@@ -1,19 +1,39 @@
-package com.gu.acquisitionsValueCalculator
+package com.gu.support.acquisitions.calculator
 
-import cats.syntax.either._
-import com.gu.support.acquisitions.models._
-import com.gu.support.acquisitions.models.PaymentFrequency._
-import com.gu.support.acquisitions.models.PrintProduct._
-import com.gu.support.acquisitions.models.AcquisitionProduct
+import com.gu.support.acquisitions.models.PaymentFrequency.{Annually, Monthly, OneOff, Quarterly, SixMonthly}
+import com.gu.support.acquisitions.models.PrintProduct.{
+  GuardianWeekly,
+  HomeDeliveryEveryday,
+  HomeDeliveryEverydayPlus,
+  HomeDeliverySaturday,
+  HomeDeliverySaturdayPlus,
+  HomeDeliverySixday,
+  HomeDeliverySixdayPlus,
+  HomeDeliverySunday,
+  HomeDeliverySundayPlus,
+  HomeDeliveryWeekend,
+  HomeDeliveryWeekendPlus,
+  VoucherEveryday,
+  VoucherEverydayPlus,
+  VoucherSaturday,
+  VoucherSaturdayPlus,
+  VoucherSixday,
+  VoucherSixdayPlus,
+  VoucherSunday,
+  VoucherSundayPlus,
+  VoucherWeekend,
+  VoucherWeekendPlus,
+}
+import com.gu.support.acquisitions.models.{AcquisitionProduct, PaymentFrequency}
 
 object AnnualisedValueTwoCalculator {
 
-  //Currencies - All other currencies are treated as ROW
+  // Currencies - All other currencies are treated as ROW
   val GBP = "GBP"
   val USD = "USD"
   val AUD = "AUD"
 
-  //Country codes - All other countries are treated as ROW
+  // Country codes - All other countries are treated as ROW
   val GB = "GB"
   val US = "US"
   val AU = "AU"
@@ -84,35 +104,37 @@ object AnnualisedValueTwoCalculator {
     }
 
   def getPrintAV(a: AcquisitionModel): Either[String, Double] =
-    a.printOptions.map(x => {
-      (x.product, x.deliveryCountryCode) match {
-        case (GuardianWeekly, GB) => Right(67.73)
-        case (GuardianWeekly, US) => Right(105.19)
-        case (GuardianWeekly, AU) => Right(209.50)
-        case (GuardianWeekly, _) => Right(68.58)
-        case (VoucherSaturday, _) => Right(29.66)
-        case (VoucherSaturdayPlus, _) => Right(88.07)
-        case (VoucherSunday, _) => Right(36.09)
-        case (VoucherSundayPlus, _) => Right(121.35)
-        case (VoucherWeekend, _) => Right(68.42)
-        case (VoucherWeekendPlus, _) => Right(131.41)
-        case (VoucherSixday, _) => Right(157.84)
-        case (VoucherSixdayPlus, _) => Right(202.31)
-        case (VoucherEveryday, _) => Right(157.64)
-        case (VoucherEverydayPlus, _) => Right(183.47)
-        case (HomeDeliverySaturday, _) => Right(86.76)
-        case (HomeDeliverySaturdayPlus, _) => Right(149.00)
-        case (HomeDeliverySunday, _) => Right(85.15)
-        case (HomeDeliverySundayPlus, _) => Right(176.96)
-        case (HomeDeliveryWeekend, _) => Right(129.01)
-        case (HomeDeliveryWeekendPlus, _) => Right(196.70)
-        case (HomeDeliverySixday, _) => Right(298.53)
-        case (HomeDeliverySixdayPlus, _) => Right(345.54)
-        case (HomeDeliveryEveryday, _) => Right(320.04)
-        case (HomeDeliveryEverydayPlus, _) => Right(346.65)
-        case _ => Left(s"No pricing information for ${x.product.value}")
-      }
-    }).getOrElse(Left("No print options supplied"))
+    a.printOptions
+      .map(x => {
+        (x.product, x.deliveryCountryCode) match {
+          case (GuardianWeekly, GB) => Right(67.73)
+          case (GuardianWeekly, US) => Right(105.19)
+          case (GuardianWeekly, AU) => Right(209.50)
+          case (GuardianWeekly, _) => Right(68.58)
+          case (VoucherSaturday, _) => Right(29.66)
+          case (VoucherSaturdayPlus, _) => Right(88.07)
+          case (VoucherSunday, _) => Right(36.09)
+          case (VoucherSundayPlus, _) => Right(121.35)
+          case (VoucherWeekend, _) => Right(68.42)
+          case (VoucherWeekendPlus, _) => Right(131.41)
+          case (VoucherSixday, _) => Right(157.84)
+          case (VoucherSixdayPlus, _) => Right(202.31)
+          case (VoucherEveryday, _) => Right(157.64)
+          case (VoucherEverydayPlus, _) => Right(183.47)
+          case (HomeDeliverySaturday, _) => Right(86.76)
+          case (HomeDeliverySaturdayPlus, _) => Right(149.00)
+          case (HomeDeliverySunday, _) => Right(85.15)
+          case (HomeDeliverySundayPlus, _) => Right(176.96)
+          case (HomeDeliveryWeekend, _) => Right(129.01)
+          case (HomeDeliveryWeekendPlus, _) => Right(196.70)
+          case (HomeDeliverySixday, _) => Right(298.53)
+          case (HomeDeliverySixdayPlus, _) => Right(345.54)
+          case (HomeDeliveryEveryday, _) => Right(320.04)
+          case (HomeDeliveryEverydayPlus, _) => Right(346.65)
+          case _ => Left(s"No pricing information for ${x.product.value}")
+        }
+      })
+      .getOrElse(Left("No print options supplied"))
 
   def getMargin(a: AcquisitionModel) =
     a.product match {

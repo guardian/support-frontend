@@ -1,6 +1,7 @@
 package com.gu.support.acquisitions.ga
 
 import cats.data.EitherT
+import com.gu.support.acquisitions.calculator.{AcquisitionModel, AnnualisedValueTwoCalculator, PrintOptionsModel}
 // import com.gu.acquisitionsValueCalculatorClient.model.{AcquisitionModel, PrintOptionsModel}
 // import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
 import com.gu.support.acquisitions.AbTest
@@ -18,15 +19,13 @@ import com.gu.support.acquisitions.models.{AcquisitionDataRow, AcquisitionProduc
 import com.gu.support.acquisitions.utils.Retry
 import com.gu.support.zuora.api.ReaderType
 import com.typesafe.scalalogging.LazyLogging
-import okhttp3.{Call, Callback, HttpUrl, OkHttpClient, Request, RequestBody, Response}
+import okhttp3._
 
 import java.io.IOException
 import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.util.control.NonFatal
 import scala.util.matching.Regex
-import com.gu.acquisitionsValueCalculator.AnnualisedValueTwoCalculator
-import com.gu.acquisitionsValueCalculator.{ AcquisitionModel, PrintOptionsModel }
 
 trait GoogleAnalyticsService {
   def submit(acquisition: AcquisitionDataRow, gaData: GAData, maxRetries: Int)(implicit
@@ -72,13 +71,13 @@ object GoogleAnalyticsService extends LazyLogging {
       amount.toDouble,
       acquisition.product,
       acquisition.currency.iso,
-      acquisition.paymentFrequency.value,
-      acquisition.paymentProvider.map(_.toString),
+      acquisition.paymentFrequency,
+      acquisition.paymentProvider,
       acquisition.printOptions.map(printOptions =>
-        PrintOptionsModel(printOptions.product.value, printOptions.deliveryCountry.alpha2),
+        PrintOptionsModel(printOptions.product, printOptions.deliveryCountry.alpha2),
       ),
     )
-    EitherT(AnnualisedValueTwoCalculator.getAnnualisedValue(acquisitionModel))
+    EitherT.fromEither(AnnualisedValueTwoCalculator.getAnnualisedValue(acquisitionModel))
   }
 
   private[ga] def getSuccessfulSubscriptionSignUpMetric(conversionCategory: ConversionCategory) =

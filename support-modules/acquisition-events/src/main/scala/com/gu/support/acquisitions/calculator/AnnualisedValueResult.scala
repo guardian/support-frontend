@@ -1,4 +1,4 @@
-package com.gu.acquisitionsValueCalculator
+package com.gu.support.acquisitions.calculator
 
 sealed trait AnnualisedValueResult
 
@@ -6,7 +6,7 @@ object AnnualisedValueResult {
   def fromResult(result: Either[String, Double]): AnnualisedValueResult = {
     result.fold(
       err => AVError(err),
-      value => AnnualisedValueTwo(value)
+      value => AnnualisedValueTwo(value),
     )
   }
 }
