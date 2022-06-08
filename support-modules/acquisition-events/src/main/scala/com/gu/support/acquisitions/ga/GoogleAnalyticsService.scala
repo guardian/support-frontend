@@ -1,8 +1,7 @@
 package com.gu.support.acquisitions.ga
 
 import cats.data.EitherT
-import com.gu.acquisitionsValueCalculatorClient.model.{AcquisitionModel, PrintOptionsModel}
-import com.gu.acquisitionsValueCalculatorClient.service.AnnualisedValueService
+import com.gu.support.acquisitions.calculator.{AcquisitionModel, AnnualisedValueTwoCalculator, PrintOptionsModel}
 import com.gu.support.acquisitions.AbTest
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService.buildBody
 import com.gu.support.acquisitions.ga.models.GAError.{BuildError, NetworkFailure, ResponseUnsuccessful}
@@ -18,7 +17,7 @@ import com.gu.support.acquisitions.models.{AcquisitionDataRow, AcquisitionProduc
 import com.gu.support.acquisitions.utils.Retry
 import com.gu.support.zuora.api.ReaderType
 import com.typesafe.scalalogging.LazyLogging
-import okhttp3.{Call, Callback, HttpUrl, OkHttpClient, Request, RequestBody, Response}
+import okhttp3._
 
 import java.io.IOException
 import java.util.UUID
@@ -68,15 +67,15 @@ object GoogleAnalyticsService extends LazyLogging {
     val amount = acquisition.amount.getOrElse[BigDecimal](0.0)
     val acquisitionModel = AcquisitionModel(
       amount.toDouble,
-      acquisition.product.value,
+      acquisition.product,
       acquisition.currency.iso,
-      acquisition.paymentFrequency.value,
-      acquisition.paymentProvider.map(_.toString),
+      acquisition.paymentFrequency,
+      acquisition.paymentProvider,
       acquisition.printOptions.map(printOptions =>
-        PrintOptionsModel(printOptions.product.value, printOptions.deliveryCountry.alpha2),
+        PrintOptionsModel(printOptions.product, printOptions.deliveryCountry.alpha2),
       ),
     )
-    EitherT(AnnualisedValueService.getAsyncAV(acquisitionModel, "ophan"))
+    EitherT.fromEither(AnnualisedValueTwoCalculator.getAnnualisedValue(acquisitionModel))
   }
 
   private[ga] def getSuccessfulSubscriptionSignUpMetric(conversionCategory: ConversionCategory) =
