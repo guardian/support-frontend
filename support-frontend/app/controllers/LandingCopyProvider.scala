@@ -10,6 +10,7 @@ class LandingCopyProvider(
     promotionServiceProvider: PromotionServiceProvider,
     stage: Stage,
 ) {
+  private val promoCopyService = ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
 
   // To see if there is any promotional copy in place for this page we need to get a country in the current region (country group)
   // this is because promotions apply to countries not regions. We can use any country however because the promo tool UI only deals
@@ -26,9 +27,10 @@ class LandingCopyProvider(
       queryPromos: List[String],
       product1: Product,
       country: Country,
-  ): Option[PromotionCopy] =
-    queryPromos.headOption.flatMap(promoCode =>
-      ProductPromotionCopy(promotionServiceProvider.forUser(false), stage)
-        .getCopyForPromoCode(promoCode, product1, country),
-    )
+  ): Option[PromotionCopy] = {
+    queryPromos
+      .to(LazyList) // For efficiency - only call getCopyForPromoCode until we find a valid promo
+      .map(promoCode => promoCopyService.getCopyForPromoCode(promoCode, product1, country))
+      .collectFirst { case Some(promoCopy) => promoCopy }
+  }
 }

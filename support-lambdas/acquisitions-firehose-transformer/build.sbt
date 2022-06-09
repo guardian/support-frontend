@@ -9,7 +9,6 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "com.gu" %% "acquisitions-value-calculator-client" % "2.0.6",
   "org.scanamo" %% "scanamo" % "1.0.0-M17",
 )
 

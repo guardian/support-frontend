@@ -7,6 +7,7 @@ import type {
 import type { StripeKey } from 'helpers/forms/stripe';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import type { SendEventId } from 'helpers/tracking/quantumMetric';
 import type { User } from 'helpers/user/userReducer';
 import type { ProductPrices } from './assets/helpers/productPrice/productPrices';
 
@@ -77,7 +78,10 @@ declare global {
 				) => ComponentType;
 			};
 		};
-		QuantumMetricAPI: unknown;
+		QuantumMetricAPI?: {
+			isOn: () => boolean;
+			sendEvent: (id: SendEventId, isConversion: 0 | 1, value: string) => void;
+		};
 		v2OnloadCallback: () => void;
 		__REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: <R>(a: R) => R;
 		__REDUX_DEVTOOLS_EXTENSION__?: () => undefined;

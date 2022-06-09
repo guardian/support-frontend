@@ -11,21 +11,21 @@ import cats.instances.either._
 import io.circe.parser.decode
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import com.gu.acquisitionsValueCalculatorClient.model.AcquisitionModel
 import com.gu.i18n.Currency
 import org.joda.time.DateTime
+import com.gu.support.acquisitions.calculator.AcquisitionModel
+import com.gu.support.acquisitions.calculator.AnnualisedValueTwoCalculator
 
 case class AcquisitionWithRecordId(val acquisition: AcquisitionDataRow, recordId: String)
 
 object Lambda extends LazyLogging {
 
   def handler(event: KinesisFirehoseEvent): KinesisAnalyticsInputPreprocessingResponse = {
-    processEvent(event, new AnnualisedValueServiceImpl(), GBPConversionServiceImpl)
+    processEvent(event, GBPConversionServiceImpl)
   }
 
   def processEvent(
       event: KinesisFirehoseEvent,
-      avService: AnnualisedValueServiceWrapper,
       gbpService: GBPConversionService,
   ): KinesisAnalyticsInputPreprocessingResponse = {
     val records = event.getRecords.asScala
@@ -51,14 +51,14 @@ object Lambda extends LazyLogging {
     def getAnnualisedValue(amount: BigDecimal, acquisition: AcquisitionDataRow): Either[String, Double] = {
       val acqModel = AcquisitionModel(
         amount = amount.toDouble,
-        product = acquisition.product.value,
+        product = acquisition.product,
         currency = acquisition.currency.iso,
-        paymentFrequency = acquisition.paymentFrequency.value,
-        paymentProvider = acquisition.paymentProvider.map(_.value),
+        paymentFrequency = acquisition.paymentFrequency,
+        paymentProvider = acquisition.paymentProvider,
         printOptions = None,
       )
 
-      avService.getAV(acqModel, "ophan")
+      AnnualisedValueTwoCalculator.getAnnualisedValue(acqModel)
     }
 
     def buildRecords(acquisitions: List[(BigDecimal, AcquisitionWithRecordId)]): Either[String, List[Record]] =

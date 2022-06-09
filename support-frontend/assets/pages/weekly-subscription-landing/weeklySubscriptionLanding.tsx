@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import { css } from '@emotion/react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
@@ -41,6 +42,10 @@ const reactElementId: Record<CountryGroupId, string> = {
 	International: 'weekly-landing-page-int',
 };
 
+const closeGapAfterPageTitle = css`
+	margin-top: 0;
+`;
+
 // ----- Render ----- //
 function WeeklyLandingPage({
 	countryId,
@@ -53,7 +58,6 @@ function WeeklyLandingPage({
 	if (!productPrices) {
 		return null;
 	}
-
 	const path = orderIsAGift
 		? routes.guardianWeeklySubscriptionLandingGift
 		: routes.guardianWeeklySubscriptionLanding;
@@ -97,7 +101,9 @@ function WeeklyLandingPage({
 			/>
 			<FullWidthContainer>
 				<CentredContainer>
-					<Block>{orderIsAGift ? <GiftBenefits /> : <Benefits />}</Block>
+					<Block cssOverrides={closeGapAfterPageTitle}>
+						{orderIsAGift ? <GiftBenefits /> : <Benefits />}
+					</Block>
 				</CentredContainer>
 			</FullWidthContainer>
 			<FullWidthContainer theme="dark" hasOverlap>

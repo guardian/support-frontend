@@ -29,11 +29,7 @@ const themeColors: Record<ThemeType, string> = {
 	paper: paperSubscriptionsBlue,
 };
 const headerThemes: Record<ThemeType, SerializedStyles> = {
-	weekly: css`
-		:before {
-			background-color: ${themeColors.weekly};
-		}
-	`,
+	weekly: css``,
 	digital: css`
 		color: ${neutral[97]};
 		:before {
@@ -45,11 +41,7 @@ const headerThemes: Record<ThemeType, SerializedStyles> = {
 			background-color: ${themeColors.showcase};
 		}
 	`,
-	paper: css`
-		:before {
-			background-color: ${themeColors.paper};
-		}
-	`,
+	paper: css``,
 };
 const header = css`
 	color: ${neutral[7]};
