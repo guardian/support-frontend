@@ -32,11 +32,10 @@ class StripeSubscriptionsProcessor(
   }
 
   def processSubs(list: List[StripeSubscription]) = {
+    val unknownEmailViaCSR = "patrons@theguardian.com"
     Future.sequence(
       list
-        .filterNot(sub =>
-          sub.customer.email.contains("@guardian.co.uk") || sub.customer.email.contains("@theguardian.com"),
-        )
+        .filterNot(sub => sub.customer.email == unknownEmailViaCSR)
         .distinctBy(
           _.customer.email, // I think this is probably only an issue in dev, but there can be multiple subs with the same email
         )
