@@ -27,8 +27,7 @@
     "storybook-static": "build-storybook -c .storybook -o storybook-static  -s .storybook/static",
     "cache-ssr": "node scripts/ssrScript.js",
     "orphans": "echo 'Checking for orphan modules' && node scripts/orphans.js",
-    "check-images": "echo 'Purging unused images' && node scripts/gridImages.js",
-    "ts-errors": "node scripts/ts-log-errors.js && bash scripts/generate-history-csv.sh > ./ts-error-history.csv"
+    "check-images": "echo 'Purging unused images' && node scripts/gridImages.js"
   },
   "browserslist": [
     "Chrome >= 49",
