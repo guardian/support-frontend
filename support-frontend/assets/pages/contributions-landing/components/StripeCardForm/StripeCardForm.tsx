@@ -46,7 +46,7 @@ import { useCardFormFieldStates } from './useCardFormFieldStates';
 import { useSelectedField } from './useSelectedField';
 import './stripeCardForm.scss';
 
-// ----- Types -----//
+// ----- Redux -----//
 
 const mapStateToProps = (state: State) => ({
 	contributionType: state.page.form.contributionType,
@@ -97,45 +97,17 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type PropTypes = ConnectedProps<typeof connector> & {
+// ----- Component -----//
+
+interface PropsFromParent {
 	stripeKey: string;
-};
+}
 
-const fieldStyle = {
-	base: {
-		fontFamily:
-			"'GuardianTextSans', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
-		'::placeholder': {
-			color: '#999999',
-		},
-		fontSize: '17px',
-		lineHeight: '1.5',
-	},
-};
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const zipCodeContainerStyles = css`
-	margin-top: 0.65rem;
-`;
-
-const renderVerificationCopy = (
-	countryGroupId: CountryGroupId,
-	contributionType: ContributionType,
-) => {
-	trackComponentLoad(
-		`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`,
-	);
-	return (
-		<div className="form__error">
-			{' '}
-			{"Please tick to verify you're a human"}{' '}
-		</div>
-	);
-};
+type PropTypes = PropsFromRedux & PropsFromParent;
 
 function CardForm(props: PropTypes) {
-	/**
-	 * State
-	 */
 	const stripe = stripeJs.useStripe();
 	const elements = stripeJs.useElements();
 
@@ -422,7 +394,7 @@ function CardForm(props: PropTypes) {
 					<CardNumberElement
 						id="stripeCardNumberElement"
 						options={{
-							style: fieldStyle,
+							style: styles.stripeField,
 						}}
 						onChange={onFieldChange('CardNumber')}
 						onFocus={selectField('CardNumber')}
@@ -444,7 +416,7 @@ function CardForm(props: PropTypes) {
 							<CardExpiryElement
 								id="stripeCardExpiryElement"
 								options={{
-									style: fieldStyle,
+									style: styles.stripeField,
 								}}
 								onChange={onFieldChange('Expiry')}
 								onFocus={selectField('Expiry')}
@@ -479,7 +451,7 @@ function CardForm(props: PropTypes) {
 							<CardCvcElement
 								id="stripeCardCVCElement"
 								options={{
-									style: fieldStyle,
+									style: styles.stripeField,
 								}}
 								onChange={onFieldChange('CVC')}
 								onFocus={selectField('CVC')}
@@ -493,7 +465,7 @@ function CardForm(props: PropTypes) {
 			</div>
 
 			{showZipCodeField && (
-				<div css={zipCodeContainerStyles}>
+				<div css={styles.zipCodeContainer}>
 					<TextInput
 						id="contributionZipCode"
 						name="contribution-zip-code"
@@ -510,17 +482,63 @@ function CardForm(props: PropTypes) {
 					<div className="ds-security-check__label">
 						<label htmlFor="robot_checkbox">Security check</label>
 					</div>
-					{props.checkoutFormHasBeenSubmitted && !recaptchaVerified
-						? renderVerificationCopy(
-								props.countryGroupId,
-								props.contributionType,
-						  )
-						: null}
+					{props.checkoutFormHasBeenSubmitted && !recaptchaVerified && (
+						<VerificationCopy
+							countryGroupId={props.countryGroupId}
+							contributionType={props.contributionType}
+						/>
+					)}
 					<Recaptcha />
 				</div>
 			) : null}
 		</div>
 	);
 }
+
+// ---- Helper components ---- //
+
+interface VerificationCopyProps {
+	countryGroupId: CountryGroupId;
+	contributionType: ContributionType;
+}
+
+function VerificationCopy({
+	countryGroupId,
+	contributionType,
+}: VerificationCopyProps) {
+	useEffect(() => {
+		trackComponentLoad(
+			`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`,
+		);
+	}, []);
+
+	return (
+		<div className="form__error">
+			{' '}
+			{"Please tick to verify you're a human"}{' '}
+		</div>
+	);
+}
+
+// ---- Styles ---- //
+
+const styles = {
+	stripeField: {
+		base: {
+			fontFamily:
+				"'GuardianTextSans', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
+			'::placeholder': {
+				color: '#999999',
+			},
+			fontSize: '17px',
+			lineHeight: '1.5',
+		},
+	},
+	zipCodeContainer: css`
+		margin-top: 0.65rem;
+	`,
+};
+
+// ----- Exports -----//
 
 export default connector(CardForm);
