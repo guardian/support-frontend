@@ -130,9 +130,10 @@ function CardForm(props: PropTypes) {
 	/**
 	 * Handlers
 	 */
+
 	const handleStripeError = (errorData: StripeError): void => {
 		props.setPaymentWaiting(false);
-		logException(`Error creating Payment Method: ${JSON.stringify(errorData)}`);
+		logCreatePaymentMethodError(errorData);
 
 		if (errorData.type === 'validation_error') {
 			// This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
@@ -182,7 +183,7 @@ function CardForm(props: PropTypes) {
 		window.grecaptcha?.render('robot_checkbox', {
 			sitekey: window.guardian.v2recaptchaPublicKey,
 			callback: (token: string) => {
-				trackComponentLoad('contributions-recaptcha-client-token-received');
+				trackRecaptchaClientTokenReceived();
 				props.setOneOffRecaptchaToken(token);
 			},
 		});
@@ -224,7 +225,7 @@ function CardForm(props: PropTypes) {
 		});
 		// @ts-expect-error TODO: This needs fixing in the reducer; we may always get undefined because we can't be sure the Stripe SDK will load
 		props.setHandleStripe3DS((clientSecret: string) => {
-			trackComponentLoad('stripe-3ds');
+			trackStripe3ds();
 			return stripe?.handleCardAction(clientSecret);
 		});
 	};
@@ -484,9 +485,7 @@ function VerificationCopy({
 	contributionType,
 }: VerificationCopyProps) {
 	useEffect(() => {
-		trackComponentLoad(
-			`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`,
-		);
+		trackRecaptchaVerificationWarning(countryGroupId, contributionType);
 	}, []);
 
 	return (
@@ -539,6 +538,19 @@ function trackRecaptchaVerified() {
 	trackComponentLoad('contributions-recaptcha-verified');
 }
 
+function trackStripe3ds() {
+	trackComponentLoad('stripe-3ds');
+}
+
+function trackRecaptchaVerificationWarning(
+	countryGroupId: CountryGroupId,
+	contributionType: ContributionType,
+) {
+	trackComponentLoad(
+		`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`,
+	);
+}
+
 // --- Error helper functions --- //
 
 function noClientSecretError(json: unknown) {
@@ -553,6 +565,10 @@ function logCreateSetupIntentError(err: Error) {
 	logException(
 		`Error getting Setup Intent client_secret from ${routes.stripeSetupIntentRecaptcha}: ${err.message}`,
 	);
+}
+
+function logCreatePaymentMethodError(errorData: StripeError) {
+	logException(`Error creating Payment Method: ${JSON.stringify(errorData)}`);
 }
 
 // --- DOM helper functions --- //
