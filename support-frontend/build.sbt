@@ -29,7 +29,7 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.9.9",
   "com.gu.identity" %% "identity-auth-play" % "3.255",
   "com.gu" %% "identity-test-users" % "0.8",
-  "com.google.guava" % "guava" % "29.0-jre",
+  "com.google.guava" % "guava" % "31.1-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.gu.play-googleauth" %% "play-v28" % "2.2.6",
   "io.github.bonigarcia" % "webdrivermanager" % "3.3.0" % "test",
