@@ -19,6 +19,5 @@ releaseProcess := Seq[ReleaseStep](
   setNextVersion,
   commitNextVersion,
   ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
-  pushChanges
+  pushChanges,
 )
-

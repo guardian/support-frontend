@@ -8,6 +8,3 @@ pomExtra := <url>https://github.com/guardian/support-config</url>
         <url>https://github.com/rupertbates</url>
       </developer>
     </developers>
-
-
-
