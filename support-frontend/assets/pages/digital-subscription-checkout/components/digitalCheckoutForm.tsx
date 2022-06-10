@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import { useEffect } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Form, {
@@ -51,6 +52,10 @@ import {
 } from 'helpers/subscriptionsForms/submit';
 import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
+import {
+	sendEventIds,
+	sendEventWithProductAnnualValue,
+} from 'helpers/tracking/quantumMetric/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
@@ -132,6 +137,16 @@ function DigitalCheckoutForm(props: PropTypes) {
 		props.country,
 		props.billingPeriod,
 	);
+
+	useEffect(() => {
+		sendEventWithProductAnnualValue(
+			sendEventIds.digiSubCheckoutStart,
+			false,
+			productPrice,
+			props.billingPeriod,
+		);
+	}, []);
+
 	const submissionErrorHeading =
 		props.submissionError === 'personal_details_incorrect'
 			? 'Sorry there was a problem'
