@@ -127,10 +127,6 @@ function CardForm(props: PropTypes) {
 	const updateZipCode = (event: React.ChangeEvent<HTMLInputElement>) =>
 		setZipCode(event.target.value);
 
-	/**
-	 * Handlers
-	 */
-
 	const handleStripeError = (errorData: StripeError): void => {
 		props.setPaymentWaiting(false);
 		logCreatePaymentMethodError(errorData);
@@ -214,16 +210,12 @@ function CardForm(props: PropTypes) {
 	};
 
 	const setupRecurringHandlers = (): void => {
-		// Start by requesting the client_secret for a new Payment Method.
-		// Note - because this value is requested asynchronously when the component loads,
-		// it's possible for it to arrive after the user clicks 'Contribute'.
-		// This is handled in the callback below by checking the value of paymentWaiting.
 		props.setCreateStripePaymentMethod((clientSecret: string | null) => {
 			props.setPaymentWaiting(true);
 
-			/* Recaptcha verification is required for setupIntent creation.
-      If setupIntentClientSecret is ready then complete the payment now.
-      If setupIntentClientSecret is not ready then componentDidUpdate will complete the payment when it arrives. */
+			// Recaptcha verification is required for setupIntent creation.
+			// If setupIntentClientSecret is ready then complete the payment now.
+			// If setupIntentClientSecret is not ready we handle it in a `useEffect` hook.
 			if (clientSecret) {
 				handleCardSetupForRecurring(clientSecret);
 			}
@@ -282,9 +274,6 @@ function CardForm(props: PropTypes) {
 		});
 	};
 
-	/**
-	 * Hooks
-	 */
 	useEffect(() => {
 		if (stripe && elements) {
 			if (props.contributionType === 'ONE_OFF') {
@@ -294,6 +283,7 @@ function CardForm(props: PropTypes) {
 			}
 		}
 	}, [stripe, elements, props.contributionType]);
+
 	useEffect(() => {
 		if (stripe && elements) {
 			if (props.contributionType === 'ONE_OFF') {
@@ -304,11 +294,17 @@ function CardForm(props: PropTypes) {
 		}
 	}, [stripe, elements, props.contributionType, zipCode]);
 
-	// If we have just received the setupIntentClientSecret and the user has already clicked 'Contribute'
-	// then go ahead and process the recurring contribution
+	// We keep track of the previous setup intent secret for the case that a
+	// user clicks 'contribute' before the secret has loaded. In that case,
+	// we don't handle the card setup in the recurring handler (we need the secret for that)
+	// but instead handle it in a useEffect hook. The hook checks if the secret has
+	// just been defined (i.e the previous secret wasn't defined but the current one is)
+	// and that the payment is waiting (i.e the user clicked 'contribute') and then
+	// handles the card setup.
 	const previousSetupIntentClientSecret = usePrevious(
 		props.setupIntentClientSecret,
 	);
+
 	useEffect(() => {
 		const clientSecretHasUpdated =
 			!previousSetupIntentClientSecret && props.setupIntentClientSecret;
