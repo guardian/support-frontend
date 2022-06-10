@@ -17,6 +17,7 @@ import { Recaptcha } from 'components/recaptcha/recaptcha';
 import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import type { ContributionType } from 'helpers/contributions';
+import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { usePrevious } from 'helpers/customHooks/usePrevious';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { isValidZipCode } from 'helpers/forms/formValidation';
@@ -118,7 +119,9 @@ function CardForm(props: PropTypes) {
 	// Used to avoid calling grecaptcha.render twice when switching between monthly + annual
 	const [calledRecaptchaRender, setCalledRecaptchaRender] =
 		useState<boolean>(false);
+
 	const [zipCode, setZipCode] = useState('');
+
 	const showZipCodeField = props.country === 'US';
 
 	const updateZipCode = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -141,21 +144,12 @@ function CardForm(props: PropTypes) {
 		}
 	};
 
-	const recaptchaElementNotEmpty = (): boolean => {
-		const el = document.getElementById('robot_checkbox');
-
-		if (el) {
-			return el.children.length > 0;
-		}
-
-		return true;
-	};
-
 	// Creates a new setupIntent upon recaptcha verification
 	const setupRecurringRecaptchaCallback = () => {
 		setCalledRecaptchaRender(true);
 
-		// Fix for safari, where the calledRecaptchaRender state handling does not work. TODO - find a better solution
+		// Fix for safari, where the calledRecaptchaRender state handling does not work.
+		// TODO: find a better solution
 		if (recaptchaElementNotEmpty()) {
 			return;
 		}
@@ -163,37 +157,20 @@ function CardForm(props: PropTypes) {
 		window.grecaptcha?.render('robot_checkbox', {
 			sitekey: window.guardian.v2recaptchaPublicKey,
 			callback: (token: string) => {
-				trackComponentLoad('contributions-recaptcha-client-token-received');
+				trackRecaptchaClientTokenReceived();
 				props.setStripeRecurringRecaptchaVerified(true);
-				fetchJson(
-					routes.stripeSetupIntentRecaptcha,
-					requestOptions(
-						{
-							token,
-							stripePublicKey: props.stripeKey,
-							isTestUser: props.isTestUser,
-						},
-						'same-origin',
-						'POST',
-						props.csrf,
-					),
+
+				createStripeSetupIntent(
+					token,
+					props.stripeKey,
+					props.isTestUser,
+					props.csrf,
 				)
-					.then((json) => {
-						if (json.client_secret && typeof json.client_secret === 'string') {
-							trackComponentLoad('contributions-recaptcha-verified');
-							props.setStripeSetupIntentClientSecret(json.client_secret);
-						} else {
-							throw new Error(
-								`Missing client_secret field in server response: ${JSON.stringify(
-									json,
-								)}`,
-							);
-						}
+					.then((clientSecret) => {
+						props.setStripeSetupIntentClientSecret(clientSecret);
 					})
 					.catch((err: Error) => {
-						logException(
-							`Error getting Setup Intent client_secret from ${routes.stripeSetupIntentRecaptcha}: ${err.message}`,
-						);
+						logCreateSetupIntentError(err);
 						props.paymentFailure('internal_error');
 						props.setPaymentWaiting(false);
 					});
@@ -519,6 +496,76 @@ function VerificationCopy({
 		</div>
 	);
 }
+
+// ---- Helper functions ---- //
+
+// --- Stripe helper functions --- //
+
+function createStripeSetupIntent(
+	token: string,
+	stripeKey: string,
+	isTestUser: boolean,
+	csrf: Csrf,
+): Promise<string> {
+	return fetchJson(
+		routes.stripeSetupIntentRecaptcha,
+		requestOptions(
+			{
+				token,
+				stripePublicKey: stripeKey,
+				isTestUser: isTestUser,
+			},
+			'same-origin',
+			'POST',
+			csrf,
+		),
+	).then((json) => {
+		if (json.client_secret && typeof json.client_secret === 'string') {
+			trackRecaptchaVerified();
+			return json.client_secret;
+		} else {
+			throw noClientSecretError(json);
+		}
+	});
+}
+
+// --- Tracker helper functions --- //
+
+function trackRecaptchaClientTokenReceived() {
+	trackComponentLoad('contributions-recaptcha-client-token-received');
+}
+
+function trackRecaptchaVerified() {
+	trackComponentLoad('contributions-recaptcha-verified');
+}
+
+// --- Error helper functions --- //
+
+function noClientSecretError(json: unknown) {
+	return new Error(
+		`Missing client_secret field in server response: ${JSON.stringify(json)}`,
+	);
+}
+
+// --- Log helper functions --- //
+
+function logCreateSetupIntentError(err: Error) {
+	logException(
+		`Error getting Setup Intent client_secret from ${routes.stripeSetupIntentRecaptcha}: ${err.message}`,
+	);
+}
+
+// --- DOM helper functions --- //
+
+const recaptchaElementNotEmpty = (): boolean => {
+	const el = document.getElementById('robot_checkbox');
+
+	if (el) {
+		return el.children.length > 0;
+	}
+
+	return true;
+};
 
 // ---- Styles ---- //
 
