@@ -187,9 +187,10 @@ function CardForm(props: PropTypes) {
 
 	const handleCardSetupForRecurring = (clientSecret: string): void => {
 		const cardElement = elements?.getElement(CardNumberElement);
-		if (cardElement) {
+
+		if (stripe && cardElement) {
 			void stripe
-				?.confirmCardSetup(clientSecret, {
+				.confirmCardSetup(clientSecret, {
 					payment_method: {
 						card: cardElement,
 						billing_details: {
@@ -242,29 +243,35 @@ function CardForm(props: PropTypes) {
 		}
 	};
 
+	const handleCreatePaymentForOneOff = (): void => {
+		const cardElement = elements?.getElement(CardNumberElement);
+
+		if (stripe && cardElement) {
+			void stripe
+				.createPaymentMethod({
+					type: 'card',
+					card: cardElement,
+					billing_details: {
+						address: {
+							postal_code: zipCode,
+						},
+					},
+				})
+				.then((result) => {
+					if (result.error) {
+						handleStripeError(result.error);
+					} else {
+						void props.onPaymentAuthorised(result.paymentMethod.id);
+					}
+				});
+		}
+	};
+
 	const setupOneOffHandlers = (): void => {
 		props.setCreateStripePaymentMethod(() => {
 			props.setPaymentWaiting(true);
-			const cardElement = elements?.getElement(CardNumberElement);
-			if (cardElement) {
-				void stripe
-					?.createPaymentMethod({
-						type: 'card',
-						card: cardElement,
-						billing_details: {
-							address: {
-								postal_code: zipCode,
-							},
-						},
-					})
-					.then((result) => {
-						if (result.error) {
-							handleStripeError(result.error);
-						} else {
-							void props.onPaymentAuthorised(result.paymentMethod.id);
-						}
-					});
-			}
+
+			handleCreatePaymentForOneOff();
 		});
 
 		// @ts-expect-error TODO: This needs fixing in the reducer; we may always get undefined because we can't be sure the Stripe SDK will load
@@ -330,9 +337,6 @@ function CardForm(props: PropTypes) {
 		props.setStripeCardFormComplete(formIsComplete);
 	}, [fieldStates, zipCode]);
 
-	/**
-	 * Rendering
-	 */
 	const showZipCodeError =
 		props.checkoutFormHasBeenSubmitted && !isZipCodeFieldValid();
 
@@ -348,6 +352,7 @@ function CardForm(props: PropTypes) {
 		props.contributionType === 'ONE_OFF'
 			? props.oneOffRecaptchaToken
 			: props.recurringRecaptchaVerified;
+
 	return (
 		<div>
 			<legend className="form__legend">
