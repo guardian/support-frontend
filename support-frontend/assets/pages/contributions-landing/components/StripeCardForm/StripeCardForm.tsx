@@ -340,14 +340,6 @@ function CardForm(props: PropTypes) {
 	const showZipCodeError =
 		props.checkoutFormHasBeenSubmitted && !isZipCodeFieldValid();
 
-	const showCards = (country: IsoCountry) => {
-		if (country === 'US') {
-			return <CreditCardsUS className="form__credit-card-icons" />;
-		}
-
-		return <CreditCardsROW className="form__credit-card-icons" />;
-	};
-
 	const recaptchaVerified =
 		props.contributionType === 'ONE_OFF'
 			? props.oneOffRecaptchaToken
@@ -367,7 +359,7 @@ function CardForm(props: PropTypes) {
 				label={
 					<>
 						<label htmlFor="stripeCardNumberElement">Card number</label>
-						{showCards(props.country)}
+						<CreditCardIcons country={props.country} />
 					</>
 				}
 				input={
@@ -496,6 +488,17 @@ function VerificationCopy({
 			{"Please tick to verify you're a human"}{' '}
 		</div>
 	);
+}
+
+interface CreditCardIconsProps {
+	country: IsoCountry;
+}
+function CreditCardIcons({ country }: CreditCardIconsProps) {
+	if (country === 'US') {
+		return <CreditCardsUS className="form__credit-card-icons" />;
+	}
+
+	return <CreditCardsROW className="form__credit-card-icons" />;
 }
 
 // ---- Helper functions ---- //
