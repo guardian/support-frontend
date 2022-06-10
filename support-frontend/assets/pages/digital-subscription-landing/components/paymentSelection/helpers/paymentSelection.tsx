@@ -12,11 +12,7 @@ import {
 	Monthly,
 	Quarterly,
 } from 'helpers/productPrice/billingPeriods';
-import type {
-	BillingPeriod,
-	// DigitalBillingPeriod,
-	// DigitalGiftBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	getAdverbialSubscriptionDescription,
 	getPriceDescription,
