@@ -5,7 +5,7 @@ import LibraryVersions._
 
 import scala.sys.process._
 
-val scalatest = "org.scalatest" %% "scalatest" % "3.2.2"
+val scalatest = "org.scalatest" %% "scalatest" % "3.2.12"
 
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   IntegrationTest / scalaSource := baseDirectory.value / "src" / "test" / "scala",
@@ -135,7 +135,7 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     `support-services` % "compile->compile;test->test",
     `support-models`,
     `support-config`,
-    `support-internationalisation`
+    `support-internationalisation`,
   )
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
