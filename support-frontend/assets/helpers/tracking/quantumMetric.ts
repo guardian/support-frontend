@@ -23,24 +23,24 @@ type SendEventGuardianWeeklySubConversion = 68;
 type SendEventDigiSubGiftConversion = 69;
 type SendEventGuardianWeeklySubGiftConversion = 70;
 
-type SendEventId =
-	| SendEventABTestId
+type SendEventCheckoutStartId =
 	| SendEventDigiSubCheckoutStart
 	| SendEventPaperSubCheckoutStart
 	| SendEventGuardianWeeklySubCheckoutStart
 	| SendEventDigiSubGiftCheckoutStart
-	| SendEventGuardianWeeklySubGiftCheckoutStart
+	| SendEventGuardianWeeklySubGiftCheckoutStart;
+
+type SendEventCheckoutConversionId =
 	| SendEventDigiSubConversion
 	| SendEventPaperSubConversion
 	| SendEventGuardianWeeklySubConversion
 	| SendEventDigiSubGiftConversion
 	| SendEventGuardianWeeklySubGiftConversion;
 
-const sendEventIds: Record<string, SendEventId> = {
-	abTestParticipation: 30,
-	digiSubCheckoutStart: 75,
-	digiSubGiftCheckoutStart: 78,
-};
+type SendEventId =
+	| SendEventABTestId
+	| SendEventCheckoutStartId
+	| SendEventCheckoutConversionId;
 
 function sendEvent(
 	id: SendEventId,
@@ -67,9 +67,8 @@ function waitForQuantumMetricAPi(onReady: () => void) {
 	}, 500);
 }
 
-function sendEventWithProductAnnualValue(
-	id: SendEventId,
-	isConversion: boolean,
+function sendEventCheckoutStart(
+	id: SendEventCheckoutStartId,
 	productPrice: ProductPrice,
 	billingPeriod: DigitalBillingPeriod | DigitalGiftBillingPeriod,
 ): void {
@@ -89,7 +88,7 @@ function sendEventWithProductAnnualValue(
 							sourceCurrency,
 							targetCurrency,
 						);
-					sendEvent(id, isConversion, convertedValue.toString());
+					sendEvent(id, false, convertedValue.toString());
 				}
 			};
 
@@ -113,7 +112,7 @@ function sendEventWithProductAnnualValue(
 }
 
 function sendEventABTestParticipations(participations: Participations): void {
-	const { abTestParticipation } = sendEventIds;
+	const sendEventABTestId = 30;
 	const valueQueue: string[] = [];
 
 	Object.keys(participations).forEach((testId) => {
@@ -125,7 +124,7 @@ function sendEventABTestParticipations(participations: Participations): void {
 		 * a valueQueue to be processed later.
 		 */
 		if (window.QuantumMetricAPI?.isOn()) {
-			sendEvent(abTestParticipation, false, value);
+			sendEvent(sendEventABTestId, false, value);
 		} else {
 			valueQueue.push(value);
 		}
@@ -140,7 +139,7 @@ function sendEventABTestParticipations(participations: Participations): void {
 	if (valueQueue.length) {
 		waitForQuantumMetricAPi(() => {
 			valueQueue.forEach((value) => {
-				sendEvent(abTestParticipation, false, value);
+				sendEvent(sendEventABTestId, false, value);
 			});
 		});
 	}
@@ -197,4 +196,4 @@ function init(participations: Participations): void {
 	});
 }
 
-export { init, sendEventWithProductAnnualValue, sendEventIds };
+export { init, sendEventCheckoutStart };
