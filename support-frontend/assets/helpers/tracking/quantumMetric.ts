@@ -59,6 +59,9 @@ function sendEventWithProductAnnualValue(
 	productPrice: ProductPrice,
 	billingPeriod: DigitalBillingPeriod | DigitalGiftBillingPeriod,
 ): void {
+	/**
+	 * Check user has granted consent to Quantum Metric
+	 */
 	void getConsent().then((hasConsent) => {
 		if (hasConsent) {
 			const sourceCurrency = productPrice.currency;
@@ -76,6 +79,14 @@ function sendEventWithProductAnnualValue(
 				}
 			};
 
+			/**
+			 * Quantum Metric's script sets up QuantumMetricAPI
+			 * We need to check it is defined and ready before we can
+			 * send events to it. If it is ready we call sendEventWhenReady
+			 * immediately. If it is not ready we poll a function that checks
+			 * if QuantumMetricAPI is available. Once it's available we
+			 * call sendEventWhenReady.
+			 */
 			if (window.QuantumMetricAPI?.isOn()) {
 				sendEventWhenReady();
 			} else {
