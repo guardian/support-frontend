@@ -4,7 +4,7 @@ object LibraryVersions {
   val awsClientVersion = "1.12.227"
   val awsClientVersion2 = "2.17.52"
 
-  val catsVersion = "2.1.1"
+  val catsVersion = "2.7.0"
   val jacksonVersion = "2.13.3"
   val jacksonDatabindVersion = "2.11.4"
   val okhttpVersion = "3.10.0"
