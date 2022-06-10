@@ -10,7 +10,7 @@ import {
 	setReferrerDataInLocalStorage,
 	trackAbTests,
 } from 'helpers/tracking/ophan';
-import { init as initQuantumMetric } from 'helpers/tracking/quantumMetric/quantumMetric';
+import { init as initQuantumMetric } from 'helpers/tracking/quantumMetric';
 import { isPostDeployUser } from 'helpers/user/user';
 import { init as initLogger } from 'helpers/utilities/logger';
 import 'helpers/internationalisation/country';

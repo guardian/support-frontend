@@ -55,7 +55,7 @@ import { firstError } from 'helpers/subscriptionsForms/validation';
 import {
 	sendEventIds,
 	sendEventWithProductAnnualValue,
-} from 'helpers/tracking/quantumMetric/quantumMetric';
+} from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';

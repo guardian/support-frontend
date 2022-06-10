@@ -1,4 +1,3 @@
-import type { SendEventId } from 'helpers/tracking/quantumMetric/quantumMetrics';
 import type { ComponentType } from 'react';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { Csrf } from 'helpers/csrf/csrfReducer';
@@ -10,6 +9,7 @@ import type { StripeKey } from 'helpers/forms/stripe';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { SendEventId } from 'helpers/tracking/quantumMetric';
 import type { User } from 'helpers/user/userReducer';
 
 declare global {
