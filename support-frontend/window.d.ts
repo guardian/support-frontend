@@ -7,9 +7,10 @@ import type {
 } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type { StripeKey } from 'helpers/forms/stripe';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { SendEventId } from 'helpers/tracking/quantumMetric';
 import type { User } from 'helpers/user/userReducer';
-import type { ProductPrices } from './assets/helpers/productPrice/productPrices';
 
 declare global {
 	/* ~ Here, declare things that go in the global namespace, or augment
@@ -81,6 +82,11 @@ declare global {
 		QuantumMetricAPI?: {
 			isOn: () => boolean;
 			sendEvent: (id: SendEventId, isConversion: 0 | 1, value: string) => void;
+			currencyConvertFromToValue: (
+				value: number,
+				sourceCurrency: IsoCurrency,
+				targetCurrency: IsoCurrency,
+			) => number;
 		};
 		v2OnloadCallback: () => void;
 		__REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: <R>(a: R) => R;

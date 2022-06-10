@@ -1,9 +1,9 @@
 import {
+	getAnnualValue,
 	getCurrencySymbol,
 	getDisplayPrice,
 	getProductOptions,
 	getProductPrice,
-	getSavingPercentage,
 } from '../helpers/paymentSelection';
 import { productPrices } from './__fixtures__/productPrices';
 
@@ -39,9 +39,50 @@ describe('PaymentSelection', () => {
 			).toBe(11.99);
 		}
 	});
-	it('should return saving percentage', () => {
-		const annualCost = 100;
-		const monthlyCostAnnualized = 150;
-		expect(getSavingPercentage(annualCost, monthlyCostAnnualized)).toBe('33%');
+	it('should get a monthly subscriptions annual value with a promotion', () => {
+		const fullPrice = 11.99;
+		const billingPeriod = 'Monthly';
+		const promotion = {
+			name: 'Sept 2019 Discount',
+			description: '50% off for 3 months',
+			promoCode: 'DK0NT24WG',
+			discountedPrice: 5.99,
+			numberOfDiscountedPeriods: 3,
+			discount: { amount: 50, durationMonths: 3 },
+			landingPage: {
+				title: 'Lorem ipsum dolor sit amet',
+				description: 'Lorem ipsum dolor sit amet',
+				roundel: '50% off for 3 months',
+			},
+		};
+
+		expect(getAnnualValue(fullPrice, promotion, billingPeriod)).toBe(12588);
+	});
+	it('should get a monthly subscriptions annual value without a promotion', () => {
+		const fullPrice = 11.99;
+		const billingPeriod = 'Monthly';
+		const promotion = undefined;
+
+		expect(getAnnualValue(fullPrice, promotion, billingPeriod)).toBe(14388);
+	});
+	it('should get an annual subscriptions annual value with a promotion', () => {
+		const fullPrice = 119;
+		const billingPeriod = 'Annual';
+		const promotion = {
+			name: 'Introductory Promotion UK',
+			description: '16% off for the first year',
+			promoCode: 'ANNUAL-INTRO-UK',
+			discountedPrice: 99,
+			numberOfDiscountedPeriods: 1,
+			discount: { amount: 16.81, durationMonths: 12 },
+			landingPage: {},
+		};
+		expect(getAnnualValue(fullPrice, promotion, billingPeriod)).toBe(9900);
+	});
+	it('should get an annual subscriptions annual value without a promotion', () => {
+		const fullPrice = 119;
+		const billingPeriod = 'Annual';
+		const promotion = undefined;
+		expect(getAnnualValue(fullPrice, promotion, billingPeriod)).toBe(11900);
 	});
 });

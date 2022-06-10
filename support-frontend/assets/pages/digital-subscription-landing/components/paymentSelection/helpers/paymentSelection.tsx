@@ -12,7 +12,11 @@ import {
 	Monthly,
 	Quarterly,
 } from 'helpers/productPrice/billingPeriods';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type {
+	BillingPeriod,
+	DigitalBillingPeriod,
+	DigitalGiftBillingPeriod,
+} from 'helpers/productPrice/billingPeriods';
 import {
 	getAdverbialSubscriptionDescription,
 	getPriceDescription,
@@ -26,6 +30,7 @@ import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
@@ -35,6 +40,10 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import type { OphanComponentType } from 'helpers/tracking/ophan';
+import {
+	sendEventIds,
+	sendEventWithCurrency,
+} from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { getDigitalCheckout } from 'helpers/urls/externalLinks';
 
@@ -75,10 +84,37 @@ export const getProductPrice = (
 	throw new Error('getProductPrice: product price unavailable');
 };
 
-export const getSavingPercentage = (
-	annualCost: number,
-	monthlyCostAnnualized: number,
-): string => `${Math.round((1 - annualCost / monthlyCostAnnualized) * 100)}%`;
+export const getAnnualValue = (
+	fullPrice: number,
+	promotion: Promotion | undefined,
+	billingPeriod: DigitalBillingPeriod | DigitalGiftBillingPeriod,
+): number => {
+	const periodMultiplier: Record<
+		DigitalBillingPeriod | DigitalGiftBillingPeriod,
+		number
+	> = {
+		Annual: 1,
+		Monthly: 12,
+		Quarterly: 4,
+	};
+	const fullPriceInPenceCents = fullPrice * 100;
+	const fullAnnualPrice =
+		fullPriceInPenceCents * periodMultiplier[billingPeriod];
+
+	if (!promotion?.discountedPrice || !promotion.numberOfDiscountedPeriods) {
+		return fullAnnualPrice;
+	}
+
+	const discountedPriceInPenceCents = promotion.discountedPrice * 100;
+	const discountInPenceCents =
+		fullPriceInPenceCents - discountedPriceInPenceCents;
+
+	const discountedAnnualPrice =
+		fullAnnualPrice -
+		discountInPenceCents * promotion.numberOfDiscountedPeriods;
+
+	return discountedAnnualPrice;
+};
 
 const BILLING_PERIOD = {
 	[Monthly]: {
@@ -292,7 +328,21 @@ const getPaymentOptions = ({
 				action: 'DigitalPack',
 				label: trackingProperties.id,
 			});
+
 			sendTrackingEventsOnClick(trackingProperties)();
+
+			const annualValue = getAnnualValue(
+				fullPrice,
+				promotion,
+				billingPeriod as DigitalBillingPeriod | DigitalGiftBillingPeriod,
+			);
+
+			sendEventWithCurrency(
+				sendEventIds.digiSubSelected,
+				false,
+				currencyId,
+				annualValue,
+			);
 		};
 
 		return orderIsAGift

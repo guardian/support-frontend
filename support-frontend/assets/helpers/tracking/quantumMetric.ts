@@ -2,11 +2,37 @@ import { onConsentChange } from '@guardian/consent-management-platform';
 import { loadScript } from '@guardian/libs';
 import type { Participations } from 'helpers/abTests/abtest';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { logException } from 'helpers/utilities/logger';
 
 type SendEventABTestId = 30;
+type SendEventDigiSubSelected = 75;
+type SendEventPaperSubSelected = 76;
+type SendEventGuardianWeeklySubSelected = 77;
+type SendEventDigiSubGiftSelected = 78;
+type SendEventGuardianWeeklySubGiftSelected = 79;
+type SendEventDigiSubConversion = 31;
+type SendEventPaperSubConversion = 67;
+type SendEventGuardianWeeklySubConversion = 68;
+type SendEventDigiSubGiftConversion = 69;
+type SendEventGuardianWeeklySubGiftConversion = 70;
 
-export type SendEventId = SendEventABTestId;
+type SendEventId =
+	| SendEventABTestId
+	| SendEventDigiSubSelected
+	| SendEventPaperSubSelected
+	| SendEventGuardianWeeklySubSelected
+	| SendEventDigiSubGiftSelected
+	| SendEventGuardianWeeklySubGiftSelected
+	| SendEventDigiSubConversion
+	| SendEventPaperSubConversion
+	| SendEventGuardianWeeklySubConversion
+	| SendEventDigiSubGiftConversion
+	| SendEventGuardianWeeklySubGiftConversion;
+
+const sendEventIds: Record<string, SendEventId> = {
+	digiSubSelected: 75,
+};
 
 function sendEvent(
 	id: SendEventId,
@@ -15,6 +41,32 @@ function sendEvent(
 ): void {
 	if (window.QuantumMetricAPI?.isOn()) {
 		window.QuantumMetricAPI.sendEvent(id, isConversion ? 1 : 0, value);
+	}
+}
+
+function sendEventWithCurrency(
+	id: SendEventId,
+	isConversion: boolean,
+	sourceCurrency: IsoCurrency,
+	value: number,
+): void {
+	console.log(
+		'sendEventWithCurrency --->',
+		id,
+		isConversion,
+		sourceCurrency,
+		value,
+	);
+
+	if (window.QuantumMetricAPI?.isOn()) {
+		const targetCurrency: IsoCurrency = 'GBP';
+		const convertedValue: number =
+			window.QuantumMetricAPI.currencyConvertFromToValue(
+				value,
+				sourceCurrency,
+				targetCurrency,
+			);
+		sendEvent(id, isConversion, convertedValue.toString());
 	}
 }
 
@@ -95,4 +147,4 @@ function init(participations: Participations): void {
 	});
 }
 
-export { init };
+export { init, sendEventWithCurrency, sendEventIds };
