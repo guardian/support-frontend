@@ -53,6 +53,20 @@ function sendEvent(
 	}
 }
 
+function waitForQuantumMetricAPi(onReady: () => void) {
+	let pollCount = 0;
+	const checkForQuantumMetricAPi = setInterval(() => {
+		pollCount = pollCount + 1;
+		if (window.QuantumMetricAPI?.isOn()) {
+			onReady();
+			clearInterval(checkForQuantumMetricAPi);
+		} else if (pollCount === 10) {
+			// give up waiting if QuantumMetricAPI is not ready after 10 attempts
+			clearInterval(checkForQuantumMetricAPi);
+		}
+	}, 500);
+}
+
 function sendEventWithProductAnnualValue(
 	id: SendEventId,
 	isConversion: boolean,
@@ -80,7 +94,7 @@ function sendEventWithProductAnnualValue(
 			};
 
 			/**
-			 * Quantum Metric's script sets up QuantumMetricAPI
+			 * Quantum Metric's script sets up QuantumMetricAPI.
 			 * We need to check it is defined and ready before we can
 			 * send events to it. If it is ready we call sendEventWhenReady
 			 * immediately. If it is not ready we poll a function that checks
@@ -90,12 +104,9 @@ function sendEventWithProductAnnualValue(
 			if (window.QuantumMetricAPI?.isOn()) {
 				sendEventWhenReady();
 			} else {
-				const waitForQuantumMetricAPi = setInterval(() => {
-					if (window.QuantumMetricAPI?.isOn()) {
-						sendEventWhenReady();
-						clearInterval(waitForQuantumMetricAPi);
-					}
-				}, 100);
+				waitForQuantumMetricAPi(() => {
+					sendEventWhenReady();
+				});
 			}
 		}
 	});
@@ -127,14 +138,11 @@ function sendEventABTestParticipations(participations: Participations): void {
 	 * queue of values to be sent with sendEvent.
 	 */
 	if (valueQueue.length) {
-		const waitForQuantumMetricAPi = setInterval(() => {
-			if (window.QuantumMetricAPI?.isOn()) {
-				valueQueue.forEach((value) => {
-					sendEvent(abTestParticipation, false, value);
-				});
-				clearInterval(waitForQuantumMetricAPi);
-			}
-		}, 100);
+		waitForQuantumMetricAPi(() => {
+			valueQueue.forEach((value) => {
+				sendEvent(abTestParticipation, false, value);
+			});
+		});
 	}
 }
 
