@@ -1,7 +1,6 @@
 package backend
 
 import cats.data.EitherT
-import cats.instances.future._
 import cats.syntax.apply._
 import cats.syntax.either._
 import cats.syntax.validated._

@@ -1,7 +1,7 @@
 package backend
 
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import com.amazon.pay.response.ipn.model.{AuthorizationNotification, NotificationType}
 import com.amazon.pay.response.model._
 import com.amazon.pay.response.parser.{CloseOrderReferenceResponseData, ConfirmOrderReferenceResponseData, ResponseData}

@@ -18,7 +18,6 @@ import com.gu.test.tags.objects.IntegrationTest
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import cats.implicits._
 import com.gu.config.Configuration
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}

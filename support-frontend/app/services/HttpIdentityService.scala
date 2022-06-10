@@ -2,7 +2,7 @@ package services
 
 import akka.actor.Scheduler
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import com.google.common.net.InetAddresses
 import com.gu.identity.model.PrivateFields
 import com.gu.monitoring.SafeLogger

@@ -1,7 +1,6 @@
 package backend
 
 import cats.data.EitherT
-import cats.implicits._
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.ga.{GoogleAnalyticsService, GoogleAnalyticsServiceMock}
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}

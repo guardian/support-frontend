@@ -1,6 +1,6 @@
 package com.gu.zuora.productHandlers
 
-import cats.implicits._
+import cats.syntax.all._
 import com.gu.WithLoggingSugar._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.PaperState
 import com.gu.support.workers.states.SendThankYouEmailState

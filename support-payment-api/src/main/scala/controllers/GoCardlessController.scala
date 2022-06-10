@@ -20,8 +20,6 @@ class GoCardlessController(
     with JsonUtils
     with StrictLogging
     with CorsActionProvider {
-
-  import cats.implicits._
   import util.RequestTypeDecoder.instances._
 
   def checkBankAccount: Action[CheckDirectDebitDetailsData] = CorsAction

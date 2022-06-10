@@ -1,6 +1,6 @@
 package config
 
-import cats.implicits._
+import cats.syntax.all._
 import com.typesafe.config.Config
 
 import scala.util.Try

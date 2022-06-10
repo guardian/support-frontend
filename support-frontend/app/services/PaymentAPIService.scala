@@ -8,7 +8,7 @@ import services.ExecutePaymentBody._
 import io.circe.Decoder
 import io.circe.parser.decode
 import com.gu.monitoring.SafeLogger
-import cats.implicits._
+import cats.syntax.all._
 import io.circe.generic.semiauto.deriveDecoder
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -5,7 +5,7 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.AssetsResolver
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.redemption._
