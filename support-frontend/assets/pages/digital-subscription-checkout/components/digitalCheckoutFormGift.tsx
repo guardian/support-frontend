@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
 import { TextArea } from '@guardian/source-react-components';
+import { useEffect } from 'react';
 import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
@@ -49,6 +50,10 @@ import {
 import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
+import {
+	sendEventIds,
+	sendEventWithProductAnnualValue,
+} from 'helpers/tracking/quantumMetric/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import { withError } from 'hocs/withError';
@@ -125,6 +130,16 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 		props.country,
 		props.billingPeriod,
 	);
+
+	useEffect(() => {
+		sendEventWithProductAnnualValue(
+			sendEventIds.digiSubGiftCheckoutStart,
+			false,
+			productPrice,
+			props.billingPeriod,
+		);
+	}, []);
+
 	const submissionErrorHeading =
 		props.submissionError === 'personal_details_incorrect'
 			? 'Sorry there was a problem'

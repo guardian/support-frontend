@@ -39,6 +39,7 @@ type SendEventId =
 const sendEventIds: Record<string, SendEventId> = {
 	abTestParticipation: 30,
 	digiSubCheckoutStart: 75,
+	digiSubGiftCheckoutStart: 78,
 };
 
 function sendEvent(

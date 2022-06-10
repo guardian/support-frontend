@@ -66,4 +66,14 @@ describe('Quantum Metric Helpers', () => {
 		const billingPeriod = 'Annual';
 		expect(getAnnualValue(productPrice, billingPeriod)).toBe(11900);
 	});
+	it('should get a fixed term subscriptions value', () => {
+		const productPrice: ProductPrice = {
+			price: 36,
+			currency: 'GBP',
+			fixedTerm: true,
+		};
+		const billingPeriod = 'Monthly';
+
+		expect(getAnnualValue(productPrice, billingPeriod)).toBe(3600);
+	});
 });

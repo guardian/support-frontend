@@ -22,7 +22,8 @@ export const getAnnualValue = (
 	};
 	const fullPriceInPenceCents = fullPrice * 100;
 	const fullAnnualPrice =
-		fullPriceInPenceCents * periodMultiplier[billingPeriod];
+		fullPriceInPenceCents *
+		(productPrice.fixedTerm ? 1 : periodMultiplier[billingPeriod]);
 
 	if (!promotion?.discountedPrice || !promotion.numberOfDiscountedPeriods) {
 		return fullAnnualPrice;
