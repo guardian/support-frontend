@@ -141,7 +141,9 @@ function CardForm(props: PropTypes) {
 		}
 	};
 
-	// Creates a new setupIntent upon recaptcha verification
+	// Sets up a callback for when the recaptcha has been verified.
+	// This callback will make a request to the backend to create a
+	// new setupIntent.
 	const setupRecurringRecaptchaCallback = () => {
 		setCalledRecaptchaRender(true);
 
@@ -325,20 +327,19 @@ function CardForm(props: PropTypes) {
 		}
 	}, [props.setupIntentClientSecret]);
 
-	const isZipCodeFieldValid = () =>
-		showZipCodeField ? isValidZipCode(zipCode) : true;
+	const isZipCodeFieldValid = showZipCodeField ? isValidZipCode(zipCode) : true;
+
+	const showZipCodeError =
+		props.checkoutFormHasBeenSubmitted && !isZipCodeFieldValid;
 
 	useEffect(() => {
 		const formIsComplete =
 			fieldStates.CardNumber.name === 'Complete' &&
 			fieldStates.Expiry.name === 'Complete' &&
 			fieldStates.CVC.name === 'Complete' &&
-			isZipCodeFieldValid();
+			isZipCodeFieldValid;
 		props.setStripeCardFormComplete(formIsComplete);
 	}, [fieldStates, zipCode]);
-
-	const showZipCodeError =
-		props.checkoutFormHasBeenSubmitted && !isZipCodeFieldValid();
 
 	const recaptchaVerified =
 		props.contributionType === 'ONE_OFF'
