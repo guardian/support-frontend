@@ -92,7 +92,7 @@ function sendEventWithProductAnnualValue(
 
 function sendEventABTestParticipations(participations: Participations): void {
 	const { abTestParticipation } = sendEventIds;
-	const sendEventQueue: Array<() => void> = [];
+	const valueQueue: string[] = [];
 
 	Object.keys(participations).forEach((testId) => {
 		const value = `${testId}-${participations[testId]}`;
@@ -105,9 +105,7 @@ function sendEventABTestParticipations(participations: Participations): void {
 		if (window.QuantumMetricAPI?.isOn()) {
 			sendEvent(abTestParticipation, false, value);
 		} else {
-			sendEventQueue.push(() => {
-				sendEvent(abTestParticipation, false, value);
-			});
+			valueQueue.push(value);
 		}
 	});
 
@@ -117,11 +115,11 @@ function sendEventABTestParticipations(participations: Participations): void {
 	 * QuantumMetricAPI is available. Once it's available we process the
 	 * queue of values to be sent with sendEvent.
 	 */
-	if (sendEventQueue.length) {
+	if (valueQueue.length) {
 		const waitForQuantumMetricAPi = setInterval(() => {
 			if (window.QuantumMetricAPI?.isOn()) {
-				sendEventQueue.forEach((queuedSendEvent) => {
-					queuedSendEvent();
+				valueQueue.forEach((value) => {
+					sendEvent(abTestParticipation, false, value);
 				});
 				clearInterval(waitForQuantumMetricAPi);
 			}
