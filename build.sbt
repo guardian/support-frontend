@@ -85,7 +85,7 @@ lazy val releaseSettings = Seq(
 )
 
 lazy val commonDependencies = Seq(
-  "com.typesafe" % "config" % "1.3.2",
+  "com.typesafe" % "config" % "1.3.4",
   scalatest % "test",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
 )
@@ -135,7 +135,7 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     `support-services` % "compile->compile;test->test",
     `support-models`,
     `support-config`,
-    `support-internationalisation`
+    `support-internationalisation`,
   )
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
