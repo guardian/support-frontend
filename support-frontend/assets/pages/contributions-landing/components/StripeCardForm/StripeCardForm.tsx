@@ -179,7 +179,58 @@ function CardForm(props: PropTypes) {
 		});
 	};
 
-	const setupRecaptchaTokenForOneOff = () => {
+	const setupRecurringRecaptcha = (): void => {
+		if (window.guardian.recaptchaEnabled) {
+			if (window.grecaptcha?.render) {
+				setupRecurringRecaptchaCallback();
+			} else {
+				window.v2OnloadCallback = setupRecurringRecaptchaCallback;
+			}
+		}
+	};
+
+	const handleCardSetupForRecurring = (clientSecret: string): void => {
+		const cardElement = elements?.getElement(CardNumberElement);
+		if (cardElement) {
+			void stripe
+				?.confirmCardSetup(clientSecret, {
+					payment_method: {
+						card: cardElement,
+						billing_details: {
+							address: {
+								postal_code: zipCode,
+							},
+						},
+					},
+				})
+				.then((result) => {
+					if (result.error) {
+						handleStripeError(result.error);
+					} else if (result.setupIntent.payment_method) {
+						void props.onPaymentAuthorised(result.setupIntent.payment_method);
+					}
+				});
+		}
+	};
+
+	const setupRecurringHandlers = (): void => {
+		// Start by requesting the client_secret for a new Payment Method.
+		// Note - because this value is requested asynchronously when the component loads,
+		// it's possible for it to arrive after the user clicks 'Contribute'.
+		// This is handled in the callback below by checking the value of paymentWaiting.
+		props.setCreateStripePaymentMethod((clientSecret: string | null) => {
+			props.setPaymentWaiting(true);
+
+			/* Recaptcha verification is required for setupIntent creation.
+      If setupIntentClientSecret is ready then complete the payment now.
+      If setupIntentClientSecret is not ready then componentDidUpdate will complete the payment when it arrives. */
+			if (clientSecret) {
+				handleCardSetupForRecurring(clientSecret);
+			}
+		});
+	};
+
+	const setupOneOffRecaptchaCallback = () => {
 		window.grecaptcha?.render('robot_checkbox', {
 			sitekey: window.guardian.v2recaptchaPublicKey,
 			callback: (token: string) => {
@@ -192,9 +243,9 @@ function CardForm(props: PropTypes) {
 	const setupOneOffRecaptcha = (): void => {
 		if (window.guardian.recaptchaEnabled) {
 			if (window.grecaptcha?.render) {
-				setupRecaptchaTokenForOneOff();
+				setupOneOffRecaptchaCallback();
 			} else {
-				window.v2OnloadCallback = setupRecaptchaTokenForOneOff;
+				window.v2OnloadCallback = setupOneOffRecaptchaCallback;
 			}
 		}
 	};
@@ -223,61 +274,11 @@ function CardForm(props: PropTypes) {
 					});
 			}
 		});
+
 		// @ts-expect-error TODO: This needs fixing in the reducer; we may always get undefined because we can't be sure the Stripe SDK will load
 		props.setHandleStripe3DS((clientSecret: string) => {
 			trackStripe3ds();
 			return stripe?.handleCardAction(clientSecret);
-		});
-	};
-
-	const handleCardSetupForRecurring = (clientSecret: string): void => {
-		const cardElement = elements?.getElement(CardNumberElement);
-		if (cardElement) {
-			void stripe
-				?.confirmCardSetup(clientSecret, {
-					payment_method: {
-						card: cardElement,
-						billing_details: {
-							address: {
-								postal_code: zipCode,
-							},
-						},
-					},
-				})
-				.then((result) => {
-					if (result.error) {
-						handleStripeError(result.error);
-					} else if (result.setupIntent.payment_method) {
-						void props.onPaymentAuthorised(result.setupIntent.payment_method);
-					}
-				});
-		}
-	};
-
-	const setupRecurringRecaptcha = (): void => {
-		if (window.guardian.recaptchaEnabled) {
-			if (window.grecaptcha?.render) {
-				setupRecurringRecaptchaCallback();
-			} else {
-				window.v2OnloadCallback = setupRecurringRecaptchaCallback;
-			}
-		}
-	};
-
-	const setupRecurringHandlers = (): void => {
-		// Start by requesting the client_secret for a new Payment Method.
-		// Note - because this value is requested asynchronously when the component loads,
-		// it's possible for it to arrive after the user clicks 'Contribute'.
-		// This is handled in the callback below by checking the value of paymentWaiting.
-		props.setCreateStripePaymentMethod((clientSecret: string | null) => {
-			props.setPaymentWaiting(true);
-
-			/* Recaptcha verification is required for setupIntent creation.
-      If setupIntentClientSecret is ready then complete the payment now.
-      If setupIntentClientSecret is not ready then componentDidUpdate will complete the payment when it arrives. */
-			if (clientSecret) {
-				handleCardSetupForRecurring(clientSecret);
-			}
 		});
 	};
 
