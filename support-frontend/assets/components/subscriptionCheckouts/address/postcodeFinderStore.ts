@@ -30,13 +30,13 @@ export type PostcodeFinderActions =
 	  });
 
 function postcodeFinderActionCreatorsFor(scope: AddressType): {
-	setPostcode: (postcode: string) => void;
+	setPostcodeForFinder: (postcode: string) => void;
 	fetchResults: (
 		postcode?: string,
 	) => (dispatch: Dispatch<PostcodeFinderActions>) => void;
 } {
 	return {
-		setPostcode: (postcode: string) => ({
+		setPostcodeForFinder: (postcode: string) => ({
 			type: 'SET_POSTCODE_FINDER_POSTCODE',
 			postcode,
 			scope,

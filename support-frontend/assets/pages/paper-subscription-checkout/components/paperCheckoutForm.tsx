@@ -24,7 +24,10 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import { options } from 'components/forms/customFields/options';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import {
+	BillingAddress,
+	DeliveryAddress,
+} from 'components/subscriptionCheckouts/address/scopedAddressFields';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
@@ -70,10 +73,6 @@ import {
 import type {
 	CheckoutState,
 	WithDeliveryCheckoutState,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import {
-	getBillingAddress,
-	getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
@@ -184,19 +183,6 @@ function mapDispatchToProps() {
 const connector = connect(mapStateToProps, mapDispatchToProps());
 
 type PropTypes = ConnectedProps<typeof connector>;
-
-// ----- Form Fields ----- //
-const DeliveryAddress = withStore(
-	newspaperCountries,
-	'delivery',
-	getDeliveryAddress,
-);
-
-const BillingAddress = withStore(
-	newspaperCountries,
-	'billing',
-	getBillingAddress,
-);
 
 // ----- Lifecycle hooks ----- //
 // Updated to use useEffect so it only fires once (like componentDidMount)
@@ -377,7 +363,7 @@ function PaperCheckoutForm(props: PropTypes) {
 					</FormSection>
 
 					<FormSection title={deliveryTitle}>
-						<DeliveryAddress />
+						<DeliveryAddress countries={newspaperCountries} />
 						{isHomeDelivery ? (
 							<TextArea
 								css={controlTextAreaResizing}
@@ -426,7 +412,7 @@ function PaperCheckoutForm(props: PropTypes) {
 					</FormSection>
 					{!props.billingAddressIsSame ? (
 						<FormSection title="Your billing address">
-							<BillingAddress />
+							<BillingAddress countries={newspaperCountries} />
 						</FormSection>
 					) : null}
 					{isHomeDelivery ? (

@@ -10,7 +10,7 @@ import { useCsrCustomerData } from 'components/csr/csrMode';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import { BillingAddress } from 'components/subscriptionCheckouts/address/scopedAddressFields';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import CheckoutLayout, {
 	Content,
@@ -49,7 +49,6 @@ import {
 	submitCheckoutForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
@@ -116,8 +115,6 @@ function mapDispatchToProps() {
 			setCsrCustomerData('billing', customerData),
 	};
 }
-
-const Address = withStore(countries, 'billing', getBillingAddress);
 
 const connector = connect(mapStateToProps, mapDispatchToProps());
 
@@ -194,7 +191,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 						/>
 					</FormSection>
 					<FormSection title="Address">
-						<Address />
+						<BillingAddress countries={countries} />
 					</FormSection>
 					{paymentMethods.length > 1 ? (
 						<FormSection title="How would you like to pay?">

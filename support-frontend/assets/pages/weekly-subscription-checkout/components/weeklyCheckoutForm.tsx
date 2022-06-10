@@ -20,8 +20,11 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import { options } from 'components/forms/customFields/options';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import {
+	BillingAddress,
+	DeliveryAddress,
+} from 'components/subscriptionCheckouts/address/scopedAddressFields';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
@@ -34,7 +37,6 @@ import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import { countries } from 'helpers/internationalisation/country';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
@@ -59,10 +61,6 @@ import {
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import {
-	getBillingAddress,
-	getDeliveryAddress,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/urls/routes';
 import { titles } from 'helpers/user/details';
@@ -157,12 +155,6 @@ const connector = connect(mapStateToProps, mapDispatchToProps());
 type PropTypes = ConnectedProps<typeof connector>;
 
 // ----- Form Fields ----- //
-const DeliveryAddress = withStore(
-	weeklyDeliverableCountries,
-	'delivery',
-	getDeliveryAddress,
-);
-const BillingAddress = withStore(countries, 'billing', getBillingAddress);
 const days = getWeeklyDays();
 
 // ----- Component ----- //
@@ -250,7 +242,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						/>
 					</FormSection>
 					<FormSection title="Where should we deliver your magazine?">
-						<DeliveryAddress />
+						<DeliveryAddress countries={weeklyDeliverableCountries} />
 					</FormSection>
 					<FormSection title="Is the billing address the same as the delivery address?">
 						<Rows>
@@ -284,7 +276,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					</FormSection>
 					{!props.billingAddressIsSame ? (
 						<FormSection title="Your billing address">
-							<BillingAddress />
+							<BillingAddress countries={weeklyDeliverableCountries} />
 						</FormSection>
 					) : null}
 					<FormSection title="Please select the first publication you’d like to receive">

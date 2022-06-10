@@ -14,7 +14,7 @@ import DatePickerFields from 'components/datePicker/datePicker';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import { BillingAddress } from 'components/subscriptionCheckouts/address/scopedAddressFields';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import CheckoutLayout, {
 	Content,
@@ -46,7 +46,6 @@ import {
 	submitCheckoutForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { routes } from 'helpers/urls/routes';
@@ -116,7 +115,6 @@ const connector = connect(mapStateToProps, mapDispatchToProps());
 type PropTypes = ConnectedProps<typeof connector>;
 
 const DatePickerWithError = withError(DatePickerFields);
-const Address = withStore(countries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
@@ -213,7 +211,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 						/>
 					</FormSection>
 					<FormSection title="Billing address">
-						<Address />
+						<BillingAddress countries={countries} />
 					</FormSection>
 					{paymentMethods.length > 1 ? (
 						<FormSection title="How would you like to pay?">
