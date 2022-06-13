@@ -10,5 +10,5 @@ object LibraryVersions {
   val okhttpVersion = "3.10.0"
   val scalaUriVersion = "2.2.6"
   val playCirceVersion = "2814.2"
-  val stripeVersion = "10.12.0" // Supports API version 2019-05-16
+  val stripeVersion = "10.12.2" // Supports API version 2019-05-16
 }
