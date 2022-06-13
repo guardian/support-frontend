@@ -3,15 +3,12 @@ import { loadScript } from '@guardian/libs';
 import type { Participations } from 'helpers/abTests/abtest';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type {
-	DigitalBillingPeriod,
-	DigitalGiftBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { logException } from 'helpers/utilities/logger';
 import { getAnnualValue } from './quantumMetricHelpers';
 
-type SendEventABTestId = 30;
+type SendEventTestParticipationId = 30;
 type SendEventDigiSubCheckoutStart = 75;
 type SendEventPaperSubCheckoutStart = 76;
 type SendEventGuardianWeeklySubCheckoutStart = 77;
@@ -38,9 +35,16 @@ type SendEventCheckoutConversionId =
 	| SendEventGuardianWeeklySubGiftConversion;
 
 type SendEventId =
-	| SendEventABTestId
+	| SendEventTestParticipationId
 	| SendEventCheckoutStartId
 	| SendEventCheckoutConversionId;
+
+const testParticipationId = 30;
+const digiSubCheckoutStartId = 75;
+const paperSubCheckoutStartId = 76;
+const guardianWeeklySubCheckoutStart = 77;
+const digiSubGiftCheckoutStartId = 78;
+const guardianWeeklySubGiftCheckoutStart = 79;
 
 function sendEvent(
 	id: SendEventId,
@@ -67,10 +71,10 @@ function waitForQuantumMetricAPi(onReady: () => void) {
 	}, 500);
 }
 
-function sendEventCheckoutStart(
+function sendEventSubscriptionCheckoutStart(
 	id: SendEventCheckoutStartId,
 	productPrice: ProductPrice,
-	billingPeriod: DigitalBillingPeriod | DigitalGiftBillingPeriod,
+	billingPeriod: BillingPeriod,
 ): void {
 	/**
 	 * Check user has granted consent to Quantum Metric
@@ -79,6 +83,11 @@ function sendEventCheckoutStart(
 		if (hasConsent) {
 			const sourceCurrency = productPrice.currency;
 			const value = getAnnualValue(productPrice, billingPeriod);
+
+			if (!value) {
+				return;
+			}
+
 			const targetCurrency: IsoCurrency = 'GBP';
 			const sendEventWhenReady = () => {
 				if (window.QuantumMetricAPI?.isOn()) {
@@ -112,7 +121,6 @@ function sendEventCheckoutStart(
 }
 
 function sendEventABTestParticipations(participations: Participations): void {
-	const sendEventABTestId = 30;
 	const valueQueue: string[] = [];
 
 	Object.keys(participations).forEach((testId) => {
@@ -124,7 +132,7 @@ function sendEventABTestParticipations(participations: Participations): void {
 		 * a valueQueue to be processed later.
 		 */
 		if (window.QuantumMetricAPI?.isOn()) {
-			sendEvent(sendEventABTestId, false, value);
+			sendEvent(testParticipationId, false, value);
 		} else {
 			valueQueue.push(value);
 		}
@@ -139,7 +147,7 @@ function sendEventABTestParticipations(participations: Participations): void {
 	if (valueQueue.length) {
 		waitForQuantumMetricAPi(() => {
 			valueQueue.forEach((value) => {
-				sendEvent(sendEventABTestId, false, value);
+				sendEvent(testParticipationId, false, value);
 			});
 		});
 	}
@@ -196,4 +204,12 @@ function init(participations: Participations): void {
 	});
 }
 
-export { init, sendEventCheckoutStart };
+export {
+	init,
+	sendEventSubscriptionCheckoutStart,
+	digiSubCheckoutStartId,
+	digiSubGiftCheckoutStartId,
+	guardianWeeklySubCheckoutStart,
+	paperSubCheckoutStartId,
+	guardianWeeklySubGiftCheckoutStart,
+};

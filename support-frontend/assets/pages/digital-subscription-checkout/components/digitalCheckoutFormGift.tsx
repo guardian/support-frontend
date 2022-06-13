@@ -50,7 +50,10 @@ import {
 import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
-import { sendEventCheckoutStart } from 'helpers/tracking/quantumMetric';
+import {
+	digiSubGiftCheckoutStartId,
+	sendEventSubscriptionCheckoutStart,
+} from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import { withError } from 'hocs/withError';
@@ -129,10 +132,8 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 	);
 
 	useEffect(() => {
-		const sendEventDigiSubGiftCheckoutStartId = 78;
-
-		sendEventCheckoutStart(
-			sendEventDigiSubGiftCheckoutStartId,
+		sendEventSubscriptionCheckoutStart(
+			digiSubGiftCheckoutStartId,
 			productPrice,
 			props.billingPeriod,
 		);

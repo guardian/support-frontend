@@ -52,7 +52,10 @@ import {
 } from 'helpers/subscriptionsForms/submit';
 import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
-import { sendEventCheckoutStart } from 'helpers/tracking/quantumMetric';
+import {
+	digiSubCheckoutStartId,
+	sendEventSubscriptionCheckoutStart,
+} from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
@@ -136,10 +139,8 @@ function DigitalCheckoutForm(props: PropTypes) {
 	);
 
 	useEffect(() => {
-		const sendEventDigiSubCheckoutStartId = 75;
-
-		sendEventCheckoutStart(
-			sendEventDigiSubCheckoutStartId,
+		sendEventSubscriptionCheckoutStart(
+			digiSubCheckoutStartId,
 			productPrice,
 			props.billingPeriod,
 		);

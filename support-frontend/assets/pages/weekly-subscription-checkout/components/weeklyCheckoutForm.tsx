@@ -7,6 +7,7 @@ import {
 	RadioGroup,
 	Select,
 } from '@guardian/source-react-components';
+import { useEffect } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Rows from 'components/base/rows';
@@ -64,6 +65,10 @@ import {
 	getDeliveryAddress,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
+import {
+	guardianWeeklySubCheckoutStart,
+	sendEventSubscriptionCheckoutStart,
+} from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { titles } from 'helpers/user/details';
 import { signOut } from 'helpers/user/user';
@@ -72,6 +77,7 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+
 // ----- Styles ----- //
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -176,6 +182,15 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.billingPeriod,
 		fulfilmentOption,
 	);
+
+	useEffect(() => {
+		sendEventSubscriptionCheckoutStart(
+			guardianWeeklySubCheckoutStart,
+			price,
+			props.billingPeriod,
+		);
+	}, []);
+
 	const submissionErrorHeading =
 		props.submissionError === 'personal_details_incorrect'
 			? 'Sorry there was a problem'
