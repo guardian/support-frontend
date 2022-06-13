@@ -8,7 +8,7 @@ scalacOptions ++= Seq(
   "-Ymacro-annotations",
 )
 
-addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.11.2")
+addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.11.3")
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
@@ -29,7 +29,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "org.playframework.anorm" %% "anorm" % "2.6.8",
-  "org.scalatest" %% "scalatest" % "3.0.4" % "test",
+  "org.scalatest" %% "scalatest" % "3.0.9" % "test",
   "org.scalatestplus" %% "mockito-3-4" % "3.2.1.0" % "test",
   "org.mockito" % "mockito-core" % "3.4.0",
   "org.typelevel" %% "cats-core" % catsVersion,
@@ -41,7 +41,7 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jdk8" % jacksonVersion,
   "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % jacksonVersion,
-  "com.google.guava" % "guava" % "25.1-jre", // -- added explicitly - snyk report avoid logback vulnerability
+  "com.google.guava" % "guava" % "25.0-jre", // -- added explicitly - snyk report avoid logback vulnerability
   "com.paypal.sdk" % "rest-api-sdk" % "1.13.0" exclude ("org.apache.logging.log4j", "log4j-slf4j-impl"),
   akkaHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support

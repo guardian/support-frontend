@@ -1,9 +1,9 @@
 // ----- Imports ----- //
 import { combineReducers } from '@reduxjs/toolkit';
-import csrf from 'helpers/csrf/csrfReducer';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { ReaderType } from 'helpers/productPrice/readerType';
+import { csrfReducer } from 'helpers/redux/checkout/csrf/reducer';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { marketingConsentReducer } from 'helpers/redux/checkout/marketingConsent/reducer';
 import type { MarketingConsentState } from 'helpers/redux/checkout/marketingConsent/state';
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
@@ -27,11 +27,11 @@ export type RedemptionFormState = {
 	readerType: Option<ReaderType>;
 	error: Option<string>;
 	user: User;
-	csrf: Csrf;
 	checkout: RedemptionCheckoutState;
 	checkoutForm: {
 		personalDetails: PersonalDetailsState;
 		marketingConsent: MarketingConsentState;
+		csrf: CsrfState;
 	};
 };
 
@@ -132,12 +132,12 @@ export const redemptionPageReducer = combineReducers({
 	userCode,
 	readerType,
 	error,
-	csrf,
 	user: createUserReducer(),
 	checkout: createRedemptionCheckoutReducer(),
 	checkoutForm: combineReducers({
 		personalDetails: personalDetailsReducer,
 		product: productReducer,
 		marketingConsent: marketingConsentReducer,
+		csrf: csrfReducer,
 	}),
 });

@@ -247,7 +247,7 @@ function createSubscription(
 		routes.subscriptionCreate,
 		data,
 		state.common.abParticipations,
-		state.page.csrf,
+		state.page.checkoutForm.csrf,
 	)
 		.then(handleSubscribeResult)
 		.catch(() => null);
