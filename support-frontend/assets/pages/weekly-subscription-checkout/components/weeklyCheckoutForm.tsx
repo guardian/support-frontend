@@ -66,7 +66,7 @@ import {
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import {
-	guardianWeeklySubCheckoutStart,
+	SendEventCheckoutStart,
 	sendEventSubscriptionCheckoutStart,
 } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
@@ -185,7 +185,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 
 	useEffect(() => {
 		sendEventSubscriptionCheckoutStart(
-			guardianWeeklySubCheckoutStart,
+			SendEventCheckoutStart.GuardianWeeklySub,
 			price,
 			props.billingPeriod,
 		);

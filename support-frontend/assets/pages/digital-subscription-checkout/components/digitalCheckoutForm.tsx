@@ -53,7 +53,7 @@ import {
 import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import {
-	digiSubCheckoutStartId,
+	SendEventCheckoutStart,
 	sendEventSubscriptionCheckoutStart,
 } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
@@ -140,7 +140,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 
 	useEffect(() => {
 		sendEventSubscriptionCheckoutStart(
-			digiSubCheckoutStartId,
+			SendEventCheckoutStart.DigiSub,
 			productPrice,
 			props.billingPeriod,
 		);

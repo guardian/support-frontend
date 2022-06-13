@@ -78,7 +78,7 @@ import {
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import {
-	paperSubCheckoutStartId,
+	SendEventCheckoutStart,
 	sendEventSubscriptionCheckoutStart,
 } from 'helpers/tracking/quantumMetric';
 import { paperSubsUrl } from 'helpers/urls/routes';
@@ -294,7 +294,7 @@ function PaperCheckoutForm(props: PropTypes) {
 		);
 
 		sendEventSubscriptionCheckoutStart(
-			paperSubCheckoutStartId,
+			SendEventCheckoutStart.PaperSub,
 			props.amount,
 			props.billingPeriod,
 		);

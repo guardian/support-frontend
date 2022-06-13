@@ -9,42 +9,27 @@ import { logException } from 'helpers/utilities/logger';
 import { getAnnualValue } from './quantumMetricHelpers';
 
 type SendEventTestParticipationId = 30;
-type SendEventDigiSubCheckoutStart = 75;
-type SendEventPaperSubCheckoutStart = 76;
-type SendEventGuardianWeeklySubCheckoutStart = 77;
-type SendEventDigiSubGiftCheckoutStart = 78;
-type SendEventGuardianWeeklySubGiftCheckoutStart = 79;
-type SendEventDigiSubConversion = 31;
-type SendEventPaperSubConversion = 67;
-type SendEventGuardianWeeklySubConversion = 68;
-type SendEventDigiSubGiftConversion = 69;
-type SendEventGuardianWeeklySubGiftConversion = 70;
 
-type SendEventCheckoutStartId =
-	| SendEventDigiSubCheckoutStart
-	| SendEventPaperSubCheckoutStart
-	| SendEventGuardianWeeklySubCheckoutStart
-	| SendEventDigiSubGiftCheckoutStart
-	| SendEventGuardianWeeklySubGiftCheckoutStart;
+enum SendEventCheckoutStart {
+	DigiSub = 75,
+	PaperSub = 76,
+	GuardianWeeklySub = 77,
+	DigiSubGift = 78,
+	GuardianWeeklySubGift = 79,
+}
 
-type SendEventCheckoutConversionId =
-	| SendEventDigiSubConversion
-	| SendEventPaperSubConversion
-	| SendEventGuardianWeeklySubConversion
-	| SendEventDigiSubGiftConversion
-	| SendEventGuardianWeeklySubGiftConversion;
+enum SendEventCheckoutConverion {
+	DigiSubConversion = 31,
+	PaperSubConversion = 67,
+	GuardianWeeklySubConversion = 68,
+	DigiSubGiftConversion = 69,
+	GuardianWeeklySubGiftConversion = 70,
+}
 
 type SendEventId =
 	| SendEventTestParticipationId
-	| SendEventCheckoutStartId
-	| SendEventCheckoutConversionId;
-
-const testParticipationId = 30;
-const digiSubCheckoutStartId = 75;
-const paperSubCheckoutStartId = 76;
-const guardianWeeklySubCheckoutStart = 77;
-const digiSubGiftCheckoutStartId = 78;
-const guardianWeeklySubGiftCheckoutStart = 79;
+	| SendEventCheckoutStart
+	| SendEventCheckoutConverion;
 
 function sendEvent(
 	id: SendEventId,
@@ -71,7 +56,7 @@ function waitForQuantumMetricAPi(onReady: () => void) {
 }
 
 function sendEventSubscriptionCheckoutStart(
-	id: SendEventCheckoutStartId,
+	id: SendEventCheckoutStart,
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
 ): void {
@@ -120,6 +105,7 @@ function sendEventSubscriptionCheckoutStart(
 }
 
 function sendEventABTestParticipations(participations: Participations): void {
+	const sendEventABTestId = 30;
 	const valueQueue: string[] = [];
 
 	Object.keys(participations).forEach((testId) => {
@@ -131,7 +117,7 @@ function sendEventABTestParticipations(participations: Participations): void {
 		 * a valueQueue to be processed later.
 		 */
 		if (window.QuantumMetricAPI?.isOn()) {
-			sendEvent(testParticipationId, false, value);
+			sendEvent(sendEventABTestId, false, value);
 		} else {
 			valueQueue.push(value);
 		}
@@ -146,7 +132,7 @@ function sendEventABTestParticipations(participations: Participations): void {
 	if (valueQueue.length) {
 		waitForQuantumMetricAPi(() => {
 			valueQueue.forEach((value) => {
-				sendEvent(testParticipationId, false, value);
+				sendEvent(sendEventABTestId, false, value);
 			});
 		});
 	}
@@ -203,12 +189,4 @@ function init(participations: Participations): void {
 	});
 }
 
-export {
-	init,
-	sendEventSubscriptionCheckoutStart,
-	digiSubCheckoutStartId,
-	digiSubGiftCheckoutStartId,
-	guardianWeeklySubCheckoutStart,
-	paperSubCheckoutStartId,
-	guardianWeeklySubGiftCheckoutStart,
-};
+export { init, sendEventSubscriptionCheckoutStart, SendEventCheckoutStart };
