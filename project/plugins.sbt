@@ -4,7 +4,7 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.11")
 
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.0")
 
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.0")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.6")
 
 addSbtPlugin(
   "com.typesafe.play" % "sbt-plugin" % "2.8.13",
@@ -16,7 +16,7 @@ addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.7.0")
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.5")
 
-libraryDependencies += "org.vafer" % "jdeb" % "1.5" artifacts (Artifact("jdeb", "jar", "jar"))
+libraryDependencies += "org.vafer" % "jdeb" % "1.10" artifacts (Artifact("jdeb", "jar", "jar"))
 
 addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.6")
 
