@@ -6,7 +6,7 @@ import {
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
 import { useEffect, useState } from 'react';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import {
 	trackComponentClick,
 	trackComponentLoad,
@@ -43,7 +43,7 @@ const buttonContainer = css`
 
 type ContributionThankYouSignInProps = {
 	email: string;
-	csrf: Csrf;
+	csrf: CsrfState;
 };
 
 type CreateSignInUrlResponse = {
