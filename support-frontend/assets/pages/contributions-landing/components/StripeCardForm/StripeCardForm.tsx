@@ -7,11 +7,7 @@ import {
 	CardNumberElement,
 } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/react-stripe-js';
-import type {
-	PaymentIntentResult,
-	StripeElementChangeEvent,
-	StripeError,
-} from '@stripe/stripe-js';
+import type { PaymentIntentResult, StripeError } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
@@ -46,6 +42,8 @@ import type { State } from 'pages/contributions-landing/contributionsLandingRedu
 import CreditCardsROW from './creditCardsROW.svg';
 import CreditCardsUS from './creditCardsUS.svg';
 import { StripeCardFormField } from './StripeCardFormField';
+import { useCardFormFieldStates } from './useCardFormFieldStates';
+import { useSelectedField } from './useSelectedField';
 import './stripeCardForm.scss';
 
 // ----- Types -----//
@@ -103,20 +101,6 @@ type PropTypes = ConnectedProps<typeof connector> & {
 	stripeKey: string;
 };
 
-type CardFieldState =
-	| {
-			name: 'Error';
-			errorMessage: string;
-	  }
-	| {
-			name: 'Incomplete';
-	  }
-	| {
-			name: 'Complete';
-	  };
-
-type CardFieldName = 'CardNumber' | 'Expiry' | 'CVC';
-
 const fieldStyle = {
 	base: {
 		fontFamily:
@@ -148,30 +132,17 @@ const renderVerificationCopy = (
 	);
 };
 
-const errorMessageFromState = (state: CardFieldState): string | null =>
-	state.name === 'Error' ? state.errorMessage : null;
-
 function CardForm(props: PropTypes) {
 	/**
 	 * State
 	 */
-	const [currentlySelected, setCurrentlySelected] =
-		useState<CardFieldName | null>(null);
-	const [fieldStates, setFieldStates] = useState<
-		Record<CardFieldName, CardFieldState>
-	>({
-		CardNumber: {
-			name: 'Incomplete',
-		},
-		Expiry: {
-			name: 'Incomplete',
-		},
-		CVC: {
-			name: 'Incomplete',
-		},
-	});
 	const stripe = stripeJs.useStripe();
 	const elements = stripeJs.useElements();
+
+	const { fieldStates, onFieldChange, errorMessage } = useCardFormFieldStates();
+
+	const { selectedField, selectField, clearSelectedField } = useSelectedField();
+
 	// Used to avoid calling grecaptcha.render twice when switching between monthly + annual
 	const [calledRecaptchaRender, setCalledRecaptchaRender] =
 		useState<boolean>(false);
@@ -184,33 +155,6 @@ function CardForm(props: PropTypes) {
 	/**
 	 * Handlers
 	 */
-	const onChange =
-		(fieldName: CardFieldName) => (update: StripeElementChangeEvent) => {
-			const newFieldState = () => {
-				if (update.error) {
-					return {
-						name: 'Error',
-						errorMessage: update.error.message,
-					};
-				}
-
-				if (update.complete) {
-					return {
-						name: 'Complete',
-					};
-				}
-
-				return {
-					name: 'Incomplete',
-				};
-			};
-
-			setFieldStates((prevData) => ({
-				...prevData,
-				[fieldName]: newFieldState(),
-			}));
-		};
-
 	const handleStripeError = (errorData: StripeError): void => {
 		props.setPaymentWaiting(false);
 		logException(`Error creating Payment Method: ${JSON.stringify(errorData)}`);
@@ -442,28 +386,8 @@ function CardForm(props: PropTypes) {
 	/**
 	 * Rendering
 	 */
-	const fieldError: string | null | undefined =
-		errorMessageFromState(fieldStates.CardNumber) ??
-		errorMessageFromState(fieldStates.Expiry) ??
-		errorMessageFromState(fieldStates.CVC);
 	const showZipCodeError =
 		props.checkoutFormHasBeenSubmitted && !isZipCodeFieldValid();
-
-	const incompleteMessage = (): string | null | undefined => {
-		if (
-			props.checkoutFormHasBeenSubmitted &&
-			(fieldStates.CardNumber.name === 'Incomplete' ||
-				fieldStates.Expiry.name === 'Incomplete' ||
-				fieldStates.CVC.name === 'Incomplete')
-		) {
-			return 'Please complete your card details';
-		}
-
-		return undefined;
-	};
-
-	const errorMessage: string | null | undefined =
-		fieldError ?? incompleteMessage();
 
 	const showCards = (country: IsoCountry) => {
 		if (country === 'US') {
@@ -482,7 +406,10 @@ function CardForm(props: PropTypes) {
 			<legend className="form__legend">
 				<h3>Your card details</h3>
 			</legend>
-			{errorMessage ? <InlineError> {errorMessage} </InlineError> : null}
+
+			{props.checkoutFormHasBeenSubmitted && errorMessage && (
+				<InlineError> {errorMessage} </InlineError>
+			)}
 
 			<StripeCardFormField
 				label={
@@ -497,13 +424,13 @@ function CardForm(props: PropTypes) {
 						options={{
 							style: fieldStyle,
 						}}
-						onChange={onChange('CardNumber')}
-						onFocus={() => setCurrentlySelected('CardNumber')}
-						onBlur={() => setCurrentlySelected(null)}
+						onChange={onFieldChange('CardNumber')}
+						onFocus={selectField('CardNumber')}
+						onBlur={clearSelectedField}
 					/>
 				}
 				error={fieldStates.CardNumber.name === 'Error'}
-				focus={currentlySelected === 'CardNumber'}
+				focus={selectedField === 'CardNumber'}
 			/>
 
 			<div className="ds-stripe-card-input__expiry-security-container">
@@ -519,13 +446,13 @@ function CardForm(props: PropTypes) {
 								options={{
 									style: fieldStyle,
 								}}
-								onChange={onChange('Expiry')}
-								onFocus={() => setCurrentlySelected('Expiry')}
-								onBlur={() => setCurrentlySelected(null)}
+								onChange={onFieldChange('Expiry')}
+								onFocus={selectField('Expiry')}
+								onBlur={clearSelectedField}
 							/>
 						}
 						error={fieldStates.Expiry.name === 'Error'}
-						focus={currentlySelected === 'Expiry'}
+						focus={selectedField === 'Expiry'}
 					/>
 				</div>
 
@@ -554,13 +481,13 @@ function CardForm(props: PropTypes) {
 								options={{
 									style: fieldStyle,
 								}}
-								onChange={onChange('CVC')}
-								onFocus={() => setCurrentlySelected('CVC')}
-								onBlur={() => setCurrentlySelected(null)}
+								onChange={onFieldChange('CVC')}
+								onFocus={selectField('CVC')}
+								onBlur={clearSelectedField}
 							/>
 						}
 						error={fieldStates.CVC.name === 'Error'}
-						focus={currentlySelected === 'CVC'}
+						focus={selectedField === 'CVC'}
 					/>
 				</div>
 			</div>
