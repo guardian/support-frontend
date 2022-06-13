@@ -58,7 +58,7 @@ const mapStateToProps = (state: State) => ({
 	country: state.common.internationalisation.countryId,
 	currency: state.common.internationalisation.currencyId,
 	countryGroupId: state.common.internationalisation.countryGroupId,
-	csrf: state.page.csrf,
+	csrf: state.page.checkoutForm.csrf,
 	setupIntentClientSecret:
 		state.page.form.stripeCardFormData.setupIntentClientSecret,
 	recurringRecaptchaVerified:

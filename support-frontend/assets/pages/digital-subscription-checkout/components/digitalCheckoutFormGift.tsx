@@ -67,7 +67,7 @@ function mapStateToProps(state: CheckoutState) {
 		submissionError: state.page.checkout.submissionError,
 		productPrices: state.page.checkout.productPrices,
 		currencyId: state.common.internationalisation.currencyId,
-		csrf: state.page.csrf,
+		csrf: state.page.checkoutForm.csrf,
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
 		paymentMethod: state.page.checkout.paymentMethod,
 		isTestUser: state.page.checkout.isTestUser,
