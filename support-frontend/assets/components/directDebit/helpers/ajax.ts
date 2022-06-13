@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { routes } from 'helpers/urls/routes';
 
 type CheckBankAccountDetails = {
@@ -12,7 +12,7 @@ const checkAccount = (
 	accountNumber: string,
 	_isTestUser: boolean,
 	csrf: CsrfState,
-) => {
+): Promise<Response> => {
 	const bankAccountDetails: CheckBankAccountDetails = {
 		sortCode,
 		accountNumber,

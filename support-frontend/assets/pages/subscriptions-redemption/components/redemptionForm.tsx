@@ -38,7 +38,7 @@ function mapStateToProps(state: RedemptionPageState) {
 		user: state.page.user,
 		userCode: state.page.userCode,
 		readerType: state.page.readerType,
-		csrf: state.page.csrf,
+		csrf: state.page.checkoutForm.csrf,
 		error: state.page.error,
 		firstName: state.page.checkoutForm.personalDetails.firstName,
 		lastName: state.page.checkoutForm.personalDetails.lastName,

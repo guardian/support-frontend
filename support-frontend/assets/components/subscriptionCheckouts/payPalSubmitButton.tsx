@@ -3,7 +3,6 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source-foundations';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type {
 	PayPalCheckoutDetails,
 	SetupPayPalRequestType,
@@ -13,6 +12,7 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { PayPal } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
