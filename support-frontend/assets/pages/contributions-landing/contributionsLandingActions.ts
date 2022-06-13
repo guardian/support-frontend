@@ -224,10 +224,6 @@ export type Action =
 			type: 'SET_STRIPE_V3_HAS_LOADED';
 	  }
 	| {
-			type: 'SET_HANDLE_STRIPE_3DS';
-			handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>;
-	  }
-	| {
 			type: 'SET_STRIPE_CARD_FORM_COMPLETE';
 			isComplete: boolean;
 	  }
@@ -536,13 +532,6 @@ const getUserType =
 const setTickerGoalReached = (): Action => ({
 	type: 'SET_TICKER_GOAL_REACHED',
 	tickerGoalReached: true,
-});
-
-const setHandleStripe3DS = (
-	handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>,
-): Action => ({
-	type: 'SET_HANDLE_STRIPE_3DS',
-	handleStripe3DS,
 });
 
 const setStripeCardFormComplete =
@@ -1015,7 +1004,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 		): Promise<PaymentResult> => {
 			if (paymentAuthorisation.paymentMethod === Stripe) {
 				if (paymentAuthorisation.paymentMethodId) {
-					const { handle3DS } = state.page.form.stripeCardFormData;
+					const handle3DS = paymentAuthorisation.handle3DS;
 
 					if (handle3DS) {
 						const stripeData: CreateStripePaymentIntentRequest = {
@@ -1147,7 +1136,6 @@ export {
 	setStripePaymentRequestButtonClicked,
 	setStripePaymentRequestButtonError,
 	setTickerGoalReached,
-	setHandleStripe3DS,
 	setStripeCardFormComplete,
 	setStripeSetupIntentClientSecret,
 	setStripeRecurringRecaptchaVerified,

@@ -22,7 +22,6 @@ import type { Action } from 'pages/contributions-landing/contributionsLandingAct
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentFailure,
-	setHandleStripe3DS,
 	paymentWaiting as setPaymentWaiting,
 	setStripeCardFormComplete,
 	setStripeRecurringRecaptchaVerified,
@@ -69,19 +68,20 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
-	onPaymentAuthorised: (paymentMethodId: string) =>
+	onPaymentAuthorised: (
+		paymentMethodId: string,
+		handle3DS?: (clientSecret: string) => Promise<PaymentIntentResult>,
+	) =>
 		dispatch(
 			onThirdPartyPaymentAuthorised({
 				paymentMethod: Stripe,
 				stripePaymentMethod: 'StripeCheckout',
 				paymentMethodId,
+				handle3DS,
 			}),
 		),
 	paymentFailure: (paymentError: ErrorReason) =>
 		dispatch(paymentFailure(paymentError)),
-	setHandleStripe3DS: (
-		handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>,
-	) => dispatch(setHandleStripe3DS(handleStripe3DS)),
 	setStripeCardFormComplete: (isComplete: boolean) =>
 		dispatch(setStripeCardFormComplete(isComplete)),
 	setPaymentWaiting: (isWaiting: boolean) =>
@@ -250,6 +250,11 @@ function CardForm(props: PropTypes) {
 		const cardElement = elements?.getElement(CardNumberElement);
 
 		if (stripe && cardElement) {
+			const handle3DS = (clientSecret: string) => {
+				trackStripe3ds();
+				return stripe.handleCardAction(clientSecret);
+			};
+
 			void stripe
 				.createPaymentMethod({
 					type: 'card',
@@ -264,7 +269,7 @@ function CardForm(props: PropTypes) {
 					if (result.error) {
 						handleStripeError(result.error);
 					} else {
-						void props.onPaymentAuthorised(result.paymentMethod.id);
+						void props.onPaymentAuthorised(result.paymentMethod.id, handle3DS);
 					}
 				});
 		}
@@ -275,12 +280,6 @@ function CardForm(props: PropTypes) {
 			props.setPaymentWaiting(true);
 
 			handleCreatePaymentForOneOff();
-		});
-
-		// @ts-expect-error TODO: This needs fixing in the reducer; we may always get undefined because we can't be sure the Stripe SDK will load
-		props.setHandleStripe3DS((clientSecret: string) => {
-			trackStripe3ds();
-			return stripe?.handleCardAction(clientSecret);
 		});
 	};
 
