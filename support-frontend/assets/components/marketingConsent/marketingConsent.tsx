@@ -6,8 +6,8 @@ import SvgSubscribe from 'components/svgs/subscribe';
 import SvgSubscribed from 'components/svgs/subscribed';
 import 'components/marketingConsent/marketingConsent.scss';
 import Text from 'components/text/text';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkEmail } from 'helpers/forms/formValidation';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { logException } from 'helpers/utilities/logger';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 
