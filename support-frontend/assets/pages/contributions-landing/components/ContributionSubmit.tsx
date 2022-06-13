@@ -6,7 +6,6 @@ import Button from 'components/button/button';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import { billingPeriodFromContrib, getAmount } from 'helpers/contributions';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getContributeButtonCopyWithPaymentType } from 'helpers/forms/checkouts';
 import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import { setupRecurringPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
@@ -16,6 +15,7 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { hiddenIf } from 'helpers/utilities/utilities';
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 import type { Action } from '../contributionsLandingActions';
@@ -62,7 +62,7 @@ function mapStateToProps(state: State) {
 		selectedAmounts: state.page.form.selectedAmounts,
 		otherAmount: state.page.form.formData.otherAmounts[contributionType].amount,
 		currencyId: state.common.internationalisation.currencyId,
-		csrf: state.page.csrf,
+		csrf: state.page.checkoutForm.csrf,
 		payPalHasLoaded: state.page.form.payPalData.hasLoaded,
 		isTestUser: !!state.page.user.isTestUser,
 		formIsSubmittable: state.page.form.formIsSubmittable,

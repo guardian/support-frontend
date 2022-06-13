@@ -209,7 +209,7 @@ function onPaymentAuthorised(
 		currencyId,
 	);
 	const { product, paymentMethod } = state.page.checkout;
-	const { csrf } = state.page;
+	const { csrf } = state.page.checkoutForm;
 	const { abParticipations } = state.common;
 
 	const handleSubscribeResult = (result: PaymentResult) => {
