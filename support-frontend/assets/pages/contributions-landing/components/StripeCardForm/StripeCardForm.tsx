@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import { css } from '@emotion/react';
 import { InlineError, TextInput } from '@guardian/source-react-components';
 import {
 	CardCvcElement,
@@ -15,18 +14,10 @@ import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
-import { fetchJson, requestOptions } from 'helpers/async/fetch';
-import type { ContributionType } from 'helpers/contributions';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { usePrevious } from 'helpers/customHooks/usePrevious';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { isValidZipCode } from 'helpers/forms/formValidation';
 import { Stripe } from 'helpers/forms/paymentMethods';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { routes } from 'helpers/urls/routes';
-import { logException } from 'helpers/utilities/logger';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
 	onThirdPartyPaymentAuthorised,
@@ -40,11 +31,22 @@ import {
 	updateRecaptchaToken,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
-import CreditCardsROW from './creditCardsROW.svg';
-import CreditCardsUS from './creditCardsUS.svg';
+import { CreditCardIcons } from './CreditCardIcons';
+import { recaptchaElementNotEmpty } from './helpers/dom';
+import {
+	logCreatePaymentMethodError,
+	logCreateSetupIntentError,
+} from './helpers/logging';
+import { createStripeSetupIntent } from './helpers/stripe';
+import { styles } from './helpers/styles';
+import {
+	trackRecaptchaClientTokenReceived,
+	trackStripe3ds,
+} from './helpers/tracking';
 import { StripeCardFormField } from './StripeCardFormField';
 import { useCardFormFieldStates } from './useCardFormFieldStates';
 import { useSelectedField } from './useSelectedField';
+import { VerificationCopy } from './VerificationCopy';
 import './stripeCardForm.scss';
 
 // ----- Redux -----//
@@ -467,146 +469,6 @@ function CardForm(props: PropTypes) {
 		</div>
 	);
 }
-
-// ---- Helper components ---- //
-
-interface VerificationCopyProps {
-	countryGroupId: CountryGroupId;
-	contributionType: ContributionType;
-}
-
-function VerificationCopy({
-	countryGroupId,
-	contributionType,
-}: VerificationCopyProps) {
-	useEffect(() => {
-		trackRecaptchaVerificationWarning(countryGroupId, contributionType);
-	}, []);
-
-	return (
-		<div className="form__error">
-			{' '}
-			{"Please tick to verify you're a human"}{' '}
-		</div>
-	);
-}
-
-interface CreditCardIconsProps {
-	country: IsoCountry;
-}
-function CreditCardIcons({ country }: CreditCardIconsProps) {
-	if (country === 'US') {
-		return <CreditCardsUS className="form__credit-card-icons" />;
-	}
-
-	return <CreditCardsROW className="form__credit-card-icons" />;
-}
-
-// ---- Helper functions ---- //
-
-// --- Stripe helper functions --- //
-
-function createStripeSetupIntent(
-	token: string,
-	stripeKey: string,
-	isTestUser: boolean,
-	csrf: Csrf,
-): Promise<string> {
-	return fetchJson(
-		routes.stripeSetupIntentRecaptcha,
-		requestOptions(
-			{
-				token,
-				stripePublicKey: stripeKey,
-				isTestUser: isTestUser,
-			},
-			'same-origin',
-			'POST',
-			csrf,
-		),
-	).then((json) => {
-		if (json.client_secret && typeof json.client_secret === 'string') {
-			trackRecaptchaVerified();
-			return json.client_secret;
-		} else {
-			throw noClientSecretError(json);
-		}
-	});
-}
-
-// --- Tracker helper functions --- //
-
-function trackRecaptchaClientTokenReceived() {
-	trackComponentLoad('contributions-recaptcha-client-token-received');
-}
-
-function trackRecaptchaVerified() {
-	trackComponentLoad('contributions-recaptcha-verified');
-}
-
-function trackStripe3ds() {
-	trackComponentLoad('stripe-3ds');
-}
-
-function trackRecaptchaVerificationWarning(
-	countryGroupId: CountryGroupId,
-	contributionType: ContributionType,
-) {
-	trackComponentLoad(
-		`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`,
-	);
-}
-
-// --- Error helper functions --- //
-
-function noClientSecretError(json: unknown) {
-	return new Error(
-		`Missing client_secret field in server response: ${JSON.stringify(json)}`,
-	);
-}
-
-// --- Log helper functions --- //
-
-function logCreateSetupIntentError(err: Error) {
-	logException(
-		`Error getting Setup Intent client_secret from ${routes.stripeSetupIntentRecaptcha}: ${err.message}`,
-	);
-}
-
-function logCreatePaymentMethodError(errorData: StripeError) {
-	logException(`Error creating Payment Method: ${JSON.stringify(errorData)}`);
-}
-
-// --- DOM helper functions --- //
-
-const recaptchaElementNotEmpty = (): boolean => {
-	const el = document.getElementById('robot_checkbox');
-
-	if (el) {
-		return el.children.length > 0;
-	}
-
-	return true;
-};
-
-// ---- Styles ---- //
-
-const styles = {
-	stripeField: {
-		base: {
-			fontFamily:
-				"'GuardianTextSans', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
-			'::placeholder': {
-				color: '#999999',
-			},
-			fontSize: '17px',
-			lineHeight: '1.5',
-		},
-	},
-	zipCodeContainer: css`
-		margin-top: 0.65rem;
-	`,
-};
 
 // ----- Exports -----//
 
