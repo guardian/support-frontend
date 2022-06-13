@@ -1,6 +1,5 @@
 import type { ComponentType } from 'react';
 import type { Participations } from 'helpers/abTests/abtest';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type {
 	AmazonObject,
 	AmazonPaymentsObject,
@@ -9,6 +8,7 @@ import type { StripeKey } from 'helpers/forms/stripe';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { SendEventId } from 'helpers/tracking/quantumMetric';
 import type { User } from 'helpers/user/userReducer';
 
@@ -26,7 +26,7 @@ declare global {
 				default: string;
 				uat: string;
 			};
-			csrf?: Csrf;
+			csrf?: CsrfState;
 			email?: string;
 			enableContributionsCampaign: boolean;
 			forceContributionsCampaign: boolean;

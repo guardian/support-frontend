@@ -21,8 +21,11 @@ import { options } from 'components/forms/customFields/options';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
 import Heading from 'components/heading/heading';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
 import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import {
+	BillingAddress,
+	DeliveryAddress,
+} from 'components/subscriptionCheckouts/address/scopedAddressFields';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import PaymentTerms from 'components/subscriptionCheckouts/paymentTerms';
@@ -56,10 +59,6 @@ import {
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import {
-	getBillingAddress,
-	getDeliveryAddress,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import {
 	guardianWeeklySubGiftCheckoutStart,
@@ -98,7 +97,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 		billingAddressErrors: state.page.billingAddress.fields.formErrors,
 		isTestUser: state.page.checkout.isTestUser,
 		country: state.common.internationalisation.countryId,
-		csrf: state.page.csrf,
+		csrf: state.page.checkoutForm.csrf,
 		currencyId:
 			currencyFromCountryCode(deliveryAddress.fields.country) ??
 			state.common.internationalisation.defaultCurrency,
@@ -133,7 +132,7 @@ function mapDispatchToProps() {
 				submitWithDeliveryForm(dispatch, getState()),
 		signOut,
 		setBillingCountry: (country: string) => (dispatch: SubscriptionsDispatch) =>
-			setCountry(country)(dispatch),
+			dispatch(setCountry(country)),
 		validateForm:
 			() =>
 			(
@@ -160,13 +159,6 @@ const connector = connect(mapStateToProps, mapDispatchToProps());
 type PropTypes = ConnectedProps<typeof connector>;
 
 // ----- Form Fields ----- //
-const DeliveryAddress = withStore(
-	weeklyDeliverableCountries,
-	'delivery',
-	getDeliveryAddress,
-);
-
-const BillingAddress = withStore(countries, 'billing', getBillingAddress);
 
 const days = getWeeklyDays();
 
@@ -306,7 +298,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 						</Rows>
 					</FormSection>
 					<FormSection title="Gift recipient's address">
-						<DeliveryAddress />
+						<DeliveryAddress countries={weeklyDeliverableCountries} />
 					</FormSection>
 					<FormSection
 						border="top"
@@ -381,7 +373,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 					</FormSection>
 					{!props.billingAddressIsSame ? (
 						<FormSection title="Your billing address">
-							<BillingAddress />
+							<BillingAddress countries={countries} />
 						</FormSection>
 					) : null}
 					{paymentMethods.length > 1 ? (

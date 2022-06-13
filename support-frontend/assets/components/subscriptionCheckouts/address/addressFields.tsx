@@ -5,26 +5,17 @@ import {
 	Select,
 	TextInput,
 } from '@guardian/source-react-components';
-import React, { useMemo } from 'react';
-import type { ConnectedComponent } from 'react-redux';
-import { connect } from 'react-redux';
+import React from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
-import 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import 'helpers/subscriptionsForms/addressType';
 import type {
 	ActionCreators as AddressActionCreators,
-	State as AddressState,
 	FormField,
 	FormFields,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import {
-	addressActionCreatorsFor,
-	getFormFields,
-	getPostcodeForm,
-	getStateFormErrors,
-	isPostcodeOptional,
-} from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import { withStore as postcodeFinderWithStore } from 'components/subscriptionCheckouts/address/postcodeFinder';
+import { isPostcodeOptional } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
+import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	auStates,
@@ -32,7 +23,6 @@ import {
 	usStates,
 } from 'helpers/internationalisation/country';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
@@ -42,11 +32,15 @@ import type { PostcodeFinderResult } from './postcodeLookup';
 type StatePropTypes = FormFields & {
 	countries: Record<string, string>;
 	scope: AddressType;
-	traverseState: (state: WithDeliveryCheckoutState) => AddressState;
 	formErrors: Array<FormError<FormField>>;
+	postcodeState: PostcodeFinderState;
 };
 
-type PropTypes = StatePropTypes & AddressActionCreators;
+type PropTypes = StatePropTypes &
+	AddressActionCreators & {
+		setPostcodeForFinder: (postcode: string) => void;
+		fetchResults: (postcode?: string) => void;
+	};
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -79,17 +73,7 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 	}
 }
 
-function AddressFields({ scope, traverseState, ...props }: PropTypes) {
-	// TODO: No need to memoise once we can make this an unconnected component that only accepts props,
-	// rather than requiring a store connection and address type scope
-	const PostcodeFinder = useMemo(
-		() =>
-			postcodeFinderWithStore(scope, (state) =>
-				getPostcodeForm(traverseState(state)),
-			),
-		[scope],
-	);
-
+export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 	return (
 		<div>
 			<Select
@@ -106,6 +90,9 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 			</Select>
 			{props.country === 'GB' ? (
 				<PostcodeFinder
+					{...props.postcodeState}
+					setPostcode={props.setPostcodeForFinder}
+					fetchResults={props.fetchResults}
 					id={`${scope}-postcode-lookup`}
 					onPostcodeUpdate={props.setPostcode}
 					onAddressUpdate={({
@@ -201,19 +188,3 @@ function AddressFields({ scope, traverseState, ...props }: PropTypes) {
 		</div>
 	);
 }
-
-export const withStore = (
-	countries: Record<string, string>,
-	scope: AddressType,
-	traverseState: (state: WithDeliveryCheckoutState) => AddressState,
-): ConnectedComponent<typeof AddressFields, Record<string, never>> =>
-	connect(
-		(state: WithDeliveryCheckoutState) => ({
-			countries,
-			...getFormFields(traverseState(state)),
-			formErrors: getStateFormErrors(traverseState(state)),
-			traverseState,
-			scope,
-		}),
-		addressActionCreatorsFor(scope),
-	)(AddressFields);

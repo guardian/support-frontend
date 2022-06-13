@@ -11,9 +11,9 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkEmail } from 'helpers/forms/formValidation';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { getEmail } from 'helpers/subscriptionsForms/formFields';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { Action } from 'helpers/user/userActions';
@@ -75,7 +75,7 @@ type PropTypes = ButtonPropTypes & {
 const mapStateToProps = (state: CheckoutState) => ({
 	confirmOptIn: state.page.checkoutForm.marketingConsent.confirmOptIn,
 	email: getEmail(state),
-	csrf: state.page.csrf,
+	csrf: state.page.checkoutForm.csrf,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
