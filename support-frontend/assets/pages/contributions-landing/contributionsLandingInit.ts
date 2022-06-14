@@ -25,6 +25,7 @@ import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
+import { setProductType } from 'helpers/redux/checkout/product/actions';
 import {
 	setContributionTypes,
 	setExistingPaymentMethods,
@@ -44,7 +45,6 @@ import {
 	loadPayPalExpressSdk,
 	selectAmounts,
 	setUserTypeFromIdentityResponse,
-	updateContributionTypeAndPaymentMethod,
 	updateOtherAmount,
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
@@ -241,9 +241,8 @@ function selectInitialContributionTypeAndPaymentMethod(
 		countryGroupId,
 		switches,
 	);
-	dispatch(
-		updateContributionTypeAndPaymentMethod(contributionType, paymentMethod),
-	);
+	dispatch(setProductType(contributionType));
+	dispatch(updatePaymentMethod(paymentMethod));
 
 	switch (paymentMethod) {
 		case PayPal:

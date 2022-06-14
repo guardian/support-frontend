@@ -296,17 +296,6 @@ const updatePayPalButtonReady = (ready: boolean): Action => ({
 	ready,
 });
 
-// Do not export this, as we only want it to be called via updateContributionTypeAndPaymentMethod
-const updateContributionType =
-	(contributionType: ContributionType) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		dispatch(updatePayPalButtonReady(false));
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_CONTRIBUTION_TYPE',
-			contributionType,
-		}))(dispatch, getState);
-	};
-
 const updatePaymentMethod =
 	(paymentMethod: PaymentMethod) =>
 	(dispatch: Dispatch, getState: () => State): void => {
@@ -504,18 +493,6 @@ const loadAmazonPaySdk =
 	(dispatch: Dispatch): void => {
 		dispatch(setAmazonPayHasBegunLoading());
 		setupAmazonPay(countryGroupId, dispatch, isTestUser);
-	};
-
-const updateContributionTypeAndPaymentMethod =
-	(contributionType: ContributionType, paymentMethodToSelect: PaymentMethod) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		// PayPal one-off redirects away from the site before hitting the thank you page
-		// so we need to store the contrib type & payment method in the storage so that it is available on the
-		// thank you page in all scenarios.
-		storage.setSession('selectedContributionType', contributionType);
-		storage.setSession('selectedPaymentMethod', paymentMethodToSelect);
-		updateContributionType(contributionType)(dispatch, getState);
-		updatePaymentMethod(paymentMethodToSelect)(dispatch, getState);
 	};
 
 const getUserType =
@@ -1112,7 +1089,6 @@ const onThirdPartyPaymentAuthorised =
 	};
 
 export {
-	updateContributionTypeAndPaymentMethod,
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
 	setFirstName,
