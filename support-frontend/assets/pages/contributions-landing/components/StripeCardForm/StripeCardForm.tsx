@@ -22,7 +22,6 @@ import type { Action } from 'pages/contributions-landing/contributionsLandingAct
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentFailure,
-	setCreateStripePaymentMethod,
 	setHandleStripe3DS,
 	paymentWaiting as setPaymentWaiting,
 	setStripeCardFormComplete,
@@ -80,9 +79,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
 		),
 	paymentFailure: (paymentError: ErrorReason) =>
 		dispatch(paymentFailure(paymentError)),
-	setCreateStripePaymentMethod: (
-		createStripePaymentMethod: (clientSecret: string | null) => void,
-	) => dispatch(setCreateStripePaymentMethod(createStripePaymentMethod)),
 	setHandleStripe3DS: (
 		handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>,
 	) => dispatch(setHandleStripe3DS(handleStripe3DS)),
@@ -104,6 +100,9 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 interface PropsFromParent {
 	stripeKey: string;
+	setCreateStripePaymentMethod: (
+		create: (clientSecret: string | null) => void,
+	) => void;
 }
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
