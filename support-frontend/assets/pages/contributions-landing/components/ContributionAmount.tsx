@@ -4,6 +4,7 @@ import { space } from '@guardian/source-foundations';
 import { TextInput } from '@guardian/source-react-components';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
+import type { ContributionType } from 'helpers/contributions';
 import { config } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import { amountIsValid } from 'helpers/forms/formValidation';
@@ -36,7 +37,8 @@ const otherAmoutGlphCss = css`
 const mapStateToProps = (state: State) => ({
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	currency: state.common.internationalisation.currencyId,
-	contributionType: state.page.form.contributionType,
+	contributionType: state.page.checkoutForm.product
+		.productType as ContributionType,
 	amounts: state.common.amounts,
 	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 	otherAmounts: state.page.checkoutForm.product.otherAmounts,

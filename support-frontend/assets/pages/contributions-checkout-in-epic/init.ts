@@ -1,13 +1,13 @@
-import type { Store } from 'redux';
-import type { ThunkDispatch } from 'redux-thunk';
 import type { ContributionAmounts } from 'helpers/contributions';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
-import { selectAmounts } from 'pages/contributions-landing/contributionsLandingActions';
-import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
+import { setAllAmounts } from 'helpers/redux/checkout/product/actions';
+import type {
+	ContributionsDispatch,
+	ContributionsStore,
+} from 'helpers/redux/contributionsStore';
 
 // ---- Init ---- //
 
-export function init(store: Store<State, Action>): void {
+export function init(store: ContributionsStore): void {
 	const { dispatch } = store;
 	const state = store.getState();
 
@@ -17,7 +17,7 @@ export function init(store: Store<State, Action>): void {
 // ---- Helpers ---- //
 
 function selectInitialAmounts(
-	dispatch: ThunkDispatch<State, void, Action>,
+	dispatch: ContributionsDispatch,
 	amounts: ContributionAmounts,
 ) {
 	// Here we select the second amounts in the 'amounts' arrays as the default amounts.
@@ -25,7 +25,7 @@ function selectInitialAmounts(
 	// and an 'other' option. This means the 'defaultAmount' configured in the tool
 	// might not be present.
 	dispatch(
-		selectAmounts({
+		setAllAmounts({
 			ONE_OFF: amounts.ONE_OFF.amounts[1],
 			MONTHLY: amounts.MONTHLY.amounts[1],
 			ANNUAL: amounts.ANNUAL.amounts[1],

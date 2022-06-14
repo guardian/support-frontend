@@ -139,8 +139,8 @@ const sepaFormOk = (state: State): boolean => {
 };
 
 const formIsValidParameters = (state: State) => ({
-	selectedAmounts: state.page.form.selectedAmounts,
-	otherAmounts: state.page.form.formData.otherAmounts,
+	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
+	otherAmounts: state.page.checkoutForm.product.otherAmounts,
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	contributionType: state.page.form.contributionType,
 	billingState: state.page.form.formData.billingState,

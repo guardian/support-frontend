@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import type { SelectedAmounts } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -32,6 +33,9 @@ export const productSlice = createSlice({
 		},
 		setSelectedProductPrice(state, action: PayloadAction<ProductPrice>) {
 			state.selectedProductPrice = action.payload;
+		},
+		setAllAmounts(state, action: PayloadAction<SelectedAmounts>) {
+			state.selectedAmounts = action.payload;
 		},
 		setSelectedAmount(state, action: PayloadAction<AmountChange>) {
 			const { contributionType, amount } = action.payload;

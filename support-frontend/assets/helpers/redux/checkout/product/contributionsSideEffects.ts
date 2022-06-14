@@ -3,9 +3,18 @@ import type { ContributionsStartListening } from 'helpers/redux/contributionsSto
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
-import { setOtherAmount, setProductType, setSelectedAmount } from './actions';
+import {
+	setAllAmounts,
+	setOtherAmount,
+	setProductType,
+	setSelectedAmount,
+} from './actions';
 
-const shouldCheckFormEnabled = isAnyOf(setSelectedAmount, setOtherAmount);
+const shouldCheckFormEnabled = isAnyOf(
+	setAllAmounts,
+	setSelectedAmount,
+	setOtherAmount,
+);
 
 export function addProductSideEffects(
 	startListening: ContributionsStartListening,

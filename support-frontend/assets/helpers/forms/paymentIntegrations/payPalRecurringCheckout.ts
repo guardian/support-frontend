@@ -86,8 +86,8 @@ const setupRecurringPayPalPayment =
 		const csrfToken = csrf.token;
 		const { contributionType } = state.page.form;
 		const amount = getAmount(
-			state.page.form.selectedAmounts,
-			state.page.form.formData.otherAmounts,
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
 			contributionType,
 		);
 		const billingPeriod = billingPeriodFromContrib(contributionType);

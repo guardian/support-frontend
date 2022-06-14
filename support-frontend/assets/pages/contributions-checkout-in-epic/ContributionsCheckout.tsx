@@ -1,19 +1,18 @@
 import { css } from '@emotion/react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { ThunkDispatch } from 'redux-thunk';
 import type {
 	ContributionAmounts,
 	ContributionType,
 } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import { useOnHeightChangeEffect } from 'helpers/customHooks/useOnHeightChangeEffect';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
-	selectAmount,
-	updateContributionTypeAndPaymentMethod,
-	updateOtherAmount,
-} from 'pages/contributions-landing/contributionsLandingActions';
+	setOtherAmount,
+	setProductType,
+	setSelectedAmount,
+} from 'helpers/redux/checkout/product/actions';
+import { updatePaymentMethod } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { ContributionsCheckoutForm } from './ContributionsCheckoutForm';
 import { ContributionsCheckoutSubmitting } from './ContributionsCheckoutSubmitting';
@@ -59,28 +58,16 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	contributionType: state.page.form.contributionType,
 	amounts: getAmounts(state),
-	selectedAmounts: state.page.form.selectedAmounts,
-	otherAmounts: state.page.form.formData.otherAmounts,
+	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
+	otherAmounts: state.page.checkoutForm.product.otherAmounts,
 	isTestUser: state.page.user.isTestUser ?? false,
 });
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => {
-	return {
-		setSelectedContributionType: (contributionType: ContributionType) => {
-			dispatch(
-				updateContributionTypeAndPaymentMethod(contributionType, 'None'),
-			);
-		},
-		setSelectedAmount: (
-			amount: number | 'other',
-			contributionType: ContributionType,
-		) => {
-			dispatch(selectAmount(amount, contributionType));
-		},
-		setOtherAmount: (amount: string, contributionType: ContributionType) => {
-			dispatch(updateOtherAmount(amount, contributionType));
-		},
-	};
+const mapDispatchToProps = {
+	setProductType,
+	updatePaymentMethod,
+	setSelectedAmount,
+	setOtherAmount,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -94,9 +81,10 @@ function ContributionsCheckout({
 	currency,
 	contributionType,
 	amounts,
+	setProductType,
+	updatePaymentMethod,
 	selectedAmounts,
 	otherAmounts,
-	setSelectedContributionType,
 	setSelectedAmount,
 	setOtherAmount,
 	isTestUser,
@@ -106,6 +94,11 @@ function ContributionsCheckout({
 	});
 
 	const secondaryCta = useSecondaryCta();
+
+	function setSelectedContributionType(contributionType: ContributionType) {
+		setProductType(contributionType);
+		updatePaymentMethod('None');
+	}
 
 	return (
 		<div ref={observe} css={styles.container}>
@@ -120,9 +113,11 @@ function ContributionsCheckout({
 					otherAmounts={otherAmounts}
 					setSelectedContributionType={setSelectedContributionType}
 					setSelectedAmount={(amount) =>
-						setSelectedAmount(amount, contributionType)
+						setSelectedAmount({ amount: amount.toString(), contributionType })
 					}
-					setOtherAmount={(amount) => setOtherAmount(amount, contributionType)}
+					setOtherAmount={(amount) =>
+						setOtherAmount({ amount, contributionType })
+					}
 					secondaryCta={secondaryCta}
 					isTestUser={isTestUser}
 				/>
@@ -151,7 +146,4 @@ export const styles = {
 	`,
 };
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(ContributionsCheckout);
+export default connector(ContributionsCheckout);

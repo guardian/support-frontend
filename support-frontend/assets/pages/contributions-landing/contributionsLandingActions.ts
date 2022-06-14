@@ -365,38 +365,9 @@ const updateBillingCountry = (billingCountry: IsoCountry | null): Action => ({
 	billingCountry,
 });
 
-const selectAmount =
-	(amount: number | 'other', contributionType: ContributionType) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SELECT_AMOUNT',
-			amount,
-			contributionType,
-		}))(dispatch, getState);
-	};
-
-const selectAmounts =
-	(amounts: SelectedAmounts) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SELECT_AMOUNTS',
-			amounts,
-		}))(dispatch, getState);
-	};
-
 const setCheckoutFormHasBeenSubmitted = (): Action => ({
 	type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED',
 });
-
-const updateOtherAmount =
-	(otherAmount: string, contributionType: ContributionType) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_OTHER_AMOUNT',
-			otherAmount,
-			contributionType,
-		}))(dispatch, getState);
-	};
 
 const paymentSuccess = (): Action => ({
 	type: 'PAYMENT_SUCCESS',
@@ -616,8 +587,8 @@ const buildStripeChargeDataFromAuthorisation = (
 	paymentData: {
 		currency: state.common.internationalisation.currencyId,
 		amount: getAmount(
-			state.page.form.selectedAmounts,
-			state.page.form.formData.otherAmounts,
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
 			state.page.form.contributionType,
 		),
 		email: state.page.checkoutForm.personalDetails.email,
@@ -733,8 +704,8 @@ function regularPaymentRequestFromAuthorisation(
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 
 	const amount = getAmount(
-		state.page.form.selectedAmounts,
-		state.page.form.formData.otherAmounts,
+		state.page.checkoutForm.product.selectedAmounts,
+		state.page.checkoutForm.product.otherAmounts,
 		state.page.form.contributionType,
 	);
 
@@ -783,8 +754,8 @@ const amazonPayDataFromAuthorisation = (
 	paymentData: {
 		currency: state.common.internationalisation.currencyId,
 		amount: getAmount(
-			state.page.form.selectedAmounts,
-			state.page.form.formData.otherAmounts,
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
 			state.page.form.contributionType,
 		),
 		orderReferenceId: authorisation.orderReferenceId ?? '',
@@ -1108,9 +1079,6 @@ export {
 	setAmazonPayBillingAgreementConsentStatus,
 	setAmazonPayPaymentSelected,
 	setUserTypeFromIdentityResponse,
-	selectAmount,
-	selectAmounts,
-	updateOtherAmount,
 	paymentFailure,
 	paymentWaiting,
 	paymentSuccess,

@@ -25,7 +25,11 @@ import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
-import { setProductType } from 'helpers/redux/checkout/product/actions';
+import {
+	setAllAmounts,
+	setOtherAmount,
+	setProductType,
+} from 'helpers/redux/checkout/product/actions';
 import {
 	setContributionTypes,
 	setExistingPaymentMethods,
@@ -43,9 +47,7 @@ import {
 	getUserType,
 	loadAmazonPaySdk,
 	loadPayPalExpressSdk,
-	selectAmounts,
 	setUserTypeFromIdentityResponse,
-	updateOtherAmount,
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
 	updateUserFormData,
@@ -199,14 +201,19 @@ function selectInitialAmounts(
 		amountForSelectedContributionType();
 
 	dispatch(
-		selectAmounts({
+		setAllAmounts({
 			...defaults,
 			[selectedContributionType]: selectedAmount,
 		}),
 	);
 
 	if (otherAmount) {
-		dispatch(updateOtherAmount(`${otherAmount}`, selectedContributionType));
+		dispatch(
+			setOtherAmount({
+				amount: `${otherAmount}`,
+				contributionType: selectedContributionType,
+			}),
+		);
 	}
 }
 

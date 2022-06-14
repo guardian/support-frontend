@@ -7,6 +7,7 @@ export const {
 	setBillingPeriod,
 	setProductPrices,
 	setSelectedProductPrice,
+	setAllAmounts,
 	setSelectedAmount,
 	setOtherAmount,
 	setCurrency,
