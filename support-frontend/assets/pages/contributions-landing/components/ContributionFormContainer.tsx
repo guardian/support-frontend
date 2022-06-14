@@ -17,6 +17,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
 	onThirdPartyPaymentAuthorised,
@@ -24,7 +25,6 @@ import {
 	setTickerGoalReached,
 } from '../contributionsLandingActions';
 import type { State } from '../contributionsLandingReducer';
-import '../contributionsLandingReducer';
 import ContributionForm from './ContributionForm';
 import { ContributionFormBlurb } from './ContributionFormBlurb';
 import {
@@ -67,7 +67,7 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
-	contributionType: state.page.form.contributionType,
+	contributionType: getContributionType(state.page.checkoutForm.product),
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!

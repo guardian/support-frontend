@@ -7,8 +7,6 @@ import type { DirectDebitState } from 'components/directDebit/directDebitReducer
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import type {
 	ContributionType,
-	OtherAmounts,
-	SelectedAmounts,
 	ThirdPartyPaymentLibraries,
 } from 'helpers/contributions';
 import { getContributionTypeFromSession } from 'helpers/forms/checkouts';
@@ -43,7 +41,6 @@ export interface UserFormData {
 }
 
 interface FormData extends UserFormData {
-	otherAmounts: OtherAmounts;
 	billingState: StateProvince | null;
 	billingCountry: IsoCountry | null;
 	checkoutFormHasBeenSubmitted: boolean;
@@ -84,7 +81,6 @@ interface FormState {
 	// TODO clean up when rest of Stripe Checkout is removed
 	amazonPayData: AmazonPayData;
 	payPalData: PayPalData;
-	selectedAmounts: SelectedAmounts;
 	isWaiting: boolean;
 	formData: FormData;
 	stripePaymentRequestButtonData: {
@@ -158,17 +154,6 @@ function createFormReducer() {
 			buttonReady: false,
 		},
 		formData: {
-			otherAmounts: {
-				ONE_OFF: {
-					amount: null,
-				},
-				MONTHLY: {
-					amount: null,
-				},
-				ANNUAL: {
-					amount: null,
-				},
-			},
 			billingState: null,
 			billingCountry: null,
 			checkoutFormHasBeenSubmitted: false,
@@ -194,11 +179,6 @@ function createFormReducer() {
 			accountHolderName: null,
 			country: undefined,
 			streetName: undefined,
-		},
-		selectedAmounts: {
-			ONE_OFF: 0,
-			MONTHLY: 0,
-			ANNUAL: 0,
 		},
 		isWaiting: false,
 		paymentComplete: false,
@@ -478,37 +458,6 @@ function createFormReducer() {
 
 			case 'SET_TICKER_GOAL_REACHED':
 				return { ...state, tickerGoalReached: true };
-
-			case 'SELECT_AMOUNT':
-				return {
-					...state,
-					selectedAmounts: {
-						...state.selectedAmounts,
-						[action.contributionType]: action.amount,
-					},
-				};
-
-			case 'SELECT_AMOUNTS':
-				return {
-					...state,
-					selectedAmounts: {
-						...action.amounts,
-					},
-				};
-
-			case 'UPDATE_OTHER_AMOUNT':
-				return {
-					...state,
-					formData: {
-						...state.formData,
-						otherAmounts: {
-							...state.formData.otherAmounts,
-							[action.contributionType]: {
-								amount: action.otherAmount,
-							},
-						},
-					},
-				};
 
 			case 'PAYMENT_FAILURE':
 				return {

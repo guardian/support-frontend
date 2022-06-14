@@ -4,13 +4,13 @@ import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Button from 'components/button/button';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
-import type { ContributionType } from 'helpers/contributions';
 import { billingPeriodFromContrib, getAmount } from 'helpers/contributions';
 import { getContributeButtonCopyWithPaymentType } from 'helpers/forms/checkouts';
 import { setupRecurringPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import { hiddenIf } from 'helpers/utilities/utilities';
 import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
@@ -20,8 +20,7 @@ import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
 // ----- Types ----- //
 
 function mapStateToProps(state: State) {
-	const contributionType = state.page.checkoutForm.product
-		.productType as ContributionType;
+	const contributionType = getContributionType(state.page.checkoutForm.product);
 	return {
 		currency: state.common.internationalisation.currencyId,
 		contributionType,

@@ -78,6 +78,7 @@ import {
 	setLastName,
 	setUserTypeFromIdentityResponse,
 } from 'helpers/redux/checkout/personalDetails/actions';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import * as cookie from 'helpers/storage/cookie';
 import * as storage from 'helpers/storage/storage';
 import {
@@ -589,7 +590,7 @@ const buildStripeChargeDataFromAuthorisation = (
 		amount: getAmount(
 			state.page.checkoutForm.product.selectedAmounts,
 			state.page.checkoutForm.product.otherAmounts,
-			state.page.form.contributionType,
+			getContributionType(state.page.checkoutForm.product),
 		),
 		email: state.page.checkoutForm.personalDetails.email,
 		stripePaymentMethod,
@@ -599,7 +600,9 @@ const buildStripeChargeDataFromAuthorisation = (
 		state.common.abParticipations,
 	),
 	publicKey: getStripeKey(
-		stripeAccountForContributionType[state.page.form.contributionType],
+		stripeAccountForContributionType[
+			getContributionType(state.page.checkoutForm.product)
+		],
 		state.common.internationalisation.countryId,
 		state.page.user.isTestUser ?? false,
 	),
@@ -680,11 +683,12 @@ function getProductOptionsForBenefitsTest(amount: number, state: State) {
 	const inBenefitsTest =
 		state.common.abParticipations.PP_V3 === 'V2_BULLET' ||
 		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH';
-	const isRecurring = state.page.form.contributionType != 'ONE_OFF';
+	const contributionType = getContributionType(state.page.checkoutForm.product);
+	const isRecurring = contributionType !== 'ONE_OFF';
 
 	const thresholdPrice = getThresholdPrice(
 		state.common.internationalisation.countryGroupId,
-		state.page.form.contributionType,
+		contributionType,
 	);
 	const amountIsHighEnough = !!(thresholdPrice && amount >= thresholdPrice);
 	const shouldGetDigisub = inBenefitsTest && isRecurring && amountIsHighEnough;
@@ -702,11 +706,12 @@ function regularPaymentRequestFromAuthorisation(
 		state,
 	);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
+	const contributionType = getContributionType(state.page.checkoutForm.product);
 
 	const amount = getAmount(
 		state.page.checkoutForm.product.selectedAmounts,
 		state.page.checkoutForm.product.otherAmounts,
-		state.page.form.contributionType,
+		contributionType,
 	);
 
 	const productOptions = getProductOptionsForBenefitsTest(amount, state);
@@ -732,8 +737,7 @@ function regularPaymentRequestFromAuthorisation(
 			...productOptions,
 			amount,
 			currency: state.common.internationalisation.currencyId,
-			billingPeriod:
-				state.page.form.contributionType === 'MONTHLY' ? Monthly : Annual,
+			billingPeriod: contributionType === 'MONTHLY' ? Monthly : Annual,
 		},
 		firstDeliveryDate: null,
 		paymentFields: {
@@ -756,7 +760,7 @@ const amazonPayDataFromAuthorisation = (
 		amount: getAmount(
 			state.page.checkoutForm.product.selectedAmounts,
 			state.page.checkoutForm.product.otherAmounts,
-			state.page.form.contributionType,
+			getContributionType(state.page.checkoutForm.product),
 		),
 		orderReferenceId: authorisation.orderReferenceId ?? '',
 		email: state.page.checkoutForm.personalDetails.email,
@@ -803,7 +807,7 @@ const onPaymentResult =
 							setStripePaymentRequestButtonError(
 								result.error,
 								stripeAccountForContributionType[
-									state.page.form.contributionType
+									getContributionType(state.page.checkoutForm.product)
 								],
 							),
 						);
@@ -1054,7 +1058,10 @@ const onThirdPartyPaymentAuthorised =
 	(paymentAuthorisation: PaymentAuthorisation) =>
 	(dispatch: Dispatch, getState: () => State): Promise<PaymentResult> => {
 		const state = getState();
-		return paymentAuthorisationHandlers[state.page.form.contributionType][
+		const contributionType = getContributionType(
+			state.page.checkoutForm.product,
+		);
+		return paymentAuthorisationHandlers[contributionType][
 			state.page.form.paymentMethod
 		](dispatch, state, paymentAuthorisation);
 	};

@@ -22,6 +22,7 @@ import {
 } from 'helpers/forms/paymentMethods';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import {
 	setCurrencyId,
 	setUseLocalAmounts,
@@ -76,7 +77,7 @@ const mapStateToProps = (state: State) => ({
 	thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
 	stripeClientSecret:
 		state.page.form.stripeCardFormData.setupIntentClientSecret,
-	contributionType: state.page.form.contributionType,
+	contributionType: getContributionType(state.page.checkoutForm.product),
 	paymentError: state.page.form.paymentError,
 	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 	userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
@@ -101,10 +102,10 @@ const mapStateToProps = (state: State) => ({
 		state.common.abParticipations.productSetTest === 'variant',
 	benefitsMessagingAbTestBulletVariant:
 		state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
-		state.page.form.contributionType !== 'ONE_OFF',
+		getContributionType(state.page.checkoutForm.product) !== 'ONE_OFF',
 	benefitsMessagingAbTestParaVariant:
 		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
-		state.page.form.contributionType !== 'ONE_OFF',
+		getContributionType(state.page.checkoutForm.product) !== 'ONE_OFF',
 });
 
 const mapDispatchToProps = {

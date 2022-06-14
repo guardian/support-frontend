@@ -12,6 +12,7 @@ import {
 	setProductType,
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import { updatePaymentMethod } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { ContributionsCheckoutForm } from './ContributionsCheckoutForm';
@@ -56,7 +57,7 @@ const mapStateToProps = (state: State) => ({
 	country: state.common.internationalisation.countryId,
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	currency: state.common.internationalisation.currencyId,
-	contributionType: state.page.form.contributionType,
+	contributionType: getContributionType(state.page.checkoutForm.product),
 	amounts: getAmounts(state),
 	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 	otherAmounts: state.page.checkoutForm.product.otherAmounts,

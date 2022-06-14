@@ -41,6 +41,7 @@ import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { Action } from '../contributionsLandingActions';
@@ -83,7 +84,7 @@ const mapStateToProps = (state: State) => ({
 	countryId: state.common.internationalisation.countryId,
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	currency: state.common.internationalisation.currencyId,
-	contributionType: state.page.form.contributionType,
+	contributionType: getContributionType(state.page.checkoutForm.product),
 	existingPaymentMethods: state.common.existingPaymentMethods,
 	paymentMethod: state.page.form.paymentMethod,
 	existingPaymentMethod: state.page.form.existingPaymentMethod,
