@@ -1,5 +1,5 @@
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { routes } from 'helpers/urls/routes';
 import { noClientSecretError } from './errors';
 import { trackRecaptchaVerified } from './tracking';
@@ -8,7 +8,7 @@ export function createStripeSetupIntent(
 	token: string,
 	stripeKey: string,
 	isTestUser: boolean,
-	csrf: Csrf,
+	csrf: CsrfState,
 ): Promise<string> {
 	return fetchJson(
 		routes.stripeSetupIntentRecaptcha,
