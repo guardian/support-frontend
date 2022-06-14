@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import { css } from '@emotion/react';
 import { InlineError, TextInput } from '@guardian/source-react-components';
 import {
 	CardCvcElement,
@@ -15,17 +14,10 @@ import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
-import { fetchJson, requestOptions } from 'helpers/async/fetch';
-import type { ContributionType } from 'helpers/contributions';
 import { usePrevious } from 'helpers/customHooks/usePrevious';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { isValidZipCode } from 'helpers/forms/formValidation';
 import { Stripe } from 'helpers/forms/paymentMethods';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { routes } from 'helpers/urls/routes';
-import { logException } from 'helpers/utilities/logger';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
 	onThirdPartyPaymentAuthorised,
@@ -39,14 +31,25 @@ import {
 	updateRecaptchaToken,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
-import CreditCardsROW from './creditCardsROW.svg';
-import CreditCardsUS from './creditCardsUS.svg';
+import { CreditCardIcons } from './CreditCardIcons';
+import { recaptchaElementNotEmpty } from './helpers/dom';
+import {
+	logCreatePaymentMethodError,
+	logCreateSetupIntentError,
+} from './helpers/logging';
+import { createStripeSetupIntent } from './helpers/stripe';
+import { styles } from './helpers/styles';
+import {
+	trackRecaptchaClientTokenReceived,
+	trackStripe3ds,
+} from './helpers/tracking';
 import { StripeCardFormField } from './StripeCardFormField';
 import { useCardFormFieldStates } from './useCardFormFieldStates';
 import { useSelectedField } from './useSelectedField';
+import { VerificationCopy } from './VerificationCopy';
 import './stripeCardForm.scss';
 
-// ----- Types -----//
+// ----- Redux -----//
 
 const mapStateToProps = (state: State) => ({
 	contributionType: state.page.form.contributionType,
@@ -97,45 +100,17 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type PropTypes = ConnectedProps<typeof connector> & {
+// ----- Component -----//
+
+interface PropsFromParent {
 	stripeKey: string;
-};
+}
 
-const fieldStyle = {
-	base: {
-		fontFamily:
-			"'GuardianTextSans', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif",
-		'::placeholder': {
-			color: '#999999',
-		},
-		fontSize: '17px',
-		lineHeight: '1.5',
-	},
-};
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const zipCodeContainerStyles = css`
-	margin-top: 0.65rem;
-`;
-
-const renderVerificationCopy = (
-	countryGroupId: CountryGroupId,
-	contributionType: ContributionType,
-) => {
-	trackComponentLoad(
-		`recaptchaV2-verification-warning-${countryGroupId}-${contributionType}-loaded`,
-	);
-	return (
-		<div className="form__error">
-			{' '}
-			{"Please tick to verify you're a human"}{' '}
-		</div>
-	);
-};
+type PropTypes = PropsFromRedux & PropsFromParent;
 
 function CardForm(props: PropTypes) {
-	/**
-	 * State
-	 */
 	const stripe = stripeJs.useStripe();
 	const elements = stripeJs.useElements();
 
@@ -146,18 +121,17 @@ function CardForm(props: PropTypes) {
 	// Used to avoid calling grecaptcha.render twice when switching between monthly + annual
 	const [calledRecaptchaRender, setCalledRecaptchaRender] =
 		useState<boolean>(false);
+
 	const [zipCode, setZipCode] = useState('');
+
 	const showZipCodeField = props.country === 'US';
 
 	const updateZipCode = (event: React.ChangeEvent<HTMLInputElement>) =>
 		setZipCode(event.target.value);
 
-	/**
-	 * Handlers
-	 */
 	const handleStripeError = (errorData: StripeError): void => {
 		props.setPaymentWaiting(false);
-		logException(`Error creating Payment Method: ${JSON.stringify(errorData)}`);
+		logCreatePaymentMethodError(errorData);
 
 		if (errorData.type === 'validation_error') {
 			// This shouldn't be possible as we disable the submit button until all fields are valid, but if it does
@@ -169,21 +143,14 @@ function CardForm(props: PropTypes) {
 		}
 	};
 
-	const recaptchaElementNotEmpty = (): boolean => {
-		const el = document.getElementById('robot_checkbox');
-
-		if (el) {
-			return el.children.length > 0;
-		}
-
-		return true;
-	};
-
-	// Creates a new setupIntent upon recaptcha verification
+	// Sets up a callback for when the recaptcha has been verified.
+	// This callback will make a request to the backend to create a
+	// new setupIntent.
 	const setupRecurringRecaptchaCallback = () => {
 		setCalledRecaptchaRender(true);
 
-		// Fix for safari, where the calledRecaptchaRender state handling does not work. TODO - find a better solution
+		// Fix for safari, where the calledRecaptchaRender state handling does not work.
+		// TODO: find a better solution
 		if (recaptchaElementNotEmpty()) {
 			return;
 		}
@@ -191,37 +158,20 @@ function CardForm(props: PropTypes) {
 		window.grecaptcha?.render('robot_checkbox', {
 			sitekey: window.guardian.v2recaptchaPublicKey,
 			callback: (token: string) => {
-				trackComponentLoad('contributions-recaptcha-client-token-received');
+				trackRecaptchaClientTokenReceived();
 				props.setStripeRecurringRecaptchaVerified(true);
-				fetchJson(
-					routes.stripeSetupIntentRecaptcha,
-					requestOptions(
-						{
-							token,
-							stripePublicKey: props.stripeKey,
-							isTestUser: props.isTestUser,
-						},
-						'same-origin',
-						'POST',
-						props.csrf,
-					),
+
+				createStripeSetupIntent(
+					token,
+					props.stripeKey,
+					props.isTestUser,
+					props.csrf,
 				)
-					.then((json) => {
-						if (json.client_secret && typeof json.client_secret === 'string') {
-							trackComponentLoad('contributions-recaptcha-verified');
-							props.setStripeSetupIntentClientSecret(json.client_secret);
-						} else {
-							throw new Error(
-								`Missing client_secret field in server response: ${JSON.stringify(
-									json,
-								)}`,
-							);
-						}
+					.then((clientSecret) => {
+						props.setStripeSetupIntentClientSecret(clientSecret);
 					})
 					.catch((err: Error) => {
-						logException(
-							`Error getting Setup Intent client_secret from ${routes.stripeSetupIntentRecaptcha}: ${err.message}`,
-						);
+						logCreateSetupIntentError(err);
 						props.paymentFailure('internal_error');
 						props.setPaymentWaiting(false);
 					});
@@ -229,62 +179,22 @@ function CardForm(props: PropTypes) {
 		});
 	};
 
-	const setupRecaptchaTokenForOneOff = () => {
-		window.grecaptcha?.render('robot_checkbox', {
-			sitekey: window.guardian.v2recaptchaPublicKey,
-			callback: (token: string) => {
-				trackComponentLoad('contributions-recaptcha-client-token-received');
-				props.setOneOffRecaptchaToken(token);
-			},
-		});
-	};
-
-	const setupOneOffRecaptcha = (): void => {
+	const setupRecurringRecaptcha = (): void => {
 		if (window.guardian.recaptchaEnabled) {
 			if (window.grecaptcha?.render) {
-				setupRecaptchaTokenForOneOff();
+				setupRecurringRecaptchaCallback();
 			} else {
-				window.v2OnloadCallback = setupRecaptchaTokenForOneOff;
+				window.v2OnloadCallback = setupRecurringRecaptchaCallback;
 			}
 		}
 	};
 
-	const setupOneOffHandlers = (): void => {
-		props.setCreateStripePaymentMethod(() => {
-			props.setPaymentWaiting(true);
-			const cardElement = elements?.getElement(CardNumberElement);
-			if (cardElement) {
-				void stripe
-					?.createPaymentMethod({
-						type: 'card',
-						card: cardElement,
-						billing_details: {
-							address: {
-								postal_code: zipCode,
-							},
-						},
-					})
-					.then((result) => {
-						if (result.error) {
-							handleStripeError(result.error);
-						} else {
-							void props.onPaymentAuthorised(result.paymentMethod.id);
-						}
-					});
-			}
-		});
-		// @ts-expect-error TODO: This needs fixing in the reducer; we may always get undefined because we can't be sure the Stripe SDK will load
-		props.setHandleStripe3DS((clientSecret: string) => {
-			trackComponentLoad('stripe-3ds');
-			return stripe?.handleCardAction(clientSecret);
-		});
-	};
-
 	const handleCardSetupForRecurring = (clientSecret: string): void => {
 		const cardElement = elements?.getElement(CardNumberElement);
-		if (cardElement) {
+
+		if (stripe && cardElement) {
 			void stripe
-				?.confirmCardSetup(clientSecret, {
+				.confirmCardSetup(clientSecret, {
 					payment_method: {
 						card: cardElement,
 						billing_details: {
@@ -304,36 +214,77 @@ function CardForm(props: PropTypes) {
 		}
 	};
 
-	const setupRecurringRecaptcha = (): void => {
-		if (window.guardian.recaptchaEnabled) {
-			if (window.grecaptcha?.render) {
-				setupRecurringRecaptchaCallback();
-			} else {
-				window.v2OnloadCallback = setupRecurringRecaptchaCallback;
-			}
-		}
-	};
-
 	const setupRecurringHandlers = (): void => {
-		// Start by requesting the client_secret for a new Payment Method.
-		// Note - because this value is requested asynchronously when the component loads,
-		// it's possible for it to arrive after the user clicks 'Contribute'.
-		// This is handled in the callback below by checking the value of paymentWaiting.
 		props.setCreateStripePaymentMethod((clientSecret: string | null) => {
 			props.setPaymentWaiting(true);
 
-			/* Recaptcha verification is required for setupIntent creation.
-      If setupIntentClientSecret is ready then complete the payment now.
-      If setupIntentClientSecret is not ready then componentDidUpdate will complete the payment when it arrives. */
+			// Recaptcha verification is required for setupIntent creation.
+			// If setupIntentClientSecret is ready then complete the payment now.
+			// If setupIntentClientSecret is not ready we handle it in a `useEffect` hook.
 			if (clientSecret) {
 				handleCardSetupForRecurring(clientSecret);
 			}
 		});
 	};
 
-	/**
-	 * Hooks
-	 */
+	const setupOneOffRecaptchaCallback = () => {
+		window.grecaptcha?.render('robot_checkbox', {
+			sitekey: window.guardian.v2recaptchaPublicKey,
+			callback: (token: string) => {
+				trackRecaptchaClientTokenReceived();
+				props.setOneOffRecaptchaToken(token);
+			},
+		});
+	};
+
+	const setupOneOffRecaptcha = (): void => {
+		if (window.guardian.recaptchaEnabled) {
+			if (window.grecaptcha?.render) {
+				setupOneOffRecaptchaCallback();
+			} else {
+				window.v2OnloadCallback = setupOneOffRecaptchaCallback;
+			}
+		}
+	};
+
+	const handleCreatePaymentForOneOff = (): void => {
+		const cardElement = elements?.getElement(CardNumberElement);
+
+		if (stripe && cardElement) {
+			void stripe
+				.createPaymentMethod({
+					type: 'card',
+					card: cardElement,
+					billing_details: {
+						address: {
+							postal_code: zipCode,
+						},
+					},
+				})
+				.then((result) => {
+					if (result.error) {
+						handleStripeError(result.error);
+					} else {
+						void props.onPaymentAuthorised(result.paymentMethod.id);
+					}
+				});
+		}
+	};
+
+	const setupOneOffHandlers = (): void => {
+		props.setCreateStripePaymentMethod(() => {
+			props.setPaymentWaiting(true);
+
+			handleCreatePaymentForOneOff();
+		});
+
+		// @ts-expect-error TODO: This needs fixing in the reducer; we may always get undefined because we can't be sure the Stripe SDK will load
+		props.setHandleStripe3DS((clientSecret: string) => {
+			trackStripe3ds();
+			return stripe?.handleCardAction(clientSecret);
+		});
+	};
+
 	useEffect(() => {
 		if (stripe && elements) {
 			if (props.contributionType === 'ONE_OFF') {
@@ -343,6 +294,7 @@ function CardForm(props: PropTypes) {
 			}
 		}
 	}, [stripe, elements, props.contributionType]);
+
 	useEffect(() => {
 		if (stripe && elements) {
 			if (props.contributionType === 'ONE_OFF') {
@@ -353,11 +305,17 @@ function CardForm(props: PropTypes) {
 		}
 	}, [stripe, elements, props.contributionType, zipCode]);
 
-	// If we have just received the setupIntentClientSecret and the user has already clicked 'Contribute'
-	// then go ahead and process the recurring contribution
+	// We keep track of the previous setup intent secret for the case that a
+	// user clicks 'contribute' before the secret has loaded. In that case,
+	// we don't handle the card setup in the recurring handler (we need the secret for that)
+	// but instead handle it in a useEffect hook. The hook checks if the secret has
+	// just been defined (i.e the previous secret wasn't defined but the current one is)
+	// and that the payment is waiting (i.e the user clicked 'contribute') and then
+	// handles the card setup.
 	const previousSetupIntentClientSecret = usePrevious(
 		props.setupIntentClientSecret,
 	);
+
 	useEffect(() => {
 		const clientSecretHasUpdated =
 			!previousSetupIntentClientSecret && props.setupIntentClientSecret;
@@ -371,36 +329,25 @@ function CardForm(props: PropTypes) {
 		}
 	}, [props.setupIntentClientSecret]);
 
-	const isZipCodeFieldValid = () =>
-		showZipCodeField ? isValidZipCode(zipCode) : true;
+	const isZipCodeFieldValid = showZipCodeField ? isValidZipCode(zipCode) : true;
+
+	const showZipCodeError =
+		props.checkoutFormHasBeenSubmitted && !isZipCodeFieldValid;
 
 	useEffect(() => {
 		const formIsComplete =
 			fieldStates.CardNumber.name === 'Complete' &&
 			fieldStates.Expiry.name === 'Complete' &&
 			fieldStates.CVC.name === 'Complete' &&
-			isZipCodeFieldValid();
+			isZipCodeFieldValid;
 		props.setStripeCardFormComplete(formIsComplete);
 	}, [fieldStates, zipCode]);
-
-	/**
-	 * Rendering
-	 */
-	const showZipCodeError =
-		props.checkoutFormHasBeenSubmitted && !isZipCodeFieldValid();
-
-	const showCards = (country: IsoCountry) => {
-		if (country === 'US') {
-			return <CreditCardsUS className="form__credit-card-icons" />;
-		}
-
-		return <CreditCardsROW className="form__credit-card-icons" />;
-	};
 
 	const recaptchaVerified =
 		props.contributionType === 'ONE_OFF'
 			? props.oneOffRecaptchaToken
 			: props.recurringRecaptchaVerified;
+
 	return (
 		<div>
 			<legend className="form__legend">
@@ -415,14 +362,14 @@ function CardForm(props: PropTypes) {
 				label={
 					<>
 						<label htmlFor="stripeCardNumberElement">Card number</label>
-						{showCards(props.country)}
+						<CreditCardIcons country={props.country} />
 					</>
 				}
 				input={
 					<CardNumberElement
 						id="stripeCardNumberElement"
 						options={{
-							style: fieldStyle,
+							style: styles.stripeField,
 						}}
 						onChange={onFieldChange('CardNumber')}
 						onFocus={selectField('CardNumber')}
@@ -444,7 +391,7 @@ function CardForm(props: PropTypes) {
 							<CardExpiryElement
 								id="stripeCardExpiryElement"
 								options={{
-									style: fieldStyle,
+									style: styles.stripeField,
 								}}
 								onChange={onFieldChange('Expiry')}
 								onFocus={selectField('Expiry')}
@@ -479,7 +426,7 @@ function CardForm(props: PropTypes) {
 							<CardCvcElement
 								id="stripeCardCVCElement"
 								options={{
-									style: fieldStyle,
+									style: styles.stripeField,
 								}}
 								onChange={onFieldChange('CVC')}
 								onFocus={selectField('CVC')}
@@ -493,7 +440,7 @@ function CardForm(props: PropTypes) {
 			</div>
 
 			{showZipCodeField && (
-				<div css={zipCodeContainerStyles}>
+				<div css={styles.zipCodeContainer}>
 					<TextInput
 						id="contributionZipCode"
 						name="contribution-zip-code"
@@ -510,17 +457,19 @@ function CardForm(props: PropTypes) {
 					<div className="ds-security-check__label">
 						<label htmlFor="robot_checkbox">Security check</label>
 					</div>
-					{props.checkoutFormHasBeenSubmitted && !recaptchaVerified
-						? renderVerificationCopy(
-								props.countryGroupId,
-								props.contributionType,
-						  )
-						: null}
+					{props.checkoutFormHasBeenSubmitted && !recaptchaVerified && (
+						<VerificationCopy
+							countryGroupId={props.countryGroupId}
+							contributionType={props.contributionType}
+						/>
+					)}
 					<Recaptcha />
 				</div>
 			) : null}
 		</div>
 	);
 }
+
+// ----- Exports -----//
 
 export default connector(CardForm);
