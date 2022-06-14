@@ -15,11 +15,6 @@ describe('Quantum Metric Helpers', () => {
 					discountedPrice: 5.99,
 					numberOfDiscountedPeriods: 3,
 					discount: { amount: 50, durationMonths: 3 },
-					landingPage: {
-						title: 'Lorem ipsum dolor sit amet',
-						description: 'Lorem ipsum dolor sit amet',
-						roundel: '50% off for 3 months',
-					},
 				},
 			],
 		};
@@ -50,7 +45,6 @@ describe('Quantum Metric Helpers', () => {
 					discountedPrice: 99,
 					numberOfDiscountedPeriods: 1,
 					discount: { amount: 16.81, durationMonths: 12 },
-					landingPage: {},
 				},
 			],
 		};

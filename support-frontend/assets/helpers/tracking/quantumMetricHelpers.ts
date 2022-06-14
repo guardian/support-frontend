@@ -28,17 +28,16 @@ export const getAnnualValue = (
 		return;
 	}
 
-	const fullPriceInPenceCents = fullPrice * 100;
+	const fullPriceInPence = fullPrice * 100;
 	const fullAnnualPrice =
-		fullPriceInPenceCents * (productPrice.fixedTerm ? 1 : periodMultiplier);
+		fullPriceInPence * (productPrice.fixedTerm ? 1 : periodMultiplier);
 
 	if (!promotion?.discountedPrice || !promotion.numberOfDiscountedPeriods) {
 		return fullAnnualPrice;
 	}
 
-	const discountedPriceInPenceCents = promotion.discountedPrice * 100;
-	const discountInPenceCents =
-		fullPriceInPenceCents - discountedPriceInPenceCents;
+	const discountedPriceInPence = promotion.discountedPrice * 100;
+	const discountInPenceCents = fullPriceInPence - discountedPriceInPence;
 
 	const discountedAnnualPrice =
 		fullAnnualPrice -
