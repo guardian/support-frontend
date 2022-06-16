@@ -15,7 +15,7 @@ import {
 
 type SendEventTestParticipationId = 30;
 
-export enum SendEventCheckoutStart {
+enum SendEventCheckoutStart {
 	DigiSub = 75,
 	PaperSub = 76,
 	GuardianWeeklySub = 77,
