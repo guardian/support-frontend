@@ -11,7 +11,7 @@ import { getAnnualValue } from './quantumMetricHelpers';
 
 type SendEventTestParticipationId = 30;
 
-export enum SendEventCheckoutStart {
+enum SendEventCheckoutStart {
 	DigiSub = 75,
 	PaperSub = 76,
 	GuardianWeeklySub = 77,
@@ -19,7 +19,7 @@ export enum SendEventCheckoutStart {
 	GuardianWeeklySubGift = 79,
 }
 
-export enum SendEventCheckoutConverion {
+enum SendEventCheckoutConverion {
 	DigiSub = 31,
 	PaperSub = 67,
 	GuardianWeeklySub = 68,
