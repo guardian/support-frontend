@@ -19,6 +19,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { Quarterly } from 'helpers/productPrice/billingPeriods';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import {
 	finalPrice,
 	getCurrency,
