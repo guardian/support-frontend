@@ -51,10 +51,7 @@ import {
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import { firstError } from 'helpers/subscriptionsForms/validation';
-import {
-	SendEventCheckoutStart,
-	sendEventSubscriptionCheckoutStart,
-} from 'helpers/tracking/quantumMetric';
+import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
@@ -81,6 +78,7 @@ function mapStateToProps(state: SubscriptionsState) {
 		billingPeriod: state.page.checkout.billingPeriod as DigitalBillingPeriod,
 		addressErrors: state.page.billingAddress.fields.formErrors,
 		participations: state.common.abParticipations,
+		product: state.page.checkout.product,
 	};
 }
 
@@ -137,7 +135,8 @@ function DigitalCheckoutForm(props: PropTypes) {
 
 	useEffect(() => {
 		sendEventSubscriptionCheckoutStart(
-			SendEventCheckoutStart.DigiSub,
+			props.product,
+			false,
 			productPrice,
 			props.billingPeriod,
 		);

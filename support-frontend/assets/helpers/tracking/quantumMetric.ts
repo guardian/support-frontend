@@ -5,12 +5,13 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
 import { getAnnualValue } from './quantumMetricHelpers';
 
 type SendEventTestParticipationId = 30;
 
-enum SendEventCheckoutStart {
+export enum SendEventCheckoutStart {
 	DigiSub = 75,
 	PaperSub = 76,
 	GuardianWeeklySub = 77,
@@ -18,12 +19,12 @@ enum SendEventCheckoutStart {
 	GuardianWeeklySubGift = 79,
 }
 
-enum SendEventCheckoutConverion {
-	DigiSubConversion = 31,
-	PaperSubConversion = 67,
-	GuardianWeeklySubConversion = 68,
-	DigiSubGiftConversion = 69,
-	GuardianWeeklySubGiftConversion = 70,
+export enum SendEventCheckoutConverion {
+	DigiSub = 31,
+	PaperSub = 67,
+	GuardianWeeklySub = 68,
+	DigiSubGift = 69,
+	GuardianWeeklySubGift = 70,
 }
 
 type SendEventId =
@@ -55,10 +56,11 @@ function waitForQuantumMetricAPi(onReady: () => void) {
 	}, 500);
 }
 
-function sendEventSubscriptionCheckoutStart(
-	id: SendEventCheckoutStart,
+function sendEventSubscriptionCheckoutEvent(
+	id: SendEventCheckoutStart | SendEventCheckoutConverion,
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
+	isConversion: boolean,
 ): void {
 	/**
 	 * Check user has granted consent to Quantum Metric
@@ -81,7 +83,7 @@ function sendEventSubscriptionCheckoutStart(
 							sourceCurrency,
 							targetCurrency,
 						);
-					sendEvent(id, false, convertedValue.toString());
+					sendEvent(id, isConversion, convertedValue.toString());
 				}
 			};
 
@@ -102,6 +104,79 @@ function sendEventSubscriptionCheckoutStart(
 			}
 		}
 	});
+}
+
+function getSubsProductSendEventKey(
+	product: SubscriptionProduct,
+	orderIsAGift: boolean,
+): string | undefined {
+	switch (product) {
+		case 'DigitalPack':
+			return orderIsAGift ? 'DigiSubGift' : 'DigiSub';
+		case 'GuardianWeekly':
+			return orderIsAGift ? 'GuardianWeeklySubGift' : 'GuardianWeeklySub';
+		case 'Paper':
+		case 'PaperAndDigital':
+			return 'PaperSub';
+	}
+}
+
+export function sendEventSubscriptionCheckoutStart(
+	product: SubscriptionProduct,
+	orderIsAGift: boolean,
+	productPrice: ProductPrice,
+	billingPeriod: BillingPeriod,
+): void {
+	const sendEventKey = getSubsProductSendEventKey(product, orderIsAGift);
+
+	if (!sendEventKey) {
+		return;
+	}
+
+	const indexOfKey = Object.keys(SendEventCheckoutStart).indexOf(sendEventKey);
+
+	if (indexOfKey === -1) {
+		return;
+	}
+
+	const sendEventId = Object.values(SendEventCheckoutStart)[indexOfKey];
+
+	sendEventSubscriptionCheckoutEvent(
+		sendEventId as SendEventCheckoutStart,
+		productPrice,
+		billingPeriod,
+		false,
+	);
+}
+
+export function sendEventSubscriptionCheckoutConversion(
+	product: SubscriptionProduct,
+	orderIsAGift: boolean,
+	productPrice: ProductPrice,
+	billingPeriod: BillingPeriod,
+): void {
+	const sendEventKey = getSubsProductSendEventKey(product, orderIsAGift);
+
+	if (!sendEventKey) {
+		return;
+	}
+
+	const indexOfKey = Object.keys(SendEventCheckoutConverion).indexOf(
+		sendEventKey,
+	);
+
+	if (indexOfKey === -1) {
+		return;
+	}
+
+	const sendEventId = Object.values(SendEventCheckoutConverion)[indexOfKey];
+
+	sendEventSubscriptionCheckoutEvent(
+		sendEventId as SendEventCheckoutConverion,
+		productPrice,
+		billingPeriod,
+		true,
+	);
 }
 
 function sendEventABTestParticipations(participations: Participations): void {
@@ -171,7 +246,7 @@ function getConsent(): Promise<boolean> {
 	});
 }
 
-function init(participations: Participations): void {
+export function init(participations: Participations): void {
 	// return immediately if the feature switch is OFF
 	if (!isSwitchOn('featureSwitches.enableQuantumMetric')) {
 		return;
@@ -188,5 +263,3 @@ function init(participations: Participations): void {
 		}
 	});
 }
-
-export { init, sendEventSubscriptionCheckoutStart, SendEventCheckoutStart };
