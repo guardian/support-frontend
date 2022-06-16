@@ -5,7 +5,7 @@ import Button from 'components/button/button';
 import AnimatedDots from 'components/spinners/animatedDots';
 import type {
 	AmazonLoginObject,
-	AmazonPayData,
+	AmazonPaymentsObject,
 } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import {
 	trackComponentClick,
@@ -14,16 +14,14 @@ import {
 import { logException } from 'helpers/utilities/logger';
 import { setAmazonPayHasAccessToken } from 'pages/contributions-landing/contributionsLandingActions';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
-import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 
 type PropTypes = {
-	amazonPayData: AmazonPayData;
+	amazonLoginObject?: AmazonLoginObject;
+	amazonPaymentsObject?: AmazonPaymentsObject;
 	setAmazonPayHasAccessToken: () => Action;
 };
 
-const mapStateToProps = (state: State) => ({
-	amazonPayData: state.page.form.amazonPayData,
-});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
 	setAmazonPayHasAccessToken: () => dispatch(setAmazonPayHasAccessToken),
@@ -46,17 +44,14 @@ class AmazonPayLoginButtonComponent extends Component<PropTypes> {
 	};
 
 	render() {
-		const { amazonLoginObject, amazonPaymentsObject } =
-			this.props.amazonPayData.amazonPayLibrary;
-
-		if (amazonLoginObject && amazonPaymentsObject) {
+		if (this.props.amazonLoginObject && this.props.amazonPaymentsObject) {
 			trackComponentLoad('amazon-pay-login-loaded');
 			return (
 				<div>
 					<div id="AmazonLoginButton" />
 					<Button
 						type="button"
-						onClick={this.loginPopup(amazonLoginObject)}
+						onClick={this.loginPopup(this.props.amazonLoginObject)}
 						aria-label="Submit contribution"
 					>
 						Proceed with Amazon Pay
