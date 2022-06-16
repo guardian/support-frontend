@@ -19,7 +19,6 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { Quarterly } from 'helpers/productPrice/billingPeriods';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import {
 	finalPrice,
 	getCurrency,
@@ -150,8 +149,8 @@ function getGiftRecipient(giftingState: GiftingState) {
 function buildRegularPaymentRequest(
 	state: AnyCheckoutState,
 	paymentAuthorisation: PaymentAuthorisation,
-	price: ProductPrice,
 	addresses: Addresses,
+	promotions?: Promotion[],
 	currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
 	const { title, firstName, lastName, email, telephone } =
@@ -161,7 +160,7 @@ function buildRegularPaymentRequest(
 	const product = getProduct(state, currencyId);
 	const paymentFields =
 		regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
-	const promoCode = getPromoCode(price.promotions);
+	const promoCode = getPromoCode(promotions);
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
 	return {
 		title,
@@ -207,8 +206,8 @@ function onPaymentAuthorised(
 	const data = buildRegularPaymentRequest(
 		state,
 		paymentAuthorisation,
-		productPrice,
 		addresses,
+		productPrice.promotions,
 		currencyId,
 	);
 
