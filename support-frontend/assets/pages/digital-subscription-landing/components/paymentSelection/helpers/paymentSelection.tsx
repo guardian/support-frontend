@@ -75,11 +75,6 @@ export const getProductPrice = (
 	throw new Error('getProductPrice: product price unavailable');
 };
 
-export const getSavingPercentage = (
-	annualCost: number,
-	monthlyCostAnnualized: number,
-): string => `${Math.round((1 - annualCost / monthlyCostAnnualized) * 100)}%`;
-
 const BILLING_PERIOD = {
 	[Monthly]: {
 		title: 'Monthly',
@@ -292,6 +287,7 @@ const getPaymentOptions = ({
 				action: 'DigitalPack',
 				label: trackingProperties.id,
 			});
+
 			sendTrackingEventsOnClick(trackingProperties)();
 		};
 

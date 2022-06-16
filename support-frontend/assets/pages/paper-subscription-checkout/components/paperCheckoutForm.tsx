@@ -76,6 +76,10 @@ import type {
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
+import {
+	SendEventCheckoutStart,
+	sendEventSubscriptionCheckoutStart,
+} from 'helpers/tracking/quantumMetric';
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { getQueryParameter } from 'helpers/urls/url';
 import { titles } from 'helpers/user/details';
@@ -273,6 +277,12 @@ function PaperCheckoutForm(props: PropTypes) {
 		const digitalCost = sensiblyGenerateDigiSubPrice(plusPrice, paperPrice);
 		setDigiSubPriceString(
 			getPriceSummary(showPrice(digitalCost, false), props.billingPeriod),
+		);
+
+		sendEventSubscriptionCheckoutStart(
+			SendEventCheckoutStart.PaperSub,
+			props.amount,
+			props.billingPeriod,
 		);
 	}, []);
 
