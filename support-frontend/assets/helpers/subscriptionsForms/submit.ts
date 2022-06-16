@@ -156,24 +156,8 @@ function buildRegularPaymentRequest(
 ): RegularPaymentRequest {
 	const { title, firstName, lastName, email, telephone } =
 		state.page.checkoutForm.personalDetails;
-	const {
-		// billingPeriod,
-		// fulfilmentOption,
-		// productOption,
-		// productPrices,
-		deliveryInstructions,
-		csrUsername,
-		salesforceCaseId,
-		debugInfo,
-	} = state.page.checkout;
-	// const addresses = getAddresses(state);
-	// const price = getProductPrice(
-	// 	productPrices,
-	// 	addresses.billingAddress.country,
-	// 	billingPeriod,
-	// 	fulfilmentOption,
-	// 	productOption,
-	// );
+	const { deliveryInstructions, csrUsername, salesforceCaseId, debugInfo } =
+		state.page.checkout;
 	const product = getProduct(state, currencyId);
 	const paymentFields =
 		regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
