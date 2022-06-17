@@ -1,8 +1,12 @@
+import type { DirectDebit } from 'helpers/forms/paymentMethods';
 import { PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
-export type SubscriptionsPaymentMethod = typeof PayPal | typeof Stripe;
+export type SubscriptionsPaymentMethod =
+	| typeof DirectDebit
+	| typeof PayPal
+	| typeof Stripe;
 
 function supportedPaymentMethods(
 	currencyId: IsoCurrency,
