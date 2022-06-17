@@ -53,8 +53,8 @@ class CreateSubscriptionController(
   def create: EssentialAction =
     LoggingAndAlarmOnFailure {
       MaybeAuthenticatedAction.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
-        (request.body.paymentFields, request.body.product) match {
-          case (Left(_: DirectDebitPaymentFields), _: Contribution) =>
+        request.body.paymentFields match {
+          case Left(_: DirectDebitPaymentFields) =>
             Future.successful(BadRequest)
           case _ =>
             val maybeLoggedInIdentityIdAndEmail =
