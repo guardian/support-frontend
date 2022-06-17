@@ -1,7 +1,7 @@
 package services.stepfunctions
 
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import com.amazonaws.services.stepfunctions.model.{InvalidExecutionInputException, InvalidNameException, _}
 import scala.concurrent.{ExecutionContext, Future}
 import StateMachineErrors._

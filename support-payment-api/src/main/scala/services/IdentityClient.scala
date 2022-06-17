@@ -2,7 +2,6 @@ package services
 
 import akka.util.ByteString
 import cats.data.EitherT
-import cats.instances.future._
 import cats.syntax.applicativeError._
 import cats.syntax.either._
 import com.typesafe.scalalogging.StrictLogging

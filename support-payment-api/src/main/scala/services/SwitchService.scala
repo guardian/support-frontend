@@ -42,7 +42,7 @@ object Switches {
 class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem, ec: ExecutionContext)
     extends StrictLogging {
 
-  import cats.implicits._
+  import cats.syntax.all._
 
   private val cacheKey = "switches"
 

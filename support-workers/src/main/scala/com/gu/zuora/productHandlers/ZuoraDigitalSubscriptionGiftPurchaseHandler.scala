@@ -1,6 +1,6 @@
 package com.gu.zuora.productHandlers
 
-import cats.implicits._
+import cats.syntax.all._
 import com.gu.WithLoggingSugar._
 import com.gu.helpers.DateGenerator
 import com.gu.salesforce.Salesforce.SfContactId

@@ -4,7 +4,6 @@ import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
 import akka.actor.{ActorSystem, Scheduler}
 import cats.data.EitherT
-import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.workers._

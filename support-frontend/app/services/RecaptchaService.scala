@@ -1,7 +1,7 @@
 package services
 
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
 import play.api.libs.json._
