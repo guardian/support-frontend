@@ -42,7 +42,6 @@ function mapStateToProps(state: ContributionsState) {
 		accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
 		formError: state.page.directDebit.formError,
 		phase: state.page.directDebit.phase,
-		recaptchaComplete: state.page.checkoutForm.recaptcha.completed,
 		countryGroupId: state.common.internationalisation.countryGroupId,
 	};
 }
