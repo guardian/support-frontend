@@ -13,14 +13,16 @@ export function useRecaptchaV2(
 	const [hasLoaded, setHasLoaded] = useState(false);
 
 	useEffect(() => {
-		window.v2OnloadCallback = () => {
-			setHasLoaded(true);
-			window.grecaptcha?.render(placeholderId, {
-				sitekey: window.guardian.v2recaptchaPublicKey,
-				callback: onCompletionCallback,
-			});
-		};
-		void loadRecaptchaV2();
+		if (window.guardian.recaptchaEnabled) {
+			window.v2OnloadCallback = () => {
+				setHasLoaded(true);
+				window.grecaptcha?.render(placeholderId, {
+					sitekey: window.guardian.v2recaptchaPublicKey,
+					callback: onCompletionCallback,
+				});
+			};
+			void loadRecaptchaV2();
+		}
 	}, []);
 
 	return {

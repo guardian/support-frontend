@@ -142,6 +142,7 @@ function payDirectDebitClicked(): (
 			accountNumber,
 			accountHolderConfirmation,
 		} = getState().page.directDebit;
+		const recaptchaCompleted = getState().page.checkoutForm.recaptcha.completed;
 		const sortCode = sortCodeArray.join('') || sortCodeString;
 		const isTestUser = getState().page.user.isTestUser ?? false;
 		const { csrf } = getState().page.checkoutForm;
@@ -152,6 +153,12 @@ function payDirectDebitClicked(): (
 				setDirectDebitFormError(
 					'You need to confirm that you are the account holder.',
 				),
+			);
+		}
+
+		if (!recaptchaCompleted) {
+			return dispatch(
+				setDirectDebitFormError("Please check the 'I'm not a robot' checkbox"),
 			);
 		}
 
