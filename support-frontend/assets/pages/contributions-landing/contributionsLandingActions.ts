@@ -754,6 +754,9 @@ function regularPaymentRequestFromAuthorisation(
 		state,
 	);
 
+	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
+	const isDirectDebitPayment = state.page.form.paymentMethod === 'DirectDebit';
+
 	const amount = getAmount(
 		state.page.form.selectedAmounts,
 		state.page.form.formData.otherAmounts,
@@ -791,6 +794,7 @@ function regularPaymentRequestFromAuthorisation(
 		ophanIds: getOphanIds(),
 		referrerAcquisitionData: state.common.referrerAcquisitionData,
 		supportAbTests: getSupportAbTests(state.common.abParticipations),
+		...(isDirectDebitPayment ? { recaptchaToken } : {}),
 		debugInfo: 'contributions does not collect redux state',
 	};
 }
