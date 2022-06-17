@@ -60,7 +60,11 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
         case state: ContributionState =>
           zuoraContributionHandler.subscribe(state)
         case state: PaperState =>
-          zuoraPaperHandler.subscribe(state, zuoraSubscriptionState.csrUsername, zuoraSubscriptionState.salesforceCaseId)
+          zuoraPaperHandler.subscribe(
+            state,
+            zuoraSubscriptionState.csrUsername,
+            zuoraSubscriptionState.salesforceCaseId,
+          )
         case state: GuardianWeeklyState =>
           zuoraGuardianWeeklyHandler.subscribe(
             state,
