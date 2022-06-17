@@ -67,21 +67,14 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
-	contributionType: getContributionType(state.page.checkoutForm.product),
+	contributionType: getContributionType(state),
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
-	setPaymentIsWaiting: (isWaiting: boolean) => {
-		dispatch(paymentWaiting(isWaiting));
-	},
-	setTickerGoalReached: () => {
-		dispatch(setTickerGoalReached());
-	},
-	onThirdPartyPaymentAuthorised: (token: PaymentAuthorisation) => {
-		dispatch(onThirdPartyPaymentAuthorised(token));
-	},
-});
+const mapDispatchToProps = {
+	setPaymentIsWaiting: paymentWaiting,
+	setTickerGoalReached,
+	onThirdPartyPaymentAuthorised,
+};
 
 // ----- Styles ----- //
 

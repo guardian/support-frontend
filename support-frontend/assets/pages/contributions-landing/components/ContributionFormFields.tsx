@@ -54,7 +54,7 @@ const mapStateToProps = (state: State) => ({
 	isSignedIn: state.page.checkoutForm.personalDetails.isSignedIn,
 	userTypeFromIdentityResponse:
 		state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
-	contributionType: getContributionType(state.page.checkoutForm.product),
+	contributionType: getContributionType(state),
 });
 
 const mapDispatchToProps = {

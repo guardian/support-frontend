@@ -121,9 +121,7 @@ const amazonPayFormOk = (state: State): boolean => {
 
 		return (
 			paymentSelected &&
-			(getContributionType(state.page.checkoutForm.product) === 'ONE_OFF'
-				? oneOffOk()
-				: recurringOk())
+			(getContributionType(state) === 'ONE_OFF' ? oneOffOk() : recurringOk())
 		);
 	}
 
@@ -143,7 +141,7 @@ const formIsValidParameters = (state: State) => ({
 	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 	otherAmounts: state.page.checkoutForm.product.otherAmounts,
 	countryGroupId: state.common.internationalisation.countryGroupId,
-	contributionType: getContributionType(state.page.checkoutForm.product),
+	contributionType: getContributionType(state),
 	billingState: state.page.form.formData.billingState,
 	firstName: state.page.checkoutForm.personalDetails.firstName,
 	lastName: state.page.checkoutForm.personalDetails.lastName,
@@ -162,9 +160,7 @@ function enableOrDisableForm() {
 	return (dispatch: Dispatch, getState: () => State): void => {
 		const state = getState();
 		const { isRecurringContributor } = state.page.user;
-		const contributionType = getContributionType(
-			state.page.checkoutForm.product,
-		);
+		const contributionType = getContributionType(state);
 
 		const shouldBlockExistingRecurringContributor =
 			isRecurringContributor && contributionTypeIsRecurring(contributionType);

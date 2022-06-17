@@ -153,7 +153,7 @@ type ContributionThankYouProps = {
 };
 
 const mapStateToProps = (state: State) => {
-	const contributionType = getContributionType(state.page.checkoutForm.product);
+	const contributionType = getContributionType(state);
 	return {
 		email: state.page.checkoutForm.personalDetails.email,
 		name: state.page.checkoutForm.personalDetails.firstName,

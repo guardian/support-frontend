@@ -52,7 +52,7 @@ import './stripeCardForm.scss';
 // ----- Redux -----//
 
 const mapStateToProps = (state: State) => ({
-	contributionType: getContributionType(state.page.checkoutForm.product),
+	contributionType: getContributionType(state),
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 	paymentWaiting: state.page.form.isWaiting,

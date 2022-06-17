@@ -37,7 +37,7 @@ const otherAmoutGlphCss = css`
 const mapStateToProps = (state: State) => ({
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	currency: state.common.internationalisation.currencyId,
-	contributionType: getContributionType(state.page.checkoutForm.product),
+	contributionType: getContributionType(state),
 	amounts: state.common.amounts,
 	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 	otherAmounts: state.page.checkoutForm.product.otherAmounts,

@@ -590,7 +590,7 @@ const buildStripeChargeDataFromAuthorisation = (
 		amount: getAmount(
 			state.page.checkoutForm.product.selectedAmounts,
 			state.page.checkoutForm.product.otherAmounts,
-			getContributionType(state.page.checkoutForm.product),
+			getContributionType(state),
 		),
 		email: state.page.checkoutForm.personalDetails.email,
 		stripePaymentMethod,
@@ -600,9 +600,7 @@ const buildStripeChargeDataFromAuthorisation = (
 		state.common.abParticipations,
 	),
 	publicKey: getStripeKey(
-		stripeAccountForContributionType[
-			getContributionType(state.page.checkoutForm.product)
-		],
+		stripeAccountForContributionType[getContributionType(state)],
 		state.common.internationalisation.countryId,
 		state.page.user.isTestUser ?? false,
 	),
@@ -683,7 +681,7 @@ function getProductOptionsForBenefitsTest(amount: number, state: State) {
 	const inBenefitsTest =
 		state.common.abParticipations.PP_V3 === 'V2_BULLET' ||
 		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH';
-	const contributionType = getContributionType(state.page.checkoutForm.product);
+	const contributionType = getContributionType(state);
 	const isRecurring = contributionType !== 'ONE_OFF';
 
 	const thresholdPrice = getThresholdPrice(
@@ -706,7 +704,7 @@ function regularPaymentRequestFromAuthorisation(
 		state,
 	);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
-	const contributionType = getContributionType(state.page.checkoutForm.product);
+	const contributionType = getContributionType(state);
 
 	const amount = getAmount(
 		state.page.checkoutForm.product.selectedAmounts,
@@ -760,7 +758,7 @@ const amazonPayDataFromAuthorisation = (
 		amount: getAmount(
 			state.page.checkoutForm.product.selectedAmounts,
 			state.page.checkoutForm.product.otherAmounts,
-			getContributionType(state.page.checkoutForm.product),
+			getContributionType(state),
 		),
 		orderReferenceId: authorisation.orderReferenceId ?? '',
 		email: state.page.checkoutForm.personalDetails.email,
@@ -806,9 +804,7 @@ const onPaymentResult =
 						dispatch(
 							setStripePaymentRequestButtonError(
 								result.error,
-								stripeAccountForContributionType[
-									getContributionType(state.page.checkoutForm.product)
-								],
+								stripeAccountForContributionType[getContributionType(state)],
 							),
 						);
 					} else {
@@ -1058,9 +1054,7 @@ const onThirdPartyPaymentAuthorised =
 	(paymentAuthorisation: PaymentAuthorisation) =>
 	(dispatch: Dispatch, getState: () => State): Promise<PaymentResult> => {
 		const state = getState();
-		const contributionType = getContributionType(
-			state.page.checkoutForm.product,
-		);
+		const contributionType = getContributionType(state);
 		return paymentAuthorisationHandlers[contributionType][
 			state.page.form.paymentMethod
 		](dispatch, state, paymentAuthorisation);

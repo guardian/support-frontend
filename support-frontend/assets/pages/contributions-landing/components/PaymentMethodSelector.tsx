@@ -84,7 +84,7 @@ const mapStateToProps = (state: State) => ({
 	countryId: state.common.internationalisation.countryId,
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	currency: state.common.internationalisation.currencyId,
-	contributionType: getContributionType(state.page.checkoutForm.product),
+	contributionType: getContributionType(state),
 	existingPaymentMethods: state.common.existingPaymentMethods,
 	paymentMethod: state.page.form.paymentMethod,
 	existingPaymentMethod: state.page.form.existingPaymentMethod,

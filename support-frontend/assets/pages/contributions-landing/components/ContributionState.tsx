@@ -36,7 +36,7 @@ interface ContributionStateProps {
 
 const mapStateToProps = (state: State) => ({
 	countryGroupId: state.common.internationalisation.countryGroupId,
-	contributionType: getContributionType(state.page.checkoutForm.product),
+	contributionType: getContributionType(state),
 });
 
 // ----- Render ----- //

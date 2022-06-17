@@ -21,7 +21,7 @@ type PropTypes = {
 
 const mapStateToProps = (state: State) => ({
 	paymentMethod: state.page.form.paymentMethod,
-	contributionType: getContributionType(state.page.checkoutForm.product),
+	contributionType: getContributionType(state),
 	paymentError: state.page.form.paymentError,
 	isSignedIn: state.page.user.isSignedIn,
 	formIsValid: state.page.form.formIsValid,

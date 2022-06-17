@@ -77,7 +77,7 @@ const mapStateToProps = (state: State) => ({
 	thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
 	stripeClientSecret:
 		state.page.form.stripeCardFormData.setupIntentClientSecret,
-	contributionType: getContributionType(state.page.checkoutForm.product),
+	contributionType: getContributionType(state),
 	paymentError: state.page.form.paymentError,
 	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 	userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
@@ -102,10 +102,10 @@ const mapStateToProps = (state: State) => ({
 		state.common.abParticipations.productSetTest === 'variant',
 	benefitsMessagingAbTestBulletVariant:
 		state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
-		getContributionType(state.page.checkoutForm.product) !== 'ONE_OFF',
+		getContributionType(state) !== 'ONE_OFF',
 	benefitsMessagingAbTestParaVariant:
 		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
-		getContributionType(state.page.checkoutForm.product) !== 'ONE_OFF',
+		getContributionType(state) !== 'ONE_OFF',
 });
 
 const mapDispatchToProps = {

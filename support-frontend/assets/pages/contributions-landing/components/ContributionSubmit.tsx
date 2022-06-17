@@ -20,7 +20,7 @@ import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
 // ----- Types ----- //
 
 function mapStateToProps(state: State) {
-	const contributionType = getContributionType(state.page.checkoutForm.product);
+	const contributionType = getContributionType(state);
 	return {
 		currency: state.common.internationalisation.currencyId,
 		contributionType,
