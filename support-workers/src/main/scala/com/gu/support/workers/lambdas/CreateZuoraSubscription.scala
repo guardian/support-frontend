@@ -7,16 +7,21 @@ import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.redemption.corporate._
 import com.gu.support.workers._
+import com.gu.support.workers.exceptions.RetryNone
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState}
 import com.gu.zuora.ZuoraSubscriptionCreator
 import com.gu.zuora.productHandlers._
 import com.gu.zuora.subscriptionBuilders._
 
+import scala.jdk.CollectionConverters._
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[CreateZuoraSubscriptionState, SendAcquisitionEventState](servicesProvider) {
+
+  val badName: Option[String] = System.getenv.asScala.get("BAD_NAME")
 
   def this() = this(ServiceProvider)
 
@@ -27,49 +32,58 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
       services: Services,
   ): FutureHandlerResult = {
 
-    val zuoraProductHandlers = new ZuoraProductHandlers(services, zuoraSubscriptionState)
-    import zuoraProductHandlers._
+    if (badName.contains(zuoraSubscriptionState.user.lastName)) {
+      Future.failed(new RetryNone("Failing because it's a bad request"))
+    } else {
 
-    val eventualSendThankYouEmailState = zuoraSubscriptionState.productSpecificState match {
-      case state: DigitalSubscriptionGiftRedemptionState =>
-        zuoraDigitalSubscriptionGiftRedemptionHandler.redeemGift(state)
-      case state: DigitalSubscriptionDirectPurchaseState =>
-        zuoraDigitalSubscriptionDirectHandler.subscribe(
-          state,
-          zuoraSubscriptionState.csrUsername,
-          zuoraSubscriptionState.salesforceCaseId,
-          zuoraSubscriptionState.acquisitionData,
-        )
-      case state: DigitalSubscriptionGiftPurchaseState =>
-        zuoraDigitalSubscriptionGiftPurchaseHandler.subscribe(
-          state,
-          zuoraSubscriptionState.csrUsername,
-          zuoraSubscriptionState.salesforceCaseId,
-        )
-      case state: DigitalSubscriptionCorporateRedemptionState =>
-        zuoraDigitalSubscriptionCorporateRedemptionHandler.subscribe(state)
-      case state: ContributionState =>
-        zuoraContributionHandler.subscribe(state)
-      case state: PaperState =>
-        zuoraPaperHandler.subscribe(state, zuoraSubscriptionState.csrUsername, zuoraSubscriptionState.salesforceCaseId)
-      case state: GuardianWeeklyState =>
-        zuoraGuardianWeeklyHandler.subscribe(
-          state,
-          zuoraSubscriptionState.csrUsername,
-          zuoraSubscriptionState.salesforceCaseId,
-        )
-    }
+      val zuoraProductHandlers = new ZuoraProductHandlers(services, zuoraSubscriptionState)
+      import zuoraProductHandlers._
 
-    eventualSendThankYouEmailState.map { nextState =>
-      HandlerResult(
-        SendAcquisitionEventState(
-          requestId = zuoraSubscriptionState.requestId,
-          analyticsInfo = zuoraSubscriptionState.analyticsInfo,
-          sendThankYouEmailState = nextState,
-          acquisitionData = zuoraSubscriptionState.acquisitionData,
-        ),
-        requestInfo,
-      )
+      val eventualSendThankYouEmailState = zuoraSubscriptionState.productSpecificState match {
+        case state: DigitalSubscriptionGiftRedemptionState =>
+          zuoraDigitalSubscriptionGiftRedemptionHandler.redeemGift(state)
+        case state: DigitalSubscriptionDirectPurchaseState =>
+          zuoraDigitalSubscriptionDirectHandler.subscribe(
+            state,
+            zuoraSubscriptionState.csrUsername,
+            zuoraSubscriptionState.salesforceCaseId,
+            zuoraSubscriptionState.acquisitionData,
+          )
+        case state: DigitalSubscriptionGiftPurchaseState =>
+          zuoraDigitalSubscriptionGiftPurchaseHandler.subscribe(
+            state,
+            zuoraSubscriptionState.csrUsername,
+            zuoraSubscriptionState.salesforceCaseId,
+          )
+        case state: DigitalSubscriptionCorporateRedemptionState =>
+          zuoraDigitalSubscriptionCorporateRedemptionHandler.subscribe(state)
+        case state: ContributionState =>
+          zuoraContributionHandler.subscribe(state)
+        case state: PaperState =>
+          zuoraPaperHandler.subscribe(
+            state,
+            zuoraSubscriptionState.csrUsername,
+            zuoraSubscriptionState.salesforceCaseId,
+          )
+        case state: GuardianWeeklyState =>
+          zuoraGuardianWeeklyHandler.subscribe(
+            state,
+            zuoraSubscriptionState.csrUsername,
+            zuoraSubscriptionState.salesforceCaseId,
+          )
+      }
+
+      eventualSendThankYouEmailState.map { nextState =>
+        HandlerResult(
+          SendAcquisitionEventState(
+            requestId = zuoraSubscriptionState.requestId,
+            analyticsInfo = zuoraSubscriptionState.analyticsInfo,
+            sendThankYouEmailState = nextState,
+            acquisitionData = zuoraSubscriptionState.acquisitionData,
+          ),
+          requestInfo,
+        )
+      }
     }
 
   }
