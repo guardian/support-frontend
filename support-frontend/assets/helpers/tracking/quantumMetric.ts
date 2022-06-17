@@ -62,11 +62,8 @@ function sendEventSubscriptionCheckoutEvent(
 	billingPeriod: BillingPeriod,
 	isConversion: boolean,
 ): void {
-	/**
-	 * Check user has granted consent to Quantum Metric
-	 */
-	void getConsent().then((hasConsent) => {
-		if (hasConsent) {
+	void canRunQuantumMetric().then((canRun) => {
+		if (canRun) {
 			const sourceCurrency = productPrice.currency;
 			const value = getAnnualValue(productPrice, billingPeriod);
 
@@ -227,7 +224,12 @@ function addQM() {
 	});
 }
 
-function getConsent(): Promise<boolean> {
+function canRunQuantumMetric(): Promise<boolean> {
+	// resolve immediately with false if the feature switch is OFF
+	if (!isSwitchOn('featureSwitches.enableQuantumMetric')) {
+		return Promise.resolve(false);
+	}
+	// checks users consent status
 	return new Promise((resolve) => {
 		onConsentChange((state) => {
 			if (
@@ -247,12 +249,8 @@ function getConsent(): Promise<boolean> {
 }
 
 export function init(participations: Participations): void {
-	// return immediately if the feature switch is OFF
-	if (!isSwitchOn('featureSwitches.enableQuantumMetric')) {
-		return;
-	}
-	void getConsent().then((hasConsent) => {
-		if (hasConsent) {
+	void canRunQuantumMetric().then((canRun) => {
+		if (canRun) {
 			void addQM().then(() => {
 				/**
 				 * Quantum Metric's script has loaded so we can attempt to
