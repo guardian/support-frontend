@@ -224,10 +224,6 @@ export type Action =
 			type: 'SET_STRIPE_V3_HAS_LOADED';
 	  }
 	| {
-			type: 'SET_CREATE_STRIPE_PAYMENT_METHOD';
-			createStripePaymentMethod: (clientSecret: string | null) => void;
-	  }
-	| {
 			type: 'SET_HANDLE_STRIPE_3DS';
 			handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>;
 	  }
@@ -526,7 +522,7 @@ const getUserType =
 	(email: string) =>
 	(dispatch: Dispatch, getState: () => State): void => {
 		const state = getState();
-		const { csrf } = state.page;
+		const { csrf } = state.page.checkoutForm;
 		const { isSignedIn } = state.page.user;
 		void getUserTypeFromIdentity(
 			email,
@@ -540,13 +536,6 @@ const getUserType =
 const setTickerGoalReached = (): Action => ({
 	type: 'SET_TICKER_GOAL_REACHED',
 	tickerGoalReached: true,
-});
-
-const setCreateStripePaymentMethod = (
-	createStripePaymentMethod: (clientSecret: string | null) => void,
-): Action => ({
-	type: 'SET_CREATE_STRIPE_PAYMENT_METHOD',
-	createStripePaymentMethod,
 });
 
 const setHandleStripe3DS = (
@@ -977,7 +966,7 @@ function recurringPaymentAuthorisationHandler(
 			routes.recurringContribCreate,
 			request,
 			state.common.abParticipations,
-			state.page.csrf,
+			state.page.checkoutForm.csrf,
 		),
 		paymentAuthorisation,
 	)(dispatch, () => state);
@@ -1154,7 +1143,6 @@ export {
 	setStripePaymentRequestButtonClicked,
 	setStripePaymentRequestButtonError,
 	setTickerGoalReached,
-	setCreateStripePaymentMethod,
 	setHandleStripe3DS,
 	setStripeCardFormComplete,
 	setStripeSetupIntentClientSecret,

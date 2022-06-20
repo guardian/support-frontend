@@ -2,11 +2,34 @@ import { onConsentChange } from '@guardian/consent-management-platform';
 import { loadScript } from '@guardian/libs';
 import type { Participations } from 'helpers/abTests/abtest';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { logException } from 'helpers/utilities/logger';
+import { getAnnualValue } from './quantumMetricHelpers';
 
-type SendEventABTestId = 30;
+type SendEventTestParticipationId = 30;
 
-export type SendEventId = SendEventABTestId;
+enum SendEventCheckoutStart {
+	DigiSub = 75,
+	PaperSub = 76,
+	GuardianWeeklySub = 77,
+	DigiSubGift = 78,
+	GuardianWeeklySubGift = 79,
+}
+
+enum SendEventCheckoutConverion {
+	DigiSubConversion = 31,
+	PaperSubConversion = 67,
+	GuardianWeeklySubConversion = 68,
+	DigiSubGiftConversion = 69,
+	GuardianWeeklySubGiftConversion = 70,
+}
+
+type SendEventId =
+	| SendEventTestParticipationId
+	| SendEventCheckoutStart
+	| SendEventCheckoutConverion;
 
 function sendEvent(
 	id: SendEventId,
@@ -18,8 +41,71 @@ function sendEvent(
 	}
 }
 
+function waitForQuantumMetricAPi(onReady: () => void) {
+	let pollCount = 0;
+	const checkForQuantumMetricAPi = setInterval(() => {
+		pollCount = pollCount + 1;
+		if (window.QuantumMetricAPI?.isOn()) {
+			onReady();
+			clearInterval(checkForQuantumMetricAPi);
+		} else if (pollCount === 10) {
+			// give up waiting if QuantumMetricAPI is not ready after 10 attempts
+			clearInterval(checkForQuantumMetricAPi);
+		}
+	}, 500);
+}
+
+function sendEventSubscriptionCheckoutStart(
+	id: SendEventCheckoutStart,
+	productPrice: ProductPrice,
+	billingPeriod: BillingPeriod,
+): void {
+	/**
+	 * Check user has granted consent to Quantum Metric
+	 */
+	void getConsent().then((hasConsent) => {
+		if (hasConsent) {
+			const sourceCurrency = productPrice.currency;
+			const value = getAnnualValue(productPrice, billingPeriod);
+
+			if (!value) {
+				return;
+			}
+
+			const targetCurrency: IsoCurrency = 'GBP';
+			const sendEventWhenReady = () => {
+				if (window.QuantumMetricAPI?.isOn()) {
+					const convertedValue: number =
+						window.QuantumMetricAPI.currencyConvertFromToValue(
+							value,
+							sourceCurrency,
+							targetCurrency,
+						);
+					sendEvent(id, false, convertedValue.toString());
+				}
+			};
+
+			/**
+			 * Quantum Metric's script sets up QuantumMetricAPI.
+			 * We need to check it is defined and ready before we can
+			 * send events to it. If it is ready we call sendEventWhenReady
+			 * immediately. If it is not ready we poll a function that checks
+			 * if QuantumMetricAPI is available. Once it's available we
+			 * call sendEventWhenReady.
+			 */
+			if (window.QuantumMetricAPI?.isOn()) {
+				sendEventWhenReady();
+			} else {
+				waitForQuantumMetricAPi(() => {
+					sendEventWhenReady();
+				});
+			}
+		}
+	});
+}
+
 function sendEventABTestParticipations(participations: Participations): void {
-	const sendEventABTestId: SendEventId = 30;
+	const sendEventABTestId = 30;
 	const valueQueue: string[] = [];
 
 	Object.keys(participations).forEach((testId) => {
@@ -44,14 +130,11 @@ function sendEventABTestParticipations(participations: Participations): void {
 	 * queue of values to be sent with sendEvent.
 	 */
 	if (valueQueue.length) {
-		const waitForQuantumMetricAPi = setInterval(() => {
-			if (window.QuantumMetricAPI?.isOn()) {
-				valueQueue.forEach((value) => {
-					sendEvent(sendEventABTestId, false, value);
-				});
-				clearInterval(waitForQuantumMetricAPi);
-			}
-		}, 100);
+		waitForQuantumMetricAPi(() => {
+			valueQueue.forEach((value) => {
+				sendEvent(sendEventABTestId, false, value);
+			});
+		});
 	}
 }
 
@@ -69,21 +152,32 @@ function addQM() {
 	});
 }
 
+function getConsent(): Promise<boolean> {
+	return new Promise((resolve) => {
+		onConsentChange((state) => {
+			if (
+				state.ccpa?.doNotSell === false || // check whether US users have NOT withdrawn consent
+				state.aus?.personalisedAdvertising || // check whether AUS users have consented to personalisedAdvertising
+				(state.tcfv2?.consents && // check TCFv2 purposes for non-US/AUS users
+					state.tcfv2.consents['1'] && // Store and/or access information on a device
+					state.tcfv2.consents['8'] && // Measure content performance
+					state.tcfv2.consents['10']) // Develop and improve products
+			) {
+				resolve(true);
+			} else {
+				resolve(false);
+			}
+		});
+	});
+}
+
 function init(participations: Participations): void {
 	// return immediately if the feature switch is OFF
 	if (!isSwitchOn('featureSwitches.enableQuantumMetric')) {
 		return;
 	}
-	// Check users consent state before adding script
-	onConsentChange((state) => {
-		if (
-			state.ccpa?.doNotSell === false || // check whether US users have NOT withdrawn consent
-			state.aus?.personalisedAdvertising || // check whether AUS users have consented to personalisedAdvertising
-			(state.tcfv2?.consents && // check TCFv2 purposes for non-US/AUS users
-				state.tcfv2.consents['1'] && // Store and/or access information on a device
-				state.tcfv2.consents['8'] && // Measure content performance
-				state.tcfv2.consents['10']) // Develop and improve products
-		) {
+	void getConsent().then((hasConsent) => {
+		if (hasConsent) {
 			void addQM().then(() => {
 				/**
 				 * Quantum Metric's script has loaded so we can attempt to
@@ -95,4 +189,4 @@ function init(participations: Participations): void {
 	});
 }
 
-export { init };
+export { init, sendEventSubscriptionCheckoutStart, SendEventCheckoutStart };

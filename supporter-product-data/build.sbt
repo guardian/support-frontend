@@ -15,7 +15,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "org.scala-lang.modules" %% "scala-java8-compat" % "0.9.1",
+  "org.scala-lang.modules" %% "scala-java8-compat" % "1.0.2",
   "com.nrinaudo" %% "kantan.csv-generic" % "0.6.1",
   "com.nrinaudo" %% "kantan.csv-java8" % "0.6.1",
 )

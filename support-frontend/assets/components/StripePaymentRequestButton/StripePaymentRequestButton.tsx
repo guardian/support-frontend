@@ -103,7 +103,7 @@ const mapStateToProps = (state: State, ownProps: PropsFromParent) => ({
 	currency: state.common.internationalisation.currencyId,
 	isTestUser: state.page.user.isTestUser ?? false,
 	paymentMethod: state.page.form.paymentMethod,
-	csrf: state.page.csrf,
+	csrf: state.page.checkoutForm.csrf,
 	localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });

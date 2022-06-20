@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import type { Dispatch } from 'redux';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import {
 	setApiError,
 	setConfirmMarketingConsent,

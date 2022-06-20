@@ -1,9 +1,10 @@
 // ----- Imports ----- //
 import { fetchJson, getRequestOptions } from 'helpers/async/fetch';
 import { logPromise } from 'helpers/async/promise';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { checkEmail } from 'helpers/forms/formValidation';
 import { routes } from 'helpers/urls/routes';
+import type { CsrfState } from './redux/checkout/csrf/state';
+
 // ----- Types     ----- //
 type UserType = 'new' | 'guest' | 'current';
 
@@ -18,7 +19,7 @@ export type UserTypeFromIdentityResponse =
 // ----- Functions ----- //
 async function sendGetUserTypeFromIdentityRequest(
 	email: string,
-	csrf: Csrf,
+	csrf: CsrfState,
 	setUserTypeFromIdentityResponse: (arg0: UserTypeFromIdentityResponse) => void,
 ): Promise<UserTypeFromIdentityResponse> {
 	const resp = (await fetchJson(
@@ -36,7 +37,7 @@ async function sendGetUserTypeFromIdentityRequest(
 function getUserTypeFromIdentity(
 	email: string,
 	isSignedIn: boolean,
-	csrf: Csrf,
+	csrf: CsrfState,
 	setUserTypeFromIdentityResponse: (arg0: UserTypeFromIdentityResponse) => void,
 ): Promise<UserTypeFromIdentityResponse> {
 	if (isSignedIn || !checkEmail(email)) {

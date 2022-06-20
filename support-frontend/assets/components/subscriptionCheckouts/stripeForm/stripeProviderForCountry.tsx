@@ -2,9 +2,9 @@ import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import StripeForm from 'components/subscriptionCheckouts/stripeForm/stripeForm';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { getStripeKey } from 'helpers/forms/stripe';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
@@ -18,7 +18,7 @@ export type PropTypes = {
 	submitForm: () => void;
 	validateForm: () => void;
 	buttonText: string;
-	csrf: Csrf;
+	csrf: CsrfState;
 };
 
 function StripeProviderForCountry(props: PropTypes): JSX.Element {

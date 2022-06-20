@@ -71,41 +71,41 @@ class RecurringContributionsSpec
 
     }
 
-    Scenario("Monthly contribution sign-up with direct debit - GBP") {
-
-      val testUser = new PostDeployTestUser(driverConfig)
-      val landingPage = ContributionsLanding("uk", testUser)
-
-      val contributionThankYou = new ContributionThankYou("uk")
-
-      Given("that a test user goes to the contributions landing page")
-      goTo(landingPage)
-      assert(landingPage.pageHasLoaded)
-
-      When("the user selects the monthly option")
-      landingPage.clickMonthly
-
-      Given("The user fills in their details correctly")
-      landingPage.clearForm(hasNameFields = true)
-      landingPage.fillInPersonalDetails(hasNameFields = true)
-
-      Given("that the user selects to pay with direct debit")
-      When("they press the direct debit payment button")
-      landingPage.selectDirectDebit()
-      landingPage.clickContribute
-
-      And("enter direct debit details")
-      landingPage.fillInDirectDebitDetails()
-
-      When("they click to pay")
-      landingPage.payDirectDebit()
-
-      Then("the thankyou page should display")
-      eventually {
-        assert(contributionThankYou.pageHasLoaded)
-      }
-
-    }
+//    Scenario("Monthly contribution sign-up with direct debit - GBP") {
+//
+//      val testUser = new PostDeployTestUser(driverConfig)
+//      val landingPage = ContributionsLanding("uk", testUser)
+//
+//      val contributionThankYou = new ContributionThankYou("uk")
+//
+//      Given("that a test user goes to the contributions landing page")
+//      goTo(landingPage)
+//      assert(landingPage.pageHasLoaded)
+//
+//      When("the user selects the monthly option")
+//      landingPage.clickMonthly
+//
+//      Given("The user fills in their details correctly")
+//      landingPage.clearForm(hasNameFields = true)
+//      landingPage.fillInPersonalDetails(hasNameFields = true)
+//
+//      Given("that the user selects to pay with direct debit")
+//      When("they press the direct debit payment button")
+//      landingPage.selectDirectDebit()
+//      landingPage.clickContribute
+//
+//      And("enter direct debit details")
+//      landingPage.fillInDirectDebitDetails()
+//
+//      When("they click to pay")
+//      landingPage.payDirectDebit()
+//
+//      Then("the thankyou page should display")
+//      eventually {
+//        assert(contributionThankYou.pageHasLoaded)
+//      }
+//
+//    }
 
     Scenario("Annual contribution sign-up with Stripe - USD") {
 
