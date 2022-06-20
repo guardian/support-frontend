@@ -65,7 +65,7 @@ class CreateSubscriptionController(
             case Some(token) => validateRecaptcha(token, testUsers.isTestUser(request))
             case None => EitherT.rightT[Future, RequestValidationError](())
           }
-          result <- processCreate(request)
+          result <- createSubscription(request)
         } yield result
 
         toHttpResponse(errorOrStatusResponse, request.body.product)
@@ -107,7 +107,7 @@ class CreateSubscriptionController(
     }
   }
 
-  private def processCreate(
+  private def createSubscription(
       request: OptionalAuthRequest[CreateSupportWorkersRequest],
   ): EitherT[Future, CreateSubscriptionError, StatusResponse] = {
     val maybeLoggedInIdentityIdAndEmail =
