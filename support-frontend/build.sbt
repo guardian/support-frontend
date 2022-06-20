@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "simple-configuration-ssm" % "1.5.7",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
-  "io.sentry" % "sentry-logback" % "1.7.30",
+  "io.sentry" % "sentry-logback" % "6.1.2",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sts" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
