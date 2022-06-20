@@ -58,7 +58,6 @@ export interface StripeCardFormData {
 	recurringRecaptchaVerified: boolean;
 	// TODO: No non-serialisable values should be in Redux state!! This needs to be refactored
 	// These callbacks must be initialised after the StripeCardForm component has been created
-	createPaymentMethod: ((clientSecret: string | null) => void) | null;
 	handle3DS: ((clientSecret: string) => Promise<PaymentIntentResult>) | null; // For single only
 }
 
@@ -185,7 +184,6 @@ function createFormReducer() {
 			formComplete: false,
 			setupIntentClientSecret: null,
 			recurringRecaptchaVerified: false,
-			createPaymentMethod: null,
 			handle3DS: null,
 		},
 		sepaData: {
@@ -334,15 +332,6 @@ function createFormReducer() {
 						...state.amazonPayData,
 						amazonBillingAgreementConsentStatus:
 							action.amazonBillingAgreementConsentStatus,
-					},
-				};
-
-			case 'SET_CREATE_STRIPE_PAYMENT_METHOD':
-				return {
-					...state,
-					stripeCardFormData: {
-						...state.stripeCardFormData,
-						createPaymentMethod: action.createStripePaymentMethod,
 					},
 				};
 
