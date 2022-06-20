@@ -45,6 +45,8 @@ type SendEventId =
 
 // ---- sendEvent logic ---- //
 
+// ---- sendEvent logic ---- //
+
 function sendEvent(
 	id: SendEventId,
 	isConversion: boolean,
