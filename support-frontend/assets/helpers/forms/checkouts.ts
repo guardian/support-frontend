@@ -48,11 +48,6 @@ export type PaymentMethodSwitch =
 	| 'existingCard'
 	| 'existingDirectDebit'
 	| 'amazonPay';
-type StripeHandler = {
-	open: (...args: unknown[]) => unknown;
-	close: (...args: unknown[]) => unknown;
-};
-export type ThirdPartyPaymentLibrary = StripeHandler;
 
 // ----- Functions ----- //
 function toPaymentMethodSwitchNaming(

@@ -8,7 +8,6 @@ import type {
 	ContributionType,
 	OtherAmounts,
 	SelectedAmounts,
-	ThirdPartyPaymentLibraries,
 } from 'helpers/contributions';
 import { getContributionTypeFromSession } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
@@ -76,8 +75,6 @@ interface FormState {
 	contributionType: ContributionType;
 	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries;
-	// TODO clean up when rest of Stripe Checkout is removed
 	amazonPayData: AmazonPayData;
 	payPalData: PayPalData;
 	selectedAmounts: SelectedAmounts;
@@ -124,17 +121,6 @@ function createFormReducer() {
 	const initialState: FormState = {
 		contributionType: getContributionTypeFromSession() ?? 'MONTHLY',
 		paymentMethod: 'None',
-		thirdPartyPaymentLibraries: {
-			ONE_OFF: {
-				Stripe: null,
-			},
-			MONTHLY: {
-				Stripe: null,
-			},
-			ANNUAL: {
-				Stripe: null,
-			},
-		},
 		amazonPayData: {
 			hasBegunLoading: false,
 			walletIsStale: false,
@@ -220,25 +206,6 @@ function createFormReducer() {
 				return {
 					...state,
 					existingPaymentMethod: action.existingPaymentMethod,
-				};
-
-			case 'UPDATE_PAYMENT_READY':
-				return {
-					...state,
-					thirdPartyPaymentLibraries: {
-						ONE_OFF: {
-							...state.thirdPartyPaymentLibraries.ONE_OFF,
-							...action.thirdPartyPaymentLibraryByContrib.ONE_OFF,
-						},
-						MONTHLY: {
-							...state.thirdPartyPaymentLibraries.MONTHLY,
-							...action.thirdPartyPaymentLibraryByContrib.MONTHLY,
-						},
-						ANNUAL: {
-							...state.thirdPartyPaymentLibraries.ANNUAL,
-							...action.thirdPartyPaymentLibraryByContrib.ANNUAL,
-						},
-					},
 				};
 
 			case 'SET_AMAZON_PAY_HAS_BEGUN_LOADING':
