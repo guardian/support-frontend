@@ -4,7 +4,7 @@ addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.13")
 
 addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.1.2-1")
 
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.6")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.13")
 
 addSbtPlugin(
   "com.typesafe.play" % "sbt-plugin" % "2.8.16",
