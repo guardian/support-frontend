@@ -478,7 +478,8 @@ object Fixtures {
        {
         "accountHolderName": "Mickey Mouse",
         "sortCode": "204532",
-        "accountNumber": "37462947"
+        "accountNumber": "37462947",
+        "recaptchaToken": "test"
        }
      """
 

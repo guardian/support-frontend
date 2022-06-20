@@ -128,7 +128,8 @@ object Fixtures {
       {
         "accountHolderName": "$mickeyMouse",
         "sortCode": "111111",
-        "accountNumber": "99999999"
+        "accountNumber": "99999999",
+        "recaptchaToken": "test"
       }
     """
 
