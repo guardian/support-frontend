@@ -216,7 +216,7 @@ function sendEventABTestParticipations(participations: Participations): void {
 	}
 }
 
-// ---- Initialisation ---- //
+// ---- initialisation logic ---- //
 
 function addQM() {
 	return loadScript(
