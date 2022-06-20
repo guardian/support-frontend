@@ -237,48 +237,24 @@ function setCsrCustomerData(
 	addressType: AddressType,
 	csrCustomerData: CsrCustomerData,
 ) {
-	return (
-		dispatch: SubscriptionsDispatch,
-		getState: () => CheckoutState,
-	): void => {
-		csrCustomerData.customer.email &&
-			dispatch(formActionCreators.setEmail(csrCustomerData.customer.email));
-		csrCustomerData.customer.email &&
-			dispatch(
-				formActionCreators.setConfirmEmail(csrCustomerData.customer.email),
-			);
-		csrCustomerData.customer.firstName &&
-			dispatch(
-				formActionCreators.setFirstName(csrCustomerData.customer.firstName),
-			);
+	return (dispatch: SubscriptionsDispatch): void => {
+		const { email, firstName, country, street, city, postcode, state } =
+			csrCustomerData.customer;
+
+		email && dispatch(formActionCreators.setEmail(email));
+		email && dispatch(formActionCreators.setConfirmEmail(email));
+		firstName && dispatch(formActionCreators.setFirstName(firstName));
 		dispatch(formActionCreators.setLastName(csrCustomerData.customer.lastName));
 
 		dispatch(formActionCreators.setCsrUsername(csrUserName(csrCustomerData)));
 		dispatch(formActionCreators.setSalesforceCaseId(csrCustomerData.caseId));
 
 		const addressActions = addressActionCreatorsFor(addressType);
-		csrCustomerData.customer.country &&
-			addressActions.setCountry(csrCustomerData.customer.country)(dispatch);
-		csrCustomerData.customer.street &&
-			addressActions.setAddressLineOne(csrCustomerData.customer.street)(
-				dispatch,
-				getState,
-			);
-		csrCustomerData.customer.city &&
-			addressActions.setTownCity(csrCustomerData.customer.city)(
-				dispatch,
-				getState,
-			);
-		csrCustomerData.customer.postcode &&
-			addressActions.setPostcode(csrCustomerData.customer.postcode)(
-				dispatch,
-				getState,
-			);
-		csrCustomerData.customer.state &&
-			addressActions.setState(csrCustomerData.customer.state)(
-				dispatch,
-				getState,
-			);
+		country && dispatch(addressActions.setCountry(country));
+		street && dispatch(addressActions.setAddressLineOne(street));
+		city && dispatch(addressActions.setTownCity(city));
+		postcode && dispatch(addressActions.setPostcode(postcode));
+		state && dispatch(addressActions.setState(state));
 	};
 }
 
