@@ -43,6 +43,8 @@ type SendEventId =
 	| SendEventCheckoutConversion
 	| SendEventContributionAmountToggle;
 
+// ---- sendEvent logic ---- //
+
 function sendEvent(
 	id: SendEventId,
 	isConversion: boolean,
