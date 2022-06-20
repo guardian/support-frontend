@@ -7,6 +7,7 @@ import {
 	RadioGroup,
 	Select,
 } from '@guardian/source-react-components';
+import { useEffect } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import 'redux';
@@ -59,6 +60,10 @@ import {
 } from 'helpers/subscriptionsForms/submit';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
+import {
+	SendEventCheckoutStart,
+	sendEventSubscriptionCheckoutStart,
+} from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { titles } from 'helpers/user/details';
 import { signOut } from 'helpers/user/user';
@@ -92,7 +97,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 		billingAddressErrors: state.page.billingAddress.fields.formErrors,
 		isTestUser: state.page.checkout.isTestUser,
 		country: state.common.internationalisation.countryId,
-		csrf: state.page.csrf,
+		csrf: state.page.checkoutForm.csrf,
 		currencyId:
 			currencyFromCountryCode(deliveryAddress.fields.country) ??
 			state.common.internationalisation.defaultCurrency,
@@ -166,6 +171,15 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 		props.billingPeriod,
 		fulfilmentOption,
 	);
+
+	useEffect(() => {
+		sendEventSubscriptionCheckoutStart(
+			SendEventCheckoutStart.GuardianWeeklySubGift,
+			price,
+			props.billingPeriod,
+		);
+	}, []);
+
 	const submissionErrorHeading =
 		props.submissionError === 'personal_details_incorrect'
 			? 'Sorry there was a problem'

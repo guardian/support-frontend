@@ -23,6 +23,9 @@ type PropTypes = {
 	isTestUser: boolean;
 	contributionType: ContributionType;
 	paymentMethod: PaymentMethod;
+	setCreateStripePaymentMethod: (
+		create: (clientSecret: string | null) => void,
+	) => void;
 };
 
 function StripeCardFormContainer(props: PropTypes): JSX.Element | null {
@@ -51,7 +54,10 @@ function StripeCardFormContainer(props: PropTypes): JSX.Element | null {
 						stripe={stripeObjects[stripeAccount]}
 						options={elementsOptions}
 					>
-						<StripeCardForm stripeKey={stripeKey} />
+						<StripeCardForm
+							stripeKey={stripeKey}
+							setCreateStripePaymentMethod={props.setCreateStripePaymentMethod}
+						/>
 					</Elements>
 				</div>
 			);

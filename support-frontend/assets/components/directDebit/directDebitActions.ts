@@ -144,7 +144,7 @@ function payDirectDebitClicked(): (
 		} = getState().page.directDebit;
 		const sortCode = sortCodeArray.join('') || sortCodeString;
 		const isTestUser = getState().page.user.isTestUser ?? false;
-		const { csrf } = getState().page;
+		const { csrf } = getState().page.checkoutForm;
 		dispatch(resetDirectDebitFormError());
 
 		if (!accountHolderConfirmation) {

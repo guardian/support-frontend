@@ -19,7 +19,7 @@ export const fetchAndStoreUserType =
 			void dispatch(setUserTypeFromIdentityResponse(userType)),
 	): void => {
 		const state = getState();
-		const { csrf } = state.page;
+		const { csrf } = state.page.checkoutForm;
 		const { isSignedIn } = state.page.checkoutForm.personalDetails;
 
 		void getUserTypeFromIdentity(email, isSignedIn, csrf, callback);

@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import MarketingConsent from 'components/marketingConsent/marketingConsent';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type {
 	RedemptionDispatch,
 	RedemptionPageState,
@@ -11,7 +11,7 @@ import type {
 const mapStateToProps = (state: RedemptionPageState) => ({
 	confirmOptIn: state.page.checkoutForm.marketingConsent.confirmOptIn,
 	email: state.page.checkoutForm.personalDetails.email,
-	csrf: state.page.csrf,
+	csrf: state.page.checkoutForm.csrf,
 	error: state.page.checkoutForm.marketingConsent.requestPending,
 	requestPending: state.page.checkoutForm.marketingConsent.requestPending,
 });

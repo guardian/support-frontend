@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
 import { TextArea } from '@guardian/source-react-components';
+import { useEffect } from 'react';
 import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
@@ -48,6 +49,10 @@ import {
 } from 'helpers/subscriptionsForms/submit';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
+import {
+	SendEventCheckoutStart,
+	sendEventSubscriptionCheckoutStart,
+} from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import { withError } from 'hocs/withError';
@@ -67,7 +72,7 @@ function mapStateToProps(state: CheckoutState) {
 		submissionError: state.page.checkout.submissionError,
 		productPrices: state.page.checkout.productPrices,
 		currencyId: state.common.internationalisation.currencyId,
-		csrf: state.page.csrf,
+		csrf: state.page.checkoutForm.csrf,
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
 		paymentMethod: state.page.checkout.paymentMethod,
 		isTestUser: state.page.checkout.isTestUser,
@@ -123,6 +128,15 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 		props.country,
 		props.billingPeriod,
 	);
+
+	useEffect(() => {
+		sendEventSubscriptionCheckoutStart(
+			SendEventCheckoutStart.DigiSubGift,
+			productPrice,
+			props.billingPeriod,
+		);
+	}, []);
+
 	const submissionErrorHeading =
 		props.submissionError === 'personal_details_incorrect'
 			? 'Sorry there was a problem'

@@ -6,7 +6,7 @@ version := "0.1-SNAPSHOT"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 
 libraryDependencies ++= Seq(
-  "org.joda" % "joda-convert" % "2.0.1",
+  "org.joda" % "joda-convert" % "2.2.2",
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
   "ch.qos.logback" % "logback-classic" % "1.2.3",
@@ -20,8 +20,8 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
-  "org.mockito" %% "mockito-scala" % "1.15.0" % "it,test",
-  "org.mockito" %% "mockito-scala-scalatest" % "1.15.0" % "it,test",
+  "org.mockito" %% "mockito-scala" % "1.17.7" % "it,test",
+  "org.mockito" %% "mockito-scala-scalatest" % "1.17.7" % "it,test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % "it,test",
   "org.scalatestplus" %% "scalatestplus-selenium" % "1.0.0-M2" % "it,test",
   "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "it,test",
