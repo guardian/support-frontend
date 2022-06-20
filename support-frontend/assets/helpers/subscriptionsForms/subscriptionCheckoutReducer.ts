@@ -7,13 +7,13 @@ import type {
 	State as AddressState,
 } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { addressReducerFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
-import csrf from 'helpers/csrf/csrfReducer';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import { csrfReducer } from 'helpers/redux/checkout/csrf/reducer';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { giftingReducer } from 'helpers/redux/checkout/giftingState/reducer';
 import type { GiftingState } from 'helpers/redux/checkout/giftingState/state';
 import { marketingConsentReducer } from 'helpers/redux/checkout/marketingConsent/reducer';
@@ -37,13 +37,13 @@ export type CheckoutFormState = {
 	personalDetails: PersonalDetailsState;
 	gifting: GiftingState;
 	marketingConsent: MarketingConsentState;
+	csrf: CsrfState;
 };
 
 export type CheckoutState = ReduxState<{
 	checkout: FormState;
 	checkoutForm: CheckoutFormState;
 	user: User;
-	csrf: CsrfState;
 	billingAddress: AddressState;
 	deliveryAddress?: AddressState;
 	directDebit: DirectDebitState;
@@ -52,7 +52,6 @@ export type CheckoutState = ReduxState<{
 export type WithDeliveryCheckoutState = ReduxState<{
 	checkout: FormState;
 	checkoutForm: CheckoutFormState;
-	csrf: CsrfState;
 	billingAddress: AddressState;
 	deliveryAddress: AddressState;
 	fulfilmentOption: Option<FulfilmentOptions>;
@@ -85,11 +84,11 @@ function createReducer(
 			product: productReducer,
 			gifting: giftingReducer,
 			marketingConsent: marketingConsentReducer,
+			csrf: csrfReducer,
 		}),
 		user: createUserReducer(),
 		directDebit,
 		...addressReducers,
-		csrf,
 	});
 }
 

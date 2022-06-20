@@ -14,12 +14,12 @@ import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { User } from 'helpers/user/userReducer';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
@@ -136,7 +136,7 @@ const isLargeDonation = (
 };
 
 type ContributionThankYouProps = {
-	csrf: Csrf;
+	csrf: CsrfState;
 	email: string;
 	contributionType: ContributionType;
 	amount: number;
@@ -161,7 +161,7 @@ const mapStateToProps = (state: State) => ({
 		state.page.form.contributionType,
 	),
 	currency: state.common.internationalisation.currencyId,
-	csrf: state.page.csrf,
+	csrf: state.page.checkoutForm.csrf,
 	user: state.page.user,
 	userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
 	paymentMethod: state.page.form.paymentMethod,

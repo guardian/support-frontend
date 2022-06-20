@@ -11,8 +11,6 @@ import type {
 	SelectedAmounts,
 	ThirdPartyPaymentLibraries,
 } from 'helpers/contributions';
-import csrf from 'helpers/csrf/csrfReducer';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getContributionTypeFromSession } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
@@ -22,6 +20,8 @@ import type {
 	IsoCountry,
 	StateProvince,
 } from 'helpers/internationalisation/country';
+import { csrfReducer } from 'helpers/redux/checkout/csrf/reducer';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { marketingConsentReducer } from 'helpers/redux/checkout/marketingConsent/reducer';
 import type { MarketingConsentState } from 'helpers/redux/checkout/marketingConsent/state';
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
@@ -58,7 +58,6 @@ export interface StripeCardFormData {
 	recurringRecaptchaVerified: boolean;
 	// TODO: No non-serialisable values should be in Redux state!! This needs to be refactored
 	// These callbacks must be initialised after the StripeCardForm component has been created
-	createPaymentMethod: ((clientSecret: string | null) => void) | null;
 	handle3DS: ((clientSecret: string) => Promise<PaymentIntentResult>) | null; // For single only
 }
 
@@ -108,9 +107,9 @@ interface PageState {
 		personalDetails: PersonalDetailsState;
 		product: ProductState;
 		marketingConsent: MarketingConsentState;
+		csrf: CsrfState;
 	};
 	user: UserState;
-	csrf: CsrfState;
 	directDebit: DirectDebitState;
 }
 
@@ -185,7 +184,6 @@ function createFormReducer() {
 			formComplete: false,
 			setupIntentClientSecret: null,
 			recurringRecaptchaVerified: false,
-			createPaymentMethod: null,
 			handle3DS: null,
 		},
 		sepaData: {
@@ -334,15 +332,6 @@ function createFormReducer() {
 						...state.amazonPayData,
 						amazonBillingAgreementConsentStatus:
 							action.amazonBillingAgreementConsentStatus,
-					},
-				};
-
-			case 'SET_CREATE_STRIPE_PAYMENT_METHOD':
-				return {
-					...state,
-					stripeCardFormData: {
-						...state.stripeCardFormData,
-						createPaymentMethod: action.createStripePaymentMethod,
 					},
 				};
 
@@ -563,10 +552,10 @@ function initReducer(): Reducer<PageState> {
 			personalDetails: personalDetailsReducer,
 			product: productReducer,
 			marketingConsent: marketingConsentReducer,
+			csrf: csrfReducer,
 		}),
 		user: createUserReducer(),
 		directDebit,
-		csrf,
 	});
 }
 

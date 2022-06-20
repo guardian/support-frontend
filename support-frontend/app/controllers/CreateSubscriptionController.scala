@@ -53,26 +53,30 @@ class CreateSubscriptionController(
   def create: EssentialAction =
     LoggingAndAlarmOnFailure {
       MaybeAuthenticatedAction.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
-        val maybeLoggedInIdentityIdAndEmail =
-          request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
-        logIncomingRequest(request, maybeLoggedInIdentityIdAndEmail)
+        request.body.paymentFields match {
+          case Left(_: DirectDebitPaymentFields) =>
+            Future.successful(BadRequest)
+          case _ =>
+            val maybeLoggedInIdentityIdAndEmail =
+              request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
+            logIncomingRequest(request, maybeLoggedInIdentityIdAndEmail)
 
-        val errorOrStatusResponse = for {
-          userAndEmail <- maybeLoggedInIdentityIdAndEmail match {
-            case Some(identityIdAndEmail) => EitherT.pure[Future, CreateSubscriptionError](identityIdAndEmail)
-            case None =>
-              getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
-                .leftMap(mapIdentityErrorToCreateSubscriptionError)
-          }
-          _ <- validate(request)
-          supportWorkersUser = buildSupportWorkersUser(userAndEmail, request.body, testUsers.isTestUser(request))
-          statusResponse <- client
-            .createSubscription(request, supportWorkersUser, request.uuid)
-            .leftMap[CreateSubscriptionError](ServerError)
-        } yield statusResponse
+            val errorOrStatusResponse = for {
+              userAndEmail <- maybeLoggedInIdentityIdAndEmail match {
+                case Some(identityIdAndEmail) => EitherT.pure[Future, CreateSubscriptionError](identityIdAndEmail)
+                case None =>
+                  getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
+                    .leftMap(mapIdentityErrorToCreateSubscriptionError)
+              }
+              _ <- validate(request)
+              supportWorkersUser = buildSupportWorkersUser(userAndEmail, request.body, testUsers.isTestUser(request))
+              statusResponse <- client
+                .createSubscription(request, supportWorkersUser, request.uuid)
+                .leftMap[CreateSubscriptionError](ServerError)
+            } yield statusResponse
 
-        toHttpResponse(errorOrStatusResponse, request.body.product)
-
+            toHttpResponse(errorOrStatusResponse, request.body.product)
+        }
       }
     }
 
