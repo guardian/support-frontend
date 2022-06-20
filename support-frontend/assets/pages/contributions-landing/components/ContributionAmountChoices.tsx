@@ -47,6 +47,7 @@ type ContributionAmountChoicesProps = {
 		arg0: number | 'other',
 		arg1: CountryGroupId,
 		arg2: ContributionType,
+		arg3: IsoCurrency,
 	) => () => void;
 	shouldShowFrequencyButtons: boolean;
 };
@@ -102,7 +103,12 @@ function ContributionAmountChoices({
 							contributionType,
 							defaultAmount,
 						)}
-						onChange={selectAmount(amount, countryGroupId, contributionType)}
+						onChange={selectAmount(
+							amount,
+							countryGroupId,
+							contributionType,
+							currency,
+						)}
 						label={
 							<ContributionAmountChoicesChoiceLabel
 								formattedAmount={formatAmount(
@@ -124,7 +130,12 @@ function ContributionAmountChoices({
 				name="contributionAmount"
 				value="other"
 				checked={showOther}
-				onChange={selectAmount('other', countryGroupId, contributionType)}
+				onChange={selectAmount(
+					'other',
+					countryGroupId,
+					contributionType,
+					currency,
+				)}
 				label="Other"
 			/>
 		</ChoiceCardGroup>

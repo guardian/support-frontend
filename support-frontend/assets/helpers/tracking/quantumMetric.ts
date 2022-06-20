@@ -1,5 +1,6 @@
 import { loadScript } from '@guardian/libs';
 import type { Participations } from 'helpers/abTests/abtest';
+import type { ContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
@@ -31,12 +32,16 @@ enum SendEventCheckoutConversion {
 	GuardianWeeklySubGift = 70,
 }
 
+enum SendEventContributionAmountToggle {
+	SingleContribution = 71,
+	RecurringContribution = 72,
+}
+
 type SendEventId =
 	| SendEventTestParticipationId
 	| SendEventCheckoutStart
-	| SendEventCheckoutConversion;
-
-// ---- sendEvent logic ---- //
+	| SendEventCheckoutConversion
+	| SendEventContributionAmountToggle;
 
 function sendEvent(
 	id: SendEventId,
@@ -168,6 +173,52 @@ export function sendEventSubscriptionCheckoutConversion(
 			true,
 		);
 	}
+}
+
+export function sendEventContributionAmountToggled(
+	amount: number | 'other',
+	contributionType: ContributionType,
+	sourceCurrency: IsoCurrency,
+): void {
+	if (amount === 'other') {
+		return;
+	}
+
+	void canRunQuantumMetric().then((canRun) => {
+		if (canRun) {
+			const sendEventWhenReady = () => {
+				if (window.QuantumMetricAPI?.isOn()) {
+					const annualValueInPence =
+						contributionType === 'ANNUAL' ? amount * 100 : amount * 100 * 12;
+					const sendEventId = contributionType === 'ONE_OFF' ? 71 : 72;
+					const targetCurrency: IsoCurrency = 'GBP';
+					const convertedValue: number =
+						window.QuantumMetricAPI.currencyConvertFromToValue(
+							annualValueInPence,
+							sourceCurrency,
+							targetCurrency,
+						);
+					sendEvent(sendEventId, false, convertedValue.toString());
+				}
+			};
+
+			/**
+			 * Quantum Metric's script sets up QuantumMetricAPI.
+			 * We need to check it is defined and ready before we can
+			 * send events to it. If it is ready we call sendEventWhenReady
+			 * immediately. If it is not ready we poll a function that checks
+			 * if QuantumMetricAPI is available. Once it's available we
+			 * call sendEventWhenReady.
+			 */
+			if (window.QuantumMetricAPI?.isOn()) {
+				sendEventWhenReady();
+			} else {
+				waitForQuantumMetricAPi(() => {
+					sendEventWhenReady();
+				});
+			}
+		}
+	});
 }
 
 function sendEventABTestParticipations(participations: Participations): void {

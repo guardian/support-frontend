@@ -29,6 +29,7 @@ import {
 import type { State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
+import { sendEventContributionAmountToggled } from 'helpers/tracking/quantumMetric';
 
 const otherAmoutInputCss = css`
 	padding-left: ${space[5]}px;
@@ -53,6 +54,7 @@ type PropTypes = {
 		amount: number | 'other',
 		countryGroupId: CountryGroupId,
 		contributionType: ContributionType,
+		currency: IsoCurrency,
 	) => () => void;
 	otherAmounts: OtherAmounts;
 	updateOtherAmount: (
@@ -90,12 +92,14 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 			amount: number | 'other',
 			countryGroupId: CountryGroupId,
 			contributionType: ContributionType,
+			currency: IsoCurrency,
 		) =>
 		() => {
+			dispatch(selectAmount(amount, contributionType));
+			sendEventContributionAmountToggled(amount, contributionType, currency);
 			trackComponentClick(
 				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`,
 			);
-			dispatch(selectAmount(amount, contributionType));
 		},
 	updateOtherAmount: (amount: string, contributionType: ContributionType) => {
 		dispatch(updateOtherAmount(amount, contributionType));
