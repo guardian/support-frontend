@@ -49,7 +49,7 @@ libraryDependencies ++= Seq(
   ws,
   "com.lihaoyi" %% "pprint" % "0.6.6",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
-  "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
+  "org.scala-lang.modules" %% "scala-xml" % "2.1.0",
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
