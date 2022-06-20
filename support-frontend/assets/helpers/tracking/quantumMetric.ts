@@ -1,13 +1,15 @@
-import { onConsentChange } from '@guardian/consent-management-platform';
 import { loadScript } from '@guardian/libs';
 import type { Participations } from 'helpers/abTests/abtest';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
-import { getSubscriptionAnnualValue } from './quantumMetricHelpers';
+import {
+	canRunQuantumMetric,
+	getSubscriptionAnnualValue,
+	waitForQuantumMetricAPi,
+} from './quantumMetricHelpers';
 
 // ---- Types ---- //
 
@@ -44,20 +46,6 @@ function sendEvent(
 	if (window.QuantumMetricAPI?.isOn()) {
 		window.QuantumMetricAPI.sendEvent(id, isConversion ? 1 : 0, value);
 	}
-}
-
-function waitForQuantumMetricAPi(onReady: () => void) {
-	let pollCount = 0;
-	const checkForQuantumMetricAPi = setInterval(() => {
-		pollCount = pollCount + 1;
-		if (window.QuantumMetricAPI?.isOn()) {
-			onReady();
-			clearInterval(checkForQuantumMetricAPi);
-		} else if (pollCount === 10) {
-			// give up waiting if QuantumMetricAPI is not ready after 10 attempts
-			clearInterval(checkForQuantumMetricAPi);
-		}
-	}, 500);
 }
 
 function sendEventSubscriptionCheckoutEvent(
@@ -229,30 +217,6 @@ function addQM() {
 		},
 	).catch(() => {
 		logException('Failed to load Quantum Metric');
-	});
-}
-
-function canRunQuantumMetric(): Promise<boolean> {
-	// resolve immediately with false if the feature switch is OFF
-	if (!isSwitchOn('featureSwitches.enableQuantumMetric')) {
-		return Promise.resolve(false);
-	}
-	// checks users consent status
-	return new Promise((resolve) => {
-		onConsentChange((state) => {
-			if (
-				state.ccpa?.doNotSell === false || // check whether US users have NOT withdrawn consent
-				state.aus?.personalisedAdvertising || // check whether AUS users have consented to personalisedAdvertising
-				(state.tcfv2?.consents && // check TCFv2 purposes for non-US/AUS users
-					state.tcfv2.consents['1'] && // Store and/or access information on a device
-					state.tcfv2.consents['8'] && // Measure content performance
-					state.tcfv2.consents['10']) // Develop and improve products
-			) {
-				resolve(true);
-			} else {
-				resolve(false);
-			}
-		});
 	});
 }
 
