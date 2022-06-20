@@ -10,11 +10,11 @@ SeleniumTest / testOptions := Seq(Tests.Filter(seleniumTestFilter))
 Test / testOptions ++= Seq(Tests.Filter(unitTestFilter))
 
 libraryDependencies ++= Seq(
-  "com.typesafe" % "config" % "1.3.2",
+  "com.typesafe" % "config" % "1.4.2",
   "com.gu" %% "simple-configuration-ssm" % "1.5.7",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
-  "io.sentry" % "sentry-logback" % "1.7.5",
+  "io.sentry" % "sentry-logback" % "1.7.30",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sts" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
@@ -32,11 +32,11 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "29.0-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.gu.play-googleauth" %% "play-v28" % "2.2.6",
-  "io.github.bonigarcia" % "webdrivermanager" % "3.3.0" % "test",
-  "org.seleniumhq.selenium" % "selenium-java" % "3.8.1" % "test",
+  "io.github.bonigarcia" % "webdrivermanager" % "3.8.1" % "test",
+  "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % "test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "org.scalatestplus" %% "scalatestplus-selenium" % "1.0.0-M2" % Test,
-  "com.squareup.okhttp3" % "okhttp" % "3.10.0",
+  "com.squareup.okhttp3" % "okhttp" % "3.14.9",
   "com.gocardless" % "gocardless-pro" % "2.8.0",
   "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
   // This is required to force aws libraries to use the latest version of jackson
