@@ -21,7 +21,7 @@ enum SendEventCheckoutStart {
 	GuardianWeeklySubGift = 79,
 }
 
-enum SendEventCheckoutConverion {
+enum SendEventCheckoutConversion {
 	DigiSub = 31,
 	PaperSub = 67,
 	GuardianWeeklySub = 68,
@@ -32,7 +32,7 @@ enum SendEventCheckoutConverion {
 type SendEventId =
 	| SendEventTestParticipationId
 	| SendEventCheckoutStart
-	| SendEventCheckoutConverion;
+	| SendEventCheckoutConversion;
 
 // ---- sendEvent logic ---- //
 
@@ -61,7 +61,7 @@ function waitForQuantumMetricAPi(onReady: () => void) {
 }
 
 function sendEventSubscriptionCheckoutEvent(
-	id: SendEventCheckoutStart | SendEventCheckoutConverion,
+	id: SendEventCheckoutStart | SendEventCheckoutConversion,
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
 	isConversion: boolean,
@@ -114,34 +114,34 @@ function productToCheckoutEvents(
 			return orderIsAGift
 				? checkoutEvents(
 						SendEventCheckoutStart.DigiSubGift,
-						SendEventCheckoutConverion.DigiSubGift,
+						SendEventCheckoutConversion.DigiSubGift,
 				  )
 				: checkoutEvents(
 						SendEventCheckoutStart.DigiSub,
-						SendEventCheckoutConverion.DigiSub,
+						SendEventCheckoutConversion.DigiSub,
 				  );
 		case 'GuardianWeekly':
 			return orderIsAGift
 				? checkoutEvents(
 						SendEventCheckoutStart.GuardianWeeklySubGift,
-						SendEventCheckoutConverion.GuardianWeeklySubGift,
+						SendEventCheckoutConversion.GuardianWeeklySubGift,
 				  )
 				: checkoutEvents(
 						SendEventCheckoutStart.GuardianWeeklySub,
-						SendEventCheckoutConverion.GuardianWeeklySub,
+						SendEventCheckoutConversion.GuardianWeeklySub,
 				  );
 		case 'Paper':
 		case 'PaperAndDigital':
 			return checkoutEvents(
 				SendEventCheckoutStart.PaperSub,
-				SendEventCheckoutConverion.PaperSub,
+				SendEventCheckoutConversion.PaperSub,
 			);
 	}
 }
 
 function checkoutEvents(
 	start: SendEventCheckoutStart,
-	conversion: SendEventCheckoutConverion,
+	conversion: SendEventCheckoutConversion,
 ) {
 	return { start, conversion };
 }
