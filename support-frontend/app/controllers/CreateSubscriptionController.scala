@@ -58,10 +58,9 @@ class CreateSubscriptionController(
   def create: EssentialAction =
     LoggingAndAlarmOnFailure {
       MaybeAuthenticatedAction.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
-        val maybeRecaptchaToken = getRecaptchaTokenFromRequest(request)
 
         val errorOrStatusResponse = for {
-          _ <- maybeRecaptchaToken match {
+          _ <- getRecaptchaTokenFromRequest(request) match {
             case Some(token) => validateRecaptcha(token, testUsers.isTestUser(request))
             case None => EitherT.rightT[Future, RequestValidationError](())
           }
