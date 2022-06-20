@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import AnimatedDots from 'components/spinners/animatedDots';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type {
 	PayPalCheckoutDetails,
 	SetupPayPalRequestType,
@@ -12,6 +11,7 @@ import type {
 import { getPayPalOptions } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import { updatePayPalButtonReady } from 'pages/contributions-landing/contributionsLandingActions';
 

@@ -3,8 +3,8 @@ import { css } from '@emotion/react';
 import { headline, space, textSans } from '@guardian/source-foundations';
 import { Button } from '@guardian/source-react-components';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkEmail } from 'helpers/forms/formValidation';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { logException } from 'helpers/utilities/logger';
 import 'components/marketingConsent/marketingConsent.scss';
 

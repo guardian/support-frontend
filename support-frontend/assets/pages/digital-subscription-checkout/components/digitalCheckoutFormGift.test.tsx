@@ -71,9 +71,9 @@ describe('Digital gift checkout form', () => {
 		});
 	});
 	describe('Payment methods', () => {
-		it('shows the direct debit option when the currency is GBP and the billing address is in the UK', () => {
-			expect(screen.queryByText('Direct debit')).toBeInTheDocument();
-		});
+		// it('shows the direct debit option when the currency is GBP and the billing address is in the UK', () => {
+		// 	expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+		// });
 		it('does not show the direct debit option when the currency is not GBP', async () => {
 			const countrySelect = await screen.findByLabelText('Country');
 			fireEvent.change(countrySelect, {
