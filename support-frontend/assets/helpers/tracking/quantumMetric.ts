@@ -7,7 +7,7 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
-import { getAnnualValue } from './quantumMetricHelpers';
+import { getSubscriptionAnnualValue } from './quantumMetricHelpers';
 
 type SendEventTestParticipationId = 30;
 
@@ -64,16 +64,14 @@ function sendEventSubscriptionCheckoutEvent(
 ): void {
 	void canRunQuantumMetric().then((canRun) => {
 		if (canRun) {
-			const sourceCurrency = productPrice.currency;
-			const value = getAnnualValue(productPrice, billingPeriod);
-
-			if (!value) {
-				return;
-			}
-
-			const targetCurrency: IsoCurrency = 'GBP';
 			const sendEventWhenReady = () => {
-				if (window.QuantumMetricAPI?.isOn()) {
+				const sourceCurrency = productPrice.currency;
+				const targetCurrency: IsoCurrency = 'GBP';
+				const value = getSubscriptionAnnualValue(productPrice, billingPeriod);
+
+				if (!value) {
+					return;
+				} else if (window.QuantumMetricAPI?.isOn()) {
 					const convertedValue: number =
 						window.QuantumMetricAPI.currencyConvertFromToValue(
 							value,

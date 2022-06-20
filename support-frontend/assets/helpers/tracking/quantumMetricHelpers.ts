@@ -2,7 +2,7 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 
-export const getAnnualValue = (
+export const getSubscriptionAnnualValue = (
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
 ): number | undefined => {
