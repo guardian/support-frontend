@@ -56,17 +56,6 @@ function sendEventSubscriptionCheckoutEvent(
 ): void {
 	void canRunQuantumMetric().then((canRun) => {
 		if (canRun) {
-<<<<<<< HEAD
-=======
-			const sourceCurrency = productPrice.currency;
-			const value = getAnnualValue(productPrice, billingPeriod);
-
-			if (!value) {
-				return;
-			}
-
-			const targetCurrency: IsoCurrency = 'GBP';
->>>>>>> b396f876d (check feature switch on sendEvent)
 			const sendEventWhenReady = () => {
 				const sourceCurrency = productPrice.currency;
 				const targetCurrency: IsoCurrency = 'GBP';
@@ -231,33 +220,6 @@ function addQM() {
 	});
 }
 
-<<<<<<< HEAD
-=======
-function canRunQuantumMetric(): Promise<boolean> {
-	// resolve immediately with false if the feature switch is OFF
-	if (!isSwitchOn('featureSwitches.enableQuantumMetric')) {
-		return Promise.resolve(false);
-	}
-	// checks users consent status
-	return new Promise((resolve) => {
-		onConsentChange((state) => {
-			if (
-				state.ccpa?.doNotSell === false || // check whether US users have NOT withdrawn consent
-				state.aus?.personalisedAdvertising || // check whether AUS users have consented to personalisedAdvertising
-				(state.tcfv2?.consents && // check TCFv2 purposes for non-US/AUS users
-					state.tcfv2.consents['1'] && // Store and/or access information on a device
-					state.tcfv2.consents['8'] && // Measure content performance
-					state.tcfv2.consents['10']) // Develop and improve products
-			) {
-				resolve(true);
-			} else {
-				resolve(false);
-			}
-		});
-	});
-}
-
->>>>>>> b396f876d (check feature switch on sendEvent)
 export function init(participations: Participations): void {
 	void canRunQuantumMetric().then((canRun) => {
 		if (canRun) {
