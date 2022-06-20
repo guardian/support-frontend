@@ -51,6 +51,7 @@ case class DirectDebitPaymentFields(
     accountHolderName: String,
     sortCode: String,
     accountNumber: String,
+    recaptchaToken: String,
 ) extends PaymentFields
 
 case class SepaPaymentFields(
