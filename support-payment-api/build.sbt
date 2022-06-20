@@ -22,7 +22,7 @@ libraryDependencies ++= Seq(
   "com.beachape" %% "enumeratum" % "1.6.1",
   "com.beachape" %% "enumeratum-circe" % "1.6.1",
   "com.dripower" %% "play-circe" % playCirceVersion,
-  "com.github.mpilquist" %% "simulacrum" % "0.19.0",
+  "org.typelevel" %% "simulacrum" % "1.0.1",
   "com.stripe" % "stripe-java" % stripeVersion,
   "com.gocardless" % "gocardless-pro" % "2.10.0",
   "io.circe" %% "circe-core" % circeVersion,
