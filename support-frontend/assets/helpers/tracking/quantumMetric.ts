@@ -9,6 +9,8 @@ import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
 import { getSubscriptionAnnualValue } from './quantumMetricHelpers';
 
+// ---- Types ---- //
+
 type SendEventTestParticipationId = 30;
 
 enum SendEventCheckoutStart {
@@ -31,6 +33,8 @@ type SendEventId =
 	| SendEventTestParticipationId
 	| SendEventCheckoutStart
 	| SendEventCheckoutConverion;
+
+// ---- sendEvent logic ---- //
 
 function sendEvent(
 	id: SendEventId,
@@ -101,19 +105,45 @@ function sendEventSubscriptionCheckoutEvent(
 	});
 }
 
-function getSubsProductSendEventKey(
+function productToCheckoutEvents(
 	product: SubscriptionProduct,
 	orderIsAGift: boolean,
-): string | undefined {
+) {
 	switch (product) {
 		case 'DigitalPack':
-			return orderIsAGift ? 'DigiSubGift' : 'DigiSub';
+			return orderIsAGift
+				? checkoutEvents(
+						SendEventCheckoutStart.DigiSubGift,
+						SendEventCheckoutConverion.DigiSubGift,
+				  )
+				: checkoutEvents(
+						SendEventCheckoutStart.DigiSub,
+						SendEventCheckoutConverion.DigiSub,
+				  );
 		case 'GuardianWeekly':
-			return orderIsAGift ? 'GuardianWeeklySubGift' : 'GuardianWeeklySub';
+			return orderIsAGift
+				? checkoutEvents(
+						SendEventCheckoutStart.GuardianWeeklySubGift,
+						SendEventCheckoutConverion.GuardianWeeklySubGift,
+				  )
+				: checkoutEvents(
+						SendEventCheckoutStart.GuardianWeeklySub,
+						SendEventCheckoutConverion.GuardianWeeklySub,
+				  );
 		case 'Paper':
 		case 'PaperAndDigital':
-			return 'PaperSub';
+			return checkoutEvents(
+				SendEventCheckoutStart.PaperSub,
+				SendEventCheckoutConverion.PaperSub,
+			);
 	}
+}
+
+function checkoutEvents(
+	start: SendEventCheckoutStart,
+	conversion: SendEventCheckoutConverion,
+) {
+	return { start, conversion };
 }
 
 export function sendEventSubscriptionCheckoutStart(
@@ -122,26 +152,16 @@ export function sendEventSubscriptionCheckoutStart(
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
 ): void {
-	const sendEventKey = getSubsProductSendEventKey(product, orderIsAGift);
+	const sendEventIds = productToCheckoutEvents(product, orderIsAGift);
 
-	if (!sendEventKey) {
-		return;
+	if (sendEventIds) {
+		sendEventSubscriptionCheckoutEvent(
+			sendEventIds.start,
+			productPrice,
+			billingPeriod,
+			false,
+		);
 	}
-
-	const indexOfKey = Object.keys(SendEventCheckoutStart).indexOf(sendEventKey);
-
-	if (indexOfKey === -1) {
-		return;
-	}
-
-	const sendEventId = Object.values(SendEventCheckoutStart)[indexOfKey];
-
-	sendEventSubscriptionCheckoutEvent(
-		sendEventId as SendEventCheckoutStart,
-		productPrice,
-		billingPeriod,
-		false,
-	);
 }
 
 export function sendEventSubscriptionCheckoutConversion(
@@ -150,28 +170,16 @@ export function sendEventSubscriptionCheckoutConversion(
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
 ): void {
-	const sendEventKey = getSubsProductSendEventKey(product, orderIsAGift);
+	const sendEventIds = productToCheckoutEvents(product, orderIsAGift);
 
-	if (!sendEventKey) {
-		return;
+	if (sendEventIds) {
+		sendEventSubscriptionCheckoutEvent(
+			sendEventIds.conversion,
+			productPrice,
+			billingPeriod,
+			true,
+		);
 	}
-
-	const indexOfKey = Object.keys(SendEventCheckoutConverion).indexOf(
-		sendEventKey,
-	);
-
-	if (indexOfKey === -1) {
-		return;
-	}
-
-	const sendEventId = Object.values(SendEventCheckoutConverion)[indexOfKey];
-
-	sendEventSubscriptionCheckoutEvent(
-		sendEventId as SendEventCheckoutConverion,
-		productPrice,
-		billingPeriod,
-		true,
-	);
 }
 
 function sendEventABTestParticipations(participations: Participations): void {
@@ -207,6 +215,8 @@ function sendEventABTestParticipations(participations: Participations): void {
 		});
 	}
 }
+
+// ---- Initialisation ---- //
 
 function addQM() {
 	return loadScript(
