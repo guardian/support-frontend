@@ -21,6 +21,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendEventContributionAmountToggled } from 'helpers/tracking/quantumMetric';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
 	selectAmount,
@@ -29,7 +30,6 @@ import {
 import type { State } from '../contributionsLandingReducer';
 import '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
-import { sendEventContributionAmountToggled } from 'helpers/tracking/quantumMetric';
 
 const otherAmoutInputCss = css`
 	padding-left: ${space[5]}px;
