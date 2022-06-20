@@ -3,7 +3,6 @@ import {
 	getDisplayPrice,
 	getProductOptions,
 	getProductPrice,
-	getSavingPercentage,
 } from '../helpers/paymentSelection';
 import { productPrices } from './__fixtures__/productPrices';
 
@@ -38,10 +37,5 @@ describe('PaymentSelection', () => {
 				getProductPrice(productOptions, BillingPeriod, currencyId).price,
 			).toBe(11.99);
 		}
-	});
-	it('should return saving percentage', () => {
-		const annualCost = 100;
-		const monthlyCostAnnualized = 150;
-		expect(getSavingPercentage(annualCost, monthlyCostAnnualized)).toBe('33%');
 	});
 });

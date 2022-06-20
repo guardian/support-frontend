@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import { Checkbox, CheckboxGroup } from '@guardian/source-react-components';
-import * as React from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import SepaTerms from 'components/legal/termsPrivacy/sepaTerms';
@@ -97,7 +97,6 @@ type PropTypes = {
 	formIsSubmittable: boolean;
 	isTestUser: boolean;
 	country: IsoCountry;
-	createStripePaymentMethod: ((clientSecret: string | null) => void) | null;
 	stripeClientSecret: string | null;
 	amazonPayOrderReferenceId: string | null;
 	checkoutFormHasBeenSubmitted: boolean;
@@ -145,8 +144,6 @@ const mapStateToProps = (state: State) => ({
 	paymentMethod: state.page.form.paymentMethod,
 	existingPaymentMethod: state.page.form.existingPaymentMethod,
 	thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
-	createStripePaymentMethod:
-		state.page.form.stripeCardFormData.createPaymentMethod,
 	stripeClientSecret:
 		state.page.form.stripeCardFormData.setupIntentClientSecret,
 	contributionType: state.page.form.contributionType,
@@ -230,134 +227,6 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 	},
 });
 
-// Bizarrely, adding a type to this object means the type-checking on the
-// formHandlers is no longer accurate.
-// (Flow thinks it's OK when it's missing required properties).
-const formHandlersForRecurring = {
-	PayPal: () => {
-		// we don't get an onSubmit event for PayPal recurring, so there
-		// is no need to handle anything here
-	},
-	Stripe: (props: PropTypes) => {
-		if (props.createStripePaymentMethod) {
-			props.createStripePaymentMethod(props.stripeClientSecret);
-		}
-	},
-	DirectDebit: (props: PropTypes) => {
-		props.openDirectDebitPopUp();
-	},
-	Sepa: (props: PropTypes) => {
-		const { accountHolderName, iban, country, streetName } = props.sepaData;
-
-		if (accountHolderName && iban) {
-			props.onPaymentAuthorisation({
-				paymentMethod: 'Sepa',
-				accountHolderName,
-				iban,
-				country,
-				streetName,
-			});
-		}
-	},
-	ExistingCard: (props: PropTypes) =>
-		props.onPaymentAuthorisation({
-			paymentMethod: 'ExistingCard',
-			billingAccountId: props.existingPaymentMethod?.billingAccountId ?? '',
-		}),
-	ExistingDirectDebit: (props: PropTypes) =>
-		props.onPaymentAuthorisation({
-			paymentMethod: 'ExistingDirectDebit',
-			billingAccountId: props.existingPaymentMethod?.billingAccountId ?? '',
-		}),
-	AmazonPay: (props: PropTypes) => {
-		if (props.amazonPayBillingAgreementId) {
-			props.onPaymentAuthorisation({
-				paymentMethod: 'AmazonPay',
-				amazonPayBillingAgreementId: props.amazonPayBillingAgreementId,
-			});
-		}
-	},
-};
-const formHandlers: PaymentMatrix<(arg0: PropTypes) => void> = {
-	ONE_OFF: {
-		Stripe: (props: PropTypes) => {
-			if (props.createStripePaymentMethod) {
-				props.createStripePaymentMethod(null);
-			}
-		},
-		PayPal: (props: PropTypes) => {
-			props.setPaymentIsWaiting(true);
-			props.createOneOffPayPalPayment({
-				currency: props.currency,
-				amount: getAmount(
-					props.selectedAmounts,
-					props.otherAmounts,
-					props.contributionType,
-				),
-				returnURL: payPalReturnUrl(props.countryGroupId, props.email),
-				cancelURL: payPalCancelUrl(props.countryGroupId),
-			});
-		},
-		DirectDebit: () => {
-			logInvalidCombination('ONE_OFF', DirectDebit);
-		},
-		Sepa: () => {
-			logInvalidCombination('ONE_OFF', Sepa);
-		},
-		ExistingCard: () => {
-			logInvalidCombination('ONE_OFF', ExistingCard);
-		},
-		ExistingDirectDebit: () => {
-			logInvalidCombination('ONE_OFF', ExistingDirectDebit);
-		},
-		AmazonPay: (props: PropTypes) => {
-			const { amazonPayOrderReferenceId } = props;
-
-			if (amazonPayOrderReferenceId) {
-				props.setPaymentIsWaiting(true);
-				props.onPaymentAuthorisation({
-					paymentMethod: AmazonPay,
-					orderReferenceId: amazonPayOrderReferenceId,
-				});
-			} else {
-				logException('Missing orderReferenceId for amazon pay');
-			}
-		},
-		None: () => {
-			logInvalidCombination('ONE_OFF', 'None');
-		},
-	},
-	ANNUAL: {
-		...formHandlersForRecurring,
-		None: () => {
-			logInvalidCombination('ANNUAL', 'None');
-		},
-	},
-	MONTHLY: {
-		...formHandlersForRecurring,
-		None: () => {
-			logInvalidCombination('MONTHLY', 'None');
-		},
-	},
-};
-
-// Note PayPal recurring flow does not call this function
-function onSubmit(
-	props: PropTypes,
-): (event: React.FormEvent<HTMLFormElement>) => void {
-	return (event) => {
-		// Causes errors to be displayed against payment fields
-		event.preventDefault();
-		const flowPrefix = 'npf';
-		const form = event.target;
-
-		const handlePayment = () =>
-			formHandlers[props.contributionType][props.paymentMethod](props);
-
-		onFormSubmit({ ...props, flowPrefix, handlePayment, form });
-	};
-}
-
 // ----- Render ----- //
 function ContributionForm(props: PropTypes): JSX.Element {
 	const baseClass = 'form';
@@ -379,9 +248,134 @@ function ContributionForm(props: PropTypes): JSX.Element {
 		);
 	}
 
+	const [createStripePaymentMethod, setCreateStripePaymentMethod] = useState<
+		((clientSecret: string | null) => void) | null
+	>(null);
+
+	const formHandlersForRecurring = {
+		PayPal: () => {
+			// we don't get an onSubmit event for PayPal recurring, so there
+			// is no need to handle anything here
+		},
+		Stripe: () => {
+			if (createStripePaymentMethod) {
+				createStripePaymentMethod(props.stripeClientSecret);
+			}
+		},
+		DirectDebit: () => {
+			props.openDirectDebitPopUp();
+		},
+		Sepa: () => {
+			const { accountHolderName, iban, country, streetName } = props.sepaData;
+
+			if (accountHolderName && iban) {
+				props.onPaymentAuthorisation({
+					paymentMethod: 'Sepa',
+					accountHolderName,
+					iban,
+					country,
+					streetName,
+				});
+			}
+		},
+		ExistingCard: () =>
+			props.onPaymentAuthorisation({
+				paymentMethod: 'ExistingCard',
+				billingAccountId: props.existingPaymentMethod?.billingAccountId ?? '',
+			}),
+		ExistingDirectDebit: () =>
+			props.onPaymentAuthorisation({
+				paymentMethod: 'ExistingDirectDebit',
+				billingAccountId: props.existingPaymentMethod?.billingAccountId ?? '',
+			}),
+		AmazonPay: () => {
+			if (props.amazonPayBillingAgreementId) {
+				props.onPaymentAuthorisation({
+					paymentMethod: 'AmazonPay',
+					amazonPayBillingAgreementId: props.amazonPayBillingAgreementId,
+				});
+			}
+		},
+	};
+	const formHandlers: PaymentMatrix<() => void> = {
+		ONE_OFF: {
+			Stripe: () => {
+				if (createStripePaymentMethod) {
+					createStripePaymentMethod(null);
+				}
+			},
+			PayPal: () => {
+				props.setPaymentIsWaiting(true);
+				props.createOneOffPayPalPayment({
+					currency: props.currency,
+					amount: getAmount(
+						props.selectedAmounts,
+						props.otherAmounts,
+						props.contributionType,
+					),
+					returnURL: payPalReturnUrl(props.countryGroupId, props.email),
+					cancelURL: payPalCancelUrl(props.countryGroupId),
+				});
+			},
+			DirectDebit: () => {
+				logInvalidCombination('ONE_OFF', DirectDebit);
+			},
+			Sepa: () => {
+				logInvalidCombination('ONE_OFF', Sepa);
+			},
+			ExistingCard: () => {
+				logInvalidCombination('ONE_OFF', ExistingCard);
+			},
+			ExistingDirectDebit: () => {
+				logInvalidCombination('ONE_OFF', ExistingDirectDebit);
+			},
+			AmazonPay: () => {
+				const { amazonPayOrderReferenceId } = props;
+
+				if (amazonPayOrderReferenceId) {
+					props.setPaymentIsWaiting(true);
+					props.onPaymentAuthorisation({
+						paymentMethod: AmazonPay,
+						orderReferenceId: amazonPayOrderReferenceId,
+					});
+				} else {
+					logException('Missing orderReferenceId for amazon pay');
+				}
+			},
+			None: () => {
+				logInvalidCombination('ONE_OFF', 'None');
+			},
+		},
+		ANNUAL: {
+			...formHandlersForRecurring,
+			None: () => {
+				logInvalidCombination('ANNUAL', 'None');
+			},
+		},
+		MONTHLY: {
+			...formHandlersForRecurring,
+			None: () => {
+				logInvalidCombination('MONTHLY', 'None');
+			},
+		},
+	};
+
+	// Note PayPal recurring flow does not call this function
+	function onSubmit(event: React.FormEvent<HTMLFormElement>): void {
+		// Causes errors to be displayed against payment fields
+		event.preventDefault();
+		const flowPrefix = 'npf';
+		const form = event.target;
+
+		const handlePayment = () =>
+			formHandlers[props.contributionType][props.paymentMethod]();
+
+		onFormSubmit({ ...props, flowPrefix, handlePayment, form });
+	}
+
 	return (
 		<form
-			onSubmit={onSubmit(props)}
+			onSubmit={onSubmit}
 			className={classNameWithModifiers(baseClass, classModifiers)}
 			noValidate
 		>
@@ -460,6 +454,13 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					paymentMethod={props.paymentMethod}
 					isTestUser={props.isTestUser}
 					country={props.country}
+					setCreateStripePaymentMethod={(create) => {
+						// When passing a function to a `useState` setter, react invokes
+						// the function and stores the return value. Given that we actually
+						// want to store the `create` function as state, we need to wrap it
+						// in a function first.
+						setCreateStripePaymentMethod(() => create);
+					}}
 				/>
 
 				<div>

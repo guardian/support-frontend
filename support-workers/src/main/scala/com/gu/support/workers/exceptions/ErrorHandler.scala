@@ -28,6 +28,7 @@ object ErrorHandler {
 
   def toRetryException(throwable: Throwable): RetryException =
     throwable match {
+      case e: RetryException => e
       case e: StripeError => fromStripeError(e)
       case e: PayPalError => e.asRetryException
       case e: ZuoraErrorResponse => e.asRetryException

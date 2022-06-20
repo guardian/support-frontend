@@ -1,4 +1,5 @@
-import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
+import type { DirectDebit } from 'helpers/forms/paymentMethods';
+import { PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 
@@ -15,7 +16,7 @@ function supportedPaymentMethods(
 	// This excludes eg. the Isle of Man
 	const allowsDirectDebit = currencyId === 'GBP' && countryId === 'GB';
 	const countrySpecific: SubscriptionsPaymentMethod[] = allowsDirectDebit
-		? [DirectDebit, Stripe, PayPal]
+		? [Stripe, PayPal]
 		: [Stripe, PayPal];
 	return countrySpecific;
 }
