@@ -191,13 +191,18 @@ export function sendEventContributionAmountToggled(
 		if (canRun) {
 			const sendEventWhenReady = () => {
 				if (window.QuantumMetricAPI?.isOn()) {
-					const annualValueInPence =
-						contributionType === 'ANNUAL' ? amount * 100 : amount * 100 * 12;
-					const sendEventId = contributionType === 'ONE_OFF' ? 71 : 72;
+					const sendEventId =
+						contributionType === 'ONE_OFF'
+							? SendEventContributionAmountToggle.SingleContribution
+							: SendEventContributionAmountToggle.RecurringContribution;
+					const valueInPence =
+						contributionType === 'ONE_OFF' || contributionType === 'ANNUAL'
+							? amount * 100
+							: amount * 100 * 12;
 					const targetCurrency: IsoCurrency = 'GBP';
 					const convertedValue: number =
 						window.QuantumMetricAPI.currencyConvertFromToValue(
-							annualValueInPence,
+							valueInPence,
 							sourceCurrency,
 							targetCurrency,
 						);
