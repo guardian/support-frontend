@@ -1,12 +1,17 @@
-import { onConsentChange } from '@guardian/consent-management-platform';
 import { loadScript } from '@guardian/libs';
 import type { Participations } from 'helpers/abTests/abtest';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
-import { getAnnualValue } from './quantumMetricHelpers';
+import {
+	canRunQuantumMetric,
+	getSubscriptionAnnualValue,
+	waitForQuantumMetricAPi,
+} from './quantumMetricHelpers';
+
+// ---- Types ---- //
 
 type SendEventTestParticipationId = 30;
 
@@ -18,18 +23,20 @@ enum SendEventCheckoutStart {
 	GuardianWeeklySubGift = 79,
 }
 
-enum SendEventCheckoutConverion {
-	DigiSubConversion = 31,
-	PaperSubConversion = 67,
-	GuardianWeeklySubConversion = 68,
-	DigiSubGiftConversion = 69,
-	GuardianWeeklySubGiftConversion = 70,
+enum SendEventCheckoutConversion {
+	DigiSub = 31,
+	PaperSub = 67,
+	GuardianWeeklySub = 68,
+	DigiSubGift = 69,
+	GuardianWeeklySubGift = 70,
 }
 
 type SendEventId =
 	| SendEventTestParticipationId
 	| SendEventCheckoutStart
-	| SendEventCheckoutConverion;
+	| SendEventCheckoutConversion;
+
+// ---- sendEvent logic ---- //
 
 function sendEvent(
 	id: SendEventId,
@@ -41,47 +48,29 @@ function sendEvent(
 	}
 }
 
-function waitForQuantumMetricAPi(onReady: () => void) {
-	let pollCount = 0;
-	const checkForQuantumMetricAPi = setInterval(() => {
-		pollCount = pollCount + 1;
-		if (window.QuantumMetricAPI?.isOn()) {
-			onReady();
-			clearInterval(checkForQuantumMetricAPi);
-		} else if (pollCount === 10) {
-			// give up waiting if QuantumMetricAPI is not ready after 10 attempts
-			clearInterval(checkForQuantumMetricAPi);
-		}
-	}, 500);
-}
-
-function sendEventSubscriptionCheckoutStart(
-	id: SendEventCheckoutStart,
+function sendEventSubscriptionCheckoutEvent(
+	id: SendEventCheckoutStart | SendEventCheckoutConversion,
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
+	isConversion: boolean,
 ): void {
-	/**
-	 * Check user has granted consent to Quantum Metric
-	 */
-	void getConsent().then((hasConsent) => {
-		if (hasConsent) {
-			const sourceCurrency = productPrice.currency;
-			const value = getAnnualValue(productPrice, billingPeriod);
-
-			if (!value) {
-				return;
-			}
-
-			const targetCurrency: IsoCurrency = 'GBP';
+	void canRunQuantumMetric().then((canRun) => {
+		if (canRun) {
 			const sendEventWhenReady = () => {
-				if (window.QuantumMetricAPI?.isOn()) {
+				const sourceCurrency = productPrice.currency;
+				const targetCurrency: IsoCurrency = 'GBP';
+				const value = getSubscriptionAnnualValue(productPrice, billingPeriod);
+
+				if (!value) {
+					return;
+				} else if (window.QuantumMetricAPI?.isOn()) {
 					const convertedValue: number =
 						window.QuantumMetricAPI.currencyConvertFromToValue(
 							value,
 							sourceCurrency,
 							targetCurrency,
 						);
-					sendEvent(id, false, convertedValue.toString());
+					sendEvent(id, isConversion, convertedValue.toString());
 				}
 			};
 
@@ -102,6 +91,83 @@ function sendEventSubscriptionCheckoutStart(
 			}
 		}
 	});
+}
+
+function productToCheckoutEvents(
+	product: SubscriptionProduct,
+	orderIsAGift: boolean,
+) {
+	switch (product) {
+		case 'DigitalPack':
+			return orderIsAGift
+				? checkoutEvents(
+						SendEventCheckoutStart.DigiSubGift,
+						SendEventCheckoutConversion.DigiSubGift,
+				  )
+				: checkoutEvents(
+						SendEventCheckoutStart.DigiSub,
+						SendEventCheckoutConversion.DigiSub,
+				  );
+		case 'GuardianWeekly':
+			return orderIsAGift
+				? checkoutEvents(
+						SendEventCheckoutStart.GuardianWeeklySubGift,
+						SendEventCheckoutConversion.GuardianWeeklySubGift,
+				  )
+				: checkoutEvents(
+						SendEventCheckoutStart.GuardianWeeklySub,
+						SendEventCheckoutConversion.GuardianWeeklySub,
+				  );
+		case 'Paper':
+		case 'PaperAndDigital':
+			return checkoutEvents(
+				SendEventCheckoutStart.PaperSub,
+				SendEventCheckoutConversion.PaperSub,
+			);
+	}
+}
+
+function checkoutEvents(
+	start: SendEventCheckoutStart,
+	conversion: SendEventCheckoutConversion,
+) {
+	return { start, conversion };
+}
+
+export function sendEventSubscriptionCheckoutStart(
+	product: SubscriptionProduct,
+	orderIsAGift: boolean,
+	productPrice: ProductPrice,
+	billingPeriod: BillingPeriod,
+): void {
+	const sendEventIds = productToCheckoutEvents(product, orderIsAGift);
+
+	if (sendEventIds) {
+		sendEventSubscriptionCheckoutEvent(
+			sendEventIds.start,
+			productPrice,
+			billingPeriod,
+			false,
+		);
+	}
+}
+
+export function sendEventSubscriptionCheckoutConversion(
+	product: SubscriptionProduct,
+	orderIsAGift: boolean,
+	productPrice: ProductPrice,
+	billingPeriod: BillingPeriod,
+): void {
+	const sendEventIds = productToCheckoutEvents(product, orderIsAGift);
+
+	if (sendEventIds) {
+		sendEventSubscriptionCheckoutEvent(
+			sendEventIds.conversion,
+			productPrice,
+			billingPeriod,
+			true,
+		);
+	}
 }
 
 function sendEventABTestParticipations(participations: Participations): void {
@@ -138,6 +204,8 @@ function sendEventABTestParticipations(participations: Participations): void {
 	}
 }
 
+// ---- initialisation logic ---- //
+
 function addQM() {
 	return loadScript(
 		'https://cdn.quantummetric.com/instrumentation/1.31.3/quantum-gnm.js',
@@ -152,32 +220,9 @@ function addQM() {
 	});
 }
 
-function getConsent(): Promise<boolean> {
-	return new Promise((resolve) => {
-		onConsentChange((state) => {
-			if (
-				state.ccpa?.doNotSell === false || // check whether US users have NOT withdrawn consent
-				state.aus?.personalisedAdvertising || // check whether AUS users have consented to personalisedAdvertising
-				(state.tcfv2?.consents && // check TCFv2 purposes for non-US/AUS users
-					state.tcfv2.consents['1'] && // Store and/or access information on a device
-					state.tcfv2.consents['8'] && // Measure content performance
-					state.tcfv2.consents['10']) // Develop and improve products
-			) {
-				resolve(true);
-			} else {
-				resolve(false);
-			}
-		});
-	});
-}
-
-function init(participations: Participations): void {
-	// return immediately if the feature switch is OFF
-	if (!isSwitchOn('featureSwitches.enableQuantumMetric')) {
-		return;
-	}
-	void getConsent().then((hasConsent) => {
-		if (hasConsent) {
+export function init(participations: Participations): void {
+	void canRunQuantumMetric().then((canRun) => {
+		if (canRun) {
 			void addQM().then(() => {
 				/**
 				 * Quantum Metric's script has loaded so we can attempt to
@@ -188,5 +233,3 @@ function init(participations: Participations): void {
 		}
 	});
 }
-
-export { init, sendEventSubscriptionCheckoutStart, SendEventCheckoutStart };
