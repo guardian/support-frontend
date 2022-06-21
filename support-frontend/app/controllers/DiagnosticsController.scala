@@ -6,7 +6,7 @@ import Results.Ok
 
 class DiagnosticsController(
     actionRefiners: CustomActionBuilders,
-) {
+) extends Results {
 
   val relevantCookies = List(
     "gu_user_features_expiry",
@@ -40,6 +40,19 @@ class DiagnosticsController(
             " = " + cookie.value
         }.toList
     Ok(humanReadableCookies.mkString("\n\n"))
+  }
+
+  // temp redirect so that we can use the PROD bwid in the CODE env - remove after hackdays June 2022
+  def hackday(): Action[AnyContent] = NoCacheAction() { implicit request =>
+    request.cookies.get("bwid").map(_.value) match {
+      case Some(bwid) =>
+        Redirect(
+          url = "https://support.code.dev-theguardian.com/propensity",
+          queryStringParams = Map("bwid" -> Seq(bwid)),
+        )
+      case None => Ok("You don't have a bwid cookie, so we can't check your history")
+    }
+
   }
 
 }
