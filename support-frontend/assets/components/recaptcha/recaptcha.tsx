@@ -1,9 +1,15 @@
 import './recaptcha.scss';
 
-export function Recaptcha() {
+export type RecaptchaProps = {
+	id?: string;
+};
+
+export function Recaptcha(
+	{ id }: RecaptchaProps = { id: 'robot_checkbox' },
+): JSX.Element {
 	return (
 		<>
-			<div id="robot_checkbox" className="robot_checkbox" />
+			<div id={id} className="robot_checkbox" />
 			<p className="recaptcha-terms">
 				By ticking this box, you agree to let Google perform a security check to
 				confirm you are a human. Please refer to their{' '}
