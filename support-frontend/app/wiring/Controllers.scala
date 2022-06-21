@@ -58,6 +58,7 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
+    propensityDynamoTable,
   )
 
   lazy val redemptionController = new RedemptionController(

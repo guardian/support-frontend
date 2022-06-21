@@ -88,6 +88,7 @@ POST /identity/signin-url                                          controllers.I
 
 GET  /subscribe                                                    controllers.SubscriptionsController.geoRedirect()
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.SubscriptionsController.landing(country: String)
+GET  /propensity                 controllers.SubscriptionsController.propensity(bwid: Option[String])
 
 # This is just a fallback in case someone accidentally uses an unsupported country-specific
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.

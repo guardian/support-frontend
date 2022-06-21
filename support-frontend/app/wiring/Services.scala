@@ -8,7 +8,7 @@ import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.getaddressio.GetAddressIOService
 import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import com.gu.support.promotions.PromotionServiceProvider
-import com.gu.support.redemption.corporate.{DynamoTableAsyncProvider, RedemptionTable}
+import com.gu.support.redemption.corporate.{DynamoTableAsync, DynamoTableAsyncProvider, RedemptionTable}
 import com.gu.zuora.ZuoraGiftLookupServiceProvider
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
@@ -65,6 +65,8 @@ trait Services {
   val dynamoTableAsyncProvider: DynamoTableAsyncProvider = { isTestUser =>
     RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(appConfig.stage, isTestUser))
   }
+
+  val propensityDynamoTable: DynamoTableAsync = PropensityTable.async()
 
   lazy val zuoraGiftLookupServiceProvider: ZuoraGiftLookupServiceProvider =
     new ZuoraGiftLookupServiceProvider(appConfig.zuoraConfigProvider, appConfig.stage)

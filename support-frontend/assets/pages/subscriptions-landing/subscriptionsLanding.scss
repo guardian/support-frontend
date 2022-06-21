@@ -91,6 +91,17 @@
 	}
 }
 
+.learn-more {
+	display: none;
+	border: darkgray solid thin;
+	background-color: lightgray;
+	margin: 1em;
+}
+
+.learn-more--open {
+	display: block;
+}
+
 /****************** subscriptions product-container ********************/
 
 .subscriptions__product-container {

@@ -23,6 +23,7 @@ function SubscriptionsLandingPage({
 	countryGroupId,
 	participations,
 	pricingCopy,
+	propensityProduct,
 	referrerAcquisitions,
 }: SubscriptionsLandingPropTypes) {
 	const Header = headerWithCountrySwitcherContainer({
@@ -44,6 +45,7 @@ function SubscriptionsLandingPage({
 				countryGroupId={countryGroupId}
 				participations={participations}
 				pricingCopy={pricingCopy}
+				propensityProduct={propensityProduct}
 				referrerAcquisitions={referrerAcquisitions}
 			/>
 		</Page>

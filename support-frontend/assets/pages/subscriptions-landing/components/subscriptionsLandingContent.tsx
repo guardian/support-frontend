@@ -2,6 +2,7 @@
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingPropTypes } from '../subscriptionsLandingProps';
 import FeatureHeader from './featureHeader';
+import PropensityHeader from './propensityHeader';
 import SubscriptionsProduct from './subscriptionsProduct';
 
 const isFeature = (index: number) => index === 0; // make the first card a feature
@@ -10,6 +11,7 @@ function SubscriptionsLandingContent({
 	countryGroupId,
 	pricingCopy,
 	participations,
+	propensityProduct,
 }: SubscriptionsLandingPropTypes): JSX.Element | null {
 	if (!pricingCopy) {
 		return null;
@@ -19,13 +21,14 @@ function SubscriptionsLandingContent({
 		countryGroupId,
 		pricingCopy,
 		participations,
+		propensityProduct,
 	);
 	return (
 		<div
 			className="subscriptions-landing-page"
 			id="qa-subscriptions-landing-page"
 		>
-			<FeatureHeader />
+			{propensityProduct ? <PropensityHeader /> : <FeatureHeader />}
 			<div className="subscriptions__product-container">
 				{subscriptionCopy.map((product, index) => (
 					<SubscriptionsProduct

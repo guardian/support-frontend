@@ -98,6 +98,37 @@ const getDigitalImage = (isTop: boolean, countryGroupId: CountryGroupId) => {
 	return <DigitalPackshot countryGroupId={countryGroupId} />;
 };
 
+const recurring = (): ProductCopy => ({
+	title: 'Recurring Contribution',
+	subtitle: 'From £2 per month',
+	description:
+		'Make a regular contribution from just £2 per month, or choose annual if you prefer.',
+	productImage: '',
+	offer: undefined,
+	buttons: [
+		{
+			ctaButtonText: 'Make a recurring contribution',
+			link: '/uk/contribute?selected-contribution-type=MONTHLY', //ONE_OFF
+			analyticsTracking: () => undefined,
+		},
+	],
+});
+
+const single = (): ProductCopy => ({
+	title: 'Single Contribution',
+	subtitle: 'From £1',
+	description: 'Make a contribution today.',
+	productImage: '',
+	offer: undefined,
+	buttons: [
+		{
+			ctaButtonText: 'Make a contribution',
+			link: '/uk/contribute?selected-contribution-type=ONE_OFF',
+			analyticsTracking: () => undefined,
+		},
+	],
+});
+
 const digital = (
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
@@ -249,20 +280,64 @@ const getSubscriptionCopy = (
 	countryGroupId: CountryGroupId,
 	pricingCopy: PricingCopy,
 	participations: Participations,
+	propensityProduct: string | null | undefined,
 ): ProductCopy[] => {
 	if (countryGroupId === GBPCountries) {
-		return [
-			guardianWeekly(
-				countryGroupId,
-				pricingCopy[GuardianWeekly],
-				true,
-				participations,
-			),
-			digital(countryGroupId, pricingCopy[DigitalPack], false),
-			paper(countryGroupId, pricingCopy[Paper], false), // Removing the link to the old paper+digital page during the June 21 Sale
-			// paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
-			premiumApp(countryGroupId),
-		];
+		if (propensityProduct) {
+			let firstProduct;
+			switch (propensityProduct) {
+				case 'Digital Subscription':
+					firstProduct = digital(
+						countryGroupId,
+						pricingCopy[DigitalPack],
+						false,
+					);
+					break;
+				case 'Premium App':
+					firstProduct = premiumApp(countryGroupId);
+					break;
+				case 'Single Contribution':
+					firstProduct = single();
+					break;
+				case 'Recurring Contribution':
+					firstProduct = recurring();
+					break;
+				case 'Guardian Weekly - Subscription':
+					firstProduct = guardianWeekly(
+						countryGroupId,
+						pricingCopy[GuardianWeekly],
+						true,
+						participations,
+					);
+					break;
+				case 'Newspaper - Subscription':
+					firstProduct = paper(countryGroupId, pricingCopy[Paper], false);
+					break;
+				// Patron and DS Gift ignored?
+				default:
+					firstProduct = guardianWeekly(
+						countryGroupId,
+						pricingCopy[GuardianWeekly],
+						true,
+						participations,
+					);
+			}
+
+			return [firstProduct];
+		} else {
+			return [
+				guardianWeekly(
+					countryGroupId,
+					pricingCopy[GuardianWeekly],
+					true,
+					participations,
+				),
+				digital(countryGroupId, pricingCopy[DigitalPack], false),
+				paper(countryGroupId, pricingCopy[Paper], false), // Removing the link to the old paper+digital page during the June 21 Sale
+				// paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
+				premiumApp(countryGroupId),
+			];
+		}
 	} else if (
 		[EURCountries, AUDCountries, NZDCountries].includes(countryGroupId)
 	) {

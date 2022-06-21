@@ -18,6 +18,7 @@ export type SubscriptionsLandingPropTypes = {
 	countryGroupId: CountryGroupId;
 	participations: Participations;
 	pricingCopy: PricingCopy | null | undefined;
+	propensityProduct: string | null | undefined;
 	referrerAcquisitions: ReferrerAcquisitionData;
 };
 const countryGroupId = detectCountryGroup();
@@ -25,5 +26,6 @@ export const subscriptionsLandingProps = (): SubscriptionsLandingPropTypes => ({
 	countryGroupId,
 	participations: initAbTests(detectCountry(), countryGroupId, getSettings()),
 	pricingCopy: getGlobal('pricingCopy'),
+	propensityProduct: getGlobal('propensityProduct'),
 	referrerAcquisitions: getReferrerAcquisitionData(),
 });
