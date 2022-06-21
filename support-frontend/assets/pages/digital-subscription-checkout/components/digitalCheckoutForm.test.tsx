@@ -1,36 +1,44 @@
 import '__mocks__/stripeMock';
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import {
+	combineReducers,
+	configureStore,
+	createListenerMiddleware,
+} from '@reduxjs/toolkit';
 import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { digitalProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { addAddressSideEffects } from 'helpers/redux/checkout/address/sideEffects';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
-import type { CommonState } from 'helpers/redux/commonState/state';
+import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsStore';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import DigitalCheckoutForm from './digitalCheckoutForm';
 
-const pageReducer = (commonState: CommonState) =>
-	createCheckoutReducer(
-		commonState.internationalisation.countryId,
-		DigitalPack,
-		'Monthly',
-		null,
-		null,
-		null,
-	);
+const pageReducer = () =>
+	createReducer(DigitalPack, 'Monthly', null, null, null);
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
+	const listenerMiddleware = createListenerMiddleware();
+
 	const store = configureStore({
 		reducer: combineReducers({
-			page: pageReducer(initialState.common),
+			page: pageReducer(),
 			common: commonReducer,
 		}),
 		preloadedState: initialState,
+		middleware: (getDefaultMiddleware) =>
+			getDefaultMiddleware().prepend(listenerMiddleware.middleware),
 	});
+
+	addAddressSideEffects(
+		listenerMiddleware.startListening as SubscriptionsStartListening,
+	);
+
 	store.dispatch(setInitialCommonState(initialState.common));
+
 	return store;
 }
 
@@ -50,10 +58,12 @@ describe('Digital checkout form', () => {
 					productPrices: digitalProducts,
 					formErrors: [],
 				},
-				billingAddress: {
-					fields: {
-						country: 'GB',
-						formErrors: [],
+				checkoutForm: {
+					billingAddress: {
+						fields: {
+							country: 'GB',
+							errors: [],
+						},
 					},
 				},
 			},
@@ -72,7 +82,6 @@ describe('Digital checkout form', () => {
 		});
 
 		renderWithStore(<DigitalCheckoutForm />, {
-			// @ts-expect-error -- Type mismatch is unimportant for tests
 			initialState,
 			// @ts-expect-error -- Type mismatch is unimportant for tests
 			store: setUpStore(initialState),

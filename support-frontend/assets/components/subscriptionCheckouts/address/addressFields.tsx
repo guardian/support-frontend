@@ -7,13 +7,6 @@ import {
 } from '@guardian/source-react-components';
 import React from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
-import 'helpers/subscriptionsForms/addressType';
-import type {
-	ActionCreators as AddressActionCreators,
-	FormField,
-	FormFields,
-} from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import { isPostcodeOptional } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
 import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -22,25 +15,30 @@ import {
 	caStates,
 	usStates,
 } from 'helpers/internationalisation/country';
+import type { AddressFieldsState } from 'helpers/redux/checkout/address/state';
+import { isPostcodeOptional } from 'helpers/redux/checkout/address/validation';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { firstError } from 'helpers/subscriptionsForms/validation';
-import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 import { canShow } from 'hocs/canShow';
 import type { PostcodeFinderResult } from './postcodeLookup';
 
-type StatePropTypes = FormFields & {
-	countries: Record<string, string>;
+type StatePropTypes = AddressFieldsState & {
 	scope: AddressType;
-	formErrors: Array<FormError<FormField>>;
+	countries: Record<string, string>;
 	postcodeState: PostcodeFinderState;
 };
 
-type PropTypes = StatePropTypes &
-	AddressActionCreators & {
-		setPostcodeForFinder: (postcode: string) => void;
-		fetchResults: (postcode?: string) => void;
-	};
+type PropTypes = StatePropTypes & {
+	setLineOne: (lineOne: string) => void;
+	setLineTwo: (lineTwo: string) => void;
+	setTownCity: (city: string) => void;
+	setState: (state: string) => void;
+	setPostcode: (postCode: string) => void;
+	setCountry: (countryRaw: string) => void;
+	setPostcodeForFinder: (postcode: string) => void;
+	fetchResults: (postcode?: string) => void;
+};
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -83,7 +81,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				label="Country"
 				value={props.country}
 				onChange={(e) => props.setCountry(e.target.value)}
-				error={firstError('country', props.formErrors)}
+				error={firstError('country', props.errors)}
 			>
 				<OptionForSelect value="">Select a country</OptionForSelect>
 				{sortedOptions(props.countries)}
@@ -101,11 +99,11 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 						city,
 					}: PostcodeFinderResult) => {
 						if (lineOne) {
-							props.setAddressLineOne(lineOne);
+							props.setLineOne(lineOne);
 						}
 
 						if (lineTwo) {
-							props.setAddressLineTwo(lineTwo);
+							props.setLineTwo(lineTwo);
 						}
 
 						if (city) {
@@ -121,8 +119,8 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				label="Address Line 1"
 				type="text"
 				value={props.lineOne ?? ''}
-				onChange={(e) => props.setAddressLineOne(e.target.value)}
-				error={firstError('lineOne', props.formErrors)}
+				onChange={(e) => props.setLineOne(e.target.value)}
+				error={firstError('lineOne', props.errors)}
 			/>
 			<TextInput
 				css={marginBottom}
@@ -132,8 +130,8 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				optional
 				type="text"
 				value={props.lineTwo ?? ''}
-				onChange={(e) => props.setAddressLineTwo(e.target.value)}
-				error={firstError('lineTwo', props.formErrors)}
+				onChange={(e) => props.setLineTwo(e.target.value)}
+				error={firstError('lineTwo', props.errors)}
 			/>
 			<TextInput
 				css={marginBottom}
@@ -144,7 +142,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				maxLength={40}
 				value={props.city ?? ''}
 				onChange={(e) => props.setTownCity(e.target.value)}
-				error={firstError('city', props.formErrors)}
+				error={firstError('city', props.errors)}
 			/>
 			<MaybeSelect
 				css={marginBottom}
@@ -153,7 +151,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				label={props.country === 'CA' ? 'Province/Territory' : 'State'}
 				value={props.state ?? ''}
 				onChange={(e) => props.setState(e.target.value)}
-				error={firstError('state', props.formErrors)}
+				error={firstError('state', props.errors)}
 				isShown={shouldShowStateDropdown(props.country)}
 			>
 				<>
@@ -170,7 +168,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				label="State"
 				value={props.state ?? ''}
 				onChange={(e) => props.setState(e.target.value)}
-				error={firstError('state', props.formErrors)}
+				error={firstError('state', props.errors)}
 				optional
 				isShown={shouldShowStateInput(props.country)}
 			/>
@@ -183,7 +181,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				optional={isPostcodeOptional(props.country)}
 				value={props.postCode ?? ''}
 				onChange={(e) => props.setPostcode(e.target.value)}
-				error={firstError('postCode', props.formErrors)}
+				error={firstError('postCode', props.errors)}
 			/>
 		</div>
 	);

@@ -4,7 +4,7 @@ import {
 	setFormErrors,
 	setStage,
 } from 'helpers/subscriptionsForms/formActions';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { FormField, Stage } from '../formFields';
 import type { FormError } from '../validation';
 
@@ -17,8 +17,7 @@ describe('Subscription Checkout Reducer', () => {
 		const stage: Stage = 'thankyou';
 		const action = setStage(stage, 'DigitalPack', undefined);
 
-		const newState = createCheckoutReducer(
-			'GB',
+		const newState = createReducer(
 			'DigitalPack',
 			'Annual',
 			null,
@@ -33,8 +32,7 @@ describe('Subscription Checkout Reducer', () => {
 		const stage: Stage = 'checkout';
 		const action = setStage(stage, 'DigitalPack', undefined);
 
-		const newState = createCheckoutReducer(
-			'GB',
+		const newState = createReducer(
 			'DigitalPack',
 			'Annual',
 			null,
@@ -62,8 +60,7 @@ describe('Subscription Checkout Reducer', () => {
 		];
 		const action = setFormErrors(errors as Array<FormError<FormField>>);
 
-		const newState = createCheckoutReducer(
-			'GB',
+		const newState = createReducer(
 			'DigitalPack',
 			'Annual',
 			null,

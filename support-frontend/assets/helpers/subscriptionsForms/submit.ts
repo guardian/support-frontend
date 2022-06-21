@@ -50,10 +50,6 @@ import type {
 	CheckoutState,
 	WithDeliveryCheckoutState,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import {
-	getBillingAddressFields,
-	getDeliveryAddressFields,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
@@ -68,19 +64,21 @@ type Addresses = {
 // ----- Functions ----- //
 function getAddresses(state: AnyCheckoutState): Addresses {
 	if (isPhysicalProduct(state.page.checkout.product)) {
-		const deliveryAddressFields = getDeliveryAddressFields(
-			state as unknown as WithDeliveryCheckoutState,
-		);
+		const deliveryAddressFields =
+			state.page.checkoutForm.deliveryAddress.fields;
+
+		const billingAddressFields = state.page.checkoutForm.billingAddress.fields;
+
 		return {
 			deliveryAddress: deliveryAddressFields,
 			billingAddress: state.page.checkout.billingAddressIsSame
 				? deliveryAddressFields
-				: getBillingAddressFields(state),
+				: billingAddressFields,
 		};
 	}
 
 	return {
-		billingAddress: getBillingAddressFields(state),
+		billingAddress: state.page.checkoutForm.billingAddress.fields,
 	};
 }
 

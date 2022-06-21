@@ -1,8 +1,6 @@
 import type { CsrCustomerData } from 'components/csr/csrMode';
 import { csrUserName } from 'components/csr/csrMode';
 import type { Action as DDAction } from 'components/directDebit/directDebitActions';
-import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
@@ -12,6 +10,18 @@ import { PayPal } from 'helpers/forms/paymentMethods';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import {
+	setBillingAddressLineOne,
+	setBillingCountry,
+	setBillingPostcode,
+	setBillingState,
+	setBillingTownCity,
+	setDeliveryAddressLineOne,
+	setDeliveryCountry,
+	setDeliveryPostcode,
+	setDeliveryState,
+	setDeliveryTownCity,
+} from 'helpers/redux/checkout/address/actions';
 import {
 	setEmail as setEmailGift,
 	setFirstName as setFirstNameGift,
@@ -119,7 +129,10 @@ export type Action =
 			type: 'SET_SALESFORCE_CASE_ID';
 			caseId: string;
 	  }
-	| AddressAction
+	| {
+			type: 'ON_DELIVERY_COUNTRY_CHANGED';
+			country: string;
+	  }
 	| PayPalAction
 	| DDAction;
 
@@ -152,6 +165,11 @@ const setSubmissionError = (error: ErrorReason): Action => ({
 const setFormSubmitted = (formSubmitted: boolean): Action => ({
 	type: 'SET_FORM_SUBMITTED',
 	formSubmitted,
+});
+
+const onDeliveryCountryChanged = (country: string): Action => ({
+	type: 'ON_DELIVERY_COUNTRY_CHANGED',
+	country,
 });
 
 const formActionCreators = {
@@ -258,6 +276,24 @@ function setCsrCustomerData(
 	};
 }
 
+function addressActionCreatorsFor(addressType: AddressType) {
+	return addressType === 'billing'
+		? {
+				setCountry: setBillingCountry,
+				setAddressLineOne: setBillingAddressLineOne,
+				setTownCity: setBillingTownCity,
+				setPostcode: setBillingPostcode,
+				setState: setBillingState,
+		  }
+		: {
+				setCountry: setDeliveryCountry,
+				setAddressLineOne: setDeliveryAddressLineOne,
+				setTownCity: setDeliveryTownCity,
+				setPostcode: setDeliveryPostcode,
+				setState: setDeliveryState,
+		  };
+}
+
 export type FormActionCreators = typeof formActionCreators;
 export {
 	setStage,
@@ -265,5 +301,6 @@ export {
 	setSubmissionError,
 	setFormSubmitted,
 	setCsrCustomerData,
+	onDeliveryCountryChanged,
 	formActionCreators,
 };

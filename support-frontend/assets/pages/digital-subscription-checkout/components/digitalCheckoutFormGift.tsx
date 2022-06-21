@@ -79,7 +79,7 @@ function mapStateToProps(state: CheckoutState) {
 			state.page.checkout.billingPeriod,
 		).price,
 		billingPeriod: state.page.checkout.billingPeriod as DigitalBillingPeriod,
-		addressErrors: state.page.billingAddress.fields.formErrors,
+		addressErrors: state.page.checkoutForm.billingAddress.fields.errors,
 		participations: state.common.abParticipations,
 	};
 }

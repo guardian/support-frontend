@@ -10,10 +10,9 @@ import { postIntroductorySixForSixBillingPeriod } from 'helpers/productPrice/bil
 import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
-import type { CommonState } from 'helpers/redux/commonState/state';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getQueryParameter } from 'helpers/urls/url';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
@@ -35,9 +34,8 @@ const initialBillingPeriod: WeeklyBillingPeriod =
 		: postIntroductorySixForSixBillingPeriod;
 const startDate = formatMachineDate(getWeeklyDays()[0]);
 
-const reducer = (commonState: CommonState) =>
-	createWithDeliveryCheckoutReducer(
-		commonState.internationalisation.countryId,
+const reducer = () =>
+	createReducer(
 		GuardianWeekly,
 		initialBillingPeriod,
 		startDate,
