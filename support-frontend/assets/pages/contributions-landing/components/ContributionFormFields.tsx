@@ -5,11 +5,10 @@ import { connect } from 'react-redux';
 import Signout from 'components/signout/signout';
 import {
 	checkBillingState,
-	checkEmail,
-	checkFirstName,
-	checkLastName,
 	emailRegexPattern,
 } from 'helpers/forms/formValidation';
+import { applyPersonalDetailsRules } from 'helpers/subscriptionsForms/rules';
+import { firstError } from 'helpers/subscriptionsForms/validation';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
 	setEmail,
@@ -52,6 +51,8 @@ const mapStateToProps = (state: State) => ({
 			state.page.user.stateField,
 		) ?? '',
 	isSignedIn: state.page.checkoutForm.personalDetails.isSignedIn,
+	userTypeFromIdentityResponse:
+		state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
 	contributionType: state.page.form.contributionType,
 });
 
@@ -75,12 +76,26 @@ function ContributionFormFields({
 	billingState,
 	checkoutFormHasBeenSubmitted,
 	isSignedIn,
+	userTypeFromIdentityResponse,
 	contributionType,
 	setFirstName,
 	setLastName,
 	setEmail,
 	updateBillingState,
 }: ContributionFormFieldProps) {
+	const formErrors = applyPersonalDetailsRules({
+		firstName,
+		lastName,
+		email,
+		isSignedIn,
+		userTypeFromIdentityResponse,
+	});
+
+	const getFormFieldError = (formField: string) =>
+		checkoutFormHasBeenSubmitted
+			? firstError(formField, formErrors)
+			: undefined;
+
 	return (
 		<div className="form-fields">
 			<h3 className="hidden-heading">Your details</h3>
@@ -100,11 +115,7 @@ function ContributionFormFields({
 					supporting="example@domain.com"
 					onChange={(e) => setEmail(e.target.value)}
 					pattern={emailRegexPattern}
-					error={
-						checkoutFormHasBeenSubmitted && !checkEmail(email)
-							? 'Please provide a valid email address'
-							: undefined
-					}
+					error={getFormFieldError('email')}
 					disabled={isSignedIn}
 				/>
 			</div>
@@ -126,11 +137,7 @@ function ContributionFormFields({
 							autoComplete="given-name"
 							autoCapitalize="words"
 							onChange={(e) => setFirstName(e.target.value)}
-							error={
-								checkoutFormHasBeenSubmitted && !checkFirstName(firstName)
-									? 'Please provide a valid first name'
-									: undefined
-							}
+							error={getFormFieldError('firstName')}
 							required
 						/>
 					</div>
@@ -148,11 +155,7 @@ function ContributionFormFields({
 							autoComplete="family-name"
 							autoCapitalize="words"
 							onChange={(e) => setLastName(e.target.value)}
-							error={
-								checkoutFormHasBeenSubmitted && !checkLastName(lastName)
-									? 'Please provide a valid last name'
-									: undefined
-							}
+							error={getFormFieldError('lastName')}
 							required
 						/>
 					</div>
