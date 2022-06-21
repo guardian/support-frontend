@@ -49,10 +49,7 @@ import {
 } from 'helpers/subscriptionsForms/submit';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
-import {
-	SendEventCheckoutStart,
-	sendEventSubscriptionCheckoutStart,
-} from 'helpers/tracking/quantumMetric';
+import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import { withError } from 'hocs/withError';
@@ -131,7 +128,8 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 
 	useEffect(() => {
 		sendEventSubscriptionCheckoutStart(
-			SendEventCheckoutStart.DigiSubGift,
+			props.product,
+			true,
 			productPrice,
 			props.billingPeriod,
 		);

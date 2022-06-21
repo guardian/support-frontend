@@ -10,7 +10,7 @@ SeleniumTest / testOptions := Seq(Tests.Filter(seleniumTestFilter))
 Test / testOptions ++= Seq(Tests.Filter(unitTestFilter))
 
 libraryDependencies ++= Seq(
-  "com.typesafe" % "config" % "1.3.4",
+  "com.typesafe" % "config" % "1.4.2",
   "com.gu" %% "simple-configuration-ssm" % "1.5.7",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
@@ -29,16 +29,16 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.9.9",
   "com.gu.identity" %% "identity-auth-play" % "3.255",
   "com.gu" %% "identity-test-users" % "0.8",
-  "com.google.guava" % "guava" % "29.0-jre",
+  "com.google.guava" % "guava" % "31.1-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.gu.play-googleauth" %% "play-v28" % "2.2.6",
-  "io.github.bonigarcia" % "webdrivermanager" % "3.3.0" % "test",
+  "io.github.bonigarcia" % "webdrivermanager" % "3.8.1" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % "test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "org.scalatestplus" %% "scalatestplus-selenium" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "3.14.9",
-  "com.gocardless" % "gocardless-pro" % "2.8.0",
-  "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.4",
+  "com.gocardless" % "gocardless-pro" % "2.10.0",
+  "com.googlecode.libphonenumber" % "libphonenumber" % "8.10.23",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,

@@ -55,6 +55,7 @@ import {
 	getDeliveryAddressFields,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
+import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
@@ -148,33 +149,19 @@ function getGiftRecipient(giftingState: GiftingState) {
 function buildRegularPaymentRequest(
 	state: AnyCheckoutState,
 	paymentAuthorisation: PaymentAuthorisation,
+	addresses: Addresses,
+	promotions?: Promotion[],
 	currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
 	const { title, firstName, lastName, email, telephone } =
 		state.page.checkoutForm.personalDetails;
-	const {
-		billingPeriod,
-		fulfilmentOption,
-		productOption,
-		productPrices,
-		deliveryInstructions,
-		csrUsername,
-		salesforceCaseId,
-		debugInfo,
-	} = state.page.checkout;
-	const addresses = getAddresses(state);
-	const price = getProductPrice(
-		productPrices,
-		addresses.billingAddress.country,
-		billingPeriod,
-		fulfilmentOption,
-		productOption,
-	);
+	const { deliveryInstructions, csrUsername, salesforceCaseId, debugInfo } =
+		state.page.checkout;
 	const product = getProduct(state, currencyId);
 	const paymentFields =
 		regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
-	const promoCode = getPromoCode(price.promotions);
+	const promoCode = getPromoCode(promotions);
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
 	return {
 		title,
@@ -207,14 +194,26 @@ function onPaymentAuthorised(
 	state: AnyCheckoutState,
 	currencyId?: Option<IsoCurrency>,
 ): void {
+	const { billingPeriod, fulfilmentOption, productOption, productPrices } =
+		state.page.checkout;
+	const { product, paymentMethod, orderIsAGift } = state.page.checkout;
+	const { csrf } = state.page.checkoutForm;
+	const { abParticipations } = state.common;
+	const addresses = getAddresses(state);
+	const productPrice = getProductPrice(
+		productPrices,
+		addresses.billingAddress.country,
+		billingPeriod,
+		fulfilmentOption,
+		productOption,
+	);
 	const data = buildRegularPaymentRequest(
 		state,
 		paymentAuthorisation,
+		addresses,
+		productPrice.promotions,
 		currencyId,
 	);
-	const { product, paymentMethod } = state.page.checkout;
-	const { csrf } = state.page.checkoutForm;
-	const { abParticipations } = state.common;
 
 	const handleSubscribeResult = (result: PaymentResult) => {
 		if (result.paymentStatus === 'success') {
@@ -223,6 +222,13 @@ function onPaymentAuthorised(
 			} else {
 				dispatch(setStage('thankyou', product, paymentMethod));
 			}
+			// Notify Quantum Metric of successfull subscription conversion
+			sendEventSubscriptionCheckoutConversion(
+				product,
+				!!orderIsAGift,
+				productPrice,
+				billingPeriod,
+			);
 		} else if (result.error) {
 			dispatch(setSubmissionError(result.error));
 		}
@@ -380,7 +386,6 @@ function submitCheckoutForm(
 // ----- Export ----- //
 export {
 	onPaymentAuthorised,
-	buildRegularPaymentRequest,
 	showPaymentMethod,
 	submitCheckoutForm,
 	submitWithDeliveryForm,

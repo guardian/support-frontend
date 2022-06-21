@@ -60,10 +60,7 @@ import {
 } from 'helpers/subscriptionsForms/submit';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
-import {
-	SendEventCheckoutStart,
-	sendEventSubscriptionCheckoutStart,
-} from 'helpers/tracking/quantumMetric';
+import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { titles } from 'helpers/user/details';
 import { signOut } from 'helpers/user/user';
@@ -174,7 +171,8 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 
 	useEffect(() => {
 		sendEventSubscriptionCheckoutStart(
-			SendEventCheckoutStart.GuardianWeeklySubGift,
+			props.product,
+			true,
 			price,
 			props.billingPeriod,
 		);
