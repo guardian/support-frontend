@@ -753,9 +753,7 @@ function regularPaymentRequestFromAuthorisation(
 		authorisation,
 		state,
 	);
-
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
-	const isDirectDebitPayment = state.page.form.paymentMethod === 'DirectDebit';
 
 	const amount = getAmount(
 		state.page.form.selectedAmounts,
@@ -790,11 +788,13 @@ function regularPaymentRequestFromAuthorisation(
 				state.page.form.contributionType === 'MONTHLY' ? Monthly : Annual,
 		},
 		firstDeliveryDate: null,
-		paymentFields: regularPaymentFieldsFromAuthorisation(authorisation),
+		paymentFields: {
+			...regularPaymentFieldsFromAuthorisation(authorisation),
+			recaptchaToken,
+		},
 		ophanIds: getOphanIds(),
 		referrerAcquisitionData: state.common.referrerAcquisitionData,
 		supportAbTests: getSupportAbTests(state.common.abParticipations),
-		...(isDirectDebitPayment ? { recaptchaToken } : {}),
 		debugInfo: 'contributions does not collect redux state',
 	};
 }

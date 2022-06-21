@@ -92,6 +92,7 @@ type RegularDirectDebitPaymentFields = {
 	accountHolderName: string;
 	sortCode: string;
 	accountNumber: string;
+	recaptchaToken?: string;
 };
 type RegularSepaPaymentFields = {
 	accountHolderName: string;
