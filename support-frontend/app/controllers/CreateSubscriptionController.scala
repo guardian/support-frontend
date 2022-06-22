@@ -58,7 +58,6 @@ class CreateSubscriptionController(
   def create: EssentialAction =
     LoggingAndAlarmOnFailure {
       MaybeAuthenticatedAction.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
-
         val errorOrStatusResponse = for {
           _ <- getRecaptchaTokenFromRequest(request) match {
             case Some(token) => validateRecaptcha(token, testUsers.isTestUser(request))
