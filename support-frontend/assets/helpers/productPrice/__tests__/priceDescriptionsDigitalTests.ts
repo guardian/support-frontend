@@ -40,9 +40,9 @@ const productPriceAnnualWithDiscount: ProductPrice = {
 	fixedTerm: false,
 	promotions: [
 		{
-			name: 'Introductory Promotion UK',
+			name: 'Introductory Promotion Global',
 			description: '16% off for the first year',
-			promoCode: 'ANNUAL-INTRO-UK',
+			promoCode: 'ANNUAL-INTRO-GLOBAL',
 			discountedPrice: 99,
 			numberOfDiscountedPeriods: 1,
 			discount: {
