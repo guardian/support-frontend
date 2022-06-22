@@ -21,7 +21,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventContributionAmountToggled } from 'helpers/tracking/quantumMetric';
+import { sendEventContributionAmountUpdated } from 'helpers/tracking/quantumMetric';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
 	selectAmount,
@@ -96,7 +96,7 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 		) =>
 		() => {
 			dispatch(selectAmount(amount, contributionType));
-			sendEventContributionAmountToggled(amount, contributionType, currency);
+			sendEventContributionAmountUpdated(amount, contributionType, currency);
 			trackComponentClick(
 				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`,
 			);
@@ -191,12 +191,23 @@ function ContributionAmount(props: PropTypes) {
 								props.contributionType,
 							)
 						}
-						onBlur={() =>
-							!!otherAmount &&
-							trackComponentClick(
-								`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`,
-							)
-						}
+						onBlur={() => {
+							if (otherAmount) {
+								trackComponentClick(
+									`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`,
+								);
+
+								const otherAmountNumber = parseInt(otherAmount, 10);
+
+								if (typeof otherAmountNumber === 'number') {
+									sendEventContributionAmountUpdated(
+										otherAmountNumber,
+										props.contributionType,
+										props.currency,
+									);
+								}
+							}
+						}}
 						error={otherAmountErrorMessage}
 						autoComplete="off"
 						autoFocus

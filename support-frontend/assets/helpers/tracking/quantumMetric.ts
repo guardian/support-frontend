@@ -178,7 +178,7 @@ export function sendEventSubscriptionCheckoutConversion(
 	}
 }
 
-export function sendEventContributionAmountToggled(
+export function sendEventContributionAmountUpdated(
 	amount: number | 'other',
 	contributionType: ContributionType,
 	sourceCurrency: IsoCurrency,
