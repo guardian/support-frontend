@@ -11,9 +11,9 @@ export const productPrices: ProductPrices = {
 						fixedTerm: false,
 						promotions: [
 							{
-								name: 'Introductory Promotion UK',
+								name: 'Introductory Promotion Global',
 								description: 'Save over 20% against monthly in the first year',
-								promoCode: 'ANNUAL-INTRO-UK',
+								promoCode: 'ANNUAL-INTRO-GLOBAL',
 								discountedPrice: 99,
 								numberOfDiscountedPeriods: 1,
 								discount: {

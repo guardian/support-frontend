@@ -10,12 +10,7 @@ object DefaultPromotions {
 
     object Annual {
       def all = List(
-        "ANNUAL-INTRO-EU",
-        "ANNUAL-INTRO-UK",
-        "ANNUAL-INTRO-US",
-        "ANNUAL-INTRO-NZ",
-        "ANNUAL-INTRO-CA",
-        "ANNUAL-INTRO-AU",
+        "ANNUAL-INTRO-GLOBAL",
       )
     }
     def all: List[PromoCode] = Monthly.all ++ Annual.all
