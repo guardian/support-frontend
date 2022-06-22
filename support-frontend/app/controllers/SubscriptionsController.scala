@@ -24,16 +24,16 @@ import views.ViewHelpers.outputJson
 import scala.concurrent.{ExecutionContext, Future}
 
 class SubscriptionsController(
-  val actionRefiners: CustomActionBuilders,
-  priceSummaryServiceProvider: PriceSummaryServiceProvider,
-  val assets: AssetsResolver,
-  components: ControllerComponents,
-  stringsConfig: StringsConfig,
-  settingsProvider: AllSettingsProvider,
-  val supportUrl: String,
-  propensityDynamoTable: DynamoTableAsync,
+    val actionRefiners: CustomActionBuilders,
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    val assets: AssetsResolver,
+    components: ControllerComponents,
+    stringsConfig: StringsConfig,
+    settingsProvider: AllSettingsProvider,
+    val supportUrl: String,
+    propensityDynamoTable: DynamoTableAsync,
 )(implicit val ec: ExecutionContext)
-  extends AbstractController(components)
+    extends AbstractController(components)
     with GeoRedirect
     with CanonicalLinks
     with SettingsSurrogateKeySyntax {
@@ -126,12 +126,13 @@ class SubscriptionsController(
       recommendedProduct <- OptionT.fromOption[Future](productDyamoValue match {
         case DynamoLookup.DynamoString(string) => Some(string)
         case _ => None
-      }
-      )
+      })
     } yield recommendedProduct
-    val jsLine = maybeProductToSuggest.map { product =>
-      s"""window.guardian.propensityProduct = "$product""""
-    }.getOrElse("// no propensityProduct")
+    val jsLine = maybeProductToSuggest
+      .map { product =>
+        s"""window.guardian.propensityProduct = "$product""""
+      }
+      .getOrElse("// no propensityProduct")
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | Get a Subscription"
     val mainElement = EmptyDiv("subscriptions-landing-page")
@@ -150,7 +151,7 @@ class SubscriptionsController(
             s"""<script type="text/javascript">
               window.guardian.pricingCopy = ${outputJson(pricingCopy)}
               $jsLine
-            </script>"""
+            </script>""",
           )
         },
       ).withSettingsSurrogateKey
