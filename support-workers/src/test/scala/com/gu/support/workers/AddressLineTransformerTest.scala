@@ -19,6 +19,7 @@ class AddressLineTransformerTest extends AnyFlatSpec with Matchers with MockitoS
     accountHolderName = "oscar the grouch",
     sortCode = "200000",
     accountNumber = "55779911",
+    recaptchaToken = "test",
   )
 
   "combinedAddressLine" should "return an AddressLine when there is only a lineOne" in {
