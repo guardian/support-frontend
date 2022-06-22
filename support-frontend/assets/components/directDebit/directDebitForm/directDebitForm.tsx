@@ -20,6 +20,7 @@ import {
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
+import { Recaptcha } from 'components/recaptcha/recaptcha';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
@@ -212,7 +213,7 @@ function RecaptchaInput(props: { id: string }) {
 			>
 				Security check:
 			</label>
-			<div id={props.id} />
+			<Recaptcha id={props.id} />
 		</div>
 	);
 }
