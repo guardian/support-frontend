@@ -4,9 +4,9 @@ export type RecaptchaProps = {
 	id?: string;
 };
 
-export function Recaptcha(
-	{ id }: RecaptchaProps = { id: 'robot_checkbox' },
-): JSX.Element {
+export function Recaptcha({
+	id = 'robot_checkbox',
+}: RecaptchaProps): JSX.Element {
 	return (
 		<>
 			<div id={id} className="robot_checkbox" />
