@@ -32,7 +32,7 @@ enum SendEventCheckoutConversion {
 	GuardianWeeklySubGift = 70,
 }
 
-enum SendEventContributionAmountToggle {
+enum SendEventContributionAmountUpdate {
 	SingleContribution = 71,
 	RecurringContribution = 72,
 }
@@ -41,7 +41,7 @@ type SendEventId =
 	| SendEventTestParticipationId
 	| SendEventCheckoutStart
 	| SendEventCheckoutConversion
-	| SendEventContributionAmountToggle;
+	| SendEventContributionAmountUpdate;
 
 // ---- sendEvent logic ---- //
 
@@ -193,8 +193,8 @@ export function sendEventContributionAmountUpdated(
 				if (window.QuantumMetricAPI?.isOn()) {
 					const sendEventId =
 						contributionType === 'ONE_OFF'
-							? SendEventContributionAmountToggle.SingleContribution
-							: SendEventContributionAmountToggle.RecurringContribution;
+							? SendEventContributionAmountUpdate.SingleContribution
+							: SendEventContributionAmountUpdate.RecurringContribution;
 					const valueInPence =
 						contributionType === 'ONE_OFF' || contributionType === 'ANNUAL'
 							? amount * 100
