@@ -102,7 +102,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
       setValue(sortCode1, "20")
       setValue(sortCode2, "00")
       setValue(sortCode3, "00")
-			clickRecaptcha
+      clickRecaptcha
       clickOn(confirmation)
       clickOn(submitButton)
     }
