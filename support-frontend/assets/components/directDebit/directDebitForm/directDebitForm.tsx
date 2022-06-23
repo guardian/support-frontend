@@ -29,7 +29,10 @@ import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
-import { setRecaptchaToken } from 'helpers/redux/checkout/recaptcha/actions';
+import {
+	expireRecaptchaToken,
+	setRecaptchaToken,
+} from 'helpers/redux/checkout/recaptcha/actions';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import './directDebitForm.scss';
 
@@ -58,6 +61,7 @@ const mapDispatchToProps = {
 	updateAccountHolderName,
 	updateAccountHolderConfirmation,
 	setRecaptchaToken,
+	expireRecaptchaToken,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -71,7 +75,11 @@ const recaptchaId = 'robot_checkbox';
 
 // ----- Component ----- //
 function DirectDebitForm(props: PropTypes) {
-	useRecaptchaV2(recaptchaId, props.setRecaptchaToken);
+	useRecaptchaV2(
+		recaptchaId,
+		props.setRecaptchaToken,
+		props.expireRecaptchaToken,
+	);
 
 	return (
 		<div className="component-direct-debit-form">
@@ -211,7 +219,7 @@ function RecaptchaInput(props: { id: string }) {
 				htmlFor={props.id}
 				className="component-direct-debit-form__field-label"
 			>
-				Security check:
+				Security check
 			</label>
 			<Recaptcha id={props.id} />
 		</div>

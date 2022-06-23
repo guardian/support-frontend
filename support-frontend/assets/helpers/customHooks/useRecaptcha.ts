@@ -9,6 +9,7 @@ type RecaptchaHookData = {
 export function useRecaptchaV2(
 	placeholderId: string,
 	onCompletionCallback: (token: string) => void,
+	onExpireCallback?: () => void,
 ): RecaptchaHookData {
 	const [hasLoaded, setHasLoaded] = useState(false);
 
@@ -19,6 +20,7 @@ export function useRecaptchaV2(
 				window.grecaptcha?.render(placeholderId, {
 					sitekey: window.guardian.v2recaptchaPublicKey,
 					callback: onCompletionCallback,
+					'expired-callback': onExpireCallback,
 				});
 			};
 			void loadRecaptchaV2();

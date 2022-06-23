@@ -10,6 +10,10 @@ export const recaptchaSlice = createSlice({
 			state.token = action.payload;
 			state.completed = true;
 		},
+		expireRecaptchaToken(state) {
+			state.token = '';
+			state.completed = false;
+		},
 	},
 });
 

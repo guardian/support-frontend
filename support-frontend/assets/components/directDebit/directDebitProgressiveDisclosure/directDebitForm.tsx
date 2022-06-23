@@ -15,7 +15,10 @@ import {
 } from 'components/directDebit/directDebitActions';
 import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import { setRecaptchaToken } from 'helpers/redux/checkout/recaptcha/actions';
+import {
+	expireRecaptchaToken,
+	setRecaptchaToken,
+} from 'helpers/redux/checkout/recaptcha/actions';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { nonSillyCharacters } from 'helpers/subscriptionsForms/validation';
 import Form from './components/form';
@@ -67,6 +70,9 @@ function mapDispatchToProps(
 		setRecaptchaToken: (token: string) => {
 			dispatch(setRecaptchaToken(token));
 		},
+		expireRecaptchaToken: () => {
+			dispatch(expireRecaptchaToken());
+		},
 	};
 }
 
@@ -103,7 +109,11 @@ const fieldValidationFunctions: {
 const recaptchaId = 'robot_checkbox';
 
 function DirectDebitForm(props: PropTypes) {
-	useRecaptchaV2(recaptchaId, props.setRecaptchaToken);
+	useRecaptchaV2(
+		recaptchaId,
+		props.setRecaptchaToken,
+		props.expireRecaptchaToken,
+	);
 	const [fieldErrors, setFieldErrors] = useState<
 		Record<DirectDebitFieldName, string>
 	>({
