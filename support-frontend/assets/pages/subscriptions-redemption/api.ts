@@ -107,7 +107,7 @@ function validateUserCode(
 	}
 }
 
-export function validateFormFields(
+function validateFormFields(
 	dispatch: RedemptionDispatch,
 	state: RedemptionPageState,
 ): boolean | void {
