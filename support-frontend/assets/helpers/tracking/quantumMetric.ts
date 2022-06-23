@@ -50,7 +50,6 @@ function sendEvent(
 	isConversion: boolean,
 	value: string,
 ): void {
-	console.log('sendEvent --->', id, isConversion, value);
 	if (window.QuantumMetricAPI?.isOn()) {
 		window.QuantumMetricAPI.sendEvent(id, isConversion ? 1 : 0, value);
 	}
