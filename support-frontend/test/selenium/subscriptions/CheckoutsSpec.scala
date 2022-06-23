@@ -46,11 +46,11 @@ class CheckoutsSpec
     }
   }
 
-//  Feature("Paper checkout") {
-//    Scenario("User already logged in - Direct Debit checkout") {
-//      testCheckout("Paper", new PaperCheckout, new PaperProductPage, payWithDirectDebit)
-//    }
-//  }
+  Feature("Paper checkout") {
+    Scenario("User already logged in - Direct Debit checkout") {
+      testCheckout("Paper", new PaperCheckout, new PaperProductPage, payWithDirectDebit)
+    }
+  }
 
   Feature("Guardian Weekly checkout") {
     Scenario("User already logged in - Stripe checkout") {
@@ -58,16 +58,16 @@ class CheckoutsSpec
     }
   }
 
-//  Feature("Guardian Weekly gift checkout") {
-//    Scenario("User already logged in - Direct Debit checkout") {
-//      testCheckout(
-//        "Guardian Weekly gift",
-//        new GuardianWeeklyGiftCheckout,
-//        new WeeklyGiftProductPage,
-//        payWithDirectDebit,
-//      )
-//    }
-//  }
+  Feature("Guardian Weekly gift checkout") {
+    Scenario("User already logged in - Direct Debit checkout") {
+      testCheckout(
+        "Guardian Weekly gift",
+        new GuardianWeeklyGiftCheckout,
+        new WeeklyGiftProductPage,
+        payWithDirectDebit,
+      )
+    }
+  }
 
   def testCheckout(
       checkoutName: String,
