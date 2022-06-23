@@ -17,7 +17,7 @@ import type {
 	RedemptionDispatch,
 	RedemptionPageState,
 } from 'helpers/redux/redemptionsStore';
-import { applyRedemptionRules } from 'helpers/subscriptionsForms/rules';
+import { applyPersonalDetailsRules } from 'helpers/subscriptionsForms/rules';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
@@ -110,8 +110,8 @@ function validateUserCode(
 function validateFormFields(
 	dispatch: RedemptionDispatch,
 	state: RedemptionPageState,
-) {
-	const formFieldErrors = applyRedemptionRules(
+): boolean | void {
+	const formFieldErrors = applyPersonalDetailsRules(
 		state.page.checkoutForm.personalDetails,
 	);
 
