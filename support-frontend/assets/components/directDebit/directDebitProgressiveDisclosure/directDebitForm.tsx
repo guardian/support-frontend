@@ -1,10 +1,10 @@
 // ----- Imports ----- //
+import type { AnyAction } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';
-import type { Action } from 'components/directDebit/directDebitActions';
 import {
 	payDirectDebitClicked,
 	setDirectDebitFormPhase,
@@ -13,7 +13,12 @@ import {
 	updateAccountNumber,
 	updateSortCodeString,
 } from 'components/directDebit/directDebitActions';
+import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import {
+	expireRecaptchaToken,
+	setRecaptchaToken,
+} from 'helpers/redux/checkout/recaptcha/actions';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { nonSillyCharacters } from 'helpers/subscriptionsForms/validation';
 import Form from './components/form';
@@ -27,6 +32,7 @@ function mapStateToProps(state: CheckoutState) {
 		accountNumber: state.page.directDebit.accountNumber,
 		accountHolderName: state.page.directDebit.accountHolderName,
 		accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
+		recaptchaCompleted: state.page.checkoutForm.recaptcha.completed,
 		formError: state.page.directDebit.formError,
 		countryGroupId: state.common.internationalisation.countryGroupId,
 		phase: state.page.directDebit.phase,
@@ -34,7 +40,7 @@ function mapStateToProps(state: CheckoutState) {
 }
 
 function mapDispatchToProps(
-	dispatch: ThunkDispatch<CheckoutState, void, Action>,
+	dispatch: ThunkDispatch<CheckoutState, void, AnyAction>,
 ) {
 	return {
 		payDirectDebitClicked: () => {
@@ -61,6 +67,12 @@ function mapDispatchToProps(
 			const accountHolderConfirmation: boolean = event.target.checked;
 			dispatch(updateAccountHolderConfirmation(accountHolderConfirmation));
 		},
+		setRecaptchaToken: (token: string) => {
+			dispatch(setRecaptchaToken(token));
+		},
+		expireRecaptchaToken: () => {
+			dispatch(expireRecaptchaToken());
+		},
 	};
 }
 
@@ -79,6 +91,7 @@ const fieldErrorMessages: { [key in DirectDebitFieldName]: string } = {
 	sortCodeString: 'Please enter a valid sort code',
 	accountNumber: 'Please enter a valid account number',
 	accountHolderConfirmation: 'Please confirm you are the account holder',
+	recaptcha: "Please check the 'I'm not a robot' checkbox",
 };
 
 const fieldValidationFunctions: {
@@ -89,10 +102,18 @@ const fieldValidationFunctions: {
 	sortCodeString: (fieldValue) => !!/^\d{6}$/.exec(fieldValue),
 	accountNumber: (fieldValue) => !!/^\d{6,8}$/.exec(fieldValue),
 	accountHolderConfirmation: (fieldValue) => !!fieldValue,
+	recaptcha: (completed) => !!completed,
 };
 
 // ----- Component ----- //
+const recaptchaId = 'robot_checkbox';
+
 function DirectDebitForm(props: PropTypes) {
+	useRecaptchaV2(
+		recaptchaId,
+		props.setRecaptchaToken,
+		props.expireRecaptchaToken,
+	);
 	const [fieldErrors, setFieldErrors] = useState<
 		Record<DirectDebitFieldName, string>
 	>({
@@ -100,6 +121,7 @@ function DirectDebitForm(props: PropTypes) {
 		sortCodeString: '',
 		accountNumber: '',
 		accountHolderConfirmation: '',
+		recaptcha: '',
 	});
 	const [allErrors, setAllErrors] = useState<Array<Record<string, string>>>([]);
 	const [userHasSubmitted, setUserHasSubmitted] = useState<boolean>(false);
@@ -145,6 +167,11 @@ function DirectDebitForm(props: PropTypes) {
 				)
 					? ''
 					: fieldErrorMessages.accountHolderConfirmation,
+			recaptcha: fieldValidationFunctions.recaptcha(
+				props.recaptchaCompleted ? 'true' : '',
+			)
+				? ''
+				: fieldErrorMessages.recaptcha,
 		};
 		setFieldErrors(updatedFieldErrors);
 		setAllErrors(
@@ -167,11 +194,19 @@ function DirectDebitForm(props: PropTypes) {
 		}
 	}, [allErrors, userHasSubmitted]);
 
+	useEffect(() => {
+		setFieldErrors({
+			...fieldErrors,
+			recaptcha: '',
+		});
+	}, [props.recaptchaCompleted]);
+
 	return (
 		<span>
 			{props.phase === 'entry' && (
 				<Form
 					{...props}
+					recaptchaId={recaptchaId}
 					showGeneralError={!!props.formError || !!props.submissionError}
 					accountErrors={allErrors}
 					accountErrorsLength={allErrors.length}
@@ -179,6 +214,7 @@ function DirectDebitForm(props: PropTypes) {
 					accountNumberError={fieldErrors.accountNumber}
 					sortCodeError={fieldErrors.sortCodeString}
 					accountHolderConfirmationError={fieldErrors.accountHolderConfirmation}
+					recaptchaError={fieldErrors.recaptcha}
 					onSubmit={handleErrorsAndCheckAccount}
 					onChange={onChange}
 				/>

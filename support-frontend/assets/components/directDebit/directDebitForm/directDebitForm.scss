@@ -147,6 +147,13 @@
 	margin-top: 18px;
 }
 
+.component-direct-debit-form__recaptcha {
+	margin-top: 25px;
+	margin-bottom: 5px;
+	// This is the set width of the recaptcha iframe, to fix the helper text below to the same size
+	max-width: 304px;
+}
+
 .component-direct-debit-form__cta-text {
 	color: gu-colour(neutral-7);
 	font-family: $gu-text-sans-web;

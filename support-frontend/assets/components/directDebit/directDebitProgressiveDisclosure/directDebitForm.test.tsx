@@ -6,8 +6,10 @@ import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import { setRecaptchaToken } from 'helpers/redux/checkout/recaptcha/actions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
+import type { SubscriptionsStore } from 'helpers/redux/subscriptionsStore';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
@@ -77,6 +79,8 @@ describe('Direct debit form', () => {
 	console.warn = jest.fn();
 	console.error = jest.fn();
 	let initialState;
+	let store: SubscriptionsStore;
+
 	beforeEach(() => {
 		initialState = {
 			page: {
@@ -121,6 +125,9 @@ describe('Direct debit form', () => {
 			},
 		};
 
+		//  @ts-expect-error Unused common state properties
+		store = setUpStore(initialState);
+
 		mockFetch({
 			accountValid: true,
 		});
@@ -136,8 +143,7 @@ describe('Direct debit form', () => {
 			{
 				//  @ts-expect-error Unused common state properties
 				initialState,
-				//  @ts-expect-error Unused common state properties
-				store: setUpStore(initialState),
+				store,
 			},
 		);
 	});
@@ -149,8 +155,12 @@ describe('Direct debit form', () => {
 				sortCode: '200000',
 				accountNumber: '11223344',
 			});
+			// Recaptcha is not rendered in tests so just update the store directly
+			store.dispatch(setRecaptchaToken('token'));
+
 			const submitButton = await screen.findByText('Confirm');
 			await act(async () => void fireEvent.click(submitButton));
+
 			expect(
 				screen.queryByText(
 					'If the details above are correct, press confirm to set up your direct debit, otherwise press back to make changes',

@@ -160,6 +160,7 @@ function buildRegularPaymentRequest(
 	const product = getProduct(state, currencyId);
 	const paymentFields =
 		regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
+	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const promoCode = getPromoCode(promotions);
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
 	return {
@@ -172,7 +173,10 @@ function buildRegularPaymentRequest(
 		telephoneNumber: telephone,
 		product,
 		firstDeliveryDate: state.page.checkout.startDate,
-		paymentFields,
+		paymentFields: {
+			...paymentFields,
+			recaptchaToken,
+		},
 		ophanIds: getOphanIds(),
 		referrerAcquisitionData: state.common.referrerAcquisitionData,
 		supportAbTests: getSupportAbTests(state.common.abParticipations),

@@ -21,6 +21,9 @@ import type { MarketingConsentState } from 'helpers/redux/checkout/marketingCons
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { productReducer } from 'helpers/redux/checkout/product/reducer';
+import type { ProductState } from 'helpers/redux/checkout/product/state';
+import { recaptchaReducer } from 'helpers/redux/checkout/recaptcha/reducer';
+import type { RecaptchaState } from 'helpers/redux/checkout/recaptcha/state';
 import type { CommonState } from 'helpers/redux/commonState/state';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
@@ -36,8 +39,10 @@ export type ReduxState<PageState> = {
 export type CheckoutFormState = {
 	personalDetails: PersonalDetailsState;
 	gifting: GiftingState;
+	product: ProductState;
 	marketingConsent: MarketingConsentState;
 	csrf: CsrfState;
+	recaptcha: RecaptchaState;
 };
 
 export type CheckoutState = ReduxState<{
@@ -85,6 +90,7 @@ function createReducer(
 			gifting: giftingReducer,
 			marketingConsent: marketingConsentReducer,
 			csrf: csrfReducer,
+			recaptcha: recaptchaReducer,
 		}),
 		user: createUserReducer(),
 		directDebit,

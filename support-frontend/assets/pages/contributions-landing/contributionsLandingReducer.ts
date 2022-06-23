@@ -28,6 +28,8 @@ import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/r
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { productReducer } from 'helpers/redux/checkout/product/reducer';
 import type { ProductState } from 'helpers/redux/checkout/product/state';
+import { recaptchaReducer } from 'helpers/redux/checkout/recaptcha/reducer';
+import type { RecaptchaState } from 'helpers/redux/checkout/recaptcha/state';
 import type { CommonState } from 'helpers/redux/commonState/state';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { User as UserState } from 'helpers/user/userReducer';
@@ -108,6 +110,7 @@ interface PageState {
 		product: ProductState;
 		marketingConsent: MarketingConsentState;
 		csrf: CsrfState;
+		recaptcha: RecaptchaState;
 	};
 	user: UserState;
 	directDebit: DirectDebitState;
@@ -553,6 +556,7 @@ function initReducer(): Reducer<PageState> {
 			product: productReducer,
 			marketingConsent: marketingConsentReducer,
 			csrf: csrfReducer,
+			recaptcha: recaptchaReducer,
 		}),
 		user: createUserReducer(),
 		directDebit,

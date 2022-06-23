@@ -92,6 +92,7 @@ type RegularDirectDebitPaymentFields = {
 	accountHolderName: string;
 	sortCode: string;
 	accountNumber: string;
+	recaptchaToken?: string;
 };
 type RegularSepaPaymentFields = {
 	accountHolderName: string;
@@ -152,6 +153,7 @@ export type RegularPaymentRequest = {
 	deliveryInstructions?: Option<string>;
 	csrUsername?: string;
 	salesforceCaseId?: string;
+	recaptchaToken?: string;
 	debugInfo: string;
 };
 export type StripePaymentIntentAuthorisation = {

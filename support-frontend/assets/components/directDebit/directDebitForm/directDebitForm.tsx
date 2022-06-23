@@ -20,13 +20,19 @@ import {
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
+import { Recaptcha } from 'components/recaptcha/recaptcha';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
+import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
+import {
+	expireRecaptchaToken,
+	setRecaptchaToken,
+} from 'helpers/redux/checkout/recaptcha/actions';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import './directDebitForm.scss';
 
@@ -54,6 +60,8 @@ const mapDispatchToProps = {
 	updateAccountNumber,
 	updateAccountHolderName,
 	updateAccountHolderConfirmation,
+	setRecaptchaToken,
+	expireRecaptchaToken,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -63,8 +71,16 @@ type PropTypes = ConnectedProps<typeof connector> & {
 	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void;
 };
 
+const recaptchaId = 'robot_checkbox';
+
 // ----- Component ----- //
 function DirectDebitForm(props: PropTypes) {
+	useRecaptchaV2(
+		recaptchaId,
+		props.setRecaptchaToken,
+		props.expireRecaptchaToken,
+	);
+
 	return (
 		<div className="component-direct-debit-form">
 			<AccountHolderNameInput
@@ -99,6 +115,8 @@ function DirectDebitForm(props: PropTypes) {
 				}
 				checked={props.accountHolderConfirmation}
 			/>
+
+			{props.phase === 'entry' && <RecaptchaInput id={recaptchaId} />}
 
 			<PaymentButton
 				buttonText={props.buttonText}
@@ -190,6 +208,20 @@ function AccountHolderNameInput(props: {
 				Account name
 			</label>
 			{props.phase === 'entry' ? editable : locked}
+		</div>
+	);
+}
+
+function RecaptchaInput(props: { id: string }) {
+	return (
+		<div className="component-direct-debit-form__recaptcha">
+			<label
+				htmlFor={props.id}
+				className="component-direct-debit-form__field-label"
+			>
+				Security check
+			</label>
+			<Recaptcha id={props.id} />
 		</div>
 	);
 }
