@@ -31,7 +31,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
 
   private val stripeOverlayIframe = cssSelector(".stripe_checkout_app")
 
-  private val stripeRecaptchaButton = id("robot_checkbox")
+  private val recaptchaButton = id("robot_checkbox")
 
   private object RegisterFields {
     private val firstName = id("contributionFirstName")
@@ -102,6 +102,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
       setValue(sortCode1, "20")
       setValue(sortCode2, "00")
       setValue(sortCode3, "00")
+      clickRecaptcha
       clickOn(confirmation)
       clickOn(submitButton)
     }
@@ -133,7 +134,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   }
 
   def clickRecaptcha: Unit = {
-    clickOn(stripeRecaptchaButton)
+    clickOn(recaptchaButton)
     waitForTestRecaptchaToComplete
   }
 
