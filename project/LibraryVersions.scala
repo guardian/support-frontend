@@ -8,7 +8,7 @@ object LibraryVersions {
   val jacksonVersion = "2.13.3"
   val jacksonDatabindVersion = "2.11.4"
   val okhttpVersion = "3.10.0"
-  val scalaUriVersion = "2.3.1"
+  val scalaUriVersion = "4.0.2"
   val playCirceVersion = "2814.2"
   val stripeVersion = "10.15.0" // Supports API version 2019-05-16
 }
