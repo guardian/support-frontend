@@ -5,11 +5,7 @@ import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
-import type {
-	ContributionType,
-	ThirdPartyPaymentLibraries,
-} from 'helpers/contributions';
-import { getContributionTypeFromSession } from 'helpers/forms/checkouts';
+import type { ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -74,7 +70,6 @@ export interface SepaData {
 }
 
 interface FormState {
-	contributionType: ContributionType;
 	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
 	thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries;
@@ -122,7 +117,6 @@ export interface State {
 function createFormReducer() {
 	// ----- Initial state ----- //
 	const initialState: FormState = {
-		contributionType: getContributionTypeFromSession() ?? 'MONTHLY',
 		paymentMethod: 'None',
 		thirdPartyPaymentLibraries: {
 			ONE_OFF: {
@@ -195,13 +189,6 @@ function createFormReducer() {
 		action: Action,
 	): FormState {
 		switch (action.type) {
-			case 'UPDATE_CONTRIBUTION_TYPE':
-				return {
-					...state,
-					contributionType: action.contributionType,
-					formData: { ...state.formData },
-				};
-
 			case 'UPDATE_PAYMENT_METHOD':
 				return { ...state, paymentMethod: action.paymentMethod };
 

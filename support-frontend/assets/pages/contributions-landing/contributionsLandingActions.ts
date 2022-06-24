@@ -5,11 +5,7 @@ import type { Dispatch } from 'redux';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import type { FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import type {
-	ContributionType,
-	PaymentMatrix,
-	SelectedAmounts,
-} from 'helpers/contributions';
+import type { ContributionType, PaymentMatrix } from 'helpers/contributions';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
 import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
@@ -96,28 +92,12 @@ import type { State, UserFormData } from './contributionsLandingReducer';
 
 export type Action =
 	| {
-			type: 'UPDATE_CONTRIBUTION_TYPE';
-			contributionType: ContributionType;
-	  }
-	| {
 			type: 'UPDATE_PAYMENT_METHOD';
 			paymentMethod: PaymentMethod;
 	  }
 	| {
 			type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD';
 			existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	  }
-	| {
-			type: 'UPDATE_FIRST_NAME';
-			firstName: string;
-	  }
-	| {
-			type: 'UPDATE_LAST_NAME';
-			lastName: string;
-	  }
-	| {
-			type: 'UPDATE_EMAIL';
-			email: string;
 	  }
 	| {
 			type: 'UPDATE_BILLING_STATE';
@@ -178,20 +158,6 @@ export type Action =
 	| {
 			type: 'UPDATE_RECAPTCHA_TOKEN';
 			recaptchaToken: string;
-	  }
-	| {
-			type: 'SELECT_AMOUNT';
-			amount: number | 'other';
-			contributionType: ContributionType;
-	  }
-	| {
-			type: 'SELECT_AMOUNTS';
-			amounts: SelectedAmounts;
-	  }
-	| {
-			type: 'UPDATE_OTHER_AMOUNT';
-			otherAmount: string;
-			contributionType: ContributionType;
 	  }
 	| {
 			type: 'PAYMENT_RESULT';
@@ -563,6 +529,7 @@ const sendFormSubmitEventForPayPalRecurring =
 		const state = getState();
 		const formSubmitParameters: FormSubmitParameters = {
 			...state.page.form,
+			contributionType: getContributionType(state),
 			flowPrefix: 'npf',
 			form: getForm('form--contribution'),
 			isSignedIn: state.page.user.isSignedIn,
