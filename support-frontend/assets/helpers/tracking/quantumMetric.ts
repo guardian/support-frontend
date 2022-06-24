@@ -40,7 +40,7 @@ enum SendEventContributionAmountUpdate {
 
 enum SendEventContributionCheckoutConversion {
 	SingleContribution = 73,
-	RecurringContribution = 4,
+	RecurringContribution = 74,
 }
 
 type SendEventId =
