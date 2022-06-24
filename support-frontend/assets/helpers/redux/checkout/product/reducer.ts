@@ -39,7 +39,8 @@ export const productSlice = createSlice({
 		},
 		setSelectedAmount(state, action: PayloadAction<AmountChange>) {
 			const { contributionType, amount } = action.payload;
-			state.selectedAmounts[contributionType] = Number.parseInt(amount);
+			const newAmount = amount === 'other' ? amount : Number.parseInt(amount);
+			state.selectedAmounts[contributionType] = newAmount;
 		},
 		setOtherAmount(state, action: PayloadAction<AmountChange>) {
 			const { contributionType, amount } = action.payload;
