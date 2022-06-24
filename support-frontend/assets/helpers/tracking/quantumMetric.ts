@@ -8,6 +8,7 @@ import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
 import {
 	canRunQuantumMetric,
+	getContributionAnnualValue,
 	getSubscriptionAnnualValue,
 	waitForQuantumMetricAPi,
 } from './quantumMetricHelpers';
@@ -16,7 +17,7 @@ import {
 
 type SendEventTestParticipationId = 30;
 
-enum SendEventCheckoutStart {
+enum SendEventSubscriptionCheckoutStart {
 	DigiSub = 75,
 	PaperSub = 76,
 	GuardianWeeklySub = 77,
@@ -24,7 +25,7 @@ enum SendEventCheckoutStart {
 	GuardianWeeklySubGift = 79,
 }
 
-enum SendEventCheckoutConversion {
+enum SendEventSubscriptionCheckoutConversion {
 	DigiSub = 31,
 	PaperSub = 67,
 	GuardianWeeklySub = 68,
@@ -37,11 +38,17 @@ enum SendEventContributionAmountUpdate {
 	RecurringContribution = 72,
 }
 
+enum SendEventContributionCheckoutConversion {
+	SingleContribution = 73,
+	RecurringContribution = 4,
+}
+
 type SendEventId =
 	| SendEventTestParticipationId
-	| SendEventCheckoutStart
-	| SendEventCheckoutConversion
-	| SendEventContributionAmountUpdate;
+	| SendEventSubscriptionCheckoutStart
+	| SendEventSubscriptionCheckoutConversion
+	| SendEventContributionAmountUpdate
+	| SendEventContributionCheckoutConversion;
 
 // ---- sendEvent logic ---- //
 
@@ -55,8 +62,28 @@ function sendEvent(
 	}
 }
 
+function sendEventWhenReadyTrigger(sendEventWhenReady: () => void): void {
+	/**
+	 * Quantum Metric's script sets up QuantumMetricAPI.
+	 * We need to check it is defined and ready before we can
+	 * send events to it. If it is ready we call sendEventWhenReady
+	 * immediately. If it is not ready we poll a function that checks
+	 * if QuantumMetricAPI is available. Once it's available we
+	 * call sendEventWhenReady.
+	 */
+	if (window.QuantumMetricAPI?.isOn()) {
+		sendEventWhenReady();
+	} else {
+		waitForQuantumMetricAPi(() => {
+			sendEventWhenReady();
+		});
+	}
+}
+
 function sendEventSubscriptionCheckoutEvent(
-	id: SendEventCheckoutStart | SendEventCheckoutConversion,
+	id:
+		| SendEventSubscriptionCheckoutStart
+		| SendEventSubscriptionCheckoutConversion,
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
 	isConversion: boolean,
@@ -81,21 +108,7 @@ function sendEventSubscriptionCheckoutEvent(
 				}
 			};
 
-			/**
-			 * Quantum Metric's script sets up QuantumMetricAPI.
-			 * We need to check it is defined and ready before we can
-			 * send events to it. If it is ready we call sendEventWhenReady
-			 * immediately. If it is not ready we poll a function that checks
-			 * if QuantumMetricAPI is available. Once it's available we
-			 * call sendEventWhenReady.
-			 */
-			if (window.QuantumMetricAPI?.isOn()) {
-				sendEventWhenReady();
-			} else {
-				waitForQuantumMetricAPi(() => {
-					sendEventWhenReady();
-				});
-			}
+			sendEventWhenReadyTrigger(sendEventWhenReady);
 		}
 	});
 }
@@ -108,35 +121,35 @@ function productToCheckoutEvents(
 		case 'DigitalPack':
 			return orderIsAGift
 				? checkoutEvents(
-						SendEventCheckoutStart.DigiSubGift,
-						SendEventCheckoutConversion.DigiSubGift,
+						SendEventSubscriptionCheckoutStart.DigiSubGift,
+						SendEventSubscriptionCheckoutConversion.DigiSubGift,
 				  )
 				: checkoutEvents(
-						SendEventCheckoutStart.DigiSub,
-						SendEventCheckoutConversion.DigiSub,
+						SendEventSubscriptionCheckoutStart.DigiSub,
+						SendEventSubscriptionCheckoutConversion.DigiSub,
 				  );
 		case 'GuardianWeekly':
 			return orderIsAGift
 				? checkoutEvents(
-						SendEventCheckoutStart.GuardianWeeklySubGift,
-						SendEventCheckoutConversion.GuardianWeeklySubGift,
+						SendEventSubscriptionCheckoutStart.GuardianWeeklySubGift,
+						SendEventSubscriptionCheckoutConversion.GuardianWeeklySubGift,
 				  )
 				: checkoutEvents(
-						SendEventCheckoutStart.GuardianWeeklySub,
-						SendEventCheckoutConversion.GuardianWeeklySub,
+						SendEventSubscriptionCheckoutStart.GuardianWeeklySub,
+						SendEventSubscriptionCheckoutConversion.GuardianWeeklySub,
 				  );
 		case 'Paper':
 		case 'PaperAndDigital':
 			return checkoutEvents(
-				SendEventCheckoutStart.PaperSub,
-				SendEventCheckoutConversion.PaperSub,
+				SendEventSubscriptionCheckoutStart.PaperSub,
+				SendEventSubscriptionCheckoutConversion.PaperSub,
 			);
 	}
 }
 
 function checkoutEvents(
-	start: SendEventCheckoutStart,
-	conversion: SendEventCheckoutConversion,
+	start: SendEventSubscriptionCheckoutStart,
+	conversion: SendEventSubscriptionCheckoutConversion,
 ) {
 	return { start, conversion };
 }
@@ -177,6 +190,33 @@ export function sendEventSubscriptionCheckoutConversion(
 	}
 }
 
+export function sendEventContributionCheckoutConversion(
+	amount: number,
+	contributionType: ContributionType,
+	sourceCurrency: IsoCurrency,
+): void {
+	void canRunQuantumMetric().then((canRun) => {
+		if (canRun) {
+			const sendEventWhenReady = () => {
+				const sendEventId =
+					contributionType === 'ONE_OFF'
+						? SendEventContributionCheckoutConversion.SingleContribution
+						: SendEventContributionCheckoutConversion.RecurringContribution;
+				const convertedValue = getContributionAnnualValue(
+					contributionType,
+					amount,
+					sourceCurrency,
+				);
+				if (convertedValue) {
+					sendEvent(sendEventId, true, convertedValue.toString());
+				}
+			};
+
+			sendEventWhenReadyTrigger(sendEventWhenReady);
+		}
+	});
+}
+
 export function sendEventContributionAmountUpdated(
 	amount: number | 'other',
 	contributionType: ContributionType,
@@ -189,41 +229,21 @@ export function sendEventContributionAmountUpdated(
 	void canRunQuantumMetric().then((canRun) => {
 		if (canRun) {
 			const sendEventWhenReady = () => {
-				if (window.QuantumMetricAPI?.isOn()) {
-					const sendEventId =
-						contributionType === 'ONE_OFF'
-							? SendEventContributionAmountUpdate.SingleContribution
-							: SendEventContributionAmountUpdate.RecurringContribution;
-					const valueInPence =
-						contributionType === 'ONE_OFF' || contributionType === 'ANNUAL'
-							? amount * 100
-							: amount * 100 * 12;
-					const targetCurrency: IsoCurrency = 'GBP';
-					const convertedValue: number =
-						window.QuantumMetricAPI.currencyConvertFromToValue(
-							valueInPence,
-							sourceCurrency,
-							targetCurrency,
-						);
+				const sendEventId =
+					contributionType === 'ONE_OFF'
+						? SendEventContributionAmountUpdate.SingleContribution
+						: SendEventContributionAmountUpdate.RecurringContribution;
+				const convertedValue = getContributionAnnualValue(
+					contributionType,
+					amount,
+					sourceCurrency,
+				);
+				if (convertedValue) {
 					sendEvent(sendEventId, false, convertedValue.toString());
 				}
 			};
 
-			/**
-			 * Quantum Metric's script sets up QuantumMetricAPI.
-			 * We need to check it is defined and ready before we can
-			 * send events to it. If it is ready we call sendEventWhenReady
-			 * immediately. If it is not ready we poll a function that checks
-			 * if QuantumMetricAPI is available. Once it's available we
-			 * call sendEventWhenReady.
-			 */
-			if (window.QuantumMetricAPI?.isOn()) {
-				sendEventWhenReady();
-			} else {
-				waitForQuantumMetricAPi(() => {
-					sendEventWhenReady();
-				});
-			}
+			sendEventWhenReadyTrigger(sendEventWhenReady);
 		}
 	});
 }
