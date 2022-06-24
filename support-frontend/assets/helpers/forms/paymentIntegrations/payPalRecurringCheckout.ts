@@ -5,6 +5,7 @@ import { PayPal } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import * as storage from 'helpers/storage/storage';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
@@ -84,7 +85,7 @@ const setupRecurringPayPalPayment =
 	(_dispatch: Dispatch, getState: () => State): void => {
 		const state = getState();
 		const csrfToken = csrf.token;
-		const { contributionType } = state.page.form;
+		const contributionType = getContributionType(state);
 		const amount = getAmount(
 			state.page.checkoutForm.product.selectedAmounts,
 			state.page.checkoutForm.product.otherAmounts,
