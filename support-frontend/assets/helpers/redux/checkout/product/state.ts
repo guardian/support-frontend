@@ -71,5 +71,5 @@ export const initialProductState: ProductState = {
 		},
 	},
 	currency,
-	orderIsAGift: false,
+	orderIsAGift: window.guardian.orderIsAGift,
 };

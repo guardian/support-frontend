@@ -43,7 +43,14 @@ const reducer = () =>
 		Domestic, // TODO: we need to work this out from the country
 	);
 
-const store = initReduxForSubscriptions(reducer);
+const store = initReduxForSubscriptions(
+	GuardianWeekly,
+	initialBillingPeriod,
+	reducer,
+	startDate,
+	NoProductOptions,
+	Domestic, // TODO: we need to work this out from the country
+);
 const { orderIsAGift, productPrices } = store.getState().page.checkout;
 const { countryId } = store.getState().common.internationalisation;
 FocusStyleManager.onlyShowFocusOnTabs();

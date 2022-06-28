@@ -5,6 +5,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import type { GuardianProduct } from 'helpers/redux/checkout/product/state';
 import { logException } from 'helpers/utilities/logger';
 import {
 	canRunQuantumMetric,
@@ -114,7 +115,7 @@ function sendEventSubscriptionCheckoutEvent(
 }
 
 function productToCheckoutEvents(
-	product: SubscriptionProduct,
+	product: GuardianProduct,
 	orderIsAGift: boolean,
 ) {
 	switch (product) {
@@ -144,6 +145,8 @@ function productToCheckoutEvents(
 				SendEventSubscriptionCheckoutStart.PaperSub,
 				SendEventSubscriptionCheckoutConversion.PaperSub,
 			);
+		default:
+			return;
 	}
 }
 
@@ -155,7 +158,7 @@ function checkoutEvents(
 }
 
 export function sendEventSubscriptionCheckoutStart(
-	product: SubscriptionProduct,
+	product: GuardianProduct,
 	orderIsAGift: boolean,
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,

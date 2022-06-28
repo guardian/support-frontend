@@ -100,7 +100,7 @@ const reactElementId: Record<CountryGroupId, string> = {
 
 const reducer = () => createReducer(DigitalPack, Monthly, null, null, null);
 
-const store = initReduxForSubscriptions(reducer);
+const store = initReduxForSubscriptions(DigitalPack, Monthly, reducer);
 const { currencyId } = store.getState().common.internationalisation;
 const { billingPeriod } = store.getState().page.checkout;
 

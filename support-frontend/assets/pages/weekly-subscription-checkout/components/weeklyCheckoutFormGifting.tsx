@@ -89,10 +89,16 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 		deliveryCountry: deliveryAddress.fields.country,
 		formErrors: state.page.checkout.formErrors,
 		submissionError: state.page.checkout.submissionError,
+<<<<<<< HEAD
 		productPrices: state.page.checkout.productPrices,
 		deliveryAddressErrors:
 			state.page.checkoutForm.deliveryAddress.fields.errors,
 		billingAddressErrors: state.page.checkoutForm.billingAddress.fields.errors,
+=======
+		productPrices: state.page.checkoutForm.product.productPrices,
+		deliveryAddressErrors: state.page.deliveryAddress.fields.formErrors,
+		billingAddressErrors: state.page.billingAddress.fields.formErrors,
+>>>>>>> dc9c0295c (begin connecting other checkouts)
 		isTestUser: state.page.checkout.isTestUser,
 		country: state.common.internationalisation.countryId,
 		csrf: state.page.checkoutForm.csrf,

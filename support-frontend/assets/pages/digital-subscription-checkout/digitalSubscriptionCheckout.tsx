@@ -62,11 +62,15 @@ setUpTrackingAndConsents();
 const reducer = () =>
 	createReducer(DigitalPack, initialBillingPeriod, null, null, null);
 
-const store = initReduxForSubscriptions(reducer);
+const store = initReduxForSubscriptions(
+	DigitalPack,
+	initialBillingPeriod,
+	reducer,
+);
 const { countryGroupId, countryId, currencyId } =
 	store.getState().common.internationalisation;
 const { orderIsAGift, productPrices, billingPeriod } =
-	store.getState().page.checkout;
+	store.getState().page.checkoutForm.product;
 
 const thankyouProps = {
 	countryGroupId,

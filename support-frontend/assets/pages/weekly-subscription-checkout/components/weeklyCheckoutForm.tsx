@@ -90,7 +90,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 		deliveryCountry: deliveryAddress.fields.country,
 		formErrors: state.page.checkout.formErrors,
 		submissionError: state.page.checkout.submissionError,
-		productPrices: state.page.checkout.productPrices,
+		productPrices: state.page.checkoutForm.product.productPrices,
 		deliveryAddressErrors:
 			state.page.checkoutForm.deliveryAddress.fields.errors,
 		billingAddressErrors: state.page.checkoutForm.billingAddress.fields.errors,

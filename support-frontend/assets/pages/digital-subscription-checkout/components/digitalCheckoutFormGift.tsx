@@ -67,18 +67,19 @@ function mapStateToProps(state: CheckoutState) {
 		country: state.common.internationalisation.countryId,
 		formErrors: state.page.checkout.formErrors,
 		submissionError: state.page.checkout.submissionError,
-		productPrices: state.page.checkout.productPrices,
+		productPrices: state.page.checkoutForm.product.productPrices,
 		currencyId: state.common.internationalisation.currencyId,
 		csrf: state.page.checkoutForm.csrf,
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
 		paymentMethod: state.page.checkout.paymentMethod,
 		isTestUser: state.page.checkout.isTestUser,
 		amount: finalPrice(
-			state.page.checkout.productPrices,
+			state.page.checkoutForm.product.productPrices,
 			state.common.internationalisation.countryId,
-			state.page.checkout.billingPeriod,
+			state.page.checkoutForm.product.billingPeriod,
 		).price,
-		billingPeriod: state.page.checkout.billingPeriod as DigitalBillingPeriod,
+		billingPeriod: state.page.checkoutForm.product
+			.billingPeriod as DigitalBillingPeriod,
 		addressErrors: state.page.checkoutForm.billingAddress.fields.errors,
 		participations: state.common.abParticipations,
 	};
