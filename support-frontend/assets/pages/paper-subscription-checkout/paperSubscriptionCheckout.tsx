@@ -36,7 +36,7 @@ const store = initReduxForSubscriptions(
 	reducer,
 	startDate ?? '',
 	productOption,
-	fulfilmentOption,
+	getFulfilmentOption,
 );
 
 const { countryGroupId } = store.getState().common.internationalisation;

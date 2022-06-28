@@ -81,17 +81,25 @@ export function initReduxForSubscriptions(
 	pageReducer?: (initialState: CommonState) => SubscriptionsReducer,
 	startDate?: string,
 	productOption?: ProductOptions,
-	fulfilmentOption?: FulfilmentOptions,
+	getFulfilmentOptionForCountry?: (country: string) => FulfilmentOptions,
 ): SubscriptionsStore {
 	try {
 		const initialState = getInitialState();
 		const newStore = addPageReducer(pageReducer?.(initialState));
+
 		newStore.dispatch(setInitialCommonState(initialState));
 		newStore.dispatch(setProductType(product));
 		newStore.dispatch(setBillingPeriod(initialBillingPeriod));
+
 		productOption && newStore.dispatch(setProductOption(productOption));
-		fulfilmentOption &&
-			newStore.dispatch(setFulfilmentOption(fulfilmentOption));
+		getFulfilmentOptionForCountry &&
+			newStore.dispatch(
+				setFulfilmentOption(
+					getFulfilmentOptionForCountry(
+						initialState.internationalisation.countryId,
+					),
+				),
+			);
 
 		return newStore;
 	} catch (err) {

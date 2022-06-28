@@ -7,7 +7,10 @@ import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import type { WeeklyBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { postIntroductorySixForSixBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { Domestic } from 'helpers/productPrice/fulfilmentOptions';
+import {
+	Domestic,
+	getWeeklyFulfilmentOption,
+} from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
@@ -49,7 +52,7 @@ const store = initReduxForSubscriptions(
 	reducer,
 	startDate,
 	NoProductOptions,
-	Domestic, // TODO: we need to work this out from the country
+	getWeeklyFulfilmentOption,
 );
 const { orderIsAGift, productPrices } = store.getState().page.checkout;
 const { countryId } = store.getState().common.internationalisation;
