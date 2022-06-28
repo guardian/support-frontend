@@ -2,7 +2,9 @@ import {
 	getConsentFor,
 	onConsent,
 } from '@guardian/consent-management-platform';
+import type { ContributionType } from 'helpers/contributions';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
@@ -49,6 +51,28 @@ export function getSubscriptionAnnualValue(
 		discountInPenceCents * promotion.numberOfDiscountedPeriods;
 
 	return discountedAnnualPrice;
+}
+
+export function getContributionAnnualValue(
+	contributionType: ContributionType,
+	amount: number,
+	sourceCurrency: IsoCurrency,
+): number | undefined {
+	const valueInPence =
+		contributionType === 'ONE_OFF' || contributionType === 'ANNUAL'
+			? amount * 100
+			: amount * 100 * 12;
+	const targetCurrency: IsoCurrency = 'GBP';
+
+	if (window.QuantumMetricAPI?.isOn()) {
+		const convertedValue: number =
+			window.QuantumMetricAPI.currencyConvertFromToValue(
+				valueInPence,
+				sourceCurrency,
+				targetCurrency,
+			);
+		return convertedValue;
+	}
 }
 
 export function waitForQuantumMetricAPi(onReady: () => void): void {
