@@ -21,6 +21,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendEventContributionAmountUpdated } from 'helpers/tracking/quantumMetric';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
 	selectAmount,
@@ -53,6 +54,7 @@ type PropTypes = {
 		amount: number | 'other',
 		countryGroupId: CountryGroupId,
 		contributionType: ContributionType,
+		currency: IsoCurrency,
 	) => () => void;
 	otherAmounts: OtherAmounts;
 	updateOtherAmount: (
@@ -90,12 +92,14 @@ const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
 			amount: number | 'other',
 			countryGroupId: CountryGroupId,
 			contributionType: ContributionType,
+			currency: IsoCurrency,
 		) =>
 		() => {
+			dispatch(selectAmount(amount, contributionType));
+			sendEventContributionAmountUpdated(amount, contributionType, currency);
 			trackComponentClick(
 				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`,
 			);
-			dispatch(selectAmount(amount, contributionType));
 		},
 	updateOtherAmount: (amount: string, contributionType: ContributionType) => {
 		dispatch(updateOtherAmount(amount, contributionType));
@@ -187,12 +191,25 @@ function ContributionAmount(props: PropTypes) {
 								props.contributionType,
 							)
 						}
-						onBlur={() =>
-							!!otherAmount &&
-							trackComponentClick(
-								`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`,
-							)
-						}
+						onBlur={() => {
+							if (otherAmount) {
+								trackComponentClick(
+									`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`,
+								);
+
+								const otherAmountNumber = parseInt(otherAmount, 10);
+
+								if (Number.isNaN(otherAmountNumber)) {
+									return;
+								}
+
+								sendEventContributionAmountUpdated(
+									otherAmountNumber,
+									props.contributionType,
+									props.currency,
+								);
+							}
+						}}
 						error={otherAmountErrorMessage}
 						autoComplete="off"
 						autoFocus
