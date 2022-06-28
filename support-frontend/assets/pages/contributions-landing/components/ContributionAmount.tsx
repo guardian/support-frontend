@@ -199,13 +199,15 @@ function ContributionAmount(props: PropTypes) {
 
 								const otherAmountNumber = parseInt(otherAmount, 10);
 
-								if (typeof otherAmountNumber === 'number') {
-									sendEventContributionAmountUpdated(
-										otherAmountNumber,
-										props.contributionType,
-										props.currency,
-									);
+								if (Number.isNaN(otherAmountNumber)) {
+									return;
 								}
+
+								sendEventContributionAmountUpdated(
+									otherAmountNumber,
+									props.contributionType,
+									props.currency,
+								);
 							}
 						}}
 						error={otherAmountErrorMessage}
