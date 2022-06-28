@@ -1,4 +1,5 @@
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
+import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Participations } from 'helpers/abTests/abtest';
 import {
 	fetchJson,
@@ -160,6 +161,7 @@ export type StripePaymentIntentAuthorisation = {
 	paymentMethod: typeof Stripe;
 	stripePaymentMethod: StripePaymentMethod;
 	paymentMethodId: string;
+	handle3DS?: (clientSecret: string) => Promise<PaymentIntentResult>;
 };
 export type PayPalAuthorisation = {
 	paymentMethod: typeof PayPal;

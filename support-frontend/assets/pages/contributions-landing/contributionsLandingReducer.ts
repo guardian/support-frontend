@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
-import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
@@ -58,9 +57,6 @@ export interface StripeCardFormData {
 	formComplete: boolean;
 	setupIntentClientSecret: string | null;
 	recurringRecaptchaVerified: boolean;
-	// TODO: No non-serialisable values should be in Redux state!! This needs to be refactored
-	// These callbacks must be initialised after the StripeCardForm component has been created
-	handle3DS: ((clientSecret: string) => Promise<PaymentIntentResult>) | null; // For single only
 }
 
 export interface PayPalData {
@@ -187,7 +183,6 @@ function createFormReducer() {
 			formComplete: false,
 			setupIntentClientSecret: null,
 			recurringRecaptchaVerified: false,
-			handle3DS: null,
 		},
 		sepaData: {
 			iban: null,
@@ -335,15 +330,6 @@ function createFormReducer() {
 						...state.amazonPayData,
 						amazonBillingAgreementConsentStatus:
 							action.amazonBillingAgreementConsentStatus,
-					},
-				};
-
-			case 'SET_HANDLE_STRIPE_3DS':
-				return {
-					...state,
-					stripeCardFormData: {
-						...state.stripeCardFormData,
-						handle3DS: action.handleStripe3DS,
 					},
 				};
 
