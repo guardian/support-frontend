@@ -5,6 +5,10 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import {
+	paperProductsWithDigital,
+	paperProductsWithoutDigital,
+} from 'helpers/productPrice/productOptions';
 import type {
 	ProductPrice,
 	ProductPrices,
@@ -21,6 +25,11 @@ export const productSlice = createSlice({
 		},
 		setProductOption(state, action: PayloadAction<ProductOptions>) {
 			state.productOption = action.payload;
+		},
+		setAddDigital(state, action: PayloadAction<boolean>) {
+			state.productOption = action.payload
+				? paperProductsWithDigital[state.productOption]
+				: paperProductsWithoutDigital[state.productOption];
 		},
 		setFulfilmentOption(state, action: PayloadAction<FulfilmentOptions>) {
 			state.fulfilmentOption = action.payload;

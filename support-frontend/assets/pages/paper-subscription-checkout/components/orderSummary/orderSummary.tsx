@@ -47,10 +47,11 @@ function getMobileSummaryTitle(
 
 function mapStateToProps(state: WithDeliveryCheckoutState) {
 	return {
-		fulfilmentOption: state.page.checkout.fulfilmentOption,
-		productOption: state.page.checkout.productOption as ActivePaperProducts,
-		billingPeriod: state.page.checkout.billingPeriod,
-		productPrices: state.page.checkout.productPrices,
+		fulfilmentOption: state.page.checkoutForm.product.fulfilmentOption,
+		productOption: state.page.checkoutForm.product
+			.productOption as ActivePaperProducts,
+		billingPeriod: state.page.checkoutForm.product.billingPeriod,
+		productPrices: state.page.checkoutForm.product.productPrices,
 	};
 }
 

@@ -38,6 +38,10 @@ import {
 	setTelephone,
 	setTitle,
 } from 'helpers/redux/checkout/personalDetails/actions';
+import {
+	setAddDigital,
+	setOrderIsAGift,
+} from 'helpers/redux/checkout/product/actions';
 import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import * as storage from 'helpers/storage/storage';
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
@@ -223,10 +227,7 @@ const formActionCreators = {
 			const state = getState();
 			onPaymentAuthorised(authorisation, dispatch, state);
 		},
-	setGiftStatus: (orderIsAGift: boolean): Action => ({
-		type: 'SET_ORDER_IS_GIFT',
-		orderIsAGift,
-	}),
+	setGiftStatus: setOrderIsAGift,
 	setStripePaymentMethod: (stripePaymentMethod: Option<string>): Action => ({
 		type: 'SET_STRIPE_PAYMENT_METHOD',
 		stripePaymentMethod,
@@ -237,10 +238,7 @@ const formActionCreators = {
 	}),
 	setGiftMessage,
 	setDigitalGiftDeliveryDate: setGiftDeliveryDate,
-	setAddDigitalSubscription: (addDigital: boolean): Action => ({
-		type: 'SET_ADD_DIGITAL_SUBSCRIPTION',
-		addDigital,
-	}),
+	setAddDigitalSubscription: setAddDigital,
 	setCsrUsername: (username: string): Action => ({
 		type: 'SET_CSR_USERNAME',
 		username,

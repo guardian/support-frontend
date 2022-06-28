@@ -1,10 +1,20 @@
 import type { TypedStartListening } from '@reduxjs/toolkit';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { renderError } from 'helpers/rendering/render';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { addAddressSideEffects } from './checkout/address/sideEffects';
 import { addPersonalDetailsSideEffects } from './checkout/personalDetails/subscriptionsSideEffects';
-import { addProductSideEffects } from './checkout/product/subscriptionsSideEffects';
+import {
+	setBillingPeriod,
+	setFulfilmentOption,
+	setProductOption,
+	setProductType,
+} from './checkout/product/actions';
+// import { addProductSideEffects } from './checkout/product/subscriptionsSideEffects';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
 import type { CommonState } from './commonState/state';
@@ -61,18 +71,27 @@ export function addPageReducer(
 			getDefaultMiddleware().prepend(listenerMiddleware.middleware),
 	});
 	addPersonalDetailsSideEffects(startSubscriptionsListening);
-	addProductSideEffects(startSubscriptionsListening);
 	addAddressSideEffects(startSubscriptionsListening);
 	return store;
 }
 
 export function initReduxForSubscriptions(
+	product: SubscriptionProduct,
+	initialBillingPeriod: BillingPeriod,
 	pageReducer?: (initialState: CommonState) => SubscriptionsReducer,
+	startDate?: string,
+	productOption?: ProductOptions,
+	fulfilmentOption?: FulfilmentOptions,
 ): SubscriptionsStore {
 	try {
 		const initialState = getInitialState();
 		const newStore = addPageReducer(pageReducer?.(initialState));
 		newStore.dispatch(setInitialCommonState(initialState));
+		newStore.dispatch(setProductType(product));
+		newStore.dispatch(setBillingPeriod(initialBillingPeriod));
+		productOption && newStore.dispatch(setProductOption(productOption));
+		fulfilmentOption &&
+			newStore.dispatch(setFulfilmentOption(fulfilmentOption));
 
 		return newStore;
 	} catch (err) {

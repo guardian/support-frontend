@@ -29,20 +29,24 @@ export function addProductSideEffects(
 			const { common, page } = listenerApi.getState();
 			const { product } = page.checkoutForm;
 			if (product.productType !== 'NoProduct') {
-				const selectedProductPrice = getProductPrice(
-					product.productPrices,
-					common.internationalisation.countryId,
-					product.billingPeriod,
-					product.fulfilmentOption,
-					product.productOption,
-				);
-				const productPriceWithDiscounts = finalPrice(
-					product.productPrices,
-					common.internationalisation.countryId,
-					product.billingPeriod,
-				);
-				listenerApi.dispatch(setSelectedProductPrice(selectedProductPrice));
-				listenerApi.dispatch(setDiscountedPrice(productPriceWithDiscounts));
+				try {
+					const selectedProductPrice = getProductPrice(
+						product.productPrices,
+						common.internationalisation.countryId,
+						product.billingPeriod,
+						product.fulfilmentOption,
+						product.productOption,
+					);
+					const productPriceWithDiscounts = finalPrice(
+						product.productPrices,
+						common.internationalisation.countryId,
+						product.billingPeriod,
+					);
+					listenerApi.dispatch(setSelectedProductPrice(selectedProductPrice));
+					listenerApi.dispatch(setDiscountedPrice(productPriceWithDiscounts));
+				} catch (e) {
+					console.log(e);
+				}
 			}
 		},
 	});

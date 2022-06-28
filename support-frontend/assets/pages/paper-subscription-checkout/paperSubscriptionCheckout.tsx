@@ -30,7 +30,15 @@ const startDate = getStartDate(fulfilmentOption, productOption);
 const reducer = () =>
 	createReducer(Paper, Monthly, startDate, productOption, fulfilmentOption);
 
-const store = initReduxForSubscriptions(reducer);
+const store = initReduxForSubscriptions(
+	Paper,
+	Monthly,
+	reducer,
+	startDate ?? '',
+	productOption,
+	fulfilmentOption,
+);
+
 const { countryGroupId } = store.getState().common.internationalisation;
 FocusStyleManager.onlyShowFocusOnTabs();
 // ----- Render ----- //
