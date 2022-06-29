@@ -35,6 +35,8 @@ import {
 	Paper,
 } from 'helpers/productPrice/subscriptions';
 import type { GiftingState } from 'helpers/redux/checkout/giftingState/state';
+import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
 	setFormSubmitted,
@@ -47,7 +49,6 @@ import {
 } from 'helpers/subscriptionsForms/formValidation';
 import type {
 	AnyCheckoutState,
-	CheckoutState,
 	WithDeliveryCheckoutState,
 } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
@@ -62,8 +63,9 @@ type Addresses = {
 };
 
 // ----- Functions ----- //
-function getAddresses(state: AnyCheckoutState): Addresses {
-	if (isPhysicalProduct(state.page.checkout.product)) {
+function getAddresses(state: SubscriptionsState): Addresses {
+	const product = getSubscriptionType(state);
+	if (isPhysicalProduct(product)) {
 		const deliveryAddressFields =
 			state.page.checkoutForm.deliveryAddress.fields;
 
@@ -83,16 +85,12 @@ function getAddresses(state: AnyCheckoutState): Addresses {
 }
 
 const getProduct = (
-	state: AnyCheckoutState,
+	state: SubscriptionsState,
 	currencyId?: Option<IsoCurrency>,
 ): SubscriptionProductFields => {
-	const {
-		billingPeriod,
-		fulfilmentOption,
-		productOption,
-		orderIsAGift,
-		product,
-	} = state.page.checkout;
+	const { billingPeriod, fulfilmentOption, productOption, orderIsAGift } =
+		state.page.checkoutForm.product;
+	const product = getSubscriptionType(state);
 	const readerType = orderIsAGift ? Gift : Direct;
 
 	if (product === DigitalPack) {
@@ -145,7 +143,7 @@ function getGiftRecipient(giftingState: GiftingState) {
 }
 
 function buildRegularPaymentRequest(
-	state: AnyCheckoutState,
+	state: SubscriptionsState,
 	paymentAuthorisation: PaymentAuthorisation,
 	addresses: Addresses,
 	promotions?: Promotion[],
@@ -189,7 +187,7 @@ function buildRegularPaymentRequest(
 function onPaymentAuthorised(
 	paymentAuthorisation: PaymentAuthorisation,
 	dispatch: Dispatch<Action>,
-	state: AnyCheckoutState,
+	state: SubscriptionsState,
 	currencyId?: Option<IsoCurrency>,
 ): void {
 	const {
@@ -198,8 +196,8 @@ function onPaymentAuthorised(
 		orderIsAGift,
 		productOption,
 		productPrices,
-		productType,
 	} = state.page.checkoutForm.product;
+	const productType = getSubscriptionType(state);
 	const { paymentMethod } = state.page.checkout;
 	const { csrf } = state.page.checkoutForm;
 	const { abParticipations } = state.common;
@@ -332,15 +330,11 @@ function getPricingCountry(product: SubscriptionProduct, addresses: Addresses) {
 	return addresses.billingAddress.country;
 }
 
-function submitForm(dispatch: Dispatch<Action>, state: AnyCheckoutState) {
+function submitForm(dispatch: Dispatch<Action>, state: SubscriptionsState) {
 	const { paymentMethod } = state.page.checkout;
-	const {
-		productType,
-		productOption,
-		billingPeriod,
-		fulfilmentOption,
-		productPrices,
-	} = state.page.checkoutForm.product;
+	const { productOption, billingPeriod, fulfilmentOption, productPrices } =
+		state.page.checkoutForm.product;
+	const productType = getSubscriptionType(state);
 	const addresses = getAddresses(state);
 	const pricingCountry = getPricingCountry(productType, addresses);
 	trackSubmitAttempt(paymentMethod, productType, productOption);
@@ -375,8 +369,10 @@ function submitForm(dispatch: Dispatch<Action>, state: AnyCheckoutState) {
 
 function submitWithDeliveryForm(
 	dispatch: Dispatch<Action>,
-	state: WithDeliveryCheckoutState,
+	state: SubscriptionsState,
 ): void {
+	// @ts-expect-error - this is unhappy about different ways we handle addresses
+	// but this should be sorted out when we migrate those too
 	if (validateWithDeliveryForm(dispatch, state)) {
 		submitForm(dispatch, state);
 	}
@@ -384,7 +380,7 @@ function submitWithDeliveryForm(
 
 function submitCheckoutForm(
 	dispatch: Dispatch<Action>,
-	state: CheckoutState,
+	state: SubscriptionsState,
 ): void {
 	if (validateCheckoutForm(dispatch, state)) {
 		submitForm(dispatch, state);

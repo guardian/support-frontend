@@ -55,7 +55,6 @@ export type CheckoutState = ReduxState<{
 export type WithDeliveryCheckoutState = ReduxState<{
 	checkout: FormState;
 	checkoutForm: CheckoutFormState;
-	fulfilmentOption: Option<FulfilmentOptions>;
 	directDebit: DirectDebitState;
 }>;
 
@@ -93,4 +92,5 @@ export function createReducer(
 
 export const getFulfilmentOption = (
 	state: WithDeliveryCheckoutState,
-): Option<FulfilmentOptions> => state.page.checkout.fulfilmentOption;
+): Option<FulfilmentOptions> =>
+	state.page.checkoutForm.product.fulfilmentOption;

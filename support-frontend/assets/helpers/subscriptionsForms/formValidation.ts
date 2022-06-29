@@ -102,7 +102,7 @@ function validateWithDeliveryForm(
 }
 
 const checkoutFormIsValid = (state: CheckoutState) => {
-	if (state.page.checkout.product === DigitalPack) {
+	if (state.page.checkoutForm.product.productType === DigitalPack) {
 		return checkoutValidation(state).length === 0;
 	}
 	// @ts-expect-error -- TODO revist this after we have improved the address state types

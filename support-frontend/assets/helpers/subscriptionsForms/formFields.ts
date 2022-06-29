@@ -4,8 +4,8 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
+import type { GuardianProduct } from 'helpers/redux/checkout/product/state';
 import type {
 	AnyCheckoutState,
 	CheckoutState,
@@ -25,14 +25,18 @@ type GiftingFields = {
 	giftDeliveryDate?: string;
 };
 
+type ProductFields = {
+	billingPeriod: BillingPeriod;
+	fulfilmentOption: FulfilmentOptions;
+	product: GuardianProduct;
+};
+
 export type FormFields = PersonalDetailsState &
-	GiftingFields & {
-		billingPeriod: BillingPeriod;
+	GiftingFields &
+	ProductFields & {
 		paymentMethod: Option<PaymentMethod>;
 		startDate: Option<string>;
 		billingAddressIsSame: boolean;
-		fulfilmentOption: FulfilmentOptions;
-		product: SubscriptionProduct;
 		productOption: ProductOptions;
 		orderIsAGift?: boolean;
 		deliveryInstructions: Option<string>;
@@ -42,10 +46,9 @@ export type FormFields = PersonalDetailsState &
 export type FormField = keyof FormFields | 'recaptcha';
 export type FormState = Omit<
 	FormFields,
-	keyof PersonalDetailsState | keyof GiftingFields
+	keyof PersonalDetailsState | keyof GiftingFields | keyof ProductFields
 > & {
 	stage: Stage;
-	product: SubscriptionProduct;
 	formErrors: Array<FormError<FormField>>;
 	submissionError: Option<ErrorReason>;
 	formSubmitted: boolean;
