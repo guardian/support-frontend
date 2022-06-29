@@ -14,11 +14,6 @@ import { getAmount, logInvalidCombination } from 'helpers/contributions';
 import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import { setupAmazonPay } from 'helpers/forms/paymentIntegrations/amazonPay/setup';
-import type {
-	AmazonLoginObject,
-	AmazonPaymentsObject,
-} from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type {
 	AmazonPayData,
 	CreatePaypalPaymentData,
@@ -70,7 +65,6 @@ import {
 	findIsoCountry,
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import {
 	setEmail,
@@ -139,14 +133,6 @@ export type Action =
 	  }
 	| {
 			type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING';
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_LOGIN_OBJECT';
-			amazonLoginObject: AmazonLoginObject;
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT';
-			amazonPaymentsObject: AmazonPaymentsObject;
 	  }
 	| {
 			type: 'SET_AMAZON_PAY_WALLET_IS_STALE';
@@ -423,20 +409,6 @@ const setAmazonPayHasBegunLoading = (): Action => ({
 	type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING',
 });
 
-const setAmazonPayLoginObject = (
-	amazonLoginObject: AmazonLoginObject,
-): Action => ({
-	type: 'SET_AMAZON_PAY_LOGIN_OBJECT',
-	amazonLoginObject,
-});
-
-const setAmazonPayPaymentsObject = (
-	amazonPaymentsObject: AmazonPaymentsObject,
-): Action => ({
-	type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT',
-	amazonPaymentsObject,
-});
-
 const setAmazonPayWalletIsStale = (isStale: boolean): Action => ({
 	type: 'SET_AMAZON_PAY_WALLET_IS_STALE',
 	isStale,
@@ -493,13 +465,6 @@ const loadPayPalExpressSdk =
 			dispatch(setPayPalHasBegunLoading());
 			void loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
 		}
-	};
-
-const loadAmazonPaySdk =
-	(countryGroupId: CountryGroupId, isTestUser: boolean) =>
-	(dispatch: Dispatch): void => {
-		dispatch(setAmazonPayHasBegunLoading());
-		setupAmazonPay(countryGroupId, dispatch, isTestUser);
 	};
 
 const updateContributionTypeAndPaymentMethod =
@@ -1111,8 +1076,6 @@ export {
 	updateBillingCountry,
 	updateUserFormData,
 	setAmazonPayHasBegunLoading,
-	setAmazonPayLoginObject,
-	setAmazonPayPaymentsObject,
 	setAmazonPayWalletIsStale,
 	setAmazonPayHasAccessToken,
 	setAmazonPayFatalError,
@@ -1143,7 +1106,6 @@ export {
 	updatePayPalButtonReady,
 	updateRecaptchaToken,
 	loadPayPalExpressSdk,
-	loadAmazonPaySdk,
 	setSepaIban,
 	setSepaAccountHolderName,
 	setSepaAddressStreetName,

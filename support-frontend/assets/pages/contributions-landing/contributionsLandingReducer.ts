@@ -137,10 +137,6 @@ function createFormReducer() {
 		},
 		amazonPayData: {
 			hasBegunLoading: false,
-			amazonPayLibrary: {
-				amazonLoginObject: null,
-				amazonPaymentsObject: null,
-			},
 			walletIsStale: false,
 			orderReferenceId: null,
 			paymentSelected: false,
@@ -249,30 +245,6 @@ function createFormReducer() {
 				return {
 					...state,
 					amazonPayData: { ...state.amazonPayData, hasBegunLoading: true },
-				};
-
-			case 'SET_AMAZON_PAY_LOGIN_OBJECT':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						amazonPayLibrary: {
-							...state.amazonPayData.amazonPayLibrary,
-							amazonLoginObject: action.amazonLoginObject,
-						},
-					},
-				};
-
-			case 'SET_AMAZON_PAY_PAYMENTS_OBJECT':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						amazonPayLibrary: {
-							...state.amazonPayData.amazonPayLibrary,
-							amazonPaymentsObject: action.amazonPaymentsObject,
-						},
-					},
 				};
 
 			case 'SET_AMAZON_PAY_WALLET_IS_STALE':

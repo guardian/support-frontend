@@ -13,21 +13,23 @@ import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/pa
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { hiddenIf } from 'helpers/utilities/utilities';
-import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
 import type { Action } from '../contributionsLandingActions';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { State } from '../contributionsLandingReducer';
-import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
+import { AmazonPayCheckout } from './AmazonPay/AmazonPayCheckout';
+import { useAmazonPayObjects } from './AmazonPay/useAmazonPayObjects';
 
 // ----- Types ----- //
 
 type PropTypes = {
 	contributionType: ContributionType;
 	paymentMethod: PaymentMethod;
+	countryGroupId: CountryGroupId;
 	currency: IsoCurrency;
 	isWaiting: boolean;
 	selectedAmounts: SelectedAmounts;
@@ -54,9 +56,11 @@ type PropTypes = {
 
 function mapStateToProps(state: State) {
 	const { contributionType } = state.page.form;
+
 	return {
 		currency: state.common.internationalisation.currencyId,
 		contributionType,
+		countryGroupId: state.common.internationalisation.countryGroupId,
 		isWaiting: state.page.form.isWaiting,
 		paymentMethod: state.page.form.paymentMethod,
 		selectedAmounts: state.page.form.selectedAmounts,
@@ -116,17 +120,13 @@ function ContributionSubmit(props: PropTypes) {
 		props.userInBenefitsVariant,
 	);
 
-	const amazonPayEnabled = () => !props.amazonPayData.fatalError;
+	const { loginObject, paymentsObject } = useAmazonPayObjects(
+		props.paymentMethod === AmazonPay,
+		props.countryGroupId,
+		props.isTestUser,
+	);
 
-	const getAmazonPayComponent = () =>
-		props.amazonPayData.hasAccessToken ? (
-			<AmazonPayWallet
-				isTestUser={props.isTestUser}
-				contributionType={props.contributionType}
-			/>
-		) : (
-			<AmazonPayLoginButton />
-		);
+	const amazonPayEnabled = () => !props.amazonPayData.fatalError;
 
 	// We have to show/hide PayPalExpressButton rather than conditionally rendering it
 	// because we don't want to destroy and replace the iframe each time.
@@ -156,9 +156,16 @@ function ContributionSubmit(props: PropTypes) {
 					/>
 				</div>
 			)}
-			{props.paymentMethod === AmazonPay &&
-				amazonPayEnabled() &&
-				getAmazonPayComponent()}
+
+			{props.paymentMethod === AmazonPay && amazonPayEnabled() && (
+				<AmazonPayCheckout
+					loginObject={loginObject}
+					paymentsObject={paymentsObject}
+					amazonPayData={props.amazonPayData}
+					contributionType={props.contributionType}
+					isTestUser={props.isTestUser}
+				/>
+			)}
 
 			{!showPayPalRecurringButton &&
 			(props.paymentMethod !== AmazonPay ||
