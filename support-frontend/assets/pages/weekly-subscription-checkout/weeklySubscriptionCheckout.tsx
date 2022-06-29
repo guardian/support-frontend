@@ -54,6 +54,7 @@ const store = initReduxForSubscriptions(
 	NoProductOptions,
 	getWeeklyFulfilmentOption,
 );
+
 const { orderIsAGift, productPrices } = store.getState().page.checkout;
 const { countryId } = store.getState().common.internationalisation;
 FocusStyleManager.onlyShowFocusOnTabs();

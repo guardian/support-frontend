@@ -192,9 +192,15 @@ function onPaymentAuthorised(
 	state: AnyCheckoutState,
 	currencyId?: Option<IsoCurrency>,
 ): void {
-	const { billingPeriod, fulfilmentOption, productOption, productPrices } =
-		state.page.checkout;
-	const { product, paymentMethod, orderIsAGift } = state.page.checkout;
+	const {
+		billingPeriod,
+		fulfilmentOption,
+		orderIsAGift,
+		productOption,
+		productPrices,
+		productType,
+	} = state.page.checkoutForm.product;
+	const { paymentMethod } = state.page.checkout;
 	const { csrf } = state.page.checkoutForm;
 	const { abParticipations } = state.common;
 	const addresses = getAddresses(state);
@@ -216,13 +222,13 @@ function onPaymentAuthorised(
 	const handleSubscribeResult = (result: PaymentResult) => {
 		if (result.paymentStatus === 'success') {
 			if (result.subscriptionCreationPending) {
-				dispatch(setStage('thankyou-pending', product, paymentMethod));
+				dispatch(setStage('thankyou-pending', productType, paymentMethod));
 			} else {
-				dispatch(setStage('thankyou', product, paymentMethod));
+				dispatch(setStage('thankyou', productType, paymentMethod));
 			}
 			// Notify Quantum Metric of successfull subscription conversion
 			sendEventSubscriptionCheckoutConversion(
-				product,
+				productType,
 				!!orderIsAGift,
 				productPrice,
 				billingPeriod,
@@ -327,29 +333,33 @@ function getPricingCountry(product: SubscriptionProduct, addresses: Addresses) {
 }
 
 function submitForm(dispatch: Dispatch<Action>, state: AnyCheckoutState) {
-	const { paymentMethod, product, productOption } = state.page.checkout;
+	const { paymentMethod } = state.page.checkout;
+	const {
+		productType,
+		productOption,
+		billingPeriod,
+		fulfilmentOption,
+		productPrices,
+	} = state.page.checkoutForm.product;
 	const addresses = getAddresses(state);
-	const pricingCountry = getPricingCountry(product, addresses);
-	trackSubmitAttempt(paymentMethod, product, productOption);
+	const pricingCountry = getPricingCountry(productType, addresses);
+	trackSubmitAttempt(paymentMethod, productType, productOption);
 	let priceDetails = finalPrice(
-		state.page.checkout.productPrices,
+		productPrices,
 		pricingCountry,
-		state.page.checkout.billingPeriod,
-		state.page.checkout.fulfilmentOption,
-		state.page.checkout.productOption,
+		billingPeriod,
+		fulfilmentOption,
+		productOption,
 	);
 
 	// This is a small hack to make sure we show quarterly pricing until we have promos tooling
-	if (
-		state.page.checkout.billingPeriod === Quarterly &&
-		priceDetails.price === 6
-	) {
+	if (billingPeriod === Quarterly && priceDetails.price === 6) {
 		priceDetails = getProductPrice(
-			state.page.checkout.productPrices,
+			productPrices,
 			pricingCountry,
-			state.page.checkout.billingPeriod,
-			state.page.checkout.fulfilmentOption,
-			state.page.checkout.productOption,
+			billingPeriod,
+			fulfilmentOption,
+			productOption,
 		);
 	}
 
