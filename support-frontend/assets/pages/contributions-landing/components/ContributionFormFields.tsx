@@ -7,6 +7,7 @@ import {
 	checkBillingState,
 	emailRegexPattern,
 } from 'helpers/forms/formValidation';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import { applyPersonalDetailsRules } from 'helpers/subscriptionsForms/rules';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
@@ -53,7 +54,7 @@ const mapStateToProps = (state: State) => ({
 	isSignedIn: state.page.checkoutForm.personalDetails.isSignedIn,
 	userTypeFromIdentityResponse:
 		state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
-	contributionType: state.page.form.contributionType,
+	contributionType: getContributionType(state),
 });
 
 const mapDispatchToProps = {

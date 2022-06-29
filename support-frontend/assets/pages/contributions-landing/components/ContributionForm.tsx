@@ -1,8 +1,8 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import { Checkbox, CheckboxGroup } from '@guardian/source-react-components';
 import { useState } from 'react';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import SepaTerms from 'components/legal/termsPrivacy/sepaTerms';
@@ -11,18 +11,8 @@ import ProgressMessage from 'components/progressMessage/progressMessage';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
-import type {
-	ContributionAmounts,
-	ContributionType,
-	OtherAmounts,
-	PaymentMatrix,
-	SelectedAmounts,
-} from 'helpers/contributions';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import type { CreatePaypalPaymentData } from 'helpers/forms/paymentIntegrations/oneOffContributions';
+import type { PaymentMatrix } from 'helpers/contributions';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -30,11 +20,9 @@ import {
 	ExistingDirectDebit,
 	Sepa,
 } from 'helpers/forms/paymentMethods';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
+import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import {
 	setCurrencyId,
 	setUseLocalAmounts,
@@ -47,17 +35,13 @@ import { SepaForm } from 'pages/contributions-landing/components/SepaForm';
 import {
 	createOneOffPayPalPayment,
 	paymentWaiting,
-	selectAmount,
 	setCheckoutFormHasBeenSubmitted,
 	setSepaAccountHolderName,
 	setSepaAddressCountry,
 	setSepaAddressStreetName,
 	setSepaIban,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import type {
-	SepaData,
-	State,
-} from 'pages/contributions-landing/contributionsLandingReducer';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import ContributionAmount from './ContributionAmount';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import ContributionFormFields from './ContributionFormFields';
@@ -72,57 +56,6 @@ import StripePaymentRequestButton from './StripePaymentRequestButton';
 
 // ----- Types ----- //
 
-type PropTypes = {
-	isWaiting: boolean;
-	countryGroupId: CountryGroupId;
-	email: string;
-	otherAmounts: OtherAmounts;
-	paymentMethod: PaymentMethod;
-	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	contributionType: ContributionType;
-	currency: IsoCurrency;
-	paymentError: ErrorReason | null;
-	selectedAmounts: SelectedAmounts;
-	setPaymentIsWaiting: (isWaiting: boolean) => void;
-	openDirectDebitPopUp: () => void;
-	createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => void;
-	setCheckoutFormHasBeenSubmitted: () => void;
-	onPaymentAuthorisation: (paymentAuthorisation: PaymentAuthorisation) => void;
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
-	isSignedIn: boolean;
-	formIsValid: boolean;
-	isPostDeploymentTestUser: boolean;
-	formIsSubmittable: boolean;
-	isTestUser: boolean;
-	country: IsoCountry;
-	stripeClientSecret: string | null;
-	amazonPayOrderReferenceId: string | null;
-	checkoutFormHasBeenSubmitted: boolean;
-	campaignSettings: CampaignSettings | null;
-	amazonPayBillingAgreementId: string | null | undefined;
-	localCurrencyCountry: LocalCurrencyCountry | null | undefined;
-	amounts: ContributionAmounts;
-	useLocalCurrency: boolean;
-	setUseLocalCurrency: (
-		useLocalCurrency: boolean,
-		localCurrencyCountry: LocalCurrencyCountry | null | undefined,
-		defaultOneOffAmount: number,
-	) => void;
-	defaultOneOffAmount: number;
-	sepaData: SepaData;
-	setSepaIban: (iban: string) => void;
-	setSepaAccountHolderName: (accountHolderName: string) => void;
-	setSepaAddressStreetName: (streetName: string) => void;
-	setSepaAddressCountry: (addressCountry: Country) => void;
-	productSetAbTestVariant: boolean;
-	benefitsMessagingAbTestBulletVariant: boolean;
-	benefitsMessagingAbTestParaVariant: boolean;
-	setSelectedAmount: (
-		amount: number | 'other',
-		contributionType: ContributionType,
-	) => void;
-};
-
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
 // i.e it is null.
 const getCheckoutFormValue = (
@@ -130,99 +63,75 @@ const getCheckoutFormValue = (
 	userValue: string | null,
 ): string | null => (formValue === null ? userValue : formValue);
 
-const mapStateToProps = (state: State) => ({
-	isWaiting: state.page.form.isWaiting,
-	countryGroupId: state.common.internationalisation.countryGroupId,
-	email:
-		getCheckoutFormValue(
-			state.page.checkoutForm.personalDetails.email,
-			state.page.user.email,
-		) ?? '',
-	otherAmounts: state.page.form.formData.otherAmounts,
-	paymentMethod: state.page.form.paymentMethod,
-	existingPaymentMethod: state.page.form.existingPaymentMethod,
-	stripeClientSecret:
-		state.page.form.stripeCardFormData.setupIntentClientSecret,
-	contributionType: state.page.form.contributionType,
-	paymentError: state.page.form.paymentError,
-	selectedAmounts: state.page.form.selectedAmounts,
-	userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
-	isSignedIn: state.page.user.isSignedIn,
-	formIsValid: state.page.form.formIsValid,
-	isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
-	formIsSubmittable: state.page.form.formIsSubmittable,
-	isTestUser: state.page.user.isTestUser ?? false,
-	country: state.common.internationalisation.countryId,
-	amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
-	checkoutFormHasBeenSubmitted:
-		state.page.form.formData.checkoutFormHasBeenSubmitted,
-	amazonPayBillingAgreementId:
-		state.page.form.amazonPayData.amazonBillingAgreementId,
-	localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
-	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
-	currency: state.common.internationalisation.currencyId,
-	amounts: state.common.amounts,
-	defaultOneOffAmount: state.common.defaultAmounts.ONE_OFF.defaultAmount,
-	sepaData: state.page.form.sepaData,
-	productSetAbTestVariant:
-		state.common.abParticipations.productSetTest === 'variant',
-	benefitsMessagingAbTestBulletVariant:
-		state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
-		state.page.form.contributionType !== 'ONE_OFF',
-	benefitsMessagingAbTestParaVariant:
-		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
-		state.page.form.contributionType !== 'ONE_OFF',
-});
+const mapStateToProps = (state: State) => {
+	const contributionType = getContributionType(state);
+	return {
+		isWaiting: state.page.form.isWaiting,
+		countryGroupId: state.common.internationalisation.countryGroupId,
+		email:
+			getCheckoutFormValue(
+				state.page.checkoutForm.personalDetails.email,
+				state.page.user.email,
+			) ?? '',
+		otherAmounts: state.page.checkoutForm.product.otherAmounts,
+		paymentMethod: state.page.form.paymentMethod,
+		existingPaymentMethod: state.page.form.existingPaymentMethod,
+		stripeClientSecret:
+			state.page.form.stripeCardFormData.setupIntentClientSecret,
+		contributionType,
+		paymentError: state.page.form.paymentError,
+		selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
+		userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
+		isSignedIn: state.page.user.isSignedIn,
+		formIsValid: state.page.form.formIsValid,
+		isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
+		formIsSubmittable: state.page.form.formIsSubmittable,
+		isTestUser: state.page.user.isTestUser ?? false,
+		country: state.common.internationalisation.countryId,
+		amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
+		checkoutFormHasBeenSubmitted:
+			state.page.form.formData.checkoutFormHasBeenSubmitted,
+		amazonPayBillingAgreementId:
+			state.page.form.amazonPayData.amazonBillingAgreementId,
+		localCurrencyCountry:
+			state.common.internationalisation.localCurrencyCountry,
+		useLocalCurrency: state.common.internationalisation.useLocalCurrency,
+		currency: state.common.internationalisation.currencyId,
+		amounts: state.common.amounts,
+		defaultOneOffAmount: state.common.defaultAmounts.ONE_OFF.defaultAmount,
+		sepaData: state.page.form.sepaData,
+		productSetAbTestVariant:
+			state.common.abParticipations.productSetTest === 'variant',
+		benefitsMessagingAbTestBulletVariant:
+			state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
+			contributionType !== 'ONE_OFF',
+		benefitsMessagingAbTestParaVariant:
+			state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
+			contributionType !== 'ONE_OFF',
+	};
+};
 
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
-	setPaymentIsWaiting: (isWaiting: boolean) => {
-		dispatch(paymentWaiting(isWaiting));
-	},
-	openDirectDebitPopUp: () => {
-		dispatch(openDirectDebitPopUp());
-	},
-	setCheckoutFormHasBeenSubmitted: () => {
-		dispatch(setCheckoutFormHasBeenSubmitted());
-	},
-	createOneOffPayPalPayment: (data: CreatePaypalPaymentData) => {
-		dispatch(createOneOffPayPalPayment(data));
-	},
-	setUseLocalCurrency: (
-		useLocalCurrency: boolean,
-		localCurrencyCountry: LocalCurrencyCountry | null | undefined,
-		defaultOneOffAmount: number,
-	) => {
-		dispatch(setUseLocalCurrencyFlag(useLocalCurrency));
-		dispatch(setCurrencyId(useLocalCurrency));
-		dispatch(setUseLocalAmounts(useLocalCurrency));
-		dispatch(
-			selectAmount(
-				useLocalCurrency && localCurrencyCountry
-					? localCurrencyCountry.amounts.ONE_OFF.defaultAmount
-					: defaultOneOffAmount,
-				'ONE_OFF',
-			),
-		);
-	},
-	setSepaIban: (iban: string) => {
-		dispatch(setSepaIban(iban));
-	},
-	setSepaAccountHolderName: (name: string) => {
-		dispatch(setSepaAccountHolderName(name));
-	},
-	setSepaAddressStreetName: (addressStreetName: string) => {
-		dispatch(setSepaAddressStreetName(addressStreetName));
-	},
-	setSepaAddressCountry: (addressCountry: Country) => {
-		dispatch(setSepaAddressCountry(addressCountry));
-	},
-	setSelectedAmount: (
-		amount: number | 'other',
-		contributionType: ContributionType,
-	) => {
-		dispatch(selectAmount(amount, contributionType));
-	},
-});
+const mapDispatchToProps = {
+	setPaymentIsWaiting: paymentWaiting,
+	openDirectDebitPopUp,
+	setCheckoutFormHasBeenSubmitted,
+	createOneOffPayPalPayment,
+	setUseLocalCurrencyFlag,
+	setCurrencyId,
+	setUseLocalAmounts,
+	setSelectedAmount,
+	setSepaIban,
+	setSepaAccountHolderName,
+	setSepaAddressStreetName,
+	setSepaAddressCountry,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropTypes = ConnectedProps<typeof connector> & {
+	campaignSettings: CampaignSettings | null;
+	onPaymentAuthorisation: (paymentAuthorisation: PaymentAuthorisation) => void;
+};
 
 // ----- Render ----- //
 function ContributionForm(props: PropTypes): JSX.Element {
@@ -237,8 +146,27 @@ function ContributionForm(props: PropTypes): JSX.Element {
 	);
 	const isAUDCountryGroup = props.countryGroupId === 'AUDCountries';
 
+	function setUseLocalCurrency(
+		useLocalCurrency: boolean,
+		localCurrencyCountry: LocalCurrencyCountry | null | undefined,
+		defaultOneOffAmount: number,
+	) {
+		const amount =
+			useLocalCurrency && localCurrencyCountry
+				? localCurrencyCountry.amounts.ONE_OFF.defaultAmount
+				: defaultOneOffAmount;
+
+		props.setUseLocalCurrencyFlag(useLocalCurrency);
+		props.setCurrencyId(useLocalCurrency);
+		props.setUseLocalAmounts(useLocalCurrency);
+		props.setSelectedAmount({
+			amount: amount.toString(),
+			contributionType: 'ONE_OFF',
+		});
+	}
+
 	function toggleUseLocalCurrency() {
-		props.setUseLocalCurrency(
+		setUseLocalCurrency(
 			!props.useLocalCurrency,
 			props.localCurrencyCountry,
 			props.defaultOneOffAmount,
@@ -496,4 +424,4 @@ function ContributionForm(props: PropTypes): JSX.Element {
 	);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributionForm);
+export default connector(ContributionForm);

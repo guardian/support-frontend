@@ -4,12 +4,6 @@ import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
-import type {
-	ContributionType,
-	OtherAmounts,
-	SelectedAmounts,
-} from 'helpers/contributions';
-import { getContributionTypeFromSession } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -41,7 +35,6 @@ export interface UserFormData {
 }
 
 interface FormData extends UserFormData {
-	otherAmounts: OtherAmounts;
 	billingState: StateProvince | null;
 	billingCountry: IsoCountry | null;
 	checkoutFormHasBeenSubmitted: boolean;
@@ -72,12 +65,10 @@ export interface SepaData {
 }
 
 interface FormState {
-	contributionType: ContributionType;
 	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
 	amazonPayData: AmazonPayData;
 	payPalData: PayPalData;
-	selectedAmounts: SelectedAmounts;
 	isWaiting: boolean;
 	formData: FormData;
 	stripePaymentRequestButtonData: {
@@ -119,7 +110,6 @@ export interface State {
 function createFormReducer() {
 	// ----- Initial state ----- //
 	const initialState: FormState = {
-		contributionType: getContributionTypeFromSession() ?? 'MONTHLY',
 		paymentMethod: 'None',
 		amazonPayData: {
 			hasBegunLoading: false,
@@ -136,17 +126,6 @@ function createFormReducer() {
 			buttonReady: false,
 		},
 		formData: {
-			otherAmounts: {
-				ONE_OFF: {
-					amount: null,
-				},
-				MONTHLY: {
-					amount: null,
-				},
-				ANNUAL: {
-					amount: null,
-				},
-			},
 			billingState: null,
 			billingCountry: null,
 			checkoutFormHasBeenSubmitted: false,
@@ -172,11 +151,6 @@ function createFormReducer() {
 			country: undefined,
 			streetName: undefined,
 		},
-		selectedAmounts: {
-			ONE_OFF: 0,
-			MONTHLY: 0,
-			ANNUAL: 0,
-		},
 		isWaiting: false,
 		paymentComplete: false,
 		paymentError: null,
@@ -192,13 +166,6 @@ function createFormReducer() {
 		action: Action,
 	): FormState {
 		switch (action.type) {
-			case 'UPDATE_CONTRIBUTION_TYPE':
-				return {
-					...state,
-					contributionType: action.contributionType,
-					formData: { ...state.formData },
-				};
-
 			case 'UPDATE_PAYMENT_METHOD':
 				return { ...state, paymentMethod: action.paymentMethod };
 
@@ -403,37 +370,6 @@ function createFormReducer() {
 
 			case 'SET_TICKER_GOAL_REACHED':
 				return { ...state, tickerGoalReached: true };
-
-			case 'SELECT_AMOUNT':
-				return {
-					...state,
-					selectedAmounts: {
-						...state.selectedAmounts,
-						[action.contributionType]: action.amount,
-					},
-				};
-
-			case 'SELECT_AMOUNTS':
-				return {
-					...state,
-					selectedAmounts: {
-						...action.amounts,
-					},
-				};
-
-			case 'UPDATE_OTHER_AMOUNT':
-				return {
-					...state,
-					formData: {
-						...state.formData,
-						otherAmounts: {
-							...state.formData.otherAmounts,
-							[action.contributionType]: {
-								amount: action.otherAmount,
-							},
-						},
-					},
-				};
 
 			case 'PAYMENT_FAILURE':
 				return {

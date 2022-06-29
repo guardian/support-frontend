@@ -16,6 +16,8 @@ import { logException } from 'helpers/utilities/logger';
 import { roundDp } from 'helpers/utilities/utilities';
 
 // ----- Types ----- //
+export const contributionTypes = ['ONE_OFF', 'MONTHLY', 'ANNUAL'];
+
 export type RegularContributionTypeMap<T> = {
 	MONTHLY: T;
 	ANNUAL: T;

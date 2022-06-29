@@ -22,6 +22,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import {
@@ -30,7 +31,6 @@ import {
 	setTickerGoalReached,
 } from '../contributionsLandingActions';
 import type { State } from '../contributionsLandingReducer';
-import '../contributionsLandingReducer';
 import ContributionForm from './ContributionForm';
 import { ContributionFormBlurb } from './ContributionFormBlurb';
 import {
@@ -75,23 +75,16 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
-	contributionType: state.page.form.contributionType,
-	otherAmounts: state.page.form.formData.otherAmounts,
-	selectedAmounts: state.page.form.selectedAmounts,
+	contributionType: getContributionType(state),
+	otherAmounts: state.page.checkoutForm.product.otherAmounts,
+	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
-	setPaymentIsWaiting: (isWaiting: boolean) => {
-		dispatch(paymentWaiting(isWaiting));
-	},
-	setTickerGoalReached: () => {
-		dispatch(setTickerGoalReached());
-	},
-	onThirdPartyPaymentAuthorised: (token: PaymentAuthorisation) => {
-		dispatch(onThirdPartyPaymentAuthorised(token));
-	},
-});
+const mapDispatchToProps = {
+	setPaymentIsWaiting: paymentWaiting,
+	setTickerGoalReached,
+	onThirdPartyPaymentAuthorised,
+};
 
 // ----- Styles ----- //
 

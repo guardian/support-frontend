@@ -26,6 +26,11 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
 import {
+	setAllAmounts,
+	setOtherAmount,
+	setProductType,
+} from 'helpers/redux/checkout/product/actions';
+import {
 	setContributionTypes,
 	setExistingPaymentMethods,
 } from 'helpers/redux/commonState/actions';
@@ -41,10 +46,7 @@ import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
 import {
 	getUserType,
 	loadPayPalExpressSdk,
-	selectAmounts,
 	setUserTypeFromIdentityResponse,
-	updateContributionTypeAndPaymentMethod,
-	updateOtherAmount,
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
 	updateUserFormData,
@@ -198,14 +200,19 @@ function selectInitialAmounts(
 		amountForSelectedContributionType();
 
 	dispatch(
-		selectAmounts({
+		setAllAmounts({
 			...defaults,
 			[selectedContributionType]: selectedAmount,
 		}),
 	);
 
 	if (otherAmount) {
-		dispatch(updateOtherAmount(`${otherAmount}`, selectedContributionType));
+		dispatch(
+			setOtherAmount({
+				amount: `${otherAmount}`,
+				contributionType: selectedContributionType,
+			}),
+		);
 	}
 }
 
@@ -240,9 +247,8 @@ function selectInitialContributionTypeAndPaymentMethod(
 		countryGroupId,
 		switches,
 	);
-	dispatch(
-		updateContributionTypeAndPaymentMethod(contributionType, paymentMethod),
-	);
+	dispatch(setProductType(contributionType));
+	dispatch(updatePaymentMethod(paymentMethod));
 
 	switch (paymentMethod) {
 		case PayPal:

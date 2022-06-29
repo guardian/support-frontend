@@ -5,11 +5,7 @@ import type { Dispatch } from 'redux';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import type { FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import type {
-	ContributionType,
-	PaymentMatrix,
-	SelectedAmounts,
-} from 'helpers/contributions';
+import type { ContributionType, PaymentMatrix } from 'helpers/contributions';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
@@ -71,6 +67,7 @@ import {
 	setLastName,
 	setUserTypeFromIdentityResponse,
 } from 'helpers/redux/checkout/personalDetails/actions';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import * as cookie from 'helpers/storage/cookie';
 import * as storage from 'helpers/storage/storage';
 import {
@@ -88,28 +85,12 @@ import type { State, UserFormData } from './contributionsLandingReducer';
 
 export type Action =
 	| {
-			type: 'UPDATE_CONTRIBUTION_TYPE';
-			contributionType: ContributionType;
-	  }
-	| {
 			type: 'UPDATE_PAYMENT_METHOD';
 			paymentMethod: PaymentMethod;
 	  }
 	| {
 			type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD';
 			existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	  }
-	| {
-			type: 'UPDATE_FIRST_NAME';
-			firstName: string;
-	  }
-	| {
-			type: 'UPDATE_LAST_NAME';
-			lastName: string;
-	  }
-	| {
-			type: 'UPDATE_EMAIL';
-			email: string;
 	  }
 	| {
 			type: 'UPDATE_BILLING_STATE';
@@ -155,20 +136,6 @@ export type Action =
 	| {
 			type: 'UPDATE_RECAPTCHA_TOKEN';
 			recaptchaToken: string;
-	  }
-	| {
-			type: 'SELECT_AMOUNT';
-			amount: number | 'other';
-			contributionType: ContributionType;
-	  }
-	| {
-			type: 'SELECT_AMOUNTS';
-			amounts: SelectedAmounts;
-	  }
-	| {
-			type: 'UPDATE_OTHER_AMOUNT';
-			otherAmount: string;
-			contributionType: ContributionType;
 	  }
 	| {
 			type: 'PAYMENT_RESULT';
@@ -270,17 +237,6 @@ const updatePayPalButtonReady = (ready: boolean): Action => ({
 	ready,
 });
 
-// Do not export this, as we only want it to be called via updateContributionTypeAndPaymentMethod
-const updateContributionType =
-	(contributionType: ContributionType) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		dispatch(updatePayPalButtonReady(false));
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_CONTRIBUTION_TYPE',
-			contributionType,
-		}))(dispatch, getState);
-	};
-
 const updatePaymentMethod =
 	(paymentMethod: PaymentMethod) =>
 	(dispatch: Dispatch, getState: () => State): void => {
@@ -350,38 +306,9 @@ const updateBillingCountry = (billingCountry: IsoCountry | null): Action => ({
 	billingCountry,
 });
 
-const selectAmount =
-	(amount: number | 'other', contributionType: ContributionType) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SELECT_AMOUNT',
-			amount,
-			contributionType,
-		}))(dispatch, getState);
-	};
-
-const selectAmounts =
-	(amounts: SelectedAmounts) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SELECT_AMOUNTS',
-			amounts,
-		}))(dispatch, getState);
-	};
-
 const setCheckoutFormHasBeenSubmitted = (): Action => ({
 	type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED',
 });
-
-const updateOtherAmount =
-	(otherAmount: string, contributionType: ContributionType) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_OTHER_AMOUNT',
-			otherAmount,
-			contributionType,
-		}))(dispatch, getState);
-	};
 
 const paymentSuccess = (): Action => ({
 	type: 'PAYMENT_SUCCESS',
@@ -457,18 +384,6 @@ const loadPayPalExpressSdk =
 			dispatch(setPayPalHasBegunLoading());
 			void loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
 		}
-	};
-
-const updateContributionTypeAndPaymentMethod =
-	(contributionType: ContributionType, paymentMethodToSelect: PaymentMethod) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		// PayPal one-off redirects away from the site before hitting the thank you page
-		// so we need to store the contrib type & payment method in the storage so that it is available on the
-		// thank you page in all scenarios.
-		storage.setSession('selectedContributionType', contributionType);
-		storage.setSession('selectedPaymentMethod', paymentMethodToSelect);
-		updateContributionType(contributionType)(dispatch, getState);
-		updatePaymentMethod(paymentMethodToSelect)(dispatch, getState);
 	};
 
 const getUserType =
@@ -560,6 +475,7 @@ const sendFormSubmitEventForPayPalRecurring =
 		const state = getState();
 		const formSubmitParameters: FormSubmitParameters = {
 			...state.page.form,
+			contributionType: getContributionType(state),
 			flowPrefix: 'npf',
 			form: getForm('form--contribution'),
 			isSignedIn: state.page.user.isSignedIn,
@@ -585,9 +501,9 @@ const buildStripeChargeDataFromAuthorisation = (
 	paymentData: {
 		currency: state.common.internationalisation.currencyId,
 		amount: getAmount(
-			state.page.form.selectedAmounts,
-			state.page.form.formData.otherAmounts,
-			state.page.form.contributionType,
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
+			getContributionType(state),
 		),
 		email: state.page.checkoutForm.personalDetails.email,
 		stripePaymentMethod,
@@ -597,7 +513,7 @@ const buildStripeChargeDataFromAuthorisation = (
 		state.common.abParticipations,
 	),
 	publicKey: getStripeKey(
-		stripeAccountForContributionType[state.page.form.contributionType],
+		stripeAccountForContributionType[getContributionType(state)],
 		state.common.internationalisation.countryId,
 		state.page.user.isTestUser ?? false,
 	),
@@ -678,11 +594,12 @@ function getProductOptionsForBenefitsTest(amount: number, state: State) {
 	const inBenefitsTest =
 		state.common.abParticipations.PP_V3 === 'V2_BULLET' ||
 		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH';
-	const isRecurring = state.page.form.contributionType != 'ONE_OFF';
+	const contributionType = getContributionType(state);
+	const isRecurring = contributionType !== 'ONE_OFF';
 
 	const thresholdPrice = getThresholdPrice(
 		state.common.internationalisation.countryGroupId,
-		state.page.form.contributionType,
+		contributionType,
 	);
 	const amountIsHighEnough = !!(thresholdPrice && amount >= thresholdPrice);
 	const shouldGetDigisub = inBenefitsTest && isRecurring && amountIsHighEnough;
@@ -700,11 +617,12 @@ function regularPaymentRequestFromAuthorisation(
 		state,
 	);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
+	const contributionType = getContributionType(state);
 
 	const amount = getAmount(
-		state.page.form.selectedAmounts,
-		state.page.form.formData.otherAmounts,
-		state.page.form.contributionType,
+		state.page.checkoutForm.product.selectedAmounts,
+		state.page.checkoutForm.product.otherAmounts,
+		contributionType,
 	);
 
 	const productOptions = getProductOptionsForBenefitsTest(amount, state);
@@ -730,8 +648,7 @@ function regularPaymentRequestFromAuthorisation(
 			...productOptions,
 			amount,
 			currency: state.common.internationalisation.currencyId,
-			billingPeriod:
-				state.page.form.contributionType === 'MONTHLY' ? Monthly : Annual,
+			billingPeriod: contributionType === 'MONTHLY' ? Monthly : Annual,
 		},
 		firstDeliveryDate: null,
 		paymentFields: {
@@ -752,9 +669,9 @@ const amazonPayDataFromAuthorisation = (
 	paymentData: {
 		currency: state.common.internationalisation.currencyId,
 		amount: getAmount(
-			state.page.form.selectedAmounts,
-			state.page.form.formData.otherAmounts,
-			state.page.form.contributionType,
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
+			getContributionType(state),
 		),
 		orderReferenceId: authorisation.orderReferenceId ?? '',
 		email: state.page.checkoutForm.personalDetails.email,
@@ -800,9 +717,7 @@ const onPaymentResult =
 						dispatch(
 							setStripePaymentRequestButtonError(
 								result.error,
-								stripeAccountForContributionType[
-									state.page.form.contributionType
-								],
+								stripeAccountForContributionType[getContributionType(state)],
 							),
 						);
 					} else {
@@ -1052,13 +967,13 @@ const onThirdPartyPaymentAuthorised =
 	(paymentAuthorisation: PaymentAuthorisation) =>
 	(dispatch: Dispatch, getState: () => State): Promise<PaymentResult> => {
 		const state = getState();
-		return paymentAuthorisationHandlers[state.page.form.contributionType][
+		const contributionType = getContributionType(state);
+		return paymentAuthorisationHandlers[contributionType][
 			state.page.form.paymentMethod
 		](dispatch, state, paymentAuthorisation);
 	};
 
 export {
-	updateContributionTypeAndPaymentMethod,
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
 	setFirstName,
@@ -1076,9 +991,6 @@ export {
 	setAmazonPayBillingAgreementConsentStatus,
 	setAmazonPayPaymentSelected,
 	setUserTypeFromIdentityResponse,
-	selectAmount,
-	selectAmounts,
-	updateOtherAmount,
 	paymentFailure,
 	paymentWaiting,
 	paymentSuccess,

@@ -18,6 +18,7 @@ import { AmazonPay, Sepa } from 'helpers/forms/paymentMethods';
 import { stripeCardFormIsIncomplete } from 'helpers/forms/stripe';
 import type { StateProvince } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import type { Action as UserAction } from 'helpers/user/userActions';
 import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
 import { setFormIsValid } from './contributionsLandingActions';
@@ -120,9 +121,7 @@ const amazonPayFormOk = (state: State): boolean => {
 
 		return (
 			paymentSelected &&
-			(state.page.form.contributionType === 'ONE_OFF'
-				? oneOffOk()
-				: recurringOk())
+			(getContributionType(state) === 'ONE_OFF' ? oneOffOk() : recurringOk())
 		);
 	}
 
@@ -139,10 +138,10 @@ const sepaFormOk = (state: State): boolean => {
 };
 
 const formIsValidParameters = (state: State) => ({
-	selectedAmounts: state.page.form.selectedAmounts,
-	otherAmounts: state.page.form.formData.otherAmounts,
+	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
+	otherAmounts: state.page.checkoutForm.product.otherAmounts,
 	countryGroupId: state.common.internationalisation.countryGroupId,
-	contributionType: state.page.form.contributionType,
+	contributionType: getContributionType(state),
 	billingState: state.page.form.formData.billingState,
 	firstName: state.page.checkoutForm.personalDetails.firstName,
 	lastName: state.page.checkoutForm.personalDetails.lastName,
@@ -161,9 +160,10 @@ function enableOrDisableForm() {
 	return (dispatch: Dispatch, getState: () => State): void => {
 		const state = getState();
 		const { isRecurringContributor } = state.page.user;
+		const contributionType = getContributionType(state);
+
 		const shouldBlockExistingRecurringContributor =
-			isRecurringContributor &&
-			contributionTypeIsRecurring(state.page.form.contributionType);
+			isRecurringContributor && contributionTypeIsRecurring(contributionType);
 		const formIsValid = getFormIsValid(formIsValidParameters(state));
 		dispatch(setFormIsValid(formIsValid));
 		const recaptchaRequired =
@@ -171,7 +171,7 @@ function enableOrDisableForm() {
 			state.page.form.paymentMethod === 'Stripe' &&
 			!state.page.user.isPostDeploymentTestUser;
 		const recaptchaVerified =
-			state.page.form.contributionType !== 'ONE_OFF'
+			contributionType !== 'ONE_OFF'
 				? state.page.form.stripeCardFormData.recurringRecaptchaVerified
 				: !!state.page.form.oneOffRecaptchaToken;
 		const shouldEnable =

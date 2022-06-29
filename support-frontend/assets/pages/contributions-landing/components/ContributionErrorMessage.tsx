@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import type { ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import type { State } from '../contributionsLandingReducer';
 import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringContributorErrorMessage';
 
@@ -20,7 +21,7 @@ type PropTypes = {
 
 const mapStateToProps = (state: State) => ({
 	paymentMethod: state.page.form.paymentMethod,
-	contributionType: state.page.form.contributionType,
+	contributionType: getContributionType(state),
 	paymentError: state.page.form.paymentError,
 	isSignedIn: state.page.user.isSignedIn,
 	formIsValid: state.page.form.formIsValid,

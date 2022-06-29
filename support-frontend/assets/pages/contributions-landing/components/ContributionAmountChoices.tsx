@@ -5,12 +5,12 @@ import { until } from '@guardian/source-foundations';
 import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
+import type { AmountChange } from 'helpers/redux/checkout/product/state';
 import ContributionAmountChoicesChoiceLabel from './ContributionAmountChoicesChoiceLabel';
 
 const choiceCardGridStyles = css`
@@ -27,6 +27,7 @@ const choiceCardGridStyles = css`
 		}
 	}
 `;
+
 const choiceCardGridFullWidthOtherStyles = css`
 	${choiceCardGridStyles}
 
@@ -35,20 +36,15 @@ const choiceCardGridFullWidthOtherStyles = css`
 		grid-column-end: 3;
 	}
 `;
+
 type ContributionAmountChoicesProps = {
-	countryGroupId: CountryGroupId;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
 	validAmounts: number[];
 	defaultAmount: number;
 	showOther: boolean;
 	selectedAmounts: SelectedAmounts;
-	selectAmount: (
-		arg0: number | 'other',
-		arg1: CountryGroupId,
-		arg2: ContributionType,
-		arg3: IsoCurrency,
-	) => () => void;
+	selectAmount: (amountChange: AmountChange) => void;
 	shouldShowFrequencyButtons: boolean;
 };
 
@@ -71,7 +67,6 @@ const isSelected = (
 function ContributionAmountChoices({
 	validAmounts,
 	defaultAmount,
-	countryGroupId,
 	contributionType,
 	showOther,
 	selectAmount,
@@ -103,12 +98,12 @@ function ContributionAmountChoices({
 							contributionType,
 							defaultAmount,
 						)}
-						onChange={selectAmount(
-							amount,
-							countryGroupId,
-							contributionType,
-							currency,
-						)}
+						onChange={() =>
+							selectAmount({
+								amount: amount.toString(),
+								contributionType,
+							})
+						}
 						label={
 							<ContributionAmountChoicesChoiceLabel
 								formattedAmount={formatAmount(
@@ -130,12 +125,7 @@ function ContributionAmountChoices({
 				name="contributionAmount"
 				value="other"
 				checked={showOther}
-				onChange={selectAmount(
-					'other',
-					countryGroupId,
-					contributionType,
-					currency,
-				)}
+				onChange={() => selectAmount({ amount: 'other', contributionType })}
 				label="Other"
 			/>
 		</ChoiceCardGroup>

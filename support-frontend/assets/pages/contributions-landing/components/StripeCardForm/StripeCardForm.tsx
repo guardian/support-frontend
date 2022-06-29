@@ -18,6 +18,7 @@ import { usePrevious } from 'helpers/customHooks/usePrevious';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { isValidZipCode } from 'helpers/forms/formValidation';
 import { Stripe } from 'helpers/forms/paymentMethods';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
 	onThirdPartyPaymentAuthorised,
@@ -50,7 +51,7 @@ import './stripeCardForm.scss';
 // ----- Redux -----//
 
 const mapStateToProps = (state: State) => ({
-	contributionType: state.page.form.contributionType,
+	contributionType: getContributionType(state),
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 	paymentWaiting: state.page.form.isWaiting,

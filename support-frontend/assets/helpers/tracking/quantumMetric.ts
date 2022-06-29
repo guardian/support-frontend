@@ -218,11 +218,11 @@ export function sendEventContributionCheckoutConversion(
 }
 
 export function sendEventContributionAmountUpdated(
-	amount: number | 'other',
+	amount: string,
 	contributionType: ContributionType,
 	sourceCurrency: IsoCurrency,
 ): void {
-	if (amount === 'other') {
+	if (amount === 'other' || Number.isNaN(parseInt(amount))) {
 		return;
 	}
 
@@ -235,7 +235,7 @@ export function sendEventContributionAmountUpdated(
 						: SendEventContributionAmountUpdate.RecurringContribution;
 				const convertedValue = getContributionAnnualValue(
 					contributionType,
-					amount,
+					parseInt(amount),
 					sourceCurrency,
 				);
 				if (convertedValue) {
