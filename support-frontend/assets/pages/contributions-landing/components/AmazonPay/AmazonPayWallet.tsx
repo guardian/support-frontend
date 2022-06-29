@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import type { ThunkDispatch } from 'redux-thunk';
 import type { ContributionType } from 'helpers/contributions';
 import type {
+	AmazonLoginObject,
 	AmazonPayData,
 	AmazonPaymentsObject,
 	BaseWalletConfig,
@@ -24,6 +25,8 @@ import './AmazonPay.scss';
 
 type PropTypes = {
 	amazonPayData: AmazonPayData;
+	amazonLoginObject?: AmazonLoginObject;
+	amazonPaymentsObject?: AmazonPaymentsObject;
 	setAmazonPayWalletIsStale: (isStale: boolean) => void;
 	setAmazonPayOrderReferenceId: (referenceId: string) => void;
 	setAmazonPayPaymentSelected: (paymentSelected: boolean) => void;
@@ -145,37 +148,29 @@ function AmazonPayWalletComponent(props: PropTypes) {
 	};
 
 	useEffect(() => {
-		const { amazonPaymentsObject } = props.amazonPayData.amazonPayLibrary;
-
-		if (amazonPaymentsObject) {
-			createWalletWidget(amazonPaymentsObject);
+		if (props.amazonPaymentsObject) {
+			createWalletWidget(props.amazonPaymentsObject);
 		}
-	}, [
-		props.amazonPayData.amazonPayLibrary.amazonPaymentsObject,
-		props.amazonPayData.walletIsStale,
-	]);
-	useEffect(() => {
-		const { amazonPaymentsObject } = props.amazonPayData.amazonPayLibrary;
+	}, [props.amazonPaymentsObject, props.amazonPayData.walletIsStale]);
 
+	useEffect(() => {
 		if (
-			amazonPaymentsObject &&
+			props.amazonPaymentsObject &&
 			props.amazonPayData.amazonBillingAgreementId &&
 			props.contributionType !== 'ONE_OFF'
 		) {
 			createConsentWidget(
-				amazonPaymentsObject,
+				props.amazonPaymentsObject,
 				props.amazonPayData.amazonBillingAgreementId,
 			);
 		}
 	}, [
-		props.amazonPayData.amazonPayLibrary.amazonPaymentsObject,
+		props.amazonPaymentsObject,
 		props.amazonPayData.amazonBillingAgreementId,
 		props.contributionType,
 	]);
-	const { amazonLoginObject, amazonPaymentsObject } =
-		props.amazonPayData.amazonPayLibrary;
 
-	if (amazonLoginObject && amazonPaymentsObject) {
+	if (props.amazonLoginObject && props.amazonPaymentsObject) {
 		trackComponentLoad('amazon-pay-wallet-loaded');
 		return (
 			<div>

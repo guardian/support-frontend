@@ -1,5 +1,6 @@
 import { loadScript } from '@guardian/libs';
 import type { Participations } from 'helpers/abTests/abtest';
+import type { ContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
@@ -7,6 +8,7 @@ import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
 import {
 	canRunQuantumMetric,
+	getContributionAnnualValue,
 	getSubscriptionAnnualValue,
 	waitForQuantumMetricAPi,
 } from './quantumMetricHelpers';
@@ -15,7 +17,7 @@ import {
 
 type SendEventTestParticipationId = 30;
 
-enum SendEventCheckoutStart {
+enum SendEventSubscriptionCheckoutStart {
 	DigiSub = 75,
 	PaperSub = 76,
 	GuardianWeeklySub = 77,
@@ -23,7 +25,7 @@ enum SendEventCheckoutStart {
 	GuardianWeeklySubGift = 79,
 }
 
-enum SendEventCheckoutConversion {
+enum SendEventSubscriptionCheckoutConversion {
 	DigiSub = 31,
 	PaperSub = 67,
 	GuardianWeeklySub = 68,
@@ -31,10 +33,22 @@ enum SendEventCheckoutConversion {
 	GuardianWeeklySubGift = 70,
 }
 
+enum SendEventContributionAmountUpdate {
+	SingleContribution = 71,
+	RecurringContribution = 72,
+}
+
+enum SendEventContributionCheckoutConversion {
+	SingleContribution = 73,
+	RecurringContribution = 74,
+}
+
 type SendEventId =
 	| SendEventTestParticipationId
-	| SendEventCheckoutStart
-	| SendEventCheckoutConversion;
+	| SendEventSubscriptionCheckoutStart
+	| SendEventSubscriptionCheckoutConversion
+	| SendEventContributionAmountUpdate
+	| SendEventContributionCheckoutConversion;
 
 // ---- sendEvent logic ---- //
 
@@ -48,8 +62,28 @@ function sendEvent(
 	}
 }
 
+function sendEventWhenReadyTrigger(sendEventWhenReady: () => void): void {
+	/**
+	 * Quantum Metric's script sets up QuantumMetricAPI.
+	 * We need to check it is defined and ready before we can
+	 * send events to it. If it is ready we call sendEventWhenReady
+	 * immediately. If it is not ready we poll a function that checks
+	 * if QuantumMetricAPI is available. Once it's available we
+	 * call sendEventWhenReady.
+	 */
+	if (window.QuantumMetricAPI?.isOn()) {
+		sendEventWhenReady();
+	} else {
+		waitForQuantumMetricAPi(() => {
+			sendEventWhenReady();
+		});
+	}
+}
+
 function sendEventSubscriptionCheckoutEvent(
-	id: SendEventCheckoutStart | SendEventCheckoutConversion,
+	id:
+		| SendEventSubscriptionCheckoutStart
+		| SendEventSubscriptionCheckoutConversion,
 	productPrice: ProductPrice,
 	billingPeriod: BillingPeriod,
 	isConversion: boolean,
@@ -74,21 +108,7 @@ function sendEventSubscriptionCheckoutEvent(
 				}
 			};
 
-			/**
-			 * Quantum Metric's script sets up QuantumMetricAPI.
-			 * We need to check it is defined and ready before we can
-			 * send events to it. If it is ready we call sendEventWhenReady
-			 * immediately. If it is not ready we poll a function that checks
-			 * if QuantumMetricAPI is available. Once it's available we
-			 * call sendEventWhenReady.
-			 */
-			if (window.QuantumMetricAPI?.isOn()) {
-				sendEventWhenReady();
-			} else {
-				waitForQuantumMetricAPi(() => {
-					sendEventWhenReady();
-				});
-			}
+			sendEventWhenReadyTrigger(sendEventWhenReady);
 		}
 	});
 }
@@ -101,35 +121,35 @@ function productToCheckoutEvents(
 		case 'DigitalPack':
 			return orderIsAGift
 				? checkoutEvents(
-						SendEventCheckoutStart.DigiSubGift,
-						SendEventCheckoutConversion.DigiSubGift,
+						SendEventSubscriptionCheckoutStart.DigiSubGift,
+						SendEventSubscriptionCheckoutConversion.DigiSubGift,
 				  )
 				: checkoutEvents(
-						SendEventCheckoutStart.DigiSub,
-						SendEventCheckoutConversion.DigiSub,
+						SendEventSubscriptionCheckoutStart.DigiSub,
+						SendEventSubscriptionCheckoutConversion.DigiSub,
 				  );
 		case 'GuardianWeekly':
 			return orderIsAGift
 				? checkoutEvents(
-						SendEventCheckoutStart.GuardianWeeklySubGift,
-						SendEventCheckoutConversion.GuardianWeeklySubGift,
+						SendEventSubscriptionCheckoutStart.GuardianWeeklySubGift,
+						SendEventSubscriptionCheckoutConversion.GuardianWeeklySubGift,
 				  )
 				: checkoutEvents(
-						SendEventCheckoutStart.GuardianWeeklySub,
-						SendEventCheckoutConversion.GuardianWeeklySub,
+						SendEventSubscriptionCheckoutStart.GuardianWeeklySub,
+						SendEventSubscriptionCheckoutConversion.GuardianWeeklySub,
 				  );
 		case 'Paper':
 		case 'PaperAndDigital':
 			return checkoutEvents(
-				SendEventCheckoutStart.PaperSub,
-				SendEventCheckoutConversion.PaperSub,
+				SendEventSubscriptionCheckoutStart.PaperSub,
+				SendEventSubscriptionCheckoutConversion.PaperSub,
 			);
 	}
 }
 
 function checkoutEvents(
-	start: SendEventCheckoutStart,
-	conversion: SendEventCheckoutConversion,
+	start: SendEventSubscriptionCheckoutStart,
+	conversion: SendEventSubscriptionCheckoutConversion,
 ) {
 	return { start, conversion };
 }
@@ -168,6 +188,64 @@ export function sendEventSubscriptionCheckoutConversion(
 			true,
 		);
 	}
+}
+
+export function sendEventContributionCheckoutConversion(
+	amount: number,
+	contributionType: ContributionType,
+	sourceCurrency: IsoCurrency,
+): void {
+	void canRunQuantumMetric().then((canRun) => {
+		if (canRun) {
+			const sendEventWhenReady = () => {
+				const sendEventId =
+					contributionType === 'ONE_OFF'
+						? SendEventContributionCheckoutConversion.SingleContribution
+						: SendEventContributionCheckoutConversion.RecurringContribution;
+				const convertedValue = getContributionAnnualValue(
+					contributionType,
+					amount,
+					sourceCurrency,
+				);
+				if (convertedValue) {
+					sendEvent(sendEventId, true, convertedValue.toString());
+				}
+			};
+
+			sendEventWhenReadyTrigger(sendEventWhenReady);
+		}
+	});
+}
+
+export function sendEventContributionAmountUpdated(
+	amount: string,
+	contributionType: ContributionType,
+	sourceCurrency: IsoCurrency,
+): void {
+	if (amount === 'other' || Number.isNaN(parseInt(amount))) {
+		return;
+	}
+
+	void canRunQuantumMetric().then((canRun) => {
+		if (canRun) {
+			const sendEventWhenReady = () => {
+				const sendEventId =
+					contributionType === 'ONE_OFF'
+						? SendEventContributionAmountUpdate.SingleContribution
+						: SendEventContributionAmountUpdate.RecurringContribution;
+				const convertedValue = getContributionAnnualValue(
+					contributionType,
+					parseInt(amount),
+					sourceCurrency,
+				);
+				if (convertedValue) {
+					sendEvent(sendEventId, false, convertedValue.toString());
+				}
+			};
+
+			sendEventWhenReadyTrigger(sendEventWhenReady);
+		}
+	});
 }
 
 function sendEventABTestParticipations(participations: Participations): void {

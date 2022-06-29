@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 import type {
 	PaymentMethod,
 	PaymentMethodMap,
@@ -43,19 +42,6 @@ export const logInvalidCombination = (
 	logException(
 		`Invalid combination of contribution type ${contributionType} and payment method ${paymentMethod}`,
 	);
-};
-
-// Legacy type, only used by stripe checkout. Can be cleaned up after stripe checkout fully removed
-export type ThirdPartyPaymentLibraries = {
-	ONE_OFF: {
-		Stripe: ThirdPartyPaymentLibrary | null;
-	};
-	MONTHLY: {
-		Stripe: ThirdPartyPaymentLibrary | null;
-	};
-	ANNUAL: {
-		Stripe: ThirdPartyPaymentLibrary | null;
-	};
 };
 
 export type AmountSelection = {

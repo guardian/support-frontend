@@ -74,7 +74,6 @@ const mapStateToProps = (state: State) => ({
 	otherAmounts: state.page.checkoutForm.product.otherAmounts,
 	paymentMethod: state.page.form.paymentMethod,
 	existingPaymentMethod: state.page.form.existingPaymentMethod,
-	thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
 	stripeClientSecret:
 		state.page.form.stripeCardFormData.setupIntentClientSecret,
 	contributionType: getContributionType(state),

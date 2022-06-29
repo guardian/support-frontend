@@ -1,11 +1,9 @@
 // ----- Imports ----- //
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
-import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
-import type { ThirdPartyPaymentLibraries } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -51,9 +49,6 @@ export interface StripeCardFormData {
 	formComplete: boolean;
 	setupIntentClientSecret: string | null;
 	recurringRecaptchaVerified: boolean;
-	// TODO: No non-serialisable values should be in Redux state!! This needs to be refactored
-	// These callbacks must be initialised after the StripeCardForm component has been created
-	handle3DS: ((clientSecret: string) => Promise<PaymentIntentResult>) | null; // For single only
 }
 
 export interface PayPalData {
@@ -72,8 +67,6 @@ export interface SepaData {
 interface FormState {
 	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries;
-	// TODO clean up when rest of Stripe Checkout is removed
 	amazonPayData: AmazonPayData;
 	payPalData: PayPalData;
 	isWaiting: boolean;
@@ -118,23 +111,8 @@ function createFormReducer() {
 	// ----- Initial state ----- //
 	const initialState: FormState = {
 		paymentMethod: 'None',
-		thirdPartyPaymentLibraries: {
-			ONE_OFF: {
-				Stripe: null,
-			},
-			MONTHLY: {
-				Stripe: null,
-			},
-			ANNUAL: {
-				Stripe: null,
-			},
-		},
 		amazonPayData: {
 			hasBegunLoading: false,
-			amazonPayLibrary: {
-				amazonLoginObject: null,
-				amazonPaymentsObject: null,
-			},
 			walletIsStale: false,
 			orderReferenceId: null,
 			paymentSelected: false,
@@ -166,7 +144,6 @@ function createFormReducer() {
 			formComplete: false,
 			setupIntentClientSecret: null,
 			recurringRecaptchaVerified: false,
-			handle3DS: null,
 		},
 		sepaData: {
 			iban: null,
@@ -198,53 +175,10 @@ function createFormReducer() {
 					existingPaymentMethod: action.existingPaymentMethod,
 				};
 
-			case 'UPDATE_PAYMENT_READY':
-				return {
-					...state,
-					thirdPartyPaymentLibraries: {
-						ONE_OFF: {
-							...state.thirdPartyPaymentLibraries.ONE_OFF,
-							...action.thirdPartyPaymentLibraryByContrib.ONE_OFF,
-						},
-						MONTHLY: {
-							...state.thirdPartyPaymentLibraries.MONTHLY,
-							...action.thirdPartyPaymentLibraryByContrib.MONTHLY,
-						},
-						ANNUAL: {
-							...state.thirdPartyPaymentLibraries.ANNUAL,
-							...action.thirdPartyPaymentLibraryByContrib.ANNUAL,
-						},
-					},
-				};
-
 			case 'SET_AMAZON_PAY_HAS_BEGUN_LOADING':
 				return {
 					...state,
 					amazonPayData: { ...state.amazonPayData, hasBegunLoading: true },
-				};
-
-			case 'SET_AMAZON_PAY_LOGIN_OBJECT':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						amazonPayLibrary: {
-							...state.amazonPayData.amazonPayLibrary,
-							amazonLoginObject: action.amazonLoginObject,
-						},
-					},
-				};
-
-			case 'SET_AMAZON_PAY_PAYMENTS_OBJECT':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						amazonPayLibrary: {
-							...state.amazonPayData.amazonPayLibrary,
-							amazonPaymentsObject: action.amazonPaymentsObject,
-						},
-					},
 				};
 
 			case 'SET_AMAZON_PAY_WALLET_IS_STALE':
@@ -302,15 +236,6 @@ function createFormReducer() {
 						...state.amazonPayData,
 						amazonBillingAgreementConsentStatus:
 							action.amazonBillingAgreementConsentStatus,
-					},
-				};
-
-			case 'SET_HANDLE_STRIPE_3DS':
-				return {
-					...state,
-					stripeCardFormData: {
-						...state.stripeCardFormData,
-						handle3DS: action.handleStripe3DS,
 					},
 				};
 

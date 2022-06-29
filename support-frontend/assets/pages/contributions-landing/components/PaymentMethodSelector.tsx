@@ -46,7 +46,6 @@ import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { Action } from '../contributionsLandingActions';
 import {
-	loadAmazonPaySdk,
 	loadPayPalExpressSdk,
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
@@ -73,10 +72,6 @@ interface PaymentMethodSelectorProps {
 	payPalHasBegunLoading: boolean;
 	amazonPayHasBegunLoading: boolean;
 	loadPayPalExpressSdk: (contributionType: ContributionType) => void;
-	loadAmazonPaySdk: (
-		countryGroupId: CountryGroupId,
-		isTestUser: boolean,
-	) => void;
 	checkoutFormHasBeenSubmitted: boolean;
 }
 
@@ -100,7 +95,6 @@ const mapDispatchToProps = {
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
 	loadPayPalExpressSdk,
-	loadAmazonPaySdk,
 };
 
 function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
@@ -120,13 +114,6 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 			case PayPal:
 				if (!props.payPalHasBegunLoading) {
 					props.loadPayPalExpressSdk(props.contributionType);
-				}
-
-				break;
-
-			case AmazonPay:
-				if (!props.amazonPayHasBegunLoading) {
-					props.loadAmazonPaySdk(props.countryGroupId, props.isTestUser);
 				}
 
 				break;

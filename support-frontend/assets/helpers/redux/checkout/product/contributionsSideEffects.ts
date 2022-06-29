@@ -2,6 +2,7 @@ import { isAnyOf } from '@reduxjs/toolkit';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendEventContributionAmountUpdated } from 'helpers/tracking/quantumMetric';
 import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
 import {
 	setAllAmounts,
@@ -29,9 +30,12 @@ export function addProductSideEffects(
 	startListening({
 		actionCreator: setSelectedAmount,
 		effect(action, listenerApi) {
-			const { countryGroupId } =
+			const { countryGroupId, currencyId } =
 				listenerApi.getState().common.internationalisation;
 			const { amount, contributionType } = action.payload;
+
+			sendEventContributionAmountUpdated(amount, contributionType, currencyId);
+
 			trackComponentClick(
 				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`,
 			);

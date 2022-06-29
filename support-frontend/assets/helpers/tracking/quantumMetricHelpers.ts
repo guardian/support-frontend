@@ -1,5 +1,10 @@
-import { onConsentChange } from '@guardian/consent-management-platform';
+import {
+	getConsentFor,
+	onConsent,
+} from '@guardian/consent-management-platform';
+import type { ContributionType } from 'helpers/contributions';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
@@ -48,6 +53,28 @@ export function getSubscriptionAnnualValue(
 	return discountedAnnualPrice;
 }
 
+export function getContributionAnnualValue(
+	contributionType: ContributionType,
+	amount: number,
+	sourceCurrency: IsoCurrency,
+): number | undefined {
+	const valueInPence =
+		contributionType === 'ONE_OFF' || contributionType === 'ANNUAL'
+			? amount * 100
+			: amount * 100 * 12;
+	const targetCurrency: IsoCurrency = 'GBP';
+
+	if (window.QuantumMetricAPI?.isOn()) {
+		const convertedValue: number =
+			window.QuantumMetricAPI.currencyConvertFromToValue(
+				valueInPence,
+				sourceCurrency,
+				targetCurrency,
+			);
+		return convertedValue;
+	}
+}
+
 export function waitForQuantumMetricAPi(onReady: () => void): void {
 	let pollCount = 0;
 	const checkForQuantumMetricAPi = setInterval(() => {
@@ -67,21 +94,8 @@ export function canRunQuantumMetric(): Promise<boolean> {
 	if (!isSwitchOn('featureSwitches.enableQuantumMetric')) {
 		return Promise.resolve(false);
 	}
-	// checks users consent status
-	return new Promise((resolve) => {
-		onConsentChange((state) => {
-			if (
-				state.ccpa?.doNotSell === false || // check whether US users have NOT withdrawn consent
-				state.aus?.personalisedAdvertising || // check whether AUS users have consented to personalisedAdvertising
-				(state.tcfv2?.consents && // check TCFv2 purposes for non-US/AUS users
-					state.tcfv2.consents['1'] && // Store and/or access information on a device
-					state.tcfv2.consents['8'] && // Measure content performance
-					state.tcfv2.consents['10']) // Develop and improve products
-			) {
-				resolve(true);
-			} else {
-				resolve(false);
-			}
-		});
+	// check users consent state
+	return onConsent().then((state) => {
+		return getConsentFor('qm', state);
 	});
 }

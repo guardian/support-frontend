@@ -18,6 +18,7 @@ import {
 } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendEventContributionAmountUpdated } from 'helpers/tracking/quantumMetric';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { State } from '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
@@ -145,12 +146,19 @@ function ContributionAmount(props: PropTypes) {
 								contributionType: props.contributionType,
 							})
 						}
-						onBlur={() =>
-							!!otherAmount &&
-							trackComponentClick(
-								`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`,
-							)
-						}
+						onBlur={() => {
+							if (otherAmount) {
+								trackComponentClick(
+									`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`,
+								);
+
+								sendEventContributionAmountUpdated(
+									otherAmount,
+									props.contributionType,
+									props.currency,
+								);
+							}
+						}}
 						error={otherAmountErrorMessage}
 						autoComplete="off"
 						autoFocus

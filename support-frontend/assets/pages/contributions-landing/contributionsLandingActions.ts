@@ -7,14 +7,8 @@ import type { FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import type { ContributionType, PaymentMatrix } from 'helpers/contributions';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
-import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import { setupAmazonPay } from 'helpers/forms/paymentIntegrations/amazonPay/setup';
-import type {
-	AmazonLoginObject,
-	AmazonPaymentsObject,
-} from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type {
 	AmazonPayData,
 	CreatePaypalPaymentData,
@@ -66,7 +60,6 @@ import {
 	findIsoCountry,
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import {
 	setEmail,
@@ -112,22 +105,7 @@ export type Action =
 			userFormData: UserFormData;
 	  }
 	| {
-			type: 'UPDATE_PAYMENT_READY';
-			thirdPartyPaymentLibraryByContrib: Record<
-				ContributionType,
-				Record<PaymentMethod, ThirdPartyPaymentLibrary>
-			>;
-	  }
-	| {
 			type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING';
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_LOGIN_OBJECT';
-			amazonLoginObject: AmazonLoginObject;
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT';
-			amazonPaymentsObject: AmazonPaymentsObject;
 	  }
 	| {
 			type: 'SET_AMAZON_PAY_WALLET_IS_STALE';
@@ -189,10 +167,6 @@ export type Action =
 	  }
 	| {
 			type: 'SET_STRIPE_V3_HAS_LOADED';
-	  }
-	| {
-			type: 'SET_HANDLE_STRIPE_3DS';
-			handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>;
 	  }
 	| {
 			type: 'SET_STRIPE_CARD_FORM_COMPLETE';
@@ -354,20 +328,6 @@ const setAmazonPayHasBegunLoading = (): Action => ({
 	type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING',
 });
 
-const setAmazonPayLoginObject = (
-	amazonLoginObject: AmazonLoginObject,
-): Action => ({
-	type: 'SET_AMAZON_PAY_LOGIN_OBJECT',
-	amazonLoginObject,
-});
-
-const setAmazonPayPaymentsObject = (
-	amazonPaymentsObject: AmazonPaymentsObject,
-): Action => ({
-	type: 'SET_AMAZON_PAY_PAYMENTS_OBJECT',
-	amazonPaymentsObject,
-});
-
 const setAmazonPayWalletIsStale = (isStale: boolean): Action => ({
 	type: 'SET_AMAZON_PAY_WALLET_IS_STALE',
 	isStale,
@@ -426,13 +386,6 @@ const loadPayPalExpressSdk =
 		}
 	};
 
-const loadAmazonPaySdk =
-	(countryGroupId: CountryGroupId, isTestUser: boolean) =>
-	(dispatch: Dispatch): void => {
-		dispatch(setAmazonPayHasBegunLoading());
-		setupAmazonPay(countryGroupId, dispatch, isTestUser);
-	};
-
 const getUserType =
 	(email: string) =>
 	(dispatch: Dispatch, getState: () => State): void => {
@@ -451,13 +404,6 @@ const getUserType =
 const setTickerGoalReached = (): Action => ({
 	type: 'SET_TICKER_GOAL_REACHED',
 	tickerGoalReached: true,
-});
-
-const setHandleStripe3DS = (
-	handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>,
-): Action => ({
-	type: 'SET_HANDLE_STRIPE_3DS',
-	handleStripe3DS,
 });
 
 const setStripeCardFormComplete =
@@ -930,7 +876,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 		): Promise<PaymentResult> => {
 			if (paymentAuthorisation.paymentMethod === Stripe) {
 				if (paymentAuthorisation.paymentMethodId) {
-					const { handle3DS } = state.page.form.stripeCardFormData;
+					const handle3DS = paymentAuthorisation.handle3DS;
 
 					if (handle3DS) {
 						const stripeData: CreateStripePaymentIntentRequest = {
@@ -1037,8 +983,6 @@ export {
 	updateBillingCountry,
 	updateUserFormData,
 	setAmazonPayHasBegunLoading,
-	setAmazonPayLoginObject,
-	setAmazonPayPaymentsObject,
 	setAmazonPayWalletIsStale,
 	setAmazonPayHasAccessToken,
 	setAmazonPayFatalError,
@@ -1059,7 +1003,6 @@ export {
 	setStripePaymentRequestButtonClicked,
 	setStripePaymentRequestButtonError,
 	setTickerGoalReached,
-	setHandleStripe3DS,
 	setStripeCardFormComplete,
 	setStripeSetupIntentClientSecret,
 	setStripeRecurringRecaptchaVerified,
@@ -1067,7 +1010,6 @@ export {
 	updatePayPalButtonReady,
 	updateRecaptchaToken,
 	loadPayPalExpressSdk,
-	loadAmazonPaySdk,
 	setSepaIban,
 	setSepaAccountHolderName,
 	setSepaAddressStreetName,
