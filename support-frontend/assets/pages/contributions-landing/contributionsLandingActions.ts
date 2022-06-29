@@ -11,7 +11,6 @@ import type {
 	SelectedAmounts,
 } from 'helpers/contributions';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
-import type { ThirdPartyPaymentLibrary } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type {
@@ -123,13 +122,6 @@ export type Action =
 	| {
 			type: 'UPDATE_USER_FORM_DATA';
 			userFormData: UserFormData;
-	  }
-	| {
-			type: 'UPDATE_PAYMENT_READY';
-			thirdPartyPaymentLibraryByContrib: Record<
-				ContributionType,
-				Record<PaymentMethod, ThirdPartyPaymentLibrary>
-			>;
 	  }
 	| {
 			type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING';

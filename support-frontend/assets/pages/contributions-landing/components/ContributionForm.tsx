@@ -17,7 +17,6 @@ import type {
 	OtherAmounts,
 	PaymentMatrix,
 	SelectedAmounts,
-	ThirdPartyPaymentLibraries,
 } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
@@ -80,7 +79,6 @@ type PropTypes = {
 	otherAmounts: OtherAmounts;
 	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	thirdPartyPaymentLibraries: ThirdPartyPaymentLibraries;
 	contributionType: ContributionType;
 	currency: IsoCurrency;
 	paymentError: ErrorReason | null;
@@ -143,7 +141,6 @@ const mapStateToProps = (state: State) => ({
 	otherAmounts: state.page.form.formData.otherAmounts,
 	paymentMethod: state.page.form.paymentMethod,
 	existingPaymentMethod: state.page.form.existingPaymentMethod,
-	thirdPartyPaymentLibraries: state.page.form.thirdPartyPaymentLibraries,
 	stripeClientSecret:
 		state.page.form.stripeCardFormData.setupIntentClientSecret,
 	contributionType: state.page.form.contributionType,
