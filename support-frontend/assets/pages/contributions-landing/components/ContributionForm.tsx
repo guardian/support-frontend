@@ -63,49 +63,53 @@ const getCheckoutFormValue = (
 	userValue: string | null,
 ): string | null => (formValue === null ? userValue : formValue);
 
-const mapStateToProps = (state: State) => ({
-	isWaiting: state.page.form.isWaiting,
-	countryGroupId: state.common.internationalisation.countryGroupId,
-	email:
-		getCheckoutFormValue(
-			state.page.checkoutForm.personalDetails.email,
-			state.page.user.email,
-		) ?? '',
-	otherAmounts: state.page.checkoutForm.product.otherAmounts,
-	paymentMethod: state.page.form.paymentMethod,
-	existingPaymentMethod: state.page.form.existingPaymentMethod,
-	stripeClientSecret:
-		state.page.form.stripeCardFormData.setupIntentClientSecret,
-	contributionType: getContributionType(state),
-	paymentError: state.page.form.paymentError,
-	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
-	userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
-	isSignedIn: state.page.user.isSignedIn,
-	formIsValid: state.page.form.formIsValid,
-	isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
-	formIsSubmittable: state.page.form.formIsSubmittable,
-	isTestUser: state.page.user.isTestUser ?? false,
-	country: state.common.internationalisation.countryId,
-	amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
-	checkoutFormHasBeenSubmitted:
-		state.page.form.formData.checkoutFormHasBeenSubmitted,
-	amazonPayBillingAgreementId:
-		state.page.form.amazonPayData.amazonBillingAgreementId,
-	localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
-	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
-	currency: state.common.internationalisation.currencyId,
-	amounts: state.common.amounts,
-	defaultOneOffAmount: state.common.defaultAmounts.ONE_OFF.defaultAmount,
-	sepaData: state.page.form.sepaData,
-	productSetAbTestVariant:
-		state.common.abParticipations.productSetTest === 'variant',
-	benefitsMessagingAbTestBulletVariant:
-		state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
-		getContributionType(state) !== 'ONE_OFF',
-	benefitsMessagingAbTestParaVariant:
-		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
-		getContributionType(state) !== 'ONE_OFF',
-});
+const mapStateToProps = (state: State) => {
+	const contributionType = getContributionType(state);
+	return {
+		isWaiting: state.page.form.isWaiting,
+		countryGroupId: state.common.internationalisation.countryGroupId,
+		email:
+			getCheckoutFormValue(
+				state.page.checkoutForm.personalDetails.email,
+				state.page.user.email,
+			) ?? '',
+		otherAmounts: state.page.checkoutForm.product.otherAmounts,
+		paymentMethod: state.page.form.paymentMethod,
+		existingPaymentMethod: state.page.form.existingPaymentMethod,
+		stripeClientSecret:
+			state.page.form.stripeCardFormData.setupIntentClientSecret,
+		contributionType,
+		paymentError: state.page.form.paymentError,
+		selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
+		userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
+		isSignedIn: state.page.user.isSignedIn,
+		formIsValid: state.page.form.formIsValid,
+		isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
+		formIsSubmittable: state.page.form.formIsSubmittable,
+		isTestUser: state.page.user.isTestUser ?? false,
+		country: state.common.internationalisation.countryId,
+		amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
+		checkoutFormHasBeenSubmitted:
+			state.page.form.formData.checkoutFormHasBeenSubmitted,
+		amazonPayBillingAgreementId:
+			state.page.form.amazonPayData.amazonBillingAgreementId,
+		localCurrencyCountry:
+			state.common.internationalisation.localCurrencyCountry,
+		useLocalCurrency: state.common.internationalisation.useLocalCurrency,
+		currency: state.common.internationalisation.currencyId,
+		amounts: state.common.amounts,
+		defaultOneOffAmount: state.common.defaultAmounts.ONE_OFF.defaultAmount,
+		sepaData: state.page.form.sepaData,
+		productSetAbTestVariant:
+			state.common.abParticipations.productSetTest === 'variant',
+		benefitsMessagingAbTestBulletVariant:
+			state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
+			contributionType !== 'ONE_OFF',
+		benefitsMessagingAbTestParaVariant:
+			state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
+			contributionType !== 'ONE_OFF',
+	};
+};
 
 const mapDispatchToProps = {
 	setPaymentIsWaiting: paymentWaiting,
