@@ -98,11 +98,11 @@ const reactElementId: Record<CountryGroupId, string> = {
 	International: 'digital-subscription-landing-page-int',
 };
 
-const reducer = () => createReducer(DigitalPack, Monthly, null, null, null);
+const reducer = () => createReducer(null);
 
 const store = initReduxForSubscriptions(DigitalPack, Monthly, reducer);
 const { currencyId } = store.getState().common.internationalisation;
-const { billingPeriod } = store.getState().page.checkout;
+const { billingPeriod } = store.getState().page.checkoutForm.product;
 
 // ----- Render ----- //
 function DigitalLandingPage(props: DigitalLandingPropTypes) {

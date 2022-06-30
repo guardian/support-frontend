@@ -8,7 +8,6 @@ import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { digitalProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import { addAddressSideEffects } from 'helpers/redux/checkout/address/sideEffects';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
@@ -17,8 +16,7 @@ import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subsc
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import DigitalCheckoutForm from './digitalCheckoutForm';
 
-const pageReducer = () =>
-	createReducer(DigitalPack, 'Monthly', null, null, null);
+const pageReducer = () => createReducer(null);
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const listenerMiddleware = createListenerMiddleware();
@@ -51,11 +49,6 @@ describe('Digital checkout form', () => {
 		initialState = {
 			page: {
 				checkout: {
-					product: 'DigitalPack',
-					billingPeriod: 'Monthly',
-					productOption: 'NoProductOptions',
-					fulfilmentOption: 'NoFulfilmentOptions',
-					productPrices: digitalProducts,
 					formErrors: [],
 				},
 				checkoutForm: {
@@ -64,6 +57,13 @@ describe('Digital checkout form', () => {
 							country: 'GB',
 							errors: [],
 						},
+					},
+					product: {
+						productType: 'DigitalPack',
+						billingPeriod: 'Monthly',
+						productOption: 'NoProductOptions',
+						fulfilmentOption: 'NoFulfilmentOptions',
+						productPrices: digitalProducts,
 					},
 				},
 			},

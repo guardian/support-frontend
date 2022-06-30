@@ -1,46 +1,23 @@
 // ----- Reducer ----- //
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	getWeeklyFulfilmentOption,
-	NoFulfilmentOptions,
-} from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import {
-	NoProductOptions,
-	paperProductsWithDigital,
-	paperProductsWithoutDigital,
-} from 'helpers/productPrice/productOptions';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { removeError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 import { isTestUser } from 'helpers/user/user';
 
-function createFormReducer(
-	product: SubscriptionProduct,
-	initialBillingPeriod: BillingPeriod,
-	startDate: Option<string>,
-	productOption: Option<ProductOptions>,
-	fulfilmentOption: Option<FulfilmentOptions>,
-) {
+function createFormReducer(startDate: Option<string>) {
 	const { productPrices, orderIsAGift } = window.guardian;
 	const initialState: FormState = {
 		stage: 'checkout',
-		product,
 		startDate,
 		billingAddressIsSame: true,
-		billingPeriod: initialBillingPeriod,
 		paymentMethod: null,
 		formErrors: [],
 		submissionError: null,
 		formSubmitted: false,
 		isTestUser: isTestUser(),
 		productPrices,
-		productOption: productOption ?? NoProductOptions,
-		fulfilmentOption: fulfilmentOption ?? NoFulfilmentOptions,
 		payPalHasLoaded: false,
 		orderIsAGift,
 		stripePaymentMethod: null,
@@ -63,9 +40,6 @@ function createFormReducer(
 
 			case 'SET_START_DATE':
 				return { ...state, startDate: action.startDate };
-
-			case 'SET_BILLING_PERIOD':
-				return { ...state, billingPeriod: action.billingPeriod };
 
 			case 'ON_DELIVERY_COUNTRY_CHANGED':
 				return {
@@ -116,13 +90,6 @@ function createFormReducer(
 			case 'SET_DELIVERY_INSTRUCTIONS':
 				return { ...state, deliveryInstructions: action.instructions };
 
-			case 'SET_ADD_DIGITAL_SUBSCRIPTION':
-				return {
-					...state,
-					productOption: action.addDigital
-						? paperProductsWithDigital[state.productOption]
-						: paperProductsWithoutDigital[state.productOption],
-				};
 			case 'SET_CSR_USERNAME':
 				return {
 					...state,

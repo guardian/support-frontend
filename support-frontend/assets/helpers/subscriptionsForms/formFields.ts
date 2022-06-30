@@ -28,6 +28,7 @@ type ProductFields = {
 	billingPeriod: BillingPeriod;
 	fulfilmentOption: FulfilmentOptions;
 	product: SubscriptionProduct;
+	productOption: ProductOptions;
 };
 
 export type FormFields = PersonalDetailsState &
@@ -36,7 +37,6 @@ export type FormFields = PersonalDetailsState &
 		paymentMethod: Option<PaymentMethod>;
 		startDate: Option<string>;
 		billingAddressIsSame: boolean;
-		productOption: ProductOptions;
 		orderIsAGift?: boolean;
 		deliveryInstructions: Option<string>;
 		csrUsername?: string;

@@ -16,8 +16,8 @@ import {
 } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import 'helpers/internationalisation/countryGroup';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { myAccountUrl } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getTitle } from 'pages/paper-subscription-landing/helpers/products';
@@ -28,7 +28,7 @@ import SubscriptionsSurvey from './subscriptionSurvey';
 const styles = moduleStyles as { hero: string };
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state: WithDeliveryCheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	return { ...getFormFields(state) };
 }
 

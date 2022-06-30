@@ -19,13 +19,7 @@ import { commonReducer } from './commonState/reducer';
 import type { CommonState } from './commonState/state';
 import { getInitialState } from './utils/setup';
 
-const subscriptionsPageReducer = createReducer(
-	'DigitalPack',
-	'Monthly',
-	null,
-	null,
-	null,
-);
+const subscriptionsPageReducer = createReducer(null);
 
 export type SubscriptionsReducer = typeof subscriptionsPageReducer;
 

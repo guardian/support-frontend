@@ -60,7 +60,6 @@ import {
 	submitWithDeliveryForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
@@ -112,15 +111,11 @@ function mapDispatchToProps() {
 		...formActionCreators,
 		fetchAndStoreUserType:
 			(email: string) =>
-			(
-				dispatch: SubscriptionsDispatch,
-				getState: () => WithDeliveryCheckoutState,
-			) => {
+			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) => {
 				fetchAndStoreUserType(email)(dispatch, getState);
 			},
 		formIsValid:
-			() =>
-			(_: SubscriptionsDispatch, getState: () => WithDeliveryCheckoutState) =>
+			() => (_: SubscriptionsDispatch, getState: () => SubscriptionsState) =>
 				withDeliveryFormIsValid(getState()),
 
 		submitForm:
@@ -131,10 +126,7 @@ function mapDispatchToProps() {
 		setBillingCountry,
 		validateForm:
 			() =>
-			(
-				dispatch: SubscriptionsDispatch,
-				getState: () => WithDeliveryCheckoutState,
-			) => {
+			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) => {
 				const state = getState();
 				validateWithDeliveryForm(dispatch, state);
 				// We need to track PayPal payment attempts here because PayPal behaves

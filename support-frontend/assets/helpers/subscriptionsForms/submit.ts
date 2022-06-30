@@ -47,10 +47,7 @@ import {
 	validateCheckoutForm,
 	validateWithDeliveryForm,
 } from 'helpers/subscriptionsForms/formValidation';
-import type {
-	AnyCheckoutState,
-	WithDeliveryCheckoutState,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { AnyCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
@@ -371,8 +368,6 @@ function submitWithDeliveryForm(
 	dispatch: Dispatch<Action>,
 	state: SubscriptionsState,
 ): void {
-	// @ts-expect-error - this is unhappy about different ways we handle addresses
-	// but this should be sorted out when we migrate those too
 	if (validateWithDeliveryForm(dispatch, state)) {
 		submitForm(dispatch, state);
 	}

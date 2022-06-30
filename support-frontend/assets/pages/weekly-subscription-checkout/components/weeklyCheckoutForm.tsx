@@ -120,10 +120,7 @@ function mapDispatchToProps() {
 			},
 		formIsValid:
 			() =>
-			(
-				_dispatch: SubscriptionsDispatch,
-				getState: () => WithDeliveryCheckoutState,
-			) =>
+			(_dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) =>
 				withDeliveryFormIsValid(getState()),
 		submitForm:
 			() =>
@@ -133,10 +130,7 @@ function mapDispatchToProps() {
 		setBillingCountry,
 		validateForm:
 			() =>
-			(
-				dispatch: SubscriptionsDispatch,
-				getState: () => WithDeliveryCheckoutState,
-			) => {
+			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) => {
 				const state = getState();
 				validateWithDeliveryForm(dispatch, state);
 				// We need to track PayPal payment attempts here because PayPal behaves

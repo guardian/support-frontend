@@ -16,13 +16,7 @@ import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import DirectDebitForm from './directDebitForm';
 
 const pageReducer = (initialState: WithDeliveryCheckoutState) =>
-	createReducer(
-		GuardianWeekly,
-		'Annual',
-		formatMachineDate(new Date()),
-		initialState.page.checkout.productOption,
-		initialState.page.checkout.fulfilmentOption,
-	);
+	createReducer(formatMachineDate(new Date()));
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const store = configureStore({
@@ -84,13 +78,17 @@ describe('Direct debit form', () => {
 		initialState = {
 			page: {
 				checkout: {
-					product: 'Paper',
-					billingPeriod: 'Monthly',
-					productOption: 'NoProductOptions',
-					fulfilmentOption: 'Domestic',
-					productPrices: weeklyProducts,
 					formErrors: [],
 					billingAddressIsSame: true,
+				},
+				checkoutForm: {
+					product: {
+						productType: GuardianWeekly,
+						billingPeriod: 'Annual',
+						productOption: 'NoProductOptions',
+						fulfilmentOption: 'Domestic',
+						productPrices: weeklyProducts,
+					},
 				},
 				billingAddress: {
 					fields: {

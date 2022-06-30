@@ -7,10 +7,7 @@ import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import type { WeeklyBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { postIntroductorySixForSixBillingPeriod } from 'helpers/productPrice/billingPeriods';
-import {
-	Domestic,
-	getWeeklyFulfilmentOption,
-} from 'helpers/productPrice/fulfilmentOptions';
+import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
@@ -37,14 +34,7 @@ const initialBillingPeriod: WeeklyBillingPeriod =
 		: postIntroductorySixForSixBillingPeriod;
 const startDate = formatMachineDate(getWeeklyDays()[0]);
 
-const reducer = () =>
-	createReducer(
-		GuardianWeekly,
-		initialBillingPeriod,
-		startDate,
-		NoProductOptions,
-		Domestic, // TODO: we need to work this out from the country
-	);
+const reducer = () => createReducer(startDate);
 
 const store = initReduxForSubscriptions(
 	GuardianWeekly,

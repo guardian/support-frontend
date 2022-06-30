@@ -68,10 +68,7 @@ import {
 	submitWithDeliveryForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import type {
-	CheckoutState,
-	WithDeliveryCheckoutState,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
@@ -140,21 +137,14 @@ function mapDispatchToProps() {
 				fetchAndStoreUserType(email)(dispatch, getState);
 			},
 		formIsValid:
-			() =>
-			(
-				_dispatch: Dispatch<Action>,
-				getState: () => WithDeliveryCheckoutState,
-			) =>
+			() => (_dispatch: Dispatch<Action>, getState: () => SubscriptionsState) =>
 				withDeliveryFormIsValid(getState()),
 		submitForm:
 			() => (dispatch: Dispatch<Action>, getState: () => SubscriptionsState) =>
 				submitWithDeliveryForm(dispatch, getState()),
 		validateForm:
 			() =>
-			(
-				dispatch: Dispatch<Action>,
-				getState: () => WithDeliveryCheckoutState,
-			) => {
+			(dispatch: Dispatch<Action>, getState: () => SubscriptionsState) => {
 				const state = getState();
 				validateWithDeliveryForm(dispatch, state);
 				// We need to track PayPal payment attempts here because PayPal behaves
@@ -162,7 +152,11 @@ function mapDispatchToProps() {
 				const { paymentMethod } = state.page.checkout;
 
 				if (paymentMethod === PayPal) {
-					trackSubmitAttempt(PayPal, Paper, state.page.checkout.productOption);
+					trackSubmitAttempt(
+						PayPal,
+						Paper,
+						state.page.checkoutForm.product.productOption,
+					);
 				}
 			},
 		setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,

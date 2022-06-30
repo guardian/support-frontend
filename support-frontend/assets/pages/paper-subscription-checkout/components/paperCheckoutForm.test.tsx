@@ -8,8 +8,6 @@ import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { paperProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
-import { Monthly } from 'helpers/productPrice/billingPeriods';
-import { Paper } from 'helpers/productPrice/subscriptions';
 import { addAddressSideEffects } from 'helpers/redux/checkout/address/sideEffects';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
@@ -19,21 +17,14 @@ import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutRe
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import PaperCheckoutForm from './paperCheckoutForm';
 
-const pageReducer = (initialState: WithDeliveryCheckoutState) =>
-	createReducer(
-		Paper,
-		Monthly,
-		formatMachineDate(new Date()),
-		initialState.page.checkout.productOption,
-		initialState.page.checkout.fulfilmentOption,
-	);
+const pageReducer = () => createReducer(formatMachineDate(new Date()));
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const listenerMiddleware = createListenerMiddleware();
 
 	const store = configureStore({
 		reducer: combineReducers({
-			page: pageReducer(initialState),
+			page: pageReducer(),
 			common: commonReducer,
 		}),
 		preloadedState: initialState,
@@ -58,16 +49,14 @@ describe('Newspaper checkout form', () => {
 	beforeEach(() => {
 		initialState = {
 			page: {
-				checkout: {
-					product: 'Paper',
-					billingPeriod: 'Monthly',
-					productOption: 'Everyday',
-					fulfilmentOption: 'Collection',
-					productPrices: paperProducts,
-					formErrors: [],
-					billingAddressIsSame: true,
-				},
 				checkoutForm: {
+					product: {
+						productType: 'Paper',
+						billingPeriod: 'Monthly',
+						productOption: 'NoProductOptions',
+						fulfilmentOption: 'Domestic',
+						productPrices: paperProducts,
+					},
 					billingAddress: {
 						fields: {
 							country: 'GB',
