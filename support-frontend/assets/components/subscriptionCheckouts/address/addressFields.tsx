@@ -8,14 +8,16 @@ import {
 import React from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
-import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	auStates,
 	caStates,
 	usStates,
 } from 'helpers/internationalisation/country';
-import type { AddressFieldsState } from 'helpers/redux/checkout/address/state';
+import type {
+	AddressFieldsState,
+	PostcodeFinderState,
+} from 'helpers/redux/checkout/address/state';
 import { isPostcodeOptional } from 'helpers/redux/checkout/address/validation';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { firstError } from 'helpers/subscriptionsForms/validation';
@@ -37,7 +39,8 @@ type PropTypes = StatePropTypes & {
 	setPostcode: (postCode: string) => void;
 	setCountry: (countryRaw: string) => void;
 	setPostcodeForFinder: (postcode: string) => void;
-	fetchResults: (postcode?: string) => void;
+	setPostcodeErrorForFinder: (error: string) => void;
+	onFindAddress: (postcode: string) => void;
 };
 
 const marginBottom = css`
@@ -88,27 +91,24 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 			</Select>
 			{props.country === 'GB' ? (
 				<PostcodeFinder
-					{...props.postcodeState}
-					setPostcode={props.setPostcodeForFinder}
-					fetchResults={props.fetchResults}
-					id={`${scope}-postcode-lookup`}
-					onPostcodeUpdate={props.setPostcode}
-					onAddressUpdate={({
+					postcode={props.postcodeState.postcode}
+					isLoading={props.postcodeState.isLoading}
+					error={props.postcodeState.error}
+					results={props.postcodeState.results}
+					onPostcodeUpdate={(postcode) => {
+						props.setPostcode(postcode);
+						props.setPostcodeForFinder(postcode);
+					}}
+					onPostcodeError={props.setPostcodeErrorForFinder}
+					onFindAddress={props.onFindAddress}
+					onAddressSelected={({
 						lineOne,
 						lineTwo,
 						city,
 					}: PostcodeFinderResult) => {
-						if (lineOne) {
-							props.setLineOne(lineOne);
-						}
-
-						if (lineTwo) {
-							props.setLineTwo(lineTwo);
-						}
-
-						if (city) {
-							props.setTownCity(city);
-						}
+						props.setLineOne(lineOne ?? '');
+						props.setLineTwo(lineTwo ?? '');
+						props.setTownCity(city ?? '');
 					}}
 				/>
 			) : null}
