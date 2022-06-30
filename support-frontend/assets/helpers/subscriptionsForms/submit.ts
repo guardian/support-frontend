@@ -35,7 +35,7 @@ import {
 	Paper,
 } from 'helpers/productPrice/subscriptions';
 import type { GiftingState } from 'helpers/redux/checkout/giftingState/state';
-import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors';
+import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {

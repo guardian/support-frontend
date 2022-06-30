@@ -7,11 +7,9 @@ export const {
 	setFulfilmentOption,
 	setBillingPeriod,
 	setProductPrices,
-	setSelectedProductPrice,
 	setAllAmounts,
 	setSelectedAmount,
 	setOtherAmount,
 	setCurrency,
 	setOrderIsAGift,
-	setDiscountedPrice,
 } = productSlice.actions;

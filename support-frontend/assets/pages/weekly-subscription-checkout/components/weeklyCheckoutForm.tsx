@@ -40,12 +40,14 @@ import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
-import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
-import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
+import { selectPriceForProduct } from 'helpers/redux/checkout/product/selectors/productPrice';
+import type {
+	SubscriptionsDispatch,
+	SubscriptionsState,
+} from 'helpers/redux/subscriptionsStore';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import {
 	formActionCreators,
@@ -79,7 +81,7 @@ const marginBottom = css`
 `;
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state: WithDeliveryCheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	const { billingAddress, deliveryAddress } = state.page.checkoutForm;
 	const { billingAddressIsSame } = state.page.checkout;
 	return {
@@ -88,6 +90,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 			? deliveryAddress.fields.country
 			: billingAddress.fields.country,
 		deliveryCountry: deliveryAddress.fields.country,
+		fulfilmentOption: state.page.checkoutForm.product.fulfilmentOption,
 		formErrors: state.page.checkout.formErrors,
 		submissionError: state.page.checkout.submissionError,
 		productPrices: state.page.checkoutForm.product.productPrices,
@@ -100,6 +103,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 			currencyFromCountryCode(deliveryAddress.fields.country) ?? 'USD',
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
 		participations: state.common.abParticipations,
+		price: selectPriceForProduct(state),
 	};
 }
 
@@ -123,10 +127,7 @@ function mapDispatchToProps() {
 				withDeliveryFormIsValid(getState()),
 		submitForm:
 			() =>
-			(
-				dispatch: SubscriptionsDispatch,
-				getState: () => WithDeliveryCheckoutState,
-			) =>
+			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) =>
 				submitWithDeliveryForm(dispatch, getState()),
 		signOut,
 		setBillingCountry,
@@ -163,19 +164,11 @@ const days = getWeeklyDays();
 function WeeklyCheckoutForm(props: PropTypes) {
 	useCsrCustomerData(props.setCsrCustomerData);
 
-	const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
-	const price = getProductPrice(
-		props.productPrices,
-		props.deliveryCountry,
-		props.billingPeriod,
-		fulfilmentOption,
-	);
-
 	useEffect(() => {
 		sendEventSubscriptionCheckoutStart(
 			props.product,
 			false,
-			price,
+			props.price,
 			props.billingPeriod,
 		);
 	}, []);
@@ -210,7 +203,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						}
 						title="Guardian Weekly"
 						description=""
-						productPrice={price}
+						productPrice={props.price}
 						billingPeriod={props.billingPeriod}
 						changeSubscription={routes.guardianWeeklySubscriptionLanding}
 						product={props.product}
@@ -333,7 +326,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						</Rows>
 					</FormSection>
 					<BillingPeriodSelector
-						fulfilmentOption={fulfilmentOption}
+						fulfilmentOption={props.fulfilmentOption}
 						onChange={(billingPeriod) => props.setBillingPeriod(billingPeriod)}
 						billingPeriods={weeklyBillingPeriods(
 							props.participations.sixForSixSuppression !== 'variant',
@@ -402,7 +395,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							validateForm={props.validateForm}
 							isTestUser={props.isTestUser}
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-							amount={price.price}
+							amount={props.price.price}
 							billingPeriod={props.billingPeriod}
 							// @ts-expect-error TODO: fix when we can fix error states for all checkouts
 							allErrors={[
@@ -417,9 +410,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						errorHeading={submissionErrorHeading}
 					/>
 					<Total
-						price={price.price}
+						price={props.price.price}
 						currency={props.currencyId}
-						promotions={price.promotions}
+						promotions={props.price.promotions}
 					/>
 					<PaymentTerms paymentMethod={props.paymentMethod} />
 				</Form>

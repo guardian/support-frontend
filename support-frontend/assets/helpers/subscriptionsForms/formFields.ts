@@ -4,12 +4,11 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
-import type { GuardianProduct } from 'helpers/redux/checkout/product/state';
-import type {
-	AnyCheckoutState,
-	CheckoutState,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
@@ -28,7 +27,7 @@ type GiftingFields = {
 type ProductFields = {
 	billingPeriod: BillingPeriod;
 	fulfilmentOption: FulfilmentOptions;
-	product: GuardianProduct;
+	product: SubscriptionProduct;
 };
 
 export type FormFields = PersonalDetailsState &
@@ -59,7 +58,7 @@ export type FormState = Omit<
 	debugInfo: string;
 };
 
-function getFormFields(state: AnyCheckoutState): FormFields {
+function getFormFields(state: SubscriptionsState): FormFields {
 	return {
 		title: state.page.checkoutForm.personalDetails.title,
 		firstName: state.page.checkoutForm.personalDetails.firstName,
@@ -79,7 +78,7 @@ function getFormFields(state: AnyCheckoutState): FormFields {
 		paymentMethod: state.page.checkout.paymentMethod,
 		fulfilmentOption: state.page.checkoutForm.product.fulfilmentOption,
 		productOption: state.page.checkoutForm.product.productOption,
-		product: state.page.checkoutForm.product.productType,
+		product: getSubscriptionType(state),
 		billingAddressIsSame: state.page.checkout.billingAddressIsSame,
 		orderIsAGift: state.page.checkoutForm.product.orderIsAGift,
 		deliveryInstructions: state.page.checkout.deliveryInstructions,

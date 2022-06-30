@@ -9,10 +9,7 @@ import {
 	paperProductsWithDigital,
 	paperProductsWithoutDigital,
 } from 'helpers/productPrice/productOptions';
-import type {
-	ProductPrice,
-	ProductPrices,
-} from 'helpers/productPrice/productPrices';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { AmountChange, GuardianProduct } from './state';
 import { initialProductState } from './state';
 
@@ -40,9 +37,6 @@ export const productSlice = createSlice({
 		setProductPrices(state, action: PayloadAction<ProductPrices>) {
 			state.productPrices = action.payload;
 		},
-		setSelectedProductPrice(state, action: PayloadAction<ProductPrice>) {
-			state.selectedProductPrice = action.payload;
-		},
 		setAllAmounts(state, action: PayloadAction<SelectedAmounts>) {
 			state.selectedAmounts = action.payload;
 		},
@@ -60,9 +54,6 @@ export const productSlice = createSlice({
 		},
 		setOrderIsAGift(state, action: PayloadAction<boolean>) {
 			state.orderIsAGift = action.payload;
-		},
-		setDiscountedPrice(state, action: PayloadAction<ProductPrice>) {
-			state.discountedProductPrice = action.payload;
 		},
 	},
 });

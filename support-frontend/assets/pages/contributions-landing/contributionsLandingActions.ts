@@ -67,7 +67,7 @@ import {
 	setLastName,
 	setUserTypeFromIdentityResponse,
 } from 'helpers/redux/checkout/personalDetails/actions';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import * as cookie from 'helpers/storage/cookie';
 import * as storage from 'helpers/storage/storage';
 import {

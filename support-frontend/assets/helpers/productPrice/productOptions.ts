@@ -72,6 +72,11 @@ const paperProductsWithoutDigital = {
 	EverydayPlus: Everyday,
 } as Record<ProductOptions, ProductOptions>;
 
+const correspondingPaperProducts = {
+	...paperProductsWithDigital,
+	...paperProductsWithoutDigital,
+};
+
 export {
 	NoProductOptions,
 	Saturday,
@@ -87,4 +92,5 @@ export {
 	ActivePaperProductTypes,
 	paperProductsWithDigital,
 	paperProductsWithoutDigital,
+	correspondingPaperProducts,
 };

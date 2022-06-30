@@ -20,7 +20,7 @@ import {
 	countryGroups,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { State } from '../contributionsLandingReducer';
 
 // ----- Types ----- //

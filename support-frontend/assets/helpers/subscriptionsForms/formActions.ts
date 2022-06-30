@@ -42,7 +42,10 @@ import {
 	setAddDigital,
 	setOrderIsAGift,
 } from 'helpers/redux/checkout/product/actions';
-import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
+import type {
+	SubscriptionsDispatch,
+	SubscriptionsState,
+} from 'helpers/redux/subscriptionsStore';
 import * as storage from 'helpers/storage/storage';
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
@@ -223,7 +226,10 @@ const formActionCreators = {
 	}),
 	onPaymentAuthorised:
 		(authorisation: PaymentAuthorisation) =>
-		(dispatch: SubscriptionsDispatch, getState: () => CheckoutState): void => {
+		(
+			dispatch: SubscriptionsDispatch,
+			getState: () => SubscriptionsState,
+		): void => {
 			const state = getState();
 			onPaymentAuthorised(authorisation, dispatch, state);
 		},

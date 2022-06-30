@@ -30,11 +30,12 @@ import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { countries } from 'helpers/internationalisation/country';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import {
-	finalPrice,
-	getProductPrice,
-} from 'helpers/productPrice/productPrices';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import {
+	selectDiscountedPrice,
+	selectPriceForProduct,
+} from 'helpers/redux/checkout/product/selectors/productPrice';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
@@ -47,7 +48,6 @@ import {
 	submitCheckoutForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
@@ -61,7 +61,7 @@ const controlTextAreaResizing = css`
 `;
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state: CheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	return {
 		...getFormFields(state),
 		country: state.common.internationalisation.countryId,
@@ -73,15 +73,12 @@ function mapStateToProps(state: CheckoutState) {
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
 		paymentMethod: state.page.checkout.paymentMethod,
 		isTestUser: state.page.checkout.isTestUser,
-		amount: finalPrice(
-			state.page.checkoutForm.product.productPrices,
-			state.common.internationalisation.countryId,
-			state.page.checkoutForm.product.billingPeriod,
-		).price,
 		billingPeriod: state.page.checkoutForm.product
 			.billingPeriod as DigitalBillingPeriod,
 		addressErrors: state.page.checkoutForm.billingAddress.fields.errors,
 		participations: state.common.abParticipations,
+		price: selectPriceForProduct(state),
+		discountedPrice: selectDiscountedPrice(state),
 	};
 }
 
@@ -90,13 +87,14 @@ function mapDispatchToProps() {
 	return {
 		...formActionCreators,
 		formIsValid:
-			() => (_dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
+			() => (_dispatch: Dispatch<Action>, getState: () => SubscriptionsState) =>
 				checkoutFormIsValid(getState()),
 		submitForm:
-			() => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
+			() => (dispatch: Dispatch<Action>, getState: () => SubscriptionsState) =>
 				submitCheckoutForm(dispatch, getState()),
 		validateForm:
-			() => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+			() =>
+			(dispatch: Dispatch<Action>, getState: () => SubscriptionsState) => {
 				const state = getState();
 				validateCheckoutForm(dispatch, state);
 				// We need to track PayPal payment attempts here because PayPal behaves
@@ -121,17 +119,11 @@ const DatePickerWithError = withError(DatePickerFields);
 
 // ----- Component ----- //
 function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
-	const productPrice = getProductPrice(
-		props.productPrices,
-		props.country,
-		props.billingPeriod,
-	);
-
 	useEffect(() => {
 		sendEventSubscriptionCheckoutStart(
 			props.product,
 			true,
-			productPrice,
+			props.price,
 			props.billingPeriod,
 		);
 	}, []);
@@ -163,7 +155,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 							/>
 						}
 						title="Digital Gift Subscription"
-						productPrice={productPrice}
+						productPrice={props.price}
 						billingPeriod={props.billingPeriod}
 						changeSubscription={routes.digitalSubscriptionLandingGift}
 						orderIsAGift
@@ -279,7 +271,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 							validateForm={props.validateForm}
 							isTestUser={props.isTestUser}
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-							amount={props.amount}
+							amount={props.discountedPrice.price}
 							billingPeriod={props.billingPeriod}
 							// @ts-expect-error TODO: Fixing the types around validation errors will affect every checkout, too much to tackle now
 							allErrors={[...props.formErrors, ...props.addressErrors]}

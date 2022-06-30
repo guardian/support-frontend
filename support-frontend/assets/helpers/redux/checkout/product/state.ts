@@ -8,10 +8,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import type {
-	ProductPrice,
-	ProductPrices,
-} from 'helpers/productPrice/productPrices';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getCurrency } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 
@@ -33,12 +30,10 @@ export type ProductState = {
 	fulfilmentOption: FulfilmentOptions;
 	billingPeriod: BillingPeriod;
 	productPrices: ProductPrices;
-	selectedProductPrice: ProductPrice;
 	selectedAmounts: SelectedAmounts;
 	otherAmounts: OtherAmounts;
 	currency: IsoCurrency;
 	orderIsAGift: boolean;
-	discountedProductPrice?: ProductPrice;
 };
 
 const currency = getCurrency(detectCountryGroup());
@@ -49,11 +44,6 @@ export const initialProductState: ProductState = {
 	fulfilmentOption: 'NoFulfilmentOptions',
 	billingPeriod: 'Monthly',
 	productPrices: window.guardian.productPrices,
-	selectedProductPrice: {
-		price: 0,
-		currency,
-		fixedTerm: false,
-	},
 	selectedAmounts: {
 		ONE_OFF: 0,
 		MONTHLY: 0,

@@ -10,7 +10,7 @@ import { setupRecurringPayPalPayment } from 'helpers/forms/paymentIntegrations/p
 import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { hiddenIf } from 'helpers/utilities/utilities';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { State } from '../contributionsLandingReducer';

@@ -14,7 +14,6 @@ import {
 	setProductOption,
 	setProductType,
 } from './checkout/product/actions';
-// import { addProductSideEffects } from './checkout/product/subscriptionsSideEffects';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
 import type { CommonState } from './commonState/state';

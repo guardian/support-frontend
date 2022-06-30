@@ -40,12 +40,14 @@ import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { countries } from 'helpers/internationalisation/country';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
-import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
-import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
+import { selectPriceForProduct } from 'helpers/redux/checkout/product/selectors/productPrice';
+import type {
+	SubscriptionsDispatch,
+	SubscriptionsState,
+} from 'helpers/redux/subscriptionsStore';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
@@ -77,7 +79,7 @@ const marginBottom = css`
 `;
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state: WithDeliveryCheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	const { billingAddress, deliveryAddress } = state.page.checkoutForm;
 	const { billingAddressIsSame } = state.page.checkout;
 
@@ -89,16 +91,10 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 		deliveryCountry: deliveryAddress.fields.country,
 		formErrors: state.page.checkout.formErrors,
 		submissionError: state.page.checkout.submissionError,
-<<<<<<< HEAD
-		productPrices: state.page.checkout.productPrices,
+		productPrices: state.page.checkoutForm.product.productPrices,
 		deliveryAddressErrors:
 			state.page.checkoutForm.deliveryAddress.fields.errors,
 		billingAddressErrors: state.page.checkoutForm.billingAddress.fields.errors,
-=======
-		productPrices: state.page.checkoutForm.product.productPrices,
-		deliveryAddressErrors: state.page.deliveryAddress.fields.formErrors,
-		billingAddressErrors: state.page.billingAddress.fields.formErrors,
->>>>>>> dc9c0295c (begin connecting other checkouts)
 		isTestUser: state.page.checkout.isTestUser,
 		country: state.common.internationalisation.countryId,
 		csrf: state.page.checkoutForm.csrf,
@@ -106,6 +102,7 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 			currencyFromCountryCode(deliveryAddress.fields.country) ??
 			state.common.internationalisation.defaultCurrency,
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
+		price: selectPriceForProduct(state),
 	};
 }
 
@@ -128,10 +125,7 @@ function mapDispatchToProps() {
 
 		submitForm:
 			() =>
-			(
-				dispatch: SubscriptionsDispatch,
-				getState: () => WithDeliveryCheckoutState,
-			) =>
+			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) =>
 				submitWithDeliveryForm(dispatch, getState()),
 		signOut,
 		setBillingCountry,
@@ -166,19 +160,11 @@ const days = getWeeklyDays();
 
 // ----- Component ----- //
 function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
-	const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
-	const price = getProductPrice(
-		props.productPrices,
-		props.deliveryCountry,
-		props.billingPeriod,
-		fulfilmentOption,
-	);
-
 	useEffect(() => {
 		sendEventSubscriptionCheckoutStart(
 			props.product,
 			true,
-			price,
+			props.price,
 			props.billingPeriod,
 		);
 	}, []);
@@ -214,7 +200,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 						}
 						title="Guardian Weekly"
 						description=""
-						productPrice={price}
+						productPrice={props.price}
 						billingPeriod={props.billingPeriod}
 						changeSubscription={routes.guardianWeeklySubscriptionLandingGift}
 						product={props.product}
@@ -441,7 +427,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 							validateForm={props.validateForm}
 							isTestUser={props.isTestUser}
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-							amount={price.price}
+							amount={props.price.price}
 							billingPeriod={props.billingPeriod}
 							// @ts-expect-error TODO: Fixing the types around validation errors will affect every checkout, too much to tackle now
 							allErrors={[
@@ -456,9 +442,9 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 						errorHeading={submissionErrorHeading}
 					/>
 					<Total
-						price={price.price}
+						price={props.price.price}
 						currency={props.currencyId}
-						promotions={price.promotions}
+						promotions={props.price.promotions}
 					/>
 					<PaymentTerms orderIsAGift paymentMethod={props.paymentMethod} />
 				</Form>

@@ -7,7 +7,7 @@ import {
 	checkBillingState,
 	emailRegexPattern,
 } from 'helpers/forms/formValidation';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { applyPersonalDetailsRules } from 'helpers/subscriptionsForms/rules';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';

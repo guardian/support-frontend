@@ -42,17 +42,15 @@ import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	getPriceWithDiscount,
-	getProductPrice,
-} from 'helpers/productPrice/paperProductPrices';
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
-import {
-	paperProductsWithDigital,
-	paperProductsWithoutDigital,
-} from 'helpers/productPrice/productOptions';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { Paper } from 'helpers/productPrice/subscriptions';
+import {
+	selectCorrespondingProductOptionPrice,
+	selectDiscountedPrice,
+	selectPriceForProduct,
+} from 'helpers/redux/checkout/product/selectors/productPrice';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
@@ -112,7 +110,7 @@ const removeTopBorder = css`
 `;
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state: WithDeliveryCheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	return {
 		...getFormFields(state),
 		formErrors: state.page.checkout.formErrors,
@@ -125,16 +123,10 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 		csrf: state.page.checkoutForm.csrf,
 		currencyId: state.common.internationalisation.currencyId,
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
-		total: getPriceWithDiscount(
-			state.page.checkoutForm.product.productPrices,
-			state.page.checkoutForm.product.fulfilmentOption,
-			state.page.checkoutForm.product.productOption,
-		),
-		amount: getProductPrice(
-			state.page.checkoutForm.product.productPrices,
-			state.page.checkoutForm.product.fulfilmentOption,
-			state.page.checkoutForm.product.productOption,
-		),
+		price: selectPriceForProduct(state),
+		discountedPrice: selectDiscountedPrice(state),
+		correspondingProductOptionPrice:
+			selectCorrespondingProductOptionPrice(state),
 		participations: state.common.abParticipations,
 	};
 }
@@ -155,8 +147,7 @@ function mapDispatchToProps() {
 			) =>
 				withDeliveryFormIsValid(getState()),
 		submitForm:
-			() =>
-			(dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
+			() => (dispatch: Dispatch<Action>, getState: () => SubscriptionsState) =>
 				submitWithDeliveryForm(dispatch, getState()),
 		validateForm:
 			() =>
@@ -255,21 +246,13 @@ function PaperCheckoutForm(props: PropTypes) {
 	useEffect(() => {
 		// Price of the 'Plus' product that corresponds to the selected product option
 		const plusPrice = includesDigiSub
-			? props.total
-			: getPriceWithDiscount(
-					props.productPrices,
-					props.fulfilmentOption,
-					paperProductsWithDigital[props.productOption],
-			  );
+			? props.discountedPrice
+			: props.correspondingProductOptionPrice;
 
 		// Price of the standard paper-only product that corresponds to the selected product option
 		const paperPrice = includesDigiSub
-			? getPriceWithDiscount(
-					props.productPrices,
-					props.fulfilmentOption,
-					paperProductsWithoutDigital[props.productOption],
-			  )
-			: props.total;
+			? props.correspondingProductOptionPrice
+			: props.discountedPrice;
 
 		const digitalCost = sensiblyGenerateDigiSubPrice(plusPrice, paperPrice);
 		setDigiSubPriceString(
@@ -279,7 +262,7 @@ function PaperCheckoutForm(props: PropTypes) {
 		sendEventSubscriptionCheckoutStart(
 			props.product,
 			false,
-			props.amount,
+			props.price,
 			props.billingPeriod,
 		);
 	}, []);
@@ -295,7 +278,7 @@ function PaperCheckoutForm(props: PropTypes) {
 					altText=""
 				/>
 			}
-			total={props.total}
+			total={props.discountedPrice}
 			digiSubPrice={expandedPricingText}
 			startDate={formattedStartDate}
 			includesDigiSub={includesDigiSub}
@@ -317,7 +300,7 @@ function PaperCheckoutForm(props: PropTypes) {
 					altText=""
 				/>
 			}
-			total={props.total}
+			total={props.discountedPrice}
 			digiSubPrice={expandedPricingText}
 			includesDigiSub={includesDigiSub}
 			changeSubscription={`${paperSubsUrl(
@@ -529,7 +512,7 @@ function PaperCheckoutForm(props: PropTypes) {
 							validateForm={props.validateForm}
 							isTestUser={props.isTestUser}
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-							amount={props.total.price}
+							amount={props.discountedPrice.price}
 							billingPeriod={props.billingPeriod}
 							allErrors={
 								[
