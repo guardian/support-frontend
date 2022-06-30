@@ -1,11 +1,11 @@
-import { loadScript } from '@guardian/libs';
+// import { loadScript } from '@guardian/libs';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { logException } from 'helpers/utilities/logger';
+// import { logException } from 'helpers/utilities/logger';
 import {
 	canRunQuantumMetric,
 	getContributionAnnualValue,
@@ -285,17 +285,34 @@ function sendEventABTestParticipations(participations: Participations): void {
 // ---- initialisation logic ---- //
 
 function addQM() {
-	return loadScript(
-		'https://cdn.quantummetric.com/instrumentation/1.31.3/quantum-gnm.js',
-		{
-			async: true,
-			integrity:
-				'sha384-jL1rlM/U30WWRsDEQDalNiDV8FOjayD5RCgzkywrohMqg6oME3zbszWB31/40MAD',
-			crossOrigin: 'anonymous',
-		},
-	).catch(() => {
-		logException('Failed to load Quantum Metric');
+	return new Promise((resolve, reject) => {
+		const qtm = document.createElement('script');
+		qtm.type = 'text/javascript';
+		qtm.async = true;
+		qtm.src =
+			'https://cdn.quantummetric.com/instrumentation/1.31.3/quantum-gnm.js';
+		qtm.integrity =
+			'sha384-jL1rlM/U30WWRsDEQDalNiDV8FOjayD5RCgzkywrohMqg6oME3zbszWB31/40MAD';
+		qtm.crossOrigin = 'anonymous';
+		qtm.onload = resolve;
+		qtm.onerror = reject;
+		const d = document.getElementsByTagName('script')[0];
+		if (!window.QuantumMetricAPI && d.parentNode) {
+			d.parentNode.insertBefore(qtm, d);
+		}
 	});
+
+	// return loadScript(
+	// 	'https://cdn.quantummetric.com/instrumentation/1.31.3/quantum-gnm.js',
+	// 	{
+	// 		async: true,
+	// 		integrity:
+	// 			'sha384-jL1rlM/U30WWRsDEQDalNiDV8FOjayD5RCgzkywrohMqg6oME3zbszWB31/40MAD',
+	// 		crossOrigin: 'anonymous',
+	// 	},
+	// ).catch(() => {
+	// 	logException('Failed to load Quantum Metric');
+	// });
 }
 
 export function init(participations: Participations): void {
