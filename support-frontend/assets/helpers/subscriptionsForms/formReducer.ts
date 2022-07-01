@@ -1,5 +1,4 @@
 // ----- Reducer ----- //
-import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { removeError } from 'helpers/subscriptionsForms/validation';
@@ -34,13 +33,10 @@ function createFormReducer() {
 				return { ...state, stage: action.stage };
 
 			case 'ON_DELIVERY_COUNTRY_CHANGED':
+				// For the payment reducer(s), we can use an extraReducer with the setDeliveryCountry action for this
 				return {
 					...state,
 					paymentMethod: null,
-					fulfilmentOption:
-						product === GuardianWeekly
-							? getWeeklyFulfilmentOption(action.country)
-							: state.fulfilmentOption,
 				};
 
 			case 'SET_PAYMENT_METHOD':

@@ -6,8 +6,8 @@ import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { renderError } from 'helpers/rendering/render';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { addAddressSideEffects } from './checkout/address/sideEffects';
 import type { DateYMDString } from 'helpers/types/DateString';
+import { addAddressSideEffects } from './checkout/address/sideEffects';
 import { addPersonalDetailsSideEffects } from './checkout/personalDetails/subscriptionsSideEffects';
 import {
 	setBillingPeriod,
@@ -21,7 +21,7 @@ import { commonReducer } from './commonState/reducer';
 import type { CommonState } from './commonState/state';
 import { getInitialState } from './utils/setup';
 
-const subscriptionsPageReducer = createReducer(null);
+const subscriptionsPageReducer = createReducer();
 
 export type SubscriptionsReducer = typeof subscriptionsPageReducer;
 
