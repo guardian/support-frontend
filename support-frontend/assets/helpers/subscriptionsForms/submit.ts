@@ -165,7 +165,7 @@ function buildRegularPaymentRequest(
 		...giftRecipient,
 		telephoneNumber: telephone,
 		product,
-		firstDeliveryDate: state.page.checkout.startDate,
+		firstDeliveryDate: state.page.checkoutForm.product.startDate,
 		paymentFields: {
 			...paymentFields,
 			recaptchaToken,

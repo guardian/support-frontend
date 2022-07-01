@@ -10,6 +10,7 @@ import {
 	paperProductsWithoutDigital,
 } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import type { DateYMDString } from 'helpers/types/DateString';
 import type { AmountChange, GuardianProduct } from './state';
 import { initialProductState } from './state';
 
@@ -54,6 +55,9 @@ export const productSlice = createSlice({
 		},
 		setOrderIsAGift(state, action: PayloadAction<boolean>) {
 			state.orderIsAGift = action.payload;
+		},
+		setStartDate(state, action: PayloadAction<DateYMDString>) {
+			state.startDate = action.payload;
 		},
 	},
 });

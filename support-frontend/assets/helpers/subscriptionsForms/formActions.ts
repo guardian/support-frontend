@@ -7,7 +7,6 @@ import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringChe
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { PayPal } from 'helpers/forms/paymentMethods';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
@@ -40,7 +39,9 @@ import {
 } from 'helpers/redux/checkout/personalDetails/actions';
 import {
 	setAddDigital,
+	setBillingPeriod,
 	setOrderIsAGift,
+	setStartDate,
 } from 'helpers/redux/checkout/product/actions';
 import type {
 	SubscriptionsDispatch,
@@ -59,30 +60,6 @@ export type Action =
 	| {
 			type: 'SET_STAGE';
 			stage: Stage;
-	  }
-	| {
-			type: 'SET_TITLE_GIFT';
-			titleGiftRecipient: Option<string>;
-	  }
-	| {
-			type: 'SET_FIRST_NAME_GIFT';
-			firstNameGiftRecipient: string;
-	  }
-	| {
-			type: 'SET_LAST_NAME_GIFT';
-			lastNameGiftRecipient: string;
-	  }
-	| {
-			type: 'SET_EMAIL_GIFT';
-			emailGiftRecipient: string;
-	  }
-	| {
-			type: 'SET_START_DATE';
-			startDate: string;
-	  }
-	| {
-			type: 'SET_BILLING_PERIOD';
-			billingPeriod: BillingPeriod;
 	  }
 	| {
 			type: 'SET_PAYMENT_METHOD';
@@ -190,14 +167,8 @@ const formActionCreators = {
 	setFirstNameGift,
 	setLastNameGift,
 	setEmailGift,
-	setStartDate: (startDate: string): Action => ({
-		type: 'SET_START_DATE',
-		startDate,
-	}),
-	setBillingPeriod: (billingPeriod: BillingPeriod): Action => ({
-		type: 'SET_BILLING_PERIOD',
-		billingPeriod,
-	}),
+	setStartDate,
+	setBillingPeriod,
 	setPaymentMethod:
 		(paymentMethod: PaymentMethod) =>
 		(

@@ -33,7 +33,7 @@ const store = initReduxForSubscriptions(
 	Paper,
 	Monthly,
 	reducer,
-	startDate ?? '',
+	startDate,
 	productOption,
 	getFulfilmentOption,
 );

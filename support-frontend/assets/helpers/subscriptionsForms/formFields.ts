@@ -73,7 +73,7 @@ function getFormFields(state: SubscriptionsState): FormFields {
 		firstNameGiftRecipient: state.page.checkoutForm.gifting.firstName,
 		lastNameGiftRecipient: state.page.checkoutForm.gifting.lastName,
 		emailGiftRecipient: state.page.checkoutForm.gifting.email,
-		startDate: state.page.checkout.startDate,
+		startDate: state.page.checkoutForm.product.startDate,
 		billingPeriod: state.page.checkoutForm.product.billingPeriod,
 		paymentMethod: state.page.checkout.paymentMethod,
 		fulfilmentOption: state.page.checkoutForm.product.fulfilmentOption,

@@ -11,6 +11,8 @@ import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getCurrency } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import type { DateYMDString } from 'helpers/types/DateString';
+import { formatMachineDate } from 'helpers/utilities/dateConversions';
 
 export type GuardianProduct =
 	| SubscriptionProduct
@@ -34,6 +36,7 @@ export type ProductState = {
 	otherAmounts: OtherAmounts;
 	currency: IsoCurrency;
 	orderIsAGift: boolean;
+	startDate: DateYMDString;
 };
 
 const currency = getCurrency(detectCountryGroup());
@@ -62,4 +65,5 @@ export const initialProductState: ProductState = {
 	},
 	currency,
 	orderIsAGift: window.guardian.orderIsAGift,
+	startDate: formatMachineDate(new Date()),
 };

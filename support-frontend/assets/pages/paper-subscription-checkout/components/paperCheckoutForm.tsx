@@ -72,6 +72,7 @@ import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheck
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
+import type { DateYMDString } from 'helpers/types/DateString';
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { getQueryParameter } from 'helpers/urls/url';
 import { titles } from 'helpers/user/details';
@@ -173,7 +174,7 @@ type PropTypes = ConnectedProps<typeof connector>;
 // ----- Lifecycle hooks ----- //
 // Updated to use useEffect so it only fires once (like componentDidMount)
 function setSubsCardStartDateInState(
-	setStartDate: (s: string) => void,
+	setStartDate: (dateString: DateYMDString) => void,
 	startDate: Date,
 ) {
 	useEffect(() => {

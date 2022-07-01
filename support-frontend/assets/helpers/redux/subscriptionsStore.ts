@@ -7,12 +7,14 @@ import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { renderError } from 'helpers/rendering/render';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { addAddressSideEffects } from './checkout/address/sideEffects';
+import type { DateYMDString } from 'helpers/types/DateString';
 import { addPersonalDetailsSideEffects } from './checkout/personalDetails/subscriptionsSideEffects';
 import {
 	setBillingPeriod,
 	setFulfilmentOption,
 	setProductOption,
 	setProductType,
+	setStartDate,
 } from './checkout/product/actions';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
@@ -72,7 +74,7 @@ export function initReduxForSubscriptions(
 	product: SubscriptionProduct,
 	initialBillingPeriod: BillingPeriod,
 	pageReducer?: (initialState: CommonState) => SubscriptionsReducer,
-	startDate?: string,
+	startDate?: DateYMDString,
 	productOption?: ProductOptions,
 	getFulfilmentOptionForCountry?: (country: string) => FulfilmentOptions,
 ): SubscriptionsStore {
@@ -84,6 +86,7 @@ export function initReduxForSubscriptions(
 		newStore.dispatch(setProductType(product));
 		newStore.dispatch(setBillingPeriod(initialBillingPeriod));
 
+		startDate && newStore.dispatch(setStartDate(startDate));
 		productOption && newStore.dispatch(setProductOption(productOption));
 		getFulfilmentOptionForCountry &&
 			newStore.dispatch(
