@@ -3,23 +3,18 @@ import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOption
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { removeError } from 'helpers/subscriptionsForms/validation';
-import type { Option } from 'helpers/types/option';
 import { isTestUser } from 'helpers/user/user';
 
-function createFormReducer(startDate: Option<string>) {
-	const { productPrices, orderIsAGift } = window.guardian;
+function createFormReducer() {
 	const initialState: FormState = {
 		stage: 'checkout',
-		startDate,
 		billingAddressIsSame: true,
 		paymentMethod: null,
 		formErrors: [],
 		submissionError: null,
 		formSubmitted: false,
 		isTestUser: isTestUser(),
-		productPrices,
 		payPalHasLoaded: false,
-		orderIsAGift,
 		stripePaymentMethod: null,
 		deliveryInstructions: null,
 		debugInfo: '',
@@ -37,9 +32,6 @@ function createFormReducer(startDate: Option<string>) {
 		switch (action.type) {
 			case 'SET_STAGE':
 				return { ...state, stage: action.stage };
-
-			case 'SET_START_DATE':
-				return { ...state, startDate: action.startDate };
 
 			case 'ON_DELIVERY_COUNTRY_CHANGED':
 				return {
@@ -80,9 +72,6 @@ function createFormReducer(startDate: Option<string>) {
 
 			case 'SET_PAYPAL_HAS_LOADED':
 				return { ...state, payPalHasLoaded: true };
-
-			case 'SET_ORDER_IS_GIFT':
-				return { ...state, orderIsAGift: action.orderIsAGift };
 
 			case 'SET_STRIPE_PAYMENT_METHOD':
 				return { ...state, stripePaymentMethod: action.stripePaymentMethod };

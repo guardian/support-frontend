@@ -3,13 +3,13 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
+import type { DateYMDString } from 'helpers/types/DateString';
 import type { Option } from 'helpers/types/option';
 import type { Title } from 'helpers/user/details';
 
@@ -29,15 +29,15 @@ type ProductFields = {
 	fulfilmentOption: FulfilmentOptions;
 	product: SubscriptionProduct;
 	productOption: ProductOptions;
+	orderIsAGift: boolean;
+	startDate: DateYMDString;
 };
 
 export type FormFields = PersonalDetailsState &
 	GiftingFields &
 	ProductFields & {
 		paymentMethod: Option<PaymentMethod>;
-		startDate: Option<string>;
 		billingAddressIsSame: boolean;
-		orderIsAGift?: boolean;
 		deliveryInstructions: Option<string>;
 		csrUsername?: string;
 		salesforceCaseId?: string;
@@ -52,7 +52,6 @@ export type FormState = Omit<
 	submissionError: Option<ErrorReason>;
 	formSubmitted: boolean;
 	isTestUser: boolean;
-	productPrices: ProductPrices;
 	payPalHasLoaded: boolean;
 	stripePaymentMethod: Option<string>;
 	debugInfo: string;

@@ -14,7 +14,7 @@ import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subsc
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import DigitalCheckoutFormGift from './digitalCheckoutFormGift';
 
-const pageReducer = () => createReducer(null);
+const pageReducer = () => createReducer();
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const listenerMiddleware = createListenerMiddleware();

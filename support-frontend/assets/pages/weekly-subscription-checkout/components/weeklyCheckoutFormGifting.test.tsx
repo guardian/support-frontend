@@ -7,10 +7,9 @@ import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import WeeklyCheckoutFormGift from './weeklyCheckoutFormGifting';
 
-const pageReducer = () => createReducer(formatMachineDate(new Date()));
+const pageReducer = () => createReducer();
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const store = configureStore({

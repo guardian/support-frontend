@@ -59,7 +59,7 @@ const billingPeriodInUrl = getQueryParameter('period');
 const initialBillingPeriod = getInitialBillingPeriod(billingPeriodInUrl || '');
 setUpTrackingAndConsents();
 
-const reducer = () => createReducer(null);
+const reducer = () => createReducer();
 
 const store = initReduxForSubscriptions(
 	DigitalPack,

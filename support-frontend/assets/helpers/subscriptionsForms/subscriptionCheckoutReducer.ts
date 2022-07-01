@@ -57,9 +57,9 @@ export type WithDeliveryCheckoutState = ReduxState<{
 
 export type AnyCheckoutState = CheckoutState | WithDeliveryCheckoutState;
 
-export function createReducer(startDate: Option<string>) {
+export function createReducer() {
 	return combineReducers({
-		checkout: createFormReducer(startDate),
+		checkout: createFormReducer(),
 		checkoutForm: combineReducers({
 			personalDetails: personalDetailsReducer,
 			product: productReducer,

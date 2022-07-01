@@ -98,7 +98,7 @@ const reactElementId: Record<CountryGroupId, string> = {
 	International: 'digital-subscription-landing-page-int',
 };
 
-const reducer = () => createReducer(null);
+const reducer = () => createReducer();
 
 const store = initReduxForSubscriptions(DigitalPack, Monthly, reducer);
 const { currencyId } = store.getState().common.internationalisation;

@@ -34,7 +34,7 @@ const initialBillingPeriod: WeeklyBillingPeriod =
 		: postIntroductorySixForSixBillingPeriod;
 const startDate = formatMachineDate(getWeeklyDays()[0]);
 
-const reducer = () => createReducer(startDate);
+const reducer = () => createReducer();
 
 const store = initReduxForSubscriptions(
 	GuardianWeekly,
@@ -45,7 +45,8 @@ const store = initReduxForSubscriptions(
 	getWeeklyFulfilmentOption,
 );
 
-const { orderIsAGift, productPrices } = store.getState().page.checkout;
+const { orderIsAGift, productPrices } =
+	store.getState().page.checkoutForm.product;
 const { countryId } = store.getState().common.internationalisation;
 FocusStyleManager.onlyShowFocusOnTabs();
 // ----- Render ----- //
@@ -66,13 +67,10 @@ const content = (
 					orderIsAGift ? <WeeklyCheckoutFormGifting /> : <WeeklyCheckoutForm />
 				}
 				thankYouContentPending={
-					<ThankYouContent isPending orderIsGift={orderIsAGift ?? false} />
+					<ThankYouContent isPending orderIsGift={orderIsAGift} />
 				}
 				thankYouContent={
-					<ThankYouContent
-						isPending={false}
-						orderIsGift={orderIsAGift ?? false}
-					/>
+					<ThankYouContent isPending={false} orderIsGift={orderIsAGift} />
 				}
 				subscriptionProduct="GuardianWeekly"
 			/>

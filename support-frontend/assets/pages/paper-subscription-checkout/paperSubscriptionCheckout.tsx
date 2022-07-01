@@ -27,7 +27,7 @@ const fulfilmentOption = getFulfilmentOption();
 const productOption = getProductOption();
 const startDate = getStartDate(fulfilmentOption, productOption);
 
-const reducer = () => createReducer(startDate);
+const reducer = () => createReducer();
 
 const store = initReduxForSubscriptions(
 	Paper,

@@ -12,16 +12,14 @@ import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { SubscriptionsStore } from 'helpers/redux/subscriptionsStore';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import DirectDebitForm from './directDebitForm';
 
-const pageReducer = (initialState: WithDeliveryCheckoutState) =>
-	createReducer(formatMachineDate(new Date()));
+const pageReducer = () => createReducer();
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const store = configureStore({
 		reducer: combineReducers({
-			page: pageReducer(initialState),
+			page: pageReducer(),
 			common: commonReducer,
 		}),
 	});

@@ -14,10 +14,9 @@ import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsStore';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import PaperCheckoutForm from './paperCheckoutForm';
 
-const pageReducer = () => createReducer(formatMachineDate(new Date()));
+const pageReducer = () => createReducer();
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const listenerMiddleware = createListenerMiddleware();
