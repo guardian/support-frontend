@@ -4,19 +4,26 @@ import {
 	setBillingAddressLineTwo,
 	setBillingCountry,
 	setBillingPostcode,
+	setBillingPostcodeErrorForFinder,
+	setBillingPostcodeForFinder,
 	setBillingState,
 	setBillingTownCity,
 	setDeliveryAddressLineOne,
 	setDeliveryAddressLineTwo,
 	setDeliveryCountry,
 	setDeliveryPostcode,
+	setDeliveryPostcodeErrorForFinder,
+	setDeliveryPostcodeForFinder,
 	setDeliveryState,
 	setDeliveryTownCity,
 } from 'helpers/redux/checkout/address/actions';
+import {
+	billingAddressFindAddresses,
+	deliveryAddressFindAddresses,
+} from 'helpers/redux/checkout/address/reducer';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { AddressFields } from './addressFields';
-import { postcodeFinderActionCreatorsFor } from './postcodeFinderStore';
 
 // ---- Billing address ---- //
 
@@ -41,7 +48,9 @@ const mapBillingAddressDispatchToProps = {
 	setState: setBillingState,
 	setPostcode: setBillingPostcode,
 	setCountry: setBillingCountry,
-	...postcodeFinderActionCreatorsFor('billing'),
+	setPostcodeForFinder: setBillingPostcodeForFinder,
+	setPostcodeErrorForFinder: setBillingPostcodeErrorForFinder,
+	onFindAddress: billingAddressFindAddresses,
 };
 
 export const BillingAddress = connect(
@@ -72,7 +81,9 @@ const mapDeliveryAddressDispatchToProps = {
 	setState: setDeliveryState,
 	setPostcode: setDeliveryPostcode,
 	setCountry: setDeliveryCountry,
-	...postcodeFinderActionCreatorsFor('delivery'),
+	setPostcodeForFinder: setDeliveryPostcodeForFinder,
+	setPostcodeErrorForFinder: setDeliveryPostcodeErrorForFinder,
+	onFindAddress: deliveryAddressFindAddresses,
 };
 
 export const DeliveryAddress = connect(

@@ -1,4 +1,4 @@
-import type { PostcodeFinderState } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
+import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import type {
 	CaState,
 	IsoCountry,
@@ -34,6 +34,19 @@ export function getInitialAddressFieldsState(): AddressFieldsState {
 		errors: [],
 	};
 }
+
+export type PostcodeFinderState = {
+	results: PostcodeFinderResult[];
+	isLoading: boolean;
+	postcode: string;
+	error?: string;
+};
+
+export const initialPostcodeFinderState: PostcodeFinderState = {
+	results: [],
+	isLoading: false,
+	postcode: '',
+};
 
 export interface AddressState {
 	fields: AddressFieldsState;

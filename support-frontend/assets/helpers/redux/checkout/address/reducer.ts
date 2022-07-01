@@ -1,14 +1,52 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { combineReducers, createSlice } from '@reduxjs/toolkit';
-import { postcodeFinderReducerFor } from 'components/subscriptionCheckouts/address/postcodeFinderStore';
+import {
+	combineReducers,
+	createAsyncThunk,
+	createSlice,
+} from '@reduxjs/toolkit';
+import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { fromString } from 'helpers/internationalisation/country';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { removeError } from 'helpers/subscriptionsForms/validation';
 import type { AddressFormFieldError } from './state';
-import { getInitialAddressFieldsState } from './state';
+import {
+	getInitialAddressFieldsState,
+	initialPostcodeFinderState,
+} from './state';
 
-function getAddressSlice(type: AddressType) {
-	const fieldsSlice = createSlice({
+// ---- Reducers ---- //
+
+export const {
+	reducer: deliveryAddressReducer,
+	fieldsSlice: deliveryAddressFieldsSlice,
+	postcodeFinderSlice: deliveryAddressPostcodeFinderSlice,
+	findAddresses: deliveryAddressFindAddresses,
+} = getAddressReducer('delivery');
+
+export const {
+	reducer: billingAddressReducer,
+	fieldsSlice: billingAddressFieldsSlice,
+	postcodeFinderSlice: billingAddressPostcodeFinderSlice,
+	findAddresses: billingAddressFindAddresses,
+} = getAddressReducer('billing');
+
+// ---- Helpers ---- //
+
+function getAddressReducer(type: AddressType) {
+	const fieldsSlice = getAddressFieldsSlice(type);
+	const { slice: postcodeFinderSlice, findAddresses } =
+		getPostcodeFinderSlice(type);
+
+	const reducer = combineReducers({
+		fields: fieldsSlice.reducer,
+		postcode: postcodeFinderSlice.reducer,
+	});
+
+	return { reducer, fieldsSlice, postcodeFinderSlice, findAddresses };
+}
+
+function getAddressFieldsSlice(type: AddressType) {
+	return createSlice({
 		name: `${type}AddressFields`,
 		initialState: getInitialAddressFieldsState,
 		reducers: {
@@ -44,22 +82,40 @@ function getAddressSlice(type: AddressType) {
 			},
 		},
 	});
-	const fieldsReducer = fieldsSlice.reducer;
-
-	const reducer = combineReducers({
-		fields: fieldsReducer,
-		postcode: postcodeFinderReducerFor(type),
-	});
-
-	return { fieldsSlice, reducer };
 }
 
-export const {
-	fieldsSlice: deliveryAddressFieldsSlice,
-	reducer: deliveryAddressReducer,
-} = getAddressSlice('delivery');
+function getPostcodeFinderSlice(type: AddressType) {
+	const findAddresses = createAsyncThunk(
+		`${type}PostcodeFinder/findAddresses`,
+		findAddressesForPostcode,
+	);
 
-export const {
-	fieldsSlice: billingAddressFieldsSlice,
-	reducer: billingAddressReducer,
-} = getAddressSlice('billing');
+	const slice = createSlice({
+		name: `${type}PostcodeFinder`,
+		initialState: initialPostcodeFinderState,
+		reducers: {
+			setPostcode(state, action: PayloadAction<string>) {
+				state.postcode = action.payload;
+			},
+			setError(state, action: PayloadAction<string>) {
+				state.error = action.payload;
+			},
+		},
+		extraReducers: (builder) => {
+			builder.addCase(findAddresses.pending, (state) => {
+				state.isLoading = true;
+				state.error = undefined;
+			});
+			builder.addCase(findAddresses.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.results = action.payload;
+			});
+			builder.addCase(findAddresses.rejected, (state, action) => {
+				state.isLoading = false;
+				state.error = action.error.message;
+			});
+		},
+	});
+
+	return { slice, findAddresses };
+}

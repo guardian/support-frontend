@@ -27,7 +27,7 @@ function handleErrors(response: Response) {
 	}
 }
 
-export async function getAddressesForPostcode(
+export async function findAddressesForPostcode(
 	postcode: string,
 ): Promise<PostcodeFinderResult[]> {
 	const postcodeLookup = getGlobal('checkoutPostcodeLookup');
