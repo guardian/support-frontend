@@ -1,6 +1,8 @@
 import {
 	billingAddressFieldsSlice,
+	billingAddressPostcodeFinderSlice,
 	deliveryAddressFieldsSlice,
+	deliveryAddressPostcodeFinderSlice,
 } from './reducer';
 
 export const {
@@ -14,6 +16,11 @@ export const {
 } = deliveryAddressFieldsSlice.actions;
 
 export const {
+	setPostcode: setDeliveryPostcodeForFinder,
+	setError: setDeliveryPostcodeErrorForFinder,
+} = deliveryAddressPostcodeFinderSlice.actions;
+
+export const {
 	setCountry: setBillingCountry,
 	setState: setBillingState,
 	setLineOne: setBillingAddressLineOne,
@@ -22,3 +29,8 @@ export const {
 	setTownCity: setBillingTownCity,
 	setFormErrors: setBillingAddressFormErrors,
 } = billingAddressFieldsSlice.actions;
+
+export const {
+	setPostcode: setBillingPostcodeForFinder,
+	setError: setBillingPostcodeErrorForFinder,
+} = billingAddressPostcodeFinderSlice.actions;
