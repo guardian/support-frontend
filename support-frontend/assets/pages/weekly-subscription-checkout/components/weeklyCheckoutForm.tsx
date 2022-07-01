@@ -21,7 +21,6 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import { options } from 'components/forms/customFields/options';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
-import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import {
 	BillingAddress,
 	DeliveryAddress,
@@ -45,6 +44,7 @@ import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOption
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
 import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import {
@@ -80,7 +80,7 @@ const marginBottom = css`
 
 // ----- Map State/Props ----- //
 function mapStateToProps(state: WithDeliveryCheckoutState) {
-	const { billingAddress, deliveryAddress } = state.page;
+	const { billingAddress, deliveryAddress } = state.page.checkoutForm;
 	const { billingAddressIsSame } = state.page.checkout;
 	return {
 		...getFormFields(state),
@@ -91,8 +91,9 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 		formErrors: state.page.checkout.formErrors,
 		submissionError: state.page.checkout.submissionError,
 		productPrices: state.page.checkout.productPrices,
-		deliveryAddressErrors: state.page.deliveryAddress.fields.formErrors,
-		billingAddressErrors: state.page.billingAddress.fields.formErrors,
+		deliveryAddressErrors:
+			state.page.checkoutForm.deliveryAddress.fields.errors,
+		billingAddressErrors: state.page.checkoutForm.billingAddress.fields.errors,
 		isTestUser: state.page.checkout.isTestUser,
 		csrf: state.page.checkoutForm.csrf,
 		currencyId:
@@ -103,7 +104,6 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 }
 
 function mapDispatchToProps() {
-	const { setCountry } = addressActionCreatorsFor('billing');
 	return {
 		...formActionCreators,
 		fetchAndStoreUserType:
@@ -129,8 +129,7 @@ function mapDispatchToProps() {
 			) =>
 				submitWithDeliveryForm(dispatch, getState()),
 		signOut,
-		setBillingCountry: (country: string) => (dispatch: SubscriptionsDispatch) =>
-			setCountry(country)(dispatch),
+		setBillingCountry,
 		validateForm:
 			() =>
 			(

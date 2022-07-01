@@ -1,5 +1,4 @@
 // ----- Reducer ----- //
-import type { SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
@@ -49,15 +48,6 @@ function createFormReducer(
 		debugInfo: '',
 	};
 
-	const getFulfilmentOption = (
-		action: SetCountryChangedAction,
-		currentOption: FulfilmentOptions, // For GuardianWeekly subs, when the country changes we need to update the fulfilment option
-	): FulfilmentOptions =>
-		// because it may mean a switch between domestic and rest of the world
-		product === GuardianWeekly && action.scope === 'delivery'
-			? getWeeklyFulfilmentOption(action.country)
-			: currentOption;
-
 	return function (
 		originalState: FormState = initialState,
 		action: Action,
@@ -77,11 +67,14 @@ function createFormReducer(
 			case 'SET_BILLING_PERIOD':
 				return { ...state, billingPeriod: action.billingPeriod };
 
-			case 'SET_COUNTRY_CHANGED':
+			case 'ON_DELIVERY_COUNTRY_CHANGED':
 				return {
 					...state,
 					paymentMethod: null,
-					fulfilmentOption: getFulfilmentOption(action, state.fulfilmentOption),
+					fulfilmentOption:
+						product === GuardianWeekly
+							? getWeeklyFulfilmentOption(action.country)
+							: state.fulfilmentOption,
 				};
 
 			case 'SET_PAYMENT_METHOD':

@@ -1,17 +1,15 @@
 import { combineReducers } from 'redux';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
-import type {
-	FormFields as AddressFormFields,
-	AddressReducer,
-	State as AddressState,
-} from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import { addressReducerFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import {
+	billingAddressReducer,
+	deliveryAddressReducer,
+} from 'helpers/redux/checkout/address/reducer';
+import type { AddressState } from 'helpers/redux/checkout/address/state';
 import { csrfReducer } from 'helpers/redux/checkout/csrf/reducer';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { giftingReducer } from 'helpers/redux/checkout/giftingState/reducer';
@@ -43,38 +41,32 @@ export type CheckoutFormState = {
 	marketingConsent: MarketingConsentState;
 	csrf: CsrfState;
 	recaptcha: RecaptchaState;
+	billingAddress: AddressState;
+	deliveryAddress: AddressState;
 };
 
 export type CheckoutState = ReduxState<{
 	checkout: FormState;
 	checkoutForm: CheckoutFormState;
 	user: User;
-	billingAddress: AddressState;
-	deliveryAddress?: AddressState;
 	directDebit: DirectDebitState;
 }>;
 
 export type WithDeliveryCheckoutState = ReduxState<{
 	checkout: FormState;
 	checkoutForm: CheckoutFormState;
-	billingAddress: AddressState;
-	deliveryAddress: AddressState;
 	fulfilmentOption: Option<FulfilmentOptions>;
 	directDebit: DirectDebitState;
 }>;
-export type AnyCheckoutState = CheckoutState | WithDeliveryCheckoutState;
-type AddressReducers = {
-	billingAddress: AddressReducer;
-	deliveryAddress?: AddressReducer;
-};
 
-function createReducer(
+export type AnyCheckoutState = CheckoutState | WithDeliveryCheckoutState;
+
+export function createReducer(
 	product: SubscriptionProduct,
 	initialBillingPeriod: BillingPeriod,
 	startDate: Option<string>,
 	productOption: Option<ProductOptions>,
 	fulfilmentOption: Option<FulfilmentOptions>,
-	addressReducers: AddressReducers,
 ) {
 	return combineReducers({
 		checkout: createFormReducer(
@@ -91,84 +83,14 @@ function createReducer(
 			marketingConsent: marketingConsentReducer,
 			csrf: csrfReducer,
 			recaptcha: recaptchaReducer,
+			deliveryAddress: deliveryAddressReducer,
+			billingAddress: billingAddressReducer,
 		}),
 		user: createUserReducer(),
 		directDebit,
-		...addressReducers,
 	});
 }
 
-function createCheckoutReducer(
-	initialCountry: IsoCountry,
-	product: SubscriptionProduct,
-	initialBillingPeriod: BillingPeriod,
-	startDate: Option<string>,
-	productOption: Option<ProductOptions>,
-	fulfilmentOption: Option<FulfilmentOptions>,
-) {
-	const address = {
-		billingAddress: addressReducerFor('billing', initialCountry),
-	};
-	return createReducer(
-		product,
-		initialBillingPeriod,
-		startDate,
-		productOption,
-		fulfilmentOption,
-		address,
-	);
-}
-
-function createWithDeliveryCheckoutReducer(
-	initialCountry: IsoCountry,
-	product: SubscriptionProduct,
-	initialBillingPeriod: BillingPeriod,
-	startDate: Option<string>,
-	productOption: Option<ProductOptions>,
-	fulfilmentOption: Option<FulfilmentOptions>,
-) {
-	const addresses = {
-		billingAddress: addressReducerFor('billing', initialCountry),
-		deliveryAddress: addressReducerFor('delivery', initialCountry),
-	};
-	return createReducer(
-		product,
-		initialBillingPeriod,
-		startDate,
-		productOption,
-		fulfilmentOption,
-		addresses,
-	);
-}
-
-const addressFieldsFromAddress = (address: AddressState) => {
-	const { formErrors, ...formFields } = address.fields;
-	return formFields;
-};
-
-const getBillingAddress = (state: AnyCheckoutState): AddressState =>
-	state.page.billingAddress;
-
-const getBillingAddressFields = (state: AnyCheckoutState): AddressFormFields =>
-	addressFieldsFromAddress(getBillingAddress(state));
-
-const getDeliveryAddress = (state: WithDeliveryCheckoutState): AddressState =>
-	state.page.deliveryAddress;
-
-const getDeliveryAddressFields = (
-	state: WithDeliveryCheckoutState,
-): AddressFormFields => addressFieldsFromAddress(getDeliveryAddress(state));
-
-const getFulfilmentOption = (
+export const getFulfilmentOption = (
 	state: WithDeliveryCheckoutState,
 ): Option<FulfilmentOptions> => state.page.checkout.fulfilmentOption;
-
-export {
-	createCheckoutReducer,
-	createWithDeliveryCheckoutReducer,
-	getBillingAddress,
-	getBillingAddressFields,
-	getDeliveryAddress,
-	getDeliveryAddressFields,
-	getFulfilmentOption,
-};

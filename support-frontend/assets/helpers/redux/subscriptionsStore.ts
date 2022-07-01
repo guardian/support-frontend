@@ -1,17 +1,16 @@
 import type { TypedStartListening } from '@reduxjs/toolkit';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import { renderError } from 'helpers/rendering/render';
-import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { addAddressSideEffects } from './checkout/address/sideEffects';
 import { addPersonalDetailsSideEffects } from './checkout/personalDetails/subscriptionsSideEffects';
 import { addProductSideEffects } from './checkout/product/subscriptionsSideEffects';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
 import type { CommonState } from './commonState/state';
-import { initialCommonState } from './commonState/state';
 import { getInitialState } from './utils/setup';
 
-const subscriptionsPageReducer = createWithDeliveryCheckoutReducer(
-	initialCommonState.internationalisation.countryId,
+const subscriptionsPageReducer = createReducer(
 	'DigitalPack',
 	'Monthly',
 	null,
@@ -63,6 +62,7 @@ export function addPageReducer(
 	});
 	addPersonalDetailsSideEffects(startSubscriptionsListening);
 	addProductSideEffects(startSubscriptionsListening);
+	addAddressSideEffects(startSubscriptionsListening);
 	return store;
 }
 

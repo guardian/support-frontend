@@ -8,10 +8,9 @@ import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { Paper } from 'helpers/productPrice/subscriptions';
-import type { CommonState } from 'helpers/redux/commonState/state';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import CheckoutForm from 'pages/paper-subscription-checkout/components/paperCheckoutForm';
 import {
 	getFulfilmentOption,
@@ -28,15 +27,8 @@ const fulfilmentOption = getFulfilmentOption();
 const productOption = getProductOption();
 const startDate = getStartDate(fulfilmentOption, productOption);
 
-const reducer = (commonState: CommonState) =>
-	createWithDeliveryCheckoutReducer(
-		commonState.internationalisation.countryId,
-		Paper,
-		Monthly,
-		startDate,
-		productOption,
-		fulfilmentOption,
-	);
+const reducer = () =>
+	createReducer(Paper, Monthly, startDate, productOption, fulfilmentOption);
 
 const store = initReduxForSubscriptions(reducer);
 const { countryGroupId } = store.getState().common.internationalisation;

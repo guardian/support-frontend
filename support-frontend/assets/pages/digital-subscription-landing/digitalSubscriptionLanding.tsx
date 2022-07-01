@@ -32,10 +32,9 @@ import { getPromotions, userIsPatron } from 'helpers/patrons';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import type { CommonState } from 'helpers/redux/commonState/state';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { routes } from 'helpers/urls/routes';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
@@ -99,15 +98,7 @@ const reactElementId: Record<CountryGroupId, string> = {
 	International: 'digital-subscription-landing-page-int',
 };
 
-const reducer = (commonState: CommonState) =>
-	createCheckoutReducer(
-		commonState.internationalisation.countryId,
-		DigitalPack,
-		Monthly,
-		null,
-		null,
-		null,
-	);
+const reducer = () => createReducer(DigitalPack, Monthly, null, null, null);
 
 const store = initReduxForSubscriptions(reducer);
 const { currencyId } = store.getState().common.internationalisation;
