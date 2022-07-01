@@ -156,7 +156,7 @@ function ThankYouContent({
 	const hideStartDate = fulfilmentOption === Collection;
 	const cleanProductOption = getTitle(productOption);
 	const hasAddedDigitalSubscription = productOption.includes('Plus');
-	const showTopContentBlock = isPending || (startDate && !hideStartDate);
+	const showTopContentBlock = isPending || !hideStartDate;
 	const packageName = `${cleanProductOption} ${
 		!hasAddedDigitalSubscription ? 'package ' : ''
 	}`;
@@ -183,7 +183,7 @@ function ThankYouContent({
 							when it goes live.
 						</p>
 					)}
-					{startDate && !hideStartDate && (
+					{!hideStartDate && (
 						<p css={subHeading}>
 							<span>You will receive your newspapers from</span>
 							<span> {formatUserDate(new Date(startDate))}</span>
