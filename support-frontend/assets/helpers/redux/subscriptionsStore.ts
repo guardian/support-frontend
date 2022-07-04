@@ -18,7 +18,6 @@ import {
 } from './checkout/product/actions';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
-import type { CommonState } from './commonState/state';
 import { getInitialState } from './utils/setup';
 
 const subscriptionsPageReducer = createReducer();
@@ -44,52 +43,33 @@ export const startSubscriptionsListening =
 
 const subscriptionsStore = configureStore({
 	reducer: baseReducer,
-	// Makes devtools work correctly with the re-created store
-	devTools: false,
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().prepend(listenerMiddleware.middleware),
 });
 
 export type SubscriptionsStore = typeof subscriptionsStore;
 
-export function addPageReducer(
-	newReducer?: SubscriptionsReducer,
-): SubscriptionsStore {
-	// For context on why we are re-creating the store at runtime
-	// https://github.com/guardian/support-frontend/pull/3595#discussion_r834202633
-	const store = configureStore({
-		reducer: {
-			common: commonReducer,
-			page: newReducer ?? subscriptionsPageReducer,
-		},
-		middleware: (getDefaultMiddleware) =>
-			getDefaultMiddleware().prepend(listenerMiddleware.middleware),
-	});
-	addPersonalDetailsSideEffects(startSubscriptionsListening);
-	addAddressSideEffects(startSubscriptionsListening);
-	return store;
-}
-
 export function initReduxForSubscriptions(
 	product: SubscriptionProduct,
 	initialBillingPeriod: BillingPeriod,
-	pageReducer?: (initialState: CommonState) => SubscriptionsReducer,
 	startDate?: DateYMDString,
 	productOption?: ProductOptions,
 	getFulfilmentOptionForCountry?: (country: string) => FulfilmentOptions,
 ): SubscriptionsStore {
 	try {
+		addPersonalDetailsSideEffects(startSubscriptionsListening);
+		addAddressSideEffects(startSubscriptionsListening);
 		const initialState = getInitialState();
-		const newStore = addPageReducer(pageReducer?.(initialState));
 
-		newStore.dispatch(setInitialCommonState(initialState));
-		newStore.dispatch(setProductType(product));
-		newStore.dispatch(setBillingPeriod(initialBillingPeriod));
+		subscriptionsStore.dispatch(setInitialCommonState(initialState));
+		subscriptionsStore.dispatch(setProductType(product));
+		subscriptionsStore.dispatch(setBillingPeriod(initialBillingPeriod));
 
-		startDate && newStore.dispatch(setStartDate(startDate));
-		productOption && newStore.dispatch(setProductOption(productOption));
+		startDate && subscriptionsStore.dispatch(setStartDate(startDate));
+		productOption &&
+			subscriptionsStore.dispatch(setProductOption(productOption));
 		getFulfilmentOptionForCountry &&
-			newStore.dispatch(
+			subscriptionsStore.dispatch(
 				setFulfilmentOption(
 					getFulfilmentOptionForCountry(
 						initialState.internationalisation.countryId,
@@ -97,7 +77,7 @@ export function initReduxForSubscriptions(
 				),
 			);
 
-		return newStore;
+		return subscriptionsStore;
 	} catch (err) {
 		renderError(err as Error, null);
 		throw err;

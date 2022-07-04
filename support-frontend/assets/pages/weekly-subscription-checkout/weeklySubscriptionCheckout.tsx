@@ -12,7 +12,6 @@ import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getQueryParameter } from 'helpers/urls/url';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
@@ -34,12 +33,9 @@ const initialBillingPeriod: WeeklyBillingPeriod =
 		: postIntroductorySixForSixBillingPeriod;
 const startDate = formatMachineDate(getWeeklyDays()[0]);
 
-const reducer = () => createReducer();
-
 const store = initReduxForSubscriptions(
 	GuardianWeekly,
 	initialBillingPeriod,
-	reducer,
 	startDate,
 	NoProductOptions,
 	getWeeklyFulfilmentOption,

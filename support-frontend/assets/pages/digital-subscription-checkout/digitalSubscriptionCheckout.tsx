@@ -19,7 +19,6 @@ import {
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getQueryParameter } from 'helpers/urls/url';
 import CheckoutForm from 'pages/digital-subscription-checkout/components/digitalCheckoutForm';
 import CheckoutFormGift from 'pages/digital-subscription-checkout/components/digitalCheckoutFormGift';
@@ -59,13 +58,7 @@ const billingPeriodInUrl = getQueryParameter('period');
 const initialBillingPeriod = getInitialBillingPeriod(billingPeriodInUrl || '');
 setUpTrackingAndConsents();
 
-const reducer = () => createReducer();
-
-const store = initReduxForSubscriptions(
-	DigitalPack,
-	initialBillingPeriod,
-	reducer,
-);
+const store = initReduxForSubscriptions(DigitalPack, initialBillingPeriod);
 const { countryGroupId, countryId, currencyId } =
 	store.getState().common.internationalisation;
 const { orderIsAGift, productPrices, billingPeriod } =
