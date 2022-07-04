@@ -31,6 +31,7 @@ import {
 	selectDiscountedPrice,
 	selectPriceForProduct,
 } from 'helpers/redux/checkout/product/selectors/productPrice';
+import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type {
 	SubscriptionsDispatch,
 	SubscriptionsState,
@@ -73,7 +74,7 @@ function mapStateToProps(state: SubscriptionsState) {
 			.billingPeriod as DigitalBillingPeriod,
 		addressErrors: state.page.checkoutForm.billingAddress.fields.errors,
 		participations: state.common.abParticipations,
-		product: state.page.checkoutForm.product.productType,
+		product: getSubscriptionType(state),
 		price: selectPriceForProduct(state),
 		discountedPrice: selectDiscountedPrice(state),
 	};
