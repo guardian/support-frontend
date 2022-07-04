@@ -14,12 +14,10 @@ import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subsc
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import DirectDebitForm from './directDebitForm';
 
-const pageReducer = () => createReducer();
-
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const store = configureStore({
 		reducer: combineReducers({
-			page: pageReducer(),
+			page: createReducer(),
 			common: commonReducer,
 		}),
 	});

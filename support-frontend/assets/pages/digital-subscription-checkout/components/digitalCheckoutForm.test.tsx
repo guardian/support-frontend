@@ -16,14 +16,12 @@ import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subsc
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import DigitalCheckoutForm from './digitalCheckoutForm';
 
-const pageReducer = () => createReducer();
-
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const listenerMiddleware = createListenerMiddleware();
 
 	const store = configureStore({
 		reducer: combineReducers({
-			page: pageReducer(),
+			page: createReducer(),
 			common: commonReducer,
 		}),
 		preloadedState: initialState,
