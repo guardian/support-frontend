@@ -46,13 +46,13 @@ describe('Guardian Weekly checkout form', () => {
 					billingAddress: {
 						fields: {
 							country: 'GB',
-							formErrors: [],
+							errors: [],
 						},
 					},
 					deliveryAddress: {
 						fields: {
 							country: 'GB',
-							formErrors: [],
+							errors: [],
 						},
 					},
 				},

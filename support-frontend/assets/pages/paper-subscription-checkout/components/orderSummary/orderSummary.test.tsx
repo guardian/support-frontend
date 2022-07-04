@@ -31,17 +31,22 @@ describe('Paper order summary', () => {
 	beforeEach(() => {
 		initialState = {
 			page: {
-				checkout: {
-					product: 'Paper',
-					billingPeriod: 'Monthly',
-					productOption,
-					fulfilmentOption: 'Collection',
-					productPrices: paperProducts,
+				checkoutForm: {
+					product: {
+						productType: 'Paper',
+						billingPeriod: 'Monthly',
+						productOption,
+						fulfilmentOption: 'Collection',
+						productPrices: paperProducts,
+					},
 				},
 			},
 			common: {
 				settings: {
 					useDigitalVoucher: true,
+				},
+				internationalisation: {
+					countryID: 'GB',
 				},
 			},
 		};
