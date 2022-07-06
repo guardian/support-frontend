@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream
 import java.util.{Map => JavaMap}
 
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import com.amazonaws.services.lambda.runtime._
 import com.gu.handler._
 import com.gu.handler.impure.S3Loader

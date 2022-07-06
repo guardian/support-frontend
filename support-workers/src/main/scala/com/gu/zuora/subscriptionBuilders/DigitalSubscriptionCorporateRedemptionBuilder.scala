@@ -1,7 +1,6 @@
 package com.gu.zuora.subscriptionBuilders
 
 import cats.data.EitherT
-import cats.implicits._
 import com.gu.helpers.DateGenerator
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.redemption.corporate.CorporateCodeValidator

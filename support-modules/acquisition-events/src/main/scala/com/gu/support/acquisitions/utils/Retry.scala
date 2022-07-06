@@ -2,7 +2,6 @@ package com.gu.support.acquisitions.utils
 
 import scala.concurrent.{Future, ExecutionContext}
 import cats.data.EitherT
-import cats.instances.future._
 
 object Retry {
   def apply[A, B](max: Int)(f: => EitherT[Future, A, B])(implicit ec: ExecutionContext): EitherT[Future, List[A], B] = {
