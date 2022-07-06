@@ -142,7 +142,7 @@ function ContributionAmount(props: PropTypes) {
 						value={`${otherAmount ?? ''}`}
 						onChange={(e) =>
 							props.setOtherAmount({
-								amount: e.target.value.replace(/[^0-9]/g, ''),
+								amount: e.target.value,
 								contributionType: props.contributionType,
 							})
 						}

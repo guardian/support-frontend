@@ -46,6 +46,8 @@ export const isValidEmail: (arg0: string | null) => boolean = (input) =>
 export const isValidZipCode = (zipCode: string): boolean =>
 	/^\d{5}(-\d{4})?$/.test(zipCode);
 
+export const isNotNaN = (value: string): boolean => !isNaN(parseFloat(value));
+
 export const isLargerOrEqual: (arg0: number, arg1: string) => boolean = (
 	min,
 	input,
@@ -113,6 +115,7 @@ export const amountIsValid = (
 			: config[countryGroupId][contributionType].max;
 	return (
 		isNotEmpty(input) &&
+		isNotNaN(input) &&
 		isLargerOrEqual(min, input) &&
 		isSmallerOrEqual(max, input) &&
 		maxTwoDecimals(input)
