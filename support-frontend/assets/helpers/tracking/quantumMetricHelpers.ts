@@ -97,8 +97,7 @@ export function canRunQuantumMetric(): Promise<boolean> {
 	// check users consent state
 	return onConsent().then((state) => {
 		return (
-			state.ccpa?.doNotSell ??
-			state.aus?.personalisedAdvertising ??
+			(state.ccpa?.doNotSell === false || state.aus?.personalisedAdvertising) ??
 			getConsentFor('qm', state)
 		);
 	});
