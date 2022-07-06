@@ -8,7 +8,7 @@ scalacOptions ++= Seq(
   "-Ymacro-annotations",
 )
 
-addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.11.3")
+addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.13.2")
 
 libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.2.3",
