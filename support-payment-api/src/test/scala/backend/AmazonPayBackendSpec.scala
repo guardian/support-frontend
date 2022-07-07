@@ -125,7 +125,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     mockDatabaseService,
   )(new DefaultThreadPool(ec))
 
-  val paymentdata = AmazonPaymentData("refId", BigDecimal(25), Currency.USD, "email@gu.com")
+  val paymentdata = AmazonPaymentData("refId", BigDecimal(25), Currency.USD, "email@thegulocal.com")
   val amazonPayRequest = AmazonPayRequest(paymentdata, Some(acquisitionData))
 
 }
@@ -178,7 +178,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
           when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
           when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
             .thenReturn(streamResponseError)
-          when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponseError)
+          when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com")).thenReturn(identityResponseError)
           amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
         }
 
@@ -199,7 +199,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
           .thenReturn(streamResponseError)
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 
         amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
@@ -219,7 +219,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         )
 
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 
         verify(mockAmazonPayService, Mockito.times(0)).setOrderReference(any())
@@ -241,7 +241,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         )
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
 
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 
         amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft mustBe
@@ -264,7 +264,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
           DatatypeFactory.newInstance().newXMLGregorianCalendar(),
         )
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@gu.com")).thenReturn(identityResponse)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 
         amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft mustBe

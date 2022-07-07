@@ -83,6 +83,8 @@ describe('address form fields functionality', () => {
 		const deliveryAddressFormReducer = addressReducerFor('delivery', 'GB');
 		const newState = deliveryAddressFormReducer(
 			{
+				'[unknown]': undefined,
+				postcode: undefined,
 				fields: {
 					country: 'GB',
 					city: null,
