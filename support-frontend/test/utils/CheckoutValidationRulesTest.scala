@@ -162,7 +162,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
           None,
           "bob",
           "builder",
-          Some("bob@gu.com"),
+          Some("bob@thegulocal.com"),
           Some("have a nice sub"),
           Some(new LocalDate(2020, 10, 2)),
         ),

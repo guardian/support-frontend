@@ -7,7 +7,7 @@ object Fixtures {
   val idId = "9999999"
   val salesforceId = "0039E000017tZVkQAM"
   val salesforceAccountId = "0019E00001JJ9ZMQA1"
-  val emailAddress = "integration-test@gu.com"
+  val emailAddress = "integration-test@thegulocal.com"
   val telephoneNumber = "0123456789"
   val title = Title.Mrs
   val name = "integration-test"
