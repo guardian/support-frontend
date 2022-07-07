@@ -26,10 +26,12 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
     }
 
   def findPromotions(promoCodes: List[PromoCode]): List[PromotionWithCode] =
-    allWith6For6
-      .foldLeft(List.empty[PromotionWithCode]) { (acc, promotion) =>
-        val maybeCode = promoCodes.intersect(promotion.promoCodes.toList).headOption
-        maybeCode.map(code => acc :+ PromotionWithCode(code, promotion)).getOrElse(acc)
+    promoCodes
+      .foldLeft(List.empty[PromotionWithCode]) { (acc, promoCode) =>
+        allWith6For6.find(promo => promo.promoCodes.exists(_ == promoCode)) match {
+          case Some(promotion) => acc :+ PromotionWithCode(promoCode, promotion)
+          case None => acc
+        }
       }
 
   def validatePromotion(
