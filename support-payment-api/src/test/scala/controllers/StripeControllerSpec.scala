@@ -539,7 +539,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
               |        "contributionId": "67dba1aa-5c4b-4828-a00d-64f82cc7465d",
               |        "countrySubdivisionCode": "unknown-country-subdivision-code",
               |        "ophanPageviewId": "jercw9q8cp285gk2o9oz",
-              |        "email": "jsmith@thegulocal.com",
+              |        "email": "jsmith@gu.com",
               |        "name": "john smith",
               |        "countryCode": "unknown-country-code"
               |      },
@@ -553,7 +553,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
               |        "type": "authorized"
               |      },
               |      "paid": true,
-              |      "receipt_email": "jsmith@thegulocal.com",
+              |      "receipt_email": "jsmith@gu.com",
               |      "receipt_number": null,
               |      "refunded": true,
               |      "refunds": {
@@ -601,7 +601,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
               |        "funding": "credit",
               |        "last4": "4242",
               |        "metadata": {},
-              |        "name": "jsmith@thegulocal.com",
+              |        "name": "jsmith@gu.com",
               |        "tokenization_method": null
               |      },
               |      "source_transfer": null,
@@ -702,7 +702,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
               |        "contributionId": "67dba1aa-5c4b-4828-a00d-64f82cc7465d",
               |        "countrySubdivisionCode": "unknown-country-subdivision-code",
               |        "ophanPageviewId": "jercw9q8cp285gk2o9oz",
-              |        "email": "jsmith@thegulocal.com",
+              |        "email": "jsmith@gu.com",
               |        "name": "john smith",
               |        "countryCode": "unknown-country-code"
               |      },
@@ -716,7 +716,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
               |        "type": "authorized"
               |      },
               |      "paid": true,
-              |      "receipt_email": "jsmith@thegulocal.com",
+              |      "receipt_email": "jsmith@gu.com",
               |      "receipt_number": null,
               |      "refunded": true,
               |      "refunds": {
@@ -764,7 +764,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
               |        "funding": "credit",
               |        "last4": "4242",
               |        "metadata": {},
-              |        "name": "jsmith@thegulocal.com",
+              |        "name": "jsmith@gu.com",
               |        "tokenization_method": null
               |      },
               |      "source_transfer": null,

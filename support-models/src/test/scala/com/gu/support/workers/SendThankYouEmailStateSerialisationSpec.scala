@@ -52,7 +52,7 @@ object ProductTypeCreatedTestData {
     recipientSFContactId = SfContactId("sfrecip"),
     DigitalPack(GBP, Monthly, ReaderType.Gift),
     GiftRecipient
-      .DigitalSubscriptionGiftRecipient("bob", "builder", "bob@thegulocal.com", Some("message"), new LocalDate(2020, 10, 2)),
+      .DigitalSubscriptionGiftRecipient("bob", "builder", "bob@gu.com", Some("message"), new LocalDate(2020, 10, 2)),
     GeneratedGiftCode("gd12-23456789").get,
     new LocalDate(2020, 10, 14),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
@@ -91,7 +91,7 @@ object ProductTypeCreatedTestData {
   val guardianWeeklyCreated = SendThankYouEmailGuardianWeeklyState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
     GuardianWeekly(GBP, Monthly, Domestic),
-    Some(GiftRecipient.WeeklyGiftRecipient(None, "bob", "builder", Some("bob@thegulocal.com"))),
+    Some(GiftRecipient.WeeklyGiftRecipient(None, "bob", "builder", Some("bob@gu.com"))),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
     None,

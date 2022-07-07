@@ -237,7 +237,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     TouchPointEnvironments.SANDBOX,
     new SubscribeItemBuilder(
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
+      User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
       GBP,
     ),
   )
@@ -261,7 +261,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     SANDBOX,
     new SubscribeItemBuilder(
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
+      User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
       GBP,
     ),
   )
@@ -273,7 +273,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     SANDBOX,
     new SubscribeItemBuilder(
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
+      User("1234", "hi@gu.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
       GBP,
     ),
   )
@@ -284,7 +284,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         DigitalSubscriptionDirectPurchaseState(
           Country.UK,
           DigitalPack(GBP, Monthly),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
           None,
           SalesforceContactRecord("", ""),
         ),
@@ -301,7 +301,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         DigitalSubscriptionDirectPurchaseState(
           Country.UK,
           DigitalPack(GBP, Monthly, amount = Some(12)),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
           None,
           SalesforceContactRecord("", ""),
         ),
@@ -320,7 +320,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         DigitalSubscriptionDirectPurchaseState(
           Country.UK,
           DigitalPack(GBP, Monthly, amount = Some(1)),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
           None,
           SalesforceContactRecord("", ""),
         ),
@@ -339,7 +339,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         DigitalSubscriptionDirectPurchaseState(
           Country.UK,
           DigitalPack(GBP, Monthly, amount = Some(12)),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
           None,
           SalesforceContactRecord("", ""),
         ),
@@ -355,9 +355,9 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       .build(
         DigitalSubscriptionGiftPurchaseState(
           Country.UK,
-          DigitalSubscriptionGiftRecipient("bob", "smith", "hi@thegulocal.com", None, new LocalDate(2020, 12, 1)),
+          DigitalSubscriptionGiftRecipient("bob", "smith", "hi@gu.com", None, new LocalDate(2020, 12, 1)),
           DigitalPack(GBP, Quarterly, Gift),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
           None,
           SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
         ),
@@ -372,7 +372,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       DigitalSubscriptionDirectPurchaseState(
         Country.UK,
         DigitalPack(GBP, Monthly),
-        PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+        PayPalReferenceTransaction("baid", "hi@gu.com"),
         None,
         SalesforceContactRecord("", ""),
       ),
@@ -390,7 +390,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         DigitalSubscriptionDirectPurchaseState(
           Country.UK,
           DigitalPack(GBP, Monthly),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
           Some("NOTAPATRONPROMO"),
           SalesforceContactRecord("", ""),
         ),
@@ -407,7 +407,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         DigitalSubscriptionDirectPurchaseState(
           Country.UK,
           DigitalPack(GBP, Monthly),
-          PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+          PayPalReferenceTransaction("baid", "hi@gu.com"),
           Some("FOOPATRON"),
           SalesforceContactRecord("", ""),
         ),

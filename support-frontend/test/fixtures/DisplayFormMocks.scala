@@ -15,7 +15,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 trait DisplayFormMocks extends TestCSRFComponents {
 
-  val authenticatedIdUser = User("testuser@thegulocal.com", "123")
+  val authenticatedIdUser = User("testuser@gu.com", "123")
 
   val testUsers = new TestUserService("test") {
     override def isTestUser(testUserName: Option[String]): Boolean = testUserName.exists(_.startsWith("test"))
@@ -29,7 +29,7 @@ trait DisplayFormMocks extends TestCSRFComponents {
 
   val idUser = User(
     id = "123",
-    primaryEmailAddress = "test@thegulocal.com",
+    primaryEmailAddress = "test@gu.com",
     publicFields = PublicFields(displayName = Some("test-user")),
   )
 

@@ -127,7 +127,7 @@ object Fixtures {
     ContactDetails(
       "Test-FirstName",
       "Test-LastName",
-      Some("test@thegulocal.com"),
+      Some("test@gu.com"),
       Country.UK,
       deliveryInstructions = Some(deliveryInstructions),
     )
@@ -249,7 +249,7 @@ object Fixtures {
         "BillToContact" : {
           "FirstName" : "test",
           "LastName" : "user",
-          "WorkEmail" : "yjcysqxfcqqytuzupjc@thegulocal.com",
+          "WorkEmail" : "yjcysqxfcqqytuzupjc@gu.com",
           "Country" : "GB",
           "Address1" : null,
           "Address2" : null,

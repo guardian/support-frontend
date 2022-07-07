@@ -15,7 +15,7 @@ import { findIsoCountry } from 'helpers/internationalisation/country';
 //     "postcode": "N1 9GU",
 //     "lastName": "Mickey",
 //     "firstName": "Mouse",
-//     "email": "rupert.bates@thegulocal.com",
+//     "email": "rupert.bates@gu.com",
 //     "country": "United States",
 //     "city": "London"
 // },

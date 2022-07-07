@@ -112,7 +112,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     val name = "integration-test-recipient"
     val upsertData = DeliveryContact(
       AccountId = salesforceAccountId,
-      Email = Some("integration-test-recipient@thegulocal.com"),
+      Email = Some("integration-test-recipient@gu.com"),
       Salutation = Some(Title.Dr),
       FirstName = name,
       LastName = name,

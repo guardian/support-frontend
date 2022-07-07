@@ -39,11 +39,11 @@ object Fixtures {
     "createdreqid_hi",
   )
 
-  val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", Some("test@thegulocal.com"), Country.UK)
+  val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", Some("test@gu.com"), Country.UK)
   val differentContactDetails = ContactDetails(
     "Test-FirstName",
     "Test-LastName",
-    Some("test@thegulocal.com"),
+    Some("test@gu.com"),
     Country.UK,
     Some("123 easy street"),
     None,

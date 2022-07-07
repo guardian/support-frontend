@@ -141,7 +141,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     UUID.randomUUID(),
     User(
       "1234",
-      "hi@thegulocal.com",
+      "hi@gu.com",
       None,
       "bob",
       "smith",
@@ -160,7 +160,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     GuardianWeeklyState(
       User(
         "1234",
-        "hi@thegulocal.com",
+        "hi@gu.com",
         None,
         "bob",
         "smith",
@@ -169,7 +169,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       ),
       Some(WeeklyGiftRecipient(None, "bob", "smith", None)),
       weekly,
-      PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+      PayPalReferenceTransaction("baid", "hi@gu.com"),
       firstDeliveryDate,
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
@@ -183,7 +183,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
   val nonGiftState = GuardianWeeklyState(
     User(
       "1234",
-      "hi@thegulocal.com",
+      "hi@gu.com",
       None,
       "bob",
       "smith",
@@ -192,7 +192,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     ),
     None,
     weekly,
-    PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+    PayPalReferenceTransaction("baid", "hi@gu.com"),
     firstDeliveryDate,
     None,
     SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
@@ -220,7 +220,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
     GuardianWeeklyState(
       User(
         "1234",
-        "hi@thegulocal.com",
+        "hi@gu.com",
         None,
         "bob",
         "smith",
@@ -229,7 +229,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       ),
       None,
       weekly,
-      PayPalReferenceTransaction("baid", "hi@thegulocal.com"),
+      PayPalReferenceTransaction("baid", "hi@gu.com"),
       firstDeliveryDate,
       None,
       SalesforceContactRecords(SalesforceContactRecord("", ""), Some(SalesforceContactRecord("", ""))),
