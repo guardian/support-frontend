@@ -30,7 +30,7 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
     val promosByCode: Map[PromoCode, List[Promotion]] =
       allWith6For6
         .flatMap(promo => promo.promoCodes.map(code => code -> promo))
-        .groupMap(_._1) { case (promoCode, promo) => promo }
+        .groupMap(_._1)(_._2)
 
     promoCodes.foldLeft(List.empty[PromotionWithCode]) { (acc, promoCode) =>
       acc ++ promosByCode.getOrElse(promoCode, Nil).map(promotion => PromotionWithCode(promoCode, promotion))
