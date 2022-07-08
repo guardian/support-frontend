@@ -25,14 +25,17 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
       case tooMany => Left(DuplicateCode(tooMany.mkString(", ")))
     }
 
-  def findPromotions(promoCodes: List[PromoCode]): List[PromotionWithCode] =
-    promoCodes
-      .foldLeft(List.empty[PromotionWithCode]) { (acc, promoCode) =>
-        allWith6For6.find(promo => promo.promoCodes.exists(_ == promoCode)) match {
-          case Some(promotion) => acc :+ PromotionWithCode(promoCode, promotion)
-          case None => acc
-        }
-      }
+  // promoCodes here is expected to be a small list of default promos plus one from the querystring
+  def findPromotions(promoCodes: List[PromoCode]): List[PromotionWithCode] = {
+    val promosByCode: Map[PromoCode, List[Promotion]] =
+      allWith6For6
+        .flatMap(promo => promo.promoCodes.map(code => code -> promo))
+        .groupMap(_._1) { case (promoCode, promo) => promo }
+
+    promoCodes.foldLeft(List.empty[PromotionWithCode]) { (acc, promoCode) =>
+      acc ++ promosByCode.getOrElse(promoCode, Nil).map(promotion => PromotionWithCode(promoCode, promotion))
+    }
+  }
 
   def validatePromotion(
       promotion: PromotionWithCode,
