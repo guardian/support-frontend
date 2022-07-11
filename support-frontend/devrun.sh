@@ -18,5 +18,5 @@ source_nvm
 
 nvm use
 yarn devrun &
-yarn storybook &
+# yarn storybook &
 cd ..; sbt -mem 2048 "project support-frontend" devrun
