@@ -4,16 +4,15 @@ const devConfig = require('../webpack.dev.js');
 
 module.exports = {
   "stories": [
-    "../stories/**/*.stories.@(js|jsx)"
+    "../stories/**/*.stories.@(js|jsx|ts|tsx)",
   ],
   "addons": [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
-		// "@storybook/addon-knobs",
-    // "@storybook/addon-options",
-    // "@storybook/addon-storysource",
-    // "@storybook/addon-viewport",
+    "@storybook/addon-storysource",
+    "@storybook/addon-viewport",
+		'@storybook/addon-a11y',
   ],
   "framework": "@storybook/react",
   "core": {
@@ -35,6 +34,7 @@ module.exports = {
 			resolve: {
 				...config.resolve,
 				alias: devConfig.resolve.alias,
+				modules: devConfig.resolve.modules,
 			}
 		};
   },

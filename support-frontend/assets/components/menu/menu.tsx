@@ -6,7 +6,7 @@ const styles = moduleStyles as { item: string; root: string };
 
 type ItemProps = {
 	children: ReactNode;
-	isSelected: boolean;
+	isSelected?: boolean;
 };
 
 function Item({
@@ -33,7 +33,7 @@ function LinkItem({
 	...props
 }: ItemProps & {
 	href: string;
-	onClick: () => void;
+	onClick?: () => void;
 }): JSX.Element {
 	return (
 		<Item el="a" {...props}>
@@ -55,7 +55,7 @@ function Menu({
 	...props
 }: {
 	children: ReactNode;
-	style: Record<string, string | number>;
+	style?: Record<string, string | number>;
 }): JSX.Element {
 	return (
 		<div {...props} className={styles.root}>
