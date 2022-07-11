@@ -37,6 +37,30 @@ sealed trait Product {
       .distinct
 }
 
+case object SupporterPlus extends Product {
+  private def productRatePlan(
+    id: String,
+    billingPeriod: BillingPeriod,
+  ) =
+    ProductRatePlan(id, billingPeriod, NoFulfilmentOptions, NoProductOptions, s"Supporter Plus ${billingPeriod.getClass.getSimpleName}")
+
+  lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[SupporterPlus.type]]] =
+    Map(
+      PROD -> List(
+        productRatePlan("todo", Monthly),
+        productRatePlan("todo", Annual),
+      ),
+      UAT -> List(
+        productRatePlan("todo", Monthly),
+        productRatePlan("todo", Annual),
+      ),
+      SANDBOX -> List(
+        productRatePlan("8ad09fc281de1ce70181de3b251736a4", Monthly),
+        productRatePlan("8ad09fc281de1ce70181de3b28ee3783", Annual),
+      ),
+    )
+}
+
 case object DigitalPack extends Product {
   private def productRatePlan(
       id: String,

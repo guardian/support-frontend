@@ -12,15 +12,17 @@ import org.scalatest.flatspec.AsyncFlatSpec
 class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with LazyLogging {
 
   "The full Catalog" should "decode successfully" in {
+    val supporterPlusId = "8ad09fc281de1ce70181de3b251736a4"
     val digitalPackId = "2c92a0fb4edd70c8014edeaa4eae220a"
     val guardianWeeklyAnnualDomesticId = "2c92a0fe6619b4b901661aa8e66c1692"
     val numberOfPriceLists =
-      DigitalPack.ratePlans(PROD).length + Paper.ratePlans(PROD).length + GuardianWeekly.ratePlans(PROD).length
+      DigitalPack.ratePlans(PROD).length + Paper.ratePlans(PROD).length + GuardianWeekly.ratePlans(PROD).length + SupporterPlus.ratePlans(PROD).length
 
     testDecoding[Catalog](
       Fixtures.loadCatalog,
       catalog => {
         catalog.prices.length shouldBe numberOfPriceLists
+        checkPrice(catalog, supporterPlusId, GBP, 11.99)
         checkPrice(catalog, digitalPackId, GBP, 11.99)
         checkPrice(catalog, guardianWeeklyAnnualDomesticId, GBP, 150)
       },
