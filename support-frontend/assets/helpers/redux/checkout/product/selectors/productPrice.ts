@@ -1,5 +1,5 @@
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { correspondingPaperProducts } from 'helpers/productPrice/productOptions';
+import { productOptionIfDigiAddOnChanged } from 'helpers/productPrice/productOptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import {
 	finalPrice,
@@ -84,14 +84,15 @@ export function selectCorrespondingProductOptionPrice(
 		isPaperProduct(product.productType) &&
 		requiredFieldsForProduct[product.productType](product)
 	) {
-		const correspondingProductOption =
-			correspondingPaperProducts[product.productOption];
+		const alternateProductOption = productOptionIfDigiAddOnChanged(
+			product.productOption,
+		);
 		return finalPrice(
 			product.productPrices,
 			common.internationalisation.countryId,
 			product.billingPeriod,
 			product.fulfilmentOption,
-			correspondingProductOption,
+			alternateProductOption,
 		);
 	}
 	return selectDiscountedPrice(state);
