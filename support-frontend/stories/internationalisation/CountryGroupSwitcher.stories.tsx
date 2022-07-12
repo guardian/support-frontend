@@ -1,3 +1,5 @@
+import { expect } from '@storybook/jest';
+import { userEvent, waitFor, within } from '@storybook/testing-library';
 import React from 'react';
 import CountryGroupSwitcherComponent from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -66,4 +68,26 @@ export function CountryGroupSwitcher(args: {
 
 CountryGroupSwitcher.args = {
 	countryGroup: GBPCountries,
+};
+
+CountryGroupSwitcher.play = async ({
+	canvasElement,
+}: {
+	canvasElement: HTMLCanvasElement;
+}) => {
+	const canvas = within(canvasElement);
+
+	userEvent.click(canvas.getByRole('button'));
+
+	await waitFor(() => {
+		expect(canvas.getByRole('dialog')).toHaveAttribute('aria-hidden', 'false');
+	});
+
+	await waitFor(() => {
+		userEvent.click(canvas.getByTestId('dialog-backdrop'));
+	});
+
+	await waitFor(() => {
+		expect(canvas.getByTestId('dialog')).not.toBeVisible();
+	});
 };

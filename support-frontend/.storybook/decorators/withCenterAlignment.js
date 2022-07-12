@@ -2,9 +2,9 @@ import React from 'react';
 
 const styles = {
   display: 'flex',
-  padding: '10vh 10vh',
-  minHeight: '100vh',
-  width: '100vw',
+  padding: '2em',
+  minHeight: '100%',
+  width: '100&',
   boxSizing: 'border-box',
   alignItems: 'center',
   justifyContent: 'center',

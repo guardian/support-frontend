@@ -57,7 +57,6 @@ const tabInteraction = async ({
 	userEvent.click(canvas.getByRole('tab', { selected: false }));
 
 	await waitFor(() => {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call  -- no idea why this has no typedef
 		expect(args.onTabChange).toHaveBeenCalled();
 	});
 };
@@ -65,7 +64,7 @@ const tabInteraction = async ({
 export default {
 	title: 'Content/Tabs',
 	component: TabsComponent,
-	argTypes: { onTabChange: { action: 'clicked' } },
+	argTypes: { onTabChange: { action: 'tab changed' } },
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<div

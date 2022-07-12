@@ -1,5 +1,5 @@
 import MenuComponent, { ButtonItem, LinkItem } from 'components/menu/menu';
-import { withCenterAlignment } from '../.storybook/decorators/withCenterAlignment';
+import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 
 export default {
 	title: 'Core/Menu',

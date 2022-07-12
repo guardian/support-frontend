@@ -2,7 +2,7 @@ import React from 'react';
 import AnimatedDots from 'components/spinners/animatedDots';
 
 export default {
-	title: 'Animations/Dots',
+	title: 'Animations/Loading Dots',
 	component: AnimatedDots,
 	argTypes: {
 		appearance: {
@@ -31,10 +31,12 @@ export default {
 	],
 };
 
-export function Dots(args: { appearance: 'light' | 'dark' }): JSX.Element {
+export function LoadingDots(args: {
+	appearance: 'light' | 'dark';
+}): JSX.Element {
 	return <AnimatedDots appearance={args.appearance} />;
 }
 
-Dots.args = {
+LoadingDots.args = {
 	appearance: 'light',
 };

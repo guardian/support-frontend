@@ -5,8 +5,8 @@ export default {
 	title: 'Content/List With Sub Text',
 	component: ListComponent,
 	argTypes: {
-		bulletColour: { type: 'radio', options: ['light', 'dark'] },
-		bulletSize: { type: 'radio', options: ['small', 'large'] },
+		bulletColour: { control: { type: 'radio', options: ['light', 'dark'] } },
+		bulletSize: { control: { type: 'radio', options: ['small', 'large'] } },
 	},
 };
 
