@@ -7,15 +7,8 @@ import type {
 	SortCodeIndex,
 } from 'components/directDebit/directDebitActions';
 import {
-	closeDirectDebitGuarantee,
 	confirmDirectDebitClicked,
-	openDirectDebitGuarantee,
 	payDirectDebitClicked,
-	setDirectDebitFormPhase,
-	updateAccountHolderConfirmation,
-	updateAccountHolderName,
-	updateAccountNumber,
-	updateSortCode,
 } from 'components/directDebit/directDebitActions';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
@@ -30,6 +23,15 @@ import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/rea
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
 import {
+	setAccountHolderConfirmation,
+	setAccountHolderName,
+	setAccountNumber,
+	setDDGuaranteeClose,
+	setDDGuaranteeOpen,
+	setPhase,
+	setSortCode,
+} from 'helpers/redux/checkout/payment/directDebit/actions';
+import {
 	expireRecaptchaToken,
 	setRecaptchaToken,
 } from 'helpers/redux/checkout/recaptcha/actions';
@@ -39,27 +41,30 @@ import './directDebitForm.scss';
 // ----- Map State/Props ----- //
 function mapStateToProps(state: ContributionsState) {
 	return {
-		isDDGuaranteeOpen: state.page.directDebit.isDDGuaranteeOpen,
-		sortCodeArray: state.page.directDebit.sortCodeArray,
-		accountNumber: state.page.directDebit.accountNumber,
-		accountHolderName: state.page.directDebit.accountHolderName,
-		accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
-		formError: state.page.directDebit.formError,
-		phase: state.page.directDebit.phase,
+		isDDGuaranteeOpen:
+			state.page.checkoutForm.payment.directDebit.isDDGuaranteeOpen,
+		sortCodeArray: state.page.checkoutForm.payment.directDebit.sortCodeArray,
+		accountNumber: state.page.checkoutForm.payment.directDebit.accountNumber,
+		accountHolderName:
+			state.page.checkoutForm.payment.directDebit.accountHolderName,
+		accountHolderConfirmation:
+			state.page.checkoutForm.payment.directDebit.accountHolderConfirmation,
+		formError: state.page.checkoutForm.payment.directDebit.formError,
+		phase: state.page.checkoutForm.payment.directDebit.phase,
 		countryGroupId: state.common.internationalisation.countryGroupId,
 	};
 }
 
 const mapDispatchToProps = {
 	payDirectDebitClicked,
-	setDirectDebitFormPhase,
 	confirmDirectDebitClicked,
-	openDirectDebitGuarantee,
-	closeDirectDebitGuarantee,
-	updateSortCode,
-	updateAccountNumber,
-	updateAccountHolderName,
-	updateAccountHolderConfirmation,
+	setPhase,
+	setDDGuaranteeOpen,
+	setDDGuaranteeClose,
+	setSortCode,
+	setAccountHolderConfirmation,
+	setAccountHolderName,
+	setAccountNumber,
 	setRecaptchaToken,
 	expireRecaptchaToken,
 };
@@ -86,7 +91,7 @@ function DirectDebitForm(props: PropTypes) {
 			<AccountHolderNameInput
 				phase={props.phase}
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					props.updateAccountHolderName(e.target.value)
+					props.setAccountHolderName(e.target.value)
 				}
 				value={props.accountHolderName}
 			/>
@@ -94,7 +99,7 @@ function DirectDebitForm(props: PropTypes) {
 			<AccountNumberInput
 				phase={props.phase}
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					props.updateAccountNumber(e.target.value)
+					props.setAccountNumber(e.target.value)
 				}
 				value={props.accountNumber}
 			/>
@@ -104,14 +109,14 @@ function DirectDebitForm(props: PropTypes) {
 				onChange={(
 					index: SortCodeIndex,
 					e: React.ChangeEvent<HTMLInputElement>,
-				) => props.updateSortCode(index, e.target.value)}
+				) => props.setSortCode({ index, partialSortCode: e.target.value })}
 				sortCodeArray={props.sortCodeArray}
 			/>
 
 			<ConfirmationInput
 				phase={props.phase}
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					props.updateAccountHolderConfirmation(e.target.checked)
+					props.setAccountHolderConfirmation(e.target.checked)
 				}
 				checked={props.accountHolderConfirmation}
 			/>
@@ -122,7 +127,7 @@ function DirectDebitForm(props: PropTypes) {
 				buttonText={props.buttonText}
 				phase={props.phase}
 				onPayClick={props.payDirectDebitClicked}
-				onEditClick={() => props.setDirectDebitFormPhase('entry')}
+				onEditClick={() => props.setPhase('entry')}
 				onConfirmClick={() =>
 					props.confirmDirectDebitClicked(props.onPaymentAuthorisation)
 				}
@@ -137,8 +142,8 @@ function DirectDebitForm(props: PropTypes) {
 
 			<DirectDebitGuarantee
 				isDDGuaranteeOpen={props.isDDGuaranteeOpen}
-				openDirectDebitGuarantee={props.openDirectDebitGuarantee}
-				closeDirectDebitGuarantee={props.closeDirectDebitGuarantee}
+				openDirectDebitGuarantee={props.setDDGuaranteeOpen}
+				closeDirectDebitGuarantee={props.setDDGuaranteeClose}
 			/>
 		</div>
 	);

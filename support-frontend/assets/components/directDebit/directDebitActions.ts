@@ -197,7 +197,7 @@ function confirmDirectDebitClicked(
 ): (dispatch: Dispatch<Action>, getState: () => CheckoutState) => void {
 	return (dispatch, getState) => {
 		const { sortCodeString, sortCodeArray, accountNumber, accountHolderName } =
-			getState().page.directDebit;
+			getState().page.checkoutForm.payment.directDebit;
 		const sortCode = sortCodeArray.join('') || sortCodeString;
 		onPaymentAuthorisation({
 			paymentMethod: DirectDebit,

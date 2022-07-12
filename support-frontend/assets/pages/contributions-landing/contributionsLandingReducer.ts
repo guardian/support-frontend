@@ -16,6 +16,8 @@ import { csrfReducer } from 'helpers/redux/checkout/csrf/reducer';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { marketingConsentReducer } from 'helpers/redux/checkout/marketingConsent/reducer';
 import type { MarketingConsentState } from 'helpers/redux/checkout/marketingConsent/state';
+import type { PaymentState } from 'helpers/redux/checkout/payment/reducer';
+import { paymentReducer } from 'helpers/redux/checkout/payment/reducer';
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { productReducer } from 'helpers/redux/checkout/product/reducer';
@@ -95,6 +97,7 @@ interface PageState {
 		marketingConsent: MarketingConsentState;
 		csrf: CsrfState;
 		recaptcha: RecaptchaState;
+		payment: PaymentState;
 	};
 	user: UserState;
 	directDebit: DirectDebitState;
@@ -418,6 +421,7 @@ function initReducer(): Reducer<PageState> {
 			marketingConsent: marketingConsentReducer,
 			csrf: csrfReducer,
 			recaptcha: recaptchaReducer,
+			payment: paymentReducer,
 		}),
 		user: createUserReducer(),
 		directDebit,

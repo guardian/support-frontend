@@ -16,6 +16,8 @@ import { giftingReducer } from 'helpers/redux/checkout/giftingState/reducer';
 import type { GiftingState } from 'helpers/redux/checkout/giftingState/state';
 import { marketingConsentReducer } from 'helpers/redux/checkout/marketingConsent/reducer';
 import type { MarketingConsentState } from 'helpers/redux/checkout/marketingConsent/state';
+import type { PaymentState } from 'helpers/redux/checkout/payment/reducer';
+import { paymentReducer } from 'helpers/redux/checkout/payment/reducer';
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { productReducer } from 'helpers/redux/checkout/product/reducer';
@@ -43,6 +45,7 @@ export type CheckoutFormState = {
 	recaptcha: RecaptchaState;
 	billingAddress: AddressState;
 	deliveryAddress: AddressState;
+	payment: PaymentState;
 };
 
 export type CheckoutState = ReduxState<{
@@ -85,6 +88,7 @@ export function createReducer(
 			recaptcha: recaptchaReducer,
 			deliveryAddress: deliveryAddressReducer,
 			billingAddress: billingAddressReducer,
+			payment: paymentReducer,
 		}),
 		user: createUserReducer(),
 		directDebit,
