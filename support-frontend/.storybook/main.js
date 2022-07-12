@@ -7,12 +7,12 @@ module.exports = {
     "../stories/**/*.stories.@(js|jsx|ts|tsx)",
   ],
   "addons": [
+		'@storybook/addon-a11y',
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
-    "@storybook/addon-storysource",
+    // "@storybook/addon-storysource",
     "@storybook/addon-viewport",
-		'@storybook/addon-a11y',
+    "@storybook/addon-interactions",
   ],
   "framework": "@storybook/react",
   "core": {

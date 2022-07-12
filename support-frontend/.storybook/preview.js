@@ -1,4 +1,5 @@
 import { viewports } from "./viewports";
+import '../assets/stylesheets/skeleton/skeleton.scss';
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -11,4 +12,17 @@ export const parameters = {
 	viewport: {
     viewports,
   },
+}
+
+export const 	argTypes = {
+	cssOverrides: {
+		table: {
+			disable: true,
+		},
+	},
+	children: {
+		table: {
+			disable: true,
+		},
+	},
 }
