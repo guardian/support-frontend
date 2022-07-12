@@ -50,8 +50,8 @@ describe('Newspaper checkout form', () => {
 					product: {
 						productType: 'Paper',
 						billingPeriod: 'Monthly',
-						productOption: 'NoProductOptions',
-						fulfilmentOption: 'Domestic',
+						productOption: 'Everyday',
+						fulfilmentOption: 'Collection',
 						productPrices: paperProducts,
 					},
 					billingAddress: {
