@@ -1,4 +1,3 @@
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { productOptionIfDigiAddOnChanged } from 'helpers/productPrice/productOptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import {
@@ -7,6 +6,7 @@ import {
 } from 'helpers/productPrice/productPrices';
 import { paperProductTypes } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
+import { renderError } from 'helpers/rendering/render';
 import type { GuardianProduct, ProductState } from '../state';
 
 function canDeterminePaperPrice(productState: ProductState): boolean {
@@ -32,12 +32,6 @@ const requiredFieldsForProduct: Record<
 	ANNUAL: () => false,
 };
 
-const getDefaultPriceObject = (currency: IsoCurrency): ProductPrice => ({
-	price: 0,
-	currency,
-	fixedTerm: false,
-});
-
 export function selectPriceForProduct(state: SubscriptionsState): ProductPrice {
 	const { common, page } = state;
 	const { product } = page.checkoutForm;
@@ -51,7 +45,7 @@ export function selectPriceForProduct(state: SubscriptionsState): ProductPrice {
 		);
 		return selectedProductPrice;
 	}
-	return getDefaultPriceObject(common.internationalisation.currencyId);
+	throw renderError(new Error('Could not determine product price'));
 }
 
 export function selectDiscountedPrice(state: SubscriptionsState): ProductPrice {
@@ -66,7 +60,8 @@ export function selectDiscountedPrice(state: SubscriptionsState): ProductPrice {
 			product.productOption,
 		);
 	}
-	return getDefaultPriceObject(common.internationalisation.currencyId);
+	// Throwing so we unwind the stack
+	throw renderError(new Error('Could not determine discounted product price'));
 }
 
 function isPaperProduct(productType: GuardianProduct): boolean {
