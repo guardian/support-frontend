@@ -104,7 +104,7 @@ function sendEventSubscriptionCheckoutEvent(
 							sourceCurrency,
 							targetCurrency,
 						);
-					sendEvent(id, isConversion, convertedValue.toString());
+					sendEvent(id, isConversion, Math.round(convertedValue).toString());
 				}
 			};
 
@@ -208,7 +208,7 @@ export function sendEventContributionCheckoutConversion(
 					sourceCurrency,
 				);
 				if (convertedValue) {
-					sendEvent(sendEventId, true, convertedValue.toString());
+					sendEvent(sendEventId, true, Math.round(convertedValue).toString());
 				}
 			};
 
