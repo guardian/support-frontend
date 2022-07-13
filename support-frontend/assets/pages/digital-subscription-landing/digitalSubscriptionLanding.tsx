@@ -34,7 +34,6 @@ import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { routes } from 'helpers/urls/routes';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
@@ -98,11 +97,9 @@ const reactElementId: Record<CountryGroupId, string> = {
 	International: 'digital-subscription-landing-page-int',
 };
 
-const reducer = () => createReducer(DigitalPack, Monthly, null, null, null);
-
-const store = initReduxForSubscriptions(reducer);
+const store = initReduxForSubscriptions(DigitalPack, Monthly);
 const { currencyId } = store.getState().common.internationalisation;
-const { billingPeriod } = store.getState().page.checkout;
+const { billingPeriod } = store.getState().page.checkoutForm.product;
 
 // ----- Render ----- //
 function DigitalLandingPage(props: DigitalLandingPropTypes) {

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import type { ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { State } from '../contributionsLandingReducer';
 import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringContributorErrorMessage';
 

@@ -22,7 +22,7 @@ import {
 } from 'helpers/forms/paymentMethods';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	setCurrencyId,
 	setUseLocalAmounts,

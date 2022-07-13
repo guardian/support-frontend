@@ -10,7 +10,7 @@ import {
 import { getDefaultContributionType } from 'helpers/redux/commonState/selectors';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
-import type { GuardianProduct } from './state';
+import type { GuardianProduct } from '../state';
 
 function isContribution(product: GuardianProduct): product is ContributionType {
 	return contributionTypes.includes(product);
@@ -34,6 +34,20 @@ function isSubscription(
 	);
 }
 
+function getSubscriptionTypeFromURL(): SubscriptionProduct {
+	const urlPathRegex = /\/subscribe\/(.+)\/checkout/;
+	const productsToUrlPath: Record<string, SubscriptionProduct> = {
+		digital: DigitalPack,
+		paper: Paper,
+		weekly: GuardianWeekly,
+	};
+	const [, match] = urlPathRegex.exec(window.location.pathname) ?? [];
+	if (match) {
+		return productsToUrlPath[match];
+	}
+	return DigitalPack;
+}
+
 export function getSubscriptionType(
 	state: SubscriptionsState,
 ): SubscriptionProduct {
@@ -42,7 +56,5 @@ export function getSubscriptionType(
 	if (isSubscription(productType)) {
 		return productType;
 	}
-	// TODO: We are very unlikely to hit this, but we should have a way of determining what the product 'really' is
-	// Maybe from the URL?
-	return DigitalPack;
+	return getSubscriptionTypeFromURL();
 }

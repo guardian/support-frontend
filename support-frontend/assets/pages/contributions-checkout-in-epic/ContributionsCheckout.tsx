@@ -12,7 +12,7 @@ import {
 	setProductType,
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { updatePaymentMethod } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { ContributionsCheckoutForm } from './ContributionsCheckoutForm';

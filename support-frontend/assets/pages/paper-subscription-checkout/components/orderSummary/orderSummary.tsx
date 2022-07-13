@@ -5,11 +5,6 @@ import OrderSummary from 'components/orderSummary/orderSummary';
 import OrderSummaryProduct from 'components/orderSummary/orderSummaryProduct';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	getPriceWithDiscount,
-	getProductPrice,
-} from 'helpers/productPrice/paperProductPrices';
-import { paperProductsWithoutDigital } from 'helpers/productPrice/productOptions';
 import type {
 	ActivePaperProducts,
 	ProductOptions,
@@ -17,7 +12,11 @@ import type {
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import {
+	selectCorrespondingProductOptionPrice,
+	selectPriceForProduct,
+} from 'helpers/redux/checkout/product/selectors/productPrice';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import {
 	getOrderSummaryTitle,
 	getPriceSummary,
@@ -45,12 +44,16 @@ function getMobileSummaryTitle(
 	);
 }
 
-function mapStateToProps(state: WithDeliveryCheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	return {
-		fulfilmentOption: state.page.checkout.fulfilmentOption,
-		productOption: state.page.checkout.productOption as ActivePaperProducts,
-		billingPeriod: state.page.checkout.billingPeriod,
-		productPrices: state.page.checkout.productPrices,
+		fulfilmentOption: state.page.checkoutForm.product.fulfilmentOption,
+		productOption: state.page.checkoutForm.product
+			.productOption as ActivePaperProducts,
+		billingPeriod: state.page.checkoutForm.product.billingPeriod,
+		productPrices: state.page.checkoutForm.product.productPrices,
+		priceWithoutPromotions: selectPriceForProduct(state),
+		correspondingProductOptionPrice:
+			selectCorrespondingProductOptionPrice(state),
 	};
 }
 
@@ -70,27 +73,16 @@ function PaperOrderSummary(props: PropTypes) {
 
 	// If the user has added a digi sub, we need to know the price of their selected base paper product separately
 	const basePaperPrice = props.includesDigiSub
-		? getPriceWithDiscount(
-				props.productPrices,
-				props.fulfilmentOption,
-				paperProductsWithoutDigital[props.productOption],
-		  )
+		? props.correspondingProductOptionPrice
 		: props.total;
 
-	// This allows us to get the price without promotion, so we can say what the price will revert to
-	const paperWithoutPromo = getProductPrice(
-		props.productPrices,
-		props.fulfilmentOption,
-		props.productOption,
-	);
-
-	const activePromo = getAppliedPromo(paperWithoutPromo.promotions);
+	const activePromo = getAppliedPromo(props.priceWithoutPromotions.promotions);
 	const monthsDiscounted = activePromo?.numberOfDiscountedPeriods;
 
 	const promotionPriceString =
 		activePromo && monthsDiscounted
 			? ` for ${monthsDiscounted} months, then ${showPrice(
-					paperWithoutPromo,
+					props.priceWithoutPromotions,
 					false,
 			  )} per month`
 			: '';

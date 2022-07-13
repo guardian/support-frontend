@@ -8,7 +8,6 @@ import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { getPriceDescription } from 'helpers/productPrice/priceDescriptions';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { getProductPrice } from 'helpers/productPrice/productPrices';
-import type { Action } from 'helpers/subscriptionsForms/formActions';
 
 type PropTypes = {
 	productPrices: ProductPrices;
@@ -16,7 +15,7 @@ type PropTypes = {
 	fulfilmentOption?: FulfilmentOptions;
 	pricingCountry: IsoCountry;
 	selected: BillingPeriod;
-	onChange: (period: BillingPeriod) => Action;
+	onChange: (period: BillingPeriod) => void;
 };
 
 function BillingPeriodSelector(props: PropTypes): JSX.Element {

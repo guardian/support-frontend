@@ -10,7 +10,6 @@ import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { Paper } from 'helpers/productPrice/subscriptions';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import CheckoutForm from 'pages/paper-subscription-checkout/components/paperCheckoutForm';
 import {
 	getFulfilmentOption,
@@ -27,10 +26,14 @@ const fulfilmentOption = getFulfilmentOption();
 const productOption = getProductOption();
 const startDate = getStartDate(fulfilmentOption, productOption);
 
-const reducer = () =>
-	createReducer(Paper, Monthly, startDate, productOption, fulfilmentOption);
+const store = initReduxForSubscriptions(
+	Paper,
+	Monthly,
+	startDate,
+	productOption,
+	getFulfilmentOption,
+);
 
-const store = initReduxForSubscriptions(reducer);
 const { countryGroupId } = store.getState().common.internationalisation;
 FocusStyleManager.onlyShowFocusOnTabs();
 // ----- Render ----- //

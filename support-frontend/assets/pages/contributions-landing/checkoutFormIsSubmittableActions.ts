@@ -18,7 +18,7 @@ import { AmazonPay, Sepa } from 'helpers/forms/paymentMethods';
 import { stripeCardFormIsIncomplete } from 'helpers/forms/stripe';
 import type { StateProvince } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { Action as UserAction } from 'helpers/user/userActions';
 import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
 import { setFormIsValid } from './contributionsLandingActions';

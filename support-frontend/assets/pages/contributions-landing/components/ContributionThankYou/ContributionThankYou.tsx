@@ -20,7 +20,7 @@ import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { User } from 'helpers/user/userReducer';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';

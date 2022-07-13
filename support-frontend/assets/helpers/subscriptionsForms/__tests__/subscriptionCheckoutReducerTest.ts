@@ -17,13 +17,7 @@ describe('Subscription Checkout Reducer', () => {
 		const stage: Stage = 'thankyou';
 		const action = setStage(stage, 'DigitalPack', undefined);
 
-		const newState = createReducer(
-			'DigitalPack',
-			'Annual',
-			null,
-			null,
-			null,
-		)(undefined, action);
+		const newState = createReducer()(undefined, action);
 
 		expect(newState.checkout.stage).toEqual(stage);
 	});
@@ -32,13 +26,7 @@ describe('Subscription Checkout Reducer', () => {
 		const stage: Stage = 'checkout';
 		const action = setStage(stage, 'DigitalPack', undefined);
 
-		const newState = createReducer(
-			'DigitalPack',
-			'Annual',
-			null,
-			null,
-			null,
-		)(undefined, action);
+		const newState = createReducer()(undefined, action);
 
 		expect(newState.checkout.stage).toEqual(stage);
 	});
@@ -60,13 +48,7 @@ describe('Subscription Checkout Reducer', () => {
 		];
 		const action = setFormErrors(errors as Array<FormError<FormField>>);
 
-		const newState = createReducer(
-			'DigitalPack',
-			'Annual',
-			null,
-			null,
-			null,
-		)(undefined, action);
+		const newState = createReducer()(undefined, action);
 
 		expect(newState.checkout.formErrors).toEqual(errors);
 	});

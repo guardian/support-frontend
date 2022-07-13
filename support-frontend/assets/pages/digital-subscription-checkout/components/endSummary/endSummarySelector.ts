@@ -1,8 +1,9 @@
 import { userIsPatron } from 'helpers/patrons';
 import { getBillingDescription } from 'helpers/productPrice/priceDescriptionsDigital';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import { getProductPrice, showPrice } from 'helpers/productPrice/productPrices';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { showPrice } from 'helpers/productPrice/productPrices';
+import { selectPriceForProduct } from 'helpers/redux/checkout/product/selectors/productPrice';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { EndSummaryProps } from './endSummary';
 
 const getPromotion = (productPrice: ProductPrice): string | null =>
@@ -10,13 +11,9 @@ const getPromotion = (productPrice: ProductPrice): string | null =>
 		? productPrice.promotions[0].description
 		: null;
 
-function mapStateToProps(state: CheckoutState): EndSummaryProps {
-	const { billingPeriod, productPrices, orderIsAGift } = state.page.checkout;
-	const productPrice = getProductPrice(
-		productPrices,
-		state.common.internationalisation.countryId,
-		billingPeriod,
-	);
+function mapStateToProps(state: SubscriptionsState): EndSummaryProps {
+	const { billingPeriod, orderIsAGift } = state.page.checkoutForm.product;
+	const productPrice = selectPriceForProduct(state);
 	const digitalBillingPeriod =
 		billingPeriod === 'Annual' ? billingPeriod : 'Monthly';
 	const digitalGiftBillingPeriod =
@@ -25,7 +22,7 @@ function mapStateToProps(state: CheckoutState): EndSummaryProps {
 	return {
 		priceDescription: getBillingDescription(productPrice, digitalBillingPeriod),
 		promotion: getPromotion(productPrice) ?? '',
-		orderIsAGift: orderIsAGift ?? false,
+		orderIsAGift,
 		digitalGiftBillingPeriod,
 		price: showPrice(productPrice),
 		isPatron: userIsPatron(productPrice.promotions),

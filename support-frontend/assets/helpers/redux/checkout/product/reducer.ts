@@ -4,11 +4,16 @@ import type { SelectedAmounts } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import type {
-	ProductPrice,
-	ProductPrices,
-} from 'helpers/productPrice/productPrices';
+import {
+	paperProductsWithDigital,
+	paperProductsWithoutDigital,
+} from 'helpers/productPrice/productOptions';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
+import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import type { DateYMDString } from 'helpers/types/DateString';
+import { setDeliveryCountry } from '../address/actions';
 import type { AmountChange, GuardianProduct } from './state';
 import { initialProductState } from './state';
 
@@ -22,6 +27,11 @@ export const productSlice = createSlice({
 		setProductOption(state, action: PayloadAction<ProductOptions>) {
 			state.productOption = action.payload;
 		},
+		setAddDigital(state, action: PayloadAction<boolean>) {
+			state.productOption = action.payload
+				? paperProductsWithDigital[state.productOption]
+				: paperProductsWithoutDigital[state.productOption];
+		},
 		setFulfilmentOption(state, action: PayloadAction<FulfilmentOptions>) {
 			state.fulfilmentOption = action.payload;
 		},
@@ -30,9 +40,6 @@ export const productSlice = createSlice({
 		},
 		setProductPrices(state, action: PayloadAction<ProductPrices>) {
 			state.productPrices = action.payload;
-		},
-		setSelectedProductPrice(state, action: PayloadAction<ProductPrice>) {
-			state.selectedProductPrice = action.payload;
 		},
 		setAllAmounts(state, action: PayloadAction<SelectedAmounts>) {
 			state.selectedAmounts = action.payload;
@@ -52,9 +59,16 @@ export const productSlice = createSlice({
 		setOrderIsAGift(state, action: PayloadAction<boolean>) {
 			state.orderIsAGift = action.payload;
 		},
-		setDiscountedPrice(state, action: PayloadAction<ProductPrice>) {
-			state.discountedProductPrice = action.payload;
+		setStartDate(state, action: PayloadAction<DateYMDString>) {
+			state.startDate = action.payload;
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(setDeliveryCountry, (state, action) => {
+			if (state.productType === GuardianWeekly) {
+				state.fulfilmentOption = getWeeklyFulfilmentOption(action.payload);
+			}
+		});
 	},
 });
 

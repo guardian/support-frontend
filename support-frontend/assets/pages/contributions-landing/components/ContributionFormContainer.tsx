@@ -22,7 +22,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import {
