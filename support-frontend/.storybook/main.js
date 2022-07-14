@@ -14,7 +14,7 @@ module.exports = {
     "@storybook/addon-viewport",
     "@storybook/addon-interactions",
   ],
-  framework: "@storybook/react",
+  framework: "@storybook/preact",
   core: {
     "builder": "@storybook/builder-webpack5"
   },
