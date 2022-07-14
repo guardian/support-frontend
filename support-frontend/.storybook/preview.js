@@ -1,20 +1,20 @@
-import { viewports } from "./viewports";
+import { viewports } from './viewports';
 import '../assets/stylesheets/skeleton/skeleton.scss';
 
 export const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
-  controls: {
-    matchers: {
-      color: /(background|color)$/i,
-      date: /Date$/,
-    },
-  },
+	actions: { argTypesRegex: '^on[A-Z].*' },
+	controls: {
+		matchers: {
+			color: /(background|color)$/i,
+			date: /Date$/,
+		},
+	},
 	viewport: {
-    viewports,
-  },
-}
+		viewports,
+	},
+};
 
-export const 	argTypes = {
+export const argTypes = {
 	cssOverrides: {
 		table: {
 			disable: true,
@@ -25,4 +25,4 @@ export const 	argTypes = {
 			disable: true,
 		},
 	},
-}
+};

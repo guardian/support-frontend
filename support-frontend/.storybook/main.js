@@ -3,26 +3,25 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const devConfig = require('../webpack.dev.js');
 
 module.exports = {
-  stories: [
-    "../stories/**/*.stories.@(js|jsx|ts|tsx)",
-  ],
-  addons: [
+	stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
+	addons: [
 		'@storybook/addon-a11y',
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-storysource",
-    "@storybook/addon-viewport",
-    "@storybook/addon-interactions",
-  ],
-  framework: "@storybook/preact",
-  core: {
-    "builder": "@storybook/builder-webpack5"
-  },
+		'@storybook/addon-links',
+		'@storybook/addon-essentials',
+		'@storybook/addon-storysource',
+		'@storybook/addon-viewport',
+		'@storybook/addon-interactions',
+	],
+	framework: '@storybook/preact',
+	core: {
+		builder: '@storybook/builder-webpack5',
+	},
 	features: {
-    interactionsDebugger: true,
-  },
+		interactionsDebugger: true,
+	},
+	staticDirs: ['./static'],
 	webpackFinal: async (config) => {
-    return {
+		return {
 			...config,
 			plugins: [
 				...config.plugins,
@@ -38,7 +37,7 @@ module.exports = {
 				...config.resolve,
 				alias: devConfig.resolve.alias,
 				modules: devConfig.resolve.modules,
-			}
+			},
 		};
-  },
-}
+	},
+};
