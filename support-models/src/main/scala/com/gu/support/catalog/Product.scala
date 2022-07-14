@@ -41,22 +41,23 @@ case object SupporterPlus extends Product {
   private def productRatePlan(
     id: String,
     billingPeriod: BillingPeriod,
+    chargeId: ProductRatePlanChargeId
   ) =
     ProductRatePlan(id, billingPeriod, NoFulfilmentOptions, NoProductOptions, s"Supporter Plus ${billingPeriod.getClass.getSimpleName}")
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[SupporterPlus.type]]] =
     Map(
       PROD -> List(
-        productRatePlan("todo", Monthly),
-        productRatePlan("todo", Annual),
+        productRatePlan("todo", Monthly, "todo"),
+        productRatePlan("todo", Annual, "todo"),
       ),
       UAT -> List(
-        productRatePlan("todo", Monthly),
-        productRatePlan("todo", Annual),
+        productRatePlan("todo", Monthly, "todo"),
+        productRatePlan("todo", Annual, "todo"),
       ),
       SANDBOX -> List(
-        productRatePlan("8ad09fc281de1ce70181de3b251736a4", Monthly),
-        productRatePlan("8ad09fc281de1ce70181de3b28ee3783", Annual),
+        productRatePlan("8ad09fc281de1ce70181de3b251736a4", Monthly, "8ad09fc281de1ce70181de3b253e36a6"),
+        productRatePlan("8ad09fc281de1ce70181de3b28ee3783", Annual, "8ad09fc281de1ce70181de3b29223787"),
       ),
     )
 }

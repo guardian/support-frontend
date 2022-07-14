@@ -26,6 +26,7 @@ import com.gu.support.workers.{
   SepaPaymentMethod,
   SixWeekly,
   StripePaymentType,
+  SupporterPlus,
 }
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
@@ -120,6 +121,7 @@ object AcquisitionDataRowBuilder {
 
   private def productTypeAndAmount(product: ProductType): (AcquisitionProduct, Option[BigDecimal]) = product match {
     case c: Contribution => (AcquisitionProduct.RecurringContribution, Some(c.amount.toDouble))
+    case s: SupporterPlus => (AcquisitionProduct.SupporterPlus, Some(s.amount.toDouble))
     case _: DigitalPack => (AcquisitionProduct.DigitalSubscription, None)
     case _: Paper => (AcquisitionProduct.Paper, None)
     case _: GuardianWeekly => (AcquisitionProduct.GuardianWeekly, None)
@@ -173,6 +175,15 @@ object AcquisitionDataRowBuilder {
   private def getAcquisitionTypeDetails(s: SendThankYouEmailState): AcquisitionTypeDetails =
     s match {
       case s: SendThankYouEmailContributionState =>
+        AcquisitionTypeDetails(
+          Some(s.paymentMethod),
+          None,
+          Direct,
+          Purchase,
+          Some(s.accountNumber),
+          Some(s.subscriptionNumber),
+        )
+      case s: SendThankYouEmailSupportertPlusState =>
         AcquisitionTypeDetails(
           Some(s.paymentMethod),
           None,

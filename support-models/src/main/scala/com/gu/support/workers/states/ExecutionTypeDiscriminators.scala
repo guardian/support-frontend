@@ -5,6 +5,7 @@ object ExecutionTypeDiscriminators {
   val fieldName = "productType"
 
   val contribution = "Contribution"
+  val supporterPlus = "SupporterPlus"
   val digitalSubscriptionDirectPurchase = "DigitalSubscriptionDirectPurchase"
   val digitalSubscriptionGiftPurchase = "DigitalSubscriptionGiftPurchase"
   val digitalSubscriptionCorporateRedemption = "DigitalSubscriptionCorporateRedemption"

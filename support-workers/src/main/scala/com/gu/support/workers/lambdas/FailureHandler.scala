@@ -41,6 +41,8 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     val emailFields = state.product match {
       case _: Contribution =>
         FailedEmailFields.contribution(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
+      case _: SupporterPlus =>
+        FailedEmailFields.supporterPlus(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case _: DigitalPack =>
         FailedEmailFields.digitalPack(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case _: Paper => FailedEmailFields.paper(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
