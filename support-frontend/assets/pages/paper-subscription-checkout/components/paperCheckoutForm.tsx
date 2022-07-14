@@ -118,6 +118,7 @@ function mapStateToProps(state: SubscriptionsState) {
 		deliveryAddressErrors: state.page.checkoutForm.billingAddress.fields.errors,
 		isTestUser: state.page.checkout.isTestUser,
 		country: state.common.internationalisation.countryId,
+		billingCountry: state.page.checkoutForm.billingAddress.fields.country,
 		csrf: state.page.checkoutForm.csrf,
 		currencyId: state.common.internationalisation.currencyId,
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
@@ -204,7 +205,7 @@ function PaperCheckoutForm(props: PropTypes) {
 
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,
-		props.country,
+		props.billingAddressIsSame ? props.country : props.billingCountry,
 	);
 
 	const isSubscriptionCard = props.fulfilmentOption === Collection;
