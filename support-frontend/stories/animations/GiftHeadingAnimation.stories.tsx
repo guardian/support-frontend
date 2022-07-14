@@ -20,34 +20,3 @@ export default {
 };
 
 export { default as GiftHeadingAnimation } from 'components/animations/giftHeadingAnimation';
-
-// Dots.args = {
-// 	appearance: 'light',
-// };
-
-// // stories.add('Animated dots', () => (
-// // 	<div
-// // 		style={{
-// // 			background: '#121212',
-// // 			display: 'flex',
-// // 			padding: '10vh 10vh',
-// // 			minHeight: '100vh',
-// // 			width: '100vw',
-// // 			boxSizing: 'border-box',
-// // 			alignItems: 'center',
-// // 			justifyContent: 'center',
-// // 		}}
-// // 	>
-// // 		<AnimatedDots appearance={'light'} />
-// // 	</div>
-// // ));
-
-// // stories.add('Gifting animation', () => (
-// // 	<div
-// // 		style={{
-
-// // 		}}
-// // 	>
-// // 		<GiftHeadingAnimation />
-// // 	</div>
-// // ));

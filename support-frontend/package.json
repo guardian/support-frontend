@@ -24,7 +24,7 @@
     "prettier:check": "prettier --check ./assets",
     "prettier:fix": "prettier --write ./assets",
     "storybook": "start-storybook -p 9001 --no-open",
-    "build-storybook": "build-storybook",
+    "build-storybook": "build-storybook -o storybook-static -s .storybook/static",
     "cache-ssr": "node scripts/ssrScript.js",
     "orphans": "echo 'Checking for orphan modules' && node scripts/orphans.js",
     "check-images": "echo 'Purging unused images' && node scripts/gridImages.js"
