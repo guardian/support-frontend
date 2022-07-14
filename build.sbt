@@ -88,6 +88,7 @@ lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.4.2",
   scalatest % "test",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.13.2",
 )
 
 lazy val root = (project in file("."))
