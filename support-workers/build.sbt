@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.sentry" % "sentry-logback" % "1.7.4",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
-  "com.gocardless" % "gocardless-pro" % "2.10.0",
+  "com.gocardless" % "gocardless-pro" % "5.7.0",
 )
 
 riffRaffPackageType := assembly.value
