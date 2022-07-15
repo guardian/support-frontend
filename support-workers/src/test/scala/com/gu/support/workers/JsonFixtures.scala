@@ -483,7 +483,7 @@ object JsonFixtures {
         salesforceContact,
       ),
       UUID.randomUUID(),
-      user(),
+      user("9999998"),
       SupporterPlus(12, GBP, Monthly),
       AnalyticsInfo(false, Stripe),
       None,
