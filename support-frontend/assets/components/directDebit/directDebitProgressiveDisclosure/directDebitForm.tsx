@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import { payDirectDebitClicked } from 'components/directDebit/directDebitActions';
 import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import {
@@ -13,6 +12,7 @@ import {
 	setPhase,
 	setSortCodeString,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
+import { confirmAccountDetails } from 'helpers/redux/checkout/payment/directDebit/thunks';
 import {
 	expireRecaptchaToken,
 	setRecaptchaToken,
@@ -40,7 +40,7 @@ function mapStateToProps(state: CheckoutState) {
 }
 
 const mapDispatchToProps = {
-	payDirectDebitClicked,
+	payDirectDebitClicked: confirmAccountDetails,
 	setPhase,
 	updateSortCodeString: setSortCodeString,
 	updateAccountNumber: setAccountNumber,
@@ -160,7 +160,7 @@ function DirectDebitForm(props: PropTypes) {
 	useEffect(() => {
 		if (userHasSubmitted) {
 			if (allErrors.length === 0) {
-				props.payDirectDebitClicked();
+				void props.payDirectDebitClicked();
 			} else {
 				setUserHasSubmitted(false);
 			}

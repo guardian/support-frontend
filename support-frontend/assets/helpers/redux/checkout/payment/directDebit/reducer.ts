@@ -2,6 +2,11 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { Phase, SortCodeUpdate } from './state';
 import { initialDirectDebitState } from './state';
+import {
+	confirmAccountDetails,
+	directDebitErrorMessages,
+	payWithDirectDebit,
+} from './thunks';
 
 export const directDebitSlice = createSlice({
 	name: 'directDebit',
@@ -50,6 +55,28 @@ export const directDebitSlice = createSlice({
 		setPhase(state, action: PayloadAction<Phase>) {
 			state.phase = action.payload;
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(confirmAccountDetails.fulfilled, (state, action) => {
+			if (action.payload) {
+				state.phase = 'confirmation';
+			} else {
+				state.formError = directDebitErrorMessages.incorrectInput;
+			}
+		});
+
+		builder.addCase(confirmAccountDetails.rejected, (state, action) => {
+			const errorMessage = action.payload ?? directDebitErrorMessages.default;
+			state.formError = errorMessage;
+		});
+
+		builder.addCase(payWithDirectDebit.fulfilled, (state) => {
+			state.isPopUpOpen = false;
+		});
+
+		builder.addCase(payWithDirectDebit.rejected, (state) => {
+			state.isPopUpOpen = false;
+		});
 	},
 });
 

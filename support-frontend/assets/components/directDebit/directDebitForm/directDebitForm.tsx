@@ -6,10 +6,6 @@ import type {
 	Phase,
 	SortCodeIndex,
 } from 'components/directDebit/directDebitActions';
-import {
-	confirmDirectDebitClicked,
-	payDirectDebitClicked,
-} from 'components/directDebit/directDebitActions';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
@@ -31,6 +27,10 @@ import {
 	setPhase,
 	setSortCode,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
+import {
+	confirmAccountDetails,
+	payWithDirectDebit,
+} from 'helpers/redux/checkout/payment/directDebit/thunks';
 import {
 	expireRecaptchaToken,
 	setRecaptchaToken,
@@ -56,8 +56,8 @@ function mapStateToProps(state: ContributionsState) {
 }
 
 const mapDispatchToProps = {
-	payDirectDebitClicked,
-	confirmDirectDebitClicked,
+	payDirectDebitClicked: confirmAccountDetails,
+	confirmDirectDebitClicked: payWithDirectDebit,
 	setPhase,
 	setDDGuaranteeOpen,
 	setDDGuaranteeClose,
