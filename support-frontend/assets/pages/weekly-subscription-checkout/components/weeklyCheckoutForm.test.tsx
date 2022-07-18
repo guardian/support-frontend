@@ -9,22 +9,12 @@ import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import WeeklyCheckoutForm from './weeklyCheckoutForm';
-
-const pageReducer = (initialState: WithDeliveryCheckoutState) =>
-	createReducer(
-		GuardianWeekly,
-		'Annual',
-		formatMachineDate(new Date()),
-		initialState.page.checkout.productOption,
-		initialState.page.checkout.fulfilmentOption,
-	);
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const store = configureStore({
 		reducer: combineReducers({
-			page: pageReducer(initialState),
+			page: createReducer(),
 			common: commonReducer,
 		}),
 		preloadedState: initialState,
@@ -42,24 +32,28 @@ describe('Guardian Weekly checkout form', () => {
 		initialState = {
 			page: {
 				checkout: {
-					product: 'Paper',
-					billingPeriod: 'Monthly',
-					productOption: 'NoProductOptions',
-					fulfilmentOption: 'Domestic',
-					productPrices: weeklyProducts,
 					formErrors: [],
 					billingAddressIsSame: true,
 				},
-				billingAddress: {
-					fields: {
-						country: 'GB',
-						formErrors: [],
+				checkoutForm: {
+					product: {
+						productType: GuardianWeekly,
+						billingPeriod: 'Monthly',
+						productOption: 'NoProductOptions',
+						fulfilmentOption: 'Domestic',
+						productPrices: weeklyProducts,
 					},
-				},
-				deliveryAddress: {
-					fields: {
-						country: 'GB',
-						formErrors: [],
+					billingAddress: {
+						fields: {
+							country: 'GB',
+							errors: [],
+						},
+					},
+					deliveryAddress: {
+						fields: {
+							country: 'GB',
+							errors: [],
+						},
 					},
 				},
 			},

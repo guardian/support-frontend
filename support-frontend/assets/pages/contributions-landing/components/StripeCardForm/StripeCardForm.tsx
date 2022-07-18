@@ -18,7 +18,7 @@ import { usePrevious } from 'helpers/customHooks/usePrevious';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { isValidZipCode } from 'helpers/forms/formValidation';
 import { Stripe } from 'helpers/forms/paymentMethods';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
 	onThirdPartyPaymentAuthorised,

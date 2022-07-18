@@ -12,8 +12,8 @@ import moduleStyles from 'components/subscriptionCheckouts/thankYou/thankYou.mod
 import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { Option } from 'helpers/types/option';
 import {
 	helpCentreUrl,
@@ -28,7 +28,7 @@ const styles = moduleStyles as {
 };
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state: WithDeliveryCheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	return { ...getFormFields(state) };
 }
 

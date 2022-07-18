@@ -72,6 +72,21 @@ const paperProductsWithoutDigital = {
 	EverydayPlus: Everyday,
 } as Record<ProductOptions, ProductOptions>;
 
+// Returns the product option with the opposite 'add digital' option to the one passed
+// e.g. SaturdayPlus -> Saturday
+function productOptionIfDigiAddOnChanged(
+	selectedOption: ProductOptions,
+): ProductOptions {
+	if (selectedOption === 'NoProductOptions') {
+		return selectedOption;
+	}
+	const matchingProducLookup = {
+		...paperProductsWithDigital,
+		...paperProductsWithoutDigital,
+	};
+	return matchingProducLookup[selectedOption];
+}
+
 export {
 	NoProductOptions,
 	Saturday,
@@ -87,4 +102,5 @@ export {
 	ActivePaperProductTypes,
 	paperProductsWithDigital,
 	paperProductsWithoutDigital,
+	productOptionIfDigiAddOnChanged,
 };

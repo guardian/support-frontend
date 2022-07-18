@@ -1,9 +1,11 @@
 // ----- Imports ----- //
 import type { Dispatch } from 'redux';
-import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
+import type {
+	SubscriptionsDispatch,
+	SubscriptionsState,
+} from 'helpers/redux/subscriptionsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { checkoutFormIsValid } from 'helpers/subscriptionsForms/formValidation';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 
 // ----- Functions ----- //
 function enableOrDisablePayPalExpressCheckoutButton(
@@ -17,7 +19,7 @@ function enableOrDisablePayPalExpressCheckoutButton(
 }
 
 function enableOrDisableForm() {
-	return (_dispatch: Dispatch, getState: () => CheckoutState): void => {
+	return (_dispatch: Dispatch, getState: () => SubscriptionsState): void => {
 		enableOrDisablePayPalExpressCheckoutButton(checkoutFormIsValid(getState()));
 	};
 }
@@ -25,7 +27,7 @@ function enableOrDisableForm() {
 function setFormSubmissionDependentValue(setStateValue: () => Action) {
 	return (
 		dispatch: SubscriptionsDispatch,
-		getState: () => CheckoutState,
+		getState: () => SubscriptionsState,
 	): void => {
 		dispatch(setStateValue());
 		enableOrDisableForm()(dispatch, getState);

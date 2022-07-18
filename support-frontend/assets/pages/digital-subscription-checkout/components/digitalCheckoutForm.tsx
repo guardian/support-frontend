@@ -26,11 +26,12 @@ import { countries } from 'helpers/internationalisation/country';
 import { userIsPatron } from 'helpers/patrons';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import {
-	finalPrice,
-	getProductPrice,
-} from 'helpers/productPrice/productPrices';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import {
+	selectDiscountedPrice,
+	selectPriceForProduct,
+} from 'helpers/redux/checkout/product/selectors/productPrice';
+import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type {
 	SubscriptionsDispatch,
 	SubscriptionsState,
@@ -64,21 +65,18 @@ function mapStateToProps(state: SubscriptionsState) {
 		country: state.common.internationalisation.countryId,
 		formErrors: state.page.checkout.formErrors,
 		submissionError: state.page.checkout.submissionError,
-		productPrices: state.page.checkout.productPrices,
 		currencyId: state.common.internationalisation.currencyId,
 		csrf: state.page.checkoutForm.csrf,
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
 		paymentMethod: state.page.checkout.paymentMethod,
 		isTestUser: state.page.checkout.isTestUser,
-		amount: finalPrice(
-			state.page.checkout.productPrices,
-			state.common.internationalisation.countryId,
-			state.page.checkout.billingPeriod,
-		).price,
-		billingPeriod: state.page.checkout.billingPeriod as DigitalBillingPeriod,
+		billingPeriod: state.page.checkoutForm.product
+			.billingPeriod as DigitalBillingPeriod,
 		addressErrors: state.page.checkoutForm.billingAddress.fields.errors,
 		participations: state.common.abParticipations,
-		product: state.page.checkout.product,
+		product: getSubscriptionType(state),
+		price: selectPriceForProduct(state),
+		discountedPrice: selectDiscountedPrice(state),
 	};
 }
 
@@ -127,17 +125,11 @@ type PropTypes = ConnectedProps<typeof connector>;
 function DigitalCheckoutForm(props: PropTypes) {
 	useCsrCustomerData(props.setCsrCustomerData);
 
-	const productPrice = getProductPrice(
-		props.productPrices,
-		props.country,
-		props.billingPeriod,
-	);
-
 	useEffect(() => {
 		sendEventSubscriptionCheckoutStart(
 			props.product,
 			false,
-			productPrice,
+			props.price,
 			props.billingPeriod,
 		);
 	}, []);
@@ -151,7 +143,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 		props.country,
 	);
 
-	const isPatron = userIsPatron(productPrice.promotions);
+	const isPatron = userIsPatron(props.price.promotions);
 
 	return (
 		<Content>
@@ -172,7 +164,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 							/>
 						}
 						title="Digital Subscription"
-						productPrice={productPrice}
+						productPrice={props.price}
 						billingPeriod={props.billingPeriod}
 						changeSubscription={routes.digitalSubscriptionLanding}
 						isPatron={isPatron}
@@ -257,7 +249,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 							validateForm={props.validateForm}
 							isTestUser={props.isTestUser}
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-							amount={props.amount}
+							amount={props.discountedPrice.price}
 							billingPeriod={props.billingPeriod}
 							//  @ts-expect-error -- TODO: fix error types!!
 							allErrors={[...props.addressErrors, ...props.formErrors]}

@@ -1,10 +1,7 @@
 import { combineReducers } from 'redux';
 import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
 	billingAddressReducer,
 	deliveryAddressReducer,
@@ -58,27 +55,14 @@ export type CheckoutState = ReduxState<{
 export type WithDeliveryCheckoutState = ReduxState<{
 	checkout: FormState;
 	checkoutForm: CheckoutFormState;
-	fulfilmentOption: Option<FulfilmentOptions>;
 	directDebit: DirectDebitState;
 }>;
 
 export type AnyCheckoutState = CheckoutState | WithDeliveryCheckoutState;
 
-export function createReducer(
-	product: SubscriptionProduct,
-	initialBillingPeriod: BillingPeriod,
-	startDate: Option<string>,
-	productOption: Option<ProductOptions>,
-	fulfilmentOption: Option<FulfilmentOptions>,
-) {
+export function createReducer() {
 	return combineReducers({
-		checkout: createFormReducer(
-			product,
-			initialBillingPeriod,
-			startDate,
-			productOption,
-			fulfilmentOption,
-		),
+		checkout: createFormReducer(),
 		checkoutForm: combineReducers({
 			personalDetails: personalDetailsReducer,
 			product: productReducer,
@@ -97,4 +81,5 @@ export function createReducer(
 
 export const getFulfilmentOption = (
 	state: WithDeliveryCheckoutState,
-): Option<FulfilmentOptions> => state.page.checkout.fulfilmentOption;
+): Option<FulfilmentOptions> =>
+	state.page.checkoutForm.product.fulfilmentOption;

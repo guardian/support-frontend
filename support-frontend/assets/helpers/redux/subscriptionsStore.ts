@@ -1,22 +1,26 @@
 import type { TypedStartListening } from '@reduxjs/toolkit';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { renderError } from 'helpers/rendering/render';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { DateYMDString } from 'helpers/types/DateString';
 import { addAddressSideEffects } from './checkout/address/sideEffects';
 import { addPersonalDetailsSideEffects } from './checkout/personalDetails/subscriptionsSideEffects';
-import { addProductSideEffects } from './checkout/product/subscriptionsSideEffects';
+import {
+	setBillingPeriod,
+	setFulfilmentOption,
+	setProductOption,
+	setProductType,
+	setStartDate,
+} from './checkout/product/actions';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
-import type { CommonState } from './commonState/state';
 import { getInitialState } from './utils/setup';
 
-const subscriptionsPageReducer = createReducer(
-	'DigitalPack',
-	'Monthly',
-	null,
-	null,
-	null,
-);
+const subscriptionsPageReducer = createReducer();
 
 export type SubscriptionsReducer = typeof subscriptionsPageReducer;
 
@@ -39,42 +43,41 @@ export const startSubscriptionsListening =
 
 const subscriptionsStore = configureStore({
 	reducer: baseReducer,
-	// Makes devtools work correctly with the re-created store
-	devTools: false,
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().prepend(listenerMiddleware.middleware),
 });
 
 export type SubscriptionsStore = typeof subscriptionsStore;
 
-export function addPageReducer(
-	newReducer?: SubscriptionsReducer,
-): SubscriptionsStore {
-	// For context on why we are re-creating the store at runtime
-	// https://github.com/guardian/support-frontend/pull/3595#discussion_r834202633
-	const store = configureStore({
-		reducer: {
-			common: commonReducer,
-			page: newReducer ?? subscriptionsPageReducer,
-		},
-		middleware: (getDefaultMiddleware) =>
-			getDefaultMiddleware().prepend(listenerMiddleware.middleware),
-	});
-	addPersonalDetailsSideEffects(startSubscriptionsListening);
-	addProductSideEffects(startSubscriptionsListening);
-	addAddressSideEffects(startSubscriptionsListening);
-	return store;
-}
-
 export function initReduxForSubscriptions(
-	pageReducer?: (initialState: CommonState) => SubscriptionsReducer,
+	product: SubscriptionProduct,
+	initialBillingPeriod: BillingPeriod,
+	startDate?: DateYMDString,
+	productOption?: ProductOptions,
+	getFulfilmentOptionForCountry?: (country: string) => FulfilmentOptions,
 ): SubscriptionsStore {
 	try {
+		addPersonalDetailsSideEffects(startSubscriptionsListening);
+		addAddressSideEffects(startSubscriptionsListening);
 		const initialState = getInitialState();
-		const newStore = addPageReducer(pageReducer?.(initialState));
-		newStore.dispatch(setInitialCommonState(initialState));
 
-		return newStore;
+		subscriptionsStore.dispatch(setInitialCommonState(initialState));
+		subscriptionsStore.dispatch(setProductType(product));
+		subscriptionsStore.dispatch(setBillingPeriod(initialBillingPeriod));
+
+		startDate && subscriptionsStore.dispatch(setStartDate(startDate));
+		productOption &&
+			subscriptionsStore.dispatch(setProductOption(productOption));
+		getFulfilmentOptionForCountry &&
+			subscriptionsStore.dispatch(
+				setFulfilmentOption(
+					getFulfilmentOptionForCountry(
+						initialState.internationalisation.countryId,
+					),
+				),
+			);
+
+		return subscriptionsStore;
 	} catch (err) {
 		renderError(err as Error, null);
 		throw err;

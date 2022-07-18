@@ -24,6 +24,6 @@
       "ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"],
     }
   },
-  "include": ["./assets", "./declaration.d.ts", "./window.d.ts"], // The files to type check,
+  "include": ["./assets", "./stories", "./declaration.d.ts", "./window.d.ts"], // The files to type check,
   "exclude": ["node_modules"] // The files to not type check
 }
