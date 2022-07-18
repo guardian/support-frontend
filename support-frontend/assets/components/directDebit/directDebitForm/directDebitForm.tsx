@@ -75,12 +75,6 @@ const recaptchaId = 'robot_checkbox';
 
 // ----- Component ----- //
 function DirectDebitForm(props: PropTypes) {
-	useRecaptchaV2(
-		recaptchaId,
-		props.setRecaptchaToken,
-		props.expireRecaptchaToken,
-	);
-
 	return (
 		<div className="component-direct-debit-form">
 			<AccountHolderNameInput
@@ -116,7 +110,21 @@ function DirectDebitForm(props: PropTypes) {
 				checked={props.accountHolderConfirmation}
 			/>
 
-			{props.phase === 'entry' && <RecaptchaInput id={recaptchaId} />}
+			{props.phase === 'confirmation' && (
+				<RecaptchaInput
+					setRecaptchaToken={props.setRecaptchaToken}
+					expireRecaptchaToken={props.expireRecaptchaToken}
+				/>
+			)}
+
+			{props.formError && (
+				<div className="component-direct-debit-form__error-message-container">
+					<ErrorMessage
+						message={props.formError}
+						svg={<SvgExclamationAlternate />}
+					/>
+				</div>
+			)}
 
 			<PaymentButton
 				buttonText={props.buttonText}
@@ -126,11 +134,6 @@ function DirectDebitForm(props: PropTypes) {
 				onConfirmClick={() =>
 					props.confirmDirectDebitClicked(props.onPaymentAuthorisation)
 				}
-			/>
-
-			<ErrorMessage
-				message={props.formError}
-				svg={<SvgExclamationAlternate />}
 			/>
 
 			<LegalNotice countryGroupId={props.countryGroupId} />
@@ -212,16 +215,24 @@ function AccountHolderNameInput(props: {
 	);
 }
 
-function RecaptchaInput(props: { id: string }) {
+function RecaptchaInput(props: {
+	setRecaptchaToken: (token: string) => void;
+	expireRecaptchaToken?: () => void;
+}) {
+	useRecaptchaV2(
+		recaptchaId,
+		props.setRecaptchaToken,
+		props.expireRecaptchaToken,
+	);
 	return (
 		<div className="component-direct-debit-form__recaptcha">
 			<label
-				htmlFor={props.id}
+				htmlFor={recaptchaId}
 				className="component-direct-debit-form__field-label"
 			>
 				Security check
 			</label>
-			<Recaptcha id={props.id} />
+			<Recaptcha id={recaptchaId} />
 		</div>
 	);
 }
