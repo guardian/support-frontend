@@ -283,7 +283,10 @@ function showPaymentMethod(
 			break;
 
 		case DirectDebit:
-			directDebitAuthorised(onAuthorised, state.page.directDebit);
+			directDebitAuthorised(
+				onAuthorised,
+				state.page.checkoutForm.payment.directDebit,
+			);
 			break;
 
 		case PayPal:

@@ -1,6 +1,12 @@
 import type { Dispatch } from 'redux';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
+import {
+	resetFormError,
+	setFormError,
+	setPhase,
+	setPopupClose,
+} from 'helpers/redux/checkout/payment/directDebit/actions';
 import * as storage from 'helpers/storage/storage';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { checkAccount } from './helpers/ajax';
@@ -132,7 +138,7 @@ type DirectDebitConfirmationResponse = {
 };
 
 function payDirectDebitClicked(): (
-	dispatch: Dispatch<Action>,
+	dispatch: Dispatch,
 	getState: () => CheckoutState,
 ) => void {
 	return async (dispatch, getState) => {
@@ -141,24 +147,22 @@ function payDirectDebitClicked(): (
 			sortCodeArray,
 			accountNumber,
 			accountHolderConfirmation,
-		} = getState().page.directDebit;
+		} = getState().page.checkoutForm.payment.directDebit;
 		const recaptchaCompleted = getState().page.checkoutForm.recaptcha.completed;
 		const sortCode = sortCodeArray.join('') || sortCodeString;
 		const isTestUser = getState().page.user.isTestUser ?? false;
 		const { csrf } = getState().page.checkoutForm;
-		dispatch(resetDirectDebitFormError());
+		dispatch(resetFormError());
 
 		if (!accountHolderConfirmation) {
 			return dispatch(
-				setDirectDebitFormError(
-					'You need to confirm that you are the account holder.',
-				),
+				setFormError('You need to confirm that you are the account holder.'),
 			);
 		}
 
 		if (!recaptchaCompleted) {
 			return dispatch(
-				setDirectDebitFormError("Please check the 'I'm not a robot' checkbox"),
+				setFormError("Please check the 'I'm not a robot' checkbox"),
 			);
 		}
 
@@ -170,31 +174,25 @@ function payDirectDebitClicked(): (
 				csrf,
 			);
 			if (!response.ok) {
-				return dispatch(
-					setDirectDebitFormError(directDebitErrorMessages.invalidInput),
-				);
+				return dispatch(setFormError(directDebitErrorMessages.invalidInput));
 			}
 			const checkAccountStatus =
 				(await response.json()) as DirectDebitConfirmationResponse;
 
 			if (!checkAccountStatus.accountValid) {
-				return dispatch(
-					setDirectDebitFormError(directDebitErrorMessages.incorrectInput),
-				);
+				return dispatch(setFormError(directDebitErrorMessages.incorrectInput));
 			}
 
-			return dispatch(setDirectDebitFormPhase('confirmation'));
+			return dispatch(setPhase('confirmation'));
 		} catch (error) {
-			return dispatch(
-				setDirectDebitFormError(directDebitErrorMessages.default),
-			);
+			return dispatch(setFormError(directDebitErrorMessages.default));
 		}
 	};
 }
 
 function confirmDirectDebitClicked(
 	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void,
-): (dispatch: Dispatch<Action>, getState: () => CheckoutState) => void {
+): (dispatch: Dispatch, getState: () => CheckoutState) => void {
 	return (dispatch, getState) => {
 		const { sortCodeString, sortCodeArray, accountNumber, accountHolderName } =
 			getState().page.checkoutForm.payment.directDebit;
@@ -205,7 +203,7 @@ function confirmDirectDebitClicked(
 			sortCode,
 			accountNumber,
 		});
-		return dispatch(closeDirectDebitPopUp());
+		return dispatch(setPopupClose());
 	};
 }
 
