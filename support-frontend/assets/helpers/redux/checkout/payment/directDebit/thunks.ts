@@ -4,7 +4,6 @@ import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/rea
 import { DirectDebit } from 'helpers/forms/paymentMethods';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
-import { resetFormError } from './actions';
 
 export const directDebitErrorMessages = {
 	notConfirmed: 'You need to confirm that you are the account holder.',
@@ -29,7 +28,7 @@ export const confirmAccountDetails = createAsyncThunk<
 	}
 >(
 	'directDebit/confirmAccountDetails',
-	async function confirmAccountDetails(_, { dispatch, getState }) {
+	async function confirmAccountDetails(_, { getState }) {
 		const {
 			sortCodeString,
 			sortCodeArray,
@@ -40,7 +39,6 @@ export const confirmAccountDetails = createAsyncThunk<
 		const sortCode = sortCodeArray.join('') || sortCodeString;
 		const isTestUser = getState().page.user.isTestUser ?? false;
 		const { csrf } = getState().page.checkoutForm;
-		dispatch(resetFormError());
 
 		if (!accountHolderConfirmation) {
 			throw directDebitErrorMessages.notConfirmed;

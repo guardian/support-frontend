@@ -57,6 +57,10 @@ export const directDebitSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
+		builder.addCase(confirmAccountDetails.pending, (state) => {
+			state.formError = '';
+		});
+
 		builder.addCase(confirmAccountDetails.fulfilled, (state, action) => {
 			if (action.payload) {
 				state.phase = 'confirmation';
