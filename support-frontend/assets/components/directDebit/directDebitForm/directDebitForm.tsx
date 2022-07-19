@@ -2,10 +2,6 @@
 import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type {
-	Phase,
-	SortCodeIndex,
-} from 'components/directDebit/directDebitActions';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
@@ -27,6 +23,10 @@ import {
 	setPhase,
 	setSortCode,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
+import type {
+	Phase,
+	SortCodeIndex,
+} from 'helpers/redux/checkout/payment/directDebit/state';
 import {
 	confirmAccountDetails,
 	payWithDirectDebit,
@@ -56,8 +56,8 @@ function mapStateToProps(state: ContributionsState) {
 }
 
 const mapDispatchToProps = {
-	payDirectDebitClicked: confirmAccountDetails,
-	confirmDirectDebitClicked: payWithDirectDebit,
+	confirmAccountDetails,
+	payWithDirectDebit,
 	setPhase,
 	setDDGuaranteeOpen,
 	setDDGuaranteeClose,
@@ -134,10 +134,10 @@ function DirectDebitForm(props: PropTypes) {
 			<PaymentButton
 				buttonText={props.buttonText}
 				phase={props.phase}
-				onPayClick={props.payDirectDebitClicked}
+				onPayClick={props.confirmAccountDetails}
 				onEditClick={() => props.setPhase('entry')}
 				onConfirmClick={() =>
-					props.confirmDirectDebitClicked(props.onPaymentAuthorisation)
+					props.payWithDirectDebit(props.onPaymentAuthorisation)
 				}
 			/>
 

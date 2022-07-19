@@ -39,7 +39,7 @@ function mapStateToProps(state: CheckoutState) {
 }
 
 const mapDispatchToProps = {
-	payDirectDebitClicked: confirmAccountDetails,
+	confirmAccountDetails,
 	setPhase,
 	updateSortCodeString: setSortCodeString,
 	updateAccountNumber: setAccountNumber,
@@ -152,7 +152,7 @@ function DirectDebitForm(props: PropTypes) {
 	useEffect(() => {
 		if (userHasSubmitted) {
 			if (allErrors.length === 0) {
-				void props.payDirectDebitClicked();
+				void props.confirmAccountDetails();
 			} else {
 				setUserHasSubmitted(false);
 			}

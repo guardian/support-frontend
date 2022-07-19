@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { Phase } from 'components/directDebit/directDebitActions';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import SvgCross from 'components/svgs/cross';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
@@ -10,6 +9,7 @@ import {
 	resetFormError,
 	setPopupClose,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
+import type { Phase } from 'helpers/redux/checkout/payment/directDebit/state';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 
 // ----- Map State/Props ----- //

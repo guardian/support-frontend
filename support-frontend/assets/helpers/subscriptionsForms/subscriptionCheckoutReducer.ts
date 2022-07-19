@@ -1,6 +1,4 @@
 import { combineReducers } from 'redux';
-import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
-import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	billingAddressReducer,
@@ -49,13 +47,11 @@ export type CheckoutState = ReduxState<{
 	checkout: FormState;
 	checkoutForm: CheckoutFormState;
 	user: User;
-	directDebit: DirectDebitState;
 }>;
 
 export type WithDeliveryCheckoutState = ReduxState<{
 	checkout: FormState;
 	checkoutForm: CheckoutFormState;
-	directDebit: DirectDebitState;
 }>;
 
 export type AnyCheckoutState = CheckoutState | WithDeliveryCheckoutState;
@@ -75,7 +71,6 @@ export function createReducer() {
 			payment: paymentReducer,
 		}),
 		user: createUserReducer(),
-		directDebit,
 	});
 }
 

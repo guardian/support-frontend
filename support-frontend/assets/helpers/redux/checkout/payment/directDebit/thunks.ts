@@ -24,7 +24,6 @@ export const confirmAccountDetails = createAsyncThunk<
 	void,
 	{
 		state: SubscriptionsState | ContributionsState;
-		rejectValue: string;
 	}
 >(
 	'directDebit/confirmAccountDetails',
@@ -35,17 +34,12 @@ export const confirmAccountDetails = createAsyncThunk<
 			accountNumber,
 			accountHolderConfirmation,
 		} = getState().page.checkoutForm.payment.directDebit;
-		const recaptchaCompleted = getState().page.checkoutForm.recaptcha.completed;
 		const sortCode = sortCodeArray.join('') || sortCodeString;
 		const isTestUser = getState().page.user.isTestUser ?? false;
 		const { csrf } = getState().page.checkoutForm;
 
 		if (!accountHolderConfirmation) {
-			throw directDebitErrorMessages.notConfirmed;
-		}
-
-		if (!recaptchaCompleted) {
-			throw directDebitErrorMessages.notCompletedRecaptcha;
+			throw new Error(directDebitErrorMessages.notConfirmed);
 		}
 
 		const response = await checkAccount(
@@ -55,7 +49,7 @@ export const confirmAccountDetails = createAsyncThunk<
 			csrf,
 		);
 		if (!response.ok) {
-			throw directDebitErrorMessages.invalidInput;
+			throw new Error(directDebitErrorMessages.invalidInput);
 		}
 		const checkAccountStatus =
 			(await response.json()) as DirectDebitConfirmationResponse;

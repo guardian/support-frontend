@@ -2,8 +2,6 @@
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
-import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
-import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -100,7 +98,6 @@ interface PageState {
 		payment: PaymentState;
 	};
 	user: UserState;
-	directDebit: DirectDebitState;
 }
 
 export interface State {
@@ -424,7 +421,6 @@ function initReducer(): Reducer<PageState> {
 			payment: paymentReducer,
 		}),
 		user: createUserReducer(),
-		directDebit,
 	});
 }
 

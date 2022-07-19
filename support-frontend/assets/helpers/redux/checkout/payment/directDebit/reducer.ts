@@ -70,7 +70,8 @@ export const directDebitSlice = createSlice({
 		});
 
 		builder.addCase(confirmAccountDetails.rejected, (state, action) => {
-			const errorMessage = action.payload ?? directDebitErrorMessages.default;
+			const errorMessage =
+				action.error.message ?? directDebitErrorMessages.default;
 			state.formError = errorMessage;
 		});
 
