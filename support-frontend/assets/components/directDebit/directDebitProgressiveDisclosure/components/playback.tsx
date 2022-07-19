@@ -9,7 +9,9 @@ import {
 } from '@guardian/source-react-components';
 import { useEffect, useRef } from 'react';
 import * as React from 'react';
+import { RecaptchaField } from 'components/recaptcha/recaptchaField';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
+import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 
 const directDebitForm = css`
 	clear: left;
@@ -38,11 +40,17 @@ const fieldInfoWithMargin = css`
 	margin: ${space[2]}px 0 ${space[5]}px;
 `;
 
+const recaptchaContainer = css`
+	margin-bottom: 20px;
+`;
+
 const ctaContainer = css`
 	display: inline-flex;
 	justify-content: space-between;
 	width: 100%;
 `;
+
+const recaptchaId = 'robot_checkbox';
 
 function Playback(props: {
 	editDirectDebitClicked: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -52,7 +60,16 @@ function Playback(props: {
 	sortCodeString: string;
 	buttonText: string;
 	allErrors: Array<Record<string, string>>;
+	setRecaptchaToken: (token: string) => void;
+	expireRecaptchaToken?: () => void;
+	recaptchaError: string;
 }): JSX.Element {
+	useRecaptchaV2(
+		recaptchaId,
+		props.setRecaptchaToken,
+		props.expireRecaptchaToken,
+	);
+
 	const subscribeButtonRef = useRef<HTMLDivElement>(null);
 
 	// Actively moving focus to the buttons prevents a screenreader 'losing its place' in the document
@@ -90,6 +107,14 @@ function Playback(props: {
 					If the details above are correct, press confirm to set up your direct
 					debit, otherwise press back to make changes
 				</p>
+			</div>
+
+			<div css={recaptchaContainer}>
+				<RecaptchaField
+					label="Security check"
+					id={recaptchaId}
+					error={props.recaptchaError}
+				/>
 			</div>
 
 			<div css={ctaContainer} ref={subscribeButtonRef} tabIndex={-1}>

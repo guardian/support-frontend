@@ -1,32 +1,31 @@
 // ----- Imports ----- //
+import { css } from '@emotion/react';
+import { error, textSans } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
-import SvgExclamation from 'components/svgs/exclamation';
 
 // ---- Types ----- //
+
 type PropTypes = {
-	showError?: boolean;
-	message: string | null | undefined;
+	message: string;
 	svg?: ReactNode;
 };
 
 // ----- Component ----- //
-export default function ErrorMessage(props: PropTypes): JSX.Element | null {
-	if (props.showError && props.message) {
-		return (
-			<div className="component-error-message">
-				{props.svg}
-				<span className="component-error-message__message">
-					{props.message}
-				</span>
-			</div>
-		);
-	}
 
-	return null;
+export default function ErrorMessage(props: PropTypes): JSX.Element {
+	return (
+		<div css={styles.container}>
+			{props.svg}
+			<span>{props.message}</span>
+		</div>
+	);
 }
 
-// ----- Default Props ----- //
-ErrorMessage.defaultProps = {
-	showError: true,
-	svg: <SvgExclamation />,
+// ----- Styles ----- //
+
+const styles = {
+	container: css`
+		${textSans.xsmall()}
+		color: ${error[400]};
+	`,
 };
