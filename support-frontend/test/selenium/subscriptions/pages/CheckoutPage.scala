@@ -70,7 +70,6 @@ trait CheckoutPage extends Page with Browser {
     setValue(sortCode, "200000")
     setValue(accountNumber, "55779911")
     clickOn(accountConfirmation)
-    clickRecaptcha
   }
 
   def thankYouPageHasLoaded: Boolean = {
@@ -83,7 +82,10 @@ trait CheckoutPage extends Page with Browser {
 
   def clickDirectDebitConfirm(): Unit = clickOn(directDebitSubmitButton)
 
-  def clickDirectDebitPay(): Unit = clickOn(directDebitPlaybackSubmit)
+  def clickDirectDebitPay(): Unit = {
+    clickRecaptcha
+    clickOn(directDebitPlaybackSubmit)
+  }
 
   def fillForm(): Unit
 }
