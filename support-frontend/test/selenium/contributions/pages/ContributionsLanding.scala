@@ -102,12 +102,14 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
       setValue(sortCode1, "20")
       setValue(sortCode2, "00")
       setValue(sortCode3, "00")
-      clickRecaptcha
       clickOn(confirmation)
       clickOn(submitButton)
     }
 
-    def pay(): Unit = clickOn(payButton)
+    def pay(): Unit = {
+      clickRecaptcha
+      clickOn(payButton)
+    }
   }
 
   def fillInPersonalDetails(hasNameFields: Boolean): Unit = { RegisterFields.fillIn(hasNameFields) }
