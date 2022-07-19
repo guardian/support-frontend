@@ -39,11 +39,17 @@ sealed trait Product {
 
 case object SupporterPlus extends Product {
   private def productRatePlan(
-    id: String,
-    billingPeriod: BillingPeriod,
-    chargeId: ProductRatePlanChargeId
+      id: String,
+      billingPeriod: BillingPeriod,
+      chargeId: ProductRatePlanChargeId,
   ) =
-    ProductRatePlan(id, billingPeriod, NoFulfilmentOptions, NoProductOptions, s"Supporter Plus ${billingPeriod.getClass.getSimpleName}")
+    ProductRatePlan(
+      id,
+      billingPeriod,
+      NoFulfilmentOptions,
+      NoProductOptions,
+      s"Supporter Plus ${billingPeriod.getClass.getSimpleName}",
+    )
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[SupporterPlus.type]]] =
     Map(

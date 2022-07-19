@@ -16,7 +16,9 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     val digitalPackId = "2c92a0fb4edd70c8014edeaa4eae220a"
     val guardianWeeklyAnnualDomesticId = "2c92a0fe6619b4b901661aa8e66c1692"
     val numberOfPriceLists =
-      DigitalPack.ratePlans(PROD).length + Paper.ratePlans(PROD).length + GuardianWeekly.ratePlans(PROD).length + SupporterPlus.ratePlans(PROD).length
+      DigitalPack.ratePlans(PROD).length + Paper.ratePlans(PROD).length + GuardianWeekly
+        .ratePlans(PROD)
+        .length + SupporterPlus.ratePlans(PROD).length
 
     testDecoding[Catalog](
       Fixtures.loadCatalog,

@@ -50,8 +50,8 @@ object ProductTypeRatePlans {
       )
 
   def supporterPlusRatePlan(
-    product: SupporterPlus,
-    environment: TouchPointEnvironment,
+      product: SupporterPlus,
+      environment: TouchPointEnvironment,
   ): Option[ProductRatePlan[catalog.SupporterPlus.type]] =
     catalog.SupporterPlus.ratePlans
       .getOrElse(environment, Nil)

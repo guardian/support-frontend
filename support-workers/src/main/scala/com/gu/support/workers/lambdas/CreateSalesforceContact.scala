@@ -5,9 +5,27 @@ import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.redemptions.RedemptionData
-import com.gu.support.workers.{Contribution, DigitalPack, GuardianWeekly, Paper, PaymentMethod, RequestInfo, SalesforceContactRecord, SupporterPlus}
+import com.gu.support.workers.{
+  Contribution,
+  DigitalPack,
+  GuardianWeekly,
+  Paper,
+  PaymentMethod,
+  RequestInfo,
+  SalesforceContactRecord,
+  SupporterPlus,
+}
 import com.gu.support.workers.exceptions.SalesforceException
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{ContributionState, DigitalSubscriptionCorporateRedemptionState, DigitalSubscriptionDirectPurchaseState, DigitalSubscriptionGiftPurchaseState, DigitalSubscriptionGiftRedemptionState, GuardianWeeklyState, PaperState, SupporterPlusState}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
+  ContributionState,
+  DigitalSubscriptionCorporateRedemptionState,
+  DigitalSubscriptionDirectPurchaseState,
+  DigitalSubscriptionGiftPurchaseState,
+  DigitalSubscriptionGiftRedemptionState,
+  GuardianWeeklyState,
+  PaperState,
+  SupporterPlusState,
+}
 import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.ReaderType
 
@@ -92,9 +110,9 @@ class NextState(state: CreateSalesforceContactState) {
     )
 
   def toNextSupporterPlus(
-    salesforceContactRecords: SalesforceContactRecords,
-    product: SupporterPlus,
-    purchase: PaymentMethod,
+      salesforceContactRecords: SalesforceContactRecords,
+      product: SupporterPlus,
+      purchase: PaymentMethod,
   ): CreateZuoraSubscriptionState =
     CreateZuoraSubscriptionState(
       SupporterPlusState(
