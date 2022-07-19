@@ -11,12 +11,9 @@
 		margin-right: $gu-h-spacing * 0.5;
 	}
 
-	.component-error-message {
-		background-color: transparent;
-		color: gu-colour(state-error);
-		padding: 0;
-		height: 0;
-	}
+  .component-direct-debit-form__error-message-container {
+    margin-top: 8px;
+  }
 
 	.svg-exclamation-alternate {
 		float: left;

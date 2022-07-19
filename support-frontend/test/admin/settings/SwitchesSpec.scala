@@ -76,6 +76,15 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      }
           |    }
           |  },
+          |  "subscriptionsPaymentMethods": {
+          |    "description": "Payment methods - subscriptions",
+          |    "switches": {
+          |      "directDebit": {
+          |        "description": "Direct Debit",
+          |        "state": "On"
+          |      }
+          |    }
+          |  },
           |  "subscriptionsSwitches": {
           |    "description": "Subscriptions",
           |    "switches": {
@@ -139,6 +148,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
         Switches(
           oneOffPaymentMethods = OneOffPaymentMethodSwitches(On, On, On, On, On),
           recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, Off, Off),
+          subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(On),
           subscriptionsSwitches = SubscriptionsSwitches(On, On, On),
           featureSwitches = FeatureSwitches(On, On),
           campaignSwitches = CampaignSwitches(Off, Off),

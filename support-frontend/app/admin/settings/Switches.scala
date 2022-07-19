@@ -57,9 +57,14 @@ case class RecurringPaymentMethodSwitches(
     sepa: SwitchState,
 )
 
+case class SubscriptionsPaymentMethodSwitches(
+    directDebit: SwitchState,
+)
+
 case class Switches(
     oneOffPaymentMethods: OneOffPaymentMethodSwitches,
     recurringPaymentMethods: RecurringPaymentMethodSwitches,
+    subscriptionsPaymentMethods: SubscriptionsPaymentMethodSwitches,
     subscriptionsSwitches: SubscriptionsSwitches,
     featureSwitches: FeatureSwitches,
     campaignSwitches: CampaignSwitches,
