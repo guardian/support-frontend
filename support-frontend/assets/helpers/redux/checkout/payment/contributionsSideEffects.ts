@@ -9,6 +9,7 @@ export function addPaymentsSideEffects(
 	startListening({
 		actionCreator: setPopupOpen,
 		effect() {
+			// TODO: we should do this on the payment method selection action instead in future
 			storage.setSession('selectedPaymentMethod', DirectDebit);
 		},
 	});
