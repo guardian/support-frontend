@@ -9,7 +9,6 @@ import {
 } from '@guardian/source-react-components';
 import * as React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import { RecaptchaField } from 'components/recaptcha/recaptchaField';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { Option } from 'helpers/types/option';
@@ -55,8 +54,6 @@ type PropTypes = {
 	updateSortCodeString: EventHandler;
 	updateAccountNumber: EventHandler;
 	updateAccountHolderConfirmation: EventHandler;
-	recaptchaId: string;
-	recaptchaError: string;
 	onChange: (
 		field: DirectDebitFieldName,
 		dispatchUpdate: (event: React.ChangeEvent<HTMLInputElement>) => void,
@@ -144,13 +141,6 @@ function Form(props: PropTypes): JSX.Element {
 				/>
 			</div>
 
-			<div css={spaceBetween}>
-				<RecaptchaField
-					label="Security check"
-					id={props.recaptchaId}
-					error={props.recaptchaError}
-				/>
-			</div>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<Button
 					id="qa-direct-debit-submit"
