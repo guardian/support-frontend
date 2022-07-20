@@ -357,7 +357,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 							<BillingAddress countries={countries} />
 						</FormSection>
 					) : null}
-					{paymentMethods.length > 1 ? (
+					{paymentMethods.length > 0 ? (
 						<FormSection title="How would you like to pay?">
 							<PaymentMethodSelector
 								availablePaymentMethods={paymentMethods}

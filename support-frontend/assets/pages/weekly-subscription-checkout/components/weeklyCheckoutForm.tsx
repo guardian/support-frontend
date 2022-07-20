@@ -181,6 +181,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.currencyId,
 		props.billingCountry,
 	);
+
 	return (
 		<Content>
 			<Layout
@@ -329,7 +330,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						productPrices={props.productPrices}
 						selected={props.billingPeriod}
 					/>
-					{paymentMethods.length > 1 ? (
+					{paymentMethods.length > 0 ? (
 						<FormSection title="How would you like to pay?">
 							<PaymentMethodSelector
 								availablePaymentMethods={paymentMethods}

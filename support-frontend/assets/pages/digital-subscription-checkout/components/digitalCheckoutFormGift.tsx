@@ -132,10 +132,12 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 		props.submissionError === 'personal_details_incorrect'
 			? 'Sorry there was a problem'
 			: 'Sorry we could not process your payment';
+
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,
 		props.country,
 	);
+
 	return (
 		<Content>
 			<CheckoutLayout
@@ -218,7 +220,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 					<FormSection title="Billing address">
 						<BillingAddress countries={countries} />
 					</FormSection>
-					{paymentMethods.length > 1 ? (
+					{paymentMethods.length > 0 ? (
 						<FormSection title="How would you like to pay?">
 							<PaymentMethodSelector
 								availablePaymentMethods={paymentMethods}

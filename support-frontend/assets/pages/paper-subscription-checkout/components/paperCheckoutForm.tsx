@@ -445,7 +445,7 @@ function PaperCheckoutForm(props: PropTypes) {
 						digiSubPrice={expandedPricingText}
 						addDigitalSubscription={addDigitalSubscription}
 					/>
-					{paymentMethods.length > 1 ? (
+					{paymentMethods.length > 0 ? (
 						<FormSection
 							cssOverrides={removeTopBorder}
 							title="How would you like to pay?"
