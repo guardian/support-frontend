@@ -10,8 +10,6 @@ describe('SEPA Form', () => {
 	beforeEach(() => {
 		render(
 			<SepaForm
-				iban={null}
-				accountHolderName={null}
 				updateAddressStreetName={updateAddressStreetName}
 				updateAddressCountry={updateAddressCountry}
 				updateIban={updateIban}
