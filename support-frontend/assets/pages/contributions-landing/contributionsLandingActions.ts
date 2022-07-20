@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Dispatch } from 'redux';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
@@ -180,22 +179,6 @@ export type Action =
 	| {
 			type: 'UPDATE_PAYPAL_BUTTON_READY';
 			ready: boolean;
-	  }
-	| {
-			type: 'SET_SEPA_IBAN';
-			iban: string | null;
-	  }
-	| {
-			type: 'SET_SEPA_ACCOUNT_HOLDER_NAME';
-			accountHolderName: string | null;
-	  }
-	| {
-			type: 'SET_SEPA_ADDRESS_STREET_NAME';
-			addressStreetName?: string;
-	  }
-	| {
-			type: 'SET_SEPA_ADDRESS_COUNTRY';
-			addressCountry?: Country;
 	  };
 
 const setFormIsValid = (isValid: boolean): Action => ({
@@ -353,42 +336,6 @@ const setStripeRecurringRecaptchaVerified =
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED',
 			recaptchaVerified,
-		}))(dispatch, getState);
-	};
-
-const setSepaIban =
-	(iban: string | null) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_SEPA_IBAN',
-			iban,
-		}))(dispatch, getState);
-	};
-
-const setSepaAccountHolderName =
-	(accountHolderName: string | null) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_SEPA_ACCOUNT_HOLDER_NAME',
-			accountHolderName,
-		}))(dispatch, getState);
-	};
-
-const setSepaAddressStreetName =
-	(addressStreetName?: string) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_SEPA_ADDRESS_STREET_NAME',
-			addressStreetName,
-		}))(dispatch, getState);
-	};
-
-const setSepaAddressCountry =
-	(addressCountry?: Country) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_SEPA_ADDRESS_COUNTRY',
-			addressCountry,
 		}))(dispatch, getState);
 	};
 
@@ -925,8 +872,4 @@ export {
 	updatePayPalButtonReady,
 	updateRecaptchaToken,
 	loadPayPalExpressSdk,
-	setSepaIban,
-	setSepaAccountHolderName,
-	setSepaAddressStreetName,
-	setSepaAddressCountry,
 };

@@ -1,5 +1,4 @@
 // ----- Imports ----- //
-import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
@@ -56,13 +55,6 @@ export interface PayPalData {
 	buttonReady: boolean;
 }
 
-export interface SepaData {
-	iban: string | null;
-	accountHolderName: string | null;
-	streetName?: string;
-	country?: Country;
-}
-
 interface FormState {
 	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
@@ -74,7 +66,6 @@ interface FormState {
 		REGULAR: StripePaymentRequestButtonData;
 	};
 	stripeCardFormData: StripeCardFormData;
-	sepaData: SepaData;
 	paymentComplete: boolean;
 	paymentError: ErrorReason | null;
 	hasSeenDirectDebitThankYouCopy: boolean;
@@ -134,12 +125,6 @@ function createFormReducer() {
 			setupIntentClientSecret: null,
 			recurringRecaptchaVerified: false,
 		},
-		sepaData: {
-			iban: null,
-			accountHolderName: null,
-			country: undefined,
-			streetName: undefined,
-		},
 		isWaiting: false,
 		paymentComplete: false,
 		paymentError: null,
@@ -188,36 +173,6 @@ function createFormReducer() {
 					stripeCardFormData: {
 						...state.stripeCardFormData,
 						recurringRecaptchaVerified: action.recaptchaVerified,
-					},
-				};
-
-			case 'SET_SEPA_IBAN':
-				return { ...state, sepaData: { ...state.sepaData, iban: action.iban } };
-
-			case 'SET_SEPA_ACCOUNT_HOLDER_NAME':
-				return {
-					...state,
-					sepaData: {
-						...state.sepaData,
-						accountHolderName: action.accountHolderName,
-					},
-				};
-
-			case 'SET_SEPA_ADDRESS_STREET_NAME':
-				return {
-					...state,
-					sepaData: {
-						...state.sepaData,
-						streetName: action.addressStreetName,
-					},
-				};
-
-			case 'SET_SEPA_ADDRESS_COUNTRY':
-				return {
-					...state,
-					sepaData: {
-						...state.sepaData,
-						country: action.addressCountry,
 					},
 				};
 
