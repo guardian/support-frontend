@@ -9,7 +9,7 @@ import {
 import type { ReactNode } from 'react';
 import Rows from 'components/base/rows';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import type { SubscriptionsPaymentMethod } from 'helpers/subscriptionsForms/countryPaymentMethods';
+import type { SubscriptionsPaymentMethod } from 'helpers/subscriptionsForms/supportedPaymentMethods';
 import type { Option } from 'helpers/types/option';
 
 type PropTypes = {

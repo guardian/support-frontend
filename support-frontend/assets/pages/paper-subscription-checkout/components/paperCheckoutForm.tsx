@@ -51,7 +51,6 @@ import {
 	selectPriceForProduct,
 } from 'helpers/redux/checkout/product/selectors/productPrice';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
-import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
 	formActionCreators,
@@ -69,6 +68,7 @@ import {
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/supportedPaymentMethods';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
