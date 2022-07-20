@@ -1,6 +1,14 @@
+import { isAnyOf } from '@reduxjs/toolkit';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
+import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
+import {
+	setAmazonPayBillingAgreementConsentStatus,
+	setAmazonPayBillingAgreementId,
+	setAmazonPayOrderReferenceId,
+	setAmazonPayPaymentSelected,
+} from './amazonPay/actions';
 import { setPopupOpen } from './directDebit/actions';
 
 export function addPaymentsSideEffects(
@@ -13,4 +21,20 @@ export function addPaymentsSideEffects(
 			storage.setSession('selectedPaymentMethod', DirectDebit);
 		},
 	});
+
+	startListening({
+		matcher: shouldCheckFormEnabled,
+		effect(_action, listenerApi) {
+			listenerApi.dispatch(enableOrDisableForm());
+		},
+	});
 }
+
+// ---- Matchers ---- //
+
+const shouldCheckFormEnabled = isAnyOf(
+	setAmazonPayPaymentSelected,
+	setAmazonPayOrderReferenceId,
+	setAmazonPayBillingAgreementId,
+	setAmazonPayBillingAgreementConsentStatus,
+);

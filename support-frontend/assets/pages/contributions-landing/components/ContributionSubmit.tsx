@@ -41,7 +41,7 @@ function mapStateToProps(state: State) {
 			contributionType,
 		),
 		billingPeriod: billingPeriodFromContrib(contributionType),
-		amazonPayData: state.page.form.amazonPayData,
+		amazonPay: state.page.checkoutForm.payment.amazonPay,
 	};
 }
 
@@ -90,7 +90,7 @@ function ContributionSubmit(props: PropTypes) {
 		props.isTestUser,
 	);
 
-	const amazonPayEnabled = () => !props.amazonPayData.fatalError;
+	const amazonPayEnabled = () => !props.amazonPay.fatalError;
 
 	// We have to show/hide PayPalExpressButton rather than conditionally rendering it
 	// because we don't want to destroy and replace the iframe each time.
@@ -125,7 +125,7 @@ function ContributionSubmit(props: PropTypes) {
 				<AmazonPayCheckout
 					loginObject={loginObject}
 					paymentsObject={paymentsObject}
-					amazonPayData={props.amazonPayData}
+					hasAccessToken={props.amazonPay.hasAccessToken}
 					contributionType={props.contributionType}
 					isTestUser={props.isTestUser}
 				/>
@@ -133,7 +133,7 @@ function ContributionSubmit(props: PropTypes) {
 
 			{!showPayPalRecurringButton &&
 			(props.paymentMethod !== AmazonPay ||
-				(amazonPayEnabled() && props.amazonPayData.hasAccessToken)) ? (
+				(amazonPayEnabled() && props.amazonPay.hasAccessToken)) ? (
 				<Button
 					type="submit"
 					aria-label={submitButtonCopy}

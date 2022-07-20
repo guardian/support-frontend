@@ -112,7 +112,7 @@ const amazonPayFormOk = (state: State): boolean => {
 			amazonBillingAgreementId,
 			amazonBillingAgreementConsentStatus,
 			paymentSelected,
-		} = state.page.form.amazonPayData;
+		} = state.page.checkoutForm.payment.amazonPay;
 
 		const oneOffOk = () => !!orderReferenceId;
 

@@ -1,16 +1,15 @@
 import type { ContributionType } from 'helpers/contributions';
 import type {
 	AmazonLoginObject,
-	AmazonPayData,
 	AmazonPaymentsObject,
 } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import AmazonPayLoginButton from './AmazonPayLoginButton';
 import AmazonPayWallet from './AmazonPayWallet';
 
-interface AmazonPayProps {
+interface AmazonPayCheckoutProps {
 	loginObject?: AmazonLoginObject;
 	paymentsObject?: AmazonPaymentsObject;
-	amazonPayData: AmazonPayData;
+	hasAccessToken: boolean;
 	isTestUser: boolean;
 	contributionType: ContributionType;
 }
@@ -18,11 +17,11 @@ interface AmazonPayProps {
 export function AmazonPayCheckout({
 	loginObject,
 	paymentsObject,
-	amazonPayData,
+	hasAccessToken,
 	isTestUser,
 	contributionType,
-}: AmazonPayProps): JSX.Element {
-	return amazonPayData.hasAccessToken ? (
+}: AmazonPayCheckoutProps): JSX.Element {
+	return hasAccessToken ? (
 		<AmazonPayWallet
 			amazonLoginObject={loginObject}
 			amazonPaymentsObject={paymentsObject}

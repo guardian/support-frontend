@@ -70,7 +70,6 @@ interface PaymentMethodSelectorProps {
 	isTestUser: boolean;
 	switches: Switches;
 	payPalHasBegunLoading: boolean;
-	amazonPayHasBegunLoading: boolean;
 	loadPayPalExpressSdk: (contributionType: ContributionType) => void;
 	checkoutFormHasBeenSubmitted: boolean;
 }
@@ -86,7 +85,6 @@ const mapStateToProps = (state: State) => ({
 	isTestUser: state.page.user.isTestUser ?? false,
 	switches: state.common.settings.switches,
 	payPalHasBegunLoading: state.page.form.payPalData.hasBegunLoading,
-	amazonPayHasBegunLoading: state.page.form.amazonPayData.hasBegunLoading,
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
