@@ -22,11 +22,11 @@ type NameAndSaving = {
 const orderedCountryGroupNames: NameAndSaving[] = [
 	{
 		name: 'United Kingdom',
-		saving: '34%',
+		saving: '35%',
 	},
 	{
 		name: 'United States',
-		saving: '34%',
+		saving: '35%',
 	},
 	{
 		name: 'Australia',
