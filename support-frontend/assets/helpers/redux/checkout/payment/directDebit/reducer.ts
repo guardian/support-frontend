@@ -25,14 +25,8 @@ export const directDebitSlice = createSlice({
 			state.isDDGuaranteeOpen = false;
 		},
 		setSortCode(state, action: PayloadAction<SortCodeUpdate>) {
-			state.sortCodeArray = state.sortCodeArray.map(
-				(partialSortCode, index) => {
-					if (index === action.payload.index) {
-						return action.payload.partialSortCode;
-					}
-					return partialSortCode;
-				},
-			);
+			const { index, partialSortCode } = action.payload;
+			state.sortCodeArray.splice(index, 1, partialSortCode);
 		},
 		setSortCodeString(state, action: PayloadAction<string>) {
 			state.sortCodeString = action.payload;

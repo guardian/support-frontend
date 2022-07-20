@@ -20,6 +20,7 @@ import {
 	setAccountNumber,
 	setDDGuaranteeClose,
 	setDDGuaranteeOpen,
+	setFormError,
 	setPhase,
 	setSortCode,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
@@ -29,6 +30,7 @@ import type {
 } from 'helpers/redux/checkout/payment/directDebit/state';
 import {
 	confirmAccountDetails,
+	directDebitErrorMessages,
 	payWithDirectDebit,
 } from 'helpers/redux/checkout/payment/directDebit/thunks';
 import {
@@ -52,6 +54,7 @@ function mapStateToProps(state: ContributionsState) {
 		formError: state.page.checkoutForm.payment.directDebit.formError,
 		phase: state.page.checkoutForm.payment.directDebit.phase,
 		countryGroupId: state.common.internationalisation.countryGroupId,
+		recaptchaCompleted: state.page.checkoutForm.recaptcha.completed,
 	};
 }
 
@@ -65,6 +68,7 @@ const mapDispatchToProps = {
 	setAccountHolderConfirmation,
 	setAccountHolderName,
 	setAccountNumber,
+	setFormError,
 	setRecaptchaToken,
 	expireRecaptchaToken,
 };
@@ -80,6 +84,14 @@ const recaptchaId = 'robot_checkbox';
 
 // ----- Component ----- //
 function DirectDebitForm(props: PropTypes) {
+	function onSubmit() {
+		if (props.recaptchaCompleted) {
+			void props.payWithDirectDebit(props.onPaymentAuthorisation);
+		} else {
+			props.setFormError(directDebitErrorMessages.notCompletedRecaptcha);
+		}
+	}
+
 	return (
 		<div className="component-direct-debit-form">
 			<AccountHolderNameInput
@@ -136,9 +148,7 @@ function DirectDebitForm(props: PropTypes) {
 				phase={props.phase}
 				onPayClick={props.confirmAccountDetails}
 				onEditClick={() => props.setPhase('entry')}
-				onConfirmClick={() =>
-					props.payWithDirectDebit(props.onPaymentAuthorisation)
-				}
+				onConfirmClick={onSubmit}
 			/>
 
 			<LegalNotice countryGroupId={props.countryGroupId} />
