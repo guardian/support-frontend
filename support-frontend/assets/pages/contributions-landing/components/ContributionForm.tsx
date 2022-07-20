@@ -4,7 +4,6 @@ import { Checkbox, CheckboxGroup } from '@guardian/source-react-components';
 import { useState } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import { openDirectDebitPopUp } from 'components/directDebit/directDebitActions';
 import SepaTerms from 'components/legal/termsPrivacy/sepaTerms';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import ProgressMessage from 'components/progressMessage/progressMessage';
@@ -21,6 +20,7 @@ import {
 	Sepa,
 } from 'helpers/forms/paymentMethods';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
+import { setPopupOpen } from 'helpers/redux/checkout/payment/directDebit/actions';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
@@ -113,7 +113,7 @@ const mapStateToProps = (state: State) => {
 
 const mapDispatchToProps = {
 	setPaymentIsWaiting: paymentWaiting,
-	openDirectDebitPopUp,
+	setPopupOpen,
 	setCheckoutFormHasBeenSubmitted,
 	createOneOffPayPalPayment,
 	setUseLocalCurrencyFlag,
@@ -188,7 +188,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 			}
 		},
 		DirectDebit: () => {
-			props.openDirectDebitPopUp();
+			props.setPopupOpen();
 		},
 		Sepa: () => {
 			const { accountHolderName, iban, country, streetName } = props.sepaData;

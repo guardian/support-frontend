@@ -1,6 +1,5 @@
 import type { CsrCustomerData } from 'components/csr/csrMode';
 import { csrUserName } from 'components/csr/csrMode';
-import type { Action as DDAction } from 'components/directDebit/directDebitActions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
@@ -117,8 +116,7 @@ export type Action =
 			type: 'ON_DELIVERY_COUNTRY_CHANGED';
 			country: string;
 	  }
-	| PayPalAction
-	| DDAction;
+	| PayPalAction;
 
 // ----- Action Creators ----- //
 const setStage = (
