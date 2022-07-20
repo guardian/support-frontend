@@ -3,7 +3,6 @@ import type { Country } from '@guardian/consent-management-platform/dist/types/c
 import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type {
@@ -67,7 +66,6 @@ export interface SepaData {
 interface FormState {
 	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	amazonPayData: AmazonPayData;
 	payPalData: PayPalData;
 	isWaiting: boolean;
 	formData: FormData;
@@ -111,15 +109,6 @@ function createFormReducer() {
 	// ----- Initial state ----- //
 	const initialState: FormState = {
 		paymentMethod: 'None',
-		amazonPayData: {
-			hasBegunLoading: false,
-			walletIsStale: false,
-			orderReferenceId: null,
-			paymentSelected: false,
-			hasAccessToken: false,
-			fatalError: false,
-			amazonBillingAgreementConsentStatus: false,
-		},
 		payPalData: {
 			hasBegunLoading: false,
 			hasLoaded: false,
@@ -173,70 +162,6 @@ function createFormReducer() {
 				return {
 					...state,
 					existingPaymentMethod: action.existingPaymentMethod,
-				};
-
-			case 'SET_AMAZON_PAY_HAS_BEGUN_LOADING':
-				return {
-					...state,
-					amazonPayData: { ...state.amazonPayData, hasBegunLoading: true },
-				};
-
-			case 'SET_AMAZON_PAY_WALLET_IS_STALE':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						walletIsStale: action.isStale,
-					},
-				};
-
-			case 'SET_AMAZON_PAY_ORDER_REFERENCE_ID':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						orderReferenceId: action.orderReferenceId,
-					},
-				};
-
-			case 'SET_AMAZON_PAY_PAYMENT_SELECTED':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						paymentSelected: action.paymentSelected,
-					},
-				};
-
-			case 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN':
-				return {
-					...state,
-					amazonPayData: { ...state.amazonPayData, hasAccessToken: true },
-				};
-
-			case 'SET_AMAZON_PAY_FATAL_ERROR':
-				return {
-					...state,
-					amazonPayData: { ...state.amazonPayData, fatalError: true },
-				};
-
-			case 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						amazonBillingAgreementId: action.amazonBillingAgreementId,
-					},
-				};
-
-			case 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						amazonBillingAgreementConsentStatus:
-							action.amazonBillingAgreementConsentStatus,
-					},
 				};
 
 			case 'SET_STRIPE_CARD_FORM_COMPLETE':

@@ -88,11 +88,12 @@ const mapStateToProps = (state: State) => {
 		formIsSubmittable: state.page.form.formIsSubmittable,
 		isTestUser: state.page.user.isTestUser ?? false,
 		country: state.common.internationalisation.countryId,
-		amazonPayOrderReferenceId: state.page.form.amazonPayData.orderReferenceId,
+		amazonPayOrderReferenceId:
+			state.page.checkoutForm.payment.amazonPay.orderReferenceId,
 		checkoutFormHasBeenSubmitted:
 			state.page.form.formData.checkoutFormHasBeenSubmitted,
 		amazonPayBillingAgreementId:
-			state.page.form.amazonPayData.amazonBillingAgreementId,
+			state.page.checkoutForm.payment.amazonPay.amazonBillingAgreementId,
 		localCurrencyCountry:
 			state.common.internationalisation.localCurrencyCountry,
 		useLocalCurrency: state.common.internationalisation.useLocalCurrency,

@@ -62,6 +62,10 @@ import {
 } from 'helpers/internationalisation/country';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import {
+	setAmazonPayFatalError,
+	setAmazonPayWalletIsStale,
+} from 'helpers/redux/checkout/payment/amazonPay/actions';
+import {
 	setEmail,
 	setFirstName,
 	setLastName,
@@ -103,35 +107,6 @@ export type Action =
 	| {
 			type: 'UPDATE_USER_FORM_DATA';
 			userFormData: UserFormData;
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING';
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_WALLET_IS_STALE';
-			isStale: boolean;
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID';
-			orderReferenceId: string;
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_PAYMENT_SELECTED';
-			paymentSelected: boolean;
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN';
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_FATAL_ERROR';
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID';
-			amazonBillingAgreementId: string;
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS';
-			amazonBillingAgreementConsentStatus: boolean;
 	  }
 	| {
 			type: 'UPDATE_RECAPTCHA_TOKEN';
@@ -323,58 +298,6 @@ const paymentFailure = (paymentError: ErrorReason): Action => ({
 	type: 'PAYMENT_FAILURE',
 	paymentError,
 });
-
-const setAmazonPayHasBegunLoading = (): Action => ({
-	type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING',
-});
-
-const setAmazonPayWalletIsStale = (isStale: boolean): Action => ({
-	type: 'SET_AMAZON_PAY_WALLET_IS_STALE',
-	isStale,
-});
-
-const setAmazonPayHasAccessToken: Action = {
-	type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN',
-};
-const setAmazonPayFatalError: Action = {
-	type: 'SET_AMAZON_PAY_FATAL_ERROR',
-};
-
-const setAmazonPayPaymentSelected =
-	(paymentSelected: boolean) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_AMAZON_PAY_PAYMENT_SELECTED',
-			paymentSelected,
-		}))(dispatch, getState);
-	};
-
-const setAmazonPayOrderReferenceId =
-	(orderReferenceId: string) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID',
-			orderReferenceId,
-		}))(dispatch, getState);
-	};
-
-const setAmazonPayBillingAgreementId =
-	(amazonBillingAgreementId: string) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID',
-			amazonBillingAgreementId,
-		}))(dispatch, getState);
-	};
-
-const setAmazonPayBillingAgreementConsentStatus =
-	(amazonBillingAgreementConsentStatus: boolean) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS',
-			amazonBillingAgreementConsentStatus,
-		}))(dispatch, getState);
-	};
 
 // We defer loading 3rd party payment SDKs until the user selects one, or one is selected by default
 const loadPayPalExpressSdk =
@@ -691,7 +614,7 @@ const onPaymentResult =
 		paymentResult: Promise<PaymentResult>,
 		paymentAuthorisation: PaymentAuthorisation,
 	) =>
-	(dispatch: Dispatch<Action>, getState: () => State): Promise<PaymentResult> =>
+	(dispatch: Dispatch, getState: () => State): Promise<PaymentResult> =>
 		paymentResult.then((result) => {
 			const state = getState();
 
@@ -730,7 +653,7 @@ const onPaymentResult =
 								dispatch(setAmazonPayWalletIsStale(true));
 							} else {
 								// Disable Amazon Pay
-								dispatch(setAmazonPayFatalError);
+								dispatch(setAmazonPayFatalError());
 							}
 						}
 
@@ -982,14 +905,6 @@ export {
 	updateBillingState,
 	updateBillingCountry,
 	updateUserFormData,
-	setAmazonPayHasBegunLoading,
-	setAmazonPayWalletIsStale,
-	setAmazonPayHasAccessToken,
-	setAmazonPayFatalError,
-	setAmazonPayOrderReferenceId,
-	setAmazonPayBillingAgreementId,
-	setAmazonPayBillingAgreementConsentStatus,
-	setAmazonPayPaymentSelected,
 	setUserTypeFromIdentityResponse,
 	paymentFailure,
 	paymentWaiting,
