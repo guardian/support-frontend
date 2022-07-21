@@ -21,6 +21,12 @@ import {
 } from 'helpers/forms/paymentMethods';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 import { setPopupOpen } from 'helpers/redux/checkout/payment/directDebit/actions';
+import {
+	setSepaAccountHolderName,
+	setSepaAddressCountry,
+	setSepaAddressStreetName,
+	setSepaIban,
+} from 'helpers/redux/checkout/payment/sepa/actions';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
@@ -36,10 +42,6 @@ import {
 	createOneOffPayPalPayment,
 	paymentWaiting,
 	setCheckoutFormHasBeenSubmitted,
-	setSepaAccountHolderName,
-	setSepaAddressCountry,
-	setSepaAddressStreetName,
-	setSepaIban,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import ContributionAmount from './ContributionAmount';
@@ -100,7 +102,7 @@ const mapStateToProps = (state: State) => {
 		currency: state.common.internationalisation.currencyId,
 		amounts: state.common.amounts,
 		defaultOneOffAmount: state.common.defaultAmounts.ONE_OFF.defaultAmount,
-		sepaData: state.page.form.sepaData,
+		sepa: state.page.checkoutForm.payment.sepa,
 		productSetAbTestVariant:
 			state.common.abParticipations.productSetTest === 'variant',
 		benefitsMessagingAbTestBulletVariant:
@@ -192,7 +194,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 			props.setPopupOpen();
 		},
 		Sepa: () => {
-			const { accountHolderName, iban, country, streetName } = props.sepaData;
+			const { accountHolderName, iban, country, streetName } = props.sepa;
 
 			if (accountHolderName && iban) {
 				props.onPaymentAuthorisation({
@@ -360,10 +362,10 @@ function ContributionForm(props: PropTypes): JSX.Element {
 				{props.paymentMethod === Sepa && (
 					<>
 						<SepaForm
-							iban={props.sepaData.iban}
-							accountHolderName={props.sepaData.accountHolderName}
-							addressStreetName={props.sepaData.streetName}
-							addressCountry={props.sepaData.country}
+							iban={props.sepa.iban}
+							accountHolderName={props.sepa.accountHolderName}
+							addressStreetName={props.sepa.streetName}
+							addressCountry={props.sepa.country}
 							updateIban={props.setSepaIban}
 							updateAccountHolderName={props.setSepaAccountHolderName}
 							updateAddressStreetName={props.setSepaAddressStreetName}

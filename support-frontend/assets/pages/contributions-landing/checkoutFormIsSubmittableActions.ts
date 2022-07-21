@@ -130,7 +130,7 @@ const amazonPayFormOk = (state: State): boolean => {
 
 const sepaFormOk = (state: State): boolean => {
 	if (state.page.form.paymentMethod === Sepa) {
-		const { accountHolderName, iban } = state.page.form.sepaData;
+		const { accountHolderName, iban } = state.page.checkoutForm.payment.sepa;
 		return !!accountHolderName && isValidIban(iban);
 	}
 

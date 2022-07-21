@@ -28,8 +28,8 @@ const fieldsContainerStyles = css`
 
 // -- Component -- //
 type SepaFormProps = {
-	iban: string | null;
-	accountHolderName: string | null;
+	iban?: string;
+	accountHolderName?: string;
 	addressStreetName?: string;
 	addressCountry?: Country;
 	updateAddressStreetName: (addressStreetName: string) => void;

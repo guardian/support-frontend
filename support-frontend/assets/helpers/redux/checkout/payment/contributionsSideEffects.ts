@@ -10,6 +10,12 @@ import {
 	setAmazonPayPaymentSelected,
 } from './amazonPay/actions';
 import { setPopupOpen } from './directDebit/actions';
+import {
+	setSepaAccountHolderName,
+	setSepaAddressCountry,
+	setSepaAddressStreetName,
+	setSepaIban,
+} from './sepa/actions';
 
 export function addPaymentsSideEffects(
 	startListening: ContributionsStartListening,
@@ -37,4 +43,8 @@ const shouldCheckFormEnabled = isAnyOf(
 	setAmazonPayOrderReferenceId,
 	setAmazonPayBillingAgreementId,
 	setAmazonPayBillingAgreementConsentStatus,
+	setSepaIban,
+	setSepaAccountHolderName,
+	setSepaAddressStreetName,
+	setSepaAddressCountry,
 );
