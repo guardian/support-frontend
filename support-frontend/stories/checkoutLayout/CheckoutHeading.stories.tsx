@@ -1,5 +1,7 @@
+import { Column, Columns } from '@guardian/source-react-components';
 import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHeading';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
+import { Container } from 'components/layout/container';
 import { withPositionRelative } from '../../.storybook/decorators/withPositionRelative';
 
 export default {
@@ -63,25 +65,34 @@ WithSibling.decorators = [
 				<div
 					style={{
 						position: 'relative',
-						width: '100%',
-						display: 'flex',
-						justifyContent: 'flex-end',
-						padding: '36px',
-						paddingTop: '120px',
 					}}
 				>
-					<div
-						style={{
-							background: '#fff',
-							width: '100%',
-							maxWidth: '480px',
-							height: '600px',
-							padding: '12px',
-							border: '1px solid black',
-						}}
-					>
-						This is a sibling element that overlays the header
-					</div>
+					<Container>
+						<Columns>
+							<Column width={[0, 0, 1 / 3]}></Column>
+							<Column>
+								<div
+									style={{
+										background: '#ffffff',
+										width: '100%',
+										maxWidth: '540px',
+										height: '600px',
+										marginTop: '120px',
+										padding: '12px',
+										border: '1px solid black',
+									}}
+								>
+									<p>
+										Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+										faucibus nibh erat, eget rutrum ligula vehicula sit amet.
+										Etiam scelerisque dapibus pulvinar. Integer non accumsan
+										justo. Duis et vehicula risus. Nulla ligula eros, consequat
+										sodales lectus eget, eleifend venenatis neque.
+									</p>
+								</div>
+							</Column>
+						</Columns>
+					</Container>
 				</div>
 			</>
 		);

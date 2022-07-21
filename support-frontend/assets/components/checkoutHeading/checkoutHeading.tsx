@@ -16,7 +16,6 @@ const mainStyles = css`
 	position: absolute;
 	left: 0;
 	right: 0;
-	background-color: ${brand[400]};
 	color: ${neutral[100]};
 `;
 
@@ -40,14 +39,8 @@ const heading = css`
 
 const headingImage = css`
 	height: 140px;
-	position: relative;
 	margin-top: ${space[12]}px;
 	margin-left: -${space[9]}px;
-
-	& img {
-		position: absolute;
-		left: 0;
-	}
 `;
 
 export interface CheckoutHeadingProps extends CSSOverridable {
@@ -59,7 +52,11 @@ export interface CheckoutHeadingProps extends CSSOverridable {
 export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
 	return (
 		<div css={mainStyles}>
-			<Container sideBorders={true} borderColor={brand[600]}>
+			<Container
+				sideBorders={true}
+				borderColor={brand[600]}
+				backgroundColor={brand[400]}
+			>
 				<Columns collapseUntil="desktop">
 					<Column width={1 / 3}>
 						<div css={headingContentContainer}>
