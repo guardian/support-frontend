@@ -11,7 +11,9 @@ import { Container, Hide } from '@guardian/source-react-components';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 
 const mainStyles = css`
-	width: 100%;
+	position: absolute;
+	left: 0;
+	right: 0;
 	background-color: ${brand[400]};
 	color: ${neutral[100]};
 `;
@@ -39,7 +41,7 @@ const headingImage = css`
 
 	& img {
 		position: absolute;
-		right: 0;
+		left: 0;
 	}
 `;
 
