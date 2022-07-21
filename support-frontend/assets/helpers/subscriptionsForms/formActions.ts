@@ -1,8 +1,6 @@
 import type { CsrCustomerData } from 'components/csr/csrMode';
 import { csrUserName } from 'components/csr/csrMode';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
-import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { PayPal } from 'helpers/forms/paymentMethods';
@@ -28,6 +26,7 @@ import {
 	setLastName as setLastNameGift,
 	setTitle as setTitleGift,
 } from 'helpers/redux/checkout/giftingState/actions';
+import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
 import {
 	setConfirmEmail,
 	setEmail,
@@ -115,8 +114,7 @@ export type Action =
 	| {
 			type: 'ON_DELIVERY_COUNTRY_CHANGED';
 			country: string;
-	  }
-	| PayPalAction;
+	  };
 
 // ----- Action Creators ----- //
 const setStage = (
@@ -180,8 +178,11 @@ const formActionCreators = {
 				componentType: 'ACQUISITIONS_OTHER',
 			})();
 
-			if (paymentMethod === PayPal && !state.page.checkout.payPalHasLoaded) {
-				showPayPal(dispatch);
+			if (
+				paymentMethod === PayPal &&
+				!state.page.checkoutForm.payment.payPal.hasBegunLoading
+			) {
+				void dispatch(loadPayPalExpressSdk());
 			}
 
 			return dispatch({

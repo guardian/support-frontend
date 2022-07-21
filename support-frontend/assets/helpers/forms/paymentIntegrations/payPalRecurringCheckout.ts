@@ -1,6 +1,5 @@
 // ----- Imports ----- //
 import type { Dispatch } from 'redux';
-import { setPayPalHasLoaded } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { PayPal } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -46,12 +45,6 @@ const loadPayPalRecurring = (): Promise<void> => {
 		script.src = 'https://www.paypalobjects.com/api/checkout.js';
 
 		document.head.appendChild(script);
-	});
-};
-
-const showPayPal = (dispatch: Dispatch): void => {
-	void loadPayPalRecurring().then(() => {
-		dispatch(setPayPalHasLoaded());
 	});
 };
 
@@ -314,7 +307,6 @@ const getPayPalOptions = (
 // ----- Exports ----- //
 export {
 	getPayPalOptions,
-	showPayPal,
 	loadPayPalRecurring,
 	payPalRequestData,
 	setupSubscriptionPayPalPaymentNoShipping,

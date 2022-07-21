@@ -41,12 +41,12 @@ import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { Action } from '../contributionsLandingActions';
 import {
-	loadPayPalExpressSdk,
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
 } from '../contributionsLandingActions';
@@ -70,7 +70,7 @@ interface PaymentMethodSelectorProps {
 	isTestUser: boolean;
 	switches: Switches;
 	payPalHasBegunLoading: boolean;
-	loadPayPalExpressSdk: (contributionType: ContributionType) => void;
+	loadPayPalExpressSdk: () => void;
 	checkoutFormHasBeenSubmitted: boolean;
 }
 
@@ -84,7 +84,7 @@ const mapStateToProps = (state: State) => ({
 	existingPaymentMethod: state.page.form.existingPaymentMethod,
 	isTestUser: state.page.user.isTestUser ?? false,
 	switches: state.common.settings.switches,
-	payPalHasBegunLoading: state.page.form.payPalData.hasBegunLoading,
+	payPalHasBegunLoading: state.page.checkoutForm.payment.payPal.hasBegunLoading,
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
@@ -111,7 +111,7 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 		switch (paymentMethod) {
 			case PayPal:
 				if (!props.payPalHasBegunLoading) {
-					props.loadPayPalExpressSdk(props.contributionType);
+					props.loadPayPalExpressSdk();
 				}
 
 				break;

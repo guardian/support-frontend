@@ -2,7 +2,6 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import AnimatedDots from 'components/spinners/animatedDots';
 import type {
 	PayPalCheckoutDetails,
@@ -12,8 +11,7 @@ import { getPayPalOptions } from 'helpers/forms/paymentIntegrations/payPalRecurr
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
-import { updatePayPalButtonReady } from 'pages/contributions-landing/contributionsLandingActions';
+import { updatePayPalButtonReady } from 'helpers/redux/checkout/payment/payPal/actions';
 
 type PropTypes = {
 	onPayPalCheckoutCompleted: (
@@ -32,10 +30,9 @@ type PropTypes = {
 	updatePayPalButtonReady: (ready: boolean) => void; // created in mapDispatchToProps should not be passed into the component
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
-	updatePayPalButtonReady: (ready: boolean) =>
-		dispatch(updatePayPalButtonReady(ready)),
-});
+const mapDispatchToProps = {
+	updatePayPalButtonReady,
+};
 
 function PayPalExpressButtonComponent(props: PropTypes) {
 	// hasLoaded determines whether window.paypal is available

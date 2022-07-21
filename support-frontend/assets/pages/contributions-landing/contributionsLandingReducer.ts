@@ -49,16 +49,9 @@ export interface StripeCardFormData {
 	recurringRecaptchaVerified: boolean;
 }
 
-export interface PayPalData {
-	hasBegunLoading: boolean;
-	hasLoaded: boolean;
-	buttonReady: boolean;
-}
-
 interface FormState {
 	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	payPalData: PayPalData;
 	isWaiting: boolean;
 	formData: FormData;
 	stripePaymentRequestButtonData: {
@@ -100,11 +93,6 @@ function createFormReducer() {
 	// ----- Initial state ----- //
 	const initialState: FormState = {
 		paymentMethod: 'None',
-		payPalData: {
-			hasBegunLoading: false,
-			hasLoaded: false,
-			buttonReady: false,
-		},
 		formData: {
 			billingState: null,
 			billingCountry: null,
@@ -228,24 +216,6 @@ function createFormReducer() {
 				return {
 					...state,
 					formData: { ...state.formData, ...action.userFormData },
-				};
-
-			case 'SET_PAYPAL_HAS_BEGUN_LOADING':
-				return {
-					...state,
-					payPalData: { ...state.payPalData, hasBegunLoading: true },
-				};
-
-			case 'SET_PAYPAL_HAS_LOADED':
-				return {
-					...state,
-					payPalData: { ...state.payPalData, hasLoaded: true },
-				};
-
-			case 'UPDATE_PAYPAL_BUTTON_READY':
-				return {
-					...state,
-					payPalData: { ...state.payPalData, buttonReady: action.ready },
 				};
 
 			case 'SET_TICKER_GOAL_REACHED':
