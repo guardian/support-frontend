@@ -12,6 +12,7 @@ export const parameters = {
 	viewport: {
 		viewports,
 	},
+	layout: 'fullscreen',
 };
 
 export const argTypes = {

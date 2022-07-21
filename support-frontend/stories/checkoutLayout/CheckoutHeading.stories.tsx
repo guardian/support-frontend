@@ -13,6 +13,14 @@ export default {
 		},
 	},
 	decorators: [withPositionRelative],
+	parameters: {
+		docs: {
+			description: {
+				component:
+					'A heading block that sits behind part of the UI. It must be placed inside a relative positioned container. A subsequent sibling element that is also relatively positioned will automatically sit over it.',
+			},
+		},
+	},
 };
 
 function Template(args: CheckoutHeadingProps): JSX.Element {
@@ -29,17 +37,8 @@ Template.decorators = [] as unknown[];
 
 export const Heading = Template.bind({});
 
-Heading.parameters = {
-	docs: {
-		description: {
-			component:
-				'A heading block that sits behind part of the UI. It must be placed inside a relative positioned container. A subsequent sibling element that is also relatively positioned will automatically sit over it.',
-		},
-	},
-};
-
 Heading.args = {
-	heading: 'Thank you for\u00a0your support',
+	heading: 'Thank you for your\u00a0support',
 	children: (
 		<p>
 			Help protect the Guardian&apos;s independence so we can keep delivering

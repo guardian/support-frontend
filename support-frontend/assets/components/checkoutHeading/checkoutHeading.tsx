@@ -6,8 +6,10 @@ import {
 	neutral,
 	space,
 	textSans,
+	until,
 } from '@guardian/source-foundations';
-import { Container, Hide } from '@guardian/source-react-components';
+import { Column, Columns, Hide } from '@guardian/source-react-components';
+import { Container } from 'components/layout/container';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 
 const mainStyles = css`
@@ -19,14 +21,17 @@ const mainStyles = css`
 `;
 
 const headingContentContainer = css`
-	max-width: 335px;
 	min-height: 440px;
 	padding-top: ${space[6]}px;
 	${textSans.large({ fontWeight: 'bold' })}
 `;
 
 const heading = css`
+	display: inline-block;
 	${headline.medium({ fontWeight: 'bold' })}
+	${until.desktop} {
+		margin: 0 auto;
+	}
 	${from.desktop} {
 		${headline.large({ fontWeight: 'bold' })}
 		margin-bottom: ${space[3]}px;
@@ -55,13 +60,19 @@ export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
 	return (
 		<div css={mainStyles}>
 			<Container sideBorders={true} borderColor={brand[600]}>
-				<div css={headingContentContainer}>
-					<h1 css={heading}>{props.heading}</h1>
-					<Hide until="desktop">
-						{props.children}
-						{props.image && <figure css={headingImage}>{props.image}</figure>}
-					</Hide>
-				</div>
+				<Columns collapseUntil="desktop">
+					<Column width={1 / 3}>
+						<div css={headingContentContainer}>
+							<h1 css={heading}>{props.heading}</h1>
+							<Hide until="desktop">
+								{props.children}
+								{props.image && (
+									<figure css={headingImage}>{props.image}</figure>
+								)}
+							</Hide>
+						</div>
+					</Column>
+				</Columns>
 			</Container>
 		</div>
 	);
