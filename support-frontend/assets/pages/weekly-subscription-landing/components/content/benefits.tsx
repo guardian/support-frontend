@@ -15,7 +15,7 @@ function Benefits(): JSX.Element {
 								items={[
 									{
 										content:
-											'Every issue delivered with up to 34% off the cover price',
+											'Every issue delivered with up to 35% off the cover price',
 									},
 									{
 										content: "Access to the magazine's digital archive",
