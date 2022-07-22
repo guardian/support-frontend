@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { fireEvent, screen } from '@testing-library/react';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
@@ -20,6 +21,15 @@ function setUpStore(initialState: WithDeliveryCheckoutState) {
 	store.dispatch(setInitialCommonState(initialState.common));
 	return store;
 }
+
+jest.mock('helpers/globalsAndSwitches/globals', () => ({
+	__esModule: true,
+	isSwitchOn: jest.fn(),
+	getSettings: jest.fn(),
+	getGlobal: jest.fn(),
+}));
+
+const mock = (mockFn: unknown) => mockFn as jest.Mock;
 
 describe('Guardian Weekly checkout form', () => {
 	// Suppress warnings related to our version of Redux and improper JSX
@@ -63,6 +73,9 @@ describe('Guardian Weekly checkout form', () => {
 				},
 			},
 		};
+
+		mock(isSwitchOn).mockImplementation(() => true);
+
 		renderWithStore(<WeeklyCheckoutFormGift />, {
 			// @ts-expect-error -- Type mismatch is unimportant for tests
 			initialState,
