@@ -23,67 +23,85 @@ import { applyCheckoutRules, applyDeliveryRules } from './rules';
 
 type Error<T> = {
 	errors: Array<FormError<T>>;
-	errorAction: (arg0: any) => Action;
+	dispatchErrors: (dispatch: Dispatch) => void;
 };
 type AnyErrorType = Error<AddressFormField> | Error<FormField>;
 
 function checkoutValidation(state: SubscriptionsState): AnyErrorType[] {
-	return [
-		{
-			errors: applyCheckoutRules(getFormFields(state)),
-			errorAction: setFormErrors,
-		} as Error<FormField>,
-		{
-			errors: applyBillingAddressRules(
-				state.page.checkoutForm.billingAddress.fields,
-			),
-			errorAction: setBillingAddressFormErrors,
-		} as Error<AddressFormField>,
-	].filter(({ errors }) => errors.length > 0);
+	const errors: AnyErrorType[] = [];
+
+	const checkoutErrors = applyCheckoutRules(getFormFields(state));
+	if (checkoutErrors.length > 0) {
+		errors.push({
+			errors: checkoutErrors,
+			dispatchErrors: (dispatch) => dispatch(setFormErrors(checkoutErrors)),
+		});
+	}
+
+	const billingAddressErrors = applyBillingAddressRules(
+		state.page.checkoutForm.billingAddress.fields,
+	);
+	if (checkoutErrors.length > 0) {
+		errors.push({
+			errors: billingAddressErrors,
+			dispatchErrors: (dispatch) =>
+				dispatch(setBillingAddressFormErrors(billingAddressErrors)),
+		});
+	}
+
+	return errors;
 }
 
 const shouldValidateBillingAddress = (fields: FormFields) =>
 	!fields.billingAddressIsSame;
 
 function withDeliveryValidation(state: SubscriptionsState): AnyErrorType[] {
-	const formFields = getFormFields(state);
-	return [
-		{
-			errors: applyDeliveryRules(formFields),
-			errorAction: setFormErrors,
-		} as Error<FormField>,
-		{
-			errors: applyDeliveryAddressRules(
-				getFulfilmentOption(state),
-				state.page.checkoutForm.deliveryAddress.fields,
-			),
-			errorAction: setDeliveryAddressFormErrors,
-		} as Error<AddressFormField>,
-		...(shouldValidateBillingAddress(formFields)
-			? [
-					{
-						errors: applyBillingAddressRules(
-							state.page.checkoutForm.billingAddress.fields,
-						),
-						errorAction: setBillingAddressFormErrors,
-					} as Error<AddressFormField>,
-			  ]
-			: []),
-	].filter(({ errors }) => errors.length > 0);
-}
+	const errors: AnyErrorType[] = [];
 
-function dispatchErrors(dispatch: Dispatch<Action>, allErrors: AnyErrorType[]) {
-	allErrors.forEach(({ errors, errorAction }) => {
-		dispatch(errorAction(errors));
-	});
+	const formFields = getFormFields(state);
+
+	const deliveryErrrors = applyDeliveryRules(formFields);
+	if (deliveryErrrors.length > 0) {
+		errors.push({
+			errors: deliveryErrrors,
+			dispatchErrors: (dispatch) => dispatch(setFormErrors(deliveryErrrors)),
+		});
+	}
+
+	const deliveryAddressErrors = applyDeliveryAddressRules(
+		getFulfilmentOption(state),
+		state.page.checkoutForm.deliveryAddress.fields,
+	);
+	if (deliveryAddressErrors.length > 0) {
+		errors.push({
+			errors: deliveryAddressErrors,
+			dispatchErrors: (dispatch) =>
+				dispatch(setDeliveryAddressFormErrors(deliveryAddressErrors)),
+		});
+	}
+
+	if (shouldValidateBillingAddress(formFields)) {
+		const billingAddressErrors = applyBillingAddressRules(
+			state.page.checkoutForm.billingAddress.fields,
+		);
+		if (billingAddressErrors.length > 0) {
+			errors.push({
+				errors: billingAddressErrors,
+				dispatchErrors: (dispatch) =>
+					dispatch(setBillingAddressFormErrors(billingAddressErrors)),
+			});
+		}
+	}
+
+	return errors;
 }
 
 function validateCheckoutForm(
-	dispatch: Dispatch<Action>,
+	dispatch: Dispatch,
 	state: SubscriptionsState,
 ): boolean {
 	const allErrors = checkoutValidation(state);
-	dispatchErrors(dispatch, allErrors);
+	allErrors.forEach((e) => e.dispatchErrors(dispatch));
 	return allErrors.length === 0;
 }
 
@@ -92,18 +110,18 @@ function validateWithDeliveryForm(
 	state: SubscriptionsState,
 ): boolean {
 	const allErrors = withDeliveryValidation(state);
-	dispatchErrors(dispatch, allErrors);
+	allErrors.forEach((e) => e.dispatchErrors(dispatch));
 	return allErrors.length === 0;
 }
 
-const checkoutFormIsValid = (state: SubscriptionsState) => {
+const checkoutFormIsValid = (state: SubscriptionsState): boolean => {
 	if (state.page.checkoutForm.product.productType === DigitalPack) {
 		return checkoutValidation(state).length === 0;
 	}
 	return withDeliveryValidation(state).length === 0;
 };
 
-const withDeliveryFormIsValid = (state: SubscriptionsState) =>
+const withDeliveryFormIsValid = (state: SubscriptionsState): boolean =>
 	withDeliveryValidation(state).length === 0;
 
 export {
