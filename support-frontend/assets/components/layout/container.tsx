@@ -1,0 +1,71 @@
+import { css } from '@emotion/react';
+import { from, neutral } from '@guardian/source-foundations';
+import { Container as SourceContainer } from '@guardian/source-react-components';
+import React from 'react';
+
+type Props = {
+	children: React.ReactNode;
+	sidePadding?: boolean;
+	topBorder?: boolean;
+	sideBorders?: boolean;
+	borderColor?: string;
+	backgroundColor?: string;
+};
+
+const sidePaddingStyles = css`
+	> div {
+		padding-left: 10px;
+		padding-right: 10px;
+		${from.mobileLandscape} {
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+	}
+`;
+
+const noPaddingStyles = css`
+	> div {
+		padding: 0;
+	}
+`;
+
+const sideBorderStyles = (color: string = neutral[86]) => css`
+	> div {
+		${from.tablet} {
+			border-left: 1px solid ${color};
+			border-right: 1px solid ${color};
+		}
+	}
+`;
+
+const topBorderStyles = (color: string = neutral[86]) => css`
+	> div {
+		${from.tablet} {
+			border-top: 1px solid ${color};
+		}
+	}
+`;
+
+export function Container({
+	children,
+	sidePadding = true,
+	topBorder,
+	sideBorders,
+	borderColor = neutral[86],
+	backgroundColor,
+}: Props): JSX.Element {
+	return (
+		<SourceContainer
+			topBorder={topBorder}
+			borderColor={borderColor}
+			backgroundColor={backgroundColor}
+			cssOverrides={[
+				sidePadding ? sidePaddingStyles : noPaddingStyles,
+				sideBorders ? sideBorderStyles(borderColor) : css``,
+				topBorder ? topBorderStyles(borderColor) : css``,
+			]}
+		>
+			{children}
+		</SourceContainer>
+	);
+}
