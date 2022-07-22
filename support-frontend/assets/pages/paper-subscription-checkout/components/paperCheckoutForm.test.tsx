@@ -8,6 +8,7 @@ import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { paperProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { addAddressSideEffects } from 'helpers/redux/checkout/address/sideEffects';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
@@ -38,10 +39,20 @@ function setUpStore(initialState: WithDeliveryCheckoutState) {
 	return store;
 }
 
+jest.mock('helpers/globalsAndSwitches/globals', () => ({
+	__esModule: true,
+	isSwitchOn: jest.fn(),
+	getSettings: jest.fn(),
+	getGlobal: jest.fn(),
+}));
+
+const mock = (mockFn: unknown) => mockFn as jest.Mock;
+
 describe('Newspaper checkout form', () => {
 	// Suppress warnings related to our version of Redux and improper JSX
 	console.warn = jest.fn();
 	console.error = jest.fn();
+
 	let initialState;
 	beforeEach(() => {
 		initialState = {
@@ -82,12 +93,15 @@ describe('Newspaper checkout form', () => {
 			client_secret: 'super secret',
 		});
 
+		mock(isSwitchOn).mockImplementation(() => true);
+
 		renderWithStore(<PaperCheckoutForm />, {
 			initialState,
 			// @ts-expect-error -- Type mismatch is unimportant for tests
 			store: setUpStore(initialState),
 		});
 	});
+
 	describe('Payment methods', () => {
 		it('does not show the direct debit option when the delivery address is in the Isle of Man', async () => {
 			const countrySelect = await screen.findByLabelText('Country');
@@ -112,6 +126,7 @@ describe('Newspaper checkout form', () => {
 			expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
 		});
 	});
+
 	describe('Validation', () => {
 		it('should display an error if a silly character is entered into an input field', async () => {
 			const firstNameInput = await screen.findByLabelText('First name');
