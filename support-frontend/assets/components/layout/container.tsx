@@ -4,12 +4,12 @@ import { Container as SourceContainer } from '@guardian/source-react-components'
 import React from 'react';
 
 type Props = {
-	children: React.ReactNode; // Children are inserted inside the nested div of the section
-	sidePadding?: boolean; // Should side padding be added to the content inside the container (nested div)
-	topBorder?: boolean; // Show top border
-	sideBorders?: boolean; // Show left and right borders
-	borderColor?: string; // Set the colour for borders
-	backgroundColor?: string; // Sets the background colour of the section (root) element
+	children: React.ReactNode;
+	sidePadding?: boolean;
+	topBorder?: boolean;
+	sideBorders?: boolean;
+	borderColor?: string;
+	backgroundColor?: string;
 };
 
 const sidePaddingStyles = css`

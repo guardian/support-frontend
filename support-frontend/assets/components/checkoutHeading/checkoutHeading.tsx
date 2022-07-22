@@ -20,7 +20,10 @@ const mainStyles = css`
 `;
 
 const headingContentContainer = css`
-	min-height: 440px;
+	min-height: 480px;
+	${from.desktop} {
+		min-height: 440px;
+	}
 	padding-top: ${space[6]}px;
 	${textSans.large({ fontWeight: 'bold' })}
 `;

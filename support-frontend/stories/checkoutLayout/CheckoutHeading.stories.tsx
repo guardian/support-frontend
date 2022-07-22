@@ -1,3 +1,4 @@
+import { brand } from '@guardian/source-foundations';
 import { Column, Columns } from '@guardian/source-react-components';
 import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHeading';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
@@ -53,11 +54,38 @@ Heading.args = {
 	),
 };
 
-export const WithSibling = Template.bind({});
+export const WithMenu = Template.bind({});
 
-WithSibling.args = { ...Heading.args };
+WithMenu.args = { ...Heading.args };
 
-WithSibling.decorators = [
+WithMenu.decorators = [
+	(Story: React.FC): JSX.Element => (
+		<div
+			style={{
+				backgroundColor: brand[400],
+				paddingTop: '1rem',
+			}}
+		>
+			<Container
+				topBorder={true}
+				sideBorders={true}
+				borderColor={brand[600]}
+				backgroundColor={brand[400]}
+			>
+				<div style={{ color: 'white', paddingTop: '1rem' }}>
+					[Menu component]
+				</div>
+			</Container>
+			<Story />
+		</div>
+	),
+];
+
+export const WithSiblingOverlaid = Template.bind({});
+
+WithSiblingOverlaid.args = { ...Heading.args };
+
+WithSiblingOverlaid.decorators = [
 	(Story: React.FC) => {
 		return (
 			<>
