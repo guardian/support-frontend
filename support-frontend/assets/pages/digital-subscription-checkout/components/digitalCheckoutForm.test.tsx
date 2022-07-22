@@ -49,7 +49,7 @@ jest.mock('helpers/globalsAndSwitches/globals', () => ({
 const mock = (mockFn: unknown) => mockFn as jest.Mock;
 
 describe('Digital checkout form', () => {
-	// Suppress warnings related to our version of Redux and improper JSX
+	// Suppress warnings related to improper JSX
 	console.warn = jest.fn();
 	console.error = jest.fn();
 
