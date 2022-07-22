@@ -2,7 +2,6 @@ import type { SerializedStyles } from '@emotion/react';
 import type { FormHTMLAttributes, ReactNode } from 'react';
 import Heading from 'components/heading/heading';
 import type { HeadingSize } from 'components/heading/heading';
-import type { Option } from 'helpers/types/option';
 import './checkoutForm.scss';
 
 /*
@@ -11,11 +10,11 @@ Form "blocks". you need at least one of these.
 */
 type FormSectionPropTypes = {
 	id?: string;
-	title: Option<string>;
+	title?: string;
 	children: ReactNode;
 	headingSize: HeadingSize;
 	border: 'full' | 'bottom' | 'top' | 'none';
-	cssOverrides?: Option<SerializedStyles>;
+	cssOverrides?: SerializedStyles;
 };
 
 function FormSection({
@@ -54,7 +53,7 @@ FormSection.defaultProps = {
 };
 // Hidden version of form section
 type FormSectionHiddenPropTypes = {
-	title: Option<string>;
+	title?: string;
 	children: ReactNode;
 	headingSize: HeadingSize;
 	show?: boolean;
