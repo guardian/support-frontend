@@ -1,3 +1,4 @@
+import { neutral } from '@guardian/source-foundations';
 import { Container } from 'components/layout/container';
 
 export default {
@@ -50,7 +51,7 @@ Default.args = {
 	sidePadding: true,
 	topBorder: false,
 	sideBorders: false,
-	borderColor: '',
+	borderColor: neutral[86],
 	backgroundColor: '',
 };
 
@@ -60,7 +61,7 @@ SideBorders.args = {
 	sideBorders: true,
 	sidePadding: true,
 	topBorder: false,
-	borderColor: '',
+	borderColor: neutral[86],
 	backgroundColor: '',
 };
 
@@ -70,6 +71,6 @@ TopBorder.args = {
 	topBorder: true,
 	sidePadding: true,
 	sideBorders: false,
-	borderColor: '',
+	borderColor: neutral[86],
 	backgroundColor: '',
 };

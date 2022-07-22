@@ -38,6 +38,14 @@ const sideBorderStyles = (color: string = neutral[86]) => css`
 	}
 `;
 
+const topBorderStyles = (color: string = neutral[86]) => css`
+	> div {
+		${from.tablet} {
+			border-top: 1px solid ${color};
+		}
+	}
+`;
+
 export function Container({
 	children,
 	sidePadding = true,
@@ -54,6 +62,7 @@ export function Container({
 			cssOverrides={[
 				sidePadding ? sidePaddingStyles : noPaddingStyles,
 				sideBorders ? sideBorderStyles(borderColor) : css``,
+				topBorder ? topBorderStyles(borderColor) : css``,
 			]}
 		>
 			{children}

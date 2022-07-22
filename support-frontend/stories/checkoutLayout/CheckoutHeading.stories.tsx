@@ -42,7 +42,7 @@ export const Heading = Template.bind({});
 Heading.args = {
 	heading: 'Thank you for your\u00a0support',
 	children: (
-		<p>
+		<p style={{ marginRight: '48px' }}>
 			Help protect the Guardian&apos;s independence so we can keep delivering
 			quality journalism that&apos;s open for everyone around the world, not
 			behind a paywall.
