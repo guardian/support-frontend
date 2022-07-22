@@ -64,65 +64,57 @@ export function withDeliveryFormIsValid(state: SubscriptionsState): boolean {
 
 function checkoutValidation(state: SubscriptionsState): AnyErrorType[] {
 	const errors: AnyErrorType[] = [];
+	const pushIfErrors = getPushIfErrors(errors);
 
 	const checkoutErrors = applyCheckoutRules(getFormFields(state));
-	if (checkoutErrors.length > 0) {
-		errors.push({
-			errors: checkoutErrors,
-			dispatchErrors: (dispatch) => dispatch(setFormErrors(checkoutErrors)),
-		});
-	}
+	pushIfErrors({
+		errors: checkoutErrors,
+		dispatchErrors: (dispatch) => dispatch(setFormErrors(checkoutErrors)),
+	});
 
 	const billingAddressErrors = applyBillingAddressRules(
 		state.page.checkoutForm.billingAddress.fields,
 	);
-	if (checkoutErrors.length > 0) {
-		errors.push({
-			errors: billingAddressErrors,
-			dispatchErrors: (dispatch) =>
-				dispatch(setBillingAddressFormErrors(billingAddressErrors)),
-		});
-	}
+	pushIfErrors({
+		errors: billingAddressErrors,
+		dispatchErrors: (dispatch) =>
+			dispatch(setBillingAddressFormErrors(billingAddressErrors)),
+	});
 
 	return errors;
 }
 
 function withDeliveryValidation(state: SubscriptionsState): AnyErrorType[] {
 	const errors: AnyErrorType[] = [];
+	const pushIfErrors = getPushIfErrors(errors);
 
 	const formFields = getFormFields(state);
 
 	const deliveryErrrors = applyDeliveryRules(formFields);
-	if (deliveryErrrors.length > 0) {
-		errors.push({
-			errors: deliveryErrrors,
-			dispatchErrors: (dispatch) => dispatch(setFormErrors(deliveryErrrors)),
-		});
-	}
+	pushIfErrors({
+		errors: deliveryErrrors,
+		dispatchErrors: (dispatch) => dispatch(setFormErrors(deliveryErrrors)),
+	});
 
 	const deliveryAddressErrors = applyDeliveryAddressRules(
 		getFulfilmentOption(state),
 		state.page.checkoutForm.deliveryAddress.fields,
 	);
-	if (deliveryAddressErrors.length > 0) {
-		errors.push({
-			errors: deliveryAddressErrors,
-			dispatchErrors: (dispatch) =>
-				dispatch(setDeliveryAddressFormErrors(deliveryAddressErrors)),
-		});
-	}
+	pushIfErrors({
+		errors: deliveryAddressErrors,
+		dispatchErrors: (dispatch) =>
+			dispatch(setDeliveryAddressFormErrors(deliveryAddressErrors)),
+	});
 
 	if (shouldValidateBillingAddress(formFields)) {
 		const billingAddressErrors = applyBillingAddressRules(
 			state.page.checkoutForm.billingAddress.fields,
 		);
-		if (billingAddressErrors.length > 0) {
-			errors.push({
-				errors: billingAddressErrors,
-				dispatchErrors: (dispatch) =>
-					dispatch(setBillingAddressFormErrors(billingAddressErrors)),
-			});
-		}
+		pushIfErrors({
+			errors: billingAddressErrors,
+			dispatchErrors: (dispatch) =>
+				dispatch(setBillingAddressFormErrors(billingAddressErrors)),
+		});
 	}
 
 	return errors;
@@ -134,4 +126,13 @@ function shouldValidateBillingAddress(fields: FormFields) {
 
 function dispatchAllErrors(dispatch: Dispatch, allErrors: AnyErrorType[]) {
 	allErrors.forEach((e) => e.dispatchErrors(dispatch));
+}
+
+function getPushIfErrors(errors: AnyErrorType[]) {
+	function pushIfErrors(error: AnyErrorType) {
+		if (error.errors.length > 0) {
+			errors.push(error);
+		}
+	}
+	return pushIfErrors;
 }
