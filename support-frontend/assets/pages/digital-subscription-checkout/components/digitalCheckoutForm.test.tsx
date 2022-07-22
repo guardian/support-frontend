@@ -8,6 +8,7 @@ import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { digitalProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { addAddressSideEffects } from 'helpers/redux/checkout/address/sideEffects';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
@@ -38,10 +39,20 @@ function setUpStore(initialState: WithDeliveryCheckoutState) {
 	return store;
 }
 
+jest.mock('helpers/globalsAndSwitches/globals', () => ({
+	__esModule: true,
+	isSwitchOn: jest.fn(),
+	getSettings: jest.fn(),
+	getGlobal: jest.fn(),
+}));
+
+const mock = (mockFn: unknown) => mockFn as jest.Mock;
+
 describe('Digital checkout form', () => {
 	// Suppress warnings related to our version of Redux and improper JSX
 	console.warn = jest.fn();
 	console.error = jest.fn();
+
 	let initialState;
 	beforeEach(() => {
 		initialState = {
@@ -78,6 +89,8 @@ describe('Digital checkout form', () => {
 		mockFetch({
 			client_secret: 'super secret',
 		});
+
+		mock(isSwitchOn).mockImplementation(() => true);
 
 		renderWithStore(<DigitalCheckoutForm />, {
 			initialState,
