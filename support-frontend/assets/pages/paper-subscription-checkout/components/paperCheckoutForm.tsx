@@ -448,7 +448,9 @@ function PaperCheckoutForm(props: PropTypes) {
 					{paymentMethods.length > 0 ? (
 						<FormSection
 							cssOverrides={removeTopBorder}
-							title="How would you like to pay?"
+							title={
+								paymentMethods.length > 1 ? 'How would you like to pay?' : ''
+							}
 						>
 							<PaymentMethodSelector
 								availablePaymentMethods={paymentMethods}

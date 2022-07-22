@@ -221,7 +221,11 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 						<BillingAddress countries={countries} />
 					</FormSection>
 					{paymentMethods.length > 0 ? (
-						<FormSection title="How would you like to pay?">
+						<FormSection
+							title={
+								paymentMethods.length > 1 ? 'How would you like to pay?' : ''
+							}
+						>
 							<PaymentMethodSelector
 								availablePaymentMethods={paymentMethods}
 								paymentMethod={props.paymentMethod}
