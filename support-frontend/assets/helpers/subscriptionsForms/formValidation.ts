@@ -63,11 +63,8 @@ export function withDeliveryFormIsValid(state: SubscriptionsState): boolean {
 // ---- Helpers ---- //
 
 function checkoutValidation(state: SubscriptionsState): AnyErrorType[] {
-	const errors: AnyErrorType[] = [];
-	const pushIfErrors = getPushIfErrors(errors);
-
 	const checkoutErrors = applyCheckoutRules(getFormFields(state));
-	pushIfErrors({
+	const checkoutErrorsList = getErrorList({
 		errors: checkoutErrors,
 		dispatchErrors: (dispatch) => dispatch(setFormErrors(checkoutErrors)),
 	});
@@ -75,32 +72,29 @@ function checkoutValidation(state: SubscriptionsState): AnyErrorType[] {
 	const billingAddressErrors = applyBillingAddressRules(
 		state.page.checkoutForm.billingAddress.fields,
 	);
-	pushIfErrors({
+	const billingAddressErrorsList = getErrorList({
 		errors: billingAddressErrors,
 		dispatchErrors: (dispatch) =>
 			dispatch(setBillingAddressFormErrors(billingAddressErrors)),
 	});
 
-	return errors;
+	return [...checkoutErrorsList, ...billingAddressErrorsList];
 }
 
 function withDeliveryValidation(state: SubscriptionsState): AnyErrorType[] {
-	const errors: AnyErrorType[] = [];
-	const pushIfErrors = getPushIfErrors(errors);
-
 	const formFields = getFormFields(state);
 
-	const deliveryErrrors = applyDeliveryRules(formFields);
-	pushIfErrors({
-		errors: deliveryErrrors,
-		dispatchErrors: (dispatch) => dispatch(setFormErrors(deliveryErrrors)),
+	const deliveryErrors = applyDeliveryRules(formFields);
+	const deliveryErrorsList = getErrorList({
+		errors: deliveryErrors,
+		dispatchErrors: (dispatch) => dispatch(setFormErrors(deliveryErrors)),
 	});
 
 	const deliveryAddressErrors = applyDeliveryAddressRules(
 		getFulfilmentOption(state),
 		state.page.checkoutForm.deliveryAddress.fields,
 	);
-	pushIfErrors({
+	const deliveryAddressErrorsList = getErrorList({
 		errors: deliveryAddressErrors,
 		dispatchErrors: (dispatch) =>
 			dispatch(setDeliveryAddressFormErrors(deliveryAddressErrors)),
@@ -110,14 +104,20 @@ function withDeliveryValidation(state: SubscriptionsState): AnyErrorType[] {
 		const billingAddressErrors = applyBillingAddressRules(
 			state.page.checkoutForm.billingAddress.fields,
 		);
-		pushIfErrors({
+		const billingAddressErrorsList = getErrorList({
 			errors: billingAddressErrors,
 			dispatchErrors: (dispatch) =>
 				dispatch(setBillingAddressFormErrors(billingAddressErrors)),
 		});
+
+		return [
+			...deliveryErrorsList,
+			...deliveryAddressErrorsList,
+			...billingAddressErrorsList,
+		];
 	}
 
-	return errors;
+	return [...deliveryErrorsList, ...deliveryAddressErrorsList];
 }
 
 function shouldValidateBillingAddress(fields: FormFields) {
@@ -128,11 +128,6 @@ function dispatchAllErrors(dispatch: Dispatch, allErrors: AnyErrorType[]) {
 	allErrors.forEach((e) => e.dispatchErrors(dispatch));
 }
 
-function getPushIfErrors(errors: AnyErrorType[]) {
-	function pushIfErrors(error: AnyErrorType) {
-		if (error.errors.length > 0) {
-			errors.push(error);
-		}
-	}
-	return pushIfErrors;
+function getErrorList(error: AnyErrorType) {
+	return error.errors.length > 0 ? [error] : [];
 }
