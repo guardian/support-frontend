@@ -40,18 +40,3 @@ object RatePlanCharge {
 }
 
 case class RatePlanCharge(id: String, name: String)
-
-object RevenueSchedulesResponse {
-  implicit val codec: Codec[RevenueSchedulesResponse] = deriveCodec
-}
-
-case class RevenueSchedulesResponse(revenueSchedules: List[RevenueSchedule])
-
-object RevenueSchedule {
-  implicit val codec: Codec[RevenueSchedule] = deriveCodec
-}
-case class RevenueSchedule(
-    number: String,
-    amount: BigDecimal,
-    undistributedUnrecognizedRevenue: BigDecimal,
-)

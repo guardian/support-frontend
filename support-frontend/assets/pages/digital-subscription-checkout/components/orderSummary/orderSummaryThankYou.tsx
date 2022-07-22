@@ -10,11 +10,8 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import type { $Call } from 'utility-types';
-import type { GridImg } from 'components/gridImage/gridImage';
-import 'components/gridImage/gridImage';
-
-type GridImageType = typeof import('components/gridImage/gridImage').default;
+import GridImage from 'components/gridImage/gridImage';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 export const wrapper = css`
 	display: none;
@@ -28,6 +25,7 @@ export const wrapper = css`
 		}
 	}
 `;
+
 export const topLine = css`
 	display: flex;
 	justify-content: space-between;
@@ -44,6 +42,7 @@ export const topLine = css`
 		display: block;
 	}
 `;
+
 export const sansTitle = css`
 	${textSans.medium({
 		fontWeight: 'bold',
@@ -54,6 +53,7 @@ export const sansTitle = css`
 		})};
 	}
 `;
+
 export const contentBlock = css`
 	display: flex;
 	width: 100%;
@@ -62,6 +62,7 @@ export const contentBlock = css`
 		display: block;
 	}
 `;
+
 export const imageContainer = css`
 	display: inline-flex;
 	align-items: flex-start;
@@ -74,6 +75,7 @@ export const imageContainer = css`
 		height: auto;
 	}
 `;
+
 export const textBlock = css`
 	margin-left: ${space[3]}px;
 
@@ -95,13 +97,14 @@ export const textBlock = css`
 		}
 	}
 `;
+
 type PropTypes = {
 	title: string;
-	image: $Call<GridImageType, GridImg>;
+	countryGroupId: CountryGroupId;
 	pending?: boolean;
 };
 
-function OrderSummaryThankYou(props: PropTypes) {
+function OrderSummaryThankYou(props: PropTypes): JSX.Element {
 	return (
 		<aside css={wrapper}>
 			<div css={topLine}>
@@ -110,7 +113,19 @@ function OrderSummaryThankYou(props: PropTypes) {
 				</h3>
 			</div>
 			<div css={contentBlock}>
-				<div css={imageContainer}>{props.image}</div>
+				<div css={imageContainer}>
+					<GridImage
+						gridId={
+							props.countryGroupId === 'AUDCountries'
+								? 'editionsPackshotAusShort'
+								: 'editionsPackshotShort'
+						}
+						srcSizes={[1000, 500]}
+						sizes="(max-width: 740px) 50vw, 500"
+						imgType="png"
+						altText=""
+					/>
+				</div>
 				<div css={textBlock}>
 					<h4>{props.title}</h4>
 				</div>
@@ -122,4 +137,5 @@ function OrderSummaryThankYou(props: PropTypes) {
 OrderSummaryThankYou.defaultProps = {
 	pending: false,
 };
+
 export default OrderSummaryThankYou;

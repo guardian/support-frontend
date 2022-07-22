@@ -1,6 +1,5 @@
-import type { ContributionType } from 'helpers/contributions';
-import 'helpers/contributions';
 import { css } from '@emotion/react';
+import type { ContributionType } from 'helpers/contributions';
 
 type ContributionAmountLabelProps = {
 	formattedAmount: string;
@@ -12,7 +11,7 @@ function ContributionAmountChoicesChoiceLabel({
 	formattedAmount,
 	shouldShowFrequencyButtons,
 	contributionType,
-}: ContributionAmountLabelProps) {
+}: ContributionAmountLabelProps): JSX.Element {
 	let frequencyLabel = '';
 
 	if (shouldShowFrequencyButtons) {

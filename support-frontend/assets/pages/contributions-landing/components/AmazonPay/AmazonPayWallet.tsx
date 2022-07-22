@@ -1,63 +1,53 @@
 import { InlineError } from '@guardian/source-react-components';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import type { ThunkDispatch } from 'redux-thunk';
 import type { ContributionType } from 'helpers/contributions';
 import type {
-	AmazonPayData,
+	AmazonLoginObject,
 	AmazonPaymentsObject,
 	BaseWalletConfig,
 	ConsentConfig,
 } from 'helpers/forms/paymentIntegrations/amazonPay/types';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { logException } from 'helpers/utilities/logger';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 import {
 	setAmazonPayBillingAgreementConsentStatus,
 	setAmazonPayBillingAgreementId,
 	setAmazonPayOrderReferenceId,
 	setAmazonPayPaymentSelected,
 	setAmazonPayWalletIsStale,
-} from 'pages/contributions-landing/contributionsLandingActions';
+} from 'helpers/redux/checkout/payment/amazonPay/actions';
+import type { AmazonPayState } from 'helpers/redux/checkout/payment/amazonPay/state';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { logException } from 'helpers/utilities/logger';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import './AmazonPay.scss';
 
 type PropTypes = {
-	amazonPayData: AmazonPayData;
-	setAmazonPayWalletIsStale: (arg0: boolean) => Action;
-	setAmazonPayOrderReferenceId: (arg0: string) => Action;
-	setAmazonPayPaymentSelected: (arg0: boolean) => Action;
-	setAmazonPayBillingAgreementId: (arg0: string) => Action;
-	setAmazonPayBillingAgreementConsentStatus: (arg0: boolean) => Action;
+	amazonPay: AmazonPayState;
+	amazonLoginObject?: AmazonLoginObject;
+	amazonPaymentsObject?: AmazonPaymentsObject;
+	setAmazonPayWalletIsStale: (isStale: boolean) => void;
+	setAmazonPayOrderReferenceId: (referenceId: string) => void;
+	setAmazonPayPaymentSelected: (paymentSelected: boolean) => void;
+	setAmazonPayBillingAgreementId: (agreementId: string) => void;
+	setAmazonPayBillingAgreementConsentStatus: (consentStatus: boolean) => void;
 	isTestUser: boolean;
 	contributionType: ContributionType;
 	checkoutFormHasBeenSubmitted: boolean;
 };
 
 const mapStateToProps = (state: State) => ({
-	amazonPayData: state.page.form.amazonPayData,
+	amazonPay: state.page.checkoutForm.payment.amazonPay,
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
-	setAmazonPayWalletIsStale: (isReady: boolean) =>
-		dispatch(setAmazonPayWalletIsStale(isReady)),
-	setAmazonPayOrderReferenceId: (orderReferenceId: string) =>
-		dispatch(setAmazonPayOrderReferenceId(orderReferenceId)),
-	setAmazonPayPaymentSelected: (paymentSelected: boolean) =>
-		dispatch(setAmazonPayPaymentSelected(paymentSelected)),
-	setAmazonPayBillingAgreementId: (amazonBillingAgreementId: string) =>
-		dispatch(setAmazonPayBillingAgreementId(amazonBillingAgreementId)),
-	setAmazonPayBillingAgreementConsentStatus: (
-		amazonPayBillingAgreementConsentStatus: boolean,
-	) =>
-		dispatch(
-			setAmazonPayBillingAgreementConsentStatus(
-				amazonPayBillingAgreementConsentStatus,
-			),
-		),
-});
+const mapDispatchToProps = {
+	setAmazonPayWalletIsStale,
+	setAmazonPayOrderReferenceId,
+	setAmazonPayPaymentSelected,
+	setAmazonPayBillingAgreementId,
+	setAmazonPayBillingAgreementConsentStatus,
+};
 
 const getSellerId = (isTestUser: boolean): string =>
 	isTestUser
@@ -97,7 +87,7 @@ function AmazonPayWalletComponent(props: PropTypes) {
 		} else {
 			new amazonPaymentsObject.Widgets.Wallet({
 				...baseWalletConfig,
-				amazonOrderReferenceId: props.amazonPayData.orderReferenceId,
+				amazonOrderReferenceId: props.amazonPay.orderReferenceId,
 				onOrderReferenceCreate: (orderReference) => {
 					props.setAmazonPayOrderReferenceId(
 						orderReference.getAmazonOrderReferenceId(),
@@ -145,42 +135,34 @@ function AmazonPayWalletComponent(props: PropTypes) {
 	};
 
 	useEffect(() => {
-		const { amazonPaymentsObject } = props.amazonPayData.amazonPayLibrary;
-
-		if (amazonPaymentsObject) {
-			createWalletWidget(amazonPaymentsObject);
+		if (props.amazonPaymentsObject) {
+			createWalletWidget(props.amazonPaymentsObject);
 		}
-	}, [
-		props.amazonPayData.amazonPayLibrary.amazonPaymentsObject,
-		props.amazonPayData.walletIsStale,
-	]);
-	useEffect(() => {
-		const { amazonPaymentsObject } = props.amazonPayData.amazonPayLibrary;
+	}, [props.amazonPaymentsObject, props.amazonPay.walletIsStale]);
 
+	useEffect(() => {
 		if (
-			amazonPaymentsObject &&
-			props.amazonPayData.amazonBillingAgreementId &&
+			props.amazonPaymentsObject &&
+			props.amazonPay.amazonBillingAgreementId &&
 			props.contributionType !== 'ONE_OFF'
 		) {
 			createConsentWidget(
-				amazonPaymentsObject,
-				props.amazonPayData.amazonBillingAgreementId,
+				props.amazonPaymentsObject,
+				props.amazonPay.amazonBillingAgreementId,
 			);
 		}
 	}, [
-		props.amazonPayData.amazonPayLibrary.amazonPaymentsObject,
-		props.amazonPayData.amazonBillingAgreementId,
+		props.amazonPaymentsObject,
+		props.amazonPay.amazonBillingAgreementId,
 		props.contributionType,
 	]);
-	const { amazonLoginObject, amazonPaymentsObject } =
-		props.amazonPayData.amazonPayLibrary;
 
-	if (amazonLoginObject && amazonPaymentsObject) {
+	if (props.amazonLoginObject && props.amazonPaymentsObject) {
 		trackComponentLoad('amazon-pay-wallet-loaded');
 		return (
 			<div>
 				{props.checkoutFormHasBeenSubmitted &&
-					!props.amazonPayData.paymentSelected && (
+					!props.amazonPay.paymentSelected && (
 						<InlineError>Please select a payment method</InlineError>
 					)}
 				<div className="walletWidgetDiv" id="WalletWidgetDiv" />
@@ -188,7 +170,7 @@ function AmazonPayWalletComponent(props: PropTypes) {
 				{props.contributionType !== 'ONE_OFF' && (
 					<div>
 						{props.checkoutFormHasBeenSubmitted &&
-							!props.amazonPayData.amazonBillingAgreementConsentStatus && (
+							!props.amazonPay.amazonBillingAgreementConsentStatus && (
 								<InlineError>
 									Please tick the box to agree to a recurring payment
 								</InlineError>

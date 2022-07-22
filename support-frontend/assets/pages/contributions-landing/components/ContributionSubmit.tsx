@@ -1,94 +1,62 @@
 // ----- Imports ----- //
 
-import type { ThunkDispatch } from '@reduxjs/toolkit';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Button from 'components/button/button';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
-import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import { billingPeriodFromContrib, getAmount } from 'helpers/contributions';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { getContributeButtonCopyWithPaymentType } from 'helpers/forms/checkouts';
-import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import { setupRecurringPayPalPayment } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { hiddenIf } from 'helpers/utilities/utilities';
-import AmazonPayLoginButton from 'pages/contributions-landing/components/AmazonPay/AmazonPayLoginButton';
-import type { Action } from '../contributionsLandingActions';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import type { State } from '../contributionsLandingReducer';
-import AmazonPayWallet from './AmazonPay/AmazonPayWallet';
+import { AmazonPayCheckout } from './AmazonPay/AmazonPayCheckout';
+import { useAmazonPayObjects } from './AmazonPay/useAmazonPayObjects';
 
 // ----- Types ----- //
 
-type PropTypes = {
-	contributionType: ContributionType;
-	paymentMethod: PaymentMethod;
-	currency: IsoCurrency;
-	isWaiting: boolean;
-	selectedAmounts: SelectedAmounts;
-	otherAmount: string | null;
-	currencyId: IsoCurrency;
-	csrf: CsrfState;
-	sendFormSubmitEventForPayPalRecurring: () => void;
-	setupRecurringPayPalPayment: (
-		resolve: (token: string) => void,
-		reject: (error: Error) => void,
-		currencyId: IsoCurrency,
-		csrf: CsrfState,
-	) => void;
-	payPalHasLoaded: boolean;
-	isTestUser: boolean;
-	onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void;
-	formIsSubmittable: boolean;
-	amount: number;
-	billingPeriod: BillingPeriod;
-	amazonPayData: AmazonPayData;
-	showBenefitsMessaging: boolean;
-	userInBenefitsVariant: boolean;
-};
-
 function mapStateToProps(state: State) {
-	const { contributionType } = state.page.form;
+	const contributionType = getContributionType(state);
 	return {
 		currency: state.common.internationalisation.currencyId,
 		contributionType,
+		countryGroupId: state.common.internationalisation.countryGroupId,
 		isWaiting: state.page.form.isWaiting,
 		paymentMethod: state.page.form.paymentMethod,
-		selectedAmounts: state.page.form.selectedAmounts,
-		otherAmount: state.page.form.formData.otherAmounts[contributionType].amount,
+		selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
+		otherAmount:
+			state.page.checkoutForm.product.otherAmounts[contributionType].amount,
 		currencyId: state.common.internationalisation.currencyId,
-		csrf: state.page.csrf,
+		csrf: state.page.checkoutForm.csrf,
 		payPalHasLoaded: state.page.form.payPalData.hasLoaded,
 		isTestUser: !!state.page.user.isTestUser,
 		formIsSubmittable: state.page.form.formIsSubmittable,
 		amount: getAmount(
-			state.page.form.selectedAmounts,
-			state.page.form.formData.otherAmounts,
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
 			contributionType,
 		),
 		billingPeriod: billingPeriodFromContrib(contributionType),
-		amazonPayData: state.page.form.amazonPayData,
+		amazonPay: state.page.checkoutForm.payment.amazonPay,
 	};
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
-	sendFormSubmitEventForPayPalRecurring: () => {
-		dispatch(sendFormSubmitEventForPayPalRecurring());
-	},
-	setupRecurringPayPalPayment: (
-		resolve: (token: string) => void,
-		reject: (error: Error) => void,
-		currencyId: IsoCurrency,
-		csrf: CsrfState,
-	) => {
-		dispatch(setupRecurringPayPalPayment(resolve, reject, currencyId, csrf));
-	},
-});
+const mapDispatchToProps = {
+	sendFormSubmitEventForPayPalRecurring,
+	setupRecurringPayPalPayment,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropTypes = ConnectedProps<typeof connector> & {
+	onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void;
+	showBenefitsMessaging: boolean;
+	userInBenefitsVariant: boolean;
+};
 
 // ----- Render ----- //
 
@@ -116,17 +84,13 @@ function ContributionSubmit(props: PropTypes) {
 		props.userInBenefitsVariant,
 	);
 
-	const amazonPayEnabled = () => !props.amazonPayData.fatalError;
+	const { loginObject, paymentsObject } = useAmazonPayObjects(
+		props.paymentMethod === AmazonPay,
+		props.countryGroupId,
+		props.isTestUser,
+	);
 
-	const getAmazonPayComponent = () =>
-		props.amazonPayData.hasAccessToken ? (
-			<AmazonPayWallet
-				isTestUser={props.isTestUser}
-				contributionType={props.contributionType}
-			/>
-		) : (
-			<AmazonPayLoginButton />
-		);
+	const amazonPayEnabled = () => !props.amazonPay.fatalError;
 
 	// We have to show/hide PayPalExpressButton rather than conditionally rendering it
 	// because we don't want to destroy and replace the iframe each time.
@@ -156,13 +120,20 @@ function ContributionSubmit(props: PropTypes) {
 					/>
 				</div>
 			)}
-			{props.paymentMethod === AmazonPay &&
-				amazonPayEnabled() &&
-				getAmazonPayComponent()}
+
+			{props.paymentMethod === AmazonPay && amazonPayEnabled() && (
+				<AmazonPayCheckout
+					loginObject={loginObject}
+					paymentsObject={paymentsObject}
+					hasAccessToken={props.amazonPay.hasAccessToken}
+					contributionType={props.contributionType}
+					isTestUser={props.isTestUser}
+				/>
+			)}
 
 			{!showPayPalRecurringButton &&
 			(props.paymentMethod !== AmazonPay ||
-				(amazonPayEnabled() && props.amazonPayData.hasAccessToken)) ? (
+				(amazonPayEnabled() && props.amazonPay.hasAccessToken)) ? (
 				<Button
 					type="submit"
 					aria-label={submitButtonCopy}

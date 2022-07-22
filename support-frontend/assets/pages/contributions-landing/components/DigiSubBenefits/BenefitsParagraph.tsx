@@ -14,6 +14,7 @@ import {
 import GridImage from 'components/gridImage/gridImage';
 import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { AmountChange } from 'helpers/redux/checkout/product/state';
 import { getBtnThresholdCopy, getThresholdPrice } from './helpers';
 import { useLiveFeedBackContext } from './LiveFeedBackProvider';
 
@@ -75,10 +76,7 @@ type PropTypes = {
 	countryGroupId: CountryGroupId;
 	showBenefitsMessaging: boolean;
 	contributionType: ContributionType;
-	setSelectedAmount: (
-		amount: number | 'other',
-		contributionType: ContributionType,
-	) => void;
+	setSelectedAmount: (amountChange: AmountChange) => void;
 };
 
 function BenefitsParagraph({
@@ -118,7 +116,10 @@ function BenefitsParagraph({
 
 	function handleBtnClick() {
 		if (thresholdPrice) {
-			setSelectedAmount(thresholdPrice, contributionType);
+			setSelectedAmount({
+				amount: thresholdPrice.toString(),
+				contributionType,
+			});
 			setShowLiveFeedBack?.(true);
 		}
 	}

@@ -41,11 +41,11 @@ import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { Action } from '../contributionsLandingActions';
 import {
-	loadAmazonPaySdk,
 	loadPayPalExpressSdk,
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
@@ -70,12 +70,7 @@ interface PaymentMethodSelectorProps {
 	isTestUser: boolean;
 	switches: Switches;
 	payPalHasBegunLoading: boolean;
-	amazonPayHasBegunLoading: boolean;
 	loadPayPalExpressSdk: (contributionType: ContributionType) => void;
-	loadAmazonPaySdk: (
-		countryGroupId: CountryGroupId,
-		isTestUser: boolean,
-	) => void;
 	checkoutFormHasBeenSubmitted: boolean;
 }
 
@@ -83,14 +78,13 @@ const mapStateToProps = (state: State) => ({
 	countryId: state.common.internationalisation.countryId,
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	currency: state.common.internationalisation.currencyId,
-	contributionType: state.page.form.contributionType,
+	contributionType: getContributionType(state),
 	existingPaymentMethods: state.common.existingPaymentMethods,
 	paymentMethod: state.page.form.paymentMethod,
 	existingPaymentMethod: state.page.form.existingPaymentMethod,
 	isTestUser: state.page.user.isTestUser ?? false,
 	switches: state.common.settings.switches,
 	payPalHasBegunLoading: state.page.form.payPalData.hasBegunLoading,
-	amazonPayHasBegunLoading: state.page.form.amazonPayData.hasBegunLoading,
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
@@ -99,7 +93,6 @@ const mapDispatchToProps = {
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
 	loadPayPalExpressSdk,
-	loadAmazonPaySdk,
 };
 
 function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
@@ -119,13 +112,6 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 			case PayPal:
 				if (!props.payPalHasBegunLoading) {
 					props.loadPayPalExpressSdk(props.contributionType);
-				}
-
-				break;
-
-			case AmazonPay:
-				if (!props.amazonPayHasBegunLoading) {
-					props.loadAmazonPaySdk(props.countryGroupId, props.isTestUser);
 				}
 
 				break;

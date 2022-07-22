@@ -1,9 +1,8 @@
-import * as React from 'react';
 import { List } from 'components/list/list';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';
 
-const Benefits: React.FC = () => {
+function Benefits(): JSX.Element {
 	return (
 		<BenefitsContainer
 			sections={[
@@ -16,7 +15,7 @@ const Benefits: React.FC = () => {
 								items={[
 									{
 										content:
-											'Every issue delivered with up to 34% off the cover price',
+											'Every issue delivered with up to 35% off the cover price',
 									},
 									{
 										content: "Access to the magazine's digital archive",
@@ -35,6 +34,6 @@ const Benefits: React.FC = () => {
 			]}
 		/>
 	);
-};
+}
 
 export default Benefits;

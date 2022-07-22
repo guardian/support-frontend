@@ -1,4 +1,5 @@
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
+import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Participations } from 'helpers/abTests/abtest';
 import {
 	fetchJson,
@@ -6,7 +7,6 @@ import {
 	requestOptions,
 } from 'helpers/async/fetch';
 import { logPromise, pollUntilPromise } from 'helpers/async/promise';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import {
 	AmazonPay,
@@ -31,6 +31,7 @@ import type {
 	GuardianWeekly,
 	Paper,
 } from 'helpers/productPrice/subscriptions';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type {
 	AcquisitionABTest,
 	OphanIds,
@@ -92,6 +93,7 @@ type RegularDirectDebitPaymentFields = {
 	accountHolderName: string;
 	sortCode: string;
 	accountNumber: string;
+	recaptchaToken?: string;
 };
 type RegularSepaPaymentFields = {
 	accountHolderName: string;
@@ -125,12 +127,12 @@ export type RegularPaymentRequestAddress = {
 	city: Option<string>;
 };
 type GiftRecipientType = {
-	title?: Option<Title>;
+	title?: Title;
 	firstName: string;
 	lastName: string;
-	email?: Option<string>;
-	message: Option<string>;
-	deliveryDate: Option<string>;
+	email?: string;
+	message?: string;
+	deliveryDate?: string;
 };
 // The model that is sent to support-workers
 export type RegularPaymentRequest = {
@@ -152,12 +154,14 @@ export type RegularPaymentRequest = {
 	deliveryInstructions?: Option<string>;
 	csrUsername?: string;
 	salesforceCaseId?: string;
+	recaptchaToken?: string;
 	debugInfo: string;
 };
 export type StripePaymentIntentAuthorisation = {
 	paymentMethod: typeof Stripe;
 	stripePaymentMethod: StripePaymentMethod;
 	paymentMethodId: string;
+	handle3DS?: (clientSecret: string) => Promise<PaymentIntentResult>;
 };
 export type PayPalAuthorisation = {
 	paymentMethod: typeof PayPal;

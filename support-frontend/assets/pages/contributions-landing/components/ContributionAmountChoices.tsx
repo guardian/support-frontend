@@ -1,16 +1,16 @@
 // ----- Imports ----- //
+
 import { css } from '@emotion/react';
 import { until } from '@guardian/source-foundations';
 import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
-import * as React from 'react';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
+import type { AmountChange } from 'helpers/redux/checkout/product/state';
 import ContributionAmountChoicesChoiceLabel from './ContributionAmountChoicesChoiceLabel';
 
 const choiceCardGridStyles = css`
@@ -27,6 +27,7 @@ const choiceCardGridStyles = css`
 		}
 	}
 `;
+
 const choiceCardGridFullWidthOtherStyles = css`
 	${choiceCardGridStyles}
 
@@ -35,19 +36,15 @@ const choiceCardGridFullWidthOtherStyles = css`
 		grid-column-end: 3;
 	}
 `;
+
 type ContributionAmountChoicesProps = {
-	countryGroupId: CountryGroupId;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
 	validAmounts: number[];
 	defaultAmount: number;
 	showOther: boolean;
 	selectedAmounts: SelectedAmounts;
-	selectAmount: (
-		arg0: number | 'other',
-		arg1: CountryGroupId,
-		arg2: ContributionType,
-	) => () => void;
+	selectAmount: (amountChange: AmountChange) => void;
 	shouldShowFrequencyButtons: boolean;
 };
 
@@ -67,17 +64,16 @@ const isSelected = (
 	return amount === defaultAmount;
 };
 
-const ContributionAmountChoices: React.FC<ContributionAmountChoicesProps> = ({
+function ContributionAmountChoices({
 	validAmounts,
 	defaultAmount,
-	countryGroupId,
 	contributionType,
 	showOther,
 	selectAmount,
 	selectedAmounts,
 	currency,
 	shouldShowFrequencyButtons,
-}: ContributionAmountChoicesProps) => {
+}: ContributionAmountChoicesProps): JSX.Element {
 	const isOtherAmountFullWidth = validAmounts.length % 2 === 0;
 	return (
 		<ChoiceCardGroup
@@ -102,7 +98,12 @@ const ContributionAmountChoices: React.FC<ContributionAmountChoicesProps> = ({
 							contributionType,
 							defaultAmount,
 						)}
-						onChange={selectAmount(amount, countryGroupId, contributionType)}
+						onChange={() =>
+							selectAmount({
+								amount: amount.toString(),
+								contributionType,
+							})
+						}
 						label={
 							<ContributionAmountChoicesChoiceLabel
 								formattedAmount={formatAmount(
@@ -124,11 +125,11 @@ const ContributionAmountChoices: React.FC<ContributionAmountChoicesProps> = ({
 				name="contributionAmount"
 				value="other"
 				checked={showOther}
-				onChange={selectAmount('other', countryGroupId, contributionType)}
+				onChange={() => selectAmount({ amount: 'other', contributionType })}
 				label="Other"
 			/>
 		</ChoiceCardGroup>
 	);
-};
+}
 
 export default ContributionAmountChoices;

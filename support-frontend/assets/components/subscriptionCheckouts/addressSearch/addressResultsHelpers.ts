@@ -60,11 +60,13 @@ const parseTextRegions = (
 			type: 'highlight',
 		}),
 	);
-	const normal = parseNormal(text, highlightString).map((arr) => ({
-		start: arr[0],
-		end: arr[1],
-		type: 'normal',
-	}));
+	const normal: TextRegion[] = parseNormal(text, highlightString).map(
+		(arr) => ({
+			start: arr[0],
+			end: arr[1],
+			type: 'normal',
+		}),
+	);
 	const all = highlights.concat(normal);
 	all.sort((a, b) => a.start - b.start);
 	return all;

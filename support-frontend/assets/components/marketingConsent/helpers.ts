@@ -1,33 +1,35 @@
 // ----- Imports ----- //
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
+import type { Dispatch } from 'redux';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import {
+	setApiError,
+	setConfirmMarketingConsent,
+	setRequestPending,
+} from 'helpers/redux/checkout/marketingConsent/actions';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import { marketingConsentActionsFor } from './marketingConsentActions';
 
 // ----- Functions ----- //
-const requestData = (email: string, csrf: CsrfState) => ({
-	method: 'POST',
-	headers: {
-		'Content-Type': 'application/json',
-		'Csrf-Token': csrf.token || '',
-	},
-	credentials: 'same-origin',
-	body: JSON.stringify({
-		email,
-	}),
-});
+const requestData = (email: string, csrf: CsrfState) =>
+	({
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'Csrf-Token': csrf.token ?? '',
+		},
+		credentials: 'same-origin',
+		body: JSON.stringify({
+			email,
+		}),
+	} as const);
 
 // Fire and forget, as we don't want to interrupt the flow
 function sendMarketingPreferencesToIdentity(
 	optIn: boolean,
 	email: string,
-	dispatch: (...args: any[]) => any,
+	dispatch: Dispatch,
 	csrf: CsrfState,
-	scope: string,
 ): void {
-	const { setConfirmMarketingConsent, setAPIError, setRequestPending } =
-		marketingConsentActionsFor(scope);
-
 	if (!optIn) {
 		dispatch(setConfirmMarketingConsent(false));
 		return;
@@ -42,7 +44,7 @@ function sendMarketingPreferencesToIdentity(
 				dispatch(setConfirmMarketingConsent(optIn));
 			} else {
 				logException('Marketing preference API returned an error');
-				dispatch(setAPIError(true));
+				dispatch(setApiError(true));
 			}
 		})
 		.catch(() => {
@@ -50,7 +52,7 @@ function sendMarketingPreferencesToIdentity(
 			logException(
 				'Error while trying to interact with the marketing preference API',
 			);
-			dispatch(setAPIError(true));
+			dispatch(setApiError(true));
 		});
 }
 

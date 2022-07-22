@@ -28,20 +28,17 @@ export type ProductPrice = {
 	promotions?: Promotion[];
 };
 
-export type CountryGroupPrices = Record<
-	FulfilmentOptions,
-	Record<
-		ProductOptions,
-		Record<BillingPeriod, Record<IsoCurrency, ProductPrice>>
-	>
->;
+export type BillingPeriods = {
+	[K in BillingPeriod]?: { [K in IsoCurrency]?: ProductPrice };
+};
 
-export type ProductPrices = Record<CountryGroupName, CountryGroupPrices>;
+export type CountryGroupPrices = {
+	[K in FulfilmentOptions]?: { [K in ProductOptions]?: BillingPeriods };
+};
 
-export type BillingPeriods = Record<
-	BillingPeriod,
-	Record<IsoCurrency, ProductPrice>
->;
+export type ProductPrices = {
+	[K in CountryGroupName]?: CountryGroupPrices;
+};
 
 const isNumeric = (num?: number | null): num is number =>
 	num !== null && num !== undefined && !Number.isNaN(num);
@@ -64,9 +61,17 @@ function getProductPrice(
 	productOption: ProductOptions = NoProductOptions,
 ): ProductPrice {
 	const countryGroup = getCountryGroup(country);
-	return productPrices[countryGroup.name][fulfilmentOption][productOption][
-		billingPeriod
-	][countryGroup.currency];
+
+	const productPrice =
+		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
+			billingPeriod
+		]?.[countryGroup.currency];
+
+	if (productPrice) {
+		return productPrice;
+	}
+
+	throw new Error('getProductPrice: product price unavailable');
 }
 
 function finalPrice(

@@ -26,17 +26,12 @@ type PropTypes = {
 	campaignSettings: CampaignSettings | null;
 	amount: number;
 	currency: IsoCurrency;
-	showBenefitsMessaging: boolean;
 	userInBenefitsVariant: boolean;
 };
 
 // ----- Component ----- //
 function TermsPrivacy(props: PropTypes): ReactElement {
-	const terms = props.showBenefitsMessaging ? (
-		<a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
-			Terms and Conditions
-		</a>
-	) : (
+	const terms = (
 		<a href={contributionsTermsLinks[props.countryGroupId]}>
 			Terms and Conditions
 		</a>
@@ -83,12 +78,10 @@ function TermsPrivacy(props: PropTypes): ReactElement {
 		</a>
 	);
 
-	const americasContactLink = (
-		<a href="mailto:us.philanthropy@theguardian.com">contact us</a>
-	);
-
-	const customerQueriesLink = (
-		<a href="https://manage.theguardian.com/help-centre">go here</a>
+	const philanthropyHelpLink = (
+		<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way">
+			help page
+		</a>
 	);
 
 	const patronText = (
@@ -99,37 +92,17 @@ function TermsPrivacy(props: PropTypes): ReactElement {
 				{getRegionalAmountString()} a month, you can join us as a Guardian
 				Patron. {patronsLink}
 			</p>
-			<br />
 		</div>
 	);
 
 	const patronAndPhilanthropicAskText = (
 		<div>
-			<div className="horizontalRule" />
 			<div className="philanthropic-ask">
-				<h4>Contribute another way</h4>
 				<p>
-					To contribute by mail, please make your check payable to:
-					<br />
-					Guardian News
-					<br />
-					Church Street Station
-					<br />
-					PO Box 3403
-					<br />
-					New York, NY 10008-3403.
+					To learn more about other ways to support the Guardian, including
+					checks and tax-exempt options, please visit our {philanthropyHelpLink}{' '}
+					on this topic.
 				</p>
-				<p>
-					Please {americasContactLink} if you would like to: make a larger
-					single contribution as an individual, contribute as a company or
-					foundation, learn about options for tax-exempt support or would like
-					to discuss legacy gifting.
-				</p>
-				<p>
-					To contribute at a higher level on a recurring basis, you can join as
-					a Guardian Patron. {patronsLink}.
-				</p>
-				<p>Thank you for your generosity.</p>
 			</div>
 		</div>
 	);
@@ -190,13 +163,8 @@ function TermsPrivacy(props: PropTypes): ReactElement {
 				</div>
 			</div>
 			<br />
-			<div>{isUSContributor ? patronAndPhilanthropicAskText : patronText}</div>
-			<div>
-				{isUSContributor && (
-					<div className="customer-support-contact">
-						For regular customer queries, {customerQueriesLink}.
-					</div>
-				)}
+			<div className="other-support-container">
+				{isUSContributor ? patronAndPhilanthropicAskText : patronText}
 			</div>
 		</>
 	);

@@ -7,7 +7,7 @@ import Asyncronously from 'components/asyncronously/asyncronously';
 import Content from 'components/content/contentSimple';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
-import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
+import moduleStyles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
@@ -16,8 +16,8 @@ import {
 } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import 'helpers/internationalisation/countryGroup';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { myAccountUrl } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { getTitle } from 'pages/paper-subscription-landing/helpers/products';
@@ -25,8 +25,10 @@ import AppsSection from './appsSection';
 import { HeroPicture } from './heroPicture';
 import SubscriptionsSurvey from './subscriptionSurvey';
 
+const styles = moduleStyles as { hero: string };
+
 // ----- Map State/Props ----- //
-function mapStateToProps(state: WithDeliveryCheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	return { ...getFormFields(state) };
 }
 
@@ -154,7 +156,7 @@ function ThankYouContent({
 	const hideStartDate = fulfilmentOption === Collection;
 	const cleanProductOption = getTitle(productOption);
 	const hasAddedDigitalSubscription = productOption.includes('Plus');
-	const showTopContentBlock = isPending || (startDate && !hideStartDate);
+	const showTopContentBlock = isPending || !hideStartDate;
 	const packageName = `${cleanProductOption} ${
 		!hasAddedDigitalSubscription ? 'package ' : ''
 	}`;
@@ -181,7 +183,7 @@ function ThankYouContent({
 							when it goes live.
 						</p>
 					)}
-					{startDate && !hideStartDate && (
+					{!hideStartDate && (
 						<p css={subHeading}>
 							<span>You will receive your newspapers from</span>
 							<span> {formatUserDate(new Date(startDate))}</span>

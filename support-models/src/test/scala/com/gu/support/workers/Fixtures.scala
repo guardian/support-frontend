@@ -6,7 +6,7 @@ import com.gu.i18n.Currency.GBP
 //noinspection TypeAnnotation
 object Fixtures {
   val idId = "12345"
-  val email = "test@gu.com"
+  val email = "test@thegulocal.com"
   val userJson =
     s"""
       "user":{
@@ -128,7 +128,8 @@ object Fixtures {
       {
         "accountHolderName": "$mickeyMouse",
         "sortCode": "111111",
-        "accountNumber": "99999999"
+        "accountNumber": "99999999",
+        "recaptchaToken": "test"
       }
     """
 

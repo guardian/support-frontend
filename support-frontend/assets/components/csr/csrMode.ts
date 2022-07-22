@@ -15,7 +15,7 @@ import { findIsoCountry } from 'helpers/internationalisation/country';
 //     "postcode": "N1 9GU",
 //     "lastName": "Mickey",
 //     "firstName": "Mouse",
-//     "email": "rupert.bates@gu.com",
+//     "email": "rupert.bates@thegulocal.com",
 //     "country": "United States",
 //     "city": "London"
 // },
@@ -28,15 +28,15 @@ import { findIsoCountry } from 'helpers/internationalisation/country';
 
 type SalesforceData = {
 	customer: {
-		salutation: string | null;
-		firstName: string | null;
+		salutation?: string;
+		firstName?: string;
 		lastName: string;
-		email: string | null;
-		street: string | null;
-		city: string | null;
-		state: string | null;
-		postcode: string | null;
-		country: string | null;
+		email?: string;
+		street?: string;
+		city?: string;
+		state?: string;
+		postcode?: string;
+		country?: string;
 	};
 	csr: { lastName: string; firstName: string };
 	caseId: string;
@@ -44,15 +44,15 @@ type SalesforceData = {
 
 export type CsrCustomerData = {
 	customer: {
-		title: string | null;
-		firstName: string | null;
+		title?: string;
+		firstName?: string;
 		lastName: string;
-		email: string | null;
-		street: string | null;
-		city: string | null;
-		state: UsState | CaState | null;
-		postcode: string | null;
-		country: IsoCountry | null;
+		email?: string;
+		street?: string;
+		city?: string;
+		state?: UsState | CaState;
+		postcode?: string;
+		country?: IsoCountry;
 	};
 	csr: { lastName: string; firstName: string };
 	caseId: string;
@@ -73,7 +73,7 @@ const parseCustomerData = (data: string): CsrCustomerData => {
 	const customer = {
 		...otherData,
 		title: salutation,
-		country: isoCountry,
+		...(isoCountry && { country: isoCountry }),
 	};
 	return {
 		csr: salesforceData.csr,
@@ -84,7 +84,7 @@ const parseCustomerData = (data: string): CsrCustomerData => {
 
 const useCsrCustomerData = (
 	callback: (csrCustomerData: CsrCustomerData) => void,
-) => {
+): void => {
 	useEffect(() => {
 		function checkForParentMessage(event: MessageEvent) {
 			if (isSalesforceDomain(event.origin)) {
@@ -97,7 +97,7 @@ const useCsrCustomerData = (
 	}, []);
 };
 
-const csrUserName = (csrCustomerData: CsrCustomerData) =>
+const csrUserName = (csrCustomerData: CsrCustomerData): string =>
 	`${csrCustomerData.csr.firstName} ${csrCustomerData.csr.lastName}`;
 
 export {

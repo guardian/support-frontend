@@ -1,13 +1,11 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
 import {
-	between,
 	body,
 	brandAlt,
 	from,
 	headline,
 	space,
-	until,
 } from '@guardian/source-foundations';
 import {
 	buttonThemeBrand,
@@ -17,11 +15,10 @@ import {
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
-import HeroRoundel, { roundelSizeMob } from 'components/page/heroRoundel';
+import OfferStrapline from 'components/page/offerStrapline';
 import PageTitle from 'components/page/pageTitle';
-import { getMaxSavingVsRetail } from 'helpers/productPrice/paperProductPrices';
+import { getMaxSavingVsRetail } from 'helpers/productPrice/paperSavingsVsRetail';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
@@ -31,13 +28,7 @@ type PropTypes = {
 	productPrices: ProductPrices;
 	promotionCopy: PromotionCopy;
 };
-const fitHeadline = css`
-	h1 {
-		${between.mobileMedium.and.tablet} {
-			max-width: calc(100% - ${roundelSizeMob}px);
-		}
-	}
-`;
+
 const heroCopy = css`
 	padding: 0 ${space[3]}px ${space[3]}px;
 	${from.tablet} {
@@ -52,10 +43,6 @@ const heroTitle = css`
 		fontWeight: 'bold',
 	})};
 	margin-bottom: ${space[3]}px;
-
-	${between.mobileMedium.and.tablet} {
-		margin-right: ${roundelSizeMob}px;
-	}
 
 	${from.tablet} {
 		${headline.large({
@@ -80,32 +67,6 @@ const heroParagraph = css`
 	${from.desktop} {
 		max-width: 75%;
 		margin-bottom: ${space[9]}px;
-	}
-`;
-const roundelLines = css`
-	padding: ${space[1]}px;
-	${headline.xxxsmall({
-		fontWeight: 'bold',
-	})}
-	${from.desktop} {
-		${headline.xxsmall({
-			fontWeight: 'bold',
-		})}
-	}
-`;
-const roundelCentreLine = css`
-	${headline.medium({
-		fontWeight: 'bold',
-	})}
-	${from.tablet} {
-		${headline.xlarge({
-			fontWeight: 'bold',
-		})}
-	}
-`;
-const roundelOffset = css`
-	${until.tablet} {
-		transform: translateY(-34%);
 	}
 `;
 const mobileLineBreak = css`
@@ -134,40 +95,24 @@ const defaultCopy = (
 	</>
 );
 
-function PaperHero({ productPrices, promotionCopy }: PropTypes) {
-	const maxSavingVsRetail = productPrices
-		? getMaxSavingVsRetail(productPrices)
-		: 0;
+function PaperHero({
+	productPrices,
+	promotionCopy,
+}: PropTypes): JSX.Element | null {
+	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
 	const { roundel } = getDiscountCopy(maxSavingVsRetail);
-	const defaultRoundelText = (
-		<>
-			{/* role="text" is non-standardised but works in Safari. Ensures the whole section is read as one text element */}
-			{/* eslint-disable-next-line jsx-a11y/aria-role */}
-			<div role="text" css={roundelLines}>
-				{roundel.map((text, index) => {
-					if (index === 1) {
-						return <div css={roundelCentreLine}>{text}</div>;
-					}
+	const defaultRoundelText = roundel.length ? roundel.join(' ') : undefined;
 
-					return text;
-				})}
-			</div>
-		</>
-	);
-	const title = promotionCopy.title || defaultTitle;
+	const title = promotionCopy.title ?? defaultTitle;
 	const copy =
 		promotionHTML(promotionCopy.description, {
 			tag: 'p',
-		}) || defaultCopy;
-	const roundelText =
-		promotionHTML(promotionCopy.roundel) || defaultRoundelText;
+		}) ?? defaultCopy;
+	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
 	return (
-		<PageTitle
-			title="Newspaper subscription"
-			theme="paper"
-			cssOverrides={fitHeadline}
-		>
+		<PageTitle title="Newspaper subscription" theme="paper">
 			<CentredContainer>
+				<OfferStrapline copy={roundelText} />
 				<Hero
 					image={
 						<GridImage
@@ -181,11 +126,7 @@ function PaperHero({ productPrices, promotionCopy }: PropTypes) {
 						/>
 					}
 					hideRoundelBelow="mobileMedium"
-					roundelElement={
-						<HeroRoundel cssOverrides={roundelOffset}>
-							{roundelText}
-						</HeroRoundel>
-					}
+					roundelElement={undefined}
 				>
 					<section css={heroCopy}>
 						<h2 css={heroTitle}>{title}</h2>

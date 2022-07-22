@@ -2,31 +2,31 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import Button from 'components/button/button';
 import AnimatedDots from 'components/spinners/animatedDots';
-import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
+import type {
+	AmazonLoginObject,
+	AmazonPaymentsObject,
+} from 'helpers/forms/paymentIntegrations/amazonPay/types';
+import { setAmazonPayHasAccessToken } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
-import { setAmazonPayHasAccessToken } from 'pages/contributions-landing/contributionsLandingActions';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
-import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 
 type PropTypes = {
-	amazonPayData: AmazonPayData;
-	setAmazonPayHasAccessToken: () => Action;
+	amazonLoginObject?: AmazonLoginObject;
+	amazonPaymentsObject?: AmazonPaymentsObject;
+	setAmazonPayHasAccessToken: () => void;
 };
 
-const mapStateToProps = (state: State) => ({
-	amazonPayData: state.page.form.amazonPayData,
-});
+const mapStateToProps = () => ({});
 
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
-	setAmazonPayHasAccessToken: () => dispatch(setAmazonPayHasAccessToken),
-});
+const mapDispatchToProps = {
+	setAmazonPayHasAccessToken,
+};
 
 class AmazonPayLoginButtonComponent extends Component<PropTypes> {
-	loginPopup = (amazonLoginObject: Record<string, any>) => (): void => {
+	loginPopup = (amazonLoginObject: AmazonLoginObject) => (): void => {
 		trackComponentClick('amazon-pay-login-click');
 		const loginOptions = {
 			scope: 'profile postal_code payments:widget payments:shipping_address',
@@ -42,17 +42,14 @@ class AmazonPayLoginButtonComponent extends Component<PropTypes> {
 	};
 
 	render() {
-		const { amazonLoginObject, amazonPaymentsObject } =
-			this.props.amazonPayData.amazonPayLibrary;
-
-		if (amazonLoginObject && amazonPaymentsObject) {
+		if (this.props.amazonLoginObject && this.props.amazonPaymentsObject) {
 			trackComponentLoad('amazon-pay-login-loaded');
 			return (
 				<div>
 					<div id="AmazonLoginButton" />
 					<Button
 						type="button"
-						onClick={this.loginPopup(amazonLoginObject)}
+						onClick={this.loginPopup(this.props.amazonLoginObject)}
 						aria-label="Submit contribution"
 					>
 						Proceed with Amazon Pay

@@ -49,7 +49,7 @@ const getHomeDeliveryDays = (
 ): Date[] => {
 	const currentWeekday = new Date(today).getDay();
 	const delayDays = getDaysToAdd(currentWeekday, product);
-	const deliveryDay: Day = ((currentWeekday + delayDays) % 7) as any;
+	const deliveryDay: Day = ((currentWeekday + delayDays) % 7) as Day;
 	const canMakeNextDelivery = canDeliverOnNextDeliveryDay(
 		currentWeekday,
 		deliveryDay,

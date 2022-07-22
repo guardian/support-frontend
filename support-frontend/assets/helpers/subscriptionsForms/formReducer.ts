@@ -1,68 +1,23 @@
 // ----- Reducer ----- //
-import type { SetCountryChangedAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	getWeeklyFulfilmentOption,
-	NoFulfilmentOptions,
-} from 'helpers/productPrice/fulfilmentOptions';
-import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import {
-	NoProductOptions,
-	paperProductsWithDigital,
-	paperProductsWithoutDigital,
-} from 'helpers/productPrice/productOptions';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { removeError } from 'helpers/subscriptionsForms/validation';
-import type { Option } from 'helpers/types/option';
 import { isTestUser } from 'helpers/user/user';
 
-function createFormReducer(
-	product: SubscriptionProduct,
-	initialBillingPeriod: BillingPeriod,
-	startDate: Option<string>,
-	productOption: Option<ProductOptions>,
-	fulfilmentOption: Option<FulfilmentOptions>,
-) {
-	const { productPrices, orderIsAGift } = window.guardian;
+function createFormReducer() {
 	const initialState: FormState = {
 		stage: 'checkout',
-		product,
-		startDate,
 		billingAddressIsSame: true,
-		billingPeriod: initialBillingPeriod,
-		titleGiftRecipient: null,
-		firstNameGiftRecipient: null,
-		lastNameGiftRecipient: null,
-		emailGiftRecipient: null,
 		paymentMethod: null,
 		formErrors: [],
 		submissionError: null,
 		formSubmitted: false,
 		isTestUser: isTestUser(),
-		productPrices,
-		productOption: productOption ?? NoProductOptions,
-		fulfilmentOption: fulfilmentOption ?? NoFulfilmentOptions,
 		payPalHasLoaded: false,
-		orderIsAGift,
 		stripePaymentMethod: null,
 		deliveryInstructions: null,
 		debugInfo: '',
-		giftMessage: null,
-		giftDeliveryDate: null,
 	};
-
-	const getFulfilmentOption = (
-		action: SetCountryChangedAction,
-		currentOption: FulfilmentOptions, // For GuardianWeekly subs, when the country changes we need to update the fulfilment option
-	): FulfilmentOptions =>
-		// because it may mean a switch between domestic and rest of the world
-		product === GuardianWeekly && action.scope === 'delivery'
-			? getWeeklyFulfilmentOption(action.country)
-			: currentOption;
 
 	return function (
 		originalState: FormState = initialState,
@@ -77,41 +32,11 @@ function createFormReducer(
 			case 'SET_STAGE':
 				return { ...state, stage: action.stage };
 
-			case 'SET_TITLE_GIFT':
-				return { ...state, titleGiftRecipient: action.titleGiftRecipient };
-
-			case 'SET_FIRST_NAME_GIFT':
-				return {
-					...state,
-					firstNameGiftRecipient: action.firstNameGiftRecipient,
-					formErrors: removeError('firstNameGiftRecipient', state.formErrors),
-				};
-
-			case 'SET_LAST_NAME_GIFT':
-				return {
-					...state,
-					lastNameGiftRecipient: action.lastNameGiftRecipient,
-					formErrors: removeError('lastNameGiftRecipient', state.formErrors),
-				};
-
-			case 'SET_EMAIL_GIFT':
-				return {
-					...state,
-					emailGiftRecipient: action.emailGiftRecipient,
-					formErrors: removeError('emailGiftRecipient', state.formErrors),
-				};
-
-			case 'SET_START_DATE':
-				return { ...state, startDate: action.startDate };
-
-			case 'SET_BILLING_PERIOD':
-				return { ...state, billingPeriod: action.billingPeriod };
-
-			case 'SET_COUNTRY_CHANGED':
+			case 'ON_DELIVERY_COUNTRY_CHANGED':
+				// For the payment reducer(s), we can use an extraReducer with the setDeliveryCountry action for this
 				return {
 					...state,
 					paymentMethod: null,
-					fulfilmentOption: getFulfilmentOption(action, state.fulfilmentOption),
 				};
 
 			case 'SET_PAYMENT_METHOD':
@@ -144,32 +69,12 @@ function createFormReducer(
 			case 'SET_PAYPAL_HAS_LOADED':
 				return { ...state, payPalHasLoaded: true };
 
-			case 'SET_ORDER_IS_GIFT':
-				return { ...state, orderIsAGift: action.orderIsAGift };
-
 			case 'SET_STRIPE_PAYMENT_METHOD':
 				return { ...state, stripePaymentMethod: action.stripePaymentMethod };
 
 			case 'SET_DELIVERY_INSTRUCTIONS':
 				return { ...state, deliveryInstructions: action.instructions };
 
-			case 'SET_GIFT_MESSAGE':
-				return { ...state, giftMessage: action.message };
-
-			case 'SET_GIFT_DELIVERY_DATE':
-				return {
-					...state,
-					giftDeliveryDate: action.giftDeliveryDate,
-					formErrors: removeError('giftDeliveryDate', state.formErrors),
-				};
-
-			case 'SET_ADD_DIGITAL_SUBSCRIPTION':
-				return {
-					...state,
-					productOption: action.addDigital
-						? paperProductsWithDigital[state.productOption]
-						: paperProductsWithoutDigital[state.productOption],
-				};
 			case 'SET_CSR_USERNAME':
 				return {
 					...state,

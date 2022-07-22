@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import { useEffect } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Form, {
@@ -10,7 +11,7 @@ import { useCsrCustomerData } from 'components/csr/csrMode';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import { BillingAddress } from 'components/subscriptionCheckouts/address/scopedAddressFields';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import CheckoutLayout, {
 	Content,
@@ -25,11 +26,12 @@ import { countries } from 'helpers/internationalisation/country';
 import { userIsPatron } from 'helpers/patrons';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import {
-	finalPrice,
-	getProductPrice,
-} from 'helpers/productPrice/productPrices';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import {
+	selectDiscountedPrice,
+	selectPriceForProduct,
+} from 'helpers/redux/checkout/product/selectors/productPrice';
+import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type {
 	SubscriptionsDispatch,
 	SubscriptionsState,
@@ -49,8 +51,8 @@ import {
 	submitCheckoutForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
+import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import EndSummaryMobile from 'pages/digital-subscription-checkout/components/endSummary/endSummaryMobile';
@@ -63,20 +65,18 @@ function mapStateToProps(state: SubscriptionsState) {
 		country: state.common.internationalisation.countryId,
 		formErrors: state.page.checkout.formErrors,
 		submissionError: state.page.checkout.submissionError,
-		productPrices: state.page.checkout.productPrices,
 		currencyId: state.common.internationalisation.currencyId,
-		csrf: state.page.csrf,
+		csrf: state.page.checkoutForm.csrf,
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
 		paymentMethod: state.page.checkout.paymentMethod,
 		isTestUser: state.page.checkout.isTestUser,
-		amount: finalPrice(
-			state.page.checkout.productPrices,
-			state.common.internationalisation.countryId,
-			state.page.checkout.billingPeriod,
-		).price,
-		billingPeriod: state.page.checkout.billingPeriod as DigitalBillingPeriod,
-		addressErrors: state.page.billingAddress.fields.formErrors,
+		billingPeriod: state.page.checkoutForm.product
+			.billingPeriod as DigitalBillingPeriod,
+		addressErrors: state.page.checkoutForm.billingAddress.fields.errors,
 		participations: state.common.abParticipations,
+		product: getSubscriptionType(state),
+		price: selectPriceForProduct(state),
+		discountedPrice: selectDiscountedPrice(state),
 	};
 }
 
@@ -117,8 +117,6 @@ function mapDispatchToProps() {
 	};
 }
 
-const Address = withStore(countries, 'billing', getBillingAddress);
-
 const connector = connect(mapStateToProps, mapDispatchToProps());
 
 type PropTypes = ConnectedProps<typeof connector>;
@@ -127,11 +125,15 @@ type PropTypes = ConnectedProps<typeof connector>;
 function DigitalCheckoutForm(props: PropTypes) {
 	useCsrCustomerData(props.setCsrCustomerData);
 
-	const productPrice = getProductPrice(
-		props.productPrices,
-		props.country,
-		props.billingPeriod,
-	);
+	useEffect(() => {
+		sendEventSubscriptionCheckoutStart(
+			props.product,
+			false,
+			props.price,
+			props.billingPeriod,
+		);
+	}, []);
+
 	const submissionErrorHeading =
 		props.submissionError === 'personal_details_incorrect'
 			? 'Sorry there was a problem'
@@ -141,7 +143,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 		props.country,
 	);
 
-	const isPatron = userIsPatron(productPrice.promotions);
+	const isPatron = userIsPatron(props.price.promotions);
 
 	return (
 		<Content>
@@ -162,7 +164,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 							/>
 						}
 						title="Digital Subscription"
-						productPrice={productPrice}
+						productPrice={props.price}
 						billingPeriod={props.billingPeriod}
 						changeSubscription={routes.digitalSubscriptionLanding}
 						isPatron={isPatron}
@@ -194,7 +196,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 						/>
 					</FormSection>
 					<FormSection title="Address">
-						<Address />
+						<BillingAddress countries={countries} />
 					</FormSection>
 					{paymentMethods.length > 1 ? (
 						<FormSection title="How would you like to pay?">
@@ -247,7 +249,7 @@ function DigitalCheckoutForm(props: PropTypes) {
 							validateForm={props.validateForm}
 							isTestUser={props.isTestUser}
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-							amount={props.amount}
+							amount={props.discountedPrice.price}
 							billingPeriod={props.billingPeriod}
 							//  @ts-expect-error -- TODO: fix error types!!
 							allErrors={[...props.addressErrors, ...props.formErrors]}

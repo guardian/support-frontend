@@ -1,18 +1,19 @@
 // ----- Imports ----- //
-import * as React from 'react';
+import React from 'react';
+
 // ----- Types ----- //
-type AugmentedProps<Props> = Props & {
+type AugmentedProps<T> = T & {
 	isShown: boolean;
 };
-type In<Props> = React.ComponentType<Props>;
-type Out<Props> = React.ComponentType<AugmentedProps<Props>>;
+type ComponentToWrap<T> = React.ComponentType<T>;
+
+type MaybeComponent<T> = React.ComponentType<AugmentedProps<T>>;
 
 // ----- Component ----- //
-function canShow<Props>(Component: In<Props>): Out<Props> {
-	return function ({ isShown, ...props }: AugmentedProps<Props>) {
-		return isShown ? <Component {...props} /> : null;
+export function canShow<Props>(
+	Component: ComponentToWrap<Props>,
+): MaybeComponent<Props> {
+	return function (props: AugmentedProps<Props>) {
+		return props.isShown ? <Component {...props} /> : null;
 	};
 }
-
-// ----- Exports ----- //
-export { canShow };

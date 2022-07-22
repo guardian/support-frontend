@@ -3,17 +3,19 @@ import { useEffect, useState } from 'react';
 import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { ThunkDispatch } from 'redux-thunk';
-import type { Action } from 'components/directDebit/directDebitActions';
-import {
-	payDirectDebitClicked,
-	setDirectDebitFormPhase,
-	updateAccountHolderConfirmation,
-	updateAccountHolderName,
-	updateAccountNumber,
-	updateSortCodeString,
-} from 'components/directDebit/directDebitActions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import {
+	setAccountHolderConfirmation,
+	setAccountHolderName,
+	setAccountNumber,
+	setPhase,
+	setSortCodeString,
+} from 'helpers/redux/checkout/payment/directDebit/actions';
+import { confirmAccountDetails } from 'helpers/redux/checkout/payment/directDebit/thunks';
+import {
+	expireRecaptchaToken,
+	setRecaptchaToken,
+} from 'helpers/redux/checkout/recaptcha/actions';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { nonSillyCharacters } from 'helpers/subscriptionsForms/validation';
 import Form from './components/form';
@@ -23,46 +25,29 @@ import type { DirectDebitFieldName } from './types';
 // ----- Map State/Props ----- //
 function mapStateToProps(state: CheckoutState) {
 	return {
-		sortCodeString: state.page.directDebit.sortCodeString,
-		accountNumber: state.page.directDebit.accountNumber,
-		accountHolderName: state.page.directDebit.accountHolderName,
-		accountHolderConfirmation: state.page.directDebit.accountHolderConfirmation,
-		formError: state.page.directDebit.formError,
+		sortCodeString: state.page.checkoutForm.payment.directDebit.sortCodeString,
+		accountNumber: state.page.checkoutForm.payment.directDebit.accountNumber,
+		accountHolderName:
+			state.page.checkoutForm.payment.directDebit.accountHolderName,
+		accountHolderConfirmation:
+			state.page.checkoutForm.payment.directDebit.accountHolderConfirmation,
+		recaptchaCompleted: state.page.checkoutForm.recaptcha.completed,
+		formError: state.page.checkoutForm.payment.directDebit.formError,
 		countryGroupId: state.common.internationalisation.countryGroupId,
-		phase: state.page.directDebit.phase,
+		phase: state.page.checkoutForm.payment.directDebit.phase,
 	};
 }
 
-function mapDispatchToProps(
-	dispatch: ThunkDispatch<CheckoutState, void, Action>,
-) {
-	return {
-		payDirectDebitClicked: () => {
-			void dispatch(payDirectDebitClicked());
-			return false;
-		},
-		editDirectDebitClicked: () => {
-			dispatch(setDirectDebitFormPhase('entry'));
-		},
-		updateSortCodeString: (event: React.ChangeEvent<HTMLInputElement>) => {
-			dispatch(updateSortCodeString(event.target.value));
-		},
-		updateAccountNumber: (event: React.ChangeEvent<HTMLInputElement>) => {
-			const accountNumber: string = event.target.value;
-			dispatch(updateAccountNumber(accountNumber));
-		},
-		updateAccountHolderName: (event: React.ChangeEvent<HTMLInputElement>) => {
-			const accountHolderName: string = event.target.value;
-			dispatch(updateAccountHolderName(accountHolderName));
-		},
-		updateAccountHolderConfirmation: (
-			event: React.ChangeEvent<HTMLInputElement>,
-		) => {
-			const accountHolderConfirmation: boolean = event.target.checked;
-			dispatch(updateAccountHolderConfirmation(accountHolderConfirmation));
-		},
-	};
-}
+const mapDispatchToProps = {
+	confirmAccountDetails,
+	setPhase,
+	updateSortCodeString: setSortCodeString,
+	updateAccountNumber: setAccountNumber,
+	updateAccountHolderName: setAccountHolderName,
+	updateAccountHolderConfirmation: setAccountHolderConfirmation,
+	setRecaptchaToken,
+	expireRecaptchaToken,
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -80,6 +65,8 @@ const fieldErrorMessages: { [key in DirectDebitFieldName]: string } = {
 	accountNumber: 'Please enter a valid account number',
 	accountHolderConfirmation: 'Please confirm you are the account holder',
 };
+
+const recaptchaErrorMessage = "Please check the 'I'm not a robot' checkbox";
 
 const fieldValidationFunctions: {
 	[key in DirectDebitFieldName]: (fieldValue: string) => boolean;
@@ -102,23 +89,28 @@ function DirectDebitForm(props: PropTypes) {
 		accountHolderConfirmation: '',
 	});
 	const [allErrors, setAllErrors] = useState<Array<Record<string, string>>>([]);
+	const [recaptchaError, setRecaptchaError] = useState('');
 	const [userHasSubmitted, setUserHasSubmitted] = useState<boolean>(false);
 
 	function onSubmit(event: React.MouseEvent<HTMLButtonElement>) {
 		event.preventDefault();
-		props.submitForm();
+
+		if (!props.recaptchaCompleted) {
+			setRecaptchaError(recaptchaErrorMessage);
+		} else {
+			props.submitForm();
+		}
 	}
 
 	function onChange(
 		fieldName: DirectDebitFieldName,
-		dispatchUpdate: (event: React.ChangeEvent<HTMLInputElement>) => void,
-		event: React.ChangeEvent<HTMLInputElement>,
+		dispatchUpdate: () => void,
 	) {
 		setFieldErrors({
 			...fieldErrors,
 			[fieldName]: '',
 		});
-		dispatchUpdate(event);
+		dispatchUpdate();
 	}
 
 	function handleErrorsAndCheckAccount(
@@ -160,12 +152,16 @@ function DirectDebitForm(props: PropTypes) {
 	useEffect(() => {
 		if (userHasSubmitted) {
 			if (allErrors.length === 0) {
-				props.payDirectDebitClicked();
+				void props.confirmAccountDetails();
 			} else {
 				setUserHasSubmitted(false);
 			}
 		}
 	}, [allErrors, userHasSubmitted]);
+
+	useEffect(() => {
+		setRecaptchaError('');
+	}, [props.recaptchaCompleted]);
 
 	return (
 		<span>
@@ -185,13 +181,16 @@ function DirectDebitForm(props: PropTypes) {
 			)}
 			{props.phase === 'confirmation' && (
 				<Playback
-					editDirectDebitClicked={props.editDirectDebitClicked}
+					editDirectDebitClicked={() => props.setPhase('entry')}
 					onSubmit={onSubmit}
 					accountHolderName={props.accountHolderName}
 					accountNumber={props.accountNumber}
 					sortCodeString={props.sortCodeString}
 					buttonText={props.buttonText}
 					allErrors={props.allErrors}
+					setRecaptchaToken={props.setRecaptchaToken}
+					expireRecaptchaToken={props.expireRecaptchaToken}
+					recaptchaError={recaptchaError}
 				/>
 			)}
 		</span>

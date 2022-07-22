@@ -9,7 +9,12 @@ import SecureTransactionIndicator from 'components/secureTransactionIndicator/se
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
-import type { ContributionType } from 'helpers/contributions';
+import { getAmount } from 'helpers/contributions';
+import type {
+	ContributionType,
+	OtherAmounts,
+	SelectedAmounts,
+} from 'helpers/contributions';
 import { useLastOneOffContribution } from 'helpers/customHooks/useLastOneOffContribution';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -17,14 +22,15 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentWaiting,
 	setTickerGoalReached,
 } from '../contributionsLandingActions';
 import type { State } from '../contributionsLandingReducer';
-import '../contributionsLandingReducer';
 import ContributionForm from './ContributionForm';
 import { ContributionFormBlurb } from './ContributionFormBlurb';
 import {
@@ -54,6 +60,8 @@ type PropTypes = {
 	shouldShowRichLandingPage: boolean;
 	isSignedIn: boolean;
 	contributionType: ContributionType;
+	otherAmounts: OtherAmounts;
+	selectedAmounts: SelectedAmounts;
 };
 
 const mapStateToProps = (state: State) => ({
@@ -67,21 +75,16 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
-	contributionType: state.page.form.contributionType,
+	contributionType: getContributionType(state),
+	otherAmounts: state.page.checkoutForm.product.otherAmounts,
+	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- we'll investigate this in a follow up!
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
-	setPaymentIsWaiting: (isWaiting: boolean) => {
-		dispatch(paymentWaiting(isWaiting));
-	},
-	setTickerGoalReached: () => {
-		dispatch(setTickerGoalReached());
-	},
-	onThirdPartyPaymentAuthorised: (token: PaymentAuthorisation) => {
-		dispatch(onThirdPartyPaymentAuthorised(token));
-	},
-});
+const mapDispatchToProps = {
+	setPaymentIsWaiting: paymentWaiting,
+	setTickerGoalReached,
+	onThirdPartyPaymentAuthorised,
+};
 
 // ----- Styles ----- //
 
@@ -206,11 +209,22 @@ function withProps(props: PropTypes) {
 	};
 
 	if (props.paymentComplete) {
+		const {
+			contributionType,
+			selectedAmounts,
+			otherAmounts,
+			currency,
+			thankYouRoute,
+		} = props;
+		const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
+
+		sendEventContributionCheckoutConversion(amount, contributionType, currency);
+
 		// We deliberately allow the redirect to REPLACE rather than PUSH /thankyou onto the history stack.
 		// This is because going 'back' to the /contribute page is not helpful, and the client-side routing would redirect
 		// back to /thankyou given the current state of the redux store.
 		// The effect is that clicking back in the browser will take the user to the page before they arrived at /contribute
-		return <Navigate to={props.thankYouRoute} replace />;
+		return <Navigate to={thankYouRoute} replace />;
 	}
 
 	if (props.campaignCodeParameter && !campaignSettings) {
@@ -229,7 +243,6 @@ function withProps(props: PropTypes) {
 		props.referrerAcquisitionData,
 	);
 	const lastOneOffContribution = useLastOneOffContribution(props.isSignedIn);
-	const AUDCountries = props.countryGroupId === 'AUDCountries';
 
 	return (
 		<div
@@ -303,21 +316,15 @@ function withProps(props: PropTypes) {
 									<PreviousGivingHeaderCopy userName={props.userName} />
 								}
 								bodyCopy={
-									AUDCountries ? (
-										<PreviousGivingBodyCopy
-											lastOneOffContribution={lastOneOffContribution}
-										/>
-									) : (
-										''
-									)
+									<PreviousGivingBodyCopy
+										lastOneOffContribution={lastOneOffContribution}
+									/>
 								}
 							/>
 						) : (
 							<ContributionFormBlurb
 								headerCopy={countryGroupDetails.headerCopy}
-								bodyCopy={
-									AUDCountries ? countryGroupDetails.contributeCopy : ''
-								}
+								bodyCopy={countryGroupDetails.contributeCopy}
 							/>
 						)}
 					</div>

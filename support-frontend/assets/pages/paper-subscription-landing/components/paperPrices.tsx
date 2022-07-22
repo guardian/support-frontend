@@ -1,16 +1,16 @@
 import type { ReactNode } from 'react';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	getPriceWithDiscount,
-	getProductPrice,
-} from 'helpers/productPrice/paperProductPrices';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
-import { showPrice } from 'helpers/productPrice/productPrices';
+import {
+	finalPrice,
+	getProductPrice,
+	showPrice,
+} from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
 import {
 	sendTrackingEventsOnClick,
@@ -126,8 +126,10 @@ const getPlans = (
 	productPrices: ProductPrices,
 ) =>
 	ActivePaperProductTypes.map((productOption) => {
-		const priceAfterPromosApplied = getPriceWithDiscount(
+		const priceAfterPromosApplied = finalPrice(
 			productPrices,
+			'GB',
+			'Monthly',
 			fulfilmentOption,
 			productOption,
 		);
@@ -140,6 +142,8 @@ const getPlans = (
 		};
 		const nonDiscountedPrice = getProductPrice(
 			productPrices,
+			'GB',
+			'Monthly',
 			fulfilmentOption,
 			productOption,
 		);

@@ -123,6 +123,8 @@ Resources:
       Dimensions:
         - Name: ApiName
           Value: !Sub acquisition-events-api-${Stage}
+        - Name: Method
+          Value: POST
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 1
       Period: 300

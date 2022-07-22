@@ -24,7 +24,10 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import { options } from 'components/forms/customFields/options';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import {
+	BillingAddress,
+	DeliveryAddress,
+} from 'components/subscriptionCheckouts/address/scopedAddressFields';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
@@ -39,17 +42,15 @@ import {
 	Collection,
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	getPriceWithDiscount,
-	getProductPrice,
-} from 'helpers/productPrice/paperProductPrices';
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
-import {
-	paperProductsWithDigital,
-	paperProductsWithoutDigital,
-} from 'helpers/productPrice/productOptions';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { Paper } from 'helpers/productPrice/subscriptions';
+import {
+	selectCorrespondingProductOptionPrice,
+	selectDiscountedPrice,
+	selectPriceForProduct,
+} from 'helpers/redux/checkout/product/selectors/productPrice';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
@@ -67,16 +68,11 @@ import {
 	submitWithDeliveryForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import type {
-	CheckoutState,
-	WithDeliveryCheckoutState,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import {
-	getBillingAddress,
-	getDeliveryAddress,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
+import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
+import type { DateYMDString } from 'helpers/types/DateString';
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { getQueryParameter } from 'helpers/urls/url';
 import { titles } from 'helpers/user/details';
@@ -112,29 +108,24 @@ const removeTopBorder = css`
 `;
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state: WithDeliveryCheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	return {
 		...getFormFields(state),
 		formErrors: state.page.checkout.formErrors,
 		submissionError: state.page.checkout.submissionError,
-		productPrices: state.page.checkout.productPrices,
-		billingAddressErrors: state.page.deliveryAddress.fields.formErrors,
-		deliveryAddressErrors: state.page.billingAddress.fields.formErrors,
+		productPrices: state.page.checkoutForm.product.productPrices,
+		billingAddressErrors: state.page.checkoutForm.deliveryAddress.fields.errors,
+		deliveryAddressErrors: state.page.checkoutForm.billingAddress.fields.errors,
 		isTestUser: state.page.checkout.isTestUser,
 		country: state.common.internationalisation.countryId,
-		csrf: state.page.csrf,
+		billingCountry: state.page.checkoutForm.billingAddress.fields.country,
+		csrf: state.page.checkoutForm.csrf,
 		currencyId: state.common.internationalisation.currencyId,
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
-		total: getPriceWithDiscount(
-			state.page.checkout.productPrices,
-			state.page.checkout.fulfilmentOption,
-			state.page.checkout.productOption,
-		),
-		amount: getProductPrice(
-			state.page.checkout.productPrices,
-			state.page.checkout.fulfilmentOption,
-			state.page.checkout.productOption,
-		),
+		price: selectPriceForProduct(state),
+		discountedPrice: selectDiscountedPrice(state),
+		correspondingProductOptionPrice:
+			selectCorrespondingProductOptionPrice(state),
 		participations: state.common.abParticipations,
 	};
 }
@@ -148,22 +139,14 @@ function mapDispatchToProps() {
 				fetchAndStoreUserType(email)(dispatch, getState);
 			},
 		formIsValid:
-			() =>
-			(
-				_dispatch: Dispatch<Action>,
-				getState: () => WithDeliveryCheckoutState,
-			) =>
+			() => (_dispatch: Dispatch<Action>, getState: () => SubscriptionsState) =>
 				withDeliveryFormIsValid(getState()),
 		submitForm:
-			() =>
-			(dispatch: Dispatch<Action>, getState: () => WithDeliveryCheckoutState) =>
+			() => (dispatch: Dispatch<Action>, getState: () => SubscriptionsState) =>
 				submitWithDeliveryForm(dispatch, getState()),
 		validateForm:
 			() =>
-			(
-				dispatch: Dispatch<Action>,
-				getState: () => WithDeliveryCheckoutState,
-			) => {
+			(dispatch: Dispatch<Action>, getState: () => SubscriptionsState) => {
 				const state = getState();
 				validateWithDeliveryForm(dispatch, state);
 				// We need to track PayPal payment attempts here because PayPal behaves
@@ -171,7 +154,11 @@ function mapDispatchToProps() {
 				const { paymentMethod } = state.page.checkout;
 
 				if (paymentMethod === PayPal) {
-					trackSubmitAttempt(PayPal, Paper, state.page.checkout.productOption);
+					trackSubmitAttempt(
+						PayPal,
+						Paper,
+						state.page.checkoutForm.product.productOption,
+					);
 				}
 			},
 		setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
@@ -185,23 +172,10 @@ const connector = connect(mapStateToProps, mapDispatchToProps());
 
 type PropTypes = ConnectedProps<typeof connector>;
 
-// ----- Form Fields ----- //
-const DeliveryAddress = withStore(
-	newspaperCountries,
-	'delivery',
-	getDeliveryAddress,
-);
-
-const BillingAddress = withStore(
-	newspaperCountries,
-	'billing',
-	getBillingAddress,
-);
-
 // ----- Lifecycle hooks ----- //
 // Updated to use useEffect so it only fires once (like componentDidMount)
 function setSubsCardStartDateInState(
-	setStartDate: (s: string) => void,
+	setStartDate: (dateString: DateYMDString) => void,
 	startDate: Date,
 ) {
 	useEffect(() => {
@@ -231,7 +205,7 @@ function PaperCheckoutForm(props: PropTypes) {
 
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,
-		props.country,
+		props.billingAddressIsSame ? props.country : props.billingCountry,
 	);
 
 	const isSubscriptionCard = props.fulfilmentOption === Collection;
@@ -268,25 +242,24 @@ function PaperCheckoutForm(props: PropTypes) {
 	useEffect(() => {
 		// Price of the 'Plus' product that corresponds to the selected product option
 		const plusPrice = includesDigiSub
-			? props.total
-			: getPriceWithDiscount(
-					props.productPrices,
-					props.fulfilmentOption,
-					paperProductsWithDigital[props.productOption],
-			  );
+			? props.discountedPrice
+			: props.correspondingProductOptionPrice;
 
 		// Price of the standard paper-only product that corresponds to the selected product option
 		const paperPrice = includesDigiSub
-			? getPriceWithDiscount(
-					props.productPrices,
-					props.fulfilmentOption,
-					paperProductsWithoutDigital[props.productOption],
-			  )
-			: props.total;
+			? props.correspondingProductOptionPrice
+			: props.discountedPrice;
 
 		const digitalCost = sensiblyGenerateDigiSubPrice(plusPrice, paperPrice);
 		setDigiSubPriceString(
 			getPriceSummary(showPrice(digitalCost, false), props.billingPeriod),
+		);
+
+		sendEventSubscriptionCheckoutStart(
+			props.product,
+			false,
+			props.price,
+			props.billingPeriod,
 		);
 	}, []);
 
@@ -301,7 +274,7 @@ function PaperCheckoutForm(props: PropTypes) {
 					altText=""
 				/>
 			}
-			total={props.total}
+			total={props.discountedPrice}
 			digiSubPrice={expandedPricingText}
 			startDate={formattedStartDate}
 			includesDigiSub={includesDigiSub}
@@ -323,7 +296,7 @@ function PaperCheckoutForm(props: PropTypes) {
 					altText=""
 				/>
 			}
-			total={props.total}
+			total={props.discountedPrice}
 			digiSubPrice={expandedPricingText}
 			includesDigiSub={includesDigiSub}
 			changeSubscription={`${paperSubsUrl(
@@ -349,6 +322,7 @@ function PaperCheckoutForm(props: PropTypes) {
 						<Select
 							css={marginBottom}
 							id="title"
+							data-qm-masking="blocklist"
 							label="Title"
 							optional
 							value={props.title ?? ''}
@@ -376,11 +350,12 @@ function PaperCheckoutForm(props: PropTypes) {
 					</FormSection>
 
 					<FormSection title={deliveryTitle}>
-						<DeliveryAddress />
+						<DeliveryAddress countries={newspaperCountries} />
 						{isHomeDelivery ? (
 							<TextArea
 								css={controlTextAreaResizing}
 								id="delivery-instructions"
+								data-qm-masking="blocklist"
 								label="Delivery instructions"
 								autoComplete="new-password" // Using "new-password" here because "off" isn't working in chrome
 								supporting="Please let us know any details to help us find your property (door colour, any access issues) and the best place to leave your newspaper. For example, 'Front door - red - on Crinan Street, put through letterbox'"
@@ -424,7 +399,7 @@ function PaperCheckoutForm(props: PropTypes) {
 					</FormSection>
 					{!props.billingAddressIsSame ? (
 						<FormSection title="Your billing address">
-							<BillingAddress />
+							<BillingAddress countries={newspaperCountries} />
 						</FormSection>
 					) : null}
 					{isHomeDelivery ? (
@@ -533,7 +508,7 @@ function PaperCheckoutForm(props: PropTypes) {
 							validateForm={props.validateForm}
 							isTestUser={props.isTestUser}
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-							amount={props.total.price}
+							amount={props.discountedPrice.price}
 							billingPeriod={props.billingPeriod}
 							allErrors={
 								[

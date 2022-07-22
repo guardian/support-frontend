@@ -1,18 +1,20 @@
 // ----- Imports ----- //
+
 import * as React from 'react';
 import Content from 'components/content/content';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
+import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
+import Text, { LargeParagraph } from 'components/text/text';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	DigitalPack,
 	sendTrackingEventsOnClick,
 } from 'helpers/productPrice/subscriptions';
-import 'helpers/internationalisation/countryGroup';
-import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
-import Text, { LargeParagraph } from 'components/text/text';
 import ThankYouHero from './components/thankYou/hero';
+
 // ----- Types ----- //
+
 type PropTypes = {
 	countryGroupId: CountryGroupId;
 	marketingConsent: React.ReactNode;
@@ -20,7 +22,8 @@ type PropTypes = {
 };
 
 // ----- Component ----- //
-function ThankYouPendingContent(props: PropTypes) {
+
+function ThankYouPendingContent(props: PropTypes): JSX.Element {
 	return (
 		<div className="thank-you-stage">
 			<ThankYouHero countryGroupId={props.countryGroupId} />
@@ -60,6 +63,8 @@ function ThankYouPendingContent(props: PropTypes) {
 			<Content>{props.marketingConsent}</Content>
 		</div>
 	);
-} // ----- Export ----- //
+}
+
+// ----- Export ----- //
 
 export default ThankYouPendingContent;

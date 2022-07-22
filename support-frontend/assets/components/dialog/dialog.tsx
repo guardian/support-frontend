@@ -28,6 +28,8 @@ function Dialog({
 				styled ? 'styled' : null,
 			])}
 			role="dialog"
+			// Adding a test ID as when the dialog is hidden, it cannot be selected by its ARIA role
+			data-testid="dialog"
 			aria-modal={true}
 			aria-hidden={!open}
 			tabIndex={-1}
@@ -41,6 +43,7 @@ function Dialog({
 			<div
 				className="component-dialog__backdrop"
 				aria-hidden
+				data-testid="dialog-backdrop"
 				onClick={() => !blocking && closeDialog()}
 			/>
 		</div>

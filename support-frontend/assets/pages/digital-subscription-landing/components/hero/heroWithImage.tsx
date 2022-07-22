@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+
 import { ThemeProvider } from '@emotion/react';
 import {
 	buttonThemeBrand,
@@ -32,11 +33,14 @@ function GiftCopy() {
 	);
 }
 
-function HeroWithImage({ promotionCopy, countryGroupId }: PropTypes) {
+function HeroWithImage({
+	promotionCopy,
+	countryGroupId,
+}: PropTypes): JSX.Element {
 	const promoCopy = promotionHTML(promotionCopy.description, {
 		tag: 'div',
 	});
-	const copy = promoCopy || <GiftCopy />;
+	const copy = promoCopy ?? <GiftCopy />;
 	return (
 		<PageTitle title="Give the digital subscription" theme="digital">
 			<CentredContainer>

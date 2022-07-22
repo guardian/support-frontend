@@ -1,9 +1,12 @@
 // ----- Imports ----- //
+
 import { getQueryParameter } from 'helpers/urls/url';
 import type { IsoCountry } from './country';
-import type { CountryGroup, CountryGroupId } from './countryGroup';
+import type { CountryGroupId } from './countryGroup';
 import { countryGroups, fromCountry } from './countryGroup';
+
 // ----- Types ----- //
+
 export type IsoCurrency =
 	| 'GBP'
 	| 'USD'
@@ -25,7 +28,9 @@ export type SpokenCurrency = {
 	singular: string;
 	plural: string;
 };
+
 // ----- Config ----- //
+
 const currencies: Record<IsoCurrency, Currency> = {
 	GBP: {
 		glyph: '£',
@@ -132,15 +137,8 @@ const spokenCurrencies: Record<IsoCurrency, SpokenCurrency> = {
 };
 
 // ----- Functions ----- //
-function fromCountryGroupId(
-	countryGroupId: CountryGroupId,
-): IsoCurrency | null | undefined {
-	const countryGroup: CountryGroup | null | undefined =
-		countryGroups[countryGroupId];
-
-	if (!countryGroup) {
-		return null;
-	}
+function fromCountryGroupId(countryGroupId: CountryGroupId): IsoCurrency {
+	const countryGroup = countryGroups[countryGroupId];
 
 	return countryGroup.currency;
 }
@@ -200,7 +198,7 @@ function fromQueryParameter(): IsoCurrency | null | undefined {
 }
 
 function detect(countryGroup: CountryGroupId): IsoCurrency {
-	return fromQueryParameter() || fromCountryGroupId(countryGroup) || 'GBP';
+	return fromQueryParameter() ?? fromCountryGroupId(countryGroup);
 }
 
 const glyph = (c: IsoCurrency): string => currencies[c].glyph;

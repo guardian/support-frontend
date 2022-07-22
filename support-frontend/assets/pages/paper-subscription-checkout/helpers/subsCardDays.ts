@@ -1,6 +1,5 @@
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
-import 'helpers/productPrice/productOptions';
 
 const additionalDays = [
 	{
@@ -104,21 +103,17 @@ const monthText = [
 ];
 const milsInADay = 1000 * 60 * 60 * 24;
 
-const getFormattedStartDate = (startDate: Date) => {
-	if (startDate) {
-		const machineDateArray = formatMachineDate(startDate).split('-');
-		return `${machineDateArray[2]} ${monthText[startDate.getMonth()]} ${
-			machineDateArray[0]
-		}`;
-	}
-
-	return 'date to be confirmed';
+const getFormattedStartDate = (startDate: Date): string => {
+	const machineDateArray = formatMachineDate(startDate).split('-');
+	return `${machineDateArray[2]} ${monthText[startDate.getMonth()]} ${
+		machineDateArray[0]
+	}`;
 };
 
 const getPaymentStartDate = (
 	date: number,
 	productOption: ActivePaperProducts,
-) => {
+): Date => {
 	const day = new Date(date).getDay();
 	const delay = additionalDays[day][productOption];
 	const delayInMils = delay * milsInADay;

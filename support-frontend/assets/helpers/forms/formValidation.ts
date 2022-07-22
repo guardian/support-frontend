@@ -26,10 +26,10 @@ import type { LocalCurrencyCountry } from '../internationalisation/localCurrency
 export const emailRegexPattern =
 	"^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$";
 
-export const isEmpty: (arg0: string | null) => boolean = (input) =>
+export const isEmpty: (arg0?: string | null) => boolean = (input) =>
 	typeof input === 'undefined' || input == null || input.trim().length === 0;
 
-export const isNotEmpty: (arg0: string | null) => boolean = (input) =>
+export const isNotEmpty: (arg0?: string | null) => boolean = (input) =>
 	!isEmpty(input);
 
 export const isNotTooFarInTheFuture: (arg0: Date) => boolean = (date) => {
@@ -45,6 +45,8 @@ export const isValidEmail: (arg0: string | null) => boolean = (input) =>
 
 export const isValidZipCode = (zipCode: string): boolean =>
 	/^\d{5}(-\d{4})?$/.test(zipCode);
+
+export const isNotNaN = (value: string): boolean => !isNaN(parseFloat(value));
 
 export const isLargerOrEqual: (arg0: number, arg1: string) => boolean = (
 	min,
@@ -85,7 +87,7 @@ export const emailAddressesMatch: (
 export const checkOptionalEmail: (arg0: string | null) => boolean = (input) =>
 	isEmpty(input) || isValidEmail(input);
 
-export const checkGiftStartDate: (arg0: string | null) => boolean = (
+export const checkGiftStartDate: (giftDeliveryDate?: string) => boolean = (
 	rawDate,
 ) => {
 	const date = rawDate ? new Date(rawDate) : null;
@@ -113,6 +115,7 @@ export const amountIsValid = (
 			: config[countryGroupId][contributionType].max;
 	return (
 		isNotEmpty(input) &&
+		isNotNaN(input) &&
 		isLargerOrEqual(min, input) &&
 		isSmallerOrEqual(max, input) &&
 		maxTwoDecimals(input)
@@ -185,7 +188,7 @@ export const checkStateIfApplicable: (
 	return true;
 };
 // ignores all spaces
-export const isValidIban = (iban: string | null): boolean =>
+export const isValidIban = (iban?: string): boolean =>
 	!!iban &&
 	/[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}/.test(
 		iban.replace(/ /g, ''),

@@ -11,12 +11,9 @@
 		margin-right: $gu-h-spacing * 0.5;
 	}
 
-	.component-error-message {
-		background-color: transparent;
-		color: gu-colour(state-error);
-		padding: 0;
-		height: 0;
-	}
+  .component-direct-debit-form__error-message-container {
+    margin-top: 8px;
+  }
 
 	.svg-exclamation-alternate {
 		float: left;
@@ -145,6 +142,13 @@
 
 .component-direct-debit-form__confirmation-guidance {
 	margin-top: 18px;
+}
+
+.component-direct-debit-form__recaptcha {
+	margin-top: 25px;
+	margin-bottom: 5px;
+	// This is the set width of the recaptcha iframe, to fix the helper text below to the same size
+	max-width: 304px;
 }
 
 .component-direct-debit-form__cta-text {

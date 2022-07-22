@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import MarketingConsent from 'components/marketingConsent/marketingConsent';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { getEmail } from 'helpers/subscriptionsForms/formFields';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { Action } from 'helpers/user/userActions';
 
 const mapStateToProps = (state: CheckoutState) => ({
-	confirmOptIn: state.page.marketingConsent.confirmOptIn,
+	confirmOptIn: state.page.checkoutForm.marketingConsent.confirmOptIn,
 	email: getEmail(state),
-	csrf: state.page.csrf,
+	csrf: state.page.checkoutForm.csrf,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -27,7 +27,6 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 				email,
 				dispatch,
 				csrf,
-				'MARKETING_CONSENT',
 			);
 		},
 	};

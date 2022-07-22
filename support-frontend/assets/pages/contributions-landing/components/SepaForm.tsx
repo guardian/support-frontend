@@ -28,8 +28,8 @@ const fieldsContainerStyles = css`
 
 // -- Component -- //
 type SepaFormProps = {
-	iban: string | null;
-	accountHolderName: string | null;
+	iban?: string;
+	accountHolderName?: string;
 	addressStreetName?: string;
 	addressCountry?: Country;
 	updateAddressStreetName: (addressStreetName: string) => void;
@@ -38,6 +38,7 @@ type SepaFormProps = {
 	updateAccountHolderName: (accountHolderName: string) => void;
 	checkoutFormHasBeenSubmitted: boolean;
 };
+
 export function SepaForm({
 	iban,
 	accountHolderName,
@@ -48,7 +49,7 @@ export function SepaForm({
 	updateIban,
 	updateAccountHolderName,
 	checkoutFormHasBeenSubmitted,
-}: SepaFormProps) {
+}: SepaFormProps): JSX.Element {
 	return (
 		<div css={containerStyles}>
 			<h3 css={headerStyles}>Your account details</h3>
@@ -56,6 +57,9 @@ export function SepaForm({
 			<div css={fieldsContainerStyles}>
 				<div>
 					<TextInput
+						id="sepa-account-holder-name-input"
+						data-testid="sepa-account-holder-name-input"
+						data-qm-masking="blocklist"
 						optional={false}
 						hideLabel={false}
 						label="Bank account holder name"
@@ -74,6 +78,9 @@ export function SepaForm({
 
 				<div>
 					<TextInput
+						id="sepa-account-number"
+						data-testid="sepa-account-number"
+						data-qm-masking="blocklist"
 						optional={false}
 						hideLabel={false}
 						label="IBAN"
@@ -92,6 +99,9 @@ export function SepaForm({
 
 				<div>
 					<TextInput
+						id="sepa-address-line-one"
+						data-testid="sepa-address-line-one"
+						data-qm-masking="blocklist"
 						optional={false}
 						hideLabel={false}
 						label="Address Line 1"
@@ -109,6 +119,9 @@ export function SepaForm({
 
 				<div>
 					<Select
+						id="sepa-country"
+						data-testid="sepa-country"
+						data-qm-masking="blocklist"
 						optional={false}
 						hideLabel={false}
 						label="Country"

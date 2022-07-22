@@ -1,15 +1,14 @@
 import { FormSection } from 'components/checkoutForm/checkoutForm';
-import type { Option } from 'helpers/types/option';
-import 'helpers/types/option';
+import CancellationPolicy from 'components/subscriptionCheckouts/cancellationPolicy';
+import DirectDebitTerms from 'components/subscriptionCheckouts/directDebit/directDebitTerms';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
-import DirectDebitTerms from 'components/subscriptionCheckouts/directDebit/directDebitTerms';
-import CancellationPolicy from 'components/subscriptionCheckouts/cancellationPolicy';
+import type { Option } from 'helpers/types/option';
 
 export default function PaymentTerms(props: {
 	paymentMethod: Option<PaymentMethod>;
 	orderIsAGift?: boolean;
-}) {
+}): JSX.Element {
 	return (
 		<FormSection>
 			{!props.orderIsAGift && <CancellationPolicy />}

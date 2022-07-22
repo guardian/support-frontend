@@ -1,36 +1,28 @@
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import 'components/gridImage/gridImage';
 import OrderSummary from 'components/orderSummary/orderSummary';
 import OrderSummaryProduct from 'components/orderSummary/orderSummaryProduct';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { Collection } from 'helpers/productPrice/fulfilmentOptions';
-import {
-	getPriceWithDiscount,
-	getProductPrice,
-} from 'helpers/productPrice/paperProductPrices';
-import { paperProductsWithoutDigital } from 'helpers/productPrice/productOptions';
 import type {
 	ActivePaperProducts,
 	ProductOptions,
 } from 'helpers/productPrice/productOptions';
-import type {
-	ProductPrice,
-	ProductPrices,
-} from 'helpers/productPrice/productPrices';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import {
+	selectCorrespondingProductOptionPrice,
+	selectPriceForProduct,
+} from 'helpers/redux/checkout/product/selectors/productPrice';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import {
 	getOrderSummaryTitle,
 	getPriceSummary,
 } from 'pages/paper-subscription-checkout/helpers/orderSummaryText';
 
-type PropTypes = {
-	fulfilmentOption: FulfilmentOptions;
-	productOption: ActivePaperProducts;
-	billingPeriod: BillingPeriod;
-	productPrices: ProductPrices;
+export type OrderSummaryProps = {
 	digiSubPrice: string;
 	image: JSX.Element | null;
 	includesDigiSub: boolean;
@@ -52,14 +44,22 @@ function getMobileSummaryTitle(
 	);
 }
 
-function mapStateToProps(state: WithDeliveryCheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	return {
-		fulfilmentOption: state.page.checkout.fulfilmentOption,
-		productOption: state.page.checkout.productOption as ActivePaperProducts,
-		billingPeriod: state.page.checkout.billingPeriod,
-		productPrices: state.page.checkout.productPrices,
+		fulfilmentOption: state.page.checkoutForm.product.fulfilmentOption,
+		productOption: state.page.checkoutForm.product
+			.productOption as ActivePaperProducts,
+		billingPeriod: state.page.checkoutForm.product.billingPeriod,
+		productPrices: state.page.checkoutForm.product.productPrices,
+		priceWithoutPromotions: selectPriceForProduct(state),
+		correspondingProductOptionPrice:
+			selectCorrespondingProductOptionPrice(state),
 	};
 }
+
+const connector = connect(mapStateToProps);
+
+type PropTypes = ConnectedProps<typeof connector> & OrderSummaryProps;
 
 function PaperOrderSummary(props: PropTypes) {
 	const rawTotal = getPriceSummary(
@@ -73,27 +73,16 @@ function PaperOrderSummary(props: PropTypes) {
 
 	// If the user has added a digi sub, we need to know the price of their selected base paper product separately
 	const basePaperPrice = props.includesDigiSub
-		? getPriceWithDiscount(
-				props.productPrices,
-				props.fulfilmentOption,
-				paperProductsWithoutDigital[props.productOption],
-		  )
+		? props.correspondingProductOptionPrice
 		: props.total;
 
-	// This allows us to get the price without promotion, so we can say what the price will revert to
-	const paperWithoutPromo = getProductPrice(
-		props.productPrices,
-		props.fulfilmentOption,
-		props.productOption,
-	);
-
-	const activePromo = getAppliedPromo(paperWithoutPromo.promotions);
+	const activePromo = getAppliedPromo(props.priceWithoutPromotions.promotions);
 	const monthsDiscounted = activePromo?.numberOfDiscountedPeriods;
 
 	const promotionPriceString =
 		activePromo && monthsDiscounted
 			? ` for ${monthsDiscounted} months, then ${showPrice(
-					paperWithoutPromo,
+					props.priceWithoutPromotions,
 					false,
 			  )} per month`
 			: '';
@@ -176,4 +165,4 @@ PaperOrderSummary.defaultProps = {
 	startDate: '',
 };
 
-export default connect(mapStateToProps)(PaperOrderSummary);
+export default connector(PaperOrderSummary);

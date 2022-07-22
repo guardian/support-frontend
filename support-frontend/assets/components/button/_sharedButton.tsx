@@ -38,6 +38,7 @@ type SharedButtonPropTypes = {
 	getRef?: (arg0: Element | null | undefined) => void;
 	modifierClasses: string[];
 	postDeploymentTestID?: string;
+	onClick?: () => void;
 };
 type PropTypes = SharedButtonPropTypes & {
 	element: 'a' | 'button' | 'div';

@@ -13,8 +13,9 @@ env:
 jobs:
   support_frontend_build:
     if: >-
-      github.event.pull_request.head.repo.owner.login == 'guardian' ||
-      github.event_name == 'push'
+      (github.actor != 'dependabot[bot]') &&
+        (github.event.pull_request.head.repo.owner.login == 'guardian' ||
+          github.event_name == 'push')
 
     # Required by actions-assume-aws-role
     permissions:
@@ -35,7 +36,9 @@ jobs:
         uses: guardian/actions-setup-node@v2.4.1
         with:
           cache: 'yarn'
-          cache-dependency-path: support-frontend/yarn.lock
+          cache-dependency-path: |
+            support-frontend/yarn.lock
+            cdk/yarn.lock
 
       - name: Install
         run: yarn
@@ -48,14 +51,6 @@ jobs:
       - name: Build assets
         run: yarn run build-prod
         working-directory: support-frontend
-
-      # The CDK build requires node 16 and currently the rest of the build is on v12
-      - name: Setup Node for CDK
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: cdk/yarn.lock
 
       - name: Build CFN from CDK
         run: ./script/ci
@@ -73,6 +68,7 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
+
       - uses: actions/cache@v2
         with:
           path: |

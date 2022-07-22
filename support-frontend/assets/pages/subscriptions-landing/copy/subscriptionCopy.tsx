@@ -14,6 +14,7 @@ import {
 	AUDCountries,
 	EURCountries,
 	GBPCountries,
+	NZDCountries,
 } from 'helpers/internationalisation/countryGroup';
 import {
 	currencies,
@@ -42,13 +43,16 @@ import {
 	paperSubsUrl,
 } from 'helpers/urls/routes';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
+
 // types
 export type ProductButton = {
 	ctaButtonText: string;
 	link: string;
-	analyticsTracking: (...args: any[]) => any;
+	analyticsTracking: () => void;
 	hierarchy?: string;
+	modifierClasses?: string;
 };
+
 export type ProductCopy = {
 	title: string;
 	subtitle: Option<string>;
@@ -82,7 +86,7 @@ function getGuardianWeeklyOfferCopy(
 		return undefined;
 	}
 
-	const currency = glyph(fromCountryGroupId(countryGroupId) ?? 'GBP');
+	const currency = glyph(fromCountryGroupId(countryGroupId));
 	return `6 issues for ${currency}6`;
 }
 
@@ -259,7 +263,9 @@ const getSubscriptionCopy = (
 			// paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
 			premiumApp(countryGroupId),
 		];
-	} else if (countryGroupId === EURCountries) {
+	} else if (
+		[EURCountries, AUDCountries, NZDCountries].includes(countryGroupId)
+	) {
 		return [
 			guardianWeekly(
 				countryGroupId,

@@ -1,11 +1,16 @@
 // ----- Imports ----- //
+
 import { pollUntilPromise } from 'helpers/async/promise';
+
 // ----- Tests ----- //
+
 describe('promise', () => {
 	describe('polling', () => {
-		it('return a successful action', (done, fail) => {
+		it('return a successful action', async () => {
+			expect.assertions(1);
+
 			let n = 0;
-			pollUntilPromise(
+			await pollUntilPromise(
 				2,
 				50,
 				() => {
@@ -13,9 +18,9 @@ describe('promise', () => {
 					return Promise.resolve(n);
 				},
 				() => n <= 1,
-			)
-				.then(() => expect(n).toEqual(2))
-				.then(done, fail);
+			);
+
+			expect(n).toEqual(2);
 		});
 	});
 });

@@ -5,8 +5,10 @@
 import { gridSrcset, gridUrl } from 'helpers/images/theGrid';
 import type { ImageId, ImageType } from 'helpers/images/theGrid';
 import { ascending, classNameWithModifiers } from 'helpers/utilities/utilities';
+
 // ----- Constants ----- //
 const MIN_IMG_WIDTH = 300;
+
 // ----- Types ----- //
 export type GridImg = {
 	gridId: ImageId;
@@ -16,8 +18,10 @@ export type GridImg = {
 	imgType?: ImageType;
 	classModifiers?: Array<string | null | undefined>;
 };
-type PropTypes = GridImg; // ----- Component ----- //
 
+type PropTypes = GridImg;
+
+// ----- Component ----- //
 export default function GridImage(props: PropTypes): JSX.Element | null {
 	if (props.srcSizes.length < 1) {
 		return null;
@@ -39,8 +43,9 @@ export default function GridImage(props: PropTypes): JSX.Element | null {
 			alt={props.altText}
 		/>
 	);
-} // ----- Default Props ----- //
+}
 
+// ----- Default Props ----- //
 GridImage.defaultProps = {
 	imgType: 'jpg',
 	altText: '',

@@ -2,32 +2,25 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source-foundations';
 import { TextInput } from '@guardian/source-react-components';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type {
-	ContributionAmounts,
-	ContributionType,
-	OtherAmounts,
-	SelectedAmounts,
-} from 'helpers/contributions';
 import { config } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import { amountIsValid } from 'helpers/forms/formValidation';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
-import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
-	selectAmount,
-	updateOtherAmount,
-} from '../contributionsLandingActions';
+	setOtherAmount,
+	setSelectedAmount,
+} from 'helpers/redux/checkout/product/actions';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendEventContributionAmountUpdated } from 'helpers/tracking/quantumMetric';
+import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { State } from '../contributionsLandingReducer';
-import '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
 
 const otherAmoutInputCss = css`
@@ -42,36 +35,13 @@ const otherAmoutGlphCss = css`
 	padding-left: ${space[2]}px;
 `;
 
-// ----- Types ----- //
-type PropTypes = {
-	countryGroupId: CountryGroupId;
-	currency: IsoCurrency;
-	contributionType: ContributionType;
-	amounts: ContributionAmounts;
-	selectedAmounts: SelectedAmounts;
-	selectAmount: (
-		amount: number | 'other',
-		countryGroupId: CountryGroupId,
-		contributionType: ContributionType,
-	) => () => void;
-	otherAmounts: OtherAmounts;
-	updateOtherAmount: (
-		amount: string,
-		contributionType: ContributionType,
-	) => void;
-	checkoutFormHasBeenSubmitted: boolean;
-	stripePaymentRequestButtonClicked: boolean;
-	localCurrencyCountry: LocalCurrencyCountry | null | undefined;
-	useLocalCurrency: boolean;
-};
-
 const mapStateToProps = (state: State) => ({
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	currency: state.common.internationalisation.currencyId,
-	contributionType: state.page.form.contributionType,
+	contributionType: getContributionType(state),
 	amounts: state.common.amounts,
-	selectedAmounts: state.page.form.selectedAmounts,
-	otherAmounts: state.page.form.formData.otherAmounts,
+	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
+	otherAmounts: state.page.checkoutForm.product.otherAmounts,
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 	stripePaymentRequestButtonClicked:
@@ -83,24 +53,14 @@ const mapStateToProps = (state: State) => ({
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- temp solution
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
-	selectAmount:
-		(
-			amount: number | 'other',
-			countryGroupId: CountryGroupId,
-			contributionType: ContributionType,
-		) =>
-		() => {
-			trackComponentClick(
-				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`,
-			);
-			dispatch(selectAmount(amount, contributionType));
-		},
-	updateOtherAmount: (amount: string, contributionType: ContributionType) => {
-		dispatch(updateOtherAmount(amount, contributionType));
-	},
-});
+const mapDispatchToProps = {
+	setSelectedAmount,
+	setOtherAmount,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropTypes = ConnectedProps<typeof connector>;
 
 function ContributionAmount(props: PropTypes) {
 	const { amounts: validAmounts, defaultAmount } =
@@ -158,14 +118,13 @@ function ContributionAmount(props: PropTypes) {
 			</legend>
 
 			<ContributionAmountChoices
-				countryGroupId={props.countryGroupId}
 				currency={props.currency}
 				contributionType={props.contributionType}
 				validAmounts={validAmounts}
 				defaultAmount={defaultAmount}
 				showOther={showOther}
 				selectedAmounts={props.selectedAmounts}
-				selectAmount={props.selectAmount}
+				selectAmount={props.setSelectedAmount}
 				shouldShowFrequencyButtons={props.contributionType !== 'ONE_OFF'}
 			/>
 
@@ -182,17 +141,24 @@ function ContributionAmount(props: PropTypes) {
 						label={`Other amount`}
 						value={`${otherAmount ?? ''}`}
 						onChange={(e) =>
-							props.updateOtherAmount(
-								e.target.value.replace(/[^0-9]/g, ''),
-								props.contributionType,
-							)
+							props.setOtherAmount({
+								amount: e.target.value,
+								contributionType: props.contributionType,
+							})
 						}
-						onBlur={() =>
-							!!otherAmount &&
-							trackComponentClick(
-								`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`,
-							)
-						}
+						onBlur={() => {
+							if (otherAmount) {
+								trackComponentClick(
+									`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`,
+								);
+
+								sendEventContributionAmountUpdated(
+									otherAmount,
+									props.contributionType,
+									props.currency,
+								);
+							}
+						}}
 						error={otherAmountErrorMessage}
 						autoComplete="off"
 						autoFocus
@@ -205,4 +171,4 @@ function ContributionAmount(props: PropTypes) {
 	);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContributionAmount);
+export default connector(ContributionAmount);

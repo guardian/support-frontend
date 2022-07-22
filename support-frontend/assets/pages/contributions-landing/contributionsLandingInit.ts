@@ -19,12 +19,17 @@ import {
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
+import { PayPal } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
+import {
+	setAllAmounts,
+	setOtherAmount,
+	setProductType,
+} from 'helpers/redux/checkout/product/actions';
 import {
 	setContributionTypes,
 	setExistingPaymentMethods,
@@ -40,12 +45,8 @@ import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
 import {
 	getUserType,
-	loadAmazonPaySdk,
 	loadPayPalExpressSdk,
-	selectAmounts,
 	setUserTypeFromIdentityResponse,
-	updateContributionTypeAndPaymentMethod,
-	updateOtherAmount,
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
 	updateUserFormData,
@@ -199,14 +200,19 @@ function selectInitialAmounts(
 		amountForSelectedContributionType();
 
 	dispatch(
-		selectAmounts({
+		setAllAmounts({
 			...defaults,
 			[selectedContributionType]: selectedAmount,
 		}),
 	);
 
 	if (otherAmount) {
-		dispatch(updateOtherAmount(`${otherAmount}`, selectedContributionType));
+		dispatch(
+			setOtherAmount({
+				amount: `${otherAmount}`,
+				contributionType: selectedContributionType,
+			}),
+		);
 	}
 }
 
@@ -241,19 +247,12 @@ function selectInitialContributionTypeAndPaymentMethod(
 		countryGroupId,
 		switches,
 	);
-	dispatch(
-		updateContributionTypeAndPaymentMethod(contributionType, paymentMethod),
-	);
+	dispatch(setProductType(contributionType));
+	dispatch(updatePaymentMethod(paymentMethod));
 
 	switch (paymentMethod) {
 		case PayPal:
 			dispatch(loadPayPalExpressSdk(contributionType));
-			break;
-
-		case AmazonPay:
-			dispatch(
-				loadAmazonPaySdk(countryGroupId, state.page.user.isTestUser ?? false),
-			);
 			break;
 
 		default:

@@ -16,8 +16,8 @@ type ActionBodyProps = {
 	children: React.ReactNode;
 };
 
-const ActionBody: React.FC<ActionBodyProps> = ({
-	children,
-}: ActionBodyProps) => <div css={bodyContainer}>{children}</div>;
+function ActionBody({ children }: ActionBodyProps): JSX.Element {
+	return <div css={bodyContainer}>{children}</div>;
+}
 
 export default ActionBody;

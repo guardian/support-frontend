@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { tabButton, tabList, tabPanel } from './tabsStyles';
 
 type TabElement = 'a' | 'button';
-type TabProps = {
+export type TabProps = {
 	id: string;
 	text: string;
 	href?: string;

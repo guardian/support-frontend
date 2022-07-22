@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import {
 	trackComponentClick,
 	trackComponentLoad,
@@ -41,22 +41,16 @@ const mapStateToProps = () => ({});
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
 	return {
-		subscribeToNewsLetter: (email: string, csrf: Csrf) => {
-			sendMarketingPreferencesToIdentity(
-				true,
-				email,
-				dispatch,
-				csrf,
-				'MARKETING_CONSENT',
-			);
+		subscribeToNewsLetter: (email: string, csrf: CsrfState) => {
+			sendMarketingPreferencesToIdentity(true, email, dispatch, csrf);
 		},
 	};
 }
 
 type ContributionThankYouMarketingConsentProps = {
 	email: string;
-	csrf: Csrf;
-	subscribeToNewsLetter: (email: string, csrf: Csrf) => void;
+	csrf: CsrfState;
+	subscribeToNewsLetter: (email: string, csrf: CsrfState) => void;
 };
 
 function ContributionThankYouMarketingConsent({

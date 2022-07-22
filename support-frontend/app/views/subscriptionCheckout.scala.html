@@ -4,7 +4,7 @@
 @import com.gu.identity.model.{User => IdUser}
 @import com.gu.support.config._
 @import helper.CSRF
-@import com.gu.support.pricing.ProductPrices
+@import services.pricing.ProductPrices
 @import views.ViewHelpers._
 @import io.circe.syntax._
 @import com.gu.support.encoding.CustomCodecs._
@@ -64,7 +64,7 @@
         uat: "@uatPayPalConfig.payPalEnvironment"
       };
 
-      window.guardian.checkoutPostcodeLookup = "@settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.isOn"
+      window.guardian.checkoutPostcodeLookup = @settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.isOn
 
       window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
 

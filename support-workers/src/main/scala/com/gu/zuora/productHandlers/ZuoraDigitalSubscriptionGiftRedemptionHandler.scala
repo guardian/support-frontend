@@ -83,7 +83,6 @@ class ZuoraUpdater(
     )
     (dates, newTermLength) = calculatedDates
     _ <- updateGiftIdentityIdCall(newTermLength)
-    _ <- zuoraService.setupRevenueRecognition(fullGiftSubscription, dates)
   } yield (ZuoraSubscriptionNumber(fullGiftSubscription.subscriptionNumber), dates, productRatePlan.billingPeriod)
 
   private def calculateNewTermLength(productRatePlan: ProductRatePlan[Product], customerAcceptanceDate: LocalDate) = {

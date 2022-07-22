@@ -1,10 +1,15 @@
 import type { Dispatch } from 'redux';
-import type { FormField as AddressFormField } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import {
+	setBillingAddressFormErrors,
+	setDeliveryAddressFormErrors,
+} from 'helpers/redux/checkout/address/actions';
+import type { AddressFormField } from 'helpers/redux/checkout/address/state';
 import {
 	applyBillingAddressRules,
 	applyDeliveryAddressRules,
-	setFormErrorsFor as setAddressFormErrorsFor,
-} from 'components/subscriptionCheckouts/address/addressFieldsStore';
+} from 'helpers/redux/checkout/address/validation';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { setFormErrors } from 'helpers/subscriptionsForms/formActions';
 import type {
@@ -12,15 +17,7 @@ import type {
 	FormFields,
 } from 'helpers/subscriptionsForms/formFields';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type {
-	CheckoutState,
-	WithDeliveryCheckoutState,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import {
-	getBillingAddressFields,
-	getDeliveryAddressFields,
-	getFulfilmentOption,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { getFulfilmentOption } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { applyCheckoutRules, applyDeliveryRules } from './rules';
 
@@ -30,7 +27,7 @@ type Error<T> = {
 };
 type AnyErrorType = Error<AddressFormField> | Error<FormField>;
 
-function checkoutValidation(state: CheckoutState): AnyErrorType[] {
+function checkoutValidation(state: SubscriptionsState): AnyErrorType[] {
 	return [
 		{
 			errors: applyCheckoutRules(getFormFields(state)),
@@ -38,10 +35,9 @@ function checkoutValidation(state: CheckoutState): AnyErrorType[] {
 		} as Error<FormField>,
 		{
 			errors: applyBillingAddressRules(
-				getBillingAddressFields(state),
-				'billing',
+				state.page.checkoutForm.billingAddress.fields,
 			),
-			errorAction: setAddressFormErrorsFor('billing'),
+			errorAction: setBillingAddressFormErrors,
 		} as Error<AddressFormField>,
 	].filter(({ errors }) => errors.length > 0);
 }
@@ -49,9 +45,7 @@ function checkoutValidation(state: CheckoutState): AnyErrorType[] {
 const shouldValidateBillingAddress = (fields: FormFields) =>
 	!fields.billingAddressIsSame;
 
-function withDeliveryValidation(
-	state: WithDeliveryCheckoutState,
-): AnyErrorType[] {
+function withDeliveryValidation(state: SubscriptionsState): AnyErrorType[] {
 	const formFields = getFormFields(state);
 	return [
 		{
@@ -61,19 +55,17 @@ function withDeliveryValidation(
 		{
 			errors: applyDeliveryAddressRules(
 				getFulfilmentOption(state),
-				getDeliveryAddressFields(state),
-				'delivery',
+				state.page.checkoutForm.deliveryAddress.fields,
 			),
-			errorAction: setAddressFormErrorsFor('delivery'),
+			errorAction: setDeliveryAddressFormErrors,
 		} as Error<AddressFormField>,
 		...(shouldValidateBillingAddress(formFields)
 			? [
 					{
 						errors: applyBillingAddressRules(
-							getBillingAddressFields(state),
-							'billing',
+							state.page.checkoutForm.billingAddress.fields,
 						),
-						errorAction: setAddressFormErrorsFor('billing'),
+						errorAction: setBillingAddressFormErrors,
 					} as Error<AddressFormField>,
 			  ]
 			: []),
@@ -88,7 +80,7 @@ function dispatchErrors(dispatch: Dispatch<Action>, allErrors: AnyErrorType[]) {
 
 function validateCheckoutForm(
 	dispatch: Dispatch<Action>,
-	state: CheckoutState,
+	state: SubscriptionsState,
 ): boolean {
 	const allErrors = checkoutValidation(state);
 	dispatchErrors(dispatch, allErrors);
@@ -97,17 +89,21 @@ function validateCheckoutForm(
 
 function validateWithDeliveryForm(
 	dispatch: Dispatch<Action>,
-	state: WithDeliveryCheckoutState,
+	state: SubscriptionsState,
 ): boolean {
 	const allErrors = withDeliveryValidation(state);
 	dispatchErrors(dispatch, allErrors);
 	return allErrors.length === 0;
 }
 
-const checkoutFormIsValid = (state: CheckoutState) =>
-	checkoutValidation(state).length === 0;
+const checkoutFormIsValid = (state: SubscriptionsState) => {
+	if (state.page.checkoutForm.product.productType === DigitalPack) {
+		return checkoutValidation(state).length === 0;
+	}
+	return withDeliveryValidation(state).length === 0;
+};
 
-const withDeliveryFormIsValid = (state: WithDeliveryCheckoutState) =>
+const withDeliveryFormIsValid = (state: SubscriptionsState) =>
 	withDeliveryValidation(state).length === 0;
 
 export {

@@ -1,7 +1,5 @@
 // ----- Imports ----- //
 import type { Dispatch } from 'redux';
-import 'redux';
-import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import type {
 	PaymentAuthorisation,
 	PaymentResult,
@@ -34,6 +32,10 @@ import {
 	isPhysicalProduct,
 	Paper,
 } from 'helpers/productPrice/subscriptions';
+import type { GiftingState } from 'helpers/redux/checkout/giftingState/state';
+import type { DirectDebitState } from 'helpers/redux/checkout/payment/directDebit/state';
+import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
 	setFormSubmitted,
@@ -44,16 +46,9 @@ import {
 	validateCheckoutForm,
 	validateWithDeliveryForm,
 } from 'helpers/subscriptionsForms/formValidation';
-import type {
-	AnyCheckoutState,
-	CheckoutState,
-	WithDeliveryCheckoutState,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import {
-	getBillingAddressFields,
-	getDeliveryAddressFields,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { AnyCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
+import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
@@ -64,35 +59,34 @@ type Addresses = {
 };
 
 // ----- Functions ----- //
-function getAddresses(state: AnyCheckoutState): Addresses {
-	if (isPhysicalProduct(state.page.checkout.product)) {
-		const deliveryAddressFields = getDeliveryAddressFields(
-			state as any as WithDeliveryCheckoutState,
-		);
+function getAddresses(state: SubscriptionsState): Addresses {
+	const product = getSubscriptionType(state);
+	if (isPhysicalProduct(product)) {
+		const deliveryAddressFields =
+			state.page.checkoutForm.deliveryAddress.fields;
+
+		const billingAddressFields = state.page.checkoutForm.billingAddress.fields;
+
 		return {
 			deliveryAddress: deliveryAddressFields,
 			billingAddress: state.page.checkout.billingAddressIsSame
 				? deliveryAddressFields
-				: getBillingAddressFields(state),
+				: billingAddressFields,
 		};
 	}
 
 	return {
-		billingAddress: getBillingAddressFields(state),
+		billingAddress: state.page.checkoutForm.billingAddress.fields,
 	};
 }
 
 const getProduct = (
-	state: AnyCheckoutState,
+	state: SubscriptionsState,
 	currencyId?: Option<IsoCurrency>,
 ): SubscriptionProductFields => {
-	const {
-		billingPeriod,
-		fulfilmentOption,
-		productOption,
-		orderIsAGift,
-		product,
-	} = state.page.checkout;
+	const { billingPeriod, fulfilmentOption, productOption, orderIsAGift } =
+		state.page.checkoutForm.product;
+	const product = getSubscriptionType(state);
 	const readerType = orderIsAGift ? Gift : Direct;
 
 	if (product === DigitalPack) {
@@ -126,54 +120,41 @@ const getPromoCode = (promotions?: Promotion[]) => {
 	return promotion ? promotion.promoCode : null;
 };
 
+function getGiftRecipient(giftingState: GiftingState) {
+	const { title, firstName, lastName, email, giftMessage, giftDeliveryDate } =
+		giftingState;
+	if (firstName && lastName) {
+		return {
+			giftRecipient: {
+				title,
+				firstName,
+				lastName,
+				email,
+				message: giftMessage,
+				deliveryDate: giftDeliveryDate,
+			},
+		};
+	}
+	return {};
+}
+
 function buildRegularPaymentRequest(
-	state: AnyCheckoutState,
+	state: SubscriptionsState,
 	paymentAuthorisation: PaymentAuthorisation,
+	addresses: Addresses,
+	promotions?: Promotion[],
 	currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
 	const { title, firstName, lastName, email, telephone } =
 		state.page.checkoutForm.personalDetails;
-	const {
-		titleGiftRecipient,
-		firstNameGiftRecipient,
-		lastNameGiftRecipient,
-		emailGiftRecipient,
-		giftMessage,
-		giftDeliveryDate,
-		billingPeriod,
-		fulfilmentOption,
-		productOption,
-		productPrices,
-		deliveryInstructions,
-		csrUsername,
-		salesforceCaseId,
-		debugInfo,
-	} = state.page.checkout;
-	const addresses = getAddresses(state);
-	const price = getProductPrice(
-		productPrices,
-		addresses.billingAddress.country,
-		billingPeriod,
-		fulfilmentOption,
-		productOption,
-	);
+	const { deliveryInstructions, csrUsername, salesforceCaseId, debugInfo } =
+		state.page.checkout;
 	const product = getProduct(state, currencyId);
 	const paymentFields =
 		regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
-	const promoCode = getPromoCode(price.promotions);
-	const giftRecipient =
-		!!firstNameGiftRecipient && !!lastNameGiftRecipient
-			? {
-					giftRecipient: {
-						title: titleGiftRecipient,
-						firstName: firstNameGiftRecipient,
-						lastName: lastNameGiftRecipient,
-						email: emailGiftRecipient,
-						message: giftMessage,
-						deliveryDate: giftDeliveryDate,
-					},
-			  }
-			: {};
+	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
+	const promoCode = getPromoCode(promotions);
+	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
 	return {
 		title,
 		firstName: firstName.trim(),
@@ -183,8 +164,11 @@ function buildRegularPaymentRequest(
 		...giftRecipient,
 		telephoneNumber: telephone,
 		product,
-		firstDeliveryDate: state.page.checkout.startDate,
-		paymentFields,
+		firstDeliveryDate: state.page.checkoutForm.product.startDate,
+		paymentFields: {
+			...paymentFields,
+			recaptchaToken,
+		},
 		ophanIds: getOphanIds(),
 		referrerAcquisitionData: state.common.referrerAcquisitionData,
 		supportAbTests: getSupportAbTests(state.common.abParticipations),
@@ -199,25 +183,50 @@ function buildRegularPaymentRequest(
 function onPaymentAuthorised(
 	paymentAuthorisation: PaymentAuthorisation,
 	dispatch: Dispatch<Action>,
-	state: AnyCheckoutState,
+	state: SubscriptionsState,
 	currencyId?: Option<IsoCurrency>,
-) {
+): void {
+	const {
+		billingPeriod,
+		fulfilmentOption,
+		orderIsAGift,
+		productOption,
+		productPrices,
+	} = state.page.checkoutForm.product;
+	const productType = getSubscriptionType(state);
+	const { paymentMethod } = state.page.checkout;
+	const { csrf } = state.page.checkoutForm;
+	const { abParticipations } = state.common;
+	const addresses = getAddresses(state);
+	const productPrice = getProductPrice(
+		productPrices,
+		addresses.billingAddress.country,
+		billingPeriod,
+		fulfilmentOption,
+		productOption,
+	);
 	const data = buildRegularPaymentRequest(
 		state,
 		paymentAuthorisation,
+		addresses,
+		productPrice.promotions,
 		currencyId,
 	);
-	const { product, paymentMethod } = state.page.checkout;
-	const { csrf } = state.page;
-	const { abParticipations } = state.common;
 
 	const handleSubscribeResult = (result: PaymentResult) => {
 		if (result.paymentStatus === 'success') {
 			if (result.subscriptionCreationPending) {
-				dispatch(setStage('thankyou-pending', product, paymentMethod));
+				dispatch(setStage('thankyou-pending', productType, paymentMethod));
 			} else {
-				dispatch(setStage('thankyou', product, paymentMethod));
+				dispatch(setStage('thankyou', productType, paymentMethod));
 			}
+			// Notify Quantum Metric of successfull subscription conversion
+			sendEventSubscriptionCheckoutConversion(
+				productType,
+				!!orderIsAGift,
+				productPrice,
+				billingPeriod,
+			);
 		} else if (result.error) {
 			dispatch(setSubmissionError(result.error));
 		}
@@ -273,7 +282,10 @@ function showPaymentMethod(
 			break;
 
 		case DirectDebit:
-			directDebitAuthorised(onAuthorised, state.page.directDebit);
+			directDebitAuthorised(
+				onAuthorised,
+				state.page.checkoutForm.payment.directDebit,
+			);
 			break;
 
 		case PayPal:
@@ -294,7 +306,7 @@ function trackSubmitAttempt(
 	paymentMethod: PaymentMethod | null | undefined,
 	productType: SubscriptionProduct,
 	productOption: ProductOptions,
-) {
+): void {
 	const componentId =
 		productOption === NoProductOptions
 			? `subs-checkout-submit-${productType}-${paymentMethod ?? ''}`
@@ -317,30 +329,30 @@ function getPricingCountry(product: SubscriptionProduct, addresses: Addresses) {
 	return addresses.billingAddress.country;
 }
 
-function submitForm(dispatch: Dispatch<Action>, state: AnyCheckoutState) {
-	const { paymentMethod, product, productOption } = state.page.checkout;
+function submitForm(dispatch: Dispatch<Action>, state: SubscriptionsState) {
+	const { paymentMethod } = state.page.checkout;
+	const { productOption, billingPeriod, fulfilmentOption, productPrices } =
+		state.page.checkoutForm.product;
+	const productType = getSubscriptionType(state);
 	const addresses = getAddresses(state);
-	const pricingCountry = getPricingCountry(product, addresses);
-	trackSubmitAttempt(paymentMethod, product, productOption);
+	const pricingCountry = getPricingCountry(productType, addresses);
+	trackSubmitAttempt(paymentMethod, productType, productOption);
 	let priceDetails = finalPrice(
-		state.page.checkout.productPrices,
+		productPrices,
 		pricingCountry,
-		state.page.checkout.billingPeriod,
-		state.page.checkout.fulfilmentOption,
-		state.page.checkout.productOption,
+		billingPeriod,
+		fulfilmentOption,
+		productOption,
 	);
 
 	// This is a small hack to make sure we show quarterly pricing until we have promos tooling
-	if (
-		state.page.checkout.billingPeriod === Quarterly &&
-		priceDetails.price === 6
-	) {
+	if (billingPeriod === Quarterly && priceDetails.price === 6) {
 		priceDetails = getProductPrice(
-			state.page.checkout.productPrices,
+			productPrices,
 			pricingCountry,
-			state.page.checkout.billingPeriod,
-			state.page.checkout.fulfilmentOption,
-			state.page.checkout.productOption,
+			billingPeriod,
+			fulfilmentOption,
+			productOption,
 		);
 	}
 
@@ -356,14 +368,17 @@ function submitForm(dispatch: Dispatch<Action>, state: AnyCheckoutState) {
 
 function submitWithDeliveryForm(
 	dispatch: Dispatch<Action>,
-	state: WithDeliveryCheckoutState,
-) {
+	state: SubscriptionsState,
+): void {
 	if (validateWithDeliveryForm(dispatch, state)) {
 		submitForm(dispatch, state);
 	}
 }
 
-function submitCheckoutForm(dispatch: Dispatch<Action>, state: CheckoutState) {
+function submitCheckoutForm(
+	dispatch: Dispatch<Action>,
+	state: SubscriptionsState,
+): void {
 	if (validateCheckoutForm(dispatch, state)) {
 		submitForm(dispatch, state);
 	}
@@ -372,7 +387,6 @@ function submitCheckoutForm(dispatch: Dispatch<Action>, state: CheckoutState) {
 // ----- Export ----- //
 export {
 	onPaymentAuthorised,
-	buildRegularPaymentRequest,
 	showPaymentMethod,
 	submitCheckoutForm,
 	submitWithDeliveryForm,

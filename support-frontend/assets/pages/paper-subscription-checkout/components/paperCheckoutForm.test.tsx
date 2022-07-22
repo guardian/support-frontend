@@ -1,59 +1,41 @@
 import '__mocks__/stripeMock';
-import type { Store } from '@reduxjs/toolkit';
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
+import {
+	combineReducers,
+	configureStore,
+	createListenerMiddleware,
+} from '@reduxjs/toolkit';
+import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { paperProducts } from '__mocks__/productInfoMocks';
-import { Monthly } from 'helpers/productPrice/billingPeriods';
-import { Paper } from 'helpers/productPrice/subscriptions';
+import { renderWithStore } from '__test-utils__/render';
+import { addAddressSideEffects } from 'helpers/redux/checkout/address/sideEffects';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
+import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsStore';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { formatMachineDate } from 'helpers/utilities/dateConversions';
+import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import PaperCheckoutForm from './paperCheckoutForm';
 
-const pageReducer = (initialState: WithDeliveryCheckoutState) =>
-	createWithDeliveryCheckoutReducer(
-		initialState.common.internationalisation.countryId,
-		Paper,
-		Monthly,
-		formatMachineDate(new Date()),
-		initialState.page.checkout.productOption,
-		initialState.page.checkout.fulfilmentOption,
-	);
-
 function setUpStore(initialState: WithDeliveryCheckoutState) {
-	combineReducers;
+	const listenerMiddleware = createListenerMiddleware();
+
 	const store = configureStore({
 		reducer: combineReducers({
-			page: pageReducer(initialState),
+			page: createReducer(),
 			common: commonReducer,
 		}),
-		// @ts-expect-error - some state properties ignored for testing
 		preloadedState: initialState,
+		middleware: (getDefaultMiddleware) =>
+			getDefaultMiddleware().prepend(listenerMiddleware.middleware),
 	});
+
+	addAddressSideEffects(
+		listenerMiddleware.startListening as SubscriptionsStartListening,
+	);
+
 	store.dispatch(setInitialCommonState(initialState.common));
+
 	return store;
-}
-
-function renderWithStore(
-	component: React.ReactElement,
-	{
-		initialState,
-		store = initialState ? setUpStore(initialState) : undefined,
-		...renderOptions
-	}: { initialState?: WithDeliveryCheckoutState; store?: Store } = {},
-) {
-	function Wrapper({ children }: { children?: React.ReactNode }) {
-		return <>{store && <Provider store={store}>{children}</Provider>}</>;
-	}
-
-	return render(component, {
-		wrapper: Wrapper,
-		...renderOptions,
-	});
 }
 
 describe('Newspaper checkout form', () => {
@@ -64,25 +46,25 @@ describe('Newspaper checkout form', () => {
 	beforeEach(() => {
 		initialState = {
 			page: {
-				checkout: {
-					product: 'Paper',
-					billingPeriod: 'Monthly',
-					productOption: 'Everyday',
-					fulfilmentOption: 'Collection',
-					productPrices: paperProducts,
-					formErrors: [],
-					billingAddressIsSame: true,
-				},
-				billingAddress: {
-					fields: {
-						country: 'GB',
-						formErrors: [],
+				checkoutForm: {
+					product: {
+						productType: 'Paper',
+						billingPeriod: 'Monthly',
+						productOption: 'Everyday',
+						fulfilmentOption: 'Collection',
+						productPrices: paperProducts,
 					},
-				},
-				deliveryAddress: {
-					fields: {
-						country: 'GB',
-						formErrors: [],
+					billingAddress: {
+						fields: {
+							country: 'GB',
+							errors: [],
+						},
+					},
+					deliveryAddress: {
+						fields: {
+							country: 'GB',
+							errors: [],
+						},
 					},
 				},
 			},
@@ -101,14 +83,12 @@ describe('Newspaper checkout form', () => {
 		});
 
 		renderWithStore(<PaperCheckoutForm />, {
-			// @ts-expect-error -- Type mismatch is unimportant for tests
 			initialState,
+			// @ts-expect-error -- Type mismatch is unimportant for tests
+			store: setUpStore(initialState),
 		});
 	});
 	describe('Payment methods', () => {
-		it('shows the direct debit option when the currency is GBP and the delivery address is in the UK', () => {
-			expect(screen.queryByText('Direct debit')).toBeInTheDocument();
-		});
 		it('does not show the direct debit option when the delivery address is in the Isle of Man', async () => {
 			const countrySelect = await screen.findByLabelText('Country');
 			fireEvent.change(countrySelect, {

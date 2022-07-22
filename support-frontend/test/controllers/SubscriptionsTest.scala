@@ -6,7 +6,7 @@ import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.GBP
 import com.gu.support.catalog.{NoFulfilmentOptions, NoProductOptions}
 import com.gu.support.config._
-import com.gu.support.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
+import services.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.Monthly
 import com.gu.support.zuora.api.ReaderType
@@ -75,6 +75,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       Switches(
         oneOffPaymentMethods = OneOffPaymentMethodSwitches(On, On, On, On, On),
         recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, Off, On, On, On, Off),
+        subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(On),
         subscriptionsSwitches = SubscriptionsSwitches(On, On, On),
         featureSwitches = FeatureSwitches(On, On),
         campaignSwitches = CampaignSwitches(On, On),

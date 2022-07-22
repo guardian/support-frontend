@@ -1,17 +1,33 @@
 import type { CsrCustomerData } from 'components/csr/csrMode';
 import { csrUserName } from 'components/csr/csrMode';
-import type { Action as DDAction } from 'components/directDebit/directDebitActions';
-import type { Action as AddressAction } from 'components/subscriptionCheckouts/address/addressFieldsStore';
-import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { PayPal } from 'helpers/forms/paymentMethods';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import {
+	setBillingAddressLineOne,
+	setBillingCountry,
+	setBillingPostcode,
+	setBillingState,
+	setBillingTownCity,
+	setDeliveryAddressLineOne,
+	setDeliveryCountry,
+	setDeliveryPostcode,
+	setDeliveryState,
+	setDeliveryTownCity,
+} from 'helpers/redux/checkout/address/actions';
+import {
+	setEmail as setEmailGift,
+	setFirstName as setFirstNameGift,
+	setGiftDeliveryDate,
+	setGiftMessage,
+	setLastName as setLastNameGift,
+	setTitle as setTitleGift,
+} from 'helpers/redux/checkout/giftingState/actions';
 import {
 	setConfirmEmail,
 	setEmail,
@@ -20,10 +36,17 @@ import {
 	setTelephone,
 	setTitle,
 } from 'helpers/redux/checkout/personalDetails/actions';
-import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
+import {
+	setAddDigital,
+	setBillingPeriod,
+	setOrderIsAGift,
+	setStartDate,
+} from 'helpers/redux/checkout/product/actions';
+import type {
+	SubscriptionsDispatch,
+	SubscriptionsState,
+} from 'helpers/redux/subscriptionsStore';
 import * as storage from 'helpers/storage/storage';
-import type { FormSubmissionDependentValueThunk } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
-import { setFormSubmissionDependentValue } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
@@ -36,30 +59,6 @@ export type Action =
 	| {
 			type: 'SET_STAGE';
 			stage: Stage;
-	  }
-	| {
-			type: 'SET_TITLE_GIFT';
-			titleGiftRecipient: Option<string>;
-	  }
-	| {
-			type: 'SET_FIRST_NAME_GIFT';
-			firstNameGiftRecipient: string;
-	  }
-	| {
-			type: 'SET_LAST_NAME_GIFT';
-			lastNameGiftRecipient: string;
-	  }
-	| {
-			type: 'SET_EMAIL_GIFT';
-			emailGiftRecipient: string;
-	  }
-	| {
-			type: 'SET_START_DATE';
-			startDate: string;
-	  }
-	| {
-			type: 'SET_BILLING_PERIOD';
-			billingPeriod: BillingPeriod;
 	  }
 	| {
 			type: 'SET_PAYMENT_METHOD';
@@ -113,9 +112,11 @@ export type Action =
 			type: 'SET_SALESFORCE_CASE_ID';
 			caseId: string;
 	  }
-	| AddressAction
-	| PayPalAction
-	| DDAction;
+	| {
+			type: 'ON_DELIVERY_COUNTRY_CHANGED';
+			country: string;
+	  }
+	| PayPalAction;
 
 // ----- Action Creators ----- //
 const setStage = (
@@ -148,6 +149,11 @@ const setFormSubmitted = (formSubmitted: boolean): Action => ({
 	formSubmitted,
 });
 
+const onDeliveryCountryChanged = (country: string): Action => ({
+	type: 'ON_DELIVERY_COUNTRY_CHANGED',
+	country,
+});
+
 const formActionCreators = {
 	setTitle,
 	setFirstName,
@@ -155,40 +161,12 @@ const formActionCreators = {
 	setEmail,
 	setConfirmEmail,
 	setTelephone,
-	setTitleGift: (titleGiftRecipient: string): Action => ({
-		type: 'SET_TITLE_GIFT',
-		titleGiftRecipient:
-			titleGiftRecipient !== 'Select a title' ? titleGiftRecipient : null,
-	}),
-	setFirstNameGift: (
-		firstNameGiftRecipient: string,
-	): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_FIRST_NAME_GIFT',
-			firstNameGiftRecipient,
-		})),
-	setLastNameGift: (
-		lastNameGiftRecipient: string,
-	): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_LAST_NAME_GIFT',
-			lastNameGiftRecipient,
-		})),
-	setEmailGift: (
-		emailGiftRecipient: string,
-	): FormSubmissionDependentValueThunk =>
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_EMAIL_GIFT',
-			emailGiftRecipient,
-		})),
-	setStartDate: (startDate: string): Action => ({
-		type: 'SET_START_DATE',
-		startDate,
-	}),
-	setBillingPeriod: (billingPeriod: BillingPeriod): Action => ({
-		type: 'SET_BILLING_PERIOD',
-		billingPeriod,
-	}),
+	setTitleGift,
+	setFirstNameGift,
+	setLastNameGift,
+	setEmailGift,
+	setStartDate,
+	setBillingPeriod,
 	setPaymentMethod:
 		(paymentMethod: PaymentMethod) =>
 		(
@@ -217,14 +195,14 @@ const formActionCreators = {
 	}),
 	onPaymentAuthorised:
 		(authorisation: PaymentAuthorisation) =>
-		(dispatch: SubscriptionsDispatch, getState: () => CheckoutState): void => {
+		(
+			dispatch: SubscriptionsDispatch,
+			getState: () => SubscriptionsState,
+		): void => {
 			const state = getState();
 			onPaymentAuthorised(authorisation, dispatch, state);
 		},
-	setGiftStatus: (orderIsAGift: boolean): Action => ({
-		type: 'SET_ORDER_IS_GIFT',
-		orderIsAGift,
-	}),
+	setGiftStatus: setOrderIsAGift,
 	setStripePaymentMethod: (stripePaymentMethod: Option<string>): Action => ({
 		type: 'SET_STRIPE_PAYMENT_METHOD',
 		stripePaymentMethod,
@@ -233,18 +211,9 @@ const formActionCreators = {
 		type: 'SET_DELIVERY_INSTRUCTIONS',
 		instructions,
 	}),
-	setGiftMessage: (message: string | null): Action => ({
-		type: 'SET_GIFT_MESSAGE',
-		message,
-	}),
-	setDigitalGiftDeliveryDate: (giftDeliveryDate: string): Action => ({
-		type: 'SET_GIFT_DELIVERY_DATE',
-		giftDeliveryDate,
-	}),
-	setAddDigitalSubscription: (addDigital: boolean): Action => ({
-		type: 'SET_ADD_DIGITAL_SUBSCRIPTION',
-		addDigital,
-	}),
+	setGiftMessage,
+	setDigitalGiftDeliveryDate: setGiftDeliveryDate,
+	setAddDigitalSubscription: setAddDigital,
 	setCsrUsername: (username: string): Action => ({
 		type: 'SET_CSR_USERNAME',
 		username,
@@ -259,49 +228,43 @@ function setCsrCustomerData(
 	addressType: AddressType,
 	csrCustomerData: CsrCustomerData,
 ) {
-	return (
-		dispatch: SubscriptionsDispatch,
-		getState: () => CheckoutState,
-	): void => {
-		csrCustomerData.customer.email &&
-			dispatch(formActionCreators.setEmail(csrCustomerData.customer.email));
-		csrCustomerData.customer.email &&
-			dispatch(
-				formActionCreators.setConfirmEmail(csrCustomerData.customer.email),
-			);
-		csrCustomerData.customer.firstName &&
-			dispatch(
-				formActionCreators.setFirstName(csrCustomerData.customer.firstName),
-			);
+	return (dispatch: SubscriptionsDispatch): void => {
+		const { email, firstName, country, street, city, postcode, state } =
+			csrCustomerData.customer;
+
+		email && dispatch(formActionCreators.setEmail(email));
+		email && dispatch(formActionCreators.setConfirmEmail(email));
+		firstName && dispatch(formActionCreators.setFirstName(firstName));
 		dispatch(formActionCreators.setLastName(csrCustomerData.customer.lastName));
 
 		dispatch(formActionCreators.setCsrUsername(csrUserName(csrCustomerData)));
 		dispatch(formActionCreators.setSalesforceCaseId(csrCustomerData.caseId));
 
 		const addressActions = addressActionCreatorsFor(addressType);
-		csrCustomerData.customer.country &&
-			addressActions.setCountry(csrCustomerData.customer.country)(dispatch);
-		csrCustomerData.customer.street &&
-			addressActions.setAddressLineOne(csrCustomerData.customer.street)(
-				dispatch,
-				getState,
-			);
-		csrCustomerData.customer.city &&
-			addressActions.setTownCity(csrCustomerData.customer.city)(
-				dispatch,
-				getState,
-			);
-		csrCustomerData.customer.postcode &&
-			addressActions.setPostcode(csrCustomerData.customer.postcode)(
-				dispatch,
-				getState,
-			);
-		csrCustomerData.customer.state &&
-			addressActions.setState(csrCustomerData.customer.state)(
-				dispatch,
-				getState,
-			);
+		country && dispatch(addressActions.setCountry(country));
+		street && dispatch(addressActions.setAddressLineOne(street));
+		city && dispatch(addressActions.setTownCity(city));
+		postcode && dispatch(addressActions.setPostcode(postcode));
+		state && dispatch(addressActions.setState(state));
 	};
+}
+
+function addressActionCreatorsFor(addressType: AddressType) {
+	return addressType === 'billing'
+		? {
+				setCountry: setBillingCountry,
+				setAddressLineOne: setBillingAddressLineOne,
+				setTownCity: setBillingTownCity,
+				setPostcode: setBillingPostcode,
+				setState: setBillingState,
+		  }
+		: {
+				setCountry: setDeliveryCountry,
+				setAddressLineOne: setDeliveryAddressLineOne,
+				setTownCity: setDeliveryTownCity,
+				setPostcode: setDeliveryPostcode,
+				setState: setDeliveryState,
+		  };
 }
 
 export type FormActionCreators = typeof formActionCreators;
@@ -311,5 +274,6 @@ export {
 	setSubmissionError,
 	setFormSubmitted,
 	setCsrCustomerData,
+	onDeliveryCountryChanged,
 	formActionCreators,
 };

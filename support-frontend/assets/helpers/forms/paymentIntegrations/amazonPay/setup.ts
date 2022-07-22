@@ -1,23 +1,25 @@
-import type { Dispatch } from 'redux';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { isProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
-import {
-	setAmazonPayLoginObject,
-	setAmazonPayPaymentsObject,
-} from 'pages/contributions-landing/contributionsLandingActions';
+import type { AmazonLoginObject, AmazonPaymentsObject } from './types';
 
 // ---- Setup ---- //
 
 export const setupAmazonPay = (
 	countryGroupId: CountryGroupId,
-	dispatch: Dispatch,
+	onAmazonLoginReady: (loginObject: AmazonLoginObject) => void,
+	onAmazonPaymentsReady: (paymentsObject: AmazonPaymentsObject) => void,
 	isTestUser: boolean,
 ): void => {
 	const isSandbox = isTestUser || !isProd();
 
 	if (isSupportedCountryGroup(countryGroupId)) {
-		setupAmazonPayCallbacks(countryGroupId, dispatch, isSandbox);
+		setupAmazonPayCallbacks(
+			countryGroupId,
+			onAmazonLoginReady,
+			onAmazonPaymentsReady,
+			isSandbox,
+		);
 		loadAmazonPayScript(isSandbox);
 	}
 };
@@ -32,7 +34,8 @@ const isSupportedCountryGroup = (countryGroupId: CountryGroupId) =>
 // Amazon Pay callbacks - called after Widgets.js has loaded
 const setupAmazonPayCallbacks = (
 	countryGroupId: CountryGroupId,
-	dispatch: Dispatch,
+	onAmazonLoginReady: (loginObject: AmazonLoginObject) => void,
+	onAmazonPaymentsReady: (paymentsObject: AmazonPaymentsObject) => void,
 	isSandbox: boolean,
 ): void => {
 	window.onAmazonLoginReady = () => {
@@ -48,14 +51,14 @@ const setupAmazonPayCallbacks = (
 					amazonLoginObject.setSandboxMode(true);
 				}
 
-				dispatch(setAmazonPayLoginObject(window.amazon.Login));
+				onAmazonLoginReady(window.amazon.Login);
 			}
 		}
 	};
 
 	window.onAmazonPaymentsReady = () => {
 		if (window.OffAmazonPayments) {
-			dispatch(setAmazonPayPaymentsObject(window.OffAmazonPayments));
+			onAmazonPaymentsReady(window.OffAmazonPayments);
 		}
 	};
 };
@@ -65,6 +68,7 @@ const loadAmazonPayScript = (isSandbox: boolean): void => {
 	const widgetsUrl = isSandbox
 		? 'https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js'
 		: 'https://static-na.payments-amazon.com/OffAmazonPayments/us/js/Widgets.js';
+
 	new Promise((_resolve, reject) => {
 		const script = document.createElement('script');
 		script.onerror = reject;

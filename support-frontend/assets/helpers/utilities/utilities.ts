@@ -6,7 +6,7 @@ function ascending(a: number, b: number): number {
 }
 
 // Converts a number to a given number of decimal places, default two.
-function roundDp(num: number, dps = 2) {
+function roundDp(num: number, dps = 2): number {
 	return Math.round(num * 10 ** dps) / 10 ** dps;
 }
 
@@ -16,9 +16,12 @@ function classNameWithModifiers(
 	className: string,
 	modifiers: Array<string | null | undefined>,
 ): string {
-	return modifiers
-		.filter(Boolean)
-		.reduce((acc, modifier) => `${acc} ${className}--${modifier}`, className);
+	const validModifiers = modifiers.filter(Boolean) as string[];
+
+	return validModifiers.reduce(
+		(acc, modifier) => `${acc} ${className}--${modifier}`,
+		className,
+	);
 }
 
 function hiddenIf(shouldHide: boolean, className: string): string {
@@ -30,7 +33,7 @@ function deserialiseJsonObject(
 	serialised: string,
 ): Record<string, any> | null | undefined {
 	try {
-		const deserialised = JSON.parse(serialised);
+		const deserialised: unknown = JSON.parse(serialised);
 
 		if (deserialised instanceof Object && !(deserialised instanceof Array)) {
 			return deserialised;

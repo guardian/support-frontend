@@ -12,10 +12,10 @@ import { useEffect, useState } from 'react';
 import * as React from 'react';
 import './stripeForm.scss';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import { loadRecaptchaV2 } from 'helpers/forms/recaptcha';
 import type { StripePaymentIntentResult } from 'helpers/forms/stripe';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
@@ -38,7 +38,7 @@ export type StripeFormPropTypes = {
 	submitForm: () => void;
 	validateForm: () => void;
 	buttonText: string;
-	csrf: Csrf;
+	csrf: CsrfState;
 	isTestUser: boolean;
 };
 
@@ -50,7 +50,7 @@ type CardFieldData = {
 	errorIncomplete: string;
 };
 
-type CardFieldName = 'cardNumber' | 'cardExpiry' | 'cardCvc';
+export type CardFieldName = 'cardNumber' | 'cardExpiry' | 'cardCvc';
 
 type CardFieldsData = Record<CardFieldName, CardFieldData>;
 

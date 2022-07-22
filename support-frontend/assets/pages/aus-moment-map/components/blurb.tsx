@@ -1,56 +1,53 @@
 // ----- Imports ----- //
-import * as React from 'preact/compat';
+import { css } from '@emotion/react';
+import { from } from '@guardian/source-foundations';
 import { SocialLinks } from 'pages/aus-moment-map/components/socialLinks';
 
-const enableSupporterCount = true as boolean;
+const mobileTabletOnly = css`
+	display: block;
+	${from.desktop} {
+		display: none;
+	}
+`;
 
-const useSupportersCount = () => {
-	const [supportersCount, setSupportersCount] = React.useState(0);
-	const supportersCountEndpoint = '/supporters-ticker.json';
-
-	React.useEffect(() => {
-		if (enableSupporterCount) {
-			void fetch(supportersCountEndpoint)
-				.then((response) => response.json())
-				.then((data: { total: number }) => setSupportersCount(data.total));
-		}
-	}, []);
-	return supportersCount;
-};
+const desktopOnly = css`
+	display: none;
+	${from.desktop} {
+		display: block;
+	}
+`;
 
 type PropTypes = {
 	slim?: boolean;
 };
 
+function getCopyParagraph(desktop = false) {
+	return `${
+		desktop ? 'Click on the map to read' : 'Read'
+	} messages from Guardian supporters across Australia,
+	explaining why they were motivated to support our journalism. The
+	supporters whose voices are captured here are a sample of the
+	hundreds of thousands who now power our work, keeping us fiercely
+	independent and open to all. We hope you'll join them in the fight
+	for progress.`;
+}
+
 // ----- Render ----- //
 export function Blurb(props: PropTypes): JSX.Element {
-	const supportersCount = useSupportersCount();
 	return (
 		<div className="blurb-wrapper">
 			<div>
 				<h2 className={`blurb ${props.slim ? 'blurb-slim' : ''}`}>
-					Hear from Guardian supporters across Australia
+					Our supporters are putting independent journalism on the map
 				</h2>
 				{!props.slim && (
 					<div>
-						<p className="blurb">
-							Our supporters are doing something powerful. As our readership
-							grows, more people are supporting Guardian journalism than ever
-							before. But what drives this support? We asked readers across
-							every state to share their reasons with us – and here is a
-							selection. You can become a supporter right now and add to the
-							conversation.
+						<p className="blurb" css={mobileTabletOnly}>
+							{getCopyParagraph()}
 						</p>
-						{enableSupporterCount && (
-							<>
-								<p className="supporters-total">
-									{supportersCount.toLocaleString()}
-								</p>
-								<p className="supporters-total-caption">
-									Total supporters in Australia
-								</p>
-							</>
-						)}
+						<p className="blurb" css={desktopOnly}>
+							{getCopyParagraph(true)}
+						</p>
 					</div>
 				)}
 			</div>

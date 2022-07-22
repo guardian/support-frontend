@@ -2,7 +2,10 @@ import type { TypedStartListening } from '@reduxjs/toolkit';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import { renderError } from 'helpers/rendering/render';
 import { initReducer } from 'pages/contributions-landing/contributionsLandingReducer';
+import { addPaymentsSideEffects } from './checkout/payment/contributionsSideEffects';
 import { addPersonalDetailsSideEffects } from './checkout/personalDetails/contributionsSideEffects';
+import { setCurrency } from './checkout/product/actions';
+import { addProductSideEffects } from './checkout/product/contributionsSideEffects';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
 import { getInitialState } from './utils/setup';
@@ -37,8 +40,13 @@ export type ContributionsStore = typeof contributionsStore;
 export function initReduxForContributions(): ContributionsStore {
 	try {
 		addPersonalDetailsSideEffects(startContributionsListening);
+		addProductSideEffects(startContributionsListening);
+		addPaymentsSideEffects(startContributionsListening);
 		const initialState = getInitialState();
 		contributionsStore.dispatch(setInitialCommonState(initialState));
+		contributionsStore.dispatch(
+			setCurrency(initialState.internationalisation.currencyId),
+		);
 		return contributionsStore;
 	} catch (err) {
 		renderError(err as Error, null);

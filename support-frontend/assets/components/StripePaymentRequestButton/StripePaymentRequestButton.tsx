@@ -46,7 +46,6 @@ import {
 	onThirdPartyPaymentAuthorised,
 	setEmail,
 	setFirstName,
-	setHandleStripe3DS,
 	setLastName,
 	paymentWaiting as setPaymentWaiting,
 	setStripePaymentRequestButtonClicked,
@@ -103,7 +102,7 @@ const mapStateToProps = (state: State, ownProps: PropsFromParent) => ({
 	currency: state.common.internationalisation.currencyId,
 	isTestUser: state.page.user.isTestUser ?? false,
 	paymentMethod: state.page.form.paymentMethod,
-	csrf: state.page.csrf,
+	csrf: state.page.checkoutForm.csrf,
 	localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
@@ -119,7 +118,6 @@ const mapDispatchToProps = {
 	setAssociatedPaymentMethod: updatePaymentMethod,
 	setPaymentWaiting,
 	setError: setStripePaymentRequestButtonError,
-	setHandleStripe3DS,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -322,13 +320,20 @@ function handlePaymentRequestError(props: PropTypes, errorType: ErrorReason) {
 
 async function handlePaymentRequest(
 	props: PropTypes,
+	stripe: StripeJs,
 	paymentMethod: PaymentMethod,
 	stripePaymentMethod: StripePaymentMethod,
 ) {
+	const handle3DS = (clientSecret: string) => {
+		trackComponentLoad('stripe-3ds');
+		return stripe.handleCardAction(clientSecret);
+	};
+
 	const authResult = await props.onPaymentAuthorised({
 		paymentMethod: Stripe,
 		paymentMethodId: paymentMethod.id,
 		stripePaymentMethod,
+		handle3DS,
 	});
 	onComplete(authResult);
 }
@@ -349,7 +354,12 @@ async function handleRecurringPaymentRequest(
 		if (confirmResult.error) {
 			handlePaymentRequestError(props, 'card_authentication_error');
 		} else {
-			void handlePaymentRequest(props, paymentMethod, stripePaymentMethod);
+			void handlePaymentRequest(
+				props,
+				stripe,
+				paymentMethod,
+				stripePaymentMethod,
+			);
 		}
 	} catch (error) {
 		if (error instanceof Error) {
@@ -388,7 +398,12 @@ function setUpPaymentListenerSca(
 			});
 
 			if (props.contributionType === 'ONE_OFF') {
-				void handlePaymentRequest(props, paymentMethod, stripePaymentMethod);
+				void handlePaymentRequest(
+					props,
+					stripe,
+					paymentMethod,
+					stripePaymentMethod,
+				);
 			} else {
 				void handleRecurringPaymentRequest(
 					props,
@@ -458,14 +473,6 @@ function PaymentRequestButton(props: PropTypes) {
 				props.setPaymentRequestObject({ status: 'NOT_AVAILABLE' });
 			}
 		});
-
-		// Only need 3DS handler for one-offs - recurring has its own special flow via confirmCardSetup
-		if (props.contributionType === 'ONE_OFF') {
-			props.setHandleStripe3DS((clientSecret: string) => {
-				trackComponentLoad('stripe-3ds');
-				return stripe.handleCardAction(clientSecret);
-			});
-		}
 	}
 
 	useEffect(() => {

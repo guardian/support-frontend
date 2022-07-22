@@ -1,10 +1,11 @@
 // ----- Imports ----- //
 import type { Dispatch } from 'redux';
-import type { Csrf, Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { setPayPalHasLoaded } from 'helpers/forms/paymentIntegrations/payPalActions';
 import { PayPal } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import * as storage from 'helpers/storage/storage';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
@@ -79,15 +80,15 @@ const setupRecurringPayPalPayment =
 		resolve: (arg0: string) => void,
 		reject: (arg0: Error) => void,
 		currency: IsoCurrency,
-		csrf: Csrf,
+		csrf: CsrfState,
 	) =>
 	(_dispatch: Dispatch, getState: () => State): void => {
 		const state = getState();
 		const csrfToken = csrf.token;
-		const { contributionType } = state.page.form;
+		const contributionType = getContributionType(state);
 		const amount = getAmount(
-			state.page.form.selectedAmounts,
-			state.page.form.formData.otherAmounts,
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
 			contributionType,
 		);
 		const billingPeriod = billingPeriodFromContrib(contributionType);

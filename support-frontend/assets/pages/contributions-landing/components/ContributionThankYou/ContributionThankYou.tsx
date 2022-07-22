@@ -14,12 +14,13 @@ import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { User } from 'helpers/user/userReducer';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
@@ -136,7 +137,7 @@ const isLargeDonation = (
 };
 
 type ContributionThankYouProps = {
-	csrf: Csrf;
+	csrf: CsrfState;
 	email: string;
 	contributionType: ContributionType;
 	amount: number;
@@ -151,29 +152,32 @@ type ContributionThankYouProps = {
 	benefitsMessagingAbTestParaVariant: boolean;
 };
 
-const mapStateToProps = (state: State) => ({
-	email: state.page.checkoutForm.personalDetails.email,
-	name: state.page.checkoutForm.personalDetails.firstName,
-	contributionType: state.page.form.contributionType,
-	amount: getAmount(
-		state.page.form.selectedAmounts,
-		state.page.form.formData.otherAmounts,
-		state.page.form.contributionType,
-	),
-	currency: state.common.internationalisation.currencyId,
-	csrf: state.page.csrf,
-	user: state.page.user,
-	userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
-	paymentMethod: state.page.form.paymentMethod,
-	countryId: state.common.internationalisation.countryId,
-	campaignCode: state.common.referrerAcquisitionData.campaignCode,
-	benefitsMessagingAbTestBulletVariant:
-		state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
-		state.page.form.contributionType !== 'ONE_OFF',
-	benefitsMessagingAbTestParaVariant:
-		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
-		state.page.form.contributionType !== 'ONE_OFF',
-});
+const mapStateToProps = (state: State) => {
+	const contributionType = getContributionType(state);
+	return {
+		email: state.page.checkoutForm.personalDetails.email,
+		name: state.page.checkoutForm.personalDetails.firstName,
+		contributionType,
+		amount: getAmount(
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
+			contributionType,
+		),
+		currency: state.common.internationalisation.currencyId,
+		csrf: state.page.checkoutForm.csrf,
+		user: state.page.user,
+		userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
+		paymentMethod: state.page.form.paymentMethod,
+		countryId: state.common.internationalisation.countryId,
+		campaignCode: state.common.referrerAcquisitionData.campaignCode,
+		benefitsMessagingAbTestBulletVariant:
+			state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
+			contributionType !== 'ONE_OFF',
+		benefitsMessagingAbTestParaVariant:
+			state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
+			contributionType !== 'ONE_OFF',
+	};
+};
 
 function ContributionThankYou({
 	csrf,

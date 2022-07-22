@@ -1,16 +1,15 @@
 // ----- Imports ----- //
+
 import { connect } from 'react-redux';
-import type { ContributionType } from 'helpers/contributions';
-import 'helpers/contributions';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
-import 'helpers/forms/errorReasons';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
+import type { ContributionType } from 'helpers/contributions';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { State } from '../contributionsLandingReducer';
-import '../contributionsLandingReducer';
 import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringContributorErrorMessage';
+
 // ----- Types ----- //
 
-/* eslint-disable react/no-unused-prop-types */
 type PropTypes = {
 	contributionType: ContributionType;
 	paymentError: ErrorReason | null;
@@ -20,10 +19,9 @@ type PropTypes = {
 	checkoutFormHasBeenSubmitted: boolean;
 };
 
-/* eslint-enable react/no-unused-prop-types */
 const mapStateToProps = (state: State) => ({
 	paymentMethod: state.page.form.paymentMethod,
-	contributionType: state.page.form.contributionType,
+	contributionType: getContributionType(state),
 	paymentError: state.page.form.paymentError,
 	isSignedIn: state.page.user.isSignedIn,
 	formIsValid: state.page.form.formIsValid,
@@ -33,7 +31,9 @@ const mapStateToProps = (state: State) => ({
 });
 
 // ----- Functions ----- //
+
 // ----- Render ----- //
+
 function ContributionErrorMessage(props: PropTypes) {
 	const shouldsShowExistingContributorErrorMessage =
 		props.contributionType !== 'ONE_OFF' &&

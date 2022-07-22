@@ -1,57 +1,28 @@
 /* eslint-disable @typescript-eslint/require-await -- To simplify mocking of functions that return promises */
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { fireEvent, render, screen } from '@testing-library/react';
-import * as React from 'react';
+import { fireEvent, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import { Provider } from 'react-redux';
-import type { Store } from 'redux';
 import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
+import { renderWithStore } from '__test-utils__/render';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import { setRecaptchaToken } from 'helpers/redux/checkout/recaptcha/actions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
+import type { SubscriptionsStore } from 'helpers/redux/subscriptionsStore';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { formatMachineDate } from 'helpers/utilities/dateConversions';
+import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import DirectDebitForm from './directDebitForm';
-
-const pageReducer = (initialState: WithDeliveryCheckoutState) =>
-	createWithDeliveryCheckoutReducer(
-		initialState.common.internationalisation.countryId,
-		GuardianWeekly,
-		'Annual',
-		formatMachineDate(new Date()),
-		initialState.page.checkout.productOption,
-		initialState.page.checkout.fulfilmentOption,
-	);
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const store = configureStore({
 		reducer: combineReducers({
-			page: pageReducer(initialState),
+			page: createReducer(),
 			common: commonReducer,
 		}),
 	});
 	store.dispatch(setInitialCommonState(initialState.common));
 	return store;
-}
-
-function renderWithStore(
-	component: React.ReactElement,
-	{
-		initialState,
-		store = initialState ? setUpStore(initialState) : undefined,
-		...renderOptions
-	}: { initialState?: WithDeliveryCheckoutState; store?: Store } = {},
-) {
-	function Wrapper({ children }: { children?: React.ReactNode }) {
-		return <>{store && <Provider store={store}>{children}</Provider>}</>;
-	}
-
-	return render(component, {
-		wrapper: Wrapper,
-		...renderOptions,
-	});
 }
 
 async function fillOutForm(
@@ -97,17 +68,23 @@ describe('Direct debit form', () => {
 	console.warn = jest.fn();
 	console.error = jest.fn();
 	let initialState;
+	let store: SubscriptionsStore;
+
 	beforeEach(() => {
 		initialState = {
 			page: {
 				checkout: {
-					product: 'Paper',
-					billingPeriod: 'Monthly',
-					productOption: 'NoProductOptions',
-					fulfilmentOption: 'Domestic',
-					productPrices: weeklyProducts,
 					formErrors: [],
 					billingAddressIsSame: true,
+				},
+				checkoutForm: {
+					product: {
+						productType: GuardianWeekly,
+						billingPeriod: 'Annual',
+						productOption: 'NoProductOptions',
+						fulfilmentOption: 'Domestic',
+						productPrices: weeklyProducts,
+					},
 				},
 				billingAddress: {
 					fields: {
@@ -141,6 +118,9 @@ describe('Direct debit form', () => {
 			},
 		};
 
+		//  @ts-expect-error Unused common state properties
+		store = setUpStore(initialState);
+
 		mockFetch({
 			accountValid: true,
 		});
@@ -156,6 +136,7 @@ describe('Direct debit form', () => {
 			{
 				//  @ts-expect-error Unused common state properties
 				initialState,
+				store,
 			},
 		);
 	});
@@ -167,8 +148,12 @@ describe('Direct debit form', () => {
 				sortCode: '200000',
 				accountNumber: '11223344',
 			});
+			// Recaptcha is not rendered in tests so just update the store directly
+			store.dispatch(setRecaptchaToken('token'));
+
 			const submitButton = await screen.findByText('Confirm');
 			await act(async () => void fireEvent.click(submitButton));
+
 			expect(
 				screen.queryByText(
 					'If the details above are correct, press confirm to set up your direct debit, otherwise press back to make changes',

@@ -17,7 +17,7 @@ class DigitalPackGiftCheckout(implicit val webDriver: WebDriver) extends Checkou
   def fillForm(): Unit = {
     setValue(giftRecipientFirstName, "CP")
     setValue(giftRecipientLastName, "Scott")
-    setValue(giftRecipientEmail, "cp.scott@gu.com")
+    setValue(giftRecipientEmail, "cp.scott@thegulocal.com")
     setValue(addressLineOne, "Kings Place")
     setValue(city, "London")
     setValue(postcode, "N19GU")

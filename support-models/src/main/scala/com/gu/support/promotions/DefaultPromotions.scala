@@ -10,12 +10,7 @@ object DefaultPromotions {
 
     object Annual {
       def all = List(
-        "ANNUAL-INTRO-EU",
-        "ANNUAL-INTRO-UK",
-        "ANNUAL-INTRO-US",
-        "ANNUAL-INTRO-NZ",
-        "ANNUAL-INTRO-CA",
-        "ANNUAL-INTRO-AU",
+        "ANNUAL-INTRO-GLOBAL",
       )
     }
     def all: List[PromoCode] = Monthly.all ++ Annual.all
@@ -32,11 +27,7 @@ object DefaultPromotions {
     }
     object NonGift {
       val sixForSix = "6FOR6"
-      val tenAnnual = "10ANNUAL"
-      def all = List(sixForSix, tenAnnual)
     }
-
-    def all = Gift.all ++ NonGift.all
   }
 
 }

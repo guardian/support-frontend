@@ -27,18 +27,17 @@ function handleErrors(response: Response) {
 	}
 }
 
-const getAddressesForPostcode = (
+export async function findAddressesForPostcode(
 	postcode: string,
-): Promise<PostcodeFinderResult[]> => {
+): Promise<PostcodeFinderResult[]> {
 	const postcodeLookup = getGlobal('checkoutPostcodeLookup');
 
 	if (postcodeLookup) {
-		return fetch(postcodeLookupUrl(postcode))
-			.then(handleErrors)
-			.then((res) => res.json());
+		const response = await fetch(postcodeLookupUrl(postcode)).then(
+			handleErrors,
+		);
+		return response.json() as Promise<PostcodeFinderResult[]>;
 	}
 
-	return Promise.resolve([]);
-};
-
-export { getAddressesForPostcode };
+	return [];
+}

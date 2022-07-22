@@ -1,10 +1,10 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
 import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import type {
 	ContributionType,
-	ContributionTypes,
 	ContributionTypeSetting,
 } from 'helpers/contributions';
 import 'helpers/contributions';
@@ -15,74 +15,15 @@ import {
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { setProductType } from 'helpers/redux/checkout/product/actions';
 import {
 	setCurrencyId,
 	setUseLocalAmounts,
 } from 'helpers/redux/commonState/actions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import { updateContributionTypeAndPaymentMethod } from '../contributionsLandingActions';
+import { updatePaymentMethod } from '../contributionsLandingActions';
 import type { State } from '../contributionsLandingReducer';
-
-// ----- Types ----- //
-type PropTypes = {
-	contributionType: ContributionType;
-	countryId: IsoCountry;
-	countryGroupId: CountryGroupId;
-	switches: Switches;
-	contributionTypes: ContributionTypes;
-	onSelectContributionType: (
-		arg0: ContributionType,
-		arg1: Switches,
-		arg2: IsoCountry,
-		arg3: CountryGroupId,
-		arg4: boolean,
-	) => void;
-	useLocalCurrency: boolean;
-};
-
-const mapStateToProps = (state: State) => ({
-	countryGroupId: state.common.internationalisation.countryGroupId,
-	contributionType: state.page.form.contributionType,
-	countryId: state.common.internationalisation.countryId,
-	switches: state.common.settings.switches,
-	contributionTypes: state.common.settings.contributionTypes,
-	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
-});
-
-const mapDispatchToProps = (dispatch: (...args: any[]) => any) => ({
-	onSelectContributionType: (
-		contributionType: ContributionType,
-		switches: Switches,
-		countryId: IsoCountry,
-		countryGroupId: CountryGroupId,
-		useLocalCurrency: boolean,
-	) => {
-		const paymentMethodToSelect = getPaymentMethodToSelect(
-			contributionType,
-			switches,
-			countryId,
-			countryGroupId,
-		);
-		trackComponentClick(
-			`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`,
-		);
-		dispatch(
-			updateContributionTypeAndPaymentMethod(
-				contributionType,
-				paymentMethodToSelect,
-			),
-		);
-
-		if (contributionType !== 'ONE_OFF') {
-			dispatch(setCurrencyId(false));
-			dispatch(setUseLocalAmounts(false));
-		} else {
-			dispatch(setCurrencyId(useLocalCurrency));
-			dispatch(setUseLocalAmounts(useLocalCurrency));
-		}
-	},
-});
 
 const groupStyles = css`
 	> div {
@@ -102,9 +43,58 @@ const groupStyles = css`
 	}
 `;
 
+const mapStateToProps = (state: State) => ({
+	countryGroupId: state.common.internationalisation.countryGroupId,
+	contributionType: state.page.checkoutForm.product.productType,
+	countryId: state.common.internationalisation.countryId,
+	switches: state.common.settings.switches,
+	contributionTypes: state.common.settings.contributionTypes,
+	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
+});
+
+const mapDispatchToProps = {
+	setProductType,
+	setCurrencyId,
+	setUseLocalAmounts,
+	updatePaymentMethod,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropTypes = ConnectedProps<typeof connector>;
+
 // ----- Render ----- //
 function ContributionTypeTabs(props: PropTypes) {
 	const contributionTypes = props.contributionTypes[props.countryGroupId];
+
+	function onSelectContributionType(
+		contributionType: ContributionType,
+		switches: Switches,
+		countryId: IsoCountry,
+		countryGroupId: CountryGroupId,
+		useLocalCurrency: boolean,
+	) {
+		const paymentMethodToSelect = getPaymentMethodToSelect(
+			contributionType,
+			switches,
+			countryId,
+			countryGroupId,
+		);
+		trackComponentClick(
+			`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`,
+		);
+
+		props.setProductType(contributionType);
+		props.updatePaymentMethod(paymentMethodToSelect);
+
+		if (contributionType !== 'ONE_OFF') {
+			props.setCurrencyId(false);
+			props.setUseLocalAmounts(false);
+		} else {
+			props.setCurrencyId(useLocalCurrency);
+			props.setUseLocalAmounts(useLocalCurrency);
+		}
+	}
 
 	const renderChoiceCards = () => (
 		<ChoiceCardGroup name="contributionTypes" cssOverrides={groupStyles}>
@@ -117,7 +107,7 @@ function ContributionTypeTabs(props: PropTypes) {
 							value={contributionType}
 							label={toHumanReadableContributionType(contributionType)}
 							onChange={() =>
-								props.onSelectContributionType(
+								onSelectContributionType(
 									contributionType,
 									props.switches,
 									props.countryId,
@@ -131,44 +121,6 @@ function ContributionTypeTabs(props: PropTypes) {
 				},
 			)}
 		</ChoiceCardGroup>
-	);
-
-	// leaving in place as this is still in active development:
-	const renderControl = () => (
-		<ul className="form__radio-group-list form__radio-group-list--border">
-			{contributionTypes.map(
-				(contributionTypeSetting: ContributionTypeSetting) => {
-					const { contributionType } = contributionTypeSetting;
-					return (
-						<li className="form__radio-group-item">
-							<input
-								id={`contributionType-${contributionType}`}
-								className="form__radio-group-input"
-								type="radio"
-								name="contributionType"
-								value={contributionType}
-								onChange={() =>
-									props.onSelectContributionType(
-										contributionType,
-										props.switches,
-										props.countryId,
-										props.countryGroupId,
-										props.useLocalCurrency,
-									)
-								}
-								checked={props.contributionType === contributionType}
-							/>
-							<label
-								htmlFor={`contributionType-${contributionType}`}
-								className="form__radio-group-label"
-							>
-								{toHumanReadableContributionType(contributionType)}
-							</label>
-						</li>
-					);
-				},
-			)}
-		</ul>
 	);
 
 	if (

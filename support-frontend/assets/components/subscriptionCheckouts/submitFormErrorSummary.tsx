@@ -6,6 +6,9 @@ import {
 	textSans,
 } from '@guardian/source-foundations';
 import { InlineError } from '@guardian/source-react-components';
+import type { FormField } from 'helpers/subscriptionsForms/formFields';
+import type { FormError } from 'helpers/subscriptionsForms/validation';
+import type { CardFieldName } from './stripeForm/stripeForm';
 
 const errorContainer = css`
 	border: 4px ${errorColour[400]} solid;
@@ -24,18 +27,22 @@ const boldText = css`
 `;
 // ----- Types ----- //
 type PropTypes = {
-	errors: Array<Record<string, any>>;
+	errors: Array<
+		Record<string, string> | FormError<FormField> | FormError<CardFieldName>
+	>;
 };
 // ----- Render ----- //
-export const ErrorSummary = (props: PropTypes) => (
-	<div role="status" aria-live="assertive" css={errorContainer}>
-		<InlineError css={boldText}>Some information is missing</InlineError>
-		<ul>
-			{props.errors.map((error) => (
-				<li key={error.message} css={errorMessage}>
-					{error.message}
-				</li>
-			))}
-		</ul>
-	</div>
-);
+export function ErrorSummary(props: PropTypes): JSX.Element {
+	return (
+		<div role="status" aria-live="assertive" css={errorContainer}>
+			<InlineError css={boldText}>Some information is missing</InlineError>
+			<ul>
+				{props.errors.map((error) => (
+					<li key={error.message} css={errorMessage}>
+						{error.message}
+					</li>
+				))}
+			</ul>
+		</div>
+	);
+}

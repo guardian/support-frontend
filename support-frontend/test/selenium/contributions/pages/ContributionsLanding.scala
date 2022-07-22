@@ -31,7 +31,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
 
   private val stripeOverlayIframe = cssSelector(".stripe_checkout_app")
 
-  private val stripeRecaptchaButton = id("robot_checkbox")
+  private val recaptchaButton = id("robot_checkbox")
 
   private object RegisterFields {
     private val firstName = id("contributionFirstName")
@@ -40,7 +40,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
 
     def fillIn(hasNameFields: Boolean): Unit = {
 
-      setValue(email, s"${testUser.username}@gu.com", clear = true)
+      setValue(email, s"${testUser.username}@thegulocal.com", clear = true)
       if (hasNameFields) {
         setValue(firstName, testUser.username, clear = true)
         setValue(lastName, testUser.username, clear = true)
@@ -106,7 +106,10 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
       clickOn(submitButton)
     }
 
-    def pay(): Unit = clickOn(payButton)
+    def pay(): Unit = {
+      clickRecaptcha
+      clickOn(payButton)
+    }
   }
 
   def fillInPersonalDetails(hasNameFields: Boolean): Unit = { RegisterFields.fillIn(hasNameFields) }
@@ -133,7 +136,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   }
 
   def clickRecaptcha: Unit = {
-    clickOn(stripeRecaptchaButton)
+    clickOn(recaptchaButton)
     waitForTestRecaptchaToComplete
   }
 

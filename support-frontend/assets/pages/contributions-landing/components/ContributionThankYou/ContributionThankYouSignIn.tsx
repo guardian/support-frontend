@@ -6,8 +6,7 @@ import {
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
 import { useEffect, useState } from 'react';
-import * as React from 'react';
-import type { Csrf } from 'helpers/csrf/csrfReducer';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import {
 	trackComponentClick,
 	trackComponentLoad,
@@ -44,17 +43,17 @@ const buttonContainer = css`
 
 type ContributionThankYouSignInProps = {
 	email: string;
-	csrf: Csrf;
+	csrf: CsrfState;
 };
 
 type CreateSignInUrlResponse = {
 	signInLink: string;
 };
 
-const ContributionThankYouSignIn: React.FC<ContributionThankYouSignInProps> = ({
+function ContributionThankYouSignIn({
 	email,
 	csrf,
-}: ContributionThankYouSignInProps) => {
+}: ContributionThankYouSignInProps): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
 	const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
 
@@ -167,6 +166,6 @@ const ContributionThankYouSignIn: React.FC<ContributionThankYouSignInProps> = ({
 			body={actionBody}
 		/>
 	);
-};
+}
 
 export default ContributionThankYouSignIn;

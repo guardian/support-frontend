@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
 import { TextArea } from '@guardian/source-react-components';
+import { useEffect } from 'react';
 import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
@@ -14,7 +15,7 @@ import DatePickerFields from 'components/datePicker/datePicker';
 import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclosure/directDebitForm';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
+import { BillingAddress } from 'components/subscriptionCheckouts/address/scopedAddressFields';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import CheckoutLayout, {
 	Content,
@@ -29,11 +30,12 @@ import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { countries } from 'helpers/internationalisation/country';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import {
-	finalPrice,
-	getProductPrice,
-} from 'helpers/productPrice/productPrices';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import {
+	selectDiscountedPrice,
+	selectPriceForProduct,
+} from 'helpers/redux/checkout/product/selectors/productPrice';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
@@ -46,9 +48,8 @@ import {
 	submitCheckoutForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import { getBillingAddress } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
+import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { signOut } from 'helpers/user/user';
 import { withError } from 'hocs/withError';
@@ -60,26 +61,24 @@ const controlTextAreaResizing = css`
 `;
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state: CheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	return {
 		...getFormFields(state),
 		country: state.common.internationalisation.countryId,
 		formErrors: state.page.checkout.formErrors,
 		submissionError: state.page.checkout.submissionError,
-		productPrices: state.page.checkout.productPrices,
+		productPrices: state.page.checkoutForm.product.productPrices,
 		currencyId: state.common.internationalisation.currencyId,
-		csrf: state.page.csrf,
+		csrf: state.page.checkoutForm.csrf,
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
 		paymentMethod: state.page.checkout.paymentMethod,
 		isTestUser: state.page.checkout.isTestUser,
-		amount: finalPrice(
-			state.page.checkout.productPrices,
-			state.common.internationalisation.countryId,
-			state.page.checkout.billingPeriod,
-		).price,
-		billingPeriod: state.page.checkout.billingPeriod as DigitalBillingPeriod,
-		addressErrors: state.page.billingAddress.fields.formErrors,
+		billingPeriod: state.page.checkoutForm.product
+			.billingPeriod as DigitalBillingPeriod,
+		addressErrors: state.page.checkoutForm.billingAddress.fields.errors,
 		participations: state.common.abParticipations,
+		price: selectPriceForProduct(state),
+		discountedPrice: selectDiscountedPrice(state),
 	};
 }
 
@@ -88,13 +87,14 @@ function mapDispatchToProps() {
 	return {
 		...formActionCreators,
 		formIsValid:
-			() => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
+			() => (_dispatch: Dispatch<Action>, getState: () => SubscriptionsState) =>
 				checkoutFormIsValid(getState()),
 		submitForm:
-			() => (dispatch: Dispatch<Action>, getState: () => CheckoutState) =>
+			() => (dispatch: Dispatch<Action>, getState: () => SubscriptionsState) =>
 				submitCheckoutForm(dispatch, getState()),
 		validateForm:
-			() => (dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
+			() =>
+			(dispatch: Dispatch<Action>, getState: () => SubscriptionsState) => {
 				const state = getState();
 				validateCheckoutForm(dispatch, state);
 				// We need to track PayPal payment attempts here because PayPal behaves
@@ -116,15 +116,18 @@ const connector = connect(mapStateToProps, mapDispatchToProps());
 type PropTypes = ConnectedProps<typeof connector>;
 
 const DatePickerWithError = withError(DatePickerFields);
-const Address = withStore(countries, 'billing', getBillingAddress);
 
 // ----- Component ----- //
 function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
-	const productPrice = getProductPrice(
-		props.productPrices,
-		props.country,
-		props.billingPeriod,
-	);
+	useEffect(() => {
+		sendEventSubscriptionCheckoutStart(
+			props.product,
+			true,
+			props.price,
+			props.billingPeriod,
+		);
+	}, []);
+
 	const submissionErrorHeading =
 		props.submissionError === 'personal_details_incorrect'
 			? 'Sorry there was a problem'
@@ -152,7 +155,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 							/>
 						}
 						title="Digital Gift Subscription"
-						productPrice={productPrice}
+						productPrice={props.price}
 						billingPeriod={props.billingPeriod}
 						changeSubscription={routes.digitalSubscriptionLandingGift}
 						orderIsAGift
@@ -167,11 +170,11 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 				>
 					<FormSection title="Gift recipient's details">
 						<PersonalDetailsDigitalGift
-							firstNameGiftRecipient={props.firstNameGiftRecipient ?? ''}
+							firstNameGiftRecipient={props.firstNameGiftRecipient}
 							setFirstNameGift={props.setFirstNameGift}
-							lastNameGiftRecipient={props.lastNameGiftRecipient ?? ''}
+							lastNameGiftRecipient={props.lastNameGiftRecipient}
 							setLastNameGift={props.setLastNameGift}
-							emailGiftRecipient={props.emailGiftRecipient ?? ''}
+							emailGiftRecipient={props.emailGiftRecipient}
 							setEmailGift={props.setEmailGift}
 							formErrors={props.formErrors}
 						/>
@@ -187,6 +190,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 						<TextArea
 							css={controlTextAreaResizing}
 							id="gift-message"
+							data-qm-masking="blocklist"
 							label="Gift message"
 							maxLength={300}
 							value={props.giftMessage ?? ''}
@@ -212,7 +216,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 						/>
 					</FormSection>
 					<FormSection title="Billing address">
-						<Address />
+						<BillingAddress countries={countries} />
 					</FormSection>
 					{paymentMethods.length > 1 ? (
 						<FormSection title="How would you like to pay?">
@@ -267,7 +271,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 							validateForm={props.validateForm}
 							isTestUser={props.isTestUser}
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-							amount={props.amount}
+							amount={props.discountedPrice.price}
 							billingPeriod={props.billingPeriod}
 							// @ts-expect-error TODO: Fixing the types around validation errors will affect every checkout, too much to tackle now
 							allErrors={[...props.formErrors, ...props.addressErrors]}
@@ -277,7 +281,7 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 						errorReason={props.submissionError}
 						errorHeading={submissionErrorHeading}
 					/>
-					<EndSummaryMobile orderIsAGift />
+					<EndSummaryMobile />
 					<DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />
 				</Form>
 			</CheckoutLayout>

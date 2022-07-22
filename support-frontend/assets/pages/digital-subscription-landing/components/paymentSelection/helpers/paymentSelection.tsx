@@ -41,9 +41,17 @@ import { getDigitalCheckout } from 'helpers/urls/externalLinks';
 export const getProductOptions = (
 	productPrices: ProductPrices,
 	countryGroupId: CountryGroupId,
-): Record<BillingPeriod, Record<IsoCurrency, ProductPrice>> =>
-	productPrices[countryGroups[countryGroupId].name].NoFulfilmentOptions
-		.NoProductOptions;
+): BillingPeriods => {
+	const countryGroupName = countryGroups[countryGroupId].name;
+	const productOptions =
+		productPrices[countryGroupName]?.NoFulfilmentOptions?.NoProductOptions;
+
+	if (productOptions) {
+		return productOptions;
+	}
+
+	throw new Error('getProductOptions: product options unavailable');
+};
 
 export const getCurrencySymbol = (currencyId: IsoCurrency): string =>
 	currencies[currencyId].glyph;
@@ -57,12 +65,15 @@ export const getProductPrice = (
 	productOptions: BillingPeriods,
 	billingPeriod: BillingPeriod,
 	currencyId: IsoCurrency,
-): ProductPrice => productOptions[billingPeriod][currencyId];
+): ProductPrice => {
+	const productPrice = productOptions[billingPeriod]?.[currencyId];
 
-export const getSavingPercentage = (
-	annualCost: number,
-	monthlyCostAnnualized: number,
-): string => `${Math.round((1 - annualCost / monthlyCostAnnualized) * 100)}%`;
+	if (productPrice) {
+		return productPrice;
+	}
+
+	throw new Error('getProductPrice: product price unavailable');
+};
 
 const BILLING_PERIOD = {
 	[Monthly]: {
@@ -187,12 +198,7 @@ const getHeroCtaProps = (
 		};
 
 		return {
-			href: getDigitalCheckout(
-				countryGroupId,
-				digitalBillingPeriod,
-				promoCode,
-				false,
-			),
+			href: getDigitalCheckout(digitalBillingPeriod, promoCode, false),
 			onClick,
 			priceCopy: getPriceDescription(
 				productPrice,
@@ -281,6 +287,7 @@ const getPaymentOptions = ({
 				action: 'DigitalPack',
 				label: trackingProperties.id,
 			});
+
 			sendTrackingEventsOnClick(trackingProperties)();
 		};
 
@@ -289,7 +296,6 @@ const getPaymentOptions = ({
 					title: BILLING_PERIOD_GIFT[digitalBillingPeriodGift].title,
 					price: getDisplayPrice(currencyId, fullPrice),
 					href: getDigitalCheckout(
-						countryGroupId,
 						billingPeriodForHref,
 						promoCode,
 						orderIsAGift,
@@ -309,7 +315,6 @@ const getPaymentOptions = ({
 						getFirstValidPrice(promotionalPrice, fullPrice),
 					),
 					href: getDigitalCheckout(
-						countryGroupId,
 						billingPeriodForHref,
 						promoCode,
 						orderIsAGift,

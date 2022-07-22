@@ -13,7 +13,7 @@ trait CheckoutPage extends Page with Browser {
   private val cardNumber = name("cardnumber")
   private val expiry = name("exp-date")
   private val cvc = name("cvc")
-  private val stripeRecaptchaButton = id("robot_checkbox")
+  private val recaptchaButton = id("robot_checkbox")
 
   // Direct debit
   private val directDebitButton = id("qa-direct-debit")
@@ -27,6 +27,11 @@ trait CheckoutPage extends Page with Browser {
   def selectStripePaymentMethod(): Unit = clickOn(stripeRadioButton)
 
   def selectDirectDebitPaymentMethod(): Unit = clickOn(directDebitButton)
+
+  def clickRecaptcha: Unit = {
+    clickOn(recaptchaButton)
+    waitForTestRecaptchaToComplete
+  }
 
   def pageHasLoaded: Boolean = {
     pageHasElement(personalDetails)
@@ -55,8 +60,7 @@ trait CheckoutPage extends Page with Browser {
     switchToFrame(2)
     setValue(cvc, "123")
     switchToParentFrame
-    clickOn(stripeRecaptchaButton)
-    waitForTestRecaptchaToComplete
+    clickRecaptcha
   }
 
   def waitForTestRecaptchaToComplete: Unit = Thread.sleep(1000)
@@ -78,7 +82,10 @@ trait CheckoutPage extends Page with Browser {
 
   def clickDirectDebitConfirm(): Unit = clickOn(directDebitSubmitButton)
 
-  def clickDirectDebitPay(): Unit = clickOn(directDebitPlaybackSubmit)
+  def clickDirectDebitPay(): Unit = {
+    clickRecaptcha
+    clickOn(directDebitPlaybackSubmit)
+  }
 
   def fillForm(): Unit
 }

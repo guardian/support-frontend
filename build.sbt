@@ -40,12 +40,28 @@ lazy val release = Seq[ReleaseStep](
 inThisBuild(
   Seq(
     organization := "com.gu",
-    scalaVersion := "2.13.6",
+    scalaVersion := "2.13.8",
     // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
     updateOptions := updateOptions.value.withCachedResolution(true),
     resolvers ++= Seq(Resolver.sonatypeRepo("releases")), // libraries that haven't yet synced to maven central
   ),
 )
+
+val mergeStrategySettings = {
+  assembly / assemblyMergeStrategy := {
+    case PathList("models", xs @ _*) => MergeStrategy.discard
+    case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
+    case x if x.endsWith("git.properties") => MergeStrategy.discard
+    case x if x.endsWith("module-info.class") => MergeStrategy.discard
+    case "mime.types" => MergeStrategy.first
+    case str if str.contains("simulacrum") => MergeStrategy.first
+    case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
+    case PathList("javax", "annotation", _ @_*) => MergeStrategy.first
+    case y =>
+      val oldStrategy = (assembly / assemblyMergeStrategy).value
+      oldStrategy(y)
+  }
+}
 
 lazy val releaseSettings = Seq(
   isSnapshot := false,
@@ -69,9 +85,9 @@ lazy val releaseSettings = Seq(
 )
 
 lazy val commonDependencies = Seq(
-  "com.typesafe" % "config" % "1.3.2",
+  "com.typesafe" % "config" % "1.4.2",
   scalatest % "test",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
 )
 
 lazy val root = (project in file("."))
@@ -86,6 +102,7 @@ lazy val root = (project in file("."))
     `support-workers`,
     `supporter-product-data`,
     `supporter-product-data-dynamo`,
+    `stripe-patrons-data`,
     `support-models`,
     `support-config`,
     `support-internationalisation`,
@@ -104,15 +121,22 @@ lazy val root = (project in file("."))
 lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .configs(SeleniumTest)
+  .configs(SeleniumTest, IntegrationTest)
   .settings(
+    integrationTestSettings,
     inConfig(SeleniumTest)(Defaults.testTasks),
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     scalafmtSettings,
   )
-  .dependsOn(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
+  .dependsOn(
+    // Include tests from support-services, for use by PriceSummaryServiceSpec
+    `support-services` % "compile->compile;test->test",
+    `support-models`,
+    `support-config`,
+    `support-internationalisation`,
+  )
   .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
 
 lazy val `support-workers` = (project in file("support-workers"))
@@ -123,6 +147,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     integrationTestSettings,
     scalafmtSettings,
     libraryDependencies ++= commonDependencies,
+    mergeStrategySettings,
   )
   .dependsOn(
     `support-services`,
@@ -160,6 +185,18 @@ lazy val `supporter-product-data-dynamo` = (project in file("support-modules/sup
   )
   .dependsOn(`module-aws`)
   .aggregate(`module-aws`)
+
+lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
+  .enablePlugins(RiffRaffArtifact)
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .configs(IntegrationTest)
+  .settings(
+    integrationTestSettings,
+    scalafmtSettings,
+    libraryDependencies ++= commonDependencies,
+  )
+  .dependsOn(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
+  .aggregate(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
 
 lazy val `support-payment-api` = (project in file("support-payment-api"))
   .enablePlugins(RiffRaffArtifact, SystemdPlugin, PlayService, RoutesCompiler, JDebPackaging, BuildInfoPlugin)
@@ -265,6 +302,7 @@ lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas
   .settings(
     scalafmtSettings,
     libraryDependencies ++= commonDependencies,
+    mergeStrategySettings,
   )
   .dependsOn(`module-acquisition-events`)
   .aggregate(`module-acquisition-events`)
@@ -275,6 +313,7 @@ lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisitio
   .settings(
     scalafmtSettings,
     libraryDependencies ++= commonDependencies,
+    mergeStrategySettings,
   )
   .dependsOn(`module-acquisition-events`, `module-aws`)
   .aggregate(`module-acquisition-events`)

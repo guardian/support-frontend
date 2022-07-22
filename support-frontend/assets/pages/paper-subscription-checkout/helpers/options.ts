@@ -14,6 +14,7 @@ import {
 	ActivePaperProductTypes,
 	Everyday,
 } from 'helpers/productPrice/productOptions';
+import type { DateYMDString } from 'helpers/types/DateString';
 import { getQueryParameter } from 'helpers/urls/url';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 import { getHomeDeliveryDays } from 'pages/paper-subscription-checkout/helpers/homeDeliveryDays';
@@ -45,7 +46,7 @@ function getDays(
 const getStartDate = (
 	fulfilmentOption: FulfilmentOptions,
 	productOption: ProductOptions,
-): string | null =>
-	formatMachineDate(getDays(fulfilmentOption, productOption)[0]) || null;
+): DateYMDString =>
+	formatMachineDate(getDays(fulfilmentOption, productOption)[0]);
 
 export { getProductOption, getFulfilmentOption, getDays, getStartDate };

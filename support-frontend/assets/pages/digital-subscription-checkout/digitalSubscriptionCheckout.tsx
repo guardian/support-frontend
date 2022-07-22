@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import { FocusStyleManager } from '@guardian/source-foundations';
 import { Provider } from 'react-redux';
-import DigitalFooter from 'components/footerCompliant/DigitalFooter';
 import Page from 'components/page/page';
 import HeaderWrapper from 'components/subscriptionCheckouts/headerWrapper';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
@@ -18,15 +17,14 @@ import {
 	Quarterly,
 } from 'helpers/productPrice/billingPeriods';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import type { CommonState } from 'helpers/redux/commonState/state';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getQueryParameter } from 'helpers/urls/url';
 import CheckoutForm from 'pages/digital-subscription-checkout/components/digitalCheckoutForm';
 import CheckoutFormGift from 'pages/digital-subscription-checkout/components/digitalCheckoutFormGift';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouGift from 'pages/digital-subscription-checkout/thankYouGift';
+import { DigitalFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import ThankYouPendingContent from './thankYouPendingContent';
 import 'stylesheets/skeleton/skeleton.scss';
 import './digitalSubscriptionCheckout.scss';
@@ -60,21 +58,11 @@ const billingPeriodInUrl = getQueryParameter('period');
 const initialBillingPeriod = getInitialBillingPeriod(billingPeriodInUrl || '');
 setUpTrackingAndConsents();
 
-const reducer = (commonState: CommonState) =>
-	createCheckoutReducer(
-		commonState.internationalisation.countryId,
-		DigitalPack,
-		initialBillingPeriod,
-		null,
-		null,
-		null,
-	);
-
-const store = initReduxForSubscriptions(reducer);
+const store = initReduxForSubscriptions(DigitalPack, initialBillingPeriod);
 const { countryGroupId, countryId, currencyId } =
 	store.getState().common.internationalisation;
 const { orderIsAGift, productPrices, billingPeriod } =
-	store.getState().page.checkout;
+	store.getState().page.checkoutForm.product;
 
 const thankyouProps = {
 	countryGroupId,

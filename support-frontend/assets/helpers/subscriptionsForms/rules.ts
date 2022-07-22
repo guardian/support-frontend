@@ -10,6 +10,7 @@ import {
 	formError,
 	nonEmptyString,
 	nonSillyCharacters,
+	notLongerThan,
 	notNull,
 	validate,
 } from './validation';
@@ -20,10 +21,10 @@ type CheckoutRule = {
 	error: FormError<FormField>;
 };
 
-function applyRedemptionRules(
+function applyPersonalDetailsRules(
 	fields: PersonalDetailsState,
 ): Array<FormError<FormField>> {
-	const redemptionFormRules: CheckoutRule[] = [
+	const personalDetailsRules: CheckoutRule[] = [
 		{
 			rule: nonEmptyString(fields.firstName),
 			error: formError('firstName', 'Please enter a first name.'),
@@ -34,6 +35,10 @@ function applyRedemptionRules(
 				'firstName',
 				'Please use only letters, numbers and punctuation.',
 			),
+		},
+		{
+			rule: notLongerThan(fields.firstName, 40),
+			error: formError('firstName', 'First name is too long.'),
 		},
 		{
 			rule: nonEmptyString(fields.lastName),
@@ -47,6 +52,10 @@ function applyRedemptionRules(
 			),
 		},
 		{
+			rule: notLongerThan(fields.lastName, 40),
+			error: formError('lastName', 'Last name is too long'),
+		},
+		{
 			rule: nonSillyCharacters(fields.telephone),
 			error: formError(
 				'telephone',
@@ -58,6 +67,10 @@ function applyRedemptionRules(
 			error: formError('email', 'Please enter a valid email address.'),
 		},
 		{
+			rule: notLongerThan(fields.email, 40),
+			error: formError('email', 'Email address is too long.'),
+		},
+		{
 			rule: emailAddressesMatch(
 				fields.isSignedIn,
 				fields.email,
@@ -66,7 +79,7 @@ function applyRedemptionRules(
 			error: formError('confirmEmail', 'The email addresses do not match.'),
 		},
 	];
-	return validate(redemptionFormRules);
+	return validate(personalDetailsRules);
 }
 
 function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
@@ -224,4 +237,4 @@ function applyDeliveryRules(fields: FormFields): Array<FormError<FormField>> {
 	return validate(deliveryRules).concat(applyCheckoutRules(fields));
 }
 
-export { applyCheckoutRules, applyDeliveryRules, applyRedemptionRules };
+export { applyCheckoutRules, applyDeliveryRules, applyPersonalDetailsRules };

@@ -1,55 +1,39 @@
-import type { Store } from '@reduxjs/toolkit';
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
+import {
+	combineReducers,
+	configureStore,
+	createListenerMiddleware,
+} from '@reduxjs/toolkit';
+import { fireEvent, screen } from '@testing-library/react';
 import { digitalProducts } from '__mocks__/productInfoMocks';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { renderWithStore } from '__test-utils__/render';
+import { addAddressSideEffects } from 'helpers/redux/checkout/address/sideEffects';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
-import type { CommonState } from 'helpers/redux/commonState/state';
+import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsStore';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import DigitalCheckoutFormGift from './digitalCheckoutFormGift';
 
-const pageReducer = (commonState: CommonState) =>
-	createCheckoutReducer(
-		commonState.internationalisation.countryId,
-		DigitalPack,
-		'Monthly',
-		null,
-		null,
-		null,
-	);
-
 function setUpStore(initialState: WithDeliveryCheckoutState) {
+	const listenerMiddleware = createListenerMiddleware();
+
 	const store = configureStore({
 		reducer: combineReducers({
-			page: pageReducer(initialState.common),
+			page: createReducer(),
 			common: commonReducer,
 		}),
-		// @ts-expect-error - some state properties ignored for testing
 		preloadedState: initialState,
+		middleware: (getDefaultMiddleware) =>
+			getDefaultMiddleware().prepend(listenerMiddleware.middleware),
 	});
+
+	addAddressSideEffects(
+		listenerMiddleware.startListening as SubscriptionsStartListening,
+	);
+
 	store.dispatch(setInitialCommonState(initialState.common));
+
 	return store;
-}
-
-function renderWithStore(
-	component: React.ReactElement,
-	{
-		initialState,
-		store = initialState ? setUpStore(initialState) : undefined,
-		...renderOptions
-	}: { initialState?: WithDeliveryCheckoutState; store?: Store } = {},
-) {
-	function Wrapper({ children }: { children?: React.ReactNode }) {
-		return <>{store && <Provider store={store}>{children}</Provider>}</>;
-	}
-
-	return render(component, {
-		wrapper: Wrapper,
-		...renderOptions,
-	});
 }
 
 describe('Digital gift checkout form', () => {
@@ -61,17 +45,21 @@ describe('Digital gift checkout form', () => {
 		initialState = {
 			page: {
 				checkout: {
-					product: 'DigitalPack',
-					billingPeriod: 'Monthly',
-					productOption: 'NoProductOptions',
-					fulfilmentOption: 'NoFulfilmentOptions',
-					productPrices: digitalProducts,
 					formErrors: [],
 				},
-				billingAddress: {
-					fields: {
-						country: 'GB',
-						formErrors: [],
+				checkoutForm: {
+					billingAddress: {
+						fields: {
+							country: 'GB',
+							errors: [],
+						},
+					},
+					product: {
+						productType: 'DigitalPack',
+						billingPeriod: 'Monthly',
+						productOption: 'NoProductOptions',
+						fulfilmentOption: 'NoFulfilmentOptions',
+						productPrices: digitalProducts,
 					},
 				},
 			},
@@ -84,14 +72,16 @@ describe('Digital gift checkout form', () => {
 			},
 		};
 		renderWithStore(<DigitalCheckoutFormGift />, {
-			// @ts-expect-error -- Type mismatch is unimportant for tests
 			initialState,
+			// @ts-expect-error -- Type mismatch is unimportant for tests
+			store: setUpStore(initialState),
 		});
 	});
 	describe('Payment methods', () => {
 		it('shows the direct debit option when the currency is GBP and the billing address is in the UK', () => {
 			expect(screen.queryByText('Direct debit')).toBeInTheDocument();
 		});
+
 		it('does not show the direct debit option when the currency is not GBP', async () => {
 			const countrySelect = await screen.findByLabelText('Country');
 			fireEvent.change(countrySelect, {

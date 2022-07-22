@@ -1,28 +1,36 @@
 // ----- Imports ----- //
+
 import {
 	setFormErrors,
 	setStage,
 } from 'helpers/subscriptionsForms/formActions';
-import { createCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import type { FormField, Stage } from '../formFields';
+import type { FormError } from '../validation';
 
 jest.mock('ophan', () => () => ({}));
+
 // ----- Tests ----- //
+
 describe('Subscription Checkout Reducer', () => {
-	global.guardian = {
-		productPrices: null,
-	};
 	it('should handle SET_STAGE to "thankyou"', () => {
 		const stage: Stage = 'thankyou';
-		const action = setStage(stage);
-		const newState = createCheckoutReducer('GB')(undefined, action);
+		const action = setStage(stage, 'DigitalPack', undefined);
+
+		const newState = createReducer()(undefined, action);
+
 		expect(newState.checkout.stage).toEqual(stage);
 	});
+
 	it('should handle SET_STAGE to "checkout"', () => {
 		const stage: Stage = 'checkout';
-		const action = setStage(stage);
-		const newState = createCheckoutReducer('GB')(undefined, action);
+		const action = setStage(stage, 'DigitalPack', undefined);
+
+		const newState = createReducer()(undefined, action);
+
 		expect(newState.checkout.stage).toEqual(stage);
 	});
+
 	it('should setErrors on the redux store', () => {
 		const errors = [
 			{
@@ -38,8 +46,10 @@ describe('Subscription Checkout Reducer', () => {
 				message: 'Please enter a value',
 			},
 		];
-		const action = setFormErrors(errors);
-		const newState = createCheckoutReducer('GB')(undefined, action);
+		const action = setFormErrors(errors as Array<FormError<FormField>>);
+
+		const newState = createReducer()(undefined, action);
+
 		expect(newState.checkout.formErrors).toEqual(errors);
 	});
 });

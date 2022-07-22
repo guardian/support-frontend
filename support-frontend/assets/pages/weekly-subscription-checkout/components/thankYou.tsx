@@ -8,12 +8,12 @@ import HeadingBlock from 'components/headingBlock/headingBlock';
 import OrderedList from 'components/list/orderedList';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
-import styles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
+import moduleStyles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { Option } from 'helpers/types/option';
 import {
 	helpCentreUrl,
@@ -22,8 +22,13 @@ import {
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 
+const styles = moduleStyles as {
+	heroGuardianWeeklyNonGifting: string;
+	hero: string;
+};
+
 // ----- Map State/Props ----- //
-function mapStateToProps(state: WithDeliveryCheckoutState) {
+function mapStateToProps(state: SubscriptionsState) {
 	return { ...getFormFields(state) };
 }
 

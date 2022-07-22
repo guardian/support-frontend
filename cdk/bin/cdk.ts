@@ -1,6 +1,7 @@
 import "source-map-support/register";
 import { App } from "@aws-cdk/core";
 import { Frontend } from "../lib/frontend";
+import { StripePatronsData } from "../lib/stripe-patrons-data";
 
 const app = new App();
 const cloudFormationStackName = process.env.GU_CFN_STACK_NAME;
@@ -33,4 +34,16 @@ new Frontend(app, "Frontend-CODE", {
     maximumInstances: 2,
   },
   shouldEnableAlarms: false,
+});
+
+new StripePatronsData(app, "StripePatronsData-CODE", {
+  stack: "support",
+  stage: "CODE",
+  cloudFormationStackName,
+});
+
+new StripePatronsData(app, "StripePatronsData-PROD", {
+  stack: "support",
+  stage: "PROD",
+  cloudFormationStackName,
 });

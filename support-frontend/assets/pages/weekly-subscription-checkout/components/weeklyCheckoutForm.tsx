@@ -7,6 +7,7 @@ import {
 	RadioGroup,
 	Select,
 } from '@guardian/source-react-components';
+import { useEffect } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Rows from 'components/base/rows';
@@ -20,8 +21,10 @@ import DirectDebitForm from 'components/directDebit/directDebitProgressiveDisclo
 import { options } from 'components/forms/customFields/options';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import GridImage from 'components/gridImage/gridImage';
-import { withStore } from 'components/subscriptionCheckouts/address/addressFields';
-import { addressActionCreatorsFor } from 'components/subscriptionCheckouts/address/addressFieldsStore';
+import {
+	BillingAddress,
+	DeliveryAddress,
+} from 'components/subscriptionCheckouts/address/scopedAddressFields';
 import { BillingPeriodSelector } from 'components/subscriptionCheckouts/billingPeriodSelector';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
@@ -34,15 +37,17 @@ import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import { countries } from 'helpers/internationalisation/country';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
 import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
-import { getWeeklyFulfilmentOption } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import { getProductPrice } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
-import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
+import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
+import { selectPriceForProduct } from 'helpers/redux/checkout/product/selectors/productPrice';
+import type {
+	SubscriptionsDispatch,
+	SubscriptionsState,
+} from 'helpers/redux/subscriptionsStore';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import {
 	formActionCreators,
@@ -59,11 +64,8 @@ import {
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import {
-	getBillingAddress,
-	getDeliveryAddress,
-} from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { firstError } from 'helpers/subscriptionsForms/validation';
+import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
 import { titles } from 'helpers/user/details';
 import { signOut } from 'helpers/user/user';
@@ -72,14 +74,15 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+
 // ----- Styles ----- //
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
 `;
 
 // ----- Map State/Props ----- //
-function mapStateToProps(state: WithDeliveryCheckoutState) {
-	const { billingAddress, deliveryAddress } = state.page;
+function mapStateToProps(state: SubscriptionsState) {
+	const { billingAddress, deliveryAddress } = state.page.checkoutForm;
 	const { billingAddressIsSame } = state.page.checkout;
 	return {
 		...getFormFields(state),
@@ -87,22 +90,24 @@ function mapStateToProps(state: WithDeliveryCheckoutState) {
 			? deliveryAddress.fields.country
 			: billingAddress.fields.country,
 		deliveryCountry: deliveryAddress.fields.country,
+		fulfilmentOption: state.page.checkoutForm.product.fulfilmentOption,
 		formErrors: state.page.checkout.formErrors,
 		submissionError: state.page.checkout.submissionError,
-		productPrices: state.page.checkout.productPrices,
-		deliveryAddressErrors: state.page.deliveryAddress.fields.formErrors,
-		billingAddressErrors: state.page.billingAddress.fields.formErrors,
+		productPrices: state.page.checkoutForm.product.productPrices,
+		deliveryAddressErrors:
+			state.page.checkoutForm.deliveryAddress.fields.errors,
+		billingAddressErrors: state.page.checkoutForm.billingAddress.fields.errors,
 		isTestUser: state.page.checkout.isTestUser,
-		csrf: state.page.csrf,
+		csrf: state.page.checkoutForm.csrf,
 		currencyId:
 			currencyFromCountryCode(deliveryAddress.fields.country) ?? 'USD',
 		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
 		participations: state.common.abParticipations,
+		price: selectPriceForProduct(state),
 	};
 }
 
 function mapDispatchToProps() {
-	const { setCountry } = addressActionCreatorsFor('billing');
 	return {
 		...formActionCreators,
 		fetchAndStoreUserType:
@@ -115,27 +120,17 @@ function mapDispatchToProps() {
 			},
 		formIsValid:
 			() =>
-			(
-				_dispatch: SubscriptionsDispatch,
-				getState: () => WithDeliveryCheckoutState,
-			) =>
+			(_dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) =>
 				withDeliveryFormIsValid(getState()),
 		submitForm:
 			() =>
-			(
-				dispatch: SubscriptionsDispatch,
-				getState: () => WithDeliveryCheckoutState,
-			) =>
+			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) =>
 				submitWithDeliveryForm(dispatch, getState()),
 		signOut,
-		setBillingCountry: (country: string) => (dispatch: SubscriptionsDispatch) =>
-			setCountry(country)(dispatch),
+		setBillingCountry,
 		validateForm:
 			() =>
-			(
-				dispatch: SubscriptionsDispatch,
-				getState: () => WithDeliveryCheckoutState,
-			) => {
+			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) => {
 				const state = getState();
 				validateWithDeliveryForm(dispatch, state);
 				// We need to track PayPal payment attempts here because PayPal behaves
@@ -157,25 +152,21 @@ const connector = connect(mapStateToProps, mapDispatchToProps());
 type PropTypes = ConnectedProps<typeof connector>;
 
 // ----- Form Fields ----- //
-const DeliveryAddress = withStore(
-	weeklyDeliverableCountries,
-	'delivery',
-	getDeliveryAddress,
-);
-const BillingAddress = withStore(countries, 'billing', getBillingAddress);
 const days = getWeeklyDays();
 
 // ----- Component ----- //
 function WeeklyCheckoutForm(props: PropTypes) {
 	useCsrCustomerData(props.setCsrCustomerData);
 
-	const fulfilmentOption = getWeeklyFulfilmentOption(props.deliveryCountry);
-	const price = getProductPrice(
-		props.productPrices,
-		props.deliveryCountry,
-		props.billingPeriod,
-		fulfilmentOption,
-	);
+	useEffect(() => {
+		sendEventSubscriptionCheckoutStart(
+			props.product,
+			false,
+			props.price,
+			props.billingPeriod,
+		);
+	}, []);
+
 	const submissionErrorHeading =
 		props.submissionError === 'personal_details_incorrect'
 			? 'Sorry there was a problem'
@@ -206,7 +197,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						}
 						title="Guardian Weekly"
 						description=""
-						productPrice={price}
+						productPrice={props.price}
 						billingPeriod={props.billingPeriod}
 						changeSubscription={routes.guardianWeeklySubscriptionLanding}
 						product={props.product}
@@ -223,6 +214,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						<Select
 							css={marginBottom}
 							id="title"
+							data-qm-masking="blocklist"
 							label="Title"
 							optional
 							value={props.title ?? ''}
@@ -249,7 +241,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						/>
 					</FormSection>
 					<FormSection title="Where should we deliver your magazine?">
-						<DeliveryAddress />
+						<DeliveryAddress countries={weeklyDeliverableCountries} />
 					</FormSection>
 					<FormSection title="Is the billing address the same as the delivery address?">
 						<Rows>
@@ -283,7 +275,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					</FormSection>
 					{!props.billingAddressIsSame ? (
 						<FormSection title="Your billing address">
-							<BillingAddress />
+							<BillingAddress countries={weeklyDeliverableCountries} />
 						</FormSection>
 					) : null}
 					<FormSection title="Please select the first publication you’d like to receive">
@@ -328,7 +320,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						</Rows>
 					</FormSection>
 					<BillingPeriodSelector
-						fulfilmentOption={fulfilmentOption}
+						fulfilmentOption={props.fulfilmentOption}
 						onChange={(billingPeriod) => props.setBillingPeriod(billingPeriod)}
 						billingPeriods={weeklyBillingPeriods(
 							props.participations.sixForSixSuppression !== 'variant',
@@ -397,7 +389,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							validateForm={props.validateForm}
 							isTestUser={props.isTestUser}
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-							amount={price.price}
+							amount={props.price.price}
 							billingPeriod={props.billingPeriod}
 							// @ts-expect-error TODO: fix when we can fix error states for all checkouts
 							allErrors={[
@@ -412,9 +404,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						errorHeading={submissionErrorHeading}
 					/>
 					<Total
-						price={price.price}
+						price={props.price.price}
 						currency={props.currencyId}
-						promotions={price.promotions}
+						promotions={props.price.promotions}
 					/>
 					<PaymentTerms paymentMethod={props.paymentMethod} />
 				</Form>

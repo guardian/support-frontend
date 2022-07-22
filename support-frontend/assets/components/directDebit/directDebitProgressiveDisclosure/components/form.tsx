@@ -11,9 +11,7 @@ import * as React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import 'helpers/forms/errorReasons';
 import type { Option } from 'helpers/types/option';
-import 'helpers/types/option';
 import type { DirectDebitFieldName } from '../types';
 
 const directDebitForm = css`
@@ -35,7 +33,7 @@ const passThroughClicksToInput = css`
 	}
 `;
 
-type EventHandler = (e: React.ChangeEvent<HTMLInputElement>) => void;
+type EventHandler = (newVal: string) => void;
 
 type PropTypes = {
 	accountHolderName: string;
@@ -55,12 +53,8 @@ type PropTypes = {
 	updateAccountHolderName: EventHandler;
 	updateSortCodeString: EventHandler;
 	updateAccountNumber: EventHandler;
-	updateAccountHolderConfirmation: EventHandler;
-	onChange: (
-		field: DirectDebitFieldName,
-		dispatchUpdate: (event: React.ChangeEvent<HTMLInputElement>) => void,
-		event: React.ChangeEvent<HTMLInputElement>,
-	) => void;
+	updateAccountHolderConfirmation: (isConfirmed: boolean) => void;
+	onChange: (field: DirectDebitFieldName, dispatchUpdate: () => void) => void;
 	onSubmit: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
@@ -70,13 +64,12 @@ function Form(props: PropTypes): JSX.Element {
 			<div css={spaceBetween}>
 				<TextInput
 					id="account-holder-name-input"
+					data-qm-masking="blocklist"
 					value={props.accountHolderName}
 					autoComplete="off"
 					onChange={(e) =>
-						props.onChange(
-							'accountHolderName',
-							props.updateAccountHolderName,
-							e,
+						props.onChange('accountHolderName', () =>
+							props.updateAccountHolderName(e.target.value),
 						)
 					}
 					maxLength={40}
@@ -88,6 +81,7 @@ function Form(props: PropTypes): JSX.Element {
 			<div css={spaceBetween}>
 				<TextInput
 					id="sort-code-input"
+					data-qm-masking="blocklist"
 					label="Sort code"
 					autoComplete="off"
 					type="text"
@@ -95,7 +89,9 @@ function Form(props: PropTypes): JSX.Element {
 					pattern="[0-9]*"
 					value={props.sortCodeString}
 					onChange={(e) =>
-						props.onChange('sortCodeString', props.updateSortCodeString, e)
+						props.onChange('sortCodeString', () =>
+							props.updateSortCodeString(e.target.value),
+						)
 					}
 					error={props.sortCodeError}
 					minLength={6}
@@ -107,10 +103,13 @@ function Form(props: PropTypes): JSX.Element {
 			<div css={spaceBetween}>
 				<TextInput
 					id="account-number-input"
+					data-qm-masking="blocklist"
 					value={props.accountNumber}
 					autoComplete="off"
 					onChange={(e) =>
-						props.onChange('accountNumber', props.updateAccountNumber, e)
+						props.onChange('accountNumber', () =>
+							props.updateAccountNumber(e.target.value),
+						)
 					}
 					minLength={6}
 					maxLength={8}
@@ -127,10 +126,8 @@ function Form(props: PropTypes): JSX.Element {
 					value="account-holder-confirmation"
 					id="account-holder-confirmation"
 					onChange={(e) =>
-						props.onChange(
-							'accountHolderConfirmation',
-							props.updateAccountHolderConfirmation,
-							e,
+						props.onChange('accountHolderConfirmation', () =>
+							props.updateAccountHolderConfirmation(e.target.checked),
 						)
 					}
 					checked={props.accountHolderConfirmation}
@@ -139,6 +136,7 @@ function Form(props: PropTypes): JSX.Element {
 					error={!!props.accountHolderConfirmationError}
 				/>
 			</div>
+
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<Button
 					id="qa-direct-debit-submit"

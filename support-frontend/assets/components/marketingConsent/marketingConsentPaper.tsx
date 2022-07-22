@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+
 import { css, ThemeProvider } from '@emotion/react';
 import { from, headline, space, textSans } from '@guardian/source-foundations';
 import {
@@ -10,10 +11,11 @@ import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
-import type { Csrf as CsrfState } from 'helpers/csrf/csrfReducer';
 import { checkEmail } from 'helpers/forms/formValidation';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { getEmail } from 'helpers/subscriptionsForms/formFields';
+import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { Action } from 'helpers/user/userActions';
 import { logException } from 'helpers/utilities/logger';
 
@@ -55,22 +57,25 @@ const maxWidth = css`
 const marginForButton = css`
 	margin: ${space[5]}px 0 0;
 `;
+
 // ----- Types ----- //
+
 type ButtonPropTypes = {
 	confirmOptIn: boolean | null | undefined;
 	email: string;
 	csrf: CsrfState;
-	onClick: (arg0: string | null | undefined, arg1: CsrfState) => void;
+	onClick: (email: string, csrf: CsrfState) => void;
 	requestPending: boolean;
 };
+
 type PropTypes = ButtonPropTypes & {
 	error: boolean;
 };
 
-const mapStateToProps = (state) => ({
-	confirmOptIn: state.page.marketingConsent.confirmOptIn,
+const mapStateToProps = (state: CheckoutState) => ({
+	confirmOptIn: state.page.checkoutForm.marketingConsent.confirmOptIn,
 	email: getEmail(state),
-	csrf: state.page.csrf,
+	csrf: state.page.checkoutForm.csrf,
 });
 
 function mapDispatchToProps(dispatch: Dispatch<Action>) {
@@ -85,7 +90,6 @@ function mapDispatchToProps(dispatch: Dispatch<Action>) {
 				email,
 				dispatch,
 				csrf,
-				'MARKETING_CONSENT',
 			);
 		},
 	};

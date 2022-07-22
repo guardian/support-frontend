@@ -2,6 +2,7 @@ package controllers
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
+import admin.settings.AllSettingsProvider
 import akka.actor.{ActorSystem, Scheduler}
 import cats.data.EitherT
 import cats.implicits._
@@ -9,6 +10,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.workers._
 import config.Configuration.GuardianDomain
+import config.RecaptchaConfigProvider
 import controllers.CreateSubscriptionController._
 import io.circe.Encoder
 import io.circe.generic.semiauto._
@@ -22,7 +24,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
-import services.{IdentityService, TestUserService}
+import services.{IdentityService, RecaptchaService, StripeSetupIntentService, TestUserService}
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
@@ -44,6 +46,9 @@ class CreateSubscriptionController(
     client: SupportWorkersClient,
     actionRefiners: CustomActionBuilders,
     identityService: IdentityService,
+    recaptchaService: RecaptchaService,
+    recaptchaConfigProvider: RecaptchaConfigProvider,
+    settingsProvider: AllSettingsProvider,
     testUsers: TestUserService,
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
@@ -56,26 +61,75 @@ class CreateSubscriptionController(
   def create: EssentialAction =
     LoggingAndAlarmOnFailure {
       MaybeAuthenticatedAction.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
-        val maybeLoggedInIdentityIdAndEmail =
-          request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
-        logIncomingRequest(request, maybeLoggedInIdentityIdAndEmail)
-
         val errorOrStatusResponse = for {
-          userAndEmail <- maybeLoggedInIdentityIdAndEmail match {
-            case Some(identityIdAndEmail) => EitherT.pure[Future, CreateSubscriptionError](identityIdAndEmail)
-            case None => getOrCreateIdentityUser(request.body).leftMap(mapIdentityErrorToCreateSubscriptionError)
+          _ <- getRecaptchaTokenFromRequest(request) match {
+            case Some(token) => validateRecaptcha(token, testUsers.isTestUser(request))
+            case None => EitherT.rightT[Future, RequestValidationError](())
           }
-          _ <- validate(request)
-          supportWorkersUser = buildSupportWorkersUser(userAndEmail, request.body, testUsers.isTestUser(request))
-          statusResponse <- client
-            .createSubscription(request, supportWorkersUser, request.uuid)
-            .leftMap[CreateSubscriptionError](ServerError)
-        } yield statusResponse
+          result <- createSubscription(request)
+        } yield result
 
         toHttpResponse(errorOrStatusResponse, request.body.product, request.body.email)
 
       }
     }
+
+  private def getRecaptchaTokenFromRequest(
+      request: OptionalAuthRequest[CreateSupportWorkersRequest],
+  ): Option[String] = {
+    // Only Direct Debit requests include a recaptchaToken. For Stripe payments, recaptcha validation is done earlier in the flow
+    request.body.paymentFields match {
+      case Left(dd: DirectDebitPaymentFields) => Some(dd.recaptchaToken)
+      case _ => None
+    }
+  }
+
+  // Returns a Right if validation succeeds
+  private def validateRecaptcha(token: String, isTestUser: Boolean): EitherT[Future, RequestValidationError, Unit] = {
+    val recaptchaBackendEnabled =
+      settingsProvider.getAllSettings().switches.recaptchaSwitches.enableRecaptchaBackend.isOn
+    val recaptchaFrontendEnabled =
+      settingsProvider.getAllSettings().switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
+    // We never validate on backend unless frontend validation is Enabled
+    val recaptchaEnabled = recaptchaFrontendEnabled && recaptchaBackendEnabled
+
+    val v2RecaptchaSecretKey = recaptchaConfigProvider.get(isTestUser).v2SecretKey
+
+    if (recaptchaEnabled) {
+      recaptchaService
+        .verify(token, v2RecaptchaSecretKey)
+        .leftMap(err => RequestValidationError(err))
+        .map(_.success)
+        .subflatMap {
+          case true => Right(())
+          case false => Left(RequestValidationError("Recaptcha validation failed"))
+        }
+    } else {
+      EitherT.rightT(true)
+    }
+  }
+
+  private def createSubscription(
+      request: OptionalAuthRequest[CreateSupportWorkersRequest],
+  ): EitherT[Future, CreateSubscriptionError, StatusResponse] = {
+    val maybeLoggedInIdentityIdAndEmail =
+      request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
+    logIncomingRequest(request, maybeLoggedInIdentityIdAndEmail)
+
+    for {
+      userAndEmail <- maybeLoggedInIdentityIdAndEmail match {
+        case Some(identityIdAndEmail) => EitherT.pure[Future, CreateSubscriptionError](identityIdAndEmail)
+        case None =>
+          getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
+            .leftMap(mapIdentityErrorToCreateSubscriptionError)
+      }
+      _ <- validate(request)
+      supportWorkersUser = buildSupportWorkersUser(userAndEmail, request.body, testUsers.isTestUser(request))
+      statusResponse <- client
+        .createSubscription(request, supportWorkersUser, request.uuid)
+        .leftMap[CreateSubscriptionError](ServerError)
+    } yield statusResponse
+  }
 
   private def mapIdentityErrorToCreateSubscriptionError(identityError: IdentityError) =
     if (IdentityError.isDisallowedEmailError(identityError))
@@ -96,9 +150,16 @@ class CreateSubscriptionController(
 
   private def getOrCreateIdentityUser(
       body: CreateSupportWorkersRequest,
+      referer: Option[String],
   ): EitherT[Future, IdentityError, IdentityIdAndEmail] = {
     implicit val scheduler: Scheduler = system.scheduler
-    val identityId = identityService.getOrCreateUserFromEmail(body.email, body.firstName, body.lastName)
+    val identityId = identityService.getOrCreateUserFromEmail(
+      body.email,
+      body.firstName,
+      body.lastName,
+      body.ophanIds.pageviewId,
+      referer,
+    )
 
     identityId.map(identityId => IdentityIdAndEmail(identityId, body.email))
   }

@@ -3,7 +3,7 @@ import * as React from 'react';
 import type {
 	Phase,
 	SortCodeIndex,
-} from 'components/directDebit/directDebitActions';
+} from 'helpers/redux/checkout/payment/directDebit/state';
 
 type SortCodePropTypes = {
 	phase: Phase;
@@ -67,6 +67,7 @@ function SortCodeField(props: {
 	return (
 		<input
 			id={props.id}
+			data-qm-masking="blocklist"
 			value={props.value}
 			onChange={props.onChange}
 			type="tel"

@@ -14,8 +14,7 @@ function getInternationalisationFromCountry(
 ) {
 	const countryGroupId =
 		fromCountry(countryId) ?? internationalisation.countryGroupId;
-	const currencyId =
-		fromCountryGroupId(countryGroupId) ?? internationalisation.currencyId;
+	const currencyId = fromCountryGroupId(countryGroupId);
 	return {
 		countryGroupId,
 		currencyId,

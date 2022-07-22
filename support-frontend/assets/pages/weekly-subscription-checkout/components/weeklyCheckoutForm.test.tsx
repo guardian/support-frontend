@@ -1,58 +1,26 @@
 import '__mocks__/stripeMock';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { fireEvent, render, screen } from '@testing-library/react';
-import * as React from 'react';
-import { Provider } from 'react-redux';
-import type { Store } from 'redux';
+import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
+import { renderWithStore } from '__test-utils__/render';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { createWithDeliveryCheckoutReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { formatMachineDate } from 'helpers/utilities/dateConversions';
+import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import WeeklyCheckoutForm from './weeklyCheckoutForm';
-
-const pageReducer = (initialState: WithDeliveryCheckoutState) =>
-	createWithDeliveryCheckoutReducer(
-		initialState.common.internationalisation.countryId,
-		GuardianWeekly,
-		'Annual',
-		formatMachineDate(new Date()),
-		initialState.page.checkout.productOption,
-		initialState.page.checkout.fulfilmentOption,
-	);
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const store = configureStore({
 		reducer: combineReducers({
-			page: pageReducer(initialState),
+			page: createReducer(),
 			common: commonReducer,
 		}),
-		// @ts-expect-error - some state properties ignored for testing
 		preloadedState: initialState,
 	});
 	store.dispatch(setInitialCommonState(initialState.common));
 	return store;
-}
-
-function renderWithStore(
-	component: React.ReactElement,
-	{
-		initialState,
-		store = initialState ? setUpStore(initialState) : undefined,
-		...renderOptions
-	}: { initialState?: WithDeliveryCheckoutState; store?: Store } = {},
-) {
-	function Wrapper({ children }: { children?: React.ReactNode }) {
-		return <>{store && <Provider store={store}>{children}</Provider>}</>;
-	}
-
-	return render(component, {
-		wrapper: Wrapper,
-		...renderOptions,
-	});
 }
 
 describe('Guardian Weekly checkout form', () => {
@@ -64,24 +32,28 @@ describe('Guardian Weekly checkout form', () => {
 		initialState = {
 			page: {
 				checkout: {
-					product: 'Paper',
-					billingPeriod: 'Monthly',
-					productOption: 'NoProductOptions',
-					fulfilmentOption: 'Domestic',
-					productPrices: weeklyProducts,
 					formErrors: [],
 					billingAddressIsSame: true,
 				},
-				billingAddress: {
-					fields: {
-						country: 'GB',
-						formErrors: [],
+				checkoutForm: {
+					product: {
+						productType: GuardianWeekly,
+						billingPeriod: 'Monthly',
+						productOption: 'NoProductOptions',
+						fulfilmentOption: 'Domestic',
+						productPrices: weeklyProducts,
 					},
-				},
-				deliveryAddress: {
-					fields: {
-						country: 'GB',
-						formErrors: [],
+					billingAddress: {
+						fields: {
+							country: 'GB',
+							errors: [],
+						},
+					},
+					deliveryAddress: {
+						fields: {
+							country: 'GB',
+							errors: [],
+						},
 					},
 				},
 			},
@@ -102,6 +74,8 @@ describe('Guardian Weekly checkout form', () => {
 		renderWithStore(<WeeklyCheckoutForm />, {
 			//  @ts-expect-error Unused common state properties
 			initialState,
+			// @ts-expect-error -- Type mismatch is unimportant for tests
+			store: setUpStore(initialState),
 		});
 	});
 

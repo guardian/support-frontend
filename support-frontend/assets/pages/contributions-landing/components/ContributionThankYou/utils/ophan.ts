@@ -1,8 +1,6 @@
+import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { trackComponentEvents } from 'helpers/tracking/ophan';
-import 'helpers/forms/paymentMethods';
-import type { ContributionType } from 'helpers/contributions';
-import 'helpers/contributions';
 
 export const OPHAN_COMPONENT_ID_SIGN_IN = 'sign-into-the-guardian-link';
 export const OPHAN_COMPONENT_ID_SIGN_UP = 'set-password';
@@ -93,7 +91,7 @@ export const trackUserData = (
 	isSignedIn: boolean,
 	isKnownEmail: boolean,
 	isLargeDonation: boolean,
-) => {
+): void => {
 	trackPaymentMethod(paymentMethod);
 	trackContributionType(contributionType);
 	trackSignedIn(isSignedIn);

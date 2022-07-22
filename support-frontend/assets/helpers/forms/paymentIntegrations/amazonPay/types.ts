@@ -3,6 +3,10 @@
 export interface AmazonLoginObject {
 	setClientId: (clientId: string) => void;
 	setSandboxMode: (sandboxMode: boolean) => void;
+	authorize: (
+		login: { scope: string; popup: boolean },
+		cb: (response: { error?: string }) => void,
+	) => void;
 }
 
 export interface AmazonObject {
@@ -65,20 +69,4 @@ export interface AmazonPaymentsObject {
 		Wallet: WalletConstructor;
 		Consent: ConsentConstructor;
 	};
-}
-export interface AmazonPayLibrary {
-	amazonLoginObject: AmazonLoginObject | null;
-	amazonPaymentsObject: AmazonPaymentsObject | null;
-}
-
-export interface AmazonPayData {
-	hasBegunLoading: boolean; // to avoid loading the sdk more than once
-	amazonPayLibrary: AmazonPayLibrary; // sdk objects
-	walletIsStale: boolean; // for re-rendering the wallet widget when an error needs to be displayed
-	hasAccessToken: boolean; // set when user logs in
-	paymentSelected: boolean; // indicates if user has selected a payment method from their wallet
-	fatalError: boolean; // for when we cannot use amazon pay
-	orderReferenceId: string | null; // for one-off contributions
-	amazonBillingAgreementId?: string; // for recurring contributions
-	amazonBillingAgreementConsentStatus: boolean; // for recurring contributions
 }
