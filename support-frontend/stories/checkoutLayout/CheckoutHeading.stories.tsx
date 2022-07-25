@@ -1,5 +1,7 @@
+import { css } from '@emotion/react';
 import { brand } from '@guardian/source-foundations';
 import { Column, Columns } from '@guardian/source-react-components';
+import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHeading';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Container } from 'components/layout/container';
@@ -96,28 +98,24 @@ WithSiblingOverlaid.decorators = [
 					}}
 				>
 					<Container>
-						<Columns>
-							<Column width={[0, 0, 1 / 3]}></Column>
-							<Column>
-								<div
-									style={{
-										background: '#ffffff',
-										width: '100%',
-										maxWidth: '540px',
-										height: '600px',
-										marginTop: '120px',
-										padding: '12px',
-										border: '1px solid black',
-									}}
-								>
-									<p>
-										Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
-										faucibus nibh erat, eget rutrum ligula vehicula sit amet.
-										Etiam scelerisque dapibus pulvinar. Integer non accumsan
-										justo. Duis et vehicula risus. Nulla ligula eros, consequat
-										sodales lectus eget, eleifend venenatis neque.
-									</p>
-								</div>
+						<Columns
+							cssOverrides={css`
+								padding-top: 120px;
+							`}
+						>
+							<Column width={[0, 1 / 8, 1 / 3]}></Column>
+							<Column width={[1, 3 / 4, 1 / 2]}>
+								<Box>
+									<BoxContents>
+										<p>
+											Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+											Ut faucibus nibh erat, eget rutrum ligula vehicula sit
+											amet. Etiam scelerisque dapibus pulvinar. Integer non
+											accumsan justo. Duis et vehicula risus. Nulla ligula eros,
+											consequat sodales lectus eget, eleifend venenatis neque.
+										</p>
+									</BoxContents>
+								</Box>
 							</Column>
 						</Columns>
 					</Container>
