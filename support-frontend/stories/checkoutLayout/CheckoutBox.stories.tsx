@@ -24,7 +24,7 @@ export default {
 	},
 	decorators: [
 		(Story: React.FC): JSX.Element => (
-			<Container backgroundColor="#D9D9D9">
+			<Container backgroundColor={neutral[97]}>
 				<Columns
 					collapseUntil="tablet"
 					cssOverrides={css`
