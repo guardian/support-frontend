@@ -18,10 +18,10 @@ function getPaymentMethodSwitchName(
 			return 'paypal';
 
 		case Stripe:
-			return 'directDebit';
+			return 'creditCard';
 
 		case DirectDebit:
-			return 'creditCard';
+			return 'directDebit';
 
 		default:
 			return null;
