@@ -432,9 +432,7 @@ function getBillingCountryAndState(
 }
 
 function getProductOptionsForBenefitsTest(amount: number, state: State) {
-	const inBenefitsTest =
-		state.common.abParticipations.PP_V3 === 'V2_BULLET' ||
-		state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH';
+	const isInPropTest = state.common.abParticipations.newProp === 'variant';
 	const contributionType = getContributionType(state);
 	const isRecurring = contributionType !== 'ONE_OFF';
 
@@ -443,9 +441,10 @@ function getProductOptionsForBenefitsTest(amount: number, state: State) {
 		contributionType,
 	);
 	const amountIsHighEnough = !!(thresholdPrice && amount >= thresholdPrice);
-	const shouldGetDigisub = inBenefitsTest && isRecurring && amountIsHighEnough;
-	return shouldGetDigisub
-		? { productType: 'DigitalPack' as const, readerType: 'Direct' as const }
+	const shouldGetSupporterPlus =
+		isInPropTest && isRecurring && amountIsHighEnough;
+	return shouldGetSupporterPlus
+		? { productType: 'SupporterPlus' as const }
 		: { productType: 'Contribution' as const };
 }
 
