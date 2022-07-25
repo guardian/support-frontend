@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { brand, neutral } from '@guardian/source-foundations';
-import { Column, Columns } from '@guardian/source-react-components';
+import { Column, Columns, TextInput } from '@guardian/source-react-components';
 import type { BoxProps } from 'components/checkoutBox/checkoutBox';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { Container } from 'components/layout/container';
@@ -45,14 +45,15 @@ function Template(args: BoxProps): JSX.Element {
 	return <Box {...args} />;
 }
 
-Template.args = {} as Record<string, unknown>;
+Template.args = {} as BoxProps;
 
 export const WithBoxContents = Template.bind({});
 
 WithBoxContents.args = {
 	children: (
 		<BoxContents>
-			This is simple container for content on the checkout page.
+			This is simple container for content on the checkout page. Children may be
+			wrapped in a BoxContents component to provide consistent padding.
 		</BoxContents>
 	),
 	tag: 'section',
@@ -80,3 +81,38 @@ WithoutBoxContents.args = {
 		</div>
 	),
 };
+
+export const WithFormElements = Template.bind({});
+
+WithFormElements.args = {
+	children: (
+		<BoxContents>
+			<TextInput
+				id="email"
+				type="email"
+				label="Email address"
+				cssOverrides={css`
+					margin-bottom: 16px;
+				`}
+			/>
+			<TextInput
+				id="firstName"
+				label="First name"
+				cssOverrides={css`
+					margin-bottom: 16px;
+				`}
+			/>
+			<TextInput id="lastName" label="Last name" />
+		</BoxContents>
+	),
+};
+
+export function Stacked(): JSX.Element {
+	return (
+		<>
+			<WithBoxContents {...WithBoxContents.args} />
+			<WithFormElements {...WithFormElements.args} />
+			<WithoutBoxContents {...WithoutBoxContents.args} />
+		</>
+	);
+}

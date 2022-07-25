@@ -8,10 +8,13 @@ const mainStyles = css`
 	background-color: ${neutral[100]};
 	border: 1px solid ${neutral[86]};
 	border-radius: ${space[3]}px;
-	margin-bottom: ${space[3]}px;
 
-	${from.mobileLandscape} {
-		margin-bottom: ${space[4]}px;
+	:not(:last-child) {
+		margin-bottom: ${space[3]}px;
+
+		${from.mobileLandscape} {
+			margin-bottom: ${space[4]}px;
+		}
 	}
 `;
 
