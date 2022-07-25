@@ -16,7 +16,6 @@ import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
-import { showPayPal } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -32,6 +31,7 @@ import { getPromotions, userIsPatron } from 'helpers/patrons';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
@@ -110,7 +110,7 @@ function DigitalLandingPage(props: DigitalLandingPropTypes) {
 	}
 
 	useEffect(() => {
-		showPayPal(store.dispatch);
+		void store.dispatch(loadPayPalExpressSdk());
 	}, []);
 
 	const path = orderIsAGift

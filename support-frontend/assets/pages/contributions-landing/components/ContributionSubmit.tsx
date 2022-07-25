@@ -32,7 +32,7 @@ function mapStateToProps(state: State) {
 			state.page.checkoutForm.product.otherAmounts[contributionType].amount,
 		currencyId: state.common.internationalisation.currencyId,
 		csrf: state.page.checkoutForm.csrf,
-		payPalHasLoaded: state.page.form.payPalData.hasLoaded,
+		payPalHasLoaded: state.page.checkoutForm.payment.payPal.hasLoaded,
 		isTestUser: !!state.page.user.isTestUser,
 		formIsSubmittable: state.page.form.formIsSubmittable,
 		amount: getAmount(

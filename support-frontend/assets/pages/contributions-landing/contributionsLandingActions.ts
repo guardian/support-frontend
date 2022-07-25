@@ -4,7 +4,7 @@ import type { Dispatch } from 'redux';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import type { FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import type { ContributionType, PaymentMatrix } from 'helpers/contributions';
+import type { PaymentMatrix } from 'helpers/contributions';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
@@ -20,9 +20,6 @@ import {
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
-import { setPayPalHasLoaded } from 'helpers/forms/paymentIntegrations/payPalActions';
-import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
 	AmazonPayAuthorisation,
 	PaymentAuthorisation,
@@ -64,6 +61,7 @@ import {
 	setAmazonPayFatalError,
 	setAmazonPayWalletIsStale,
 } from 'helpers/redux/checkout/payment/amazonPay/actions';
+import { updatePayPalButtonReady } from 'helpers/redux/checkout/payment/payPal/actions';
 import {
 	setEmail,
 	setFirstName,
@@ -155,10 +153,6 @@ export type Action =
 			recaptchaVerified: boolean;
 	  }
 	| {
-			type: 'SET_PAYPAL_HAS_BEGUN_LOADING';
-	  }
-	| PayPalAction
-	| {
 			type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY';
 	  }
 	| {
@@ -175,24 +169,11 @@ export type Action =
 	| {
 			type: 'SET_TICKER_GOAL_REACHED';
 			tickerGoalReached: boolean;
-	  }
-	| {
-			type: 'UPDATE_PAYPAL_BUTTON_READY';
-			ready: boolean;
 	  };
 
 const setFormIsValid = (isValid: boolean): Action => ({
 	type: 'SET_FORM_IS_VALID',
 	isValid,
-});
-
-const setPayPalHasBegunLoading = (): Action => ({
-	type: 'SET_PAYPAL_HAS_BEGUN_LOADING',
-});
-
-const updatePayPalButtonReady = (ready: boolean): Action => ({
-	type: 'UPDATE_PAYPAL_BUTTON_READY',
-	ready,
 });
 
 const updatePaymentMethod =
@@ -281,16 +262,6 @@ const paymentFailure = (paymentError: ErrorReason): Action => ({
 	type: 'PAYMENT_FAILURE',
 	paymentError,
 });
-
-// We defer loading 3rd party payment SDKs until the user selects one, or one is selected by default
-const loadPayPalExpressSdk =
-	(contributionType: ContributionType) =>
-	(dispatch: Dispatch): void => {
-		if (contributionType !== 'ONE_OFF') {
-			dispatch(setPayPalHasBegunLoading());
-			void loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
-		}
-	};
 
 const getUserType =
 	(email: string) =>
@@ -868,8 +839,5 @@ export {
 	setStripeCardFormComplete,
 	setStripeSetupIntentClientSecret,
 	setStripeRecurringRecaptchaVerified,
-	setPayPalHasBegunLoading,
-	updatePayPalButtonReady,
 	updateRecaptchaToken,
-	loadPayPalExpressSdk,
 };

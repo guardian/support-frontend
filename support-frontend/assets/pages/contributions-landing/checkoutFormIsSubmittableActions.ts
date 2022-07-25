@@ -181,7 +181,7 @@ function enableOrDisableForm() {
 		dispatch(
 			setFormIsSubmittable(
 				shouldEnable,
-				state.page.form.payPalData.buttonReady,
+				state.page.checkoutForm.payment.payPal.buttonReady,
 			),
 		);
 	};

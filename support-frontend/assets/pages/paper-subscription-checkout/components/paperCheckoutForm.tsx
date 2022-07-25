@@ -121,7 +121,7 @@ function mapStateToProps(state: SubscriptionsState) {
 		billingCountry: state.page.checkoutForm.billingAddress.fields.country,
 		csrf: state.page.checkoutForm.csrf,
 		currencyId: state.common.internationalisation.currencyId,
-		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
+		payPalHasLoaded: state.page.checkoutForm.payment.payPal.hasLoaded,
 		price: selectPriceForProduct(state),
 		discountedPrice: selectDiscountedPrice(state),
 		correspondingProductOptionPrice:
