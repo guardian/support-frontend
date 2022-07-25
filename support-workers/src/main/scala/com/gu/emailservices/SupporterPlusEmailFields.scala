@@ -31,10 +31,10 @@ class SupporterPlusEmailFields(
         "currency" -> state.product.currency.iso,
         "edition" -> state.user.billingAddress.country.alpha2,
         "name" -> state.user.firstName,
-        "product" -> s"${state.product.billingPeriod.toString.toLowerCase}-contribution",
+        "product" -> s"${state.product.billingPeriod.toString.toLowerCase}-supporter-plus",
       ) ++ paymentFields
 
-      EmailFields(fields, state.user, "regular-contribution-thank-you")
+      EmailFields(fields, state.user, "supporter-plus-thank-you") // TODO: this doesn't exist yet
     }
   }
 
