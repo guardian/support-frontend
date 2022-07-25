@@ -65,7 +65,7 @@ class EmailBuilder(
 
     state match {
       case contribution: SendThankYouEmailContributionState => contributionEmailFields.build(contribution).map(List(_))
-      case supporterPlus: SendThankYouEmailSupportertPlusState =>
+      case supporterPlus: SendThankYouEmailSupporterPlusState =>
         supporterPlusEmailFields.build(supporterPlus).map(List(_))
       case digi: SendThankYouEmailDigitalSubscriptionState => digitalPackEmailFields.build(digi)
       case paper: SendThankYouEmailPaperState => paperEmailFields.build(paper).map(List(_))

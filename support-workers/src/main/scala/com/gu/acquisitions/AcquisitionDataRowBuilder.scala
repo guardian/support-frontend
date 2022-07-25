@@ -183,7 +183,7 @@ object AcquisitionDataRowBuilder {
           Some(s.accountNumber),
           Some(s.subscriptionNumber),
         )
-      case s: SendThankYouEmailSupportertPlusState =>
+      case s: SendThankYouEmailSupporterPlusState =>
         AcquisitionTypeDetails(
           Some(s.paymentMethod),
           None,

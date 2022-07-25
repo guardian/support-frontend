@@ -57,7 +57,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a Supporter Plus subscription" in {
     createZuoraHelper
       .createSubscription(createSupporterPlusZuoraSubscriptionJson)
-      .map(_ should matchPattern { case _: SendThankYouEmailSupportertPlusState =>
+      .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }
 

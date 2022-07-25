@@ -28,7 +28,7 @@ object SendThankYouEmailState {
       subscriptionNumber: String,
   ) extends SendThankYouEmailState
 
-  case class SendThankYouEmailSupportertPlusState(
+  case class SendThankYouEmailSupporterPlusState(
       user: User,
       product: SupporterPlus,
       paymentMethod: PaymentMethod,
@@ -114,7 +114,7 @@ object SendThankYouEmailState {
   implicit val codec = discriminatedType.codec(
     List(
       discriminatedType.variant[SendThankYouEmailContributionState](contribution),
-      discriminatedType.variant[SendThankYouEmailSupportertPlusState](supporterPlus),
+      discriminatedType.variant[SendThankYouEmailSupporterPlusState](supporterPlus),
       discriminatedType.variant[SendThankYouEmailDigitalSubscriptionDirectPurchaseState](
         digitalSubscriptionDirectPurchase,
       ),

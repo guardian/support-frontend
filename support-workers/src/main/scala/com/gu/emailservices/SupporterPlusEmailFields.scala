@@ -5,7 +5,7 @@ import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendThankYouEmailState.{
   SendThankYouEmailContributionState,
-  SendThankYouEmailSupportertPlusState,
+  SendThankYouEmailSupporterPlusState,
 }
 import org.joda.time.DateTime
 
@@ -17,7 +17,7 @@ class SupporterPlusEmailFields(
 ) {
 
   def build(
-      state: SendThankYouEmailSupportertPlusState,
+      state: SendThankYouEmailSupporterPlusState,
   )(implicit ec: ExecutionContext): Future[EmailFields] = {
     getPaymentFields(
       state.paymentMethod,
