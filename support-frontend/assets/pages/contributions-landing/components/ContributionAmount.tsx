@@ -4,13 +4,13 @@ import { space } from '@guardian/source-foundations';
 import { TextInput } from '@guardian/source-react-components';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import { config } from 'helpers/contributions';
-import { formatAmount } from 'helpers/forms/checkouts';
-import { amountIsValid } from 'helpers/forms/formValidation';
+// import { config } from 'helpers/contributions';
+// import { formatAmount } from 'helpers/forms/checkouts';
+import { AmountError, amountIsValid2 } from 'helpers/forms/formValidation';
 import 'helpers/internationalisation/countryGroup';
 import {
 	currencies,
-	spokenCurrencies,
+	// spokenCurrencies,
 } from 'helpers/internationalisation/currency';
 import {
 	setOtherAmount,
@@ -67,43 +67,58 @@ function ContributionAmount(props: PropTypes) {
 		props.amounts[props.contributionType];
 	const showOther: boolean =
 		props.selectedAmounts[props.contributionType] === 'other';
-	const { min, max } =
-		props.useLocalCurrency &&
-		props.localCurrencyCountry &&
-		props.contributionType === 'ONE_OFF'
-			? props.localCurrencyCountry.config[props.contributionType]
-			: config[props.countryGroupId][props.contributionType];
-	const minAmount: string = formatAmount(
-		currencies[props.currency],
-		spokenCurrencies[props.currency],
-		min,
-		false,
-	);
-	const maxAmount: string = formatAmount(
-		currencies[props.currency],
-		spokenCurrencies[props.currency],
-		max,
-		false,
-	);
+	// const { min, max } =
+	// 	props.useLocalCurrency &&
+	// 	props.localCurrencyCountry &&
+	// 	props.contributionType === 'ONE_OFF'
+	// 		? props.localCurrencyCountry.config[props.contributionType]
+	// 		: config[props.countryGroupId][props.contributionType];
+	// const minAmount: string = formatAmount(
+	// 	currencies[props.currency],
+	// 	spokenCurrencies[props.currency],
+	// 	min,
+	// 	false,
+	// );
+	// const maxAmount: string = formatAmount(
+	// 	currencies[props.currency],
+	// 	spokenCurrencies[props.currency],
+	// 	max,
+	// 	false,
+	// );
 	const otherAmount = props.otherAmounts[props.contributionType].amount;
 	const otherAmountGlyph: string = currencies[props.currency].glyph;
 	const { checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked } =
 		props;
+
 	const canShowOtherAmountErrorMessage =
 		checkoutFormHasBeenSubmitted ||
 		stripePaymentRequestButtonClicked ||
 		!!otherAmount;
-	const otherAmountErrorMessage: string =
-		canShowOtherAmountErrorMessage &&
-		!amountIsValid(
-			otherAmount ?? '',
-			props.countryGroupId,
-			props.contributionType,
-			props.localCurrencyCountry,
-			props.useLocalCurrency,
-		)
-			? `Please provide an amount between ${minAmount} and ${maxAmount}`
+
+	const otherAmountValidation = amountIsValid2(
+		otherAmount ?? '',
+		props.countryGroupId,
+		props.contributionType,
+		props.localCurrencyCountry,
+		props.useLocalCurrency,
+	);
+
+	const otherAmountErrorMessage =
+		canShowOtherAmountErrorMessage && !otherAmountValidation.valid
+			? getOtherAmountErrorMessage(otherAmountValidation.error)
 			: '';
+	// const otherAmountErrorMessage: string =
+	// 	canShowOtherAmountErrorMessage &&
+	// 	!amountIsValid2(
+	// 		otherAmount ?? '',
+	// 		props.countryGroupId,
+	// 		props.contributionType,
+	// 		props.localCurrencyCountry,
+	// 		props.useLocalCurrency,
+	// 	)
+	// 		? `Please provide an amount between ${minAmount} and ${maxAmount}`
+	// 		: '';
+
 	return (
 		<fieldset
 			className={classNameWithModifiers('form__radio-group', [
@@ -172,3 +187,16 @@ function ContributionAmount(props: PropTypes) {
 }
 
 export default connector(ContributionAmount);
+
+function getOtherAmountErrorMessage(error: AmountError): string {
+	if (error === AmountError.IsEmpty) {
+		return 'Please enter an amount';
+	} else if (error === AmountError.IsNaN) {
+		return 'Please enter a number';
+	} else if (error === AmountError.IsTooLarge) {
+		return 'Please enter an amount less than XXX';
+	} else if (error === AmountError.IsTooSmall) {
+		return 'Please enter an amount greater than XXX';
+	}
+	return 'Please enter an amount with only two decimals';
+}

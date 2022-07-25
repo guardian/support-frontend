@@ -48,6 +48,8 @@ export const isValidZipCode = (zipCode: string): boolean =>
 
 export const isNotNaN = (value: string): boolean => !isNaN(parseFloat(value));
 
+const isTooLarge = (max: number, val: number): boolean => val > max;
+
 export const isLargerOrEqual: (arg0: number, arg1: string) => boolean = (
 	min,
 	input,
@@ -96,6 +98,65 @@ export const checkGiftStartDate: (giftDeliveryDate?: string) => boolean = (
 		return isNotTooFarInTheFuture(date);
 	}
 	return false;
+};
+
+export enum AmountError {
+	IsEmpty,
+	IsNaN,
+	IsTooLarge,
+	IsTooSmall,
+	HasTooManyDecimals,
+}
+
+type AmountValidationResult =
+	| { valid: true }
+	| { valid: false; error: AmountError };
+
+const VALID_AMOUNT: AmountValidationResult = { valid: true };
+
+function invalidAmount(error: AmountError): AmountValidationResult {
+	return { valid: false, error };
+}
+
+export const amountIsValid2 = (
+	input: string,
+	countryGroupId: CountryGroupId,
+	contributionType: ContributionType,
+	localCurrencyCountry?: LocalCurrencyCountry | null,
+	useLocalCurrency?: boolean | null,
+): AmountValidationResult => {
+	const min =
+		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
+			? localCurrencyCountry.config[contributionType].min
+			: config[countryGroupId][contributionType].min;
+	const max =
+		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
+			? localCurrencyCountry.config[contributionType].max
+			: config[countryGroupId][contributionType].max;
+
+	if (isEmpty(input)) {
+		return invalidAmount(AmountError.IsEmpty);
+	}
+
+	const value = parseFloat(input);
+
+	if (isNaN(value)) {
+		return invalidAmount(AmountError.IsNaN);
+	}
+
+	if (isTooLarge(max, value)) {
+		return invalidAmount(AmountError.IsTooLarge);
+	}
+
+	if (isSmallerOrEqual(max, input)) {
+		return invalidAmount(AmountError.IsTooLarge);
+	}
+
+	if (maxTwoDecimals(input)) {
+		return invalidAmount(AmountError.HasTooManyDecimals);
+	}
+
+	return VALID_AMOUNT;
 };
 
 export const amountIsValid = (
