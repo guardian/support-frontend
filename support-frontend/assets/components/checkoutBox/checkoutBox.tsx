@@ -27,7 +27,7 @@ export interface BoxProps extends CSSOverridable {
 export function Box(props: BoxProps): JSX.Element {
 	const TagName = props.tag ?? 'section';
 	return (
-		<TagName css={[mainStyles, props.cssOverrides ? props.cssOverrides : '']}>
+		<TagName css={[mainStyles, props.cssOverrides ?? '']}>
 			{props.children}
 		</TagName>
 	);
@@ -48,9 +48,7 @@ const innerContainerStyles = css`
 export function BoxContents(props: BoxProps): JSX.Element {
 	const TagName = props.tag ?? 'div';
 	return (
-		<TagName
-			css={[innerContainerStyles, props.cssOverrides ? props.cssOverrides : '']}
-		>
+		<TagName css={[innerContainerStyles, props.cssOverrides ?? '']}>
 			{props.children}
 		</TagName>
 	);
