@@ -35,7 +35,7 @@ class StripePatronsDataLambda extends GuScheduledLambda {
           alarmDescription: `Triggers if there are errors from ${appName} on ${scope.stage}`,
           snsTopicName: "reader-revenue-dev",
           toleratedErrorPercentage: 1,
-          numberOfMinutesAboveThresholdBeforeAlarm: 1,
+          numberOfMinutesAboveThresholdBeforeAlarm: 46, // The lambda runs every 15 mins so alarm if it fails 3 times in a row
         };
       return { noMonitoring: true };
     }
