@@ -25,8 +25,9 @@ class ContributionSubscriptionBuilder(
     // instead they will be notified by email the day after purchasing.
     //
     // The reason for making this change relates to a project being undertaken by the Finance team on August 1st 2022
-    // to re-publish revenue schedules from 4-4-5 over to calendar monthly. This change is going live a few days ahead
-    // of that date to enable the change to be monitored for any issues downstream.
+    // to re-publish revenue schedules from 4-4-5 over to calendar monthly, and it requires no invoices be posted or
+    // payments be made during the change window. This change is going live a few days ahead of that date to enable
+    // the change to be monitored for any issues downstream.
     val contractAcceptanceDate = contractEffectiveDate.plusDays(1)
 
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
