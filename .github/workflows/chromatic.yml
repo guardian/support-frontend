@@ -1,0 +1,24 @@
+name: Chromatic
+on:
+  push:
+jobs:
+  upload-storybook:
+    runs-on: ubuntu-latest
+    defaults:
+     run:
+       working-directory: ./support-frontend
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: guardian/actions-setup-node@v2.4.1
+        with:
+          cache: 'yarn'
+      - run: yarn install --frozen-lockfile
+      - uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          buildScriptName: 'build-storybook'
+          exitOnceUploaded: true
+          onlyChanged: "!(main)" # only turbosnap on non-main branches
