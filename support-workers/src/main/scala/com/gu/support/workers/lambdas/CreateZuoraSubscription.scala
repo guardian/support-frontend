@@ -128,7 +128,6 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     new ContributionSubscriptionBuilder(
       services.config.zuoraConfigProvider.get(isTestUser).contributionConfig,
       subscribeItemBuilder,
-      dateGenerator,
     ),
     state.user,
   )
