@@ -8,13 +8,20 @@ jobs:
      run:
        working-directory: support-frontend
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node
+        uses: guardian/actions-setup-node@v2.4.1
+
+      # Cache npm dependencies using https://github.com/bahmutov/npm-install
+      - name: Cache dependencies
+        uses: bahmutov/npm-install@v1
         with:
-          fetch-depth: 0
-      - uses: guardian/actions-setup-node@v2.4.1
-        with:
-          cache: 'yarn'
-      - run: yarn install --frozen-lockfile
+          working-directory: support-frontend
+
+      - name: Install
+        run: yarn
       - uses: chromaui/action@v1
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
