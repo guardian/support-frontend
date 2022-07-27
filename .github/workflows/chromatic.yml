@@ -24,6 +24,7 @@ jobs:
         run: yarn
       - uses: chromaui/action@v1
         with:
+          workingDir: support-frontend
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
           buildScriptName: 'build-storybook'
