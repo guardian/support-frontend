@@ -225,8 +225,5 @@
   },
   "lint-staged": {
     "./assets/**/**/*.{js,jsx,ts,tsx}": "eslint"
-  },
-  "readme": "ERROR: No README data found!",
-  "homepage": "https://github.com/guardian/support-frontend#readme",
-  "_id": "support-frontend@1.0.0"
+  }
 }
