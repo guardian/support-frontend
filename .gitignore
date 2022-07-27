@@ -16,6 +16,7 @@ yarn-error.log
 app/npm-debug.log
 coverage/
 package-lock.json
+build-storybook.log
 
 dev
 logs
