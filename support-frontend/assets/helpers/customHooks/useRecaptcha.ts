@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { loadRecaptchaV2 } from 'helpers/forms/recaptcha';
 
 type RecaptchaHookData = {
-	recaptchaEnabled: boolean;
+	isEnabled: boolean;
 	hasLoaded: boolean;
 };
 
@@ -28,7 +28,7 @@ export function useRecaptchaV2(
 	}, []);
 
 	return {
-		recaptchaEnabled: window.guardian.recaptchaEnabled ?? false,
+		isEnabled: window.guardian.recaptchaEnabled ?? false,
 		hasLoaded,
 	};
 }

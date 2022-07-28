@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
 import { from, space } from '@guardian/source-foundations';
-import { useEffect } from 'react';
 // ----- Styles ----- //
 import 'stylesheets/skeleton/skeleton.scss';
 import { Provider } from 'react-redux';
@@ -31,7 +30,6 @@ import { getPromotions, userIsPatron } from 'helpers/patrons';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
-import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
@@ -108,10 +106,6 @@ function DigitalLandingPage(props: DigitalLandingPropTypes) {
 	if (!productPrices) {
 		return null;
 	}
-
-	useEffect(() => {
-		void store.dispatch(loadPayPalExpressSdk());
-	}, []);
 
 	const path = orderIsAGift
 		? routes.digitalSubscriptionLandingGift

@@ -1,4 +1,5 @@
 import { isAnyOf } from '@reduxjs/toolkit';
+import { PayPal } from 'helpers/forms/paymentMethods';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
@@ -9,6 +10,7 @@ import {
 	setAmazonPayPaymentSelected,
 } from './amazonPay/actions';
 import { setPaymentMethod } from './paymentMethod/actions';
+import { loadPayPalExpressSdk } from './payPal/reducer';
 import {
 	setSepaAccountHolderName,
 	setSepaAddressCountry,
@@ -20,15 +22,16 @@ export function addPaymentsSideEffects(
 	startListening: ContributionsStartListening,
 ): void {
 	startListening({
-		actionCreator: setPaymentMethod,
-		effect(action) {
-			storage.setSession('selectedPaymentMethod', action.payload);
-		},
-	});
-
-	startListening({
 		matcher: shouldCheckFormEnabled,
-		effect(_action, listenerApi) {
+		effect(action, listenerApi) {
+			if (setPaymentMethod.match(action)) {
+				const paymentMethod = action.payload;
+				const { payPal } = listenerApi.getState().page.checkoutForm.payment;
+				storage.setSession('selectedPaymentMethod', paymentMethod);
+				if (paymentMethod === PayPal && !payPal.hasBegunLoading) {
+					void listenerApi.dispatch(loadPayPalExpressSdk());
+				}
+			}
 			listenerApi.dispatch(enableOrDisableForm());
 		},
 	});

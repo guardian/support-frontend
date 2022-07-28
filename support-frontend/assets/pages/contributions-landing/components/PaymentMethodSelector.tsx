@@ -42,7 +42,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
@@ -68,7 +67,6 @@ interface PaymentMethodSelectorProps {
 	isTestUser: boolean;
 	switches: Switches;
 	payPalHasBegunLoading: boolean;
-	loadPayPalExpressSdk: () => void;
 	checkoutFormHasBeenSubmitted: boolean;
 }
 
@@ -90,7 +88,6 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = {
 	setPaymentMethod,
 	updateSelectedExistingPaymentMethod,
-	loadPayPalExpressSdk,
 };
 
 function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
@@ -106,17 +103,6 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 	);
 
 	const onPaymentMethodUpdate = (paymentMethod: PaymentMethod) => {
-		switch (paymentMethod) {
-			case PayPal:
-				if (!props.payPalHasBegunLoading) {
-					props.loadPayPalExpressSdk();
-				}
-
-				break;
-
-			default:
-		}
-
 		props.setPaymentMethod(paymentMethod);
 		props.updateSelectedExistingPaymentMethod(undefined);
 	};

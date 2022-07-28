@@ -115,7 +115,7 @@ const mapDispatchToProps = {
 	updateBillingState,
 	updateBillingCountry,
 	setStripePaymentRequestButtonClicked,
-	setAssociatedPaymentMethod: setPaymentMethod,
+	setPaymentMethod,
 	setPaymentWaiting,
 	setError: setStripePaymentRequestButtonError,
 };
@@ -197,7 +197,7 @@ function updateTotal(props: PropTypes) {
 function getClickHandler(props: PropTypes, isCustomPrb: boolean) {
 	function onClick(event: StripePaymentRequestButtonElementClickEvent) {
 		trackComponentClick('apple-pay-clicked');
-		props.setAssociatedPaymentMethod(Stripe);
+		props.setPaymentMethod(Stripe);
 		props.setStripePaymentRequestButtonClicked(props.stripeAccount);
 
 		const isValid = amountIsValid(
