@@ -58,22 +58,23 @@ export function initReduxForSubscriptions(
 	startDate?: DateYMDString,
 	productOption?: ProductOptions,
 	getFulfilmentOptionForCountry?: (country: string) => FulfilmentOptions,
+	store = subscriptionsStore,
+	startListening = startSubscriptionsListening,
 ): SubscriptionsStore {
 	try {
-		addPersonalDetailsSideEffects(startSubscriptionsListening);
-		addAddressSideEffects(startSubscriptionsListening);
-		addPaymentsSideEffects(startSubscriptionsListening);
+		addPersonalDetailsSideEffects(startListening);
+		addAddressSideEffects(startListening);
+		addPaymentsSideEffects(startListening);
 		const initialState = getInitialState();
 
-		subscriptionsStore.dispatch(setInitialCommonState(initialState));
-		subscriptionsStore.dispatch(setProductType(product));
-		subscriptionsStore.dispatch(setBillingPeriod(initialBillingPeriod));
+		store.dispatch(setInitialCommonState(initialState));
+		store.dispatch(setProductType(product));
+		store.dispatch(setBillingPeriod(initialBillingPeriod));
 
-		startDate && subscriptionsStore.dispatch(setStartDate(startDate));
-		productOption &&
-			subscriptionsStore.dispatch(setProductOption(productOption));
+		startDate && store.dispatch(setStartDate(startDate));
+		productOption && store.dispatch(setProductOption(productOption));
 		getFulfilmentOptionForCountry &&
-			subscriptionsStore.dispatch(
+			store.dispatch(
 				setFulfilmentOption(
 					getFulfilmentOptionForCountry(
 						initialState.internationalisation.countryId,
@@ -81,7 +82,7 @@ export function initReduxForSubscriptions(
 				),
 			);
 
-		return subscriptionsStore;
+		return store;
 	} catch (err) {
 		renderError(err as Error, null);
 		throw err;
