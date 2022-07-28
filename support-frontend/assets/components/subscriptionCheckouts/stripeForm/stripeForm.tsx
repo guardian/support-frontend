@@ -118,15 +118,12 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 	const stripe = stripeJs.useStripe();
 	const elements = stripeJs.useElements();
 
-	const { recaptchaEnabled } = useRecaptchaV2(
-		'robot_checkbox',
-		(token: string) => {
-			trackComponentLoad('subscriptions-recaptcha-client-token-received');
-			setRecaptchaCompleted(true);
-			setRecaptchaError(null);
-			void fetchPaymentIntent(token);
-		},
-	);
+	useRecaptchaV2('robot_checkbox', (token: string) => {
+		trackComponentLoad('subscriptions-recaptcha-client-token-received');
+		setRecaptchaCompleted(true);
+		setRecaptchaError(null);
+		void fetchPaymentIntent(token);
+	});
 
 	/**
 	 * Handlers
@@ -212,7 +209,7 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 			});
 
 	const setupRecurringHandlers = (): void => {
-		if (!recaptchaEnabled) {
+		if (!window.guardian.recaptchaEnabled) {
 			void fetchPaymentIntent('dummy');
 		}
 	};

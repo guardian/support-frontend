@@ -71,7 +71,7 @@ function mapStateToProps(state: SubscriptionsState) {
 		currencyId: state.common.internationalisation.currencyId,
 		csrf: state.page.checkoutForm.csrf,
 		payPalHasLoaded: state.page.checkoutForm.payment.payPal.hasLoaded,
-		paymentMethod: state.page.checkout.paymentMethod,
+		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 		isTestUser: state.page.checkout.isTestUser,
 		billingPeriod: state.page.checkoutForm.product
 			.billingPeriod as DigitalBillingPeriod,
