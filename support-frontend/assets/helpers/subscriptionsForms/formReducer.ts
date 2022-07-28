@@ -38,13 +38,6 @@ function createFormReducer() {
 					paymentMethod: null,
 				};
 
-			case 'SET_PAYMENT_METHOD':
-				return {
-					...state,
-					paymentMethod: action.paymentMethod,
-					formErrors: removeError('paymentMethod', state.formErrors),
-				};
-
 			case 'SET_FORM_ERRORS':
 				return { ...state, formErrors: action.errors };
 
