@@ -15,6 +15,7 @@ import {
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import {
 	setCurrencyId,
@@ -22,7 +23,6 @@ import {
 } from 'helpers/redux/commonState/actions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import { updatePaymentMethod } from '../contributionsLandingActions';
 import type { State } from '../contributionsLandingReducer';
 
 const groupStyles = css`
@@ -56,7 +56,7 @@ const mapDispatchToProps = {
 	setProductType,
 	setCurrencyId,
 	setUseLocalAmounts,
-	updatePaymentMethod,
+	setPaymentMethod,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -85,7 +85,7 @@ function ContributionTypeTabs(props: PropTypes) {
 		);
 
 		props.setProductType(contributionType);
-		props.updatePaymentMethod(paymentMethodToSelect);
+		props.setPaymentMethod(paymentMethodToSelect);
 
 		if (contributionType !== 'ONE_OFF') {
 			props.setCurrencyId(false);

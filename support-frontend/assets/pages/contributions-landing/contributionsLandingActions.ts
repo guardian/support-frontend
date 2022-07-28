@@ -61,7 +61,6 @@ import {
 	setAmazonPayFatalError,
 	setAmazonPayWalletIsStale,
 } from 'helpers/redux/checkout/payment/amazonPay/actions';
-import { updatePayPalButtonReady } from 'helpers/redux/checkout/payment/payPal/actions';
 import {
 	setEmail,
 	setFirstName,
@@ -70,7 +69,6 @@ import {
 } from 'helpers/redux/checkout/personalDetails/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import * as cookie from 'helpers/storage/cookie';
-import * as storage from 'helpers/storage/storage';
 import {
 	derivePaymentApiAcquisitionData,
 	getOphanIds,
@@ -175,20 +173,6 @@ const setFormIsValid = (isValid: boolean): Action => ({
 	type: 'SET_FORM_IS_VALID',
 	isValid,
 });
-
-const updatePaymentMethod =
-	(paymentMethod: PaymentMethod) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		// PayPal one-off redirects away from the site before hitting the thank you page
-		// so we need to store the payment method in the storage so that it is available on the
-		// thank you page in all scenarios.
-		storage.setSession('selectedPaymentMethod', paymentMethod);
-		dispatch(updatePayPalButtonReady(false));
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_PAYMENT_METHOD',
-			paymentMethod,
-		}))(dispatch, getState);
-	};
 
 const updateSelectedExistingPaymentMethod = (
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
@@ -810,12 +794,11 @@ const onThirdPartyPaymentAuthorised =
 		const state = getState();
 		const contributionType = getContributionType(state);
 		return paymentAuthorisationHandlers[contributionType][
-			state.page.form.paymentMethod
+			state.page.checkoutForm.payment.paymentMethod
 		](dispatch, state, paymentAuthorisation);
 	};
 
 export {
-	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
 	setFirstName,
 	setLastName,

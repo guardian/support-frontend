@@ -36,6 +36,7 @@ import {
 	findIsoCountry,
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import {
 	trackComponentClick,
 	trackComponentLoad,
@@ -52,7 +53,6 @@ import {
 	setStripePaymentRequestButtonError,
 	updateBillingCountry,
 	updateBillingState,
-	updatePaymentMethod,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { trackComponentEvents } from '../../helpers/tracking/ophan';
@@ -101,7 +101,7 @@ const mapStateToProps = (state: State, ownProps: PropsFromParent) => ({
 	billingState: state.page.form.formData.billingState,
 	currency: state.common.internationalisation.currencyId,
 	isTestUser: state.page.user.isTestUser ?? false,
-	paymentMethod: state.page.form.paymentMethod,
+	paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 	csrf: state.page.checkoutForm.csrf,
 	localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
@@ -115,7 +115,7 @@ const mapDispatchToProps = {
 	updateBillingState,
 	updateBillingCountry,
 	setStripePaymentRequestButtonClicked,
-	setAssociatedPaymentMethod: updatePaymentMethod,
+	setAssociatedPaymentMethod: setPaymentMethod,
 	setPaymentWaiting,
 	setError: setStripePaymentRequestButtonError,
 };

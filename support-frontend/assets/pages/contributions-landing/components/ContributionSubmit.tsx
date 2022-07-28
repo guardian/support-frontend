@@ -26,7 +26,7 @@ function mapStateToProps(state: State) {
 		contributionType,
 		countryGroupId: state.common.internationalisation.countryGroupId,
 		isWaiting: state.page.form.isWaiting,
-		paymentMethod: state.page.form.paymentMethod,
+		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 		selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 		otherAmount:
 			state.page.checkoutForm.product.otherAmounts[contributionType].amount,

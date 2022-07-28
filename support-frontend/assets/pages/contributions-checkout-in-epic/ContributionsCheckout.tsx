@@ -7,13 +7,13 @@ import type {
 } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import { useOnHeightChangeEffect } from 'helpers/customHooks/useOnHeightChangeEffect';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import {
 	setOtherAmount,
 	setProductType,
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { updatePaymentMethod } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { ContributionsCheckoutForm } from './ContributionsCheckoutForm';
 import { ContributionsCheckoutSubmitting } from './ContributionsCheckoutSubmitting';
@@ -66,7 +66,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = {
 	setProductType,
-	updatePaymentMethod,
+	setPaymentMethod,
 	setSelectedAmount,
 	setOtherAmount,
 };
@@ -83,7 +83,7 @@ function ContributionsCheckout({
 	contributionType,
 	amounts,
 	setProductType,
-	updatePaymentMethod,
+	setPaymentMethod,
 	selectedAmounts,
 	otherAmounts,
 	setSelectedAmount,
@@ -98,7 +98,7 @@ function ContributionsCheckout({
 
 	function setSelectedContributionType(contributionType: ContributionType) {
 		setProductType(contributionType);
-		updatePaymentMethod('None');
+		setPaymentMethod('None');
 	}
 
 	return (

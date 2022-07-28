@@ -41,15 +41,13 @@ import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { Action } from '../contributionsLandingActions';
-import {
-	updatePaymentMethod,
-	updateSelectedExistingPaymentMethod,
-} from '../contributionsLandingActions';
+import { updateSelectedExistingPaymentMethod } from '../contributionsLandingActions';
 import type { State } from '../contributionsLandingReducer';
 import ContributionChoicesHeader from './ContributionChoicesHeader';
 
@@ -63,7 +61,7 @@ interface PaymentMethodSelectorProps {
 	existingPaymentMethods?: ExistingPaymentMethod[];
 	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	updatePaymentMethod: (paymentMethod: PaymentMethod) => void;
+	setPaymentMethod: (paymentMethod: PaymentMethod) => void;
 	updateSelectedExistingPaymentMethod: (
 		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 	) => Action;
@@ -80,7 +78,7 @@ const mapStateToProps = (state: State) => ({
 	currency: state.common.internationalisation.currencyId,
 	contributionType: getContributionType(state),
 	existingPaymentMethods: state.common.existingPaymentMethods,
-	paymentMethod: state.page.form.paymentMethod,
+	paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 	existingPaymentMethod: state.page.form.existingPaymentMethod,
 	isTestUser: state.page.user.isTestUser ?? false,
 	switches: state.common.settings.switches,
@@ -90,7 +88,7 @@ const mapStateToProps = (state: State) => ({
 });
 
 const mapDispatchToProps = {
-	updatePaymentMethod,
+	setPaymentMethod,
 	updateSelectedExistingPaymentMethod,
 	loadPayPalExpressSdk,
 };
@@ -119,7 +117,7 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 			default:
 		}
 
-		props.updatePaymentMethod(paymentMethod);
+		props.setPaymentMethod(paymentMethod);
 		props.updateSelectedExistingPaymentMethod(undefined);
 	};
 
@@ -163,7 +161,7 @@ function PaymentMethodSelector(props: PaymentMethodSelectorProps) {
 											type="radio"
 											value={existingPaymentMethod.paymentType}
 											onChange={() => {
-												props.updatePaymentMethod(
+												props.setPaymentMethod(
 													mapExistingPaymentMethodToPaymentMethod(
 														existingPaymentMethod,
 													),

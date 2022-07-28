@@ -167,7 +167,7 @@ const mapStateToProps = (state: State) => {
 		csrf: state.page.checkoutForm.csrf,
 		user: state.page.user,
 		userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
-		paymentMethod: state.page.form.paymentMethod,
+		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 		countryId: state.common.internationalisation.countryId,
 		campaignCode: state.common.referrerAcquisitionData.campaignCode,
 		benefitsMessagingAbTestBulletVariant:
