@@ -113,7 +113,7 @@ function CardForm(props: PropTypes) {
 
 	const [zipCode, setZipCode] = useState('');
 
-	const { recaptchaEnabled } = useRecaptchaV2(
+	useRecaptchaV2(
 		'robot_checkbox',
 		(token: string) => {
 			trackRecaptchaClientTokenReceived();
@@ -392,7 +392,7 @@ function CardForm(props: PropTypes) {
 				</div>
 			)}
 
-			{recaptchaEnabled ? (
+			{window.guardian.recaptchaEnabled ? (
 				<div className="ds-security-check">
 					<div className="ds-security-check__label">
 						<label htmlFor="robot_checkbox">Security check</label>

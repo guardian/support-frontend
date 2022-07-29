@@ -19,13 +19,11 @@ import {
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { PayPal } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
 import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
 import {
 	setAllAmounts,
@@ -249,14 +247,6 @@ function selectInitialContributionTypeAndPaymentMethod(
 	);
 	dispatch(setProductType(contributionType));
 	dispatch(setPaymentMethod(paymentMethod));
-
-	switch (paymentMethod) {
-		case PayPal:
-			void dispatch(loadPayPalExpressSdk());
-			break;
-
-		default:
-	}
 
 	return contributionType;
 }
