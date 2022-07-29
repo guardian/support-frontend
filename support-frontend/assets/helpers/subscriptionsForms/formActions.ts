@@ -102,10 +102,6 @@ export type Action =
 	| {
 			type: 'SET_SALESFORCE_CASE_ID';
 			caseId: string;
-	  }
-	| {
-			type: 'ON_DELIVERY_COUNTRY_CHANGED';
-			country: string;
 	  };
 
 // ----- Action Creators ----- //
@@ -137,11 +133,6 @@ const setSubmissionError = (error: ErrorReason): Action => ({
 const setFormSubmitted = (formSubmitted: boolean): Action => ({
 	type: 'SET_FORM_SUBMITTED',
 	formSubmitted,
-});
-
-const onDeliveryCountryChanged = (country: string): Action => ({
-	type: 'ON_DELIVERY_COUNTRY_CHANGED',
-	country,
 });
 
 const formActionCreators = {
@@ -243,6 +234,5 @@ export {
 	setSubmissionError,
 	setFormSubmitted,
 	setCsrCustomerData,
-	onDeliveryCountryChanged,
 	formActionCreators,
 };
