@@ -155,18 +155,6 @@ function createFormReducer() {
 					},
 				};
 
-			case 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED':
-				return {
-					...state,
-					stripeCardFormData: {
-						...state.stripeCardFormData,
-						recurringRecaptchaVerified: action.recaptchaVerified,
-					},
-				};
-
-			case 'UPDATE_RECAPTCHA_TOKEN':
-				return { ...state, oneOffRecaptchaToken: action.recaptchaToken };
-
 			case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
 				return {
 					...state,

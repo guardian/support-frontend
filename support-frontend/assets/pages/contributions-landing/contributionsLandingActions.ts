@@ -104,10 +104,6 @@ export type Action =
 			userFormData: UserFormData;
 	  }
 	| {
-			type: 'UPDATE_RECAPTCHA_TOKEN';
-			recaptchaToken: string;
-	  }
-	| {
 			type: 'PAYMENT_RESULT';
 			paymentResult: Promise<PaymentResult>;
 	  }
@@ -147,10 +143,6 @@ export type Action =
 			setupIntentClientSecret: string;
 	  }
 	| {
-			type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED';
-			recaptchaVerified: boolean;
-	  }
-	| {
 			type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY';
 	  }
 	| {
@@ -180,15 +172,6 @@ const updateSelectedExistingPaymentMethod = (
 	type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD',
 	existingPaymentMethod,
 });
-
-const updateRecaptchaToken =
-	(recaptchaToken: string) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_RECAPTCHA_TOKEN',
-			recaptchaToken,
-		}))(dispatch, getState);
-	};
 
 const setStripePaymentRequestButtonClicked = (
 	stripeAccount: StripeAccount,
@@ -285,15 +268,6 @@ const setStripeSetupIntentClientSecret =
 		}))(dispatch, getState);
 	};
 
-const setStripeRecurringRecaptchaVerified =
-	(recaptchaVerified: boolean) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED',
-			recaptchaVerified,
-		}))(dispatch, getState);
-	};
-
 const sendFormSubmitEventForPayPalRecurring =
 	() =>
 	(dispatch: Dispatch, getState: () => State): void => {
@@ -309,15 +283,6 @@ const sendFormSubmitEventForPayPalRecurring =
 		};
 		onFormSubmit(formSubmitParameters);
 	};
-
-const stripeOneOffRecaptchaToken = (state: State): string => {
-	if (state.page.user.isPostDeploymentTestUser) {
-		return 'post-deploy-token';
-	}
-
-	// see https://github.com/guardian/payment-api/pull/195
-	return state.page.form.oneOffRecaptchaToken ?? '';
-};
 
 const buildStripeChargeDataFromAuthorisation = (
 	stripePaymentMethod: StripePaymentMethod,
@@ -342,7 +307,7 @@ const buildStripeChargeDataFromAuthorisation = (
 		state.common.internationalisation.countryId,
 		state.page.user.isTestUser ?? false,
 	),
-	recaptchaToken: stripeOneOffRecaptchaToken(state),
+	recaptchaToken: state.page.checkoutForm.recaptcha.token,
 });
 
 const stripeChargeDataFromPaymentIntentAuthorisation = (
@@ -821,6 +786,4 @@ export {
 	setTickerGoalReached,
 	setStripeCardFormComplete,
 	setStripeSetupIntentClientSecret,
-	setStripeRecurringRecaptchaVerified,
-	updateRecaptchaToken,
 };
