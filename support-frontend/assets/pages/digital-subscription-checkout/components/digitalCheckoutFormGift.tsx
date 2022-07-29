@@ -99,7 +99,7 @@ function mapDispatchToProps() {
 				validateCheckoutForm(dispatch, state);
 				// We need to track PayPal payment attempts here because PayPal behaves
 				// differently to other payment methods. All others are tracked in submit.js
-				const { paymentMethod } = state.page.checkout;
+				const { paymentMethod } = state.page.checkoutForm.payment;
 
 				if (paymentMethod === PayPal) {
 					trackSubmitAttempt(PayPal, DigitalPack, NoProductOptions);
