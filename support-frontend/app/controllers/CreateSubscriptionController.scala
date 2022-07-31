@@ -12,6 +12,8 @@ import com.gu.support.workers._
 import config.Configuration.GuardianDomain
 import config.RecaptchaConfigProvider
 import controllers.CreateSubscriptionController._
+import io.circe.Encoder
+import io.circe.generic.semiauto._
 import io.circe.syntax._
 import lib.PlayImplicits._
 import models.identity.responses.IdentityErrorResponse.IdentityError
@@ -26,6 +28,7 @@ import services.{IdentityService, RecaptchaService, StripeSetupIntentService, Te
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
 
+import java.net.URLEncoder
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.chaining._
 
@@ -66,7 +69,8 @@ class CreateSubscriptionController(
           result <- createSubscription(request)
         } yield result
 
-        toHttpResponse(errorOrStatusResponse, request.body.product)
+        toHttpResponse(errorOrStatusResponse, request.body.product, request.body.email)
+
       }
     }
 
@@ -169,35 +173,81 @@ class CreateSubscriptionController(
   private def toHttpResponse(
       result: EitherT[Future, CreateSubscriptionError, StatusResponse],
       product: ProductType,
+      userEmail: String,
   )(implicit request: Request[CreateSupportWorkersRequest], writeable: Writeable[String]): Future[Result] = {
-    result.fold(
-      { error =>
-        SafeLogger.error(scrub"[${request.uuid}] Failed to create new ${request.body.product.describe}, due to $error")
-        error match {
-          case err: RequestValidationError =>
-            // Store the error message in the result.header.reasonPhrase this will allow us to
-            // avoid alerting for disallowed email addresses in LoggingAndAlarmOnFailure
-            Result(
-              header = new ResponseHeader(
-                status = BAD_REQUEST,
-                reasonPhrase = Some(err.message),
-              ),
-              body = writeable.toEntity(err.message),
-            )
-          case _: ServerError =>
-            InternalServerError
-        }
-      },
-      { statusResponse =>
-        SafeLogger.info(
-          s"[${request.uuid}] Successfully created a support workers execution for a new ${request.body.product.describe}",
-        )
-        Accepted(statusResponse.asJson).withCookies(cookies(product): _*)
-      },
-    )
+    result
+      .fold(
+        { error =>
+          SafeLogger.error(
+            scrub"[${request.uuid}] Failed to create new ${request.body.product.describe}, due to $error",
+          )
+          val errResult = error match {
+            case err: RequestValidationError =>
+              // Store the error message in the result.header.reasonPhrase this will allow us to
+              // avoid alerting for disallowed email addresses in LoggingAndAlarmOnFailure
+              Result(
+                header = new ResponseHeader(
+                  status = BAD_REQUEST,
+                  reasonPhrase = Some(err.message),
+                ),
+                body = writeable.toEntity(err.message),
+              )
+            case _: ServerError =>
+              InternalServerError
+          }
+          Future.successful(errResult)
+        },
+        { statusResponse =>
+          SafeLogger.info(
+            s"[${request.uuid}] Successfully created a support workers execution for a new ${request.body.product.describe}",
+          )
+          cookies(product, userEmail)
+            .map(cookies => Accepted(statusResponse.asJson).withCookies(cookies: _*))
+        },
+      )
+      .flatten
   }
 
-  private def cookies(product: ProductType) = {
+  case class CheckoutCompleteCookieBody(
+      userType: String,
+      product: String,
+  )
+  object CheckoutCompleteCookieBody {
+    implicit val encoder: Encoder[CheckoutCompleteCookieBody] =
+      deriveEncoder[CheckoutCompleteCookieBody]
+  }
+  private def checkoutCompleteCookies(productType: ProductType, userEmail: String): Future[List[Cookie]] = {
+    identityService
+      .getUserType(userEmail)
+      .fold(
+        err => {
+          SafeLogger.error(scrub"Failed to retrieve user type for $userEmail: $err")
+          SafeLogger.error(scrub"Failed to create GU_CO_COMPLETE cookie")
+          List.empty
+        },
+        response => {
+          SafeLogger.info(s"Successfully retrieved user type for $userEmail")
+          SafeLogger.info(s"USERTYPE: ${response.userType}")
+          val cookieValue: String = CheckoutCompleteCookieBody(
+            userType = response.userType,
+            product = productType.toString,
+          ).asJson.noSpaces
+
+          List(
+            Cookie(
+              name = "GU_CO_COMPLETE",
+              value = URLEncoder.encode(cookieValue, "UTF-8"),
+              maxAge = Some(1209600), // fourteen days
+              secure = true,
+              httpOnly = false,
+              domain = Some(guardianDomain.value),
+            ),
+          )
+        },
+      )
+  }
+
+  private def cookies(product: ProductType, userEmail: String): Future[List[Cookie]] = {
     // Setting the user attributes cookies used by frontend. See:
     // https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/common/modules/commercial/user-features.js#L69
     val standardCookies = List(
@@ -223,7 +273,8 @@ class CreateSubscriptionController(
       case _: Paper => List.empty
       case _: GuardianWeekly => List.empty
     }
-    (standardCookies ++ productCookies).map { case (name, value) =>
+
+    val standardAndProductCookies = (standardCookies ++ productCookies).map { case (name, value) =>
       Cookie(
         name = name,
         value = value,
@@ -232,6 +283,8 @@ class CreateSubscriptionController(
         domain = Some(guardianDomain.value),
       )
     }
+
+    checkoutCompleteCookies(product, userEmail).map(_ ++ standardAndProductCookies)
   }
 
   private def buildSupportWorkersUser(

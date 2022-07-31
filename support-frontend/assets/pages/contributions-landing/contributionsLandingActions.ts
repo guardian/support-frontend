@@ -1,11 +1,10 @@
 // ----- Imports ----- //
-import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Dispatch } from 'redux';
 import { getForm } from 'helpers/checkoutForm/checkoutForm';
 import type { FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import type { ContributionType, PaymentMatrix } from 'helpers/contributions';
+import type { PaymentMatrix } from 'helpers/contributions';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
@@ -21,9 +20,6 @@ import {
 	postOneOffPayPalCreatePaymentRequest,
 	processStripePaymentIntentRequest,
 } from 'helpers/forms/paymentIntegrations/oneOffContributions';
-import type { Action as PayPalAction } from 'helpers/forms/paymentIntegrations/payPalActions';
-import { setPayPalHasLoaded } from 'helpers/forms/paymentIntegrations/payPalActions';
-import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
 	AmazonPayAuthorisation,
 	PaymentAuthorisation,
@@ -61,6 +57,11 @@ import {
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
+import {
+	setAmazonPayFatalError,
+	setAmazonPayWalletIsStale,
+} from 'helpers/redux/checkout/payment/amazonPay/actions';
+import { updatePayPalButtonReady } from 'helpers/redux/checkout/payment/payPal/actions';
 import {
 	setEmail,
 	setFirstName,
@@ -103,35 +104,6 @@ export type Action =
 	| {
 			type: 'UPDATE_USER_FORM_DATA';
 			userFormData: UserFormData;
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING';
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_WALLET_IS_STALE';
-			isStale: boolean;
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID';
-			orderReferenceId: string;
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_PAYMENT_SELECTED';
-			paymentSelected: boolean;
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN';
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_FATAL_ERROR';
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID';
-			amazonBillingAgreementId: string;
-	  }
-	| {
-			type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS';
-			amazonBillingAgreementConsentStatus: boolean;
 	  }
 	| {
 			type: 'UPDATE_RECAPTCHA_TOKEN';
@@ -181,10 +153,6 @@ export type Action =
 			recaptchaVerified: boolean;
 	  }
 	| {
-			type: 'SET_PAYPAL_HAS_BEGUN_LOADING';
-	  }
-	| PayPalAction
-	| {
 			type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY';
 	  }
 	| {
@@ -201,40 +169,11 @@ export type Action =
 	| {
 			type: 'SET_TICKER_GOAL_REACHED';
 			tickerGoalReached: boolean;
-	  }
-	| {
-			type: 'UPDATE_PAYPAL_BUTTON_READY';
-			ready: boolean;
-	  }
-	| {
-			type: 'SET_SEPA_IBAN';
-			iban: string | null;
-	  }
-	| {
-			type: 'SET_SEPA_ACCOUNT_HOLDER_NAME';
-			accountHolderName: string | null;
-	  }
-	| {
-			type: 'SET_SEPA_ADDRESS_STREET_NAME';
-			addressStreetName?: string;
-	  }
-	| {
-			type: 'SET_SEPA_ADDRESS_COUNTRY';
-			addressCountry?: Country;
 	  };
 
 const setFormIsValid = (isValid: boolean): Action => ({
 	type: 'SET_FORM_IS_VALID',
 	isValid,
-});
-
-const setPayPalHasBegunLoading = (): Action => ({
-	type: 'SET_PAYPAL_HAS_BEGUN_LOADING',
-});
-
-const updatePayPalButtonReady = (ready: boolean): Action => ({
-	type: 'UPDATE_PAYPAL_BUTTON_READY',
-	ready,
 });
 
 const updatePaymentMethod =
@@ -324,68 +263,6 @@ const paymentFailure = (paymentError: ErrorReason): Action => ({
 	paymentError,
 });
 
-const setAmazonPayHasBegunLoading = (): Action => ({
-	type: 'SET_AMAZON_PAY_HAS_BEGUN_LOADING',
-});
-
-const setAmazonPayWalletIsStale = (isStale: boolean): Action => ({
-	type: 'SET_AMAZON_PAY_WALLET_IS_STALE',
-	isStale,
-});
-
-const setAmazonPayHasAccessToken: Action = {
-	type: 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN',
-};
-const setAmazonPayFatalError: Action = {
-	type: 'SET_AMAZON_PAY_FATAL_ERROR',
-};
-
-const setAmazonPayPaymentSelected =
-	(paymentSelected: boolean) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_AMAZON_PAY_PAYMENT_SELECTED',
-			paymentSelected,
-		}))(dispatch, getState);
-	};
-
-const setAmazonPayOrderReferenceId =
-	(orderReferenceId: string) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_AMAZON_PAY_ORDER_REFERENCE_ID',
-			orderReferenceId,
-		}))(dispatch, getState);
-	};
-
-const setAmazonPayBillingAgreementId =
-	(amazonBillingAgreementId: string) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID',
-			amazonBillingAgreementId,
-		}))(dispatch, getState);
-	};
-
-const setAmazonPayBillingAgreementConsentStatus =
-	(amazonBillingAgreementConsentStatus: boolean) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS',
-			amazonBillingAgreementConsentStatus,
-		}))(dispatch, getState);
-	};
-
-// We defer loading 3rd party payment SDKs until the user selects one, or one is selected by default
-const loadPayPalExpressSdk =
-	(contributionType: ContributionType) =>
-	(dispatch: Dispatch): void => {
-		if (contributionType !== 'ONE_OFF') {
-			dispatch(setPayPalHasBegunLoading());
-			void loadPayPalRecurring().then(() => dispatch(setPayPalHasLoaded()));
-		}
-	};
-
 const getUserType =
 	(email: string) =>
 	(dispatch: Dispatch, getState: () => State): void => {
@@ -430,42 +307,6 @@ const setStripeRecurringRecaptchaVerified =
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED',
 			recaptchaVerified,
-		}))(dispatch, getState);
-	};
-
-const setSepaIban =
-	(iban: string | null) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_SEPA_IBAN',
-			iban,
-		}))(dispatch, getState);
-	};
-
-const setSepaAccountHolderName =
-	(accountHolderName: string | null) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_SEPA_ACCOUNT_HOLDER_NAME',
-			accountHolderName,
-		}))(dispatch, getState);
-	};
-
-const setSepaAddressStreetName =
-	(addressStreetName?: string) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_SEPA_ADDRESS_STREET_NAME',
-			addressStreetName,
-		}))(dispatch, getState);
-	};
-
-const setSepaAddressCountry =
-	(addressCountry?: Country) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_SEPA_ADDRESS_COUNTRY',
-			addressCountry,
 		}))(dispatch, getState);
 	};
 
@@ -691,7 +532,7 @@ const onPaymentResult =
 		paymentResult: Promise<PaymentResult>,
 		paymentAuthorisation: PaymentAuthorisation,
 	) =>
-	(dispatch: Dispatch<Action>, getState: () => State): Promise<PaymentResult> =>
+	(dispatch: Dispatch, getState: () => State): Promise<PaymentResult> =>
 		paymentResult.then((result) => {
 			const state = getState();
 
@@ -730,7 +571,7 @@ const onPaymentResult =
 								dispatch(setAmazonPayWalletIsStale(true));
 							} else {
 								// Disable Amazon Pay
-								dispatch(setAmazonPayFatalError);
+								dispatch(setAmazonPayFatalError());
 							}
 						}
 
@@ -982,14 +823,6 @@ export {
 	updateBillingState,
 	updateBillingCountry,
 	updateUserFormData,
-	setAmazonPayHasBegunLoading,
-	setAmazonPayWalletIsStale,
-	setAmazonPayHasAccessToken,
-	setAmazonPayFatalError,
-	setAmazonPayOrderReferenceId,
-	setAmazonPayBillingAgreementId,
-	setAmazonPayBillingAgreementConsentStatus,
-	setAmazonPayPaymentSelected,
 	setUserTypeFromIdentityResponse,
 	paymentFailure,
 	paymentWaiting,
@@ -1006,12 +839,5 @@ export {
 	setStripeCardFormComplete,
 	setStripeSetupIntentClientSecret,
 	setStripeRecurringRecaptchaVerified,
-	setPayPalHasBegunLoading,
-	updatePayPalButtonReady,
 	updateRecaptchaToken,
-	loadPayPalExpressSdk,
-	setSepaIban,
-	setSepaAccountHolderName,
-	setSepaAddressStreetName,
-	setSepaAddressCountry,
 };

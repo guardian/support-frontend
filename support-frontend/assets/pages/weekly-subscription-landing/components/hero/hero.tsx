@@ -112,7 +112,7 @@ const getFirstParagraph = (
 };
 
 const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
-	const defaultRoundelText = 'Save up to 34% a year';
+	const defaultRoundelText = 'Save up to 35% a year';
 	const defaultTitle = orderIsAGift ? null : getRegionalCopyFor(detect());
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy = getFirstParagraph(promotionCopy, orderIsAGift);

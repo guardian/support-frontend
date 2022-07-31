@@ -1,7 +1,5 @@
 // ----- Imports ----- //
 import type { Dispatch } from 'redux';
-import 'redux';
-import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
 import type {
 	PaymentAuthorisation,
 	PaymentResult,
@@ -35,6 +33,7 @@ import {
 	Paper,
 } from 'helpers/productPrice/subscriptions';
 import type { GiftingState } from 'helpers/redux/checkout/giftingState/state';
+import type { DirectDebitState } from 'helpers/redux/checkout/payment/directDebit/state';
 import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
@@ -283,7 +282,10 @@ function showPaymentMethod(
 			break;
 
 		case DirectDebit:
-			directDebitAuthorised(onAuthorised, state.page.directDebit);
+			directDebitAuthorised(
+				onAuthorised,
+				state.page.checkoutForm.payment.directDebit,
+			);
 			break;
 
 		case PayPal:

@@ -52,7 +52,6 @@ export type FormState = Omit<
 	submissionError: Option<ErrorReason>;
 	formSubmitted: boolean;
 	isTestUser: boolean;
-	payPalHasLoaded: boolean;
 	stripePaymentMethod: Option<string>;
 	debugInfo: string;
 };

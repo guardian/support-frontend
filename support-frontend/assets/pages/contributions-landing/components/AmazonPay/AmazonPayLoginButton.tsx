@@ -1,31 +1,29 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
 import Button from 'components/button/button';
 import AnimatedDots from 'components/spinners/animatedDots';
 import type {
 	AmazonLoginObject,
 	AmazonPaymentsObject,
 } from 'helpers/forms/paymentIntegrations/amazonPay/types';
+import { setAmazonPayHasAccessToken } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
-import { setAmazonPayHasAccessToken } from 'pages/contributions-landing/contributionsLandingActions';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
 
 type PropTypes = {
 	amazonLoginObject?: AmazonLoginObject;
 	amazonPaymentsObject?: AmazonPaymentsObject;
-	setAmazonPayHasAccessToken: () => Action;
+	setAmazonPayHasAccessToken: () => void;
 };
 
 const mapStateToProps = () => ({});
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-	setAmazonPayHasAccessToken: () => dispatch(setAmazonPayHasAccessToken),
-});
+const mapDispatchToProps = {
+	setAmazonPayHasAccessToken,
+};
 
 class AmazonPayLoginButtonComponent extends Component<PropTypes> {
 	loginPopup = (amazonLoginObject: AmazonLoginObject) => (): void => {

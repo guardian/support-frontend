@@ -239,7 +239,7 @@ export function sendEventContributionAmountUpdated(
 					sourceCurrency,
 				);
 				if (convertedValue) {
-					sendEvent(sendEventId, false, convertedValue.toString());
+					sendEvent(sendEventId, false, Math.round(convertedValue).toString());
 				}
 			};
 
