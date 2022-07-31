@@ -101,7 +101,7 @@ function mapStateToProps(state: SubscriptionsState) {
 		csrf: state.page.checkoutForm.csrf,
 		currencyId:
 			currencyFromCountryCode(deliveryAddress.fields.country) ?? 'USD',
-		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
+		payPalHasLoaded: state.page.checkoutForm.payment.payPal.hasLoaded,
 		participations: state.common.abParticipations,
 		price: selectPriceForProduct(state),
 	};

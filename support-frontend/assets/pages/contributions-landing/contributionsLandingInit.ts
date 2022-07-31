@@ -24,6 +24,7 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
 import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
 import {
 	setAllAmounts,
@@ -45,7 +46,6 @@ import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
 import {
 	getUserType,
-	loadPayPalExpressSdk,
 	setUserTypeFromIdentityResponse,
 	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
@@ -252,7 +252,7 @@ function selectInitialContributionTypeAndPaymentMethod(
 
 	switch (paymentMethod) {
 		case PayPal:
-			dispatch(loadPayPalExpressSdk(contributionType));
+			void dispatch(loadPayPalExpressSdk());
 			break;
 
 		default:

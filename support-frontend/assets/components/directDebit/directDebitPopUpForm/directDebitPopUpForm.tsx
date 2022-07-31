@@ -1,28 +1,28 @@
 // ----- Imports ----- //
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { Phase } from 'components/directDebit/directDebitActions';
-import {
-	closeDirectDebitPopUp,
-	resetDirectDebitFormError,
-} from 'components/directDebit/directDebitActions';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import SvgCross from 'components/svgs/cross';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import './directDebitPopUpForm.scss';
+import {
+	resetFormError,
+	setPopupClose,
+} from 'helpers/redux/checkout/payment/directDebit/actions';
+import type { Phase } from 'helpers/redux/checkout/payment/directDebit/state';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 
 // ----- Map State/Props ----- //
 function mapStateToProps(state: ContributionsState) {
 	return {
-		isPopUpOpen: state.page.directDebit.isPopUpOpen,
-		phase: state.page.directDebit.phase,
+		isPopUpOpen: state.page.checkoutForm.payment.directDebit.isPopUpOpen,
+		phase: state.page.checkoutForm.payment.directDebit.phase,
 	};
 }
 
 const mapDispatchToProps = {
-	closeDirectDebitPopUp,
-	resetDirectDebitFormError,
+	setPopupClose,
+	resetFormError,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -35,8 +35,8 @@ type PropTypes = ConnectedProps<typeof connector> & {
 // ----- Component ----- //
 function DirectDebitPopUpForm(props: PropTypes): JSX.Element {
 	function closePopup() {
-		props.closeDirectDebitPopUp();
-		props.resetDirectDebitFormError();
+		props.setPopupClose();
+		props.resetFormError();
 	}
 
 	if (props.isPopUpOpen) {

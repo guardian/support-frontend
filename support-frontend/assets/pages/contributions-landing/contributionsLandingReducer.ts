@@ -1,11 +1,7 @@
 // ----- Imports ----- //
-import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
-import type { DirectDebitState } from 'components/directDebit/directDebitReducer';
-import { directDebitReducer as directDebit } from 'components/directDebit/directDebitReducer';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { AmazonPayData } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type {
@@ -16,6 +12,8 @@ import { csrfReducer } from 'helpers/redux/checkout/csrf/reducer';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { marketingConsentReducer } from 'helpers/redux/checkout/marketingConsent/reducer';
 import type { MarketingConsentState } from 'helpers/redux/checkout/marketingConsent/state';
+import type { PaymentState } from 'helpers/redux/checkout/payment/reducer';
+import { paymentReducer } from 'helpers/redux/checkout/payment/reducer';
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { productReducer } from 'helpers/redux/checkout/product/reducer';
@@ -51,24 +49,9 @@ export interface StripeCardFormData {
 	recurringRecaptchaVerified: boolean;
 }
 
-export interface PayPalData {
-	hasBegunLoading: boolean;
-	hasLoaded: boolean;
-	buttonReady: boolean;
-}
-
-export interface SepaData {
-	iban: string | null;
-	accountHolderName: string | null;
-	streetName?: string;
-	country?: Country;
-}
-
 interface FormState {
 	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	amazonPayData: AmazonPayData;
-	payPalData: PayPalData;
 	isWaiting: boolean;
 	formData: FormData;
 	stripePaymentRequestButtonData: {
@@ -76,7 +59,6 @@ interface FormState {
 		REGULAR: StripePaymentRequestButtonData;
 	};
 	stripeCardFormData: StripeCardFormData;
-	sepaData: SepaData;
 	paymentComplete: boolean;
 	paymentError: ErrorReason | null;
 	hasSeenDirectDebitThankYouCopy: boolean;
@@ -95,9 +77,9 @@ interface PageState {
 		marketingConsent: MarketingConsentState;
 		csrf: CsrfState;
 		recaptcha: RecaptchaState;
+		payment: PaymentState;
 	};
 	user: UserState;
-	directDebit: DirectDebitState;
 }
 
 export interface State {
@@ -111,20 +93,6 @@ function createFormReducer() {
 	// ----- Initial state ----- //
 	const initialState: FormState = {
 		paymentMethod: 'None',
-		amazonPayData: {
-			hasBegunLoading: false,
-			walletIsStale: false,
-			orderReferenceId: null,
-			paymentSelected: false,
-			hasAccessToken: false,
-			fatalError: false,
-			amazonBillingAgreementConsentStatus: false,
-		},
-		payPalData: {
-			hasBegunLoading: false,
-			hasLoaded: false,
-			buttonReady: false,
-		},
 		formData: {
 			billingState: null,
 			billingCountry: null,
@@ -144,12 +112,6 @@ function createFormReducer() {
 			formComplete: false,
 			setupIntentClientSecret: null,
 			recurringRecaptchaVerified: false,
-		},
-		sepaData: {
-			iban: null,
-			accountHolderName: null,
-			country: undefined,
-			streetName: undefined,
 		},
 		isWaiting: false,
 		paymentComplete: false,
@@ -173,70 +135,6 @@ function createFormReducer() {
 				return {
 					...state,
 					existingPaymentMethod: action.existingPaymentMethod,
-				};
-
-			case 'SET_AMAZON_PAY_HAS_BEGUN_LOADING':
-				return {
-					...state,
-					amazonPayData: { ...state.amazonPayData, hasBegunLoading: true },
-				};
-
-			case 'SET_AMAZON_PAY_WALLET_IS_STALE':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						walletIsStale: action.isStale,
-					},
-				};
-
-			case 'SET_AMAZON_PAY_ORDER_REFERENCE_ID':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						orderReferenceId: action.orderReferenceId,
-					},
-				};
-
-			case 'SET_AMAZON_PAY_PAYMENT_SELECTED':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						paymentSelected: action.paymentSelected,
-					},
-				};
-
-			case 'SET_AMAZON_PAY_HAS_ACCESS_TOKEN':
-				return {
-					...state,
-					amazonPayData: { ...state.amazonPayData, hasAccessToken: true },
-				};
-
-			case 'SET_AMAZON_PAY_FATAL_ERROR':
-				return {
-					...state,
-					amazonPayData: { ...state.amazonPayData, fatalError: true },
-				};
-
-			case 'SET_AMAZON_PAY_BILLING_AGREEMENT_ID':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						amazonBillingAgreementId: action.amazonBillingAgreementId,
-					},
-				};
-
-			case 'SET_AMAZON_PAY_BILLING_AGREEMENT_CONSENT_STATUS':
-				return {
-					...state,
-					amazonPayData: {
-						...state.amazonPayData,
-						amazonBillingAgreementConsentStatus:
-							action.amazonBillingAgreementConsentStatus,
-					},
 				};
 
 			case 'SET_STRIPE_CARD_FORM_COMPLETE':
@@ -263,36 +161,6 @@ function createFormReducer() {
 					stripeCardFormData: {
 						...state.stripeCardFormData,
 						recurringRecaptchaVerified: action.recaptchaVerified,
-					},
-				};
-
-			case 'SET_SEPA_IBAN':
-				return { ...state, sepaData: { ...state.sepaData, iban: action.iban } };
-
-			case 'SET_SEPA_ACCOUNT_HOLDER_NAME':
-				return {
-					...state,
-					sepaData: {
-						...state.sepaData,
-						accountHolderName: action.accountHolderName,
-					},
-				};
-
-			case 'SET_SEPA_ADDRESS_STREET_NAME':
-				return {
-					...state,
-					sepaData: {
-						...state.sepaData,
-						streetName: action.addressStreetName,
-					},
-				};
-
-			case 'SET_SEPA_ADDRESS_COUNTRY':
-				return {
-					...state,
-					sepaData: {
-						...state.sepaData,
-						country: action.addressCountry,
 					},
 				};
 
@@ -350,24 +218,6 @@ function createFormReducer() {
 					formData: { ...state.formData, ...action.userFormData },
 				};
 
-			case 'SET_PAYPAL_HAS_BEGUN_LOADING':
-				return {
-					...state,
-					payPalData: { ...state.payPalData, hasBegunLoading: true },
-				};
-
-			case 'SET_PAYPAL_HAS_LOADED':
-				return {
-					...state,
-					payPalData: { ...state.payPalData, hasLoaded: true },
-				};
-
-			case 'UPDATE_PAYPAL_BUTTON_READY':
-				return {
-					...state,
-					payPalData: { ...state.payPalData, buttonReady: action.ready },
-				};
-
 			case 'SET_TICKER_GOAL_REACHED':
 				return { ...state, tickerGoalReached: true };
 
@@ -418,9 +268,9 @@ function initReducer(): Reducer<PageState> {
 			marketingConsent: marketingConsentReducer,
 			csrf: csrfReducer,
 			recaptcha: recaptchaReducer,
+			payment: paymentReducer,
 		}),
 		user: createUserReducer(),
-		directDebit,
 	});
 }
 

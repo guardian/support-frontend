@@ -31,3 +31,9 @@ export function DatePicker(args: {
 DatePicker.args = {
 	value: formatMachineDate(new Date()),
 };
+DatePicker.parameters = {
+	// TODO: We can factor out a purely presentational component and then re-enable
+	// the snapshot tests. For now the component has hardcoded references to Date.now()
+	// so will cause a snapshot diff every day!
+	chromatic: { disableSnapshot: true },
+};

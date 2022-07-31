@@ -100,7 +100,7 @@ function mapStateToProps(state: SubscriptionsState) {
 		currencyId:
 			currencyFromCountryCode(deliveryAddress.fields.country) ??
 			state.common.internationalisation.defaultCurrency,
-		payPalHasLoaded: state.page.checkout.payPalHasLoaded,
+		payPalHasLoaded: state.page.checkoutForm.payment.payPal.hasLoaded,
 		price: selectPriceForProduct(state),
 	};
 }

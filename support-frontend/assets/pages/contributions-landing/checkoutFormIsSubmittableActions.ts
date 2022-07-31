@@ -112,7 +112,7 @@ const amazonPayFormOk = (state: State): boolean => {
 			amazonBillingAgreementId,
 			amazonBillingAgreementConsentStatus,
 			paymentSelected,
-		} = state.page.form.amazonPayData;
+		} = state.page.checkoutForm.payment.amazonPay;
 
 		const oneOffOk = () => !!orderReferenceId;
 
@@ -130,7 +130,7 @@ const amazonPayFormOk = (state: State): boolean => {
 
 const sepaFormOk = (state: State): boolean => {
 	if (state.page.form.paymentMethod === Sepa) {
-		const { accountHolderName, iban } = state.page.form.sepaData;
+		const { accountHolderName, iban } = state.page.checkoutForm.payment.sepa;
 		return !!accountHolderName && isValidIban(iban);
 	}
 
@@ -181,7 +181,7 @@ function enableOrDisableForm() {
 		dispatch(
 			setFormIsSubmittable(
 				shouldEnable,
-				state.page.form.payPalData.buttonReady,
+				state.page.checkoutForm.payment.payPal.buttonReady,
 			),
 		);
 	};

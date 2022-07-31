@@ -3,7 +3,7 @@ import * as React from 'react';
 import type {
 	Phase,
 	SortCodeIndex,
-} from 'components/directDebit/directDebitActions';
+} from 'helpers/redux/checkout/payment/directDebit/state';
 
 type SortCodePropTypes = {
 	phase: Phase;

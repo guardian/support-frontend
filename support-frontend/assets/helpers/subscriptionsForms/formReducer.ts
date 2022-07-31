@@ -13,7 +13,6 @@ function createFormReducer() {
 		submissionError: null,
 		formSubmitted: false,
 		isTestUser: isTestUser(),
-		payPalHasLoaded: false,
 		stripePaymentMethod: null,
 		deliveryInstructions: null,
 		debugInfo: '',
@@ -65,9 +64,6 @@ function createFormReducer() {
 					billingAddressIsSame: action.isSame,
 					formErrors: removeError('billingAddressIsSame', state.formErrors),
 				};
-
-			case 'SET_PAYPAL_HAS_LOADED':
-				return { ...state, payPalHasLoaded: true };
 
 			case 'SET_STRIPE_PAYMENT_METHOD':
 				return { ...state, stripePaymentMethod: action.stripePaymentMethod };
