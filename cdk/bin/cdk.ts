@@ -1,6 +1,7 @@
 import "source-map-support/register";
 import { App } from "@aws-cdk/core";
 import { Frontend } from "../lib/frontend";
+import { PaymentApi } from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
 
 const app = new App();
@@ -46,4 +47,14 @@ new StripePatronsData(app, "StripePatronsData-PROD", {
   stack: "support",
   stage: "PROD",
   cloudFormationStackName,
+});
+
+new PaymentApi(app, "Payment-API-CODE", {
+  stack: "support",
+  stage: "CODE",
+});
+
+new PaymentApi(app, "Payment-API-PROD", {
+  stack: "support",
+  stage: "PROD",
 });

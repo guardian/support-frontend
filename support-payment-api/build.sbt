@@ -67,4 +67,5 @@ riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffManifestProjectName := "support:payment-api-mono"
 riffRaffPackageType := (Debian / packageBin).value
-riffRaffArtifactResources += (file("support-payment-api/src/main/resources/cloud-formation.yaml"), "cfn/cfn.yaml")
+riffRaffArtifactResources += (file("cdk/cdk.out/Payment-API-PROD.template.json"), "cfn/Payment-API-PROD.template.json")
+riffRaffArtifactResources += (file("cdk/cdk.out/Payment-API-CODE.template.json"), "cfn/Payment-API-CODE.template.json")

@@ -31,6 +31,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
+      - name: Setup Node for CDK
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: cdk/yarn.lock
+
+      - name: Build CFN from CDK
+        run: ./script/ci
+        working-directory: cdk
+
       # Required by sbt riffRaffUpload
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
