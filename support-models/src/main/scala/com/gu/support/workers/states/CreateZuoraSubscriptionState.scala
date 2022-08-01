@@ -41,6 +41,12 @@ object CreateZuoraSubscriptionProductState {
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
 
+  case class SupporterPlusState(
+      product: SupporterPlus,
+      paymentMethod: PaymentMethod,
+      salesForceContact: SalesforceContactRecord,
+  ) extends CreateZuoraSubscriptionProductState
+
   case class DigitalSubscriptionDirectPurchaseState(
       billingCountry: Country,
       product: DigitalPack,
@@ -95,6 +101,7 @@ object CreateZuoraSubscriptionProductState {
   implicit val codec: Codec[CreateZuoraSubscriptionProductState] = discriminatedType.codec(
     List(
       discriminatedType.variant[ContributionState](contribution),
+      discriminatedType.variant[SupporterPlusState](supporterPlus),
       discriminatedType.variant[DigitalSubscriptionDirectPurchaseState](digitalSubscriptionDirectPurchase),
       discriminatedType.variant[DigitalSubscriptionGiftPurchaseState](digitalSubscriptionGiftPurchase),
       discriminatedType.variant[DigitalSubscriptionCorporateRedemptionState](digitalSubscriptionCorporateRedemption),

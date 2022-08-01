@@ -31,6 +31,12 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
     import zuoraProductHandlers._
 
     val eventualSendThankYouEmailState = zuoraSubscriptionState.productSpecificState match {
+      case state: SupporterPlusState =>
+        zuoraSupporterPlusHandler.subscribe(
+          state,
+          zuoraSubscriptionState.csrUsername,
+          zuoraSubscriptionState.salesforceCaseId,
+        )
       case state: DigitalSubscriptionGiftRedemptionState =>
         zuoraDigitalSubscriptionGiftRedemptionHandler.redeemGift(state)
       case state: DigitalSubscriptionDirectPurchaseState =>
@@ -129,6 +135,16 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
       services.config.zuoraConfigProvider.get(isTestUser).contributionConfig,
       subscribeItemBuilder,
       dateGenerator,
+    ),
+    state.user,
+  )
+  lazy val zuoraSupporterPlusHandler = new ZuoraSupporterPlusHandler(
+    zuoraSubscriptionCreator,
+    new SupporterPlusSubcriptionBuilder(
+      services.config.zuoraConfigProvider.get(isTestUser).supporterPlusConfig,
+      dateGenerator,
+      touchPointEnvironment,
+      subscribeItemBuilder,
     ),
     state.user,
   )

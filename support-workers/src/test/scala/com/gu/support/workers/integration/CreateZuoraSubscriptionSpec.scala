@@ -54,6 +54,13 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
       })
   }
 
+  it should "create a Supporter Plus subscription" in {
+    createZuoraHelper
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson)
+      .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
+      })
+  }
+
   it should "create a Digital Pack subscription" in {
     createZuoraHelper
       .createSubscription(createDigiPackZuoraSubscriptionJson)

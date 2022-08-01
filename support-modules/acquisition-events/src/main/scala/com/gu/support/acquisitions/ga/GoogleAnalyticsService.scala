@@ -8,6 +8,7 @@ import com.gu.support.acquisitions.ga.models.GAError.{BuildError, NetworkFailure
 import com.gu.support.acquisitions.ga.models.{ConversionCategory, GAData, GAError}
 import com.gu.support.acquisitions.models.AcquisitionProduct.{
   Contribution,
+  SupporterPlus,
   DigitalSubscription,
   GuardianWeekly,
   Paper,
@@ -169,6 +170,7 @@ object GoogleAnalyticsService extends LazyLogging {
   private[ga] def getProductCheckout(acquisition: AcquisitionDataRow): Option[String] =
     acquisition.product match {
       case Contribution | RecurringContribution => Some("Contribution")
+      case SupporterPlus => Some("SupporterPlus")
       case DigitalSubscription => Some("DigitalPack")
       case Paper => getProductCheckoutForPrint(acquisition.printOptions)
       case GuardianWeekly => Some("GuardianWeekly")

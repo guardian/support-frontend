@@ -260,6 +260,12 @@ class CreateSubscriptionController(
           s"gu.contributions.recurring.contrib-timestamp.$billingPeriod" -> DateTime.now.getMillis.toString,
           "gu_recurring_contributor" -> true.toString,
         )
+      case _: SupporterPlus =>
+        List(
+          "gu_digital_subscriber" -> true.toString, // TODO: confirm these
+          "gu_supporter_plus" -> true.toString,
+          "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
+        )
       case _: DigitalPack =>
         List(
           "gu_digital_subscriber" -> true.toString,

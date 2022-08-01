@@ -105,14 +105,4 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
   }
 
-  private def maybePromoCode(s: SendThankYouEmailState): Option[PromoCode] = s match {
-    case _: SendThankYouEmailContributionState => None
-    case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState => s.promoCode
-    case s: SendThankYouEmailDigitalSubscriptionGiftPurchaseState => s.promoCode
-    case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => None
-    case _: SendThankYouEmailDigitalSubscriptionGiftRedemptionState => None
-    case s: SendThankYouEmailPaperState => s.promoCode
-    case s: SendThankYouEmailGuardianWeeklyState => s.promoCode
-  }
-
 }

@@ -97,6 +97,8 @@ object AcquisitionProduct {
 
   case object RecurringContribution extends AcquisitionProduct("RECURRING_CONTRIBUTION")
 
+  case object SupporterPlus extends AcquisitionProduct("SUPPORTER_PLUS")
+
   case object DigitalSubscription extends AcquisitionProduct("DIGITAL_SUBSCRIPTION")
 
   case object Paper extends AcquisitionProduct("PRINT_SUBSCRIPTION")
