@@ -4,13 +4,18 @@ import Heading from 'components/heading/heading';
 import type { HeadingSize } from 'components/heading/heading';
 import './checkoutForm.scss';
 
-/*
-Form Section
-Form "blocks". you need at least one of these.
-*/
-type FormSectionPropTypes = {
+type TitleProps =
+	| {
+			title?: ReactNode;
+			titleComponent?: never;
+	  }
+	| {
+			title?: never;
+			titleComponent?: ReactNode;
+	  };
+
+type FormSectionPropTypes = TitleProps & {
 	id?: string;
-	title?: string;
 	children: ReactNode;
 	headingSize: HeadingSize;
 	border: 'full' | 'bottom' | 'top' | 'none';
@@ -20,6 +25,7 @@ type FormSectionPropTypes = {
 function FormSection({
 	children,
 	title,
+	titleComponent,
 	headingSize,
 	border,
 	id,
@@ -29,8 +35,9 @@ function FormSection({
 		<div
 			id={id}
 			className={`component-checkout-form-section component-checkout-form-section--${border} component-checkout-form-section__wrap`}
-			css={cssOverrides}
+			css={titleComponent && cssOverrides}
 		>
+			{titleComponent && titleComponent}
 			{title && (
 				<Heading
 					className="component-checkout-form-section__heading"

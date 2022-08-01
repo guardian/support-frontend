@@ -360,7 +360,9 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 					{paymentMethods.length > 0 ? (
 						<FormSection
 							title={
-								paymentMethods.length > 1 ? 'How would you like to pay?' : ''
+								paymentMethods.length > 1
+									? 'How would you like to pay?'
+									: 'Payment Method'
 							}
 						>
 							<PaymentMethodSelector
@@ -372,7 +374,13 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 								}
 							/>
 						</FormSection>
-					) : null}
+					) : (
+						<GeneralErrorMessage
+							classModifiers={['no-valid-payments']}
+							errorHeading="Payment methods are unavailable"
+							errorReason="all_payment_methods_unavailable"
+						/>
+					)}
 					<FormSectionHiddenUntilSelected
 						id="stripeForm"
 						show={props.paymentMethod === Stripe}
