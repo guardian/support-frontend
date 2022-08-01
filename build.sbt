@@ -5,7 +5,7 @@ import LibraryVersions._
 
 import scala.sys.process._
 
-val scalatest = "org.scalatest" %% "scalatest" % "3.2.2"
+val scalatest = "org.scalatest" %% "scalatest" % "3.2.13"
 
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   IntegrationTest / scalaSource := baseDirectory.value / "src" / "test" / "scala",
