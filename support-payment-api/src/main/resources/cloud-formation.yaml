@@ -36,7 +36,7 @@ Metadata:
           - CertificateArn
 
 Parameters:
-  VpcId:
+  CfnVpcId:
     Type: String
     Description: VpcId of your Virtual Private Cloud (VPC)
   PrivateVpcSubnets:
@@ -163,7 +163,7 @@ Resources:
       ImageId: !Ref AMI
       SecurityGroups:
         - !Ref InstanceSecurityGroup
-        - !Ref WazuhSecurityGroup
+        - !Ref NewWazuhSecurityGroup
       InstanceType: !FindInMap [ StageVariables, !Ref Stage, InstanceType ]
       IamInstanceProfile: !Ref InstanceProfile
       AssociatePublicIpAddress: false
@@ -347,7 +347,7 @@ Resources:
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
       UnhealthyThresholdCount: 2
-      VpcId: !Ref VpcId
+      VpcId: !Ref CfnVpcId
       TargetGroupAttributes:
       - Key: deregistration_delay.timeout_seconds
         Value: '20'
@@ -358,7 +358,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Permit incoming HTTPS access on port 443, egress to port 9000
-      VpcId: !Ref VpcId
+      VpcId: !Ref CfnVpcId
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 443
@@ -374,7 +374,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Open up SSH access and enable HTTP access on the configured port
-      VpcId: !Ref VpcId
+      VpcId: !Ref CfnVpcId
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 22
@@ -394,12 +394,24 @@ Resources:
           ToPort: 5432
           CidrIp: 0.0.0.0/0
 
+  NewWazuhSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow outbound traffic from wazuh agent to manager
+      VpcId:
+        Ref: CfnVpcId
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 1514
+          ToPort: 1515
+          CidrIp: 0.0.0.0/0
+
   WazuhSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Allow outbound traffic from wazuh agent to manager
       VpcId:
-        Ref: VpcId
+        Ref: CfnVpcId
       SecurityGroupEgress:
         - IpProtocol: tcp
           FromPort: 1514
