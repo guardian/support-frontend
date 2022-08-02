@@ -8,6 +8,7 @@ import type {
 } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
+import { expireRecaptchaToken, setRecaptchaToken } from '../recaptcha/actions';
 import {
 	setAmazonPayBillingAgreementConsentStatus,
 	setAmazonPayBillingAgreementId,
@@ -61,6 +62,8 @@ export function addPaymentsSideEffects(
 // ---- Matchers ---- //
 
 const shouldCheckFormEnabled = isAnyOf(
+	setRecaptchaToken,
+	expireRecaptchaToken,
 	setPaymentMethod,
 	setAmazonPayPaymentSelected,
 	setAmazonPayOrderReferenceId,

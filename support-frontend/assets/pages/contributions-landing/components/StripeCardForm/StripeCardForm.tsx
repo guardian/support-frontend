@@ -119,20 +119,22 @@ function CardForm(props: PropTypes) {
 			trackRecaptchaClientTokenReceived();
 			props.setRecaptchaToken(token);
 
-			createStripeSetupIntent(
-				token,
-				props.stripeKey,
-				props.isTestUser,
-				props.csrf,
-			)
-				.then((clientSecret) => {
-					props.setStripeSetupIntentClientSecret(clientSecret);
-				})
-				.catch((err: Error) => {
-					logCreateSetupIntentError(err);
-					props.paymentFailure('internal_error');
-					props.setPaymentWaiting(false);
-				});
+			if (props.contributionType !== 'ONE_OFF') {
+				createStripeSetupIntent(
+					token,
+					props.stripeKey,
+					props.isTestUser,
+					props.csrf,
+				)
+					.then((clientSecret) => {
+						props.setStripeSetupIntentClientSecret(clientSecret);
+					})
+					.catch((err: Error) => {
+						logCreateSetupIntentError(err);
+						props.paymentFailure('internal_error');
+						props.setPaymentWaiting(false);
+					});
+			}
 		},
 		props.expireRecaptchaToken,
 	);

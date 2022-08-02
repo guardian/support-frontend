@@ -170,14 +170,12 @@ function enableOrDisableForm() {
 			window.guardian.recaptchaEnabled &&
 			state.page.checkoutForm.payment.paymentMethod === 'Stripe' &&
 			!state.page.user.isPostDeploymentTestUser;
-		const recaptchaVerified =
-			contributionType !== 'ONE_OFF'
-				? state.page.form.stripeCardFormData.recurringRecaptchaVerified
-				: !!state.page.form.oneOffRecaptchaToken;
+		const recaptchaVerified = state.page.checkoutForm.recaptcha.completed;
 		const shouldEnable =
 			formIsValid &&
 			!shouldBlockExistingRecurringContributor &&
 			(!recaptchaRequired || recaptchaVerified);
+
 		dispatch(
 			setFormIsSubmittable(
 				shouldEnable,

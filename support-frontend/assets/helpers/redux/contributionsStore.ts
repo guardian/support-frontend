@@ -6,6 +6,7 @@ import { addPaymentsSideEffects } from './checkout/payment/contributionsSideEffe
 import { addPersonalDetailsSideEffects } from './checkout/personalDetails/contributionsSideEffects';
 import { setCurrency } from './checkout/product/actions';
 import { addProductSideEffects } from './checkout/product/contributionsSideEffects';
+import { addRecaptchaSideEffects } from './checkout/recaptcha/contributionsSideEffects';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
 import { getInitialState } from './utils/setup';
@@ -42,6 +43,7 @@ export function initReduxForContributions(): ContributionsStore {
 		addPersonalDetailsSideEffects(startContributionsListening);
 		addProductSideEffects(startContributionsListening);
 		addPaymentsSideEffects(startContributionsListening);
+		addRecaptchaSideEffects(startContributionsListening);
 		const initialState = getInitialState();
 		contributionsStore.dispatch(setInitialCommonState(initialState));
 		contributionsStore.dispatch(
