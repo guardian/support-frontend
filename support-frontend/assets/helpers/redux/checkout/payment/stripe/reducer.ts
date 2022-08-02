@@ -7,7 +7,7 @@ export const stripeCardSlice = createSlice({
 	name: 'stripeCard',
 	initialState: initialStripeCardState,
 	reducers: {
-		setFormComplete: (state, action: PayloadAction<boolean>) => {
+		setStripeFieldsCompleted: (state, action: PayloadAction<boolean>) => {
 			state.formComplete = action.payload;
 		},
 		setClientSecret(state, action: PayloadAction<string>) {

@@ -18,7 +18,7 @@ import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import { isValidZipCode } from 'helpers/forms/formValidation';
 import type { StripePaymentIntentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/forms/paymentMethods';
-import { setFormComplete } from 'helpers/redux/checkout/payment/stripe/actions';
+import { setStripeFieldsCompleted } from 'helpers/redux/checkout/payment/stripe/actions';
 import { getStripeSetupIntent } from 'helpers/redux/checkout/payment/stripe/thunks';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
@@ -68,7 +68,7 @@ const mapDispatchToProps = {
 	onPaymentAuthorised: onThirdPartyPaymentAuthorised,
 	paymentFailure,
 	getStripeSetupIntent,
-	setStripeCardFormComplete: setFormComplete,
+	setStripeFieldsCompleted,
 	setPaymentWaiting,
 	setRecaptchaToken,
 	expireRecaptchaToken,
@@ -282,7 +282,7 @@ function CardForm(props: PropTypes) {
 			fieldStates.Expiry.name === 'Complete' &&
 			fieldStates.CVC.name === 'Complete' &&
 			isZipCodeFieldValid;
-		props.setStripeCardFormComplete(formIsComplete);
+		props.setStripeFieldsCompleted(formIsComplete);
 	}, [fieldStates, zipCode]);
 
 	return (
