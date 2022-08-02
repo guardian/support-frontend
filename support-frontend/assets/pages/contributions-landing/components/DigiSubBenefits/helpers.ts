@@ -43,16 +43,10 @@ const benefitsThresholdsByCountryGroup: Record<
 	},
 };
 
-function isOneOff(
-	contributionType: ContributionType,
-): contributionType is RegularContribType {
-	return contributionType == 'ONE_OFF';
-}
-
 function isNotOneOff(
 	contributionType: ContributionType,
 ): contributionType is RegularContribType {
-	return !isOneOff(contributionType);
+	return contributionType !== 'ONE_OFF';
 }
 
 function getThresholdPrice(
