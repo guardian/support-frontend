@@ -156,7 +156,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropTypes = ConnectedProps<typeof connector> & {
 	campaignSettings: CampaignSettings | null;
 	onPaymentAuthorisation: (paymentAuthorisation: PaymentAuthorisation) => void;
-	payPalHasBegunLoading: boolean;
+	payPalHasBegunLoading?: boolean;
 	loadPayPalExpressSdk: () => void;
 	checkoutFormHasBeenSubmitted: boolean;
 };
