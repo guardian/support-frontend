@@ -53,7 +53,7 @@ describe('Digital checkout form', () => {
 	console.warn = jest.fn();
 	console.error = jest.fn();
 
-	let initialState;
+	let initialState: unknown;
 	beforeEach(() => {
 		initialState = {
 			page: {
@@ -89,31 +89,116 @@ describe('Digital checkout form', () => {
 		mockFetch({
 			client_secret: 'super secret',
 		});
-
-		mock(isSwitchOn).mockImplementation(() => true);
-
-		renderWithStore(<DigitalCheckoutForm />, {
-			initialState,
-			// @ts-expect-error -- Type mismatch is unimportant for tests
-			store: setUpStore(initialState),
-		});
 	});
+
 	describe('Payment methods', () => {
-		it('shows the direct debit option when the currency is GBP and the billing address is in the UK', () => {
-			expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+		describe('with all switches on', () => {
+			beforeEach(() => {
+				mock(isSwitchOn).mockImplementation(() => true);
+
+				renderWithStore(<DigitalCheckoutForm />, {
+					initialState,
+					// @ts-expect-error -- Type mismatch is unimportant for tests
+					store: setUpStore(initialState),
+				});
+			});
+
+			it('shows all payment options', () => {
+				expect(screen.queryByText('PayPal')).toBeInTheDocument();
+				expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+				expect(screen.queryByText('Credit/Debit card')).toBeInTheDocument();
+			});
+
+			it('shows the direct debit option when the currency is GBP and the billing address is in the UK', () => {
+				expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+			});
+
+			it('does not show the direct debit option when the currency is not GBP', async () => {
+				const countrySelect = await screen.findByLabelText('Country');
+				fireEvent.change(countrySelect, {
+					target: {
+						value: 'US',
+					},
+				});
+				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+			});
 		});
 
-		it('does not show the direct debit option when the currency is not GBP', async () => {
-			const countrySelect = await screen.findByLabelText('Country');
-			fireEvent.change(countrySelect, {
-				target: {
-					value: 'US',
-				},
+		describe('with only paypal switch on', () => {
+			beforeEach(() => {
+				mock(isSwitchOn).mockImplementation(
+					(key) => key === 'subscriptionsPaymentMethods.paypal',
+				);
+
+				renderWithStore(<DigitalCheckoutForm />, {
+					initialState,
+					// @ts-expect-error -- Type mismatch is unimportant for tests
+					store: setUpStore(initialState),
+				});
 			});
-			expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+
+			it('does not show the direct debit option', () => {
+				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+			});
+			it('does not show the credit/debit card option', () => {
+				expect(screen.queryByText('Credit/Debit card')).not.toBeInTheDocument();
+			});
+		});
+
+		describe('with only direct debit switch on', () => {
+			beforeEach(() => {
+				mock(isSwitchOn).mockImplementation(
+					(key) => key === 'subscriptionsPaymentMethods.directDebit',
+				);
+
+				renderWithStore(<DigitalCheckoutForm />, {
+					initialState,
+					// @ts-expect-error -- Type mismatch is unimportant for tests
+					store: setUpStore(initialState),
+				});
+			});
+
+			it('does not show the direct debit option', () => {
+				expect(screen.queryByText('PayPal')).not.toBeInTheDocument();
+			});
+			it('does not show the credit/debit card option', () => {
+				expect(screen.queryByText('Credit/Debit card')).not.toBeInTheDocument();
+			});
+		});
+
+		describe('with only credit/debit card switch on', () => {
+			beforeEach(() => {
+				mock(isSwitchOn).mockImplementation(
+					(key) => key === 'subscriptionsPaymentMethods.creditCard',
+				);
+
+				renderWithStore(<DigitalCheckoutForm />, {
+					initialState,
+					// @ts-expect-error -- Type mismatch is unimportant for tests
+					store: setUpStore(initialState),
+				});
+			});
+
+			it('does not show the direct debit option', () => {
+				expect(screen.queryByText('PayPal')).not.toBeInTheDocument();
+			});
+			it('does not show the credit/debit card option', () => {
+				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+			});
 		});
 	});
+
 	describe('Validation', () => {
+		beforeEach(() => {
+			mock(isSwitchOn).mockImplementation(() => true);
+
+			renderWithStore(<DigitalCheckoutForm />, {
+				initialState,
+				// @ts-expect-error -- Type mismatch is unimportant for tests
+				store: setUpStore(initialState),
+			});
+		});
+
 		it('should display an error if a silly character is entered into an input field', async () => {
 			const firstNameInput = await screen.findByLabelText('First name');
 			fireEvent.change(firstNameInput, {
