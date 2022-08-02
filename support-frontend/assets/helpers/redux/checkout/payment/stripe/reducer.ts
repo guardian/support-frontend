@@ -1,7 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { initialStripeCardState } from './state';
-import { getSetupIntent } from './thunks';
+import { getStripeSetupIntent } from './thunks';
 
 export const stripeCardSlice = createSlice({
 	name: 'stripeCard',
@@ -18,7 +18,7 @@ export const stripeCardSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		builder.addCase(getSetupIntent.fulfilled, (state, action) => {
+		builder.addCase(getStripeSetupIntent.fulfilled, (state, action) => {
 			state.setupIntentClientSecret = action.payload;
 		});
 	},

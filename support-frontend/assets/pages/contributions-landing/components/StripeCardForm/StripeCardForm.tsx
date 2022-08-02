@@ -18,6 +18,8 @@ import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import { isValidZipCode } from 'helpers/forms/formValidation';
 import type { StripePaymentIntentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/forms/paymentMethods';
+import { setFormComplete } from 'helpers/redux/checkout/payment/stripe/actions';
+import { getStripeSetupIntent } from 'helpers/redux/checkout/payment/stripe/thunks';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	expireRecaptchaToken,
@@ -27,8 +29,6 @@ import {
 	onThirdPartyPaymentAuthorised,
 	paymentFailure,
 	paymentWaiting as setPaymentWaiting,
-	setStripeCardFormComplete,
-	setStripeSetupIntentClientSecret,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { CreditCardIcons } from './CreditCardIcons';
@@ -36,7 +36,6 @@ import {
 	logCreatePaymentMethodError,
 	logCreateSetupIntentError,
 } from './helpers/logging';
-import { createStripeSetupIntent } from './helpers/stripe';
 import { styles } from './helpers/styles';
 import {
 	trackRecaptchaClientTokenReceived,
@@ -58,9 +57,8 @@ const mapStateToProps = (state: State) => ({
 	country: state.common.internationalisation.countryId,
 	currency: state.common.internationalisation.currencyId,
 	countryGroupId: state.common.internationalisation.countryGroupId,
-	csrf: state.page.checkoutForm.csrf,
 	setupIntentClientSecret:
-		state.page.form.stripeCardFormData.setupIntentClientSecret,
+		state.page.checkoutForm.payment.stripe.setupIntentClientSecret,
 	recaptchCompleted: state.page.checkoutForm.recaptcha.completed,
 	formIsSubmittable: state.page.form.formIsSubmittable,
 	isTestUser: state.page.user.isTestUser ?? false,
@@ -69,9 +67,9 @@ const mapStateToProps = (state: State) => ({
 const mapDispatchToProps = {
 	onPaymentAuthorised: onThirdPartyPaymentAuthorised,
 	paymentFailure,
-	setStripeCardFormComplete,
+	getStripeSetupIntent,
+	setStripeCardFormComplete: setFormComplete,
 	setPaymentWaiting,
-	setStripeSetupIntentClientSecret,
 	setRecaptchaToken,
 	expireRecaptchaToken,
 };
@@ -83,7 +81,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 interface PropsFromParent {
 	stripeKey: string;
 	setCreateStripePaymentMethod: (
-		create: (clientSecret: string | null) => void,
+		create: (clientSecret?: string) => void,
 	) => void;
 }
 
@@ -120,14 +118,11 @@ function CardForm(props: PropTypes) {
 			props.setRecaptchaToken(token);
 
 			if (props.contributionType !== 'ONE_OFF') {
-				createStripeSetupIntent(
-					token,
-					props.stripeKey,
-					props.isTestUser,
-					props.csrf,
-				)
-					.then((clientSecret) => {
-						props.setStripeSetupIntentClientSecret(clientSecret);
+				props
+					.getStripeSetupIntent({
+						token,
+						stripePublicKey: props.stripeKey,
+						isTestUser: props.isTestUser,
 					})
 					.catch((err: Error) => {
 						logCreateSetupIntentError(err);
@@ -188,7 +183,7 @@ function CardForm(props: PropTypes) {
 	};
 
 	const setupRecurringHandlers = (): void => {
-		props.setCreateStripePaymentMethod((clientSecret: string | null) => {
+		props.setCreateStripePaymentMethod((clientSecret?: string) => {
 			props.setPaymentWaiting(true);
 
 			// Recaptcha verification is required for setupIntent creation.

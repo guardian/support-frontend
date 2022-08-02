@@ -11,14 +11,14 @@ type SetupIntentData = {
 	isTestUser: boolean;
 };
 
-export const getSetupIntent = createAsyncThunk<
+export const getStripeSetupIntent = createAsyncThunk<
 	string,
 	SetupIntentData,
 	{
 		state: SubscriptionsState | ContributionsState;
 	}
 >(
-	'stripeCard/getSetupIntent',
+	'stripeCard/getStripeSetupIntent',
 	async function fetchSetupIntent(setupIntentData, thunkApi) {
 		const { csrf } = thunkApi.getState().page.checkoutForm;
 		const result: StripePaymentIntentResult = await fetchJson(
