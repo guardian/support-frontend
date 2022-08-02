@@ -13,6 +13,7 @@ import com.gu.support.workers.{
   PaymentMethod,
   RequestInfo,
   SalesforceContactRecord,
+  SupporterPlus,
 }
 import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
@@ -23,6 +24,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   DigitalSubscriptionGiftRedemptionState,
   GuardianWeeklyState,
   PaperState,
+  SupporterPlusState,
 }
 import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.ReaderType
@@ -67,6 +69,8 @@ class NextState(state: CreateSalesforceContactState) {
     (product, paymentMethod) match {
       case (product: Contribution, Purchase(purchase)) =>
         toNextContribution(salesforceContactRecords, product, purchase)
+      case (product: SupporterPlus, Purchase(purchase)) =>
+        toNextSupporterPlus(salesforceContactRecords, product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Direct =>
         toNextDSDirect(salesforceContactRecords.buyer, product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Gift =>
@@ -90,6 +94,28 @@ class NextState(state: CreateSalesforceContactState) {
   ): CreateZuoraSubscriptionState =
     CreateZuoraSubscriptionState(
       ContributionState(
+        product,
+        purchase,
+        salesforceContactRecords.buyer,
+      ),
+      requestId,
+      user,
+      product,
+      analyticsInfo,
+      None,
+      None,
+      state.csrUsername,
+      state.salesforceCaseId,
+      acquisitionData,
+    )
+
+  def toNextSupporterPlus(
+      salesforceContactRecords: SalesforceContactRecords,
+      product: SupporterPlus,
+      purchase: PaymentMethod,
+  ): CreateZuoraSubscriptionState =
+    CreateZuoraSubscriptionState(
+      SupporterPlusState(
         product,
         purchase,
         salesforceContactRecords.buyer,

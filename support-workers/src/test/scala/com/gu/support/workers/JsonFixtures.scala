@@ -17,6 +17,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   DigitalSubscriptionGiftRedemptionState,
   GuardianWeeklyState,
   PaperState,
+  SupporterPlusState,
 }
 import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.StripeGatewayDefault
@@ -473,6 +474,25 @@ object JsonFixtures {
       None,
       None,
     ).asJson.spaces2
+
+  val createSupporterPlusZuoraSubscriptionJson =
+    CreateZuoraSubscriptionState(
+      SupporterPlusState(
+        SupporterPlus(12, GBP, Monthly),
+        stripePaymentMethodObj,
+        salesforceContact,
+      ),
+      UUID.randomUUID(),
+      user("9999998"),
+      SupporterPlus(12, GBP, Monthly),
+      AnalyticsInfo(false, Stripe),
+      None,
+      None,
+      None,
+      None,
+      None,
+    ).asJson.spaces2
+
   val createDigiPackZuoraSubscriptionJson =
     CreateZuoraSubscriptionState(
       DigitalSubscriptionDirectPurchaseState(
