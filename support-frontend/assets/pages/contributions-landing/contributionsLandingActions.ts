@@ -432,7 +432,8 @@ function getBillingCountryAndState(
 }
 
 function getProductOptionsForBenefitsTest(amount: number, state: State) {
-	const isInPropTest = state.common.abParticipations.newProp === 'variant';
+	const isInNewProductTest =
+		state.common.abParticipations.newProduct === 'variant';
 	const contributionType = getContributionType(state);
 	const isRecurring = contributionType !== 'ONE_OFF';
 
@@ -442,7 +443,7 @@ function getProductOptionsForBenefitsTest(amount: number, state: State) {
 	);
 	const amountIsHighEnough = !!(thresholdPrice && amount >= thresholdPrice);
 	const shouldGetSupporterPlus =
-		isInPropTest && isRecurring && amountIsHighEnough;
+		isInNewProductTest && isRecurring && amountIsHighEnough;
 	return shouldGetSupporterPlus
 		? { productType: 'SupporterPlus' as const }
 		: { productType: 'Contribution' as const };

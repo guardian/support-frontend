@@ -148,7 +148,7 @@ type ContributionThankYouProps = {
 	paymentMethod: PaymentMethod;
 	countryId: IsoCountry;
 	campaignCode?: string;
-	isInPropTest: boolean;
+	isInNewProductTest: boolean;
 };
 
 const mapStateToProps = (state: State) => {
@@ -169,7 +169,7 @@ const mapStateToProps = (state: State) => {
 		paymentMethod: state.page.form.paymentMethod,
 		countryId: state.common.internationalisation.countryId,
 		campaignCode: state.common.referrerAcquisitionData.campaignCode,
-		isInPropTest: state.common.abParticipations.newProp === 'variant',
+		isInNewProductTest: state.common.abParticipations.newProduct === 'variant',
 	};
 };
 
@@ -185,7 +185,7 @@ function ContributionThankYou({
 	paymentMethod,
 	countryId,
 	campaignCode,
-	isInPropTest,
+	isInNewProductTest,
 }: ContributionThankYouProps) {
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 
@@ -277,8 +277,8 @@ function ContributionThankYou({
 	const firstColumn = shownComponents.slice(0, numberOfComponentsInFirstColumn);
 	const secondColumn = shownComponents.slice(numberOfComponentsInFirstColumn);
 
-	const showNewPropThankYouText =
-		isInPropTest &&
+	const showNewProductThankYouText =
+		isInNewProductTest &&
 		shouldShowBenefitsThankYouText(countryId, amount, contributionType);
 
 	return (
@@ -296,7 +296,7 @@ function ContributionThankYou({
 						contributionType,
 						paymentMethod,
 					)}
-					showNewPropThankYouText={showNewPropThankYouText}
+					showNewProductThankYouText={showNewProductThankYouText}
 				/>
 			</div>
 

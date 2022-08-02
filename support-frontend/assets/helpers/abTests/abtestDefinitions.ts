@@ -133,7 +133,7 @@ export const tests: Tests = {
 		seed: 13,
 		optimizeId: 'LFdPJnrvTu6re1oxnYdSvA',
 	},
-	newProp: {
+	newProduct: {
 		variants: [
 			{
 				id: 'control',
