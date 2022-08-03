@@ -6,11 +6,13 @@ import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type {
 	ContributionsStartListening,
+	ContributionsState,
 	ContributionsStore,
 } from 'helpers/redux/contributionsStore';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import type {
 	SubscriptionsStartListening,
+	SubscriptionsState,
 	SubscriptionsStore,
 } from 'helpers/redux/subscriptionsStore';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
@@ -24,6 +26,7 @@ export function createTestStoreForSubscriptions(
 	startDate?: DateYMDString,
 	productOption?: ProductOptions,
 	getFulfilmentOptionForCountry?: (country: string) => FulfilmentOptions,
+	initialState?: SubscriptionsState,
 ): SubscriptionsStore {
 	const subscriptionsPageReducer = createReducer();
 
@@ -39,8 +42,13 @@ export function createTestStoreForSubscriptions(
 
 	const testSubscriptionsStore = configureStore({
 		reducer: baseReducer,
+		preloadedState: initialState,
 		middleware: (getDefaultMiddleware) =>
-			getDefaultMiddleware().prepend(listenerMiddleware.middleware),
+			getDefaultMiddleware({
+				// Disabling middleware to improve test performance
+				immutableCheck: false,
+				serializableCheck: false,
+			}).prepend(listenerMiddleware.middleware),
 	});
 
 	return initReduxForSubscriptions(
@@ -54,7 +62,9 @@ export function createTestStoreForSubscriptions(
 	);
 }
 
-export function createTestStoreForContributions(): ContributionsStore {
+export function createTestStoreForContributions(
+	initialState?: ContributionsState,
+): ContributionsStore {
 	const baseReducer = {
 		common: commonReducer,
 		page: initReducer(),
@@ -67,8 +77,13 @@ export function createTestStoreForContributions(): ContributionsStore {
 
 	const testContributionsStore = configureStore({
 		reducer: baseReducer,
+		preloadedState: initialState,
 		middleware: (getDefaultMiddleware) =>
-			getDefaultMiddleware().prepend(listenerMiddleware.middleware),
+			getDefaultMiddleware({
+				// Disabling middleware to improve test performance
+				immutableCheck: false,
+				serializableCheck: false,
+			}).prepend(listenerMiddleware.middleware),
 	});
 
 	return initReduxForContributions(testContributionsStore, testStartListening);

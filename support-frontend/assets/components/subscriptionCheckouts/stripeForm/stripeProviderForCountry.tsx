@@ -13,7 +13,6 @@ export type PropTypes = {
 	country: IsoCountry;
 	isTestUser: boolean;
 	allErrors: Array<FormError<FormField>>;
-	setStripePaymentMethod: (stripePaymentMethod?: string) => void;
 	submitForm: () => void;
 	validateForm: () => void;
 	buttonText: string;
@@ -39,7 +38,6 @@ function StripeProviderForCountry(props: PropTypes): JSX.Element {
 				submitForm={props.submitForm}
 				allErrors={props.allErrors}
 				stripeKey={stripeKey}
-				setStripePaymentMethod={props.setStripePaymentMethod}
 				validateForm={props.validateForm}
 				buttonText={props.buttonText}
 				csrf={props.csrf}

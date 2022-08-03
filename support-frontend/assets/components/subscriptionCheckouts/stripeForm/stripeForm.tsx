@@ -40,7 +40,6 @@ import {
 export type StripeFormPropTypes = {
 	allErrors: Array<FormError<FormField>>;
 	stripeKey: string;
-	setStripePaymentMethod: (stripePaymentMethod?: string) => void;
 	submitForm: () => void;
 	validateForm: () => void;
 	buttonText: string;

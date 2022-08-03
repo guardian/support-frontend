@@ -6,6 +6,7 @@ import { act } from 'react-dom/test-utils';
 import { mockFetch } from '__mocks__/fetchMock';
 import { renderWithStore } from '__test-utils__/render';
 import { createTestStoreForSubscriptions } from '__test-utils__/testStore';
+import { setStripePaymentMethod } from 'helpers/redux/checkout/payment/stripe/actions';
 import type { PropTypes } from './stripeProviderForCountry';
 import { StripeProviderForCountry } from './stripeProviderForCountry';
 
@@ -40,22 +41,22 @@ async function fillOutForm() {
 }
 
 describe('Stripe Form', () => {
-	// let store: SubscriptionsStore;
+	// The action object that would be dispatched on a successful payment creation with the Stripe mock
+	const mockPaymentMethodAction = setStripePaymentMethod('mock');
+
 	let props: PropTypes;
 	let stripeForm: RenderResult;
+	let store: ReturnType<typeof createTestStoreForSubscriptions>;
 	let submitForm: () => void;
 	let validateForm: () => void;
-	let setStripePaymentMethod: (stripePaymentMethod?: string) => void;
 
 	beforeEach(async () => {
 		submitForm = jest.fn();
 		validateForm = jest.fn();
-		setStripePaymentMethod = jest.fn();
 		props = {
 			country: 'GB',
 			isTestUser: true,
 			allErrors: [],
-			setStripePaymentMethod,
 			submitForm,
 			validateForm,
 			buttonText: 'Button',
@@ -68,14 +69,18 @@ describe('Stripe Form', () => {
 			client_secret: 'super secret',
 		});
 
+		store = createTestStoreForSubscriptions(
+			'GuardianWeekly',
+			'Monthly',
+			'2022-09-01',
+		);
+
+		jest.spyOn(store, 'dispatch');
+
 		// Async render as StripeForm does a bunch of internal async set up
 		await act(async () => {
 			stripeForm = renderWithStore(<StripeProviderForCountry {...props} />, {
-				store: createTestStoreForSubscriptions(
-					'GuardianWeekly',
-					'Monthly',
-					'2022-09-01',
-				),
+				store,
 			});
 		});
 	});
@@ -86,7 +91,7 @@ describe('Stripe Form', () => {
 			const button = await screen.findByRole('button');
 			await act(async () => void fireEvent.click(button));
 			expect(validateForm).toHaveBeenCalled();
-			expect(setStripePaymentMethod).toHaveBeenCalled();
+			expect(store.dispatch).toHaveBeenCalledWith(mockPaymentMethodAction);
 			expect(submitForm).toHaveBeenCalled();
 		});
 	});
@@ -116,7 +121,7 @@ describe('Stripe Form', () => {
 			const button = await screen.findByRole('button');
 			await act(async () => void fireEvent.click(button));
 			expect(validateForm).toHaveBeenCalled();
-			expect(setStripePaymentMethod).not.toHaveBeenCalled();
+			expect(store.dispatch).not.toHaveBeenCalledWith(mockPaymentMethodAction);
 			expect(submitForm).not.toHaveBeenCalled();
 		});
 	});
@@ -127,7 +132,6 @@ describe('Stripe Form', () => {
 		beforeEach(async () => {
 			errorProps = {
 				...props,
-				setStripePaymentMethod,
 				submitForm,
 				validateForm,
 				allErrors: [
@@ -158,7 +162,7 @@ describe('Stripe Form', () => {
 			const button = await screen.findByRole('button');
 			await act(async () => void fireEvent.click(button));
 			expect(validateForm).toHaveBeenCalled();
-			expect(setStripePaymentMethod).not.toHaveBeenCalled();
+			expect(store.dispatch).not.toHaveBeenCalledWith(mockPaymentMethodAction);
 			expect(submitForm).not.toHaveBeenCalled();
 		});
 
