@@ -18,20 +18,16 @@ class StripeSubscriptionsProcessor(
   def processSubscriptions(pageSize: Int) =
     processFutureResponse(pageSize, None)
 
-  final def processFutureResponse(pageSize: Int, startingAfterId: Option[String]): Future[Unit] = {
-    Future.unit.flatMap { _ =>
-      stripeService
-        .getSubscriptions(pageSize, startingAfterId)
-        .flatMap { response =>
-          processSubs(response.data).flatMap(_ =>
-            if (response.hasMore)
-              processFutureResponse(pageSize, Some(response.data.last.id))
-            else
-              Future.successful(()),
-          )
-        }
-    }
-  }
+  final def processFutureResponse(pageSize: Int, startingAfterId: Option[String]): Future[Unit] =
+    for {
+      response <- stripeService.getSubscriptions(pageSize, startingAfterId)
+      _ <- processSubs(response.data)
+      result <-
+        if (response.hasMore)
+          processFutureResponse(pageSize, Some(response.data.last.id))
+        else
+          Future.successful(())
+    } yield result
 
   def processSubs(list: List[StripeSubscription]) = {
     val unknownEmailViaCSR = "patrons@theguardian.com"
