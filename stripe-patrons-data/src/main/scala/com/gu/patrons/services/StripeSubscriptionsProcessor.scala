@@ -16,18 +16,19 @@ class StripeSubscriptionsProcessor(
 ) {
 
   def processSubscriptions(pageSize: Int) =
-    processFutureResponse(stripeService.getSubscriptions(pageSize))
+    processFutureResponse(pageSize, None)
 
-  final def processFutureResponse(eventualResponse: Future[StripeSubscriptionsResponse]): Future[Unit] = {
-    eventualResponse.flatMap { response =>
-      processSubs(response.data).map(_ =>
-        if (response.hasMore)
-          processFutureResponse(
-            stripeService.getSubscriptions(startingAfterId = Some(response.data.last.id)),
-          )
-        else
-          Future.successful(()),
-      )
+  final def processFutureResponse(pageSize: Int, startingAfterId: Option[String]): Future[Unit] = {
+    Future.unit.flatMap { _ =>
+      stripeService
+        .getSubscriptions(pageSize, startingAfterId)
+        .flatMap { response =>
+          processSubs(response.data)
+          if (response.hasMore)
+            processFutureResponse(pageSize, Some(response.data.last.id))
+          else
+            Future.successful(())
+        }
     }
   }
 
@@ -46,6 +47,11 @@ class StripeSubscriptionsProcessor(
 
 trait SubscriptionProcessor {
   def processSubscription(subscription: StripeSubscription): Future[Unit]
+}
+
+class DebugLoggingProcessor extends SubscriptionProcessor {
+  override def processSubscription(subscription: StripeSubscription) =
+    Future.successful(SafeLogger.info(s"$subscription"))
 }
 
 abstract class DynamoProcessor(
