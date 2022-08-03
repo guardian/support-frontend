@@ -51,7 +51,6 @@ import {
 	selectPriceForProduct,
 } from 'helpers/redux/checkout/product/selectors/productPrice';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
-import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
 	formActionCreators,
@@ -69,6 +68,7 @@ import {
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/supportedPaymentMethods';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
@@ -445,10 +445,14 @@ function PaperCheckoutForm(props: PropTypes) {
 						digiSubPrice={expandedPricingText}
 						addDigitalSubscription={addDigitalSubscription}
 					/>
-					{paymentMethods.length > 1 ? (
+					{paymentMethods.length > 0 ? (
 						<FormSection
 							cssOverrides={removeTopBorder}
-							title="How would you like to pay?"
+							title={
+								paymentMethods.length > 1
+									? 'How would you like to pay?'
+									: 'Payment Method'
+							}
 						>
 							<PaymentMethodSelector
 								availablePaymentMethods={paymentMethods}
@@ -457,7 +461,13 @@ function PaperCheckoutForm(props: PropTypes) {
 								validationError={firstError('paymentMethod', props.formErrors)}
 							/>
 						</FormSection>
-					) : null}
+					) : (
+						<GeneralErrorMessage
+							classModifiers={['no-valid-payments']}
+							errorHeading="Payment methods are unavailable"
+							errorReason="all_payment_methods_unavailable"
+						/>
+					)}
 					<FormSectionHiddenUntilSelected
 						id="stripeForm"
 						show={props.paymentMethod === Stripe}
