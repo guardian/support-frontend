@@ -38,18 +38,19 @@ export type ContributionsDispatch = typeof contributionsStore.dispatch;
 
 export type ContributionsStore = typeof contributionsStore;
 
-export function initReduxForContributions(): ContributionsStore {
+export function initReduxForContributions(
+	store = contributionsStore,
+	startListening = startContributionsListening,
+): ContributionsStore {
 	try {
-		addPersonalDetailsSideEffects(startContributionsListening);
-		addProductSideEffects(startContributionsListening);
-		addPaymentsSideEffects(startContributionsListening);
-		addRecaptchaSideEffects(startContributionsListening);
+		addPersonalDetailsSideEffects(startListening);
+		addProductSideEffects(startListening);
+		addPaymentsSideEffects(startListening);
+		addRecaptchaSideEffects(startListening);
 		const initialState = getInitialState();
-		contributionsStore.dispatch(setInitialCommonState(initialState));
-		contributionsStore.dispatch(
-			setCurrency(initialState.internationalisation.currencyId),
-		);
-		return contributionsStore;
+		store.dispatch(setInitialCommonState(initialState));
+		store.dispatch(setCurrency(initialState.internationalisation.currencyId));
+		return store;
 	} catch (err) {
 		renderError(err as Error, null);
 		throw err;

@@ -5,12 +5,18 @@ import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type {
+	ContributionsStartListening,
+	ContributionsStore,
+} from 'helpers/redux/contributionsStore';
+import { initReduxForContributions } from 'helpers/redux/contributionsStore';
+import type {
 	SubscriptionsStartListening,
 	SubscriptionsStore,
 } from 'helpers/redux/subscriptionsStore';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { DateYMDString } from 'helpers/types/DateString';
+import { initReducer } from 'pages/contributions-landing/contributionsLandingReducer';
 
 export function createTestStoreForSubscriptions(
 	product: SubscriptionProduct,
@@ -46,4 +52,24 @@ export function createTestStoreForSubscriptions(
 		testSubscriptionsStore,
 		testStartListening,
 	);
+}
+
+export function createTestStoreForContributions(): ContributionsStore {
+	const baseReducer = {
+		common: commonReducer,
+		page: initReducer(),
+	};
+
+	const listenerMiddleware = createListenerMiddleware();
+
+	const testStartListening =
+		listenerMiddleware.startListening as ContributionsStartListening;
+
+	const testContributionsStore = configureStore({
+		reducer: baseReducer,
+		middleware: (getDefaultMiddleware) =>
+			getDefaultMiddleware().prepend(listenerMiddleware.middleware),
+	});
+
+	return initReduxForContributions(testContributionsStore, testStartListening);
 }

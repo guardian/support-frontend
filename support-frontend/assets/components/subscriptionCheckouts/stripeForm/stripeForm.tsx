@@ -14,14 +14,15 @@ import './stripeForm.scss';
 import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import { setStripePaymentMethod } from 'helpers/redux/checkout/payment/stripe/actions';
 import { getStripeSetupIntent } from 'helpers/redux/checkout/payment/stripe/thunks';
 import {
 	expireRecaptchaToken,
 	setRecaptchaToken,
 } from 'helpers/redux/checkout/recaptcha/actions';
 import {
-	useSubsDispatch,
-	useSubsSelector,
+	useSubscriptionsDispatch,
+	useSubscriptionsSelector,
 } from 'helpers/redux/subscriptionsStore';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
@@ -85,11 +86,11 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 	/**
 	 * Redux hooks
 	 */
-	const dispatch = useSubsDispatch();
-	const setupIntentClientSecret = useSubsSelector(
+	const dispatch = useSubscriptionsDispatch();
+	const setupIntentClientSecret = useSubscriptionsSelector(
 		(state) => state.page.checkoutForm.payment.stripe.setupIntentClientSecret,
 	);
-	const recaptchaCompleted = useSubsSelector(
+	const recaptchaCompleted = useSubscriptionsSelector(
 		(state) => state.page.checkoutForm.recaptcha.completed,
 	);
 
@@ -320,7 +321,9 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 
 	const handleCardSetupAndPay = () =>
 		handleCardSetup(setupIntentClientSecret)
-			?.then(props.setStripePaymentMethod)
+			?.then((paymentMethod?: string) =>
+				dispatch(setStripePaymentMethod(paymentMethod)),
+			)
 			.then(() => {
 				setDisableButton(false);
 				props.submitForm();

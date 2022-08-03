@@ -93,6 +93,7 @@ export type SubscriptionsState = ReturnType<typeof subscriptionsStore.getState>;
 
 export type SubscriptionsDispatch = typeof subscriptionsStore.dispatch;
 
-export const useSubsDispatch: () => SubscriptionsDispatch = useDispatch;
-export const useSubsSelector: TypedUseSelectorHook<SubscriptionsState> =
+export const useSubscriptionsDispatch: () => SubscriptionsDispatch =
+	useDispatch;
+export const useSubscriptionsSelector: TypedUseSelectorHook<SubscriptionsState> =
 	useSelector;

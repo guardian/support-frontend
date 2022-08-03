@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/require-await -- To simplify mocking of functions that return promises */
 import '__mocks__/stripeMock';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { mockFetch } from '__mocks__/fetchMock';
-import type { Option } from 'helpers/types/option';
+import { renderWithStore } from '__test-utils__/render';
+import { createTestStoreForSubscriptions } from '__test-utils__/testStore';
 import type { PropTypes } from './stripeProviderForCountry';
 import { StripeProviderForCountry } from './stripeProviderForCountry';
 
@@ -39,11 +40,12 @@ async function fillOutForm() {
 }
 
 describe('Stripe Form', () => {
+	// let store: SubscriptionsStore;
 	let props: PropTypes;
 	let stripeForm: RenderResult;
 	let submitForm: () => void;
 	let validateForm: () => void;
-	let setStripePaymentMethod: (stripePaymentMethod: Option<string>) => void;
+	let setStripePaymentMethod: (stripePaymentMethod?: string) => void;
 
 	beforeEach(async () => {
 		submitForm = jest.fn();
@@ -68,7 +70,13 @@ describe('Stripe Form', () => {
 
 		// Async render as StripeForm does a bunch of internal async set up
 		await act(async () => {
-			stripeForm = render(<StripeProviderForCountry {...props} />);
+			stripeForm = renderWithStore(<StripeProviderForCountry {...props} />, {
+				store: createTestStoreForSubscriptions(
+					'GuardianWeekly',
+					'Monthly',
+					'2022-09-01',
+				),
+			});
 		});
 	});
 
