@@ -23,11 +23,12 @@ class StripeSubscriptionsProcessor(
       stripeService
         .getSubscriptions(pageSize, startingAfterId)
         .flatMap { response =>
-          processSubs(response.data)
-          if (response.hasMore)
-            processFutureResponse(pageSize, Some(response.data.last.id))
-          else
-            Future.successful(())
+          processSubs(response.data).flatMap(_ =>
+            if (response.hasMore)
+              processFutureResponse(pageSize, Some(response.data.last.id))
+            else
+              Future.successful(()),
+          )
         }
     }
   }
