@@ -13,7 +13,7 @@ export const stripeCardSlice = createSlice({
 		setClientSecret(state, action: PayloadAction<string>) {
 			state.setupIntentClientSecret = action.payload;
 		},
-		setStripePaymentMethod(state, action: PayloadAction<string>) {
+		setStripePaymentMethod(state, action: PayloadAction<string | undefined>) {
 			state.stripePaymentMethod = action.payload;
 		},
 	},

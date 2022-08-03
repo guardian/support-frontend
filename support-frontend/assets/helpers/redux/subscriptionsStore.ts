@@ -1,5 +1,7 @@
 import type { TypedStartListening } from '@reduxjs/toolkit';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
+import type { TypedUseSelectorHook } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -89,3 +91,7 @@ export function initReduxForSubscriptions(
 export type SubscriptionsState = ReturnType<typeof subscriptionsStore.getState>;
 
 export type SubscriptionsDispatch = typeof subscriptionsStore.dispatch;
+
+export const useSubsDispatch: () => SubscriptionsDispatch = useDispatch;
+export const useSubsSelector: TypedUseSelectorHook<SubscriptionsState> =
+	useSelector;
