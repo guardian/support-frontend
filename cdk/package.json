@@ -35,6 +35,7 @@
     "@aws-cdk/aws-cloudwatch": "1.152.0",
     "@aws-cdk/aws-logs": "1.152.0",
     "@aws-cdk/core": "1.152.0",
+    "@aws-cdk/cloudformation-include": "1.152.0",
     "@guardian/cdk": "40.0.1",
     "source-map-support": "^0.5.20"
   }

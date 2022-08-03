@@ -9,7 +9,9 @@ deployments:
         Recipe: bionic-membership-ARM
         AmigoStage: PROD
       amiEncrypted: true
-      templatePath: cfn.yaml
+      templateStagePaths:
+        CODE: Payment-API-CODE.template.json
+        PROD: Payment-API-PROD.template.json
   payment-api:
     type: autoscaling
     parameters:
