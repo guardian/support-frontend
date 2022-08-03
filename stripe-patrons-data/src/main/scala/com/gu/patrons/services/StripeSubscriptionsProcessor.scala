@@ -49,11 +49,6 @@ trait SubscriptionProcessor {
   def processSubscription(subscription: StripeSubscription): Future[Unit]
 }
 
-class DebugLoggingProcessor extends SubscriptionProcessor {
-  override def processSubscription(subscription: StripeSubscription) =
-    Future.successful(SafeLogger.info(s"$subscription"))
-}
-
 abstract class DynamoProcessor(
     supporterDataDynamoService: SupporterDataDynamoService,
 ) extends SubscriptionProcessor {
