@@ -23,7 +23,7 @@ import {
 import {
 	useSubscriptionsDispatch,
 	useSubscriptionsSelector,
-} from 'helpers/redux/subscriptionsStore';
+} from 'helpers/redux/storeHooks';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
