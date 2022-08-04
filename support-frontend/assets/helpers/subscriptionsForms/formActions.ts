@@ -25,7 +25,6 @@ import {
 	setTitle as setTitleGift,
 } from 'helpers/redux/checkout/giftingState/actions';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import { setStripePaymentMethod } from 'helpers/redux/checkout/payment/stripe/actions';
 import {
 	setConfirmEmail,
 	setEmail,
@@ -160,7 +159,6 @@ const formActionCreators = {
 			onPaymentAuthorised(authorisation, dispatch, state);
 		},
 	setGiftStatus: setOrderIsAGift,
-	setStripePaymentMethod,
 	setDeliveryInstructions: (instructions: string | null): Action => ({
 		type: 'SET_DELIVERY_INSTRUCTIONS',
 		instructions,

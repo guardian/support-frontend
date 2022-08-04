@@ -484,7 +484,6 @@ function PaperCheckoutForm(props: PropTypes) {
 									...props.formErrors,
 								] as Array<FormError<FormField>>
 							}
-							setStripePaymentMethod={props.setStripePaymentMethod}
 							validateForm={props.validateForm}
 							buttonText="Pay now"
 							csrf={props.csrf}
