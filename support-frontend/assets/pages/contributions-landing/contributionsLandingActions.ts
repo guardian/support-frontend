@@ -61,7 +61,6 @@ import {
 	setAmazonPayFatalError,
 	setAmazonPayWalletIsStale,
 } from 'helpers/redux/checkout/payment/amazonPay/actions';
-import { updatePayPalButtonReady } from 'helpers/redux/checkout/payment/payPal/actions';
 import {
 	setEmail,
 	setFirstName,
@@ -70,7 +69,6 @@ import {
 } from 'helpers/redux/checkout/personalDetails/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import * as cookie from 'helpers/storage/cookie';
-import * as storage from 'helpers/storage/storage';
 import {
 	derivePaymentApiAcquisitionData,
 	getOphanIds,
@@ -104,10 +102,6 @@ export type Action =
 	| {
 			type: 'UPDATE_USER_FORM_DATA';
 			userFormData: UserFormData;
-	  }
-	| {
-			type: 'UPDATE_RECAPTCHA_TOKEN';
-			recaptchaToken: string;
 	  }
 	| {
 			type: 'PAYMENT_RESULT';
@@ -149,10 +143,6 @@ export type Action =
 			setupIntentClientSecret: string;
 	  }
 	| {
-			type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED';
-			recaptchaVerified: boolean;
-	  }
-	| {
 			type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY';
 	  }
 	| {
@@ -176,35 +166,12 @@ const setFormIsValid = (isValid: boolean): Action => ({
 	isValid,
 });
 
-const updatePaymentMethod =
-	(paymentMethod: PaymentMethod) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		// PayPal one-off redirects away from the site before hitting the thank you page
-		// so we need to store the payment method in the storage so that it is available on the
-		// thank you page in all scenarios.
-		storage.setSession('selectedPaymentMethod', paymentMethod);
-		dispatch(updatePayPalButtonReady(false));
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_PAYMENT_METHOD',
-			paymentMethod,
-		}))(dispatch, getState);
-	};
-
 const updateSelectedExistingPaymentMethod = (
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 ): Action => ({
 	type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD',
 	existingPaymentMethod,
 });
-
-const updateRecaptchaToken =
-	(recaptchaToken: string) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_RECAPTCHA_TOKEN',
-			recaptchaToken,
-		}))(dispatch, getState);
-	};
 
 const setStripePaymentRequestButtonClicked = (
 	stripeAccount: StripeAccount,
@@ -301,15 +268,6 @@ const setStripeSetupIntentClientSecret =
 		}))(dispatch, getState);
 	};
 
-const setStripeRecurringRecaptchaVerified =
-	(recaptchaVerified: boolean) =>
-	(dispatch: Dispatch, getState: () => State): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_STRIPE_RECURRING_RECAPTCHA_VERIFIED',
-			recaptchaVerified,
-		}))(dispatch, getState);
-	};
-
 const sendFormSubmitEventForPayPalRecurring =
 	() =>
 	(dispatch: Dispatch, getState: () => State): void => {
@@ -325,15 +283,6 @@ const sendFormSubmitEventForPayPalRecurring =
 		};
 		onFormSubmit(formSubmitParameters);
 	};
-
-const stripeOneOffRecaptchaToken = (state: State): string => {
-	if (state.page.user.isPostDeploymentTestUser) {
-		return 'post-deploy-token';
-	}
-
-	// see https://github.com/guardian/payment-api/pull/195
-	return state.page.form.oneOffRecaptchaToken ?? '';
-};
 
 const buildStripeChargeDataFromAuthorisation = (
 	stripePaymentMethod: StripePaymentMethod,
@@ -358,7 +307,7 @@ const buildStripeChargeDataFromAuthorisation = (
 		state.common.internationalisation.countryId,
 		state.page.user.isTestUser ?? false,
 	),
-	recaptchaToken: stripeOneOffRecaptchaToken(state),
+	recaptchaToken: state.page.checkoutForm.recaptcha.token,
 });
 
 const stripeChargeDataFromPaymentIntentAuthorisation = (
@@ -810,12 +759,11 @@ const onThirdPartyPaymentAuthorised =
 		const state = getState();
 		const contributionType = getContributionType(state);
 		return paymentAuthorisationHandlers[contributionType][
-			state.page.form.paymentMethod
+			state.page.checkoutForm.payment.paymentMethod
 		](dispatch, state, paymentAuthorisation);
 	};
 
 export {
-	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
 	setFirstName,
 	setLastName,
@@ -838,6 +786,4 @@ export {
 	setTickerGoalReached,
 	setStripeCardFormComplete,
 	setStripeSetupIntentClientSecret,
-	setStripeRecurringRecaptchaVerified,
-	updateRecaptchaToken,
 };

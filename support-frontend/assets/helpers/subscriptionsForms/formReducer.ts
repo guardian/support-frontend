@@ -8,7 +8,6 @@ function createFormReducer() {
 	const initialState: FormState = {
 		stage: 'checkout',
 		billingAddressIsSame: true,
-		paymentMethod: null,
 		formErrors: [],
 		submissionError: null,
 		formSubmitted: false,
@@ -30,20 +29,6 @@ function createFormReducer() {
 		switch (action.type) {
 			case 'SET_STAGE':
 				return { ...state, stage: action.stage };
-
-			case 'ON_DELIVERY_COUNTRY_CHANGED':
-				// For the payment reducer(s), we can use an extraReducer with the setDeliveryCountry action for this
-				return {
-					...state,
-					paymentMethod: null,
-				};
-
-			case 'SET_PAYMENT_METHOD':
-				return {
-					...state,
-					paymentMethod: action.paymentMethod,
-					formErrors: removeError('paymentMethod', state.formErrors),
-				};
 
 			case 'SET_FORM_ERRORS':
 				return { ...state, formErrors: action.errors };

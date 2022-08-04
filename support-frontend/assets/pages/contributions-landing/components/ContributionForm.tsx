@@ -35,6 +35,7 @@ import {
 } from 'helpers/forms/paymentMethods';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 import { setPopupOpen } from 'helpers/redux/checkout/payment/directDebit/actions';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
 import {
 	setSepaAccountHolderName,
@@ -57,7 +58,6 @@ import {
 	createOneOffPayPalPayment,
 	paymentWaiting,
 	setCheckoutFormHasBeenSubmitted,
-	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
@@ -93,7 +93,7 @@ const mapStateToProps = (state: State) => {
 				state.page.user.email,
 			) ?? '',
 		otherAmounts: state.page.checkoutForm.product.otherAmounts,
-		paymentMethod: state.page.form.paymentMethod,
+		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 		existingPaymentMethod: state.page.form.existingPaymentMethod,
 		existingPaymentMethods: state.common.existingPaymentMethods,
 		stripeClientSecret:
@@ -146,7 +146,7 @@ const mapDispatchToProps = {
 	setSepaAccountHolderName,
 	setSepaAddressStreetName,
 	setSepaAddressCountry,
-	updatePaymentMethod,
+	setPaymentMethod,
 	updateSelectedExistingPaymentMethod,
 	loadPayPalExpressSdk,
 };
@@ -361,7 +361,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 			default:
 		}
 
-		props.updatePaymentMethod(paymentMethod);
+		props.setPaymentMethod(paymentMethod);
 		props.updateSelectedExistingPaymentMethod(undefined);
 	};
 

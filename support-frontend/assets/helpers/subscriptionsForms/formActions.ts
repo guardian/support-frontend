@@ -3,8 +3,6 @@ import { csrUserName } from 'components/csr/csrMode';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { PayPal } from 'helpers/forms/paymentMethods';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
 	setBillingAddressLineOne,
@@ -26,7 +24,7 @@ import {
 	setLastName as setLastNameGift,
 	setTitle as setTitleGift,
 } from 'helpers/redux/checkout/giftingState/actions';
-import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import {
 	setConfirmEmail,
 	setEmail,
@@ -45,9 +43,7 @@ import type {
 	SubscriptionsDispatch,
 	SubscriptionsState,
 } from 'helpers/redux/subscriptionsStore';
-import * as storage from 'helpers/storage/storage';
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { trackThankYouPageLoaded } from 'helpers/tracking/behaviour';
 import type { Option } from 'helpers/types/option';
@@ -58,10 +54,6 @@ export type Action =
 	| {
 			type: 'SET_STAGE';
 			stage: Stage;
-	  }
-	| {
-			type: 'SET_PAYMENT_METHOD';
-			paymentMethod: PaymentMethod;
 	  }
 	| {
 			type: 'SET_FORM_ERRORS';
@@ -110,10 +102,6 @@ export type Action =
 	| {
 			type: 'SET_SALESFORCE_CASE_ID';
 			caseId: string;
-	  }
-	| {
-			type: 'ON_DELIVERY_COUNTRY_CHANGED';
-			country: string;
 	  };
 
 // ----- Action Creators ----- //
@@ -147,11 +135,6 @@ const setFormSubmitted = (formSubmitted: boolean): Action => ({
 	formSubmitted,
 });
 
-const onDeliveryCountryChanged = (country: string): Action => ({
-	type: 'ON_DELIVERY_COUNTRY_CHANGED',
-	country,
-});
-
 const formActionCreators = {
 	setTitle,
 	setFirstName,
@@ -165,31 +148,7 @@ const formActionCreators = {
 	setEmailGift,
 	setStartDate,
 	setBillingPeriod,
-	setPaymentMethod:
-		(paymentMethod: PaymentMethod) =>
-		(
-			dispatch: SubscriptionsDispatch,
-			getState: () => CheckoutState,
-		): Action => {
-			const state = getState();
-			storage.setSession('selectedPaymentMethod', paymentMethod);
-			sendTrackingEventsOnClick({
-				id: `subscriptions-payment-method-selector-${paymentMethod}`,
-				componentType: 'ACQUISITIONS_OTHER',
-			})();
-
-			if (
-				paymentMethod === PayPal &&
-				!state.page.checkoutForm.payment.payPal.hasBegunLoading
-			) {
-				void dispatch(loadPayPalExpressSdk());
-			}
-
-			return dispatch({
-				type: 'SET_PAYMENT_METHOD',
-				paymentMethod,
-			});
-		},
+	setPaymentMethod,
 	setBillingAddressIsSame: (isSame: boolean): Action => ({
 		type: 'SET_BILLING_ADDRESS_IS_SAME',
 		isSame,
@@ -275,6 +234,5 @@ export {
 	setSubmissionError,
 	setFormSubmitted,
 	setCsrCustomerData,
-	onDeliveryCountryChanged,
 	formActionCreators,
 };

@@ -12,8 +12,8 @@ import { useEffect, useState } from 'react';
 import * as React from 'react';
 import './stripeForm.scss';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
+import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
-import { loadRecaptchaV2 } from 'helpers/forms/recaptcha';
 import type { StripePaymentIntentResult } from 'helpers/forms/stripe';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
@@ -118,6 +118,13 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 	const stripe = stripeJs.useStripe();
 	const elements = stripeJs.useElements();
 
+	useRecaptchaV2('robot_checkbox', (token: string) => {
+		trackComponentLoad('subscriptions-recaptcha-client-token-received');
+		setRecaptchaCompleted(true);
+		setRecaptchaError(null);
+		void fetchPaymentIntent(token);
+	});
+
 	/**
 	 * Handlers
 	 */
@@ -201,26 +208,9 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 				]);
 			});
 
-	// Creates a new setupIntent upon recaptcha verification
-	const setupRecurringRecaptchaCallback = () => {
-		window.grecaptcha?.render('robot_checkbox', {
-			sitekey: window.guardian.v2recaptchaPublicKey,
-			callback: (token: string) => {
-				trackComponentLoad('subscriptions-recaptcha-client-token-received');
-				setRecaptchaCompleted(true);
-				setRecaptchaError(null);
-				void fetchPaymentIntent(token);
-			},
-		});
-	};
-
 	const setupRecurringHandlers = (): void => {
 		if (!window.guardian.recaptchaEnabled) {
 			void fetchPaymentIntent('dummy');
-		} else if (window.grecaptcha?.render) {
-			setupRecurringRecaptchaCallback();
-		} else {
-			window.v2OnloadCallback = setupRecurringRecaptchaCallback;
 		}
 	};
 
@@ -354,7 +344,6 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 	useEffect(() => {
 		if (stripe) {
 			setupRecurringHandlers();
-			void loadRecaptchaV2();
 		}
 	}, [stripe]);
 

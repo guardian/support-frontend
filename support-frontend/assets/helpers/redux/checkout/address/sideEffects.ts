@@ -3,7 +3,6 @@ import { fromString } from 'helpers/internationalisation/country';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsStore';
 import { enableOrDisableForm } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
-import { onDeliveryCountryChanged } from 'helpers/subscriptionsForms/formActions';
 import {
 	setBillingAddressLineOne,
 	setBillingCountry,
@@ -43,13 +42,6 @@ export function addAddressSideEffects(
 			if (country && countryShouldBeUpdated) {
 				listener.dispatch(setCountryInternationalisation(country));
 			}
-		},
-	});
-
-	startListening({
-		actionCreator: setDeliveryCountry,
-		effect(action, listener) {
-			listener.dispatch(onDeliveryCountryChanged(action.payload));
 		},
 	});
 }

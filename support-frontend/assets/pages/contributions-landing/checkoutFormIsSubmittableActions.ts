@@ -106,7 +106,7 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
 };
 
 const amazonPayFormOk = (state: State): boolean => {
-	if (state.page.form.paymentMethod === AmazonPay) {
+	if (state.page.checkoutForm.payment.paymentMethod === AmazonPay) {
 		const {
 			orderReferenceId,
 			amazonBillingAgreementId,
@@ -129,7 +129,7 @@ const amazonPayFormOk = (state: State): boolean => {
 };
 
 const sepaFormOk = (state: State): boolean => {
-	if (state.page.form.paymentMethod === Sepa) {
+	if (state.page.checkoutForm.payment.paymentMethod === Sepa) {
 		const { accountHolderName, iban } = state.page.checkoutForm.payment.sepa;
 		return !!accountHolderName && isValidIban(iban);
 	}
@@ -147,7 +147,7 @@ const formIsValidParameters = (state: State) => ({
 	lastName: state.page.checkoutForm.personalDetails.lastName,
 	email: state.page.checkoutForm.personalDetails.email,
 	stripeCardFormOk: !stripeCardFormIsIncomplete(
-		state.page.form.paymentMethod,
+		state.page.checkoutForm.payment.paymentMethod,
 		state.page.form.stripeCardFormData.formComplete,
 	),
 	amazonPayFormOk: amazonPayFormOk(state),
@@ -168,16 +168,14 @@ function enableOrDisableForm() {
 		dispatch(setFormIsValid(formIsValid));
 		const recaptchaRequired =
 			window.guardian.recaptchaEnabled &&
-			state.page.form.paymentMethod === 'Stripe' &&
+			state.page.checkoutForm.payment.paymentMethod === 'Stripe' &&
 			!state.page.user.isPostDeploymentTestUser;
-		const recaptchaVerified =
-			contributionType !== 'ONE_OFF'
-				? state.page.form.stripeCardFormData.recurringRecaptchaVerified
-				: !!state.page.form.oneOffRecaptchaToken;
+		const recaptchaVerified = state.page.checkoutForm.recaptcha.completed;
 		const shouldEnable =
 			formIsValid &&
 			!shouldBlockExistingRecurringContributor &&
 			(!recaptchaRequired || recaptchaVerified);
+
 		dispatch(
 			setFormIsSubmittable(
 				shouldEnable,

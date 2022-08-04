@@ -194,7 +194,7 @@ function onPaymentAuthorised(
 		productPrices,
 	} = state.page.checkoutForm.product;
 	const productType = getSubscriptionType(state);
-	const { paymentMethod } = state.page.checkout;
+	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { csrf } = state.page.checkoutForm;
 	const { abParticipations } = state.common;
 	const addresses = getAddresses(state);
@@ -330,7 +330,7 @@ function getPricingCountry(product: SubscriptionProduct, addresses: Addresses) {
 }
 
 function submitForm(dispatch: Dispatch<Action>, state: SubscriptionsState) {
-	const { paymentMethod } = state.page.checkout;
+	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { productOption, billingPeriod, fulfilmentOption, productPrices } =
 		state.page.checkoutForm.product;
 	const productType = getSubscriptionType(state);

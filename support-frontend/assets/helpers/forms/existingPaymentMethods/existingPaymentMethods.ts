@@ -1,10 +1,8 @@
 // ----- Imports ----- //
 import { fetchJson } from 'helpers/async/fetch';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import {
-	updatePaymentMethod,
-	updateSelectedExistingPaymentMethod,
-} from 'pages/contributions-landing/contributionsLandingActions';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
+import { updateSelectedExistingPaymentMethod } from 'pages/contributions-landing/contributionsLandingActions';
 import { logException } from '../../utilities/logger';
 import { getPaymentLabel } from '../checkouts';
 import {
@@ -108,7 +106,7 @@ const getFullExistingPaymentMethods = (
 const updateExistingPaymentMethod = (
 	existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
 ): void => {
-	updatePaymentMethod(
+	setPaymentMethod(
 		mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod),
 	);
 	updateSelectedExistingPaymentMethod(existingPaymentMethod);
