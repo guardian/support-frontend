@@ -33,6 +33,7 @@ object CheckoutValidationRules {
 
   def validate(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
     (createSupportWorkersRequest.product match {
+      case _: SupporterPlus => PaidProductValidation.passes(createSupportWorkersRequest)
       case d: DigitalPack => DigitalPackValidation.passes(createSupportWorkersRequest, d)
       case p: Paper => PaperValidation.passes(createSupportWorkersRequest, p.fulfilmentOptions)
       case _: GuardianWeekly => GuardianWeeklyValidation.passes(createSupportWorkersRequest)

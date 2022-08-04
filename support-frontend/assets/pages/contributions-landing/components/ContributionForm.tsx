@@ -4,14 +4,28 @@ import { Checkbox, CheckboxGroup } from '@guardian/source-react-components';
 import { useState } from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
+import { FormSection } from 'components/checkoutForm/checkoutForm';
+import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import SepaTerms from 'components/legal/termsPrivacy/sepaTerms';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import ProgressMessage from 'components/progressMessage/progressMessage';
+import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
-import { getAmount, logInvalidCombination } from 'helpers/contributions';
+import {
+	contributionTypeIsRecurring,
+	getAmount,
+	logInvalidCombination,
+} from 'helpers/contributions';
 import type { PaymentMatrix } from 'helpers/contributions';
+import { getValidPaymentMethods } from 'helpers/forms/checkouts';
+import {
+	getFullExistingPaymentMethods,
+	updateExistingPaymentMethod,
+} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -21,6 +35,8 @@ import {
 } from 'helpers/forms/paymentMethods';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 import { setPopupOpen } from 'helpers/redux/checkout/payment/directDebit/actions';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
+import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
 import {
 	setSepaAccountHolderName,
 	setSepaAddressCountry,
@@ -42,9 +58,11 @@ import {
 	createOneOffPayPalPayment,
 	paymentWaiting,
 	setCheckoutFormHasBeenSubmitted,
+	updateSelectedExistingPaymentMethod,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import ContributionAmount from './ContributionAmount';
+import ContributionChoicesHeader from './ContributionChoicesHeader';
 import ContributionErrorMessage from './ContributionErrorMessage';
 import ContributionFormFields from './ContributionFormFields';
 import ContributionSubmit from './ContributionSubmit';
@@ -52,7 +70,6 @@ import ContributionTypeTabs from './ContributionTypeTabs';
 import BenefitsBulletPoints from './DigiSubBenefits/BenefitsBulletPoints';
 import BenefitsParagraph from './DigiSubBenefits/BenefitsParagraph';
 import { shouldShowBenefitsMessaging } from './DigiSubBenefits/helpers';
-import PaymentMethodSelector from './PaymentMethodSelector';
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
 
@@ -78,6 +95,7 @@ const mapStateToProps = (state: State) => {
 		otherAmounts: state.page.checkoutForm.product.otherAmounts,
 		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 		existingPaymentMethod: state.page.form.existingPaymentMethod,
+		existingPaymentMethods: state.common.existingPaymentMethods,
 		stripeClientSecret:
 			state.page.form.stripeCardFormData.setupIntentClientSecret,
 		contributionType,
@@ -111,6 +129,7 @@ const mapStateToProps = (state: State) => {
 		benefitsMessagingAbTestParaVariant:
 			state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
 			contributionType !== 'ONE_OFF',
+		switches: state.common.settings.switches,
 	};
 };
 
@@ -127,6 +146,9 @@ const mapDispatchToProps = {
 	setSepaAccountHolderName,
 	setSepaAddressStreetName,
 	setSepaAddressCountry,
+	setPaymentMethod,
+	updateSelectedExistingPaymentMethod,
+	loadPayPalExpressSdk,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -134,7 +156,26 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropTypes = ConnectedProps<typeof connector> & {
 	campaignSettings: CampaignSettings | null;
 	onPaymentAuthorisation: (paymentAuthorisation: PaymentAuthorisation) => void;
+	payPalHasBegunLoading?: boolean;
+	loadPayPalExpressSdk: () => void;
+	checkoutFormHasBeenSubmitted: boolean;
 };
+
+function PaymentMethodSelectorLegend() {
+	return (
+		<div
+			css={css`
+				display: flex;
+				justify-content: space-between;
+			`}
+		>
+			<legend id="payment_method">
+				<ContributionChoicesHeader>Payment Method</ContributionChoicesHeader>
+			</legend>
+			<SecureTransactionIndicator modifierClasses={['middle']} />
+		</div>
+	);
+}
 
 // ----- Render ----- //
 function ContributionForm(props: PropTypes): JSX.Element {
@@ -301,6 +342,29 @@ function ContributionForm(props: PropTypes): JSX.Element {
 		onFormSubmit({ ...props, flowPrefix, handlePayment, form });
 	}
 
+	const paymentMethods: PaymentMethod[] = getValidPaymentMethods(
+		props.contributionType,
+		props.switches,
+		props.country,
+		props.countryGroupId,
+	);
+
+	const onPaymentMethodUpdate = (paymentMethod: PaymentMethod) => {
+		switch (paymentMethod) {
+			case 'PayPal':
+				if (!props.payPalHasBegunLoading) {
+					void props.loadPayPalExpressSdk();
+				}
+
+				break;
+
+			default:
+		}
+
+		props.setPaymentMethod(paymentMethod);
+		props.updateSelectedExistingPaymentMethod(undefined);
+	};
+
 	return (
 		<form
 			onSubmit={onSubmit}
@@ -357,8 +421,42 @@ function ContributionForm(props: PropTypes): JSX.Element {
 			/>
 			<div className={classNameWithModifiers('form', ['content'])}>
 				<ContributionFormFields />
-				<PaymentMethodSelector />
-
+				{paymentMethods.length > 0 ? (
+					<FormSection
+						titleComponent={<PaymentMethodSelectorLegend />}
+						cssOverrides={css`
+							padding: 0;
+							margin-top: 1.25rem;
+						`}
+					>
+						<PaymentMethodSelector
+							availablePaymentMethods={paymentMethods}
+							paymentMethod={props.paymentMethod}
+							setPaymentMethod={onPaymentMethodUpdate}
+							validationError={
+								props.checkoutFormHasBeenSubmitted &&
+								props.paymentMethod === 'None'
+									? 'Please select a payment method'
+									: undefined
+							}
+							fullExistingPaymentMethods={getFullExistingPaymentMethods(
+								props.existingPaymentMethods,
+							)}
+							contributionTypeIsRecurring={contributionTypeIsRecurring(
+								props.contributionType,
+							)}
+							existingPaymentMethod={props.existingPaymentMethod}
+							existingPaymentMethods={props.existingPaymentMethods}
+							updateExistingPaymentMethod={updateExistingPaymentMethod}
+						/>
+					</FormSection>
+				) : (
+					<GeneralErrorMessage
+						classModifiers={['no-valid-payments']}
+						errorHeading="Payment methods are unavailable"
+						errorReason="all_payment_methods_unavailable"
+					/>
+				)}
 				{props.paymentMethod === Sepa && (
 					<>
 						<SepaForm

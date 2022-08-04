@@ -5,6 +5,9 @@ object FailedEmailFields {
   def contribution(email: String, identityUserId: IdentityUserId): EmailFields =
     failedEmailFields("contribution-failed", email, identityUserId)
 
+  def supporterPlus(email: String, identityUserId: IdentityUserId): EmailFields =
+    failedEmailFields("supporter-plus-failed", email, identityUserId) // TODO: this email doesn't exist!
+
   def digitalPack(email: String, identityUserId: IdentityUserId): EmailFields =
     failedEmailFields("digipack-failed", email, identityUserId)
 

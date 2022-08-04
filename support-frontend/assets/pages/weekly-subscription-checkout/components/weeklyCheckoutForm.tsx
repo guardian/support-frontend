@@ -48,7 +48,6 @@ import type {
 	SubscriptionsDispatch,
 	SubscriptionsState,
 } from 'helpers/redux/subscriptionsStore';
-import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import {
 	formActionCreators,
 	setCsrCustomerData,
@@ -64,6 +63,7 @@ import {
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/supportedPaymentMethods';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
@@ -181,6 +181,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.currencyId,
 		props.billingCountry,
 	);
+
 	return (
 		<Content>
 			<Layout
@@ -329,8 +330,14 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						productPrices={props.productPrices}
 						selected={props.billingPeriod}
 					/>
-					{paymentMethods.length > 1 ? (
-						<FormSection title="How would you like to pay?">
+					{paymentMethods.length > 0 ? (
+						<FormSection
+							title={
+								paymentMethods.length > 1
+									? 'How would you like to pay?'
+									: 'Payment Method'
+							}
+						>
 							<PaymentMethodSelector
 								availablePaymentMethods={paymentMethods}
 								paymentMethod={props.paymentMethod}
@@ -338,7 +345,13 @@ function WeeklyCheckoutForm(props: PropTypes) {
 								validationError={firstError('paymentMethod', props.formErrors)}
 							/>
 						</FormSection>
-					) : null}
+					) : (
+						<GeneralErrorMessage
+							classModifiers={['no-valid-payments']}
+							errorHeading="Payment methods are unavailable"
+							errorReason="all_payment_methods_unavailable"
+						/>
+					)}
 					<FormSectionHiddenUntilSelected
 						id="stripeForm"
 						show={props.paymentMethod === Stripe}

@@ -1,17 +1,8 @@
 // ----- Imports ----- //
-import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
-import { TextInput } from '@guardian/source-react-components';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import { config } from 'helpers/contributions';
-import { formatAmount } from 'helpers/forms/checkouts';
-import { amountIsValid } from 'helpers/forms/formValidation';
 import 'helpers/internationalisation/countryGroup';
-import {
-	currencies,
-	spokenCurrencies,
-} from 'helpers/internationalisation/currency';
 import {
 	setOtherAmount,
 	setSelectedAmount,
@@ -22,18 +13,7 @@ import { sendEventContributionAmountUpdated } from 'helpers/tracking/quantumMetr
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import type { State } from '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
-
-const otherAmoutInputCss = css`
-	padding-left: ${space[5]}px;
-`;
-
-const otherAmoutGlphCss = css`
-	position: absolute;
-	font-weight: bold;
-	bottom: 22px; // half of the fixed height of the input element we get from source
-	transform: translateY(50%);
-	padding-left: ${space[2]}px;
-`;
+import { ContributionAmountOtherAmountField } from './ContributionAmountOtherAmountField';
 
 const mapStateToProps = (state: State) => ({
 	countryGroupId: state.common.internationalisation.countryGroupId,
@@ -73,37 +53,12 @@ function ContributionAmount(props: PropTypes) {
 		props.contributionType === 'ONE_OFF'
 			? props.localCurrencyCountry.config[props.contributionType]
 			: config[props.countryGroupId][props.contributionType];
-	const minAmount: string = formatAmount(
-		currencies[props.currency],
-		spokenCurrencies[props.currency],
-		min,
-		false,
-	);
-	const maxAmount: string = formatAmount(
-		currencies[props.currency],
-		spokenCurrencies[props.currency],
-		max,
-		false,
-	);
 	const otherAmount = props.otherAmounts[props.contributionType].amount;
-	const otherAmountGlyph: string = currencies[props.currency].glyph;
-	const { checkoutFormHasBeenSubmitted, stripePaymentRequestButtonClicked } =
-		props;
 	const canShowOtherAmountErrorMessage =
-		checkoutFormHasBeenSubmitted ||
-		stripePaymentRequestButtonClicked ||
+		props.checkoutFormHasBeenSubmitted ||
+		props.stripePaymentRequestButtonClicked ||
 		!!otherAmount;
-	const otherAmountErrorMessage: string =
-		canShowOtherAmountErrorMessage &&
-		!amountIsValid(
-			otherAmount ?? '',
-			props.countryGroupId,
-			props.contributionType,
-			props.localCurrencyCountry,
-			props.useLocalCurrency,
-		)
-			? `Please provide an amount between ${minAmount} and ${maxAmount}`
-			: '';
+
 	return (
 		<fieldset
 			className={classNameWithModifiers('form__radio-group', [
@@ -129,43 +84,36 @@ function ContributionAmount(props: PropTypes) {
 			/>
 
 			{showOther && (
-				<div
-					className={classNameWithModifiers('form__field', [
-						'contribution-other-amount',
-					])}
-				>
-					<p css={otherAmoutGlphCss}>{otherAmountGlyph}</p>
-					<TextInput
-						id="contributionOther"
-						cssOverrides={otherAmoutInputCss}
-						label={`Other amount`}
-						value={`${otherAmount ?? ''}`}
-						onChange={(e) =>
-							props.setOtherAmount({
-								amount: e.target.value,
-								contributionType: props.contributionType,
-							})
-						}
-						onBlur={() => {
-							if (otherAmount) {
-								trackComponentClick(
-									`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`,
-								);
+				<ContributionAmountOtherAmountField
+					countryGroupId={props.countryGroupId}
+					amount={props.otherAmounts[props.contributionType].amount ?? ''}
+					contributionType={props.contributionType}
+					canShowErrorMessage={canShowOtherAmountErrorMessage}
+					currency={props.currency}
+					max={max}
+					min={min}
+					onChange={(amount) => {
+						props.setOtherAmount({
+							amount,
+							contributionType: props.contributionType,
+						});
+					}}
+					onBlur={() => {
+						if (otherAmount) {
+							trackComponentClick(
+								`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`,
+							);
 
-								sendEventContributionAmountUpdated(
-									otherAmount,
-									props.contributionType,
-									props.currency,
-								);
-							}
-						}}
-						error={otherAmountErrorMessage}
-						autoComplete="off"
-						autoFocus
-						inputMode="numeric"
-						pattern="[0-9]*"
-					/>
-				</div>
+							sendEventContributionAmountUpdated(
+								otherAmount,
+								props.contributionType,
+								props.currency,
+							);
+						}
+					}}
+					localCurrencyCountry={props.localCurrencyCountry}
+					useLocalCurrency={props.useLocalCurrency}
+				/>
 			)}
 		</fieldset>
 	);

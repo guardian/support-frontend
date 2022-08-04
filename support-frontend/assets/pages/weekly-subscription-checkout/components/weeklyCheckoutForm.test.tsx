@@ -4,6 +4,7 @@ import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
@@ -23,11 +24,20 @@ function setUpStore(initialState: WithDeliveryCheckoutState) {
 	return store;
 }
 
+jest.mock('helpers/globalsAndSwitches/globals', () => ({
+	__esModule: true,
+	isSwitchOn: jest.fn(),
+	getSettings: jest.fn(),
+	getGlobal: jest.fn(),
+}));
+
+const mock = (mockFn: unknown) => mockFn as jest.Mock;
+
 describe('Guardian Weekly checkout form', () => {
 	// Suppress warnings related to our version of Redux and improper JSX
 	console.warn = jest.fn();
 	console.error = jest.fn();
-	let initialState;
+	let initialState: unknown;
 	beforeEach(() => {
 		initialState = {
 			page: {
@@ -70,46 +80,116 @@ describe('Guardian Weekly checkout form', () => {
 		mockFetch({
 			client_secret: 'super secret',
 		});
-
-		renderWithStore(<WeeklyCheckoutForm />, {
-			//  @ts-expect-error Unused common state properties
-			initialState,
-			// @ts-expect-error -- Type mismatch is unimportant for tests
-			store: setUpStore(initialState),
-		});
 	});
 
 	describe('Payment methods', () => {
-		it('shows the direct debit option when the currency is GBP and the delivery address is in the UK', () => {
-			expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+		describe('with all switches on', () => {
+			beforeEach(() => {
+				mock(isSwitchOn).mockImplementation(() => true);
+
+				renderWithStore(<WeeklyCheckoutForm />, {
+					initialState,
+					// @ts-expect-error -- Type mismatch is unimportant for tests
+					store: setUpStore(initialState),
+				});
+			});
+
+			it('shows all payment options', () => {
+				expect(screen.queryByText('PayPal')).toBeInTheDocument();
+				expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+				expect(screen.queryByText('Credit/Debit card')).toBeInTheDocument();
+			});
+
+			it('shows the direct debit option when the currency is GBP and the delivery address is in the UK', () => {
+				expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+			});
+
+			it('does not show the direct debit option when the delivery address is outside the UK', async () => {
+				const countrySelect = await screen.findByLabelText('Country');
+				fireEvent.change(countrySelect, {
+					target: {
+						value: 'DE',
+					},
+				});
+				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+			});
 		});
 
-		it('does not show the direct debit option when the delivery address is outside the UK', async () => {
-			const countrySelect = await screen.findByLabelText('Country');
-			fireEvent.change(countrySelect, {
-				target: {
-					value: 'DE',
-				},
+		describe('with only paypal switch on', () => {
+			beforeEach(() => {
+				mock(isSwitchOn).mockImplementation(
+					(key) => key === 'subscriptionsPaymentMethods.paypal',
+				);
+
+				renderWithStore(<WeeklyCheckoutForm />, {
+					initialState,
+					// @ts-expect-error -- Type mismatch is unimportant for tests
+					store: setUpStore(initialState),
+				});
 			});
-			expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+
+			it('does not show the direct debit option', () => {
+				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+			});
+			it('does not show the credit/debit card option', () => {
+				expect(screen.queryByText('Credit/Debit card')).not.toBeInTheDocument();
+			});
 		});
 
-		it('does not show the direct debit option when the billing address is outside the UK', async () => {
-			const addressIsNotSame = await screen.findByRole('radio', {
-				name: 'No',
+		describe('with only direct debit switch on', () => {
+			beforeEach(() => {
+				mock(isSwitchOn).mockImplementation(
+					(key) => key === 'subscriptionsPaymentMethods.directDebit',
+				);
+
+				renderWithStore(<WeeklyCheckoutForm />, {
+					initialState,
+					// @ts-expect-error -- Type mismatch is unimportant for tests
+					store: setUpStore(initialState),
+				});
 			});
-			fireEvent.click(addressIsNotSame);
-			const allCountrySelects = await screen.findAllByLabelText('Country');
-			fireEvent.change(allCountrySelects[1], {
-				target: {
-					value: 'IE',
-				},
+
+			it('does not show the direct debit option', () => {
+				expect(screen.queryByText('PayPal')).not.toBeInTheDocument();
 			});
-			expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+			it('does not show the credit/debit card option', () => {
+				expect(screen.queryByText('Credit/Debit card')).not.toBeInTheDocument();
+			});
+		});
+
+		describe('with only credit/debit card switch on', () => {
+			beforeEach(() => {
+				mock(isSwitchOn).mockImplementation(
+					(key) => key === 'subscriptionsPaymentMethods.creditCard',
+				);
+
+				renderWithStore(<WeeklyCheckoutForm />, {
+					initialState,
+					// @ts-expect-error -- Type mismatch is unimportant for tests
+					store: setUpStore(initialState),
+				});
+			});
+
+			it('does not show the direct debit option', () => {
+				expect(screen.queryByText('PayPal')).not.toBeInTheDocument();
+			});
+			it('does not show the credit/debit card option', () => {
+				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+			});
 		});
 	});
 
 	describe('Validation', () => {
+		beforeEach(() => {
+			mock(isSwitchOn).mockImplementation(() => true);
+
+			renderWithStore(<WeeklyCheckoutForm />, {
+				initialState,
+				// @ts-expect-error -- Type mismatch is unimportant for tests
+				store: setUpStore(initialState),
+			});
+		});
+
 		it('should display an error if a silly character is entered into an input field', async () => {
 			const firstNameInput = await screen.findByLabelText('First name');
 			fireEvent.change(firstNameInput, {

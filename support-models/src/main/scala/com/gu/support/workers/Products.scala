@@ -29,6 +29,14 @@ case class Contribution(
   override def describe: String = s"$billingPeriod-Contribution-$currency-$amount"
 }
 
+case class SupporterPlus(
+    amount: BigDecimal,
+    currency: Currency,
+    billingPeriod: BillingPeriod,
+) extends ProductType {
+  override def describe: String = s"$billingPeriod-SupporterPlus-$currency-$amount"
+}
+
 case class DigitalPack(
     currency: Currency,
     billingPeriod: BillingPeriod,
@@ -61,10 +69,12 @@ object ProductType {
   val discriminatedType = new DiscriminatedType[ProductType]("productType")
 
   implicit val codecContribution = discriminatedType.variant[Contribution]("Contribution")
+  implicit val codecSupporterPlus = discriminatedType.variant[SupporterPlus]("SupporterPlus")
   implicit val codecPaper = discriminatedType.variant[Paper]("Paper")
   implicit val codecGuardianWeekly = discriminatedType.variant[GuardianWeekly]("GuardianWeekly")
   implicit val codecDigital = discriminatedType.variant[DigitalPack]("DigitalPack")
 
-  implicit val codec = discriminatedType.codec(List(codecContribution, codecPaper, codecGuardianWeekly, codecDigital))
+  implicit val codec =
+    discriminatedType.codec(List(codecContribution, codecSupporterPlus, codecPaper, codecGuardianWeekly, codecDigital))
 
 }

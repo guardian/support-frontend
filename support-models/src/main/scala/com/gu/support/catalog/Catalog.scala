@@ -13,17 +13,11 @@ case class Catalog(
 )
 
 object Catalog {
-  lazy val productRatePlansWithPrices: List[ProductRatePlanId] = List(
-    DigitalPack.ratePlans(PROD),
-    Paper.ratePlans(PROD),
-    GuardianWeekly.ratePlans(PROD),
-    DigitalPack.ratePlans(UAT),
-    Paper.ratePlans(UAT),
-    GuardianWeekly.ratePlans(UAT),
-    DigitalPack.ratePlans(SANDBOX),
-    Paper.ratePlans(SANDBOX),
-    GuardianWeekly.ratePlans(SANDBOX),
-  ).flatten.map(_.id)
+  lazy val productRatePlansWithPrices: List[ProductRatePlanId] = for {
+    product <- List(SupporterPlus, DigitalPack, Paper, GuardianWeekly)
+    env <- List(PROD, UAT, SANDBOX)
+    plan <- product.ratePlans(env)
+  } yield plan.id
 
   implicit val encoder: Encoder[Catalog] = deriveEncoder
   implicit val decoder: Decoder[Catalog] = deriveDecoder[Catalog].prepare(mapFields)
