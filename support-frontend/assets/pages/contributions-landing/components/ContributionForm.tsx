@@ -68,7 +68,6 @@ import ContributionFormFields from './ContributionFormFields';
 import ContributionSubmit from './ContributionSubmit';
 import ContributionTypeTabs from './ContributionTypeTabs';
 import BenefitsBulletPoints from './DigiSubBenefits/BenefitsBulletPoints';
-import BenefitsParagraph from './DigiSubBenefits/BenefitsParagraph';
 import { shouldShowBenefitsMessaging } from './DigiSubBenefits/helpers';
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
@@ -123,11 +122,8 @@ const mapStateToProps = (state: State) => {
 		sepa: state.page.checkoutForm.payment.sepa,
 		productSetAbTestVariant:
 			state.common.abParticipations.productSetTest === 'variant',
-		benefitsMessagingAbTestBulletVariant:
-			state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
-			contributionType !== 'ONE_OFF',
-		benefitsMessagingAbTestParaVariant:
-			state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
+		isInNewProductTest:
+			state.common.abParticipations.newProduct === 'variant' &&
 			contributionType !== 'ONE_OFF',
 		switches: state.common.settings.switches,
 	};
@@ -188,7 +184,6 @@ function ContributionForm(props: PropTypes): JSX.Element {
 		props.otherAmounts,
 		props.countryGroupId,
 	);
-	const isAUDCountryGroup = props.countryGroupId === 'AUDCountries';
 
 	function setUseLocalCurrency(
 		useLocalCurrency: boolean,
@@ -392,16 +387,8 @@ function ContributionForm(props: PropTypes): JSX.Element {
 				)}
 			</div>
 
-			{props.benefitsMessagingAbTestBulletVariant && !isAUDCountryGroup && (
+			{props.isInNewProductTest && (
 				<BenefitsBulletPoints
-					showBenefitsMessaging={showBenefitsMessaging}
-					countryGroupId={props.countryGroupId}
-					contributionType={props.contributionType}
-					setSelectedAmount={props.setSelectedAmount}
-				/>
-			)}
-			{props.benefitsMessagingAbTestParaVariant && !isAUDCountryGroup && (
-				<BenefitsParagraph
 					showBenefitsMessaging={showBenefitsMessaging}
 					countryGroupId={props.countryGroupId}
 					contributionType={props.contributionType}
@@ -496,10 +483,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 				<ContributionSubmit
 					onPaymentAuthorisation={props.onPaymentAuthorisation}
 					showBenefitsMessaging={showBenefitsMessaging}
-					userInBenefitsVariant={
-						props.benefitsMessagingAbTestBulletVariant ||
-						props.benefitsMessagingAbTestParaVariant
-					}
+					userInNewProductTest={props.isInNewProductTest}
 				/>
 			</div>
 
@@ -513,10 +497,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					props.otherAmounts,
 					props.contributionType,
 				)}
-				userInBenefitsVariant={
-					props.benefitsMessagingAbTestBulletVariant ||
-					props.benefitsMessagingAbTestParaVariant
-				}
+				userInNewProductTest={props.isInNewProductTest}
 			/>
 			{props.isWaiting ? (
 				<ProgressMessage message={['Processing transaction', 'Please wait']} />

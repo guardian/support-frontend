@@ -50,7 +50,7 @@ type ContributionThankYouHeaderProps = {
 	amount: number;
 	currency: IsoCurrency;
 	shouldShowLargeDonationMessage: boolean;
-	showBenefitsThankYouText: boolean;
+	showNewProductThankYouText: boolean;
 };
 const MAX_DISPLAY_NAME_LENGTH = 10;
 
@@ -62,7 +62,7 @@ function ContributionThankYouHeader({
 	amount,
 	currency,
 	shouldShowLargeDonationMessage,
-	showBenefitsThankYouText,
+	showNewProductThankYouText,
 }: ContributionThankYouHeaderProps): JSX.Element {
 	const title = (): React.ReactNode => {
 		const nameAndTrailingSpace: string =
@@ -95,7 +95,7 @@ function ContributionThankYouHeader({
 					return (
 						<div>
 							Thank you {nameAndTrailingSpace}for{' '}
-							{showBenefitsThankYouText
+							{showNewProductThankYouText
 								? 'supporting us with'
 								: 'choosing to contribute'}{' '}
 							{currencyAndAmount} each month ❤️
@@ -106,7 +106,7 @@ function ContributionThankYouHeader({
 					return (
 						<div>
 							Thank you {nameAndTrailingSpace}for{' '}
-							{showBenefitsThankYouText
+							{showNewProductThankYouText
 								? 'supporting us with'
 								: 'choosing to contribute'}{' '}
 							{currencyAndAmount} each year ❤️
@@ -148,8 +148,8 @@ function ContributionThankYouHeader({
 
 		return (
 			<>
-				{showBenefitsThankYouText ? benefitsThresholdIsMetText : mainText}
-				{!showBenefitsThankYouText && contributionType !== 'ONE_OFF' && (
+				{showNewProductThankYouText ? benefitsThresholdIsMetText : mainText}
+				{!showNewProductThankYouText && contributionType !== 'ONE_OFF' && (
 					<MarketingCopy />
 				)}
 			</>

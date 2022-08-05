@@ -56,6 +56,12 @@ type RegularContribution = {
 	currency: string;
 	billingPeriod: BillingPeriod;
 };
+type SupporterPlus = {
+	productType: 'SupporterPlus';
+	amount: number;
+	currency: string;
+	billingPeriod: BillingPeriod;
+};
 export type DigitalSubscription = {
 	productType: typeof DigitalPack;
 	currency: string;
@@ -77,6 +83,7 @@ export type GuardianWeeklySubscription = {
 	fulfilmentOptions: FulfilmentOptions;
 };
 export type SubscriptionProductFields =
+	| SupporterPlus
 	| DigitalSubscription
 	| PaperSubscription
 	| GuardianWeeklySubscription;

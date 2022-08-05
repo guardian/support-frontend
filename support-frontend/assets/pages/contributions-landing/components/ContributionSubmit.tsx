@@ -55,7 +55,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropTypes = ConnectedProps<typeof connector> & {
 	onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void;
 	showBenefitsMessaging: boolean;
-	userInBenefitsVariant: boolean;
+	userInNewProductTest: boolean;
 };
 
 // ----- Render ----- //
@@ -81,7 +81,7 @@ function ContributionSubmit(props: PropTypes) {
 		props.currency,
 		props.paymentMethod,
 		props.showBenefitsMessaging,
-		props.userInBenefitsVariant,
+		props.userInNewProductTest,
 	);
 
 	const { loginObject, paymentsObject } = useAmazonPayObjects(
