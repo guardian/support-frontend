@@ -39,6 +39,7 @@ export type ContributionsDispatch = typeof contributionsStore.dispatch;
 export type ContributionsStore = typeof contributionsStore;
 
 export function initReduxForContributions(
+	// Injecting the store and listener makes it possible to re-use this function for tests
 	store = contributionsStore,
 	startListening = startContributionsListening,
 ): ContributionsStore {

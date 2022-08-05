@@ -270,7 +270,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 		ONE_OFF: {
 			Stripe: () => {
 				if (createStripePaymentMethod) {
-					createStripePaymentMethod('');
+					createStripePaymentMethod();
 				}
 			},
 			PayPal: () => {

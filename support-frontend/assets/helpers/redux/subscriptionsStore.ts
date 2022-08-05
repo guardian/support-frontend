@@ -56,6 +56,7 @@ export function initReduxForSubscriptions(
 	startDate?: DateYMDString,
 	productOption?: ProductOptions,
 	getFulfilmentOptionForCountry?: (country: string) => FulfilmentOptions,
+	// Injecting the store and listener makes it possible to re-use this function for tests
 	store = subscriptionsStore,
 	startListening = startSubscriptionsListening,
 ): SubscriptionsStore {
