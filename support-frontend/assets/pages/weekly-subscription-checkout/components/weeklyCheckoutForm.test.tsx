@@ -1,246 +1,224 @@
 import '__mocks__/stripeMock';
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
+import {
+  setBillingCountry,
+  setDeliveryCountry,
+} from 'helpers/redux/checkout/address/actions';
+import { setProductPrices } from 'helpers/redux/checkout/product/actions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
-import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { setFirstName } from 'pages/contributions-landing/contributionsLandingActions';
+import { getWeeklyFulfilmentOption } from '../../../helpers/productPrice/fulfilmentOptions';
+import { NoProductOptions } from '../../../helpers/productPrice/productOptions';
+import type { SubscriptionsStore } from '../../../helpers/redux/subscriptionsStore';
+import { initReduxForSubscriptions } from '../../../helpers/redux/subscriptionsStore';
+import { formatMachineDate } from '../../../helpers/utilities/dateConversions';
 import WeeklyCheckoutForm from './weeklyCheckoutForm';
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
-	const store = configureStore({
-		reducer: combineReducers({
-			page: createReducer(),
-			common: commonReducer,
-		}),
-		preloadedState: initialState,
-	});
-	store.dispatch(setInitialCommonState(initialState.common));
-	return store;
+  const store = initReduxForSubscriptions(
+    GuardianWeekly,
+    'Monthly',
+    formatMachineDate(new Date()),
+    NoProductOptions,
+    getWeeklyFulfilmentOption,
+  );
+  store.dispatch(setProductPrices(weeklyProducts));
+  store.dispatch(setInitialCommonState(initialState.common));
+  return store;
 }
 
-jest.mock('helpers/globalsAndSwitches/globals', () => ({
-	__esModule: true,
-	isSwitchOn: jest.fn(),
-	getSettings: jest.fn(),
-	getGlobal: jest.fn(),
-}));
-
-const mock = (mockFn: unknown) => mockFn as jest.Mock;
-
 describe('Guardian Weekly checkout form', () => {
-	// Suppress warnings related to our version of Redux and improper JSX
-	console.warn = jest.fn();
-	console.error = jest.fn();
-	let initialState: unknown;
-	beforeEach(() => {
-		initialState = {
-			page: {
-				checkout: {
-					formErrors: [],
-					billingAddressIsSame: true,
-				},
-				checkoutForm: {
-					product: {
-						productType: GuardianWeekly,
-						billingPeriod: 'Monthly',
-						productOption: 'NoProductOptions',
-						fulfilmentOption: 'Domestic',
-						productPrices: weeklyProducts,
-					},
-					billingAddress: {
-						fields: {
-							country: 'GB',
-							errors: [],
-						},
-					},
-					deliveryAddress: {
-						fields: {
-							country: 'GB',
-							errors: [],
-						},
-					},
-				},
-			},
-			common: {
-				internationalisation: {
-					countryGroupId: 'GBPCountries',
-					countryId: 'GB',
-					currencyId: 'GBP',
-				},
-				abParticipations: [],
-			},
-		};
+  // Suppress warnings related to our version of Redux and improper JSX
+  console.warn = jest.fn();
+  console.error = jest.fn();
+  let initialState;
+  let store: SubscriptionsStore;
+  const [billingPeriod, productOption, fulfilmentOption] = [
+    'Monthly',
+    'NoProductOptions',
+    'Domestic',
+  ];
 
-		mockFetch({
-			client_secret: 'super secret',
-		});
-	});
+  beforeEach(() => {
+    initialState = {
+      page: {
+        checkout: {
+          formErrors: [],
+          billingAddressIsSame: true,
+        },
+        checkoutForm: {
+          product: {
+            productType: GuardianWeekly,
+            billingPeriod,
+            productOption,
+            fulfilmentOption,
+            productPrices: weeklyProducts,
+          },
+          billingAddress: {
+            fields: {
+              country: 'GB',
+              errors: [],
+            },
+          },
+          deliveryAddress: {
+            fields: {
+              country: 'GB',
+              errors: [],
+            },
+          },
+        },
+      },
+      common: {
+        internationalisation: {
+          countryGroupId: 'GBPCountries',
+          countryId: 'GB',
+          currencyId: 'GBP',
+        },
+        abParticipations: [],
+      },
+    };
 
-	describe('Payment methods', () => {
-		describe('with all switches on', () => {
-			beforeEach(() => {
-				mock(isSwitchOn).mockImplementation(() => true);
+    mockFetch({
+      client_secret: 'super secret',
+    });
 
-				renderWithStore(<WeeklyCheckoutForm />, {
-					initialState,
-					// @ts-expect-error -- Type mismatch is unimportant for tests
-					store: setUpStore(initialState),
-				});
-			});
+    // @ts-expect-error -- Type mismatch is unimportant for tests
+    store = setUpStore(initialState);
 
-			it('shows all payment options', () => {
-				expect(screen.queryByText('PayPal')).toBeInTheDocument();
-				expect(screen.queryByText('Direct debit')).toBeInTheDocument();
-				expect(screen.queryByText('Credit/Debit card')).toBeInTheDocument();
-			});
+    renderWithStore(<WeeklyCheckoutForm />, {
+      //  @ts-expect-error Unused common state properties
+      initialState,
+      store,
+    });
+  });
 
-			it('shows the direct debit option when the currency is GBP and the delivery address is in the UK', () => {
-				expect(screen.queryByText('Direct debit')).toBeInTheDocument();
-			});
+  afterEach(() => {
+    // TODO: Set up a non-global store for tests
+    store.dispatch(setFirstName(''));
+    store.dispatch(setDeliveryCountry('GB'));
+    store.dispatch(setBillingCountry('GB'));
+  });
 
-			it('does not show the direct debit option when the delivery address is outside the UK', async () => {
-				const countrySelect = await screen.findByLabelText('Country');
-				fireEvent.change(countrySelect, {
-					target: {
-						value: 'DE',
-					},
-				});
-				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
-			});
-		});
+  describe('Payment methods', () => {
+    it('shows the direct debit option when the currency is GBP and the delivery address is in the UK', () => {
+      expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+    });
 
-		describe('with only paypal switch on', () => {
-			beforeEach(() => {
-				mock(isSwitchOn).mockImplementation(
-					(key) => key === 'subscriptionsPaymentMethods.paypal',
-				);
+    it('does not show the direct debit option when the delivery address is outside the UK', async () => {
+      const countrySelect = await screen.findByLabelText('Country');
+      fireEvent.change(countrySelect, {
+        target: {
+          value: 'DE',
+        },
+      });
+      expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+    });
 
-				renderWithStore(<WeeklyCheckoutForm />, {
-					initialState,
-					// @ts-expect-error -- Type mismatch is unimportant for tests
-					store: setUpStore(initialState),
-				});
-			});
+    it('does not show the direct debit option when the billing address is outside the UK', async () => {
+      const addressIsNotSame = await screen.findByRole('radio', {
+        name: 'No',
+      });
+      fireEvent.click(addressIsNotSame);
+      const allCountrySelects = await screen.findAllByLabelText('Country');
+      fireEvent.change(allCountrySelects[1], {
+        target: {
+          value: 'IE',
+        },
+      });
+      expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+    });
+  });
 
-			it('does not show the direct debit option', () => {
-				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
-			});
-			it('does not show the credit/debit card option', () => {
-				expect(screen.queryByText('Credit/Debit card')).not.toBeInTheDocument();
-			});
-		});
+  describe('Validation', () => {
+    it('should display an error if a silly character is entered into an input field', async () => {
+      const firstNameInput = await screen.findByLabelText('First name');
+      fireEvent.change(firstNameInput, {
+        target: {
+          value: 'jane✅',
+        },
+      });
+      const creditDebit = await screen.findByLabelText('Credit/Debit card');
+      fireEvent.click(creditDebit);
+      const payNowButton = await screen.findByRole(
+        'button',
+        {
+          name: 'Pay now',
+        },
+        {
+          timeout: 2000,
+        },
+      );
+      fireEvent.click(payNowButton);
+      expect(
+        screen.queryAllByText(
+          'Please use only letters, numbers and punctuation.',
+        ).length,
+      ).toBeGreaterThan(0);
+    });
 
-		describe('with only direct debit switch on', () => {
-			beforeEach(() => {
-				mock(isSwitchOn).mockImplementation(
-					(key) => key === 'subscriptionsPaymentMethods.directDebit',
-				);
+    it('should not display an error message when only valid characters are entered', async () => {
+      const firstNameInput = await screen.findByLabelText('First name');
+      fireEvent.change(firstNameInput, {
+        target: {
+          // This is a right single quotation character, *not* an apostrophe
+          value: 'O’Connor',
+        },
+      });
+      const creditDebit = await screen.findByLabelText('Credit/Debit card');
+      fireEvent.click(creditDebit);
+      const payNowButton = await screen.findByRole(
+        'button',
+        {
+          name: 'Pay now',
+        },
+        {
+          timeout: 2000,
+        },
+      );
+      fireEvent.click(payNowButton);
+      expect(
+        screen.queryAllByText(
+          'Please use only letters, numbers and punctuation.',
+        ),
+      ).toHaveLength(0);
+    });
+  });
 
-				renderWithStore(<WeeklyCheckoutForm />, {
-					initialState,
-					// @ts-expect-error -- Type mismatch is unimportant for tests
-					store: setUpStore(initialState),
-				});
-			});
+  describe('Pricing internationalisation', () => {
+    it('should display correct prices based on delivery address country (regardless of billing address country)', async () => {
+      const addressIsNotSame = await screen.findByRole('radio', {
+        name: 'No',
+      });
+      fireEvent.click(addressIsNotSame);
 
-			it('does not show the direct debit option', () => {
-				expect(screen.queryByText('PayPal')).not.toBeInTheDocument();
-			});
-			it('does not show the credit/debit card option', () => {
-				expect(screen.queryByText('Credit/Debit card')).not.toBeInTheDocument();
-			});
-		});
+      const [Germany, UnitedKingdom] = ['DE', 'GB'];
+      const [deliveryAddressCountry, billingAddressCountry] =
+        await screen.findAllByLabelText('Country');
+      fireEvent.change(deliveryAddressCountry, {
+        target: {
+          value: Germany,
+        },
+      });
+      fireEvent.change(billingAddressCountry, {
+        target: {
+          value: UnitedKingdom,
+        },
+      });
 
-		describe('with only credit/debit card switch on', () => {
-			beforeEach(() => {
-				mock(isSwitchOn).mockImplementation(
-					(key) => key === 'subscriptionsPaymentMethods.creditCard',
-				);
-
-				renderWithStore(<WeeklyCheckoutForm />, {
-					initialState,
-					// @ts-expect-error -- Type mismatch is unimportant for tests
-					store: setUpStore(initialState),
-				});
-			});
-
-			it('does not show the direct debit option', () => {
-				expect(screen.queryByText('PayPal')).not.toBeInTheDocument();
-			});
-			it('does not show the credit/debit card option', () => {
-				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
-			});
-		});
-	});
-
-	describe('Validation', () => {
-		beforeEach(() => {
-			mock(isSwitchOn).mockImplementation(() => true);
-
-			renderWithStore(<WeeklyCheckoutForm />, {
-				initialState,
-				// @ts-expect-error -- Type mismatch is unimportant for tests
-				store: setUpStore(initialState),
-			});
-		});
-
-		it('should display an error if a silly character is entered into an input field', async () => {
-			const firstNameInput = await screen.findByLabelText('First name');
-			fireEvent.change(firstNameInput, {
-				target: {
-					value: 'jane✅',
-				},
-			});
-			const creditDebit = await screen.findByLabelText('Credit/Debit card');
-			fireEvent.click(creditDebit);
-			const payNowButton = await screen.findByRole(
-				'button',
-				{
-					name: 'Pay now',
-				},
-				{
-					timeout: 2000,
-				},
-			);
-			fireEvent.click(payNowButton);
-			expect(
-				screen.queryAllByText(
-					'Please use only letters, numbers and punctuation.',
-				).length,
-			).toBeGreaterThan(0);
-		});
-
-		it('should not display an error message when only valid characters are entered', async () => {
-			const firstNameInput = await screen.findByLabelText('First name');
-			fireEvent.change(firstNameInput, {
-				target: {
-					// This is a right single quotation character, *not* an apostrophe
-					value: 'O’Connor',
-				},
-			});
-			const creditDebit = await screen.findByLabelText('Credit/Debit card');
-			fireEvent.click(creditDebit);
-			const payNowButton = await screen.findByRole(
-				'button',
-				{
-					name: 'Pay now',
-				},
-				{
-					timeout: 2000,
-				},
-			);
-			fireEvent.click(payNowButton);
-			expect(
-				screen.queryAllByText(
-					'Please use only letters, numbers and punctuation.',
-				),
-			).toHaveLength(0);
-		});
-	});
+      const expectedPrice =
+        // @ts-expect-error -- `weeklyProducts` is a hard-coded mock, type checking is irrelevant
+        weeklyProducts['Europe'][fulfilmentOption][productOption][
+          billingPeriod
+          ]['EUR']['price'];
+      expect(
+        screen.queryAllByText(new RegExp(`€${expectedPrice}.+per month`))
+          .length,
+      ).toBeGreaterThan(0);
+    });
+  });
 });
