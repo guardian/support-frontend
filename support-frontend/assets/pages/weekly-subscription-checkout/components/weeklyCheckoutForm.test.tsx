@@ -18,6 +18,7 @@ import type { SubscriptionsStore } from '../../../helpers/redux/subscriptionsSto
 import { initReduxForSubscriptions } from '../../../helpers/redux/subscriptionsStore';
 import { formatMachineDate } from '../../../helpers/utilities/dateConversions';
 import WeeklyCheckoutForm from './weeklyCheckoutForm';
+import { isSwitchOn } from '../../../helpers/globalsAndSwitches/globals';
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
   const store = initReduxForSubscriptions(
@@ -32,11 +33,21 @@ function setUpStore(initialState: WithDeliveryCheckoutState) {
   return store;
 }
 
+jest.mock('helpers/globalsAndSwitches/globals', () => {
+  const actualGlobalsAndSwitches = jest.requireActual('helpers/globalsAndSwitches/globals');
+
+  return {
+    ...actualGlobalsAndSwitches,
+    isSwitchOn: jest.fn(),
+  }
+});
+const mock = (mockFn: unknown) => mockFn as jest.Mock;
+
 describe('Guardian Weekly checkout form', () => {
   // Suppress warnings related to our version of Redux and improper JSX
   console.warn = jest.fn();
   console.error = jest.fn();
-  let initialState;
+  let initialState: unknown;
   let store: SubscriptionsStore;
   const [billingPeriod, productOption, fulfilmentOption] = [
     'Monthly',
@@ -45,6 +56,8 @@ describe('Guardian Weekly checkout form', () => {
   ];
 
   beforeEach(() => {
+    mock(isSwitchOn).mockImplementation(() => true);
+
     initialState = {
       page: {
         checkout: {
@@ -91,7 +104,6 @@ describe('Guardian Weekly checkout form', () => {
     store = setUpStore(initialState);
 
     renderWithStore(<WeeklyCheckoutForm />, {
-      //  @ts-expect-error Unused common state properties
       initialState,
       store,
     });
