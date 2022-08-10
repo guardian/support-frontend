@@ -1,3 +1,7 @@
+/* eslint-disable eslint-comments/require-description -- This is a mocks file, it is not intended to be good code! */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import '__mocks__/stripeMock';
 import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
@@ -226,7 +230,7 @@ describe('Guardian Weekly checkout form', () => {
 			});
 
 			const expectedPrice: number =
-				// @ts-expect-error -- `weeklyProducts` is a hard-coded mock, type checking is irrelevant
+				// @ts-expect-error -- `weeklyProducts` is a hard-coded mock, no risk of null values
 				weeklyProducts['Europe'][fulfilmentOption][productOption][
 					billingPeriod
 				]['EUR']['price'];
