@@ -232,7 +232,6 @@ function DigitalCheckoutForm(props: PropTypes) {
 							submitForm={props.submitForm}
 							//  @ts-expect-error -- TODO: fix error types!!
 							allErrors={[...props.addressErrors, ...props.formErrors]}
-							setStripePaymentMethod={props.setStripePaymentMethod}
 							validateForm={props.validateForm}
 							buttonText={isPatron ? 'Continue' : 'Start your free trial now'}
 							csrf={props.csrf}

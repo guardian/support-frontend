@@ -396,7 +396,6 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 								...props.deliveryAddressErrors,
 								...props.formErrors,
 							]}
-							setStripePaymentMethod={props.setStripePaymentMethod}
 							name={`${props.firstName} ${props.lastName}`}
 							validateForm={props.validateForm}
 							buttonText="Pay now"

@@ -55,7 +55,6 @@ export type FormState = Omit<
 	submissionError: Option<ErrorReason>;
 	formSubmitted: boolean;
 	isTestUser: boolean;
-	stripePaymentMethod: Option<string>;
 	debugInfo: string;
 };
 
