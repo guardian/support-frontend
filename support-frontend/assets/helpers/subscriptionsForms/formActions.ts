@@ -80,10 +80,6 @@ export type Action =
 			instructions: Option<string>;
 	  }
 	| {
-			type: 'SET_STRIPE_PAYMENT_METHOD';
-			stripePaymentMethod: Option<string>;
-	  }
-	| {
 			type: 'SET_GIFT_MESSAGE';
 			message: Option<string>;
 	  }
@@ -163,10 +159,6 @@ const formActionCreators = {
 			onPaymentAuthorised(authorisation, dispatch, state);
 		},
 	setGiftStatus: setOrderIsAGift,
-	setStripePaymentMethod: (stripePaymentMethod: Option<string>): Action => ({
-		type: 'SET_STRIPE_PAYMENT_METHOD',
-		stripePaymentMethod,
-	}),
 	setDeliveryInstructions: (instructions: string | null): Action => ({
 		type: 'SET_DELIVERY_INSTRUCTIONS',
 		instructions,

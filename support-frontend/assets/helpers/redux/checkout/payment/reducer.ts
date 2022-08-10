@@ -9,6 +9,8 @@ import { payPalReducer } from './payPal/reducer';
 import type { PayPalState } from './payPal/state';
 import { sepaReducer } from './sepa/reducer';
 import type { SepaState } from './sepa/state';
+import { stripeCardReducer } from './stripe/reducer';
+import type { StripeCardState } from './stripe/state';
 
 export type PaymentState = {
 	paymentMethod: PaymentMethod;
@@ -16,6 +18,7 @@ export type PaymentState = {
 	amazonPay: AmazonPayState;
 	sepa: SepaState;
 	payPal: PayPalState;
+	stripe: StripeCardState;
 };
 
 export const paymentReducer = combineReducers({
@@ -24,4 +27,5 @@ export const paymentReducer = combineReducers({
 	amazonPay: amazonPayReducer,
 	sepa: sepaReducer,
 	payPal: payPalReducer,
+	stripe: stripeCardReducer,
 });

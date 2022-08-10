@@ -5,7 +5,7 @@ import type { Reducer, Store } from 'redux';
 import { createStore } from 'redux';
 
 type RenderWithStoreOptions<S> = {
-	initialState: S;
+	initialState?: S;
 	reducer?: Reducer;
 	store?: Store<S>;
 } & RenderOptions;
@@ -13,7 +13,7 @@ type RenderWithStoreOptions<S> = {
 export function renderWithStore<StateType>(
 	component: React.ReactElement,
 	{
-		initialState,
+		initialState = {} as StateType,
 		reducer = (state: StateType) => state,
 		store = createStore(reducer, initialState),
 		...renderOptions

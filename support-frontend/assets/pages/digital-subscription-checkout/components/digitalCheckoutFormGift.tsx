@@ -255,7 +255,6 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 							submitForm={props.submitForm}
 							// @ts-expect-error TODO: Fixing the types around validation errors will affect every checkout, too much to tackle now
 							allErrors={[...props.formErrors, ...props.addressErrors]}
-							setStripePaymentMethod={props.setStripePaymentMethod}
 							validateForm={props.validateForm}
 							buttonText="Pay for your gift"
 							csrf={props.csrf}

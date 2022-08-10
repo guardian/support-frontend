@@ -148,7 +148,7 @@ const formIsValidParameters = (state: State) => ({
 	email: state.page.checkoutForm.personalDetails.email,
 	stripeCardFormOk: !stripeCardFormIsIncomplete(
 		state.page.checkoutForm.payment.paymentMethod,
-		state.page.form.stripeCardFormData.formComplete,
+		state.page.checkoutForm.payment.stripe.formComplete,
 	),
 	amazonPayFormOk: amazonPayFormOk(state),
 	sepaFormOk: sepaFormOk(state),

@@ -7,14 +7,12 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
-import type { Option } from 'helpers/types/option';
 
 // Types
 export type PropTypes = {
 	country: IsoCountry;
 	isTestUser: boolean;
 	allErrors: Array<FormError<FormField>>;
-	setStripePaymentMethod: (stripePaymentMethod: Option<string>) => void;
 	submitForm: () => void;
 	validateForm: () => void;
 	buttonText: string;
@@ -40,7 +38,6 @@ function StripeProviderForCountry(props: PropTypes): JSX.Element {
 				submitForm={props.submitForm}
 				allErrors={props.allErrors}
 				stripeKey={stripeKey}
-				setStripePaymentMethod={props.setStripePaymentMethod}
 				validateForm={props.validateForm}
 				buttonText={props.buttonText}
 				csrf={props.csrf}

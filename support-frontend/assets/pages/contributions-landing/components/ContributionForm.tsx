@@ -96,7 +96,7 @@ const mapStateToProps = (state: State) => {
 		existingPaymentMethod: state.page.form.existingPaymentMethod,
 		existingPaymentMethods: state.common.existingPaymentMethods,
 		stripeClientSecret:
-			state.page.form.stripeCardFormData.setupIntentClientSecret,
+			state.page.checkoutForm.payment.stripe.setupIntentClientSecret,
 		contributionType,
 		paymentError: state.page.form.paymentError,
 		selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
@@ -213,7 +213,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 	}
 
 	const [createStripePaymentMethod, setCreateStripePaymentMethod] = useState<
-		((clientSecret: string | null) => void) | null
+		((clientSecret?: string) => void) | null
 	>(null);
 
 	const formHandlersForRecurring = {
@@ -265,7 +265,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 		ONE_OFF: {
 			Stripe: () => {
 				if (createStripePaymentMethod) {
-					createStripePaymentMethod(null);
+					createStripePaymentMethod();
 				}
 			},
 			PayPal: () => {

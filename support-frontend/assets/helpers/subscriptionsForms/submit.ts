@@ -243,7 +243,7 @@ function onPaymentAuthorised(
 
 function checkStripeUserType(
 	onAuthorised: (pa: PaymentAuthorisation) => void,
-	stripePaymentMethodId: Option<string>,
+	stripePaymentMethodId?: string,
 ) {
 	if (stripePaymentMethodId != null) {
 		onAuthorised({
@@ -273,7 +273,7 @@ const directDebitAuthorised = (
 function showPaymentMethod(
 	onAuthorised: (pa: PaymentAuthorisation) => void,
 	paymentMethod: Option<PaymentMethod>,
-	stripePaymentMethod: Option<string>,
+	stripePaymentMethod: string | undefined,
 	state: AnyCheckoutState,
 ): void {
 	switch (paymentMethod) {
@@ -358,7 +358,7 @@ function submitForm(dispatch: Dispatch<Action>, state: SubscriptionsState) {
 
 	const currencyId = getCurrency(pricingCountry);
 	const stripePaymentMethod =
-		paymentMethod === Stripe ? state.page.checkout.stripePaymentMethod : null;
+		state.page.checkoutForm.payment.stripe.stripePaymentMethod;
 
 	const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
 		onPaymentAuthorised(paymentAuthorisation, dispatch, state, currencyId);

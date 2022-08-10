@@ -55,6 +55,16 @@ describe('Digital checkout form', () => {
 
 	let initialState: unknown;
 	beforeEach(() => {
+		// For some inexplicable reason, executing the setup intent fetching thunk on render
+		// in the StripeForm component causes this test suite to hang indefinitely.
+		// cf. https://github.com/guardian/support-frontend/blob/ecd79a404c60fdb7d7ea19eb8a56075ad3084471/support-frontend/assets/components/subscriptionCheckouts/stripeForm/stripeForm.tsx#L211
+		// This does not happen in near-identical tests for the other product checkouts??
+		// The problem appears to be specifically to do with createAsyncThunk itself
+		window.guardian = {
+			...window.guardian,
+			recaptchaEnabled: true,
+		};
+
 		initialState = {
 			page: {
 				checkout: {

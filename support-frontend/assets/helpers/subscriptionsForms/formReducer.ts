@@ -12,7 +12,6 @@ function createFormReducer() {
 		submissionError: null,
 		formSubmitted: false,
 		isTestUser: isTestUser(),
-		stripePaymentMethod: null,
 		deliveryInstructions: null,
 		debugInfo: '',
 	};
@@ -49,9 +48,6 @@ function createFormReducer() {
 					billingAddressIsSame: action.isSame,
 					formErrors: removeError('billingAddressIsSame', state.formErrors),
 				};
-
-			case 'SET_STRIPE_PAYMENT_METHOD':
-				return { ...state, stripePaymentMethod: action.stripePaymentMethod };
 
 			case 'SET_DELIVERY_INSTRUCTIONS':
 				return { ...state, deliveryInstructions: action.instructions };
