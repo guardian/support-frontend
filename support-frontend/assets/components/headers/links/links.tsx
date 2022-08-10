@@ -85,6 +85,19 @@ function internationalisationID(
 	return null;
 }
 
+function getActiveLinkClassModifiers(
+	urlWithoutParams: string,
+	href: string,
+): string | null {
+	if (
+		urlWithoutParams.endsWith(href) ||
+		urlWithoutParams.endsWith(`${href}/delivery`)
+	) {
+		return 'active';
+	}
+	return null;
+}
+
 // Export
 function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
 	const { protocol, host, pathname } = window.location;
@@ -127,7 +140,7 @@ function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
 							<li
 								className={cx(
 									classNameWithModifiers('component-header-links__li', [
-										urlWithoutParams.endsWith(href) ? 'active' : null,
+										getActiveLinkClassModifiers(urlWithoutParams, href),
 									]),
 									additionalClasses,
 								)}
