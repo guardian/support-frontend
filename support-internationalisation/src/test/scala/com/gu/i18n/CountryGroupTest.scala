@@ -1,11 +1,11 @@
 package com.gu.i18n
 
 import com.gu.i18n.Currency._
-import org.scalatest.Inspectors
-import org.scalatest.flatspec.AsyncFlatSpec
+import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-class CountryGroupTest extends AsyncFlatSpec with Matchers with Inspectors {
+class CountryGroupTest extends AnyFlatSpec with Matchers with Inspectors {
 
   "A CountryGroup" should "be found by id" in {
     CountryGroup.byId("ie") shouldBe None
