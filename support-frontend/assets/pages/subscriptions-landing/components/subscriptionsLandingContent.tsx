@@ -28,7 +28,7 @@ function SubscriptionsLandingContent({
 			className="subscriptions-landing-page"
 			id="qa-subscriptions-landing-page"
 		>
-			{propensityProduct ? <PropensityHeader /> : <FeatureHeader />}
+			{propensityProduct ? <PropensityHeader product={propensityProduct} /> : <FeatureHeader />}
 			<div className="subscriptions__product-container">
 				{subscriptionCopy.map((product, index) => (
 					<SubscriptionsProduct

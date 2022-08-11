@@ -96,10 +96,19 @@
 	border: darkgray solid thin;
 	background-color: lightgray;
 	margin: 1em;
+  p {
+    padding-bottom: 1em;
+  }
 }
 
 .learn-more--open {
 	display: block;
+}
+
+.subscriptions__feature-ul > li {
+  display: list-item;
+  margin-left: 2em;
+  list-style: disc;
 }
 
 /****************** subscriptions product-container ********************/
