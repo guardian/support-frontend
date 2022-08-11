@@ -837,13 +837,11 @@
 
 	img {
 		position: absolute;
-		bottom: -50px;
 		width: 100%;
 	}
 
 	@include mq($from: tablet) {
 		position: absolute;
-		bottom: 0;
 		padding: 0px;
 
 		img {
