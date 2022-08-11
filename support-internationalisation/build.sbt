@@ -2,7 +2,7 @@ import sbtrelease.ReleaseStateTransformations._
 
 name := "support-internationalisation"
 
-crossScalaVersions := Seq("2.11.12", "2.12.16")
+crossScalaVersions := Seq("2.13.8", "3.1.3")
 
 description := "Scala library to provide internationalisation classes to Guardian Membership/Subscriptions/support projects."
 
