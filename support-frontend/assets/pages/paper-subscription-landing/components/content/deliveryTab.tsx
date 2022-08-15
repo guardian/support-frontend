@@ -66,8 +66,8 @@ export function ContentDeliveryFaqBlock({
 		<FlexContainer cssOverrides={flexContainerOverride}>
 			<div css={faqsContainer}>
 				<p css={paragraph}>
-					If you live in Greater London (within the M25), you can use the
-					Guardian’s home delivery service. If not, you can use our{' '}
+					If you live in Greater London, you can use the Guardian’s home
+					delivery service. If not, you can use our{' '}
 					<LinkTo tab={Collection} setTabAction={setTabAction}>
 						subscription cards
 					</LinkTo>
