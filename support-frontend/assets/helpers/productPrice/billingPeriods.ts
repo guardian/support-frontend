@@ -30,7 +30,7 @@ const weeklyBillingPeriods = (
 ): WeeklyBillingPeriod[] =>
 	enableSixForSix
 		? [SixWeekly, postIntroductorySixForSixBillingPeriod, Annual]
-		: [postIntroductorySixForSixBillingPeriod, Annual];
+		: [postIntroductorySixForSixBillingPeriod, Quarterly, Annual];
 
 const weeklyGiftBillingPeriods: WeeklyBillingPeriod[] = [Quarterly, Annual];
 
