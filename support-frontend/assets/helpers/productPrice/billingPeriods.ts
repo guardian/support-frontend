@@ -29,7 +29,6 @@ const weeklyBillingPeriods = (
 	enableSixForSix: boolean,
 	enableGuardianWeeklyQuarterly: boolean,
 ): WeeklyBillingPeriod[] => {
-	console.log('enableGuardianWeeklyQuarterly', enableGuardianWeeklyQuarterly);
 	if (enableSixForSix) {
 		return [SixWeekly, postIntroductorySixForSixBillingPeriod, Annual];
 	} else if (enableGuardianWeeklyQuarterly) {
