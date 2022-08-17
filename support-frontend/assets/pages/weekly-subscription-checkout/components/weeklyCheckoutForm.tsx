@@ -325,6 +325,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						onChange={(billingPeriod) => props.setBillingPeriod(billingPeriod)}
 						billingPeriods={weeklyBillingPeriods(
 							props.participations.sixForSixSuppression !== 'variant',
+							props.participations.guardianWeeklyQuarterly === 'variant',
 						)}
 						pricingCountry={props.deliveryCountry}
 						productPrices={props.productPrices}
