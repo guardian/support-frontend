@@ -308,6 +308,7 @@ lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .settings(
     scalafmtSettings,
+    scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
     mergeStrategySettings,
   )
@@ -319,6 +320,7 @@ lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisitio
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .settings(
     scalafmtSettings,
+    scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
     mergeStrategySettings,
   )
