@@ -441,10 +441,12 @@ function PaperCheckoutForm(props: PropTypes) {
 							</Rows>
 						</FormSection>
 					) : null}
-					<AddDigiSubCta
-						digiSubPrice={expandedPricingText}
-						addDigitalSubscription={addDigitalSubscription}
-					/>
+					{props.participations.newProduct !== 'variant' ? (
+						<AddDigiSubCta
+							digiSubPrice={expandedPricingText}
+							addDigitalSubscription={addDigitalSubscription}
+						/>
+					) : null}
 					{paymentMethods.length > 0 ? (
 						<FormSection
 							cssOverrides={removeTopBorder}
