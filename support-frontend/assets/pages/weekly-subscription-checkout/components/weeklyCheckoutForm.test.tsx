@@ -16,6 +16,7 @@ import { setProductPrices } from 'helpers/redux/checkout/product/actions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { setFirstName } from 'pages/contributions-landing/contributionsLandingActions';
+import { createTestStoreForSubscriptions } from '../../../__test-utils__/testStore';
 import { isSwitchOn } from '../../../helpers/globalsAndSwitches/globals';
 import type { BillingPeriod } from '../../../helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from '../../../helpers/productPrice/fulfilmentOptions';
@@ -25,7 +26,6 @@ import { NoProductOptions } from '../../../helpers/productPrice/productOptions';
 import type { SubscriptionsStore } from '../../../helpers/redux/subscriptionsStore';
 import { formatMachineDate } from '../../../helpers/utilities/dateConversions';
 import WeeklyCheckoutForm from './weeklyCheckoutForm';
-import {createTestStoreForSubscriptions} from "../../../__test-utils__/testStore";
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
 	const store = createTestStoreForSubscriptions(
