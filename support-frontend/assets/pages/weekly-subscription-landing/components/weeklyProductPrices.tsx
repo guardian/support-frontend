@@ -123,7 +123,7 @@ const getProducts = ({
 		? weeklyGiftBillingPeriods
 		: weeklyBillingPeriods(
 				participations.sixForSixSuppression !== 'variant',
-				participations.guardianWeeklyQuarterly === 'variant',
+				countryId === 'US' || countryId === 'CA',
 		  );
 
 	return billingPeriodsToUse.map((billingPeriod) => {
