@@ -23,12 +23,12 @@ import { getWeeklyFulfilmentOption } from '../../../helpers/productPrice/fulfilm
 import type { ProductOptions } from '../../../helpers/productPrice/productOptions';
 import { NoProductOptions } from '../../../helpers/productPrice/productOptions';
 import type { SubscriptionsStore } from '../../../helpers/redux/subscriptionsStore';
-import { initReduxForSubscriptions } from '../../../helpers/redux/subscriptionsStore';
 import { formatMachineDate } from '../../../helpers/utilities/dateConversions';
 import WeeklyCheckoutForm from './weeklyCheckoutForm';
+import {createTestStoreForSubscriptions} from "../../../__test-utils__/testStore";
 
 function setUpStore(initialState: WithDeliveryCheckoutState) {
-	const store = initReduxForSubscriptions(
+	const store = createTestStoreForSubscriptions(
 		GuardianWeekly,
 		'Monthly',
 		formatMachineDate(new Date()),
