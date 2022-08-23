@@ -21,7 +21,9 @@ import type { SubscriptionsStore } from '../../../helpers/redux/subscriptionsSto
 import { formatMachineDate } from '../../../helpers/utilities/dateConversions';
 import WeeklyCheckoutForm from './weeklyCheckoutForm';
 
-function setUpStore(initialState: WithDeliveryCheckoutState) {
+function setUpStore(
+	initialState: WithDeliveryCheckoutState,
+): SubscriptionsStore {
 	const store = createTestStoreForSubscriptions(
 		GuardianWeekly,
 		'Monthly',
@@ -50,8 +52,8 @@ describe('Guardian Weekly checkout form', () => {
 	// Suppress warnings related to our version of Redux and improper JSX
 	console.warn = jest.fn();
 	console.error = jest.fn();
+
 	let initialState: unknown;
-	let store: SubscriptionsStore;
 	const billingPeriod: BillingPeriod = 'Monthly';
 	const productOption: ProductOptions = 'NoProductOptions';
 	const fulfilmentOption: FulfilmentOptions = 'Domestic';
@@ -98,41 +100,39 @@ describe('Guardian Weekly checkout form', () => {
 		mockFetch({
 			client_secret: 'super secret',
 		});
-
-		// @ts-expect-error -- Type mismatch is unimportant for tests
-		store = setUpStore(initialState);
-
-		renderWithStore(<WeeklyCheckoutForm />, {
-			initialState,
-			store,
-		});
 	});
 
 	describe('Payment methods', () => {
 		describe('with all switches on', () => {
 			beforeEach(() => {
 				mock(isSwitchOn).mockImplementation(() => true);
+
+				renderWithStore(<WeeklyCheckoutForm />, {
+					initialState,
+					// @ts-expect-error -- Type mismatch is unimportant for tests
+					store: setUpStore(initialState),
+				});
 			});
 
-      it('shows all payment options', () => {
-        expect(screen.queryByText('PayPal')).toBeInTheDocument();
-        expect(screen.queryByText('Direct debit')).toBeInTheDocument();
-        expect(screen.queryByText('Credit/Debit card')).toBeInTheDocument();
-      });
+			it('shows all payment options', () => {
+				expect(screen.queryByText('PayPal')).toBeInTheDocument();
+				expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+				expect(screen.queryByText('Credit/Debit card')).toBeInTheDocument();
+			});
 
-      it('does not show the direct debit option when the delivery address is outside the UK', async () => {
-        const countrySelect = await screen.findByLabelText('Country');
-        fireEvent.change(countrySelect, {
-          target: {
-            value: 'DE',
-          },
-        });
-        expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
-      });
+			it('does not show the direct debit option when the delivery address is outside the UK', async () => {
+				const countrySelect = await screen.findByLabelText('Country');
+				fireEvent.change(countrySelect, {
+					target: {
+						value: 'DE',
+					},
+				});
+				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+			});
 
-      it('shows the direct debit option when the currency is GBP and the delivery address is in the UK', () => {
-        expect(screen.queryByText('Direct debit')).toBeInTheDocument();
-      });
+			it('shows the direct debit option when the currency is GBP and the delivery address is in the UK', () => {
+				expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+			});
 		});
 
 		describe('with only PayPal switch on', () => {
@@ -140,6 +140,12 @@ describe('Guardian Weekly checkout form', () => {
 				mock(isSwitchOn).mockImplementation(
 					(key) => key === 'subscriptionsPaymentMethods.paypal',
 				);
+
+				renderWithStore(<WeeklyCheckoutForm />, {
+					initialState,
+					// @ts-expect-error -- Type mismatch is unimportant for tests
+					store: setUpStore(initialState),
+				});
 			});
 
 			it('does not show the direct debit option', () => {
@@ -155,6 +161,12 @@ describe('Guardian Weekly checkout form', () => {
 				mock(isSwitchOn).mockImplementation(
 					(key) => key === 'subscriptionsPaymentMethods.directDebit',
 				);
+
+				renderWithStore(<WeeklyCheckoutForm />, {
+					initialState,
+					// @ts-expect-error -- Type mismatch is unimportant for tests
+					store: setUpStore(initialState),
+				});
 			});
 
 			it('does not show the PayPal option', () => {
@@ -170,6 +182,12 @@ describe('Guardian Weekly checkout form', () => {
 				mock(isSwitchOn).mockImplementation(
 					(key) => key === 'subscriptionsPaymentMethods.creditCard',
 				);
+
+				renderWithStore(<WeeklyCheckoutForm />, {
+					initialState,
+					// @ts-expect-error -- Type mismatch is unimportant for tests
+					store: setUpStore(initialState),
+				});
 			});
 
 			it('does not show the PayPal option', () => {
@@ -184,6 +202,12 @@ describe('Guardian Weekly checkout form', () => {
 	describe('Validation', () => {
 		beforeEach(() => {
 			mock(isSwitchOn).mockImplementation(() => true);
+
+			renderWithStore(<WeeklyCheckoutForm />, {
+				initialState,
+				// @ts-expect-error -- Type mismatch is unimportant for tests
+				store: setUpStore(initialState),
+			});
 		});
 
 		it('should display an error if a silly character is entered into an input field', async () => {
@@ -241,6 +265,16 @@ describe('Guardian Weekly checkout form', () => {
 	});
 
 	describe('Pricing internationalisation', () => {
+		beforeEach(() => {
+			mock(isSwitchOn).mockImplementation(() => true);
+
+			renderWithStore(<WeeklyCheckoutForm />, {
+				initialState,
+				// @ts-expect-error -- Type mismatch is unimportant for tests
+				store: setUpStore(initialState),
+			});
+		});
+
 		it('should display correct prices based on delivery address country (regardless of billing address country)', async () => {
 			const addressIsNotSame = await screen.findByRole('radio', {
 				name: 'No',
