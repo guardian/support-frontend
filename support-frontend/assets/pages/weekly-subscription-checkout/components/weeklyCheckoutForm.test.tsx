@@ -1,28 +1,22 @@
 /* eslint-disable eslint-comments/require-description -- This is a mocks file, it is not intended to be good code! */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import '__mocks__/stripeMock';
 import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
-import {
-	setBillingCountry,
-	setDeliveryCountry,
-} from 'helpers/redux/checkout/address/actions';
-import { setProductPrices } from 'helpers/redux/checkout/product/actions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { setFirstName } from 'pages/contributions-landing/contributionsLandingActions';
 import { createTestStoreForSubscriptions } from '../../../__test-utils__/testStore';
-import { isSwitchOn } from '../../../helpers/globalsAndSwitches/globals';
 import type { BillingPeriod } from '../../../helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from '../../../helpers/productPrice/fulfilmentOptions';
 import { getWeeklyFulfilmentOption } from '../../../helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from '../../../helpers/productPrice/productOptions';
 import { NoProductOptions } from '../../../helpers/productPrice/productOptions';
+import { setProductPrices } from '../../../helpers/redux/checkout/product/actions';
 import type { SubscriptionsStore } from '../../../helpers/redux/subscriptionsStore';
 import { formatMachineDate } from '../../../helpers/utilities/dateConversions';
 import WeeklyCheckoutForm from './weeklyCheckoutForm';
@@ -63,8 +57,6 @@ describe('Guardian Weekly checkout form', () => {
 	const fulfilmentOption: FulfilmentOptions = 'Domestic';
 
 	beforeEach(() => {
-		mock(isSwitchOn).mockImplementation(() => true);
-
 		initialState = {
 			page: {
 				checkout: {
@@ -116,44 +108,84 @@ describe('Guardian Weekly checkout form', () => {
 		});
 	});
 
-	afterEach(() => {
-		// TODO: Set up a non-global store for tests
-		store.dispatch(setFirstName(''));
-		store.dispatch(setDeliveryCountry('GB'));
-		store.dispatch(setBillingCountry('GB'));
-	});
-
 	describe('Payment methods', () => {
-		it('shows the direct debit option when the currency is GBP and the delivery address is in the UK', () => {
-			expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+		describe('with all switches on', () => {
+			beforeEach(() => {
+				mock(isSwitchOn).mockImplementation(() => true);
+			});
+
+      it('shows all payment options', () => {
+        expect(screen.queryByText('PayPal')).toBeInTheDocument();
+        expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+        expect(screen.queryByText('Credit/Debit card')).toBeInTheDocument();
+      });
+
+      it('does not show the direct debit option when the delivery address is outside the UK', async () => {
+        const countrySelect = await screen.findByLabelText('Country');
+        fireEvent.change(countrySelect, {
+          target: {
+            value: 'DE',
+          },
+        });
+        expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+      });
+
+      it('shows the direct debit option when the currency is GBP and the delivery address is in the UK', () => {
+        expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+      });
 		});
 
-		it('does not show the direct debit option when the delivery address is outside the UK', async () => {
-			const countrySelect = await screen.findByLabelText('Country');
-			fireEvent.change(countrySelect, {
-				target: {
-					value: 'DE',
-				},
+		describe('with only PayPal switch on', () => {
+			beforeEach(() => {
+				mock(isSwitchOn).mockImplementation(
+					(key) => key === 'subscriptionsPaymentMethods.paypal',
+				);
 			});
-			expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+
+			it('does not show the direct debit option', () => {
+				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+			});
+			it('does not show the credit/debit card option', () => {
+				expect(screen.queryByText('Credit/Debit card')).not.toBeInTheDocument();
+			});
 		});
 
-		it('does not show the direct debit option when the billing address is outside the UK', async () => {
-			const addressIsNotSame = await screen.findByRole('radio', {
-				name: 'No',
+		describe('with only direct debit switch on', () => {
+			beforeEach(() => {
+				mock(isSwitchOn).mockImplementation(
+					(key) => key === 'subscriptionsPaymentMethods.directDebit',
+				);
 			});
-			fireEvent.click(addressIsNotSame);
-			const allCountrySelects = await screen.findAllByLabelText('Country');
-			fireEvent.change(allCountrySelects[1], {
-				target: {
-					value: 'IE',
-				},
+
+			it('does not show the PayPal option', () => {
+				expect(screen.queryByText('PayPal')).not.toBeInTheDocument();
 			});
-			expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+			it('does not show the credit/debit card option', () => {
+				expect(screen.queryByText('Credit/Debit card')).not.toBeInTheDocument();
+			});
+		});
+
+		describe('with only credit/debit card switch on', () => {
+			beforeEach(() => {
+				mock(isSwitchOn).mockImplementation(
+					(key) => key === 'subscriptionsPaymentMethods.creditCard',
+				);
+			});
+
+			it('does not show the PayPal option', () => {
+				expect(screen.queryByText('PayPal')).not.toBeInTheDocument();
+			});
+			it('does not show the direct debit card option', () => {
+				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
+			});
 		});
 	});
 
 	describe('Validation', () => {
+		beforeEach(() => {
+			mock(isSwitchOn).mockImplementation(() => true);
+		});
+
 		it('should display an error if a silly character is entered into an input field', async () => {
 			const firstNameInput = await screen.findByLabelText('First name');
 			fireEvent.change(firstNameInput, {
