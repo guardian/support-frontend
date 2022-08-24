@@ -2,7 +2,6 @@
 import { FocusStyleManager } from '@guardian/source-foundations';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes, useParams } from 'react-router-dom';
-import type { ThunkDispatch } from 'redux-thunk';
 import ContributionsFooter from 'components/footerCompliant/ContributionsFooter';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import Page from 'components/page/page';
@@ -21,9 +20,7 @@ import * as user from 'helpers/user/user';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import { ContributionFormContainer } from './components/ContributionFormContainer';
 import ContributionThankYouPage from './components/ContributionThankYou/ContributionThankYouPage';
-import type { Action } from './contributionsLandingActions';
 import { init as formInit } from './contributionsLandingInit';
-import type { State } from './contributionsLandingReducer';
 import { setUserStateActions } from './setUserStateActions';
 import './contributionsLanding.scss';
 import './newContributionsLandingTemplate.scss';
@@ -123,6 +120,6 @@ const router = () => {
 	);
 };
 
-const dispatch = store.dispatch as ThunkDispatch<State, void, Action>;
+const dispatch = store.dispatch;
 
 renderPage(router(), reactElementId, () => dispatch(enableOrDisableForm()));
