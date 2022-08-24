@@ -349,10 +349,11 @@ Resources:
   SupporterProductDataDeadLetterQueue:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: !Sub dead-letters-direct-mail-${Stage}
+      QueueName: !Sub dead-letters-supporter-product-data-${Stage}
       Tags:
         - Key: Stage
           Value: !Ref Stage
+
   SupporterProductDataQueue:
     Type: AWS::SQS::Queue
     Properties:
@@ -363,6 +364,7 @@ Resources:
             - "SupporterProductDataDeadLetterQueue"
             - "Arn"
         maxReceiveCount: 10
+      VisibilityTimeout: 600
       Tags:
         - Key: Stage
           Value: !Ref Stage

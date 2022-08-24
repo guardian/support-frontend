@@ -18,5 +18,6 @@ deployments:
         - "-SupporterProductDataQueryZuora-"
         - "-SupporterProductDataFetchResults-"
         - "-SupporterProductDataUpdateDynamo-"
+        - "-SupporterProductDataProcessSubscription-"
       fileName: supporter-product-data.jar
     dependencies: [cfn]
