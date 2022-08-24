@@ -117,6 +117,15 @@ Resources:
               Resource:
                 Fn::ImportValue:
                   !Sub supporter-product-data-tables-${Stage}-SupporterProductDataTable
+        - PolicyName: SQSReceiveAndDelete
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+                - sqs:ReceiveMessage
+                - sqs:DeleteMessage
+                - sqs:GetQueueAttributes
+              Resource: '*' #TODO, restrict this
 
   QueryZuoraLambda:
     Type: "AWS::Lambda::Function"
@@ -161,6 +170,24 @@ Resources:
         !Sub support-SupporterProductDataUpdateDynamo-${Stage}
       Description: "Update DynamoDB with the results of the Zuora query"
       Handler: "com.gu.lambdas.UpdateDynamoLambda::handleRequest"
+      Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
+      Code:
+        S3Bucket: supporter-product-data-dist
+        S3Key: !Sub support/${Stage}/supporter-product-data/supporter-product-data.jar
+      MemorySize: 4096
+      Runtime: "java8.al2"
+      Timeout: 600
+      Environment:
+        Variables:
+          'Stage': !Sub ${Stage}
+
+  ProcessSubscriptionLambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName:
+        !Sub support-SupporterProductDataProcessSubscription-${Stage}
+      Description: "Process new subscriptions from the SQS queue"
+      Handler: "com.gu.lambdas.ProcessSubscriptionLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
       Code:
         S3Bucket: supporter-product-data-dist
@@ -339,6 +366,18 @@ Resources:
       Tags:
         - Key: Stage
           Value: !Ref Stage
+
+  SQSTrigger:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 1
+      Enabled: true
+      EventSourceArn: !GetAtt SupporterProductDataQueue.Arn
+      FunctionName: !Ref ProcessSubscriptionLambda
+    DependsOn:
+      - SupporterProductDataQueue
+      - ProcessSubscriptionLambda
+
   UnprocessedSupporterProductDataRecordAlarm:
     Type: 'AWS::CloudWatch::Alarm'
     Condition: CreateProdResources
