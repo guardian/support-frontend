@@ -1,6 +1,7 @@
 package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
+import com.typesafe.scalalogging.StrictLogging
 import io.circe.parser.decode
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
@@ -38,9 +39,13 @@ abstract class Handler[IN, OUT](implicit
 
 }
 
-object StreamHandler {
+object StreamHandler extends StrictLogging {
   def fromStream[T](is: InputStream)(implicit decoder: Decoder[T]): Try[T] = {
-    val triedT = Try(Source.fromInputStream(is).mkString).flatMap(decode[T](_).toTry)
+    val triedT = Try {
+      val body = Source.fromInputStream(is).mkString
+      logger.info(body)
+      body
+    }.flatMap(decode[T](_).toTry)
     is.close()
     triedT
   }
