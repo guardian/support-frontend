@@ -50,9 +50,9 @@ object CheckoutValidationRules {
           if (switches.stripeApplePay.isOn) Valid else Invalid("Invalid Payment Method")
         case Some(StripePaymentType.StripePaymentRequestButton) =>
           if (switches.stripePaymentRequestButton.isOn) Valid else Invalid("Invalid Payment Method")
-
+        case Some(StripePaymentType.StripeCheckout) =>
+          if (switches.stripe.isOn) Valid else Invalid("Invalid Payment Method")
       }
-
     case Left(_: AmazonPayPaymentFields) =>
       if (switches.amazonPay.isOn) Valid else Invalid("Invalid Payment Method")
     case Left(_: ExistingPaymentFields) =>
@@ -61,12 +61,16 @@ object CheckoutValidationRules {
       Valid
 
   }
-  def checkPaymentMethodEnabled(createSupportWorkersRequest: CreateSupportWorkersRequest, switches: Switches) =
-    (createSupportWorkersRequest.product match {
+  def checkPaymentMethodEnabled(
+      product: ProductType,
+      paymentFields: Either[PaymentFields, RedemptionData],
+      switches: Switches,
+  ) =
+    (product match {
       case _: Contribution =>
         checkContributionPaymentMethodEnabled(
           switches.recurringPaymentMethods,
-          createSupportWorkersRequest.paymentFields,
+          paymentFields,
         )
       case _ =>
     })

@@ -1,5 +1,6 @@
 package utils
 
+import admin.settings.{On, OneOffPaymentMethodSwitches, SwitchState, Switches}
 import com.gu.i18n.Currency.{GBP, USD}
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.acquisitions.{OphanIds, ReferrerAcquisitionData}
@@ -15,6 +16,16 @@ import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.TestData.monthlyDirectUSDProduct
 
+class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
+
+  it should "return Invalid if a user tries to pay with direct debit but the Direct debit switch in RRCP is off" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(DirectDebitPaymentFields("Testuser", "", "", "")),
+      switches = TestData.switches,
+    )
+  }
+}
 class SimpleCheckoutFormValidationTest extends AnyFlatSpec with Matchers {
 
   import TestData.validDigitalPackRequest
@@ -317,6 +328,7 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
 
 object TestData {
 
+  val switches = Switches(OneOffPaymentMethodSwitches(stripe = On))
   val monthlyDirectUSDProduct = DigitalPack(Currency.USD, Monthly)
   val validDigitalPackRequest = CreateSupportWorkersRequest(
     title = None,
