@@ -1,5 +1,6 @@
 package utils
 
+import admin.settings.{RecurringPaymentMethodSwitches, Switches}
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
@@ -30,6 +31,45 @@ object CheckoutValidationRules {
   }
   case class Invalid(message: String) extends Result
   case object Valid extends Result
+
+  def checkContributionPaymentMethodEnabled(
+      switches: RecurringPaymentMethodSwitches,
+      paymentFields: Either[PaymentFields, RedemptionData],
+  ) = paymentFields match {
+    case Left(_: PayPalPaymentFields) =>
+      if (switches.payPal.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_: DirectDebitPaymentFields) =>
+      if (switches.directDebit.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_: SepaPaymentFields) =>
+      if (switches.sepa.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_: StripeSourcePaymentFields) =>
+      if (switches.stripe.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(s: StripePaymentMethodPaymentFields) =>
+      s.stripePaymentType match {
+        case Some(StripePaymentType.StripeApplePay) =>
+          if (switches.stripeApplePay.isOn) Valid else Invalid("Invalid Payment Method")
+        case Some(StripePaymentType.StripePaymentRequestButton) =>
+          if (switches.stripePaymentRequestButton.isOn) Valid else Invalid("Invalid Payment Method")
+
+      }
+
+    case Left(_: AmazonPayPaymentFields) =>
+      if (switches.amazonPay.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_: ExistingPaymentFields) =>
+      // Return Valid for all existing payments because we can't tell whether the user has a direct debit or card but,
+      // there are separate switches in the switchboards(RRCP-Reader Revenue Control Panel) for these
+      Valid
+
+  }
+  def checkPaymentMethodEnabled(createSupportWorkersRequest: CreateSupportWorkersRequest, switches: Switches) =
+    (createSupportWorkersRequest.product match {
+      case _: Contribution =>
+        checkContributionPaymentMethodEnabled(
+          switches.recurringPaymentMethods,
+          createSupportWorkersRequest.paymentFields,
+        )
+      case _ =>
+    })
 
   def validate(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
     (createSupportWorkersRequest.product match {

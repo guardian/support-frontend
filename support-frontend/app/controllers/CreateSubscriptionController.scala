@@ -2,7 +2,7 @@ package controllers
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
-import admin.settings.AllSettingsProvider
+import admin.settings.{AllSettings, AllSettingsProvider, Switches}
 import akka.actor.{ActorSystem, Scheduler}
 import cats.data.EitherT
 import cats.implicits._
@@ -61,6 +61,7 @@ class CreateSubscriptionController(
   def create: EssentialAction =
     LoggingAndAlarmOnFailure {
       MaybeAuthenticatedAction.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
+        implicit val settings: AllSettings = settingsProvider.getAllSettings()
         val errorOrStatusResponse = for {
           _ <- getRecaptchaTokenFromRequest(request) match {
             case Some(token) => validateRecaptcha(token, testUsers.isTestUser(request))
@@ -85,11 +86,13 @@ class CreateSubscriptionController(
   }
 
   // Returns a Right if validation succeeds
-  private def validateRecaptcha(token: String, isTestUser: Boolean): EitherT[Future, RequestValidationError, Unit] = {
+  private def validateRecaptcha(token: String, isTestUser: Boolean)(implicit
+      settings: AllSettings,
+  ): EitherT[Future, RequestValidationError, Unit] = {
     val recaptchaBackendEnabled =
-      settingsProvider.getAllSettings().switches.recaptchaSwitches.enableRecaptchaBackend.isOn
+      settings.switches.recaptchaSwitches.enableRecaptchaBackend.isOn
     val recaptchaFrontendEnabled =
-      settingsProvider.getAllSettings().switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
+      settings.switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
     // We never validate on backend unless frontend validation is Enabled
     val recaptchaEnabled = recaptchaFrontendEnabled && recaptchaBackendEnabled
 
@@ -111,7 +114,7 @@ class CreateSubscriptionController(
 
   private def createSubscription(
       request: OptionalAuthRequest[CreateSupportWorkersRequest],
-  ): EitherT[Future, CreateSubscriptionError, StatusResponse] = {
+  )(implicit settings: AllSettings): EitherT[Future, CreateSubscriptionError, StatusResponse] = {
     val maybeLoggedInIdentityIdAndEmail =
       request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
     logIncomingRequest(request, maybeLoggedInIdentityIdAndEmail)
@@ -123,7 +126,7 @@ class CreateSubscriptionController(
           getOrCreateIdentityUser(request.body, request.headers.get("Referer"))
             .leftMap(mapIdentityErrorToCreateSubscriptionError)
       }
-      _ <- validate(request)
+      _ <- validate(request, settings.switches)
       supportWorkersUser = buildSupportWorkersUser(userAndEmail, request.body, testUsers.isTestUser(request))
       statusResponse <- client
         .createSubscription(request, supportWorkersUser, request.uuid)
@@ -164,7 +167,10 @@ class CreateSubscriptionController(
     identityId.map(identityId => IdentityIdAndEmail(identityId, body.email))
   }
 
-  private def validate(request: Request[CreateSupportWorkersRequest]): EitherT[Future, CreateSubscriptionError, Unit] =
+  private def validate(
+      request: Request[CreateSupportWorkersRequest],
+      switches: Switches,
+  ): EitherT[Future, CreateSubscriptionError, Unit] =
     CheckoutValidationRules.validate(request.body) match {
       case Valid => EitherT.pure(())
       case Invalid(message) => EitherT.leftT(RequestValidationError(message))
