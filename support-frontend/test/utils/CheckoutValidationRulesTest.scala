@@ -1,6 +1,18 @@
 package utils
 
-import admin.settings.{On, OneOffPaymentMethodSwitches, SwitchState, Switches}
+import admin.settings.{
+  CampaignSwitches,
+  FeatureSwitches,
+  Off,
+  On,
+  OneOffPaymentMethodSwitches,
+  RecaptchaSwitches,
+  RecurringPaymentMethodSwitches,
+  SubscriptionsPaymentMethodSwitches,
+  SubscriptionsSwitches,
+  SwitchState,
+  Switches,
+}
 import com.gu.i18n.Currency.{GBP, USD}
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.acquisitions.{OphanIds, ReferrerAcquisitionData}
@@ -22,8 +34,21 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(DirectDebitPaymentFields("Testuser", "", "", "")),
-      switches = TestData.switches,
-    )
+      switches = TestData.ddOffSwitches,
+    ) shouldBe Invalid("Invalid Payment Method")
+  }
+
+  it should "return Invalid if a user tries to pay with Apple Pay but the switch in RRCP is off" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(
+        StripePaymentMethodPaymentFields(
+          paymentMethod = PaymentMethodId("testId").get,
+          stripePaymentType = Some(StripePaymentType.StripeApplePay),
+        ),
+      ),
+      switches = TestData.applePayOffSwitches,
+    ) shouldBe Invalid("Invalid Payment Method")
   }
 }
 class SimpleCheckoutFormValidationTest extends AnyFlatSpec with Matchers {
@@ -328,7 +353,24 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
 
 object TestData {
 
-  val switches = Switches(OneOffPaymentMethodSwitches(stripe = On))
+  val applePayOffSwitches = Switches(
+    OneOffPaymentMethodSwitches(On, On, On, On, On),
+    RecurringPaymentMethodSwitches(On, Off, On, On, Off, On, On, On, On),
+    SubscriptionsPaymentMethodSwitches(On, On, On),
+    SubscriptionsSwitches(On, On, On),
+    FeatureSwitches(On, On),
+    CampaignSwitches(On, On),
+    RecaptchaSwitches(On, On),
+  )
+  val ddOffSwitches = Switches(
+    OneOffPaymentMethodSwitches(On, On, On, On, On),
+    RecurringPaymentMethodSwitches(On, On, On, On, Off, On, On, On, On),
+    SubscriptionsPaymentMethodSwitches(On, On, On),
+    SubscriptionsSwitches(On, On, On),
+    FeatureSwitches(On, On),
+    CampaignSwitches(On, On),
+    RecaptchaSwitches(On, On),
+  )
   val monthlyDirectUSDProduct = DigitalPack(Currency.USD, Monthly)
   val validDigitalPackRequest = CreateSupportWorkersRequest(
     title = None,
