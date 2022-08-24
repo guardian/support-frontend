@@ -319,6 +319,48 @@ Resources:
                   - states:StartExecution
                 Resource: !Ref SupporterProductData
 
+  SupporterProductDataDeadLetterQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub dead-letters-direct-mail-${Stage}
+      Tags:
+        - Key: Stage
+          Value: !Ref Stage
+  SupporterProductDataQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: !Sub supporter-product-data-${Stage}
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - "SupporterProductDataDeadLetterQueue"
+            - "Arn"
+        maxReceiveCount: 10
+      Tags:
+        - Key: Stage
+          Value: !Ref Stage
+  UnprocessedSupporterProductDataRecordAlarm:
+    Type: 'AWS::CloudWatch::Alarm'
+    Condition: CreateProdResources
+    Properties:
+      AlarmName: !Sub 'There was a failure processing a supporter record in the supporter-product-data stepfunction - Dead letters queue is building up'
+      AlarmDescription: >
+        TODO
+      Namespace: AWS/SQS
+      Dimensions:
+        - Name: QueueName
+          Value: !Sub dead-letters-direct-mail-${Stage}
+      MetricName: ApproximateNumberOfMessagesVisible
+      Statistic: Average
+      ComparisonOperator: GreaterThanThreshold
+      Threshold: '1'
+      Period: '60'
+      EvaluationPeriods: '60'
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+    DependsOn:
+      - SupporterProductDataDeadLetterQueue
+
   SupporterProductDataAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
