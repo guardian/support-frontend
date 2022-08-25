@@ -3,6 +3,7 @@ import { TextInput } from '@guardian/source-react-components';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Signout from 'components/signout/signout';
+import SignoutTemp from 'components/signout/signoutTemp';
 import {
 	checkBillingState,
 	emailRegexPattern,
@@ -121,6 +122,7 @@ function ContributionFormFields({
 				/>
 			</div>
 
+			<SignoutTemp />
 			<Signout />
 
 			{contributionType !== 'ONE_OFF' ? (
