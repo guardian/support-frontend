@@ -193,7 +193,7 @@ describe('Guardian Weekly checkout form', () => {
 			it('does not show the PayPal option', () => {
 				expect(screen.queryByText('PayPal')).not.toBeInTheDocument();
 			});
-			it('does not show the direct debit card option', () => {
+			it('does not show the direct debit option', () => {
 				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
 			});
 		});
