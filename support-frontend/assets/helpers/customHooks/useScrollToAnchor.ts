@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export function useHashLink(): void {
+export function useScrollToAnchor(): void {
 	useEffect(() => {
 		requestAnimationFrame(() => {
 			if (window.location.hash) {

@@ -2,9 +2,9 @@ import { css, Global } from '@emotion/react';
 import { FocusStyleManager, resets } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
-import { useHashLink } from 'helpers/customHooks/useHashLink';
+import { useScrollToAnchor } from 'helpers/customHooks/useScrollToAnchor';
 
-type EmotionPageProps = {
+type PageScaffoldProps = {
 	id: string;
 	header?: ReactNode;
 	footer?: ReactNode;
@@ -13,8 +13,8 @@ type EmotionPageProps = {
 
 FocusStyleManager.onlyShowFocusOnTabs();
 
-export default function EmotionPage(props: EmotionPageProps): JSX.Element {
-	useHashLink();
+export function PageScaffold(props: PageScaffoldProps): JSX.Element {
+	useScrollToAnchor();
 
 	return (
 		<div id={props.id}>

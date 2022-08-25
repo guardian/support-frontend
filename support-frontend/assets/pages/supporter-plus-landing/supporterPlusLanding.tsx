@@ -1,5 +1,5 @@
-import EmotionPage from 'components/page/emotionPage';
+import { PageScaffold } from 'components/page/pageScaffold';
 
 export function SupporterPlusLandingPage(): JSX.Element {
-	return <EmotionPage id="supporter-plus-landing">hello</EmotionPage>;
+	return <PageScaffold id="supporter-plus-landing">hello</PageScaffold>;
 }
