@@ -13,7 +13,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 
 export default {
-	title: 'SFD/Nav',
+	title: 'Checkout Layout/Nav',
 	component: NavComponent,
 	argTypes: {
 		countryGroup: {
