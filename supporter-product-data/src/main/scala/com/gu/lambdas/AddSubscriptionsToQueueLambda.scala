@@ -1,7 +1,7 @@
 package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.lambdas.AddSubscriptionsToQueueLambda.writeToDynamo
+import com.gu.lambdas.AddSubscriptionsToQueueLambda.addToQueue
 import com.gu.model.StageConstructors
 import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
 import com.gu.model.states.AddSubscriptionsToQueueState
@@ -28,7 +28,7 @@ class ContextTimeOutCheck(context: Context) extends TimeOutCheck {
 
 class AddSubscriptionsToQueueLambda extends Handler[AddSubscriptionsToQueueState, AddSubscriptionsToQueueState] {
   override protected def handlerFuture(input: AddSubscriptionsToQueueState, context: Context) = {
-    writeToDynamo(StageConstructors.fromEnvironment, input, new ContextTimeOutCheck(context))
+    addToQueue(StageConstructors.fromEnvironment, input, new ContextTimeOutCheck(context))
   }
 }
 
@@ -36,12 +36,12 @@ object AddSubscriptionsToQueueLambda extends StrictLogging {
   val maxBatchSize = 5
   val timeoutBufferInMillis = maxBatchSize * 5 * 1000
 
-  def writeToDynamo(
+  def addToQueue(
       stage: Stage,
       state: AddSubscriptionsToQueueState,
       timeOutCheck: TimeOutCheck,
   ): Future[AddSubscriptionsToQueueState] = {
-    logger.info(s"Starting write to dynamo task for ${state.recordCount} records from ${state.filename}")
+    logger.info(s"Starting to add subscriptions to queue for ${state.recordCount} records from ${state.filename}")
 
     val s3Object = S3Service.streamFromS3(stage, state.filename)
     val csvReader = s3Object.getObjectContent.asCsvReader[SupporterRatePlanItem](rfc.withHeader)

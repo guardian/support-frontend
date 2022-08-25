@@ -43,6 +43,8 @@ class SqsService(queueName: String)(implicit val executionContext: ExecutionCont
 object SqsService {
   import scala.concurrent.ExecutionContext.Implicits.global
   def apply(stage: Stage) = {
-    new SqsService(s"supporter-product-data-${stage}")
+    val queueName = s"supporter-product-data-${stage.value}"
+    SafeLogger.info(s"Creating SqsService for SQS queue $queueName")
+    new SqsService(queueName)
   }
 }

@@ -122,9 +122,11 @@ Resources:
             Statement:
             - Effect: Allow
               Action:
+                - sqs:GetQueueUrl
+                - sqs:GetQueueAttributes
+                - sqs:SendMessage
                 - sqs:ReceiveMessage
                 - sqs:DeleteMessage
-                - sqs:GetQueueAttributes
               Resource: '*' #TODO, restrict this
 
   QueryZuoraLambda:
