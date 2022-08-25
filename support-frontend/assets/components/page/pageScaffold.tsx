@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { useScrollToAnchor } from 'helpers/customHooks/useScrollToAnchor';
 
-type PageScaffoldProps = {
+export type PageScaffoldProps = {
 	id: string;
 	header?: ReactNode;
 	footer?: ReactNode;
