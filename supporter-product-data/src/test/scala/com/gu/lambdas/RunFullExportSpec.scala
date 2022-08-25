@@ -4,7 +4,7 @@ import com.gu.lambdas.FetchResultsLambda.getValueOrThrow
 import com.gu.lambdas.RunFullExportSpec.sleep
 import com.gu.supporterdata.model.Stage._
 import com.gu.model.states.QueryType._
-import com.gu.model.states.UpdateDynamoState
+import com.gu.model.states.AddSubscriptionsToQueueState
 import com.gu.model.zuora.response.BatchQueryResponse
 import com.gu.model.zuora.response.JobStatus.Completed
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
@@ -34,14 +34,18 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       LocalDateTime.parse("2021-03-15T16:27:02.429").atZone(ZoneId.of("America/Los_Angeles")).minusMinutes(1)
     for {
       fetchResultsState <- QueryZuoraLambda.queryZuora(stage, queryType)
-      updateDynamoState <- fetchResults(stage, fetchResultsState.jobId, fetchResultsState.attemptedQueryTime)
+      addSubscriptionsToQueueState <- fetchResults(stage, fetchResultsState.jobId, fetchResultsState.attemptedQueryTime)
       _ <-
         if (updateLastSuccessfulQueryTime) ConfigService(stage).putLastSuccessfulQueryTime(attemptedQueryTime)
         else Future.successful(())
-    } yield updateDynamoState.filename should endWith(".csv")
+    } yield addSubscriptionsToQueueState.filename should endWith(".csv")
   }
 
-  def fetchResults(stage: Stage, jobId: String, attemptedQueryTime: ZonedDateTime): Future[UpdateDynamoState] = {
+  def fetchResults(
+      stage: Stage,
+      jobId: String,
+      attemptedQueryTime: ZonedDateTime,
+  ): Future[AddSubscriptionsToQueueState] = {
     logger.info(s"Attempting to fetch results for jobId $jobId")
     sleep(20 * 1000)
     for {
@@ -74,7 +78,7 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       _ = if (sanitizeFieldNamesAfterDownload) sanitizeFieldNames(filePath.toString)
     } yield {
       logger.info(s"Successfully wrote file $filePath with ${batch.recordCount} records")
-      UpdateDynamoState(
+      AddSubscriptionsToQueueState(
         filePath.toString,
         batch.recordCount,
         processedCount = 0,

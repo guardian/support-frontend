@@ -3,7 +3,7 @@ package com.gu.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.lambdas.FetchResultsLambda.fetchResults
 import com.gu.model.StageConstructors
-import com.gu.model.states.{FetchResultsState, UpdateDynamoState}
+import com.gu.model.states.{FetchResultsState, AddSubscriptionsToQueueState}
 import com.gu.model.zuora.response.JobStatus.Completed
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{ConfigService, S3Service, ZuoraQuerierService}
@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 
-class FetchResultsLambda extends Handler[FetchResultsState, UpdateDynamoState] {
+class FetchResultsLambda extends Handler[FetchResultsState, AddSubscriptionsToQueueState] {
   override protected def handlerFuture(input: FetchResultsState, context: Context) =
     fetchResults(StageConstructors.fromEnvironment, input.jobId, input.attemptedQueryTime)
 }
@@ -45,7 +45,7 @@ object FetchResultsLambda extends StrictLogging {
       if (batch.recordCount == 0)
         ConfigService(stage).putLastSuccessfulQueryTime(attemptedQueryTime)
 
-      UpdateDynamoState(
+      AddSubscriptionsToQueueState(
         filename,
         batch.recordCount,
         processedCount = 0,

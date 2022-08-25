@@ -163,13 +163,13 @@ Resources:
         Variables:
           'Stage': !Sub ${Stage}
 
-  UpdateDynamoLambda:
+  AddSubscriptionsToQueueLambda:
     Type: "AWS::Lambda::Function"
     Properties:
       FunctionName:
-        !Sub support-SupporterProductDataUpdateDynamo-${Stage}
+        !Sub support-SupporterProductDataAddSubscriptionsToQueue-${Stage}
       Description: "Update DynamoDB with the results of the Zuora query"
-      Handler: "com.gu.lambdas.UpdateDynamoLambda::handleRequest"
+      Handler: "com.gu.lambdas.AddSubscriptionsToQueueLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
       Code:
         S3Bucket: supporter-product-data-dist
@@ -267,13 +267,13 @@ Resources:
                       "Next": "NoNewSubscriptions"
                   }
                 ],
-                "Default": "UpdateDynamo"
+                "Default": "AddSubscriptionsToQueue"
               },
               "NoNewSubscriptions": {
                 "Type": "Pass",
                 "End": true
               },
-              "UpdateDynamo": {
+              "AddSubscriptionsToQueue": {
                 "Type": "Task",
                 "Resource": "${dynamoArn}",
                 "Next": "CheckProcessingComplete",
@@ -291,7 +291,7 @@ Resources:
                   {
                       "Variable": "$.recordCount",
                       "NumericGreaterThanPath": "$.processedCount",
-                      "Next": "UpdateDynamo"
+                      "Next": "AddSubscriptionsToQueue"
                   }
                 ],
                 "Default": "ProcessingComplete"
@@ -305,7 +305,7 @@ Resources:
         - {
           querierArn: !GetAtt [ QueryZuoraLambda, Arn ],
           fetcherArn: !GetAtt [ FetchResultsLambda, Arn ],
-          dynamoArn: !GetAtt [ UpdateDynamoLambda, Arn ]
+          dynamoArn: !GetAtt [ AddSubscriptionsToQueueLambda, Arn ]
         }
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
 

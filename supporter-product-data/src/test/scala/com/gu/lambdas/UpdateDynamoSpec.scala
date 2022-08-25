@@ -8,14 +8,14 @@ import org.scalatest.matchers.should.Matchers
 import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
 import com.gu.supporterdata.model.SupporterRatePlanItem
 
-class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
+class AddSubscriptionsToQueueSpec extends AsyncFlatSpec with Matchers {
 
   "getUnprocessedItems" should "return the correct items" in {
     val results = Fixtures.loadQueryResults
 
     val csvReader = results.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
 
-    UpdateDynamoLambda.getUnprocessedItems(csvReader, 2).length shouldBe 8
+    AddSubscriptionsToQueueLambda.getUnprocessedItems(csvReader, 2).length shouldBe 8
   }
 
   "batchItemsWhichCanUpdateConcurrently" should "return the correct items" in {
@@ -23,7 +23,7 @@ class UpdateDynamoSpec extends AsyncFlatSpec with Matchers {
     val csvReader = results.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
     val items = csvReader.zipWithIndex.toList.collect { case (Right(item), index) => (item, index) }
 
-    val batchedItems = UpdateDynamoLambda.batchItemsWhichCanUpdateConcurrently(items)
+    val batchedItems = AddSubscriptionsToQueueLambda.batchItemsWhichCanUpdateConcurrently(items)
 
     // The test rows should batch up into 3 separate lists - there are two rows which are not
     // suitable to run concurrently because they belong to the same subscription at index 6 & 7

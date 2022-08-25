@@ -17,7 +17,7 @@ deployments:
       functionNames:
         - "-SupporterProductDataQueryZuora-"
         - "-SupporterProductDataFetchResults-"
-        - "-SupporterProductDataUpdateDynamo-"
+        - "-SupporterProductDataAddSubscriptionsToQueue-"
         - "-SupporterProductDataProcessSubscription-"
       fileName: supporter-product-data.jar
     dependencies: [cfn]

@@ -1,11 +1,11 @@
 package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.lambdas.UpdateDynamoLambda.writeToDynamo
+import com.gu.lambdas.AddSubscriptionsToQueueLambda.writeToDynamo
 import com.gu.model.StageConstructors
 import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
-import com.gu.model.states.UpdateDynamoState
-import com.gu.services.{AlarmService, ConfigService, S3Service}
+import com.gu.model.states.AddSubscriptionsToQueueState
+import com.gu.services.{AlarmService, ConfigService, S3Service, SqsService}
 import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.typesafe.scalalogging.StrictLogging
@@ -26,22 +26,26 @@ class ContextTimeOutCheck(context: Context) extends TimeOutCheck {
   override def timeRemainingMillis = context.getRemainingTimeInMillis
 }
 
-class UpdateDynamoLambda extends Handler[UpdateDynamoState, UpdateDynamoState] {
-  override protected def handlerFuture(input: UpdateDynamoState, context: Context) = {
+class AddSubscriptionsToQueueLambda extends Handler[AddSubscriptionsToQueueState, AddSubscriptionsToQueueState] {
+  override protected def handlerFuture(input: AddSubscriptionsToQueueState, context: Context) = {
     writeToDynamo(StageConstructors.fromEnvironment, input, new ContextTimeOutCheck(context))
   }
 }
 
-object UpdateDynamoLambda extends StrictLogging {
+object AddSubscriptionsToQueueLambda extends StrictLogging {
   val maxBatchSize = 5
   val timeoutBufferInMillis = maxBatchSize * 5 * 1000
 
-  def writeToDynamo(stage: Stage, state: UpdateDynamoState, timeOutCheck: TimeOutCheck): Future[UpdateDynamoState] = {
+  def writeToDynamo(
+      stage: Stage,
+      state: AddSubscriptionsToQueueState,
+      timeOutCheck: TimeOutCheck,
+  ): Future[AddSubscriptionsToQueueState] = {
     logger.info(s"Starting write to dynamo task for ${state.recordCount} records from ${state.filename}")
 
     val s3Object = S3Service.streamFromS3(stage, state.filename)
     val csvReader = s3Object.getObjectContent.asCsvReader[SupporterRatePlanItem](rfc.withHeader)
-    val dynamoDBService = SupporterDataDynamoService(stage)
+    val sqsService = SqsService(stage)
     val alarmService = AlarmService(stage)
 
     val unProcessed = getUnprocessedItems(csvReader, state.processedCount)
@@ -66,8 +70,7 @@ object UpdateDynamoLambda extends StrictLogging {
       state.processedCount,
       batches,
       timeOutCheck,
-      dynamoDBService,
-      alarmService,
+      sqsService,
     )
 
     val maybeSaveSuccessTime =
@@ -85,8 +88,7 @@ object UpdateDynamoLambda extends StrictLogging {
       processedCount: Int,
       batches: List[List[(SupporterRatePlanItem, Int)]],
       timeOutCheck: TimeOutCheck,
-      dynamoDBService: SupporterDataDynamoService,
-      alarmService: AlarmService,
+      sqsService: SqsService,
   ): Int =
     batches.foldLeft(processedCount) { (processedCount, batch) =>
       if (timeOutCheck.timeRemainingMillis < timeoutBufferInMillis) {
@@ -99,7 +101,7 @@ object UpdateDynamoLambda extends StrictLogging {
         s"Continuing processing with batch of ${batch.length} - time remaining: ${timeOutCheck.timeRemainingMillis / 1000} seconds, buffer: ${timeoutBufferInMillis / 1000} seconds",
       )
 
-      Await.result(writeBatch(batch, dynamoDBService, alarmService), 120.seconds)
+      Await.result(writeBatch(batch, sqsService), 120.seconds)
 
       val (_, highestProcessedIndex) = batch.last
       val newProcessedCount = highestProcessedIndex + 1
@@ -109,14 +111,13 @@ object UpdateDynamoLambda extends StrictLogging {
 
   def writeBatch(
       list: List[(SupporterRatePlanItem, Int)],
-      dynamoDBService: SupporterDataDynamoService,
-      alarmService: AlarmService,
+      sqsService: SqsService,
   ) = {
     val futures = list.map { case (supporterRatePlanItem, index) =>
       logger.info(
-        s"Attempting to write item index $index - ${supporterRatePlanItem.productRatePlanName} to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}",
+        s"Attempting to add item index $index - ${supporterRatePlanItem.productRatePlanName} to queue - ${supporterRatePlanItem.asJson.noSpaces}",
       )
-      dynamoDBService.writeItem(supporterRatePlanItem)
+      sqsService.send(supporterRatePlanItem)
     }
     Future.sequence(futures)
   }
