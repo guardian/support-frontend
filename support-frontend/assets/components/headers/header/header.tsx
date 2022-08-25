@@ -5,7 +5,7 @@ import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import Links from '../links/links';
-import LinksWrapper from '../links/linksWrapper';
+//import LinksWrapper from '../links/linksWrapper';
 import MobileMenuToggler from './mobileMenuToggler';
 import Padlock from './padlock.svg';
 import './header.scss';
@@ -174,7 +174,7 @@ export default class Header extends Component<PropTypes, State> {
 					</div>
 					{display === 'navigation' && (
 						<div className="component-header__row">
-							<LinksWrapper />
+							{/* <LinksWrapper /> */}
 							<Links
 								countryGroupId={countryGroupId}
 								location="desktop"

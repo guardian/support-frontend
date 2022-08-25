@@ -6,6 +6,8 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import Links from './links';
 
+// menuRef: Element | null | undefined;
+
 // ----- Types ----- //
 
 type PropTypes = {
@@ -18,10 +20,14 @@ type PropTypes = {
 function LinksWrapper(props: PropTypes) {
 	console.log('LinksWrapper:abVariant', props);
 	return (
+		// <a className="component-signout"> {props.abVariant.newProduct}</a>
 		<Links
 			location={'desktop'}
 			countryGroupId={props.countryGroupId}
 			hideDigital={props.abVariant.newProduct === 'variant'}
+			// getRef={(el) => {
+			// 	this.menuRef = el;
+			// }}
 		/>
 	);
 }
