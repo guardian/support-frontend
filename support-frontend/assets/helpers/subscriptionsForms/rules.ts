@@ -67,10 +67,6 @@ function applyPersonalDetailsRules(
 			error: formError('email', 'Please enter a valid email address.'),
 		},
 		{
-			rule: notLongerThan(fields.email, 40),
-			error: formError('email', 'Email address is too long.'),
-		},
-		{
 			rule: emailAddressesMatch(
 				fields.isSignedIn,
 				fields.email,
