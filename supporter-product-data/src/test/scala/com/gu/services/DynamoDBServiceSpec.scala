@@ -19,10 +19,11 @@ class DynamoDBServiceSpec extends AsyncFlatSpec with Matchers {
       identityId = "999999",
       gifteeIdentityId = None,
       subscriptionName = "test-sub-name",
-      productRatePlanId = "2c92a0fb4edd70c8014edeaa4e972204",
-      productRatePlanName = "Digital Pack Annual",
-      termEndDate = LocalDate.parse("2021-03-20"),
+      productRatePlanId = "2c92c0f85a6b134e015a7fcd9f0c7855",
+      productRatePlanName = "Monthly Contribution",
+      termEndDate = LocalDate.now().plusDays(1),
       contractEffectiveDate = LocalDate.parse("2020-03-20"),
+      contributionAmount = Some(20),
     )
     service
       .writeItem(item)

@@ -65,6 +65,7 @@ abstract class DynamoProcessor(
           "Guardian Patron",
           sub.currentPeriodEnd,
           sub.created,
+          None,
         ),
       )
   }

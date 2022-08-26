@@ -76,6 +76,7 @@ object UpdateSupporterProductData {
               identityId = user.id,
               productRatePlanId = productRatePlan.id,
               productRatePlanName = s"support-workers added ${product.describe}",
+              Some(product.amount),
             ),
           )
           .toRight(())
@@ -160,6 +161,7 @@ object UpdateSupporterProductData {
       identityId: String,
       productRatePlanId: String,
       productRatePlanName: String,
+      contributionAmount: Option[BigDecimal] = None,
   ) =
     SupporterRatePlanItem(
       subscriptionName = subscriptionName,
@@ -169,5 +171,6 @@ object UpdateSupporterProductData {
       productRatePlanName = productRatePlanName,
       termEndDate = LocalDate.now.plusWeeks(1),
       contractEffectiveDate = LocalDate.now,
+      contributionAmount,
     )
 }
