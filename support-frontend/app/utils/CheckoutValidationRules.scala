@@ -1,6 +1,6 @@
 package utils
 
-import admin.settings.{RecurringPaymentMethodSwitches, Switches}
+import admin.settings.{RecurringPaymentMethodSwitches, SubscriptionsPaymentMethodSwitches, Switches}
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
@@ -31,6 +31,17 @@ object CheckoutValidationRules {
   }
   case class Invalid(message: String) extends Result
   case object Valid extends Result
+  def checkSubscriptionPaymentMethodEnabled(
+      switches: SubscriptionsPaymentMethodSwitches,
+      paymentFields: Either[PaymentFields, RedemptionData],
+  ) = paymentFields match {
+    case Left(_: PayPalPaymentFields) =>
+      if (switches.paypal.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_: DirectDebitPaymentFields) =>
+      if (switches.directDebit.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_: StripePaymentMethodPaymentFields) =>
+      if (switches.creditCard.isOn) Valid else Invalid("Invalid Payment Method")
+  }
 
   def checkContributionPaymentMethodEnabled(
       switches: RecurringPaymentMethodSwitches,
@@ -66,14 +77,18 @@ object CheckoutValidationRules {
       paymentFields: Either[PaymentFields, RedemptionData],
       switches: Switches,
   ) =
-    (product match {
+    product match {
       case _: Contribution =>
         checkContributionPaymentMethodEnabled(
           switches.recurringPaymentMethods,
           paymentFields,
         )
       case _ =>
-    })
+        checkSubscriptionPaymentMethodEnabled(
+          switches.subscriptionsPaymentMethods,
+          paymentFields,
+        )
+    }
 
   def validate(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
     (createSupportWorkersRequest.product match {

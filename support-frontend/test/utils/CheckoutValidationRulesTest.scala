@@ -34,11 +34,11 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(DirectDebitPaymentFields("Testuser", "", "", "")),
-      switches = TestData.ddOffSwitches,
+      switches = TestData.paymentSwitchesOffState("ddOffSwitches"),
     ) shouldBe Invalid("Invalid Payment Method")
   }
 
-  it should "return Invalid if a user tries to pay with Apple Pay but the switch in RRCP is off" in {
+  it should "return Invalid if a user tries to pay with Apple Pay but the  Apple Pay switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(
@@ -47,9 +47,232 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripePaymentType = Some(StripePaymentType.StripeApplePay),
         ),
       ),
-      switches = TestData.applePayOffSwitches,
+      switches = TestData.paymentSwitchesOffState("applePayOffSwitches"),
     ) shouldBe Invalid("Invalid Payment Method")
   }
+  it should "return Invalid if a user tries to pay with Sepa but the Sepa switch in RRCP is off" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(SepaPaymentFields("", "", Some(""), Some(""))),
+      switches = TestData.paymentSwitchesOffState("sepaOffSwitches"),
+    ) shouldBe Invalid("Invalid Payment Method")
+  }
+
+  it should "return Invalid if a user tries to pay with PayPal but the Pay Pal switch in RRCP is off" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(PayPalPaymentFields("")),
+      switches = TestData.paymentSwitchesOffState("payPalOffSwitches"),
+    ) shouldBe Invalid("Invalid Payment Method")
+  }
+  it should "return Invalid if a user tries to pay with Stripe  but the switch  in RRCP is off" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(
+        StripeSourcePaymentFields("testStripeToken", stripePaymentType = None),
+      ),
+      switches = TestData.paymentSwitchesOffState("stripeOffSwitches"),
+    ) shouldBe Invalid("Invalid Payment Method")
+  }
+  it should "return Invalid if a user tries to pay with Stripe Payment Request Button but the switch  in RRCP is off" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(
+        StripePaymentMethodPaymentFields(
+          paymentMethod = PaymentMethodId("testId").get,
+          stripePaymentType = Some(StripePaymentType.StripePaymentRequestButton),
+        ),
+      ),
+      switches = TestData.paymentSwitchesOffState("stripePaymentRequestButtonOffSwitches"),
+    ) shouldBe Invalid("Invalid Payment Method")
+  }
+  it should "return Invalid if a user tries to pay with Stripe Checkout but the switch  in RRCP is off" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(
+        StripePaymentMethodPaymentFields(
+          paymentMethod = PaymentMethodId("testId").get,
+          stripePaymentType = Some(StripePaymentType.StripeCheckout),
+        ),
+      ),
+      switches = TestData.paymentSwitchesOffState(
+        "stripeCheckoutOffSwitches",
+      ),
+    ) shouldBe Invalid("Invalid Payment Method")
+  }
+  it should "return Invalid if a user tries to pay with Amazon Pay but the Amazon Pay switch in RRCP is off" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(AmazonPayPaymentFields("")),
+      switches = TestData.paymentSwitchesOffState("amazonPayOffSwitches"),
+    ) shouldBe Invalid("Invalid Payment Method")
+  }
+  it should "return Valid if a user tries to pay with Existing Direct Debit or Card while the switch in RRCP is off" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(ExistingPaymentFields("")),
+      switches = TestData.paymentSwitchesOffState("existingDirectDebitOrCardOffSwitches"),
+    ) shouldBe Valid
+  }
+  it should "return Invalid if a user tries to pay with Pay Pal but the Pay Pal switch in RRCP is off for Subscription Payment " in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = SupporterPlus(0, GBP, Monthly),
+      paymentFields = Left(PayPalPaymentFields("")),
+      switches = TestData.paymentSwitchesOffState("payPalSubscriptionPaymentOffSwitches"),
+    ) shouldBe Invalid("Invalid Payment Method")
+  }
+  it should "return Invalid if a user tries to pay with Direct Debit but the Direct Debit switch in RRCP is off for Subscription Payment " in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = DigitalPack(
+        GBP,
+        Monthly,
+        Direct,
+        Some(0),
+      ),
+      paymentFields = Left(DirectDebitPaymentFields("", "", "", "")),
+      switches = TestData.paymentSwitchesOffState("directDebitSubscriptionPaymentOffSwitches"),
+    ) shouldBe Invalid("Invalid Payment Method")
+  }
+
+  it should "return Invalid if a user tries to pay with Credit card(Stripe) but the  switch in RRCP is off for Subscription Payment " in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = DigitalPack(
+        GBP,
+        Monthly,
+        Direct,
+        Some(0),
+      ),
+      paymentFields = Left(
+        StripePaymentMethodPaymentFields(
+          paymentMethod = PaymentMethodId("testId").get,
+          stripePaymentType = Some(StripePaymentType.StripeCheckout),
+        ),
+      ),
+      switches = TestData.paymentSwitchesOffState("creditCardSubscriptionPaymentOffSwitches"),
+    ) shouldBe Invalid("Invalid Payment Method")
+  }
+
+  // Below are the test case for 'ON' state of  payment switches
+  it should "return Valid if a user tries to pay with direct debit while the Direct debit switch in RRCP is on" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(DirectDebitPaymentFields("Testuser", "", "", "")),
+      switches = TestData.paymentSwitchesOnState,
+    ) shouldBe Valid
+  }
+
+  it should "return Valid if a user tries to pay with Apple Pay while the  Apple Pay switch in RRCP is on" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(
+        StripePaymentMethodPaymentFields(
+          paymentMethod = PaymentMethodId("testId").get,
+          stripePaymentType = Some(StripePaymentType.StripeApplePay),
+        ),
+      ),
+      switches = TestData.paymentSwitchesOnState,
+    ) shouldBe Valid
+  }
+  it should "return Valid if a user tries to pay with Sepa while the Sepa switch in RRCP is on" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(SepaPaymentFields("", "", Some(""), Some(""))),
+      switches = TestData.paymentSwitchesOnState,
+    ) shouldBe Valid
+  }
+
+  it should "return Valid if a user tries to pay with PayPal while the Pay Pal switch in RRCP is on" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(PayPalPaymentFields("")),
+      switches = TestData.paymentSwitchesOnState,
+    ) shouldBe Valid
+  }
+  it should "return Valid if a user tries to pay with Stripe  while the switch  in RRCP is on" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(
+        StripeSourcePaymentFields("testStripeToken", stripePaymentType = None),
+      ),
+      switches = TestData.paymentSwitchesOnState,
+    ) shouldBe Valid
+  }
+  it should "return Valid if a user tries to pay with Stripe Payment Request Button while the switch  in RRCP is on" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(
+        StripePaymentMethodPaymentFields(
+          paymentMethod = PaymentMethodId("testId").get,
+          stripePaymentType = Some(StripePaymentType.StripePaymentRequestButton),
+        ),
+      ),
+      switches = TestData.paymentSwitchesOnState,
+    ) shouldBe Valid
+  }
+  it should "return Valid if a user tries to pay with Stripe Checkout while the switch  in RRCP is on" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(
+        StripePaymentMethodPaymentFields(
+          paymentMethod = PaymentMethodId("testId").get,
+          stripePaymentType = Some(StripePaymentType.StripeCheckout),
+        ),
+      ),
+      switches = TestData.paymentSwitchesOnState,
+    ) shouldBe Valid
+  }
+  it should "return Valid if a user tries to pay with Amazon Pay while the Amazon Pay switch in RRCP is on" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(AmazonPayPaymentFields("")),
+      switches = TestData.paymentSwitchesOnState,
+    ) shouldBe Valid
+  }
+  it should "return Valid if a user tries to pay with Existing Direct Debit or Card while the switch in RRCP is on" in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = Contribution(0, GBP, Monthly),
+      paymentFields = Left(ExistingPaymentFields("")),
+      switches = TestData.paymentSwitchesOnState,
+    ) shouldBe Valid
+  }
+  it should "return Valid if a user tries to pay with Pay Pal while the Pay Pal switch in RRCP is on for Subscription Payment " in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = SupporterPlus(0, GBP, Monthly),
+      paymentFields = Left(PayPalPaymentFields("")),
+      switches = TestData.paymentSwitchesOnState,
+    ) shouldBe Valid
+  }
+  it should "return Valid if a user tries to pay with Direct Debit while the Direct Debit switch in RRCP is on for Subscription Payment " in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = DigitalPack(
+        GBP,
+        Monthly,
+        Direct,
+        Some(0),
+      ),
+      paymentFields = Left(DirectDebitPaymentFields("", "", "", "")),
+      switches = TestData.paymentSwitchesOnState,
+    ) shouldBe Valid
+  }
+
+  it should "return Valid if a user tries to pay with Credit card(Stripe) but while the  switch in RRCP is on for Subscription Payment " in {
+    CheckoutValidationRules.checkPaymentMethodEnabled(
+      product = DigitalPack(
+        GBP,
+        Monthly,
+        Direct,
+        Some(0),
+      ),
+      paymentFields = Left(
+        StripePaymentMethodPaymentFields(
+          paymentMethod = PaymentMethodId("testId").get,
+          stripePaymentType = Some(StripePaymentType.StripeCheckout),
+        ),
+      ),
+      switches = TestData.paymentSwitchesOnState,
+    ) shouldBe Valid
+  }
+
 }
 class SimpleCheckoutFormValidationTest extends AnyFlatSpec with Matchers {
 
@@ -353,24 +576,140 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
 
 object TestData {
 
-  val applePayOffSwitches = Switches(
+  val paymentSwitchesOnState: Switches = Switches(
     OneOffPaymentMethodSwitches(On, On, On, On, On),
-    RecurringPaymentMethodSwitches(On, Off, On, On, Off, On, On, On, On),
+    RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
     SubscriptionsPaymentMethodSwitches(On, On, On),
     SubscriptionsSwitches(On, On, On),
     FeatureSwitches(On, On),
     CampaignSwitches(On, On),
     RecaptchaSwitches(On, On),
   )
-  val ddOffSwitches = Switches(
-    OneOffPaymentMethodSwitches(On, On, On, On, On),
-    RecurringPaymentMethodSwitches(On, On, On, On, Off, On, On, On, On),
-    SubscriptionsPaymentMethodSwitches(On, On, On),
-    SubscriptionsSwitches(On, On, On),
-    FeatureSwitches(On, On),
-    CampaignSwitches(On, On),
-    RecaptchaSwitches(On, On),
-  )
+  def paymentSwitchesOffState(
+      switchIsOff: String,
+  ): Switches = switchIsOff match {
+    case "creditCardSubscriptionPaymentOffSwitches" =>
+      Switches(
+        OneOffPaymentMethodSwitches(On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, Off, On),
+        SubscriptionsSwitches(On, On, On),
+        FeatureSwitches(On, On),
+        CampaignSwitches(On, On),
+        RecaptchaSwitches(On, On),
+      )
+    case "directDebitSubscriptionPaymentOffSwitches" =>
+      Switches(
+        OneOffPaymentMethodSwitches(On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(Off, On, On),
+        SubscriptionsSwitches(On, On, On),
+        FeatureSwitches(On, On),
+        CampaignSwitches(On, On),
+        RecaptchaSwitches(On, On),
+      )
+    case "payPalSubscriptionPaymentOffSwitches" =>
+      Switches(
+        OneOffPaymentMethodSwitches(On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, Off),
+        SubscriptionsSwitches(On, On, On),
+        FeatureSwitches(On, On),
+        CampaignSwitches(On, On),
+        RecaptchaSwitches(On, On),
+      )
+    case "existingDirectDebitOrCardOffSwitches" =>
+      Switches(
+        OneOffPaymentMethodSwitches(On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, Off, Off, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+        SubscriptionsSwitches(On, On, On),
+        FeatureSwitches(On, On),
+        CampaignSwitches(On, On),
+        RecaptchaSwitches(On, On),
+      )
+    case "amazonPayOffSwitches" =>
+      Switches(
+        OneOffPaymentMethodSwitches(On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, Off, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+        SubscriptionsSwitches(On, On, On),
+        FeatureSwitches(On, On),
+        CampaignSwitches(On, On),
+        RecaptchaSwitches(On, On),
+      )
+    case "stripeCheckoutOffSwitches" =>
+      Switches(
+        OneOffPaymentMethodSwitches(On, On, On, On, On),
+        RecurringPaymentMethodSwitches(Off, On, On, On, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+        SubscriptionsSwitches(On, On, On),
+        FeatureSwitches(On, On),
+        CampaignSwitches(On, On),
+        RecaptchaSwitches(On, On),
+      )
+    case "stripePaymentRequestButtonOffSwitches" =>
+      Switches(
+        OneOffPaymentMethodSwitches(On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, Off, On, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+        SubscriptionsSwitches(On, On, On),
+        FeatureSwitches(On, On),
+        CampaignSwitches(On, On),
+        RecaptchaSwitches(On, On),
+      )
+    case "stripeOffSwitches" =>
+      Switches(
+        OneOffPaymentMethodSwitches(On, On, On, On, On),
+        RecurringPaymentMethodSwitches(Off, On, On, On, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+        SubscriptionsSwitches(On, On, On),
+        FeatureSwitches(On, On),
+        CampaignSwitches(On, On),
+        RecaptchaSwitches(On, On),
+      )
+    case "payPalOffSwitches" =>
+      Switches(
+        OneOffPaymentMethodSwitches(On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, Off, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+        SubscriptionsSwitches(On, On, On),
+        FeatureSwitches(On, On),
+        CampaignSwitches(On, On),
+        RecaptchaSwitches(On, On),
+      )
+
+    case "sepaOffSwitches" =>
+      Switches(
+        OneOffPaymentMethodSwitches(On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, Off),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+        SubscriptionsSwitches(On, On, On),
+        FeatureSwitches(On, On),
+        CampaignSwitches(On, On),
+        RecaptchaSwitches(On, On),
+      )
+    case "applePayOffSwitches" =>
+      Switches(
+        OneOffPaymentMethodSwitches(On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, Off, On, On, Off, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+        SubscriptionsSwitches(On, On, On),
+        FeatureSwitches(On, On),
+        CampaignSwitches(On, On),
+        RecaptchaSwitches(On, On),
+      )
+    case "ddOffSwitches" =>
+      Switches(
+        OneOffPaymentMethodSwitches(On, On, On, On, On),
+        RecurringPaymentMethodSwitches(On, On, On, On, Off, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+        SubscriptionsSwitches(On, On, On),
+        FeatureSwitches(On, On),
+        CampaignSwitches(On, On),
+        RecaptchaSwitches(On, On),
+      )
+  }
   val monthlyDirectUSDProduct = DigitalPack(Currency.USD, Monthly)
   val validDigitalPackRequest = CreateSupportWorkersRequest(
     title = None,
