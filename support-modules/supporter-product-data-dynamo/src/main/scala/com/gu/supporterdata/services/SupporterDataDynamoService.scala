@@ -32,6 +32,7 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
     // Dynamo will delete expired subs at the start of the day, whereas the subscription actually lasts until the end of the day
     val expiryDate = item.termEndDate.plusDays(1)
     val expiryDateName = "expiryDate"
+    val contributionAmount = "contributionAmount"
 
     val key = Map(
       identityId -> AttributeValue.builder.s(beneficiaryIdentityId).build,
@@ -45,6 +46,7 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
           $termEndDate = :$termEndDate,
           $contractEffectiveDate = :$contractEffectiveDate,
           $expiryDateName = :$expiryDateName
+          $contributionAmount = :$contributionAmount
           """
     val attributeValues = Map(
       ":" + productRatePlanId -> AttributeValue.builder.s(item.productRatePlanId).build,
@@ -52,6 +54,7 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
       ":" + termEndDate -> AttributeValue.builder.s(asIso(item.termEndDate)).build,
       ":" + contractEffectiveDate -> AttributeValue.builder.s(asIso(item.contractEffectiveDate)).build,
       ":" + expiryDateName -> AttributeValue.builder.n(asEpochSecond(expiryDate)).build,
+      ":" + contributionAmount -> AttributeValue.builder.n(item.contributionAmount.map(_.toString).getOrElse("")).build,
     ).asJava
 
     val updateItemRequest = UpdateItemRequest.builder
