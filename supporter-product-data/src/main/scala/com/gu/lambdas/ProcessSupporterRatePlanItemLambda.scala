@@ -19,7 +19,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-class ProcessSubscriptionLambda extends Handler[SqsEvent, Unit] {
+class ProcessSupporterRatePlanItemLambda extends Handler[SqsEvent, Unit] {
   override protected def handlerFuture(input: SqsEvent, context: Context) = {
     val stage = StageConstructors.fromEnvironment
     val dynamoService = SupporterDataDynamoService(stage)
@@ -29,7 +29,7 @@ class ProcessSubscriptionLambda extends Handler[SqsEvent, Unit] {
       .sequence(input.Records.map { record =>
         val subscription = decode[SupporterRatePlanItem](record.body)
         subscription match {
-          case Right(item) => subscriptionProcessor.processSubscription(item)
+          case Right(item) => subscriptionProcessor.processSupporterRatePlanItem(item)
           case _ =>
             SafeLogger.warn(s"Couldn't decode a SupporterRatePlanItem with body: ${record.body}")
             Future.successful(()) // This should never happen so I don't think it's worth alerting on
@@ -42,7 +42,7 @@ class ProcessSubscriptionLambda extends Handler[SqsEvent, Unit] {
 
 class SubscriptionProcessor(dynamoService: SupporterDataDynamoService, alarmService: AlarmService)
     extends StrictLogging {
-  def processSubscription(supporterRatePlanItem: SupporterRatePlanItem) = {
+  def processSupporterRatePlanItem(supporterRatePlanItem: SupporterRatePlanItem) = {
     SafeLogger.info(s"Attempting to write item to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}")
     try {
       dynamoService.writeItem(supporterRatePlanItem).map { _ =>

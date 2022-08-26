@@ -5,14 +5,14 @@ import io.circe.{Decoder, Encoder}
 
 import java.time.ZonedDateTime
 
-case class AddSubscriptionsToQueueState(
+case class AddSupporterRatePlanItemToQueueState(
     filename: String,
     recordCount: Int,
     processedCount: Int,
     attemptedQueryTime: ZonedDateTime,
 )
 
-object AddSubscriptionsToQueueState {
-  implicit val encoder: Encoder[AddSubscriptionsToQueueState] = deriveEncoder
-  implicit val decoder: Decoder[AddSubscriptionsToQueueState] = deriveDecoder
+object AddSupporterRatePlanItemToQueueState {
+  implicit val encoder: Encoder[AddSupporterRatePlanItemToQueueState] = deriveEncoder
+  implicit val decoder: Decoder[AddSupporterRatePlanItemToQueueState] = deriveDecoder
 }

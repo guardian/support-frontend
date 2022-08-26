@@ -1,10 +1,10 @@
 package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.lambdas.AddSubscriptionsToQueueLambda.addToQueue
+import com.gu.lambdas.AddSupporterRatePlanItemToQueueLambda.addToQueue
 import com.gu.model.StageConstructors
 import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
-import com.gu.model.states.AddSubscriptionsToQueueState
+import com.gu.model.states.AddSupporterRatePlanItemToQueueState
 import com.gu.services.{AlarmService, ConfigService, S3Service, SqsService}
 import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
@@ -26,21 +26,22 @@ class ContextTimeOutCheck(context: Context) extends TimeOutCheck {
   override def timeRemainingMillis = context.getRemainingTimeInMillis
 }
 
-class AddSubscriptionsToQueueLambda extends Handler[AddSubscriptionsToQueueState, AddSubscriptionsToQueueState] {
-  override protected def handlerFuture(input: AddSubscriptionsToQueueState, context: Context) = {
+class AddSupporterRatePlanItemToQueueLambda
+    extends Handler[AddSupporterRatePlanItemToQueueState, AddSupporterRatePlanItemToQueueState] {
+  override protected def handlerFuture(input: AddSupporterRatePlanItemToQueueState, context: Context) = {
     addToQueue(StageConstructors.fromEnvironment, input, new ContextTimeOutCheck(context))
   }
 }
 
-object AddSubscriptionsToQueueLambda extends StrictLogging {
+object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
   val maxBatchSize = 5
   val timeoutBufferInMillis = maxBatchSize * 5 * 1000
 
   def addToQueue(
       stage: Stage,
-      state: AddSubscriptionsToQueueState,
+      state: AddSupporterRatePlanItemToQueueState,
       timeOutCheck: TimeOutCheck,
-  ): Future[AddSubscriptionsToQueueState] = {
+  ): Future[AddSupporterRatePlanItemToQueueState] = {
     logger.info(s"Starting to add subscriptions to queue for ${state.recordCount} records from ${state.filename}")
 
     val s3Object = S3Service.streamFromS3(stage, state.filename)

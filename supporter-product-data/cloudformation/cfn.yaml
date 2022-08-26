@@ -165,13 +165,13 @@ Resources:
         Variables:
           'Stage': !Sub ${Stage}
 
-  AddSubscriptionsToQueueLambda:
+  AddSupporterRatePlanItemToQueueLambda:
     Type: "AWS::Lambda::Function"
     Properties:
       FunctionName:
-        !Sub support-SupporterProductDataAddSubscriptionsToQueue-${Stage}
+        !Sub support-SupporterProductDataAddSupporterRatePlanItemToQueue-${Stage}
       Description: "Update DynamoDB with the results of the Zuora query"
-      Handler: "com.gu.lambdas.AddSubscriptionsToQueueLambda::handleRequest"
+      Handler: "com.gu.lambdas.AddSupporterRatePlanItemToQueueLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
       Code:
         S3Bucket: supporter-product-data-dist
@@ -183,13 +183,13 @@ Resources:
         Variables:
           'Stage': !Sub ${Stage}
 
-  ProcessSubscriptionLambda:
+  ProcessSupporterRatePlanItemLambda:
     Type: "AWS::Lambda::Function"
     Properties:
       FunctionName:
-        !Sub support-SupporterProductDataProcessSubscription-${Stage}
+        !Sub support-SupporterProductDataProcessSupporterRatePlanItem-${Stage}
       Description: "Process new subscriptions from the SQS queue"
-      Handler: "com.gu.lambdas.ProcessSubscriptionLambda::handleRequest"
+      Handler: "com.gu.lambdas.ProcessSupporterRatePlanItemLambda::handleRequest"
       Role: !GetAtt [ SupporterProductDataLambdaRole, Arn ]
       Code:
         S3Bucket: supporter-product-data-dist
@@ -269,13 +269,13 @@ Resources:
                       "Next": "NoNewSubscriptions"
                   }
                 ],
-                "Default": "AddSubscriptionsToQueue"
+                "Default": "AddSupporterRatePlanItemToQueue"
               },
               "NoNewSubscriptions": {
                 "Type": "Pass",
                 "End": true
               },
-              "AddSubscriptionsToQueue": {
+              "AddSupporterRatePlanItemToQueue": {
                 "Type": "Task",
                 "Resource": "${dynamoArn}",
                 "Next": "CheckProcessingComplete",
@@ -293,7 +293,7 @@ Resources:
                   {
                       "Variable": "$.recordCount",
                       "NumericGreaterThanPath": "$.processedCount",
-                      "Next": "AddSubscriptionsToQueue"
+                      "Next": "AddSupporterRatePlanItemToQueue"
                   }
                 ],
                 "Default": "ProcessingComplete"
@@ -307,7 +307,7 @@ Resources:
         - {
           querierArn: !GetAtt [ QueryZuoraLambda, Arn ],
           fetcherArn: !GetAtt [ FetchResultsLambda, Arn ],
-          dynamoArn: !GetAtt [ AddSubscriptionsToQueueLambda, Arn ]
+          dynamoArn: !GetAtt [ AddSupporterRatePlanItemToQueueLambda, Arn ]
         }
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
 
@@ -377,10 +377,10 @@ Resources:
       BatchSize: 1
       Enabled: true
       EventSourceArn: !GetAtt SupporterProductDataQueue.Arn
-      FunctionName: !Ref ProcessSubscriptionLambda
+      FunctionName: !Ref ProcessSupporterRatePlanItemLambda
     DependsOn:
       - SupporterProductDataQueue
-      - ProcessSubscriptionLambda
+      - ProcessSupporterRatePlanItemLambda
 
   UnprocessedSupporterProductDataRecordAlarm:
     Type: 'AWS::CloudWatch::Alarm'
