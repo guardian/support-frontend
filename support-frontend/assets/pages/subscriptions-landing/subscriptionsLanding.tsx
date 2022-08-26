@@ -25,7 +25,7 @@ function SubscriptionsLandingPage({
 	pricingCopy,
 	referrerAcquisitions,
 }: SubscriptionsLandingPropTypes) {
-	const hideDigital = participations.newProduct === 'variant' ? true : false;
+	const hideDigital = participations.newProduct === 'variant';
 	const Header = headerWithCountrySwitcherContainer({
 		path: '/subscribe',
 		countryGroupId,

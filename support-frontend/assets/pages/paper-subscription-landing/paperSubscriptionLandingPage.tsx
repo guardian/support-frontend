@@ -47,7 +47,7 @@ function PaperLandingPage({
 	promotionCopy,
 	participations,
 }: PaperLandingPropTypes) {
-	const hideDigital = participations.newProduct === 'variant' ? true : false;
+	const hideDigital = participations.newProduct === 'variant';
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
 		'delivery',
