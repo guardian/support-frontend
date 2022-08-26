@@ -166,7 +166,11 @@ export default class Header extends Component<PropTypes, State> {
 						{display === 'navigation' && (
 							<MobileMenuToggler
 								links={
-									<Links countryGroupId={countryGroupId} location="mobile" />
+									<Links
+										countryGroupId={countryGroupId}
+										location="mobile"
+										hideDigital={hideDigital}
+									/>
 								}
 								utility={utility}
 							/>
