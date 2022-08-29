@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "org.playframework.anorm" %% "anorm" % "2.6.10",
+  "org.playframework.anorm" %% "anorm" % "2.7.0",
   "org.scalatest" %% "scalatest" % "3.0.9" % "test",
   "org.scalatestplus" %% "mockito-3-4" % "3.2.1.0" % "test",
   "org.mockito" % "mockito-core" % "4.7.0",
