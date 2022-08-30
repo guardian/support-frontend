@@ -36,7 +36,6 @@ class SupporterPlusEmailFields(
     }
   }
 
-  //noinspection ScalaStyle
   def getPaymentFields(paymentMethod: PaymentMethod, accountNumber: String, created: DateTime)(implicit
                                                                                                ec: ExecutionContext,
   ): Future[Seq[(String, String)]] = {
