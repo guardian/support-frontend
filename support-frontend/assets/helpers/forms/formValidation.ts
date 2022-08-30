@@ -65,7 +65,7 @@ export const containsEmoji: (input: string | null) => boolean = (input) =>
 	/\p{Emoji_Presentation}/u.test(input ?? '');
 
 export const notLongerThan = (
-	value: string | null | undefined,
+	value: string | null,
 	maxLength: number,
 ): boolean => {
 	if (!value) return true;
