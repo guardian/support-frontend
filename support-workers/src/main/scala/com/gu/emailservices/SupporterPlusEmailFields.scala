@@ -1,12 +1,8 @@
 package com.gu.emailservices
 
 import com.gu.emailservices.SubscriptionEmailFieldHelpers.{formatDate, hyphenate, mask}
-import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.workers._
-import com.gu.support.workers.states.SendThankYouEmailState.{
-  SendThankYouEmailContributionState,
-  SendThankYouEmailSupporterPlusState,
-}
+import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailSupporterPlusState
 import org.joda.time.DateTime
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -25,21 +21,24 @@ class SupporterPlusEmailFields(
       created,
     ).map { paymentFields =>
       val fields = List(
-        "EmailAddress" -> state.user.primaryEmailAddress,
+        "email_address" -> state.user.primaryEmailAddress,
         "created" -> created.toString,
         "amount" -> state.product.amount.toString,
         "currency" -> state.product.currency.iso,
-        "edition" -> state.user.billingAddress.country.alpha2,
-        "name" -> state.user.firstName,
+        "first_name" -> state.user.firstName,
+        "last_name" -> state.user.lastName,
+        "billing_period" -> state.product.billingPeriod.toString.toLowerCase,
         "product" -> s"${state.product.billingPeriod.toString.toLowerCase}-supporter-plus",
+        "zuorasubscriberid" -> state.subscriptionNumber,
       ) ++ paymentFields
 
-      EmailFields(fields, state.user, "supporter-plus-thank-you") // TODO: this doesn't exist yet
+      EmailFields(fields, state.user, "supporter-plus")
     }
   }
 
+  //noinspection ScalaStyle
   def getPaymentFields(paymentMethod: PaymentMethod, accountNumber: String, created: DateTime)(implicit
-      ec: ExecutionContext,
+                                                                                               ec: ExecutionContext,
   ): Future[Seq[(String, String)]] = {
     paymentMethod match {
       case dd: DirectDebitPaymentMethod =>
@@ -73,9 +72,27 @@ class SupporterPlusEmailFields(
             "payment method" -> "SEPA",
           ),
         )
-      case _: PayPalReferenceTransaction => Future.successful(List("payment method" -> "PayPal"))
-      case _: CreditCardReferenceTransaction => Future.successful(List("payment method" -> "credit / debit card"))
-      case _: AmazonPayPaymentMethod => Future.successful(List("payment method" -> "AmazonPay"))
+      case _: PayPalReferenceTransaction =>
+        Future.successful(
+          List(
+            "first payment date" -> formatDate(created.plusDays(0).toLocalDate),
+            "payment method" -> "PayPal",
+          ),
+        )
+      case _: CreditCardReferenceTransaction =>
+        Future.successful(
+          List(
+            "first payment date" -> formatDate(created.plusDays(0).toLocalDate),
+            "payment method" -> "credit / debit card",
+          ),
+        )
+      case _: AmazonPayPaymentMethod =>
+        Future.successful(
+          List(
+            "first payment date" -> formatDate(created.plusDays(0).toLocalDate),
+            "payment method" -> "AmazonPay",
+          ),
+        )
     }
   }
 }
