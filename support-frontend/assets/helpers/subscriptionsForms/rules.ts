@@ -119,6 +119,10 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 			error: formError('email', 'Please enter a valid email address.'),
 		},
 		{
+			rule: notLongerThan(fields.email, 80),
+			error: formError('email', 'Email address is too long.'),
+		},
+		{
 			rule: emailAddressesMatch(isSignedIn, fields.email, fields.confirmEmail),
 			error: formError('confirmEmail', 'The email addresses do not match.'),
 		},
