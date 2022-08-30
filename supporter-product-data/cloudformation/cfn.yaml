@@ -197,6 +197,7 @@ Resources:
       MemorySize: 4096
       Runtime: "java8.al2"
       Timeout: 600
+      ReservedConcurrentExecutions: 10
       Environment:
         Variables:
           'Stage': !Sub ${Stage}
