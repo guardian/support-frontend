@@ -72,27 +72,9 @@ class SupporterPlusEmailFields(
             "payment method" -> "SEPA",
           ),
         )
-      case _: PayPalReferenceTransaction =>
-        Future.successful(
-          List(
-            "first payment date" -> formatDate(created.plusDays(0).toLocalDate),
-            "payment method" -> "PayPal",
-          ),
-        )
-      case _: CreditCardReferenceTransaction =>
-        Future.successful(
-          List(
-            "first payment date" -> formatDate(created.plusDays(0).toLocalDate),
-            "payment method" -> "credit / debit card",
-          ),
-        )
-      case _: AmazonPayPaymentMethod =>
-        Future.successful(
-          List(
-            "first payment date" -> formatDate(created.plusDays(0).toLocalDate),
-            "payment method" -> "AmazonPay",
-          ),
-        )
+      case _: PayPalReferenceTransaction => Future.successful(List("payment method" -> "PayPal"))
+      case _: CreditCardReferenceTransaction => Future.successful(List("payment method" -> "credit / debit card"))
+      case _: AmazonPayPaymentMethod => Future.successful(List("payment method" -> "AmazonPay"))
     }
   }
 }
