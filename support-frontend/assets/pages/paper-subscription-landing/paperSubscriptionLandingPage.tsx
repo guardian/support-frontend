@@ -45,7 +45,9 @@ const pageQaId = 'qa-paper-subscriptions';
 function PaperLandingPage({
 	productPrices,
 	promotionCopy,
+	participations,
 }: PaperLandingPropTypes) {
+	const hideDigital = participations.newProduct === 'variant';
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
 		'delivery',
@@ -73,7 +75,9 @@ function PaperLandingPage({
 	return (
 		<Page
 			id={pageQaId}
-			header={<Header countryGroupId={GBPCountries} />}
+			header={
+				<Header countryGroupId={GBPCountries} hideDigital={hideDigital} />
+			}
 			footer={paperSubsFooter}
 		>
 			<PaperHero
