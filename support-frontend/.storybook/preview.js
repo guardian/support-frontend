@@ -1,5 +1,6 @@
 import { viewports } from './viewports';
-import '../assets/stylesheets/skeleton/skeleton.scss';
+import { withFocusStyleManager } from './decorators/withFocusStyleManager';
+import { withSourceReset } from './decorators/withSourceReset';
 
 export const parameters = {
 	actions: { argTypesRegex: '^on[A-Z].*' },
@@ -14,6 +15,8 @@ export const parameters = {
 	},
 	layout: 'fullscreen',
 };
+
+export const decorators = [withFocusStyleManager, withSourceReset];
 
 export const argTypes = {
 	cssOverrides: {

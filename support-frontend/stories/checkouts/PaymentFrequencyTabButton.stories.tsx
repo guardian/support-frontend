@@ -29,15 +29,19 @@ Template.args = {} as Record<string, unknown>;
 export const Selected = Template.bind({});
 
 Selected.args = {
+	role: 'tab',
 	id: 'selected',
-	isSelected: true,
+	ariaSelected: 'true',
+	ariaControls: 'selected-tab',
 	children: 'Monthly',
 };
 
-export const NotSelected = Template.bind({});
+export const Unselected = Template.bind({});
 
-NotSelected.args = {
-	id: 'not-selected',
-	isSelected: false,
+Unselected.args = {
+	role: 'tab',
+	id: 'unselected',
+	ariaSelected: 'false',
+	ariaControls: 'unselected-tab',
 	children: 'Monthly',
 };

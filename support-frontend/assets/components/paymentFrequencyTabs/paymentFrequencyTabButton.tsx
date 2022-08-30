@@ -1,55 +1,74 @@
 import { css } from '@emotion/react';
-import { brand, neutral, space, textSans } from '@guardian/source-foundations';
+import {
+	brand,
+	focusHalo,
+	from,
+	neutral,
+	space,
+	textSans,
+} from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 
 const tabButtonStyles = css`
 	${textSans.medium({ fontWeight: 'bold' })}
 	background-color: ${brand[500]};
 	color: ${neutral[100]};
+	margin: 0;
 	border: none;
 	border-bottom: 1px solid ${neutral[86]};
 	flex-grow: 1;
-	padding-top: 18px;
-	padding-bottom: ${space[4]}px;
+	padding: 13px 0;
+
+	${from.tablet} {
+		padding-top: 18px;
+		padding-bottom: ${space[4]}px;
+	}
+
+	:focus {
+		${focusHalo}
+		/* Puts the focused button in its own stacking context so the halo shows up correctly */
+		position: relative;
+	}
 
 	:not(:last-of-type) {
 		border-right: 1px solid ${neutral[86]};
 	}
+
+	&[aria-selected='true'] {
+		background-color: ${neutral[100]};
+		color: ${neutral[7]};
+		border-bottom: none;
+	}
 `;
 
-const tabButtonSelectedStyles = css`
-	background-color: ${neutral[100]};
-	color: ${neutral[7]};
-	border-bottom: none;
-`;
-
-export type PaymentFrequencyTabButtonProps = {
+export type PaymentFrequencyTabButtonAttributes = {
+	role: 'tab';
 	id: string;
-	isSelected: boolean;
-	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-	children: ReactNode;
+	ariaSelected: 'true' | 'false';
+	ariaControls: string;
 };
 
-function getButtonStyles(isSelected: boolean) {
-	return isSelected
-		? [tabButtonStyles, tabButtonSelectedStyles]
-		: tabButtonStyles;
-}
+export type PaymentFrequencyTabButtonProps =
+	PaymentFrequencyTabButtonAttributes & {
+		onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+		children: ReactNode;
+	};
 
 export function PaymentFrequencyTabButton({
+	role,
 	id,
-	isSelected,
+	ariaControls,
+	ariaSelected,
 	onClick,
 	children,
 }: PaymentFrequencyTabButtonProps): JSX.Element {
-	const selected = isSelected ? 'true' : 'false';
 	return (
 		<button
-			css={getButtonStyles(isSelected)}
-			role="tab"
+			css={tabButtonStyles}
+			role={role}
 			id={id}
-			aria-selected={selected}
-			aria-controls={`${id}-tab`}
+			aria-controls={ariaControls}
+			aria-selected={ariaSelected}
 			onClick={onClick}
 		>
 			{children}
