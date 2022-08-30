@@ -39,29 +39,36 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
       subscriptionName -> AttributeValue.builder.s(item.subscriptionName).build,
     ).asJava
 
-    val updateExpression =
+    val nonOptionExpression =
       s"""SET
           $productRatePlanId = :$productRatePlanId,
           $productRatePlanName = :$productRatePlanName,
           $termEndDate = :$termEndDate,
           $contractEffectiveDate = :$contractEffectiveDate,
           $expiryDateName = :$expiryDateName
-          $contributionAmount = :$contributionAmount
           """
-    val attributeValues = Map(
+    val updateExpression =
+      if (item.contributionAmount.isDefined)
+        nonOptionExpression + s",\n          $contributionAmount = :$contributionAmount"
+      else nonOptionExpression
+
+    val nonOptionValues = Map(
       ":" + productRatePlanId -> AttributeValue.builder.s(item.productRatePlanId).build,
       ":" + productRatePlanName -> AttributeValue.builder.s(item.productRatePlanName).build,
       ":" + termEndDate -> AttributeValue.builder.s(asIso(item.termEndDate)).build,
       ":" + contractEffectiveDate -> AttributeValue.builder.s(asIso(item.contractEffectiveDate)).build,
       ":" + expiryDateName -> AttributeValue.builder.n(asEpochSecond(expiryDate)).build,
-      ":" + contributionAmount -> AttributeValue.builder.n(item.contributionAmount.map(_.toString).getOrElse("")).build,
-    ).asJava
+    )
+
+    val attributeValues = item.contributionAmount
+      .map(amount => nonOptionValues + (":" + contributionAmount -> AttributeValue.builder.n(amount.toString()).build))
+      .getOrElse(nonOptionValues)
 
     val updateItemRequest = UpdateItemRequest.builder
       .tableName(tableName)
       .key(key)
       .updateExpression(updateExpression)
-      .expressionAttributeValues(attributeValues)
+      .expressionAttributeValues(attributeValues.asJava)
       .build
 
     client.updateItem(updateItemRequest).toScala
