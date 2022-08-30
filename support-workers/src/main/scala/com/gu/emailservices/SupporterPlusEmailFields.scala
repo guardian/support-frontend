@@ -8,13 +8,13 @@ import org.joda.time.DateTime
 import scala.concurrent.{ExecutionContext, Future}
 
 class SupporterPlusEmailFields(
-                                getMandate: String => Future[Option[String]],
-                                created: DateTime,
-                              ) {
+    getMandate: String => Future[Option[String]],
+    created: DateTime,
+) {
 
   def build(
-             state: SendThankYouEmailSupporterPlusState,
-           )(implicit ec: ExecutionContext): Future[EmailFields] = {
+      state: SendThankYouEmailSupporterPlusState,
+  )(implicit ec: ExecutionContext): Future[EmailFields] = {
     getPaymentFields(
       state.paymentMethod,
       state.accountNumber,
@@ -37,7 +37,7 @@ class SupporterPlusEmailFields(
   }
 
   def getPaymentFields(paymentMethod: PaymentMethod, accountNumber: String, created: DateTime)(implicit
-                                                                                               ec: ExecutionContext,
+      ec: ExecutionContext,
   ): Future[Seq[(String, String)]] = {
     paymentMethod match {
       case dd: DirectDebitPaymentMethod =>
