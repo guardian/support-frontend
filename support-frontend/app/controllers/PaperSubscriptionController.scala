@@ -41,8 +41,8 @@ class PaperSubscriptionController(
   def paper(): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
-    val queryPromos =
-      DefaultPromotions.Paper.june21Promotion :: request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+    val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(Paper)
+    val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
 
     Ok(
       views.html.main(
@@ -59,7 +59,8 @@ class PaperSubscriptionController(
         ),
         shareUrl = canonicalLink,
       ) {
-        val maybePromotionCopy = landingCopyProvider.promotionCopyForPrimaryCountry(queryPromos, Paper, UK)
+        val maybePromotionCopy =
+          landingCopyProvider.promotionCopyForPrimaryCountry(queryPromos ++ defaultPromos, Paper, UK)
         Html(
           s"""<script type="text/javascript">
       window.guardian.productPrices = ${outputJson(

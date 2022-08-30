@@ -61,7 +61,7 @@ class SubscriptionsController(
     val service = priceSummaryServiceProvider.forUser(false)
 
     val paperMap = if (countryGroup == CountryGroup.UK) {
-      val paper = service.getPrices(Paper, List(DefaultPromotions.Paper.june21Promotion))(CountryGroup.UK)(Collection)(
+      val paper = service.getPrices(Paper, Nil)(CountryGroup.UK)(Collection)(
         Sunday,
       )(Monthly)(GBP)
       Map(Paper.toString -> pricingCopy(paper))
