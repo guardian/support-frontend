@@ -170,11 +170,24 @@ class CreateSubscriptionController(
   private def validate(
       request: Request[CreateSupportWorkersRequest],
       switches: Switches,
-  ): EitherT[Future, CreateSubscriptionError, Unit] =
-    CheckoutValidationRules.validate(request.body) match {
-      case Valid => EitherT.pure(())
-      case Invalid(message) => EitherT.leftT(RequestValidationError(message))
+  ): EitherT[Future, CreateSubscriptionError, Unit] = {
+
+    val paymentMethodEnabledValidation =
+      CheckoutValidationRules.checkPaymentMethodEnabled(
+        request.body.product,
+        request.body.paymentFields,
+        switches,
+      )
+
+    val validationRulesResult = CheckoutValidationRules.validate(request.body)
+
+    paymentMethodEnabledValidation and validationRulesResult match {
+      case Valid =>
+        EitherT.pure(())
+      case Invalid(message) =>
+        EitherT.leftT(RequestValidationError(message))
     }
+  }
 
   private def toHttpResponse(
       result: EitherT[Future, CreateSubscriptionError, StatusResponse],
