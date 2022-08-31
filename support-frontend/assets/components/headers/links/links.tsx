@@ -24,7 +24,7 @@ type PropTypes = {
 	location: 'desktop' | 'mobile';
 	countryGroupId?: CountryGroupId;
 	getRef?: (element: Element | null) => void;
-	hideDigitalSupport?: boolean;
+	hideDigiSupptContrib?: boolean;
 };
 
 const links: HeaderNavLink[] = [
@@ -104,7 +104,7 @@ function Links({
 	location,
 	getRef,
 	countryGroupId,
-	hideDigitalSupport: hideDigitalSupport,
+	hideDigiSupptContrib: hideDigiSupptContrib,
 }: PropTypes): JSX.Element {
 	const { protocol, host, pathname } = window.location;
 	const urlWithoutParams = `${protocol}//${host}${pathname}`;
@@ -115,8 +115,12 @@ function Links({
 			<ul className="component-header-links__ul" ref={getRef}>
 				{links
 					.filter(({ text }) => {
-						if (text === 'Digital' || text === 'Support') {
-							if (hideDigitalSupport) {
+						if (
+							text === 'Digital' ||
+							text === 'Support' ||
+							text === 'Contributions'
+						) {
+							if (hideDigiSupptContrib) {
 								return false;
 							}
 						}

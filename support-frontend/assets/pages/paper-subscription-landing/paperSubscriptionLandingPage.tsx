@@ -47,7 +47,7 @@ function PaperLandingPage({
 	promotionCopy,
 	participations,
 }: PaperLandingPropTypes) {
-	const hideDigitalSupport = participations.newProduct === 'variant';
+	const hideDigiSupptContrib = participations.newProduct === 'variant';
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
 		'delivery',
@@ -78,7 +78,7 @@ function PaperLandingPage({
 			header={
 				<Header
 					countryGroupId={GBPCountries}
-					hideDigitalSupport={hideDigitalSupport}
+					hideDigiSupptContrib={hideDigiSupptContrib}
 				/>
 			}
 			footer={paperSubsFooter}
