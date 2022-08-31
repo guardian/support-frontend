@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import {
 	brand,
-	focusHalo,
+	focus,
 	from,
 	neutral,
 	space,
@@ -24,10 +24,10 @@ const tabButtonStyles = css`
 		padding-bottom: ${space[4]}px;
 	}
 
-	:focus {
-		${focusHalo}
-		/* Puts the focused button in its own stacking context so the halo shows up correctly */
-		position: relative;
+	/* .src-focus-disabled is added by the Source FocusStyleManager */
+	html:not(.src-focus-disabled) &:focus {
+		outline: 5px solid ${neutral[86]};
+		outline-offset: -5px;
 	}
 
 	:not(:last-of-type) {
@@ -38,6 +38,10 @@ const tabButtonStyles = css`
 		background-color: ${neutral[100]};
 		color: ${neutral[7]};
 		border-bottom: none;
+
+		html:not(.src-focus-disabled) &:focus {
+			outline-color: ${focus[400]};
+		}
 	}
 `;
 

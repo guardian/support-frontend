@@ -1,6 +1,7 @@
 import { viewports } from './viewports';
 import { withFocusStyleManager } from './decorators/withFocusStyleManager';
 import { withSourceReset } from './decorators/withSourceReset';
+import '../assets/stylesheets/skeleton/skeleton.scss';
 
 export const parameters = {
 	actions: { argTypesRegex: '^on[A-Z].*' },

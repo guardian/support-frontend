@@ -1,17 +1,11 @@
 import { css } from '@emotion/react';
-import { focusHalo } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 import type { PaymentFrequencyTabButtonAttributes } from './paymentFrequencyTabButton';
 import { PaymentFrequencyTabButton } from './paymentFrequencyTabButton';
+import { PaymentFrequencyTabPanel } from './paymentFrequencyTabPanel';
 
 const tabListStyles = css`
 	display: flex;
-`;
-
-const tabPanelStyles = css`
-	:focus > * {
-		${focusHalo}
-	}
 `;
 
 export type TabProps = {
@@ -65,17 +59,14 @@ export function PaymentFrequencyTabs({
 				})}
 			</div>
 			{tabs.map((tab: TabProps) => (
-				<div
-					css={tabPanelStyles}
-					role="tabpanel"
+				<PaymentFrequencyTabPanel
 					key={getTabPanelId(tab.id)}
 					id={getTabPanelId(tab.id)}
-					aria-labelledby={tab.id}
-					hidden={!tab.selected}
-					tabIndex={0}
+					ariaLabelledby={tab.id}
+					isSelected={tab.selected}
 				>
 					{tab.content}
-				</div>
+				</PaymentFrequencyTabPanel>
 			))}
 		</div>
 	);
