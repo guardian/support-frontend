@@ -53,7 +53,7 @@ formInit(store);
 const reactElementId = `contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 const { abParticipations } = store.getState().common;
 
-const showNewProductPage = abParticipations.newProduct === 'variant';
+const showNewProductPage = abParticipations.supporterPlus === 'variant';
 
 // ----- Render ----- //
 
