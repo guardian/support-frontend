@@ -2,10 +2,10 @@ import { css } from '@emotion/react';
 import { Button, Column, Columns } from '@guardian/source-react-components';
 import React, { useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
-import { Container } from 'components/layout/container';
 import type { PaymentFrequencyTabButtonProps } from 'components/paymentFrequencyTabs/paymentFrequencyTabButton';
 import type { PaymentFrequencyTabProps } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
 import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
+import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 
 export default {
 	title: 'Checkouts/Payment Frequency Tabs',
@@ -13,23 +13,27 @@ export default {
 	argTypes: { onTabChange: { action: 'tab changed' } },
 	decorators: [
 		(Story: React.FC): JSX.Element => (
-			<Container>
-				<Columns>
-					<Column span={[0, 2, 5]}></Column>
-					<Column span={[1, 8, 7]}>
-						<Box>
-							<Story />
-						</Box>
-					</Column>
-				</Columns>
-			</Container>
+			<Columns
+				collapseUntil="tablet"
+				cssOverrides={css`
+					width: 100%;
+				`}
+			>
+				<Column span={[1, 8, 7]}>
+					<Box>
+						<Story />
+					</Box>
+				</Column>
+			</Columns>
 		),
+		withCenterAlignment,
 	],
 	parameters: {
 		docs: {
 			description: {
-				component:
-					'A tab component for switching payment frequency on the checkout. An alternate tab controller component may be supplied.',
+				component: `A tab component for switching payment frequency on the checkout. An alternate tab controller component may be supplied.
+          The keyboard controls are a simplified version of the ARIA authoring guidelines for a Tabs component, based on research conducted
+          by the BBC: https://bbc.github.io/gel/components/tabs/#related-research`,
 			},
 		},
 	},
@@ -65,13 +69,13 @@ Default.args = {
 		{
 			id: 'tab1',
 			text: 'Tab 1',
-			selected: true,
+			selected: false,
 			content: <BoxContents>Tab 1</BoxContents>,
 		},
 		{
 			id: 'tab2',
 			text: 'Tab 2',
-			selected: false,
+			selected: true,
 			content: <BoxContents>Tab 2</BoxContents>,
 		},
 		{
@@ -88,7 +92,7 @@ function AlternativeTabController({
 	id,
 	ariaControls,
 	ariaSelected,
-	onFocus,
+	onClick,
 	children,
 }: PaymentFrequencyTabButtonProps) {
 	return (
@@ -101,7 +105,7 @@ function AlternativeTabController({
 			priority={ariaSelected === 'true' ? 'secondary' : 'primary'}
 			aria-selected={ariaSelected}
 			aria-controls={ariaControls}
-			onFocus={onFocus}
+			onClick={onClick}
 		>
 			{children}
 		</Button>

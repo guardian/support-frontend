@@ -27,6 +27,8 @@ export function PaymentFrequencyTabPanel({
 	const isInitialMount = useRef(true);
 	const tabPanel = useRef<HTMLDivElement>(null);
 
+	// We want to auto-focus the tab panel when the tab selection changes, but not on initial mount
+	// Cf. https://reactjs.org/docs/hooks-faq.html#can-i-run-an-effect-only-on-updates
 	useEffect(() => {
 		if (isInitialMount.current) {
 			isInitialMount.current = false;
