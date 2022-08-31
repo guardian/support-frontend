@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import type { ReactNode } from 'react';
+import type { ContributionType } from 'helpers/contributions';
 import type { PaymentFrequencyTabButtonAttributes } from './paymentFrequencyTabButton';
 import { PaymentFrequencyTabButton } from './paymentFrequencyTabButton';
 import { PaymentFrequencyTabPanel } from './paymentFrequencyTabPanel';
@@ -9,7 +10,7 @@ const tabListStyles = css`
 `;
 
 export type TabProps = {
-	id: string;
+	id: ContributionType;
 	text: string;
 	selected: boolean;
 	content: ReactNode;
@@ -18,8 +19,8 @@ export type TabProps = {
 export type PaymentFrequencyTabProps = {
 	ariaLabel: string;
 	tabs: TabProps[];
-	onTabChange: (tabId: string) => void;
-	TabController: typeof PaymentFrequencyTabButton;
+	onTabChange: (tabId: ContributionType) => void;
+	TabController?: typeof PaymentFrequencyTabButton;
 };
 
 function getTabPanelId(tabId: string) {
