@@ -240,9 +240,15 @@ const POLLING_INTERVAL = 3000;
 const MAX_POLLS = 10;
 
 // ----- Functions ----- //
+
 function regularPaymentFieldsFromAuthorisation(
 	authorisation: PaymentAuthorisation,
 ): RegularPaymentFields {
+  return {
+      accountHolderName: "testuser",
+      sortCode: "200000",
+      accountNumber: "55779911",
+  }
 	switch (authorisation.paymentMethod) {
 		case Stripe:
 			if (authorisation.paymentMethodId) {
