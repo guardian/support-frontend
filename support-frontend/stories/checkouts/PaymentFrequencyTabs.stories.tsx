@@ -3,8 +3,9 @@ import { Button, Column, Columns } from '@guardian/source-react-components';
 import React, { useState } from 'react';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { PaymentFrequencyTabButtonProps } from 'components/paymentFrequencyTabs/paymentFrequencyTabButton';
-import type { PaymentFrequencyTabProps } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
+import type { PaymentFrequencyTabsProps } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
 import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
+import type { ContributionType } from 'helpers/contributions';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 
 export default {
@@ -39,11 +40,15 @@ export default {
 	},
 };
 
-function Template(args: PaymentFrequencyTabProps) {
+function Template(args: PaymentFrequencyTabsProps) {
+	const [selectedTab, setSelectedTab] = useState(
+		args.tabs.find((tab) => tab.selected)?.id ?? args.tabs[0].id,
+	);
 	const [tabList, setTabList] = useState(args.tabs);
 
-	function onTabChange(newTab: string) {
+	function onTabChange(newTab: ContributionType) {
 		args.onTabChange(newTab);
+		setSelectedTab(newTab);
 		setTabList((oldTabs) =>
 			oldTabs.map((tab) => {
 				return {
@@ -55,7 +60,15 @@ function Template(args: PaymentFrequencyTabProps) {
 	}
 
 	return (
-		<PaymentFrequencyTabs {...args} tabs={tabList} onTabChange={onTabChange} />
+		<PaymentFrequencyTabs
+			{...args}
+			tabs={tabList}
+			selectedTab={selectedTab}
+			onTabChange={onTabChange}
+			renderTabContent={(tabId) => (
+				<BoxContents>{`${tabId} tab content`}</BoxContents>
+			)}
+		/>
 	);
 }
 
@@ -67,22 +80,19 @@ Default.args = {
 	ariaLabel: 'default',
 	tabs: [
 		{
-			id: 'tab1',
-			text: 'Tab 1',
+			id: 'ONE_OFF',
+			labelText: 'Single',
 			selected: false,
-			content: <BoxContents>Tab 1</BoxContents>,
 		},
 		{
-			id: 'tab2',
-			text: 'Tab 2',
+			id: 'MONTHLY',
+			labelText: 'Monthly',
 			selected: true,
-			content: <BoxContents>Tab 2</BoxContents>,
 		},
 		{
-			id: 'tab3',
-			text: 'Tab 3',
+			id: 'ANNUAL',
+			labelText: 'Annual',
 			selected: false,
-			content: <BoxContents>Tab 3</BoxContents>,
 		},
 	],
 };
@@ -120,21 +130,18 @@ WithAlternateController.args = {
 	tabs: [
 		{
 			id: 'tab1',
-			text: 'Tab 1',
+			labelText: 'Tab 1',
 			selected: true,
-			content: <BoxContents>Tab 1</BoxContents>,
 		},
 		{
 			id: 'tab2',
-			text: 'Tab 2',
+			labelText: 'Tab 2',
 			selected: false,
-			content: <BoxContents>Tab 2</BoxContents>,
 		},
 		{
 			id: 'tab3',
-			text: 'Tab 3',
+			labelText: 'Tab 3',
 			selected: false,
-			content: <BoxContents>Tab 3</BoxContents>,
 		},
 	],
 };

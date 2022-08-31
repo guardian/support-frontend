@@ -1,20 +1,26 @@
-import type { ReactNode } from 'react';
-import type { ContributionType } from 'helpers/contributions';
 import { toHumanReadableContributionType } from 'helpers/forms/checkouts';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import type { TabProps } from './paymentFrequenncyTabs';
-import { PaymentFrequencyTabs } from './paymentFrequenncyTabs';
+import type {
+	PaymentFrequencyTabsProps,
+	TabProps,
+} from './paymentFrequenncyTabs';
+
+type PaymentFrequencyTabsRenderProps = Omit<
+	PaymentFrequencyTabsProps,
+	'TabController' | 'renderTabContent'
+>;
 
 type PaymentFrequencyTabsContainerProps = {
-	tabContent: (selectedTab: ContributionType) => ReactNode;
+	render: (tabComponentProps: PaymentFrequencyTabsRenderProps) => JSX.Element;
 };
 
 export function PaymentFrequencyTabsContainer({
-	tabContent,
+	render,
 }: PaymentFrequencyTabsContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const { contributionTypes } = useContributionsSelector(
@@ -23,26 +29,22 @@ export function PaymentFrequencyTabsContainer({
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const { productType } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
+	const productType = useContributionsSelector(getContributionType);
 
 	const tabs: TabProps[] = contributionTypes[countryGroupId].map(
 		({ contributionType }) => {
 			return {
 				id: contributionType,
-				text: toHumanReadableContributionType(contributionType),
+				labelText: toHumanReadableContributionType(contributionType),
 				selected: contributionType === productType,
-				content: tabContent(contributionType),
 			};
 		},
 	);
 
-	return (
-		<PaymentFrequencyTabs
-			ariaLabel="Payment frequency"
-			tabs={tabs}
-			onTabChange={(tabId) => dispatch(setProductType(tabId))}
-		/>
-	);
+	return render({
+		ariaLabel: 'Payment frequency',
+		tabs,
+		selectedTab: productType,
+		onTabChange: (tabId) => dispatch(setProductType(tabId)),
+	});
 }

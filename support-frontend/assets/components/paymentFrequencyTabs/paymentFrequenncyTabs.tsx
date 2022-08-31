@@ -1,25 +1,35 @@
 import { css } from '@emotion/react';
+import { focus } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
+import { useEffect, useRef } from 'react';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentFrequencyTabButtonAttributes } from './paymentFrequencyTabButton';
 import { PaymentFrequencyTabButton } from './paymentFrequencyTabButton';
-import { PaymentFrequencyTabPanel } from './paymentFrequencyTabPanel';
 
 const tabListStyles = css`
 	display: flex;
 `;
 
+const tabPanelStyles = css`
+	/* .src-focus-disabled is added by the Source FocusStyleManager */
+	html:not(.src-focus-disabled) &:focus {
+		outline: 5px solid ${focus[400]};
+		outline-offset: -5px;
+	}
+`;
+
 export type TabProps = {
 	id: ContributionType;
-	text: string;
+	labelText: string;
 	selected: boolean;
-	content: ReactNode;
 };
 
-export type PaymentFrequencyTabProps = {
+export type PaymentFrequencyTabsProps = {
 	ariaLabel: string;
 	tabs: TabProps[];
+	selectedTab: ContributionType;
 	onTabChange: (tabId: ContributionType) => void;
+	renderTabContent: (tabId: ContributionType) => ReactNode;
 	TabController?: typeof PaymentFrequencyTabButton;
 };
 
@@ -41,9 +51,24 @@ function getTabControllerAttributes(
 export function PaymentFrequencyTabs({
 	ariaLabel,
 	tabs,
+	selectedTab,
 	onTabChange,
+	renderTabContent,
 	TabController = PaymentFrequencyTabButton,
-}: PaymentFrequencyTabProps): JSX.Element {
+}: PaymentFrequencyTabsProps): JSX.Element {
+	const isInitialMount = useRef(true);
+	const tabPanel = useRef<HTMLDivElement>(null);
+
+	// We want to auto-focus the tab panel when the tab selection changes, but not on initial mount
+	// Cf. https://reactjs.org/docs/hooks-faq.html#can-i-run-an-effect-only-on-updates
+	useEffect(() => {
+		if (isInitialMount.current) {
+			isInitialMount.current = false;
+		} else {
+			tabPanel.current?.focus();
+		}
+	}, [selectedTab]);
+
 	return (
 		<div>
 			<div role="tablist" aria-label={ariaLabel} css={tabListStyles}>
@@ -54,21 +79,21 @@ export function PaymentFrequencyTabs({
 							onClick={() => onTabChange(tab.id)}
 							{...getTabControllerAttributes(tab)}
 						>
-							{tab.text}
+							{tab.labelText}
 						</TabController>
 					);
 				})}
 			</div>
-			{tabs.map((tab: TabProps) => (
-				<PaymentFrequencyTabPanel
-					key={getTabPanelId(tab.id)}
-					id={getTabPanelId(tab.id)}
-					ariaLabelledby={tab.id}
-					isSelected={tab.selected}
-				>
-					{tab.content}
-				</PaymentFrequencyTabPanel>
-			))}
+			<div
+				ref={tabPanel}
+				css={tabPanelStyles}
+				role="tabpanel"
+				id={getTabPanelId(selectedTab)}
+				aria-labelledby={selectedTab}
+				tabIndex={0}
+			>
+				{renderTabContent(selectedTab)}
+			</div>
 		</div>
 	);
 }
