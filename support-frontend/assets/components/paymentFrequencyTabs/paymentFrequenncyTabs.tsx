@@ -24,11 +24,14 @@ export type TabProps = {
 	selected: boolean;
 };
 
-export type PaymentFrequencyTabsProps = {
+export type PaymentFrequencyTabsRenderProps = {
 	ariaLabel: string;
 	tabs: TabProps[];
 	selectedTab: ContributionType;
 	onTabChange: (tabId: ContributionType) => void;
+};
+
+export type PaymentFrequencyTabsProps = PaymentFrequencyTabsRenderProps & {
 	renderTabContent: (tabId: ContributionType) => ReactNode;
 	TabController?: typeof PaymentFrequencyTabButton;
 };

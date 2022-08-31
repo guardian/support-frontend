@@ -6,20 +6,17 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import type {
-	PaymentFrequencyTabsProps,
+	PaymentFrequencyTabsRenderProps,
 	TabProps,
 } from './paymentFrequenncyTabs';
 
-type PaymentFrequencyTabsRenderProps = Omit<
-	PaymentFrequencyTabsProps,
-	'TabController' | 'renderTabContent'
->;
-
 type PaymentFrequencyTabsContainerProps = {
+	ariaLabel?: string;
 	render: (tabComponentProps: PaymentFrequencyTabsRenderProps) => JSX.Element;
 };
 
 export function PaymentFrequencyTabsContainer({
+	ariaLabel = 'Payment frequency options',
 	render,
 }: PaymentFrequencyTabsContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
@@ -42,7 +39,7 @@ export function PaymentFrequencyTabsContainer({
 	);
 
 	return render({
-		ariaLabel: 'Payment frequency',
+		ariaLabel,
 		tabs,
 		selectedTab: productType,
 		onTabChange: (tabId) => dispatch(setProductType(tabId)),
