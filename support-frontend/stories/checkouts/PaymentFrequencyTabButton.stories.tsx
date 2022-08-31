@@ -1,12 +1,13 @@
 import type { PaymentFrequencyTabButtonProps } from 'components/paymentFrequencyTabs/paymentFrequencyTabButton';
 import { PaymentFrequencyTabButton } from 'components/paymentFrequencyTabs/paymentFrequencyTabButton';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
+import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 export default {
 	title: 'Checkouts/Payment Frequency Tab Button',
 	component: PaymentFrequencyTabButton,
 	argTypes: { onClick: { action: 'tab clicked' } },
-	decorators: [withCenterAlignment],
+	decorators: [withCenterAlignment, withSourceReset],
 };
 
 function Template(args: PaymentFrequencyTabButtonProps) {

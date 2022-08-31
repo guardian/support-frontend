@@ -1,6 +1,5 @@
 import { viewports } from './viewports';
 import { withFocusStyleManager } from './decorators/withFocusStyleManager';
-import { withSourceReset } from './decorators/withSourceReset';
 import '../assets/stylesheets/skeleton/skeleton.scss';
 
 export const parameters = {
@@ -17,7 +16,7 @@ export const parameters = {
 	layout: 'fullscreen',
 };
 
-export const decorators = [withFocusStyleManager, withSourceReset];
+export const decorators = [withFocusStyleManager];
 
 export const argTypes = {
 	cssOverrides: {

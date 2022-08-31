@@ -7,6 +7,7 @@ import type { PaymentFrequencyTabsProps } from 'components/paymentFrequencyTabs/
 import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
 import type { ContributionType } from 'helpers/contributions';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
+import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 export default {
 	title: 'Checkouts/Payment Frequency Tabs',
@@ -28,6 +29,7 @@ export default {
 			</Columns>
 		),
 		withCenterAlignment,
+		withSourceReset,
 	],
 	parameters: {
 		docs: {
