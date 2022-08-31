@@ -20,16 +20,16 @@ Mappings:
       S3Bucket: supporter-product-data-export-dev
       # Every 10 mins between 7am and 7pm Mon-Fri
       scheduleRate: "cron(*/10 7-19 ? * 1-5 *)"
-      lambdaConcurrency: 10
+      lambdaConcurrency: 50
     UAT:
       S3Bucket: supporter-product-data-export-uat
       scheduleRate: "cron(*/10 7-19 ? * 1-5 *)"
-      lambdaConcurrency: 10
+      lambdaConcurrency: 50
     PROD:
       S3Bucket: supporter-product-data-export-prod
       # Every 5 mins
       scheduleRate: "cron(*/5 * ? * * *)"
-      lambdaConcurrency: 50
+      lambdaConcurrency: 200
 
 Resources:
 
@@ -370,7 +370,7 @@ Resources:
             - "SupporterProductDataDeadLetterQueue"
             - "Arn"
         maxReceiveCount: 10
-      VisibilityTimeout: 600
+      VisibilityTimeout: 3000
       Tags:
         - Key: Stage
           Value: !Ref Stage

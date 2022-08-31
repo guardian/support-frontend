@@ -28,7 +28,7 @@ class ProcessSupporterRatePlanItemLambda extends Handler[SqsEvent, Unit] {
     val stage = StageConstructors.fromEnvironment
     val dynamoService = SupporterDataDynamoService(stage)
     val alarmService = AlarmService(stage)
-
+    SafeLogger.info(s"Received ${input.Records.length} records from the queue")
     for {
       config <- ConfigService(stage).load
       contributionProcessor = new ContributionProcessor(stage, config)
