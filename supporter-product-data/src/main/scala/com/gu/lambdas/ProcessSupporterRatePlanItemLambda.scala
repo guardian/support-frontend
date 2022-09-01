@@ -2,6 +2,7 @@ package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.conf.ZuoraQuerierConfig
+import com.gu.lambdas.ProcessSupporterRatePlanItemLambda.getSupporterRatePlanItemProcessor
 import com.gu.lambdas.SupporterRatePlanItemCodec.codec
 import com.gu.model.StageConstructors
 import com.gu.model.sqs.SqsEvent
@@ -19,25 +20,18 @@ import io.circe.parser._
 import io.circe.syntax.EncoderOps
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.DurationInt
 import scala.util.{Failure, Success}
 
-class ProcessSupporterRatePlanItemLambda extends Handler[SqsEvent, Unit] {
+class ProcessSupporterRatePlanItemLambda(supporterRatePlanItemProcessor: SupporterRatePlanItemProcessor)
+    extends Handler[SqsEvent, Unit] {
+
+  def this() = this(getSupporterRatePlanItemProcessor())
+
   override protected def handlerFuture(input: SqsEvent, context: Context) = {
-    val stage = StageConstructors.fromEnvironment
-    val dynamoService = SupporterDataDynamoService(stage)
-    val alarmService = AlarmService(stage)
     SafeLogger.info(s"Received ${input.Records.length} records from the queue")
-    for {
-      config <- ConfigService(stage).load
-      contributionProcessor = new ContributionProcessor(stage, config)
-      supporterRatePlanItemProcessor = new SupporterRatePlanItemProcessor(
-        dynamoService,
-        alarmService,
-        contributionProcessor,
-      )
-    } yield Future
+    Future
       .sequence(input.Records.map { record =>
         val subscription = decode[SupporterRatePlanItem](record.body)
         subscription match {
@@ -48,6 +42,22 @@ class ProcessSupporterRatePlanItemLambda extends Handler[SqsEvent, Unit] {
         }
       })
       .map(_ => ())
+  }
+}
+
+object ProcessSupporterRatePlanItemLambda {
+  def getSupporterRatePlanItemProcessor() = {
+    val stage = StageConstructors.fromEnvironment
+    val dynamoService = SupporterDataDynamoService(stage)
+    val alarmService = AlarmService(stage)
+    val futureProcessor = ConfigService(stage).load.map { config =>
+      new SupporterRatePlanItemProcessor(
+        dynamoService,
+        alarmService,
+        new ContributionProcessor(stage, config),
+      )
+    }
+    Await.result(futureProcessor, 10.seconds)
   }
 }
 
