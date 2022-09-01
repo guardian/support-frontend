@@ -5,6 +5,8 @@ import com.gu.lambdas.AddSupporterRatePlanItemToQueueLambda.addToQueue
 import com.gu.model.StageConstructors
 import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
 import com.gu.model.states.AddSupporterRatePlanItemToQueueState
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.services.{AlarmService, ConfigService, S3Service, SqsService}
 import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
@@ -65,7 +67,7 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
       alarmService.triggerCsvReadAlarm
     }
 
-    val batches = batchItemsWhichCanUpdateConcurrently(validUnprocessed)
+    val batches = validUnprocessed.grouped(5)
 
     val processedCount = writeBatchesUntilTimeout(
       state.processedCount,
@@ -87,7 +89,7 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
 
   def writeBatchesUntilTimeout(
       processedCount: Int,
-      batches: List[List[(SupporterRatePlanItem, Int)]],
+      batches: Iterator[List[(SupporterRatePlanItem, Int)]],
       timeOutCheck: TimeOutCheck,
       sqsService: SqsService,
   ): Int =
@@ -102,7 +104,11 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
         s"Continuing processing with batch of ${batch.length} - time remaining: ${timeOutCheck.timeRemainingMillis / 1000} seconds, buffer: ${timeoutBufferInMillis / 1000} seconds",
       )
 
-      Await.result(writeBatch(batch, sqsService), 120.seconds)
+      try {
+        Await.result(writeBatch(batch, sqsService), 120.seconds)
+      } catch {
+        case e: Throwable => SafeLogger.error(scrub"Error awaiting batch", e)
+      }
 
       val (_, highestProcessedIndex) = batch.last
       val newProcessedCount = highestProcessedIndex + 1
@@ -111,49 +117,16 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
     }
 
   def writeBatch(
-      list: List[(SupporterRatePlanItem, Int)],
+      batch: List[(SupporterRatePlanItem, Int)],
       sqsService: SqsService,
   ) = {
-    val futures = list.map { case (supporterRatePlanItem, index) =>
+    val futures = batch.map { case (supporterRatePlanItem, index) =>
       logger.info(
         s"Attempting to add item index $index - ${supporterRatePlanItem.productRatePlanName} to queue - ${supporterRatePlanItem.asJson.noSpaces}",
       )
       sqsService.send(supporterRatePlanItem)
     }
     Future.sequence(futures)
-  }
-
-  def batchItemsWhichCanUpdateConcurrently(
-      items: List[(SupporterRatePlanItem, Int)],
-  ): List[List[(SupporterRatePlanItem, Int)]] = {
-    // 'Batch' supporterRatePlanItems up into groups which we can update in Dynamo concurrently.
-    // For this to be safe we need to make sure that no group has more than one item with the same subscription name in it because if it does
-    // then order of execution is important and we can't guarantee this with parallel executions.
-
-    def batchAlreadyHasAnItemForThisSubscription(
-        batch: ListBuffer[(SupporterRatePlanItem, Int)],
-        subscriptionName: String,
-    ) =
-      batch.exists { case (item, _) =>
-        item.subscriptionName == subscriptionName
-      }
-
-    // Using mutable state for performance reasons, it is many times faster than the immutable version
-    val result = ListBuffer(ListBuffer.empty[(SupporterRatePlanItem, Int)])
-
-    for ((item, index) <- items) {
-      val currentBatch = result.last
-      if (
-        batchAlreadyHasAnItemForThisSubscription(
-          currentBatch,
-          item.subscriptionName,
-        ) || currentBatch.length == maxBatchSize
-      )
-        result += ListBuffer((item, index))
-      else
-        currentBatch += ((item, index))
-    }
-    result.map(_.toList).toList
   }
 
 }
