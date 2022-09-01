@@ -34,7 +34,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(DirectDebitPaymentFields("Testuser", "", "", "")),
-      switches = TestData.paymentSwitchesOffState("ddOffSwitches"),
+      switches = TestData.buildSwitches(
+        RecurringPaymentMethodSwitches(On, On, On, On, Off, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+      ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
 
@@ -47,14 +50,20 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripePaymentType = Some(StripePaymentType.StripeApplePay),
         ),
       ),
-      switches = TestData.paymentSwitchesOffState("applePayOffSwitches"),
+      switches = TestData.buildSwitches(
+        RecurringPaymentMethodSwitches(On, Off, On, On, Off, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+      ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
   it should "return Invalid if a user tries to pay with Sepa but the Sepa switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(SepaPaymentFields("", "", Some(""), Some(""))),
-      switches = TestData.paymentSwitchesOffState("sepaOffSwitches"),
+      switches = TestData.buildSwitches(
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, Off),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+      ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
 
@@ -62,7 +71,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(PayPalPaymentFields("")),
-      switches = TestData.paymentSwitchesOffState("payPalOffSwitches"),
+      switches = TestData.buildSwitches(
+        RecurringPaymentMethodSwitches(On, On, On, Off, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+      ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
   it should "return Invalid if a user tries to pay with Stripe  but the switch  in RRCP is off" in {
@@ -71,7 +83,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
       paymentFields = Left(
         StripeSourcePaymentFields("testStripeToken", stripePaymentType = None),
       ),
-      switches = TestData.paymentSwitchesOffState("stripeOffSwitches"),
+      switches = TestData.buildSwitches(
+        RecurringPaymentMethodSwitches(Off, On, On, On, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+      ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
   it should "return Invalid if a user tries to pay with Stripe Payment Request Button but the switch  in RRCP is off" in {
@@ -83,7 +98,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripePaymentType = Some(StripePaymentType.StripePaymentRequestButton),
         ),
       ),
-      switches = TestData.paymentSwitchesOffState("stripePaymentRequestButtonOffSwitches"),
+      switches = TestData.buildSwitches(
+        RecurringPaymentMethodSwitches(On, On, Off, On, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+      ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
   it should "return Invalid if a user tries to pay with Stripe Checkout but the switch  in RRCP is off" in {
@@ -95,8 +113,9 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripePaymentType = Some(StripePaymentType.StripeCheckout),
         ),
       ),
-      switches = TestData.paymentSwitchesOffState(
-        "stripeCheckoutOffSwitches",
+      switches = TestData.buildSwitches(
+        RecurringPaymentMethodSwitches(Off, On, On, On, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
       ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
@@ -104,21 +123,30 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(AmazonPayPaymentFields("")),
-      switches = TestData.paymentSwitchesOffState("amazonPayOffSwitches"),
+      switches = TestData.buildSwitches(
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, Off, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+      ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
   it should "return Valid if a user tries to pay with Existing Direct Debit or Card while the switch in RRCP is off" in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(ExistingPaymentFields("")),
-      switches = TestData.paymentSwitchesOffState("existingDirectDebitOrCardOffSwitches"),
+      switches = TestData.buildSwitches(
+        RecurringPaymentMethodSwitches(On, On, On, On, On, Off, Off, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, On),
+      ),
     ) shouldBe Valid
   }
   it should "return Invalid if a user tries to pay with Pay Pal but the Pay Pal switch in RRCP is off for Subscription Payment " in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = SupporterPlus(0, GBP, Monthly),
       paymentFields = Left(PayPalPaymentFields("")),
-      switches = TestData.paymentSwitchesOffState("payPalSubscriptionPaymentOffSwitches"),
+      switches = TestData.buildSwitches(
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, On, Off),
+      ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
   it should "return Invalid if a user tries to pay with Direct Debit but the Direct Debit switch in RRCP is off for Subscription Payment " in {
@@ -130,7 +158,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         Some(0),
       ),
       paymentFields = Left(DirectDebitPaymentFields("", "", "", "")),
-      switches = TestData.paymentSwitchesOffState("directDebitSubscriptionPaymentOffSwitches"),
+      switches = TestData.buildSwitches(
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(Off, On, On),
+      ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
 
@@ -148,7 +179,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
           stripePaymentType = Some(StripePaymentType.StripeCheckout),
         ),
       ),
-      switches = TestData.paymentSwitchesOffState("creditCardSubscriptionPaymentOffSwitches"),
+      switches = TestData.buildSwitches(
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+        SubscriptionsPaymentMethodSwitches(On, Off, On),
+      ),
     ) shouldBe Invalid("Invalid Payment Method")
   }
 
@@ -585,131 +619,22 @@ object TestData {
     CampaignSwitches(On, On),
     RecaptchaSwitches(On, On),
   )
-  def paymentSwitchesOffState(
-      switchIsOff: String,
-  ): Switches = switchIsOff match {
-    case "creditCardSubscriptionPaymentOffSwitches" =>
-      Switches(
-        OneOffPaymentMethodSwitches(On, On, On, On, On),
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
-        SubscriptionsPaymentMethodSwitches(On, Off, On),
-        SubscriptionsSwitches(On, On, On),
-        FeatureSwitches(On, On),
-        CampaignSwitches(On, On),
-        RecaptchaSwitches(On, On),
-      )
-    case "directDebitSubscriptionPaymentOffSwitches" =>
-      Switches(
-        OneOffPaymentMethodSwitches(On, On, On, On, On),
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
-        SubscriptionsPaymentMethodSwitches(Off, On, On),
-        SubscriptionsSwitches(On, On, On),
-        FeatureSwitches(On, On),
-        CampaignSwitches(On, On),
-        RecaptchaSwitches(On, On),
-      )
-    case "payPalSubscriptionPaymentOffSwitches" =>
-      Switches(
-        OneOffPaymentMethodSwitches(On, On, On, On, On),
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
-        SubscriptionsPaymentMethodSwitches(On, On, Off),
-        SubscriptionsSwitches(On, On, On),
-        FeatureSwitches(On, On),
-        CampaignSwitches(On, On),
-        RecaptchaSwitches(On, On),
-      )
-    case "existingDirectDebitOrCardOffSwitches" =>
-      Switches(
-        OneOffPaymentMethodSwitches(On, On, On, On, On),
-        RecurringPaymentMethodSwitches(On, On, On, On, On, Off, Off, On, On),
-        SubscriptionsPaymentMethodSwitches(On, On, On),
-        SubscriptionsSwitches(On, On, On),
-        FeatureSwitches(On, On),
-        CampaignSwitches(On, On),
-        RecaptchaSwitches(On, On),
-      )
-    case "amazonPayOffSwitches" =>
-      Switches(
-        OneOffPaymentMethodSwitches(On, On, On, On, On),
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, Off, On),
-        SubscriptionsPaymentMethodSwitches(On, On, On),
-        SubscriptionsSwitches(On, On, On),
-        FeatureSwitches(On, On),
-        CampaignSwitches(On, On),
-        RecaptchaSwitches(On, On),
-      )
-    case "stripeCheckoutOffSwitches" =>
-      Switches(
-        OneOffPaymentMethodSwitches(On, On, On, On, On),
-        RecurringPaymentMethodSwitches(Off, On, On, On, On, On, On, On, On),
-        SubscriptionsPaymentMethodSwitches(On, On, On),
-        SubscriptionsSwitches(On, On, On),
-        FeatureSwitches(On, On),
-        CampaignSwitches(On, On),
-        RecaptchaSwitches(On, On),
-      )
-    case "stripePaymentRequestButtonOffSwitches" =>
-      Switches(
-        OneOffPaymentMethodSwitches(On, On, On, On, On),
-        RecurringPaymentMethodSwitches(On, On, Off, On, On, On, On, On, On),
-        SubscriptionsPaymentMethodSwitches(On, On, On),
-        SubscriptionsSwitches(On, On, On),
-        FeatureSwitches(On, On),
-        CampaignSwitches(On, On),
-        RecaptchaSwitches(On, On),
-      )
-    case "stripeOffSwitches" =>
-      Switches(
-        OneOffPaymentMethodSwitches(On, On, On, On, On),
-        RecurringPaymentMethodSwitches(Off, On, On, On, On, On, On, On, On),
-        SubscriptionsPaymentMethodSwitches(On, On, On),
-        SubscriptionsSwitches(On, On, On),
-        FeatureSwitches(On, On),
-        CampaignSwitches(On, On),
-        RecaptchaSwitches(On, On),
-      )
-    case "payPalOffSwitches" =>
-      Switches(
-        OneOffPaymentMethodSwitches(On, On, On, On, On),
-        RecurringPaymentMethodSwitches(On, On, On, Off, On, On, On, On, On),
-        SubscriptionsPaymentMethodSwitches(On, On, On),
-        SubscriptionsSwitches(On, On, On),
-        FeatureSwitches(On, On),
-        CampaignSwitches(On, On),
-        RecaptchaSwitches(On, On),
-      )
 
-    case "sepaOffSwitches" =>
-      Switches(
-        OneOffPaymentMethodSwitches(On, On, On, On, On),
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, Off),
-        SubscriptionsPaymentMethodSwitches(On, On, On),
-        SubscriptionsSwitches(On, On, On),
-        FeatureSwitches(On, On),
-        CampaignSwitches(On, On),
-        RecaptchaSwitches(On, On),
-      )
-    case "applePayOffSwitches" =>
-      Switches(
-        OneOffPaymentMethodSwitches(On, On, On, On, On),
-        RecurringPaymentMethodSwitches(On, Off, On, On, Off, On, On, On, On),
-        SubscriptionsPaymentMethodSwitches(On, On, On),
-        SubscriptionsSwitches(On, On, On),
-        FeatureSwitches(On, On),
-        CampaignSwitches(On, On),
-        RecaptchaSwitches(On, On),
-      )
-    case "ddOffSwitches" =>
-      Switches(
-        OneOffPaymentMethodSwitches(On, On, On, On, On),
-        RecurringPaymentMethodSwitches(On, On, On, On, Off, On, On, On, On),
-        SubscriptionsPaymentMethodSwitches(On, On, On),
-        SubscriptionsSwitches(On, On, On),
-        FeatureSwitches(On, On),
-        CampaignSwitches(On, On),
-        RecaptchaSwitches(On, On),
-      )
-  }
+  def buildSwitches(
+      recurringPaymentMethodSwitches: RecurringPaymentMethodSwitches =
+        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+      subscriptionsPaymentMethodSwitches: SubscriptionsPaymentMethodSwitches =
+        SubscriptionsPaymentMethodSwitches(On, Off, On),
+  ): Switches = Switches(
+    OneOffPaymentMethodSwitches(On, On, On, On, On),
+    recurringPaymentMethodSwitches,
+    subscriptionsPaymentMethodSwitches,
+    SubscriptionsSwitches(On, On, On),
+    FeatureSwitches(On, On),
+    CampaignSwitches(On, On),
+    RecaptchaSwitches(On, On),
+  )
+
   val monthlyDirectUSDProduct = DigitalPack(Currency.USD, Monthly)
   val validDigitalPackRequest = CreateSupportWorkersRequest(
     title = None,

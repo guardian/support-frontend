@@ -240,7 +240,6 @@ const POLLING_INTERVAL = 3000;
 const MAX_POLLS = 10;
 
 // ----- Functions ----- //
-
 function regularPaymentFieldsFromAuthorisation(
 	authorisation: PaymentAuthorisation,
 ): RegularPaymentFields {
