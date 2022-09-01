@@ -1,17 +1,11 @@
 import { css } from '@emotion/react';
-import {
-	brand,
-	from,
-	headline,
-	neutral,
-	space,
-	until,
-} from '@guardian/source-foundations';
+import { brand } from '@guardian/source-foundations';
 import { Column, Columns } from '@guardian/source-react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHeading';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Container } from 'components/layout/container';
+import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
 import { withPositionRelative } from '../../.storybook/decorators/withPositionRelative';
 
 export default {
@@ -50,30 +44,7 @@ Template.decorators = [] as unknown[];
 export const Heading = Template.bind({});
 
 Heading.args = {
-	heading: (
-		<h1
-			css={css`
-				color: ${neutral[100]};
-				display: inline-block;
-				${headline.medium({ fontWeight: 'bold' })}
-				font-size: 36px;
-				${from.tablet} {
-					font-size: 38px;
-				}
-
-				${until.desktop} {
-					margin: 0 auto;
-					margin-bottom: ${space[6]}px;
-				}
-				${from.desktop} {
-					${headline.large({ fontWeight: 'bold' })}
-					margin-bottom: ${space[3]}px;
-				}
-			`}
-		>
-			Thank you for&nbsp;your&nbsp;support
-		</h1>
-	),
+	heading: <LandingPageHeading />,
 	children: (
 		<p style={{ marginRight: '48px' }}>
 			Help protect the Guardian&apos;s independence so we can keep delivering
