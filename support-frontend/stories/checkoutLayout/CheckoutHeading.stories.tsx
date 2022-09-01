@@ -1,5 +1,12 @@
 import { css } from '@emotion/react';
-import { brand } from '@guardian/source-foundations';
+import {
+	brand,
+	from,
+	headline,
+	neutral,
+	space,
+	until,
+} from '@guardian/source-foundations';
 import { Column, Columns } from '@guardian/source-react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHeading';
@@ -43,7 +50,30 @@ Template.decorators = [] as unknown[];
 export const Heading = Template.bind({});
 
 Heading.args = {
-	heading: 'Thank you for your\u00a0support',
+	heading: (
+		<h1
+			css={css`
+				color: ${neutral[100]};
+				display: inline-block;
+				${headline.medium({ fontWeight: 'bold' })}
+				font-size: 36px;
+				${from.tablet} {
+					font-size: 38px;
+				}
+
+				${until.desktop} {
+					margin: 0 auto;
+					margin-bottom: ${space[6]}px;
+				}
+				${from.desktop} {
+					${headline.large({ fontWeight: 'bold' })}
+					margin-bottom: ${space[3]}px;
+				}
+			`}
+		>
+			Thank you for&nbsp;your&nbsp;support
+		</h1>
+	),
 	children: (
 		<p style={{ marginRight: '48px' }}>
 			Help protect the Guardian&apos;s independence so we can keep delivering
