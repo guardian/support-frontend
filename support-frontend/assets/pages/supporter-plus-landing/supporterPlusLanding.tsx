@@ -1,12 +1,5 @@
 import { css } from '@emotion/react';
-import {
-	from,
-	headline,
-	neutral,
-	space,
-	textSans,
-	until,
-} from '@guardian/source-foundations';
+import { from, neutral, space, textSans } from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
@@ -14,6 +7,7 @@ import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/paymentFrequencyTabsContainer';
 import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
+import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
 
 const checkoutContainer = css`
@@ -34,25 +28,6 @@ const checkoutContainer = css`
 	}
 `;
 
-const headingStyles = css`
-	color: ${neutral[100]};
-	display: inline-block;
-	${headline.medium({ fontWeight: 'bold' })}
-	font-size: 36px;
-	${from.tablet} {
-		font-size: 38px;
-	}
-
-	${until.desktop} {
-		margin: 0 auto;
-		margin-bottom: ${space[6]}px;
-	}
-	${from.desktop} {
-		${headline.large({ fontWeight: 'bold' })}
-		margin-bottom: ${space[3]}px;
-	}
-`;
-
 // TODO: these are purely for demo purposes, delete once the boxes have real content in
 const smallDemoBox = css`
 	min-height: 200px;
@@ -63,9 +38,7 @@ const largeDemoBox = css`
 `;
 
 export function SupporterPlusLandingPage(): JSX.Element {
-	const heading = (
-		<h1 css={headingStyles}>Thank you for&nbsp;your&nbsp;support</h1>
-	);
+	const heading = <LandingPageHeading />;
 
 	return (
 		<PageScaffold id="supporter-plus-landing">

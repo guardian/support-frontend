@@ -1,10 +1,11 @@
 import { css } from '@emotion/react';
-import { headline, textSans } from '@guardian/source-foundations';
+import { headline, space, textSans } from '@guardian/source-foundations';
 import { Link } from '@guardian/source-react-components';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
 
 const headingStyles = css`
 	${headline.xxxsmall({ fontWeight: 'bold' })}
+	margin-bottom: ${space[1]}px;
 `;
 
 const copyStyles = css`
