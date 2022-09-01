@@ -12,6 +12,8 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/paymentFrequencyTabsContainer';
+import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
 import { PatronsMessage } from './components/patronsMessage';
 
 const checkoutContainer = css`
@@ -79,9 +81,18 @@ export function SupporterPlusLandingPage(): JSX.Element {
 					<Column span={[1, 8, 7]}>
 						<Hide from="desktop">{heading}</Hide>
 						<Box>
-							<BoxContents>
-								<p css={smallDemoBox}>Amount selection</p>
-							</BoxContents>
+							<PaymentFrequencyTabsContainer
+								render={(tabProps) => (
+									<PaymentFrequencyTabs
+										{...tabProps}
+										renderTabContent={(tabId) => (
+											<BoxContents>
+												<p css={smallDemoBox}>Amount selection for {tabId}</p>
+											</BoxContents>
+										)}
+									/>
+								)}
+							/>
 						</Box>
 						<Box>
 							<BoxContents>
