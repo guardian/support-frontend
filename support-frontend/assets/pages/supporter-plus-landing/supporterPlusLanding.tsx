@@ -4,6 +4,7 @@ import {
 	headline,
 	neutral,
 	space,
+	textSans,
 	until,
 } from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
@@ -11,13 +12,22 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { PatronsMessage } from './components/patronsMessage';
 
-const relativeContainer = css`
+const checkoutContainer = css`
 	position: relative;
-	padding-bottom: ${space[24]}px;
+	color: ${neutral[7]};
+	${textSans.medium()};
+
 	padding-top: ${space[3]}px;
+	padding-bottom: ${space[9]}px;
+
+	${from.mobileLandscape} {
+		padding-bottom: ${space[12]}px;
+	}
 
 	${from.desktop} {
+		padding-bottom: ${space[24]}px;
 		padding-top: ${space[6]}px;
 	}
 `;
@@ -41,6 +51,7 @@ const headingStyles = css`
 	}
 `;
 
+// TODO: these are purely for demo purposes, delete once the boxes have real content in
 const smallDemoBox = css`
 	min-height: 200px;
 `;
@@ -62,8 +73,8 @@ export function SupporterPlusLandingPage(): JSX.Element {
 					ex justo, varius ut porttitor tristique, rhoncus quis dolor.
 				</p>
 			</CheckoutHeading>
-			<Container sideBorders>
-				<Columns cssOverrides={relativeContainer} collapseUntil="tablet">
+			<Container sideBorders backgroundColor={neutral[97]}>
+				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
 					<Column span={[0, 2, 5]}></Column>
 					<Column span={[1, 8, 7]}>
 						<Hide from="desktop">{heading}</Hide>
@@ -79,7 +90,7 @@ export function SupporterPlusLandingPage(): JSX.Element {
 						</Box>
 						<Box>
 							<BoxContents>
-								<p css={smallDemoBox}>Patrons message</p>
+								<PatronsMessage />
 							</BoxContents>
 						</Box>
 					</Column>
