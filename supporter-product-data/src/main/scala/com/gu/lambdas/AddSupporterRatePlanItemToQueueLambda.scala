@@ -67,7 +67,7 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
       alarmService.triggerCsvReadAlarm
     }
 
-    val batches = validUnprocessed.grouped(5)
+    val batches = validUnprocessed.grouped(10).toList
 
     val processedCount = writeBatchesUntilTimeout(
       state.processedCount,
@@ -89,7 +89,7 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
 
   def writeBatchesUntilTimeout(
       processedCount: Int,
-      batches: Iterator[List[(SupporterRatePlanItem, Int)]],
+      batches: List[List[(SupporterRatePlanItem, Int)]],
       timeOutCheck: TimeOutCheck,
       sqsService: SqsService,
   ): Int =
@@ -105,9 +105,10 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
       )
 
       try {
-        Await.result(writeBatch(batch, sqsService), 120.seconds)
+        sqsService.sendBatch(batch)
       } catch {
-        case e: Throwable => SafeLogger.error(scrub"Error awaiting batch", e)
+        // TODO Alert
+        case e: Throwable => SafeLogger.error(scrub"Error sending batch to sqs", e)
       }
 
       val (_, highestProcessedIndex) = batch.last
@@ -115,18 +116,4 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
       logger.info(s"$newProcessedCount items processed")
       newProcessedCount
     }
-
-  def writeBatch(
-      batch: List[(SupporterRatePlanItem, Int)],
-      sqsService: SqsService,
-  ) = {
-    val futures = batch.map { case (supporterRatePlanItem, index) =>
-      logger.info(
-        s"Attempting to add item index $index - ${supporterRatePlanItem.productRatePlanName} to queue - ${supporterRatePlanItem.asJson.noSpaces}",
-      )
-      sqsService.send(supporterRatePlanItem)
-    }
-    Future.sequence(futures)
-  }
-
 }

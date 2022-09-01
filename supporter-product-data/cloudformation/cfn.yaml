@@ -29,7 +29,7 @@ Mappings:
       S3Bucket: supporter-product-data-export-prod
       # Every 5 mins
       scheduleRate: "cron(*/5 * ? * * *)"
-      lambdaConcurrency: 100
+      lambdaConcurrency: 50
 
 Resources:
 
