@@ -8,7 +8,7 @@ libraryDependencies ++= Seq(
   "com.google.cloud" % "google-cloud-bigquery" % "2.15.0",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "com.amazonaws" % "aws-java-sdk-kinesis" % "1.12.293",
+  "com.amazonaws" % "aws-java-sdk-kinesis" % "1.12.294",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
 
   // This is required to force aws libraries to use the latest version of jackson
