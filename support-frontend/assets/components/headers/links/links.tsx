@@ -115,10 +115,15 @@ function Links({
 			<ul className="component-header-links__ul" ref={getRef}>
 				{links
 					.filter(({ text }) => {
+						const internationalisationIDValue =
+							internationalisationID(countryGroupId);
 						if (
 							text === 'Digital' ||
 							text === 'Support' ||
-							text === 'Contributions'
+							text === 'Contributions' ||
+							(text === 'Newspaper' && internationalisationIDValue !== 'uk') ||
+							(text === 'Guardian Weekly' &&
+								internationalisationIDValue !== 'uk')
 						) {
 							if (isNewProduct) {
 								return false;
