@@ -13,7 +13,7 @@ export type PropTypes = {
 	utility?: JSX.Element;
 	countryGroupId: CountryGroupId;
 	display?: 'navigation' | 'checkout' | 'guardianLogo' | void;
-	hideDigiSupptContrib?: boolean;
+	isNewProduct?: boolean;
 };
 export type State = {
 	fitsLinksInOneRow: boolean;
@@ -131,12 +131,7 @@ export default class Header extends Component<PropTypes, State> {
 	observer: ResizeObserver | null | undefined;
 
 	render(): JSX.Element {
-		const {
-			utility,
-			display,
-			countryGroupId,
-			hideDigiSupptContrib: hideDigiSupptContrib,
-		} = this.props;
+		const { utility, display, countryGroupId, isNewProduct } = this.props;
 		const { fitsLinksInOneRow, fitsLinksAtAll, isTestUser } = this.state;
 		return (
 			<header
@@ -174,7 +169,7 @@ export default class Header extends Component<PropTypes, State> {
 									<Links
 										countryGroupId={countryGroupId}
 										location="mobile"
-										hideDigiSupptContrib={hideDigiSupptContrib}
+										isNewProduct={isNewProduct}
 									/>
 								}
 								utility={utility}
@@ -189,7 +184,7 @@ export default class Header extends Component<PropTypes, State> {
 								getRef={(el) => {
 									this.menuRef = el;
 								}}
-								hideDigiSupptContrib={hideDigiSupptContrib}
+								isNewProduct={isNewProduct}
 							/>
 						</div>
 					)}

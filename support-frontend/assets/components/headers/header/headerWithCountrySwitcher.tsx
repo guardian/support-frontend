@@ -13,13 +13,13 @@ export default function ({
 	countryGroupId,
 	listOfCountryGroups,
 	trackProduct,
-	hideDigiSupptContrib: hideDigiSupptContrib,
+	isNewProduct,
 }: {
 	path: string;
 	countryGroupId: CountryGroupId;
 	listOfCountryGroups: CountryGroupId[];
 	trackProduct?: Option<SubscriptionProduct>;
-	hideDigiSupptContrib?: boolean;
+	isNewProduct?: boolean;
 }) {
 	return function (): JSX.Element {
 		return (
@@ -33,7 +33,7 @@ export default function ({
 						trackProduct={trackProduct}
 					/>
 				}
-				hideDigiSupptContrib={hideDigiSupptContrib}
+				isNewProduct={isNewProduct}
 			/>
 		);
 	};

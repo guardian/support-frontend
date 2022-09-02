@@ -24,7 +24,7 @@ type PropTypes = {
 	location: 'desktop' | 'mobile';
 	countryGroupId?: CountryGroupId;
 	getRef?: (element: Element | null) => void;
-	hideDigiSupptContrib?: boolean;
+	isNewProduct?: boolean;
 };
 
 const links: HeaderNavLink[] = [
@@ -104,7 +104,7 @@ function Links({
 	location,
 	getRef,
 	countryGroupId,
-	hideDigiSupptContrib: hideDigiSupptContrib,
+	isNewProduct,
 }: PropTypes): JSX.Element {
 	const { protocol, host, pathname } = window.location;
 	const urlWithoutParams = `${protocol}//${host}${pathname}`;
@@ -120,7 +120,7 @@ function Links({
 							text === 'Support' ||
 							text === 'Contributions'
 						) {
-							if (hideDigiSupptContrib) {
+							if (isNewProduct) {
 								return false;
 							}
 						}
