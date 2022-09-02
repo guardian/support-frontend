@@ -122,8 +122,7 @@ function Links({
 							text === 'Support' ||
 							text === 'Contributions' ||
 							(text === 'Newspaper' && internationalisationIDValue !== 'uk') ||
-							(text === 'Guardian Weekly' &&
-								internationalisationIDValue !== 'uk')
+							(text === 'Subscriptions' && internationalisationIDValue !== 'uk')
 						) {
 							if (isNewProduct) {
 								return false;
