@@ -1,12 +1,19 @@
+import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import './recaptcha.scss';
 
 export type RecaptchaProps = {
 	id?: string;
+	onRecaptchaCompleted: (token: string) => void;
+	onRecaptchaExpired?: () => void;
 };
 
 export function Recaptcha({
 	id = 'robot_checkbox',
+	onRecaptchaCompleted,
+	onRecaptchaExpired,
 }: RecaptchaProps): JSX.Element {
+	useRecaptchaV2(id, onRecaptchaCompleted, onRecaptchaExpired);
+
 	return (
 		<>
 			<div id={id} className="robot_checkbox" />

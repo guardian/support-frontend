@@ -11,7 +11,6 @@ import type { StripeElementChangeEvent, StripeError } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import './stripeForm.scss';
-import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { setStripePaymentMethod } from 'helpers/redux/checkout/payment/stripe/actions';
@@ -130,17 +129,6 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 		useState<boolean>(false);
 	const stripe = stripeJs.useStripe();
 	const elements = stripeJs.useElements();
-
-	useRecaptchaV2(
-		'robot_checkbox',
-		(token: string) => {
-			trackComponentLoad('subscriptions-recaptcha-client-token-received');
-			dispatch(setRecaptchaToken(token));
-			setRecaptchaError(null);
-			void fetchPaymentIntent(token);
-		},
-		() => dispatch(expireRecaptchaToken()),
-	);
 
 	/**
 	 * Handlers
@@ -432,6 +420,15 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 					{window.guardian.recaptchaEnabled ? (
 						<RecaptchaWithError
 							id="robot_checkbox"
+							onRecaptchaCompleted={(token: string) => {
+								trackComponentLoad(
+									'subscriptions-recaptcha-client-token-received',
+								);
+								dispatch(setRecaptchaToken(token));
+								setRecaptchaError(null);
+								void fetchPaymentIntent(token);
+							}}
+							onRecaptchaExpired={() => dispatch(expireRecaptchaToken())}
 							label="Security check"
 							// TODO: Remove type assertion when we can fix field error types
 							error={recaptchaError?.message as string}
