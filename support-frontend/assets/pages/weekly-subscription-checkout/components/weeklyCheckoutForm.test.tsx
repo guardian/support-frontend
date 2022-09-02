@@ -1,5 +1,7 @@
+/* eslint-disable eslint-comments/require-description -- This is a mocks file, it is not intended to be good code! */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import '__mocks__/stripeMock';
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { fireEvent, screen } from '@testing-library/react';
 import { mockFetch } from '__mocks__/fetchMock';
 import { weeklyProducts } from '__mocks__/productInfoMocks';
@@ -7,37 +9,55 @@ import { renderWithStore } from '__test-utils__/render';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
-import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { createTestStoreForSubscriptions } from '../../../__test-utils__/testStore';
+import type { BillingPeriod } from '../../../helpers/productPrice/billingPeriods';
+import type { FulfilmentOptions } from '../../../helpers/productPrice/fulfilmentOptions';
+import { getWeeklyFulfilmentOption } from '../../../helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from '../../../helpers/productPrice/productOptions';
+import { NoProductOptions } from '../../../helpers/productPrice/productOptions';
+import { setProductPrices } from '../../../helpers/redux/checkout/product/actions';
+import type { SubscriptionsStore } from '../../../helpers/redux/subscriptionsStore';
+import { formatMachineDate } from '../../../helpers/utilities/dateConversions';
 import WeeklyCheckoutForm from './weeklyCheckoutForm';
 
-function setUpStore(initialState: WithDeliveryCheckoutState) {
-	const store = configureStore({
-		reducer: combineReducers({
-			page: createReducer(),
-			common: commonReducer,
-		}),
-		preloadedState: initialState,
-	});
+function setUpStore(
+	initialState: WithDeliveryCheckoutState,
+): SubscriptionsStore {
+	const store = createTestStoreForSubscriptions(
+		GuardianWeekly,
+		'Monthly',
+		formatMachineDate(new Date()),
+		NoProductOptions,
+		getWeeklyFulfilmentOption,
+	);
+	store.dispatch(setProductPrices(weeklyProducts));
 	store.dispatch(setInitialCommonState(initialState.common));
 	return store;
 }
 
-jest.mock('helpers/globalsAndSwitches/globals', () => ({
-	__esModule: true,
-	isSwitchOn: jest.fn(),
-	getSettings: jest.fn(),
-	getGlobal: jest.fn(),
-}));
+jest.mock('helpers/globalsAndSwitches/globals', () => {
+	const actualGlobalsAndSwitches = jest.requireActual(
+		'helpers/globalsAndSwitches/globals',
+	);
 
+	return {
+		...actualGlobalsAndSwitches,
+		isSwitchOn: jest.fn(),
+	};
+});
 const mock = (mockFn: unknown) => mockFn as jest.Mock;
 
 describe('Guardian Weekly checkout form', () => {
 	// Suppress warnings related to our version of Redux and improper JSX
 	console.warn = jest.fn();
 	console.error = jest.fn();
+
 	let initialState: unknown;
+	const billingPeriod: BillingPeriod = 'Monthly';
+	const productOption: ProductOptions = 'NoProductOptions';
+	const fulfilmentOption: FulfilmentOptions = 'Domestic';
+
 	beforeEach(() => {
 		initialState = {
 			page: {
@@ -48,9 +68,9 @@ describe('Guardian Weekly checkout form', () => {
 				checkoutForm: {
 					product: {
 						productType: GuardianWeekly,
-						billingPeriod: 'Monthly',
-						productOption: 'NoProductOptions',
-						fulfilmentOption: 'Domestic',
+						billingPeriod,
+						productOption,
+						fulfilmentOption,
 						productPrices: weeklyProducts,
 					},
 					billingAddress: {
@@ -100,10 +120,6 @@ describe('Guardian Weekly checkout form', () => {
 				expect(screen.queryByText('Credit/Debit card')).toBeInTheDocument();
 			});
 
-			it('shows the direct debit option when the currency is GBP and the delivery address is in the UK', () => {
-				expect(screen.queryByText('Direct debit')).toBeInTheDocument();
-			});
-
 			it('does not show the direct debit option when the delivery address is outside the UK', async () => {
 				const countrySelect = await screen.findByLabelText('Country');
 				fireEvent.change(countrySelect, {
@@ -113,9 +129,13 @@ describe('Guardian Weekly checkout form', () => {
 				});
 				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
 			});
+
+			it('shows the direct debit option when the currency is GBP and the delivery address is in the UK', () => {
+				expect(screen.queryByText('Direct debit')).toBeInTheDocument();
+			});
 		});
 
-		describe('with only paypal switch on', () => {
+		describe('with only PayPal switch on', () => {
 			beforeEach(() => {
 				mock(isSwitchOn).mockImplementation(
 					(key) => key === 'subscriptionsPaymentMethods.paypal',
@@ -149,7 +169,7 @@ describe('Guardian Weekly checkout form', () => {
 				});
 			});
 
-			it('does not show the direct debit option', () => {
+			it('does not show the PayPal option', () => {
 				expect(screen.queryByText('PayPal')).not.toBeInTheDocument();
 			});
 			it('does not show the credit/debit card option', () => {
@@ -170,10 +190,10 @@ describe('Guardian Weekly checkout form', () => {
 				});
 			});
 
-			it('does not show the direct debit option', () => {
+			it('does not show the PayPal option', () => {
 				expect(screen.queryByText('PayPal')).not.toBeInTheDocument();
 			});
-			it('does not show the credit/debit card option', () => {
+			it('does not show the direct debit option', () => {
 				expect(screen.queryByText('Direct debit')).not.toBeInTheDocument();
 			});
 		});
@@ -241,6 +261,50 @@ describe('Guardian Weekly checkout form', () => {
 					'Please use only letters, numbers and punctuation.',
 				),
 			).toHaveLength(0);
+		});
+	});
+
+	describe('Pricing internationalisation', () => {
+		beforeEach(() => {
+			mock(isSwitchOn).mockImplementation(() => true);
+
+			renderWithStore(<WeeklyCheckoutForm />, {
+				initialState,
+				// @ts-expect-error -- Type mismatch is unimportant for tests
+				store: setUpStore(initialState),
+			});
+		});
+
+		it('should display correct prices based on delivery address country (regardless of billing address country)', async () => {
+			const addressIsNotSame = await screen.findByRole('radio', {
+				name: 'No',
+			});
+			fireEvent.click(addressIsNotSame);
+
+			const [Germany, UnitedKingdom] = ['DE', 'GB'];
+			const [deliveryAddressCountry, billingAddressCountry] =
+				await screen.findAllByLabelText('Country');
+			fireEvent.change(deliveryAddressCountry, {
+				target: {
+					value: Germany,
+				},
+			});
+			fireEvent.change(billingAddressCountry, {
+				target: {
+					value: UnitedKingdom,
+				},
+			});
+
+			const expectedPrice: number =
+				// @ts-expect-error -- `weeklyProducts` is a hard-coded mock, no risk of null values
+				weeklyProducts['Europe'][fulfilmentOption][productOption][
+					billingPeriod
+				]['EUR']['price'];
+
+			expect(
+				screen.queryAllByText(new RegExp(`€${expectedPrice}.+per month`))
+					.length,
+			).toBeGreaterThan(0);
 		});
 	});
 });

@@ -2,7 +2,7 @@ import type { TypedUseSelectorHook } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
 import type {
 	ContributionsDispatch,
-	ContributionsStore,
+	ContributionsState,
 } from './contributionsStore';
 import type {
 	SubscriptionsDispatch,
@@ -16,5 +16,5 @@ export const useSubscriptionsSelector: TypedUseSelectorHook<SubscriptionsState> 
 
 export const useContributionsDispatch: () => ContributionsDispatch =
 	useDispatch;
-export const useContributionsSelector: TypedUseSelectorHook<ContributionsStore> =
+export const useContributionsSelector: TypedUseSelectorHook<ContributionsState> =
 	useSelector;

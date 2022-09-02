@@ -24,6 +24,7 @@ type PropTypes = {
 	location: 'desktop' | 'mobile';
 	countryGroupId?: CountryGroupId;
 	getRef?: (element: Element | null) => void;
+	isNewProduct?: boolean;
 };
 
 const links: HeaderNavLink[] = [
@@ -99,7 +100,12 @@ function getActiveLinkClassModifiers(
 }
 
 // Export
-function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
+function Links({
+	location,
+	getRef,
+	countryGroupId,
+	isNewProduct,
+}: PropTypes): JSX.Element {
 	const { protocol, host, pathname } = window.location;
 	const urlWithoutParams = `${protocol}//${host}${pathname}`;
 	return (
@@ -108,6 +114,18 @@ function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
 		>
 			<ul className="component-header-links__ul" ref={getRef}>
 				{links
+					.filter(({ text }) => {
+						if (
+							text === 'Digital' ||
+							text === 'Support' ||
+							text === 'Contributions'
+						) {
+							if (isNewProduct) {
+								return false;
+							}
+						}
+						return true;
+					})
 					.filter(({ include }) => {
 						// If there is no country group ID for the link, return true and include the link in the rendering.
 						if (!countryGroupId) {

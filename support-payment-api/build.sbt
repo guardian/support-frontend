@@ -11,7 +11,7 @@ scalacOptions ++= Seq(
 addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.11.3")
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "ch.qos.logback" % "logback-classic" % "1.2.11",
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "org.playframework.anorm" %% "anorm" % "2.6.10",
+  "org.playframework.anorm" %% "anorm" % "2.7.0",
   "org.scalatest" %% "scalatest" % "3.0.9" % "test",
   "org.scalatestplus" %% "mockito-3-4" % "3.2.1.0" % "test",
   "org.mockito" % "mockito-core" % "4.7.0",

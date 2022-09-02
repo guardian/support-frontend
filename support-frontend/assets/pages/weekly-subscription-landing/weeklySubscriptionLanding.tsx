@@ -67,6 +67,7 @@ function WeeklyLandingPage({
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	// ID for Selenium tests
 	const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
+	const isNewProduct = participations.newProduct === 'variant';
 	const Header = headerWithCountrySwitcherContainer({
 		path,
 		countryGroupId,
@@ -80,6 +81,7 @@ function WeeklyLandingPage({
 			International,
 		],
 		trackProduct: 'GuardianWeekly',
+		isNewProduct,
 	});
 	return (
 		<Page

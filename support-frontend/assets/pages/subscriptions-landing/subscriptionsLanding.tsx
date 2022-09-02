@@ -25,6 +25,7 @@ function SubscriptionsLandingPage({
 	pricingCopy,
 	referrerAcquisitions,
 }: SubscriptionsLandingPropTypes) {
+	const isNewProduct = participations.newProduct === 'variant';
 	const Header = headerWithCountrySwitcherContainer({
 		path: '/subscribe',
 		countryGroupId,
@@ -37,6 +38,7 @@ function SubscriptionsLandingPage({
 			NZDCountries,
 			International,
 		],
+		isNewProduct,
 	});
 	return (
 		<Page header={<Header />} footer={<Footer centred />}>

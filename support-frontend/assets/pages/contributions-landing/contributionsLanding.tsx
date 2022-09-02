@@ -1,12 +1,6 @@
 // ----- Imports ----- //
-import { FocusStyleManager } from '@guardian/source-foundations';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Routes, useParams } from 'react-router-dom';
-import type { ThunkDispatch } from 'redux-thunk';
-import ContributionsFooter from 'components/footerCompliant/ContributionsFooter';
-import { RoundelHeader } from 'components/headers/roundelHeader/header';
-import Page from 'components/page/page';
-import { getCampaignSettings } from 'helpers/campaigns/campaigns';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	countryGroups,
@@ -18,15 +12,12 @@ import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import * as user from 'helpers/user/user';
+import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
-import { ContributionFormContainer } from './components/ContributionFormContainer';
 import ContributionThankYouPage from './components/ContributionThankYou/ContributionThankYouPage';
-import type { Action } from './contributionsLandingActions';
 import { init as formInit } from './contributionsLandingInit';
-import type { State } from './contributionsLandingReducer';
+import { ContributionsLandingPage } from './contributionsLandingPage';
 import { setUserStateActions } from './setUserStateActions';
-import './contributionsLanding.scss';
-import './newContributionsLandingTemplate.scss';
 
 if (!isDetailsSupported) {
 	polyfillDetails();
@@ -60,53 +51,32 @@ if (typeof Object.values !== 'function') {
 user.init(store.dispatch, setUserStateActions(countryGroupId));
 formInit(store);
 const reactElementId = `contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
+const { abParticipations } = store.getState().common;
 
-// ----- Internationalisation ----- //
-
-const selectedCountryGroup = countryGroups[countryGroupId];
+const showNewProductPage = abParticipations.supporterPlus === 'variant';
 
 // ----- Render ----- //
 
-const campaignSettings = getCampaignSettings();
-const cssModifiers = campaignSettings?.cssModifiers ?? [];
-const backgroundImageSrc = campaignSettings?.backgroundImage;
-FocusStyleManager.onlyShowFocusOnTabs(); // https://www.theguardian.design/2a1e5182b/p/6691bb-accessibility
-
-function ContributionsLandingPage() {
-	const { campaignCode } = useParams();
-
-	return (
-		<Page
-			classModifiers={['new-template', 'contribution-form', ...cssModifiers]}
-			header={<RoundelHeader selectedCountryGroup={selectedCountryGroup} />}
-			footer={<ContributionsFooter />}
-			backgroundImageSrc={backgroundImageSrc}
-		>
-			<ContributionFormContainer
-				thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
-				campaignCodeParameter={campaignCode}
-			/>
-		</Page>
-	);
-}
-
 const router = () => {
 	const countryIds = ['uk', 'us', 'au', 'eu', 'int', 'nz', 'ca'];
+
+	const landingPage = showNewProductPage ? (
+		<SupporterPlusLandingPage />
+	) : (
+		<ContributionsLandingPage />
+	);
 
 	return (
 		<BrowserRouter>
 			<Provider store={store}>
 				<Routes>
 					{countryIds.map((countryId) => (
-						<Route
-							path={`/${countryId}/contribute/`}
-							element={<ContributionsLandingPage />}
-						/>
+						<Route path={`/${countryId}/contribute/`} element={landingPage} />
 					))}
 					{countryIds.map((countryId) => (
 						<Route
 							path={`/${countryId}/contribute/:campaignCode`}
-							element={<ContributionsLandingPage />}
+							element={landingPage}
 						/>
 					))}
 					{countryIds.map((countryId) => (
@@ -123,6 +93,6 @@ const router = () => {
 	);
 };
 
-const dispatch = store.dispatch as ThunkDispatch<State, void, Action>;
+const dispatch = store.dispatch;
 
 renderPage(router(), reactElementId, () => dispatch(enableOrDisableForm()));

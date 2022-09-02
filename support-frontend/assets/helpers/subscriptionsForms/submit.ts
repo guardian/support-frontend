@@ -198,9 +198,11 @@ function onPaymentAuthorised(
 	const { csrf } = state.page.checkoutForm;
 	const { abParticipations } = state.common;
 	const addresses = getAddresses(state);
+	const pricingCountry =
+		addresses.deliveryAddress?.country ?? addresses.billingAddress.country;
 	const productPrice = getProductPrice(
 		productPrices,
-		addresses.billingAddress.country,
+		pricingCountry,
 		billingPeriod,
 		fulfilmentOption,
 		productOption,
