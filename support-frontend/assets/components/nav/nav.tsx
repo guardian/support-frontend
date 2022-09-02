@@ -1,34 +1,16 @@
 import { css } from '@emotion/react';
-import { between, brand, from, neutral } from '@guardian/source-foundations';
+import { between, brand, from } from '@guardian/source-foundations';
+import { Column, Columns } from '@guardian/source-react-components';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import { Container } from 'components/layout/container';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 const container = css`
 	display: none;
 
 	${from.desktop} {
-		display: flex;
-		min-width: 100%;
-		min-height: 41px;
-		background-color: ${brand[400]};
-		color: ${neutral[97]};
+		display: block;
 	}
-`;
-
-const gutter = (direction: string) => css`
-  border-${direction}: 1px solid ${brand[600]};
-
-  ${from.desktop} {
-    width: 60px;
-  }
-
-  ${from.leftCol} {
-    width: 30px;
-  }
-
-  ${from.wide} {
-    width: 70px;
-  }
 `;
 
 const divider = css`
@@ -42,9 +24,10 @@ const divider = css`
 	}
 `;
 
-const countrySwitcher = css`
-	flex-grow: 1;
-	margin: auto 0;
+const columnCssOverrides = css`
+	min-height: 42px;
+	display: flex;
+	align-items: center;
 `;
 
 interface NavProps {
@@ -60,16 +43,24 @@ function Nav({
 }: NavProps): JSX.Element {
 	return (
 		<nav css={container}>
-			<span css={gutter('right')} />
-			<span css={divider} />
-			<div css={countrySwitcher}>
-				<CountryGroupSwitcher
-					countryGroupIds={countryGroupIds}
-					selectedCountryGroup={selectedCountryGroup}
-					subPath={subPath}
-				/>
-			</div>
-			<span css={gutter('left')} />
+			<Container
+				sideBorders={true}
+				sidePadding={false}
+				topBorder={true}
+				borderColor={brand[600]}
+				backgroundColor={brand[400]}
+			>
+				<Columns>
+					<div css={divider} />
+					<Column cssOverrides={columnCssOverrides}>
+						<CountryGroupSwitcher
+							countryGroupIds={countryGroupIds}
+							selectedCountryGroup={selectedCountryGroup}
+							subPath={subPath}
+						/>
+					</Column>
+				</Columns>
+			</Container>
 		</nav>
 	);
 }
