@@ -11,7 +11,7 @@ import com.amazonaws.services.sqs.model.{
 import com.gu.aws.{AwsAsync, CredentialsProvider}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
+import com.gu.supporterdata.model.{ContributionAmount, Stage, SupporterRatePlanItem}
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
 import io.circe.syntax.EncoderOps
@@ -21,6 +21,7 @@ import scala.jdk.CollectionConverters._
 
 class SqsService(queueName: String)(implicit val executionContext: ExecutionContext) {
   implicit val encoder: Encoder[SupporterRatePlanItem] = deriveEncoder
+  implicit val contributionAmountEncoder: Encoder[ContributionAmount] = deriveEncoder
   private val sqsClient = AmazonSQSAsyncClientBuilder.standard
     .withCredentials(CredentialsProvider)
     .withRegion(Regions.EU_WEST_1)

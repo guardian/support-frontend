@@ -9,7 +9,7 @@ import com.gu.model.ZuoraFieldNames.{
   subscriptionName,
   termEndDate,
 }
-import com.gu.supporterdata.model.SupporterRatePlanItem
+import com.gu.supporterdata.model.{ContributionAmount, SupporterRatePlanItem}
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
 import kantan.csv.HeaderDecoder
@@ -47,5 +47,6 @@ object SupporterRatePlanItemCodecs {
         ),
     )
 
-  implicit val circeEncoder: Encoder[SupporterRatePlanItem] = deriveEncoder
+  implicit val supporterRatePlanEncoder: Encoder[SupporterRatePlanItem] = deriveEncoder
+  implicit val contributionAmountEncoder: Encoder[ContributionAmount] = deriveEncoder
 }

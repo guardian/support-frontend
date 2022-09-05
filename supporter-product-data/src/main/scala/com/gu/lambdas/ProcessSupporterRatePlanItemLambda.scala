@@ -11,7 +11,7 @@ import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{AlarmService, ConfigService, ZuoraSubscriptionService}
 import com.gu.supporterdata.model.Stage.{DEV, PROD, UAT}
-import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
+import com.gu.supporterdata.model.{ContributionAmount, Stage, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.Codec
@@ -79,8 +79,10 @@ class ContributionProcessor(stage: Stage, config: ZuoraQuerierConfig) {
     zuoraService
       .getSubscription(supporterRatePlanItem.subscriptionName)
       .map { sub =>
-        SafeLogger.info(s"Contribution amount for supporter ${supporterRatePlanItem.identityId} is ${sub.price}")
-        supporterRatePlanItem.copy(contributionAmount = sub.price)
+        SafeLogger.info(
+          s"Contribution amount for supporter ${supporterRatePlanItem.identityId} is ${sub.contributionAmount}",
+        )
+        supporterRatePlanItem.copy(contributionAmount = sub.contributionAmount)
       }
 
 }
@@ -118,6 +120,7 @@ class SupporterRatePlanItemProcessor(
 
 object SupporterRatePlanItemCodec {
   implicit val codec: Codec[SupporterRatePlanItem] = deriveCodec
+  implicit val contributionCodec: Codec[ContributionAmount] = deriveCodec
 }
 
 object ContributionIds {

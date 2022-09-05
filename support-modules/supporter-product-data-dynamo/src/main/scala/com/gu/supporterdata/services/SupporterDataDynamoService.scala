@@ -33,6 +33,7 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
     val expiryDate = item.termEndDate.plusDays(1)
     val expiryDateName = "expiryDate"
     val contributionAmount = "contributionAmount"
+    val contributionCurrency = "contributionCurrency"
 
     val key = Map(
       identityId -> AttributeValue.builder.s(beneficiaryIdentityId).build,
@@ -49,7 +50,7 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
           """
     val updateExpression =
       if (item.contributionAmount.isDefined)
-        nonOptionExpression + s",\n          $contributionAmount = :$contributionAmount"
+        nonOptionExpression + s",\n          $contributionAmount = :$contributionAmount,\n          $contributionCurrency = :$contributionCurrency"
       else nonOptionExpression
 
     val nonOptionValues = Map(
@@ -61,7 +62,12 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
     )
 
     val attributeValues = item.contributionAmount
-      .map(amount => nonOptionValues + (":" + contributionAmount -> AttributeValue.builder.n(amount.toString()).build))
+      .map(amount =>
+        nonOptionValues ++ Map(
+          ":" + contributionAmount -> AttributeValue.builder.n(amount.amount.toString).build,
+          ":" + contributionCurrency -> AttributeValue.builder.s(amount.currency).build,
+        ),
+      )
       .getOrElse(nonOptionValues)
 
     val updateItemRequest = UpdateItemRequest.builder

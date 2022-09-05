@@ -130,7 +130,7 @@ Resources:
                 - sqs:SendMessage
                 - sqs:ReceiveMessage
                 - sqs:DeleteMessage
-              Resource: '*' #TODO, restrict this
+              Resource: !GetAtt [ SupporterProductDataQueue, Arn ]
 
   QueryZuoraLambda:
     Type: "AWS::Lambda::Function"

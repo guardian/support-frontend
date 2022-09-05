@@ -16,7 +16,7 @@ import com.gu.support.workers.states.SendThankYouEmailState.{
 }
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
 import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
-import com.gu.supporterdata.model.SupporterRatePlanItem
+import com.gu.supporterdata.model.{ContributionAmount, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.gu.threadpools.CustomPool.executionContext
 
@@ -76,7 +76,7 @@ object UpdateSupporterProductData {
               identityId = user.id,
               productRatePlanId = productRatePlan.id,
               productRatePlanName = s"support-workers added ${product.describe}",
-              Some(product.amount),
+              Some(ContributionAmount(product.amount, product.currency.iso)),
             ),
           )
           .toRight(())
@@ -161,7 +161,7 @@ object UpdateSupporterProductData {
       identityId: String,
       productRatePlanId: String,
       productRatePlanName: String,
-      contributionAmount: Option[BigDecimal] = None,
+      contributionAmount: Option[ContributionAmount] = None,
   ) =
     SupporterRatePlanItem(
       subscriptionName = subscriptionName,
