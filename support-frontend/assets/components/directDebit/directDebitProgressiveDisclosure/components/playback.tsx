@@ -11,7 +11,6 @@ import { useEffect, useRef } from 'react';
 import * as React from 'react';
 import { RecaptchaField } from 'components/recaptcha/recaptchaField';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
-import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 
 const directDebitForm = css`
 	clear: left;
@@ -64,12 +63,6 @@ function Playback(props: {
 	expireRecaptchaToken?: () => void;
 	recaptchaError: string;
 }): JSX.Element {
-	useRecaptchaV2(
-		recaptchaId,
-		props.setRecaptchaToken,
-		props.expireRecaptchaToken,
-	);
-
 	const subscribeButtonRef = useRef<HTMLDivElement>(null);
 
 	// Actively moving focus to the buttons prevents a screenreader 'losing its place' in the document
@@ -114,6 +107,8 @@ function Playback(props: {
 					label="Security check"
 					id={recaptchaId}
 					error={props.recaptchaError}
+					onRecaptchaCompleted={props.setRecaptchaToken}
+					onRecaptchaExpired={props.expireRecaptchaToken}
 				/>
 			</div>
 

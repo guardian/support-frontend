@@ -8,6 +8,7 @@ import type React from 'react';
 import { compose } from 'redux';
 import type { PropsForHoc as WithErrorProps } from 'components/forms/customFields/error';
 import type { PropsForHoc as WithLabelProps } from 'components/forms/label';
+import type { RecaptchaProps } from 'components/recaptcha/recaptcha';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { withError } from 'hocs/withError';
 import { withLabel } from 'hocs/withLabel';
@@ -36,7 +37,7 @@ export const CardCvcWithError = compose<
 )(CardCvcElement);
 
 export const RecaptchaWithError = compose<
-	React.FC<stripeJs.CardNumberElementProps & WithErrorAndLabelProps>
+	React.FC<RecaptchaProps & WithErrorAndLabelProps>
 >(
 	withLabel,
 	withError,
