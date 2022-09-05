@@ -390,9 +390,10 @@ Resources:
     Type: 'AWS::CloudWatch::Alarm'
     Condition: CreateProdResources
     Properties:
-      AlarmName: !Sub 'There was a failure processing a supporter record in the supporter-product-data stepfunction - Dead letters queue is building up'
+      AlarmName: !Sub 'Urgent 9-5 - There was a failure processing a supporter record in the ProcessSupporterRatePlanItemLambda lambda'
       AlarmDescription: >
-        TODO
+        Check the dead-letters-direct-mail-PROD SQS queue for details of the record which failed and the ProcessSupporterRatePlanItemLambda
+        Cloudwatch logs for details of what went wrong
       Namespace: AWS/SQS
       Dimensions:
         - Name: QueueName
@@ -417,7 +418,6 @@ Resources:
       AlarmName: !Join
         - ' '
         - - 'URGENT 9-5 -'
-          - !Ref 'Stage'
           - 'Failed to extract supporter product data from Zuora'
       AlarmDescription: !Join
         - ' '
@@ -445,7 +445,6 @@ Resources:
       AlarmName: !Join
         - ' '
         - - 'URGENT 9-5 -'
-          - !Ref 'Stage'
           - 'There was a csv read failure when loading supporter product data into DynamoDB'
       AlarmDescription: !Join
         - ' '
@@ -471,13 +470,37 @@ Resources:
       AlarmName: !Join
         - ' '
         - - 'URGENT 9-5 -'
-          - !Ref 'Stage'
           - 'There was a DynamoDB write failure when loading supporter product data into DynamoDB'
       AlarmDescription: !Join
         - ' '
         - - 'Impact - On or more subscriber will not get their digital benefits'
           - 'Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit'
       MetricName: DynamoWriteFailure
+      Namespace: supporter-product-data
+      Dimensions:
+        - Name: Environment
+          Value: PROD
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 1
+      Period: 60
+      EvaluationPeriods: 1
+      Statistic: Average
+
+  SQSWriteAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Condition: CreateProdResources
+    Properties:
+      AlarmActions:
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+      AlarmName: !Join
+        - ' '
+        - - 'URGENT 9-5 -'
+          - 'There was a failure when trying to write supporter data to the supporter-product-data-PROD sqs queue'
+      AlarmDescription: !Join
+        - ' '
+        - - 'Search for the term "Error sending batch" in the AddSupporterRatePlanItemToQueueLambda cloudwatch logs'
+          - 'to see details of the items which failed'
+      MetricName: SqsWriteFailure
       Namespace: supporter-product-data
       Dimensions:
         - Name: Environment

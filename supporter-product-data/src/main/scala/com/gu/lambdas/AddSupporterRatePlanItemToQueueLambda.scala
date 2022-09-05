@@ -74,6 +74,7 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
       batches,
       timeOutCheck,
       sqsService,
+      alarmService,
     )
 
     val maybeSaveSuccessTime =
@@ -92,6 +93,7 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
       batches: List[List[(SupporterRatePlanItem, Int)]],
       timeOutCheck: TimeOutCheck,
       sqsService: SqsService,
+      alarmService: AlarmService,
   ): Int =
     batches.foldLeft(processedCount) { (processedCount, batch) =>
       if (timeOutCheck.timeRemainingMillis < timeoutBufferInMillis) {
@@ -103,12 +105,12 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
       logger.info(
         s"Continuing processing with batch of ${batch.length} - time remaining: ${timeOutCheck.timeRemainingMillis / 1000} seconds, buffer: ${timeoutBufferInMillis / 1000} seconds",
       )
-
       try {
         sqsService.sendBatch(batch)
       } catch {
-        // TODO Alert
-        case e: Throwable => SafeLogger.error(scrub"Error sending batch to sqs", e)
+        case e: Throwable =>
+          SafeLogger.error(scrub"Error sending batch to sqs\nbatch content was ${batch.asJson.spaces2}", e)
+          alarmService.triggerCsvReadAlarm
       }
 
       val (_, highestProcessedIndex) = batch.last
