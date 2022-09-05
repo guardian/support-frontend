@@ -108,6 +108,8 @@ function Links({
 }: PropTypes): JSX.Element {
 	const { protocol, host, pathname } = window.location;
 	const urlWithoutParams = `${protocol}//${host}${pathname}`;
+	const internationalisationIDValue = internationalisationID(countryGroupId);
+	const isNotUk = internationalisationIDValue !== 'uk';
 	return (
 		<nav
 			className={classNameWithModifiers('component-header-links', [location])}
@@ -118,7 +120,9 @@ function Links({
 						if (
 							text === 'Digital' ||
 							text === 'Support' ||
-							text === 'Contributions'
+							text === 'Contributions' ||
+							(text === 'Newspaper' && isNotUk) ||
+							(text === 'Subscriptions' && isNotUk)
 						) {
 							if (isNewProduct) {
 								return false;
@@ -141,9 +145,6 @@ function Links({
 						return true;
 					})
 					.map((link) => {
-						const internationalisationIDValue =
-							internationalisationID(countryGroupId);
-
 						if (internationalisationIDValue == null || !link.internal) {
 							return link;
 						}
