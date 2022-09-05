@@ -13,7 +13,6 @@ function createFormReducer() {
 		formSubmitted: false,
 		isTestUser: isTestUser(),
 		deliveryInstructions: null,
-		debugInfo: '',
 	};
 
 	return function (state: FormState = initialState, action: Action): FormState {
