@@ -41,6 +41,8 @@ object CheckoutValidationRules {
       if (switches.directDebit.isOn) Valid else Invalid("Invalid Payment Method")
     case Left(_: StripePaymentMethodPaymentFields) =>
       if (switches.creditCard.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_) => Invalid("Invalid Payment Method")
+    case Right(_) => Valid
   }
 
   def checkContributionPaymentMethodEnabled(
@@ -63,6 +65,7 @@ object CheckoutValidationRules {
           if (switches.stripePaymentRequestButton.isOn) Valid else Invalid("Invalid Payment Method")
         case Some(StripePaymentType.StripeCheckout) =>
           if (switches.stripe.isOn) Valid else Invalid("Invalid Payment Method")
+        case None => Invalid("Invalid Payment Method")
       }
     case Left(_: AmazonPayPaymentFields) =>
       if (switches.amazonPay.isOn) Valid else Invalid("Invalid Payment Method")
@@ -70,6 +73,7 @@ object CheckoutValidationRules {
       // Return Valid for all existing payments because we can't tell whether the user has a direct debit or card but,
       // there are separate switches in the switchboards(RRCP-Reader Revenue Control Panel) for these
       Valid
+    case Right(_) => Invalid("Invalid Payment Method")
 
   }
   def checkPaymentMethodEnabled(
