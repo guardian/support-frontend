@@ -1746,22 +1746,22 @@
   resolved "https://registry.yarnpkg.com/@guardian/prettier/-/prettier-0.6.0.tgz#b3dcbef0e2a9232d2afe04dff075426b2939f44e"
   integrity sha512-RN8GBRth5BXHoWymCZIYDbmZM8DkUbgecf+wyv+9hdXA/ad4Ob4qP9u/ARU689qMo+JSC1z3FRKelvkkjtYzJw==
 
-"@guardian/source-foundations@^4.1.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@guardian/source-foundations/-/source-foundations-4.2.0.tgz#fdde370f04b07ab9ce37f0d03af110e9e96ed8df"
-  integrity sha512-NXUoN4LSGlhufUed1OXPwvQcLiwxIdOSgMoRoNZsKUNhFOBUghEVuH7NlXL2LtLiIT7IdlPrU0Pnu0I2mUe69g==
+"@guardian/source-foundations@^5.2.1":
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/@guardian/source-foundations/-/source-foundations-5.2.1.tgz#5c6bc8967bdcd579ac307b8087028917933386eb"
+  integrity sha512-zBAZsT0thtWxR1d4Wl4PeNVHHcfrSfuNHExBMnQKZAPnwsGbHKF8ETPzP14YnU290Wb/fStNti6wTzCqmkRgnw==
   dependencies:
     mini-svg-data-uri "^1.3.3"
 
-"@guardian/source-react-components-development-kitchen@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@guardian/source-react-components-development-kitchen/-/source-react-components-development-kitchen-3.0.0.tgz#abca04e964ed5f3f3bd10a2aeb9de56a492e58d9"
-  integrity sha512-P5DJcZY0FjJpmOfhPNwTZc2Nom7HKnXWGEB2VM/KbuPAn9Jfxp/H9R29433kfaKX1OKLL3fVls+tKcdknZOkTQ==
+"@guardian/source-react-components-development-kitchen@^3.1.10":
+  version "3.1.10"
+  resolved "https://registry.yarnpkg.com/@guardian/source-react-components-development-kitchen/-/source-react-components-development-kitchen-3.1.10.tgz#1f38d98b900be4859c9ed35981737226e4769889"
+  integrity sha512-RV1QiugUDoTivxrafTRFBnk6nEgDlXx2gzqcW6IvzzKf20nlNgtOpfKWZ2JuvU/2mQSyXnqN9IAQtTKvjRcLwg==
 
-"@guardian/source-react-components@^4.0.3":
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/@guardian/source-react-components/-/source-react-components-4.3.1.tgz#eb346ee0aea6783c4eb96e2d90ce01b81f556137"
-  integrity sha512-KsAtctNhcYUi9LLkjEpk6Ky2ZP3RtXs6Up4a28alU7p+3euJdbhgxRTtuZlC/u5ERgj4dDu8r5/Q45EXZ+E6MA==
+"@guardian/source-react-components@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@guardian/source-react-components/-/source-react-components-7.1.0.tgz#2ab2c6963a95ac3d82671e8bce8cd223c649a829"
+  integrity sha512-CXumOw8D3Rpmi6QdCvpFznTGJ7SMaa/yRjZATk+ejtNPFbQ4wQhc114o8ONnTMPtWZf7+8/97iKHPPqDvfMWBA==
 
 "@humanwhocodes/config-array@^0.5.0":
   version "0.5.0"

@@ -1,6 +1,10 @@
 import { css } from '@emotion/react';
 import { from, neutral, space, textSans } from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
+import {
+	FooterLinks,
+	FooterWithContents,
+} from '@guardian/source-react-components-development-kitchen';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Container } from 'components/layout/container';
@@ -41,7 +45,14 @@ export function SupporterPlusLandingPage(): JSX.Element {
 	const heading = <LandingPageHeading />;
 
 	return (
-		<PageScaffold id="supporter-plus-landing">
+		<PageScaffold
+			id="supporter-plus-landing"
+			footer={
+				<FooterWithContents>
+					<FooterLinks></FooterLinks>
+				</FooterWithContents>
+			}
+		>
 			<CheckoutHeading heading={heading}>
 				<p>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
