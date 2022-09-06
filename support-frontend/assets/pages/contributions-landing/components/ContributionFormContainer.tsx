@@ -23,6 +23,7 @@ import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import {
@@ -30,7 +31,6 @@ import {
 	paymentWaiting,
 	setTickerGoalReached,
 } from '../contributionsLandingActions';
-import type { State } from '../contributionsLandingReducer';
 import ContributionForm from './ContributionForm';
 import { ContributionFormBlurb } from './ContributionFormBlurb';
 import {
@@ -64,7 +64,7 @@ type PropTypes = {
 	selectedAmounts: SelectedAmounts;
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: ContributionsState) => ({
 	paymentComplete: state.page.form.paymentComplete,
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	tickerGoalReached: state.page.form.tickerGoalReached,

@@ -11,15 +11,15 @@ import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/pa
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { hiddenIf } from 'helpers/utilities/utilities';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
-import type { State } from '../contributionsLandingReducer';
 import { AmazonPayCheckout } from './AmazonPay/AmazonPayCheckout';
 import { useAmazonPayObjects } from './AmazonPay/useAmazonPayObjects';
 
 // ----- Types ----- //
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: ContributionsState) {
 	const contributionType = getContributionType(state);
 	return {
 		currency: state.common.internationalisation.currencyId,
