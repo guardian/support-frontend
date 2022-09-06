@@ -172,6 +172,7 @@ function buildRegularPaymentRequest(
 	currencyId: IsoCurrency,
 	countryId: IsoCountry,
 	participations: Participations,
+	debugInfo: string,
 ): RegularPaymentRequest {
 	const product: SubscriptionProductFields = {
 		productType: DigitalPack,
@@ -201,7 +202,7 @@ function buildRegularPaymentRequest(
 		ophanIds: getOphanIds(),
 		referrerAcquisitionData: getReferrerAcquisitionData(),
 		supportAbTests: getSupportAbTests(participations),
-		debugInfo: 'no form/redux for redemption page',
+		debugInfo,
 	};
 }
 
@@ -228,6 +229,7 @@ function createSubscription(
 		state.common.internationalisation.currencyId,
 		state.common.internationalisation.countryId,
 		state.common.abParticipations,
+		state.debug.actionHistory,
 	);
 
 	const handleSubscribeResult = (result: PaymentResult) => {
