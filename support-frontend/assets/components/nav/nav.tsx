@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { between, brand, from } from '@guardian/source-foundations';
+import { brand, from, space } from '@guardian/source-foundations';
 import { Column, Columns } from '@guardian/source-react-components';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { Container } from 'components/layout/container';
@@ -13,21 +13,16 @@ const container = css`
 	}
 `;
 
-const divider = css`
-	width: 420px;
+const col1CssOverrides = css`
 	height: 28px;
 	border-right: 1px solid ${brand[600]};
-	margin-right: 11px;
-
-	${between.leftCol.and.wide} {
-		margin-right: 7px;
-	}
+	margin-right: 0;
 `;
 
-const columnCssOverrides = css`
+const col2CssOverrides = css`
 	min-height: 42px;
 	display: flex;
-	align-items: center;
+	padding: ${space[2]}px;
 `;
 
 interface NavProps {
@@ -51,8 +46,8 @@ function Nav({
 				backgroundColor={brand[400]}
 			>
 				<Columns>
-					<div css={divider} />
-					<Column cssOverrides={columnCssOverrides}>
+					<Column span={5} cssOverrides={col1CssOverrides} />
+					<Column cssOverrides={col2CssOverrides}>
 						<CountryGroupSwitcher
 							countryGroupIds={countryGroupIds}
 							selectedCountryGroup={selectedCountryGroup}
