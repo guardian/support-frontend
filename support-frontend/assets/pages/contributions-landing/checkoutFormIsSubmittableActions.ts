@@ -19,11 +19,12 @@ import { stripeCardFormIsIncomplete } from 'helpers/forms/stripe';
 import type { StateProvince } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import type { Action as UserAction } from 'helpers/user/userActions';
 import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
 import { setFormIsValid } from './contributionsLandingActions';
 import type { Action as ContributionsLandingAction } from './contributionsLandingActions';
-import type { State } from './contributionsLandingReducer';
+
 // ----- Types ----- //
 type Action = ContributionsLandingAction | UserAction;
 
@@ -105,7 +106,7 @@ const getFormIsValid = (formIsValidParameters: FormIsValidParameters) => {
 	);
 };
 
-const amazonPayFormOk = (state: State): boolean => {
+const amazonPayFormOk = (state: ContributionsState): boolean => {
 	if (state.page.checkoutForm.payment.paymentMethod === AmazonPay) {
 		const {
 			orderReferenceId,
@@ -128,7 +129,7 @@ const amazonPayFormOk = (state: State): boolean => {
 	return true;
 };
 
-const sepaFormOk = (state: State): boolean => {
+const sepaFormOk = (state: ContributionsState): boolean => {
 	if (state.page.checkoutForm.payment.paymentMethod === Sepa) {
 		const { accountHolderName, iban } = state.page.checkoutForm.payment.sepa;
 		return !!accountHolderName && isValidIban(iban);
@@ -137,7 +138,7 @@ const sepaFormOk = (state: State): boolean => {
 	return true;
 };
 
-const formIsValidParameters = (state: State) => ({
+const formIsValidParameters = (state: ContributionsState) => ({
 	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 	otherAmounts: state.page.checkoutForm.product.otherAmounts,
 	countryGroupId: state.common.internationalisation.countryGroupId,
@@ -157,7 +158,7 @@ const formIsValidParameters = (state: State) => ({
 });
 
 function enableOrDisableForm() {
-	return (dispatch: Dispatch, getState: () => State): void => {
+	return (dispatch: Dispatch, getState: () => ContributionsState): void => {
 		const state = getState();
 		const { isRecurringContributor } = state.page.user;
 		const contributionType = getContributionType(state);
@@ -186,7 +187,7 @@ function enableOrDisableForm() {
 }
 
 function setFormSubmissionDependentValue(setStateValue: () => Action) {
-	return (dispatch: Dispatch, getState: () => State): void => {
+	return (dispatch: Dispatch, getState: () => ContributionsState): void => {
 		dispatch(setStateValue());
 		enableOrDisableForm()(dispatch, getState);
 	};
