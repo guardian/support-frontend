@@ -121,8 +121,7 @@ function Links({
 							text === 'Digital' ||
 							text === 'Support' ||
 							text === 'Contributions' ||
-							(text === 'Newspaper' && isNotUk) ||
-							(text === 'Subscriptions' && isNotUk)
+							(text === 'Newspaper' && isNotUk)
 						) {
 							if (isNewProduct) {
 								return false;
