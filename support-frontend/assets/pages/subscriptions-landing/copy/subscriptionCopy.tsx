@@ -249,45 +249,40 @@ const getSubscriptionCopy = (
 	countryGroupId: CountryGroupId,
 	pricingCopy: PricingCopy,
 	participations: Participations,
+	isNewProduct?: boolean,
 ): ProductCopy[] => {
-	if (countryGroupId === GBPCountries) {
-		return [
-			guardianWeekly(
-				countryGroupId,
-				pricingCopy[GuardianWeekly],
-				true,
-				participations,
-			),
-			digital(countryGroupId, pricingCopy[DigitalPack], false),
-			paper(countryGroupId, pricingCopy[Paper], false), // Removing the link to the old paper+digital page during the June 21 Sale
-			// paperAndDigital(countryGroupId, state.common.referrerAcquisitionData, state.common.abParticipations),
-			premiumApp(countryGroupId),
-		];
-	} else if (
-		[EURCountries, AUDCountries, NZDCountries].includes(countryGroupId)
-	) {
-		return [
-			guardianWeekly(
-				countryGroupId,
-				pricingCopy[GuardianWeekly],
-				true,
-				participations,
-			),
-			digital(countryGroupId, pricingCopy[DigitalPack], false),
-			premiumApp(countryGroupId),
-		];
-	}
-
-	return [
-		digital(countryGroupId, pricingCopy[DigitalPack], true),
+	const productcopy: ProductCopy[] = [
 		guardianWeekly(
 			countryGroupId,
 			pricingCopy[GuardianWeekly],
-			false,
+			true,
 			participations,
 		),
-		premiumApp(countryGroupId),
 	];
+	if (isNewProduct) {
+		if (countryGroupId === GBPCountries) {
+			productcopy.push(paper(countryGroupId, pricingCopy[Paper], false));
+		}
+	} else {
+		if (
+			[GBPCountries, EURCountries, AUDCountries, NZDCountries].includes(
+				countryGroupId,
+			)
+		) {
+			productcopy.push(
+				digital(countryGroupId, pricingCopy[DigitalPack], false),
+			);
+		} else {
+			productcopy.unshift(
+				digital(countryGroupId, pricingCopy[DigitalPack], false),
+			);
+		}
+		if (countryGroupId === GBPCountries) {
+			productcopy.push(paper(countryGroupId, pricingCopy[Paper], false));
+		}
+	}
+	productcopy.push(premiumApp(countryGroupId));
+	return productcopy;
 };
 
 export { getSubscriptionCopy };
