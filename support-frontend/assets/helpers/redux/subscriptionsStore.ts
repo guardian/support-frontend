@@ -19,7 +19,6 @@ import {
 } from './checkout/product/actions';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
-import { debugReducer } from './debug/reducer';
 import { getInitialState } from './utils/setup';
 
 const subscriptionsPageReducer = createReducer();
@@ -29,7 +28,6 @@ export type SubscriptionsReducer = typeof subscriptionsPageReducer;
 const baseReducer = {
 	common: commonReducer,
 	page: subscriptionsPageReducer,
-	debug: debugReducer,
 };
 
 // Listener middleware allows us to specify side-effects for certain actions

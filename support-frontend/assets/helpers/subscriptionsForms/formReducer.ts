@@ -13,9 +13,18 @@ function createFormReducer() {
 		formSubmitted: false,
 		isTestUser: isTestUser(),
 		deliveryInstructions: null,
+		debugInfo: '',
 	};
 
-	return function (state: FormState = initialState, action: Action): FormState {
+	return function (
+		originalState: FormState = initialState,
+		action: Action,
+	): FormState {
+		const state = {
+			...originalState,
+			debugInfo: `${originalState.debugInfo} ${JSON.stringify(action)}\n`,
+		};
+
 		switch (action.type) {
 			case 'SET_STAGE':
 				return { ...state, stage: action.stage };

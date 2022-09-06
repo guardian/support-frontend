@@ -5,11 +5,11 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { billingPeriodFromContrib, getAmount } from '../../contributions';
 
 export type SetupPayPalRequestType = (
@@ -75,7 +75,7 @@ const setupRecurringPayPalPayment =
 		currency: IsoCurrency,
 		csrf: CsrfState,
 	) =>
-	(_dispatch: Dispatch, getState: () => ContributionsState): void => {
+	(_dispatch: Dispatch, getState: () => State): void => {
 		const state = getState();
 		const csrfToken = csrf.token;
 		const contributionType = getContributionType(state);

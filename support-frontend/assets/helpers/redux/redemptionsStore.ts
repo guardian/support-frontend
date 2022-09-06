@@ -3,13 +3,11 @@ import { renderError } from 'helpers/rendering/render';
 import { redemptionPageReducer } from 'pages/subscriptions-redemption/subscriptionsRedemptionReducer';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
-import { debugReducer } from './debug/reducer';
 import { getInitialState } from './utils/setup';
 
 const baseReducer = {
 	common: commonReducer,
 	page: redemptionPageReducer,
-	debug: debugReducer,
 };
 
 export const redemptionStore = configureStore({

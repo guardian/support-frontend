@@ -5,7 +5,7 @@ import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMess
 import type { ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
+import type { State } from '../contributionsLandingReducer';
 import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringContributorErrorMessage';
 
 // ----- Types ----- //
@@ -19,7 +19,7 @@ type PropTypes = {
 	checkoutFormHasBeenSubmitted: boolean;
 };
 
-const mapStateToProps = (state: ContributionsState) => ({
+const mapStateToProps = (state: State) => ({
 	paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 	contributionType: getContributionType(state),
 	paymentError: state.page.form.paymentError,

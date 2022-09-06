@@ -24,12 +24,12 @@ import {
 	expireRecaptchaToken,
 	setRecaptchaToken,
 } from 'helpers/redux/checkout/recaptcha/actions';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentFailure,
 	paymentWaiting as setPaymentWaiting,
 } from 'pages/contributions-landing/contributionsLandingActions';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { CreditCardIcons } from './CreditCardIcons';
 import {
 	logCreatePaymentMethodError,
@@ -48,7 +48,7 @@ import './stripeCardForm.scss';
 
 // ----- Redux -----//
 
-const mapStateToProps = (state: ContributionsState) => ({
+const mapStateToProps = (state: State) => ({
 	contributionType: getContributionType(state),
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,

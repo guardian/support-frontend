@@ -14,7 +14,7 @@ import {
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { ContributionsCheckoutForm } from './ContributionsCheckoutForm';
 import { ContributionsCheckoutSubmitting } from './ContributionsCheckoutSubmitting';
 import { ContributionsCheckoutThankYou } from './ContributionsCheckoutThankYou';
@@ -24,7 +24,7 @@ import { useSecondaryCta } from './useSecondaryCta';
 
 type Status = 'INPUT' | 'SUBMITTING' | 'SUCCESS';
 
-const getStatus = (state: ContributionsState): Status => {
+const getStatus = (state: State): Status => {
 	if (state.page.form.paymentComplete) {
 		return 'SUCCESS';
 	} else if (state.page.form.isWaiting) {
@@ -33,7 +33,7 @@ const getStatus = (state: ContributionsState): Status => {
 	return 'INPUT';
 };
 
-const getAmounts = (state: ContributionsState): ContributionAmounts => {
+const getAmounts = (state: State): ContributionAmounts => {
 	const amounts = state.common.amounts;
 
 	return {
@@ -52,7 +52,7 @@ const getAmounts = (state: ContributionsState): ContributionAmounts => {
 	};
 };
 
-const mapStateToProps = (state: ContributionsState) => ({
+const mapStateToProps = (state: State) => ({
 	status: getStatus(state),
 	country: state.common.internationalisation.countryId,
 	countryGroupId: state.common.internationalisation.countryGroupId,

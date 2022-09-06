@@ -8,14 +8,14 @@ import {
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventContributionAmountUpdated } from 'helpers/tracking/quantumMetric';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import type { State } from '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
 import { ContributionAmountOtherAmountField } from './ContributionAmountOtherAmountField';
 
-const mapStateToProps = (state: ContributionsState) => ({
+const mapStateToProps = (state: State) => ({
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	currency: state.common.internationalisation.currencyId,
 	contributionType: getContributionType(state),

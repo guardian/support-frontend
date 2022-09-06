@@ -68,7 +68,6 @@ import {
 	setUserTypeFromIdentityResponse,
 } from 'helpers/redux/checkout/personalDetails/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import * as cookie from 'helpers/storage/cookie';
 import {
 	derivePaymentApiAcquisitionData,
@@ -81,7 +80,7 @@ import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
-import type { UserFormData } from './contributionsLandingReducer';
+import type { State, UserFormData } from './contributionsLandingReducer';
 
 export type Action =
 	| {
@@ -192,7 +191,7 @@ const setStripePaymentRequestButtonError = (
 
 const updateUserFormData =
 	(userFormData: UserFormData) =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
+	(dispatch: Dispatch, getState: () => State): void => {
 		setFormSubmissionDependentValue(() => ({
 			type: 'UPDATE_USER_FORM_DATA',
 			userFormData,
@@ -201,7 +200,7 @@ const updateUserFormData =
 
 const updateBillingState =
 	(billingState: StateProvince | null) =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
+	(dispatch: Dispatch, getState: () => State): void => {
 		setFormSubmissionDependentValue(() => ({
 			type: 'UPDATE_BILLING_STATE',
 			billingState,
@@ -233,7 +232,7 @@ const paymentFailure = (paymentError: ErrorReason): Action => ({
 
 const getUserType =
 	(email: string) =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
+	(dispatch: Dispatch, getState: () => State): void => {
 		const state = getState();
 		const { csrf } = state.page.checkoutForm;
 		const { isSignedIn } = state.page.user;
@@ -253,7 +252,7 @@ const setTickerGoalReached = (): Action => ({
 
 const setStripeCardFormComplete =
 	(isComplete: boolean) =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
+	(dispatch: Dispatch, getState: () => State): void => {
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_STRIPE_CARD_FORM_COMPLETE',
 			isComplete,
@@ -262,7 +261,7 @@ const setStripeCardFormComplete =
 
 const setStripeSetupIntentClientSecret =
 	(setupIntentClientSecret: string) =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
+	(dispatch: Dispatch, getState: () => State): void => {
 		setFormSubmissionDependentValue(() => ({
 			type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET',
 			setupIntentClientSecret,
@@ -271,7 +270,7 @@ const setStripeSetupIntentClientSecret =
 
 const sendFormSubmitEventForPayPalRecurring =
 	() =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
+	(dispatch: Dispatch, getState: () => State): void => {
 		const state = getState();
 		const formSubmitParameters: FormSubmitParameters = {
 			...state.page.form,
@@ -287,7 +286,7 @@ const sendFormSubmitEventForPayPalRecurring =
 
 const buildStripeChargeDataFromAuthorisation = (
 	stripePaymentMethod: StripePaymentMethod,
-	state: ContributionsState,
+	state: State,
 ): StripeChargeData => ({
 	paymentData: {
 		currency: state.common.internationalisation.currencyId,
@@ -313,7 +312,7 @@ const buildStripeChargeDataFromAuthorisation = (
 
 const stripeChargeDataFromPaymentIntentAuthorisation = (
 	authorisation: StripePaymentIntentAuthorisation,
-	state: ContributionsState,
+	state: State,
 ): StripeChargeData =>
 	buildStripeChargeDataFromAuthorisation(
 		authorisation.stripePaymentMethod,
@@ -322,7 +321,7 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
 
 function getBillingCountryAndState(
 	authorisation: PaymentAuthorisation,
-	state: ContributionsState,
+	state: State,
 ): {
 	billingCountry: IsoCountry;
 	billingState: Option<StateProvince>;
@@ -381,10 +380,7 @@ function getBillingCountryAndState(
 	};
 }
 
-function getProductOptionsForBenefitsTest(
-	amount: number,
-	state: ContributionsState,
-) {
+function getProductOptionsForBenefitsTest(amount: number, state: State) {
 	const isInNewProductTest =
 		state.common.abParticipations.newProduct === 'variant';
 	const contributionType = getContributionType(state);
@@ -404,9 +400,8 @@ function getProductOptionsForBenefitsTest(
 
 function regularPaymentRequestFromAuthorisation(
 	authorisation: PaymentAuthorisation,
-	state: ContributionsState,
+	state: State,
 ): RegularPaymentRequest {
-	const { actionHistory } = state.debug;
 	const { billingCountry, billingState } = getBillingCountryAndState(
 		authorisation,
 		state,
@@ -453,13 +448,13 @@ function regularPaymentRequestFromAuthorisation(
 		ophanIds: getOphanIds(),
 		referrerAcquisitionData: state.common.referrerAcquisitionData,
 		supportAbTests: getSupportAbTests(state.common.abParticipations),
-		debugInfo: actionHistory,
+		debugInfo: 'contributions does not collect redux state',
 	};
 }
 
 const amazonPayDataFromAuthorisation = (
 	authorisation: AmazonPayAuthorisation,
-	state: ContributionsState,
+	state: State,
 ): AmazonPayData => ({
 	paymentData: {
 		currency: state.common.internationalisation.currencyId,
@@ -486,10 +481,7 @@ const onPaymentResult =
 		paymentResult: Promise<PaymentResult>,
 		paymentAuthorisation: PaymentAuthorisation,
 	) =>
-	(
-		dispatch: Dispatch,
-		getState: () => ContributionsState,
-	): Promise<PaymentResult> =>
+	(dispatch: Dispatch, getState: () => State): Promise<PaymentResult> =>
 		paymentResult.then((result) => {
 			const state = getState();
 
@@ -550,7 +542,7 @@ const onPaymentResult =
 
 const onCreateOneOffPayPalPaymentResponse =
 	(paymentResult: Promise<CreatePayPalPaymentResponse>) =>
-	(dispatch: Dispatch<Action>, getState: () => ContributionsState): void => {
+	(dispatch: Dispatch<Action>, getState: () => State): void => {
 		void paymentResult.then((result: CreatePayPalPaymentResponse) => {
 			const state = getState();
 			const acquisitionData = derivePaymentApiAcquisitionData(
@@ -589,7 +581,7 @@ const onCreateOneOffPayPalPaymentResponse =
 // and "execute payment" for Stripe, and these are not synonymous.
 const createOneOffPayPalPayment =
 	(data: CreatePaypalPaymentData) =>
-	(dispatch: Dispatch<Action>, getState: () => ContributionsState): void => {
+	(dispatch: Dispatch<Action>, getState: () => State): void => {
 		onCreateOneOffPayPalPaymentResponse(
 			postOneOffPayPalCreatePaymentRequest(data),
 		)(dispatch, getState);
@@ -601,10 +593,7 @@ const makeCreateStripePaymentIntentRequest =
 		handleStripe3DS: (clientSecret: string) => Promise<PaymentIntentResult>,
 		paymentAuthorisation: PaymentAuthorisation,
 	) =>
-	(
-		dispatch: Dispatch<Action>,
-		getState: () => ContributionsState,
-	): Promise<PaymentResult> =>
+	(dispatch: Dispatch<Action>, getState: () => State): Promise<PaymentResult> =>
 		onPaymentResult(
 			processStripePaymentIntentRequest(data, handleStripe3DS),
 			paymentAuthorisation,
@@ -612,10 +601,7 @@ const makeCreateStripePaymentIntentRequest =
 
 const executeAmazonPayOneOffPayment =
 	(data: AmazonPayData, paymentAuthorisation: PaymentAuthorisation) =>
-	(
-		dispatch: Dispatch<Action>,
-		getState: () => ContributionsState,
-	): Promise<PaymentResult> =>
+	(dispatch: Dispatch<Action>, getState: () => State): Promise<PaymentResult> =>
 		onPaymentResult(
 			postOneOffAmazonPayExecutePaymentRequest(data),
 			paymentAuthorisation,
@@ -623,7 +609,7 @@ const executeAmazonPayOneOffPayment =
 
 function recurringPaymentAuthorisationHandler(
 	dispatch: Dispatch<Action>,
-	state: ContributionsState,
+	state: State,
 	paymentAuthorisation: PaymentAuthorisation,
 ): Promise<PaymentResult> {
 	const request = regularPaymentRequestFromAuthorisation(
@@ -662,7 +648,7 @@ const error: PaymentResult = {
 const paymentAuthorisationHandlers: PaymentMatrix<
 	(
 		dispatch: Dispatch<Action>,
-		state: ContributionsState,
+		state: State,
 		paymentAuthorisation: PaymentAuthorisation,
 	) => Promise<PaymentResult>
 > = {
@@ -675,7 +661,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 		},
 		Stripe: (
 			dispatch: Dispatch<Action>,
-			state: ContributionsState,
+			state: State,
 			paymentAuthorisation: PaymentAuthorisation,
 		): Promise<PaymentResult> => {
 			if (paymentAuthorisation.paymentMethod === Stripe) {
@@ -731,7 +717,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 		},
 		AmazonPay: (
 			dispatch: Dispatch<Action>,
-			state: ContributionsState,
+			state: State,
 			paymentAuthorisation: PaymentAuthorisation,
 		): Promise<PaymentResult> => {
 			if (
@@ -769,10 +755,7 @@ const paymentAuthorisationHandlers: PaymentMatrix<
 
 const onThirdPartyPaymentAuthorised =
 	(paymentAuthorisation: PaymentAuthorisation) =>
-	(
-		dispatch: Dispatch,
-		getState: () => ContributionsState,
-	): Promise<PaymentResult> => {
+	(dispatch: Dispatch, getState: () => State): Promise<PaymentResult> => {
 		const state = getState();
 		const contributionType = getContributionType(state);
 		return paymentAuthorisationHandlers[contributionType][

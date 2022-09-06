@@ -145,10 +145,9 @@ function buildRegularPaymentRequest(
 	promotions?: Promotion[],
 	currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
-	const { actionHistory } = state.debug;
 	const { title, firstName, lastName, email, telephone } =
 		state.page.checkoutForm.personalDetails;
-	const { deliveryInstructions, csrUsername, salesforceCaseId } =
+	const { deliveryInstructions, csrUsername, salesforceCaseId, debugInfo } =
 		state.page.checkout;
 	const product = getProduct(state, currencyId);
 	const paymentFields =
@@ -177,7 +176,7 @@ function buildRegularPaymentRequest(
 		deliveryInstructions,
 		csrUsername,
 		salesforceCaseId,
-		debugInfo: actionHistory,
+		debugInfo,
 	};
 }
 
