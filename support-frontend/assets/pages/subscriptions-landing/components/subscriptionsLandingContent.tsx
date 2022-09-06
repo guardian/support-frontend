@@ -15,10 +15,12 @@ function SubscriptionsLandingContent({
 		return null;
 	}
 
+	const isNewProduct = participations.newProduct === 'variant';
 	const subscriptionCopy = getSubscriptionCopy(
 		countryGroupId,
 		pricingCopy,
 		participations,
+		isNewProduct,
 	);
 	return (
 		<div
