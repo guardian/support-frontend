@@ -61,12 +61,12 @@ function Footer({
 				>
 					<ul css={linksList}>
 						<li css={link}>
-							<Link subdued href="https://manage.theguardian.com/help-centre">
+							<Link href="https://manage.theguardian.com/help-centre">
 								Help Centre
 							</Link>
 						</li>
 						<li css={link}>
-							<Link subdued href="https://www.theguardian.com/help/contact-us">
+							<Link href="https://www.theguardian.com/help/contact-us">
 								Contact us
 							</Link>
 						</li>
@@ -79,15 +79,13 @@ function Footer({
 							</Link>
 						</li>
 						<li css={link}>
-							<ButtonLink subdued onClick={showPrivacyManager}>
+							<ButtonLink onClick={showPrivacyManager}>
 								Privacy Settings
 							</ButtonLink>
 						</li>
 						{termsConditionsLink && (
 							<li css={link}>
-								<Link subdued href={termsConditionsLink}>
-									Terms & Conditions
-								</Link>
+								<Link href={termsConditionsLink}>Terms & Conditions</Link>
 							</li>
 						)}
 					</ul>
