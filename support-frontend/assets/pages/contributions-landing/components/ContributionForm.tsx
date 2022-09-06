@@ -50,7 +50,6 @@ import {
 	setUseLocalAmounts,
 	setUseLocalCurrencyFlag,
 } from 'helpers/redux/commonState/actions';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
@@ -61,6 +60,7 @@ import {
 	setCheckoutFormHasBeenSubmitted,
 	updateSelectedExistingPaymentMethod,
 } from 'pages/contributions-landing/contributionsLandingActions';
+import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import ContributionAmount from './ContributionAmount';
 import ContributionChoicesHeader from './ContributionChoicesHeader';
 import ContributionErrorMessage from './ContributionErrorMessage';
@@ -81,7 +81,7 @@ const getCheckoutFormValue = (
 	userValue: string | null,
 ): string | null => (formValue === null ? userValue : formValue);
 
-const mapStateToProps = (state: ContributionsState) => {
+const mapStateToProps = (state: State) => {
 	const contributionType = getContributionType(state);
 	return {
 		isWaiting: state.page.form.isWaiting,

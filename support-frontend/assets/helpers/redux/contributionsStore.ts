@@ -9,7 +9,6 @@ import { addProductSideEffects } from './checkout/product/contributionsSideEffec
 import { addRecaptchaSideEffects } from './checkout/recaptcha/contributionsSideEffects';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
-import { debugReducer } from './debug/reducer';
 import { getInitialState } from './utils/setup';
 
 // Listener middleware allows us to specify side-effects for certain actions
@@ -28,7 +27,6 @@ export const contributionsStore = configureStore({
 	reducer: {
 		common: commonReducer,
 		page: initReducer(),
-		debug: debugReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().prepend(listenerMiddleware.middleware),

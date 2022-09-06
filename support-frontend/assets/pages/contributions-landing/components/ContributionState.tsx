@@ -21,7 +21,7 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
+import type { State } from '../contributionsLandingReducer';
 
 // ----- Types ----- //
 
@@ -34,7 +34,7 @@ interface ContributionStateProps {
 	contributionType: string;
 }
 
-const mapStateToProps = (state: ContributionsState) => ({
+const mapStateToProps = (state: State) => ({
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	contributionType: getContributionType(state),
 });
