@@ -49,7 +49,6 @@ const mapStateToProps = (state: State) => ({
 	countryId: state.common.internationalisation.countryId,
 	switches: state.common.settings.switches,
 	contributionTypes: state.common.settings.contributionTypes,
-	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
 
 const mapDispatchToProps = {
@@ -72,7 +71,6 @@ function ContributionTypeTabs(props: PropTypes) {
 		switches: Switches,
 		countryId: IsoCountry,
 		countryGroupId: CountryGroupId,
-		useLocalCurrency: boolean,
 	) {
 		const paymentMethodToSelect = getPaymentMethodToSelect(
 			contributionType,
@@ -86,14 +84,6 @@ function ContributionTypeTabs(props: PropTypes) {
 
 		props.setProductType(contributionType);
 		props.setPaymentMethod(paymentMethodToSelect);
-
-		if (contributionType !== 'ONE_OFF') {
-			props.setCurrencyId(false);
-			props.setUseLocalAmounts(false);
-		} else {
-			props.setCurrencyId(useLocalCurrency);
-			props.setUseLocalAmounts(useLocalCurrency);
-		}
 	}
 
 	const renderChoiceCards = () => (
@@ -112,7 +102,6 @@ function ContributionTypeTabs(props: PropTypes) {
 									props.switches,
 									props.countryId,
 									props.countryGroupId,
-									props.useLocalCurrency,
 								)
 							}
 							checked={props.contributionType === contributionType}
