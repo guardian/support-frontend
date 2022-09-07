@@ -1,19 +1,11 @@
 import { z } from 'zod';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-// import type { Title } from 'helpers/user/details';
+import {
+	maxLengths,
+	nonSillyString,
+} from 'helpers/redux/utils/validation/commonRules';
+import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import { getUser } from 'helpers/user/user';
-
-const maxLengths = {
-	name: 40,
-	email: 80,
-};
-
-const containsEmojiRegex = /\p{Emoji_Presentation}/u;
-
-const nonSillyString = (zodString: z.ZodString) =>
-	zodString.refine((string) => !containsEmojiRegex.test(string), {
-		message: 'Please use only letters, numbers and punctuation.',
-	});
 
 export const personalDetailsSchema = z
 	.object({
@@ -43,9 +35,12 @@ export const personalDetailsSchema = z
 		path: ['confirmEmail'],
 	});
 
-export type PersonalDetailsState = z.infer<typeof personalDetailsSchema> & {
+type PersonalDetailsValidatedFields = z.infer<typeof personalDetailsSchema>;
+
+export type PersonalDetailsState = PersonalDetailsValidatedFields & {
 	isSignedIn: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
+	errors?: SliceErrors<PersonalDetailsValidatedFields>;
 };
 
 const user = getUser();

@@ -45,6 +45,7 @@ const mapStateToProps = (state: ContributionsState) => ({
 			state.page.checkoutForm.personalDetails.email,
 			state.page.user.email,
 		) ?? '',
+	errors: state.page.checkoutForm.personalDetails.errors,
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 	billingState:
