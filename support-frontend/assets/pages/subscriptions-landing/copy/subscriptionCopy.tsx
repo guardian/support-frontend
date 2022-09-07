@@ -255,7 +255,11 @@ const getSubscriptionCopy = (
 		guardianWeekly(
 			countryGroupId,
 			pricingCopy[GuardianWeekly],
-			true,
+			[GBPCountries, EURCountries, AUDCountries, NZDCountries].includes(
+				countryGroupId,
+			)
+				? true
+				: false,
 			participations,
 		),
 	];
