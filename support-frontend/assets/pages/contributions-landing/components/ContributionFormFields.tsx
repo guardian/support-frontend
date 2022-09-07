@@ -7,6 +7,7 @@ import {
 	checkBillingState,
 	emailRegexPattern,
 } from 'helpers/forms/formValidation';
+import { validatePersonalDetails } from 'helpers/redux/checkout/personalDetails/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { applyPersonalDetailsRules } from 'helpers/subscriptionsForms/rules';
@@ -62,6 +63,7 @@ const mapDispatchToProps = {
 	setLastName,
 	setEmail,
 	updateBillingState,
+	validatePersonalDetails,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -82,6 +84,7 @@ function ContributionFormFields({
 	setFirstName,
 	setLastName,
 	setEmail,
+	validatePersonalDetails,
 	updateBillingState,
 }: ContributionFormFieldProps) {
 	const formErrors = applyPersonalDetailsRules({
@@ -156,6 +159,7 @@ function ContributionFormFields({
 							autoComplete="family-name"
 							autoCapitalize="words"
 							onChange={(e) => setLastName(e.target.value)}
+							onBlur={() => validatePersonalDetails()}
 							error={getFormFieldError('lastName')}
 							required
 						/>

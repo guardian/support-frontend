@@ -2,7 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { Title } from 'helpers/user/details';
-import { initialPersonalDetailsState } from './state';
+import { initialPersonalDetailsState, personalDetailsSchema } from './state';
 
 export const personalDetailsSlice = createSlice({
 	name: 'personalDetails',
@@ -36,6 +36,12 @@ export const personalDetailsSlice = createSlice({
 		},
 		setTelephone(state, action: PayloadAction<string>) {
 			state.telephone = action.payload;
+		},
+		validatePersonalDetails(state) {
+			const validationResult = personalDetailsSchema.safeParse(state);
+			if (!validationResult.success) {
+				console.log(validationResult.error.format());
+			}
 		},
 	},
 });

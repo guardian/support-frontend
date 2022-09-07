@@ -9,4 +9,5 @@ export const {
 	setIsSignedIn,
 	setUserTypeFromIdentityResponse,
 	setTelephone,
+	validatePersonalDetails,
 } = personalDetailsSlice.actions;
