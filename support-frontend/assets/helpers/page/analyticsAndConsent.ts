@@ -25,6 +25,7 @@ function analyticsInitialisation(
 	setReferrerDataInLocalStorage(acquisitionData);
 	void googleTagManager.init(participations);
 	ophan.init();
+	console.log('*** initQuantumMetric ***');
 	initQuantumMetric(participations);
 	trackAbTests(participations);
 	// Sentry logging.
