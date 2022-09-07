@@ -251,28 +251,24 @@ const getSubscriptionCopy = (
 	participations: Participations,
 	isNewProduct?: boolean,
 ): ProductCopy[] => {
+	const isRegionWeeklyFirst = [
+		GBPCountries,
+		EURCountries,
+		AUDCountries,
+		NZDCountries,
+	].includes(countryGroupId)
+		? true
+		: false;
 	const productcopy: ProductCopy[] = [
 		guardianWeekly(
 			countryGroupId,
 			pricingCopy[GuardianWeekly],
-			[GBPCountries, EURCountries, AUDCountries, NZDCountries].includes(
-				countryGroupId,
-			)
-				? true
-				: false,
+			isRegionWeeklyFirst,
 			participations,
 		),
 	];
-	if (isNewProduct) {
-		if (countryGroupId === GBPCountries) {
-			productcopy.push(paper(countryGroupId, pricingCopy[Paper], false));
-		}
-	} else {
-		if (
-			[GBPCountries, EURCountries, AUDCountries, NZDCountries].includes(
-				countryGroupId,
-			)
-		) {
+	if (!isNewProduct) {
+		if (isRegionWeeklyFirst) {
 			productcopy.push(
 				digital(countryGroupId, pricingCopy[DigitalPack], false),
 			);
@@ -281,9 +277,9 @@ const getSubscriptionCopy = (
 				digital(countryGroupId, pricingCopy[DigitalPack], false),
 			);
 		}
-		if (countryGroupId === GBPCountries) {
-			productcopy.push(paper(countryGroupId, pricingCopy[Paper], false));
-		}
+	}
+	if (countryGroupId === GBPCountries) {
+		productcopy.push(paper(countryGroupId, pricingCopy[Paper], false));
 	}
 	productcopy.push(premiumApp(countryGroupId));
 	return productcopy;
