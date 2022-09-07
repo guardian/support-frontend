@@ -9,12 +9,7 @@ import SecureTransactionIndicator from 'components/secureTransactionIndicator/se
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
-import { getAmount } from 'helpers/contributions';
-import type {
-	ContributionType,
-	OtherAmounts,
-	SelectedAmounts,
-} from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import { useLastOneOffContribution } from 'helpers/customHooks/useLastOneOffContribution';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -25,7 +20,6 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentWaiting,
@@ -60,8 +54,6 @@ type PropTypes = {
 	shouldShowRichLandingPage: boolean;
 	isSignedIn: boolean;
 	contributionType: ContributionType;
-	otherAmounts: OtherAmounts;
-	selectedAmounts: SelectedAmounts;
 };
 
 const mapStateToProps = (state: ContributionsState) => ({
@@ -76,8 +68,6 @@ const mapStateToProps = (state: ContributionsState) => ({
 	shouldShowRichLandingPage: false,
 	isSignedIn: state.page.user.isSignedIn,
 	contributionType: getContributionType(state),
-	otherAmounts: state.page.checkoutForm.product.otherAmounts,
-	selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 });
 
 const mapDispatchToProps = {
@@ -209,16 +199,7 @@ function withProps(props: PropTypes) {
 	};
 
 	if (props.paymentComplete) {
-		const {
-			contributionType,
-			selectedAmounts,
-			otherAmounts,
-			currency,
-			thankYouRoute,
-		} = props;
-		const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
-
-		sendEventContributionCheckoutConversion(amount, contributionType, currency);
+		const { thankYouRoute } = props;
 
 		// We deliberately allow the redirect to REPLACE rather than PUSH /thankyou onto the history stack.
 		// This is because going 'back' to the /contribute page is not helpful, and the client-side routing would redirect

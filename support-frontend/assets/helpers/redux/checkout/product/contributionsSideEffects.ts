@@ -1,4 +1,5 @@
 import { isAnyOf } from '@reduxjs/toolkit';
+import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -46,6 +47,38 @@ export function addProductSideEffects(
 		matcher: shouldCheckFormEnabled,
 		effect(_, listenerApi) {
 			listenerApi.dispatch(enableOrDisableForm());
+		},
+	});
+
+	startListening({
+		type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED',
+		effect(_, listenerApi) {
+			const state = listenerApi.getState();
+			// const { currencyId } = state.common.internationalisation;
+			const selectedAmounts = state.page.checkoutForm.product.selectedAmounts;
+			/**
+			 * selectedAmounts (type SelectedAmounts) can only be indexed with ContributionType,
+			 * so I'm have to type cast productType from ProductType to ContributionType
+			 * to be able to index selectedAmounts. As ProductType could be 'DigiPack' which
+			 * can't be used to index an onject of type SelectedAmounts.
+			 */
+			const productType = state.page.checkoutForm.product
+				.productType as ContributionType;
+			const selectedAmount = selectedAmounts[productType];
+
+			if (selectedAmount === 'other') {
+				const otherAmount =
+					state.page.checkoutForm.product.otherAmounts[productType].amount;
+
+				if (otherAmount) {
+					storage.setSession('contributionAmount', otherAmount.toString());
+				}
+			} else {
+				storage.setSession('contributionAmount', selectedAmount.toString());
+			}
+
+			// storage.setSession('gu.qm.contributionType', productType);
+			// storage.setSession('gu.contributionCurrency', currencyId);
 		},
 	});
 }

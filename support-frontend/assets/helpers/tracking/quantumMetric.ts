@@ -57,6 +57,7 @@ function sendEvent(
 	isConversion: boolean,
 	value: string,
 ): void {
+	console.log('sendEvent ---->', id, isConversion, value);
 	if (window.QuantumMetricAPI?.isOn()) {
 		window.QuantumMetricAPI.sendEvent(id, isConversion ? 1 : 0, value);
 	}
@@ -299,6 +300,7 @@ function addQM() {
 }
 
 export function init(participations: Participations): void {
+	console.log('*** init ***');
 	void canRunQuantumMetric().then((canRun) => {
 		if (canRun) {
 			void addQM().then(() => {
@@ -307,6 +309,7 @@ export function init(participations: Participations): void {
 				 * send user AB test participations via the sendEvent function.
 				 */
 				sendEventABTestParticipations(participations);
+				console.log('*** sendEventABTestParticipations ***');
 			});
 		}
 	});
