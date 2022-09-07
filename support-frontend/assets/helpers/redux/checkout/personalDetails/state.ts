@@ -40,7 +40,7 @@ type PersonalDetailsValidatedFields = z.infer<typeof personalDetailsSchema>;
 export type PersonalDetailsState = PersonalDetailsValidatedFields & {
 	isSignedIn: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
-	errors?: SliceErrors<PersonalDetailsValidatedFields>;
+	errors: SliceErrors<PersonalDetailsValidatedFields>;
 };
 
 const user = getUser();
@@ -52,4 +52,5 @@ export const initialPersonalDetailsState: PersonalDetailsState = {
 	confirmEmail: '',
 	isSignedIn: user.isSignedIn,
 	userTypeFromIdentityResponse: 'noRequestSent',
+	errors: {},
 };

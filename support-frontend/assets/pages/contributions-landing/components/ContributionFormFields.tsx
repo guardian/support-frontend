@@ -7,11 +7,8 @@ import {
 	checkBillingState,
 	emailRegexPattern,
 } from 'helpers/forms/formValidation';
-import { validatePersonalDetails } from 'helpers/redux/checkout/personalDetails/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
-import { applyPersonalDetailsRules } from 'helpers/subscriptionsForms/rules';
-import { firstError } from 'helpers/subscriptionsForms/validation';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
 	setEmail,
@@ -54,8 +51,6 @@ const mapStateToProps = (state: ContributionsState) => ({
 			state.page.user.stateField,
 		) ?? '',
 	isSignedIn: state.page.checkoutForm.personalDetails.isSignedIn,
-	userTypeFromIdentityResponse:
-		state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
 	contributionType: getContributionType(state),
 });
 
@@ -64,7 +59,6 @@ const mapDispatchToProps = {
 	setLastName,
 	setEmail,
 	updateBillingState,
-	validatePersonalDetails,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -77,29 +71,18 @@ function ContributionFormFields({
 	firstName,
 	lastName,
 	email,
+	errors,
 	billingState,
 	checkoutFormHasBeenSubmitted,
 	isSignedIn,
-	userTypeFromIdentityResponse,
 	contributionType,
 	setFirstName,
 	setLastName,
 	setEmail,
-	validatePersonalDetails,
 	updateBillingState,
 }: ContributionFormFieldProps) {
-	const formErrors = applyPersonalDetailsRules({
-		firstName,
-		lastName,
-		email,
-		isSignedIn,
-		userTypeFromIdentityResponse,
-	});
-
-	const getFormFieldError = (formField: string) =>
-		checkoutFormHasBeenSubmitted
-			? firstError(formField, formErrors)
-			: undefined;
+	const getFormFieldError = (formField: 'firstName' | 'lastName' | 'email') =>
+		errors[formField]?.[0];
 
 	return (
 		<div className="form-fields">
@@ -160,7 +143,6 @@ function ContributionFormFields({
 							autoComplete="family-name"
 							autoCapitalize="words"
 							onChange={(e) => setLastName(e.target.value)}
-							onBlur={() => validatePersonalDetails()}
 							error={getFormFieldError('lastName')}
 							required
 						/>

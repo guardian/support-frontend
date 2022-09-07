@@ -1,23 +1,12 @@
 // ----- Imports ----- //
 
+import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
-import type { ContributionType } from 'helpers/contributions';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { getAllErrorsForContributions } from 'helpers/redux/checkout/checkoutSelectors';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringContributorErrorMessage';
-
-// ----- Types ----- //
-
-type PropTypes = {
-	contributionType: ContributionType;
-	paymentError: ErrorReason | null;
-	isSignedIn: boolean;
-	formIsValid: boolean;
-	isRecurringContributor: boolean;
-	checkoutFormHasBeenSubmitted: boolean;
-};
 
 const mapStateToProps = (state: ContributionsState) => ({
 	paymentMethod: state.page.checkoutForm.payment.paymentMethod,
@@ -25,10 +14,15 @@ const mapStateToProps = (state: ContributionsState) => ({
 	paymentError: state.page.form.paymentError,
 	isSignedIn: state.page.user.isSignedIn,
 	formIsValid: state.page.form.formIsValid,
+	allErrors: getAllErrorsForContributions(state),
 	isRecurringContributor: state.page.user.isRecurringContributor,
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 });
+
+const connector = connect(mapStateToProps);
+
+type PropTypes = ConnectedProps<typeof connector>;
 
 // ----- Functions ----- //
 
@@ -40,27 +34,40 @@ function ContributionErrorMessage(props: PropTypes) {
 		props.isRecurringContributor &&
 		props.checkoutFormHasBeenSubmitted;
 
-	if (props.paymentError) {
-		return <GeneralErrorMessage errorReason={props.paymentError} />;
-	} else if (!props.formIsValid && props.checkoutFormHasBeenSubmitted) {
-		return (
-			<GeneralErrorMessage
-				classModifiers={['invalid_form_mobile']}
-				errorHeading="Form incomplete"
-				errorReason="invalid_form_mobile"
-			/>
-		);
-	} else if (shouldsShowExistingContributorErrorMessage) {
-		return (
-			<ExistingRecurringContributorErrorMessage
-				contributionType={props.contributionType}
-				checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
-				isRecurringContributor={props.isRecurringContributor}
-			/>
-		);
-	}
+	// if (props.paymentError) {
+	// 	return <GeneralErrorMessage errorReason={props.paymentError} />;
+	// } else if (!props.formIsValid && props.checkoutFormHasBeenSubmitted) {
+	return (
+		<div>
+			Errors:
+			<ul>
+				{Object.entries(props.allErrors).map(([fieldName, errors]) => {
+					return errors?.map((errorText) => (
+						<li>
+							<a
+								href={`#contribution${fieldName[0].toUpperCase()}${fieldName.slice(
+									1,
+								)}`}
+							>
+								{errorText}
+							</a>
+						</li>
+					));
+				})}
+			</ul>
+		</div>
+	);
+	// } else if (shouldsShowExistingContributorErrorMessage) {
+	// 	return (
+	// 		<ExistingRecurringContributorErrorMessage
+	// 			contributionType={props.contributionType}
+	// 			checkoutFormHasBeenSubmitted={props.checkoutFormHasBeenSubmitted}
+	// 			isRecurringContributor={props.isRecurringContributor}
+	// 		/>
+	// 	);
+	// }
 
 	return null;
 }
 
-export default connect(mapStateToProps)(ContributionErrorMessage);
+export default connector(ContributionErrorMessage);
