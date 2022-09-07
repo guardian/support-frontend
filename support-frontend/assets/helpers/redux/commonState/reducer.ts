@@ -115,27 +115,19 @@ export const commonSlice = createSlice({
 	extraReducers: (builder) => {
 		builder.addCase(setProductType, (state, action) => {
 			// Reset amount localisation when the contributions product changes
-			if (action.payload === 'MONTHLY' || action.payload === 'ANNUAL') {
-				state.amounts = getLocalisedAmounts(
-					state.internationalisation,
-					state.defaultAmounts,
-					false,
-				);
-				state.internationalisation.currencyId = getLocalisedCurrencyId(
-					state.internationalisation,
-					false,
-				);
-			} else if (action.payload === 'ONE_OFF') {
-				state.amounts = getLocalisedAmounts(
-					state.internationalisation,
-					state.defaultAmounts,
-					state.internationalisation.useLocalCurrency,
-				);
-				state.internationalisation.currencyId = getLocalisedCurrencyId(
-					state.internationalisation,
-					false,
-				);
-			}
+			const { useLocalCurrency } = state.internationalisation;
+			const shouldUseLocalCurrency =
+				action.payload === 'ONE_OFF' ? useLocalCurrency : false;
+
+			state.amounts = getLocalisedAmounts(
+				state.internationalisation,
+				state.defaultAmounts,
+				shouldUseLocalCurrency,
+			);
+			state.internationalisation.currencyId = getLocalisedCurrencyId(
+				state.internationalisation,
+				shouldUseLocalCurrency,
+			);
 		});
 	},
 });
