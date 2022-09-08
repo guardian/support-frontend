@@ -398,7 +398,7 @@ Resources:
       Namespace: AWS/SQS
       Dimensions:
         - Name: QueueName
-          Value: !Sub dead-letters-direct-mail-${Stage}
+          Value: !Ref SupporterProductDataDeadLetterQueue
       MetricName: ApproximateNumberOfMessagesVisible
       Statistic: Average
       ComparisonOperator: GreaterThanThreshold
