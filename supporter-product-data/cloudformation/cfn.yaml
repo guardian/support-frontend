@@ -29,7 +29,7 @@ Mappings:
       S3Bucket: supporter-product-data-export-prod
       # Every 5 mins
       scheduleRate: "cron(*/5 * ? * * *)"
-      lambdaConcurrency: 50
+      lambdaConcurrency: 50 # May need to reduce this number if we see downstream systems getting overwhelmed during a full refresh, I've tested with 30 and that was fine
 
 Resources:
 
@@ -144,7 +144,7 @@ Resources:
         S3Bucket: supporter-product-data-dist
         S3Key: !Sub support/${Stage}/supporter-product-data/supporter-product-data.jar
       MemorySize: 512
-      Runtime: "java8.al2"
+      Runtime: "java11"
       Timeout: 300
       Environment:
         Variables:
@@ -162,7 +162,7 @@ Resources:
         S3Bucket: supporter-product-data-dist
         S3Key: !Sub support/${Stage}/supporter-product-data/supporter-product-data.jar
       MemorySize: 512
-      Runtime: "java8.al2"
+      Runtime: "java11"
       Timeout: 300
       Environment:
         Variables:
@@ -180,7 +180,7 @@ Resources:
         S3Bucket: supporter-product-data-dist
         S3Key: !Sub support/${Stage}/supporter-product-data/supporter-product-data.jar
       MemorySize: 4096
-      Runtime: "java8.al2"
+      Runtime: "java11"
       Timeout: 600
       Environment:
         Variables:
@@ -198,7 +198,7 @@ Resources:
         S3Bucket: supporter-product-data-dist
         S3Key: !Sub support/${Stage}/supporter-product-data/supporter-product-data.jar
       MemorySize: 4096
-      Runtime: "java8.al2"
+      Runtime: "java11"
       Timeout: 600
       ReservedConcurrentExecutions: !FindInMap [StageVariables, !Ref Stage, lambdaConcurrency]
       Environment:
@@ -378,7 +378,8 @@ Resources:
   SQSTrigger:
     Type: AWS::Lambda::EventSourceMapping
     Properties:
-      BatchSize: 1
+      BatchSize: 10
+      MaximumBatchingWindowInSeconds: 5
       Enabled: true
       EventSourceArn: !GetAtt SupporterProductDataQueue.Arn
       FunctionName: !Ref ProcessSupporterRatePlanItemLambda
