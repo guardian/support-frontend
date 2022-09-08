@@ -34,8 +34,6 @@ import {
 	Sepa,
 } from 'helpers/forms/paymentMethods';
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
-import { validateForm } from 'helpers/redux/checkout/checkoutActions';
-import { contributionsFormHasErrors } from 'helpers/redux/checkout/checkoutSelectors';
 import { setPopupOpen } from 'helpers/redux/checkout/payment/directDebit/actions';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
@@ -106,8 +104,7 @@ const mapStateToProps = (state: ContributionsState) => {
 		isSignedIn: state.page.user.isSignedIn,
 		formIsValid: state.page.form.formIsValid,
 		isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,
-		formIsSubmittable:
-			state.page.form.formIsSubmittable && contributionsFormHasErrors(state),
+		formIsSubmittable: state.page.form.formIsSubmittable,
 		isTestUser: state.page.user.isTestUser ?? false,
 		country: state.common.internationalisation.countryId,
 		amazonPayOrderReferenceId:
@@ -148,7 +145,6 @@ const mapDispatchToProps = {
 	setPaymentMethod,
 	updateSelectedExistingPaymentMethod,
 	loadPayPalExpressSdk,
-	validateForm,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -332,8 +328,6 @@ function ContributionForm(props: PropTypes): JSX.Element {
 	function onSubmit(event: React.FormEvent<HTMLFormElement>): void {
 		// Causes errors to be displayed against payment fields
 		event.preventDefault();
-		props.validateForm();
-
 		const flowPrefix = 'npf';
 		const form = event.target;
 

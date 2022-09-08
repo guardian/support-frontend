@@ -9,6 +9,8 @@ import {
 } from 'helpers/forms/formValidation';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
+import { applyPersonalDetailsRules } from 'helpers/subscriptionsForms/rules';
+import { firstError } from 'helpers/subscriptionsForms/validation';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import {
 	setEmail,
@@ -42,7 +44,6 @@ const mapStateToProps = (state: ContributionsState) => ({
 			state.page.checkoutForm.personalDetails.email,
 			state.page.user.email,
 		) ?? '',
-	errors: state.page.checkoutForm.personalDetails.errors,
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 	billingState:
@@ -51,6 +52,8 @@ const mapStateToProps = (state: ContributionsState) => ({
 			state.page.user.stateField,
 		) ?? '',
 	isSignedIn: state.page.checkoutForm.personalDetails.isSignedIn,
+	userTypeFromIdentityResponse:
+		state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
 	contributionType: getContributionType(state),
 });
 
@@ -71,18 +74,28 @@ function ContributionFormFields({
 	firstName,
 	lastName,
 	email,
-	errors,
 	billingState,
 	checkoutFormHasBeenSubmitted,
 	isSignedIn,
+	userTypeFromIdentityResponse,
 	contributionType,
 	setFirstName,
 	setLastName,
 	setEmail,
 	updateBillingState,
 }: ContributionFormFieldProps) {
-	const getFormFieldError = (formField: 'firstName' | 'lastName' | 'email') =>
-		errors[formField]?.[0];
+	const formErrors = applyPersonalDetailsRules({
+		firstName,
+		lastName,
+		email,
+		isSignedIn,
+		userTypeFromIdentityResponse,
+	});
+
+	const getFormFieldError = (formField: string) =>
+		checkoutFormHasBeenSubmitted
+			? firstError(formField, formErrors)
+			: undefined;
 
 	return (
 		<div className="form-fields">
