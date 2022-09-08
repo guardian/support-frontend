@@ -8,9 +8,19 @@ import {
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Container } from 'components/layout/container';
+import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/paymentFrequencyTabsContainer';
 import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
+import {
+	AUDCountries,
+	Canada,
+	EURCountries,
+	GBPCountries,
+	International,
+	NZDCountries,
+	UnitedStates,
+} from 'helpers/internationalisation/countryGroup';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
 
@@ -53,6 +63,19 @@ export function SupporterPlusLandingPage(): JSX.Element {
 				</FooterWithContents>
 			}
 		>
+			<Nav
+				countryGroupIds={[
+					GBPCountries,
+					UnitedStates,
+					AUDCountries,
+					EURCountries,
+					NZDCountries,
+					Canada,
+					International,
+				]}
+				selectedCountryGroup={GBPCountries}
+				subPath={window.location.search}
+			/>
 			<CheckoutHeading heading={heading}>
 				<p>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque

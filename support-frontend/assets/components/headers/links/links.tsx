@@ -24,7 +24,7 @@ type PropTypes = {
 	location: 'desktop' | 'mobile';
 	countryGroupId?: CountryGroupId;
 	getRef?: (element: Element | null) => void;
-	hideDigital?: boolean;
+	isNewProduct?: boolean;
 };
 
 const links: HeaderNavLink[] = [
@@ -104,10 +104,12 @@ function Links({
 	location,
 	getRef,
 	countryGroupId,
-	hideDigital,
+	isNewProduct,
 }: PropTypes): JSX.Element {
 	const { protocol, host, pathname } = window.location;
 	const urlWithoutParams = `${protocol}//${host}${pathname}`;
+	const internationalisationIDValue = internationalisationID(countryGroupId);
+	const isNotUk = internationalisationIDValue !== 'uk';
 	return (
 		<nav
 			className={classNameWithModifiers('component-header-links', [location])}
@@ -115,8 +117,16 @@ function Links({
 			<ul className="component-header-links__ul" ref={getRef}>
 				{links
 					.filter(({ text }) => {
-						if (text === 'Digital' && hideDigital) {
-							return false;
+						if (
+							text === 'Digital' ||
+							text === 'Support' ||
+							text === 'Contributions' ||
+							(text === 'Newspaper' && isNotUk) ||
+							(text === 'Subscriptions' && isNotUk)
+						) {
+							if (isNewProduct) {
+								return false;
+							}
 						}
 						return true;
 					})
@@ -135,9 +145,6 @@ function Links({
 						return true;
 					})
 					.map((link) => {
-						const internationalisationIDValue =
-							internationalisationID(countryGroupId);
-
 						if (internationalisationIDValue == null || !link.internal) {
 							return link;
 						}

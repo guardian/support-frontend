@@ -8,6 +8,7 @@ import {
 	emailRegexPattern,
 } from 'helpers/forms/formValidation';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { applyPersonalDetailsRules } from 'helpers/subscriptionsForms/rules';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
@@ -17,7 +18,6 @@ import {
 	setLastName,
 	updateBillingState,
 } from '../contributionsLandingActions';
-import type { State } from '../contributionsLandingReducer';
 import ContributionState from './ContributionState';
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -28,7 +28,7 @@ const getCheckoutFormValue = (
 ): string | null =>
 	formValue === null || formValue === '' ? userValue : formValue;
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: ContributionsState) => ({
 	firstName:
 		getCheckoutFormValue(
 			state.page.checkoutForm.personalDetails.firstName,

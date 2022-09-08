@@ -63,7 +63,7 @@ const router = () => {
 	const landingPage = showNewProductPage ? (
 		<SupporterPlusLandingPage />
 	) : (
-		<ContributionsLandingPage />
+		<ContributionsLandingPage countryGroupId={countryGroupId} />
 	);
 
 	return (
