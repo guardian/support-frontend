@@ -31,8 +31,6 @@ function getContributionCartValueData(pageState: PageState): {
 	contributionType: ContributionType;
 	contributionCurrency: IsoCurrency;
 } {
-	console.log('pageState --->', pageState);
-
 	const selectedAmounts = pageState.checkoutForm.product.selectedAmounts;
 	/**
 	 * selectedAmounts (type SelectedAmounts) can only be indexed with ContributionType,
