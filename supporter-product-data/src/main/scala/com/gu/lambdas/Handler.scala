@@ -44,7 +44,7 @@ object StreamHandler {
   def fromStream[T](is: InputStream)(implicit decoder: Decoder[T]): Try[T] = {
     val triedT = Try {
       val body = Source.fromInputStream(is).mkString
-      SafeLogger.info(body)
+      SafeLogger.info(s"Lambda input: $body")
       body
     }.flatMap(decode[T](_).toTry)
     is.close()
