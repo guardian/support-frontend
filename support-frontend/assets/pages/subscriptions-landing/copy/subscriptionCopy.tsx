@@ -281,7 +281,9 @@ const getSubscriptionCopy = (
 	if (countryGroupId === GBPCountries) {
 		productcopy.push(paper(countryGroupId, pricingCopy[Paper], false));
 	}
-	productcopy.push(premiumApp(countryGroupId));
+	if (!isNewProduct) {
+		productcopy.push(premiumApp(countryGroupId));
+	}
 	return productcopy;
 };
 
