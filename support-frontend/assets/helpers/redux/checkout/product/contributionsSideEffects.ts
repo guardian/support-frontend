@@ -1,5 +1,5 @@
 import { isAnyOf } from '@reduxjs/toolkit';
-import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -24,6 +24,13 @@ export function addProductSideEffects(
 	startListening({
 		actionCreator: setProductType,
 		effect(action) {
+			/**
+			 * selectedContributionType is read from storage in 2 places:
+			 * 1) It is used to set the selected contribution type on return
+			 * visits to the Contributions Landing Page in the same session.
+			 * 2) It is used on the Contributions Thank You page to send data to Quantum
+			 * Metric, and to also set a cookie for one off contributions.
+			 */
 			storage.setSession('selectedContributionType', action.payload);
 		},
 	});
@@ -54,7 +61,6 @@ export function addProductSideEffects(
 		type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED',
 		effect(_, listenerApi) {
 			const state = listenerApi.getState();
-			// const { currencyId } = state.common.internationalisation;
 			const selectedAmounts = state.page.checkoutForm.product.selectedAmounts;
 			/**
 			 * selectedAmounts (type SelectedAmounts) can only be indexed with ContributionType,
@@ -65,20 +71,14 @@ export function addProductSideEffects(
 			const productType = state.page.checkoutForm.product
 				.productType as ContributionType;
 			const selectedAmount = selectedAmounts[productType];
+			const contributionAmount =
+				selectedAmount === 'other'
+					? state.page.checkoutForm.product.otherAmounts[productType].amount
+					: selectedAmount;
 
-			if (selectedAmount === 'other') {
-				const otherAmount =
-					state.page.checkoutForm.product.otherAmounts[productType].amount;
-
-				if (otherAmount) {
-					storage.setSession('contributionAmount', otherAmount.toString());
-				}
-			} else {
-				storage.setSession('contributionAmount', selectedAmount.toString());
+			if (contributionAmount) {
+				storage.setSession('contributionAmount', contributionAmount.toString());
 			}
-
-			// storage.setSession('gu.qm.contributionType', productType);
-			// storage.setSession('gu.contributionCurrency', currencyId);
 		},
 	});
 }
