@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import type { StripeErrorPayload } from './state';
 import { initialStripeCardState } from './state';
 import { getStripeSetupIntent } from './thunks';
 
@@ -15,6 +16,9 @@ export const stripeCardSlice = createSlice({
 		},
 		setStripePaymentMethod(state, action: PayloadAction<string | undefined>) {
 			state.stripePaymentMethod = action.payload;
+		},
+		setStripeFormError(state, action: PayloadAction<StripeErrorPayload>) {
+			state.errors[action.payload.field] = action.payload.errors;
 		},
 	},
 	extraReducers: (builder) => {
