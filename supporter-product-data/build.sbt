@@ -68,6 +68,7 @@ deployToProd := {
     "-SupporterProductDataQueryZuora-",
     "-SupporterProductDataFetchResults-",
     "-SupporterProductDataAddSupporterRatePlanItemToQueue-",
+    "-SupporterProductDataProcessSupporterRatePlanItem-",
   ).foreach(functionPartial =>
     s"aws lambda update-function-code --function-name support${functionPartial}PROD --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!,
   )
