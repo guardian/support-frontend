@@ -28,17 +28,22 @@ export const personalDetailsSchema = z
 			.min(1, 'Please enter an email address.')
 			.max(maxLengths.email, 'Email address is too long'),
 		confirmEmail: z.optional(z.string()),
+		isSignedIn: z.boolean(),
 		telephone: z.optional(nonSillyString(z.string())),
 	})
-	.refine(({ email, confirmEmail }) => email === confirmEmail, {
-		message: 'The email addresses do not match.',
-		path: ['confirmEmail'],
-	});
+	.refine(
+		({ email, confirmEmail, isSignedIn }) => {
+			return email === confirmEmail || isSignedIn;
+		},
+		{
+			message: 'The email addresses do not match.',
+			path: ['confirmEmail'],
+		},
+	);
 
 type PersonalDetailsValidatedFields = z.infer<typeof personalDetailsSchema>;
 
 export type PersonalDetailsState = PersonalDetailsValidatedFields & {
-	isSignedIn: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	errors: SliceErrors<PersonalDetailsValidatedFields>;
 };
