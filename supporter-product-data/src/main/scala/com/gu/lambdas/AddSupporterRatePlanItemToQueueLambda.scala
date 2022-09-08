@@ -110,7 +110,7 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
       } catch {
         case e: Throwable =>
           SafeLogger.error(scrub"Error sending batch to sqs\nbatch content was ${batch.asJson.spaces2}", e)
-          alarmService.triggerCsvReadAlarm
+          alarmService.triggerSQSWriteAlarm
       }
 
       val (_, highestProcessedIndex) = batch.last
