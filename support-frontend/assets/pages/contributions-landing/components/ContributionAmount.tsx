@@ -10,7 +10,7 @@ import {
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventContributionAmountUpdated } from 'helpers/tracking/quantumMetric';
+import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import ContributionAmountChoices from './ContributionAmountChoices';
 import { ContributionAmountOtherAmountField } from './ContributionAmountOtherAmountField';
@@ -104,7 +104,7 @@ function ContributionAmount(props: PropTypes) {
 								`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`,
 							);
 
-							sendEventContributionAmountUpdated(
+							sendEventContributionCartValue(
 								otherAmount,
 								props.contributionType,
 								props.currency,
