@@ -391,10 +391,13 @@ Resources:
     Type: 'AWS::CloudWatch::Alarm'
     Condition: CreateProdResources
     Properties:
-      AlarmName: !Sub 'Urgent 9-5 - There was a failure processing a supporter record in the ProcessSupporterRatePlanItemLambda lambda'
+      AlarmName: There was a failure processing a supporter record in the ProcessSupporterRatePlanItemLambda lambda
       AlarmDescription: >
-        Check the dead-letters-direct-mail-PROD SQS queue for details of the record which failed and the ProcessSupporterRatePlanItemLambda
-        Cloudwatch logs for details of what went wrong
+        Check the dead-letters-direct-mail-PROD SQS queue for details of the record which failed:
+        https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/queues/https%3A%2F%2Fsqs.eu-west-1.amazonaws.com%2F865473395570%2Fsupporter-product-data-PROD
+
+        And the ProcessSupporterRatePlanItemLambda Cloudwatch logs for details of what went wrong:
+        https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fsupport-SupporterProductDataProcessSupporterRatePlanItem-PROD
       Namespace: AWS/SQS
       Dimensions:
         - Name: QueueName
@@ -416,14 +419,10 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Join
-        - ' '
-        - - 'URGENT 9-5 -'
-          - 'Failed to extract supporter product data from Zuora'
-      AlarmDescription: !Join
-        - ' '
-        - - 'Impact - New subscribers will not get their digital benefits.'
-          - 'Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit'
+      AlarmName: Failed to extract supporter product data from Zuora
+      AlarmDescription: >
+        The supporter-product-data step function failed, check for failed executions here:
+        https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:supporter-product-data-PROD
       MetricName: ExecutionsFailed
       Namespace: AWS/States
       Dimensions:
@@ -443,14 +442,10 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Join
-        - ' '
-        - - 'URGENT 9-5 -'
-          - 'There was a csv read failure when loading supporter product data into DynamoDB'
-      AlarmDescription: !Join
-        - ' '
-        - - 'Impact - On or more subscriber will not get their digital benefits'
-          - 'Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit'
+      AlarmName: There was a csv read failure when loading supporter product data into DynamoDB
+      AlarmDescription: >
+        Search for 'CSV read failures' in the AddSupporterRatePlanItemToQueueLambda Cloudwatch logs:
+        https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fsupport-SupporterProductDataAddSupporterRatePlanItemToQueue-PROD
       MetricName: CsvReadFailure
       Namespace: supporter-product-data
       Dimensions:
@@ -468,14 +463,11 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Join
-        - ' '
-        - - 'URGENT 9-5 -'
-          - 'There was a DynamoDB write failure when loading supporter product data into DynamoDB'
-      AlarmDescription: !Join
-        - ' '
-        - - 'Impact - On or more subscriber will not get their digital benefits'
-          - 'Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit'
+      AlarmName: There was a DynamoDB write failure when writing supporter product data into DynamoDB
+      AlarmDescription: >
+        Impact - On or more subscriber will not get their digital benefits
+        For details of the record which failed search for 'Error writing item to Dynamo' in the ProcessSupporterRatePlanItemLambda Cloudwatch logs:
+        https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fsupport-SupporterProductDataProcessSupporterRatePlanItem-DEV
       MetricName: DynamoWriteFailure
       Namespace: supporter-product-data
       Dimensions:
@@ -493,14 +485,11 @@ Resources:
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: !Join
-        - ' '
-        - - 'URGENT 9-5 -'
-          - 'There was a failure when trying to write supporter data to the supporter-product-data-PROD sqs queue'
-      AlarmDescription: !Join
-        - ' '
-        - - 'Search for the term "Error sending batch" in the AddSupporterRatePlanItemToQueueLambda cloudwatch logs'
-          - 'to see details of the items which failed'
+      AlarmName: There was a failure when trying to write supporter data to the supporter-product-data-PROD sqs queue
+      AlarmDescription: >
+        Search for the term 'Error writing to the queue' in the AddSupporterRatePlanItemToQueueLambda cloudwatch logs
+        https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fsupport-SupporterProductDataAddSupporterRatePlanItemToQueue-PROD
+        to see details of the failures
       MetricName: SqsWriteFailure
       Namespace: supporter-product-data
       Dimensions:
