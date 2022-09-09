@@ -45,7 +45,7 @@ type PersonalDetailsValidatedFields = z.infer<typeof personalDetailsSchema>;
 
 export type PersonalDetailsState = PersonalDetailsValidatedFields & {
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
-	errors: SliceErrors<PersonalDetailsValidatedFields>;
+	errors?: SliceErrors<PersonalDetailsValidatedFields>;
 };
 
 const user = getUser();

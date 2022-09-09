@@ -1,4 +1,6 @@
-export const titles = {
+import type { $Keys } from 'utility-types';
+
+export const titles: Record<string, string> = {
 	Ms: 'Ms',
 	Mr: 'Mr',
 	Mrs: 'Mrs',
@@ -8,5 +10,4 @@ export const titles = {
 	Prof: 'Prof',
 	Rev: 'Rev',
 };
-
-export type Title = keyof typeof titles | 'Select a title';
+export type Title = $Keys<typeof titles>;
