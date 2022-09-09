@@ -5,12 +5,9 @@ import com.gu.lambdas.AddSupporterRatePlanItemToQueueLambda.addToQueue
 import com.gu.model.StageConstructors
 import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
 import com.gu.model.states.AddSupporterRatePlanItemToQueueState
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.services.{AlarmService, ConfigService, S3Service, SqsService}
 import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import com.typesafe.scalalogging.StrictLogging
-import io.circe.syntax.EncoderOps
 import kantan.csv._
 import kantan.csv.ops._
 
@@ -102,13 +99,7 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
       logger.info(
         s"Continuing processing with batch of ${batch.length} - time remaining: ${timeOutCheck.timeRemainingMillis / 1000} seconds, buffer: ${timeoutBufferInMillis / 1000} seconds",
       )
-      try {
-        sqsService.sendBatch(batch)
-      } catch {
-        case e: Throwable =>
-          SafeLogger.error(scrub"Error sending batch to sqs\nbatch content was ${batch.asJson.spaces2}", e)
-          alarmService.triggerSQSWriteAlarm
-      }
+      sqsService.sendBatch(batch)
 
       val (_, highestProcessedIndex) = batch.last
       val newProcessedCount = highestProcessedIndex + 1

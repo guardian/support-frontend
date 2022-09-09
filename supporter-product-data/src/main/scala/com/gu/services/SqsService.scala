@@ -18,8 +18,9 @@ import io.circe.syntax.EncoderOps
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters._
+import scala.util.{Failure, Success, Try}
 
-class SqsService(queueName: String)(implicit val executionContext: ExecutionContext) {
+class SqsService(queueName: String, alarmService: AlarmService)(implicit val executionContext: ExecutionContext) {
   implicit val encoder: Encoder[SupporterRatePlanItem] = deriveEncoder
   implicit val contributionAmountEncoder: Encoder[ContributionAmount] = deriveEncoder
   private val sqsClient = AmazonSQSAsyncClientBuilder.standard
@@ -37,13 +38,28 @@ class SqsService(queueName: String)(implicit val executionContext: ExecutionCont
     }
 
     val batchRequest = new SendMessageBatchRequest(queueUrl, batchRequestEntries.asJava)
-    val result = sqsClient.sendMessageBatch(batchRequest)
-    result.getFailed.asScala.toList.foreach { error =>
-      val failedItem = supporterRatePlanItems(error.getId.toInt)
-      SafeLogger.error(
-        scrub"Failed to write a supporterRatePlanItem to the queue\nItem body: ${failedItem.asJson}\nError message: ${error.getMessage}",
-      )
+    sqsClient.sendMessageBatch(batchRequest)
+
+    Try(sqsClient.sendMessageBatch(batchRequest)) match {
+      case Success(batchResult) =>
+        val failures = batchResult.getFailed.asScala.toList
+        if (failures.nonEmpty) {
+          failures.foreach { error =>
+            val failedItem = supporterRatePlanItems(error.getId.toInt)
+            SafeLogger.error(
+              scrub"Error writing to the queue\nFor item with body: ${failedItem.asJson}\nError message: ${error.getMessage}",
+            )
+          }
+          alarmService.triggerSQSWriteAlarm
+        }
+      case Failure(exception) =>
+        SafeLogger.error(
+          scrub"Error writing to the queue\nAn exception was thrown by SQS when writing this list of items: ${supporterRatePlanItems.asJson.spaces2}",
+          exception,
+        )
+        alarmService.triggerSQSWriteAlarm
     }
+    ()
   }
 }
 
@@ -52,6 +68,6 @@ object SqsService {
   def apply(stage: Stage) = {
     val queueName = s"supporter-product-data-${stage.value}"
     SafeLogger.info(s"Creating SqsService for SQS queue $queueName")
-    new SqsService(queueName)
+    new SqsService(queueName, new AlarmService(stage))
   }
 }
