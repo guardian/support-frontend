@@ -57,6 +57,7 @@ function sendEvent(
 	isConversion: boolean,
 	value: string,
 ): void {
+	console.log('sendEvent ---->', id, isConversion, value);
 	if (window.QuantumMetricAPI?.isOn()) {
 		window.QuantumMetricAPI.sendEvent(id, isConversion ? 1 : 0, value);
 	}
@@ -286,15 +287,15 @@ function sendEventABTestParticipations(participations: Participations): void {
 
 function addQM() {
 	return loadScript(
-		'https://cdn.quantummetric.com/instrumentation/1.31.5/quantum-gnm.js',
+		'https://cdn.quantummetric.com/instrumentation/1.31.5/quantum-gnmx.js',
 		{
 			async: true,
 			integrity:
 				'sha384-QqJrp8s9Nl3x7Z6sc9kQG5eYJLVWYwlEsvhjCukLSwFsWtK17WdC5whHVwSXQh1F',
 			crossOrigin: 'anonymous',
 		},
-	).catch((e: Error) => {
-		logException(`Failed to load Quantum Metric: ${e.message}`);
+	).catch(() => {
+		logException('Failed to load Quantum Metric');
 	});
 }
 
