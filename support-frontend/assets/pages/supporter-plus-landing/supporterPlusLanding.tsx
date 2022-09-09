@@ -7,6 +7,7 @@ import {
 } from '@guardian/source-react-components-development-kitchen';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
+import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -57,6 +58,7 @@ export function SupporterPlusLandingPage(): JSX.Element {
 	return (
 		<PageScaffold
 			id="supporter-plus-landing"
+			header={<Header></Header>}
 			footer={
 				<FooterWithContents>
 					<FooterLinks></FooterLinks>
