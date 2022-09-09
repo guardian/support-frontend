@@ -65,7 +65,6 @@ const hr = (margin: string) => css`
 
 const para = css`
 	font-weight: bold;
-	margin-bottom: ${space[5]}px;
 `;
 
 type PropTypes = {
