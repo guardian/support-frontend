@@ -15,6 +15,8 @@ case class RatePlan(ratePlanCharges: List[RatePlanCharge])
 
 case class RatePlanCharge(price: BigDecimal, currency: String)
 
+case class MinimalZuoraError(message: String) extends Throwable
+
 object MinimalZuoraSubscription {
   implicit val decoder: Decoder[MinimalZuoraSubscription] = deriveDecoder
 }
@@ -25,4 +27,8 @@ object RatePlan {
 
 object RatePlanCharge {
   implicit val decoder: Decoder[RatePlanCharge] = deriveDecoder
+}
+
+object MinimalZuoraError {
+  implicit val decoder: Decoder[MinimalZuoraError] = deriveDecoder
 }

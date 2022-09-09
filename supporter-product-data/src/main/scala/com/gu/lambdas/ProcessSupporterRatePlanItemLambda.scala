@@ -2,18 +2,16 @@ package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.conf.ZuoraQuerierConfig
-import com.gu.lambdas.SupporterRatePlanItemCodec.codec
 import com.gu.model.StageConstructors
+import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
 import com.gu.model.sqs.SqsEvent
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{AlarmService, ConfigService, ZuoraSubscriptionService}
 import com.gu.supporterdata.model.Stage.{DEV, PROD, UAT}
-import com.gu.supporterdata.model.{ContributionAmount, Stage, SupporterRatePlanItem}
+import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
-import io.circe.Codec
-import io.circe.generic.semiauto.deriveCodec
 import io.circe.parser._
 import io.circe.syntax.EncoderOps
 
@@ -96,11 +94,6 @@ class ContributionAmountFetcher(config: ZuoraQuerierConfig) {
         supporterRatePlanItem.copy(contributionAmount = sub.contributionAmount)
       }
 
-}
-
-object SupporterRatePlanItemCodec {
-  implicit val codec: Codec[SupporterRatePlanItem] = deriveCodec
-  implicit val contributionCodec: Codec[ContributionAmount] = deriveCodec
 }
 
 object ContributionIds {

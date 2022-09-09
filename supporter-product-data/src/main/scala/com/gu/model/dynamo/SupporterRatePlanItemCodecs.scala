@@ -1,17 +1,9 @@
 package com.gu.model.dynamo
 
-import com.gu.model.ZuoraFieldNames.{
-  contractEffectiveDate,
-  gifteeIdentityId,
-  identityId,
-  productRatePlanId,
-  productRatePlanName,
-  subscriptionName,
-  termEndDate,
-}
+import com.gu.model.ZuoraFieldNames._
 import com.gu.supporterdata.model.{ContributionAmount, SupporterRatePlanItem}
-import io.circe.Encoder
-import io.circe.generic.semiauto.deriveEncoder
+import io.circe.Codec
+import io.circe.generic.semiauto.deriveCodec
 import kantan.csv.HeaderDecoder
 import kantan.csv.java8.defaultLocalDateCellDecoder
 
@@ -47,6 +39,6 @@ object SupporterRatePlanItemCodecs {
         ),
     )
 
-  implicit val supporterRatePlanEncoder: Encoder[SupporterRatePlanItem] = deriveEncoder
-  implicit val contributionAmountEncoder: Encoder[ContributionAmount] = deriveEncoder
+  implicit val codec: Codec[SupporterRatePlanItem] = deriveCodec
+  implicit val contributionCodec: Codec[ContributionAmount] = deriveCodec
 }
