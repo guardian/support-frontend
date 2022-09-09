@@ -15,18 +15,16 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConfigService(stage: Stage) extends StrictLogging {
   val parameterStoreService = ParameterStoreService(stage)
 
-  def load(implicit ec: ExecutionContext): Future[ZuoraQuerierConfig] = {
-
-    parameterStoreService.getParametersByPath(zuoraConfigPath).map { params =>
-      ZuoraQuerierConfig(
-        findParameterOrThrow("url", params),
-        findParameterOrThrow("partnerId", params),
-        findParameterOrThrow("username", params),
-        findParameterOrThrow("password", params),
-        getDiscountProductRatePlanIds(stage),
-        findParameterValue(lastSuccessfulQueryTime, params).map(ZonedDateTime.parse(_, DateTimeFormatter.ISO_DATE_TIME)),
-      )
-    }
+  def load(implicit ec: ExecutionContext): ZuoraQuerierConfig = {
+    val params = parameterStoreService.getParametersByPath(zuoraConfigPath)
+    ZuoraQuerierConfig(
+      findParameterOrThrow("url", params),
+      findParameterOrThrow("partnerId", params),
+      findParameterOrThrow("username", params),
+      findParameterOrThrow("password", params),
+      getDiscountProductRatePlanIds(stage),
+      findParameterValue(lastSuccessfulQueryTime, params).map(ZonedDateTime.parse(_, DateTimeFormatter.ISO_DATE_TIME)),
+    )
   }
 
   private def getDiscountProductRatePlanIds(stage: Stage) =

@@ -52,9 +52,10 @@ class RunFullExportSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   ): Future[AddSupporterRatePlanItemToQueueState] = {
     logger.info(s"Attempting to fetch results for jobId $jobId")
     sleep(20 * 1000)
+    val config = ConfigService(stage).load
+    val service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
+
     for {
-      config <- ConfigService(stage).load
-      service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       result <- service.getResults(jobId)
       finalState <-
         if (result.status == Completed)

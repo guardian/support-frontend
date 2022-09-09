@@ -21,11 +21,13 @@ class FetchResultsLambda extends Handler[FetchResultsState, AddSupporterRatePlan
 }
 
 object FetchResultsLambda extends StrictLogging {
+  val stage = StageConstructors.fromEnvironment
+  val config = ConfigService(stage).load
+  val service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
+
   def fetchResults(stage: Stage, jobId: String, attemptedQueryTime: ZonedDateTime) = {
     logger.info(s"Attempting to fetch results for jobId $jobId")
     for {
-      config <- ConfigService(stage).load
-      service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       result <- service.getResults(jobId)
       _ = assert(result.status == Completed, s"Job with id $jobId is still in status ${result.status}")
       batch = getValueOrThrow(

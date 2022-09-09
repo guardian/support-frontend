@@ -9,16 +9,13 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.services.{AlarmService, ConfigService, S3Service, SqsService}
 import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
-import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.syntax.EncoderOps
 import kantan.csv._
 import kantan.csv.ops._
 
-import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.DurationInt
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 
 trait TimeOutCheck {
   def timeRemainingMillis: Int

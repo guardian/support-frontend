@@ -2,7 +2,6 @@ package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.conf.ZuoraQuerierConfig
-import com.gu.lambdas.ProcessSupporterRatePlanItemLambda.getSupporterRatePlanItemProcessor
 import com.gu.lambdas.SupporterRatePlanItemCodec.codec
 import com.gu.model.StageConstructors
 import com.gu.model.sqs.SqsEvent
@@ -13,21 +12,17 @@ import com.gu.services.{AlarmService, ConfigService, ZuoraSubscriptionService}
 import com.gu.supporterdata.model.Stage.{DEV, PROD, UAT}
 import com.gu.supporterdata.model.{ContributionAmount, Stage, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
-import com.typesafe.scalalogging.StrictLogging
 import io.circe.Codec
 import io.circe.generic.semiauto.deriveCodec
 import io.circe.parser._
 import io.circe.syntax.EncoderOps
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.util.{Failure, Success}
 
-class ProcessSupporterRatePlanItemLambda(supporterRatePlanItemProcessor: SupporterRatePlanItemProcessor)
-    extends Handler[SqsEvent, Unit] {
-
-  def this() = this(getSupporterRatePlanItemProcessor())
+class ProcessSupporterRatePlanItemLambda extends Handler[SqsEvent, Unit] {
 
   override protected def handlerFuture(input: SqsEvent, context: Context) = {
     SafeLogger.info(s"Received ${input.Records.length} records from the queue")
@@ -35,7 +30,7 @@ class ProcessSupporterRatePlanItemLambda(supporterRatePlanItemProcessor: Support
       .sequence(input.Records.map { record =>
         val subscription = decode[SupporterRatePlanItem](record.body)
         subscription match {
-          case Right(item) => supporterRatePlanItemProcessor.processItem(item)
+          case Right(item) => ProcessSupporterRatePlanItemLambda.processItem(item)
           case _ =>
             SafeLogger.warn(s"Couldn't decode a SupporterRatePlanItem with body: ${record.body}")
             Future.successful(()) // This should never happen so I don't think it's worth alerting on
@@ -46,24 +41,12 @@ class ProcessSupporterRatePlanItemLambda(supporterRatePlanItemProcessor: Support
 }
 
 object ProcessSupporterRatePlanItemLambda {
-  def getSupporterRatePlanItemProcessor() = {
-    val stage = StageConstructors.fromEnvironment
-    val dynamoService = SupporterDataDynamoService(stage)
-    val alarmService = AlarmService(stage)
-    val futureProcessor = ConfigService(stage).load.map { config =>
-      new SupporterRatePlanItemProcessor(
-        dynamoService,
-        alarmService,
-        new ContributionProcessor(stage, config),
-      )
-    }
-    Await.result(futureProcessor, 10.seconds)
-  }
-}
-
-class ContributionProcessor(stage: Stage, config: ZuoraQuerierConfig) {
+  val stage = StageConstructors.fromEnvironment
+  val config = ConfigService(stage).load
+  val dynamoService = SupporterDataDynamoService(stage)
   val contributionIds = ContributionIds.forStage(stage)
-  lazy val zuoraService = new ZuoraSubscriptionService(config, configurableFutureRunner(60.seconds))
+  lazy val contributionAmountFetcher = new ContributionAmountFetcher(config)
+  lazy val alarmService = AlarmService(stage)
 
   def isRecurringContribution(supporterRatePlanItem: SupporterRatePlanItem) =
     contributionIds.contains(supporterRatePlanItem.productRatePlanId)
@@ -71,31 +54,12 @@ class ContributionProcessor(stage: Stage, config: ZuoraQuerierConfig) {
   def addAmountIfContribution(supporterRatePlanItem: SupporterRatePlanItem) =
     if (isRecurringContribution(supporterRatePlanItem)) {
       SafeLogger.info(s"Supporter ${supporterRatePlanItem.identityId} is a recurring contributor")
-      fetchContributionAmountFromZuora(supporterRatePlanItem)
+      contributionAmountFetcher.fetchContributionAmountFromZuora(supporterRatePlanItem)
     } else
       Future.successful(supporterRatePlanItem)
 
-  def fetchContributionAmountFromZuora(supporterRatePlanItem: SupporterRatePlanItem) =
-    zuoraService
-      .getSubscription(supporterRatePlanItem.subscriptionName)
-      .map { sub =>
-        SafeLogger.info(
-          s"Contribution amount for supporter ${supporterRatePlanItem.identityId} is ${sub.contributionAmount}",
-        )
-        supporterRatePlanItem.copy(contributionAmount = sub.contributionAmount)
-      }
-
-}
-
-class SupporterRatePlanItemProcessor(
-    dynamoService: SupporterDataDynamoService,
-    alarmService: AlarmService,
-    contributionProcessor: ContributionProcessor,
-) {
-
   def processItem(supporterRatePlanItem: SupporterRatePlanItem) =
-    contributionProcessor
-      .addAmountIfContribution(supporterRatePlanItem)
+    addAmountIfContribution(supporterRatePlanItem)
       .flatMap(writeItemToDynamo)
 
   def writeItemToDynamo(supporterRatePlanItem: SupporterRatePlanItem) = {
@@ -116,6 +80,21 @@ class SupporterRatePlanItemProcessor(
         }
     }
   }
+}
+
+class ContributionAmountFetcher(config: ZuoraQuerierConfig) {
+  lazy val zuoraService = new ZuoraSubscriptionService(config, configurableFutureRunner(60.seconds))
+
+  def fetchContributionAmountFromZuora(supporterRatePlanItem: SupporterRatePlanItem) =
+    zuoraService
+      .getSubscription(supporterRatePlanItem.subscriptionName)
+      .map { sub =>
+        SafeLogger.info(
+          s"Contribution amount for supporter ${supporterRatePlanItem.identityId} is ${sub.contributionAmount}",
+        )
+        supporterRatePlanItem.copy(contributionAmount = sub.contributionAmount)
+      }
+
 }
 
 object SupporterRatePlanItemCodec {
