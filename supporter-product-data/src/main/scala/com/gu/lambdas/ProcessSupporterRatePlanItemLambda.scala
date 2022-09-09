@@ -64,13 +64,14 @@ object ProcessSupporterRatePlanItemLambda {
 
   def writeItemToDynamo(supporterRatePlanItem: SupporterRatePlanItem) = {
     SafeLogger.info(s"Attempting to write item to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}")
-    try {
-      dynamoService.writeItem(supporterRatePlanItem).map { _ =>
+
+    dynamoService
+      .writeItem(supporterRatePlanItem)
+      .map { _ =>
         SafeLogger.info(s"Successfully wrote item to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}")
         ()
       }
-    } catch {
-      case t: Throwable =>
+      .recover { case t: Throwable =>
         SafeLogger.error(scrub"Error writing item to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}", t)
         alarmService.triggerDynamoWriteAlarm match {
           case Success(_) => Future.successful(())
@@ -78,7 +79,7 @@ object ProcessSupporterRatePlanItemLambda {
             SafeLogger.error(scrub"Failed to trigger dynamo alarm", exception)
             Future.successful(())
         }
-    }
+      }
   }
 }
 
