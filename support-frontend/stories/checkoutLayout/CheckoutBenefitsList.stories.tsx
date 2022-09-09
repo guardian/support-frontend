@@ -1,41 +1,49 @@
-import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsContainer';
+import { css } from '@emotion/react';
+import { neutral } from '@guardian/source-foundations';
+import { Column, Columns, Container } from '@guardian/source-react-components';
 import CheckoutBenefitsListComponent from 'components/checkoutBenefits/checkoutBenefitsList';
-import { GBPCountries } from 'helpers/internationalisation/countryGroup';
+import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
+import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 
 export default {
 	title: 'Checkout Layout/Benefits List',
 	component: CheckoutBenefitsListComponent,
-	decorators: [(Story: React.FC): JSX.Element => <Story />],
+	decorators: [
+		(Story: React.FC): JSX.Element => (
+			<Container backgroundColor={neutral[97]}>
+				<Columns
+					collapseUntil="tablet"
+					cssOverrides={css`
+						justify-content: center;
+						padding: 1rem 0;
+					`}
+				>
+					<Column width={[1, 3 / 4, 1 / 2]}>
+						<Box>
+							<BoxContents>
+								<Story />
+							</BoxContents>
+						</Box>
+					</Column>
+				</Columns>
+			</Container>
+		),
+	],
 };
 
 export function CheckoutBenefitsList(args: {
-	titleCopy: string;
-	btnCopy: string;
+	title: string;
 	showBenefitsMessaging: boolean;
-	paragraph: string;
-	desktopGridId: string;
-	// checkListData: CheckListData[];
-	handleBtnClick: () => void;
 }): JSX.Element {
 	return (
 		<CheckoutBenefitsListComponent
-			titleCopy={args.titleCopy}
-			btnCopy={args.btnCopy}
-			showBenefitsMessaging={args.showBenefitsMessaging}
-			paragraph={args.paragraph}
-			desktopGridId={args.desktopGridId}
-			checkListData={checkListData(GBPCountries, args.showBenefitsMessaging)}
-			handleBtnClick={args.handleBtnClick}
+			title={args.title}
+			checkListData={checkListData(args.showBenefitsMessaging)}
 		/>
 	);
 }
 
 CheckoutBenefitsList.args = {
-	titleCopy: "You've unlocked exclusive extras",
-	btnCopy: 'Change to £20 per month',
+	title: "For £12 per month, you'll unlock",
 	showBenefitsMessaging: true,
-	paragraph: 'Thank you for choosing to give £20 or more each month.',
-	desktopGridId: 'benefitsPackshotBulletsDesktopUK',
-	// checkListData: checkListData(GBPCountries, true),
-	handleBtnClick: () => undefined,
 };
