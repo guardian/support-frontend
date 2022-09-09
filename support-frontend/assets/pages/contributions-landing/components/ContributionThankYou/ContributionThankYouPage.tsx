@@ -2,9 +2,12 @@ import { Navigate, useLocation } from 'react-router-dom';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import Page from 'components/page/page';
+import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
 import * as storage from 'helpers/storage/storage';
+import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import ContributionThankYou from './ContributionThankYou';
 import 'helpers/internationalisation/countryGroup';
 
@@ -25,8 +28,29 @@ function ContributionThankYouPage({
 		return <Navigate to={redirectPath} replace />;
 	}
 
+	const selectedContributionType = storage.getSession(
+		'selectedContributionType',
+	) as ContributionType | null | undefined;
+	const contributionAmount = storage.getSession('contributionAmount');
+	const currency = storage.getSession('currency') as
+		| IsoCurrency
+		| null
+		| undefined;
+
+	if (contributionAmount && selectedContributionType && currency) {
+		const contributionAmountNumber = parseInt(contributionAmount, 10);
+
+		if (!isNaN(contributionAmountNumber)) {
+			sendEventContributionCheckoutConversion(
+				contributionAmountNumber,
+				selectedContributionType,
+				currency,
+			);
+		}
+	}
+
 	// we set the recurring cookie server side
-	if (storage.getSession('selectedContributionType') === 'ONE_OFF') {
+	if (selectedContributionType === 'ONE_OFF') {
 		setOneOffContributionCookie();
 	}
 

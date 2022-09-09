@@ -40,7 +40,30 @@ const getPriceCopyString = (
 	return <>per month{productCopy}</>;
 };
 
+const autumnPromoCodes = [
+	'AUTUMNEVERYDAY10HD',
+	'AUTUMNSAT10',
+	'AUTUMNSAT10HD',
+	'AUTUMNSIXDAY10',
+	'AUTUMNSIXDAY10HD',
+	'AUTUMNSUN10',
+	'AUTUMNSUN10HD',
+	'AUTUMNWEEKEND10',
+	'AUTUMNWEEKEND10HD',
+	'AUTUMN14',
+	'FESTIVAL20',
+	'AUTUMN20',
+	'AUTUMN30',
+];
+
 const getOfferText = (price: ProductPrice) => {
+	if (
+		price.promotions?.some((promo) =>
+			autumnPromoCodes.includes(promo.promoCode),
+		)
+	) {
+		return '';
+	}
 	if (price.savingVsRetail && price.savingVsRetail > 0) {
 		return `Save ${price.savingVsRetail}% on retail price`;
 	}

@@ -10,6 +10,7 @@ import type {
 	ContributionsStore,
 } from 'helpers/redux/contributionsStore';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
+import { debugReducer } from 'helpers/redux/debug/reducer';
 import type {
 	SubscriptionsStartListening,
 	SubscriptionsState,
@@ -33,6 +34,7 @@ export function createTestStoreForSubscriptions(
 	const baseReducer = {
 		common: commonReducer,
 		page: subscriptionsPageReducer,
+		debug: debugReducer,
 	};
 
 	const listenerMiddleware = createListenerMiddleware();
@@ -68,6 +70,7 @@ export function createTestStoreForContributions(
 	const baseReducer = {
 		common: commonReducer,
 		page: initReducer(),
+		debug: debugReducer,
 	};
 
 	const listenerMiddleware = createListenerMiddleware();

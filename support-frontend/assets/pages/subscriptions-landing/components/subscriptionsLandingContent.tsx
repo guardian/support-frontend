@@ -15,17 +15,22 @@ function SubscriptionsLandingContent({
 		return null;
 	}
 
+	const isNewProduct = participations.newProduct === 'variant';
+	const supportMsg = isNewProduct
+		? 'Support the Guardian with a print subscription'
+		: 'Support the Guardian with a print or digital subscription';
 	const subscriptionCopy = getSubscriptionCopy(
 		countryGroupId,
 		pricingCopy,
 		participations,
+		isNewProduct,
 	);
 	return (
 		<div
 			className="subscriptions-landing-page"
 			id="qa-subscriptions-landing-page"
 		>
-			<FeatureHeader />
+			<FeatureHeader featureHeaderMsg={supportMsg} />
 			<div className="subscriptions__product-container">
 				{subscriptionCopy.map((product, index) => (
 					<SubscriptionsProduct
