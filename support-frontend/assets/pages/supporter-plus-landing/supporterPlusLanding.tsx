@@ -5,6 +5,8 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
+import CheckoutBenefitsList from 'components/checkoutBenefits/checkoutBenefitsList';
+import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Container } from 'components/layout/container';
@@ -95,6 +97,10 @@ export function SupporterPlusLandingPage(): JSX.Element {
 										renderTabContent={(tabId) => (
 											<BoxContents>
 												<p css={smallDemoBox}>Amount selection for {tabId}</p>
+												<CheckoutBenefitsList
+													title="For £12 per month, you'll unlock"
+													checkListData={checkListData(true)}
+												/>
 											</BoxContents>
 										)}
 									/>
