@@ -1,14 +1,13 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { neutral } from '@guardian/source-foundations';
-import { SvgTickRound } from '@guardian/source-react-components';
+import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
 import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import type { AmountChange } from 'helpers/redux/checkout/product/state';
 import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import CheckoutBenefitsList from './checkoutBenefitsList';
-import { SvgCrossRound } from './svgCrossRound';
 
 const greyedOut = css`
 	color: ${neutral[60]};
