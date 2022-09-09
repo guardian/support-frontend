@@ -31,7 +31,7 @@ export default {
 	],
 };
 
-export function CheckoutBenefitsList(args: {
+export function BenefitsList(args: {
 	title: string;
 	showBenefitsMessaging: boolean;
 }): JSX.Element {
@@ -43,7 +43,7 @@ export function CheckoutBenefitsList(args: {
 	);
 }
 
-CheckoutBenefitsList.args = {
+BenefitsList.args = {
 	title: "For £12 per month, you'll unlock",
 	showBenefitsMessaging: true,
 };
