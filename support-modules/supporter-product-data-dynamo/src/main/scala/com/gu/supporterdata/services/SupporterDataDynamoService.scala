@@ -40,7 +40,7 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
       subscriptionName -> AttributeValue.builder.s(item.subscriptionName).build,
     ).asJava
 
-    val nonOptionExpression =
+    val requiredValuesExpression =
       s"""SET
           $productRatePlanId = :$productRatePlanId,
           $productRatePlanName = :$productRatePlanName,
@@ -50,10 +50,13 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
           """
     val updateExpression =
       if (item.contributionAmount.isDefined)
-        nonOptionExpression + s",\n          $contributionAmount = :$contributionAmount,\n          $contributionCurrency = :$contributionCurrency"
-      else nonOptionExpression
+        requiredValuesExpression + s""",
+          $contributionAmount = :$contributionAmount,
+          $contributionCurrency = :$contributionCurrency
+        """
+      else requiredValuesExpression
 
-    val nonOptionValues = Map(
+    val requiredValues = Map(
       ":" + productRatePlanId -> AttributeValue.builder.s(item.productRatePlanId).build,
       ":" + productRatePlanName -> AttributeValue.builder.s(item.productRatePlanName).build,
       ":" + termEndDate -> AttributeValue.builder.s(asIso(item.termEndDate)).build,
@@ -63,12 +66,12 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
 
     val attributeValues = item.contributionAmount
       .map(amount =>
-        nonOptionValues ++ Map(
+        requiredValues ++ Map(
           ":" + contributionAmount -> AttributeValue.builder.n(amount.amount.toString).build,
           ":" + contributionCurrency -> AttributeValue.builder.s(amount.currency).build,
         ),
       )
-      .getOrElse(nonOptionValues)
+      .getOrElse(requiredValues)
 
     val updateItemRequest = UpdateItemRequest.builder
       .tableName(tableName)
