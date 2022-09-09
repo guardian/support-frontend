@@ -2,11 +2,9 @@ import { css } from '@emotion/react';
 import {
 	brand,
 	from,
-	headline,
 	neutral,
 	space,
 	textSans,
-	until,
 } from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
 import { Container } from 'components/layout/container';
@@ -28,18 +26,6 @@ const headingContentContainer = css`
 	${textSans.large({ fontWeight: 'bold' })}
 `;
 
-const heading = css`
-	display: inline-block;
-	${headline.medium({ fontWeight: 'bold' })}
-	${until.desktop} {
-		margin: 0 auto;
-	}
-	${from.desktop} {
-		${headline.large({ fontWeight: 'bold' })}
-		margin-bottom: ${space[3]}px;
-	}
-`;
-
 const headingImage = css`
 	height: 140px;
 	margin-top: ${space[12]}px;
@@ -47,7 +33,7 @@ const headingImage = css`
 `;
 
 export interface CheckoutHeadingProps extends CSSOverridable {
-	heading: string;
+	heading: React.ReactNode;
 	children?: React.ReactNode;
 	image?: React.ReactNode;
 }
@@ -61,10 +47,10 @@ export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
 				backgroundColor={brand[400]}
 			>
 				<Columns collapseUntil="desktop">
-					<Column width={1 / 3}>
+					<Column span={[1, 2, 5]}>
 						<div css={headingContentContainer}>
-							<h1 css={heading}>{props.heading}</h1>
 							<Hide until="desktop">
+								{props.heading}
 								{props.children}
 								{props.image && (
 									<figure css={headingImage}>{props.image}</figure>

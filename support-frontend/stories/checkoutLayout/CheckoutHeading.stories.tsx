@@ -5,6 +5,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHeading';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Container } from 'components/layout/container';
+import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
 import { withPositionRelative } from '../../.storybook/decorators/withPositionRelative';
 
 export default {
@@ -43,7 +44,7 @@ Template.decorators = [] as unknown[];
 export const Heading = Template.bind({});
 
 Heading.args = {
-	heading: 'Thank you for your\u00a0support',
+	heading: <LandingPageHeading />,
 	children: (
 		<p style={{ marginRight: '48px' }}>
 			Help protect the Guardian&apos;s independence so we can keep delivering
