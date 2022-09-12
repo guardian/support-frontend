@@ -148,14 +148,14 @@ const guardianWeekly = (
 	isTop: boolean,
 	participations: Participations,
 ): ProductCopy => ({
-	title: 'The Guardian Weekly',
+	title: 'Open up your world view',
 	subtitle: getDisplayPrice(
 		countryGroupId,
 		priceCopy.price,
 		postIntroductorySixForSixBillingPeriod,
 	),
 	description:
-		'A weekly, global magazine from the Guardian, with delivery worldwide',
+		'Gain a deeper understanding of the issues that matter with the Guardian Weekly magazine. Every week, take your time over handpicked articles from the Guardian and Observer, delivered for free to wherever you are in the world.',
 	offer: getGuardianWeeklyOfferCopy(
 		countryGroupId,
 		priceCopy.discountCopy,
@@ -163,23 +163,13 @@ const guardianWeekly = (
 	),
 	buttons: [
 		{
-			ctaButtonText: 'Find out more',
+			ctaButtonText: 'Subscribe now',
 			link: guardianWeeklyLanding(countryGroupId, false),
 			analyticsTracking: sendTrackingEventsOnClick({
 				id: 'weekly_cta',
 				product: 'GuardianWeekly',
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
-		},
-		{
-			ctaButtonText: 'See gift options',
-			link: guardianWeeklyLanding(countryGroupId, true),
-			analyticsTracking: sendTrackingEventsOnClick({
-				id: 'weekly_cta_gift',
-				product: 'GuardianWeekly',
-				componentType: 'ACQUISITIONS_BUTTON',
-			}),
-			modifierClasses: '',
 		},
 	],
 	productImage: getWeeklyImage(isTop),
