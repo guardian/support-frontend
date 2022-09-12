@@ -117,7 +117,7 @@ export class PaymentApi extends GuStack {
       app: "payment-api",
       access: { scope: AccessScope.PUBLIC },
       certificateProps: {
-        domainName: props.domainName,
+        domainName: "payment.code.dev-guardianapis.com",
         hostedZoneId: "Z1E4V12LQGXFEC",
       },
       monitoringConfiguration: { noMonitoring: true },
