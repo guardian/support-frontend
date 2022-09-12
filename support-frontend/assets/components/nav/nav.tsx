@@ -5,18 +5,12 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { Container } from 'components/layout/container';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-const col1CssOverrides = css`
+const switcherContainer = css`
 	height: 28px;
-	border-right: 1px solid ${brand[600]};
-	margin-right: 0;
+	border-left: 1px solid ${brand[600]};
+	padding: ${space[2]}px 0 0 ${space[3]}px;
+	margin-bottom: ${space[3]}px;
 `;
-
-const col2CssOverrides = css`
-	min-height: 42px;
-	display: flex;
-	padding: ${space[2]}px;
-`;
-
 interface NavProps {
 	countryGroupIds: CountryGroupId[];
 	selectedCountryGroup: CountryGroupId;
@@ -32,20 +26,21 @@ function Nav({
 		<Container
 			element="nav"
 			sideBorders={true}
-			sidePadding={false}
 			topBorder={true}
 			borderColor={brand[600]}
 			backgroundColor={brand[400]}
 		>
 			<Hide until="desktop">
 				<Columns>
-					<Column span={5} cssOverrides={col1CssOverrides} />
-					<Column cssOverrides={col2CssOverrides}>
-						<CountryGroupSwitcher
-							countryGroupIds={countryGroupIds}
-							selectedCountryGroup={selectedCountryGroup}
-							subPath={subPath}
-						/>
+					<Column span={5} />
+					<Column>
+						<div css={switcherContainer}>
+							<CountryGroupSwitcher
+								countryGroupIds={countryGroupIds}
+								selectedCountryGroup={selectedCountryGroup}
+								subPath={subPath}
+							/>
+						</div>
 					</Column>
 				</Columns>
 			</Hide>
