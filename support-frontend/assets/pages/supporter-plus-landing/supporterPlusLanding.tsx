@@ -9,6 +9,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
@@ -77,7 +78,9 @@ export function SupporterPlusLandingPage(): JSX.Element {
 			header={
 				<Header>
 					<Hide from="desktop">
-						<CountryGroupSwitcher {...countrySwitcherProps} />
+						<CountrySwitcherContainer>
+							<CountryGroupSwitcher {...countrySwitcherProps} />
+						</CountrySwitcherContainer>
 					</Hide>
 				</Header>
 			}
