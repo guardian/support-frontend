@@ -1,17 +1,9 @@
 import { css } from '@emotion/react';
-import { brand, from, space } from '@guardian/source-foundations';
-import { Column, Columns } from '@guardian/source-react-components';
+import { brand, space } from '@guardian/source-foundations';
+import { Column, Columns, Hide } from '@guardian/source-react-components';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { Container } from 'components/layout/container';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-
-const container = css`
-	display: none;
-
-	${from.desktop} {
-		display: block;
-	}
-`;
 
 const col1CssOverrides = css`
 	height: 28px;
@@ -37,14 +29,15 @@ function Nav({
 	subPath,
 }: NavProps): JSX.Element {
 	return (
-		<nav css={container}>
-			<Container
-				sideBorders={true}
-				sidePadding={false}
-				topBorder={true}
-				borderColor={brand[600]}
-				backgroundColor={brand[400]}
-			>
+		<Container
+			element="nav"
+			sideBorders={true}
+			sidePadding={false}
+			topBorder={true}
+			borderColor={brand[600]}
+			backgroundColor={brand[400]}
+		>
+			<Hide until="desktop">
 				<Columns>
 					<Column span={5} cssOverrides={col1CssOverrides} />
 					<Column cssOverrides={col2CssOverrides}>
@@ -55,8 +48,8 @@ function Nav({
 						/>
 					</Column>
 				</Columns>
-			</Container>
-		</nav>
+			</Hide>
+		</Container>
 	);
 }
 

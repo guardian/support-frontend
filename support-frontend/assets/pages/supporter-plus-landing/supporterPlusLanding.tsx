@@ -7,6 +7,8 @@ import {
 } from '@guardian/source-react-components-development-kitchen';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
+import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
@@ -52,32 +54,40 @@ const largeDemoBox = css`
 	min-height: 400px;
 `;
 
+const countrySwitcherProps: CountryGroupSwitcherProps = {
+	countryGroupIds: [
+		GBPCountries,
+		UnitedStates,
+		AUDCountries,
+		EURCountries,
+		NZDCountries,
+		Canada,
+		International,
+	],
+	selectedCountryGroup: GBPCountries,
+	subPath: '/contribute',
+};
+
 export function SupporterPlusLandingPage(): JSX.Element {
 	const heading = <LandingPageHeading />;
 
 	return (
 		<PageScaffold
 			id="supporter-plus-landing"
-			header={<Header></Header>}
+			header={
+				<Header>
+					<Hide from="desktop">
+						<CountryGroupSwitcher {...countrySwitcherProps} />
+					</Hide>
+				</Header>
+			}
 			footer={
 				<FooterWithContents>
 					<FooterLinks></FooterLinks>
 				</FooterWithContents>
 			}
 		>
-			<Nav
-				countryGroupIds={[
-					GBPCountries,
-					UnitedStates,
-					AUDCountries,
-					EURCountries,
-					NZDCountries,
-					Canada,
-					International,
-				]}
-				selectedCountryGroup={GBPCountries}
-				subPath={window.location.search}
-			/>
+			<Nav {...countrySwitcherProps} />
 			<CheckoutHeading heading={heading}>
 				<p>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
