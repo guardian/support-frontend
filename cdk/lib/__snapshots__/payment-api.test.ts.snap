@@ -744,10 +744,10 @@ Object {
     "CertificatePaymentapi8AACB639": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
-        "DomainName": "payment.guardianapis.com.origin.membership.guardianapis.com",
+        "DomainName": "payment.code.dev-guardianapis.com",
         "DomainValidationOptions": Array [
           Object {
-            "DomainName": "payment.guardianapis.com.origin.membership.guardianapis.com",
+            "DomainName": "payment.code.dev-guardianapis.com",
             "HostedZoneId": "Z1E4V12LQGXFEC",
           },
         ],
@@ -1787,7 +1787,7 @@ dpkg -i /tmp/\${ProjectName}_\${ProjectVersion}_all.deb
           },
         ],
         "AlarmDescription": "There have been no one-off contributions using paypal in the last 2 hours",
-        "AlarmName": "[CDK] payment-api PROD CP One-off contributions with PayPal might be down ",
+        "AlarmName": "[CDK] payment-api PROD CP One-off contributions with PayPal might be down",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
         "Dimensions": Array [
           Object {
