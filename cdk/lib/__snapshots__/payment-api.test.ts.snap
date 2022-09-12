@@ -745,12 +745,6 @@ Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
         "DomainName": "payment.code.dev-guardianapis.com",
-        "DomainValidationOptions": Array [
-          Object {
-            "DomainName": "payment.code.dev-guardianapis.com",
-            "HostedZoneId": "Z1E4V12LQGXFEC",
-          },
-        ],
         "Tags": Array [
           Object {
             "Key": "App",
