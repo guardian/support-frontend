@@ -3,22 +3,23 @@ import { focus, neutral, textSans } from '@guardian/source-foundations';
 
 const skipLinkStyles = css`
 	${textSans.medium()}
+	display: block;
+	position: absolute;
 	height: 40px;
 	top: -40px;
+	padding: 0;
+	margin: 0;
 	line-height: 30px;
 	overflow: hidden;
-	padding: 0;
-	position: absolute;
 	background: ${neutral[100]};
-	display: block;
-	text-align: center;
-	margin: 0;
-	text-decoration: none;
 	color: ${neutral[0]};
+	text-align: center;
+	text-decoration: none;
+
 	&:focus,
 	&:active {
-		border: 5px solid ${focus[400]};
 		position: static;
+		border: 5px solid ${focus[400]};
 	}
 	&:visited,
 	&:active {
