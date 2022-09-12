@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { from, neutral } from '@guardian/source-foundations';
 import { Container as SourceContainer } from '@guardian/source-react-components';
+import type { HTMLAttributes } from 'react';
 import React from 'react';
 
 type ContainerElement =
@@ -12,7 +13,7 @@ type ContainerElement =
 	| 'nav'
 	| 'section';
 
-type Props = {
+interface ContainerProps extends HTMLAttributes<HTMLElement> {
 	children: React.ReactNode;
 	element?: ContainerElement;
 	sidePadding?: boolean;
@@ -20,7 +21,7 @@ type Props = {
 	sideBorders?: boolean;
 	borderColor?: string;
 	backgroundColor?: string;
-};
+}
 
 const sidePaddingStyles = css`
 	> div {
@@ -64,7 +65,8 @@ export function Container({
 	sideBorders,
 	borderColor = neutral[86],
 	backgroundColor,
-}: Props): JSX.Element {
+	...props
+}: ContainerProps): JSX.Element {
 	return (
 		<SourceContainer
 			element={element}
@@ -76,6 +78,7 @@ export function Container({
 				sideBorders ? sideBorderStyles(borderColor) : css``,
 				topBorder ? topBorderStyles(borderColor) : css``,
 			]}
+			{...props}
 		>
 			{children}
 		</SourceContainer>

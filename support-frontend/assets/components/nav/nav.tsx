@@ -24,6 +24,7 @@ function Nav({
 }: NavProps): JSX.Element {
 	return (
 		<Container
+			id="navigation"
 			element="nav"
 			sideBorders={true}
 			topBorder={true}
