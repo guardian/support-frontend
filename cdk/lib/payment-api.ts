@@ -227,7 +227,7 @@ export class PaymentApi extends GuStack {
 
     new GuAlarm(this, "NoPaypalPaymentsInTwoHours247Alarm", {
       app,
-      alarmName: `[CDK] ${app} ${this.stage} CP One-off contributions with PayPal might be down `,
+      alarmName: `[CDK] ${app} ${this.stage} CP One-off contributions with PayPal might be down`,
       alarmDescription:
         "There have been no one-off contributions using paypal in the last 2 hours",
       actionsEnabled: props.stage === "PROD",
