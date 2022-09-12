@@ -53,7 +53,7 @@ new PaymentApi(app, "Payment-API-CODE", {
   stack: "support",
   stage: "CODE",
   domainName:
-    "payment.code.dev-guardianapis.com.origin.membership.guardianapis.com",
+    "pay.code.dev-guardianapis.com.origin.membership.guardianapis.com",
   scaling: {
     minimumInstances: 1,
     maximumInstances: 2,

@@ -744,7 +744,13 @@ Object {
     "CertificatePaymentapi8AACB639": Object {
       "DeletionPolicy": "Retain",
       "Properties": Object {
-        "DomainName": "payment.code.dev-guardianapis.com",
+        "DomainName": "payment.guardianapis.com.origin.membership.guardianapis.com",
+        "DomainValidationOptions": Array [
+          Object {
+            "DomainName": "payment.guardianapis.com.origin.membership.guardianapis.com",
+            "HostedZoneId": "Z1E4V12LQGXFEC",
+          },
+        ],
         "Tags": Array [
           Object {
             "Key": "App",
