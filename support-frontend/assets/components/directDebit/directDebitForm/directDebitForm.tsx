@@ -10,7 +10,6 @@ import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
 import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
-import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
@@ -234,11 +233,6 @@ function RecaptchaInput(props: {
 	setRecaptchaToken: (token: string) => void;
 	expireRecaptchaToken?: () => void;
 }) {
-	useRecaptchaV2(
-		recaptchaId,
-		props.setRecaptchaToken,
-		props.expireRecaptchaToken,
-	);
 	return (
 		<div className="component-direct-debit-form__recaptcha">
 			<label
@@ -247,7 +241,11 @@ function RecaptchaInput(props: {
 			>
 				Security check
 			</label>
-			<Recaptcha id={recaptchaId} />
+			<Recaptcha
+				id={recaptchaId}
+				onRecaptchaCompleted={props.setRecaptchaToken}
+				onRecaptchaExpired={props.expireRecaptchaToken}
+			/>
 		</div>
 	);
 }

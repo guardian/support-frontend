@@ -152,4 +152,23 @@ export const tests: Tests = {
 		referrerControlled: false,
 		seed: 14,
 	},
+	supporterPlus: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false,
+		seed: 15,
+	},
 };

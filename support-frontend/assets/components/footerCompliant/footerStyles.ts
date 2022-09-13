@@ -28,6 +28,7 @@ export const componentFooter = css`
     Preferably switch to the Link component in Source for all links- current display property means we can't use it as of 2.0 */
 	a,
 	button {
+		text-decoration: none;
 		font-size: inherit;
 		color: ${brandText.anchorPrimary};
 		:hover {

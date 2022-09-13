@@ -25,7 +25,7 @@ function SubscriptionsLandingPage({
 	pricingCopy,
 	referrerAcquisitions,
 }: SubscriptionsLandingPropTypes) {
-	const hideDigital = participations.newProduct === 'variant';
+	const isNewProduct = participations.newProduct === 'variant';
 	const Header = headerWithCountrySwitcherContainer({
 		path: '/subscribe',
 		countryGroupId,
@@ -38,7 +38,7 @@ function SubscriptionsLandingPage({
 			NZDCountries,
 			International,
 		],
-		hideDigital: hideDigital,
+		isNewProduct,
 	});
 	return (
 		<Page header={<Header />} footer={<Footer centred />}>

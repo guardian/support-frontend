@@ -14,7 +14,6 @@ import { connect } from 'react-redux';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
 import { usePrevious } from 'helpers/customHooks/usePrevious';
-import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 import { isValidZipCode } from 'helpers/forms/formValidation';
 import type { StripePaymentIntentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/forms/paymentMethods';
@@ -25,12 +24,12 @@ import {
 	expireRecaptchaToken,
 	setRecaptchaToken,
 } from 'helpers/redux/checkout/recaptcha/actions';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentFailure,
 	paymentWaiting as setPaymentWaiting,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { CreditCardIcons } from './CreditCardIcons';
 import {
 	logCreatePaymentMethodError,
@@ -49,7 +48,7 @@ import './stripeCardForm.scss';
 
 // ----- Redux -----//
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: ContributionsState) => ({
 	contributionType: getContributionType(state),
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
@@ -111,28 +110,24 @@ function CardForm(props: PropTypes) {
 
 	const [zipCode, setZipCode] = useState('');
 
-	useRecaptchaV2(
-		'robot_checkbox',
-		(token: string) => {
-			trackRecaptchaClientTokenReceived();
-			props.setRecaptchaToken(token);
+	const onRecaptchaCompleted = (token: string) => {
+		trackRecaptchaClientTokenReceived();
+		props.setRecaptchaToken(token);
 
-			if (props.contributionType !== 'ONE_OFF') {
-				props
-					.getStripeSetupIntent({
-						token,
-						stripePublicKey: props.stripeKey,
-						isTestUser: props.isTestUser,
-					})
-					.catch((err: Error) => {
-						logCreateSetupIntentError(err);
-						props.paymentFailure('internal_error');
-						props.setPaymentWaiting(false);
-					});
-			}
-		},
-		props.expireRecaptchaToken,
-	);
+		if (props.contributionType !== 'ONE_OFF') {
+			props
+				.getStripeSetupIntent({
+					token,
+					stripePublicKey: props.stripeKey,
+					isTestUser: props.isTestUser,
+				})
+				.catch((err: Error) => {
+					logCreateSetupIntentError(err);
+					props.paymentFailure('internal_error');
+					props.setPaymentWaiting(false);
+				});
+		}
+	};
 
 	const showZipCodeField = props.country === 'US';
 
@@ -400,7 +395,10 @@ function CardForm(props: PropTypes) {
 							contributionType={props.contributionType}
 						/>
 					)}
-					<Recaptcha />
+					<Recaptcha
+						onRecaptchaCompleted={onRecaptchaCompleted}
+						onRecaptchaExpired={props.expireRecaptchaToken}
+					/>
 				</div>
 			) : null}
 		</div>

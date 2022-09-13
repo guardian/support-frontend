@@ -293,8 +293,8 @@ function addQM() {
 				'sha384-QqJrp8s9Nl3x7Z6sc9kQG5eYJLVWYwlEsvhjCukLSwFsWtK17WdC5whHVwSXQh1F',
 			crossOrigin: 'anonymous',
 		},
-	).catch(() => {
-		logException('Failed to load Quantum Metric');
+	).catch((e: Error) => {
+		logException(`Failed to load Quantum Metric: ${e.message}`);
 	});
 }
 

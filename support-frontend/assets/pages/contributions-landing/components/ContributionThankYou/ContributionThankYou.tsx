@@ -21,9 +21,9 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { User } from 'helpers/user/userReducer';
-import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { showBenefitsThankYouText as shouldShowBenefitsThankYouText } from '../DigiSubBenefits/helpers';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
@@ -151,7 +151,7 @@ type ContributionThankYouProps = {
 	isInNewProductTest: boolean;
 };
 
-const mapStateToProps = (state: State) => {
+const mapStateToProps = (state: ContributionsState) => {
 	const contributionType = getContributionType(state);
 	return {
 		email: state.page.checkoutForm.personalDetails.email,

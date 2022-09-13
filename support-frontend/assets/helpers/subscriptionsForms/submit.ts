@@ -145,9 +145,10 @@ function buildRegularPaymentRequest(
 	promotions?: Promotion[],
 	currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
+	const { actionHistory } = state.debug;
 	const { title, firstName, lastName, email, telephone } =
 		state.page.checkoutForm.personalDetails;
-	const { deliveryInstructions, csrUsername, salesforceCaseId, debugInfo } =
+	const { deliveryInstructions, csrUsername, salesforceCaseId } =
 		state.page.checkout;
 	const product = getProduct(state, currencyId);
 	const paymentFields =
@@ -176,7 +177,7 @@ function buildRegularPaymentRequest(
 		deliveryInstructions,
 		csrUsername,
 		salesforceCaseId,
-		debugInfo,
+		debugInfo: actionHistory,
 	};
 }
 
@@ -198,9 +199,11 @@ function onPaymentAuthorised(
 	const { csrf } = state.page.checkoutForm;
 	const { abParticipations } = state.common;
 	const addresses = getAddresses(state);
+	const pricingCountry =
+		addresses.deliveryAddress?.country ?? addresses.billingAddress.country;
 	const productPrice = getProductPrice(
 		productPrices,
-		addresses.billingAddress.country,
+		pricingCountry,
 		billingPeriod,
 		fulfilmentOption,
 		productOption,

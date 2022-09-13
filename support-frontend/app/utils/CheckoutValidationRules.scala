@@ -1,5 +1,6 @@
 package utils
 
+import admin.settings.{RecurringPaymentMethodSwitches, SubscriptionsPaymentMethodSwitches, Switches}
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
@@ -30,6 +31,68 @@ object CheckoutValidationRules {
   }
   case class Invalid(message: String) extends Result
   case object Valid extends Result
+  def checkSubscriptionPaymentMethodEnabled(
+      switches: SubscriptionsPaymentMethodSwitches,
+      paymentFields: Either[PaymentFields, RedemptionData],
+  ) = paymentFields match {
+    case Left(_: PayPalPaymentFields) =>
+      if (switches.paypal.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_: DirectDebitPaymentFields) =>
+      if (switches.directDebit.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_: StripePaymentMethodPaymentFields) =>
+      if (switches.creditCard.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_) => Invalid("Invalid Payment Method")
+    case Right(_) => Valid
+  }
+
+  def checkContributionPaymentMethodEnabled(
+      switches: RecurringPaymentMethodSwitches,
+      paymentFields: Either[PaymentFields, RedemptionData],
+  ) = paymentFields match {
+    case Left(_: PayPalPaymentFields) =>
+      if (switches.payPal.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_: DirectDebitPaymentFields) =>
+      if (switches.directDebit.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_: SepaPaymentFields) =>
+      if (switches.sepa.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_: StripeSourcePaymentFields) =>
+      if (switches.stripe.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(s: StripePaymentMethodPaymentFields) =>
+      s.stripePaymentType match {
+        case Some(StripePaymentType.StripeApplePay) =>
+          if (switches.stripeApplePay.isOn) Valid else Invalid("Invalid Payment Method")
+        case Some(StripePaymentType.StripePaymentRequestButton) =>
+          if (switches.stripePaymentRequestButton.isOn) Valid else Invalid("Invalid Payment Method")
+        case Some(StripePaymentType.StripeCheckout) =>
+          if (switches.stripe.isOn) Valid else Invalid("Invalid Payment Method")
+        case None => Invalid("Invalid Payment Method")
+      }
+    case Left(_: AmazonPayPaymentFields) =>
+      if (switches.amazonPay.isOn) Valid else Invalid("Invalid Payment Method")
+    case Left(_: ExistingPaymentFields) =>
+      // Return Valid for all existing payments because we can't tell whether the user has a direct debit or card but,
+      // there are separate switches in the switchboards(RRCP-Reader Revenue Control Panel) for these
+      Valid
+    case Right(_) => Invalid("Invalid Payment Method")
+
+  }
+  def checkPaymentMethodEnabled(
+      product: ProductType,
+      paymentFields: Either[PaymentFields, RedemptionData],
+      switches: Switches,
+  ) =
+    product match {
+      case _: Contribution =>
+        checkContributionPaymentMethodEnabled(
+          switches.recurringPaymentMethods,
+          paymentFields,
+        )
+      case _ =>
+        checkSubscriptionPaymentMethodEnabled(
+          switches.subscriptionsPaymentMethods,
+          paymentFields,
+        )
+    }
 
   def validate(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
     (createSupportWorkersRequest.product match {

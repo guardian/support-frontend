@@ -9,7 +9,7 @@ import io.circe.generic.auto._
 import akka.actor.ActorSystem
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.defaultPromotionsLoadingFailure
-import com.gu.support.catalog.{GuardianWeekly, Product}
+import com.gu.support.catalog.{GuardianWeekly, Paper, Product}
 import com.typesafe.scalalogging.LazyLogging
 import services.pricing.DefaultPromotionService.DefaultPromotions
 
@@ -23,7 +23,7 @@ trait DefaultPromotionService {
 }
 
 object DefaultPromotionService {
-  case class DefaultPromotions(guardianWeekly: List[String])
+  case class DefaultPromotions(guardianWeekly: List[String], paper: List[String])
 
   implicit val decoder = Decoder[DefaultPromotions]
 }
@@ -41,7 +41,7 @@ class DefaultPromotionServiceS3(
     new AmazonS3URI(s"s3://gu-promotions-tool-private/${env.envValue}/defaultPromos.json")
   }
   private val defaultPromoCodes = new AtomicReference[DefaultPromotions](
-    DefaultPromotions(guardianWeekly = Nil),
+    DefaultPromotions(guardianWeekly = Nil, paper = Nil),
   )
 
   private def fetch(): Try[DefaultPromotions] =
@@ -65,6 +65,7 @@ class DefaultPromotionServiceS3(
   def getPromoCodes(product: Product): List[String] =
     product match {
       case GuardianWeekly => defaultPromoCodes.get().guardianWeekly
+      case Paper => defaultPromoCodes.get().paper
       case _ => Nil
     }
 

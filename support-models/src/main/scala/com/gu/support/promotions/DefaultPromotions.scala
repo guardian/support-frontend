@@ -16,10 +16,6 @@ object DefaultPromotions {
     def all: List[PromoCode] = Monthly.all ++ Annual.all
   }
 
-  object Paper {
-    val june21Promotion = "JUNE21SALE"
-  }
-
   object GuardianWeekly {
     object Gift {
       val twentyPercentOff = "GW20GIFT1Y"
