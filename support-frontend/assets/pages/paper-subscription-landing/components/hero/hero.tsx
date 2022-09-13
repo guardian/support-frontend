@@ -6,6 +6,7 @@ import {
 	from,
 	headline,
 	space,
+	text,
 } from '@guardian/source-foundations';
 import {
 	buttonThemeBrand,
@@ -22,6 +23,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { offerStraplineBlue } from 'stylesheets/emotion/colours';
 import { getDiscountCopy } from './discountCopy';
 
 type PropTypes = {
@@ -112,7 +114,11 @@ function PaperHero({
 	return (
 		<PageTitle title="Newspaper subscription" theme="paper">
 			<CentredContainer>
-				<OfferStrapline copy={roundelText} />
+				<OfferStrapline
+					fgCol={text.primary}
+					bgCol={offerStraplineBlue}
+					copy={roundelText}
+				/>
 				<Hero
 					image={
 						<GridImage

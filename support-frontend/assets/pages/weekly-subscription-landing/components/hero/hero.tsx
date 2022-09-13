@@ -1,9 +1,15 @@
 // ----- Imports ----- //
 
 import { css, ThemeProvider } from '@emotion/react';
-import { body, from, headline, space } from '@guardian/source-foundations';
 import {
-	buttonThemeBrand,
+	body,
+	from,
+	headline,
+	space,
+	text,
+} from '@guardian/source-foundations';
+import {
+	buttonThemeBrandAlt,
 	LinkButton,
 	SvgArrowDownStraight,
 } from '@guardian/source-react-components';
@@ -22,6 +28,11 @@ import {
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import {
+	backgroundCtaPrimaryOveride,
+	backgroundCtaSecondaryOveride,
+	digitalSubscriptionsBlue,
+} from 'stylesheets/emotion/colours';
 
 type PropTypes = {
 	orderIsAGift: boolean;
@@ -31,6 +42,7 @@ type PropTypes = {
 };
 const weeklyHeroCopy = css`
 	padding: 0 ${space[3]}px ${space[3]}px;
+	color: ${text.primary};
 `;
 const weeklyHeroTitle = css`
 	${headline.small({
@@ -103,10 +115,11 @@ const getFirstParagraph = (
 
 	return (
 		<>
-			The Guardian Weekly magazine is a round-up of the world news, opinion and
-			long reads that have shaped the week. Inside, the past seven days' most
-			memorable stories are reframed with striking photography and insightful
-			companion pieces, all handpicked from the Guardian and the Observer.
+			The Guardian Weekly takes you beyond the headlines to give you a deeper
+			understanding of the issues that really matter. Inside you’ll find the
+			week’s most memorable stories brought to life with striking photography.
+			Featuring a roundup of global news, opinion and long reads, all handpicked
+			from the Guardian and Observer.
 		</>
 	);
 };
@@ -117,6 +130,12 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy = getFirstParagraph(promotionCopy, orderIsAGift);
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
+	const containerColour = css`
+		background-color: ${backgroundCtaSecondaryOveride};
+	`;
+	const linkButtonColour = css`
+		color: ${digitalSubscriptionsBlue};
+	`;
 
 	return (
 		<PageTitle
@@ -124,7 +143,12 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 			theme="weekly"
 		>
 			<CentredContainer>
-				<OfferStrapline copy={roundelText} orderIsAGift={orderIsAGift} />
+				<OfferStrapline
+					fgCol={text.ctaPrimary}
+					bgCol={backgroundCtaPrimaryOveride}
+					copy={roundelText}
+					orderIsAGift={orderIsAGift}
+				/>
 				<Hero
 					image={
 						<GridImage
@@ -138,6 +162,7 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 						/>
 					}
 					roundelText={undefined}
+					cssOverrides={containerColour}
 				>
 					<section css={weeklyHeroCopy}>
 						{orderIsAGift ? (
@@ -146,7 +171,7 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 							<h2 css={weeklyHeroTitle}>{title}</h2>
 						)}
 						<p css={weeklyHeroParagraph}>{copy}</p>
-						<ThemeProvider theme={buttonThemeBrand}>
+						<ThemeProvider theme={buttonThemeBrandAlt}>
 							<LinkButton
 								onClick={sendTrackingEventsOnClick({
 									id: 'options_cta_click',
@@ -156,6 +181,7 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 								priority="tertiary"
 								iconSide="right"
 								icon={<SvgArrowDownStraight />}
+								cssOverrides={linkButtonColour}
 								href="#subscribe"
 							>
 								See pricing options

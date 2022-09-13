@@ -131,7 +131,7 @@ function getPromotionCopy(promotionCopy?: PromotionCopy | null): PromotionCopy {
 	}
 
 	return {
-		title: promotionCopy.title ?? '',
+		title: promotionCopy.title ?? 'Open up your world view',
 		description: getSanitisedHtml(promotionCopy.description ?? ''),
 		roundel: getSanitisedHtml(promotionCopy.roundel ?? ''),
 	};
