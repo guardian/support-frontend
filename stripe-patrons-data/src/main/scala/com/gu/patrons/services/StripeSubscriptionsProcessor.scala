@@ -65,16 +65,17 @@ abstract class DynamoProcessor(
           "Guardian Patron",
           sub.currentPeriodEnd,
           sub.created,
+          None,
         ),
       )
   }
 
-  def logDynamoResult(email: String, updateDynamoState: UpdateItemResponse) =
-    if (updateDynamoState.sdkHttpResponse().statusCode() == 200)
+  def logDynamoResult(email: String, addSubscriptionsToQueueState: UpdateItemResponse) =
+    if (addSubscriptionsToQueueState.sdkHttpResponse().statusCode() == 200)
       SafeLogger.info(s"Dynamo record successfully written for ${email}")
     else
       SafeLogger.info(
-        s"Error response from Dynamo for ${email}. Status code was ${updateDynamoState.sdkHttpResponse().statusCode()}",
+        s"Error response from Dynamo for ${email}. Status code was ${addSubscriptionsToQueueState.sdkHttpResponse().statusCode()}",
       )
 }
 

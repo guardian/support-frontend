@@ -25,8 +25,7 @@ class ParameterStoreService(client: AWSSimpleSystemsManagementAsync, stage: Stag
       .withPath(s"$configRoot/$path/")
       .withRecursive(false)
       .withWithDecryption(true)
-
-    AwsAsync(client.getParametersByPathAsync, request).map(_.getParameters.asScala.toList)
+    client.getParametersByPath(request).getParameters.asScala.toList
   }
 
   def getParameter(name: String)(implicit executionContext: ExecutionContext) = {

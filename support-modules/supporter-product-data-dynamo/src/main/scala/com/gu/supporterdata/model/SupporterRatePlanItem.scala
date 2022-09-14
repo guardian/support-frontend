@@ -10,4 +10,7 @@ case class SupporterRatePlanItem(
     productRatePlanName: String, // Name of the product in this rate plan
     termEndDate: LocalDate, // Date that this subscription term ends
     contractEffectiveDate: LocalDate, // Date that this subscription started
+    contributionAmount: Option[ContributionAmount],
 )
+
+case class ContributionAmount(amount: BigDecimal, currency: String)
