@@ -3,6 +3,7 @@ import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import { config } from 'helpers/contributions';
 import 'helpers/internationalisation/countryGroup';
+import { hasPaymentRequestButtonBeenClicked } from 'helpers/redux/checkout/payment/paymentRequestButton/selectors';
 import {
 	setOtherAmount,
 	setSelectedAmount,
@@ -24,11 +25,7 @@ const mapStateToProps = (state: ContributionsState) => ({
 	otherAmounts: state.page.checkoutForm.product.otherAmounts,
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
-	stripePaymentRequestButtonClicked:
-		state.page.form.stripePaymentRequestButtonData.ONE_OFF
-			.stripePaymentRequestButtonClicked ||
-		state.page.form.stripePaymentRequestButtonData.REGULAR
-			.stripePaymentRequestButtonClicked,
+	stripePaymentRequestButtonClicked: hasPaymentRequestButtonBeenClicked(state),
 	localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
