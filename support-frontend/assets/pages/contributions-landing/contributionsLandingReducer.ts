@@ -54,11 +54,6 @@ interface FormState {
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
 	isWaiting: boolean;
 	formData: FormData;
-	stripePaymentRequestButtonData: {
-		ONE_OFF: StripePaymentRequestButtonData;
-		REGULAR: StripePaymentRequestButtonData;
-	};
-	stripeCardFormData: StripeCardFormData;
 	paymentComplete: boolean;
 	paymentError: ErrorReason | null;
 	hasSeenDirectDebitThankYouCopy: boolean;
@@ -98,21 +93,6 @@ function createFormReducer() {
 			billingCountry: null,
 			checkoutFormHasBeenSubmitted: false,
 		},
-		stripePaymentRequestButtonData: {
-			ONE_OFF: {
-				stripePaymentRequestButtonClicked: false,
-				paymentError: null,
-			},
-			REGULAR: {
-				stripePaymentRequestButtonClicked: false,
-				paymentError: null,
-			},
-		},
-		stripeCardFormData: {
-			formComplete: false,
-			setupIntentClientSecret: null,
-			recurringRecaptchaVerified: false,
-		},
 		isWaiting: false,
 		paymentComplete: false,
 		paymentError: null,
@@ -137,24 +117,6 @@ function createFormReducer() {
 					existingPaymentMethod: action.existingPaymentMethod,
 				};
 
-			case 'SET_STRIPE_CARD_FORM_COMPLETE':
-				return {
-					...state,
-					stripeCardFormData: {
-						...state.stripeCardFormData,
-						formComplete: action.isComplete,
-					},
-				};
-
-			case 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET':
-				return {
-					...state,
-					stripeCardFormData: {
-						...state.stripeCardFormData,
-						setupIntentClientSecret: action.setupIntentClientSecret,
-					},
-				};
-
 			case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
 				return {
 					...state,
@@ -173,30 +135,6 @@ function createFormReducer() {
 					formData: {
 						...state.formData,
 						billingCountry: action.billingCountry,
-					},
-				};
-
-			case 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED':
-				return {
-					...state,
-					stripePaymentRequestButtonData: {
-						...state.stripePaymentRequestButtonData,
-						[action.stripeAccount]: {
-							...state.stripePaymentRequestButtonData[action.stripeAccount],
-							stripePaymentRequestButtonClicked: true,
-						},
-					},
-				};
-
-			case 'SET_STRIPE_PAYMENT_REQUEST_ERROR':
-				return {
-					...state,
-					stripePaymentRequestButtonData: {
-						...state.stripePaymentRequestButtonData,
-						[action.stripeAccount]: {
-							...state.stripePaymentRequestButtonData[action.stripeAccount],
-							paymentError: action.paymentError,
-						},
 					},
 				};
 
