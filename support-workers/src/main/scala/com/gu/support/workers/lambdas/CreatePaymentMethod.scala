@@ -179,8 +179,15 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       ipAddress: String,
       userAgent: String,
   ): Future[SepaPaymentMethod] = {
+    var gatewayOptionData = List(
+      GatewayOption(
+        "UserAgent",
+        userAgent.take(255),
+      ),
+    )
     if (ipAddress.length() > 15) {
       SafeLogger.warn(s"IPv6 Address: ${ipAddress} is longer than 15 characters")
+      gatewayOptionData = gatewayOptionData :+ GatewayOption("IPAddress", ipAddress)
     }
     if (userAgent.length() > 255) {
       SafeLogger.warn(s"User Agent: ${userAgent} will be truncated to 255 characters")
@@ -193,14 +200,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         StreetName = sepa.streetName,
         Email = user.primaryEmailAddress,
         IPAddress = ipAddress,
-        GatewayOptionData = GatewayOptionData(
-          List(
-            GatewayOption(
-              "UserAgent",
-              userAgent.take(255), // zuora's max length for GatewayOption values
-            ),
-          ),
-        ),
+        GatewayOptionData = GatewayOptionData(gatewayOptionData),
       ),
     )
   }
