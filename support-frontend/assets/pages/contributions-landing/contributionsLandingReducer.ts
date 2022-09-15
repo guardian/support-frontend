@@ -2,8 +2,6 @@
 import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type {
 	IsoCountry,
 	StateProvince,
@@ -50,14 +48,11 @@ export interface StripeCardFormData {
 }
 
 interface FormState {
-	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
 	isWaiting: boolean;
 	formData: FormData;
 	paymentComplete: boolean;
 	paymentError: ErrorReason | null;
-	hasSeenDirectDebitThankYouCopy: boolean;
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	formIsValid: boolean;
 	formIsSubmittable: boolean;
 	tickerGoalReached: boolean;
@@ -87,7 +82,6 @@ export interface State {
 function createFormReducer() {
 	// ----- Initial state ----- //
 	const initialState: FormState = {
-		paymentMethod: 'None',
 		formData: {
 			billingState: null,
 			billingCountry: null,
@@ -96,8 +90,6 @@ function createFormReducer() {
 		isWaiting: false,
 		paymentComplete: false,
 		paymentError: null,
-		hasSeenDirectDebitThankYouCopy: false,
-		userTypeFromIdentityResponse: 'noRequestSent',
 		formIsValid: true,
 		formIsSubmittable: true,
 		tickerGoalReached: false,
@@ -108,19 +100,10 @@ function createFormReducer() {
 		action: Action,
 	): FormState {
 		switch (action.type) {
-			case 'UPDATE_PAYMENT_METHOD':
-				return { ...state, paymentMethod: action.paymentMethod };
-
 			case 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD':
 				return {
 					...state,
 					existingPaymentMethod: action.existingPaymentMethod,
-				};
-
-			case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
-				return {
-					...state,
-					userTypeFromIdentityResponse: action.userTypeFromIdentityResponse,
 				};
 
 			case 'UPDATE_BILLING_STATE':
@@ -175,9 +158,6 @@ function createFormReducer() {
 					...state,
 					formData: { ...state.formData, checkoutFormHasBeenSubmitted: true },
 				};
-
-			case 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY':
-				return { ...state, hasSeenDirectDebitThankYouCopy: true };
 
 			default:
 				return state;

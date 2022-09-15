@@ -32,7 +32,6 @@ import {
 	postRegularPaymentRequest,
 	regularPaymentFieldsFromAuthorisation,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -85,10 +84,6 @@ import type { UserFormData } from './contributionsLandingReducer';
 
 export type Action =
 	| {
-			type: 'UPDATE_PAYMENT_METHOD';
-			paymentMethod: PaymentMethod;
-	  }
-	| {
 			type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD';
 			existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
 	  }
@@ -103,10 +98,6 @@ export type Action =
 	| {
 			type: 'UPDATE_USER_FORM_DATA';
 			userFormData: UserFormData;
-	  }
-	| {
-			type: 'PAYMENT_RESULT';
-			paymentResult: Promise<PaymentResult>;
 	  }
 	| {
 			type: 'PAYMENT_FAILURE';
@@ -124,14 +115,7 @@ export type Action =
 			formIsSubmittable: boolean;
 	  }
 	| {
-			type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY';
-	  }
-	| {
 			type: 'PAYMENT_SUCCESS';
-	  }
-	| {
-			type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE';
-			userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	  }
 	| {
 			type: 'SET_FORM_IS_VALID';
@@ -221,6 +205,9 @@ const sendFormSubmitEventForPayPalRecurring =
 		const state = getState();
 		const formSubmitParameters: FormSubmitParameters = {
 			...state.page.form,
+			paymentMethod: state.page.checkoutForm.payment.paymentMethod,
+			userTypeFromIdentityResponse:
+				state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
 			contributionType: getContributionType(state),
 			flowPrefix: 'npf',
 			form: getForm('form--contribution'),
