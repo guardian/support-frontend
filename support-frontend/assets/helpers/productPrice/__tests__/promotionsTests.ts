@@ -13,7 +13,7 @@ describe('getPromotionCopy', () => {
 	const sanitisablePromotionCopy = {
 		title: 'The Guardian Weekly',
 		description:
-			'Open up your world view:\n- The Guardian Weekly takes you beyond the headlines to give you a deeper understanding of the issues that really matter. Inside you’ll find the week’s most memorable stories brought to life with striking photography. Featuring a roundup of global news, opinion and long reads, all handpicked from the Guardian and Observer.',
+			'The Guardian Weekly magazine:\n- is a round-up of the [world news opinion and long reads that have shaped the week.](https://www.theguardian.com/about/journalism)\n- with striking photography and insightful companion pieces, all handpicked from the Guardian and the Observer.',
 		roundel: '**Save _25%_ for a year!**',
 	};
 
