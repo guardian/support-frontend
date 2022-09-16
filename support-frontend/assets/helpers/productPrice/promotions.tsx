@@ -125,13 +125,16 @@ function getSanitisedHtml(markdownString: string): string {
 	});
 }
 
-function getPromotionCopy(promotionCopy?: PromotionCopy | null): PromotionCopy {
+function getPromotionCopy(
+	promotionCopy?: PromotionCopy | null,
+	isGift?: boolean | null,
+): PromotionCopy {
 	if (!promotionCopy) {
 		return {};
 	}
-
+	const msgFirstPerson = isGift ? 'their' : 'your';
 	return {
-		title: promotionCopy.title ?? 'Open up your world view',
+		title: promotionCopy.title ?? `Open up ${msgFirstPerson} world view`,
 		description: getSanitisedHtml(promotionCopy.description ?? ''),
 		roundel: getSanitisedHtml(promotionCopy.roundel ?? ''),
 	};
