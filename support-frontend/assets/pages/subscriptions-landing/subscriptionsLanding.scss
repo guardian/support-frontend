@@ -455,7 +455,7 @@
 	margin-top: -6px;
 }
 .subscriptions__product--feature .subscriptions__description::before {
-	border-top: solid #cadbe8 1px;
+	border-top: solid #FFE500 1px;
 
 	@include mq($until: tablet) {
 		border-top: none;
