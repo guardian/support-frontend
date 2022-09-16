@@ -52,12 +52,7 @@ type PropTypes = {
 	orderIsAGift?: boolean;
 };
 
-function OfferStrapline({
-	fgCol,
-	bgCol,
-	copy,
-	orderIsAGift,
-}: PropTypes): ReactElement {
+function OfferStrapline({ fgCol, bgCol, copy }: PropTypes): ReactElement {
 	// Requirement: last line must include a minimum of 2 words
 	const noWidowWord = (c: string) => {
 		const trimmedCopy = c.trim();
@@ -75,11 +70,6 @@ function OfferStrapline({
 		}
 		return <div css={offerStraplineStyles(false, bgCol, fgCol)}>{c}</div>;
 	};
-
-	// Requirement: never show the offer on the Gift page
-	if (orderIsAGift) {
-		return <></>;
-	}
 
 	if (copy) {
 		return noWidowWord(copy);

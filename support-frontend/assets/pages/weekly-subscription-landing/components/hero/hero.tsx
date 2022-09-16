@@ -104,10 +104,8 @@ const getFirstParagraph = (
 		return (
 			<>
 				<p>
-					Gift the Guardian Weekly magazine to someonething today, so they can
-					round-up of the world news, opinion and long reads that have shaped
-					gain a deeper understanding of the issues they care about. They’ll can
-					the week, all handpicked from the Guardian and the Observer. find
+					Gift the Guardian Weekly magazine to someone today, so they can gain a
+					deeper understanding of the issues they care about. They’ll find
 					in-depth reporting, alongside news, opinion pieces and long reads from
 					around the globe. From unpicking the election results to debunking
 					climate misinformation, they can take time with the Guardian Weekly to
