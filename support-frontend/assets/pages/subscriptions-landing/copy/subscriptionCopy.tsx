@@ -148,7 +148,7 @@ const guardianWeekly = (
 	isTop: boolean,
 	participations: Participations,
 ): ProductCopy => ({
-	title: 'Guardian Weekly',
+	title: 'Open up your world view',
 	subtitle: getDisplayPrice(
 		countryGroupId,
 		priceCopy.price,
