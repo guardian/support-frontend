@@ -3,6 +3,7 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
 	body,
+	brandAlt,
 	from,
 	headline,
 	space,
@@ -13,7 +14,6 @@ import {
 	LinkButton,
 	SvgArrowDownStraight,
 } from '@guardian/source-react-components';
-import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
@@ -29,7 +29,6 @@ import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import {
-	backgroundCtaPrimaryOveride,
 	backgroundCtaSecondaryOveride,
 	digitalSubscriptionsBlue,
 } from 'stylesheets/emotion/colours';
@@ -105,9 +104,12 @@ const getFirstParagraph = (
 		return (
 			<>
 				<p>
-					Share the gift of clarity with the Guardian Weekly magazine. A
-					round-up of the world news, opinion and long reads that have shaped
-					the week, all handpicked from the Guardian and the Observer.
+					Gift the Guardian Weekly magazine to someonething today, so they can
+					gain a deeper understanding of the issues they care about. They’ll can
+					find in-depth reporting, alongside news, opinion pieces and long reads
+					from around the globe. From unpicking the election results to
+					debunking climate misinformation, they can take time with the Guardian
+					Weekly to help them make sense of the world.
 				</p>
 			</>
 		);
@@ -144,8 +146,8 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 		>
 			<CentredContainer>
 				<OfferStrapline
-					fgCol={text.ctaPrimary}
-					bgCol={backgroundCtaPrimaryOveride}
+					fgCol={text.primary}
+					bgCol={brandAlt[400]}
 					copy={roundelText}
 					orderIsAGift={orderIsAGift}
 				/>
@@ -165,11 +167,7 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 					cssOverrides={containerColour}
 				>
 					<section css={weeklyHeroCopy}>
-						{orderIsAGift ? (
-							<GiftHeadingAnimation />
-						) : (
-							<h2 css={weeklyHeroTitle}>{title}</h2>
-						)}
+						<h2 css={weeklyHeroTitle}>{title}</h2>
 						<p css={weeklyHeroParagraph}>{copy}</p>
 						<ThemeProvider theme={buttonThemeBrandAlt}>
 							<LinkButton
@@ -184,7 +182,7 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 								cssOverrides={linkButtonColour}
 								href="#subscribe"
 							>
-								See pricing options
+								Subscribe
 							</LinkButton>
 						</ThemeProvider>
 					</section>
