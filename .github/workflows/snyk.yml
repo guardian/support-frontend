@@ -3,12 +3,27 @@ name: Snyk (test)
 
 on: push
 
+# Having 2 jobs here is a hack because this project's sbt build is set up to aggregate 
+# sub-projects which depend on the parent LibraryVersions.scala. To exclude the sub-projects, 
+# but still scan yarn.lock, we have to run 2 jobs because --excludes does not allow specifying 
+# a path, only a directory or filename(!) and we don't recommend/allow --file 
 jobs:
-  security:
+  security-sbt:
     uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
     with:
       DEBUG: true
       ORG: guardian-test
-      SKIP_NODE: false
+      SKIP_NODE: true
+      EXCLUDE: stripe-patrons-data,support-config,support-frontend,support-internationalisation,support-lambdas,support-models,support-modules,support-payment-api,support-redemptiondb,support-services,support-workers,supporter-product-data
+    secrets:
+       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+       
+  security-yarn:
+    uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
+    with:
+      DEBUG: true
+      ORG: guardian-test
+      SKIP_SBT: true
+      EXCLUDE: build.sbt
     secrets:
        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
