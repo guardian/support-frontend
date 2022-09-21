@@ -38,6 +38,10 @@ import {
 } from 'helpers/internationalisation/country';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import {
+	clickPaymentRequestButton,
+	setPaymentRequestError,
+} from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
+import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
@@ -49,8 +53,6 @@ import {
 	setFirstName,
 	setLastName,
 	paymentWaiting as setPaymentWaiting,
-	setStripePaymentRequestButtonClicked,
-	setStripePaymentRequestButtonError,
 	updateBillingCountry,
 	updateBillingState,
 } from 'pages/contributions-landing/contributionsLandingActions';
@@ -64,7 +66,7 @@ type PaymentRequestButtonType = 'APPLE_PAY' | 'GOOGLE_PAY' | 'PAY_NOW' | 'NONE';
 export interface RenderPaymentRequestButtonInput {
 	type: PaymentRequestButtonType;
 	paymentRequest: PaymentRequest;
-	paymentRequestError: ErrorReason | null;
+	paymentRequestError?: ErrorReason;
 	onStripeButtonClick: (
 		event: StripePaymentRequestButtonElementClickEvent,
 	) => void;
@@ -95,7 +97,9 @@ interface PropsFromParent {
 
 const mapStateToProps = (state: State, ownProps: PropsFromParent) => ({
 	stripePaymentRequestButtonData:
-		state.page.form.stripePaymentRequestButtonData[ownProps.stripeAccount],
+		state.page.checkoutForm.payment.paymentRequestButton[
+			ownProps.stripeAccount
+		],
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	country: state.common.internationalisation.countryId,
 	billingState: state.page.form.formData.billingState,
@@ -114,10 +118,10 @@ const mapDispatchToProps = {
 	updateLastName: setLastName,
 	updateBillingState,
 	updateBillingCountry,
-	setStripePaymentRequestButtonClicked,
+	clickPaymentRequestButton,
 	setPaymentMethod,
 	setPaymentWaiting,
-	setError: setStripePaymentRequestButtonError,
+	setPaymentRequestError,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -198,7 +202,7 @@ function getClickHandler(props: PropTypes, isCustomPrb: boolean) {
 	function onClick(event: StripePaymentRequestButtonElementClickEvent) {
 		trackComponentClick('apple-pay-clicked');
 		props.setPaymentMethod(Stripe);
-		props.setStripePaymentRequestButtonClicked(props.stripeAccount);
+		props.clickPaymentRequestButton(props.stripeAccount);
 
 		const isValid = amountIsValid(
 			props.amount.toString(),
@@ -309,12 +313,18 @@ function onPayment(
 		props.setPaymentWaiting(true);
 		processPayment();
 	} else {
-		props.setError('incomplete_payment_request_details', props.stripeAccount);
+		props.setPaymentRequestError({
+			error: 'incomplete_payment_request_details',
+			account: props.stripeAccount,
+		});
 	}
 }
 
 function handlePaymentRequestError(props: PropTypes, errorType: ErrorReason) {
-	props.setError(errorType, props.stripeAccount);
+	props.setPaymentRequestError({
+		error: errorType,
+		account: props.stripeAccount,
+	});
 	props.setPaymentWaiting(false);
 }
 

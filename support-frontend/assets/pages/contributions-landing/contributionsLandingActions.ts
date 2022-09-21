@@ -32,7 +32,6 @@ import {
 	postRegularPaymentRequest,
 	regularPaymentFieldsFromAuthorisation,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -41,7 +40,6 @@ import {
 	Sepa,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
-import type { StripeAccount } from 'helpers/forms/stripe';
 import {
 	getStripeKey,
 	stripeAccountForContributionType,
@@ -61,6 +59,7 @@ import {
 	setAmazonPayFatalError,
 	setAmazonPayWalletIsStale,
 } from 'helpers/redux/checkout/payment/amazonPay/actions';
+import { setPaymentRequestError } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
 import {
 	setEmail,
 	setFirstName,
@@ -85,10 +84,6 @@ import type { UserFormData } from './contributionsLandingReducer';
 
 export type Action =
 	| {
-			type: 'UPDATE_PAYMENT_METHOD';
-			paymentMethod: PaymentMethod;
-	  }
-	| {
 			type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD';
 			existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
 	  }
@@ -103,10 +98,6 @@ export type Action =
 	| {
 			type: 'UPDATE_USER_FORM_DATA';
 			userFormData: UserFormData;
-	  }
-	| {
-			type: 'PAYMENT_RESULT';
-			paymentResult: Promise<PaymentResult>;
 	  }
 	| {
 			type: 'PAYMENT_FAILURE';
@@ -124,34 +115,7 @@ export type Action =
 			formIsSubmittable: boolean;
 	  }
 	| {
-			type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED';
-			stripeAccount: StripeAccount;
-	  }
-	| {
-			type: 'SET_STRIPE_PAYMENT_REQUEST_ERROR';
-			paymentError: ErrorReason;
-			stripeAccount: StripeAccount;
-	  }
-	| {
-			type: 'SET_STRIPE_V3_HAS_LOADED';
-	  }
-	| {
-			type: 'SET_STRIPE_CARD_FORM_COMPLETE';
-			isComplete: boolean;
-	  }
-	| {
-			type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET';
-			setupIntentClientSecret: string;
-	  }
-	| {
-			type: 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY';
-	  }
-	| {
 			type: 'PAYMENT_SUCCESS';
-	  }
-	| {
-			type: 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE';
-			userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	  }
 	| {
 			type: 'SET_FORM_IS_VALID';
@@ -172,22 +136,6 @@ const updateSelectedExistingPaymentMethod = (
 ): Action => ({
 	type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD',
 	existingPaymentMethod,
-});
-
-const setStripePaymentRequestButtonClicked = (
-	stripeAccount: StripeAccount,
-): Action => ({
-	type: 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED',
-	stripeAccount,
-});
-
-const setStripePaymentRequestButtonError = (
-	paymentError: ErrorReason,
-	stripeAccount: StripeAccount,
-): Action => ({
-	type: 'SET_STRIPE_PAYMENT_REQUEST_ERROR',
-	paymentError,
-	stripeAccount,
 });
 
 const updateUserFormData =
@@ -251,30 +199,15 @@ const setTickerGoalReached = (): Action => ({
 	tickerGoalReached: true,
 });
 
-const setStripeCardFormComplete =
-	(isComplete: boolean) =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_STRIPE_CARD_FORM_COMPLETE',
-			isComplete,
-		}))(dispatch, getState);
-	};
-
-const setStripeSetupIntentClientSecret =
-	(setupIntentClientSecret: string) =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET',
-			setupIntentClientSecret,
-		}))(dispatch, getState);
-	};
-
 const sendFormSubmitEventForPayPalRecurring =
 	() =>
 	(dispatch: Dispatch, getState: () => ContributionsState): void => {
 		const state = getState();
 		const formSubmitParameters: FormSubmitParameters = {
 			...state.page.form,
+			paymentMethod: state.page.checkoutForm.payment.paymentMethod,
+			userTypeFromIdentityResponse:
+				state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
 			contributionType: getContributionType(state),
 			flowPrefix: 'npf',
 			form: getForm('form--contribution'),
@@ -513,10 +446,11 @@ const onPaymentResult =
 
 					if (isPaymentRequestButton && result.error) {
 						dispatch(
-							setStripePaymentRequestButtonError(
-								result.error,
-								stripeAccountForContributionType[getContributionType(state)],
-							),
+							setPaymentRequestError({
+								error: result.error,
+								account:
+									stripeAccountForContributionType[getContributionType(state)],
+							}),
 						);
 					} else {
 						if (paymentAuthorisation.paymentMethod === 'AmazonPay') {
@@ -798,9 +732,5 @@ export {
 	getUserType,
 	setFormIsValid,
 	sendFormSubmitEventForPayPalRecurring,
-	setStripePaymentRequestButtonClicked,
-	setStripePaymentRequestButtonError,
 	setTickerGoalReached,
-	setStripeCardFormComplete,
-	setStripeSetupIntentClientSecret,
 };
