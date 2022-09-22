@@ -174,6 +174,7 @@ const guardianWeekly = (
 	],
 	productImage: getWeeklyImage(isTop),
 	participations: participations,
+	classModifier: ['subscriptions__guardian-weekly'],
 });
 
 const getPaperImage = (isTop: boolean) => {

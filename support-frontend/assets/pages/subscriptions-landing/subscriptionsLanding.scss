@@ -171,10 +171,10 @@
 /****************** subscriptions product--feature ********************/
 
 .subscriptions__product.subscriptions__product--feature {
-	color: gu-colour('text.primary');
+	color: gu-colour('neutral-100');
 	border: none;
 	padding-top: 10px;
-	background-color: #cadbe8;
+	background-color: gu-colour('brand-main');
 	overflow: hidden;
 
 	@include mq($until: tablet) {
@@ -241,10 +241,12 @@
 		bottom: 0;
 	}
 
+  // WHY DO WE DO THIS?
 	@include mq($from: desktop) {
 		right: -50px;
 	}
 
+  // WHY DO WE DO THIS?
 	@include mq($from: leftCol) {
 		right: -80px;
 	}
@@ -253,7 +255,6 @@
 .subscriptions__copy-container.subscriptions__product--feature {
 	position: relative;
 	width: 100%;
-	background-color: #cadbe8;
 
 	@include mq($from: tablet) {
 		width: 50%;
@@ -455,7 +456,7 @@
 	margin-top: -6px;
 }
 .subscriptions__product--feature .subscriptions__description::before {
-	border-top: solid #FFE500 1px;
+	border-top: solid gu-colour('brand-pastel') 1px;
 
 	@include mq($until: tablet) {
 		border-top: none;
@@ -546,6 +547,35 @@
 	}
 }
 
+/****************** guardian weekly ********************/
+
+.subscriptions__guardian-weekly.subscriptions__product--feature
+{
+  color: #000;
+	background-color: #cadbe8;
+
+  .subscriptions__image-container {
+    right: 0;
+    margin-bottom: 0;
+    position: relative;
+  }
+
+  .subscriptions-feature-packshot {
+    width: 100%;
+
+
+    @include mq($from: tablet) {
+      position: absolute;
+      bottom: 0;
+    }
+
+    img {
+      width: 100%;
+      vertical-align: bottom;
+    }
+  }
+}
+
 /****************** premium app ********************/
 
 .subscriptions__premuim-app {
@@ -617,36 +647,14 @@
 	position: relative;
 	width: 100%;
 
+  @include mq($from: tablet) {
+    position: absolute;
+    bottom: 0;
+	}
+
 	img {
-		bottom: -25px;
 		width: 100%;
-	}
-
-	@include mq($from: tablet) {
-		position: absolute;
-		bottom: -10px;
-		padding: 0px;
-	}
-
-	@include mq($from: desktop) {
-		bottom: -50px;
-		img {
-			width: 100%;
-		}
-	}
-
-	@include mq($from: leftCol) {
-		left: 50px;
-		img {
-			width: 85%;
-		}
-	}
-
-	@include mq($from: wide) {
-		left: 80px;
-		img {
-			width: 75%;
-		}
+    vertical-align: bottom;
 	}
 }
 

@@ -1,4 +1,4 @@
-import GridImage from 'components/gridImage/gridImage';
+import GridPicture from 'components/gridPicture/gridPicture';
 
 /** NOTE about packshot images
  * ------
@@ -8,17 +8,30 @@ import GridImage from 'components/gridImage/gridImage';
  * container CSS to center the pack shot as a single image
  * this is applied using the "subscriptions__guardian-weekly-packshot" class in this instance
  *  */
-function GuardianWeeklyPackShot() {
+function GuardianWeeklyPackShot(): JSX.Element {
 	return (
 		<div className="subscriptions__guardian-weekly-packshot">
-			<GridImage
-				gridId="subscriptionGuardianWeeklyPackShot"
-				srcSizes={[500, 140]}
-				sizes="(max-width: 739px) 140px,
-             (max-width: 979px) 500px,
-             (max-width: 1140px) 500px,
-             500px"
-				imgType="png"
+			<GridPicture
+				sources={[
+					{
+						gridId: 'subscriptionGuardianWeeklyPackShot',
+						srcSizes: [500, 140],
+						imgType: 'png',
+						sizes: '100vw',
+						media: '(max-width: 739px)',
+					},
+					{
+						gridId: 'subscriptionGuardianWeeklyPackShot',
+						srcSizes: [1000, 500],
+						imgType: 'png',
+						sizes: '(min-width: 1000px) 2000px, 1000px',
+						media: '(min-width: 740px)',
+					},
+				]}
+				fallback="subscriptionGuardianWeeklyPackShot"
+				fallbackSize={1000}
+				altText=""
+				fallbackImgType="png"
 			/>
 		</div>
 	);
