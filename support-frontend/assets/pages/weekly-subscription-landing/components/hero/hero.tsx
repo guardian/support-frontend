@@ -182,7 +182,7 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 								cssOverrides={linkButtonColour}
 								href="#subscribe"
 							>
-								Subscribe
+								See pricing options
 							</LinkButton>
 						</ThemeProvider>
 					</section>

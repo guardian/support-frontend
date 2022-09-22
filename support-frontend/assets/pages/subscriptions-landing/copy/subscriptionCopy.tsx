@@ -163,13 +163,24 @@ const guardianWeekly = (
 	),
 	buttons: [
 		{
-			ctaButtonText: 'Subscribe now',
+			ctaButtonText: 'Find out more',
 			link: guardianWeeklyLanding(countryGroupId, false),
 			analyticsTracking: sendTrackingEventsOnClick({
 				id: 'weekly_cta',
 				product: 'GuardianWeekly',
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
+			modifierClasses: 'guardian-weekly',
+		},
+		{
+			ctaButtonText: 'See gift options',
+			link: guardianWeeklyLanding(countryGroupId, true),
+			analyticsTracking: sendTrackingEventsOnClick({
+				id: 'weekly_cta_gift',
+				product: 'GuardianWeekly',
+				componentType: 'ACQUISITIONS_BUTTON',
+			}),
+			modifierClasses: 'guardian-weekly',
 		},
 	],
 	productImage: getWeeklyImage(isTop),

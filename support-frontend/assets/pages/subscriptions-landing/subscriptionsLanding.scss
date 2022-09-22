@@ -574,6 +574,24 @@
       vertical-align: bottom;
     }
   }
+
+  .component-button--primary.component-button--guardian-weekly {
+    color: #ffffff;
+    background-color: #333333;
+  }
+
+  .component-button--primary.component-button--guardian-weekly:hover,
+  .component-button--primary.component-button--guardian-weekly:focus {
+    background-color: #121212;
+  }
+
+  .component-button--tertiaryFeature.component-button--guardian-weekly,
+  .component-button--tertiaryFeature.component-button--guardian-weekly:hover,
+  .component-button--tertiaryFeature.component-button--guardian-weekly:focus {
+    color: #333333;
+    border: solid 1px #333333;
+    background-color: transparent;
+  }
 }
 
 /****************** premium app ********************/
