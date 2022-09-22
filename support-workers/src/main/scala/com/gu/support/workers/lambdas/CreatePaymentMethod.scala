@@ -199,7 +199,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         Country = sepa.country,
         StreetName = sepa.streetName,
         Email = user.primaryEmailAddress,
-        IPAddress = ipAddress,
+        IPAddress = if (ipAddress.length() > 15) "" else ipAddress,
         GatewayOptionData = GatewayOptionData(gatewayOptionData),
       ),
     )
