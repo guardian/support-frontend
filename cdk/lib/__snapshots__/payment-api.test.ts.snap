@@ -723,9 +723,7 @@ Object {
                 "#!/bin/bash -ev
     mkdir /etc/gu
 
-    cat > /etc/gu/stage <<'EOF'
-    PROD
-    EOF
+    echo PROD > /etc/gu/stage
 
     aws --region ",
                 Object {
@@ -1330,9 +1328,7 @@ Object {
             "Fn::Sub": "#!/bin/bash -ev
 mkdir /etc/gu
 
-cat > /etc/gu/stage <<'EOF'
-PROD
-EOF
+echo PROD > /etc/gu/stage
 
 aws --region \${AWS::Region} s3 cp s3://membership-dist/\${Stack}/PROD/\${App}/\${ProjectName}_\${ProjectVersion}_all.deb /tmp
 dpkg -i /tmp/\${ProjectName}_\${ProjectVersion}_all.deb
