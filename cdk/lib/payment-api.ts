@@ -105,9 +105,7 @@ export class PaymentApi extends GuStack {
     const userData = `#!/bin/bash -ev
     mkdir /etc/gu
 
-    cat > /etc/gu/stage <<'EOF'
-    ${this.stage}
-    EOF
+    echo ${this.stage} > /etc/gu/stage
 
     aws --region ${this.region} s3 cp s3://membership-dist/${this.stack}/${this.stage}/${app}/${projectName}_${projectVersion}_all.deb /tmp
     dpkg -i /tmp/${projectName}_${projectVersion}_all.deb
