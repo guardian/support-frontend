@@ -1,11 +1,19 @@
 import type { ContributionsState } from '../contributionsStore';
+import { getContributionType } from './product/selectors/productType';
 
 export function getAllErrorsForContributions(
 	state: ContributionsState,
 ): Partial<Record<string, string[]>> {
-	const { firstName, lastName, email } =
-		state.page.checkoutForm.personalDetails.errors;
+	const contributionType = getContributionType(state);
 
+	const { firstName, lastName, email } =
+		state.page.checkoutForm.personalDetails.errors ?? {};
+
+	if (contributionType === 'ONE_OFF') {
+		return {
+			email,
+		};
+	}
 	return {
 		firstName,
 		lastName,
@@ -14,10 +22,16 @@ export function getAllErrorsForContributions(
 }
 
 export function contributionsFormHasErrors(state: ContributionsState): boolean {
+	const contributionType = getContributionType(state);
 	const { firstName, lastName, email } =
-		state.page.checkoutForm.personalDetails.errors;
-	const allErrorsLength =
-		(firstName?.length ?? 0) && (lastName?.length ?? 0) && (email?.length ?? 0);
+		state.page.checkoutForm.personalDetails.errors ?? {};
 
-	return !!allErrorsLength;
+	if (contributionType === 'ONE_OFF') {
+		return !!email?.length;
+	}
+
+	const allErrorsLength =
+		!!firstName?.length || !!lastName?.length || !!email?.length;
+
+	return allErrorsLength;
 }
