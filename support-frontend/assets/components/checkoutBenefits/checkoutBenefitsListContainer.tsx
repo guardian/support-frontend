@@ -96,8 +96,12 @@ function getBenefitsListTitle(
 
 export function CheckoutBenefitsListContainer({
 	renderBenefitsList,
-}: CheckoutBenefitsListContainerProps): JSX.Element {
+}: CheckoutBenefitsListContainerProps): JSX.Element | null {
 	const contributionType = useContributionsSelector(getContributionType);
+	if (contributionType === 'ONE_OFF') {
+		return null;
+	}
+
 	const { countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -107,7 +111,7 @@ export function CheckoutBenefitsListContainer({
 		getThresholdPrice(countryGroupId, contributionType) ?? 1;
 	const thresholdPriceWithCurrency = simpleFormatAmount(
 		currencies[currencyId],
-		thresholdPrice,
+		selectedAmount,
 	);
 	const showBenefitsMessaging = thresholdPrice <= selectedAmount;
 

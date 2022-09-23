@@ -31,21 +31,30 @@ const mobileGrid = css`
 `;
 
 const cardsContainer = css`
-	padding-top: ${space[2]}px;
-	padding-bottom: ${space[6]}px;
+	padding: ${space[2]}px 0;
 
 	${from.mobileLandscape} {
-		padding-top: ${space[3]}px;
-		padding-bottom: 28px;
+		padding: ${space[3]}px 0;
 	}
 
 	${from.tablet} {
-		padding-top: ${space[2]}px;
-		padding-bottom: 32px;
+		padding: ${space[2]}px 0;
 	}
 
-	${from.desktop} {
-		padding-bottom: ${space[9]}px;
+	:not(:last-child) {
+		padding-bottom: ${space[6]}px;
+
+		${from.mobileLandscape} {
+			padding-bottom: 28px;
+		}
+
+		${from.tablet} {
+			padding-bottom: 32px;
+		}
+
+		${from.desktop} {
+			padding-bottom: ${space[9]}px;
+		}
 	}
 `;
 
