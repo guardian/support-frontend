@@ -74,3 +74,12 @@ RecurringContribution.args = {
 	currency: 'GBP',
 	paymentInterval: 'month',
 };
+
+export const OddAmountOfOptions = Template.bind({});
+
+OddAmountOfOptions.args = {
+	amounts: ['5', '12', '15', '20', '30'],
+	selectedAmount: '12',
+	currency: 'GBP',
+	paymentInterval: 'year',
+};

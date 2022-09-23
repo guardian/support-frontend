@@ -18,6 +18,8 @@ import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/paymentFrequencyTabsContainer';
 import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
+import { PriceCards } from 'components/priceCards/priceCards';
+import { PriceCardsContainer } from 'components/priceCards/priceCardsContainer';
 import {
 	AUDCountries,
 	Canada,
@@ -49,10 +51,6 @@ const checkoutContainer = css`
 `;
 
 // TODO: these are purely for demo purposes, delete once the boxes have real content in
-const smallDemoBox = css`
-	min-height: 200px;
-`;
-
 const largeDemoBox = css`
 	min-height: 400px;
 `;
@@ -111,7 +109,12 @@ export function SupporterPlusLandingPage(): JSX.Element {
 										{...tabProps}
 										renderTabContent={(tabId) => (
 											<BoxContents>
-												<p css={smallDemoBox}>Amount selection for {tabId}</p>
+												<PriceCardsContainer
+													frequency={tabId}
+													renderPriceCards={(props) => (
+														<PriceCards {...props} />
+													)}
+												/>
 												<CheckoutBenefitsList
 													title="For £12 per month, you'll unlock"
 													checkListData={checkListData(true)}

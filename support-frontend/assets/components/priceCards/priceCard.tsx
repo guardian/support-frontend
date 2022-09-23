@@ -1,11 +1,13 @@
 import { ChoiceCard } from '@guardian/source-react-components';
 
+export type PriceCardPaymentInterval = 'month' | 'year';
+
 export type PriceCardProps = {
 	amount: string;
 	amountWithCurrency: string;
 	isSelected: boolean;
 	onClick: (amount: string) => void;
-	paymentInterval?: 'month' | 'year';
+	paymentInterval?: PriceCardPaymentInterval;
 };
 
 export function PriceCard({

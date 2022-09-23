@@ -4,6 +4,7 @@ import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
+import type { PriceCardPaymentInterval } from './priceCard';
 import { PriceCard } from './priceCard';
 
 const cardStyles = css`
@@ -48,12 +49,19 @@ const cardsContainer = css`
 	}
 `;
 
+function getChoiceCardGroupStyles(amountOfAmounts: number) {
+	if (amountOfAmounts % 2) {
+		return [cardStyles, mobileGrid, cardsContainer];
+	}
+	return [cardStyles, otherAmountFullWidthStyles, mobileGrid, cardsContainer];
+}
+
 export type PriceCardsProps = {
 	amounts: string[];
 	selectedAmount: string;
 	currency: IsoCurrency;
 	onAmountChange: (newAmount: string) => void;
-	paymentInterval?: 'month' | 'year';
+	paymentInterval?: PriceCardPaymentInterval;
 };
 
 export function PriceCards({
@@ -65,12 +73,7 @@ export function PriceCards({
 }: PriceCardsProps): JSX.Element {
 	return (
 		<ChoiceCardGroup
-			cssOverrides={[
-				cardStyles,
-				otherAmountFullWidthStyles,
-				mobileGrid,
-				cardsContainer,
-			]}
+			cssOverrides={getChoiceCardGroupStyles(amounts.length)}
 			name="amounts"
 			columns={2}
 		>
