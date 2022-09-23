@@ -71,6 +71,8 @@ export function PriceCards({
 	onAmountChange,
 	paymentInterval,
 }: PriceCardsProps): JSX.Element {
+	const otherAmountLabel = amounts.length % 2 ? 'Other' : 'Choose your amount';
+
 	return (
 		<ChoiceCardGroup
 			cssOverrides={getChoiceCardGroupStyles(amounts.length)}
@@ -96,7 +98,7 @@ export function PriceCards({
 					name="amount"
 					onChange={() => onAmountChange('other')}
 					value="other"
-					label="Choose your amount"
+					label={otherAmountLabel}
 				/>
 			</>
 		</ChoiceCardGroup>
