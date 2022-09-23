@@ -67,15 +67,15 @@ const para = css`
 	font-weight: bold;
 `;
 
-type PropTypes = {
+export type CheckoutBenefitsListProps = {
 	title: string;
 	checkListData: CheckListData[];
 };
 
-function CheckoutBenefitsList({
+export function CheckoutBenefitsList({
 	title,
 	checkListData,
-}: PropTypes): JSX.Element {
+}: CheckoutBenefitsListProps): JSX.Element {
 	return (
 		<div css={container}>
 			<h3 css={heading}>{title}</h3>
@@ -95,5 +95,3 @@ function CheckoutBenefitsList({
 		</div>
 	);
 }
-
-export default CheckoutBenefitsList;

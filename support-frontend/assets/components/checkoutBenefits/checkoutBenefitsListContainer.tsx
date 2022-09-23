@@ -2,12 +2,14 @@ import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { neutral } from '@guardian/source-foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
+import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
-import CheckoutBenefitsList from './checkoutBenefitsList';
+import type { CheckoutBenefitsListProps } from './checkoutBenefitsList';
 
 const greyedOut = css`
 	color: ${neutral[60]};
@@ -28,7 +30,7 @@ export type CheckListData = {
 };
 
 type CheckoutBenefitsListContainerProps = {
-	showBenefitsMessaging: boolean;
+	renderBenefitsList: (props: CheckoutBenefitsListProps) => JSX.Element;
 };
 
 const getSvgIcon = (showBenefitsMessaging: boolean) =>
@@ -84,28 +86,33 @@ export const checkListData = (
 	];
 };
 
+function getBenefitsListTitle(
+	priceString: string,
+	contributionType: ContributionType,
+) {
+	const billingPeriod = contributionType == 'MONTHLY' ? 'month' : 'year';
+	return `For ${priceString} per ${billingPeriod}, you’ll unlock`;
+}
+
 export function CheckoutBenefitsListContainer({
-	showBenefitsMessaging,
+	renderBenefitsList,
 }: CheckoutBenefitsListContainerProps): JSX.Element {
 	const contributionType = useContributionsSelector(getContributionType);
 	const { countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
+	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 
 	const thresholdPrice =
-		getThresholdPrice(countryGroupId, contributionType) ?? '';
+		getThresholdPrice(countryGroupId, contributionType) ?? 1;
 	const thresholdPriceWithCurrency = simpleFormatAmount(
 		currencies[currencyId],
 		thresholdPrice,
 	);
-	const billingPeriod = contributionType == 'MONTHLY' ? 'month' : 'year';
+	const showBenefitsMessaging = thresholdPrice <= selectedAmount;
 
-	const title = `For ${thresholdPriceWithCurrency} per ${billingPeriod}, you’ll unlock`;
-
-	return (
-		<CheckoutBenefitsList
-			title={title}
-			checkListData={checkListData(showBenefitsMessaging)}
-		/>
-	);
+	return renderBenefitsList({
+		title: getBenefitsListTitle(thresholdPriceWithCurrency, contributionType),
+		checkListData: checkListData(showBenefitsMessaging),
+	});
 }

@@ -5,7 +5,6 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
-import { CheckoutBenefitsListContainer } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -15,10 +14,6 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/paymentFrequencyTabsContainer';
-import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
-import { PriceCards } from 'components/priceCards/priceCards';
-import { PriceCardsContainer } from 'components/priceCards/priceCardsContainer';
 import {
 	AUDCountries,
 	Canada,
@@ -31,6 +26,7 @@ import {
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
+import { AmountAndBenefits } from './formSections/amountAndBenefits';
 
 const checkoutContainer = css`
 	position: relative;
@@ -106,26 +102,7 @@ export function SupporterPlusLandingPage(): JSX.Element {
 					<Column span={[1, 8, 7]}>
 						<Hide from="desktop">{heading}</Hide>
 						<Box>
-							<PaymentFrequencyTabsContainer
-								render={(tabProps) => (
-									<PaymentFrequencyTabs
-										{...tabProps}
-										renderTabContent={(tabId) => (
-											<BoxContents>
-												<PriceCardsContainer
-													frequency={tabId}
-													renderPriceCards={(props) => (
-														<PriceCards {...props} />
-													)}
-												/>
-												<CheckoutBenefitsListContainer
-													showBenefitsMessaging={true}
-												/>
-											</BoxContents>
-										)}
-									/>
-								)}
-							/>
+							<AmountAndBenefits />
 						</Box>
 						<Box>
 							<BoxContents>
