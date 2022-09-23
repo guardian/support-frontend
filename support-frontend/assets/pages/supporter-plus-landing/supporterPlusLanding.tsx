@@ -5,8 +5,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
-import CheckoutBenefitsList from 'components/checkoutBenefits/checkoutBenefitsList';
-import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
+import { CheckoutBenefitsListContainer } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -29,6 +28,7 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
 
@@ -55,21 +55,24 @@ const largeDemoBox = css`
 	min-height: 400px;
 `;
 
-const countrySwitcherProps: CountryGroupSwitcherProps = {
-	countryGroupIds: [
-		GBPCountries,
-		UnitedStates,
-		AUDCountries,
-		EURCountries,
-		NZDCountries,
-		Canada,
-		International,
-	],
-	selectedCountryGroup: GBPCountries,
-	subPath: '/contribute',
-};
-
 export function SupporterPlusLandingPage(): JSX.Element {
+	const selectedCountryGroup = useContributionsSelector(
+		(state) => state.common.internationalisation.countryGroupId,
+	);
+
+	const countrySwitcherProps: CountryGroupSwitcherProps = {
+		countryGroupIds: [
+			GBPCountries,
+			UnitedStates,
+			AUDCountries,
+			EURCountries,
+			NZDCountries,
+			Canada,
+			International,
+		],
+		selectedCountryGroup,
+		subPath: '/contribute',
+	};
 	const heading = <LandingPageHeading />;
 
 	return (
@@ -115,9 +118,8 @@ export function SupporterPlusLandingPage(): JSX.Element {
 														<PriceCards {...props} />
 													)}
 												/>
-												<CheckoutBenefitsList
-													title="For £12 per month, you'll unlock"
-													checkListData={checkListData(true)}
+												<CheckoutBenefitsListContainer
+													showBenefitsMessaging={true}
 												/>
 											</BoxContents>
 										)}

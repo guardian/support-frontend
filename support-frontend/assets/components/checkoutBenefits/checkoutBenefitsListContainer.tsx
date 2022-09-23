@@ -2,10 +2,10 @@ import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { neutral } from '@guardian/source-foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
-import type { ContributionType } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect, glyph } from 'helpers/internationalisation/currency';
-import type { AmountChange } from 'helpers/redux/checkout/product/state';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { currencies } from 'helpers/internationalisation/currency';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import CheckoutBenefitsList from './checkoutBenefitsList';
 
@@ -27,11 +27,8 @@ export type CheckListData = {
 	maybeGreyedOut: null | SerializedStyles;
 };
 
-type PropTypes = {
-	countryGroupId: CountryGroupId;
+type CheckoutBenefitsListContainerProps = {
 	showBenefitsMessaging: boolean;
-	contributionType: ContributionType;
-	setSelectedAmount: (amountChange: AmountChange) => void;
 };
 
 const getSvgIcon = (showBenefitsMessaging: boolean) =>
@@ -89,15 +86,21 @@ export const checkListData = (
 
 export function CheckoutBenefitsListContainer({
 	showBenefitsMessaging,
-	countryGroupId,
-	contributionType,
-}: PropTypes): JSX.Element {
-	const currencyGlyph = glyph(detect(countryGroupId));
+}: CheckoutBenefitsListContainerProps): JSX.Element {
+	const contributionType = useContributionsSelector(getContributionType);
+	const { countryGroupId, currencyId } = useContributionsSelector(
+		(state) => state.common.internationalisation,
+	);
+
 	const thresholdPrice =
 		getThresholdPrice(countryGroupId, contributionType) ?? '';
+	const thresholdPriceWithCurrency = simpleFormatAmount(
+		currencies[currencyId],
+		thresholdPrice,
+	);
 	const billingPeriod = contributionType == 'MONTHLY' ? 'month' : 'year';
 
-	const title = `For ${currencyGlyph}${thresholdPrice} per ${billingPeriod}, you’ll unlock`;
+	const title = `For ${thresholdPriceWithCurrency} per ${billingPeriod}, you’ll unlock`;
 
 	return (
 		<CheckoutBenefitsList
@@ -106,5 +109,3 @@ export function CheckoutBenefitsListContainer({
 		/>
 	);
 }
-
-export default CheckoutBenefitsListContainer;
