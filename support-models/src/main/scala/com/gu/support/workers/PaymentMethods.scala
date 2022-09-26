@@ -93,7 +93,7 @@ case class SepaPaymentMethod(
     BankTransferAccountName: String,
     BankTransferAccountNumber: String,
     Email: String,
-    // IPAddress: String,
+    IPAddress: String,
     GatewayOptionData: GatewayOptionData,
     BankTransferType: String = "SEPA",
     `Type`: String = "BankTransfer",

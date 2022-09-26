@@ -200,7 +200,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         Country = sepa.country,
         StreetName = sepa.streetName,
         Email = user.primaryEmailAddress,
-        // IPAddress = if (isIpv6Address) "0.0.0.0" else ipAddress,
+        IPAddress = if (isIpv6Address) "0.0.0.0" else ipAddress,
         GatewayOptionData = GatewayOptionData(gatewayOptionData),
       ),
     )
