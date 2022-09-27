@@ -84,7 +84,6 @@ class PaymentMethodEncoderSpec extends AsyncFlatSpec with Matchers with LazyLogg
          |"BankTransferAccountName": "Mr Test",
          |"BankTransferAccountNumber": "DE89370400440532013000",
          |"Email": "mr.test@guardian.co.uk",
-         |"IPAddress": "127.0.0.1",
          |"GatewayOptionData": {
          |    "GatewayOption": [
          |        {
