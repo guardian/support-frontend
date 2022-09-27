@@ -179,16 +179,8 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       ipAddress: String,
       userAgent: String,
   ): Future[SepaPaymentMethod] = {
-    val isIpv6Address: Boolean = ipAddress.length() > 15
-    var gatewayOptionData = List(
-      GatewayOption(
-        "UserAgent",
-        userAgent.take(255),
-      ),
-    )
-    if (isIpv6Address) {
+    if (ipAddress.length() > 15) {
       SafeLogger.warn(s"IPv6 Address: ${ipAddress} is longer than 15 characters")
-      gatewayOptionData = gatewayOptionData :+ GatewayOption("IPAddress", ipAddress)
     }
     if (userAgent.length() > 255) {
       SafeLogger.warn(s"User Agent: ${userAgent} will be truncated to 255 characters")
@@ -200,8 +192,18 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
         Country = sepa.country,
         StreetName = sepa.streetName,
         Email = user.primaryEmailAddress,
-        IPAddress = if (isIpv6Address) "0.0.0.0" else ipAddress,
-        GatewayOptionData = GatewayOptionData(gatewayOptionData),
+        GatewayOptionData = GatewayOptionData(
+          List(
+            GatewayOption(
+              "UserAgent",
+              userAgent.take(255),
+            ),
+            GatewayOption(
+              "IPAddress",
+              ipAddress,
+            ),
+          ),
+        ),
       ),
     )
   }
