@@ -1,7 +1,10 @@
-# This action is just a test
-name: Snyk (test)
+name: Snyk
 
-on: push
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 # Having 2 jobs here is a hack because this project's sbt build is set up to aggregate 
 # sub-projects which depend on the parent LibraryVersions.scala. To exclude the sub-projects, 
@@ -12,7 +15,7 @@ jobs:
     uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
     with:
       DEBUG: true
-      ORG: guardian-test
+      ORG: the-guardian-cuu
       SKIP_NODE: true
       EXCLUDE: stripe-patrons-data,support-config,support-frontend,support-internationalisation,support-lambdas,support-models,support-modules,support-payment-api,support-redemptiondb,support-services,support-workers,supporter-product-data
     secrets:
@@ -22,7 +25,7 @@ jobs:
     uses: guardian/.github/.github/workflows/sbt-node-snyk.yml@main
     with:
       DEBUG: true
-      ORG: guardian-test
+      ORG: the-guardian-cuu
       SKIP_SBT: true
       EXCLUDE: build.sbt
     secrets:
