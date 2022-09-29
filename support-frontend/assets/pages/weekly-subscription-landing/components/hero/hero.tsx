@@ -28,10 +28,7 @@ import {
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import {
-	backgroundCtaSecondaryOveride,
-	digitalSubscriptionsBlue,
-} from 'stylesheets/emotion/colours';
+import { backgroundCtaSecondaryOveride } from 'stylesheets/emotion/colours';
 
 type PropTypes = {
 	orderIsAGift: boolean;
@@ -136,7 +133,10 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 		background-color: ${backgroundCtaSecondaryOveride};
 	`;
 	const linkButtonColour = css`
-		color: ${digitalSubscriptionsBlue};
+		color: ${text.primary};
+		&:hover {
+			background: ${'#AEBDC8'};
+		}
 	`;
 
 	return (
