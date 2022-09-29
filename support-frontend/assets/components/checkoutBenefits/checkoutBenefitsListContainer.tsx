@@ -29,59 +29,65 @@ export type CheckListData = {
 	maybeGreyedOut: null | SerializedStyles;
 };
 
+type TierUnlocks = {
+	lowerTier: boolean;
+	higherTier: boolean;
+};
+
 type CheckoutBenefitsListContainerProps = {
 	renderBenefitsList: (props: CheckoutBenefitsListProps) => JSX.Element;
 };
 
-const getSvgIcon = (showBenefitsMessaging: boolean) =>
-	showBenefitsMessaging ? (
+const getSvgIcon = (isUnlocked: boolean) =>
+	isUnlocked ? (
 		<SvgTickRound isAnnouncedByScreenReader size="small" />
 	) : (
 		<SvgCrossRound isAnnouncedByScreenReader size="small" />
 	);
 
-export const checkListData = (
-	showBenefitsMessaging: boolean,
-): CheckListData[] => {
+export const checkListData = ({
+	lowerTier,
+	higherTier,
+}: TierUnlocks): CheckListData[] => {
 	return [
 		{
-			icon: <SvgTickRound isAnnouncedByScreenReader size="small" />,
+			icon: getSvgIcon(lowerTier),
 			text: (
 				<p>
 					<span css={boldText}>Uninterrupted reading. </span> No more yellow
 					banners
 				</p>
 			),
-			maybeGreyedOut: null,
+			maybeGreyedOut: lowerTier ? null : greyedOut,
 		},
 		{
-			icon: <SvgTickRound isAnnouncedByScreenReader size="small" />,
+			icon: getSvgIcon(lowerTier),
 			text: (
 				<p>
 					<span css={boldText}>Supporter newsletter. </span>Giving you editorial
 					insight on the week’s top stories
 				</p>
 			),
-			maybeGreyedOut: null,
+			maybeGreyedOut: lowerTier ? null : greyedOut,
 		},
 		{
-			icon: getSvgIcon(showBenefitsMessaging),
+			icon: getSvgIcon(higherTier),
 			text: (
 				<p>
 					<span css={boldText}>Ad-free. </span>On any device when signed in
 				</p>
 			),
-			maybeGreyedOut: showBenefitsMessaging ? null : greyedOut,
+			maybeGreyedOut: higherTier ? null : greyedOut,
 		},
 		{
-			icon: getSvgIcon(showBenefitsMessaging),
+			icon: getSvgIcon(higherTier),
 			text: (
 				<p>
 					<span css={boldText}>Unlimited app access. </span>For the best mobile
 					experience
 				</p>
 			),
-			maybeGreyedOut: showBenefitsMessaging ? null : greyedOut,
+			maybeGreyedOut: higherTier ? null : greyedOut,
 		},
 	];
 };
@@ -89,7 +95,11 @@ export const checkListData = (
 function getBenefitsListTitle(
 	priceString: string,
 	contributionType: ContributionType,
+	selectedAmount: number,
 ) {
+	if (Number.isNaN(selectedAmount)) {
+		return 'Contribute more than $$AMOUNT to unlock benefits';
+	}
 	const billingPeriod = contributionType == 'MONTHLY' ? 'month' : 'year';
 	return `For ${priceString} per ${billingPeriod}, you’ll unlock`;
 }
@@ -113,10 +123,19 @@ export function CheckoutBenefitsListContainer({
 		currencies[currencyId],
 		selectedAmount,
 	);
-	const showBenefitsMessaging = thresholdPrice <= selectedAmount;
+	const higherTier = thresholdPrice <= selectedAmount;
+	// TODO: What is the minimum threshold for unlocking the basic benefits?
+	const lowerTier = selectedAmount > 0;
 
 	return renderBenefitsList({
-		title: getBenefitsListTitle(thresholdPriceWithCurrency, contributionType),
-		checkListData: checkListData(showBenefitsMessaging),
+		title: getBenefitsListTitle(
+			thresholdPriceWithCurrency,
+			contributionType,
+			selectedAmount,
+		),
+		checkListData: checkListData({
+			lowerTier,
+			higherTier,
+		}),
 	});
 }

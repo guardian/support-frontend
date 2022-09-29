@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
 import { neutral } from '@guardian/source-foundations';
 import { Column, Columns, Container } from '@guardian/source-react-components';
-import CheckoutBenefitsListComponent from 'components/checkoutBenefits/checkoutBenefitsList';
+import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 
 export default {
 	title: 'Checkout Layout/Benefits List',
-	component: CheckoutBenefitsListComponent,
+	component: CheckoutBenefitsList,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Container backgroundColor={neutral[97]}>
@@ -36,7 +36,7 @@ export function BenefitsList(args: {
 	showBenefitsMessaging: boolean;
 }): JSX.Element {
 	return (
-		<CheckoutBenefitsListComponent
+		<CheckoutBenefitsList
 			title={args.title}
 			checkListData={checkListData(args.showBenefitsMessaging)}
 		/>

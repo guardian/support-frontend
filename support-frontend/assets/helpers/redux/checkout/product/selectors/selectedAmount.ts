@@ -8,6 +8,7 @@ export function getUserSelectedAmount(state: ContributionsState): number {
 
 	if (priceCardAmountSelected === 'other') {
 		const customAmount = otherAmounts[contributionType];
+		// TODO: what do we do when this is NaN? Do we handle elsewhere?
 		return Number.parseFloat(customAmount.amount ?? '');
 	}
 
