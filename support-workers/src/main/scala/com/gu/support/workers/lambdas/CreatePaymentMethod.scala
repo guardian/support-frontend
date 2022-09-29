@@ -76,7 +76,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       case dd: DirectDebitPaymentFields =>
         createDirectDebitPaymentMethod(dd, user)
       case sepa: SepaPaymentFields =>
-        createSepaPaymentMethod(sepa, user, ipAddress, userAgent)
+        createSepaPaymentMethod(sepa, user, "2001:db8:3333:4444:5555:6666:7777:8888", userAgent)
       case _: ExistingPaymentFields =>
         Future.failed(new RuntimeException("Existing payment methods should never make their way to this lambda"))
       case amazonPay: AmazonPayPaymentFields =>
