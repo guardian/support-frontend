@@ -441,7 +441,8 @@ function PaperCheckoutForm(props: PropTypes) {
 							</Rows>
 						</FormSection>
 					) : null}
-					{props.participations.newProduct !== 'variant' ? (
+					{props.participations.newProduct ===
+					'Hide this for the time being because it is not working correctly. We can delete it when the new prop is launched and tested' ? (
 						<AddDigiSubCta
 							digiSubPrice={expandedPricingText}
 							addDigitalSubscription={addDigitalSubscription}

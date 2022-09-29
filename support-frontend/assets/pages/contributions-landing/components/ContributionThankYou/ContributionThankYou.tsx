@@ -165,7 +165,8 @@ const mapStateToProps = (state: ContributionsState) => {
 		currency: state.common.internationalisation.currencyId,
 		csrf: state.page.checkoutForm.csrf,
 		user: state.page.user,
-		userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
+		userTypeFromIdentityResponse:
+			state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
 		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 		countryId: state.common.internationalisation.countryId,
 		campaignCode: state.common.referrerAcquisitionData.campaignCode,

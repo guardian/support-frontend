@@ -16,7 +16,7 @@ import moduleStyles from './countryGroupSwitcher.module.scss';
 const styles = moduleStyles as { button: string };
 
 // ----- Props ----- //
-export type PropTypes = {
+export type CountryGroupSwitcherProps = {
 	countryGroupIds: CountryGroupId[];
 	selectedCountryGroup: CountryGroupId;
 	trackProduct?: Option<SubscriptionProduct>;
@@ -29,7 +29,7 @@ function CountryGroupSwitcher({
 	selectedCountryGroup,
 	countryGroupIds,
 	trackProduct,
-}: PropTypes): JSX.Element {
+}: CountryGroupSwitcherProps): JSX.Element {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [bounds, setBounds] = useState({

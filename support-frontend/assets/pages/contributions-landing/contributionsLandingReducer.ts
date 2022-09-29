@@ -2,8 +2,6 @@
 import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type {
 	IsoCountry,
 	StateProvince,
@@ -50,19 +48,11 @@ export interface StripeCardFormData {
 }
 
 interface FormState {
-	paymentMethod: PaymentMethod;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
 	isWaiting: boolean;
 	formData: FormData;
-	stripePaymentRequestButtonData: {
-		ONE_OFF: StripePaymentRequestButtonData;
-		REGULAR: StripePaymentRequestButtonData;
-	};
-	stripeCardFormData: StripeCardFormData;
 	paymentComplete: boolean;
 	paymentError: ErrorReason | null;
-	hasSeenDirectDebitThankYouCopy: boolean;
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	formIsValid: boolean;
 	formIsSubmittable: boolean;
 	tickerGoalReached: boolean;
@@ -92,32 +82,14 @@ export interface State {
 function createFormReducer() {
 	// ----- Initial state ----- //
 	const initialState: FormState = {
-		paymentMethod: 'None',
 		formData: {
 			billingState: null,
 			billingCountry: null,
 			checkoutFormHasBeenSubmitted: false,
 		},
-		stripePaymentRequestButtonData: {
-			ONE_OFF: {
-				stripePaymentRequestButtonClicked: false,
-				paymentError: null,
-			},
-			REGULAR: {
-				stripePaymentRequestButtonClicked: false,
-				paymentError: null,
-			},
-		},
-		stripeCardFormData: {
-			formComplete: false,
-			setupIntentClientSecret: null,
-			recurringRecaptchaVerified: false,
-		},
 		isWaiting: false,
 		paymentComplete: false,
 		paymentError: null,
-		hasSeenDirectDebitThankYouCopy: false,
-		userTypeFromIdentityResponse: 'noRequestSent',
 		formIsValid: true,
 		formIsSubmittable: true,
 		tickerGoalReached: false,
@@ -128,37 +100,10 @@ function createFormReducer() {
 		action: Action,
 	): FormState {
 		switch (action.type) {
-			case 'UPDATE_PAYMENT_METHOD':
-				return { ...state, paymentMethod: action.paymentMethod };
-
 			case 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD':
 				return {
 					...state,
 					existingPaymentMethod: action.existingPaymentMethod,
-				};
-
-			case 'SET_STRIPE_CARD_FORM_COMPLETE':
-				return {
-					...state,
-					stripeCardFormData: {
-						...state.stripeCardFormData,
-						formComplete: action.isComplete,
-					},
-				};
-
-			case 'SET_STRIPE_SETUP_INTENT_CLIENT_SECRET':
-				return {
-					...state,
-					stripeCardFormData: {
-						...state.stripeCardFormData,
-						setupIntentClientSecret: action.setupIntentClientSecret,
-					},
-				};
-
-			case 'SET_USER_TYPE_FROM_IDENTITY_RESPONSE':
-				return {
-					...state,
-					userTypeFromIdentityResponse: action.userTypeFromIdentityResponse,
 				};
 
 			case 'UPDATE_BILLING_STATE':
@@ -173,30 +118,6 @@ function createFormReducer() {
 					formData: {
 						...state.formData,
 						billingCountry: action.billingCountry,
-					},
-				};
-
-			case 'SET_STRIPE_PAYMENT_REQUEST_BUTTON_CLICKED':
-				return {
-					...state,
-					stripePaymentRequestButtonData: {
-						...state.stripePaymentRequestButtonData,
-						[action.stripeAccount]: {
-							...state.stripePaymentRequestButtonData[action.stripeAccount],
-							stripePaymentRequestButtonClicked: true,
-						},
-					},
-				};
-
-			case 'SET_STRIPE_PAYMENT_REQUEST_ERROR':
-				return {
-					...state,
-					stripePaymentRequestButtonData: {
-						...state.stripePaymentRequestButtonData,
-						[action.stripeAccount]: {
-							...state.stripePaymentRequestButtonData[action.stripeAccount],
-							paymentError: action.paymentError,
-						},
 					},
 				};
 
@@ -237,9 +158,6 @@ function createFormReducer() {
 					...state,
 					formData: { ...state.formData, checkoutFormHasBeenSubmitted: true },
 				};
-
-			case 'SET_HAS_SEEN_DIRECT_DEBIT_THANK_YOU_COPY':
-				return { ...state, hasSeenDirectDebitThankYouCopy: true };
 
 			default:
 				return state;

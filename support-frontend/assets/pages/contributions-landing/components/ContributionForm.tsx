@@ -100,7 +100,8 @@ const mapStateToProps = (state: ContributionsState) => {
 		contributionType,
 		paymentError: state.page.form.paymentError,
 		selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
-		userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
+		userTypeFromIdentityResponse:
+			state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
 		isSignedIn: state.page.user.isSignedIn,
 		formIsValid: state.page.form.formIsValid,
 		isPostDeploymentTestUser: state.page.user.isPostDeploymentTestUser,

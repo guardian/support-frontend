@@ -9,6 +9,10 @@ import CheckoutBenefitsList from 'components/checkoutBenefits/checkoutBenefitsLi
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
+import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
+import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -53,31 +57,42 @@ const largeDemoBox = css`
 	min-height: 400px;
 `;
 
+const countrySwitcherProps: CountryGroupSwitcherProps = {
+	countryGroupIds: [
+		GBPCountries,
+		UnitedStates,
+		AUDCountries,
+		EURCountries,
+		NZDCountries,
+		Canada,
+		International,
+	],
+	selectedCountryGroup: GBPCountries,
+	subPath: '/contribute',
+};
+
 export function SupporterPlusLandingPage(): JSX.Element {
 	const heading = <LandingPageHeading />;
 
 	return (
 		<PageScaffold
 			id="supporter-plus-landing"
+			header={
+				<Header>
+					<Hide from="desktop">
+						<CountrySwitcherContainer>
+							<CountryGroupSwitcher {...countrySwitcherProps} />
+						</CountrySwitcherContainer>
+					</Hide>
+				</Header>
+			}
 			footer={
 				<FooterWithContents>
 					<FooterLinks></FooterLinks>
 				</FooterWithContents>
 			}
 		>
-			<Nav
-				countryGroupIds={[
-					GBPCountries,
-					UnitedStates,
-					AUDCountries,
-					EURCountries,
-					NZDCountries,
-					Canada,
-					International,
-				]}
-				selectedCountryGroup={GBPCountries}
-				subPath={window.location.search}
-			/>
+			<Nav {...countrySwitcherProps} />
 			<CheckoutHeading heading={heading}>
 				<p>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
