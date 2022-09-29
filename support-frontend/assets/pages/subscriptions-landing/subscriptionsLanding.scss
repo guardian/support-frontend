@@ -456,7 +456,7 @@
 	margin-top: -6px;
 }
 .subscriptions__product--feature .subscriptions__description::before {
-	border-top: solid gu-colour('brand-pastel') 1px;
+	border-top: solid #9AA4AD 1px;
 
 	@include mq($until: tablet) {
 		border-top: none;

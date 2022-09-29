@@ -10,7 +10,7 @@ import {
 	text,
 } from '@guardian/source-foundations';
 import {
-	buttonThemeBrandAlt,
+	buttonThemeDefault,
 	LinkButton,
 	SvgArrowDownStraight,
 } from '@guardian/source-react-components';
@@ -169,7 +169,7 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 					<section css={weeklyHeroCopy}>
 						<h2 css={weeklyHeroTitle}>{title}</h2>
 						<p css={weeklyHeroParagraph}>{copy}</p>
-						<ThemeProvider theme={buttonThemeBrandAlt}>
+						<ThemeProvider theme={buttonThemeDefault}>
 							<LinkButton
 								onClick={sendTrackingEventsOnClick({
 									id: 'options_cta_click',
