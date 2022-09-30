@@ -255,6 +255,7 @@
 .subscriptions__copy-container.subscriptions__product--feature {
 	position: relative;
 	width: 100%;
+  background-color: #052962;
 
 	@include mq($from: tablet) {
 		width: 50%;
@@ -558,6 +559,10 @@
     right: 0;
     margin-bottom: 0;
     position: relative;
+  }
+
+  .subscriptions__copy-container {
+    background-color: #cadbe8;
   }
 
   .subscriptions-feature-packshot {
