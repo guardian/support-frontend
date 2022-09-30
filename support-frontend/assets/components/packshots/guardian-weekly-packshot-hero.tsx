@@ -7,21 +7,21 @@ function GuardianWeeklyPackShotHero(): JSX.Element {
 			<GridPicture
 				sources={[
 					{
-						gridId: 'subscriptionGuardianWeeklyMobile',
+						gridId: 'subscriptionGuardianWeeklyHeroMobile',
 						srcSizes: [1000, 500],
 						sizes: '100vw',
 						imgType: 'png',
 						media: '(max-width: 739px)',
 					},
 					{
-						gridId: 'subscriptionGuardianWeeklyTablet',
+						gridId: 'subscriptionGuardianWeeklyHeroTablet',
 						srcSizes: [1000, 500],
 						sizes: '100vw',
 						imgType: 'png',
 						media: '(max-width: 979px)',
 					},
 				]}
-				fallback="subscriptionGuardianWeeklyPackShot"
+				fallback="subscriptionGuardianWeeklyHeroPackShot"
 				fallbackSize={1000}
 				altText=""
 				fallbackImgType="png"

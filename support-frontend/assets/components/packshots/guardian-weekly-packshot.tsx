@@ -14,18 +14,18 @@ function GuardianWeeklyPackShot(): JSX.Element {
 			<GridPicture
 				sources={[
 					{
-						gridId: 'subscriptionGuardianWeeklyPackShot',
+						gridId: 'subscriptionGuardianWeeklyMobile',
 						srcSizes: [500, 140],
 						imgType: 'png',
 						sizes: '100vw',
 						media: '(max-width: 739px)',
 					},
 					{
-						gridId: 'subscriptionGuardianWeeklyPackShot',
+						gridId: 'subscriptionGuardianWeeklyTablet',
 						srcSizes: [1000, 500],
 						imgType: 'png',
 						sizes: '(min-width: 1000px) 2000px, 1000px',
-						media: '(min-width: 740px)',
+						media: '(max-width: 979px)',
 					},
 				]}
 				fallback="subscriptionGuardianWeeklyPackShot"
