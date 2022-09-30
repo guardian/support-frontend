@@ -18,7 +18,7 @@ function GuardianWeeklyPackShotHero(): JSX.Element {
 						srcSizes: [1000, 500],
 						sizes: '100vw',
 						imgType: 'png',
-						media: '(max-width: 979px)',
+						media: '(max-width: 883px)',
 					},
 				]}
 				fallback="subscriptionGuardianWeeklyPackShot"
