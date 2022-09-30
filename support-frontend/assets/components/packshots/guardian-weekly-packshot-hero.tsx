@@ -1,16 +1,30 @@
-import GridImage from 'components/gridImage/gridImage';
+// import GridImage from 'components/gridImage/gridImage';
+import GridPicture from 'components/gridPicture/gridPicture';
 
 function GuardianWeeklyPackShotHero(): JSX.Element {
 	return (
 		<div className="subscriptions-feature-packshot">
-			<GridImage
-				gridId="subscriptionGuardianWeeklyPackShot"
-				srcSizes={[1000, 500]}
-				sizes="(max-width: 480px) 100px,
-              (max-width: 740px) 100%,
-              (max-width: 1067px) 150%,
-              800px"
-				imgType="png"
+			<GridPicture
+				sources={[
+					{
+						gridId: 'subscriptionGuardianWeeklyMobile',
+						srcSizes: [1000, 500],
+						sizes: '100vw',
+						imgType: 'png',
+						media: '(max-width: 739px)',
+					},
+					{
+						gridId: 'subscriptionGuardianWeeklyTablet',
+						srcSizes: [1000, 500],
+						sizes: '100vw',
+						imgType: 'png',
+						media: '(max-width: 883px)',
+					},
+				]}
+				fallback="subscriptionGuardianWeeklyPackShot"
+				fallbackSize={1000}
+				altText=""
+				fallbackImgType="png"
 			/>
 		</div>
 	);
