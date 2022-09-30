@@ -121,10 +121,7 @@ const getProducts = ({
 }: WeeklyProductPricesProps): Product[] => {
 	const billingPeriodsToUse = orderIsAGift
 		? weeklyGiftBillingPeriods
-		: weeklyBillingPeriods(
-				participations.sixForSixSuppression !== 'variant',
-				countryId,
-		  );
+		: weeklyBillingPeriods(participations.sixForSixSuppression !== 'variant');
 
 	return billingPeriodsToUse.map((billingPeriod) => {
 		const productPrice = productPrices

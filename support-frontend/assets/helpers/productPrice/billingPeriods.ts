@@ -1,5 +1,3 @@
-import type { IsoCountry } from 'helpers/internationalisation/country';
-
 const Annual = 'Annual';
 const Monthly = 'Monthly';
 const Quarterly = 'Quarterly';
@@ -29,14 +27,12 @@ export type ContributionBillingPeriod = typeof Monthly | typeof Annual;
 
 const weeklyBillingPeriods = (
 	enableSixForSix: boolean,
-	countryQuarterly: IsoCountry,
 ): WeeklyBillingPeriod[] => {
 	if (enableSixForSix) {
 		return [SixWeekly, postIntroductorySixForSixBillingPeriod, Annual];
-	} else if (countryQuarterly === 'US' || countryQuarterly === 'CA') {
-		return [Monthly, Quarterly, Annual];
 	}
-	return [Monthly, Annual];
+
+	return [Monthly, Quarterly, Annual];
 };
 
 const weeklyGiftBillingPeriods: WeeklyBillingPeriod[] = [Quarterly, Annual];
