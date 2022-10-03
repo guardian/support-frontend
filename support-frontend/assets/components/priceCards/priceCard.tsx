@@ -8,7 +8,23 @@ export type PriceCardProps = {
 	isSelected: boolean;
 	onClick: (amount: string) => void;
 	paymentInterval?: PriceCardPaymentInterval;
+	alternateLabel?: string;
 };
+
+function getPriceCardLabel(
+	amountWithCurrency: string,
+	paymentInterval?: PriceCardPaymentInterval,
+	alternateLabel?: string,
+) {
+	if (alternateLabel) {
+		return alternateLabel;
+	}
+	if (paymentInterval) {
+		return `${amountWithCurrency} per ${paymentInterval}`;
+	}
+
+	return amountWithCurrency;
+}
 
 export function PriceCard({
 	amount,
@@ -16,10 +32,13 @@ export function PriceCard({
 	isSelected,
 	onClick,
 	paymentInterval,
+	alternateLabel,
 }: PriceCardProps): JSX.Element {
-	const labelText = paymentInterval
-		? `${amountWithCurrency} per ${paymentInterval}`
-		: amountWithCurrency;
+	const labelText = getPriceCardLabel(
+		amountWithCurrency,
+		paymentInterval,
+		alternateLabel,
+	);
 
 	return (
 		<ChoiceCard

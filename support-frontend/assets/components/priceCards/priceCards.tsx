@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { from, space, until } from '@guardian/source-foundations';
-import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
+import { ChoiceCardGroup } from '@guardian/source-react-components';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -101,13 +101,12 @@ export function PriceCards({
 						paymentInterval={paymentInterval}
 					/>
 				))}
-				<ChoiceCard
-					id="amount-other"
-					key="amount-other"
-					name="amount"
-					onChange={() => onAmountChange('other')}
-					value="other"
-					label={otherAmountLabel}
+				<PriceCard
+					amount="other"
+					amountWithCurrency="other"
+					isSelected={selectedAmount === 'other'}
+					onClick={onAmountChange}
+					alternateLabel={otherAmountLabel}
 				/>
 			</>
 		</ChoiceCardGroup>

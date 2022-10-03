@@ -31,19 +31,34 @@ export default {
 	],
 };
 
-export function BenefitsList(args: {
+function Template(args: {
 	title: string;
-	showBenefitsMessaging: boolean;
+	higherTier: boolean;
+	lowerTier: boolean;
 }): JSX.Element {
+	const { higherTier, lowerTier } = args;
 	return (
 		<CheckoutBenefitsList
 			title={args.title}
-			checkListData={checkListData(args.showBenefitsMessaging)}
+			checkListData={checkListData({ lowerTier, higherTier })}
 		/>
 	);
 }
 
-BenefitsList.args = {
+Template.args = {} as Record<string, unknown>;
+
+export const AllBenefitsUnlocked = Template.bind({});
+
+AllBenefitsUnlocked.args = {
 	title: "For £12 per month, you'll unlock",
-	showBenefitsMessaging: true,
+	higherTier: true,
+	lowerTier: true,
+};
+
+export const LowerTierUnlocked = Template.bind({});
+
+LowerTierUnlocked.args = {
+	title: "For £5 per month, you'll unlock",
+	higherTier: false,
+	lowerTier: true,
 };
