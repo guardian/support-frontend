@@ -7,6 +7,7 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import type { CheckoutBenefitsListProps } from './checkoutBenefitsList';
@@ -96,11 +97,12 @@ function getBenefitsListTitle(
 	priceString: string,
 	contributionType: ContributionType,
 	selectedAmount: number,
+	minimumAmountPriceString: string,
 ) {
+	const billingPeriod = contributionType === 'MONTHLY' ? 'month' : 'year';
 	if (Number.isNaN(selectedAmount)) {
-		return 'Contribute more than $$AMOUNT to unlock benefits';
+		return `Contribute more than ${minimumAmountPriceString} per ${billingPeriod} to unlock benefits`;
 	}
-	const billingPeriod = contributionType == 'MONTHLY' ? 'month' : 'year';
 	return `For ${priceString} per ${billingPeriod}, you’ll unlock`;
 }
 
@@ -116,6 +118,9 @@ export function CheckoutBenefitsListContainer({
 		(state) => state.common.internationalisation,
 	);
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
+	const minimumContributionAmount = useContributionsSelector(
+		getMinimumContributionAmount,
+	);
 
 	const thresholdPrice =
 		getThresholdPrice(countryGroupId, contributionType) ?? 1;
@@ -124,14 +129,14 @@ export function CheckoutBenefitsListContainer({
 		selectedAmount,
 	);
 	const higherTier = thresholdPrice <= selectedAmount;
-	// TODO: What is the minimum threshold for unlocking the basic benefits?
-	const lowerTier = selectedAmount > 0;
+	const lowerTier = selectedAmount > minimumContributionAmount;
 
 	return renderBenefitsList({
 		title: getBenefitsListTitle(
 			thresholdPriceWithCurrency,
 			contributionType,
 			selectedAmount,
+			simpleFormatAmount(currencies[currencyId], minimumContributionAmount),
 		),
 		checkListData: checkListData({
 			lowerTier,
