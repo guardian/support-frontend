@@ -64,6 +64,8 @@ class MyComponents(context: Context)
     .updateConfiguration(super.configuration, requestEnvironments, environment.mode)
     .valueOr(throw _)
 
+  logger.info("configuration: ", configuration)
+
   override val threadPools: AppThreadPools = AppThreadPools.load(executionContext, actorSystem).valueOr(throw _)
 
   implicit val _wsClient: WSClient = wsClient
