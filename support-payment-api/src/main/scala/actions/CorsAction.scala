@@ -1,5 +1,6 @@
 package actions
 
+import com.typesafe.scalalogging.StrictLogging
 import play.api.http.HeaderNames
 import play.api.mvc._
 
@@ -9,12 +10,14 @@ class CorsAction(
     val parser: BodyParser[AnyContent],
     val executionContext: ExecutionContext,
     corsUrls: List[String],
-) extends ActionBuilder[Request, AnyContent] {
+) extends ActionBuilder[Request, AnyContent]
+    with StrictLogging {
 
   implicit def ec: ExecutionContext = executionContext
 
   private def corsHeaders(request: Request[_]) = {
     val origin = request.headers.get(HeaderNames.ORIGIN)
+    logger.info("corsUrls: ", corsUrls)
     origin.filter(corsUrls.contains).toList.flatMap { origin =>
       List(
         "Access-Control-Allow-Origin" -> origin,

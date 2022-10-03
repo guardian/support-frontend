@@ -9,7 +9,6 @@ import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagement
 import com.typesafe.scalalogging.StrictLogging
 import conf.{ConfigLoader, PlayConfigUpdater}
-import model.RequestEnvironments.logger
 import model.{AppThreadPools, AppThreadPoolsProvider, RequestEnvironments}
 import play.api.ApplicationLoader.Context
 import play.api._
@@ -45,8 +44,7 @@ class MyComponents(context: Context)
     with NoHttpFiltersComponents
     with HikariCPComponents
     with AhcWSComponents
-    with AppThreadPoolsProvider
-    with StrictLogging {
+    with AppThreadPoolsProvider {
 
   // At this point, the app either gets two request environments that differ
   // (Live and Test), or two that are the same (Test and Test).
@@ -63,8 +61,6 @@ class MyComponents(context: Context)
   override val configuration: Configuration = playConfigUpdater
     .updateConfiguration(super.configuration, requestEnvironments, environment.mode)
     .valueOr(throw _)
-
-  logger.info("configuration: ", configuration)
 
   override val threadPools: AppThreadPools = AppThreadPools.load(executionContext, actorSystem).valueOr(throw _)
 
@@ -97,7 +93,6 @@ class MyComponents(context: Context)
       .valueOr(throw _)
 
   implicit val allowedCorsUrl = configuration.get[Seq[String]](s"cors.allowedOrigins").toList
-  logger.info("allowedCorsUrl: ", allowedCorsUrl)
 
   // Usually the cloudWatchService is determined based on the request (live vs test). But inside the controllers
   // we may not know the environment, so we just use live. Note - in DEV/CODE, there is no difference between test/live
