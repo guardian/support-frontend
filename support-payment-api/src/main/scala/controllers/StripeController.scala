@@ -109,5 +109,4 @@ class StripeController(
   override implicit val controllerComponents: ControllerComponents = cc
   override implicit val corsUrls: List[String] = allowedCorsUrls
 
-  logger.info("corsUrls: ", corsUrls)
 }
