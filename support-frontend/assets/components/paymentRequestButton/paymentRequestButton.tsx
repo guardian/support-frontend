@@ -33,6 +33,9 @@ export function PaymentRequestButton({
 	button,
 }: PaymentRequestButtonProps): JSX.Element {
 	const dividerText = button ? 'or' : '';
+  console.log(button);
+
+
 	return (
 		<div css={containerStyles}>
 			{button && <div css={buttonContainer}>{button}</div>}

@@ -4,6 +4,7 @@ import {
 } from '@stripe/react-stripe-js';
 import type { PaymentRequest, Stripe as StripeJs } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
+import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { toHumanReadableContributionType } from 'helpers/forms/checkouts';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -33,7 +34,7 @@ function usePaymentRequest(
 		if (stripe) {
 			const paymentRequestSdk = stripe.paymentRequest({
 				country: countryId,
-				currency: currencyId,
+				currency: currencyId.toLowerCase(),
 				total: {
 					label: `${toHumanReadableContributionType(
 						contributionType,
@@ -63,28 +64,64 @@ function usePaymentRequest(
 	return [paymentType, paymentRequest];
 }
 
-type PaymentRequestButtonContainerProps = {
-	customButton: React.ReactNode;
+type CustomButtonProps = {
+	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-function Button(props: PaymentRequestButtonContainerProps): JSX.Element | null {
+type PaymentRequestButtonContainerProps = {
+	CustomButton: React.FC<CustomButtonProps>;
+};
+
+function Button({
+	CustomButton,
+}: PaymentRequestButtonContainerProps): JSX.Element | null {
 	const stripe = useStripe();
 	const [paymentType, paymentRequest] = usePaymentRequest(stripe);
 
 	if (paymentRequest && paymentType === 'PAY_NOW') {
-		return <>{props.customButton}</>;
+		return <CustomButton onClick={() => console.log('clicked')} />;
 	} else if (paymentRequest && paymentType !== 'NONE') {
 		return <PaymentRequestButtonElement options={{ paymentRequest }} />;
 	}
 	return null;
 }
 
-export function PaymentRequestButtonContainer(
-	props: PaymentRequestButtonContainerProps,
-): JSX.Element {
+function getButtonForPaymentType(
+	paymentType: PaymentRequestButtonType,
+	paymentRequest: PaymentRequest,
+	customButton: JSX.Element,
+) {
+	if (paymentType === 'PAY_NOW') {
+		return customButton;
+	} else if (paymentType !== 'NONE') {
+		return <PaymentRequestButtonElement options={{ paymentRequest }} />;
+	}
+	return null;
+}
+
+function PaymentRequestButtonProvider({
+	CustomButton,
+}: PaymentRequestButtonContainerProps) {
+	const stripe = useStripe();
+	const [paymentType, paymentRequest] = usePaymentRequest(stripe);
+
+	const button = paymentRequest
+		? getButtonForPaymentType(
+				paymentType,
+				paymentRequest,
+				<CustomButton onClick={() => console.log('clicked')} />,
+		  )
+		: null;
+
+	return <PaymentRequestButton button={button} />;
+}
+
+export function PaymentRequestButtonContainer({
+	CustomButton,
+}: PaymentRequestButtonContainerProps): JSX.Element {
 	return (
-		<PaymentRequestButton
-			button={<Button customButton={props.customButton} />}
-		/>
+		<ContributionsStripe>
+			<PaymentRequestButtonProvider CustomButton={CustomButton} />
+		</ContributionsStripe>
 	);
 }
