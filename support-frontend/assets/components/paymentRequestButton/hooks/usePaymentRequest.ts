@@ -4,6 +4,7 @@ import {
 	getAvailablePaymentRequestButtonPaymentMethod,
 	toHumanReadableContributionType,
 } from 'helpers/forms/checkouts';
+import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -18,6 +19,9 @@ export function usePaymentRequest(
 	const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
 		null,
 	);
+	const [internalPaymentMethodName, setInternalPaymentMethodName] =
+		useState<StripePaymentMethod | null>(null);
+
 	const [paymentType, setPaymentType] =
 		useState<PaymentRequestButtonType>('NONE');
 
@@ -27,7 +31,11 @@ export function usePaymentRequest(
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
 
-	usePaymentRequestCompletion(paymentRequest);
+	usePaymentRequestCompletion(
+		stripe,
+		paymentRequest,
+		internalPaymentMethodName,
+	);
 
 	useEffect(() => {
 		if (stripe) {
@@ -52,6 +60,7 @@ export function usePaymentRequest(
 				if (result && paymentMethod) {
 					trackComponentLoad(`${paymentMethod}-loaded`);
 					setPaymentRequest(paymentRequestSdk);
+					setInternalPaymentMethodName(paymentMethod);
 
 					if (result.applePay) {
 						setPaymentType('APPLE_PAY');
