@@ -3,11 +3,14 @@ import { css } from '@emotion/react';
 import { neutral } from '@guardian/source-foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
 import type { ContributionType } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect, glyph } from 'helpers/internationalisation/currency';
-import type { AmountChange } from 'helpers/redux/checkout/product/state';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { currencies } from 'helpers/internationalisation/currency';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
-import CheckoutBenefitsList from './checkoutBenefitsList';
+import type { CheckoutBenefitsListProps } from './checkoutBenefitsList';
 
 const greyedOut = css`
 	color: ${neutral[60]};
@@ -27,84 +30,117 @@ export type CheckListData = {
 	maybeGreyedOut: null | SerializedStyles;
 };
 
-type PropTypes = {
-	countryGroupId: CountryGroupId;
-	showBenefitsMessaging: boolean;
-	contributionType: ContributionType;
-	setSelectedAmount: (amountChange: AmountChange) => void;
+type TierUnlocks = {
+	lowerTier: boolean;
+	higherTier: boolean;
 };
 
-const getSvgIcon = (showBenefitsMessaging: boolean) =>
-	showBenefitsMessaging ? (
+type CheckoutBenefitsListContainerProps = {
+	renderBenefitsList: (props: CheckoutBenefitsListProps) => JSX.Element;
+};
+
+const getSvgIcon = (isUnlocked: boolean) =>
+	isUnlocked ? (
 		<SvgTickRound isAnnouncedByScreenReader size="small" />
 	) : (
 		<SvgCrossRound isAnnouncedByScreenReader size="small" />
 	);
 
-export const checkListData = (
-	showBenefitsMessaging: boolean,
-): CheckListData[] => {
+export const checkListData = ({
+	lowerTier,
+	higherTier,
+}: TierUnlocks): CheckListData[] => {
 	return [
 		{
-			icon: <SvgTickRound isAnnouncedByScreenReader size="small" />,
+			icon: getSvgIcon(lowerTier),
 			text: (
 				<p>
 					<span css={boldText}>Uninterrupted reading. </span> No more yellow
 					banners
 				</p>
 			),
-			maybeGreyedOut: null,
+			maybeGreyedOut: lowerTier ? null : greyedOut,
 		},
 		{
-			icon: <SvgTickRound isAnnouncedByScreenReader size="small" />,
+			icon: getSvgIcon(lowerTier),
 			text: (
 				<p>
 					<span css={boldText}>Supporter newsletter. </span>Giving you editorial
 					insight on the week’s top stories
 				</p>
 			),
-			maybeGreyedOut: null,
+			maybeGreyedOut: lowerTier ? null : greyedOut,
 		},
 		{
-			icon: getSvgIcon(showBenefitsMessaging),
+			icon: getSvgIcon(higherTier),
 			text: (
 				<p>
 					<span css={boldText}>Ad-free. </span>On any device when signed in
 				</p>
 			),
-			maybeGreyedOut: showBenefitsMessaging ? null : greyedOut,
+			maybeGreyedOut: higherTier ? null : greyedOut,
 		},
 		{
-			icon: getSvgIcon(showBenefitsMessaging),
+			icon: getSvgIcon(higherTier),
 			text: (
 				<p>
 					<span css={boldText}>Unlimited app access. </span>For the best mobile
 					experience
 				</p>
 			),
-			maybeGreyedOut: showBenefitsMessaging ? null : greyedOut,
+			maybeGreyedOut: higherTier ? null : greyedOut,
 		},
 	];
 };
 
-export function CheckoutBenefitsListContainer({
-	showBenefitsMessaging,
-	countryGroupId,
-	contributionType,
-}: PropTypes): JSX.Element {
-	const currencyGlyph = glyph(detect(countryGroupId));
-	const thresholdPrice =
-		getThresholdPrice(countryGroupId, contributionType) ?? '';
-	const billingPeriod = contributionType == 'MONTHLY' ? 'month' : 'year';
-
-	const title = `For ${currencyGlyph}${thresholdPrice} per ${billingPeriod}, you’ll unlock`;
-
-	return (
-		<CheckoutBenefitsList
-			title={title}
-			checkListData={checkListData(showBenefitsMessaging)}
-		/>
-	);
+function getBenefitsListTitle(
+	priceString: string,
+	contributionType: ContributionType,
+	selectedAmount: number,
+	minimumAmountPriceString: string,
+) {
+	const billingPeriod = contributionType === 'MONTHLY' ? 'month' : 'year';
+	if (Number.isNaN(selectedAmount)) {
+		return `Contribute more than ${minimumAmountPriceString} per ${billingPeriod} to unlock benefits`;
+	}
+	return `For ${priceString} per ${billingPeriod}, you’ll unlock`;
 }
 
-export default CheckoutBenefitsListContainer;
+export function CheckoutBenefitsListContainer({
+	renderBenefitsList,
+}: CheckoutBenefitsListContainerProps): JSX.Element | null {
+	const contributionType = useContributionsSelector(getContributionType);
+	if (contributionType === 'ONE_OFF') {
+		return null;
+	}
+
+	const { countryGroupId, currencyId } = useContributionsSelector(
+		(state) => state.common.internationalisation,
+	);
+	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
+	const minimumContributionAmount = useContributionsSelector(
+		getMinimumContributionAmount,
+	);
+
+	const thresholdPrice =
+		getThresholdPrice(countryGroupId, contributionType) ?? 1;
+	const userSelectedAmountWithCurrency = simpleFormatAmount(
+		currencies[currencyId],
+		selectedAmount,
+	);
+	const higherTier = thresholdPrice <= selectedAmount;
+	const lowerTier = selectedAmount > minimumContributionAmount;
+
+	return renderBenefitsList({
+		title: getBenefitsListTitle(
+			userSelectedAmountWithCurrency,
+			contributionType,
+			selectedAmount,
+			simpleFormatAmount(currencies[currencyId], minimumContributionAmount),
+		),
+		checkListData: checkListData({
+			lowerTier,
+			higherTier,
+		}),
+	});
+}

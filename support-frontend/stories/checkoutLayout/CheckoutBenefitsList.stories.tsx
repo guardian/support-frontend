@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
 import { neutral } from '@guardian/source-foundations';
 import { Column, Columns, Container } from '@guardian/source-react-components';
-import CheckoutBenefitsListComponent from 'components/checkoutBenefits/checkoutBenefitsList';
+import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 
 export default {
 	title: 'Checkout Layout/Benefits List',
-	component: CheckoutBenefitsListComponent,
+	component: CheckoutBenefitsList,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Container backgroundColor={neutral[97]}>
@@ -31,19 +31,34 @@ export default {
 	],
 };
 
-export function BenefitsList(args: {
+function Template(args: {
 	title: string;
-	showBenefitsMessaging: boolean;
+	higherTier: boolean;
+	lowerTier: boolean;
 }): JSX.Element {
+	const { title, higherTier, lowerTier } = args;
 	return (
-		<CheckoutBenefitsListComponent
-			title={args.title}
-			checkListData={checkListData(args.showBenefitsMessaging)}
+		<CheckoutBenefitsList
+			title={title}
+			checkListData={checkListData({ lowerTier, higherTier })}
 		/>
 	);
 }
 
-BenefitsList.args = {
+Template.args = {} as Record<string, unknown>;
+
+export const AllBenefitsUnlocked = Template.bind({});
+
+AllBenefitsUnlocked.args = {
 	title: "For £12 per month, you'll unlock",
-	showBenefitsMessaging: true,
+	higherTier: true,
+	lowerTier: true,
+};
+
+export const LowerTierUnlocked = Template.bind({});
+
+LowerTierUnlocked.args = {
+	title: "For £5 per month, you'll unlock",
+	higherTier: false,
+	lowerTier: true,
 };
