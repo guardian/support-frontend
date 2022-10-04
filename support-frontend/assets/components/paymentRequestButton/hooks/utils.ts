@@ -29,9 +29,9 @@ export function setPayerName(
 		logException(
 			`Failed to set name: no spaces in data object: ${nameParts.join('')}`,
 		);
+	} else {
+		logException('Failed to set name: no name in data object');
 	}
-
-	logException('Failed to set name: no name in data object');
 }
 
 export function setPayerEmail(
