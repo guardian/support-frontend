@@ -5,10 +5,14 @@ import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
 import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
+import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import type { CheckoutBenefitsListProps } from './checkoutBenefitsList';
 
@@ -106,6 +110,15 @@ function getBenefitsListTitle(
 	return `For ${priceString} per ${billingPeriod}, you’ll unlock`;
 }
 
+const getbuttonCopy = (
+	higherTier: boolean,
+	thresholdPriceWithCurrency: string,
+	selectedAmount: number,
+) =>
+	higherTier || Number.isNaN(selectedAmount)
+		? null
+		: `Switch to ${thresholdPriceWithCurrency} to unlock all extras`;
+
 export function CheckoutBenefitsListContainer({
 	renderBenefitsList,
 }: CheckoutBenefitsListContainerProps): JSX.Element | null {
@@ -126,10 +139,21 @@ export function CheckoutBenefitsListContainer({
 		getThresholdPrice(countryGroupId, contributionType) ?? 1;
 	const thresholdPriceWithCurrency = simpleFormatAmount(
 		currencies[currencyId],
-		selectedAmount,
+		thresholdPrice,
 	);
-	const higherTier = thresholdPrice <= selectedAmount;
+	const higherTier = selectedAmount >= thresholdPrice;
 	const lowerTier = selectedAmount > minimumContributionAmount;
+
+	const dispatch = useContributionsDispatch();
+
+	const handleButtonClick = () => {
+		dispatch(
+			setSelectedAmount({
+				contributionType,
+				amount: thresholdPrice.toString(),
+			}),
+		);
+	};
 
 	return renderBenefitsList({
 		title: getBenefitsListTitle(
@@ -142,5 +166,11 @@ export function CheckoutBenefitsListContainer({
 			lowerTier,
 			higherTier,
 		}),
+		buttonCopy: getbuttonCopy(
+			higherTier,
+			thresholdPriceWithCurrency,
+			selectedAmount,
+		),
+		handleButtonClick: handleButtonClick,
 	});
 }
