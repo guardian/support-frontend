@@ -51,6 +51,7 @@ class MyComponents(context: Context)
   // (Live and Test), or two that are the same (Test and Test).
   // This will determine, later on, whether passing the "?mode=test" param has any effect
   val requestEnvironments: RequestEnvironments = RequestEnvironments.fromAppStage
+  logger.info("requestEnvironments: ", requestEnvironments)
 
   val ssm: AWSSimpleSystemsManagement = AWSClientBuilder.buildAWSSimpleSystemsManagementClient()
 
