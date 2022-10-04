@@ -94,7 +94,7 @@ class MyComponents(context: Context)
       .valueOr(throw _)
 
   implicit val allowedCorsUrl = configuration.get[Seq[String]](s"cors.allowedOrigins").toList
-  logger.info("allowedCorsUrl", allowedCorsUrl)
+  logger.info("allowedCorsUrl: ", allowedCorsUrl)
 
   // Usually the cloudWatchService is determined based on the request (live vs test). But inside the controllers
   // we may not know the environment, so we just use live. Note - in DEV/CODE, there is no difference between test/live
