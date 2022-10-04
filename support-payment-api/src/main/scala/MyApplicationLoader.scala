@@ -44,14 +44,12 @@ class MyComponents(context: Context)
     with NoHttpFiltersComponents
     with HikariCPComponents
     with AhcWSComponents
-    with AppThreadPoolsProvider
-    with StrictLogging {
+    with AppThreadPoolsProvider {
 
   // At this point, the app either gets two request environments that differ
   // (Live and Test), or two that are the same (Test and Test).
   // This will determine, later on, whether passing the "?mode=test" param has any effect
   val requestEnvironments: RequestEnvironments = RequestEnvironments.fromAppStage
-  logger.info("requestEnvironments: ", requestEnvironments)
 
   val ssm: AWSSimpleSystemsManagement = AWSClientBuilder.buildAWSSimpleSystemsManagementClient()
 
