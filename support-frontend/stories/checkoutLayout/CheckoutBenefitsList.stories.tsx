@@ -36,10 +36,10 @@ function Template(args: {
 	higherTier: boolean;
 	lowerTier: boolean;
 }): JSX.Element {
-	const { higherTier, lowerTier } = args;
+	const { title, higherTier, lowerTier } = args;
 	return (
 		<CheckoutBenefitsList
-			title={args.title}
+			title={title}
 			checkListData={checkListData({ lowerTier, higherTier })}
 		/>
 	);
