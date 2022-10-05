@@ -2,11 +2,12 @@ package com.gu.zuora.subscriptionBuilders
 
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.Country
+import com.gu.i18n.Country.Australia
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds}
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
-import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig}
+import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig, ZuoraInvoiceTemplatesConfig}
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
 import com.gu.support.redemption.corporate.{CorporateCodeValidator, DynamoLookup}
 import com.gu.support.redemption.gifting.GiftCodeValidator
@@ -219,6 +220,10 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2020, 6, 5)
   lazy val giftCodeGeneratorService = new GiftCodeGeneratorService
+  lazy val invoiceTemplateIds = ZuoraInvoiceTemplatesConfig(
+    auTemplateId = "auInvoiceTemplateId",
+    defaultTemplateId = "defaultInvoiceTemplateId",
+  )
 
   val testCode = "test-code-123"
 
@@ -239,6 +244,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
       GBP,
+      invoiceTemplateIds,
     ),
   )
 
@@ -263,6 +269,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
       GBP,
+      invoiceTemplateIds,
     ),
   )
 
@@ -275,6 +282,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
       GBP,
+      invoiceTemplateIds,
     ),
   )
 
