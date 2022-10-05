@@ -1,6 +1,5 @@
 import type { PaymentMethod, Stripe as StripeJs } from '@stripe/stripe-js';
-import { useContext, useEffect } from 'react';
-import { StripeAccountContext } from 'components/stripe/stripeAccountContext';
+import { useEffect } from 'react';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/forms/paymentMethods';
@@ -79,7 +78,9 @@ export function usePaymentRequestCompletion(
 	internalPaymentMethodName: StripePaymentMethod | null,
 	{ paymentMethod, paymentAuthorised, paymentWallet }: PaymentEventDetails,
 ): void {
-	const { publicKey, stripeAccount } = useContext(StripeAccountContext);
+	const { publicKey, stripeAccount } = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.stripeAccountDetails,
+	);
 	const { csrf } = useContributionsSelector((state) => state.page.checkoutForm);
 
 	const dispatch = useContributionsDispatch();
