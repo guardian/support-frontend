@@ -1,8 +1,4 @@
-import type {
-	PaymentMethod,
-	PaymentRequest,
-	Stripe as StripeJs,
-} from '@stripe/stripe-js';
+import type { PaymentMethod, Stripe as StripeJs } from '@stripe/stripe-js';
 import { useContext, useEffect } from 'react';
 import { StripeAccountContext } from 'components/stripe/stripeAccountContext';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
@@ -24,7 +20,7 @@ import {
 	onThirdPartyPaymentAuthorised,
 	paymentWaiting,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import { usePaymentRequestListener } from './usePaymentRequestListener';
+import type { PaymentEventDetails } from './usePaymentRequestListener';
 import { createPaymentRequestErrorHandler } from './utils';
 
 async function fetchClientSecret(
@@ -76,15 +72,14 @@ function handlePayment(
 	});
 }
 
+// Deals with our custom payment handling and checkout completion following
+// the user's successful interaction with the payment request interface
 export function usePaymentRequestCompletion(
 	stripe: StripeJs | null,
-	paymentRequest: PaymentRequest | null,
 	internalPaymentMethodName: StripePaymentMethod | null,
+	{ paymentMethod, paymentAuthorised, paymentWallet }: PaymentEventDetails,
 ): void {
 	const { publicKey, stripeAccount } = useContext(StripeAccountContext);
-	const { paymentMethod, paymentAuthorised, paymentWallet } =
-		usePaymentRequestListener(paymentRequest);
-
 	const { csrf } = useContributionsSelector((state) => state.page.checkoutForm);
 
 	const dispatch = useContributionsDispatch();

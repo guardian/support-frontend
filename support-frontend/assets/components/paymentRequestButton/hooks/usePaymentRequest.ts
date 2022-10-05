@@ -10,9 +10,11 @@ import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import { usePaymentRequestCompletion } from './usePaymentRequestCompletion';
+import { usePaymentRequestListener } from './usePaymentRequestListener';
 
 type PaymentRequestButtonType = 'APPLE_PAY' | 'GOOGLE_PAY' | 'PAY_NOW' | 'NONE';
 
+// Orchestrates the entire payment request process via Stripe
 export function usePaymentRequest(
 	stripe: StripeJs | null,
 ): [PaymentRequestButtonType, PaymentRequest | null] {
@@ -32,10 +34,11 @@ export function usePaymentRequest(
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
 
+	const paymentEventDetails = usePaymentRequestListener(paymentRequest);
 	usePaymentRequestCompletion(
 		stripe,
-		paymentRequest,
 		internalPaymentMethodName,
+		paymentEventDetails,
 	);
 
 	// Check if we can use the PRB once the Stripe SDK is available
