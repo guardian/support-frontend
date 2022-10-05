@@ -1,8 +1,14 @@
-import type { PaymentMethod } from '@stripe/stripe-js';
+import type {
+	PaymentMethod,
+	PaymentRequestPaymentMethodEvent,
+} from '@stripe/stripe-js';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
+import type { StripeAccount } from 'helpers/forms/stripe';
 import {
 	findIsoCountry,
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
+import { setPaymentRequestError } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
 import {
 	setEmail,
 	setFirstName,
@@ -11,11 +17,12 @@ import {
 import type { ContributionsDispatch } from 'helpers/redux/contributionsStore';
 import { logException } from 'helpers/utilities/logger';
 import {
+	paymentWaiting,
 	updateBillingCountry,
 	updateBillingState,
 } from 'pages/contributions-landing/contributionsLandingActions';
 
-export function setPayerName(
+function setPayerName(
 	dispatch: ContributionsDispatch,
 	payerName?: string,
 ): void {
@@ -34,7 +41,7 @@ export function setPayerName(
 	}
 }
 
-export function setPayerEmail(
+function setPayerEmail(
 	dispatch: ContributionsDispatch,
 	payerEmail?: string,
 ): void {
@@ -45,7 +52,7 @@ export function setPayerEmail(
 	}
 }
 
-export function setBillingCountryAndState(
+function setBillingCountryAndState(
 	dispatch: ContributionsDispatch,
 	billingDetails: PaymentMethod.BillingDetails,
 ): void {
@@ -62,4 +69,31 @@ export function setBillingCountryAndState(
 		dispatch(updateBillingCountry(validatedCountry));
 		dispatch(updateBillingState(validatedState ?? ''));
 	}
+}
+
+export function addPayerDetailsToRedux(
+	dispatch: ContributionsDispatch,
+	paymentMethodEvent: PaymentRequestPaymentMethodEvent,
+): void {
+	const { paymentMethod, payerName, payerEmail } = paymentMethodEvent;
+	setPayerName(dispatch, payerName);
+	setPayerEmail(dispatch, payerEmail);
+	setBillingCountryAndState(dispatch, paymentMethod.billing_details);
+}
+
+export function createPaymentRequestErrorHandler(
+	dispatch: ContributionsDispatch,
+	account: StripeAccount | 'NONE',
+): (error: ErrorReason) => void {
+	return function paymentRequestErrorHandler(error: ErrorReason) {
+		if (account !== 'NONE') {
+			dispatch(
+				setPaymentRequestError({
+					error,
+					account,
+				}),
+			);
+		}
+		dispatch(paymentWaiting(false));
+	};
 }

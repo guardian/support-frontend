@@ -3,78 +3,101 @@ import type {
 	PaymentRequest,
 	Stripe as StripeJs,
 } from '@stripe/stripe-js';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
+import { StripeAccountContext } from 'components/stripe/stripeAccountContext';
+import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/forms/paymentMethods';
-import { useContributionsDispatch } from 'helpers/redux/storeHooks';
+import type { StripePaymentIntentResult } from 'helpers/forms/stripe';
+import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
 import { trackComponentEvents } from 'helpers/tracking/ophan';
+import { logException } from 'helpers/utilities/logger';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentWaiting,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import {
-	setBillingCountryAndState,
-	setPayerEmail,
-	setPayerName,
-} from './utils';
+import { usePaymentRequestListener } from './usePaymentRequestListener';
+import { createPaymentRequestErrorHandler } from './utils';
+
+async function fetchClientSecret(
+	stripePublicKey: string,
+	csrf: CsrfState,
+): Promise<string> {
+	const setupIntentResult: StripePaymentIntentResult = await fetchJson(
+		'/stripe/create-setup-intent/prb',
+		requestOptions(
+			{
+				stripePublicKey,
+			},
+			'omit',
+			'POST',
+			csrf,
+		),
+	);
+	if (setupIntentResult.client_secret) {
+		return setupIntentResult.client_secret;
+	}
+	throw new Error('Missing client_secret field in response for PRB');
+}
+
+function handlePayment(
+	stripe: StripeJs,
+	paymentMethod: PaymentMethod,
+	internalPaymentMethodName: StripePaymentMethod,
+) {
+	const walletType =
+		(paymentMethod.card?.wallet?.type as string | null) ?? 'no-wallet';
+
+	trackComponentEvents({
+		component: {
+			componentType: 'ACQUISITIONS_OTHER',
+		},
+		action: 'CLICK',
+		id: 'stripe-prb-wallet',
+		value: walletType,
+	});
+
+	return onThirdPartyPaymentAuthorised({
+		paymentMethod: Stripe,
+		paymentMethodId: paymentMethod.id,
+		stripePaymentMethod: internalPaymentMethodName,
+		handle3DS: (clientSecret: string) => {
+			trackComponentLoad('stripe-3ds');
+			return stripe.handleCardAction(clientSecret);
+		},
+	});
+}
 
 export function usePaymentRequestCompletion(
 	stripe: StripeJs | null,
 	paymentRequest: PaymentRequest | null,
 	internalPaymentMethodName: StripePaymentMethod | null,
 ): void {
-	const [paymentAuthorised, setPaymentAuthorised] = useState<boolean>(false);
-	const [paymentWallet, setPaymentWallet] = useState<string>('');
-	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(
-		null,
-	);
+	const { publicKey, stripeAccount } = useContext(StripeAccountContext);
+	const { paymentMethod, paymentAuthorised, paymentWallet } =
+		usePaymentRequestListener(paymentRequest);
+
+	const { csrf } = useContributionsSelector((state) => state.page.checkoutForm);
 
 	const dispatch = useContributionsDispatch();
 
-	useEffect(() => {
-		if (paymentRequest) {
-			paymentRequest.on('paymentmethod', (paymentMethodEvent) => {
-				const { complete, paymentMethod, payerName, payerEmail, walletName } =
-					paymentMethodEvent;
-
-				// Always dismiss the payment popup immediately - any pending/success/failure will be displayed on our own page.
-				// This is because `complete` must be called within 30 seconds or the user will see an error.
-				// Our backend (support-workers) can in extreme cases take longer than this, so we must call complete now.
-				// This means that the browser's payment popup will be dismissed, and our own 'spinner' will be displayed until
-				// the backend job finishes.
-				complete('success');
-
-				setPaymentMethod(paymentMethod);
-				setPaymentWallet(walletName);
-				setPayerName(dispatch, payerName);
-				setPayerEmail(dispatch, payerEmail);
-				setBillingCountryAndState(dispatch, paymentMethod.billing_details);
-
-				setPaymentAuthorised(true);
-
-				const walletType =
-					(paymentMethod.card?.wallet?.type as string | null) ?? 'no-wallet';
-
-				trackComponentEvents({
-					component: {
-						componentType: 'ACQUISITIONS_OTHER',
-					},
-					action: 'CLICK',
-					id: 'stripe-prb-wallet',
-					value: walletType,
-				});
-			});
-		}
-	}, [paymentRequest]);
+	const errorHandler = createPaymentRequestErrorHandler(
+		dispatch,
+		stripeAccount,
+	);
 
 	useEffect(() => {
 		if (
-			stripe &&
 			paymentAuthorised &&
+			stripe &&
 			paymentMethod &&
 			internalPaymentMethodName
 		) {
@@ -83,29 +106,33 @@ export function usePaymentRequestCompletion(
 
 			dispatch(paymentWaiting(true));
 
-			const walletType =
-				(paymentMethod.card?.wallet?.type as string | null) ?? 'no-wallet';
-
-			trackComponentEvents({
-				component: {
-					componentType: 'ACQUISITIONS_OTHER',
-				},
-				action: 'CLICK',
-				id: 'stripe-prb-wallet',
-				value: walletType,
-			});
-
-			void dispatch(
-				onThirdPartyPaymentAuthorised({
-					paymentMethod: Stripe,
-					paymentMethodId: paymentMethod.id,
-					stripePaymentMethod: internalPaymentMethodName,
-					handle3DS: (clientSecret: string) => {
-						trackComponentLoad('stripe-3ds');
-						return stripe.handleCardAction(clientSecret);
-					},
-				}),
-			);
+			if (stripeAccount === 'REGULAR') {
+				fetchClientSecret(publicKey, csrf)
+					.then((clientSecret) =>
+						stripe.confirmCardSetup(clientSecret, {
+							payment_method: paymentMethod.id,
+						}),
+					)
+					.then((result) => {
+						if (result.error) {
+							errorHandler('card_authentication_error');
+						} else {
+							return dispatch(
+								handlePayment(stripe, paymentMethod, internalPaymentMethodName),
+							);
+						}
+					})
+					.catch((error: Error) => {
+						logException(
+							`Error confirming recurring contribution from Payment Request Button: - message: ${error.message}`,
+						);
+						errorHandler('internal_error');
+					});
+			} else {
+				void dispatch(
+					handlePayment(stripe, paymentMethod, internalPaymentMethodName),
+				);
+			}
 		}
 	}, [paymentAuthorised]);
 }

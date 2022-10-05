@@ -1,8 +1,6 @@
 import { Elements } from '@stripe/react-stripe-js';
 import { useStripeAccount } from 'helpers/forms/stripe';
 
-// type PaymentRequestStatus = 'NOT_LOADED' | 'NOT_AVAILABLE' | 'AVAILABLE';
-
 type StripeElementsProps = {
 	stripeKey: string;
 	children: React.ReactNode;

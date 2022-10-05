@@ -19,6 +19,7 @@ export function usePaymentRequest(
 	const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
 		null,
 	);
+	// This is only used for tracking purposes
 	const [internalPaymentMethodName, setInternalPaymentMethodName] =
 		useState<StripePaymentMethod | null>(null);
 
@@ -37,6 +38,7 @@ export function usePaymentRequest(
 		internalPaymentMethodName,
 	);
 
+	// Check if we can use the PRB once the Stripe SDK is available
 	useEffect(() => {
 		if (stripe) {
 			const paymentRequestSdk = stripe.paymentRequest({
