@@ -286,7 +286,7 @@ function sendEventABTestParticipations(participations: Participations): void {
 
 function addQM() {
 	return loadScript(
-		'https://cdn.quantummetric.com/instrumentation/1.31.5/quantum-gnmx.js',
+		'https://cdn.quantummetric.com/instrumentation/1.31.5/quantum-gnm.js',
 		{
 			async: true,
 			integrity:

@@ -1,12 +1,15 @@
 import { isAnyOf } from '@reduxjs/toolkit';
 import type { ContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type {
+	ContributionsStartListening,
+	ContributionsState,
+} from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
-import type { PageState } from 'pages/contributions-landing/contributionsLandingReducer';
 import {
 	setAllAmounts,
 	setOtherAmount,
@@ -26,20 +29,14 @@ const shouldSendEventContributionCartValue = isAnyOf(
 	setSelectedAmount,
 );
 
-function getContributionCartValueData(pageState: PageState): {
+function getContributionCartValueData(contributionsState: ContributionsState): {
 	contributionAmount: string | number | null;
 	contributionType: ContributionType;
 	contributionCurrency: IsoCurrency;
 } {
+	const pageState = contributionsState.page;
 	const selectedAmounts = pageState.checkoutForm.product.selectedAmounts;
-	/**
-	 * selectedAmounts (type SelectedAmounts) can only be indexed with ContributionType,
-	 * so I'm have to type cast contributionType from ProductType to ContributionType
-	 * to be able to index selectedAmounts. As ProductType could be 'DigiPack' which
-	 * can't be used to index an onject of type SelectedAmounts.
-	 */
-	const contributionType = pageState.checkoutForm.product
-		.productType as ContributionType;
+	const contributionType = getContributionType(contributionsState);
 	const selectedAmount = selectedAmounts[contributionType];
 	const contributionAmount =
 		selectedAmount === 'other'
@@ -61,7 +58,7 @@ export function addProductSideEffects(
 		matcher: shouldSendEventContributionCartValue,
 		effect(_, listenerApi) {
 			const { contributionAmount, contributionType, contributionCurrency } =
-				getContributionCartValueData(listenerApi.getState().page);
+				getContributionCartValueData(listenerApi.getState());
 
 			if (contributionAmount) {
 				sendEventContributionCartValue(
@@ -111,7 +108,7 @@ export function addProductSideEffects(
 		type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED',
 		effect(_, listenerApi) {
 			const { contributionAmount } = getContributionCartValueData(
-				listenerApi.getState().page,
+				listenerApi.getState(),
 			);
 
 			if (contributionAmount) {
