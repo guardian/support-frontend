@@ -137,7 +137,7 @@ export function CheckoutBenefitsListContainer({
 
 	const thresholdPrice =
 		getThresholdPrice(countryGroupId, contributionType) ?? 1;
-	const thresholdPriceWithCurrency = simpleFormatAmount(
+	const userSelectedAmountWithCurrency = simpleFormatAmount(
 		currencies[currencyId],
 		thresholdPrice,
 	);
@@ -157,7 +157,7 @@ export function CheckoutBenefitsListContainer({
 
 	return renderBenefitsList({
 		title: getBenefitsListTitle(
-			thresholdPriceWithCurrency,
+			userSelectedAmountWithCurrency,
 			contributionType,
 			selectedAmount,
 			simpleFormatAmount(currencies[currencyId], minimumContributionAmount),
