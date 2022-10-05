@@ -8,8 +8,8 @@ const containerStyles = css`
 	padding-bottom: ${space[5]}px;
 `;
 
-const buttonContainer = css`
-	margin-bottom: 28px;
+const buttonContainer = (shouldShowButton: boolean) => css`
+	margin-bottom: ${shouldShowButton ? 28 : 0}px;
 `;
 
 const dividerOverrides = css`
@@ -38,7 +38,7 @@ export function PaymentRequestButton({
 
 	return (
 		<div css={containerStyles}>
-			{shouldShowButton && <div css={buttonContainer}>{children}</div>}
+			<div css={buttonContainer(shouldShowButton)}>{children}</div>
 			<Divider
 				displayText={dividerText}
 				size="full"
