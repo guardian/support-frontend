@@ -26,17 +26,19 @@ const dividerOverrides = css`
 `;
 
 export type PaymentRequestButtonProps = {
-	button?: React.ReactNode;
+	shouldShowButton: boolean;
+	children: React.ReactNode;
 };
 
 export function PaymentRequestButton({
-	button,
+	shouldShowButton,
+	children,
 }: PaymentRequestButtonProps): JSX.Element {
-	const dividerText = button ? 'or' : '';
+	const dividerText = shouldShowButton ? 'or' : '';
 
 	return (
 		<div css={containerStyles}>
-			{button && <div css={buttonContainer}>{button}</div>}
+			{shouldShowButton && <div css={buttonContainer}>{children}</div>}
 			<Divider
 				displayText={dividerText}
 				size="full"

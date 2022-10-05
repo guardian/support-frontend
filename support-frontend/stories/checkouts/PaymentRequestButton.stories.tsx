@@ -19,7 +19,8 @@ Template.args = {} as Record<string, unknown>;
 export const Default = Template.bind({});
 
 Default.args = {
-	button: <SavedCardButton onClick={() => undefined} />,
+	children: <SavedCardButton onClick={() => undefined} />,
+	shouldShowButton: true,
 };
 
 export const NoButton = Template.bind({});
