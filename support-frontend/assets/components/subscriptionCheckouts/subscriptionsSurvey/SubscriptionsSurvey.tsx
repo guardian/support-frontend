@@ -30,7 +30,7 @@ export function SubscriptionsSurvey({
 				<Text title={title}>{message}</Text>
 				<AnchorButton
 					href={surveyLink}
-					appearance="secondary"
+					appearance="tertiary"
 					aria-label="Link to subscription survey"
 				>
 					Share your thoughts
