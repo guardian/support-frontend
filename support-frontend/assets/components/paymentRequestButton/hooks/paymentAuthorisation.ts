@@ -68,17 +68,15 @@ export function onPaymentAuthorised(
 
 export function createPaymentRequestErrorHandler(
 	dispatch: ContributionsDispatch,
-	account: StripeAccount | 'NONE',
+	account: StripeAccount,
 ): (error: ErrorReason) => void {
 	return function paymentRequestErrorHandler(error: ErrorReason) {
-		if (account !== 'NONE') {
-			dispatch(
-				setPaymentRequestError({
-					error,
-					account,
-				}),
-			);
-		}
+		dispatch(
+			setPaymentRequestError({
+				error,
+				account,
+			}),
+		);
 		dispatch(paymentWaiting(false));
 	};
 }
