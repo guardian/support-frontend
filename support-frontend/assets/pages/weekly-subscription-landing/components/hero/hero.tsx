@@ -28,7 +28,7 @@ import {
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { backgroundCtaSecondaryOveride } from 'stylesheets/emotion/colours';
+import { guardianWeeklyHeroBlue } from 'stylesheets/emotion/colours';
 
 type PropTypes = {
 	orderIsAGift: boolean;
@@ -130,7 +130,7 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 	const copy = getFirstParagraph(promotionCopy, orderIsAGift);
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
 	const containerColour = css`
-		background-color: ${backgroundCtaSecondaryOveride};
+		background-color: ${guardianWeeklyHeroBlue};
 	`;
 	const linkButtonColour = css`
 		color: ${text.primary};

@@ -1,4 +1,3 @@
-// import GridImage from 'components/gridImage/gridImage';
 import GridPicture from 'components/gridPicture/gridPicture';
 
 function GuardianWeeklyPackShotHero(): JSX.Element {
