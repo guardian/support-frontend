@@ -1,7 +1,5 @@
 @import '~stylesheets/gu-sass/gu-sass';
 
-$security-green: #058b00;
-
 .component-secure-transaction--top {
 	margin-bottom: $gu-v-spacing * 0.5;
 
@@ -19,12 +17,6 @@ $security-green: #058b00;
 		visibility: hidden;
 		display: none;
 	}
-}
-
-.component-secure-transaction--bottom-grey {
-	justify-content: center;
-	margin: -35px auto 0;
-	padding-bottom: 15px;
 }
 
 .component-secure-transaction {
