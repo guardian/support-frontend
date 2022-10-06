@@ -1375,6 +1375,107 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
+    "UnhealthyInstancesAlarmFrontend3D40A304": Object {
+      "Properties": Object {
+        "ActionsEnabled": true,
+        "AlarmActions": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:aws:sns:",
+                Object {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+                ":reader-revenue-dev",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "frontend's instances have failed healthchecks several times over the last 1 hour.
+      This typically results in the AutoScaling Group cycling instances and can lead to problems with deployment,
+      scaling or handling traffic spikes.
+
+      Check frontend's application logs or ssh onto an unhealthy instance in order to debug these problems.",
+        "AlarmName": "Unhealthy instances for frontend in PROD",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "DatapointsToAlarm": 30,
+        "Dimensions": Array [
+          Object {
+            "Name": "LoadBalancer",
+            "Value": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  Object {
+                    "Fn::Select": Array [
+                      1,
+                      Object {
+                        "Fn::Split": Array [
+                          "/",
+                          Object {
+                            "Ref": "ListenerFrontend190D01D2",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  "/",
+                  Object {
+                    "Fn::Select": Array [
+                      2,
+                      Object {
+                        "Fn::Split": Array [
+                          "/",
+                          Object {
+                            "Ref": "ListenerFrontend190D01D2",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  "/",
+                  Object {
+                    "Fn::Select": Array [
+                      3,
+                      Object {
+                        "Fn::Split": Array [
+                          "/",
+                          Object {
+                            "Ref": "ListenerFrontend190D01D2",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              ],
+            },
+          },
+          Object {
+            "Name": "TargetGroup",
+            "Value": Object {
+              "Fn::GetAtt": Array [
+                "TargetGroupFrontendBE464F1D",
+                "TargetGroupFullName",
+              ],
+            },
+          },
+        ],
+        "EvaluationPeriods": 60,
+        "MetricName": "UnHealthyHostCount",
+        "Namespace": "AWS/ApplicationELB",
+        "Period": 60,
+        "Statistic": "Maximum",
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
     "WazuhSecurityGroup": Object {
       "Properties": Object {
         "GroupDescription": "Allow outbound traffic from wazuh agent to manager",
