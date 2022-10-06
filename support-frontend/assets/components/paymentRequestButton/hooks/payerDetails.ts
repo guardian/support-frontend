@@ -2,13 +2,10 @@ import type {
 	PaymentMethod,
 	PaymentRequestPaymentMethodEvent,
 } from '@stripe/stripe-js';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { StripeAccount } from 'helpers/forms/stripe';
 import {
 	findIsoCountry,
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
-import { setPaymentRequestError } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
 import {
 	setEmail,
 	setFirstName,
@@ -17,7 +14,6 @@ import {
 import type { ContributionsDispatch } from 'helpers/redux/contributionsStore';
 import { logException } from 'helpers/utilities/logger';
 import {
-	paymentWaiting,
 	updateBillingCountry,
 	updateBillingState,
 } from 'pages/contributions-landing/contributionsLandingActions';
@@ -79,21 +75,4 @@ export function addPayerDetailsToRedux(
 	setPayerName(dispatch, payerName);
 	setPayerEmail(dispatch, payerEmail);
 	setBillingCountryAndState(dispatch, paymentMethod.billing_details);
-}
-
-export function createPaymentRequestErrorHandler(
-	dispatch: ContributionsDispatch,
-	account: StripeAccount | 'NONE',
-): (error: ErrorReason) => void {
-	return function paymentRequestErrorHandler(error: ErrorReason) {
-		if (account !== 'NONE') {
-			dispatch(
-				setPaymentRequestError({
-					error,
-					account,
-				}),
-			);
-		}
-		dispatch(paymentWaiting(false));
-	};
 }

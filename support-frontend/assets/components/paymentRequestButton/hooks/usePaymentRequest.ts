@@ -9,15 +9,17 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { usePaymentRequestCompletion } from './usePaymentRequestCompletion';
-import { usePaymentRequestListener } from './usePaymentRequestListener';
 
 type PaymentRequestButtonType = 'APPLE_PAY' | 'GOOGLE_PAY' | 'PAY_NOW' | 'NONE';
 
+type PaymentRequestData = {
+	buttonType: PaymentRequestButtonType;
+	paymentRequest: PaymentRequest | null;
+	internalPaymentMethodName: StripePaymentMethod | null;
+};
+
 // Orchestrates the entire payment request process via Stripe
-export function usePaymentRequest(
-	stripe: StripeJs | null,
-): [PaymentRequestButtonType, PaymentRequest | null] {
+export function usePaymentRequest(stripe: StripeJs | null): PaymentRequestData {
 	const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(
 		null,
 	);
@@ -25,7 +27,7 @@ export function usePaymentRequest(
 	const [internalPaymentMethodName, setInternalPaymentMethodName] =
 		useState<StripePaymentMethod | null>(null);
 
-	const [paymentType, setPaymentType] =
+	const [buttonType, setButtonType] =
 		useState<PaymentRequestButtonType>('NONE');
 
 	const { countryId, currencyId } = useContributionsSelector(
@@ -33,13 +35,6 @@ export function usePaymentRequest(
 	);
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
-
-	const paymentEventDetails = usePaymentRequestListener(paymentRequest);
-	usePaymentRequestCompletion(
-		stripe,
-		internalPaymentMethodName,
-		paymentEventDetails,
-	);
 
 	// Check if we can use the PRB once the Stripe SDK is available
 	useEffect(() => {
@@ -68,11 +63,11 @@ export function usePaymentRequest(
 					setInternalPaymentMethodName(paymentMethod);
 
 					if (result.applePay) {
-						setPaymentType('APPLE_PAY');
+						setButtonType('APPLE_PAY');
 					} else if (result.googlePay) {
-						setPaymentType('GOOGLE_PAY');
+						setButtonType('GOOGLE_PAY');
 					} else {
-						setPaymentType('PAY_NOW');
+						setButtonType('PAY_NOW');
 					}
 
 					trackComponentLoad(`${paymentMethod}-displayed`);
@@ -96,5 +91,9 @@ export function usePaymentRequest(
 		}
 	}, [amount, currencyId]);
 
-	return [paymentType, paymentRequest];
+	return {
+		buttonType,
+		paymentRequest,
+		internalPaymentMethodName,
+	};
 }

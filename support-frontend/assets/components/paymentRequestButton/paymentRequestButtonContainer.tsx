@@ -10,6 +10,8 @@ import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/a
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { usePaymentRequest } from './hooks/usePaymentRequest';
+import { usePaymentRequestCompletion } from './hooks/usePaymentRequestCompletion';
+import { usePaymentRequestEvent } from './hooks/usePaymentRequestEvent';
 import { PaymentRequestButton } from './paymentRequestButton';
 
 type CustomButtonProps = {
@@ -29,7 +31,16 @@ function AvailablePaymentRequestButton({
 	setShouldShowButton,
 }: AvailablePaymentRequestButtonProps) {
 	const stripe = useStripe();
-	const [paymentType, paymentRequest] = usePaymentRequest(stripe);
+
+	const { buttonType, paymentRequest, internalPaymentMethodName } =
+		usePaymentRequest(stripe);
+	const paymentEventDetails = usePaymentRequestEvent(paymentRequest);
+	usePaymentRequestCompletion(
+		stripe,
+		internalPaymentMethodName,
+		paymentEventDetails,
+	);
+
 	const dispatch = useContributionsDispatch();
 
 	function handleButtonClick() {
@@ -39,13 +50,13 @@ function AvailablePaymentRequestButton({
 	}
 
 	useEffect(() => {
-		if (paymentType !== 'NONE') {
+		if (buttonType !== 'NONE') {
 			setShouldShowButton(true);
 		}
-	}, [paymentType]);
+	}, [buttonType]);
 
 	if (paymentRequest) {
-		if (paymentType === 'PAY_NOW') {
+		if (buttonType === 'PAY_NOW') {
 			return (
 				<CustomButton
 					onClick={() => {
@@ -54,7 +65,7 @@ function AvailablePaymentRequestButton({
 					}}
 				/>
 			);
-		} else if (paymentType !== 'NONE') {
+		} else if (buttonType !== 'NONE') {
 			return (
 				<PaymentRequestButtonElement
 					options={{ paymentRequest }}

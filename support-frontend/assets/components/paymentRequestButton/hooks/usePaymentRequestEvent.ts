@@ -2,7 +2,7 @@ import type { PaymentMethod, PaymentRequest } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import { trackComponentEvents } from 'helpers/tracking/ophan';
-import { addPayerDetailsToRedux } from './utils';
+import { addPayerDetailsToRedux } from './payerDetails';
 
 export type PaymentEventDetails = {
 	paymentMethod: PaymentMethod | null;
@@ -11,7 +11,7 @@ export type PaymentEventDetails = {
 };
 
 // Handles listening for the payment event from Stripe, and returns details from that payment event
-export function usePaymentRequestListener(
+export function usePaymentRequestEvent(
 	paymentRequest: PaymentRequest | null,
 ): PaymentEventDetails {
 	const [paymentWallet, setPaymentWallet] = useState<string>('');

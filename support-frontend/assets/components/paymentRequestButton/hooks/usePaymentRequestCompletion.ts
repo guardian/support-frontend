@@ -1,75 +1,19 @@
-import type { PaymentMethod, Stripe as StripeJs } from '@stripe/stripe-js';
+import type { Stripe as StripeJs } from '@stripe/stripe-js';
 import { useEffect } from 'react';
-import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import { Stripe } from 'helpers/forms/paymentMethods';
-import type { StripePaymentIntentResult } from 'helpers/forms/stripe';
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import {
-	trackComponentClick,
-	trackComponentLoad,
-} from 'helpers/tracking/behaviour';
-import { trackComponentEvents } from 'helpers/tracking/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
+import { paymentWaiting } from 'pages/contributions-landing/contributionsLandingActions';
 import {
-	onThirdPartyPaymentAuthorised,
-	paymentWaiting,
-} from 'pages/contributions-landing/contributionsLandingActions';
-import type { PaymentEventDetails } from './usePaymentRequestListener';
-import { createPaymentRequestErrorHandler } from './utils';
-
-async function fetchClientSecret(
-	stripePublicKey: string,
-	csrf: CsrfState,
-): Promise<string> {
-	const setupIntentResult: StripePaymentIntentResult = await fetchJson(
-		'/stripe/create-setup-intent/prb',
-		requestOptions(
-			{
-				stripePublicKey,
-			},
-			'omit',
-			'POST',
-			csrf,
-		),
-	);
-	if (setupIntentResult.client_secret) {
-		return setupIntentResult.client_secret;
-	}
-	throw new Error('Missing client_secret field in response for PRB');
-}
-
-function handlePayment(
-	stripe: StripeJs,
-	paymentMethod: PaymentMethod,
-	internalPaymentMethodName: StripePaymentMethod,
-) {
-	const walletType =
-		(paymentMethod.card?.wallet?.type as string | null) ?? 'no-wallet';
-
-	trackComponentEvents({
-		component: {
-			componentType: 'ACQUISITIONS_OTHER',
-		},
-		action: 'CLICK',
-		id: 'stripe-prb-wallet',
-		value: walletType,
-	});
-
-	return onThirdPartyPaymentAuthorised({
-		paymentMethod: Stripe,
-		paymentMethodId: paymentMethod.id,
-		stripePaymentMethod: internalPaymentMethodName,
-		handle3DS: (clientSecret: string) => {
-			trackComponentLoad('stripe-3ds');
-			return stripe.handleCardAction(clientSecret);
-		},
-	});
-}
+	createPaymentRequestErrorHandler,
+	fetchClientSecret,
+	onPaymentAuthorised,
+} from './paymentAuthorisation';
+import type { PaymentEventDetails } from './usePaymentRequestEvent';
 
 // Deals with our custom payment handling and checkout completion following
 // the user's successful interaction with the payment request interface
@@ -114,7 +58,11 @@ export function usePaymentRequestCompletion(
 							errorHandler('card_authentication_error');
 						} else {
 							return dispatch(
-								handlePayment(stripe, paymentMethod, internalPaymentMethodName),
+								onPaymentAuthorised(
+									stripe,
+									paymentMethod,
+									internalPaymentMethodName,
+								),
 							);
 						}
 					})
@@ -126,7 +74,7 @@ export function usePaymentRequestCompletion(
 					});
 			} else {
 				void dispatch(
-					handlePayment(stripe, paymentMethod, internalPaymentMethodName),
+					onPaymentAuthorised(stripe, paymentMethod, internalPaymentMethodName),
 				);
 			}
 		}
