@@ -1,17 +1,19 @@
-// ----- Imports ----- //
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import './secureTransactionIndicator.scss';
 import SecurePadlock from './securePadlock.svg';
-// ----- Component ----- //
+
 type PropTypes = {
 	modifierClasses: string[];
 };
+
 const text = 'Secure transaction';
-export default function SecureTransactionIndicator(props: PropTypes) {
+export default function SecureTransactionIndicator({
+	modifierClasses = [],
+}: PropTypes): JSX.Element {
 	return (
 		<div
 			className={classNameWithModifiers('component-secure-transaction', [
-				...props.modifierClasses,
+				...modifierClasses,
 			])}
 		>
 			<SecurePadlock className="component-secure-transaction__padlock" />
@@ -19,6 +21,3 @@ export default function SecureTransactionIndicator(props: PropTypes) {
 		</div>
 	);
 }
-SecureTransactionIndicator.defaultProps = {
-	modifierClasses: [],
-};
