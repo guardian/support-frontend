@@ -122,6 +122,8 @@ const getbuttonCopy = (
 export function CheckoutBenefitsListContainer({
 	renderBenefitsList,
 }: CheckoutBenefitsListContainerProps): JSX.Element | null {
+	const dispatch = useContributionsDispatch();
+
 	const contributionType = useContributionsSelector(getContributionType);
 	if (contributionType === 'ONE_OFF') {
 		return null;
@@ -135,25 +137,30 @@ export function CheckoutBenefitsListContainer({
 		getMinimumContributionAmount,
 	);
 
+	const currency = currencies[currencyId];
+
 	const thresholdPrice =
 		getThresholdPrice(countryGroupId, contributionType) ?? 1;
-	const userSelectedAmountWithCurrency = simpleFormatAmount(
-		currencies[currencyId],
+	const thresholdPriceWithCurrency = simpleFormatAmount(
+		currency,
 		thresholdPrice,
+	);
+	const userSelectedAmountWithCurrency = simpleFormatAmount(
+		currency,
+		selectedAmount,
 	);
 	const higherTier = selectedAmount >= thresholdPrice;
 	const lowerTier = selectedAmount > minimumContributionAmount;
 
-	const dispatch = useContributionsDispatch();
-
-	const handleButtonClick = () => {
+	function handleButtonClick() {
+		// return;
 		dispatch(
 			setSelectedAmount({
 				contributionType,
 				amount: thresholdPrice.toString(),
 			}),
 		);
-	};
+	}
 
 	return renderBenefitsList({
 		title: getBenefitsListTitle(
@@ -171,6 +178,6 @@ export function CheckoutBenefitsListContainer({
 			thresholdPriceWithCurrency,
 			selectedAmount,
 		),
-		handleButtonClick: handleButtonClick,
+		handleButtonClick,
 	});
 }

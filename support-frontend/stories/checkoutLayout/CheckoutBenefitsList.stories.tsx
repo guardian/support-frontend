@@ -35,7 +35,7 @@ export default {
 	],
 };
 
-function Template(args: CheckoutBenefitsListProps): JSX.Element {
+function Template(args: CheckoutBenefitsListProps) {
 	return <CheckoutBenefitsList {...args} />;
 }
 
