@@ -260,7 +260,7 @@ function withProps(props: PropTypes) {
 								countryGroupId={props.countryGroupId}
 							/>
 
-							<SecureTransactionIndicator modifierClasses={['top']} />
+							<SecureTransactionIndicator position="top" />
 
 							{props.tickerGoalReached &&
 							campaignSettings &&
@@ -330,7 +330,7 @@ function withoutProps(): JSX.Element {
 			/>
 
 			<div className="gu-content__form gu-content__form-ssr">
-				<SecureTransactionIndicator modifierClasses={['top']} />
+				<SecureTransactionIndicator position="top" />
 				<ProgressMessage message={['Loading the page']} />
 			</div>
 		</div>

@@ -169,7 +169,7 @@ function PaymentMethodSelectorLegend() {
 			<legend id="payment_method">
 				<ContributionChoicesHeader>Payment Method</ContributionChoicesHeader>
 			</legend>
-			<SecureTransactionIndicator modifierClasses={['middle']} />
+			<SecureTransactionIndicator position="middle" />
 		</div>
 	);
 }
