@@ -1,4 +1,3 @@
-import { join } from "path";
 import {
   ComparisonOperator,
   Metric,
@@ -6,7 +5,7 @@ import {
 } from "@aws-cdk/aws-cloudwatch";
 import { InstanceClass, InstanceSize, InstanceType } from "@aws-cdk/aws-ec2";
 import type { App } from "@aws-cdk/core";
-import { Duration, Tags } from "@aws-cdk/core";
+import { Duration } from "@aws-cdk/core";
 import { GuPlayApp } from "@guardian/cdk";
 import { AccessScope } from "@guardian/cdk/lib/constants";
 import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
@@ -75,12 +74,6 @@ export class PaymentApi extends GuStack {
     const sqsKmsArn = new GuStringParameter(this, "SqsKmsArn", {
       description: "ARN of the KMS key for encrypting SQS data",
     });
-
-    const yamlTemplateFilePath = join(
-      __dirname,
-      "../..",
-      "support-payment-api/src/main/resources/cloud-formation.yaml"
-    );
 
     // TODO: Should these remain as cloudformation parameters?
     const projectName = "payment-api";
