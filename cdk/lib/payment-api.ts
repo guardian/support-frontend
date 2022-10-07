@@ -163,10 +163,6 @@ export class PaymentApi extends GuStack {
       },
     });
 
-    // TODO: remove this tag after the migration
-    const playAppAsg = playApp.autoScalingGroup;
-    Tags.of(playAppAsg).add("gu:riffraff:new-asg", "true");
-
     // ---- Alarms ---- //
 
     new GuAlarm(this, "NoHealthyInstancesAlarm", {
