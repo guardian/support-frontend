@@ -83,20 +83,6 @@ export class PaymentApi extends GuStack {
       "support-payment-api/src/main/resources/cloud-formation.yaml"
     );
 
-    new CfnInclude(this, "YamlTemplate", {
-      templateFile: yamlTemplateFilePath,
-      parameters: {
-        Stage: props.stage,
-        EmailSqsQueueCodeArn: emailSqsCodeArn,
-        EmailSqsQueueProdArn: emailSqsProdArn,
-        OphanRole: ophanRole,
-        KinesisStreamArn: kinesisStreamArn,
-        ContributionsStoreSqsQueueCodeArn: contributionsStoreSqsQueueCodeArn,
-        ContributionsStoreSqsQueueProdArn: contributionsStoreSqsQueueProdArn,
-        SqsKmsArn: sqsKmsArn,
-      },
-    });
-
     // TODO: Should these remain as cloudformation parameters?
     const projectName = "payment-api";
     const projectVersion = "0.1";
