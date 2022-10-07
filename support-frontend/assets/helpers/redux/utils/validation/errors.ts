@@ -1,4 +1,5 @@
-import type { ZodFormattedError } from 'zod';
+import type { WritableDraft } from 'immer/dist/internal';
+import type { z } from 'zod';
 
 type ValidateableState = Record<string, unknown>;
 
@@ -9,7 +10,7 @@ export type SliceErrors<S extends ValidateableState> = Partial<
 >;
 
 export function getSliceErrorsFromZodResult<S extends ValidateableState>(
-	validationResult: ZodFormattedError<S>,
+	validationResult: z.ZodFormattedError<S>,
 ): SliceErrors<S> {
 	return Object.keys(validationResult).reduce<SliceErrors<S>>(
 		(formattedResult, key) => {
@@ -24,4 +25,26 @@ export function getSliceErrorsFromZodResult<S extends ValidateableState>(
 		},
 		{},
 	);
+}
+
+type Schema =
+	| z.ZodEffects<z.ZodObject<z.ZodRawShape>>
+	| z.ZodObject<z.ZodRawShape>;
+
+type SliceStateWithErrors = ValidateableState & {
+	errors?: SliceErrors<ValidateableState>;
+};
+
+// Create a handler for the validateForm action for any Redux slice which needs to store errors
+export function createSliceValidatorFor(schema: Schema) {
+	return function validateStateSlice(
+		state: WritableDraft<SliceStateWithErrors>,
+	): void {
+		const validationResult = schema.safeParse(state);
+		if (!validationResult.success) {
+			state.errors = getSliceErrorsFromZodResult(
+				validationResult.error.format(),
+			);
+		}
+	};
 }

@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { getSliceErrorsFromZodResult } from 'helpers/redux/utils/validation/errors';
+import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
 import { validateForm } from '../../checkoutActions';
 import { initialSepaState, sepaSchema } from './state';
 
@@ -22,14 +22,7 @@ export const sepaSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		builder.addCase(validateForm, (state) => {
-			const validationResult = sepaSchema.safeParse(state);
-			if (!validationResult.success) {
-				state.errors = getSliceErrorsFromZodResult(
-					validationResult.error.format(),
-				);
-			}
-		});
+		builder.addCase(validateForm, createSliceValidatorFor(sepaSchema));
 	},
 });
 

@@ -1,7 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { getSliceErrorsFromZodResult } from 'helpers/redux/utils/validation/errors';
+import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
 import type { Title } from 'helpers/user/details';
 import { validateForm } from '../checkoutActions';
 import { initialPersonalDetailsState, personalDetailsSchema } from './state';
@@ -41,14 +41,10 @@ export const personalDetailsSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		builder.addCase(validateForm, (state) => {
-			const validationResult = personalDetailsSchema.safeParse(state);
-			if (!validationResult.success) {
-				state.errors = getSliceErrorsFromZodResult(
-					validationResult.error.format(),
-				);
-			}
-		});
+		builder.addCase(
+			validateForm,
+			createSliceValidatorFor(personalDetailsSchema),
+		);
 	},
 });
 

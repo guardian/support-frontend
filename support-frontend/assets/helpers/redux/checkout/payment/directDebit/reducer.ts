@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { getSliceErrorsFromZodResult } from 'helpers/redux/utils/validation/errors';
+import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
 import { validateForm } from '../../checkoutActions';
 import type { Phase, SortCodeUpdate } from './state';
 import { directDebitSchema, initialDirectDebitState } from './state';
@@ -79,15 +79,7 @@ export const directDebitSlice = createSlice({
 			state.isPopUpOpen = false;
 		});
 
-		builder.addCase(validateForm, (state) => {
-			const validationResult = directDebitSchema.safeParse(state);
-
-			if (!validationResult.success) {
-				state.errors = getSliceErrorsFromZodResult(
-					validationResult.error.format(),
-				);
-			}
-		});
+		builder.addCase(validateForm, createSliceValidatorFor(directDebitSchema));
 	},
 });
 

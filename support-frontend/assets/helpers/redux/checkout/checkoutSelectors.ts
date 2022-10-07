@@ -24,11 +24,14 @@ function getPaymentMethodErrors(
 function formHasPaymentMethodErrors(state: ContributionsState): boolean {
 	const errors = getPaymentMethodErrors(state);
 	const errorObjectHasKeys = !!Object.keys(errors).length;
+	if (!errorObjectHasKeys) {
+		return false;
+	}
+
 	const atLeastOneKeyHasErrors = Object.keys(errors).some(
 		(key) => errors[key].length,
 	);
-
-	return errorObjectHasKeys && atLeastOneKeyHasErrors;
+	return atLeastOneKeyHasErrors;
 }
 
 export function getAllErrorsForContributions(
