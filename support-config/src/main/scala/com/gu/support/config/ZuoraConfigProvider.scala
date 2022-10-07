@@ -76,7 +76,7 @@ class ZuoraConfigProvider(config: Config, defaultStage: Stage)
   )
 
   private def invoiceTemplatesFromConfig(config: Config) = ZuoraInvoiceTemplatesConfig(
-    defaultTemplateId = config.getString("default"),
-    auTemplateId = config.getString("au"),
+    defaultTemplateId = config.getString("defaultTemplateId"),
+    auTemplateId = config.getString("auTemplateId"),
   )
 }
