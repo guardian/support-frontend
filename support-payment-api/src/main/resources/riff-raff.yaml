@@ -16,5 +16,4 @@ deployments:
     type: autoscaling
     parameters:
       bucket: membership-dist
-      asgMigrationInProgress: true
     dependencies: [cfn]
