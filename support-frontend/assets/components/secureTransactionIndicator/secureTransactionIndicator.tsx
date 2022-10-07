@@ -37,6 +37,12 @@ const secureTransaction = (position: string) => css`
       display: none;
     }
   `}
+
+	${position === 'center' &&
+	`
+    justify-content: center;
+    align-items: center;
+  `}
 `;
 
 const padlock = css`
@@ -44,10 +50,8 @@ const padlock = css`
 `;
 
 const text = css`
-	${textSans.xsmall()};
-	font-size: 14px;
+	${textSans.xsmall({ fontWeight: 'bold' })};
 	color: ${neutral[46]};
-	font-weight: bold;
 	letter-spacing: 0.01em;
 `;
 

@@ -14,6 +14,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
+import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import {
 	AUDCountries,
 	Canada,
@@ -106,7 +107,8 @@ export function SupporterPlusLandingPage(): JSX.Element {
 						</Box>
 						<Box>
 							<BoxContents>
-								<p css={largeDemoBox}>Personal details and payment</p>
+								<SecureTransactionIndicator position="center" />
+								<div css={largeDemoBox} />
 							</BoxContents>
 						</Box>
 						<Box>
