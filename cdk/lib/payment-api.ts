@@ -5,7 +5,6 @@ import {
   TreatMissingData,
 } from "@aws-cdk/aws-cloudwatch";
 import { InstanceClass, InstanceSize, InstanceType } from "@aws-cdk/aws-ec2";
-import { CfnInclude } from "@aws-cdk/cloudformation-include";
 import type { App } from "@aws-cdk/core";
 import { Duration, Tags } from "@aws-cdk/core";
 import { GuPlayApp } from "@guardian/cdk";
