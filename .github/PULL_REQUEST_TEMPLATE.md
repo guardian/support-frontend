@@ -26,9 +26,9 @@ If this is an AB test, PR reviewers should open and check the Optimize test.
 [**Optimize Link**](https://optimize.google.com/optimize/home)
 
 ## Accessibility test checklist
- - [ ] [Tested with screen reader](https://accessibility.gutools.co.uk/testing/web/screen-readers/)
- - [ ] [Navigable with keyboard](https://accessibility.gutools.co.uk/testing/web/keyboard-navigation/)
- - [ ] [Colour contrast passed](https://accessibility.gutools.co.uk/testing/web/colour-contrast/)
+ - [ ] [Tested with screen reader](https://webaim.org/articles/voiceover/)
+ - [ ] [Navigable with keyboard](https://www.accessibility-developer-guide.com/knowledge/keyboard-only/browsing-websites/)
+ - [ ] [Colour contrast passed](https://www.whocanuse.com/)
 
 ## Screenshots
 
