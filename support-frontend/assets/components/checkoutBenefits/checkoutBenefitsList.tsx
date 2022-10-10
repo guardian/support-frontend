@@ -7,7 +7,7 @@ import {
 	textSans,
 } from '@guardian/source-foundations';
 import UpsellButton from 'components/button/upsellButton';
-import type { CheckListData } from './checkoutBenefitsListContainer';
+import type { CheckListData } from './checkoutBenefitsListData';
 
 const container = css`
 	${textSans.small({ lineHeight: 'tight' })};
