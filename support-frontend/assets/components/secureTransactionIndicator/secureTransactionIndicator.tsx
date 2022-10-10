@@ -8,7 +8,7 @@ import {
 } from '@guardian/source-foundations';
 import SecurePadlock from './securePadlock.svg';
 
-type PropTypes = {
+export type SecureTransactionIndicatorProps = {
 	position: string;
 };
 
@@ -55,9 +55,9 @@ const text = css`
 	letter-spacing: 0.01em;
 `;
 
-export default function SecureTransactionIndicator({
+export function SecureTransactionIndicator({
 	position,
-}: PropTypes): JSX.Element {
+}: SecureTransactionIndicatorProps): JSX.Element {
 	return (
 		<div css={secureTransaction(position)}>
 			<SecurePadlock css={padlock} />
