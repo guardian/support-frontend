@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import ProgressMessage from 'components/progressMessage/progressMessage';
-import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';

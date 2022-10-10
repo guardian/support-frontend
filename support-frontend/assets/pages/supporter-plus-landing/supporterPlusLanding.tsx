@@ -14,7 +14,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
-import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import {
 	AUDCountries,
 	Canada,
