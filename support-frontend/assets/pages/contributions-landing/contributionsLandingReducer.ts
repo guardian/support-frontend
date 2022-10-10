@@ -59,7 +59,7 @@ interface FormState {
 	oneOffRecaptchaToken: string | null;
 }
 
-interface PageState {
+export interface PageState {
 	form: FormState;
 	checkoutForm: {
 		personalDetails: PersonalDetailsState;
