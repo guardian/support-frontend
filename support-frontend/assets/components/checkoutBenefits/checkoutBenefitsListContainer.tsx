@@ -153,7 +153,6 @@ export function CheckoutBenefitsListContainer({
 	const lowerTier = selectedAmount > minimumContributionAmount;
 
 	function handleButtonClick() {
-		// return;
 		dispatch(
 			setSelectedAmount({
 				contributionType,
