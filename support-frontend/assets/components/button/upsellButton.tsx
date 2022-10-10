@@ -11,10 +11,14 @@ const button = css`
 	justify-content: space-around;
 	margin: ${space[3]}px 0;
 	color: ${neutral[7]};
+	margin: ${space[5]}px 0 ${space[3]}px;
 
-	//
-	${from.tablet} {
-		margin: ${space[5]}px 0;
+	${from.mobileMedium} {
+		margin-bottom: ${space[4]}px;
+	}
+
+	${from.desktop} {
+		margin: ${space[6]}px 0 ${space[5]}px;
 	}
 `;
 

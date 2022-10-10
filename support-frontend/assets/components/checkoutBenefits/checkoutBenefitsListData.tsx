@@ -26,7 +26,7 @@ export type CheckListData = {
 	maybeGreyedOut: null | SerializedStyles;
 };
 
-export const getSvgIcon = (isUnlocked: boolean) =>
+export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 	isUnlocked ? (
 		<SvgTickRound isAnnouncedByScreenReader size="small" />
 	) : (
