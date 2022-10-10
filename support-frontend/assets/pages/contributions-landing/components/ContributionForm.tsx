@@ -9,7 +9,7 @@ import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMess
 import SepaTerms from 'components/legal/termsPrivacy/sepaTerms';
 import TermsPrivacy from 'components/legal/termsPrivacy/termsPrivacy';
 import ProgressMessage from 'components/progressMessage/progressMessage';
-import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { PaymentMethodSelector } from 'components/subscriptionCheckouts/paymentMethodSelector';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
@@ -169,7 +169,7 @@ function PaymentMethodSelectorLegend() {
 			<legend id="payment_method">
 				<ContributionChoicesHeader>Payment Method</ContributionChoicesHeader>
 			</legend>
-			<SecureTransactionIndicator modifierClasses={['middle']} />
+			<SecureTransactionIndicator position="middle" />
 		</div>
 	);
 }

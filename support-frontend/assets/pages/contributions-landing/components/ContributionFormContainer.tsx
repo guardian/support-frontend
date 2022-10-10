@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import DirectDebitPopUpForm from 'components/directDebit/directDebitPopUpForm/directDebitPopUpForm';
 import ProgressMessage from 'components/progressMessage/progressMessage';
-import SecureTransactionIndicator from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import ContributionTicker from 'components/ticker/contributionTicker';
 import { isInSupportAgainHeaderVariant } from 'helpers/abTests/lpPreviousGiving';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
@@ -260,7 +260,7 @@ function withProps(props: PropTypes) {
 								countryGroupId={props.countryGroupId}
 							/>
 
-							<SecureTransactionIndicator modifierClasses={['top']} />
+							<SecureTransactionIndicator position="top" />
 
 							{props.tickerGoalReached &&
 							campaignSettings &&
@@ -330,7 +330,7 @@ function withoutProps(): JSX.Element {
 			/>
 
 			<div className="gu-content__form gu-content__form-ssr">
-				<SecureTransactionIndicator modifierClasses={['top']} />
+				<SecureTransactionIndicator position="top" />
 				<ProgressMessage message={['Loading the page']} />
 			</div>
 		</div>
