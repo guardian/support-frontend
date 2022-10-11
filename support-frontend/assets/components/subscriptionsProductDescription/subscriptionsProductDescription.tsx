@@ -60,7 +60,10 @@ function SubscriptionsProductDescription({
 						href={button.link}
 						onClick={button.analyticsTracking}
 						appearance={getButtonAppearance(index, isFeature, button.hierarchy)}
-						modifierClasses={['subscriptions__product-button']}
+						modifierClasses={[
+							button.modifierClasses ?? '',
+							'subscriptions__product-button',
+						]}
 					>
 						{button.ctaButtonText}
 					</AnchorButton>

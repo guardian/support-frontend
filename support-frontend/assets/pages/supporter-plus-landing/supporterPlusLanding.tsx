@@ -16,6 +16,7 @@ import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
+import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import {
 	AUDCountries,
 	Canada,
@@ -108,6 +109,7 @@ export function SupporterPlusLandingPage(): JSX.Element {
 						</Box>
 						<Box>
 							<BoxContents>
+								<SecureTransactionIndicator position="center" />
 								<PaymentRequestButtonContainer CustomButton={SavedCardButton} />
 								<p css={largeDemoBox}>Personal details and payment</p>
 							</BoxContents>
