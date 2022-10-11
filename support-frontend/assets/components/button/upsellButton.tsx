@@ -9,7 +9,6 @@ import {
 const button = css`
 	width: 100%;
 	justify-content: space-around;
-	margin: ${space[3]}px 0;
 	color: ${neutral[7]};
 	margin: ${space[5]}px 0 ${space[3]}px;
 
@@ -31,7 +30,6 @@ interface UpsellButtonProps {
 function UpsellButton({
 	buttonCopy,
 	handleButtonClick,
-	cssOverrides,
 }: UpsellButtonProps): JSX.Element {
 	return (
 		<>
@@ -41,9 +39,8 @@ function UpsellButton({
 						iconSide="left"
 						priority="primary"
 						size="default"
-						css={[button, cssOverrides]}
+						cssOverrides={button}
 						onClick={handleButtonClick}
-						cssOverrides={cssOverrides}
 					>
 						{buttonCopy}
 					</Button>
