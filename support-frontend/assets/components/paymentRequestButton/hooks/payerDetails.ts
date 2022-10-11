@@ -20,10 +20,10 @@ import {
 
 function setPayerName(
 	dispatch: ContributionsDispatch,
-	payerName?: string,
+	payerName: string,
 ): void {
 	// This turns "    jean    claude    van    damme     " into ["jean", "claude", "van", "damme"]
-	const nameParts = payerName?.trim().replace(/\s+/g, ' ').split(' ') ?? [];
+	const nameParts = payerName.trim().replace(/\s+/g, ' ').split(' ');
 
 	if (nameParts.length > 1) {
 		dispatch(setFirstName(nameParts[0]));
@@ -72,7 +72,7 @@ export function addPayerDetailsToRedux(
 	paymentMethodEvent: PaymentRequestPaymentMethodEvent,
 ): void {
 	const { paymentMethod, payerName, payerEmail } = paymentMethodEvent;
-	setPayerName(dispatch, payerName);
+	payerName && setPayerName(dispatch, payerName);
 	setPayerEmail(dispatch, payerEmail);
 	setBillingCountryAndState(dispatch, paymentMethod.billing_details);
 }

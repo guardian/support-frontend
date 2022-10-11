@@ -7,7 +7,6 @@ import { addPayerDetailsToRedux } from './payerDetails';
 export type PaymentEventDetails = {
 	paymentMethod: PaymentMethod | null;
 	paymentWallet: string;
-	paymentAuthorised: boolean;
 };
 
 // Handles listening for the payment event from Stripe, and returns details from that payment event
@@ -18,7 +17,6 @@ export function usePaymentRequestEvent(
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(
 		null,
 	);
-	const [paymentAuthorised, setPaymentAuthorised] = useState<boolean>(false);
 
 	const dispatch = useContributionsDispatch();
 
@@ -34,11 +32,9 @@ export function usePaymentRequestEvent(
 				// the backend job finishes.
 				paymentMethodEvent.complete('success');
 
+				addPayerDetailsToRedux(dispatch, paymentMethodEvent);
 				setPaymentMethod(paymentMethod);
 				setPaymentWallet(walletName);
-				addPayerDetailsToRedux(dispatch, paymentMethodEvent);
-
-				setPaymentAuthorised(true);
 
 				const walletType =
 					(paymentMethod.card?.wallet?.type as string | null) ?? 'no-wallet';
@@ -58,6 +54,5 @@ export function usePaymentRequestEvent(
 	return {
 		paymentMethod,
 		paymentWallet,
-		paymentAuthorised,
 	};
 }

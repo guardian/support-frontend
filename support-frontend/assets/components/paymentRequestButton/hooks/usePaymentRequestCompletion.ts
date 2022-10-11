@@ -20,7 +20,7 @@ import type { PaymentEventDetails } from './usePaymentRequestEvent';
 export function usePaymentRequestCompletion(
 	stripe: StripeJs | null,
 	internalPaymentMethodName: StripePaymentMethod | null,
-	{ paymentMethod, paymentAuthorised, paymentWallet }: PaymentEventDetails,
+	{ paymentMethod, paymentWallet }: PaymentEventDetails,
 ): void {
 	const { publicKey, stripeAccount } = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.stripeAccountDetails,
@@ -35,12 +35,9 @@ export function usePaymentRequestCompletion(
 	);
 
 	useEffect(() => {
-		if (
-			paymentAuthorised &&
-			stripe &&
-			paymentMethod &&
-			internalPaymentMethodName
-		) {
+		if (stripe && paymentMethod && internalPaymentMethodName) {
+			console.log('payment method is', paymentMethod);
+
 			// TODO: HANDLE VALIDATION IN HERE!!
 			trackComponentClick(`${paymentWallet}-paymentAuthorised`);
 
@@ -78,5 +75,5 @@ export function usePaymentRequestCompletion(
 				);
 			}
 		}
-	}, [paymentAuthorised]);
+	}, [paymentMethod]);
 }
