@@ -31,7 +31,6 @@ interface UpsellButtonProps {
 function UpsellButton({
 	buttonCopy,
 	handleButtonClick,
-	cssOverrides,
 }: UpsellButtonProps): JSX.Element {
 	return (
 		<>
@@ -41,9 +40,8 @@ function UpsellButton({
 						iconSide="left"
 						priority="primary"
 						size="default"
-						css={[button, cssOverrides]}
+						cssOverrides={button}
 						onClick={handleButtonClick}
-						cssOverrides={cssOverrides}
 					>
 						{buttonCopy}
 					</Button>

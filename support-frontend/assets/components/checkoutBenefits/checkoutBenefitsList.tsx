@@ -54,12 +54,6 @@ const table = css`
 	}
 `;
 
-const buttonCssOverrides = css`
-	& button {
-		margin: 20px 0 12px;
-	}
-`;
-
 const hr = (margin: string) => css`
 	border: none;
 	height: 1px;
@@ -101,7 +95,6 @@ export function CheckoutBenefitsList({
 			<UpsellButton
 				buttonCopy={buttonCopy}
 				handleButtonClick={handleButtonClick}
-				cssOverrides={buttonCssOverrides}
 			/>
 			<hr css={hr(`${space[5]}px 0 ${space[4]}px`)} />
 			<p css={para}>Cancel anytime</p>
