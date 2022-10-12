@@ -2,10 +2,12 @@ package com.gu.zuora.subscriptionBuilders
 
 import com.gu.helpers.DateGenerator
 import com.gu.i18n.Country
+import com.gu.i18n.Country.Australia
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.Domestic
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
+import com.gu.support.config.ZuoraInvoiceTemplatesConfig
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
 import com.gu.support.workers.GiftRecipient.WeeklyGiftRecipient
 import com.gu.support.workers._
@@ -136,6 +138,10 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
   lazy val promotionService = mock[PromotionService]
   lazy val saleDate = new LocalDate(2019, 10, 24)
   lazy val firstDeliveryDate = saleDate.plusDays(3)
+  lazy val invoiceTemplateIds = ZuoraInvoiceTemplatesConfig(
+    auTemplateId = "auInvoiceTemplateId",
+    defaultTemplateId = "defaultInvoiceTemplateId",
+  )
 
   lazy val subscribeItemBuilder = new SubscribeItemBuilder(
     UUID.randomUUID(),
@@ -149,6 +155,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
       Some(Address(None, None, None, None, None, Country.UK)),
     ),
     GBP,
+    invoiceTemplateIds,
   )
 
   lazy val gift: SubscriptionData = new GuardianWeeklySubscriptionBuilder(
