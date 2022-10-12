@@ -8,8 +8,8 @@ const containerStyles = css`
 	padding-bottom: ${space[5]}px;
 `;
 
-const buttonContainer = (shouldShowButton: boolean) => css`
-	margin-bottom: ${shouldShowButton ? 28 : 0}px;
+const buttonContainer = css`
+	margin-bottom: 28px;
 `;
 
 const dividerOverrides = css`
@@ -26,24 +26,16 @@ const dividerOverrides = css`
 `;
 
 export type PaymentRequestButtonProps = {
-	shouldShowButton: boolean;
 	children: React.ReactNode;
 };
 
 export function PaymentRequestButton({
-	shouldShowButton,
 	children,
 }: PaymentRequestButtonProps): JSX.Element {
-	const dividerText = shouldShowButton ? 'or' : '';
-
 	return (
 		<div css={containerStyles}>
-			<div css={buttonContainer(shouldShowButton)}>{children}</div>
-			<Divider
-				displayText={dividerText}
-				size="full"
-				cssOverrides={dividerOverrides}
-			/>
+			<div css={buttonContainer}>{children}</div>
+			<Divider displayText="or" size="full" cssOverrides={dividerOverrides} />
 		</div>
 	);
 }

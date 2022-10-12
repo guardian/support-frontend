@@ -2,9 +2,6 @@ import {
 	PaymentRequestButtonElement,
 	useStripe,
 } from '@stripe/react-stripe-js';
-import { useEffect } from 'preact/hooks';
-import { useState } from 'react';
-import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { Stripe } from 'helpers/forms/paymentMethods';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
@@ -22,14 +19,9 @@ type PaymentRequestButtonContainerProps = {
 	CustomButton: React.FC<CustomButtonProps>;
 };
 
-type AvailablePaymentRequestButtonProps = PaymentRequestButtonContainerProps & {
-	setShouldShowButton: (shouldShowButton: boolean) => void;
-};
-
-function AvailablePaymentRequestButton({
+export function PaymentRequestButtonContainer({
 	CustomButton,
-	setShouldShowButton,
-}: AvailablePaymentRequestButtonProps) {
+}: PaymentRequestButtonContainerProps): JSX.Element | null {
 	const stripe = useStripe();
 
 	const { buttonType, paymentRequest, internalPaymentMethodName } =
@@ -49,47 +41,28 @@ function AvailablePaymentRequestButton({
 		dispatch(setPaymentMethod(Stripe));
 	}
 
-	useEffect(() => {
-		if (buttonType !== 'NONE') {
-			setShouldShowButton(true);
-		}
-	}, [buttonType]);
-
 	if (paymentRequest) {
 		if (buttonType === 'PAY_NOW') {
 			return (
-				<CustomButton
-					onClick={() => {
-						handleButtonClick();
-						paymentRequest.show();
-					}}
-				/>
+				<PaymentRequestButton>
+					<CustomButton
+						onClick={() => {
+							handleButtonClick();
+							paymentRequest.show();
+						}}
+					/>
+				</PaymentRequestButton>
 			);
 		} else if (buttonType !== 'NONE') {
 			return (
-				<PaymentRequestButtonElement
-					options={{ paymentRequest }}
-					onClick={handleButtonClick}
-				/>
+				<PaymentRequestButton>
+					<PaymentRequestButtonElement
+						options={{ paymentRequest }}
+						onClick={handleButtonClick}
+					/>
+				</PaymentRequestButton>
 			);
 		}
 	}
 	return null;
-}
-
-export function PaymentRequestButtonContainer({
-	CustomButton,
-}: PaymentRequestButtonContainerProps): JSX.Element {
-	const [shouldShowButton, setShouldShowButton] = useState<boolean>(false);
-
-	return (
-		<PaymentRequestButton shouldShowButton={shouldShowButton}>
-			<ContributionsStripe>
-				<AvailablePaymentRequestButton
-					setShouldShowButton={setShouldShowButton}
-					CustomButton={CustomButton}
-				/>
-			</ContributionsStripe>
-		</PaymentRequestButton>
-	);
 }

@@ -36,8 +36,6 @@ export function usePaymentRequestCompletion(
 
 	useEffect(() => {
 		if (stripe && paymentMethod && internalPaymentMethodName) {
-			console.log('payment method is', paymentMethod);
-
 			// TODO: HANDLE VALIDATION IN HERE!!
 			trackComponentClick(`${paymentWallet}-paymentAuthorised`);
 
