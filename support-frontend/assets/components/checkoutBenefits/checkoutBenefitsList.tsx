@@ -6,8 +6,7 @@ import {
 	space,
 	textSans,
 } from '@guardian/source-foundations';
-import UpsellButton from 'components/button/upsellButton';
-import type { CheckListData } from './checkoutBenefitsListData';
+import type { CheckListData } from './checkoutBenefitsListContainer';
 
 const container = css`
 	${textSans.small({ lineHeight: 'tight' })};
@@ -42,6 +41,7 @@ const checkListText = css`
 
 const table = css`
 	padding-top: ${space[4]}px;
+	margin-bottom: 28px;
 
 	& tr:not(:last-child) {
 		border-bottom: 10px solid transparent;
@@ -59,6 +59,8 @@ const hr = (margin: string) => css`
 	height: 1px;
 	background-color: #dcdcdc;
 	margin: ${margin};
+
+	margin-bottom: ${space[4]}px 0;
 `;
 
 const para = css`
@@ -68,15 +70,11 @@ const para = css`
 export type CheckoutBenefitsListProps = {
 	title: string;
 	checkListData: CheckListData[];
-	buttonCopy: string | null;
-	handleButtonClick: () => void;
 };
 
 export function CheckoutBenefitsList({
 	title,
 	checkListData,
-	buttonCopy,
-	handleButtonClick,
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
 		<div css={container}>
@@ -92,10 +90,6 @@ export function CheckoutBenefitsList({
 					</tr>
 				))}
 			</table>
-			<UpsellButton
-				buttonCopy={buttonCopy}
-				handleButtonClick={handleButtonClick}
-			/>
 			<hr css={hr(`${space[5]}px 0 ${space[4]}px`)} />
 			<p css={para}>Cancel anytime</p>
 		</div>
