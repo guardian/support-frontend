@@ -37,6 +37,9 @@ export const checkListData = ({
 	lowerTier,
 	higherTier,
 }: TierUnlocks): CheckListData[] => {
+	const maybeGreyedOutLowerTier = lowerTier ? null : greyedOut;
+	const maybeGreyedOutHigherTier = higherTier ? null : greyedOut;
+
 	return [
 		{
 			icon: getSvgIcon(lowerTier),
@@ -46,7 +49,7 @@ export const checkListData = ({
 					banners
 				</p>
 			),
-			maybeGreyedOut: lowerTier ? null : greyedOut,
+			maybeGreyedOut: maybeGreyedOutLowerTier,
 		},
 		{
 			icon: getSvgIcon(lowerTier),
@@ -56,7 +59,7 @@ export const checkListData = ({
 					insight on the week’s top stories
 				</p>
 			),
-			maybeGreyedOut: lowerTier ? null : greyedOut,
+			maybeGreyedOut: maybeGreyedOutLowerTier,
 		},
 		{
 			icon: getSvgIcon(higherTier),
@@ -65,7 +68,7 @@ export const checkListData = ({
 					<span css={boldText}>Ad-free. </span>On any device when signed in
 				</p>
 			),
-			maybeGreyedOut: higherTier ? null : greyedOut,
+			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
 		{
 			icon: getSvgIcon(higherTier),
@@ -75,7 +78,7 @@ export const checkListData = ({
 					experience
 				</p>
 			),
-			maybeGreyedOut: higherTier ? null : greyedOut,
+			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
 	];
 };
