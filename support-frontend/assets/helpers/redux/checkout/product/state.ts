@@ -47,7 +47,7 @@ export const initialProductState: ProductState = {
 	productOption: 'NoProductOptions',
 	fulfilmentOption: 'NoFulfilmentOptions',
 	billingPeriod: 'Monthly',
-	productPrices: getGlobal('window.guardian.productPrices') ?? {},
+	productPrices: getGlobal('productPrices') ?? {},
 	selectedAmounts: {
 		ONE_OFF: 0,
 		MONTHLY: 0,
@@ -65,6 +65,6 @@ export const initialProductState: ProductState = {
 		},
 	},
 	currency,
-	orderIsAGift: getGlobal('window.guardian.orderIsAGift') ?? false,
+	orderIsAGift: getGlobal('orderIsAGift') ?? false,
 	startDate: formatMachineDate(new Date()),
 };
