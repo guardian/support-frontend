@@ -13,6 +13,8 @@ import { sepaReducer } from './sepa/reducer';
 import type { SepaState } from './sepa/state';
 import { stripeCardReducer } from './stripe/reducer';
 import type { StripeCardState } from './stripe/state';
+import { stripeAccountDetailsReducer } from './stripeAccountDetails/reducer';
+import type { StripeAccountDetailsState } from './stripeAccountDetails/state';
 
 export type PaymentState = {
 	paymentMethod: PaymentMethod;
@@ -21,6 +23,7 @@ export type PaymentState = {
 	sepa: SepaState;
 	payPal: PayPalState;
 	stripe: StripeCardState;
+	stripeAccountDetails: StripeAccountDetailsState;
 	paymentRequestButton: PaymentRequestButtonState;
 };
 
@@ -31,5 +34,6 @@ export const paymentReducer = combineReducers({
 	sepa: sepaReducer,
 	payPal: payPalReducer,
 	stripe: stripeCardReducer,
+	stripeAccountDetails: stripeAccountDetailsReducer,
 	paymentRequestButton: paymentRequestButtonReducer,
 });

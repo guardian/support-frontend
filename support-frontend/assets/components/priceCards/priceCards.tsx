@@ -31,6 +31,7 @@ const mobileGrid = css`
 `;
 
 const cardsContainer = css`
+	position: relative;
 	padding: ${space[2]}px 0;
 
 	${from.mobileLandscape} {
