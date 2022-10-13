@@ -1,17 +1,13 @@
 import { css } from '@emotion/react';
 import { neutral } from '@guardian/source-foundations';
 import { Column, Columns, Container } from '@guardian/source-react-components';
-import type { CheckoutBenefitsListProps } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
-import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
+import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 
 export default {
 	title: 'Checkout Layout/Benefits List',
 	component: CheckoutBenefitsList,
-	argTypes: {
-		handleButtonClick: { action: 'button clicked' },
-	},
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Container backgroundColor={neutral[97]}>
@@ -35,24 +31,34 @@ export default {
 	],
 };
 
-function Template(args: CheckoutBenefitsListProps) {
-	return <CheckoutBenefitsList {...args} />;
+function Template(args: {
+	title: string;
+	higherTier: boolean;
+	lowerTier: boolean;
+}): JSX.Element {
+	const { title, higherTier, lowerTier } = args;
+	return (
+		<CheckoutBenefitsList
+			title={title}
+			checkListData={checkListData({ lowerTier, higherTier })}
+		/>
+	);
 }
 
-Template.args = {} as Omit<CheckoutBenefitsListProps, 'handleButtonClick'>;
+Template.args = {} as Record<string, unknown>;
 
 export const AllBenefitsUnlocked = Template.bind({});
 
 AllBenefitsUnlocked.args = {
 	title: "For £12 per month, you'll unlock",
-	checkListData: checkListData({ lowerTier: true, higherTier: true }),
-	buttonCopy: null,
+	higherTier: true,
+	lowerTier: true,
 };
 
 export const LowerTierUnlocked = Template.bind({});
 
 LowerTierUnlocked.args = {
 	title: "For £5 per month, you'll unlock",
-	checkListData: checkListData({ lowerTier: true, higherTier: false }),
-	buttonCopy: 'Switch to £12 per month to unlock all extras',
+	higherTier: false,
+	lowerTier: true,
 };
