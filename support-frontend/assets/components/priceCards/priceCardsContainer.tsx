@@ -1,5 +1,10 @@
+import type { OtherAmountProps } from 'components/otherAmount/otherAmount';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
-import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
+import {
+	setOtherAmount,
+	setSelectedAmount,
+} from 'helpers/redux/checkout/product/actions';
+import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -7,9 +12,11 @@ import {
 import type { PriceCardPaymentInterval } from './priceCard';
 import type { PriceCardsProps } from './priceCards';
 
+type PriceCardsRenderProps = PriceCardsProps & OtherAmountProps;
+
 type PriceCardsContainerProps = {
 	frequency: ContributionType;
-	renderPriceCards: (props: PriceCardsProps) => JSX.Element;
+	renderPriceCards: (props: PriceCardsRenderProps) => JSX.Element;
 };
 
 const contributionTypeToPaymentInterval: Partial<
@@ -39,6 +46,7 @@ export function PriceCardsContainer({
 	const { selectedAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
+	const minAmount = useContributionsSelector(getMinimumContributionAmount);
 
 	const { amounts: frequencyAmounts, defaultAmount } = amounts[frequency];
 	const selectedAmount = getSelectedAmount(
@@ -56,11 +64,22 @@ export function PriceCardsContainer({
 		);
 	}
 
+	function onOtherAmountChange(newAmount: string) {
+		dispatch(
+			setOtherAmount({
+				contributionType: frequency,
+				amount: newAmount,
+			}),
+		);
+	}
+
 	return renderPriceCards({
 		currency,
 		amounts: frequencyAmounts.map((amount) => amount.toString()),
 		selectedAmount,
-		onAmountChange,
 		paymentInterval: contributionTypeToPaymentInterval[frequency],
+		minAmount,
+		onAmountChange,
+		onOtherAmountChange,
 	});
 }

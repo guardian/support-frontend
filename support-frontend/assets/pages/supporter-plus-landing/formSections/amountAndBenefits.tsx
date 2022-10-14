@@ -17,14 +17,28 @@ export function AmountAndBenefits(): JSX.Element {
 						<BoxContents>
 							<PriceCardsContainer
 								frequency={tabId}
-								renderPriceCards={(priceCardProps) => (
+								renderPriceCards={({
+									amounts,
+									selectedAmount,
+									currency,
+									paymentInterval,
+									onAmountChange,
+									minAmount,
+									onOtherAmountChange,
+								}) => (
 									<>
 										<PriceCards
-											{...priceCardProps}
+											amounts={amounts}
+											selectedAmount={selectedAmount}
+											currency={currency}
+											paymentInterval={paymentInterval}
+											onAmountChange={onAmountChange}
 											otherAmountField={
 												<OtherAmount
-													currency={priceCardProps.currency}
-													selectedAmount={priceCardProps.selectedAmount}
+													currency={currency}
+													minAmount={minAmount}
+													selectedAmount={selectedAmount}
+													onOtherAmountChange={onOtherAmountChange}
 												/>
 											}
 										/>
