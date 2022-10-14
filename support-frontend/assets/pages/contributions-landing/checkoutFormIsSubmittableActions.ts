@@ -24,6 +24,7 @@ import type { Action as UserAction } from 'helpers/user/userActions';
 import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
 import { setFormIsValid } from './contributionsLandingActions';
 import type { Action as ContributionsLandingAction } from './contributionsLandingActions';
+import { isSupporterPlusPurchase } from './newProductTestHelper';
 
 // ----- Types ----- //
 type Action = ContributionsLandingAction | UserAction;
@@ -162,9 +163,13 @@ function enableOrDisableForm() {
 		const state = getState();
 		const { isRecurringContributor } = state.page.user;
 		const contributionType = getContributionType(state);
+		const isSupporterPlus = isSupporterPlusPurchase(state);
 
 		const shouldBlockExistingRecurringContributor =
-			isRecurringContributor && contributionTypeIsRecurring(contributionType);
+			!isSupporterPlus &&
+			isRecurringContributor &&
+			contributionTypeIsRecurring(contributionType);
+
 		const formIsValid = getFormIsValid(formIsValidParameters(state));
 		dispatch(setFormIsValid(formIsValid));
 		const recaptchaRequired =
