@@ -30,7 +30,7 @@ export function OtherAmount({
 	const prefix = currencyDetails.isSuffixGlyph ? '' : glyph;
 	const suffix = currencyDetails.isSuffixGlyph ? glyph : '';
 
-	const supportingText = `Choose an amount above ${simpleFormatAmount(
+	const supportingText = `Must be at least ${simpleFormatAmount(
 		currencyDetails,
 		minAmount,
 	)}`;
