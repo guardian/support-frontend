@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, neutral, space } from '@guardian/source-foundations';
+import { from, headline, neutral, space } from '@guardian/source-foundations';
 import { getThankYouModuleData } from './thankYouModuleData';
 
 const container = css`
@@ -34,33 +34,37 @@ const defaultGridContainer = css`
 const downloadAppGridContainer = css`
 	display: grid;
 	grid-column-gap: ${space[3]}px;
-	grid-template-columns: min-content 1fr 1fr;
+	grid-template-columns: min-content 1fr min-content;
 	grid-template-areas:
+		'img img'
 		'icon header'
-		'body body'
-		'qrCodes qrCodes';
+		'body body';
 
 	${from.tablet} {
 		grid-template-areas:
-			'icon header'
-			'---- body'
-			'---- qrCodes';
+			'icon header img'
+			'icon body img'
+			'icon qrCodes qrCodes';
 	}
 `;
 
 const iconContainer = css`
 	grid-area: icon;
+	display: flex;
 
 	svg {
+		display: block;
+	}
+
+	${from.tablet} {
 		display: block;
 	}
 `;
 
 const headerContainer = css`
 	grid-area: header;
-
-	display: flex;
-	align-items: center;
+	${headline.xxxsmall({ fontWeight: 'bold' })}
+	align-self: center;
 `;
 
 const bodyContainer = css`
@@ -68,8 +72,21 @@ const bodyContainer = css`
 	max-width: 300px;
 `;
 
+const bodyCopyStyle = css`
+	margin-bottom: ${space[1]}px;
+`;
+
+const imgContainer = css`
+	grid-area: img;
+`;
+
 const qrCodesContainer = css`
-	grid-area: qrCodes;
+	display: none;
+
+	${from.tablet} {
+		display: block;
+		grid-area: qrCodes;
+	}
 `;
 
 export type ThankYouModuleType = 'downloadTheApp' | 'feedback' | 'shareSupport';
@@ -83,7 +100,7 @@ function ThankYouModule({
 	moduleType,
 	isSignedIn,
 }: ThankYouModuleProps): JSX.Element {
-	const { icon, heading, bodyCopy, ctas, qrCodes } =
+	const { icon, header, bodyCopy, ctas, qrCodes } =
 		getThankYouModuleData(moduleType);
 
 	const isDownloadModule = moduleType === 'downloadTheApp';
@@ -96,12 +113,13 @@ function ThankYouModule({
 		<section css={container}>
 			<div css={gridContainer}>
 				<div css={iconContainer}>{icon}</div>
-				<div css={headerContainer}>{heading}</div>
+				<div css={headerContainer}>{header}</div>
 				<div css={bodyContainer}>
-					{bodyCopy}
+					<p css={bodyCopyStyle}>{bodyCopy}</p>
 					{ctas}
 				</div>
 
+				<div css={imgContainer}>[img here]</div>
 				{/* {isDownloadModule && images ? img component : null} */}
 
 				{isDownloadModule && isSignedIn && qrCodes ? (
