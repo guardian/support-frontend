@@ -1,5 +1,5 @@
 import "source-map-support/register";
-import { App } from "@aws-cdk/core";
+import { App } from "aws-cdk-lib";
 import { Frontend } from "../lib/frontend";
 import { PaymentApi } from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";

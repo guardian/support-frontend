@@ -1,4 +1,3 @@
-//import { FilterPattern, LogGroup, MetricFilter } from "@aws-cdk/aws-logs";
 import { GuEc2App } from "@guardian/cdk";
 import { AccessScope } from "@guardian/cdk/lib/constants";
 import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
