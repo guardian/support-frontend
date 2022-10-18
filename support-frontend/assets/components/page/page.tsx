@@ -2,6 +2,7 @@
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
+import { SkipLink } from 'components/skipLink/skipLink';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 
 // ----- Types ----- //
@@ -42,9 +43,10 @@ export default function Page(props: PropTypes): JSX.Element {
 			id={props.id}
 			className={classNameWithModifiers('gu-content', props.classModifiers)}
 		>
+			<SkipLink id="maincontent" label="Skip to main content" />
 			<CsrBanner />
 			{props.header}
-			<main role="main" className="gu-content__main">
+			<main role="main" id="maincontent" className="gu-content__main">
 				{backgroundImage}
 				{props.children}
 			</main>
