@@ -1,14 +1,14 @@
 export type StripeFormErrors = {
-	cardNumber?: string[];
-	expiry?: string[];
-	cvc?: string[];
+	cardNumber?: string;
+	expiry?: string;
+	cvc?: string;
 };
 
 export type StripeField = keyof StripeFormErrors;
 
 export type StripeErrorPayload = {
 	field: StripeField;
-	errors?: string[];
+	error?: string;
 };
 
 export type StripeCardState = {

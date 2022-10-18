@@ -37,7 +37,7 @@ const stripeElementStyles = (isFocused: boolean, error?: string) => css`
 	& .StripeElement {
 		margin-top: ${space[1]}px;
 		height: ${height.inputMedium}px;
-		border: 2px solid ${neutral[60]};
+		border: 2px solid ${neutral[46]};
 		padding: 10px ${space[2]}px;
 	}
 
@@ -63,15 +63,11 @@ type ElementDecoratorProps = LabelProps & {
 const baseStyles: StripeElementStyleVariant = {
 	fontSize: `${space[4]}px`,
 	color: neutral[7],
-	'::placeholder': {
-		color: neutral[100],
-	},
 };
 
-const invalidStyles: StripeElementStyleVariant = {
-	color: error[400],
-};
-
+/**
+ * Provides a Source-based label, error message and focus state for a Stripe Elements component
+ */
 export function ElementDecorator({
 	id,
 	element,
@@ -96,7 +92,6 @@ export function ElementDecorator({
 				options: {
 					style: {
 						base: { ...baseStyles },
-						invalid: { ...invalidStyles },
 					},
 				},
 				onFocus: () => setIsFocused(true),
