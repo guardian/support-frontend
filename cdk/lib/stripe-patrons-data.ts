@@ -1,15 +1,16 @@
-import { Schedule } from "@aws-cdk/aws-events";
-import { PolicyStatement } from "@aws-cdk/aws-iam";
-import { Runtime } from "@aws-cdk/aws-lambda";
-import type { App } from "@aws-cdk/core";
-import { Duration } from "@aws-cdk/core";
-import { GuScheduledLambda } from "@guardian/cdk";
+import { GuApiGatewayWithLambdaByPath, GuScheduledLambda } from "@guardian/cdk";
 import type {
   GuLambdaErrorPercentageMonitoringProps,
   NoMonitoring,
 } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
+import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
+import type { App } from "aws-cdk-lib";
+import { Duration } from "aws-cdk-lib";
+import { Schedule } from "aws-cdk-lib/aws-events";
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 
 class StripePatronsDataLambda extends GuScheduledLambda {
   constructor(scope: GuStack, id: string) {
@@ -29,7 +30,7 @@ class StripePatronsDataLambda extends GuScheduledLambda {
     function monitoringForEnvironment(
       stage: string
     ): NoMonitoring | GuLambdaErrorPercentageMonitoringProps {
-      if (stage == "PROD")
+      if (stage == "PROD") {
         return {
           alarmName: `${appName}-${scope.stage}-ErrorAlarm`,
           alarmDescription: `Triggers if there are errors from ${appName} on ${scope.stage}`,
@@ -37,6 +38,7 @@ class StripePatronsDataLambda extends GuScheduledLambda {
           toleratedErrorPercentage: 1,
           numberOfMinutesAboveThresholdBeforeAlarm: 46, // The lambda runs every 15 mins so alarm if it fails 3 times in a row
         };
+      }
       return { noMonitoring: true };
     }
 
@@ -81,5 +83,36 @@ export class StripePatronsData extends GuStack {
     super(scope, id, props);
 
     new StripePatronsDataLambda(this, id);
+
+    // Configure lambdas
+    const accountCreatedLambda = new GuLambdaFunction(
+      this,
+      "supporter-product-data-api-account-created",
+      {
+        app: "supporter-product-data-api",
+        runtime: Runtime.JAVA_11,
+        handler: "lambda-one.handler",
+        fileName: "lambda-one.zip",
+      }
+    );
+
+    // Wire up the API
+    new GuApiGatewayWithLambdaByPath(this, {
+      app: "example-api-gateway-instance",
+      targets: [
+        {
+          path: "lambda-one",
+          httpMethod: "GET",
+          lambda: accountCreatedLambda,
+        },
+      ],
+      // Create an alarm
+      monitoringConfiguration: {
+        snsTopicName: "my-topic-for-cloudwatch-alerts",
+        http5xxAlarm: {
+          tolerated5xxPercentage: 1,
+        },
+      },
+    });
   }
 }

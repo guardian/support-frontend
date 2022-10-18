@@ -1,152 +1,202 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The Frontend stack matches the snapshot 1`] = `
-Object {
-  "Outputs": Object {
-    "LoadBalancerFrontendDnsName": Object {
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuAllowPolicy",
+      "GuGetS3ObjectsPolicy",
+      "GuGetS3ObjectsPolicy",
+      "GuGetS3ObjectsPolicy",
+      "GuPutCloudwatchMetricsPolicy",
+      "GuAllowPolicy",
+      "GuAllowPolicy",
+      "GuAllowPolicy",
+      "GuAllowPolicy",
+      "GuAllowPolicy",
+      "GuVpcParameter",
+      "GuSubnetListParameter",
+      "GuEc2App",
+      "GuCertificate",
+      "GuInstanceRole",
+      "GuSSMRunCommandPolicy",
+      "GuDescribeEC2Policy",
+      "GuLoggingStreamNameParameter",
+      "GuLogShippingPolicy",
+      "GuDistributionBucketParameter",
+      "GuGetDistributablePolicy",
+      "GuParameterStoreReadPolicy",
+      "GuAmiParameter",
+      "GuHttpsEgressSecurityGroup",
+      "GuAutoScalingGroup",
+      "GuWazuhAccess",
+      "GuSubnetListParameter",
+      "GuApplicationLoadBalancer",
+      "GuApplicationTargetGroup",
+      "GuHttpsApplicationListener",
+      "GuAlb5xxPercentageAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Outputs": {
+    "LoadBalancerFrontendDnsName": {
       "Description": "DNS entry for LoadBalancerFrontend",
-      "Value": Object {
-        "Fn::GetAtt": Array [
+      "Value": {
+        "Fn::GetAtt": [
           "LoadBalancerFrontendD42F8E66",
           "DNSName",
         ],
       },
     },
   },
-  "Parameters": Object {
-    "AMIFrontend": Object {
+  "Parameters": {
+    "AMIFrontend": {
       "Description": "Amazon Machine Image ID for the app frontend. Use this in conjunction with AMIgo to keep AMIs up to date.",
       "Type": "AWS::EC2::Image::Id",
     },
-    "DistributionBucketName": Object {
+    "DistributionBucketName": {
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "LoggingStreamName": Object {
+    "LoggingStreamName": {
       "Default": "/account/services/logging.stream.name",
       "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
       "Type": "AWS::SSM::Parameter::Value<String>",
     },
-    "VpcId": Object {
+    "VpcId": {
       "Default": "/account/vpc/primary/id",
       "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
       "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
     },
-    "frontendPrivateSubnets": Object {
+    "frontendPrivateSubnets": {
       "Default": "/account/vpc/primary/subnets/private",
       "Description": "A list of private subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
-    "frontendPublicSubnets": Object {
+    "frontendPublicSubnets": {
       "Default": "/account/vpc/primary/subnets/public",
       "Description": "A list of public subnets",
       "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
   },
-  "Resources": Object {
-    "AutoScalingGroupFrontendASG567FDA1B": Object {
-      "Properties": Object {
+  "Resources": {
+    "AutoScalingGroupFrontendASG567FDA1B": {
+      "Properties": {
         "HealthCheckGracePeriod": 120,
         "HealthCheckType": "ELB",
-        "LaunchConfigurationName": Object {
+        "LaunchConfigurationName": {
           "Ref": "AutoScalingGroupFrontendLaunchConfig038C27B1",
         },
         "MaxSize": "6",
         "MinSize": "3",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "PropagateAtLaunch": true,
             "Value": "frontend",
           },
-          Object {
+          {
             "Key": "gu:cdk:pattern-name",
             "PropagateAtLaunch": true,
             "Value": "GuEc2App",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "PropagateAtLaunch": true,
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "PropagateAtLaunch": true,
             "Value": "guardian/support-frontend",
           },
-          Object {
+          {
+            "Key": "LogKinesisStreamName",
+            "PropagateAtLaunch": true,
+            "Value": {
+              "Ref": "LoggingStreamName",
+            },
+          },
+          {
             "Key": "Name",
             "PropagateAtLaunch": true,
             "Value": "Frontend-PROD/AutoScalingGroupFrontend",
           },
-          Object {
+          {
             "Key": "Stack",
             "PropagateAtLaunch": true,
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "PropagateAtLaunch": true,
             "Value": "PROD",
           },
         ],
-        "TargetGroupARNs": Array [
-          Object {
+        "TargetGroupARNs": [
+          {
             "Ref": "TargetGroupFrontendBE464F1D",
           },
         ],
-        "VPCZoneIdentifier": Object {
+        "VPCZoneIdentifier": {
           "Ref": "frontendPrivateSubnets",
         },
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
     },
-    "AutoScalingGroupFrontendInstanceProfileB9C04B01": Object {
-      "Properties": Object {
-        "Roles": Array [
-          Object {
+    "AutoScalingGroupFrontendInstanceProfileB9C04B01": {
+      "Properties": {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::InstanceProfile",
     },
-    "AutoScalingGroupFrontendLaunchConfig038C27B1": Object {
-      "DependsOn": Array [
+    "AutoScalingGroupFrontendLaunchConfig038C27B1": {
+      "DependsOn": [
         "InstanceRoleFrontend9A970131",
       ],
-      "Properties": Object {
-        "IamInstanceProfile": Object {
+      "Properties": {
+        "IamInstanceProfile": {
           "Ref": "AutoScalingGroupFrontendInstanceProfileB9C04B01",
         },
-        "ImageId": Object {
+        "ImageId": {
           "Ref": "AMIFrontend",
         },
         "InstanceType": "t4g.small",
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
               "GuHttpsEgressSecurityGroupFrontend71EF7DC2",
               "GroupId",
             ],
           },
-          Object {
-            "Fn::GetAtt": Array [
+          {
+            "Fn::GetAtt": [
               "WazuhSecurityGroup",
               "GroupId",
             ],
           },
         ],
-        "UserData": Object {
-          "Fn::Base64": Object {
-            "Fn::Join": Array [
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "#!/bin/bash -ev
     mkdir /etc/gu
     aws --region ",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 " s3 cp s3://membership-dist/support/PROD/frontend/support-frontend_1.0-SNAPSHOT_all.deb /tmp
@@ -159,20 +209,20 @@ Object {
       },
       "Type": "AWS::AutoScaling::LaunchConfiguration",
     },
-    "CatalogLoadingFailureAlarmD11891D9": Object {
-      "Properties": Object {
+    "CatalogLoadingFailureAlarmD11891D9": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":reader-revenue-dev",
@@ -183,8 +233,8 @@ Object {
         "AlarmDescription": "Impact - Cannot sell any subscriptions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
         "AlarmName": "URGENT 9-5 - PROD support-frontend could not load the Zuora catalog from S3",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "Environment",
             "Value": "PROD",
           },
@@ -198,34 +248,34 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "CertificateFrontendF1E5575F": Object {
+    "CertificateFrontendF1E5575F": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
+      "Properties": {
         "DomainName": "support.theguardian.com.origin.membership.guardianapis.com",
-        "DomainValidationOptions": Array [
-          Object {
+        "DomainValidationOptions": [
+          {
             "DomainName": "support.theguardian.com.origin.membership.guardianapis.com",
             "HostedZoneId": "Z1E4V12LQGXFEC",
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "frontend",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
@@ -235,12 +285,12 @@ Object {
       "Type": "AWS::CertificateManager::Certificate",
       "UpdateReplacePolicy": "Retain",
     },
-    "CloudwatchMetricsC6F65856": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "CloudwatchMetricsC6F65856": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
@@ -253,28 +303,28 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "CloudwatchMetricsC6F65856",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DefaultPromotionsLoadingFailureAlarm31718167": Object {
-      "Properties": Object {
+    "DefaultPromotionsLoadingFailureAlarm31718167": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":reader-revenue-dev",
@@ -285,8 +335,8 @@ Object {
         "AlarmDescription": "Impact - cannot display default product promotions on the support site",
         "AlarmName": "URGENT 9-5 - PROD support-frontend could not load default promo codes from S3",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "Environment",
             "Value": "PROD",
           },
@@ -300,12 +350,12 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "DescribeEC2PolicyFF5F9295": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DescribeEC2PolicyFF5F9295": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "autoscaling:DescribeAutoScalingInstances",
                 "autoscaling:DescribeAutoScalingGroups",
                 "ec2:DescribeTags",
@@ -318,27 +368,27 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "describe-ec2-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoPromotions4DBD3844": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "DynamoPromotions4DBD3844": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "dynamodb:GetItem",
                 "dynamodb:Scan",
                 "dynamodb:Query",
                 "dynamodb:DescribeTable",
               ],
               "Effect": "Allow",
-              "Resource": Array [
+              "Resource": [
                 "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
                 "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT",
               ],
@@ -347,22 +397,22 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoPromotions4DBD3844",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "DynamoRedemptions7E1D478A": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "DynamoRedemptions7E1D478A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "dynamodb:GetItem",
               "Effect": "Allow",
-              "Resource": Array [
+              "Resource": [
                 "arn:aws:dynamodb:*:*:table/redemption-codes-PROD",
                 "arn:aws:dynamodb:*:*:table/redemption-codes-UAT",
               ],
@@ -371,27 +421,27 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "DynamoRedemptions7E1D478A",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GetDistributablePolicyFrontendA36D2A61": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "GetDistributablePolicyFrontendA36D2A61": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:s3:::",
-                    Object {
+                    {
                       "Ref": "DistributionBucketName",
                     },
                     "/support/PROD/frontend/*",
@@ -403,19 +453,19 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GetDistributablePolicyFrontendA36D2A61",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GuHttpsEgressSecurityGroupFrontend71EF7DC2": Object {
-      "Properties": Object {
+    "GuHttpsEgressSecurityGroupFrontend71EF7DC2": {
+      "Properties": {
         "GroupDescription": "Allow all outbound HTTPS traffic",
-        "SecurityGroupEgress": Array [
-          Object {
+        "SecurityGroupEgress": [
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow all outbound HTTPS traffic",
             "FromPort": 443,
@@ -423,47 +473,47 @@ Object {
             "ToPort": 443,
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "frontend",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "VpcId",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "GuHttpsEgressSecurityGroupFrontendfromFrontendPRODLoadBalancerFrontendSecurityGroup76ED83889000CE3BBBF3": Object {
-      "Properties": Object {
+    "GuHttpsEgressSecurityGroupFrontendfromFrontendPRODLoadBalancerFrontendSecurityGroup76ED83889000CE3BBBF3": {
+      "Properties": {
         "Description": "Load balancer to target",
         "FromPort": 9000,
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
+        "GroupId": {
+          "Fn::GetAtt": [
             "GuHttpsEgressSecurityGroupFrontend71EF7DC2",
             "GroupId",
           ],
         },
         "IpProtocol": "tcp",
-        "SourceSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
             "LoadBalancerFrontendSecurityGroup3E7708CD",
             "GroupId",
           ],
@@ -472,30 +522,30 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupIngress",
     },
-    "GuLogShippingPolicy981BFE5A": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "GuLogShippingPolicy981BFE5A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "kinesis:Describe*",
                 "kinesis:Put*",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:kinesis:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":stream/",
-                    Object {
+                    {
                       "Ref": "LoggingStreamName",
                     },
                   ],
@@ -506,19 +556,19 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GuLogShippingPolicy981BFE5A",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "GuPutCloudwatchMetricsPolicyC5BCE402": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "GuPutCloudwatchMetricsPolicyC5BCE402": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "cloudwatch:PutMetricData",
               "Effect": "Allow",
               "Resource": "*",
@@ -527,28 +577,28 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "GuPutCloudwatchMetricsPolicyC5BCE402",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "High5xxPercentageAlarmFrontend168775E5": Object {
-      "Properties": Object {
+    "High5xxPercentageAlarmFrontend168775E5": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":reader-revenue-dev",
@@ -560,21 +610,21 @@ Object {
         "AlarmName": "URGENT 9-5 - PROD support-frontend is returning 5XX errors",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
-        "Metrics": Array [
-          Object {
+        "Metrics": [
+          {
             "Expression": "100*(m1+m2)/m3",
             "Id": "expr_1",
             "Label": "% of 5XX responses served for frontend (load balancer and instances combined)",
           },
-          Object {
+          {
             "Id": "m1",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "LoadBalancer",
-                    "Value": Object {
-                      "Fn::GetAtt": Array [
+                    "Value": {
+                      "Fn::GetAtt": [
                         "LoadBalancerFrontendD42F8E66",
                         "LoadBalancerFullName",
                       ],
@@ -589,15 +639,15 @@ Object {
             },
             "ReturnData": false,
           },
-          Object {
+          {
             "Id": "m2",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "LoadBalancer",
-                    "Value": Object {
-                      "Fn::GetAtt": Array [
+                    "Value": {
+                      "Fn::GetAtt": [
                         "LoadBalancerFrontendD42F8E66",
                         "LoadBalancerFullName",
                       ],
@@ -612,15 +662,15 @@ Object {
             },
             "ReturnData": false,
           },
-          Object {
+          {
             "Id": "m3",
-            "MetricStat": Object {
-              "Metric": Object {
-                "Dimensions": Array [
-                  Object {
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
                     "Name": "LoadBalancer",
-                    "Value": Object {
-                      "Fn::GetAtt": Array [
+                    "Value": {
+                      "Fn::GetAtt": [
                         "LoadBalancerFrontendD42F8E66",
                         "LoadBalancerFullName",
                       ],
@@ -641,20 +691,20 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "InstanceRoleFrontend9A970131": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "InstanceRoleFrontend9A970131": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
-                "Service": Object {
-                  "Fn::Join": Array [
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "ec2.",
-                      Object {
+                      {
                         "Ref": "AWS::URLSuffix",
                       },
                     ],
@@ -666,24 +716,24 @@ Object {
           "Version": "2012-10-17",
         },
         "Path": "/",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "frontend",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
@@ -691,20 +741,20 @@ Object {
       },
       "Type": "AWS::IAM::Role",
     },
-    "LatencyNotificationAlarmBF39AEFA": Object {
-      "Properties": Object {
+    "LatencyNotificationAlarmBF39AEFA": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":reader-revenue-dev",
@@ -715,20 +765,20 @@ Object {
         "AlarmDescription": "Impact - support-frontend users are seeing slow responses. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
         "AlarmName": "URGENT 9-5 - PROD support-frontend has high latency",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::GetAtt": Array [
+            "Value": {
+              "Fn::GetAtt": [
                 "LoadBalancerFrontendD42F8E66",
                 "LoadBalancerFullName",
               ],
             },
           },
-          Object {
+          {
             "Name": "TargetGroup",
-            "Value": Object {
-              "Fn::GetAtt": Array [
+            "Value": {
+              "Fn::GetAtt": [
                 "TargetGroupFrontendBE464F1D",
                 "TargetGroupFullName",
               ],
@@ -744,24 +794,24 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ListenerFrontend190D01D2": Object {
-      "Properties": Object {
-        "Certificates": Array [
-          Object {
-            "CertificateArn": Object {
+    "ListenerFrontend190D01D2": {
+      "Properties": {
+        "Certificates": [
+          {
+            "CertificateArn": {
               "Ref": "CertificateFrontendF1E5575F",
             },
           },
         ],
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
               "Ref": "TargetGroupFrontendBE464F1D",
             },
             "Type": "forward",
           },
         ],
-        "LoadBalancerArn": Object {
+        "LoadBalancerArn": {
           "Ref": "LoadBalancerFrontendD42F8E66",
         },
         "Port": 443,
@@ -769,44 +819,44 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
-    "LoadBalancerFrontendD42F8E66": Object {
-      "Properties": Object {
-        "LoadBalancerAttributes": Array [
-          Object {
+    "LoadBalancerFrontendD42F8E66": {
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
             "Key": "deletion_protection.enabled",
             "Value": "true",
           },
         ],
         "Scheme": "internet-facing",
-        "SecurityGroups": Array [
-          Object {
-            "Fn::GetAtt": Array [
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
               "LoadBalancerFrontendSecurityGroup3E7708CD",
               "GroupId",
             ],
           },
         ],
-        "Subnets": Object {
+        "Subnets": {
           "Ref": "frontendPublicSubnets",
         },
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "frontend",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
@@ -815,11 +865,11 @@ Object {
       },
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
     },
-    "LoadBalancerFrontendSecurityGroup3E7708CD": Object {
-      "Properties": Object {
+    "LoadBalancerFrontendSecurityGroup3E7708CD": {
+      "Properties": {
         "GroupDescription": "Automatically created Security Group for ELB FrontendPRODLoadBalancerFrontend13B3B84D",
-        "SecurityGroupIngress": Array [
-          Object {
+        "SecurityGroupIngress": [
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Allow from anyone on port 443",
             "FromPort": 443,
@@ -827,46 +877,46 @@ Object {
             "ToPort": 443,
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "frontend",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "VpcId",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "LoadBalancerFrontendSecurityGrouptoFrontendPRODGuHttpsEgressSecurityGroupFrontend9549B0099000AA39C127": Object {
-      "Properties": Object {
+    "LoadBalancerFrontendSecurityGrouptoFrontendPRODGuHttpsEgressSecurityGroupFrontend9549B0099000AA39C127": {
+      "Properties": {
         "Description": "Load balancer to target",
-        "DestinationSecurityGroupId": Object {
-          "Fn::GetAtt": Array [
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
             "GuHttpsEgressSecurityGroupFrontend71EF7DC2",
             "GroupId",
           ],
         },
         "FromPort": 9000,
-        "GroupId": Object {
-          "Fn::GetAtt": Array [
+        "GroupId": {
+          "Fn::GetAtt": [
             "LoadBalancerFrontendSecurityGroup3E7708CD",
             "GroupId",
           ],
@@ -876,20 +926,20 @@ Object {
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
-    "NoHealthyInstancesAlarm4A3DBA9E": Object {
-      "Properties": Object {
+    "NoHealthyInstancesAlarm4A3DBA9E": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":reader-revenue-dev",
@@ -900,20 +950,20 @@ Object {
         "AlarmDescription": "Impact - Cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
         "AlarmName": "URGENT 9-5 - PROD no healthy instances for support-frontend",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::GetAtt": Array [
+            "Value": {
+              "Fn::GetAtt": [
                 "LoadBalancerFrontendD42F8E66",
                 "LoadBalancerFullName",
               ],
             },
           },
-          Object {
+          {
             "Name": "TargetGroup",
-            "Value": Object {
-              "Fn::GetAtt": Array [
+            "Value": {
+              "Fn::GetAtt": [
                 "TargetGroupFrontendBE464F1D",
                 "TargetGroupFullName",
               ],
@@ -929,23 +979,23 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ParameterStoreReadFrontendD7F424C6": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "ParameterStoreReadFrontendD7F424C6": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/PROD/support/frontend",
@@ -953,22 +1003,22 @@ Object {
                 ],
               },
             },
-            Object {
-              "Action": Array [
+            {
+              "Action": [
                 "ssm:GetParameters",
                 "ssm:GetParameter",
               ],
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/PROD/support/frontend/*",
@@ -980,22 +1030,22 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "parameter-store-read-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "PrivateBucket35D9C6C6": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "PrivateBucket35D9C6C6": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
-              "Resource": Array [
+              "Resource": [
                 "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json",
                 "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-UAT/catalog.json",
                 "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-DEV/catalog.json",
@@ -1005,19 +1055,19 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "PrivateBucket35D9C6C6",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "PromoToolBucketE9531506": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "PromoToolBucketE9531506": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
               "Resource": "arn:aws:s3:::gu-promotions-tool-private/*/defaultPromos.json",
@@ -1026,28 +1076,28 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "PromoToolBucketE9531506",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ReducedHealthyInstancesAlarmD9B227CB": Object {
-      "Properties": Object {
+    "ReducedHealthyInstancesAlarmD9B227CB": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":reader-revenue-dev",
@@ -1058,20 +1108,20 @@ Object {
         "AlarmDescription": "Impact - Imminent issue cannot sell any subscriptions or contributions products. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
         "AlarmName": "URGENT 9-5 - PROD reduced number healthy instances for support-frontend",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::GetAtt": Array [
+            "Value": {
+              "Fn::GetAtt": [
                 "LoadBalancerFrontendD42F8E66",
                 "LoadBalancerFullName",
               ],
             },
           },
-          Object {
+          {
             "Name": "TargetGroup",
-            "Value": Object {
-              "Fn::GetAtt": Array [
+            "Value": {
+              "Fn::GetAtt": [
                 "TargetGroupFrontendBE464F1D",
                 "TargetGroupFullName",
               ],
@@ -1087,23 +1137,23 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "SSMGetF4C837D5": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "SSMGetF4C837D5": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "ssm:GetParametersByPath",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:ssm:",
-                    Object {
+                    {
                       "Ref": "AWS::Region",
                     },
                     ":",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":parameter/support/frontend/PROD",
@@ -1115,20 +1165,20 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "SSMGetF4C837D5",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "SSMRunCommandPolicy244E1613": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "SSMRunCommandPolicy244E1613": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "ec2messages:AcknowledgeMessage",
                 "ec2messages:DeleteMessage",
                 "ec2messages:FailMessage",
@@ -1151,28 +1201,28 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "ssm-run-command-policy",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ServerSideCreateFailureAlarm3FA2BA71": Object {
-      "Properties": Object {
+    "ServerSideCreateFailureAlarm3FA2BA71": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":reader-revenue-dev",
@@ -1183,8 +1233,8 @@ Object {
         "AlarmDescription": "Impact - Someone pressed buy on a recurring product but received an error. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
         "AlarmName": "URGENT 9-5 - PROD support-frontend create recurring product call failed",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "Stage",
             "Value": "PROD",
           },
@@ -1199,11 +1249,11 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "SettingsBucket420EA4B0": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "SettingsBucket420EA4B0": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:GetObject",
               "Effect": "Allow",
               "Resource": "arn:aws:s3:::support-admin-console/PROD/*",
@@ -1212,28 +1262,28 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "SettingsBucket420EA4B0",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "StateMachineUnavailableAlarm43BA4A0D": Object {
-      "Properties": Object {
+    "StateMachineUnavailableAlarm43BA4A0D": {
+      "Properties": {
         "ActionsEnabled": true,
-        "AlarmActions": Array [
-          Object {
-            "Fn::Join": Array [
+        "AlarmActions": [
+          {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "arn:aws:sns:",
-                Object {
+                {
                   "Ref": "AWS::Region",
                 },
                 ":",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
                 ":reader-revenue-dev",
@@ -1254,12 +1304,12 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "StateMachineUnavailableMetricFilter0A74A04F": Object {
-      "Properties": Object {
-        "FilterPattern": "\\"regular-contributions-state-machine-unavailable\\"",
+    "StateMachineUnavailableMetricFilter0A74A04F": {
+      "Properties": {
+        "FilterPattern": ""regular-contributions-state-machine-unavailable"",
         "LogGroupName": "support-frontend-PROD",
-        "MetricTransformations": Array [
-          Object {
+        "MetricTransformations": [
+          {
             "MetricName": "state-machine-unavailable",
             "MetricNamespace": "support-frontend-PROD",
             "MetricValue": "1",
@@ -1268,12 +1318,12 @@ Object {
       },
       "Type": "AWS::Logs::MetricFilter",
     },
-    "StateMachinesB7FF33B0": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
+    "StateMachinesB7FF33B0": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
                 "states:ListStateMachines",
                 "states:StartExecution",
                 "states:GetExecutionHistory",
@@ -1286,27 +1336,27 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "StateMachinesB7FF33B0",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "StripeSetupIntentLambdaB064A7A2": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+    "StripeSetupIntentLambdaB064A7A2": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "lambda:InvokeFunction",
               "Effect": "Allow",
-              "Resource": Object {
-                "Fn::Join": Array [
+              "Resource": {
+                "Fn::Join": [
                   "",
-                  Array [
+                  [
                     "arn:aws:lambda:eu-west-1:",
-                    Object {
+                    {
                       "Ref": "AWS::AccountId",
                     },
                     ":function:stripe-intent-PROD",
@@ -1318,16 +1368,16 @@ Object {
           "Version": "2012-10-17",
         },
         "PolicyName": "StripeSetupIntentLambdaB064A7A2",
-        "Roles": Array [
-          Object {
+        "Roles": [
+          {
             "Ref": "InstanceRoleFrontend9A970131",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "TargetGroupFrontendBE464F1D": Object {
-      "Properties": Object {
+    "TargetGroupFrontendBE464F1D": {
+      "Properties": {
         "HealthCheckIntervalSeconds": 10,
         "HealthCheckPath": "/healthcheck",
         "HealthCheckProtocol": "HTTP",
@@ -1335,58 +1385,58 @@ Object {
         "HealthyThresholdCount": 5,
         "Port": 9000,
         "Protocol": "HTTP",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "App",
             "Value": "frontend",
           },
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
         ],
-        "TargetGroupAttributes": Array [
-          Object {
+        "TargetGroupAttributes": [
+          {
             "Key": "deregistration_delay.timeout_seconds",
             "Value": "30",
           },
-          Object {
+          {
             "Key": "stickiness.enabled",
             "Value": "false",
           },
         ],
         "TargetType": "instance",
         "UnhealthyThresholdCount": 2,
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "VpcId",
         },
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
     },
-    "WazuhSecurityGroup": Object {
-      "Properties": Object {
+    "WazuhSecurityGroup": {
+      "Properties": {
         "GroupDescription": "Allow outbound traffic from wazuh agent to manager",
-        "SecurityGroupEgress": Array [
-          Object {
+        "SecurityGroupEgress": [
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Wazuh event logging",
             "FromPort": 1514,
             "IpProtocol": "tcp",
             "ToPort": 1514,
           },
-          Object {
+          {
             "CidrIp": "0.0.0.0/0",
             "Description": "Wazuh agent registration",
             "FromPort": 1515,
@@ -1394,25 +1444,25 @@ Object {
             "ToPort": 1515,
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
         ],
-        "VpcId": Object {
+        "VpcId": {
           "Ref": "VpcId",
         },
       },

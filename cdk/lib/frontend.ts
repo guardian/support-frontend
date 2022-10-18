@@ -1,12 +1,4 @@
-import {
-  ComparisonOperator,
-  Metric,
-  TreatMissingData,
-} from "@aws-cdk/aws-cloudwatch";
-import { InstanceClass, InstanceSize, InstanceType } from "@aws-cdk/aws-ec2";
-import { FilterPattern, LogGroup, MetricFilter } from "@aws-cdk/aws-logs";
-import type { App } from "@aws-cdk/core";
-import { Duration } from "@aws-cdk/core";
+//import { FilterPattern, LogGroup, MetricFilter } from "@aws-cdk/aws-logs";
 import { GuEc2App } from "@guardian/cdk";
 import { AccessScope } from "@guardian/cdk/lib/constants";
 import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
@@ -18,6 +10,15 @@ import {
   GuPutCloudwatchMetricsPolicy,
 } from "@guardian/cdk/lib/constructs/iam";
 import type { GuAsgCapacity } from "@guardian/cdk/lib/types";
+import type { App } from "aws-cdk-lib";
+import { Duration } from "aws-cdk-lib";
+import {
+  ComparisonOperator,
+  Metric,
+  TreatMissingData,
+} from "aws-cdk-lib/aws-cloudwatch";
+import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
+import { FilterPattern, LogGroup, MetricFilter } from "aws-cdk-lib/aws-logs";
 
 interface FrontendProps extends GuStackProps {
   membershipSubPromotionsTable: string;
