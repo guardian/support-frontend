@@ -3,8 +3,18 @@ import { from, neutral } from '@guardian/source-foundations';
 import { Container as SourceContainer } from '@guardian/source-react-components';
 import React from 'react';
 
+type ContainerElement =
+	| 'div'
+	| 'article'
+	| 'aside'
+	| 'footer'
+	| 'header'
+	| 'nav'
+	| 'section';
+
 type Props = {
 	children: React.ReactNode;
+	element?: ContainerElement;
 	sidePadding?: boolean;
 	topBorder?: boolean;
 	sideBorders?: boolean;
@@ -48,6 +58,7 @@ const topBorderStyles = (color: string = neutral[86]) => css`
 
 export function Container({
 	children,
+	element,
 	sidePadding = true,
 	topBorder,
 	sideBorders,
@@ -56,6 +67,7 @@ export function Container({
 }: Props): JSX.Element {
 	return (
 		<SourceContainer
+			element={element}
 			topBorder={topBorder}
 			borderColor={borderColor}
 			backgroundColor={backgroundColor}

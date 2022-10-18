@@ -7,14 +7,14 @@ import type {
 } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import { useOnHeightChangeEffect } from 'helpers/customHooks/useOnHeightChangeEffect';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import {
 	setOtherAmount,
 	setProductType,
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { updatePaymentMethod } from 'pages/contributions-landing/contributionsLandingActions';
-import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { ContributionsCheckoutForm } from './ContributionsCheckoutForm';
 import { ContributionsCheckoutSubmitting } from './ContributionsCheckoutSubmitting';
 import { ContributionsCheckoutThankYou } from './ContributionsCheckoutThankYou';
@@ -24,7 +24,7 @@ import { useSecondaryCta } from './useSecondaryCta';
 
 type Status = 'INPUT' | 'SUBMITTING' | 'SUCCESS';
 
-const getStatus = (state: State): Status => {
+const getStatus = (state: ContributionsState): Status => {
 	if (state.page.form.paymentComplete) {
 		return 'SUCCESS';
 	} else if (state.page.form.isWaiting) {
@@ -33,7 +33,7 @@ const getStatus = (state: State): Status => {
 	return 'INPUT';
 };
 
-const getAmounts = (state: State): ContributionAmounts => {
+const getAmounts = (state: ContributionsState): ContributionAmounts => {
 	const amounts = state.common.amounts;
 
 	return {
@@ -52,7 +52,7 @@ const getAmounts = (state: State): ContributionAmounts => {
 	};
 };
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: ContributionsState) => ({
 	status: getStatus(state),
 	country: state.common.internationalisation.countryId,
 	countryGroupId: state.common.internationalisation.countryGroupId,
@@ -66,7 +66,7 @@ const mapStateToProps = (state: State) => ({
 
 const mapDispatchToProps = {
 	setProductType,
-	updatePaymentMethod,
+	setPaymentMethod,
 	setSelectedAmount,
 	setOtherAmount,
 };
@@ -83,7 +83,7 @@ function ContributionsCheckout({
 	contributionType,
 	amounts,
 	setProductType,
-	updatePaymentMethod,
+	setPaymentMethod,
 	selectedAmounts,
 	otherAmounts,
 	setSelectedAmount,
@@ -98,7 +98,7 @@ function ContributionsCheckout({
 
 	function setSelectedContributionType(contributionType: ContributionType) {
 		setProductType(contributionType);
-		updatePaymentMethod('None');
+		setPaymentMethod('None');
 	}
 
 	return (

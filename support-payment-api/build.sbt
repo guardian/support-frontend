@@ -11,7 +11,7 @@ scalacOptions ++= Seq(
 addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.11.3")
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "ch.qos.logback" % "logback-classic" % "1.2.11",
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
@@ -28,10 +28,10 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "org.playframework.anorm" %% "anorm" % "2.6.10",
+  "org.playframework.anorm" %% "anorm" % "2.7.0",
   "org.scalatest" %% "scalatest" % "3.0.9" % "test",
   "org.scalatestplus" %% "mockito-3-4" % "3.2.1.0" % "test",
-  "org.mockito" % "mockito-core" % "4.6.1",
+  "org.mockito" % "mockito-core" % "4.8.0",
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.github.blemale" %% "scaffeine" % "4.1.0",
   // This is required to force aws libraries to use the latest version of jackson
@@ -48,7 +48,7 @@ libraryDependencies ++= Seq(
   logback, // add Play logging support
   jdbc,
   ws,
-  "com.lihaoyi" %% "pprint" % "0.7.3",
+  "com.lihaoyi" %% "pprint" % "0.8.0",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
   "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
 )

@@ -1,6 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { initialPayPalState } from './state';
 
 export const loadPayPalExpressSdk = createAsyncThunk(
@@ -22,6 +23,9 @@ export const payPalSlice = createSlice({
 		});
 		builder.addCase(loadPayPalExpressSdk.fulfilled, (state) => {
 			state.hasLoaded = true;
+		});
+		builder.addCase(setPaymentMethod, (state) => {
+			state.buttonReady = false;
 		});
 	},
 });

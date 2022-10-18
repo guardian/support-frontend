@@ -21,6 +21,10 @@ class QueryZuoraLambda extends Handler[QueryZuoraState, FetchResultsState] {
 }
 
 object QueryZuoraLambda extends StrictLogging {
+  val stage = StageConstructors.fromEnvironment
+  val config = ConfigService(stage).load
+  val service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
+
   def queryZuora(stage: Stage, queryType: QueryType) = {
     logger.info(s"Attempting to submit ${queryType.value} query to Zuora")
 
@@ -28,11 +32,7 @@ object QueryZuoraLambda extends StrictLogging {
     // https://knowledgecenter.zuora.com/Central_Platform/API/AB_Aggregate_Query_API/B_Submit_Query/e_Post_Query_with_Retrieval_Time
     val attemptedQueryTime = ZonedDateTime.now(ZoneId.of("America/Los_Angeles")).minusMinutes(1)
 
-    for {
-      config <- ConfigService(stage).load
-      service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
-      result <- service.postQuery(queryType)
-    } yield {
+    service.postQuery(queryType).map { result =>
       logger.info(s"Successfully submitted query with jobId ${result.id}, results will be ${queryType.value}")
       FetchResultsState(result.id, attemptedQueryTime)
     }

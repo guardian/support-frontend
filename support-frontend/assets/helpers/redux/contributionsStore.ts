@@ -6,8 +6,10 @@ import { addPaymentsSideEffects } from './checkout/payment/contributionsSideEffe
 import { addPersonalDetailsSideEffects } from './checkout/personalDetails/contributionsSideEffects';
 import { setCurrency } from './checkout/product/actions';
 import { addProductSideEffects } from './checkout/product/contributionsSideEffects';
+import { addRecaptchaSideEffects } from './checkout/recaptcha/contributionsSideEffects';
 import { setInitialCommonState } from './commonState/actions';
 import { commonReducer } from './commonState/reducer';
+import { debugReducer } from './debug/reducer';
 import { getInitialState } from './utils/setup';
 
 // Listener middleware allows us to specify side-effects for certain actions
@@ -26,6 +28,7 @@ export const contributionsStore = configureStore({
 	reducer: {
 		common: commonReducer,
 		page: initReducer(),
+		debug: debugReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().prepend(listenerMiddleware.middleware),
@@ -37,17 +40,20 @@ export type ContributionsDispatch = typeof contributionsStore.dispatch;
 
 export type ContributionsStore = typeof contributionsStore;
 
-export function initReduxForContributions(): ContributionsStore {
+export function initReduxForContributions(
+	// Injecting the store and listener makes it possible to re-use this function for tests
+	store = contributionsStore,
+	startListening = startContributionsListening,
+): ContributionsStore {
 	try {
-		addPersonalDetailsSideEffects(startContributionsListening);
-		addProductSideEffects(startContributionsListening);
-		addPaymentsSideEffects(startContributionsListening);
+		addPersonalDetailsSideEffects(startListening);
+		addProductSideEffects(startListening);
+		addPaymentsSideEffects(startListening);
+		addRecaptchaSideEffects(startListening);
 		const initialState = getInitialState();
-		contributionsStore.dispatch(setInitialCommonState(initialState));
-		contributionsStore.dispatch(
-			setCurrency(initialState.internationalisation.currencyId),
-		);
-		return contributionsStore;
+		store.dispatch(setInitialCommonState(initialState));
+		store.dispatch(setCurrency(initialState.internationalisation.currencyId));
+		return store;
 	} catch (err) {
 		renderError(err as Error, null);
 		throw err;

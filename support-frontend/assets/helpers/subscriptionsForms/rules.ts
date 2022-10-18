@@ -1,8 +1,8 @@
 import {
-	checkEmail,
 	checkGiftStartDate,
 	checkOptionalEmail,
 	emailAddressesMatch,
+	isValidEmail,
 } from 'helpers/forms/formValidation';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import type { FormField, FormFields } from './formFields';
@@ -63,11 +63,15 @@ function applyPersonalDetailsRules(
 			),
 		},
 		{
-			rule: checkEmail(fields.email),
+			rule: nonEmptyString(fields.email),
+			error: formError('email', 'Please enter an email address.'),
+		},
+		{
+			rule: isValidEmail(fields.email),
 			error: formError('email', 'Please enter a valid email address.'),
 		},
 		{
-			rule: notLongerThan(fields.email, 40),
+			rule: notLongerThan(fields.email, 80),
 			error: formError('email', 'Email address is too long.'),
 		},
 		{
@@ -115,8 +119,16 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 			),
 		},
 		{
-			rule: checkEmail(fields.email),
+			rule: nonEmptyString(fields.email),
+			error: formError('email', 'Please enter an email address.'),
+		},
+		{
+			rule: isValidEmail(fields.email),
 			error: formError('email', 'Please enter a valid email address.'),
+		},
+		{
+			rule: notLongerThan(fields.email, 80),
+			error: formError('email', 'Email address is too long.'),
 		},
 		{
 			rule: emailAddressesMatch(isSignedIn, fields.email, fields.confirmEmail),
@@ -159,12 +171,24 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 						),
 					},
 					{
-						rule:
-							checkEmail(fields.emailGiftRecipient) &&
-							nonSillyCharacters(fields.emailGiftRecipient),
+						rule: nonEmptyString(fields.emailGiftRecipient),
 						error: formError(
 							'emailGiftRecipient',
-							'Please use a valid email address for the recipient.',
+							'Please enter an email address for the recipient.',
+						),
+					},
+					{
+						rule: isValidEmail(fields.emailGiftRecipient),
+						error: formError(
+							'emailGiftRecipient',
+							'Please enter a valid email address for the recipient.',
+						),
+					},
+					{
+						rule: notLongerThan(fields.emailGiftRecipient, 80),
+						error: formError(
+							'emailGiftRecipient',
+							'Email address is too long.',
 						),
 					},
 					{

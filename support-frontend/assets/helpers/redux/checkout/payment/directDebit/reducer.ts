@@ -1,7 +1,9 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
+import { validateForm } from '../../checkoutActions';
 import type { Phase, SortCodeUpdate } from './state';
-import { initialDirectDebitState } from './state';
+import { directDebitSchema, initialDirectDebitState } from './state';
 import {
 	confirmAccountDetails,
 	directDebitErrorMessages,
@@ -76,6 +78,8 @@ export const directDebitSlice = createSlice({
 		builder.addCase(payWithDirectDebit.rejected, (state) => {
 			state.isPopUpOpen = false;
 		});
+
+		builder.addCase(validateForm, createSliceValidatorFor(directDebitSchema));
 	},
 });
 

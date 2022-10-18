@@ -32,5 +32,5 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
-  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "ch.qos.logback" % "logback-classic" % "1.2.11",
 )

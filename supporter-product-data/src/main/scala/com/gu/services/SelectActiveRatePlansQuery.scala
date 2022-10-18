@@ -49,7 +49,7 @@ object SelectActiveRatePlansQuery {
 
    * Order By *
    Rate plans for the same user id are ordered in ASC order by subscription name and then subscription version
-   this makes sure that cancellations are written after the active version of the sub in case we have both (we shouldn't but you never know!)
+   this makes sure that cancellations come after the active version of the sub in case we have both (we shouldn't but you never know!)
    */
 
   def query(discountProductRatePlanIds: List[String]): String =

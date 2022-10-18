@@ -246,26 +246,32 @@ function getPaymentDescription(
 	return '';
 }
 
-const formatAmount = (
+const simpleFormatAmount = (
 	currency: Currency,
-	spokenCurrency: SpokenCurrency,
-	amount: number,
-	verbose: boolean,
+	amount: number | string,
 ): string => {
 	const glyph = currency.isPaddedGlyph ? ` ${currency.glyph} ` : currency.glyph;
-
-	if (verbose) {
-		return `${amount} ${
-			amount === 1 ? spokenCurrency.singular : spokenCurrency.plural
-		}`;
-	}
-
 	const amountText = /^(\d+\.\d)$/.test(`${amount}`) ? `${amount}0` : amount;
 
 	const valueWithGlyph = currency.isSuffixGlyph
 		? `${amountText}${glyph}`
 		: `${glyph}${amountText}`;
 	return valueWithGlyph.trim();
+};
+
+const formatAmount = (
+	currency: Currency,
+	spokenCurrency: SpokenCurrency,
+	amount: number,
+	verbose: boolean,
+): string => {
+	if (verbose) {
+		return `${amount} ${
+			amount === 1 ? spokenCurrency.singular : spokenCurrency.plural
+		}`;
+	}
+
+	return simpleFormatAmount(currency, amount);
 };
 
 const getContributeButtonCopy = (
@@ -369,6 +375,7 @@ function getAvailablePaymentRequestButtonPaymentMethod(
 export {
 	getContributeButtonCopy,
 	getContributeButtonCopyWithPaymentType,
+	simpleFormatAmount,
 	formatAmount,
 	getValidContributionTypesFromUrlOrElse,
 	getContributionTypeFromSession,

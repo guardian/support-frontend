@@ -13,6 +13,7 @@ export type PropTypes = {
 	utility?: JSX.Element;
 	countryGroupId: CountryGroupId;
 	display?: 'navigation' | 'checkout' | 'guardianLogo' | void;
+	isNewProduct?: boolean;
 };
 export type State = {
 	fitsLinksInOneRow: boolean;
@@ -130,7 +131,7 @@ export default class Header extends Component<PropTypes, State> {
 	observer: ResizeObserver | null | undefined;
 
 	render(): JSX.Element {
-		const { utility, display, countryGroupId } = this.props;
+		const { utility, display, countryGroupId, isNewProduct } = this.props;
 		const { fitsLinksInOneRow, fitsLinksAtAll, isTestUser } = this.state;
 		return (
 			<header
@@ -165,7 +166,11 @@ export default class Header extends Component<PropTypes, State> {
 						{display === 'navigation' && (
 							<MobileMenuToggler
 								links={
-									<Links countryGroupId={countryGroupId} location="mobile" />
+									<Links
+										countryGroupId={countryGroupId}
+										location="mobile"
+										isNewProduct={isNewProduct}
+									/>
 								}
 								utility={utility}
 							/>
@@ -179,6 +184,7 @@ export default class Header extends Component<PropTypes, State> {
 								getRef={(el) => {
 									this.menuRef = el;
 								}}
+								isNewProduct={isNewProduct}
 							/>
 						</div>
 					)}

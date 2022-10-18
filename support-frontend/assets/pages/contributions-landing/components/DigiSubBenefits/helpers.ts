@@ -7,11 +7,10 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 
-type CountryGroupsNotAUD = Exclude<CountryGroupId, 'AUDCountries'>;
 export type RegularContribType = Exclude<ContributionType, 'ONE_OFF'>;
 
 const benefitsThresholdsByCountryGroup: Record<
-	CountryGroupsNotAUD,
+	CountryGroupId,
 	Record<RegularContribType, number>
 > = {
 	GBPCountries: {
@@ -30,6 +29,10 @@ const benefitsThresholdsByCountryGroup: Record<
 		MONTHLY: 20,
 		ANNUAL: 199,
 	},
+	AUDCountries: {
+		MONTHLY: 22,
+		ANNUAL: 215,
+	},
 	NZDCountries: {
 		MONTHLY: 24,
 		ANNUAL: 235,
@@ -39,12 +42,6 @@ const benefitsThresholdsByCountryGroup: Record<
 		ANNUAL: 219,
 	},
 };
-
-function isNotAustralia(
-	countryGroupId: CountryGroupId,
-): countryGroupId is CountryGroupsNotAUD {
-	return countryGroupId !== 'AUDCountries';
-}
 
 function isNotOneOff(
 	contributionType: ContributionType,
@@ -56,7 +53,7 @@ function getThresholdPrice(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
 ): number | undefined {
-	if (isNotAustralia(countryGroupId) && isNotOneOff(contributionType)) {
+	if (isNotOneOff(contributionType)) {
 		return benefitsThresholdsByCountryGroup[countryGroupId][contributionType];
 	}
 }
@@ -102,7 +99,7 @@ function shouldShowBenefitsMessaging(
 	otherAmounts: OtherAmounts,
 	countryGroupId: CountryGroupId,
 ): boolean {
-	if (!isNotAustralia(countryGroupId) || !isNotOneOff(contributionType)) {
+	if (!isNotOneOff(contributionType)) {
 		return false;
 	}
 
@@ -123,11 +120,10 @@ function shouldShowBenefitsThankYouText(
 	contributionType: ContributionType,
 ): boolean {
 	const maybeCountryGroup = fromCountry(countryId);
-	const countryGroupNotAUD =
-		maybeCountryGroup && isNotAustralia(maybeCountryGroup);
+
 	const isNotOneOffContrib = isNotOneOff(contributionType);
 
-	if (maybeCountryGroup && countryGroupNotAUD && isNotOneOffContrib) {
+	if (maybeCountryGroup && isNotOneOffContrib) {
 		return (
 			amount >=
 			benefitsThresholdsByCountryGroup[maybeCountryGroup][contributionType]

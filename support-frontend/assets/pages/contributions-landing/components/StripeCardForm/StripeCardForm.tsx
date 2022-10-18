@@ -11,32 +11,30 @@ import { useEffect, useState } from 'react';
 import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
-import type { ThunkDispatch } from 'redux-thunk';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import QuestionMarkHintIcon from 'components/svgs/questionMarkHintIcon';
 import { usePrevious } from 'helpers/customHooks/usePrevious';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { isValidZipCode } from 'helpers/forms/formValidation';
+import type { StripePaymentIntentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { Stripe } from 'helpers/forms/paymentMethods';
+import { setStripeFieldsCompleted } from 'helpers/redux/checkout/payment/stripe/actions';
+import { getStripeSetupIntent } from 'helpers/redux/checkout/payment/stripe/thunks';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import type { Action } from 'pages/contributions-landing/contributionsLandingActions';
+import {
+	expireRecaptchaToken,
+	setRecaptchaToken,
+} from 'helpers/redux/checkout/recaptcha/actions';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentFailure,
 	paymentWaiting as setPaymentWaiting,
-	setStripeCardFormComplete,
-	setStripeRecurringRecaptchaVerified,
-	setStripeSetupIntentClientSecret,
-	updateRecaptchaToken,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { CreditCardIcons } from './CreditCardIcons';
-import { recaptchaElementNotEmpty } from './helpers/dom';
 import {
 	logCreatePaymentMethodError,
 	logCreateSetupIntentError,
 } from './helpers/logging';
-import { createStripeSetupIntent } from './helpers/stripe';
 import { styles } from './helpers/styles';
 import {
 	trackRecaptchaClientTokenReceived,
@@ -50,7 +48,7 @@ import './stripeCardForm.scss';
 
 // ----- Redux -----//
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: ContributionsState) => ({
 	contributionType: getContributionType(state),
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
@@ -58,42 +56,22 @@ const mapStateToProps = (state: State) => ({
 	country: state.common.internationalisation.countryId,
 	currency: state.common.internationalisation.currencyId,
 	countryGroupId: state.common.internationalisation.countryGroupId,
-	csrf: state.page.checkoutForm.csrf,
 	setupIntentClientSecret:
-		state.page.form.stripeCardFormData.setupIntentClientSecret,
-	recurringRecaptchaVerified:
-		state.page.form.stripeCardFormData.recurringRecaptchaVerified,
+		state.page.checkoutForm.payment.stripe.setupIntentClientSecret,
+	recaptchCompleted: state.page.checkoutForm.recaptcha.completed,
 	formIsSubmittable: state.page.form.formIsSubmittable,
-	oneOffRecaptchaToken: state.page.form.oneOffRecaptchaToken,
 	isTestUser: state.page.user.isTestUser ?? false,
 });
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<State, void, Action>) => ({
-	onPaymentAuthorised: (
-		paymentMethodId: string,
-		handle3DS?: (clientSecret: string) => Promise<PaymentIntentResult>,
-	) =>
-		dispatch(
-			onThirdPartyPaymentAuthorised({
-				paymentMethod: Stripe,
-				stripePaymentMethod: 'StripeCheckout',
-				paymentMethodId,
-				handle3DS,
-			}),
-		),
-	paymentFailure: (paymentError: ErrorReason) =>
-		dispatch(paymentFailure(paymentError)),
-	setStripeCardFormComplete: (isComplete: boolean) =>
-		dispatch(setStripeCardFormComplete(isComplete)),
-	setPaymentWaiting: (isWaiting: boolean) =>
-		dispatch(setPaymentWaiting(isWaiting)),
-	setStripeSetupIntentClientSecret: (clientSecret: string) =>
-		dispatch(setStripeSetupIntentClientSecret(clientSecret)),
-	setOneOffRecaptchaToken: (recaptchaToken: string) =>
-		dispatch(updateRecaptchaToken(recaptchaToken)),
-	setStripeRecurringRecaptchaVerified: (recaptchaVerified: boolean) =>
-		dispatch(setStripeRecurringRecaptchaVerified(recaptchaVerified)),
-});
+const mapDispatchToProps = {
+	onPaymentAuthorised: onThirdPartyPaymentAuthorised,
+	paymentFailure,
+	getStripeSetupIntent,
+	setStripeFieldsCompleted,
+	setPaymentWaiting,
+	setRecaptchaToken,
+	expireRecaptchaToken,
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -102,13 +80,25 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 interface PropsFromParent {
 	stripeKey: string;
 	setCreateStripePaymentMethod: (
-		create: (clientSecret: string | null) => void,
+		create: (clientSecret?: string) => void,
 	) => void;
 }
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 type PropTypes = PropsFromRedux & PropsFromParent;
+
+function getStripePaymentIntentAuthorisation(
+	paymentMethodId: string,
+	handle3DS?: (clientSecret: string) => Promise<PaymentIntentResult>,
+): StripePaymentIntentAuthorisation {
+	return {
+		paymentMethod: Stripe,
+		stripePaymentMethod: 'StripeCheckout',
+		paymentMethodId,
+		handle3DS,
+	};
+}
 
 function CardForm(props: PropTypes) {
 	const stripe = stripeJs.useStripe();
@@ -118,11 +108,26 @@ function CardForm(props: PropTypes) {
 
 	const { selectedField, selectField, clearSelectedField } = useSelectedField();
 
-	// Used to avoid calling grecaptcha.render twice when switching between monthly + annual
-	const [calledRecaptchaRender, setCalledRecaptchaRender] =
-		useState<boolean>(false);
-
 	const [zipCode, setZipCode] = useState('');
+
+	const onRecaptchaCompleted = (token: string) => {
+		trackRecaptchaClientTokenReceived();
+		props.setRecaptchaToken(token);
+
+		if (props.contributionType !== 'ONE_OFF') {
+			props
+				.getStripeSetupIntent({
+					token,
+					stripePublicKey: props.stripeKey,
+					isTestUser: props.isTestUser,
+				})
+				.catch((err: Error) => {
+					logCreateSetupIntentError(err);
+					props.paymentFailure('internal_error');
+					props.setPaymentWaiting(false);
+				});
+		}
+	};
 
 	const showZipCodeField = props.country === 'US';
 
@@ -140,52 +145,6 @@ function CardForm(props: PropTypes) {
 		} else {
 			// This is probably a Stripe or network problem
 			props.paymentFailure('payment_provider_unavailable');
-		}
-	};
-
-	// Sets up a callback for when the recaptcha has been verified.
-	// This callback will make a request to the backend to create a
-	// new setupIntent.
-	const setupRecurringRecaptchaCallback = () => {
-		setCalledRecaptchaRender(true);
-
-		// Fix for safari, where the calledRecaptchaRender state handling does not work.
-		// TODO: find a better solution
-		if (recaptchaElementNotEmpty()) {
-			return;
-		}
-
-		window.grecaptcha?.render('robot_checkbox', {
-			sitekey: window.guardian.v2recaptchaPublicKey,
-			callback: (token: string) => {
-				trackRecaptchaClientTokenReceived();
-				props.setStripeRecurringRecaptchaVerified(true);
-
-				createStripeSetupIntent(
-					token,
-					props.stripeKey,
-					props.isTestUser,
-					props.csrf,
-				)
-					.then((clientSecret) => {
-						props.setStripeSetupIntentClientSecret(clientSecret);
-					})
-					.catch((err: Error) => {
-						logCreateSetupIntentError(err);
-						props.paymentFailure('internal_error');
-						props.setPaymentWaiting(false);
-					});
-			},
-		});
-	};
-
-	const setupRecurringRecaptcha = (): void => {
-		if (window.guardian.recaptchaEnabled) {
-			if (window.grecaptcha?.render) {
-				setupRecurringRecaptchaCallback();
-			} else {
-				window.v2OnloadCallback = setupRecurringRecaptchaCallback;
-			}
 		}
 	};
 
@@ -208,14 +167,18 @@ function CardForm(props: PropTypes) {
 					if (result.error) {
 						handleStripeError(result.error);
 					} else if (result.setupIntent.payment_method) {
-						void props.onPaymentAuthorised(result.setupIntent.payment_method);
+						void props.onPaymentAuthorised(
+							getStripePaymentIntentAuthorisation(
+								result.setupIntent.payment_method,
+							),
+						);
 					}
 				});
 		}
 	};
 
 	const setupRecurringHandlers = (): void => {
-		props.setCreateStripePaymentMethod((clientSecret: string | null) => {
+		props.setCreateStripePaymentMethod((clientSecret?: string) => {
 			props.setPaymentWaiting(true);
 
 			// Recaptcha verification is required for setupIntent creation.
@@ -225,26 +188,6 @@ function CardForm(props: PropTypes) {
 				handleCardSetupForRecurring(clientSecret);
 			}
 		});
-	};
-
-	const setupOneOffRecaptchaCallback = () => {
-		window.grecaptcha?.render('robot_checkbox', {
-			sitekey: window.guardian.v2recaptchaPublicKey,
-			callback: (token: string) => {
-				trackRecaptchaClientTokenReceived();
-				props.setOneOffRecaptchaToken(token);
-			},
-		});
-	};
-
-	const setupOneOffRecaptcha = (): void => {
-		if (window.guardian.recaptchaEnabled) {
-			if (window.grecaptcha?.render) {
-				setupOneOffRecaptchaCallback();
-			} else {
-				window.v2OnloadCallback = setupOneOffRecaptchaCallback;
-			}
-		}
 	};
 
 	const handleCreatePaymentForOneOff = (): void => {
@@ -270,7 +213,12 @@ function CardForm(props: PropTypes) {
 					if (result.error) {
 						handleStripeError(result.error);
 					} else {
-						void props.onPaymentAuthorised(result.paymentMethod.id, handle3DS);
+						void props.onPaymentAuthorised(
+							getStripePaymentIntentAuthorisation(
+								result.paymentMethod.id,
+								handle3DS,
+							),
+						);
 					}
 				});
 		}
@@ -283,16 +231,6 @@ function CardForm(props: PropTypes) {
 			handleCreatePaymentForOneOff();
 		});
 	};
-
-	useEffect(() => {
-		if (stripe && elements) {
-			if (props.contributionType === 'ONE_OFF') {
-				setupOneOffRecaptcha();
-			} else if (!calledRecaptchaRender) {
-				setupRecurringRecaptcha();
-			}
-		}
-	}, [stripe, elements, props.contributionType]);
 
 	useEffect(() => {
 		if (stripe && elements) {
@@ -339,13 +277,8 @@ function CardForm(props: PropTypes) {
 			fieldStates.Expiry.name === 'Complete' &&
 			fieldStates.CVC.name === 'Complete' &&
 			isZipCodeFieldValid;
-		props.setStripeCardFormComplete(formIsComplete);
+		props.setStripeFieldsCompleted(formIsComplete);
 	}, [fieldStates, zipCode]);
-
-	const recaptchaVerified =
-		props.contributionType === 'ONE_OFF'
-			? props.oneOffRecaptchaToken
-			: props.recurringRecaptchaVerified;
 
 	return (
 		<div>
@@ -456,13 +389,16 @@ function CardForm(props: PropTypes) {
 					<div className="ds-security-check__label">
 						<label htmlFor="robot_checkbox">Security check</label>
 					</div>
-					{props.checkoutFormHasBeenSubmitted && !recaptchaVerified && (
+					{props.checkoutFormHasBeenSubmitted && !props.recaptchCompleted && (
 						<VerificationCopy
 							countryGroupId={props.countryGroupId}
 							contributionType={props.contributionType}
 						/>
 					)}
-					<Recaptcha />
+					<Recaptcha
+						onRecaptchaCompleted={onRecaptchaCompleted}
+						onRecaptchaExpired={props.expireRecaptchaToken}
+					/>
 				</div>
 			) : null}
 		</div>

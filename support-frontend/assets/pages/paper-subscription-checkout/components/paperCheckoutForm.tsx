@@ -51,7 +51,6 @@ import {
 	selectPriceForProduct,
 } from 'helpers/redux/checkout/product/selectors/productPrice';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
-import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
 	formActionCreators,
@@ -69,6 +68,7 @@ import {
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/supportedPaymentMethods';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
@@ -151,7 +151,7 @@ function mapDispatchToProps() {
 				validateWithDeliveryForm(dispatch, state);
 				// We need to track PayPal payment attempts here because PayPal behaves
 				// differently to other payment methods. All others are tracked in submit.js
-				const { paymentMethod } = state.page.checkout;
+				const { paymentMethod } = state.page.checkoutForm.payment;
 
 				if (paymentMethod === PayPal) {
 					trackSubmitAttempt(
@@ -441,14 +441,21 @@ function PaperCheckoutForm(props: PropTypes) {
 							</Rows>
 						</FormSection>
 					) : null}
-					<AddDigiSubCta
-						digiSubPrice={expandedPricingText}
-						addDigitalSubscription={addDigitalSubscription}
-					/>
-					{paymentMethods.length > 1 ? (
+					{props.participations.newProduct ===
+					'Hide this for the time being because it is not working correctly. We can delete it when the new prop is launched and tested' ? (
+						<AddDigiSubCta
+							digiSubPrice={expandedPricingText}
+							addDigitalSubscription={addDigitalSubscription}
+						/>
+					) : null}
+					{paymentMethods.length > 0 ? (
 						<FormSection
 							cssOverrides={removeTopBorder}
-							title="How would you like to pay?"
+							title={
+								paymentMethods.length > 1
+									? 'How would you like to pay?'
+									: 'Payment Method'
+							}
 						>
 							<PaymentMethodSelector
 								availablePaymentMethods={paymentMethods}
@@ -457,7 +464,13 @@ function PaperCheckoutForm(props: PropTypes) {
 								validationError={firstError('paymentMethod', props.formErrors)}
 							/>
 						</FormSection>
-					) : null}
+					) : (
+						<GeneralErrorMessage
+							classModifiers={['no-valid-payments']}
+							errorHeading="Payment methods are unavailable"
+							errorReason="all_payment_methods_unavailable"
+						/>
+					)}
 					<FormSectionHiddenUntilSelected
 						id="stripeForm"
 						show={props.paymentMethod === Stripe}
@@ -474,7 +487,6 @@ function PaperCheckoutForm(props: PropTypes) {
 									...props.formErrors,
 								] as Array<FormError<FormField>>
 							}
-							setStripePaymentMethod={props.setStripePaymentMethod}
 							validateForm={props.validateForm}
 							buttonText="Pay now"
 							csrf={props.csrf}

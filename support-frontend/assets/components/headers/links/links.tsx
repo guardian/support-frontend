@@ -24,6 +24,7 @@ type PropTypes = {
 	location: 'desktop' | 'mobile';
 	countryGroupId?: CountryGroupId;
 	getRef?: (element: Element | null) => void;
+	isNewProduct?: boolean;
 };
 
 const links: HeaderNavLink[] = [
@@ -85,16 +86,50 @@ function internationalisationID(
 	return null;
 }
 
+function getActiveLinkClassModifiers(
+	urlWithoutParams: string,
+	href: string,
+): string | null {
+	if (
+		urlWithoutParams.endsWith(href) ||
+		urlWithoutParams.endsWith(`${href}/delivery`)
+	) {
+		return 'active';
+	}
+	return null;
+}
+
 // Export
-function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
+function Links({
+	location,
+	getRef,
+	countryGroupId,
+	isNewProduct,
+}: PropTypes): JSX.Element {
 	const { protocol, host, pathname } = window.location;
 	const urlWithoutParams = `${protocol}//${host}${pathname}`;
+	const internationalisationIDValue = internationalisationID(countryGroupId);
+	const isNotUk = internationalisationIDValue !== 'uk';
 	return (
 		<nav
 			className={classNameWithModifiers('component-header-links', [location])}
 		>
 			<ul className="component-header-links__ul" ref={getRef}>
 				{links
+					.filter(({ text }) => {
+						if (
+							text === 'Digital' ||
+							text === 'Support' ||
+							text === 'Contributions' ||
+							(text === 'Newspaper' && isNotUk) ||
+							(text === 'Subscriptions' && isNotUk)
+						) {
+							if (isNewProduct) {
+								return false;
+							}
+						}
+						return true;
+					})
 					.filter(({ include }) => {
 						// If there is no country group ID for the link, return true and include the link in the rendering.
 						if (!countryGroupId) {
@@ -110,9 +145,6 @@ function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
 						return true;
 					})
 					.map((link) => {
-						const internationalisationIDValue =
-							internationalisationID(countryGroupId);
-
 						if (internationalisationIDValue == null || !link.internal) {
 							return link;
 						}
@@ -127,7 +159,7 @@ function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
 							<li
 								className={cx(
 									classNameWithModifiers('component-header-links__li', [
-										urlWithoutParams.endsWith(href) ? 'active' : null,
+										getActiveLinkClassModifiers(urlWithoutParams, href),
 									]),
 									additionalClasses,
 								)}

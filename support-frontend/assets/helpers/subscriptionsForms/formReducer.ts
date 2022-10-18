@@ -8,42 +8,17 @@ function createFormReducer() {
 	const initialState: FormState = {
 		stage: 'checkout',
 		billingAddressIsSame: true,
-		paymentMethod: null,
 		formErrors: [],
 		submissionError: null,
 		formSubmitted: false,
 		isTestUser: isTestUser(),
-		stripePaymentMethod: null,
 		deliveryInstructions: null,
-		debugInfo: '',
 	};
 
-	return function (
-		originalState: FormState = initialState,
-		action: Action,
-	): FormState {
-		const state = {
-			...originalState,
-			debugInfo: `${originalState.debugInfo} ${JSON.stringify(action)}\n`,
-		};
-
+	return function (state: FormState = initialState, action: Action): FormState {
 		switch (action.type) {
 			case 'SET_STAGE':
 				return { ...state, stage: action.stage };
-
-			case 'ON_DELIVERY_COUNTRY_CHANGED':
-				// For the payment reducer(s), we can use an extraReducer with the setDeliveryCountry action for this
-				return {
-					...state,
-					paymentMethod: null,
-				};
-
-			case 'SET_PAYMENT_METHOD':
-				return {
-					...state,
-					paymentMethod: action.paymentMethod,
-					formErrors: removeError('paymentMethod', state.formErrors),
-				};
 
 			case 'SET_FORM_ERRORS':
 				return { ...state, formErrors: action.errors };
@@ -64,9 +39,6 @@ function createFormReducer() {
 					billingAddressIsSame: action.isSame,
 					formErrors: removeError('billingAddressIsSame', state.formErrors),
 				};
-
-			case 'SET_STRIPE_PAYMENT_METHOD':
-				return { ...state, stripePaymentMethod: action.stripePaymentMethod };
 
 			case 'SET_DELIVERY_INSTRUCTIONS':
 				return { ...state, deliveryInstructions: action.instructions };

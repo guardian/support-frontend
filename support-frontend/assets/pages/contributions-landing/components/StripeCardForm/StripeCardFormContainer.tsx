@@ -24,7 +24,7 @@ type PropTypes = {
 	contributionType: ContributionType;
 	paymentMethod: PaymentMethod;
 	setCreateStripePaymentMethod: (
-		create: (clientSecret: string | null) => void,
+		create: (clientSecret?: string) => void,
 	) => void;
 };
 

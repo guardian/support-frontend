@@ -1,8 +1,10 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
 import type { Title } from 'helpers/user/details';
-import { initialPersonalDetailsState } from './state';
+import { validateForm } from '../checkoutActions';
+import { initialPersonalDetailsState, personalDetailsSchema } from './state';
 
 export const personalDetailsSlice = createSlice({
 	name: 'personalDetails',
@@ -37,6 +39,12 @@ export const personalDetailsSlice = createSlice({
 		setTelephone(state, action: PayloadAction<string>) {
 			state.telephone = action.payload;
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(
+			validateForm,
+			createSliceValidatorFor(personalDetailsSchema),
+		);
 	},
 });
 

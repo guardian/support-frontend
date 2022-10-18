@@ -11,22 +11,22 @@ import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/pa
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { hiddenIf } from 'helpers/utilities/utilities';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
-import type { State } from '../contributionsLandingReducer';
 import { AmazonPayCheckout } from './AmazonPay/AmazonPayCheckout';
 import { useAmazonPayObjects } from './AmazonPay/useAmazonPayObjects';
 
 // ----- Types ----- //
 
-function mapStateToProps(state: State) {
+function mapStateToProps(state: ContributionsState) {
 	const contributionType = getContributionType(state);
 	return {
 		currency: state.common.internationalisation.currencyId,
 		contributionType,
 		countryGroupId: state.common.internationalisation.countryGroupId,
 		isWaiting: state.page.form.isWaiting,
-		paymentMethod: state.page.form.paymentMethod,
+		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 		selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 		otherAmount:
 			state.page.checkoutForm.product.otherAmounts[contributionType].amount,
@@ -55,7 +55,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropTypes = ConnectedProps<typeof connector> & {
 	onPaymentAuthorisation: (arg0: PaymentAuthorisation) => void;
 	showBenefitsMessaging: boolean;
-	userInBenefitsVariant: boolean;
+	userInNewProductTest: boolean;
 };
 
 // ----- Render ----- //
@@ -81,7 +81,7 @@ function ContributionSubmit(props: PropTypes) {
 		props.currency,
 		props.paymentMethod,
 		props.showBenefitsMessaging,
-		props.userInBenefitsVariant,
+		props.userInNewProductTest,
 	);
 
 	const { loginObject, paymentsObject } = useAmazonPayObjects(

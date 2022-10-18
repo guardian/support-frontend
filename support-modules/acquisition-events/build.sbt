@@ -1,14 +1,14 @@
-import LibraryVersions.{circeVersion, jacksonDatabindVersion, jacksonVersion, okhttpVersion}
+import LibraryVersions.{circeVersion, jacksonDatabindVersion, jacksonVersion, okhttpVersion, awsClientVersion}
 
 name := "module-acquisition-events"
 
 description := "Module for sending acquisition events"
 
 libraryDependencies ++= Seq(
-  "com.google.cloud" % "google-cloud-bigquery" % "2.13.6",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.17.1",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "com.amazonaws" % "aws-java-sdk-kinesis" % "1.12.273",
+  "com.amazonaws" % "aws-java-sdk-kinesis" % awsClientVersion,
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
 
   // This is required to force aws libraries to use the latest version of jackson

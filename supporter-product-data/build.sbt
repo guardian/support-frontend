@@ -5,7 +5,7 @@ import sbt.Keys.libraryDependencies
 version := "0.1-SNAPSHOT"
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "ch.qos.logback" % "logback-classic" % "1.2.11",
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
@@ -48,7 +48,8 @@ deployToCode := {
   List(
     "-SupporterProductDataQueryZuora-",
     "-SupporterProductDataFetchResults-",
-    "-SupporterProductDataUpdateDynamo-",
+    "-SupporterProductDataAddSupporterRatePlanItemToQueue-",
+    "-SupporterProductDataProcessSupporterRatePlanItem-",
   ).foreach(functionPartial =>
     s"aws lambda update-function-code --function-name support${functionPartial}DEV --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!,
   )
@@ -66,7 +67,8 @@ deployToProd := {
   List(
     "-SupporterProductDataQueryZuora-",
     "-SupporterProductDataFetchResults-",
-    "-SupporterProductDataUpdateDynamo-",
+    "-SupporterProductDataAddSupporterRatePlanItemToQueue-",
+    "-SupporterProductDataProcessSupporterRatePlanItem-",
   ).foreach(functionPartial =>
     s"aws lambda update-function-code --function-name support${functionPartial}PROD --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!,
   )

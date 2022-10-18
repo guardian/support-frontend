@@ -31,6 +31,16 @@ class AlarmService(stage: Stage) {
       ),
     )
   }
+
+  def triggerSQSWriteAlarm = {
+    AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(
+      MetricRequest(
+        MetricNamespace("supporter-product-data"),
+        MetricName("SqsWriteFailure"),
+        Map(MetricDimensionName("Stage") -> MetricDimensionValue(stage.value)),
+      ),
+    )
+  }
 }
 
 object AlarmService {

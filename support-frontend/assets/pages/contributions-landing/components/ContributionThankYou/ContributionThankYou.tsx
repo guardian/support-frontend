@@ -21,9 +21,9 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { User } from 'helpers/user/userReducer';
-import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { showBenefitsThankYouText as shouldShowBenefitsThankYouText } from '../DigiSubBenefits/helpers';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
@@ -148,11 +148,10 @@ type ContributionThankYouProps = {
 	paymentMethod: PaymentMethod;
 	countryId: IsoCountry;
 	campaignCode?: string;
-	benefitsMessagingAbTestBulletVariant: boolean;
-	benefitsMessagingAbTestParaVariant: boolean;
+	isInNewProductTest: boolean;
 };
 
-const mapStateToProps = (state: State) => {
+const mapStateToProps = (state: ContributionsState) => {
 	const contributionType = getContributionType(state);
 	return {
 		email: state.page.checkoutForm.personalDetails.email,
@@ -166,16 +165,12 @@ const mapStateToProps = (state: State) => {
 		currency: state.common.internationalisation.currencyId,
 		csrf: state.page.checkoutForm.csrf,
 		user: state.page.user,
-		userTypeFromIdentityResponse: state.page.form.userTypeFromIdentityResponse,
-		paymentMethod: state.page.form.paymentMethod,
+		userTypeFromIdentityResponse:
+			state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
+		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 		countryId: state.common.internationalisation.countryId,
 		campaignCode: state.common.referrerAcquisitionData.campaignCode,
-		benefitsMessagingAbTestBulletVariant:
-			state.common.abParticipations.PP_V3 === 'V2_BULLET' &&
-			contributionType !== 'ONE_OFF',
-		benefitsMessagingAbTestParaVariant:
-			state.common.abParticipations.PP_V3 === 'V1_PARAGRAPH' &&
-			contributionType !== 'ONE_OFF',
+		isInNewProductTest: state.common.abParticipations.newProduct === 'variant',
 	};
 };
 
@@ -191,8 +186,7 @@ function ContributionThankYou({
 	paymentMethod,
 	countryId,
 	campaignCode,
-	benefitsMessagingAbTestBulletVariant,
-	benefitsMessagingAbTestParaVariant,
+	isInNewProductTest,
 }: ContributionThankYouProps) {
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 
@@ -284,11 +278,8 @@ function ContributionThankYou({
 	const firstColumn = shownComponents.slice(0, numberOfComponentsInFirstColumn);
 	const secondColumn = shownComponents.slice(numberOfComponentsInFirstColumn);
 
-	const userInBenefitsTestVariant =
-		benefitsMessagingAbTestBulletVariant || benefitsMessagingAbTestParaVariant;
-
-	const showBenefitsThankYouText =
-		userInBenefitsTestVariant &&
+	const showNewProductThankYouText =
+		isInNewProductTest &&
 		shouldShowBenefitsThankYouText(countryId, amount, contributionType);
 
 	return (
@@ -306,7 +297,7 @@ function ContributionThankYou({
 						contributionType,
 						paymentMethod,
 					)}
-					showBenefitsThankYouText={showBenefitsThankYouText}
+					showNewProductThankYouText={showNewProductThankYouText}
 				/>
 			</div>
 

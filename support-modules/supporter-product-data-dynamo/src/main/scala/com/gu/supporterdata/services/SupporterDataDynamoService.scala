@@ -32,13 +32,15 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
     // Dynamo will delete expired subs at the start of the day, whereas the subscription actually lasts until the end of the day
     val expiryDate = item.termEndDate.plusDays(1)
     val expiryDateName = "expiryDate"
+    val contributionAmount = "contributionAmount"
+    val contributionCurrency = "contributionCurrency"
 
     val key = Map(
       identityId -> AttributeValue.builder.s(beneficiaryIdentityId).build,
       subscriptionName -> AttributeValue.builder.s(item.subscriptionName).build,
     ).asJava
 
-    val updateExpression =
+    val requiredValuesExpression =
       s"""SET
           $productRatePlanId = :$productRatePlanId,
           $productRatePlanName = :$productRatePlanName,
@@ -46,19 +48,36 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
           $contractEffectiveDate = :$contractEffectiveDate,
           $expiryDateName = :$expiryDateName
           """
-    val attributeValues = Map(
+    val updateExpression =
+      if (item.contributionAmount.isDefined)
+        requiredValuesExpression + s""",
+          $contributionAmount = :$contributionAmount,
+          $contributionCurrency = :$contributionCurrency
+        """
+      else requiredValuesExpression
+
+    val requiredValues = Map(
       ":" + productRatePlanId -> AttributeValue.builder.s(item.productRatePlanId).build,
       ":" + productRatePlanName -> AttributeValue.builder.s(item.productRatePlanName).build,
       ":" + termEndDate -> AttributeValue.builder.s(asIso(item.termEndDate)).build,
       ":" + contractEffectiveDate -> AttributeValue.builder.s(asIso(item.contractEffectiveDate)).build,
       ":" + expiryDateName -> AttributeValue.builder.n(asEpochSecond(expiryDate)).build,
-    ).asJava
+    )
+
+    val attributeValues = item.contributionAmount
+      .map(amount =>
+        requiredValues ++ Map(
+          ":" + contributionAmount -> AttributeValue.builder.n(amount.amount.toString).build,
+          ":" + contributionCurrency -> AttributeValue.builder.s(amount.currency).build,
+        ),
+      )
+      .getOrElse(requiredValues)
 
     val updateItemRequest = UpdateItemRequest.builder
       .tableName(tableName)
       .key(key)
       .updateExpression(updateExpression)
-      .expressionAttributeValues(attributeValues)
+      .expressionAttributeValues(attributeValues.asJava)
       .build
 
     client.updateItem(updateItemRequest).toScala

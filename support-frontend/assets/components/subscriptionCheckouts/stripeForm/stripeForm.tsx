@@ -11,16 +11,21 @@ import type { StripeElementChangeEvent, StripeError } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import './stripeForm.scss';
-import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
-import { loadRecaptchaV2 } from 'helpers/forms/recaptcha';
-import type { StripePaymentIntentResult } from 'helpers/forms/stripe';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import { setStripePaymentMethod } from 'helpers/redux/checkout/payment/stripe/actions';
+import { getStripeSetupIntent } from 'helpers/redux/checkout/payment/stripe/thunks';
+import {
+	expireRecaptchaToken,
+	setRecaptchaToken,
+} from 'helpers/redux/checkout/recaptcha/actions';
+import {
+	useSubscriptionsDispatch,
+	useSubscriptionsSelector,
+} from 'helpers/redux/storeHooks';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import type { Option } from 'helpers/types/option';
-import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { ErrorSummary } from '../submitFormErrorSummary';
 import {
@@ -34,7 +39,6 @@ import {
 export type StripeFormPropTypes = {
 	allErrors: Array<FormError<FormField>>;
 	stripeKey: string;
-	setStripePaymentMethod: (stripePaymentMethod: Option<string>) => void;
 	submitForm: () => void;
 	validateForm: () => void;
 	buttonText: string;
@@ -78,15 +82,23 @@ const marginTop = css`
 
 function StripeForm(props: StripeFormPropTypes): JSX.Element {
 	/**
-	 * State
+	 * Redux hooks
+	 */
+	const dispatch = useSubscriptionsDispatch();
+	const setupIntentClientSecret = useSubscriptionsSelector(
+		(state) => state.page.checkoutForm.payment.stripe.setupIntentClientSecret,
+	);
+	const recaptchaCompleted = useSubscriptionsSelector(
+		(state) => state.page.checkoutForm.recaptcha.completed,
+	);
+
+	/**
+	 * Component state
 	 */
 	const [cardErrors, setCardErrors] = useState<Array<FormError<CardFieldName>>>(
 		[],
 	);
-	const [setupIntentClientSecret, setSetupIntentClientSecret] =
-		useState<Option<string>>(null);
 	const [paymentWaiting, setPaymentWaiting] = useState<boolean>(false);
-	const [recaptchaCompleted, setRecaptchaCompleted] = useState<boolean>(false);
 	const [recaptchaError, setRecaptchaError] =
 		useState<FormError<'recaptcha'> | null>(null);
 	const [cardFieldsData, setCardFieldsData] = useState<CardFieldsData>({
@@ -147,7 +159,7 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 		}
 	};
 
-	const handleCardSetup = (clientSecret: Option<string>) => {
+	const handleCardSetup = (clientSecret?: string) => {
 		const cardElement = elements?.getElement(CardNumberElement);
 		if (stripe && clientSecret && cardElement) {
 			return stripe
@@ -160,67 +172,34 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 						return Promise.reject(result.error);
 					}
 
-					return result.setupIntent.payment_method;
+					return result.setupIntent.payment_method ?? undefined;
 				});
 		}
 	};
 
 	const fetchPaymentIntent = (token: string) =>
-		fetchJson(
-			routes.stripeSetupIntentRecaptcha,
-			requestOptions(
+		dispatch(
+			getStripeSetupIntent({
+				token,
+				stripePublicKey: props.stripeKey,
+				isTestUser: props.isTestUser,
+			}),
+		).catch((error: Error) => {
+			logException(
+				`Error getting Stripe client secret for subscription: ${error.message}`,
+			);
+			setCardErrors((prevData) => [
+				...prevData,
 				{
-					token,
-					stripePublicKey: props.stripeKey,
-					isTestUser: props.isTestUser,
+					field: 'cardNumber',
+					message: appropriateErrorMessage('internal_error'),
 				},
-				'same-origin',
-				'POST',
-				props.csrf,
-			),
-		)
-			.then((result: StripePaymentIntentResult) => {
-				if (result.client_secret) {
-					setSetupIntentClientSecret(result.client_secret);
-				} else {
-					throw new Error(
-						`Missing client_secret field in response from ${routes.stripeSetupIntentRecaptcha}`,
-					);
-				}
-			})
-			.catch((error: Error) => {
-				logException(
-					`Error getting Stripe client secret for subscription: ${error.message}`,
-				);
-				setCardErrors((prevData) => [
-					...prevData,
-					{
-						field: 'cardNumber',
-						message: appropriateErrorMessage('internal_error'),
-					},
-				]);
-			});
-
-	// Creates a new setupIntent upon recaptcha verification
-	const setupRecurringRecaptchaCallback = () => {
-		window.grecaptcha?.render('robot_checkbox', {
-			sitekey: window.guardian.v2recaptchaPublicKey,
-			callback: (token: string) => {
-				trackComponentLoad('subscriptions-recaptcha-client-token-received');
-				setRecaptchaCompleted(true);
-				setRecaptchaError(null);
-				void fetchPaymentIntent(token);
-			},
+			]);
 		});
-	};
 
 	const setupRecurringHandlers = (): void => {
 		if (!window.guardian.recaptchaEnabled) {
 			void fetchPaymentIntent('dummy');
-		} else if (window.grecaptcha?.render) {
-			setupRecurringRecaptchaCallback();
-		} else {
-			window.v2OnloadCallback = setupRecurringRecaptchaCallback;
 		}
 	};
 
@@ -329,7 +308,9 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 
 	const handleCardSetupAndPay = () =>
 		handleCardSetup(setupIntentClientSecret)
-			?.then(props.setStripePaymentMethod)
+			?.then((paymentMethod?: string) =>
+				dispatch(setStripePaymentMethod(paymentMethod)),
+			)
 			.then(() => {
 				setDisableButton(false);
 				props.submitForm();
@@ -354,7 +335,6 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 	useEffect(() => {
 		if (stripe) {
 			setupRecurringHandlers();
-			void loadRecaptchaV2();
 		}
 	}, [stripe]);
 
@@ -440,6 +420,15 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 					{window.guardian.recaptchaEnabled ? (
 						<RecaptchaWithError
 							id="robot_checkbox"
+							onRecaptchaCompleted={(token: string) => {
+								trackComponentLoad(
+									'subscriptions-recaptcha-client-token-received',
+								);
+								dispatch(setRecaptchaToken(token));
+								setRecaptchaError(null);
+								void fetchPaymentIntent(token);
+							}}
+							onRecaptchaExpired={() => dispatch(expireRecaptchaToken())}
 							label="Security check"
 							// TODO: Remove type assertion when we can fix field error types
 							error={recaptchaError?.message as string}
