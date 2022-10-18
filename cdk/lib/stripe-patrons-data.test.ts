@@ -12,5 +12,7 @@ describe("The Stripe patrons data stack", () => {
 
     const template = Template.fromStack(stack);
     expect(template.toJSON()).toMatchSnapshot();
+
+    //expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
   });
 });

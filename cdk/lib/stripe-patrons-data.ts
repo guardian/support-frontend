@@ -1,10 +1,11 @@
-import { GuScheduledLambda } from "@guardian/cdk";
+import { GuApiGatewayWithLambdaByPath, GuScheduledLambda } from "@guardian/cdk";
 import type {
   GuLambdaErrorPercentageMonitoringProps,
   NoMonitoring,
 } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
+import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
 import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
 import { Schedule } from "aws-cdk-lib/aws-events";
@@ -82,5 +83,36 @@ export class StripePatronsData extends GuStack {
     super(scope, id, props);
 
     new StripePatronsDataLambda(this, id);
+
+    // Configure lambdas
+    const accountCreatedLambda = new GuLambdaFunction(
+      this,
+      "supporter-product-data-api-account-created",
+      {
+        app: "supporter-product-data-api",
+        runtime: Runtime.JAVA_11,
+        handler: "lambda-one.handler",
+        fileName: "lambda-one.zip",
+      }
+    );
+
+    // Wire up the API
+    new GuApiGatewayWithLambdaByPath(this, {
+      app: "example-api-gateway-instance",
+      targets: [
+        {
+          path: "lambda-one",
+          httpMethod: "GET",
+          lambda: accountCreatedLambda,
+        },
+      ],
+      // Create an alarm
+      monitoringConfiguration: {
+        snsTopicName: "my-topic-for-cloudwatch-alerts",
+        http5xxAlarm: {
+          tolerated5xxPercentage: 1,
+        },
+      },
+    });
   }
 }
