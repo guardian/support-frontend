@@ -16,5 +16,5 @@ deployments:
   payment-api:
     type: autoscaling
     parameters:
-      bucket: membership-dist
+      bucketSsmLookup: true
     dependencies: [cfn]
