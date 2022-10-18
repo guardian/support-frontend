@@ -9,6 +9,11 @@ describe("The Payment API stack", () => {
     const stack = new PaymentApi(app, "Frontend-PROD", {
       stack: "support",
       stage: "PROD",
+      scaling: {
+        minimumInstances: 3,
+        maximumInstances: 6,
+      },
+      domainName: "payment.guardianapis.com.origin.membership.guardianapis.com",
     });
 
     expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();

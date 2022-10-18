@@ -172,9 +172,7 @@ Resources:
           #!/bin/bash -ev
           mkdir /etc/gu
 
-          cat > /etc/gu/stage <<'EOF'
-          ${Stage}
-          EOF
+          echo ${Stage} > /etc/gu/stage
 
           aws --region ${AWS::Region} s3 cp s3://membership-dist/${Stack}/${Stage}/${App}/${ProjectName}_${ProjectVersion}_all.deb /tmp
           dpkg -i /tmp/${ProjectName}_${ProjectVersion}_all.deb
