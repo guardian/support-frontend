@@ -1,4 +1,8 @@
 import { Button } from '@guardian/source-react-components';
+import QRCodes from './moduleComponents/QRCodes';
+import downloadIcon from './temp/icons/download.png';
+import packshotDesktop from './temp/imgs/packshotDesktop.png';
+import packshotMob from './temp/imgs/packshotMob.png';
 import type { ThankYouModuleType } from './thankYouModule';
 
 function AppDownloadBadges(): JSX.Element {
@@ -47,23 +51,31 @@ function FeedbackButton(): JSX.Element {
 	return <Button>Provide Feedback</Button>;
 }
 
+interface Images {
+	mobile: JSX.Element;
+	desktop: JSX.Element;
+}
+
 type ThankYouModuleData = {
 	icon: JSX.Element;
 	heading: string;
 	bodyCopy: string;
 	ctas: JSX.Element;
-	img?: JSX.Element;
+	images?: Images;
 	qrCodes?: JSX.Element;
 };
 
 const thankYouModuleData: Record<ThankYouModuleType, ThankYouModuleData> = {
 	downloadTheApp: {
-		icon: <p>Download Icon</p>,
-		heading: 'Download The App Heading',
-		bodyCopy: 'Body Copy',
+		icon: <img src={downloadIcon} alt="download" />,
+		heading: 'Download the Guardian app',
+		bodyCopy: 'Unlock full access to our quality news app today',
 		ctas: <AppDownloadBadges />,
-		img: <p>Placeholder Img</p>,
-		qrCodes: <p>QR Codes</p>,
+		images: {
+			mobile: <img src={packshotMob} alt="download" />,
+			desktop: <img src={packshotDesktop} alt="download" />,
+		},
+		qrCodes: <QRCodes />,
 	},
 	feedback: {
 		icon: <p>Feedback Icon</p>,
