@@ -1,24 +1,38 @@
+import { css } from '@emotion/react';
+import { from, space, sport } from '@guardian/source-foundations';
 import React from 'react';
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
-import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
+
+const container = css`
+	padding: 0px ${space[3]}px;
+
+	${from.tablet} {
+		background-color: ${sport[800]};
+		width: 100%;
+		padding: 50px;
+	}
+`;
 
 export default {
 	title: 'Checkouts/Thank You Module',
 	component: ThankYouModule,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
-			<div>
+			<div css={container}>
 				<Story />
 			</div>
 		),
-		withCenterAlignment,
 	],
 };
 
 function Template(args: ThankYouModuleProps): JSX.Element {
 	return (
-		<ThankYouModule moduleType={args.moduleType} isSignedIn={args.isSignedIn} />
+		<ThankYouModule
+			moduleType={args.moduleType}
+			isSignedIn={args.isSignedIn}
+			contryGroupId={args.contryGroupId}
+		/>
 	);
 }
 
@@ -29,6 +43,7 @@ export const DownloadTheAppSignedIn = Template.bind({});
 DownloadTheAppSignedIn.args = {
 	moduleType: 'downloadTheApp',
 	isSignedIn: true,
+	contryGroupId: 'GBPCountries',
 };
 
 export const DownloadTheAppSignedOut = Template.bind({});
@@ -36,4 +51,5 @@ export const DownloadTheAppSignedOut = Template.bind({});
 DownloadTheAppSignedOut.args = {
 	moduleType: 'downloadTheApp',
 	isSignedIn: false,
+	contryGroupId: 'GBPCountries',
 };
