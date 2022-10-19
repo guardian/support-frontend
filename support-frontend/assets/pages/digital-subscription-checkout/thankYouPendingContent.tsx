@@ -4,7 +4,6 @@ import * as React from 'react';
 import Content from 'components/content/content';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
-import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 import Text, { LargeParagraph } from 'components/text/text';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
@@ -57,9 +56,6 @@ function ThankYouPendingContent(props: PropTypes): JSX.Element {
 					</p>
 				</Text>
 			</Content>
-			{props.includePaymentCopy ? (
-				<SubscriptionsSurvey product={DigitalPack} />
-			) : null}
 			<Content>{props.marketingConsent}</Content>
 		</div>
 	);
