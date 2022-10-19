@@ -9,7 +9,7 @@ import {
 	text,
 	textSans,
 } from '@guardian/source-foundations';
-import { LinkButton, SvgCheckmark } from '@guardian/source-react-components';
+import { SvgCheckmark } from '@guardian/source-react-components';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import GridImage from 'components/gridImage/gridImage';
@@ -79,12 +79,6 @@ const blueSans = css`
 `;
 const subHeading = css`
 	${headline.xsmall({
-		fontWeight: 'bold',
-	})};
-	margin-bottom: ${space[3]}px;
-`;
-const minorHeading = css`
-	${headline.xxsmall({
 		fontWeight: 'bold',
 	})};
 	margin-bottom: ${space[3]}px;
