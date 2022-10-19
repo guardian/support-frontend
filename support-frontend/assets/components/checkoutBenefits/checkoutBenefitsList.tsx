@@ -89,6 +89,10 @@ export function CheckoutBenefitsList({
 					</tr>
 				))}
 			</table>
+			{/* <UpsellButton
+				buttonCopy={buttonCopy}
+				handleButtonClick={handleButtonClick}
+			/> */}
 			<hr css={hr(`${space[5]}px 0 ${space[4]}px`)} />
 			<p css={para}>Cancel anytime</p>
 		</div>
