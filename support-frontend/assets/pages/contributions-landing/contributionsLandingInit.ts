@@ -23,6 +23,7 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { setBillingState } from 'helpers/redux/checkout/address/actions';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
 import {
@@ -47,7 +48,6 @@ import {
 	getUserType,
 	setUserTypeFromIdentityResponse,
 	updateSelectedExistingPaymentMethod,
-	updateUserFormData,
 } from './contributionsLandingActions';
 import type { State } from './contributionsLandingReducer';
 
@@ -285,11 +285,7 @@ const init = (store: ContributionsStore): void => {
 		dispatch(getUserType(email));
 	}
 
-	dispatch(
-		updateUserFormData({
-			billingState: stateField,
-		}),
-	);
+	dispatch(setBillingState(stateField));
 	void loadRecaptchaV2();
 };
 

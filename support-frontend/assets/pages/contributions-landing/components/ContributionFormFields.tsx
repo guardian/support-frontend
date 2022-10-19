@@ -7,6 +7,7 @@ import {
 	checkBillingState,
 	emailRegexPattern,
 } from 'helpers/forms/formValidation';
+import { setBillingState } from 'helpers/redux/checkout/address/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { applyPersonalDetailsRules } from 'helpers/subscriptionsForms/rules';
@@ -16,7 +17,6 @@ import {
 	setEmail,
 	setFirstName,
 	setLastName,
-	updateBillingState,
 } from '../contributionsLandingActions';
 import ContributionState from './ContributionState';
 
@@ -48,7 +48,7 @@ const mapStateToProps = (state: ContributionsState) => ({
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
 	billingState:
 		getCheckoutFormValue(
-			state.page.form.formData.billingState,
+			state.page.checkoutForm.billingAddress.fields.state,
 			state.page.user.stateField,
 		) ?? '',
 	isSignedIn: state.page.checkoutForm.personalDetails.isSignedIn,
@@ -61,7 +61,7 @@ const mapDispatchToProps = {
 	setFirstName,
 	setLastName,
 	setEmail,
-	updateBillingState,
+	setBillingState,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -82,7 +82,7 @@ function ContributionFormFields({
 	setFirstName,
 	setLastName,
 	setEmail,
-	updateBillingState,
+	setBillingState,
 }: ContributionFormFieldProps) {
 	const formErrors = applyPersonalDetailsRules({
 		firstName,
@@ -164,9 +164,7 @@ function ContributionFormFields({
 			) : null}
 
 			<ContributionState
-				onChange={(newBillingState) =>
-					updateBillingState(newBillingState === '' ? null : newBillingState)
-				}
+				onChange={setBillingState}
 				selectedState={billingState}
 				isValid={checkBillingState(billingState)}
 				formHasBeenSubmitted={checkoutFormHasBeenSubmitted}

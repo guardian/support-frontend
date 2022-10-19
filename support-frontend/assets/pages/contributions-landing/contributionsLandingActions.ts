@@ -56,6 +56,10 @@ import {
 } from 'helpers/internationalisation/country';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import {
+	setBillingCountry,
+	setBillingState,
+} from 'helpers/redux/checkout/address/actions';
+import {
 	setAmazonPayFatalError,
 	setAmazonPayWalletIsStale,
 } from 'helpers/redux/checkout/payment/amazonPay/actions';
@@ -79,25 +83,11 @@ import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
-import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
-import type { UserFormData } from './contributionsLandingReducer';
 
 export type Action =
 	| {
 			type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD';
 			existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	  }
-	| {
-			type: 'UPDATE_BILLING_STATE';
-			billingState: StateProvince | null;
-	  }
-	| {
-			type: 'UPDATE_BILLING_COUNTRY';
-			billingCountry: IsoCountry | null;
-	  }
-	| {
-			type: 'UPDATE_USER_FORM_DATA';
-			userFormData: UserFormData;
 	  }
 	| {
 			type: 'PAYMENT_FAILURE';
@@ -136,29 +126,6 @@ const updateSelectedExistingPaymentMethod = (
 ): Action => ({
 	type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD',
 	existingPaymentMethod,
-});
-
-const updateUserFormData =
-	(userFormData: UserFormData) =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_USER_FORM_DATA',
-			userFormData,
-		}))(dispatch, getState);
-	};
-
-const updateBillingState =
-	(billingState: StateProvince | null) =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
-		setFormSubmissionDependentValue(() => ({
-			type: 'UPDATE_BILLING_STATE',
-			billingState,
-		}))(dispatch, getState);
-	};
-
-const updateBillingCountry = (billingCountry: IsoCountry | null): Action => ({
-	type: 'UPDATE_BILLING_COUNTRY',
-	billingCountry,
 });
 
 const setCheckoutFormHasBeenSubmitted = (): Action => ({
@@ -261,12 +228,13 @@ function getBillingCountryAndState(
 	billingState: Option<StateProvince>;
 } {
 	const pageBaseCountry = state.common.internationalisation.countryId; // Needed later
+	const { country: billingCountry, state: billingState } =
+		state.page.checkoutForm.billingAddress.fields;
 
 	// If the user chose a Direct Debit payment method, then we must use the pageBaseCountry as the billingCountry.
 	if (
 		[DirectDebit, ExistingDirectDebit].includes(authorisation.paymentMethod)
 	) {
-		const { billingState } = state.page.form.formData;
 		return {
 			billingCountry: pageBaseCountry,
 			billingState,
@@ -276,8 +244,7 @@ function getBillingCountryAndState(
 	// If the page form has a billingCountry, then it must have been provided by a wallet, ApplePay or
 	// Payment Request Button, which will already have filtered the billingState by stateProvinceFromString,
 	// so we can trust both values, verbatim.
-	if (state.page.form.formData.billingCountry) {
-		const { billingCountry, billingState } = state.page.form.formData;
+	if (billingCountry) {
 		return {
 			billingCountry,
 			billingState,
@@ -286,31 +253,25 @@ function getBillingCountryAndState(
 
 	// If we have a billingState but no billingCountry then the state must have come from the drop-down on the website,
 	// wherupon it must match with the page's base country.
-	if (
-		state.page.form.formData.billingState &&
-		!state.page.form.formData.billingCountry
-	) {
+	if (billingState && !billingCountry) {
 		return {
 			billingCountry: pageBaseCountry,
-			billingState: stateProvinceFromString(
-				pageBaseCountry,
-				state.page.form.formData.billingState,
-			),
+			billingState: stateProvinceFromString(pageBaseCountry, billingState),
 		};
 	}
 
 	// Else, it's not a wallet transaction, and it's a no-state checkout page, so the only other option is to determine
 	// the country and state from GEO-IP, and failing that, the page's base country, ultimately from the countryGroup
 	// (e.g. DE for Europe, IN for International, GB for United Kingdom).
-	const billingCountry =
+	const fallbackCountry =
 		findIsoCountry(window.guardian.geoip?.countryCode) ?? pageBaseCountry;
-	const billingState = stateProvinceFromString(
+	const fallbackState = stateProvinceFromString(
 		billingCountry,
 		window.guardian.geoip?.stateCode,
 	);
 	return {
-		billingCountry,
-		billingState,
+		billingCountry: fallbackCountry,
+		billingState: fallbackState,
 	};
 }
 
@@ -467,8 +428,8 @@ const onPaymentResult =
 						}
 
 						// Reset any updates the previous payment method had made to the form's billingCountry or billingState
-						dispatch(updateBillingCountry(null));
-						updateBillingState(null)(dispatch, getState);
+						dispatch(setBillingCountry(''));
+						dispatch(setBillingState(''));
 						// Finally, trigger the form display
 						if (result.error) {
 							dispatch(paymentFailure(result.error));
@@ -719,9 +680,6 @@ export {
 	setFirstName,
 	setLastName,
 	setEmail,
-	updateBillingState,
-	updateBillingCountry,
-	updateUserFormData,
 	setUserTypeFromIdentityResponse,
 	paymentFailure,
 	paymentWaiting,

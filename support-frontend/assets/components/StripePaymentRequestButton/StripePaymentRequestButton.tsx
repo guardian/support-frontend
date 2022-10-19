@@ -36,6 +36,10 @@ import {
 	findIsoCountry,
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
+import {
+	setBillingCountry,
+	setBillingState,
+} from 'helpers/redux/checkout/address/actions';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import {
 	clickPaymentRequestButton,
@@ -53,8 +57,6 @@ import {
 	setFirstName,
 	setLastName,
 	paymentWaiting as setPaymentWaiting,
-	updateBillingCountry,
-	updateBillingState,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 import { trackComponentEvents } from '../../helpers/tracking/ophan';
@@ -102,7 +104,7 @@ const mapStateToProps = (state: State, ownProps: PropsFromParent) => ({
 		],
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	country: state.common.internationalisation.countryId,
-	billingState: state.page.form.formData.billingState,
+	billingState: state.page.checkoutForm.billingAddress.fields.state,
 	currency: state.common.internationalisation.currencyId,
 	isTestUser: state.page.user.isTestUser ?? false,
 	paymentMethod: state.page.checkoutForm.payment.paymentMethod,
@@ -116,8 +118,8 @@ const mapDispatchToProps = {
 	updateEmail: setEmail,
 	updateFirstName: setFirstName,
 	updateLastName: setLastName,
-	updateBillingState,
-	updateBillingCountry,
+	setBillingState,
+	setBillingCountry,
 	clickPaymentRequestButton,
 	setPaymentMethod,
 	setPaymentWaiting,
@@ -296,8 +298,8 @@ function onPayment(
 			); // Don't update the form, because the user may pick another payment method that doesn't update formData.
 		} else {
 			// Update the form data with the billing country value and a valid-or-null billing state
-			props.updateBillingCountry(validatedCountryFromCard);
-			props.updateBillingState(validatedBillingStateFromCard);
+			props.setBillingCountry(validatedCountryFromCard);
+			props.setBillingState(validatedBillingStateFromCard ?? '');
 			countryAndStateValueOk = true;
 		}
 	}
