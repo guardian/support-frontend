@@ -1,5 +1,5 @@
-stacks: [support]
-regions: [eu-west-1]
+stacks: [ support ]
+regions: [ eu-west-1 ]
 allowedStages:
   - CODE
   - PROD
@@ -15,7 +15,10 @@ deployments:
     type: aws-lambda
     parameters:
       bucket: membership-dist
-      functionNames: [stripe-patrons-data-]
+      functionNames:
+        - stripe-patrons-data-
+        - stripe-patrons-data-cancelled-
       fileName: stripe-patrons-data.jar
       prefixStack: false
-    dependencies: [cfn]
+    dependencies: [ cfn ]
+
