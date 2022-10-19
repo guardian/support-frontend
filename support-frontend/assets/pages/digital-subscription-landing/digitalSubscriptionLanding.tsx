@@ -14,6 +14,7 @@ import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
+import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -195,6 +196,11 @@ function DigitalLandingComponent({
 		currencyId,
 		countryGroupId,
 	);
+  
+	const [setElementToObserve] = useHasBeenSeen({
+		threshold: 0.3,
+		debounce: true,
+	});
 
 	return (
 		<span>
