@@ -296,16 +296,6 @@ function ThankYouGift(props: PropTypes) {
 						</ul>
 					</PageSection>
 					<PageSection>
-						<h3 css={minorHeading}>Tell us about your experience</h3>
-						<LinkButton
-							href="https://www.surveymonkey.co.uk/r/QF9ZGQR"
-							priority="secondary"
-							aria-label="Link to subscription survey"
-						>
-							Share your thoughts
-						</LinkButton>
-					</PageSection>
-					<PageSection>
 						{props.marketingConsent}
 						<div css={sansText}>
 							This is the option to choose if you want to hear about how to make
