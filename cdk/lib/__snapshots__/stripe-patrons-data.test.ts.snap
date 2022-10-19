@@ -6,7 +6,6 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
     "gu:cdk:constructs": [
       "GuDistributionBucketParameter",
       "GuLambdaErrorPercentageAlarm",
-      "GuLambdaFunction",
       "GuApiGatewayWithLambdaByPath",
       "GuApiGateway5xxPercentageAlarm",
     ],
@@ -212,10 +211,13 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "RestApiDeployment180EC50306e942dca44ef0235ca1a23115d2ec23": {
+    "RestApiDeployment180EC5035777c64ff4f14d74070508947cff7b40": {
       "DependsOn": [
-        "RestApilambdaoneGET6E862584",
-        "RestApilambdaoneA9252B2D",
+        "RestApipatron1DDE9314",
+        "RestApipatronsubscriptioncancelcountryIdPOSTFA2082F3",
+        "RestApipatronsubscriptioncancelcountryId57A3F9F4",
+        "RestApipatronsubscriptioncancel0F56DD38",
+        "RestApipatronsubscriptionAE58DC90",
       ],
       "Properties": {
         "Description": "Automatically created by the RestApi construct",
@@ -231,7 +233,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "RestApiDeployment180EC50306e942dca44ef0235ca1a23115d2ec23",
+          "Ref": "RestApiDeployment180EC5035777c64ff4f14d74070508947cff7b40",
         },
         "RestApiId": {
           "Ref": "RestApi0C43BF4B",
@@ -258,7 +260,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "RestApilambdaoneA9252B2D": {
+    "RestApipatron1DDE9314": {
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
@@ -266,59 +268,55 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
             "RootResourceId",
           ],
         },
-        "PathPart": "lambda-one",
+        "PathPart": "patron",
         "RestApiId": {
           "Ref": "RestApi0C43BF4B",
         },
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "RestApilambdaoneGET6E862584": {
+    "RestApipatronsubscriptionAE58DC90": {
       "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "GET",
-        "Integration": {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
-                {
-                  "Fn::GetAtt": [
-                    "supporterproductdataapiaccountcreated9B7951CA",
-                    "Arn",
-                  ],
-                },
-                "/invocations",
-              ],
-            ],
-          },
+        "ParentId": {
+          "Ref": "RestApipatron1DDE9314",
         },
-        "ResourceId": {
-          "Ref": "RestApilambdaoneA9252B2D",
-        },
+        "PathPart": "subscription",
         "RestApiId": {
           "Ref": "RestApi0C43BF4B",
         },
       },
-      "Type": "AWS::ApiGateway::Method",
+      "Type": "AWS::ApiGateway::Resource",
     },
-    "RestApilambdaoneGETApiPermissionStripePatronsDataPRODRestApi790D3BDCGETlambdaoneCAEDFFD1": {
+    "RestApipatronsubscriptioncancel0F56DD38": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "RestApipatronsubscriptionAE58DC90",
+        },
+        "PathPart": "cancel",
+        "RestApiId": {
+          "Ref": "RestApi0C43BF4B",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "RestApipatronsubscriptioncancelcountryId57A3F9F4": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "RestApipatronsubscriptioncancel0F56DD38",
+        },
+        "PathPart": "{countryId}",
+        "RestApiId": {
+          "Ref": "RestApi0C43BF4B",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "RestApipatronsubscriptioncancelcountryIdPOSTApiPermissionStripePatronsDataPRODRestApi790D3BDCPOSTpatronsubscriptioncancelcountryId69A52814": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "supporterproductdataapiaccountcreated9B7951CA",
+            "stripepatronsdatacancelled2E3CED96",
             "Arn",
           ],
         },
@@ -347,19 +345,19 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
               {
                 "Ref": "RestApiDeploymentStageprod3855DE66",
               },
-              "/GET/lambda-one",
+              "/POST/patron/subscription/cancel/*",
             ],
           ],
         },
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "RestApilambdaoneGETApiPermissionTestStripePatronsDataPRODRestApi790D3BDCGETlambdaone328D69C9": {
+    "RestApipatronsubscriptioncancelcountryIdPOSTApiPermissionTestStripePatronsDataPRODRestApi790D3BDCPOSTpatronsubscriptioncancelcountryId414EED6A": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "supporterproductdataapiaccountcreated9B7951CA",
+            "stripepatronsdatacancelled2E3CED96",
             "Arn",
           ],
         },
@@ -384,12 +382,52 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
               {
                 "Ref": "RestApi0C43BF4B",
               },
-              "/test-invoke-stage/GET/lambda-one",
+              "/test-invoke-stage/POST/patron/subscription/cancel/*",
             ],
           ],
         },
       },
       "Type": "AWS::Lambda::Permission",
+    },
+    "RestApipatronsubscriptioncancelcountryIdPOSTFA2082F3": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "POST",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "stripepatronsdatacancelled2E3CED96",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "RestApipatronsubscriptioncancelcountryId57A3F9F4",
+        },
+        "RestApiId": {
+          "Ref": "RestApi0C43BF4B",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
     },
     "StripePatronsDataPROD61F45521": {
       "DependsOn": [
@@ -755,30 +793,31 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "supporterproductdataapiaccountcreated9B7951CA": {
+    "stripepatronsdatacancelled2E3CED96": {
       "DependsOn": [
-        "supporterproductdataapiaccountcreatedServiceRoleDefaultPolicyCC75CDA2",
-        "supporterproductdataapiaccountcreatedServiceRole0BC34CD8",
+        "stripepatronsdatacancelledServiceRoleDefaultPolicy46825C35",
+        "stripepatronsdatacancelledServiceRole157E3052",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/supporter-product-data-api/lambda-one.zip",
+          "S3Key": "support/PROD/stripe-patrons-data/stripe-patrons-data.jar",
         },
         "Environment": {
           "Variables": {
-            "APP": "supporter-product-data-api",
+            "APP": "stripe-patrons-data",
             "STACK": "support",
             "STAGE": "PROD",
           },
         },
-        "Handler": "lambda-one.handler",
+        "FunctionName": "stripe-patrons-data-cancelled-PROD",
+        "Handler": "com.gu.patrons.lambdas.PatronCancelledEventLambda::handleRequest",
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "supporterproductdataapiaccountcreatedServiceRole0BC34CD8",
+            "stripepatronsdatacancelledServiceRole157E3052",
             "Arn",
           ],
         },
@@ -786,7 +825,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "supporter-product-data-api",
+            "Value": "stripe-patrons-data",
           },
           {
             "Key": "gu:cdk:version",
@@ -805,11 +844,11 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
             "Value": "PROD",
           },
         ],
-        "Timeout": 30,
+        "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
     },
-    "supporterproductdataapiaccountcreatedServiceRole0BC34CD8": {
+    "stripepatronsdatacancelledServiceRole157E3052": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -840,7 +879,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "supporter-product-data-api",
+            "Value": "stripe-patrons-data",
           },
           {
             "Key": "gu:cdk:version",
@@ -862,7 +901,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "supporterproductdataapiaccountcreatedServiceRoleDefaultPolicyCC75CDA2": {
+    "stripepatronsdatacancelledServiceRoleDefaultPolicy46825C35": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -901,7 +940,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/supporter-product-data-api/lambda-one.zip",
+                      "/support/PROD/stripe-patrons-data/stripe-patrons-data.jar",
                     ],
                   ],
                 },
@@ -922,7 +961,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/supporter-product-data-api",
+                    ":parameter/PROD/support/stripe-patrons-data",
                   ],
                 ],
               },
@@ -945,7 +984,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/supporter-product-data-api/*",
+                    ":parameter/PROD/support/stripe-patrons-data/*",
                   ],
                 ],
               },
@@ -953,10 +992,10 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "supporterproductdataapiaccountcreatedServiceRoleDefaultPolicyCC75CDA2",
+        "PolicyName": "stripepatronsdatacancelledServiceRoleDefaultPolicy46825C35",
         "Roles": [
           {
-            "Ref": "supporterproductdataapiaccountcreatedServiceRole0BC34CD8",
+            "Ref": "stripepatronsdatacancelledServiceRole157E3052",
           },
         ],
       },
