@@ -90,7 +90,7 @@
     "@guardian/pasteup": "1.0.0-alpha.7",
     "@guardian/source-foundations": "^5.2.1",
     "@guardian/source-react-components": "^7.1.0",
-    "@guardian/source-react-components-development-kitchen": "^3.1.10",
+    "@guardian/source-react-components-development-kitchen": "^5.0.0",
     "@juggle/resize-observer": "^3.3.1",
     "@reduxjs/toolkit": "^1.8.1",
     "@sentry/browser": "^5.4.0",

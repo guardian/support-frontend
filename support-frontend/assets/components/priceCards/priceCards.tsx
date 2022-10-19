@@ -61,9 +61,9 @@ const cardsContainer = css`
 
 function getChoiceCardGroupStyles(amountOfAmounts: number) {
 	if (amountOfAmounts % 2) {
-		return [cardStyles, mobileGrid, cardsContainer];
+		return [cardStyles, mobileGrid];
 	}
-	return [cardStyles, otherAmountFullWidthStyles, mobileGrid, cardsContainer];
+	return [cardStyles, otherAmountFullWidthStyles, mobileGrid];
 }
 
 export type PriceCardsProps = {
@@ -72,6 +72,7 @@ export type PriceCardsProps = {
 	currency: IsoCurrency;
 	onAmountChange: (newAmount: string) => void;
 	paymentInterval?: PriceCardPaymentInterval;
+	otherAmountField?: React.ReactNode;
 };
 
 export function PriceCards({
@@ -80,36 +81,40 @@ export function PriceCards({
 	currency,
 	onAmountChange,
 	paymentInterval,
+	otherAmountField,
 }: PriceCardsProps): JSX.Element {
 	const otherAmountLabel = amounts.length % 2 ? 'Other' : 'Choose your amount';
 
 	return (
-		<ChoiceCardGroup
-			cssOverrides={getChoiceCardGroupStyles(amounts.length)}
-			name="amounts"
-			columns={2}
-		>
-			<>
-				{amounts.map((amount) => (
+		<div css={cardsContainer}>
+			<ChoiceCardGroup
+				cssOverrides={getChoiceCardGroupStyles(amounts.length)}
+				name="amounts"
+				columns={2}
+			>
+				<>
+					{amounts.map((amount) => (
+						<PriceCard
+							amount={amount}
+							amountWithCurrency={simpleFormatAmount(
+								currencies[currency],
+								amount,
+							)}
+							isSelected={amount === selectedAmount}
+							onClick={onAmountChange}
+							paymentInterval={paymentInterval}
+						/>
+					))}
 					<PriceCard
-						amount={amount}
-						amountWithCurrency={simpleFormatAmount(
-							currencies[currency],
-							amount,
-						)}
-						isSelected={amount === selectedAmount}
+						amount="other"
+						amountWithCurrency="other"
+						isSelected={selectedAmount === 'other'}
 						onClick={onAmountChange}
-						paymentInterval={paymentInterval}
+						alternateLabel={otherAmountLabel}
 					/>
-				))}
-				<PriceCard
-					amount="other"
-					amountWithCurrency="other"
-					isSelected={selectedAmount === 'other'}
-					onClick={onAmountChange}
-					alternateLabel={otherAmountLabel}
-				/>
-			</>
-		</ChoiceCardGroup>
+				</>
+			</ChoiceCardGroup>
+			{otherAmountField}
+		</div>
 	);
 }

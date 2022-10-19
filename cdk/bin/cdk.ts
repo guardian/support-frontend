@@ -1,5 +1,5 @@
 import "source-map-support/register";
-import { App } from "@aws-cdk/core";
+import { App } from "aws-cdk-lib";
 import { Frontend } from "../lib/frontend";
 import { PaymentApi } from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
@@ -52,9 +52,20 @@ new StripePatronsData(app, "StripePatronsData-PROD", {
 new PaymentApi(app, "Payment-API-CODE", {
   stack: "support",
   stage: "CODE",
+  domainName:
+    "pay.code.dev-guardianapis.com.origin.membership.guardianapis.com",
+  scaling: {
+    minimumInstances: 1,
+    maximumInstances: 2,
+  },
 });
 
 new PaymentApi(app, "Payment-API-PROD", {
   stack: "support",
   stage: "PROD",
+  domainName: "payment.guardianapis.com.origin.membership.guardianapis.com",
+  scaling: {
+    minimumInstances: 3,
+    maximumInstances: 6,
+  },
 });
