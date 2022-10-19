@@ -13,6 +13,8 @@ libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.1",
+  "com.amazonaws" % "aws-lambda-java-events" % "3.11.0",
+  "com.stripe" % "stripe-java" % "20.128.0",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
@@ -50,8 +52,9 @@ deployToCode := {
   (s"aws s3 cp ${assembly.value} s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!
   List(
     "stripe-patrons-data-CODE",
-  ).foreach(functionPartial =>
-    s"aws lambda update-function-code --function-name ${functionPartial} --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!,
-  )
-
+    "stripe-patrons-data-cancelled-CODE"
+  ).foreach(functionPartial => {
+    System.out.println(s"Updating function $functionPartial")
+    s"aws lambda update-function-code --function-name ${functionPartial} --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!
+  })
 }

@@ -92,6 +92,9 @@ class PatronCancelledLambda extends GuLambdaFunction {
       runtime: Runtime.JAVA_11,
       timeout: Duration.minutes(15),
     });
+
+    this.addToRolePolicy(parameterStorePolicy(scope, appName));
+    this.addToRolePolicy(dynamoPolicy(scope.stage));
   }
 }
 
@@ -107,7 +110,7 @@ export class StripePatronsData extends GuStack {
 
     // Wire up the API
     new GuApiGatewayWithLambdaByPath(this, {
-      app: "example-api-gateway-instance",
+      app: appName,
       targets: [
         {
           path: "patron/subscription/cancel/{countryId}",
