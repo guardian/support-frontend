@@ -6,10 +6,7 @@ import HeadingBlock from 'components/headingBlock/headingBlock';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import Text, { LargeParagraph } from 'components/text/text';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {
-	DigitalPack,
-	sendTrackingEventsOnClick,
-} from 'helpers/productPrice/subscriptions';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import ThankYouHero from './components/thankYou/hero';
 
 // ----- Types ----- //
