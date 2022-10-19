@@ -36,7 +36,6 @@ import { routes } from 'helpers/urls/routes';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
 import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
-import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
 import { DigitalFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import {
 	footer,
@@ -258,7 +257,6 @@ function DigitalLandingComponent({
 					/>
 				</CentredContainer>
 			</FullWidthContainer>
-			<FeedbackWidget display={widgetShouldDisplay} />
 		</span>
 	);
 }
