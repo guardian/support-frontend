@@ -11,8 +11,8 @@ import type {
 	StripeCardExpiryElementChangeEvent,
 	StripeCardNumberElementChangeEvent,
 } from '@stripe/stripe-js';
-import type { StripeFormErrors } from 'helpers/redux/checkout/payment/stripe/state';
 import { ElementDecorator } from './elementDecorator';
+import type { StripeCardFormDisplayErrors } from './selectors';
 
 const sectionLegend = css`
 	${headline.xxsmall({ fontWeight: 'bold' })}
@@ -22,14 +22,18 @@ type StripeCardFormProps = {
 	onCardNumberChange: (event: StripeCardNumberElementChangeEvent) => void;
 	onExpiryChange: (event: StripeCardExpiryElementChangeEvent) => void;
 	onCvcChange: (event: StripeCardCvcElementChangeEvent) => void;
+	onZipCodeChange: (newZipCode: string) => void;
+	zipCode: string;
 	showZipCode: boolean;
-	errors: StripeFormErrors;
+	errors: StripeCardFormDisplayErrors;
 };
 
 export function StripeCardForm({
 	onCardNumberChange,
 	onExpiryChange,
 	onCvcChange,
+	onZipCodeChange,
+	zipCode,
 	showZipCode,
 	errors,
 }: StripeCardFormProps): JSX.Element {
@@ -81,9 +85,8 @@ export function StripeCardForm({
 						id="zipCode"
 						name="zip-code"
 						label="ZIP code"
-						// value={zipCode}
-						// onChange={updateZipCode}
-						// error={showZipCodeError ? 'Please enter a valid ZIP code' : ''}
+						value={zipCode}
+						onChange={(e) => onZipCodeChange(e.target.value)}
 					/>
 				</div>
 			)}
