@@ -1,18 +1,13 @@
 import { App } from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
-import { PaymentApi } from "./payment-api";
+import { StripePatronsData } from "./stripe-patrons-data";
 
-describe("The Payment API stack", () => {
+describe("The Stripe patrons data stack", () => {
   it("matches the snapshot", () => {
     const app = new App();
-    const stack = new PaymentApi(app, "Frontend-PROD", {
+    const stack = new StripePatronsData(app, "StripePatronsData-PROD", {
       stack: "support",
       stage: "PROD",
-      scaling: {
-        minimumInstances: 3,
-        maximumInstances: 6,
-      },
-      domainName: "payment.guardianapis.com.origin.membership.guardianapis.com",
     });
 
     const template = Template.fromStack(stack);

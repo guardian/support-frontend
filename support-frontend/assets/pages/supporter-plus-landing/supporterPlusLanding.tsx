@@ -79,13 +79,16 @@ export function SupporterPlusLandingPage(): JSX.Element {
 		<PageScaffold
 			id="supporter-plus-landing"
 			header={
-				<Header>
-					<Hide from="desktop">
-						<CountrySwitcherContainer>
-							<CountryGroupSwitcher {...countrySwitcherProps} />
-						</CountrySwitcherContainer>
-					</Hide>
-				</Header>
+				<>
+					<Header>
+						<Hide from="desktop">
+							<CountrySwitcherContainer>
+								<CountryGroupSwitcher {...countrySwitcherProps} />
+							</CountrySwitcherContainer>
+						</Hide>
+					</Header>
+					<Nav {...countrySwitcherProps} />
+				</>
 			}
 			footer={
 				<FooterWithContents>
@@ -93,7 +96,6 @@ export function SupporterPlusLandingPage(): JSX.Element {
 				</FooterWithContents>
 			}
 		>
-			<Nav {...countrySwitcherProps} />
 			<CheckoutHeading heading={heading}>
 				<p>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
