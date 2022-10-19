@@ -15,20 +15,24 @@ class LandingCopyProvider(
   // To see if there is any promotional copy in place for this page we need to get a country in the current region (country group)
   // this is because promotions apply to countries not regions. We can use any country however because the promo tool UI only deals
   // with regions and then adds all the countries for that region to the promotion
-  def promotionCopy(queryPromos: List[String], product1: Product, countryCode: String): Option[PromotionCopy] = {
+  def promotionCopy(promos: List[String], product1: Product, countryCode: String): Option[PromotionCopy] = {
     val country = (for {
       countryGroup <- CountryGroup.byId(countryCode)
       country <- countryGroup.countries.headOption
     } yield country).getOrElse(UK)
-    promotionCopyForPrimaryCountry(queryPromos, product1, country)
+    println("Testing -----------------------")
+    println(country)
+    println(promotionCopyForPrimaryCountry(promos, product1, country))
+    println("Testing -------------------------")
+    promotionCopyForPrimaryCountry(promos, product1, country)
   }
 
   def promotionCopyForPrimaryCountry(
-      queryPromos: List[String],
+      promos: List[String],
       product1: Product,
       country: Country,
   ): Option[PromotionCopy] = {
-    queryPromos
+    promos
       .to(LazyList) // For efficiency - only call getCopyForPromoCode until we find a valid promo
       .map(promoCode => promoCopyService.getCopyForPromoCode(promoCode, product1, country))
       .collectFirst { case Some(promoCopy) => promoCopy }
