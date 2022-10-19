@@ -3,7 +3,6 @@ import * as React from 'react';
 import Content from 'components/content/content';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
-import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 import Text, { LargeParagraph } from 'components/text/text';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -93,9 +92,6 @@ function ThankYouContent(props: PropTypes): JSX.Element {
 				<AppsSection countryGroupId={props.countryGroupId} />
 				{showEventsContent && <EventsModule />}
 			</Content>
-			{props.includePaymentCopy ? (
-				<SubscriptionsSurvey product={DigitalPack} />
-			) : null}
 			<Content>{props.marketingConsent}</Content>
 		</div>
 	);
