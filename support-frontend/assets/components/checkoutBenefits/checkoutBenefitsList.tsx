@@ -6,7 +6,6 @@ import {
 	space,
 	textSans,
 } from '@guardian/source-foundations';
-import UpsellButton from 'components/button/upsellButton';
 import type { CheckListData } from './checkoutBenefitsListData';
 
 const container = css`
@@ -75,8 +74,6 @@ export type CheckoutBenefitsListProps = {
 export function CheckoutBenefitsList({
 	title,
 	checkListData,
-	buttonCopy,
-	handleButtonClick,
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
 		<div css={container}>
@@ -92,10 +89,6 @@ export function CheckoutBenefitsList({
 					</tr>
 				))}
 			</table>
-			<UpsellButton
-				buttonCopy={buttonCopy}
-				handleButtonClick={handleButtonClick}
-			/>
 			<hr css={hr(`${space[5]}px 0 ${space[4]}px`)} />
 			<p css={para}>Cancel anytime</p>
 		</div>
