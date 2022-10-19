@@ -12,7 +12,6 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { getPromotions, userIsPatron } from 'helpers/patrons';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 import AppsSection from './components/thankYou/appsSection';
 import EventsModule from './components/thankYou/eventsModule';
