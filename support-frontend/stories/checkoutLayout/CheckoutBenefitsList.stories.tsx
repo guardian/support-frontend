@@ -7,7 +7,7 @@ import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListD
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 
 export default {
-	title: 'Checkout Layout/Benefits List',
+	title: 'Checkouts/Benefits List',
 	component: CheckoutBenefitsList,
 	argTypes: {
 		handleButtonClick: { action: 'button clicked' },
