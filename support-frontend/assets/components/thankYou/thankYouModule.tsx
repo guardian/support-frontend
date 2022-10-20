@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { from, headline, neutral, space } from '@guardian/source-foundations';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getThankYouModuleData } from './thankYouModuleData';
+import AppDownloadImage from './downloadTheApp/AppDownloadImage';
+import AppDownloadQRCodes from './downloadTheApp/AppDownloadQRCodes';
 
 const container = css`
 	background: white;
@@ -133,26 +133,32 @@ const marginTop = css`
 `;
 
 export type ThankYouModuleType =
-	| 'downloadTheApp'
+	| 'appDownload'
 	| 'feedback'
-	| 'shareSupport'
-	| 'continueToAccount';
+	| 'socialShare'
+	| 'continueToAccount'
+	| 'newsletters'
+	| 'continueToAccount'
+	| 'supportReminder';
 
 export interface ThankYouModuleProps {
 	moduleType: ThankYouModuleType;
-	contryGroupId: CountryGroupId;
 	isSignedIn: boolean;
+	icon: JSX.Element;
+	header: string;
+	bodyCopy: JSX.Element | string;
+	ctas: JSX.Element | null;
 }
 
 function ThankYouModule({
 	moduleType,
 	isSignedIn,
-	contryGroupId,
+	icon,
+	header,
+	bodyCopy,
+	ctas,
 }: ThankYouModuleProps): JSX.Element {
-	const { icon, header, bodyCopy, ctas, image, qrCodes } =
-		getThankYouModuleData(moduleType, contryGroupId);
-
-	const isDownloadModule = moduleType === 'downloadTheApp';
+	const isDownloadModule = moduleType === 'appDownload';
 
 	const gridContainer = isDownloadModule
 		? downloadAppGridContainer
@@ -170,14 +176,16 @@ function ThankYouModule({
 					<div css={maybeMarginTop}>{ctas}</div>
 				</div>
 
-				{isDownloadModule && image ? (
+				{isDownloadModule ? (
 					<div css={[imgContainer, !isSignedIn && hideBelowTablet]}>
-						{image}
+						<AppDownloadImage />
 					</div>
 				) : null}
 
-				{isDownloadModule && qrCodes && isSignedIn ? (
-					<div css={[qrCodesContainer, hideBelowTablet]}>{qrCodes}</div>
+				{isDownloadModule && isSignedIn ? (
+					<div css={[qrCodesContainer, hideBelowTablet]}>
+						<AppDownloadQRCodes />
+					</div>
 				) : null}
 			</div>
 		</section>

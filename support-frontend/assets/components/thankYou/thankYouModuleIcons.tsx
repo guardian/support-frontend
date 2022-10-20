@@ -4,7 +4,7 @@ export const getThankYouModuleIcon = (
 	moduleType: ThankYouModuleType,
 ): JSX.Element => {
 	switch (moduleType) {
-		case 'downloadTheApp':
+		case 'appDownload':
 			return <DownloadTheAppIcon />;
 		case 'feedback':
 			return <FeedbackIcon />;

@@ -1,8 +1,10 @@
 import { css } from '@emotion/react';
 import { from, space, sport } from '@guardian/source-foundations';
 import React from 'react';
+import AppDownloadBadges from 'components/thankYou/downloadTheApp/AppDownloadBadges';
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
+import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
 
 const container = css`
 	padding: 0px ${space[3]}px;
@@ -31,7 +33,10 @@ function Template(args: ThankYouModuleProps): JSX.Element {
 		<ThankYouModule
 			moduleType={args.moduleType}
 			isSignedIn={args.isSignedIn}
-			contryGroupId={args.contryGroupId}
+			icon={args.icon}
+			header={args.header}
+			bodyCopy={args.bodyCopy}
+			ctas={args.ctas}
 		/>
 	);
 }
@@ -41,15 +46,21 @@ Template.args = {} as Record<string, unknown>;
 export const DownloadTheAppSignedIn = Template.bind({});
 
 DownloadTheAppSignedIn.args = {
-	moduleType: 'downloadTheApp',
+	moduleType: 'appDownload',
 	isSignedIn: true,
-	contryGroupId: 'GBPCountries',
+	icon: getThankYouModuleIcon('appDownload'),
+	header: 'Download the Guardian app',
+	bodyCopy: 'Unlock full access to our quality news app today',
+	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
 };
 
 export const DownloadTheAppSignedOut = Template.bind({});
 
 DownloadTheAppSignedOut.args = {
-	moduleType: 'downloadTheApp',
+	moduleType: 'appDownload',
 	isSignedIn: false,
-	contryGroupId: 'GBPCountries',
+	icon: getThankYouModuleIcon('appDownload'),
+	header: 'Download the Guardian app',
+	bodyCopy: 'Unlock full access to our quality news app today',
+	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
 };
