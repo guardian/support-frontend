@@ -53,3 +53,11 @@ DownloadTheAppSignedOut.args = {
 	isSignedIn: false,
 	contryGroupId: 'GBPCountries',
 };
+
+export const ShareYourSupport = Template.bind({});
+
+ShareYourSupport.args = {
+	moduleType: 'shareSupport',
+	isSignedIn: true,
+	contryGroupId: 'GBPCountries',
+};
