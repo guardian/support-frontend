@@ -14,15 +14,32 @@ import software.amazon.awssdk.core.retry.RetryPolicy
 import software.amazon.awssdk.core.retry.backoff.FullJitterBackoffStrategy
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
-import software.amazon.awssdk.services.dynamodb.model.{AttributeValue, UpdateItemRequest, UpdateItemResponse}
+import software.amazon.awssdk.services.dynamodb.model._
 
 import java.time.format.DateTimeFormatter
 import java.time.{Duration, LocalDate, ZoneOffset}
 import scala.compat.java8.FutureConverters._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters._
+import scala.util.{Failure, Success, Try}
 
 class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String) {
+
+  def deleteItem(
+      identityIdToDelete: String,
+  )(implicit executionContext: ExecutionContext): Future[Either[String, DeleteItemResponse]] = {
+    val key = Map(
+      identityId -> AttributeValue.builder.s(identityIdToDelete).build,
+    ).asJava
+    val request = DeleteItemRequest.builder.tableName(tableName).key(key).build
+    client
+      .deleteItem(request)
+      .toScala
+      .transform {
+        case Success(value) => Try(Right(value))
+        case Failure(exception) => Try(Left(exception.getMessage))
+      }
+  }
 
   def writeItem(
       item: SupporterRatePlanItem,

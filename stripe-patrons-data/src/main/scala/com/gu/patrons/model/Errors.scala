@@ -10,6 +10,8 @@ case class InvalidRequestError(message: String) extends Error
 
 case class InvalidJsonError(message: String) extends Error
 
-case class MissingPaymentNumberError(message: String) extends Error
+case class UserNotFoundIdentityError(message: String) extends Error
 
-case class ZuoraApiError(message: String) extends Error
+case class UserNotFoundStripeError(message: String) extends Error
+
+case class DynamoDbError(message: String) extends Error
