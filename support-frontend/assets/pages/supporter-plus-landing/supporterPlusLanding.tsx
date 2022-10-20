@@ -15,6 +15,8 @@ import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
+import PersonalDetails from 'components/personalDetails/personalDetails';
+import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
@@ -48,11 +50,6 @@ const checkoutContainer = css`
 		padding-bottom: ${space[24]}px;
 		padding-top: ${space[6]}px;
 	}
-`;
-
-// TODO: these are purely for demo purposes, delete once the boxes have real content in
-const largeDemoBox = css`
-	min-height: 400px;
 `;
 
 export function SupporterPlusLandingPage(): JSX.Element {
@@ -118,7 +115,11 @@ export function SupporterPlusLandingPage(): JSX.Element {
 										CustomButton={SavedCardButton}
 									/>
 								</ContributionsStripe>
-								<p css={largeDemoBox}>Personal details and payment</p>
+								<PersonalDetailsContainer
+									renderPersonalDetails={(personalDetailsProps) => (
+										<PersonalDetails {...personalDetailsProps} />
+									)}
+								/>
 							</BoxContents>
 						</Box>
 						<Box>
