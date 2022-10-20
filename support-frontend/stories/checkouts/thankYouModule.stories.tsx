@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { from, space, sport } from '@guardian/source-foundations';
 import React from 'react';
-import AppDownloadBadges from 'components/thankYou/downloadTheApp/AppDownloadBadges';
+import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
