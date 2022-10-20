@@ -105,10 +105,7 @@ const imgContainer = css`
 `;
 
 const qrCodesContainer = css`
-	display: none;
-
 	${from.tablet} {
-		display: block;
 		grid-area: qrCodes;
 		margin-top: ${space[5]}px;
 		margin-right: ${space[5]}px;
@@ -120,6 +117,14 @@ const qrCodesContainer = css`
 const paddingRight = css`
 	${from.tablet} {
 		padding-right: 72px;
+	}
+`;
+
+const hideBelowTablet = css`
+	display: none;
+
+	${from.tablet} {
+		display: block;
 	}
 `;
 
@@ -166,11 +171,13 @@ function ThankYouModule({
 				</div>
 
 				{isDownloadModule && image ? (
-					<div css={imgContainer}>{image}</div>
+					<div css={[imgContainer, !isSignedIn && hideBelowTablet]}>
+						{image}
+					</div>
 				) : null}
 
 				{isDownloadModule && qrCodes && isSignedIn ? (
-					<div css={qrCodesContainer}>{qrCodes}</div>
+					<div css={[qrCodesContainer, hideBelowTablet]}>{qrCodes}</div>
 				) : null}
 			</div>
 		</section>
