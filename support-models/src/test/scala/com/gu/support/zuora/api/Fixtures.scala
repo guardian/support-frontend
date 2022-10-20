@@ -1,6 +1,6 @@
 package com.gu.support.zuora.api
 
-import com.gu.i18n.Currency.GBP
+import com.gu.i18n.Currency.{AUD, GBP}
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.workers.{
   CreditCardReferenceTransaction,
@@ -113,13 +113,28 @@ object Fixtures {
       currency: Currency = GBP,
       paymentGateway: PaymentGateway = StripeGatewayDefault,
   ): Account = Account(
-    salesforceAccountId,
-    currency,
-    salesforceAccountId,
-    salesforceId,
-    identityId,
-    Some(paymentGateway),
-    "createdreqid_hi",
+    name = salesforceAccountId,
+    currency = currency,
+    crmId = salesforceAccountId,
+    sfContactId__c = salesforceId,
+    identityId__c = identityId,
+    paymentGateway = Some(paymentGateway),
+    createdRequestId__c = "createdreqid_hi",
+    invoiceTemplateId = "defaultInvoiceTemplateId",
+  )
+
+  def auAccount(
+      currency: Currency = AUD,
+      paymentGateway: PaymentGateway = StripeGatewayAUD,
+  ): Account = Account(
+    name = salesforceAccountId,
+    currency = currency,
+    crmId = salesforceAccountId,
+    sfContactId__c = salesforceId,
+    identityId__c = identityId,
+    paymentGateway = Some(paymentGateway),
+    createdRequestId__c = "createdreqid_hi",
+    invoiceTemplateId = "auInvoiceTemplateId",
   )
 
   val deliveryInstructions = "Leave behind the dustbin"
@@ -220,10 +235,10 @@ object Fixtures {
         "AutoPay" : true,
         "PaymentTerm" : "Due Upon Receipt",
         "BcdSettingOption" : "AutoSet",
-        "Batch" : "Batch1"
+        "Batch" : "Batch1",
+        "InvoiceTemplateId" : "anInvoiceTemplateId"
       }
     """
-
   val subscriptionJson =
     s"""
       {

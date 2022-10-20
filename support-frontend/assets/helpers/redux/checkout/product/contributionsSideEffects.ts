@@ -1,9 +1,8 @@
 import { isAnyOf } from '@reduxjs/toolkit';
-import type { ContributionType } from 'helpers/contributions';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventContributionAmountUpdated } from 'helpers/tracking/quantumMetric';
+import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
 import {
 	setAllAmounts,
@@ -11,6 +10,7 @@ import {
 	setProductType,
 	setSelectedAmount,
 } from './actions';
+import { getContributionCartValueData } from './selectors/cartValue';
 
 const shouldCheckFormEnabled = isAnyOf(
 	setAllAmounts,
@@ -18,9 +18,31 @@ const shouldCheckFormEnabled = isAnyOf(
 	setOtherAmount,
 );
 
+const shouldSendEventContributionCartValue = isAnyOf(
+	setAllAmounts,
+	setProductType,
+	setSelectedAmount,
+);
+
 export function addProductSideEffects(
 	startListening: ContributionsStartListening,
 ): void {
+	startListening({
+		matcher: shouldSendEventContributionCartValue,
+		effect(_, listenerApi) {
+			const { contributionAmount, contributionType, contributionCurrency } =
+				getContributionCartValueData(listenerApi.getState());
+
+			if (contributionAmount) {
+				sendEventContributionCartValue(
+					contributionAmount.toString(),
+					contributionType,
+					contributionCurrency,
+				);
+			}
+		},
+	});
+
 	startListening({
 		actionCreator: setProductType,
 		effect(action) {
@@ -38,11 +60,9 @@ export function addProductSideEffects(
 	startListening({
 		actionCreator: setSelectedAmount,
 		effect(action, listenerApi) {
-			const { countryGroupId, currencyId } =
+			const { countryGroupId } =
 				listenerApi.getState().common.internationalisation;
 			const { amount, contributionType } = action.payload;
-
-			sendEventContributionAmountUpdated(amount, contributionType, currencyId);
 
 			trackComponentClick(
 				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`,
@@ -60,21 +80,9 @@ export function addProductSideEffects(
 	startListening({
 		type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED',
 		effect(_, listenerApi) {
-			const state = listenerApi.getState();
-			const selectedAmounts = state.page.checkoutForm.product.selectedAmounts;
-			/**
-			 * selectedAmounts (type SelectedAmounts) can only be indexed with ContributionType,
-			 * so I'm have to type cast productType from ProductType to ContributionType
-			 * to be able to index selectedAmounts. As ProductType could be 'DigiPack' which
-			 * can't be used to index an onject of type SelectedAmounts.
-			 */
-			const productType = state.page.checkoutForm.product
-				.productType as ContributionType;
-			const selectedAmount = selectedAmounts[productType];
-			const contributionAmount =
-				selectedAmount === 'other'
-					? state.page.checkoutForm.product.otherAmounts[productType].amount
-					: selectedAmount;
+			const { contributionAmount } = getContributionCartValueData(
+				listenerApi.getState(),
+			);
 
 			if (contributionAmount) {
 				storage.setSession('contributionAmount', contributionAmount.toString());

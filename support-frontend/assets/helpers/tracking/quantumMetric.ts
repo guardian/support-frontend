@@ -217,7 +217,7 @@ export function sendEventContributionCheckoutConversion(
 	});
 }
 
-export function sendEventContributionAmountUpdated(
+export function sendEventContributionCartValue(
 	amount: string,
 	contributionType: ContributionType,
 	sourceCurrency: IsoCurrency,
@@ -293,8 +293,8 @@ function addQM() {
 				'sha384-QqJrp8s9Nl3x7Z6sc9kQG5eYJLVWYwlEsvhjCukLSwFsWtK17WdC5whHVwSXQh1F',
 			crossOrigin: 'anonymous',
 		},
-	).catch((e: Error) => {
-		logException(`Failed to load Quantum Metric: ${e.message}`);
+	).catch(() => {
+		logException('Failed to load Quantum Metric');
 	});
 }
 

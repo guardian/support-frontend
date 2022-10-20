@@ -98,6 +98,26 @@ export const useStripeObjects = (
 	return stripeObjects;
 };
 
+export function useStripeAccount(stripeKey: string): StripeJs | null {
+	const [stripeSdk, setStripeSdk] = useState<StripeJs | null>(null);
+
+	useEffect(() => {
+		if (stripeSdk === null) {
+			if (!stripeScriptHasBeenAddedToPage()) {
+				loadStripe.setLoadParameters({
+					advancedFraudSignals: false,
+				});
+			}
+
+			void loadStripe(stripeKey).then((newStripe) => {
+				setStripeSdk(newStripe);
+			});
+		}
+	}, [stripeKey]);
+
+	return stripeSdk;
+}
+
 export {
 	stripeCardFormIsIncomplete,
 	stripeAccountForContributionType,

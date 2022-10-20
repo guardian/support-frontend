@@ -7,7 +7,7 @@ import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { renderError } from 'helpers/rendering/render';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { DateYMDString } from 'helpers/types/DateString';
-import { addAddressSideEffects } from './checkout/address/sideEffects';
+import { addAddressSideEffects } from './checkout/address/subscriptionsSideEffects';
 import { addPaymentsSideEffects } from './checkout/payment/subscriptionsSideEffects';
 import { addPersonalDetailsSideEffects } from './checkout/personalDetails/subscriptionsSideEffects';
 import {

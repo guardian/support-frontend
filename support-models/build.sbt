@@ -5,7 +5,7 @@ name := "support-models"
 description := "Scala library to provide shared step-function models to Guardian Support projects."
 
 libraryDependencies ++= Seq(
-  "joda-time" % "joda-time" % "2.11.1",
+  "joda-time" % "joda-time" % "2.12.0",
   "org.typelevel" %% "cats-core" % catsVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,

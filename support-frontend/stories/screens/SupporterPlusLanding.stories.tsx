@@ -3,6 +3,14 @@ import { Provider } from 'react-redux';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 
+global.window.guardian = {
+	...global.window.guardian,
+	stripeKeyDefaultCurrencies: {
+		ONE_OFF: { uat: '', default: '' },
+		REGULAR: { uat: '', default: '' },
+	},
+};
+
 const store = createTestStoreForContributions();
 
 export default {

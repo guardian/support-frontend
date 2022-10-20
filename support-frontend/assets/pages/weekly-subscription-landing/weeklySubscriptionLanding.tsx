@@ -64,7 +64,7 @@ function WeeklyLandingPage({
 	const giftNonGiftLink = orderIsAGift
 		? routes.guardianWeeklySubscriptionLanding
 		: routes.guardianWeeklySubscriptionLandingGift;
-	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+	const sanitisedPromoCopy = getPromotionCopy(promotionCopy, orderIsAGift);
 	// ID for Selenium tests
 	const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
 	const isNewProduct = participations.newProduct === 'variant';

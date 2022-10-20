@@ -1,13 +1,17 @@
 import { css } from '@emotion/react';
 import { neutral } from '@guardian/source-foundations';
 import { Column, Columns, Container } from '@guardian/source-react-components';
-import CheckoutBenefitsListComponent from 'components/checkoutBenefits/checkoutBenefitsList';
-import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
+import type { CheckoutBenefitsListProps } from 'components/checkoutBenefits/checkoutBenefitsList';
+import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
+import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 
 export default {
-	title: 'Checkout Layout/Benefits List',
-	component: CheckoutBenefitsListComponent,
+	title: 'Checkouts/Benefits List',
+	component: CheckoutBenefitsList,
+	argTypes: {
+		handleButtonClick: { action: 'button clicked' },
+	},
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Container backgroundColor={neutral[97]}>
@@ -31,19 +35,24 @@ export default {
 	],
 };
 
-export function BenefitsList(args: {
-	title: string;
-	showBenefitsMessaging: boolean;
-}): JSX.Element {
-	return (
-		<CheckoutBenefitsListComponent
-			title={args.title}
-			checkListData={checkListData(args.showBenefitsMessaging)}
-		/>
-	);
+function Template(args: CheckoutBenefitsListProps) {
+	return <CheckoutBenefitsList {...args} />;
 }
 
-BenefitsList.args = {
+Template.args = {} as Omit<CheckoutBenefitsListProps, 'handleButtonClick'>;
+
+export const AllBenefitsUnlocked = Template.bind({});
+
+AllBenefitsUnlocked.args = {
 	title: "For £12 per month, you'll unlock",
-	showBenefitsMessaging: true,
+	checkListData: checkListData({ lowerTier: true, higherTier: true }),
+	buttonCopy: null,
+};
+
+export const LowerTierUnlocked = Template.bind({});
+
+LowerTierUnlocked.args = {
+	title: "For £5 per month, you'll unlock",
+	checkListData: checkListData({ lowerTier: true, higherTier: false }),
+	buttonCopy: 'Switch to £12 per month to unlock all extras',
 };

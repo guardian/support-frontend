@@ -2,9 +2,10 @@ package com.gu.support.workers
 
 import com.gu.helpers
 import com.gu.helpers.DateGenerator
+import com.gu.i18n.Country.Australia
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
-import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig}
+import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig, ZuoraInvoiceTemplatesConfig}
 import com.gu.support.redemption.corporate.DynamoLookup.{DynamoBoolean, DynamoString}
 import com.gu.support.redemption.corporate.DynamoUpdate.DynamoFieldUpdate
 import com.gu.support.redemption.corporate.{
@@ -45,6 +46,11 @@ import java.util.UUID
 import scala.concurrent.Future
 
 class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
+
+  val invoiceTemplateIds = ZuoraInvoiceTemplatesConfig(
+    auTemplateId = "auInvoiceTemplateId",
+    defaultTemplateId = "defaultInvoiceTemplateId",
+  )
 
   it should "create a Digital Pack corporate subscription" in {
 
@@ -117,6 +123,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
             Address(None, None, None, None, None, Country.UK),
           ),
           GBP,
+          invoiceTemplateIds,
         ),
       ),
       user =
@@ -202,6 +209,7 @@ class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
             Address(None, None, None, None, None, Country.UK),
           ),
           Currency.GBP,
+          invoiceTemplateIds,
         ),
       ),
       user =

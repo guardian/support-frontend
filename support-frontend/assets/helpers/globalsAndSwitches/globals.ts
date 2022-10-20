@@ -11,6 +11,7 @@ function isRecord(
 
 function getGlobal<T>(path = ''): T | null {
 	const value = path
+		.replace(/^window.guardian./, '')
 		.replace(/\[(.+?)\]/g, '.$1')
 		.split('.')
 		.reduce<unknown>((config: unknown, key: string) => {

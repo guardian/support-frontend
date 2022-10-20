@@ -24,6 +24,7 @@ import type { Action as UserAction } from 'helpers/user/userActions';
 import type { LocalCurrencyCountry } from '../../helpers/internationalisation/localCurrencyCountry';
 import { setFormIsValid } from './contributionsLandingActions';
 import type { Action as ContributionsLandingAction } from './contributionsLandingActions';
+import { isSupporterPlusPurchase } from './newProductTestHelper';
 
 // ----- Types ----- //
 type Action = ContributionsLandingAction | UserAction;
@@ -143,7 +144,7 @@ const formIsValidParameters = (state: ContributionsState) => ({
 	otherAmounts: state.page.checkoutForm.product.otherAmounts,
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	contributionType: getContributionType(state),
-	billingState: state.page.form.formData.billingState,
+	billingState: state.page.checkoutForm.billingAddress.fields.state,
 	firstName: state.page.checkoutForm.personalDetails.firstName,
 	lastName: state.page.checkoutForm.personalDetails.lastName,
 	email: state.page.checkoutForm.personalDetails.email,
@@ -162,9 +163,13 @@ function enableOrDisableForm() {
 		const state = getState();
 		const { isRecurringContributor } = state.page.user;
 		const contributionType = getContributionType(state);
+		const isSupporterPlus = isSupporterPlusPurchase(state);
 
 		const shouldBlockExistingRecurringContributor =
-			isRecurringContributor && contributionTypeIsRecurring(contributionType);
+			!isSupporterPlus &&
+			isRecurringContributor &&
+			contributionTypeIsRecurring(contributionType);
+
 		const formIsValid = getFormIsValid(formIsValidParameters(state));
 		dispatch(setFormIsValid(formIsValid));
 		const recaptchaRequired =

@@ -1,9 +1,9 @@
 export default function SvgSepa(): JSX.Element {
 	return (
 		<svg
-			width="97"
-			height="28"
-			viewBox="0 0 97 28"
+			width="40"
+			height="30"
+			viewBox="0 0 97 30"
 			xmlns="http://www.w3.org/2000/svg"
 			className="svg-sepa"
 			aria-hidden="true"

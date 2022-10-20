@@ -1,110 +1,103 @@
-import type { SerializedStyles } from '@emotion/react';
-import { css } from '@emotion/react';
-import { neutral } from '@guardian/source-foundations';
-import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
 import type { ContributionType } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect, glyph } from 'helpers/internationalisation/currency';
-import type { AmountChange } from 'helpers/redux/checkout/product/state';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { currencies } from 'helpers/internationalisation/currency';
+import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
-import CheckoutBenefitsList from './checkoutBenefitsList';
+import type { CheckoutBenefitsListProps } from './checkoutBenefitsList';
+import { checkListData } from './checkoutBenefitsListData';
 
-const greyedOut = css`
-	color: ${neutral[60]};
+type CheckoutBenefitsListContainerProps = {
+	renderBenefitsList: (props: CheckoutBenefitsListProps) => JSX.Element;
+};
 
-	svg {
-		fill: ${neutral[60]};
+function getBenefitsListTitle(
+	priceString: string,
+	contributionType: ContributionType,
+	selectedAmount: number,
+	minimumAmountPriceString: string,
+) {
+	const billingPeriod = contributionType === 'MONTHLY' ? 'month' : 'year';
+	if (Number.isNaN(selectedAmount)) {
+		return `Contribute at least ${minimumAmountPriceString} per ${billingPeriod} to unlock benefits`;
 	}
-`;
-
-const boldText = css`
-	font-weight: bold;
-`;
-
-export type CheckListData = {
-	icon: JSX.Element;
-	text?: JSX.Element;
-	maybeGreyedOut: null | SerializedStyles;
-};
-
-type PropTypes = {
-	countryGroupId: CountryGroupId;
-	showBenefitsMessaging: boolean;
-	contributionType: ContributionType;
-	setSelectedAmount: (amountChange: AmountChange) => void;
-};
-
-const getSvgIcon = (showBenefitsMessaging: boolean) =>
-	showBenefitsMessaging ? (
-		<SvgTickRound isAnnouncedByScreenReader size="small" />
-	) : (
-		<SvgCrossRound isAnnouncedByScreenReader size="small" />
-	);
-
-export const checkListData = (
-	showBenefitsMessaging: boolean,
-): CheckListData[] => {
-	return [
-		{
-			icon: <SvgTickRound isAnnouncedByScreenReader size="small" />,
-			text: (
-				<p>
-					<span css={boldText}>Uninterrupted reading. </span> No more yellow
-					banners
-				</p>
-			),
-			maybeGreyedOut: null,
-		},
-		{
-			icon: <SvgTickRound isAnnouncedByScreenReader size="small" />,
-			text: (
-				<p>
-					<span css={boldText}>Supporter newsletter. </span>Giving you editorial
-					insight on the week’s top stories
-				</p>
-			),
-			maybeGreyedOut: null,
-		},
-		{
-			icon: getSvgIcon(showBenefitsMessaging),
-			text: (
-				<p>
-					<span css={boldText}>Ad-free. </span>On any device when signed in
-				</p>
-			),
-			maybeGreyedOut: showBenefitsMessaging ? null : greyedOut,
-		},
-		{
-			icon: getSvgIcon(showBenefitsMessaging),
-			text: (
-				<p>
-					<span css={boldText}>Unlimited app access. </span>For the best mobile
-					experience
-				</p>
-			),
-			maybeGreyedOut: showBenefitsMessaging ? null : greyedOut,
-		},
-	];
-};
-
-export function CheckoutBenefitsListContainer({
-	showBenefitsMessaging,
-	countryGroupId,
-	contributionType,
-}: PropTypes): JSX.Element {
-	const currencyGlyph = glyph(detect(countryGroupId));
-	const thresholdPrice =
-		getThresholdPrice(countryGroupId, contributionType) ?? '';
-	const billingPeriod = contributionType == 'MONTHLY' ? 'month' : 'year';
-
-	const title = `For ${currencyGlyph}${thresholdPrice} per ${billingPeriod}, you’ll unlock`;
-
-	return (
-		<CheckoutBenefitsList
-			title={title}
-			checkListData={checkListData(showBenefitsMessaging)}
-		/>
-	);
+	return `For ${priceString} per ${billingPeriod}, you’ll unlock`;
 }
 
-export default CheckoutBenefitsListContainer;
+const getbuttonCopy = (
+	higherTier: boolean,
+	thresholdPriceWithCurrency: string,
+	selectedAmount: number,
+) =>
+	higherTier || Number.isNaN(selectedAmount)
+		? null
+		: `Switch to ${thresholdPriceWithCurrency} to unlock all extras`;
+
+export function CheckoutBenefitsListContainer({
+	renderBenefitsList,
+}: CheckoutBenefitsListContainerProps): JSX.Element | null {
+	const dispatch = useContributionsDispatch();
+
+	const contributionType = useContributionsSelector(getContributionType);
+	if (contributionType === 'ONE_OFF') {
+		return null;
+	}
+
+	const { countryGroupId, currencyId } = useContributionsSelector(
+		(state) => state.common.internationalisation,
+	);
+	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
+	const minimumContributionAmount = useContributionsSelector(
+		getMinimumContributionAmount,
+	);
+
+	const currency = currencies[currencyId];
+
+	const thresholdPrice =
+		getThresholdPrice(countryGroupId, contributionType) ?? 1;
+	const thresholdPriceWithCurrency = simpleFormatAmount(
+		currency,
+		thresholdPrice,
+	);
+	const userSelectedAmountWithCurrency = simpleFormatAmount(
+		currency,
+		selectedAmount,
+	);
+
+	const higherTier = thresholdPrice <= selectedAmount;
+	const lowerTier = selectedAmount >= minimumContributionAmount;
+
+	function handleButtonClick() {
+		dispatch(
+			setSelectedAmount({
+				contributionType,
+				amount: thresholdPrice.toString(),
+			}),
+		);
+	}
+
+	return renderBenefitsList({
+		title: getBenefitsListTitle(
+			userSelectedAmountWithCurrency,
+			contributionType,
+			selectedAmount,
+			simpleFormatAmount(currencies[currencyId], minimumContributionAmount),
+		),
+		checkListData: checkListData({
+			lowerTier,
+			higherTier,
+		}),
+		buttonCopy: getbuttonCopy(
+			higherTier,
+			thresholdPriceWithCurrency,
+			selectedAmount,
+		),
+		handleButtonClick,
+	});
+}

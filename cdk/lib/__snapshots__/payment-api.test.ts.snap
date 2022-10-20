@@ -1,191 +1,155 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`The Payment API stack matches the snapshot 1`] = `
-Object {
-  "AWSTemplateFormatVersion": "2010-09-09",
-  "Conditions": Object {
-    "CreateCodeResources": Object {
-      "Fn::Equals": Array [
-        "PROD",
-        "CODE",
-      ],
-    },
-    "CreateProdResources": Object {
-      "Fn::Equals": Array [
-        "PROD",
-        "PROD",
-      ],
-    },
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuStringParameter",
+      "GuStringParameter",
+      "GuStringParameter",
+      "GuStringParameter",
+      "GuStringParameter",
+      "GuStringParameter",
+      "GuStringParameter",
+      "GuAllowPolicy",
+      "GuAllowPolicy",
+      "GuAllowPolicy",
+      "GuPutCloudwatchMetricsPolicy",
+      "GuAllowPolicy",
+      "GuAllowPolicy",
+      "GuAllowPolicy",
+      "GuAllowPolicy",
+      "GuGetS3ObjectsPolicy",
+      "GuVpcParameter",
+      "GuSubnetListParameter",
+      "GuPlayApp",
+      "GuCertificate",
+      "GuInstanceRole",
+      "GuSSMRunCommandPolicy",
+      "GuDescribeEC2Policy",
+      "GuLoggingStreamNameParameter",
+      "GuLogShippingPolicy",
+      "GuDistributionBucketParameter",
+      "GuGetDistributablePolicy",
+      "GuParameterStoreReadPolicy",
+      "GuAmiParameter",
+      "GuHttpsEgressSecurityGroup",
+      "GuAutoScalingGroup",
+      "GuWazuhAccess",
+      "GuSubnetListParameter",
+      "GuApplicationLoadBalancer",
+      "GuApplicationTargetGroup",
+      "GuHttpsApplicationListener",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+      "GuAlarm",
+    ],
+    "gu:cdk:version": "TEST",
   },
-  "Description": "payment-api",
-  "Mappings": Object {
-    "StageVariables": Object {
-      "CODE": Object {
-        "InstanceType": "t4g.small",
-        "MaxInstances": 2,
-        "MinInstances": 1,
+  "Outputs": {
+    "LoadBalancerPaymentapiDnsName": {
+      "Description": "DNS entry for LoadBalancerPaymentapi",
+      "Value": {
+        "Fn::GetAtt": [
+          "LoadBalancerPaymentapi9D2DA35F",
+          "DNSName",
+        ],
       },
-      "PROD": Object {
-        "InstanceType": "t4g.small",
-        "MaxInstances": 6,
-        "MinInstances": 3,
-      },
     },
   },
-  "Metadata": Object {
-    "AWS::CloudFormation::Interface": Object {
-      "ParameterGroups": Array [
-        Object {
-          "Label": Object {
-            "default": "Tags",
-          },
-          "Parameters": Array [
-            "Stack",
-            "App",
-            "Stage",
-          ],
-        },
-        Object {
-          "Label": Object {
-            "default": "AMI",
-          },
-          "Parameters": Array [
-            "AMI",
-          ],
-        },
-        Object {
-          "Label": Object {
-            "default": "Used to fetch RiffRaff artifact",
-          },
-          "Parameters": Array [
-            "ProjectName",
-            "ProjectVersion",
-          ],
-        },
-        Object {
-          "Label": Object {
-            "default": "Networking",
-          },
-          "Parameters": Array [
-            "SiteDomain",
-            "VpcId",
-            "Subnets",
-            "BastionSecurityGroup",
-          ],
-        },
-        Object {
-          "Label": Object {
-            "default": "AWS Resources",
-          },
-          "Parameters": Array [
-            "EmailSqsQueueCodeArn",
-            "EmailSqsQueueProdArn",
-            "ContributionsStoreSqsQueueCodeArn",
-            "ContributionsStoreSqsQueueProdArn",
-            "CertificateArn",
-          ],
-        },
-      ],
+  "Parameters": {
+    "AMIPaymentapi": {
+      "Description": "Amazon Machine Image ID for the app payment-api. Use this in conjunction with AMIgo to keep AMIs up to date.",
+      "Type": "AWS::EC2::Image::Id",
     },
-  },
-  "Parameters": Object {
-    "AMI": Object {
-      "Description": "AMI ID. Set by RiffRaff on each deploy",
+    "ContributionsStoreSqsQueueCodeArn": {
+      "Description": "For the PROD stack you still need to supply this, because PROD instances need access to both PROD and CODE contribution store queues.",
       "Type": "String",
     },
-    "App": Object {
-      "Default": "payment-api",
-      "Description": "Should never change",
+    "ContributionsStoreSqsQueueProdArn": {
+      "Description": "For the CODE stack you can leave this empty since it won't be used.  For the PROD stack you need to set it.",
       "Type": "String",
     },
-    "BastionSecurityGroup": Object {
-      "Description": "The SG for the bastion to enable ssh tunnelling",
+    "DistributionBucketName": {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "EmailSqsQueueCodeArn": {
+      "Description": "For the PROD stack you still need to supply this, because PROD instances need access to both PROD and CODE email queues.",
       "Type": "String",
     },
-    "CertificateArn": Object {
-      "Description": "The ARN of the HTTPS certificate",
+    "EmailSqsQueueProdArn": {
+      "Description": "For the CODE stack you can leave this empty since it won't be used.  For the PROD stack you need to set it.",
       "Type": "String",
     },
-    "CfnVpcId": Object {
-      "Description": "VpcId of your Virtual Private Cloud (VPC)",
-      "Type": "String",
-    },
-    "ContributionsStoreSqsQueueCodeArn": Object {
-      "Description": "For the PROD stack you still need to supply this, because PROD instances need access to both PROD and CODE contribution store queues.
-",
-      "Type": "String",
-    },
-    "ContributionsStoreSqsQueueProdArn": Object {
-      "Description": "For the CODE stack you can leave this empty since it won't be used. For the PROD stack you need to set it.
-",
-      "Type": "String",
-    },
-    "EmailSqsQueueCodeArn": Object {
-      "Description": "For the PROD stack you still need to supply this, because PROD instances need access to both PROD and CODE email queues.
-",
-      "Type": "String",
-    },
-    "EmailSqsQueueProdArn": Object {
-      "Description": "For the CODE stack you can leave this empty since it won't be used. For the PROD stack you need to set it.
-",
-      "Type": "String",
-    },
-    "KinesisStreamArn": Object {
+    "KinesisStreamArn": {
       "Description": "ARN of the kinesis stream to write events to",
       "Type": "String",
     },
-    "OphanRole": Object {
+    "LoggingStreamName": {
+      "Default": "/account/services/logging.stream.name",
+      "Description": "SSM parameter containing the Name (not ARN) on the kinesis stream",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "OphanRole": {
       "Description": "ARN of the Ophan cross-account role",
       "Type": "String",
     },
-    "PrivateVpcSubnets": Object {
-      "Description": "Private subnets to use for EC2 instances",
-      "Type": "List<AWS::EC2::Subnet::Id>",
-    },
-    "ProjectName": Object {
-      "Default": "payment-api",
-      "Description": "This must match the name key in your build.sbt. It will probably be the same as App, but doesn't have to be.
-",
-      "Type": "String",
-    },
-    "ProjectVersion": Object {
-      "Default": 0.1,
-      "Description": "This must match the version key in your build.sbt",
-      "Type": "String",
-    },
-    "PublicVpcSubnets": Object {
-      "Description": "Public subnets to use for the ELB",
-      "Type": "List<AWS::EC2::Subnet::Id>",
-    },
-    "SiteDomain": Object {
-      "Description": "Route53 CNAME for load balancer (pointed to by NS1 domain name)",
-      "Type": "String",
-    },
-    "SqsKmsArn": Object {
+    "SqsKmsArn": {
       "Description": "ARN of the KMS key for encrypting SQS data",
       "Type": "String",
     },
-    "Stack": Object {
-      "Default": "support",
-      "Description": "Should never change",
-      "Type": "String",
+    "VpcId": {
+      "Default": "/account/vpc/primary/id",
+      "Description": "Virtual Private Cloud to run EC2 instances within. Should NOT be the account default VPC.",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>",
+    },
+    "paymentapiPrivateSubnets": {
+      "Default": "/account/vpc/primary/subnets/private",
+      "Description": "A list of private subnets",
+      "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
+    },
+    "paymentapiPublicSubnets": {
+      "Default": "/account/vpc/primary/subnets/public",
+      "Description": "A list of public subnets",
+      "Type": "AWS::SSM::Parameter::Value<List<AWS::EC2::Subnet::Id>>",
     },
   },
-  "Resources": Object {
-    "AmazonPayPaymentError": Object {
-      "Condition": "CreateProdResources",
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:contributions-dev",
+  "Resources": {
+    "AmazonPayPaymentErrorAECECF4D": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":contributions-dev",
+              ],
+            ],
           },
         ],
-        "AlarmName": Object {
-          "Fn::Sub": "\${App} PROD Amazon Pay payment error for one-off contribution via the payment-api",
-        },
+        "AlarmName": "[CDK] payment-api PROD Amazon Pay payment error for one-off contribution via the payment-api",
         "ComparisonOperator": "GreaterThanThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "payment-provider",
             "Value": "AmazonPay",
           },
@@ -200,431 +164,437 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "AppRole": Object {
-      "Properties": Object {
-        "AssumeRolePolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "sts:AssumeRole",
-              ],
+    "AssumeOphanRoleE66A9D46": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
               "Effect": "Allow",
-              "Principal": Object {
-                "Service": Array [
-                  "ec2.amazonaws.com",
-                ],
+              "Resource": {
+                "Ref": "OphanRole",
               },
             },
           ],
+          "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": Array [
-          Object {
-            "Fn::Sub": "arn:aws:iam::\${AWS::AccountId}:policy/guardian-ec2-role-for-ssm",
-          },
-        ],
-        "Path": "/",
-        "Policies": Array [
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
-                    "logs:CreateLogGroup",
-                    "logs:CreateLogStream",
-                    "logs:PutLogEvents",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": Object {
-                    "Fn::GetAtt": "PaymentAPILogGroup.Arn",
-                  },
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "CloudwatchLogs",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
-                    "ssm:GetParametersByPath",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": Object {
-                    "Fn::Sub": "arn:aws:ssm:\${AWS::Region}:\${AWS::AccountId}:parameter/\${App}/*",
-                  },
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "SSMConfigParams",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
-                    "sqs:GetQueueUrl",
-                    "sqs:SendMessage",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": Object {
-                    "Fn::If": Array [
-                      "CreateProdResources",
-                      Array [
-                        Object {
-                          "Ref": "EmailSqsQueueCodeArn",
-                        },
-                        Object {
-                          "Ref": "EmailSqsQueueProdArn",
-                        },
-                      ],
-                      Array [
-                        Object {
-                          "Ref": "EmailSqsQueueCodeArn",
-                        },
-                      ],
-                    ],
-                  },
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "SqsMessages",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": Array [
-                    "cloudwatch:PutMetricData",
-                  ],
-                  "Effect": "Allow",
-                  "Resource": "*",
-                },
-              ],
-              "Version": "2012-10-17",
-            },
-            "PolicyName": "CloudWatchMetrics",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": "sts:AssumeRole",
-                  "Effect": "Allow",
-                  "Resource": Object {
-                    "Ref": "OphanRole",
-                  },
-                },
-              ],
-            },
-            "PolicyName": "AssumeOphanRole",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": "kinesis:*",
-                  "Effect": "Allow",
-                  "Resource": Object {
-                    "Ref": "KinesisStreamArn",
-                  },
-                },
-              ],
-            },
-            "PolicyName": "KinesisPut",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": "sqs:SendMessage",
-                  "Effect": "Allow",
-                  "Resource": Object {
-                    "Fn::If": Array [
-                      "CreateProdResources",
-                      Array [
-                        Object {
-                          "Ref": "ContributionsStoreSqsQueueCodeArn",
-                        },
-                        Object {
-                          "Ref": "ContributionsStoreSqsQueueProdArn",
-                        },
-                      ],
-                      Array [
-                        Object {
-                          "Ref": "ContributionsStoreSqsQueueCodeArn",
-                        },
-                      ],
-                    ],
-                  },
-                },
-              ],
-            },
-            "PolicyName": "SQSPut",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": "kms:Encrypt",
-                  "Effect": "Allow",
-                  "Resource": Object {
-                    "Ref": "SqsKmsArn",
-                  },
-                },
-              ],
-            },
-            "PolicyName": "SqsKmsEncryption",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Array [
-                Object {
-                  "Action": "s3:GetObject",
-                  "Effect": "Allow",
-                  "Resource": Array [
-                    Object {
-                      "Fn::If": Array [
-                        "CreateProdResources",
-                        Object {
-                          "Fn::Sub": "arn:aws:s3:::support-admin-console/*/*",
-                        },
-                        Object {
-                          "Fn::Sub": "arn:aws:s3:::support-admin-console/CODE/*",
-                        },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-            "PolicyName": "SettingsBucket",
-          },
-          Object {
-            "PolicyDocument": Object {
-              "Statement": Object {
-                "Action": "s3:GetObject",
-                "Effect": "Allow",
-                "Resource": Array [
-                  "arn:aws:s3::*:membership-dist/*",
-                ],
-              },
-            },
-            "PolicyName": "s3Deploy",
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": "PROD",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "AutoScalingGroup": Object {
-      "Properties": Object {
-        "HealthCheckGracePeriod": 300,
-        "HealthCheckType": "ELB",
-        "LaunchConfigurationName": Object {
-          "Ref": "LaunchConfig",
-        },
-        "MaxSize": Object {
-          "Fn::FindInMap": Array [
-            "StageVariables",
-            "PROD",
-            "MaxInstances",
-          ],
-        },
-        "MinSize": Object {
-          "Fn::FindInMap": Array [
-            "StageVariables",
-            "PROD",
-            "MinInstances",
-          ],
-        },
-        "Tags": Array [
-          Object {
-            "Key": "App",
-            "PropagateAtLaunch": true,
-            "Value": Object {
-              "Ref": "App",
-            },
-          },
-          Object {
-            "Key": "gu:cdk:version",
-            "PropagateAtLaunch": true,
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "PropagateAtLaunch": true,
-            "Value": "guardian/support-frontend",
-          },
-          Object {
-            "Key": "Name",
-            "PropagateAtLaunch": true,
-            "Value": Object {
-              "Fn::Join": Array [
-                "-",
-                Array [
-                  Object {
-                    "Ref": "Stack",
-                  },
-                  "PROD",
-                  Object {
-                    "Ref": "App",
-                  },
-                ],
-              ],
-            },
-          },
-          Object {
-            "Key": "Stack",
-            "PropagateAtLaunch": true,
-            "Value": "support",
-          },
-          Object {
-            "Key": "Stage",
-            "PropagateAtLaunch": true,
-            "Value": "PROD",
-          },
-        ],
-        "TargetGroupARNs": Array [
-          Object {
-            "Ref": "TargetGroup",
-          },
-        ],
-        "VPCZoneIdentifier": Object {
-          "Ref": "PrivateVpcSubnets",
-        },
-      },
-      "Type": "AWS::AutoScaling::AutoScalingGroup",
-    },
-    "DescribeEC2Policy": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "ec2:DescribeTags",
-                "ec2:DescribeInstances",
-                "autoscaling:DescribeAutoScalingGroups",
-                "autoscaling:DescribeAutoScalingInstances",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-        },
-        "PolicyName": "describe-ec2-policy",
-        "Roles": Array [
-          Object {
-            "Ref": "AppRole",
+        "PolicyName": "AssumeOphanRoleE66A9D46",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "ElasticLoadBalancer": Object {
-      "Properties": Object {
-        "Name": Object {
-          "Fn::Sub": "\${Stack}-PROD-\${App}",
+    "AutoScalingGroupPaymentapiASG929EE343": {
+      "Properties": {
+        "HealthCheckGracePeriod": 120,
+        "HealthCheckType": "ELB",
+        "LaunchConfigurationName": {
+          "Ref": "AutoScalingGroupPaymentapiLaunchConfig1F95A9C2",
         },
-        "SecurityGroups": Array [
-          Object {
-            "Ref": "LoadBalancerSecurityGroup",
-          },
-        ],
-        "Subnets": Object {
-          "Ref": "PublicVpcSubnets",
-        },
-        "Tags": Array [
-          Object {
+        "MaxSize": "6",
+        "MinSize": "3",
+        "Tags": [
+          {
             "Key": "App",
-            "Value": Object {
-              "Ref": "App",
+            "PropagateAtLaunch": true,
+            "Value": "payment-api",
+          },
+          {
+            "Key": "gu:cdk:pattern-name",
+            "PropagateAtLaunch": true,
+            "Value": "GuPlayApp",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "PropagateAtLaunch": true,
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "PropagateAtLaunch": true,
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "LogKinesisStreamName",
+            "PropagateAtLaunch": true,
+            "Value": {
+              "Ref": "LoggingStreamName",
             },
           },
-          Object {
+          {
+            "Key": "Name",
+            "PropagateAtLaunch": true,
+            "Value": "Frontend-PROD/AutoScalingGroupPaymentapi",
+          },
+          {
+            "Key": "Stack",
+            "PropagateAtLaunch": true,
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "PropagateAtLaunch": true,
+            "Value": "PROD",
+          },
+        ],
+        "TargetGroupARNs": [
+          {
+            "Ref": "TargetGroupPaymentapiE63889C3",
+          },
+        ],
+        "VPCZoneIdentifier": {
+          "Ref": "paymentapiPrivateSubnets",
+        },
+      },
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+    },
+    "AutoScalingGroupPaymentapiInstanceProfileFFF22F7E": {
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "AutoScalingGroupPaymentapiLaunchConfig1F95A9C2": {
+      "DependsOn": [
+        "InstanceRolePaymentapi2FA25312",
+      ],
+      "Properties": {
+        "IamInstanceProfile": {
+          "Ref": "AutoScalingGroupPaymentapiInstanceProfileFFF22F7E",
+        },
+        "ImageId": {
+          "Ref": "AMIPaymentapi",
+        },
+        "InstanceType": "t4g.small",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "GuHttpsEgressSecurityGroupPaymentapiEFC7370C",
+              "GroupId",
+            ],
+          },
+          {
+            "Fn::GetAtt": [
+              "WazuhSecurityGroup",
+              "GroupId",
+            ],
+          },
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash -ev
+    mkdir /etc/gu
+
+    echo PROD > /etc/gu/stage
+
+    aws --region ",
+                {
+                  "Ref": "AWS::Region",
+                },
+                " s3 cp s3://membership-dist/support/PROD/payment-api/payment-api_0.1_all.deb /tmp
+    dpkg -i /tmp/payment-api_0.1_all.deb
+    /opt/cloudwatch-logs/configure-logs application support PROD payment-api /var/log/payment-api/application.log",
+              ],
+            ],
+          },
+        },
+      },
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+    },
+    "CertificatePaymentapi8AACB639": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "DomainName": "payment.guardianapis.com.origin.membership.guardianapis.com",
+        "DomainValidationOptions": [
+          {
+            "DomainName": "payment.guardianapis.com.origin.membership.guardianapis.com",
+            "HostedZoneId": "Z1E4V12LQGXFEC",
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "payment-api",
+          },
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
         ],
+        "ValidationMethod": "DNS",
       },
-      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+      "Type": "AWS::CertificateManager::Certificate",
+      "UpdateReplacePolicy": "Retain",
     },
-    "FrontendELBDNSrecord": Object {
-      "Properties": Object {
-        "Comment": "CNAME for AWS ELB",
-        "HostedZoneId": "/hostedzone/Z1E4V12LQGXFEC",
-        "Name": Object {
-          "Ref": "SiteDomain",
+    "CloudwatchLogs39890016": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:logs:*:*:*",
+            },
+          ],
+          "Version": "2012-10-17",
         },
-        "ResourceRecords": Array [
-          Object {
-            "Fn::GetAtt": "ElasticLoadBalancer.DNSName",
+        "PolicyName": "CloudwatchLogs39890016",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
           },
         ],
-        "TTL": "120",
-        "Type": "CNAME",
       },
-      "Type": "AWS::Route53::RecordSet",
+      "Type": "AWS::IAM::Policy",
     },
-    "High5XXRateAlarm": Object {
-      "Condition": "CreateProdResources",
-      "DependsOn": Array [
-        "ElasticLoadBalancer",
-        "TargetGroup",
-      ],
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:contributions-dev",
+    "DescribeEC2PolicyFF5F9295": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "autoscaling:DescribeAutoScalingInstances",
+                "autoscaling:DescribeAutoScalingGroups",
+                "ec2:DescribeTags",
+                "ec2:DescribeInstances",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "describe-ec2-policy",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
           },
         ],
-        "AlarmName": Object {
-          "Fn::Sub": "High 5XX rate for \${App} in PROD",
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GetDistributablePolicyPaymentapi43E29B2C": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "DistributionBucketName",
+                    },
+                    "/support/PROD/payment-api/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
         },
+        "PolicyName": "GetDistributablePolicyPaymentapi43E29B2C",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GuHttpsEgressSecurityGroupPaymentapiEFC7370C": {
+      "Properties": {
+        "GroupDescription": "Allow all outbound HTTPS traffic",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound HTTPS traffic",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "payment-api",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "VpcId": {
+          "Ref": "VpcId",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "GuHttpsEgressSecurityGroupPaymentapifromFrontendPRODLoadBalancerPaymentapiSecurityGroupB8716EA5900082B5D743": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "FromPort": 9000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "GuHttpsEgressSecurityGroupPaymentapiEFC7370C",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "LoadBalancerPaymentapiSecurityGroupA9F891D2",
+            "GroupId",
+          ],
+        },
+        "ToPort": 9000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "GuLogShippingPolicy981BFE5A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "kinesis:Describe*",
+                "kinesis:Put*",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:kinesis:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":stream/",
+                    {
+                      "Ref": "LoggingStreamName",
+                    },
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuLogShippingPolicy981BFE5A",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "GuPutCloudwatchMetricsPolicyC5BCE402": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "cloudwatch:PutMetricData",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "GuPutCloudwatchMetricsPolicyC5BCE402",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "High5XXRateAlarmA4E3FB07": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":contributions-dev",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "[CDK] High 5XX rate for payment-api in PROD",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::GetAtt": "ElasticLoadBalancer.LoadBalancerFullName",
+            "Value": {
+              "Fn::GetAtt": [
+                "LoadBalancerPaymentapi9D2DA35F",
+                "LoadBalancerFullName",
+              ],
             },
           },
-          Object {
+          {
             "Name": "TargetGroup",
-            "Value": Object {
-              "Fn::GetAtt": "TargetGroup.TargetGroupFullName",
+            "Value": {
+              "Fn::GetAtt": [
+                "TargetGroupPaymentapiE63889C3",
+                "TargetGroupFullName",
+              ],
             },
           },
         ],
@@ -637,248 +607,251 @@ Object {
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "InstanceProfile": Object {
-      "Properties": Object {
+    "InstanceRolePaymentapi2FA25312": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "ec2.",
+                      {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
         "Path": "/",
-        "Roles": Array [
-          Object {
-            "Ref": "AppRole",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "payment-api",
           },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "InstanceSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Open up SSH access and enable HTTP access on the configured port",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "FromPort": 443,
-            "IpProtocol": "tcp",
-            "ToPort": 443,
-          },
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "FromPort": 5432,
-            "IpProtocol": "tcp",
-            "ToPort": 5432,
-          },
-        ],
-        "SecurityGroupIngress": Array [
-          Object {
-            "FromPort": 22,
-            "IpProtocol": "tcp",
-            "SourceSecurityGroupId": Object {
-              "Ref": "BastionSecurityGroup",
-            },
-            "ToPort": 22,
-          },
-          Object {
-            "FromPort": 9000,
-            "IpProtocol": "tcp",
-            "SourceSecurityGroupId": Object {
-              "Ref": "LoadBalancerSecurityGroup",
-            },
-            "ToPort": 9000,
-          },
-        ],
-        "Tags": Array [
-          Object {
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
         ],
-        "VpcId": Object {
-          "Ref": "CfnVpcId",
-        },
       },
-      "Type": "AWS::EC2::SecurityGroup",
+      "Type": "AWS::IAM::Role",
     },
-    "LaunchConfig": Object {
-      "Properties": Object {
-        "AssociatePublicIpAddress": false,
-        "IamInstanceProfile": Object {
-          "Ref": "InstanceProfile",
-        },
-        "ImageId": Object {
-          "Ref": "AMI",
-        },
-        "InstanceType": Object {
-          "Fn::FindInMap": Array [
-            "StageVariables",
-            "PROD",
-            "InstanceType",
+    "KinesisPut0200D7F7": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "kinesis:*",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "KinesisStreamArn",
+              },
+            },
           ],
+          "Version": "2012-10-17",
         },
-        "SecurityGroups": Array [
-          Object {
-            "Ref": "InstanceSecurityGroup",
-          },
-          Object {
-            "Ref": "NewWazuhSecurityGroup",
+        "PolicyName": "KinesisPut0200D7F7",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
           },
         ],
-        "UserData": Object {
-          "Fn::Base64": Object {
-            "Fn::Sub": "#!/bin/bash -ev
-mkdir /etc/gu
-
-cat > /etc/gu/stage <<'EOF'
-PROD
-EOF
-
-aws --region \${AWS::Region} s3 cp s3://membership-dist/\${Stack}/PROD/\${App}/\${ProjectName}_\${ProjectVersion}_all.deb /tmp
-dpkg -i /tmp/\${ProjectName}_\${ProjectVersion}_all.deb
-/opt/cloudwatch-logs/configure-logs application \${Stack} PROD \${App} /var/log/\${App}/application.log
-",
-          },
-        },
       },
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Type": "AWS::IAM::Policy",
     },
-    "LoadBalancerListener": Object {
-      "Properties": Object {
-        "Certificates": Array [
-          Object {
-            "CertificateArn": Object {
-              "Ref": "CertificateArn",
+    "ListenerPaymentapi860EC20D": {
+      "Properties": {
+        "Certificates": [
+          {
+            "CertificateArn": {
+              "Ref": "CertificatePaymentapi8AACB639",
             },
           },
         ],
-        "DefaultActions": Array [
-          Object {
-            "TargetGroupArn": Object {
-              "Ref": "TargetGroup",
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "TargetGroupPaymentapiE63889C3",
             },
             "Type": "forward",
           },
         ],
-        "LoadBalancerArn": Object {
-          "Ref": "ElasticLoadBalancer",
+        "LoadBalancerArn": {
+          "Ref": "LoadBalancerPaymentapi9D2DA35F",
         },
         "Port": 443,
         "Protocol": "HTTPS",
       },
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
     },
-    "LoadBalancerSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Permit incoming HTTPS access on port 443, egress to port 9000",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "FromPort": 9000,
-            "IpProtocol": "tcp",
-            "ToPort": 9000,
+    "LoadBalancerPaymentapi9D2DA35F": {
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
+            "Key": "deletion_protection.enabled",
+            "Value": "true",
           },
         ],
-        "SecurityGroupIngress": Array [
-          Object {
+        "Scheme": "internet-facing",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "LoadBalancerPaymentapiSecurityGroupA9F891D2",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": {
+          "Ref": "paymentapiPublicSubnets",
+        },
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "payment-api",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "LoadBalancerPaymentapiSecurityGroupA9F891D2": {
+      "Properties": {
+        "GroupDescription": "Automatically created Security Group for ELB FrontendPRODLoadBalancerPaymentapi0B315B22",
+        "SecurityGroupIngress": [
+          {
             "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 443",
             "FromPort": 443,
             "IpProtocol": "tcp",
             "ToPort": 443,
           },
         ],
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "payment-api",
+          },
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
         ],
-        "VpcId": Object {
-          "Ref": "CfnVpcId",
+        "VpcId": {
+          "Ref": "VpcId",
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
     },
-    "NewWazuhSecurityGroup": Object {
-      "Properties": Object {
-        "GroupDescription": "Allow outbound traffic from wazuh agent to manager",
-        "SecurityGroupEgress": Array [
-          Object {
-            "CidrIp": "0.0.0.0/0",
-            "FromPort": 1514,
-            "IpProtocol": "tcp",
-            "ToPort": 1515,
-          },
-        ],
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": "PROD",
-          },
-        ],
-        "VpcId": Object {
-          "Ref": "CfnVpcId",
+    "LoadBalancerPaymentapiSecurityGrouptoFrontendPRODGuHttpsEgressSecurityGroupPaymentapiCDAD469290009A3F86B1": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "GuHttpsEgressSecurityGroupPaymentapiEFC7370C",
+            "GroupId",
+          ],
         },
+        "FromPort": 9000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "LoadBalancerPaymentapiSecurityGroupA9F891D2",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 9000,
       },
-      "Type": "AWS::EC2::SecurityGroup",
+      "Type": "AWS::EC2::SecurityGroupEgress",
     },
-    "NoHealthyInstancesAlarm": Object {
-      "Condition": "CreateProdResources",
-      "DependsOn": Array [
-        "ElasticLoadBalancer",
-        "TargetGroup",
-      ],
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:contributions-dev",
+    "NoHealthyInstancesAlarm4A3DBA9E": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":contributions-dev",
+              ],
+            ],
           },
         ],
-        "AlarmName": Object {
-          "Fn::Sub": "No healthy instances for \${App} in PROD",
-        },
+        "AlarmName": "[CDK] No healthy instances for payment-api in PROD",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "LoadBalancer",
-            "Value": Object {
-              "Fn::GetAtt": "ElasticLoadBalancer.LoadBalancerFullName",
+            "Value": {
+              "Fn::GetAtt": [
+                "LoadBalancerPaymentapi9D2DA35F",
+                "LoadBalancerFullName",
+              ],
             },
           },
-          Object {
+          {
             "Name": "TargetGroup",
-            "Value": Object {
-              "Fn::GetAtt": "TargetGroup.TargetGroupFullName",
+            "Value": {
+              "Fn::GetAtt": [
+                "TargetGroupPaymentapiE63889C3",
+                "TargetGroupFullName",
+              ],
             },
           },
         ],
@@ -891,20 +864,31 @@ dpkg -i /tmp/\${ProjectName}_\${ProjectVersion}_all.deb
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoPaypalPaymentsInOneHourAlarm": Object {
-      "Condition": "CreateProdResources",
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:contributions-dev",
+    "NoPaypalPaymentsInOneHourAlarmA26312E6": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":contributions-dev",
+              ],
+            ],
           },
         ],
-        "AlarmName": Object {
-          "Fn::Sub": "\${App} PROD No successful paypal payments via payment-api for an hour",
-        },
+        "AlarmName": "[CDK] payment-api PROD No successful paypal payments via payment-api for an hour",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "payment-provider",
             "Value": "Paypal",
           },
@@ -919,21 +903,32 @@ dpkg -i /tmp/\${ProjectName}_\${ProjectVersion}_all.deb
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoPaypalPaymentsInTwoHours247Alarm": Object {
-      "Condition": "CreateProdResources",
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:reader-revenue-24-7",
+    "NoPaypalPaymentsInTwoHours247Alarm381FDFB1": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":reader-revenue-24-7",
+              ],
+            ],
           },
         ],
         "AlarmDescription": "There have been no one-off contributions using paypal in the last 2 hours",
-        "AlarmName": Object {
-          "Fn::Sub": "\${App} PROD CP One-off contributions with PayPal might be down",
-        },
+        "AlarmName": "[CDK] payment-api PROD CP One-off contributions with PayPal might be down",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "payment-provider",
             "Value": "Paypal",
           },
@@ -948,20 +943,31 @@ dpkg -i /tmp/\${ProjectName}_\${ProjectVersion}_all.deb
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoStripePaymentsInOneHourAlarm": Object {
-      "Condition": "CreateProdResources",
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:contributions-dev",
+    "NoStripePaymentsInOneHourAlarmB74D5E9A": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":contributions-dev",
+              ],
+            ],
           },
         ],
-        "AlarmName": Object {
-          "Fn::Sub": "\${App} PROD No successful stripe payments via payment-api for an hour",
-        },
+        "AlarmName": "[CDK] payment-api PROD No successful stripe payments via payment-api for an hour",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "payment-provider",
             "Value": "Stripe",
           },
@@ -976,21 +982,32 @@ dpkg -i /tmp/\${ProjectName}_\${ProjectVersion}_all.deb
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "NoStripePaymentsInThreeHours247Alarm": Object {
-      "Condition": "CreateProdResources",
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:reader-revenue-24-7",
+    "NoStripePaymentsInThreeHours247AlarmF141CCFE": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":reader-revenue-24-7",
+              ],
+            ],
           },
         ],
         "AlarmDescription": "There have been no one-off contributions using card payment in the last 3 hours",
-        "AlarmName": Object {
-          "Fn::Sub": "\${App} PROD CP One-off contributions with Card might be down",
-        },
+        "AlarmName": "[CDK] payment-api PROD CP One-off contributions with Card might be down",
         "ComparisonOperator": "LessThanOrEqualToThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "payment-provider",
             "Value": "Stripe",
           },
@@ -1005,47 +1022,90 @@ dpkg -i /tmp/\${ProjectName}_\${ProjectVersion}_all.deb
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "PaymentAPILogGroup": Object {
-      "Properties": Object {
-        "LogGroupName": Object {
-          "Fn::Sub": "\${Stack}-\${App}-PROD",
+    "ParameterStoreReadPaymentapiC0C68C82": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/PROD/support/payment-api",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/PROD/support/payment-api/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
         },
-        "RetentionInDays": 14,
-        "Tags": Array [
-          Object {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          Object {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          Object {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          Object {
-            "Key": "Stage",
-            "Value": "PROD",
+        "PolicyName": "parameter-store-read-policy",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
           },
         ],
       },
-      "Type": "AWS::Logs::LogGroup",
+      "Type": "AWS::IAM::Policy",
     },
-    "PaypalPaymentError": Object {
-      "Condition": "CreateProdResources",
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:contributions-dev",
+    "PaypalPaymentErrorE93EAAD1": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":contributions-dev",
+              ],
+            ],
           },
         ],
-        "AlarmName": Object {
-          "Fn::Sub": "\${App} PROD Paypal payment error for one-off contribution via the payment-api",
-        },
+        "AlarmName": "[CDK] payment-api PROD Paypal payment error for one-off contribution via the payment-api",
         "ComparisonOperator": "GreaterThanThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "payment-provider",
             "Value": "Paypal",
           },
@@ -1060,21 +1120,32 @@ dpkg -i /tmp/\${ProjectName}_\${ProjectVersion}_all.deb
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "PostPaymentError": Object {
-      "Condition": "CreateProdResources",
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:contributions-dev",
+    "PostPaymentError75539BE2": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":contributions-dev",
+              ],
+            ],
           },
         ],
-        "AlarmName": Object {
-          "Fn::Sub": "\${App} PROD Failed post-payment task for one-off contributions via the payment-api",
-        },
+        "AlarmName": "[CDK] payment-api PROD Failed post-payment task for one-off contribution via the payment-api",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
-        "MetricName": "post-payment-tasks-error",
-        "Namespace": "support-payment-api-PROD",
+        "MetricName": "payment-error",
+        "Namespace": "post-payment-tasks-error",
         "Period": 60,
         "Statistic": "Sum",
         "Threshold": 1,
@@ -1082,20 +1153,206 @@ dpkg -i /tmp/\${ProjectName}_\${ProjectVersion}_all.deb
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "StripePaymentError": Object {
-      "Condition": "CreateProdResources",
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:contributions-dev",
+    "SQSPutAF4697B8": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sqs:SendMessage",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Ref": "ContributionsStoreSqsQueueCodeArn",
+                },
+                {
+                  "Ref": "ContributionsStoreSqsQueueProdArn",
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SQSPutAF4697B8",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
           },
         ],
-        "AlarmName": Object {
-          "Fn::Sub": "\${App} PROD Stripe payment error for one-off contribution via the payment-api",
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SSMConfigParams2A7D5B05": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/payment-api/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
         },
+        "PolicyName": "SSMConfigParams2A7D5B05",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SSMRunCommandPolicy244E1613": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ec2messages:AcknowledgeMessage",
+                "ec2messages:DeleteMessage",
+                "ec2messages:FailMessage",
+                "ec2messages:GetEndpoint",
+                "ec2messages:GetMessages",
+                "ec2messages:SendReply",
+                "ssm:UpdateInstanceInformation",
+                "ssm:ListInstanceAssociations",
+                "ssm:DescribeInstanceProperties",
+                "ssm:DescribeDocumentParameters",
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ssm-run-command-policy",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SettingsBucket420EA4B0": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::support-admin-console/*/*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SettingsBucket420EA4B0",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SqsKmsEncryption08744558": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "kms:Encrypt",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "SqsKmsArn",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SqsKmsEncryption08744558",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "SqsMessages5A6DF6BE": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sqs:GetQueueUrl",
+                "sqs:SendMessage",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Ref": "EmailSqsQueueCodeArn",
+                },
+                {
+                  "Ref": "EmailSqsQueueProdArn",
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SqsMessages5A6DF6BE",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "StripePaymentError235E2E2D": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":contributions-dev",
+              ],
+            ],
+          },
+        ],
+        "AlarmName": "[CDK] payment-api PROD Stripe payment error for one-off contribution via the payment-api",
         "ComparisonOperator": "GreaterThanThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "payment-provider",
             "Value": "Stripe",
           },
@@ -1110,20 +1367,31 @@ dpkg -i /tmp/\${ProjectName}_\${ProjectVersion}_all.deb
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "StripeRateLimitingAlarm": Object {
-      "Condition": "CreateProdResources",
-      "Properties": Object {
-        "AlarmActions": Array [
-          Object {
-            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:contributions-dev",
+    "StripeRateLimitingAlarm4776DAC9": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":contributions-dev",
+              ],
+            ],
           },
         ],
-        "AlarmName": Object {
-          "Fn::Sub": "\${App} PROD One or more requests have exceeded the rate limit for Stripe one-off contributions via payment-api in the last 15 mins",
-        },
+        "AlarmName": "[CDK] payment-api PROD One or more requests have exceeded the rate limit for Stripe one-off contribution via the payment-api in the last 15 mins",
         "ComparisonOperator": "GreaterThanThreshold",
-        "Dimensions": Array [
-          Object {
+        "Dimensions": [
+          {
             "Name": "payment-provider",
             "Value": "Stripe",
           },
@@ -1138,52 +1406,97 @@ dpkg -i /tmp/\${ProjectName}_\${ProjectVersion}_all.deb
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "TargetGroup": Object {
-      "DependsOn": Array [
-        "ElasticLoadBalancer",
-      ],
-      "Properties": Object {
+    "TargetGroupPaymentapiE63889C3": {
+      "Properties": {
         "HealthCheckIntervalSeconds": 10,
         "HealthCheckPath": "/healthcheck",
-        "HealthCheckPort": "9000",
         "HealthCheckProtocol": "HTTP",
         "HealthCheckTimeoutSeconds": 5,
-        "HealthyThresholdCount": 2,
-        "Name": Object {
-          "Fn::Sub": "\${Stack}-PROD-\${App}",
-        },
+        "HealthyThresholdCount": 5,
         "Port": 9000,
         "Protocol": "HTTP",
-        "Tags": Array [
-          Object {
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "payment-api",
+          },
+          {
             "Key": "gu:cdk:version",
             "Value": "TEST",
           },
-          Object {
+          {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
           },
-          Object {
+          {
             "Key": "Stack",
             "Value": "support",
           },
-          Object {
+          {
             "Key": "Stage",
             "Value": "PROD",
           },
         ],
-        "TargetGroupAttributes": Array [
-          Object {
+        "TargetGroupAttributes": [
+          {
             "Key": "deregistration_delay.timeout_seconds",
-            "Value": "20",
+            "Value": "30",
+          },
+          {
+            "Key": "stickiness.enabled",
+            "Value": "false",
           },
         ],
+        "TargetType": "instance",
         "UnhealthyThresholdCount": 2,
-        "VpcId": Object {
-          "Ref": "CfnVpcId",
+        "VpcId": {
+          "Ref": "VpcId",
         },
       },
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "WazuhSecurityGroup": {
+      "Properties": {
+        "GroupDescription": "Allow outbound traffic from wazuh agent to manager",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Wazuh event logging",
+            "FromPort": 1514,
+            "IpProtocol": "tcp",
+            "ToPort": 1514,
+          },
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Wazuh agent registration",
+            "FromPort": 1515,
+            "IpProtocol": "tcp",
+            "ToPort": 1515,
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "VpcId": {
+          "Ref": "VpcId",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
     },
   },
 }

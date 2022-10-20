@@ -1,16 +1,29 @@
+import { z } from 'zod';
+import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
+
 export type Phase = 'entry' | 'confirmation';
 export type SortCodeIndex = 0 | 1 | 2;
 
-export type DirectDebitState = {
+const numericStringRegex = /^\d+$/;
+
+export const directDebitSchema = z.object({
+	sortCodeString: z.string().length(6).regex(numericStringRegex),
+	accountNumber: z.string().min(1).regex(numericStringRegex),
+	accountHolderName: z.string().min(1),
+	accountHolderConfirmation: z.boolean().refine((confirmed) => confirmed, {
+		message: 'Please confirm you are the account holder',
+	}),
+});
+
+export type DirectDebitValidateableState = z.infer<typeof directDebitSchema>;
+
+export type DirectDebitState = DirectDebitValidateableState & {
 	isPopUpOpen: boolean;
 	isDDGuaranteeOpen: boolean;
 	sortCodeArray: string[];
-	sortCodeString: string;
-	accountNumber: string;
-	accountHolderName: string;
-	accountHolderConfirmation: boolean;
 	formError: string;
 	phase: Phase;
+	errors?: SliceErrors<DirectDebitValidateableState>;
 };
 
 export type SortCodeUpdate = {

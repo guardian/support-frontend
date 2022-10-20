@@ -1,13 +1,19 @@
 // ----- Imports ----- //
 
 import { css, ThemeProvider } from '@emotion/react';
-import { body, from, headline, space } from '@guardian/source-foundations';
 import {
-	buttonThemeBrand,
+	body,
+	brandAlt,
+	from,
+	headline,
+	space,
+	text,
+} from '@guardian/source-foundations';
+import {
+	buttonThemeDefault,
 	LinkButton,
 	SvgArrowDownStraight,
 } from '@guardian/source-react-components';
-import GiftHeadingAnimation from 'components/animations/giftHeadingAnimation';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
@@ -22,6 +28,7 @@ import {
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { guardianWeeklyHeroBlue } from 'stylesheets/emotion/colours';
 
 type PropTypes = {
 	orderIsAGift: boolean;
@@ -31,6 +38,7 @@ type PropTypes = {
 };
 const weeklyHeroCopy = css`
 	padding: 0 ${space[3]}px ${space[3]}px;
+	color: ${text.primary};
 `;
 const weeklyHeroTitle = css`
 	${headline.small({
@@ -93,9 +101,12 @@ const getFirstParagraph = (
 		return (
 			<>
 				<p>
-					Share the gift of clarity with the Guardian Weekly magazine. A
-					round-up of the world news, opinion and long reads that have shaped
-					the week, all handpicked from the Guardian and the Observer.
+					Gift the Guardian Weekly magazine to someone today, so they can gain a
+					deeper understanding of the issues they care about. They’ll find
+					in-depth reporting, alongside news, opinion pieces and long reads from
+					around the globe. From unpicking the election results to debunking
+					climate misinformation, they can take time with the Guardian Weekly to
+					help them make sense of the world.
 				</p>
 			</>
 		);
@@ -103,10 +114,11 @@ const getFirstParagraph = (
 
 	return (
 		<>
-			The Guardian Weekly magazine is a round-up of the world news, opinion and
-			long reads that have shaped the week. Inside, the past seven days' most
-			memorable stories are reframed with striking photography and insightful
-			companion pieces, all handpicked from the Guardian and the Observer.
+			The Guardian Weekly takes you beyond the headlines to give you a deeper
+			understanding of the issues that really matter. Inside you’ll find the
+			week’s most memorable stories brought to life with striking photography.
+			Featuring a roundup of global news, opinion and long reads, all handpicked
+			from the Guardian and Observer.
 		</>
 	);
 };
@@ -117,6 +129,15 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy = getFirstParagraph(promotionCopy, orderIsAGift);
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
+	const containerColour = css`
+		background-color: ${guardianWeeklyHeroBlue};
+	`;
+	const linkButtonColour = css`
+		color: ${text.primary};
+		&:hover {
+			background: ${'#AEBDC8'};
+		}
+	`;
 
 	return (
 		<PageTitle
@@ -124,7 +145,12 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 			theme="weekly"
 		>
 			<CentredContainer>
-				<OfferStrapline copy={roundelText} orderIsAGift={orderIsAGift} />
+				<OfferStrapline
+					fgCol={text.primary}
+					bgCol={brandAlt[400]}
+					copy={roundelText}
+					orderIsAGift={orderIsAGift}
+				/>
 				<Hero
 					image={
 						<GridImage
@@ -138,15 +164,12 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 						/>
 					}
 					roundelText={undefined}
+					cssOverrides={containerColour}
 				>
 					<section css={weeklyHeroCopy}>
-						{orderIsAGift ? (
-							<GiftHeadingAnimation />
-						) : (
-							<h2 css={weeklyHeroTitle}>{title}</h2>
-						)}
+						<h2 css={weeklyHeroTitle}>{title}</h2>
 						<p css={weeklyHeroParagraph}>{copy}</p>
-						<ThemeProvider theme={buttonThemeBrand}>
+						<ThemeProvider theme={buttonThemeDefault}>
 							<LinkButton
 								onClick={sendTrackingEventsOnClick({
 									id: 'options_cta_click',
@@ -156,6 +179,7 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 								priority="tertiary"
 								iconSide="right"
 								icon={<SvgArrowDownStraight />}
+								cssOverrides={linkButtonColour}
 								href="#subscribe"
 							>
 								See pricing options

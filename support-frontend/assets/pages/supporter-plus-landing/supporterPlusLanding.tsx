@@ -5,8 +5,6 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
-import CheckoutBenefitsList from 'components/checkoutBenefits/checkoutBenefitsList';
-import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -16,8 +14,10 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/paymentFrequencyTabsContainer';
-import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
+import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
+import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
+import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import {
 	AUDCountries,
 	Canada,
@@ -27,8 +27,10 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
+import { AmountAndBenefits } from './formSections/amountAndBenefits';
 
 const checkoutContainer = css`
 	position: relative;
@@ -49,42 +51,44 @@ const checkoutContainer = css`
 `;
 
 // TODO: these are purely for demo purposes, delete once the boxes have real content in
-const smallDemoBox = css`
-	min-height: 200px;
-`;
-
 const largeDemoBox = css`
 	min-height: 400px;
 `;
 
-const countrySwitcherProps: CountryGroupSwitcherProps = {
-	countryGroupIds: [
-		GBPCountries,
-		UnitedStates,
-		AUDCountries,
-		EURCountries,
-		NZDCountries,
-		Canada,
-		International,
-	],
-	selectedCountryGroup: GBPCountries,
-	subPath: '/contribute',
-};
-
 export function SupporterPlusLandingPage(): JSX.Element {
+	const selectedCountryGroup = useContributionsSelector(
+		(state) => state.common.internationalisation.countryGroupId,
+	);
+
+	const countrySwitcherProps: CountryGroupSwitcherProps = {
+		countryGroupIds: [
+			GBPCountries,
+			UnitedStates,
+			AUDCountries,
+			EURCountries,
+			NZDCountries,
+			Canada,
+			International,
+		],
+		selectedCountryGroup,
+		subPath: '/contribute',
+	};
 	const heading = <LandingPageHeading />;
 
 	return (
 		<PageScaffold
 			id="supporter-plus-landing"
 			header={
-				<Header>
-					<Hide from="desktop">
-						<CountrySwitcherContainer>
-							<CountryGroupSwitcher {...countrySwitcherProps} />
-						</CountrySwitcherContainer>
-					</Hide>
-				</Header>
+				<>
+					<Header>
+						<Hide from="desktop">
+							<CountrySwitcherContainer>
+								<CountryGroupSwitcher {...countrySwitcherProps} />
+							</CountrySwitcherContainer>
+						</Hide>
+					</Header>
+					<Nav {...countrySwitcherProps} />
+				</>
 			}
 			footer={
 				<FooterWithContents>
@@ -92,7 +96,6 @@ export function SupporterPlusLandingPage(): JSX.Element {
 				</FooterWithContents>
 			}
 		>
-			<Nav {...countrySwitcherProps} />
 			<CheckoutHeading heading={heading}>
 				<p>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
@@ -105,25 +108,16 @@ export function SupporterPlusLandingPage(): JSX.Element {
 					<Column span={[1, 8, 7]}>
 						<Hide from="desktop">{heading}</Hide>
 						<Box>
-							<PaymentFrequencyTabsContainer
-								render={(tabProps) => (
-									<PaymentFrequencyTabs
-										{...tabProps}
-										renderTabContent={(tabId) => (
-											<BoxContents>
-												<p css={smallDemoBox}>Amount selection for {tabId}</p>
-												<CheckoutBenefitsList
-													title="For £12 per month, you'll unlock"
-													checkListData={checkListData(true)}
-												/>
-											</BoxContents>
-										)}
-									/>
-								)}
-							/>
+							<AmountAndBenefits />
 						</Box>
 						<Box>
 							<BoxContents>
+								<SecureTransactionIndicator position="center" />
+								<ContributionsStripe>
+									<PaymentRequestButtonContainer
+										CustomButton={SavedCardButton}
+									/>
+								</ContributionsStripe>
 								<p css={largeDemoBox}>Personal details and payment</p>
 							</BoxContents>
 						</Box>

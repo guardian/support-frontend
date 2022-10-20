@@ -148,14 +148,14 @@ const guardianWeekly = (
 	isTop: boolean,
 	participations: Participations,
 ): ProductCopy => ({
-	title: 'The Guardian Weekly',
+	title: 'Guardian Weekly',
 	subtitle: getDisplayPrice(
 		countryGroupId,
 		priceCopy.price,
 		postIntroductorySixForSixBillingPeriod,
 	),
 	description:
-		'A weekly, global magazine from the Guardian, with delivery worldwide',
+		'Gain a deeper understanding of the issues that matter with the Guardian Weekly magazine. Every week, take your time over handpicked articles from the Guardian and Observer, delivered for free to wherever you are in the world.',
 	offer: getGuardianWeeklyOfferCopy(
 		countryGroupId,
 		priceCopy.discountCopy,
@@ -170,6 +170,7 @@ const guardianWeekly = (
 				product: 'GuardianWeekly',
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
+			modifierClasses: 'guardian-weekly',
 		},
 		{
 			ctaButtonText: 'See gift options',
@@ -179,11 +180,12 @@ const guardianWeekly = (
 				product: 'GuardianWeekly',
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
-			modifierClasses: '',
+			modifierClasses: 'guardian-weekly',
 		},
 	],
 	productImage: getWeeklyImage(isTop),
 	participations: participations,
+	classModifier: ['subscriptions__guardian-weekly'],
 });
 
 const getPaperImage = (isTop: boolean) => {
