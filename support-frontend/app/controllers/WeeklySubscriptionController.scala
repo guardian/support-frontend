@@ -12,7 +12,6 @@ import play.api.mvc._
 import play.twirl.api.Html
 import views.EmptyDiv
 import views.ViewHelpers.outputJson
-import com.typesafe.scalalogging.StrictLogging
 
 import scala.concurrent.ExecutionContext
 
