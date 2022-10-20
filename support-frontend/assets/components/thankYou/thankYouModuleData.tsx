@@ -1,6 +1,6 @@
 import { Button } from '@guardian/source-react-components';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import AppDownloadBadges from './downloadTheApp/AppDownloadBadges';
+import AppDownloadBadges from './appDownload/AppDownloadBadges';
 import type { ThankYouModuleType } from './thankYouModule';
 import { getThankYouModuleIcon } from './thankYouModuleIcons';
 

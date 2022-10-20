@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { from, headline, neutral, space } from '@guardian/source-foundations';
-import AppDownloadImage from './downloadTheApp/AppDownloadImage';
-import AppDownloadQRCodes from './downloadTheApp/AppDownloadQRCodes';
+import AppDownloadImage from './appDownload/AppDownloadImage';
+import AppDownloadQRCodes from './appDownload/AppDownloadQRCodes';
 
 const container = css`
 	background: white;
