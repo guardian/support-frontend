@@ -27,9 +27,11 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
 
   def deleteItem(
       identityIdToDelete: String,
+      subscriptionId: String,
   )(implicit executionContext: ExecutionContext): Future[Either[String, DeleteItemResponse]] = {
     val key = Map(
       identityId -> AttributeValue.builder.s(identityIdToDelete).build,
+      subscriptionName -> AttributeValue.builder.s(subscriptionId).build,
     ).asJava
     val request = DeleteItemRequest.builder.tableName(tableName).key(key).build
     client

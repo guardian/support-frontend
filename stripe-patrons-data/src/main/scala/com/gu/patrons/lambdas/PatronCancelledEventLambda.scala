@@ -45,7 +45,7 @@ object PatronCancelledEventLambda extends StrictLogging {
       event <- getEvent(payload)
       customer <- getCustomer(event.customerId)
       identityId <- getIdentityId(customer.getEmail, identityService)
-      _ <- deleteCustomer(stage, identityId)
+      _ <- deleteCustomer(stage, identityId, event.subscriptionId)
     } yield ()).value.map(getAPIGatewayResult)
   }
 
@@ -128,20 +128,21 @@ object PatronCancelledEventLambda extends StrictLogging {
     )
   }
 
-  def deleteCustomer(stage: Stage, identityId: String): EitherT[Future, Error, DeleteItemResponse] = {
+  def deleteCustomer(stage: Stage, identityId: String, subscriptionId: String): EitherT[Future, Error, DeleteItemResponse] = {
     logger.info(s"Attempting to delete Patron record for user with identity id $identityId")
     val dynamoService = SupporterDataDynamoService(stage)
-    EitherT(dynamoService.deleteItem(identityId).map(_.left.map(DynamoDbError)))
+    EitherT(dynamoService.deleteItem(identityId, subscriptionId).map(_.left.map(DynamoDbError)))
   }
 }
 
 case class PatronCancelledEvent(data: PatronCancelledData, `type`: String) {
   def customerId = data.`object`.customer
+  def subscriptionId = data.`object`.id
 }
 object PatronCancelledEvent {
   implicit val decoder: Decoder[PatronCancelledEvent] = deriveDecoder
   implicit val dataDecoder: Decoder[PatronCancelledData] = deriveDecoder
-  implicit val objectDecoder: Decoder[PatronCancelledObject] = deriveDecoder
+  implicit val objectDecoder: Decoder[PatronSubscription] = deriveDecoder
 }
-case class PatronCancelledData(`object`: PatronCancelledObject)
-case class PatronCancelledObject(customer: String)
+case class PatronCancelledData(`object`: PatronSubscription)
+case class PatronSubscription(customer: String, id: String)
