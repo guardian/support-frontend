@@ -27,7 +27,7 @@ const fieldsContainerStyles = css`
 `;
 
 // -- Component -- //
-type SepaFormProps = {
+export type SepaFormProps = {
 	iban?: string;
 	accountHolderName?: string;
 	addressStreetName?: string;
