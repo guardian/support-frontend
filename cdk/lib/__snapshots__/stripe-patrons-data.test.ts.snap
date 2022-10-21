@@ -47,7 +47,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
-    "ApiGatewayHigh5xxPercentageAlarmExampleapigatewayinstance0B776A32": {
+    "ApiGatewayHigh5xxPercentageAlarmStripepatronsdata8C2DB30B": {
       "Properties": {
         "ActionsEnabled": true,
         "AlarmActions": [
@@ -68,15 +68,15 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmDescription": "example-api-gateway-instance exceeded 1% error rate",
-        "AlarmName": "High 5XX error % from example-api-gateway-instance (ApiGateway) in PROD",
+        "AlarmDescription": "stripe-patrons-data exceeded 1% error rate",
+        "AlarmName": "High 5XX error % from stripe-patrons-data (ApiGateway) in PROD",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [
           {
             "Expression": "100*m1/m2",
             "Id": "expr_1",
-            "Label": "% of 5XX responses served for example-api-gateway-instance",
+            "Label": "% of 5XX responses served for stripe-patrons-data",
           },
           {
             "Id": "m1",
@@ -85,7 +85,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                 "Dimensions": [
                   {
                     "Name": "ApiName",
-                    "Value": "support-PROD-example-api-gateway-instance",
+                    "Value": "support-PROD-stripe-patrons-data",
                   },
                 ],
                 "MetricName": "5XXError",
@@ -103,7 +103,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                 "Dimensions": [
                   {
                     "Name": "ApiName",
-                    "Value": "support-PROD-example-api-gateway-instance",
+                    "Value": "support-PROD-stripe-patrons-data",
                   },
                 ],
                 "MetricName": "Count",
@@ -122,7 +122,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
     },
     "RestApi0C43BF4B": {
       "Properties": {
-        "Name": "support-PROD-example-api-gateway-instance",
+        "Name": "support-PROD-stripe-patrons-data",
         "Tags": [
           {
             "Key": "gu:cdk:version",
@@ -211,7 +211,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "RestApiDeployment180EC5035777c64ff4f14d74070508947cff7b40": {
+    "RestApiDeployment180EC5031415bce23b484655df855d90ebafb1d3": {
       "DependsOn": [
         "RestApipatron1DDE9314",
         "RestApipatronsubscriptioncancelcountryIdPOSTFA2082F3",
@@ -233,7 +233,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "RestApiDeployment180EC5035777c64ff4f14d74070508947cff7b40",
+          "Ref": "RestApiDeployment180EC5031415bce23b484655df855d90ebafb1d3",
         },
         "RestApiId": {
           "Ref": "RestApi0C43BF4B",
@@ -988,6 +988,38 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                   ],
                 ],
               },
+            },
+            {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/PROD/support/stripe-patrons-data/*",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:Query",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:dynamodb:*:*:table/SupporterProductData-PROD",
             },
           ],
           "Version": "2012-10-17",

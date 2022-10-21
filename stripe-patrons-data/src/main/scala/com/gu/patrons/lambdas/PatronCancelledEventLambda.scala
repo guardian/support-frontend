@@ -5,25 +5,37 @@ import com.amazonaws.services.lambda.runtime.events.{APIGatewayProxyRequestEvent
 import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.patrons.conf.{PatronsIdentityConfig, PatronsStripeConfig}
-import com.gu.patrons.model.{ConfigLoadingError, DynamoDbError, Error, InvalidJsonError, InvalidRequestError, StageConstructors, UserNotFoundIdentityError, UserNotFoundStripeError}
+import com.gu.patrons.model.{
+  ConfigLoadingError,
+  DynamoDbError,
+  Error,
+  InvalidJsonError,
+  InvalidRequestError,
+  StageConstructors,
+  UserNotFoundIdentityError,
+  UserNotFoundStripeError,
+}
 import com.gu.patrons.services.PatronsIdentityService
 import com.gu.supporterdata.model.Stage
 import com.gu.supporterdata.services.SupporterDataDynamoService
+import com.stripe.Stripe
 import com.stripe.model.Customer
 import com.stripe.net.Webhook
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.parser.decode
-import software.amazon.awssdk.services.dynamodb.model.DeleteItemResponse
+import software.amazon.awssdk.services.dynamodb.model.UpdateItemResponse
 
+import java.time.LocalDate
+import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.{Duration, DurationInt, MINUTES}
-import scala.concurrent.{Await, Future}
 import scala.jdk.CollectionConverters.MapHasAsScala
 import scala.util.{Failure, Success, Try}
 
 object PatronCancelledEventLambda extends StrictLogging {
+  val runner = configurableFutureRunner(60.seconds)
 
   def handleRequest(event: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent = {
     Await.result(
@@ -35,17 +47,15 @@ object PatronCancelledEventLambda extends StrictLogging {
   def deleteCustomerFromDynamoDb(event: APIGatewayProxyRequestEvent): Future[APIGatewayProxyResponseEvent] = {
     val stage = StageConstructors.fromEnvironment
     SafeLogger.info(s"Path is ${event.getPathParameters.get("countryId")}")
-    val runner = configurableFutureRunner(60.seconds)
 
     (for {
       stripeConfig <- getStripeConfig(stage)
       identityConfig <- getIdentityConfig(stage)
-      identityService = new PatronsIdentityService(identityConfig, runner)
       payload <- getPayload(event, stripeConfig.signingSecret)
       event <- getEvent(payload)
-      customer <- getCustomer(event.customerId)
-      identityId <- getIdentityId(customer.getEmail, identityService)
-      _ <- deleteCustomer(stage, identityId, event.subscriptionId)
+      customer <- getCustomer(stripeConfig, event.customerId)
+      identityId <- getIdentityId(identityConfig, customer.getEmail)
+      _ <- cancelSubscription(stage, identityId, event.subscriptionId)
     } yield ()).value.map(getAPIGatewayResult)
   }
 
@@ -55,15 +65,19 @@ object PatronCancelledEventLambda extends StrictLogging {
       case Left(error @ (ConfigLoadingError(_) | DynamoDbError(_))) =>
         logger.error(error.message)
         response.setStatusCode(500)
+        response.setBody(error.message)
       case Left(error @ (InvalidRequestError(_) | InvalidJsonError(_))) =>
         logger.error(error.message)
         response.setStatusCode(400)
+        response.setBody(error.message)
       case Left(error @ (UserNotFoundIdentityError(_) | UserNotFoundStripeError(_))) =>
         logger.error(error.message)
         response.setStatusCode(200)
+        response.setBody(error.message)
       case Right(_) =>
-        logger.info("Successfully removed user from data store")
+        logger.info("Successfully cancelled Patron subscription")
         response.setStatusCode(200)
+        response.setBody("Successfully cancelled Patron subscription")
     }
     response
   }
@@ -97,7 +111,7 @@ object PatronCancelledEventLambda extends StrictLogging {
     logger.info("Attempting to verify event payload")
     EitherT.fromEither(for {
       payload <- Option(event.getBody).toRight(InvalidRequestError("Missing body"))
-      _ = SafeLogger.info(s"payload is $payload")
+      _ = SafeLogger.info(s"payload is ${payload.replace("\n", "")}")
       sigHeader <- event.getHeaders.asScala.get("Stripe-Signature").toRight(InvalidRequestError("Missing sig header"))
       _ <- Try(
         Webhook.Signature.verifyHeader(payload, sigHeader, signingSecret, 300),
@@ -107,20 +121,22 @@ object PatronCancelledEventLambda extends StrictLogging {
   }
 
   def getEvent(payload: String): EitherT[Future, Error, PatronCancelledEvent] = {
-    logger.info(s"Attempting to decode event from payload: $payload")
+    logger.info(s"Attempting to decode event from payload")
     EitherT.fromEither(decode[PatronCancelledEvent](payload).left.map(e => InvalidJsonError(e.getMessage)))
   }
 
-  def getCustomer(customerId: String): EitherT[Future, Error, Customer] = {
+  def getCustomer(config: PatronsStripeConfig, customerId: String): EitherT[Future, Error, Customer] = {
     logger.info(s"Attempting to retrieve customer with id $customerId from Stripe")
+    Stripe.apiKey = config.apiKey
     EitherT.fromEither(Try(Customer.retrieve(customerId)).toEither.left.map(e => UserNotFoundStripeError(e.getMessage)))
   }
 
   def getIdentityId(
+      config: PatronsIdentityConfig,
       email: String,
-      identityService: PatronsIdentityService,
   ): EitherT[Future, UserNotFoundIdentityError, String] = {
     logger.info(s"Attempting to find identity id for user with email $email")
+    val identityService = new PatronsIdentityService(config, runner)
     EitherT(
       identityService
         .getUserIdFromEmail(email)
@@ -128,10 +144,16 @@ object PatronCancelledEventLambda extends StrictLogging {
     )
   }
 
-  def deleteCustomer(stage: Stage, identityId: String, subscriptionId: String): EitherT[Future, Error, DeleteItemResponse] = {
-    logger.info(s"Attempting to delete Patron record for user with identity id $identityId")
+  def cancelSubscription(
+      stage: Stage,
+      identityId: String,
+      subscriptionId: String,
+  ): EitherT[Future, Error, UpdateItemResponse] = {
+    logger.info(
+      s"Attempting to cancel Patron subscription for user with identity id $identityId and subscription id $subscriptionId",
+    )
     val dynamoService = SupporterDataDynamoService(stage)
-    EitherT(dynamoService.deleteItem(identityId, subscriptionId).map(_.left.map(DynamoDbError)))
+    EitherT(dynamoService.cancelSubscription(identityId, subscriptionId, LocalDate.now).map(_.left.map(DynamoDbError)))
   }
 }
 

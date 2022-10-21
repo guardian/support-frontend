@@ -25,22 +25,34 @@ import scala.util.{Failure, Success, Try}
 
 class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String) {
 
-  def deleteItem(
-      identityIdToDelete: String,
+  def cancelSubscription(
+      identityIdToCancel: String,
       subscriptionId: String,
-  )(implicit executionContext: ExecutionContext): Future[Either[String, DeleteItemResponse]] = {
+      cancellationDate: LocalDate,
+  )(implicit executionContext: ExecutionContext): Future[Either[String, UpdateItemResponse]] = {
     val key = Map(
-      identityId -> AttributeValue.builder.s(identityIdToDelete).build,
-      subscriptionName -> AttributeValue.builder.s(subscriptionId).build,
+      identityIdField -> AttributeValue.builder.s(identityIdToCancel).build,
+      subscriptionNameField -> AttributeValue.builder.s(subscriptionId).build,
     ).asJava
-    val request = DeleteItemRequest.builder.tableName(tableName).key(key).build
-    client
-      .deleteItem(request)
-      .toScala
-      .transform {
-        case Success(value) => Try(Right(value))
-        case Failure(exception) => Try(Left(exception.getMessage))
-      }
+
+    val updateExpression =
+      s"SET $cancellationDateField = :$cancellationDateField"
+
+    val values = Map(
+      ":" + cancellationDateField -> AttributeValue.builder.s(asIso(cancellationDate)).build,
+    )
+
+    val updateItemRequest = UpdateItemRequest.builder
+      .tableName(tableName)
+      .key(key)
+      .updateExpression(updateExpression)
+      .expressionAttributeValues(values.asJava)
+      .build
+
+    client.updateItem(updateItemRequest).toScala.transform {
+      case Success(value) => Try(Right(value))
+      case Failure(exception) => Try(Left(exception.getMessage))
+    }
   }
 
   def writeItem(
@@ -50,44 +62,41 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
 
     // Dynamo will delete expired subs at the start of the day, whereas the subscription actually lasts until the end of the day
     val expiryDate = item.termEndDate.plusDays(1)
-    val expiryDateName = "expiryDate"
-    val contributionAmount = "contributionAmount"
-    val contributionCurrency = "contributionCurrency"
 
     val key = Map(
-      identityId -> AttributeValue.builder.s(beneficiaryIdentityId).build,
-      subscriptionName -> AttributeValue.builder.s(item.subscriptionName).build,
+      identityIdField -> AttributeValue.builder.s(beneficiaryIdentityId).build,
+      subscriptionNameField -> AttributeValue.builder.s(item.subscriptionName).build,
     ).asJava
 
     val requiredValuesExpression =
       s"""SET
-          $productRatePlanId = :$productRatePlanId,
-          $productRatePlanName = :$productRatePlanName,
-          $termEndDate = :$termEndDate,
-          $contractEffectiveDate = :$contractEffectiveDate,
-          $expiryDateName = :$expiryDateName
+          $productRatePlanIdField = :$productRatePlanIdField,
+          $productRatePlanNameField = :$productRatePlanNameField,
+          $termEndDateField = :$termEndDateField,
+          $contractEffectiveDateField = :$contractEffectiveDateField,
+          $expiryDateNameField = :$expiryDateNameField
           """
     val updateExpression =
       if (item.contributionAmount.isDefined)
         requiredValuesExpression + s""",
-          $contributionAmount = :$contributionAmount,
-          $contributionCurrency = :$contributionCurrency
+          $contributionAmountField = :$contributionAmountField,
+          $contributionCurrencyField = :$contributionCurrencyField
         """
       else requiredValuesExpression
 
     val requiredValues = Map(
-      ":" + productRatePlanId -> AttributeValue.builder.s(item.productRatePlanId).build,
-      ":" + productRatePlanName -> AttributeValue.builder.s(item.productRatePlanName).build,
-      ":" + termEndDate -> AttributeValue.builder.s(asIso(item.termEndDate)).build,
-      ":" + contractEffectiveDate -> AttributeValue.builder.s(asIso(item.contractEffectiveDate)).build,
-      ":" + expiryDateName -> AttributeValue.builder.n(asEpochSecond(expiryDate)).build,
+      ":" + productRatePlanIdField -> AttributeValue.builder.s(item.productRatePlanId).build,
+      ":" + productRatePlanNameField -> AttributeValue.builder.s(item.productRatePlanName).build,
+      ":" + termEndDateField -> AttributeValue.builder.s(asIso(item.termEndDate)).build,
+      ":" + contractEffectiveDateField -> AttributeValue.builder.s(asIso(item.contractEffectiveDate)).build,
+      ":" + expiryDateNameField -> AttributeValue.builder.n(asEpochSecond(expiryDate)).build,
     )
 
     val attributeValues = item.contributionAmount
       .map(amount =>
         requiredValues ++ Map(
-          ":" + contributionAmount -> AttributeValue.builder.n(amount.amount.toString).build,
-          ":" + contributionCurrency -> AttributeValue.builder.s(amount.currency).build,
+          ":" + contributionAmountField -> AttributeValue.builder.n(amount.amount.toString).build,
+          ":" + contributionCurrencyField -> AttributeValue.builder.s(amount.currency).build,
         ),
       )
       .getOrElse(requiredValues)
