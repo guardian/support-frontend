@@ -142,7 +142,7 @@ export class Frontend extends GuStack {
           actionsEnabled: shouldEnableAlarms,
           tolerated5xxPercentage: 5,
         },
-        unhealthyInstancesAlarm: false,
+        unhealthyInstancesAlarm: true,
       },
       userData,
       roleConfiguration: {
