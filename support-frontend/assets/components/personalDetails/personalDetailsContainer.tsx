@@ -42,10 +42,16 @@ export function PersonalDetailsContainer({
 	const checkoutFormHasBeenSubmitted = useContributionsSelector(
 		(state) => state.page.form.formData.checkoutFormHasBeenSubmitted,
 	);
-
+	const userTypeFromIdentityResponse = useContributionsSelector(
+		(state) =>
+			state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
+	);
 	function onEmailChange(email: string) {
 		dispatch(setEmail(email));
 	}
+	const isSignedIn = useContributionsSelector(
+		(state) => state.page.checkoutForm.personalDetails.isSignedIn,
+	);
 
 	function onFirstNameChange(email: string) {
 		dispatch(setFirstName(email));
@@ -62,6 +68,8 @@ export function PersonalDetailsContainer({
 		billingState,
 		checkoutFormHasBeenSubmitted,
 		contributionType,
+		isSignedIn,
+		userTypeFromIdentityResponse,
 		onEmailChange,
 		onFirstNameChange,
 		onLastNameChange,

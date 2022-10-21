@@ -6,6 +6,9 @@ import {
 	checkBillingState,
 	emailRegexPattern,
 } from 'helpers/forms/formValidation';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import { applyPersonalDetailsRules } from 'helpers/subscriptionsForms/rules';
+import { firstError } from 'helpers/subscriptionsForms/validation';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import ContributionState from 'pages/contributions-landing/components/ContributionState';
 import { updateBillingState } from 'pages/contributions-landing/contributionsLandingActions';
@@ -17,6 +20,8 @@ export type PersonalDetailsProps = {
 	billingState: string;
 	checkoutFormHasBeenSubmitted: boolean;
 	contributionType: ContributionType;
+	isSignedIn: boolean;
+	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	onEmailChange: (email: string) => void;
 	onFirstNameChange: (firstName: string) => void;
 	onLastNameChange: (lastName: string) => void;
@@ -29,10 +34,25 @@ export function PersonalDetails({
 	billingState,
 	checkoutFormHasBeenSubmitted,
 	contributionType,
+	isSignedIn,
+	userTypeFromIdentityResponse,
 	onEmailChange,
 	onFirstNameChange,
 	onLastNameChange,
 }: PersonalDetailsProps): JSX.Element {
+	const formErrors = applyPersonalDetailsRules({
+		firstName,
+		lastName,
+		email,
+		isSignedIn,
+		userTypeFromIdentityResponse,
+	});
+
+	const getFormFieldError = (formField: string) =>
+		checkoutFormHasBeenSubmitted
+			? firstError(formField, formErrors)
+			: undefined;
+
 	return (
 		<div className="form-fields">
 			<h3 className="hidden-heading">Your details</h3>
@@ -52,6 +72,8 @@ export function PersonalDetails({
 					supporting="example@domain.com"
 					onChange={(e) => onEmailChange(e.target.value)}
 					pattern={emailRegexPattern}
+					error={getFormFieldError('email')}
+					disabled={isSignedIn}
 				/>
 			</div>
 
@@ -72,6 +94,7 @@ export function PersonalDetails({
 							autoComplete="given-name"
 							autoCapitalize="words"
 							onChange={(e) => onFirstNameChange(e.target.value)}
+							error={getFormFieldError('firstName')}
 							required
 						/>
 					</div>
@@ -88,6 +111,7 @@ export function PersonalDetails({
 							autoComplete="family-name"
 							autoCapitalize="words"
 							onChange={(e) => onLastNameChange(e.target.value)}
+							error={getFormFieldError('lastName')}
 							required
 						/>
 					</div>
