@@ -2,6 +2,8 @@ import { css } from '@emotion/react';
 import { from, space, sport } from '@guardian/source-foundations';
 import React from 'react';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
+import { FeedbackCTA } from 'components/thankYou/feedback/FeedbackItems';
+import { ShareSupportSocialIcons } from 'components/thankYou/shareYourSupport/ShareYourSupportItems';
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
@@ -68,7 +70,35 @@ DownloadTheAppSignedOut.args = {
 export const ShareYourSupport = Template.bind({});
 
 ShareYourSupport.args = {
-	moduleType: 'shareSupport',
+	moduleType: 'socialShare',
 	isSignedIn: true,
-	contryGroupId: 'GBPCountries',
+	icon: getThankYouModuleIcon('socialShare'),
+	header: 'Share your support',
+	bodyCopy:
+		'Invite your followers to join you and support the Guardian’s open, independent reporting.',
+	ctas: (
+		<ShareSupportSocialIcons
+			countryId="GB"
+			campaignCode="Us_eoy_2021"
+			createReferralCodes={false}
+			email=""
+		/>
+	),
+};
+
+export const Feedback = Template.bind({});
+
+Feedback.args = {
+	moduleType: 'feedback',
+	isSignedIn: true,
+	icon: getThankYouModuleIcon('feedback'),
+	header: 'Send us your thoughts',
+	bodyCopy:
+		'We would love to hear more about your experience of supporting the Guardian today. Please fill out this short form – it only takes a minute.',
+	ctas: (
+		<FeedbackCTA
+			countryId={'GB'}
+			setFeedbackSurveyHasBeenCompleted={() => null}
+		/>
+	),
 };
