@@ -1,4 +1,3 @@
-import { Button } from '@guardian/source-react-components';
 import {
 	CardNumberElement,
 	useElements,
@@ -6,6 +5,7 @@ import {
 } from '@stripe/react-stripe-js';
 import type { StripeError } from '@stripe/stripe-js';
 import { useEffect, useState } from 'preact/hooks';
+import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
 import { Stripe } from 'helpers/forms/paymentMethods';
 import {
 	useContributionsDispatch,
@@ -139,5 +139,5 @@ export function StripePaymentButton(): JSX.Element {
 		}
 	}, [setupIntentClientSecret, paymentAwaitingSetupIntent]);
 
-	return <Button onClick={pay}>Pay with Stripe</Button>;
+	return <DefaultPaymentButtonContainer onClick={pay} />;
 }
