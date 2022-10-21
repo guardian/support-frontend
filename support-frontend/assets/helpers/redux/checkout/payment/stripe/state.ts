@@ -1,7 +1,7 @@
 export type StripeFormErrors = {
-	cardNumber?: string;
-	expiry?: string;
-	cvc?: string;
+	cardNumber?: string[];
+	expiry?: string[];
+	cvc?: string[];
 };
 
 export type StripeField = keyof StripeFormErrors;
@@ -25,8 +25,8 @@ export const initialStripeCardState: StripeCardState = {
 	formComplete: false,
 	showErrors: false,
 	errors: {
-		cardNumber: 'Your card number is incomplete',
-		expiry: "Your card's expiration date is incomplete",
-		cvc: "Your card's security code is incomplete",
+		cardNumber: ['Your card number is incomplete'],
+		expiry: ["Your card's expiration date is incomplete"],
+		cvc: ["Your card's security code is incomplete"],
 	},
 };

@@ -19,7 +19,9 @@ export const stripeCardSlice = createSlice({
 			state.stripePaymentMethod = action.payload;
 		},
 		setStripeFormError(state, action: PayloadAction<StripeErrorPayload>) {
-			state.errors[action.payload.field] = action.payload.error;
+			if (action.payload.error) {
+				state.errors[action.payload.field] = [action.payload.error];
+			}
 		},
 	},
 	extraReducers: (builder) => {

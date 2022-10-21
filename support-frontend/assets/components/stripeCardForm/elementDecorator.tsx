@@ -31,8 +31,14 @@ const stripeElementFocusStyles = css`
 	}
 `;
 
+/* The Stripe 'inputs' are actually iframes to forms on Stripe's own domain, which allows us to
+take credit card payments without ever having to handle the hot potato that is card details.
+These styles applied to the .StripeElement container that wraps each iframe make them look more or less
+like our own inputs from Source.
+*/
 const stripeElementStyles = (isFocused: boolean, error?: string) => css`
 	display: block;
+	flex-grow: 1;
 
 	& .StripeElement {
 		margin-top: ${space[1]}px;
@@ -54,7 +60,7 @@ type ElementRenderProps = {
 };
 
 type ElementDecoratorProps = LabelProps & {
-	element: (renderProps: ElementRenderProps) => React.ReactNode;
+	renderElement: (renderProps: ElementRenderProps) => React.ReactNode;
 	id: string;
 	error?: string;
 };
@@ -70,7 +76,7 @@ const baseStyles: StripeElementStyleVariant = {
  */
 export function ElementDecorator({
 	id,
-	element,
+	renderElement,
 	error,
 	...labelProps
 }: ElementDecoratorProps): JSX.Element {
@@ -87,7 +93,7 @@ export function ElementDecorator({
 					<InlineError id={descriptionId(id)}>{error}</InlineError>
 				</div>
 			)}
-			{element({
+			{renderElement({
 				id,
 				options: {
 					style: {
