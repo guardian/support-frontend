@@ -3,7 +3,7 @@ package com.gu.lambdas
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.lambdas.FetchResultsLambda.fetchResults
 import com.gu.model.StageConstructors
-import com.gu.model.states.{FetchResultsState, UpdateDynamoState}
+import com.gu.model.states.{FetchResultsState, AddSupporterRatePlanItemToQueueState}
 import com.gu.model.zuora.response.JobStatus.Completed
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{ConfigService, S3Service, ZuoraQuerierService}
@@ -15,17 +15,19 @@ import java.time.format.DateTimeFormatter
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
 
-class FetchResultsLambda extends Handler[FetchResultsState, UpdateDynamoState] {
+class FetchResultsLambda extends Handler[FetchResultsState, AddSupporterRatePlanItemToQueueState] {
   override protected def handlerFuture(input: FetchResultsState, context: Context) =
     fetchResults(StageConstructors.fromEnvironment, input.jobId, input.attemptedQueryTime)
 }
 
 object FetchResultsLambda extends StrictLogging {
+  val stage = StageConstructors.fromEnvironment
+  val config = ConfigService(stage).load
+  val service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
+
   def fetchResults(stage: Stage, jobId: String, attemptedQueryTime: ZonedDateTime) = {
     logger.info(s"Attempting to fetch results for jobId $jobId")
     for {
-      config <- ConfigService(stage).load
-      service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
       result <- service.getResults(jobId)
       _ = assert(result.status == Completed, s"Job with id $jobId is still in status ${result.status}")
       batch = getValueOrThrow(
@@ -45,7 +47,7 @@ object FetchResultsLambda extends StrictLogging {
       if (batch.recordCount == 0)
         ConfigService(stage).putLastSuccessfulQueryTime(attemptedQueryTime)
 
-      UpdateDynamoState(
+      AddSupporterRatePlanItemToQueueState(
         filename,
         batch.recordCount,
         processedCount = 0,

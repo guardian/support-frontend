@@ -1,6 +1,8 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { initialSepaState } from './state';
+import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
+import { validateForm } from '../../checkoutActions';
+import { initialSepaState, sepaSchema } from './state';
 
 export const sepaSlice = createSlice({
 	name: 'sepa',
@@ -18,6 +20,9 @@ export const sepaSlice = createSlice({
 		setSepaAddressCountry(state, action: PayloadAction<string>) {
 			state.country = action.payload;
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(validateForm, createSliceValidatorFor(sepaSchema));
 	},
 });
 

@@ -1,7 +1,10 @@
 package com.gu.zuora.subscriptionBuilders
 
-import com.gu.i18n.Currency
+import com.gu.i18n.Country.Australia
+import com.gu.i18n.Currency.AUD
+import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.ProductRatePlanId
+import com.gu.support.config.ZuoraInvoiceTemplatesConfig
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import com.gu.support.workers.{Address, PaymentMethod, SalesforceContactRecord, User}
 import com.gu.support.zuora.api.AcquisitionSource.CSR
@@ -15,6 +18,7 @@ class SubscribeItemBuilder(
     requestId: UUID,
     user: User,
     currency: Currency,
+    invoiceTemplateIds: ZuoraInvoiceTemplatesConfig,
 ) {
 
   def build(
@@ -25,7 +29,7 @@ class SubscribeItemBuilder(
   ): SubscribeItem = {
     val billingEnabled = maybePaymentMethod.isDefined
     SubscribeItem(
-      account = buildAccount(salesForceContact, maybePaymentMethod),
+      account = buildAccount(salesForceContact, maybePaymentMethod, determineInvoiceTemplateId(soldToContact)),
       billToContact = buildContactDetails(
         Some(user.primaryEmailAddress),
         user.firstName,
@@ -39,7 +43,18 @@ class SubscribeItemBuilder(
     )
   }
 
-  private def buildAccount(salesForceContact: SalesforceContactRecord, maybePaymentMethod: Option[PaymentMethod]) = {
+  private def determineInvoiceTemplateId(soldToContact: Option[ContactDetails]): String = {
+    val legalEntityCountry =
+      soldToContact.map(_.country) orElse user.deliveryAddress.map(_.country) getOrElse user.billingAddress.country
+    if (legalEntityCountry == Australia && currency == AUD) invoiceTemplateIds.auTemplateId
+    else invoiceTemplateIds.defaultTemplateId
+  }
+
+  private def buildAccount(
+      salesForceContact: SalesforceContactRecord,
+      maybePaymentMethod: Option[PaymentMethod],
+      invoiceTemplateId: String,
+  ) = {
     Account(
       name = salesForceContact.AccountId, // We store the Salesforce Account id in the name field
       currency = currency,
@@ -49,6 +64,7 @@ class SubscribeItemBuilder(
       paymentGateway = maybePaymentMethod.map(_.PaymentGateway),
       createdRequestId__c = requestId.toString,
       autoPay = maybePaymentMethod.isDefined,
+      invoiceTemplateId = invoiceTemplateId,
     )
   }
 
@@ -90,7 +106,6 @@ class SubscribeItemBuilder(
         acquisitionCase = salesforceCaseId,
       ),
     )
-
 }
 
 object SubscribeItemBuilder {

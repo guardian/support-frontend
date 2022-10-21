@@ -1,6 +1,8 @@
 // ----- Imports ----- //
 import { fetchJson } from 'helpers/async/fetch';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
+import { updateSelectedExistingPaymentMethod } from 'pages/contributions-landing/contributionsLandingActions';
 import { logException } from '../../utilities/logger';
 import { getPaymentLabel } from '../checkouts';
 import {
@@ -96,6 +98,20 @@ function getExistingPaymentMethodLabel(
 	return 'Other Payment Method';
 }
 
+const getFullExistingPaymentMethods = (
+	existingPaymentMethods?: ExistingPaymentMethod[],
+): RecentlySignedInExistingPaymentMethod[] =>
+	(existingPaymentMethods ?? []).filter(isUsableExistingPaymentMethod);
+
+const updateExistingPaymentMethod = (
+	existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
+): void => {
+	setPaymentMethod(
+		mapExistingPaymentMethodToPaymentMethod(existingPaymentMethod),
+	);
+	updateSelectedExistingPaymentMethod(existingPaymentMethod);
+};
+
 function subscriptionToExplainerPart(
 	subscription: ExistingPaymentMethodSubscription,
 ): string {
@@ -120,6 +136,8 @@ export {
 	isUsableExistingPaymentMethod,
 	mapExistingPaymentMethodToPaymentMethod,
 	getExistingPaymentMethodLabel,
+	getFullExistingPaymentMethods,
+	updateExistingPaymentMethod,
 	subscriptionToExplainerPart,
 	subscriptionsToExplainerList,
 };

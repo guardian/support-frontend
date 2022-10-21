@@ -5,6 +5,7 @@ deployments:
     type: cloud-formation
     app: payment-api
     parameters:
+      amiParameter: AMIPaymentapi
       amiTags:
         Recipe: bionic-membership-ARM
         AmigoStage: PROD
@@ -15,6 +16,5 @@ deployments:
   payment-api:
     type: autoscaling
     parameters:
-      bucket: membership-dist
-      asgMigrationInProgress: true
+      bucketSsmLookup: true
     dependencies: [cfn]

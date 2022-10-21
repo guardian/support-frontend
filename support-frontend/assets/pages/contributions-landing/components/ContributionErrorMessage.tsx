@@ -5,7 +5,8 @@ import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMess
 import type { ContributionType } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import type { State } from '../contributionsLandingReducer';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
+import { isSupporterPlusPurchase } from '../newProductTestHelper';
 import { ExistingRecurringContributorErrorMessage } from './ExistingRecurringContributorErrorMessage';
 
 // ----- Types ----- //
@@ -17,10 +18,11 @@ type PropTypes = {
 	formIsValid: boolean;
 	isRecurringContributor: boolean;
 	checkoutFormHasBeenSubmitted: boolean;
+	isSupporterPlus: boolean;
 };
 
-const mapStateToProps = (state: State) => ({
-	paymentMethod: state.page.form.paymentMethod,
+const mapStateToProps = (state: ContributionsState) => ({
+	paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 	contributionType: getContributionType(state),
 	paymentError: state.page.form.paymentError,
 	isSignedIn: state.page.user.isSignedIn,
@@ -28,6 +30,7 @@ const mapStateToProps = (state: State) => ({
 	isRecurringContributor: state.page.user.isRecurringContributor,
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
+	isSupporterPlus: isSupporterPlusPurchase(state),
 });
 
 // ----- Functions ----- //
@@ -38,6 +41,7 @@ function ContributionErrorMessage(props: PropTypes) {
 	const shouldsShowExistingContributorErrorMessage =
 		props.contributionType !== 'ONE_OFF' &&
 		props.isRecurringContributor &&
+		!props.isSupporterPlus &&
 		props.checkoutFormHasBeenSubmitted;
 
 	if (props.paymentError) {

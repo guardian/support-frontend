@@ -217,7 +217,7 @@ export function sendEventContributionCheckoutConversion(
 	});
 }
 
-export function sendEventContributionAmountUpdated(
+export function sendEventContributionCartValue(
 	amount: string,
 	contributionType: ContributionType,
 	sourceCurrency: IsoCurrency,

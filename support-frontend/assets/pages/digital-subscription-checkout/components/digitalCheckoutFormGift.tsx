@@ -36,7 +36,6 @@ import {
 	selectPriceForProduct,
 } from 'helpers/redux/checkout/product/selectors/productPrice';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
-import { supportedPaymentMethods } from 'helpers/subscriptionsForms/countryPaymentMethods';
 import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
@@ -48,6 +47,7 @@ import {
 	submitCheckoutForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
+import { supportedPaymentMethods } from 'helpers/subscriptionsForms/supportedPaymentMethods';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
@@ -71,7 +71,7 @@ function mapStateToProps(state: SubscriptionsState) {
 		currencyId: state.common.internationalisation.currencyId,
 		csrf: state.page.checkoutForm.csrf,
 		payPalHasLoaded: state.page.checkoutForm.payment.payPal.hasLoaded,
-		paymentMethod: state.page.checkout.paymentMethod,
+		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 		isTestUser: state.page.checkout.isTestUser,
 		billingPeriod: state.page.checkoutForm.product
 			.billingPeriod as DigitalBillingPeriod,
@@ -99,7 +99,7 @@ function mapDispatchToProps() {
 				validateCheckoutForm(dispatch, state);
 				// We need to track PayPal payment attempts here because PayPal behaves
 				// differently to other payment methods. All others are tracked in submit.js
-				const { paymentMethod } = state.page.checkout;
+				const { paymentMethod } = state.page.checkoutForm.payment;
 
 				if (paymentMethod === PayPal) {
 					trackSubmitAttempt(PayPal, DigitalPack, NoProductOptions);
@@ -132,10 +132,12 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 		props.submissionError === 'personal_details_incorrect'
 			? 'Sorry there was a problem'
 			: 'Sorry we could not process your payment';
+
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,
 		props.country,
 	);
+
 	return (
 		<Content>
 			<CheckoutLayout
@@ -218,8 +220,14 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 					<FormSection title="Billing address">
 						<BillingAddress countries={countries} />
 					</FormSection>
-					{paymentMethods.length > 1 ? (
-						<FormSection title="How would you like to pay?">
+					{paymentMethods.length > 0 ? (
+						<FormSection
+							title={
+								paymentMethods.length > 1
+									? 'How would you like to pay?'
+									: 'Payment Method'
+							}
+						>
 							<PaymentMethodSelector
 								availablePaymentMethods={paymentMethods}
 								paymentMethod={props.paymentMethod}
@@ -229,7 +237,13 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 								}
 							/>
 						</FormSection>
-					) : null}
+					) : (
+						<GeneralErrorMessage
+							classModifiers={['no-valid-payments']}
+							errorHeading="Payment methods are unavailable"
+							errorReason="all_payment_methods_unavailable"
+						/>
+					)}
 					<FormSectionHiddenUntilSelected
 						id="stripeForm"
 						show={props.paymentMethod === Stripe}
@@ -241,7 +255,6 @@ function DigitalCheckoutFormGift(props: PropTypes): JSX.Element {
 							submitForm={props.submitForm}
 							// @ts-expect-error TODO: Fixing the types around validation errors will affect every checkout, too much to tackle now
 							allErrors={[...props.formErrors, ...props.addressErrors]}
-							setStripePaymentMethod={props.setStripePaymentMethod}
 							validateForm={props.validateForm}
 							buttonText="Pay for your gift"
 							csrf={props.csrf}

@@ -30,13 +30,14 @@ object Fixtures {
       currency: Currency = GBP,
       paymentGateway: PaymentGateway = StripeGatewayDefault,
   ): Account = Account(
-    salesforceAccountId,
-    currency,
-    salesforceAccountId,
-    salesforceId,
-    identityId,
-    Some(paymentGateway),
-    "createdreqid_hi",
+    name = salesforceAccountId,
+    currency = currency,
+    crmId = salesforceAccountId,
+    sfContactId__c = salesforceId,
+    identityId__c = identityId,
+    paymentGateway = Some(paymentGateway),
+    createdRequestId__c = "createdreqid_hi",
+    invoiceTemplateId = "2c92c0f849369b8801493bf7db7e450e",
   )
 
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", Some("test@thegulocal.com"), Country.UK)

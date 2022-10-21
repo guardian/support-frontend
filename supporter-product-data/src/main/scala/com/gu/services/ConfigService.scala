@@ -2,6 +2,7 @@ package com.gu.services
 
 import com.amazonaws.services.simplesystemsmanagement.model.Parameter
 import com.gu.conf.ZuoraQuerierConfig
+import com.gu.monitoring.SafeLogger
 import com.gu.supporterdata.model.Stage.{DEV, PROD, UAT}
 import com.gu.services.ConfigService.{lastSuccessfulQueryTime, zuoraConfigPath}
 import com.gu.supporterdata.model.Stage
@@ -14,18 +15,16 @@ import scala.concurrent.{ExecutionContext, Future}
 class ConfigService(stage: Stage) extends StrictLogging {
   val parameterStoreService = ParameterStoreService(stage)
 
-  def load(implicit ec: ExecutionContext): Future[ZuoraQuerierConfig] = {
-
-    parameterStoreService.getParametersByPath(zuoraConfigPath).map { params =>
-      ZuoraQuerierConfig(
-        findParameterOrThrow("url", params),
-        findParameterOrThrow("partnerId", params),
-        findParameterOrThrow("username", params),
-        findParameterOrThrow("password", params),
-        getDiscountProductRatePlanIds(stage),
-        findParameterValue(lastSuccessfulQueryTime, params).map(ZonedDateTime.parse(_, DateTimeFormatter.ISO_DATE_TIME)),
-      )
-    }
+  def load(implicit ec: ExecutionContext): ZuoraQuerierConfig = {
+    val params = parameterStoreService.getParametersByPath(zuoraConfigPath)
+    ZuoraQuerierConfig(
+      findParameterOrThrow("url", params),
+      findParameterOrThrow("partnerId", params),
+      findParameterOrThrow("username", params),
+      findParameterOrThrow("password", params),
+      getDiscountProductRatePlanIds(stage),
+      findParameterValue(lastSuccessfulQueryTime, params).map(ZonedDateTime.parse(_, DateTimeFormatter.ISO_DATE_TIME)),
+    )
   }
 
   private def getDiscountProductRatePlanIds(stage: Stage) =
@@ -64,9 +63,14 @@ class ConfigService(stage: Stage) extends StrictLogging {
           "2c92a0ff56fe33f301572314aed277fb",
           "2c92a0fc610e738901612d83fce461fd",
           "2c92a0fe56fe33ff015723143e4778be",
+          "8a1295918021d0d2018022d4ca0c4aac",
+          "8a12865b8021d0d9018022d2a2e52c74",
           // 6 for 6 these are also covered by a regular rate plan
           "2c92a0086619bf8901661aaac94257fe",
           "2c92a0086619bf8901661ab545f51b21",
+          // Holiday credits
+          "2c92a0fc5b42d2c9015b6259f7f40040",
+          "2c92a0fc6ae918b6016b080950e96d75",
         )
     }
 

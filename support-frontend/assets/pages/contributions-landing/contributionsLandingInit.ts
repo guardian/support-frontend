@@ -19,12 +19,12 @@ import {
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { PayPal } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
+import { setBillingState } from 'helpers/redux/checkout/address/actions';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
 import {
 	setAllAmounts,
@@ -47,9 +47,7 @@ import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
 import {
 	getUserType,
 	setUserTypeFromIdentityResponse,
-	updatePaymentMethod,
 	updateSelectedExistingPaymentMethod,
-	updateUserFormData,
 } from './contributionsLandingActions';
 import type { State } from './contributionsLandingReducer';
 
@@ -143,7 +141,7 @@ function initialisePaymentMethods(
 					isUsableExistingPaymentMethod(firstExistingPaymentMethod)
 				) {
 					dispatch(
-						updatePaymentMethod(
+						setPaymentMethod(
 							mapExistingPaymentMethodToPaymentMethod(
 								firstExistingPaymentMethod,
 							),
@@ -248,15 +246,7 @@ function selectInitialContributionTypeAndPaymentMethod(
 		switches,
 	);
 	dispatch(setProductType(contributionType));
-	dispatch(updatePaymentMethod(paymentMethod));
-
-	switch (paymentMethod) {
-		case PayPal:
-			void dispatch(loadPayPalExpressSdk());
-			break;
-
-		default:
-	}
+	dispatch(setPaymentMethod(paymentMethod));
 
 	return contributionType;
 }
@@ -295,11 +285,7 @@ const init = (store: ContributionsStore): void => {
 		dispatch(getUserType(email));
 	}
 
-	dispatch(
-		updateUserFormData({
-			billingState: stateField,
-		}),
-	);
+	dispatch(setBillingState(stateField));
 	void loadRecaptchaV2();
 };
 

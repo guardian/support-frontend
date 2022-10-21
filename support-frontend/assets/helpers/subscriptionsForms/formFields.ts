@@ -36,7 +36,7 @@ type ProductFields = {
 export type FormFields = PersonalDetailsState &
 	GiftingFields &
 	ProductFields & {
-		paymentMethod: Option<PaymentMethod>;
+		paymentMethod: PaymentMethod;
 		billingAddressIsSame: boolean;
 		deliveryInstructions: Option<string>;
 		csrUsername?: string;
@@ -45,15 +45,16 @@ export type FormFields = PersonalDetailsState &
 export type FormField = keyof FormFields | 'recaptcha';
 export type FormState = Omit<
 	FormFields,
-	keyof PersonalDetailsState | keyof GiftingFields | keyof ProductFields
+	| keyof PersonalDetailsState
+	| keyof GiftingFields
+	| keyof ProductFields
+	| 'paymentMethod'
 > & {
 	stage: Stage;
 	formErrors: Array<FormError<FormField>>;
 	submissionError: Option<ErrorReason>;
 	formSubmitted: boolean;
 	isTestUser: boolean;
-	stripePaymentMethod: Option<string>;
-	debugInfo: string;
 };
 
 function getFormFields(state: SubscriptionsState): FormFields {
@@ -73,7 +74,7 @@ function getFormFields(state: SubscriptionsState): FormFields {
 		emailGiftRecipient: state.page.checkoutForm.gifting.email,
 		startDate: state.page.checkoutForm.product.startDate,
 		billingPeriod: state.page.checkoutForm.product.billingPeriod,
-		paymentMethod: state.page.checkout.paymentMethod,
+		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
 		fulfilmentOption: state.page.checkoutForm.product.fulfilmentOption,
 		productOption: state.page.checkoutForm.product.productOption,
 		product: getSubscriptionType(state),

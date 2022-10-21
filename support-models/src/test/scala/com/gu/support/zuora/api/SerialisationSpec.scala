@@ -18,12 +18,20 @@ import org.scalatest.flatspec.AsyncFlatSpec
 class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with LazyLogging with Inspectors {
 
   "Account" should "serialise to correct json" in {
-    val json = account(GBP).asJson
+    val json = account().asJson
     (json \\ "Currency").head.asString should be(Some("GBP"))
     (json \\ "PaymentGateway").head.asString should be(Some("Stripe Gateway 1"))
+    (json \\ "InvoiceTemplateId").head.asString should be(Some("defaultInvoiceTemplateId"))
   }
 
-  it should "deserialise correctly" in {
+  "AUAccount" should "serialise to correct json" in {
+    val json = auAccount().asJson
+    (json \\ "Currency").head.asString should be(Some("AUD"))
+    (json \\ "PaymentGateway").head.asString should be(Some("Stripe Gateway GNM Membership AUS"))
+    (json \\ "InvoiceTemplateId").head.asString should be(Some("auInvoiceTemplateId"))
+  }
+
+  "InternationalAccount" should "deserialise correctly" in {
     testDecoding[Account](s"$accountJson")
   }
 

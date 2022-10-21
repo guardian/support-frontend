@@ -241,10 +241,12 @@
 		bottom: 0;
 	}
 
+  // WHY DO WE DO THIS?
 	@include mq($from: desktop) {
 		right: -50px;
 	}
 
+  // WHY DO WE DO THIS?
 	@include mq($from: leftCol) {
 		right: -80px;
 	}
@@ -253,7 +255,7 @@
 .subscriptions__copy-container.subscriptions__product--feature {
 	position: relative;
 	width: 100%;
-	background-color: gu-colour('brand-main');
+  background-color: #052962;
 
 	@include mq($from: tablet) {
 		width: 50%;
@@ -305,7 +307,7 @@
 
 .subscriptions__copy-container.subscriptions__product--feature
 	.subscriptions__product-title {
-	font-size: 42px;
+	font-size: 37px;
 
 	@include mq($until: tablet) {
 		font-size: 34px;
@@ -455,7 +457,7 @@
 	margin-top: -6px;
 }
 .subscriptions__product--feature .subscriptions__description::before {
-	border-top: solid gu-colour('brand-pastel') 1px;
+	border-top: solid #9AA4AD 1px;
 
 	@include mq($until: tablet) {
 		border-top: none;
@@ -546,6 +548,57 @@
 	}
 }
 
+/****************** guardian weekly ********************/
+
+.subscriptions__guardian-weekly.subscriptions__product--feature
+{
+  color: #000;
+	background-color: #cadbe8;
+
+  .subscriptions__image-container {
+    right: 0;
+    margin-bottom: 0;
+    position: relative;
+  }
+
+  .subscriptions__copy-container {
+    background-color: #cadbe8;
+  }
+
+  .subscriptions-feature-packshot {
+    width: 100%;
+
+
+    @include mq($from: tablet) {
+      position: absolute;
+      bottom: 0;
+    }
+
+    img {
+      width: 100%;
+      vertical-align: bottom;
+    }
+  }
+
+  .component-button--primary.component-button--guardian-weekly {
+    color: #ffffff;
+    background-color: #333333;
+  }
+
+  .component-button--primary.component-button--guardian-weekly:hover,
+  .component-button--primary.component-button--guardian-weekly:focus {
+    background-color: #121212;
+  }
+
+  .component-button--tertiaryFeature.component-button--guardian-weekly,
+  .component-button--tertiaryFeature.component-button--guardian-weekly:hover,
+  .component-button--tertiaryFeature.component-button--guardian-weekly:focus {
+    color: #333333;
+    border: solid 1px #333333;
+    background-color: transparent;
+  }
+}
+
 /****************** premium app ********************/
 
 .subscriptions__premuim-app {
@@ -617,36 +670,14 @@
 	position: relative;
 	width: 100%;
 
+  @include mq($from: tablet) {
+    position: absolute;
+    bottom: 0;
+	}
+
 	img {
-		bottom: -25px;
 		width: 100%;
-	}
-
-	@include mq($from: tablet) {
-		position: absolute;
-		bottom: -10px;
-		padding: 0px;
-	}
-
-	@include mq($from: desktop) {
-		bottom: -50px;
-		img {
-			width: 100%;
-		}
-	}
-
-	@include mq($from: leftCol) {
-		left: 50px;
-		img {
-			width: 85%;
-		}
-	}
-
-	@include mq($from: wide) {
-		left: 80px;
-		img {
-			width: 75%;
-		}
+    vertical-align: bottom;
 	}
 }
 
@@ -837,13 +868,11 @@
 
 	img {
 		position: absolute;
-		bottom: -50px;
 		width: 100%;
 	}
 
 	@include mq($from: tablet) {
 		position: absolute;
-		bottom: 0;
 		padding: 0px;
 
 		img {

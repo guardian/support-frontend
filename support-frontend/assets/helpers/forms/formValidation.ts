@@ -64,18 +64,31 @@ export const maxTwoDecimals: (arg0: string) => boolean = (input) =>
 export const containsEmoji: (input: string | null) => boolean = (input) =>
 	/\p{Emoji_Presentation}/u.test(input ?? '');
 
+export const notLongerThan = (
+	value: string | null,
+	maxLength: number,
+): boolean => {
+	if (!value) return true;
+	return value.length < maxLength;
+};
+
 export const checkFirstName: (firstName: string | null) => boolean = (
 	firstName,
-) => isNotEmpty(firstName) && !containsEmoji(firstName);
+) =>
+	isNotEmpty(firstName) &&
+	!containsEmoji(firstName) &&
+	notLongerThan(firstName, 40);
 
 export const checkLastName: (lastName: string | null) => boolean = (lastName) =>
-	isNotEmpty(lastName) && !containsEmoji(lastName);
+	isNotEmpty(lastName) &&
+	!containsEmoji(lastName) &&
+	notLongerThan(lastName, 40);
 
 export const checkBillingState: (arg0: string | null) => boolean = (s) =>
 	typeof s === 'string' && isNotEmpty(s);
 
 export const checkEmail: (arg0: string | null) => boolean = (input) =>
-	isNotEmpty(input) && isValidEmail(input);
+	isNotEmpty(input) && isValidEmail(input) && notLongerThan(input, 80);
 
 export const emailAddressesMatch: (
 	isSignedIn: boolean,

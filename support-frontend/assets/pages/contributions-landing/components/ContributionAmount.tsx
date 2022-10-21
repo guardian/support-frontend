@@ -3,19 +3,20 @@ import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import { config } from 'helpers/contributions';
 import 'helpers/internationalisation/countryGroup';
+import { hasPaymentRequestButtonBeenClicked } from 'helpers/redux/checkout/payment/paymentRequestButton/selectors';
 import {
 	setOtherAmount,
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventContributionAmountUpdated } from 'helpers/tracking/quantumMetric';
+import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import type { State } from '../contributionsLandingReducer';
 import ContributionAmountChoices from './ContributionAmountChoices';
 import { ContributionAmountOtherAmountField } from './ContributionAmountOtherAmountField';
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: ContributionsState) => ({
 	countryGroupId: state.common.internationalisation.countryGroupId,
 	currency: state.common.internationalisation.currencyId,
 	contributionType: getContributionType(state),
@@ -24,11 +25,7 @@ const mapStateToProps = (state: State) => ({
 	otherAmounts: state.page.checkoutForm.product.otherAmounts,
 	checkoutFormHasBeenSubmitted:
 		state.page.form.formData.checkoutFormHasBeenSubmitted,
-	stripePaymentRequestButtonClicked:
-		state.page.form.stripePaymentRequestButtonData.ONE_OFF
-			.stripePaymentRequestButtonClicked ||
-		state.page.form.stripePaymentRequestButtonData.REGULAR
-			.stripePaymentRequestButtonClicked,
+	stripePaymentRequestButtonClicked: hasPaymentRequestButtonBeenClicked(state),
 	localCurrencyCountry: state.common.internationalisation.localCurrencyCountry,
 	useLocalCurrency: state.common.internationalisation.useLocalCurrency,
 });
@@ -104,7 +101,7 @@ function ContributionAmount(props: PropTypes) {
 								`npf-contribution-amount-toggle-${props.countryGroupId}-${props.contributionType}-${otherAmount}`,
 							);
 
-							sendEventContributionAmountUpdated(
+							sendEventContributionCartValue(
 								otherAmount,
 								props.contributionType,
 								props.currency,

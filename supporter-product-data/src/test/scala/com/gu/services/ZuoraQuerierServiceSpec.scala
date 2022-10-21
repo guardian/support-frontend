@@ -13,13 +13,10 @@ import scala.concurrent.duration._
 @IntegrationTest
 class ZuoraQuerierServiceSpec extends AsyncFlatSpec with Matchers {
   "ZuoraQuerierService" should "run a query successfully" in {
-    val futureResult = for {
-      config <- ConfigService(DEV).load
-      service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
-      result <- service.postQuery(Full)
-    } yield result
+    val config = ConfigService(DEV).load
+    val service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
 
-    futureResult.map { response =>
+    service.postQuery(Full).map { response =>
       response.id shouldNot be("")
       response.status shouldBe Submitted
     }

@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "simple-configuration-ssm" % "1.5.7",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
-  "io.sentry" % "sentry-logback" % "1.7.30",
+  "io.sentry" % "sentry-logback" % "6.5.0",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sts" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
@@ -38,7 +38,7 @@ libraryDependencies ++= Seq(
   "org.scalatestplus" %% "scalatestplus-selenium" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "3.14.9",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
-  "com.googlecode.libphonenumber" % "libphonenumber" % "8.12.51",
+  "com.googlecode.libphonenumber" % "libphonenumber" % "8.12.57",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,

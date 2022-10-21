@@ -145,9 +145,10 @@ function buildRegularPaymentRequest(
 	promotions?: Promotion[],
 	currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
+	const { actionHistory } = state.debug;
 	const { title, firstName, lastName, email, telephone } =
 		state.page.checkoutForm.personalDetails;
-	const { deliveryInstructions, csrUsername, salesforceCaseId, debugInfo } =
+	const { deliveryInstructions, csrUsername, salesforceCaseId } =
 		state.page.checkout;
 	const product = getProduct(state, currencyId);
 	const paymentFields =
@@ -176,7 +177,7 @@ function buildRegularPaymentRequest(
 		deliveryInstructions,
 		csrUsername,
 		salesforceCaseId,
-		debugInfo,
+		debugInfo: actionHistory,
 	};
 }
 
@@ -194,13 +195,15 @@ function onPaymentAuthorised(
 		productPrices,
 	} = state.page.checkoutForm.product;
 	const productType = getSubscriptionType(state);
-	const { paymentMethod } = state.page.checkout;
+	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { csrf } = state.page.checkoutForm;
 	const { abParticipations } = state.common;
 	const addresses = getAddresses(state);
+	const pricingCountry =
+		addresses.deliveryAddress?.country ?? addresses.billingAddress.country;
 	const productPrice = getProductPrice(
 		productPrices,
-		addresses.billingAddress.country,
+		pricingCountry,
 		billingPeriod,
 		fulfilmentOption,
 		productOption,
@@ -243,7 +246,7 @@ function onPaymentAuthorised(
 
 function checkStripeUserType(
 	onAuthorised: (pa: PaymentAuthorisation) => void,
-	stripePaymentMethodId: Option<string>,
+	stripePaymentMethodId?: string,
 ) {
 	if (stripePaymentMethodId != null) {
 		onAuthorised({
@@ -273,7 +276,7 @@ const directDebitAuthorised = (
 function showPaymentMethod(
 	onAuthorised: (pa: PaymentAuthorisation) => void,
 	paymentMethod: Option<PaymentMethod>,
-	stripePaymentMethod: Option<string>,
+	stripePaymentMethod: string | undefined,
 	state: AnyCheckoutState,
 ): void {
 	switch (paymentMethod) {
@@ -330,7 +333,7 @@ function getPricingCountry(product: SubscriptionProduct, addresses: Addresses) {
 }
 
 function submitForm(dispatch: Dispatch<Action>, state: SubscriptionsState) {
-	const { paymentMethod } = state.page.checkout;
+	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { productOption, billingPeriod, fulfilmentOption, productPrices } =
 		state.page.checkoutForm.product;
 	const productType = getSubscriptionType(state);
@@ -358,7 +361,7 @@ function submitForm(dispatch: Dispatch<Action>, state: SubscriptionsState) {
 
 	const currencyId = getCurrency(pricingCountry);
 	const stripePaymentMethod =
-		paymentMethod === Stripe ? state.page.checkout.stripePaymentMethod : null;
+		state.page.checkoutForm.payment.stripe.stripePaymentMethod;
 
 	const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
 		onPaymentAuthorised(paymentAuthorisation, dispatch, state, currencyId);

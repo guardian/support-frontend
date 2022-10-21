@@ -4,7 +4,7 @@ const styles = {
 	display: 'flex',
 	padding: '2em',
 	minHeight: '100%',
-	width: '100&',
+	width: '100%',
 	boxSizing: 'border-box',
 	alignItems: 'center',
 	justifyContent: 'center',

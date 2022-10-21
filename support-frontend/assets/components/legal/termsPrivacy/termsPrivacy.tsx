@@ -26,7 +26,7 @@ type PropTypes = {
 	campaignSettings: CampaignSettings | null;
 	amount: number;
 	currency: IsoCurrency;
-	userInBenefitsVariant: boolean;
+	userInNewProductTest: boolean;
 };
 
 // ----- Component ----- //
@@ -147,7 +147,7 @@ function TermsPrivacy(props: PropTypes): ReactElement {
 	return (
 		<>
 			<div className="component-terms-privacy">
-				{props.contributionType !== 'ONE_OFF' && !props.userInBenefitsVariant && (
+				{props.contributionType !== 'ONE_OFF' && !props.userInNewProductTest && (
 					<div className="component-terms-privacy__change">
 						{recurringCopy()}{' '}
 						<strong>

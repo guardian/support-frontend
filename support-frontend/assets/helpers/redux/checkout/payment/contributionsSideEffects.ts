@@ -1,15 +1,23 @@
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { isAnyOf } from '@reduxjs/toolkit';
-import { DirectDebit } from 'helpers/forms/paymentMethods';
-import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { PayPal } from 'helpers/forms/paymentMethods';
+import type {
+	ContributionsDispatch,
+	ContributionsStartListening,
+} from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
+import { expireRecaptchaToken, setRecaptchaToken } from '../recaptcha/actions';
 import {
 	setAmazonPayBillingAgreementConsentStatus,
 	setAmazonPayBillingAgreementId,
 	setAmazonPayOrderReferenceId,
 	setAmazonPayPaymentSelected,
 } from './amazonPay/actions';
-import { setPopupOpen } from './directDebit/actions';
+import { setPaymentMethod } from './paymentMethod/actions';
+import { loadPayPalExpressSdk } from './payPal/reducer';
+import type { PayPalState } from './payPal/state';
 import {
 	setSepaAccountHolderName,
 	setSepaAddressCountry,
@@ -17,20 +25,35 @@ import {
 	setSepaIban,
 } from './sepa/actions';
 
+function handlePaymentMethodChange(action: PayloadAction<PaymentMethod>) {
+	const paymentMethod = action.payload;
+	storage.setSession('selectedPaymentMethod', paymentMethod);
+}
+
+function maybeLoadPaypal(
+	action: PayloadAction<PaymentMethod>,
+	payPal: PayPalState,
+	dispatch: ContributionsDispatch,
+) {
+	if (action.payload === PayPal && !payPal.hasBegunLoading) {
+		void dispatch(loadPayPalExpressSdk());
+	}
+}
+
 export function addPaymentsSideEffects(
 	startListening: ContributionsStartListening,
 ): void {
 	startListening({
-		actionCreator: setPopupOpen,
-		effect() {
-			// TODO: we should do this on the payment method selection action instead in future
-			storage.setSession('selectedPaymentMethod', DirectDebit);
-		},
-	});
-
-	startListening({
 		matcher: shouldCheckFormEnabled,
-		effect(_action, listenerApi) {
+		effect(action, listenerApi) {
+			if (setPaymentMethod.match(action)) {
+				handlePaymentMethodChange(action);
+				maybeLoadPaypal(
+					action,
+					listenerApi.getState().page.checkoutForm.payment.payPal,
+					listenerApi.dispatch,
+				);
+			}
 			listenerApi.dispatch(enableOrDisableForm());
 		},
 	});
@@ -39,6 +62,9 @@ export function addPaymentsSideEffects(
 // ---- Matchers ---- //
 
 const shouldCheckFormEnabled = isAnyOf(
+	setRecaptchaToken,
+	expireRecaptchaToken,
+	setPaymentMethod,
 	setAmazonPayPaymentSelected,
 	setAmazonPayOrderReferenceId,
 	setAmazonPayBillingAgreementId,

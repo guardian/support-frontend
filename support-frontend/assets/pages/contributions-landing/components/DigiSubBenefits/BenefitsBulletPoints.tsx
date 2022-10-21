@@ -12,6 +12,7 @@ import {
 	Button,
 	buttonThemeReaderRevenueBrand,
 	SvgCheckmark,
+	SvgCross,
 } from '@guardian/source-react-components';
 import GridImage from 'components/gridImage/gridImage';
 import type { ContributionType } from 'helpers/contributions';
@@ -118,9 +119,10 @@ const imgContainer = (showBenefitsMessaging: boolean) => css`
 	}
 `;
 
-const checkmark = css`
+const checkListIcon = css`
 	vertical-align: top;
 	padding-right: 10px;
+	padding-top: 2px;
 	line-height: 0;
 
 	${from.desktop} {
@@ -132,11 +134,19 @@ const checkmark = css`
 	}
 `;
 
-const checklistItem = css`
+const checkListText = css`
 	display: inline-block;
 
 	& p {
 		line-height: 1.35;
+	}
+`;
+
+const greyedOut = css`
+	color: ${neutral[60]};
+
+	svg {
+		fill: ${neutral[60]};
 	}
 `;
 
@@ -179,7 +189,7 @@ type PropTypes = {
 	setSelectedAmount: (amountChange: AmountChange) => void;
 };
 
-function BenefitsBulletPoints({
+export function BenefitsBulletPoints({
 	showBenefitsMessaging,
 	countryGroupId,
 	contributionType,
@@ -199,6 +209,74 @@ function BenefitsBulletPoints({
 		: `Unlock exclusive extras when you give a little more each ${billingPeriod}.`;
 
 	const btnCopy = getBtnThresholdCopy(countryGroupId, contributionType);
+
+	const getSvgIcon = showBenefitsMessaging ? (
+		<SvgCheckmark size="xsmall" />
+	) : (
+		<SvgCross size="xsmall" />
+	);
+
+	const getNewsletterCopy = (countryGroupId: CountryGroupId) => {
+		switch (countryGroupId) {
+			case 'GBPCountries':
+			case 'EURCountries':
+			case 'International':
+			case 'NZDCountries':
+			case 'Canada':
+				return (
+					<p>
+						<span css={boldText}>Weekly newsletter</span> from a senior editor
+						giving you the inside track on the week's top stories
+					</p>
+				);
+			case 'AUDCountries':
+				return (
+					<p>
+						<span css={boldText}>
+							Regular email updates from the Guardian Australia newsroom
+						</span>{' '}
+						providing an inside look on the biggest stories of the moment
+					</p>
+				);
+			case 'UnitedStates':
+				return (
+					<p>
+						<span css={boldText}>Newsletter from a senior editor,</span> giving
+						you the inside track on the week's top stories
+					</p>
+				);
+			default:
+				return;
+		}
+	};
+
+	const checkListData = [
+		{
+			icon: <SvgCheckmark size="xsmall" />,
+			text: getNewsletterCopy(countryGroupId),
+			maybeGreyedOut: null,
+		},
+		{
+			icon: getSvgIcon,
+			text: (
+				<p>
+					Premium access to{' '}
+					<span css={boldText}>our award-winning news app,</span> for the best
+					mobile experience
+				</p>
+			),
+			maybeGreyedOut: showBenefitsMessaging ? null : greyedOut,
+		},
+		{
+			icon: getSvgIcon,
+			text: (
+				<p>
+					<span css={boldText}>Ad-free reading</span> on all your devices
+				</p>
+			),
+			maybeGreyedOut: showBenefitsMessaging ? null : greyedOut,
+		},
+	];
 
 	const setShowLiveFeedBack = useLiveFeedBackContext()?.setShowLiveFeedBack;
 
@@ -265,39 +343,12 @@ function BenefitsBulletPoints({
 			)}
 			{showBenefitsMessaging && <hr css={hr} />}
 			<table css={table}>
-				<tr>
-					<td css={checkmark}>
-						<SvgCheckmark size="xsmall" />
-					</td>
-					<td css={checklistItem}>
-						<p>
-							<span css={boldText}>Ad-free reading</span> on all your devices
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<td css={checkmark}>
-						<SvgCheckmark size="xsmall" />
-					</td>
-					<td css={checklistItem}>
-						<p>
-							Premium access to{' '}
-							<span css={boldText}>our award-winning news app,</span> for the
-							best mobile experience
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<td css={checkmark}>
-						<SvgCheckmark size="xsmall" />
-					</td>
-					<td css={checklistItem}>
-						<p>
-							<span css={boldText}>Weekly newsletter</span> from a senior editor
-							giving you the inside track on the week's top stories
-						</p>
-					</td>
-				</tr>
+				{checkListData.map((item) => (
+					<tr>
+						<td css={[checkListIcon, item.maybeGreyedOut]}>{item.icon}</td>
+						<td css={[checkListText, item.maybeGreyedOut]}>{item.text}</td>
+					</tr>
+				))}
 			</table>
 		</div>
 	);

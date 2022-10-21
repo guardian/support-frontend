@@ -1,16 +1,20 @@
 import { css } from '@emotion/react';
 import { from, textSans } from '@guardian/source-foundations';
 import type { ReactElement } from 'react';
-import { offerStraplineBlue } from 'stylesheets/emotion/colours';
 
 // Requirement: strapline acts differently (becomes full-width) at smaller device widths if the copy is longer than 32 chars
-const offerStraplineStyles = (isLong: boolean) => css`
+const offerStraplineStyles = (
+	isLong: boolean,
+	bgCol: string,
+	fgCol: string,
+) => css`
 	${textSans.medium({
 		fontWeight: 'bold',
 	})};
 	padding: 4px 10px 8px;
 	margin-bottom: 0;
-	background-color: ${offerStraplineBlue};
+	background-color: ${bgCol};
+	color: ${fgCol};
 	${isLong
 		? 'width: 100%;'
 		: `
@@ -42,11 +46,18 @@ const offerStraplineStyles = (isLong: boolean) => css`
 `;
 
 type PropTypes = {
+	fgCol: string;
+	bgCol: string;
 	copy?: string;
 	orderIsAGift?: boolean;
 };
 
-function OfferStrapline({ copy, orderIsAGift }: PropTypes): ReactElement {
+function OfferStrapline({
+	fgCol,
+	bgCol,
+	copy,
+	orderIsAGift,
+}: PropTypes): ReactElement {
 	// Requirement: last line must include a minimum of 2 words
 	const noWidowWord = (c: string) => {
 		const trimmedCopy = c.trim();
@@ -55,14 +66,14 @@ function OfferStrapline({ copy, orderIsAGift }: PropTypes): ReactElement {
 		if (wordArray.length > 1) {
 			const lastWord: string | undefined = wordArray.pop();
 			return (
-				<div css={offerStraplineStyles(copyLength > 32)}>
+				<div css={offerStraplineStyles(copyLength > 32, bgCol, fgCol)}>
 					<span>
 						{wordArray.join(' ')}&nbsp;{lastWord}
 					</span>
 				</div>
 			);
 		}
-		return <div css={offerStraplineStyles(false)}>{c}</div>;
+		return <div css={offerStraplineStyles(false, bgCol, fgCol)}>{c}</div>;
 	};
 
 	// Requirement: never show the offer on the Gift page

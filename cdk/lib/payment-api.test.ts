@@ -1,6 +1,5 @@
-import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
-import { App } from "@aws-cdk/core";
+import { App } from "aws-cdk-lib";
+import { Template } from "aws-cdk-lib/assertions";
 import { PaymentApi } from "./payment-api";
 
 describe("The Payment API stack", () => {
@@ -16,6 +15,7 @@ describe("The Payment API stack", () => {
       domainName: "payment.guardianapis.com.origin.membership.guardianapis.com",
     });
 
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    const template = Template.fromStack(stack);
+    expect(template.toJSON()).toMatchSnapshot();
   });
 });

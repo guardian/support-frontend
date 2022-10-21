@@ -59,6 +59,8 @@ case class RecurringPaymentMethodSwitches(
 
 case class SubscriptionsPaymentMethodSwitches(
     directDebit: SwitchState,
+    creditCard: SwitchState,
+    paypal: SwitchState,
 )
 
 case class Switches(

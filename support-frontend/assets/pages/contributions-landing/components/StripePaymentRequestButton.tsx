@@ -71,15 +71,14 @@ function PaymentRequestButton({
 		contributionType !== 'ONE_OFF' &&
 		(countryGroupId === 'GBPCountries' || countryGroupId === 'EURCountries');
 
-	const shouldShow =
-		type === 'APPLE_PAY' || type === 'GOOGLE_PAY' || !isUkOrEuRecurring;
+	const shouldRenderStripeElement =
+		type === 'APPLE_PAY' || type === 'GOOGLE_PAY';
+
+	const shouldShow = shouldRenderStripeElement || !isUkOrEuRecurring;
 
 	if (!shouldShow) {
 		return null;
 	}
-
-	const shouldRenderStripeElement =
-		type === 'APPLE_PAY' || type === 'GOOGLE_PAY';
 
 	return (
 		<>

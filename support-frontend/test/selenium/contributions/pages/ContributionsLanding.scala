@@ -24,9 +24,9 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
 
   private val otherAmount = id("contributionOther")
 
-  private val stripeSelector = id("paymentMethodSelector-Stripe")
-  private val directDebitSelector = id("paymentMethodSelector-DirectDebit")
-  private val payPalSelector = id("paymentMethodSelector-PayPal")
+  private val stripeSelector = id("qa-credit-card")
+  private val directDebitSelector = id("qa-direct-debit")
+  private val payPalSelector = id("qa-paypal")
   private val stateSelector = id("contributionState")
 
   private val stripeOverlayIframe = cssSelector(".stripe_checkout_app")

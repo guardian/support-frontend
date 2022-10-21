@@ -16,20 +16,18 @@ class StripeSubscriptionsProcessor(
 ) {
 
   def processSubscriptions(pageSize: Int) =
-    processFutureResponse(stripeService.getSubscriptions(pageSize))
+    processFutureResponse(pageSize, None)
 
-  final def processFutureResponse(eventualResponse: Future[StripeSubscriptionsResponse]): Future[Unit] = {
-    eventualResponse.flatMap { response =>
-      processSubs(response.data).map(_ =>
+  final def processFutureResponse(pageSize: Int, startingAfterId: Option[String]): Future[Unit] =
+    for {
+      response <- stripeService.getSubscriptions(pageSize, startingAfterId)
+      _ <- processSubs(response.data)
+      result <-
         if (response.hasMore)
-          processFutureResponse(
-            stripeService.getSubscriptions(startingAfterId = Some(response.data.last.id)),
-          )
+          processFutureResponse(pageSize, Some(response.data.last.id))
         else
-          Future.successful(()),
-      )
-    }
-  }
+          Future.successful(())
+    } yield result
 
   def processSubs(list: List[StripeSubscription]) = {
     val unknownEmailViaCSR = "patrons@theguardian.com"
@@ -67,16 +65,17 @@ abstract class DynamoProcessor(
           "Guardian Patron",
           sub.currentPeriodEnd,
           sub.created,
+          None,
         ),
       )
   }
 
-  def logDynamoResult(email: String, updateDynamoState: UpdateItemResponse) =
-    if (updateDynamoState.sdkHttpResponse().statusCode() == 200)
+  def logDynamoResult(email: String, addSubscriptionsToQueueState: UpdateItemResponse) =
+    if (addSubscriptionsToQueueState.sdkHttpResponse().statusCode() == 200)
       SafeLogger.info(s"Dynamo record successfully written for ${email}")
     else
       SafeLogger.info(
-        s"Error response from Dynamo for ${email}. Status code was ${updateDynamoState.sdkHttpResponse().statusCode()}",
+        s"Error response from Dynamo for ${email}. Status code was ${addSubscriptionsToQueueState.sdkHttpResponse().statusCode()}",
       )
 }
 
