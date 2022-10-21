@@ -1,13 +1,22 @@
 // ----- Imports ----- //
 import { TextInput } from '@guardian/source-react-components';
 import Signout from 'components/signout/signout';
-import { emailRegexPattern } from 'helpers/forms/formValidation';
+import type { ContributionType } from 'helpers/contributions';
+import {
+	checkBillingState,
+	emailRegexPattern,
+} from 'helpers/forms/formValidation';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import ContributionState from 'pages/contributions-landing/components/ContributionState';
+import { updateBillingState } from 'pages/contributions-landing/contributionsLandingActions';
 
 export type PersonalDetailsProps = {
 	email: string;
 	firstName: string;
 	lastName: string;
+	billingState: string;
+	checkoutFormHasBeenSubmitted: boolean;
+	contributionType: ContributionType;
 	onEmailChange: (email: string) => void;
 	onFirstNameChange: (firstName: string) => void;
 	onLastNameChange: (lastName: string) => void;
@@ -17,6 +26,9 @@ export function PersonalDetails({
 	email,
 	firstName,
 	lastName,
+	billingState,
+	checkoutFormHasBeenSubmitted,
+	contributionType,
 	onEmailChange,
 	onFirstNameChange,
 	onLastNameChange,
@@ -45,40 +57,51 @@ export function PersonalDetails({
 
 			<Signout />
 
-			<div>
-				<div
-					className={classNameWithModifiers('form__field', [
-						'contribution-fname',
-					])}
-				>
-					<TextInput
-						id="contributionFirstName"
-						data-qm-masking="blocklist"
-						label="First name"
-						value={firstName}
-						autoComplete="given-name"
-						autoCapitalize="words"
-						onChange={(e) => onFirstNameChange(e.target.value)}
-						required
-					/>
+			{contributionType !== 'ONE_OFF' ? (
+				<div>
+					<div
+						className={classNameWithModifiers('form__field', [
+							'contribution-fname',
+						])}
+					>
+						<TextInput
+							id="contributionFirstName"
+							data-qm-masking="blocklist"
+							label="First name"
+							value={firstName}
+							autoComplete="given-name"
+							autoCapitalize="words"
+							onChange={(e) => onFirstNameChange(e.target.value)}
+							required
+						/>
+					</div>
+					<div
+						className={classNameWithModifiers('form__field', [
+							'contribution-lname',
+						])}
+					>
+						<TextInput
+							id="contributionLastName"
+							data-qm-masking="blocklist"
+							label="Last name"
+							value={lastName}
+							autoComplete="family-name"
+							autoCapitalize="words"
+							onChange={(e) => onLastNameChange(e.target.value)}
+							required
+						/>
+					</div>
 				</div>
-				<div
-					className={classNameWithModifiers('form__field', [
-						'contribution-lname',
-					])}
-				>
-					<TextInput
-						id="contributionLastName"
-						data-qm-masking="blocklist"
-						label="Last name"
-						value={lastName}
-						autoComplete="family-name"
-						autoCapitalize="words"
-						onChange={(e) => onLastNameChange(e.target.value)}
-						required
-					/>
-				</div>
-			</div>
+			) : null}
+
+			<ContributionState
+				onChange={(newBillingState) =>
+					updateBillingState(newBillingState === '' ? null : newBillingState)
+				}
+				selectedState={billingState}
+				isValid={checkBillingState(billingState)}
+				formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+			/>
 		</div>
 	);
 }
