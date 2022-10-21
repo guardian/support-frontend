@@ -14,6 +14,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -123,7 +124,11 @@ export function SupporterPlusLandingPage(): JSX.Element {
 									<p css={largeDemoBox}>Personal details and payment</p>
 
 									<StripeCardFormContainer />
-									<StripePaymentButton />
+									<PaymentButtonController
+										paymentButtons={{
+											Stripe: StripePaymentButton,
+										}}
+									/>
 								</ContributionsStripe>
 							</BoxContents>
 						</Box>
