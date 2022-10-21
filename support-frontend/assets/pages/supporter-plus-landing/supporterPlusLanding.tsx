@@ -19,6 +19,7 @@ import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { StripeCardFormContainer } from 'components/stripeCardForm/stripeCardFormContainer';
+import { StripePaymentButton } from 'components/stripeCardForm/stripePaymentButton';
 import {
 	AUDCountries,
 	Canada,
@@ -113,15 +114,16 @@ export function SupporterPlusLandingPage(): JSX.Element {
 						</Box>
 						<Box>
 							<BoxContents>
-								<SecureTransactionIndicator position="center" />
 								<ContributionsStripe>
+									<SecureTransactionIndicator position="center" />
 									<PaymentRequestButtonContainer
 										CustomButton={SavedCardButton}
 									/>
-								</ContributionsStripe>
-								<p css={largeDemoBox}>Personal details and payment</p>
-								<ContributionsStripe>
+
+									<p css={largeDemoBox}>Personal details and payment</p>
+
 									<StripeCardFormContainer />
+									<StripePaymentButton />
 								</ContributionsStripe>
 							</BoxContents>
 						</Box>
