@@ -4,6 +4,7 @@ import { headline, space } from '@guardian/source-foundations';
 import {
 	Option as OptionForSelect,
 	Select,
+	Stack,
 	TextInput,
 } from '@guardian/source-react-components';
 import { countries } from 'helpers/internationalisation/country';
@@ -20,9 +21,6 @@ const headerStyles = css`
 `;
 const fieldsContainerStyles = css`
 	margin-top: ${space[4]}px;
-	> * + * {
-		margin-top: ${space[3]}px;
-	}
 `;
 
 // -- Component -- //
@@ -50,8 +48,7 @@ export function SepaForm({
 	return (
 		<div css={containerStyles}>
 			<h3 css={headerStyles}>Your account details</h3>
-
-			<div css={fieldsContainerStyles}>
+			<Stack cssOverrides={fieldsContainerStyles} space={3}>
 				<div>
 					<TextInput
 						id="sepa-account-holder-name-input"
@@ -65,9 +62,6 @@ export function SepaForm({
 						onChange={(e) => updateAccountHolderName(e.target.value)}
 					/>
 				</div>
-
-				<div />
-
 				<div>
 					<TextInput
 						id="sepa-account-number"
@@ -83,7 +77,6 @@ export function SepaForm({
 						onChange={(e) => updateIban(e.target.value)}
 					/>
 				</div>
-
 				<div>
 					<TextInput
 						id="sepa-address-line-one"
@@ -96,9 +89,6 @@ export function SepaForm({
 						onChange={(e) => updateAddressStreetName(e.target.value)}
 					/>
 				</div>
-
-				<div />
-
 				<div>
 					<Select
 						id="sepa-country"
@@ -114,7 +104,7 @@ export function SepaForm({
 						{sortedOptions(countries)}
 					</Select>
 				</div>
-			</div>
+			</Stack>
 		</div>
 	);
 }
