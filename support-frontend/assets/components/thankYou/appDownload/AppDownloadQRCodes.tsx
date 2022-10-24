@@ -41,6 +41,7 @@ function AppDownloadQRCodes(): JSX.Element {
 					// PLACEHOLDER LINK //
 					//////////////////////
 					src="https://tools-qr-production.s3.amazonaws.com/output/apple-toolbox/731eb34571091e0b5081c965ebb0d652/f04d238959ff2fb888b8cb92efae42d8.png"
+					alt="QR code"
 				/>
 			</div>
 
@@ -52,6 +53,7 @@ function AppDownloadQRCodes(): JSX.Element {
 					// PLACEHOLDER LINK //
 					//////////////////////
 					src="https://tools-qr-production.s3.amazonaws.com/output/apple-toolbox/731eb34571091e0b5081c965ebb0d652/f04d238959ff2fb888b8cb92efae42d8.png"
+					alt="QR code"
 				/>
 			</div>
 		</div>
