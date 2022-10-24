@@ -196,7 +196,7 @@ function DigitalLandingComponent({
 		currencyId,
 		countryGroupId,
 	);
-  
+
 	const [setElementToObserve] = useHasBeenSeen({
 		threshold: 0.3,
 		debounce: true,
