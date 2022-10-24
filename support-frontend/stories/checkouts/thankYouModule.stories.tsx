@@ -3,8 +3,18 @@ import { between, from, space, sport } from '@guardian/source-foundations';
 import { Column, Columns, Container } from '@guardian/source-react-components';
 import React from 'react';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
+import { AusMapCTA } from 'components/thankYou/ausMap/ausMap';
 import { FeedbackCTA } from 'components/thankYou/feedback/FeedbackItems';
-import { ShareSupportSocialIcons } from 'components/thankYou/shareYourSupport/ShareYourSupportItems';
+import ThankYouMarketingConsentCTA, {
+	ThankYouMarketingConsentBodyCopy,
+} from 'components/thankYou/marketingConsent/marketingConsentItems';
+import {
+	SignInBodyCopy,
+	SignInCTA,
+} from 'components/thankYou/signIn/signInItems';
+import { SignUpBodyCopy } from 'components/thankYou/signUp/signUpItems';
+import { SocialShareIcons } from 'components/thankYou/socialShare/SocialShareItems';
+import { SupportReminderBodyCopy } from 'components/thankYou/supportReminder/supportReminderItems';
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
@@ -130,7 +140,7 @@ ShareYourSupport.args = {
 	bodyCopy:
 		'Invite your followers to join you and support the Guardian’s open, independent reporting.',
 	ctas: (
-		<ShareSupportSocialIcons
+		<SocialShareIcons
 			countryId="GB"
 			campaignCode="Us_eoy_2021"
 			createReferralCodes={false}
@@ -152,6 +162,102 @@ Feedback.args = {
 		<FeedbackCTA
 			countryId={'GB'}
 			setFeedbackSurveyHasBeenCompleted={() => null}
+		/>
+	),
+};
+
+export const SignUp = Template.bind({});
+
+SignUp.args = {
+	moduleType: 'signUp',
+	isSignedIn: false,
+	icon: getThankYouModuleIcon('signUp'),
+	header: 'Check your inbox',
+	bodyCopy: <SignUpBodyCopy />,
+	ctas: null,
+};
+
+export const SignIn = Template.bind({});
+
+SignIn.args = {
+	moduleType: 'signIn',
+	isSignedIn: false,
+	icon: getThankYouModuleIcon('signIn'),
+	header: 'Continue to your account',
+	bodyCopy: <SignInBodyCopy />,
+	ctas: <SignInCTA email={''} csrf={{ token: undefined }} />,
+};
+
+export const AusMap = Template.bind({});
+
+AusMap.args = {
+	moduleType: 'ausMap',
+	isSignedIn: true,
+	icon: getThankYouModuleIcon('ausMap'),
+	header: 'Hear from supporters across Australia',
+	bodyCopy:
+		'Open up our interactive map to see messages from readers in every state. Learn why others chose to support Guardian Australia, and you can send us your thoughts too.',
+	ctas: <AusMapCTA />,
+};
+
+export const MarketingConsent = Template.bind({});
+
+MarketingConsent.args = {
+	moduleType: 'marketingConsent',
+	isSignedIn: true,
+	icon: getThankYouModuleIcon('marketingConsent'),
+	header: 'Hear from our newsroom',
+	bodyCopy: (
+		<ThankYouMarketingConsentBodyCopy
+			marketingConsentState={{
+				hasBeenCompleted: false,
+				hasConsented: false,
+				errorMessage: '',
+			}}
+			setMarketingConsentState={() => null}
+		/>
+	),
+	ctas: (
+		<ThankYouMarketingConsentCTA
+			email={''}
+			csrf={{ token: undefined }}
+			marketingConsentState={{
+				hasBeenCompleted: false,
+				hasConsented: false,
+				errorMessage: '',
+			}}
+			setMarketingConsentState={() => null}
+		/>
+	),
+};
+
+export const SupportReminder = Template.bind({});
+
+SupportReminder.args = {
+	moduleType: 'supportReminder',
+	isSignedIn: true,
+	icon: getThankYouModuleIcon('supportReminder'),
+	header: 'Set a support reminder',
+	bodyCopy: (
+		<SupportReminderBodyCopy
+			supportReminderState={{
+				selectedChoiceIndex: 0,
+				hasBeenCompleted: false,
+				errorMessage: '',
+			}}
+			setSupportReminderState={() => null}
+		/>
+	),
+	ctas: (
+		<ThankYouMarketingConsentCTA
+			email={''}
+			csrf={{ token: undefined }}
+			marketingConsentState={{
+				hasBeenCompleted: false,
+				hasConsented: false,
+				errorMessage: '',
+			}}
+			setMarketingConsentState={() => null}
 		/>
 	),
 };
