@@ -108,7 +108,13 @@ export function StripeCardForm({
 						/>
 					</div>
 				)}
-				{recaptcha}
+				{recaptcha && (
+					<ElementDecorator
+						id="robot-checkbox"
+						text="Security check"
+						renderElement={() => recaptcha}
+					/>
+				)}
 			</Stack>
 		</div>
 	);

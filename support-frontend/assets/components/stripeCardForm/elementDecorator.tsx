@@ -40,8 +40,11 @@ const stripeElementStyles = (isFocused: boolean, error?: string) => css`
 	display: block;
 	flex-grow: 1;
 
+	& > div:first-child {
+		margin-bottom: ${space[1]}px;
+	}
+
 	& .StripeElement {
-		margin-top: ${space[1]}px;
 		height: ${height.inputMedium}px;
 		border: 2px solid ${neutral[46]};
 		padding: 10px ${space[2]}px;
