@@ -2,10 +2,8 @@
 import type { Reducer } from 'redux';
 import { combineReducers } from 'redux';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type {
-	IsoCountry,
-	StateProvince,
-} from 'helpers/internationalisation/country';
+import { billingAddressReducer } from 'helpers/redux/checkout/address/reducer';
+import type { AddressState } from 'helpers/redux/checkout/address/state';
 import { csrfReducer } from 'helpers/redux/checkout/csrf/reducer';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { marketingConsentReducer } from 'helpers/redux/checkout/marketingConsent/reducer';
@@ -26,13 +24,7 @@ import type { Action } from './contributionsLandingActions';
 
 // ----- Types ----- //
 
-export interface UserFormData {
-	billingState: string | null;
-}
-
-interface FormData extends UserFormData {
-	billingState: StateProvince | null;
-	billingCountry: IsoCountry | null;
+interface FormData {
 	checkoutFormHasBeenSubmitted: boolean;
 }
 
@@ -68,6 +60,7 @@ export interface PageState {
 		csrf: CsrfState;
 		recaptcha: RecaptchaState;
 		payment: PaymentState;
+		billingAddress: AddressState;
 	};
 	user: UserState;
 }
@@ -80,8 +73,6 @@ export interface State {
 // ----- Initial state ----- //
 export const initialFormState: FormState = {
 	formData: {
-		billingState: null,
-		billingCountry: null,
 		checkoutFormHasBeenSubmitted: false,
 	},
 	isWaiting: false,
@@ -104,27 +95,6 @@ function createFormReducer() {
 				return {
 					...state,
 					existingPaymentMethod: action.existingPaymentMethod,
-				};
-
-			case 'UPDATE_BILLING_STATE':
-				return {
-					...state,
-					formData: { ...state.formData, billingState: action.billingState },
-				};
-
-			case 'UPDATE_BILLING_COUNTRY':
-				return {
-					...state,
-					formData: {
-						...state.formData,
-						billingCountry: action.billingCountry,
-					},
-				};
-
-			case 'UPDATE_USER_FORM_DATA':
-				return {
-					...state,
-					formData: { ...state.formData, ...action.userFormData },
 				};
 
 			case 'SET_TICKER_GOAL_REACHED':
@@ -175,6 +145,7 @@ function initReducer(): Reducer<PageState> {
 			csrf: csrfReducer,
 			recaptcha: recaptchaReducer,
 			payment: paymentReducer,
+			billingAddress: billingAddressReducer,
 		}),
 		user: createUserReducer(),
 	});

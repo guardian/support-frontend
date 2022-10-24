@@ -3,6 +3,10 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import {
+	getInitialAddressFieldsState,
+	initialPostcodeFinderState,
+} from 'helpers/redux/checkout/address/state';
 import { initialCsrfState } from 'helpers/redux/checkout/csrf/state';
 import { initialMarketingConsentState } from 'helpers/redux/checkout/marketingConsent/state';
 import { initialAmazonPayState } from 'helpers/redux/checkout/payment/amazonPay/state';
@@ -58,6 +62,10 @@ export const initialContributionsTestStoreState: ContributionsState = {
 				stripe: initialStripeCardState,
 				stripeAccountDetails: initialStripeAccountDetailsState,
 				paymentRequestButton: initialPaymentRequestButtonState,
+			},
+			billingAddress: {
+				fields: getInitialAddressFieldsState(),
+				postcode: initialPostcodeFinderState,
 			},
 		},
 		user: initialUserState,

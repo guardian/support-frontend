@@ -3,6 +3,7 @@ import type {
 	OtherAmounts,
 	SelectedAmounts,
 } from 'helpers/contributions';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -46,7 +47,7 @@ export const initialProductState: ProductState = {
 	productOption: 'NoProductOptions',
 	fulfilmentOption: 'NoFulfilmentOptions',
 	billingPeriod: 'Monthly',
-	productPrices: window.guardian.productPrices,
+	productPrices: getGlobal('productPrices') ?? {},
 	selectedAmounts: {
 		ONE_OFF: 0,
 		MONTHLY: 0,
@@ -64,6 +65,6 @@ export const initialProductState: ProductState = {
 		},
 	},
 	currency,
-	orderIsAGift: window.guardian.orderIsAGift,
+	orderIsAGift: getGlobal('orderIsAGift') ?? false,
 	startDate: formatMachineDate(new Date()),
 };

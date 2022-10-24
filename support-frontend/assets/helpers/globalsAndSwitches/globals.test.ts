@@ -37,6 +37,12 @@ describe('getGlobal', () => {
 		);
 	});
 
+	it('uses the passed path to traverse the window.guardian settings object even if given a fully qualified path', () => {
+		expect(getGlobal('window.guardian.settings.amounts.GBPCountries')).toEqual(
+			emptyConfiguredRegionAmounts,
+		);
+	});
+
 	it('returns any item reached in traversal that is not an object', () => {
 		expect(getGlobal('settings.contributionTypes.Canada.something')).toEqual(
 			[],

@@ -1,13 +1,17 @@
 import { css } from '@emotion/react';
 import { neutral } from '@guardian/source-foundations';
 import { Column, Columns, Container } from '@guardian/source-react-components';
+import type { CheckoutBenefitsListProps } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
-import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
+import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 
 export default {
-	title: 'Checkout Layout/Benefits List',
+	title: 'Checkouts/Benefits List',
 	component: CheckoutBenefitsList,
+	argTypes: {
+		handleButtonClick: { action: 'button clicked' },
+	},
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Container backgroundColor={neutral[97]}>
@@ -31,34 +35,24 @@ export default {
 	],
 };
 
-function Template(args: {
-	title: string;
-	higherTier: boolean;
-	lowerTier: boolean;
-}): JSX.Element {
-	const { title, higherTier, lowerTier } = args;
-	return (
-		<CheckoutBenefitsList
-			title={title}
-			checkListData={checkListData({ lowerTier, higherTier })}
-		/>
-	);
+function Template(args: CheckoutBenefitsListProps) {
+	return <CheckoutBenefitsList {...args} />;
 }
 
-Template.args = {} as Record<string, unknown>;
+Template.args = {} as Omit<CheckoutBenefitsListProps, 'handleButtonClick'>;
 
 export const AllBenefitsUnlocked = Template.bind({});
 
 AllBenefitsUnlocked.args = {
 	title: "For £12 per month, you'll unlock",
-	higherTier: true,
-	lowerTier: true,
+	checkListData: checkListData({ lowerTier: true, higherTier: true }),
+	buttonCopy: null,
 };
 
 export const LowerTierUnlocked = Template.bind({});
 
 LowerTierUnlocked.args = {
 	title: "For £5 per month, you'll unlock",
-	higherTier: false,
-	lowerTier: true,
+	checkListData: checkListData({ lowerTier: true, higherTier: false }),
+	buttonCopy: 'Switch to £12 per month to unlock all extras',
 };
