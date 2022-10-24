@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { headline } from '@guardian/source-foundations';
 import { Inline, Stack, TextInput } from '@guardian/source-react-components';
 import {
 	CardCvcElement,
@@ -13,10 +12,6 @@ import type {
 } from '@stripe/stripe-js';
 import { ElementDecorator } from './elementDecorator';
 import type { StripeCardFormDisplayErrors } from './selectors';
-
-const sectionLegend = css`
-	${headline.xxsmall({ fontWeight: 'bold' })}
-`;
 
 const zipCodeContainer = css`
 	display: block;
@@ -58,9 +53,6 @@ export function StripeCardForm({
 	return (
 		<div>
 			<Stack space={3}>
-				<legend>
-					<h3 css={sectionLegend}>Your card details</h3>
-				</legend>
 				<ElementDecorator
 					id="cardNumber"
 					text="Card number"
