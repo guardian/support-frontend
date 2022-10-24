@@ -2,11 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const isAnyAction = () => true;
 
+export const initialDebugState = {
+	actionHistory: '',
+};
+
 export const debugSlice = createSlice({
 	name: 'debug',
-	initialState: {
-		actionHistory: '',
-	},
+	initialState: initialDebugState,
 	reducers: {},
 	extraReducers: (builder) => {
 		builder.addMatcher(isAnyAction, (state, action) => {

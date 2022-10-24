@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { androidAppUrl, getIosAppUrl } from 'helpers/urls/externalLinks';
@@ -29,12 +30,12 @@ const googlePlayImg = css`
 `;
 
 const appStoreLink = css`
-	padding: ${imgHeight * 0.25}px;
+	padding: ${imgHeight * 0.25}px ${space[4]}px ${imgHeight * 0.25}px 0;
 	display: block;
 `;
 
 const appStoreImg = css`
-	height: ${imgHeight}px;
+	height: ${imgHeight + 1}px;
 	width: auto;
 	display: block;
 `;
@@ -46,6 +47,20 @@ function AppDownloadBadges({
 }): JSX.Element {
 	return (
 		<div css={container}>
+			{/* App Store */}
+			<a
+				href={getIosAppUrl(countryGroupId)}
+				target="blank"
+				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_APP_STORE_BADGE)}
+				css={appStoreLink}
+			>
+				<img
+					src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1295395200&h=5d04f8512e72f9edf165c49777299f49"
+					alt="Download on the App Store"
+					css={appStoreImg}
+				/>
+			</a>
+
 			{/* Google Play */}
 			<a
 				href={androidAppUrl}
@@ -57,28 +72,8 @@ function AppDownloadBadges({
 			>
 				<img
 					alt="Get it on Google Play"
-					//////////////////////
-					// PLACEHOLDER LINK //
-					//////////////////////
 					src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
 					css={googlePlayImg}
-				/>
-			</a>
-
-			{/* App Store */}
-			<a
-				href={getIosAppUrl(countryGroupId)}
-				target="blank"
-				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_APP_STORE_BADGE)}
-				css={appStoreLink}
-			>
-				<img
-					//////////////////////
-					// PLACEHOLDER LINK //
-					//////////////////////
-					src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1295395200&h=5d04f8512e72f9edf165c49777299f49"
-					alt="Download on the App Store"
-					css={appStoreImg}
 				/>
 			</a>
 		</div>

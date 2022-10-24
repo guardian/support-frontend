@@ -77,24 +77,24 @@ export interface State {
 	page: PageState;
 }
 
-// ----- Functions ----- //
+// ----- Initial state ----- //
+export const initialState: FormState = {
+	formData: {
+		billingState: null,
+		billingCountry: null,
+		checkoutFormHasBeenSubmitted: false,
+	},
+	isWaiting: false,
+	paymentComplete: false,
+	paymentError: null,
+	formIsValid: true,
+	formIsSubmittable: true,
+	tickerGoalReached: false,
+	oneOffRecaptchaToken: null,
+};
 
+// ----- Functions ----- //
 function createFormReducer() {
-	// ----- Initial state ----- //
-	const initialState: FormState = {
-		formData: {
-			billingState: null,
-			billingCountry: null,
-			checkoutFormHasBeenSubmitted: false,
-		},
-		isWaiting: false,
-		paymentComplete: false,
-		paymentError: null,
-		formIsValid: true,
-		formIsSubmittable: true,
-		tickerGoalReached: false,
-		oneOffRecaptchaToken: null,
-	};
 	return function formReducer(
 		state: FormState = initialState,
 		action: Action,

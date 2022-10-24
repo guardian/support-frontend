@@ -20,32 +20,33 @@ export type User = {
 	address4?: string | null;
 };
 
+const userInfo = getUser();
+console.log({ userInfo });
+
+export const initialUserState: User = {
+	id: '',
+	email: userInfo.email ?? '',
+	displayName: '',
+	firstName: userInfo.firstName ?? '',
+	lastName: userInfo.lastName ?? '',
+	fullName: '',
+	stateField: '',
+	isTestUser: null,
+	isPostDeploymentTestUser: false,
+	gnmMarketing: false,
+	isSignedIn: userInfo.isSignedIn,
+	isRecurringContributor: false,
+	emailValidated: false,
+	isReturningContributor: false,
+};
+
 // ----- Reducer ----- //
 function createUserReducer(): (
 	state: User | undefined,
 	action: Action,
 ) => User {
-	const userInfo = getUser();
-
-	const initialState: User = {
-		id: '',
-		email: userInfo.email ?? '',
-		displayName: '',
-		firstName: userInfo.firstName ?? '',
-		lastName: userInfo.lastName ?? '',
-		fullName: '',
-		stateField: '',
-		isTestUser: null,
-		isPostDeploymentTestUser: false,
-		gnmMarketing: false,
-		isSignedIn: userInfo.isSignedIn,
-		isRecurringContributor: false,
-		emailValidated: false,
-		isReturningContributor: false,
-	};
-
 	return function userReducer(
-		state: User = initialState,
+		state: User = initialUserState,
 		action: Action,
 	): User {
 		switch (action.type) {

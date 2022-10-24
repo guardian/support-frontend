@@ -18,6 +18,7 @@ export type User = {
 
 // ----- Functions ----- //
 function getUser(): User {
+	console.log('getUser function');
 	if (window.guardian.user && window.guardian.user.email !== '') {
 		const { firstName, lastName, email } = window.guardian.user;
 		return {
