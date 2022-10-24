@@ -36,6 +36,8 @@ const buttonsContainer = css`
 	}
 `;
 
+const socialShareHeader = 'Share your support';
+
 const getSocialShareCopy = (countryId: IsoCountry): string =>
 	countryId === 'AU'
 		? 'Your voice matters. By sharing a message of support for Guardian Australia, you can help us grow our community. ' +
@@ -110,4 +112,4 @@ function SocialShareIcons({
 	);
 }
 
-export { getSocialShareCopy, SocialShareIcons };
+export { socialShareHeader, getSocialShareCopy, SocialShareIcons };

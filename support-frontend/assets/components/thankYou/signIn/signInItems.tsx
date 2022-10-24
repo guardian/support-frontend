@@ -54,6 +54,8 @@ type CreateSignInUrlResponse = {
 	signInLink: string;
 };
 
+export const signInHeader = 'Continue to your account';
+
 export function SignInBodyCopy(): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
 

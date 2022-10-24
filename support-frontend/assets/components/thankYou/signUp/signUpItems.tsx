@@ -6,6 +6,8 @@ const listContainer = css`
 	margin-top: ${space[4]}px;
 `;
 
+export const signUpHeader = 'Check your inbox';
+
 export function SignUpBodyCopy(): JSX.Element {
 	return (
 		<>

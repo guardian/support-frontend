@@ -1,19 +1,39 @@
 import { css } from '@emotion/react';
-import { between, from, space, sport } from '@guardian/source-foundations';
+import { from, space, sport } from '@guardian/source-foundations';
 import { Column, Columns, Container } from '@guardian/source-react-components';
 import React from 'react';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
-import { AusMapCTA } from 'components/thankYou/ausMap/ausMap';
-import { FeedbackCTA } from 'components/thankYou/feedback/FeedbackItems';
+import {
+	appDownloadBodyCopy,
+	appDownloadHeader,
+} from 'components/thankYou/appDownload/appDownloadItems';
+import {
+	ausMapBodyCopy,
+	AusMapCTA,
+	ausMapHeader,
+} from 'components/thankYou/ausMap/ausMapItems';
+import {
+	FeedbackBodyCopy,
+	FeedbackCTA,
+	getFeedbackHeader,
+} from 'components/thankYou/feedback/FeedbackItems';
 import ThankYouMarketingConsentCTA, {
 	ThankYouMarketingConsentBodyCopy,
 } from 'components/thankYou/marketingConsent/marketingConsentItems';
 import {
 	SignInBodyCopy,
 	SignInCTA,
+	signInHeader,
 } from 'components/thankYou/signIn/signInItems';
-import { SignUpBodyCopy } from 'components/thankYou/signUp/signUpItems';
-import { SocialShareIcons } from 'components/thankYou/socialShare/SocialShareItems';
+import {
+	SignUpBodyCopy,
+	signUpHeader,
+} from 'components/thankYou/signUp/signUpItems';
+import {
+	getSocialShareCopy,
+	socialShareHeader,
+	SocialShareIcons,
+} from 'components/thankYou/socialShare/SocialShareItems';
 import { SupportReminderBodyCopy } from 'components/thankYou/supportReminder/supportReminderItems';
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
@@ -24,13 +44,6 @@ const container = css`
 
 	${from.tablet} {
 		background-color: ${sport[800]};
-	}
-`;
-
-const downloadCopy = css`
-	${between.desktop.and.leftCol} {
-		max-width: 260px;
-		display: block;
 	}
 `;
 
@@ -106,12 +119,8 @@ DownloadTheAppSignedIn.args = {
 	moduleType: 'appDownload',
 	isSignedIn: true,
 	icon: getThankYouModuleIcon('appDownload'),
-	header: 'Download the Guardian app',
-	bodyCopy: (
-		<span css={downloadCopy}>
-			Unlock full access to our quality news app today
-		</span>
-	),
+	header: appDownloadHeader,
+	bodyCopy: appDownloadBodyCopy,
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
 };
 
@@ -121,12 +130,8 @@ DownloadTheAppSignedOut.args = {
 	moduleType: 'appDownload',
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('appDownload'),
-	header: 'Download the Guardian app',
-	bodyCopy: (
-		<span css={downloadCopy}>
-			Unlock full access to our quality news app today
-		</span>
-	),
+	header: appDownloadHeader,
+	bodyCopy: appDownloadBodyCopy,
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
 };
 
@@ -136,9 +141,8 @@ ShareYourSupport.args = {
 	moduleType: 'socialShare',
 	isSignedIn: true,
 	icon: getThankYouModuleIcon('socialShare'),
-	header: 'Share your support',
-	bodyCopy:
-		'Invite your followers to join you and support the Guardian’s open, independent reporting.',
+	header: socialShareHeader,
+	bodyCopy: getSocialShareCopy('GB'),
 	ctas: (
 		<SocialShareIcons
 			countryId="GB"
@@ -155,9 +159,10 @@ Feedback.args = {
 	moduleType: 'feedback',
 	isSignedIn: true,
 	icon: getThankYouModuleIcon('feedback'),
-	header: 'Send us your thoughts',
-	bodyCopy:
-		'We would love to hear more about your experience of supporting the Guardian today. Please fill out this short form – it only takes a minute.',
+	header: getFeedbackHeader('GB', false),
+	bodyCopy: (
+		<FeedbackBodyCopy countryId={'GB'} feedbackSurveyHasBeenCompleted={false} />
+	),
 	ctas: (
 		<FeedbackCTA
 			countryId={'GB'}
@@ -172,7 +177,7 @@ SignUp.args = {
 	moduleType: 'signUp',
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signUp'),
-	header: 'Check your inbox',
+	header: signUpHeader,
 	bodyCopy: <SignUpBodyCopy />,
 	ctas: null,
 };
@@ -183,7 +188,7 @@ SignIn.args = {
 	moduleType: 'signIn',
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('signIn'),
-	header: 'Continue to your account',
+	header: signInHeader,
 	bodyCopy: <SignInBodyCopy />,
 	ctas: <SignInCTA email={''} csrf={{ token: undefined }} />,
 };
@@ -194,9 +199,8 @@ AusMap.args = {
 	moduleType: 'ausMap',
 	isSignedIn: true,
 	icon: getThankYouModuleIcon('ausMap'),
-	header: 'Hear from supporters across Australia',
-	bodyCopy:
-		'Open up our interactive map to see messages from readers in every state. Learn why others chose to support Guardian Australia, and you can send us your thoughts too.',
+	header: ausMapHeader,
+	bodyCopy: ausMapBodyCopy,
 	ctas: <AusMapCTA />,
 };
 

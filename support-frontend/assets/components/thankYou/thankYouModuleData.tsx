@@ -1,5 +1,3 @@
-import { css } from '@emotion/react';
-import { between } from '@guardian/source-foundations';
 import { useState } from 'react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
@@ -13,7 +11,11 @@ import {
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
 import AppDownloadBadges from './appDownload/AppDownloadBadges';
-import { AusMapCTA } from './ausMap/ausMap';
+import {
+	appDownloadBodyCopy,
+	appDownloadHeader,
+} from './appDownload/appDownloadItems';
+import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
 import {
 	FeedbackBodyCopy,
 	FeedbackCTA,
@@ -22,10 +24,11 @@ import {
 import ThankYouMarketingConsentCTA, {
 	ThankYouMarketingConsentBodyCopy,
 } from './marketingConsent/marketingConsentItems';
-import { SignInBodyCopy, SignInCTA } from './signIn/signInItems';
-import { SignUpBodyCopy } from './signUp/signUpItems';
+import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
+import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
 import {
 	getSocialShareCopy,
+	socialShareHeader,
 	SocialShareIcons,
 } from './socialShare/SocialShareItems';
 import {
@@ -35,12 +38,6 @@ import {
 import type { ThankYouModuleType } from './thankYouModule';
 import { getThankYouModuleIcon } from './thankYouModuleIcons';
 
-const downloadCopy = css`
-	${between.desktop.and.leftCol} {
-		max-width: 260px;
-		display: block;
-	}
-`;
 interface ThankYouModuleData {
 	icon: JSX.Element;
 	header: string;
@@ -75,19 +72,14 @@ export const getThankYouModuleData = (
 	const thankYouModuleData: Record<ThankYouModuleType, ThankYouModuleData> = {
 		appDownload: {
 			icon: getThankYouModuleIcon('appDownload'),
-			header: 'Download the Guardian app',
-			bodyCopy: (
-				<span css={downloadCopy}>
-					Unlock full access to our quality news app today
-				</span>
-			),
+			header: appDownloadHeader,
+			bodyCopy: appDownloadBodyCopy,
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
 		},
 		ausMap: {
 			icon: getThankYouModuleIcon('ausMap'),
-			header: 'Hear from supporters across Australia',
-			bodyCopy:
-				'Open up our interactive map to see messages from readers in every state. Learn why others chose to support Guardian Australia, and you can send us your thoughts too.',
+			header: ausMapHeader,
+			bodyCopy: ausMapBodyCopy,
 			ctas: <AusMapCTA />,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_AUS_MAP,
 		},
@@ -131,21 +123,21 @@ export const getThankYouModuleData = (
 		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),
-			header: 'Continue to your account',
+			header: signInHeader,
 			bodyCopy: <SignInBodyCopy />,
 			ctas: <SignInCTA email={email} csrf={csrf} />,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_IN,
 		},
 		signUp: {
 			icon: getThankYouModuleIcon('signUp'),
-			header: 'Check your inbox',
-			bodyCopy: SignUpBodyCopy(),
+			header: signUpHeader,
+			bodyCopy: <SignUpBodyCopy />,
 			ctas: null,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SIGN_UP,
 		},
 		socialShare: {
 			icon: getThankYouModuleIcon('socialShare'),
-			header: 'Share your support',
+			header: socialShareHeader,
 			bodyCopy: getSocialShareCopy(countryId),
 			ctas: (
 				<SocialShareIcons
