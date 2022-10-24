@@ -1,3 +1,5 @@
+import { css } from '@emotion/react';
+import { between } from '@guardian/source-foundations';
 import { Button } from '@guardian/source-react-components';
 import { useState } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -14,6 +16,13 @@ import {
 } from './shareYourSupport/ShareYourSupportItems';
 import type { ThankYouModuleType } from './thankYouModule';
 import { getThankYouModuleIcon } from './thankYouModuleIcons';
+
+const downloadCopy = css`
+	${between.desktop.and.leftCol} {
+		max-width: 260px;
+		display: block;
+	}
+`;
 
 type ThankYouModuleData = {
 	icon: JSX.Element;
@@ -36,7 +45,11 @@ export const getThankYouModuleData = (
 		appDownload: {
 			icon: getThankYouModuleIcon('appDownload'),
 			header: 'Download the Guardian app',
-			bodyCopy: 'Unlock full access to our quality news app today',
+			bodyCopy: (
+				<span css={downloadCopy}>
+					Unlock full access to our quality news app today
+				</span>
+			),
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
 		},
 		ausMap: {

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, space, sport } from '@guardian/source-foundations';
+import { between, from, space, sport } from '@guardian/source-foundations';
 import { Column, Columns, Container } from '@guardian/source-react-components';
 import React from 'react';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
@@ -14,6 +14,13 @@ const container = css`
 
 	${from.tablet} {
 		background-color: ${sport[800]};
+	}
+`;
+
+const downloadCopy = css`
+	${between.desktop.and.leftCol} {
+		max-width: 260px;
+		display: block;
 	}
 `;
 
@@ -90,7 +97,11 @@ DownloadTheAppSignedIn.args = {
 	isSignedIn: true,
 	icon: getThankYouModuleIcon('appDownload'),
 	header: 'Download the Guardian app',
-	bodyCopy: 'Unlock full access to our quality news app today',
+	bodyCopy: (
+		<span css={downloadCopy}>
+			Unlock full access to our quality news app today
+		</span>
+	),
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
 };
 
@@ -101,7 +112,11 @@ DownloadTheAppSignedOut.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('appDownload'),
 	header: 'Download the Guardian app',
-	bodyCopy: 'Unlock full access to our quality news app today',
+	bodyCopy: (
+		<span css={downloadCopy}>
+			Unlock full access to our quality news app today
+		</span>
+	),
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
 };
 
