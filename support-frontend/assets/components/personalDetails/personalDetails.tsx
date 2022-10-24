@@ -7,11 +7,11 @@ import {
 	emailRegexPattern,
 } from 'helpers/forms/formValidation';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { StateProvince } from 'helpers/internationalisation/country';
 import { applyPersonalDetailsRules } from 'helpers/subscriptionsForms/rules';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
 import ContributionState from 'pages/contributions-landing/components/ContributionState';
-import { updateBillingState } from 'pages/contributions-landing/contributionsLandingActions';
 
 export type PersonalDetailsProps = {
 	email: string;
@@ -25,6 +25,7 @@ export type PersonalDetailsProps = {
 	onEmailChange: (email: string) => void;
 	onFirstNameChange: (firstName: string) => void;
 	onLastNameChange: (lastName: string) => void;
+	updateBillState: (billingState: StateProvince | null) => void;
 };
 
 export function PersonalDetails({
@@ -39,6 +40,7 @@ export function PersonalDetails({
 	onEmailChange,
 	onFirstNameChange,
 	onLastNameChange,
+	updateBillState,
 }: PersonalDetailsProps): JSX.Element {
 	const formErrors = applyPersonalDetailsRules({
 		firstName,
@@ -120,7 +122,7 @@ export function PersonalDetails({
 
 			<ContributionState
 				onChange={(newBillingState) =>
-					updateBillingState(newBillingState === '' ? null : newBillingState)
+					updateBillState(newBillingState === '' ? null : newBillingState)
 				}
 				selectedState={billingState}
 				isValid={checkBillingState(billingState)}
