@@ -56,7 +56,7 @@ export function StripeCardForm({
 	recaptcha,
 }: StripeCardFormProps): JSX.Element {
 	return (
-		<fieldset>
+		<div>
 			<Stack space={3}>
 				<legend>
 					<h3 css={sectionLegend}>Your card details</h3>
@@ -110,6 +110,6 @@ export function StripeCardForm({
 				)}
 				{recaptcha}
 			</Stack>
-		</fieldset>
+		</div>
 	);
 }
