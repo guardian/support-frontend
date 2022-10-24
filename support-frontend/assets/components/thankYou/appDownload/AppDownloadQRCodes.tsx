@@ -13,6 +13,9 @@ const container = css`
 const qrContainer = css`
 	background-color: ${sport[800]};
 	border: 1px solid ${neutral[93]};
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 `;
 
 const title = css`
@@ -22,8 +25,9 @@ const title = css`
 `;
 
 const img = css`
-	max-width: 175px;
-	margin: ${space[5]}px 40px 35px;
+	padding: ${space[5]}px ${space[9]}px ${space[9]}px;
+	width: 100%;
+	display: block;
 `;
 
 function AppDownloadQRCodes(): JSX.Element {

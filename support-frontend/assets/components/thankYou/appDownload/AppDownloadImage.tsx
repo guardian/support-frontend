@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
-import { from, space } from '@guardian/source-foundations';
+import { between, from, space } from '@guardian/source-foundations';
 import GridImage from 'components/gridImage/gridImage';
 
 const mobileImg = css`
 	display: block;
-	width: 230px;
+	max-width: 230px;
 	height: auto;
 	margin: auto;
 
@@ -29,7 +29,7 @@ const mobileImg = css`
 
 const desktopImg = css`
 	display: none;
-	width: 220px;
+	max-width: 220px;
 	height: auto;
 	margin-left: auto;
 
@@ -41,13 +41,26 @@ const desktopImg = css`
 	${from.tablet} {
 		display: block;
 	}
+
+	${between.desktop.and.leftCol} {
+		display: none;
+	}
 `;
 
+// will need to tweak the offset margins here if the image or copy is updated
+// to ensure this image lines up correctly with the app download badges
 const container = css`
-	margin-top: -${space[2]}px;
-
 	${from.tablet} {
 		margin-top: -${space[9]}px;
+	}
+
+	${between.leftCol.and.wide} {
+		margin-top: 0;
+		margin-left: ${space[5]}px;
+	}
+
+	${from.wide} {
+		margin-top: -32px;
 	}
 `;
 
