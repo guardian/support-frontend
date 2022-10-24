@@ -70,6 +70,9 @@ function AppDownloadImage(): JSX.Element {
 			<div css={mobileImg}>
 				<GridImage
 					classModifiers={['']}
+					/////////////////////////
+					// PLACEHOLDER GRID ID //
+					/////////////////////////
 					gridId={'benefitsPackshotParaMobAndDesktopUK'}
 					srcSizes={[500, 140]}
 					sizes="(min-width: 1140px) 100%,
@@ -80,6 +83,9 @@ function AppDownloadImage(): JSX.Element {
 			<div css={desktopImg}>
 				<GridImage
 					classModifiers={['']}
+					/////////////////////////
+					// PLACEHOLDER GRID ID //
+					/////////////////////////
 					gridId={'benefitsPackshotBulletsDesktopUK'}
 					srcSizes={[500, 140]}
 					sizes="(min-width: 1140px) 100%,
