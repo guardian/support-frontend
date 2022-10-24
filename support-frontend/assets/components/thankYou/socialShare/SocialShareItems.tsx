@@ -7,15 +7,10 @@ import {
 	SvgLinkedIn,
 	SvgTwitter,
 } from '@guardian/source-react-components';
-import { useEffect } from 'react';
 import { generateReferralCode } from 'helpers/campaigns/campaignReferralCodes';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {
-	trackComponentClick,
-	trackComponentLoad,
-} from 'helpers/tracking/behaviour';
-import {
-	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
 	OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
 	OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN,
@@ -28,9 +23,9 @@ import {
 	getTwitterShareLink,
 } from 'pages/contributions-landing/components/ContributionThankYou/utils/social';
 
-interface ShareSupportSocialIconsProps {
+interface SocialShareIconsProps {
 	countryId: IsoCountry;
-	campaignCode: string;
+	campaignCode?: string;
 	createReferralCodes: boolean;
 	email: string;
 }
@@ -41,22 +36,18 @@ const buttonsContainer = css`
 	}
 `;
 
-const getShareSupportCopy = (countryId: IsoCountry): string =>
+const getSocialShareCopy = (countryId: IsoCountry): string =>
 	countryId === 'AU'
 		? 'Your voice matters. By sharing a message of support for Guardian Australia, you can help us grow our community. ' +
 		  'Together, we can make a difference.'
 		: 'Invite your followers to support the Guardian’s open, independent reporting.';
 
-function ShareSupportSocialIcons({
+function SocialShareIcons({
 	countryId,
 	campaignCode,
 	createReferralCodes,
 	email,
-}: ShareSupportSocialIconsProps): JSX.Element {
-	useEffect(() => {
-		trackComponentLoad(OPHAN_COMPONENT_ID_SOCIAL);
-	}, []);
-
+}: SocialShareIconsProps): JSX.Element {
 	const referralCode =
 		createReferralCodes && campaignCode
 			? generateReferralCode(email, campaignCode)
@@ -119,4 +110,4 @@ function ShareSupportSocialIcons({
 	);
 }
 
-export { getShareSupportCopy, ShareSupportSocialIcons };
+export { getSocialShareCopy, SocialShareIcons };
