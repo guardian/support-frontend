@@ -8,7 +8,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import type { SepaFormProps } from 'pages/contributions-landing/components/SepaForm';
+import type { SepaFormProps } from './SepaForm';
 
 type SepaFormContainerProps = {
 	render: (sepaFormProps: SepaFormProps) => JSX.Element;
@@ -18,12 +18,9 @@ export function SepaFormContainer({
 	render,
 }: SepaFormContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
+
 	const { iban, accountHolderName, streetName, country } =
 		useContributionsSelector((state) => state.page.checkoutForm.payment.sepa);
-
-	const { checkoutFormHasBeenSubmitted } = useContributionsSelector(
-		(state) => state.page.form.formData,
-	);
 
 	function updateIban(iban: string) {
 		dispatch(setSepaIban(iban));
@@ -50,6 +47,5 @@ export function SepaFormContainer({
 		updateAccountHolderName,
 		updateAddressStreetName,
 		updateAddressCountry,
-		checkoutFormHasBeenSubmitted,
 	});
 }

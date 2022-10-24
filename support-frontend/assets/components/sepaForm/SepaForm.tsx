@@ -6,9 +6,8 @@ import {
 	Select,
 	TextInput,
 } from '@guardian/source-react-components';
-import { isValidIban } from 'helpers/forms/formValidation';
 import { countries } from 'helpers/internationalisation/country';
-import { sortedOptions } from '../../../components/forms/customFields/sortedOptions';
+import { sortedOptions } from '../forms/customFields/sortedOptions';
 
 // -- Styles -- //
 const containerStyles = css`
@@ -27,16 +26,15 @@ const fieldsContainerStyles = css`
 `;
 
 // -- Component -- //
-type SepaFormProps = {
+export type SepaFormProps = {
 	iban?: string;
 	accountHolderName?: string;
 	addressStreetName?: string;
 	addressCountry?: Country;
-	updateAddressStreetName: (addressStreetName: string) => void;
-	updateAddressCountry: (addressCountry: Country) => void;
 	updateIban: (iban: string) => void;
 	updateAccountHolderName: (accountHolderName: string) => void;
-	checkoutFormHasBeenSubmitted: boolean;
+	updateAddressStreetName: (addressStreetName: string) => void;
+	updateAddressCountry: (addressCountry: Country) => void;
 };
 
 export function SepaForm({
@@ -48,7 +46,6 @@ export function SepaForm({
 	updateAddressCountry,
 	updateIban,
 	updateAccountHolderName,
-	checkoutFormHasBeenSubmitted,
 }: SepaFormProps): JSX.Element {
 	return (
 		<div css={containerStyles}>
@@ -66,11 +63,6 @@ export function SepaForm({
 						maxLength={40}
 						value={accountHolderName ?? undefined}
 						onChange={(e) => updateAccountHolderName(e.target.value)}
-						error={
-							checkoutFormHasBeenSubmitted && !accountHolderName
-								? 'Please provide your account holder name'
-								: undefined
-						}
 					/>
 				</div>
 
@@ -89,11 +81,6 @@ export function SepaForm({
 						maxLength={34}
 						value={iban ?? undefined}
 						onChange={(e) => updateIban(e.target.value)}
-						error={
-							checkoutFormHasBeenSubmitted && !isValidIban(iban)
-								? 'Please provide a valid IBAN'
-								: undefined
-						}
 					/>
 				</div>
 
@@ -107,11 +94,6 @@ export function SepaForm({
 						label="Address Line 1"
 						value={addressStreetName ?? undefined}
 						onChange={(e) => updateAddressStreetName(e.target.value)}
-						error={
-							checkoutFormHasBeenSubmitted && !addressStreetName
-								? 'Please enter a billing address'
-								: undefined
-						}
 					/>
 				</div>
 
@@ -127,11 +109,6 @@ export function SepaForm({
 						label="Country"
 						value={addressCountry ?? undefined}
 						onChange={(e) => updateAddressCountry(e.target.value)}
-						error={
-							checkoutFormHasBeenSubmitted && !addressCountry
-								? 'Please select a billing country'
-								: undefined
-						}
 					>
 						<OptionForSelect value="">Select a country</OptionForSelect>
 						{sortedOptions(countries)}
