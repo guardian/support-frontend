@@ -3,14 +3,28 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import { initialCsrfState } from 'helpers/redux/checkout/csrf/state';
+import { initialMarketingConsentState } from 'helpers/redux/checkout/marketingConsent/state';
+import { initialAmazonPayState } from 'helpers/redux/checkout/payment/amazonPay/state';
+import { initialDirectDebitState } from 'helpers/redux/checkout/payment/directDebit/state';
+import { initialPaymentMethodState } from 'helpers/redux/checkout/payment/paymentMethod/reducer';
+import { initialPaymentRequestButtonState } from 'helpers/redux/checkout/payment/paymentRequestButton/state';
+import { initialPayPalState } from 'helpers/redux/checkout/payment/payPal/state';
+import { initialSepaState } from 'helpers/redux/checkout/payment/sepa/state';
+import { initialStripeCardState } from 'helpers/redux/checkout/payment/stripe/state';
+import { initialStripeAccountDetailsState } from 'helpers/redux/checkout/payment/stripeAccountDetails/state';
+import { initialPersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
+import { initialProductState } from 'helpers/redux/checkout/product/state';
+import { initialRecaptchaState } from 'helpers/redux/checkout/recaptcha/state';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
+import { initialCommonState } from 'helpers/redux/commonState/state';
 import type {
 	ContributionsStartListening,
 	ContributionsState,
 	ContributionsStore,
 } from 'helpers/redux/contributionsStore';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
-import { debugReducer } from 'helpers/redux/debug/reducer';
+import { debugReducer, initialDebugState } from 'helpers/redux/debug/reducer';
 import type {
 	SubscriptionsStartListening,
 	SubscriptionsState,
@@ -19,7 +33,37 @@ import type {
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { DateYMDString } from 'helpers/types/DateString';
-import { initReducer } from 'pages/contributions-landing/contributionsLandingReducer';
+import { initialUserState } from 'helpers/user/userReducer';
+import {
+	initialFormState,
+	initReducer,
+} from 'pages/contributions-landing/contributionsLandingReducer';
+
+export const initialContributionsTestStoreState: ContributionsState = {
+	common: initialCommonState,
+	page: {
+		form: initialFormState,
+		checkoutForm: {
+			personalDetails: initialPersonalDetailsState,
+			product: initialProductState,
+			marketingConsent: initialMarketingConsentState,
+			csrf: initialCsrfState,
+			recaptcha: initialRecaptchaState,
+			payment: {
+				paymentMethod: initialPaymentMethodState,
+				directDebit: initialDirectDebitState,
+				amazonPay: initialAmazonPayState,
+				sepa: initialSepaState,
+				payPal: initialPayPalState,
+				stripe: initialStripeCardState,
+				stripeAccountDetails: initialStripeAccountDetailsState,
+				paymentRequestButton: initialPaymentRequestButtonState,
+			},
+		},
+		user: initialUserState,
+	},
+	debug: initialDebugState,
+};
 
 export function createTestStoreForSubscriptions(
 	product: SubscriptionProduct,

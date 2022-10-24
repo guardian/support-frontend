@@ -1,11 +1,11 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { StripeAccount } from 'helpers/forms/stripe';
-import { initialState } from './state';
+import { initialStripeAccountDetailsState } from './state';
 
 export const stripeAccountDetailsSlice = createSlice({
 	name: 'stripeAccountDetails',
-	initialState,
+	initialState: initialStripeAccountDetailsState,
 	reducers: {
 		setStripePublicKey(state, action: PayloadAction<string>) {
 			state.publicKey = action.payload;

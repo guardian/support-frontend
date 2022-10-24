@@ -3,7 +3,7 @@ export type RecaptchaState = {
 	completed: boolean;
 };
 
-export const initialState = {
+export const initialRecaptchaState = {
 	token: '',
 	completed: false,
 };

@@ -1,11 +1,11 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import { initialState } from './state';
+import { initialRecaptchaState } from './state';
 
 export const recaptchaSlice = createSlice({
 	name: 'recaptcha',
-	initialState,
+	initialState: initialRecaptchaState,
 	reducers: {
 		setRecaptchaToken(state, action: PayloadAction<string>) {
 			state.token = action.payload;
