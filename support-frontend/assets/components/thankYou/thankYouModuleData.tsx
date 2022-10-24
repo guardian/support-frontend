@@ -39,18 +39,11 @@ export const getThankYouModuleData = (
 			bodyCopy: 'Unlock full access to our quality news app today',
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
 		},
-		socialShare: {
-			icon: getThankYouModuleIcon('socialShare'),
-			header: 'Share your support',
-			bodyCopy: getShareSupportCopy(countryId),
-			ctas: (
-				<ShareSupportSocialIcons
-					countryId={countryId}
-					campaignCode={campaignCode}
-					createReferralCodes={createReferralCodes}
-					email={email}
-				/>
-			),
+		ausMap: {
+			icon: <i>icon</i>,
+			header: '',
+			bodyCopy: '',
+			ctas: <Button>Click me</Button>,
 		},
 		feedback: {
 			icon: getThankYouModuleIcon('feedback'),
@@ -63,21 +56,36 @@ export const getThankYouModuleData = (
 				/>
 			),
 		},
-
-		//////////////////////
-		// PLACEHOLDER DATA //
-		//////////////////////
-		continueToAccount: {
-			icon: <p>Continue To Account</p>,
-			header: 'Continue To Account Heading',
-			bodyCopy: 'Continue To Account Body Copy',
-			ctas: <Button>Continue</Button>,
+		marketingConsent: {
+			icon: <i>icon</i>,
+			header: '',
+			bodyCopy: '',
+			ctas: <Button>Click me</Button>,
 		},
-		newsletters: {
-			icon: <p>Hear from our newsroom</p>,
-			header: 'Hear from our newsroom Heading',
-			bodyCopy: 'Hear from our newsroom Body Copy',
-			ctas: <Button>Subscribe</Button>,
+		signIn: {
+			icon: <i>icon</i>,
+			header: '',
+			bodyCopy: '',
+			ctas: <Button>Click me</Button>,
+		},
+		signUp: {
+			icon: <i>icon</i>,
+			header: '',
+			bodyCopy: '',
+			ctas: <Button>Click me</Button>,
+		},
+		socialShare: {
+			icon: getThankYouModuleIcon('socialShare'),
+			header: 'Share your support',
+			bodyCopy: getShareSupportCopy(countryId),
+			ctas: (
+				<ShareSupportSocialIcons
+					countryId={countryId}
+					campaignCode={campaignCode}
+					createReferralCodes={createReferralCodes}
+					email={email}
+				/>
+			),
 		},
 		supportReminder: {
 			icon: <p>Set a support reminder</p>,

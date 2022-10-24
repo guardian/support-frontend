@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { from, space, sport } from '@guardian/source-foundations';
+import { Column, Columns, Container } from '@guardian/source-react-components';
 import React from 'react';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
 import { FeedbackCTA } from 'components/thankYou/feedback/FeedbackItems';
@@ -9,12 +10,10 @@ import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
 
 const container = css`
-	padding: 0px ${space[3]}px;
+	padding: ${space[9]}px 0;
 
 	${from.tablet} {
 		background-color: ${sport[800]};
-		width: 100%;
-		padding: 50px;
 	}
 `;
 
@@ -28,18 +27,57 @@ export default {
 			</div>
 		),
 	],
+	argTypes: {
+		moduleType: {
+			table: {
+				disable: true,
+			},
+		},
+		isSignedIn: {
+			table: {
+				disable: true,
+			},
+		},
+		icon: {
+			table: {
+				disable: true,
+			},
+		},
+		header: {
+			table: {
+				disable: true,
+			},
+		},
+		bodyCopy: {
+			table: {
+				disable: true,
+			},
+		},
+		ctas: {
+			table: {
+				disable: true,
+			},
+		},
+	},
 };
 
 function Template(args: ThankYouModuleProps): JSX.Element {
 	return (
-		<ThankYouModule
-			moduleType={args.moduleType}
-			isSignedIn={args.isSignedIn}
-			icon={args.icon}
-			header={args.header}
-			bodyCopy={args.bodyCopy}
-			ctas={args.ctas}
-		/>
+		<Container>
+			<Columns collapseUntil="desktop">
+				<Column>
+					<ThankYouModule
+						moduleType={args.moduleType}
+						isSignedIn={args.isSignedIn}
+						icon={args.icon}
+						header={args.header}
+						bodyCopy={args.bodyCopy}
+						ctas={args.ctas}
+					/>
+				</Column>
+				<Column></Column>
+			</Columns>
+		</Container>
 	);
 }
 

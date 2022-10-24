@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { from, headline, neutral, space } from '@guardian/source-foundations';
+import {
+	between,
+	body,
+	from,
+	neutral,
+	space,
+} from '@guardian/source-foundations';
 import AppDownloadImage from './appDownload/AppDownloadImage';
 import AppDownloadQRCodes from './appDownload/AppDownloadQRCodes';
 
@@ -10,7 +16,7 @@ const container = css`
 	border-bottom: 1px solid ${neutral[86]};
 
 	${from.tablet} {
-		width: 620px;
+		max-width: 620px;
 		padding-left: ${space[4]}px;
 		border: 1px solid ${neutral[86]};
 	}
@@ -22,14 +28,12 @@ const defaultGridContainer = css`
 	grid-template-columns: min-content 1fr;
 	grid-template-areas:
 		'icon header'
-		'body body'
-		'qrCodes qrCodes';
+		'body body';
 
 	${from.tablet} {
 		grid-template-areas:
 			'icon header'
-			'---- body'
-			'---- qrCodes';
+			'---- body';
 	}
 `;
 
@@ -46,14 +50,22 @@ const downloadAppGridContainer = css`
 		grid-template-columns: min-content 270px 1fr;
 		grid-template-areas:
 			'icon header img'
-			'icon body img'
-			'icon qrCodes qrCodes';
+			'---- body img'
+			'---- qrCodes qrCodes';
+	}
+
+	${between.desktop.and.leftCol} {
+		grid-template-areas:
+			'icon header header'
+			'---- body body'
+			'---- qrCodes qrCodes';
 	}
 `;
 
 const iconContainer = css`
 	grid-area: icon;
 	display: flex;
+	align-self: center;
 
 	svg {
 		display: block;
@@ -66,10 +78,10 @@ const iconContainer = css`
 
 const headerContainer = css`
 	grid-area: header;
-	${headline.xxxsmall({ fontWeight: 'bold' })}
+	${body.medium({ fontWeight: 'bold' })}
 	align-self: center;
 
-	${from.tablet} {
+	${from.desktop} {
 		font-size: 20px;
 		margin-top: 2px;
 	}
@@ -77,30 +89,28 @@ const headerContainer = css`
 
 const bodyContainer = css`
 	grid-area: body;
-
-	${from.tablet} {
-		max-width: 473px;
-	}
 `;
 
 const bodyCopyStyle = css`
-	font-size: 17px;
+	${body.small()};
 	margin-top: ${space[3]}px;
 	margin-bottom: ${space[1]}px;
 
 	${from.tablet} {
 		margin-top: ${space[2]}px;
+		font-size: 17px;
 	}
 `;
 
 const imgContainer = css`
 	grid-area: img;
+	align-self: flex-end;
 	border-bottom: 1px solid ${neutral[86]};
 	margin-bottom: ${space[3]}px;
 
 	${from.tablet} {
 		border-bottom: none;
-		margin-bottom: none;
+		margin-bottom: 0;
 	}
 `;
 
@@ -136,10 +146,11 @@ export type ThankYouModuleType =
 	| 'appDownload'
 	| 'feedback'
 	| 'socialShare'
-	| 'continueToAccount'
-	| 'newsletters'
-	| 'continueToAccount'
-	| 'supportReminder';
+	| 'supportReminder'
+	| 'signIn'
+	| 'signUp'
+	| 'marketingConsent'
+	| 'ausMap';
 
 export interface ThankYouModuleProps {
 	moduleType: ThankYouModuleType;

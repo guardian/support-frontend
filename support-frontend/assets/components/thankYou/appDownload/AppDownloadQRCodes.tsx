@@ -13,6 +13,9 @@ const container = css`
 const qrContainer = css`
 	background-color: ${sport[800]};
 	border: 1px solid ${neutral[93]};
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 `;
 
 const title = css`
@@ -22,8 +25,9 @@ const title = css`
 `;
 
 const img = css`
-	max-width: 175px;
-	margin: ${space[5]}px 40px 35px;
+	padding: ${space[5]}px ${space[9]}px ${space[9]}px;
+	width: 100%;
+	display: block;
 `;
 
 function AppDownloadQRCodes(): JSX.Element {
@@ -33,10 +37,11 @@ function AppDownloadQRCodes(): JSX.Element {
 				<p css={title}>Download on the App Store</p>
 				<img
 					css={img}
-					/////////////////////
+					//////////////////////
 					// PLACEHOLDER LINK //
 					//////////////////////
 					src="https://tools-qr-production.s3.amazonaws.com/output/apple-toolbox/731eb34571091e0b5081c965ebb0d652/f04d238959ff2fb888b8cb92efae42d8.png"
+					alt="QR code"
 				/>
 			</div>
 
@@ -48,6 +53,7 @@ function AppDownloadQRCodes(): JSX.Element {
 					// PLACEHOLDER LINK //
 					//////////////////////
 					src="https://tools-qr-production.s3.amazonaws.com/output/apple-toolbox/731eb34571091e0b5081c965ebb0d652/f04d238959ff2fb888b8cb92efae42d8.png"
+					alt="QR code"
 				/>
 			</div>
 		</div>
