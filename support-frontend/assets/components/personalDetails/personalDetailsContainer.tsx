@@ -1,3 +1,4 @@
+import type { StateProvince } from 'helpers/internationalisation/country';
 import {
 	setEmail,
 	setFirstName,
@@ -8,6 +9,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { updateBillingState } from 'pages/contributions-landing/contributionsLandingActions';
 import type { PersonalDetailsProps } from './personalDetails';
 
 // We only want to use the user state value if the form state value has not been changed since it was initialised,
@@ -26,6 +28,7 @@ export function PersonalDetailsContainer({
 	renderPersonalDetails,
 }: PersonalDetailsContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
+
 	const { email, firstName, lastName } = useContributionsSelector(
 		(state) => state.page.checkoutForm.personalDetails,
 	);
@@ -53,12 +56,14 @@ export function PersonalDetailsContainer({
 		(state) => state.page.checkoutForm.personalDetails.isSignedIn,
 	);
 
-	function onFirstNameChange(email: string) {
-		dispatch(setFirstName(email));
+	function onFirstNameChange(firstName: string) {
+		dispatch(setFirstName(firstName));
 	}
-
-	function onLastNameChange(email: string) {
-		dispatch(setLastName(email));
+	function onLastNameChange(lastName: string) {
+		dispatch(setLastName(lastName));
+	}
+	function updateBillState(billingState: StateProvince | null) {
+		dispatch(updateBillingState(billingState));
 	}
 
 	return renderPersonalDetails({
@@ -73,5 +78,6 @@ export function PersonalDetailsContainer({
 		onEmailChange,
 		onFirstNameChange,
 		onLastNameChange,
+		updateBillState,
 	});
 }
