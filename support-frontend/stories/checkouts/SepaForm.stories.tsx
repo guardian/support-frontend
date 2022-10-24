@@ -78,16 +78,4 @@ Default.args = {
 	accountHolderName: '',
 	addressStreetName: '',
 	addressCountry: '',
-	updateIban: (iban: string) => {
-		console.log(iban);
-	},
-	updateAccountHolderName: (accountHolderName: string) => {
-		console.log(accountHolderName);
-	},
-	updateAddressStreetName: (addressStreetName: string) => {
-		console.log(addressStreetName);
-	},
-	updateAddressCountry: (addressCountry: string) => {
-		console.log(addressCountry);
-	},
 };
