@@ -1,4 +1,4 @@
-import { Button } from '@guardian/source-react-components';
+import Button from 'components/button/button';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import AppDownloadBadges from './appDownload/AppDownloadBadges';
 import type { ThankYouModuleType } from './thankYouModule';
@@ -21,10 +21,12 @@ export const getThankYouModuleData = (
 			bodyCopy: 'Unlock full access to our quality news app today',
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
 		},
-
-		//////////////////////
-		// PLACEHOLDER DATA //
-		//////////////////////
+		ausMap: {
+			icon: <i>icon</i>,
+			header: '',
+			bodyCopy: '',
+			ctas: <Button>Click me</Button>,
+		},
 		feedback: {
 			icon: getThankYouModuleIcon('feedback'),
 			header: 'Send us your thoughts',
@@ -32,23 +34,29 @@ export const getThankYouModuleData = (
 				'We would love to hear more about your experience of supporting the Guardian today. Please fill out this short form – it only takes a minute.',
 			ctas: <Button>Provide Feedback</Button>,
 		},
+		marketingConsent: {
+			icon: <i>icon</i>,
+			header: '',
+			bodyCopy: '',
+			ctas: <Button>Click me</Button>,
+		},
+		signIn: {
+			icon: <i>icon</i>,
+			header: '',
+			bodyCopy: '',
+			ctas: <Button>Click me</Button>,
+		},
+		signUp: {
+			icon: <i>icon</i>,
+			header: '',
+			bodyCopy: '',
+			ctas: <Button>Click me</Button>,
+		},
 		socialShare: {
-			icon: <p>Social Share Icon</p>,
-			header: 'Social Share Heading',
-			bodyCopy: 'Body Copy',
-			ctas: <p>icons</p>,
-		},
-		continueToAccount: {
-			icon: <p>Continue To Account</p>,
-			header: 'Continue To Account Heading',
-			bodyCopy: 'Body Copy',
-			ctas: <Button>Continue</Button>,
-		},
-		newsletters: {
-			icon: <p>Newsletters</p>,
-			header: 'Newsletters Heading',
-			bodyCopy: 'Body Copy',
-			ctas: <Button>Continue</Button>,
+			icon: <i>icon</i>,
+			header: '',
+			bodyCopy: '',
+			ctas: <Button>Click me</Button>,
 		},
 		supportReminder: {
 			icon: <p>Support Reminder</p>,

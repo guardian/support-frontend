@@ -146,10 +146,11 @@ export type ThankYouModuleType =
 	| 'appDownload'
 	| 'feedback'
 	| 'socialShare'
-	| 'continueToAccount'
-	| 'newsletters'
-	| 'continueToAccount'
-	| 'supportReminder';
+	| 'supportReminder'
+	| 'signIn'
+	| 'signUp'
+	| 'marketingConsent'
+	| 'ausMap';
 
 export interface ThankYouModuleProps {
 	moduleType: ThankYouModuleType;
