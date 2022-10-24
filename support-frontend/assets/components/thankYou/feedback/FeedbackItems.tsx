@@ -2,12 +2,8 @@ import {
 	LinkButton,
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
-import { useEffect } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import {
-	trackComponentClick,
-	trackComponentLoad,
-} from 'helpers/tracking/behaviour';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import styles from 'pages/contributions-landing/components/ContributionThankYou/styles';
 import { OPHAN_COMPONENT_ID_SURVEY } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
 
@@ -26,44 +22,43 @@ const getFeedbackHeader = (
 		: heading;
 };
 
-function getFeedbackBodyCopy(
-	countryId: IsoCountry,
-	feedbackSurveyHasBeenCompleted: boolean,
-): JSX.Element {
+function FeedbackBodyCopy({
+	countryId,
+	feedbackSurveyHasBeenCompleted,
+}: {
+	countryId: IsoCountry;
+	feedbackSurveyHasBeenCompleted: boolean;
+}): JSX.Element {
 	const isAus = countryId === 'AU';
 
 	return (
 		<>
 			{feedbackSurveyHasBeenCompleted ? (
-				<p>
-					You’re helping us deepen our understanding of Guardian supporters.
-				</p>
+				'You’re helping us deepen our understanding of Guardian supporters.'
 			) : (
 				<>
-					<p>
-						{isAus && (
-							<span>
-								We would love to know more about your decision to support our
-								journalism today. We’ll publish a selection of our favourite
-								messages, so other readers can enjoy them too.
+					{isAus && (
+						<span>
+							We would love to know more about your decision to support our
+							journalism today. We’ll publish a selection of our favourite
+							messages, so other readers can enjoy them too.
+						</span>
+					)}
+
+					{!isAus && (
+						<>
+							<span css={styles.hideAfterTablet}>
+								Fill out this short form to tell us more about your experience
+								of supporting us today – it only takes a minute.
 							</span>
-						)}
 
-						{!isAus && (
-							<>
-								<span css={styles.hideAfterTablet}>
-									Fill out this short form to tell us more about your experience
-									of supporting us today – it only takes a minute.
-								</span>
-
-								<span css={styles.hideBeforeTablet}>
-									We would love to hear more about your experience of supporting
-									the Guardian today. Please fill out this short form – it only
-									takes a minute.
-								</span>
-							</>
-						)}
-					</p>
+							<span css={styles.hideBeforeTablet}>
+								We would love to hear more about your experience of supporting
+								the Guardian today. Please fill out this short form – it only
+								takes a minute.
+							</span>
+						</>
+					)}
 				</>
 			)}
 		</>
@@ -79,10 +74,6 @@ function FeedbackCTA({
 		feedbackSurveyHasBeenCompleted: boolean,
 	) => void;
 }): JSX.Element {
-	useEffect(() => {
-		trackComponentLoad(OPHAN_COMPONENT_ID_SURVEY);
-	}, []);
-
 	const isAus = countryId === 'AU';
 
 	const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/VDQ32ND';
@@ -113,4 +104,4 @@ function FeedbackCTA({
 	);
 }
 
-export { getFeedbackHeader, getFeedbackBodyCopy, FeedbackCTA };
+export { getFeedbackHeader, FeedbackBodyCopy, FeedbackCTA };
