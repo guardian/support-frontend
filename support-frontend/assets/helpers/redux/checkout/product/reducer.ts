@@ -74,17 +74,17 @@ export const productSlice = createSlice({
 		});
 
 		builder.addCase(validateForm, (state) => {
-			if (isContribution(state.productType)) {
-				if (state.selectedAmounts[state.productType] === 'other') {
-					const validationResult = otherAmountSchema.safeParse(
-						state.otherAmounts[state.productType],
-					);
-					if (!validationResult.success) {
-						const formattedErrors = validationResult.error.format();
-						state.errors = {
-							otherAmount: formattedErrors.amount?._errors,
-						};
-					}
+			if (!isContribution(state.productType)) return;
+
+			if (state.selectedAmounts[state.productType] === 'other') {
+				const validationResult = otherAmountSchema.safeParse(
+					state.otherAmounts[state.productType],
+				);
+				if (!validationResult.success) {
+					const formattedErrors = validationResult.error.format();
+					state.errors = {
+						otherAmount: formattedErrors.amount?._errors,
+					};
 				}
 			}
 		});
