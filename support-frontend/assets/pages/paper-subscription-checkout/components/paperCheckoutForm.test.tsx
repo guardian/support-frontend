@@ -9,7 +9,7 @@ import { mockFetch } from '__mocks__/fetchMock';
 import { paperProducts } from '__mocks__/productInfoMocks';
 import { renderWithStore } from '__test-utils__/render';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import { addAddressSideEffects } from 'helpers/redux/checkout/address/sideEffects';
+import { addAddressSideEffects } from 'helpers/redux/checkout/address/subscriptionsSideEffects';
 import { setInitialCommonState } from 'helpers/redux/commonState/actions';
 import { commonReducer } from 'helpers/redux/commonState/reducer';
 import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsStore';

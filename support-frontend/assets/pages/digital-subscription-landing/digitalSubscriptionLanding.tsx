@@ -14,7 +14,6 @@ import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
 import MarketingConsent from 'components/subscriptionCheckouts/thankYou/marketingConsentContainer';
 import MarketingConsentGift from 'components/subscriptionCheckouts/thankYou/marketingConsentContainerGift';
-import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -36,7 +35,6 @@ import { routes } from 'helpers/urls/routes';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
 import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
-import FeedbackWidget from 'pages/digital-subscription-landing/components/feedbackWidget/feedbackWidget';
 import { DigitalFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import {
 	footer,
@@ -198,11 +196,6 @@ function DigitalLandingComponent({
 		countryGroupId,
 	);
 
-	const [widgetShouldDisplay, setElementToObserve] = useHasBeenSeen({
-		threshold: 0.3,
-		debounce: true,
-	});
-
 	return (
 		<span>
 			{orderIsAGift ? (
@@ -219,7 +212,7 @@ function DigitalLandingComponent({
 			)}
 			<FullWidthContainer>
 				<CentredContainer>
-					<div css={interactiveTableContainer} ref={setElementToObserve}>
+					<div css={interactiveTableContainer}>
 						<InteractiveTable
 							caption={<>What&apos;s included in a paid digital subscription</>}
 							headers={headers}
@@ -258,7 +251,6 @@ function DigitalLandingComponent({
 					/>
 				</CentredContainer>
 			</FullWidthContainer>
-			<FeedbackWidget display={widgetShouldDisplay} />
 		</span>
 	);
 }

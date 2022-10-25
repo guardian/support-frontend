@@ -10,10 +10,8 @@ type PropTypes = {
 };
 
 const surveyLinks: Partial<Record<SubscriptionProduct, string>> = {
-	DigitalPack: 'https://www.surveymonkey.co.uk/r/SLKWCHT',
 	GuardianWeekly:
 		'https://guardiannewsampampmedia.formstack.com/forms/guardian_weekly_2022',
-	Paper: 'https://www.surveymonkey.co.uk/r/99PGHSX',
 };
 
 export function SubscriptionsSurvey({

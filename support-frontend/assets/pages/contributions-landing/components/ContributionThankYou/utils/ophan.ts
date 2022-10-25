@@ -23,6 +23,15 @@ export const OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN =
 	'contribution-thankyou-read-more-sign-in';
 export const OPHAN_COMPONENT_ID_READ_MORE_SIGN_UP =
 	'contribution-thankyou-read-more-sign-up';
+
+//////////////////////////////////////////
+//Supporter Plus v2 checkout component IDs
+export const OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE =
+	'supporter-plus-thankyou-google-play';
+export const OPHAN_COMPONENT_ID_APP_STORE_BADGE =
+	'supporter-plus-thankyou-app-store';
+//////////////////////////////////////////
+
 const OPHAN_EVENT_ID_PAYMENT_METHOD = 'contributions-thankyou-payment-method';
 const OPHAN_EVENT_ID_CONTRIBUTION_TYPE =
 	'contributions-thankyou-contribution-type';

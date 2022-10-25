@@ -7,16 +7,16 @@ import {
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
 import {
+	setBillingCountry,
+	setBillingState,
+} from 'helpers/redux/checkout/address/actions';
+import {
 	setEmail,
 	setFirstName,
 	setLastName,
 } from 'helpers/redux/checkout/personalDetails/actions';
 import type { ContributionsDispatch } from 'helpers/redux/contributionsStore';
 import { logException } from 'helpers/utilities/logger';
-import {
-	updateBillingCountry,
-	updateBillingState,
-} from 'pages/contributions-landing/contributionsLandingActions';
 
 function setPayerName(
 	dispatch: ContributionsDispatch,
@@ -62,8 +62,8 @@ function setBillingCountryAndState(
 			state ?? undefined,
 		);
 
-		dispatch(updateBillingCountry(validatedCountry));
-		dispatch(updateBillingState(validatedState ?? ''));
+		dispatch(setBillingCountry(validatedCountry));
+		dispatch(setBillingState(validatedState ?? ''));
 	}
 }
 
