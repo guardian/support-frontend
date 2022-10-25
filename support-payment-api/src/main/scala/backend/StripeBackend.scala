@@ -27,7 +27,7 @@ import model._
 import model.acquisition.{AcquisitionDataRowBuilder, StripeAcquisition}
 import model.db.ContributionData
 import model.email.ContributorRow
-import model.stripe.StripeApiError.recaptchaErrorText
+import model.stripe.StripeApiError.{recaptchaErrorText, stripeDisabledErrorText}
 import model.stripe.StripePaymentMethod.{StripeApplePay, StripePaymentRequestButton}
 import model.stripe.{StripePaymentIntentRequest, _}
 import play.api.libs.ws.WSClient
@@ -57,8 +57,11 @@ class StripeBackend(
 
   // We only want the backend switch to be valid if the frontend switch is enabled
   private def recaptchaEnabled =
-    switchService.recaptchaSwitches
+    switchService.switches
       .map(s => s.enableRecaptchaFrontend.exists(_.isOn) && s.enableRecaptchaBackend.exists(_.isOn))
+
+  private def stripeEnabled =
+    switchService.switches.map(s => s.stripe.exists(_.isOn))
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
   // Legacy handler for the Stripe Charges API. Still required for mobile apps payments
@@ -149,16 +152,21 @@ class StripeBackend(
           }
         }
 
-    recaptchaRequired().flatMap {
+    stripeEnabled.flatMap {
       case true =>
-        recaptchaService
-          .verify(request.recaptchaToken)
-          .flatMap { resp =>
-            if (resp.success) createIntent()
-            else EitherT.leftT(StripeApiError.fromString(recaptchaErrorText, publicKey = None))
-          }
-      case false =>
-        createIntent()
+        recaptchaRequired().flatMap {
+          case true =>
+            recaptchaService
+              .verify(request.recaptchaToken)
+              .flatMap { resp =>
+                if (resp.success) createIntent()
+                else EitherT.leftT(StripeApiError.fromString(recaptchaErrorText, publicKey = None))
+              }
+          case false =>
+            createIntent()
+        }
+      case _ =>
+        EitherT.leftT(StripeApiError.fromString(stripeDisabledErrorText, publicKey = None))
     }
   }
 

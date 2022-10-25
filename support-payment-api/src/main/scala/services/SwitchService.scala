@@ -30,10 +30,17 @@ object SwitchState {
 
   implicit val switchStateEncoder: Encoder[SwitchState] = Encoder.encodeString.contramap[SwitchState](_.toString)
   implicit val switchStateDecoder: Decoder[SwitchState] = Decoder.decodeString.map(SwitchState.fromString)
-
 }
 
-case class Switches(enableRecaptchaFrontend: Option[SwitchState], enableRecaptchaBackend: Option[SwitchState])
+case class Switches(
+    enableRecaptchaFrontend: Option[SwitchState],
+    enableRecaptchaBackend: Option[SwitchState],
+    stripe: Option[SwitchState],
+    stripeApplePay: Option[SwitchState],
+    stripePaymentRequestButton: Option[SwitchState],
+    payPal: Option[SwitchState],
+    amazonPay: Option[SwitchState],
+)
 
 object Switches {
   implicit val switchesCodec: Codec[Switches] = deriveCodec
@@ -51,9 +58,9 @@ class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem
       .recordStats()
       .expireAfterWrite(1.minutes)
       .maximumSize(10)
-      .buildAsync(s => fromS3().getOrElse(Switches(None, None)))
+      .buildAsync(s => fromS3().getOrElse(Switches(None, None, None, None, None, None, None)))
 
-  def recaptchaSwitches: EitherT[Future, Nothing, Switches] =
+  def switches: EitherT[Future, Nothing, Switches] =
     EitherT.right(cache.get(cacheKey))
 
   private def fromBufferedSource(buf: BufferedSource): Either[Throwable, Switches] = {
