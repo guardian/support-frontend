@@ -23,7 +23,7 @@ type TierUnlocks = {
 export type CheckListData = {
 	icon: JSX.Element;
 	text?: JSX.Element;
-	maybeGreyedOut: null | SerializedStyles;
+	maybeGreyedOut?: SerializedStyles;
 };
 
 export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
@@ -33,33 +33,27 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 		<SvgCrossRound isAnnouncedByScreenReader size="small" />
 	);
 
-export const checkListData = ({
-	lowerTier,
-	higherTier,
-}: TierUnlocks): CheckListData[] => {
-	const maybeGreyedOutLowerTier = lowerTier ? null : greyedOut;
-	const maybeGreyedOutHigherTier = higherTier ? null : greyedOut;
+export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
+	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
 
 	return [
 		{
-			icon: getSvgIcon(lowerTier),
+			icon: getSvgIcon(true),
 			text: (
 				<p>
 					<span css={boldText}>Uninterrupted reading. </span> No more yellow
 					banners
 				</p>
 			),
-			maybeGreyedOut: maybeGreyedOutLowerTier,
 		},
 		{
-			icon: getSvgIcon(lowerTier),
+			icon: getSvgIcon(true),
 			text: (
 				<p>
 					<span css={boldText}>Supporter newsletter. </span>Giving you editorial
 					insight on the week’s top stories
 				</p>
 			),
-			maybeGreyedOut: maybeGreyedOutLowerTier,
 		},
 		{
 			icon: getSvgIcon(higherTier),

@@ -20,13 +20,8 @@ type CheckoutBenefitsListContainerProps = {
 function getBenefitsListTitle(
 	priceString: string,
 	contributionType: ContributionType,
-	selectedAmount: number,
-	minimumAmountPriceString: string,
 ) {
 	const billingPeriod = contributionType === 'MONTHLY' ? 'month' : 'year';
-	if (Number.isNaN(selectedAmount)) {
-		return `Contribute at least ${minimumAmountPriceString} per ${billingPeriod} to unlock benefits`;
-	}
 	return `For ${priceString} per ${billingPeriod}, you’ll unlock`;
 }
 
@@ -82,12 +77,14 @@ export function CheckoutBenefitsListContainer({
 		);
 	}
 
+	if (!lowerTier || Number.isNaN(selectedAmount)) {
+		return null;
+	}
+
 	return renderBenefitsList({
 		title: getBenefitsListTitle(
 			userSelectedAmountWithCurrency,
 			contributionType,
-			selectedAmount,
-			simpleFormatAmount(currencies[currencyId], minimumContributionAmount),
 		),
 		checkListData: checkListData({
 			lowerTier,
