@@ -92,7 +92,7 @@ const mapStateToProps = (state: ContributionsState) => {
 				state.page.user.email,
 			) ?? '',
 		otherAmounts: state.page.checkoutForm.product.otherAmounts,
-		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
+		paymentMethod: state.page.checkoutForm.payment.paymentMethod.name,
 		existingPaymentMethod: state.page.form.existingPaymentMethod,
 		existingPaymentMethods: state.common.existingPaymentMethods,
 		stripeClientSecret:
