@@ -3,11 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { setDeliveryCountry } from '../../address/actions';
 
-export const initialPaymentMethodState = 'None' as PaymentMethod;
-
 export const paymentMethodSlice = createSlice({
 	name: 'paymentMethod',
-	initialState: initialPaymentMethodState,
+	initialState: 'None' as PaymentMethod,
 	reducers: {
 		setPaymentMethod(_, action: PayloadAction<PaymentMethod>) {
 			return action.payload;

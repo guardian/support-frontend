@@ -5,7 +5,7 @@ export type StripeAccountDetailsState = {
 	stripeAccount: StripeAccount;
 };
 
-export const initialStripeAccountDetailsState: StripeAccountDetailsState = {
+export const initialState: StripeAccountDetailsState = {
 	publicKey: '',
 	stripeAccount: 'REGULAR',
 };
