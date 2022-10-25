@@ -1,52 +1,46 @@
 // ----- Imports ----- //
 import { TextInput } from '@guardian/source-react-components';
-import Signout from 'components/signout/signout';
 import type { ContributionType } from 'helpers/contributions';
-import {
-	checkBillingState,
-	emailRegexPattern,
-} from 'helpers/forms/formValidation';
+import { emailRegexPattern } from 'helpers/forms/formValidation';
 import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import type { StateProvince } from 'helpers/internationalisation/country';
 import { applyPersonalDetailsRules } from 'helpers/subscriptionsForms/rules';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
-import ContributionState from 'pages/contributions-landing/components/ContributionState';
 
 export type PersonalDetailsProps = {
 	email: string;
 	firstName: string;
 	lastName: string;
-	billingState: string;
 	checkoutFormHasBeenSubmitted: boolean;
 	contributionType: ContributionType;
-	isSignedIn: boolean;
+	isSignedInPersonalDetails: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	onEmailChange: (email: string) => void;
 	onFirstNameChange: (firstName: string) => void;
 	onLastNameChange: (lastName: string) => void;
-	updateBillState: (billingState: StateProvince | null) => void;
+	signOutLink: React.ReactNode;
+	contributionState: React.ReactNode;
 };
 
 export function PersonalDetails({
 	email,
 	firstName,
 	lastName,
-	billingState,
 	checkoutFormHasBeenSubmitted,
 	contributionType,
-	isSignedIn,
+	isSignedInPersonalDetails,
 	userTypeFromIdentityResponse,
 	onEmailChange,
 	onFirstNameChange,
 	onLastNameChange,
-	updateBillState,
+	signOutLink,
+	contributionState,
 }: PersonalDetailsProps): JSX.Element {
 	const formErrors = applyPersonalDetailsRules({
 		firstName,
 		lastName,
 		email,
-		isSignedIn,
+		isSignedIn: isSignedInPersonalDetails,
 		userTypeFromIdentityResponse,
 	});
 
@@ -75,11 +69,11 @@ export function PersonalDetails({
 					onChange={(e) => onEmailChange(e.target.value)}
 					pattern={emailRegexPattern}
 					error={getFormFieldError('email')}
-					disabled={isSignedIn}
+					disabled={isSignedInPersonalDetails}
 				/>
 			</div>
 
-			<Signout />
+			{signOutLink}
 
 			{contributionType !== 'ONE_OFF' ? (
 				<div>
@@ -120,14 +114,7 @@ export function PersonalDetails({
 				</div>
 			) : null}
 
-			<ContributionState
-				onChange={(newBillingState) =>
-					updateBillState(newBillingState === '' ? null : newBillingState)
-				}
-				selectedState={billingState}
-				isValid={checkBillingState(billingState)}
-				formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
-			/>
+			{contributionState}
 		</div>
 	);
 }

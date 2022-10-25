@@ -1,3 +1,5 @@
+import Signout from 'components/signout/signout';
+import { checkBillingState } from 'helpers/forms/formValidation';
 import type { StateProvince } from 'helpers/internationalisation/country';
 import {
 	setEmail,
@@ -9,6 +11,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import ContributionState from 'pages/contributions-landing/components/ContributionState';
 import { updateBillingState } from 'pages/contributions-landing/contributionsLandingActions';
 import type { PersonalDetailsProps } from './personalDetails';
 
@@ -52,10 +55,15 @@ export function PersonalDetailsContainer({
 	function onEmailChange(email: string) {
 		dispatch(setEmail(email));
 	}
-	const isSignedIn = useContributionsSelector(
+	const isSignedInPersonalDetails = useContributionsSelector(
 		(state) => state.page.checkoutForm.personalDetails.isSignedIn,
 	);
-
+	const isSignedInUser = useContributionsSelector(
+		(state) => state.page.user.isSignedIn,
+	);
+	const countryGroupId = useContributionsSelector(
+		(state) => state.common.internationalisation.countryGroupId,
+	);
 	function onFirstNameChange(firstName: string) {
 		dispatch(setFirstName(firstName));
 	}
@@ -70,14 +78,25 @@ export function PersonalDetailsContainer({
 		email,
 		firstName,
 		lastName,
-		billingState,
 		checkoutFormHasBeenSubmitted,
 		contributionType,
-		isSignedIn,
+		isSignedInPersonalDetails,
 		userTypeFromIdentityResponse,
 		onEmailChange,
 		onFirstNameChange,
 		onLastNameChange,
-		updateBillState,
+		signOutLink: <Signout isSignedIn={isSignedInUser} />,
+		contributionState: (
+			<ContributionState
+				onChange={(newBillingState) =>
+					updateBillState(newBillingState === '' ? null : newBillingState)
+				}
+				selectedState={billingState}
+				isValid={checkBillingState(billingState)}
+				formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+				contributionType={contributionType}
+				countryGroupId={countryGroupId}
+			/>
+		),
 	});
 }
