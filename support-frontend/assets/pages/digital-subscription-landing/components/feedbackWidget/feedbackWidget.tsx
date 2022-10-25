@@ -104,7 +104,7 @@ function FeedbackWidget({ display }: { display: boolean }): JSX.Element {
 							size="small"
 							id="feedbackLink"
 							aria-label="Click here to fill in a short survey about the information on this page"
-							href="https://www.surveymonkey.co.uk/r/63XM7CX"
+							href=""
 							target="_blank"
 							rel="noopener noreferrer"
 							onClick={() => setShowWidget(false)}
