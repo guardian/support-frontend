@@ -23,12 +23,12 @@ class LandingCopyProvider(
   ): Option[PromotionCopy] =
     for {
       countryGroup <- CountryGroup.byId(countryCode)
-      productRatePlanIds = getProductRatePlanIdsForCountryGroup(product1, countryGroup)
+      productRatePlanIds = getProductRatePlanIdsForCountryGroup(product1, countryGroup, isGift)
       country <- countryGroup.countries.headOption
       promoCopy <- promotionCopyForPrimaryCountry(queryPromos, productRatePlanIds, country)
     } yield promoCopy
 
-  def getProductRatePlanIdsForCountryGroup(product: Product, countryGroup: CountryGroup, isGift: Boolean = false) = {
+  def getProductRatePlanIdsForCountryGroup(product: Product, countryGroup: CountryGroup, isGift: Boolean) = {
     val environment = TouchPointEnvironments.fromStage(stage)
     val readerType = if (isGift) Gift else Direct
     (product, countryGroup) match {
