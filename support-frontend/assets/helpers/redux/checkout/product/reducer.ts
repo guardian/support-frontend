@@ -54,6 +54,7 @@ export const productSlice = createSlice({
 		setOtherAmount(state, action: PayloadAction<AmountChange>) {
 			const { contributionType, amount } = action.payload;
 			state.otherAmounts[contributionType].amount = amount;
+			state.errors.otherAmount = [];
 		},
 		setCurrency(state, action: PayloadAction<IsoCurrency>) {
 			state.currency = action.payload;

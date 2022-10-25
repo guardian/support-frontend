@@ -21,10 +21,9 @@ const maxOneDecimalPlaceRegex = /^\d+\.?\d{0,2}$/;
 export const otherAmountSchema = z.object({
 	amount: z
 		.string({ invalid_type_error: 'Please enter an amount' })
-		.min(1, { message: 'Please enter an amount' })
-		.regex(maxOneDecimalPlaceRegex, { message: 'Please enter an amount' })
+		.regex(maxOneDecimalPlaceRegex, { message: 'Please enter a valid amount' })
 		.refine((amount) => !Number.isNaN(Number.parseFloat(amount)), {
-			message: 'Please enter an amount',
+			message: 'Please enter a valid amount',
 		}),
 });
 
@@ -55,7 +54,7 @@ export type ProductState = {
 	currency: IsoCurrency;
 	orderIsAGift: boolean;
 	startDate: DateYMDString;
-	errors?: ProductErrors;
+	errors: ProductErrors;
 };
 
 const currency = getCurrency(detectCountryGroup());
@@ -85,4 +84,5 @@ export const initialProductState: ProductState = {
 	currency,
 	orderIsAGift: getGlobal('orderIsAGift') ?? false,
 	startDate: formatMachineDate(new Date()),
+	errors: {},
 };

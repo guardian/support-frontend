@@ -25,6 +25,7 @@ export function AmountAndBenefits(): JSX.Element {
 									onAmountChange,
 									minAmount,
 									onOtherAmountChange,
+									errors,
 								}) => (
 									<>
 										<PriceCards
@@ -39,6 +40,7 @@ export function AmountAndBenefits(): JSX.Element {
 													minAmount={minAmount}
 													selectedAmount={selectedAmount}
 													onOtherAmountChange={onOtherAmountChange}
+													errors={errors}
 												/>
 											}
 										/>

@@ -1,4 +1,5 @@
 import type { OtherAmountProps } from 'components/otherAmount/otherAmount';
+import { getOtherAmountErrors } from 'components/otherAmount/selectors';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import {
 	setOtherAmount,
@@ -54,6 +55,7 @@ export function PriceCardsContainer({
 		frequency,
 		defaultAmount,
 	).toString();
+	const otherAmountErrors = useContributionsSelector(getOtherAmountErrors);
 
 	function onAmountChange(newAmount: string) {
 		dispatch(
@@ -81,5 +83,6 @@ export function PriceCardsContainer({
 		minAmount,
 		onAmountChange,
 		onOtherAmountChange,
+		errors: otherAmountErrors,
 	});
 }
