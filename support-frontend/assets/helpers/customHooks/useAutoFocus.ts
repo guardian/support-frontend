@@ -1,15 +1,12 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
+// This provides a 'callback ref' to consistently auto-focus on any node once it's mounted
+// cf https://tkdodo.eu/blog/avoiding-use-effect-with-callback-refs
 export function useAutoFocus<T extends HTMLElement | null>(): (
 	node: T | null,
 ) => void {
-	const [ref, setRef] = useState<T | null>(null);
 	const refCallback = useCallback((node: T | null) => {
-		if (ref) return;
-		if (node) {
-			node.focus();
-		}
-		setRef(node);
+		node?.focus();
 	}, []);
 
 	return refCallback;

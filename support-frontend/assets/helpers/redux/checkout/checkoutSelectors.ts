@@ -9,7 +9,7 @@ function getPaymentMethodErrors(
 
 	switch (payment.paymentMethod.name) {
 		case 'Stripe':
-			return payment.stripe.errors;
+			return payment.stripe.showErrors ? payment.stripe.errors : {};
 
 		case 'DirectDebit':
 			return payment.directDebit.errors ?? {};
@@ -22,19 +22,6 @@ function getPaymentMethodErrors(
 	}
 }
 
-function formHasPaymentMethodErrors(state: ContributionsState): boolean {
-	const errors = getPaymentMethodErrors(state);
-	const errorObjectHasKeys = !!Object.keys(errors).length;
-	if (!errorObjectHasKeys) {
-		return false;
-	}
-
-	const atLeastOneKeyHasErrors = Object.keys(errors).some(
-		(key) => errors[key].length,
-	);
-	return atLeastOneKeyHasErrors;
-}
-
 export function getAllErrorsForContributions(
 	state: ContributionsState,
 ): Partial<Record<string, string[]>> {
@@ -44,6 +31,7 @@ export function getAllErrorsForContributions(
 		state.page.checkoutForm.personalDetails.errors ?? {};
 
 	const otherAmount = getOtherAmountErrors(state);
+	const paymentMethod = state.page.checkoutForm.payment.paymentMethod.errors;
 
 	if (contributionType === 'ONE_OFF') {
 		return {
@@ -57,25 +45,13 @@ export function getAllErrorsForContributions(
 		firstName,
 		lastName,
 		email,
+		paymentMethod,
 		...getPaymentMethodErrors(state),
 	};
 }
 
 export function contributionsFormHasErrors(state: ContributionsState): boolean {
-	const contributionType = getContributionType(state);
-	const hasPaymentErrors = formHasPaymentMethodErrors(state);
-	const { firstName, lastName, email } =
-		state.page.checkoutForm.personalDetails.errors ?? {};
+	const errorObject = getAllErrorsForContributions(state);
 
-	if (contributionType === 'ONE_OFF') {
-		return hasPaymentErrors || !!email?.length;
-	}
-
-	const allErrorsLength =
-		hasPaymentErrors ||
-		!!firstName?.length ||
-		!!lastName?.length ||
-		!!email?.length;
-
-	return allErrorsLength;
+	return Object.values(errorObject).some((errorList) => errorList?.length);
 }

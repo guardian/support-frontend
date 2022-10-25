@@ -1,6 +1,14 @@
+import { css } from '@emotion/react';
+import { focusHalo } from '@guardian/source-foundations';
 import { Link } from '@guardian/source-react-components';
 import { ErrorSummary } from '@guardian/source-react-components-development-kitchen';
 import { useAutoFocus } from 'helpers/customHooks/useAutoFocus';
+
+const errorContainerStyles = css`
+	:focus {
+		${focusHalo};
+	}
+`;
 
 type CheckoutErrorLink = {
 	href: string;
@@ -18,14 +26,21 @@ export function CheckoutErrorSummary({
 
 	if (!errorList.length) return null;
 	return (
-		<div aria-live="polite" tabIndex={-1} ref={containerRef}>
+		<div
+			css={errorContainerStyles}
+			role="alert"
+			tabIndex={-1}
+			ref={containerRef}
+			aria-live="polite"
+		>
 			<ErrorSummary
+				css={errorContainerStyles}
 				message="Some information is missing"
 				context={
 					<ul>
 						{errorList.map(({ href, message }) => (
 							<li>
-								<Link priority="secondary" href={href}>
+								<Link priority="secondary" href={href} subdued={true}>
 									{message}
 								</Link>
 							</li>
