@@ -44,11 +44,9 @@ export function ContributionsStripe({
 	 */
 	return (
 		<>
-			{publicKey && (
-				<StripeElements key={publicKey} stripeKey={publicKey}>
-					{children}
-				</StripeElements>
-			)}
+			<StripeElements key={publicKey} stripeKey={publicKey}>
+				{children}
+			</StripeElements>
 		</>
 	);
 }

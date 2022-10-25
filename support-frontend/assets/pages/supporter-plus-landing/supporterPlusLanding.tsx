@@ -14,10 +14,12 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import { StripeCardFormContainer } from 'components/stripeCardForm/stripeCardFormContainer';
 import {
 	AUDCountries,
 	Canada,
@@ -27,10 +29,12 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
 import { AmountAndBenefits } from './formSections/amountAndBenefits';
+import { getPaymentMethodButtons } from './paymentButtons';
 
 const checkoutContainer = css`
 	position: relative;
@@ -56,9 +60,13 @@ const largeDemoBox = css`
 `;
 
 export function SupporterPlusLandingPage(): JSX.Element {
-	const selectedCountryGroup = useContributionsSelector(
-		(state) => state.common.internationalisation.countryGroupId,
+	const { countryGroupId, countryId } = useContributionsSelector(
+		(state) => state.common.internationalisation,
 	);
+	const { switches } = useContributionsSelector(
+		(state) => state.common.settings,
+	);
+	const contributionType = useContributionsSelector(getContributionType);
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
@@ -70,7 +78,7 @@ export function SupporterPlusLandingPage(): JSX.Element {
 			Canada,
 			International,
 		],
-		selectedCountryGroup,
+		selectedCountryGroup: countryGroupId,
 		subPath: '/contribute',
 	};
 	const heading = <LandingPageHeading />;
@@ -112,13 +120,25 @@ export function SupporterPlusLandingPage(): JSX.Element {
 						</Box>
 						<Box>
 							<BoxContents>
-								<SecureTransactionIndicator position="center" />
+								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
 								<ContributionsStripe>
+									<SecureTransactionIndicator position="center" />
 									<PaymentRequestButtonContainer
 										CustomButton={SavedCardButton}
 									/>
+
+									<p css={largeDemoBox}>Personal details and payment</p>
+
+									<StripeCardFormContainer />
+									<PaymentButtonController
+										paymentButtons={getPaymentMethodButtons(
+											contributionType,
+											switches,
+											countryId,
+											countryGroupId,
+										)}
+									/>
 								</ContributionsStripe>
-								<p css={largeDemoBox}>Personal details and payment</p>
 							</BoxContents>
 						</Box>
 						<Box>

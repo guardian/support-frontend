@@ -102,7 +102,7 @@ export function useStripeAccount(stripeKey: string): StripeJs | null {
 	const [stripeSdk, setStripeSdk] = useState<StripeJs | null>(null);
 
 	useEffect(() => {
-		if (stripeSdk === null) {
+		if (stripeSdk === null && stripeKey) {
 			if (!stripeScriptHasBeenAddedToPage()) {
 				loadStripe.setLoadParameters({
 					advancedFraudSignals: false,
