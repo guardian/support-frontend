@@ -1,3 +1,4 @@
+import { getOtherAmountErrors } from 'components/otherAmount/selectors';
 import type { ContributionsState } from '../contributionsStore';
 import { getContributionType } from './product/selectors/productType';
 
@@ -42,13 +43,17 @@ export function getAllErrorsForContributions(
 	const { firstName, lastName, email } =
 		state.page.checkoutForm.personalDetails.errors ?? {};
 
+	const otherAmount = getOtherAmountErrors(state);
+
 	if (contributionType === 'ONE_OFF') {
 		return {
+			otherAmount,
 			email,
 			...getPaymentMethodErrors(state),
 		};
 	}
 	return {
+		otherAmount,
 		firstName,
 		lastName,
 		email,

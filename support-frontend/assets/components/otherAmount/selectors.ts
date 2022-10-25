@@ -11,7 +11,9 @@ function amountIsNotInRange(amount: string, min: number, max: number) {
 	return amountAsFloat > max || amountAsFloat < min;
 }
 
-export function getOtherAmountErrors(state: ContributionsState): string[] {
+export function getOtherAmountErrors(
+	state: ContributionsState,
+): string[] | undefined {
 	const constributionType = getContributionType(state);
 	const { errors, otherAmounts, selectedAmounts } =
 		state.page.checkoutForm.product;
@@ -33,6 +35,4 @@ export function getOtherAmountErrors(state: ContributionsState): string[] {
 	if (amountIsNotInRange(customAmount, minAmount, maxAmount)) {
 		return [`Please provide an amount between ${minAmount} and ${maxAmount}`];
 	}
-
-	return [];
 }
