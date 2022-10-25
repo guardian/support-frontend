@@ -9,6 +9,11 @@ export function getStripeCardFormErrors(state: ContributionsState): {
 	errors: StripeCardFormDisplayErrors;
 	showErrors: boolean;
 } {
+	const { paymentMethod } = state.page.checkoutForm.payment;
+	if (paymentMethod.name !== 'Stripe') {
+		return { errors: {}, showErrors: false };
+	}
+
 	const { errors, showErrors } = state.page.checkoutForm.payment.stripe;
 
 	const shouldShowZipCode =
