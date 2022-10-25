@@ -66,7 +66,9 @@ export function CheckoutBenefitsListContainer({
 	);
 
 	const higherTier = thresholdPrice <= selectedAmount;
-	const lowerTier = selectedAmount >= minimumContributionAmount;
+	const displayBenefits =
+		!Number.isNaN(selectedAmount) &&
+		selectedAmount >= minimumContributionAmount;
 
 	function handleButtonClick() {
 		dispatch(
@@ -77,7 +79,7 @@ export function CheckoutBenefitsListContainer({
 		);
 	}
 
-	if (!lowerTier || Number.isNaN(selectedAmount)) {
+	if (!displayBenefits) {
 		return null;
 	}
 
@@ -87,7 +89,6 @@ export function CheckoutBenefitsListContainer({
 			contributionType,
 		),
 		checkListData: checkListData({
-			lowerTier,
 			higherTier,
 		}),
 		buttonCopy: getbuttonCopy(

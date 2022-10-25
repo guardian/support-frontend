@@ -16,7 +16,6 @@ const boldText = css`
 `;
 
 type TierUnlocks = {
-	lowerTier: boolean;
 	higherTier: boolean;
 };
 
