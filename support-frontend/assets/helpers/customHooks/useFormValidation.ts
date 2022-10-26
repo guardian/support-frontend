@@ -1,5 +1,4 @@
-import { useCallback } from 'preact/hooks';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
 import { contributionsFormHasErrors } from 'helpers/redux/checkout/checkoutSelectors';
 import {
