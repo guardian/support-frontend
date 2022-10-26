@@ -26,9 +26,7 @@ export function PersonalDetailsContainer({
 	const { email, firstName, lastName } = useContributionsSelector(
 		(state) => state.page.checkoutForm.personalDetails,
 	);
-	const contributionType = getContributionType(
-		useContributionsSelector((state) => state),
-	);
+	const contributionType = useContributionsSelector(getContributionType);
 	const billingState = useContributionsSelector(
 		(state) => state.page.checkoutForm.billingAddress.fields.state,
 	);
