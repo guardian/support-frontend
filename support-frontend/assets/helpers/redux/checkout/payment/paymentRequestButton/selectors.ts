@@ -9,3 +9,13 @@ export function hasPaymentRequestButtonBeenClicked(
 		paymentRequestButton.REGULAR.buttonClicked
 	);
 }
+
+export function hasPaymentRequestInterfaceClosed(
+	state: ContributionsState,
+): boolean {
+	const { paymentRequestButton } = state.page.checkoutForm.payment;
+	return (
+		paymentRequestButton.ONE_OFF.completed ||
+		paymentRequestButton.REGULAR.completed
+	);
+}

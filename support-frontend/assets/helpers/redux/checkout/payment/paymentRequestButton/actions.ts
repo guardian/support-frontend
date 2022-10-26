@@ -1,4 +1,7 @@
 import { paymentRequestButtonSlice } from './reducer';
 
-export const { clickPaymentRequestButton, setPaymentRequestError } =
-	paymentRequestButtonSlice.actions;
+export const {
+	clickPaymentRequestButton,
+	completePaymentRequest,
+	setPaymentRequestError,
+} = paymentRequestButtonSlice.actions;

@@ -6,7 +6,11 @@ import type { StripePaymentRequestButtonElementClickEvent } from '@stripe/stripe
 import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { Stripe } from 'helpers/forms/paymentMethods';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import { useContributionsDispatch } from 'helpers/redux/storeHooks';
+import { clickPaymentRequestButton } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { usePaymentRequest } from './hooks/usePaymentRequest';
 import { usePaymentRequestCompletion } from './hooks/usePaymentRequestCompletion';
@@ -36,6 +40,10 @@ export function PaymentRequestButtonContainer({
 	);
 	const dispatch = useContributionsDispatch();
 
+	const { stripeAccount } = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.stripeAccountDetails,
+	);
+
 	const handleButtonClick =
 		useFormValidation<StripePaymentRequestButtonElementClickEvent>(
 			function handleButtonClick() {
@@ -45,11 +53,16 @@ export function PaymentRequestButtonContainer({
 			},
 		);
 
+	function onClick(event: StripePaymentRequestButtonElementClickEvent) {
+		dispatch(clickPaymentRequestButton(stripeAccount));
+		handleButtonClick(event);
+	}
+
 	if (paymentRequest) {
 		if (buttonType === 'PAY_NOW') {
 			return (
 				<PaymentRequestButton>
-					<CustomButton onClick={handleButtonClick} />
+					<CustomButton onClick={onClick} />
 				</PaymentRequestButton>
 			);
 		} else if (buttonType !== 'NONE') {
@@ -57,7 +70,7 @@ export function PaymentRequestButtonContainer({
 				<PaymentRequestButton>
 					<PaymentRequestButtonElement
 						options={{ paymentRequest }}
-						onClick={handleButtonClick}
+						onClick={onClick}
 					/>
 				</PaymentRequestButton>
 			);

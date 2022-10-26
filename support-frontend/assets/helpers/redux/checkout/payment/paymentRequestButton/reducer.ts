@@ -10,6 +10,12 @@ export const paymentRequestButtonSlice = createSlice({
 	reducers: {
 		clickPaymentRequestButton(state, action: PayloadAction<StripeAccount>) {
 			state[action.payload].buttonClicked = true;
+			if (state[action.payload].completed) {
+				state[action.payload].completed = false;
+			}
+		},
+		completePaymentRequest(state, action: PayloadAction<StripeAccount>) {
+			state[action.payload].completed = true;
 		},
 		setPaymentRequestError(state, action: PayloadAction<PaymentRequestError>) {
 			const { account, error } = action.payload;

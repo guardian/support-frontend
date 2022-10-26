@@ -3,6 +3,7 @@ import type { StripeAccount } from 'helpers/forms/stripe';
 
 type StripePaymentRequestButtonData = {
 	buttonClicked: boolean;
+	completed: boolean;
 	paymentError?: ErrorReason;
 };
 
@@ -19,8 +20,10 @@ export type PaymentRequestButtonState = Record<
 export const initialPaymentRequestButtonState: PaymentRequestButtonState = {
 	ONE_OFF: {
 		buttonClicked: false,
+		completed: false,
 	},
 	REGULAR: {
 		buttonClicked: false,
+		completed: false,
 	},
 };
