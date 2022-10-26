@@ -11,8 +11,9 @@ function getPaymentMethodErrors(
 		case 'Stripe':
 			return payment.stripe.showErrors ? payment.stripe.errors : {};
 
-		case 'DirectDebit':
-			return payment.directDebit.errors ?? {};
+		// TODO: implement this once we have a new DD form
+		// case 'DirectDebit':
+		// 	return payment.directDebit.errors ?? {};
 
 		case 'Sepa':
 			return payment.sepa.errors;
@@ -32,21 +33,26 @@ export function getAllErrorsForContributions(
 
 	const otherAmount = getOtherAmountErrors(state);
 	const paymentMethod = state.page.checkoutForm.payment.paymentMethod.errors;
+	const robot_checkbox = state.page.checkoutForm.recaptcha.errors;
+
+	const nonPersonalDetailsErrors = {
+		otherAmount,
+		paymentMethod,
+		...getPaymentMethodErrors(state),
+		robot_checkbox,
+	};
 
 	if (contributionType === 'ONE_OFF') {
 		return {
-			otherAmount,
 			email,
-			...getPaymentMethodErrors(state),
+			...nonPersonalDetailsErrors,
 		};
 	}
 	return {
-		otherAmount,
 		firstName,
 		lastName,
 		email,
-		paymentMethod,
-		...getPaymentMethodErrors(state),
+		...nonPersonalDetailsErrors,
 	};
 }
 
