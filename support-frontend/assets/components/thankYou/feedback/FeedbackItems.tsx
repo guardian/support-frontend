@@ -76,7 +76,8 @@ function FeedbackCTA({
 }): JSX.Element {
 	const isAus = countryId === 'AU';
 
-	const SURVEY_LINK = 'https://www.surveymonkey.co.uk/r/VDQ32ND';
+	const SURVEY_LINK =
+		'https://guardiannewsampampmedia.formstack.com/forms/guardian_contributions';
 	const AUS_SURVEY_LINK =
 		'https://guardiannewsampampmedia.formstack.com/forms/australia_2022';
 
