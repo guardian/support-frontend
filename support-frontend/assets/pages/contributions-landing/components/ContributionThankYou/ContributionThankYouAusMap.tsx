@@ -9,6 +9,7 @@ import {
 	trackComponentClick,
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
+import { getOrigin } from 'helpers/urls/url';
 import ActionBody from './components/ActionBody';
 import ActionContainer from './components/ActionContainer';
 import ActionHeader from './components/ActionHeader';
@@ -19,8 +20,7 @@ const buttonContainer = css`
 	margin-top: ${space[6]}px;
 `;
 
-const AUS_MAP_URL =
-	'https://support.theguardian.com/aus-map?INTCMP=thankyou-page-aus-map-cta';
+const AUS_MAP_URL = `${getOrigin()}/aus-map?INTCMP=thankyou-page-aus-map-cta`;
 
 function ContributionThankYouAusMap(): JSX.Element {
 	useEffect(() => {

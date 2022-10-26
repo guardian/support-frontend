@@ -3,10 +3,10 @@ import {
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { getOrigin } from 'helpers/urls/url';
 import { OPHAN_COMPONENT_ID_AUS_MAP } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
 
-const AUS_MAP_URL =
-	'https://support.theguardian.com/aus-map?INTCMP=thankyou-page-aus-map-cta';
+const AUS_MAP_URL = `${getOrigin()}/aus-map?INTCMP=thankyou-page-aus-map-cta`;
 
 export const ausMapHeader = 'Hear from supporters across Australia';
 
