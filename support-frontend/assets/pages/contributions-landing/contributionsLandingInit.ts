@@ -72,8 +72,8 @@ function getInitialPaymentMethod(
 	) {
 		return paymentMethodFromSession;
 	}
-
-	return 'None';
+	return 'AmazonPay';
+	//return 'None';
 }
 
 function getInitialContributionType(

@@ -1,3 +1,4 @@
+import { AmazonPaymentButton } from 'components/amazonPaymentButton/amazonPaymentButton';
 import { StripePaymentButton } from 'components/stripeCardForm/stripePaymentButton';
 import type { ContributionType } from 'helpers/contributions';
 import { getValidPaymentMethods } from 'helpers/forms/checkouts';
@@ -10,6 +11,7 @@ type PaymentMethodButtons = Partial<Record<PaymentMethod, React.FC>>;
 
 const allPaymentMethodButtons: PaymentMethodButtons = {
 	Stripe: StripePaymentButton,
+	AmazonPay: AmazonPaymentButton,
 };
 
 export function getPaymentMethodButtons(
