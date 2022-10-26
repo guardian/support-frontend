@@ -167,7 +167,6 @@ const defaultContributeCopy = (
 		As a reader-funded news organisation, we rely on your generosity. 
 		Please give what you can, so millions more can benefit from quality
 		reporting on the events shaping our world.
-		</span>
 	</span>
 );
 
