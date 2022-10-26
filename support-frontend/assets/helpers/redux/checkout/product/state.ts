@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import type {
 	ContributionType,
 	OtherAmounts,
@@ -15,10 +16,25 @@ import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { DateYMDString } from 'helpers/types/DateString';
 import { formatMachineDate } from 'helpers/utilities/dateConversions';
 
+const maxOneDecimalPlaceRegex = /^\d+\.?\d{0,2}$/;
+
+export const otherAmountSchema = z.object({
+	amount: z
+		.string({ invalid_type_error: 'Please enter an amount' })
+		.regex(maxOneDecimalPlaceRegex, { message: 'Please enter a valid amount' })
+		.refine((amount) => !Number.isNaN(Number.parseFloat(amount)), {
+			message: 'Please enter a valid amount',
+		}),
+});
+
 export type GuardianProduct =
 	| SubscriptionProduct
 	| ContributionType
 	| 'NoProduct';
+
+type ProductErrors = {
+	otherAmount?: string[];
+};
 
 // TODO: Fix the type difference between pre-selected amounts and custom amounts
 // Probably best to handle everything as strings
@@ -38,6 +54,7 @@ export type ProductState = {
 	currency: IsoCurrency;
 	orderIsAGift: boolean;
 	startDate: DateYMDString;
+	errors: ProductErrors;
 };
 
 const currency = getCurrency(detectCountryGroup());
@@ -67,4 +84,5 @@ export const initialProductState: ProductState = {
 	currency,
 	orderIsAGift: getGlobal('orderIsAGift') ?? false,
 	startDate: formatMachineDate(new Date()),
+	errors: {},
 };

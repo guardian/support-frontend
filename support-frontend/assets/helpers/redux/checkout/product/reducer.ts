@@ -14,8 +14,10 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import type { DateYMDString } from 'helpers/types/DateString';
 import { setDeliveryCountry } from '../address/actions';
+import { validateForm } from '../checkoutActions';
+import { isContribution } from './selectors/productType';
 import type { AmountChange, GuardianProduct } from './state';
-import { initialProductState } from './state';
+import { initialProductState, otherAmountSchema } from './state';
 
 export const productSlice = createSlice({
 	name: 'product',
@@ -52,6 +54,7 @@ export const productSlice = createSlice({
 		setOtherAmount(state, action: PayloadAction<AmountChange>) {
 			const { contributionType, amount } = action.payload;
 			state.otherAmounts[contributionType].amount = amount;
+			state.errors.otherAmount = [];
 		},
 		setCurrency(state, action: PayloadAction<IsoCurrency>) {
 			state.currency = action.payload;
@@ -67,6 +70,22 @@ export const productSlice = createSlice({
 		builder.addCase(setDeliveryCountry, (state, action) => {
 			if (state.productType === GuardianWeekly) {
 				state.fulfilmentOption = getWeeklyFulfilmentOption(action.payload);
+			}
+		});
+
+		builder.addCase(validateForm, (state) => {
+			if (!isContribution(state.productType)) return;
+
+			if (state.selectedAmounts[state.productType] === 'other') {
+				const validationResult = otherAmountSchema.safeParse(
+					state.otherAmounts[state.productType],
+				);
+				if (!validationResult.success) {
+					const formattedErrors = validationResult.error.format();
+					state.errors = {
+						otherAmount: formattedErrors.amount?._errors,
+					};
+				}
 			}
 		});
 	},

@@ -6,7 +6,7 @@ function getPaymentMethodErrors(
 ): Record<string, string[]> {
 	const { payment } = state.page.checkoutForm;
 
-	switch (payment.paymentMethod) {
+	switch (payment.paymentMethod.name) {
 		case 'Stripe':
 			return payment.stripe.errors;
 
