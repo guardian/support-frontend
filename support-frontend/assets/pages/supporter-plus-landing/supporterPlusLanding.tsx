@@ -9,8 +9,6 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import { CheckoutErrorSummary } from 'components/errorSummary/errorSummary';
-import { CheckoutErrorSummaryContainer } from 'components/errorSummary/errorSummaryContainer';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
@@ -124,11 +122,6 @@ export function SupporterPlusLandingPage(): JSX.Element {
 							<BoxContents>
 								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
 								<ContributionsStripe>
-									<CheckoutErrorSummaryContainer
-										renderSummary={({ errorList }) => (
-											<CheckoutErrorSummary errorList={errorList} />
-										)}
-									/>
 									<SecureTransactionIndicator position="center" />
 									<PaymentRequestButtonContainer
 										CustomButton={SavedCardButton}

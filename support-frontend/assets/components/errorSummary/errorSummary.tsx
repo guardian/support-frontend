@@ -20,6 +20,11 @@ const errorContainerStyles = css`
 	}
 `;
 
+const errorListStyles = css`
+	list-style: disc;
+	margin-bottom: ${space[1]}px;
+`;
+
 type CheckoutErrorLink = {
 	href: string;
 	message: string;
@@ -47,7 +52,7 @@ export function CheckoutErrorSummary({
 				css={errorContainerStyles}
 				message="Some information is missing"
 				context={
-					<ul>
+					<ul css={errorListStyles}>
 						{errorList.map(({ href, message }) => (
 							<li>
 								<Link priority="secondary" href={href} subdued={true}>

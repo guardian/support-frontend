@@ -1,6 +1,8 @@
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { CheckoutBenefitsListContainer } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
+import { CheckoutErrorSummary } from 'components/errorSummary/errorSummary';
+import { CheckoutErrorSummaryContainer } from 'components/errorSummary/errorSummaryContainer';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
 import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/paymentFrequencyTabsContainer';
 import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
@@ -15,6 +17,11 @@ export function AmountAndBenefits(): JSX.Element {
 					{...tabProps}
 					renderTabContent={(tabId) => (
 						<BoxContents>
+							<CheckoutErrorSummaryContainer
+								renderSummary={({ errorList }) => (
+									<CheckoutErrorSummary errorList={errorList} />
+								)}
+							/>
 							<PriceCardsContainer
 								frequency={tabId}
 								renderPriceCards={({
