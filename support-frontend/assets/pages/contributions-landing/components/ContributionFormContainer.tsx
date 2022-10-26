@@ -161,15 +161,14 @@ export type CountryMetaData = {
 	formMessage?: JSX.Element;
 };
 const defaultHeaderCopy =
-	'Support\xa0our\njournalism\xa0with\na\xa0contribution\nof\xa0any\xa0size';
+	'Support\xa0fearless\nindependent\xa0journalism';
 const defaultContributeCopy = (
 	<span>
-		Your support helps protect the Guardian’s independence and it means we can
-		keep delivering quality journalism that’s open for everyone around the
-		world.
+		As a reader-funded news organisation, we rely on your generosity.
 		<span className="gu-content__blurb-blurb-last-sentence">
 			{' '}
-			Every contribution, however big or small, is so valuable for our future.
+			Please give what you can, so millions more can benefit from quality
+			reporting on the events shaping our world.
 		</span>
 	</span>
 );
