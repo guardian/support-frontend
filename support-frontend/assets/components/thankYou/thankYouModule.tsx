@@ -6,6 +6,8 @@ import {
 	neutral,
 	space,
 } from '@guardian/source-foundations';
+import { useEffect } from 'react';
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import AppDownloadImage from './appDownload/AppDownloadImage';
 import AppDownloadQRCodes from './appDownload/AppDownloadQRCodes';
 
@@ -144,13 +146,13 @@ const marginTop = css`
 
 export type ThankYouModuleType =
 	| 'appDownload'
+	| 'ausMap'
 	| 'feedback'
-	| 'socialShare'
-	| 'supportReminder'
+	| 'marketingConsent'
 	| 'signIn'
 	| 'signUp'
-	| 'marketingConsent'
-	| 'ausMap';
+	| 'socialShare'
+	| 'supportReminder';
 
 export interface ThankYouModuleProps {
 	moduleType: ThankYouModuleType;
@@ -159,6 +161,7 @@ export interface ThankYouModuleProps {
 	header: string;
 	bodyCopy: JSX.Element | string;
 	ctas: JSX.Element | null;
+	trackComponentLoadId?: string;
 }
 
 function ThankYouModule({
@@ -168,7 +171,12 @@ function ThankYouModule({
 	header,
 	bodyCopy,
 	ctas,
+	trackComponentLoadId,
 }: ThankYouModuleProps): JSX.Element {
+	useEffect(() => {
+		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
+	}, []);
+
 	const isDownloadModule = moduleType === 'appDownload';
 
 	const gridContainer = isDownloadModule

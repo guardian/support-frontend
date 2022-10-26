@@ -3,6 +3,38 @@ import { from, space, sport } from '@guardian/source-foundations';
 import { Column, Columns, Container } from '@guardian/source-react-components';
 import React from 'react';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
+import {
+	appDownloadBodyCopy,
+	appDownloadHeader,
+} from 'components/thankYou/appDownload/appDownloadItems';
+import {
+	ausMapBodyCopy,
+	AusMapCTA,
+	ausMapHeader,
+} from 'components/thankYou/ausMap/ausMapItems';
+import {
+	FeedbackBodyCopy,
+	FeedbackCTA,
+	getFeedbackHeader,
+} from 'components/thankYou/feedback/FeedbackItems';
+import ThankYouMarketingConsentCTA, {
+	ThankYouMarketingConsentBodyCopy,
+} from 'components/thankYou/marketingConsent/marketingConsentItems';
+import {
+	SignInBodyCopy,
+	SignInCTA,
+	signInHeader,
+} from 'components/thankYou/signIn/signInItems';
+import {
+	SignUpBodyCopy,
+	signUpHeader,
+} from 'components/thankYou/signUp/signUpItems';
+import {
+	getSocialShareCopy,
+	socialShareHeader,
+	SocialShareIcons,
+} from 'components/thankYou/socialShare/SocialShareItems';
+import { SupportReminderBodyCopy } from 'components/thankYou/supportReminder/supportReminderItems';
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
@@ -87,8 +119,8 @@ DownloadTheAppSignedIn.args = {
 	moduleType: 'appDownload',
 	isSignedIn: true,
 	icon: getThankYouModuleIcon('appDownload'),
-	header: 'Download the Guardian app',
-	bodyCopy: 'Unlock full access to our quality news app today',
+	header: appDownloadHeader,
+	bodyCopy: appDownloadBodyCopy,
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
 };
 
@@ -98,7 +130,138 @@ DownloadTheAppSignedOut.args = {
 	moduleType: 'appDownload',
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('appDownload'),
-	header: 'Download the Guardian app',
-	bodyCopy: 'Unlock full access to our quality news app today',
+	header: appDownloadHeader,
+	bodyCopy: appDownloadBodyCopy,
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
+};
+
+export const ShareYourSupport = Template.bind({});
+
+ShareYourSupport.args = {
+	moduleType: 'socialShare',
+	isSignedIn: true,
+	icon: getThankYouModuleIcon('socialShare'),
+	header: socialShareHeader,
+	bodyCopy: getSocialShareCopy('GB'),
+	ctas: (
+		<SocialShareIcons
+			countryId="GB"
+			campaignCode="Us_eoy_2021"
+			createReferralCodes={false}
+			email=""
+		/>
+	),
+};
+
+export const Feedback = Template.bind({});
+
+Feedback.args = {
+	moduleType: 'feedback',
+	isSignedIn: true,
+	icon: getThankYouModuleIcon('feedback'),
+	header: getFeedbackHeader('GB', false),
+	bodyCopy: (
+		<FeedbackBodyCopy countryId={'GB'} feedbackSurveyHasBeenCompleted={false} />
+	),
+	ctas: (
+		<FeedbackCTA
+			countryId={'GB'}
+			setFeedbackSurveyHasBeenCompleted={() => null}
+		/>
+	),
+};
+
+export const SignUp = Template.bind({});
+
+SignUp.args = {
+	moduleType: 'signUp',
+	isSignedIn: false,
+	icon: getThankYouModuleIcon('signUp'),
+	header: signUpHeader,
+	bodyCopy: <SignUpBodyCopy />,
+	ctas: null,
+};
+
+export const SignIn = Template.bind({});
+
+SignIn.args = {
+	moduleType: 'signIn',
+	isSignedIn: false,
+	icon: getThankYouModuleIcon('signIn'),
+	header: signInHeader,
+	bodyCopy: <SignInBodyCopy />,
+	ctas: <SignInCTA email={''} csrf={{ token: undefined }} />,
+};
+
+export const AusMap = Template.bind({});
+
+AusMap.args = {
+	moduleType: 'ausMap',
+	isSignedIn: true,
+	icon: getThankYouModuleIcon('ausMap'),
+	header: ausMapHeader,
+	bodyCopy: ausMapBodyCopy,
+	ctas: <AusMapCTA />,
+};
+
+export const MarketingConsent = Template.bind({});
+
+MarketingConsent.args = {
+	moduleType: 'marketingConsent',
+	isSignedIn: true,
+	icon: getThankYouModuleIcon('marketingConsent'),
+	header: 'Hear from our newsroom',
+	bodyCopy: (
+		<ThankYouMarketingConsentBodyCopy
+			marketingConsentState={{
+				hasBeenCompleted: false,
+				hasConsented: false,
+				errorMessage: '',
+			}}
+			setMarketingConsentState={() => null}
+		/>
+	),
+	ctas: (
+		<ThankYouMarketingConsentCTA
+			email={''}
+			csrf={{ token: undefined }}
+			marketingConsentState={{
+				hasBeenCompleted: false,
+				hasConsented: false,
+				errorMessage: '',
+			}}
+			setMarketingConsentState={() => null}
+		/>
+	),
+};
+
+export const SupportReminder = Template.bind({});
+
+SupportReminder.args = {
+	moduleType: 'supportReminder',
+	isSignedIn: true,
+	icon: getThankYouModuleIcon('supportReminder'),
+	header: 'Set a support reminder',
+	bodyCopy: (
+		<SupportReminderBodyCopy
+			supportReminderState={{
+				selectedChoiceIndex: 0,
+				hasBeenCompleted: false,
+				errorMessage: '',
+			}}
+			setSupportReminderState={() => null}
+		/>
+	),
+	ctas: (
+		<ThankYouMarketingConsentCTA
+			email={''}
+			csrf={{ token: undefined }}
+			marketingConsentState={{
+				hasBeenCompleted: false,
+				hasConsented: false,
+				errorMessage: '',
+			}}
+			setMarketingConsentState={() => null}
+		/>
+	),
 };
