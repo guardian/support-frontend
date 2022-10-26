@@ -1,10 +1,20 @@
 import { css } from '@emotion/react';
-import { focusHalo } from '@guardian/source-foundations';
+import { focusHalo, from, space } from '@guardian/source-foundations';
 import { Link } from '@guardian/source-react-components';
 import { ErrorSummary } from '@guardian/source-react-components-development-kitchen';
 import { useAutoFocus } from 'helpers/customHooks/useAutoFocus';
 
 const errorContainerStyles = css`
+	margin-bottom: ${space[3]}px;
+
+	${from.tablet} {
+		margin-bottom: ${space[5]}px;
+	}
+
+	${from.desktop} {
+		margin-bottom: ${space[6]}px;
+	}
+
 	:focus {
 		${focusHalo};
 	}
