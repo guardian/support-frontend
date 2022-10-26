@@ -123,9 +123,11 @@ export function SupporterPlusLandingPage(): JSX.Element {
 									<PaymentRequestButtonContainer
 										CustomButton={SavedCardButton}
 									/>
-
-									<p css={largeDemoBox}>Personal details and payment</p>
-
+									<PersonalDetailsContainer
+										renderPersonalDetails={(personalDetailsProps) => (
+											<PersonalDetails {...personalDetailsProps} />
+										)}
+									/>
 									<StripeCardFormContainer />
 									<PaymentButtonController
 										paymentButtons={getPaymentMethodButtons(
@@ -136,11 +138,6 @@ export function SupporterPlusLandingPage(): JSX.Element {
 										)}
 									/>
 								</ContributionsStripe>
-								<PersonalDetailsContainer
-									renderPersonalDetails={(personalDetailsProps) => (
-										<PersonalDetails {...personalDetailsProps} />
-									)}
-								/>
 							</BoxContents>
 						</Box>
 						<Box>
