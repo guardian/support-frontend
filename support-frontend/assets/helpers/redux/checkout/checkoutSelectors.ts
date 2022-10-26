@@ -1,4 +1,5 @@
 import { getOtherAmountErrors } from 'components/otherAmount/selectors';
+import { recaptchaRequiredPaymentMethods } from 'helpers/forms/paymentMethods';
 import type { ContributionsState } from '../contributionsStore';
 import { getContributionType } from './product/selectors/productType';
 
@@ -23,6 +24,14 @@ function getPaymentMethodErrors(
 	}
 }
 
+function getRecaptchaError(state: ContributionsState): string[] | undefined {
+	const { paymentMethod } = state.page.checkoutForm.payment;
+
+	if (recaptchaRequiredPaymentMethods.includes(paymentMethod.name)) {
+		return state.page.checkoutForm.recaptcha.errors;
+	}
+}
+
 export function getAllErrorsForContributions(
 	state: ContributionsState,
 ): Partial<Record<string, string[]>> {
@@ -33,7 +42,7 @@ export function getAllErrorsForContributions(
 
 	const otherAmount = getOtherAmountErrors(state);
 	const paymentMethod = state.page.checkoutForm.payment.paymentMethod.errors;
-	const robot_checkbox = state.page.checkoutForm.recaptcha.errors;
+	const robot_checkbox = getRecaptchaError(state);
 
 	const nonPersonalDetailsErrors = {
 		otherAmount,

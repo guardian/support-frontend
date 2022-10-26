@@ -8,6 +8,7 @@ import {
 	TextInput,
 } from '@guardian/source-react-components';
 import { countries } from 'helpers/internationalisation/country';
+import type { SepaState } from 'helpers/redux/checkout/payment/sepa/state';
 import { sortedOptions } from '../forms/customFields/sortedOptions';
 
 // -- Styles -- //
@@ -33,6 +34,7 @@ export type SepaFormProps = {
 	updateAccountHolderName: (accountHolderName: string) => void;
 	updateAddressStreetName: (addressStreetName: string) => void;
 	updateAddressCountry: (addressCountry: Country) => void;
+	errors: SepaState['errors'];
 };
 
 export function SepaForm({
@@ -44,6 +46,7 @@ export function SepaForm({
 	updateAddressCountry,
 	updateIban,
 	updateAccountHolderName,
+	errors,
 }: SepaFormProps): JSX.Element {
 	return (
 		<div css={containerStyles}>
@@ -51,7 +54,7 @@ export function SepaForm({
 			<Stack cssOverrides={fieldsContainerStyles} space={3}>
 				<div>
 					<TextInput
-						id="sepa-account-holder-name-input"
+						id="accountHolderName"
 						data-testid="sepa-account-holder-name-input"
 						data-qm-masking="blocklist"
 						optional={false}
@@ -59,12 +62,13 @@ export function SepaForm({
 						label="Bank account holder name"
 						maxLength={40}
 						value={accountHolderName ?? undefined}
+						error={errors.accountHolderName?.[0]}
 						onChange={(e) => updateAccountHolderName(e.target.value)}
 					/>
 				</div>
 				<div>
 					<TextInput
-						id="sepa-account-number"
+						id="iban"
 						data-testid="sepa-account-number"
 						data-qm-masking="blocklist"
 						optional={false}
@@ -74,30 +78,33 @@ export function SepaForm({
 						minLength={6}
 						maxLength={34}
 						value={iban ?? undefined}
+						error={errors.iban?.[0]}
 						onChange={(e) => updateIban(e.target.value)}
 					/>
 				</div>
 				<div>
 					<TextInput
-						id="sepa-address-line-one"
+						id="streetName"
 						data-testid="sepa-address-line-one"
 						data-qm-masking="blocklist"
 						optional={false}
 						hideLabel={false}
 						label="Address Line 1"
 						value={addressStreetName ?? undefined}
+						error={errors.streetName?.[0]}
 						onChange={(e) => updateAddressStreetName(e.target.value)}
 					/>
 				</div>
 				<div>
 					<Select
-						id="sepa-country"
+						id="country"
 						data-testid="sepa-country"
 						data-qm-masking="blocklist"
 						optional={false}
 						hideLabel={false}
 						label="Country"
 						value={addressCountry ?? undefined}
+						error={errors.country?.[0]}
 						onChange={(e) => updateAddressCountry(e.target.value)}
 					>
 						<OptionForSelect value="">Select a country</OptionForSelect>

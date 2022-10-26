@@ -10,15 +10,19 @@ export const sepaSlice = createSlice({
 	reducers: {
 		setSepaIban(state, action: PayloadAction<string>) {
 			state.iban = action.payload;
+			delete state.errors.iban;
 		},
 		setSepaAccountHolderName(state, action: PayloadAction<string>) {
 			state.accountHolderName = action.payload;
+			delete state.errors.accountHolderName;
 		},
 		setSepaAddressStreetName(state, action: PayloadAction<string>) {
 			state.streetName = action.payload;
+			delete state.errors.streetName;
 		},
 		setSepaAddressCountry(state, action: PayloadAction<string>) {
 			state.country = action.payload;
+			delete state.errors.country;
 		},
 	},
 	extraReducers: (builder) => {

@@ -28,6 +28,11 @@ export type PaymentMethod =
 	| typeof AmazonPay
 	| typeof None;
 
+export const recaptchaRequiredPaymentMethods: PaymentMethod[] = [
+	DirectDebit,
+	Stripe,
+];
+
 export {
 	Stripe,
 	PayPal,
