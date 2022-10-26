@@ -77,7 +77,7 @@ export function CheckoutBenefitsList({
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
 		<div css={container}>
-			<h3 css={heading}>{title}</h3>
+			<h2 css={heading}>{title}</h2>
 			<hr css={hr(`${space[4]}px 0`)} />
 			<table css={table}>
 				{checkListData.map((item) => (

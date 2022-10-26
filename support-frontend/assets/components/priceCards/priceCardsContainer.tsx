@@ -44,18 +44,20 @@ export function PriceCardsContainer({
 		(state) => state.common.internationalisation.currencyId,
 	);
 	const { amounts } = useContributionsSelector((state) => state.common);
-	const { selectedAmounts } = useContributionsSelector(
+	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
 	const minAmount = useContributionsSelector(getMinimumContributionAmount);
 
 	const { amounts: frequencyAmounts, defaultAmount } = amounts[frequency];
+
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
 		frequency,
 		defaultAmount,
 	).toString();
 	const otherAmountErrors = useContributionsSelector(getOtherAmountErrors);
+	const otherAmount = otherAmounts[frequency].amount ?? '';
 
 	function onAmountChange(newAmount: string) {
 		dispatch(
@@ -79,6 +81,7 @@ export function PriceCardsContainer({
 		currency,
 		amounts: frequencyAmounts.map((amount) => amount.toString()),
 		selectedAmount,
+		otherAmount,
 		paymentInterval: contributionTypeToPaymentInterval[frequency],
 		minAmount,
 		onAmountChange,

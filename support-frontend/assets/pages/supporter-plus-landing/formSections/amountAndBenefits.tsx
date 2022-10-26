@@ -20,6 +20,7 @@ export function AmountAndBenefits(): JSX.Element {
 								renderPriceCards={({
 									amounts,
 									selectedAmount,
+									otherAmount,
 									currency,
 									paymentInterval,
 									onAmountChange,
@@ -39,6 +40,7 @@ export function AmountAndBenefits(): JSX.Element {
 													currency={currency}
 													minAmount={minAmount}
 													selectedAmount={selectedAmount}
+													otherAmount={otherAmount}
 													onOtherAmountChange={onOtherAmountChange}
 													errors={errors}
 												/>
