@@ -11,18 +11,19 @@ import { paymentWaiting } from 'pages/contributions-landing/contributionsLanding
  * A hook to wrap any payment handler function.
  * Validates the form, and will only run the handler if the form is valid.
  */
-export function useFormValidation(
-	paymentHandler: (event: React.MouseEvent<HTMLButtonElement>) => void,
-): (event: React.MouseEvent<HTMLButtonElement>) => void {
-	const [clickEvent, setClickEvent] =
-		useState<React.MouseEvent<HTMLButtonElement> | null>(null);
+export function useFormValidation<
+	EventType extends {
+		preventDefault: () => void;
+	} = React.MouseEvent<HTMLButtonElement>,
+>(paymentHandler: (event: EventType) => void): (event: EventType) => void {
+	const [clickEvent, setClickEvent] = useState<EventType | null>(null);
 	const dispatch = useContributionsDispatch();
 	const errorsPreventSubmission = useContributionsSelector(
 		contributionsFormHasErrors,
 	);
 
 	const validateAndPay = useCallback(
-		function validateAndPay(event: React.MouseEvent<HTMLButtonElement>) {
+		function validateAndPay(event: EventType) {
 			dispatch(validateForm());
 			setClickEvent(event);
 		},

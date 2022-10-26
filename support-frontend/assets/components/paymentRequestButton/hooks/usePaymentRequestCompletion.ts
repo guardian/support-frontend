@@ -1,6 +1,7 @@
 import type { Stripe as StripeJs } from '@stripe/stripe-js';
 import { useEffect } from 'react';
 import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import { contributionsFormHasErrors } from 'helpers/redux/checkout/checkoutSelectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -26,6 +27,9 @@ export function usePaymentRequestCompletion(
 		(state) => state.page.checkoutForm.payment.stripeAccountDetails,
 	);
 	const { csrf } = useContributionsSelector((state) => state.page.checkoutForm);
+	const errorsPreventSubmission = useContributionsSelector(
+		contributionsFormHasErrors,
+	);
 
 	const dispatch = useContributionsDispatch();
 
@@ -35,8 +39,8 @@ export function usePaymentRequestCompletion(
 	);
 
 	useEffect(() => {
+		if (errorsPreventSubmission) return;
 		if (stripe && paymentMethod && internalPaymentMethodName) {
-			// TODO: HANDLE VALIDATION IN HERE!!
 			trackComponentClick(`${paymentWallet}-paymentAuthorised`);
 
 			dispatch(paymentWaiting(true));
@@ -73,5 +77,10 @@ export function usePaymentRequestCompletion(
 				);
 			}
 		}
-	}, [paymentMethod]);
+	}, [
+		stripe,
+		paymentMethod,
+		internalPaymentMethodName,
+		errorsPreventSubmission,
+	]);
 }

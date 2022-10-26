@@ -78,7 +78,7 @@ export function usePaymentRequest(stripe: StripeJs | null): PaymentRequestData {
 
 	// Update the PR object when the amount or currency changes
 	useEffect(() => {
-		if (paymentRequest) {
+		if (paymentRequest && !Number.isNaN(amount)) {
 			paymentRequest.update({
 				currency: currencyId.toLowerCase(),
 				total: {

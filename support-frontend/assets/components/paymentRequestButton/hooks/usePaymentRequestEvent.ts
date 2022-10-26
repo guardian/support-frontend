@@ -1,5 +1,6 @@
 import type { PaymentMethod, PaymentRequest } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
+import { validateForm } from 'helpers/redux/checkout/checkoutActions';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import { trackComponentEvents } from 'helpers/tracking/ophan';
 import { addPayerDetailsToRedux } from './payerDetails';
@@ -35,6 +36,7 @@ export function usePaymentRequestEvent(
 				addPayerDetailsToRedux(dispatch, paymentMethodEvent);
 				setPaymentMethod(paymentMethod);
 				setPaymentWallet(walletName);
+				dispatch(validateForm());
 
 				const walletType =
 					(paymentMethod.card?.wallet?.type as string | null) ?? 'no-wallet';

@@ -2,6 +2,8 @@ import {
 	PaymentRequestButtonElement,
 	useStripe,
 } from '@stripe/react-stripe-js';
+import type { StripePaymentRequestButtonElementClickEvent } from '@stripe/stripe-js';
+import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { Stripe } from 'helpers/forms/paymentMethods';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
@@ -32,25 +34,22 @@ export function PaymentRequestButtonContainer({
 		internalPaymentMethodName,
 		paymentEventDetails,
 	);
-
 	const dispatch = useContributionsDispatch();
 
-	function handleButtonClick() {
-		// TODO: VALIDATE OTHER AMOUNT FIELD HERE
-		trackComponentClick('apple-pay-clicked');
-		dispatch(setPaymentMethod(Stripe));
-	}
+	const handleButtonClick =
+		useFormValidation<StripePaymentRequestButtonElementClickEvent>(
+			function handleButtonClick() {
+				paymentRequest?.show();
+				trackComponentClick('apple-pay-clicked');
+				dispatch(setPaymentMethod(Stripe));
+			},
+		);
 
 	if (paymentRequest) {
 		if (buttonType === 'PAY_NOW') {
 			return (
 				<PaymentRequestButton>
-					<CustomButton
-						onClick={() => {
-							handleButtonClick();
-							paymentRequest.show();
-						}}
-					/>
+					<CustomButton onClick={handleButtonClick} />
 				</PaymentRequestButton>
 			);
 		} else if (buttonType !== 'NONE') {
