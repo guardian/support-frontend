@@ -18,13 +18,13 @@ import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import ContributionThankYouHeader from 'pages/contributions-landing/components/ContributionThankYou/ContributionThankYouHeader';
 import {
 	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 	trackUserData,
 } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
-import { showBenefitsThankYouText as shouldShowBenefitsThankYouText } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
+import { shouldShowBenefitsMessaging } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import ThankYouFooter from './components/thankYouFooter';
+import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
 const checkoutContainer = css`
 	${from.tablet} {
@@ -64,7 +64,13 @@ const buttonContainer = css`
 	padding: ${space[12]}px 0;
 `;
 
-const isLargeDonation = (
+export const largeDonations = {
+	MONTHLY: 20,
+	ANNUAL: 100,
+	ONE_OFF: 100,
+};
+
+export const isLargeDonation = (
 	amount: number,
 	contributionType: ContributionType,
 	paymentMethod: PaymentMethod,
@@ -74,11 +80,6 @@ const isLargeDonation = (
 		return false;
 	}
 
-	const largeDonations = {
-		MONTHLY: 20,
-		ANNUAL: 100,
-		ONE_OFF: 100,
-	};
 	return amount >= largeDonations[contributionType];
 };
 
@@ -118,16 +119,18 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const contributionType = useContributionsSelector(getContributionType);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
-	const isInNewProductTest =
-		useContributionsSelector(
-			(state) => state.common.abParticipations.newProduct,
-		) === 'variant';
 
 	const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
 
-	const showNewProductThankYouText =
-		isInNewProductTest &&
-		shouldShowBenefitsThankYouText(countryId, amount, contributionType);
+	const amountIsAboveThreshold = shouldShowBenefitsMessaging(
+		contributionType,
+		selectedAmounts,
+		otherAmounts,
+		countryGroupId,
+	);
+
+	const isOneOffPayPal =
+		paymentMethod === PayPal && contributionType === 'ONE_OFF';
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
@@ -202,10 +205,10 @@ export function SupporterPlusThankYou(): JSX.Element {
 			<div css={checkoutContainer}>
 				<Container>
 					<div css={headerContainer}>
-						<ContributionThankYouHeader
+						<ThankYouHeader
 							name={firstName}
 							showDirectDebitMessage={paymentMethod === DirectDebit}
-							paymentMethod={paymentMethod}
+							isOneOffPayPal={isOneOffPayPal}
 							contributionType={contributionType}
 							amount={amount}
 							currency={currencyId}
@@ -214,7 +217,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 								contributionType,
 								paymentMethod,
 							)}
-							showNewProductThankYouText={showNewProductThankYouText}
+							amountIsAboveThreshold={amountIsAboveThreshold}
 						/>
 					</div>
 

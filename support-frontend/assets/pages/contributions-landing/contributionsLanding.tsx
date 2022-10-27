@@ -13,6 +13,7 @@ import { renderPage } from 'helpers/rendering/render';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import * as user from 'helpers/user/user';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
+import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYouPage from './components/ContributionThankYou/ContributionThankYouPage';
 import { init as formInit } from './contributionsLandingInit';
@@ -66,6 +67,12 @@ const router = () => {
 		<ContributionsLandingPage countryGroupId={countryGroupId} />
 	);
 
+	const thankYouPage = showNewProductPage ? (
+		<SupporterPlusThankYou />
+	) : (
+		<ContributionThankYouPage countryGroupId={countryGroupId} />
+	);
+
 	return (
 		<BrowserRouter>
 			<Provider store={store}>
@@ -80,12 +87,7 @@ const router = () => {
 						/>
 					))}
 					{countryIds.map((countryId) => (
-						<Route
-							path={`/${countryId}/thankyou`}
-							element={
-								<ContributionThankYouPage countryGroupId={countryGroupId} />
-							}
-						/>
+						<Route path={`/${countryId}/thankyou`} element={thankYouPage} />
 					))}
 				</Routes>
 			</Provider>

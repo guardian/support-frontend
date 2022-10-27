@@ -1,10 +1,16 @@
 import { css } from '@emotion/react';
 import { from, neutral, space, textSans } from '@guardian/source-foundations';
-import { Column, Columns, Hide } from '@guardian/source-react-components';
+import {
+	Button,
+	Column,
+	Columns,
+	Hide,
+} from '@guardian/source-react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
+import { Navigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -23,6 +29,7 @@ import { StripeCardFormContainer } from 'components/stripeCardForm/stripeCardFor
 import {
 	AUDCountries,
 	Canada,
+	countryGroups,
 	EURCountries,
 	GBPCountries,
 	International,
@@ -139,6 +146,16 @@ export function SupporterPlusLandingPage(): JSX.Element {
 										)}
 									/>
 								</ContributionsStripe>
+								<br />
+								<Button
+									onClick={() => (
+										<Navigate
+											to={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
+										/>
+									)}
+								>
+									Go to thank you page
+								</Button>
 							</BoxContents>
 						</Box>
 						<Box>

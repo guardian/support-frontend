@@ -9,8 +9,10 @@ import {
 import { useEffect } from 'react';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import { setThankYouMarketingConsent } from 'helpers/redux/checkout/thankYouState/actions';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { isLocalHost } from 'helpers/urls/url';
 import { OPHAN_COMPONENT_ID_MARKETING } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
 
 const checkboxContainer = css`
@@ -41,29 +43,25 @@ type ThankYouMarketingConsentState = {
 	marketingConsentState: {
 		hasBeenCompleted: boolean;
 		hasConsented: boolean;
-		errorMessage: string;
+		errorMessage: string | null;
 	};
-	setMarketingConsentState: React.Dispatch<
-		React.SetStateAction<{
-			hasBeenCompleted: boolean;
-			hasConsented: boolean;
-			errorMessage: string;
-		}>
-	>;
 };
 
 const ERROR_MESSAGE = "Please tick the box below, then click 'subscribe'";
 
 export function ThankYouMarketingConsentBodyCopy({
 	marketingConsentState,
-	setMarketingConsentState,
 }: ThankYouMarketingConsentState): JSX.Element {
+	const dispatch = useContributionsDispatch();
+
 	// reset error message when consent changes
 	useEffect(() => {
-		setMarketingConsentState((state) => ({
-			...state,
-			errorMessage: '',
-		}));
+		dispatch(
+			setThankYouMarketingConsent({
+				...marketingConsentState,
+				errorMessage: '',
+			}),
+		);
 	}, [marketingConsentState.hasConsented]);
 
 	return (
@@ -100,10 +98,12 @@ export function ThankYouMarketingConsentBodyCopy({
 								value="marketing-consent"
 								checked={marketingConsentState.hasConsented}
 								onChange={() =>
-									setMarketingConsentState((state) => ({
-										...state,
-										hasConsented: !marketingConsentState.hasConsented,
-									}))
+									dispatch(
+										setThankYouMarketingConsent({
+											...marketingConsentState,
+											hasConsented: !marketingConsentState.hasConsented,
+										}),
+									)
 								}
 								supporting="Stay up-to-date with our latest offers and the aims of the organisation, as well as the ways to enjoy and support our journalism."
 							/>
@@ -119,29 +119,34 @@ function ThankYouMarketingConsentCTA({
 	email,
 	csrf,
 	marketingConsentState,
-	setMarketingConsentState,
 }: {
 	email: string;
 	csrf: CsrfState;
 } & ThankYouMarketingConsentState): JSX.Element {
-	const subscribeToNewsLetter = (email: string, csrf: CsrfState) => {
-		const dispatch = useContributionsDispatch();
+	const dispatch = useContributionsDispatch();
 
+	const subscribeToNewsLetter = (email: string, csrf: CsrfState) => {
 		sendMarketingPreferencesToIdentity(true, email, dispatch, csrf);
 	};
 
 	const onSubmit = () => {
 		if (!marketingConsentState.hasConsented) {
-			setMarketingConsentState((state) => ({
-				...state,
-				errorMessage: ERROR_MESSAGE,
-			}));
+			dispatch(
+				setThankYouMarketingConsent({
+					...marketingConsentState,
+					errorMessage: ERROR_MESSAGE,
+				}),
+			);
 		} else {
+			dispatch(
+				setThankYouMarketingConsent({
+					...marketingConsentState,
+					hasBeenCompleted: true,
+				}),
+			);
+			const isLocal = isLocalHost();
+			if (isLocal) return;
 			trackComponentClick(OPHAN_COMPONENT_ID_MARKETING);
-			setMarketingConsentState((state) => ({
-				...state,
-				hasBeenCompleted: true,
-			}));
 			subscribeToNewsLetter(email, csrf);
 		}
 	};

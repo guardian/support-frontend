@@ -4,7 +4,7 @@ import { Column, Columns, Container } from '@guardian/source-react-components';
 import React from 'react';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
 import {
-	appDownloadBodyCopy,
+	AppDownloadBodyCopy,
 	appDownloadHeader,
 } from 'components/thankYou/appDownload/appDownloadItems';
 import {
@@ -34,7 +34,10 @@ import {
 	socialShareHeader,
 	SocialShareIcons,
 } from 'components/thankYou/socialShare/SocialShareItems';
-import { SupportReminderBodyCopy } from 'components/thankYou/supportReminder/supportReminderItems';
+import {
+	SupportReminderBodyCopy,
+	SupportReminderCTAandPrivacy,
+} from 'components/thankYou/supportReminder/supportReminderItems';
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
@@ -120,7 +123,7 @@ DownloadTheAppSignedIn.args = {
 	isSignedIn: true,
 	icon: getThankYouModuleIcon('appDownload'),
 	header: appDownloadHeader,
-	bodyCopy: appDownloadBodyCopy,
+	bodyCopy: <AppDownloadBodyCopy />,
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
 };
 
@@ -131,7 +134,7 @@ DownloadTheAppSignedOut.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('appDownload'),
 	header: appDownloadHeader,
-	bodyCopy: appDownloadBodyCopy,
+	bodyCopy: <AppDownloadBodyCopy />,
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
 };
 
@@ -163,12 +166,7 @@ Feedback.args = {
 	bodyCopy: (
 		<FeedbackBodyCopy countryId={'GB'} feedbackSurveyHasBeenCompleted={false} />
 	),
-	ctas: (
-		<FeedbackCTA
-			countryId={'GB'}
-			setFeedbackSurveyHasBeenCompleted={() => null}
-		/>
-	),
+	ctas: <FeedbackCTA countryId={'GB'} />,
 };
 
 export const SignUp = Template.bind({});
@@ -218,7 +216,6 @@ MarketingConsent.args = {
 				hasConsented: false,
 				errorMessage: '',
 			}}
-			setMarketingConsentState={() => null}
 		/>
 	),
 	ctas: (
@@ -230,7 +227,6 @@ MarketingConsent.args = {
 				hasConsented: false,
 				errorMessage: '',
 			}}
-			setMarketingConsentState={() => null}
 		/>
 	),
 };
@@ -249,19 +245,16 @@ SupportReminder.args = {
 				hasBeenCompleted: false,
 				errorMessage: '',
 			}}
-			setSupportReminderState={() => null}
 		/>
 	),
 	ctas: (
-		<ThankYouMarketingConsentCTA
+		<SupportReminderCTAandPrivacy
 			email={''}
-			csrf={{ token: undefined }}
-			marketingConsentState={{
+			supportReminderState={{
 				hasBeenCompleted: false,
-				hasConsented: false,
+				selectedChoiceIndex: 0,
 				errorMessage: '',
 			}}
-			setMarketingConsentState={() => null}
 		/>
 	),
 };

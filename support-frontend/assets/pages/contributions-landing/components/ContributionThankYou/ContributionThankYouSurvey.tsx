@@ -4,7 +4,12 @@ import {
 	LinkButton,
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { setThankYouFeedbackSurveyHasBeenCompleted } from 'helpers/redux/checkout/thankYouState/actions';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import {
 	trackComponentClick,
 	trackComponentLoad,
@@ -32,7 +37,11 @@ interface ContributionThankyouSurveyProps {
 function ContributionThankYouSurvey({
 	countryId,
 }: ContributionThankyouSurveyProps): JSX.Element {
-	const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
+	const { feedbackSurveyHasBeenCompleted } = useContributionsSelector(
+		(state) => state.page.checkoutForm.thankYou,
+	);
+
+	const dispatch = useContributionsDispatch();
 
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_SURVEY);
@@ -47,20 +56,24 @@ function ContributionThankYouSurvey({
 	const actionIcon = <SvgSpeechBubbleWithPlus />;
 	const actionHeader = (
 		<ActionHeader
-			title={hasBeenCompleted ? 'Thank you for sharing your thoughts' : heading}
+			title={
+				feedbackSurveyHasBeenCompleted
+					? 'Thank you for sharing your thoughts'
+					: heading
+			}
 		/>
 	);
 
 	const onClick = () => {
 		trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
-		setHasBeenCompleted(true);
+		dispatch(setThankYouFeedbackSurveyHasBeenCompleted(true));
 	};
 
 	const surveyLink = isAus ? AUS_SURVEY_LINK : SURVEY_LINK;
 
 	const actionBody = (
 		<ActionBody>
-			{hasBeenCompleted ? (
+			{feedbackSurveyHasBeenCompleted ? (
 				<p>
 					You’re helping us deepen our understanding of Guardian supporters.
 				</p>

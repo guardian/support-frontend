@@ -8,11 +8,14 @@ import {
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
 import { privacyLink } from 'helpers/legal';
+import { setThankYouSupportReminder } from 'helpers/redux/checkout/thankYouState/actions';
+import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {
 	createOneOffReminderEndpoint,
 	createRecurringReminderEndpoint,
 } from 'helpers/urls/routes';
+import { isLocalHost } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
 import { OPHAN_COMPONENT_ID_SET_REMINDER } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
@@ -145,23 +148,17 @@ type SupportReminderState = {
 	supportReminderState: {
 		selectedChoiceIndex: number;
 		hasBeenCompleted: boolean;
-		errorMessage: string;
+		errorMessage: string | null;
 	};
-	setSupportReminderState: React.Dispatch<
-		React.SetStateAction<{
-			selectedChoiceIndex: number;
-			hasBeenCompleted: boolean;
-			errorMessage: string;
-		}>
-	>;
 };
 
 const reminderChoices = getDefaultReminderChoices();
 
 export function SupportReminderBodyCopy({
 	supportReminderState,
-	setSupportReminderState,
 }: SupportReminderState): JSX.Element {
+	const dispatch = useContributionsDispatch();
+
 	return (
 		<>
 			{supportReminderState.hasBeenCompleted ? (
@@ -192,10 +189,12 @@ export function SupportReminderBodyCopy({
 									label={choice.label}
 									checked={supportReminderState.selectedChoiceIndex === index}
 									onChange={() =>
-										setSupportReminderState((state) => ({
-											...state,
-											selectedChoiceIndex: index,
-										}))
+										dispatch(
+											setThankYouSupportReminder({
+												...supportReminderState,
+												selectedChoiceIndex: index,
+											}),
+										)
 									}
 								/>
 							))}
@@ -210,11 +209,16 @@ export function SupportReminderBodyCopy({
 export function SupportReminderCTAandPrivacy({
 	email,
 	supportReminderState,
-	setSupportReminderState,
 }: { email: string } & SupportReminderState): JSX.Element {
+	const dispatch = useContributionsDispatch();
+
 	const setReminder = () => {
 		const choice = reminderChoices[supportReminderState.selectedChoiceIndex];
 		const url = getReminderUrl(choice);
+
+		const isLocal = isLocalHost();
+		if (isLocal) return;
+
 		fetch(url, {
 			method: 'POST',
 			headers: {
@@ -239,7 +243,12 @@ export function SupportReminderCTAandPrivacy({
 	const onSubmit = () => {
 		setReminder();
 		trackComponentClick(OPHAN_COMPONENT_ID_SET_REMINDER);
-		setSupportReminderState((state) => ({ ...state, hasBeenCompleted: true }));
+		dispatch(
+			setThankYouSupportReminder({
+				...supportReminderState,
+				hasBeenCompleted: true,
+			}),
+		);
 	};
 
 	return (
