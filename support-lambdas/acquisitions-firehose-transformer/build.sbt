@@ -9,7 +9,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "org.scanamo" %% "scanamo" % "1.0.0-M20",
+  "org.scanamo" %% "scanamo" % "1.0.0-M22",
 )
 
 assemblyJarName := s"${name.value}.jar"
