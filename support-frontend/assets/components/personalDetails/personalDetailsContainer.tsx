@@ -33,10 +33,6 @@ export function PersonalDetailsContainer({
 	const checkoutFormHasBeenSubmitted = useContributionsSelector(
 		(state) => state.page.form.formData.checkoutFormHasBeenSubmitted,
 	);
-	const userTypeFromIdentityResponse = useContributionsSelector(
-		(state) =>
-			state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
-	);
 	function onEmailChange(email: string) {
 		dispatch(setEmail(email));
 	}
@@ -63,10 +59,8 @@ export function PersonalDetailsContainer({
 		email,
 		firstName,
 		lastName,
-		checkoutFormHasBeenSubmitted,
 		contributionType,
 		isSignedInPersonalDetails,
-		userTypeFromIdentityResponse,
 		onEmailChange,
 		onFirstNameChange,
 		onLastNameChange,
