@@ -58,10 +58,8 @@ SingleContribSignedIn.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	checkoutFormHasBeenSubmitted: false,
 	contributionType: 'ONE_OFF',
 	isSignedInPersonalDetails: false,
-	userTypeFromIdentityResponse: 'requestPending',
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
 		<ContributionState
@@ -81,10 +79,8 @@ SingleContribSignedOut.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	checkoutFormHasBeenSubmitted: false,
 	contributionType: 'ONE_OFF',
 	isSignedInPersonalDetails: false,
-	userTypeFromIdentityResponse: 'requestPending',
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
 		<ContributionState
@@ -104,10 +100,8 @@ MultiContribSignedIn.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	checkoutFormHasBeenSubmitted: false,
 	contributionType: 'MONTHLY',
 	isSignedInPersonalDetails: false,
-	userTypeFromIdentityResponse: 'requestPending',
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
 		<ContributionState
@@ -127,10 +121,8 @@ MultiContribSignedOut.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	checkoutFormHasBeenSubmitted: false,
 	contributionType: 'MONTHLY',
 	isSignedInPersonalDetails: false,
-	userTypeFromIdentityResponse: 'requestPending',
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
 		<ContributionState
@@ -150,10 +142,8 @@ MultiContribUSSignedIn.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	checkoutFormHasBeenSubmitted: false,
 	contributionType: 'MONTHLY',
 	isSignedInPersonalDetails: false,
-	userTypeFromIdentityResponse: 'requestPending',
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
 		<ContributionState
@@ -173,10 +163,8 @@ MultiContribUSSignedOut.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	checkoutFormHasBeenSubmitted: false,
 	contributionType: 'MONTHLY',
 	isSignedInPersonalDetails: false,
-	userTypeFromIdentityResponse: 'requestPending',
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
 		<ContributionState
