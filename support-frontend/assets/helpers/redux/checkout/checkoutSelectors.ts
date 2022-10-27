@@ -1,5 +1,6 @@
 import { getOtherAmountErrors } from 'components/otherAmount/selectors';
 import { recaptchaRequiredPaymentMethods } from 'helpers/forms/paymentMethods';
+import { shouldCollectStateForContributions } from 'helpers/internationalisation/shouldCollectStateForContribs';
 import type { ContributionsState } from '../contributionsStore';
 import {
 	hasPaymentRequestButtonBeenClicked,
@@ -40,21 +41,37 @@ function getRecaptchaError(state: ContributionsState): string[] | undefined {
 	}
 }
 
+function getStateOrProvinceError(state: ContributionsState): ErrorCollection {
+	const { countryGroupId } = state.common.internationalisation;
+
+	if (shouldCollectStateForContributions(countryGroupId)) {
+		return {
+			contributionsState:
+				state.page.checkoutForm.billingAddress.fields.errorObject.state,
+		};
+	}
+	return {};
+}
+
 function getPersonalDetailsErrors(state: ContributionsState): ErrorCollection {
 	const contributionType = getContributionType(state);
 
 	const { firstName, lastName, email } =
 		state.page.checkoutForm.personalDetails.errors ?? {};
 
+	const stateOrProvinceErrors = getStateOrProvinceError(state);
+
 	if (contributionType === 'ONE_OFF') {
 		return {
 			email,
+			...stateOrProvinceErrors,
 		};
 	}
 	return {
 		firstName,
 		lastName,
 		email,
+		...stateOrProvinceErrors,
 	};
 }
 

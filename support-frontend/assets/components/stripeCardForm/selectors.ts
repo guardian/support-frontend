@@ -17,8 +17,15 @@ export function getStripeCardFormErrors(state: ContributionsState): {
 		state.common.internationalisation.countryId === 'US';
 
 	if (shouldShowZipCode) {
-		// TODO: get zipcode errors from the address slice
-		return { errors, showErrors };
+		const zipCode =
+			state.page.checkoutForm.billingAddress.fields.errorObject.postCode;
+		return {
+			errors: {
+				...errors,
+				zipCode,
+			},
+			showErrors,
+		};
 	}
 
 	return {
