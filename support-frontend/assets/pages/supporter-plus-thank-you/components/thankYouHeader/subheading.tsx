@@ -25,8 +25,8 @@ function Subheading({
 			? 'It’s not every day we receive such a generous contribution – thank you. We’ll be in touch to bring you closer to our journalism. Please select the extra add-ons that suit you best. '
 			: 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best. As you’re now a valued supporter, we’ll be in touch to bring you closer to our journalism. ',
 		MONTHLY: amountIsAboveThreshold
-			? 'Look out for your exclusive newsletter from our supporter editor, and other ways to get the most out of your supporter experience. '
-			: 'You have unlocked access to the Guardian’s digital subscription, offering you the best possible experience of our independent journalism. Look out for emails from us shortly, so you can activate your exclusive extras. In the meantime, please select the add-ons that suit you best.',
+			? 'You have unlocked access to the Guardian’s digital subscription, offering you the best possible experience of our independent journalism. Look out for emails from us shortly, so you can activate your exclusive extras. In the meantime, please select the add-ons that suit you best. '
+			: 'Look out for your exclusive newsletter from our supporter editor, and other ways to get the most out of your supporter experience. ',
 		ANNUAL: amountIsAboveThreshold
 			? 'Look out for your exclusive newsletter from our supporter editor, and other ways to get the most out of your supporter experience. '
 			: 'You have unlocked access to the Guardian’s digital subscription, offering you the best possible experience of our independent journalism. Look out for emails from us shortly, so you can activate your exclusive extras. In the meantime, please select the add-ons that suit you best.',
