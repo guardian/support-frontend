@@ -15,7 +15,6 @@ import {
 	createOneOffReminderEndpoint,
 	createRecurringReminderEndpoint,
 } from 'helpers/urls/routes';
-import { isLocalHost } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
 import { OPHAN_COMPONENT_ID_SET_REMINDER } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
@@ -216,8 +215,7 @@ export function SupportReminderCTAandPrivacy({
 		const choice = reminderChoices[supportReminderState.selectedChoiceIndex];
 		const url = getReminderUrl(choice);
 
-		const isLocal = isLocalHost();
-		if (isLocal) return;
+		if (window.location.hostname !== 'theguardian.com') return;
 
 		fetch(url, {
 			method: 'POST',

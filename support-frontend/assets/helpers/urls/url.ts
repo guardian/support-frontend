@@ -83,10 +83,6 @@ function isProd(): boolean {
 	return getBaseDomain() === 'theguardian.com';
 }
 
-function isLocalHost(): boolean {
-	return window.location.hostname === 'localhost';
-}
-
 // ----- Exports ----- //
 export {
 	getQueryParameter,
@@ -97,5 +93,4 @@ export {
 	addQueryParamsToURL,
 	getAbsoluteURL,
 	isProd,
-	isLocalHost,
 };
