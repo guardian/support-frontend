@@ -249,7 +249,7 @@ RecurringNotSignedIn.args = {
 	paymentMethod: Stripe,
 	contributionType: 'MONTHLY',
 	nameIsOverTenCharacters: true,
-	shouldShowLargeDonationMessage: true,
+	shouldShowLargeDonationMessage: false,
 	countryGroup: 'GBPCountries',
 };
 
@@ -288,7 +288,7 @@ RecurringNotSignedIn.decorators = [
 					  }
 					: {
 							contributionType: contributionType,
-							amount: `${largeDonations[contributionType] + 5}`,
+							amount: `${largeDonations[contributionType] - 5}`,
 					  },
 			),
 		);
@@ -347,7 +347,7 @@ RecurringSignedIn.decorators = [
 					  }
 					: {
 							contributionType: contributionType,
-							amount: `${largeDonations[contributionType] + 5}`,
+							amount: `${largeDonations[contributionType] - 5}`,
 					  },
 			),
 		);
@@ -408,7 +408,7 @@ RecurringSignUp.decorators = [
 					  }
 					: {
 							contributionType: contributionType,
-							amount: `${largeDonations[contributionType] + 5}`,
+							amount: `${largeDonations[contributionType] - 5}`,
 					  },
 			),
 		);

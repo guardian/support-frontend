@@ -14,6 +14,7 @@ import {
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import {
 	setEmail,
@@ -276,17 +277,22 @@ RecurringNotSignedIn.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(
+			setCountryInternationalisation(
+				countryGroups['AUDCountries'].countries[0],
+			),
+		);
 
 		store.dispatch(
 			setSelectedAmount(
 				shouldShowLargeDonationMessage
 					? {
-							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] + 5}`,
+							contributionType,
+							amount: `${largeDonations[contributionType] + 5}`,
 					  }
 					: {
-							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] - 5}`,
+							contributionType: contributionType,
+							amount: `${largeDonations[contributionType] - 5}`,
 					  },
 			),
 		);
@@ -337,12 +343,12 @@ RecurringSignedIn.decorators = [
 			setSelectedAmount(
 				shouldShowLargeDonationMessage
 					? {
-							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] + 5}`,
+							contributionType: contributionType,
+							amount: `${largeDonations[contributionType] + 5}`,
 					  }
 					: {
-							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] - 5}`,
+							contributionType: contributionType,
+							amount: `${largeDonations[contributionType] - 5}`,
 					  },
 			),
 		);
@@ -395,12 +401,12 @@ RecurringSignUp.decorators = [
 			setSelectedAmount(
 				shouldShowLargeDonationMessage
 					? {
-							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] + 5}`,
+							contributionType: contributionType,
+							amount: `${largeDonations[contributionType] + 5}`,
 					  }
 					: {
-							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] - 5}`,
+							contributionType: contributionType,
+							amount: `${largeDonations[contributionType] - 5}`,
 					  },
 			),
 		);
