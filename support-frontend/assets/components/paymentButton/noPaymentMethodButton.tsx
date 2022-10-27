@@ -1,11 +1,8 @@
-import { validateForm } from 'helpers/redux/checkout/checkoutActions';
-import { useContributionsDispatch } from 'helpers/redux/storeHooks';
+import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { DefaultPaymentButtonContainer } from './defaultPaymentButtonContainer';
 
 export function NoPaymentMethodButton(): JSX.Element {
-	const dispatch = useContributionsDispatch();
+	const onClick = useFormValidation(() => undefined);
 
-	return (
-		<DefaultPaymentButtonContainer onClick={() => dispatch(validateForm())} />
-	);
+	return <DefaultPaymentButtonContainer onClick={onClick} />;
 }
