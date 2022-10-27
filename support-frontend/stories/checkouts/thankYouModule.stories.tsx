@@ -2,6 +2,8 @@ import { css } from '@emotion/react';
 import { from, space, sport } from '@guardian/source-foundations';
 import { Column, Columns, Container } from '@guardian/source-react-components';
 import React from 'react';
+import { Provider } from 'react-redux';
+import { createTestStoreForContributions } from '__test-utils__/testStore';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
 import {
 	AppDownloadBodyCopy,
@@ -115,6 +117,7 @@ function Template(args: ThankYouModuleProps): JSX.Element {
 }
 
 Template.args = {} as Record<string, unknown>;
+Template.decorators = [] as unknown[];
 
 export const DownloadTheAppSignedIn = Template.bind({});
 
@@ -169,6 +172,18 @@ Feedback.args = {
 	ctas: <FeedbackCTA countryId={'GB'} />,
 };
 
+Feedback.decorators = [
+	(Story: React.FC): JSX.Element => {
+		const store = createTestStoreForContributions();
+
+		return (
+			<Provider store={store}>
+				<Story />
+			</Provider>
+		);
+	},
+];
+
 export const SignUp = Template.bind({});
 
 SignUp.args = {
@@ -190,6 +205,18 @@ SignIn.args = {
 	bodyCopy: <SignInBodyCopy />,
 	ctas: <SignInCTA email={''} csrf={{ token: undefined }} />,
 };
+
+SignIn.decorators = [
+	(Story: React.FC): JSX.Element => {
+		const store = createTestStoreForContributions();
+
+		return (
+			<Provider store={store}>
+				<Story />
+			</Provider>
+		);
+	},
+];
 
 export const AusMap = Template.bind({});
 
@@ -231,6 +258,18 @@ MarketingConsent.args = {
 	),
 };
 
+MarketingConsent.decorators = [
+	(Story: React.FC): JSX.Element => {
+		const store = createTestStoreForContributions();
+
+		return (
+			<Provider store={store}>
+				<Story />
+			</Provider>
+		);
+	},
+];
+
 export const SupportReminder = Template.bind({});
 
 SupportReminder.args = {
@@ -258,3 +297,15 @@ SupportReminder.args = {
 		/>
 	),
 };
+
+SupportReminder.decorators = [
+	(Story: React.FC): JSX.Element => {
+		const store = createTestStoreForContributions();
+
+		return (
+			<Provider store={store}>
+				<Story />
+			</Provider>
+		);
+	},
+];
