@@ -140,6 +140,8 @@ OneOffNotSignedIn.decorators = [
 			),
 		);
 
+		console.log(`${largeDonations['ONE_OFF'] + 5}`);
+
 		return (
 			<Provider store={store}>
 				<Story />

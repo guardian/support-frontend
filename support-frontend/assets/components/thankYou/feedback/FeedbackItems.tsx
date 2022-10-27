@@ -72,6 +72,7 @@ function FeedbackCTA({ countryId }: { countryId: IsoCountry }): JSX.Element {
 
 	const isAus = countryId === 'AU';
 
+	// PLACEHOLDER LINK - to be updated before v2 launch
 	const SURVEY_LINK =
 		'https://guardiannewsampampmedia.formstack.com/forms/guardian_contributions';
 	const AUS_SURVEY_LINK =
