@@ -124,7 +124,7 @@ OneOffNotSignedIn.decorators = [
 					  }
 					: {
 							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] + 5}`,
+							amount: `${largeDonations['ONE_OFF'] - 5}`,
 					  },
 			),
 		);
@@ -175,7 +175,7 @@ OneOffSignedIn.decorators = [
 					  }
 					: {
 							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] + 5}`,
+							amount: `${largeDonations['ONE_OFF'] - 5}`,
 					  },
 			),
 		);
@@ -227,7 +227,7 @@ OneOffSignUp.decorators = [
 					  }
 					: {
 							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] + 5}`,
+							amount: `${largeDonations['ONE_OFF'] - 5}`,
 					  },
 			),
 		);

@@ -135,12 +135,10 @@ OneOffNotSignedIn.decorators = [
 					  }
 					: {
 							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] + 5}`,
+							amount: `${largeDonations['ONE_OFF'] - 5}`,
 					  },
 			),
 		);
-
-		console.log(`${largeDonations['ONE_OFF'] + 5}`);
 
 		return (
 			<Provider store={store}>
@@ -184,7 +182,7 @@ OneOffSignedIn.decorators = [
 					  }
 					: {
 							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] + 5}`,
+							amount: `${largeDonations['ONE_OFF'] - 5}`,
 					  },
 			),
 		);
@@ -233,7 +231,7 @@ OneOffSignUp.decorators = [
 					  }
 					: {
 							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] + 5}`,
+							amount: `${largeDonations['ONE_OFF'] - 5}`,
 					  },
 			),
 		);
@@ -288,7 +286,7 @@ RecurringNotSignedIn.decorators = [
 					  }
 					: {
 							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] + 5}`,
+							amount: `${largeDonations['ONE_OFF'] - 5}`,
 					  },
 			),
 		);
@@ -344,7 +342,7 @@ RecurringSignedIn.decorators = [
 					  }
 					: {
 							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] + 5}`,
+							amount: `${largeDonations['ONE_OFF'] - 5}`,
 					  },
 			),
 		);
@@ -402,7 +400,7 @@ RecurringSignUp.decorators = [
 					  }
 					: {
 							contributionType: 'ONE_OFF',
-							amount: `${largeDonations['ONE_OFF'] + 5}`,
+							amount: `${largeDonations['ONE_OFF'] - 5}`,
 					  },
 			),
 		);
