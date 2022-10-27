@@ -52,13 +52,45 @@ type SendEventId =
 
 // ---- sendEvent logic ---- //
 
+const {
+	DigiSub,
+	PaperSub,
+	GuardianWeeklySub,
+	DigiSubGift,
+	GuardianWeeklySubGift,
+} = SendEventSubscriptionCheckoutStart;
+
+const { SingleContribution, RecurringContribution } =
+	SendEventContributionAmountUpdate;
+
+const cartValueEventIds: SendEventId[] = [
+	DigiSub,
+	PaperSub,
+	GuardianWeeklySub,
+	DigiSubGift,
+	GuardianWeeklySubGift,
+	SingleContribution,
+	RecurringContribution,
+];
+
 function sendEvent(
 	id: SendEventId,
 	isConversion: boolean,
 	value: string,
 ): void {
+	/**
+	 * A cart value event is indicated by 64 in QM.
+	 * A non cart value event is indicated by 0 in QM.
+	 * And a conversion event is indicated by 1 in QM.
+	 */
+	const qmCartValueEventId = isConversion
+		? 1
+		: cartValueEventIds.includes(id)
+		? 64
+		: 0;
+
 	if (window.QuantumMetricAPI?.isOn()) {
-		window.QuantumMetricAPI.sendEvent(id, isConversion ? 1 : 0, value);
+		window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value);
 	}
 }
 
