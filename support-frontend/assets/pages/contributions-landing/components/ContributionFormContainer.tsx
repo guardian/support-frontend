@@ -160,13 +160,12 @@ export type CountryMetaData = {
 	// Optional message to display at the top of the form
 	formMessage?: JSX.Element;
 };
-const defaultHeaderCopy =
-	'Support\xa0fearless\nindependent\njournalism';
+const defaultHeaderCopy = 'Support\xa0fearless\nindependent\njournalism';
 const defaultContributeCopy = (
 	<span>
-		As a reader-funded news organisation, we rely on your generosity. 
-		Please give what you can, so millions more can benefit from quality
-		reporting on the events shaping our world.
+		As a reader-funded news organisation, we rely on your generosity. Please
+		give what you can, so millions more can benefit from quality reporting on
+		the events shaping our world.
 	</span>
 );
 
