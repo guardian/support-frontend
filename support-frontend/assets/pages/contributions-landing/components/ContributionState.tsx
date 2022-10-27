@@ -2,7 +2,6 @@
 import { css } from '@emotion/react';
 import { focusHalo, space } from '@guardian/source-foundations';
 import { InlineError } from '@guardian/source-react-components';
-import { connect } from 'react-redux';
 import DownChevronDs from 'components/svgs/downChevronDs';
 import type { StateProvince } from 'helpers/internationalisation/country';
 import {
@@ -20,26 +19,17 @@ import {
 	countryGroups,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
 
 // ----- Types ----- //
 
 interface ContributionStateProps {
-	countryGroupId: CountryGroupId;
 	selectedState: StateProvince | null;
 	onChange: (state: string) => void;
 	isValid: boolean;
 	formHasBeenSubmitted: boolean;
 	contributionType: string;
+	countryGroupId: CountryGroupId;
 }
-
-const mapStateToProps = (state: ContributionsState) => ({
-	countryGroupId: state.common.internationalisation.countryGroupId,
-	contributionType: getContributionType(state),
-});
-
-// ----- Render ----- //
 
 const selectCss = css`
 	appearance: none !important;
@@ -168,12 +158,12 @@ const renderStatesField = (
 
 function ContributionState({
 	selectedState,
-	countryGroupId,
 	onChange,
 	isValid,
 	formHasBeenSubmitted,
 	contributionType,
-}: ContributionStateProps) {
+	countryGroupId,
+}: ContributionStateProps): JSX.Element | null {
 	const showError = !isValid && formHasBeenSubmitted;
 
 	if (contributionType !== 'ONE_OFF') {
@@ -228,4 +218,4 @@ function ContributionState({
 	return null;
 }
 
-export default connect(mapStateToProps)(ContributionState);
+export default ContributionState;
