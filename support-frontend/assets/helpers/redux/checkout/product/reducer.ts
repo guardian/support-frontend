@@ -65,6 +65,13 @@ export const productSlice = createSlice({
 		setStartDate(state, action: PayloadAction<DateYMDString>) {
 			state.startDate = action.payload;
 		},
+		setOtherAmountError(state, action: PayloadAction<string>) {
+			if (Array.isArray(state.errors.otherAmount)) {
+				state.errors.otherAmount.push(action.payload);
+			} else {
+				state.errors.otherAmount = [action.payload];
+			}
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(setDeliveryCountry, (state, action) => {

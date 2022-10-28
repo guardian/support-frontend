@@ -13,4 +13,5 @@ export const {
 	setCurrency,
 	setOrderIsAGift,
 	setStartDate,
+	setOtherAmountError,
 } = productSlice.actions;

@@ -27,16 +27,16 @@ export function getAllErrorsForContributions(
 	const paymentMethod = state.page.checkoutForm.payment.paymentMethod.errors;
 	const robot_checkbox = getRecaptchaError(state);
 
-	const nonPersonalDetailsErrors = {
-		otherAmount,
+	const paymentErrors = {
 		paymentMethod,
 		...getPaymentMethodErrors(state),
 		robot_checkbox,
 	};
 
 	return {
+		otherAmount,
 		...personalDetailsErrors,
-		...nonPersonalDetailsErrors,
+		...paymentErrors,
 	};
 }
 

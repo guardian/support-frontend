@@ -1,16 +1,25 @@
 import { isAnyOf } from '@reduxjs/toolkit';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { currencies } from 'helpers/internationalisation/currency';
+import {
+	getMaximumContributionAmount,
+	getMinimumContributionAmount,
+} from 'helpers/redux/commonState/selectors';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
+import { validateForm } from '../checkoutActions';
 import {
 	setAllAmounts,
 	setOtherAmount,
+	setOtherAmountError,
 	setProductType,
 	setSelectedAmount,
 } from './actions';
 import { getContributionCartValueData } from './selectors/cartValue';
+import { isContribution } from './selectors/productType';
 
 const shouldCheckFormEnabled = isAnyOf(
 	setAllAmounts,
@@ -89,4 +98,39 @@ export function addProductSideEffects(
 			}
 		},
 	});
+
+	startListening({
+		actionCreator: validateForm,
+		effect(_, listenerApi) {
+			const state = listenerApi.getState();
+			const { currencyId } = state.common.internationalisation;
+			const { productType, selectedAmounts, otherAmounts } =
+				state.page.checkoutForm.product;
+			if (isContribution(productType)) {
+				if (selectedAmounts[productType] === 'other') {
+					const customAmount = otherAmounts[productType].amount ?? '';
+					const minAmount = getMinimumContributionAmount(state);
+					const maxAmount = getMaximumContributionAmount(state);
+
+					if (amountIsNotInRange(customAmount, minAmount, maxAmount)) {
+						const currency = currencies[currencyId];
+						listenerApi.dispatch(
+							setOtherAmountError(
+								`Please provide an amount between ${simpleFormatAmount(
+									currency,
+									minAmount,
+								)} and ${simpleFormatAmount(currency, maxAmount)}`,
+							),
+						);
+					}
+				}
+			}
+		},
+	});
+}
+
+function amountIsNotInRange(amount: string, min: number, max: number) {
+	const amountAsFloat = Number.parseFloat(amount);
+
+	return amountAsFloat > max || amountAsFloat < min;
 }
