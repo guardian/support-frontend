@@ -30,10 +30,12 @@ export const paymentRequestButtonSlice = createSlice({
 			if (state.ONE_OFF.completed) {
 				state.ONE_OFF.buttonClicked = false;
 				state.ONE_OFF.completed = false;
+				delete state.ONE_OFF.paymentError;
 			}
 			if (state.REGULAR.completed) {
 				state.REGULAR.buttonClicked = false;
 				state.REGULAR.completed = false;
+				delete state.REGULAR.paymentError;
 			}
 		});
 	},

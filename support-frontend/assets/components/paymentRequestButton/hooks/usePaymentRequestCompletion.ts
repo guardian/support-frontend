@@ -1,8 +1,8 @@
 import type { Stripe as StripeJs } from '@stripe/stripe-js';
 import { useEffect } from 'react';
 import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import { contributionsFormHasErrors } from 'helpers/redux/checkout/checkoutSelectors';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
+import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -45,6 +45,7 @@ export function usePaymentRequestCompletion(
 			dispatch(setPaymentMethod('None'));
 			dispatch(paymentWaiting(false));
 			resetPayerDetails(dispatch);
+			errorHandler('incomplete_payment_request_details');
 			return;
 		}
 		if (stripe && paymentMethod && internalPaymentMethodName) {

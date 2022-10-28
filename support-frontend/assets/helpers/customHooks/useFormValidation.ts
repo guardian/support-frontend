@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
-import { contributionsFormHasErrors } from 'helpers/redux/checkout/checkoutSelectors';
+import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,

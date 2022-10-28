@@ -22,7 +22,7 @@ import {
 	paymentFailure,
 	paymentWaiting,
 } from 'pages/contributions-landing/contributionsLandingActions';
-import { getStripeCardFormErrors } from './selectors';
+import { getDisplayErrors } from './selectors';
 import { StripeCardForm } from './stripeCardForm';
 
 type StripeChangeEvents = {
@@ -34,9 +34,7 @@ type StripeChangeEvents = {
 export function StripeCardFormContainer(): JSX.Element {
 	const dispatch = useContributionsDispatch();
 
-	const { errors, showErrors } = useContributionsSelector(
-		getStripeCardFormErrors,
-	);
+	const { errors, showErrors } = useContributionsSelector(getDisplayErrors);
 	const zipCode = useContributionsSelector(
 		(state) => state.page.checkoutForm.billingAddress.fields.postCode,
 	);
