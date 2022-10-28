@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { isAnyOf } from '@reduxjs/toolkit';
+import { resetPayerDetails } from 'components/paymentRequestButton/hooks/payerDetails';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { PayPal } from 'helpers/forms/paymentMethods';
 import type {
@@ -8,6 +9,8 @@ import type {
 } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
+import { paymentWaiting } from 'pages/contributions-landing/contributionsLandingActions';
+import { contributionsFormHasErrors } from '../checkoutSelectors';
 import { expireRecaptchaToken, setRecaptchaToken } from '../recaptcha/actions';
 import {
 	setAmazonPayBillingAgreementConsentStatus,
@@ -16,6 +19,7 @@ import {
 	setAmazonPayPaymentSelected,
 } from './amazonPay/actions';
 import { setPaymentMethod } from './paymentMethod/actions';
+import { completePaymentRequest } from './paymentRequestButton/actions';
 import { loadPayPalExpressSdk } from './payPal/reducer';
 import type { PayPalState } from './payPal/state';
 import {
@@ -55,6 +59,18 @@ export function addPaymentsSideEffects(
 				);
 			}
 			listenerApi.dispatch(enableOrDisableForm());
+		},
+	});
+
+	startListening({
+		actionCreator: completePaymentRequest,
+		effect(_, listenerApi) {
+			const state = listenerApi.getState();
+			if (contributionsFormHasErrors(state)) {
+				listenerApi.dispatch(setPaymentMethod('None'));
+				listenerApi.dispatch(paymentWaiting(false));
+				resetPayerDetails(listenerApi.dispatch);
+			}
 		},
 	});
 }

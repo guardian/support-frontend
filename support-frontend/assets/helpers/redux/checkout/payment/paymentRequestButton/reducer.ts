@@ -1,6 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { StripeAccount } from 'helpers/forms/stripe';
+import { validateForm } from '../../checkoutActions';
 import type { PaymentRequestError } from './state';
 import { initialPaymentRequestButtonState } from './state';
 
@@ -21,6 +22,20 @@ export const paymentRequestButtonSlice = createSlice({
 			const { account, error } = action.payload;
 			state[account].paymentError = error;
 		},
+	},
+	extraReducers: (builder) => {
+		// If we're validating again after the PRB is in a completed state, it's because the PRB payment failed
+		// and the user is paying by some other method. Thus we need to reset in order to display regular validation errors
+		builder.addCase(validateForm, (state) => {
+			if (state.ONE_OFF.completed) {
+				state.ONE_OFF.buttonClicked = false;
+				state.ONE_OFF.completed = false;
+			}
+			if (state.REGULAR.completed) {
+				state.REGULAR.buttonClicked = false;
+				state.REGULAR.completed = false;
+			}
+		});
 	},
 });
 

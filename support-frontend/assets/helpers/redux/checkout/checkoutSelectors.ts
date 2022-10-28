@@ -86,6 +86,8 @@ function getPaymentRequestButtonErrors(
 	if (hasBeenClicked && hasBeenCompleted) {
 		const personalDetailsErrors = getPersonalDetailsErrors(state);
 
+		// Errors at this stage come from the details on the user's Apple/Google Pay account- eg. they signed up with an emoji in their name
+		// We can't meaningfully recover from this, so the best option is to try another payment method
 		if (errorCollectionHasErrors({ ...personalDetailsErrors, otherAmount })) {
 			return {
 				maincontent: [
