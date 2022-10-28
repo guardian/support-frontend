@@ -104,7 +104,8 @@ export function SupporterPlusLandingPage(): JSX.Element {
 			<CheckoutHeading heading={heading}>
 				<p>
 					As a reader-funded news organisation, we rely on your generosity.
-					Please give what you can, so millions more can benefit from quality reporting on the events shaping our world.
+					Please give what you can, so millions more can benefit from quality
+					reporting on the events shaping our world.
 				</p>
 			</CheckoutHeading>
 			<Container sideBorders backgroundColor={neutral[97]}>
