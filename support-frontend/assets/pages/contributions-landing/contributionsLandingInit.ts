@@ -58,6 +58,7 @@ function getInitialPaymentMethod(
 	countryGroupId: CountryGroupId,
 	switches: Switches,
 ): PaymentMethod {
+	return 'AmazonPay'; // Remove after AmazonPay testing
 	const paymentMethodFromSession = getPaymentMethodFromSession();
 	const validPaymentMethods = getValidPaymentMethods(
 		contributionType,
@@ -72,8 +73,7 @@ function getInitialPaymentMethod(
 	) {
 		return paymentMethodFromSession;
 	}
-	return 'AmazonPay';
-	//return 'None';
+	return 'None';
 }
 
 function getInitialContributionType(
