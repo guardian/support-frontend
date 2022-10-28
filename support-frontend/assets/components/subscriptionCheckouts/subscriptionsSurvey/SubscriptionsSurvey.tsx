@@ -11,7 +11,7 @@ type PropTypes = {
 
 const surveyLinks: Partial<Record<SubscriptionProduct, string>> = {
 	GuardianWeekly:
-		'guardiannewsandmedia.formstack.com/forms/guardian_weekly_2022',
+		'https://guardiannewsandmedia.formstack.com/forms/guardian_weekly_2022',
 };
 
 export function SubscriptionsSurvey({
