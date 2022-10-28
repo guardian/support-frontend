@@ -52,13 +52,45 @@ type SendEventId =
 
 // ---- sendEvent logic ---- //
 
+const {
+	DigiSub,
+	PaperSub,
+	GuardianWeeklySub,
+	DigiSubGift,
+	GuardianWeeklySubGift,
+} = SendEventSubscriptionCheckoutStart;
+
+const { SingleContribution, RecurringContribution } =
+	SendEventContributionAmountUpdate;
+
+const cartValueEventIds: SendEventId[] = [
+	DigiSub,
+	PaperSub,
+	GuardianWeeklySub,
+	DigiSubGift,
+	GuardianWeeklySubGift,
+	SingleContribution,
+	RecurringContribution,
+];
+
 function sendEvent(
 	id: SendEventId,
 	isConversion: boolean,
 	value: string,
 ): void {
+	/**
+	 * A cart value event is indicated by 64 in QM.
+	 * A non cart value event is indicated by 0 in QM.
+	 * And a conversion event is indicated by 1 in QM.
+	 */
+	const qmCartValueEventId = isConversion
+		? 1
+		: cartValueEventIds.includes(id)
+		? 64
+		: 0;
+
 	if (window.QuantumMetricAPI?.isOn()) {
-		window.QuantumMetricAPI.sendEvent(id, isConversion ? 1 : 0, value);
+		window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value);
 	}
 }
 
@@ -286,11 +318,11 @@ function sendEventABTestParticipations(participations: Participations): void {
 
 function addQM() {
 	return loadScript(
-		'https://cdn.quantummetric.com/instrumentation/1.31.5/quantum-gnm.js',
+		'https://cdn.quantummetric.com/instrumentation/1.32.16/quantum-gnm.js',
 		{
 			async: true,
 			integrity:
-				'sha384-QqJrp8s9Nl3x7Z6sc9kQG5eYJLVWYwlEsvhjCukLSwFsWtK17WdC5whHVwSXQh1F',
+				'sha384-DuqUDRG4K0l7XMcHiXiWN2mwr8GdfMbKUpH40hCvJ2dpBeo4pWAxOvbaWpQ8LGZW',
 			crossOrigin: 'anonymous',
 		},
 	).catch(() => {
