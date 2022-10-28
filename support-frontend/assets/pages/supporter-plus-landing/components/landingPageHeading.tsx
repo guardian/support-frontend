@@ -27,5 +27,5 @@ const headingStyles = css`
 `;
 
 export function LandingPageHeading(): JSX.Element {
-	return <h1 css={headingStyles}>Support fearless,&nbsp;independent&nbsp;journalism</h1>;
+	return <h1 css={headingStyles}>Support&nbsp;fearless, independent journalism</h1>;
 }
