@@ -19,7 +19,7 @@ export function SepaFormContainer({
 }: SepaFormContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 
-	const { iban, accountHolderName, streetName, country } =
+	const { iban, accountHolderName, streetName, country, errors } =
 		useContributionsSelector((state) => state.page.checkoutForm.payment.sepa);
 
 	function updateIban(iban: string) {
@@ -47,5 +47,6 @@ export function SepaFormContainer({
 		updateAccountHolderName,
 		updateAddressStreetName,
 		updateAddressCountry,
+		errors,
 	});
 }

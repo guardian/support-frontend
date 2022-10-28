@@ -21,6 +21,5 @@ Template.args = {} as Omit<DefaultPaymentButtonProps, 'onClick'>;
 export const Default = Template.bind({});
 
 Default.args = {
-	amountWithCurrency: '£12',
-	paymentInterval: 'month',
+	buttonText: 'Pay £12 per month',
 };
