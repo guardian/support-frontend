@@ -2,6 +2,7 @@ import type { Stripe as StripeJs } from '@stripe/stripe-js';
 import { useEffect } from 'react';
 import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import { contributionsFormHasErrors } from 'helpers/redux/checkout/checkoutSelectors';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -9,6 +10,7 @@ import {
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
 import { paymentWaiting } from 'pages/contributions-landing/contributionsLandingActions';
+import { resetPayerDetails } from './payerDetails';
 import {
 	createPaymentRequestErrorHandler,
 	fetchClientSecret,
@@ -39,7 +41,12 @@ export function usePaymentRequestCompletion(
 	);
 
 	useEffect(() => {
-		if (errorsPreventSubmission) return;
+		if (errorsPreventSubmission) {
+			dispatch(setPaymentMethod('None'));
+			dispatch(paymentWaiting(false));
+			resetPayerDetails(dispatch);
+			return;
+		}
 		if (stripe && paymentMethod && internalPaymentMethodName) {
 			trackComponentClick(`${paymentWallet}-paymentAuthorised`);
 

@@ -24,6 +24,7 @@ export function useFormValidation<
 
 	const validateAndPay = useCallback(
 		function validateAndPay(event: EventType) {
+			event.preventDefault();
 			dispatch(validateForm());
 			setClickEvent(event);
 		},
