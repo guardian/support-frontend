@@ -7,14 +7,16 @@ import {
 } from 'helpers/redux/storeHooks';
 import { paymentWaiting } from 'pages/contributions-landing/contributionsLandingActions';
 
+type PreventableEvent = {
+	preventDefault: () => void;
+};
+
 /**
  * A hook to wrap any payment handler function.
  * Validates the form, and will only run the handler if the form is valid.
  */
 export function useFormValidation<
-	EventType extends {
-		preventDefault: () => void;
-	} = React.MouseEvent<HTMLButtonElement>,
+	EventType extends PreventableEvent = React.MouseEvent<HTMLButtonElement>,
 >(paymentHandler: (event: EventType) => void): (event: EventType) => void {
 	const [clickEvent, setClickEvent] = useState<EventType | null>(null);
 	const dispatch = useContributionsDispatch();

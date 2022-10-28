@@ -99,6 +99,9 @@ export function addProductSideEffects(
 		},
 	});
 
+	// TODO: Can we refactor this so the information about min/max contribution amounts lives
+	// in the product state and we can do this validation in the extraReducer for validateForm?
+	// Potentially a big job
 	startListening({
 		actionCreator: validateForm,
 		effect(_, listenerApi) {
