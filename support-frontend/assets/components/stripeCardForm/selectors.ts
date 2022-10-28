@@ -18,7 +18,7 @@ export function getStripeCardFormErrors(state: ContributionsState): {
 
 	if (shouldShowZipCode) {
 		const zipCode =
-			state.page.checkoutForm.billingAddress.fields.errorObject.postCode;
+			state.page.checkoutForm.billingAddress.fields.errorObject?.postCode;
 		return {
 			errors: {
 				...errors,

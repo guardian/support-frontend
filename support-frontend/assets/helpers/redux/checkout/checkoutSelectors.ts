@@ -47,7 +47,7 @@ function getStateOrProvinceError(state: ContributionsState): ErrorCollection {
 	if (shouldCollectStateForContributions(countryGroupId)) {
 		return {
 			contributionsState:
-				state.page.checkoutForm.billingAddress.fields.errorObject.state,
+				state.page.checkoutForm.billingAddress.fields.errorObject?.state,
 		};
 	}
 	return {};

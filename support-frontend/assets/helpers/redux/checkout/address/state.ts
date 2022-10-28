@@ -42,7 +42,7 @@ export type AddressFieldsState = AddressFields & {
 	// TODO: Eventually we should move the subs checkouts over to the new validation mechanism
 	// but for now we need to leave the old validation mechanism alone
 	errors: AddressFormFieldError[];
-	errorObject: SliceErrors<AddressFieldsValidatedState>;
+	errorObject?: SliceErrors<AddressFieldsValidatedState>;
 };
 
 export function getInitialAddressFieldsState(): AddressFieldsState {

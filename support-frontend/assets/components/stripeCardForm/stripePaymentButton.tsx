@@ -82,7 +82,7 @@ export function StripePaymentButton(): JSX.Element {
 					card: cardElement,
 					billing_details: {
 						address: {
-							postal_code: postCode ?? '',
+							postal_code: postCode,
 						},
 					},
 				})
@@ -113,7 +113,7 @@ export function StripePaymentButton(): JSX.Element {
 						card: cardElement,
 						billing_details: {
 							address: {
-								postal_code: postCode ?? '',
+								postal_code: postCode,
 							},
 						},
 					},

@@ -96,7 +96,7 @@ export function StripeCardFormContainer(): JSX.Element {
 			onExpiryChange={onCardFieldChange('expiry')}
 			onCvcChange={onCardFieldChange('cvc')}
 			onZipCodeChange={onZipCodeChange}
-			zipCode={zipCode ?? ''}
+			zipCode={zipCode}
 			showZipCode={showZipCode}
 			errors={showErrors ? errors : {}}
 			recaptcha={
