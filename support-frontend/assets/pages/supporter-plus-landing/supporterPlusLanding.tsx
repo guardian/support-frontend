@@ -10,7 +10,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -29,7 +29,6 @@ import { StripeCardFormContainer } from 'components/stripeCardForm/stripeCardFor
 import {
 	AUDCountries,
 	Canada,
-	countryGroups,
 	EURCountries,
 	GBPCountries,
 	International,
@@ -66,7 +65,11 @@ const largeDemoBox = css`
 	min-height: 400px;
 `;
 
-export function SupporterPlusLandingPage(): JSX.Element {
+export function SupporterPlusLandingPage({
+	thankYouRoute,
+}: {
+	thankYouRoute: string;
+}): JSX.Element {
 	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -74,6 +77,8 @@ export function SupporterPlusLandingPage(): JSX.Element {
 		(state) => state.common.settings,
 	);
 	const contributionType = useContributionsSelector(getContributionType);
+
+	const navigate = useNavigate();
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
@@ -148,11 +153,10 @@ export function SupporterPlusLandingPage(): JSX.Element {
 								</ContributionsStripe>
 								<br />
 								<Button
-									onClick={() => (
-										<Navigate
-											to={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
-										/>
-									)}
+									onClick={(e) => {
+										e.preventDefault();
+										navigate(thankYouRoute);
+									}}
 								>
 									Go to thank you page
 								</Button>

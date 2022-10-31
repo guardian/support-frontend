@@ -56,15 +56,20 @@ const { abParticipations } = store.getState().common;
 
 const showNewProductPage = abParticipations.supporterPlus === 'variant';
 
+const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
+
 // ----- Render ----- //
 
 const router = () => {
 	const countryIds = ['uk', 'us', 'au', 'eu', 'int', 'nz', 'ca'];
 
 	const landingPage = showNewProductPage ? (
-		<SupporterPlusLandingPage />
+		<SupporterPlusLandingPage thankYouRoute={thankYouRoute} />
 	) : (
-		<ContributionsLandingPage countryGroupId={countryGroupId} />
+		<ContributionsLandingPage
+			countryGroupId={countryGroupId}
+			thankYouRoute={thankYouRoute}
+		/>
 	);
 
 	const thankYouPage = showNewProductPage ? (

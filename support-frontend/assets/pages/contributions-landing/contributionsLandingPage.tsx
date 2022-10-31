@@ -20,8 +20,10 @@ FocusStyleManager.onlyShowFocusOnTabs(); // https://www.theguardian.design/2a1e5
 
 export function ContributionsLandingPage({
 	countryGroupId,
+	thankYouRoute,
 }: {
 	countryGroupId: CountryGroupId;
+	thankYouRoute: string;
 }): JSX.Element {
 	const { campaignCode } = useParams();
 	const selectedCountryGroup = countryGroups[countryGroupId];
@@ -34,7 +36,7 @@ export function ContributionsLandingPage({
 			backgroundImageSrc={backgroundImageSrc}
 		>
 			<ContributionFormContainer
-				thankYouRoute={`/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`}
+				thankYouRoute={thankYouRoute}
 				campaignCodeParameter={campaignCode}
 			/>
 		</Page>
