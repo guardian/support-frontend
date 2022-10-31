@@ -1,8 +1,34 @@
 // ----- Imports ----- //
-import { TextInput } from '@guardian/source-react-components';
+import { css } from '@emotion/react';
+import { from, space, visuallyHidden } from '@guardian/source-foundations';
+import { Stack, TextInput } from '@guardian/source-react-components';
+import { Divider } from '@guardian/source-react-components-development-kitchen';
 import type { ContributionType } from 'helpers/contributions';
 import { emailRegexPattern } from 'helpers/forms/formValidation';
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
+
+const hiddenHeading = css`
+	${visuallyHidden};
+`;
+
+const dividerStyles = css`
+	margin-left: 0;
+	width: 100%;
+	margin-top: 40px;
+
+	${from.tablet} {
+		margin-top: 44px;
+	}
+`;
+
+const stackStyles = css`
+	position: relative;
+	${from.tablet} {
+		& > * + * {
+			margin-top: ${space[4]}px;
+		}
+	}
+`;
 
 export type PersonalDetailsProps = {
 	email: string;
@@ -15,6 +41,7 @@ export type PersonalDetailsProps = {
 	onLastNameChange: (lastName: string) => void;
 	signOutLink: React.ReactNode;
 	contributionState: React.ReactNode;
+	errors?: PersonalDetailsState['errors'];
 };
 
 export function PersonalDetails({
@@ -26,20 +53,16 @@ export function PersonalDetails({
 	onEmailChange,
 	onFirstNameChange,
 	onLastNameChange,
+	errors,
 	signOutLink,
 	contributionState,
 }: PersonalDetailsProps): JSX.Element {
 	return (
-		<div className="form-fields">
-			<h3 className="hidden-heading">Your details</h3>
-
-			<div
-				className={classNameWithModifiers('form__field', [
-					'contribution-email',
-				])}
-			>
+		<Stack space={3} cssOverrides={stackStyles}>
+			<h3 css={hiddenHeading}>Your details</h3>
+			<div>
 				<TextInput
-					id="contributionEmail"
+					id="email"
 					data-qm-masking="blocklist"
 					label="Email address"
 					value={email}
@@ -48,7 +71,7 @@ export function PersonalDetails({
 					supporting="example@domain.com"
 					onChange={(e) => onEmailChange(e.target.value)}
 					pattern={emailRegexPattern}
-					error={''}
+					error={errors?.email?.[0]}
 					disabled={isSignedInPersonalDetails}
 				/>
 			</div>
@@ -56,46 +79,40 @@ export function PersonalDetails({
 			{signOutLink}
 
 			{contributionType !== 'ONE_OFF' ? (
-				<div>
-					<div
-						className={classNameWithModifiers('form__field', [
-							'contribution-fname',
-						])}
-					>
+				<>
+					<div>
 						<TextInput
-							id="contributionFirstName"
+							id="firstName"
 							data-qm-masking="blocklist"
 							label="First name"
 							value={firstName}
 							autoComplete="given-name"
 							autoCapitalize="words"
 							onChange={(e) => onFirstNameChange(e.target.value)}
-							error={''}
+							error={errors?.firstName?.[0]}
 							required
 						/>
 					</div>
-					<div
-						className={classNameWithModifiers('form__field', [
-							'contribution-lname',
-						])}
-					>
+					<div>
 						<TextInput
-							id="contributionLastName"
+							id="lastName"
 							data-qm-masking="blocklist"
 							label="Last name"
 							value={lastName}
 							autoComplete="family-name"
 							autoCapitalize="words"
 							onChange={(e) => onLastNameChange(e.target.value)}
-							error={''}
+							error={errors?.lastName?.[0]}
 							required
 						/>
 					</div>
-				</div>
+				</>
 			) : null}
 
 			{contributionState}
-		</div>
+
+			<Divider size="full" cssOverrides={dividerStyles} />
+		</Stack>
 	);
 }
 
