@@ -25,7 +25,7 @@ export function AmazonPaymentButton(): JSX.Element {
 	);
 
 	const { loginObject, paymentsObject } = useAmazonPayObjects(
-		paymentMethod === AmazonPay,
+		paymentMethod.name === AmazonPay,
 		countryGroupId,
 		false,
 	);
