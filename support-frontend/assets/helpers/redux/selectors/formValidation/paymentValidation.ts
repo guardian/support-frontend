@@ -6,7 +6,9 @@ import {
 } from 'helpers/redux/checkout/payment/paymentRequestButton/selectors';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { getOtherAmountErrors } from 'helpers/redux/selectors/formValidation/otherAmountValidation';
+import { getPersonalDetailsErrors } from './personalDetailsValidation';
 import type { ErrorCollection } from './utils';
+import { errorCollectionHasErrors } from './utils';
 
 export function getStripeFormErrors(
 	state: ContributionsState,
@@ -69,11 +71,12 @@ export function getPaymentRequestButtonErrors(
 
 	if (hasBeenClicked && hasBeenCompleted) {
 		const hasFailed = hasPaymentRequestPaymentFailed(state);
+		const personalDetailsErrors = getPersonalDetailsErrors(state);
 
 		// Either the payment itself has failed, or the personal details on the user's Apple/Google Pay account failed validation-
 		// eg. they signed up with an emoji in their name
 		// We can't meaningfully recover from this, so the best option is to try another payment method
-		if (hasFailed) {
+		if (hasFailed || errorCollectionHasErrors(personalDetailsErrors)) {
 			return {
 				maincontent: [
 					'Sorry, something went wrong. Please try another payment method',
