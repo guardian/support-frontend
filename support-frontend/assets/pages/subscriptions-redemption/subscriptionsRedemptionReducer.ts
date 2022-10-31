@@ -9,7 +9,6 @@ import type { MarketingConsentState } from 'helpers/redux/checkout/marketingCons
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { productReducer } from 'helpers/redux/checkout/product/reducer';
-import { thankYouReducer } from 'helpers/redux/checkout/thankYouState/reducer';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
@@ -140,6 +139,5 @@ export const redemptionPageReducer = combineReducers({
 		product: productReducer,
 		marketingConsent: marketingConsentReducer,
 		csrf: csrfReducer,
-		thankYou: thankYouReducer,
 	}),
 });
