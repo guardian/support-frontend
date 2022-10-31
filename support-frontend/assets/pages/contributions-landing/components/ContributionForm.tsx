@@ -123,8 +123,8 @@ const mapStateToProps = (state: ContributionsState) => {
 		sepa: state.page.checkoutForm.payment.sepa,
 		productSetAbTestVariant:
 			state.common.abParticipations.productSetTest === 'variant',
-		isInNewProductTest:
-			state.common.abParticipations.newProduct === 'variant' &&
+		isInSupporterPlusTestControl:
+			state.common.abParticipations.supporterPlus === 'control' &&
 			contributionType !== 'ONE_OFF',
 		switches: state.common.settings.switches,
 	};
@@ -388,7 +388,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 				)}
 			</div>
 
-			{props.isInNewProductTest && (
+			{props.isInSupporterPlusTestControl && (
 				<BenefitsBulletPoints
 					showBenefitsMessaging={showBenefitsMessaging}
 					countryGroupId={props.countryGroupId}
@@ -484,7 +484,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 				<ContributionSubmit
 					onPaymentAuthorisation={props.onPaymentAuthorisation}
 					showBenefitsMessaging={showBenefitsMessaging}
-					userInNewProductTest={props.isInNewProductTest}
+					userInNewProductTest={props.isInSupporterPlusTestControl}
 				/>
 			</div>
 
@@ -498,7 +498,7 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					props.otherAmounts,
 					props.contributionType,
 				)}
-				userInNewProductTest={props.isInNewProductTest}
+				userInNewProductTest={props.isInSupporterPlusTestControl}
 			/>
 			{props.isWaiting ? (
 				<ProgressMessage message={['Processing transaction', 'Please wait']} />

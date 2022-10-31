@@ -82,7 +82,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
+import { isSupporterPlusPurchase } from './newProductTestHelper';
 
 export type Action =
 	| {
@@ -275,23 +275,8 @@ function getBillingCountryAndState(
 	};
 }
 
-function getProductOptionsForBenefitsTest(
-	amount: number,
-	state: ContributionsState,
-) {
-	const isInNewProductTest =
-		state.common.abParticipations.newProduct === 'variant';
-	const contributionType = getContributionType(state);
-	const isRecurring = contributionType !== 'ONE_OFF';
-
-	const thresholdPrice = getThresholdPrice(
-		state.common.internationalisation.countryGroupId,
-		contributionType,
-	);
-	const amountIsHighEnough = !!(thresholdPrice && amount >= thresholdPrice);
-	const shouldGetSupporterPlus =
-		isInNewProductTest && isRecurring && amountIsHighEnough;
-	return shouldGetSupporterPlus
+function getProductOptionsForSupporterPlusTest(state: ContributionsState) {
+	return isSupporterPlusPurchase(state)
 		? { productType: 'SupporterPlus' as const }
 		: { productType: 'Contribution' as const };
 }
@@ -314,7 +299,7 @@ function regularPaymentRequestFromAuthorisation(
 		contributionType,
 	);
 
-	const productOptions = getProductOptionsForBenefitsTest(amount, state);
+	const productOptions = getProductOptionsForSupporterPlusTest(state);
 
 	return {
 		firstName: state.page.checkoutForm.personalDetails.firstName.trim(),
