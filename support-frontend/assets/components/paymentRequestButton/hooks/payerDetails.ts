@@ -76,3 +76,11 @@ export function addPayerDetailsToRedux(
 	setPayerEmail(dispatch, payerEmail);
 	setBillingCountryAndState(dispatch, paymentMethod.billing_details);
 }
+
+export function resetPayerDetails(dispatch: ContributionsDispatch): void {
+	dispatch(setEmail(''));
+	dispatch(setFirstName(''));
+	dispatch(setLastName(''));
+	dispatch(setBillingCountry(''));
+	dispatch(setBillingState(''));
+}

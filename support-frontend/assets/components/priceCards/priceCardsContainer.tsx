@@ -1,11 +1,11 @@
 import type { OtherAmountProps } from 'components/otherAmount/otherAmount';
-import { getOtherAmountErrors } from 'components/otherAmount/selectors';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import {
 	setOtherAmount,
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
+import { getOtherAmountErrors } from 'helpers/redux/selectors/formValidation/otherAmountValidation';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
