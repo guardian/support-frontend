@@ -146,26 +146,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 		moduleType: ThankYouModuleType,
 	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
 
-	const defaultTYModuleTypes: ThankYouModuleType[] = [
-		...maybeThankYouModule(isNewAccount, 'signUp'),
-		...maybeThankYouModule(
-			!isNewAccount && !isSignedIn && email.length > 0,
-			'signIn',
-		),
-		...maybeThankYouModule(contributionType !== 'ONE_OFF', 'appDownload'),
-		...maybeThankYouModule(
-			contributionType === 'ONE_OFF' && email.length > 0,
-			'marketingConsent',
-		),
-		...maybeThankYouModule(
-			contributionType === 'ONE_OFF' && email.length > 0,
-			'supportReminder',
-		),
-		'feedback',
-		'socialShare',
-	];
-
-	const ausTYModuleTypes: ThankYouModuleType[] = [
+	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'),
 		...maybeThankYouModule(
 			!isNewAccount && !isSignedIn && email.length > 0,
@@ -184,9 +165,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];
-
-	const thankYouModules =
-		countryId === 'AU' ? ausTYModuleTypes : defaultTYModuleTypes;
 
 	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;
 	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
