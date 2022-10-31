@@ -33,9 +33,9 @@ export function getPersonalDetailsErrors(
 		};
 	}
 	return {
+		email,
 		firstName,
 		lastName,
-		email,
 		...stateOrProvinceErrors,
 	};
 }

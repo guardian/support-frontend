@@ -85,10 +85,5 @@ export function usePaymentRequestCompletion(
 				);
 			}
 		}
-	}, [
-		stripe,
-		paymentMethod,
-		internalPaymentMethodName,
-		errorsPreventSubmission,
-	]);
+	}, [paymentMethod]);
 }
