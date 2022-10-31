@@ -26,7 +26,13 @@ export const sepaSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
-		builder.addCase(validateForm, createSliceValidatorFor(sepaSchema));
+		builder.addCase(
+			validateForm,
+			createSliceValidatorFor(
+				sepaSchema,
+				(paymentMethod) => paymentMethod === 'Sepa',
+			),
+		);
 	},
 });
 

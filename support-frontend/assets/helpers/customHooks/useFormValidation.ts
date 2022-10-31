@@ -20,6 +20,9 @@ export function useFormValidation<
 >(paymentHandler: (event: EventType) => void): (event: EventType) => void {
 	const [clickEvent, setClickEvent] = useState<EventType | null>(null);
 	const dispatch = useContributionsDispatch();
+	const { paymentMethod } = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment,
+	);
 	const errorsPreventSubmission = useContributionsSelector(
 		contributionsFormHasErrors,
 	);
@@ -27,7 +30,7 @@ export function useFormValidation<
 	const validateAndPay = useCallback(
 		function validateAndPay(event: EventType) {
 			event.preventDefault();
-			dispatch(validateForm());
+			dispatch(validateForm(paymentMethod.name));
 			setClickEvent(event);
 		},
 		[dispatch],
