@@ -12,7 +12,9 @@ import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { GuardianProduct } from '../state';
 
-function isContribution(product: GuardianProduct): product is ContributionType {
+export function isContribution(
+	product: GuardianProduct,
+): product is ContributionType {
 	return contributionTypes.includes(product);
 }
 

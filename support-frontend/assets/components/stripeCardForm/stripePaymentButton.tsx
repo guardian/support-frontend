@@ -6,6 +6,7 @@ import {
 import type { StripeError } from '@stripe/stripe-js';
 import { useEffect, useState } from 'preact/hooks';
 import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
+import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { Stripe } from 'helpers/forms/paymentMethods';
 import {
 	useContributionsDispatch,
@@ -37,6 +38,21 @@ export function StripePaymentButton(): JSX.Element {
 		(state) => state.page.checkoutForm.payment.stripe,
 	);
 
+	const payWithStripe = useFormValidation(function pay() {
+		if (stripeAccount === 'ONE_OFF') {
+			oneOffPayment();
+		} else if (setupIntentClientSecret) {
+			recurringPayment(setupIntentClientSecret);
+		} else {
+			// The setupIntentClientSecret is requested asynchronously when the user completes the recaptcha and is
+			// required to establish our intent to take future card payments.
+			// Thus it's possible that the user clicks the payment button *before* we have this secret available.
+			// In this case we record that they *intend* to pay, and then attempt to make the payment via the useEffect hook below
+			// which will run when the client secret has become available
+			setPaymentAwaitingSetupIntent(true);
+		}
+	});
+
 	function handleStripeError(errorData: StripeError): void {
 		dispatch(paymentWaiting(false));
 		logException(`Error creating Payment Method: ${JSON.stringify(errorData)}`);
@@ -66,7 +82,7 @@ export function StripePaymentButton(): JSX.Element {
 					card: cardElement,
 					billing_details: {
 						address: {
-							postal_code: postCode ?? '',
+							postal_code: postCode,
 						},
 					},
 				})
@@ -97,7 +113,7 @@ export function StripePaymentButton(): JSX.Element {
 						card: cardElement,
 						billing_details: {
 							address: {
-								postal_code: postCode ?? '',
+								postal_code: postCode,
 							},
 						},
 					},
@@ -118,26 +134,11 @@ export function StripePaymentButton(): JSX.Element {
 		}
 	}
 
-	function pay() {
-		if (stripeAccount === 'ONE_OFF') {
-			oneOffPayment();
-		} else if (setupIntentClientSecret) {
-			recurringPayment(setupIntentClientSecret);
-		} else {
-			// The setupIntentClientSecret is requested asynchronously when the user completes the recaptcha and is
-			// required to establish our intent to take future card payments.
-			// Thus it's possible that the user clicks the payment button *before* we have this secret available.
-			// In this case we record that they *intend* to pay, and then attempt to make the payment via the useEffect hook below
-			// which will run when the client secret has become available
-			setPaymentAwaitingSetupIntent(true);
-		}
-	}
-
 	useEffect(() => {
 		if (setupIntentClientSecret && paymentAwaitingSetupIntent) {
 			recurringPayment(setupIntentClientSecret);
 		}
 	}, [setupIntentClientSecret, paymentAwaitingSetupIntent]);
 
-	return <DefaultPaymentButtonContainer onClick={pay} />;
+	return <DefaultPaymentButtonContainer onClick={payWithStripe} />;
 }

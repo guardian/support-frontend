@@ -172,7 +172,7 @@ const sendFormSubmitEventForPayPalRecurring =
 		const state = getState();
 		const formSubmitParameters: FormSubmitParameters = {
 			...state.page.form,
-			paymentMethod: state.page.checkoutForm.payment.paymentMethod,
+			paymentMethod: state.page.checkoutForm.payment.paymentMethod.name,
 			userTypeFromIdentityResponse:
 				state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
 			contributionType: getContributionType(state),
@@ -671,7 +671,7 @@ const onThirdPartyPaymentAuthorised =
 		const state = getState();
 		const contributionType = getContributionType(state);
 		return paymentAuthorisationHandlers[contributionType][
-			state.page.checkoutForm.payment.paymentMethod
+			state.page.checkoutForm.payment.paymentMethod.name
 		](dispatch, state, paymentAuthorisation);
 	};
 

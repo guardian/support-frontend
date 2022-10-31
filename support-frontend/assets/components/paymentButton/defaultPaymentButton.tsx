@@ -9,34 +9,25 @@ const buttonOverrides = css`
 	justify-content: center;
 `;
 
-function getButtonPrice(
-	amountWithCurrency: string,
-	paymentInterval?: 'month' | 'year',
-) {
-	if (paymentInterval) {
-		return `${amountWithCurrency} per ${paymentInterval}`;
-	}
-
-	return amountWithCurrency;
-}
-
 export type DefaultPaymentButtonProps = {
-	amountWithCurrency: string;
+	buttonText: string;
 	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-	paymentInterval?: 'month' | 'year';
+	loading?: boolean;
 };
 
 export function DefaultPaymentButton({
-	amountWithCurrency,
+	buttonText,
 	onClick,
-	paymentInterval,
+	loading,
 }: DefaultPaymentButtonProps): JSX.Element {
-	const buttonPrice = getButtonPrice(amountWithCurrency, paymentInterval);
-
 	return (
 		<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-			<Button cssOverrides={buttonOverrides} onClick={onClick}>
-				Pay {buttonPrice}
+			<Button
+				cssOverrides={buttonOverrides}
+				onClick={onClick}
+				isLoading={loading}
+			>
+				{buttonText}
 			</Button>
 		</ThemeProvider>
 	);

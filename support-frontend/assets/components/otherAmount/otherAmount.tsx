@@ -14,6 +14,7 @@ export type OtherAmountProps = {
 	currency: IsoCurrency;
 	minAmount: number;
 	onOtherAmountChange: (newAmount: string) => void;
+	errors?: string[];
 };
 
 export function OtherAmount({
@@ -21,6 +22,7 @@ export function OtherAmount({
 	otherAmount,
 	currency,
 	onOtherAmountChange,
+	errors,
 }: OtherAmountProps): JSX.Element | null {
 	const currencyDetails = currencies[currency];
 	const glyph = currencyDetails.isPaddedGlyph
@@ -38,6 +40,7 @@ export function OtherAmount({
 					label="Enter your amount"
 					prefixText={prefix}
 					suffixText={suffix}
+					error={errors?.[0]}
 					value={otherAmount}
 					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 						onOtherAmountChange(e.target.value)

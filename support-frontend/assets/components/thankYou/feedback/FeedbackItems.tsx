@@ -77,9 +77,9 @@ function FeedbackCTA({
 	const isAus = countryId === 'AU';
 
 	const SURVEY_LINK =
-		'https://guardiannewsampampmedia.formstack.com/forms/guardian_contributions';
+		'https://guardiannewsandmedia.formstack.com/forms/guardian_contributions';
 	const AUS_SURVEY_LINK =
-		'https://guardiannewsampampmedia.formstack.com/forms/australia_2022';
+		'https://guardiannewsandmedia.formstack.com/forms/australia_2022';
 
 	const surveyLink = isAus ? AUS_SURVEY_LINK : SURVEY_LINK;
 

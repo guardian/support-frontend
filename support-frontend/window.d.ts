@@ -81,7 +81,11 @@ declare global {
 		};
 		QuantumMetricAPI?: {
 			isOn: () => boolean;
-			sendEvent: (id: SendEventId, isConversion: 0 | 1, value: string) => void;
+			sendEvent: (
+				id: SendEventId,
+				isConversion: 0 | 1 | 64,
+				value: string,
+			) => void;
 			currencyConvertFromToValue: (
 				value: number,
 				sourceCurrency: IsoCurrency,

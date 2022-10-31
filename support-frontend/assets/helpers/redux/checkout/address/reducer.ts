@@ -6,10 +6,13 @@ import {
 } from '@reduxjs/toolkit';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { fromString } from 'helpers/internationalisation/country';
+import { getSliceErrorsFromZodResult } from 'helpers/redux/utils/validation/errors';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { removeError } from 'helpers/subscriptionsForms/validation';
+import { validateForm } from '../checkoutActions';
 import type { AddressFormFieldError } from './state';
 import {
+	addressFieldsSchema,
 	getInitialAddressFieldsState,
 	initialPostcodeFinderState,
 } from './state';
@@ -80,6 +83,16 @@ function getAddressFieldsSlice(type: AddressType) {
 			setFormErrors(state, action: PayloadAction<AddressFormFieldError[]>) {
 				state.errors = action.payload;
 			},
+		},
+		extraReducers: (builder) => {
+			builder.addCase(validateForm, (state) => {
+				const validationResult = addressFieldsSchema.safeParse(state);
+				if (!validationResult.success) {
+					state.errorObject = getSliceErrorsFromZodResult(
+						validationResult.error.format(),
+					);
+				}
+			});
 		},
 	});
 }

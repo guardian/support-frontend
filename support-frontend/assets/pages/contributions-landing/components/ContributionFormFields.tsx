@@ -51,10 +51,12 @@ const mapStateToProps = (state: ContributionsState) => ({
 			state.page.checkoutForm.billingAddress.fields.state,
 			state.page.user.stateField,
 		) ?? '',
-	isSignedIn: state.page.checkoutForm.personalDetails.isSignedIn,
+	isSignedInPersonalDetails: state.page.checkoutForm.personalDetails.isSignedIn,
+	isSignedInUser: state.page.user.isSignedIn,
 	userTypeFromIdentityResponse:
 		state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
 	contributionType: getContributionType(state),
+	countryGroupId: state.common.internationalisation.countryGroupId,
 });
 
 const mapDispatchToProps = {
@@ -76,9 +78,11 @@ function ContributionFormFields({
 	email,
 	billingState,
 	checkoutFormHasBeenSubmitted,
-	isSignedIn,
+	isSignedInPersonalDetails,
+	isSignedInUser,
 	userTypeFromIdentityResponse,
 	contributionType,
+	countryGroupId,
 	setFirstName,
 	setLastName,
 	setEmail,
@@ -88,7 +92,7 @@ function ContributionFormFields({
 		firstName,
 		lastName,
 		email,
-		isSignedIn,
+		isSignedIn: isSignedInPersonalDetails,
 		userTypeFromIdentityResponse,
 	});
 
@@ -117,11 +121,11 @@ function ContributionFormFields({
 					onChange={(e) => setEmail(e.target.value)}
 					pattern={emailRegexPattern}
 					error={getFormFieldError('email')}
-					disabled={isSignedIn}
+					disabled={isSignedInPersonalDetails}
 				/>
 			</div>
 
-			<Signout />
+			<Signout isSignedIn={isSignedInUser} />
 
 			{contributionType !== 'ONE_OFF' ? (
 				<div>
@@ -168,6 +172,8 @@ function ContributionFormFields({
 				selectedState={billingState}
 				isValid={checkBillingState(billingState)}
 				formHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+				contributionType={contributionType}
+				countryGroupId={countryGroupId}
 			/>
 		</div>
 	);

@@ -65,6 +65,7 @@ function Template(args: SepaFormProps) {
 			updateAddressCountry={(addressCountry: string) => {
 				setAddressCountry(addressCountry);
 			}}
+			errors={args.errors}
 		/>
 	);
 }
@@ -78,4 +79,20 @@ Default.args = {
 	accountHolderName: '',
 	addressStreetName: '',
 	addressCountry: '',
+	errors: {},
+};
+
+export const WithErrors = Template.bind({});
+
+WithErrors.args = {
+	iban: '',
+	accountHolderName: '',
+	addressStreetName: '',
+	addressCountry: '',
+	errors: {
+		accountHolderName: ['Please provide your account holder name'],
+		iban: ['Please enter a valid IBAN'],
+		streetName: ['Please enter a billing address'],
+		country: ['Please enter a billing country'],
+	},
 };

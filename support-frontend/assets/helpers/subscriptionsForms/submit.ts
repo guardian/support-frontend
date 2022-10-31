@@ -219,9 +219,9 @@ function onPaymentAuthorised(
 	const handleSubscribeResult = (result: PaymentResult) => {
 		if (result.paymentStatus === 'success') {
 			if (result.subscriptionCreationPending) {
-				dispatch(setStage('thankyou-pending', productType, paymentMethod));
+				dispatch(setStage('thankyou-pending', productType, paymentMethod.name));
 			} else {
-				dispatch(setStage('thankyou', productType, paymentMethod));
+				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
 			// Notify Quantum Metric of successfull subscription conversion
 			sendEventSubscriptionCheckoutConversion(
@@ -339,7 +339,7 @@ function submitForm(dispatch: Dispatch<Action>, state: SubscriptionsState) {
 	const productType = getSubscriptionType(state);
 	const addresses = getAddresses(state);
 	const pricingCountry = getPricingCountry(productType, addresses);
-	trackSubmitAttempt(paymentMethod, productType, productOption);
+	trackSubmitAttempt(paymentMethod.name, productType, productOption);
 	let priceDetails = finalPrice(
 		productPrices,
 		pricingCountry,
@@ -366,7 +366,12 @@ function submitForm(dispatch: Dispatch<Action>, state: SubscriptionsState) {
 	const onAuthorised = (paymentAuthorisation: PaymentAuthorisation) =>
 		onPaymentAuthorised(paymentAuthorisation, dispatch, state, currencyId);
 
-	showPaymentMethod(onAuthorised, paymentMethod, stripePaymentMethod, state);
+	showPaymentMethod(
+		onAuthorised,
+		paymentMethod.name,
+		stripePaymentMethod,
+		state,
+	);
 }
 
 function submitWithDeliveryForm(

@@ -167,7 +167,7 @@ const mapStateToProps = (state: ContributionsState) => {
 		user: state.page.user,
 		userTypeFromIdentityResponse:
 			state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
-		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
+		paymentMethod: state.page.checkoutForm.payment.paymentMethod.name,
 		countryId: state.common.internationalisation.countryId,
 		campaignCode: state.common.referrerAcquisitionData.campaignCode,
 		isInNewProductTest: state.common.abParticipations.newProduct === 'variant',

@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
-import { Inline, Stack, TextInput } from '@guardian/source-react-components';
+import { space } from '@guardian/source-foundations';
+import { Stack, TextInput } from '@guardian/source-react-components';
 import {
 	CardCvcElement,
 	CardExpiryElement,
@@ -17,15 +18,11 @@ const zipCodeContainer = css`
 	display: block;
 `;
 
-const inlineOverrides = css`
-	margin-left: 0;
+const inlineContainer = css`
+	display: flex;
 
-	& * {
-		margin-bottom: 0;
-	}
-
-	& *:first-of-type {
-		margin-left: 0;
+	& *:not(:last-of-type) {
+		margin-right: ${space[4]}px;
 	}
 `;
 
@@ -64,7 +61,7 @@ export function StripeCardForm({
 						/>
 					)}
 				/>
-				<Inline space={3} cssOverrides={inlineOverrides}>
+				<div css={inlineContainer}>
 					<ElementDecorator
 						id="expiry"
 						text="Expiry date"
@@ -87,7 +84,7 @@ export function StripeCardForm({
 							/>
 						)}
 					/>
-				</Inline>
+				</div>
 				{showZipCode && (
 					<div css={zipCodeContainer}>
 						<TextInput
@@ -104,6 +101,7 @@ export function StripeCardForm({
 					<ElementDecorator
 						id="robot-checkbox"
 						text="Security check"
+						error={errors.recaptcha?.[0]}
 						renderElement={() => recaptcha}
 					/>
 				)}
