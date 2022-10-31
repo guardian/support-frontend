@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
 import { from, space, visuallyHidden } from '@guardian/source-foundations';
-import { Stack, TextInput } from '@guardian/source-react-components';
+import { TextInput } from '@guardian/source-react-components';
 import { Divider } from '@guardian/source-react-components-development-kitchen';
 import type { ContributionType } from 'helpers/contributions';
 import { emailRegexPattern } from 'helpers/forms/formValidation';
@@ -21,10 +21,14 @@ const dividerStyles = css`
 	}
 `;
 
-const stackStyles = css`
+const fieldGroupStyles = css`
 	position: relative;
+	& > *:not(:first-of-type) {
+		margin-top: ${space[3]}px;
+	}
+
 	${from.tablet} {
-		& > * + * {
+		& > *:not(:first-of-type) {
 			margin-top: ${space[4]}px;
 		}
 	}
@@ -58,7 +62,7 @@ export function PersonalDetails({
 	contributionState,
 }: PersonalDetailsProps): JSX.Element {
 	return (
-		<Stack space={3} cssOverrides={stackStyles}>
+		<div css={fieldGroupStyles}>
 			<h3 css={hiddenHeading}>Your details</h3>
 			<div>
 				<TextInput
@@ -112,7 +116,7 @@ export function PersonalDetails({
 			{contributionState}
 
 			<Divider size="full" cssOverrides={dividerStyles} />
-		</Stack>
+		</div>
 	);
 }
 

@@ -15,9 +15,9 @@ type StateSelectProps = {
 };
 
 const stateDescriptors: Partial<Record<CountryGroupId, string>> = {
-	UnitedStates: 'state',
-	Canada: 'province',
-	AUDCountries: 'state / territory',
+	UnitedStates: 'State',
+	Canada: 'Province',
+	AUDCountries: 'State / Territory',
 };
 
 const stateLists: Partial<Record<CountryGroupId, Record<string, string>>> = {
@@ -26,13 +26,7 @@ const stateLists: Partial<Record<CountryGroupId, Record<string, string>>> = {
 	AUDCountries: auStates,
 };
 
-function getLabel(countryGroupId: CountryGroupId) {
-	const descriptor = stateDescriptors[countryGroupId] ?? 'state';
-
-	return `Please select your ${descriptor}`;
-}
-
-export default function StateSelect({
+export function StateSelect({
 	countryGroupId,
 	state,
 	onStateChange,
@@ -45,7 +39,7 @@ export default function StateSelect({
 			<div>
 				<Select
 					id="state"
-					label={getLabel(countryGroupId)}
+					label={stateDescriptors[countryGroupId] ?? 'State'}
 					value={state}
 					onChange={(e) => onStateChange(e.target.value)}
 					error={error}
@@ -53,7 +47,11 @@ export default function StateSelect({
 					<>
 						<Option value="">&nbsp;</Option>
 						{Object.entries(statesList).map(([abbreviation, name]) => {
-							return <Option value={abbreviation}>{name}</Option>;
+							return (
+								<Option value={abbreviation} selected={abbreviation === state}>
+									{name}
+								</Option>
+							);
 						})}
 					</>
 				</Select>

@@ -11,7 +11,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import type { PersonalDetailsProps } from './personalDetails';
-import StateSelect from './stateSelect';
+import { StateSelect } from './stateSelect';
 
 type PersonalDetailsContainerProps = {
 	renderPersonalDetails: (props: PersonalDetailsProps) => JSX.Element;

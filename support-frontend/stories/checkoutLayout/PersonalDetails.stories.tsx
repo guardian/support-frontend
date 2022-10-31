@@ -4,12 +4,12 @@ import { Column, Columns, Container } from '@guardian/source-react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { PersonalDetailsProps } from 'components/personalDetails/personalDetails';
 import { PersonalDetails } from 'components/personalDetails/personalDetails';
+import { StateSelect } from 'components/personalDetails/stateSelect';
 import Signout from 'components/signout/signout';
 import {
 	GBPCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import ContributionState from 'pages/contributions-landing/components/ContributionState';
 
 export default {
 	title: 'Checkouts/Personal Details',
@@ -62,12 +62,9 @@ SingleContribSignedIn.args = {
 	isSignedInPersonalDetails: false,
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
-		<ContributionState
-			selectedState={null}
-			onChange={() => null}
-			isValid={false}
-			formHasBeenSubmitted={false}
-			contributionType={'ONE_OFF'}
+		<StateSelect
+			state=""
+			onStateChange={() => null}
 			countryGroupId={GBPCountries}
 		/>
 	),
@@ -83,12 +80,9 @@ SingleContribSignedOut.args = {
 	isSignedInPersonalDetails: false,
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
-		<ContributionState
-			selectedState={null}
-			onChange={() => null}
-			isValid={false}
-			formHasBeenSubmitted={false}
-			contributionType={'ONE_OFF'}
+		<StateSelect
+			state=""
+			onStateChange={() => null}
 			countryGroupId={GBPCountries}
 		/>
 	),
@@ -104,12 +98,9 @@ MultiContribSignedIn.args = {
 	isSignedInPersonalDetails: false,
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
-		<ContributionState
-			selectedState={null}
-			onChange={() => null}
-			isValid={false}
-			formHasBeenSubmitted={false}
-			contributionType={'MONTHLY'}
+		<StateSelect
+			state=""
+			onStateChange={() => null}
 			countryGroupId={GBPCountries}
 		/>
 	),
@@ -125,12 +116,9 @@ MultiContribSignedOut.args = {
 	isSignedInPersonalDetails: false,
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
-		<ContributionState
-			selectedState={null}
-			onChange={() => null}
-			isValid={false}
-			formHasBeenSubmitted={false}
-			contributionType={'MONTHLY'}
+		<StateSelect
+			state=""
+			onStateChange={() => null}
 			countryGroupId={GBPCountries}
 		/>
 	),
@@ -146,12 +134,9 @@ MultiContribUSSignedIn.args = {
 	isSignedInPersonalDetails: false,
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
-		<ContributionState
-			selectedState={null}
-			onChange={() => null}
-			isValid={false}
-			formHasBeenSubmitted={false}
-			contributionType={'MONTHLY'}
+		<StateSelect
+			state=""
+			onStateChange={() => null}
 			countryGroupId={UnitedStates}
 		/>
 	),
@@ -167,12 +152,33 @@ MultiContribUSSignedOut.args = {
 	isSignedInPersonalDetails: false,
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
-		<ContributionState
-			selectedState={null}
-			onChange={() => null}
-			isValid={false}
-			formHasBeenSubmitted={false}
-			contributionType={'MONTHLY'}
+		<StateSelect
+			state=""
+			onStateChange={() => null}
+			countryGroupId={UnitedStates}
+		/>
+	),
+};
+
+export const WithErrors = Template.bind({});
+
+WithErrors.args = {
+	email: '',
+	firstName: '',
+	lastName: '',
+	contributionType: 'MONTHLY',
+	isSignedInPersonalDetails: false,
+	errors: {
+		firstName: ['Please enter your first name'],
+		lastName: ['Please enter your last name'],
+		email: ['Please enter your email address'],
+	},
+	signOutLink: <Signout isSignedIn={false} />,
+	contributionState: (
+		<StateSelect
+			state=""
+			error="Please select your state, province or territory"
+			onStateChange={() => null}
 			countryGroupId={UnitedStates}
 		/>
 	),

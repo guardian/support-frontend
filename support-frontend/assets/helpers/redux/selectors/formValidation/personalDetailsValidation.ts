@@ -10,8 +10,7 @@ export function getStateOrProvinceError(
 
 	if (shouldCollectStateForContributions(countryGroupId)) {
 		return {
-			contributionsState:
-				state.page.checkoutForm.billingAddress.fields.errorObject?.state,
+			state: state.page.checkoutForm.billingAddress.fields.errorObject?.state,
 		};
 	}
 	return {};
