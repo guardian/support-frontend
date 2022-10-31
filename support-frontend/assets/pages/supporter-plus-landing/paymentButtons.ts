@@ -1,4 +1,3 @@
-
 import { AmazonPaymentButton } from 'components/amazonPaymentButton/amazonPaymentButton';
 import { SepaPaymentButton } from 'components/sepaForm/sepaPaymentButton';
 import { StripePaymentButton } from 'components/stripeCardForm/stripePaymentButton';
