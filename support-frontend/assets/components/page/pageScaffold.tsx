@@ -6,6 +6,21 @@ import { SkipLink } from 'components/skipLink/skipLink';
 import { TestUserBanner } from 'components/test-user-banner/testUserBanner';
 import { useScrollToAnchor } from 'helpers/customHooks/useScrollToAnchor';
 
+const container = css`
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+
+	& main {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		& > :last-child {
+			flex: 1;
+		}
+	}
+`;
+
 export type PageScaffoldProps = {
 	id: string;
 	header?: ReactNode;
@@ -19,7 +34,7 @@ export function PageScaffold(props: PageScaffoldProps): JSX.Element {
 	useScrollToAnchor();
 
 	return (
-		<div id={props.id}>
+		<div id={props.id} css={container}>
 			<Global
 				styles={css`
 					${resets.resetCSS}
