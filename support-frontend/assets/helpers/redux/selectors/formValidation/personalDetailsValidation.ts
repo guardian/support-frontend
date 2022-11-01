@@ -7,8 +7,9 @@ export function getStateOrProvinceError(
 	state: ContributionsState,
 ): ErrorCollection {
 	const { countryGroupId } = state.common.internationalisation;
+	const contributionType = getContributionType(state);
 
-	if (shouldCollectStateForContributions(countryGroupId)) {
+	if (shouldCollectStateForContributions(countryGroupId, contributionType)) {
 		return {
 			state: state.page.checkoutForm.billingAddress.fields.errorObject?.state,
 		};

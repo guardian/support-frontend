@@ -69,6 +69,7 @@ export function PersonalDetailsContainer({
 		contributionState: (
 			<StateSelect
 				countryGroupId={countryGroupId}
+				contributionType={contributionType}
 				state={state}
 				onStateChange={onBillingStateChange}
 				error={errorObject?.state?.[0]}

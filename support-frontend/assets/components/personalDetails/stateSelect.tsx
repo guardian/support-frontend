@@ -1,4 +1,5 @@
 import { Option, Select } from '@guardian/source-react-components';
+import type { ContributionType } from 'helpers/contributions';
 import {
 	auStates,
 	caStates,
@@ -9,6 +10,7 @@ import { shouldCollectStateForContributions } from 'helpers/internationalisation
 
 type StateSelectProps = {
 	countryGroupId: CountryGroupId;
+	contributionType: ContributionType;
 	state: string;
 	onStateChange: (newState: string) => void;
 	error?: string;
@@ -28,13 +30,14 @@ const stateLists: Partial<Record<CountryGroupId, Record<string, string>>> = {
 
 export function StateSelect({
 	countryGroupId,
+	contributionType,
 	state,
 	onStateChange,
 	error,
 }: StateSelectProps): JSX.Element | null {
 	const statesList = stateLists[countryGroupId] ?? {};
 
-	if (shouldCollectStateForContributions(countryGroupId)) {
+	if (shouldCollectStateForContributions(countryGroupId, contributionType)) {
 		return (
 			<div>
 				<Select

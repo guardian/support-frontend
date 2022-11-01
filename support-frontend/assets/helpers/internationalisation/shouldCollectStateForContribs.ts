@@ -1,3 +1,4 @@
+import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroup, CountryGroupId } from './countryGroup';
 import {
 	AUDCountries,
@@ -8,7 +9,10 @@ import {
 
 export function shouldCollectStateForContributions(
 	countryGroupId: CountryGroupId,
+	contributionType: ContributionType,
 ): boolean {
+	if (contributionType === 'ONE_OFF') return false;
+
 	if (countryGroupId === UnitedStates || countryGroupId === Canada) {
 		return true;
 	}
