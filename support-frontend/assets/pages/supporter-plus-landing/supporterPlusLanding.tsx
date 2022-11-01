@@ -1,10 +1,16 @@
 import { css } from '@emotion/react';
 import { from, neutral, space, textSans } from '@guardian/source-foundations';
-import { Column, Columns, Hide } from '@guardian/source-react-components';
+import {
+	Button,
+	Column,
+	Columns,
+	Hide,
+} from '@guardian/source-react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
+import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -16,7 +22,7 @@ import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
-import PersonalDetails from 'components/personalDetails/personalDetails';
+import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -56,7 +62,11 @@ const checkoutContainer = css`
 	}
 `;
 
-export function SupporterPlusLandingPage(): JSX.Element {
+export function SupporterPlusLandingPage({
+	thankYouRoute,
+}: {
+	thankYouRoute: string;
+}): JSX.Element {
 	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -64,6 +74,8 @@ export function SupporterPlusLandingPage(): JSX.Element {
 		(state) => state.common.settings,
 	);
 	const contributionType = useContributionsSelector(getContributionType);
+
+	const navigate = useNavigate();
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
@@ -139,6 +151,15 @@ export function SupporterPlusLandingPage(): JSX.Element {
 										)}
 									/>
 								</ContributionsStripe>
+								<br />
+								<Button
+									onClick={(e) => {
+										e.preventDefault();
+										navigate(thankYouRoute);
+									}}
+								>
+									Go to thank you page
+								</Button>
 							</BoxContents>
 						</Box>
 						<Box>

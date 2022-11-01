@@ -6,11 +6,16 @@ import {
 	CheckboxGroup,
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/helpers';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import { setThankYouMarketingConsent } from 'helpers/redux/checkout/thankYouState/actions';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import {
 	trackComponentClick,
 	trackComponentLoad,
@@ -58,9 +63,12 @@ function ContributionThankYouMarketingConsent({
 	csrf,
 	subscribeToNewsLetter,
 }: ContributionThankYouMarketingConsentProps) {
-	const [hasConsented, setHasConsented] = useState(false);
-	const [errorMessage, setErrorMessage] = useState<string | null>(null);
-	const [hasBeenCompleted, setHasBeenCompleted] = useState(false);
+	const { marketingConsent } = useContributionsSelector(
+		(state) => state.page.checkoutForm.thankYou,
+	);
+	const { hasBeenCompleted, hasConsented, errorMessage } = marketingConsent;
+
+	const dispatch = useContributionsDispatch();
 
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_MARKETING);
@@ -68,15 +76,30 @@ function ContributionThankYouMarketingConsent({
 
 	// reset error message when consent changes
 	useEffect(() => {
-		setErrorMessage(null);
+		dispatch(
+			setThankYouMarketingConsent({
+				...marketingConsent,
+				errorMessage: null,
+			}),
+		);
 	}, [hasConsented]);
 
 	const onSubmit = () => {
 		if (!hasConsented) {
-			setErrorMessage(ERROR_MESSAGE);
+			dispatch(
+				setThankYouMarketingConsent({
+					...marketingConsent,
+					errorMessage: ERROR_MESSAGE,
+				}),
+			);
 		} else {
 			trackComponentClick(OPHAN_COMPONENT_ID_MARKETING);
-			setHasBeenCompleted(true);
+			dispatch(
+				setThankYouMarketingConsent({
+					...marketingConsent,
+					hasBeenCompleted: true,
+				}),
+			);
 			subscribeToNewsLetter(email, csrf);
 		}
 	};
@@ -116,7 +139,14 @@ function ContributionThankYouMarketingConsent({
 							<Checkbox
 								value="marketing-consent"
 								checked={hasConsented}
-								onChange={() => setHasConsented(!hasConsented)}
+								onChange={() =>
+									dispatch(
+										setThankYouMarketingConsent({
+											...marketingConsent,
+											hasConsented: !marketingConsent.hasConsented,
+										}),
+									)
+								}
 								supporting="Stay up-to-date with our latest offers and the aims of the organisation, as well as the ways to enjoy and support our journalism."
 							/>
 						</CheckboxGroup>

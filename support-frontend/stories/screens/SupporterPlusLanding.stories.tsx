@@ -1,5 +1,6 @@
 import '__mocks__/settingsMock';
 import { Provider } from 'react-redux';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
 import { init as formInit } from 'pages/contributions-landing/contributionsLandingInit';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
@@ -22,14 +23,18 @@ export default {
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Provider store={store}>
-				<Story />
+				<MemoryRouter>
+					<Routes>
+						<Route path="/*" element={<Story />} />
+					</Routes>
+				</MemoryRouter>
 			</Provider>
 		),
 	],
 };
 
 function Template() {
-	return <SupporterPlusLandingPage />;
+	return <SupporterPlusLandingPage thankYouRoute={'/uk/thankyou'} />;
 }
 
 export const Default = Template.bind({});

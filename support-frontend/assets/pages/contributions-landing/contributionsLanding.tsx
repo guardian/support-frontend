@@ -13,6 +13,7 @@ import { renderPage } from 'helpers/rendering/render';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import * as user from 'helpers/user/user';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
+import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
 import ContributionThankYouPage from './components/ContributionThankYou/ContributionThankYouPage';
 import { init as formInit } from './contributionsLandingInit';
@@ -55,15 +56,26 @@ const { abParticipations } = store.getState().common;
 
 const showNewProductPage = abParticipations.supporterPlus === 'variant';
 
+const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
+
 // ----- Render ----- //
 
 const router = () => {
 	const countryIds = ['uk', 'us', 'au', 'eu', 'int', 'nz', 'ca'];
 
 	const landingPage = showNewProductPage ? (
-		<SupporterPlusLandingPage />
+		<SupporterPlusLandingPage thankYouRoute={thankYouRoute} />
 	) : (
-		<ContributionsLandingPage countryGroupId={countryGroupId} />
+		<ContributionsLandingPage
+			countryGroupId={countryGroupId}
+			thankYouRoute={thankYouRoute}
+		/>
+	);
+
+	const thankYouPage = showNewProductPage ? (
+		<SupporterPlusThankYou />
+	) : (
+		<ContributionThankYouPage countryGroupId={countryGroupId} />
 	);
 
 	return (
@@ -80,12 +92,7 @@ const router = () => {
 						/>
 					))}
 					{countryIds.map((countryId) => (
-						<Route
-							path={`/${countryId}/thankyou`}
-							element={
-								<ContributionThankYouPage countryGroupId={countryGroupId} />
-							}
-						/>
+						<Route path={`/${countryId}/thankyou`} element={thankYouPage} />
 					))}
 				</Routes>
 			</Provider>

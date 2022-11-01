@@ -7,8 +7,13 @@ import {
 	RadioGroup,
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { privacyLink } from 'helpers/legal';
+import { setThankYouSupportReminder } from 'helpers/redux/checkout/thankYouState/actions';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import {
 	trackComponentClick,
 	trackComponentLoad,
@@ -143,8 +148,12 @@ type ContributionThankYouSupportReminderProps = {
 function ContributionThankYouSupportReminder({
 	email,
 }: ContributionThankYouSupportReminderProps): JSX.Element {
-	const [selectedChoiceIndex, setSelectedChoiceIndex] = useState(0);
-	const [hasBeenCompleted, setHasBeenInteractedWith] = useState(false);
+	const { supportReminder } = useContributionsSelector(
+		(state) => state.page.checkoutForm.thankYou,
+	);
+	const { selectedChoiceIndex, hasBeenCompleted } = supportReminder;
+
+	const dispatch = useContributionsDispatch();
 
 	useEffect(() => {
 		trackComponentLoad(OPHAN_COMPONENT_ID_SET_REMINDER);
@@ -179,7 +188,12 @@ function ContributionThankYouSupportReminder({
 	const onSubmit = () => {
 		setReminder();
 		trackComponentClick(OPHAN_COMPONENT_ID_SET_REMINDER);
-		setHasBeenInteractedWith(true);
+		dispatch(
+			setThankYouSupportReminder({
+				...supportReminder,
+				hasBeenCompleted: true,
+			}),
+		);
 	};
 
 	const actionIcon = <SvgClock />;
@@ -221,7 +235,14 @@ function ContributionThankYouSupportReminder({
 									value={choice.label}
 									label={choice.label}
 									checked={selectedChoiceIndex === index}
-									onChange={() => setSelectedChoiceIndex(index)}
+									onChange={() =>
+										dispatch(
+											setThankYouSupportReminder({
+												...supportReminder,
+												selectedChoiceIndex: index,
+											}),
+										)
+									}
 								/>
 							))}
 						</RadioGroup>
