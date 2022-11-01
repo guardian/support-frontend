@@ -22,6 +22,8 @@ import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
+import { PersonalDetails } from 'components/personalDetails/personalDetails';
+import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
@@ -58,11 +60,6 @@ const checkoutContainer = css`
 		padding-bottom: ${space[24]}px;
 		padding-top: ${space[6]}px;
 	}
-`;
-
-// TODO: these are purely for demo purposes, delete once the boxes have real content in
-const largeDemoBox = css`
-	min-height: 400px;
 `;
 
 export function SupporterPlusLandingPage({
@@ -118,8 +115,9 @@ export function SupporterPlusLandingPage({
 		>
 			<CheckoutHeading heading={heading}>
 				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-					ex justo, varius ut porttitor tristique, rhoncus quis dolor.
+					As a reader-funded news organisation, we rely on your generosity.
+					Please give what you can, so millions more can benefit from quality
+					reporting on the events shaping our world.
 				</p>
 			</CheckoutHeading>
 			<Container sideBorders backgroundColor={neutral[97]}>
@@ -138,9 +136,11 @@ export function SupporterPlusLandingPage({
 									<PaymentRequestButtonContainer
 										CustomButton={SavedCardButton}
 									/>
-
-									<p css={largeDemoBox}>Personal details and payment</p>
-
+									<PersonalDetailsContainer
+										renderPersonalDetails={(personalDetailsProps) => (
+											<PersonalDetails {...personalDetailsProps} />
+										)}
+									/>
 									<StripeCardFormContainer />
 									<PaymentButtonController
 										paymentButtons={getPaymentMethodButtons(

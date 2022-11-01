@@ -68,7 +68,7 @@ function mapStateToProps(state: SubscriptionsState) {
 		currencyId: state.common.internationalisation.currencyId,
 		csrf: state.page.checkoutForm.csrf,
 		payPalHasLoaded: state.page.checkoutForm.payment.payPal.hasLoaded,
-		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
+		paymentMethod: state.page.checkoutForm.payment.paymentMethod.name,
 		isTestUser: state.page.checkout.isTestUser,
 		billingPeriod: state.page.checkoutForm.product
 			.billingPeriod as DigitalBillingPeriod,
@@ -106,7 +106,7 @@ function mapDispatchToProps() {
 				// differently to other payment methods. All others are tracked in submit.js
 				const { paymentMethod } = state.page.checkoutForm.payment;
 
-				if (paymentMethod === PayPal) {
+				if (paymentMethod.name === PayPal) {
 					trackSubmitAttempt(PayPal, DigitalPack, NoProductOptions);
 				}
 			},

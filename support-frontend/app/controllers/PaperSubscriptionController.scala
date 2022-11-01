@@ -60,7 +60,7 @@ class PaperSubscriptionController(
         shareUrl = canonicalLink,
       ) {
         val maybePromotionCopy =
-          landingCopyProvider.promotionCopyForPrimaryCountry(queryPromos ++ defaultPromos, Paper, UK)
+          landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, Paper, "uk")
         Html(
           s"""<script type="text/javascript">
       window.guardian.productPrices = ${outputJson(

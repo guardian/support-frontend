@@ -33,3 +33,18 @@ export function getMinimumContributionAmount(
 
 	return min;
 }
+
+export function getMaximumContributionAmount(
+	state: ContributionsState,
+): number {
+	const { countryGroupId, useLocalCurrency, localCurrencyCountry } =
+		state.common.internationalisation;
+	const contributionType = getContributionType(state);
+
+	const { max } =
+		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
+			? localCurrencyCountry.config[contributionType]
+			: config[countryGroupId][contributionType];
+
+	return max;
+}

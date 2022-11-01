@@ -133,7 +133,7 @@ function mapDispatchToProps() {
 				// differently to other payment methods. All others are tracked in submit.js
 				const { paymentMethod } = state.page.checkoutForm.payment;
 
-				if (paymentMethod === PayPal) {
+				if (paymentMethod.name === PayPal) {
 					trackSubmitAttempt(PayPal, GuardianWeekly, NoProductOptions);
 				}
 			},

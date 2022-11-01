@@ -1,23 +1,25 @@
 import type { StripeFormErrors } from 'helpers/redux/checkout/payment/stripe/state';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
+import { getStripeFormErrors } from 'helpers/redux/selectors/formValidation/paymentValidation';
 
 export type StripeCardFormDisplayErrors = StripeFormErrors & {
+	recaptcha?: string[];
 	zipCode?: string[];
 };
 
-export function getStripeCardFormErrors(state: ContributionsState): {
+export function getDisplayErrors(state: ContributionsState): {
 	errors: StripeCardFormDisplayErrors;
 	showErrors: boolean;
 } {
-	const { errors, showErrors } = state.page.checkoutForm.payment.stripe;
+	const { showErrors } = state.page.checkoutForm.payment.stripe;
+	const recaptchaErrors = state.page.checkoutForm.recaptcha.errors;
+	const formErrors = getStripeFormErrors(state);
 
-	const shouldShowZipCode =
-		state.common.internationalisation.countryId === 'US';
-
-	if (shouldShowZipCode) {
-		// TODO: get zipcode errors from the address slice
-		return { errors, showErrors };
-	}
-
-	return { errors, showErrors };
+	return {
+		errors: {
+			...formErrors,
+			recaptcha: recaptchaErrors,
+		},
+		showErrors,
+	};
 }

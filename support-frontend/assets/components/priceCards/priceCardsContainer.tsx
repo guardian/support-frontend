@@ -5,6 +5,7 @@ import {
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
+import { getOtherAmountErrors } from 'helpers/redux/selectors/formValidation/otherAmountValidation';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -55,6 +56,7 @@ export function PriceCardsContainer({
 		frequency,
 		defaultAmount,
 	).toString();
+	const otherAmountErrors = useContributionsSelector(getOtherAmountErrors);
 	const otherAmount = otherAmounts[frequency].amount ?? '';
 
 	function onAmountChange(newAmount: string) {
@@ -84,5 +86,6 @@ export function PriceCardsContainer({
 		minAmount,
 		onAmountChange,
 		onOtherAmountChange,
+		errors: otherAmountErrors,
 	});
 }

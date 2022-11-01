@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { amazonPayReducer } from './amazonPay/reducer';
 import type { AmazonPayState } from './amazonPay/state';
 import { directDebitReducer } from './directDebit/reducer';
 import type { DirectDebitState } from './directDebit/state';
 import { paymentMethodReducer } from './paymentMethod/reducer';
+import type { PaymentMethodState } from './paymentMethod/state';
 import { paymentRequestButtonReducer } from './paymentRequestButton/reducer';
 import type { PaymentRequestButtonState } from './paymentRequestButton/state';
 import { payPalReducer } from './payPal/reducer';
@@ -17,7 +17,7 @@ import { stripeAccountDetailsReducer } from './stripeAccountDetails/reducer';
 import type { StripeAccountDetailsState } from './stripeAccountDetails/state';
 
 export type PaymentState = {
-	paymentMethod: PaymentMethod;
+	paymentMethod: PaymentMethodState;
 	directDebit: DirectDebitState;
 	amazonPay: AmazonPayState;
 	sepa: SepaState;

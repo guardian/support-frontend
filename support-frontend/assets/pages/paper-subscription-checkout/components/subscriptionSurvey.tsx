@@ -41,7 +41,7 @@ const marginForButton = css`
 
 function SubscriptionsSurvey(): JSX.Element | null {
 	const surveyLink =
-		'https://guardiannewsampampmedia.formstack.com/forms/newspaper_subs_2022';
+		'https://guardiannewsandmedia.formstack.com/forms/newspaper_subs_2022';
 	const title = 'Tell us about your subscription';
 	const message =
 		'Please take this short survey to tell us why you purchased your subscription.';
