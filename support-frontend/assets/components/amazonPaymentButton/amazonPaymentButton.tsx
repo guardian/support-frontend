@@ -1,5 +1,6 @@
 import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
 import AnimatedDots from 'components/spinners/animatedDots';
+import { useAmazonPayObjects } from 'helpers/customHooks/useAmazonPayObjects';
 import { AmazonPay } from 'helpers/forms/paymentMethods';
 import { setAmazonPayHasAccessToken } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import {
@@ -11,7 +12,6 @@ import {
 	trackComponentLoad,
 } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
-import { useAmazonPayObjects } from 'pages/contributions-landing/components/AmazonPay/useAmazonPayObjects';
 
 export function AmazonPaymentButton(): JSX.Element {
 	const dispatch = useContributionsDispatch();
