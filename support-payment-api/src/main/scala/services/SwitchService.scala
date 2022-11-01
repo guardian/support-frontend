@@ -33,7 +33,8 @@ object SwitchState {
 
 }
 
-case class Switches(enableRecaptchaFrontend: Option[SwitchState], enableRecaptchaBackend: Option[SwitchState])
+case class Switches(enableRecaptchaFrontend: Option[SwitchState], enableRecaptchaBackend: Option[SwitchState],enableStripeCreditDebit: Option[SwitchState],enableStripeApplePay: Option[SwitchState],enableStripePaymentRequest: Option[SwitchState],enablePayPal: Option[SwitchState],enableAmazonPay: Option[SwitchState])
+
 
 object Switches {
   implicit val switchesCodec: Codec[Switches] = deriveCodec
@@ -51,7 +52,7 @@ class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem
       .recordStats()
       .expireAfterWrite(1.minutes)
       .maximumSize(10)
-      .buildAsync(s => fromS3().getOrElse(Switches(None, None)))
+      .buildAsync(s => fromS3().getOrElse(Switches(None,None,None,None,None,None,None)))
 
   def recaptchaSwitches: EitherT[Future, Nothing, Switches] =
     EitherT.right(cache.get(cacheKey))
@@ -68,7 +69,7 @@ class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem
       case Test => "CODE"
     }
 
-    val path = s"$stage/switches.json"
+    val path = s"$stage/switches_v2.json"
 
     for {
       buf <- Either.catchNonFatal {
