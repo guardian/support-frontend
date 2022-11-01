@@ -65,6 +65,7 @@ SingleContribSignedIn.args = {
 		<StateSelect
 			state=""
 			onStateChange={() => null}
+			contributionType={'ONE_OFF'}
 			countryGroupId={GBPCountries}
 		/>
 	),
@@ -83,6 +84,7 @@ SingleContribSignedOut.args = {
 		<StateSelect
 			state=""
 			onStateChange={() => null}
+			contributionType={'ONE_OFF'}
 			countryGroupId={GBPCountries}
 		/>
 	),
@@ -101,6 +103,7 @@ MultiContribSignedIn.args = {
 		<StateSelect
 			state=""
 			onStateChange={() => null}
+			contributionType={'MONTHLY'}
 			countryGroupId={GBPCountries}
 		/>
 	),
@@ -119,6 +122,7 @@ MultiContribSignedOut.args = {
 		<StateSelect
 			state=""
 			onStateChange={() => null}
+			contributionType={'MONTHLY'}
 			countryGroupId={GBPCountries}
 		/>
 	),
@@ -137,6 +141,7 @@ MultiContribUSSignedIn.args = {
 		<StateSelect
 			state=""
 			onStateChange={() => null}
+			contributionType={'MONTHLY'}
 			countryGroupId={UnitedStates}
 		/>
 	),
@@ -155,6 +160,7 @@ MultiContribUSSignedOut.args = {
 		<StateSelect
 			state=""
 			onStateChange={() => null}
+			contributionType={'MONTHLY'}
 			countryGroupId={UnitedStates}
 		/>
 	),
@@ -179,6 +185,7 @@ WithErrors.args = {
 			state=""
 			error="Please select your state, province or territory"
 			onStateChange={() => null}
+			contributionType={'MONTHLY'}
 			countryGroupId={UnitedStates}
 		/>
 	),
