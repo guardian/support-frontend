@@ -60,15 +60,21 @@ export function RadioWithImage({
 	isSupporterPlus,
 }: RadioWithImagePropTypes): JSX.Element {
 	return (
-		<div css={[radioWithImageStyles, cssOverrides]}>
-			<Radio
-				id={id}
-				label={getLabelText(label, checked, isSupporterPlus)}
-				checked={checked}
-				name={name}
-				onChange={onChange}
-			/>
-			<div css={paymentIcon}>{image}</div>
-		</div>
+		<label
+			htmlFor={id}
+			css={css`
+				cursor: pointer;
+			`}
+		>
+			<div css={[radioWithImageStyles, cssOverrides]} onChange={onChange}>
+				<Radio
+					id={id}
+					label={getLabelText(label, checked, isSupporterPlus)}
+					checked={checked}
+					name={name}
+				/>
+				<div css={paymentIcon}>{image}</div>
+			</div>
+		</label>
 	);
 }
