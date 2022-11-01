@@ -64,7 +64,7 @@ const buttonContainer = css`
 	padding: ${space[12]}px 0;
 `;
 
-export const largeDonations = {
+export const largeDonations: Record<ContributionType, number> = {
 	MONTHLY: 20,
 	ANNUAL: 100,
 	ONE_OFF: 100,
@@ -110,8 +110,8 @@ export function SupporterPlusThankYou(): JSX.Element {
 		useContributionsSelector(
 			(state) => state.page.checkoutForm.personalDetails,
 		);
-	const { paymentMethod } = useContributionsSelector(
-		(state) => state.page.checkoutForm.payment,
+	const paymentMethod = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.paymentMethod.name,
 	);
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
