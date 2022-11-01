@@ -26,7 +26,7 @@ function mapStateToProps(state: ContributionsState) {
 		contributionType,
 		countryGroupId: state.common.internationalisation.countryGroupId,
 		isWaiting: state.page.form.isWaiting,
-		paymentMethod: state.page.checkoutForm.payment.paymentMethod,
+		paymentMethod: state.page.checkoutForm.payment.paymentMethod.name,
 		selectedAmounts: state.page.checkoutForm.product.selectedAmounts,
 		otherAmount:
 			state.page.checkoutForm.product.otherAmounts[contributionType].amount,
@@ -64,7 +64,7 @@ function ContributionSubmit(props: PropTypes) {
 	// if all payment methods are switched off, do not display the button
 	const formClassName = 'form--contribution';
 	const showPayPalRecurringButton =
-		props.paymentMethod.name === PayPal && props.contributionType !== 'ONE_OFF';
+		props.paymentMethod === PayPal && props.contributionType !== 'ONE_OFF';
 
 	const onPayPalCheckoutCompleted = (
 		payPalCheckoutDetails: PayPalCheckoutDetails,
@@ -79,13 +79,13 @@ function ContributionSubmit(props: PropTypes) {
 		props.otherAmount,
 		props.selectedAmounts,
 		props.currency,
-		props.paymentMethod.name,
+		props.paymentMethod,
 		props.showBenefitsMessaging,
 		props.userInNewProductTest,
 	);
 
 	const { loginObject, paymentsObject } = useAmazonPayObjects(
-		props.paymentMethod.name === AmazonPay,
+		props.paymentMethod === AmazonPay,
 		props.countryGroupId,
 		props.isTestUser,
 	);
@@ -121,7 +121,7 @@ function ContributionSubmit(props: PropTypes) {
 				</div>
 			)}
 
-			{props.paymentMethod.name === AmazonPay && amazonPayEnabled() && (
+			{props.paymentMethod === AmazonPay && amazonPayEnabled() && (
 				<AmazonPayCheckout
 					loginObject={loginObject}
 					paymentsObject={paymentsObject}
@@ -132,7 +132,7 @@ function ContributionSubmit(props: PropTypes) {
 			)}
 
 			{!showPayPalRecurringButton &&
-			(props.paymentMethod.name !== AmazonPay ||
+			(props.paymentMethod !== AmazonPay ||
 				(amazonPayEnabled() && props.amazonPay.hasAccessToken)) ? (
 				<Button
 					type="submit"
