@@ -11,6 +11,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
+import { useEffect } from 'preact/hooks';
 import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
@@ -27,6 +28,7 @@ import PaymentMethodSelectorContainer from 'components/paymentMethodSelector/Pay
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
 import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
+import ProgressMessage from 'components/progressMessage/progressMessage';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
@@ -83,6 +85,9 @@ export function SupporterPlusLandingPage({
 		(state) => state.common.settings,
 	);
 	const contributionType = useContributionsSelector(getContributionType);
+	const { paymentComplete, isWaiting } = useContributionsSelector(
+		(state) => state.page.form,
+	);
 
 	const navigate = useNavigate();
 
@@ -100,6 +105,12 @@ export function SupporterPlusLandingPage({
 		subPath: '/contribute',
 	};
 	const heading = <LandingPageHeading />;
+
+	useEffect(() => {
+		if (paymentComplete) {
+			navigate(thankYouRoute, { replace: true });
+		}
+	}, [paymentComplete]);
 
 	return (
 		<PageScaffold
@@ -186,6 +197,9 @@ export function SupporterPlusLandingPage({
 					</Column>
 				</Columns>
 			</Container>
+			{isWaiting && (
+				<ProgressMessage message={['Processing transaction', 'Please wait']} />
+			)}
 		</PageScaffold>
 	);
 }

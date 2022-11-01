@@ -12,8 +12,9 @@ export default function ProgressMessage(props: PropTypes): JSX.Element {
 			<div className="component-progress-message__dialog">
 				{props.message.map((message) => (
 					<div
+						role="alert"
 						className="component-progress-message__message"
-						aria-live="polite"
+						// aria-live="polite"
 					>
 						{message}
 					</div>
