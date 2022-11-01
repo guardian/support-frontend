@@ -1,6 +1,11 @@
 import type { PaymentMethod, PaymentRequest } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
-import { useContributionsDispatch } from 'helpers/redux/storeHooks';
+import { validateForm } from 'helpers/redux/checkout/checkoutActions';
+import { completePaymentRequest } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import { trackComponentEvents } from 'helpers/tracking/ophan';
 import { addPayerDetailsToRedux } from './payerDetails';
 
@@ -18,6 +23,9 @@ export function usePaymentRequestEvent(
 		null,
 	);
 
+	const { stripeAccount } = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.stripeAccountDetails,
+	);
 	const dispatch = useContributionsDispatch();
 
 	useEffect(() => {
@@ -35,6 +43,8 @@ export function usePaymentRequestEvent(
 				addPayerDetailsToRedux(dispatch, paymentMethodEvent);
 				setPaymentMethod(paymentMethod);
 				setPaymentWallet(walletName);
+				dispatch(validateForm());
+				dispatch(completePaymentRequest(stripeAccount));
 
 				const walletType =
 					(paymentMethod.card?.wallet?.type as string | null) ?? 'no-wallet';

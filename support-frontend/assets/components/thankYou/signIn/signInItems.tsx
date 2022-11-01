@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { routes } from 'helpers/urls/routes';
+import { isCodeOrProd } from 'helpers/urls/url';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
 import BulletPointedList from 'pages/contributions-landing/components/ContributionThankYou/components/BulletPointedList';
 import ExpandableContainer from 'pages/contributions-landing/components/ContributionThankYou/components/ExpandableContainer';
@@ -123,10 +124,9 @@ export function SignInBodyCopy(): JSX.Element {
 export function SignInCTA({ email, csrf }: SignInBodyCopyProps): JSX.Element {
 	const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
 
-	useEffect(() => {
-		const payload = {
-			email,
-		};
+	function fetchSignInLink(payload: { email: string }) {
+		if (!isCodeOrProd()) return;
+
 		fetch(routes.createSignInUrl, {
 			method: 'post',
 			headers: {
@@ -140,6 +140,14 @@ export function SignInCTA({ email, csrf }: SignInBodyCopyProps): JSX.Element {
 				setSignInUrl((data as CreateSignInUrlResponse).signInLink),
 			)
 			.catch(catchPromiseHandler('Error fetching sign in link'));
+	}
+
+	useEffect(() => {
+		const payload = {
+			email,
+		};
+
+		fetchSignInLink(payload);
 	}, []);
 
 	const onSignInClick = () => trackComponentClick(OPHAN_COMPONENT_ID_SIGN_IN);

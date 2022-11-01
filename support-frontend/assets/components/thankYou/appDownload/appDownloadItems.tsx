@@ -10,8 +10,10 @@ const downloadCopy = css`
 
 export const appDownloadHeader = 'Download the Guardian app';
 
-export const appDownloadBodyCopy = (
-	<span css={downloadCopy}>
-		Unlock full access to our quality news app today
-	</span>
-);
+export function AppDownloadBodyCopy(): JSX.Element {
+	return (
+		<span css={downloadCopy}>
+			Unlock full access to our quality news app today
+		</span>
+	);
+}

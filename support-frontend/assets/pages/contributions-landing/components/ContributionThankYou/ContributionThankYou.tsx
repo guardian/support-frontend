@@ -24,6 +24,7 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { User } from 'helpers/user/userReducer';
+import { largeDonations } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { showBenefitsThankYouText as shouldShowBenefitsThankYouText } from '../DigiSubBenefits/helpers';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
@@ -128,11 +129,6 @@ const isLargeDonation = (
 		return false;
 	}
 
-	const largeDonations = {
-		MONTHLY: 20,
-		ANNUAL: 100,
-		ONE_OFF: 100,
-	};
 	return amount >= largeDonations[contributionType];
 };
 

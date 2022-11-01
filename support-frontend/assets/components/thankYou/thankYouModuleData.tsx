@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import {
 	OPHAN_COMPONENT_ID_AUS_MAP,
 	OPHAN_COMPONENT_ID_MARKETING,
@@ -12,7 +12,7 @@ import {
 } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
 import AppDownloadBadges from './appDownload/AppDownloadBadges';
 import {
-	appDownloadBodyCopy,
+	AppDownloadBodyCopy,
 	appDownloadHeader,
 } from './appDownload/appDownloadItems';
 import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
@@ -54,26 +54,14 @@ export const getThankYouModuleData = (
 	email: string,
 	campaignCode?: string,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
-	const [feedbackSurveyHasBeenCompleted, setFeedbackSurveyHasBeenCompleted] =
-		useState(false);
-
-	const [marketingConsentState, setMarketingConsentState] = useState({
-		hasBeenCompleted: false,
-		hasConsented: false,
-		errorMessage: '',
-	});
-
-	const [supportReminderState, setSupportReminderState] = useState({
-		selectedChoiceIndex: 0,
-		hasBeenCompleted: false,
-		errorMessage: '',
-	});
+	const { feedbackSurveyHasBeenCompleted, marketingConsent, supportReminder } =
+		useContributionsSelector((state) => state.page.checkoutForm.thankYou);
 
 	const thankYouModuleData: Record<ThankYouModuleType, ThankYouModuleData> = {
 		appDownload: {
 			icon: getThankYouModuleIcon('appDownload'),
 			header: appDownloadHeader,
-			bodyCopy: appDownloadBodyCopy,
+			bodyCopy: <AppDownloadBodyCopy />,
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
 		},
 		ausMap: {
@@ -93,30 +81,25 @@ export const getThankYouModuleData = (
 				/>
 			),
 			ctas: feedbackSurveyHasBeenCompleted ? null : (
-				<FeedbackCTA
-					countryId={countryId}
-					setFeedbackSurveyHasBeenCompleted={setFeedbackSurveyHasBeenCompleted}
-				/>
+				<FeedbackCTA countryId={countryId} />
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
 		},
 		marketingConsent: {
 			icon: getThankYouModuleIcon('marketingConsent'),
-			header: marketingConsentState.hasBeenCompleted
+			header: marketingConsent.hasBeenCompleted
 				? "You're signed up"
 				: 'Hear from our newsroom',
 			bodyCopy: (
 				<ThankYouMarketingConsentBodyCopy
-					marketingConsentState={marketingConsentState}
-					setMarketingConsentState={setMarketingConsentState}
+					marketingConsentState={marketingConsent}
 				/>
 			),
 			ctas: (
 				<ThankYouMarketingConsentCTA
 					email={email}
 					csrf={csrf}
-					marketingConsentState={marketingConsentState}
-					setMarketingConsentState={setMarketingConsentState}
+					marketingConsentState={marketingConsent}
 				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_MARKETING,
@@ -151,20 +134,16 @@ export const getThankYouModuleData = (
 		},
 		supportReminder: {
 			icon: getThankYouModuleIcon('supportReminder'),
-			header: supportReminderState.hasBeenCompleted
+			header: supportReminder.hasBeenCompleted
 				? 'Your support reminder is set'
 				: 'Set a support reminder',
 			bodyCopy: (
-				<SupportReminderBodyCopy
-					supportReminderState={supportReminderState}
-					setSupportReminderState={setSupportReminderState}
-				/>
+				<SupportReminderBodyCopy supportReminderState={supportReminder} />
 			),
 			ctas: (
 				<SupportReminderCTAandPrivacy
 					email={email}
-					supportReminderState={supportReminderState}
-					setSupportReminderState={setSupportReminderState}
+					supportReminderState={supportReminder}
 				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SET_REMINDER,

@@ -1,11 +1,17 @@
 import { css } from '@emotion/react';
 import { from, neutral, space, textSans } from '@guardian/source-foundations';
-import { Column, Columns, Hide } from '@guardian/source-react-components';
+import {
+	Button,
+	Column,
+	Columns,
+	Hide,
+} from '@guardian/source-react-components';
 import {
 	Divider,
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
+import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -63,7 +69,11 @@ const divider = css`
 	margin: 60px 0 ${space[6]}px;
 `;
 
-export function SupporterPlusLandingPage(): JSX.Element {
+export function SupporterPlusLandingPage({
+	thankYouRoute,
+}: {
+	thankYouRoute: string;
+}): JSX.Element {
 	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -71,6 +81,8 @@ export function SupporterPlusLandingPage(): JSX.Element {
 		(state) => state.common.settings,
 	);
 	const contributionType = useContributionsSelector(getContributionType);
+
+	const navigate = useNavigate();
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
@@ -151,6 +163,15 @@ export function SupporterPlusLandingPage(): JSX.Element {
 										)}
 									/>
 								</ContributionsStripe>
+								<br />
+								<Button
+									onClick={(e) => {
+										e.preventDefault();
+										navigate(thankYouRoute);
+									}}
+								>
+									Go to thank you page
+								</Button>
 							</BoxContents>
 						</Box>
 						<Box>

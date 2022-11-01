@@ -1,4 +1,4 @@
-import { getAllErrorsForContributions } from 'helpers/redux/checkout/checkoutSelectors';
+import { getAllErrorsForContributions } from 'helpers/redux/selectors/formValidation';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { CheckoutErrorSummaryProps } from './errorSummary';
 

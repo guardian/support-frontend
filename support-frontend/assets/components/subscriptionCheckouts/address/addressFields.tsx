@@ -149,7 +149,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				id={`${scope}-stateProvince`}
 				data-qm-masking="blocklist"
 				label={props.country === 'CA' ? 'Province/Territory' : 'State'}
-				value={props.state ?? ''}
+				value={props.state}
 				onChange={(e) => props.setState(e.target.value)}
 				error={firstError('state', props.errors)}
 				isShown={shouldShowStateDropdown(props.country)}
@@ -166,7 +166,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				id={`${scope}-stateProvince`}
 				data-qm-masking="blocklist"
 				label="State"
-				value={props.state ?? ''}
+				value={props.state}
 				onChange={(e) => props.setState(e.target.value)}
 				error={firstError('state', props.errors)}
 				optional
@@ -179,7 +179,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				label={props.country === 'US' ? 'ZIP code' : 'Postcode'}
 				type="text"
 				optional={isPostcodeOptional(props.country)}
-				value={props.postCode ?? ''}
+				value={props.postCode}
 				onChange={(e) => props.setPostcode(e.target.value)}
 				error={firstError('postCode', props.errors)}
 			/>

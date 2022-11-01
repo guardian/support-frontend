@@ -2,9 +2,11 @@ import { css } from '@emotion/react';
 import { from, space, sport } from '@guardian/source-foundations';
 import { Column, Columns, Container } from '@guardian/source-react-components';
 import React from 'react';
+import { Provider } from 'react-redux';
+import { createTestStoreForContributions } from '__test-utils__/testStore';
 import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges';
 import {
-	appDownloadBodyCopy,
+	AppDownloadBodyCopy,
 	appDownloadHeader,
 } from 'components/thankYou/appDownload/appDownloadItems';
 import {
@@ -34,7 +36,10 @@ import {
 	socialShareHeader,
 	SocialShareIcons,
 } from 'components/thankYou/socialShare/SocialShareItems';
-import { SupportReminderBodyCopy } from 'components/thankYou/supportReminder/supportReminderItems';
+import {
+	SupportReminderBodyCopy,
+	SupportReminderCTAandPrivacy,
+} from 'components/thankYou/supportReminder/supportReminderItems';
 import type { ThankYouModuleProps } from 'components/thankYou/thankYouModule';
 import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleIcon } from 'components/thankYou/thankYouModuleIcons';
@@ -112,6 +117,7 @@ function Template(args: ThankYouModuleProps): JSX.Element {
 }
 
 Template.args = {} as Record<string, unknown>;
+Template.decorators = [] as unknown[];
 
 export const DownloadTheAppSignedIn = Template.bind({});
 
@@ -120,7 +126,7 @@ DownloadTheAppSignedIn.args = {
 	isSignedIn: true,
 	icon: getThankYouModuleIcon('appDownload'),
 	header: appDownloadHeader,
-	bodyCopy: appDownloadBodyCopy,
+	bodyCopy: <AppDownloadBodyCopy />,
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
 };
 
@@ -131,7 +137,7 @@ DownloadTheAppSignedOut.args = {
 	isSignedIn: false,
 	icon: getThankYouModuleIcon('appDownload'),
 	header: appDownloadHeader,
-	bodyCopy: appDownloadBodyCopy,
+	bodyCopy: <AppDownloadBodyCopy />,
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
 };
 
@@ -163,13 +169,20 @@ Feedback.args = {
 	bodyCopy: (
 		<FeedbackBodyCopy countryId={'GB'} feedbackSurveyHasBeenCompleted={false} />
 	),
-	ctas: (
-		<FeedbackCTA
-			countryId={'GB'}
-			setFeedbackSurveyHasBeenCompleted={() => null}
-		/>
-	),
+	ctas: <FeedbackCTA countryId={'GB'} />,
 };
+
+Feedback.decorators = [
+	(Story: React.FC): JSX.Element => {
+		const store = createTestStoreForContributions();
+
+		return (
+			<Provider store={store}>
+				<Story />
+			</Provider>
+		);
+	},
+];
 
 export const SignUp = Template.bind({});
 
@@ -192,6 +205,18 @@ SignIn.args = {
 	bodyCopy: <SignInBodyCopy />,
 	ctas: <SignInCTA email={''} csrf={{ token: undefined }} />,
 };
+
+SignIn.decorators = [
+	(Story: React.FC): JSX.Element => {
+		const store = createTestStoreForContributions();
+
+		return (
+			<Provider store={store}>
+				<Story />
+			</Provider>
+		);
+	},
+];
 
 export const AusMap = Template.bind({});
 
@@ -218,7 +243,6 @@ MarketingConsent.args = {
 				hasConsented: false,
 				errorMessage: '',
 			}}
-			setMarketingConsentState={() => null}
 		/>
 	),
 	ctas: (
@@ -230,10 +254,21 @@ MarketingConsent.args = {
 				hasConsented: false,
 				errorMessage: '',
 			}}
-			setMarketingConsentState={() => null}
 		/>
 	),
 };
+
+MarketingConsent.decorators = [
+	(Story: React.FC): JSX.Element => {
+		const store = createTestStoreForContributions();
+
+		return (
+			<Provider store={store}>
+				<Story />
+			</Provider>
+		);
+	},
+];
 
 export const SupportReminder = Template.bind({});
 
@@ -249,19 +284,28 @@ SupportReminder.args = {
 				hasBeenCompleted: false,
 				errorMessage: '',
 			}}
-			setSupportReminderState={() => null}
 		/>
 	),
 	ctas: (
-		<ThankYouMarketingConsentCTA
+		<SupportReminderCTAandPrivacy
 			email={''}
-			csrf={{ token: undefined }}
-			marketingConsentState={{
+			supportReminderState={{
 				hasBeenCompleted: false,
-				hasConsented: false,
+				selectedChoiceIndex: 0,
 				errorMessage: '',
 			}}
-			setMarketingConsentState={() => null}
 		/>
 	),
 };
+
+SupportReminder.decorators = [
+	(Story: React.FC): JSX.Element => {
+		const store = createTestStoreForContributions();
+
+		return (
+			<Provider store={store}>
+				<Story />
+			</Provider>
+		);
+	},
+];
