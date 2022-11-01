@@ -16,7 +16,7 @@ import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
-import PersonalDetails from 'components/personalDetails/personalDetails';
+import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -35,6 +35,7 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
+import { PaymentFailureMessage } from './components/paymentFailure';
 import { AmountAndBenefits } from './formSections/amountAndBenefits';
 import { getPaymentMethodButtons } from './paymentButtons';
 
@@ -137,6 +138,7 @@ export function SupporterPlusLandingPage(): JSX.Element {
 											countryGroupId,
 										)}
 									/>
+									<PaymentFailureMessage />
 								</ContributionsStripe>
 							</BoxContents>
 						</Box>
