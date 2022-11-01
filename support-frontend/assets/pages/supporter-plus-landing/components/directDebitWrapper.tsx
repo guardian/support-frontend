@@ -8,6 +8,7 @@ import {
 
 export function DirectDebitContainer(): JSX.Element {
 	const dispatch = useContributionsDispatch();
+
 	function onPaymentAuthorisation(paymentAuthorisation: PaymentAuthorisation) {
 		dispatch(paymentWaiting(true));
 		void dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation));
