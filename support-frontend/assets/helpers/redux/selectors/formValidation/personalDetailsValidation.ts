@@ -7,11 +7,11 @@ export function getStateOrProvinceError(
 	state: ContributionsState,
 ): ErrorCollection {
 	const { countryGroupId } = state.common.internationalisation;
+	const contributionType = getContributionType(state);
 
-	if (shouldCollectStateForContributions(countryGroupId)) {
+	if (shouldCollectStateForContributions(countryGroupId, contributionType)) {
 		return {
-			contributionsState:
-				state.page.checkoutForm.billingAddress.fields.errorObject?.state,
+			state: state.page.checkoutForm.billingAddress.fields.errorObject?.state,
 		};
 	}
 	return {};
@@ -34,9 +34,9 @@ export function getPersonalDetailsErrors(
 		};
 	}
 	return {
+		email,
 		firstName,
 		lastName,
-		email,
 		...stateOrProvinceErrors,
 	};
 }
