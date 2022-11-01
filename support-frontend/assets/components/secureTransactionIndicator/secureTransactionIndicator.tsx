@@ -7,9 +7,11 @@ import {
 	until,
 } from '@guardian/source-foundations';
 import SecurePadlock from './securePadlock.svg';
+import SecurePadlockCircle from './securePadlockCircle.svg';
 
 export type SecureTransactionIndicatorProps = {
 	position: string;
+	hideText?: boolean;
 };
 
 const secureTransaction = (position: string) => css`
@@ -45,6 +47,11 @@ const secureTransaction = (position: string) => css`
   `}
 `;
 
+const suppPlusPayMethodIndicator = css`
+	display: flex;
+	align-items: center;
+`;
+
 const padlock = css`
 	margin-right: 5px;
 `;
@@ -57,11 +64,18 @@ const text = css`
 
 export function SecureTransactionIndicator({
 	position,
+	hideText,
 }: SecureTransactionIndicatorProps): JSX.Element {
 	return (
-		<div css={secureTransaction(position)}>
-			<SecurePadlock css={padlock} />
-			<div css={text}>Secure transaction</div>
+		<div
+			css={hideText ? suppPlusPayMethodIndicator : secureTransaction(position)}
+		>
+			{hideText ? (
+				<SecurePadlockCircle css={padlock} />
+			) : (
+				<SecurePadlock css={padlock} />
+			)}
+			{!hideText && <div css={text}>Secure transaction</div>}
 		</div>
 	);
 }
