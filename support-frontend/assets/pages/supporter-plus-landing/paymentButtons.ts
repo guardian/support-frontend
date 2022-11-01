@@ -1,4 +1,5 @@
 import { AmazonPaymentButton } from 'components/amazonPaymentButton/amazonPaymentButton';
+import { DirectDebitPaymentButton } from 'components/paymentButton/directDebitPaymentButton';
 import { SepaPaymentButton } from 'components/sepaForm/sepaPaymentButton';
 import { StripePaymentButton } from 'components/stripeCardForm/stripePaymentButton';
 import type { ContributionType } from 'helpers/contributions';
@@ -14,6 +15,7 @@ const allPaymentMethodButtons: PaymentMethodButtons = {
 	Stripe: StripePaymentButton,
 	AmazonPay: AmazonPaymentButton,
 	Sepa: SepaPaymentButton,
+	DirectDebit: DirectDebitPaymentButton,
 };
 
 export function getPaymentMethodButtons(
