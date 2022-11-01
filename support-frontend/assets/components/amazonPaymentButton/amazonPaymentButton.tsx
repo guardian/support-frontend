@@ -1,6 +1,7 @@
 import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
 import AnimatedDots from 'components/spinners/animatedDots';
 import { useAmazonPayObjects } from 'helpers/customHooks/useAmazonPayObjects';
+import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { AmazonPay } from 'helpers/forms/paymentMethods';
 import { setAmazonPayHasAccessToken } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import {
@@ -30,7 +31,7 @@ export function AmazonPaymentButton(): JSX.Element {
 		false,
 	);
 
-	function pay() {
+	const payWithAmazonPay = useFormValidation(function pay() {
 		trackComponentClick('amazon-pay-login-click');
 		const loginOptions = {
 			scope: 'profile postal_code payments:widget payments:shipping_address',
@@ -45,10 +46,10 @@ export function AmazonPaymentButton(): JSX.Element {
 				}
 			});
 		}
-	}
+	});
 	if (loginObject && paymentsObject) {
 		trackComponentLoad('amazon-pay-login-loaded');
-		return <DefaultPaymentButtonContainer onClick={pay} />;
+		return <DefaultPaymentButtonContainer onClick={payWithAmazonPay} />;
 	}
 	return <AnimatedDots appearance="dark" />;
 }
