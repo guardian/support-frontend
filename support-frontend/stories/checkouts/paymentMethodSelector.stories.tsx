@@ -1,3 +1,5 @@
+import { css } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
 import { Elements } from '@stripe/react-stripe-js';
 import { Provider } from 'react-redux';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
@@ -49,12 +51,19 @@ function Template(args: { paymentMethod: PaymentMethod }): JSX.Element {
 	];
 
 	return (
-		<PaymentMethodSelector
-			availablePaymentMethods={availablePaymentMethods}
-			paymentMethod={args.paymentMethod}
-			validationError={undefined}
-			existingPaymentMethods={[]}
-		/>
+		<div
+			css={css`
+				max-width: 500px;
+				padding: ${space[6]}px;
+			`}
+		>
+			<PaymentMethodSelector
+				availablePaymentMethods={availablePaymentMethods}
+				paymentMethod={args.paymentMethod}
+				validationError={undefined}
+				existingPaymentMethods={[]}
+			/>
+		</div>
 	);
 }
 
