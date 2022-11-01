@@ -1,11 +1,5 @@
 import { css } from '@emotion/react';
-import {
-	brand,
-	from,
-	neutral,
-	space,
-	textSans,
-} from '@guardian/source-foundations';
+import { brand, neutral, space, textSans } from '@guardian/source-foundations';
 import { Radio } from '@guardian/source-react-components';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 
@@ -58,18 +52,6 @@ export function PaymentMethodRadioButton({
 				value={paymentMethod}
 			/>
 			{paymentMethod}
-			<div
-				css={css`
-					display: none;
-					margin-left: auto;
-					${from.mobileMedium} {
-						display: flex;
-					}
-				`}
-			>
-				{/* {getLogos(paymentMethod)} */}
-				{/* // return logo */}
-			</div>
 		</label>
 	);
 }

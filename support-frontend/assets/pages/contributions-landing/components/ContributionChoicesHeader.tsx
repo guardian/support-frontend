@@ -1,9 +1,11 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { from, headline, space } from '@guardian/source-foundations';
 import * as React from 'react';
 
 type ContributionAmountLabelProps = {
 	children: React.ReactNode;
+	cssOverrides?: SerializedStyles;
 };
 const container = css`
 	margin-bottom: ${space[3]}px;
@@ -17,8 +19,9 @@ const container = css`
 
 function ContributionAmountRecurringNotification({
 	children,
-}: ContributionAmountLabelProps) {
-	return <div css={container}>{children}</div>;
+	cssOverrides,
+}: ContributionAmountLabelProps): JSX.Element {
+	return <div css={[container, cssOverrides]}>{children}</div>;
 }
 
 export default ContributionAmountRecurringNotification;

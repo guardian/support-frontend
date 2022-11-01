@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { from, neutral, space, textSans } from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
 import {
+	Divider,
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
@@ -23,7 +24,6 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
-import { StripeCardFormContainer } from 'components/stripeCardForm/stripeCardFormContainer';
 import {
 	AUDCountries,
 	Canada,
@@ -56,6 +56,11 @@ const checkoutContainer = css`
 		padding-bottom: ${space[24]}px;
 		padding-top: ${space[6]}px;
 	}
+`;
+
+const divider = css`
+	max-width: 100%;
+	margin: 60px 0 ${space[6]}px;
 `;
 
 export function SupporterPlusLandingPage(): JSX.Element {
@@ -131,12 +136,12 @@ export function SupporterPlusLandingPage(): JSX.Element {
 											<PersonalDetails {...personalDetailsProps} />
 										)}
 									/>
+									<Divider size="full" cssOverrides={divider} />
 									<PaymentMethodSelectorContainer
 										render={(paymentMethodSelectorProps) => (
 											<PaymentMethodSelector {...paymentMethodSelectorProps} />
 										)}
 									/>
-									<StripeCardFormContainer />
 									<PaymentButtonController
 										paymentButtons={getPaymentMethodButtons(
 											contributionType,

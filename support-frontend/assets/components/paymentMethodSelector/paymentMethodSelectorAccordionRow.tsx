@@ -36,12 +36,12 @@ const radio = css`
 
 const focused = css`
 	border: 4px solid ${brand[500]};
-	margin: ${space[2]}px 0;
+	margin-top: ${space[2]}px;
 `;
 
 const notFocused = css`
 	border: 4px solid ${neutral[60]};
-	margin: ${space[2]}px 0;
+	margin-top: ${space[2]}px;
 `;
 
 const borderBottom = css`
