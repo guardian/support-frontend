@@ -21,11 +21,11 @@ export function AmazonPaymentButton(): JSX.Element {
 	);
 
 	const paymentMethod = useContributionsSelector(
-		(state) => state.page.checkoutForm.payment.paymentMethod,
+		(state) => state.page.checkoutForm.payment.paymentMethod.name,
 	);
 
 	const { loginObject, paymentsObject } = useAmazonPayObjects(
-		paymentMethod.name === AmazonPay,
+		paymentMethod === AmazonPay,
 		countryGroupId,
 		false,
 	);
