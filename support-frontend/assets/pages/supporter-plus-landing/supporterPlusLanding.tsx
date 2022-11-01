@@ -15,8 +15,10 @@ import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
+import { PaymentMethodSelector } from 'components/paymentMethodSelector/paymentMethodSelector';
+import PaymentMethodSelectorContainer from 'components/paymentMethodSelector/PaymentMethodSelectorContainer';
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
-import PersonalDetails from 'components/personalDetails/personalDetails';
+import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -127,6 +129,11 @@ export function SupporterPlusLandingPage(): JSX.Element {
 									<PersonalDetailsContainer
 										renderPersonalDetails={(personalDetailsProps) => (
 											<PersonalDetails {...personalDetailsProps} />
+										)}
+									/>
+									<PaymentMethodSelectorContainer
+										render={(paymentMethodSelectorProps) => (
+											<PaymentMethodSelector {...paymentMethodSelectorProps} />
 										)}
 									/>
 									<StripeCardFormContainer />
