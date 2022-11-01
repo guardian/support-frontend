@@ -12,6 +12,7 @@ import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { setThankYouMarketingConsent } from 'helpers/redux/checkout/thankYouState/actions';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { isCodeOrProd } from 'helpers/urls/url';
 import { OPHAN_COMPONENT_ID_MARKETING } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
 
 const checkboxContainer = css`
@@ -143,7 +144,7 @@ function ThankYouMarketingConsentCTA({
 					hasBeenCompleted: true,
 				}),
 			);
-			if (window.location.hostname !== 'theguardian.com') return;
+			if (!isCodeOrProd()) return;
 			trackComponentClick(OPHAN_COMPONENT_ID_MARKETING);
 			subscribeToNewsLetter(email, csrf);
 		}

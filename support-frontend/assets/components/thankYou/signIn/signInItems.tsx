@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { routes } from 'helpers/urls/routes';
+import { isCodeOrProd } from 'helpers/urls/url';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
 import BulletPointedList from 'pages/contributions-landing/components/ContributionThankYou/components/BulletPointedList';
 import ExpandableContainer from 'pages/contributions-landing/components/ContributionThankYou/components/ExpandableContainer';
@@ -124,7 +125,7 @@ export function SignInCTA({ email, csrf }: SignInBodyCopyProps): JSX.Element {
 	const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
 
 	function fetchSignInLink(payload: { email: string }) {
-		if (window.location.hostname !== 'theguardian.com') return;
+		if (!isCodeOrProd()) return;
 
 		fetch(routes.createSignInUrl, {
 			method: 'post',
