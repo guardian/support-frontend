@@ -1,5 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
+import { brand, neutral } from '@guardian/source-foundations';
 import { Radio } from '@guardian/source-react-components';
 import type { ReactNode } from 'react';
 
@@ -15,6 +16,28 @@ const paymentIcon = css`
 	max-width: 40px;
 `;
 
+const defaultRadioLabelColour = css`
+	color: ${neutral[46]};
+	font-weight: bold;
+`;
+
+const checkedRadioLabelColour = css`
+	color: ${brand[500]};
+	font-weight: bold;
+`;
+
+function getLabelText(
+	label: string,
+	checked: boolean,
+	isSupporterPlus: boolean | undefined,
+): ReactNode {
+	const radioLabelColour = checked
+		? checkedRadioLabelColour
+		: defaultRadioLabelColour;
+
+	return <p css={isSupporterPlus ? radioLabelColour : undefined}>{label}</p>;
+}
+
 type RadioWithImagePropTypes = {
 	id: string;
 	image: ReactNode;
@@ -23,6 +46,7 @@ type RadioWithImagePropTypes = {
 	checked: boolean;
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	cssOverrides?: SerializedStyles | SerializedStyles[];
+	isSupporterPlus?: boolean;
 };
 
 export function RadioWithImage({
@@ -33,12 +57,13 @@ export function RadioWithImage({
 	name,
 	onChange,
 	cssOverrides,
+	isSupporterPlus,
 }: RadioWithImagePropTypes): JSX.Element {
 	return (
 		<div css={[radioWithImageStyles, cssOverrides]}>
 			<Radio
 				id={id}
-				label={label}
+				label={getLabelText(label, checked, isSupporterPlus)}
 				checked={checked}
 				name={name}
 				onChange={onChange}

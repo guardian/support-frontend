@@ -10,7 +10,6 @@ const defaultRadioStyles = css`
 	margin-bottom: ${space[4]}px;
 	${textSans.medium({ lineHeight: 'regular' })};
 	font-weight: bold;
-	color: ${neutral[46]};
 	border-radius: 4px;
 	box-shadow: inset 0px 0px 0px 2px ${neutral[46]};
 	cursor: pointer;
@@ -21,8 +20,6 @@ const defaultRadioStyles = css`
 
 const checkedRadioStyles = css`
 	box-shadow: inset 0px 0px 0px 4px ${brand[500]};
-	background-color: #e3f6ff;
-	color: ${brand[400]};
 `;
 
 export function PaymentMethodRadioButton({

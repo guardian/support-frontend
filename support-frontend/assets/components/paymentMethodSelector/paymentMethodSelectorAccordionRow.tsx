@@ -35,13 +35,15 @@ const radio = css`
 `;
 
 const focused = css`
-	border: 4px solid ${brand[500]};
+	border: 2px solid ${brand[500]};
 	margin-top: ${space[2]}px;
+	border-radius: 4px;
 `;
 
 const notFocused = css`
-	border: 4px solid ${neutral[60]};
+	border: 2px solid ${neutral[60]};
 	margin-top: ${space[2]}px;
+	border-radius: 4px;
 `;
 
 const borderBottom = css`
@@ -187,6 +189,7 @@ export function AvailablePaymentMethodAccordionRow({
 						radio,
 						...(checked && accordionBody ? [borderBottom] : []),
 					]}
+					isSupporterPlus={true}
 				/>
 			</div>
 
