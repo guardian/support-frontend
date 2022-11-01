@@ -1,10 +1,16 @@
 import { css } from '@emotion/react';
 import { from, neutral, space, textSans } from '@guardian/source-foundations';
-import { Column, Columns, Hide } from '@guardian/source-react-components';
+import {
+	Button,
+	Column,
+	Columns,
+	Hide,
+} from '@guardian/source-react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
+import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -57,7 +63,11 @@ const checkoutContainer = css`
 	}
 `;
 
-export function SupporterPlusLandingPage(): JSX.Element {
+export function SupporterPlusLandingPage({
+	thankYouRoute,
+}: {
+	thankYouRoute: string;
+}): JSX.Element {
 	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -65,6 +75,8 @@ export function SupporterPlusLandingPage(): JSX.Element {
 		(state) => state.common.settings,
 	);
 	const contributionType = useContributionsSelector(getContributionType);
+
+	const navigate = useNavigate();
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
@@ -104,8 +116,9 @@ export function SupporterPlusLandingPage(): JSX.Element {
 		>
 			<CheckoutHeading heading={heading}>
 				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-					ex justo, varius ut porttitor tristique, rhoncus quis dolor.
+					As a reader-funded news organisation, we rely on your generosity.
+					Please give what you can, so millions more can benefit from quality
+					reporting on the events shaping our world.
 				</p>
 			</CheckoutHeading>
 			<Container sideBorders backgroundColor={neutral[97]}>
@@ -140,6 +153,15 @@ export function SupporterPlusLandingPage(): JSX.Element {
 									/>
 									<PaymentFailureMessage />
 								</ContributionsStripe>
+								<br />
+								<Button
+									onClick={(e) => {
+										e.preventDefault();
+										navigate(thankYouRoute);
+									}}
+								>
+									Go to thank you page
+								</Button>
 							</BoxContents>
 						</Box>
 						<Box>

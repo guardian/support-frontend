@@ -16,6 +16,8 @@ import { productReducer } from 'helpers/redux/checkout/product/reducer';
 import type { ProductState } from 'helpers/redux/checkout/product/state';
 import { recaptchaReducer } from 'helpers/redux/checkout/recaptcha/reducer';
 import type { RecaptchaState } from 'helpers/redux/checkout/recaptcha/state';
+import { thankYouReducer } from 'helpers/redux/checkout/thankYouState/reducer';
+import type { ThankYouState } from 'helpers/redux/checkout/thankYouState/state';
 import type { CommonState } from 'helpers/redux/commonState/state';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { User as UserState } from 'helpers/user/userReducer';
@@ -61,6 +63,7 @@ export interface PageState {
 		recaptcha: RecaptchaState;
 		payment: PaymentState;
 		billingAddress: AddressState;
+		thankYou: ThankYouState;
 	};
 	user: UserState;
 }
@@ -146,6 +149,7 @@ function initReducer(): Reducer<PageState> {
 			recaptcha: recaptchaReducer,
 			payment: paymentReducer,
 			billingAddress: billingAddressReducer,
+			thankYou: thankYouReducer,
 		}),
 		user: createUserReducer(),
 	});

@@ -3,6 +3,8 @@ import {
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { setThankYouFeedbackSurveyHasBeenCompleted } from 'helpers/redux/checkout/thankYouState/actions';
+import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import styles from 'pages/contributions-landing/components/ContributionThankYou/styles';
 import { OPHAN_COMPONENT_ID_SURVEY } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
@@ -65,27 +67,22 @@ function FeedbackBodyCopy({
 	);
 }
 
-function FeedbackCTA({
-	countryId,
-	setFeedbackSurveyHasBeenCompleted,
-}: {
-	countryId: IsoCountry;
-	setFeedbackSurveyHasBeenCompleted: (
-		feedbackSurveyHasBeenCompleted: boolean,
-	) => void;
-}): JSX.Element {
+function FeedbackCTA({ countryId }: { countryId: IsoCountry }): JSX.Element {
+	const dispatch = useContributionsDispatch();
+
 	const isAus = countryId === 'AU';
 
+	// PLACEHOLDER LINK - to be updated before v2 launch
 	const SURVEY_LINK =
-		'https://guardiannewsampampmedia.formstack.com/forms/guardian_contributions';
+		'https://guardiannewsandmedia.formstack.com/forms/guardian_contributions';
 	const AUS_SURVEY_LINK =
-		'https://guardiannewsampampmedia.formstack.com/forms/australia_2022';
+		'https://guardiannewsandmedia.formstack.com/forms/australia_2022';
 
 	const surveyLink = isAus ? AUS_SURVEY_LINK : SURVEY_LINK;
 
 	const onClick = () => {
 		trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
-		setFeedbackSurveyHasBeenCompleted(true);
+		dispatch(setThankYouFeedbackSurveyHasBeenCompleted(true));
 	};
 
 	return (

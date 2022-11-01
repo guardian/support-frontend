@@ -34,7 +34,7 @@ function TestimonialCtaPrimary() {
 					className="testimonial-cta-primary-link-button"
 					priority="primary"
 					size="small"
-					href="https://guardiannewsampampmedia.formstack.com/forms/australia_2022"
+					href="https://guardiannewsandmedia.formstack.com/forms/australia_2022"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
