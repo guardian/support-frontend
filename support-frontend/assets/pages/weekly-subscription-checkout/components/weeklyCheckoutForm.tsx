@@ -288,9 +288,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
 								hideLabel={true}
 							>
 								{days
-									// Don't render input if Christmas day or Christmas eve
-									.filter((day) => !formatMachineDate(day).endsWith('-12-25'))
-									.filter((day) => !formatMachineDate(day).endsWith('-12-24'))
+									// Don't show 2022-12-30 as this is not a valid publication date in 2022
+									.filter((day) => !formatMachineDate(day).endsWith('-12-30'))
 									.map((day) => {
 										const [userDate, machineDate] = [
 											formatUserDate(day),
