@@ -58,7 +58,7 @@ function getInitialPaymentMethod(
 	countryGroupId: CountryGroupId,
 	switches: Switches,
 ): PaymentMethod {
-	// return 'AmazonPay'; // Uncomment to force AmazonPay testing
+	return 'AmazonPay'; // Uncomment to force AmazonPay testing
 	const paymentMethodFromSession = getPaymentMethodFromSession();
 	const validPaymentMethods = getValidPaymentMethods(
 		contributionType,

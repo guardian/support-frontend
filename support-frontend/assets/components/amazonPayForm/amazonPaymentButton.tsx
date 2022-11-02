@@ -1,7 +1,7 @@
 import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
 import AnimatedDots from 'components/spinners/animatedDots';
 import { useAmazonPayObjects } from 'helpers/customHooks/useAmazonPayObjects';
-import { useFormValidation } from 'helpers/customHooks/useFormValidation';
+//import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { AmazonPay } from 'helpers/forms/paymentMethods';
 import { setAmazonPayHasAccessToken } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import {
@@ -31,7 +31,13 @@ export function AmazonPaymentButton(): JSX.Element {
 		false,
 	);
 
-	const payWithAmazonPay = useFormValidation(function pay() {
+	const hasAccessToken = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.amazonPay.hasAccessToken,
+	);
+
+	// const loginWithAmazonPay = useFormValidation(function login() {
+	function loginWithAmazonPay() {
+		console.log('amazonPaymentButton.loginWithAmazonPay');
 		trackComponentClick('amazon-pay-login-click');
 		const loginOptions = {
 			scope: 'profile postal_code payments:widget payments:shipping_address',
@@ -46,10 +52,20 @@ export function AmazonPaymentButton(): JSX.Element {
 				}
 			});
 		}
-	});
+	}
+	// });
+
+	function payWithAmazonPay() {
+		console.log('amazonPaymentButton.payWithAmazonPay');
+	}
+
 	if (loginObject && paymentsObject) {
 		trackComponentLoad('amazon-pay-login-loaded');
-		return <DefaultPaymentButtonContainer onClick={payWithAmazonPay} />;
+		return (
+			<DefaultPaymentButtonContainer
+				onClick={hasAccessToken ? payWithAmazonPay : loginWithAmazonPay}
+			/>
+		);
 	}
 	return <AnimatedDots appearance="dark" />;
 }

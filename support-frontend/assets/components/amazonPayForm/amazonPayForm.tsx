@@ -19,7 +19,7 @@ import type { AmazonPayState } from 'helpers/redux/checkout/payment/amazonPay/st
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
-import './AmazonPay.scss';
+import './amazonPayForm.scss';
 
 type PropTypes = {
 	amazonPay: AmazonPayState;
@@ -55,7 +55,7 @@ const getSellerId = (isTestUser: boolean): string =>
 		: window.guardian.amazonPaySellerId.default;
 
 function AmazonPayWalletComponent(props: PropTypes) {
-	console.log('AmazPayWallet.AmazonPayWalletComponent.props', props);
+	console.log('amazonPayForm.AmazonPayWalletComponent.props', props);
 	const createWalletWidget = (
 		amazonPaymentsObject: AmazonPaymentsObject,
 	): void => {
@@ -186,8 +186,8 @@ function AmazonPayWalletComponent(props: PropTypes) {
 	return null;
 }
 
-const AmazonPayWallet = connect(
+const AmazonPayForm = connect(
 	mapStateToProps,
 	mapDispatchToProps,
 )(AmazonPayWalletComponent);
-export default AmazonPayWallet;
+export default AmazonPayForm;

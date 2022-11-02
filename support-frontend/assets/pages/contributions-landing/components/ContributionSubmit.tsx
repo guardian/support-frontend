@@ -84,12 +84,18 @@ function ContributionSubmit(props: PropTypes) {
 		props.userInNewProductTest,
 	);
 
+	console.log(
+		'amazonPayFormContainer.paymentMethod,countryGroupId,isTestUser',
+		props.paymentMethod,
+		props.countryGroupId,
+		props.isTestUser,
+	);
 	const { loginObject, paymentsObject } = useAmazonPayObjects(
 		props.paymentMethod === AmazonPay,
 		props.countryGroupId,
 		props.isTestUser,
 	);
-
+	console.log('ContributionSubmit.loginObject', loginObject);
 	const amazonPayEnabled = () => !props.amazonPay.fatalError;
 
 	// We have to show/hide PayPalExpressButton rather than conditionally rendering it
