@@ -10,7 +10,7 @@ type PropTypes = {
 	countryGroupId: CountryGroupId;
 }; // ----- Component ----- //
 
-export default function ContribLegal(props: PropTypes) {
+export default function ContribLegal(props: PropTypes): JSX.Element {
 	const contactUs = useDotcomContactPage() ? (
 		<ContactPageLink linkText="contact us here" />
 	) : (
