@@ -9,7 +9,7 @@ import { getContributionType } from '../../product/selectors/productType';
 import { getUserSelectedAmount } from '../../product/selectors/selectedAmount';
 
 export type PayPalTokenResolve = (token: string) => void;
-export type PayPalTokenReject = (err: unknown) => void;
+export type PayPalTokenReject = (err: Error) => void;
 
 type PayPalLoadFns = {
 	resolve: PayPalTokenResolve;
@@ -55,7 +55,7 @@ export const setUpPayPalPayment = createAsyncThunk<
 		}
 	} catch (error) {
 		logException((error as Error).message);
-		reject(error);
+		reject(error as Error);
 	}
 });
 
