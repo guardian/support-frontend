@@ -36,7 +36,7 @@ import {
 import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
 import { setPopupOpen } from 'helpers/redux/checkout/payment/directDebit/actions';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
+import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/thunks';
 import {
 	setSepaAccountHolderName,
 	setSepaAddressCountry,

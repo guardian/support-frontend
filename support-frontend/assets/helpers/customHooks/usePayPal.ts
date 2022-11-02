@@ -1,5 +1,5 @@
 import { useEffect } from 'preact/hooks';
-import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/reducer';
+import { loadPayPalExpressSdk } from 'helpers/redux/checkout/payment/payPal/thunks';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,

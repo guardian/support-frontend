@@ -1,16 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { fetchJson } from 'helpers/async/fetch';
-import type {
-	PayPalCheckoutDetails,
-	SetupPayPalRequestType,
-} from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { PayPal } from 'helpers/forms/paymentMethods';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import type {
+	PayPalTokenReject,
+	PayPalTokenResolve,
+} from 'helpers/redux/checkout/payment/payPal/thunks';
+import { setUpPayPalPayment } from 'helpers/redux/checkout/payment/payPal/thunks';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -20,14 +18,14 @@ import { logException } from 'helpers/utilities/logger';
 import { onThirdPartyPaymentAuthorised } from 'pages/contributions-landing/contributionsLandingActions';
 
 function getPayPalOptions(
-	currencyId: IsoCurrency,
 	csrf: CsrfState,
 	onPayPalCheckoutCompleted: (arg0: PayPalCheckoutDetails) => void,
 	onClick: () => void,
 	isTestUser: boolean,
-	amount: number,
-	billingPeriod: BillingPeriod,
-	setupPayPalPayment: SetupPayPalRequestType,
+	setUpForPayment: (
+		resolve: PayPalTokenResolve,
+		reject: PayPalTokenReject,
+	) => void,
 ): PayPalButtonProps {
 	return {
 		env: isTestUser
@@ -49,18 +47,7 @@ function getPayPalOptions(
 		},
 		onClick,
 		// This function is called when user clicks the PayPal button.
-		payment: (
-			resolve: (arg0: string) => void,
-			reject: (error: Error) => void,
-		) =>
-			setupPayPalPayment(
-				resolve,
-				reject,
-				currencyId,
-				csrf,
-				amount,
-				billingPeriod,
-			),
+		payment: setUpForPayment,
 		// This function is called when the user finishes with PayPal interface (approves payment).
 		onAuthorize: async (payPalData: Record<string, unknown>) => {
 			try {
@@ -92,13 +79,8 @@ function getPayPalOptions(
 
 export function PayPalButton(): JSX.Element {
 	const dispatch = useContributionsDispatch();
-	const { currencyId } = useContributionsSelector(
-		(state) => state.common.internationalisation,
-	);
 	const { csrf } = useContributionsSelector((state) => state.page.checkoutForm);
 	const { isTestUser } = useContributionsSelector((state) => state.page.user);
-	const amount = useContributionsSelector(getUserSelectedAmount);
-	const contributionType = useContributionsSelector(getContributionType);
 
 	function onCheckoutCompleted(payPalCheckoutDetails: PayPalCheckoutDetails) {
 		void dispatch(
@@ -110,19 +92,17 @@ export function PayPalButton(): JSX.Element {
 	}
 
 	const buttonProps = getPayPalOptions(
-		currencyId,
 		csrf,
 		onCheckoutCompleted,
 		console.log,
 		isTestUser ?? false,
-		amount,
-		contributionType.toLowerCase(),
-		console.log,
+		(resolve, reject) => void dispatch(setUpPayPalPayment({ resolve, reject })),
 	);
 
 	const Button = window.paypal.Button.driver('react', {
 		React,
 		ReactDOM,
 	});
+
 	return <Button {...buttonProps} />;
 }
