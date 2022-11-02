@@ -58,7 +58,11 @@ class StripeBackend(
   // We only want the backend switch to be valid if the frontend switch is enabled
   private def recaptchaEnabled =
     switchService.recaptchaSwitches
-      .map(s => s.recaptchaSwitches.map(switch=>switch.switchType.enableRecaptchaFrontend.state.isOn)&& s.recaptchaSwitches.map(switch=>switch.switchType.enableRecaptchaBackend.state.isOn))
+      .map(s =>
+        s.recaptchaSwitches.exists(switch =>
+          switch.switches.enableRecaptchaFrontend.state.isOn && switch.switches.enableRecaptchaBackend.state.isOn,
+        ),
+      )
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
   // Legacy handler for the Stripe Charges API. Still required for mobile apps payments

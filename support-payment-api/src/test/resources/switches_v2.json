@@ -1,140 +1,140 @@
 {
-  "recaptchaSwitches" : {
-    "description" : "Recaptcha switches",
-    "switches" : {
-      "enableRecaptchaBackend" : {
-        "description" : "Enable Recaptcha on the backend",
-        "state" : "On"
+  "recaptchaSwitches": {
+    "description": "Recaptcha switches",
+    "switches": {
+      "enableRecaptchaBackend": {
+        "description": "Enable Recaptcha on the backend",
+        "state": "On"
       },
-      "enableRecaptchaFrontend" : {
-        "description" : "Enable Recaptcha on the client",
-        "state" : "On"
+      "enableRecaptchaFrontend": {
+        "description": "Enable Recaptcha on the client",
+        "state": "On"
       }
     }
   },
-  "recurringPaymentMethods" : {
-    "description" : "Payment methods - recurring contributions",
-    "switches" : {
-      "stripePaymentRequestButton" : {
-        "description" : "Stripe - Payment Request Button",
-        "state" : "On"
+  "recurringPaymentMethods": {
+    "description": "Payment methods - recurring contributions",
+    "switches": {
+      "stripePaymentRequestButton": {
+        "description": "Stripe - Payment Request Button",
+        "state": "On"
       },
-      "existingCard" : {
-        "description" : "Existing card",
-        "state" : "On"
+      "existingCard": {
+        "description": "Existing card",
+        "state": "On"
       },
-      "stripeApplePay" : {
-        "description" : "Stripe - Apple Pay",
-        "state" : "On"
+      "stripeApplePay": {
+        "description": "Stripe - Apple Pay",
+        "state": "On"
       },
-      "amazonPay" : {
-        "description" : "Amazon Pay",
-        "state" : "Off"
+      "amazonPay": {
+        "description": "Amazon Pay",
+        "state": "Off"
       },
-      "directDebit" : {
-        "description" : "Direct Debit",
-        "state" : "On"
+      "directDebit": {
+        "description": "Direct Debit",
+        "state": "On"
       },
-      "existingDirectDebit" : {
-        "description" : "Existing Direct Debit",
-        "state" : "On"
+      "existingDirectDebit": {
+        "description": "Existing Direct Debit",
+        "state": "On"
       },
-      "sepa" : {
-        "description" : "SEPA",
-        "state" : "On"
+      "sepa": {
+        "description": "SEPA",
+        "state": "On"
       },
-      "payPal" : {
-        "description" : "PayPal",
-        "state" : "On"
+      "payPal": {
+        "description": "PayPal",
+        "state": "On"
       },
-      "stripe" : {
-        "description" : "Stripe - Credit/Debit card",
-        "state" : "On"
+      "stripe": {
+        "description": "Stripe - Credit/Debit card",
+        "state": "On"
       }
     }
   },
-  "oneOffPaymentMethods" : {
-    "description" : "Payment methods - one-off contributions",
-    "switches" : {
-      "stripePaymentRequestButton" : {
-        "description" : "Stripe - Payment Request Button",
-        "state" : "On"
+  "oneOffPaymentMethods": {
+    "description": "Payment methods - one-off contributions",
+    "switches": {
+      "stripePaymentRequestButton": {
+        "description": "Stripe - Payment Request Button",
+        "state": "On"
       },
-      "stripeApplePay" : {
-        "description" : "Stripe - Apple Pay",
-        "state" : "On"
+      "stripeApplePay": {
+        "description": "Stripe - Apple Pay",
+        "state": "On"
       },
-      "amazonPay" : {
-        "description" : "Amazon Pay",
-        "state" : "On"
+      "amazonPay": {
+        "description": "Amazon Pay",
+        "state": "On"
       },
-      "payPal" : {
-        "description" : "PayPal",
-        "state" : "On"
+      "payPal": {
+        "description": "PayPal",
+        "state": "On"
       },
-      "stripe" : {
-        "description" : "Stripe - Credit/Debit card",
-        "state" : "Off"
+      "stripe": {
+        "description": "Stripe - Credit/Debit card",
+        "state": "Off"
       }
     }
   },
-  "campaignSwitches" : {
-    "description" : "Campaign switches",
-    "switches" : {
-      "enableContributionsCampaign" : {
-        "description" : "Enable contributions campaign",
-        "state" : "On"
+  "campaignSwitches": {
+    "description": "Campaign switches",
+    "switches": {
+      "enableContributionsCampaign": {
+        "description": "Enable contributions campaign",
+        "state": "On"
       },
-      "forceContributionsCampaign" : {
-        "description" : "Force all users into the contributions campaign (ignore url path)",
-        "state" : "Off"
+      "forceContributionsCampaign": {
+        "description": "Force all users into the contributions campaign (ignore url path)",
+        "state": "Off"
       }
     }
   },
-  "featureSwitches" : {
-    "description" : "Feature switches",
-    "switches" : {
-      "enableQuantumMetric" : {
-        "description" : "Enable quantum metric",
-        "state" : "On"
+  "featureSwitches": {
+    "description": "Feature switches",
+    "switches": {
+      "enableQuantumMetric": {
+        "description": "Enable quantum metric",
+        "state": "On"
       },
-      "usStripeAccountForSingle" : {
-        "description" : "US Stripe account for single contributions",
-        "state" : "On"
+      "usStripeAccountForSingle": {
+        "description": "US Stripe account for single contributions",
+        "state": "On"
       }
     }
   },
-  "subscriptionsPaymentMethods" : {
-    "description" : "Payment methods - subscriptions",
-    "switches" : {
-      "directDebit" : {
-        "description" : "Direct Debit",
-        "state" : "On"
+  "subscriptionsPaymentMethods": {
+    "description": "Payment methods - subscriptions",
+    "switches": {
+      "directDebit": {
+        "description": "Direct Debit",
+        "state": "On"
       },
-      "creditCard" : {
-        "description" : "Credit Card",
-        "state" : "On"
+      "creditCard": {
+        "description": "Credit Card",
+        "state": "On"
       },
-      "paypal" : {
-        "description" : "Paypal",
-        "state" : "On"
+      "paypal": {
+        "description": "Paypal",
+        "state": "On"
       }
     }
   },
-  "subscriptionsSwitches" : {
-    "description" : "Subscriptions",
-    "switches" : {
-      "checkoutPostcodeLookup" : {
-        "description" : "Enable external service postcode lookup in checkout form",
-        "state" : "Off"
+  "subscriptionsSwitches": {
+    "description": "Subscriptions",
+    "switches": {
+      "checkoutPostcodeLookup": {
+        "description": "Enable external service postcode lookup in checkout form",
+        "state": "Off"
       },
-      "enableDigitalSubGifting" : {
-        "description" : "Enable Digital Sub gifting",
-        "state" : "On"
+      "enableDigitalSubGifting": {
+        "description": "Enable Digital Sub gifting",
+        "state": "On"
       },
-      "useDotcomContactPage" : {
-        "description" : "Use Dotcom contact page",
-        "state" : "On"
+      "useDotcomContactPage": {
+        "description": "Use Dotcom contact page",
+        "state": "On"
       }
     }
   }

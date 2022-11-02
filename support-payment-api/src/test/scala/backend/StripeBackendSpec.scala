@@ -106,7 +106,24 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val recaptchaServiceFail: EitherT[Future, StripeApiError, RecaptchaResponse] =
     EitherT.right(Future.successful(RecaptchaResponse(false)))
   val switchServiceOnResponse: EitherT[Future, Nothing, Switches] =
-    EitherT.right(Future.successful(Switches(Some(On), Some(On),Some(On),Some(On),Some(On),Some(On),Some(On))))
+    EitherT.right(
+      Future.successful(
+        Switches(
+          Some(RecaptchaSwitches(RecaptchaSwitchTypes(SwitchDetails(On), SwitchDetails(On)))),
+          Some(
+            OneOffPaymentMethodsSwitches(
+              OneOffPaymentMethodsSwitchesTypes(
+                SwitchDetails(On),
+                SwitchDetails(On),
+                SwitchDetails(On),
+                SwitchDetails(On),
+                SwitchDetails(On),
+              ),
+            ),
+          ),
+        ),
+      ),
+    )
 
   // -- service mocks
   val mockStripeService: StripeService = mock[StripeService]
