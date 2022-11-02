@@ -33,12 +33,34 @@ object SwitchState {
 
 }
 
-case class Switches(recaptchaSwitches:Option[RecaptchaSwitches], enableRecaptchaBackend: Option[SwitchState],enableStripeCreditDebit: Option[SwitchState],enableStripeApplePay: Option[SwitchState],enableStripePaymentRequest: Option[SwitchState],enablePayPal: Option[SwitchState],enableAmazonPay: Option[SwitchState])
+case class Switches(recaptchaSwitches:Option[RecaptchaSwitches],oneOffPaymentMethods: Option[OneOffPaymentMethodsSwitches])
+case class RecaptchaSwitches(description:String,switchType:RecaptchaSwitchTypes)
+case class OneOffPaymentMethodsSwitches(description:String,switchType:OneOffPaymentMethodsSwitchesTypes)
 
-case class RecaptchaSwitches(description:String)
+case class SwitchDetails(description:String,state:SwitchState)
+
+case class RecaptchaSwitchTypes(
+                                enableRecaptchaBackend: SwitchDetails,
+                                enableRecaptchaFrontend: SwitchDetails,
+                              )
+
+case class OneOffPaymentMethodsSwitchesTypes(
+                                              stripe: SwitchDetails,
+                                              stripeApplePay: SwitchDetails,
+                                              stripePaymentRequestButton: SwitchDetails,
+                                              payPal: SwitchDetails,
+                                              amazonPay: SwitchDetails,
+                                            )
+
+
+
 object Switches {
   implicit val switchesCodec: Codec[Switches] = deriveCodec
   implicit val recaptchaSwitchesCodec: Codec[RecaptchaSwitches] = deriveCodec
+  implicit val recaptchaSwitchesTypesCodec: Codec[RecaptchaSwitchTypes] = deriveCodec
+  implicit val oneOffPaymentMethodsSwitchesCodec: Codec[OneOffPaymentMethodsSwitches] = deriveCodec
+  implicit val oneOffPaymentMethodsSwitchesTypesCodec: Codec[OneOffPaymentMethodsSwitchesTypes] = deriveCodec
+  implicit val switchDetailsCodec: Codec[SwitchDetails] = deriveCodec
 }
 
 class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem, ec: ExecutionContext)
@@ -53,7 +75,7 @@ class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem
       .recordStats()
       .expireAfterWrite(1.minutes)
       .maximumSize(10)
-      .buildAsync(s => fromS3().getOrElse(Switches(None,None,None,None,None,None,None)))
+      .buildAsync(s => fromS3().getOrElse(Switches(None,None)))
 
   def recaptchaSwitches: EitherT[Future, Nothing, Switches] =
     EitherT.right(cache.get(cacheKey))

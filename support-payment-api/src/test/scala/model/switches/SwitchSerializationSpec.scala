@@ -19,6 +19,11 @@ class SwitchSerializationSpec extends AnyFlatSpec with Matchers {
     val switches: Either[circe.Error, Switches] = decode[Switches](loadSwitches)
     switches.isRight mustBe true
     switches.map(switch=>switch.recaptchaSwitches.map(recaptchaSwitch=>recaptchaSwitch.description mustBe "Recaptcha switches"))
+    switches.map(switch=>switch.oneOffPaymentMethods.map(oneOffPaymentSwitch=>oneOffPaymentSwitch.description mustBe "Payment methods - one-off contributions"))
+
+
+    switches.map(switch=>switch.recaptchaSwitches.map(recaptchaSwitch=>recaptchaSwitch.switchType.enableRecaptchaBackend.description mustBe "Recaptcha switches"))
+    switches.map(switch => switch.oneOffPaymentMethods.map(oneOffPaymentSwitch => oneOffPaymentSwitch.switchType.payPal.description mustBe "PayPal"))
   }
 
 }
