@@ -54,8 +54,7 @@ const getSellerId = (isTestUser: boolean): string =>
 		? window.guardian.amazonPaySellerId.uat
 		: window.guardian.amazonPaySellerId.default;
 
-function AmazonPayWalletComponent(props: PropTypes) {
-	console.log('amazonPayForm.AmazonPayWalletComponent.props', props);
+function AmazonPayFormComponent(props: PropTypes) {
 	const createWalletWidget = (
 		amazonPaymentsObject: AmazonPaymentsObject,
 	): void => {
@@ -189,5 +188,5 @@ function AmazonPayWalletComponent(props: PropTypes) {
 const AmazonPayForm = connect(
 	mapStateToProps,
 	mapDispatchToProps,
-)(AmazonPayWalletComponent);
+)(AmazonPayFormComponent);
 export default AmazonPayForm;
