@@ -41,6 +41,7 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
+import { PaymentFailureMessage } from './components/paymentFailure';
 import { AmountAndBenefits } from './formSections/amountAndBenefits';
 import { getPaymentMethodButtons } from './paymentButtons';
 
@@ -150,6 +151,7 @@ export function SupporterPlusLandingPage({
 											countryGroupId,
 										)}
 									/>
+									<PaymentFailureMessage />
 								</ContributionsStripe>
 								<br />
 								<Button

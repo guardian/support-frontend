@@ -29,8 +29,10 @@ export const stripeCardSlice = createSlice({
 			state.setupIntentClientSecret = action.payload;
 		});
 
-		builder.addCase(validateForm, (state) => {
-			state.showErrors = true;
+		builder.addCase(validateForm, (state, action) => {
+			if (action.payload === 'Stripe') {
+				state.showErrors = true;
+			}
 		});
 	},
 });
