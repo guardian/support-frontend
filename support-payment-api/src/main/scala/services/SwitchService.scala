@@ -33,11 +33,12 @@ object SwitchState {
 
 }
 
-case class Switches(enableRecaptchaFrontend: Option[SwitchState], enableRecaptchaBackend: Option[SwitchState],enableStripeCreditDebit: Option[SwitchState],enableStripeApplePay: Option[SwitchState],enableStripePaymentRequest: Option[SwitchState],enablePayPal: Option[SwitchState],enableAmazonPay: Option[SwitchState])
+case class Switches(recaptchaSwitches:Option[RecaptchaSwitches], enableRecaptchaBackend: Option[SwitchState],enableStripeCreditDebit: Option[SwitchState],enableStripeApplePay: Option[SwitchState],enableStripePaymentRequest: Option[SwitchState],enablePayPal: Option[SwitchState],enableAmazonPay: Option[SwitchState])
 
-
+case class RecaptchaSwitches(description:String)
 object Switches {
   implicit val switchesCodec: Codec[Switches] = deriveCodec
+  implicit val recaptchaSwitchesCodec: Codec[RecaptchaSwitches] = deriveCodec
 }
 
 class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem, ec: ExecutionContext)
