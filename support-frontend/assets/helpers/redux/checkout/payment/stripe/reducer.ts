@@ -21,6 +21,8 @@ export const stripeCardSlice = createSlice({
 		setStripeFormError(state, action: PayloadAction<StripeErrorPayload>) {
 			if (action.payload.error) {
 				state.errors[action.payload.field] = [action.payload.error];
+			} else {
+				delete state.errors[action.payload.field];
 			}
 		},
 	},

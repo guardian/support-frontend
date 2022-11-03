@@ -20,6 +20,7 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
+import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
@@ -28,7 +29,6 @@ import PaymentMethodSelectorContainer from 'components/paymentMethodSelector/Pay
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
 import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
-import ProgressMessage from 'components/progressMessage/progressMessage';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
@@ -198,7 +198,10 @@ export function SupporterPlusLandingPage({
 				</Columns>
 			</Container>
 			{isWaiting && (
-				<ProgressMessage message={['Processing transaction', 'Please wait']} />
+				<LoadingOverlay>
+					<p>Processing transaction</p>
+					<p>Please wait</p>
+				</LoadingOverlay>
 			)}
 		</PageScaffold>
 	);
