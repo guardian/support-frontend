@@ -34,9 +34,14 @@ export function LoadingOverlay({ children }: LoadingOverlayProps): JSX.Element {
 			event.preventDefault();
 		}
 
-		window.addEventListener('keydown', preventKeydown, { capture: true });
+		document.body.addEventListener('keydown', preventKeydown, {
+			capture: true,
+		});
 
-		return () => window.removeEventListener('keydown', preventKeydown);
+		return () =>
+			document.body.removeEventListener('keydown', preventKeydown, {
+				capture: true,
+			});
 	}, []);
 
 	return (
