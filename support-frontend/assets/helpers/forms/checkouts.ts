@@ -207,11 +207,12 @@ function getPaymentMethodToSelect(
 		countryId,
 		countryGroupId,
 	);
-	console.log('getPaymentMethodToSelect.allSwitches', allSwitches);
 	return (
+		// Paul Dempsey : Temporary Force AmazonPay Whilst Awaiting New Payment Selector
 		validPaymentMethods[
 			contributionType === 'ONE_OFF' && countryGroupId === UnitedStates ? 2 : 0
 		] || 'None'
+		//validPaymentMethods[0] || 'None'
 	);
 }
 

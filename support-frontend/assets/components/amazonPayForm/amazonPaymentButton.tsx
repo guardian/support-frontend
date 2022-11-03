@@ -13,6 +13,7 @@ export function AmazonPaymentButton(): JSX.Element {
 		(state) => state.page.checkoutForm.payment.amazonPay.hasAccessToken,
 	);
 
+	// Paul Dempsey : Temporary Force AmazonPay Whilst Awaiting New Payment Selector/Validator Update
 	// const loginWithAmazonPay = useFormValidation(function login() {
 	function loginWithAmazonPay() {
 		console.log('amazonPaymentButton.loginWithAmazonPay');
