@@ -30,6 +30,7 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import { getAmount } from 'helpers/contributions';
 import {
 	AUDCountries,
 	Canada,
@@ -41,11 +42,13 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { shouldShowBenefitsMessaging } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import { DirectDebitContainer } from './components/directDebitWrapper';
 import { GuardianTsAndCs } from './components/guardianTsAndCs';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
 import { PaymentFailureMessage } from './components/paymentFailure';
+import { PaymentTsAndCs } from './components/paymentTsAndCs';
 import { AmountAndBenefits } from './formSections/amountAndBenefits';
 import { getPaymentMethodButtons } from './paymentButtons';
 
@@ -77,13 +80,23 @@ export function SupporterPlusLandingPage({
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
-	const { countryGroupId, countryId } = useContributionsSelector(
+	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const { switches } = useContributionsSelector(
 		(state) => state.common.settings,
 	);
+	const { selectedAmounts, otherAmounts } = useContributionsSelector(
+		(state) => state.page.checkoutForm.product,
+	);
 	const contributionType = useContributionsSelector(getContributionType);
+
+	const amountIsAboveThreshold = shouldShowBenefitsMessaging(
+		contributionType,
+		selectedAmounts,
+		otherAmounts,
+		countryGroupId,
+	);
 
 	const navigate = useNavigate();
 
@@ -168,6 +181,17 @@ export function SupporterPlusLandingPage({
 									<PaymentFailureMessage />
 									<DirectDebitContainer />
 								</ContributionsStripe>
+								<PaymentTsAndCs
+									countryGroupId={countryGroupId}
+									contributionType={contributionType}
+									currency={currencyId}
+									amount={getAmount(
+										selectedAmounts,
+										otherAmounts,
+										contributionType,
+									)}
+									amountIsAboveThreshold={amountIsAboveThreshold}
+								/>
 								<br />
 								<Button
 									onClick={(e) => {
