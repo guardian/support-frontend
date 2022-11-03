@@ -68,7 +68,7 @@ const checkoutContainer = css`
 
 const divider = css`
 	max-width: 100%;
-	margin: 60px 0 ${space[6]}px;
+	margin: 40px 0 ${space[6]}px;
 `;
 
 export function SupporterPlusLandingPage({
