@@ -22,10 +22,10 @@ function getButtonText(
 	paymentInterval?: 'month' | 'year',
 ) {
 	if (paymentInterval) {
-		return `${amountWithCurrency} per ${paymentInterval}`;
+		return `Support us with ${amountWithCurrency} per ${paymentInterval}`;
 	}
 
-	return amountWithCurrency;
+	return `Support us with ${amountWithCurrency}`;
 }
 
 export function DefaultPaymentButtonContainer({
