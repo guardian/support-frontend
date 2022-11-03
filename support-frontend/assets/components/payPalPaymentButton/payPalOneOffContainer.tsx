@@ -34,5 +34,10 @@ export function PayPalButtonOneOffContainer(): JSX.Element {
 		);
 	});
 
-	return <DefaultPaymentButtonContainer onClick={payOneOffWithPayPal} />;
+	return (
+		<DefaultPaymentButtonContainer
+			onClick={payOneOffWithPayPal}
+			createButtonText={(amount) => `Pay ${amount} with PayPal`}
+		/>
+	);
 }

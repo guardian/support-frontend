@@ -27,7 +27,7 @@ type PayPalPropsRequirements = {
 	onCompletion: (arg0: PayPalCheckoutDetails) => void;
 };
 
-export function getPayPalOptions({
+export function getPayPalButtonProps({
 	csrf,
 	isTestUser,
 	setValidationControls,

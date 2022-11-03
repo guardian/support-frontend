@@ -9,8 +9,8 @@ import {
 } from 'helpers/redux/storeHooks';
 import { onThirdPartyPaymentAuthorised } from 'pages/contributions-landing/contributionsLandingActions';
 import { PayPalButton } from './payPalButton';
-import type { OnPaypalWindowOpen } from './utils';
-import { getPayPalOptions } from './utils';
+import type { OnPaypalWindowOpen } from './payPalButtonProps';
+import { getPayPalButtonProps } from './payPalButtonProps';
 
 type PayPalButtonControls = {
 	enable?: () => void;
@@ -43,7 +43,7 @@ export function PayPalButtonRecurringContainer({
 	const onWindowOpen: OnPaypalWindowOpen = (resolve, reject) =>
 		void dispatch(setUpPayPalPayment({ resolve, reject }));
 
-	const buttonProps = getPayPalOptions({
+	const buttonProps = getPayPalButtonProps({
 		csrf,
 		isTestUser: isTestUser ?? false,
 		setValidationControls,
