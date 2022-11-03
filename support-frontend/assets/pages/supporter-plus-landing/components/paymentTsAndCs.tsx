@@ -1,3 +1,5 @@
+import { css } from '@emotion/react';
+import { neutral, space, textSans } from '@guardian/source-foundations';
 import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -31,7 +33,11 @@ function TsAndCsFooterLinks({
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 
 	return (
-		<div className="component-terms-privacy__terms">
+		<div
+			css={css`
+				margin-top: ${space[2]}px;
+			`}
+		>
 			By proceeding, you are agreeing to our {terms}. To find out what personal
 			data we collect and how we use it, please visit our {privacy}.
 		</div>
@@ -61,6 +67,15 @@ export function PaymentTsAndCs({
 
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
+
+	const container = css`
+		${textSans.xsmall()};
+		color: ${neutral[20]};
+
+		& a {
+			color: ${neutral[20]};
+		}
+	`;
 
 	const copyBelowThreshold = (contributionType: ContributionType) => {
 		return (
@@ -102,12 +117,20 @@ export function PaymentTsAndCs({
 	}
 
 	if (contributionType === 'MONTHLY') {
-		return amountIsAboveThreshold
-			? copyAboveThreshold(contributionType)
-			: copyBelowThreshold(contributionType);
+		return (
+			<div css={container}>
+				{amountIsAboveThreshold
+					? copyAboveThreshold(contributionType)
+					: copyBelowThreshold(contributionType)}
+			</div>
+		);
 	}
 
-	return amountIsAboveThreshold
-		? copyAboveThreshold(contributionType)
-		: copyBelowThreshold(contributionType);
+	return (
+		<div css={container}>
+			{amountIsAboveThreshold
+				? copyAboveThreshold(contributionType)
+				: copyBelowThreshold(contributionType)}
+		</div>
+	);
 }
