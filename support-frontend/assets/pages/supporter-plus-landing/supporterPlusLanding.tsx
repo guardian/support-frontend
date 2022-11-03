@@ -1,16 +1,12 @@
 import { css } from '@emotion/react';
 import { from, neutral, space, textSans } from '@guardian/source-foundations';
-import {
-	Button,
-	Column,
-	Columns,
-	Hide,
-} from '@guardian/source-react-components';
+import { Column, Columns, Hide } from '@guardian/source-react-components';
 import {
 	Divider,
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
@@ -19,6 +15,7 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
+import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
@@ -83,6 +80,9 @@ export function SupporterPlusLandingPage({
 		(state) => state.common.settings,
 	);
 	const contributionType = useContributionsSelector(getContributionType);
+	const { paymentComplete, isWaiting } = useContributionsSelector(
+		(state) => state.page.form,
+	);
 
 	const navigate = useNavigate();
 
@@ -100,6 +100,12 @@ export function SupporterPlusLandingPage({
 		subPath: '/contribute',
 	};
 	const heading = <LandingPageHeading />;
+
+	useEffect(() => {
+		if (paymentComplete) {
+			navigate(thankYouRoute, { replace: true });
+		}
+	}, [paymentComplete]);
 
 	return (
 		<PageScaffold
@@ -167,15 +173,6 @@ export function SupporterPlusLandingPage({
 									<PaymentFailureMessage />
 									<DirectDebitContainer />
 								</ContributionsStripe>
-								<br />
-								<Button
-									onClick={(e) => {
-										e.preventDefault();
-										navigate(thankYouRoute);
-									}}
-								>
-									Go to thank you page
-								</Button>
 							</BoxContents>
 						</Box>
 						<Box>
@@ -186,6 +183,12 @@ export function SupporterPlusLandingPage({
 					</Column>
 				</Columns>
 			</Container>
+			{isWaiting && (
+				<LoadingOverlay>
+					<p>Processing transaction</p>
+					<p>Please wait</p>
+				</LoadingOverlay>
+			)}
 		</PageScaffold>
 	);
 }

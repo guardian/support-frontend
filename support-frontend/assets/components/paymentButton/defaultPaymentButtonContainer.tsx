@@ -41,9 +41,6 @@ export function DefaultPaymentButtonContainer({
 	const { currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const paymentWaiting = useContributionsSelector(
-		(state) => state.page.form.isWaiting,
-	);
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const contributionType = useContributionsSelector(getContributionType);
 
@@ -57,11 +54,5 @@ export function DefaultPaymentButtonContainer({
 				contributionTypeToPaymentInterval[contributionType],
 		  );
 
-	return (
-		<DefaultPaymentButton
-			buttonText={buttonText}
-			onClick={onClick}
-			loading={paymentWaiting}
-		/>
-	);
+	return <DefaultPaymentButton buttonText={buttonText} onClick={onClick} />;
 }
