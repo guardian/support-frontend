@@ -50,7 +50,7 @@ function PaymentMethodSelectorContainer({
 		availablePaymentMethods: availablePaymentMethods || [],
 		paymentMethod,
 		existingPaymentMethod,
-		existingPaymentMethods,
+		existingPaymentMethods: existingPaymentMethods ?? [],
 		validationError: undefined,
 		fullExistingPaymentMethods: getFullExistingPaymentMethods(
 			existingPaymentMethods,

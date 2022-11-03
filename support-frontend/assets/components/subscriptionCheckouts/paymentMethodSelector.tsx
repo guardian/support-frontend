@@ -125,7 +125,8 @@ function PaymentMethodSelector({
 					)}
 
 					{contributionTypeIsRecurring &&
-						fullExistingPaymentMethods?.map(
+						fullExistingPaymentMethods?.length &&
+						fullExistingPaymentMethods.map(
 							(
 								preExistingPaymentMethod: RecentlySignedInExistingPaymentMethod,
 							) => (

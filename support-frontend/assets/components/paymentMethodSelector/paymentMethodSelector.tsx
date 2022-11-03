@@ -15,6 +15,7 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
+import { isCodeOrProd } from 'helpers/urls/url';
 import ContributionChoicesHeader from 'pages/contributions-landing/components/ContributionChoicesHeader';
 import { paymentMethodData } from './paymentMethodData';
 import {
@@ -57,10 +58,10 @@ export interface PaymentMethodSelectorProps {
 	availablePaymentMethods: PaymentMethod[];
 	paymentMethod: PaymentMethod | null;
 	validationError: string | undefined;
-	fullExistingPaymentMethods?: RecentlySignedInExistingPaymentMethod[];
+	fullExistingPaymentMethods: RecentlySignedInExistingPaymentMethod[];
 	contributionTypeIsRecurring?: boolean;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	existingPaymentMethods?: ExistingPaymentMethod[];
+	existingPaymentMethods: ExistingPaymentMethod[];
 }
 
 export function PaymentMethodSelector({
@@ -79,11 +80,7 @@ export function PaymentMethodSelector({
 			dispatch(setPaymentMethod(availablePaymentMethods[0]));
 	}, []);
 
-	const fullExistingRecurringPaymentMethods =
-		contributionTypeIsRecurring && fullExistingPaymentMethods;
-
 	if (
-		fullExistingPaymentMethods &&
 		fullExistingPaymentMethods.length < 1 &&
 		availablePaymentMethods.length < 1
 	) {
@@ -104,11 +101,13 @@ export function PaymentMethodSelector({
 				hideLabel
 				error={validationError}
 			>
-				{contributionTypeIsRecurring && !existingPaymentMethods && (
-					<div className="awaiting-existing-payment-options">
-						<AnimatedDots appearance="medium" />
-					</div>
-				)}
+				{contributionTypeIsRecurring &&
+					!existingPaymentMethods.length &&
+					isCodeOrProd() && (
+						<div className="awaiting-existing-payment-options">
+							<AnimatedDots appearance="medium" />
+						</div>
+					)}
 
 				<Accordion
 					cssOverrides={css`
@@ -117,24 +116,44 @@ export function PaymentMethodSelector({
 				>
 					{[
 						<>
-							{fullExistingRecurringPaymentMethods &&
+							{contributionTypeIsRecurring &&
 								fullExistingPaymentMethods.map(
 									(
 										preExistingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-									) => (
-										<ExistingPaymentMethodAccordionRow
-											expanded={
-												paymentMethod ===
-													mapExistingPaymentMethodToPaymentMethod(
-														preExistingPaymentMethod,
-													) &&
-												existingPaymentMethod === preExistingPaymentMethod
-											}
-											paymentMethod={paymentMethod}
-											preExistingPaymentMethod={preExistingPaymentMethod}
-											existingPaymentMethod={existingPaymentMethod}
-										/>
-									),
+									) => {
+										const existingPaymentMethodType =
+											preExistingPaymentMethod.paymentType;
+
+										const paymentType =
+											existingPaymentMethodType === 'Card'
+												? 'ExistingCard'
+												: 'DirectDebit';
+
+										return (
+											<ExistingPaymentMethodAccordionRow
+												expanded={
+													paymentMethod ===
+														mapExistingPaymentMethodToPaymentMethod(
+															preExistingPaymentMethod,
+														) &&
+													existingPaymentMethod === preExistingPaymentMethod
+												}
+												paymentMethod={paymentMethod}
+												preExistingPaymentMethod={preExistingPaymentMethod}
+												existingPaymentMethod={existingPaymentMethod}
+												checked={
+													paymentMethod ===
+														mapExistingPaymentMethodToPaymentMethod(
+															preExistingPaymentMethod,
+														) &&
+													existingPaymentMethod === preExistingPaymentMethod
+												}
+												accordionBody={
+													paymentMethodData[paymentType].accordionBody
+												}
+											/>
+										);
+									},
 								)}
 
 							{availablePaymentMethods.map((method) => (
@@ -153,9 +172,8 @@ export function PaymentMethodSelector({
 				</Accordion>
 
 				{contributionTypeIsRecurring &&
-					existingPaymentMethods &&
 					existingPaymentMethods.length > 0 &&
-					fullExistingPaymentMethods?.length === 0 && (
+					fullExistingPaymentMethods.length === 0 && (
 						<li className="form__radio-group-item">
 							...or{' '}
 							<a className="reauthenticate-link" href={getReauthenticateUrl()}>

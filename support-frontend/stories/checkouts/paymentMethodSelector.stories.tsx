@@ -62,6 +62,7 @@ function Template(args: { paymentMethod: PaymentMethod }): JSX.Element {
 				paymentMethod={args.paymentMethod}
 				validationError={undefined}
 				existingPaymentMethods={[]}
+				fullExistingPaymentMethods={[]}
 			/>
 		</div>
 	);
