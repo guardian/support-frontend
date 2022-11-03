@@ -13,8 +13,14 @@ const contributionTypeToPaymentInterval: Partial<
 	ANNUAL: 'year',
 };
 
+type ButtonTextCreator = (
+	amountWithCurrency: string,
+	paymentInterval?: 'month' | 'year',
+) => string;
+
 export type DefaultPaymentContainerProps = {
 	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+	createButtonText?: ButtonTextCreator;
 };
 
 function getButtonText(
@@ -22,14 +28,15 @@ function getButtonText(
 	paymentInterval?: 'month' | 'year',
 ) {
 	if (paymentInterval) {
-		return `${amountWithCurrency} per ${paymentInterval}`;
+		return `Pay ${amountWithCurrency} per ${paymentInterval}`;
 	}
 
-	return amountWithCurrency;
+	return `Pay ${amountWithCurrency}`;
 }
 
 export function DefaultPaymentButtonContainer({
 	onClick,
+	createButtonText = getButtonText,
 }: DefaultPaymentContainerProps): JSX.Element {
 	const { currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -45,7 +52,7 @@ export function DefaultPaymentButtonContainer({
 
 	const buttonText = Number.isNaN(selectedAmount)
 		? 'Pay now'
-		: getButtonText(
+		: createButtonText(
 				amountWithCurrency,
 				contributionTypeToPaymentInterval[contributionType],
 		  );

@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import type { ComponentType, React } from 'react';
 import type { Participations } from 'helpers/abTests/abtest';
 import type {
 	AmazonObject,
@@ -16,6 +16,25 @@ declare global {
 	/* ~ Here, declare things that go in the global namespace, or augment
 	 *~ existing declarations in the global namespace
 	 */
+
+	type PayPalButtonProps = {
+		env: string;
+		style: Record<string, string | boolean>;
+		commit: boolean;
+		validate: (actions: { enable: () => void; disable: () => void }) => void;
+		funding: {
+			disallowed: unknown[];
+		};
+		onClick: () => void;
+		// This function is called when user clicks the PayPal button.
+		payment: (
+			resolve: (arg0: string) => void,
+			reject: (error: Error) => void,
+		) => void;
+		// This function is called when the user finishes with PayPal interface (approves payment).
+		onAuthorize: (data: Record<string, unknown>) => void;
+	};
+
 	interface Window {
 		guardian: {
 			amazonPayClientId: {
@@ -76,8 +95,8 @@ declare global {
 			Button: {
 				driver: (
 					name: 'react',
-					{ React, ReactDOM }: { React: unknown; ReactDOM: unknown },
-				) => ComponentType;
+					{ React, ReactDOM }: { React: React; ReactDOM: typeof ReactDOM },
+				) => ComponentType<PayPalButtonProps>;
 			};
 		};
 		QuantumMetricAPI?: {
