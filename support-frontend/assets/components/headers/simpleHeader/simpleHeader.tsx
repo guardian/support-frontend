@@ -42,18 +42,16 @@ export function Header({ children }: HeaderProps): JSX.Element {
 				<Columns>
 					<Column>{children}</Column>
 					<Column span={[2, 3, 4]}>
-						<div css={logoContainer}>
-							<a href="https://www.theguardian.com">
-								<div
-									css={css`
-										${visuallyHidden};
-									`}
-								>
-									Return to the Guardian
-								</div>
-								<SvgGuardianLogo textColor={neutral[100]} />
-							</a>
-						</div>
+						<a href="https://www.theguardian.com" css={logoContainer}>
+							<div
+								css={css`
+									${visuallyHidden};
+								`}
+							>
+								Return to the Guardian
+							</div>
+							<SvgGuardianLogo textColor={neutral[100]} />
+						</a>
 					</Column>
 					{/* Only show at wide breakpoint */}
 					<Column span={[0, 0, 0, 0, 1]}></Column>
