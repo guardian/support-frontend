@@ -1,11 +1,6 @@
 import { css } from '@emotion/react';
 import { from, neutral, space, textSans } from '@guardian/source-foundations';
-import {
-	Button,
-	Column,
-	Columns,
-	Hide,
-} from '@guardian/source-react-components';
+import { Column, Columns, Hide } from '@guardian/source-react-components';
 import {
 	Divider,
 	FooterLinks,
@@ -178,15 +173,6 @@ export function SupporterPlusLandingPage({
 									<PaymentFailureMessage />
 									<DirectDebitContainer />
 								</ContributionsStripe>
-								<br />
-								<Button
-									onClick={(e) => {
-										e.preventDefault();
-										navigate(thankYouRoute);
-									}}
-								>
-									Go to thank you page
-								</Button>
 							</BoxContents>
 						</Box>
 						<Box>
