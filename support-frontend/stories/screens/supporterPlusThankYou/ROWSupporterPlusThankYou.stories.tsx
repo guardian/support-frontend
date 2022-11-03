@@ -266,6 +266,7 @@ RecurringNotSignedIn.decorators = [
 		const store = createTestStoreForContributions();
 
 		store.dispatch(setProductType(contributionType));
+		store.dispatch(setUserTypeFromIdentityResponse('guest'));
 		store.dispatch(
 			setFirstName(nameIsOverTenCharacters ? 'NameIsOverTenCharacters' : 'Joe'),
 		);
@@ -329,6 +330,7 @@ RecurringSignedIn.decorators = [
 		const store = createTestStoreForContributions();
 
 		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
+		store.dispatch(setUserTypeFromIdentityResponse('current'));
 		store.dispatch(setProductType(contributionType));
 		store.dispatch(
 			setFirstName(nameIsOverTenCharacters ? 'NameIsOverTenCharacters' : 'Joe'),

@@ -196,6 +196,8 @@ export function SupporterPlusThankYou(): JSX.Element {
 								paymentMethod,
 							)}
 							amountIsAboveThreshold={amountIsAboveThreshold}
+							isSignedIn={isSignedIn}
+							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 						/>
 					</div>
 
