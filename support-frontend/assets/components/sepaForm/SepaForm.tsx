@@ -12,9 +12,7 @@ import type { SepaState } from 'helpers/redux/checkout/payment/sepa/state';
 import { sortedOptions } from '../forms/customFields/sortedOptions';
 
 // -- Styles -- //
-const containerStyles = css`
-	padding-top: ${space[5]}px;
-`;
+
 const headerStyles = css`
 	${headline.xxxsmall({
 		fontWeight: 'bold',
@@ -49,7 +47,7 @@ export function SepaForm({
 	errors,
 }: SepaFormProps): JSX.Element {
 	return (
-		<div css={containerStyles}>
+		<div>
 			<h3 css={headerStyles}>Your account details</h3>
 			<Stack cssOverrides={fieldsContainerStyles} space={3}>
 				<div>

@@ -6,9 +6,10 @@ import {
 	SvgDirectDebit,
 	SvgPayPal,
 } from '@guardian/source-react-components';
-import type { ReactNode } from 'react';
 import React from 'react';
 import Rows from 'components/base/rows';
+import { PaymentMethodLabel } from 'components/paymentMethodSelector/paymentMethodLabel';
+import { RadioWithImage } from 'components/paymentMethodSelector/radioWithImage';
 import AnimatedDots from 'components/spinners/animatedDots';
 import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgSepa from 'components/svgs/sepa';
@@ -23,12 +24,11 @@ import {
 	subscriptionToExplainerPart,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import type { Option } from 'helpers/types/option';
 import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
 
 type PropTypes = {
 	availablePaymentMethods: PaymentMethod[];
-	paymentMethod: Option<PaymentMethod>;
+	paymentMethod: PaymentMethod | null;
 	setPaymentMethod: (method: PaymentMethod) => void;
 	validationError: string | undefined;
 	fullExistingPaymentMethods?: RecentlySignedInExistingPaymentMethod[];
@@ -40,74 +40,6 @@ type PropTypes = {
 	) => void;
 };
 
-type RadioWithImagePropTypes = {
-	id: string;
-	image: ReactNode;
-	label: string;
-	name: string;
-	checked: boolean;
-	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-};
-
-const radioWithImageStyles = css`
-	display: inline-flex;
-	justify-content: space-between;
-	align-items: center;
-`;
-
-const paymentIcon = css`
-	min-width: 30px;
-	max-width: 40px;
-`;
-
-function RadioWithImage({
-	id,
-	image,
-	label,
-	checked,
-	name,
-	onChange,
-}: RadioWithImagePropTypes) {
-	return (
-		<div css={radioWithImageStyles}>
-			<Radio
-				id={id}
-				label={label}
-				checked={checked}
-				name={name}
-				onChange={onChange}
-			/>
-			<div css={paymentIcon}>{image}</div>
-		</div>
-	);
-}
-
-interface PaymentMethodLabelProps {
-	label: string;
-	logo: JSX.Element;
-	isChecked: boolean;
-}
-
-const labelContainer = css`
-	display: flex;
-	width: 100%;
-	margin: 0;
-	justify-content: space-between;
-	align-items: center;
-
-	svg {
-		width: 36px;
-		height: 24px;
-		display: block;
-	}
-
-	&[data-checked='false'] {
-		svg {
-			filter: grayscale(100%);
-		}
-	}
-`;
-
 const explainerListContainer = css`
 	font-size: small;
 	font-style: italic;
@@ -116,19 +48,6 @@ const explainerListContainer = css`
 	color: #767676;
 	padding-right: 40px;
 `;
-
-function PaymentMethodLabel({
-	label,
-	logo,
-	isChecked,
-}: PaymentMethodLabelProps) {
-	return (
-		<div css={labelContainer} data-checked={isChecked.toString()}>
-			<div>{label}</div>
-			{logo}
-		</div>
-	);
-}
 
 const paymentMethodData = {
 	Stripe: {
@@ -206,7 +125,8 @@ function PaymentMethodSelector({
 					)}
 
 					{contributionTypeIsRecurring &&
-						fullExistingPaymentMethods?.map(
+						fullExistingPaymentMethods?.length &&
+						fullExistingPaymentMethods.map(
 							(
 								preExistingPaymentMethod: RecentlySignedInExistingPaymentMethod,
 							) => (

@@ -7,6 +7,7 @@ import {
 	Hide,
 } from '@guardian/source-react-components';
 import {
+	Divider,
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
@@ -21,13 +22,14 @@ import { Container } from 'components/layout/container';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
+import { PaymentMethodSelector } from 'components/paymentMethodSelector/paymentMethodSelector';
+import PaymentMethodSelectorContainer from 'components/paymentMethodSelector/PaymentMethodSelectorContainer';
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
 import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
-import { StripeCardFormContainer } from 'components/stripeCardForm/stripeCardFormContainer';
 import {
 	AUDCountries,
 	Canada,
@@ -61,6 +63,11 @@ const checkoutContainer = css`
 		padding-bottom: ${space[24]}px;
 		padding-top: ${space[6]}px;
 	}
+`;
+
+const divider = css`
+	max-width: 100%;
+	margin: 60px 0 ${space[6]}px;
 `;
 
 export function SupporterPlusLandingPage({
@@ -142,7 +149,12 @@ export function SupporterPlusLandingPage({
 											<PersonalDetails {...personalDetailsProps} />
 										)}
 									/>
-									<StripeCardFormContainer />
+									<Divider size="full" cssOverrides={divider} />
+									<PaymentMethodSelectorContainer
+										render={(paymentMethodSelectorProps) => (
+											<PaymentMethodSelector {...paymentMethodSelectorProps} />
+										)}
+									/>
 									<PaymentButtonController
 										paymentButtons={getPaymentMethodButtons(
 											contributionType,
