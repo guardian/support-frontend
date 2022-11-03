@@ -21,8 +21,8 @@ function PaymentMethodSelectorContainer({
 		(state) => state.common.internationalisation,
 	);
 
-	const paymentMethod = useContributionsSelector(
-		(state) => state.page.checkoutForm.payment.paymentMethod.name,
+	const { name, errors } = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.paymentMethod,
 	);
 
 	const { existingPaymentMethod } = useContributionsSelector(
@@ -48,10 +48,10 @@ function PaymentMethodSelectorContainer({
 
 	return render({
 		availablePaymentMethods: availablePaymentMethods || [],
-		paymentMethod,
+		paymentMethod: name,
 		existingPaymentMethod,
 		existingPaymentMethods: existingPaymentMethods ?? [],
-		validationError: undefined,
+		validationError: errors?.[0],
 		fullExistingPaymentMethods: getFullExistingPaymentMethods(
 			existingPaymentMethods,
 		),
