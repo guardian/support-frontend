@@ -42,6 +42,7 @@ import {
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { DirectDebitContainer } from './components/directDebitWrapper';
+import { GuardianTsAndCs } from './components/guardianTsAndCs';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
 import { PaymentFailureMessage } from './components/paymentFailure';
@@ -180,6 +181,14 @@ export function SupporterPlusLandingPage({
 						</Box>
 						<Divider size="full" cssOverrides={divider} />
 						<PatronsMessage />
+						<Divider
+							size="full"
+							cssOverrides={css`
+								max-width: 100%;
+								margin: ${space[4]}px 0 ${space[4]}px;
+							`}
+						/>
+						<GuardianTsAndCs />
 					</Column>
 				</Columns>
 			</Container>
