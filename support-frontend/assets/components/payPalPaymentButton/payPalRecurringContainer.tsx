@@ -7,7 +7,10 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { onThirdPartyPaymentAuthorised } from 'pages/contributions-landing/contributionsLandingActions';
+import {
+	onThirdPartyPaymentAuthorised,
+	sendFormSubmitEventForPayPalRecurring,
+} from 'pages/contributions-landing/contributionsLandingActions';
 import { PayPalButton } from './payPalButton';
 import type { OnPaypalWindowOpen } from './payPalButtonProps';
 import { getPayPalButtonProps } from './payPalButtonProps';
@@ -47,7 +50,7 @@ export function PayPalButtonRecurringContainer({
 		csrf,
 		isTestUser: isTestUser ?? false,
 		setValidationControls,
-		onClick: console.log,
+		onClick: () => dispatch(sendFormSubmitEventForPayPalRecurring()),
 		onWindowOpen,
 		onCompletion,
 	});
@@ -58,7 +61,7 @@ export function PayPalButtonRecurringContainer({
 		} else {
 			validationControls.enable?.();
 		}
-	}, [disabled]);
+	}, [disabled, validationControls]);
 
 	return <PayPalButton {...buttonProps} />;
 }
