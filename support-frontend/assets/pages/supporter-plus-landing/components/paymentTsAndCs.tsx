@@ -51,12 +51,14 @@ export function PaymentTsAndCs({
 	amount,
 	amountIsAboveThreshold,
 }: PaymentTsAndCsProps): JSX.Element {
-	const amountCopy = formatAmount(
-		currencies[currency],
-		spokenCurrencies[currency],
-		amount,
-		false,
-	);
+	const amountCopy = isNaN(amount)
+		? null
+		: ` of ${formatAmount(
+				currencies[currency],
+				spokenCurrencies[currency],
+				amount,
+				false,
+		  )}`;
 
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const thresholdPrice =
@@ -81,7 +83,7 @@ export function PaymentTsAndCs({
 		return (
 			<>
 				<div>
-					We will attempt to take payment of {amountCopy}, on the{' '}
+					We will attempt to take payment{amountCopy}, on the{' '}
 					{getDateWithOrdinal(new Date())} day of every{' '}
 					{frequencySingular(contributionType)}, from now until you cancel your
 					payment. Payments may take up to 6 days to be recorded in your bank

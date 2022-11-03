@@ -30,7 +30,6 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
-import { getAmount } from 'helpers/contributions';
 import {
 	AUDCountries,
 	Canada,
@@ -41,6 +40,7 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { shouldShowBenefitsMessaging } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import { DirectDebitContainer } from './components/directDebitWrapper';
@@ -90,6 +90,7 @@ export function SupporterPlusLandingPage({
 		(state) => state.page.checkoutForm.product,
 	);
 	const contributionType = useContributionsSelector(getContributionType);
+	const amount = useContributionsSelector(getUserSelectedAmount);
 
 	const amountIsAboveThreshold = shouldShowBenefitsMessaging(
 		contributionType,
@@ -185,11 +186,7 @@ export function SupporterPlusLandingPage({
 									countryGroupId={countryGroupId}
 									contributionType={contributionType}
 									currency={currencyId}
-									amount={getAmount(
-										selectedAmounts,
-										otherAmounts,
-										contributionType,
-									)}
+									amount={amount}
 									amountIsAboveThreshold={amountIsAboveThreshold}
 								/>
 								<br />
