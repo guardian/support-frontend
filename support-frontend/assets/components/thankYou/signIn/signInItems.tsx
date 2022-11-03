@@ -83,17 +83,14 @@ export function SignInBodyCopy(): JSX.Element {
 				</span>
 
 				<span css={hideBeforeTablet}>
-					By signing in, you enable us to recognise you as a supporter across
-					our website and apps. This means we will:
+					By signing in, you help us to recognise you as a valued supporter when
+					you visit our website or app. This means we can:
 				</span>
 			</p>
 			<div css={hideAfterTablet}>
 				<ExpandableContainer isExpanded={isExpanded} maxHeight={500}>
 					<div css={expandableContainer}>
-						<p>
-							You will be able to easily manage your recurring contributions,
-							subscriptions and newsletters in one place.
-						</p>
+						<p>You will be able to easily manage your account in one place.</p>
 
 						<p>
 							Make sure you sign in on each of the devices you use to read our
@@ -106,8 +103,8 @@ export function SignInBodyCopy(): JSX.Element {
 				<div css={expandableContainer}>
 					<BulletPointedList
 						items={[
-							'Remove unnecessary messages asking you for financial support',
-							'Let you easily manage your recurring contributions, subscriptions and newsletters in one place',
+							'Show you far fewer requests for financial support',
+							'Offer you a simple way to manage your support payments and newsletter subscriptions',
 						]}
 					/>
 

@@ -152,7 +152,10 @@ export function SupporterPlusThankYou(): JSX.Element {
 			!isNewAccount && !isSignedIn && email.length > 0,
 			'signIn',
 		),
-		...maybeThankYouModule(contributionType !== 'ONE_OFF', 'appDownload'),
+		...maybeThankYouModule(
+			contributionType !== 'ONE_OFF' && amountIsAboveThreshold,
+			'appDownload',
+		),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && email.length > 0,
 			'marketingConsent',
