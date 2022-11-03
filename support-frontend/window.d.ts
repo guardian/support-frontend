@@ -62,7 +62,8 @@ declare global {
 		enablePayPalButton?: () => void;
 		googleTagManagerDataLayer?: Array<Record<string, unknown>>;
 		grecaptcha?: {
-			render: (arg0: string, arg1: Record<string, unknown>) => void;
+			render: (arg0: string, arg1: Record<string, unknown>) => number;
+			reset: (id: number | undefined) => void;
 		};
 		gtag_enable_tcf_support?: boolean;
 		OffAmazonPayments?: AmazonPaymentsObject;

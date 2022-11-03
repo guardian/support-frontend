@@ -41,6 +41,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { DirectDebitContainer } from './components/directDebitWrapper';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
 import { PaymentFailureMessage } from './components/paymentFailure';
@@ -164,6 +165,7 @@ export function SupporterPlusLandingPage({
 										)}
 									/>
 									<PaymentFailureMessage />
+									<DirectDebitContainer />
 								</ContributionsStripe>
 								<br />
 								<Button
