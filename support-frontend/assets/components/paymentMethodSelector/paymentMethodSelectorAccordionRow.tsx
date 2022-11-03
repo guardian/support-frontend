@@ -47,7 +47,7 @@ const notFocused = css`
 `;
 
 const borderBottom = css`
-	background-image: linear-gradient(to top, ${brand[500]} 4px, transparent 4px);
+	background-image: linear-gradient(to top, ${brand[500]} 2px, transparent 2px);
 `;
 
 const accordionBodyPadding = css`
@@ -88,6 +88,8 @@ interface ExistingPaymentMethodAccordionRowProps {
 	) => void;
 	paymentMethod: PaymentMethod | null;
 	existingPaymentMethod: RecentlySignedInExistingPaymentMethod | undefined;
+	accordionBody?: JSX.Element;
+	checked: boolean;
 }
 
 export function ExistingPaymentMethodAccordionRow({
@@ -96,61 +98,61 @@ export function ExistingPaymentMethodAccordionRow({
 	existingPaymentMethod,
 	updateExistingPaymentMethod,
 	expanded,
+	accordionBody,
+	checked,
 }: ExistingPaymentMethodAccordionRowProps): EmotionJSX.Element {
 	return (
-		<div>
-			<Radio
-				id={`paymentMethod-existing${preExistingPaymentMethod.billingAccountId}`}
-				name="paymentMethod"
-				type="radio"
-				value={preExistingPaymentMethod.paymentType}
-				onChange={() => {
-					updateExistingPaymentMethod?.(preExistingPaymentMethod);
-				}}
-				aria-expanded={expanded}
-				checked={
-					paymentMethod ===
-						mapExistingPaymentMethodToPaymentMethod(preExistingPaymentMethod) &&
-					existingPaymentMethod === preExistingPaymentMethod
-				}
-				arial-labelledby="payment_method"
-				label={
-					<PaymentMethodLabel
-						label={getExistingPaymentMethodLabel(preExistingPaymentMethod)}
-						logo={
-							paymentMethodData[
-								mapExistingPaymentMethodToPaymentMethod(
-									preExistingPaymentMethod,
-								)
-							].icon
-						}
-						isChecked={existingPaymentMethod === preExistingPaymentMethod}
-					/>
-				}
-			/>
+		<div css={checked ? focused : notFocused}>
+			<div>
+				<Radio
+					id={`paymentMethod-existing${preExistingPaymentMethod.billingAccountId}`}
+					name="paymentMethod"
+					type="radio"
+					value={preExistingPaymentMethod.paymentType}
+					onChange={() => {
+						updateExistingPaymentMethod?.(preExistingPaymentMethod);
+					}}
+					checked={
+						paymentMethod ===
+							mapExistingPaymentMethodToPaymentMethod(
+								preExistingPaymentMethod,
+							) && existingPaymentMethod === preExistingPaymentMethod
+					}
+					aria-labelledby="payment_method"
+					aria-expanded={expanded}
+					label={
+						<PaymentMethodLabel
+							label={getExistingPaymentMethodLabel(preExistingPaymentMethod)}
+							logo={
+								paymentMethodData[
+									mapExistingPaymentMethodToPaymentMethod(
+										preExistingPaymentMethod,
+									)
+								].icon
+							}
+							isChecked={existingPaymentMethod === preExistingPaymentMethod}
+						/>
+					}
+				/>
 
-			<div css={explainerListContainer}>
-				Used for your{' '}
-				{subscriptionsToExplainerList(
-					preExistingPaymentMethod.subscriptions.map(
-						subscriptionToExplainerPart,
-					),
-				)}
+				<div css={explainerListContainer}>
+					Used for your{' '}
+					{subscriptionsToExplainerList(
+						preExistingPaymentMethod.subscriptions.map(
+							subscriptionToExplainerPart,
+						),
+					)}
+				</div>
 			</div>
 
 			{/* Accordion Body */}
-			<div css={expanded ? expandedBody : collapsedBody}>
-				<div hidden={!expanded}>
-					i am the expanded body i am the expanded body i am the expanded body i
-					am the expanded body i am the expanded body Lorem ipsum dolor sit
-					amet, consectetur adipisicing elit. Ut expedita autem neque sed in
-					unde impedit molestiae? Asperiores quo accusamus exercitationem ex
-					omnis ipsum voluptatum accusantium culpa! Accusamus, repellat
-					consectetur! Lorem ipsum dolor sit amet consectetur adipisicing elit.
-					Quae, aspernatur et quas vero pariatur magnam dolor velit minus
-					temporibus ad veniam quaerat! Vero molestias quod modi fugit nihil et
-					ad.
-				</div>
+			<div
+				css={[
+					expanded ? expandedBody : collapsedBody,
+					...(expanded && accordionBody ? [accordionBodyPadding] : []),
+				]}
+			>
+				<div hidden={!expanded}>{accordionBody}</div>
 			</div>
 		</div>
 	);
