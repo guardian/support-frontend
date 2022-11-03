@@ -259,6 +259,7 @@ RecurringNotSignedIn.decorators = [
 
 		store.dispatch(setCountryInternationalisation('AU'));
 		store.dispatch(setProductType(contributionType));
+		store.dispatch(setUserTypeFromIdentityResponse('guest'));
 		store.dispatch(
 			setFirstName(nameIsOverTenCharacters ? 'NameIsOverTenCharacters' : 'Joe'),
 		);
@@ -318,6 +319,7 @@ RecurringSignedIn.decorators = [
 
 		store.dispatch(setCountryInternationalisation('AU'));
 		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
+		store.dispatch(setUserTypeFromIdentityResponse('current'));
 		store.dispatch(setProductType(contributionType));
 		store.dispatch(
 			setFirstName(nameIsOverTenCharacters ? 'NameIsOverTenCharacters' : 'Joe'),

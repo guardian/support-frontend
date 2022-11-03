@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import { body, from, space, titlepiece } from '@guardian/source-foundations';
 import type { ContributionType } from 'helpers/contributions';
+import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import DirectDebitMessage from './directDebitMessage';
 import Heading from './heading';
@@ -43,6 +44,8 @@ type ThankYouHeaderProps = {
 	currency: IsoCurrency;
 	shouldShowLargeDonationMessage: boolean;
 	amountIsAboveThreshold: boolean;
+	isSignedIn: boolean;
+	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 };
 
 function ThankYouHeader({
@@ -54,6 +57,8 @@ function ThankYouHeader({
 	currency,
 	shouldShowLargeDonationMessage,
 	amountIsAboveThreshold,
+	isSignedIn,
+	userTypeFromIdentityResponse,
 }: ThankYouHeaderProps): JSX.Element {
 	return (
 		<header css={header}>
@@ -72,6 +77,8 @@ function ThankYouHeader({
 					shouldShowLargeDonationMessage={shouldShowLargeDonationMessage}
 					contributionType={contributionType}
 					amountIsAboveThreshold={amountIsAboveThreshold}
+					isSignedIn={isSignedIn}
+					userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 				/>
 			</p>
 		</header>
