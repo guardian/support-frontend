@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, textSans } from '@guardian/source-foundations';
-import { useEffect } from 'preact/hooks';
+import { useEffect } from 'react';
 import AnimatedDots from 'components/spinners/animatedDots';
 
 const loadingBackground = css`
