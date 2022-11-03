@@ -36,14 +36,6 @@ const hideBeforeTablet = css`
 	}
 `;
 
-const hideAfterTablet = css`
-	display: block;
-
-	${from.tablet} {
-		display: none;
-	}
-`;
-
 const privacyText = css`
 	${hideBeforeTablet}
 	${textSans.small()}
@@ -169,17 +161,9 @@ export function SupportReminderBodyCopy({
 			) : (
 				<>
 					<p>
-						<span css={hideAfterTablet}>
-							Choose a time when we can invite you to support our journalism
-							again. We’ll send you a maximum of two reminder emails, with no
-							obligation.
-						</span>
-						<span css={hideBeforeTablet}>
-							Many readers choose to support Guardian journalism by making
-							single contributions at various points in the year. Opt in to
-							whichever time suits you best, and we’ll send you a maximum of two
-							reminder emails, with no obligation.
-						</span>
+						Many readers choose to support Guardian journalism at various points
+						in the year. Opt in to whichever time suits you best, and we’ll send
+						you a maximum of two reminder emails, with no obligation to give.
 					</p>
 					<form css={form}>
 						<RadioGroup name="reminder" label="I'd like to be reminded in:">

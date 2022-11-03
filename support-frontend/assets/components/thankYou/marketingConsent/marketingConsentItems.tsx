@@ -23,22 +23,6 @@ const checkboxContainer = css`
 	}
 `;
 
-const hideAfterTablet = css`
-	display: block;
-
-	${from.tablet} {
-		display: none;
-	}
-`;
-
-const hideBeforeTablet = css`
-	display: none;
-
-	${from.tablet} {
-		display: block;
-	}
-`;
-
 type ThankYouMarketingConsentState = {
 	marketingConsentState: {
 		hasBeenCompleted: boolean;
@@ -75,15 +59,9 @@ export function ThankYouMarketingConsentBodyCopy({
 			) : (
 				<>
 					<p>
-						<span css={hideAfterTablet}>
-							Opt in to receive a regular newsletter from inside the Guardian.
-						</span>
-
-						<span css={hideBeforeTablet}>
-							Our membership editor and others will discuss the most important
-							recent news stories and suggest compelling articles to read. Opt
-							in to receive their regular newsletter.
-						</span>
+						Our supporter editor and others will discuss the most important news
+						stories and suggest compelling articles to read. Opt in to read
+						their regular newsletter.
 					</p>
 					<div css={checkboxContainer}>
 						<CheckboxGroup

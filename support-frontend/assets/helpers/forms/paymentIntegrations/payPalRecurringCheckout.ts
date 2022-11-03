@@ -249,7 +249,7 @@ const getPayPalOptions = (
 	billingPeriod: BillingPeriod,
 	setupPayPalPayment: SetupPayPalRequestType,
 	updatePayPalButtonReady: (ready: boolean) => void,
-): Record<string, unknown> => {
+): PayPalButtonProps => {
 	function toggleButton(actions: {
 		enable: () => void;
 		disable: () => void;

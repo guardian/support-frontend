@@ -152,7 +152,10 @@ export function SupporterPlusThankYou(): JSX.Element {
 			!isNewAccount && !isSignedIn && email.length > 0,
 			'signIn',
 		),
-		...maybeThankYouModule(contributionType !== 'ONE_OFF', 'appDownload'),
+		...maybeThankYouModule(
+			contributionType !== 'ONE_OFF' && amountIsAboveThreshold,
+			'appDownload',
+		),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && email.length > 0,
 			'marketingConsent',
@@ -196,6 +199,8 @@ export function SupporterPlusThankYou(): JSX.Element {
 								paymentMethod,
 							)}
 							amountIsAboveThreshold={amountIsAboveThreshold}
+							isSignedIn={isSignedIn}
+							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 						/>
 					</div>
 

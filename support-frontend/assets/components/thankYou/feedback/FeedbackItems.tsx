@@ -17,7 +17,7 @@ const getFeedbackHeader = (
 
 	const heading = isAus
 		? 'Tell us why you value Guardian Australia'
-		: 'Send us your thoughts';
+		: 'Send your thoughts';
 
 	return feedbackSurveyHasBeenCompleted
 		? 'Thank you for sharing your thoughts'

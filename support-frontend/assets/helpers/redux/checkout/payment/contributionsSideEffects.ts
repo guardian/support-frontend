@@ -16,8 +16,8 @@ import {
 	setAmazonPayPaymentSelected,
 } from './amazonPay/actions';
 import { setPaymentMethod } from './paymentMethod/actions';
-import { loadPayPalExpressSdk } from './payPal/reducer';
 import type { PayPalState } from './payPal/state';
+import { loadPayPalExpressSdk } from './payPal/thunks';
 import {
 	setSepaAccountHolderName,
 	setSepaAddressCountry,
