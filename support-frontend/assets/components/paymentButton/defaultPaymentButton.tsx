@@ -12,21 +12,15 @@ const buttonOverrides = css`
 export type DefaultPaymentButtonProps = {
 	buttonText: string;
 	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-	loading?: boolean;
 };
 
 export function DefaultPaymentButton({
 	buttonText,
 	onClick,
-	loading,
 }: DefaultPaymentButtonProps): JSX.Element {
 	return (
 		<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-			<Button
-				cssOverrides={buttonOverrides}
-				onClick={onClick}
-				isLoading={loading}
-			>
+			<Button cssOverrides={buttonOverrides} onClick={onClick}>
 				{buttonText}
 			</Button>
 		</ThemeProvider>
