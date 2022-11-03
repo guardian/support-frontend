@@ -178,11 +178,8 @@ export function SupporterPlusLandingPage({
 								</Button>
 							</BoxContents>
 						</Box>
-						<Box>
-							<BoxContents>
-								<PatronsMessage />
-							</BoxContents>
-						</Box>
+						<Divider size="full" cssOverrides={divider} />
+						<PatronsMessage />
 					</Column>
 				</Columns>
 			</Container>
