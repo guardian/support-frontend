@@ -56,7 +56,7 @@ export const SUPPORTER_PLUS_AMOUNTS: SupporterPlusAmounts = {
 		},
 		ANNUAL: {
 			amounts: [50, 95, 250, 500],
-			defaultAmount: 0,
+			defaultAmount: 95,
 		},
 	},
 	NZDCountries: {
@@ -84,7 +84,7 @@ export const SUPPORTER_PLUS_AMOUNTS: SupporterPlusAmounts = {
 		},
 		ANNUAL: {
 			amounts: [60, 120, 199, 500],
-			defaultAmount: 0,
+			defaultAmount: 120,
 		},
 	},
 	AUDCountries: {
