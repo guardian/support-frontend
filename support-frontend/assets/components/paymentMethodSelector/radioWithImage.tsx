@@ -75,9 +75,6 @@ export function RadioWithImage({
 					checked={checked}
 					name={name}
 					supporting={supportingText}
-					cssOverrides={css`
-						margin-bottom: 0;
-					`}
 				/>
 				<div css={paymentIcon}>{image}</div>
 			</div>

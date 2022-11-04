@@ -79,7 +79,8 @@ function PaymentMethodSelectorContainer({
 	);
 
 	// We check on page init if we should try to retrieve existing payment methods from MDAPI
-	// If we are retrieving them, the value will be undefined, otherwise we set it to an empty array
+	// If we are in the process of retrieving them but the request is still pending, the value will be undefined.
+	// If we know we're not retrieving them the value is immediately set to an empty array
 	// TODO: Do this in a less weird way with a proper thunk and pending state!
 	const pendingExistingPaymentMethods = existingPaymentMethods === undefined;
 
