@@ -1,9 +1,48 @@
+import type { ContributionType } from 'helpers/contributions';
 import { contributionTypeIsRecurring } from 'helpers/contributions';
 import { getValidPaymentMethods } from 'helpers/forms/checkouts';
-import { getFullExistingPaymentMethods } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import type {
+	ExistingPaymentMethod,
+	RecentlySignedInExistingPaymentMethod,
+} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import {
+	getFullExistingPaymentMethods,
+	isUsableExistingPaymentMethod,
+} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
+
+function existingPaymentMethodsToDisplay(
+	contributionType: ContributionType,
+	existingPaymentMethods?: ExistingPaymentMethod[],
+): RecentlySignedInExistingPaymentMethod[] {
+	const shouldShowExistingPaymentMethods =
+		contributionTypeIsRecurring(contributionType);
+
+	const existingPaymentMethodList = getFullExistingPaymentMethods(
+		existingPaymentMethods,
+	);
+
+	return shouldShowExistingPaymentMethods ? existingPaymentMethodList : [];
+}
+
+function showReauthenticationLink(
+	contributionType: ContributionType,
+	existingPaymentMethods?: ExistingPaymentMethod[],
+): boolean {
+	const shouldShowExistingPaymentMethods =
+		contributionTypeIsRecurring(contributionType);
+	const hasExistingPaymentMethods = existingPaymentMethods?.length;
+
+	if (!shouldShowExistingPaymentMethods || !hasExistingPaymentMethods) {
+		return false;
+	}
+
+	return existingPaymentMethods.every(
+		(method) => !isUsableExistingPaymentMethod(method),
+	);
+}
 
 function PaymentMethodSelectorContainer({
 	render,
@@ -25,11 +64,9 @@ function PaymentMethodSelectorContainer({
 	const { existingPaymentMethod } = useContributionsSelector(
 		(state) => state.page.form,
 	);
-
 	const { existingPaymentMethods } = useContributionsSelector(
 		(state) => state.common,
 	);
-
 	const { switches } = useContributionsSelector(
 		(state) => state.common.settings,
 	);
@@ -41,16 +78,26 @@ function PaymentMethodSelectorContainer({
 		countryGroupId,
 	);
 
+	// We check on page init if we should try to retrieve existing payment methods from MDAPI
+	// If we are in the process of retrieving them but the request is still pending, the value will be undefined.
+	// If we know we're not retrieving them the value is immediately set to an empty array
+	// TODO: Do this in a less weird way with a proper thunk and pending state!
+	const pendingExistingPaymentMethods = existingPaymentMethods === undefined;
+
 	return render({
 		availablePaymentMethods: availablePaymentMethods,
 		paymentMethod: name,
 		existingPaymentMethod,
-		existingPaymentMethods: existingPaymentMethods ?? [],
-		validationError: errors?.[0],
-		fullExistingPaymentMethods: getFullExistingPaymentMethods(
+		existingPaymentMethodList: existingPaymentMethodsToDisplay(
+			contributionType,
 			existingPaymentMethods,
 		),
-		contributionTypeIsRecurring: contributionTypeIsRecurring(contributionType),
+		validationError: errors?.[0],
+		pendingExistingPaymentMethods,
+		showReauthenticateLink: showReauthenticationLink(
+			contributionType,
+			existingPaymentMethods,
+		),
 	});
 }
 

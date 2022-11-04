@@ -6,22 +6,19 @@ import { useEffect } from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import AnimatedDots from 'components/spinners/animatedDots';
-import type {
-	ExistingPaymentMethod,
-	RecentlySignedInExistingPaymentMethod,
-} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { mapExistingPaymentMethodToPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
-import { getReauthenticateUrl } from 'helpers/urls/externalLinks';
-import { isCodeOrProd } from 'helpers/urls/url';
 import ContributionChoicesHeader from 'pages/contributions-landing/components/ContributionChoicesHeader';
+import { updateSelectedExistingPaymentMethod } from 'pages/contributions-landing/contributionsLandingActions';
 import { paymentMethodData } from './paymentMethodData';
 import {
 	AvailablePaymentMethodAccordionRow,
 	ExistingPaymentMethodAccordionRow,
 } from './paymentMethodSelectorAccordionRow';
+import { ReauthenticateLink } from './reauthenticateLink';
 
 const container = css`
 	margin-top: ${space[6]}px;
@@ -58,20 +55,20 @@ export interface PaymentMethodSelectorProps {
 	availablePaymentMethods: PaymentMethod[];
 	paymentMethod: PaymentMethod | null;
 	validationError: string | undefined;
-	fullExistingPaymentMethods: RecentlySignedInExistingPaymentMethod[];
-	contributionTypeIsRecurring?: boolean;
 	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	existingPaymentMethods: ExistingPaymentMethod[];
+	existingPaymentMethodList: RecentlySignedInExistingPaymentMethod[];
+	pendingExistingPaymentMethods?: boolean;
+	showReauthenticateLink?: boolean;
 }
 
 export function PaymentMethodSelector({
 	availablePaymentMethods,
 	paymentMethod,
 	validationError,
-	fullExistingPaymentMethods,
-	contributionTypeIsRecurring,
 	existingPaymentMethod,
-	existingPaymentMethods,
+	existingPaymentMethodList,
+	pendingExistingPaymentMethods,
+	showReauthenticateLink,
 }: PaymentMethodSelectorProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 
@@ -81,7 +78,7 @@ export function PaymentMethodSelector({
 	}, []);
 
 	if (
-		fullExistingPaymentMethods.length < 1 &&
+		existingPaymentMethodList.length < 1 &&
 		availablePaymentMethods.length < 1
 	) {
 		return (
@@ -98,17 +95,16 @@ export function PaymentMethodSelector({
 			<PaymentMethodSelectorLegend />
 			<RadioGroup
 				id="paymentMethod"
+				role="radiogroup"
 				label="Select payment method"
 				hideLabel
 				error={validationError}
 			>
-				{contributionTypeIsRecurring &&
-					!existingPaymentMethods.length &&
-					isCodeOrProd() && (
-						<div className="awaiting-existing-payment-options">
-							<AnimatedDots appearance="medium" />
-						</div>
-					)}
+				{pendingExistingPaymentMethods && (
+					<div className="awaiting-existing-payment-options">
+						<AnimatedDots appearance="medium" />
+					</div>
+				)}
 
 				<Accordion
 					cssOverrides={css`
@@ -117,45 +113,52 @@ export function PaymentMethodSelector({
 				>
 					{[
 						<>
-							{contributionTypeIsRecurring &&
-								fullExistingPaymentMethods.map(
-									(
-										preExistingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-									) => {
-										const existingPaymentMethodType =
-											preExistingPaymentMethod.paymentType;
+							{existingPaymentMethodList.map(
+								(
+									preExistingPaymentMethod: RecentlySignedInExistingPaymentMethod,
+								) => {
+									const existingPaymentMethodType =
+										preExistingPaymentMethod.paymentType;
 
-										const paymentType =
-											existingPaymentMethodType === 'Card'
-												? 'ExistingCard'
-												: 'DirectDebit';
+									const paymentType: PaymentMethod =
+										existingPaymentMethodType === 'Card'
+											? 'ExistingCard'
+											: 'ExistingDirectDebit';
 
-										return (
-											<ExistingPaymentMethodAccordionRow
-												expanded={
-													paymentMethod ===
-														mapExistingPaymentMethodToPaymentMethod(
-															preExistingPaymentMethod,
-														) &&
-													existingPaymentMethod === preExistingPaymentMethod
-												}
-												paymentMethod={paymentMethod}
-												preExistingPaymentMethod={preExistingPaymentMethod}
-												existingPaymentMethod={existingPaymentMethod}
-												checked={
-													paymentMethod ===
-														mapExistingPaymentMethodToPaymentMethod(
-															preExistingPaymentMethod,
-														) &&
-													existingPaymentMethod === preExistingPaymentMethod
-												}
-												accordionBody={
-													paymentMethodData[paymentType].accordionBody
-												}
-											/>
-										);
-									},
-								)}
+									return (
+										<ExistingPaymentMethodAccordionRow
+											expanded={
+												paymentMethod ===
+													mapExistingPaymentMethodToPaymentMethod(
+														preExistingPaymentMethod,
+													) &&
+												existingPaymentMethod === preExistingPaymentMethod
+											}
+											paymentMethod={paymentMethod}
+											preExistingPaymentMethod={preExistingPaymentMethod}
+											existingPaymentMethod={existingPaymentMethod}
+											checked={
+												paymentMethod ===
+													mapExistingPaymentMethodToPaymentMethod(
+														preExistingPaymentMethod,
+													) &&
+												existingPaymentMethod === preExistingPaymentMethod
+											}
+											onChange={() => {
+												dispatch(setPaymentMethod(paymentType));
+												dispatch(
+													updateSelectedExistingPaymentMethod(
+														preExistingPaymentMethod,
+													),
+												);
+											}}
+											accordionBody={
+												paymentMethodData[paymentType].accordionBody
+											}
+										/>
+									);
+								},
+							)}
 
 							{availablePaymentMethods.map((method) => (
 								<AvailablePaymentMethodAccordionRow
@@ -172,17 +175,7 @@ export function PaymentMethodSelector({
 					]}
 				</Accordion>
 
-				{contributionTypeIsRecurring &&
-					existingPaymentMethods.length > 0 &&
-					fullExistingPaymentMethods.length === 0 && (
-						<li className="form__radio-group-item">
-							...or{' '}
-							<a className="reauthenticate-link" href={getReauthenticateUrl()}>
-								re-enter your password
-							</a>{' '}
-							to use one of your existing payment methods.
-						</li>
-					)}
+				{showReauthenticateLink && <ReauthenticateLink />}
 			</RadioGroup>
 		</div>
 	);

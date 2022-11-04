@@ -18,6 +18,7 @@ export type ExistingPaymentMethodSubscription = {
 	isActive: boolean;
 	isCancelled: boolean;
 	name: string;
+	billingAccountId?: string;
 };
 
 type ExistingPaymentType = 'Card' | 'DirectDebit';
