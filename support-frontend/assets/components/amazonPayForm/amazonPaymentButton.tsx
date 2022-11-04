@@ -1,4 +1,5 @@
 import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
+import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { setAmazonPayHasAccessToken } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import {
 	useContributionsDispatch,
@@ -13,13 +14,10 @@ export function AmazonPaymentButton(): JSX.Element {
 		(state) => state.page.checkoutForm.payment.amazonPay.hasAccessToken,
 	);
 
-	// Paul Dempsey : Temporary Force AmazonPay Whilst Awaiting New Payment Selector/Validator Update
-	// const loginWithAmazonPay = useFormValidation(function login() {
-	function loginWithAmazonPay() {
+	const loginWithAmazonPay = useFormValidation(function login() {
 		console.log('amazonPaymentButton.loginWithAmazonPay');
 		dispatch(setAmazonPayHasAccessToken());
-	}
-	// });
+	});
 
 	function payWithAmazonPay() {
 		console.log('amazonPaymentButton.payWithAmazonPay');

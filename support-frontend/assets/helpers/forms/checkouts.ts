@@ -26,7 +26,6 @@ import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { UnitedStates } from 'helpers/internationalisation/countryGroup';
 import {
 	currencies,
 	spokenCurrencies,
@@ -207,13 +206,7 @@ function getPaymentMethodToSelect(
 		countryId,
 		countryGroupId,
 	);
-	return (
-		// Paul Dempsey : Temporary Force AmazonPay Whilst Awaiting New Payment Selector
-		validPaymentMethods[
-			contributionType === 'ONE_OFF' && countryGroupId === UnitedStates ? 2 : 0
-		] || 'None'
-		//validPaymentMethods[0] || 'None'
-	);
+	return validPaymentMethods[0] || 'None';
 }
 
 function getPaymentMethodFromSession(): PaymentMethod | null | undefined {
