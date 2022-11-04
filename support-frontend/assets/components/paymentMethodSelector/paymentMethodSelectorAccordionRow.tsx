@@ -83,9 +83,7 @@ const collapsedBody = css`
 interface ExistingPaymentMethodAccordionRowProps {
 	expanded: boolean;
 	preExistingPaymentMethod: RecentlySignedInExistingPaymentMethod;
-	updateExistingPaymentMethod?: (
-		existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-	) => void;
+	onChange: () => void;
 	paymentMethod: PaymentMethod | null;
 	existingPaymentMethod: RecentlySignedInExistingPaymentMethod | undefined;
 	accordionBody?: JSX.Element;
@@ -96,7 +94,7 @@ export function ExistingPaymentMethodAccordionRow({
 	paymentMethod,
 	preExistingPaymentMethod,
 	existingPaymentMethod,
-	updateExistingPaymentMethod,
+	onChange,
 	expanded,
 	accordionBody,
 	checked,
@@ -114,9 +112,7 @@ export function ExistingPaymentMethodAccordionRow({
 				<RadioWithImage
 					id={`paymentMethod-existing${preExistingPaymentMethod.billingAccountId}`}
 					name="paymentMethod"
-					onChange={() => {
-						updateExistingPaymentMethod?.(preExistingPaymentMethod);
-					}}
+					onChange={onChange}
 					checked={
 						paymentMethod ===
 							mapExistingPaymentMethodToPaymentMethod(
