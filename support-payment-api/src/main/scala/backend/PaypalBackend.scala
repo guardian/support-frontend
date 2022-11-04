@@ -50,12 +50,12 @@ class PaypalBackend(
    * Once authorised, the payment can be executed via the execute-payment endpoint.
    */
 
-  private def paypalEnabled =
+  private def paypalEnabled  =
     switchService.allSwitches.map(switch=>switch.oneOffPaymentMethods.exists(s=>s.switches.payPal.state.isOn))
 
 
   def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] = {
-    paypalEnabled.flatMap {
+    paypalEnabled match {
       case true=>
         paypalService
         .createPayment(c)
@@ -268,6 +268,7 @@ object PaypalBackend {
       emailService,
       cloudWatchService,
       switchService,
+
     )
   }
 
