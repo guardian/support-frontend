@@ -141,7 +141,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   implicit val mockS3Client: AmazonS3 = mock[AmazonS3]
 
   // happens on instantiation of StripeBackend
-  when(mockSwitchService.recaptchaSwitches).thenReturn(switchServiceOnResponse)
+  when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
 
   // -- test obj
   val stripeBackend = new StripeBackend(

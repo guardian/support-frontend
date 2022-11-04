@@ -78,7 +78,7 @@ class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem
       .maximumSize(10)
       .buildAsync(s => fromS3().getOrElse(Switches(None, None)))
 
-  def recaptchaSwitches: EitherT[Future, Nothing, Switches] =
+  def allSwitches: EitherT[Future, Nothing, Switches] =
     EitherT.right(cache.get(cacheKey))
 
   private def fromBufferedSource(buf: BufferedSource): Either[Throwable, Switches] = {

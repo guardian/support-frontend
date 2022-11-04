@@ -57,7 +57,7 @@ class StripeBackend(
 
   // We only want the backend switch to be valid if the frontend switch is enabled
   private def recaptchaEnabled =
-    switchService.recaptchaSwitches
+    switchService.allSwitches
       .map(s =>
         s.recaptchaSwitches.exists(switch =>
           switch.switches.enableRecaptchaFrontend.state.isOn && switch.switches.enableRecaptchaBackend.state.isOn,
