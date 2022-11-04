@@ -119,10 +119,10 @@ export function PaymentMethodSelector({
 									const existingPaymentMethodType =
 										preExistingPaymentMethod.paymentType;
 
-									const paymentType =
+									const paymentType: PaymentMethod =
 										existingPaymentMethodType === 'Card'
 											? 'ExistingCard'
-											: 'DirectDebit';
+											: 'ExistingDirectDebit';
 
 									return (
 										<ExistingPaymentMethodAccordionRow

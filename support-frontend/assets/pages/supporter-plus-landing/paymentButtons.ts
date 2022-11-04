@@ -1,4 +1,6 @@
 import { AmazonPaymentButton } from 'components/amazonPaymentButton/amazonPaymentButton';
+import { ExistingCardPaymentButton } from 'components/existingMethodPaymentButton/existingCardPaymentButton';
+import { ExistingDirectDebitPaymentButton } from 'components/existingMethodPaymentButton/existingDirectDebitPaymentButton';
 import { DirectDebitPaymentButton } from 'components/paymentButton/directDebitPaymentButton';
 import { PayPalPaymentButton } from 'components/payPalPaymentButton/payPalPaymentButton';
 import { SepaPaymentButton } from 'components/sepaForm/sepaPaymentButton';
@@ -15,6 +17,8 @@ type PaymentMethodButtons = Partial<Record<PaymentMethod, React.FC>>;
 const allPaymentMethodButtons: PaymentMethodButtons = {
 	AmazonPay: AmazonPaymentButton,
 	DirectDebit: DirectDebitPaymentButton,
+	ExistingCard: ExistingCardPaymentButton,
+	ExistingDirectDebit: ExistingDirectDebitPaymentButton,
 	PayPal: PayPalPaymentButton,
 	Sepa: SepaPaymentButton,
 	Stripe: StripePaymentButton,
