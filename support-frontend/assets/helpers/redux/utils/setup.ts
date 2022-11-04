@@ -1,6 +1,5 @@
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
-import { getAmounts } from 'helpers/abTests/helpers';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -20,6 +19,7 @@ import {
 	getAllQueryParamsWithExclusions,
 	getQueryParameter,
 } from 'helpers/urls/url';
+import { SUPPORTER_PLUS_AMOUNTS } from '../checkout/product/supporterPlus/supporterPlusAmounts';
 import type { CommonState, Internationalisation } from '../commonState/state';
 
 function getLocalCurrencyCountry(
@@ -66,7 +66,10 @@ function buildInitialState(
 		internationalisation.localCurrencyCountry = localCurrencyCountry;
 	}
 
-	const amounts = getAmounts(settings, abParticipations, countryGroupId);
+	// Hard coded supporter plus amounts
+	const amounts = SUPPORTER_PLUS_AMOUNTS[countryGroupId];
+	// const amounts = getAmounts(settings, abParticipations, countryGroupId);
+
 	return {
 		campaign: getCampaign(acquisitionData),
 		referrerAcquisitionData: acquisitionData,
