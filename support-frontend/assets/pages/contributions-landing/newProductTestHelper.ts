@@ -17,6 +17,7 @@ export function isSupporterPlusPurchase(state: ContributionsState): boolean {
 	);
 	const amountIsHighEnough = !!(thresholdPrice && amount >= thresholdPrice);
 	return (
-		state.common.abParticipations.newProduct == 'variant' && amountIsHighEnough
+		state.common.abParticipations.supporterPlus == 'variant' &&
+		amountIsHighEnough
 	);
 }
