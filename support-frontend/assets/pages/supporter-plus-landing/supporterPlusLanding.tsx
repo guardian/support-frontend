@@ -37,11 +37,15 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { shouldShowBenefitsMessaging } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import { DirectDebitContainer } from './components/directDebitWrapper';
+import { GuardianTsAndCs } from './components/guardianTsAndCs';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
 import { PaymentFailureMessage } from './components/paymentFailure';
+import { PaymentTsAndCs } from './components/paymentTsAndCs';
 import { AmountAndBenefits } from './formSections/amountAndBenefits';
 import { getPaymentMethodButtons } from './paymentButtons';
 
@@ -65,7 +69,7 @@ const checkoutContainer = css`
 
 const divider = css`
 	max-width: 100%;
-	margin: 60px 0 ${space[6]}px;
+	margin: 40px 0 ${space[6]}px;
 `;
 
 export function SupporterPlusLandingPage({
@@ -73,13 +77,25 @@ export function SupporterPlusLandingPage({
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
-	const { countryGroupId, countryId } = useContributionsSelector(
+	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const { switches } = useContributionsSelector(
 		(state) => state.common.settings,
 	);
+	const { selectedAmounts, otherAmounts } = useContributionsSelector(
+		(state) => state.page.checkoutForm.product,
+	);
 	const contributionType = useContributionsSelector(getContributionType);
+	const amount = useContributionsSelector(getUserSelectedAmount);
+
+	const amountIsAboveThreshold = shouldShowBenefitsMessaging(
+		contributionType,
+		selectedAmounts,
+		otherAmounts,
+		countryGroupId,
+	);
+
 	const { paymentComplete, isWaiting } = useContributionsSelector(
 		(state) => state.page.form,
 	);
@@ -173,13 +189,25 @@ export function SupporterPlusLandingPage({
 									<PaymentFailureMessage />
 									<DirectDebitContainer />
 								</ContributionsStripe>
+								<PaymentTsAndCs
+									countryGroupId={countryGroupId}
+									contributionType={contributionType}
+									currency={currencyId}
+									amount={amount}
+									amountIsAboveThreshold={amountIsAboveThreshold}
+								/>
 							</BoxContents>
 						</Box>
-						<Box>
-							<BoxContents>
-								<PatronsMessage />
-							</BoxContents>
-						</Box>
+						<Divider size="full" cssOverrides={divider} />
+						<PatronsMessage />
+						<Divider
+							size="full"
+							cssOverrides={css`
+								max-width: 100%;
+								margin: ${space[4]}px 0 ${space[4]}px;
+							`}
+						/>
+						<GuardianTsAndCs />
 					</Column>
 				</Columns>
 			</Container>

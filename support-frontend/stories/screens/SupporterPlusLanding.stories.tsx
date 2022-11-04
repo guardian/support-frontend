@@ -2,6 +2,7 @@ import '__mocks__/settingsMock';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
+import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import { init as formInit } from 'pages/contributions-landing/contributionsLandingInit';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 
@@ -14,6 +15,7 @@ global.window.guardian = {
 };
 
 const store = createTestStoreForContributions();
+store.dispatch(setCountryInternationalisation('GBP'));
 
 formInit(store);
 

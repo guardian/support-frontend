@@ -4,17 +4,20 @@ import { Link } from '@guardian/source-react-components';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
 
 const headingStyles = css`
-	${headline.xxxsmall({ fontWeight: 'bold' })}
+	${headline.xxxsmall({ fontWeight: 'bold' })};
+	color: #606060;
 	margin-bottom: ${space[1]}px;
 `;
 
 const copyStyles = css`
-	${textSans.xsmall({ lineHeight: 'regular' })}
+	${textSans.xsmall({ lineHeight: 'regular' })};
+	color: #606060;
 `;
 
 const linkStyles = css`
 	font-size: inherit;
 	line-height: inherit;
+	color: #606060;
 `;
 
 const intCMPParameter = 'gdnwb_copts_support_contributions_referral';
