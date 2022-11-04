@@ -122,7 +122,11 @@ export function PaymentTsAndCs({
 	};
 
 	if (contributionType === 'ONE_OFF') {
-		return <TsAndCsFooterLinks countryGroupId={countryGroupId} />;
+		return (
+			<div css={container}>
+				<TsAndCsFooterLinks countryGroupId={countryGroupId} />
+			</div>
+		);
 	}
 
 	if (contributionType === 'MONTHLY') {
