@@ -3,9 +3,13 @@ import { useAmazonPayObjects } from 'helpers/customHooks/useAmazonPayObjects';
 import { getContributeButtonCopyWithPaymentType } from 'helpers/forms/checkouts';
 import { AmazonPay } from 'helpers/forms/paymentMethods';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
+import { paymentWaiting } from 'pages/contributions-landing/contributionsLandingActions';
 import AmazonPayForm from './amazonPayForm';
 
 type PropTypes = {
@@ -14,6 +18,7 @@ type PropTypes = {
 };
 
 export function AmazonPayFormContainer(props: PropTypes): JSX.Element {
+	const dispatch = useContributionsDispatch();
 	const countryGroupId = useContributionsSelector(
 		(state) => state.common.internationalisation.countryGroupId,
 	);
@@ -43,6 +48,7 @@ export function AmazonPayFormContainer(props: PropTypes): JSX.Element {
 	);
 
 	if (hasAccessToken) {
+		dispatch(paymentWaiting(false));
 		trackComponentClick('amazon-pay-login-click');
 		const loginOptions = {
 			scope: 'profile postal_code payments:widget payments:shipping_address',

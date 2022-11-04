@@ -3,6 +3,7 @@ import {
 	SvgDirectDebitWide,
 	SvgPayPalBrand,
 } from '@guardian/source-react-components';
+import { AmazonPayFormContainer } from 'components/amazonPayForm/amazonPayFormContainer';
 import type { SepaFormProps } from 'components/sepaForm/SepaForm';
 import { SepaForm } from 'components/sepaForm/SepaForm';
 import { SepaFormContainer } from 'components/sepaForm/SepaFormContainer';
@@ -51,6 +52,12 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 		id: 'qa-amazon-pay',
 		label: 'Amazon Pay',
 		icon: <SvgAmazonPayLogoDs />,
+		accordionBody: (
+			<AmazonPayFormContainer
+				showBenefitsMessaging={true}
+				userInNewProductTest={false}
+			/>
+		),
 	},
 	ExistingCard: {
 		id: 'qa-existing-card',
