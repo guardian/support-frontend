@@ -95,6 +95,7 @@ export function PaymentMethodSelector({
 			<PaymentMethodSelectorLegend />
 			<RadioGroup
 				id="paymentMethod"
+				role="radiogroup"
 				label="Select payment method"
 				hideLabel
 				error={validationError}
