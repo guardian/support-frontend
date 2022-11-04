@@ -1,8 +1,7 @@
 import { contributionTypeIsRecurring } from 'helpers/contributions';
 import { getValidPaymentMethods } from 'helpers/forms/checkouts';
 import { getFullExistingPaymentMethods } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { isContribution } from 'helpers/redux/checkout/product/selectors/productType';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
 
@@ -13,16 +12,14 @@ function PaymentMethodSelectorContainer({
 		paymentMethodSelectorProps: PaymentMethodSelectorProps,
 	) => JSX.Element;
 }): JSX.Element {
-	const contributionType = useContributionsSelector(
-		(state) => state.page.checkoutForm.product.productType,
-	);
+	const contributionType = useContributionsSelector(getContributionType);
 
 	const { countryId, countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 
-	const paymentMethod = useContributionsSelector(
-		(state) => state.page.checkoutForm.payment.paymentMethod.name,
+	const { name, errors } = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.paymentMethod,
 	);
 
 	const { existingPaymentMethod } = useContributionsSelector(
@@ -37,27 +34,23 @@ function PaymentMethodSelectorContainer({
 		(state) => state.common.settings,
 	);
 
-	const availablePaymentMethods: PaymentMethod[] | false =
-		isContribution(contributionType) &&
-		getValidPaymentMethods(
-			contributionType,
-			switches,
-			countryId,
-			countryGroupId,
-		);
+	const availablePaymentMethods = getValidPaymentMethods(
+		contributionType,
+		switches,
+		countryId,
+		countryGroupId,
+	);
 
 	return render({
-		availablePaymentMethods: availablePaymentMethods || [],
-		paymentMethod,
+		availablePaymentMethods: availablePaymentMethods,
+		paymentMethod: name,
 		existingPaymentMethod,
 		existingPaymentMethods: existingPaymentMethods ?? [],
-		validationError: undefined,
+		validationError: errors?.[0],
 		fullExistingPaymentMethods: getFullExistingPaymentMethods(
 			existingPaymentMethods,
 		),
-		contributionTypeIsRecurring:
-			isContribution(contributionType) &&
-			contributionTypeIsRecurring(contributionType),
+		contributionTypeIsRecurring: contributionTypeIsRecurring(contributionType),
 	});
 }
 

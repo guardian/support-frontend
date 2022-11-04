@@ -16,6 +16,7 @@ export function getStripeFormErrors(
 	const { errors, showErrors } = state.page.checkoutForm.payment.stripe;
 	const shouldShowZipCode =
 		state.common.internationalisation.countryId === 'US';
+	const recaptchaErrors = getRecaptchaError(state);
 
 	if (!showErrors) return {};
 
@@ -25,9 +26,10 @@ export function getStripeFormErrors(
 		return {
 			...errors,
 			zipCode,
+			robot_checkbox: recaptchaErrors,
 		};
 	}
-	return errors;
+	return { ...errors, robot_checkbox: recaptchaErrors };
 }
 
 export function getPaymentMethodErrors(
