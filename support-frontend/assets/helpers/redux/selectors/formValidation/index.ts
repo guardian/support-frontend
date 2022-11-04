@@ -3,7 +3,6 @@ import type { ContributionsState } from '../../contributionsStore';
 import {
 	getPaymentMethodErrors,
 	getPaymentRequestButtonErrors,
-	getRecaptchaError,
 } from './paymentValidation';
 import { getPersonalDetailsErrors } from './personalDetailsValidation';
 import type { ErrorCollection } from './utils';
@@ -25,12 +24,10 @@ export function getAllErrorsForContributions(
 
 	const otherAmount = getOtherAmountErrors(state);
 	const paymentMethod = state.page.checkoutForm.payment.paymentMethod.errors;
-	const robot_checkbox = getRecaptchaError(state);
 
 	const paymentErrors = {
 		paymentMethod,
 		...getPaymentMethodErrors(state),
-		robot_checkbox,
 	};
 
 	return {
