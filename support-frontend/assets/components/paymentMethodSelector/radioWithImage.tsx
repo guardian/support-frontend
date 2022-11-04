@@ -47,6 +47,7 @@ type RadioWithImagePropTypes = {
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	cssOverrides?: SerializedStyles | SerializedStyles[];
 	isSupporterPlus?: boolean;
+	supportingText?: string;
 };
 
 export function RadioWithImage({
@@ -58,6 +59,7 @@ export function RadioWithImage({
 	onChange,
 	cssOverrides,
 	isSupporterPlus,
+	supportingText,
 }: RadioWithImagePropTypes): JSX.Element {
 	return (
 		<label
@@ -72,6 +74,10 @@ export function RadioWithImage({
 					label={getLabelText(label, checked, isSupporterPlus)}
 					checked={checked}
 					name={name}
+					supporting={supportingText}
+					cssOverrides={css`
+						margin-bottom: 0;
+					`}
 				/>
 				<div css={paymentIcon}>{image}</div>
 			</div>

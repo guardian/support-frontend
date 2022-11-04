@@ -154,7 +154,23 @@ function initialisePaymentMethods(
 			},
 		);
 	} else {
-		dispatch(setExistingPaymentMethods([]));
+		dispatch(
+			setExistingPaymentMethods([
+				{
+					paymentType: 'Card',
+					billingAccountId: '2c92a00e718678220171978d334c65cf',
+					subscriptions: [
+						{
+							billingAccountId: '2c92a00e718678220171978d334c65cf',
+							isCancelled: false,
+							isActive: true,
+							name: 'Digital Pack',
+						},
+					],
+					card: '0123',
+				},
+			]),
+		);
 	}
 }
 
