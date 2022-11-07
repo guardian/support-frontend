@@ -17,7 +17,10 @@ type PreventableEvent = {
  */
 export function useFormValidation<
 	EventType extends PreventableEvent = React.MouseEvent<HTMLButtonElement>,
->(paymentHandler: (event: EventType) => void): (event: EventType) => void {
+>(
+	paymentHandler: (event: EventType) => void,
+	dispatchPaymentWaiting = true,
+): (event: EventType) => void {
 	const [clickEvent, setClickEvent] = useState<EventType | null>(null);
 	const dispatch = useContributionsDispatch();
 	const { paymentMethod } = useContributionsSelector(
@@ -42,7 +45,8 @@ export function useFormValidation<
 			return;
 		}
 		if (clickEvent) {
-			dispatch(paymentWaiting(true));
+			dispatchPaymentWaiting && dispatch(paymentWaiting(true));
+
 			paymentHandler(clickEvent);
 		}
 	}, [clickEvent, errorsPreventSubmission]);
