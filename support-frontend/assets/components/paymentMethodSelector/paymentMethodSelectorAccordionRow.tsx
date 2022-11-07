@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import {
 	brand,
+	from,
 	neutral,
 	space,
 	transitions,
@@ -23,7 +24,11 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { RadioWithImage } from './radioWithImage';
 
 const radio = css`
-	padding: ${space[2]}px ${space[4]}px;
+	padding: ${space[2]}px ${space[3]}px;
+
+	${from.mobileLandscape} {
+		padding: ${space[2]}px ${space[4]}px;
+	}
 `;
 
 const existingPaymentMethodOverrides = css`

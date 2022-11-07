@@ -10,6 +10,7 @@ import { StripeCardFormContainer } from 'components/stripeCardForm/stripeCardFor
 import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgSepa from 'components/svgs/sepa';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { CreditDebitIcons } from './creditDebitIcons';
 
 interface PaymentMethodData {
 	id: string;
@@ -22,18 +23,18 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 	Stripe: {
 		id: 'qa-credit-card',
 		label: 'Credit/Debit card',
-		icon: <SvgCreditCard />,
+		icon: <CreditDebitIcons />,
 		accordionBody: () => <StripeCardFormContainer />,
 	},
 	PayPal: {
 		id: 'qa-paypal',
 		label: 'PayPal',
-		icon: <SvgPayPalBrand />,
+		icon: <SvgPayPalBrand size="medium" />,
 	},
 	DirectDebit: {
 		id: 'qa-direct-debit',
 		label: 'Direct debit',
-		icon: <SvgDirectDebitWide />,
+		icon: <SvgDirectDebitWide size="xsmall" />,
 	},
 	Sepa: {
 		id: 'qa-direct-debit-sepa',
@@ -55,16 +56,16 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 	ExistingCard: {
 		id: 'qa-existing-card',
 		label: 'Credit/Debit card',
-		icon: <SvgCreditCard />,
+		icon: <SvgCreditCard size="medium" />,
 	},
 	ExistingDirectDebit: {
 		id: 'qa-existing-direct-debit',
 		label: 'Direct Debit',
-		icon: <SvgDirectDebitWide />,
+		icon: <SvgDirectDebitWide size="xsmall" />,
 	},
 	None: {
 		id: 'qa-none',
 		label: 'Other Payment Method',
-		icon: <SvgCreditCard />,
+		icon: <SvgCreditCard size="medium" />,
 	},
 };
