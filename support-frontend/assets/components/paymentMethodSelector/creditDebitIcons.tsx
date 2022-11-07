@@ -24,7 +24,7 @@ export function CreditDebitIcons(): JSX.Element {
 	return (
 		<>
 			<div css={creditCardIcon}>
-				<SvgCreditCard />
+				<SvgCreditCard size="medium" />
 			</div>
 
 			<div css={brandedIcons}>
