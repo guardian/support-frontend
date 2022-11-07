@@ -82,7 +82,7 @@ object CheckoutValidationRules {
       switches: Switches,
   ) =
     product match {
-      case _: Contribution =>
+      case _: Contribution | _: SupporterPlus =>
         checkContributionPaymentMethodEnabled(
           switches.recurringPaymentMethods,
           paymentFields,
