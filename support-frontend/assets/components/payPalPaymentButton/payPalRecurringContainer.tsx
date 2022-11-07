@@ -9,6 +9,7 @@ import {
 } from 'helpers/redux/storeHooks';
 import {
 	onThirdPartyPaymentAuthorised,
+	paymentWaiting,
 	sendFormSubmitEventForPayPalRecurring,
 } from 'pages/contributions-landing/contributionsLandingActions';
 import { PayPalButton } from './payPalButton';
@@ -35,6 +36,7 @@ export function PayPalButtonRecurringContainer({
 	const { isTestUser } = useContributionsSelector((state) => state.page.user);
 
 	function onCompletion(payPalCheckoutDetails: PayPalCheckoutDetails) {
+		dispatch(paymentWaiting(true));
 		void dispatch(
 			onThirdPartyPaymentAuthorised({
 				paymentMethod: PayPal,
