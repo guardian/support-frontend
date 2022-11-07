@@ -88,7 +88,7 @@ interface ExistingPaymentMethodAccordionRowProps {
 	) => void;
 	paymentMethod: PaymentMethod | null;
 	existingPaymentMethod: RecentlySignedInExistingPaymentMethod | undefined;
-	accordionBody?: JSX.Element;
+	accordionBody?: () => JSX.Element;
 	checked: boolean;
 }
 
@@ -152,7 +152,7 @@ export function ExistingPaymentMethodAccordionRow({
 					...(expanded && accordionBody ? [accordionBodyPadding] : []),
 				]}
 			>
-				<div hidden={!expanded}>{accordionBody}</div>
+				<div hidden={!expanded}>{accordionBody?.()}</div>
 			</div>
 		</div>
 	);
@@ -165,7 +165,7 @@ interface AvailablePaymentMethodAccordionRowProps {
 	name: string;
 	checked: boolean;
 	onChange: () => void;
-	accordionBody?: JSX.Element;
+	accordionBody?: () => JSX.Element;
 }
 
 export function AvailablePaymentMethodAccordionRow({
@@ -201,7 +201,7 @@ export function AvailablePaymentMethodAccordionRow({
 					...(checked && accordionBody ? [accordionBodyPadding] : []),
 				]}
 			>
-				<div hidden={!checked}>{accordionBody}</div>
+				<div hidden={!checked}>{checked && accordionBody?.()}</div>
 			</div>
 		</div>
 	);

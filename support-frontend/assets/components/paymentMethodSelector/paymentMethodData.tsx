@@ -15,7 +15,7 @@ interface PaymentMethodData {
 	id: string;
 	label: string;
 	icon: JSX.Element;
-	accordionBody?: JSX.Element;
+	accordionBody?: () => JSX.Element;
 }
 
 export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
@@ -23,7 +23,7 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 		id: 'qa-credit-card',
 		label: 'Credit/Debit card',
 		icon: <SvgCreditCard />,
-		accordionBody: <StripeCardFormContainer />,
+		accordionBody: () => <StripeCardFormContainer />,
 	},
 	PayPal: {
 		id: 'qa-paypal',
@@ -39,7 +39,7 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 		id: 'qa-direct-debit-sepa',
 		label: 'Direct debit (SEPA)',
 		icon: <SvgSepa />,
-		accordionBody: (
+		accordionBody: () => (
 			<SepaFormContainer
 				render={(sepaFormProps: SepaFormProps) => (
 					<SepaForm {...sepaFormProps} />
