@@ -18,6 +18,7 @@ import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import {
 	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 	trackUserData,
@@ -121,6 +122,14 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 
 	const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
+
+	useEffect(() => {
+		sendEventContributionCheckoutConversion(
+			amount,
+			contributionType,
+			currencyId,
+		);
+	}, []);
 
 	const amountIsAboveThreshold = shouldShowBenefitsMessaging(
 		contributionType,
