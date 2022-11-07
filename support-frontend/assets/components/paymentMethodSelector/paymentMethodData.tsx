@@ -10,6 +10,7 @@ import { StripeCardFormContainer } from 'components/stripeCardForm/stripeCardFor
 import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgSepa from 'components/svgs/sepa';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { CreditDebitIcons } from './creditDebitIcons';
 
 interface PaymentMethodData {
 	id: string;
@@ -22,7 +23,7 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 	Stripe: {
 		id: 'qa-credit-card',
 		label: 'Credit/Debit card',
-		icon: <SvgCreditCard />,
+		icon: <CreditDebitIcons />,
 		accordionBody: () => <StripeCardFormContainer />,
 	},
 	PayPal: {

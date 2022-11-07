@@ -12,8 +12,8 @@ const radioWithImageStyles = css`
 `;
 
 const paymentIcon = css`
+	display: flex;
 	min-width: 30px;
-	max-width: 40px;
 `;
 
 const defaultRadioLabelColour = css`
