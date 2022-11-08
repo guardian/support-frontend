@@ -46,7 +46,7 @@ const focused = css`
 `;
 
 const notFocused = css`
-	border: 2px solid ${neutral[60]};
+	border: 2px solid ${neutral[46]};
 	margin-top: ${space[2]}px;
 	border-radius: 4px;
 `;

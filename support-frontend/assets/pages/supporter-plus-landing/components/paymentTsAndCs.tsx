@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, space, textSans } from '@guardian/source-foundations';
+import { neutral, textSans } from '@guardian/source-foundations';
 import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -13,6 +13,10 @@ import {
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
 import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
+
+const marginTop = css`
+	margin-top: 4px;
+`;
 
 interface PaymentTsAndCsProps {
 	contributionType: ContributionType;
@@ -33,17 +37,9 @@ function TsAndCsFooterLinks({
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 
 	return (
-		<div
-			css={css`
-				margin-top: ${space[2]}px;
-			`}
-		>
+		<div css={marginTop}>
 			By proceeding, you are agreeing to our {terms}.{' '}
-			<p
-				css={css`
-					margin-top: 6px;
-				`}
-			>
+			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
 			</p>
@@ -78,7 +74,7 @@ export function PaymentTsAndCs({
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
 
 	const container = css`
-		${textSans.xsmall()};
+		${textSans.xxsmall()};
 		color: ${neutral[20]};
 
 		& a {

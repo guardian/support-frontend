@@ -12,14 +12,10 @@ const hiddenHeading = css`
 
 const fieldGroupStyles = css`
 	position: relative;
-	& > *:not(:first-of-type) {
-		margin-top: ${space[3]}px;
-	}
+	margin-top: ${space[3]}px;
 
 	${from.tablet} {
-		& > *:not(:first-of-type) {
-			margin-top: ${space[4]}px;
-		}
+		margin-top: ${space[4]}px;
 	}
 `;
 
@@ -61,7 +57,6 @@ export function PersonalDetails({
 					value={email}
 					type="email"
 					autoComplete="email"
-					supporting="example@domain.com"
 					onChange={(e) => onEmailChange(e.target.value)}
 					pattern={emailRegexPattern}
 					error={errors?.email?.[0]}

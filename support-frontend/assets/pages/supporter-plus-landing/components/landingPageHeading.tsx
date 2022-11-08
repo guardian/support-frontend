@@ -11,7 +11,11 @@ const headingStyles = css`
 	color: ${neutral[100]};
 	display: inline-block;
 	${headline.medium({ fontWeight: 'bold' })}
-	font-size: 36px;
+
+	${until.mobileMedium} {
+		font-size: 28px;
+	}
+
 	${from.tablet} {
 		font-size: 38px;
 	}

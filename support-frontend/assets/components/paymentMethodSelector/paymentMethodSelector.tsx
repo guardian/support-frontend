@@ -42,7 +42,7 @@ function PaymentMethodSelectorLegend() {
 		>
 			<legend id="payment_method">
 				<ContributionChoicesHeader cssOverrides={header}>
-					Payment Method
+					Payment method
 				</ContributionChoicesHeader>
 			</legend>
 			<SecureTransactionIndicator position="middle" hideText={true} />

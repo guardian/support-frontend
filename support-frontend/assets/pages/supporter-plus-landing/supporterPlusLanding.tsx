@@ -57,12 +57,11 @@ const checkoutContainer = css`
 	padding-top: ${space[3]}px;
 	padding-bottom: ${space[9]}px;
 
-	${from.mobileLandscape} {
+	${from.tablet} {
 		padding-bottom: ${space[12]}px;
 	}
 
 	${from.desktop} {
-		padding-bottom: ${space[24]}px;
 		padding-top: ${space[6]}px;
 	}
 `;
@@ -70,6 +69,11 @@ const checkoutContainer = css`
 const divider = css`
 	max-width: 100%;
 	margin: 40px 0 ${space[6]}px;
+`;
+
+const subheading = css`
+	font-weight: normal;
+	padding-right: ${space[2]}px;
 `;
 
 export function SupporterPlusLandingPage({
@@ -145,7 +149,7 @@ export function SupporterPlusLandingPage({
 			}
 		>
 			<CheckoutHeading heading={heading}>
-				<p>
+				<p css={subheading}>
 					As a reader-funded news organisation, we rely on your generosity.
 					Please give what you can, so millions more can benefit from quality
 					reporting on the events shaping our world.
