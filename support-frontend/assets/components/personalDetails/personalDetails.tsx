@@ -12,10 +12,15 @@ const hiddenHeading = css`
 
 const fieldGroupStyles = css`
 	position: relative;
-	margin-top: ${space[3]}px;
+	margin-top: ${space[4]}px;
 
+	& > *:not(:first-of-type) {
+		margin-top: ${space[3]}px;
+	}
 	${from.tablet} {
-		margin-top: ${space[4]}px;
+		& > *:not(:first-of-type) {
+			margin-top: ${space[4]}px;
+		}
 	}
 `;
 
