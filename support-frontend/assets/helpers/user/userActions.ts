@@ -1,4 +1,5 @@
 import type { Dispatch } from 'redux';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 
 // ----- Types ----- //
 export type Action =
@@ -56,6 +57,10 @@ export type Action =
 	| {
 			type: 'SET_IS_RETURNING_CONTRIBUTOR';
 			isReturningContributor: boolean;
+	  }
+	| {
+			type: 'global/validateForm';
+			paymentMethod?: PaymentMethod;
 	  };
 
 export type UserSetStateActions = {
