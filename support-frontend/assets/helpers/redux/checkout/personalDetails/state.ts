@@ -7,6 +7,12 @@ import {
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import { getUser } from 'helpers/user/user';
 
+export const emailRules = z
+	.string()
+	.email('Please enter a valid email address.')
+	.min(1, 'Please enter an email address.')
+	.max(maxLengths.email, 'Email address is too long');
+
 export const personalDetailsSchema = z
 	.object({
 		title: z.optional(z.string()),
@@ -22,11 +28,7 @@ export const personalDetailsSchema = z
 				.min(1, 'Please enter a last name.')
 				.max(maxLengths.name, 'Last name is too long'),
 		),
-		email: z
-			.string()
-			.email('Please enter a valid email address.')
-			.min(1, 'Please enter an email address.')
-			.max(maxLengths.email, 'Email address is too long'),
+		email: emailRules,
 		confirmEmail: z.optional(z.string()),
 		isSignedIn: z.boolean(),
 		telephone: z.optional(nonSillyString(z.string())),
