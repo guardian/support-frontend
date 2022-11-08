@@ -8,7 +8,7 @@ const manageUrl =
 	'https://manage.theguardian.com/contributions?INTCMP=existing-contributor-from-support';
 
 export function ExistingRecurringContributorMessage(): JSX.Element | null {
-	const isNotAlreadyARecurringContributor = useContributionsSelector(
+	const isAlreadyARecurringContributor = !useContributionsSelector(
 		getUserCanTakeOutContribution,
 	);
 
@@ -16,7 +16,7 @@ export function ExistingRecurringContributorMessage(): JSX.Element | null {
 		trackComponentClick('send-to-mma-already-contributor');
 	}
 
-	if (!isNotAlreadyARecurringContributor) {
+	if (isAlreadyARecurringContributor) {
 		return (
 			<NonValidationFailureMessage message="We've checked, and you are already a recurring contributor">
 				<p>
