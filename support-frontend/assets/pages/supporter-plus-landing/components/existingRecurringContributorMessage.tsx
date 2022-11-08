@@ -30,6 +30,5 @@ export function ExistingRecurringContributorMessage(): JSX.Element | null {
 			</NonValidationFailureMessage>
 		);
 	}
-
 	return null;
 }
