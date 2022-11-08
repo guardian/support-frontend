@@ -24,13 +24,25 @@ interface PaymentTsAndCsProps {
 
 function TsAndCsFooterLinks({
 	countryGroupId,
+	amountIsAboveThreshold,
 }: {
 	countryGroupId: CountryGroupId;
+	amountIsAboveThreshold: boolean;
 }) {
-	const terms = (
+	const privacy = <a href={privacyLink}>Privacy Policy</a>;
+
+	const termsContributions = (
 		<a href={contributionsTermsLinks[countryGroupId]}>Terms and Conditions</a>
 	);
-	const privacy = <a href={privacyLink}>Privacy Policy</a>;
+	const termsSupporterPlus = (
+		<a href="https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions">
+			Terms and Conditions
+		</a>
+	);
+
+	const terms = amountIsAboveThreshold
+		? termsSupporterPlus
+		: termsContributions;
 
 	return (
 		<div
@@ -97,7 +109,10 @@ export function PaymentTsAndCs({
 					account. You can change how much you give or cancel your payment at
 					any time.
 				</div>
-				<TsAndCsFooterLinks countryGroupId={countryGroupId} />
+				<TsAndCsFooterLinks
+					countryGroupId={countryGroupId}
+					amountIsAboveThreshold={amountIsAboveThreshold}
+				/>
 			</>
 		);
 	};
@@ -116,7 +131,10 @@ export function PaymentTsAndCs({
 					days, you’ll receive a full refund. Cancellation of your payment will
 					result in the cancellation of these benefits.
 				</div>
-				<TsAndCsFooterLinks countryGroupId={countryGroupId} />
+				<TsAndCsFooterLinks
+					countryGroupId={countryGroupId}
+					amountIsAboveThreshold={amountIsAboveThreshold}
+				/>
 			</>
 		);
 	};
@@ -124,7 +142,10 @@ export function PaymentTsAndCs({
 	if (contributionType === 'ONE_OFF') {
 		return (
 			<div css={container}>
-				<TsAndCsFooterLinks countryGroupId={countryGroupId} />
+				<TsAndCsFooterLinks
+					countryGroupId={countryGroupId}
+					amountIsAboveThreshold={amountIsAboveThreshold}
+				/>
 			</div>
 		);
 	}
