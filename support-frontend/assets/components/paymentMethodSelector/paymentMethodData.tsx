@@ -1,7 +1,6 @@
 import {
 	SvgCreditCard,
 	SvgDirectDebitWide,
-	SvgPayPalBrand,
 } from '@guardian/source-react-components';
 import type { SepaFormProps } from 'components/sepaForm/SepaForm';
 import { SepaForm } from 'components/sepaForm/SepaForm';
@@ -11,6 +10,7 @@ import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgSepa from 'components/svgs/sepa';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { CreditDebitIcons } from './creditDebitIcons';
+import { PaypalIcon } from './paypalIcon';
 
 interface PaymentMethodData {
 	id: string;
@@ -29,7 +29,7 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 	PayPal: {
 		id: 'qa-paypal',
 		label: 'PayPal',
-		icon: <SvgPayPalBrand size="medium" />,
+		icon: <PaypalIcon />,
 	},
 	DirectDebit: {
 		id: 'qa-direct-debit',

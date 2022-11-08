@@ -43,19 +43,10 @@ const cardsContainer = css`
 	}
 
 	:not(:last-child) {
-		padding-bottom: ${space[6]}px;
-
-		${from.mobileLandscape} {
-			padding-bottom: 28px;
+		${until.mobileLandscape} {
+			padding-bottom: 10px;
 		}
-
-		${from.tablet} {
-			padding-bottom: 32px;
-		}
-
-		${from.desktop} {
-			padding-bottom: ${space[9]}px;
-		}
+		padding-bottom: ${space[4]}px;
 	}
 `;
 
