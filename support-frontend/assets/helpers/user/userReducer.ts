@@ -18,6 +18,7 @@ export type User = {
 	emailValidated: boolean;
 	isReturningContributor: boolean;
 	address4?: string | null;
+	isRecurringContributorError?: boolean;
 };
 
 // ----- Reducer ----- //
@@ -96,6 +97,15 @@ function createUserReducer(): (
 					...state,
 					isReturningContributor: action.isReturningContributor,
 				};
+
+			case 'global/validateForm':
+				if (state.isRecurringContributor) {
+					return {
+						...state,
+						isRecurringContributorError: true,
+					};
+				}
+				return state;
 
 			default:
 				return state;

@@ -41,6 +41,7 @@ import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { shouldShowBenefitsMessaging } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import { DirectDebitContainer } from './components/directDebitWrapper';
+import { ExistingRecurringContributorMessage } from './components/existingRecurringContributorMessage';
 import { GuardianTsAndCs } from './components/guardianTsAndCs';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
@@ -186,6 +187,7 @@ export function SupporterPlusLandingPage({
 											countryGroupId,
 										)}
 									/>
+									<ExistingRecurringContributorMessage />
 									<PaymentFailureMessage />
 									<DirectDebitContainer />
 								</ContributionsStripe>
