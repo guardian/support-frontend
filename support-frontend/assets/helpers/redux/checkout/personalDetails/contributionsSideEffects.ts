@@ -8,12 +8,19 @@ import {
 	setLastName,
 	setUserTypeFromIdentityResponse,
 } from './actions';
+import { getUserTypeFromIdentity } from './thunks';
 
 const shouldCheckFormEnabled = isAnyOf(
 	setEmail,
 	setFirstName,
 	setLastName,
 	setUserTypeFromIdentityResponse,
+	getUserTypeFromIdentity.fulfilled,
+);
+
+const isSettingUserType = isAnyOf(
+	setUserTypeFromIdentityResponse,
+	getUserTypeFromIdentity.fulfilled,
 );
 
 export function addPersonalDetailsSideEffects(
@@ -22,12 +29,19 @@ export function addPersonalDetailsSideEffects(
 	startListening({
 		matcher: shouldCheckFormEnabled,
 		effect(action, listenerApi) {
-			if (setUserTypeFromIdentityResponse.match(action)) {
+			if (isSettingUserType(action)) {
 				storage.setSession('userTypeFromIdentityResponse', action.payload);
 			} else if (setEmail.match(action)) {
 				storage.setSession('gu.email', action.payload);
 			}
 			listenerApi.dispatch(enableOrDisableForm());
+		},
+	});
+
+	startListening({
+		actionCreator: setEmail,
+		effect(action, listenerApi) {
+			void listenerApi.dispatch(getUserTypeFromIdentity(action.payload));
 		},
 	});
 }

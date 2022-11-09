@@ -17,11 +17,7 @@ export const getUserTypeFromIdentity = createAsyncThunk<
 >(
 	'personalDetails/getUserTypeFromIdentity',
 	async function getUserType(email, thunkApi) {
-		const { isSignedIn } = thunkApi.getState().page.user;
 		const { csrf } = thunkApi.getState().page.checkoutForm;
-		if (isSignedIn || !emailRules.safeParse(email).success) {
-			return 'noRequestSent';
-		}
 
 		const resp = (await fetchJson(
 			`${routes.getUserType}?maybeEmail=${encodeURIComponent(email)}`,
@@ -32,5 +28,17 @@ export const getUserTypeFromIdentity = createAsyncThunk<
 			throw new Error('userType string was not present in response');
 		}
 		return resp.userType;
+	},
+	{
+		condition: (email, thunkApi) => {
+			const { userTypeFromIdentityResponse, isSignedIn } =
+				thunkApi.getState().page.checkoutForm.personalDetails;
+			const emailInvalid = !emailRules.safeParse(email).success;
+			const requestInFlight = userTypeFromIdentityResponse === 'requestPending';
+
+			if (isSignedIn || emailInvalid || requestInFlight) {
+				return false;
+			}
+		},
 	},
 );
