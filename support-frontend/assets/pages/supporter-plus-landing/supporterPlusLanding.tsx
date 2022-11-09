@@ -158,6 +158,7 @@ export function SupporterPlusLandingPage({
 						srcSizes={[500]}
 						sizes="500px"
 						imgType="png"
+						altText=""
 					/>
 				}
 			>
