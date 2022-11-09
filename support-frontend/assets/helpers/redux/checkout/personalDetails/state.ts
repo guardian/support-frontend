@@ -14,11 +14,13 @@ export type UserTypeFromIdentityResponse =
 	| 'requestPending'
 	| 'requestFailed';
 
-export const emailRules = z
-	.string()
-	.email('Please enter a valid email address.')
-	.min(1, 'Please enter an email address.')
-	.max(maxLengths.email, 'Email address is too long');
+export const emailRules = nonSillyString(
+	z
+		.string()
+		.email('Please enter a valid email address.')
+		.min(1, 'Please enter an email address.')
+		.max(maxLengths.email, 'Email address is too long'),
+);
 
 export const personalDetailsSchema = z
 	.object({
