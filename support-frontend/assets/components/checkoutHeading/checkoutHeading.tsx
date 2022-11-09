@@ -28,8 +28,13 @@ const headingContentContainer = css`
 
 const headingImage = css`
 	height: 140px;
-	margin-top: ${space[12]}px;
+	margin-top: ${space[6]}px;
 	margin-left: -${space[9]}px;
+	margin-right: ${space[5]}px;
+
+	img {
+		max-width: 100%;
+	}
 `;
 
 export interface CheckoutHeadingProps extends CSSOverridable {
