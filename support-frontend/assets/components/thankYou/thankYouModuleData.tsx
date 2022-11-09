@@ -73,16 +73,13 @@ export const getThankYouModuleData = (
 		},
 		feedback: {
 			icon: getThankYouModuleIcon('feedback'),
-			header: getFeedbackHeader(countryId, feedbackSurveyHasBeenCompleted),
+			header: getFeedbackHeader(feedbackSurveyHasBeenCompleted),
 			bodyCopy: (
 				<FeedbackBodyCopy
-					countryId={countryId}
 					feedbackSurveyHasBeenCompleted={feedbackSurveyHasBeenCompleted}
 				/>
 			),
-			ctas: feedbackSurveyHasBeenCompleted ? null : (
-				<FeedbackCTA countryId={countryId} />
-			),
+			ctas: feedbackSurveyHasBeenCompleted ? null : <FeedbackCTA />,
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
 		},
 		marketingConsent: {
