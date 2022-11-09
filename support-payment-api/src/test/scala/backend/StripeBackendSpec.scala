@@ -13,6 +13,7 @@ import io.circe.Json
 import model.Environment.Live
 import model.paypal.PaypalApiError
 import model.stripe.StripePaymentIntentRequest.{ConfirmPaymentIntent, CreatePaymentIntent}
+import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripePaymentRequestButton}
 import model.stripe.{StripeApiError, _}
 import model.{AcquisitionData, _}
 import org.mockito.ArgumentMatchers.any
@@ -23,7 +24,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.ws.WSClient
-import services.SwitchState.On
+import services.SwitchState.{Off, On}
 import services._
 import util.FutureEitherValues
 
@@ -56,7 +57,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
     IdentityClient.GetUser("test@theguardian.com"),
   )
-
+  val stripeDisabledErrorText = "Stripe payments are currently disabled"
   val paymentError = PaypalApiError.fromString("Error response")
   val stripeApiError = StripeApiError.fromThrowable(new Exception("Stripe error"), None)
   val backendError = BackendError.fromStripeApiError(stripeApiError)
@@ -116,6 +117,25 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
                 SwitchDetails(On),
                 SwitchDetails(On),
                 SwitchDetails(On),
+                SwitchDetails(On),
+                SwitchDetails(On),
+              ),
+            ),
+          ),
+        ),
+      ),
+    )
+  val switchServiceStripeOffResponse: EitherT[Future, Nothing, Switches] =
+    EitherT.right(
+      Future.successful(
+        Switches(
+          Some(RecaptchaSwitches(RecaptchaSwitchTypes(SwitchDetails(On), SwitchDetails(On)))),
+          Some(
+            OneOffPaymentMethodsSwitches(
+              OneOffPaymentMethodsSwitchesTypes(
+                SwitchDetails(Off),
+                SwitchDetails(Off),
+                SwitchDetails(Off),
                 SwitchDetails(On),
                 SwitchDetails(On),
               ),
@@ -200,7 +220,102 @@ class StripeBackendSpec
 
   "Stripe Backend" when {
 
-    "a request is made to create a charge/payment" should {
+    "a request is made to create a Payment Intent" should {
+      "return Stripe payments are currently disabled response  if stripe checkout switch is off in support-admin-console" in new StripeBackendFixture {
+        val stripePaymentDataWithStripe = StripePaymentData(email, Currency.USD, 12, Some(StripeCheckout))
+        val createPaymentIntentWithStripeCheckout =
+          CreatePaymentIntent("payment-method-id", stripePaymentDataWithStripe, acquisitionData, Some(stripePublicKey), recaptchaToken)
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceStripeOffResponse)
+
+        stripeBackend.createPaymentIntent(createPaymentIntentWithStripeCheckout, clientBrowserInfo).futureLeft mustBe
+          StripeApiError.fromString(stripeDisabledErrorText, None)
+      }
+
+      "return Stripe payments are currently disabled response  if stripe Apple Pay switch is off in support-admin-console" in new StripeBackendFixture {
+        val stripePaymentDataWithApplePay = StripePaymentData(email, Currency.USD, 12, Some(StripeApplePay))
+        val createPaymentIntentWithStripeApplePay=
+          CreatePaymentIntent("payment-method-id", stripePaymentDataWithApplePay, acquisitionData, Some(stripePublicKey), recaptchaToken)
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceStripeOffResponse)
+
+        stripeBackend.createPaymentIntent(createPaymentIntentWithStripeApplePay, clientBrowserInfo).futureLeft mustBe
+          StripeApiError.fromString(stripeDisabledErrorText, None)
+      }
+      "return Stripe payments are currently disabled response  if stripe payment request button switch is off in support-admin-console" in new StripeBackendFixture {
+        val stripePaymentDataWithStripePaymentRequest = StripePaymentData(email, Currency.USD, 12, Some(StripePaymentRequestButton))
+        val createPaymentIntentWithStripePaymentRequest =
+          CreatePaymentIntent("payment-method-id", stripePaymentDataWithStripePaymentRequest, acquisitionData, Some(stripePublicKey), recaptchaToken)
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceStripeOffResponse)
+
+        stripeBackend.createPaymentIntent(createPaymentIntentWithStripePaymentRequest, clientBrowserInfo).futureLeft mustBe
+          StripeApiError.fromString(stripeDisabledErrorText, None)
+      }
+      "return Success if stripe checkout switch is On in support-admin-console" in new StripeBackendFixture {
+        val stripePaymentDataWithStripe = StripePaymentData(email, Currency.USD, 12, Some(StripeCheckout))
+        val createPaymentIntentWithStripeCheckout =
+          CreatePaymentIntent("payment-method-id", stripePaymentDataWithStripe, acquisitionData, Some(stripePublicKey), recaptchaToken)
+        populateChargeMock()
+        when(paymentIntentMock.getStatus).thenReturn("succeeded")
+
+        populatePaymentIntentMock()
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
+        when(mockStripeService.createPaymentIntent(createPaymentIntentWithStripeCheckout)).thenReturn(paymentServiceIntentResponse)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
+        when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceSuccess)
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
+
+
+        stripeBackend.createPaymentIntent(createPaymentIntentWithStripeCheckout, clientBrowserInfo).futureRight mustBe
+          StripePaymentIntentsApiResponse.Success()
+      }
+
+      "return Success if stripe apple pay switch is On in support-admin-console" in new StripeBackendFixture {
+        val stripePaymentDataWithStripeApplePay = StripePaymentData(email, Currency.USD, 12, Some(StripeApplePay))
+        val createPaymentIntentWithStripeApplePay =
+          CreatePaymentIntent("payment-method-id", stripePaymentDataWithStripeApplePay, acquisitionData, Some(stripePublicKey), recaptchaToken)
+        populateChargeMock()
+        when(paymentIntentMock.getStatus).thenReturn("succeeded")
+
+        populatePaymentIntentMock()
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
+        when(mockStripeService.createPaymentIntent(createPaymentIntentWithStripeApplePay)).thenReturn(paymentServiceIntentResponse)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
+        when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceSuccess)
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
+
+
+        stripeBackend.createPaymentIntent(createPaymentIntentWithStripeApplePay, clientBrowserInfo).futureRight mustBe
+          StripePaymentIntentsApiResponse.Success()
+      }
+      "return Success if stripe payment request button  switch is On in support-admin-console" in new StripeBackendFixture {
+        val stripePaymentDataWithStripePaymentRequest = StripePaymentData(email, Currency.USD, 12, Some(StripePaymentRequestButton))
+        val createPaymentIntentWithStripePaymentRequest =
+          CreatePaymentIntent("payment-method-id", stripePaymentDataWithStripePaymentRequest, acquisitionData, Some(stripePublicKey), recaptchaToken)
+        populateChargeMock()
+        when(paymentIntentMock.getStatus).thenReturn("succeeded")
+
+        populatePaymentIntentMock()
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
+        when(mockStripeService.createPaymentIntent(createPaymentIntentWithStripePaymentRequest)).thenReturn(paymentServiceIntentResponse)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
+        when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
+        when(mockRecaptchaService.verify(recaptchaToken)).thenReturn(recaptchaServiceSuccess)
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
+
+
+        stripeBackend.createPaymentIntent(createPaymentIntentWithStripePaymentRequest, clientBrowserInfo).futureRight mustBe
+          StripePaymentIntentsApiResponse.Success()
+      }
+    }
+
+      "a request is made to create a charge/payment" should {
 
       "return error if stripe service fails" in new StripeBackendFixture {
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponseError)

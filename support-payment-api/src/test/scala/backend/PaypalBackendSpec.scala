@@ -164,11 +164,11 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
   "Paypal Backend" when {
 
-    "a request  fail to create a payment" should {
+    "a request  is made to create a payment" should {
 
       "return Paypal switch not enabled error  if paypal switch in support-admin-console is Off" in new PaypalBackendFixture {
         val createPaypalPaymentData = CreatePaypalPaymentData(Currency.GBP, BigDecimal(3), "return-url", "cancel-url")
-        val paypalSwitchServiceStatus: EitherT[Future, Nothing, Switches] =
+        val switchServiceOffResponse: EitherT[Future, Nothing, Switches] =
           EitherT.right(
             Future.successful(
               Switches(
@@ -179,7 +179,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
                       SwitchDetails(On),
                       SwitchDetails(On),
                       SwitchDetails(On),
-                      SwitchDetails(On),
+                      SwitchDetails(Off),
                       SwitchDetails(On),
                     ),
                   ),
@@ -188,8 +188,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
             ),
           )
 
-        when(mockSwitchService.allSwitches).thenReturn(paypalSwitchServiceStatus)
-        when(mockPaypalService.createPayment(createPaypalPaymentData)).thenReturn(paypalSwitchFailResponse)
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOffResponse)
         paypalBackend.createPayment(createPaypalPaymentData).futureLeft mustBe PaypalApiError(None,None,"Paypal Switch not enabled")
       }
     }

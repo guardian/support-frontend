@@ -163,7 +163,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
   "Amazon Pay Backend" when {
     "A request is made to create a charge/payment " should {
       "return error if amazonPay switch is disabled in support-admin-console " in new AmazonPayBackendFixture{
-        val switchServiceStatus: EitherT[Future, Nothing, Switches] =
+        val switchServiceOffResponse: EitherT[Future, Nothing, Switches] =
           EitherT.right(
             Future.successful(
               Switches(
@@ -182,9 +182,35 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
               ),
             ),
           )
-        when(mockSwitchService.allSwitches).thenReturn(switchServiceStatus)
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOffResponse)
         amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft mustBe amazonPaySwitchError
         }
+      "return Success  if amazonPay switch is On in support-admin-console " in new AmazonPayBackendFixture {
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
+        when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
+        when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
+        when(mockOrderReferenceStatus.getState).thenReturn("Open")
+        when(mockAmazonPayService.setOrderReference(any())).thenReturn(setOrderRefRes)
+        when(mockAmazonPayService.confirmOrderReference(any())).thenReturn(mockConfirmRes)
+        when(mockAmazonPayService.authorize(any(), any())).thenReturn(mockAuthResponse)
+        when(mockAuthorizationDetails.getAuthorizationStatus).thenReturn(mockAuthStatus)
+        when(mockAuthorizationDetails.getAuthorizationAmount).thenReturn(new Price("50.00", "USD"))
+        when(mockAuthStatus.getState).thenReturn("Closed")
+        when(mockAmazonPayService.close(any())).thenReturn(mockCloseResponse)
+        when(mockAuthorizationDetails.getCreationTimestamp).thenReturn(
+          DatatypeFactory.newInstance().newXMLGregorianCalendar(),
+        )
+        when(mockOrderRef.getOrderTotal).thenReturn(mockOrderTotal)
+        when(mockOrderTotal.getCurrencyCode).thenReturn("USD")
+        when(mockOrderTotal.getAmount).thenReturn("25")
+        when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
+          .thenReturn(streamResponseError)
+        when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com"))
+          .thenReturn(identityResponseError)
+        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
+      }
     }
 
     "refund" should {
