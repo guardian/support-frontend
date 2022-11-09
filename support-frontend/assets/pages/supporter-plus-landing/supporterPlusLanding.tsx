@@ -12,6 +12,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import GridImage from 'components/gridImage/gridImage';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
@@ -149,7 +150,18 @@ export function SupporterPlusLandingPage({
 				</FooterWithContents>
 			}
 		>
-			<CheckoutHeading heading={heading}>
+			<CheckoutHeading
+				heading={heading}
+				image={
+					<GridImage
+						gridId="supporterPlusLanding"
+						srcSizes={[500]}
+						sizes="500px"
+						imgType="png"
+						altText=""
+					/>
+				}
+			>
 				<p css={subheading}>
 					As a reader-funded news organisation, we rely on your generosity.
 					Please give what you can, so millions more can benefit from quality
