@@ -44,7 +44,6 @@ import {
 	getStripeKey,
 	stripeAccountForContributionType,
 } from 'helpers/forms/stripe';
-import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import type {
 	IsoCountry,
 	StateProvince,
@@ -69,7 +68,6 @@ import {
 	setLastName,
 	setUserTypeFromIdentityResponse,
 } from 'helpers/redux/checkout/personalDetails/actions';
-import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import * as cookie from 'helpers/storage/cookie';
@@ -145,21 +143,6 @@ const paymentFailure = (paymentError: ErrorReason): Action => ({
 	type: 'PAYMENT_FAILURE',
 	paymentError,
 });
-
-const getUserType =
-	(email: string) =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
-		const state = getState();
-		const { csrf } = state.page.checkoutForm;
-		const { isSignedIn } = state.page.user;
-		void getUserTypeFromIdentity(
-			email,
-			isSignedIn,
-			csrf,
-			(userType: UserTypeFromIdentityResponse) =>
-				dispatch(setUserTypeFromIdentityResponse(userType)),
-		);
-	};
 
 const setTickerGoalReached = (): Action => ({
 	type: 'SET_TICKER_GOAL_REACHED',
@@ -672,7 +655,6 @@ export {
 	onThirdPartyPaymentAuthorised,
 	setCheckoutFormHasBeenSubmitted,
 	createOneOffPayPalPayment,
-	getUserType,
 	setFormIsValid,
 	sendFormSubmitEventForPayPalRecurring,
 	setTickerGoalReached,
