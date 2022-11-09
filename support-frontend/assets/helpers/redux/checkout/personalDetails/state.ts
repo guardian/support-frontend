@@ -1,11 +1,18 @@
 import { z } from 'zod';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import {
 	maxLengths,
 	nonSillyString,
 } from 'helpers/redux/utils/validation/commonRules';
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import { getUser } from 'helpers/user/user';
+
+export type UserType = 'new' | 'guest' | 'current';
+
+export type UserTypeFromIdentityResponse =
+	| UserType
+	| 'noRequestSent'
+	| 'requestPending'
+	| 'requestFailed';
 
 export const emailRules = z
 	.string()

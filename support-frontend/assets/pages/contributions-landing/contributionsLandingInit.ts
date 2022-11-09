@@ -26,6 +26,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { setBillingState } from 'helpers/redux/checkout/address/actions';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
+import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import {
 	setAllAmounts,
 	setOtherAmount,
@@ -45,7 +46,6 @@ import { getQueryParameter } from 'helpers/urls/url';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
 import {
-	getUserType,
 	setUserTypeFromIdentityResponse,
 	updateSelectedExistingPaymentMethod,
 } from './contributionsLandingActions';
@@ -282,7 +282,7 @@ const init = (store: ContributionsStore): void => {
 	) {
 		dispatch(setUserTypeFromIdentityResponse(userType));
 	} else {
-		dispatch(getUserType(email));
+		void dispatch(getUserTypeFromIdentity(email));
 	}
 
 	dispatch(setBillingState(stateField));

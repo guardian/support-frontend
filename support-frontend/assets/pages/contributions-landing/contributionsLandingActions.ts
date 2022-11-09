@@ -44,7 +44,6 @@ import {
 	getStripeKey,
 	stripeAccountForContributionType,
 } from 'helpers/forms/stripe';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import type {
 	IsoCountry,
@@ -70,6 +69,7 @@ import {
 	setLastName,
 	setUserTypeFromIdentityResponse,
 } from 'helpers/redux/checkout/personalDetails/actions';
+import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import * as cookie from 'helpers/storage/cookie';

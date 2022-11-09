@@ -3,17 +3,10 @@ import { fetchJson, getRequestOptions } from 'helpers/async/fetch';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { routes } from 'helpers/urls/routes';
+import type { UserType, UserTypeFromIdentityResponse } from './state';
 import { emailRules } from './state';
 
-type UserType = 'new' | 'guest' | 'current';
-
 type UserTypeResponse = { userType: UserType };
-
-export type UserTypeFromIdentityResponse =
-	| UserType
-	| 'noRequestSent'
-	| 'requestPending'
-	| 'requestFailed';
 
 export const getUserTypeFromIdentity = createAsyncThunk<
 	UserTypeFromIdentityResponse,
