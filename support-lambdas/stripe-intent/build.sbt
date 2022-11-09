@@ -25,7 +25,7 @@ libraryDependencies ++= Seq(
 ).map(_ % circeVersion)
 
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-lambda-java-core" % "1.2.1",
+  "com.amazonaws" % "aws-lambda-java-core" % "1.2.2",
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,

@@ -6,7 +6,7 @@ version := "0.1-SNAPSHOT"
 scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-target:jvm-1.8", "-Xfatal-warnings")
 
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-lambda-java-core" % "1.2.1",
+  "com.amazonaws" % "aws-lambda-java-core" % "1.2.2",
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   // This is required to force aws libraries to use the latest version of jackson
