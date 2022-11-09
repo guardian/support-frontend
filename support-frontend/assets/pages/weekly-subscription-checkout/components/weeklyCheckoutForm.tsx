@@ -43,6 +43,7 @@ import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
+import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import { selectPriceForProduct } from 'helpers/redux/checkout/product/selectors/productPrice';
 import type {
 	SubscriptionsDispatch,
@@ -57,12 +58,10 @@ import {
 	validateWithDeliveryForm,
 	withDeliveryFormIsValid,
 } from 'helpers/subscriptionsForms/formValidation';
-import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import {
 	submitWithDeliveryForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import type { WithDeliveryCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/supportedPaymentMethods';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
@@ -110,14 +109,7 @@ function mapStateToProps(state: SubscriptionsState) {
 function mapDispatchToProps() {
 	return {
 		...formActionCreators,
-		fetchAndStoreUserType:
-			(email: string) =>
-			(
-				dispatch: SubscriptionsDispatch,
-				getState: () => WithDeliveryCheckoutState,
-			) => {
-				fetchAndStoreUserType(email)(dispatch, getState);
-			},
+		fetchAndStoreUserType: getUserTypeFromIdentity,
 		formIsValid:
 			() =>
 			(_dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) =>

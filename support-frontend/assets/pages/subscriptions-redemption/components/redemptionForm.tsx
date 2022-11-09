@@ -20,11 +20,11 @@ import {
 	setLastName,
 	setTelephone,
 } from 'helpers/redux/checkout/personalDetails/actions';
+import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import type {
 	RedemptionDispatch,
 	RedemptionPageState,
 } from 'helpers/redux/redemptionsStore';
-import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import { signOut } from 'helpers/user/user';
 import {
 	submitCode,
@@ -66,11 +66,7 @@ function mapDispatchToProps() {
 		setEmail,
 		setTelephone,
 		setConfirmEmail,
-		fetchAndStoreUserType:
-			(email: string) =>
-			(dispatch: RedemptionDispatch, getState: () => RedemptionPageState) => {
-				fetchAndStoreUserType(email)(dispatch, getState);
-			},
+		fetchAndStoreUserType: getUserTypeFromIdentity,
 		signOut,
 	};
 }

@@ -43,6 +43,7 @@ import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyD
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
+import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import { selectPriceForProduct } from 'helpers/redux/checkout/product/selectors/productPrice';
 import type {
 	SubscriptionsDispatch,
@@ -54,7 +55,6 @@ import {
 	validateWithDeliveryForm,
 	withDeliveryFormIsValid,
 } from 'helpers/subscriptionsForms/formValidation';
-import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import {
 	submitWithDeliveryForm,
 	trackSubmitAttempt,
@@ -109,11 +109,7 @@ function mapStateToProps(state: SubscriptionsState) {
 function mapDispatchToProps() {
 	return {
 		...formActionCreators,
-		fetchAndStoreUserType:
-			(email: string) =>
-			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) => {
-				fetchAndStoreUserType(email)(dispatch, getState);
-			},
+		fetchAndStoreUserType: getUserTypeFromIdentity,
 		formIsValid:
 			() => (_: SubscriptionsDispatch, getState: () => SubscriptionsState) =>
 				withDeliveryFormIsValid(getState()),
