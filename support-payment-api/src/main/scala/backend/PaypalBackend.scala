@@ -17,15 +17,14 @@ import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoa
 import play.api.libs.ws.WSClient
 import conf._
 import conf.ConfigLoader._
-import model._
+import model.{InitializationResult, _}
 import model.acquisition.{AcquisitionDataRowBuilder, PaypalAcquisition}
 import model.db.ContributionData
 import model.email.ContributorRow
 import model.paypal._
 import services._
 import util.EnvironmentBasedBuilder
-import model.paypal.PaypalApiError.{paypalErrorText}
-
+import model.paypal.PaypalApiError.paypalErrorText
 import scala.concurrent.Future
 import scala.jdk.CollectionConverters._
 import scala.util.Try
@@ -50,12 +49,14 @@ class PaypalBackend(
    * Once authorised, the payment can be executed via the execute-payment endpoint.
    */
 
-  private def paypalEnabled  =
+  private def paypalEnabled  = {
     switchService.allSwitches.map(switch=>switch.oneOffPaymentMethods.exists(s=>s.switches.payPal.state.isOn))
+  }
+
 
 
   def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] = {
-    paypalEnabled match {
+    paypalEnabled.flatMap {
       case true=>
         paypalService
         .createPayment(c)
@@ -268,7 +269,6 @@ object PaypalBackend {
       emailService,
       cloudWatchService,
       switchService,
-
     )
   }
 

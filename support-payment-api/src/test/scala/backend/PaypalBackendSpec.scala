@@ -15,6 +15,7 @@ import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
+import services.SwitchState.{Off, On}
 import services._
 import util.FutureEitherValues
 
@@ -45,7 +46,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     IdentityClient.Error.fromThrowable(new Exception("Identity error response")),
     IdentityClient.GetUser("test@theguardian.com"),
   )
-
+  val payPalSwitchError = PaypalApiError.fromString("Paypal Switch not enabled")
   val paymentError = PaypalApiError.fromString("Error response")
   val backendPaymentError = BackendError.fromPaypalAPIError(paymentError)
   val backendDbError = BackendError.fromDatabaseError(dbError)
@@ -61,6 +62,8 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val transactions = List(transaction).asJava
 
   // -- service responses
+  val paypalSwitchFailResponse: EitherT[Future, PaypalApiError, Payment] =
+    EitherT.left(Future.successful(payPalSwitchError))
   val paymentServiceResponse: EitherT[Future, PaypalApiError, Payment] =
     EitherT.right(Future.successful(paymentMock))
   val enrichedPaymentServiceResponse: EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
@@ -91,6 +94,25 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(identityError))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
+  val switchServiceOnResponse: EitherT[Future, Nothing, Switches] =
+    EitherT.right(
+      Future.successful(
+        Switches(
+          Some(RecaptchaSwitches(RecaptchaSwitchTypes(SwitchDetails(On), SwitchDetails(On)))),
+          Some(
+            OneOffPaymentMethodsSwitches(
+              OneOffPaymentMethodsSwitchesTypes(
+                SwitchDetails(On),
+                SwitchDetails(On),
+                SwitchDetails(On),
+                SwitchDetails(On),
+                SwitchDetails(On),
+              ),
+            ),
+          ),
+        ),
+      ),
+    )
 
   // -- service mocks
   val mockPaypalService: PaypalService = mock[PaypalService]
@@ -101,6 +123,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
   val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
+  val mockSwitchService: SwitchService = mock[SwitchService]
 
   // -- test obj
   val paypalBackend = new PaypalBackend(
@@ -112,6 +135,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockAcquisitionsStreamService,
     mockEmailService,
     mockCloudWatchService,
+    mockSwitchService,
   )(new DefaultThreadPool(ec))
 
   // This is only needed if testing code which depends on extracting data from Payment object
@@ -140,16 +164,47 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
   "Paypal Backend" when {
 
+    "a request  fail to create a payment" should {
+
+      "return Paypal switch not enabled error  if paypal switch in support-admin-console is Off" in new PaypalBackendFixture {
+        val createPaypalPaymentData = CreatePaypalPaymentData(Currency.GBP, BigDecimal(3), "return-url", "cancel-url")
+        val paypalSwitchServiceStatus: EitherT[Future, Nothing, Switches] =
+          EitherT.right(
+            Future.successful(
+              Switches(
+                Some(RecaptchaSwitches(RecaptchaSwitchTypes(SwitchDetails(On), SwitchDetails(On)))),
+                Some(
+                  OneOffPaymentMethodsSwitches(
+                    OneOffPaymentMethodsSwitchesTypes(
+                      SwitchDetails(On),
+                      SwitchDetails(On),
+                      SwitchDetails(On),
+                      SwitchDetails(On),
+                      SwitchDetails(On),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
+
+        when(mockSwitchService.allSwitches).thenReturn(paypalSwitchServiceStatus)
+        when(mockPaypalService.createPayment(createPaypalPaymentData)).thenReturn(paypalSwitchFailResponse)
+        paypalBackend.createPayment(createPaypalPaymentData).futureLeft mustBe PaypalApiError(None,None,"Paypal Switch not enabled")
+      }
+    }
     "a request is made to create a payment" should {
 
       "return payment if service returns payment successfully" in new PaypalBackendFixture {
         val createPaypalPaymentData = CreatePaypalPaymentData(Currency.GBP, BigDecimal(3), "return-url", "cancel-url")
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockPaypalService.createPayment(createPaypalPaymentData)).thenReturn(paymentServiceResponse)
         paypalBackend.createPayment(createPaypalPaymentData).futureRight mustBe paymentMock
       }
 
       "return error if service fails" in new PaypalBackendFixture {
         val createPaypalPaymentData = CreatePaypalPaymentData(Currency.GBP, BigDecimal(3), "return-url", "cancel-url")
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockPaypalService.createPayment(createPaypalPaymentData)).thenReturn(paymentServiceResponseError)
         paypalBackend.createPayment(createPaypalPaymentData).futureLeft mustBe
           PaypalApiError(None, None, "Error response")
@@ -161,6 +216,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
       "return error if paypal service fails" in new PaypalBackendFixture {
         when(mockPaypalService.capturePayment(capturePaypalPaymentData)).thenReturn(paymentServiceResponseError)
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         paypalBackend.capturePayment(capturePaypalPaymentData, clientBrowserInfo).futureLeft mustBe
           paymentError
 
@@ -171,6 +227,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
           populatePaymentMock()
           val enrichedPaypalPaymentMock =
             EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
+          when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
           when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
           when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
           when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
@@ -186,6 +243,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
     "a request is made to execute a payment" should {
 
       "return error if paypal service fails" in new PaypalBackendFixture {
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponseError)
         paypalBackend.executePayment(executePaypalPaymentData, clientBrowserInfo).futureLeft mustBe paymentError
 
@@ -196,6 +254,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
           populatePaymentMock()
           val enrichedPaypalPaymentMock =
             EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
+          when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
           when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
           when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
           when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
@@ -212,6 +271,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         populatePaymentMock()
         val enrichedPaypalPaymentMock =
           EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
@@ -228,18 +288,21 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
     "a request is made to process a refund hook" should {
 
       "return error if refund hook is not valid" in new PaypalBackendFixture {
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockPaypalService.validateWebhookEvent(any(), any())).thenReturn(unitPaymentResponseError)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponseError)
         paypalBackend.processRefundHook(paypalRefundWebHookData).futureLeft mustBe backendPaymentError
       }
 
       "return error if databaseService fails" in new PaypalBackendFixture {
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockPaypalService.validateWebhookEvent(any(), any())).thenReturn(unitPaymentResponse)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponseError)
         paypalBackend.processRefundHook(paypalRefundWebHookData).futureLeft mustBe backendDbError
       }
 
       "return success if refund hook is valid and databaseService succeeds" in new PaypalBackendFixture {
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockPaypalService.validateWebhookEvent(any(), any())).thenReturn(unitPaymentResponse)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponse)
         paypalBackend.processRefundHook(paypalRefundWebHookData).futureRight mustBe (())
@@ -250,7 +313,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
       "return just a DB error if BigQuery succeeds but DB fails" in new PaypalBackendFixture {
         populatePaymentMock()
-
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
@@ -269,7 +332,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
       "return a combined error if stream and BigQuery fail" in new PaypalBackendFixture {
         populatePaymentMock()
-
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))

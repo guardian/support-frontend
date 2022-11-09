@@ -43,7 +43,7 @@ class AmazonPayBackend(
     with PaymentBackend {
 
     private def amazonPayEnabled =
-    switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.amazonPay.state.isOn))
+      switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.amazonPay.state.isOn))
 
 
   def makePayment(
@@ -91,7 +91,8 @@ class AmazonPayBackend(
       response: Either[AmazonPayApiError, AuthorizationDetails],
       amazonPayRequest: AmazonPayRequest,
       clientBrowserInfo: ClientBrowserInfo,
-  ): EitherT[Future, AmazonPayApiError, Unit] =
+  ): EitherT[Future, AmazonPayApiError, Unit] = {
+    println("RESPONSE")
     response
       .toEitherT[Future]
       .leftMap { error =>
@@ -120,6 +121,7 @@ class AmazonPayBackend(
           ()
         }
       }
+  }
 
   private def getOrCreateIdentityIdFromEmail(email: String) =
     identityService

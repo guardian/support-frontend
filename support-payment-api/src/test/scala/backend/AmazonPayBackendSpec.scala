@@ -20,6 +20,7 @@ import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
+import services.SwitchState.{Off, On}
 import services._
 import util.FutureEitherValues
 
@@ -39,6 +40,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val expectedGuestToken = Some("guest-token")
 
   val paymentError = AmazonPayApiError.fromString("Error response")
+  val amazonPaySwitchError = AmazonPayApiError.fromString("Amazon Pay Switch not enabled")
 
   val emailError: EmailService.Error = EmailService.Error(new Exception("Email error response"))
   val responseXml =
@@ -102,6 +104,26 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     EitherT.left(Future.successful(identityError))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
+  val switchServiceOnResponse: EitherT[Future, Nothing, Switches] =
+    EitherT.right(
+      Future.successful(
+        Switches(
+          Some(RecaptchaSwitches(RecaptchaSwitchTypes(SwitchDetails(On), SwitchDetails(On)))),
+          Some(
+            OneOffPaymentMethodsSwitches(
+              OneOffPaymentMethodsSwitchesTypes(
+                SwitchDetails(On),
+                SwitchDetails(On),
+                SwitchDetails(On),
+                SwitchDetails(On),
+                SwitchDetails(On),
+              ),
+            ),
+          ),
+        ),
+      ),
+    )
+
 
   // -- service mocks
   val mockAmazonPayService: AmazonPayService = mock[AmazonPayService]
@@ -112,6 +134,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
   val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
+  val mockSwitchService: SwitchService = mock[SwitchService]
 
   // -- test obj
   val amazonPayBackend = new AmazonPayBackend(
@@ -123,6 +146,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     mockBigQueryService,
     mockAcquisitionsStreamService,
     mockDatabaseService,
+    mockSwitchService,
   )(new DefaultThreadPool(ec))
 
   val paymentdata = AmazonPaymentData("refId", BigDecimal(25), Currency.USD, "email@thegulocal.com")
@@ -137,13 +161,41 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
   val clientBrowserInfo = ClientBrowserInfo("", "", None, None, None)
 
   "Amazon Pay Backend" when {
+    "A request is made to create a charge/payment " should {
+      "return error if amazonPay switch is disabled in support-admin-console " in new AmazonPayBackendFixture{
+        val switchServiceStatus: EitherT[Future, Nothing, Switches] =
+          EitherT.right(
+            Future.successful(
+              Switches(
+                Some(RecaptchaSwitches(RecaptchaSwitchTypes(SwitchDetails(On), SwitchDetails(On)))),
+                Some(
+                  OneOffPaymentMethodsSwitches(
+                    OneOffPaymentMethodsSwitchesTypes(
+                      SwitchDetails(On),
+                      SwitchDetails(On),
+                      SwitchDetails(On),
+                      SwitchDetails(On),
+                      SwitchDetails(Off),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceStatus)
+        amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft mustBe amazonPaySwitchError
+        }
+    }
+
     "refund" should {
       "convert refundId to OrderRef" in new AmazonPayBackendFixture {
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         amazonPayBackend.refundIdToOrderRef("S23-1234567-1234567-0000003") mustBe "S23-1234567-1234567"
       }
 
       "a request is made to create a charge/payment" should {
         "return error if amazonPay service fails" in new AmazonPayBackendFixture {
+          when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
           when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
           when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
           when(mockOrderReferenceStatus.getState).thenReturn("Open")
@@ -156,6 +208,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
     "request" should {
       "return successful payment response even if identityService, " +
         "databaseService, bigQueryService and emailService all fail" in new AmazonPayBackendFixture {
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
           when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
           when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
           when(mockOrderReferenceStatus.getState).thenReturn("Open")
@@ -184,6 +237,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new AmazonPayBackendFixture {
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
         when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
         when(mockOrderReferenceStatus.getState).thenReturn("Draft")
@@ -207,6 +261,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
       }
 
       "Not call setOrderRef if state is suspended" in new AmazonPayBackendFixture {
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
         when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
         when(mockOrderReferenceStatus.getState).thenReturn("Suspended")
@@ -227,6 +282,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
       }
 
       "Return an error when card is declined" in new AmazonPayBackendFixture {
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         val expectedReason = "some reason"
         when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
         when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
@@ -251,6 +307,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
       }
 
       "Call cancel when transaction times out " in new AmazonPayBackendFixture {
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         val expectedReason = "some reason"
         when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
         when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
@@ -276,6 +333,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
       "a request is made to process a refund hook" should {
 
         "return Unit if not a refund" in new AmazonPayBackendFixture {
+          when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
           val mockNotification = mock[AuthorizationNotification]
           when(mockNotification.getNotificationType).thenReturn(NotificationType.AuthorizationNotification)
 
