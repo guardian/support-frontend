@@ -1,5 +1,7 @@
+import { useEffect } from 'preact/hooks';
 import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
 import { useFormValidation } from 'helpers/customHooks/useFormValidation';
+import { validateForm } from 'helpers/redux/checkout/checkoutActions';
 import { setAmazonPayHasAccessToken } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import {
 	useContributionsDispatch,
@@ -18,6 +20,10 @@ export function AmazonPaymentButton(): JSX.Element {
 		console.log('amazonPaymentButton.loginWithAmazonPay');
 		dispatch(setAmazonPayHasAccessToken());
 	});
+
+	useEffect(() => {
+		dispatch(validateForm('AmazonPay'));
+	}, []);
 
 	function payWithAmazonPay() {
 		console.log('amazonPaymentButton.payWithAmazonPay');
