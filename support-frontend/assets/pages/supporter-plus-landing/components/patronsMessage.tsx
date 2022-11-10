@@ -37,10 +37,14 @@ export function PatronsMessage({
 		Canada: '$167',
 	};
 
+	const isUSA = countryGroupId === 'UnitedStates';
+
 	return (
 		<>
-			<h2 css={headingStyles}>Guardian Patrons programme</h2>
-			{countryGroupId === 'UnitedStates' ? (
+			<h2 css={headingStyles}>
+				{isUSA ? 'Support another way' : 'Guardian Patrons programme'}
+			</h2>
+			{isUSA ? (
 				<p css={copyStyles}>
 					To learn more about other ways to support the Guardian, including
 					checks and tax-exempt options, please visit our{' '}
