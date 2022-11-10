@@ -164,7 +164,7 @@ const defaultHeaderCopy = 'Support\xa0fearless,\nindependent\njournalism';
 const defaultContributeCopy = (
 	<span>
 		As a reader-funded news organisation, we rely on your generosity. Please
-		give what you can, so millions more can benefit from quality reporting on
+		give what you can, so millions can benefit from quality reporting on
 		the events shaping our world.
 	</span>
 );
