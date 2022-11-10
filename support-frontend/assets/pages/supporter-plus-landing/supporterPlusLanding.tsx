@@ -164,7 +164,7 @@ export function SupporterPlusLandingPage({
 			>
 				<p css={subheading}>
 					As a reader-funded news organisation, we rely on your generosity.
-					Please give what you can, so millions more can benefit from quality
+					Please give what you can, so millions can benefit from quality
 					reporting on the events shaping our world.
 				</p>
 			</CheckoutHeading>
