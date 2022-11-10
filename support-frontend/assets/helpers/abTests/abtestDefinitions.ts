@@ -164,9 +164,9 @@ export const tests: Tests = {
 		audiences: {
 			ALL: {
 				offset: 0,
-				// This will allocate 20% of the whole audience into the test *at all*,
-				// with half of that ie. 10% seeing the variant
-				size: 0.2,
+				// This will allocate 100% of the whole audience into the test *at all*,
+				// with half of that ie. 50% seeing the variant
+				size: 1,
 			},
 		},
 		isActive: true,
