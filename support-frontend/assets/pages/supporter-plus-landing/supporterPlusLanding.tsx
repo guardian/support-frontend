@@ -217,7 +217,7 @@ export function SupporterPlusLandingPage({
 							</BoxContents>
 						</Box>
 						<Divider size="full" cssOverrides={divider} />
-						<PatronsMessage />
+						<PatronsMessage countryGroupId={countryGroupId} />
 						<Divider
 							size="full"
 							cssOverrides={css`
