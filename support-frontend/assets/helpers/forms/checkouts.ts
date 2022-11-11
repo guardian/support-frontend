@@ -1,7 +1,5 @@
 // ----- Imports ----- //
 import type { CanMakePaymentResult } from '@stripe/stripe-js';
-import type { Participations } from 'helpers/abTests/abtest';
-import { init as initAbTests } from 'helpers/abTests/abtest';
 import {
 	generateContributionTypes,
 	getFrequency,
@@ -24,10 +22,9 @@ import {
 	Sepa,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
-import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	currencies,
@@ -151,6 +148,7 @@ function getPaymentMethods(
 	contributionType: ContributionType,
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
+	isSupporterPlus?: boolean,
 ): PaymentMethod[] {
 	if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
 		return [DirectDebit, Stripe, PayPal];
@@ -160,13 +158,7 @@ function getPaymentMethods(
 			contributionType === 'ONE_OFF' ||
 			getQueryParameter('amazon-pay-recurring') === 'true'
 		) {
-			const participations: Participations = initAbTests(
-				detectCountry(),
-				countryGroupId,
-				getSettings(),
-			);
-			const isSupporterPlus = participations.supporterPlus === 'variant';
-			return isSupporterPlus ? [Stripe, PayPal] : [Stripe, PayPal, AmazonPay];
+			return !isSupporterPlus ? [Stripe, PayPal, AmazonPay] : [Stripe, PayPal];
 		}
 
 		return [Stripe, PayPal];
@@ -193,13 +185,18 @@ function getValidPaymentMethods(
 	_allSwitches: Switches,
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
+	isSupporterPlus?: boolean,
 ): PaymentMethod[] {
 	const switchKey = switchKeyForContributionType(contributionType);
-	return getPaymentMethods(contributionType, countryId, countryGroupId).filter(
-		(paymentMethod) =>
-			isSwitchOn(
-				`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) ?? '-'}`,
-			),
+	return getPaymentMethods(
+		contributionType,
+		countryId,
+		countryGroupId,
+		isSupporterPlus,
+	).filter((paymentMethod) =>
+		isSwitchOn(
+			`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) ?? '-'}`,
+		),
 	);
 }
 

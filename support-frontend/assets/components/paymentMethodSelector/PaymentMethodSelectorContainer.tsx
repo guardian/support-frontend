@@ -1,3 +1,5 @@
+import type { Participations } from 'helpers/abTests/abtest';
+import { init as initAbTests } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import { contributionTypeIsRecurring } from 'helpers/contributions';
 import { getValidPaymentMethods } from 'helpers/forms/checkouts';
@@ -9,6 +11,8 @@ import {
 	getFullExistingPaymentMethods,
 	isUsableExistingPaymentMethod,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import { getSettings } from 'helpers/globalsAndSwitches/globals';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
@@ -70,12 +74,23 @@ function PaymentMethodSelectorContainer({
 	const { switches } = useContributionsSelector(
 		(state) => state.common.settings,
 	);
-
+	const participations: Participations = initAbTests(
+		detectCountry(),
+		countryGroupId,
+		getSettings(),
+	);
+	const isSupporterPlus = participations.supporterPlus === 'variant';
+	console.log(
+		'PaymentSelectorContainer.isSupporterPlus',
+		isSupporterPlus,
+		participations.supporterPlus,
+	);
 	const availablePaymentMethods = getValidPaymentMethods(
 		contributionType,
 		switches,
 		countryId,
 		countryGroupId,
+		isSupporterPlus,
 	);
 
 	// We check on page init if we should try to retrieve existing payment methods from MDAPI
