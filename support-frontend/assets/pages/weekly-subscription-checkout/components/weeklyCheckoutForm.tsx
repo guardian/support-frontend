@@ -288,8 +288,11 @@ function WeeklyCheckoutForm(props: PropTypes) {
 								hideLabel={true}
 							>
 								{days
-									// Don't show 2022-12-30 as this is not a valid publication date in 2022
-									.filter((day) => !formatMachineDate(day).endsWith('-12-30'))
+									.filter((day) => {
+									    const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
+									    const date = formatMachineDate(day);
+									    return !invalidPublicationDates.some(dateSuffix => date.endsWith(dateSuffix))
+									})
 									.map((day) => {
 										const [userDate, machineDate] = [
 											formatUserDate(day),
