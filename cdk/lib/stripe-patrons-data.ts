@@ -120,7 +120,7 @@ export class StripePatronsData extends GuStack {
       ],
       // Create an alarm
       monitoringConfiguration: {
-        snsTopicName: "my-topic-for-cloudwatch-alerts",
+        snsTopicName: "reader-revenue-dev",
         http5xxAlarm: {
           tolerated5xxPercentage: 1,
         },
