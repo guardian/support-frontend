@@ -152,12 +152,6 @@ function getPaymentMethods(
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
 ): PaymentMethod[] {
-	const participations: Participations = initAbTests(
-		detectCountry(),
-		countryGroupId,
-		getSettings(),
-	);
-	const isSupporterPlus = participations.supporterPlus === 'variant';
 	if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
 		return [DirectDebit, Stripe, PayPal];
 	} else if (countryId === 'US') {
@@ -166,6 +160,12 @@ function getPaymentMethods(
 			contributionType === 'ONE_OFF' ||
 			getQueryParameter('amazon-pay-recurring') === 'true'
 		) {
+			const participations: Participations = initAbTests(
+				detectCountry(),
+				countryGroupId,
+				getSettings(),
+			);
+			const isSupporterPlus = participations.supporterPlus === 'variant';
 			return isSupporterPlus ? [Stripe, PayPal] : [Stripe, PayPal, AmazonPay];
 		}
 
