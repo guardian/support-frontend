@@ -1,5 +1,7 @@
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { useCallback, useEffect, useState } from 'react';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
+import { validateOtherAmount } from 'helpers/redux/checkout/product/actions';
 import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
 import {
 	useContributionsDispatch,
@@ -11,21 +13,16 @@ type PreventableEvent = {
 	preventDefault: () => void;
 };
 
-/**
- * A hook to wrap any payment handler function.
- * Validates the form, and will only run the handler if the form is valid.
- */
-export function useFormValidation<
+function useValidation<
 	EventType extends PreventableEvent = React.MouseEvent<HTMLButtonElement>,
 >(
 	paymentHandler: (event: EventType) => void,
+	validationActionCreator: () => PayloadAction<unknown>,
 	dispatchPaymentWaiting = true,
 ): (event: EventType) => void {
 	const [clickEvent, setClickEvent] = useState<EventType | null>(null);
 	const dispatch = useContributionsDispatch();
-	const { paymentMethod } = useContributionsSelector(
-		(state) => state.page.checkoutForm.payment,
-	);
+
 	const errorsPreventSubmission = useContributionsSelector(
 		contributionsFormHasErrors,
 	);
@@ -33,7 +30,7 @@ export function useFormValidation<
 	const validateAndPay = useCallback(
 		function validateAndPay(event: EventType) {
 			event.preventDefault();
-			dispatch(validateForm(paymentMethod.name));
+			dispatch(validationActionCreator());
 			setClickEvent(event);
 		},
 		[dispatch],
@@ -50,6 +47,48 @@ export function useFormValidation<
 			paymentHandler(clickEvent);
 		}
 	}, [clickEvent, errorsPreventSubmission]);
+
+	return validateAndPay;
+}
+
+/**
+ * A hook to wrap any payment handler function.
+ * Validates the form, and will only run the handler if the form is valid.
+ */
+export function useFormValidation<
+	EventType extends PreventableEvent = React.MouseEvent<HTMLButtonElement>,
+>(
+	paymentHandler: (event: EventType) => void,
+	dispatchPaymentWaiting = true,
+): (event: EventType) => void {
+	const { paymentMethod } = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment,
+	);
+
+	const validateAndPay = useValidation(
+		paymentHandler,
+		() => validateForm(paymentMethod.name),
+		dispatchPaymentWaiting,
+	);
+
+	return validateAndPay;
+}
+
+/**
+ * A hook to wrap any payment handler function.
+ * Validates the other amount field *only*, and will only run the handler if the form is valid.
+ */
+export function useOtherAmountValidation<
+	EventType extends PreventableEvent = React.MouseEvent<HTMLButtonElement>,
+>(
+	paymentHandler: (event: EventType) => void,
+	dispatchPaymentWaiting = true,
+): (event: EventType) => void {
+	const validateAndPay = useValidation(
+		paymentHandler,
+		validateOtherAmount,
+		dispatchPaymentWaiting,
+	);
 
 	return validateAndPay;
 }
