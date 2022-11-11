@@ -11,18 +11,17 @@ const headingStyles = css`
 	color: ${neutral[100]};
 	display: inline-block;
 	${headline.medium({ fontWeight: 'bold' })}
-
-	${until.mobileMedium} {
-		font-size: 28px;
-	}
+	font-size: 28px;
+	max-width: 400px;
 
 	${from.tablet} {
-		font-size: 38px;
+		font-size: 34px;
+		max-width: 480px;
 	}
 
 	${until.desktop} {
 		margin: 0 auto;
-		margin-bottom: ${space[6]}px;
+		margin-bottom: ${space[5]}px;
 	}
 	${from.desktop} {
 		${headline.large({ fontWeight: 'bold' })}
