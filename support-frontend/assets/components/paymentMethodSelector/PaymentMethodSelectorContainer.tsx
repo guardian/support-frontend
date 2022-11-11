@@ -80,11 +80,7 @@ function PaymentMethodSelectorContainer({
 		getSettings(),
 	);
 	const isSupporterPlus = participations.supporterPlus === 'variant';
-	console.log(
-		'PaymentSelectorContainer.isSupporterPlus',
-		isSupporterPlus,
-		participations.supporterPlus,
-	);
+
 	const availablePaymentMethods = getValidPaymentMethods(
 		contributionType,
 		switches,
