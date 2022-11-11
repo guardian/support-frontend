@@ -1,5 +1,7 @@
 // ----- Imports ----- //
 import type { CanMakePaymentResult } from '@stripe/stripe-js';
+import type { Participations } from 'helpers/abTests/abtest';
+import { init as initAbTests } from 'helpers/abTests/abtest';
 import {
 	generateContributionTypes,
 	getFrequency,
@@ -22,9 +24,10 @@ import {
 	Sepa,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { getSettings, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	currencies,
@@ -149,6 +152,12 @@ function getPaymentMethods(
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
 ): PaymentMethod[] {
+	const participations: Participations = initAbTests(
+		detectCountry(),
+		countryGroupId,
+		getSettings(),
+	);
+	const isSupporterPlus = participations.supporterPlus === 'variant';
 	if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
 		return [DirectDebit, Stripe, PayPal];
 	} else if (countryId === 'US') {
@@ -157,7 +166,7 @@ function getPaymentMethods(
 			contributionType === 'ONE_OFF' ||
 			getQueryParameter('amazon-pay-recurring') === 'true'
 		) {
-			return [Stripe, PayPal];
+			return isSupporterPlus ? [Stripe, PayPal] : [Stripe, PayPal, AmazonPay];
 		}
 
 		return [Stripe, PayPal];
