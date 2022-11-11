@@ -289,9 +289,15 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							>
 								{days
 									.filter((day) => {
-									    const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
-									    const date = formatMachineDate(day);
-									    return !invalidPublicationDates.some(dateSuffix => date.endsWith(dateSuffix))
+										const invalidPublicationDates = [
+											'-12-24',
+											'-12-25',
+											'-12-30',
+										];
+										const date = formatMachineDate(day);
+										return !invalidPublicationDates.some((dateSuffix) =>
+											date.endsWith(dateSuffix),
+										);
 									})
 									.map((day) => {
 										const [userDate, machineDate] = [
