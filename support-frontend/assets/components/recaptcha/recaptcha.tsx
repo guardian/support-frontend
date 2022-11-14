@@ -1,5 +1,30 @@
+import { css } from '@emotion/react';
+import { neutral, textSans, until } from '@guardian/source-foundations';
 import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
-import './recaptcha.scss';
+
+const container = css`
+	${until.mobileMedium} {
+		& > div {
+			width: 0 !important;
+			max-width: 100% !important;
+		}
+		iframe {
+			transform: scale(0.82);
+			transform-origin: top left;
+		}
+	}
+`;
+
+const terms = css`
+	color: ${neutral[20]};
+	${textSans.xxsmall()}
+
+	margin-top: 5px;
+
+	a {
+		color: inherit;
+	}
+`;
 
 export type RecaptchaProps = {
 	id?: string;
@@ -16,8 +41,8 @@ export function Recaptcha({
 
 	return (
 		<>
-			<div id={id} className="robot_checkbox" />
-			<p className="recaptcha-terms">
+			<div id={id} css={container} />
+			<p css={terms}>
 				By ticking this box, you agree to let Google perform a security check to
 				confirm you are a human. Please refer to their{' '}
 				<a
