@@ -43,6 +43,7 @@ import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyD
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
+import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import { selectPriceForProduct } from 'helpers/redux/checkout/product/selectors/productPrice';
 import type {
 	SubscriptionsDispatch,
@@ -54,7 +55,6 @@ import {
 	validateWithDeliveryForm,
 	withDeliveryFormIsValid,
 } from 'helpers/subscriptionsForms/formValidation';
-import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import {
 	submitWithDeliveryForm,
 	trackSubmitAttempt,
@@ -109,11 +109,7 @@ function mapStateToProps(state: SubscriptionsState) {
 function mapDispatchToProps() {
 	return {
 		...formActionCreators,
-		fetchAndStoreUserType:
-			(email: string) =>
-			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) => {
-				fetchAndStoreUserType(email)(dispatch, getState);
-			},
+		fetchAndStoreUserType: getUserTypeFromIdentity,
 		formIsValid:
 			() => (_: SubscriptionsDispatch, getState: () => SubscriptionsState) =>
 				withDeliveryFormIsValid(getState()),
@@ -246,9 +242,17 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 								label="Gift delivery date"
 							>
 								{days
-									// Don't render input if Christmas day or Christmas eve
-									.filter((day) => !formatMachineDate(day).endsWith('-12-25'))
-									.filter((day) => !formatMachineDate(day).endsWith('-12-24'))
+									.filter((day) => {
+										const invalidPublicationDates = [
+											'-12-24',
+											'-12-25',
+											'-12-30',
+										];
+										const date = formatMachineDate(day);
+										return !invalidPublicationDates.some((dateSuffix) =>
+											date.endsWith(dateSuffix),
+										);
+									})
 									.map((day) => {
 										const [userDate, machineDate] = [
 											formatUserDate(day),

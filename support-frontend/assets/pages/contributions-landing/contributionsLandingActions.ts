@@ -44,8 +44,6 @@ import {
 	getStripeKey,
 	stripeAccountForContributionType,
 } from 'helpers/forms/stripe';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import type {
 	IsoCountry,
 	StateProvince,
@@ -145,21 +143,6 @@ const paymentFailure = (paymentError: ErrorReason): Action => ({
 	type: 'PAYMENT_FAILURE',
 	paymentError,
 });
-
-const getUserType =
-	(email: string) =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
-		const state = getState();
-		const { csrf } = state.page.checkoutForm;
-		const { isSignedIn } = state.page.user;
-		void getUserTypeFromIdentity(
-			email,
-			isSignedIn,
-			csrf,
-			(userType: UserTypeFromIdentityResponse) =>
-				dispatch(setUserTypeFromIdentityResponse(userType)),
-		);
-	};
 
 const setTickerGoalReached = (): Action => ({
 	type: 'SET_TICKER_GOAL_REACHED',
@@ -672,7 +655,6 @@ export {
 	onThirdPartyPaymentAuthorised,
 	setCheckoutFormHasBeenSubmitted,
 	createOneOffPayPalPayment,
-	getUserType,
 	setFormIsValid,
 	sendFormSubmitEventForPayPalRecurring,
 	setTickerGoalReached,

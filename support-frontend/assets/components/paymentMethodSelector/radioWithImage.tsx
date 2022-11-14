@@ -12,8 +12,8 @@ const radioWithImageStyles = css`
 `;
 
 const paymentIcon = css`
+	display: flex;
 	min-width: 30px;
-	max-width: 40px;
 `;
 
 const defaultRadioLabelColour = css`
@@ -22,7 +22,7 @@ const defaultRadioLabelColour = css`
 `;
 
 const checkedRadioLabelColour = css`
-	color: ${brand[500]};
+	color: ${brand[400]};
 	font-weight: bold;
 `;
 
@@ -75,6 +75,9 @@ export function RadioWithImage({
 					checked={checked}
 					name={name}
 					supporting={supportingText}
+					cssOverrides={css`
+						color: ${neutral[46]};
+					`}
 				/>
 				<div css={paymentIcon}>{image}</div>
 			</div>

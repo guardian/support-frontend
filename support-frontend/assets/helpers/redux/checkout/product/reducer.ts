@@ -25,6 +25,7 @@ export const productSlice = createSlice({
 	reducers: {
 		setProductType(state, action: PayloadAction<GuardianProduct>) {
 			state.productType = action.payload;
+			state.errors.otherAmount = [];
 		},
 		setProductOption(state, action: PayloadAction<ProductOptions>) {
 			state.productOption = action.payload;

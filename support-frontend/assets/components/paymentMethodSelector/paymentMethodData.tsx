@@ -1,7 +1,6 @@
 import {
 	SvgCreditCard,
 	SvgDirectDebitWide,
-	SvgPayPalBrand,
 } from '@guardian/source-react-components';
 import type { SepaFormProps } from 'components/sepaForm/SepaForm';
 import { SepaForm } from 'components/sepaForm/SepaForm';
@@ -10,36 +9,38 @@ import { StripeCardFormContainer } from 'components/stripeCardForm/stripeCardFor
 import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgSepa from 'components/svgs/sepa';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { CreditDebitIcons } from './creditDebitIcons';
+import { PaypalIcon } from './paypalIcon';
 
 interface PaymentMethodData {
 	id: string;
 	label: string;
 	icon: JSX.Element;
-	accordionBody?: JSX.Element;
+	accordionBody?: () => JSX.Element;
 }
 
 export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 	Stripe: {
 		id: 'qa-credit-card',
 		label: 'Credit/Debit card',
-		icon: <SvgCreditCard />,
-		accordionBody: <StripeCardFormContainer />,
+		icon: <CreditDebitIcons />,
+		accordionBody: () => <StripeCardFormContainer />,
 	},
 	PayPal: {
 		id: 'qa-paypal',
 		label: 'PayPal',
-		icon: <SvgPayPalBrand />,
+		icon: <PaypalIcon />,
 	},
 	DirectDebit: {
 		id: 'qa-direct-debit',
 		label: 'Direct debit',
-		icon: <SvgDirectDebitWide />,
+		icon: <SvgDirectDebitWide size="xsmall" />,
 	},
 	Sepa: {
 		id: 'qa-direct-debit-sepa',
 		label: 'Direct debit (SEPA)',
 		icon: <SvgSepa />,
-		accordionBody: (
+		accordionBody: () => (
 			<SepaFormContainer
 				render={(sepaFormProps: SepaFormProps) => (
 					<SepaForm {...sepaFormProps} />
@@ -55,16 +56,16 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 	ExistingCard: {
 		id: 'qa-existing-card',
 		label: 'Credit/Debit card',
-		icon: <SvgCreditCard />,
+		icon: <SvgCreditCard size="medium" />,
 	},
 	ExistingDirectDebit: {
 		id: 'qa-existing-direct-debit',
 		label: 'Direct Debit',
-		icon: <SvgDirectDebitWide />,
+		icon: <SvgDirectDebitWide size="xsmall" />,
 	},
 	None: {
 		id: 'qa-none',
 		label: 'Other Payment Method',
-		icon: <SvgCreditCard />,
+		icon: <SvgCreditCard size="medium" />,
 	},
 };

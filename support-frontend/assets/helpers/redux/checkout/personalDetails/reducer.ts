@@ -1,10 +1,11 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
 import type { Title } from 'helpers/user/details';
 import { validateForm } from '../checkoutActions';
+import type { UserTypeFromIdentityResponse } from './state';
 import { initialPersonalDetailsState, personalDetailsSchema } from './state';
+import { getUserTypeFromIdentity } from './thunks';
 
 export const personalDetailsSlice = createSlice({
 	name: 'personalDetails',
@@ -51,6 +52,18 @@ export const personalDetailsSlice = createSlice({
 			validateForm,
 			createSliceValidatorFor(personalDetailsSchema),
 		);
+
+		builder.addCase(getUserTypeFromIdentity.pending, (state) => {
+			state.userTypeFromIdentityResponse = 'requestPending';
+		});
+
+		builder.addCase(getUserTypeFromIdentity.fulfilled, (state, action) => {
+			state.userTypeFromIdentityResponse = action.payload;
+		});
+
+		builder.addCase(getUserTypeFromIdentity.rejected, (state) => {
+			state.userTypeFromIdentityResponse = 'requestFailed';
+		});
 	},
 });
 

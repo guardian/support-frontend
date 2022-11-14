@@ -24,6 +24,8 @@ export type SubsUrls = {
 // ----- Setup ----- //
 
 const patronsUrl = 'https://patrons.theguardian.com';
+const patronsUrlUS =
+	'https://manage.theguardian.com/help-centre/article/contribute-another-way';
 const profileUrl = `https://profile.${getBaseDomain()}`;
 const manageUrl = `https://manage.${getBaseDomain()}`;
 const homeDeliveryUrl = `https://www.${getBaseDomain()}/help/2017/dec/11/help-with-delivery#nav1`;
@@ -49,10 +51,15 @@ function getMemLink(product: MemProduct, intCmp?: string | null): string {
 	return `${memUrls[product]}?${params.toString()}`;
 }
 
-function getPatronsLink(intCmp?: string): string {
+function getPatronsLink(
+	intCmp?: string,
+	countryGroupId?: CountryGroupId,
+): string {
 	const params = new URLSearchParams();
 	params.append('INTCMP', intCmp ?? defaultIntCmp);
-	return `${patronsUrl}?${params.toString()}`;
+
+	const url = countryGroupId === 'UnitedStates' ? patronsUrlUS : patronsUrl;
+	return `${url}?${params.toString()}`;
 }
 
 // Builds a link to the digital pack checkout.

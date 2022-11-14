@@ -4,6 +4,7 @@ import { Column, Columns } from '@guardian/source-react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHeading';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
+import GridImage from 'components/gridImage/gridImage';
 import { Container } from 'components/layout/container';
 import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
 import { withPositionRelative } from '../../.storybook/decorators/withPositionRelative';
@@ -53,7 +54,12 @@ Heading.args = {
 		</p>
 	),
 	image: (
-		<img src="/dev_checkout_image.png" alt="The Guardian apps and website" />
+		<GridImage
+			gridId="supporterPlusLanding"
+			srcSizes={[500]}
+			sizes="500px"
+			imgType="png"
+		/>
 	),
 };
 

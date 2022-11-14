@@ -27,6 +27,7 @@ import { userIsPatron } from 'helpers/patrons';
 import type { DigitalBillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import {
 	selectDiscountedPrice,
 	selectPriceForProduct,
@@ -45,7 +46,6 @@ import {
 	checkoutFormIsValid,
 	validateCheckoutForm,
 } from 'helpers/subscriptionsForms/formValidation';
-import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import {
 	submitCheckoutForm,
 	trackSubmitAttempt,
@@ -84,11 +84,7 @@ function mapStateToProps(state: SubscriptionsState) {
 function mapDispatchToProps() {
 	return {
 		...formActionCreators,
-		fetchAndStoreUserType:
-			(email: string) =>
-			(dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) => {
-				fetchAndStoreUserType(email)(dispatch, getState);
-			},
+		fetchAndStoreUserType: getUserTypeFromIdentity,
 		formIsValid:
 			() =>
 			(_dispatch: SubscriptionsDispatch, getState: () => SubscriptionsState) =>

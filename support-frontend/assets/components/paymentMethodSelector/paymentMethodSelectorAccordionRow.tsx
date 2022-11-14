@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import {
 	brand,
+	from,
 	neutral,
 	space,
 	transitions,
@@ -23,7 +24,11 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { RadioWithImage } from './radioWithImage';
 
 const radio = css`
-	padding: ${space[2]}px ${space[4]}px;
+	padding: ${space[2]}px ${space[3]}px;
+
+	${from.mobileLandscape} {
+		padding: ${space[2]}px ${space[4]}px;
+	}
 `;
 
 const existingPaymentMethodOverrides = css`
@@ -41,7 +46,7 @@ const focused = css`
 `;
 
 const notFocused = css`
-	border: 2px solid ${neutral[60]};
+	border: 2px solid ${neutral[46]};
 	margin-top: ${space[2]}px;
 	border-radius: 4px;
 `;
@@ -86,7 +91,7 @@ interface ExistingPaymentMethodAccordionRowProps {
 	onChange: () => void;
 	paymentMethod: PaymentMethod | null;
 	existingPaymentMethod: RecentlySignedInExistingPaymentMethod | undefined;
-	accordionBody?: JSX.Element;
+	accordionBody?: () => JSX.Element;
 	checked: boolean;
 }
 
@@ -142,7 +147,7 @@ export function ExistingPaymentMethodAccordionRow({
 					...(expanded && accordionBody ? [accordionBodyPadding] : []),
 				]}
 			>
-				<div hidden={!expanded}>{accordionBody}</div>
+				<div hidden={!expanded}>{accordionBody?.()}</div>
 			</div>
 		</div>
 	);
@@ -155,7 +160,7 @@ interface AvailablePaymentMethodAccordionRowProps {
 	name: string;
 	checked: boolean;
 	onChange: () => void;
-	accordionBody?: JSX.Element;
+	accordionBody?: () => JSX.Element;
 }
 
 export function AvailablePaymentMethodAccordionRow({
@@ -191,7 +196,7 @@ export function AvailablePaymentMethodAccordionRow({
 					...(checked && accordionBody ? [accordionBodyPadding] : []),
 				]}
 			>
-				<div hidden={!checked}>{accordionBody}</div>
+				<div hidden={!checked}>{checked && accordionBody?.()}</div>
 			</div>
 		</div>
 	);
