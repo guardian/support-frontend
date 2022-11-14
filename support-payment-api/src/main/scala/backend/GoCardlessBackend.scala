@@ -1,7 +1,7 @@
 package backend
 
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.typesafe.scalalogging.StrictLogging
 import conf.ConfigLoader._

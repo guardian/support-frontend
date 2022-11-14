@@ -6,8 +6,7 @@ import com.typesafe.scalalogging.LazyLogging
 import com.amazonaws.services.lambda.runtime.events.KinesisAnalyticsInputPreprocessingResponse._
 import com.amazonaws.services.lambda.runtime.events.{KinesisAnalyticsInputPreprocessingResponse, KinesisFirehoseEvent}
 import com.gu.support.acquisitions.models.AcquisitionDataRow
-import cats.implicits._
-import cats.instances.either._
+import cats.syntax.all._
 import io.circe.parser.decode
 
 import scala.concurrent.ExecutionContext.Implicits.global

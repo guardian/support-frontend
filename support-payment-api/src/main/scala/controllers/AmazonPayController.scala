@@ -3,7 +3,6 @@ package controllers
 import actions.CorsActionProvider
 import backend.AmazonPayBackend
 import cats.data.EitherT
-import cats.instances.future._
 import com.amazon.pay.response.ipn.model.Notification
 import com.typesafe.scalalogging.StrictLogging
 import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest

@@ -1,7 +1,6 @@
 package com.gu.zuora
 
 import cats.data.OptionT
-import cats.implicits._
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import com.gu.support.config.ZuoraConfig

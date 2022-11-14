@@ -6,7 +6,6 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.flatspec.AnyFlatSpec
 
 import cats.data.EitherT
-import cats.instances.future._
 
 import scala.concurrent.{Future, Await}
 import scala.concurrent.duration._

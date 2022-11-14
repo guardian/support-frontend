@@ -1,6 +1,6 @@
 package com.gu.support.encoding
 
-import cats.implicits._
+import cats.syntax.all._
 import io.circe.Decoder.Result
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedAsObjectEncoder

@@ -2,7 +2,7 @@ package services.stepfunctions
 
 import akka.actor.ActorSystem
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.i18n.Title
 import com.gu.monitoring.SafeLogger

@@ -4,13 +4,13 @@ import services.aws.AwsAsync
 import StateMachineContainer.{Response, convertErrors}
 import akka.actor.ActorSystem
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import com.amazonaws.regions.Regions
 import services.aws.CredentialsProvider
 import com.amazonaws.services.stepfunctions.model.{ExecutionStatus => _, _}
 import com.amazonaws.services.stepfunctions.{AWSStepFunctionsAsync, AWSStepFunctionsAsyncClientBuilder}
 import io.circe.Encoder
-import cats.implicits._
+import cats.syntax.all._
 import com.gu.monitoring.SafeLogger
 import services.stepfunctions.StateMachineErrors.Fail
 

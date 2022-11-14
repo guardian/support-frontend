@@ -1,7 +1,6 @@
 package backend
 
 import cats.data.EitherT
-import cats.implicits._
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions.ga.models.GAData
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}

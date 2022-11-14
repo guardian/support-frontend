@@ -1,7 +1,7 @@
 package backend
 
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import com.amazon.pay.response.ipn.model.{Notification, NotificationType, RefundNotification}
 import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetails, Status}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync

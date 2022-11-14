@@ -2,7 +2,6 @@ package backend
 
 import akka.actor.ActorSystem
 import cats.data.EitherT
-import cats.implicits._
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.ga.{GoogleAnalyticsService, GoogleAnalyticsServiceMock}

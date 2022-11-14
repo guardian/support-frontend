@@ -24,8 +24,6 @@ import scala.concurrent.Future
 class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[SendAcquisitionEventState, Unit](serviceProvider) {
 
-  import cats.instances.future._
-
   def this() = this(ServiceProvider)
 
   override protected def servicesHandler(

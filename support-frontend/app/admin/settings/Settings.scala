@@ -2,7 +2,7 @@ package admin.settings
 
 import java.io.FileNotFoundException
 import java.nio.file.{Files, Paths}
-import cats.implicits._
+import cats.syntax.all._
 import com.amazonaws.services.s3.AmazonS3URI
 import com.gu.aws.AwsS3Client
 import com.gu.support.config.Stage

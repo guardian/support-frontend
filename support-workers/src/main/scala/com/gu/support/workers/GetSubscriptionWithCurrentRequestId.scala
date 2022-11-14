@@ -1,7 +1,7 @@
 package com.gu.support.workers
 
 import java.util.UUID
-import cats.implicits._
+import cats.syntax.all._
 import com.gu.WithLoggingSugar.LogImplicitFuture
 import com.gu.helpers.DateGenerator
 import com.gu.support.zuora.domain.{CreatedRequestId, DomainSubscription}

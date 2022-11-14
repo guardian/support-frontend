@@ -1,7 +1,7 @@
 package services
 
 import cats.data.EitherT
-import cats.implicits._
+import cats.syntax.all._
 import com.paypal.api.payments._
 import com.paypal.base.Constants
 import com.paypal.base.rest.APIContext

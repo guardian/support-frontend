@@ -4,7 +4,6 @@ import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import backend._
 import cats.data.EitherT
-import cats.instances.all._
 import com.amazon.pay.response.ipn.model.Notification
 import model.DefaultThreadPool
 import model.amazonpay.AmazonPayApiError
