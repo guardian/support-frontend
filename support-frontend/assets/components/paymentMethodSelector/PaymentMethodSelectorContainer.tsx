@@ -70,12 +70,17 @@ function PaymentMethodSelectorContainer({
 	const { switches } = useContributionsSelector(
 		(state) => state.common.settings,
 	);
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
+	);
+	const isSupporterPlus = abParticipations.supporterPlus === 'variant';
 
 	const availablePaymentMethods = getValidPaymentMethods(
 		contributionType,
 		switches,
 		countryId,
 		countryGroupId,
+		isSupporterPlus,
 	);
 
 	// We check on page init if we should try to retrieve existing payment methods from MDAPI
