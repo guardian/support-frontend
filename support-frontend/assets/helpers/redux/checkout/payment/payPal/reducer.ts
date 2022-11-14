@@ -1,13 +1,8 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { createSlice } from '@reduxjs/toolkit';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { initialPayPalState } from './state';
-
-export const loadPayPalExpressSdk = createAsyncThunk(
-	'paypal/loadPayPalExpressSdk',
-	loadPayPalRecurring,
-);
+import { loadPayPalExpressSdk } from './thunks';
 
 export const payPalSlice = createSlice({
 	name: 'paypal',

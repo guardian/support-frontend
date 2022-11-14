@@ -165,11 +165,9 @@ Feedback.args = {
 	moduleType: 'feedback',
 	isSignedIn: true,
 	icon: getThankYouModuleIcon('feedback'),
-	header: getFeedbackHeader('GB', false),
-	bodyCopy: (
-		<FeedbackBodyCopy countryId={'GB'} feedbackSurveyHasBeenCompleted={false} />
-	),
-	ctas: <FeedbackCTA countryId={'GB'} />,
+	header: getFeedbackHeader(false),
+	bodyCopy: <FeedbackBodyCopy feedbackSurveyHasBeenCompleted={false} />,
+	ctas: <FeedbackCTA />,
 };
 
 Feedback.decorators = [

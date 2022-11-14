@@ -7,6 +7,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class PatronsStripeConfig(
     apiKey: String,
+    signingSecret: String,
 )
 
 object PatronsStripeConfig extends ConfigService {
@@ -17,6 +18,7 @@ object PatronsStripeConfig extends ConfigService {
     ParameterStoreService(stage).getParametersByPath(stripeConfigPath).map { params =>
       PatronsStripeConfig(
         findParameterOrThrow("api-key", params),
+        findParameterOrThrow("signing-secret", params),
       )
     }
   }

@@ -65,5 +65,4 @@ export const initialCommonState: CommonState = {
 		useLocalCurrency: false,
 		defaultCurrency: 'USD',
 	},
-	existingPaymentMethods: [],
 };

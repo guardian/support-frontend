@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
-import { headline, space } from '@guardian/source-foundations';
+import { space } from '@guardian/source-foundations';
+import { textSans } from '@guardian/source-foundations/dist/cjs/typography/api';
 import {
 	Option as OptionForSelect,
 	Select,
@@ -12,16 +13,14 @@ import type { SepaState } from 'helpers/redux/checkout/payment/sepa/state';
 import { sortedOptions } from '../forms/customFields/sortedOptions';
 
 // -- Styles -- //
-const containerStyles = css`
-	padding-top: ${space[5]}px;
-`;
-const headerStyles = css`
-	${headline.xxxsmall({
-		fontWeight: 'bold',
-	})}
-`;
-const fieldsContainerStyles = css`
+const legalCopy = css`
+	${textSans.xxsmall({})};
+	font-size: 11px;
 	margin-top: ${space[4]}px;
+`;
+
+const legalCopyBold = css`
+	font-weight: bold;
 `;
 
 // -- Component -- //
@@ -49,9 +48,8 @@ export function SepaForm({
 	errors,
 }: SepaFormProps): JSX.Element {
 	return (
-		<div css={containerStyles}>
-			<h3 css={headerStyles}>Your account details</h3>
-			<Stack cssOverrides={fieldsContainerStyles} space={3}>
+		<div>
+			<Stack space={3}>
 				<div>
 					<TextInput
 						id="accountHolderName"
@@ -112,6 +110,14 @@ export function SepaForm({
 					</Select>
 				</div>
 			</Stack>
+			<p css={legalCopy}>
+				By proceeding, you authorise Guardian News & Media Ltd and Stripe, our
+				payment provider, to instruct your bank to debit your account.{' '}
+				<span css={legalCopyBold}>
+					You’re entitled to a refund from your bank under their T&Cs, which
+					must be claimed within 8 weeks of the first payment.
+				</span>
+			</p>
 		</div>
 	);
 }

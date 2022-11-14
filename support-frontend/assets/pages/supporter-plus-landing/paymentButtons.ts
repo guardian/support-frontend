@@ -1,3 +1,8 @@
+import { AmazonPaymentButton } from 'components/amazonPaymentButton/amazonPaymentButton';
+import { ExistingCardPaymentButton } from 'components/existingMethodPaymentButton/existingCardPaymentButton';
+import { ExistingDirectDebitPaymentButton } from 'components/existingMethodPaymentButton/existingDirectDebitPaymentButton';
+import { DirectDebitPaymentButton } from 'components/paymentButton/directDebitPaymentButton';
+import { PayPalPaymentButton } from 'components/payPalPaymentButton/payPalPaymentButton';
 import { SepaPaymentButton } from 'components/sepaForm/sepaPaymentButton';
 import { StripePaymentButton } from 'components/stripeCardForm/stripePaymentButton';
 import type { ContributionType } from 'helpers/contributions';
@@ -10,8 +15,13 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 type PaymentMethodButtons = Partial<Record<PaymentMethod, React.FC>>;
 
 const allPaymentMethodButtons: PaymentMethodButtons = {
-	Stripe: StripePaymentButton,
+	AmazonPay: AmazonPaymentButton,
+	DirectDebit: DirectDebitPaymentButton,
+	ExistingCard: ExistingCardPaymentButton,
+	ExistingDirectDebit: ExistingDirectDebitPaymentButton,
+	PayPal: PayPalPaymentButton,
 	Sepa: SepaPaymentButton,
+	Stripe: StripePaymentButton,
 };
 
 export function getPaymentMethodButtons(

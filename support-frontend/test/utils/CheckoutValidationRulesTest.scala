@@ -141,7 +141,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   }
   it should "return Invalid if a user tries to pay with Pay Pal but the Pay Pal switch in RRCP is off for Subscription Payment " in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
-      product = SupporterPlus(0, GBP, Monthly),
+      product = DigitalPack(GBP, Monthly),
       paymentFields = Left(PayPalPaymentFields("")),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),

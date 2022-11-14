@@ -79,7 +79,13 @@ export const directDebitSlice = createSlice({
 			state.isPopUpOpen = false;
 		});
 
-		builder.addCase(validateForm, createSliceValidatorFor(directDebitSchema));
+		builder.addCase(
+			validateForm,
+			createSliceValidatorFor(
+				directDebitSchema,
+				(paymentMethod) => paymentMethod === 'DirectDebit',
+			),
+		);
 	},
 });
 

@@ -55,7 +55,12 @@ export function CheckoutErrorSummary({
 					<ul css={errorListStyles}>
 						{errorList.map(({ href, message }) => (
 							<li>
-								<Link priority="secondary" href={href} subdued={true}>
+								<Link
+									data-qm-validation
+									priority="secondary"
+									href={href}
+									subdued={true}
+								>
 									{message}
 								</Link>
 							</li>

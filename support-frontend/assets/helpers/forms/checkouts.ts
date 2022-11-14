@@ -157,7 +157,7 @@ function getPaymentMethods(
 			contributionType === 'ONE_OFF' ||
 			getQueryParameter('amazon-pay-recurring') === 'true'
 		) {
-			return [Stripe, PayPal, AmazonPay];
+			return [Stripe, PayPal];
 		}
 
 		return [Stripe, PayPal];

@@ -5,16 +5,17 @@ import {
 	headline,
 	space,
 	textSans,
+	until,
 } from '@guardian/source-foundations';
 import type { CheckListData } from './checkoutBenefitsListData';
 
 const container = css`
-	${textSans.small({ lineHeight: 'tight' })};
+	${textSans.medium({ lineHeight: 'tight' })};
 `;
 
 const heading = css`
 	${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
-	max-width: 300px;
+	max-width: 295px;
 `;
 
 const checkListIcon = css`
@@ -62,6 +63,10 @@ const hr = (margin: string) => css`
 
 const para = css`
 	font-weight: bold;
+
+	${until.tablet} {
+		margin-bottom: ${space[2]}px;
+	}
 `;
 
 export type CheckoutBenefitsListProps = {

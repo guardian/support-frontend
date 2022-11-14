@@ -2,7 +2,6 @@
 import { css } from '@emotion/react';
 import { from, space, visuallyHidden } from '@guardian/source-foundations';
 import { TextInput } from '@guardian/source-react-components';
-import { Divider } from '@guardian/source-react-components-development-kitchen';
 import type { ContributionType } from 'helpers/contributions';
 import { emailRegexPattern } from 'helpers/forms/formValidation';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
@@ -11,22 +10,13 @@ const hiddenHeading = css`
 	${visuallyHidden};
 `;
 
-const dividerStyles = css`
-	margin-left: 0;
-	width: 100%;
-	margin-top: 40px;
-
-	${from.tablet} {
-		margin-top: 44px;
-	}
-`;
-
 const fieldGroupStyles = css`
 	position: relative;
+	margin-top: ${space[4]}px;
+
 	& > *:not(:first-of-type) {
 		margin-top: ${space[3]}px;
 	}
-
 	${from.tablet} {
 		& > *:not(:first-of-type) {
 			margin-top: ${space[4]}px;
@@ -72,7 +62,6 @@ export function PersonalDetails({
 					value={email}
 					type="email"
 					autoComplete="email"
-					supporting="example@domain.com"
 					onChange={(e) => onEmailChange(e.target.value)}
 					pattern={emailRegexPattern}
 					error={errors?.email?.[0]}
@@ -114,8 +103,6 @@ export function PersonalDetails({
 			) : null}
 
 			{contributionState}
-
-			<Divider size="full" cssOverrides={dividerStyles} />
 		</div>
 	);
 }

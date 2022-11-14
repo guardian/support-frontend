@@ -1,33 +1,33 @@
 import { css } from '@emotion/react';
 import { from, neutral, space, textSans } from '@guardian/source-foundations';
+import { Column, Columns, Hide } from '@guardian/source-react-components';
 import {
-	Button,
-	Column,
-	Columns,
-	Hide,
-} from '@guardian/source-react-components';
-import {
+	Divider,
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import GridImage from 'components/gridImage/gridImage';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
+import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
+import { PaymentMethodSelector } from 'components/paymentMethodSelector/paymentMethodSelector';
+import PaymentMethodSelectorContainer from 'components/paymentMethodSelector/PaymentMethodSelectorContainer';
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
 import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
-import { StripeCardFormContainer } from 'components/stripeCardForm/stripeCardFormContainer';
 import {
 	AUDCountries,
 	Canada,
@@ -38,9 +38,16 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { shouldShowBenefitsMessaging } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
+import { DirectDebitContainer } from './components/directDebitWrapper';
+import { ExistingRecurringContributorMessage } from './components/existingRecurringContributorMessage';
+import { GuardianTsAndCs } from './components/guardianTsAndCs';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
+import { PaymentFailureMessage } from './components/paymentFailure';
+import { PaymentTsAndCs } from './components/paymentTsAndCs';
 import { AmountAndBenefits } from './formSections/amountAndBenefits';
 import { getPaymentMethodButtons } from './paymentButtons';
 
@@ -52,14 +59,23 @@ const checkoutContainer = css`
 	padding-top: ${space[3]}px;
 	padding-bottom: ${space[9]}px;
 
-	${from.mobileLandscape} {
+	${from.tablet} {
 		padding-bottom: ${space[12]}px;
 	}
 
 	${from.desktop} {
-		padding-bottom: ${space[24]}px;
 		padding-top: ${space[6]}px;
 	}
+`;
+
+const divider = css`
+	max-width: 100%;
+	margin: 40px 0 ${space[6]}px;
+`;
+
+const subheading = css`
+	font-weight: normal;
+	padding-right: ${space[2]}px;
 `;
 
 export function SupporterPlusLandingPage({
@@ -67,13 +83,28 @@ export function SupporterPlusLandingPage({
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
-	const { countryGroupId, countryId } = useContributionsSelector(
+	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const { switches } = useContributionsSelector(
 		(state) => state.common.settings,
 	);
+	const { selectedAmounts, otherAmounts } = useContributionsSelector(
+		(state) => state.page.checkoutForm.product,
+	);
 	const contributionType = useContributionsSelector(getContributionType);
+	const amount = useContributionsSelector(getUserSelectedAmount);
+
+	const amountIsAboveThreshold = shouldShowBenefitsMessaging(
+		contributionType,
+		selectedAmounts,
+		otherAmounts,
+		countryGroupId,
+	);
+
+	const { paymentComplete, isWaiting } = useContributionsSelector(
+		(state) => state.page.form,
+	);
 
 	const navigate = useNavigate();
 
@@ -91,6 +122,12 @@ export function SupporterPlusLandingPage({
 		subPath: '/contribute',
 	};
 	const heading = <LandingPageHeading />;
+
+	useEffect(() => {
+		if (paymentComplete) {
+			navigate(thankYouRoute, { replace: true });
+		}
+	}, [paymentComplete]);
 
 	return (
 		<PageScaffold
@@ -113,10 +150,21 @@ export function SupporterPlusLandingPage({
 				</FooterWithContents>
 			}
 		>
-			<CheckoutHeading heading={heading}>
-				<p>
+			<CheckoutHeading
+				heading={heading}
+				image={
+					<GridImage
+						gridId="supporterPlusLanding"
+						srcSizes={[500]}
+						sizes="500px"
+						imgType="png"
+						altText=""
+					/>
+				}
+			>
+				<p css={subheading}>
 					As a reader-funded news organisation, we rely on your generosity.
-					Please give what you can, so millions more can benefit from quality
+					Please give what you can, so millions can benefit from quality
 					reporting on the events shaping our world.
 				</p>
 			</CheckoutHeading>
@@ -141,7 +189,12 @@ export function SupporterPlusLandingPage({
 											<PersonalDetails {...personalDetailsProps} />
 										)}
 									/>
-									<StripeCardFormContainer />
+									<Divider size="full" cssOverrides={divider} />
+									<PaymentMethodSelectorContainer
+										render={(paymentMethodSelectorProps) => (
+											<PaymentMethodSelector {...paymentMethodSelectorProps} />
+										)}
+									/>
 									<PaymentButtonController
 										paymentButtons={getPaymentMethodButtons(
 											contributionType,
@@ -150,26 +203,38 @@ export function SupporterPlusLandingPage({
 											countryGroupId,
 										)}
 									/>
+									<ExistingRecurringContributorMessage />
+									<PaymentFailureMessage />
+									<DirectDebitContainer />
 								</ContributionsStripe>
-								<br />
-								<Button
-									onClick={(e) => {
-										e.preventDefault();
-										navigate(thankYouRoute);
-									}}
-								>
-									Go to thank you page
-								</Button>
+								<PaymentTsAndCs
+									countryGroupId={countryGroupId}
+									contributionType={contributionType}
+									currency={currencyId}
+									amount={amount}
+									amountIsAboveThreshold={amountIsAboveThreshold}
+								/>
 							</BoxContents>
 						</Box>
-						<Box>
-							<BoxContents>
-								<PatronsMessage />
-							</BoxContents>
-						</Box>
+						<Divider size="full" cssOverrides={divider} />
+						<PatronsMessage countryGroupId={countryGroupId} />
+						<Divider
+							size="full"
+							cssOverrides={css`
+								max-width: 100%;
+								margin: ${space[4]}px 0 ${space[4]}px;
+							`}
+						/>
+						<GuardianTsAndCs />
 					</Column>
 				</Columns>
 			</Container>
+			{isWaiting && (
+				<LoadingOverlay>
+					<p>Processing transaction</p>
+					<p>Please wait</p>
+				</LoadingOverlay>
+			)}
 		</PageScaffold>
 	);
 }

@@ -52,6 +52,7 @@ function AppDownloadBadges({
 				target="blank"
 				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_APP_STORE_BADGE)}
 				css={appStoreLink}
+				aria-label="Download on the Apple App Store"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -191,6 +192,7 @@ function AppDownloadBadges({
 					trackComponentClick(OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE)
 				}
 				css={googlePlayLink}
+				aria-label="Get it on Google Play"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

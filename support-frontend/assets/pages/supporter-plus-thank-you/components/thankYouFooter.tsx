@@ -1,16 +1,21 @@
 import { css } from '@emotion/react';
-import { space, textSans } from '@guardian/source-foundations';
+import { from, space, textSans } from '@guardian/source-foundations';
 
 const footer = css`
 	${textSans.small()};
-	margin: ${space[2]}px;
+	margin-top: ${space[2]}px;
+	margin-bottom: 28px;
+
+	${from.desktop} {
+		margin-bottom: ${space[2]}px;
+	}
 `;
 
 function ThankYouFooter(): JSX.Element {
 	return (
 		<div css={footer}>
-			If you have any questions about contributing to the Guardian, please
-			contact our customer service team.
+			If you have any questions about supporting the Guardian, please contact
+			our customer service team.
 		</div>
 	);
 }

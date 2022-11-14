@@ -40,8 +40,8 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			icon: getSvgIcon(true),
 			text: (
 				<p>
-					<span css={boldText}>Uninterrupted reading. </span> No more yellow
-					banners
+					<span css={boldText}>A regular supporter newsletter. </span>Get
+					exclusive insight from our newsroom
 				</p>
 			),
 		},
@@ -49,8 +49,8 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			icon: getSvgIcon(true),
 			text: (
 				<p>
-					<span css={boldText}>Supporter newsletter. </span>Giving you editorial
-					insight on the week’s top stories
+					<span css={boldText}>Uninterrupted reading. </span> See far fewer asks
+					for support
 				</p>
 			),
 		},
@@ -58,7 +58,8 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			icon: getSvgIcon(higherTier),
 			text: (
 				<p>
-					<span css={boldText}>Ad-free. </span>On any device when signed in
+					<span css={boldText}>Full access to our news app. </span>Read our
+					reporting on the go
 				</p>
 			),
 			maybeGreyedOut: maybeGreyedOutHigherTier,
@@ -67,8 +68,8 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			icon: getSvgIcon(higherTier),
 			text: (
 				<p>
-					<span css={boldText}>Unlimited app access. </span>For the best mobile
-					experience
+					<span css={boldText}>Ad-free reading. </span>Avoid ads on all your
+					devices
 				</p>
 			),
 			maybeGreyedOut: maybeGreyedOutHigherTier,

@@ -3,9 +3,11 @@ import type { ContributionsState } from '../../contributionsStore';
 import {
 	getPaymentMethodErrors,
 	getPaymentRequestButtonErrors,
-	getRecaptchaError,
 } from './paymentValidation';
-import { getPersonalDetailsErrors } from './personalDetailsValidation';
+import {
+	getPersonalDetailsErrors,
+	getUserCanTakeOutContribution,
+} from './personalDetailsValidation';
 import type { ErrorCollection } from './utils';
 import { errorCollectionHasErrors } from './utils';
 
@@ -25,12 +27,10 @@ export function getAllErrorsForContributions(
 
 	const otherAmount = getOtherAmountErrors(state);
 	const paymentMethod = state.page.checkoutForm.payment.paymentMethod.errors;
-	const robot_checkbox = getRecaptchaError(state);
 
 	const paymentErrors = {
 		paymentMethod,
 		...getPaymentMethodErrors(state),
-		robot_checkbox,
 	};
 
 	return {
@@ -42,6 +42,7 @@ export function getAllErrorsForContributions(
 
 export function contributionsFormHasErrors(state: ContributionsState): boolean {
 	const errorObject = getAllErrorsForContributions(state);
+	const userCanTakeOutContribution = getUserCanTakeOutContribution(state);
 
-	return errorCollectionHasErrors(errorObject);
+	return errorCollectionHasErrors(errorObject) || !userCanTakeOutContribution;
 }

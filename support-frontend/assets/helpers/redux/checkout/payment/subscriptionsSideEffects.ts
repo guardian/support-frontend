@@ -3,7 +3,7 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsStore';
 import * as storage from 'helpers/storage/storage';
 import { setPaymentMethod } from './paymentMethod/actions';
-import { loadPayPalExpressSdk } from './payPal/reducer';
+import { loadPayPalExpressSdk } from './payPal/thunks';
 
 export function addPaymentsSideEffects(
 	startListening: SubscriptionsStartListening,

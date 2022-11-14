@@ -51,6 +51,7 @@ export function PaymentRequestButtonContainer({
 				trackComponentClick('apple-pay-clicked');
 				dispatch(setPaymentMethod(Stripe));
 			},
+			false,
 		);
 
 	function onClick(event: StripePaymentRequestButtonElementClickEvent) {

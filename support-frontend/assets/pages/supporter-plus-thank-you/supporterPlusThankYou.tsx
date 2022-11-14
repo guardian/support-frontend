@@ -18,6 +18,7 @@ import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import {
 	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 	trackUserData,
@@ -122,6 +123,14 @@ export function SupporterPlusThankYou(): JSX.Element {
 
 	const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
 
+	useEffect(() => {
+		sendEventContributionCheckoutConversion(
+			amount,
+			contributionType,
+			currencyId,
+		);
+	}, []);
+
 	const amountIsAboveThreshold = shouldShowBenefitsMessaging(
 		contributionType,
 		selectedAmounts,
@@ -152,7 +161,10 @@ export function SupporterPlusThankYou(): JSX.Element {
 			!isNewAccount && !isSignedIn && email.length > 0,
 			'signIn',
 		),
-		...maybeThankYouModule(contributionType !== 'ONE_OFF', 'appDownload'),
+		...maybeThankYouModule(
+			contributionType !== 'ONE_OFF' && amountIsAboveThreshold,
+			'appDownload',
+		),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && email.length > 0,
 			'marketingConsent',
@@ -196,6 +208,8 @@ export function SupporterPlusThankYou(): JSX.Element {
 								paymentMethod,
 							)}
 							amountIsAboveThreshold={amountIsAboveThreshold}
+							isSignedIn={isSignedIn}
+							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 						/>
 					</div>
 

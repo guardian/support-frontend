@@ -13,9 +13,9 @@ import { AmazonPay, PayPal } from 'helpers/forms/paymentMethods';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { hiddenIf } from 'helpers/utilities/utilities';
+import { useAmazonPayObjects } from '../../../helpers/customHooks/useAmazonPayObjects';
 import { sendFormSubmitEventForPayPalRecurring } from '../contributionsLandingActions';
 import { AmazonPayCheckout } from './AmazonPay/AmazonPayCheckout';
-import { useAmazonPayObjects } from './AmazonPay/useAmazonPayObjects';
 
 // ----- Types ----- //
 

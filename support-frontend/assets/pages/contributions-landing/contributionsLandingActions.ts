@@ -44,8 +44,6 @@ import {
 	getStripeKey,
 	stripeAccountForContributionType,
 } from 'helpers/forms/stripe';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
-import { getUserTypeFromIdentity } from 'helpers/identityApis';
 import type {
 	IsoCountry,
 	StateProvince,
@@ -82,7 +80,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
+import { isSupporterPlusPurchase } from './newProductTestHelper';
 
 export type Action =
 	| {
@@ -145,21 +143,6 @@ const paymentFailure = (paymentError: ErrorReason): Action => ({
 	type: 'PAYMENT_FAILURE',
 	paymentError,
 });
-
-const getUserType =
-	(email: string) =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
-		const state = getState();
-		const { csrf } = state.page.checkoutForm;
-		const { isSignedIn } = state.page.user;
-		void getUserTypeFromIdentity(
-			email,
-			isSignedIn,
-			csrf,
-			(userType: UserTypeFromIdentityResponse) =>
-				dispatch(setUserTypeFromIdentityResponse(userType)),
-		);
-	};
 
 const setTickerGoalReached = (): Action => ({
 	type: 'SET_TICKER_GOAL_REACHED',
@@ -275,23 +258,8 @@ function getBillingCountryAndState(
 	};
 }
 
-function getProductOptionsForBenefitsTest(
-	amount: number,
-	state: ContributionsState,
-) {
-	const isInNewProductTest =
-		state.common.abParticipations.newProduct === 'variant';
-	const contributionType = getContributionType(state);
-	const isRecurring = contributionType !== 'ONE_OFF';
-
-	const thresholdPrice = getThresholdPrice(
-		state.common.internationalisation.countryGroupId,
-		contributionType,
-	);
-	const amountIsHighEnough = !!(thresholdPrice && amount >= thresholdPrice);
-	const shouldGetSupporterPlus =
-		isInNewProductTest && isRecurring && amountIsHighEnough;
-	return shouldGetSupporterPlus
+function getProductOptionsForSupporterPlusTest(state: ContributionsState) {
+	return isSupporterPlusPurchase(state)
 		? { productType: 'SupporterPlus' as const }
 		: { productType: 'Contribution' as const };
 }
@@ -314,7 +282,7 @@ function regularPaymentRequestFromAuthorisation(
 		contributionType,
 	);
 
-	const productOptions = getProductOptionsForBenefitsTest(amount, state);
+	const productOptions = getProductOptionsForSupporterPlusTest(state);
 
 	return {
 		firstName: state.page.checkoutForm.personalDetails.firstName.trim(),
@@ -687,7 +655,6 @@ export {
 	onThirdPartyPaymentAuthorised,
 	setCheckoutFormHasBeenSubmitted,
 	createOneOffPayPalPayment,
-	getUserType,
 	setFormIsValid,
 	sendFormSubmitEventForPayPalRecurring,
 	setTickerGoalReached,

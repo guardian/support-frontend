@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { brand, from, neutral, space } from '@guardian/source-foundations';
+import {
+	brand,
+	from,
+	neutral,
+	space,
+	visuallyHidden,
+} from '@guardian/source-foundations';
 import {
 	Column,
 	Columns,
@@ -36,9 +42,16 @@ export function Header({ children }: HeaderProps): JSX.Element {
 				<Columns>
 					<Column>{children}</Column>
 					<Column span={[2, 3, 4]}>
-						<div css={logoContainer}>
+						<a href="https://www.theguardian.com" css={logoContainer}>
+							<div
+								css={css`
+									${visuallyHidden};
+								`}
+							>
+								Return to the Guardian
+							</div>
 							<SvgGuardianLogo textColor={neutral[100]} />
-						</div>
+						</a>
 					</Column>
 					{/* Only show at wide breakpoint */}
 					<Column span={[0, 0, 0, 0, 1]}></Column>

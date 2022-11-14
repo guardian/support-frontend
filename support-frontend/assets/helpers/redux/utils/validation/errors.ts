@@ -1,5 +1,7 @@
+import type { PayloadAction } from '@reduxjs/toolkit';
 import type { WritableDraft } from 'immer/dist/internal';
 import type { z } from 'zod';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 
 type ValidateableState = Record<string, unknown>;
 
@@ -35,16 +37,26 @@ type SliceStateWithErrors = ValidateableState & {
 	errors?: SliceErrors<ValidateableState>;
 };
 
+type PaymentMethodConditional = (
+	paymentMethod: PaymentMethod | undefined,
+) => boolean;
+
 // Create a handler for the validateForm action for any Redux slice which needs to store errors
-export function createSliceValidatorFor(schema: Schema) {
+export function createSliceValidatorFor(
+	schema: Schema,
+	checkPaymentMethod: PaymentMethodConditional = () => true,
+) {
 	return function validateStateSlice(
 		state: WritableDraft<SliceStateWithErrors>,
+		action: PayloadAction<PaymentMethod | undefined>,
 	): void {
-		const validationResult = schema.safeParse(state);
-		if (!validationResult.success) {
-			state.errors = getSliceErrorsFromZodResult(
-				validationResult.error.format(),
-			);
+		if (checkPaymentMethod(action.payload)) {
+			const validationResult = schema.safeParse(state);
+			if (!validationResult.success) {
+				state.errors = getSliceErrorsFromZodResult(
+					validationResult.error.format(),
+				);
+			}
 		}
 	};
 }

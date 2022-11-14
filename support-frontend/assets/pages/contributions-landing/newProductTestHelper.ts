@@ -4,6 +4,10 @@ import type { ContributionsState } from '../../helpers/redux/contributionsStore'
 import { getThresholdPrice } from './components/DigiSubBenefits/helpers';
 
 export function isSupporterPlusPurchase(state: ContributionsState): boolean {
+	if (state.common.abParticipations.supporterPlus != 'variant') {
+		return false;
+	}
+
 	const contributionType = getContributionType(state);
 
 	const thresholdPrice = getThresholdPrice(
@@ -15,8 +19,8 @@ export function isSupporterPlusPurchase(state: ContributionsState): boolean {
 		state.page.checkoutForm.product.otherAmounts,
 		contributionType,
 	);
+
 	const amountIsHighEnough = !!(thresholdPrice && amount >= thresholdPrice);
-	return (
-		state.common.abParticipations.newProduct == 'variant' && amountIsHighEnough
-	);
+
+	return amountIsHighEnough;
 }
