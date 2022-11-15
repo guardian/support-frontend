@@ -17,6 +17,7 @@ import {
 	setOtherAmountError,
 	setProductType,
 	setSelectedAmount,
+	validateOtherAmount,
 } from './actions';
 import { getContributionCartValueData } from './selectors/cartValue';
 import { isContribution } from './selectors/productType';
@@ -32,6 +33,8 @@ const shouldSendEventContributionCartValue = isAnyOf(
 	setProductType,
 	setSelectedAmount,
 );
+
+const validatesOtherAmountField = isAnyOf(validateForm, validateOtherAmount);
 
 export function addProductSideEffects(
 	startListening: ContributionsStartListening,
@@ -103,7 +106,7 @@ export function addProductSideEffects(
 	// in the product state and we can do this validation in the extraReducer for validateForm?
 	// Potentially a big job
 	startListening({
-		actionCreator: validateForm,
+		matcher: validatesOtherAmountField,
 		effect(_, listenerApi) {
 			const state = listenerApi.getState();
 			const { currencyId } = state.common.internationalisation;

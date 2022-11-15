@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import type { WritableDraft } from 'immer/dist/types/types-external';
 import type { SelectedAmounts } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -16,8 +17,24 @@ import type { DateYMDString } from 'helpers/types/DateString';
 import { setDeliveryCountry } from '../address/actions';
 import { validateForm } from '../checkoutActions';
 import { isContribution } from './selectors/productType';
-import type { AmountChange, GuardianProduct } from './state';
+import type { AmountChange, GuardianProduct, ProductState } from './state';
 import { initialProductState, otherAmountSchema } from './state';
+
+function validateOtherAmount(state: WritableDraft<ProductState>) {
+	if (!isContribution(state.productType)) return;
+
+	if (state.selectedAmounts[state.productType] === 'other') {
+		const validationResult = otherAmountSchema.safeParse(
+			state.otherAmounts[state.productType],
+		);
+		if (!validationResult.success) {
+			const formattedErrors = validationResult.error.format();
+			state.errors = {
+				otherAmount: formattedErrors.amount?._errors,
+			};
+		}
+	}
+}
 
 export const productSlice = createSlice({
 	name: 'product',
@@ -73,6 +90,7 @@ export const productSlice = createSlice({
 				state.errors.otherAmount = [action.payload];
 			}
 		},
+		validateOtherAmount,
 	},
 	extraReducers: (builder) => {
 		builder.addCase(setDeliveryCountry, (state, action) => {
@@ -81,21 +99,7 @@ export const productSlice = createSlice({
 			}
 		});
 
-		builder.addCase(validateForm, (state) => {
-			if (!isContribution(state.productType)) return;
-
-			if (state.selectedAmounts[state.productType] === 'other') {
-				const validationResult = otherAmountSchema.safeParse(
-					state.otherAmounts[state.productType],
-				);
-				if (!validationResult.success) {
-					const formattedErrors = validationResult.error.format();
-					state.errors = {
-						otherAmount: formattedErrors.amount?._errors,
-					};
-				}
-			}
-		});
+		builder.addCase(validateForm, validateOtherAmount);
 	},
 });
 
