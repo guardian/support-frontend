@@ -124,7 +124,6 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
       ),
     )
 
-
   // -- service mocks
   val mockAmazonPayService: AmazonPayService = mock[AmazonPayService]
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
@@ -162,7 +161,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
 
   "Amazon Pay Backend" when {
     "A request is made to create a charge/payment " should {
-      "return error if amazonPay switch is disabled in support-admin-console " in new AmazonPayBackendFixture{
+      "return error if amazonPay switch is disabled in support-admin-console " in new AmazonPayBackendFixture {
         val switchServiceOffResponse: EitherT[Future, Nothing, Switches] =
           EitherT.right(
             Future.successful(
@@ -184,7 +183,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
           )
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOffResponse)
         amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft mustBe amazonPaySwitchError
-        }
+      }
       "return Success  if amazonPay switch is On in support-admin-console " in new AmazonPayBackendFixture {
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
@@ -234,7 +233,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
     "request" should {
       "return successful payment response even if identityService, " +
         "databaseService, bigQueryService and emailService all fail" in new AmazonPayBackendFixture {
-        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
+          when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
           when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
           when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
           when(mockOrderReferenceStatus.getState).thenReturn("Open")

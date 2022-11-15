@@ -189,7 +189,11 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
           )
 
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOffResponse)
-        paypalBackend.createPayment(createPaypalPaymentData).futureLeft mustBe PaypalApiError(None,None,"Paypal Switch not enabled")
+        paypalBackend.createPayment(createPaypalPaymentData).futureLeft mustBe PaypalApiError(
+          None,
+          None,
+          "Paypal Switch not enabled",
+        )
       }
     }
     "a request is made to create a payment" should {

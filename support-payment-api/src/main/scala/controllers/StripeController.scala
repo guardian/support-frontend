@@ -3,6 +3,7 @@ package controllers
 import actions.{CorsActionProvider, RateLimitingAction, RateLimitingSettings}
 import backend.StripeBackend
 import cats.instances.future._
+import com.gu.monitoring.SafeLogger
 import com.typesafe.scalalogging.StrictLogging
 import controllers.ActionOps.Extension
 import model._

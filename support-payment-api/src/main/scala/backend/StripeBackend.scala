@@ -8,8 +8,15 @@ import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.monitoring.SafeLogger
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
-import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, AcquisitionsStreamServiceImpl, BigQueryConfig, BigQueryService}
+import com.gu.support.acquisitions.{
+  AcquisitionsStreamEc2OrLocalConfig,
+  AcquisitionsStreamService,
+  AcquisitionsStreamServiceImpl,
+  BigQueryConfig,
+  BigQueryService,
+}
 import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
@@ -58,22 +65,26 @@ class StripeBackend(
         ),
       )
 
-  private def stripeEnabled(request: StripePaymentIntentRequest.CreatePaymentIntent)= request.paymentData.stripePaymentMethod match{
-     case Some(StripeCheckout)=> stripeCheckoutEnabled
-     case Some(StripeApplePay)=> stripeApplePayEnabled
-     case Some(StripePaymentRequestButton) => stripePaymentRequestEnabled
-     case None => stripeCheckoutEnabled
-  }
+  private def stripeEnabled(request: StripePaymentIntentRequest.CreatePaymentIntent) =
+    request.paymentData.stripePaymentMethod match {
+      case Some(StripeCheckout) => stripeCheckoutEnabled
+      case Some(StripeApplePay) => stripeApplePayEnabled
+      case Some(StripePaymentRequestButton) => stripePaymentRequestEnabled
+      case None => stripeCheckoutEnabled
+    }
 
   private def stripeCheckoutEnabled =
     switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.stripe.state.isOn))
 
   private def stripeApplePayEnabled =
-    switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.stripeApplePay.state.isOn))
+    switchService.allSwitches.map(switch =>
+      switch.oneOffPaymentMethods.exists(s => s.switches.stripeApplePay.state.isOn),
+    )
 
   private def stripePaymentRequestEnabled =
-    switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.stripePaymentRequestButton.state.isOn))
-
+    switchService.allSwitches.map(switch =>
+      switch.oneOffPaymentMethods.exists(s => s.switches.stripePaymentRequestButton.state.isOn),
+    )
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
   // Legacy handler for the Stripe Charges API. Still required for mobile apps payments
@@ -182,7 +193,6 @@ class StripeBackend(
         EitherT.leftT(StripeApiError.fromString(stripeDisabledErrorText, publicKey = None))
     }
   }
-
   def confirmPaymentIntent(
       request: StripePaymentIntentRequest.ConfirmPaymentIntent,
       clientBrowserInfo: ClientBrowserInfo,

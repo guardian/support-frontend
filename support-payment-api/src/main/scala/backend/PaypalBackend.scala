@@ -8,8 +8,15 @@ import cats.syntax.either._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
+import com.gu.monitoring.SafeLogger
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
-import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, AcquisitionsStreamServiceImpl, BigQueryConfig, BigQueryService}
+import com.gu.support.acquisitions.{
+  AcquisitionsStreamEc2OrLocalConfig,
+  AcquisitionsStreamService,
+  AcquisitionsStreamServiceImpl,
+  BigQueryConfig,
+  BigQueryService,
+}
 import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
@@ -25,6 +32,7 @@ import model.paypal._
 import services._
 import util.EnvironmentBasedBuilder
 import model.paypal.PaypalApiError.paypalErrorText
+
 import scala.concurrent.Future
 import scala.jdk.CollectionConverters._
 import scala.util.Try
@@ -38,7 +46,7 @@ class PaypalBackend(
     val acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
     cloudWatchService: CloudWatchService,
-    switchService:SwitchService,
+    switchService: SwitchService,
 )(implicit pool: DefaultThreadPool)
     extends StrictLogging
     with PaymentBackend {
@@ -49,22 +57,20 @@ class PaypalBackend(
    * Once authorised, the payment can be executed via the execute-payment endpoint.
    */
 
-  private def paypalEnabled  = {
-    switchService.allSwitches.map(switch=>switch.oneOffPaymentMethods.exists(s=>s.switches.payPal.state.isOn))
+  private def paypalEnabled = {
+    switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.payPal.state.isOn))
   }
-
-
 
   def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] = {
     paypalEnabled.flatMap {
-      case true=>
+      case true =>
         paypalService
-        .createPayment(c)
-        .leftMap { error =>
-          cloudWatchService.recordFailedPayment(error, PaymentProvider.Paypal)
-          error
-        }
-      case _=>
+          .createPayment(c)
+          .leftMap { error =>
+            cloudWatchService.recordFailedPayment(error, PaymentProvider.Paypal)
+            error
+          }
+      case _ =>
         EitherT.leftT(PaypalApiError.fromString(paypalErrorText))
     }
   }
@@ -257,7 +263,7 @@ object PaypalBackend {
       acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
       cloudWatchService: CloudWatchService,
-      switchService:SwitchService,
+      switchService: SwitchService,
   )(implicit pool: DefaultThreadPool): PaypalBackend = {
     new PaypalBackend(
       paypalService,

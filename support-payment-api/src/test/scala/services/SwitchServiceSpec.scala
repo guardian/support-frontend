@@ -10,8 +10,8 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 
 class SwitchServiceSpec extends AnyFlatSpec with Matchers {
-
-  "SwitchService" should "loads switches successfully" in {
+// Integration test to load switches from S3 ,This will not run on the build server, but can be run locally.
+  "SwitchService" should "loads switches successfully" ignore {
     implicit val system: ActorSystem = ActorSystem()
     implicit val s3 = AWSClientBuilder.buildS3Client()
 

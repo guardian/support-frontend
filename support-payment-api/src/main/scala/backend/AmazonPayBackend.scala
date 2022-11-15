@@ -9,7 +9,13 @@ import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetail
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
-import com.gu.support.acquisitions.{AcquisitionsStreamEc2OrLocalConfig, AcquisitionsStreamService, AcquisitionsStreamServiceImpl, BigQueryConfig, BigQueryService}
+import com.gu.support.acquisitions.{
+  AcquisitionsStreamEc2OrLocalConfig,
+  AcquisitionsStreamService,
+  AcquisitionsStreamServiceImpl,
+  BigQueryConfig,
+  BigQueryService,
+}
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
@@ -37,14 +43,13 @@ class AmazonPayBackend(
     val bigQueryService: BigQueryService,
     val acquisitionsStreamService: AcquisitionsStreamService,
     val databaseService: ContributionsStoreService,
-    switchService:SwitchService,
+    switchService: SwitchService,
 )(implicit pool: DefaultThreadPool)
     extends StrictLogging
     with PaymentBackend {
 
-    private def amazonPayEnabled =
-      switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.amazonPay.state.isOn))
-
+  private def amazonPayEnabled =
+    switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.amazonPay.state.isOn))
 
   def makePayment(
       amazonPayRequest: AmazonPayRequest,
@@ -68,22 +73,27 @@ class AmazonPayBackend(
       )
     }
 
-   amazonPayEnabled.flatMap{
-     case true=>
-       val response =
-         for {
-           orderRef <- service.getOrderReference(amazonPayRequest.paymentData.orderReferenceId)
-           _ <- if (isNotSuspended(orderRef)) service.setOrderReference(amazonPayRequest.paymentData) else Right(orderRef)
-           _ <- service.confirmOrderReference(orderRef)
-           authRes <- service.authorize(orderRef, amazonPayRequest.paymentData)
-           _ <- handleDeclinedResponse(orderRef, authRes.getAuthorizationStatus)
-         } yield authRes
+    amazonPayEnabled.flatMap {
+      case true =>
+        val response =
+          for {
+            orderRef <- service.getOrderReference(amazonPayRequest.paymentData.orderReferenceId)
+            _ <-
+              if (isNotSuspended(orderRef)) service.setOrderReference(amazonPayRequest.paymentData) else Right(orderRef)
+            _ <- service.confirmOrderReference(orderRef)
+            authRes <- service.authorize(orderRef, amazonPayRequest.paymentData)
+            _ <- handleDeclinedResponse(orderRef, authRes.getAuthorizationStatus)
+          } yield authRes
 
-       handleResponse(response, amazonPayRequest, clientBrowserInfo)
-     case _ =>
-       handleResponse(Either.left(AmazonPayApiError.fromString(amazonPayErrorText)), amazonPayRequest, clientBrowserInfo)
+        handleResponse(response, amazonPayRequest, clientBrowserInfo)
+      case _ =>
+        handleResponse(
+          Either.left(AmazonPayApiError.fromString(amazonPayErrorText)),
+          amazonPayRequest,
+          clientBrowserInfo,
+        )
 
-   }
+    }
 
   }
 
@@ -232,7 +242,7 @@ object AmazonPayBackend {
       acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
       cloudWatchService: CloudWatchService,
-      switchService:SwitchService,
+      switchService: SwitchService,
   )(implicit pool: DefaultThreadPool): AmazonPayBackend = {
     new AmazonPayBackend(
       cloudWatchService,

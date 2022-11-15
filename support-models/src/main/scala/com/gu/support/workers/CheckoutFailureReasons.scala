@@ -17,6 +17,7 @@ object CheckoutFailureReasons {
     AmazonPayTryAnotherCard,
     AmazonPayTryAgain,
     AmazonPayFatal,
+    StripePaymentMethodDisabled,
     Unknown,
   )
 
@@ -24,6 +25,10 @@ object CheckoutFailureReasons {
 
   sealed trait CheckoutFailureReason {
     def asString: String
+  }
+
+  case object StripePaymentMethodDisabled extends CheckoutFailureReason {
+    override def asString: String = "Stripe payments are currently disabled"
   }
 
   case object InsufficientFunds extends CheckoutFailureReason {
@@ -113,6 +118,7 @@ object CheckoutFailureReasons {
     case "transaction_not_allowed" => PaymentMethodUnacceptable
     case "try_again_later" => PaymentMethodTemporarilyDeclined
     case "withdrawal_count_limit_exceeded" => PaymentMethodUnacceptable
+    case "Stripe payments are currently disabled" => StripePaymentMethodDisabled
   }
 
   def convertAmazonPayDeclineCode(declineCode: String): CheckoutFailureReason = declineCode match {
