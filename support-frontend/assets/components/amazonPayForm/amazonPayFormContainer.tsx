@@ -67,7 +67,7 @@ export function AmazonPayFormContainer(): JSX.Element {
 	});
 
 	return (
-		<div className="form__submit">
+		<div>
 			{hasAccessToken && amazonPayEnabled && (
 				<AmazonPayForm
 					amazonLoginObject={loginObject}
