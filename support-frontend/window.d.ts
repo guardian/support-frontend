@@ -33,6 +33,7 @@ declare global {
 		) => void;
 		// This function is called when the user finishes with PayPal interface (approves payment).
 		onAuthorize: (data: Record<string, unknown>) => void;
+		onError?: () => void;
 	};
 
 	interface Window {
