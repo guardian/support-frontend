@@ -88,7 +88,7 @@ class CreateMissingIdentityProcessor(
   override def processSubscription(subscription: StripeSubscription) =
     for {
       _ <- processCustomerEmail(subscription.customer.email, subscription.customer.name, subscription)
-      _ <- checkForJointPatron(subscription)
+      _ <- maybeAddJointPatron(subscription)
     } yield {
       ()
     }
@@ -101,12 +101,12 @@ class CreateMissingIdentityProcessor(
     ()
   }
 
-  def checkForJointPatron(subscription: StripeSubscription) =
+  def maybeAddJointPatron(subscription: StripeSubscription) =
     subscription.customer.jointPatronEmail match {
       case Some(email) =>
-      SafeLogger.info(s"Customer ${subscription.customer.email} has an associated joint patron - $email")
+        SafeLogger.info(s"Customer ${subscription.customer.email} has an associated joint patron - $email")
         processCustomerEmail(email, subscription.customer.jointPatronName, subscription)
-      case _ => Future.successful(Unit)
+      case _ => Future.successful(())
     }
 }
 

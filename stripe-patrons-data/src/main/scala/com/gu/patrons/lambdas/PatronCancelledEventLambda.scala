@@ -12,14 +12,13 @@ import com.gu.patrons.model.{
   InvalidJsonError,
   InvalidRequestError,
   StageConstructors,
+  StripeCustomer,
   UserNotFoundIdentityError,
   UserNotFoundStripeError,
 }
-import com.gu.patrons.services.PatronsIdentityService
+import com.gu.patrons.services.{PatronsIdentityService, PatronsStripeService}
 import com.gu.supporterdata.model.Stage
 import com.gu.supporterdata.services.SupporterDataDynamoService
-import com.stripe.Stripe
-import com.stripe.model.Customer
 import com.stripe.net.Webhook
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.Decoder
@@ -39,13 +38,13 @@ object PatronCancelledEventLambda extends StrictLogging {
 
   def handleRequest(event: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent = {
     Await.result(
-      deleteCustomerFromDynamoDb(event),
+      cancelCustomerInDynamoDb(event),
       Duration(15, MINUTES),
     )
   }
 
-  def deleteCustomerFromDynamoDb(event: APIGatewayProxyRequestEvent): Future[APIGatewayProxyResponseEvent] = {
-    val stage = StageConstructors.fromEnvironment
+  def cancelCustomerInDynamoDb(event: APIGatewayProxyRequestEvent): Future[APIGatewayProxyResponseEvent] = {
+    implicit val stage = StageConstructors.fromEnvironment
     SafeLogger.info(s"Path is ${event.getPathParameters.get("countryId")}")
 
     (for {
@@ -54,10 +53,28 @@ object PatronCancelledEventLambda extends StrictLogging {
       payload <- getPayload(event, stripeConfig.signingSecret)
       event <- getEvent(payload)
       customer <- getCustomer(stripeConfig, event.customerId)
-      identityId <- getIdentityId(identityConfig, customer.getEmail)
-      _ <- cancelSubscription(stage, identityId, event.subscriptionId)
+      _ <- cancelSubscriptionForEmail(customer.email, event.subscriptionId, identityConfig)
+      _ <- maybeCancelJointPatron(customer, event.subscriptionId, identityConfig)
     } yield ()).value.map(getAPIGatewayResult)
   }
+
+  def cancelSubscriptionForEmail(email: String, subscriptionId: String, identityConfig: PatronsIdentityConfig)(implicit
+      stage: Stage,
+  ) = for {
+    identityId <- getIdentityId(identityConfig, email)
+    _ <- cancelSubscription(stage, identityId, subscriptionId)
+  } yield ()
+
+  def maybeCancelJointPatron(customer: StripeCustomer, subscriptionId: String, identityConfig: PatronsIdentityConfig)(
+      implicit stage: Stage,
+  ): EitherT[Future, Error, Unit] =
+    customer.jointPatronEmail match {
+      case Some(email) =>
+        SafeLogger.info(s"Customer ${customer.email} has an associated joint patron - $email")
+        cancelSubscriptionForEmail(email, subscriptionId, identityConfig)
+      case _ =>
+        EitherT.pure(())
+    }
 
   def getAPIGatewayResult(result: Either[Error, Unit]) = {
     val response = new APIGatewayProxyResponseEvent()
@@ -125,10 +142,21 @@ object PatronCancelledEventLambda extends StrictLogging {
     EitherT.fromEither(decode[PatronCancelledEvent](payload).left.map(e => InvalidJsonError(e.getMessage)))
   }
 
-  def getCustomer(config: PatronsStripeConfig, customerId: String): EitherT[Future, Error, Customer] = {
+  def getCustomer(config: PatronsStripeConfig, customerId: String): EitherT[Future, Error, StripeCustomer] = {
     logger.info(s"Attempting to retrieve customer with id $customerId from Stripe")
-    Stripe.apiKey = config.apiKey
-    EitherT.fromEither(Try(Customer.retrieve(customerId)).toEither.left.map(e => UserNotFoundStripeError(e.getMessage)))
+    val stripeService = new PatronsStripeService(config, runner)
+    val futureCustomer = stripeService.getCustomer(customerId).transform {
+      case Success(customer) => Try(Right(customer))
+      case Failure(err) =>
+        Try(
+          Left(
+            UserNotFoundStripeError(
+              s"Couldn't retrieve customer with id $customerId from Stripe because of error - ${err.getMessage}",
+            ),
+          ),
+        )
+    }
+    EitherT(futureCustomer)
   }
 
   def getIdentityId(

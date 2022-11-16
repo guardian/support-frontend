@@ -12,11 +12,13 @@ case class StripeSubscription(
     customer: StripeCustomer,
     status: String,
 )
+
 @ConfiguredJsonCodec
-case class StripeCustomer(id: String, name: Option[String], email: String, metadata: Metadata){
+case class StripeCustomer(id: String, name: Option[String], email: String, metadata: Metadata) {
   val jointPatronEmail = metadata.jointPatronEmail
   val jointPatronName = metadata.jointPatronName
 }
+
 @ConfiguredJsonCodec
 case class Metadata(jointPatronEmail: Option[String], jointPatronName: Option[String])
 @ConfiguredJsonCodec
