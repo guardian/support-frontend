@@ -16,7 +16,7 @@ export function NonValidationFailureMessage({
 	children,
 }: NonValidationFailureMessageProps): JSX.Element {
 	return (
-		<div role="alert">
+		<div role="alert" data-qm-error>
 			<ErrorSummary
 				cssOverrides={bottomSpacing}
 				message={message}
