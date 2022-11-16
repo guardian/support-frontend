@@ -1,7 +1,8 @@
 import { Button } from '@guardian/source-react-components';
 import { useAmazonPayObjects } from 'helpers/customHooks/useAmazonPayObjects';
-import { getContributeButtonCopyWithPaymentType } from 'helpers/forms/checkouts';
+import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { AmazonPay } from 'helpers/forms/paymentMethods';
+import { setAmazonPayHasAccessToken } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	useContributionsDispatch,
@@ -12,12 +13,7 @@ import { logException } from 'helpers/utilities/logger';
 import { paymentWaiting } from 'pages/contributions-landing/contributionsLandingActions';
 import AmazonPayForm from './amazonPayForm';
 
-type PropTypes = {
-	showBenefitsMessaging: boolean;
-	userInNewProductTest: boolean;
-};
-
-export function AmazonPayFormContainer(props: PropTypes): JSX.Element {
+export function AmazonPayFormContainer(): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const countryGroupId = useContributionsSelector(
 		(state) => state.common.internationalisation.countryGroupId,
@@ -64,28 +60,11 @@ export function AmazonPayFormContainer(props: PropTypes): JSX.Element {
 		}
 	}
 
-	const otherAmount = useContributionsSelector(
-		(state) =>
-			state.page.checkoutForm.product.otherAmounts[contributionType].amount,
-	);
-
-	const selectedAmounts = useContributionsSelector(
-		(state) => state.page.checkoutForm.product.selectedAmounts,
-	);
-
-	const currency = useContributionsSelector(
-		(state) => state.common.internationalisation.currencyId,
-	);
-
-	const submitButtonCopy = getContributeButtonCopyWithPaymentType(
-		contributionType,
-		otherAmount,
-		selectedAmounts,
-		currency,
-		paymentMethod,
-		props.showBenefitsMessaging,
-		props.userInNewProductTest,
-	);
+	const loginWithAmazonPay = useFormValidation(function login() {
+		console.log('amazonPaymentButton.loginWithAmazonPay');
+		dispatch(paymentWaiting(true));
+		dispatch(setAmazonPayHasAccessToken());
+	});
 
 	return (
 		<div className="form__submit">
@@ -97,9 +76,13 @@ export function AmazonPayFormContainer(props: PropTypes): JSX.Element {
 					contributionType={contributionType}
 				/>
 			)}
-			{hasAccessToken && amazonPayEnabled && (
-				<Button type="submit" aria-label={submitButtonCopy}>
-					{submitButtonCopy}
+			{!hasAccessToken && amazonPayEnabled && (
+				<Button
+					type="submit"
+					aria-label={'Login with AmazonPay'}
+					onClick={loginWithAmazonPay}
+				>
+					{'Login with AmazonPay'}
 				</Button>
 			)}
 		</div>

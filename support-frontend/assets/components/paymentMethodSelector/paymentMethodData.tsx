@@ -52,12 +52,7 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 		id: 'qa-amazon-pay',
 		label: 'Amazon Pay',
 		icon: <SvgAmazonPayLogoDs />,
-		accordionBody: (
-			<AmazonPayFormContainer
-				showBenefitsMessaging={true}
-				userInNewProductTest={false}
-			/>
-		),
+		accordionBody: <AmazonPayFormContainer />,
 	},
 	ExistingCard: {
 		id: 'qa-existing-card',

@@ -9,7 +9,10 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { onThirdPartyPaymentAuthorised } from 'pages/contributions-landing/contributionsLandingActions';
+import {
+	onThirdPartyPaymentAuthorised,
+	paymentWaiting,
+} from 'pages/contributions-landing/contributionsLandingActions';
 
 export function AmazonPaymentButton(): JSX.Element {
 	const dispatch = useContributionsDispatch();
@@ -32,11 +35,8 @@ export function AmazonPaymentButton(): JSX.Element {
 	}, []);
 
 	function payWithAmazonPay() {
-		console.log(
-			'amazonPaymentButton.payWithAmazonPay.orderReferenceId = ',
-			orderReferenceId,
-		);
 		if (orderReferenceId) {
+			dispatch(paymentWaiting(true));
 			void dispatch(
 				onThirdPartyPaymentAuthorised({
 					paymentMethod: AmazonPay,
@@ -50,6 +50,7 @@ export function AmazonPaymentButton(): JSX.Element {
 	return (
 		<DefaultPaymentButtonContainer
 			onClick={hasAccessToken ? payWithAmazonPay : loginWithAmazonPay}
+			createButtonText={(amount) => `Pay ${amount} with AmazonPay`}
 		/>
 	);
 }
