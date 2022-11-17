@@ -43,27 +43,23 @@ export function AmazonPayFormContainer(): JSX.Element {
 		(state) => !state.page.checkoutForm.payment.amazonPay.fatalError,
 	);
 
-	if (hasAccessToken) {
-		dispatch(paymentWaiting(false));
+	const loginWithAmazonPay = useFormValidation(function login() {
+		dispatch(paymentWaiting(true));
 		trackComponentClick('amazon-pay-login-click');
 		const loginOptions = {
 			scope: 'profile postal_code payments:widget payments:shipping_address',
 			popup: true,
 		};
 		if (loginObject) {
-			console.log('amazonPayFormContainer.loginObject.authorize2');
 			loginObject.authorize(loginOptions, (response) => {
 				if (response.error) {
 					logException(`Error from Amazon login: ${response.error}`);
+				} else {
+					dispatch(setAmazonPayHasAccessToken());
 				}
 			});
+			dispatch(paymentWaiting(false));
 		}
-	}
-
-	const loginWithAmazonPay = useFormValidation(function login() {
-		console.log('amazonPaymentButton.loginWithAmazonPay');
-		dispatch(paymentWaiting(true));
-		dispatch(setAmazonPayHasAccessToken());
 	});
 
 	return (
@@ -79,10 +75,10 @@ export function AmazonPayFormContainer(): JSX.Element {
 			{!hasAccessToken && amazonPayEnabled && (
 				<Button
 					type="submit"
-					aria-label={'Login with AmazonPay'}
+					aria-label={'Proceed with Amazon Pay'}
 					onClick={loginWithAmazonPay}
 				>
-					{'Login with AmazonPay'}
+					{'Proceed with Amazon Pay'}
 				</Button>
 			)}
 		</div>
