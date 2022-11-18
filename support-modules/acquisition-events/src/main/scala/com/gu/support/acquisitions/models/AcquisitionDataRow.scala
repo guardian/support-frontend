@@ -108,9 +108,10 @@ object AcquisitionProduct {
   case object AppPremiumTier extends AcquisitionProduct("APP_PREMIUM_TIER")
 
   def fromString(code: String): Option[AcquisitionProduct] = {
-    List(Contribution, RecurringContribution, DigitalSubscription, Paper, GuardianWeekly, AppPremiumTier).find(
-      _.value == code,
-    )
+    List(Contribution, RecurringContribution, SupporterPlus, DigitalSubscription, Paper, GuardianWeekly, AppPremiumTier)
+      .find(
+        _.value == code,
+      )
   }
 
   implicit val decoder: Decoder[AcquisitionProduct] =
