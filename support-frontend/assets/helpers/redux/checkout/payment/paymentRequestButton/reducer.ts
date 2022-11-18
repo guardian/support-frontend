@@ -15,6 +15,9 @@ export const paymentRequestButtonSlice = createSlice({
 				state[action.payload].completed = false;
 			}
 		},
+		unClickPaymentRequestButton(state, action: PayloadAction<StripeAccount>) {
+			state[action.payload].buttonClicked = false;
+		},
 		completePaymentRequest(state, action: PayloadAction<StripeAccount>) {
 			state[action.payload].completed = true;
 		},

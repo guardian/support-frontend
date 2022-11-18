@@ -1,7 +1,11 @@
 import type { PaymentMethod, PaymentRequest } from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
-import { completePaymentRequest } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
+import {
+	completePaymentRequest,
+	unClickPaymentRequestButton,
+} from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -19,9 +23,8 @@ export function usePaymentRequestEvent(
 	paymentRequest: PaymentRequest | null,
 ): PaymentEventDetails {
 	const [paymentWallet, setPaymentWallet] = useState<string>('');
-	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(
-		null,
-	);
+	const [paymentMethod, setStripePaymentMethod] =
+		useState<PaymentMethod | null>(null);
 
 	const { stripeAccount } = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.stripeAccountDetails,
@@ -41,7 +44,7 @@ export function usePaymentRequestEvent(
 				paymentMethodEvent.complete('success');
 
 				addPayerDetailsToRedux(dispatch, paymentMethodEvent);
-				setPaymentMethod(paymentMethod);
+				setStripePaymentMethod(paymentMethod);
 				setPaymentWallet(walletName);
 				dispatch(validateForm());
 				dispatch(completePaymentRequest(stripeAccount));
@@ -57,6 +60,20 @@ export function usePaymentRequestEvent(
 					id: 'stripe-prb-wallet',
 					value: walletType,
 				});
+			});
+		}
+	}, [paymentRequest]);
+
+	useEffect(() => {
+		if (paymentRequest) {
+			paymentRequest.on('cancel', () => {
+				// It's possible to receive the 'cancel' event when the user has actually authorised a payment, so
+				// only proceed if we don't yet have a PaymentMethod object
+				// cf. https://stripe.com/docs/js/payment_request/events/on_cancel
+				if (!paymentMethod) {
+					dispatch(unClickPaymentRequestButton(stripeAccount));
+					dispatch(setPaymentMethod('None'));
+				}
 			});
 		}
 	}, [paymentRequest]);

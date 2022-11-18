@@ -93,7 +93,7 @@ export function PaymentFrequencyTabs({
 				role="tabpanel"
 				id={getTabPanelId(selectedTab)}
 				aria-labelledby={selectedTab}
-				tabIndex={0}
+				tabIndex={-1}
 			>
 				{renderTabContent(selectedTab)}
 			</div>

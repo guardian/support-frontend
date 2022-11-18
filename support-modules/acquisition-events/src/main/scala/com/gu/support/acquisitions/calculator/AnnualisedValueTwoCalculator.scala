@@ -61,7 +61,17 @@ object AnnualisedValueTwoCalculator {
       case (Monthly, AUD) => Right(0.8954700)
       case (Monthly, _) => Right(0.8586346)
       case (Annually, _) => Right(0.99)
-      case (_, _) => Left("Payment Frequency for recurring contributions must be MONTHLY")
+      case (_, _) => Left("Payment Frequency for recurring contributions must be MONTHLY or ANNUALLY")
+    }
+
+  def getSupporterPlusMargin(a: AcquisitionModel): Either[String, Double] =
+    (a.paymentFrequency, a.currency) match {
+      case (Monthly, GBP) => Right(0.8858596)
+      case (Monthly, USD) => Right(0.8348365)
+      case (Monthly, AUD) => Right(0.8954700)
+      case (Monthly, _) => Right(0.8586346)
+      case (Annually, _) => Right(0.99)
+      case (_, _) => Left("Payment Frequency for Supporter Plus must be MONTHLY or ANNUALLY")
     }
 
   def getMembershipSupporterAV(a: AcquisitionModel): Either[String, Double] =
@@ -140,10 +150,11 @@ object AnnualisedValueTwoCalculator {
     a.product match {
       case AcquisitionProduct.Contribution => getContributionMargin(a)
       case AcquisitionProduct.RecurringContribution => getRecurringMargin(a)
+      case AcquisitionProduct.SupporterPlus => getRecurringMargin(a)
       case _ => Left("Business logic not yet implemented for product")
     }
 
-  def getContributionAV(a: AcquisitionModel): Either[String, Double] =
+  def getContributionOrSupporterPlusAV(a: AcquisitionModel): Either[String, Double] =
     for {
       margin <- getMargin(a)
       paymentFrequencyMultiplier <- getPaymentFrequencyMultiplyer(a.paymentFrequency)
@@ -153,11 +164,12 @@ object AnnualisedValueTwoCalculator {
 
   def getAnnualisedValue(a: AcquisitionModel): Either[String, Double] =
     a.product match {
-      case AcquisitionProduct.Contribution => getContributionAV(a)
-      case AcquisitionProduct.RecurringContribution => getContributionAV(a)
+      case AcquisitionProduct.Contribution => getContributionOrSupporterPlusAV(a)
+      case AcquisitionProduct.RecurringContribution => getContributionOrSupporterPlusAV(a)
       case AcquisitionProduct.DigitalSubscription => getDigitalSubscriptionAV(a)
       case AcquisitionProduct.GuardianWeekly => getPrintAV(a)
       case AcquisitionProduct.Paper => getPrintAV(a)
+      case AcquisitionProduct.SupporterPlus => getContributionOrSupporterPlusAV(a)
       case AcquisitionProduct.AppPremiumTier => Left("App premium tier not implemented yet")
       case _ => Left("Business logic not yet implemented for product")
     }

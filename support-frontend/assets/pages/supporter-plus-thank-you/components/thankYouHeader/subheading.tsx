@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import type { ContributionType } from 'helpers/contributions';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
 
 interface SubheadingProps {
 	shouldShowLargeDonationMessage: boolean;

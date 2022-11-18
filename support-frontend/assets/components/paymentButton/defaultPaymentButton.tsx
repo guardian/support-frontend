@@ -1,4 +1,5 @@
 import { css, ThemeProvider } from '@emotion/react';
+import { neutral } from '@guardian/source-foundations';
 import {
 	Button,
 	buttonThemeReaderRevenueBrand,
@@ -7,6 +8,7 @@ import {
 const buttonOverrides = css`
 	width: 100%;
 	justify-content: center;
+	color: ${neutral[7]};
 `;
 
 export type DefaultPaymentButtonProps = {

@@ -45,6 +45,7 @@ import {
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { Paper } from 'helpers/productPrice/subscriptions';
+import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import {
 	selectCorrespondingProductOptionPrice,
 	selectDiscountedPrice,
@@ -62,12 +63,10 @@ import {
 	validateWithDeliveryForm,
 	withDeliveryFormIsValid,
 } from 'helpers/subscriptionsForms/formValidation';
-import { fetchAndStoreUserType } from 'helpers/subscriptionsForms/guestCheckout';
 import {
 	submitWithDeliveryForm,
 	trackSubmitAttempt,
 } from 'helpers/subscriptionsForms/submit';
-import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { supportedPaymentMethods } from 'helpers/subscriptionsForms/supportedPaymentMethods';
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
@@ -133,11 +132,7 @@ function mapStateToProps(state: SubscriptionsState) {
 function mapDispatchToProps() {
 	return {
 		...formActionCreators,
-		fetchAndStoreUserType:
-			(email: string) =>
-			(dispatch: Dispatch<Action>, getState: () => CheckoutState) => {
-				fetchAndStoreUserType(email)(dispatch, getState);
-			},
+		fetchAndStoreUserType: getUserTypeFromIdentity,
 		formIsValid:
 			() => (_dispatch: Dispatch<Action>, getState: () => SubscriptionsState) =>
 				withDeliveryFormIsValid(getState()),

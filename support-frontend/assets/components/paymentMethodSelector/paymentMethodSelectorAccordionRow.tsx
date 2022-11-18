@@ -4,11 +4,15 @@ import { css } from '@emotion/react';
 import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import {
 	brand,
+	from,
 	neutral,
 	space,
 	transitions,
 } from '@guardian/source-foundations';
-import { Radio } from '@guardian/source-react-components';
+import {
+	SvgCreditCard,
+	SvgDirectDebit,
+} from '@guardian/source-react-components';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import {
 	getExistingPaymentMethodLabel,
@@ -17,21 +21,22 @@ import {
 	subscriptionToExplainerPart,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { paymentMethodData } from './paymentMethodData';
-import { PaymentMethodLabel } from './paymentMethodLabel';
 import { RadioWithImage } from './radioWithImage';
 
-const explainerListContainer = css`
-	font-size: small;
-	font-style: italic;
-	margin-left: 40px;
-	padding-bottom: 6px;
-	color: #767676;
-	padding-right: 40px;
+const radio = css`
+	padding: ${space[2]}px ${space[3]}px;
+
+	${from.mobileLandscape} {
+		padding: ${space[2]}px ${space[4]}px;
+	}
 `;
 
-const radio = css`
-	padding: ${space[2]}px ${space[4]}px;
+const existingPaymentMethodOverrides = css`
+	/* Normalise the positioning of the radio button when we have supporting text */
+	& > div {
+		align-items: center;
+		margin-bottom: 0;
+	}
 `;
 
 const focused = css`
@@ -41,7 +46,7 @@ const focused = css`
 `;
 
 const notFocused = css`
-	border: 2px solid ${neutral[60]};
+	border: 2px solid ${neutral[46]};
 	margin-top: ${space[2]}px;
 	border-radius: 4px;
 `;
@@ -83,12 +88,10 @@ const collapsedBody = css`
 interface ExistingPaymentMethodAccordionRowProps {
 	expanded: boolean;
 	preExistingPaymentMethod: RecentlySignedInExistingPaymentMethod;
-	updateExistingPaymentMethod?: (
-		existingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-	) => void;
+	onChange: () => void;
 	paymentMethod: PaymentMethod | null;
 	existingPaymentMethod: RecentlySignedInExistingPaymentMethod | undefined;
-	accordionBody?: JSX.Element;
+	accordionBody?: () => JSX.Element;
 	checked: boolean;
 }
 
@@ -96,53 +99,45 @@ export function ExistingPaymentMethodAccordionRow({
 	paymentMethod,
 	preExistingPaymentMethod,
 	existingPaymentMethod,
-	updateExistingPaymentMethod,
+	onChange,
 	expanded,
 	accordionBody,
 	checked,
 }: ExistingPaymentMethodAccordionRowProps): EmotionJSX.Element {
+	const image =
+		preExistingPaymentMethod.paymentType === 'Card' ? (
+			<SvgCreditCard />
+		) : (
+			<SvgDirectDebit />
+		);
+
 	return (
 		<div css={checked ? focused : notFocused}>
-			<div>
-				<Radio
+			<div css={[...(checked && accordionBody ? [borderBottom] : [])]}>
+				<RadioWithImage
 					id={`paymentMethod-existing${preExistingPaymentMethod.billingAccountId}`}
 					name="paymentMethod"
-					type="radio"
-					value={preExistingPaymentMethod.paymentType}
-					onChange={() => {
-						updateExistingPaymentMethod?.(preExistingPaymentMethod);
-					}}
+					onChange={onChange}
 					checked={
 						paymentMethod ===
 							mapExistingPaymentMethodToPaymentMethod(
 								preExistingPaymentMethod,
 							) && existingPaymentMethod === preExistingPaymentMethod
 					}
-					aria-labelledby="payment_method"
-					aria-expanded={expanded}
-					label={
-						<PaymentMethodLabel
-							label={getExistingPaymentMethodLabel(preExistingPaymentMethod)}
-							logo={
-								paymentMethodData[
-									mapExistingPaymentMethodToPaymentMethod(
-										preExistingPaymentMethod,
-									)
-								].icon
-							}
-							isChecked={existingPaymentMethod === preExistingPaymentMethod}
-						/>
-					}
-				/>
-
-				<div css={explainerListContainer}>
-					Used for your{' '}
-					{subscriptionsToExplainerList(
+					cssOverrides={[
+						radio,
+						...(checked && accordionBody ? [borderBottom] : []),
+						existingPaymentMethodOverrides,
+					]}
+					isSupporterPlus={true}
+					image={image}
+					label={getExistingPaymentMethodLabel(preExistingPaymentMethod)}
+					supportingText={`Used for your ${subscriptionsToExplainerList(
 						preExistingPaymentMethod.subscriptions.map(
 							subscriptionToExplainerPart,
 						),
-					)}
-				</div>
+					)}`}
+				/>
 			</div>
 
 			{/* Accordion Body */}
@@ -152,7 +147,7 @@ export function ExistingPaymentMethodAccordionRow({
 					...(expanded && accordionBody ? [accordionBodyPadding] : []),
 				]}
 			>
-				<div hidden={!expanded}>{accordionBody}</div>
+				<div hidden={!expanded}>{accordionBody?.()}</div>
 			</div>
 		</div>
 	);
@@ -165,7 +160,7 @@ interface AvailablePaymentMethodAccordionRowProps {
 	name: string;
 	checked: boolean;
 	onChange: () => void;
-	accordionBody?: JSX.Element;
+	accordionBody?: () => JSX.Element;
 }
 
 export function AvailablePaymentMethodAccordionRow({
@@ -201,7 +196,7 @@ export function AvailablePaymentMethodAccordionRow({
 					...(checked && accordionBody ? [accordionBodyPadding] : []),
 				]}
 			>
-				<div hidden={!checked}>{accordionBody}</div>
+				<div hidden={!checked}>{checked && accordionBody?.()}</div>
 			</div>
 		</div>
 	);

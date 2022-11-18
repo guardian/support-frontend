@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, space, textSans } from '@guardian/source-foundations';
+import { neutral, textSans } from '@guardian/source-foundations';
 import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -14,6 +14,10 @@ import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
 import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 
+const marginTop = css`
+	margin-top: 4px;
+`;
+
 interface PaymentTsAndCsProps {
 	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
@@ -24,26 +28,30 @@ interface PaymentTsAndCsProps {
 
 function TsAndCsFooterLinks({
 	countryGroupId,
+	amountIsAboveThreshold,
 }: {
 	countryGroupId: CountryGroupId;
+	amountIsAboveThreshold: boolean;
 }) {
-	const terms = (
-		<a href={contributionsTermsLinks[countryGroupId]}>Terms and Conditions</a>
-	);
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
 
+	const termsContributions = (
+		<a href={contributionsTermsLinks[countryGroupId]}>Terms and Conditions</a>
+	);
+	const termsSupporterPlus = (
+		<a href="https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions">
+			Terms and Conditions
+		</a>
+	);
+
+	const terms = amountIsAboveThreshold
+		? termsSupporterPlus
+		: termsContributions;
+
 	return (
-		<div
-			css={css`
-				margin-top: ${space[2]}px;
-			`}
-		>
+		<div css={marginTop}>
 			By proceeding, you are agreeing to our {terms}.{' '}
-			<p
-				css={css`
-					margin-top: 6px;
-				`}
-			>
+			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
 			</p>
@@ -78,7 +86,7 @@ export function PaymentTsAndCs({
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
 
 	const container = css`
-		${textSans.xsmall()};
+		${textSans.xxsmall()};
 		color: ${neutral[20]};
 
 		& a {
@@ -97,7 +105,10 @@ export function PaymentTsAndCs({
 					account. You can change how much you give or cancel your payment at
 					any time.
 				</div>
-				<TsAndCsFooterLinks countryGroupId={countryGroupId} />
+				<TsAndCsFooterLinks
+					countryGroupId={countryGroupId}
+					amountIsAboveThreshold={amountIsAboveThreshold}
+				/>
 			</>
 		);
 	};
@@ -116,13 +127,23 @@ export function PaymentTsAndCs({
 					days, you’ll receive a full refund. Cancellation of your payment will
 					result in the cancellation of these benefits.
 				</div>
-				<TsAndCsFooterLinks countryGroupId={countryGroupId} />
+				<TsAndCsFooterLinks
+					countryGroupId={countryGroupId}
+					amountIsAboveThreshold={amountIsAboveThreshold}
+				/>
 			</>
 		);
 	};
 
 	if (contributionType === 'ONE_OFF') {
-		return <TsAndCsFooterLinks countryGroupId={countryGroupId} />;
+		return (
+			<div css={container}>
+				<TsAndCsFooterLinks
+					countryGroupId={countryGroupId}
+					amountIsAboveThreshold={amountIsAboveThreshold}
+				/>
+			</div>
+		);
 	}
 
 	if (contributionType === 'MONTHLY') {

@@ -1,7 +1,7 @@
 import { invalidReason } from 'helpers/checkoutForm/checkoutForm';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
+import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
 import { trackCheckoutSubmitAttempt } from 'helpers/tracking/behaviour';
 
 type OldFlowOrNewFlow = 'opf' | 'npf';

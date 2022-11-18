@@ -14,32 +14,32 @@ const benefitsThresholdsByCountryGroup: Record<
 	Record<RegularContribType, number>
 > = {
 	GBPCountries: {
-		MONTHLY: 12,
-		ANNUAL: 119,
+		MONTHLY: 10,
+		ANNUAL: 95,
 	},
 	UnitedStates: {
-		MONTHLY: 20,
-		ANNUAL: 199,
+		MONTHLY: 13,
+		ANNUAL: 120,
 	},
 	EURCountries: {
-		MONTHLY: 15,
-		ANNUAL: 149,
+		MONTHLY: 10,
+		ANNUAL: 95,
 	},
 	International: {
-		MONTHLY: 20,
-		ANNUAL: 199,
+		MONTHLY: 13,
+		ANNUAL: 120,
 	},
 	AUDCountries: {
-		MONTHLY: 22,
-		ANNUAL: 215,
+		MONTHLY: 17,
+		ANNUAL: 160,
 	},
 	NZDCountries: {
-		MONTHLY: 24,
-		ANNUAL: 235,
+		MONTHLY: 17,
+		ANNUAL: 160,
 	},
 	Canada: {
-		MONTHLY: 22,
-		ANNUAL: 219,
+		MONTHLY: 13,
+		ANNUAL: 120,
 	},
 };
 

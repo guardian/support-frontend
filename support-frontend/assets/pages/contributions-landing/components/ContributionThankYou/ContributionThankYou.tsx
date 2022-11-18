@@ -16,10 +16,10 @@ import type { ContributionType } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
-import type { UserTypeFromIdentityResponse } from 'helpers/identityApis';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -225,7 +225,7 @@ function ContributionThankYou({
 	};
 
 	const surveyAction = {
-		component: <ContributionThankYouSurvey countryId={countryId} />,
+		component: <ContributionThankYouSurvey />,
 		shouldShow: true,
 	};
 

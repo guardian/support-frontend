@@ -12,8 +12,8 @@ const radioWithImageStyles = css`
 `;
 
 const paymentIcon = css`
+	display: flex;
 	min-width: 30px;
-	max-width: 40px;
 `;
 
 const defaultRadioLabelColour = css`
@@ -22,7 +22,7 @@ const defaultRadioLabelColour = css`
 `;
 
 const checkedRadioLabelColour = css`
-	color: ${brand[500]};
+	color: ${brand[400]};
 	font-weight: bold;
 `;
 
@@ -47,6 +47,7 @@ type RadioWithImagePropTypes = {
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	cssOverrides?: SerializedStyles | SerializedStyles[];
 	isSupporterPlus?: boolean;
+	supportingText?: string;
 };
 
 export function RadioWithImage({
@@ -58,6 +59,7 @@ export function RadioWithImage({
 	onChange,
 	cssOverrides,
 	isSupporterPlus,
+	supportingText,
 }: RadioWithImagePropTypes): JSX.Element {
 	return (
 		<label
@@ -72,6 +74,10 @@ export function RadioWithImage({
 					label={getLabelText(label, checked, isSupporterPlus)}
 					checked={checked}
 					name={name}
+					supporting={supportingText}
+					cssOverrides={css`
+						color: ${neutral[46]};
+					`}
 				/>
 				<div css={paymentIcon}>{image}</div>
 			</div>

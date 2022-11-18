@@ -18,6 +18,7 @@ const tabButtonStyles = css`
 	border-bottom: 1px solid ${neutral[86]};
 	flex-grow: 1;
 	padding: 13px 0;
+	cursor: pointer;
 
 	${from.tablet} {
 		padding-top: 18px;

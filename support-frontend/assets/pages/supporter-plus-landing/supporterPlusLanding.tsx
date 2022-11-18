@@ -12,6 +12,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import GridImage from 'components/gridImage/gridImage';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
@@ -41,6 +42,7 @@ import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { shouldShowBenefitsMessaging } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import { DirectDebitContainer } from './components/directDebitWrapper';
+import { ExistingRecurringContributorMessage } from './components/existingRecurringContributorMessage';
 import { GuardianTsAndCs } from './components/guardianTsAndCs';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
@@ -57,12 +59,11 @@ const checkoutContainer = css`
 	padding-top: ${space[3]}px;
 	padding-bottom: ${space[9]}px;
 
-	${from.mobileLandscape} {
+	${from.tablet} {
 		padding-bottom: ${space[12]}px;
 	}
 
 	${from.desktop} {
-		padding-bottom: ${space[24]}px;
 		padding-top: ${space[6]}px;
 	}
 `;
@@ -70,6 +71,11 @@ const checkoutContainer = css`
 const divider = css`
 	max-width: 100%;
 	margin: 40px 0 ${space[6]}px;
+`;
+
+const subheading = css`
+	font-weight: normal;
+	padding-right: ${space[2]}px;
 `;
 
 export function SupporterPlusLandingPage({
@@ -144,10 +150,21 @@ export function SupporterPlusLandingPage({
 				</FooterWithContents>
 			}
 		>
-			<CheckoutHeading heading={heading}>
-				<p>
+			<CheckoutHeading
+				heading={heading}
+				image={
+					<GridImage
+						gridId="supporterPlusLanding"
+						srcSizes={[500]}
+						sizes="500px"
+						imgType="png"
+						altText=""
+					/>
+				}
+			>
+				<p css={subheading}>
 					As a reader-funded news organisation, we rely on your generosity.
-					Please give what you can, so millions more can benefit from quality
+					Please give what you can, so millions can benefit from quality
 					reporting on the events shaping our world.
 				</p>
 			</CheckoutHeading>
@@ -186,6 +203,7 @@ export function SupporterPlusLandingPage({
 											countryGroupId,
 										)}
 									/>
+									<ExistingRecurringContributorMessage />
 									<PaymentFailureMessage />
 									<DirectDebitContainer />
 								</ContributionsStripe>
@@ -199,7 +217,7 @@ export function SupporterPlusLandingPage({
 							</BoxContents>
 						</Box>
 						<Divider size="full" cssOverrides={divider} />
-						<PatronsMessage />
+						<PatronsMessage countryGroupId={countryGroupId} />
 						<Divider
 							size="full"
 							cssOverrides={css`

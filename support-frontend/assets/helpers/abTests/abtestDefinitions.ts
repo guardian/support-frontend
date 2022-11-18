@@ -164,10 +164,13 @@ export const tests: Tests = {
 		audiences: {
 			ALL: {
 				offset: 0,
+				// This will allocate 100% of the whole audience into the test *at all*,
+				// with half of that ie. 50% seeing the variant
 				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		referrerControlled: false,
 		seed: 15,
 	},

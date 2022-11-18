@@ -3,7 +3,7 @@ import {
 	useStripe,
 } from '@stripe/react-stripe-js';
 import type { StripePaymentRequestButtonElementClickEvent } from '@stripe/stripe-js';
-import { useFormValidation } from 'helpers/customHooks/useFormValidation';
+import { useOtherAmountValidation } from 'helpers/customHooks/useFormValidation';
 import { Stripe } from 'helpers/forms/paymentMethods';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { clickPaymentRequestButton } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
@@ -45,12 +45,13 @@ export function PaymentRequestButtonContainer({
 	);
 
 	const handleButtonClick =
-		useFormValidation<StripePaymentRequestButtonElementClickEvent>(
+		useOtherAmountValidation<StripePaymentRequestButtonElementClickEvent>(
 			function handleButtonClick() {
 				paymentRequest?.show();
 				trackComponentClick('apple-pay-clicked');
 				dispatch(setPaymentMethod(Stripe));
 			},
+			false,
 		);
 
 	function onClick(event: StripePaymentRequestButtonElementClickEvent) {

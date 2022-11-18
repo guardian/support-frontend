@@ -21,10 +21,7 @@ const maxOneDecimalPlaceRegex = /^\d+\.?\d{0,2}$/;
 export const otherAmountSchema = z.object({
 	amount: z
 		.string({ invalid_type_error: 'Please enter an amount' })
-		.regex(maxOneDecimalPlaceRegex, { message: 'Please enter a valid amount' })
-		.refine((amount) => !Number.isNaN(Number.parseFloat(amount)), {
-			message: 'Please enter a valid amount',
-		}),
+		.regex(maxOneDecimalPlaceRegex, { message: 'Please enter a valid amount' }),
 });
 
 export type GuardianProduct =
