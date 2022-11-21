@@ -2,7 +2,14 @@ import { Button } from '@guardian/source-react-components';
 import { useAmazonPayObjects } from 'helpers/customHooks/useAmazonPayObjects';
 import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { AmazonPay } from 'helpers/forms/paymentMethods';
-import { setAmazonPayHasAccessToken } from 'helpers/redux/checkout/payment/amazonPay/actions';
+import {
+	setAmazonPayBillingAgreementConsentStatus,
+	setAmazonPayBillingAgreementId,
+	setAmazonPayHasAccessToken,
+	setAmazonPayOrderReferenceId,
+	setAmazonPayPaymentSelected,
+	setAmazonPayWalletIsStale,
+} from 'helpers/redux/checkout/payment/amazonPay/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	useContributionsDispatch,
@@ -42,6 +49,28 @@ export function AmazonPayFormContainer(): JSX.Element {
 	const amazonPayEnabled = useContributionsSelector(
 		(state) => !state.page.checkoutForm.payment.amazonPay.fatalError,
 	);
+	const amazonPay = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.amazonPay,
+	);
+	const checkoutFormHasBeenSubmitted = useContributionsSelector(
+		(state) => state.page.form.formData.checkoutFormHasBeenSubmitted,
+	);
+
+	function onAmazonPayWalletIsStale(isStale: boolean) {
+		dispatch(setAmazonPayWalletIsStale(isStale));
+	}
+	function onAmazonPayOrderReferenceId(referenceId: string) {
+		dispatch(setAmazonPayOrderReferenceId(referenceId));
+	}
+	function onAmazonPayPaymentSelected(paymentSelected: boolean) {
+		dispatch(setAmazonPayPaymentSelected(paymentSelected));
+	}
+	function onAmazonPayBillingAgreementId(agreementId: string) {
+		dispatch(setAmazonPayBillingAgreementId(agreementId));
+	}
+	function onAmazonPayBillingAgreementConsentStatus(consentStatus: boolean) {
+		dispatch(setAmazonPayBillingAgreementConsentStatus(consentStatus));
+	}
 
 	const loginWithAmazonPay = useFormValidation(function login() {
 		dispatch(paymentWaiting(true));
@@ -66,10 +95,19 @@ export function AmazonPayFormContainer(): JSX.Element {
 		<>
 			{hasAccessToken && amazonPayEnabled && (
 				<AmazonPayForm
+					amazonPay={amazonPay}
 					amazonLoginObject={loginObject}
 					amazonPaymentsObject={paymentsObject}
+					onAmazonPayWalletIsStale={onAmazonPayWalletIsStale}
+					onAmazonPayOrderReferenceId={onAmazonPayOrderReferenceId}
+					onAmazonPayPaymentSelected={onAmazonPayPaymentSelected}
+					onAmazonPayBillingAgreementId={onAmazonPayBillingAgreementId}
+					onAmazonPayBillingAgreementConsentStatus={
+						onAmazonPayBillingAgreementConsentStatus
+					}
 					isTestUser={userInNewProductTest ? userInNewProductTest : false}
 					contributionType={contributionType}
+					checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
 				/>
 			)}
 			{!hasAccessToken && amazonPayEnabled && (

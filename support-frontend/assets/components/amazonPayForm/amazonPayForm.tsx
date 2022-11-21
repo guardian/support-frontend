@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { space } from '@guardian/source-foundations';
 import { InlineError } from '@guardian/source-react-components';
 import { useEffect } from 'react';
-import { connect } from 'react-redux';
 import type { ContributionType } from 'helpers/contributions';
 import type {
 	AmazonLoginObject,
@@ -10,17 +9,9 @@ import type {
 	BaseWalletConfig,
 	ConsentConfig,
 } from 'helpers/forms/paymentIntegrations/amazonPay/types';
-import {
-	setAmazonPayBillingAgreementConsentStatus,
-	setAmazonPayBillingAgreementId,
-	setAmazonPayOrderReferenceId,
-	setAmazonPayPaymentSelected,
-	setAmazonPayWalletIsStale,
-} from 'helpers/redux/checkout/payment/amazonPay/actions';
 import type { AmazonPayState } from 'helpers/redux/checkout/payment/amazonPay/state';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
-import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
 
 const walletWidget = css`
 	margin: 0 auto ${space[5]}px;
@@ -37,28 +28,14 @@ type PropTypes = {
 	amazonPay: AmazonPayState;
 	amazonLoginObject?: AmazonLoginObject;
 	amazonPaymentsObject?: AmazonPaymentsObject;
-	setAmazonPayWalletIsStale: (isStale: boolean) => void;
-	setAmazonPayOrderReferenceId: (referenceId: string) => void;
-	setAmazonPayPaymentSelected: (paymentSelected: boolean) => void;
-	setAmazonPayBillingAgreementId: (agreementId: string) => void;
-	setAmazonPayBillingAgreementConsentStatus: (consentStatus: boolean) => void;
+	onAmazonPayWalletIsStale: (isStale: boolean) => void;
+	onAmazonPayOrderReferenceId: (referenceId: string) => void;
+	onAmazonPayPaymentSelected: (paymentSelected: boolean) => void;
+	onAmazonPayBillingAgreementId: (agreementId: string) => void;
+	onAmazonPayBillingAgreementConsentStatus: (consentStatus: boolean) => void;
 	isTestUser: boolean;
 	contributionType: ContributionType;
 	checkoutFormHasBeenSubmitted: boolean;
-};
-
-const mapStateToProps = (state: State) => ({
-	amazonPay: state.page.checkoutForm.payment.amazonPay,
-	checkoutFormHasBeenSubmitted:
-		state.page.form.formData.checkoutFormHasBeenSubmitted,
-});
-
-const mapDispatchToProps = {
-	setAmazonPayWalletIsStale,
-	setAmazonPayOrderReferenceId,
-	setAmazonPayPaymentSelected,
-	setAmazonPayBillingAgreementId,
-	setAmazonPayBillingAgreementConsentStatus,
 };
 
 const getSellerId = (isTestUser: boolean): string =>
@@ -66,11 +43,11 @@ const getSellerId = (isTestUser: boolean): string =>
 		? window.guardian.amazonPaySellerId.uat
 		: window.guardian.amazonPaySellerId.default;
 
-function AmazonPayFormComponent(props: PropTypes) {
+function AmazonPayForm(props: PropTypes) {
 	const createWalletWidget = (
 		amazonPaymentsObject: AmazonPaymentsObject,
 	): void => {
-		props.setAmazonPayPaymentSelected(false); // in case we've previously created a wallet
+		props.onAmazonPayPaymentSelected(false); // in case we've previously created a wallet
 
 		const baseWalletConfig: BaseWalletConfig = {
 			sellerId: getSellerId(props.isTestUser),
@@ -78,7 +55,7 @@ function AmazonPayFormComponent(props: PropTypes) {
 				designMode: 'responsive',
 			},
 			onPaymentSelect: () => {
-				props.setAmazonPayPaymentSelected(true);
+				props.onAmazonPayPaymentSelected(true);
 			},
 			onError: (error) => {
 				// The widget UI will display an error to the user, so we can just log it
@@ -90,7 +67,7 @@ function AmazonPayFormComponent(props: PropTypes) {
 			new amazonPaymentsObject.Widgets.Wallet({
 				...baseWalletConfig,
 				onReady: (billingAgreement) => {
-					props.setAmazonPayBillingAgreementId(
+					props.onAmazonPayBillingAgreementId(
 						billingAgreement.getAmazonBillingAgreementId(),
 					);
 				},
@@ -101,7 +78,7 @@ function AmazonPayFormComponent(props: PropTypes) {
 				...baseWalletConfig,
 				amazonOrderReferenceId: props.amazonPay.orderReferenceId,
 				onOrderReferenceCreate: (orderReference) => {
-					props.setAmazonPayOrderReferenceId(
+					props.onAmazonPayOrderReferenceId(
 						orderReference.getAmazonOrderReferenceId(),
 					);
 				},
@@ -109,7 +86,7 @@ function AmazonPayFormComponent(props: PropTypes) {
 			}).bind('WalletWidgetDiv');
 		}
 
-		props.setAmazonPayWalletIsStale(false);
+		props.onAmazonPayWalletIsStale(false);
 	};
 
 	const createConsentWidget = (
@@ -125,14 +102,14 @@ function AmazonPayFormComponent(props: PropTypes) {
 			onReady: (billingAgreementConsentStatus) => {
 				const amazonBillingAgreementConsentStatus =
 					billingAgreementConsentStatus.getConsentStatus() === 'true';
-				props.setAmazonPayBillingAgreementConsentStatus(
+				props.onAmazonPayBillingAgreementConsentStatus(
 					amazonBillingAgreementConsentStatus,
 				);
 			},
 			onConsent: (billingAgreementConsentStatus) => {
 				const amazonBillingAgreementConsentStatus =
 					billingAgreementConsentStatus.getConsentStatus() === 'true';
-				props.setAmazonPayBillingAgreementConsentStatus(
+				props.onAmazonPayBillingAgreementConsentStatus(
 					amazonBillingAgreementConsentStatus,
 				);
 			},
@@ -197,8 +174,4 @@ function AmazonPayFormComponent(props: PropTypes) {
 	return null;
 }
 
-const AmazonPayForm = connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(AmazonPayFormComponent);
 export default AmazonPayForm;
