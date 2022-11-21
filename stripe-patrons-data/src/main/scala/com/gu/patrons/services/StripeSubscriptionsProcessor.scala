@@ -72,10 +72,10 @@ abstract class DynamoProcessor(
 
   def logDynamoResult(email: String, addSubscriptionsToQueueState: UpdateItemResponse) =
     if (addSubscriptionsToQueueState.sdkHttpResponse().statusCode() == 200)
-      SafeLogger.info(s"Dynamo record successfully written for ${email}")
+      SafeLogger.info(s"Dynamo record successfully written for $email")
     else
       SafeLogger.info(
-        s"Error response from Dynamo for ${email}. Status code was ${addSubscriptionsToQueueState.sdkHttpResponse().statusCode()}",
+        s"Error response from Dynamo for $email. Status code was ${addSubscriptionsToQueueState.sdkHttpResponse().statusCode()}",
       )
 }
 
@@ -87,11 +87,26 @@ class CreateMissingIdentityProcessor(
 
   override def processSubscription(subscription: StripeSubscription) =
     for {
-      identityId <- identityService.getOrCreateUserFromEmail(subscription.customer.email, subscription.customer.name)
-      dynamoResponse <- writeToDynamo(identityId, subscription)
-      _ = logDynamoResult(subscription.customer.email, dynamoResponse)
+      _ <- processCustomerEmail(subscription.customer.email, subscription.customer.name, subscription)
+      _ <- maybeAddJointPatron(subscription)
     } yield {
       ()
+    }
+
+  def processCustomerEmail(email: String, name: Option[String], subscription: StripeSubscription): Future[Unit] = for {
+    identityId <- identityService.getOrCreateUserFromEmail(email, name)
+    dynamoResponse <- writeToDynamo(identityId, subscription)
+    _ = logDynamoResult(subscription.customer.email, dynamoResponse)
+  } yield {
+    ()
+  }
+
+  def maybeAddJointPatron(subscription: StripeSubscription) =
+    subscription.customer.jointPatronEmail match {
+      case Some(email) =>
+        SafeLogger.info(s"Customer ${subscription.customer.email} has an associated joint patron - $email")
+        processCustomerEmail(email, subscription.customer.jointPatronName, subscription)
+      case _ => Future.successful(())
     }
 }
 

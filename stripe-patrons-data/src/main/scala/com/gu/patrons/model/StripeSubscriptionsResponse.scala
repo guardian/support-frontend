@@ -12,8 +12,15 @@ case class StripeSubscription(
     customer: StripeCustomer,
     status: String,
 )
+
 @ConfiguredJsonCodec
-case class StripeCustomer(id: String, name: Option[String], email: String)
+case class StripeCustomer(id: String, name: Option[String], email: String, metadata: Metadata) {
+  val jointPatronEmail = metadata.jointPatronEmail
+  val jointPatronName = metadata.jointPatronName
+}
+
+@ConfiguredJsonCodec
+case class Metadata(jointPatronEmail: Option[String], jointPatronName: Option[String])
 @ConfiguredJsonCodec
 case class StripeSubscriptionsResponse(data: List[StripeSubscription], hasMore: Boolean)
 
@@ -42,6 +49,9 @@ object StripeSubscription {
   implicit val customConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
 }
 
+object Metadata {
+  implicit val customConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
+}
 object StripeCustomer {
   implicit val customConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
 }

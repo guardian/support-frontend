@@ -2,7 +2,7 @@ package com.gu.patrons.services
 
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.patrons.conf.PatronsStripeConfig
-import com.gu.patrons.model.{StripeError, StripeSubscriptionsResponse}
+import com.gu.patrons.model.{StripeCustomer, StripeError, StripeSubscriptionsResponse}
 import com.gu.rest.WebServiceHelper
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,5 +32,11 @@ class PatronsStripeService(val config: PatronsStripeConfig, client: FutureHttpCl
       ) ++ startingAfter.getOrElse(Nil),
     )
   }
+
+  def getCustomer(customerId: String) =
+    get[StripeCustomer](
+      s"customers/$customerId",
+      authHeader,
+    )
 
 }
