@@ -63,7 +63,7 @@ export function AmazonPayFormContainer(): JSX.Element {
 	});
 
 	return (
-		<div>
+		<>
 			{hasAccessToken && amazonPayEnabled && (
 				<AmazonPayForm
 					amazonLoginObject={loginObject}
@@ -81,6 +81,6 @@ export function AmazonPayFormContainer(): JSX.Element {
 					{'Proceed with Amazon Pay'}
 				</Button>
 			)}
-		</div>
+		</>
 	);
 }

@@ -1,3 +1,5 @@
+import { css } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
 import { InlineError } from '@guardian/source-react-components';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -19,7 +21,17 @@ import type { AmazonPayState } from 'helpers/redux/checkout/payment/amazonPay/st
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
 import type { State } from 'pages/contributions-landing/contributionsLandingReducer';
-import './amazonPayForm.scss';
+
+const walletWidget = css`
+	margin: 0 auto ${space[5]}px;
+	width: 100%;
+	height: 228px;
+`;
+const consentWidget = css`
+	margin: 0 auto ${space[5]}px;
+	width: 100%;
+	height: 120px;
+`;
 
 type PropTypes = {
 	amazonPay: AmazonPayState;
@@ -165,7 +177,7 @@ function AmazonPayFormComponent(props: PropTypes) {
 					!props.amazonPay.paymentSelected && (
 						<InlineError>Please select a payment method</InlineError>
 					)}
-				<div className="walletWidgetDiv" id="WalletWidgetDiv" />
+				<div css={walletWidget} id="WalletWidgetDiv" />
 
 				{props.contributionType !== 'ONE_OFF' && (
 					<div>
@@ -175,7 +187,7 @@ function AmazonPayFormComponent(props: PropTypes) {
 									Please tick the box to agree to a recurring payment
 								</InlineError>
 							)}
-						<div className="consentWidgetDiv" id="ConsentWidgetDiv" />
+						<div css={consentWidget} id="ConsentWidgetDiv" />
 					</div>
 				)}
 			</div>
