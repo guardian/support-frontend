@@ -1,16 +1,12 @@
-import { useEffect } from 'preact/hooks';
 import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
+import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { AmazonPay } from 'helpers/forms/paymentMethods';
-import { validateForm } from 'helpers/redux/checkout/checkoutActions';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import {
-	onThirdPartyPaymentAuthorised,
-	paymentWaiting,
-} from 'pages/contributions-landing/contributionsLandingActions';
+import { onThirdPartyPaymentAuthorised } from 'pages/contributions-landing/contributionsLandingActions';
 
 export function AmazonPaymentButton(): JSX.Element {
 	const dispatch = useContributionsDispatch();
@@ -23,13 +19,8 @@ export function AmazonPaymentButton(): JSX.Element {
 		(state) => state.page.checkoutForm.payment.amazonPay.orderReferenceId,
 	);
 
-	useEffect(() => {
-		dispatch(validateForm('AmazonPay'));
-	}, []);
-
-	function payWithAmazonPay() {
+	const payWithAmazonPay = useFormValidation(function amazonPayPayment() {
 		if (hasAccessToken && orderReferenceId) {
-			dispatch(paymentWaiting(true));
 			void dispatch(
 				onThirdPartyPaymentAuthorised({
 					paymentMethod: AmazonPay,
@@ -37,7 +28,7 @@ export function AmazonPaymentButton(): JSX.Element {
 				}),
 			);
 		}
-	}
+	});
 
 	trackComponentLoad('amazon-pay-login-loaded');
 	return (
