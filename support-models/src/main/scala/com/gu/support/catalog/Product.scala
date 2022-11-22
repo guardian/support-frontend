@@ -61,7 +61,7 @@ case object SupporterPlus extends Product {
         productRatePlan("8ad088718219a6b601822036a5801f34", Annual),
       ),
       SANDBOX -> List(
-        productRatePlan("8ad09fc281de1ce70181de3b251736a4", Monthly),
+        productRatePlan("8ad08e018499b108018499f163ac32e3", Monthly),
         productRatePlan("8ad09fc281de1ce70181de3b28ee3783", Annual),
       ),
     )

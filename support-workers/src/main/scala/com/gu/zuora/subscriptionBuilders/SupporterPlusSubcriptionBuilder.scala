@@ -32,13 +32,14 @@ class SupporterPlusSubcriptionBuilder(
     val ratePlanChargeId = if (state.product.billingPeriod == Monthly) config.monthlyChargeId else config.annualChargeId
     val todaysDate = dateGenerator.today
 
+    val contributionAmount = state.product.amount - 10 //TODO: get the real product price
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId = productRatePlanId,
       ratePlanCharges = List(
         RatePlanChargeData(
           RatePlanChargeOverride(
             ratePlanChargeId,
-            price = state.product.amount, // Pass the amount the user selected into Zuora
+            price = contributionAmount, // Pass the amount of the cost which counts as a contribution into Zuora
           ),
         ),
       ),
