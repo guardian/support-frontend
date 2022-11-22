@@ -102,7 +102,6 @@ class AmazonPayBackend(
       amazonPayRequest: AmazonPayRequest,
       clientBrowserInfo: ClientBrowserInfo,
   ): EitherT[Future, AmazonPayApiError, Unit] = {
-    println("RESPONSE")
     response
       .toEitherT[Future]
       .leftMap { error =>

@@ -10,7 +10,6 @@ import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, ControllerComponents, Result}
 import util.RequestBasedProvider
 import ActionOps.Extension
-import com.gu.monitoring.SafeLogger
 
 class PaypalController(
     cc: ControllerComponents,
