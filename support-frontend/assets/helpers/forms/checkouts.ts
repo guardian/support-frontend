@@ -158,10 +158,12 @@ function getPaymentMethods(
 			contributionType === 'ONE_OFF' ||
 			getQueryParameter('amazon-pay-recurring') === 'true'
 		) {
-			return !isSupporterPlus ? [Stripe, PayPal, AmazonPay] : [Stripe, PayPal];
+			return !isSupporterPlus
+				? [Stripe, PayPal, AmazonPay]
+				: [Stripe, PayPal, AmazonPay];
 		}
 
-		return [Stripe, PayPal];
+		return [Stripe, PayPal, AmazonPay];
 	} else if (
 		contributionType !== 'ONE_OFF' &&
 		countryGroupId === 'EURCountries'
