@@ -6,6 +6,7 @@ import headerWithCountrySwitcherContainer from 'components/headers/header/header
 import Block from 'components/page/block';
 import Page from 'components/page/page';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -67,7 +68,7 @@ function WeeklyLandingPage({
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy, orderIsAGift);
 	// ID for Selenium tests
 	const pageQaId = `qa-guardian-weekly${orderIsAGift ? '-gift' : ''}`;
-	const isNewProduct = participations.newProduct === 'variant';
+	const hideDigiSub = isSwitchOn('featureSwitches.suppressDigitalSubscription');
 	const Header = headerWithCountrySwitcherContainer({
 		path,
 		countryGroupId,
@@ -81,7 +82,7 @@ function WeeklyLandingPage({
 			International,
 		],
 		trackProduct: 'GuardianWeekly',
-		isNewProduct,
+		isNewProduct: hideDigiSub,
 	});
 	return (
 		<Page

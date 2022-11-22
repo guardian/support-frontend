@@ -19,6 +19,7 @@ object SwitchState {
 case class FeatureSwitches(
     enableQuantumMetric: SwitchState,
     usStripeAccountForSingle: SwitchState,
+    suppressDigitalSubscription: SwitchState,
 )
 
 case class CampaignSwitches(

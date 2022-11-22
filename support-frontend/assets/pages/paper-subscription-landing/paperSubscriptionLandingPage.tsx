@@ -7,6 +7,7 @@ import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import Block from 'components/page/block';
 import Page from 'components/page/page';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -45,9 +46,11 @@ const pageQaId = 'qa-paper-subscriptions';
 function PaperLandingPage({
 	productPrices,
 	promotionCopy,
-	participations,
 }: PaperLandingPropTypes) {
-	const isNewProduct = participations.newProduct === 'variant';
+	const hideDigitalSubscription = isSwitchOn(
+		'featureSwitches.suppressDigitalSubscription',
+	);
+
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
 		'delivery',
@@ -76,7 +79,10 @@ function PaperLandingPage({
 		<Page
 			id={pageQaId}
 			header={
-				<Header countryGroupId={GBPCountries} isNewProduct={isNewProduct} />
+				<Header
+					countryGroupId={GBPCountries}
+					isNewProduct={hideDigitalSubscription}
+				/>
 			}
 			footer={paperSubsFooter}
 		>
