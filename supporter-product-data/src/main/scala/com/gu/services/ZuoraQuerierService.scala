@@ -22,6 +22,7 @@ class ZuoraQuerierService(val config: ZuoraQuerierConfig, client: FutureHttpClie
   val authHeaders = Map(
     "apiSecretAccessKey" -> config.password,
     "apiAccessKeyId" -> config.username,
+    "Accept-Encoding" -> "identity", // Required to ensure that response content-length header is available. We need this when we transfer results to S3. See https://github.com/square/okhttp/issues/1542 for details
   )
 
   def postQuery(queryType: QueryType): Future[BatchQueryResponse] = {

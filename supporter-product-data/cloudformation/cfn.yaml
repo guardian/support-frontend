@@ -48,6 +48,8 @@ Resources:
           - Id: DeleteAllOldFiles
             Status: Enabled
             ExpirationInDays: 14
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 1
 
   SupporterProductDataLambdaRole:
     Type: AWS::IAM::Role

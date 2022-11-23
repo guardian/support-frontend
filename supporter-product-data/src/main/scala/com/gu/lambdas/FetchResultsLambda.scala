@@ -41,7 +41,7 @@ object FetchResultsLambda extends StrictLogging {
         fileResponse.isSuccessful,
         s"File download for job with id $jobId failed with http code ${fileResponse.code}",
       )
-      _ <- S3Service.streamToS3(stage, filename, fileResponse.body.byteStream, fileResponse.body.contentLength)
+      _ = S3Service.streamToS3(stage, filename, fileResponse.body.byteStream, fileResponse.body.contentLength)
     } yield {
       logger.info(s"Successfully wrote file $filename to S3 with ${batch.recordCount} records for jobId $jobId")
       if (batch.recordCount == 0)
