@@ -48,7 +48,11 @@ export function StateSelect({
 					error={error}
 				>
 					<>
-						<Option value="">&nbsp;</Option>
+						<Option value="">
+							{`Select your ${
+								stateDescriptors[countryGroupId]?.toLowerCase() ?? 'state'
+							}`}
+						</Option>
 						{Object.entries(statesList).map(([abbreviation, name]) => {
 							return (
 								<Option value={abbreviation} selected={abbreviation === state}>
