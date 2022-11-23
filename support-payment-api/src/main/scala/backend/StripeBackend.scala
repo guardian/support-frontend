@@ -8,7 +8,6 @@ import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.monitoring.SafeLogger
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions.{
   AcquisitionsStreamEc2OrLocalConfig,
@@ -176,20 +175,22 @@ class StripeBackend(
         }
     }
 
+    def checkRecaptcha: EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = recaptchaRequired().flatMap {
+      case true =>
+        recaptchaService
+          .verify(request.recaptchaToken)
+          .flatMap { resp =>
+            if (resp.success) createIntent()
+            else EitherT.leftT(StripeApiError.fromString(recaptchaErrorText, publicKey = None))
+          }
+      case false =>
+        createIntent()
+    }
+
     stripeEnabled(request).flatMap {
       case true =>
-        recaptchaRequired().flatMap {
-          case true =>
-            recaptchaService
-              .verify(request.recaptchaToken)
-              .flatMap { resp =>
-                if (resp.success) createIntent()
-                else EitherT.leftT(StripeApiError.fromString(recaptchaErrorText, publicKey = None))
-              }
-          case false =>
-            createIntent()
-        }
-      case _ =>
+        checkRecaptcha
+      case false =>
         EitherT.leftT(StripeApiError.fromString(stripeDisabledErrorText, publicKey = None))
     }
   }

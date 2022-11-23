@@ -8,7 +8,6 @@ import cats.syntax.either._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
-import com.gu.monitoring.SafeLogger
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions.{
   AcquisitionsStreamEc2OrLocalConfig,
@@ -24,7 +23,7 @@ import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoa
 import play.api.libs.ws.WSClient
 import conf._
 import conf.ConfigLoader._
-import model.{InitializationResult, _}
+import model._
 import model.acquisition.{AcquisitionDataRowBuilder, PaypalAcquisition}
 import model.db.ContributionData
 import model.email.ContributorRow

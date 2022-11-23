@@ -73,28 +73,25 @@ class AmazonPayBackend(
       )
     }
 
+    def getAuthorizationDetails: Either[AmazonPayApiError, AuthorizationDetails] = for {
+      orderRef <- service.getOrderReference(amazonPayRequest.paymentData.orderReferenceId)
+      _ <-
+        if (isNotSuspended(orderRef)) service.setOrderReference(amazonPayRequest.paymentData) else Right(orderRef)
+      _ <- service.confirmOrderReference(orderRef)
+      authRes <- service.authorize(orderRef, amazonPayRequest.paymentData)
+      _ <- handleDeclinedResponse(orderRef, authRes.getAuthorizationStatus)
+    } yield authRes
+
     amazonPayEnabled.flatMap {
       case true =>
-        val response =
-          for {
-            orderRef <- service.getOrderReference(amazonPayRequest.paymentData.orderReferenceId)
-            _ <-
-              if (isNotSuspended(orderRef)) service.setOrderReference(amazonPayRequest.paymentData) else Right(orderRef)
-            _ <- service.confirmOrderReference(orderRef)
-            authRes <- service.authorize(orderRef, amazonPayRequest.paymentData)
-            _ <- handleDeclinedResponse(orderRef, authRes.getAuthorizationStatus)
-          } yield authRes
-
-        handleResponse(response, amazonPayRequest, clientBrowserInfo)
-      case _ =>
+        handleResponse(getAuthorizationDetails, amazonPayRequest, clientBrowserInfo)
+      case false =>
         handleResponse(
           Either.left(AmazonPayApiError.fromString(amazonPayErrorText)),
           amazonPayRequest,
           clientBrowserInfo,
         )
-
     }
-
   }
 
   private def handleResponse(
