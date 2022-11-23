@@ -3,6 +3,7 @@ import { fetchJson } from 'helpers/async/fetch';
 import { billingPeriodFromContrib } from 'helpers/contributions';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
+import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { getContributionType } from '../../product/selectors/productType';
@@ -25,6 +26,12 @@ export const setUpPayPalPayment = createAsyncThunk<
 >('paypal/setUpPayment', async function setUp({ resolve, reject }, thunkApi) {
 	try {
 		const state = thunkApi.getState();
+		const errorsPreventOpening = contributionsFormHasErrors(state);
+
+		if (errorsPreventOpening) {
+			reject(new Error('form invalid'));
+		}
+
 		const { currencyId } = state.common.internationalisation;
 		const csrfToken = state.page.checkoutForm.csrf.token ?? '';
 		const contributionType = getContributionType(state);

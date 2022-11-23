@@ -80,5 +80,6 @@ export function getPayPalButtonProps({
 				logException((error as Error).message);
 			}
 		},
+		onError: () => null,
 	};
 }

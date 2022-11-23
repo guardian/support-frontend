@@ -2,6 +2,7 @@ import { useEffect } from 'preact/hooks';
 import { useState } from 'react';
 import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { PayPal } from 'helpers/forms/paymentMethods';
+import { validateForm } from 'helpers/redux/checkout/checkoutActions';
 import { setUpPayPalPayment } from 'helpers/redux/checkout/payment/payPal/thunks';
 import {
 	useContributionsDispatch,
@@ -45,8 +46,10 @@ export function PayPalButtonRecurringContainer({
 		);
 	}
 
-	const onWindowOpen: OnPaypalWindowOpen = (resolve, reject) =>
+	const onWindowOpen: OnPaypalWindowOpen = (resolve, reject) => {
+		dispatch(validateForm('PayPal'));
 		void dispatch(setUpPayPalPayment({ resolve, reject }));
+	};
 
 	const buttonProps = getPayPalButtonProps({
 		csrf,
