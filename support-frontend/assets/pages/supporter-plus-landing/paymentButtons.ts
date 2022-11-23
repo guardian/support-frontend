@@ -1,4 +1,4 @@
-import { AmazonPaymentButton } from 'components/amazonPaymentButton/amazonPaymentButton';
+import { AmazonPaymentButton } from 'components/amazonPayForm/amazonPaymentButton';
 import { ExistingCardPaymentButton } from 'components/existingMethodPaymentButton/existingCardPaymentButton';
 import { ExistingDirectDebitPaymentButton } from 'components/existingMethodPaymentButton/existingDirectDebitPaymentButton';
 import { DirectDebitPaymentButton } from 'components/paymentButton/directDebitPaymentButton';

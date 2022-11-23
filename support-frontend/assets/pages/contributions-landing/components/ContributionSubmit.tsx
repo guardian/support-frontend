@@ -89,7 +89,6 @@ function ContributionSubmit(props: PropTypes) {
 		props.countryGroupId,
 		props.isTestUser,
 	);
-
 	const amazonPayEnabled = () => !props.amazonPay.fatalError;
 
 	// We have to show/hide PayPalExpressButton rather than conditionally rendering it
