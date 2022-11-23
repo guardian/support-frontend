@@ -148,19 +148,10 @@ function getPaymentMethods(
 	contributionType: ContributionType,
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
-	isSupporterPlus?: boolean,
 ): PaymentMethod[] {
 	if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
 		return [DirectDebit, Stripe, PayPal];
 	} else if (countryId === 'US') {
-		// Remove this condition after we've tested in PROD
-		if (
-			contributionType === 'ONE_OFF' ||
-			getQueryParameter('amazon-pay-recurring') === 'true'
-		) {
-			return !isSupporterPlus ? [Stripe, PayPal, AmazonPay] : [Stripe, PayPal];
-		}
-
 		return [Stripe, PayPal, AmazonPay];
 	} else if (
 		contributionType !== 'ONE_OFF' &&
@@ -185,18 +176,13 @@ function getValidPaymentMethods(
 	_allSwitches: Switches,
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
-	isSupporterPlus?: boolean,
 ): PaymentMethod[] {
 	const switchKey = switchKeyForContributionType(contributionType);
-	return getPaymentMethods(
-		contributionType,
-		countryId,
-		countryGroupId,
-		isSupporterPlus,
-	).filter((paymentMethod) =>
-		isSwitchOn(
-			`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) ?? '-'}`,
-		),
+	return getPaymentMethods(contributionType, countryId, countryGroupId).filter(
+		(paymentMethod) =>
+			isSwitchOn(
+				`${switchKey}.${toPaymentMethodSwitchNaming(paymentMethod) ?? '-'}`,
+			),
 	);
 }
 
