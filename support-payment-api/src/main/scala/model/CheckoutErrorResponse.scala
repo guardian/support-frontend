@@ -1,13 +1,13 @@
 package model
 
 import com.gu.support.workers.CheckoutFailureReasons
-import com.gu.support.workers.CheckoutFailureReasons.{CheckoutFailureReason, Unknown}
+import com.gu.support.workers.CheckoutFailureReasons.{CheckoutFailureReason, StripePaymentMethodDisabled, Unknown}
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.Encoder
 import io.circe.generic.semiauto._
 import model.stripe.StripeApiError
 import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, PAYMENT_REQUIRED}
-import StripeApiError.recaptchaErrorText
+import StripeApiError.{recaptchaErrorText, stripeDisabledErrorText}
 
 case class CheckoutError(failureReason: CheckoutFailureReason)
 
@@ -25,7 +25,7 @@ object CheckoutErrorResponse extends StrictLogging {
 
     val checkoutFailureReason = stripeApiError.declineCode
       .flatMap(CheckoutFailureReasons.convertStripeDeclineCode)
-      .getOrElse(Unknown)
+      .getOrElse(if (stripeApiError.message == stripeDisabledErrorText) StripePaymentMethodDisabled else Unknown)
 
     val responseCode = checkoutFailureReason match {
       case Unknown if (stripeApiError.message == recaptchaErrorText) =>
@@ -33,6 +33,8 @@ object CheckoutErrorResponse extends StrictLogging {
       case Unknown =>
         logger.error(s"Stripe API error: Unknown checkoutFailureReason for decline code: ${stripeApiError.declineCode}")
         // Something unexpected went wrong when calling Stripe, so we return a 500
+        INTERNAL_SERVER_ERROR
+      case StripePaymentMethodDisabled =>
         INTERNAL_SERVER_ERROR
       case _ =>
         PAYMENT_REQUIRED // Stripe returned a card exception and we were able to convert the decline code into something meaningful, so we return a 402

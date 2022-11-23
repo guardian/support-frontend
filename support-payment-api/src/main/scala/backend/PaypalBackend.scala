@@ -1,11 +1,13 @@
 package backend
 
+import akka.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.apply._
 import cats.syntax.either._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
+import com.amazonaws.services.s3.AmazonS3
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions.{
   AcquisitionsStreamEc2OrLocalConfig,
@@ -28,6 +30,7 @@ import model.email.ContributorRow
 import model.paypal._
 import services._
 import util.EnvironmentBasedBuilder
+import model.paypal.PaypalApiError.paypalErrorText
 
 import scala.concurrent.Future
 import scala.jdk.CollectionConverters._
@@ -42,6 +45,7 @@ class PaypalBackend(
     val acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
     cloudWatchService: CloudWatchService,
+    switchService: SwitchService,
 )(implicit pool: DefaultThreadPool)
     extends StrictLogging
     with PaymentBackend {
@@ -51,13 +55,24 @@ class PaypalBackend(
    * Creates a payment which must be authorised by the user via PayPal's web UI.
    * Once authorised, the payment can be executed via the execute-payment endpoint.
    */
-  def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] =
-    paypalService
-      .createPayment(c)
-      .leftMap { error =>
-        cloudWatchService.recordFailedPayment(error, PaymentProvider.Paypal)
-        error
-      }
+
+  private def paypalEnabled = {
+    switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.payPal.state.isOn))
+  }
+
+  def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] = {
+    paypalEnabled.flatMap {
+      case true =>
+        paypalService
+          .createPayment(c)
+          .leftMap { error =>
+            cloudWatchService.recordFailedPayment(error, PaymentProvider.Paypal)
+            error
+          }
+      case _ =>
+        EitherT.leftT(PaypalApiError.fromString(paypalErrorText))
+    }
+  }
 
   /*
    * Used by Android app clients.
@@ -247,6 +262,7 @@ object PaypalBackend {
       acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
       cloudWatchService: CloudWatchService,
+      switchService: SwitchService,
   )(implicit pool: DefaultThreadPool): PaypalBackend = {
     new PaypalBackend(
       paypalService,
@@ -257,6 +273,7 @@ object PaypalBackend {
       acquisitionsStreamService,
       emailService,
       cloudWatchService,
+      switchService,
     )
   }
 
@@ -265,6 +282,8 @@ object PaypalBackend {
       paypalThreadPool: PaypalThreadPool,
       sqsThreadPool: SQSThreadPool,
       wsClient: WSClient,
+      awsClient: AmazonS3,
+      system: ActorSystem,
   ) extends EnvironmentBasedBuilder[PaypalBackend] {
 
     override def build(env: Environment): InitializationResult[PaypalBackend] = (
@@ -290,6 +309,7 @@ object PaypalBackend {
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
+      new SwitchService(env)(awsClient, system, paypalThreadPool).valid: InitializationResult[SwitchService],
     ).mapN(PaypalBackend.apply)
   }
 }

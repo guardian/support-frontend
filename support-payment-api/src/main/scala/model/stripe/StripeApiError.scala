@@ -31,6 +31,7 @@ case class StripeApiError(
 object StripeApiError {
 
   val recaptchaErrorText = "Recaptcha failed"
+  val stripeDisabledErrorText = "Stripe payments are currently disabled"
 
   def fromString(message: String, publicKey: Option[String]): StripeApiError =
     StripeApiError(None, None, None, message, publicKey)

@@ -27,8 +27,8 @@ import model._
 import model.acquisition.{AcquisitionDataRowBuilder, StripeAcquisition}
 import model.db.ContributionData
 import model.email.ContributorRow
-import model.stripe.StripeApiError.recaptchaErrorText
-import model.stripe.StripePaymentMethod.{StripeApplePay, StripePaymentRequestButton}
+import model.stripe.StripeApiError.{recaptchaErrorText, stripeDisabledErrorText}
+import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripePaymentRequestButton}
 import model.stripe.{StripePaymentIntentRequest, _}
 import play.api.libs.ws.WSClient
 import services._
@@ -57,8 +57,33 @@ class StripeBackend(
 
   // We only want the backend switch to be valid if the frontend switch is enabled
   private def recaptchaEnabled =
-    switchService.recaptchaSwitches
-      .map(s => s.enableRecaptchaFrontend.exists(_.isOn) && s.enableRecaptchaBackend.exists(_.isOn))
+    switchService.allSwitches
+      .map(s =>
+        s.recaptchaSwitches.exists(switch =>
+          switch.switches.enableRecaptchaFrontend.state.isOn && switch.switches.enableRecaptchaBackend.state.isOn,
+        ),
+      )
+
+  private def stripeEnabled(request: StripePaymentIntentRequest.CreatePaymentIntent) =
+    request.paymentData.stripePaymentMethod match {
+      case Some(StripeCheckout) => stripeCheckoutEnabled
+      case Some(StripeApplePay) => stripeApplePayEnabled
+      case Some(StripePaymentRequestButton) => stripePaymentRequestEnabled
+      case None => stripeCheckoutEnabled
+    }
+
+  private def stripeCheckoutEnabled =
+    switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.stripe.state.isOn))
+
+  private def stripeApplePayEnabled =
+    switchService.allSwitches.map(switch =>
+      switch.oneOffPaymentMethods.exists(s => s.switches.stripeApplePay.state.isOn),
+    )
+
+  private def stripePaymentRequestEnabled =
+    switchService.allSwitches.map(switch =>
+      switch.oneOffPaymentMethods.exists(s => s.switches.stripePaymentRequestButton.state.isOn),
+    )
 
   // Ok using the default thread pool - the mapping function is not computationally intensive, nor does is perform IO.
   // Legacy handler for the Stripe Charges API. Still required for mobile apps payments
@@ -117,7 +142,7 @@ class StripeBackend(
           false
       }
 
-    def createIntent(): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] =
+    def createIntent(): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = {
       stripeService
         .createPaymentIntent(request)
         .leftMap(err => {
@@ -148,8 +173,9 @@ class StripeBackend(
               EitherT.fromEither(Left(error))
           }
         }
+    }
 
-    recaptchaRequired().flatMap {
+    def checkRecaptcha: EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = recaptchaRequired().flatMap {
       case true =>
         recaptchaService
           .verify(request.recaptchaToken)
@@ -160,8 +186,14 @@ class StripeBackend(
       case false =>
         createIntent()
     }
-  }
 
+    stripeEnabled(request).flatMap {
+      case true =>
+        checkRecaptcha
+      case false =>
+        EitherT.leftT(StripeApiError.fromString(stripeDisabledErrorText, publicKey = None))
+    }
+  }
   def confirmPaymentIntent(
       request: StripePaymentIntentRequest.ConfirmPaymentIntent,
       clientBrowserInfo: ClientBrowserInfo,

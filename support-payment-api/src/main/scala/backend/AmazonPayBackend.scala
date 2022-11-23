@@ -1,5 +1,7 @@
 package backend
 
+import akka.actor.ActorSystem
+import com.amazonaws.services.s3.AmazonS3
 import cats.data.EitherT
 import cats.implicits._
 import com.amazon.pay.response.ipn.model.{Notification, NotificationType, RefundNotification}
@@ -21,6 +23,7 @@ import conf.ConfigLoader.environmentShow
 import conf._
 import model._
 import model.acquisition.{AcquisitionDataRowBuilder, AmazonPayAcquisition}
+import model.amazonpay.AmazonPayApiError.amazonPayErrorText
 import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
 import model.amazonpay.{AmazonPayApiError, AmazonPaymentData}
 import model.db.ContributionData
@@ -40,9 +43,13 @@ class AmazonPayBackend(
     val bigQueryService: BigQueryService,
     val acquisitionsStreamService: AcquisitionsStreamService,
     val databaseService: ContributionsStoreService,
+    switchService: SwitchService,
 )(implicit pool: DefaultThreadPool)
     extends StrictLogging
     with PaymentBackend {
+
+  private def amazonPayEnabled =
+    switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.amazonPay.state.isOn))
 
   def makePayment(
       amazonPayRequest: AmazonPayRequest,
@@ -66,22 +73,32 @@ class AmazonPayBackend(
       )
     }
 
-    val response = for {
+    def getAuthorizationDetails: Either[AmazonPayApiError, AuthorizationDetails] = for {
       orderRef <- service.getOrderReference(amazonPayRequest.paymentData.orderReferenceId)
-      _ <- if (isNotSuspended(orderRef)) service.setOrderReference(amazonPayRequest.paymentData) else Right(orderRef)
+      _ <-
+        if (isNotSuspended(orderRef)) service.setOrderReference(amazonPayRequest.paymentData) else Right(orderRef)
       _ <- service.confirmOrderReference(orderRef)
       authRes <- service.authorize(orderRef, amazonPayRequest.paymentData)
       _ <- handleDeclinedResponse(orderRef, authRes.getAuthorizationStatus)
     } yield authRes
 
-    handleResponse(response, amazonPayRequest, clientBrowserInfo)
+    amazonPayEnabled.flatMap {
+      case true =>
+        handleResponse(getAuthorizationDetails, amazonPayRequest, clientBrowserInfo)
+      case false =>
+        handleResponse(
+          Either.left(AmazonPayApiError.fromString(amazonPayErrorText)),
+          amazonPayRequest,
+          clientBrowserInfo,
+        )
+    }
   }
 
   private def handleResponse(
       response: Either[AmazonPayApiError, AuthorizationDetails],
       amazonPayRequest: AmazonPayRequest,
       clientBrowserInfo: ClientBrowserInfo,
-  ): EitherT[Future, AmazonPayApiError, Unit] =
+  ): EitherT[Future, AmazonPayApiError, Unit] = {
     response
       .toEitherT[Future]
       .leftMap { error =>
@@ -110,6 +127,7 @@ class AmazonPayBackend(
           ()
         }
       }
+  }
 
   private def getOrCreateIdentityIdFromEmail(email: String) =
     identityService
@@ -220,6 +238,7 @@ object AmazonPayBackend {
       acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
       cloudWatchService: CloudWatchService,
+      switchService: SwitchService,
   )(implicit pool: DefaultThreadPool): AmazonPayBackend = {
     new AmazonPayBackend(
       cloudWatchService,
@@ -230,6 +249,7 @@ object AmazonPayBackend {
       bigQueryService,
       acquisitionsStreamService,
       databaseService,
+      switchService,
     )
   }
 
@@ -237,6 +257,8 @@ object AmazonPayBackend {
       defaultThreadPool: DefaultThreadPool,
       wsClient: WSClient,
       sqsThreadPool: SQSThreadPool,
+      awsClient: AmazonS3,
+      system: ActorSystem,
   ) extends EnvironmentBasedBuilder[AmazonPayBackend] {
 
     override def build(env: Environment): InitializationResult[AmazonPayBackend] = (
@@ -262,6 +284,7 @@ object AmazonPayBackend {
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
+      new SwitchService(env)(awsClient, system, defaultThreadPool).valid: InitializationResult[SwitchService],
     ).mapN(AmazonPayBackend.apply)
   }
 }

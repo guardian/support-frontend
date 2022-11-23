@@ -33,10 +33,35 @@ object SwitchState {
 
 }
 
-case class Switches(enableRecaptchaFrontend: Option[SwitchState], enableRecaptchaBackend: Option[SwitchState])
+case class Switches(
+    recaptchaSwitches: Option[RecaptchaSwitches],
+    oneOffPaymentMethods: Option[OneOffPaymentMethodsSwitches],
+)
+case class RecaptchaSwitches(switches: RecaptchaSwitchTypes)
+case class OneOffPaymentMethodsSwitches(switches: OneOffPaymentMethodsSwitchesTypes)
+
+case class SwitchDetails(state: SwitchState)
+
+case class RecaptchaSwitchTypes(
+    enableRecaptchaBackend: SwitchDetails,
+    enableRecaptchaFrontend: SwitchDetails,
+)
+
+case class OneOffPaymentMethodsSwitchesTypes(
+    stripe: SwitchDetails,
+    stripeApplePay: SwitchDetails,
+    stripePaymentRequestButton: SwitchDetails,
+    payPal: SwitchDetails,
+    amazonPay: SwitchDetails,
+)
 
 object Switches {
   implicit val switchesCodec: Codec[Switches] = deriveCodec
+  implicit val recaptchaSwitchesCodec: Codec[RecaptchaSwitches] = deriveCodec
+  implicit val recaptchaSwitchesTypesCodec: Codec[RecaptchaSwitchTypes] = deriveCodec
+  implicit val oneOffPaymentMethodsSwitchesCodec: Codec[OneOffPaymentMethodsSwitches] = deriveCodec
+  implicit val oneOffPaymentMethodsSwitchesTypesCodec: Codec[OneOffPaymentMethodsSwitchesTypes] = deriveCodec
+  implicit val switchDetailsCodec: Codec[SwitchDetails] = deriveCodec
 }
 
 class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem, ec: ExecutionContext)
@@ -53,7 +78,7 @@ class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem
       .maximumSize(10)
       .buildAsync(s => fromS3().getOrElse(Switches(None, None)))
 
-  def recaptchaSwitches: EitherT[Future, Nothing, Switches] =
+  def allSwitches: EitherT[Future, Nothing, Switches] =
     EitherT.right(cache.get(cacheKey))
 
   private def fromBufferedSource(buf: BufferedSource): Either[Throwable, Switches] = {
@@ -68,7 +93,7 @@ class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem
       case Test => "CODE"
     }
 
-    val path = s"$stage/switches.json"
+    val path = s"$stage/switches_v2.json"
 
     for {
       buf <- Either.catchNonFatal {
