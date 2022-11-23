@@ -9,7 +9,6 @@ import {
 	TextArea,
 } from '@guardian/source-react-components';
 import { useEffect, useState } from 'react';
-import * as React from 'react';
 import { connect } from 'react-redux';
 import type { ConnectedProps } from 'react-redux';
 import type { Dispatch } from 'redux';
@@ -80,7 +79,6 @@ import {
 	formatMachineDate,
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
-import AddDigiSubCta from 'pages/paper-subscription-checkout/components/addDigiSubCta';
 import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
 import {
@@ -217,7 +215,7 @@ function PaperCheckoutForm(props: PropTypes) {
 	}
 
 	const [digiSubPriceString, setDigiSubPriceString] = useState<string>('');
-	const [includesDigiSub, setIncludesDigiSub] = useState<boolean>(false);
+	const [includesDigiSub] = useState<boolean>(false);
 
 	const simplePrice = digiSubPriceString.replace(/\/(.*)/, ''); // removes anything after the /
 
@@ -228,11 +226,6 @@ function PaperCheckoutForm(props: PropTypes) {
 		: simplePrice; // removes decimal point if there are no pence
 
 	const expandedPricingText = `${cleanedPrice} per month`;
-
-	function addDigitalSubscription(event: React.ChangeEvent<HTMLInputElement>) {
-		setIncludesDigiSub(event.target.checked);
-		props.setAddDigitalSubscription(event.target.checked);
-	}
 
 	useEffect(() => {
 		// Price of the 'Plus' product that corresponds to the selected product option
@@ -435,13 +428,6 @@ function PaperCheckoutForm(props: PropTypes) {
 								</Text>
 							</Rows>
 						</FormSection>
-					) : null}
-					{props.participations.newProduct ===
-					'Hide this for the time being because it is not working correctly. We can delete it when the new prop is launched and tested' ? (
-						<AddDigiSubCta
-							digiSubPrice={expandedPricingText}
-							addDigitalSubscription={addDigitalSubscription}
-						/>
 					) : null}
 					{paymentMethods.length > 0 ? (
 						<FormSection

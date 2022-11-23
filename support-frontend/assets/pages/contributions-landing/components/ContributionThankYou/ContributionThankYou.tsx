@@ -25,7 +25,6 @@ import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { User } from 'helpers/user/userReducer';
 import { largeDonations } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
-import { showBenefitsThankYouText as shouldShowBenefitsThankYouText } from '../DigiSubBenefits/helpers';
 import ContributionThankYouAusMap from './ContributionThankYouAusMap';
 import ContributionThankYouHeader from './ContributionThankYouHeader';
 import ContributionThankYouMarketingConsent from './ContributionThankYouMarketingConsent';
@@ -166,7 +165,6 @@ const mapStateToProps = (state: ContributionsState) => {
 		paymentMethod: state.page.checkoutForm.payment.paymentMethod.name,
 		countryId: state.common.internationalisation.countryId,
 		campaignCode: state.common.referrerAcquisitionData.campaignCode,
-		isInNewProductTest: state.common.abParticipations.newProduct === 'variant',
 	};
 };
 
@@ -182,7 +180,6 @@ function ContributionThankYou({
 	paymentMethod,
 	countryId,
 	campaignCode,
-	isInNewProductTest,
 }: ContributionThankYouProps) {
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 
@@ -274,10 +271,6 @@ function ContributionThankYou({
 	const firstColumn = shownComponents.slice(0, numberOfComponentsInFirstColumn);
 	const secondColumn = shownComponents.slice(numberOfComponentsInFirstColumn);
 
-	const showNewProductThankYouText =
-		isInNewProductTest &&
-		shouldShowBenefitsThankYouText(countryId, amount, contributionType);
-
 	return (
 		<div css={container}>
 			<div css={headerContainer}>
@@ -293,7 +286,6 @@ function ContributionThankYou({
 						contributionType,
 						paymentMethod,
 					)}
-					showNewProductThankYouText={showNewProductThankYouText}
 				/>
 			</div>
 

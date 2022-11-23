@@ -34,14 +34,8 @@ export type OrderSummaryProps = {
 function getMobileSummaryTitle(
 	productOption: ProductOptions,
 	fulfilmentOption: FulfilmentOptions,
-	includesDigiSub: boolean | null | undefined = false,
 ) {
-	return (
-		<>
-			{getOrderSummaryTitle(productOption, fulfilmentOption)}
-			{includesDigiSub && <> +&nbsp;digital</>}
-		</>
-	);
+	return getOrderSummaryTitle(productOption, fulfilmentOption);
 }
 
 function mapStateToProps(state: SubscriptionsState) {
@@ -128,11 +122,7 @@ function PaperOrderSummary(props: PropTypes) {
 		: total;
 
 	const mobileSummary = {
-		title: getMobileSummaryTitle(
-			props.productOption,
-			props.fulfilmentOption,
-			props.includesDigiSub,
-		),
+		title: getMobileSummaryTitle(props.productOption, props.fulfilmentOption),
 		price: mobilePriceStatement,
 	};
 
