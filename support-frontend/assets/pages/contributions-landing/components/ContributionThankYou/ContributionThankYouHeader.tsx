@@ -147,7 +147,7 @@ function Title({
 		case 'MONTHLY':
 			return (
 				<div>
-					Thank you {nameAndTrailingSpace} for choosing to contribute{' '}
+					Thank you {nameAndTrailingSpace}for choosing to contribute{' '}
 					{currencyAndAmount} each month ❤️
 				</div>
 			);
@@ -155,7 +155,7 @@ function Title({
 		case 'ANNUAL':
 			return (
 				<div>
-					Thank you {nameAndTrailingSpace} for choosing to contribute{' '}
+					Thank you {nameAndTrailingSpace}for choosing to contribute{' '}
 					{currencyAndAmount} each year ❤️
 				</div>
 			);
