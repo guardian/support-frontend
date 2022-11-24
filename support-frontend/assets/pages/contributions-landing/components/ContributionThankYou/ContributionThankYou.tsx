@@ -143,7 +143,6 @@ type ContributionThankYouProps = {
 	paymentMethod: PaymentMethod;
 	countryId: IsoCountry;
 	campaignCode?: string;
-	isInNewProductTest: boolean;
 };
 
 const mapStateToProps = (state: ContributionsState) => {
