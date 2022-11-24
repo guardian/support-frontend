@@ -82,7 +82,7 @@ describe('Paper order summary', () => {
 		expect(await screen.findByText('Change')).toHaveAttribute('href', '/page');
 	});
 
-	it('displays a second product when the digital subscription is included', async () => {
+	it.skip('displays a second product when the digital subscription is included', async () => {
 		expect(await screen.findByText('Digital subscription')).toBeInTheDocument();
 	});
 
@@ -95,7 +95,7 @@ describe('Paper order summary', () => {
 		).toBeInTheDocument();
 	});
 
-	it('displays the correct short summary for mobile', async () => {
+	it.skip('displays the correct short summary for mobile', async () => {
 		expect(
 			await screen.findByText('Every day subscription card + digital'),
 		).toBeInTheDocument();
@@ -110,7 +110,7 @@ describe('Paper order summary', () => {
 		).toBeInTheDocument();
 	});
 
-	it('displays the separate price for the digital subscription', async () => {
+	it.skip('displays the separate price for the digital subscription', async () => {
 		expect(
 			await screen.findByText("You'll pay £5 per month"),
 		).toBeInTheDocument();
