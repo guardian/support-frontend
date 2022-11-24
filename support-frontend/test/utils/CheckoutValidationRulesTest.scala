@@ -655,7 +655,7 @@ object TestData {
     recurringPaymentMethodSwitches,
     subscriptionsPaymentMethodSwitches,
     SubscriptionsSwitches(On, On, On),
-    FeatureSwitches(On, On),
+    FeatureSwitches(On, On, On),
     CampaignSwitches(On, On),
     RecaptchaSwitches(On, On),
   )
