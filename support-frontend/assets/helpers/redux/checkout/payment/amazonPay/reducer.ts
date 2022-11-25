@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import { validateForm } from '../../checkoutActions';
 import { initialAmazonPayState } from './state';
 
 export const amazonPaySlice = createSlice({
@@ -17,6 +18,7 @@ export const amazonPaySlice = createSlice({
 		},
 		setAmazonPayPaymentSelected(state, action: PayloadAction<boolean>) {
 			state.paymentSelected = action.payload;
+			delete state.errors.paymentSelected;
 		},
 		setAmazonPayOrderReferenceId(state, action: PayloadAction<string>) {
 			state.orderReferenceId = action.payload;
@@ -29,7 +31,22 @@ export const amazonPaySlice = createSlice({
 			action: PayloadAction<boolean>,
 		) {
 			state.amazonBillingAgreementConsentStatus = action.payload;
+			delete state.errors.consentStatus;
 		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(validateForm, (state, action) => {
+			if (action.payload === 'AmazonPay') {
+				if (!state.paymentSelected) {
+					state.errors.paymentSelected = ['Please select a payment method'];
+				}
+				if (!state.amazonBillingAgreementConsentStatus) {
+					state.errors.consentStatus = [
+						'Please tick the box to agree to a recurring payment',
+					];
+				}
+			}
+		});
 	},
 });
 
