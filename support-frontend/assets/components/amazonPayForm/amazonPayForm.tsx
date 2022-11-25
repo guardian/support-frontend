@@ -151,20 +151,20 @@ function AmazonPayForm(props: PropTypes): JSX.Element | null {
 		trackComponentLoad('amazon-pay-wallet-loaded');
 		return (
 			<div>
-				{props.checkoutFormHasBeenSubmitted &&
-					!props.amazonPay.paymentSelected && (
-						<InlineError>Please select a payment method</InlineError>
-					)}
+				{props.errors.paymentSelected && (
+					<InlineError id="paymentSelected">
+						Please select a payment method
+					</InlineError>
+				)}
 				<div css={walletWidget} id="WalletWidgetDiv" />
 
 				{props.contributionType !== 'ONE_OFF' && (
 					<div>
-						{props.checkoutFormHasBeenSubmitted &&
-							!props.amazonPay.amazonBillingAgreementConsentStatus && (
-								<InlineError>
-									Please tick the box to agree to a recurring payment
-								</InlineError>
-							)}
+						{props.errors.consentStatus && (
+							<InlineError id="consentStatus">
+								Please tick the box to agree to a recurring payment
+							</InlineError>
+						)}
 						<div css={consentWidget} id="ConsentWidgetDiv" />
 					</div>
 				)}

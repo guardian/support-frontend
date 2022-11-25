@@ -10,6 +10,7 @@ import {
 	setAmazonPayWalletIsStale,
 } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { getAmazonPayFormErrors } from 'helpers/redux/selectors/formValidation/paymentValidation';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -54,9 +55,8 @@ export function AmazonPayFormContainer(): JSX.Element {
 	const checkoutFormHasBeenSubmitted = useContributionsSelector(
 		(state) => state.page.form.formData.checkoutFormHasBeenSubmitted,
 	);
-	const errors = useContributionsSelector(
-		(state) => state.page.checkoutForm.payment.amazonPay.errors,
-	);
+
+	const errors = useContributionsSelector(getAmazonPayFormErrors);
 
 	function onAmazonPayWalletIsStale(isStale: boolean) {
 		dispatch(setAmazonPayWalletIsStale(isStale));
