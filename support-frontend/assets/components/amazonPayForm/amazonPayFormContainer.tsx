@@ -1,4 +1,4 @@
-import { Button } from '@guardian/source-react-components';
+import { Button, InlineError } from '@guardian/source-react-components';
 import { useAmazonPayObjects } from 'helpers/customHooks/useAmazonPayObjects';
 import { AmazonPay } from 'helpers/forms/paymentMethods';
 import {
@@ -54,6 +54,9 @@ export function AmazonPayFormContainer(): JSX.Element {
 	const checkoutFormHasBeenSubmitted = useContributionsSelector(
 		(state) => state.page.form.formData.checkoutFormHasBeenSubmitted,
 	);
+	const errors = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.amazonPay.errors,
+	);
 
 	function onAmazonPayWalletIsStale(isStale: boolean) {
 		dispatch(setAmazonPayWalletIsStale(isStale));
@@ -107,16 +110,24 @@ export function AmazonPayFormContainer(): JSX.Element {
 					isTestUser={userInNewProductTest ? userInNewProductTest : false}
 					contributionType={contributionType}
 					checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+					errors={errors}
 				/>
 			)}
 			{!hasAccessToken && amazonPayEnabled && (
-				<Button
-					type="submit"
-					aria-label={'Proceed with Amazon Pay'}
-					onClick={loginWithAmazonPay}
-				>
-					{'Proceed with Amazon Pay'}
-				</Button>
+				<>
+					{errors.paymentSelected && (
+						<InlineError id="paymentSelected">
+							Please click button to proceed
+						</InlineError>
+					)}
+					<Button
+						type="submit"
+						aria-label={'Proceed with Amazon Pay'}
+						onClick={loginWithAmazonPay}
+					>
+						{'Proceed with Amazon Pay'}
+					</Button>
+				</>
 			)}
 		</>
 	);

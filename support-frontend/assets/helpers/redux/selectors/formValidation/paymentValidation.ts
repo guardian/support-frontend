@@ -48,6 +48,9 @@ export function getPaymentMethodErrors(
 		case 'Sepa':
 			return payment.sepa.errors;
 
+		case 'AmazonPay':
+			return payment.amazonPay.errors;
+
 		default:
 			return {};
 	}

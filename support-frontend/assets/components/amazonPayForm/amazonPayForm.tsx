@@ -36,6 +36,7 @@ type PropTypes = {
 	isTestUser: boolean;
 	contributionType: ContributionType;
 	checkoutFormHasBeenSubmitted: boolean;
+	errors: AmazonPayState['errors'];
 };
 
 const getSellerId = (isTestUser: boolean): string =>
