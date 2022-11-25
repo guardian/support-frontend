@@ -29,12 +29,14 @@ object IdentityErrorResponse {
   case class IdentityError(
       message: String,
       description: String,
+      context: String = "primaryEmailAddress",
   )
 
   object IdentityError {
     object InvalidEmailAddress {
-      val message = "Registration Error"
-      val description = "Please sign up using an email address from a different provider"
+      val message = "Invalid emailAddress:"
+      val description = "Please enter a valid email address"
+      val context = "primaryEmailAddress"
       val errorReasonCode = "invalid_email_address"
     }
 

@@ -68,7 +68,7 @@ function appropriateErrorMessage(errorReason: ErrorReason | string): string {
 			return 'Please complete all relevant fields for your saved cards and billing addresses within your browser settings and try your payment again. Alternatively, you can use the form below.';
 
 		case 'invalid_email_address':
-			return 'Please use an email address from a different provider';
+			return 'Please enter a valid email address';
 
 		default:
 			return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
