@@ -108,7 +108,7 @@ class CreateSubscriptionController(
           case false => Left(RequestValidationError("Recaptcha validation failed"))
         }
     } else {
-      EitherT.rightT(true)
+      EitherT.rightT(())
     }
   }
 
