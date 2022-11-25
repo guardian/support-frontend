@@ -81,7 +81,7 @@ function PaperLandingPage({
 			header={
 				<Header
 					countryGroupId={GBPCountries}
-					isNewProduct={hideDigitalSubscription}
+					hideDigiSub={hideDigitalSubscription}
 				/>
 			}
 			footer={paperSubsFooter}

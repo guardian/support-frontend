@@ -40,13 +40,13 @@ function SubscriptionsLandingPage({
 			NZDCountries,
 			International,
 		],
-		isNewProduct: hideDigiSub,
+		hideDigiSub,
 	});
 	return (
 		<Page
 			header={
 				hideDigiSub ? (
-					<Header countryGroupId={countryGroupId} isNewProduct={hideDigiSub} />
+					<Header countryGroupId={countryGroupId} hideDigiSub={hideDigiSub} />
 				) : (
 					<HeaderWithCountrySwitcher />
 				)

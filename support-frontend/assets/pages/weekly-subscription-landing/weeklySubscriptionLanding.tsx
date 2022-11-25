@@ -82,7 +82,7 @@ function WeeklyLandingPage({
 			International,
 		],
 		trackProduct: 'GuardianWeekly',
-		isNewProduct: hideDigiSub,
+		hideDigiSub,
 	});
 	return (
 		<Page
