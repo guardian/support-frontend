@@ -133,25 +133,6 @@ export const tests: Tests = {
 		seed: 13,
 		optimizeId: 'LFdPJnrvTu6re1oxnYdSvA',
 	},
-	newProduct: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: false,
-		referrerControlled: false,
-		seed: 14,
-	},
 	supporterPlus: {
 		variants: [
 			{

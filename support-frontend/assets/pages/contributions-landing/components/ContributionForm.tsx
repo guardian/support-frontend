@@ -67,8 +67,6 @@ import ContributionErrorMessage from './ContributionErrorMessage';
 import ContributionFormFields from './ContributionFormFields';
 import ContributionSubmit from './ContributionSubmit';
 import ContributionTypeTabs from './ContributionTypeTabs';
-import BenefitsBulletPoints from './DigiSubBenefits/BenefitsBulletPoints';
-import { shouldShowBenefitsMessaging } from './DigiSubBenefits/helpers';
 import StripeCardFormContainer from './StripeCardForm/StripeCardFormContainer';
 import StripePaymentRequestButton from './StripePaymentRequestButton';
 
@@ -123,9 +121,6 @@ const mapStateToProps = (state: ContributionsState) => {
 		sepa: state.page.checkoutForm.payment.sepa,
 		productSetAbTestVariant:
 			state.common.abParticipations.productSetTest === 'variant',
-		isInNewProductTest:
-			state.common.abParticipations.newProduct === 'variant' &&
-			contributionType !== 'ONE_OFF',
 		switches: state.common.settings.switches,
 	};
 };
@@ -178,13 +173,6 @@ function PaymentMethodSelectorLegend() {
 function ContributionForm(props: PropTypes): JSX.Element {
 	const baseClass = 'form';
 	const classModifiers = ['contribution', 'with-labels'];
-
-	const showBenefitsMessaging = shouldShowBenefitsMessaging(
-		props.contributionType,
-		props.selectedAmounts,
-		props.otherAmounts,
-		props.countryGroupId,
-	);
 
 	function setUseLocalCurrency(
 		useLocalCurrency: boolean,
@@ -387,16 +375,6 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					</CheckboxGroup>
 				)}
 			</div>
-
-			{props.isInNewProductTest && (
-				<BenefitsBulletPoints
-					showBenefitsMessaging={showBenefitsMessaging}
-					countryGroupId={props.countryGroupId}
-					contributionType={props.contributionType}
-					setSelectedAmount={props.setSelectedAmount}
-				/>
-			)}
-
 			<StripePaymentRequestButton
 				contributionType={props.contributionType}
 				isTestUser={props.isTestUser}
@@ -483,8 +461,6 @@ function ContributionForm(props: PropTypes): JSX.Element {
 
 				<ContributionSubmit
 					onPaymentAuthorisation={props.onPaymentAuthorisation}
-					showBenefitsMessaging={showBenefitsMessaging}
-					userInNewProductTest={props.isInNewProductTest}
 				/>
 			</div>
 
@@ -498,7 +474,6 @@ function ContributionForm(props: PropTypes): JSX.Element {
 					props.otherAmounts,
 					props.contributionType,
 				)}
-				userInNewProductTest={props.isInNewProductTest}
 			/>
 			{props.isWaiting ? (
 				<ProgressMessage message={['Processing transaction', 'Please wait']} />

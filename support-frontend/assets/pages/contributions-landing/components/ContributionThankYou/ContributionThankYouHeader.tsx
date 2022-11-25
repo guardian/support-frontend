@@ -54,26 +54,20 @@ type ContributionThankYouHeaderProps = {
 	amount: number;
 	currency: IsoCurrency;
 	shouldShowLargeDonationMessage: boolean;
-	showNewProductThankYouText: boolean;
 };
 
 const MAX_DISPLAY_NAME_LENGTH = 10;
 
 function AdditionalCopy({
 	shouldShowLargeDonationMessage,
-	showNewProductThankYouText,
 	contributionType,
 }: {
 	shouldShowLargeDonationMessage: boolean;
-	showNewProductThankYouText: boolean;
 	contributionType: ContributionType;
 }) {
 	const mainText = shouldShowLargeDonationMessage
 		? 'It’s not every day we receive such a generous contribution – thank you. We’ll be in touch to bring you closer to our journalism. Please select the extra add-ons that suit you best. '
 		: 'To support us further, and enhance your experience with the Guardian, select the add-ons that suit you best. As you’re now a valued supporter, we’ll be in touch to bring you closer to our journalism. ';
-
-	const benefitsThresholdIsMetText =
-		'You have unlocked access to the Guardian’s digital subscription, offering you the best possible experience of our independent journalism. Look out for emails from us shortly, so you can activate your exclusive extras. In the meantime, please select the add-ons that suit you best.';
 
 	function MarketingCopy() {
 		return (
@@ -86,10 +80,8 @@ function AdditionalCopy({
 
 	return (
 		<>
-			{showNewProductThankYouText ? benefitsThresholdIsMetText : mainText}
-			{!showNewProductThankYouText && contributionType !== 'ONE_OFF' && (
-				<MarketingCopy />
-			)}
+			{mainText}
+			{contributionType !== 'ONE_OFF' && <MarketingCopy />}
 		</>
 	);
 }
@@ -115,14 +107,12 @@ function Title({
 	amount,
 	currency,
 	contributionType,
-	showNewProductThankYouText,
 }: {
 	name: string | null;
 	paymentMethod: PaymentMethod;
 	amount: number;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
-	showNewProductThankYouText: boolean;
 }) {
 	const nameAndTrailingSpace: string =
 		name && name.length < MAX_DISPLAY_NAME_LENGTH ? `${name} ` : '';
@@ -157,10 +147,7 @@ function Title({
 		case 'MONTHLY':
 			return (
 				<div>
-					Thank you {nameAndTrailingSpace}for{' '}
-					{showNewProductThankYouText
-						? 'supporting us with'
-						: 'choosing to contribute'}{' '}
+					Thank you {nameAndTrailingSpace}for choosing to contribute{' '}
 					{currencyAndAmount} each month ❤️
 				</div>
 			);
@@ -168,10 +155,7 @@ function Title({
 		case 'ANNUAL':
 			return (
 				<div>
-					Thank you {nameAndTrailingSpace}for{' '}
-					{showNewProductThankYouText
-						? 'supporting us with'
-						: 'choosing to contribute'}{' '}
+					Thank you {nameAndTrailingSpace}for choosing to contribute{' '}
 					{currencyAndAmount} each year ❤️
 				</div>
 			);
@@ -193,7 +177,6 @@ function ContributionThankYouHeader({
 	amount,
 	currency,
 	shouldShowLargeDonationMessage,
-	showNewProductThankYouText,
 }: ContributionThankYouHeaderProps): JSX.Element {
 	return (
 		<header css={header}>
@@ -204,7 +187,6 @@ function ContributionThankYouHeader({
 					amount={amount}
 					currency={currency}
 					contributionType={contributionType}
-					showNewProductThankYouText={showNewProductThankYouText}
 				/>
 			</h1>
 			<p css={headerSupportingText}>
@@ -212,7 +194,6 @@ function ContributionThankYouHeader({
 				<AdditionalCopy
 					shouldShowLargeDonationMessage={shouldShowLargeDonationMessage}
 					contributionType={contributionType}
-					showNewProductThankYouText={showNewProductThankYouText}
 				/>
 			</p>
 		</header>

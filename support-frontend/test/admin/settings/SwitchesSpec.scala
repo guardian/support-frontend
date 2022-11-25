@@ -120,6 +120,10 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "usStripeAccountForSingle" : {
           |        "description" : "US Stripe account for single contributions",
           |        "state" : "On"
+          |      },
+          |      "suppressDigitalSubscription" : {
+          |        "description" : "Hide links to the digital subscription landing page and checkout",
+          |        "state" : "On"
           |      }
           |    }
           |  },
@@ -158,7 +162,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, Off, Off),
           subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(On, On, On),
           subscriptionsSwitches = SubscriptionsSwitches(On, On, On),
-          featureSwitches = FeatureSwitches(On, On),
+          featureSwitches = FeatureSwitches(On, On, On),
           campaignSwitches = CampaignSwitches(Off, Off),
           recaptchaSwitches = RecaptchaSwitches(On, On),
         ),

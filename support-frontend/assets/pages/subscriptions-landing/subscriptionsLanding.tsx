@@ -3,6 +3,7 @@ import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import Page from 'components/page/page';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import {
 	AUDCountries,
 	Canada,
@@ -26,7 +27,7 @@ function SubscriptionsLandingPage({
 	pricingCopy,
 	referrerAcquisitions,
 }: SubscriptionsLandingPropTypes) {
-	const isNewProduct = participations.newProduct === 'variant';
+	const hideDigiSub = isSwitchOn('featureSwitches.suppressDigitalSubscription');
 	const HeaderWithCountrySwitcher = headerWithCountrySwitcherContainer({
 		path: '/subscribe',
 		countryGroupId,
@@ -39,13 +40,13 @@ function SubscriptionsLandingPage({
 			NZDCountries,
 			International,
 		],
-		isNewProduct,
+		hideDigiSub,
 	});
 	return (
 		<Page
 			header={
-				isNewProduct ? (
-					<Header countryGroupId={countryGroupId} isNewProduct={isNewProduct} />
+				hideDigiSub ? (
+					<Header countryGroupId={countryGroupId} hideDigiSub={hideDigiSub} />
 				) : (
 					<HeaderWithCountrySwitcher />
 				)

@@ -280,7 +280,7 @@ const getSubscriptionCopy = (
 	countryGroupId: CountryGroupId,
 	pricingCopy: PricingCopy,
 	participations: Participations,
-	isNewProduct?: boolean,
+	hideDigiSub?: boolean,
 ): ProductCopy[] => {
 	const isRegionWeeklyFirst = [
 		GBPCountries,
@@ -299,7 +299,7 @@ const getSubscriptionCopy = (
 			participations,
 		),
 	];
-	if (!isNewProduct) {
+	if (!hideDigiSub) {
 		if (isRegionWeeklyFirst) {
 			productcopy.push(
 				digital(countryGroupId, pricingCopy[DigitalPack], false),
@@ -313,7 +313,7 @@ const getSubscriptionCopy = (
 	if (countryGroupId === GBPCountries) {
 		productcopy.push(paper(countryGroupId, pricingCopy[Paper], false));
 	}
-	if (!isNewProduct) {
+	if (!hideDigiSub) {
 		productcopy.push(premiumApp(countryGroupId));
 	}
 	return productcopy;
