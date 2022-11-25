@@ -1,6 +1,5 @@
 import { Button } from '@guardian/source-react-components';
 import { useAmazonPayObjects } from 'helpers/customHooks/useAmazonPayObjects';
-import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { AmazonPay } from 'helpers/forms/paymentMethods';
 import {
 	setAmazonPayBillingAgreementConsentStatus,
@@ -72,7 +71,7 @@ export function AmazonPayFormContainer(): JSX.Element {
 		dispatch(setAmazonPayBillingAgreementConsentStatus(consentStatus));
 	}
 
-	const loginWithAmazonPay = useFormValidation(function login() {
+	const loginWithAmazonPay = function login() {
 		dispatch(paymentWaiting(true));
 		trackComponentClick('amazon-pay-login-click');
 		const loginOptions = {
@@ -89,7 +88,7 @@ export function AmazonPayFormContainer(): JSX.Element {
 			});
 			dispatch(paymentWaiting(false));
 		}
-	});
+	};
 
 	return (
 		<>
