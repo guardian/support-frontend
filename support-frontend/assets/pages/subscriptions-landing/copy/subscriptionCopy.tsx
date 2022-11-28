@@ -25,7 +25,7 @@ import {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	Monthly,
-	// postIntroductorySixForSixBillingPeriod,
+	postIntroductorySixForSixBillingPeriod,
 } from 'helpers/productPrice/billingPeriods';
 import {
 	DigitalPack,
@@ -73,39 +73,11 @@ const getDisplayPrice = (
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
 };
 
-/**
- * Temporary solution to show Black Friday offer price
- * in the Guardian Weekly section of subs landing page
- * between 21/11/2022 and 28/11/2022
- */
-const getGuardianWeeklyBlackFridayDisplayPrice = (
-	countryGroupId: CountryGroupId,
-): string => {
-	const currency = currencies[detect(countryGroupId)].glyph;
-	const prices = {
-		GBPCountries: 82.5,
-		UnitedStates: 165,
-		AUDCountries: 216,
-		EURCountries: 141,
-		NZDCountries: 273,
-		Canada: 180,
-		International: 180,
-	};
-	return `${currency}${fixDecimals(prices[countryGroupId])}/Annual`;
-};
-
 function getGuardianWeeklyOfferCopy(
 	countryGroupId: CountryGroupId,
 	discountCopy: string,
 	participations: Participations,
 ) {
-	/**
-	 * Temporary solution to show Black Friday offer strapline
-	 * in the Guardian Weekly section of subs landing page
-	 * between 21/11/2022 and 28/11/2022
-	 */
-	return '50% off annual subscription';
-
 	if (discountCopy !== '') {
 		return discountCopy;
 	}
@@ -177,12 +149,11 @@ const guardianWeekly = (
 	participations: Participations,
 ): ProductCopy => ({
 	title: 'Guardian Weekly',
-	// subtitle: getDisplayPrice(
-	// 	countryGroupId,
-	// 	priceCopy.price,
-	// 	postIntroductorySixForSixBillingPeriod,
-	// ),
-	subtitle: getGuardianWeeklyBlackFridayDisplayPrice(countryGroupId),
+	subtitle: getDisplayPrice(
+		countryGroupId,
+		priceCopy.price,
+		postIntroductorySixForSixBillingPeriod,
+	),
 	description:
 		'Gain a deeper understanding of the issues that matter with the Guardian Weekly magazine. Every week, take your time over handpicked articles from the Guardian and Observer, delivered for free to wherever you are in the world.',
 	offer: getGuardianWeeklyOfferCopy(
@@ -290,7 +261,6 @@ const getSubscriptionCopy = (
 	].includes(countryGroupId)
 		? true
 		: false;
-
 	const productcopy: ProductCopy[] = [
 		guardianWeekly(
 			countryGroupId,
