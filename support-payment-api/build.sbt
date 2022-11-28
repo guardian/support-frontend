@@ -48,7 +48,7 @@ libraryDependencies ++= Seq(
   logback, // add Play logging support
   jdbc,
   ws,
-  "com.lihaoyi" %% "pprint" % "0.8.0",
+  "com.lihaoyi" %% "pprint" % "0.8.1",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
   "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
 )
