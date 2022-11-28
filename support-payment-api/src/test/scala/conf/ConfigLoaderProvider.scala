@@ -15,8 +15,9 @@ trait ConfigLoaderProvider extends BeforeAndAfterAll { self: Suite =>
   private val ssm: AWSSimpleSystemsManagement = AWSClientBuilder.buildAWSSimpleSystemsManagementClient()
   private val configLoader = new ConfigLoader(ssm)
 
-  def configForTestEnvironment[A: ParameterStoreLoadable[Environment, ?]: ClassTag](): A =
+  def configForTestEnvironment[A: ParameterStoreLoadable[Environment, *]: ClassTag](): A = {
     configLoader.loadConfig[Environment, A](Environment.Test).valueOr(throw _)
+  }
 
   override protected def afterAll(): Unit = {
     ssm.shutdown()
