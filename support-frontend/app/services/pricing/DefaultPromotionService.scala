@@ -38,7 +38,7 @@ class DefaultPromotionServiceS3(
 
   private val s3Uri = {
     val env = TouchPointEnvironments.fromStage(stage)
-    new AmazonS3URI(s"s3://support-admin-console/${env.envValue}/default-promos.json")
+    new AmazonS3URI(s"s3://support-admin-console/$stage/default-promos.json")
   }
   private val defaultPromoCodes = new AtomicReference[DefaultPromotions](
     DefaultPromotions(guardianWeekly = Nil, paper = Nil),
