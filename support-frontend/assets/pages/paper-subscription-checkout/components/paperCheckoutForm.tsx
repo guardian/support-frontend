@@ -180,7 +180,17 @@ function setSubsCardStartDateInState(
 function PaperCheckoutForm(props: PropTypes) {
 	useCsrCustomerData(props.setCsrCustomerData);
 
-	const days = getDays(props.fulfilmentOption, props.productOption);
+	const invalidDeliveryDates = ['-12-25', '-01-01'];
+
+	const days = getDays(props.fulfilmentOption, props.productOption).filter(
+		(day) => {
+			const date = formatMachineDate(day);
+			return !invalidDeliveryDates.some((dateSuffix) =>
+				date.endsWith(dateSuffix),
+			);
+		},
+	);
+
 	const isHomeDelivery = props.fulfilmentOption === HomeDelivery;
 
 	const fulfilmentOptionDescriptor = isHomeDelivery
@@ -405,6 +415,7 @@ function PaperCheckoutForm(props: PropTypes) {
 											formatUserDate(day),
 											formatMachineDate(day),
 										];
+
 										return (
 											<Radio
 												label={userDate}
