@@ -3,7 +3,7 @@ package selenium.util
 import java.net.URL
 import java.util.Date
 
-import io.github.bonigarcia.wdm.{ChromeDriverManager, WebDriverManager}
+import io.github.bonigarcia.wdm.WebDriverManager
 import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.{Cookie, JavascriptExecutor, WebDriver}
