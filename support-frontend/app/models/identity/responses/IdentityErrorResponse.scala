@@ -29,20 +29,27 @@ object IdentityErrorResponse {
   case class IdentityError(
       message: String,
       description: String,
-      context: String = "primaryEmailAddress",
   )
 
   object IdentityError {
     object InvalidEmailAddress {
-      val message = "Invalid emailAddress:"
-      val description = "Please enter a valid email address"
-      val context = "primaryEmailAddress"
+      val message = "Registration Error"
+      val description = "Please sign up using an email address from a different provider"
       val errorReasonCode = "invalid_email_address"
     }
 
+    object BadEmailAddress {
+      val message = "Invalid emailAddress:"
+      val description = "Please enter a valid email address"
+      val errorReasonCode = "bad_email_address"
+    }
     def isDisallowedEmailError(identityError: IdentityError): Boolean =
       identityError.message == InvalidEmailAddress.message &&
         identityError.description == InvalidEmailAddress.description
+
+    def isBadEmailError(identityError: IdentityError): Boolean =
+      identityError.message == BadEmailAddress.message &&
+        identityError.description == BadEmailAddress.description
 
     implicit val reads: Reads[IdentityError] = Json.reads[IdentityError]
   }

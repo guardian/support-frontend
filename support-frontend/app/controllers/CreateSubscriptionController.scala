@@ -17,7 +17,7 @@ import io.circe.generic.semiauto._
 import io.circe.syntax._
 import lib.PlayImplicits._
 import models.identity.responses.IdentityErrorResponse.IdentityError
-import models.identity.responses.IdentityErrorResponse.IdentityError.InvalidEmailAddress
+import models.identity.responses.IdentityErrorResponse.IdentityError.{InvalidEmailAddress,BadEmailAddress}
 import org.joda.time.DateTime
 import play.api.http.Writeable
 import play.api.libs.circe.Circe
@@ -137,6 +137,8 @@ class CreateSubscriptionController(
   private def mapIdentityErrorToCreateSubscriptionError(identityError: IdentityError) =
     if (IdentityError.isDisallowedEmailError(identityError))
       RequestValidationError(InvalidEmailAddress.errorReasonCode)
+    else if (IdentityError.isBadEmailError(identityError))
+      RequestValidationError(BadEmailAddress.errorReasonCode)
     else
       ServerError(identityError.description)
 
