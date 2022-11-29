@@ -17,7 +17,7 @@ import io.circe.generic.semiauto._
 import io.circe.syntax._
 import lib.PlayImplicits._
 import models.identity.responses.IdentityErrorResponse.IdentityError
-import models.identity.responses.IdentityErrorResponse.IdentityError.{InvalidEmailAddress,BadEmailAddress}
+import models.identity.responses.IdentityErrorResponse.IdentityError.{InvalidEmailAddress, BadEmailAddress}
 import org.joda.time.DateTime
 import play.api.http.Writeable
 import play.api.libs.circe.Circe

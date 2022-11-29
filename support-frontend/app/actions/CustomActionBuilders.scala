@@ -7,7 +7,7 @@ import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.support.config.Stage
-import models.identity.responses.IdentityErrorResponse.IdentityError.{InvalidEmailAddress,BadEmailAddress}
+import models.identity.responses.IdentityErrorResponse.IdentityError.{InvalidEmailAddress, BadEmailAddress}
 import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import play.filters.csrf._
