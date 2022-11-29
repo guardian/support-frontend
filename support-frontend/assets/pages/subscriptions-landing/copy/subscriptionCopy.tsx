@@ -155,7 +155,7 @@ const guardianWeekly = (
 		postIntroductorySixForSixBillingPeriod,
 	),
 	description:
-		'Gain a deeper understanding of the issues that matter with the Guardian Weekly magazine. Every week, take your time over handpicked articles from the Guardian and Observer, delivered for free to wherever you are in the world.',
+		'Give someone answers and insights that go beyond the headlines, and into the issues that matter most. They can enjoy handpicked articles from the Guardian and Observer, curated into one magazine and delivered for free, wherever they are in the world. Plus, for a limited time, gift a whole year’s subscription, for half the usual price.',
 	offer: getGuardianWeeklyOfferCopy(
 		countryGroupId,
 		priceCopy.discountCopy,
@@ -163,20 +163,20 @@ const guardianWeekly = (
 	),
 	buttons: [
 		{
-			ctaButtonText: 'Find out more',
-			link: guardianWeeklyLanding(countryGroupId, false),
+			ctaButtonText: 'See gift options',
+			link: guardianWeeklyLanding(countryGroupId, true),
 			analyticsTracking: sendTrackingEventsOnClick({
-				id: 'weekly_cta',
+				id: 'weekly_cta_gift',
 				product: 'GuardianWeekly',
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
 			modifierClasses: 'guardian-weekly',
 		},
 		{
-			ctaButtonText: 'See gift options',
-			link: guardianWeeklyLanding(countryGroupId, true),
+			ctaButtonText: 'See personal subscriptions',
+			link: guardianWeeklyLanding(countryGroupId, false),
 			analyticsTracking: sendTrackingEventsOnClick({
-				id: 'weekly_cta_gift',
+				id: 'weekly_cta',
 				product: 'GuardianWeekly',
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
