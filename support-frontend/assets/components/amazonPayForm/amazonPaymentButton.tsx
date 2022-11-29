@@ -34,7 +34,7 @@ export function AmazonPaymentButton(): JSX.Element {
 	return (
 		<DefaultPaymentButtonContainer
 			onClick={payWithAmazonPay}
-			createButtonText={(amount) => `Pay ${amount} with AmazonPay`}
+			createButtonText={(amount) => `Pay ${amount} with Amazon Pay`}
 		/>
 	);
 }

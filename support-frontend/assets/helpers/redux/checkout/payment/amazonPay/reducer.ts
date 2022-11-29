@@ -38,7 +38,7 @@ export const amazonPaySlice = createSlice({
 		builder.addCase(validateForm, (state, action) => {
 			if (action.payload === 'AmazonPay') {
 				if (!state.paymentSelected) {
-					state.errors.paymentSelected = ['Please select a payment method'];
+					state.errors.paymentSelected = ['Please proceed with Amazon Pay'];
 				}
 				if (!state.amazonBillingAgreementConsentStatus) {
 					state.errors.consentStatus = [
