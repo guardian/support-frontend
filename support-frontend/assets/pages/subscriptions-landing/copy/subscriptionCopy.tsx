@@ -23,10 +23,7 @@ import {
 	glyph,
 } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import {
-	Monthly,
-	postIntroductorySixForSixBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
+import { Monthly } from 'helpers/productPrice/billingPeriods';
 import {
 	DigitalPack,
 	fixDecimals,
@@ -73,11 +70,38 @@ const getDisplayPrice = (
 	return `${currency}${fixDecimals(price)}/${billingPeriod}`;
 };
 
+/**
+ * Temporary solution promoting Guardian Weekly Gifting Christmas
+ * offer in the Guardian Weekly section of subs landing page
+ * between 01/12/2022 and 23/12/2022GW
+ */
+const getDisplayPriceGWGiftingChristmas = (
+	countryGroupId: CountryGroupId,
+): string => {
+	const currency = currencies[detect(countryGroupId)].glyph;
+	const prices = {
+		GBPCountries: 82.5,
+		UnitedStates: 165,
+		AUDCountries: 216,
+		EURCountries: 141,
+		NZDCountries: 273,
+		Canada: 180,
+		International: 180,
+	};
+	return `${currency}${fixDecimals(prices[countryGroupId])}/Annual`;
+};
+
 function getGuardianWeeklyOfferCopy(
 	countryGroupId: CountryGroupId,
 	discountCopy: string,
 	participations: Participations,
 ) {
+	/**
+	 * Temporary solution promoting Guardian Weekly Gifting Christmas
+	 * offer in the Guardian Weekly section of subs landing page
+	 * between 01/12/2022 and 23/12/2022
+	 */
+	return '50% off annual gifting subscription';
 	if (discountCopy !== '') {
 		return discountCopy;
 	}
@@ -149,13 +173,9 @@ const guardianWeekly = (
 	participations: Participations,
 ): ProductCopy => ({
 	title: 'Guardian Weekly',
-	subtitle: getDisplayPrice(
-		countryGroupId,
-		priceCopy.price,
-		postIntroductorySixForSixBillingPeriod,
-	),
+	subtitle: getDisplayPriceGWGiftingChristmas(countryGroupId),
 	description:
-		'Gain a deeper understanding of the issues that matter with the Guardian Weekly magazine. Every week, take your time over handpicked articles from the Guardian and Observer, delivered for free to wherever you are in the world.',
+		'Give someone answers and insights that go beyond the headlines, and into the issues that matter most. They can enjoy handpicked articles from the Guardian and Observer, curated into one magazine and delivered for free, wherever they are in the world. Plus, for a limited time, gift a whole year’s subscription, for half the usual price.',
 	offer: getGuardianWeeklyOfferCopy(
 		countryGroupId,
 		priceCopy.discountCopy,
@@ -163,20 +183,20 @@ const guardianWeekly = (
 	),
 	buttons: [
 		{
-			ctaButtonText: 'Find out more',
-			link: guardianWeeklyLanding(countryGroupId, false),
+			ctaButtonText: 'See gift options',
+			link: guardianWeeklyLanding(countryGroupId, true),
 			analyticsTracking: sendTrackingEventsOnClick({
-				id: 'weekly_cta',
+				id: 'weekly_cta_gift',
 				product: 'GuardianWeekly',
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
 			modifierClasses: 'guardian-weekly',
 		},
 		{
-			ctaButtonText: 'See gift options',
-			link: guardianWeeklyLanding(countryGroupId, true),
+			ctaButtonText: 'See personal subscriptions',
+			link: guardianWeeklyLanding(countryGroupId, false),
 			analyticsTracking: sendTrackingEventsOnClick({
-				id: 'weekly_cta_gift',
+				id: 'weekly_cta',
 				product: 'GuardianWeekly',
 				componentType: 'ACQUISITIONS_BUTTON',
 			}),
