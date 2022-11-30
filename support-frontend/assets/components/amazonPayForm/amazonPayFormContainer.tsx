@@ -1,6 +1,5 @@
-import { Button } from '@guardian/source-react-components';
+import { Button, InlineError } from '@guardian/source-react-components';
 import { useAmazonPayObjects } from 'helpers/customHooks/useAmazonPayObjects';
-import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { AmazonPay } from 'helpers/forms/paymentMethods';
 import {
 	setAmazonPayBillingAgreementConsentStatus,
@@ -11,6 +10,7 @@ import {
 	setAmazonPayWalletIsStale,
 } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { getAmazonPayFormErrors } from 'helpers/redux/selectors/formValidation/paymentValidation';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -56,6 +56,8 @@ export function AmazonPayFormContainer(): JSX.Element {
 		(state) => state.page.form.formData.checkoutFormHasBeenSubmitted,
 	);
 
+	const errors = useContributionsSelector(getAmazonPayFormErrors);
+
 	function onAmazonPayWalletIsStale(isStale: boolean) {
 		dispatch(setAmazonPayWalletIsStale(isStale));
 	}
@@ -72,7 +74,7 @@ export function AmazonPayFormContainer(): JSX.Element {
 		dispatch(setAmazonPayBillingAgreementConsentStatus(consentStatus));
 	}
 
-	const loginWithAmazonPay = useFormValidation(function login() {
+	const loginWithAmazonPay = function login() {
 		dispatch(paymentWaiting(true));
 		trackComponentClick('amazon-pay-login-click');
 		const loginOptions = {
@@ -89,7 +91,7 @@ export function AmazonPayFormContainer(): JSX.Element {
 			});
 			dispatch(paymentWaiting(false));
 		}
-	});
+	};
 
 	return (
 		<>
@@ -108,16 +110,24 @@ export function AmazonPayFormContainer(): JSX.Element {
 					isTestUser={userInNewProductTest ? userInNewProductTest : false}
 					contributionType={contributionType}
 					checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
+					errors={errors}
 				/>
 			)}
 			{!hasAccessToken && amazonPayEnabled && (
-				<Button
-					type="submit"
-					aria-label={'Proceed with Amazon Pay'}
-					onClick={loginWithAmazonPay}
-				>
-					{'Proceed with Amazon Pay'}
-				</Button>
+				<>
+					{errors.paymentSelected && (
+						<InlineError id="paymentSelected">
+							Please click button to proceed
+						</InlineError>
+					)}
+					<Button
+						type="submit"
+						aria-label={'Proceed with Amazon Pay'}
+						onClick={loginWithAmazonPay}
+					>
+						{'Proceed with Amazon Pay'}
+					</Button>
+				</>
 			)}
 		</>
 	);

@@ -4,6 +4,7 @@ import {
 	hasPaymentRequestInterfaceClosed,
 	hasPaymentRequestPaymentFailed,
 } from 'helpers/redux/checkout/payment/paymentRequestButton/selectors';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { getOtherAmountErrors } from 'helpers/redux/selectors/formValidation/otherAmountValidation';
 import { getPersonalDetailsErrors } from './personalDetailsValidation';
@@ -32,6 +33,21 @@ export function getStripeFormErrors(
 	return { ...errors, robot_checkbox: recaptchaErrors };
 }
 
+export function getAmazonPayFormErrors(
+	state: ContributionsState,
+): ErrorCollection {
+	const contributionType = getContributionType(state);
+
+	const { errors } = state.page.checkoutForm.payment.amazonPay;
+
+	if (contributionType === 'ONE_OFF') {
+		return {
+			paymentSelected: errors.paymentSelected,
+		};
+	}
+	return errors;
+}
+
 export function getPaymentMethodErrors(
 	state: ContributionsState,
 ): ErrorCollection {
@@ -47,6 +63,9 @@ export function getPaymentMethodErrors(
 
 		case 'Sepa':
 			return payment.sepa.errors;
+
+		case 'AmazonPay':
+			return getAmazonPayFormErrors(state);
 
 		default:
 			return {};
