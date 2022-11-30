@@ -38,9 +38,18 @@ object IdentityErrorResponse {
       val errorReasonCode = "invalid_email_address"
     }
 
+    object BadEmailAddress {
+      val message = "Invalid emailAddress:"
+      val description = "Please enter a valid email address"
+      val errorReasonCode = "bad_email_address"
+    }
     def isDisallowedEmailError(identityError: IdentityError): Boolean =
       identityError.message == InvalidEmailAddress.message &&
         identityError.description == InvalidEmailAddress.description
+
+    def isBadEmailError(identityError: IdentityError): Boolean =
+      identityError.message == BadEmailAddress.message &&
+        identityError.description == BadEmailAddress.description
 
     implicit val reads: Reads[IdentityError] = Json.reads[IdentityError]
   }

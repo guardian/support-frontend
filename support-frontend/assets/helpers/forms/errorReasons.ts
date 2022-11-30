@@ -70,6 +70,9 @@ function appropriateErrorMessage(errorReason: ErrorReason | string): string {
 		case 'invalid_email_address':
 			return 'Please use an email address from a different provider';
 
+		case 'bad_email_address':
+			return 'Please enter a valid email address';
+
 		default:
 			return 'The transaction was temporarily declined. Please try entering your payment details again. Alternatively, try another payment method.';
 	}
