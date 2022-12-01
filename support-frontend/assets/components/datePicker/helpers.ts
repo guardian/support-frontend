@@ -17,7 +17,11 @@ const getLatestAvailableDateText = () => {
 
 const dateIsOutsideRange = (date: Date) => {
 	const rangeDate = getRange();
-	return DateUtils.isDayAfter(date, rangeDate);
+	const startDate = new Date();
+	return (
+		DateUtils.isDayAfter(date, rangeDate) ||
+		DateUtils.isDayBefore(date, startDate)
+	);
 };
 
 export { dateIsOutsideRange, getRange, getLatestAvailableDateText };
