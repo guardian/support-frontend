@@ -81,4 +81,5 @@ jobs:
         run: |
           export LAST_TEAMCITY_BUILD=10000
           export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
+          echo "Build number: $GITHUB_RUN_NUMBER"
           sbt "project support-frontend" riffRaffUpload

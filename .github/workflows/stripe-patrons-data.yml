@@ -59,4 +59,5 @@ jobs:
 
       - name: Build and upload to RiffRaff
         run: |
+          echo "Build number: $GITHUB_RUN_NUMBER"
           sbt "project stripe-patrons-data" riffRaffUpload
