@@ -1,6 +1,7 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.services.s3.AmazonS3
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers.states.StepFunctionUserState
 import com.gu.support.workers.{ExecutionError, RequestInfo}
