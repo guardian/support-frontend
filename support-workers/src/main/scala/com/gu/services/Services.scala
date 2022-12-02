@@ -28,7 +28,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 
 trait ServiceProvider {
-  private val config = Configuration.load()
+  private lazy val config = Configuration.load()
   private lazy val defaultServices: Services = new Services(false, config)
   private lazy val uatServices: Services = new Services(true, config)
   def forUser(isTestUser: Boolean): Services = if (isTestUser) uatServices else defaultServices
