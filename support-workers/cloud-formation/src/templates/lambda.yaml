@@ -12,5 +12,5 @@
       S3Key: !Sub support/${Stage}/support-workers/support-workers.jar
     Runtime: "java11"
     Timeout: "60"
-#    SnapStart:
-#      ApplyOn: PublishedVersions
+    SnapStart:
+      ApplyOn: PublishedVersions
