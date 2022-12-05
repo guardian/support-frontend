@@ -31,7 +31,7 @@ Resources:
         Bucket: support-workers-dist
         Key: !Sub support/${Stage}/it-test-runner/it-test-runner.jar
       MemorySize: 2048
-      Runtime: java8.al2
+      Runtime: java11
       Timeout: 300
       Environment:
         Variables:
