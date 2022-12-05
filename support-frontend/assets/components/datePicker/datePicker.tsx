@@ -77,7 +77,10 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
 	}
 
 	getDateString = (): string =>
-		`${this.state.year}-${this.state.month}-${this.state.day}`;
+		`${this.state.year}-${this.state.month.padStart(
+			2,
+			'0',
+		)}-${this.state.day.padStart(2, '0')}`;
 
 	getDateConfirmationText = (): string => {
 		const { value } = this.props;
@@ -152,21 +155,25 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
 
 	handleInput = (value: string, field: keyof StateTypes): void => {
 		if (/^[0-9]+$/.test(value)) {
-			this.setState((prevState) => ({
-				...prevState,
-				[field]: value,
-				dateError: '',
-				dateValidated: false,
-			}));
-			this.updateStartDate();
+			this.setState(
+				(prevState) => ({
+					...prevState,
+					[field]: value,
+					dateError: '',
+					dateValidated: false,
+				}),
+				this.updateStartDate,
+			);
 		} else {
-			this.setState((prevState) => ({
-				...prevState,
-				[field]: '',
-				dateError: '',
-				dateValidated: false,
-			}));
-			this.updateStartDate();
+			this.setState(
+				(prevState) => ({
+					...prevState,
+					[field]: '',
+					dateError: '',
+					dateValidated: false,
+				}),
+				this.updateStartDate,
+			);
 		}
 	};
 
