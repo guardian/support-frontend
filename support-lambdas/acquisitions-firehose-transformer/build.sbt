@@ -18,3 +18,10 @@ riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffManifestProjectName := s"support:lambdas:${name.value}"
 riffRaffArtifactResources += (file(s"support-lambdas/${name.value}/cfn.yaml"), "cfn/cfn.yaml")
+
+assembly / assemblyMergeStrategy := {
+  case PathList("deriving.conf") => MergeStrategy.concat
+  case y =>
+    val oldStrategy = (assembly / assemblyMergeStrategy).value
+    oldStrategy(y)
+}
