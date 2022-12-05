@@ -25,7 +25,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
-  "io.circe" %% "circe-optics" % circeVersion,
+  "io.circe" %% "circe-optics" % "0.14.1",
   "joda-time" % "joda-time" % "2.9.9",
   "com.gu.identity" %% "identity-auth-play" % "3.255",
   "com.gu" %% "identity-test-users" % "0.8",
