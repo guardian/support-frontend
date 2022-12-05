@@ -77,15 +77,10 @@ class DatePickerFields extends Component<PropTypes, StateTypes> {
 	}
 
 	getDateString = (): string =>
-		`${this.state.year}-${this.padZero(this.state.month)}-${this.padZero(
-			this.state.day,
-		)}`;
-
-	padZero = (singleDigit: string): string => {
-		const doubleDigit =
-			(singleDigit.length === 1 && +singleDigit < 10 ? '0' : '') + singleDigit;
-		return doubleDigit;
-	};
+		`${this.state.year}-${this.state.month.padStart(
+			2,
+			'0',
+		)}-${this.state.day.padStart(2, '0')}`;
 
 	getDateConfirmationText = (): string => {
 		const { value } = this.props;
