@@ -25,13 +25,7 @@ export type WeeklyBillingPeriod =
 
 export type ContributionBillingPeriod = typeof Monthly | typeof Annual;
 
-const weeklyBillingPeriods = (
-	enableSixForSix: boolean,
-): WeeklyBillingPeriod[] => {
-	if (enableSixForSix) {
-		return [SixWeekly, postIntroductorySixForSixBillingPeriod, Annual];
-	}
-
+const weeklyBillingPeriods = (): WeeklyBillingPeriod[] => {
 	return [Monthly, Quarterly, Annual];
 };
 

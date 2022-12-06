@@ -115,7 +115,6 @@ function WeeklyLandingPage({
 						countryId={countryId}
 						productPrices={productPrices}
 						orderIsAGift={orderIsAGift ?? false}
-						participations={participations}
 					/>
 				</CentredContainer>
 			</FullWidthContainer>

@@ -16,12 +16,7 @@ import {
 	GBPCountries,
 	NZDCountries,
 } from 'helpers/internationalisation/countryGroup';
-import {
-	currencies,
-	detect,
-	fromCountryGroupId,
-	glyph,
-} from 'helpers/internationalisation/currency';
+import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import {
@@ -91,11 +86,7 @@ const getDisplayPriceGWGiftingChristmas = (
 	return `${currency}${fixDecimals(prices[countryGroupId])}/Annual`;
 };
 
-function getGuardianWeeklyOfferCopy(
-	countryGroupId: CountryGroupId,
-	discountCopy: string,
-	participations: Participations,
-) {
+function getGuardianWeeklyOfferCopy(discountCopy: string) {
 	/**
 	 * Temporary solution promoting Guardian Weekly Gifting Christmas
 	 * offer in the Guardian Weekly section of subs landing page
@@ -106,12 +97,7 @@ function getGuardianWeeklyOfferCopy(
 		return discountCopy;
 	}
 
-	if (participations.sixForSixSuppression === 'variant') {
-		return undefined;
-	}
-
-	const currency = glyph(fromCountryGroupId(countryGroupId));
-	return `6 issues for ${currency}6`;
+	return '';
 }
 
 const getDigitalImage = (isTop: boolean, countryGroupId: CountryGroupId) => {
@@ -176,11 +162,7 @@ const guardianWeekly = (
 	subtitle: getDisplayPriceGWGiftingChristmas(countryGroupId),
 	description:
 		'Give someone answers and insights that go beyond the headlines, and into the issues that matter most. They can enjoy handpicked articles from the Guardian and Observer, curated into one magazine and delivered for free, wherever they are in the world. Plus, for a limited time, gift a whole year’s subscription, for half the usual price.',
-	offer: getGuardianWeeklyOfferCopy(
-		countryGroupId,
-		priceCopy.discountCopy,
-		participations,
-	),
+	offer: getGuardianWeeklyOfferCopy(priceCopy.discountCopy),
 	buttons: [
 		{
 			ctaButtonText: 'See gift options',

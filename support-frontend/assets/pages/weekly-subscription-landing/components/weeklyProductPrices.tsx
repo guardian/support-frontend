@@ -1,5 +1,4 @@
 import type { Product } from 'components/product/productOption';
-import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -110,18 +109,16 @@ type WeeklyProductPricesProps = {
 	countryId: IsoCountry;
 	productPrices: ProductPrices | null | undefined;
 	orderIsAGift: boolean;
-	participations: Participations;
 };
 
 const getProducts = ({
 	countryId,
 	productPrices,
 	orderIsAGift,
-	participations,
 }: WeeklyProductPricesProps): Product[] => {
 	const billingPeriodsToUse = orderIsAGift
 		? weeklyGiftBillingPeriods
-		: weeklyBillingPeriods(participations.sixForSixSuppression !== 'variant');
+		: weeklyBillingPeriods();
 
 	return billingPeriodsToUse.map((billingPeriod) => {
 		const productPrice = productPrices
@@ -145,7 +142,6 @@ function WeeklyProductPrices({
 	countryId,
 	productPrices,
 	orderIsAGift,
-	participations,
 }: WeeklyProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
@@ -155,7 +151,6 @@ function WeeklyProductPrices({
 		countryId,
 		productPrices,
 		orderIsAGift,
-		participations,
 	});
 	return <Prices products={products} orderIsAGift={orderIsAGift} />;
 }
