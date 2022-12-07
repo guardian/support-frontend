@@ -101,7 +101,6 @@ function mapStateToProps(state: SubscriptionsState) {
 		currencyId:
 			currencyFromCountryCode(deliveryAddress.fields.country) ?? 'USD',
 		payPalHasLoaded: state.page.checkoutForm.payment.payPal.hasLoaded,
-		participations: state.common.abParticipations,
 		price: selectPriceForProduct(state),
 	};
 }
@@ -323,9 +322,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					<BillingPeriodSelector
 						fulfilmentOption={props.fulfilmentOption}
 						onChange={(billingPeriod) => props.setBillingPeriod(billingPeriod)}
-						billingPeriods={weeklyBillingPeriods(
-							props.participations.sixForSixSuppression !== 'variant',
-						)}
+						billingPeriods={weeklyBillingPeriods()}
 						pricingCountry={props.deliveryCountry}
 						productPrices={props.productPrices}
 						selected={props.billingPeriod}

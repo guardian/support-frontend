@@ -115,24 +115,6 @@ export const tests: Tests = {
 		seed: 10,
 		optimizeId: 'dQCXBc3QQIW7M1Di_qSCHw',
 	},
-	sixForSixSuppression: {
-		variants: [
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.subscriptions.subsShowcaseAndWeeklyPages,
-		seed: 13,
-		optimizeId: 'LFdPJnrvTu6re1oxnYdSvA',
-	},
 	supporterPlus: {
 		variants: [
 			{
