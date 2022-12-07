@@ -4,6 +4,7 @@ import BulletPointedList from 'pages/contributions-landing/components/Contributi
 
 const listContainer = css`
 	margin-top: ${space[4]}px;
+	margin-bottom: ${space[4]}px;
 `;
 
 export const signUpHeader = 'Create your Guardian account';
