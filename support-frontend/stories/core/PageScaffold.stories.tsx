@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import type { PageScaffoldProps } from 'components/page/pageScaffold';
 import { PageScaffold } from 'components/page/pageScaffold';
 
@@ -17,9 +17,9 @@ export default {
 
 function Template(args: PageScaffoldProps) {
 	return (
-		<BrowserRouter>
+		<MemoryRouter>
 			<PageScaffold id={args.id}>{args.children}</PageScaffold>
-		</BrowserRouter>
+		</MemoryRouter>
 	);
 }
 

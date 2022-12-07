@@ -1,6 +1,6 @@
 import '__mocks__/settingsMock';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -81,9 +81,9 @@ export default {
 
 function Template() {
 	return (
-		<BrowserRouter>
+		<MemoryRouter>
 			<SupporterPlusThankYou />
-		</BrowserRouter>
+		</MemoryRouter>
 	);
 }
 
