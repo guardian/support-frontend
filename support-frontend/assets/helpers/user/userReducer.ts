@@ -11,6 +11,7 @@ export type User = {
 	fullName: string;
 	isTestUser?: boolean | null;
 	isPostDeploymentTestUser: boolean;
+	isStorybookUser?: boolean;
 	stateField: string;
 	gnmMarketing: boolean;
 	isSignedIn: boolean;
@@ -38,6 +39,7 @@ function createUserReducer(): (
 		stateField: '',
 		isTestUser: null,
 		isPostDeploymentTestUser: false,
+		isStorybookUser: false,
 		gnmMarketing: false,
 		isSignedIn: userInfo.isSignedIn,
 		isRecurringContributor: false,
@@ -72,6 +74,12 @@ function createUserReducer(): (
 				return {
 					...state,
 					isPostDeploymentTestUser: action.postDeploymentTestUser,
+				};
+
+			case 'SET_STORYBOOK_USER':
+				return {
+					...state,
+					isStorybookUser: action.storybookUser,
 				};
 
 			case 'SET_EMAIL':

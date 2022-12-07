@@ -33,10 +33,12 @@ export const getUserTypeFromIdentity = createAsyncThunk<
 		condition: (email, thunkApi) => {
 			const { userTypeFromIdentityResponse, isSignedIn } =
 				thunkApi.getState().page.checkoutForm.personalDetails;
+			const { isStorybookUser } = thunkApi.getState().page.user;
+
 			const emailInvalid = !emailRules.safeParse(email).success;
 			const requestInFlight = userTypeFromIdentityResponse === 'requestPending';
 
-			if (isSignedIn || emailInvalid || requestInFlight) {
+			if (isSignedIn || emailInvalid || requestInFlight || isStorybookUser) {
 				return false;
 			}
 		},

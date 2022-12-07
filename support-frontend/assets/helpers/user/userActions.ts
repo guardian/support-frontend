@@ -43,6 +43,10 @@ export type Action =
 			postDeploymentTestUser: boolean;
 	  }
 	| {
+			type: 'SET_STORYBOOK_USER';
+			storybookUser: boolean;
+	  }
+	| {
 			type: 'SET_GNM_MARKETING';
 			preference: boolean;
 	  }
@@ -72,6 +76,7 @@ export type UserSetStateActions = {
 	setEmail: (email: string) => Action;
 	setTestUser: (testUser: boolean) => Action;
 	setPostDeploymentTestUser: (postDeploymentTestUser: boolean) => Action;
+	setStorybookUser: (storybookUser: boolean) => Action;
 	setGnmMarketing: (gnmMarketing: boolean) => Action;
 	setEmailValidated: (emailValidated: boolean) => Action;
 	setIsReturningContributor: (isReturningContributor: boolean) => Action;

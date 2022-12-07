@@ -120,6 +120,7 @@ OneOffNotSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		store.dispatch(setProductType('ONE_OFF'));
 		store.dispatch(setFirstName('Joe'));
@@ -166,6 +167,7 @@ OneOffSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
 		store.dispatch(setProductType('ONE_OFF'));
@@ -213,6 +215,7 @@ OneOffSignUp.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		// is a new account
 		store.dispatch(setUserTypeFromIdentityResponse('new'));
@@ -269,6 +272,7 @@ RecurringNotSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		store.dispatch(setProductType(contributionType));
 		store.dispatch(
@@ -329,6 +333,7 @@ RecurringSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
 		store.dispatch(setProductType(contributionType));
@@ -385,6 +390,7 @@ RecurringSignUp.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		// is a new account
 		store.dispatch(setUserTypeFromIdentityResponse('new'));

@@ -109,6 +109,7 @@ OneOffNotSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setProductType('ONE_OFF'));
 		store.dispatch(setFirstName('Joe'));
 		store.dispatch(setLastName('Bloggs'));
@@ -159,6 +160,7 @@ OneOffSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
 		store.dispatch(setProductType('ONE_OFF'));
 		store.dispatch(setFirstName('Joe'));
@@ -209,6 +211,7 @@ OneOffSignUp.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		// is a new account
 		store.dispatch(setUserTypeFromIdentityResponse('new'));
 		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
@@ -268,6 +271,7 @@ RecurringNotSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setProductType(contributionType));
 		store.dispatch(
 			setFirstName(nameIsOverTenCharacters ? 'NameIsOverTenCharacters' : 'Joe'),
@@ -326,6 +330,7 @@ RecurringSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
 		store.dispatch(setProductType(contributionType));
 		store.dispatch(
@@ -385,6 +390,7 @@ RecurringSignUp.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		// is a new account
 		store.dispatch(setUserTypeFromIdentityResponse('new'));
 		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
