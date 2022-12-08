@@ -15,11 +15,11 @@ const testUserBannerStyles = css`
 
 export function TestUserBanner(): JSX.Element | null {
 	const testUser = isTestUser();
-	const location = useLocation();
-
-	const isThankYouPage = location.pathname.includes('thankyou');
 
 	if (testUser) {
+		const location = useLocation();
+		const isThankYouPage = location.pathname.includes('thankyou');
+
 		return (
 			<div css={testUserBannerStyles}>
 				<p>You are a test user</p>
