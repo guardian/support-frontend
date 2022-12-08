@@ -5,16 +5,12 @@ import {
 	radioThemeBrand,
 } from '@guardian/source-react-components';
 import { useEffect, useState } from 'react';
-import {
-	setEmail,
-	setUserTypeFromIdentityResponse,
-} from 'helpers/redux/checkout/personalDetails/actions';
+import { setUserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/actions';
 import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { getSession } from 'helpers/storage/storage';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 
 const selectorStyles = css`
@@ -51,11 +47,6 @@ export function ThankYouUserTypeSelector(): JSX.Element {
 			case 'current':
 				dispatch(setUserTypeFromIdentityResponse('current'));
 				dispatch(defaultUserActionFunctions.setIsSignedIn(true));
-				dispatch(
-					setEmail(
-						getSession('gu.email') ?? 'thankYouTestEmail@thegulocal.com',
-					),
-				);
 				return;
 
 			default:
