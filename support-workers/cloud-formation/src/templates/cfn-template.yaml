@@ -222,22 +222,51 @@ Resources:
       Statistic: Sum
     DependsOn: SupportWorkersPROD
 
-  NoPaypalContributionsInTwoHoursAlarm:
+  NoPayPalContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
       AlarmName: !Sub support-workers ${Stage} No successful recurring paypal contributions for two hours
-      MetricName: PaymentSuccess
-      Namespace: support-frontend
-      Dimensions:
-        - Name: PaymentProvider
-          Value: PayPal
-        - Name: ProductType
-          Value: Contribution
-        - Name: Stage
-          Value: !Ref Stage
+      Metrics:
+        - Id: e1
+          Expression: "SUM([FILL(m1,0),FILL(m2,0)])"
+          Label: AllRecurringPayPalContributions
+        - Id: m1
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: PayPal
+                - Name: ProductType
+                  Value: Contribution
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
+        - Id: m2
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: PayPal
+                - Name: ProductType
+                  Value: SupporterPlus
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       Period: 3600
@@ -253,15 +282,44 @@ Resources:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
       AlarmName: !Sub support-workers ${Stage} No successful recurring stripe contributions for two hours
-      MetricName: PaymentSuccess
-      Namespace: support-frontend
-      Dimensions:
-        - Name: PaymentProvider
-          Value: Stripe
-        - Name: ProductType
-          Value: Contribution
-        - Name: Stage
-          Value: !Ref Stage
+      Metrics:
+        - Id: e1
+          Expression: "SUM([FILL(m1,0),FILL(m2,0)])"
+          Label: AllRecurringStripeContributions
+        - Id: m1
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: Stripe
+                - Name: ProductType
+                  Value: Contribution
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
+        - Id: m2
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: Stripe
+                - Name: ProductType
+                  Value: SupporterPlus
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       Period: 3600
@@ -288,15 +346,44 @@ Resources:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
       AlarmName: !Sub support-workers ${Stage} No successful recurring Gocardless contributions for ten hours
-      MetricName: PaymentSuccess
-      Namespace: support-frontend
-      Dimensions:
-        - Name: PaymentProvider
-          Value: DirectDebit
-        - Name: ProductType
-          Value: Contribution
-        - Name: Stage
-          Value: !Ref Stage
+      Metrics:
+        - Id: e1
+          Expression: "SUM([FILL(m1,0),FILL(m2,0)])"
+          Label: AllRecurringGocardlessContributions
+        - Id: m1
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: DirectDebit
+                - Name: ProductType
+                  Value: Contribution
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
+        - Id: m2
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: DirectDebit
+                - Name: ProductType
+                  Value: SupporterPlus
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       Period: 3600
