@@ -222,9 +222,9 @@ Resources:
       Statistic: Sum
     DependsOn: SupportWorkersPROD
 
-  NoPayPalContributionsInTwoHoursAlarm:
+  NoPaypalContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
-    Condition: CreateCodeResources
+    Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
@@ -271,11 +271,11 @@ Resources:
       Threshold: 0
       EvaluationPeriods: 24
       TreatMissingData: breaching
-    DependsOn: SupportWorkersCODE
+    DependsOn: SupportWorkersPROD
 
   NoStripeContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
-    Condition: CreateCodeResources
+    Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
@@ -322,7 +322,7 @@ Resources:
       Threshold: 0
       EvaluationPeriods: 24
       TreatMissingData: breaching
-    DependsOn: SupportWorkersCODE
+    DependsOn: SupportWorkersPROD
 
   # Why 10 hours for gocardless? Well...
   #
@@ -337,7 +337,7 @@ Resources:
   #
   NoGocardlessContributionsInTenHoursAlarm:
     Type: AWS::CloudWatch::Alarm
-    Condition: CreateCodeResources
+    Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
@@ -384,7 +384,7 @@ Resources:
       Threshold: 0
       EvaluationPeriods: 120
       TreatMissingData: breaching
-    DependsOn: SupportWorkersCODE
+    DependsOn: SupportWorkersPROD
 
   # This alarm is for the PaymentSuccess metric where
   # ProductType == Paper AND PaymentProvider in [Stripe, Gocardless, Paypal]
