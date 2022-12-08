@@ -222,7 +222,7 @@ Resources:
       Statistic: Sum
     DependsOn: SupportWorkersPROD
 
-  NoPayPalContributionsInTwoHoursAlarm:
+  NoPaypalContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
@@ -269,9 +269,7 @@ Resources:
           ReturnData: false
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 3600
-      EvaluationPeriods: 2
-      Statistic: Sum
+      EvaluationPeriods: 24
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
@@ -322,9 +320,7 @@ Resources:
           ReturnData: false
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 3600
-      EvaluationPeriods: 2
-      Statistic: Sum
+      EvaluationPeriods: 24
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
@@ -386,9 +382,7 @@ Resources:
           ReturnData: false
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 3600
-      EvaluationPeriods: 10
-      Statistic: Sum
+      EvaluationPeriods: 120
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
