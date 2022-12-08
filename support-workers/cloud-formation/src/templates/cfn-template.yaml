@@ -222,7 +222,7 @@ Resources:
       Statistic: Sum
     DependsOn: SupportWorkersPROD
 
-  NoPayPalContributionsInTwoHoursAlarm:
+  NoPaypalContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateCodeResources
     Properties:
