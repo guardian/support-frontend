@@ -22,7 +22,9 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.6")
 
 addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.18")
 
-addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.9")
+addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.11")
+//Fix for sbt-native-packager 1.9.11 upgrade errors
+ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 
 // needed for riffraff as it uses AWS S3 SDK 1.11 which uses some base64 methods that were removed in JDK11
 // this is not needed for the current build server, but it is a good reason to move to AWS SDK v2
