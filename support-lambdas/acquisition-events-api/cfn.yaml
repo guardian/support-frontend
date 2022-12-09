@@ -51,7 +51,7 @@ Resources:
     Properties:
       FunctionName: !Sub ${App}-${Stage}
       Description: A lambda for acquisitions events api
-      Runtime: java8.al2
+      Runtime: java11
       Handler: com.gu.acquisitionEventsApi.Lambda::handler
       MemorySize: 512
       Timeout: 300
