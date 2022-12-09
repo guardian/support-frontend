@@ -28,11 +28,15 @@ export type ExistingPaymentMethod =
 
 export type ExistingPaymentMethodsState = {
 	status: AsyncStatus;
-	paymentMethods: ExistingPaymentMethod[];
+	showExistingPaymentMethods: boolean;
+	showReauthenticateLink: boolean;
+	paymentMethods: RecentlySignedInExistingPaymentMethod[];
 	selectedPaymentMethod?: RecentlySignedInExistingPaymentMethod;
 };
 
 export const initialState: ExistingPaymentMethodsState = {
 	status: Initial,
+	showExistingPaymentMethods: true,
+	showReauthenticateLink: false,
 	paymentMethods: [],
 };

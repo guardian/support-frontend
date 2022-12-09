@@ -2,10 +2,11 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { Completed, Failed, Pending } from 'helpers/types/asyncStatus';
 import { logException } from 'helpers/utilities/logger';
+import { setProductType } from '../../product/actions';
 import type { RecentlySignedInExistingPaymentMethod } from './state';
 import { initialState } from './state';
 import { getExistingPaymentMethods } from './thunks';
-import { getExistingPaymentMethodSwitchState } from './utils';
+import { getUsableExistingPaymentMethods } from './utils';
 
 export const existingPaymentMethodsSlice = createSlice({
 	name: 'existingPaymentMethods',
@@ -19,6 +20,14 @@ export const existingPaymentMethodsSlice = createSlice({
 		},
 	},
 	extraReducers: (builder) => {
+		builder.addCase(setProductType, (state, action) => {
+			if (action.payload === 'ONE_OFF') {
+				state.showExistingPaymentMethods = false;
+			} else {
+				state.showExistingPaymentMethods = true;
+			}
+		});
+
 		builder.addCase(getExistingPaymentMethods.pending, (state) => {
 			state.status = Pending;
 		});
@@ -32,15 +41,16 @@ export const existingPaymentMethodsSlice = createSlice({
 		});
 
 		builder.addCase(getExistingPaymentMethods.fulfilled, (state, action) => {
-			const switchState = getExistingPaymentMethodSwitchState();
-
-			const switchedOnExistingPaymentMethods = action.payload.filter(
-				({ paymentType }) =>
-					(paymentType === 'Card' && switchState.card) ||
-					(paymentType === 'DirectDebit' && switchState.directDebit),
+			const usablePaymentMethods = getUsableExistingPaymentMethods(
+				action.payload,
 			);
-			state.paymentMethods = switchedOnExistingPaymentMethods;
+			state.paymentMethods = usablePaymentMethods;
 			state.status = Completed;
+
+			// The user has at least one existing payment method, but it's not currently usable for payment
+			if (usablePaymentMethods.length < action.payload.length) {
+				state.showReauthenticateLink = true;
+			}
 		});
 	},
 });

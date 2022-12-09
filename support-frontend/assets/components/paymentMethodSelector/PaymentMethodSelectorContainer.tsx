@@ -1,47 +1,27 @@
-import type { ContributionType } from 'helpers/contributions';
-import { contributionTypeIsRecurring } from 'helpers/contributions';
 import { getValidPaymentMethods } from 'helpers/forms/checkouts';
-import type {
-	ExistingPaymentMethod,
-	RecentlySignedInExistingPaymentMethod,
-} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import {
-	getFullExistingPaymentMethods,
-	isUsableExistingPaymentMethod,
-} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import type { ExistingPaymentMethodsState } from 'helpers/redux/checkout/payment/existingPaymentMethods/state';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
 
-function existingPaymentMethodsToDisplay(
-	contributionType: ContributionType,
-	existingPaymentMethods?: ExistingPaymentMethod[],
-): RecentlySignedInExistingPaymentMethod[] {
-	const shouldShowExistingPaymentMethods =
-		contributionTypeIsRecurring(contributionType);
+function getExistingPaymentMethodProps(
+	existingPaymentMethods: ExistingPaymentMethodsState,
+) {
+	const showReauthenticateLink =
+		existingPaymentMethods.showExistingPaymentMethods &&
+		existingPaymentMethods.showReauthenticateLink;
 
-	const existingPaymentMethodList = getFullExistingPaymentMethods(
-		existingPaymentMethods,
-	);
+	const existingPaymentMethodList =
+		existingPaymentMethods.showExistingPaymentMethods
+			? existingPaymentMethods.paymentMethods
+			: [];
 
-	return shouldShowExistingPaymentMethods ? existingPaymentMethodList : [];
-}
-
-function showReauthenticationLink(
-	contributionType: ContributionType,
-	existingPaymentMethods?: ExistingPaymentMethod[],
-): boolean {
-	const shouldShowExistingPaymentMethods =
-		contributionTypeIsRecurring(contributionType);
-	const hasExistingPaymentMethods = existingPaymentMethods?.length;
-
-	if (!shouldShowExistingPaymentMethods || !hasExistingPaymentMethods) {
-		return false;
-	}
-
-	return existingPaymentMethods.every(
-		(method) => !isUsableExistingPaymentMethod(method),
-	);
+	return {
+		existingPaymentMethod: existingPaymentMethods.selectedPaymentMethod,
+		existingPaymentMethodList,
+		pendingExistingPaymentMethods: existingPaymentMethods.status === 'pending',
+		showReauthenticateLink,
+	};
 }
 
 function PaymentMethodSelectorContainer({
@@ -78,17 +58,8 @@ function PaymentMethodSelectorContainer({
 	return render({
 		availablePaymentMethods: availablePaymentMethods,
 		paymentMethod: name,
-		existingPaymentMethod: existingPaymentMethods.selectedPaymentMethod,
-		existingPaymentMethodList: existingPaymentMethodsToDisplay(
-			contributionType,
-			existingPaymentMethods.paymentMethods,
-		),
 		validationError: errors?.[0],
-		pendingExistingPaymentMethods: existingPaymentMethods.status === 'pending',
-		showReauthenticateLink: showReauthenticationLink(
-			contributionType,
-			existingPaymentMethods.paymentMethods,
-		),
+		...getExistingPaymentMethodProps(existingPaymentMethods),
 	});
 }
 
