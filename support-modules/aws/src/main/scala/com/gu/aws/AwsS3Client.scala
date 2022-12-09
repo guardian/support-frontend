@@ -14,7 +14,7 @@ object AwsS3Client extends AwsS3Client {
     AmazonS3ClientBuilder
       .standard()
       .withRegion(Regions.EU_WEST_1)
-      .withCredentials(CredentialsProvider)
+//      .withCredentials(CredentialsProvider)
       .build()
 
   def withStream[RESULT](block: InputStream => Try[RESULT])(uri: AmazonS3URI): Try[RESULT] = for {
