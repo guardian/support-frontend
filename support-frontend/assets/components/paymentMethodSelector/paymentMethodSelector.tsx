@@ -9,10 +9,10 @@ import AnimatedDots from 'components/spinners/animatedDots';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { mapExistingPaymentMethodToPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { selectExistingPaymentMethod } from 'helpers/redux/checkout/payment/existingPaymentMethods/actions';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import ContributionChoicesHeader from 'pages/contributions-landing/components/ContributionChoicesHeader';
-import { updateSelectedExistingPaymentMethod } from 'pages/contributions-landing/contributionsLandingActions';
 import { paymentMethodData } from './paymentMethodData';
 import {
 	AvailablePaymentMethodAccordionRow,
@@ -147,9 +147,7 @@ export function PaymentMethodSelector({
 											onChange={() => {
 												dispatch(setPaymentMethod(paymentType));
 												dispatch(
-													updateSelectedExistingPaymentMethod(
-														preExistingPaymentMethod,
-													),
+													selectExistingPaymentMethod(preExistingPaymentMethod),
 												);
 											}}
 											accordionBody={

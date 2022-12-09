@@ -61,9 +61,6 @@ function PaymentMethodSelectorContainer({
 		(state) => state.page.checkoutForm.payment.paymentMethod,
 	);
 
-	const { existingPaymentMethod } = useContributionsSelector(
-		(state) => state.page.form,
-	);
 	const { existingPaymentMethods } = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment,
 	);
@@ -81,7 +78,7 @@ function PaymentMethodSelectorContainer({
 	return render({
 		availablePaymentMethods: availablePaymentMethods,
 		paymentMethod: name,
-		existingPaymentMethod,
+		existingPaymentMethod: existingPaymentMethods.selectedPaymentMethod,
 		existingPaymentMethodList: existingPaymentMethodsToDisplay(
 			contributionType,
 			existingPaymentMethods.paymentMethods,

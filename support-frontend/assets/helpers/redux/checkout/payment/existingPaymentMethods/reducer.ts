@@ -1,6 +1,8 @@
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { Completed, Failed, Pending } from 'helpers/types/asyncStatus';
 import { logException } from 'helpers/utilities/logger';
+import type { RecentlySignedInExistingPaymentMethod } from './state';
 import { initialState } from './state';
 import { getExistingPaymentMethods } from './thunks';
 import { getExistingPaymentMethodSwitchState } from './utils';
@@ -8,7 +10,14 @@ import { getExistingPaymentMethodSwitchState } from './utils';
 export const existingPaymentMethodsSlice = createSlice({
 	name: 'existingPaymentMethods',
 	initialState,
-	reducers: {},
+	reducers: {
+		selectExistingPaymentMethod(
+			state,
+			action: PayloadAction<RecentlySignedInExistingPaymentMethod>,
+		) {
+			state.selectedPaymentMethod = action.payload;
+		},
+	},
 	extraReducers: (builder) => {
 		builder.addCase(getExistingPaymentMethods.pending, (state) => {
 			state.status = Pending;
