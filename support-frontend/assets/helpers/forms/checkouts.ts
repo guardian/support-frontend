@@ -149,18 +149,25 @@ function getPaymentMethods(
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
 ): PaymentMethod[] {
+	const nonRegionSpecificPaymentMethods: PaymentMethod[] = [
+		ExistingCard,
+		ExistingDirectDebit,
+		Stripe,
+		PayPal,
+	];
+
 	if (contributionType !== 'ONE_OFF' && countryId === 'GB') {
-		return [DirectDebit, Stripe, PayPal];
+		return [DirectDebit, ...nonRegionSpecificPaymentMethods];
 	} else if (countryId === 'US') {
-		return [Stripe, PayPal, AmazonPay];
+		return [...nonRegionSpecificPaymentMethods, AmazonPay];
 	} else if (
 		contributionType !== 'ONE_OFF' &&
 		countryGroupId === 'EURCountries'
 	) {
-		return [Sepa, Stripe, PayPal];
+		return [Sepa, ...nonRegionSpecificPaymentMethods];
 	}
 
-	return [Stripe, PayPal];
+	return nonRegionSpecificPaymentMethods;
 }
 
 function switchKeyForContributionType(
