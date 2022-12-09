@@ -1,35 +1,47 @@
 package com.gu.acquisitionEventsApi
 
 import cats.syntax.either._
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.simplesystemsmanagement.model.GetParametersByPathRequest
-import com.amazonaws.services.simplesystemsmanagement.AWSSimpleSystemsManagementClientBuilder
-import com.gu.aws.CredentialsProvider
-import scala.jdk.CollectionConverters.CollectionHasAsScala
+import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.ssm.SsmClient
+import software.amazon.awssdk.services.ssm.model.GetParametersByPathRequest
 import com.gu.support.acquisitions.BigQueryConfig
+
+import scala.jdk.CollectionConverters.CollectionHasAsScala
 import scala.util.Try
 
 object SSMService {
   private val stage = sys.env.getOrElse("STAGE", "CODE")
 
-  val client = AWSSimpleSystemsManagementClientBuilder
-    .standard()
-    .withCredentials(CredentialsProvider)
-    .withRegion(Regions.EU_WEST_1)
+  private val credentialsProvider = AwsCredentialsProviderChain.builder().credentialsProviders(
+    ProfileCredentialsProvider.builder.profileName("membership").build,
+    InstanceProfileCredentialsProvider
+      .builder
+      .asyncCredentialUpdateEnabled(true)
+      .build,
+    EnvironmentVariableCredentialsProvider,
+  )
+
+  private val client = SsmClient
+    .builder()
+    .credentialsProvider(credentialsProvider.build())
+    .region(Region.EU_WEST_1)
     .build()
 
   def getConfig(): Either[String, BigQueryConfig] = {
     val path = s"/acquisition-events-api/bigquery-config/$stage"
-    val request = new GetParametersByPathRequest()
-      .withPath(path + "/")
-      .withWithDecryption(true)
-      .withRecursive(false)
+    val request = GetParametersByPathRequest
+      .builder()
+      .path(path + "/")
+      .withDecryption(true)
+      .recursive(false)
+      .build()
 
     Try(client.getParametersByPath(request)).toEither
       .leftMap(error => error.getMessage)
       .flatMap { result =>
-        val params = result.getParameters.asScala.toList.map { parameter =>
-          parameter.getName -> parameter.getValue
+        val params = result.parameters.asScala.toList.map { parameter =>
+          parameter.name -> parameter.value
         }.toMap
 
         val config = for {
