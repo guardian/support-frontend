@@ -1,7 +1,12 @@
 package com.gu.acquisitionEventsApi
 
 import cats.syntax.either._
-import software.amazon.awssdk.auth.credentials.{AwsCredentialsProviderChain, EnvironmentVariableCredentialsProvider, InstanceProfileCredentialsProvider, ProfileCredentialsProvider}
+import software.amazon.awssdk.auth.credentials.{
+  AwsCredentialsProviderChain,
+  EnvironmentVariableCredentialsProvider,
+  InstanceProfileCredentialsProvider,
+  ProfileCredentialsProvider,
+}
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.ssm.SsmClient
 import software.amazon.awssdk.services.ssm.model.GetParametersByPathRequest
@@ -13,14 +18,15 @@ import scala.util.Try
 object SSMService {
   private val stage = sys.env.getOrElse("STAGE", "CODE")
 
-  private val credentialsProvider = AwsCredentialsProviderChain.builder().credentialsProviders(
-    ProfileCredentialsProvider.builder.profileName("membership").build,
-    InstanceProfileCredentialsProvider
-      .builder
-      .asyncCredentialUpdateEnabled(true)
-      .build,
-    EnvironmentVariableCredentialsProvider,
-  )
+  private val credentialsProvider = AwsCredentialsProviderChain
+    .builder()
+    .credentialsProviders(
+      ProfileCredentialsProvider.builder.profileName("membership").build,
+      InstanceProfileCredentialsProvider.builder
+        .asyncCredentialUpdateEnabled(true)
+        .build,
+      EnvironmentVariableCredentialsProvider,
+    )
 
   private val client = SsmClient
     .builder()
