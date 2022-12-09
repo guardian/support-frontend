@@ -57,6 +57,7 @@ val mergeStrategySettings = {
     case str if str.contains("simulacrum") => MergeStrategy.first
     case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
     case PathList("javax", "annotation", _ @_*) => MergeStrategy.first
+    case str if str.contains("codegen-resources") => MergeStrategy.first
     case y =>
       val oldStrategy = (assembly / assemblyMergeStrategy).value
       oldStrategy(y)
