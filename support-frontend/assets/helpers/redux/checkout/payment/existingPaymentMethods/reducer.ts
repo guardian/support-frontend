@@ -30,8 +30,11 @@ export const existingPaymentMethodsSlice = createSlice({
 					(paymentType === 'Card' && switchState.card) ||
 					(paymentType === 'DirectDebit' && switchState.directDebit),
 			);
-			state.existingPaymentMethods = switchedOnExistingPaymentMethods;
+			state.paymentMethods = switchedOnExistingPaymentMethods;
 			state.status = Completed;
 		});
 	},
 });
+
+export const existingPaymentMethodsReducer =
+	existingPaymentMethodsSlice.reducer;

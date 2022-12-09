@@ -3,6 +3,8 @@ import { amazonPayReducer } from './amazonPay/reducer';
 import type { AmazonPayState } from './amazonPay/state';
 import { directDebitReducer } from './directDebit/reducer';
 import type { DirectDebitState } from './directDebit/state';
+import { existingPaymentMethodsReducer } from './existingPaymentMethods/reducer';
+import type { ExistingPaymentMethodsState } from './existingPaymentMethods/state';
 import { paymentMethodReducer } from './paymentMethod/reducer';
 import type { PaymentMethodState } from './paymentMethod/state';
 import { paymentRequestButtonReducer } from './paymentRequestButton/reducer';
@@ -25,6 +27,7 @@ export type PaymentState = {
 	stripe: StripeCardState;
 	stripeAccountDetails: StripeAccountDetailsState;
 	paymentRequestButton: PaymentRequestButtonState;
+	existingPaymentMethods: ExistingPaymentMethodsState;
 };
 
 export const paymentReducer = combineReducers({
@@ -36,4 +39,5 @@ export const paymentReducer = combineReducers({
 	stripe: stripeCardReducer,
 	stripeAccountDetails: stripeAccountDetailsReducer,
 	paymentRequestButton: paymentRequestButtonReducer,
+	existingPaymentMethods: existingPaymentMethodsReducer,
 });

@@ -24,6 +24,7 @@ import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { setBillingState } from 'helpers/redux/checkout/address/actions';
+import { getExistingPaymentMethods } from 'helpers/redux/checkout/payment/existingPaymentMethods/thunks';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
 import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
@@ -264,6 +265,7 @@ const init = (store: ContributionsStore): void => {
 	const contributionTypes = getContributionTypes(state);
 	dispatch(setContributionTypes(contributionTypes));
 	getStoredEmail(dispatch);
+	void dispatch(getExistingPaymentMethods());
 	initialisePaymentMethods(state, dispatch);
 	const contributionType = selectInitialContributionTypeAndPaymentMethod(
 		state,
