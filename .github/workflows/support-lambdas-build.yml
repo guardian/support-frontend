@@ -1,0 +1,56 @@
+name: Build support-lambdas
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  support_lambdas_build:
+    if: >-
+      (github.actor != 'dependabot[bot]') &&
+        (github.event.pull_request.head.repo.owner.login == 'guardian' ||
+          github.event_name == 'push')
+
+    # Required by actions-assume-aws-role
+    permissions:
+      id-token: write
+      contents: read
+
+    name: support-lambdas build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Env
+        run: env
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      # Required by sbt riffRaffUpload
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
+
+      - name: Setup Java 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.ivy2/cache
+            ~/.sbt
+            ~/.coursier
+          key: sbt
+
+      - name: Build and upload to RiffRaff
+        run: |
+          export LAST_TEAMCITY_BUILD=15000
+          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
+          sbt "project support-lambdas" riffRaffUpload
