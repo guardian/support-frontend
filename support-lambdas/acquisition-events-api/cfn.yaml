@@ -55,6 +55,8 @@ Resources:
       Handler: com.gu.acquisitionEventsApi.Lambda::handler
       MemorySize: 512
       Timeout: 300
+      SnapStart:
+        ApplyOn: PublishedVersions
       Environment:
         Variables:
           STAGE: !Ref Stage
