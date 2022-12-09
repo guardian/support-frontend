@@ -19,7 +19,8 @@ object Lambda extends LazyLogging {
   }
 
   def handler(event: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent = {
-    SSMService.getConfig() match {
+    val ssmService = new SSMService()
+    ssmService.getConfig() match {
       case Right(config) =>
         val bigQuery = new BigQueryService(config)
         processEvent(event, bigQuery)

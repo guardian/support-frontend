@@ -11,11 +11,14 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.ssm.SsmClient
 import software.amazon.awssdk.services.ssm.model.GetParametersByPathRequest
 import com.gu.support.acquisitions.BigQueryConfig
+import com.typesafe.scalalogging.LazyLogging
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 import scala.util.Try
 
-object SSMService {
+class SSMService() extends LazyLogging {
+  logger.info(s"Creating SSMService")
+
   private val stage = sys.env.getOrElse("STAGE", "CODE")
 
   private val credentialsProvider = AwsCredentialsProviderChain
