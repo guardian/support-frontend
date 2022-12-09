@@ -21,21 +21,21 @@ class SSMService() extends LazyLogging {
 
   private val stage = sys.env.getOrElse("STAGE", "CODE")
 
-  private val credentialsProvider = AwsCredentialsProviderChain
-    .builder()
-    .credentialsProviders(
-      ProfileCredentialsProvider.builder.profileName("membership").build,
-      InstanceProfileCredentialsProvider.builder
-        .asyncCredentialUpdateEnabled(true)
-        .build,
-      EnvironmentVariableCredentialsProvider.create(),
-    )
+//  private val credentialsProvider = AwsCredentialsProviderChain
+//    .builder()
+//    .credentialsProviders(
+//      ProfileCredentialsProvider.builder.profileName("membership").build,
+//      InstanceProfileCredentialsProvider.builder
+//        .asyncCredentialUpdateEnabled(true)
+//        .build,
+//      EnvironmentVariableCredentialsProvider.create(),
+//    )
 
-  private val client = SsmClient
-    .builder()
-    .credentialsProvider(credentialsProvider.build())
-    .region(Region.EU_WEST_1)
-    .build()
+  private val client = SsmClient.create()
+//    .builder()
+//    .credentialsProvider(credentialsProvider.build())
+//    .region(Region.EU_WEST_1)
+//    .build()
 
   def getConfig(): Either[String, BigQueryConfig] = {
     val path = s"/acquisition-events-api/bigquery-config/$stage"
