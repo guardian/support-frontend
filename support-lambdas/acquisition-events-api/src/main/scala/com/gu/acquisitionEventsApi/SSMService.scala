@@ -25,7 +25,7 @@ object SSMService {
       InstanceProfileCredentialsProvider.builder
         .asyncCredentialUpdateEnabled(true)
         .build,
-      EnvironmentVariableCredentialsProvider,
+      EnvironmentVariableCredentialsProvider.create(),
     )
 
   private val client = SsmClient
