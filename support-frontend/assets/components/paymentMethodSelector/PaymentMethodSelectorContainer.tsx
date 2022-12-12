@@ -1,4 +1,8 @@
 import { getValidPaymentMethods } from 'helpers/forms/checkouts';
+import {
+	ExistingCard,
+	ExistingDirectDebit,
+} from 'helpers/forms/paymentMethods';
 import type { ExistingPaymentMethodsState } from 'helpers/redux/checkout/payment/existingPaymentMethods/state';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -7,20 +11,24 @@ import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
 function getExistingPaymentMethodProps(
 	existingPaymentMethods: ExistingPaymentMethodsState,
 ) {
-	const showReauthenticateLink =
-		existingPaymentMethods.showExistingPaymentMethods &&
-		existingPaymentMethods.showReauthenticateLink;
+	if (existingPaymentMethods.showExistingPaymentMethods) {
+		const showReauthenticateLink =
+			existingPaymentMethods.showReauthenticateLink;
 
-	const existingPaymentMethodList =
-		existingPaymentMethods.showExistingPaymentMethods
-			? existingPaymentMethods.paymentMethods
-			: [];
+		const existingPaymentMethodList = existingPaymentMethods.paymentMethods;
 
+		return {
+			existingPaymentMethod: existingPaymentMethods.selectedPaymentMethod,
+			existingPaymentMethodList,
+			pendingExistingPaymentMethods:
+				existingPaymentMethods.status === 'pending',
+			showReauthenticateLink,
+		};
+	}
 	return {
-		existingPaymentMethod: existingPaymentMethods.selectedPaymentMethod,
-		existingPaymentMethodList,
+		existingPaymentMethodList: [],
 		pendingExistingPaymentMethods: existingPaymentMethods.status === 'pending',
-		showReauthenticateLink,
+		showReauthenticateLink: false,
 	};
 }
 
@@ -53,6 +61,9 @@ function PaymentMethodSelectorContainer({
 		switches,
 		countryId,
 		countryGroupId,
+	).filter(
+		(methodName) =>
+			methodName !== ExistingCard && methodName !== ExistingDirectDebit,
 	);
 
 	return render({

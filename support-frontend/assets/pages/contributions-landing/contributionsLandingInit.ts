@@ -101,6 +101,7 @@ function getInitialContributionType(
 		: contributionTypes[countryGroupId][0].contributionType;
 }
 
+// TODO: delete this function when we turn off the old checkout
 function initialisePaymentMethods(
 	state: State,
 	dispatch: ContributionsDispatch,
