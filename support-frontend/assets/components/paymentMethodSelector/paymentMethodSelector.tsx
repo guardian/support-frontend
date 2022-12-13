@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
 import { from, headline, space } from '@guardian/source-foundations';
 import { Accordion, RadioGroup } from '@guardian/source-react-components';
-import { useEffect } from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import AnimatedDots from 'components/spinners/animatedDots';
@@ -13,9 +12,6 @@ import {
 	subscriptionToExplainerPart,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { selectExistingPaymentMethod } from 'helpers/redux/checkout/payment/existingPaymentMethods/actions';
-import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import ContributionChoicesHeader from 'pages/contributions-landing/components/ContributionChoicesHeader';
 import { paymentMethodData } from './paymentMethodData';
 import { AvailablePaymentMethodAccordionRow } from './paymentMethodSelectorAccordionRow';
@@ -60,6 +56,10 @@ export interface PaymentMethodSelectorProps {
 	existingPaymentMethodList: RecentlySignedInExistingPaymentMethod[];
 	pendingExistingPaymentMethods?: boolean;
 	showReauthenticateLink?: boolean;
+	onSelectPaymentMethod: (
+		paymentMethod: PaymentMethod,
+		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
+	) => void;
 }
 
 export function PaymentMethodSelector({
@@ -70,14 +70,8 @@ export function PaymentMethodSelector({
 	existingPaymentMethodList,
 	pendingExistingPaymentMethods,
 	showReauthenticateLink,
+	onSelectPaymentMethod,
 }: PaymentMethodSelectorProps): JSX.Element {
-	const dispatch = useContributionsDispatch();
-
-	useEffect(() => {
-		availablePaymentMethods.length === 1 &&
-			dispatch(setPaymentMethod(availablePaymentMethods[0]));
-	}, []);
-
 	if (
 		existingPaymentMethodList.length < 1 &&
 		availablePaymentMethods.length < 1
@@ -144,9 +138,9 @@ export function PaymentMethodSelector({
 												),
 											)}`}
 											onChange={() => {
-												dispatch(setPaymentMethod(paymentType));
-												dispatch(
-													selectExistingPaymentMethod(preExistingPaymentMethod),
+												onSelectPaymentMethod(
+													paymentType,
+													preExistingPaymentMethod,
 												);
 											}}
 											accordionBody={
@@ -164,7 +158,7 @@ export function PaymentMethodSelector({
 									label={paymentMethodData[method].label}
 									name="paymentMethod"
 									checked={paymentMethod === method}
-									onChange={() => dispatch(setPaymentMethod(method))}
+									onChange={() => onSelectPaymentMethod(method)}
 									accordionBody={paymentMethodData[method].accordionBody}
 								/>
 							))}

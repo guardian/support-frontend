@@ -1,11 +1,19 @@
+import { useEffect } from 'react';
 import { getValidPaymentMethods } from 'helpers/forms/checkouts';
+import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	ExistingCard,
 	ExistingDirectDebit,
 } from 'helpers/forms/paymentMethods';
+import { selectExistingPaymentMethod } from 'helpers/redux/checkout/payment/existingPaymentMethods/actions';
 import type { ExistingPaymentMethodsState } from 'helpers/redux/checkout/payment/existingPaymentMethods/state';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
 
 function getExistingPaymentMethodProps(
@@ -39,6 +47,7 @@ function PaymentMethodSelectorContainer({
 		paymentMethodSelectorProps: PaymentMethodSelectorProps,
 	) => JSX.Element;
 }): JSX.Element {
+	const dispatch = useContributionsDispatch();
 	const contributionType = useContributionsSelector(getContributionType);
 
 	const { countryId, countryGroupId } = useContributionsSelector(
@@ -66,11 +75,26 @@ function PaymentMethodSelectorContainer({
 			methodName !== ExistingCard && methodName !== ExistingDirectDebit,
 	);
 
+	function onSelectPaymentMethod(
+		paymentMethod: PaymentMethod,
+		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
+	) {
+		dispatch(setPaymentMethod(paymentMethod));
+		existingPaymentMethod &&
+			dispatch(selectExistingPaymentMethod(existingPaymentMethod));
+	}
+
+	useEffect(() => {
+		availablePaymentMethods.length === 1 &&
+			dispatch(setPaymentMethod(availablePaymentMethods[0]));
+	}, []);
+
 	return render({
 		availablePaymentMethods: availablePaymentMethods,
 		paymentMethod: name,
 		validationError: errors?.[0],
 		...getExistingPaymentMethodProps(existingPaymentMethods),
+		onSelectPaymentMethod,
 	});
 }
 

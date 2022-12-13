@@ -1,52 +1,40 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source-foundations';
 import { Elements } from '@stripe/react-stripe-js';
-import { Provider } from 'react-redux';
-import { createTestStoreForContributions } from '__test-utils__/testStore';
+import { useState } from 'react';
+import type { PaymentMethodSelectorProps } from 'components/paymentMethodSelector/paymentMethodSelector';
 import { PaymentMethodSelector } from 'components/paymentMethodSelector/paymentMethodSelector';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
 	DirectDebit,
-	ExistingCard,
-	ExistingDirectDebit,
 	PayPal,
 	Sepa,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
-import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import { setProductType } from 'helpers/redux/checkout/product/actions';
-import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 
 export default {
 	title: 'Checkouts/PaymentMethodSelector',
 	component: PaymentMethodSelector,
-	argTypes: {
-		paymentMethod: {
-			control: {
-				type: 'radio',
-				options: [
-					Stripe,
-					PayPal,
-					DirectDebit,
-					Sepa,
-					ExistingCard,
-					ExistingDirectDebit,
-					AmazonPay,
-				],
-			},
+	decorators: [
+		(Story: React.FC): JSX.Element => {
+			return (
+				<Elements stripe={null}>
+					<Story />
+				</Elements>
+			);
 		},
-	},
+	],
 };
 
-function Template(args: { paymentMethod: PaymentMethod }): JSX.Element {
+function Template(args: Partial<PaymentMethodSelectorProps>): JSX.Element {
+	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('None');
+
 	const availablePaymentMethods: PaymentMethod[] = [
-		Stripe,
-		PayPal,
 		DirectDebit,
 		Sepa,
-		ExistingCard,
-		ExistingDirectDebit,
+		Stripe,
+		PayPal,
 		AmazonPay,
 	];
 
@@ -59,37 +47,38 @@ function Template(args: { paymentMethod: PaymentMethod }): JSX.Element {
 		>
 			<PaymentMethodSelector
 				availablePaymentMethods={availablePaymentMethods}
-				paymentMethod={args.paymentMethod}
-				validationError={undefined}
-				existingPaymentMethodList={[]}
+				paymentMethod={paymentMethod}
+				validationError={args.validationError}
+				existingPaymentMethodList={[
+					{
+						paymentType: 'Card',
+						billingAccountId: '12345',
+						subscriptions: [
+							{
+								billingAccountId: '12345',
+								isCancelled: false,
+								isActive: true,
+								name: 'Guardian Weekly',
+							},
+						],
+						card: '0123',
+					},
+				]}
+				onSelectPaymentMethod={(paymentMethod) =>
+					setPaymentMethod(paymentMethod)
+				}
 			/>
 		</div>
 	);
 }
 
-Template.args = {} as Record<string, unknown>;
+Template.args = {} as Partial<PaymentMethodSelectorProps>;
 Template.decorators = [] as unknown[];
 
 export const Default = Template.bind({});
 
-Default.args = {
-	paymentMethod: 'DirectDebit',
+export const WithError = Template.bind({});
+
+WithError.args = {
+	validationError: 'Please select a payment method',
 };
-
-Default.decorators = [
-	(Story: React.FC, args: { paymentMethod: PaymentMethod }): JSX.Element => {
-		const store = createTestStoreForContributions();
-
-		store.dispatch(setPaymentMethod(args.paymentMethod));
-		store.dispatch(setCountryInternationalisation('GB'));
-		store.dispatch(setProductType('MONTHLY'));
-
-		return (
-			<Provider store={store}>
-				<Elements stripe={null}>
-					<Story />
-				</Elements>
-			</Provider>
-		);
-	},
-];
