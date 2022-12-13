@@ -3,6 +3,7 @@ on:
   push:
 jobs:
   upload-storybook:
+    if: ${{ github.actor != 'gu-scala-steward-public-repos[bot]' }}
     runs-on: ubuntu-latest
     defaults:
      run:
