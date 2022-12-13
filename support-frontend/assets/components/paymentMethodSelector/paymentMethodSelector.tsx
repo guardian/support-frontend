@@ -7,17 +7,18 @@ import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMess
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import AnimatedDots from 'components/spinners/animatedDots';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import { mapExistingPaymentMethodToPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import {
+	getExistingPaymentMethodLabel,
+	subscriptionsToExplainerList,
+	subscriptionToExplainerPart,
+} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { selectExistingPaymentMethod } from 'helpers/redux/checkout/payment/existingPaymentMethods/actions';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import ContributionChoicesHeader from 'pages/contributions-landing/components/ContributionChoicesHeader';
 import { paymentMethodData } from './paymentMethodData';
-import {
-	AvailablePaymentMethodAccordionRow,
-	ExistingPaymentMethodAccordionRow,
-} from './paymentMethodSelectorAccordionRow';
+import { AvailablePaymentMethodAccordionRow } from './paymentMethodSelectorAccordionRow';
 import { ReauthenticateLink } from './reauthenticateLink';
 
 const container = css`
@@ -126,24 +127,22 @@ export function PaymentMethodSelector({
 											: 'ExistingDirectDebit';
 
 									return (
-										<ExistingPaymentMethodAccordionRow
-											expanded={
-												paymentMethod ===
-													mapExistingPaymentMethodToPaymentMethod(
-														preExistingPaymentMethod,
-													) &&
-												existingPaymentMethod === preExistingPaymentMethod
-											}
-											paymentMethod={paymentMethod}
-											preExistingPaymentMethod={preExistingPaymentMethod}
-											existingPaymentMethod={existingPaymentMethod}
+										<AvailablePaymentMethodAccordionRow
+											id={`paymentMethod-existing${preExistingPaymentMethod.billingAccountId}`}
+											name="paymentMethod"
+											label={getExistingPaymentMethodLabel(
+												preExistingPaymentMethod,
+											)}
+											image={paymentMethodData[paymentType].icon}
 											checked={
-												paymentMethod ===
-													mapExistingPaymentMethodToPaymentMethod(
-														preExistingPaymentMethod,
-													) &&
+												paymentMethod === paymentType &&
 												existingPaymentMethod === preExistingPaymentMethod
 											}
+											supportingText={`Used for your ${subscriptionsToExplainerList(
+												preExistingPaymentMethod.subscriptions.map(
+													subscriptionToExplainerPart,
+												),
+											)}`}
 											onChange={() => {
 												dispatch(setPaymentMethod(paymentType));
 												dispatch(

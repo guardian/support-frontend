@@ -12,14 +12,7 @@ import {
 	getValidContributionTypesFromUrlOrElse,
 	getValidPaymentMethods,
 } from 'helpers/forms/checkouts';
-import {
-	isUsableExistingPaymentMethod,
-	mapExistingPaymentMethodToPaymentMethod,
-	sendGetExistingPaymentMethodsRequest,
-} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -33,23 +26,15 @@ import {
 	setOtherAmount,
 	setProductType,
 } from 'helpers/redux/checkout/product/actions';
-import {
-	setContributionTypes,
-	setExistingPaymentMethods,
-} from 'helpers/redux/commonState/actions';
+import { setContributionTypes } from 'helpers/redux/commonState/actions';
 import type {
 	ContributionsDispatch,
 	ContributionsState,
 	ContributionsStore,
 } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
-import { getQueryParameter } from 'helpers/urls/url';
-import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
-import {
-	setUserTypeFromIdentityResponse,
-	updateSelectedExistingPaymentMethod,
-} from './contributionsLandingActions';
+import { setUserTypeFromIdentityResponse } from './contributionsLandingActions';
 import type { State } from './contributionsLandingReducer';
 
 // ----- Functions ----- //
@@ -99,64 +84,6 @@ function getInitialContributionType(
 	return defaultContributionType
 		? defaultContributionType.contributionType
 		: contributionTypes[countryGroupId][0].contributionType;
-}
-
-// TODO: delete this function when we turn off the old checkout
-function initialisePaymentMethods(
-	state: State,
-	dispatch: ContributionsDispatch,
-) {
-	const { currencyId } = state.common.internationalisation;
-	// initiate fetch of existing payment methods
-	const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
-	const existingDirectDebitON = isSwitchOn(
-		'recurringPaymentMethods.existingDirectDebit',
-	);
-	const existingCardON = isSwitchOn('recurringPaymentMethods.existingCard');
-	const existingPaymentsEnabledViaUrlParam =
-		getQueryParameter('displayExistingPaymentOptions') === 'true';
-
-	if (
-		userAppearsLoggedIn &&
-		(existingCardON || existingDirectDebitON) &&
-		existingPaymentsEnabledViaUrlParam
-	) {
-		sendGetExistingPaymentMethodsRequest(
-			currencyId,
-			(allExistingPaymentMethods: ExistingPaymentMethod[]) => {
-				const switchedOnExistingPaymentMethods =
-					allExistingPaymentMethods.filter(
-						(existingPaymentMethod) =>
-							(existingPaymentMethod.paymentType === 'Card' &&
-								existingCardON) ||
-							(existingPaymentMethod.paymentType === 'DirectDebit' &&
-								existingDirectDebitON),
-					);
-				dispatch(setExistingPaymentMethods(switchedOnExistingPaymentMethods));
-				const firstExistingPaymentMethod = switchedOnExistingPaymentMethods[0];
-				const allowDefaultSelectedPaymentMethod =
-					state.common.abParticipations.defaultPaymentMethodTest === 'control';
-
-				if (
-					allowDefaultSelectedPaymentMethod &&
-					isUsableExistingPaymentMethod(firstExistingPaymentMethod)
-				) {
-					dispatch(
-						setPaymentMethod(
-							mapExistingPaymentMethodToPaymentMethod(
-								firstExistingPaymentMethod,
-							),
-						),
-					);
-					dispatch(
-						updateSelectedExistingPaymentMethod(firstExistingPaymentMethod),
-					);
-				}
-			},
-		);
-	} else {
-		dispatch(setExistingPaymentMethods([]));
-	}
 }
 
 function selectInitialAmounts(
@@ -267,7 +194,6 @@ const init = (store: ContributionsStore): void => {
 	dispatch(setContributionTypes(contributionTypes));
 	getStoredEmail(dispatch);
 	void dispatch(getExistingPaymentMethods());
-	initialisePaymentMethods(state, dispatch);
 	const contributionType = selectInitialContributionTypeAndPaymentMethod(
 		state,
 		dispatch,

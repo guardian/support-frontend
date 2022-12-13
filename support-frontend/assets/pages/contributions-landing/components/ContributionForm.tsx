@@ -331,6 +331,8 @@ function ContributionForm(props: PropTypes): JSX.Element {
 		props.switches,
 		props.country,
 		props.countryGroupId,
+	).filter(
+		(method) => method !== 'ExistingCard' && method !== 'ExistingDirectDebit',
 	);
 
 	const onPaymentMethodUpdate = (paymentMethod: PaymentMethod) => {
