@@ -37,7 +37,6 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
           state.user,
           state.product.currency,
           services,
-          state.ipAddress,
           state.userAgent,
         )
           .map(paymentMethod =>
@@ -65,7 +64,6 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       user: User,
       currency: Currency,
       services: Services,
-      ipAddress: String,
       userAgent: String,
   ): Future[PaymentMethod] =
     paymentFields match {
@@ -76,7 +74,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       case dd: DirectDebitPaymentFields =>
         createDirectDebitPaymentMethod(dd, user)
       case sepa: SepaPaymentFields =>
-        createSepaPaymentMethod(sepa, user, ipAddress, userAgent)
+        createSepaPaymentMethod(sepa, user, "2001:db8:3333:4444:5555:6666:7777:8888", userAgent)
       case _: ExistingPaymentFields =>
         Future.failed(new RuntimeException("Existing payment methods should never make their way to this lambda"))
       case amazonPay: AmazonPayPaymentFields =>
@@ -179,9 +177,6 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       ipAddress: String,
       userAgent: String,
   ): Future[SepaPaymentMethod] = {
-    if (ipAddress.length() > 15) {
-      SafeLogger.warn(s"IPv6 Address: ${ipAddress} is longer than 15 characters")
-    }
     if (userAgent.length() > 255) {
       SafeLogger.warn(s"User Agent: ${userAgent} will be truncated to 255 characters")
     }
