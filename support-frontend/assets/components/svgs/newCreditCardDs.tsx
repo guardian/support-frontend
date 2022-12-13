@@ -12,10 +12,10 @@ export default function SvgNewCreditCardDs(): JSX.Element {
 			preserveAspectRatio="xMinYMid"
 			aria-hidden="true"
 			focusable="false"
-			aria-labelledby="svgDescription"
+			aria-labelledby="svgDescriptionCreditCard"
 			role="img"
 		>
-			<desc id="svgDescription">Credit card symbol</desc>
+			<desc id="svgDescriptionCreditCard">Credit card symbol</desc>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"

@@ -11,10 +11,10 @@ export default function SvgPayPalDs(): JSX.Element {
 			className="svg-paypal" // preserveAspectRatio="xMinYMid"
 			aria-hidden="true"
 			focusable="false"
-			aria-labelledby="svgDescription"
+			aria-labelledby="svgDescriptionPayPal"
 			role="img"
 		>
-			<desc id="svgTitle">PayPal logo</desc>
+			<desc id="svgDescriptionPayPal">PayPal logo</desc>
 			<path
 				d="M20.2203 6.06506C20.2055 6.15997 20.1885 6.257 20.1694 6.35668C19.5136 9.72401 17.2697 10.8873 14.404 10.8873H12.9449C12.5944 10.8873 12.2991 11.1418 12.2445 11.4875L11.4974 16.2254L11.2858 17.5684C11.2503 17.7953 11.4253 18 11.6543 18H14.2423C14.5487 18 14.8091 17.7773 14.8573 17.4751L14.8828 17.3436L15.37 14.2514L15.4013 14.0818C15.449 13.7785 15.7099 13.5558 16.0163 13.5558H16.4034C18.9107 13.5558 20.8735 12.5378 21.4472 9.59199C21.6869 8.36138 21.5628 7.33384 20.9287 6.61117C20.7368 6.39326 20.4987 6.21246 20.2203 6.06506Z"
 				fill="#A7B4C8"
