@@ -122,7 +122,6 @@ export const tests: Tests = {
 			},
 		],
 		audiences: {
-			// test
 			ALL: {
 				offset: 0,
 				size: 1,
