@@ -50,12 +50,13 @@ user.init(store.dispatch, setUserStateActions(countryGroupId));
 formInit(store);
 const reactElementId = `contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
+const countryIds = Object.values(countryGroups).map(
+	(group) => group.supportInternationalisationId,
+);
 
 // ----- Render ----- //
 
 const router = () => {
-	const countryIds = ['uk', 'us', 'au', 'eu', 'int', 'nz', 'ca'];
-
 	const landingPage = (
 		<SupporterPlusLandingPage thankYouRoute={thankYouRoute} />
 	);
