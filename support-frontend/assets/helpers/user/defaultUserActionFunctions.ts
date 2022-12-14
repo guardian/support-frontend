@@ -84,6 +84,13 @@ function setPostDeploymentTestUser(postDeploymentTestUser: boolean): Action {
 	};
 }
 
+function setStorybookUser(storybookUser: boolean): Action {
+	return {
+		type: 'SET_STORYBOOK_USER',
+		storybookUser,
+	};
+}
+
 function setGnmMarketing(preference: boolean): Action {
 	return {
 		type: 'SET_GNM_MARKETING',
@@ -128,6 +135,7 @@ const defaultUserActionFunctions = {
 	setIsRecurringContributor,
 	setTestUser,
 	setPostDeploymentTestUser,
+	setStorybookUser,
 	setGnmMarketing,
 	setEmailValidated,
 	setIsReturningContributor,

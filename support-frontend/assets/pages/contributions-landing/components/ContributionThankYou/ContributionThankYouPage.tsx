@@ -2,6 +2,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import Footer from 'components/footer/footer';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import Page from 'components/page/page';
+import { TestUserBanner } from 'components/test-user-banner/testUserBanner';
 import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -60,6 +61,7 @@ function ContributionThankYouPage({
 			header={<RoundelHeader />}
 			footer={<Footer disclaimer countryGroupId={countryGroupId} />}
 		>
+			<TestUserBanner />
 			<ContributionThankYou />
 		</Page>
 	);

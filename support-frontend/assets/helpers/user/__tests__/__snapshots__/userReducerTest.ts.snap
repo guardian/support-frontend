@@ -13,6 +13,7 @@ Object {
   "isRecurringContributor": false,
   "isReturningContributor": false,
   "isSignedIn": false,
+  "isStorybookUser": false,
   "isTestUser": null,
   "lastName": "",
   "stateField": "",

@@ -1,3 +1,4 @@
+import { MemoryRouter } from 'react-router-dom';
 import type { PageScaffoldProps } from 'components/page/pageScaffold';
 import { PageScaffold } from 'components/page/pageScaffold';
 
@@ -15,7 +16,11 @@ export default {
 };
 
 function Template(args: PageScaffoldProps) {
-	return <PageScaffold id={args.id}>{args.children}</PageScaffold>;
+	return (
+		<MemoryRouter>
+			<PageScaffold id={args.id}>{args.children}</PageScaffold>
+		</MemoryRouter>
+	);
 }
 
 Template.args = {} as Record<string, unknown>;

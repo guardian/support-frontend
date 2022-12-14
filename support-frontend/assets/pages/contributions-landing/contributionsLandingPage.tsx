@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import ContributionsFooter from 'components/footerCompliant/ContributionsFooter';
 import { RoundelHeader } from 'components/headers/roundelHeader/header';
 import Page from 'components/page/page';
+import { TestUserBanner } from 'components/test-user-banner/testUserBanner';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -35,6 +36,7 @@ export function ContributionsLandingPage({
 			footer={<ContributionsFooter />}
 			backgroundImageSrc={backgroundImageSrc}
 		>
+			<TestUserBanner />
 			<ContributionFormContainer
 				thankYouRoute={thankYouRoute}
 				campaignCodeParameter={campaignCode}

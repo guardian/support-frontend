@@ -1,5 +1,6 @@
 import '__mocks__/settingsMock';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
 import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -79,7 +80,11 @@ export default {
 };
 
 function Template() {
-	return <SupporterPlusThankYou />;
+	return (
+		<MemoryRouter>
+			<SupporterPlusThankYou />
+		</MemoryRouter>
+	);
 }
 
 Template.args = {} as Record<string, unknown>;
@@ -111,6 +116,7 @@ OneOffNotSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		store.dispatch(setProductType('ONE_OFF'));
 		store.dispatch(setFirstName('Joe'));
@@ -156,6 +162,7 @@ OneOffSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
 		store.dispatch(setProductType('ONE_OFF'));
@@ -202,6 +209,7 @@ OneOffSignUp.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		// is a new account
 		store.dispatch(setUserTypeFromIdentityResponse('new'));
@@ -257,6 +265,7 @@ RecurringNotSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		store.dispatch(setProductType(contributionType));
 		store.dispatch(setUserTypeFromIdentityResponse('guest'));
@@ -317,6 +326,7 @@ RecurringSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
 		store.dispatch(setUserTypeFromIdentityResponse('current'));
@@ -378,6 +388,7 @@ RecurringSignUp.decorators = [
 
 		const store = createTestStoreForContributions();
 
+		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
 		store.dispatch(setCountryInternationalisation('AU'));
 		// is a new account
 		store.dispatch(setUserTypeFromIdentityResponse('new'));
