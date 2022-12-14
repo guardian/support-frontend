@@ -33,7 +33,7 @@ libraryDependencies ++= Seq(
   "org.scalatestplus" %% "mockito-3-4" % "3.2.1.0" % "test",
   "org.mockito" % "mockito-core" % "4.8.1",
   "org.typelevel" %% "cats-core" % catsVersion,
-  "com.github.blemale" %% "scaffeine" % "4.1.0",
+  "com.github.blemale" %% "scaffeine" % "5.2.1",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
