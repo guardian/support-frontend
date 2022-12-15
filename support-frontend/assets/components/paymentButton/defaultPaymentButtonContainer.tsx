@@ -59,6 +59,8 @@ export function DefaultPaymentButtonContainer({
 		(state) => state.common.internationalisation,
 	);
 
+	const testId = 'qa-contributions-landing-submit-contribution-button';
+
 	const amountIsAboveThreshold = shouldShowBenefitsMessaging(
 		contributionType,
 		selectedAmounts,
@@ -74,5 +76,11 @@ export function DefaultPaymentButtonContainer({
 				contributionTypeToPaymentInterval[contributionType],
 		  );
 
-	return <DefaultPaymentButton buttonText={buttonText} onClick={onClick} />;
+	return (
+		<DefaultPaymentButton
+			id={testId}
+			buttonText={buttonText}
+			onClick={onClick}
+		/>
+	);
 }
