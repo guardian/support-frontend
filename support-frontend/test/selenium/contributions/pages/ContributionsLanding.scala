@@ -14,29 +14,27 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
 
   private val contributePayPalButton = className("paypal-button")
 
-  private val oneOffButton = cssSelector(".form__radio-group--contribution-type label[for='contributionType-ONE_OFF']")
-  private val monthlyButton = cssSelector(".form__radio-group--contribution-type label[for='contributionType-MONTHLY']")
-  private val annualButton = cssSelector(".form__radio-group--contribution-type label[for='contributionType-ANNUAL']")
+  private val oneOffButton = id("ONE_OFF")
+  private val monthlyButton = id("MONTHLY")
+  private val annualButton = id("ANNUAL")
 
-  private val otherAmountButton = cssSelector(
-    ".form__radio-group--contribution-amount label[for='contributionAmount-other']",
-  )
+  private val otherAmountButton = cssSelector("label[for='amount-other']")
 
-  private val otherAmount = id("contributionOther")
+  private val otherAmount = id("otherAmount")
 
   private val stripeSelector = id("qa-credit-card")
   private val directDebitSelector = id("qa-direct-debit")
   private val payPalSelector = id("qa-paypal")
-  private val stateSelector = id("contributionState")
+  private val stateSelector = id("state")
 
   private val stripeOverlayIframe = cssSelector(".stripe_checkout_app")
 
   private val recaptchaButton = id("robot_checkbox")
 
   private object RegisterFields {
-    private val firstName = id("contributionFirstName")
-    private val lastName = id("contributionLastName")
-    private val email = id("contributionEmail")
+    private val firstName = id("firstName")
+    private val lastName = id("lastName")
+    private val email = id("email")
 
     def fillIn(hasNameFields: Boolean): Unit = {
 
@@ -71,10 +69,10 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
       }
     }
 
-    val cardNumber = StripeCardField("stripeCardNumberElement", "cardnumber")
-    val expiryDate = StripeCardField("stripeCardExpiryElement", "exp-date")
-    val cvc = StripeCardField("stripeCardCVCElement", "cvc")
-    val zipCode = id("contributionZipCode")
+    val cardNumber = StripeCardField("cardNumber", "cardnumber")
+    val expiryDate = StripeCardField("expiry", "exp-date")
+    val cvc = StripeCardField("cvc", "cvc")
+    val zipCode = id("zipCode")
 
     def fillIn(hasZipCodeField: Boolean): Unit = {
       cardNumber.set("4242424242424242")
