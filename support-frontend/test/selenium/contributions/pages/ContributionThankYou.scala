@@ -8,7 +8,7 @@ class ContributionThankYou(region: String)(implicit val webDriver: WebDriver) ex
 
   val url = s"${Config.supportFrontendUrl}/$region/thankyou"
 
-  private val thankYouMainElement = className("supporter-plus-thank-you")
+  private val thankYouMainElement = id("supporter-plus-thank-you")
 
   def pageHasLoaded: Boolean = {
     pageHasElement(thankYouMainElement) && pageHasUrl(s"/$region/thankyou")
