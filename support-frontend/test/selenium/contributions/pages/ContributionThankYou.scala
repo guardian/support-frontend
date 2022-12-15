@@ -8,10 +8,10 @@ class ContributionThankYou(region: String)(implicit val webDriver: WebDriver) ex
 
   val url = s"${Config.supportFrontendUrl}/$region/thankyou"
 
-  private val thankYouHeader = className("gu-content--contribution-thankyou")
+  private val thankYouMainElement = className("supporter-plus-thank-you")
 
   def pageHasLoaded: Boolean = {
-    pageHasElement(thankYouHeader) && pageHasUrl(s"/$region/thankyou")
+    pageHasElement(thankYouMainElement) && pageHasUrl(s"/$region/thankyou")
   }
 
 }
