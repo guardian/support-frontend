@@ -19,7 +19,7 @@ import {
 	getAllQueryParamsWithExclusions,
 	getQueryParameter,
 } from 'helpers/urls/url';
-import { SUPPORTER_PLUS_AMOUNTS } from '../checkout/product/supporterPlus/supporterPlusAmounts';
+import { getAmounts } from '../../abTests/helpers';
 import type { CommonState, Internationalisation } from '../commonState/state';
 
 function getLocalCurrencyCountry(
@@ -66,9 +66,7 @@ function buildInitialState(
 		internationalisation.localCurrencyCountry = localCurrencyCountry;
 	}
 
-	// Hard coded supporter plus amounts
-	const amounts = SUPPORTER_PLUS_AMOUNTS[countryGroupId];
-	// const amounts = getAmounts(settings, abParticipations, countryGroupId);
+	const amounts = getAmounts(settings, abParticipations, countryGroupId);
 
 	return {
 		campaign: getCampaign(acquisitionData),
