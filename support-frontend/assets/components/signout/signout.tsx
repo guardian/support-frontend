@@ -1,4 +1,11 @@
+import { css } from '@emotion/react';
+import { neutral, textSans } from '@guardian/source-foundations';
 import { getSignoutUrl } from 'helpers/urls/externalLinks';
+
+const signOutStyles = css`
+	${textSans.xsmall({ fontWeight: 'light' })}
+	color: ${neutral[7]};
+`;
 
 interface SignoutProps {
 	isSignedIn: boolean;
@@ -11,7 +18,7 @@ function Signout({ isSignedIn, returnUrl }: SignoutProps): JSX.Element | null {
 	}
 
 	return (
-		<a className="component-signout" href={getSignoutUrl(returnUrl)}>
+		<a css={signOutStyles} href={getSignoutUrl(returnUrl)}>
 			Not you? Sign out
 		</a>
 	);

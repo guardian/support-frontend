@@ -1,7 +1,6 @@
 import { isAnyOf } from '@reduxjs/toolkit';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
-import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
 import {
 	setEmail,
 	setFirstName,
@@ -28,13 +27,12 @@ export function addPersonalDetailsSideEffects(
 ): void {
 	startListening({
 		matcher: shouldCheckFormEnabled,
-		effect(action, listenerApi) {
+		effect(action) {
 			if (isSettingUserType(action)) {
 				storage.setSession('userTypeFromIdentityResponse', action.payload);
 			} else if (setEmail.match(action)) {
 				storage.setSession('gu.email', action.payload);
 			}
-			listenerApi.dispatch(enableOrDisableForm());
 		},
 	});
 

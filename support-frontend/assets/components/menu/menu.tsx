@@ -1,3 +1,5 @@
+import { css } from '@emotion/react';
+import { visuallyHidden } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 import SvgCheckmark from 'components/svgs/checkmark';
 import moduleStyles from './menu.module.scss';
@@ -22,7 +24,13 @@ function Item({
 			{children}{' '}
 			{isSelected && [
 				<SvgCheckmark />,
-				<span className="visually-hidden">Selected</span>,
+				<span
+					css={css`
+						${visuallyHidden}
+					`}
+				>
+					Selected
+				</span>,
 			]}
 		</El>
 	);

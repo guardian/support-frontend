@@ -14,10 +14,7 @@ import { gaEvent } from 'helpers/tracking/googleTagManager';
 import * as user from 'helpers/user/user';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
-import { enableOrDisableForm } from './checkoutFormIsSubmittableActions';
-import ContributionThankYouPage from './components/ContributionThankYou/ContributionThankYouPage';
 import { init as formInit } from './contributionsLandingInit';
-import { ContributionsLandingPage } from './contributionsLandingPage';
 import { setUserStateActions } from './setUserStateActions';
 
 if (!isDetailsSupported) {
@@ -52,30 +49,16 @@ if (typeof Object.values !== 'function') {
 user.init(store.dispatch, setUserStateActions(countryGroupId));
 formInit(store);
 const reactElementId = `contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
-const { abParticipations } = store.getState().common;
-
-const showNewProductPage = abParticipations.supporterPlus === 'variant';
-
 const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
+const countryIds = Object.values(countryGroups).map(
+	(group) => group.supportInternationalisationId,
+);
 
 // ----- Render ----- //
 
 const router = () => {
-	const countryIds = ['uk', 'us', 'au', 'eu', 'int', 'nz', 'ca'];
-
-	const landingPage = showNewProductPage ? (
+	const landingPage = (
 		<SupporterPlusLandingPage thankYouRoute={thankYouRoute} />
-	) : (
-		<ContributionsLandingPage
-			countryGroupId={countryGroupId}
-			thankYouRoute={thankYouRoute}
-		/>
-	);
-
-	const thankYouPage = showNewProductPage ? (
-		<SupporterPlusThankYou />
-	) : (
-		<ContributionThankYouPage countryGroupId={countryGroupId} />
 	);
 
 	return (
@@ -92,7 +75,10 @@ const router = () => {
 						/>
 					))}
 					{countryIds.map((countryId) => (
-						<Route path={`/${countryId}/thankyou`} element={thankYouPage} />
+						<Route
+							path={`/${countryId}/thankyou`}
+							element={<SupporterPlusThankYou />}
+						/>
 					))}
 				</Routes>
 			</Provider>
@@ -100,6 +86,4 @@ const router = () => {
 	);
 };
 
-const dispatch = store.dispatch;
-
-renderPage(router(), reactElementId, () => dispatch(enableOrDisableForm()));
+renderPage(router(), reactElementId);

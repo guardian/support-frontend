@@ -1,10 +1,12 @@
 import { css, Global } from '@emotion/react';
-import { FocusStyleManager, resets } from '@guardian/source-foundations';
+import { FocusStyleManager } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { SkipLink } from 'components/skipLink/skipLink';
 import { TestUserBanner } from 'components/test-user-banner/testUserBanner';
 import { useScrollToAnchor } from 'helpers/customHooks/useScrollToAnchor';
+import { guardianFonts } from 'stylesheets/emotion/fonts';
+import { reset } from 'stylesheets/emotion/reset';
 
 const container = css`
 	display: flex;
@@ -37,11 +39,7 @@ export function PageScaffold(props: PageScaffoldProps): JSX.Element {
 
 	return (
 		<div id={props.id} css={container}>
-			<Global
-				styles={css`
-					${resets.resetCSS}
-				`}
-			/>
+			<Global styles={[reset, guardianFonts]} />
 			<SkipLink id="maincontent" label="Skip to main content" />
 			<SkipLink id="navigation" label="Skip to navigation" />
 			<CsrBanner />

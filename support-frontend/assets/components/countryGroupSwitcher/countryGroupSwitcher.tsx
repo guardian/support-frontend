@@ -1,9 +1,10 @@
 // ----- Imports ----- //
+import { css } from '@emotion/react';
+import { visuallyHidden } from '@guardian/source-foundations';
 import { useRef, useState } from 'react';
 import Dialog from 'components/dialog/dialog';
 import Menu, { LinkItem } from 'components/menu/menu';
 import SvgDropdownArrow from 'components/svgs/dropdownArrow';
-import 'helpers/types/option';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -106,7 +107,9 @@ function CountryGroupSwitcher({
 						</LinkItem>
 					))}
 					<button
-						className="visually-hidden"
+						css={css`
+							${visuallyHidden}
+						`}
 						onClick={() => {
 							setMenuOpen(false);
 						}}

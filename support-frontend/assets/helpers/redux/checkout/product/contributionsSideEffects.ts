@@ -9,11 +9,9 @@ import type { ContributionsStartListening } from 'helpers/redux/contributionsSto
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
-import { enableOrDisableForm } from 'pages/contributions-landing/checkoutFormIsSubmittableActions';
 import { validateForm } from '../checkoutActions';
 import {
 	setAllAmounts,
-	setOtherAmount,
 	setOtherAmountError,
 	setProductType,
 	setSelectedAmount,
@@ -21,12 +19,6 @@ import {
 } from './actions';
 import { getContributionCartValueData } from './selectors/cartValue';
 import { isContribution } from './selectors/productType';
-
-const shouldCheckFormEnabled = isAnyOf(
-	setAllAmounts,
-	setSelectedAmount,
-	setOtherAmount,
-);
 
 const shouldSendEventContributionCartValue = isAnyOf(
 	setAllAmounts,
@@ -79,13 +71,6 @@ export function addProductSideEffects(
 			trackComponentClick(
 				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`,
 			);
-		},
-	});
-
-	startListening({
-		matcher: shouldCheckFormEnabled,
-		effect(_, listenerApi) {
-			listenerApi.dispatch(enableOrDisableForm());
 		},
 	});
 

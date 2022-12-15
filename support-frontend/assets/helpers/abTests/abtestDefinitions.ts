@@ -115,21 +115,4 @@ export const tests: Tests = {
 		seed: 10,
 		optimizeId: 'dQCXBc3QQIW7M1Di_qSCHw',
 	},
-	supporterPlus: {
-		variants: [
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		referrerControlled: false,
-		seed: 15,
-	},
 };
