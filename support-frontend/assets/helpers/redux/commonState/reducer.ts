@@ -4,7 +4,6 @@ import type {
 	ContributionAmounts,
 	ContributionTypes,
 } from 'helpers/contributions';
-import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
@@ -85,12 +84,6 @@ export const commonSlice = createSlice({
 					state.internationalisation,
 				),
 			};
-		},
-		setExistingPaymentMethods(
-			state,
-			action: PayloadAction<ExistingPaymentMethod[]>,
-		) {
-			state.existingPaymentMethods = action.payload;
 		},
 		setContributionTypes(state, action: PayloadAction<ContributionTypes>) {
 			state.settings.contributionTypes = action.payload;

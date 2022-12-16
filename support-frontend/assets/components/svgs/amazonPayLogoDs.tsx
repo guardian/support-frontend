@@ -10,10 +10,10 @@ export default function SvgAmazonPayLogoDs(): JSX.Element {
 			preserveAspectRatio="xMinYMid"
 			aria-hidden="true"
 			focusable="false"
-			aria-labelledby="svgDescription"
+			aria-labelledby="svgDescriptionAmazonPay"
 			role="img"
 		>
-			<desc id="svgDescription">Amazon Pay badge</desc>
+			<desc id="svgDescriptionAmazonPay">Amazon Pay badge</desc>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"

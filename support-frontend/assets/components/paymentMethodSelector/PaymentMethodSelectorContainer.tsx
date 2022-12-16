@@ -1,47 +1,43 @@
-import type { ContributionType } from 'helpers/contributions';
-import { contributionTypeIsRecurring } from 'helpers/contributions';
+import { useEffect } from 'react';
 import { getValidPaymentMethods } from 'helpers/forms/checkouts';
-import type {
-	ExistingPaymentMethod,
-	RecentlySignedInExistingPaymentMethod,
-} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
-	getFullExistingPaymentMethods,
-	isUsableExistingPaymentMethod,
-} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+	ExistingCard,
+	ExistingDirectDebit,
+} from 'helpers/forms/paymentMethods';
+import { selectExistingPaymentMethod } from 'helpers/redux/checkout/payment/existingPaymentMethods/actions';
+import type { ExistingPaymentMethodsState } from 'helpers/redux/checkout/payment/existingPaymentMethods/state';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
 
-function existingPaymentMethodsToDisplay(
-	contributionType: ContributionType,
-	existingPaymentMethods?: ExistingPaymentMethod[],
-): RecentlySignedInExistingPaymentMethod[] {
-	const shouldShowExistingPaymentMethods =
-		contributionTypeIsRecurring(contributionType);
+function getExistingPaymentMethodProps(
+	existingPaymentMethods: ExistingPaymentMethodsState,
+) {
+	if (existingPaymentMethods.showExistingPaymentMethods) {
+		const showReauthenticateLink =
+			existingPaymentMethods.showReauthenticateLink;
 
-	const existingPaymentMethodList = getFullExistingPaymentMethods(
-		existingPaymentMethods,
-	);
+		const existingPaymentMethodList = existingPaymentMethods.paymentMethods;
 
-	return shouldShowExistingPaymentMethods ? existingPaymentMethodList : [];
-}
-
-function showReauthenticationLink(
-	contributionType: ContributionType,
-	existingPaymentMethods?: ExistingPaymentMethod[],
-): boolean {
-	const shouldShowExistingPaymentMethods =
-		contributionTypeIsRecurring(contributionType);
-	const hasExistingPaymentMethods = existingPaymentMethods?.length;
-
-	if (!shouldShowExistingPaymentMethods || !hasExistingPaymentMethods) {
-		return false;
+		return {
+			existingPaymentMethod: existingPaymentMethods.selectedPaymentMethod,
+			existingPaymentMethodList,
+			pendingExistingPaymentMethods:
+				existingPaymentMethods.status === 'pending',
+			showReauthenticateLink,
+		};
 	}
-
-	return existingPaymentMethods.every(
-		(method) => !isUsableExistingPaymentMethod(method),
-	);
+	return {
+		existingPaymentMethodList: [],
+		pendingExistingPaymentMethods: existingPaymentMethods.status === 'pending',
+		showReauthenticateLink: false,
+	};
 }
 
 function PaymentMethodSelectorContainer({
@@ -51,6 +47,7 @@ function PaymentMethodSelectorContainer({
 		paymentMethodSelectorProps: PaymentMethodSelectorProps,
 	) => JSX.Element;
 }): JSX.Element {
+	const dispatch = useContributionsDispatch();
 	const contributionType = useContributionsSelector(getContributionType);
 
 	const { countryId, countryGroupId } = useContributionsSelector(
@@ -61,11 +58,8 @@ function PaymentMethodSelectorContainer({
 		(state) => state.page.checkoutForm.payment.paymentMethod,
 	);
 
-	const { existingPaymentMethod } = useContributionsSelector(
-		(state) => state.page.form,
-	);
 	const { existingPaymentMethods } = useContributionsSelector(
-		(state) => state.common,
+		(state) => state.page.checkoutForm.payment,
 	);
 	const { switches } = useContributionsSelector(
 		(state) => state.common.settings,
@@ -76,28 +70,31 @@ function PaymentMethodSelectorContainer({
 		switches,
 		countryId,
 		countryGroupId,
+	).filter(
+		(methodName) =>
+			methodName !== ExistingCard && methodName !== ExistingDirectDebit,
 	);
 
-	// We check on page init if we should try to retrieve existing payment methods from MDAPI
-	// If we are in the process of retrieving them but the request is still pending, the value will be undefined.
-	// If we know we're not retrieving them the value is immediately set to an empty array
-	// TODO: Do this in a less weird way with a proper thunk and pending state!
-	const pendingExistingPaymentMethods = existingPaymentMethods === undefined;
+	function onSelectPaymentMethod(
+		paymentMethod: PaymentMethod,
+		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
+	) {
+		dispatch(setPaymentMethod(paymentMethod));
+		existingPaymentMethod &&
+			dispatch(selectExistingPaymentMethod(existingPaymentMethod));
+	}
+
+	useEffect(() => {
+		availablePaymentMethods.length === 1 &&
+			dispatch(setPaymentMethod(availablePaymentMethods[0]));
+	}, []);
 
 	return render({
 		availablePaymentMethods: availablePaymentMethods,
 		paymentMethod: name,
-		existingPaymentMethod,
-		existingPaymentMethodList: existingPaymentMethodsToDisplay(
-			contributionType,
-			existingPaymentMethods,
-		),
 		validationError: errors?.[0],
-		pendingExistingPaymentMethods,
-		showReauthenticateLink: showReauthenticationLink(
-			contributionType,
-			existingPaymentMethods,
-		),
+		...getExistingPaymentMethodProps(existingPaymentMethods),
+		onSelectPaymentMethod,
 	});
 }
 

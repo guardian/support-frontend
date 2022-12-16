@@ -8,15 +8,15 @@ import { onThirdPartyPaymentAuthorised } from 'pages/contributions-landing/contr
 
 export function ExistingDirectDebitPaymentButton(): JSX.Element {
 	const dispatch = useContributionsDispatch();
-	const { existingPaymentMethod } = useContributionsSelector(
-		(state) => state.page.form,
+	const { selectedPaymentMethod } = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.existingPaymentMethods,
 	);
 
 	const payWithExistingDD = useFormValidation(function pay() {
 		void dispatch(
 			onThirdPartyPaymentAuthorised({
 				paymentMethod: 'ExistingDirectDebit',
-				billingAccountId: existingPaymentMethod?.billingAccountId ?? '',
+				billingAccountId: selectedPaymentMethod?.billingAccountId ?? '',
 			}),
 		);
 	});

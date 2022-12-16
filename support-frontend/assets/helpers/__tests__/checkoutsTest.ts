@@ -1,6 +1,12 @@
 // ----- Imports ----- //
 
-import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
+import {
+	DirectDebit,
+	ExistingCard,
+	ExistingDirectDebit,
+	PayPal,
+	Stripe,
+} from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
@@ -36,7 +42,13 @@ describe('checkouts', () => {
 					countryId,
 					countryGroupId,
 				),
-			).toEqual([DirectDebit, Stripe, PayPal]);
+			).toEqual([
+				DirectDebit,
+				ExistingCard,
+				ExistingDirectDebit,
+				Stripe,
+				PayPal,
+			]);
 
 			expect(
 				getPaymentMethodToSelect(

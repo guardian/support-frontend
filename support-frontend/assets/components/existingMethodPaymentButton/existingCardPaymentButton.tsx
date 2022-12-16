@@ -8,15 +8,15 @@ import { onThirdPartyPaymentAuthorised } from 'pages/contributions-landing/contr
 
 export function ExistingCardPaymentButton(): JSX.Element {
 	const dispatch = useContributionsDispatch();
-	const { existingPaymentMethod } = useContributionsSelector(
-		(state) => state.page.form,
+	const { selectedPaymentMethod } = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.existingPaymentMethods,
 	);
 
 	const payWithExistingCard = useFormValidation(function pay() {
 		void dispatch(
 			onThirdPartyPaymentAuthorised({
 				paymentMethod: 'ExistingCard',
-				billingAccountId: existingPaymentMethod?.billingAccountId ?? '',
+				billingAccountId: selectedPaymentMethod?.billingAccountId ?? '',
 			}),
 		);
 	});

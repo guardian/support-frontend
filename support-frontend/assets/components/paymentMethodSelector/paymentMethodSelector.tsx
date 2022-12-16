@@ -2,22 +2,19 @@ import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
 import { from, headline, space } from '@guardian/source-foundations';
 import { Accordion, RadioGroup } from '@guardian/source-react-components';
-import { useEffect } from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import AnimatedDots from 'components/spinners/animatedDots';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import { mapExistingPaymentMethodToPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import { useContributionsDispatch } from 'helpers/redux/storeHooks';
-import ContributionChoicesHeader from 'pages/contributions-landing/components/ContributionChoicesHeader';
-import { updateSelectedExistingPaymentMethod } from 'pages/contributions-landing/contributionsLandingActions';
-import { paymentMethodData } from './paymentMethodData';
 import {
-	AvailablePaymentMethodAccordionRow,
-	ExistingPaymentMethodAccordionRow,
-} from './paymentMethodSelectorAccordionRow';
+	getExistingPaymentMethodLabel,
+	subscriptionsToExplainerList,
+	subscriptionToExplainerPart,
+} from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import ContributionChoicesHeader from 'pages/contributions-landing/components/ContributionChoicesHeader';
+import { paymentMethodData } from './paymentMethodData';
+import { AvailablePaymentMethodAccordionRow } from './paymentMethodSelectorAccordionRow';
 import { ReauthenticateLink } from './reauthenticateLink';
 
 const container = css`
@@ -59,6 +56,10 @@ export interface PaymentMethodSelectorProps {
 	existingPaymentMethodList: RecentlySignedInExistingPaymentMethod[];
 	pendingExistingPaymentMethods?: boolean;
 	showReauthenticateLink?: boolean;
+	onSelectPaymentMethod: (
+		paymentMethod: PaymentMethod,
+		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
+	) => void;
 }
 
 export function PaymentMethodSelector({
@@ -69,14 +70,8 @@ export function PaymentMethodSelector({
 	existingPaymentMethodList,
 	pendingExistingPaymentMethods,
 	showReauthenticateLink,
+	onSelectPaymentMethod,
 }: PaymentMethodSelectorProps): JSX.Element {
-	const dispatch = useContributionsDispatch();
-
-	useEffect(() => {
-		availablePaymentMethods.length === 1 &&
-			dispatch(setPaymentMethod(availablePaymentMethods[0]));
-	}, []);
-
 	if (
 		existingPaymentMethodList.length < 1 &&
 		availablePaymentMethods.length < 1
@@ -126,30 +121,26 @@ export function PaymentMethodSelector({
 											: 'ExistingDirectDebit';
 
 									return (
-										<ExistingPaymentMethodAccordionRow
-											expanded={
-												paymentMethod ===
-													mapExistingPaymentMethodToPaymentMethod(
-														preExistingPaymentMethod,
-													) &&
-												existingPaymentMethod === preExistingPaymentMethod
-											}
-											paymentMethod={paymentMethod}
-											preExistingPaymentMethod={preExistingPaymentMethod}
-											existingPaymentMethod={existingPaymentMethod}
+										<AvailablePaymentMethodAccordionRow
+											id={`paymentMethod-existing${preExistingPaymentMethod.billingAccountId}`}
+											name="paymentMethod"
+											label={getExistingPaymentMethodLabel(
+												preExistingPaymentMethod,
+											)}
+											image={paymentMethodData[paymentType].icon}
 											checked={
-												paymentMethod ===
-													mapExistingPaymentMethodToPaymentMethod(
-														preExistingPaymentMethod,
-													) &&
+												paymentMethod === paymentType &&
 												existingPaymentMethod === preExistingPaymentMethod
 											}
+											supportingText={`Used for your ${subscriptionsToExplainerList(
+												preExistingPaymentMethod.subscriptions.map(
+													subscriptionToExplainerPart,
+												),
+											)}`}
 											onChange={() => {
-												dispatch(setPaymentMethod(paymentType));
-												dispatch(
-													updateSelectedExistingPaymentMethod(
-														preExistingPaymentMethod,
-													),
+												onSelectPaymentMethod(
+													paymentType,
+													preExistingPaymentMethod,
 												);
 											}}
 											accordionBody={
@@ -167,7 +158,7 @@ export function PaymentMethodSelector({
 									label={paymentMethodData[method].label}
 									name="paymentMethod"
 									checked={paymentMethod === method}
-									onChange={() => dispatch(setPaymentMethod(method))}
+									onChange={() => onSelectPaymentMethod(method)}
 									accordionBody={paymentMethodData[method].accordionBody}
 								/>
 							))}

@@ -10,10 +10,10 @@ export default function DownChevronDs(): JSX.Element {
 			xmlns="http://www.w3.org/2000/svg"
 			aria-hidden="true"
 			focusable="false"
-			aria-labelledby="svgDescription"
+			aria-labelledby="svgDescriptionDownArrow"
 			role="img"
 		>
-			<desc id="svgDescription">Down arrow symbol</desc>
+			<desc id="svgDescriptionDownArrow">Down arrow symbol</desc>
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"
