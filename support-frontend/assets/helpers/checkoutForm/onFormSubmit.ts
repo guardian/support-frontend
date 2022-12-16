@@ -11,7 +11,7 @@ export type FormSubmitParameters = {
 	contributionType: ContributionType;
 	isSignedIn: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
-	setCheckoutFormHasBeenSubmitted?: () => void;
+	setCheckoutFormHasBeenSubmitted: () => void;
 	handlePayment?: () => void;
 	formIsSubmittable: boolean;
 	formIsValid: boolean;
@@ -55,5 +55,5 @@ export const onFormSubmit = (params: FormSubmitParameters) => {
 		);
 	}
 
-	params.setCheckoutFormHasBeenSubmitted?.();
+	params.setCheckoutFormHasBeenSubmitted();
 };

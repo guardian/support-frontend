@@ -75,7 +75,7 @@ export function addProductSideEffects(
 	});
 
 	startListening({
-		type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED',
+		type: 'PAYMENT_WAITING',
 		effect(_, listenerApi) {
 			const { contributionAmount } = getContributionCartValueData(
 				listenerApi.getState(),

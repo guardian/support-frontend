@@ -1,9 +1,6 @@
 // ----- Imports ----- //
 import type { PaymentIntentResult } from '@stripe/stripe-js';
 import type { Dispatch } from 'redux';
-import { getForm } from 'helpers/checkoutForm/checkoutForm';
-import type { FormSubmitParameters } from 'helpers/checkoutForm/onFormSubmit';
-import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import type { PaymentMatrix } from 'helpers/contributions';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
@@ -101,23 +98,6 @@ const paymentFailure = (paymentError: ErrorReason): Action => ({
 	type: 'PAYMENT_FAILURE',
 	paymentError,
 });
-
-const sendFormSubmitEventForPayPalRecurring =
-	() =>
-	(_dispatch: Dispatch, getState: () => ContributionsState): void => {
-		const state = getState();
-		const formSubmitParameters: FormSubmitParameters = {
-			...state.page.form,
-			paymentMethod: state.page.checkoutForm.payment.paymentMethod.name,
-			userTypeFromIdentityResponse:
-				state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
-			contributionType: getContributionType(state),
-			flowPrefix: 'npf',
-			form: getForm('form--contribution'),
-			isSignedIn: state.page.user.isSignedIn,
-		};
-		onFormSubmit(formSubmitParameters);
-	};
 
 const buildStripeChargeDataFromAuthorisation = (
 	stripePaymentMethod: StripePaymentMethod,
@@ -600,5 +580,4 @@ export {
 	paymentSuccess,
 	onThirdPartyPaymentAuthorised,
 	createOneOffPayPalPayment,
-	sendFormSubmitEventForPayPalRecurring,
 };
