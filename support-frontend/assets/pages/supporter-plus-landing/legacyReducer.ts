@@ -18,10 +18,9 @@ import { recaptchaReducer } from 'helpers/redux/checkout/recaptcha/reducer';
 import type { RecaptchaState } from 'helpers/redux/checkout/recaptcha/state';
 import { thankYouReducer } from 'helpers/redux/checkout/thankYouState/reducer';
 import type { ThankYouState } from 'helpers/redux/checkout/thankYouState/state';
-import type { CommonState } from 'helpers/redux/commonState/state';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { User as UserState } from 'helpers/user/userReducer';
-import type { Action } from './contributionsLandingActions';
+import type { Action } from './legacyActionCreators';
 
 // ----- Types ----- //
 
@@ -29,7 +28,6 @@ interface FormState {
 	isWaiting: boolean;
 	paymentComplete: boolean;
 	paymentError: ErrorReason | null;
-	tickerGoalReached: boolean;
 }
 
 export interface PageState {
@@ -47,11 +45,6 @@ export interface PageState {
 	user: UserState;
 }
 
-export interface State {
-	common: CommonState;
-	page: PageState;
-}
-
 // ----- Functions ----- //
 
 function createFormReducer() {
@@ -60,16 +53,12 @@ function createFormReducer() {
 		isWaiting: false,
 		paymentComplete: false,
 		paymentError: null,
-		tickerGoalReached: false,
 	};
 	return function formReducer(
 		state: FormState = initialState,
 		action: Action,
 	): FormState {
 		switch (action.type) {
-			case 'SET_TICKER_GOAL_REACHED':
-				return { ...state, tickerGoalReached: true };
-
 			case 'PAYMENT_FAILURE':
 				return {
 					...state,

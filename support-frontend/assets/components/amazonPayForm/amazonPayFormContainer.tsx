@@ -17,7 +17,7 @@ import {
 } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
-import { paymentWaiting } from 'pages/contributions-landing/contributionsLandingActions';
+import { paymentWaiting } from 'pages/supporter-plus-landing/legacyActionCreators';
 import AmazonPayForm from './amazonPayForm';
 
 export function AmazonPayFormContainer(): JSX.Element {

@@ -12,7 +12,7 @@ import {
 	onThirdPartyPaymentAuthorised,
 	paymentWaiting,
 	sendFormSubmitEventForPayPalRecurring,
-} from 'pages/contributions-landing/contributionsLandingActions';
+} from 'pages/supporter-plus-landing/legacyActionCreators';
 import { PayPalButton } from './payPalButton';
 import type { OnPaypalWindowOpen } from './payPalButtonProps';
 import { getPayPalButtonProps } from './payPalButtonProps';

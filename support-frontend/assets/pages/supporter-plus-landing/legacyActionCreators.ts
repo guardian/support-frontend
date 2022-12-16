@@ -86,10 +86,6 @@ export type Action =
 	  }
 	| {
 			type: 'PAYMENT_SUCCESS';
-	  }
-	| {
-			type: 'SET_TICKER_GOAL_REACHED';
-			tickerGoalReached: boolean;
 	  };
 
 const paymentSuccess = (): Action => ({
@@ -104,11 +100,6 @@ const paymentWaiting = (isWaiting: boolean): Action => ({
 const paymentFailure = (paymentError: ErrorReason): Action => ({
 	type: 'PAYMENT_FAILURE',
 	paymentError,
-});
-
-const setTickerGoalReached = (): Action => ({
-	type: 'SET_TICKER_GOAL_REACHED',
-	tickerGoalReached: true,
 });
 
 const sendFormSubmitEventForPayPalRecurring =
@@ -610,5 +601,4 @@ export {
 	onThirdPartyPaymentAuthorised,
 	createOneOffPayPalPayment,
 	sendFormSubmitEventForPayPalRecurring,
-	setTickerGoalReached,
 };

@@ -37,7 +37,6 @@ import type {
 	ContributionsStore,
 } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
-import type { State } from './contributionsLandingReducer';
 
 // ----- Functions ----- //
 function getInitialPaymentMethod(
@@ -145,7 +144,7 @@ function selectInitialAmounts(
 }
 
 // Override the settings from the server if contributionTypes are defined in url params or campaign settings
-function getContributionTypes(state: State): ContributionTypes {
+function getContributionTypes(state: ContributionsState): ContributionTypes {
 	const campaignSettings = getCampaignSettings();
 
 	if (campaignSettings?.contributionTypes) {

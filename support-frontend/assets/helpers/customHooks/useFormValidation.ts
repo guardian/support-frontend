@@ -7,7 +7,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { paymentWaiting } from 'pages/contributions-landing/contributionsLandingActions';
+import { paymentWaiting } from 'pages/supporter-plus-landing/legacyActionCreators';
 
 type PreventableEvent = {
 	preventDefault: () => void;
