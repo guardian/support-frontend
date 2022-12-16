@@ -4,28 +4,23 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import type { Action, UserSetStateActions } from 'helpers/user/userActions';
-import { setFormSubmissionDependentValue } from './checkoutFormIsSubmittableActions';
 
 // ----- Actions Creators ----- //
 const setIsSignedIn =
 	(isSignedIn: boolean) =>
 	(dispatch: ThunkDispatch<ContributionsState, void, Action>) => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_IS_SIGNED_IN',
-				isSignedIn,
-			})),
-		);
+		dispatch({
+			type: 'SET_IS_SIGNED_IN',
+			isSignedIn,
+		});
 	};
 
 const setIsRecurringContributor =
 	() =>
 	(dispatch: ThunkDispatch<ContributionsState, void, Action>): void => {
-		dispatch(
-			setFormSubmissionDependentValue(() => ({
-				type: 'SET_IS_RECURRING_CONTRIBUTOR',
-			})),
-		);
+		dispatch({
+			type: 'SET_IS_RECURRING_CONTRIBUTOR',
+		});
 	};
 
 const setStateFieldSafely =
@@ -38,12 +33,10 @@ const setStateFieldSafely =
 		);
 
 		if (stateField) {
-			dispatch(
-				setFormSubmissionDependentValue(() => ({
-					type: 'SET_STATEFIELD',
-					stateField,
-				})),
-			);
+			dispatch({
+				type: 'SET_STATEFIELD',
+				stateField,
+			});
 		}
 	};
 

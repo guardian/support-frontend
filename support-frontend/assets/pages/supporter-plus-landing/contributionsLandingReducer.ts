@@ -21,36 +21,15 @@ import type { ThankYouState } from 'helpers/redux/checkout/thankYouState/state';
 import type { CommonState } from 'helpers/redux/commonState/state';
 import { createUserReducer } from 'helpers/user/userReducer';
 import type { User as UserState } from 'helpers/user/userReducer';
-import type { RecentlySignedInExistingPaymentMethod } from '../../helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { Action } from './contributionsLandingActions';
 
 // ----- Types ----- //
 
-interface FormData {
-	checkoutFormHasBeenSubmitted: boolean;
-}
-
-export interface StripePaymentRequestButtonData {
-	stripePaymentRequestButtonClicked: boolean;
-	paymentError: ErrorReason | null;
-}
-
-export interface StripeCardFormData {
-	formComplete: boolean;
-	setupIntentClientSecret: string | null;
-	recurringRecaptchaVerified: boolean;
-}
-
 interface FormState {
-	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
 	isWaiting: boolean;
-	formData: FormData;
 	paymentComplete: boolean;
 	paymentError: ErrorReason | null;
-	formIsValid: boolean;
-	formIsSubmittable: boolean;
 	tickerGoalReached: boolean;
-	oneOffRecaptchaToken: string | null;
 }
 
 export interface PageState {
@@ -78,28 +57,16 @@ export interface State {
 function createFormReducer() {
 	// ----- Initial state ----- //
 	const initialState: FormState = {
-		formData: {
-			checkoutFormHasBeenSubmitted: false,
-		},
 		isWaiting: false,
 		paymentComplete: false,
 		paymentError: null,
-		formIsValid: true,
-		formIsSubmittable: true,
 		tickerGoalReached: false,
-		oneOffRecaptchaToken: null,
 	};
 	return function formReducer(
 		state: FormState = initialState,
 		action: Action,
 	): FormState {
 		switch (action.type) {
-			case 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD':
-				return {
-					...state,
-					existingPaymentMethod: action.existingPaymentMethod,
-				};
-
 			case 'SET_TICKER_GOAL_REACHED':
 				return { ...state, tickerGoalReached: true };
 
@@ -110,12 +77,6 @@ function createFormReducer() {
 					paymentError: action.paymentError,
 				};
 
-			case 'SET_FORM_IS_VALID':
-				return { ...state, formIsValid: action.isValid };
-
-			case 'SET_FORM_IS_SUBMITTABLE':
-				return { ...state, formIsSubmittable: action.formIsSubmittable };
-
 			case 'PAYMENT_WAITING':
 				return {
 					...state,
@@ -125,12 +86,6 @@ function createFormReducer() {
 
 			case 'PAYMENT_SUCCESS':
 				return { ...state, paymentComplete: true };
-
-			case 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED':
-				return {
-					...state,
-					formData: { ...state.formData, checkoutFormHasBeenSubmitted: true },
-				};
 
 			default:
 				return state;

@@ -13,13 +13,17 @@ import {
 	getValidPaymentMethods,
 } from 'helpers/forms/checkouts';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { loadRecaptchaV2 } from 'helpers/forms/recaptcha';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { setBillingState } from 'helpers/redux/checkout/address/actions';
 import { getExistingPaymentMethods } from 'helpers/redux/checkout/payment/existingPaymentMethods/thunks';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import { setEmail } from 'helpers/redux/checkout/personalDetails/actions';
+import {
+	setEmail,
+	setUserTypeFromIdentityResponse,
+} from 'helpers/redux/checkout/personalDetails/actions';
 import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import {
 	setAllAmounts,
@@ -33,8 +37,6 @@ import type {
 	ContributionsStore,
 } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
-import { loadRecaptchaV2 } from '../../helpers/forms/recaptcha';
-import { setUserTypeFromIdentityResponse } from './contributionsLandingActions';
 import type { State } from './contributionsLandingReducer';
 
 // ----- Functions ----- //
@@ -186,7 +188,7 @@ function getStoredEmail(dispatch: ContributionsDispatch): void {
 	}
 }
 
-const init = (store: ContributionsStore): void => {
+export function setUpRedux(store: ContributionsStore): void {
 	const dispatch = store.dispatch;
 	const state = store.getState();
 	// TODO - move these settings out of the redux store, as they only change once, upon initialisation
@@ -215,7 +217,4 @@ const init = (store: ContributionsStore): void => {
 
 	dispatch(setBillingState(stateField));
 	void loadRecaptchaV2();
-};
-
-// ----- Exports ----- //
-export { init };
+}

@@ -7,7 +7,6 @@ import { onFormSubmit } from 'helpers/checkoutForm/onFormSubmit';
 import type { PaymentMatrix } from 'helpers/contributions';
 import { getAmount, logInvalidCombination } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type {
 	AmazonPayData,
 	CreatePaypalPaymentData,
@@ -62,12 +61,7 @@ import {
 	setAmazonPayWalletIsStale,
 } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import { setPaymentRequestError } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
-import {
-	setEmail,
-	setFirstName,
-	setLastName,
-	setUserTypeFromIdentityResponse,
-} from 'helpers/redux/checkout/personalDetails/actions';
+import { isSupporterPlusPurchase } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import * as cookie from 'helpers/storage/cookie';
@@ -80,13 +74,8 @@ import trackConversion from 'helpers/tracking/conversions';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
-import { isSupporterPlusPurchase } from './newProductTestHelper';
 
 export type Action =
-	| {
-			type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD';
-			existingPaymentMethod?: RecentlySignedInExistingPaymentMethod;
-	  }
 	| {
 			type: 'PAYMENT_FAILURE';
 			paymentError: ErrorReason;
@@ -96,39 +85,12 @@ export type Action =
 			isWaiting: boolean;
 	  }
 	| {
-			type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED';
-	  }
-	| {
-			type: 'SET_FORM_IS_SUBMITTABLE';
-			formIsSubmittable: boolean;
-	  }
-	| {
 			type: 'PAYMENT_SUCCESS';
-	  }
-	| {
-			type: 'SET_FORM_IS_VALID';
-			isValid: boolean;
 	  }
 	| {
 			type: 'SET_TICKER_GOAL_REACHED';
 			tickerGoalReached: boolean;
 	  };
-
-const setFormIsValid = (isValid: boolean): Action => ({
-	type: 'SET_FORM_IS_VALID',
-	isValid,
-});
-
-const updateSelectedExistingPaymentMethod = (
-	existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
-): Action => ({
-	type: 'UPDATE_SELECTED_EXISTING_PAYMENT_METHOD',
-	existingPaymentMethod,
-});
-
-const setCheckoutFormHasBeenSubmitted = (): Action => ({
-	type: 'SET_CHECKOUT_FORM_HAS_BEEN_SUBMITTED',
-});
 
 const paymentSuccess = (): Action => ({
 	type: 'PAYMENT_SUCCESS',
@@ -151,7 +113,7 @@ const setTickerGoalReached = (): Action => ({
 
 const sendFormSubmitEventForPayPalRecurring =
 	() =>
-	(dispatch: Dispatch, getState: () => ContributionsState): void => {
+	(_dispatch: Dispatch, getState: () => ContributionsState): void => {
 		const state = getState();
 		const formSubmitParameters: FormSubmitParameters = {
 			...state.page.form,
@@ -162,8 +124,6 @@ const sendFormSubmitEventForPayPalRecurring =
 			flowPrefix: 'npf',
 			form: getForm('form--contribution'),
 			isSignedIn: state.page.user.isSignedIn,
-			setCheckoutFormHasBeenSubmitted: () =>
-				void dispatch(setCheckoutFormHasBeenSubmitted()),
 		};
 		onFormSubmit(formSubmitParameters);
 	};
@@ -644,18 +604,11 @@ const onThirdPartyPaymentAuthorised =
 	};
 
 export {
-	updateSelectedExistingPaymentMethod,
-	setFirstName,
-	setLastName,
-	setEmail,
-	setUserTypeFromIdentityResponse,
 	paymentFailure,
 	paymentWaiting,
 	paymentSuccess,
 	onThirdPartyPaymentAuthorised,
-	setCheckoutFormHasBeenSubmitted,
 	createOneOffPayPalPayment,
-	setFormIsValid,
 	sendFormSubmitEventForPayPalRecurring,
 	setTickerGoalReached,
 };

@@ -14,7 +14,7 @@ import { gaEvent } from 'helpers/tracking/googleTagManager';
 import * as user from 'helpers/user/user';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
-import { init as formInit } from './contributionsLandingInit';
+import { setUpRedux } from './setUpRedux';
 import { setUserStateActions } from './setUserStateActions';
 
 if (!isDetailsSupported) {
@@ -45,9 +45,10 @@ if (typeof Object.values !== 'function') {
 }
 
 // We need to initialise in this order, as
-// formInit depends on the user being populated
+// setUpRedux depends on the user being populated
 user.init(store.dispatch, setUserStateActions(countryGroupId));
-formInit(store);
+setUpRedux(store);
+
 const reactElementId = `contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
 const countryIds = Object.values(countryGroups).map(
