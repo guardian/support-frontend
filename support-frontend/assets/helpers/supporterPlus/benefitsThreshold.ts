@@ -42,6 +42,8 @@ export const benefitsThresholdsByCountryGroup: Record<
 // This is a function overload that means if the caller has already determined that contributionType is recurring
 // they do not have to handle an undefined return type from getThresholdPrice
 // cf. https://www.typescriptlang.org/docs/handbook/2/functions.html#overload-signatures-and-the-implementation-signature
+
+// Signatures
 export function getThresholdPrice(
 	countryGroupId: CountryGroupId,
 	contributionType: 'ONE_OFF',
@@ -50,6 +52,11 @@ export function getThresholdPrice(
 	countryGroupId: CountryGroupId,
 	contributionType: RegularContributionType,
 ): number;
+export function getThresholdPrice(
+	countryGroupId: CountryGroupId,
+	contributionType: ContributionType,
+): number | undefined;
+// Implementation
 export function getThresholdPrice(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,

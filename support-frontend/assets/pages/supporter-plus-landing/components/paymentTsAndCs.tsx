@@ -75,17 +75,6 @@ export function PaymentTsAndCs({
 	amount,
 	amountIsAboveThreshold,
 }: PaymentTsAndCsProps): JSX.Element {
-	if (contributionType === 'ONE_OFF') {
-		return (
-			<div css={container}>
-				<TsAndCsFooterLinks
-					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
-				/>
-			</div>
-		);
-	}
-
 	const amountCopy = isNaN(amount)
 		? null
 		: ` of ${formatAmount(
@@ -144,6 +133,17 @@ export function PaymentTsAndCs({
 			</>
 		);
 	};
+
+	if (contributionType === 'ONE_OFF') {
+		return (
+			<div css={container}>
+				<TsAndCsFooterLinks
+					countryGroupId={countryGroupId}
+					amountIsAboveThreshold={amountIsAboveThreshold}
+				/>
+			</div>
+		);
+	}
 
 	if (contributionType === 'MONTHLY') {
 		return (

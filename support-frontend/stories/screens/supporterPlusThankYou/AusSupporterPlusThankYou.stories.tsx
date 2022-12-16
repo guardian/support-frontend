@@ -2,7 +2,10 @@ import '__mocks__/settingsMock';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
-import type { ContributionType } from 'helpers/contributions';
+import type {
+	ContributionType,
+	RegularContributionType,
+} from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
@@ -26,7 +29,6 @@ import {
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
-import type { RegularContribType } from 'helpers/supporterPlus/benefitsThreshold';
 import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import {
@@ -278,7 +280,7 @@ RecurringNotSignedIn.decorators = [
 
 		const thresholdPrice =
 			benefitsThresholdsByCountryGroup['AUDCountries'][
-				contributionType as RegularContribType
+				contributionType as RegularContributionType
 			];
 
 		store.dispatch(
@@ -340,7 +342,7 @@ RecurringSignedIn.decorators = [
 
 		const thresholdPrice =
 			benefitsThresholdsByCountryGroup['AUDCountries'][
-				contributionType as RegularContribType
+				contributionType as RegularContributionType
 			];
 
 		store.dispatch(
@@ -403,7 +405,7 @@ RecurringSignUp.decorators = [
 
 		const thresholdPrice =
 			benefitsThresholdsByCountryGroup['AUDCountries'][
-				contributionType as RegularContribType
+				contributionType as RegularContributionType
 			];
 
 		store.dispatch(
