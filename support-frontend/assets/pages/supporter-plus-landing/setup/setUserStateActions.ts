@@ -6,23 +6,9 @@ import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFuncti
 import type { Action, UserSetStateActions } from 'helpers/user/userActions';
 
 // ----- Actions Creators ----- //
-const setIsSignedIn =
-	(isSignedIn: boolean) =>
-	(dispatch: ThunkDispatch<ContributionsState, void, Action>) => {
-		dispatch({
-			type: 'SET_IS_SIGNED_IN',
-			isSignedIn,
-		});
-	};
-
-const setIsRecurringContributor =
-	() =>
-	(dispatch: ThunkDispatch<ContributionsState, void, Action>): void => {
-		dispatch({
-			type: 'SET_IS_RECURRING_CONTRIBUTOR',
-		});
-	};
-
+// This action creator seems to be overridden in order to prevent setting an invalid string as the user's state
+// as we get this from window.guardian - see helpers/user/user.ts#140 on
+// It would make more sense to put this logic in the reducer itself when we refactor to RTK
 const setStateFieldSafely =
 	(pageCountryGroupId: CountryGroupId) =>
 	(unsafeState: string) =>
@@ -46,8 +32,6 @@ const setUserStateActions = (
 	const setStateField = setStateFieldSafely(countryGroupId);
 	return {
 		...defaultUserActionFunctions,
-		setIsSignedIn,
-		setIsRecurringContributor,
 		setStateField,
 	};
 };

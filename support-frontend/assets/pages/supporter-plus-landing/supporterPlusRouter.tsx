@@ -14,8 +14,8 @@ import { gaEvent } from 'helpers/tracking/googleTagManager';
 import * as user from 'helpers/user/user';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
-import { setUpRedux } from './setUpRedux';
-import { setUserStateActions } from './setUserStateActions';
+import { setUpRedux } from './setup/setUpRedux';
+import { setUserStateActions } from './setup/setUserStateActions';
 
 if (!isDetailsSupported) {
 	polyfillDetails();

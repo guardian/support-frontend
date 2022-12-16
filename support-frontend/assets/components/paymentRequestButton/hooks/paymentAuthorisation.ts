@@ -15,7 +15,7 @@ import { trackComponentEvents } from 'helpers/tracking/ophan';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentWaiting,
-} from 'pages/supporter-plus-landing/legacyActionCreators';
+} from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 
 export async function fetchClientSecret(
 	stripePublicKey: string,

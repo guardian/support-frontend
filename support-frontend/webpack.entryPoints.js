@@ -3,7 +3,7 @@ module.exports = {
     favicons: 'images/favicons.ts',
     showcasePage: 'pages/showcase/showcase.tsx',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.tsx',
-    contributionsLandingPage: 'pages/supporter-plus-landing/supporterPlusEntrypoint.tsx',
+    supporterPlusLandingPage: 'pages/supporter-plus-landing/supporterPlusRouter.tsx',
     digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.tsx',
     digitalSubscriptionCheckoutPage: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx',
     digitalSubscriptionCheckoutPageThankYouExisting: 'pages/digital-subscription-checkout/thankYouExisting.tsx',

@@ -170,9 +170,9 @@ class Application(
   )(implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
-    val css = elementForStage(RefPath("contributionsLandingPage.css"))
+    val css = elementForStage(RefPath("supporterPlusLandingPage.css"))
 
-    val js = elementForStage(RefPath("contributionsLandingPage.js"))
+    val js = elementForStage(RefPath("supporterPlusLandingPage.js"))
 
     val classes = "gu-content--contribution-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")

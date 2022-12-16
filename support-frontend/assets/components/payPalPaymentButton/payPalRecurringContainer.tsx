@@ -14,7 +14,7 @@ import { trackCheckoutSubmitAttempt } from 'helpers/tracking/behaviour';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentWaiting,
-} from 'pages/supporter-plus-landing/legacyActionCreators';
+} from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 import { PayPalButton } from './payPalButton';
 import type { OnPaypalWindowOpen } from './payPalButtonProps';
 import { getPayPalButtonProps } from './payPalButtonProps';

@@ -9,7 +9,7 @@ import {
 } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
-import { paymentWaiting } from 'pages/supporter-plus-landing/legacyActionCreators';
+import { paymentWaiting } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 import { resetPayerDetails } from './payerDetails';
 import {
 	createPaymentRequestErrorHandler,

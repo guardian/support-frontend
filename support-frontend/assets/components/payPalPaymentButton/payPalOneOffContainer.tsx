@@ -9,7 +9,7 @@ import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import {
 	createOneOffPayPalPayment,
 	paymentWaiting,
-} from 'pages/supporter-plus-landing/legacyActionCreators';
+} from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 
 export function PayPalButtonOneOffContainer(): JSX.Element {
 	const dispatch = useContributionsDispatch();
