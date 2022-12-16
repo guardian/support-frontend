@@ -26,9 +26,9 @@ import {
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
+import type { RegularContribType } from 'helpers/supporterPlus/benefitsThreshold';
+import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
-import type { RegularContribType } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
-import { benefitsThresholdsByCountryGroup } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import {
 	largeDonations,
 	SupporterPlusThankYou,

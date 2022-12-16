@@ -1,10 +1,15 @@
 import { getAmount } from 'helpers/contributions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
-import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
+import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
+import { isOneOff } from 'helpers/supporterPlus/isContributionRecurring';
 
 export function isSupporterPlusPurchase(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
+
+	if (isOneOff(contributionType)) {
+		return false;
+	}
 
 	const thresholdPrice = getThresholdPrice(
 		state.common.internationalisation.countryGroupId,

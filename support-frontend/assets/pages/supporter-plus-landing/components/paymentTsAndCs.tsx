@@ -11,11 +11,20 @@ import {
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
+import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
-import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 
 const marginTop = css`
 	margin-top: 4px;
+`;
+
+const container = css`
+	${textSans.xxsmall()};
+	color: ${neutral[20]};
+
+	& a {
+		color: ${neutral[20]};
+	}
 `;
 
 interface PaymentTsAndCsProps {
@@ -66,6 +75,17 @@ export function PaymentTsAndCs({
 	amount,
 	amountIsAboveThreshold,
 }: PaymentTsAndCsProps): JSX.Element {
+	if (contributionType === 'ONE_OFF') {
+		return (
+			<div css={container}>
+				<TsAndCsFooterLinks
+					countryGroupId={countryGroupId}
+					amountIsAboveThreshold={amountIsAboveThreshold}
+				/>
+			</div>
+		);
+	}
+
 	const amountCopy = isNaN(amount)
 		? null
 		: ` of ${formatAmount(
@@ -76,23 +96,13 @@ export function PaymentTsAndCs({
 		  )}`;
 
 	const currencyGlyph = glyph(detect(countryGroupId));
-	const thresholdPrice =
-		getThresholdPrice(countryGroupId, contributionType) ?? 1;
+	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
 
 	const frequencySingular = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'month' : 'year';
 
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
-
-	const container = css`
-		${textSans.xxsmall()};
-		color: ${neutral[20]};
-
-		& a {
-			color: ${neutral[20]};
-		}
-	`;
 
 	const copyBelowThreshold = (contributionType: ContributionType) => {
 		return (
@@ -134,17 +144,6 @@ export function PaymentTsAndCs({
 			</>
 		);
 	};
-
-	if (contributionType === 'ONE_OFF') {
-		return (
-			<div css={container}>
-				<TsAndCsFooterLinks
-					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
-				/>
-			</div>
-		);
-	}
 
 	if (contributionType === 'MONTHLY') {
 		return (

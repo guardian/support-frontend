@@ -9,7 +9,8 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { getThresholdPrice } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
+import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
+import { isOneOff } from 'helpers/supporterPlus/isContributionRecurring';
 import type { CheckoutBenefitsListProps } from './checkoutBenefitsList';
 import { checkListData } from './checkoutBenefitsListData';
 
@@ -40,7 +41,7 @@ export function CheckoutBenefitsListContainer({
 	const dispatch = useContributionsDispatch();
 
 	const contributionType = useContributionsSelector(getContributionType);
-	if (contributionType === 'ONE_OFF') {
+	if (isOneOff(contributionType)) {
 		return null;
 	}
 
@@ -54,8 +55,7 @@ export function CheckoutBenefitsListContainer({
 
 	const currency = currencies[currencyId];
 
-	const thresholdPrice =
-		getThresholdPrice(countryGroupId, contributionType) ?? 1;
+	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
 	const thresholdPriceWithCurrency = simpleFormatAmount(
 		currency,
 		thresholdPrice,
