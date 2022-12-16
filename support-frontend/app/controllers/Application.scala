@@ -187,7 +187,7 @@ class Application(
     val uatMode = testUsers.isTestUser(request)
 
     views.html.contributions(
-      title = "Support the Guardian | Make a Contribution",
+      title = "Support the Guardian",
       id = s"contributions-landing-page-$countryCode",
       mainElement = mainElement,
       js = js,
