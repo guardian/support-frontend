@@ -13,7 +13,6 @@ import {
 	getValidPaymentMethods,
 } from 'helpers/forms/checkouts';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { loadRecaptchaV2 } from 'helpers/forms/recaptcha';
 import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -215,5 +214,4 @@ export function setUpRedux(store: ContributionsStore): void {
 	}
 
 	dispatch(setBillingState(stateField));
-	void loadRecaptchaV2();
 }
