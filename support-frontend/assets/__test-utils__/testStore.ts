@@ -19,7 +19,7 @@ import type {
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import type { DateYMDString } from 'helpers/types/DateString';
-import { initReducer } from 'pages/supporter-plus-landing/setup/legacyReducer';
+import { initReducer } from 'pages/contributions-landing/contributionsLandingReducer';
 
 export function createTestStoreForSubscriptions(
 	product: SubscriptionProduct,

@@ -35,6 +35,7 @@ type PropTypes = {
 	onAmazonPayBillingAgreementConsentStatus: (consentStatus: boolean) => void;
 	isTestUser: boolean;
 	contributionType: ContributionType;
+	checkoutFormHasBeenSubmitted: boolean;
 	errors: AmazonPayState['errors'];
 };
 

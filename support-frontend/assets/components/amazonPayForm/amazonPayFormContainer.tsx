@@ -52,6 +52,9 @@ export function AmazonPayFormContainer(): JSX.Element {
 	const amazonPay = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.amazonPay,
 	);
+	const checkoutFormHasBeenSubmitted = useContributionsSelector(
+		(state) => state.page.form.formData.checkoutFormHasBeenSubmitted,
+	);
 
 	const errors = useContributionsSelector(getAmazonPayFormErrors);
 
@@ -106,6 +109,7 @@ export function AmazonPayFormContainer(): JSX.Element {
 					}
 					isTestUser={userInNewProductTest ? userInNewProductTest : false}
 					contributionType={contributionType}
+					checkoutFormHasBeenSubmitted={checkoutFormHasBeenSubmitted}
 					errors={errors}
 				/>
 			)}

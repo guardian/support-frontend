@@ -4,7 +4,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { onThirdPartyPaymentAuthorised } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
+import { onThirdPartyPaymentAuthorised } from 'pages/contributions-landing/contributionsLandingActions';
 
 export function ExistingCardPaymentButton(): JSX.Element {
 	const dispatch = useContributionsDispatch();

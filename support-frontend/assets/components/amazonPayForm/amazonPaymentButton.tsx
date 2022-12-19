@@ -6,7 +6,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { onThirdPartyPaymentAuthorised } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
+import { onThirdPartyPaymentAuthorised } from 'pages/contributions-landing/contributionsLandingActions';
 
 export function AmazonPaymentButton(): JSX.Element {
 	const dispatch = useContributionsDispatch();

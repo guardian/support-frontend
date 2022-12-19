@@ -1,7 +1,7 @@
 import type { TypedStartListening } from '@reduxjs/toolkit';
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
 import { renderError } from 'helpers/rendering/render';
-import { initReducer } from 'pages/supporter-plus-landing/setup/legacyReducer';
+import { initReducer } from 'pages/contributions-landing/contributionsLandingReducer';
 import { addPaymentsSideEffects } from './checkout/payment/contributionsSideEffects';
 import { addPersonalDetailsSideEffects } from './checkout/personalDetails/contributionsSideEffects';
 import { setCurrency } from './checkout/product/actions';

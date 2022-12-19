@@ -3,15 +3,15 @@ import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
+import { setProductType } from 'helpers/redux/checkout/product/actions';
+import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
+import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import {
 	setEmail,
 	setFirstName,
 	setLastName,
-} from 'helpers/redux/checkout/personalDetails/actions';
-import { setProductType } from 'helpers/redux/checkout/product/actions';
-import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
-import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
-import { setUpRedux } from 'pages/supporter-plus-landing/setup/setUpRedux';
+} from 'pages/contributions-landing/contributionsLandingActions';
+import { init as formInit } from 'pages/contributions-landing/contributionsLandingInit';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 
 global.window.guardian = {
@@ -26,7 +26,7 @@ const store = createTestStoreForContributions();
 store.dispatch(setCountryInternationalisation('GBP'));
 
 // This function has side effects such as retrieving the user email from session storage
-setUpRedux(store);
+formInit(store);
 
 // These overrides ensure the user will arrive at this story with a blank slate
 store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
