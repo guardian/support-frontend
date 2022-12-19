@@ -25,5 +25,5 @@
     }
   },
   "include": ["./assets", "./stories", "./declaration.d.ts", "./window.d.ts"], // The files to type check,
-  "exclude": ["node_modules"] // The files to not type check
+  "exclude": ["node_modules", "./assets/pages/contributions-landing"] // The files to not type check
 }

@@ -155,6 +155,8 @@ const sendFormSubmitEventForPayPalRecurring =
 		const state = getState();
 		const formSubmitParameters: FormSubmitParameters = {
 			...state.page.form,
+			formIsSubmittable: true,
+			formIsValid: true,
 			paymentMethod: state.page.checkoutForm.payment.paymentMethod.name,
 			userTypeFromIdentityResponse:
 				state.page.checkoutForm.personalDetails.userTypeFromIdentityResponse,
