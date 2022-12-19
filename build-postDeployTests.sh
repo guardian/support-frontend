@@ -18,7 +18,7 @@ if [ ! -e $SBT_JAR ]; then
 
 fi
 
-java -jar sbt-launch.jar selenium:test
+java -Xss2m -Xms512m -Xmx1536m -jar sbt-launch.jar selenium:test
 RC=$?
 if [[ $RC -ne 0 ]]
 then
