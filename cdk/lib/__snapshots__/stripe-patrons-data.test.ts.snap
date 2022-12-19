@@ -450,7 +450,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionName": "stripe-patrons-data-PROD",
         "Handler": "com.gu.patrons.lambdas.ProcessStripeSubscriptionsLambda::handleRequest",
-        "MemorySize": 1024,
+        "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
             "StripePatronsDataPRODServiceRoleF56253CB",
@@ -814,7 +814,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionName": "stripe-patrons-data-cancelled-PROD",
         "Handler": "com.gu.patrons.lambdas.PatronCancelledEventLambda::handleRequest",
-        "MemorySize": 1024,
+        "MemorySize": 1536,
         "Role": {
           "Fn::GetAtt": [
             "stripepatronsdatacancelledServiceRole157E3052",
