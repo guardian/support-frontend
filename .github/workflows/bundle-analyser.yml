@@ -6,7 +6,12 @@ on:
       - mo-fix-bundle-analyser
 
 jobs:
-  context_check:
+  build_check:
+    name: Bundle Analyser
+    defaults:
+      run:
+        working-directory: support-frontend
+    runs-on: ubuntu-latest
     steps:
       - name: Head owner
         run: echo "head owner = ${{ github.event.pull_request.head.repo.owner.login }}"
@@ -20,14 +25,6 @@ jobs:
       - name: Repo owner
         run: echo "github.repository_owner == 'guardian'"
 
-  build_check:
-    if: github.event.pull_request.head.repo.owner.login == 'guardian'
-    name: Bundle Analyser
-    defaults:
-      run:
-        working-directory: support-frontend
-    runs-on: ubuntu-latest
-    steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
