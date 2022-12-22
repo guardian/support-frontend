@@ -1,8 +1,6 @@
 name: Chromatic
 on:
   push:
-    branches:
-      - main
 jobs:
   upload-storybook:
     if: ${{ github.actor != 'gu-scala-steward-public-repos[bot]' }}
