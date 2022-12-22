@@ -13,6 +13,12 @@ jobs:
         working-directory: support-frontend
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node
+        uses: guardian/actions-setup-node@main
+
       - name: Head owner
         run: echo "head owner = ${{ github.event.pull_request.head.repo.owner.login }}"
 
@@ -24,12 +30,6 @@ jobs:
 
       - name: Repo owner
         run: echo "github.repository_owner == 'guardian'"
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install Node
-        uses: guardian/actions-setup-node@main
 
       # Cache npm dependencies using https://github.com/bahmutov/npm-install
       - name: Cache dependencies
