@@ -15,7 +15,7 @@ jobs:
   payment_api_build:
     if: >-
       (github.actor != 'dependabot[bot]') &&
-        (github.repository_owner == 'guardian' ||
+        (github.repository_owner == "guardian" ||
           github.event_name == 'push')
 
     # Required by actions-assume-aws-role

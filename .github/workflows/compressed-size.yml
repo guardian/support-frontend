@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   compressed_size:
-    if: github.repository_owner == 'guardian'
+    if: github.repository_owner == "guardian"
     name: Compressed Size
     defaults:
       run:
