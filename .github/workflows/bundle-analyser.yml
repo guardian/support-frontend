@@ -20,16 +20,16 @@ jobs:
         uses: guardian/actions-setup-node@main
 
       - name: Head owner
-        run: echo "head owner = ${{ github.event.pull_request.head.repo.owner.login }}"
+        run: echo 'head owner = ${{ github.event.pull_request.head.repo.owner.login }}'
 
       - name: Base owner
-        run: echo "base owner = ${{ github.event.pull_request.base.repo.owner.login }}"
+        run: echo 'base owner = ${{ github.event.pull_request.base.repo.owner.login }}'
 
       - name: Pull request
-        run: echo "pull request = ${{ github.event.pull_request }}"
+        run: echo 'pull request = ${{ github.event.pull_request }}'
 
       - name: Repo owner
-        run: echo "github.repository_owner == 'guardian'"
+        run: echo '${{ github.repository_owner }}'
 
       # Cache npm dependencies using https://github.com/bahmutov/npm-install
       - name: Cache dependencies
