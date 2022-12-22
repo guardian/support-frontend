@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - mo-fix-bundle-analyser
 
 jobs:
   context_check:
