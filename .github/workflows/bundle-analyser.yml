@@ -3,11 +3,10 @@ on:
   push:
     branches:
       - main
-      - mo-fix-bundle-analyser
 
 jobs:
   build_check:
-    if: github.repository_owner == 'guardian'
+    if: github.repository_owner == "guardian"
     name: Bundle Analyser
     defaults:
       run:
