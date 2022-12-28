@@ -20,12 +20,21 @@ export const userSlice = createSlice({
 				fullName,
 			};
 		},
-		setTestUserStatus(state, action: PayloadAction<Record<string, boolean>>) {
-			state.isTestUser = action.payload.isTestUser;
-			state.isPostDeploymentTestUser = action.payload.isPostDeploymentTestUser;
+		setEmail(state, action: PayloadAction<string>) {
+			state.email = action.payload;
+		},
+		setEmailValidated(state, action: PayloadAction<boolean>) {
+			state.emailValidated = action.payload;
 		},
 		setIsReturningContributor(state, action: PayloadAction<boolean>) {
 			state.isReturningContributor = action.payload;
+		},
+		setIsSignedIn(state, action: PayloadAction<boolean>) {
+			state.isSignedIn = action.payload;
+		},
+		setTestUserStatus(state, action: PayloadAction<Record<string, boolean>>) {
+			state.isTestUser = action.payload.isTestUser;
+			state.isPostDeploymentTestUser = action.payload.isPostDeploymentTestUser;
 		},
 		setStateField(
 			state,

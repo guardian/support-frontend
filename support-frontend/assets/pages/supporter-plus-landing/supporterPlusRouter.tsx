@@ -15,7 +15,6 @@ import * as user from 'helpers/user/user';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
-import { setUserStateActions } from './setup/setUserStateActions';
 
 if (!isDetailsSupported) {
 	polyfillDetails();
@@ -46,7 +45,7 @@ if (typeof Object.values !== 'function') {
 
 // We need to initialise in this order, as
 // setUpRedux depends on the user being populated
-user.init(store.dispatch, setUserStateActions(countryGroupId));
+user.init(store.dispatch, countryGroupId);
 setUpRedux(store);
 
 const reactElementId = `contributions-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;

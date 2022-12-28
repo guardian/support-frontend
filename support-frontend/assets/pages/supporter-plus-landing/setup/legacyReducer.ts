@@ -18,8 +18,8 @@ import { recaptchaReducer } from 'helpers/redux/checkout/recaptcha/reducer';
 import type { RecaptchaState } from 'helpers/redux/checkout/recaptcha/state';
 import { thankYouReducer } from 'helpers/redux/checkout/thankYouState/reducer';
 import type { ThankYouState } from 'helpers/redux/checkout/thankYouState/state';
-import { createUserReducer } from 'helpers/user/userReducer';
-import type { User as UserState } from 'helpers/user/userReducer';
+import { userReducer } from 'helpers/redux/user/reducer';
+import type { UserState } from 'helpers/redux/user/state';
 import type { Action } from './legacyActionCreators';
 
 // ----- Types ----- //
@@ -95,7 +95,7 @@ function initReducer(): Reducer<PageState> {
 			billingAddress: billingAddressReducer,
 			thankYou: thankYouReducer,
 		}),
-		user: createUserReducer(),
+		user: userReducer,
 	});
 }
 

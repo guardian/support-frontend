@@ -9,18 +9,21 @@ export const getRecurringContributorStatus = createAsyncThunk<
 	{
 		state: SubscriptionsState | ContributionsState;
 	}
->('user', async function getIsRecurringContributor() {
-	const attributes = await fetchJson(
-		`${window.guardian.mdapiUrl}/user-attributes/me`,
-		{
-			mode: 'cors',
-			credentials: 'include',
-		},
-	);
+>(
+	'user/getRecurringContributorStatus',
+	async function getIsRecurringContributor() {
+		const attributes = await fetchJson(
+			`${window.guardian.mdapiUrl}/user-attributes/me`,
+			{
+				mode: 'cors',
+				credentials: 'include',
+			},
+		);
 
-	if (attributes.recurringContributionPaymentPlan) {
-		return true;
-	}
+		if (attributes.recurringContributionPaymentPlan) {
+			return true;
+		}
 
-	return false;
-});
+		return false;
+	},
+);

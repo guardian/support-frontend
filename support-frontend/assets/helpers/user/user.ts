@@ -1,13 +1,22 @@
 // ----- Imports ----- //
-import type { ThunkDispatch } from 'redux-thunk';
+import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { ContributionsDispatch } from 'helpers/redux/contributionsStore';
+import {
+	setEmail,
+	setEmailValidated,
+	setIsReturningContributor,
+	setIsSignedIn,
+	setStateField,
+	setTestUserStatus,
+} from 'helpers/redux/user/actions';
+import type { UserState } from 'helpers/redux/user/state';
+import { getRecurringContributorStatus } from 'helpers/redux/user/thunks';
 import * as cookie from 'helpers/storage/cookie';
 import { get as getCookie } from 'helpers/storage/cookie';
 import { getSession } from 'helpers/storage/storage';
 import type { Option } from 'helpers/types/option';
 import { getSignoutUrl } from 'helpers/urls/externalLinks';
-import { routes } from 'helpers/urls/routes';
-import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
-import type { Action, UserSetStateActions } from 'helpers/user/userActions';
 
 export type User = {
 	firstName: Option<string>;
@@ -82,32 +91,13 @@ const getEmailValidatedFromUserCookie = (
 };
 
 const init = (
-	dispatch: ThunkDispatch<User, void, Action>,
-	actions: UserSetStateActions = defaultUserActionFunctions,
+	dispatch: ContributionsDispatch,
+	countryGroupId: CountryGroupId,
 ): void => {
-	const {
-		setId,
-		setDisplayName,
-		setFirstName,
-		setLastName,
-		setFullName,
-		setIsSignedIn,
-		setEmail,
-		setStateField,
-		setIsRecurringContributor,
-		setTestUser,
-		setPostDeploymentTestUser,
-		setEmailValidated,
-		setIsReturningContributor,
-	} = actions;
-	const windowHasUser = window.guardian.user;
+	const windowHasUser = getGlobal<UserState>('user');
 	const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
 
-	function getEmailFromBrowser(): string | null | undefined {
-		return window.guardian.email ?? getSession('gu.email');
-	}
-
-	const emailFromBrowser = getEmailFromBrowser();
+	const emailFromBrowser = getGlobal<string>('email') ?? getSession('gu.email');
 
 	/*
 	 * Prevent use of the test stripe token if user is logged in, as support-workers will try it in live mode
@@ -126,11 +116,12 @@ const init = (
 	};
 
 	if (isTestUser() && (!userAppearsLoggedIn || emailMatchesTestUser())) {
-		dispatch(setTestUser(true));
-	}
-
-	if (isTestUser() && isPostDeployUser()) {
-		dispatch(setPostDeploymentTestUser(true));
+		dispatch(
+			setTestUserStatus({
+				isTestUser: true,
+				isPostDeploymentTestUser: isPostDeployUser(),
+			}),
+		);
 	}
 
 	if (getCookie('gu.contributions.contrib-timestamp')) {
@@ -138,71 +129,43 @@ const init = (
 	}
 
 	if (windowHasUser) {
-		const { id, email, displayName, firstName, lastName, address4 } =
-			windowHasUser;
-
-		id && dispatch(setId(id));
-		email && dispatch(setEmail(email));
-		displayName && dispatch(setDisplayName(displayName));
-		firstName && dispatch(setFirstName(firstName));
-		lastName && dispatch(setLastName(lastName));
-		dispatch(setFullName(`${firstName} ${lastName}`));
+		const { address4 } = windowHasUser;
 
 		// default value from Identity Billing Address, or Fastly GEO-IP
 		if (address4) {
-			dispatch(setStateField(address4));
+			dispatch(
+				setStateField({
+					countryGroupId,
+					stateName: address4,
+				}),
+			);
 		} else {
 			window.guardian.geoip?.stateCode &&
-				dispatch(setStateField(window.guardian.geoip.stateCode));
+				dispatch(
+					setStateField({
+						countryGroupId,
+						stateName: window.guardian.geoip.stateCode,
+					}),
+				);
 		}
 
 		dispatch(setIsSignedIn(true));
 		dispatch(
 			setEmailValidated(getEmailValidatedFromUserCookie(cookie.get('GU_U'))),
 		);
-		void fetch(`${window.guardian.mdapiUrl}/user-attributes/me`, {
-			mode: 'cors',
-			credentials: 'include',
-		})
-			.then((response) => response.json())
-			.then((attributes: Record<string, unknown>) => {
-				if (attributes.recurringContributionPaymentPlan) {
-					dispatch(setIsRecurringContributor());
-				}
-			});
-	} else if (userAppearsLoggedIn) {
-		// TODO - remove in another PR as this condition is deprecated
-		void fetch(routes.oneOffContribAutofill, {
-			credentials: 'include',
-		}).then((response) => {
-			if (response.ok) {
-				void response.json().then((data: Record<string, string>) => {
-					if (data.id) {
-						dispatch(setIsSignedIn(true));
-						dispatch(setId(data.id));
-					}
-
-					if (data.name) {
-						dispatch(setFullName(data.name));
-					}
-
-					if (data.email) {
-						dispatch(setEmail(data.email));
-					}
-
-					if (data.displayName) {
-						dispatch(setDisplayName(data.displayName));
-					}
-				});
-			}
-		});
+		void dispatch(getRecurringContributorStatus());
 	} else {
 		if (emailFromBrowser) {
 			dispatch(setEmail(emailFromBrowser));
 		}
 
 		window.guardian.geoip?.stateCode &&
-			dispatch(setStateField(window.guardian.geoip.stateCode));
+			dispatch(
+				setStateField({
+					countryGroupId,
+					stateName: window.guardian.geoip.stateCode,
+				}),
+			);
 	}
 };
 

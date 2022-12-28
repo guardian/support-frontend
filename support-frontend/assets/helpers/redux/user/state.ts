@@ -3,6 +3,7 @@ import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 type InitialUserInfo = {
 	firstName?: string;
 	lastName?: string;
+	displayName?: string;
 	email?: string;
 	isSignedIn?: boolean;
 };
@@ -29,13 +30,18 @@ export type UserState = {
 
 const userInfo = getGlobal<InitialUserInfo>('user') ?? {};
 
+const fullName =
+	userInfo.firstName && userInfo.lastName
+		? `${userInfo.firstName} ${userInfo.lastName}`
+		: '';
+
 export const initialState: UserState = {
 	id: '',
 	email: userInfo.email ?? '',
-	displayName: '',
+	displayName: userInfo.displayName ?? '',
 	firstName: userInfo.firstName ?? '',
 	lastName: userInfo.lastName ?? '',
-	fullName: '',
+	fullName,
 	stateField: '',
 	isTestUser: false,
 	isPostDeploymentTestUser: false,
