@@ -52,3 +52,12 @@ export const initialState: UserState = {
 	emailValidated: false,
 	isReturningContributor: false,
 };
+
+/**
+ * TODO
+ * - How many of these properties do we ACTUALLY use?
+ * - How many are never even set?
+ * - isSignedIn duplicated in personal details- where should it live?
+ * - isStorybookUser should be removed
+ * - Better handling of returningContributor error?
+ */
