@@ -11,6 +11,7 @@ import io.circe.{Decoder, Encoder}
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.IdentityService
+import services.GetUserTypeError._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -57,9 +58,23 @@ class IdentityController(
       identityService
         .getUserType(email)
         .fold(
-          err => {
-            SafeLogger.error(scrub"Failed to retrieve user type for $email: ${err.toString}")
-            InternalServerError
+          _ match {
+            case GotErrorResponse(response) =>
+              if (response.status >= 400 && response.status < 500) {
+                SafeLogger.warn(s"4xx error when retrieving user type for $email: ${response.body}")
+                BadRequest(response.body)
+              } else {
+                SafeLogger.error(scrub"Failed to retrieve user type for $email: ${response.body}")
+                InternalServerError
+              }
+            case CallFailed(err) => {
+              SafeLogger.error(scrub"Failed to retrieve user type for $email: $err")
+              InternalServerError
+            }
+            case DecodeFailed(decodeErrors) => {
+              SafeLogger.error(scrub"Failed to retrieve user type for $email: ${decodeErrors.mkString(",")}")
+              InternalServerError
+            }
           },
           response => {
             SafeLogger.info(s"Successfully retrieved user type for $email")

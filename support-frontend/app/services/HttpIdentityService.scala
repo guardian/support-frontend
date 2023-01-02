@@ -13,12 +13,13 @@ import io.circe.generic.semiauto.deriveEncoder
 import models.identity.requests.CreateGuestAccountRequestBody
 import models.identity.responses.IdentityErrorResponse.IdentityError
 import models.identity.responses.{GuestRegistrationResponse, IdentityErrorResponse, UserResponse}
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.{Json, JsonValidationError, JsPath, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
 import utils.EitherTRetry
 
 import java.net.URI
+import scala.collection.Seq
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -51,6 +52,14 @@ case class GetUserTypeResponse(userType: String)
 object GetUserTypeResponse {
   implicit val readsGetUserTypeResponse: Reads[GetUserTypeResponse] = Json.reads[GetUserTypeResponse]
   implicit val getUserTypeEncoder: Encoder[GetUserTypeResponse] = deriveEncoder
+}
+
+sealed trait GetUserTypeError
+
+object GetUserTypeError {
+  case class CallFailed(error: Throwable) extends GetUserTypeError
+  case class GotErrorResponse(response: WSResponse) extends GetUserTypeError
+  case class DecodeFailed(decodeErrors: Seq[(JsPath, Seq[JsonValidationError])]) extends GetUserTypeError
 }
 
 case class CreateSignInTokenResponse(encryptedEmail: String)
@@ -88,12 +97,18 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
 
   def getUserType(
       email: String,
-  )(implicit ec: ExecutionContext): EitherT[Future, String, GetUserTypeResponse] = {
+  )(implicit ec: ExecutionContext): EitherT[Future, GetUserTypeError, GetUserTypeResponse] = {
     request(s"user/type/$email")
       .get()
       .attemptT
-      .leftMap(_.toString)
-      .subflatMap(resp => resp.json.validate[GetUserTypeResponse].asEither.leftMap(_.mkString(",")))
+      .leftMap(GetUserTypeError.CallFailed(_))
+      .subflatMap(resp =>
+        if (resp.status >= 300) {
+          Left(GetUserTypeError.GotErrorResponse(resp))
+        } else {
+          resp.json.validate[GetUserTypeResponse].asEither.leftMap(GetUserTypeError.DecodeFailed(_))
+        },
+      )
   }
 
   def createSignInToken(
