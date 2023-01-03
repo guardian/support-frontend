@@ -6,7 +6,7 @@ import com.gu.i18n.{Country, CountryGroup}
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.ContributionState
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{ContributionState, SupporterPlusState}
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, PreparePaymentMethodForReuseState}
 import com.gu.support.zuora.api.PaymentGateway
 import com.gu.support.zuora.api.response.{
@@ -57,23 +57,42 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
       crmId <- getOrFailWithMessage(account.CrmId, s"Zuora account $accountId has not CrmId")
       paymentMethod <- toPaymentMethod(getPaymentMethodResponse, services.goCardlessService, account.PaymentGateway)
       sfContact = SalesforceContactRecord(sfContactId, crmId)
-      contribution <- Future.fromTry(state.product match {
-        case c: Contribution => Success(c)
+      (productState, productType) <- Future.fromTry(state.product match {
+        case c: Contribution =>
+          Success(
+            (
+              ContributionState(
+                product = c,
+                paymentMethod = paymentMethod,
+                salesForceContact = sfContact,
+              ),
+            ),
+            c,
+          )
+        case sp: SupporterPlus =>
+          Success(
+            (
+              SupporterPlusState(
+                product = sp,
+                paymentMethod = paymentMethod,
+                salesForceContact = sfContact,
+              ),
+            ),
+            sp,
+          )
         case _ =>
           Failure(
-            new RuntimeException("Reusing payment methods is not yet supported for products other than contributions"),
+            new RuntimeException(
+              "Reusing payment methods is not yet supported for products other than contributions or SupporterPlus",
+            ),
           )
       })
     } yield HandlerResult(
       CreateZuoraSubscriptionState(
-        ContributionState(
-          product = contribution,
-          paymentMethod = paymentMethod,
-          salesForceContact = sfContact,
-        ),
+        productState,
         state.requestId,
         state.user,
-        contribution,
+        productType,
         state.analyticsInfo,
         None,
         None,
