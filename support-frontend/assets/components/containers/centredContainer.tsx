@@ -12,6 +12,12 @@ const centredContainer = css`
 	margin: 0 auto;
 	max-width: 1290px;
 
+  ${from.phablet} {
+    display: flex;
+	  flex-direction: row;
+    justify-content: space-evenly:
+  }
+
 	${from.desktop} {
 		width: calc(100% - 110px);
 	}
