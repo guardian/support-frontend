@@ -13,6 +13,7 @@ import com.gu.patrons.model.{
   InvalidRequestError,
   StageConstructors,
   StripeCustomer,
+  SubscriptionNotFoundDynamo,
   UserNotFoundIdentityError,
   UserNotFoundStripeError,
 }
@@ -91,6 +92,10 @@ object PatronCancelledEventLambda extends StrictLogging {
         logger.error(error.message)
         response.setStatusCode(200)
         response.setBody(error.message)
+      case Left(notFoundDynamo @ SubscriptionNotFoundDynamo(_)) =>
+        logger.warn(notFoundDynamo.message)
+        response.setStatusCode(200)
+        response.setBody(notFoundDynamo.message)
       case Right(_) =>
         logger.info("Successfully cancelled Patron subscription")
         response.setStatusCode(200)
@@ -178,10 +183,29 @@ object PatronCancelledEventLambda extends StrictLogging {
       subscriptionId: String,
   ): EitherT[Future, Error, UpdateItemResponse] = {
     logger.info(
-      s"Attempting to cancel Patron subscription for user with identity id $identityId and subscription id $subscriptionId",
+      s"Attempting to cancel Patron subscription for user with identity id " +
+        s"$identityId and subscription id $subscriptionId",
     )
     val dynamoService = SupporterDataDynamoService(stage)
-    EitherT(dynamoService.cancelSubscription(identityId, subscriptionId, LocalDate.now).map(_.left.map(DynamoDbError)))
+    val cancellationResult: Future[Either[Error, UpdateItemResponse]] =
+      dynamoService.subscriptionExists(identityId, subscriptionId).flatMap {
+        case Right(userExists) if userExists =>
+          dynamoService
+            .cancelSubscription(identityId, subscriptionId, LocalDate.now)
+            .map(_.left.map(DynamoDbError))
+        case Right(_) =>
+          Future.successful(
+            Left(
+              SubscriptionNotFoundDynamo(
+                s"Subscription with identity id $identityId and subscription id $subscriptionId " +
+                  s"was not found in Dynamo DB, it may have been removed because of an expired TTL " +
+                  s"https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html",
+              ),
+            ),
+          )
+        case Left(errorMessage) => Future.successful(Left(DynamoDbError(errorMessage)))
+      }
+    EitherT(cancellationResult)
   }
 }
 
