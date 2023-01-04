@@ -125,6 +125,11 @@ function WeeklyLandingPage({
 						href={giftNonGiftLink}
 						orderIsAGift={orderIsAGift ?? false}
 					/>
+					<GiftNonGiftCta
+						product="Student"
+						href={routes.guardianWeeklyStudent}
+						isStudent={true}
+					/>
 				</CentredContainer>
 			</FullWidthContainer>
 		</Page>
