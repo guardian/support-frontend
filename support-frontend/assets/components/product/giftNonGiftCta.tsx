@@ -10,7 +10,7 @@ type SubscriptionProduct = 'digital' | 'Guardian Weekly' | 'Student';
 type PropTypes = {
 	href: string;
 	product: SubscriptionProduct;
-	orderIsAGift?: boolean;
+	orderIsAGift: boolean;
 	isStudent?: boolean;
 };
 const giftOrPersonal = css`
@@ -32,6 +32,9 @@ function GiftOrPersonalOrStudent({
 	orderIsAGift,
 	isStudent,
 }: PropTypes) {
+	if (isStudent && orderIsAGift) {
+		return null;
+	}
 	return (
 		<section css={giftOrPersonal}>
 			<div css={giftOrPersonalCopy}>
