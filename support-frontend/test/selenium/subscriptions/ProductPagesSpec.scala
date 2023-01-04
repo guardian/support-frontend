@@ -54,18 +54,6 @@ class ProductPagesSpec
     }
   }
 
-  Feature("Digital Pack product page") {
-    Scenario("Basic loading") {
-      testPageLoads(new DigitalPackProductPage())
-    }
-  }
-
-  Feature("Digital Pack gift product page") {
-    Scenario("Basic loading") {
-      testPageLoads(new DigitalPackGiftProductPage())
-    }
-  }
-
   def testPageLoads(page: ProductPage): Unit = {
     Given("that a user goes to the page")
     goTo(page)
