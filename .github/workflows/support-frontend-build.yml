@@ -23,7 +23,7 @@ jobs:
       contents: read
 
     name: support-frontend build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-4-cores
     steps:
       - name: Env
         run: env
