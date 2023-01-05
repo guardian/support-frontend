@@ -9,7 +9,7 @@ import {
 	toYouTyping,
 } from './giftHeadingAnimationStyles';
 
-function GiftHeadingAnimation() {
+function GiftHeadingAnimation(): JSX.Element {
 	return (
 		<div css={giftTag}>
 			<div css={toFromLines}>

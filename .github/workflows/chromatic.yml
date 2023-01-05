@@ -6,13 +6,13 @@ jobs:
     if: ${{ github.actor != 'gu-scala-steward-public-repos[bot]' }}
     runs-on: ubuntu-latest
     defaults:
-     run:
-       working-directory: support-frontend
+      run:
+        working-directory: support-frontend
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-         fetch-depth: 0
+          fetch-depth: 0
       - name: Install Node
         uses: guardian/actions-setup-node@v2.4.1
 
@@ -29,6 +29,6 @@ jobs:
           workingDir: support-frontend
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          buildScriptName: 'build-storybook'
+          buildScriptName: "build-storybook"
           exitOnceUploaded: true
           onlyChanged: "!(main)" # only turbosnap on non-main branches
