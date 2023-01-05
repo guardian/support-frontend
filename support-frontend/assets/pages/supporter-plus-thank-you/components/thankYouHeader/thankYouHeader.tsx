@@ -40,7 +40,7 @@ type ThankYouHeaderProps = {
 	showDirectDebitMessage: boolean;
 	isOneOffPayPal: boolean;
 	contributionType: ContributionType;
-	amount: number;
+	amount: number | undefined;
 	currency: IsoCurrency;
 	shouldShowLargeDonationMessage: boolean;
 	amountIsAboveThreshold: boolean;
