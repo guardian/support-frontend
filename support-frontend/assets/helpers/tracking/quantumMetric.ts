@@ -1,6 +1,7 @@
 import { loadScript } from '@guardian/libs';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
@@ -38,6 +39,10 @@ enum SendEventContributionAmountUpdate {
 	RecurringContribution = 72,
 }
 
+enum SendEventContributionPaymentMethodUpdate {
+	PaymentMethod = 103,
+}
+
 enum SendEventContributionCheckoutConversion {
 	SingleContribution = 73,
 	RecurringContribution = 74,
@@ -48,7 +53,8 @@ type SendEventId =
 	| SendEventSubscriptionCheckoutStart
 	| SendEventSubscriptionCheckoutConversion
 	| SendEventContributionAmountUpdate
-	| SendEventContributionCheckoutConversion;
+	| SendEventContributionCheckoutConversion
+	| SendEventContributionPaymentMethodUpdate;
 
 // ---- sendEvent logic ---- //
 
@@ -271,6 +277,11 @@ export function sendEventContributionCartValue(
 					sourceCurrency,
 				);
 				if (convertedValue) {
+					console.log(
+						'sendEventContributionCartValue.sendEvent(sendEventId, false, Math.round(convertedValue).toString())',
+						sendEventId,
+						Math.round(convertedValue).toString(),
+					);
 					sendEvent(sendEventId, false, Math.round(convertedValue).toString());
 				}
 			};
@@ -278,6 +289,29 @@ export function sendEventContributionCartValue(
 			sendEventWhenReadyTrigger(sendEventWhenReady);
 		}
 	});
+}
+
+export function sendEventContributionPaymentMethod(
+	paymentMethod: PaymentMethod | null,
+): void {
+	if (paymentMethod) {
+		void canRunQuantumMetric().then((canRun) => {
+			if (canRun) {
+				const sendEventWhenReady = () => {
+					const sendEventId =
+						SendEventContributionPaymentMethodUpdate.PaymentMethod;
+					console.log(
+						'sendEventContributionPaymentMethod.sendEvent(sendEventId, false, paymentMethod)',
+						sendEventId,
+						paymentMethod,
+					);
+					sendEvent(sendEventId, false, paymentMethod.toString());
+				};
+
+				sendEventWhenReadyTrigger(sendEventWhenReady);
+			}
+		});
+	}
 }
 
 function sendEventABTestParticipations(participations: Participations): void {
