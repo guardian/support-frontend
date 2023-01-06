@@ -14,4 +14,6 @@ case class UserNotFoundIdentityError(message: String) extends Error
 
 case class UserNotFoundStripeError(message: String) extends Error
 
+case class SubscriptionNotFoundDynamo(message: String) extends Error
+
 case class DynamoDbError(message: String) extends Error
