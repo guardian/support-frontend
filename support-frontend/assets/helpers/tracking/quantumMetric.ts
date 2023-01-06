@@ -277,11 +277,6 @@ function sendEventContributionCartValue(
 					sourceCurrency,
 				);
 				if (convertedValue) {
-					console.log(
-						'sendEventContributionCartValue.sendEvent(sendEventId, false, Math.round(convertedValue).toString())',
-						sendEventId,
-						Math.round(convertedValue).toString(),
-					);
 					sendEvent(sendEventId, false, Math.round(convertedValue).toString());
 				}
 			};
@@ -300,11 +295,6 @@ function sendEventContributionPaymentMethod(
 				const sendEventWhenReady = () => {
 					const sendEventId =
 						SendEventContributionPaymentMethodUpdate.PaymentMethod;
-					console.log(
-						'sendEventContributionPaymentMethod.sendEvent(sendEventId, false, paymentMethod)',
-						sendEventId,
-						paymentMethod,
-					);
 					sendEvent(sendEventId, false, paymentMethod.toString());
 				};
 
