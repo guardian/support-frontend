@@ -12,7 +12,6 @@ import {
 	subscriptionToExplainerPart,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { sendEventContributionPaymentMethod } from 'helpers/tracking/quantumMetric';
 import ContributionChoicesHeader from 'pages/contributions-landing/components/ContributionChoicesHeader';
 import { paymentMethodData } from './paymentMethodData';
 import { AvailablePaymentMethodAccordionRow } from './paymentMethodSelectorAccordionRow';
@@ -85,11 +84,6 @@ export function PaymentMethodSelector({
 			/>
 		);
 	}
-	console.log(
-		'PaymentMethodSelector.sendEventContributionPaymentMethod',
-		paymentMethod,
-	);
-	sendEventContributionPaymentMethod(paymentMethod);
 
 	return (
 		<div css={container}>

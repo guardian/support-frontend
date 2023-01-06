@@ -192,7 +192,7 @@ function checkoutEvents(
 	return { start, conversion };
 }
 
-export function sendEventSubscriptionCheckoutStart(
+function sendEventSubscriptionCheckoutStart(
 	product: SubscriptionProduct,
 	orderIsAGift: boolean,
 	productPrice: ProductPrice,
@@ -210,7 +210,7 @@ export function sendEventSubscriptionCheckoutStart(
 	}
 }
 
-export function sendEventSubscriptionCheckoutConversion(
+function sendEventSubscriptionCheckoutConversion(
 	product: SubscriptionProduct,
 	orderIsAGift: boolean,
 	productPrice: ProductPrice,
@@ -228,7 +228,7 @@ export function sendEventSubscriptionCheckoutConversion(
 	}
 }
 
-export function sendEventContributionCheckoutConversion(
+function sendEventContributionCheckoutConversion(
 	amount: number,
 	contributionType: ContributionType,
 	sourceCurrency: IsoCurrency,
@@ -255,7 +255,7 @@ export function sendEventContributionCheckoutConversion(
 	});
 }
 
-export function sendEventContributionCartValue(
+function sendEventContributionCartValue(
 	amount: string,
 	contributionType: ContributionType,
 	sourceCurrency: IsoCurrency,
@@ -291,7 +291,7 @@ export function sendEventContributionCartValue(
 	});
 }
 
-export function sendEventContributionPaymentMethod(
+function sendEventContributionPaymentMethod(
 	paymentMethod: PaymentMethod | null,
 ): void {
 	if (paymentMethod) {
@@ -364,7 +364,7 @@ function addQM() {
 	});
 }
 
-export function init(participations: Participations): void {
+function init(participations: Participations): void {
 	void canRunQuantumMetric().then((canRun) => {
 		if (canRun) {
 			void addQM().then(() => {
@@ -377,3 +377,12 @@ export function init(participations: Participations): void {
 		}
 	});
 }
+
+export {
+	init,
+	sendEventSubscriptionCheckoutStart,
+	sendEventSubscriptionCheckoutConversion,
+	sendEventContributionCheckoutConversion,
+	sendEventContributionCartValue,
+	sendEventContributionPaymentMethod,
+};

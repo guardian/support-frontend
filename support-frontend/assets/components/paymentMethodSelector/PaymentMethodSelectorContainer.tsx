@@ -14,6 +14,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { sendEventContributionPaymentMethod } from 'helpers/tracking/quantumMetric';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
 
 function getExistingPaymentMethodProps(
@@ -79,6 +80,7 @@ function PaymentMethodSelectorContainer({
 		paymentMethod: PaymentMethod,
 		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 	) {
+		sendEventContributionPaymentMethod(paymentMethod);
 		dispatch(setPaymentMethod(paymentMethod));
 		existingPaymentMethod &&
 			dispatch(selectExistingPaymentMethod(existingPaymentMethod));
