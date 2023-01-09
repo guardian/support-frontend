@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
+import { from } from '@guardian/source-foundations';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
@@ -46,6 +47,13 @@ const reactElementId: Record<CountryGroupId, string> = {
 const closeGapAfterPageTitle = css`
 	margin-top: 0;
 `;
+
+const displayRowEvenly = css`
+  ${from.phablet} {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly:
+}`;
 
 // ----- Render ----- //
 function WeeklyLandingPage({
@@ -120,11 +128,21 @@ function WeeklyLandingPage({
 			</FullWidthContainer>
 			<FullWidthContainer theme="white">
 				<CentredContainer>
-					<GiftNonGiftCta
-						product="Guardian Weekly"
-						href={giftNonGiftLink}
-						orderIsAGift={orderIsAGift ?? false}
-					/>
+					<div css={displayRowEvenly}>
+						<GiftNonGiftCta
+							product="Guardian Weekly"
+							href={giftNonGiftLink}
+							orderIsAGift={orderIsAGift ?? false}
+						/>
+						{countryGroupId === 'GBPCountries' && (
+							<GiftNonGiftCta
+								product="Student"
+								href={routes.guardianWeeklyStudent}
+								orderIsAGift={orderIsAGift ?? false}
+								isStudent={true}
+							/>
+						)}
+					</div>
 				</CentredContainer>
 			</FullWidthContainer>
 		</Page>

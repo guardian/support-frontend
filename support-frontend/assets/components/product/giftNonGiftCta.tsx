@@ -6,11 +6,12 @@ import {
 } from '@guardian/source-react-components';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
-type GiftableProduct = 'digital' | 'Guardian Weekly';
+type SubscriptionProduct = 'digital' | 'Guardian Weekly' | 'Student';
 type PropTypes = {
 	href: string;
-	product: GiftableProduct;
+	product: SubscriptionProduct;
 	orderIsAGift: boolean;
+	isStudent?: boolean;
 };
 const giftOrPersonal = css`
 	padding: ${space[3]}px ${space[3]}px ${space[12]}px;
@@ -25,16 +26,30 @@ const giftOrPersonalHeading = css`
 	})};
 `;
 
-function GiftOrPersonal({ href, product, orderIsAGift }: PropTypes) {
+function GiftOrPersonalOrStudent({
+	href,
+	product,
+	orderIsAGift,
+	isStudent,
+}: PropTypes) {
+	if (isStudent && orderIsAGift) {
+		return null;
+	}
 	return (
 		<section css={giftOrPersonal}>
 			<div css={giftOrPersonalCopy}>
 				<h2 css={giftOrPersonalHeading}>
-					{orderIsAGift
+					{isStudent
+						? 'Student subscriptions'
+						: orderIsAGift
 						? 'Looking for a subscription for yourself?'
 						: 'Gift subscriptions'}
 				</h2>
-				{!orderIsAGift && <p>A {product} subscription makes a great gift.</p>}
+				{isStudent ? (
+					<p>{product}s get 70% off a Guardian Weekly subscription.</p>
+				) : (
+					!orderIsAGift && <p>A {product} subscription makes a great gift.</p>
+				)}
 			</div>
 			<LinkButton
 				icon={<SvgArrowRightStraight />}
@@ -44,15 +59,21 @@ function GiftOrPersonal({ href, product, orderIsAGift }: PropTypes) {
 				href={href}
 				onClick={() => {
 					sendTrackingEventsOnClick({
-						id: `${orderIsAGift ? 'personal' : 'gift'}_subscriptions_cta`,
+						id: `${
+							isStudent ? 'student' : orderIsAGift ? 'personal' : 'gift'
+						}_subscriptions_cta`,
 						componentType: 'ACQUISITIONS_BUTTON',
-					})();
+					});
 				}}
 			>
-				{orderIsAGift ? 'See personal subscriptions' : 'See gift subscriptions'}
+				{isStudent
+					? `I'm a student`
+					: orderIsAGift
+					? 'See personal subscriptions'
+					: 'See gift subscriptions'}
 			</LinkButton>
 		</section>
 	);
 }
 
-export default GiftOrPersonal;
+export default GiftOrPersonalOrStudent;
