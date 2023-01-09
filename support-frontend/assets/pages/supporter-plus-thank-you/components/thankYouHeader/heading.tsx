@@ -17,7 +17,7 @@ const amountText = css`
 interface HeadingProps {
 	name: string | null;
 	isOneOffPayPal: boolean;
-	amount: number;
+	amount: number | undefined;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
 }

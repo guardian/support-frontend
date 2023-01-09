@@ -15,7 +15,7 @@ jobs:
   payment_api_build:
     if: >-
       (github.actor != 'dependabot[bot]') &&
-        (github.event.pull_request.head.repo.owner.login == 'guardian' ||
+        (github.repository_owner == 'guardian' ||
           github.event_name == 'push')
 
     # Required by actions-assume-aws-role
@@ -30,13 +30,13 @@ jobs:
         run: env
 
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node for CDK
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '16'
-          cache: 'yarn'
+          node-version: 16
+          cache: "yarn"
           cache-dependency-path: cdk/yarn.lock
 
       - name: Build CFN from CDK
@@ -51,10 +51,10 @@ jobs:
           aws-region: eu-west-1
 
       - name: Setup Java 8
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
-          java-version: '8'
-          distribution: 'adopt'
+          java-version: "8"
+          distribution: "adopt"
       - uses: actions/cache@v2
         with:
           path: |

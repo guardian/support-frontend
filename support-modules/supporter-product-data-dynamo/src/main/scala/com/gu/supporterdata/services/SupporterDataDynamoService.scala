@@ -25,6 +25,20 @@ import scala.util.{Failure, Success, Try}
 
 class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String) {
 
+  def subscriptionExists(identityId: String, subscriptionId: String)(implicit executionContext: ExecutionContext) = {
+    val key = Map(
+      identityIdField -> AttributeValue.builder.s(identityId).build,
+      subscriptionNameField -> AttributeValue.builder.s(subscriptionId).build,
+    ).asJava
+    val request = GetItemRequest.builder.key(key).tableName(tableName).build()
+
+    client.getItem(request).toScala.transform {
+      case Success(item) =>
+        Try(Right(!item.item().isEmpty))
+      case Failure(exception) => Try(Left(exception.getMessage))
+    }
+  }
+
   def cancelSubscription(
       identityIdToCancel: String,
       subscriptionId: String,
