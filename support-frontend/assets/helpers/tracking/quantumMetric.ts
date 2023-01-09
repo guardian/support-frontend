@@ -1,6 +1,7 @@
 import { loadScript } from '@guardian/libs';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
@@ -38,6 +39,10 @@ enum SendEventContributionAmountUpdate {
 	RecurringContribution = 72,
 }
 
+enum SendEventContributionPaymentMethodUpdate {
+	PaymentMethod = 103,
+}
+
 enum SendEventContributionCheckoutConversion {
 	SingleContribution = 73,
 	RecurringContribution = 74,
@@ -48,7 +53,8 @@ type SendEventId =
 	| SendEventSubscriptionCheckoutStart
 	| SendEventSubscriptionCheckoutConversion
 	| SendEventContributionAmountUpdate
-	| SendEventContributionCheckoutConversion;
+	| SendEventContributionCheckoutConversion
+	| SendEventContributionPaymentMethodUpdate;
 
 // ---- sendEvent logic ---- //
 
@@ -186,7 +192,7 @@ function checkoutEvents(
 	return { start, conversion };
 }
 
-export function sendEventSubscriptionCheckoutStart(
+function sendEventSubscriptionCheckoutStart(
 	product: SubscriptionProduct,
 	orderIsAGift: boolean,
 	productPrice: ProductPrice,
@@ -204,7 +210,7 @@ export function sendEventSubscriptionCheckoutStart(
 	}
 }
 
-export function sendEventSubscriptionCheckoutConversion(
+function sendEventSubscriptionCheckoutConversion(
 	product: SubscriptionProduct,
 	orderIsAGift: boolean,
 	productPrice: ProductPrice,
@@ -222,7 +228,7 @@ export function sendEventSubscriptionCheckoutConversion(
 	}
 }
 
-export function sendEventContributionCheckoutConversion(
+function sendEventContributionCheckoutConversion(
 	amount: number,
 	contributionType: ContributionType,
 	sourceCurrency: IsoCurrency,
@@ -249,7 +255,7 @@ export function sendEventContributionCheckoutConversion(
 	});
 }
 
-export function sendEventContributionCartValue(
+function sendEventContributionCartValue(
 	amount: string,
 	contributionType: ContributionType,
 	sourceCurrency: IsoCurrency,
@@ -278,6 +284,24 @@ export function sendEventContributionCartValue(
 			sendEventWhenReadyTrigger(sendEventWhenReady);
 		}
 	});
+}
+
+function sendEventContributionPaymentMethod(
+	paymentMethod: PaymentMethod | null,
+): void {
+	if (paymentMethod) {
+		void canRunQuantumMetric().then((canRun) => {
+			if (canRun) {
+				const sendEventWhenReady = () => {
+					const sendEventId =
+						SendEventContributionPaymentMethodUpdate.PaymentMethod;
+					sendEvent(sendEventId, false, paymentMethod.toString());
+				};
+
+				sendEventWhenReadyTrigger(sendEventWhenReady);
+			}
+		});
+	}
 }
 
 function sendEventABTestParticipations(participations: Participations): void {
@@ -330,7 +354,7 @@ function addQM() {
 	});
 }
 
-export function init(participations: Participations): void {
+function init(participations: Participations): void {
 	void canRunQuantumMetric().then((canRun) => {
 		if (canRun) {
 			void addQM().then(() => {
@@ -343,3 +367,12 @@ export function init(participations: Participations): void {
 		}
 	});
 }
+// ----- Exports ----- //
+export {
+	init,
+	sendEventSubscriptionCheckoutStart,
+	sendEventSubscriptionCheckoutConversion,
+	sendEventContributionCheckoutConversion,
+	sendEventContributionCartValue,
+	sendEventContributionPaymentMethod,
+};
