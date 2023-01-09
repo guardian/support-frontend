@@ -36,8 +36,6 @@ const routes: Record<string, string> = {
 		'/subscribe/paper/delivery#subscribe',
 	guardianWeeklySubscriptionLanding: '/subscribe/weekly',
 	guardianWeeklySubscriptionLandingGift: '/subscribe/weekly/gift',
-	guardianWeeklyStudent:
-		'https://connect.studentbeans.com/v4/hosted/the-guardian-weekly/uk',
 	postcodeLookup: '/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
 	stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
