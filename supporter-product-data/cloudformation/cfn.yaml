@@ -18,17 +18,17 @@ Mappings:
   StageVariables:
     DEV:
       S3Bucket: supporter-product-data-export-dev
-      # Every 10 mins between 7am and 7pm Mon-Fri
-      scheduleRate: "cron(*/10 7-19 ? * 1-5 *)"
+      # Run once at 6am Mon-Fri
+      scheduleRate: "cron(0 6 * * 1-5)"
       lambdaConcurrency: 30
     UAT:
       S3Bucket: supporter-product-data-export-uat
-      scheduleRate: "cron(*/10 7-19 ? * 1-5 *)"
+      scheduleRate: "cron(0 6 * * 1-5)"
       lambdaConcurrency: 30
     PROD:
       S3Bucket: supporter-product-data-export-prod
-      # Every 5 mins
-      scheduleRate: "cron(*/5 * ? * * *)"
+      # Every 15 mins
+      scheduleRate: "cron(*/15 * ? * * *)"
       lambdaConcurrency: 50 # May need to reduce this number if we see downstream systems getting overwhelmed during a full refresh, I've tested with 30 and that was fine
 
 Resources:

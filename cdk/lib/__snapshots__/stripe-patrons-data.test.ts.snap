@@ -756,9 +756,9 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "StripePatronsDataPRODStripePatronsDataPRODrate15minutes0115BF571": {
+    "StripePatronsDataPRODStripePatronsDataPRODrate30minutes028F3FD32": {
       "Properties": {
-        "ScheduleExpression": "rate(15 minutes)",
+        "ScheduleExpression": "rate(30 minutes)",
         "State": "ENABLED",
         "Targets": [
           {
@@ -774,7 +774,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Events::Rule",
     },
-    "StripePatronsDataPRODStripePatronsDataPRODrate15minutes0AllowEventRuleStripePatronsDataPRODBF7BDE5FC0DAF728": {
+    "StripePatronsDataPRODStripePatronsDataPRODrate30minutes0AllowEventRuleStripePatronsDataPRODBF7BDE5FE71C5129": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -786,7 +786,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         "Principal": "events.amazonaws.com",
         "SourceArn": {
           "Fn::GetAtt": [
-            "StripePatronsDataPRODStripePatronsDataPRODrate15minutes0115BF571",
+            "StripePatronsDataPRODStripePatronsDataPRODrate30minutes028F3FD32",
             "Arn",
           ],
         },

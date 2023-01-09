@@ -67,14 +67,14 @@ class StripePatronsDataLambda extends GuScheduledLambda {
           alarmDescription: `Triggers if there are errors from ${appName} on ${stage}`,
           snsTopicName: "reader-revenue-dev",
           toleratedErrorPercentage: 1,
-          numberOfMinutesAboveThresholdBeforeAlarm: 46, // The lambda runs every 15 mins so alarm if it fails 3 times in a row
+          numberOfMinutesAboveThresholdBeforeAlarm: 46,
         };
       }
       return { noMonitoring: true };
     }
 
     function scheduleRateForEnvironment(stage: string) {
-      return Schedule.rate(Duration.minutes(stage == "PROD" ? 15 : 60));
+      return Schedule.rate(Duration.minutes(stage == "PROD" ? 30 : 24 * 60));
     }
 
     this.addToRolePolicy(parameterStorePolicy(scope, appName));
