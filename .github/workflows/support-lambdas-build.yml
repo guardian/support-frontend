@@ -12,7 +12,7 @@ jobs:
   support_lambdas_build:
     if: >-
       (github.actor != 'dependabot[bot]') &&
-        (github.event.pull_request.head.repo.owner.login == 'guardian' ||
+        (github.repository_owner == 'guardian' ||
           github.event_name == 'push')
 
     # Required by actions-assume-aws-role
@@ -27,7 +27,7 @@ jobs:
         run: env
 
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Required by sbt riffRaffUpload
       - name: Configure AWS credentials
@@ -37,10 +37,10 @@ jobs:
           aws-region: eu-west-1
 
       - name: Setup Java 8
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
-          java-version: '8'
-          distribution: 'adopt'
+          java-version: "8"
+          distribution: "adopt"
       - uses: actions/cache@v2
         with:
           path: |

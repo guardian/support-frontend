@@ -17,6 +17,7 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { getSession } from 'helpers/storage/storage';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
@@ -64,6 +65,14 @@ const buttonContainer = css`
 	padding: ${space[12]}px 0;
 `;
 
+function getAmountFromSessionStorage(): number | undefined {
+	const amount = getSession('contributionAmount');
+
+	if (amount) {
+		return parseFloat(amount);
+	}
+}
+
 export const largeDonations: Record<ContributionType, number> = {
 	MONTHLY: 20,
 	ANNUAL: 100,
@@ -88,17 +97,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 		() => getCampaignSettings(campaignCode),
 		[],
 	);
-
-	useEffect(() => {
-		trackUserData(
-			paymentMethod,
-			contributionType,
-			isSignedIn,
-			!isNewAccount,
-			isLargeDonation(amount, contributionType, paymentMethod),
-		);
-	}, []);
-
 	const { countryId, countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -119,15 +117,31 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const contributionType = useContributionsSelector(getContributionType);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
-
-	const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
+	const isOneOffPayPal =
+		paymentMethod === PayPal && contributionType === 'ONE_OFF';
+	const amount = isOneOffPayPal
+		? getAmountFromSessionStorage()
+		: getAmount(selectedAmounts, otherAmounts, contributionType);
+	const isAmountLargeDonation = amount
+		? isLargeDonation(amount, contributionType, paymentMethod)
+		: false;
 
 	useEffect(() => {
-		sendEventContributionCheckoutConversion(
-			amount,
-			contributionType,
-			currencyId,
-		);
+		if (amount) {
+			sendEventContributionCheckoutConversion(
+				amount,
+				contributionType,
+				currencyId,
+			);
+
+			trackUserData(
+				paymentMethod,
+				contributionType,
+				isSignedIn,
+				!isNewAccount,
+				isAmountLargeDonation,
+			);
+		}
 	}, []);
 
 	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
@@ -136,9 +150,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 		otherAmounts,
 		countryGroupId,
 	);
-
-	const isOneOffPayPal =
-		paymentMethod === PayPal && contributionType === 'ONE_OFF';
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
@@ -201,11 +212,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 							contributionType={contributionType}
 							amount={amount}
 							currency={currencyId}
-							shouldShowLargeDonationMessage={isLargeDonation(
-								amount,
-								contributionType,
-								paymentMethod,
-							)}
+							shouldShowLargeDonationMessage={isAmountLargeDonation}
 							amountIsAboveThreshold={amountIsAboveThreshold}
 							isSignedIn={isSignedIn}
 							userTypeFromIdentityResponse={userTypeFromIdentityResponse}

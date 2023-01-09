@@ -54,6 +54,7 @@ class StripePatronsDataLambda extends GuScheduledLambda {
       monitoringConfiguration: monitoringForEnvironment(scope.stage),
       rules: [{ schedule: scheduleRateForEnvironment(scope.stage) }],
       runtime: Runtime.JAVA_11,
+      memorySize: 1536,
       timeout: Duration.minutes(15),
     });
 
@@ -90,6 +91,7 @@ class PatronCancelledLambda extends GuLambdaFunction {
       handler:
         "com.gu.patrons.lambdas.PatronCancelledEventLambda::handleRequest",
       runtime: Runtime.JAVA_11,
+      memorySize: 1536,
       timeout: Duration.minutes(15),
     });
 

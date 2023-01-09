@@ -1,8 +1,10 @@
 import cx from 'classnames';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
+	AUDCountries,
 	countryGroups,
 	GBPCountries,
+	NZDCountries,
 } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
@@ -17,6 +19,7 @@ type HeaderNavLink = {
 	internal: boolean;
 	opensInNewWindow?: boolean;
 	include?: CountryGroupId[];
+	exclude?: CountryGroupId[];
 	additionalClasses?: string;
 };
 
@@ -71,6 +74,7 @@ const links: HeaderNavLink[] = [
 		text: 'Patrons',
 		trackAs: 'patrons',
 		opensInNewWindow: true,
+		exclude: [AUDCountries, NZDCountries],
 		internal: false,
 	},
 ];
@@ -130,14 +134,19 @@ function Links({
 						}
 						return true;
 					})
-					.filter(({ include }) => {
+					.filter(({ include, exclude }) => {
 						// If there is no country group ID for the link, return true and include the link in the rendering.
 						if (!countryGroupId) {
 							return true;
 						}
 
-						// If the link is not meant to be rendered for a specific CountryGroupID, do not include.
+						// If the link is not meant to be included for a specific CountryGroupID, do not include in array.
 						if (include && !include.includes(countryGroupId)) {
+							return false;
+						}
+
+						// If the link is meant to be excluded for a specific CountryGroupID, exclude from array.
+						if (exclude?.includes(countryGroupId)) {
 							return false;
 						}
 
