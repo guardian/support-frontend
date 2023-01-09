@@ -21,7 +21,7 @@ import { logCreateSetupIntentError } from 'pages/contributions-landing/component
 import {
 	paymentFailure,
 	paymentWaiting,
-} from 'pages/contributions-landing/contributionsLandingActions';
+} from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 import { getDisplayErrors } from './selectors';
 import { StripeCardForm } from './stripeCardForm';
 

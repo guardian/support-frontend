@@ -3,7 +3,10 @@ import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import { trackComponentEvents } from 'helpers/tracking/ophan';
 
-export type ProductCheckout = 'Contribution' | SubscriptionProduct;
+export type ProductCheckout =
+	| 'Contribution'
+	| 'SupporterPlus'
+	| SubscriptionProduct;
 
 const trackCheckoutSubmitAttempt = (
 	componentId: string,

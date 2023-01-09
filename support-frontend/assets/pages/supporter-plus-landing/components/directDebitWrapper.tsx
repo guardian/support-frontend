@@ -4,7 +4,7 @@ import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentWaiting,
-} from 'pages/contributions-landing/contributionsLandingActions';
+} from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 
 export function DirectDebitContainer(): JSX.Element {
 	const dispatch = useContributionsDispatch();

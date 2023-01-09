@@ -4,15 +4,17 @@ import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/pa
 import { PayPal } from 'helpers/forms/paymentMethods';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
 import { setUpPayPalPayment } from 'helpers/redux/checkout/payment/payPal/thunks';
+import { isSupporterPlusPurchase } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { trackCheckoutSubmitAttempt } from 'helpers/tracking/behaviour';
 import {
 	onThirdPartyPaymentAuthorised,
 	paymentWaiting,
-	sendFormSubmitEventForPayPalRecurring,
-} from 'pages/contributions-landing/contributionsLandingActions';
+} from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 import { PayPalButton } from './payPalButton';
 import type { OnPaypalWindowOpen } from './payPalButtonProps';
 import { getPayPalButtonProps } from './payPalButtonProps';
@@ -33,8 +35,14 @@ export function PayPalButtonRecurringContainer({
 		useState<PayPalButtonControls>({});
 
 	const dispatch = useContributionsDispatch();
+
+	const contributionType = useContributionsSelector(getContributionType);
 	const { csrf } = useContributionsSelector((state) => state.page.checkoutForm);
+	const { userTypeFromIdentityResponse } = useContributionsSelector(
+		(state) => state.page.checkoutForm.personalDetails,
+	);
 	const { isTestUser } = useContributionsSelector((state) => state.page.user);
+	const isSupporterPlus = useContributionsSelector(isSupporterPlusPurchase);
 
 	function onCompletion(payPalCheckoutDetails: PayPalCheckoutDetails) {
 		dispatch(paymentWaiting(true));
@@ -55,7 +63,13 @@ export function PayPalButtonRecurringContainer({
 		csrf,
 		isTestUser: isTestUser ?? false,
 		setValidationControls,
-		onClick: () => dispatch(sendFormSubmitEventForPayPalRecurring()),
+		onClick: () =>
+			trackCheckoutSubmitAttempt(
+				`PayPal-${contributionType}-submit`,
+				`npf-allowed-for-user-type-${userTypeFromIdentityResponse}`,
+				'PayPal',
+				isSupporterPlus ? 'SupporterPlus' : 'Contribution',
+			),
 		onWindowOpen,
 		onCompletion,
 	});

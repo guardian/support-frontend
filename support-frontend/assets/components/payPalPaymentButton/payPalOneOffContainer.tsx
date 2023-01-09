@@ -9,8 +9,7 @@ import { payPalCancelUrl, payPalReturnUrl } from 'helpers/urls/routes';
 import {
 	createOneOffPayPalPayment,
 	paymentWaiting,
-	setCheckoutFormHasBeenSubmitted,
-} from 'pages/contributions-landing/contributionsLandingActions';
+} from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 
 export function PayPalButtonOneOffContainer(): JSX.Element {
 	const dispatch = useContributionsDispatch();
@@ -33,8 +32,6 @@ export function PayPalButtonOneOffContainer(): JSX.Element {
 				cancelURL: payPalCancelUrl(countryGroupId),
 			}),
 		);
-
-		dispatch(setCheckoutFormHasBeenSubmitted());
 	});
 
 	return (

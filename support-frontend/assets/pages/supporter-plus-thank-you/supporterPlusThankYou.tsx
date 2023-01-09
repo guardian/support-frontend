@@ -18,13 +18,13 @@ import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getSession } from 'helpers/storage/storage';
+import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import {
 	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 	trackUserData,
 } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
-import { shouldShowBenefitsMessaging } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
@@ -47,9 +47,8 @@ const columnContainer = css`
 `;
 
 const firstColumnContainer = css`
-		${between.tablet.and.desktop} {
-			margin-bottom: ${space[6]}px;
-		}
+	${between.tablet.and.desktop} {
+		margin-bottom: ${space[6]}px;
 	}
 `;
 
@@ -145,7 +144,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 		}
 	}, []);
 
-	const amountIsAboveThreshold = shouldShowBenefitsMessaging(
+	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
 		contributionType,
 		selectedAmounts,
 		otherAmounts,

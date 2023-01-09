@@ -2,6 +2,7 @@ import '__mocks__/settingsMock';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
+import type { RegularContributionType } from 'helpers/contributions';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -25,9 +26,8 @@ import {
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
+import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
 import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
-import type { RegularContribType } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
-import { benefitsThresholdsByCountryGroup } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
 import {
 	largeDonations,
 	SupporterPlusThankYou,
@@ -288,7 +288,7 @@ RecurringNotSignedIn.decorators = [
 
 		const thresholdPrice =
 			benefitsThresholdsByCountryGroup[countryGroup][
-				contributionType as RegularContribType
+				contributionType as RegularContributionType
 			];
 
 		store.dispatch(
@@ -354,7 +354,7 @@ RecurringSignedIn.decorators = [
 
 		const thresholdPrice =
 			benefitsThresholdsByCountryGroup[countryGroup][
-				contributionType as RegularContribType
+				contributionType as RegularContributionType
 			];
 
 		store.dispatch(
@@ -421,7 +421,7 @@ RecurringSignUp.decorators = [
 
 		const thresholdPrice =
 			benefitsThresholdsByCountryGroup[countryGroup][
-				contributionType as RegularContribType
+				contributionType as RegularContributionType
 			];
 
 		store.dispatch(

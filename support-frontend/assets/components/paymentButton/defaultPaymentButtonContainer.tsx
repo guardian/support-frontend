@@ -4,7 +4,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { shouldShowBenefitsMessaging } from 'pages/contributions-landing/components/DigiSubBenefits/helpers';
+import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { DefaultPaymentButton } from './defaultPaymentButton';
 
 const contributionTypeToPaymentInterval: Partial<
@@ -61,7 +61,7 @@ export function DefaultPaymentButtonContainer({
 
 	const testId = 'qa-contributions-landing-submit-contribution-button';
 
-	const amountIsAboveThreshold = shouldShowBenefitsMessaging(
+	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
 		contributionType,
 		selectedAmounts,
 		otherAmounts,

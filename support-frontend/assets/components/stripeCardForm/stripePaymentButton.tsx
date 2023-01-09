@@ -18,7 +18,7 @@ import {
 	onThirdPartyPaymentAuthorised,
 	paymentFailure,
 	paymentWaiting,
-} from 'pages/contributions-landing/contributionsLandingActions';
+} from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 
 export function StripePaymentButton(): JSX.Element {
 	const [paymentAwaitingSetupIntent, setPaymentAwaitingSetupIntent] =
