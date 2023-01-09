@@ -367,7 +367,7 @@ function init(participations: Participations): void {
 		}
 	});
 }
-
+// ----- Exports ----- //
 export {
 	init,
 	sendEventSubscriptionCheckoutStart,
