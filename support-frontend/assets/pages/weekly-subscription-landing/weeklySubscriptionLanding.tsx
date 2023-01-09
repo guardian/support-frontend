@@ -134,12 +134,14 @@ function WeeklyLandingPage({
 							href={giftNonGiftLink}
 							orderIsAGift={orderIsAGift ?? false}
 						/>
-						<GiftNonGiftCta
-							product="Student"
-							href={routes.guardianWeeklyStudent}
-							orderIsAGift={orderIsAGift ?? false}
-							isStudent={true}
-						/>
+						{countryGroupId === 'GBPCountries' && (
+							<GiftNonGiftCta
+								product="Student"
+								href={routes.guardianWeeklyStudent}
+								orderIsAGift={orderIsAGift ?? false}
+								isStudent={true}
+							/>
+						)}
 					</div>
 				</CentredContainer>
 			</FullWidthContainer>
