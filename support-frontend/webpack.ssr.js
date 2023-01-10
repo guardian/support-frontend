@@ -6,7 +6,7 @@ module.exports = merge(common('[name].css', '[name].js', false), {
 	mode: 'development',
 	entry: entryPoints.ssr,
 	output: {
-		library: ['Support', '[name]'],
+		library: ['Subscriptions', '[name]'],
 		libraryTarget: 'commonjs',
 	},
 });
