@@ -19,11 +19,11 @@ Mappings:
     DEV:
       S3Bucket: supporter-product-data-export-dev
       # Run once at 6am Mon-Fri
-      scheduleRate: "cron(0 6 * * 1-5)"
+      scheduleRate: "cron(0 6 ? * 1-5 *)"
       lambdaConcurrency: 30
     UAT:
       S3Bucket: supporter-product-data-export-uat
-      scheduleRate: "cron(0 6 * * 1-5)"
+      scheduleRate: "cron(0 6 ? * 1-5 *)"
       lambdaConcurrency: 30
     PROD:
       S3Bucket: supporter-product-data-export-prod
