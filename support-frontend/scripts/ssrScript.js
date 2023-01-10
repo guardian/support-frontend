@@ -38,8 +38,6 @@ global.HTMLElement = window.HTMLElement;
 const { ssrPages } = require('../public/compiled-assets/javascripts/ssrPages').Support;
 
 ssrPages.pages.forEach((page) => {
-  global.document.head = global.document.createElement('head');
-
   const { filename, html } = page;
 
   const styleTags = global.document.head.querySelectorAll('style[data-emotion]');

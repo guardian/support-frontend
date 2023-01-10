@@ -9,7 +9,6 @@ import { Box } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import GridImage from 'components/gridImage/gridImage';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
@@ -42,11 +41,6 @@ const checkoutContainer = css`
 	${from.desktop} {
 		padding-top: ${space[6]}px;
 	}
-`;
-
-const subheading = css`
-	font-weight: normal;
-	padding-right: ${space[2]}px;
 `;
 
 const emptyBox = css`
@@ -92,23 +86,8 @@ function PreRenderSupporterPlusLandingPage(): JSX.Element {
 			}
 		>
 			<PrerenderGlobalStyles />
-			<CheckoutHeading
-				heading={heading}
-				image={
-					<GridImage
-						gridId="supporterPlusLanding"
-						srcSizes={[500]}
-						sizes="500px"
-						imgType="png"
-						altText=""
-					/>
-				}
-			>
-				<p css={subheading}>
-					As a reader-funded news organisation, we rely on your generosity.
-					Please give what you can, so millions can benefit from quality
-					reporting on the events shaping our world.
-				</p>
+			<CheckoutHeading heading={heading}>
+				<p></p>
 			</CheckoutHeading>
 			<Container sideBorders backgroundColor={neutral[97]}>
 				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
