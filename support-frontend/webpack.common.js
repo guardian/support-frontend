@@ -109,7 +109,6 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 			'node_modules',
 		],
 		extensions: ['.js', '.jsx', '.ts', '.tsx'],
-    fallback: { stream: false }
 	},
 
 	module: {
