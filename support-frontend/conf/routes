@@ -28,16 +28,15 @@ GET /eu                                                            controllers.A
 GET /int                                                           controllers.Application.redirect(location="/int/contribute")
 GET /nz                                                            controllers.Application.redirect(location="/nz/contribute")
 GET /ca                                                            controllers.Application.redirect(location="/ca/contribute")
-GET /uk                                                            controllers.Application.redirect(location="/uk/support")
+GET /uk                                                            controllers.Application.redirect(location="/uk/contribute")
 GET /                                                              controllers.Application.geoRedirect()
 
 
 # ----- Bundles Landing Page ----- #
 
-GET /support                                                       controllers.Application.supportGeoRedirect()
-GET /$country<(uk|us|au|eu|int|nz|ca)>/support                     controllers.Application.showcase(country: String)
-# redirect from old ab test
-GET /showcase                                                      controllers.Application.permanentRedirect(location="/uk/support")
+GET /support                                                       controllers.Application.permanentRedirect(location="/contribute")
+GET /$country<(uk|us|au|eu|int|nz|ca)>/support                     controllers.Application.permanentRedirectWithCountry(country, location="/contribute")
+GET /showcase                                                      controllers.Application.permanentRedirect(location="/contribute")
 
 
 # ----- Events Redirect ----- #

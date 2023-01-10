@@ -26,13 +26,13 @@ class SiteMap(
   private def supportLandingPages()(implicit req: RequestHeader) = {
     <url>
       <loc>{
-      routes.Application.showcase("uk").absoluteURL(secure = true)
+      contributionsLandingPageUK()
     }</loc>
       <xhtml:link rel="alternate" hreflang="en-us" href={
       contributionsLandingPageUS()
     }/>
       <xhtml:link rel="alternate" hreflang="en" href={
-      routes.Application.showcase("uk").absoluteURL(secure = true)
+      contributionsLandingPageUK()
     }/>
       <priority>1.0</priority>
     </url>
@@ -47,7 +47,7 @@ class SiteMap(
       contributionsLandingPageUS()
     }/>
       <xhtml:link rel="alternate" hreflang="en" href={
-      routes.Application.showcase("uk").absoluteURL(secure = true)
+      contributionsLandingPageUK()
     }/>
       <priority>1.0</priority>
     </url>
@@ -61,5 +61,15 @@ class SiteMap(
       )
       .absoluteURL(secure = true)
   }
+
+  private def contributionsLandingPageUK()(implicit req: RequestHeader) = {
+    routes.Application
+      .contributionsLanding(
+        country = "uk",
+        campaignCode = "",
+      )
+      .absoluteURL(secure = true)
+  }
+
 
 }
