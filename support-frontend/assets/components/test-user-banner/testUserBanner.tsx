@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { error, neutral, space, textSans } from '@guardian/source-foundations';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 import { isTestUser } from 'helpers/user/user';
 import { ThankYouUserTypeSelector } from './thankYouUserTypeSelector';
 
@@ -15,10 +15,10 @@ const testUserBannerStyles = css`
 
 export function TestUserBanner(): JSX.Element | null {
 	const testUser = isTestUser();
-	const location = useLocation();
+	// const location = useLocation();
 
 	if (testUser) {
-		const isThankYouPage = location.pathname.includes('thankyou');
+		const isThankYouPage = window.location.pathname.includes('thankyou');
 
 		return (
 			<div css={testUserBannerStyles}>
