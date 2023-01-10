@@ -1,13 +1,10 @@
-import createCache from '@emotion/cache';
-import { CacheProvider, css } from '@emotion/react';
-import createEmotionServer from '@emotion/server/create-instance';
+import { css } from '@emotion/react';
 import { from, neutral, space, textSans } from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
-import { renderToString } from 'react-dom/server';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -27,6 +24,7 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import { PrerenderGlobalStyles } from 'helpers/rendering/prerenderGlobalStyles';
 import { LandingPageHeading } from './components/landingPageHeading';
 
 const checkoutContainer = css`
@@ -51,6 +49,10 @@ const subheading = css`
 	padding-right: ${space[2]}px;
 `;
 
+const emptyBox = css`
+	height: 500px;
+`;
+
 const countrySwitcherProps: CountryGroupSwitcherProps = {
 	countryGroupIds: [
 		GBPCountries,
@@ -65,75 +67,65 @@ const countrySwitcherProps: CountryGroupSwitcherProps = {
 	subPath: '/contribute',
 };
 
-const cache = createCache({
-	key: 'ssr',
-});
-const emotionServer = createEmotionServer(cache);
-
 function PreRenderSupporterPlusLandingPage(): JSX.Element {
 	const heading = <LandingPageHeading />;
 
 	return (
-		<CacheProvider value={cache}>
-			<PageScaffold
-				id="supporter-plus-landing"
-				header={
-					<>
-						<Header>
-							<Hide from="desktop">
-								<CountrySwitcherContainer>
-									<CountryGroupSwitcher {...countrySwitcherProps} />
-								</CountrySwitcherContainer>
-							</Hide>
-						</Header>
-						<Nav {...countrySwitcherProps} />
-					</>
-				}
-				footer={
-					<FooterWithContents>
-						<FooterLinks></FooterLinks>
-					</FooterWithContents>
+		<PageScaffold
+			id="supporter-plus-landing"
+			header={
+				<>
+					<Header>
+						<Hide from="desktop">
+							<CountrySwitcherContainer>
+								<CountryGroupSwitcher {...countrySwitcherProps} />
+							</CountrySwitcherContainer>
+						</Hide>
+					</Header>
+					<Nav {...countrySwitcherProps} />
+				</>
+			}
+			footer={
+				<FooterWithContents>
+					<FooterLinks></FooterLinks>
+				</FooterWithContents>
+			}
+		>
+			<PrerenderGlobalStyles />
+			<CheckoutHeading
+				heading={heading}
+				image={
+					<GridImage
+						gridId="supporterPlusLanding"
+						srcSizes={[500]}
+						sizes="500px"
+						imgType="png"
+						altText=""
+					/>
 				}
 			>
-				<CheckoutHeading
-					heading={heading}
-					image={
-						<GridImage
-							gridId="supporterPlusLanding"
-							srcSizes={[500]}
-							sizes="500px"
-							imgType="png"
-							altText=""
-						/>
-					}
-				>
-					<p css={subheading}>
-						As a reader-funded news organisation, we rely on your generosity.
-						Please give what you can, so millions can benefit from quality
-						reporting on the events shaping our world.
-					</p>
-				</CheckoutHeading>
-				<Container sideBorders backgroundColor={neutral[97]}>
-					<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
-						<Column span={[0, 2, 5]}></Column>
-						<Column span={[1, 8, 7]}>
-							<Hide from="desktop">{heading}</Hide>
-							<Box>
-								<div></div>
-							</Box>
-							<Box>
-								<div></div>
-							</Box>
-						</Column>
-					</Columns>
-				</Container>
-			</PageScaffold>
-		</CacheProvider>
+				<p css={subheading}>
+					As a reader-funded news organisation, we rely on your generosity.
+					Please give what you can, so millions can benefit from quality
+					reporting on the events shaping our world.
+				</p>
+			</CheckoutHeading>
+			<Container sideBorders backgroundColor={neutral[97]}>
+				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
+					<Column span={[0, 2, 5]}></Column>
+					<Column span={[1, 8, 7]}>
+						<Hide from="desktop">{heading}</Hide>
+						<Box>
+							<div css={emptyBox}></div>
+						</Box>
+						<Box>
+							<div css={emptyBox}></div>
+						</Box>
+					</Column>
+				</Columns>
+			</Container>
+		</PageScaffold>
 	);
 }
 
-const html = renderToString(<PreRenderSupporterPlusLandingPage />);
-const chunks = emotionServer.extractCriticalToChunks(html);
-const styles = emotionServer.constructStyleTagsFromChunks(chunks);
-
-export const supporterPlusLanding = `${styles}${html}`;
+export const supporterPlusLanding = <PreRenderSupporterPlusLandingPage />;

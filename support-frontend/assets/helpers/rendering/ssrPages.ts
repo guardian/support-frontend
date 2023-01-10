@@ -9,6 +9,6 @@ export const pages = [
 	},
 	{
 		filename: 'supporter-plus-landing.html',
-		html: supporterPlusLanding,
+		html: renderToString(supporterPlusLanding),
 	},
 ];
