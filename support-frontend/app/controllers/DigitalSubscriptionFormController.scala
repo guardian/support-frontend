@@ -18,6 +18,7 @@ import views.html.subscriptionCheckout
 
 import scala.concurrent.ExecutionContext
 
+// comment here to trigger re-build
 class DigitalSubscriptionFormController(
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
     val assets: AssetsResolver,
