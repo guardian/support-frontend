@@ -27,8 +27,8 @@ Mappings:
       lambdaConcurrency: 30
     PROD:
       S3Bucket: supporter-product-data-export-prod
-      # Every 15 mins
-      scheduleRate: "cron(*/15 * ? * * *)"
+      # Every 5 mins
+      scheduleRate: "cron(*/5 * ? * * *)"
       lambdaConcurrency: 50 # May need to reduce this number if we see downstream systems getting overwhelmed during a full refresh, I've tested with 30 and that was fine
 
 Resources:
