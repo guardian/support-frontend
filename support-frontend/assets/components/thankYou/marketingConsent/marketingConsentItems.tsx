@@ -11,9 +11,9 @@ import { sendMarketingPreferencesToIdentity } from 'components/marketingConsent/
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { setThankYouMarketingConsent } from 'helpers/redux/checkout/thankYouState/actions';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
+import { OPHAN_COMPONENT_ID_MARKETING } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { isCodeOrProd } from 'helpers/urls/url';
-import { OPHAN_COMPONENT_ID_MARKETING } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
 
 const checkboxContainer = css`
 	margin-top: ${space[2]}px;

@@ -7,16 +7,16 @@ import {
 } from '@guardian/source-react-components';
 import { useEffect, useState } from 'react';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import {
+	OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN,
+	OPHAN_COMPONENT_ID_SIGN_IN,
+} from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { routes } from 'helpers/urls/routes';
 import { isCodeOrProd } from 'helpers/urls/url';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
 import BulletPointedList from 'pages/contributions-landing/components/ContributionThankYou/components/BulletPointedList';
 import ExpandableContainer from 'pages/contributions-landing/components/ContributionThankYou/components/ExpandableContainer';
-import {
-	OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN,
-	OPHAN_COMPONENT_ID_SIGN_IN,
-} from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
 
 const bodyText = css`
 	${body.small()};
