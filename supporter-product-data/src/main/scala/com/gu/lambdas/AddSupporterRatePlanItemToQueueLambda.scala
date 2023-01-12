@@ -45,6 +45,15 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
     val sqsService = SqsService(stage)
     val alarmService = AlarmService(stage)
 
+    if (csvReader.isEmpty) {
+      s3Object.close()
+      logger.error(
+        s"CSV read failure: file ${state.filename} was empty",
+      )
+      alarmService.triggerCsvReadAlarm
+      throw new RuntimeException(s"The specified CSV file ${state.filename} was empty")
+    }
+
     val unProcessed = getUnprocessedItems(csvReader, state.processedCount)
 
     // Close this after retrieving all the items
@@ -55,7 +64,7 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
 
     if (invalidUnprocessedIndexes.nonEmpty && state.processedCount == 0) {
       logger.error(
-        s"There were ${invalidUnprocessedIndexes.length} CSV read failures from file ${state.filename} with line numbers ${invalidUnprocessedIndexes
+        s"CSV read failure: there were ${invalidUnprocessedIndexes.length} read failures from file ${state.filename} with line numbers ${invalidUnprocessedIndexes
             .mkString(",")}",
       )
       alarmService.triggerCsvReadAlarm
