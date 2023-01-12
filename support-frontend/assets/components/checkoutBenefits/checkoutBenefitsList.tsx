@@ -7,6 +7,11 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
+import {
+	CheckoutNudge,
+	nudgeData,
+} from 'components/checkoutNudge/checkoutNudge';
+import type { ContributionType } from 'helpers/contributions';
 import type { CheckListData } from './checkoutBenefitsListData';
 
 const container = css`
@@ -72,6 +77,7 @@ const para = css`
 export type CheckoutBenefitsListProps = {
 	title: string;
 	checkListData: CheckListData[];
+	contributionType: ContributionType;
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
 };
@@ -79,27 +85,40 @@ export type CheckoutBenefitsListProps = {
 export function CheckoutBenefitsList({
 	title,
 	checkListData,
+	contributionType,
 }: CheckoutBenefitsListProps): JSX.Element {
+	function handleButtonClick(): void {
+		throw new Error('Function not implemented.');
+	}
 	return (
 		<div css={container}>
-			<h2 css={heading}>{title}</h2>
-			<hr css={hr(`${space[4]}px 0`)} />
-			<table css={table}>
-				{checkListData.map((item) => (
-					<tr>
-						<td css={[checkListIcon, item.maybeGreyedOut]}>
-							<div css={iconContainer}>{item.icon}</div>
-						</td>
-						<td css={[checkListText, item.maybeGreyedOut]}>{item.text}</td>
-					</tr>
-				))}
-			</table>
+			{contributionType === 'ONE_OFF' ? (
+				<CheckoutNudge
+					checkoutNudge={nudgeData}
+					handleCloseButtonClick={handleButtonClick}
+				/>
+			) : (
+				<>
+					<h2 css={heading}>{title}</h2>
+					<hr css={hr(`${space[4]}px 0`)} />
+					<table css={table}>
+						{checkListData.map((item) => (
+							<tr>
+								<td css={[checkListIcon, item.maybeGreyedOut]}>
+									<div css={iconContainer}>{item.icon}</div>
+								</td>
+								<td css={[checkListText, item.maybeGreyedOut]}>{item.text}</td>
+							</tr>
+						))}
+					</table>
+					<hr css={hr(`${space[5]}px 0 ${space[4]}px`)} />
+					<p css={para}>Cancel anytime</p>
+				</>
+			)}
 			{/* <UpsellButton
 				buttonCopy={buttonCopy}
 				handleButtonClick={handleButtonClick}
 			/> */}
-			<hr css={hr(`${space[5]}px 0 ${space[4]}px`)} />
-			<p css={para}>Cancel anytime</p>
 		</div>
 	);
 }

@@ -10,7 +10,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
-import { isOneOff } from 'helpers/supporterPlus/isContributionRecurring';
+import { isRecurring } from 'helpers/supporterPlus/isContributionRecurring';
 import type { CheckoutBenefitsListProps } from './checkoutBenefitsList';
 import { checkListData } from './checkoutBenefitsListData';
 
@@ -41,9 +41,6 @@ export function CheckoutBenefitsListContainer({
 	const dispatch = useContributionsDispatch();
 
 	const contributionType = useContributionsSelector(getContributionType);
-	if (isOneOff(contributionType)) {
-		return null;
-	}
 
 	const { countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -55,7 +52,9 @@ export function CheckoutBenefitsListContainer({
 
 	const currency = currencies[currencyId];
 
-	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
+	const thresholdPrice = isRecurring(contributionType)
+		? getThresholdPrice(countryGroupId, contributionType)
+		: 0;
 	const thresholdPriceWithCurrency = simpleFormatAmount(
 		currency,
 		thresholdPrice,
@@ -96,6 +95,7 @@ export function CheckoutBenefitsListContainer({
 			thresholdPriceWithCurrency,
 			selectedAmount,
 		),
+		contributionType: contributionType,
 		handleButtonClick,
 	});
 }
