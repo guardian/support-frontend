@@ -47,11 +47,7 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
 
     if (csvReader.isEmpty) {
       s3Object.close()
-      logger.error(
-        s"CSV read failure: file ${state.filename} was empty",
-      )
-      alarmService.triggerCsvReadAlarm
-      throw new RuntimeException(s"The specified CSV file ${state.filename} was empty")
+      alarmAndExit( alarmService, s"The specified CSV file ${state.filename} was empty")
     }
 
     val unProcessed = getUnprocessedItems(csvReader, state.processedCount)
@@ -62,12 +58,11 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
     val validUnprocessed = unProcessed.collect { case (Right(item), index) => (item, index) }
     val invalidUnprocessedIndexes = unProcessed.collect { case (Left(_), index) => index }
 
-    if (invalidUnprocessedIndexes.nonEmpty && state.processedCount == 0) {
-      logger.error(
-        s"CSV read failure: there were ${invalidUnprocessedIndexes.length} read failures from file ${state.filename} with line numbers ${invalidUnprocessedIndexes
-            .mkString(",")}",
-      )
-      alarmService.triggerCsvReadAlarm
+    if (invalidUnprocessedIndexes.nonEmpty) {
+      alarmAndExit(alarmService, s"there were ${invalidUnprocessedIndexes.length} read failures from file ${state.filename} with line numbers ${
+        invalidUnprocessedIndexes
+          .mkString(",")
+      }")
     }
 
     val batches = validUnprocessed.grouped(10).toList
@@ -86,6 +81,14 @@ object AddSupporterRatePlanItemToQueueLambda extends StrictLogging {
       else Future.successful(())
 
     maybeSaveSuccessTime.map(_ => state.copy(processedCount = processedCount))
+  }
+
+  def alarmAndExit(alarmService: AlarmService, message: String) = {
+    logger.error(
+      s"CSV read failure: $message",
+    )
+    alarmService.triggerCsvReadAlarm
+    throw new RuntimeException(message)
   }
 
   def getUnprocessedItems(csvReader: CsvReader[ReadResult[SupporterRatePlanItem]], processedCount: Int) =
