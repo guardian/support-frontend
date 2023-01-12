@@ -6,6 +6,8 @@ import {
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
 import { useEffect, useState } from 'react';
+import BulletPointedList from 'components/thankYou/utilityComponents/BulletPointedList';
+import ExpandableContainer from 'components/thankYou/utilityComponents/ExpandableContainer';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import {
 	OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN,
@@ -15,8 +17,6 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { routes } from 'helpers/urls/routes';
 import { isCodeOrProd } from 'helpers/urls/url';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
-import BulletPointedList from 'pages/contributions-landing/components/ContributionThankYou/components/BulletPointedList';
-import ExpandableContainer from 'pages/contributions-landing/components/ContributionThankYou/components/ExpandableContainer';
 
 const bodyText = css`
 	${body.small()};

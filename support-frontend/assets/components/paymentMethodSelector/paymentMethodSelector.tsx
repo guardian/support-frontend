@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
-import { from, headline, space } from '@guardian/source-foundations';
+import { headline, space } from '@guardian/source-foundations';
 import { Accordion, RadioGroup } from '@guardian/source-react-components';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -12,7 +12,6 @@ import {
 	subscriptionToExplainerPart,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import ContributionChoicesHeader from 'pages/contributions-landing/components/ContributionChoicesHeader';
 import { paymentMethodData } from './paymentMethodData';
 import { AvailablePaymentMethodAccordionRow } from './paymentMethodSelectorAccordionRow';
 import { ReauthenticateLink } from './reauthenticateLink';
@@ -22,11 +21,8 @@ const container = css`
 `;
 
 const header = css`
+	margin-bottom: ${space[3]}px;
 	${headline.small({ fontWeight: 'bold' })};
-
-	${from.desktop} {
-		font-size: 28px;
-	}
 `;
 
 function PaymentMethodSelectorLegend() {
@@ -38,9 +34,7 @@ function PaymentMethodSelectorLegend() {
 			`}
 		>
 			<legend id="payment_method">
-				<ContributionChoicesHeader cssOverrides={header}>
-					Payment method
-				</ContributionChoicesHeader>
+				<h2 css={header}>Payment method</h2>
 			</legend>
 			<SecureTransactionIndicator position="middle" hideText={true} />
 		</div>
