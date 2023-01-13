@@ -21,6 +21,9 @@ const styles = {
 		margin-top: ${space[1]}px;
 		margin-bottom: ${space[4]}px;
 
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+		background-position: right;
 		background-image: url(https://media.guim.co.uk/2d33e52f89462481b77f0fd419d62a55fb70c0f0/0_0_274_202/274.png);
 		${from.mobileMedium} {
 			background-image: url(https://media.guim.co.uk/91d324df80b882d314dcd35f23dcffea8e346824/0_0_329_188/329.png);
