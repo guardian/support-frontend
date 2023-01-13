@@ -8,34 +8,38 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import SvgClose from 'components/svgs/close';
+import { config } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect, glyph } from 'helpers/internationalisation/currency';
+import { CheckoutNudgeCloseButton } from './checkoutNudgeButtonClose';
 
 const styles = {
 	container: css`
 		border-radius: 12px;
-		// border: 1px red solid;
-		// background-image: url(./testimage.svg/jpg/png);
-		// background-image: url(./assets/components/checkoutNudge/testimage.svg/jpg/png);
-		//background-image: url(./public/testimage.svg/jpg/png);
 		background-color: ${neutral[97]};
-		background-image: linear-gradient(yellow, green);
 
 		margin-top: ${space[1]}px;
 		margin-bottom: ${space[4]}px;
 
+		background-image: url(https://media.guim.co.uk/2d33e52f89462481b77f0fd419d62a55fb70c0f0/0_0_274_202/274.png);
 		${from.mobileMedium} {
+			background-image: url(https://media.guim.co.uk/91d324df80b882d314dcd35f23dcffea8e346824/0_0_329_188/329.png);
 		}
 		${from.mobileLandscape} {
+			background-image: url(https://media.guim.co.uk/2fcda5a622b598515997c0ce0ff98faffec3826d/0_0_415_188/415.png);
 		}
 		${from.tablet} {
 			margin-top: ${space[2]}px;
+			background-image: url(https://media.guim.co.uk/933daaf47129bc1ed1f9af4171d3d5a637fadf2c/0_0_419_213/419.png);
 		}
 		${from.desktop} {
+			background-image: url(https://media.guim.co.uk/29edb4f891687e2188cc44f352372536ee41a04c/0_0_493_190/493.png);
 		}
 	`,
-
+	top: css`
+		display: flex;
+		justify-content: flex-end;
+	`,
 	heading: (backColor: string) => css`
 		max-width: 295px;
 
@@ -80,44 +84,34 @@ function gotoMonthly() {
 }
 
 export type CheckoutNudge = {
-	title: string;
-	titleColor: string;
-	titleSecond: string;
-	titleSecondColor: string;
 	countryGroupId: CountryGroupId;
 };
 
-export const nudgeData: CheckoutNudge = {
-	title: 'Make a bigger impact',
-	titleColor: neutral[7],
-	titleSecond: 'Support us every month',
-	titleSecondColor: brand[500],
-	countryGroupId: 'GBPCountries',
-};
-
 export type CheckoutNudgeProps = {
-	checkoutNudge: CheckoutNudge;
+	countryGroupId: CountryGroupId;
 	onClose: () => void;
 	onMonthly: () => void;
 };
 
 export function CheckoutNudge({
-	checkoutNudge,
+	countryGroupId,
+	onClose,
 }: CheckoutNudgeProps): JSX.Element {
-	const currencyGlyph = glyph(detect(checkoutNudge.countryGroupId));
+	const currencyGlyph = glyph(detect(countryGroupId));
+	const minAmount = config[countryGroupId]['MONTHLY'].min;
 	return (
 		<div css={styles.container}>
-			<SvgClose />
-			<h2 css={styles.heading(checkoutNudge.titleColor)}>
-				{checkoutNudge.title}
-			</h2>
-			<h2 css={styles.heading(checkoutNudge.titleSecondColor)}>
-				{checkoutNudge.titleSecond}
-			</h2>
+			<div css={styles.top}>
+				<h2 css={styles.heading(brand[500])}>Make a bigger impact</h2>
+				<CheckoutNudgeCloseButton onClose={onClose} />
+			</div>
+
+			<h2 css={styles.heading(neutral[7])}>Support us every month</h2>
 			<p css={styles.para}>
 				Regular, reliable support powers Guardian journalism in perpetuity. If
 				you can, please consider setting up a monthly payment today from just{' '}
-				{currencyGlyph}2 – it takes less than a minute.
+				{currencyGlyph}
+				{minAmount} – it takes less than a minute.
 			</p>
 			<a css={styles.para} onClick={gotoMonthly}>
 				See monthly

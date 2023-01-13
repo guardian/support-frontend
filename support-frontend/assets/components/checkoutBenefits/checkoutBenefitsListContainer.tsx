@@ -95,7 +95,8 @@ export function CheckoutBenefitsListContainer({
 			thresholdPriceWithCurrency,
 			selectedAmount,
 		),
-		contributionType: contributionType,
+		contributionType,
+		countryGroupId,
 		handleButtonClick,
 	});
 }

@@ -7,11 +7,9 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import {
-	CheckoutNudge,
-	nudgeData,
-} from 'components/checkoutNudge/checkoutNudge';
+import { CheckoutNudge } from 'components/checkoutNudge/checkoutNudge';
 import type { ContributionType } from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CheckListData } from './checkoutBenefitsListData';
 
 const container = css`
@@ -78,6 +76,7 @@ export type CheckoutBenefitsListProps = {
 	title: string;
 	checkListData: CheckListData[];
 	contributionType: ContributionType;
+	countryGroupId: CountryGroupId;
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
 };
@@ -86,6 +85,7 @@ export function CheckoutBenefitsList({
 	title,
 	checkListData,
 	contributionType,
+	countryGroupId,
 }: CheckoutBenefitsListProps): JSX.Element {
 	function handleButtonClick(): void {
 		throw new Error('Function not implemented.');
@@ -94,7 +94,7 @@ export function CheckoutBenefitsList({
 		<div css={container}>
 			{contributionType === 'ONE_OFF' ? (
 				<CheckoutNudge
-					checkoutNudge={nudgeData}
+					countryGroupId={countryGroupId}
 					onClose={handleButtonClick}
 					onMonthly={handleButtonClick}
 				/>
