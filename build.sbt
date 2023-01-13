@@ -34,7 +34,7 @@ lazy val release = Seq[ReleaseStep](
   ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = false),
   setNextVersion,
   commitNextVersion,
-  //pushChanges,
+  pushChanges,
 )
 
 inThisBuild(
