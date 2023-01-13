@@ -190,7 +190,7 @@ const config: Record<CountryGroupId, Config> = {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,
-			minInWords: numbersInWords['10'],
+			minInWords: numbersInWords['2'],
 			max: 200,
 			maxInWords: numbersInWords['200'],
 			default: 20,
@@ -237,7 +237,7 @@ const config: Record<CountryGroupId, Config> = {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,
-			minInWords: numbersInWords['5'],
+			minInWords: numbersInWords['2'],
 			max: 166,
 			maxInWords: numbersInWords['166'],
 			default: 10,
@@ -248,7 +248,7 @@ const config: Record<CountryGroupId, Config> = {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,
-			minInWords: numbersInWords['10'],
+			minInWords: numbersInWords['2'],
 			max: 200,
 			maxInWords: numbersInWords['200'],
 			default: 20,
@@ -259,7 +259,7 @@ const config: Record<CountryGroupId, Config> = {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
 			min: 2,
-			minInWords: numbersInWords['5'],
+			minInWords: numbersInWords['2'],
 			max: 166,
 			maxInWords: numbersInWords['166'],
 			default: 10,
