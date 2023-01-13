@@ -34,7 +34,7 @@ lazy val release = Seq[ReleaseStep](
   ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = false),
   setNextVersion,
   commitNextVersion,
-  pushChanges,
+  //pushChanges,
 )
 
 inThisBuild(
@@ -180,9 +180,9 @@ lazy val `supporter-product-data` = (project in file("supporter-product-data"))
   .aggregate(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
 
 lazy val `supporter-product-data-dynamo` = (project in file("support-modules/supporter-product-data-dynamo"))
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
   .settings(
     libraryDependencies ++= commonDependencies,
+    releaseSettings,
     scalafmtSettings,
   )
   .dependsOn(`module-aws`)
