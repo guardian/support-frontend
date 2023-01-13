@@ -87,7 +87,7 @@ lazy val releaseSettings = Seq(
 lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.4.2",
   scalatest % "test",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+  "com.typesafe.scala-logging" % "scala-logging_2.13" % "3.9.5",
 )
 
 lazy val root = (project in file("."))
@@ -128,6 +128,7 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
+    scalacOptions += "-Ytasty-reader",
     scalafmtSettings,
   )
   .dependsOn(
@@ -147,6 +148,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     integrationTestSettings,
     scalafmtSettings,
     libraryDependencies ++= commonDependencies,
+    scalacOptions += "-Ytasty-reader",
     mergeStrategySettings,
   )
   .dependsOn(
@@ -206,6 +208,7 @@ lazy val `support-payment-api` = (project in file("support-payment-api"))
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
     libraryDependencies ++= commonDependencies,
+    scalacOptions += "-Ytasty-reader",
     scalafmtSettings,
   )
   .dependsOn(`support-models`, `support-internationalisation`, `module-acquisition-events`)
@@ -217,6 +220,7 @@ lazy val `support-models` = (project in file("support-models"))
     releaseSettings,
     integrationTestSettings,
     scalafmtSettings,
+    scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
   )
   .dependsOn(`support-internationalisation`)
@@ -228,6 +232,7 @@ lazy val `support-config` = (project in file("support-config"))
     releaseSettings,
     integrationTestSettings,
     scalafmtSettings,
+    scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
   )
   .dependsOn(`support-models`, `support-internationalisation`)
@@ -239,6 +244,7 @@ lazy val `support-services` = (project in file("support-services"))
     releaseSettings,
     integrationTestSettings,
     scalafmtSettings,
+    scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
   )
   .dependsOn(`support-internationalisation`, `support-models`, `support-config`, `module-rest`, `module-aws`)
@@ -262,6 +268,7 @@ lazy val `module-acquisition-events` = (project in file("support-modules/acquisi
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
   .settings(
     scalafmtSettings,
+    scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
   )
   .dependsOn(`support-config`)
@@ -301,6 +308,7 @@ lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .settings(
     scalafmtSettings,
+    scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
     mergeStrategySettings,
   )
@@ -312,6 +320,7 @@ lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisitio
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .settings(
     scalafmtSettings,
+    scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
     mergeStrategySettings,
   )
