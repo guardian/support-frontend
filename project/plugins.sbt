@@ -7,7 +7,7 @@ addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.2.1")
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.13")
 
 addSbtPlugin(
-  "com.typesafe.play" % "sbt-plugin" % "2.8.18",
+  "com.typesafe.play" % "sbt-plugin" % "2.8.19",
 ) // when updating major version, also update play-circe version
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
