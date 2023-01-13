@@ -189,8 +189,8 @@ const config: Record<CountryGroupId, Config> = {
 	AUDCountries: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
-			min: 10,
-			minInWords: numbersInWords['10'],
+			min: 2,
+			minInWords: numbersInWords['2'],
 			max: 200,
 			maxInWords: numbersInWords['200'],
 			default: 20,
@@ -236,8 +236,8 @@ const config: Record<CountryGroupId, Config> = {
 	International: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
-			min: 5,
-			minInWords: numbersInWords['5'],
+			min: 2,
+			minInWords: numbersInWords['2'],
 			max: 166,
 			maxInWords: numbersInWords['166'],
 			default: 10,
@@ -247,8 +247,8 @@ const config: Record<CountryGroupId, Config> = {
 	NZDCountries: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
-			min: 10,
-			minInWords: numbersInWords['10'],
+			min: 2,
+			minInWords: numbersInWords['2'],
 			max: 200,
 			maxInWords: numbersInWords['200'],
 			default: 20,
@@ -258,8 +258,8 @@ const config: Record<CountryGroupId, Config> = {
 	Canada: {
 		ANNUAL: defaultConfig.ANNUAL,
 		MONTHLY: {
-			min: 5,
-			minInWords: numbersInWords['5'],
+			min: 2,
+			minInWords: numbersInWords['2'],
 			max: 166,
 			maxInWords: numbersInWords['166'],
 			default: 10,
