@@ -18,8 +18,7 @@ const styles = {
 		border-radius: 12px;
 		background-color: ${neutral[97]};
 
-		margin-top: ${space[1]}px;
-		margin-bottom: ${space[4]}px;
+		margin-bottom: ${space[3]}px;
 
 		background-size: 100% 100%;
 		background-repeat: no-repeat;
@@ -40,14 +39,18 @@ const styles = {
 		}
 	`,
 	top: css`
+		margin-top: 6px;
 		display: flex;
-		justify-content: flex-end;
+		flex-direction: row;
+		justify-content: space-between;
+	`,
+	topheading: css`
+		margin-top: ${space[3]}px; ;
 	`,
 	heading: (backColor: string) => css`
 		max-width: 295px;
-
-		margin-left: ${space[3]}px;
-		margin-bottom: ${space[1]}px;
+		margin-left: 10px;
+		line-height: 108%;
 
 		color: ${backColor};
 		${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
@@ -66,12 +69,12 @@ const styles = {
 
 	para: css`
 		max-width: 295px;
-
-		margin-left: ${space[3]}px;
+		margin-top: ${space[1]}px;
+		margin-left: 10px;
+		margin-right: 10px;
 		margin-bottom: ${space[1]}px;
-
-		color: ${neutral[7]};
-		${textSans.medium({ lineHeight: 'tight' })};
+		line-height: 135%;
+		${textSans.small({ lineHeight: 'tight' })};
 
 		${from.mobileLandscape} {
 			max-width: 350px;
@@ -79,6 +82,13 @@ const styles = {
 		${until.tablet} {
 			margin-bottom: ${space[2]}px;
 		}
+	`,
+	link: css`
+		max-width: 295px;
+		margin-left: 10px;
+		line-height: 135%;
+		${textSans.small({ lineHeight: 'tight' })};
+		padding-bottom: ${space[4]}px;
 	`,
 };
 
@@ -105,10 +115,11 @@ export function CheckoutNudge({
 	return (
 		<div css={styles.container}>
 			<div css={styles.top}>
-				<h2 css={styles.heading(brand[500])}>Make a bigger impact</h2>
+				<div css={styles.topheading}>
+					<h2 css={styles.heading(brand[500])}>Make a bigger impact</h2>
+				</div>
 				<CheckoutNudgeCloseButton onClose={onClose} />
 			</div>
-
 			<h2 css={styles.heading(neutral[7])}>Support us every month</h2>
 			<p css={styles.para}>
 				Regular, reliable support powers Guardian journalism in perpetuity. If
@@ -116,9 +127,9 @@ export function CheckoutNudge({
 				{currencyGlyph}
 				{minAmount} – it takes less than a minute.
 			</p>
-			<a css={styles.para} onClick={gotoMonthly}>
-				See monthly
-			</a>
+			<div css={styles.link}>
+				<a onClick={gotoMonthly}>See monthly</a>
+			</div>
 		</div>
 	);
 }

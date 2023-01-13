@@ -20,7 +20,7 @@ export function CheckoutNudgeCloseButton({
 	return (
 		<Button
 			onClick={onClose}
-			icon={<SvgCross size="small" />}
+			icon={<SvgCross size="xsmall" />}
 			size="small"
 			hideLabel
 			priority="secondary"
