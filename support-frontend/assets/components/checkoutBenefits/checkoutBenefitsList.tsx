@@ -95,7 +95,8 @@ export function CheckoutBenefitsList({
 			{contributionType === 'ONE_OFF' ? (
 				<CheckoutNudge
 					checkoutNudge={nudgeData}
-					handleCloseButtonClick={handleButtonClick}
+					onClose={handleButtonClick}
+					onMonthly={handleButtonClick}
 				/>
 			) : (
 				<>

@@ -14,32 +14,37 @@ import { detect, glyph } from 'helpers/internationalisation/currency';
 
 const styles = {
 	container: css`
+		border-radius: 12px;
+		// border: 1px red solid;
+		// background-image: url(./testimage.svg/jpg/png);
+		// background-image: url(./assets/components/checkoutNudge/testimage.svg/jpg/png);
+		//background-image: url(./public/testimage.svg/jpg/png);
+		background-color: ${neutral[97]};
+		background-image: linear-gradient(yellow, green);
+
 		margin-top: ${space[1]}px;
 		margin-bottom: ${space[4]}px;
-		${textSans.medium({ lineHeight: 'tight' })};
-		background-color: ${neutral[97]};
-		background-image: url('./backgroundNudgeMobile.png');
+
 		${from.mobileMedium} {
-			background-image: url('./backgroundNudgeMobileMedium.png');
 		}
 		${from.mobileLandscape} {
-			background-image: url('./backgroundNudgeMobileLandscape.png');
 		}
 		${from.tablet} {
 			margin-top: ${space[2]}px;
-			background-image: url('./backgroundNudgeTablet.png');
 		}
 		${from.desktop} {
-			background-image: url('./backgroundNudgeDesktop.png');
 		}
 	`,
 
 	heading: (backColor: string) => css`
+		max-width: 295px;
+
 		margin-left: ${space[3]}px;
 		margin-bottom: ${space[1]}px;
+
 		color: ${backColor};
 		${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
-		max-width: 295px;
+
 		${from.mobileMedium} {
 			margin-bottom: ${space[2]}px;
 			${headline.xsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
@@ -53,10 +58,14 @@ const styles = {
 	`,
 
 	para: css`
+		max-width: 295px;
+
 		margin-left: ${space[3]}px;
 		margin-bottom: ${space[1]}px;
+
 		color: ${neutral[7]};
-		max-width: 295px;
+		${textSans.medium({ lineHeight: 'tight' })};
+
 		${from.mobileLandscape} {
 			max-width: 350px;
 		}
@@ -88,7 +97,8 @@ export const nudgeData: CheckoutNudge = {
 
 export type CheckoutNudgeProps = {
 	checkoutNudge: CheckoutNudge;
-	handleCloseButtonClick: () => void;
+	onClose: () => void;
+	onMonthly: () => void;
 };
 
 export function CheckoutNudge({
