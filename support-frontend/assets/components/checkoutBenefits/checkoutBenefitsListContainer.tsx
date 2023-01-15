@@ -1,5 +1,7 @@
+import { init as initAbTests } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import { currencies } from 'helpers/internationalisation/currency';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -42,8 +44,13 @@ export function CheckoutBenefitsListContainer({
 
 	const contributionType = useContributionsSelector(getContributionType);
 
-	const { countryGroupId, currencyId } = useContributionsSelector(
+	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
+	);
+	const abParticipations = initAbTests(
+		countryId,
+		countryGroupId,
+		getSettings(),
 	);
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const minimumContributionAmount = useContributionsSelector(
@@ -97,6 +104,7 @@ export function CheckoutBenefitsListContainer({
 		),
 		contributionType,
 		countryGroupId,
+		displayNudge: abParticipations.nudgeTest === 'variant',
 		handleButtonClick,
 	});
 }
