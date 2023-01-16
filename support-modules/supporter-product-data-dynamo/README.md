@@ -21,7 +21,19 @@ https://docs.google.com/document/d/1rNXjoZDqZMsQblOVXPAIIOMWuwUKe3KzTCttuqS7AcY/
 
 Library usage
 =================
-
+You will need to give whatever application is using this library the the correct IAM permissions eg.
+```yaml
+- PolicyName: SupporterProductDataDynamoTable
+  PolicyDocument:
+    Statement:
+    - Effect: Allow
+      Action:
+      - dynamodb:PutItem
+      - dynamodb:UpdateItem
+      Resource:
+      - Fn::ImportValue: supporter-product-data-tables-DEV-SupporterProductDataTable
+```
+Then you can use it as follows:
 ```scala
 import com.gu.supporterdata.model.Stage.{DEV, PROD, UAT}
 import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
