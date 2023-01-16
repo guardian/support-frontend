@@ -49,7 +49,11 @@ const getOfferText = (price: ProductPrice, promo?: Promotion) => {
 			price.savingVsRetail,
 			promo.discount.amount,
 		);
-		return `Save ${discount}% on retail price`;
+		if (discount > 0) {
+			return `Save ${discount}% on retail price`;
+		} else {
+			return '';
+		}
 	}
 
 	if (price.savingVsRetail && price.savingVsRetail > 0) {
