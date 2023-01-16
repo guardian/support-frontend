@@ -126,6 +126,22 @@ function getCurrency(country: IsoCountry): IsoCurrency {
 	return currency;
 }
 
+/**
+ * @param discountedPrice - price after promo discount applied to online price
+ * @param onlineVsRetailPerc - % discount of normal online price vs retail price
+ * @param discountedVsOnlinePerc - % discount of discountedPrice against normal online price
+ */
+const getDiscountVsRetail = (
+	discountedPrice: number,
+	onlineVsRetailPerc: number,
+	discountedVsOnlinePerc: number,
+): number => {
+	const onlinePrice = discountedPrice / (1 - discountedVsOnlinePerc / 100);
+	const retailPrice = onlinePrice / (1 - onlineVsRetailPerc / 100);
+	const totalSavingVsRetail = (1 - discountedPrice / retailPrice) * 100;
+	return Math.round(totalSavingVsRetail);
+};
+
 export {
 	getProductPrice,
 	getFirstValidPrice,
@@ -135,4 +151,5 @@ export {
 	showPrice,
 	displayPrice,
 	isNumeric,
+	getDiscountVsRetail,
 };
