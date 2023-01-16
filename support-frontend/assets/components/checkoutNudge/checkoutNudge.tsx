@@ -39,13 +39,17 @@ const styles = {
 		}
 	`,
 	top: css`
-		margin-top: 6px;
+		margin-top: ${space[2]}px;
+		margin-bottom: -${space[1]}px;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
+		${from.mobileMedium} {
+			margin-bottom: -${space[3]}px;
+		}
 	`,
 	topheading: css`
-		margin-top: ${space[3]}px; ;
+		margin-top: ${space[3]}px;
 	`,
 	heading: (backColor: string) => css`
 		max-width: 295px;
@@ -74,7 +78,7 @@ const styles = {
 		margin-right: 10px;
 		margin-bottom: ${space[1]}px;
 		line-height: 135%;
-		${textSans.small({ lineHeight: 'tight' })};
+		${textSans.medium({ lineHeight: 'tight' })};
 
 		${from.mobileLandscape} {
 			max-width: 350px;
@@ -87,8 +91,16 @@ const styles = {
 		max-width: 295px;
 		margin-left: 10px;
 		line-height: 135%;
-		${textSans.small({ lineHeight: 'tight' })};
+		${textSans.medium({ lineHeight: 'tight' })};
 		padding-bottom: ${space[4]}px;
+	`,
+	alink: css`
+		color: ${brand[500]};
+		text-decoration: underline;
+		&:hover {
+      fontWeight:'bold';
+			cursor: pointer;
+		},
 	`,
 };
 
@@ -128,7 +140,9 @@ export function CheckoutNudge({
 				{minAmount} – it takes less than a minute.
 			</p>
 			<div css={styles.link}>
-				<a onClick={gotoMonthly}>See monthly</a>
+				<a onClick={gotoMonthly} css={styles.alink}>
+					See monthly
+				</a>
 			</div>
 		</div>
 	);
