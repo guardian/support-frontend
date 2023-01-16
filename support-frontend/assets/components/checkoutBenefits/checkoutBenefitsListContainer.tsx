@@ -112,7 +112,14 @@ export function CheckoutBenefitsListContainer({
 		),
 		contributionType,
 		countryGroupId,
-		displayNudge: abParticipations.singleToRecurring === 'variant',
+		nudgeTitleTopCopy:
+			abParticipations.singleToRecurring === 'variant'
+				? 'Consider monthly'
+				: 'Make a bigger impact',
+		nudgeTitleCopy:
+			abParticipations.singleToRecurring === 'variant'
+				? 'to sustain us long term'
+				: 'Support us every month',
 		handleButtonClick,
 		onNudgeClose,
 		onNudgeClick,

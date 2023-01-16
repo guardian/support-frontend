@@ -78,36 +78,34 @@ export type CheckoutBenefitsListProps = {
 	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
 	buttonCopy: string | null;
-	displayNudge: boolean;
+	nudgeTitleTopCopy: string;
+	nudgeTitleCopy: string;
 	handleButtonClick: () => void;
 	onNudgeClose: () => void;
 	onNudgeClick: () => void;
 };
-
-const displayNudgeAllowed = (
-	contributionType: ContributionType,
-	displayNudge: boolean,
-) => displayNudge && contributionType === 'ONE_OFF';
 
 export function CheckoutBenefitsList({
 	title,
 	checkListData,
 	contributionType,
 	countryGroupId,
-	displayNudge,
+	nudgeTitleTopCopy,
+	nudgeTitleCopy,
 	onNudgeClose,
 	onNudgeClick,
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
 		<div css={container}>
-			{displayNudgeAllowed(contributionType, displayNudge) && (
+			{contributionType === 'ONE_OFF' ? (
 				<CheckoutNudge
 					countryGroupId={countryGroupId}
+					nudgeTitleTopCopy={nudgeTitleTopCopy}
+					nudgeTitleCopy={nudgeTitleCopy}
 					onNudgeClose={onNudgeClose}
 					onNudgeClick={onNudgeClick}
 				/>
-			)}
-			{contributionType !== 'ONE_OFF' && (
+			) : (
 				<>
 					<h2 css={heading}>{title}</h2>
 					<hr css={hr(`${space[4]}px 0`)} />
