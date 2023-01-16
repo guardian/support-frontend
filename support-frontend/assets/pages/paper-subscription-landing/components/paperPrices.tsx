@@ -8,6 +8,7 @@ import type {
 } from 'helpers/productPrice/productPrices';
 import {
 	finalPrice,
+	getDiscountVsRetail,
 	getProductPrice,
 	showPrice,
 } from 'helpers/productPrice/productPrices';
@@ -57,6 +58,18 @@ const autumnPromoCodes = [
 ];
 
 const getOfferText = (price: ProductPrice) => {
+	const winterPromo = (price.promotions ?? []).find((p) =>
+		p.promoCode.startsWith('WINTER'),
+	);
+	if (winterPromo && price.savingVsRetail && winterPromo.discount?.amount) {
+		const discount = getDiscountVsRetail(
+			price.price,
+			price.savingVsRetail,
+			winterPromo.discount.amount,
+		);
+		return `Save ${discount}% on retail price`;
+	}
+
 	if (
 		price.promotions?.some((promo) =>
 			autumnPromoCodes.includes(promo.promoCode),
