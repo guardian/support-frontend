@@ -3,7 +3,10 @@ import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import { currencies } from 'helpers/internationalisation/currency';
-import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
+import {
+	setProductType,
+	setSelectedAmount,
+} from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
@@ -85,12 +88,8 @@ export function CheckoutBenefitsListContainer({
 		);
 	}
 
-	function onNudgeClose() {
-		console.log('onNudgeClose');
-	}
-
 	function onNudgeClick() {
-		console.log('onNudgeClick');
+		dispatch(setProductType('MONTHLY'));
 	}
 
 	if (!displayBenefits) {
@@ -121,7 +120,6 @@ export function CheckoutBenefitsListContainer({
 				? 'to sustain us long term'
 				: 'Support us every month',
 		handleButtonClick,
-		onNudgeClose,
 		onNudgeClick,
 	});
 }

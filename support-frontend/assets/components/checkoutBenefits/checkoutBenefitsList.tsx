@@ -7,6 +7,7 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
+import { useState } from 'preact/hooks';
 import { CheckoutNudge } from 'components/checkoutNudge/checkoutNudge';
 import type { ContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -81,7 +82,6 @@ export type CheckoutBenefitsListProps = {
 	nudgeTitleTopCopy: string;
 	nudgeTitleCopy: string;
 	handleButtonClick: () => void;
-	onNudgeClose: () => void;
 	onNudgeClick: () => void;
 };
 
@@ -92,20 +92,21 @@ export function CheckoutBenefitsList({
 	countryGroupId,
 	nudgeTitleTopCopy,
 	nudgeTitleCopy,
-	onNudgeClose,
 	onNudgeClick,
 }: CheckoutBenefitsListProps): JSX.Element {
+	const [displayNudge, setDisplayNudge] = useState(true);
 	return (
 		<div css={container}>
-			{contributionType === 'ONE_OFF' ? (
+			{contributionType === 'ONE_OFF' && displayNudge && (
 				<CheckoutNudge
 					countryGroupId={countryGroupId}
 					nudgeTitleTopCopy={nudgeTitleTopCopy}
 					nudgeTitleCopy={nudgeTitleCopy}
-					onNudgeClose={onNudgeClose}
+					onNudgeClose={() => setDisplayNudge(false)}
 					onNudgeClick={onNudgeClick}
 				/>
-			) : (
+			)}
+			{contributionType !== 'ONE_OFF' && (
 				<>
 					<h2 css={heading}>{title}</h2>
 					<hr css={hr(`${space[4]}px 0`)} />
