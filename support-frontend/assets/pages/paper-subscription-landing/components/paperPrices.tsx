@@ -13,6 +13,7 @@ import {
 	showPrice,
 } from 'helpers/productPrice/productPrices';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	sendTrackingEventsOnClick,
 	sendTrackingEventsOnView,
@@ -41,42 +42,16 @@ const getPriceCopyString = (
 	return <>per month{productCopy}</>;
 };
 
-const autumnPromoCodes = [
-	'AUTUMNEVERYDAY10HD',
-	'AUTUMNSAT10',
-	'AUTUMNSAT10HD',
-	'AUTUMNSIXDAY10',
-	'AUTUMNSIXDAY10HD',
-	'AUTUMNSUN10',
-	'AUTUMNSUN10HD',
-	'AUTUMNWEEKEND10',
-	'AUTUMNWEEKEND10HD',
-	'AUTUMN14',
-	'FESTIVAL20',
-	'AUTUMN20',
-	'AUTUMN30',
-];
-
-const getOfferText = (price: ProductPrice) => {
-	const winterPromo = (price.promotions ?? []).find((p) =>
-		p.promoCode.startsWith('WINTER'),
-	);
-	if (winterPromo && price.savingVsRetail && winterPromo.discount?.amount) {
+const getOfferText = (price: ProductPrice, promo?: Promotion) => {
+	if (promo && price.savingVsRetail && promo.discount?.amount) {
 		const discount = getDiscountVsRetail(
 			price.price,
 			price.savingVsRetail,
-			winterPromo.discount.amount,
+			promo.discount.amount,
 		);
 		return `Save ${discount}% on retail price`;
 	}
 
-	if (
-		price.promotions?.some((promo) =>
-			autumnPromoCodes.includes(promo.promoCode),
-		)
-	) {
-		return '';
-	}
 	if (price.savingVsRetail && price.savingVsRetail > 0) {
 		return `Save ${price.savingVsRetail}% on retail price`;
 	}
@@ -195,7 +170,7 @@ const getPlans = (
 				nonDiscountedPrice,
 				copy[fulfilmentOption][productOption],
 			),
-			offerCopy: getOfferText(priceAfterPromosApplied),
+			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
 			label: labelText,
 		};
 	});
