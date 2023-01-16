@@ -178,8 +178,8 @@ class Application(
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
 
     val mainElement = assets.getSsrCacheContentsAsHtml(
-      divId = s"contributions-landing-page-$countryCode",
-      file = "contributions-landing.html",
+      divId = s"supporter-plus-landing-page-$countryCode",
+      file = "supporter-plus-landing.html",
       classes = Some(classes),
     )
 

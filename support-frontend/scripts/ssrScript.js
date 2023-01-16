@@ -39,11 +39,17 @@ const { ssrPages } = require('../public/compiled-assets/javascripts/ssrPages').S
 
 ssrPages.pages.forEach((page) => {
   const { filename, html } = page;
+
+  const styleTags = global.document.head.querySelectorAll('style[data-emotion]');
+  const styles = Array.from(styleTags).map(tag => tag.innerHTML)
+
   console.log(`Writing ${filename}`);
+
+  const fileContents = `<style>${styles.join('')}</style>${html}`;
 
   writeFileSync(
     resolve(__dirname, '..', 'conf/ssr-cache/', `${filename}`),
-    html, 'utf8',
+    fileContents, 'utf8',
   );
   console.log(`Finished writing ${filename}`);
 });
