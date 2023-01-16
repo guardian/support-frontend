@@ -115,7 +115,7 @@ export const tests: Tests = {
 		seed: 10,
 		optimizeId: 'dQCXBc3QQIW7M1Di_qSCHw',
 	},
-	nudgeTest: {
+	singleToRecurring: {
 		variants: [
 			{
 				id: 'control',

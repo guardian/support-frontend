@@ -112,7 +112,7 @@ export function CheckoutBenefitsListContainer({
 		),
 		contributionType,
 		countryGroupId,
-		displayNudge: abParticipations.nudgeTest === 'variant',
+		displayNudge: abParticipations.singleToRecurring === 'variant',
 		handleButtonClick,
 		onNudgeClose,
 		onNudgeClick,
