@@ -80,6 +80,8 @@ export type CheckoutBenefitsListProps = {
 	buttonCopy: string | null;
 	displayNudge: boolean;
 	handleButtonClick: () => void;
+	onNudgeClose: () => void;
+	onNudgeClick: () => void;
 };
 
 const displayNudgeAllowed = (
@@ -93,17 +95,16 @@ export function CheckoutBenefitsList({
 	contributionType,
 	countryGroupId,
 	displayNudge,
+	onNudgeClose,
+	onNudgeClick,
 }: CheckoutBenefitsListProps): JSX.Element {
-	function handleButtonClick(): void {
-		throw new Error('Function not implemented.');
-	}
 	return (
 		<div css={container}>
 			{displayNudgeAllowed(contributionType, displayNudge) && (
 				<CheckoutNudge
 					countryGroupId={countryGroupId}
-					onClose={handleButtonClick}
-					onMonthly={handleButtonClick}
+					onNudgeClose={onNudgeClose}
+					onNudgeClick={onNudgeClick}
 				/>
 			)}
 			{contributionType !== 'ONE_OFF' && (

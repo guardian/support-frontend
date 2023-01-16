@@ -85,6 +85,14 @@ export function CheckoutBenefitsListContainer({
 		);
 	}
 
+	function onNudgeClose() {
+		console.log('onNudgeClose');
+	}
+
+	function onNudgeClick() {
+		console.log('onNudgeClick');
+	}
+
 	if (!displayBenefits) {
 		return null;
 	}
@@ -106,5 +114,7 @@ export function CheckoutBenefitsListContainer({
 		countryGroupId,
 		displayNudge: abParticipations.nudgeTest === 'variant',
 		handleButtonClick,
+		onNudgeClose,
+		onNudgeClick,
 	});
 }

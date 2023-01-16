@@ -104,23 +104,20 @@ const styles = {
 	`,
 };
 
-function gotoMonthly() {
-	console.log('goto monthly');
-}
-
 export type CheckoutNudge = {
 	countryGroupId: CountryGroupId;
 };
 
 export type CheckoutNudgeProps = {
 	countryGroupId: CountryGroupId;
-	onClose: () => void;
-	onMonthly: () => void;
+	onNudgeClose: () => void;
+	onNudgeClick: () => void;
 };
 
 export function CheckoutNudge({
 	countryGroupId,
-	onClose,
+	onNudgeClose,
+	onNudgeClick,
 }: CheckoutNudgeProps): JSX.Element {
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId]['MONTHLY'].min;
@@ -130,7 +127,7 @@ export function CheckoutNudge({
 				<div css={styles.topheading}>
 					<h2 css={styles.heading(brand[500])}>Make a bigger impact</h2>
 				</div>
-				<CheckoutNudgeCloseButton onClose={onClose} />
+				<CheckoutNudgeCloseButton onClose={onNudgeClose} />
 			</div>
 			<h2 css={styles.heading(neutral[7])}>Support us every month</h2>
 			<p css={styles.para}>
@@ -140,7 +137,7 @@ export function CheckoutNudge({
 				{minAmount} – it takes less than a minute.
 			</p>
 			<div css={styles.link}>
-				<a onClick={gotoMonthly} css={styles.alink}>
+				<a onClick={onNudgeClick} css={styles.alink}>
 					See monthly
 				</a>
 			</div>
