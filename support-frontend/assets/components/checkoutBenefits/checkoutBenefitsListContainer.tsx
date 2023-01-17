@@ -55,6 +55,10 @@ export function CheckoutBenefitsListContainer({
 		countryGroupId,
 		getSettings(),
 	);
+	const isControl =
+		abParticipations.singleToRecurring === 'control' ||
+		!abParticipations.singleToRecurring;
+
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const minimumContributionAmount = useContributionsSelector(
 		getMinimumContributionAmount,
@@ -111,12 +115,13 @@ export function CheckoutBenefitsListContainer({
 		),
 		contributionType,
 		countryGroupId,
+		nudgeDisplay: !isControl,
 		nudgeTitleCopySection1:
-			abParticipations.singleToRecurring === 'variant'
+			abParticipations.singleToRecurring === 'variantA'
 				? 'Make a bigger impact'
 				: 'Consider monthly',
 		nudgeTitleCopySection2:
-			abParticipations.singleToRecurring === 'variant'
+			abParticipations.singleToRecurring === 'variantA'
 				? 'Support us every month'
 				: 'to sustain us long term',
 		handleButtonClick,

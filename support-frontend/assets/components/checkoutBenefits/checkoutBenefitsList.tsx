@@ -79,6 +79,7 @@ export type CheckoutBenefitsListProps = {
 	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
 	buttonCopy: string | null;
+	nudgeDisplay: boolean;
 	nudgeTitleCopySection1: string;
 	nudgeTitleCopySection2: string;
 	handleButtonClick: () => void;
@@ -90,11 +91,12 @@ export function CheckoutBenefitsList({
 	checkListData,
 	contributionType,
 	countryGroupId,
+	nudgeDisplay,
 	nudgeTitleCopySection1,
 	nudgeTitleCopySection2,
 	onNudgeClick,
 }: CheckoutBenefitsListProps): JSX.Element {
-	const [displayNudge, setDisplayNudge] = useState(true);
+	const [displayNudge, setDisplayNudge] = useState(nudgeDisplay);
 	return (
 		<div css={container}>
 			{contributionType === 'ONE_OFF' && displayNudge && (

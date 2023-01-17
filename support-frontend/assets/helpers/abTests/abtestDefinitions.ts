@@ -135,6 +135,7 @@ export const tests: Tests = {
 		},
 		isActive: false,
 		referrerControlled: false,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 15,
 	},
 };
