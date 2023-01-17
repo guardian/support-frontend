@@ -344,6 +344,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   }
 
 }
+
 class SimpleCheckoutFormValidationTest extends AnyFlatSpec with Matchers {
 
   import TestData.validDigitalPackRequest
@@ -680,11 +681,11 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
 
 object TestData {
   def buildSwitches(
-      recurringPaymentMethodSwitches: RecurringPaymentMethodSwitches =
-        RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
-      subscriptionsPaymentMethodSwitches: SubscriptionsPaymentMethodSwitches =
-        SubscriptionsPaymentMethodSwitches(On, On, On),
-  ): Switches = Switches(
+                     recurringPaymentMethodSwitches: RecurringPaymentMethodSwitches =
+                     RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
+                     subscriptionsPaymentMethodSwitches: SubscriptionsPaymentMethodSwitches =
+                     SubscriptionsPaymentMethodSwitches(On, On, On),
+                   ): Switches = Switches(
     OneOffPaymentMethodSwitches(On, On, On, On, On),
     recurringPaymentMethodSwitches,
     subscriptionsPaymentMethodSwitches,
