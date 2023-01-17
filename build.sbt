@@ -185,8 +185,6 @@ lazy val `supporter-product-data-dynamo` = (project in file("support-modules/sup
     releaseSettings,
     scalafmtSettings,
   )
-  .dependsOn(`module-aws`)
-  .aggregate(`module-aws`)
 
 lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
   .enablePlugins(RiffRaffArtifact)
