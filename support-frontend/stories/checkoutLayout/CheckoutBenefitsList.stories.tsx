@@ -39,6 +39,10 @@ function Template(args: CheckoutBenefitsListProps) {
 	return <CheckoutBenefitsList {...args} />;
 }
 
+function onNudgeClick(): () => void {
+	throw new Error('Function not implemented.');
+}
+
 Template.args = {} as Omit<CheckoutBenefitsListProps, 'handleButtonClick'>;
 
 export const AllBenefitsUnlocked = Template.bind({});
@@ -46,7 +50,12 @@ export const AllBenefitsUnlocked = Template.bind({});
 AllBenefitsUnlocked.args = {
 	title: "For £12 per month, you'll unlock",
 	checkListData: checkListData({ higherTier: true }),
+	contributionType: 'ONE_OFF',
+	countryGroupId: 'GBPCountries',
 	buttonCopy: null,
+	nudgeTitleTopCopy: 'Consider monthly',
+	nudgeTitleCopy: 'to sustain us long term',
+	onNudgeClick: onNudgeClick,
 };
 
 export const LowerTierUnlocked = Template.bind({});
@@ -54,5 +63,10 @@ export const LowerTierUnlocked = Template.bind({});
 LowerTierUnlocked.args = {
 	title: "For £5 per month, you'll unlock",
 	checkListData: checkListData({ higherTier: false }),
+	contributionType: 'ONE_OFF',
+	countryGroupId: 'GBPCountries',
 	buttonCopy: 'Switch to £12 per month to unlock all extras',
+	nudgeTitleTopCopy: 'Consider monthly',
+	nudgeTitleCopy: 'to sustain us long term',
+	onNudgeClick: onNudgeClick,
 };
