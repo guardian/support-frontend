@@ -32,9 +32,9 @@ object CheckoutValidationRules {
   case class Invalid(message: String) extends Result
   case object Valid extends Result
   def checkSubscriptionPaymentMethodEnabled(
-                                             switches: SubscriptionsPaymentMethodSwitches,
-                                             paymentFields: Either[PaymentFields, RedemptionData],
-                                           ) = paymentFields match {
+      switches: SubscriptionsPaymentMethodSwitches,
+      paymentFields: Either[PaymentFields, RedemptionData],
+  ) = paymentFields match {
     case Left(_: PayPalPaymentFields) =>
       if (switches.paypal.isOn) Valid else Invalid("Invalid Payment Method")
     case Left(_: DirectDebitPaymentFields) =>
@@ -46,9 +46,9 @@ object CheckoutValidationRules {
   }
 
   def checkContributionPaymentMethodEnabled(
-                                             switches: RecurringPaymentMethodSwitches,
-                                             paymentFields: Either[PaymentFields, RedemptionData],
-                                           ) = paymentFields match {
+      switches: RecurringPaymentMethodSwitches,
+      paymentFields: Either[PaymentFields, RedemptionData],
+  ) = paymentFields match {
     case Left(_: PayPalPaymentFields) =>
       if (switches.payPal.isOn) Valid else Invalid("Invalid Payment Method")
     case Left(_: DirectDebitPaymentFields) =>
@@ -77,10 +77,10 @@ object CheckoutValidationRules {
 
   }
   def checkPaymentMethodEnabled(
-                                 product: ProductType,
-                                 paymentFields: Either[PaymentFields, RedemptionData],
-                                 switches: Switches,
-                               ) =
+      product: ProductType,
+      paymentFields: Either[PaymentFields, RedemptionData],
+      switches: Switches,
+  ) =
     product match {
       case _: Contribution | _: SupporterPlus =>
         checkContributionPaymentMethodEnabled(
@@ -195,9 +195,9 @@ object AddressAndCurrencyValidationRules {
   def hasPostcodeIfRequired(countryFromRequest: Country, postcodeFromRequest: Option[String]): Result =
     if (
       countryFromRequest == Country.UK ||
-        countryFromRequest == Country.US ||
-        countryFromRequest == Country.Canada ||
-        countryFromRequest == Country.Australia
+      countryFromRequest == Country.US ||
+      countryFromRequest == Country.Canada ||
+      countryFromRequest == Country.Australia
     ) {
       postcodeFromRequest.isDefined.otherwise(s"postcode is required for $countryFromRequest")
     } else Valid
@@ -1660,4 +1660,3 @@ object PaperValidation {
   val M25_POSTCODE_PREFIXES = M25_POSTCODE_OLD_PREFIXES ++ M25_NEW_PREFIXES
 
 }
-
