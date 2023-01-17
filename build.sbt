@@ -73,6 +73,7 @@ lazy val releaseSettings = Seq(
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
   licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
+  releaseTagName := s"${name.value}-${version.value}",
   releaseProcess := release,
   releaseUseGlobalVersion := false,
   releaseVersionFile := file(name.value + "/version.sbt"),
