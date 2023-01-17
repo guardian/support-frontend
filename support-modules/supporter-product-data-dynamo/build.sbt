@@ -2,6 +2,7 @@ import LibraryVersions.awsClientVersion2
 import sbtrelease.ReleaseStateTransformations._
 
 name := "support-product-data-dynamo"
+releaseVersionFile := file("support-modules/" + name.value + "/version.sbt")
 
 scalaVersion := "3.1.2" // beware >= 3.1.3 has an incompatibility with <= 2.13.8 which causes compile issue `Unsupported Scala 3 generic tuple type scala.Tuple in bounds of type MirroredElemTypes; found in  scala.deriving.Mirror.<refinement>.`
 crossScalaVersions := Seq("2.13.10", "3.1.2")
@@ -18,7 +19,7 @@ releaseProcess := Seq[ReleaseStep](
   setNextVersion,
   commitNextVersion,
   ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
-  pushChanges,
+  //pushChanges,
 )
 
 libraryDependencies ++= Seq(
