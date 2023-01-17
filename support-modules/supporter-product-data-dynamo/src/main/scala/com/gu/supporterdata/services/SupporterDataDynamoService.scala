@@ -1,6 +1,5 @@
 package com.gu.supporterdata.services
 
-import com.gu.aws.ProfileName
 import com.gu.supporterdata.model.FieldNames._
 import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import software.amazon.awssdk.auth.credentials.{
@@ -135,6 +134,7 @@ class SupporterDataDynamoService(client: DynamoDbAsyncClient, tableName: String)
 }
 
 object SupporterDataDynamoService {
+  private val ProfileName = "membership"
   lazy val CredentialsProvider = AwsCredentialsProviderChain.builder
     .credentialsProviders(
       ProfileCredentialsProvider.builder.profileName(ProfileName).build,
