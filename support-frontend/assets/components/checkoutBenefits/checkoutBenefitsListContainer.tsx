@@ -113,12 +113,12 @@ export function CheckoutBenefitsListContainer({
 		countryGroupId,
 		nudgeTitleTopCopy:
 			abParticipations.singleToRecurring === 'variant'
-				? 'Consider monthly'
-				: 'Make a bigger impact',
+				? 'Make a bigger impact'
+				: 'Consider monthly',
 		nudgeTitleCopy:
 			abParticipations.singleToRecurring === 'variant'
-				? 'to sustain us long term'
-				: 'Support us every month',
+				? 'Support us every month'
+				: 'to sustain us long term',
 		handleButtonClick,
 		onNudgeClick,
 	});
