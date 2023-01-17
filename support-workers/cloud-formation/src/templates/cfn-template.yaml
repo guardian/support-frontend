@@ -123,11 +123,7 @@ Resources:
             - Effect: Allow
               Action:
               - dynamodb:PutItem
-              - dynamodb:GetItem
               - dynamodb:UpdateItem
-              - dynamodb:DeleteItem
-              - dynamodb:BatchGetItem
-              - dynamodb:DescribeTable
               Resource:
               - Fn::ImportValue: supporter-product-data-tables-UAT-SupporterProductDataTable
               - Fn::ImportValue: !FindInMap [ StageVariables, !Ref Stage, SupporterProductDataTable ]
