@@ -53,8 +53,8 @@ AllBenefitsUnlocked.args = {
 	contributionType: 'MONTHLY',
 	countryGroupId: 'GBPCountries',
 	buttonCopy: null,
-	nudgeTitleTopCopy: 'Consider monthly',
-	nudgeTitleCopy: 'to sustain us long term',
+	nudgeTitleCopySection1: 'Consider monthly',
+	nudgeTitleCopySection2: 'to sustain us long term',
 	onNudgeClick: onNudgeClick,
 };
 
@@ -66,8 +66,8 @@ LowerTierUnlocked.args = {
 	contributionType: 'MONTHLY',
 	countryGroupId: 'GBPCountries',
 	buttonCopy: 'Switch to £12 per month to unlock all extras',
-	nudgeTitleTopCopy: 'Consider monthly',
-	nudgeTitleCopy: 'to sustain us long term',
+	nudgeTitleCopySection1: 'Consider monthly',
+	nudgeTitleCopySection2: 'to sustain us long term',
 	onNudgeClick: onNudgeClick,
 };
 
@@ -79,7 +79,7 @@ NudgeOneOff.args = {
 	contributionType: 'ONE_OFF',
 	countryGroupId: 'GBPCountries',
 	buttonCopy: 'Switch to £12 per month to unlock all extras',
-	nudgeTitleTopCopy: 'Consider monthly',
-	nudgeTitleCopy: 'to sustain us long term',
+	nudgeTitleCopySection1: 'Consider monthly',
+	nudgeTitleCopySection2: 'to sustain us long term',
 	onNudgeClick: onNudgeClick,
 };

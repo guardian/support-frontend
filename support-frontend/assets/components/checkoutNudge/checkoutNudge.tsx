@@ -110,16 +110,16 @@ export type CheckoutNudge = {
 
 export type CheckoutNudgeProps = {
 	countryGroupId: CountryGroupId;
-	nudgeTitleTopCopy: string;
-	nudgeTitleCopy: string;
+	nudgeTitleCopySection1: string;
+	nudgeTitleCopySection2: string;
 	onNudgeClose: () => void;
 	onNudgeClick: () => void;
 };
 
 export function CheckoutNudge({
 	countryGroupId,
-	nudgeTitleTopCopy,
-	nudgeTitleCopy,
+	nudgeTitleCopySection1,
+	nudgeTitleCopySection2,
 	onNudgeClose,
 	onNudgeClick,
 }: CheckoutNudgeProps): JSX.Element {
@@ -129,11 +129,11 @@ export function CheckoutNudge({
 		<div css={styles.container}>
 			<div css={styles.top}>
 				<div css={styles.topheading}>
-					<h2 css={styles.heading(brand[500])}>{nudgeTitleTopCopy}</h2>
+					<h2 css={styles.heading(brand[500])}>{nudgeTitleCopySection1}</h2>
 				</div>
 				<CheckoutNudgeCloseButton onClose={onNudgeClose} />
 			</div>
-			<h2 css={styles.heading(neutral[7])}>{nudgeTitleCopy}</h2>
+			<h2 css={styles.heading(neutral[7])}>{nudgeTitleCopySection2}</h2>
 			<p css={styles.para}>
 				Regular, reliable support powers Guardian journalism in perpetuity. If
 				you can, please consider setting up a monthly payment today from just{' '}

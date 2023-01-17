@@ -79,8 +79,8 @@ export type CheckoutBenefitsListProps = {
 	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
 	buttonCopy: string | null;
-	nudgeTitleTopCopy: string;
-	nudgeTitleCopy: string;
+	nudgeTitleCopySection1: string;
+	nudgeTitleCopySection2: string;
 	handleButtonClick: () => void;
 	onNudgeClick: () => void;
 };
@@ -90,8 +90,8 @@ export function CheckoutBenefitsList({
 	checkListData,
 	contributionType,
 	countryGroupId,
-	nudgeTitleTopCopy,
-	nudgeTitleCopy,
+	nudgeTitleCopySection1,
+	nudgeTitleCopySection2,
 	onNudgeClick,
 }: CheckoutBenefitsListProps): JSX.Element {
 	const [displayNudge, setDisplayNudge] = useState(true);
@@ -100,8 +100,8 @@ export function CheckoutBenefitsList({
 			{contributionType === 'ONE_OFF' && displayNudge && (
 				<CheckoutNudge
 					countryGroupId={countryGroupId}
-					nudgeTitleTopCopy={nudgeTitleTopCopy}
-					nudgeTitleCopy={nudgeTitleCopy}
+					nudgeTitleCopySection1={nudgeTitleCopySection1}
+					nudgeTitleCopySection2={nudgeTitleCopySection2}
 					onNudgeClose={() => setDisplayNudge(false)}
 					onNudgeClick={onNudgeClick}
 				/>
@@ -124,10 +124,6 @@ export function CheckoutBenefitsList({
 					<p css={para}>Cancel anytime</p>
 				</>
 			)}
-			{/* <UpsellButton
-				buttonCopy={buttonCopy}
-				handleButtonClick={handleButtonClick}
-			/> */}
 		</div>
 	);
 }
