@@ -281,9 +281,9 @@ object GuardianWeeklyValidation {
           hasAddressLine1AndCity(createSupportWorkersRequest.billingAddress) and
           hasAddressLine1AndCity(address) and
           hasValidPostcodeLength(address.postCode, "Delivery") and hasValidPostcodeLength(
-          createSupportWorkersRequest.billingAddress.postCode,
-          "Billing",
-        )
+            createSupportWorkersRequest.billingAddress.postCode,
+            "Billing",
+          )
       case None => Invalid("missing delivery address")
     }
 
@@ -317,9 +317,9 @@ object PaperValidation {
         hasAddressLine1AndCity(createSupportWorkersRequest.billingAddress) and
         deliveryAddressHasAddressLine1AndCity and
         validPostcode and hasValidPostcodeLength(address.postCode, "Delivery") and hasValidPostcodeLength(
-        createSupportWorkersRequest.billingAddress.postCode,
-        "Billing",
-      )
+          createSupportWorkersRequest.billingAddress.postCode,
+          "Billing",
+        )
 
     }
 
