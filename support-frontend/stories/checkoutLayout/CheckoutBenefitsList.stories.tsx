@@ -50,7 +50,7 @@ export const AllBenefitsUnlocked = Template.bind({});
 AllBenefitsUnlocked.args = {
 	title: "For £12 per month, you'll unlock",
 	checkListData: checkListData({ higherTier: true }),
-	contributionType: 'ONE_OFF',
+	contributionType: 'MONTHLY',
 	countryGroupId: 'GBPCountries',
 	buttonCopy: null,
 	nudgeTitleTopCopy: 'Consider monthly',
@@ -61,6 +61,19 @@ AllBenefitsUnlocked.args = {
 export const LowerTierUnlocked = Template.bind({});
 
 LowerTierUnlocked.args = {
+	title: "For £5 per month, you'll unlock",
+	checkListData: checkListData({ higherTier: false }),
+	contributionType: 'MONTHLY',
+	countryGroupId: 'GBPCountries',
+	buttonCopy: 'Switch to £12 per month to unlock all extras',
+	nudgeTitleTopCopy: 'Consider monthly',
+	nudgeTitleCopy: 'to sustain us long term',
+	onNudgeClick: onNudgeClick,
+};
+
+export const NudgeOneOff = Template.bind({});
+
+NudgeOneOff.args = {
 	title: "For £5 per month, you'll unlock",
 	checkListData: checkListData({ higherTier: false }),
 	contributionType: 'ONE_OFF',
