@@ -596,13 +596,13 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
     val requestPostCode = validPaperRequest.copy(billingAddress =
       validPaperRequest.billingAddress.copy(postCode = Some("Test111111111111111111111111")),
     )
-    GuardianWeeklyValidation.passes(requestPostCode) shouldBe an[Invalid]
+    PaperValidation.passes(requestPostCode,Collection) shouldBe an[Invalid]
   }
   it should "fail if there are more than 20 characters in Delivery Address postCode" in {
     val requestDeliveryPostCode = validPaperRequest.copy(deliveryAddress =
       validPaperRequest.deliveryAddress map (_.copy(postCode = Some("Test22222222222222222222"))),
     )
-    GuardianWeeklyValidation.passes(requestDeliveryPostCode) shouldBe an[Invalid]
+    PaperValidation.passes(requestDeliveryPostCode,Collection) shouldBe an[Invalid]
   }
 
 }
