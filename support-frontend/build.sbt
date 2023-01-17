@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "identity-test-users" % "0.8",
   "com.google.guava" % "guava" % "31.1-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
-  "com.gu.play-googleauth" %% "play-v28" % "2.2.6",
+  "com.gu.play-googleauth" %% "play-v28" % "2.2.7",
   "io.github.bonigarcia" % "webdrivermanager" % "5.3.1" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % "test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
