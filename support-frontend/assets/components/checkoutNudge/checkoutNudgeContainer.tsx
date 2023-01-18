@@ -1,7 +1,5 @@
 import { useState } from 'preact/hooks';
-import { init as initAbTests } from 'helpers/abTests/abtest';
 import { config } from 'helpers/contributions';
-import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -18,16 +16,15 @@ type CheckoutNudgeContainerProps = {
 export function CheckoutNudgeContainer({
 	renderNudge: renderNudge,
 }: CheckoutNudgeContainerProps): JSX.Element | null {
-	const contributionType = useContributionsSelector(getContributionType);
 	const dispatch = useContributionsDispatch();
-	const { countryGroupId, countryId } = useContributionsSelector(
+	const contributionType = useContributionsSelector(getContributionType);
+	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const abParticipations = initAbTests(
-		countryId,
-		countryGroupId,
-		getSettings(),
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
 	);
+
 	const isControl =
 		abParticipations.singleToRecurring === 'control' ||
 		!abParticipations.singleToRecurring;
