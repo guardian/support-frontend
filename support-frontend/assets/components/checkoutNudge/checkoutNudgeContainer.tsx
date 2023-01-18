@@ -50,12 +50,12 @@ export function CheckoutNudgeContainer({
 		nudgeDisplay: displayNudge,
 		nudgeTitleCopySection1:
 			abParticipations.singleToRecurring === 'variantA'
-				? 'Make a bigger impact'
-				: 'Consider monthly',
+				? 'Consider monthly'
+				: 'Make a bigger impact',
 		nudgeTitleCopySection2:
 			abParticipations.singleToRecurring === 'variantA'
-				? 'Support us every month'
-				: 'to sustain us long term',
+				? 'to sustain us long term'
+				: 'Support us every month',
 		nudgeParagraphCopy:
 			abParticipations.singleToRecurring === 'variantA'
 				? paragraphCopyVariantA
