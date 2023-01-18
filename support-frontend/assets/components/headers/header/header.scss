@@ -136,7 +136,20 @@ $header-links-min-width: gu-span(12);
 		width: gu-span(5);
 		background-color: gu-colour(brand-main);
 		float: right;
+    .component-header--one-row-from-tablet & {
+		  border-left: 1px solid gu-colour(brand-pastel);
+		  z-index: 10;
+		  position: relative;
+    }
 	}
+
+  @include mq($from: desktop) {
+    .component-header--one-row-from-desktop & {
+		  border-left: 1px solid gu-colour(brand-pastel);
+		  z-index: 10;
+		  position: relative;
+    }
+  }
 
 	@include mq($from: wide) {
 		padding-right: gu-span(1) + $gu-h-spacing;
@@ -160,7 +173,7 @@ $header-links-min-width: gu-span(12);
 	border-top: 1px solid gu-colour(brand-pastel);
 	z-index: 9;
 	white-space: nowrap;
-	margin: 0 ($gu-h-spacing * -2) 0 0 -($gu-h-spacing * 0.5);
+	margin: 0 ($gu-h-spacing * -2) 0 0;
 	box-sizing: border-box;
 
 	@media (min-width: $header-links-min-width + 40) {
@@ -169,10 +182,25 @@ $header-links-min-width: gu-span(12);
 		border-right: 1px solid gu-colour(brand-pastel);
 	}
 
-	.component-header-links__ul {
-    @include mq($until: desktop) {
-      margin-left: -($gu-h-spacing * 0.5)px;
+  @include mq($from: tablet) {
+    .component-header--one-row-from-tablet & {
+      position: absolute;
+      bottom: 0;
+      left: $gu-h-spacing * 0.5;
+      right: gu-span(5);
     }
+  }
+
+  @include mq($from: desktop) {
+    .component-header--one-row-from-desktop & {
+      position: absolute;
+      bottom: 0;
+      left: $gu-h-spacing * 0.5;
+      right: gu-span(5);
+    }
+  }
+
+	.component-header-links__ul {
 		list-style: none;
 		display: inline-flex;
 		width: auto;
