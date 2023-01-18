@@ -6,16 +6,11 @@ import {
 	neutral,
 	space,
 	textSans,
-	until,
 } from '@guardian/source-foundations';
-import { config } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect, glyph } from 'helpers/internationalisation/currency';
 import { CheckoutNudgeCloseButton } from './checkoutNudgeButtonClose';
 
 const styles = {
 	container: css`
-		border: 1px solid red;
 		border-radius: 12px;
 		background-color: ${neutral[97]};
 
@@ -40,7 +35,6 @@ const styles = {
 		}
 	`,
 	top: css`
-		border: 1px solid red;
 		margin-top: ${space[2]}px;
 		margin-bottom: -${space[1]}px;
 		display: flex;
@@ -51,61 +45,57 @@ const styles = {
 		}
 	`,
 	topheading: css`
-		border: 1px solid red;
 		margin-top: ${space[3]}px;
 	`,
 	heading: (backColor: string, marginBottom: number) => css`
-		border: 1px solid red;
 		margin-left: 10px;
-		//line-height: 108%;
-
 		color: ${backColor};
 		${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
+		line-height: 108%;
 
 		${from.mobileMedium} {
 			margin-left: 12px;
 			margin-bottom: ${marginBottom}px;
 			${headline.xsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
+			line-height: 108%;
 		}
 		${from.tablet} {
 			${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
+			line-height: 108%;
 		}
 	`,
 
 	para: css`
-		border: 1px solid red;
 		margin-top: ${space[1]}px;
 		margin-left: 10px;
 		margin-right: 10px;
-		margin-bottom: ${space[1]}px;
-		//line-height: 130%;
+		margin-bottom: ${space[2]}px;
 		${textSans.small({ lineHeight: 'regular' })};
-
+		line-height: 130%;
 		${from.mobileMedium} {
-			${textSans.medium({ lineHeight: 'regular' })};
 			margin-left: 12px;
-			max-width: 350px;
+			max-width: 470px;
 		}
-		${from.mobileLandscape} {
-			max-width: ;
-		}
-		${until.tablet} {
-			margin-bottom: ${space[2]}px;
+		${from.tablet} {
+			${textSans.medium({ lineHeight: 'regular' })};
+			line-height: 130%;
 		}
 	`,
 	link: css`
-		border: 1px solid red;
 		margin-left: 10px;
-		//line-height: 135%;
-		${textSans.medium({ lineHeight: 'regular' })};
+		${textSans.small({ lineHeight: 'regular' })};
+		line-height: 135%;
 		padding-bottom: ${space[5]}px;
 
 		${from.mobileMedium} {
 			margin-left: 12px;
 		}
+		${from.tablet} {
+			${textSans.medium({ lineHeight: 'tight' })};
+			line-height: 108%;
+		}
 	`,
 	alink: css`
-  border: 1px solid red;
 		color: ${brand[500]};
 		text-decoration: underline;
 		&:hover {
@@ -115,29 +105,23 @@ const styles = {
 	`,
 };
 
-export type CheckoutNudge = {
-	countryGroupId: CountryGroupId;
-};
-
 export type CheckoutNudgeProps = {
-	countryGroupId: CountryGroupId;
 	nudgeDisplay: boolean;
 	nudgeTitleCopySection1: string;
 	nudgeTitleCopySection2: string;
+	nudgeParagraphCopy: string;
 	onNudgeClose: () => void;
 	onNudgeClick: () => void;
 };
 
 export function CheckoutNudge({
-	countryGroupId,
 	nudgeDisplay,
 	nudgeTitleCopySection1,
 	nudgeTitleCopySection2,
+	nudgeParagraphCopy,
 	onNudgeClose,
 	onNudgeClick,
 }: CheckoutNudgeProps): JSX.Element {
-	const currencyGlyph = glyph(detect(countryGroupId));
-	const minAmount = config[countryGroupId]['MONTHLY'].min;
 	return (
 		<div css={styles.container}>
 			{nudgeDisplay && (
@@ -151,12 +135,7 @@ export function CheckoutNudge({
 						<CheckoutNudgeCloseButton onClose={onNudgeClose} />
 					</div>
 					<h2 css={styles.heading(neutral[7], 0)}>{nudgeTitleCopySection2}</h2>
-					<p css={styles.para}>
-						Regular, reliable support powers Guardian journalism in perpetuity.
-						If you can, please consider setting up a monthly payment today from
-						just {currencyGlyph}
-						{minAmount} – it takes less than a minute.
-					</p>
+					<p css={styles.para}>{nudgeParagraphCopy}</p>
 					<div css={styles.link}>
 						<a onClick={onNudgeClick} css={styles.alink}>
 							See monthly

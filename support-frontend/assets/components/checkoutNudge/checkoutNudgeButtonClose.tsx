@@ -1,19 +1,17 @@
 import { css } from '@emotion/react';
 import { Button, SvgCross } from '@guardian/source-react-components';
 
-const styles = {
-	button: css`
-		color: #606060;
+const button = css`
+	color: #606060;
+	background-color: transparent;
+	&:hover {
 		background-color: transparent;
-		&:hover {
-			background-color: transparent;
-		}
-	`,
-	svg: css`
+	}
+	& svg {
 		width: 24px;
 		margin: 2px;
-	`,
-};
+	}
+`;
 
 interface CheckoutNudgeCloseButtonProps {
 	onClose: () => void;
@@ -29,7 +27,7 @@ export function CheckoutNudgeCloseButton({
 			size="small"
 			hideLabel
 			priority="secondary"
-			cssOverrides={styles.button}
+			cssOverrides={button}
 		/>
 	);
 }
