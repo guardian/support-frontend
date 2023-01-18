@@ -104,53 +104,47 @@ const styles = {
 	`,
 };
 
-export type CheckoutNudge = {
+export type CheckoutNudgeBenefits = {
 	countryGroupId: CountryGroupId;
 };
 
-export type CheckoutNudgeProps = {
+export type CheckoutNudgeBenefitsProps = {
 	countryGroupId: CountryGroupId;
-	nudgeDisplay: boolean;
 	nudgeTitleCopySection1: string;
 	nudgeTitleCopySection2: string;
 	onNudgeClose: () => void;
 	onNudgeClick: () => void;
 };
 
-export function CheckoutNudge({
+export function CheckoutNudgeBenefits({
 	countryGroupId,
-	nudgeDisplay,
 	nudgeTitleCopySection1,
 	nudgeTitleCopySection2,
 	onNudgeClose,
 	onNudgeClick,
-}: CheckoutNudgeProps): JSX.Element {
+}: CheckoutNudgeBenefitsProps): JSX.Element {
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId]['MONTHLY'].min;
 	return (
 		<div css={styles.container}>
-			{nudgeDisplay && (
-				<>
-					<div css={styles.top}>
-						<div css={styles.topheading}>
-							<h2 css={styles.heading(brand[500])}>{nudgeTitleCopySection1}</h2>
-						</div>
-						<CheckoutNudgeCloseButton onClose={onNudgeClose} />
-					</div>
-					<h2 css={styles.heading(neutral[7])}>{nudgeTitleCopySection2}</h2>
-					<p css={styles.para}>
-						Regular, reliable support powers Guardian journalism in perpetuity.
-						If you can, please consider setting up a monthly payment today from
-						just {currencyGlyph}
-						{minAmount} – it takes less than a minute.
-					</p>
-					<div css={styles.link}>
-						<a onClick={onNudgeClick} css={styles.alink}>
-							See monthly
-						</a>
-					</div>
-				</>
-			)}
+			<div css={styles.top}>
+				<div css={styles.topheading}>
+					<h2 css={styles.heading(brand[500])}>{nudgeTitleCopySection1}</h2>
+				</div>
+				<CheckoutNudgeCloseButton onClose={onNudgeClose} />
+			</div>
+			<h2 css={styles.heading(neutral[7])}>{nudgeTitleCopySection2}</h2>
+			<p css={styles.para}>
+				Regular, reliable support powers Guardian journalism in perpetuity. If
+				you can, please consider setting up a monthly payment today from just{' '}
+				{currencyGlyph}
+				{minAmount} – it takes less than a minute.
+			</p>
+			<div css={styles.link}>
+				<a onClick={onNudgeClick} css={styles.alink}>
+					See monthly
+				</a>
+			</div>
 		</div>
 	);
 }
