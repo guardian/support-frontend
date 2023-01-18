@@ -14,10 +14,8 @@ const styles = {
 	container: css`
 		border-radius: 12px;
 		background-color: ${neutral[97]};
-
 		margin-bottom: ${space[3]}px;
-
-		background-size: cover;
+		background-size: auto 100%;
 		background-repeat: no-repeat;
 		background-position: right;
 		background-image: url(https://media.guim.co.uk/2d33e52f89462481b77f0fd419d62a55fb70c0f0/0_0_274_202/274.png);
