@@ -7,8 +7,6 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import type { ContributionType } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CheckListData } from './checkoutBenefitsListData';
 
 const container = css`
@@ -74,50 +72,30 @@ const para = css`
 export type CheckoutBenefitsListProps = {
 	title: string;
 	checkListData: CheckListData[];
-	contributionType: ContributionType;
-	countryGroupId: CountryGroupId;
 	buttonCopy: string | null;
-	nudgeDisplay: boolean;
-	nudgeTitleCopySection1: string;
-	nudgeTitleCopySection2: string;
 	handleButtonClick: () => void;
-	onNudgeClick: () => void;
 };
 
 export function CheckoutBenefitsList({
 	title,
 	checkListData,
-	contributionType,
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
 		<div css={container}>
-			{/* {contributionType === 'ONE_OFF' && displayNudge && (
-				<CheckoutNudgeBenefits
-					countryGroupId={countryGroupId}
-					nudgeTitleCopySection1={nudgeTitleCopySection1}
-					nudgeTitleCopySection2={nudgeTitleCopySection2}
-					onNudgeClose={() => setDisplayNudge(false)}
-					onNudgeClick={onNudgeClick}
-				/>
-			)} */}
-			{contributionType !== 'ONE_OFF' && (
-				<>
-					<h2 css={heading}>{title}</h2>
-					<hr css={hr(`${space[4]}px 0`)} />
-					<table css={table}>
-						{checkListData.map((item) => (
-							<tr>
-								<td css={[checkListIcon, item.maybeGreyedOut]}>
-									<div css={iconContainer}>{item.icon}</div>
-								</td>
-								<td css={[checkListText, item.maybeGreyedOut]}>{item.text}</td>
-							</tr>
-						))}
-					</table>
-					<hr css={hr(`${space[5]}px 0 ${space[4]}px`)} />
-					<p css={para}>Cancel anytime</p>
-				</>
-			)}
+			<h2 css={heading}>{title}</h2>
+			<hr css={hr(`${space[4]}px 0`)} />
+			<table css={table}>
+				{checkListData.map((item) => (
+					<tr>
+						<td css={[checkListIcon, item.maybeGreyedOut]}>
+							<div css={iconContainer}>{item.icon}</div>
+						</td>
+						<td css={[checkListText, item.maybeGreyedOut]}>{item.text}</td>
+					</tr>
+				))}
+			</table>
+			<hr css={hr(`${space[5]}px 0 ${space[4]}px`)} />
+			<p css={para}>Cancel anytime</p>
 		</div>
 	);
 }
