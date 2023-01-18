@@ -115,4 +115,27 @@ export const tests: Tests = {
 		seed: 10,
 		optimizeId: 'dQCXBc3QQIW7M1Di_qSCHw',
 	},
+	singleToRecurring: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variantA',
+			},
+			{
+				id: 'variantB',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		seed: 15,
+	},
 };
