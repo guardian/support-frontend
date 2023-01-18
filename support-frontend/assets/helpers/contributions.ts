@@ -44,6 +44,7 @@ export const logInvalidCombination = (
 	);
 };
 
+// Change the model here?
 export type AmountSelection = {
 	amounts: number[];
 	defaultAmount: number;
@@ -56,6 +57,7 @@ export type ContributionAmounts = {
 export type AmountsTestVariant = {
 	name: string;
 	amounts: ContributionAmounts;
+	hideChooseYourAmount?: boolean;
 };
 
 export type AmountsTest = {
@@ -68,6 +70,7 @@ export type AmountsTest = {
 export type ConfiguredRegionAmounts = {
 	control: ContributionAmounts;
 	test?: AmountsTest;
+	hideChooseYourAmount?: boolean;
 };
 
 export type ConfiguredAmounts = Record<CountryGroupId, ConfiguredRegionAmounts>;

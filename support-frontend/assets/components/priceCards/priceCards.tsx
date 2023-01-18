@@ -74,6 +74,7 @@ export function PriceCards({
 	paymentInterval,
 	otherAmountField,
 }: PriceCardsProps): JSX.Element {
+	console.log('RJR: PriceCards - amounts', amounts);
 	const otherAmountLabel = amounts.length % 2 ? 'Other' : 'Choose your amount';
 
 	return (

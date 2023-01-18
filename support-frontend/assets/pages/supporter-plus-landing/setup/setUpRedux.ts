@@ -68,6 +68,7 @@ function getInitialContributionType(
 	const contributionType =
 		getContributionTypeFromUrl() ?? getContributionTypeFromSession();
 
+	// RJR: Comment on next line is not mine
 	// make sure we don't select a contribution type which isn't on the page
 	if (
 		contributionType &&
@@ -109,6 +110,7 @@ function selectInitialAmounts(
 			return { amount: amountFromUrl };
 		}
 
+		// RJR: Comments on next 4 lines are not mine
 		// This means there is a query parameter specifying an amount,
 		// but that amount isn't available as one of the choice cards.
 		// In this case we want to select the 'other' choice card
@@ -142,6 +144,7 @@ function selectInitialAmounts(
 	}
 }
 
+// RJR: Comment on next line is not mine
 // Override the settings from the server if contributionTypes are defined in url params or campaign settings
 function getContributionTypes(state: ContributionsState): ContributionTypes {
 	const campaignSettings = getCampaignSettings();
@@ -189,6 +192,28 @@ function getStoredEmail(dispatch: ContributionsDispatch): void {
 export function setUpRedux(store: ContributionsStore): void {
 	const dispatch = store.dispatch;
 	const state = store.getState();
+
+	// state.common.abParticipations
+	//   - tells us if user is in test - if yes, test/variant name
+	// state.common.campaign
+	//   - no idea what this is - maybe if user is forced into a test/variant?
+	//   - set to null
+	// state.common.internationalisation
+	//   - interesting data, but irrelevant for this PRs needs
+	// state.common.otherQueryParams
+	//   - might be useful? currently an empty array
+	// state.common.defaultAmounts
+	//   - hardcoded values - no need to interfere with these
+	//
+	// state.common.settings.amounts
+	//   - the raw amounts data pulled from S3 (somehow)
+	// state.common.settings.contributionTypes
+	//   - interesting but probably irrelevant for this PR
+	// state.common.settings.switches
+	//   - raw switches data pulled from S3 - not relevant to this PR
+	console.log('RJR: setUpRedux - state', state);
+
+	// RJR: Comment on next line is not mine
 	// TODO - move these settings out of the redux store, as they only change once, upon initialisation
 	const contributionTypes = getContributionTypes(state);
 	dispatch(setContributionTypes(contributionTypes));
@@ -201,6 +226,7 @@ export function setUpRedux(store: ContributionsStore): void {
 	);
 	selectInitialAmounts(state, dispatch, contributionType);
 	const { email, stateField } = state.page.user;
+	// RJR: Comment on next line is not mine
 	// For PayPal one-off we need to get userType from session after the thankyou page redirect
 	const userType = storage.getSession('userTypeFromIdentityResponse');
 

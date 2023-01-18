@@ -44,6 +44,8 @@ export function PriceCardsContainer({
 		(state) => state.common.internationalisation.currencyId,
 	);
 	const { amounts } = useContributionsSelector((state) => state.common);
+	console.log('RJR: PriceCardsContainer - amounts', amounts);
+
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
