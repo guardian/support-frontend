@@ -52,10 +52,10 @@ $header-links-min-width: gu-span(12);
 }
 
 .component-header-mobile-menu-toggler {
+  @include mq($until: tablet) {
+    display: block;
+  }
 	display: none;
-	.component-header--display-veggie-burger & {
-		display: block;
-	}
 	[data-not-hydrated] & {
 		display: none;
 	}
@@ -123,6 +123,12 @@ $header-links-min-width: gu-span(12);
 
 .component-header-topnav__utility {
 	padding-top: $gu-v-spacing * 0.5;
+
+  .component-country-group-switcher {
+    @include mq($until: tablet) {
+      display: none;
+    }
+  }
 }
 
 .component-header-topnav-logo {
@@ -130,12 +136,8 @@ $header-links-min-width: gu-span(12);
 		width: gu-span(5);
 		background-color: gu-colour(brand-main);
 		float: right;
-		.component-header--one-row & {
-			border-left: 1px solid gu-colour(brand-pastel);
-			z-index: 10;
-			position: relative;
-		}
 	}
+
 	@include mq($from: wide) {
 		padding-right: gu-span(1) + $gu-h-spacing;
 	}
@@ -148,13 +150,17 @@ $header-links-min-width: gu-span(12);
 }
 
 .component-header-links--desktop {
-	display: flex;
+  @include mq($until: tablet) {
+    display: none;
+  }
+
+  display: flex;
 	justify-content: flex-start;
 	background-color: gu-colour(brand-main);
 	border-top: 1px solid gu-colour(brand-pastel);
 	z-index: 9;
 	white-space: nowrap;
-	margin: 0 ($gu-h-spacing * -2) 0 0;
+	margin: 0 ($gu-h-spacing * -2) 0 0 -($gu-h-spacing * 0.5);
 	box-sizing: border-box;
 
 	@media (min-width: $header-links-min-width + 40) {
@@ -163,19 +169,10 @@ $header-links-min-width: gu-span(12);
 		border-right: 1px solid gu-colour(brand-pastel);
 	}
 
-	.component-header--display-veggie-burger & {
-		position: absolute;
-		height: 0;
-		overflow: hidden;
-	}
-	.component-header--one-row & {
-		position: absolute;
-		bottom: 0;
-		left: $gu-h-spacing * 0.5;
-		right: gu-span(5);
-	}
-
 	.component-header-links__ul {
+    @include mq($until: desktop) {
+      margin-left: -($gu-h-spacing * 0.5)px;
+    }
 		list-style: none;
 		display: inline-flex;
 		width: auto;

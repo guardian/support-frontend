@@ -15,36 +15,7 @@ export type PropTypes = {
 	display?: 'navigation' | 'checkout' | 'guardianLogo' | void;
 };
 export type State = {
-	fitsLinksInOneRow: boolean;
-	fitsLinksAtAll: boolean;
 	isTestUser: boolean | null | undefined;
-};
-
-// ----- Metrics ----- //
-const getMenuStateMetrics = ({
-	menuRef,
-	logoRef,
-	containerRef,
-}: {
-	menuRef: Element;
-	logoRef: Element;
-	containerRef: Element;
-}): State => {
-	const [logoLeft, menuWidth, containerLeft, containerWidth] = [
-		logoRef.getBoundingClientRect().left,
-		menuRef.getBoundingClientRect().width,
-		containerRef.getBoundingClientRect().left,
-		containerRef.getBoundingClientRect().width,
-	];
-	const fitsLinksAtAll = containerWidth - menuWidth > 0;
-	const fitsLinksInOneRow =
-		fitsLinksAtAll && logoLeft - containerLeft - menuWidth > 0;
-	const isTestUser = getGlobal<boolean>('isTestUser');
-	return {
-		fitsLinksInOneRow,
-		fitsLinksAtAll,
-		isTestUser,
-	};
 };
 
 // ----- Component ----- //
@@ -89,8 +60,6 @@ export default class Header extends Component<PropTypes, State> {
 		display: 'navigation',
 	};
 	state = {
-		fitsLinksInOneRow: false,
-		fitsLinksAtAll: false,
 		isTestUser: getGlobal<boolean>('isTestUser'),
 	};
 
@@ -103,13 +72,9 @@ export default class Header extends Component<PropTypes, State> {
 			containerRef
 		) {
 			this.observer = new window.ResizeObserver(() => {
-				this.setState(
-					getMenuStateMetrics({
-						menuRef,
-						logoRef,
-						containerRef,
-					}),
-				);
+				this.setState({
+					isTestUser: getGlobal<boolean>('isTestUser'),
+				});
 			});
 
 			this.observer.observe(menuRef);
@@ -131,13 +96,12 @@ export default class Header extends Component<PropTypes, State> {
 
 	render(): JSX.Element {
 		const { utility, display, countryGroupId } = this.props;
-		const { fitsLinksInOneRow, fitsLinksAtAll, isTestUser } = this.state;
+		const { isTestUser } = this.state;
+
 		return (
 			<header
 				className={classNameWithModifiers('component-header', [
-					fitsLinksInOneRow ? 'one-row' : null,
 					display === 'navigation' ? 'display-navigation' : null,
-					!fitsLinksAtAll ? 'display-veggie-burger' : null,
 					display === 'checkout' ? 'display-checkout' : null,
 				])}
 			>
@@ -155,9 +119,7 @@ export default class Header extends Component<PropTypes, State> {
 					<div className="component-header__row">
 						<TopNav
 							display={display}
-							utility={
-								display === 'navigation' && fitsLinksAtAll ? utility : undefined
-							}
+							utility={display === 'navigation' ? utility : undefined}
 							getLogoRef={(el) => {
 								this.logoRef = el;
 							}}
