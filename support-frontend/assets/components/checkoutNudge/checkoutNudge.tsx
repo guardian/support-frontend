@@ -15,12 +15,13 @@ import { CheckoutNudgeCloseButton } from './checkoutNudgeButtonClose';
 
 const styles = {
 	container: css`
+		border: 1px solid red;
 		border-radius: 12px;
 		background-color: ${neutral[97]};
 
 		margin-bottom: ${space[3]}px;
 
-		background-size: 100% 100%;
+		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: right;
 		background-image: url(https://media.guim.co.uk/2d33e52f89462481b77f0fd419d62a55fb70c0f0/0_0_274_202/274.png);
@@ -39,6 +40,7 @@ const styles = {
 		}
 	`,
 	top: css`
+		border: 1px solid red;
 		margin-top: ${space[2]}px;
 		margin-bottom: -${space[1]}px;
 		display: flex;
@@ -49,22 +51,21 @@ const styles = {
 		}
 	`,
 	topheading: css`
+		border: 1px solid red;
 		margin-top: ${space[3]}px;
 	`,
-	heading: (backColor: string) => css`
-		max-width: 295px;
+	heading: (backColor: string, marginBottom: number) => css`
+		border: 1px solid red;
 		margin-left: 10px;
-		line-height: 108%;
+		//line-height: 108%;
 
 		color: ${backColor};
 		${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
 
 		${from.mobileMedium} {
-			margin-bottom: ${space[2]}px;
+			margin-left: 12px;
+			margin-bottom: ${marginBottom}px;
 			${headline.xsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
-		}
-		${from.mobileLandscape} {
-			max-width: 350px;
 		}
 		${from.tablet} {
 			${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
@@ -72,29 +73,39 @@ const styles = {
 	`,
 
 	para: css`
-		max-width: 295px;
+		border: 1px solid red;
 		margin-top: ${space[1]}px;
 		margin-left: 10px;
 		margin-right: 10px;
 		margin-bottom: ${space[1]}px;
-		line-height: 135%;
-		${textSans.medium({ lineHeight: 'tight' })};
+		//line-height: 130%;
+		${textSans.small({ lineHeight: 'regular' })};
 
-		${from.mobileLandscape} {
+		${from.mobileMedium} {
+			${textSans.medium({ lineHeight: 'regular' })};
+			margin-left: 12px;
 			max-width: 350px;
+		}
+		${from.mobileLandscape} {
+			max-width: ;
 		}
 		${until.tablet} {
 			margin-bottom: ${space[2]}px;
 		}
 	`,
 	link: css`
-		max-width: 295px;
+		border: 1px solid red;
 		margin-left: 10px;
-		line-height: 135%;
-		${textSans.medium({ lineHeight: 'tight' })};
-		padding-bottom: ${space[4]}px;
+		//line-height: 135%;
+		${textSans.medium({ lineHeight: 'regular' })};
+		padding-bottom: ${space[5]}px;
+
+		${from.mobileMedium} {
+			margin-left: 12px;
+		}
 	`,
 	alink: css`
+  border: 1px solid red;
 		color: ${brand[500]};
 		text-decoration: underline;
 		&:hover {
@@ -133,11 +144,13 @@ export function CheckoutNudge({
 				<>
 					<div css={styles.top}>
 						<div css={styles.topheading}>
-							<h2 css={styles.heading(brand[500])}>{nudgeTitleCopySection1}</h2>
+							<h2 css={styles.heading(brand[500], space[2])}>
+								{nudgeTitleCopySection1}
+							</h2>
 						</div>
 						<CheckoutNudgeCloseButton onClose={onNudgeClose} />
 					</div>
-					<h2 css={styles.heading(neutral[7])}>{nudgeTitleCopySection2}</h2>
+					<h2 css={styles.heading(neutral[7], 0)}>{nudgeTitleCopySection2}</h2>
 					<p css={styles.para}>
 						Regular, reliable support powers Guardian journalism in perpetuity.
 						If you can, please consider setting up a monthly payment today from

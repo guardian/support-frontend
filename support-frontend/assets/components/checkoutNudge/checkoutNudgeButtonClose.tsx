@@ -1,14 +1,17 @@
 import { css } from '@emotion/react';
-import { neutral } from '@guardian/source-foundations';
 import { Button, SvgCross } from '@guardian/source-react-components';
 
 const styles = {
 	button: css`
-		color: ${neutral[46]};
+		color: #606060;
 		background-color: transparent;
 		&:hover {
 			background-color: transparent;
 		}
+	`,
+	svg: css`
+		width: 24px;
+		margin: 2px;
 	`,
 };
 
