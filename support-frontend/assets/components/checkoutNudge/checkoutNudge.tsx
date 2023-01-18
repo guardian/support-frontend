@@ -7,6 +7,7 @@ import {
 	space,
 	textSans,
 } from '@guardian/source-foundations';
+import type { ContributionType } from 'helpers/contributions';
 import { CheckoutNudgeCloseButton } from './checkoutNudgeButtonClose';
 
 const styles = {
@@ -106,6 +107,7 @@ const styles = {
 };
 
 export type CheckoutNudgeProps = {
+	contributionType: ContributionType;
 	nudgeDisplay: boolean;
 	nudgeTitleCopySection1: string;
 	nudgeTitleCopySection2: string;
@@ -115,6 +117,7 @@ export type CheckoutNudgeProps = {
 };
 
 export function CheckoutNudge({
+	contributionType,
 	nudgeDisplay,
 	nudgeTitleCopySection1,
 	nudgeTitleCopySection2,
@@ -122,9 +125,10 @@ export function CheckoutNudge({
 	onNudgeClose,
 	onNudgeClick,
 }: CheckoutNudgeProps): JSX.Element {
+	const displayValid = contributionType === 'ONE_OFF' && nudgeDisplay;
 	return (
 		<div css={styles.container}>
-			{nudgeDisplay && (
+			{displayValid && (
 				<>
 					<div css={styles.top}>
 						<div css={styles.topheading}>

@@ -4,6 +4,7 @@ import { config } from 'helpers/contributions';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -17,6 +18,7 @@ type CheckoutNudgeContainerProps = {
 export function CheckoutNudgeContainer({
 	renderNudge: renderNudge,
 }: CheckoutNudgeContainerProps): JSX.Element | null {
+	const contributionType = useContributionsSelector(getContributionType);
 	const dispatch = useContributionsDispatch();
 	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -44,6 +46,7 @@ export function CheckoutNudgeContainer({
 	}
 
 	return renderNudge({
+		contributionType,
 		nudgeDisplay: displayNudge,
 		nudgeTitleCopySection1:
 			abParticipations.singleToRecurring === 'variantA'
