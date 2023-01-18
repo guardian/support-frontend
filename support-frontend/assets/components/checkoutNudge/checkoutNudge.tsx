@@ -120,29 +120,28 @@ export function CheckoutNudge({
 	nudgeParagraphCopy,
 	onNudgeClose,
 	onNudgeClick,
-}: CheckoutNudgeProps): JSX.Element {
-	const displayValid = contributionType === 'ONE_OFF' && nudgeDisplay;
-	return (
-		<div css={container}>
-			{displayValid && (
-				<>
-					<div css={top}>
-						<div css={topheading}>
-							<h2 css={heading(brand[500], space[2])}>
-								{nudgeTitleCopySection1}
-							</h2>
-						</div>
-						<CheckoutNudgeCloseButton onClose={onNudgeClose} />
+}: CheckoutNudgeProps): JSX.Element | null {
+	if (contributionType === 'ONE_OFF' && nudgeDisplay) {
+		return (
+			<div css={container}>
+				<div css={top}>
+					<div css={topheading}>
+						<h2 css={heading(brand[500], space[2])}>
+							{nudgeTitleCopySection1}
+						</h2>
 					</div>
-					<h2 css={heading(neutral[7], 0)}>{nudgeTitleCopySection2}</h2>
-					<p css={para}>{nudgeParagraphCopy}</p>
-					<div css={link}>
-						<a onClick={onNudgeClick} css={alink}>
-							See monthly
-						</a>
-					</div>
-				</>
-			)}
-		</div>
-	);
+					<CheckoutNudgeCloseButton onClose={onNudgeClose} />
+				</div>
+				<h2 css={heading(neutral[7], 0)}>{nudgeTitleCopySection2}</h2>
+				<p css={para}>{nudgeParagraphCopy}</p>
+				<div css={link}>
+					<a onClick={onNudgeClick} css={alink}>
+						See monthly
+					</a>
+				</div>
+			</div>
+		);
+	} else {
+		return null;
+	}
 }
