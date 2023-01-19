@@ -184,7 +184,8 @@ object AddressAndCurrencyValidationRules {
 //    hasValidPostcodeLength checks if the length of postCodeIsShortEnoughForSalesforce(must be less than or equal to 20 characters)
   def hasValidPostcodeLength(postcodeFromRequest: Option[String], addressType: String): Result = {
     val validPostCode = postcodeFromRequest match {
-      case Some(postCode) if (postCode.length > 20) => Invalid(s"$addressType PostCode length must not be greater than 20 characters")
+      case Some(postCode) if (postCode.length > 20) =>
+        Invalid(s"$addressType PostCode length must not be greater than 20 characters")
       case _ => Valid
     }
     validPostCode
