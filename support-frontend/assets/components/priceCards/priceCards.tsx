@@ -75,12 +75,20 @@ export function PriceCards({
 	otherAmountField,
 }: PriceCardsProps): JSX.Element {
 	console.log('RJR: PriceCards - amounts', amounts);
-	const otherAmountLabel = amounts.length % 2 ? 'Other' : 'Choose your amount';
+
+	// RJR: need to find a way to get hideChooseYourAmount attribute into amounts data
+	// - or feed it in as an additional prop to the PriceCards component
+	const hideChooseYourAmount = Math.random() > 0.5;
+	const currentAmountsLen = hideChooseYourAmount
+		? amounts.length - 1
+		: amounts.length;
+	const otherAmountLabel =
+		currentAmountsLen % 2 ? 'Other' : 'Choose your amount';
 
 	return (
 		<div css={cardsContainer}>
 			<ChoiceCardGroup
-				cssOverrides={getChoiceCardGroupStyles(amounts.length)}
+				cssOverrides={getChoiceCardGroupStyles(currentAmountsLen)}
 				name="amounts"
 				columns={2}
 			>
@@ -97,13 +105,17 @@ export function PriceCards({
 							paymentInterval={paymentInterval}
 						/>
 					))}
-					<PriceCard
-						amount="other"
-						amountWithCurrency="other"
-						isSelected={selectedAmount === 'other'}
-						onClick={onAmountChange}
-						alternateLabel={otherAmountLabel}
-					/>
+					{hideChooseYourAmount ? (
+						<></>
+					) : (
+						<PriceCard
+							amount="other"
+							amountWithCurrency="other"
+							isSelected={selectedAmount === 'other'}
+							onClick={onAmountChange}
+							alternateLabel={otherAmountLabel}
+						/>
+					)}
 				</>
 			</ChoiceCardGroup>
 			{otherAmountField}
