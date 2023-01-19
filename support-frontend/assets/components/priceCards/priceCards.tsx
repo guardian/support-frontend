@@ -78,6 +78,7 @@ export function PriceCards({
 
 	// RJR: need to find a way to get hideChooseYourAmount attribute into amounts data
 	// - or feed it in as an additional prop to the PriceCards component
+	// - CONSTRAINT: if selected amount doesn't match any supplied amounts, then 'Other' button must display regardless of value for `hideChooseYourAmount` attribute
 	const hideChooseYourAmount = Math.random() > 0.5;
 	const currentAmountsLen = hideChooseYourAmount
 		? amounts.length - 1
