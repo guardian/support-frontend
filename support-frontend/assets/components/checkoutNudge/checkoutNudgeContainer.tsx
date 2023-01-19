@@ -32,7 +32,7 @@ export function CheckoutNudgeContainer({
 
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId]['MONTHLY'].min;
-	const paragraphCopyVariantA = `Regular, reliable funding from readers is vital for our future. It protects our independence long term, so we can report with freedom and truth. Support us monthly from just ${currencyGlyph}${minAmount}.`;
+	const paragraphCopyVariantA = `Regular, reliable funding from readers is vital for our future. It protects our independence long term, so we can report freely and without outside influence. Support us monthly from just ${currencyGlyph}${minAmount}.`;
 	const paragraphCopyVariantB = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a monthly payment today from just ${currencyGlyph}${minAmount} – it takes less than a minute.`;
 
 	function onNudgeClose() {
