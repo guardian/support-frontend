@@ -10,11 +10,24 @@ case class ContributionAmounts(
     ANNUAL: AmountsSelection,
 )
 
-case class AmountsTestVariant(name: String, amounts: ContributionAmounts)
+case class AmountsTestVariant(
+    name: String,
+    amounts: ContributionAmounts,
+    hideChooseYourAmount: Option[Boolean]
+)
 
-case class AmountsTest(name: String, isLive: Boolean, variants: List[AmountsTestVariant], seed: Int)
+case class AmountsTest(
+    name: String,
+    isLive: Boolean,
+    variants: List[AmountsTestVariant],
+    seed: Int
+)
 
-case class ConfiguredRegionAmounts(control: ContributionAmounts, test: Option[AmountsTest])
+case class ConfiguredRegionAmounts(
+    control: ContributionAmounts,
+    test: Option[AmountsTest],
+    hideChooseYourAmount: Option[Boolean]
+)
 
 case class ConfiguredAmounts(
     GBPCountries: ConfiguredRegionAmounts,
