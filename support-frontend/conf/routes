@@ -35,7 +35,7 @@ GET /                                                              controllers.A
 # ----- Bundles Landing Page ----- #
 
 GET /support                                                       controllers.Application.supportGeoRedirect()
-GET /$country<(uk|us|au|eu|int|nz|ca)>/support                     controllers.Application.showcase(country: String)
+GET /$country<(uk|us|au|eu|int|nz|ca)>/support                     controllers.Application.contributionsLanding(country: String, campaignCode = "")
 # redirect from old ab test
 GET /showcase                                                      controllers.Application.permanentRedirect(location="/uk/support")
 
