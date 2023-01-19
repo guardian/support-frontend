@@ -4,7 +4,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { onThirdPartyPaymentAuthorised } from 'pages/contributions-landing/contributionsLandingActions';
+import { onThirdPartyPaymentAuthorised } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 
 export function SepaPaymentButton(): JSX.Element {
 	const dispatch = useContributionsDispatch();

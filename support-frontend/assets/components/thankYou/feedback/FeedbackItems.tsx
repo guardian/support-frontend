@@ -1,12 +1,28 @@
+import { css } from '@emotion/react';
+import { from } from '@guardian/source-foundations';
 import {
 	LinkButton,
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
 import { setThankYouFeedbackSurveyHasBeenCompleted } from 'helpers/redux/checkout/thankYouState/actions';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
+import { OPHAN_COMPONENT_ID_SURVEY } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import styles from 'pages/contributions-landing/components/ContributionThankYou/styles';
-import { OPHAN_COMPONENT_ID_SURVEY } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
+
+const hideAfterTablet = css`
+	display: block;
+
+	${from.tablet} {
+		display: none;
+	}
+`;
+const hideBeforeTablet = css`
+	display: none;
+
+	${from.tablet} {
+		display: block;
+	}
+`;
 
 const getFeedbackHeader = (feedbackSurveyHasBeenCompleted: boolean): string => {
 	return feedbackSurveyHasBeenCompleted
@@ -26,12 +42,12 @@ function FeedbackBodyCopy({
 			) : (
 				<>
 					<>
-						<span css={styles.hideAfterTablet}>
+						<span css={hideAfterTablet}>
 							Fill out this short form to tell us more about your experience of
 							supporting us today – it only takes a minute.
 						</span>
 
-						<span css={styles.hideBeforeTablet}>
+						<span css={hideBeforeTablet}>
 							We would love to hear more about your experience of supporting the
 							Guardian today. Please fill out this short form – it only takes a
 							minute.

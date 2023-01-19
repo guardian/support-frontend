@@ -9,19 +9,19 @@ import {
 } from '@guardian/source-react-components';
 import { generateReferralCode } from 'helpers/campaigns/campaignReferralCodes';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {
 	OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
 	OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK,
 	OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN,
 	OPHAN_COMPONENT_ID_SOCIAL_TWITTER,
-} from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
+} from 'helpers/thankYouPages/utils/ophan';
 import {
 	getEmailShareLink,
 	getFacebookShareLink,
 	getLinkedInShareLink,
 	getTwitterShareLink,
-} from 'pages/contributions-landing/components/ContributionThankYou/utils/social';
+} from 'helpers/thankYouPages/utils/social';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 interface SocialShareIconsProps {
 	countryId: IsoCountry;

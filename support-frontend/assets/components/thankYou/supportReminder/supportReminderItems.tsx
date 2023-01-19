@@ -10,6 +10,7 @@ import {
 import { privacyLink } from 'helpers/legal';
 import { setThankYouSupportReminder } from 'helpers/redux/checkout/thankYouState/actions';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
+import { OPHAN_COMPONENT_ID_SET_REMINDER } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {
 	createOneOffReminderEndpoint,
@@ -18,7 +19,6 @@ import {
 import { isCodeOrProd } from 'helpers/urls/url';
 import { logException } from 'helpers/utilities/logger';
 import { catchPromiseHandler } from 'helpers/utilities/promise';
-import { OPHAN_COMPONENT_ID_SET_REMINDER } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
 
 const form = css`
 	margin-top: ${space[5]}px;

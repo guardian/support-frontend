@@ -2,9 +2,9 @@ import {
 	LinkButton,
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
+import { OPHAN_COMPONENT_ID_AUS_MAP } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getOrigin } from 'helpers/urls/url';
-import { OPHAN_COMPONENT_ID_AUS_MAP } from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
 
 const AUS_MAP_URL = `${getOrigin()}/aus-map?INTCMP=thankyou-page-aus-map-cta`;
 

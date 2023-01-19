@@ -19,12 +19,12 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getSession } from 'helpers/storage/storage';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import {
 	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 	trackUserData,
-} from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
+} from 'helpers/thankYouPages/utils/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 

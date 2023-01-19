@@ -9,7 +9,7 @@ import {
 	OPHAN_COMPONENT_ID_SIGN_UP,
 	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SURVEY,
-} from 'pages/contributions-landing/components/ContributionThankYou/utils/ophan';
+} from 'helpers/thankYouPages/utils/ophan';
 import AppDownloadBadges from './appDownload/AppDownloadBadges';
 import {
 	AppDownloadBodyCopy,

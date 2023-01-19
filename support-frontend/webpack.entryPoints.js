@@ -21,7 +21,6 @@ module.exports = {
     contributionsRedirectStyles: 'stylesheets/fallback-pages/contributionsRedirect.scss',
     promotionTerms: 'pages/promotion-terms/promotionTerms.tsx',
     ausMomentMap: 'pages/aus-moment-map/ausMomentMap.tsx',
-    contributionsCheckoutInEpic: 'pages/contributions-checkout-in-epic/contributionsCheckoutInEpic.tsx',
   },
   ssr: {
     ssrPages: 'helpers/rendering/ssrPages.ts',

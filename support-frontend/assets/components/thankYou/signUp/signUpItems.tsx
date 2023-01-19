@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { space } from '@guardian/source-foundations';
-import BulletPointedList from 'pages/contributions-landing/components/ContributionThankYou/components/BulletPointedList';
+import BulletPointedList from 'components/thankYou/utilityComponents/BulletPointedList';
 
 const listContainer = css`
 	margin-top: ${space[4]}px;

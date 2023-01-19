@@ -17,7 +17,8 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
-import { logCreateSetupIntentError } from 'pages/contributions-landing/components/StripeCardForm/helpers/logging';
+import { routes } from 'helpers/urls/routes';
+import { logException } from 'helpers/utilities/logger';
 import {
 	paymentFailure,
 	paymentWaiting,
@@ -30,6 +31,12 @@ type StripeChangeEvents = {
 	expiry: StripeCardExpiryElementChangeEvent;
 	cvc: StripeCardCvcElementChangeEvent;
 };
+
+function logCreateSetupIntentError(err: Error): void {
+	logException(
+		`Error getting Setup Intent client_secret from ${routes.stripeSetupIntentRecaptcha}: ${err.message}`,
+	);
+}
 
 export function StripeCardFormContainer(): JSX.Element {
 	const dispatch = useContributionsDispatch();
