@@ -1,6 +1,0 @@
-#!/bin/bash
-set -e
-
-# build scala
-cd ..
-./sbt "project supporter-product-data" test riffRaffUpload
