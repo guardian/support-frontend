@@ -44,7 +44,6 @@ export const logInvalidCombination = (
 	);
 };
 
-// Change the model here?
 export type AmountSelection = {
 	amounts: number[];
 	defaultAmount: number;
