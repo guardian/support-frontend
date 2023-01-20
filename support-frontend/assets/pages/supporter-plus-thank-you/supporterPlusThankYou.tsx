@@ -183,7 +183,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 			contributionType === 'ONE_OFF' && email.length > 0,
 			'supportReminder',
 		),
-		'feedback',
+		// 'feedback', // <-- Temporarily disable supporter plus thank you page survey
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];
