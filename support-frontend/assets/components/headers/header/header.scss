@@ -288,7 +288,6 @@ $header-links-min-width: gu-span(12);
 				flex: 0 0 490px;
 				color: gu-colour(neutral-100);
 				@include gu-fontset-body-sans;
-				border-right: 1px solid gu-colour(brand-pastel);
 
 				@include mq($until: tablet) {
 					flex: none;
