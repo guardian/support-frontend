@@ -23,7 +23,7 @@ jobs:
       contents: read
 
     name: support-workers build
-    runs-on: 4core-ubuntu-latest-testing
+    runs-on: ubuntu-latest
     steps:
       - name: Env
         run: env

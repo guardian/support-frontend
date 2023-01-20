@@ -24,7 +24,7 @@ jobs:
       contents: read
 
     name: payment-api build
-    runs-on: 4core-ubuntu-latest-testing
+    runs-on: ubuntu-latest
     steps:
       - name: Env
         run: env
