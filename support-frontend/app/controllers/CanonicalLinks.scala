@@ -20,4 +20,3 @@ trait CanonicalLinks {
     s"${supportUrl}/${countryCode}/support"
 
 }
-

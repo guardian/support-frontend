@@ -299,3 +299,24 @@ class Application(
     }
   }
 }
+
+object CSSElementForStage {
+
+  def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage)(
+      cssPath: RefPath,
+  ): Either[RefPath, StyleContent] = {
+    if (stage == Stages.DEV) {
+      Left(cssPath)
+    } else {
+      getFileContentsAsHtml(cssPath).fold[Either[RefPath, StyleContent]] {
+        SafeLogger.error(
+          scrub"Inline CSS failed to load for $cssPath",
+        ) // in future add email perf alert instead (cloudwatch alarm perhaps)
+        Left(cssPath)
+      } { inlineCss =>
+        Right(inlineCss)
+      }
+    }
+  }
+
+}
