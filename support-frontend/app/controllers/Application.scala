@@ -65,9 +65,9 @@ class Application(
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
     val redirectUrl = request.geoData.countryGroup match {
-      case Some(UK) => buildCanonicalSubscriptionLink("uk")
-      case Some(US) => buildCanonicalSubscriptionLink("us")
-      case Some(Australia) => buildCanonicalSubscriptionLink("au")
+      case Some(UK) => buildCanonicalShowcaseLink("uk")
+      case Some(US) => buildCanonicalShowcaseLink("us")
+      case Some(Australia) => buildCanonicalShowcaseLink("au")
       case Some(Europe) => "/eu/contribute"
       case Some(Canada) => "/ca/contribute"
       case Some(NewZealand) => "/nz/contribute"
@@ -85,7 +85,7 @@ class Application(
       case _ => "uk"
     }
 
-    RedirectWithEncodedQueryString(buildCanonicalSubscriptionLink(supportPageVariant), request.queryString, status = FOUND)
+    RedirectWithEncodedQueryString(buildCanonicalShowcaseLink(supportPageVariant), request.queryString, status = FOUND)
   }
 
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
@@ -298,25 +298,4 @@ class Application(
       case _ => s"/uk/$path"
     }
   }
-}
-
-object CSSElementForStage {
-
-  def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage)(
-      cssPath: RefPath,
-  ): Either[RefPath, StyleContent] = {
-    if (stage == Stages.DEV) {
-      Left(cssPath)
-    } else {
-      getFileContentsAsHtml(cssPath).fold[Either[RefPath, StyleContent]] {
-        SafeLogger.error(
-          scrub"Inline CSS failed to load for $cssPath",
-        ) // in future add email perf alert instead (cloudwatch alarm perhaps)
-        Left(cssPath)
-      } { inlineCss =>
-        Right(inlineCss)
-      }
-    }
-  }
-
 }
