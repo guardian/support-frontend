@@ -39,6 +39,7 @@ export function PriceCardsContainer({
 	frequency,
 	renderPriceCards,
 }: PriceCardsContainerProps): JSX.Element {
+	console.log('RJR: PriceCardsContainer');
 	const dispatch = useContributionsDispatch();
 	const currency = useContributionsSelector(
 		(state) => state.common.internationalisation.currencyId,
@@ -48,9 +49,7 @@ export function PriceCardsContainer({
 		(state) => state.page.checkoutForm.product,
 	);
 	const minAmount = useContributionsSelector(getMinimumContributionAmount);
-
 	const { amounts: frequencyAmounts, defaultAmount } = amounts[frequency];
-
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
 		frequency,
@@ -86,6 +85,7 @@ export function PriceCardsContainer({
 		minAmount,
 		onAmountChange,
 		onOtherAmountChange,
+		hideChooseYourAmount: false,
 		errors: otherAmountErrors,
 	});
 }
