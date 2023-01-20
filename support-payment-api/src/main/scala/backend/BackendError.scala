@@ -34,6 +34,7 @@ object BackendError {
   final case class AcquisitionsStreamError(error: String) extends BackendError
   final case class GoogleAnalyticsError(error: String) extends BackendError
   final case class Database(error: ContributionsStoreService.Error) extends BackendError
+  final case class SupporterProductDataError(error: String) extends BackendError
   final case class IdentityServiceError(error: IdentityClient.ContextualError) extends BackendError
   final case class PaypalApiError(error: PaypalAPIError) extends BackendError
   final case class StripeApiError(error: StripeError) extends BackendError
