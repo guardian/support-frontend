@@ -8,7 +8,6 @@ import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
 import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import InteractiveTable from 'components/interactiveTable/interactiveTable';
-import Block from 'components/page/block';
 import Page from 'components/page/page';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
 import CheckoutStage from 'components/subscriptionCheckouts/stage';
@@ -34,7 +33,6 @@ import { renderPage } from 'helpers/rendering/render';
 import { routes } from 'helpers/urls/routes';
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
-import EventsModule from 'pages/digital-subscription-landing/components/events/eventsModule';
 import { DigitalFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import {
 	footer,
@@ -47,16 +45,6 @@ import { getHeroCtaProps } from './components/paymentSelection/helpers/paymentSe
 import Prices from './components/prices';
 import { digitalLandingProps } from './digitalSubscriptionLandingProps';
 import type { DigitalLandingPropTypes } from './digitalSubscriptionLandingProps';
-
-const eventsProductBlockContainer = css`
-	margin-top: 43px;
-	padding-top: 0;
-	padding-bottom: 0;
-
-	${from.tablet} {
-		margin-top: ${space[12]}px;
-	}
-`;
 
 const extraPaddingForComparisonTable = css`
 	padding-top: ${space[6]}px;
@@ -166,7 +154,6 @@ function DigitalLandingPage(props: DigitalLandingPropTypes) {
 function DigitalLandingComponent({
 	countryGroupId,
 	currencyId,
-	participations,
 	productPrices,
 	promotionCopy,
 	orderIsAGift,
@@ -175,8 +162,6 @@ function DigitalLandingComponent({
 		return null;
 	}
 
-	const showEventsComponent =
-		participations.emailDigiSubEventsTest === 'variant';
 	const giftNonGiftLink = orderIsAGift
 		? routes.digitalSubscriptionLanding
 		: routes.digitalSubscriptionLandingGift;
@@ -222,15 +207,6 @@ function DigitalLandingComponent({
 					</div>
 				</CentredContainer>
 			</FullWidthContainer>
-			{showEventsComponent && (
-				<FullWidthContainer>
-					<CentredContainer>
-						<Block cssOverrides={eventsProductBlockContainer}>
-							<EventsModule />
-						</Block>
-					</CentredContainer>
-				</FullWidthContainer>
-			)}
 			<FullWidthContainer theme="dark" hasOverlap>
 				<CentredContainer>
 					<Prices

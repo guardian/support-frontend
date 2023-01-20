@@ -14,7 +14,6 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { Option } from 'helpers/types/option';
 import AppsSection from './components/thankYou/appsSection';
-import EventsModule from './components/thankYou/eventsModule';
 import ThankYouHero from './components/thankYou/hero';
 import 'helpers/abTests/abtest';
 
@@ -48,10 +47,6 @@ const getEmailCopy = (
 };
 
 function ThankYouContent(props: PropTypes): JSX.Element {
-	const showEventsContent =
-		props.participations &&
-		props.participations.emailDigiSubEventsTest === 'variant';
-
 	const isPatron: boolean = userIsPatron(
 		getPromotions(
 			props.countryGroupId,
@@ -81,15 +76,11 @@ function ThankYouContent(props: PropTypes): JSX.Element {
 			<Content>
 				<Text title="Can&#39;t wait to get started?">
 					<LargeParagraph>
-						{`Just download the apps and log in with your Guardian account details${
-							showEventsContent
-								? ', or start browsing our Guardian digital events programmes.'
-								: '.'
-						}`}
+						Just download the apps and log in with your Guardian account
+						details.
 					</LargeParagraph>
 				</Text>
 				<AppsSection countryGroupId={props.countryGroupId} />
-				{showEventsContent && <EventsModule />}
 			</Content>
 			<Content>{props.marketingConsent}</Content>
 		</div>
