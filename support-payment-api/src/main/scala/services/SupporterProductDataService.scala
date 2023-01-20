@@ -24,17 +24,16 @@ class SupporterProductDataService(environment: Environment) {
         contributionData.identityId
           .map(idAsLong =>
             SupporterRatePlanItem(
-              subscriptionName = contributionData.paymentId,
+              subscriptionName = s"${contributionData.paymentProvider.entryName} - ${contributionData.paymentId}",
               identityId = idAsLong.toString,
               gifteeIdentityId = None,
               productRatePlanId = "single_contribution",
               productRatePlanName = "Single Contribution",
-              termEndDate = LocalDate
-                .now()
+              termEndDate = contributionData.created.toLocalDate
                 .plusYears(
                   999,
                 ), // I don't think we need these to expire as they are for information only, no benefits attached
-              contractEffectiveDate = LocalDate.now(),
+              contractEffectiveDate = contributionData.created.toLocalDate,
               contributionAmount = Some(
                 ContributionAmount(contributionData.amount, contributionData.currency.toString),
               ),
