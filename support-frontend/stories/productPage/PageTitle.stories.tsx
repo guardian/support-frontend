@@ -9,14 +9,14 @@ export default {
 		theme: {
 			control: {
 				type: 'select',
-				options: ['showcase', 'digital', 'weekly', 'paper'],
+				options: ['digital', 'weekly', 'paper'],
 			},
 		},
 	},
 };
 
 export function Title(args: {
-	theme: 'showcase' | 'digital' | 'weekly' | 'paper';
+	theme: 'digital' | 'weekly' | 'paper';
 }): JSX.Element {
 	return (
 		<PageTitle title="Page Title" theme={args.theme}>
