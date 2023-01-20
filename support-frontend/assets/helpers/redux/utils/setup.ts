@@ -66,7 +66,11 @@ function buildInitialState(
 		internationalisation.localCurrencyCountry = localCurrencyCountry;
 	}
 
-	const amounts = getAmounts(settings, abParticipations, countryGroupId);
+	const { amountsValues: amounts, hideChooseYourAmount } = getAmounts(
+		settings,
+		abParticipations,
+		countryGroupId,
+	);
 
 	return {
 		campaign: getCampaign(acquisitionData),
@@ -76,6 +80,7 @@ function buildInitialState(
 		abParticipations,
 		settings,
 		amounts,
+		hideChooseYourAmount,
 		defaultAmounts: amounts,
 	};
 }
@@ -91,6 +96,7 @@ export function getInitialState(): CommonState {
 		settings,
 	);
 	const acquisitionData: ReferrerAcquisitionData = getReferrerAcquisitionData();
+
 	return buildInitialState(
 		participations,
 		countryGroupId,

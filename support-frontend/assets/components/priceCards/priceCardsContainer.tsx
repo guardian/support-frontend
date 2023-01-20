@@ -39,12 +39,13 @@ export function PriceCardsContainer({
 	frequency,
 	renderPriceCards,
 }: PriceCardsContainerProps): JSX.Element {
-	console.log('RJR: PriceCardsContainer');
 	const dispatch = useContributionsDispatch();
 	const currency = useContributionsSelector(
 		(state) => state.common.internationalisation.currencyId,
 	);
-	const { amounts } = useContributionsSelector((state) => state.common);
+	const { amounts, hideChooseYourAmount } = useContributionsSelector(
+		(state) => state.common,
+	);
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
@@ -85,7 +86,7 @@ export function PriceCardsContainer({
 		minAmount,
 		onAmountChange,
 		onOtherAmountChange,
-		hideChooseYourAmount: false,
+		hideChooseYourAmount,
 		errors: otherAmountErrors,
 	});
 }

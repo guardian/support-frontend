@@ -73,6 +73,11 @@ export type ConfiguredRegionAmounts = {
 	hideChooseYourAmount?: boolean;
 };
 
+export type SelectedAmountsAndMetadata = {
+	amountsValues: ContributionAmounts;
+	hideChooseYourAmount: boolean;
+};
+
 export type ConfiguredAmounts = Record<CountryGroupId, ConfiguredRegionAmounts>;
 
 export type ContributionTypeSetting = {

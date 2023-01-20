@@ -76,11 +76,6 @@ export function PriceCards({
 	otherAmountField,
 	hideChooseYourAmount,
 }: PriceCardsProps): JSX.Element {
-	console.log(
-		'hideChooseYourAmount',
-		typeof hideChooseYourAmount,
-		hideChooseYourAmount,
-	);
 	const currentAmountsLen = hideChooseYourAmount
 		? amounts.length - 1
 		: amounts.length;

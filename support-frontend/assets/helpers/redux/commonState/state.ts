@@ -35,6 +35,7 @@ export type CommonState = {
 	defaultAmounts: ContributionAmounts;
 	internationalisation: Internationalisation;
 	existingPaymentMethods?: ExistingPaymentMethod[];
+	hideChooseYourAmount: boolean;
 };
 
 export type CommonStateSetupData = {
@@ -46,6 +47,7 @@ export type CommonStateSetupData = {
 	settings: Settings;
 	amounts: ContributionAmounts;
 	defaultAmounts: ContributionAmounts;
+	hideChooseYourAmount: boolean;
 };
 
 const countryGroupId = detectCountryGroup();
@@ -58,6 +60,7 @@ export const initialCommonState: CommonState = {
 	settings: getSettings(),
 	amounts: FALLBACK_AMOUNTS[countryGroupId],
 	defaultAmounts: FALLBACK_AMOUNTS[countryGroupId],
+	hideChooseYourAmount: false,
 	internationalisation: {
 		currencyId: detectCurrency(countryGroupId),
 		countryGroupId,
