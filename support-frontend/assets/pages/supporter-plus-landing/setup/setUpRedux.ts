@@ -189,7 +189,6 @@ function getStoredEmail(dispatch: ContributionsDispatch): void {
 export function setUpRedux(store: ContributionsStore): void {
 	const dispatch = store.dispatch;
 	const state = store.getState();
-
 	// TODO - move these settings out of the redux store, as they only change once, upon initialisation
 	const contributionTypes = getContributionTypes(state);
 	dispatch(setContributionTypes(contributionTypes));
