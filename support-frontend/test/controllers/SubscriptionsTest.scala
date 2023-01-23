@@ -44,6 +44,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
     val configuredRegionAmounts = ConfiguredRegionAmounts(
       control = contributionAmounts,
       test = None,
+      hideChooseYourAmount = None,
     )
     val configuredAmounts = ConfiguredAmounts(
       GBPCountries = configuredRegionAmounts,
