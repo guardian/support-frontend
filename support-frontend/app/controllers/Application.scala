@@ -216,20 +216,6 @@ class Application(
     )
   }
 
-  def showcase(country: String): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(
-      views.html.main(
-        title = "Support the Guardian",
-        mainElement = assets.getSsrCacheContentsAsHtml("showcase-landing-page", "showcase.html"),
-        mainJsBundle = Left(RefPath("showcasePage.js")),
-        mainStyleBundle = Left(RefPath("showcasePage.css")),
-        description = stringsConfig.showcaseLandingDescription,
-        canonicalLink = Some(buildCanonicalShowcaseLink("uk")),
-      )(),
-    ).withSettingsSurrogateKey
-  }
-
   val ausMomentMapSocialImageUrl =
     "https://i.guim.co.uk/img/media/3c2c30cccd48c91f55217bd0d961dbd20cf07274/0_0_1000_525/1000.png?quality=85&s=b1394cf888724cd40646850b807659f0"
 
