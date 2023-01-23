@@ -42,7 +42,7 @@
 	}
 
 	.component-select-input__label {
-		//@include visually-hidden;
+		@include visually-hidden;
 	}
 
 }
