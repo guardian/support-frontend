@@ -76,11 +76,17 @@ export function PriceCards({
 	otherAmountField,
 	hideChooseYourAmount,
 }: PriceCardsProps): JSX.Element {
-	const currentAmountsLen = hideChooseYourAmount
+	let currentAmountsLen = hideChooseYourAmount
 		? amounts.length - 1
 		: amounts.length;
-	const otherAmountLabel =
-		currentAmountsLen % 2 ? 'Other' : 'Choose your amount';
+	let otherAmountLabel = currentAmountsLen % 2 ? 'Other' : 'Choose your amount';
+
+	// Check to catch edge case where no amounts supplied and hideChooseYourAmount is true
+	if (hideChooseYourAmount && !amounts.length) {
+		hideChooseYourAmount = false;
+		currentAmountsLen = 0;
+		otherAmountLabel = 'Choose your amount';
+	}
 
 	return (
 		<div css={cardsContainer}>
