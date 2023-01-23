@@ -26,7 +26,6 @@ const routes: Record<string, string> = {
 	directDebitCheckAccount: '/direct-debit/check-account',
 	payPalRestReturnURL: '/paypal/rest/return',
 	subscriptionCreate: '/subscribe/create',
-	showcase: '/support',
 	subscriptionsLanding: '/subscribe',
 	digitalSubscriptionLanding: '/subscribe/digital',
 	digitalSubscriptionLandingGift: '/subscribe/digital/gift',

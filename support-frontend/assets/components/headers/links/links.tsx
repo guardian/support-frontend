@@ -32,12 +32,6 @@ type PropTypes = {
 
 const links: HeaderNavLink[] = [
 	{
-		href: routes.showcase,
-		text: 'Support',
-		trackAs: 'showcase',
-		internal: true,
-	},
-	{
 		href: routes.recurringContribCheckout,
 		text: 'Contributions',
 		trackAs: 'contributions',

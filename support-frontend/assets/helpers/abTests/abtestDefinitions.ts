@@ -12,8 +12,7 @@ export const pageUrlRegexes = {
 		auLandingPage: '/au/contribute(/.*)?$',
 	},
 	subscriptions: {
-		subsShowcaseAndDigiSubPages:
-			'(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
+		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
 		digiSubLandingPages:
 			'(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
 		digiSubLandingPagesNotAus:
@@ -35,7 +34,7 @@ export const pageUrlRegexes = {
 			paperLandingWithGuestCheckout:
 				/\/subscribe\/paper(\/checkout|\/checkout\/guest)?(\?.*)?$/,
 		},
-		subsShowcaseAndWeeklyPages:
+		subsWeeklyPages:
 			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
 	},
 };

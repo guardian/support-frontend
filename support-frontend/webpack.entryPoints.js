@@ -1,7 +1,6 @@
 module.exports = {
   common: {
     favicons: 'images/favicons.ts',
-    showcasePage: 'pages/showcase/showcase.tsx',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.tsx',
     supporterPlusLandingPage: 'pages/supporter-plus-landing/supporterPlusRouter.tsx',
     digitalSubscriptionLandingPage: 'pages/digital-subscription-landing/digitalSubscriptionLanding.tsx',
