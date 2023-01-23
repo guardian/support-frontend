@@ -16,8 +16,6 @@ import com.gu.support.acquisitions.{
   BigQueryConfig,
   BigQueryService,
 }
-import com.gu.supporterdata.model.Stage.{DEV, PROD}
-import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
@@ -30,7 +28,6 @@ import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
 import model.amazonpay.{AmazonPayApiError, AmazonPaymentData}
 import model.db.ContributionData
 import model.email.ContributorRow
-import model.Environment.Live
 import play.api.libs.ws.WSClient
 import services.{CloudWatchService, _}
 import util.EnvironmentBasedBuilder
@@ -46,7 +43,6 @@ class AmazonPayBackend(
     val bigQueryService: BigQueryService,
     val acquisitionsStreamService: AcquisitionsStreamService,
     val databaseService: ContributionsStoreService,
-    val supporterProductDataService: SupporterProductDataService,
     switchService: SwitchService,
 )(implicit pool: DefaultThreadPool)
     extends StrictLogging
@@ -242,7 +238,6 @@ object AmazonPayBackend {
       acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
       cloudWatchService: CloudWatchService,
-      supporterProductDataService: SupporterProductDataService,
       switchService: SwitchService,
   )(implicit pool: DefaultThreadPool): AmazonPayBackend = {
     new AmazonPayBackend(
@@ -254,7 +249,6 @@ object AmazonPayBackend {
       bigQueryService,
       acquisitionsStreamService,
       databaseService,
-      supporterProductDataService,
       switchService,
     )
   }
@@ -290,7 +284,6 @@ object AmazonPayBackend {
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
-      new SupporterProductDataService(env).valid: InitializationResult[SupporterProductDataService],
       new SwitchService(env)(awsClient, system, defaultThreadPool).valid: InitializationResult[SwitchService],
     ).mapN(AmazonPayBackend.apply)
   }

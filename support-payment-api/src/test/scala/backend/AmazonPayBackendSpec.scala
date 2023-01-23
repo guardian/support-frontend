@@ -92,8 +92,6 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     EitherT.right(Future.successful(()))
   val databaseResponseError: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
-  val supporterProductDataResponseError: EitherT[Future, String, Unit] =
-    EitherT.left(Future.successful("an error from supporter product data"))
   val bigQueryResponse: EitherT[Future, List[String], Unit] =
     EitherT.right(Future.successful(()))
   val bigQueryResponseError: EitherT[Future, List[String], Unit] =
@@ -135,7 +133,6 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
   val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
-  val mockSupporterProductDataService: SupporterProductDataService = mock[SupporterProductDataService]
   val mockSwitchService: SwitchService = mock[SwitchService]
 
   // -- test obj
@@ -148,7 +145,6 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     mockBigQueryService,
     mockAcquisitionsStreamService,
     mockDatabaseService,
-    mockSupporterProductDataService,
     mockSwitchService,
   )(new DefaultThreadPool(ec))
 
@@ -207,8 +203,6 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         when(mockOrderTotal.getCurrencyCode).thenReturn("USD")
         when(mockOrderTotal.getAmount).thenReturn("25")
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockSupporterProductDataService.insertContributionData(any())(any()))
-          .thenReturn(supporterProductDataResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
           .thenReturn(streamResponseError)
@@ -238,7 +232,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
 
     "request" should {
       "return successful payment response even if identityService, " +
-        "databaseService, supporterProductDataService, bigQueryService and emailService all fail" in new AmazonPayBackendFixture {
+        "databaseService, bigQueryService and emailService all fail" in new AmazonPayBackendFixture {
           when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
           when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
           when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
@@ -259,8 +253,6 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
           when(mockOrderTotal.getAmount).thenReturn("25")
 
           when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-          when(mockSupporterProductDataService.insertContributionData(any())(any()))
-            .thenReturn(supporterProductDataResponseError)
           when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
           when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
             .thenReturn(streamResponseError)
@@ -284,8 +276,6 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         )
         when(mockAuthorizationDetails.getAuthorizationAmount).thenReturn(new Price("50.00", "USD"))
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockSupporterProductDataService.insertContributionData(any())(any()))
-          .thenReturn(supporterProductDataResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
           .thenReturn(streamResponseError)

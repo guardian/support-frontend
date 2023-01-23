@@ -211,8 +211,8 @@ lazy val `support-payment-api` = (project in file("support-payment-api"))
     scalacOptions += "-Ytasty-reader",
     scalafmtSettings,
   )
-  .dependsOn(`support-models`, `support-internationalisation`, `module-acquisition-events`, `supporter-product-data-dynamo`)
-  .aggregate(`support-models`, `support-internationalisation`, `module-acquisition-events`, `supporter-product-data-dynamo`)
+  .dependsOn(`support-models`, `support-internationalisation`, `module-acquisition-events`)
+  .aggregate(`support-models`, `support-internationalisation`, `module-acquisition-events`)
 
 lazy val `support-models` = (project in file("support-models"))
   .configs(IntegrationTest)
