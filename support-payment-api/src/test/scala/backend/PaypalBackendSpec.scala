@@ -78,6 +78,10 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val databaseResponseError: EitherT[Future, ContributionsStoreService.Error, Unit] =
     EitherT.left(Future.successful(dbError))
+  val supporterProductDataResponse: EitherT[Future, String, Unit] =
+    EitherT.right(Future.successful(()))
+  val supporterProductDataResponseError: EitherT[Future, String, Unit] =
+    EitherT.left(Future.successful("an error from supporter product data"))
   val bigQueryResponse: EitherT[Future, List[String], Unit] =
     EitherT.right(Future.successful(()))
   val bigQueryErrorMessage = "a BigQuery error"
@@ -123,6 +127,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
   val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
+  val mockSupporterProductDataService: SupporterProductDataService = mock[SupporterProductDataService]
   val mockSwitchService: SwitchService = mock[SwitchService]
 
   // -- test obj
@@ -135,6 +140,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockAcquisitionsStreamService,
     mockEmailService,
     mockCloudWatchService,
+    mockSupporterProductDataService,
     mockSwitchService,
   )(new DefaultThreadPool(ec))
 
@@ -259,6 +265,8 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
             EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
           when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
           when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+          when(mockSupporterProductDataService.insertContributionData(any())(any()))
+            .thenReturn(supporterProductDataResponseError)
           when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
           when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
             .thenReturn(streamResponseError)
@@ -276,6 +284,8 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
           EnrichedPaypalPayment(paymentMock, Some(paymentMock.getPayer.getPayerInfo.getEmail))
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockSupporterProductDataService.insertContributionData(any())(any()))
+          .thenReturn(supporterProductDataResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
           .thenReturn(streamResponseError)
@@ -314,12 +324,14 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
     "tracking the contribution" should {
 
-      "return just a DB error if BigQuery succeeds but DB fails" in new PaypalBackendFixture {
+      "return just a DB error if BigQuery and SupporterProductData succeed but DB fails" in new PaypalBackendFixture {
         populatePaymentMock()
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
+        when(mockSupporterProductDataService.insertContributionData(any())(any()))
+          .thenReturn(supporterProductDataResponse)
 
         val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
         val result = paypalBackend invokePrivate trackContribution(
@@ -337,6 +349,8 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         populatePaymentMock()
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
+        when(mockSupporterProductDataService.insertContributionData(any())(any()))
+          .thenReturn(supporterProductDataResponse)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
           .thenReturn(streamResponseError)

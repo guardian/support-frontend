@@ -1,17 +1,22 @@
 package backend
 
+import backend.BackendError.SupporterProductDataError
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions.ga.models.GAData
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import com.gu.support.acquisitions.models.AcquisitionDataRow
+import com.gu.supporterdata.model.{ContributionAmount, SupporterRatePlanItem}
+import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.typesafe.scalalogging.StrictLogging
 import model.DefaultThreadPool
 import model.db.ContributionData
-import services.ContributionsStoreService
+import services.{ContributionsStoreService, SupporterProductDataService}
+import software.amazon.awssdk.services.dynamodb.model.UpdateItemResponse
 
-import scala.concurrent.Future
+import java.time.LocalDate
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 trait PaymentBackend extends StrictLogging {
@@ -19,6 +24,7 @@ trait PaymentBackend extends StrictLogging {
   val bigQueryService: BigQueryService
   val acquisitionsStreamService: AcquisitionsStreamService
   val databaseService: ContributionsStoreService
+  val supporterProductDataService: SupporterProductDataService
 
   private def insertContributionDataIntoDatabase(
       contributionData: ContributionData,
@@ -28,6 +34,15 @@ trait PaymentBackend extends StrictLogging {
     databaseService
       .insertContributionData(contributionData)
       .leftMap(BackendError.fromDatabaseError)
+  }
+
+  private def insertContributionIntoSupporterProductData(
+      contributionData: ContributionData,
+  )(implicit executionContext: ExecutionContext): EitherT[Future, SupporterProductDataError, Unit] = {
+    logger.info(s"about to insert contribution into SupporterProductData Dynamo store: $contributionData")
+    supporterProductDataService
+      .insertContributionData(contributionData)
+      .leftMap(SupporterProductDataError)
   }
 
   def track(acquisition: AcquisitionDataRow, contributionData: ContributionData, gaData: GAData)(implicit
@@ -47,8 +62,12 @@ trait PaymentBackend extends StrictLogging {
 
     val dbFuture = insertContributionDataIntoDatabase(contributionData)
 
+    val supporterDataFuture = insertContributionIntoSupporterProductData(contributionData)
+
     Future
-      .sequence(List(gaFuture.value, bigQueryFuture.value, streamFuture.value, dbFuture.value))
+      .sequence(
+        List(gaFuture.value, bigQueryFuture.value, streamFuture.value, dbFuture.value, supporterDataFuture.value),
+      )
       .map { results =>
         results.collect { case Left(err) => err }
       }

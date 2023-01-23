@@ -47,6 +47,7 @@ class StripeBackend(
     emailService: EmailService,
     recaptchaService: RecaptchaService,
     cloudWatchService: CloudWatchService,
+    val supporterProductDataService: SupporterProductDataService,
     switchService: SwitchService,
     environment: Environment,
 )(implicit pool: DefaultThreadPool, WSClient: WSClient)
@@ -348,6 +349,7 @@ object StripeBackend {
       emailService: EmailService,
       recaptchaService: RecaptchaService,
       cloudWatchService: CloudWatchService,
+      supporterProductDataService: SupporterProductDataService,
       switchService: SwitchService,
       environment: Environment,
   )(implicit pool: DefaultThreadPool, WSClient: WSClient, awsClient: AmazonS3): StripeBackend = {
@@ -361,6 +363,7 @@ object StripeBackend {
       emailService,
       recaptchaService,
       cloudWatchService,
+      supporterProductDataService,
       switchService,
       environment,
     )
@@ -401,6 +404,7 @@ object StripeBackend {
         .loadConfig[Environment, RecaptchaConfig](env)
         .andThen(RecaptchaService.fromRecaptchaConfig): InitializationResult[RecaptchaService],
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
+      new SupporterProductDataService(env).valid: InitializationResult[SupporterProductDataService],
       new SwitchService(env)(awsClient, system, stripeThreadPool).valid: InitializationResult[SwitchService],
       env.valid: InitializationResult[Environment],
     ).mapN(StripeBackend.apply)
