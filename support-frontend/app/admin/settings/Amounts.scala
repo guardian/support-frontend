@@ -13,20 +13,20 @@ case class ContributionAmounts(
 case class AmountsTestVariant(
     name: String,
     amounts: ContributionAmounts,
-    hideChooseYourAmount: Option[Boolean]
+    hideChooseYourAmount: Option[Boolean],
 )
 
 case class AmountsTest(
     name: String,
     isLive: Boolean,
     variants: List[AmountsTestVariant],
-    seed: Int
+    seed: Int,
 )
 
 case class ConfiguredRegionAmounts(
     control: ContributionAmounts,
     test: Option[AmountsTest],
-    hideChooseYourAmount: Option[Boolean]
+    hideChooseYourAmount: Option[Boolean],
 )
 
 case class ConfiguredAmounts(
