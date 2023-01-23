@@ -181,16 +181,6 @@ object AddressAndCurrencyValidationRules {
       stateFromRequest.isDefined.otherwise(s"state is required for $countryFromRequest")
     } else Valid
 
-//    hasValidPostcodeLength checks if the length of postCodeIsShortEnoughForSalesforce(must be less than or equal to 20 characters)
-  def hasValidPostcodeLength(postcodeFromRequest: Option[String], addressType: String): Result = {
-    val validPostCode = postcodeFromRequest match {
-      case Some(postCode) if (postCode.length > 20) =>
-        Invalid(s"$addressType PostCode length must not be greater than 20 characters")
-      case _ => Valid
-    }
-    validPostCode
-  }
-
   def hasPostcodeIfRequired(countryFromRequest: Country, postcodeFromRequest: Option[String]): Result =
     if (
       countryFromRequest == Country.UK ||
@@ -234,7 +224,6 @@ object DigitalPackValidation {
         hasStateIfRequired(country, state) and
         hasAddressLine1AndCity(billingAddress) and
         hasPostcodeIfRequired(country, postCode) and
-        hasValidPostcodeLength(postCode, "Billing") and
         currencyIsSupportedForCountry(country, currency) and
         PaidProductValidation.noEmptyPaymentFields(paymentFields)
 
@@ -278,11 +267,7 @@ object GuardianWeeklyValidation {
         PaidProductValidation.passes(createSupportWorkersRequest) and
           createSupportWorkersRequest.firstDeliveryDate.nonEmpty.otherwise("first delivery date is required") and
           hasAddressLine1AndCity(createSupportWorkersRequest.billingAddress) and
-          hasAddressLine1AndCity(address) and
-          hasValidPostcodeLength(address.postCode, "Delivery") and hasValidPostcodeLength(
-            createSupportWorkersRequest.billingAddress.postCode,
-            "Billing",
-          )
+          hasAddressLine1AndCity(address)
       case None => Invalid("missing delivery address")
     }
 
@@ -315,10 +300,7 @@ object PaperValidation {
         createSupportWorkersRequest.firstDeliveryDate.nonEmpty.otherwise("first delivery date is missing") and
         hasAddressLine1AndCity(createSupportWorkersRequest.billingAddress) and
         deliveryAddressHasAddressLine1AndCity and
-        validPostcode and hasValidPostcodeLength(address.postCode, "Delivery") and hasValidPostcodeLength(
-          createSupportWorkersRequest.billingAddress.postCode,
-          "Billing",
-        )
+        validPostcode
 
     }
 

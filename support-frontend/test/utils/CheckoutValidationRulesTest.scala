@@ -482,15 +482,6 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
     DigitalPackValidation.passes(corporateSub, product) shouldBe Valid
   }
 
-  it should "fail if there are more than 20 characters in Billing Address postCode" in {
-    val requestDigiSubPostCode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress
-        .copy(country = Country.UK, postCode = Some("Testcase11111111111111111111")),
-      product = DigitalPack(Currency.GBP, Annual),
-    )
-    DigitalPackValidation.passes(requestDigiSubPostCode, monthlyDirectUSDProduct) shouldBe an[Invalid]
-  }
-
   it should "succeed when there is a valid gift sub purchase" in {
     val product = DigitalPack(USD, Monthly, Gift)
     val giftPurchase = validDigitalPackRequest.copy(
@@ -592,19 +583,6 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
     PaperValidation.passes(requestWithCorporateRedemption, Collection) shouldBe an[Invalid]
   }
 
-  it should "fail if there are more than 20 characters in Billing Address postCode" in {
-    val requestPostCode = validPaperRequest.copy(billingAddress =
-      validPaperRequest.billingAddress.copy(postCode = Some("Test111111111111111111111111")),
-    )
-    PaperValidation.passes(requestPostCode, Collection) shouldBe an[Invalid]
-  }
-  it should "fail if there are more than 20 characters in Delivery Address postCode" in {
-    val requestDeliveryPostCode = validPaperRequest.copy(deliveryAddress =
-      validPaperRequest.deliveryAddress map (_.copy(postCode = Some("Test22222222222222222222"))),
-    )
-    PaperValidation.passes(requestDeliveryPostCode, Collection) shouldBe an[Invalid]
-  }
-
 }
 
 class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
@@ -630,18 +608,6 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
   it should "fail if there is no first delivery date" in {
     val requestDeliveredToUs = validWeeklyRequest.copy(firstDeliveryDate = None)
     GuardianWeeklyValidation.passes(requestDeliveredToUs) shouldBe an[Invalid]
-  }
-  it should "fail if there are more than 20 characters in Billing Address postCode" in {
-    val requestPostCode = validWeeklyRequest.copy(billingAddress =
-      validWeeklyRequest.billingAddress.copy(postCode = Some("Test111111111111111111111111")),
-    )
-    GuardianWeeklyValidation.passes(requestPostCode) shouldBe an[Invalid]
-  }
-  it should "fail if there are more than 20 characters in Delivery Address postCode" in {
-    val requestDeliveryPostCode = validWeeklyRequest.copy(deliveryAddress =
-      validWeeklyRequest.deliveryAddress map (_.copy(postCode = Some("Test22222222222222222222"))),
-    )
-    GuardianWeeklyValidation.passes(requestDeliveryPostCode) shouldBe an[Invalid]
   }
 
   it should "fail when missing an address data for billing address" in {
