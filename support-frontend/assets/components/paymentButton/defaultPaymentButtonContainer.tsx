@@ -23,6 +23,7 @@ type ButtonTextCreator = (
 export type DefaultPaymentContainerProps = {
 	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	createButtonText?: ButtonTextCreator;
+	disabled?: boolean;
 };
 
 function getButtonText(
@@ -42,6 +43,7 @@ function getButtonText(
 export function DefaultPaymentButtonContainer({
 	onClick,
 	createButtonText = getButtonText,
+	disabled = false,
 }: DefaultPaymentContainerProps): JSX.Element {
 	const { currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -81,6 +83,7 @@ export function DefaultPaymentButtonContainer({
 			id={testId}
 			buttonText={buttonText}
 			onClick={onClick}
+			disabled={disabled}
 		/>
 	);
 }

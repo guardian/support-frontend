@@ -21,5 +21,10 @@ export function ExistingCardPaymentButton(): JSX.Element {
 		);
 	});
 
-	return <DefaultPaymentButtonContainer onClick={payWithExistingCard} />;
+	return (
+		<DefaultPaymentButtonContainer
+			onClick={payWithExistingCard}
+			disabled={!!selectedPaymentMethod?.billingAccountId}
+		/>
+	);
 }
