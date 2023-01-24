@@ -158,7 +158,7 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, Off, Off),
           subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(On, On, On),
           subscriptionsSwitches = SubscriptionsSwitches(On, On, On),
-          featureSwitches = FeatureSwitches(On, On, On),
+          featureSwitches = FeatureSwitches(On, On),
           campaignSwitches = CampaignSwitches(Off, Off),
           recaptchaSwitches = RecaptchaSwitches(On, On),
         ),
