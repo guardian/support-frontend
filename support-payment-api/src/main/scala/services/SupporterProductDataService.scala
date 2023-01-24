@@ -4,6 +4,7 @@ import cats.data.EitherT
 import com.gu.supporterdata.model.{ContributionAmount, SupporterRatePlanItem}
 import com.gu.supporterdata.model.Stage.{DEV, PROD}
 import com.gu.supporterdata.services.SupporterDataDynamoService
+import com.typesafe.scalalogging.StrictLogging
 import model.db.ContributionData
 import model.Environment
 import model.Environment.Live
@@ -11,7 +12,7 @@ import model.Environment.Live
 import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
-class SupporterProductDataService(environment: Environment) {
+class SupporterProductDataService(environment: Environment) extends StrictLogging {
   val dynamoService = SupporterDataDynamoService(environment match {
     case Live => PROD
     case _ => DEV
@@ -46,7 +47,10 @@ class SupporterProductDataService(environment: Environment) {
       response <- EitherT(
         dynamoService
           .writeItem(item)
-          .map(_ => Right(()))
+          .map{_ =>
+            logger.info(s"Successfully wrote supporter product information for user ${item.identityId}")
+            Right(()))
+          }
           .recover { case err: Throwable =>
             Left(
               s"An error occurred while writing to the supporter product data dynamo store: ${err.getMessage}",
