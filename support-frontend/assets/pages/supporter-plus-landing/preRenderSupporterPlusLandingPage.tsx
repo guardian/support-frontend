@@ -58,7 +58,7 @@ const countrySwitcherProps: CountryGroupSwitcherProps = {
 		International,
 	],
 	selectedCountryGroup: GBPCountries,
-	subPath: '/contribute',
+	subPath: '/support',
 };
 
 function PreRenderSupporterPlusLandingPage(): JSX.Element {

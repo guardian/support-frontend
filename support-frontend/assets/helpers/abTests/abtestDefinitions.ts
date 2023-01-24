@@ -7,9 +7,9 @@ import type { Tests } from './abtest';
 // participations.
 export const pageUrlRegexes = {
 	contributions: {
-		allLandingPagesAndThankyouPages: '/contribute|thankyou(/.*)?$',
-		notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
-		auLandingPage: '/au/contribute(/.*)?$',
+		allLandingPagesAndThankyouPages: '/support|thankyou(/.*)?$',
+		notUkLandingPage: '/us|au|eu|int|nz|ca/support(/.*)?$',
+		auLandingPage: '/au/support(/.*)?$',
 	},
 	subscriptions: {
 		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',

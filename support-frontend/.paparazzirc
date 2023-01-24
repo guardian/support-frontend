@@ -8,8 +8,8 @@ module.exports = {
       "uk/subscribe/digital",
       "uk/subscribe/digital/checkout",
       "uk/subscribe/weekly",
-      "uk/contribute",
-      "uk/contribute/recurring",
+      "uk/support",
+      "uk/support/recurring",
       "paypal/return"
     ].map(route => ['https://support.thegulocal.com', route].join('/')),
     ...[

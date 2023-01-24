@@ -92,8 +92,8 @@ class Application(
     )
   }
 
-  def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val url = List(getGeoRedirectUrl(request.geoData.countryGroup, "contribute"), campaignCode)
+  def supportGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
+    val url = List(getGeoRedirectUrl(request.geoData.countryGroup, "support"), campaignCode)
       .filter(_.nonEmpty)
       .mkString("/")
 
@@ -214,7 +214,7 @@ class Application(
       guestAccountCreationToken = guestAccountCreationToken,
       geoData = geoData,
       shareImageUrl = shareImageUrl(settings),
-      shareUrl = "https://support.theguardian.com/contribute",
+      shareUrl = "https://support.theguardian.com/support",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey,
       serversideTests = serversideTests,
     )
@@ -274,7 +274,7 @@ class Application(
         guestAccountCreationToken = guestAccountCreationToken,
         geoData = geoData,
         shareImageUrl = shareImageUrl(settings),
-        shareUrl = "https://support.theguardian.com/contribute",
+        shareUrl = "https://support.theguardian.com/support",
         v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey,
         serversideTests = serversideTests,
       ),

@@ -109,7 +109,7 @@ function setIsReturningContributor(isReturningContributor: boolean): Action {
 	// JTL: We want to send an Ophan event when we recognize a user is a returning contributor and on the landing page
 	const isReturningContributorOnLandingPage =
 		isReturningContributor &&
-		!!/^https:\/\/support\.\w+\.com\/\w\w\/contribute/.exec(
+		!!/^https:\/\/support\.\w+\.com\/\w\w\/support/.exec(
 			document.location.pathname,
 		);
 

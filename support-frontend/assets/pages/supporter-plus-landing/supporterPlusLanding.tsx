@@ -119,7 +119,7 @@ export function SupporterPlusLandingPage({
 			International,
 		],
 		selectedCountryGroup: countryGroupId,
-		subPath: '/contribute',
+		subPath: '/support',
 	};
 	const heading = <LandingPageHeading />;
 

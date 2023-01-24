@@ -21,7 +21,7 @@ const renderCountryGroup = (selectedCountryGroup: CountryGroup) =>
 		return (
 			<li className="countryGroups__item">
 				<a
-					href={`/${countryGroup.supportInternationalisationId}/contribute${window.location.search}`}
+					href={`/${countryGroup.supportInternationalisationId}/support${window.location.search}`}
 				>
 					{countryGroup.name} ({currencies[countryGroup.currency].extendedGlyph}
 					)

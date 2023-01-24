@@ -17,6 +17,6 @@ trait CanonicalLinks {
     else s"${supportUrl}/${countryCode}/subscribe/weekly"
 
   def buildCanonicalContributeLink(countryCode: String): String =
-    s"${supportUrl}/${countryCode}/contribute"
+    s"${supportUrl}/${countryCode}/support"
 
 }

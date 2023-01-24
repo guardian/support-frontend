@@ -24,7 +24,7 @@ export type CampaignSettings = {
 	createReferralCodes: boolean;
 };
 
-const currentCampaignPath: string | null = 'us/contribute';
+const currentCampaignPath: string | null = 'us/support';
 
 const usEoy2021Copy = (): CampaignCopy => ({
 	headerCopy: "Join us in the fight for America's future",

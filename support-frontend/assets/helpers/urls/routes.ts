@@ -13,13 +13,13 @@ import {
 import 'helpers/types/option';
 
 const routes: Record<string, string> = {
-	recurringContribCheckout: '/contribute/recurring',
-	recurringContribCreate: '/contribute/recurring/create',
-	recurringContribPending: '/contribute/recurring/pending',
-	contributionsSendMarketing: '/contribute/send-marketing',
+	recurringContribCheckout: '/support/recurring',
+	recurringContribCreate: '/support/recurring/create',
+	recurringContribPending: '/support/recurring/pending',
+	contributionsSendMarketing: '/support/send-marketing',
 	getUserType: '/identity/get-user-type',
-	oneOffContribAutofill: '/contribute/one-off/autofill',
-	contributionsMarketingConfirm: '/contribute/marketing-confirm',
+	oneOffContribAutofill: '/support/one-off/autofill',
+	contributionsMarketingConfirm: '/support/marketing-confirm',
 	payPalSetupPayment: '/paypal/setup-payment',
 	payPalCreateAgreement: '/paypal/create-agreement',
 	payPalOneClickCheckout: '/paypal/one-click-checkout',
@@ -116,7 +116,7 @@ function paperCheckoutUrl(
 
 // If the user cancels before completing the payment flow, send them back to the contribute page.
 function payPalCancelUrl(cgId: CountryGroupId): string {
-	return `${getOrigin()}/${countryPath(cgId)}/contribute`;
+	return `${getOrigin()}/${countryPath(cgId)}/support`;
 }
 
 function payPalReturnUrl(cgId: CountryGroupId, email: string): string {

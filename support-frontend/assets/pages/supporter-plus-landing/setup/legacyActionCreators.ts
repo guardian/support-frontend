@@ -288,10 +288,7 @@ const onPaymentResult =
 
 			switch (result.paymentStatus) {
 				case 'success':
-					trackConversion(
-						state.common.abParticipations,
-						'/contribute/thankyou',
-					);
+					trackConversion(state.common.abParticipations, '/support/thankyou');
 					dispatch(paymentSuccess());
 					break;
 

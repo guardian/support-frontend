@@ -5,7 +5,7 @@ Disallow: /uk/subscribe/premium-tier
 Disallow: /us/subscribe/premium-tier
 Disallow: /au/subscribe/premium-tier
 Disallow: /int/subscribe/premium-tier
-Disallow: /contribute/recurring-guest
+Disallow: /support/recurring-guest
 
 Allow: /
 

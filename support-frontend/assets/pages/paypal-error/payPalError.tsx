@@ -20,7 +20,7 @@ const content = (
 					Sorry, we were unable to complete your payment the first time. Don’t
 					worry, you haven’t been charged anything.
 				</p>
-				<LinkButton href="/contribute">Try again</LinkButton>
+				<LinkButton href="/support">Try again</LinkButton>
 			</PageSection>
 			<QuestionsContact />
 		</div>

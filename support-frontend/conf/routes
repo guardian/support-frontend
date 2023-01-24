@@ -22,19 +22,18 @@ GET /sitemap.xml                                                   controllers.S
 
 
 # ----- Geo landings ----- #
-GET /us                                                            controllers.Application.redirect(location="/us/contribute")
-GET /au                                                            controllers.Application.redirect(location="/au/contribute")
-GET /eu                                                            controllers.Application.redirect(location="/eu/contribute")
-GET /int                                                           controllers.Application.redirect(location="/int/contribute")
-GET /nz                                                            controllers.Application.redirect(location="/nz/contribute")
-GET /ca                                                            controllers.Application.redirect(location="/ca/contribute")
+GET /us                                                            controllers.Application.redirect(location="/us/support")
+GET /au                                                            controllers.Application.redirect(location="/au/support")
+GET /eu                                                            controllers.Application.redirect(location="/eu/support")
+GET /int                                                           controllers.Application.redirect(location="/int/support")
+GET /nz                                                            controllers.Application.redirect(location="/nz/support")
+GET /ca                                                            controllers.Application.redirect(location="/ca/support")
 GET /uk                                                            controllers.Application.redirect(location="/uk/support")
 GET /                                                              controllers.Application.geoRedirect()
 
 
 # ----- Bundles Landing Page ----- #
 
-GET /support                                                       controllers.Application.supportGeoRedirect()
 GET /$country<(uk|us|au|eu|int|nz|ca)>/support                     controllers.Application.contributionsLanding(country: String, campaignCode = "")
 # redirect from old ab test
 GET /showcase                                                      controllers.Application.permanentRedirect(location="/uk/support")
@@ -49,15 +48,15 @@ GET /event/*eventId                                                controllers.A
 # This is a temporary client-side redirect based on geo-location
 # Once we have a separate payment failure email for US and UK we can consider removing it
 
-GET  /monthly-contributions                                        controllers.Application.permanentRedirect(location="/contribute")
+GET  /monthly-contributions                                        controllers.Application.permanentRedirect(location="/support")
 
 
 # ----- Contributions ----- #
 
-GET  /contribute                                                   controllers.Application.contributeGeoRedirect(campaignCode = "")
-GET  /contribute/:campaignCode                                     controllers.Application.contributeGeoRedirect(campaignCode: String)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute                 controllers.Application.contributionsLanding(country: String, campaignCode = "")
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
+GET  /support                                                   controllers.Application.supportGeoRedirect(campaignCode = "")
+GET  /support/:campaignCode                                     controllers.Application.supportGeoRedirect(campaignCode: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/support                 controllers.Application.contributionsLanding(country: String, campaignCode = "")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/support/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
 
 GET  /contribute-in-epic                                           controllers.Application.contributeInEpicGeoRedirect()
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute-in-epic         controllers.Application.contributionsCheckoutInEpic(country: String)
@@ -69,7 +68,7 @@ GET  /thank-you-shareable-articles                                 controllers.A
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/thankyou                   controllers.Application.contributionsLanding(country: String, campaignCode = "")
 
 
-POST /contribute/recurring/create                                  controllers.CreateSubscriptionController.create()
+POST /support/recurring/create                                  controllers.CreateSubscriptionController.create()
 GET  /support-workers/status                                       controllers.SupportWorkersStatus.status(jobId: String)
 
 
@@ -78,7 +77,7 @@ POST  /stripe/create-setup-intent/prb                              controllers.S
 
 # this endpoint should be removed once identity remove
 # the need for a client token
-POST  /contribute/send-marketing                                   controllers.IdentityController.submitMarketing()
+POST  /support/send-marketing                                   controllers.IdentityController.submitMarketing()
 
 # ------ Identity ------ #
 GET /identity/get-user-type                                        controllers.IdentityController.getUserType(maybeEmail: Option[String])
@@ -150,7 +149,7 @@ GET  /paypal/cancel                                                controllers.P
 # ----- PayPal (One-off Endpoints) ----- #
 
 # For PayPal one-off create a payment by sending a request to the payment API directly.
-# <payment-api-host>/contribute/one-off/paypal/create-payment
+# <payment-api-host>/support/one-off/paypal/create-payment
 # https://github.com/guardian/payment-api/blob/master/src/main/scala/model/paypal/PaypalPaymentData.scala#L74
 # When creating the payment, we tell PayPal where to redirect back to if payment succeeds.
 # This endpoint is the return URL we supply to PayPal.

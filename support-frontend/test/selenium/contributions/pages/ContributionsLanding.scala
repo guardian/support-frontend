@@ -8,7 +8,7 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
     extends Page
     with Browser {
 
-  val url = s"${Config.supportFrontendUrl}/$region/contribute"
+  val url = s"${Config.supportFrontendUrl}/$region/support"
 
   private val contributeButton = cssSelector("#qa-contributions-landing-submit-contribution-button")
 

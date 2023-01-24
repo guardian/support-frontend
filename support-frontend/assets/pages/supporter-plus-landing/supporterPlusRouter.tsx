@@ -67,11 +67,11 @@ const router = () => {
 			<Provider store={store}>
 				<Routes>
 					{countryIds.map((countryId) => (
-						<Route path={`/${countryId}/contribute/`} element={landingPage} />
+						<Route path={`/${countryId}/support/`} element={landingPage} />
 					))}
 					{countryIds.map((countryId) => (
 						<Route
-							path={`/${countryId}/contribute/:campaignCode`}
+							path={`/${countryId}/support/:campaignCode`}
 							element={landingPage}
 						/>
 					))}

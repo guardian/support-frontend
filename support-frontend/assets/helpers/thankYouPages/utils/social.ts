@@ -12,7 +12,7 @@ const appendReferralCode = (
 const INTCMP_FACEBOOK = 'component-share-facebook';
 const INTCMP_TWITTER = 'component-share-twitter';
 const INTCMP_MAIL = 'component-share-mail';
-const LANDING_PAGE_URL = 'https://support.theguardian.com/contribute';
+const LANDING_PAGE_URL = 'https://support.theguardian.com/support';
 
 const emailLandingPageUrl = (
 	campaignCode: string | null | undefined,
