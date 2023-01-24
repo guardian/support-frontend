@@ -77,7 +77,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, Off, On, On, On, Off),
         subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(On, On, On),
         subscriptionsSwitches = SubscriptionsSwitches(On, On, On),
-        featureSwitches = FeatureSwitches(On, On, On),
+        featureSwitches = FeatureSwitches(On, On),
         campaignSwitches = CampaignSwitches(On, On),
         recaptchaSwitches = RecaptchaSwitches(On, On),
       ),
