@@ -120,10 +120,6 @@ class SwitchesSpec extends AnyWordSpec with Matchers {
           |      "usStripeAccountForSingle" : {
           |        "description" : "US Stripe account for single contributions",
           |        "state" : "On"
-          |      },
-          |      "suppressDigitalSubscription" : {
-          |        "description" : "Hide links to the digital subscription landing page and checkout",
-          |        "state" : "On"
           |      }
           |    }
           |  },
