@@ -27,7 +27,6 @@ type PropTypes = {
 	location: 'desktop' | 'mobile';
 	countryGroupId?: CountryGroupId;
 	getRef?: (element: Element | null) => void;
-	hideDigiSub?: boolean;
 };
 
 const links: HeaderNavLink[] = [
@@ -98,12 +97,7 @@ function getActiveLinkClassModifiers(
 }
 
 // Export
-function Links({
-	location,
-	getRef,
-	countryGroupId,
-	hideDigiSub,
-}: PropTypes): JSX.Element {
+function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
 	const { protocol, host, pathname } = window.location;
 	const urlWithoutParams = `${protocol}//${host}${pathname}`;
 	const internationalisationIDValue = internationalisationID(countryGroupId);
@@ -122,9 +116,7 @@ function Links({
 							(text === 'Newspaper' && isNotUk) ||
 							(text === 'Subscriptions' && isNotUk)
 						) {
-							if (hideDigiSub) {
-								return false;
-							}
+							return false;
 						}
 						return true;
 					})
