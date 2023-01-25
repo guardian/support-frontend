@@ -36,13 +36,9 @@
 		.svg-dropdown-arrow path {
 			fill: gu-colour(highlight-main);
 		}
-    .svg-dropdown-arrow{
-      transform: rotate(180deg);
-    }
 	}
 
 	.component-select-input__label {
 		@include visually-hidden;
 	}
-
 }
