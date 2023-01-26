@@ -143,8 +143,8 @@ $header-links-min-width: gu-span(12);
     }
 	}
 
-  @include mq($from: desktop) {
-    .component-header--one-row-from-desktop & {
+  @include mq($from: leftCol) {
+    .component-header--one-row-from-leftCol & {
 		  border-left: 1px solid gu-colour(brand-pastel);
 		  z-index: 10;
 		  position: relative;
@@ -191,8 +191,8 @@ $header-links-min-width: gu-span(12);
     }
   }
 
-  @include mq($from: desktop) {
-    .component-header--one-row-from-desktop & {
+  @include mq($from: leftCol) {
+    .component-header--one-row-from-leftCol & {
       position: absolute;
       bottom: 0;
       left: $gu-h-spacing * 0.5;

@@ -103,7 +103,7 @@ export default class Header extends Component<PropTypes, State> {
 				className={classNameWithModifiers('component-header', [
 					countryGroupId !== 'GBPCountries'
 						? 'one-row-from-tablet'
-						: 'one-row-from-desktop',
+						: 'one-row-from-leftCol',
 					display === 'navigation' ? 'display-navigation' : null,
 					display === 'checkout' ? 'display-checkout' : null,
 				])}
