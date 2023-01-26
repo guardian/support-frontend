@@ -1,13 +1,10 @@
 // ----- Imports ----- //
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ContributionsDispatch } from 'helpers/redux/contributionsStore';
 import {
 	setEmail,
-	setEmailValidated,
 	setIsReturningContributor,
 	setIsSignedIn,
-	setStateField,
 	setTestUserStatus,
 } from 'helpers/redux/user/actions';
 import type { UserState } from 'helpers/redux/user/state';
@@ -54,6 +51,14 @@ function isTestUser(): boolean {
 	return isDefined(uatMode) || isDefined(testCookie);
 }
 
+function getUserStateField(): string | undefined {
+	const user = getGlobal<UserState>('user');
+	if (user) {
+		return user.address4 ?? window.guardian.geoip?.stateCode;
+	}
+	return window.guardian.geoip?.stateCode;
+}
+
 const isPostDeployUser = (): boolean =>
 	cookie.get('_post_deploy_user') === 'true';
 
@@ -90,10 +95,7 @@ const getEmailValidatedFromUserCookie = (
 	return false;
 };
 
-const init = (
-	dispatch: ContributionsDispatch,
-	countryGroupId: CountryGroupId,
-): void => {
+function setUpUserState(dispatch: ContributionsDispatch): void {
 	const windowHasUser = getGlobal<UserState>('user');
 	const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
 
@@ -129,52 +131,22 @@ const init = (
 	}
 
 	if (windowHasUser) {
-		const { address4 } = windowHasUser;
-
-		// default value from Identity Billing Address, or Fastly GEO-IP
-		if (address4) {
-			dispatch(
-				setStateField({
-					countryGroupId,
-					stateName: address4,
-				}),
-			);
-		} else {
-			window.guardian.geoip?.stateCode &&
-				dispatch(
-					setStateField({
-						countryGroupId,
-						stateName: window.guardian.geoip.stateCode,
-					}),
-				);
-		}
-
 		dispatch(setIsSignedIn(true));
-		dispatch(
-			setEmailValidated(getEmailValidatedFromUserCookie(cookie.get('GU_U'))),
-		);
 		void dispatch(getRecurringContributorStatus());
 	} else {
 		if (emailFromBrowser) {
 			dispatch(setEmail(emailFromBrowser));
 		}
-
-		window.guardian.geoip?.stateCode &&
-			dispatch(
-				setStateField({
-					countryGroupId,
-					stateName: window.guardian.geoip.stateCode,
-				}),
-			);
 	}
-};
+}
 
 // ----- Exports ----- //
 export {
-	init,
+	setUpUserState,
 	getUser,
 	isTestUser,
 	isPostDeployUser,
+	getUserStateField,
 	signOut,
 	doesUserAppearToBeSignedIn,
 	getEmailValidatedFromUserCookie,

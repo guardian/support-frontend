@@ -1,4 +1,5 @@
 import type { ZodEffects, ZodString } from 'zod';
+import { z } from 'zod';
 
 export const maxLengths = {
 	name: 40,
@@ -15,3 +16,11 @@ export function nonSillyString(
 		message,
 	});
 }
+
+export const emailRules = nonSillyString(
+	z
+		.string()
+		.email('Please enter a valid email address.')
+		.min(1, 'Please enter an email address.')
+		.max(maxLengths.email, 'Email address is too long'),
+);

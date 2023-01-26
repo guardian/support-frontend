@@ -1,7 +1,5 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { stateProvinceFieldFromString } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { validateForm } from '../checkout/checkoutActions';
 import type { UserState } from './state';
 import { initialState } from './state';
@@ -12,19 +10,13 @@ export const userSlice = createSlice({
 	initialState,
 	reducers: {
 		setUser(state, action: PayloadAction<UserState>) {
-			const { firstName, lastName } = action.payload;
-			const fullName = `${firstName} ${lastName}`;
 			return {
 				...state,
 				...action.payload,
-				fullName,
 			};
 		},
 		setEmail(state, action: PayloadAction<string>) {
 			state.email = action.payload;
-		},
-		setEmailValidated(state, action: PayloadAction<boolean>) {
-			state.emailValidated = action.payload;
 		},
 		setIsReturningContributor(state, action: PayloadAction<boolean>) {
 			state.isReturningContributor = action.payload;
@@ -35,22 +27,6 @@ export const userSlice = createSlice({
 		setTestUserStatus(state, action: PayloadAction<Record<string, boolean>>) {
 			state.isTestUser = action.payload.isTestUser;
 			state.isPostDeploymentTestUser = action.payload.isPostDeploymentTestUser;
-		},
-		setStateField(
-			state,
-			action: PayloadAction<{
-				countryGroupId: CountryGroupId;
-				stateName: string;
-			}>,
-		) {
-			const stateField = stateProvinceFieldFromString(
-				action.payload.countryGroupId,
-				action.payload.stateName,
-			);
-
-			if (stateField) {
-				state.stateField = stateField;
-			}
 		},
 	},
 	extraReducers: (builder) => {

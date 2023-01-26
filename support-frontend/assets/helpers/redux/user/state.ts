@@ -8,21 +8,23 @@ type InitialUserInfo = {
 	isSignedIn?: boolean;
 };
 
+export type UserType = 'new' | 'guest' | 'current';
+
+export type UserTypeFromIdentityResponse =
+	| UserType
+	| 'noRequestSent'
+	| 'requestPending'
+	| 'requestFailed';
+
 export type UserState = {
 	id?: string;
+	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	email: string;
-	displayName?: string;
-	firstName: string;
-	lastName: string;
-	fullName: string;
-	isTestUser?: boolean;
+	isTestUser: boolean;
 	isPostDeploymentTestUser: boolean;
 	isStorybookUser?: boolean;
-	stateField: string;
-	gnmMarketing: boolean;
 	isSignedIn: boolean;
 	isRecurringContributor: boolean;
-	emailValidated: boolean;
 	isReturningContributor: boolean;
 	address4?: string;
 	isRecurringContributorError?: boolean;
@@ -30,26 +32,17 @@ export type UserState = {
 
 const userInfo = getGlobal<InitialUserInfo>('user') ?? {};
 
-const fullName =
-	userInfo.firstName && userInfo.lastName
-		? `${userInfo.firstName} ${userInfo.lastName}`
-		: '';
-
 export const initialState: UserState = {
 	id: '',
+	userTypeFromIdentityResponse: 'noRequestSent',
+	isSignedIn: userInfo.isSignedIn ?? false,
 	email: userInfo.email ?? '',
-	displayName: userInfo.displayName ?? '',
-	firstName: userInfo.firstName ?? '',
-	lastName: userInfo.lastName ?? '',
-	fullName,
-	stateField: '',
 	isTestUser: false,
 	isPostDeploymentTestUser: false,
 	isStorybookUser: false,
-	gnmMarketing: false,
-	isSignedIn: userInfo.isSignedIn ?? false,
+	// UNUSED
 	isRecurringContributor: false,
-	emailValidated: false,
+	// UNUSED
 	isReturningContributor: false,
 };
 
