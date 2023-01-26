@@ -80,10 +80,11 @@ export function PriceCards({
 		? amounts.length - 1
 		: amounts.length;
 	let otherAmountLabel = currentAmountsLen % 2 ? 'Other' : 'Choose your amount';
+	let hideChooseButton = hideChooseYourAmount ?? false;
 
 	// Check to catch edge case where no amounts supplied and hideChooseYourAmount is true
 	if (hideChooseYourAmount && !amounts.length) {
-		hideChooseYourAmount = false;
+		hideChooseButton = false;
 		currentAmountsLen = 0;
 		otherAmountLabel = 'Choose your amount';
 	}
@@ -108,7 +109,7 @@ export function PriceCards({
 							paymentInterval={paymentInterval}
 						/>
 					))}
-					{hideChooseYourAmount ? (
+					{hideChooseButton ? (
 						<></>
 					) : (
 						<PriceCard
