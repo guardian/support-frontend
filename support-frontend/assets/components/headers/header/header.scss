@@ -333,6 +333,9 @@ $header-links-min-width: gu-span(12);
 	}
 
 	.component-header-topnav-logo {
+    @include mq($from: desktop) {
+      border-left: 1px solid gu-colour(brand-pastel);
+    }
 		padding-right: $gu-h-spacing * 0.5;
 		padding-top: $gu-v-spacing * 0.5;
 	}
