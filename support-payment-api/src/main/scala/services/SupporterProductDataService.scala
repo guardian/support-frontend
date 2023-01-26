@@ -47,7 +47,7 @@ class SupporterProductDataService(environment: Environment) extends StrictLoggin
       response <- EitherT(
         dynamoService
           .writeItem(item)
-          .map{_ =>
+          .map { _ =>
             logger.info(s"Successfully wrote supporter product information for user ${item.identityId}")
             Right(())
           }
