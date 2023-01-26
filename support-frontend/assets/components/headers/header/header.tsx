@@ -22,11 +22,10 @@ export type State = {
 
 type TopNavPropTypes = {
 	utility?: JSX.Element;
-	getLogoRef: (arg0: Element | null | undefined) => void;
 	display: 'navigation' | 'checkout' | 'guardianLogo' | void;
 };
 
-function TopNav({ display, getLogoRef, utility }: TopNavPropTypes) {
+function TopNav({ display, utility }: TopNavPropTypes) {
 	return (
 		<div className="component-header-topnav">
 			<div className="component-header-topnav__utility">{utility}</div>
@@ -41,7 +40,7 @@ function TopNav({ display, getLogoRef, utility }: TopNavPropTypes) {
 					</div>
 				</div>
 			)}
-			<div className="component-header-topnav-logo" ref={getLogoRef}>
+			<div className="component-header-topnav-logo">
 				<a
 					className="component-header-topnav-logo__graun"
 					href="https://www.theguardian.com"
@@ -64,35 +63,12 @@ export default class Header extends Component<PropTypes, State> {
 	};
 
 	componentDidMount(): void {
-		const { menuRef, logoRef, containerRef } = this;
-		if (
-			this.props.display === 'navigation' &&
-			menuRef &&
-			logoRef &&
-			containerRef
-		) {
-			this.observer = new window.ResizeObserver(() => {
-				this.setState({
-					isTestUser: getGlobal<boolean>('isTestUser'),
-				});
+		if (this.props.display === 'navigation') {
+			this.setState({
+				isTestUser: getGlobal<boolean>('isTestUser'),
 			});
-
-			this.observer.observe(menuRef);
-			this.observer.observe(logoRef);
-			this.observer.observe(containerRef);
 		}
 	}
-
-	componentWillUnmount(): void {
-		if (this.observer) {
-			this.observer.disconnect();
-		}
-	}
-
-	logoRef: Element | null | undefined;
-	menuRef: Element | null | undefined;
-	containerRef: Element | null | undefined;
-	observer: ResizeObserver | null | undefined;
 
 	render(): JSX.Element {
 		const { utility, display, countryGroupId } = this.props;
@@ -113,19 +89,11 @@ export default class Header extends Component<PropTypes, State> {
 						<span>You are a test user</span>
 					</div>
 				)}
-				<div
-					className="component-header__wrapper"
-					ref={(el) => {
-						this.containerRef = el;
-					}}
-				>
+				<div className="component-header__wrapper">
 					<div className="component-header__row">
 						<TopNav
 							display={display}
 							utility={display === 'navigation' ? utility : undefined}
-							getLogoRef={(el) => {
-								this.logoRef = el;
-							}}
 						/>
 						{display === 'navigation' && (
 							<MobileMenuToggler
@@ -138,13 +106,7 @@ export default class Header extends Component<PropTypes, State> {
 					</div>
 					{display === 'navigation' && (
 						<div className="component-header__row">
-							<Links
-								countryGroupId={countryGroupId}
-								location="desktop"
-								getRef={(el) => {
-									this.menuRef = el;
-								}}
-							/>
+							<Links countryGroupId={countryGroupId} location="desktop" />
 						</div>
 					)}
 					{display === 'checkout' && (
