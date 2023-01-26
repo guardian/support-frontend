@@ -91,7 +91,6 @@ export function getInitialState(): CommonState {
 		settings,
 	);
 	const acquisitionData: ReferrerAcquisitionData = getReferrerAcquisitionData();
-
 	return buildInitialState(
 		participations,
 		countryGroupId,
