@@ -43,14 +43,16 @@ export function PriceCardsContainer({
 	const currency = useContributionsSelector(
 		(state) => state.common.internationalisation.currencyId,
 	);
-	const { amounts, hideChooseYourAmount } = useContributionsSelector(
-		(state) => state.common,
-	);
+	const { amounts } = useContributionsSelector((state) => state.common);
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
 	const minAmount = useContributionsSelector(getMinimumContributionAmount);
-	const { amounts: frequencyAmounts, defaultAmount } = amounts[frequency];
+	const {
+		amounts: frequencyAmounts,
+		defaultAmount,
+		hideChooseYourAmount,
+	} = amounts[frequency];
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
 		frequency,

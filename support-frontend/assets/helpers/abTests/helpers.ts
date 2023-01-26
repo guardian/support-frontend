@@ -1,8 +1,5 @@
 import type { Participations } from 'helpers/abTests/abtest';
-import type {
-	ContributionAmounts,
-	SelectedAmountsAndMetadata,
-} from 'helpers/contributions';
+import type { ContributionAmounts } from 'helpers/contributions';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -111,39 +108,23 @@ export function getAmounts(
 	settings: Settings,
 	abParticipations: Participations,
 	countryGroupId: CountryGroupId,
-): SelectedAmountsAndMetadata {
+): ContributionAmounts {
 	if (!settings.amounts) {
-		return {
-			amountsValues: FALLBACK_AMOUNTS[countryGroupId],
-			hideChooseYourAmount: false,
-		};
+		return FALLBACK_AMOUNTS[countryGroupId];
 	}
 
-	const {
-		test,
-		control,
-		hideChooseYourAmount: controlHideChooseYourAmounts,
-	} = settings.amounts[countryGroupId];
+	const { test, control } = settings.amounts[countryGroupId];
 
 	if (!test) {
-		return {
-			amountsValues: control,
-			hideChooseYourAmount: controlHideChooseYourAmounts ?? false,
-		};
+		return control;
 	}
 
 	const variantName = abParticipations[test.name];
 	const variant = test.variants.find((v) => v.name === variantName);
 
 	if (!variant) {
-		return {
-			amountsValues: control,
-			hideChooseYourAmount: controlHideChooseYourAmounts ?? false,
-		};
+		return control;
 	}
 
-	return {
-		amountsValues: variant.amounts,
-		hideChooseYourAmount: variant.hideChooseYourAmount ?? false,
-	};
+	return variant.amounts;
 }

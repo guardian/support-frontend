@@ -47,6 +47,7 @@ export const logInvalidCombination = (
 export type AmountSelection = {
 	amounts: number[];
 	defaultAmount: number;
+	hideChooseYourAmount?: boolean;
 };
 
 export type ContributionAmounts = {
@@ -56,7 +57,6 @@ export type ContributionAmounts = {
 export type AmountsTestVariant = {
 	name: string;
 	amounts: ContributionAmounts;
-	hideChooseYourAmount?: boolean;
 };
 
 export type AmountsTest = {
@@ -69,12 +69,6 @@ export type AmountsTest = {
 export type ConfiguredRegionAmounts = {
 	control: ContributionAmounts;
 	test?: AmountsTest;
-	hideChooseYourAmount?: boolean;
-};
-
-export type SelectedAmountsAndMetadata = {
-	amountsValues: ContributionAmounts;
-	hideChooseYourAmount: boolean;
 };
 
 export type ConfiguredAmounts = Record<CountryGroupId, ConfiguredRegionAmounts>;

@@ -63,7 +63,6 @@ export const commonSlice = createSlice({
 				settings,
 				amounts,
 				defaultAmounts,
-				hideChooseYourAmount,
 			} = action.payload;
 			return {
 				...state,
@@ -75,7 +74,6 @@ export const commonSlice = createSlice({
 				settings,
 				amounts,
 				defaultAmounts,
-				hideChooseYourAmount,
 			};
 		},
 		setCountryInternationalisation(state, action: PayloadAction<IsoCountry>) {
