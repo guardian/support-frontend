@@ -1,8 +1,8 @@
 // ----- Imports ----- //
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { ContributionsDispatch } from 'helpers/redux/contributionsStore';
+import type { SubscriptionsDispatch } from 'helpers/redux/subscriptionsStore';
 import {
-	setEmail,
 	setIsReturningContributor,
 	setIsSignedIn,
 	setTestUserStatus,
@@ -95,7 +95,9 @@ const getEmailValidatedFromUserCookie = (
 	return false;
 };
 
-function setUpUserState(dispatch: ContributionsDispatch): void {
+function setUpUserState(
+	dispatch: ContributionsDispatch | SubscriptionsDispatch,
+): void {
 	const windowHasUser = getGlobal<UserState>('user');
 	const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
 
@@ -133,10 +135,6 @@ function setUpUserState(dispatch: ContributionsDispatch): void {
 	if (windowHasUser) {
 		dispatch(setIsSignedIn(true));
 		void dispatch(getRecurringContributorStatus());
-	} else {
-		if (emailFromBrowser) {
-			dispatch(setEmail(emailFromBrowser));
-		}
 	}
 }
 

@@ -10,7 +10,7 @@ import type { UserType, UserTypeFromIdentityResponse } from './state';
 
 export const getRecurringContributorStatus = createAsyncThunk<
 	boolean,
-	undefined,
+	unknown,
 	{
 		state: SubscriptionsState | ContributionsState;
 	}

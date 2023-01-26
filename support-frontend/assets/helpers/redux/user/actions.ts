@@ -5,5 +5,4 @@ export const {
 	setIsReturningContributor,
 	setIsSignedIn,
 	setTestUserStatus,
-	setUser,
 } = userSlice.actions;

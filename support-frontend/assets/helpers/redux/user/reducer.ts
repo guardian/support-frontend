@@ -1,7 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { validateForm } from '../checkout/checkoutActions';
-import type { UserState } from './state';
 import { initialState } from './state';
 import { getRecurringContributorStatus } from './thunks';
 
@@ -9,12 +8,6 @@ export const userSlice = createSlice({
 	name: 'user',
 	initialState,
 	reducers: {
-		setUser(state, action: PayloadAction<UserState>) {
-			return {
-				...state,
-				...action.payload,
-			};
-		},
 		setEmail(state, action: PayloadAction<string>) {
 			state.email = action.payload;
 		},
