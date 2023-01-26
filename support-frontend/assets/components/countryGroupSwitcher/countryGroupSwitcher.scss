@@ -27,18 +27,19 @@
 		&::-ms-expand {
 			display: none;
 		}
+    .svg-dropdown-arrow path {
+      fill: currentColor;
+    }
 	}
 
 	&:hover {
 		.component-select-input__select {
 			color: gu-colour(highlight-main);
 		}
-		.svg-dropdown-arrow path {
-			fill: gu-colour(highlight-main);
-		}
 	}
 
 	.component-select-input__label {
 		@include visually-hidden;
+
 	}
 }

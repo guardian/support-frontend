@@ -10,7 +10,8 @@
 	@include gu-fontset-body-sans;
 
 	:global(.svg-dropdown-arrow) {
-		position: inline-block;
+		position: absolute;
+    margin-top: $gu-h-spacing*0.25;
 		margin-left: $gu-h-spacing*0.25;
 		path {
 			fill: currentColor;
