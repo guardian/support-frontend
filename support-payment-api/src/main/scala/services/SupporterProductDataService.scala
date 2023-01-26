@@ -49,7 +49,7 @@ class SupporterProductDataService(environment: Environment) extends StrictLoggin
           .writeItem(item)
           .map{_ =>
             logger.info(s"Successfully wrote supporter product information for user ${item.identityId}")
-            Right(()))
+            Right(())
           }
           .recover { case err: Throwable =>
             Left(
