@@ -7,7 +7,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class PatronsStripeConfig(
     apiKey: String,
-    signingSecret: String,
+    apiKeyAu: String,
+    cancelledHookSigningSecret: String,
+    cancelledHookSigningSecretAu: String,
+    signUpHookSigningSecret: String,
+    signUpHookSigningSecretAustralia: String,
 )
 
 object PatronsStripeConfig extends ConfigService {
@@ -18,7 +22,11 @@ object PatronsStripeConfig extends ConfigService {
     ParameterStoreService(stage).getParametersByPath(stripeConfigPath).map { params =>
       PatronsStripeConfig(
         findParameterOrThrow("api-key", params),
-        findParameterOrThrow("signing-secret", params),
+        findParameterOrThrow("api-key-au", params),
+        findParameterOrThrow("cancelled-hook-signing-secret", params),
+        findParameterOrThrow("cancelled-hook-signing-secret-au", params),
+        findParameterOrThrow("sign-up-hook-signing-secret", params),
+        findParameterOrThrow("sign-up-hook-signing-secret-au", params),
       )
     }
   }

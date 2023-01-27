@@ -8,16 +8,23 @@ import com.gu.patrons.conf.{PatronsIdentityConfig, PatronsStripeConfig}
 import com.gu.patrons.model.{
   ConfigLoadingError,
   DynamoDbError,
-  Error,
+  CancelError,
   InvalidJsonError,
   InvalidRequestError,
   StageConstructors,
+  ExpandedStripeCustomer,
   StripeCustomer,
   SubscriptionNotFoundDynamo,
   UserNotFoundIdentityError,
   UserNotFoundStripeError,
 }
-import com.gu.patrons.services.{PatronsIdentityService, PatronsStripeService}
+import com.gu.patrons.services.{
+  PatronsIdentityService,
+  PatronsStripeService,
+  PatronsStripeAccount,
+  GnmPatronScheme,
+  GnmPatronSchemeAus,
+}
 import com.gu.supporterdata.model.Stage
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.stripe.net.Webhook
@@ -46,14 +53,22 @@ object PatronCancelledEventLambda extends StrictLogging {
 
   def cancelCustomerInDynamoDb(event: APIGatewayProxyRequestEvent): Future[APIGatewayProxyResponseEvent] = {
     implicit val stage = StageConstructors.fromEnvironment
-    SafeLogger.info(s"Path is ${event.getPathParameters.get("countryId")}")
+    val countryId = event.getPathParameters.get("countryId")
+    SafeLogger.info(s"Path is ${countryId}")
+    val account = if (countryId == "au") GnmPatronSchemeAus else GnmPatronScheme
 
     (for {
       stripeConfig <- getStripeConfig(stage)
       identityConfig <- getIdentityConfig(stage)
-      payload <- getPayload(event, stripeConfig.signingSecret)
+      payload <- getPayload(
+        event,
+        account match {
+          case GnmPatronScheme => stripeConfig.cancelledHookSigningSecret
+          case GnmPatronSchemeAus => stripeConfig.cancelledHookSigningSecretAu
+        },
+      )
       event <- getEvent(payload)
-      customer <- getCustomer(stripeConfig, event.customerId)
+      customer <- getCustomer(stripeConfig, account, event.customerId)
       _ <- cancelSubscriptionForEmail(customer.email, event.subscriptionId, identityConfig)
       _ <- maybeCancelJointPatron(customer, event.subscriptionId, identityConfig)
     } yield ()).value.map(getAPIGatewayResult)
@@ -66,9 +81,13 @@ object PatronCancelledEventLambda extends StrictLogging {
     _ <- cancelSubscription(stage, identityId, subscriptionId)
   } yield ()
 
-  def maybeCancelJointPatron(customer: StripeCustomer, subscriptionId: String, identityConfig: PatronsIdentityConfig)(
-      implicit stage: Stage,
-  ): EitherT[Future, Error, Unit] =
+  def maybeCancelJointPatron(
+      customer: ExpandedStripeCustomer,
+      subscriptionId: String,
+      identityConfig: PatronsIdentityConfig,
+  )(implicit
+      stage: Stage,
+  ): EitherT[Future, CancelError, Unit] =
     customer.jointPatronEmail match {
       case Some(email) =>
         SafeLogger.info(s"Customer ${customer.email} has an associated joint patron - $email")
@@ -77,7 +96,7 @@ object PatronCancelledEventLambda extends StrictLogging {
         EitherT.pure(())
     }
 
-  def getAPIGatewayResult(result: Either[Error, Unit]) = {
+  def getAPIGatewayResult(result: Either[CancelError, Unit]) = {
     val response = new APIGatewayProxyResponseEvent()
     result match {
       case Left(error @ (ConfigLoadingError(_) | DynamoDbError(_))) =>
@@ -104,9 +123,9 @@ object PatronCancelledEventLambda extends StrictLogging {
     response
   }
 
-  def getStripeConfig(stage: Stage): EitherT[Future, Error, PatronsStripeConfig] = {
+  def getStripeConfig(stage: Stage): EitherT[Future, CancelError, PatronsStripeConfig] = {
     logger.info("Attempting to fetch Stripe config information from parameter store")
-    val futureConfig: Future[Either[Error, PatronsStripeConfig]] = PatronsStripeConfig
+    val futureConfig: Future[Either[CancelError, PatronsStripeConfig]] = PatronsStripeConfig
       .fromParameterStore(stage)
       .transform {
         case Success(config) => Try(Right(config))
@@ -115,9 +134,9 @@ object PatronCancelledEventLambda extends StrictLogging {
     EitherT(futureConfig)
   }
 
-  def getIdentityConfig(stage: Stage): EitherT[Future, Error, PatronsIdentityConfig] = {
+  def getIdentityConfig(stage: Stage): EitherT[Future, CancelError, PatronsIdentityConfig] = {
     logger.info("Attempting to fetch Identity config information from parameter store")
-    val futureConfig: Future[Either[Error, PatronsIdentityConfig]] = PatronsIdentityConfig
+    val futureConfig: Future[Either[CancelError, PatronsIdentityConfig]] = PatronsIdentityConfig
       .fromParameterStore(stage)
       .transform {
         case Success(config) => Try(Right(config))
@@ -129,7 +148,7 @@ object PatronCancelledEventLambda extends StrictLogging {
   def getPayload(
       event: APIGatewayProxyRequestEvent,
       signingSecret: String,
-  ): EitherT[Future, Error, String] = {
+  ): EitherT[Future, CancelError, String] = {
     logger.info("Attempting to verify event payload")
     EitherT.fromEither(for {
       payload <- Option(event.getBody).toRight(InvalidRequestError("Missing body"))
@@ -142,15 +161,19 @@ object PatronCancelledEventLambda extends StrictLogging {
     } yield payload)
   }
 
-  def getEvent(payload: String): EitherT[Future, Error, PatronCancelledEvent] = {
+  def getEvent(payload: String): EitherT[Future, CancelError, PatronCancelledEvent] = {
     logger.info(s"Attempting to decode event from payload")
     EitherT.fromEither(decode[PatronCancelledEvent](payload).left.map(e => InvalidJsonError(e.getMessage)))
   }
 
-  def getCustomer(config: PatronsStripeConfig, customerId: String): EitherT[Future, Error, StripeCustomer] = {
+  def getCustomer(
+      config: PatronsStripeConfig,
+      account: PatronsStripeAccount,
+      customerId: String,
+  ): EitherT[Future, CancelError, ExpandedStripeCustomer] = {
     logger.info(s"Attempting to retrieve customer with id $customerId from Stripe")
     val stripeService = new PatronsStripeService(config, runner)
-    val futureCustomer = stripeService.getCustomer(customerId).transform {
+    val futureCustomer = stripeService.getCustomer(account, customerId).transform {
       case Success(customer) => Try(Right(customer))
       case Failure(err) =>
         Try(
@@ -181,13 +204,13 @@ object PatronCancelledEventLambda extends StrictLogging {
       stage: Stage,
       identityId: String,
       subscriptionId: String,
-  ): EitherT[Future, Error, UpdateItemResponse] = {
+  ): EitherT[Future, CancelError, UpdateItemResponse] = {
     logger.info(
       s"Attempting to cancel Patron subscription for user with identity id " +
         s"$identityId and subscription id $subscriptionId",
     )
     val dynamoService = SupporterDataDynamoService(stage)
-    val cancellationResult: Future[Either[Error, UpdateItemResponse]] =
+    val cancellationResult: Future[Either[CancelError, UpdateItemResponse]] =
       dynamoService.subscriptionExists(identityId, subscriptionId).flatMap {
         case Right(userExists) if userExists =>
           dynamoService
