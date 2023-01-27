@@ -53,6 +53,7 @@ deployToCode := {
   List(
     "stripe-patrons-data-CODE",
     "stripe-patrons-data-cancelled-CODE",
+    "stripe-patrons-data-sign-up-CODE",
   ).foreach(functionPartial => {
     System.out.println(s"Updating function $functionPartial")
     s"aws lambda update-function-code --function-name $functionPartial --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!

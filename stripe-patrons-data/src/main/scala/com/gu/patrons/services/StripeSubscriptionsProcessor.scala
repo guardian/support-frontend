@@ -1,7 +1,7 @@
 package com.gu.patrons.services
 
 import com.gu.monitoring.SafeLogger
-import com.gu.patrons.model.{StripeSubscription, StripeSubscriptionsResponse}
+import com.gu.patrons.model.{StripeCustomer, ExpandedStripeCustomer, StripeSubscription, StripeSubscriptionsResponse}
 import com.gu.supporterdata.model.SupporterRatePlanItem
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import software.amazon.awssdk.services.dynamodb.model.UpdateItemResponse
@@ -15,21 +15,25 @@ class StripeSubscriptionsProcessor(
     executionContext: ExecutionContext,
 ) {
 
-  def processSubscriptions(pageSize: Int) =
-    processFutureResponse(pageSize, None)
+  def processSubscriptions(account: PatronsStripeAccount, pageSize: Int) =
+    processFutureResponse(account, pageSize, None)
 
-  final def processFutureResponse(pageSize: Int, startingAfterId: Option[String]): Future[Unit] =
+  final def processFutureResponse(
+      account: PatronsStripeAccount,
+      pageSize: Int,
+      startingAfterId: Option[String],
+  ): Future[Unit] =
     for {
-      response <- stripeService.getSubscriptions(pageSize, startingAfterId)
+      response <- stripeService.getSubscriptions(account, pageSize, startingAfterId)
       _ <- processSubs(response.data)
       result <-
         if (response.hasMore)
-          processFutureResponse(pageSize, Some(response.data.last.id))
+          processFutureResponse(account, pageSize, Some(response.data.last.id))
         else
           Future.successful(())
     } yield result
 
-  def processSubs(list: List[StripeSubscription]) = {
+  def processSubs(list: List[StripeSubscription[ExpandedStripeCustomer]]) = {
     val unknownEmailViaCSR = "patrons@theguardian.com"
     Future.sequence(
       list
@@ -43,7 +47,7 @@ class StripeSubscriptionsProcessor(
 }
 
 trait SubscriptionProcessor {
-  def processSubscription(subscription: StripeSubscription): Future[Unit]
+  def processSubscription(subscription: StripeSubscription[ExpandedStripeCustomer]): Future[Unit]
 }
 
 abstract class DynamoProcessor(
@@ -51,7 +55,7 @@ abstract class DynamoProcessor(
 ) extends SubscriptionProcessor {
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  def writeToDynamo(identityId: String, sub: StripeSubscription) = {
+  def writeToDynamo(identityId: String, sub: StripeSubscription[ExpandedStripeCustomer]) = {
     SafeLogger.info(
       s"Attempting to write subscription (${sub.customer.email}, $identityId) to Dynamo",
     )
@@ -85,7 +89,7 @@ class CreateMissingIdentityProcessor(
 ) extends DynamoProcessor(supporterDataDynamoService) {
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  override def processSubscription(subscription: StripeSubscription) =
+  override def processSubscription(subscription: StripeSubscription[ExpandedStripeCustomer]) =
     for {
       _ <- processCustomerEmail(subscription.customer.email, subscription.customer.name, subscription)
       _ <- maybeAddJointPatron(subscription)
@@ -93,7 +97,11 @@ class CreateMissingIdentityProcessor(
       ()
     }
 
-  def processCustomerEmail(email: String, name: Option[String], subscription: StripeSubscription): Future[Unit] = for {
+  def processCustomerEmail(
+      email: String,
+      name: Option[String],
+      subscription: StripeSubscription[ExpandedStripeCustomer],
+  ): Future[Unit] = for {
     identityId <- identityService.getOrCreateUserFromEmail(email, name)
     dynamoResponse <- writeToDynamo(identityId, subscription)
     _ = logDynamoResult(subscription.customer.email, dynamoResponse)
@@ -101,7 +109,7 @@ class CreateMissingIdentityProcessor(
     ()
   }
 
-  def maybeAddJointPatron(subscription: StripeSubscription) =
+  def maybeAddJointPatron(subscription: StripeSubscription[ExpandedStripeCustomer]) =
     subscription.customer.jointPatronEmail match {
       case Some(email) =>
         SafeLogger.info(s"Customer ${subscription.customer.email} has an associated joint patron - $email")
@@ -118,7 +126,7 @@ class SkipMissingIdentityProcessor(
 ) extends DynamoProcessor(supporterDataDynamoService) {
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  override def processSubscription(subscription: StripeSubscription) =
+  override def processSubscription(subscription: StripeSubscription[ExpandedStripeCustomer]) =
     identityService.getUserIdFromEmail(subscription.customer.email).map {
       case Some(identityId) =>
         writeToDynamo(identityId, subscription).map(response => logDynamoResult(subscription.customer.email, response))

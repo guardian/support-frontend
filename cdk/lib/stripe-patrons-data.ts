@@ -82,6 +82,24 @@ class StripePatronsDataLambda extends GuScheduledLambda {
   }
 }
 
+class PatronSignUpLambda extends GuLambdaFunction {
+  constructor(scope: GuStack, id: string, appName: string) {
+    super(scope, `${appName}-sign-up`, {
+      app: appName,
+      fileName: `${appName}.jar`,
+      functionName: `${appName}-sign-up-${scope.stage}`,
+      handler:
+        "com.gu.patrons.lambdas.PatronSignUpEventLambda::handleRequest",
+      runtime: Runtime.JAVA_11,
+      memorySize: 1536,
+      timeout: Duration.minutes(15),
+    });
+
+    this.addToRolePolicy(parameterStorePolicy(scope, appName));
+    this.addToRolePolicy(dynamoPolicy(scope.stage));
+  }
+}
+
 class PatronCancelledLambda extends GuLambdaFunction {
   constructor(scope: GuStack, id: string, appName: string) {
     super(scope, `${appName}-cancelled`, {
@@ -109,6 +127,7 @@ export class StripePatronsData extends GuStack {
     new StripePatronsDataLambda(this, id, appName);
 
     const patronCancelledLambda = new PatronCancelledLambda(this, id, appName);
+    const patronSignUpLambda = new PatronSignUpLambda(this, id, appName);
 
     // Wire up the API
     new GuApiGatewayWithLambdaByPath(this, {
@@ -118,6 +137,11 @@ export class StripePatronsData extends GuStack {
           path: "patron/subscription/cancel/{countryId}",
           httpMethod: "POST",
           lambda: patronCancelledLambda,
+        },
+        {
+          path: "patron/subscription/create/{countryId}",
+          httpMethod: "POST",
+          lambda: patronSignUpLambda,
         },
       ],
       // Create an alarm
