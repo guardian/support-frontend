@@ -50,8 +50,8 @@ object ExecutePaymentBody {
 
 class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit ec: ExecutionContext) {
 
-  private val paypalCreatePaymentPath = "/support/one-off/paypal/create-payment"
-  private val paypalExecutePaymentPath = "/support/one-off/paypal/execute-payment"
+  private val paypalCreatePaymentPath = "/contribute/one-off/paypal/create-payment"
+  private val paypalExecutePaymentPath = "/contribute/one-off/paypal/execute-payment"
 
   val payPalCreatePaymentEndpoint: String = s"$paymentAPIUrl$paypalCreatePaymentPath"
   val payPalExecutePaymentEndpoint: String = s"$paymentAPIUrl$paypalExecutePaymentPath"
