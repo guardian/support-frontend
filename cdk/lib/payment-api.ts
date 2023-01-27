@@ -17,7 +17,6 @@ import {
   TreatMissingData,
 } from "aws-cdk-lib/aws-cloudwatch";
 import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
-import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 interface PaymentApiProps extends GuStackProps {
   domainName: string;
