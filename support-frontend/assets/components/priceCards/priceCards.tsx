@@ -13,7 +13,7 @@ const cardStyles = css`
 	}
 `;
 
-const otherAmountFullWidthStyles = css`
+const lastButtonFullWidthStyles = css`
 	> div > label:last-of-type {
 		grid-column-start: 1;
 		grid-column-end: 3;
@@ -50,11 +50,11 @@ const cardsContainer = css`
 	}
 `;
 
-function getChoiceCardGroupStyles(amountOfAmounts: number) {
-	if (amountOfAmounts % 2) {
+function getChoiceCardGroupStyles(lastButtonFullWidth: boolean) {
+	if (!lastButtonFullWidth) {
 		return [cardStyles, mobileGrid];
 	}
-	return [cardStyles, otherAmountFullWidthStyles, mobileGrid];
+	return [cardStyles, lastButtonFullWidthStyles, mobileGrid];
 }
 
 export type PriceCardsProps = {
@@ -76,23 +76,17 @@ export function PriceCards({
 	otherAmountField,
 	hideChooseYourAmount,
 }: PriceCardsProps): JSX.Element {
-	let currentAmountsLen = hideChooseYourAmount
-		? amounts.length - 1
+	// Override hideChooseYourAmount if no amounts supplied
+	const enableChooseYourAmountButton = !hideChooseYourAmount || !amounts.length;
+	const buttonCount = enableChooseYourAmountButton
+		? amounts.length + 1
 		: amounts.length;
-	let otherAmountLabel = currentAmountsLen % 2 ? 'Other' : 'Choose your amount';
-	let hideChooseButton = hideChooseYourAmount ?? false;
-
-	// Check to catch edge case where no amounts supplied and hideChooseYourAmount is true
-	if (hideChooseYourAmount && !amounts.length) {
-		hideChooseButton = false;
-		currentAmountsLen = 0;
-		otherAmountLabel = 'Choose your amount';
-	}
+	const lastButtonFullWidth = buttonCount % 2 !== 0;
 
 	return (
 		<div css={cardsContainer}>
 			<ChoiceCardGroup
-				cssOverrides={getChoiceCardGroupStyles(currentAmountsLen)}
+				cssOverrides={getChoiceCardGroupStyles(lastButtonFullWidth)}
 				name="amounts"
 				columns={2}
 			>
@@ -109,15 +103,15 @@ export function PriceCards({
 							paymentInterval={paymentInterval}
 						/>
 					))}
-					{hideChooseButton ? (
-						<></>
-					) : (
+					{enableChooseYourAmountButton && (
 						<PriceCard
 							amount="other"
 							amountWithCurrency="other"
 							isSelected={selectedAmount === 'other'}
 							onClick={onAmountChange}
-							alternateLabel={otherAmountLabel}
+							alternateLabel={
+								!lastButtonFullWidth ? 'Other' : 'Choose your amount'
+							}
 						/>
 					)}
 				</>
