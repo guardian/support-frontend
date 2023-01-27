@@ -75,6 +75,10 @@ export class PaymentApi extends GuStack {
       description: "ARN of the KMS key for encrypting SQS data",
     });
 
+    function environmentFromStage(stage: string) {
+      return stage == "CODE" ? "DEV" : stage;
+    }
+
     // TODO: Should these remain as cloudformation parameters?
     const projectName = "payment-api";
     const projectVersion = "0.1";
@@ -103,6 +107,22 @@ export class PaymentApi extends GuStack {
       withoutImdsv2: true,
       roleConfiguration: {
         additionalPolicies: [
+          new GuAllowPolicy(this, "SupporterProductDataDynamo", {
+            actions: [
+              "dynamodb:GetItem",
+              "dynamodb:Scan",
+              "dynamodb:UpdateItem",
+              "dynamodb:DeleteItem",
+              "dynamodb:Query",
+              "dynamodb:DescribeTable",
+            ],
+            resources: [
+              `arn:aws:dynamodb:*:*:table/SupporterProductData-${environmentFromStage(
+                this.stage
+              )}`,
+            ],
+          }),
+
           new GuAllowPolicy(this, "CloudwatchLogs", {
             actions: [
               "logs:CreateLogGroup",
