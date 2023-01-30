@@ -35,6 +35,7 @@ import type {
 	ContributionsState,
 	ContributionsStore,
 } from 'helpers/redux/contributionsStore';
+import { getRecurringContributorStatus } from 'helpers/redux/user/thunks';
 import * as storage from 'helpers/storage/storage';
 import { getUserStateField, setUpUserState } from 'helpers/user/user';
 
@@ -188,6 +189,7 @@ export function setUpRedux(store: ContributionsStore): void {
 	dispatch(setContributionTypes(contributionTypes));
 
 	setUpUserState(dispatch);
+	void dispatch(getRecurringContributorStatus());
 
 	const sessionStorageEmail = storage.getSession('gu.email');
 	if (sessionStorageEmail) {

@@ -8,7 +8,6 @@ import {
 	setTestUserStatus,
 } from 'helpers/redux/user/actions';
 import type { UserState } from 'helpers/redux/user/state';
-import { getRecurringContributorStatus } from 'helpers/redux/user/thunks';
 import * as cookie from 'helpers/storage/cookie';
 import { get as getCookie } from 'helpers/storage/cookie';
 import { getSession } from 'helpers/storage/storage';
@@ -134,7 +133,6 @@ function setUpUserState(
 
 	if (windowHasUser) {
 		dispatch(setIsSignedIn(true));
-		void dispatch(getRecurringContributorStatus());
 	}
 }
 
