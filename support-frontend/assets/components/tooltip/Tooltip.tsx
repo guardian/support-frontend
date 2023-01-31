@@ -6,14 +6,14 @@ import {
 	FloatingPortal,
 	offset,
 	shift,
+	useClick,
 	useDismiss,
 	useFloating,
 	useFocus,
-	useHover,
 	useInteractions,
 	useRole,
 } from '@floating-ui/react';
-import { from, textSans, until } from '@guardian/source-foundations';
+import { between, from, textSans, until } from '@guardian/source-foundations';
 import { Button, SvgCross } from '@guardian/source-react-components';
 import { useRef, useState } from 'react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -25,16 +25,21 @@ const container = css`
 `;
 
 const tooltipContainer = css`
-	${until.mobileLandscape} {
-		position: relative;
-		display: flex;
-		justify-content: center;
+	position: relative;
+	display: flex;
 
+	${until.mobileMedium} {
 		> div {
 			left: 0 !important;
 			right: 0;
-			margin-left: auto;
+			margin-left: 24px;
 			margin-right: auto;
+		}
+	}
+
+	${between.mobileMedium.and.mobileLandscape} {
+		> div {
+			left: 74px !important;
 		}
 	}
 `;
@@ -46,42 +51,6 @@ const tooltipCss = css`
 	padding: 12px 24px 16px 16px;
 	border-radius: 4px;
 	max-width: 273px;
-`;
-
-const arrowBottom = css`
-	position: absolute;
-	top: 100%;
-	border-color: #606060 transparent transparent transparent;
-	margin-left: -8px;
-	border-width: 8px;
-	border-style: solid;
-
-	${from.mobileLandscape} {
-		left: 20.5%;
-	}
-
-	// TODO - tweak arrow position
-	${until.mobileLandscape} {
-		display: none;
-	}
-`;
-
-const arrowTop = css`
-	position: absolute;
-	bottom: 100%;
-	margin-left: -8px;
-	border-width: 8px;
-	border-style: solid;
-	border-color: transparent transparent #606060 transparent;
-
-	${from.mobileLandscape} {
-		left: 20.5%;
-	}
-
-	// TODO - tweak arrow position
-	${until.mobileLandscape} {
-		display: none;
-	}
 `;
 
 const buttonOverrides = css`
@@ -100,7 +69,7 @@ const closeButtonOverrides = css`
 	width: max-content;
 	height: max-content;
 	margin-right: 8px;
-	margin-top: 4px;
+	margin-top: 0;
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -110,7 +79,7 @@ const closeButtonOverrides = css`
 		background-color: transparent;
 	}
 	& svg {
-		width: 13px;
+		width: 16px;
 		margin: 2px;
 	}
 `;
@@ -151,7 +120,7 @@ export default function Tooltip({
 	});
 
 	// Event listeners to change the open state
-	const hover = useHover(context, { move: false });
+	const click = useClick(context);
 	const focus = useFocus(context);
 	const dismiss = useDismiss(context);
 
@@ -160,13 +129,47 @@ export default function Tooltip({
 
 	// Merge all the interactions into prop getters
 	const { getReferenceProps, getFloatingProps } = useInteractions([
-		hover,
+		click,
 		focus,
 		dismiss,
 		role,
 	]);
 
-	const onClose = () => useDismiss(context);
+	const arrowBottom = css`
+		position: absolute;
+		top: 100%;
+		border-color: #606060 transparent transparent transparent;
+		margin-left: -8px;
+		border-width: 8px;
+		border-style: solid;
+		left: 50%;
+
+		${from.mobileMedium} {
+			left: 31.5%;
+		}
+
+		${from.mobileLandscape} {
+			left: 20.5%;
+		}
+	`;
+
+	const arrowTop = css`
+		position: absolute;
+		bottom: 100%;
+		margin-left: -8px;
+		border-width: 8px;
+		border-style: solid;
+		border-color: transparent transparent #606060 transparent;
+		left: 50%;
+
+		${from.mobileMedium} {
+			left: 31.5%;
+		}
+
+		${from.mobileLandscape} {
+			left: 20.5%;
+		}
+	`;
 
 	return (
 		<div css={container}>
@@ -196,7 +199,7 @@ export default function Tooltip({
 								? tooltipCopy.uk
 								: tooltipCopy.row}
 							<Button
-								onClick={onClose}
+								onClick={() => setOpen(false)}
 								icon={<SvgCross size="xsmall" />}
 								size="small"
 								hideLabel
