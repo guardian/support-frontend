@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import {
-	arrow,
+	// arrow,
 	autoUpdate,
 	flip,
 	FloatingPortal,
@@ -15,7 +15,7 @@ import {
 } from '@floating-ui/react';
 import { between, from, textSans, until } from '@guardian/source-foundations';
 import { Button, SvgCross } from '@guardian/source-react-components';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { InfoRound } from './InfoRound';
 
@@ -95,7 +95,7 @@ export default function Tooltip({
 	countryGroupId: CountryGroupId;
 }): JSX.Element {
 	const [open, setOpen] = useState(false);
-	const arrowRef = useRef(null);
+	// const arrowRef = useRef(null);
 
 	const { x, y, refs, strategy, context } = useFloating({
 		open,
@@ -113,9 +113,9 @@ export default function Tooltip({
 				fallbackPlacements: ['top', 'bottom'],
 			}),
 			shift(),
-			arrow({
-				element: arrowRef,
-			}),
+			// arrow({
+			// 	element: arrowRef,
+			// }),
 		],
 	});
 
