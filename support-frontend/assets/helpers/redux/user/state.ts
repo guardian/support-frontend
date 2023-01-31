@@ -8,25 +8,24 @@ type InitialUserInfo = {
 	isSignedIn?: boolean;
 };
 
-export type UserType = 'new' | 'guest' | 'current';
-
-export type UserTypeFromIdentityResponse =
-	| UserType
-	| 'noRequestSent'
-	| 'requestPending'
-	| 'requestFailed';
+export type SupporterStatus = {
+	member?: boolean;
+	paidMember?: boolean;
+	recurringContributor?: boolean;
+	supporterPlus?: boolean;
+	digitalPack?: boolean;
+	paperSubscriber?: boolean;
+	guardianWeeklySubscriber?: boolean;
+	guardianPatron?: boolean;
+};
 
 export type UserState = {
 	id?: string;
-	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
-	email: string;
+	supporterStatus: SupporterStatus;
 	isTestUser: boolean;
 	isPostDeploymentTestUser: boolean;
 	isStorybookUser?: boolean;
 	isSignedIn: boolean;
-	isRecurringContributor: boolean;
-	isReturningContributor: boolean;
-	address4?: string;
 	isRecurringContributorError?: boolean;
 };
 
@@ -34,23 +33,9 @@ const userInfo = getGlobal<InitialUserInfo>('user') ?? {};
 
 export const initialState: UserState = {
 	id: '',
-	userTypeFromIdentityResponse: 'noRequestSent',
+	supporterStatus: {},
 	isSignedIn: userInfo.isSignedIn ?? false,
-	email: userInfo.email ?? '',
 	isTestUser: false,
 	isPostDeploymentTestUser: false,
 	isStorybookUser: false,
-	// UNUSED
-	isRecurringContributor: false,
-	// UNUSED
-	isReturningContributor: false,
 };
-
-/**
- * TODO
- * - How many of these properties do we ACTUALLY use?
- * - How many are never even set?
- * - isSignedIn duplicated in personal details- where should it live?
- * - isStorybookUser should be removed
- * - Better handling of returningContributor error?
- */

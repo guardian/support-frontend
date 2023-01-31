@@ -8,12 +8,6 @@ export const userSlice = createSlice({
 	name: 'user',
 	initialState,
 	reducers: {
-		setEmail(state, action: PayloadAction<string>) {
-			state.email = action.payload;
-		},
-		setIsReturningContributor(state, action: PayloadAction<boolean>) {
-			state.isReturningContributor = action.payload;
-		},
 		setIsSignedIn(state, action: PayloadAction<boolean>) {
 			state.isSignedIn = action.payload;
 		},
@@ -26,12 +20,17 @@ export const userSlice = createSlice({
 		builder.addCase(
 			getRecurringContributorStatus.fulfilled,
 			(state, action) => {
-				state.isRecurringContributor = action.payload;
+				state.supporterStatus = action.payload;
 			},
 		);
 
 		builder.addCase(validateForm, (state) => {
-			state.isRecurringContributorError = true;
+			if (
+				state.supporterStatus.recurringContributor ||
+				state.supporterStatus.supporterPlus
+			) {
+				state.isRecurringContributorError = true;
+			}
 		});
 	},
 });
