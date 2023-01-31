@@ -13,7 +13,6 @@ import type { CheckListData } from './checkoutBenefitsListData';
 
 const container = css`
 	${textSans.medium({ lineHeight: 'tight' })};
-	min-height: 200vh;
 `;
 
 const heading = css`
