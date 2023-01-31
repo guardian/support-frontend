@@ -84,7 +84,7 @@ function CountryGroupSwitcher({
 			>
 				<Menu
 					style={{
-						top: bounds.top,
+						top: bounds.top + 30,
 						left: bounds.left,
 						position: 'absolute',
 					}}
