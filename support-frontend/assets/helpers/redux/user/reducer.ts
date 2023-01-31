@@ -15,6 +15,9 @@ export const userSlice = createSlice({
 			state.isTestUser = action.payload.isTestUser;
 			state.isPostDeploymentTestUser = action.payload.isPostDeploymentTestUser;
 		},
+		setIsReturningContributor(state, action: PayloadAction<boolean>) {
+			state.isReturningContributor = action.payload;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(

@@ -26,6 +26,7 @@ export type UserState = {
 	isPostDeploymentTestUser: boolean;
 	isStorybookUser?: boolean;
 	isSignedIn: boolean;
+	isReturningContributor: boolean;
 	isRecurringContributorError?: boolean;
 };
 
@@ -38,4 +39,5 @@ export const initialState: UserState = {
 	isTestUser: false,
 	isPostDeploymentTestUser: false,
 	isStorybookUser: false,
+	isReturningContributor: false,
 };

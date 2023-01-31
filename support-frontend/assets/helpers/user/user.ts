@@ -19,6 +19,7 @@ export type User = {
 	lastName: Option<string>;
 	email: Option<string>;
 	isSignedIn: boolean;
+	address4?: string;
 };
 
 // ----- Functions ----- //
@@ -51,7 +52,7 @@ function isTestUser(): boolean {
 }
 
 function getUserStateField(): string | undefined {
-	const user = getGlobal<UserState>('user');
+	const user = getGlobal<User>('user');
 	if (user) {
 		return user.address4 ?? window.guardian.geoip?.stateCode;
 	}
