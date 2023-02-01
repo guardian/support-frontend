@@ -13,7 +13,7 @@ const cardStyles = css`
 	}
 `;
 
-const otherAmountFullWidthStyles = css`
+const lastButtonFullWidthStyles = css`
 	> div > label:last-of-type {
 		grid-column-start: 1;
 		grid-column-end: 3;
@@ -50,11 +50,11 @@ const cardsContainer = css`
 	}
 `;
 
-function getChoiceCardGroupStyles(amountOfAmounts: number) {
-	if (amountOfAmounts % 2) {
+function getChoiceCardGroupStyles(lastButtonFullWidth: boolean) {
+	if (!lastButtonFullWidth) {
 		return [cardStyles, mobileGrid];
 	}
-	return [cardStyles, otherAmountFullWidthStyles, mobileGrid];
+	return [cardStyles, lastButtonFullWidthStyles, mobileGrid];
 }
 
 export type PriceCardsProps = {
@@ -64,6 +64,7 @@ export type PriceCardsProps = {
 	onAmountChange: (newAmount: string) => void;
 	paymentInterval?: PriceCardPaymentInterval;
 	otherAmountField?: React.ReactNode;
+	hideChooseYourAmount?: boolean;
 };
 
 export function PriceCards({
@@ -73,13 +74,19 @@ export function PriceCards({
 	onAmountChange,
 	paymentInterval,
 	otherAmountField,
+	hideChooseYourAmount,
 }: PriceCardsProps): JSX.Element {
-	const otherAmountLabel = amounts.length % 2 ? 'Other' : 'Choose your amount';
+	// Override hideChooseYourAmount if no amounts supplied
+	const enableChooseYourAmountButton = !hideChooseYourAmount || !amounts.length;
+	const buttonCount = enableChooseYourAmountButton
+		? amounts.length + 1
+		: amounts.length;
+	const lastButtonFullWidth = buttonCount % 2 !== 0;
 
 	return (
 		<div css={cardsContainer}>
 			<ChoiceCardGroup
-				cssOverrides={getChoiceCardGroupStyles(amounts.length)}
+				cssOverrides={getChoiceCardGroupStyles(lastButtonFullWidth)}
 				name="amounts"
 				columns={2}
 			>
@@ -96,13 +103,17 @@ export function PriceCards({
 							paymentInterval={paymentInterval}
 						/>
 					))}
-					<PriceCard
-						amount="other"
-						amountWithCurrency="other"
-						isSelected={selectedAmount === 'other'}
-						onClick={onAmountChange}
-						alternateLabel={otherAmountLabel}
-					/>
+					{enableChooseYourAmountButton && (
+						<PriceCard
+							amount="other"
+							amountWithCurrency="other"
+							isSelected={selectedAmount === 'other'}
+							onClick={onAmountChange}
+							alternateLabel={
+								!lastButtonFullWidth ? 'Other' : 'Choose your amount'
+							}
+						/>
+					)}
 				</>
 			</ChoiceCardGroup>
 			{otherAmountField}

@@ -47,6 +47,7 @@ export const logInvalidCombination = (
 export type AmountSelection = {
 	amounts: number[];
 	defaultAmount: number;
+	hideChooseYourAmount?: boolean;
 };
 
 export type ContributionAmounts = {
