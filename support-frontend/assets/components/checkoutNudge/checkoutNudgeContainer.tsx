@@ -31,15 +31,17 @@ export function CheckoutNudgeContainer({
 	const [displayNudge, setDisplayNudge] = useState(!isControl);
 
 	const currencyGlyph = glyph(detect(countryGroupId));
-	const minAmount = config[countryGroupId]['MONTHLY'].min;
-	const paragraphCopyVariantA = `Regular, reliable funding from readers is vital for our future. It protects our independence long term, so we can report freely and without outside influence. Support us monthly from just ${currencyGlyph}${minAmount}.`;
-	const paragraphCopyVariantB = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a monthly payment today from just ${currencyGlyph}${minAmount} – it takes less than a minute.`;
+	const recurringType =
+		abParticipations.singleToRecurring === 'variantA' ? 'MONTHLY' : 'ANNUAL';
+	const minAmount = config[countryGroupId][recurringType].min;
+	const paragraphCopyVariantA = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a annual payment today from just  ${currencyGlyph}${minAmount} – it takes less than a minute.`;
+	const paragraphCopyVariantB = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a annual payment today from just ${currencyGlyph}${minAmount} – it takes less than a minute.`;
 
 	function onNudgeClose() {
 		setDisplayNudge(false);
 	}
 	function onNudgeClick() {
-		dispatch(setProductType('MONTHLY'));
+		dispatch(setProductType(recurringType));
 	}
 
 	return renderNudge({
@@ -47,12 +49,12 @@ export function CheckoutNudgeContainer({
 		nudgeDisplay: displayNudge,
 		nudgeTitleCopySection1:
 			abParticipations.singleToRecurring === 'variantA'
-				? 'Consider monthly'
+				? 'Make a bigger impact'
 				: 'Make a bigger impact',
 		nudgeTitleCopySection2:
 			abParticipations.singleToRecurring === 'variantA'
-				? 'to sustain us long term'
-				: 'Support us every month',
+				? 'Support us every month'
+				: 'Support us every year',
 		nudgeParagraphCopy:
 			abParticipations.singleToRecurring === 'variantA'
 				? paragraphCopyVariantA
