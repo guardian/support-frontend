@@ -30,12 +30,11 @@ export function CheckoutNudgeContainer({
 		!abParticipations.singleToRecurring;
 	const [displayNudge, setDisplayNudge] = useState(!isControl);
 
-	const currencyGlyph = glyph(detect(countryGroupId));
 	const recurringType =
 		abParticipations.singleToRecurring === 'variantA' ? 'MONTHLY' : 'ANNUAL';
+	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId][recurringType].min;
-	const paragraphCopyVariantA = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a annual payment today from just  ${currencyGlyph}${minAmount} – it takes less than a minute.`;
-	const paragraphCopyVariantB = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a annual payment today from just ${currencyGlyph}${minAmount} – it takes less than a minute.`;
+	const paragraphCopyVariant = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a annual payment today from just  ${currencyGlyph}${minAmount} – it takes less than a minute.`;
 
 	function onNudgeClose() {
 		setDisplayNudge(false);
@@ -47,18 +46,11 @@ export function CheckoutNudgeContainer({
 	return renderNudge({
 		contributionType,
 		nudgeDisplay: displayNudge,
-		nudgeTitleCopySection1:
-			abParticipations.singleToRecurring === 'variantA'
-				? 'Make a bigger impact'
-				: 'Make a bigger impact',
-		nudgeTitleCopySection2:
-			abParticipations.singleToRecurring === 'variantA'
-				? 'Support us every month'
-				: 'Support us every year',
-		nudgeParagraphCopy:
-			abParticipations.singleToRecurring === 'variantA'
-				? paragraphCopyVariantA
-				: paragraphCopyVariantB,
+		nudgeTitleCopySection1: 'Make a bigger impact',
+		nudgeTitleCopySection2: `Support us every ${
+			recurringType === 'MONTHLY' ? 'month' : 'year'
+		}`,
+		nudgeParagraphCopy: paragraphCopyVariant,
 		onNudgeClose,
 		onNudgeClick,
 	});
