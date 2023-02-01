@@ -34,7 +34,9 @@ export function CheckoutNudgeContainer({
 		abParticipations.singleToRecurring === 'variantA' ? 'MONTHLY' : 'ANNUAL';
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId][recurringType].min;
-	const paragraphCopyVariant = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a annual payment today from just  ${currencyGlyph}${minAmount} – it takes less than a minute.`;
+	const paragraphCopyVariant = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up ${
+		recurringType === 'MONTHLY' ? 'a' : 'an'
+	} ${recurringType.toLowerCase()} payment today from just  ${currencyGlyph}${minAmount} – it takes less than a minute.`;
 
 	function onNudgeClose() {
 		setDisplayNudge(false);
