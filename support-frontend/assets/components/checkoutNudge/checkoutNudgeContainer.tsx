@@ -51,6 +51,7 @@ export function CheckoutNudgeContainer({
 			recurringType === 'MONTHLY' ? 'month' : 'year'
 		}`,
 		nudgeParagraphCopy: paragraphCopyVariant,
+		nudgeLinkCopy: `See ${recurringType.toLowerCase()}`,
 		onNudgeClose,
 		onNudgeClick,
 	});
