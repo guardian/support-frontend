@@ -7,7 +7,6 @@ import {
 	setIsSignedIn,
 	setTestUserStatus,
 } from 'helpers/redux/user/actions';
-import type { UserState } from 'helpers/redux/user/state';
 import * as cookie from 'helpers/storage/cookie';
 import { get as getCookie } from 'helpers/storage/cookie';
 import { getSession } from 'helpers/storage/storage';
@@ -98,7 +97,7 @@ const getEmailValidatedFromUserCookie = (
 function setUpUserState(
 	dispatch: ContributionsDispatch | SubscriptionsDispatch,
 ): void {
-	const windowHasUser = getGlobal<UserState>('user');
+	const windowHasUser = getGlobal<User>('user');
 	const userAppearsLoggedIn = doesUserAppearToBeSignedIn();
 
 	const emailFromBrowser = getGlobal<string>('email') ?? getSession('gu.email');
