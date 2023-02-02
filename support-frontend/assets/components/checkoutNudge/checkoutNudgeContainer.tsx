@@ -25,38 +25,35 @@ export function CheckoutNudgeContainer({
 		(state) => state.common,
 	);
 
-	const isControl =
-		abParticipations.singleToRecurring === 'control' ||
-		!abParticipations.singleToRecurring;
-	const [displayNudge, setDisplayNudge] = useState(!isControl);
+	const [displayNudge, setDisplayNudge] = useState(true);
 
+	const recurringType =
+		abParticipations.singleToRecurringV2 === 'control' ||
+		!abParticipations.singleToRecurringV2
+			? 'MONTHLY'
+			: 'ANNUAL';
 	const currencyGlyph = glyph(detect(countryGroupId));
-	const minAmount = config[countryGroupId]['MONTHLY'].min;
-	const paragraphCopyVariantA = `Regular, reliable funding from readers is vital for our future. It protects our independence long term, so we can report freely and without outside influence. Support us monthly from just ${currencyGlyph}${minAmount}.`;
-	const paragraphCopyVariantB = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a monthly payment today from just ${currencyGlyph}${minAmount} – it takes less than a minute.`;
+	const minAmount = config[countryGroupId][recurringType].min;
+	const paragraphCopyVariant = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up ${
+		recurringType === 'MONTHLY' ? 'a' : 'an'
+	} ${recurringType.toLowerCase()} payment today from just  ${currencyGlyph}${minAmount} – it takes less than a minute.`;
 
 	function onNudgeClose() {
 		setDisplayNudge(false);
 	}
 	function onNudgeClick() {
-		dispatch(setProductType('MONTHLY'));
+		dispatch(setProductType(recurringType));
 	}
 
 	return renderNudge({
 		contributionType,
 		nudgeDisplay: displayNudge,
-		nudgeTitleCopySection1:
-			abParticipations.singleToRecurring === 'variantA'
-				? 'Consider monthly'
-				: 'Make a bigger impact',
-		nudgeTitleCopySection2:
-			abParticipations.singleToRecurring === 'variantA'
-				? 'to sustain us long term'
-				: 'Support us every month',
-		nudgeParagraphCopy:
-			abParticipations.singleToRecurring === 'variantA'
-				? paragraphCopyVariantA
-				: paragraphCopyVariantB,
+		nudgeTitleCopySection1: 'Make a bigger impact',
+		nudgeTitleCopySection2: `Support us every ${
+			recurringType === 'MONTHLY' ? 'month' : 'year'
+		}`,
+		nudgeParagraphCopy: paragraphCopyVariant,
+		nudgeLinkCopy: `See ${recurringType.toLowerCase()}`,
 		onNudgeClose,
 		onNudgeClick,
 	});

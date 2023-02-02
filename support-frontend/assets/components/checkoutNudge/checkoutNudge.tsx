@@ -108,6 +108,7 @@ export type CheckoutNudgeProps = {
 	nudgeTitleCopySection1: string;
 	nudgeTitleCopySection2: string;
 	nudgeParagraphCopy: string;
+	nudgeLinkCopy: string;
 	onNudgeClose: () => void;
 	onNudgeClick: () => void;
 };
@@ -118,6 +119,7 @@ export function CheckoutNudge({
 	nudgeTitleCopySection1,
 	nudgeTitleCopySection2,
 	nudgeParagraphCopy,
+	nudgeLinkCopy,
 	onNudgeClose,
 	onNudgeClick,
 }: CheckoutNudgeProps): JSX.Element | null {
@@ -136,7 +138,7 @@ export function CheckoutNudge({
 				<p css={para}>{nudgeParagraphCopy}</p>
 				<div css={link}>
 					<a onClick={onNudgeClick} css={alink}>
-						See monthly
+						{nudgeLinkCopy}
 					</a>
 				</div>
 			</div>
