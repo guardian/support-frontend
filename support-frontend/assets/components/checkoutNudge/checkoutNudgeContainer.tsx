@@ -28,8 +28,8 @@ export function CheckoutNudgeContainer({
 	const [displayNudge, setDisplayNudge] = useState(true);
 
 	const recurringType =
-		abParticipations.singleToRecurring === 'control' ||
-		!abParticipations.singleToRecurring
+		abParticipations.singleToRecurringV2 === 'control' ||
+		!abParticipations.singleToRecurringV2
 			? 'MONTHLY'
 			: 'ANNUAL';
 	const currencyGlyph = glyph(detect(countryGroupId));
