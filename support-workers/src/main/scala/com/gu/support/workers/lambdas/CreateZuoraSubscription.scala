@@ -142,6 +142,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     zuoraSubscriptionCreator,
     new SupporterPlusSubcriptionBuilder(
       services.config.zuoraConfigProvider.get(isTestUser).supporterPlusConfig,
+      services.catalogService,
       dateGenerator,
       touchPointEnvironment,
       subscribeItemBuilder,

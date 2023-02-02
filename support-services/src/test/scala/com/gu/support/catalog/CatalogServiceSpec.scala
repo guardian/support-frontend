@@ -20,7 +20,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
   ): Option[Price] = {
     for {
       productRatePlan <- product.getProductRatePlan(PROD, billingPeriod, fulfilmentOptions, productOptions)
-      priceList <- serviceWithFixtures.getPriceList(productRatePlan)
+      priceList <- serviceWithFixtures.getPriceList(productRatePlan.id)
       price <- priceList.prices.find(_.currency == currency)
     } yield price
   }
@@ -68,7 +68,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
 
     (for {
       voucherEveryday <- Paper.getProductRatePlan(PROD, Monthly, Collection, Everyday)
-      priceList <- serviceWithFixtures.getPriceList(voucherEveryday)
+      priceList <- serviceWithFixtures.getPriceList(voucherEveryday.id)
     } yield priceList.savingVsRetail shouldBe Some(43)).getOrElse(fail())
 
   }

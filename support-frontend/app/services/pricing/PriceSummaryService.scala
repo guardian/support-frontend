@@ -45,8 +45,8 @@ class PriceSummaryService(
       case (keys, productRatePlans) =>
         val priceSummaries = for {
           productRatePlan <- getSupportedRatePlansForCountryGroup(productRatePlans, countryGroup)
-          price <- filterCurrencies(catalogService.getPriceList(productRatePlan).map(_.prices), countryGroup)
-          saving <- catalogService.getPriceList(productRatePlan).map(_.savingVsRetail)
+          price <- filterCurrencies(catalogService.getPriceList(productRatePlan.id).map(_.prices), countryGroup)
+          saving <- catalogService.getPriceList(productRatePlan.id).map(_.savingVsRetail)
         } yield getPriceSummary(promotions, countryGroup, productRatePlan, price, saving)
         (keys, priceSummaries.toMap)
     }

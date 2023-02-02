@@ -29,7 +29,7 @@ class CatalogServiceIntegrationSpec extends AsyncFlatSpec with Matchers with Ins
   private def testProductAndEnvironment(service: CatalogService, product: Product, environment: TouchPointEnvironment) =
     forAll(product.ratePlans(environment))(ratePlan =>
       service
-        .getPriceList(ratePlan)
+        .getPriceList(ratePlan.id)
         .fold {
           Console.println(
             s"Failed to find a catalog price list for $environment > $product > ${ratePlan.billingPeriod} > ${ratePlan.id}",
