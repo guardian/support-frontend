@@ -1,7 +1,8 @@
 package com.gu.support.workers
 
-import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency, Title}
+import com.gu.i18n.Country.UK
+import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery, RestOfWorld}
@@ -9,6 +10,7 @@ import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
+import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   ContributionState,
   DigitalSubscriptionCorporateRedemptionState,
@@ -19,7 +21,6 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   PaperState,
   SupporterPlusState,
 }
-import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
 import com.gu.support.zuora.api.StripeGatewayDefault
 import io.circe.parser
 import io.circe.syntax._
@@ -38,7 +39,7 @@ object JsonFixtures {
       RequestInfo(testUser = false, failed = false, Nil, accountExists = false),
     ).asJson.noSpaces.asInputStream
 
-  def user(id: String = idId): User =
+  def user(id: String = idId, country: Country = UK): User =
     User(
       id,
       emailAddress,
@@ -51,7 +52,7 @@ object JsonFixtures {
         Some("london"),
         None,
         Some("n1 9gu"),
-        Country.UK,
+        country,
       ),
       deliveryInstructions = Some("Leave with neighbour"),
     )
@@ -457,16 +458,16 @@ object JsonFixtures {
         }
       """
 
-  def createContributionZuoraSubscriptionJson(billingPeriod: BillingPeriod = Monthly): String =
+  def createContributionZuoraSubscriptionJson(amount: BigDecimal = 5, billingPeriod: BillingPeriod = Monthly): String =
     CreateZuoraSubscriptionState(
       ContributionState(
-        Contribution(5, GBP, billingPeriod),
+        Contribution(amount, GBP, billingPeriod),
         stripePaymentMethodObj,
         salesforceContact,
       ),
       UUID.randomUUID(),
       user(),
-      Contribution(5, GBP, billingPeriod),
+      Contribution(amount, GBP, billingPeriod),
       AnalyticsInfo(false, Stripe),
       None,
       None,
@@ -475,16 +476,16 @@ object JsonFixtures {
       None,
     ).asJson.spaces2
 
-  val createSupporterPlusZuoraSubscriptionJson =
+  def createSupporterPlusZuoraSubscriptionJson(amount: BigDecimal, currency: Currency, country: Country = UK) =
     CreateZuoraSubscriptionState(
       SupporterPlusState(
-        SupporterPlus(12, GBP, Monthly),
+        SupporterPlus(amount, currency, Monthly),
         stripePaymentMethodObj,
         salesforceContact,
       ),
       UUID.randomUUID(),
-      user("9999998"),
-      SupporterPlus(12, GBP, Monthly),
+      user("9999998", country),
+      SupporterPlus(amount, currency, Monthly),
       AnalyticsInfo(false, Stripe),
       None,
       None,
