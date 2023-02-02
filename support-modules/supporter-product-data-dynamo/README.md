@@ -62,3 +62,9 @@ dynamoService
   }
 
 ```
+
+NB. to add to a Scala 3 project you can use
+
+```sbt
+libraryDependencies += ("com.gu" %% "support-product-data-dynamo" % "0.2").cross(CrossVersion.for3Use2_13) exclude("com.typesafe.scala-logging", "scala-logging_2.13")
+```
