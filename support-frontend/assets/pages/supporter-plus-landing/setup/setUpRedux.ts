@@ -37,7 +37,8 @@ import type {
 } from 'helpers/redux/contributionsStore';
 import { getRecurringContributorStatus } from 'helpers/redux/user/thunks';
 import * as storage from 'helpers/storage/storage';
-import { getUserStateField, setUpUserState } from 'helpers/user/user';
+import { setUpUserState } from 'helpers/user/reduxSetup';
+import { getUserStateField } from 'helpers/user/user';
 
 // ----- Functions ----- //
 function getInitialPaymentMethod(

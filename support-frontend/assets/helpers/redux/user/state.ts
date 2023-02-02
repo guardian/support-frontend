@@ -1,12 +1,5 @@
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
-
-type InitialUserInfo = {
-	firstName?: string;
-	lastName?: string;
-	displayName?: string;
-	email?: string;
-	isSignedIn?: boolean;
-};
+import type { User } from 'helpers/user/user';
 
 export type SupporterStatus = {
 	member?: boolean;
@@ -30,12 +23,12 @@ export type UserState = {
 	isRecurringContributorError?: boolean;
 };
 
-const userInfo = getGlobal<InitialUserInfo>('user') ?? {};
+const userInfo = getGlobal<User>('user');
 
 export const initialState: UserState = {
 	id: '',
 	supporterStatus: {},
-	isSignedIn: userInfo.isSignedIn ?? false,
+	isSignedIn: userInfo?.isSignedIn ?? false,
 	isTestUser: false,
 	isPostDeploymentTestUser: false,
 	isStorybookUser: false,
