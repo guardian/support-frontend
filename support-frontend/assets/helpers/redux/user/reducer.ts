@@ -18,6 +18,9 @@ export const userSlice = createSlice({
 		setIsReturningContributor(state, action: PayloadAction<boolean>) {
 			state.isReturningContributor = action.payload;
 		},
+		setStorybookUser(state, action: PayloadAction<boolean>) {
+			state.isStorybookUser = action.payload;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(
