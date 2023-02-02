@@ -25,13 +25,13 @@ export function CheckoutNudgeContainer({
 		(state) => state.common,
 	);
 
-	const isControl =
-		abParticipations.singleToRecurring === 'control' ||
-		!abParticipations.singleToRecurring;
-	const [displayNudge, setDisplayNudge] = useState(!isControl);
+	const [displayNudge, setDisplayNudge] = useState(true);
 
 	const recurringType =
-		abParticipations.singleToRecurring === 'variantA' ? 'MONTHLY' : 'ANNUAL';
+		abParticipations.singleToRecurring === 'control' ||
+		!abParticipations.singleToRecurring
+			? 'MONTHLY'
+			: 'ANNUAL';
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId][recurringType].min;
 	const paragraphCopyVariant = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up ${
