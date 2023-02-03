@@ -1,9 +1,10 @@
 import { Container } from '@guardian/source-react-components';
 import React from 'react';
+import type { GridImg } from 'components/gridImage/gridImage';
 import GridImage from 'components/gridImage/gridImage';
 
 export default {
-	title: 'Grid Images/Image',
+	title: 'Grid Images/GridImage',
 	component: GridImage,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
@@ -14,26 +15,31 @@ export default {
 						textAlign: 'center',
 						maxWidth: '50%',
 					}}
-				>
-					The GridImage component is responsive and will request different sizes
-					of the image at the specified breakpoints
-				</p>
+				/>
 				<Story />
 			</Container>
 		),
 	],
+	parameters: {
+		docs: {
+			description: {
+				component: `The GridImage component is responsive and will request different sizes
+        of the image at the specified breakpoints`,
+			},
+		},
+	},
 };
 
-export function Image(): JSX.Element {
-	return (
-		<GridImage
-			gridId="weeklyCampaignHeroImg"
-			srcSizes={[1000, 500, 140]}
-			sizes="(max-width: 740px) 100%,
-  (max-width: 1067px) 150%,
-  500px"
-			imgType="png"
-			altText="A collection of Guardian Weekly magazines"
-		/>
-	);
+function Template(args: GridImg) {
+	return <GridImage {...args} />;
 }
+Template.args = {} as GridImg;
+
+export const WeeklyCampaignHero = Template.bind({});
+WeeklyCampaignHero.args = {
+	gridId: 'weeklyCampaignHeroImg',
+	srcSizes: [1000, 500, 140],
+	sizes: '(max-width: 740px) 140px,(max-width: 1067px) 500px,1000px',
+	altText: 'A collection of Guardian Weekly magazines',
+	imgType: 'png',
+};
