@@ -195,7 +195,6 @@ lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
     integrationTestSettings,
     scalafmtSettings,
     libraryDependencies ++= commonDependencies,
-    scalacOptions += "-Ytasty-reader",
   )
   .dependsOn(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
   .aggregate(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
