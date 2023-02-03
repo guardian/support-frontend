@@ -15,14 +15,19 @@ export default {
 						textAlign: 'center',
 						maxWidth: '50%',
 					}}
-				>
-					The GridPicture component can show completely different images at
-					different breakpoints
-				</p>
+				/>
 				<Story />
 			</Container>
 		),
 	],
+	parameters: {
+		docs: {
+			description: {
+				component: `The GridPicture component can show completely different images at
+        different breakpoints`,
+			},
+		},
+	},
 };
 
 function Template(args: PropTypes) {

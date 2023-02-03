@@ -15,14 +15,19 @@ export default {
 						textAlign: 'center',
 						maxWidth: '50%',
 					}}
-				>
-					The GridImage component is responsive and will request different sizes
-					of the image at the specified breakpoints
-				</p>
+				/>
 				<Story />
 			</Container>
 		),
 	],
+	parameters: {
+		docs: {
+			description: {
+				component: `The GridImage component is responsive and will request different sizes
+        of the image at the specified breakpoints`,
+			},
+		},
+	},
 };
 
 function Template(args: GridImg) {
