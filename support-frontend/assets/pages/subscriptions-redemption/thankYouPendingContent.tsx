@@ -7,7 +7,7 @@ import { HeroWrapper } from 'components/productPage/productPageHero/productPageH
 import Text, { LargeParagraph } from 'components/text/text';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import ThankYouHero from '../digital-subscription-checkout/components/thankYou/hero';
+import ThankYouHero from './components/thankYou/hero';
 
 // ----- Types ----- //
 

@@ -3,8 +3,6 @@ module.exports = {
     favicons: 'images/favicons.ts',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.tsx',
     supporterPlusLandingPage: 'pages/supporter-plus-landing/supporterPlusRouter.tsx',
-    digitalSubscriptionCheckoutPage: 'pages/digital-subscription-checkout/digitalSubscriptionCheckout.tsx',
-    digitalSubscriptionCheckoutPageThankYouExisting: 'pages/digital-subscription-checkout/thankYouExisting.tsx',
     paperSubscriptionLandingPage: 'pages/paper-subscription-landing/paperSubscriptionLandingPage.tsx',
     paperSubscriptionCheckoutPage: 'pages/paper-subscription-checkout/paperSubscriptionCheckout.tsx',
     weeklySubscriptionLandingPage: 'pages/weekly-subscription-landing/weeklySubscriptionLanding.tsx',
