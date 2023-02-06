@@ -81,4 +81,4 @@ jobs:
         run: |
           export LAST_TEAMCITY_BUILD=10000
           export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
-          sbt -mem 8192 "project support-frontend" riffRaffUpload
+          sbt -mem 6144 "project support-frontend" riffRaffUpload
