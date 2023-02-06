@@ -1,6 +1,7 @@
 import { DateUtils } from 'react-day-picker';
-import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
 import { monthText } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+
+const daysFromNowForGift = 89;
 
 const getRange = (): Date => {
 	const rangeDate = new Date();
@@ -24,4 +25,9 @@ const dateIsOutsideRange = (date: Date): boolean => {
 	);
 };
 
-export { dateIsOutsideRange, getRange, getLatestAvailableDateText };
+export {
+	dateIsOutsideRange,
+	daysFromNowForGift,
+	getRange,
+	getLatestAvailableDateText,
+};

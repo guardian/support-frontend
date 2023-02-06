@@ -4,6 +4,7 @@
 // but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
 // for compatibility with Stripe
 import { DateUtils } from 'react-day-picker';
+import { daysFromNowForGift } from 'components/datePicker/helpers';
 import { config } from 'helpers/contributions';
 import type {
 	ContributionType,
@@ -14,7 +15,6 @@ import type {
 	CountryGroup,
 	CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
-import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
 import {
 	AUDCountries,
 	Canada,

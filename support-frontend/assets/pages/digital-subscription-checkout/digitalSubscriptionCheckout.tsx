@@ -25,7 +25,7 @@ import CheckoutFormGift from 'pages/digital-subscription-checkout/components/dig
 import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContainer';
 import ThankYouGift from 'pages/digital-subscription-checkout/thankYouGift';
 import { DigitalFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
-import ThankYouPendingContent from './thankYouPendingContent';
+import ThankYouPendingContent from '../subscriptions-redemption/thankYouPendingContent';
 import 'stylesheets/skeleton/skeleton.scss';
 import './digitalSubscriptionCheckout.scss';
 
