@@ -39,8 +39,6 @@ jobs:
           cache-dependency-path: |
             support-frontend/yarn.lock
             cdk/yarn.lock
-        env:
-          NODE_OPTIONS: --max_old_space_size=4096
 
       - name: Install
         run: yarn
