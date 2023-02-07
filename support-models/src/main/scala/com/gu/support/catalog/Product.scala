@@ -61,8 +61,24 @@ case object SupporterPlus extends Product {
         productRatePlan("8ad088718219a6b601822036a5801f34", Annual),
       ),
       SANDBOX -> List(
-        productRatePlan("8ad08e018499b108018499f163ac32e3", Monthly),
+        productRatePlan("8ad09fc281de1ce70181de3b251736a4", Monthly),
         productRatePlan("8ad09fc281de1ce70181de3b28ee3783", Annual),
+      ),
+    )
+
+  lazy val ratePlansV2: Map[TouchPointEnvironment, List[ProductRatePlan[SupporterPlus.type]]] =
+    Map(
+      PROD -> List(
+        productRatePlan("8a128ed885fc6ded018602296af13eba", Monthly),
+        productRatePlan("8a128ed885fc6ded01860228f77e3d5a", Annual),
+      ),
+      UAT -> List(
+        productRatePlan("8ad0940885f8901f0186024838f844a1", Monthly),
+        productRatePlan("8ad094b985f8901601860248d751315c", Annual),
+      ),
+      SANDBOX -> List(
+        productRatePlan("8ad08cbd8586721c01858804e3275376", Monthly),
+        productRatePlan("8ad08e1a8586721801858805663f6fab", Annual),
       ),
     )
 }

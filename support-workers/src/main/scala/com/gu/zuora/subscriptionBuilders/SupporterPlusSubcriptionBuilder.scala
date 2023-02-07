@@ -13,21 +13,23 @@ import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.validateRatePlan
 
 class SupporterPlusSubcriptionBuilder(
-                                       config: ZuoraSupporterPlusConfig,
-                                       catalogService: CatalogService,
-                                       dateGenerator: DateGenerator,
-                                       environment: TouchPointEnvironment,
-                                       subscribeItemBuilder: SubscribeItemBuilder,
-                                     ) {
+    config: ZuoraSupporterPlusConfig,
+    catalogService: CatalogService,
+    dateGenerator: DateGenerator,
+    environment: TouchPointEnvironment,
+    subscribeItemBuilder: SubscribeItemBuilder,
+) {
 
   def build(
-             state: SupporterPlusState,
-             csrUsername: Option[String],
-             salesforceCaseId: Option[String],
-           ): SubscribeItem = {
+      state: SupporterPlusState,
+      csrUsername: Option[String],
+      salesforceCaseId: Option[String],
+  ): SubscribeItem = {
 
     val productRatePlanId = validateRatePlan(supporterPlusRatePlan(state.product, environment), state.product.describe)
-    val ratePlanChargeId = if (state.product.billingPeriod == Monthly) config.monthlyChargeId else config.annualChargeId
+    val contributionRatePlanChargeId =
+      if (state.product.billingPeriod == Monthly) config.monthlyChargeId
+      else config.annualChargeId
     val todaysDate = dateGenerator.today
 
     val contributionAmount = state.product.amount - getBaseProductPrice(productRatePlanId, state.product.currency)
@@ -36,7 +38,7 @@ class SupporterPlusSubcriptionBuilder(
       ratePlanCharges = List(
         RatePlanChargeData(
           RatePlanChargeOverride(
-            ratePlanChargeId,
+            contributionRatePlanChargeId,
             price = contributionAmount, // Pass the amount of the cost which counts as a contribution into Zuora
           ),
         ),
