@@ -4,7 +4,6 @@
 // but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
 // for compatibility with Stripe
 import { DateUtils } from 'react-day-picker';
-import { daysFromNowForGift } from 'components/datePicker/helpers';
 import { config } from 'helpers/contributions';
 import type {
 	ContributionType,
@@ -22,6 +21,8 @@ import {
 	UnitedStates,
 } from '../internationalisation/countryGroup';
 import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
+
+const daysFromNowForGift = 89;
 
 export const emailRegexPattern =
 	"^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$";
