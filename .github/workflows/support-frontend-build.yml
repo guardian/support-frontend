@@ -39,8 +39,6 @@ jobs:
           cache-dependency-path: |
             support-frontend/yarn.lock
             cdk/yarn.lock
-        env:
-          NODE_OPTIONS: --max_old_space_size=4096
 
       - name: Install
         run: yarn
@@ -83,4 +81,4 @@ jobs:
         run: |
           export LAST_TEAMCITY_BUILD=10000
           export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
-          sbt -mem 6144 "project support-frontend" riffRaffUpload
+          sbt "project support-frontend" riffRaffUpload
