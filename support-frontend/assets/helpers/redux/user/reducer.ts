@@ -31,10 +31,7 @@ export const userSlice = createSlice({
 		);
 
 		builder.addCase(validateForm, (state) => {
-			if (
-				state.supporterStatus.recurringContributor ||
-				state.supporterStatus.supporterPlus
-			) {
+			if (state.supporterStatus.recurringContributor) {
 				state.isRecurringContributorError = true;
 			}
 		});

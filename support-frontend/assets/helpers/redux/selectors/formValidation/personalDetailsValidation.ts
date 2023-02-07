@@ -1,4 +1,5 @@
 import { shouldCollectStateForContributions } from 'helpers/internationalisation/shouldCollectStateForContribs';
+import { isSupporterPlusPurchase } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import type { ErrorCollection } from './utils';
@@ -41,6 +42,17 @@ export function getPersonalDetailsErrors(
 	};
 }
 
+function userCanPurchaseRecurring(state: ContributionsState): boolean {
+	const userIsRecurringContributor =
+		state.page.user.isRecurringContributorError ?? false;
+	const userIsBuyingSupporterPlus = isSupporterPlusPurchase(state);
+
+	if (userIsRecurringContributor && !userIsBuyingSupporterPlus) {
+		return false;
+	}
+	return true;
+}
+
 export function getUserCanTakeOutContribution(
 	state: ContributionsState,
 ): boolean {
@@ -48,8 +60,5 @@ export function getUserCanTakeOutContribution(
 	if (contributionType === 'ONE_OFF') {
 		return true;
 	}
-	const userIsAlreadyARecurringContributor =
-		state.page.user.isRecurringContributorError;
-
-	return !userIsAlreadyARecurringContributor;
+	return userCanPurchaseRecurring(state);
 }
