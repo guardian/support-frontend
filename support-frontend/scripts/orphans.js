@@ -40,7 +40,8 @@ madge(baseDir, config)
 		const jsOrphansFiltered = jsOrphans.filter(
 			(orphanPath) =>
 				!entryPointPaths.includes(orphanPath) &&
-				path.basename(path.dirname(orphanPath)) !== testDirectoryName,
+				path.basename(path.dirname(orphanPath)) !== testDirectoryName &&
+        !orphanPath.includes('.test.'),
 		);
 		// filter out entryPointPaths from scssOrphans
 		const scssOrphansFiltered = scssOrphans.filter(
