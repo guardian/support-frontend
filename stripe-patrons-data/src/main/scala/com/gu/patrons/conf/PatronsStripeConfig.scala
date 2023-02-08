@@ -3,7 +3,7 @@ package com.gu.patrons.conf
 import com.gu.patrons.services.{ConfigService, ParameterStoreService}
 import com.gu.supporterdata.model.Stage
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext}
 
 case class PatronsStripeConfig(
     apiKey: String,

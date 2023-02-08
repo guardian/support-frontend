@@ -12,7 +12,6 @@ import com.gu.patrons.model.{
   InvalidRequestError,
   StripeGetCustomerFailedError,
   StageConstructors,
-  StripeCustomer,
   ExpandedStripeCustomer,
   UnexpandedStripeCustomer,
   StripeSubscription,
@@ -34,9 +33,7 @@ import com.typesafe.scalalogging.StrictLogging
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.parser.decode
-import software.amazon.awssdk.services.dynamodb.model.UpdateItemResponse
 
-import java.time.LocalDate
 import scala.concurrent.{Await, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.{Duration, DurationInt, MINUTES}
@@ -62,7 +59,7 @@ object PatronSignUpEventLambda extends StrictLogging {
       stripeConfig <- getStripeConfig(stage)
       identityConfig <- getIdentityConfig(stage)
       identityService = new PatronsIdentityService(identityConfig, runner)
-      val account = if (event.getPathParameters.get("countryId") == "au") GnmPatronSchemeAus else GnmPatronScheme
+      account = if (event.getPathParameters.get("countryId") == "au") GnmPatronSchemeAus else GnmPatronScheme
       payload <- getPayload(
         event,
         account match {

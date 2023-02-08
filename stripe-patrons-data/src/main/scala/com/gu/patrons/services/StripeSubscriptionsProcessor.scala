@@ -1,7 +1,7 @@
 package com.gu.patrons.services
 
 import com.gu.monitoring.SafeLogger
-import com.gu.patrons.model.{StripeCustomer, ExpandedStripeCustomer, StripeSubscription, StripeSubscriptionsResponse}
+import com.gu.patrons.model.{ExpandedStripeCustomer, StripeSubscription}
 import com.gu.supporterdata.model.SupporterRatePlanItem
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import software.amazon.awssdk.services.dynamodb.model.UpdateItemResponse

@@ -13,7 +13,6 @@ import com.gu.patrons.model.{
   InvalidRequestError,
   StageConstructors,
   ExpandedStripeCustomer,
-  StripeCustomer,
   SubscriptionNotFoundDynamo,
   UserNotFoundIdentityError,
   UserNotFoundStripeError,
