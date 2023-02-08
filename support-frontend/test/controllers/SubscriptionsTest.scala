@@ -35,7 +35,11 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
     import scala.concurrent.ExecutionContext.Implicits.global
 
     val amount = 25
-    val selection = AmountsSelection(amounts = List(amount), defaultAmount = 25)
+    val selection = AmountsSelection(
+      amounts = List(amount),
+      defaultAmount = 25,
+      hideChooseYourAmount = None,
+    )
     val contributionAmounts = ContributionAmounts(
       ONE_OFF = selection,
       MONTHLY = selection,
@@ -77,7 +81,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         recurringPaymentMethods = RecurringPaymentMethodSwitches(On, On, On, On, Off, On, On, On, Off),
         subscriptionsPaymentMethods = SubscriptionsPaymentMethodSwitches(On, On, On),
         subscriptionsSwitches = SubscriptionsSwitches(On, On, On),
-        featureSwitches = FeatureSwitches(On, On, On),
+        featureSwitches = FeatureSwitches(On, On),
         campaignSwitches = CampaignSwitches(On, On),
         recaptchaSwitches = RecaptchaSwitches(On, On),
       ),

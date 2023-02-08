@@ -14,6 +14,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       "GuAllowPolicy",
       "GuAllowPolicy",
       "GuAllowPolicy",
+      "GuAllowPolicy",
       "GuPutCloudwatchMetricsPolicy",
       "GuAllowPolicy",
       "GuAllowPolicy",
@@ -1405,6 +1406,34 @@ exports[`The Payment API stack matches the snapshot 1`] = `
         "TreatMissingData": "notBreaching",
       },
       "Type": "AWS::CloudWatch::Alarm",
+    },
+    "SupporterProductDataDynamo93EDFB2C": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:Query",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:dynamodb:*:*:table/SupporterProductData-PROD",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SupporterProductDataDynamo93EDFB2C",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
     "TargetGroupPaymentapiE63889C3": {
       "Properties": {

@@ -40,10 +40,14 @@ class Promotions(
         case Paper => routes.PaperSubscriptionController.paper().url
         case Contribution => routes.Application.contributeGeoRedirect("").url
       }
-      val queryString = if (promoCode == "AUTUMN20") {
-        request.queryString + ("promoCode" -> Seq("AUTUMN20", "AUTUMN30"))
-      } else {
-        request.queryString + ("promoCode" -> Seq(promoCode))
+      val queryString = {
+        if (promoCode == "WINTERSAMPLER") {
+          request.queryString + ("promoCode" -> Seq("WINTERSAMPLER", "WINTERSAMPLER2"))
+        } else if (promoCode == "AUTUMN20") {
+          request.queryString + ("promoCode" -> Seq("AUTUMN20", "AUTUMN30"))
+        } else {
+          request.queryString + ("promoCode" -> Seq(promoCode))
+        }
       }
       RedirectWithEncodedQueryString(productLandingPage, queryString, MOVED_PERMANENTLY)
     }

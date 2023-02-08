@@ -6,7 +6,11 @@ import com.gu.support.config.{Stage, TouchPointEnvironment, TouchPointEnvironmen
 import com.gu.support.promotions.PromotionValidator._
 
 class ProductPromotionCopy(promotionService: PromotionService, touchPointEnvironment: TouchPointEnvironment) {
-  def getCopyForPromoCode(promoCode: PromoCode, productRatePlanIds: List[ProductRatePlanId], country: Country): Option[PromotionCopy] = {
+  def getCopyForPromoCode(
+      promoCode: PromoCode,
+      productRatePlanIds: List[ProductRatePlanId],
+      country: Country,
+  ): Option[PromotionCopy] = {
     val promotion = promotionService.findPromotion(promoCode)
     promotion.toOption // if promo code not valid, just ignore
       .find(_.promotion.validForAnyProductRatePlan(productRatePlanIds, country, isRenewal = false).nonEmpty)

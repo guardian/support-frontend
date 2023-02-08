@@ -17,6 +17,7 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
 import { getSession } from 'helpers/storage/storage';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import {
@@ -142,6 +143,10 @@ export function SupporterPlusThankYou(): JSX.Element {
 				isAmountLargeDonation,
 			);
 		}
+
+		if (contributionType === 'ONE_OFF') {
+			setOneOffContributionCookie();
+		}
 	}, []);
 
 	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
@@ -183,7 +188,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 			contributionType === 'ONE_OFF' && email.length > 0,
 			'supportReminder',
 		),
-		'feedback',
+		// 'feedback', // <-- Temporarily disable supporter plus thank you page survey
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];

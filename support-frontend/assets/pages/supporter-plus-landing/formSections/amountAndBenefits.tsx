@@ -1,6 +1,8 @@
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { CheckoutBenefitsListContainer } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
+import { CheckoutNudge } from 'components/checkoutNudge/checkoutNudge';
+import { CheckoutNudgeContainer } from 'components/checkoutNudge/checkoutNudgeContainer';
 import { CheckoutErrorSummary } from 'components/errorSummary/errorSummary';
 import { CheckoutErrorSummaryContainer } from 'components/errorSummary/errorSummaryContainer';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
@@ -33,6 +35,7 @@ export function AmountAndBenefits(): JSX.Element {
 									onAmountChange,
 									minAmount,
 									onOtherAmountChange,
+									hideChooseYourAmount,
 									errors,
 								}) => (
 									<>
@@ -42,6 +45,7 @@ export function AmountAndBenefits(): JSX.Element {
 											currency={currency}
 											paymentInterval={paymentInterval}
 											onAmountChange={onAmountChange}
+											hideChooseYourAmount={hideChooseYourAmount}
 											otherAmountField={
 												<OtherAmount
 													currency={currency}
@@ -60,6 +64,9 @@ export function AmountAndBenefits(): JSX.Element {
 								renderBenefitsList={(benefitsListProps) => (
 									<CheckoutBenefitsList {...benefitsListProps} />
 								)}
+							/>
+							<CheckoutNudgeContainer
+								renderNudge={(nudgeProps) => <CheckoutNudge {...nudgeProps} />}
 							/>
 						</BoxContents>
 					)}

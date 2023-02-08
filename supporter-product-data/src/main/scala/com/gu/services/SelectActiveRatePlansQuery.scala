@@ -52,7 +52,8 @@ object SelectActiveRatePlansQuery {
    this makes sure that cancellations come after the active version of the sub in case we have both (we shouldn't but you never know!)
    */
 
-  def query(discountProductRatePlanIds: List[String]): String =
+  def query(discountProductRatePlanIds: List[String]): String = {
+    // If this query changes then we MUST run a full sync in all environments or we will continue to use the old version
     s"""SELECT
           $subscriptionName,
           Subscription.Version,
@@ -73,5 +74,6 @@ object SelectActiveRatePlansQuery {
             ($isNotDSGift OR $isRedeemedDSGift)
           ORDER BY $identityId, $contractEffectiveDate, $subscriptionName, Subscription.Version
     """
+  }
 
 }

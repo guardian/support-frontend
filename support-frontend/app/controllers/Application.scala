@@ -64,16 +64,16 @@ class Application(
   }
 
   def geoRedirect: Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    val redirectUrl = request.geoData.countryGroup match {
-      case Some(UK) => buildCanonicalShowcaseLink("uk")
-      case Some(US) => buildCanonicalShowcaseLink("us")
-      case Some(Australia) => buildCanonicalShowcaseLink("au")
-      case Some(Europe) => "/eu/contribute"
-      case Some(Canada) => "/ca/contribute"
-      case Some(NewZealand) => "/nz/contribute"
-      case Some(RestOfTheWorld) => "/int/contribute"
-      case _ => "/uk/contribute"
-    }
+    val redirectUrl = buildCanonicalContributeLink(request.geoData.countryGroup match {
+      case Some(UK) => "uk"
+      case Some(US) => "us"
+      case Some(Australia) => "au"
+      case Some(Europe) => "eu"
+      case Some(Canada) => "ca"
+      case Some(NewZealand) => "nz"
+      case Some(RestOfTheWorld) => "int"
+      case _ => "uk"
+    })
 
     RedirectWithEncodedQueryString(redirectUrl, request.queryString, status = FOUND)
   }
@@ -85,7 +85,11 @@ class Application(
       case _ => "uk"
     }
 
-    RedirectWithEncodedQueryString(buildCanonicalShowcaseLink(supportPageVariant), request.queryString, status = FOUND)
+    RedirectWithEncodedQueryString(
+      buildCanonicalContributeLink(supportPageVariant),
+      request.queryString,
+      status = FOUND,
+    )
   }
 
   def contributeGeoRedirect(campaignCode: String): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
@@ -178,8 +182,8 @@ class Application(
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
 
     val mainElement = assets.getSsrCacheContentsAsHtml(
-      divId = s"contributions-landing-page-$countryCode",
-      file = "contributions-landing.html",
+      divId = s"supporter-plus-landing-page-$countryCode",
+      file = "supporter-plus-landing.html",
       classes = Some(classes),
     )
 
@@ -214,20 +218,6 @@ class Application(
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey,
       serversideTests = serversideTests,
     )
-  }
-
-  def showcase(country: String): Action[AnyContent] = CachedAction() { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    Ok(
-      views.html.main(
-        title = "Support the Guardian",
-        mainElement = assets.getSsrCacheContentsAsHtml("showcase-landing-page", "showcase.html"),
-        mainJsBundle = Left(RefPath("showcasePage.js")),
-        mainStyleBundle = Left(RefPath("showcasePage.css")),
-        description = stringsConfig.showcaseLandingDescription,
-        canonicalLink = Some(buildCanonicalShowcaseLink("uk")),
-      )(),
-    ).withSettingsSurrogateKey
   }
 
   val ausMomentMapSocialImageUrl =

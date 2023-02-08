@@ -1,5 +1,4 @@
 // components
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import { getSubscriptionCopy } from '../copy/subscriptionCopy';
 import type { SubscriptionsLandingPropTypes } from '../subscriptionsLandingProps';
 import FeatureHeader from './featureHeader';
@@ -16,15 +15,12 @@ function SubscriptionsLandingContent({
 		return null;
 	}
 
-	const hideDigiSub = isSwitchOn('featureSwitches.suppressDigitalSubscription');
-	const supportMsg = hideDigiSub
-		? 'Support the Guardian with a print subscription'
-		: 'Support the Guardian with a print or digital subscription';
+	const supportMsg = 'Support the Guardian with a print subscription';
+
 	const subscriptionCopy = getSubscriptionCopy(
 		countryGroupId,
 		pricingCopy,
 		participations,
-		hideDigiSub,
 	);
 	return (
 		<div

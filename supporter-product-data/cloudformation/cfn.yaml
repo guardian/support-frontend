@@ -27,8 +27,8 @@ Mappings:
       lambdaConcurrency: 30
     PROD:
       S3Bucket: supporter-product-data-export-prod
-      # Every 15 mins
-      scheduleRate: "cron(*/15 * ? * * *)"
+      # Every 5 mins
+      scheduleRate: "cron(*/5 * ? * * *)"
       lambdaConcurrency: 50 # May need to reduce this number if we see downstream systems getting overwhelmed during a full refresh, I've tested with 30 and that was fine
 
 Resources:
@@ -447,7 +447,7 @@ Resources:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: There was a csv read failure when loading supporter product data into DynamoDB
       AlarmDescription: >
-        Search for 'CSV read failures' in the AddSupporterRatePlanItemToQueueLambda Cloudwatch logs:
+        Search for 'CSV read failure' in the AddSupporterRatePlanItemToQueueLambda Cloudwatch logs:
         https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fsupport-SupporterProductDataAddSupporterRatePlanItemToQueue-PROD
       MetricName: CsvReadFailure
       Namespace: supporter-product-data

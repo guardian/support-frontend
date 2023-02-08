@@ -1,12 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import {
-	brandAlt,
-	from,
-	neutral,
-	space,
-	titlepiece,
-} from '@guardian/source-foundations';
+import { from, neutral, space, titlepiece } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 import {
 	digitalSubscriptionsBlue,
@@ -15,7 +9,7 @@ import {
 } from 'stylesheets/emotion/colours';
 import CentredContainer from '../containers/centredContainer';
 
-type ThemeType = 'showcase' | 'digital' | 'weekly' | 'paper';
+type ThemeType = 'digital' | 'weekly' | 'paper';
 type PropTypes = {
 	title: string;
 	theme: ThemeType;
@@ -25,7 +19,6 @@ type PropTypes = {
 const themeColors: Record<ThemeType, string> = {
 	weekly: guardianWeeklyBlue,
 	digital: digitalSubscriptionsBlue,
-	showcase: brandAlt[400],
 	paper: paperSubscriptionsBlue,
 };
 const headerThemes: Record<ThemeType, SerializedStyles> = {
@@ -34,11 +27,6 @@ const headerThemes: Record<ThemeType, SerializedStyles> = {
 		color: ${neutral[97]};
 		:before {
 			background-color: ${themeColors.digital};
-		}
-	`,
-	showcase: css`
-		:before {
-			background-color: ${themeColors.showcase};
 		}
 	`,
 	paper: css``,

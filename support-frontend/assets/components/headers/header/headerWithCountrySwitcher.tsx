@@ -13,7 +13,6 @@ export default function ({
 	countryGroupId,
 	listOfCountryGroups,
 	trackProduct,
-	hideDigiSub,
 }: {
 	path: string;
 	countryGroupId: CountryGroupId;
@@ -33,7 +32,6 @@ export default function ({
 						trackProduct={trackProduct}
 					/>
 				}
-				hideDigiSub={hideDigiSub}
 			/>
 		);
 	};

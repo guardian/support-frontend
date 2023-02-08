@@ -12,8 +12,7 @@ export const pageUrlRegexes = {
 		auLandingPage: '/au/contribute(/.*)?$',
 	},
 	subscriptions: {
-		subsShowcaseAndDigiSubPages:
-			'(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
+		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
 		digiSubLandingPages:
 			'(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
 		digiSubLandingPagesNotAus:
@@ -35,44 +34,12 @@ export const pageUrlRegexes = {
 			paperLandingWithGuestCheckout:
 				/\/subscribe\/paper(\/checkout|\/checkout\/guest)?(\?.*)?$/,
 		},
-		subsShowcaseAndWeeklyPages:
+		subsWeeklyPages:
 			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
 	},
 };
 export const tests: Tests = {
-	localCurrencyTestV2: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			SE: {
-				offset: 0,
-				size: 1,
-			},
-			CH: {
-				offset: 0,
-				size: 1,
-			},
-			NO: {
-				offset: 0,
-				size: 1,
-			},
-			DK: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: false,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		seed: 0,
-	},
-	tickerTest: {
+	singleToRecurringV2: {
 		variants: [
 			{
 				id: 'control',
@@ -89,30 +56,7 @@ export const tests: Tests = {
 		},
 		isActive: true,
 		referrerControlled: false,
-		targetPage: pageUrlRegexes.contributions.auLandingPage,
-		seed: 1,
-	},
-	// If the name of this test or the variant id changes then the code
-	// in `ZuoraDigitalSubscriptionDirectHandler.subscribe` will need
-	// to change as well.
-	emailDigiSubEventsTest: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 0,
-			},
-		},
-		isActive: false,
-		referrerControlled: true,
-		seed: 10,
-		optimizeId: 'dQCXBc3QQIW7M1Di_qSCHw',
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		seed: 15,
 	},
 };

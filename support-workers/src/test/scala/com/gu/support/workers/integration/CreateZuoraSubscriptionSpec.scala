@@ -1,31 +1,31 @@
 package com.gu.support.workers.integration
 
-import java.io.ByteArrayOutputStream
-
 import com.gu.config.Configuration
+import com.gu.i18n.CountryGroup
+import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.support.catalog.{CatalogService, Everyday, SimpleJsonProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
 import com.gu.support.redemption.CodeAlreadyUsed
-import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemption.corporate.{
   CorporateCodeStatusUpdater,
   CorporateCodeValidator,
   DynamoTableAsync,
   RedemptionTable,
 }
+import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionCode
-import com.gu.support.workers.JsonFixtures.{createEverydayPaperSubscriptionJson, _}
 import com.gu.support.workers._
+import com.gu.support.workers.JsonFixtures._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.errors.MockServicesCreator
 import com.gu.support.workers.lambdas.CreateZuoraSubscription
-import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
-import com.gu.support.zuora.api.response.ZuoraAccountNumber
+import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
+import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.{ZuoraGiftService, ZuoraService}
 import io.circe.parser.parse
@@ -33,21 +33,22 @@ import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.any
 import org.mockito.invocation.InvocationOnMock
 
-import scala.concurrent.duration._
+import java.io.ByteArrayOutputStream
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
 
 @IntegrationTest
 class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreator with MockContext {
   val createZuoraHelper = new CreateZuoraSubscriptionHelper()
 
-  "CreateZuoraSubscription lambda" should "create a monthly Zuora subscription" in {
+  "CreateZuoraSubscription lambda" should "create a monthly contribution" in {
     createZuoraHelper
-      .createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Monthly))
+      .createSubscription(createContributionZuoraSubscriptionJson(amount = 20, billingPeriod = Monthly))
       .map(_ should matchPattern { case s: SendThankYouEmailContributionState =>
       })
   }
 
-  it should "create an annual Zuora subscription" in {
+  it should "create an annual contribution" in {
     createZuoraHelper
       .createSubscription(createContributionZuoraSubscriptionJson(billingPeriod = Annual))
       .map(_ should matchPattern { case s: SendThankYouEmailContributionState =>
@@ -56,7 +57,15 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
 
   it should "create a Supporter Plus subscription" in {
     createZuoraHelper
-      .createSubscription(createSupporterPlusZuoraSubscriptionJson)
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(20, GBP))
+      .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
+      })
+  }
+
+  it should "create a Supporter Plus subscription in a country where it is taxed" in {
+    val austria = CountryGroup.Europe.countries.find(_.alpha2 == "AT").get // Fail here if we can't find it
+    createZuoraHelper
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(10, EUR, austria))
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }

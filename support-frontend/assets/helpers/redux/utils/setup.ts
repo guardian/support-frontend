@@ -22,18 +22,11 @@ import {
 import { getAmounts } from '../../abTests/helpers';
 import type { CommonState, Internationalisation } from '../commonState/state';
 
-function getLocalCurrencyCountry(
-	countryId: IsoCountry,
-	abParticipations: Participations,
-): LocalCurrencyCountry | null | undefined {
+function getLocalCurrencyCountry(): LocalCurrencyCountry | null | undefined {
 	const queryParam = getQueryParameter('local-currency-country');
 
 	if (queryParam) {
 		return localCurrencyCountries[queryParam.toUpperCase()];
-	}
-
-	if (abParticipations.localCurrencyTestV2 === 'variant') {
-		return localCurrencyCountries[countryId];
 	}
 
 	return null;
@@ -50,10 +43,7 @@ function buildInitialState(
 ): CommonState {
 	const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
 	const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
-	const localCurrencyCountry = getLocalCurrencyCountry(
-		countryId,
-		abParticipations,
-	);
+	const localCurrencyCountry = getLocalCurrencyCountry();
 	const internationalisation: Internationalisation = {
 		countryGroupId,
 		countryId,

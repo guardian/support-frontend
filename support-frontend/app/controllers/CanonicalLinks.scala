@@ -16,7 +16,7 @@ trait CanonicalLinks {
     if (orderIsAGift) s"${supportUrl}/${countryCode}/subscribe/weekly/gift"
     else s"${supportUrl}/${countryCode}/subscribe/weekly"
 
-  def buildCanonicalShowcaseLink(countryCode: String): String =
-    s"${supportUrl}/${countryCode}/support"
+  def buildCanonicalContributeLink(countryCode: String): String =
+    s"${supportUrl}/${countryCode}/contribute"
 
 }

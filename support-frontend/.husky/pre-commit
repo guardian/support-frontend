@@ -2,3 +2,16 @@
 . "$(dirname "$0")/_/husky.sh"
 
 cd support-frontend && yarn lint-staged
+
+if git diff-index --cached  --diff-filter=AM --name-only  HEAD | grep --quiet .scala$
+then
+  echo "Running scalafmtCheckAll to check for Scala formatting errors"
+  cd ..
+  if ! sbt scalafmtCheckAll
+  then
+    echo "There were formatting errors found, running scalafmtAll"
+    sbt scalafmtAll
+    exit 1
+  fi
+fi
+

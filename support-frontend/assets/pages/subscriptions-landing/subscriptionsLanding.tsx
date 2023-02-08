@@ -1,18 +1,7 @@
 // ----- Imports ----- //
 import Footer from 'components/footerCompliant/Footer';
 import Header from 'components/headers/header/header';
-import headerWithCountrySwitcherContainer from 'components/headers/header/headerWithCountrySwitcher';
 import Page from 'components/page/page';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import {
-	AUDCountries,
-	Canada,
-	EURCountries,
-	GBPCountries,
-	International,
-	NZDCountries,
-	UnitedStates,
-} from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 import './subscriptionsLanding.scss';
@@ -27,30 +16,9 @@ function SubscriptionsLandingPage({
 	pricingCopy,
 	referrerAcquisitions,
 }: SubscriptionsLandingPropTypes) {
-	const hideDigiSub = isSwitchOn('featureSwitches.suppressDigitalSubscription');
-	const HeaderWithCountrySwitcher = headerWithCountrySwitcherContainer({
-		path: '/subscribe',
-		countryGroupId,
-		listOfCountryGroups: [
-			GBPCountries,
-			UnitedStates,
-			AUDCountries,
-			EURCountries,
-			Canada,
-			NZDCountries,
-			International,
-		],
-		hideDigiSub,
-	});
 	return (
 		<Page
-			header={
-				hideDigiSub ? (
-					<Header countryGroupId={countryGroupId} hideDigiSub={hideDigiSub} />
-				) : (
-					<HeaderWithCountrySwitcher />
-				)
-			}
+			header={<Header countryGroupId={countryGroupId} />}
 			footer={<Footer centred />}
 		>
 			<SubscriptionLandingContent

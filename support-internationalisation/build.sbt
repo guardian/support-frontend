@@ -2,7 +2,8 @@ import sbtrelease.ReleaseStateTransformations._
 
 name := "support-internationalisation"
 
-crossScalaVersions := Seq("2.11.12", "2.12.17")
+scalaVersion := "3.1.3" // beware >= 3.1.3 has an incompatibility with <= 2.13.8 which causes compile issue `Unsupported Scala 3 generic tuple type scala.Tuple in bounds of type MirroredElemTypes; found in  scala.deriving.Mirror.<refinement>.`
+crossScalaVersions := Seq("2.13.8", "3.1.3")
 
 description := "Scala library to provide internationalisation classes to Guardian Membership/Subscriptions/support projects."
 

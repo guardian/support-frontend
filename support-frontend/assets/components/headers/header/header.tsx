@@ -13,50 +13,19 @@ export type PropTypes = {
 	utility?: JSX.Element;
 	countryGroupId: CountryGroupId;
 	display?: 'navigation' | 'checkout' | 'guardianLogo' | void;
-	hideDigiSub?: boolean;
 };
 export type State = {
-	fitsLinksInOneRow: boolean;
-	fitsLinksAtAll: boolean;
 	isTestUser: boolean | null | undefined;
-};
-
-// ----- Metrics ----- //
-const getMenuStateMetrics = ({
-	menuRef,
-	logoRef,
-	containerRef,
-}: {
-	menuRef: Element;
-	logoRef: Element;
-	containerRef: Element;
-}): State => {
-	const [logoLeft, menuWidth, containerLeft, containerWidth] = [
-		logoRef.getBoundingClientRect().left,
-		menuRef.getBoundingClientRect().width,
-		containerRef.getBoundingClientRect().left,
-		containerRef.getBoundingClientRect().width,
-	];
-	const fitsLinksAtAll = containerWidth - menuWidth > 0;
-	const fitsLinksInOneRow =
-		fitsLinksAtAll && logoLeft - containerLeft - menuWidth > 0;
-	const isTestUser = getGlobal<boolean>('isTestUser');
-	return {
-		fitsLinksInOneRow,
-		fitsLinksAtAll,
-		isTestUser,
-	};
 };
 
 // ----- Component ----- //
 
 type TopNavPropTypes = {
 	utility?: JSX.Element;
-	getLogoRef: (arg0: Element | null | undefined) => void;
 	display: 'navigation' | 'checkout' | 'guardianLogo' | void;
 };
 
-function TopNav({ display, getLogoRef, utility }: TopNavPropTypes) {
+function TopNav({ display, utility }: TopNavPropTypes) {
 	return (
 		<div className="component-header-topnav">
 			<div className="component-header-topnav__utility">{utility}</div>
@@ -71,7 +40,7 @@ function TopNav({ display, getLogoRef, utility }: TopNavPropTypes) {
 					</div>
 				</div>
 			)}
-			<div className="component-header-topnav-logo" ref={getLogoRef}>
+			<div className="component-header-topnav-logo">
 				<a
 					className="component-header-topnav-logo__graun"
 					href="https://www.theguardian.com"
@@ -90,55 +59,28 @@ export default class Header extends Component<PropTypes, State> {
 		display: 'navigation',
 	};
 	state = {
-		fitsLinksInOneRow: false,
-		fitsLinksAtAll: false,
 		isTestUser: getGlobal<boolean>('isTestUser'),
 	};
 
 	componentDidMount(): void {
-		const { menuRef, logoRef, containerRef } = this;
-		if (
-			this.props.display === 'navigation' &&
-			menuRef &&
-			logoRef &&
-			containerRef
-		) {
-			this.observer = new window.ResizeObserver(() => {
-				this.setState(
-					getMenuStateMetrics({
-						menuRef,
-						logoRef,
-						containerRef,
-					}),
-				);
+		if (this.props.display === 'navigation') {
+			this.setState({
+				isTestUser: getGlobal<boolean>('isTestUser'),
 			});
-
-			this.observer.observe(menuRef);
-			this.observer.observe(logoRef);
-			this.observer.observe(containerRef);
 		}
 	}
-
-	componentWillUnmount(): void {
-		if (this.observer) {
-			this.observer.disconnect();
-		}
-	}
-
-	logoRef: Element | null | undefined;
-	menuRef: Element | null | undefined;
-	containerRef: Element | null | undefined;
-	observer: ResizeObserver | null | undefined;
 
 	render(): JSX.Element {
-		const { utility, display, countryGroupId, hideDigiSub } = this.props;
-		const { fitsLinksInOneRow, fitsLinksAtAll, isTestUser } = this.state;
+		const { utility, display, countryGroupId } = this.props;
+		const { isTestUser } = this.state;
+
 		return (
 			<header
 				className={classNameWithModifiers('component-header', [
-					fitsLinksInOneRow ? 'one-row' : null,
+					countryGroupId !== 'GBPCountries'
+						? 'one-row-from-tablet'
+						: 'one-row-from-leftCol',
 					display === 'navigation' ? 'display-navigation' : null,
-					!fitsLinksAtAll ? 'display-veggie-burger' : null,
 					display === 'checkout' ? 'display-checkout' : null,
 				])}
 			>
@@ -147,30 +89,16 @@ export default class Header extends Component<PropTypes, State> {
 						<span>You are a test user</span>
 					</div>
 				)}
-				<div
-					className="component-header__wrapper"
-					ref={(el) => {
-						this.containerRef = el;
-					}}
-				>
+				<div className="component-header__wrapper">
 					<div className="component-header__row">
 						<TopNav
 							display={display}
-							utility={
-								display === 'navigation' && fitsLinksAtAll ? utility : undefined
-							}
-							getLogoRef={(el) => {
-								this.logoRef = el;
-							}}
+							utility={display === 'navigation' ? utility : undefined}
 						/>
 						{display === 'navigation' && (
 							<MobileMenuToggler
 								links={
-									<Links
-										countryGroupId={countryGroupId}
-										location="mobile"
-										hideDigiSub={hideDigiSub}
-									/>
+									<Links countryGroupId={countryGroupId} location="mobile" />
 								}
 								utility={utility}
 							/>
@@ -178,14 +106,7 @@ export default class Header extends Component<PropTypes, State> {
 					</div>
 					{display === 'navigation' && (
 						<div className="component-header__row">
-							<Links
-								countryGroupId={countryGroupId}
-								location="desktop"
-								getRef={(el) => {
-									this.menuRef = el;
-								}}
-								hideDigiSub={hideDigiSub}
-							/>
+							<Links countryGroupId={countryGroupId} location="desktop" />
 						</div>
 					)}
 					{display === 'checkout' && (

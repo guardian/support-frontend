@@ -78,6 +78,7 @@ function getAddressFieldsSlice(type: AddressType) {
 
 				if (country) {
 					state.country = country;
+					state.state = '';
 				}
 			},
 			setFormErrors(state, action: PayloadAction<AddressFormFieldError[]>) {

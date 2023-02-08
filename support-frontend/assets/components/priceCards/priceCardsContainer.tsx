@@ -48,9 +48,11 @@ export function PriceCardsContainer({
 		(state) => state.page.checkoutForm.product,
 	);
 	const minAmount = useContributionsSelector(getMinimumContributionAmount);
-
-	const { amounts: frequencyAmounts, defaultAmount } = amounts[frequency];
-
+	const {
+		amounts: frequencyAmounts,
+		defaultAmount,
+		hideChooseYourAmount,
+	} = amounts[frequency];
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
 		frequency,
@@ -86,6 +88,7 @@ export function PriceCardsContainer({
 		minAmount,
 		onAmountChange,
 		onOtherAmountChange,
+		hideChooseYourAmount,
 		errors: otherAmountErrors,
 	});
 }
