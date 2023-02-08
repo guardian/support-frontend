@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import type { RedemptionPageState } from 'helpers/redux/redemptionsStore';
-import ThankYouContent from 'pages/digital-subscription-checkout/thankYouContent';
+import ThankYouContent from 'pages/subscriptions-redemption/thankYouContent';
 
 function mapStateToProps(state: RedemptionPageState) {
 	return {
