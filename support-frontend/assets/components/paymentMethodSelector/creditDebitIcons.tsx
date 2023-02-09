@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
-import { brand, from } from '@guardian/source-foundations';
+import { brand } from '@guardian/source-foundations';
 import type { IconSize } from '@guardian/source-react-components';
 import { SvgCreditCard } from '@guardian/source-react-components';
 
 const creditCardIcon = css`
-	${from.mobileMedium} {
+	@media (min-width: 355px) {
 		display: none;
 	}
 `;
@@ -13,7 +13,7 @@ const brandedIcons = css`
 	display: none;
 	width: 100%;
 
-	${from.mobileMedium} {
+	@media (min-width: 355px) {
 		display: flex;
 	}
 `;
@@ -55,7 +55,7 @@ export function CreditDebitIcons(): JSX.Element {
 	);
 }
 
-function BrandedIcons(): JSX.Element {
+export function BrandedIcons(): JSX.Element {
 	return (
 		<svg
 			width="110"
