@@ -29,6 +29,13 @@ class ZuoraSupporterPlusHandler(
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(
         supporterPlusSubscriptionBuilder.build(state, csrUsername, salesforceCaseId, abTests),
       )
-    } yield SendThankYouEmailSupporterPlusState(user, state.product, state.paymentMethod, account.value, sub.value)
+    } yield SendThankYouEmailSupporterPlusState(
+      user,
+      state.product,
+      state.paymentMethod,
+      account.value,
+      sub.value,
+      abTests,
+    )
 
 }

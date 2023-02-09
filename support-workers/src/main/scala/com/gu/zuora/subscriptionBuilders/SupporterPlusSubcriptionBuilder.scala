@@ -1,6 +1,7 @@
 package com.gu.zuora.subscriptionBuilders
 
 import com.gu.helpers.DateGenerator
+import com.gu.helpers.SupportWorkersV2Helper.isV2SupporterPlus
 import com.gu.i18n.Currency
 import com.gu.support.acquisitions.AbTest
 import com.gu.support.catalog.{CatalogService, Pricelist, ProductRatePlanId, SupporterPlus}
@@ -20,8 +21,6 @@ class SupporterPlusSubcriptionBuilder(
     environment: TouchPointEnvironment,
     subscribeItemBuilder: SubscribeItemBuilder,
 ) {
-  def isV2SupporterPlus(abTests: Option[Set[AbTest]]) =
-    abTests.flatMap(_.find(test => test.name == "supporterPlusV2" && test.variant == "variant")).isDefined
 
   def build(
       state: SupporterPlusState,
