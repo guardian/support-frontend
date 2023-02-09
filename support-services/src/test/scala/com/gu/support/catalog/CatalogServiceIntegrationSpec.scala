@@ -10,7 +10,7 @@ import org.scalatest.matchers.should.Matchers
 @IntegrationTest
 class CatalogServiceIntegrationSpec extends AsyncFlatSpec with Matchers with Inspectors {
 
-  "CatalogService" should "load the correct catalog for the given environment" in {
+  "CatalogService" should "be able to find a price list for all product rate plans in all environments" in {
     Console.println("Testing PROD")
     testEnvironment(PROD)
     Console.println("Testing UAT")

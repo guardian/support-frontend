@@ -25,7 +25,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
     testDecoding[Catalog](
       Fixtures.loadCatalog,
       catalog => {
-        // catalog.prices.length shouldBe numberOfPriceLists
+        catalog.prices.length shouldBe numberOfPriceLists
         checkPrice(catalog, supporterPlusV1MonthlyId, GBP, 10)
         checkPrice(catalog, supporterPlusV2MonthlyId, GBP, 10)
         checkPrice(catalog, supporterPlusV2AnnualId, GBP, 95)

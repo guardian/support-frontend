@@ -9,6 +9,7 @@ import com.gu.support.workers.lambdas.UpdateSupporterProductDataSpec.{
   supporterPlusV2State,
 }
 import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.supporterdata.model.ContributionAmount
 import io.circe.parser._
 import org.scalatest.Inside.inside
 import org.scalatest.flatspec.AnyFlatSpec
@@ -46,6 +47,7 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec {
       .getSupporterRatePlanItemFromState(state.toOption.get, serviceWithFixtures)
     inside(supporterRatePlanItem) { case Right(item) =>
       item.value.identityId shouldBe "200092951"
+      item.value.contributionAmount shouldBe Some(ContributionAmount(12, "GBP"))
     }
   }
 }

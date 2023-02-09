@@ -96,9 +96,9 @@ object UpdateSupporterProductData {
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
 
       case SendThankYouEmailSupporterPlusState(user, product, _, _, subscriptionNumber, abTests) =>
-        val version = if (isV2SupporterPlus(abTests)) SupporterPlusV2 else SupporterPlusV1
+        val supporterPlusVersion = if (isV2SupporterPlus(abTests)) SupporterPlusV2 else SupporterPlusV1
         catalogService
-          .getProductRatePlan(SupporterPlus, product.billingPeriod, NoFulfilmentOptions, version)
+          .getProductRatePlan(SupporterPlus, product.billingPeriod, NoFulfilmentOptions, supporterPlusVersion)
           .map(productRatePlan =>
             Some(
               supporterRatePlanItem(
