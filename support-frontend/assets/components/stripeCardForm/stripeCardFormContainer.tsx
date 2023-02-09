@@ -85,7 +85,7 @@ export function StripeCardFormContainer(): JSX.Element {
 				getStripeSetupIntent({
 					token,
 					stripePublicKey: publicKey,
-					isTestUser: isTestUser ?? false,
+					isTestUser,
 				}),
 			).catch((err: Error) => {
 				logCreateSetupIntentError(err);

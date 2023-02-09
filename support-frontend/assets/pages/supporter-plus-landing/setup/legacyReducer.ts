@@ -18,8 +18,8 @@ import { recaptchaReducer } from 'helpers/redux/checkout/recaptcha/reducer';
 import type { RecaptchaState } from 'helpers/redux/checkout/recaptcha/state';
 import { thankYouReducer } from 'helpers/redux/checkout/thankYouState/reducer';
 import type { ThankYouState } from 'helpers/redux/checkout/thankYouState/state';
-import { createUserReducer } from 'helpers/user/userReducer';
-import type { User as UserState } from 'helpers/user/userReducer';
+import { userReducer } from 'helpers/redux/user/reducer';
+import type { UserState } from 'helpers/redux/user/state';
 import type { Action } from './legacyActionCreators';
 
 // ----- Types ----- //
@@ -47,44 +47,41 @@ export interface PageState {
 
 // ----- Functions ----- //
 
-function createFormReducer() {
-	// ----- Initial state ----- //
-	const initialState: FormState = {
-		isWaiting: false,
-		paymentComplete: false,
-		paymentError: null,
-	};
-	return function formReducer(
-		state: FormState = initialState,
-		action: Action,
-	): FormState {
-		switch (action.type) {
-			case 'PAYMENT_FAILURE':
-				return {
-					...state,
-					paymentComplete: false,
-					paymentError: action.paymentError,
-				};
+const initialState: FormState = {
+	isWaiting: false,
+	paymentComplete: false,
+	paymentError: null,
+};
+function formReducer(
+	state: FormState = initialState,
+	action: Action,
+): FormState {
+	switch (action.type) {
+		case 'PAYMENT_FAILURE':
+			return {
+				...state,
+				paymentComplete: false,
+				paymentError: action.paymentError,
+			};
 
-			case 'PAYMENT_WAITING':
-				return {
-					...state,
-					paymentComplete: false,
-					isWaiting: action.isWaiting,
-				};
+		case 'PAYMENT_WAITING':
+			return {
+				...state,
+				paymentComplete: false,
+				isWaiting: action.isWaiting,
+			};
 
-			case 'PAYMENT_SUCCESS':
-				return { ...state, paymentComplete: true };
+		case 'PAYMENT_SUCCESS':
+			return { ...state, paymentComplete: true };
 
-			default:
-				return state;
-		}
-	};
+		default:
+			return state;
+	}
 }
 
 function initReducer(): Reducer<PageState> {
 	return combineReducers({
-		form: createFormReducer(),
+		form: formReducer,
 		checkoutForm: combineReducers({
 			personalDetails: personalDetailsReducer,
 			product: productReducer,
@@ -95,7 +92,7 @@ function initReducer(): Reducer<PageState> {
 			billingAddress: billingAddressReducer,
 			thankYou: thankYouReducer,
 		}),
-		user: createUserReducer(),
+		user: userReducer,
 	});
 }
 
