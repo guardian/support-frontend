@@ -9,11 +9,11 @@ import type { MarketingConsentState } from 'helpers/redux/checkout/marketingCons
 import { personalDetailsReducer } from 'helpers/redux/checkout/personalDetails/reducer';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import { productReducer } from 'helpers/redux/checkout/product/reducer';
-import { userReducer } from 'helpers/redux/user/reducer';
-import type { UserState } from 'helpers/redux/user/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
+import type { User } from 'helpers/user/userReducer';
+import { createUserReducer } from 'helpers/user/userReducer';
 
 export type Stage = 'form' | 'processing' | 'thankyou' | 'thankyou-pending';
 
@@ -26,7 +26,7 @@ export type RedemptionFormState = {
 	userCode: Option<string>;
 	readerType: Option<ReaderType>;
 	error: Option<string>;
-	user: UserState;
+	user: User;
 	checkout: RedemptionCheckoutState;
 	checkoutForm: {
 		personalDetails: PersonalDetailsState;
@@ -132,7 +132,7 @@ export const redemptionPageReducer = combineReducers({
 	userCode,
 	readerType,
 	error,
-	user: userReducer,
+	user: createUserReducer(),
 	checkout: createRedemptionCheckoutReducer(),
 	checkoutForm: combineReducers({
 		personalDetails: personalDetailsReducer,

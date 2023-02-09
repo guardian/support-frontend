@@ -21,11 +21,11 @@ import { recaptchaReducer } from 'helpers/redux/checkout/recaptcha/reducer';
 import type { RecaptchaState } from 'helpers/redux/checkout/recaptcha/state';
 import { thankYouReducer } from 'helpers/redux/checkout/thankYouState/reducer';
 import type { CommonState } from 'helpers/redux/commonState/state';
-import { userReducer } from 'helpers/redux/user/reducer';
-import type { UserState } from 'helpers/redux/user/state';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { createFormReducer } from 'helpers/subscriptionsForms/formReducer';
 import type { Option } from 'helpers/types/option';
+import type { User } from 'helpers/user/userReducer';
+import { createUserReducer } from 'helpers/user/userReducer';
 
 export type ReduxState<PageState> = {
 	common: CommonState;
@@ -47,7 +47,7 @@ export type CheckoutFormState = {
 export type CheckoutState = ReduxState<{
 	checkout: FormState;
 	checkoutForm: CheckoutFormState;
-	user: UserState;
+	user: User;
 }>;
 
 export type WithDeliveryCheckoutState = ReduxState<{
@@ -72,7 +72,7 @@ export function createReducer() {
 			payment: paymentReducer,
 			thankYou: thankYouReducer,
 		}),
-		user: userReducer,
+		user: createUserReducer(),
 	});
 }
 
