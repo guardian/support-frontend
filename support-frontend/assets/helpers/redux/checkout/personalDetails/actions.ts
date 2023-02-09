@@ -6,6 +6,7 @@ export const {
 	setLastName,
 	setEmail,
 	setConfirmEmail,
+	setIsSignedIn,
 	setUserTypeFromIdentityResponse,
 	setTelephone,
 } = personalDetailsSlice.actions;

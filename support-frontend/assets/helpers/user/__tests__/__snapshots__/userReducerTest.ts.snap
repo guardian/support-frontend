@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`user reducer tests should return the initial state 1`] = `
+Object {
+  "displayName": "",
+  "email": "",
+  "emailValidated": false,
+  "firstName": "",
+  "fullName": "",
+  "gnmMarketing": false,
+  "id": "",
+  "isPostDeploymentTestUser": false,
+  "isRecurringContributor": false,
+  "isReturningContributor": false,
+  "isSignedIn": false,
+  "isStorybookUser": false,
+  "isTestUser": null,
+  "lastName": "",
+  "stateField": "",
+}
+`;

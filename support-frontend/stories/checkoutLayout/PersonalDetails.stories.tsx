@@ -59,7 +59,7 @@ SingleContribSignedIn.args = {
 	firstName: '',
 	lastName: '',
 	contributionType: 'ONE_OFF',
-	isSignedIn: false,
+	isSignedInPersonalDetails: false,
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
 		<StateSelect
@@ -78,7 +78,7 @@ SingleContribSignedOut.args = {
 	firstName: '',
 	lastName: '',
 	contributionType: 'ONE_OFF',
-	isSignedIn: false,
+	isSignedInPersonalDetails: false,
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
 		<StateSelect
@@ -97,7 +97,7 @@ MultiContribSignedIn.args = {
 	firstName: '',
 	lastName: '',
 	contributionType: 'MONTHLY',
-	isSignedIn: false,
+	isSignedInPersonalDetails: false,
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
 		<StateSelect
@@ -116,7 +116,7 @@ MultiContribSignedOut.args = {
 	firstName: '',
 	lastName: '',
 	contributionType: 'MONTHLY',
-	isSignedIn: false,
+	isSignedInPersonalDetails: false,
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
 		<StateSelect
@@ -135,7 +135,7 @@ MultiContribUSSignedIn.args = {
 	firstName: '',
 	lastName: '',
 	contributionType: 'MONTHLY',
-	isSignedIn: false,
+	isSignedInPersonalDetails: false,
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
 		<StateSelect
@@ -154,7 +154,7 @@ MultiContribUSSignedOut.args = {
 	firstName: '',
 	lastName: '',
 	contributionType: 'MONTHLY',
-	isSignedIn: false,
+	isSignedInPersonalDetails: false,
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
 		<StateSelect
@@ -173,7 +173,7 @@ WithErrors.args = {
 	firstName: '',
 	lastName: '',
 	contributionType: 'MONTHLY',
-	isSignedIn: false,
+	isSignedInPersonalDetails: false,
 	errors: {
 		firstName: ['Please enter your first name'],
 		lastName: ['Please enter your last name'],
