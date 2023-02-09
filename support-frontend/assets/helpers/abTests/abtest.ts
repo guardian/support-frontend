@@ -44,6 +44,7 @@ export type Audiences = {
 type AcquisitionABTest = {
 	name: string;
 	variant: string;
+	testType?: string;
 };
 
 export type Variant = {
@@ -94,6 +95,7 @@ export function init(
 	const amountsTestParticipations = getAmountsTestParticipations(
 		countryGroupId,
 		settings,
+		acquisitionDataTests,
 	);
 
 	return {
@@ -200,9 +202,25 @@ function getServerSideParticipations(): Participations | null | undefined {
 	return null;
 }
 
+function getAmountsTestFromURL(data: AcquisitionABTest[]) {
+	console.log('getAmountsTestFromURL', data);
+	const amountTests = data.filter((t) => t.testType === 'AMOUNTS_TEST');
+
+	if (amountTests.length) {
+		const test = amountTests[0];
+		console.log('getAmountsTestFromURL - SUCCESS');
+		return {
+			[test.name]: test.variant,
+		};
+	}
+	console.log('getAmountsTestFromURL - FAIL');
+	return null;
+}
+
 function getAmountsTestParticipations(
 	countryGroupId: CountryGroupId,
 	settings: Settings,
+	acquisitionDataTests: AcquisitionABTest[],
 ): Participations | null | undefined {
 	if (
 		!targetPageMatches(
@@ -211,6 +229,12 @@ function getAmountsTestParticipations(
 		)
 	) {
 		return null;
+	}
+
+	// Amounts test/variant has been set in the Epic and coded into the Epic CTA URL
+	const urlTest = getAmountsTestFromURL(acquisitionDataTests);
+	if (urlTest != null) {
+		return urlTest;
 	}
 
 	const { test } = settings.amounts?.[countryGroupId] ?? {};
