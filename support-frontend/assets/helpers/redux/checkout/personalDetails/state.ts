@@ -39,8 +39,6 @@ export const personalDetailsSchema = z
 		),
 		email: emailRules,
 		confirmEmail: z.optional(z.string()),
-		// isSignedIn is maintained in personal details state purely for the email matching check
-		// It should be set only in response to the setIsSignedIn action from the user slice
 		isSignedIn: z.boolean(),
 		telephone: z.optional(nonSillyString(z.string())),
 	})

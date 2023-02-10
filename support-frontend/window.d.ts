@@ -10,7 +10,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { SendEventId } from 'helpers/tracking/quantumMetric';
-import type { User } from 'helpers/user/user';
+import type { User } from 'helpers/user/userReducer';
 
 declare global {
 	/* ~ Here, declare things that go in the global namespace, or augment
