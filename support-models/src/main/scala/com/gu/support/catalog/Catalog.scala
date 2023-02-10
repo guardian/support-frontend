@@ -11,6 +11,15 @@ import com.gu.support.encoding.JsonHelpers._
 case class Catalog(
     prices: List[Pricelist],
 )
+case class ZuoraCatalog(
+    productRatePlans: List[List[ZuoraProductRatePlan]],
+)
+
+case class ZuoraProductRatePlan(
+    id: String,
+    pricing: List[List[Price]],
+    Saving__c: Option[String],
+)
 
 object Catalog {
   lazy val productRatePlansWithPrices: List[ProductRatePlanId] = for {
@@ -66,8 +75,38 @@ object Catalog {
       .map({ case (_, price) => price.asJson }) // convert back to Json
   }
 
+  def zuoraSumPriceLists(priceLists: List[List[Price]]): List[(Price)] = {
+    // Paper products such as Everyday are represented in the catalog as multiple
+    // product rate plan charges (one for every day of the week) and these each
+    // have their own price list. To get the total prices for these products therefore
+    // we need to sum all of the price lists
+    priceLists.flatten
+      .groupBy(_.currency)
+      .toList
+      .map(sumPrices(_)._2)
+  }
+
   def sumPrices(currencyPrices: (Currency, Seq[Price])): (Currency, Price) = currencyPrices match {
     case (currency, priceList) =>
       (currency, priceList.reduceLeft((p1, p2) => Price(p1.value + p2.value, currency)))
   }
+
+  def convert(zuoraCatalog: ZuoraCatalog): Catalog = {
+    val flatProductRatePlan = zuoraCatalog.productRatePlans.flatten
+      .filter(ratePlan => productRatePlansWithPrices.exists(fromString(_) == ratePlan.id))
+
+    val prices: List[Pricelist] = flatProductRatePlan.map { productRatePlan =>
+      val priceList = zuoraSumPriceLists(productRatePlan.pricing)
+      val id = productRatePlan.id
+      val saving = productRatePlan.Saving__c.map(_.toInt)
+      Pricelist(id, saving, priceList)
+    }
+    return Catalog(prices)
+  }
+}
+
+object ZuoraCatalog {
+
+  // implicit val decoder: Decoder[ZuoraCatalog] = deriveDecoder
+
 }
