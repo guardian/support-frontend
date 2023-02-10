@@ -54,7 +54,6 @@ export type FormState = Omit<
 	formErrors: Array<FormError<FormField>>;
 	submissionError: Option<ErrorReason>;
 	formSubmitted: boolean;
-	isTestUser: boolean;
 };
 
 function getFormFields(state: SubscriptionsState): FormFields {

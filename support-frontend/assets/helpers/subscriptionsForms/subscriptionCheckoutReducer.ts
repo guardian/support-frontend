@@ -53,6 +53,7 @@ export type CheckoutState = ReduxState<{
 export type WithDeliveryCheckoutState = ReduxState<{
 	checkout: FormState;
 	checkoutForm: CheckoutFormState;
+	user: UserState;
 }>;
 
 export type AnyCheckoutState = CheckoutState | WithDeliveryCheckoutState;
