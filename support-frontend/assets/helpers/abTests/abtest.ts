@@ -203,17 +203,14 @@ function getServerSideParticipations(): Participations | null | undefined {
 }
 
 function getAmountsTestFromURL(data: AcquisitionABTest[]) {
-	console.log('getAmountsTestFromURL', data);
 	const amountTests = data.filter((t) => t.testType === 'AMOUNTS_TEST');
 
 	if (amountTests.length) {
 		const test = amountTests[0];
-		console.log('getAmountsTestFromURL - SUCCESS');
 		return {
 			[test.name]: test.variant,
 		};
 	}
-	console.log('getAmountsTestFromURL - FAIL');
 	return null;
 }
 
