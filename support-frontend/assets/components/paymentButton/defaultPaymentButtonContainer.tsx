@@ -45,6 +45,8 @@ export function DefaultPaymentButtonContainer({
 	createButtonText = getButtonText,
 	disabled = false,
 }: DefaultPaymentContainerProps): JSX.Element {
+	console.log('DefaultPaymentButtonContainer --->', disabled);
+
 	const { currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
