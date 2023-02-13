@@ -27,7 +27,7 @@ export function ExistingCardPaymentButton(): JSX.Element {
 	return (
 		<DefaultPaymentButtonContainer
 			onClick={payWithExistingCard}
-			disabled={!!selectedPaymentMethod?.billingAccountId}
+			disabled={!selectedPaymentMethod?.billingAccountId}
 		/>
 	);
 }
