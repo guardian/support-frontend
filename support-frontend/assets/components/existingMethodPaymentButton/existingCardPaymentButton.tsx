@@ -13,6 +13,7 @@ export function ExistingCardPaymentButton(): JSX.Element {
 	);
 
 	const payWithExistingCard = useFormValidation(function pay() {
+		console.log('payWithExistingCard --->', selectedPaymentMethod);
 		void dispatch(
 			onThirdPartyPaymentAuthorised({
 				paymentMethod: 'ExistingCard',
