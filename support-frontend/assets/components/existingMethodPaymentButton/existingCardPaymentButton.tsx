@@ -21,6 +21,8 @@ export function ExistingCardPaymentButton(): JSX.Element {
 		);
 	});
 
+	console.log('selectedPaymentMethod --->', selectedPaymentMethod);
+
 	return (
 		<DefaultPaymentButtonContainer
 			onClick={payWithExistingCard}
