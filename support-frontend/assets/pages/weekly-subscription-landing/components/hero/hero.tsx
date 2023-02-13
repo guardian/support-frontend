@@ -123,7 +123,7 @@ const getFirstParagraph = (
 	);
 };
 
-const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
+function WeeklyHero({ orderIsAGift, promotionCopy }: PropTypes): JSX.Element {
 	const defaultRoundelText = 'Save up to 35% a year';
 	const defaultTitle = orderIsAGift ? null : getRegionalCopyFor(detect());
 	const title = promotionCopy.title ?? defaultTitle;
@@ -190,6 +190,6 @@ const WeeklyHero: React.FC<PropTypes> = ({ orderIsAGift, promotionCopy }) => {
 			</CentredContainer>
 		</PageTitle>
 	);
-};
+}
 
 export { WeeklyHero };
