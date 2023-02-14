@@ -43,7 +43,7 @@ object Catalog {
     val filteredProductRatePlans = zuoraCatalog.products
       .map { _.productRatePlans }
       .flatten
-      .filter(ratePlan => productRatePlansWithPrices.exists(fromString(_) == ratePlan.id))
+      .filter(ratePlan => productRatePlansWithPrices.exists(_ == ratePlan.id))
 
     // create list of priceList
     val priceList: List[Pricelist] = filteredProductRatePlans.map { productRatePlan =>
