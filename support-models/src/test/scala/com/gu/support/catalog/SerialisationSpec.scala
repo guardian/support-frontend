@@ -20,9 +20,10 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
         .ratePlans(PROD)
         .length + SupporterPlus.ratePlans(PROD).length
 
-    testDecoding[Catalog](
+    testDecoding[ZuoraCatalog](
       Fixtures.loadCatalog,
-      catalog => {
+      zuoraCatalog => {
+        val catalog = Catalog.convert(zuoraCatalog)
         catalog.prices.length shouldBe numberOfPriceLists
         checkPrice(catalog, supporterPlusMonthlyId, GBP, 11.99)
         checkPrice(catalog, digitalPackId, GBP, 11.99)
