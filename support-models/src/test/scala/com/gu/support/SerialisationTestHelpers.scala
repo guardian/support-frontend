@@ -12,6 +12,11 @@ trait SerialisationTestHelpers extends Matchers {
     assertDecodingSucceeded(decodeResult, objectChecks)
   }
 
+  def testDecodingFailed[T: Decoder](fixture: String, objectChecks: T => Assertion = (_: T) => succeed): Assertion = {
+    val decodeResult = decode[T](fixture)
+    assertDecodingFailed(decodeResult, objectChecks)
+  }
+
   def testEncoding[T: Encoder](t: T, expectedJson: String): Assertion = {
     val json = t.asJson
     parse(expectedJson).fold(
@@ -21,6 +26,15 @@ trait SerialisationTestHelpers extends Matchers {
   }
 
   def assertDecodingSucceeded[T](
+      decodeResult: Either[Error, T],
+      objectChecks: T => Assertion = (_: T) => succeed,
+  ): Assertion =
+    decodeResult.fold(
+      e => fail(e.getMessage),
+      result => objectChecks(result),
+    )
+
+  def assertDecodingFailed[T](
       decodeResult: Either[Error, T],
       objectChecks: T => Assertion = (_: T) => succeed,
   ): Assertion =
