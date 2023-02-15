@@ -13,7 +13,6 @@ export function ExistingCardPaymentButton(): JSX.Element {
 	);
 
 	const payWithExistingCard = useFormValidation(function pay() {
-		console.log('payWithExistingCard --->', selectedPaymentMethod);
 		void dispatch(
 			onThirdPartyPaymentAuthorised({
 				paymentMethod: 'ExistingCard',
@@ -22,12 +21,5 @@ export function ExistingCardPaymentButton(): JSX.Element {
 		);
 	});
 
-	console.log('selectedPaymentMethod --->', selectedPaymentMethod);
-
-	return (
-		<DefaultPaymentButtonContainer
-			onClick={payWithExistingCard}
-			disabled={!selectedPaymentMethod?.billingAccountId}
-		/>
-	);
+	return <DefaultPaymentButtonContainer onClick={payWithExistingCard} />;
 }

@@ -22,16 +22,10 @@ export function DefaultPaymentButton({
 	id,
 	buttonText,
 	onClick,
-	disabled = false,
 }: DefaultPaymentButtonProps): JSX.Element {
 	return (
 		<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-			<Button
-				id={id}
-				cssOverrides={buttonOverrides}
-				onClick={onClick}
-				disabled={disabled}
-			>
+			<Button id={id} cssOverrides={buttonOverrides} onClick={onClick}>
 				{buttonText}
 			</Button>
 		</ThemeProvider>

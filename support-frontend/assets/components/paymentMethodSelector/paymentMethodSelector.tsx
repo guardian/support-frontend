@@ -102,48 +102,54 @@ export function PaymentMethodSelector({
 				>
 					{[
 						<>
-							{existingPaymentMethodList.map(
-								(
-									preExistingPaymentMethod: RecentlySignedInExistingPaymentMethod,
-								) => {
-									const existingPaymentMethodType =
-										preExistingPaymentMethod.paymentType;
+							{existingPaymentMethodList
+								.filter(
+									(
+										preExistingPaymentMethod: RecentlySignedInExistingPaymentMethod,
+									) => !!preExistingPaymentMethod.billingAccountId,
+								)
+								.map(
+									(
+										preExistingPaymentMethod: RecentlySignedInExistingPaymentMethod,
+									) => {
+										const existingPaymentMethodType =
+											preExistingPaymentMethod.paymentType;
 
-									const paymentType: PaymentMethod =
-										existingPaymentMethodType === 'Card'
-											? 'ExistingCard'
-											: 'ExistingDirectDebit';
+										const paymentType: PaymentMethod =
+											existingPaymentMethodType === 'Card'
+												? 'ExistingCard'
+												: 'ExistingDirectDebit';
 
-									return (
-										<AvailablePaymentMethodAccordionRow
-											id={`paymentMethod-existing${preExistingPaymentMethod.billingAccountId}`}
-											name="paymentMethod"
-											label={getExistingPaymentMethodLabel(
-												preExistingPaymentMethod,
-											)}
-											image={paymentMethodData[paymentType].icon}
-											checked={
-												paymentMethod === paymentType &&
-												existingPaymentMethod === preExistingPaymentMethod
-											}
-											supportingText={`Used for your ${subscriptionsToExplainerList(
-												preExistingPaymentMethod.subscriptions.map(
-													subscriptionToExplainerPart,
-												),
-											)}`}
-											onChange={() => {
-												onSelectPaymentMethod(
-													paymentType,
+										return (
+											<AvailablePaymentMethodAccordionRow
+												id={`paymentMethod-existing${preExistingPaymentMethod.billingAccountId}`}
+												name="paymentMethod"
+												label={getExistingPaymentMethodLabel(
 													preExistingPaymentMethod,
-												);
-											}}
-											accordionBody={
-												paymentMethodData[paymentType].accordionBody
-											}
-										/>
-									);
-								},
-							)}
+												)}
+												image={paymentMethodData[paymentType].icon}
+												checked={
+													paymentMethod === paymentType &&
+													existingPaymentMethod === preExistingPaymentMethod
+												}
+												supportingText={`Used for your ${subscriptionsToExplainerList(
+													preExistingPaymentMethod.subscriptions.map(
+														subscriptionToExplainerPart,
+													),
+												)}`}
+												onChange={() => {
+													onSelectPaymentMethod(
+														paymentType,
+														preExistingPaymentMethod,
+													);
+												}}
+												accordionBody={
+													paymentMethodData[paymentType].accordionBody
+												}
+											/>
+										);
+									},
+								)}
 
 							{availablePaymentMethods.map((method) => (
 								<AvailablePaymentMethodAccordionRow
