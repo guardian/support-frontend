@@ -11,7 +11,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { setIsSignedIn } from 'helpers/redux/user/actions';
+import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 
 const selectorStyles = css`
 	display: flex;
@@ -36,17 +36,17 @@ export function ThankYouUserTypeSelector(): JSX.Element {
 		switch (selectedUserType) {
 			case 'guest':
 				dispatch(setUserTypeFromIdentityResponse('guest'));
-				dispatch(setIsSignedIn(false));
+				dispatch(defaultUserActionFunctions.setIsSignedIn(false));
 				return;
 
 			case 'new':
 				dispatch(setUserTypeFromIdentityResponse('new'));
-				dispatch(setIsSignedIn(false));
+				dispatch(defaultUserActionFunctions.setIsSignedIn(false));
 				return;
 
 			case 'current':
 				dispatch(setUserTypeFromIdentityResponse('current'));
-				dispatch(setIsSignedIn(true));
+				dispatch(defaultUserActionFunctions.setIsSignedIn(true));
 				return;
 
 			default:

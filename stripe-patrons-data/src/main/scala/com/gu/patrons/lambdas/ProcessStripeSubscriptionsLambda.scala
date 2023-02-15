@@ -9,6 +9,8 @@ import com.gu.patrons.services.{
   CreateMissingIdentityProcessor,
   PatronsIdentityService,
   PatronsStripeService,
+  GnmPatronScheme,
+  PatronsStripeAccount,
   StripeSubscriptionsProcessor,
 }
 import com.gu.supporterdata.model.Stage
@@ -21,15 +23,16 @@ import scala.concurrent.duration.{Duration, DurationInt, MILLISECONDS}
 class ProcessStripeSubscriptionsLambda extends RequestHandler[Unit, Unit] {
 
   override def handleRequest(input: Unit, context: Context) = {
+    val account = GnmPatronScheme // TODO: allow this to be set by the caller
     Await.result(
-      processSubscriptions(StageConstructors.fromEnvironment),
+      processSubscriptions(account, StageConstructors.fromEnvironment),
       Duration(context.getRemainingTimeInMillis.toLong, MILLISECONDS),
     )
   }
 }
 
 object ProcessStripeSubscriptionsLambda {
-  def processSubscriptions(stage: Stage) = {
+  def processSubscriptions(account: PatronsStripeAccount, stage: Stage) = {
     val runner = configurableFutureRunner(60.seconds)
     for {
       stripeConfig <- PatronsStripeConfig.fromParameterStore(stage)
@@ -41,7 +44,7 @@ object ProcessStripeSubscriptionsLambda {
         stripeService,
         new CreateMissingIdentityProcessor(identityService, dynamoService),
       )
-      _ <- processor.processSubscriptions(100)
+      _ <- processor.processSubscriptions(account, 100)
     } yield ()
   }
 }

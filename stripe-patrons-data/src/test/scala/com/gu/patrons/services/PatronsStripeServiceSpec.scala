@@ -17,7 +17,7 @@ class PatronsStripeServiceSpec extends AsyncFlatSpec with Matchers {
       .fromParameterStore(DEV)
       .flatMap { config =>
         val stripeService = new PatronsStripeService(config, configurableFutureRunner(60.seconds))
-        stripeService.getSubscriptions(1).map { response =>
+        stripeService.getSubscriptions(GnmPatronScheme, 1).map { response =>
           response.data.length should be > 0
           response.hasMore shouldBe true
           response.data.head.customer.email.length should be > 0

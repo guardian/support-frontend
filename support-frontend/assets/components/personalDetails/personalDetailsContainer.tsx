@@ -29,7 +29,10 @@ export function PersonalDetailsContainer({
 	const { state, errorObject } = useContributionsSelector(
 		(state) => state.page.checkoutForm.billingAddress.fields,
 	);
-	const isSignedIn = useContributionsSelector(
+	const isSignedInPersonalDetails = useContributionsSelector(
+		(state) => state.page.checkoutForm.personalDetails.isSignedIn,
+	);
+	const isSignedInUser = useContributionsSelector(
 		(state) => state.page.user.isSignedIn,
 	);
 	const countryGroupId = useContributionsSelector(
@@ -57,12 +60,12 @@ export function PersonalDetailsContainer({
 		firstName,
 		lastName,
 		contributionType,
-		isSignedIn,
+		isSignedInPersonalDetails,
 		onEmailChange,
 		onFirstNameChange,
 		onLastNameChange,
 		errors,
-		signOutLink: <Signout isSignedIn={isSignedIn} />,
+		signOutLink: <Signout isSignedIn={isSignedInUser} />,
 		contributionState: (
 			<StateSelect
 				countryGroupId={countryGroupId}

@@ -2,7 +2,7 @@ package com.gu.patrons.services
 
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.patrons.conf.PatronsStripeConfig
-import com.gu.patrons.model.{StripeCustomer, StripeError, StripeSubscriptionsResponse}
+import com.gu.patrons.model.{ExpandedStripeCustomer, StripeError, StripeSubscriptionsResponse}
 import com.gu.rest.WebServiceHelper
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -12,11 +12,16 @@ class PatronsStripeService(val config: PatronsStripeConfig, client: FutureHttpCl
 ) extends WebServiceHelper[StripeError] {
   override val wsUrl = "https://api.stripe.com/v1"
   override val httpClient = client
-  val authHeader = Map(
-    "Authorization" -> s"Bearer ${config.apiKey}",
+
+  def authHeader(account: PatronsStripeAccount): Map[String, String] = Map(
+    "Authorization" -> s"Bearer ${account match {
+        case GnmPatronScheme => config.apiKey
+        case GnmPatronSchemeAus => config.apiKeyAu
+      }}",
   )
 
   def getSubscriptions(
+      account: PatronsStripeAccount,
       pageSize: Int = 10,
       startingAfterId: Option[String] = None,
       status: String = "active",
@@ -24,7 +29,7 @@ class PatronsStripeService(val config: PatronsStripeConfig, client: FutureHttpCl
     val startingAfter = startingAfterId.map(id => Map("starting_after" -> id))
     get[StripeSubscriptionsResponse](
       s"subscriptions",
-      authHeader,
+      authHeader(account),
       Map(
         "expand[]" -> "data.customer",
         "status" -> status,
@@ -33,10 +38,15 @@ class PatronsStripeService(val config: PatronsStripeConfig, client: FutureHttpCl
     )
   }
 
-  def getCustomer(customerId: String) =
-    get[StripeCustomer](
+  def getCustomer(account: PatronsStripeAccount, customerId: String) =
+    get[ExpandedStripeCustomer](
       s"customers/$customerId",
-      authHeader,
+      authHeader(account),
     )
 
 }
+
+sealed trait PatronsStripeAccount
+
+case object GnmPatronScheme extends PatronsStripeAccount
+case object GnmPatronSchemeAus extends PatronsStripeAccount
