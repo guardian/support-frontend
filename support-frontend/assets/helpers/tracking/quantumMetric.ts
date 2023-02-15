@@ -307,10 +307,12 @@ function sendEventContributionPaymentMethod(
 
 function sendEventConversionPaymentMethod(paymentMethod: PaymentMethod): void {
 	void ifQmPermitted(() => {
-		sendEvent(
-			SendEventContributionPaymentMethodUpdate.PaymentMethodAtConversion,
-			false,
-			paymentMethod.toString(),
+		sendEventWhenReadyTrigger(() =>
+			sendEvent(
+				SendEventContributionPaymentMethodUpdate.PaymentMethodAtConversion,
+				false,
+				paymentMethod.toString(),
+			),
 		);
 	});
 }
