@@ -48,11 +48,12 @@ const closeGapAfterPageTitle = css`
 `;
 
 const displayRowEvenly = css`
-  ${from.phablet} {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly:
-}`;
+	${from.phablet} {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-evenly;
+	}
+`;
 
 // ----- Render ----- //
 function WeeklyLandingPage({

@@ -35,7 +35,7 @@ export const confirmAccountDetails = createAsyncThunk<
 			accountHolderConfirmation,
 		} = getState().page.checkoutForm.payment.directDebit;
 		const sortCode = sortCodeArray.join('') || sortCodeString;
-		const isTestUser = getState().page.user.isTestUser ?? false;
+		const isTestUser = getState().page.user.isTestUser;
 		const { csrf } = getState().page.checkoutForm;
 
 		if (!accountHolderConfirmation) {
