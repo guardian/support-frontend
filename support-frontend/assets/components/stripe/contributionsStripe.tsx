@@ -32,7 +32,7 @@ export function ContributionsStripe({
 
 	useEffect(() => {
 		const stripeAccount = stripeAccountForContributionType[contributionType];
-		const publicKey = getStripeKey(stripeAccount, country, isTestUser);
+		const publicKey = getStripeKey(stripeAccount, country, isTestUser ?? false);
 
 		dispatch(setStripeAccountName(stripeAccount));
 		dispatch(setStripePublicKey(publicKey));

@@ -120,7 +120,7 @@ const buildStripeChargeDataFromAuthorisation = (
 	publicKey: getStripeKey(
 		stripeAccountForContributionType[getContributionType(state)],
 		state.common.internationalisation.countryId,
-		state.page.user.isTestUser,
+		state.page.user.isTestUser ?? false,
 	),
 	recaptchaToken: state.page.checkoutForm.recaptcha.token,
 });

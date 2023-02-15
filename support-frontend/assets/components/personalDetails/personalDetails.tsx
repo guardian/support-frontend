@@ -29,7 +29,7 @@ export type PersonalDetailsProps = {
 	firstName: string;
 	lastName: string;
 	contributionType: ContributionType;
-	isSignedIn: boolean;
+	isSignedInPersonalDetails: boolean;
 	onEmailChange: (email: string) => void;
 	onFirstNameChange: (firstName: string) => void;
 	onLastNameChange: (lastName: string) => void;
@@ -43,7 +43,7 @@ export function PersonalDetails({
 	firstName,
 	lastName,
 	contributionType,
-	isSignedIn,
+	isSignedInPersonalDetails,
 	onEmailChange,
 	onFirstNameChange,
 	onLastNameChange,
@@ -65,7 +65,7 @@ export function PersonalDetails({
 					onChange={(e) => onEmailChange(e.target.value)}
 					pattern={emailRegexPattern}
 					error={errors?.email?.[0]}
-					disabled={isSignedIn}
+					disabled={isSignedInPersonalDetails}
 				/>
 			</div>
 

@@ -2,6 +2,7 @@
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import type { FormState } from 'helpers/subscriptionsForms/formFields';
 import { removeError } from 'helpers/subscriptionsForms/validation';
+import { isTestUser } from 'helpers/user/user';
 
 function createFormReducer() {
 	const initialState: FormState = {
@@ -10,6 +11,7 @@ function createFormReducer() {
 		formErrors: [],
 		submissionError: null,
 		formSubmitted: false,
+		isTestUser: isTestUser(),
 		deliveryInstructions: null,
 	};
 
