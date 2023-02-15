@@ -48,8 +48,8 @@ export function getUserCanTakeOutContribution(
 	if (contributionType === 'ONE_OFF') {
 		return true;
 	}
-	const userIsAlreadyARecurringContributor =
-		state.page.user.isRecurringContributorError;
 
-	return !userIsAlreadyARecurringContributor;
+	const userIsRecurringContributor =
+		state.page.user.isRecurringContributorError ?? false;
+	return !userIsRecurringContributor;
 }
