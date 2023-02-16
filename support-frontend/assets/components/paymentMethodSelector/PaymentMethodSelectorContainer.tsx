@@ -14,6 +14,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventContributionPaymentMethod } from 'helpers/tracking/quantumMetric';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
 
@@ -80,6 +81,15 @@ function PaymentMethodSelectorContainer({
 		paymentMethod: PaymentMethod,
 		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 	) {
+		// if (existingPaymentMethod) {
+		//   trackComponentClick({
+		//     `checkout`
+		//   })
+		// } else {
+		//   trackComponentClick({
+		//     `npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`
+		//   })
+		// }
 		sendEventContributionPaymentMethod(paymentMethod);
 		dispatch(setPaymentMethod(paymentMethod));
 		existingPaymentMethod &&
