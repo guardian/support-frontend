@@ -101,6 +101,10 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 			),
 		},
 		{
+			rule: notLongerThan(fields.firstName, 40),
+			error: formError('firstName', 'First name is too long.'),
+		},
+		{
 			rule: nonEmptyString(fields.lastName),
 			error: formError('lastName', 'Please enter a last name.'),
 		},
@@ -110,6 +114,10 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 				'lastName',
 				'Please use only letters, numbers and punctuation.',
 			),
+		},
+		{
+			rule: notLongerThan(fields.lastName, 40),
+			error: formError('lastName', 'Last name is too long'),
 		},
 		{
 			rule: nonSillyCharacters(fields.telephone),
