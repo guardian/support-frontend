@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { createElement } from 'react';
 import type { $Keys } from 'utility-types';
 import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
@@ -55,7 +55,7 @@ function SharedButton({
 	getRef,
 	postDeploymentTestID,
 	...otherProps
-}: PropTypes): ReactElement {
+}: PropTypes): JSX.Element {
 	const className = classNameWithModifiers('component-button', [
 		appearance,
 		`hasicon-${iconSide}`,

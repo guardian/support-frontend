@@ -17,7 +17,7 @@ const banner = css`
 	z-index: 999;
 `;
 
-function CsrBanner() {
+function CsrBanner(): JSX.Element | null {
 	const [csrCustomerData, setCsrCustomerData] = useState<
 		CsrCustomerData | undefined
 	>(undefined);
