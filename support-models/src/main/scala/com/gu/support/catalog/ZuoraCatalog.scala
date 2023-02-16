@@ -15,10 +15,10 @@ case class ZuoraProduct(
 case class ZuoraProductRatePlan(
     id: String,
     Saving__c: Option[String],
-    productRatePlanCharges: Array[ZuoraRatePlanCharge],
+    productRatePlanCharges: Array[ZuoraProductRatePlanCharge],
 )
 
-case class ZuoraRatePlanCharge(
+case class ZuoraProductRatePlanCharge(
     id: String,
     pricing: Array[Price],
 )
@@ -27,5 +27,5 @@ object ZuoraCatalog {
   implicit val decoderZuoraCatalog: Decoder[ZuoraCatalog] = deriveDecoder
   implicit val decoderZuoraProduct: Decoder[ZuoraProduct] = deriveDecoder
   implicit val decoderZuoraProductRatePlan: Decoder[ZuoraProductRatePlan] = deriveDecoder
-  implicit val decoderZuoraRatePlanCharge: Decoder[ZuoraRatePlanCharge] = deriveDecoder
+  implicit val decoderZuoraProductRatePlanCharge: Decoder[ZuoraProductRatePlanCharge] = deriveDecoder
 }
