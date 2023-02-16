@@ -6,8 +6,8 @@ import {
 	brandAlt,
 	from,
 	headline,
+	palette,
 	space,
-	text,
 } from '@guardian/source-foundations';
 import {
 	buttonThemeDefault,
@@ -19,73 +19,90 @@ import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
 import PageTitle from 'components/page/pageTitle';
-import type { Participations } from 'helpers/abTests/abtest';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	detect,
 	GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
+import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { guardianWeeklyHeroBlue } from 'stylesheets/emotion/colours';
+import WeeklyProductPrices from '../weeklyProductPrices';
 
-type PropTypes = {
+type WeeklyHeroPropTypes = {
 	orderIsAGift: boolean;
-	countryGroupId: CountryGroupId;
 	promotionCopy: PromotionCopy;
-	participations: Participations;
 };
-const weeklyHeroCopy = css`
-	padding: 0 ${space[3]}px ${space[3]}px;
-	color: ${text.primary};
-`;
-const weeklyHeroTitle = css`
-	${headline.small({
-		fontWeight: 'bold',
-	})};
-	margin-bottom: ${space[3]}px;
 
-	${from.mobileLandscape} {
-		width: 75%;
-	}
+type PriceCardsWeeklyHeroPropTypes = {
+	orderIsAGift: boolean;
+	promotionCopy: PromotionCopy;
+	countryId: IsoCountry;
+	productPrices: ProductPrices;
+	isPriceCardsAbTestVariant: boolean;
+};
 
-	${from.tablet} {
-		${headline.large({
+const styles = {
+	weeklyHeroCopy: css`
+		padding: 0 ${space[3]}px ${space[3]}px;
+		color: ${palette.neutral[7]};
+	`,
+	weeklyHeroTitle: css`
+		${headline.small({
 			fontWeight: 'bold',
 		})};
+		margin-bottom: ${space[3]}px;
+
+		${from.mobileLandscape} {
+			width: 75%;
+		}
+
+		${from.tablet} {
+			${headline.large({
+				fontWeight: 'bold',
+			})};
+			width: 100%;
+		}
+	`,
+	pageTitleOverrides: css`
 		width: 100%;
-	}
-`;
-const weeklyHeroParagraph = css`
-	${body.medium({
-		lineHeight: 'loose',
-	})}
-	margin-bottom: ${space[9]}px;
-
-	/* apply the same margin to paragraphs parsed from markdown from promo codes */
-	& p:not(:last-of-type) {
+	`,
+	weeklyHeroParagraph: css`
+		${body.medium({
+			lineHeight: 'loose',
+		})}
 		margin-bottom: ${space[9]}px;
-	}
-`;
-const showOnMobile = css`
-	display: block;
 
-	${from.mobileLandscape} {
-		display: none;
-	}
-`;
+		/* apply the same margin to paragraphs parsed from markdown from promo codes */
+		& p:not(:last-of-type) {
+			margin-bottom: ${space[9]}px;
+		}
+	`,
+	showOnMobile: css`
+		display: block;
+
+		${from.mobileLandscape} {
+			display: none;
+		}
+	`,
+	priceCardsHeroContainer: css`
+		background-color: ${palette.brand[400]};
+	`,
+};
 
 const getRegionalCopyFor = (region: CountryGroupId) =>
 	region === GBPCountries ? (
 		<span>
 			Find clarity
-			<br css={showOnMobile} /> with the Guardian&apos;s global magazine
+			<br css={styles.showOnMobile} /> with the Guardian&apos;s global magazine
 		</span>
 	) : (
 		<span>
 			Read The
-			<br css={showOnMobile} /> Guardian in print
+			<br css={styles.showOnMobile} /> Guardian in print
 		</span>
 	);
 
@@ -123,7 +140,10 @@ const getFirstParagraph = (
 	);
 };
 
-function WeeklyHero({ orderIsAGift, promotionCopy }: PropTypes): JSX.Element {
+export function WeeklyHero({
+	orderIsAGift,
+	promotionCopy,
+}: WeeklyHeroPropTypes): JSX.Element {
 	const defaultRoundelText = 'Save up to 35% a year';
 	const defaultTitle = orderIsAGift ? null : getRegionalCopyFor(detect());
 	const title = promotionCopy.title ?? defaultTitle;
@@ -133,7 +153,7 @@ function WeeklyHero({ orderIsAGift, promotionCopy }: PropTypes): JSX.Element {
 		background-color: ${guardianWeeklyHeroBlue};
 	`;
 	const linkButtonColour = css`
-		color: ${text.primary};
+		color: ${palette.neutral[7]};
 		&:hover {
 			background: ${'#AEBDC8'};
 		}
@@ -146,7 +166,7 @@ function WeeklyHero({ orderIsAGift, promotionCopy }: PropTypes): JSX.Element {
 		>
 			<CentredContainer>
 				<OfferStrapline
-					fgCol={text.primary}
+					fgCol={palette.neutral[7]}
 					bgCol={brandAlt[400]}
 					copy={roundelText}
 					orderIsAGift={orderIsAGift}
@@ -166,9 +186,9 @@ function WeeklyHero({ orderIsAGift, promotionCopy }: PropTypes): JSX.Element {
 					roundelText={undefined}
 					cssOverrides={containerColour}
 				>
-					<section css={weeklyHeroCopy}>
-						<h2 css={weeklyHeroTitle}>{title}</h2>
-						<p css={weeklyHeroParagraph}>{copy}</p>
+					<section css={styles.weeklyHeroCopy}>
+						<h2 css={styles.weeklyHeroTitle}>{title}</h2>
+						<p css={styles.weeklyHeroParagraph}>{copy}</p>
 						<ThemeProvider theme={buttonThemeDefault}>
 							<LinkButton
 								onClick={sendTrackingEventsOnClick({
@@ -192,4 +212,40 @@ function WeeklyHero({ orderIsAGift, promotionCopy }: PropTypes): JSX.Element {
 	);
 }
 
-export { WeeklyHero };
+export function PriceCardsWeeklyHero({
+	orderIsAGift,
+	promotionCopy,
+	countryId,
+	productPrices,
+	isPriceCardsAbTestVariant,
+}: PriceCardsWeeklyHeroPropTypes): JSX.Element {
+	const defaultRoundelText = 'Save up to 35% a year';
+	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
+
+	return (
+		<PageTitle
+			title={orderIsAGift ? 'Give the Guardian Weekly' : 'The Guardian Weekly'}
+			theme="weekly"
+			cssOverrides={styles.pageTitleOverrides}
+		>
+			<CentredContainer>
+				<OfferStrapline
+					fgCol={palette.neutral[7]}
+					bgCol={brandAlt[400]}
+					copy={roundelText}
+					orderIsAGift={orderIsAGift}
+				/>
+			</CentredContainer>
+			<div css={styles.priceCardsHeroContainer}>
+				<CentredContainer>
+					<WeeklyProductPrices
+						countryId={countryId}
+						productPrices={productPrices}
+						orderIsAGift={orderIsAGift}
+						isPriceCardsAbTestVariant={isPriceCardsAbTestVariant}
+					/>
+				</CentredContainer>
+			</div>
+		</PageTitle>
+	);
+}

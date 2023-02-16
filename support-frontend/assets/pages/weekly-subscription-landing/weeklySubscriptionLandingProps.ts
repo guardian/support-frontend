@@ -22,6 +22,19 @@ export type WeeklyLandingPropTypes = {
 	participations: Participations;
 };
 
+export type WeeklyLPContentPropTypes = {
+	countryId: IsoCountry;
+	countryGroupId: CountryGroupId;
+	productPrices: ProductPrices;
+	promotionCopy: PromotionCopy;
+	orderIsAGift: boolean;
+	participations: Participations;
+	pageQaId: string;
+	header: JSX.Element;
+	giftNonGiftLink: string;
+	isPriceCardsAbTestVariant?: boolean;
+};
+
 const countryGroupId = detectCountryGroup();
 
 export const weeklyLandingProps = (): WeeklyLandingPropTypes => ({
