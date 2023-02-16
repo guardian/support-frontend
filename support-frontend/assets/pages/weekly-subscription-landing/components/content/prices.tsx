@@ -103,7 +103,6 @@ function Prices({
 	products,
 	isPriceCardsAbTestVariant,
 }: PropTypes): JSX.Element {
-	console.log({ isPriceCardsAbTestVariant });
 	return (
 		<section css={pricesSection} id="subscribe">
 			<h2
