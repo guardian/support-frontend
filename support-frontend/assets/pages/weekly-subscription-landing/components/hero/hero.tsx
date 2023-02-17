@@ -93,7 +93,7 @@ const styles = {
 	`,
 };
 
-const getRegionalCopyFor = (region: CountryGroupId) =>
+export const getRegionalCopyFor = (region: CountryGroupId): JSX.Element =>
 	region === GBPCountries ? (
 		<span>
 			Find clarity
@@ -106,10 +106,10 @@ const getRegionalCopyFor = (region: CountryGroupId) =>
 		</span>
 	);
 
-const getFirstParagraph = (
+export const getFirstParagraph = (
 	promotionCopy: PromotionCopy,
 	orderIsAGift: boolean,
-) => {
+): JSX.Element | null => {
 	if (promotionCopy.description) {
 		return promotionHTML(promotionCopy.description);
 	}
