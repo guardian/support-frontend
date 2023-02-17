@@ -39,7 +39,7 @@ export const pageUrlRegexes = {
 	},
 };
 export const tests: Tests = {
-	singleToRecurringV2: {
+	singleToRecurringV3: {
 		variants: [
 			{
 				id: 'control',
