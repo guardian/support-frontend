@@ -34,9 +34,15 @@ export function CheckoutNudgeContainer({
 			: 'ANNUAL';
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId][recurringType].min;
-	const paragraphCopyVariant = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up ${
-		recurringType === 'MONTHLY' ? 'a' : 'an'
-	} ${recurringType.toLowerCase()} payment today from just  ${currencyGlyph}${minAmount} – it takes less than a minute.`;
+
+	const minWeeklyAmount =
+		countryGroupId === 'GBPCountries'
+			? Math.ceil((minAmount * 100) / 52).toString() + `p`
+			: currencyGlyph +
+			  (Math.ceil((minAmount * 100) / 52) / 100).toFixed(2).toString();
+
+	const paragraphCopyMonthly = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a ${recurringType.toLowerCase()} payment today from just  ${currencyGlyph}${minAmount} – it takes less than a minute.`;
+	const paragraphCopyAnnual = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up an ${recurringType.toLowerCase()} payment from ${currencyGlyph}${minAmount} – that’s just ${minWeeklyAmount} a week.`;
 
 	function onNudgeClose() {
 		setDisplayNudge(false);
@@ -52,7 +58,8 @@ export function CheckoutNudgeContainer({
 		nudgeTitleCopySection2: `Support us every ${
 			recurringType === 'MONTHLY' ? 'month' : 'year'
 		}`,
-		nudgeParagraphCopy: paragraphCopyVariant,
+		nudgeParagraphCopy:
+			recurringType === 'MONTHLY' ? paragraphCopyMonthly : paragraphCopyAnnual,
 		nudgeLinkCopy: `See ${recurringType.toLowerCase()}`,
 		onNudgeClose,
 		onNudgeClick,
