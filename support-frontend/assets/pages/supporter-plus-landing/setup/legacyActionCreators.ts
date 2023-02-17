@@ -68,6 +68,7 @@ import {
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
+import { sendEventConversionPaymentMethod } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
@@ -569,6 +570,10 @@ const onThirdPartyPaymentAuthorised =
 	): Promise<PaymentResult> => {
 		const state = getState();
 		const contributionType = getContributionType(state);
+		const paymentMethod = state.page.checkoutForm.payment.paymentMethod.name;
+
+		sendEventConversionPaymentMethod(paymentMethod);
+
 		return paymentAuthorisationHandlers[contributionType][
 			state.page.checkoutForm.payment.paymentMethod.name
 		](dispatch, state, paymentAuthorisation);
