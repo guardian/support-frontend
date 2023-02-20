@@ -48,16 +48,15 @@ const topheading = css`
 `;
 const heading = (
 	color: string,
-	marginBottom: number,
-	shrinkHeadline?: boolean,
+	options: { shrinkHeadline?: boolean; marginBottom?: number },
 ) => css`
 	margin-left: 9px;
 	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'regular' })};
 	color: ${color};
 
 	${from.mobileMedium} {
-		margin-bottom: ${marginBottom}px;
-		font-size: ${shrinkHeadline ? '23px' : '24px'};
+		margin-bottom: ${options.marginBottom ?? 0}px;
+		font-size: ${options.shrinkHeadline ? '23px' : '24px'};
 	}
 	${from.tablet} {
 		margin-left: 12px;
@@ -128,18 +127,17 @@ export function CheckoutNudge({
 			<div css={container}>
 				<div css={top}>
 					<div css={topheading}>
-						<h2 css={heading(brand[500], space[3])}>
+						<h2 css={heading(brand[500], { marginBottom: space[3] })}>
 							{nudgeTitleCopySection1}
 						</h2>
 					</div>
 					<CheckoutNudgeCloseButton onClose={onNudgeClose} />
 				</div>
 				<h2
-					css={heading(
-						neutral[7],
-						0,
-						recurringType === 'ANNUAL' && countryGroupId !== 'GBPCountries',
-					)}
+					css={heading(neutral[7], {
+						shrinkHeadline:
+							recurringType === 'ANNUAL' && countryGroupId !== 'GBPCountries',
+					})}
 				>
 					{nudgeTitleCopySection2}
 				</h2>
