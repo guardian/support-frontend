@@ -8,6 +8,7 @@ import {
 	textSans,
 } from '@guardian/source-foundations';
 import type { ContributionType } from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { CheckoutNudgeCloseButton } from './checkoutNudgeButtonClose';
 
 const container = css`
@@ -45,20 +46,27 @@ const top = css`
 const topheading = css`
 	margin-top: ${space[3]}px;
 `;
-const heading = (backColor: string, marginBottom: number) => css`
+const heading = (
+	backColor: string,
+	marginBottom: number,
+	shrinkHeadline?: boolean,
+) => css`
 	margin-left: 9px;
-	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'regular' })};
+	 ${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'regular' })};
   color: ${backColor};
 
   ${from.mobileMedium} {
 		margin-bottom: ${marginBottom}px;
-		${headline.xsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
+    ${
+			shrinkHeadline
+				? headline.xxsmall({ fontWeight: 'bold', lineHeight: 'tight' })
+				: headline.xsmall({ fontWeight: 'bold', lineHeight: 'tight' })
+		};
 	${from.tablet} {
     margin-left: 12px;
 		${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
 	}
 `;
-
 const para = css`
 	margin-top: ${space[1]}px;
 	margin-left: 9px;
@@ -100,6 +108,8 @@ export type CheckoutNudgeProps = {
 	nudgeTitleCopySection2: string;
 	nudgeParagraphCopy: string;
 	nudgeLinkCopy: string;
+	recurringType: string;
+	countryGroupId: CountryGroupId;
 	onNudgeClose: () => void;
 	onNudgeClick: () => void;
 };
@@ -111,6 +121,8 @@ export function CheckoutNudge({
 	nudgeTitleCopySection2,
 	nudgeParagraphCopy,
 	nudgeLinkCopy,
+	recurringType,
+	countryGroupId,
 	onNudgeClose,
 	onNudgeClick,
 }: CheckoutNudgeProps): JSX.Element | null {
@@ -125,7 +137,15 @@ export function CheckoutNudge({
 					</div>
 					<CheckoutNudgeCloseButton onClose={onNudgeClose} />
 				</div>
-				<h2 css={heading(neutral[7], 0)}>{nudgeTitleCopySection2}</h2>
+				<h2
+					css={heading(
+						neutral[7],
+						0,
+						recurringType === 'ANNUAL' && countryGroupId === 'EURCountries',
+					)}
+				>
+					{nudgeTitleCopySection2}
+				</h2>
 				<p css={para}>{nudgeParagraphCopy}</p>
 				<div css={link}>
 					<a onClick={onNudgeClick} css={alink}>
