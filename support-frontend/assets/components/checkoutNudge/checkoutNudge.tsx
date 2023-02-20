@@ -47,23 +47,20 @@ const topheading = css`
 	margin-top: ${space[3]}px;
 `;
 const heading = (
-	backColor: string,
+	color: string,
 	marginBottom: number,
 	shrinkHeadline?: boolean,
 ) => css`
 	margin-left: 9px;
-	 ${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'regular' })};
-  color: ${backColor};
+	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'regular' })};
+	color: ${color};
 
-  ${from.mobileMedium} {
+	${from.mobileMedium} {
 		margin-bottom: ${marginBottom}px;
-    ${
-			shrinkHeadline
-				? headline.xxsmall({ fontWeight: 'bold', lineHeight: 'tight' })
-				: headline.xsmall({ fontWeight: 'bold', lineHeight: 'tight' })
-		};
+		font-size: ${shrinkHeadline ? '23px' : '24px'};
+	}
 	${from.tablet} {
-    margin-left: 12px;
+		margin-left: 12px;
 		${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
 	}
 `;
