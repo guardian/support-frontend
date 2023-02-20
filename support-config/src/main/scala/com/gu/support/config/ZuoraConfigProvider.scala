@@ -77,8 +77,8 @@ class ZuoraConfigProvider(config: Config, defaultStage: Stage)
   )
 
   private def supporterPlusFromConfig(config: Config) = ZuoraSupporterPlusConfig(
-    monthlyChargeId = config.getString("monthly.contribution.productRatePlanChargeId"),
-    annualChargeId = config.getString("annual.contribution.productRatePlanChargeId"),
+    monthlyChargeId = config.getString("monthly.productRatePlanChargeId"),
+    annualChargeId = config.getString("annual.productRatePlanChargeId"),
     v2 = V2(
       monthlyContributionChargeId = config.getString("v2.monthly.contribution.productRatePlanChargeId"),
       annualContributionChargeId = config.getString("v2.annual.contribution.productRatePlanChargeId"),

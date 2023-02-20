@@ -4,6 +4,7 @@ import com.gu.config.Configuration
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
+import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
 import com.gu.support.catalog.{CatalogService, Everyday, SimpleJsonProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
@@ -58,6 +59,20 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a Supporter Plus subscription" in {
     createZuoraHelper
       .createSubscription(createSupporterPlusZuoraSubscriptionJson(20, GBP))
+      .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
+      })
+  }
+
+  it should "create a Supporter Plus V2 subscription" in {
+    val acquisitionData = Some(
+      AcquisitionData(
+        OphanIds(None, None, None),
+        ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
+        Set(AbTest("supporterPlusV2", "variant")),
+      ),
+    )
+    createZuoraHelper
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(20, GBP, acquisitionData = acquisitionData))
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }

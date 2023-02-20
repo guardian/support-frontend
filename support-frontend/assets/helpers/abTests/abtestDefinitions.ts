@@ -79,4 +79,24 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.subscriptions.subsWeeklyPages,
 		seed: 11,
 	},
+	supporterPlusV2: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 0, //opt-in only at this stage
+			},
+		},
+		isActive: true,
+		referrerControlled: false,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		seed: 1,
+	},
 };

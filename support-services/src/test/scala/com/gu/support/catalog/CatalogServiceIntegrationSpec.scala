@@ -24,6 +24,7 @@ class CatalogServiceIntegrationSpec extends AsyncFlatSpec with Matchers with Ins
     testProductAndEnvironment(service, DigitalPack, environment)
     testProductAndEnvironment(service, GuardianWeekly, environment)
     testProductAndEnvironment(service, Paper, environment)
+    testProductAndEnvironment(service, SupporterPlus, environment)
   }
 
   private def testProductAndEnvironment(service: CatalogService, product: Product, environment: TouchPointEnvironment) =
