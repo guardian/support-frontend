@@ -141,7 +141,7 @@ export function CheckoutNudge({
 					css={heading(
 						neutral[7],
 						0,
-						recurringType === 'ANNUAL' && countryGroupId === 'EURCountries',
+						recurringType === 'ANNUAL' && countryGroupId !== 'GBPCountries',
 					)}
 				>
 					{nudgeTitleCopySection2}
