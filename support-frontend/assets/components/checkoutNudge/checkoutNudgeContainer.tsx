@@ -57,7 +57,10 @@ export function CheckoutNudgeContainer({
 	return renderNudge({
 		contributionType,
 		nudgeDisplay: displayNudge,
-		nudgeTitleCopySection1: 'Make a bigger impact',
+		nudgeTitleCopySection1:
+			recurringType === 'MONTHLY'
+				? 'Make a bigger impact'
+				: 'Support us every year',
 		nudgeTitleCopySection2:
 			recurringType === 'MONTHLY' ? title2CopyMonthly : title2CopyAnnual,
 		nudgeParagraphCopy:
