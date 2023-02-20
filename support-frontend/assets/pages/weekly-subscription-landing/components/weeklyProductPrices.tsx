@@ -109,6 +109,7 @@ type WeeklyProductPricesProps = {
 	countryId: IsoCountry;
 	productPrices: ProductPrices | null | undefined;
 	orderIsAGift: boolean;
+	isPriceCardsAbTestVariant?: boolean;
 };
 
 const getProducts = ({
@@ -142,6 +143,7 @@ function WeeklyProductPrices({
 	countryId,
 	productPrices,
 	orderIsAGift,
+	isPriceCardsAbTestVariant,
 }: WeeklyProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
@@ -151,8 +153,16 @@ function WeeklyProductPrices({
 		countryId,
 		productPrices,
 		orderIsAGift,
+		isPriceCardsAbTestVariant,
 	});
-	return <Prices products={products} orderIsAGift={orderIsAGift} />;
+
+	return (
+		<Prices
+			products={products}
+			orderIsAGift={orderIsAGift}
+			isPriceCardsAbTestVariant={isPriceCardsAbTestVariant ?? false}
+		/>
+	);
 }
 
 // ----- Exports ----- //
