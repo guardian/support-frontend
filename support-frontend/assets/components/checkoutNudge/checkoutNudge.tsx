@@ -46,51 +46,42 @@ const topheading = css`
 	margin-top: ${space[3]}px;
 `;
 const heading = (backColor: string, marginBottom: number) => css`
-	margin-left: 10px;
-	color: ${backColor};
-	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
-	line-height: 108%;
+	margin-left: 9px;
+	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'regular' })};
+  color: ${backColor};
 
-	${from.mobileMedium} {
-		margin-left: 12px;
+  ${from.mobileMedium} {
 		margin-bottom: ${marginBottom}px;
 		${headline.xsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
-		line-height: 108%;
-	}
 	${from.tablet} {
+    margin-left: 12px;
 		${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
-		line-height: 108%;
 	}
 `;
 
 const para = css`
 	margin-top: ${space[1]}px;
-	margin-left: 10px;
+	margin-left: 9px;
 	margin-right: 10px;
 	margin-bottom: ${space[2]}px;
 	${textSans.small({ lineHeight: 'regular' })};
-	line-height: 130%;
+
 	${from.mobileMedium} {
-		margin-left: 12px;
 		max-width: 470px;
 	}
 	${from.tablet} {
+		margin-left: 12px;
 		${textSans.medium({ lineHeight: 'regular' })};
-		line-height: 130%;
 	}
 `;
 const link = css`
-	margin-left: 10px;
+	margin-left: 9px;
 	${textSans.small({ lineHeight: 'regular' })};
-	line-height: 135%;
 	padding-bottom: ${space[5]}px;
 
-	${from.mobileMedium} {
-		margin-left: 12px;
-	}
 	${from.tablet} {
+		margin-left: 12px;
 		${textSans.medium({ lineHeight: 'tight' })};
-		line-height: 108%;
 	}
 `;
 const alink = css`
