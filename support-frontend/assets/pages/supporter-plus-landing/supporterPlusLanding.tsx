@@ -9,7 +9,6 @@ import {
 } from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
 import {
-	Divider,
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
@@ -48,6 +47,7 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
+import { CheckoutDivider } from './components/checkoutDivider';
 import { DirectDebitContainer } from './components/directDebitWrapper';
 import { ExistingRecurringContributorMessage } from './components/existingRecurringContributorMessage';
 import { GuardianTsAndCs } from './components/guardianTsAndCs';
@@ -84,11 +84,6 @@ const darkBackgroundContainerMobile = css`
 	${until.tablet} {
 		background-color: ${brand[400]};
 	}
-`;
-
-const divider = css`
-	max-width: 100%;
-	margin: 40px 0 ${space[6]}px;
 `;
 
 const subheading = css`
@@ -221,7 +216,7 @@ export function SupporterPlusLandingPage({
 											<PersonalDetails {...personalDetailsProps} />
 										)}
 									/>
-									<Divider size="full" cssOverrides={divider} />
+									<CheckoutDivider spacing="loose" />
 									<PaymentMethodSelectorContainer
 										render={(paymentMethodSelectorProps) => (
 											<PaymentMethodSelector {...paymentMethodSelectorProps} />
@@ -248,16 +243,19 @@ export function SupporterPlusLandingPage({
 								/>
 							</BoxContents>
 						</Box>
-						<Divider size="full" cssOverrides={divider} />
-						<PatronsMessage countryGroupId={countryGroupId} />
-						<Divider
-							size="full"
-							cssOverrides={css`
-								max-width: 100%;
-								margin: ${space[4]}px 0 ${space[4]}px;
-							`}
+						<CheckoutDivider
+							spacing="loose"
+							theme={optimisedMobileLayout ? 'light' : 'dark'}
 						/>
-						<GuardianTsAndCs />
+						<PatronsMessage
+							countryGroupId={countryGroupId}
+							theme={optimisedMobileLayout ? 'light' : 'dark'}
+						/>
+						<CheckoutDivider
+							spacing="tight"
+							theme={optimisedMobileLayout ? 'light' : 'dark'}
+						/>
+						<GuardianTsAndCs theme={optimisedMobileLayout ? 'light' : 'dark'} />
 					</Column>
 				</Columns>
 			</Container>

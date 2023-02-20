@@ -1,14 +1,13 @@
-import { css } from '@emotion/react';
-import { textSans } from '@guardian/source-foundations';
+import type { FinePrintTheme } from './finePrint';
+import { FinePrint } from './finePrint';
 
-const fontStyles = css`
-	${textSans.xxsmall({ lineHeight: 'regular' })};
-	color: #606060;
-`;
-
-export function GuardianTsAndCs(): JSX.Element {
+export function GuardianTsAndCs({
+	theme = 'dark',
+}: {
+	theme?: FinePrintTheme;
+}): JSX.Element {
 	return (
-		<div css={fontStyles}>
+		<FinePrint theme={theme}>
 			<p>
 				The ultimate owner of the Guardian is The Scott Trust Limited, whose
 				role it is to secure the editorial and financial independence of the
@@ -17,6 +16,6 @@ export function GuardianTsAndCs(): JSX.Element {
 				charitable donation, so it is not eligible for Gift Aid in the UK nor a
 				tax-deduction elsewhere.
 			</p>
-		</div>
+		</FinePrint>
 	);
 }
