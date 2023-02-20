@@ -128,7 +128,7 @@ export function CheckoutNudge({
 			<div css={container}>
 				<div css={top}>
 					<div css={topheading}>
-						<h2 css={heading(brand[500], space[2])}>
+						<h2 css={heading(brand[500], space[3])}>
 							{nudgeTitleCopySection1}
 						</h2>
 					</div>

@@ -41,8 +41,11 @@ export function CheckoutNudgeContainer({
 			: currencyGlyph +
 			  (Math.ceil((minAmount * 100) / 52) / 100).toFixed(2).toString();
 
+	const title2CopyMonthly = `Support us every month`;
 	const paragraphCopyMonthly = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a ${recurringType.toLowerCase()} payment today from just  ${currencyGlyph}${minAmount} – it takes less than a minute.`;
-	const paragraphCopyAnnual = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up an ${recurringType.toLowerCase()} payment from ${currencyGlyph}${minAmount} – that’s just ${minWeeklyAmount} a week.`;
+
+	const title2CopyAnnual = `From just ${currencyGlyph}${minAmount} (${minWeeklyAmount} a week)`;
+	const paragraphCopyAnnual = `Funding Guardian journalism every year doesn’t need to be expensive. Make a bigger impact today, and protect our independence long term. Please consider annual support.`;
 
 	function onNudgeClose() {
 		setDisplayNudge(false);
@@ -55,9 +58,8 @@ export function CheckoutNudgeContainer({
 		contributionType,
 		nudgeDisplay: displayNudge,
 		nudgeTitleCopySection1: 'Make a bigger impact',
-		nudgeTitleCopySection2: `Support us every ${
-			recurringType === 'MONTHLY' ? 'month' : 'year'
-		}`,
+		nudgeTitleCopySection2:
+			recurringType === 'MONTHLY' ? title2CopyMonthly : title2CopyAnnual,
 		nudgeParagraphCopy:
 			recurringType === 'MONTHLY' ? paragraphCopyMonthly : paragraphCopyAnnual,
 		nudgeLinkCopy: `See ${recurringType.toLowerCase()}`,
