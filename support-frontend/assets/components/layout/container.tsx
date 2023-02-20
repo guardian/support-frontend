@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { from, neutral } from '@guardian/source-foundations';
 import { Container as SourceContainer } from '@guardian/source-react-components';
@@ -21,6 +22,7 @@ interface ContainerProps extends HTMLAttributes<HTMLElement> {
 	sideBorders?: boolean;
 	borderColor?: string;
 	backgroundColor?: string;
+	cssOverrides?: SerializedStyles;
 }
 
 const sidePaddingStyles = css`
@@ -65,6 +67,7 @@ export function Container({
 	sideBorders,
 	borderColor = neutral[86],
 	backgroundColor,
+	cssOverrides = css``,
 	...props
 }: ContainerProps): JSX.Element {
 	return (
@@ -77,6 +80,7 @@ export function Container({
 				sidePadding ? sidePaddingStyles : noPaddingStyles,
 				sideBorders ? sideBorderStyles(borderColor) : css``,
 				topBorder ? topBorderStyles(borderColor) : css``,
+				cssOverrides,
 			]}
 			{...props}
 		>

@@ -1,5 +1,12 @@
 import { css } from '@emotion/react';
-import { from, neutral, space, textSans } from '@guardian/source-foundations';
+import {
+	brand,
+	from,
+	neutral,
+	space,
+	textSans,
+	until,
+} from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
 import {
 	Divider,
@@ -68,6 +75,17 @@ const checkoutContainer = css`
 	}
 `;
 
+const backgroundContainer = css`
+	background-color: ${neutral[97]};
+`;
+
+const darkBackgroundContainerMobile = css`
+	${backgroundContainer}
+	${until.tablet} {
+		background-color: ${brand[400]};
+	}
+`;
+
 const divider = css`
 	max-width: 100%;
 	margin: 40px 0 ${space[6]}px;
@@ -102,11 +120,18 @@ export function SupporterPlusLandingPage({
 		countryGroupId,
 	);
 
+	const participations = useContributionsSelector(
+		(state) => state.common.abParticipations,
+	);
+
 	const { paymentComplete, isWaiting } = useContributionsSelector(
 		(state) => state.page.form,
 	);
 
 	const navigate = useNavigate();
+
+	const optimisedMobileLayout =
+		participations.supporterPlusMobileTest1 === 'variant';
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
@@ -168,7 +193,14 @@ export function SupporterPlusLandingPage({
 					reporting on the events shaping our world.
 				</p>
 			</CheckoutHeading>
-			<Container sideBorders backgroundColor={neutral[97]}>
+			<Container
+				sideBorders
+				cssOverrides={
+					optimisedMobileLayout
+						? darkBackgroundContainerMobile
+						: backgroundContainer
+				}
+			>
 				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
 					<Column span={[0, 2, 5]}></Column>
 					<Column span={[1, 8, 7]}>
