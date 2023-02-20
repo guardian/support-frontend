@@ -6,8 +6,10 @@ import com.gu.support.workers.lambdas.UpdateSupporterProductDataSpec.{
   digitalSubscriptionGiftRedemptionState,
   digitalSusbcriptionGiftPurchaseState,
   serviceWithFixtures,
+  supporterPlusV2State,
 }
 import com.gu.support.workers.states.SendThankYouEmailState
+import com.gu.supporterdata.model.ContributionAmount
 import io.circe.parser._
 import org.scalatest.Inside.inside
 import org.scalatest.flatspec.AnyFlatSpec
@@ -37,9 +39,66 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec {
       item.value.identityId shouldBe "102803446"
     }
   }
+
+  "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a Supporter Plus V2 purchase" in {
+    val state = decode[SendThankYouEmailState](supporterPlusV2State)
+    state.isRight shouldBe true
+    val supporterRatePlanItem = UpdateSupporterProductData
+      .getSupporterRatePlanItemFromState(state.toOption.get, serviceWithFixtures)
+    inside(supporterRatePlanItem) { case Right(item) =>
+      item.value.identityId shouldBe "200092951"
+      item.value.contributionAmount shouldBe Some(ContributionAmount(12, "GBP"))
+    }
+  }
 }
 
 object UpdateSupporterProductDataSpec {
+
+  val supporterPlusV2State =
+    """
+      {
+          "user": {
+            "id": "200092951",
+            "primaryEmailAddress": "test+2343343jj28323@test.com",
+            "title": null,
+            "firstName": "yy",
+            "lastName": "yy",
+            "billingAddress": {
+              "lineOne": null,
+              "lineTwo": null,
+              "city": null,
+              "state": "",
+              "postCode": null,
+              "country": "GB"
+            },
+            "deliveryAddress": null,
+            "telephoneNumber": null,
+            "isTestUser": false,
+            "deliveryInstructions": null
+          },
+          "product": {
+            "amount": 12,
+            "currency": "GBP",
+            "billingPeriod": "Monthly",
+            "productType": "SupporterPlus"
+          },
+          "paymentMethod": {
+            "TokenId": "pm_0MZap9ItVxyc3Q6nRNfyJHfO",
+            "SecondTokenId": "cus_NKFK2NAwJc9tH3",
+            "CreditCardNumber": "4242",
+            "CreditCardCountry": "US",
+            "CreditCardExpirationMonth": 2,
+            "CreditCardExpirationYear": 2029,
+            "CreditCardType": "Visa",
+            "PaymentGateway": "Stripe PaymentIntents GNM Membership",
+            "Type": "CreditCardReferenceTransaction",
+            "StripePaymentType": "StripeCheckout"
+          },
+          "accountNumber": "A00485141",
+          "subscriptionNumber": "A-S00489451",
+          "productType": "SupporterPlus"
+        }
+    """
 
   val digitalSubscriptionGiftRedemptionState = """
     {

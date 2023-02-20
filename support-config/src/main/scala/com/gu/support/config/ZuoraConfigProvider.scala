@@ -19,6 +19,12 @@ case class ZuoraDigitalPackConfig(
 case class ZuoraSupporterPlusConfig(
     monthlyChargeId: String,
     annualChargeId: String,
+    v2: V2,
+)
+
+case class V2(
+    monthlyContributionChargeId: String,
+    annualContributionChargeId: String,
 )
 
 case class ZuoraInvoiceTemplatesConfig(
@@ -73,6 +79,10 @@ class ZuoraConfigProvider(config: Config, defaultStage: Stage)
   private def supporterPlusFromConfig(config: Config) = ZuoraSupporterPlusConfig(
     monthlyChargeId = config.getString("monthly.productRatePlanChargeId"),
     annualChargeId = config.getString("annual.productRatePlanChargeId"),
+    v2 = V2(
+      monthlyContributionChargeId = config.getString("v2.monthly.contribution.productRatePlanChargeId"),
+      annualContributionChargeId = config.getString("v2.annual.contribution.productRatePlanChargeId"),
+    ),
   )
 
   private def invoiceTemplatesFromConfig(config: Config) = ZuoraInvoiceTemplatesConfig(
