@@ -21,18 +21,18 @@ object Catalog {
 
   implicit val encoder: Encoder[Catalog] = deriveEncoder
 
-  def sumPriceLists(priceLists: Array[Price]): Array[(Price)] = {
+  def sumPriceLists(priceLists: List[Price]): Iterable[(Price)] = {
     // Paper products such as Everyday are represented in the catalog as multiple
     // product rate plan charges (one for every day of the week) and these each
     // have their own price list. To get the total prices for these products therefore
     // we need to sum all of the price lists
     priceLists
       .groupBy(_.currency)
-      .toArray
-      .map(sumPrices(_)._2)
+      .map(sumPrices)
+      .map({ case (_, price) => price })
   }
 
-  def sumPrices(currencyPrices: (Currency, Array[Price])): (Currency, Price) = currencyPrices match {
+  def sumPrices(currencyPrices: (Currency, List[Price])): (Currency, Price) = currencyPrices match {
     case (currency, priceList) =>
       (currency, priceList.reduceLeft((p1, p2) => Price(p1.value + p2.value, currency)))
   }
@@ -48,11 +48,11 @@ object Catalog {
     // create list of priceList
     val priceList: List[Pricelist] = filteredProductRatePlans.map { productRatePlan =>
       val ratePlanCharges = productRatePlan.productRatePlanCharges.map { _.pricing }.flatten
-      val priceListSum = sumPriceLists(ratePlanCharges).toList
+      val priceListSum = sumPriceLists(ratePlanCharges)
       val id = productRatePlan.id
       val saving = productRatePlan.Saving__c.map(_.toInt)
-      Pricelist(id, saving, priceListSum)
-    }.toList
+      Pricelist(id, saving, priceListSum.toList)
+    }
 
     // Catalog list of prices
     return Catalog(priceList)

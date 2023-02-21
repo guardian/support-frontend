@@ -4,23 +4,23 @@ import io.circe._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 case class ZuoraCatalog(
-    products: Array[ZuoraProduct],
+    products: List[ZuoraProduct],
 )
 
 case class ZuoraProduct(
     id: String,
-    productRatePlans: Array[ZuoraProductRatePlan],
+    productRatePlans: List[ZuoraProductRatePlan],
 )
 
 case class ZuoraProductRatePlan(
     id: String,
     Saving__c: Option[String],
-    productRatePlanCharges: Array[ZuoraProductRatePlanCharge],
+    productRatePlanCharges: List[ZuoraProductRatePlanCharge],
 )
 
 case class ZuoraProductRatePlanCharge(
     id: String,
-    pricing: Array[Price],
+    pricing: List[Price],
 )
 
 object ZuoraCatalog {
