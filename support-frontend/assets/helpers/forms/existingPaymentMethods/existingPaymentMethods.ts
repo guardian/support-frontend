@@ -19,7 +19,7 @@ export type ExistingPaymentMethodSubscription = {
 	billingAccountId?: string;
 };
 
-type ExistingPaymentType = 'Card' | 'DirectDebit';
+export type ExistingPaymentType = 'Card' | 'DirectDebit';
 
 export type NotRecentlySignedInExistingPaymentMethod = {
 	paymentType: ExistingPaymentType;

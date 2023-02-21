@@ -10,7 +10,6 @@ import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { validateForm } from '../checkoutActions';
-import { setPaymentMethod } from '../payment/paymentMethod/actions';
 import {
 	setAllAmounts,
 	setOtherAmountError,

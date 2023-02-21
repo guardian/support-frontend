@@ -81,17 +81,16 @@ function PaymentMethodSelectorContainer({
 		paymentMethod: PaymentMethod,
 		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 	) {
-		// if (existingPaymentMethod) {
-		//   trackComponentClick({
-		//     `checkout`
-		//   })
-		// } else {
-		//   trackComponentClick({
-		//     `npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`
-		//   })
-		// }
-		sendEventContributionPaymentMethod(paymentMethod);
+		const paymentMethodDescription = existingPaymentMethod
+			? existingPaymentMethod.paymentType
+			: paymentMethod;
+
+		trackComponentClick(`payment-method-selector-${paymentMethodDescription}`);
+
+		sendEventContributionPaymentMethod(paymentMethodDescription);
+
 		dispatch(setPaymentMethod(paymentMethod));
+
 		existingPaymentMethod &&
 			dispatch(selectExistingPaymentMethod(existingPaymentMethod));
 	}
