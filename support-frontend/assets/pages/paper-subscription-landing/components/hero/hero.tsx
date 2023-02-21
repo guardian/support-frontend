@@ -112,7 +112,7 @@ function PaperHero({
 		}) ?? defaultCopy;
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
 	return (
-		<PageTitle title="Newspaper subscription" theme="paper">
+		<PageTitle title="Newspaper subscription">
 			<CentredContainer>
 				<OfferStrapline
 					fgCol={text.primary}

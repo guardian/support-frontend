@@ -2,35 +2,14 @@ import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { from, neutral, space, titlepiece } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
-import {
-	digitalSubscriptionsBlue,
-	guardianWeeklyBlue,
-	paperSubscriptionsBlue,
-} from 'stylesheets/emotion/colours';
 import CentredContainer from '../containers/centredContainer';
 
-type ThemeType = 'digital' | 'weekly' | 'paper';
 type PropTypes = {
 	title: string;
-	theme: ThemeType;
 	cssOverrides?: SerializedStyles;
 	children: ReactNode;
 };
-const themeColors: Record<ThemeType, string> = {
-	weekly: guardianWeeklyBlue,
-	digital: digitalSubscriptionsBlue,
-	paper: paperSubscriptionsBlue,
-};
-const headerThemes: Record<ThemeType, SerializedStyles> = {
-	weekly: css``,
-	digital: css`
-		color: ${neutral[97]};
-		:before {
-			background-color: ${themeColors.digital};
-		}
-	`,
-	paper: css``,
-};
+
 const header = css`
 	color: ${neutral[7]};
 	position: relative;
@@ -83,14 +62,9 @@ export const pageTitle = css`
 	}
 `;
 
-function PageTitle({
-	title,
-	theme,
-	cssOverrides,
-	children,
-}: PropTypes): JSX.Element {
+function PageTitle({ title, cssOverrides, children }: PropTypes): JSX.Element {
 	return (
-		<div css={[header, headerThemes[theme], cssOverrides]}>
+		<div css={[header, cssOverrides]}>
 			<CentredContainer>
 				<h1 css={pageTitle}>{title}</h1>
 			</CentredContainer>

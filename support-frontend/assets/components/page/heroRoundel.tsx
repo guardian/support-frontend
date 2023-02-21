@@ -8,7 +8,6 @@ import {
 	space,
 } from '@guardian/source-foundations';
 import type { ReactElement, ReactNode } from 'react';
-import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 
 export const roundelSizeMob = 100;
 export const roundelSize = 180;
@@ -54,7 +53,7 @@ const roundelBase = css`
 	color: ${neutral[7]};
 `;
 const roundelDigital = css`
-	background-color: ${digitalSubscriptionsBlue};
+	background-color: '#00568D';
 	color: ${neutral[100]};
 	border: 2px solid ${brandAlt[400]};
 `;

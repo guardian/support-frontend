@@ -44,9 +44,3 @@ export const Base = Template.bind({});
 Base.args = {
 	theme: 'base',
 };
-
-export const Digital = Template.bind({});
-
-Digital.args = {
-	theme: 'digital',
-};

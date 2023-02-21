@@ -162,7 +162,6 @@ export function WeeklyHero({
 	return (
 		<PageTitle
 			title={orderIsAGift ? 'Give the Guardian Weekly' : 'The Guardian Weekly'}
-			theme="weekly"
 		>
 			<CentredContainer>
 				<OfferStrapline
@@ -225,7 +224,6 @@ export function PriceCardsWeeklyHero({
 	return (
 		<PageTitle
 			title={orderIsAGift ? 'Give the Guardian Weekly' : 'The Guardian Weekly'}
-			theme="weekly"
 			cssOverrides={styles.pageTitleOverrides}
 		>
 			<CentredContainer>
