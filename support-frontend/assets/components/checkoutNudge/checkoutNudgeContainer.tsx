@@ -41,7 +41,7 @@ export function CheckoutNudgeContainer({
 			: currencyGlyph +
 			  (Math.ceil((minAmount * 100) / 52) / 100).toFixed(2).toString();
 
-	const [titleNudge, title2Nudge, paragraphNudge] = copyNudge(
+	const [title, subtitle, paragraph] = copyNudge(
 		recurringType,
 		currencyGlyph + minAmount.toString(),
 		minWeeklyAmount,
@@ -60,6 +60,7 @@ export function CheckoutNudgeContainer({
 					`Funding Guardian journalism every year doesn’t need to be expensive. Make a bigger impact today, and protect our independence long term. Please consider annual support.`,
 				];
 			}
+			case 'MONTHLY':
 			default: {
 				return [
 					`Make a bigger impact`,
@@ -79,9 +80,9 @@ export function CheckoutNudgeContainer({
 	return renderNudge({
 		contributionType,
 		nudgeDisplay: displayNudge,
-		nudgeTitleCopySection1: titleNudge,
-		nudgeTitleCopySection2: title2Nudge,
-		nudgeParagraphCopy: paragraphNudge,
+		nudgeTitle: title,
+		nudgeSubtitle: subtitle,
+		nudgeParagraph: paragraph,
 		nudgeLinkCopy: `See ${recurringType.toLowerCase()}`,
 		recurringType: recurringType,
 		countryGroupId: countryGroupId,

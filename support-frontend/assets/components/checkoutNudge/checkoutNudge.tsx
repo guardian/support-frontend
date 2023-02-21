@@ -48,15 +48,16 @@ const topheading = css`
 `;
 const heading = (
 	color: string,
-	options: { shrinkHeadline?: boolean; marginBottom?: number },
+	shrinkHeadline?: boolean,
+	marginBottom?: number,
 ) => css`
 	margin-left: 9px;
 	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'regular' })};
 	color: ${color};
 
 	${from.mobileMedium} {
-		margin-bottom: ${options.marginBottom ?? 0}px;
-		font-size: ${options.shrinkHeadline ? '23px' : '24px'};
+		margin-bottom: ${marginBottom ? marginBottom : 0}px;
+		font-size: ${shrinkHeadline ? '23px' : '24px'};
 		line-height: 100%;
 	}
 	${from.tablet} {
@@ -101,9 +102,9 @@ const alink = css`
 export type CheckoutNudgeProps = {
 	contributionType: ContributionType;
 	nudgeDisplay: boolean;
-	nudgeTitleCopySection1: string;
-	nudgeTitleCopySection2: string;
-	nudgeParagraphCopy: string;
+	nudgeTitle: string;
+	nudgeSubtitle: string;
+	nudgeParagraph: string;
 	nudgeLinkCopy: string;
 	recurringType: string;
 	countryGroupId: CountryGroupId;
@@ -114,9 +115,9 @@ export type CheckoutNudgeProps = {
 export function CheckoutNudge({
 	contributionType,
 	nudgeDisplay,
-	nudgeTitleCopySection1,
-	nudgeTitleCopySection2,
-	nudgeParagraphCopy,
+	nudgeTitle,
+	nudgeSubtitle,
+	nudgeParagraph,
 	nudgeLinkCopy,
 	recurringType,
 	countryGroupId,
@@ -128,21 +129,19 @@ export function CheckoutNudge({
 			<div css={container}>
 				<div css={top}>
 					<div css={topheading}>
-						<h2 css={heading(brand[500], { marginBottom: space[3] })}>
-							{nudgeTitleCopySection1}
-						</h2>
+						<h2 css={heading(brand[500], undefined, space[3])}>{nudgeTitle}</h2>
 					</div>
 					<CheckoutNudgeCloseButton onClose={onNudgeClose} />
 				</div>
 				<h2
-					css={heading(neutral[7], {
-						shrinkHeadline:
-							recurringType === 'ANNUAL' && countryGroupId !== 'GBPCountries',
-					})}
+					css={heading(
+						neutral[7],
+						recurringType === 'ANNUAL' && countryGroupId !== 'GBPCountries',
+					)}
 				>
-					{nudgeTitleCopySection2}
+					{nudgeSubtitle}
 				</h2>
-				<p css={para}>{nudgeParagraphCopy}</p>
+				<p css={para}>{nudgeParagraph}</p>
 				<div css={link}>
 					<a onClick={onNudgeClick} css={alink}>
 						{nudgeLinkCopy}
