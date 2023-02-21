@@ -7,7 +7,7 @@ import './button.scss';
 function NonInteractiveButton({
 	modifierClasses,
 	...props
-}: SharedButtonPropTypes) {
+}: SharedButtonPropTypes): JSX.Element {
 	return (
 		<SharedButton
 			element="div"

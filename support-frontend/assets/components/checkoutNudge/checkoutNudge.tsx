@@ -8,6 +8,7 @@ import {
 	textSans,
 } from '@guardian/source-foundations';
 import type { ContributionType } from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { CheckoutNudgeCloseButton } from './checkoutNudgeButtonClose';
 
 const container = css`
@@ -45,52 +46,48 @@ const top = css`
 const topheading = css`
 	margin-top: ${space[3]}px;
 `;
-const heading = (backColor: string, marginBottom: number) => css`
-	margin-left: 10px;
-	color: ${backColor};
-	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
-	line-height: 108%;
+const heading = (
+	color: string,
+	shrinkHeadline?: boolean,
+	marginBottom?: number,
+) => css`
+	margin-left: 9px;
+	${headline.xxsmall({ fontWeight: 'bold', lineHeight: 'regular' })};
+	color: ${color};
 
 	${from.mobileMedium} {
-		margin-left: 12px;
-		margin-bottom: ${marginBottom}px;
-		${headline.xsmall({ fontWeight: 'bold', lineHeight: 'tight' })};
-		line-height: 108%;
+		margin-bottom: ${marginBottom ? marginBottom : 0}px;
+		font-size: ${shrinkHeadline ? '23px' : '24px'};
+		line-height: 100%;
 	}
 	${from.tablet} {
+		margin-left: 12px;
 		${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
-		line-height: 108%;
 	}
 `;
-
 const para = css`
 	margin-top: ${space[1]}px;
-	margin-left: 10px;
+	margin-left: 9px;
 	margin-right: 10px;
 	margin-bottom: ${space[2]}px;
 	${textSans.small({ lineHeight: 'regular' })};
-	line-height: 130%;
+
 	${from.mobileMedium} {
-		margin-left: 12px;
 		max-width: 470px;
 	}
 	${from.tablet} {
+		margin-left: 12px;
 		${textSans.medium({ lineHeight: 'regular' })};
-		line-height: 130%;
 	}
 `;
 const link = css`
-	margin-left: 10px;
+	margin-left: 9px;
 	${textSans.small({ lineHeight: 'regular' })};
-	line-height: 135%;
 	padding-bottom: ${space[5]}px;
 
-	${from.mobileMedium} {
-		margin-left: 12px;
-	}
 	${from.tablet} {
+		margin-left: 12px;
 		${textSans.medium({ lineHeight: 'tight' })};
-		line-height: 108%;
 	}
 `;
 const alink = css`
@@ -105,10 +102,12 @@ const alink = css`
 export type CheckoutNudgeProps = {
 	contributionType: ContributionType;
 	nudgeDisplay: boolean;
-	nudgeTitleCopySection1: string;
-	nudgeTitleCopySection2: string;
-	nudgeParagraphCopy: string;
+	nudgeTitle: string;
+	nudgeSubtitle: string;
+	nudgeParagraph: string;
 	nudgeLinkCopy: string;
+	recurringType: string;
+	countryGroupId: CountryGroupId;
 	onNudgeClose: () => void;
 	onNudgeClick: () => void;
 };
@@ -116,10 +115,12 @@ export type CheckoutNudgeProps = {
 export function CheckoutNudge({
 	contributionType,
 	nudgeDisplay,
-	nudgeTitleCopySection1,
-	nudgeTitleCopySection2,
-	nudgeParagraphCopy,
+	nudgeTitle,
+	nudgeSubtitle,
+	nudgeParagraph,
 	nudgeLinkCopy,
+	recurringType,
+	countryGroupId,
 	onNudgeClose,
 	onNudgeClick,
 }: CheckoutNudgeProps): JSX.Element | null {
@@ -128,14 +129,19 @@ export function CheckoutNudge({
 			<div css={container}>
 				<div css={top}>
 					<div css={topheading}>
-						<h2 css={heading(brand[500], space[2])}>
-							{nudgeTitleCopySection1}
-						</h2>
+						<h2 css={heading(brand[500], undefined, space[3])}>{nudgeTitle}</h2>
 					</div>
 					<CheckoutNudgeCloseButton onClose={onNudgeClose} />
 				</div>
-				<h2 css={heading(neutral[7], 0)}>{nudgeTitleCopySection2}</h2>
-				<p css={para}>{nudgeParagraphCopy}</p>
+				<h2
+					css={heading(
+						neutral[7],
+						recurringType === 'ANNUAL' && countryGroupId !== 'GBPCountries',
+					)}
+				>
+					{nudgeSubtitle}
+				</h2>
+				<p css={para}>{nudgeParagraph}</p>
 				<div css={link}>
 					<a onClick={onNudgeClick} css={alink}>
 						{nudgeLinkCopy}

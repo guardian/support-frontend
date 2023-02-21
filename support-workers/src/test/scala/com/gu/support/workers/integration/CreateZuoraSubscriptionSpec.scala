@@ -4,7 +4,8 @@ import com.gu.config.Configuration
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
-import com.gu.support.catalog.{CatalogService, Everyday, SimpleJsonProvider}
+import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
+import com.gu.support.catalog.{CatalogService, Everyday, S3CatalogProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
 import com.gu.support.redemption.CodeAlreadyUsed
@@ -28,7 +29,6 @@ import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
 import com.gu.support.zuora.api.response.ZuoraAccountNumber
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.{ZuoraGiftService, ZuoraService}
-import io.circe.parser.parse
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.any
 import org.mockito.invocation.InvocationOnMock
@@ -58,6 +58,20 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a Supporter Plus subscription" in {
     createZuoraHelper
       .createSubscription(createSupporterPlusZuoraSubscriptionJson(20, GBP))
+      .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
+      })
+  }
+
+  it should "create a Supporter Plus V2 subscription" in {
+    val acquisitionData = Some(
+      AcquisitionData(
+        OphanIds(None, None, None),
+        ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
+        Set(AbTest("supporterPlusV2", "variant")),
+      ),
+    )
+    createZuoraHelper
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(20, GBP, acquisitionData = acquisitionData))
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }
@@ -191,8 +205,7 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
 
   val realRedemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(Stages.DEV))
 
-  private val json = parse("{}").toOption.get
-  private val jsonProvider = new SimpleJsonProvider(json)
+  private val jsonProvider = new S3CatalogProvider(TouchPointEnvironments.SANDBOX)
   lazy val realCatalogService = new CatalogService(TouchPointEnvironments.SANDBOX, jsonProvider)
 
   lazy val mockZuoraService = {

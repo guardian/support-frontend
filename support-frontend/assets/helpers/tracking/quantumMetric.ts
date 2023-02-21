@@ -41,6 +41,7 @@ enum SendEventContributionAmountUpdate {
 
 enum SendEventContributionPaymentMethodUpdate {
 	PaymentMethod = 103,
+	PaymentMethodAtConversion = 110,
 }
 
 enum SendEventContributionCheckoutConversion {
@@ -78,6 +79,14 @@ const cartValueEventIds: SendEventId[] = [
 	SingleContribution,
 	RecurringContribution,
 ];
+
+async function ifQmPermitted(callback: () => void) {
+	const canRun = await canRunQuantumMetric();
+
+	if (canRun) {
+		callback();
+	}
+}
 
 function sendEvent(
 	id: SendEventId,
@@ -126,28 +135,26 @@ function sendEventSubscriptionCheckoutEvent(
 	billingPeriod: BillingPeriod,
 	isConversion: boolean,
 ): void {
-	void canRunQuantumMetric().then((canRun) => {
-		if (canRun) {
-			const sendEventWhenReady = () => {
-				const sourceCurrency = productPrice.currency;
-				const targetCurrency: IsoCurrency = 'GBP';
-				const value = getSubscriptionAnnualValue(productPrice, billingPeriod);
+	void ifQmPermitted(() => {
+		const sendEventWhenReady = () => {
+			const sourceCurrency = productPrice.currency;
+			const targetCurrency: IsoCurrency = 'GBP';
+			const value = getSubscriptionAnnualValue(productPrice, billingPeriod);
 
-				if (!value) {
-					return;
-				} else if (window.QuantumMetricAPI?.isOn()) {
-					const convertedValue: number =
-						window.QuantumMetricAPI.currencyConvertFromToValue(
-							value,
-							sourceCurrency,
-							targetCurrency,
-						);
-					sendEvent(id, isConversion, Math.round(convertedValue).toString());
-				}
-			};
+			if (!value) {
+				return;
+			} else if (window.QuantumMetricAPI?.isOn()) {
+				const convertedValue: number =
+					window.QuantumMetricAPI.currencyConvertFromToValue(
+						value,
+						sourceCurrency,
+						targetCurrency,
+					);
+				sendEvent(id, isConversion, Math.round(convertedValue).toString());
+			}
+		};
 
-			sendEventWhenReadyTrigger(sendEventWhenReady);
-		}
+		sendEventWhenReadyTrigger(sendEventWhenReady);
 	});
 }
 
@@ -233,25 +240,23 @@ function sendEventContributionCheckoutConversion(
 	contributionType: ContributionType,
 	sourceCurrency: IsoCurrency,
 ): void {
-	void canRunQuantumMetric().then((canRun) => {
-		if (canRun) {
-			const sendEventWhenReady = () => {
-				const sendEventId =
-					contributionType === 'ONE_OFF'
-						? SendEventContributionCheckoutConversion.SingleContribution
-						: SendEventContributionCheckoutConversion.RecurringContribution;
-				const convertedValue = getContributionAnnualValue(
-					contributionType,
-					amount,
-					sourceCurrency,
-				);
-				if (convertedValue) {
-					sendEvent(sendEventId, true, Math.round(convertedValue).toString());
-				}
-			};
+	void ifQmPermitted(() => {
+		const sendEventWhenReady = () => {
+			const sendEventId =
+				contributionType === 'ONE_OFF'
+					? SendEventContributionCheckoutConversion.SingleContribution
+					: SendEventContributionCheckoutConversion.RecurringContribution;
+			const convertedValue = getContributionAnnualValue(
+				contributionType,
+				amount,
+				sourceCurrency,
+			);
+			if (convertedValue) {
+				sendEvent(sendEventId, true, Math.round(convertedValue).toString());
+			}
+		};
 
-			sendEventWhenReadyTrigger(sendEventWhenReady);
-		}
+		sendEventWhenReadyTrigger(sendEventWhenReady);
 	});
 }
 
@@ -264,25 +269,23 @@ function sendEventContributionCartValue(
 		return;
 	}
 
-	void canRunQuantumMetric().then((canRun) => {
-		if (canRun) {
-			const sendEventWhenReady = () => {
-				const sendEventId =
-					contributionType === 'ONE_OFF'
-						? SendEventContributionAmountUpdate.SingleContribution
-						: SendEventContributionAmountUpdate.RecurringContribution;
-				const convertedValue = getContributionAnnualValue(
-					contributionType,
-					parseInt(amount),
-					sourceCurrency,
-				);
-				if (convertedValue) {
-					sendEvent(sendEventId, false, Math.round(convertedValue).toString());
-				}
-			};
+	void ifQmPermitted(() => {
+		const sendEventWhenReady = () => {
+			const sendEventId =
+				contributionType === 'ONE_OFF'
+					? SendEventContributionAmountUpdate.SingleContribution
+					: SendEventContributionAmountUpdate.RecurringContribution;
+			const convertedValue = getContributionAnnualValue(
+				contributionType,
+				parseInt(amount),
+				sourceCurrency,
+			);
+			if (convertedValue) {
+				sendEvent(sendEventId, false, Math.round(convertedValue).toString());
+			}
+		};
 
-			sendEventWhenReadyTrigger(sendEventWhenReady);
-		}
+		sendEventWhenReadyTrigger(sendEventWhenReady);
 	});
 }
 
@@ -290,18 +293,28 @@ function sendEventContributionPaymentMethod(
 	paymentMethod: PaymentMethod | null,
 ): void {
 	if (paymentMethod) {
-		void canRunQuantumMetric().then((canRun) => {
-			if (canRun) {
-				const sendEventWhenReady = () => {
-					const sendEventId =
-						SendEventContributionPaymentMethodUpdate.PaymentMethod;
-					sendEvent(sendEventId, false, paymentMethod.toString());
-				};
+		void ifQmPermitted(() => {
+			const sendEventWhenReady = () => {
+				const sendEventId =
+					SendEventContributionPaymentMethodUpdate.PaymentMethod;
+				sendEvent(sendEventId, false, paymentMethod.toString());
+			};
 
-				sendEventWhenReadyTrigger(sendEventWhenReady);
-			}
+			sendEventWhenReadyTrigger(sendEventWhenReady);
 		});
 	}
+}
+
+function sendEventConversionPaymentMethod(paymentMethod: PaymentMethod): void {
+	void ifQmPermitted(() => {
+		sendEventWhenReadyTrigger(() =>
+			sendEvent(
+				SendEventContributionPaymentMethodUpdate.PaymentMethodAtConversion,
+				false,
+				paymentMethod.toString(),
+			),
+		);
+	});
 }
 
 function sendEventABTestParticipations(participations: Participations): void {
@@ -355,16 +368,14 @@ function addQM() {
 }
 
 function init(participations: Participations): void {
-	void canRunQuantumMetric().then((canRun) => {
-		if (canRun) {
-			void addQM().then(() => {
-				/**
-				 * Quantum Metric's script has loaded so we can attempt to
-				 * send user AB test participations via the sendEvent function.
-				 */
-				sendEventABTestParticipations(participations);
-			});
-		}
+	void ifQmPermitted(() => {
+		void addQM().then(() => {
+			/**
+			 * Quantum Metric's script has loaded so we can attempt to
+			 * send user AB test participations via the sendEvent function.
+			 */
+			sendEventABTestParticipations(participations);
+		});
 	});
 }
 // ----- Exports ----- //
@@ -375,4 +386,5 @@ export {
 	sendEventContributionCheckoutConversion,
 	sendEventContributionCartValue,
 	sendEventContributionPaymentMethod,
+	sendEventConversionPaymentMethod,
 };

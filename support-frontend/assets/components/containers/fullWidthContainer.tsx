@@ -1,12 +1,12 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { brand, brandBackground, neutral } from '@guardian/source-foundations';
+import { brand, neutral, palette } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 
 type Theme = 'light' | 'dark' | 'white' | 'brand';
 
 type PropTypes = {
-	cssOverrides?: string;
+	cssOverrides?: SerializedStyles;
 	children: ReactNode;
 	theme?: Theme;
 	hasOverlap?: boolean;
@@ -25,7 +25,7 @@ const containerThemes: Record<Theme, SerializedStyles> = {
 		color: ${neutral[7]};
 	`,
 	brand: css`
-		background-color: ${brandBackground.primary};
+		background-color: ${palette.brand[400]};
 		color: ${neutral[100]};
 	`,
 };

@@ -28,16 +28,48 @@ export function CheckoutNudgeContainer({
 	const [displayNudge, setDisplayNudge] = useState(true);
 
 	const recurringType =
-		abParticipations.singleToRecurringV2 === 'control' ||
-		!abParticipations.singleToRecurringV2
+		abParticipations.singleToRecurringV3 === 'control' ||
+		!abParticipations.singleToRecurringV3
 			? 'MONTHLY'
 			: 'ANNUAL';
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId][recurringType].min;
-	const paragraphCopyVariant = `Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up ${
-		recurringType === 'MONTHLY' ? 'a' : 'an'
-	} ${recurringType.toLowerCase()} payment today from just  ${currencyGlyph}${minAmount} – it takes less than a minute.`;
 
+	const minWeeklyAmount =
+		countryGroupId === 'GBPCountries'
+			? Math.ceil((minAmount * 100) / 52).toString() + `p`
+			: currencyGlyph +
+			  (Math.ceil((minAmount * 100) / 52) / 100).toFixed(2).toString();
+
+	const [title, subtitle, paragraph] = copyNudge(
+		recurringType,
+		currencyGlyph + minAmount.toString(),
+		minWeeklyAmount,
+	);
+
+	function copyNudge(
+		recurringType: string,
+		minAmount: string,
+		minWeeklyAmount: string,
+	): string[] {
+		switch (recurringType) {
+			case 'ANNUAL': {
+				return [
+					`Support us every year`,
+					`from just ${minAmount} (${minWeeklyAmount} a week)`,
+					`Funding Guardian journalism every year doesn’t need to be expensive. Make a bigger impact today, and protect our independence long term. Please consider annual support.`,
+				];
+			}
+			case 'MONTHLY':
+			default: {
+				return [
+					`Make a bigger impact`,
+					`Support us every month`,
+					`Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a ${recurringType.toLowerCase()} payment today from just  ${minAmount} – it takes less than a minute.`,
+				];
+			}
+		}
+	}
 	function onNudgeClose() {
 		setDisplayNudge(false);
 	}
@@ -48,12 +80,12 @@ export function CheckoutNudgeContainer({
 	return renderNudge({
 		contributionType,
 		nudgeDisplay: displayNudge,
-		nudgeTitleCopySection1: 'Make a bigger impact',
-		nudgeTitleCopySection2: `Support us every ${
-			recurringType === 'MONTHLY' ? 'month' : 'year'
-		}`,
-		nudgeParagraphCopy: paragraphCopyVariant,
+		nudgeTitle: title,
+		nudgeSubtitle: subtitle,
+		nudgeParagraph: paragraph,
 		nudgeLinkCopy: `See ${recurringType.toLowerCase()}`,
+		recurringType: recurringType,
+		countryGroupId: countryGroupId,
 		onNudgeClose,
 		onNudgeClick,
 	});

@@ -41,28 +41,35 @@ case object SupporterPlus extends Product {
   private def productRatePlan(
       id: String,
       billingPeriod: BillingPeriod,
+      versionOptions: SupporterPlusVersionOptions,
   ) =
     ProductRatePlan(
       id,
       billingPeriod,
       NoFulfilmentOptions,
-      NoProductOptions,
+      versionOptions,
       s"Supporter Plus ${billingPeriod.getClass.getSimpleName}",
     )
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[SupporterPlus.type]]] =
     Map(
       PROD -> List(
-        productRatePlan("8a12865b8219d9b401822106192b64dc", Monthly),
-        productRatePlan("8a12865b8219d9b40182210618a464ba", Annual),
+        productRatePlan("8a12865b8219d9b401822106192b64dc", Monthly, SupporterPlusV1),
+        productRatePlan("8a12865b8219d9b40182210618a464ba", Annual, SupporterPlusV1),
+        productRatePlan("8a128ed885fc6ded018602296ace3eb8", Monthly, SupporterPlusV2),
+        productRatePlan("8a128ed885fc6ded01860228f77e3d5a", Annual, SupporterPlusV2),
       ),
       UAT -> List(
-        productRatePlan("8ad088718219a6b601822036a6c91f5c", Monthly),
-        productRatePlan("8ad088718219a6b601822036a5801f34", Annual),
+        productRatePlan("8ad088718219a6b601822036a6c91f5c", Monthly, SupporterPlusV1),
+        productRatePlan("8ad088718219a6b601822036a5801f34", Annual, SupporterPlusV1),
+        productRatePlan("8ad0940885f8901f0186024838f844a1", Monthly, SupporterPlusV2),
+        productRatePlan("8ad094b985f8901601860248d751315c", Annual, SupporterPlusV2),
       ),
       SANDBOX -> List(
-        productRatePlan("8ad09fc281de1ce70181de3b251736a4", Monthly),
-        productRatePlan("8ad09fc281de1ce70181de3b28ee3783", Annual),
+        productRatePlan("8ad09fc281de1ce70181de3b251736a4", Monthly, SupporterPlusV1),
+        productRatePlan("8ad09fc281de1ce70181de3b28ee3783", Annual, SupporterPlusV1),
+        productRatePlan("8ad08cbd8586721c01858804e3275376", Monthly, SupporterPlusV2),
+        productRatePlan("8ad08e1a8586721801858805663f6fab", Annual, SupporterPlusV2),
       ),
     )
 }

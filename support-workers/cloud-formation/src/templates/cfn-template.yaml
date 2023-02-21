@@ -31,6 +31,10 @@ Mappings:
       RedemptionTables:
       - arn:aws:dynamodb:*:*:table/redemption-codes-DEV
       - arn:aws:dynamodb:*:*:table/redemption-codes-UAT
+      S3Files:
+      - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-DEV/catalog.json
+      - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-UAT/catalog.json
+      - arn:aws:s3:::support-workers-private/*
       SupporterProductDataTable: supporter-product-data-tables-DEV-SupporterProductDataTable
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-CODE
     PROD:
@@ -40,6 +44,10 @@ Mappings:
       RedemptionTables:
       - arn:aws:dynamodb:*:*:table/redemption-codes-UAT
       - arn:aws:dynamodb:*:*:table/redemption-codes-PROD
+      S3Files:
+      - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json
+      - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-UAT/catalog.json
+      - arn:aws:s3:::support-workers-private/*
       SupporterProductDataTable: supporter-product-data-tables-PROD-SupporterProductDataTable
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-PROD
 Resources:
@@ -54,13 +62,13 @@ Resources:
               Service: lambda.amazonaws.com
             Action: "sts:AssumeRole"
       Policies:
-        - PolicyName: PrivateBucket
+        - PolicyName: S3Buckets
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
             - Effect: Allow
               Action: s3:GetObject
-              Resource: arn:aws:s3:::support-workers-private/*
+              Resource: !FindInMap [StageVariables, !Ref Stage, S3Files]
         - PolicyName: SqsMessages
           PolicyDocument:
             Version: '2012-10-17'

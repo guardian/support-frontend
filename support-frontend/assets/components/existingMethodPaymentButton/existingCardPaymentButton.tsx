@@ -8,6 +8,7 @@ import { onThirdPartyPaymentAuthorised } from 'pages/supporter-plus-landing/setu
 
 export function ExistingCardPaymentButton(): JSX.Element {
 	const dispatch = useContributionsDispatch();
+
 	const { selectedPaymentMethod } = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.existingPaymentMethods,
 	);
@@ -21,10 +22,5 @@ export function ExistingCardPaymentButton(): JSX.Element {
 		);
 	});
 
-	return (
-		<DefaultPaymentButtonContainer
-			onClick={payWithExistingCard}
-			disabled={!!selectedPaymentMethod?.billingAccountId}
-		/>
-	);
+	return <DefaultPaymentButtonContainer onClick={payWithExistingCard} />;
 }

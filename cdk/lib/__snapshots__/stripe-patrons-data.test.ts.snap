@@ -211,12 +211,15 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "RestApiDeployment180EC5031415bce23b484655df855d90ebafb1d3": {
+    "RestApiDeployment180EC5033fc0c8ea808241777537b04b239b12f5": {
       "DependsOn": [
         "RestApipatron1DDE9314",
         "RestApipatronsubscriptioncancelcountryIdPOSTFA2082F3",
         "RestApipatronsubscriptioncancelcountryId57A3F9F4",
         "RestApipatronsubscriptioncancel0F56DD38",
+        "RestApipatronsubscriptioncreatecountryIdPOST1E68C8CD",
+        "RestApipatronsubscriptioncreatecountryId97F3026B",
+        "RestApipatronsubscriptioncreateC44D8A79",
         "RestApipatronsubscriptionAE58DC90",
       ],
       "Properties": {
@@ -233,7 +236,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "RestApiDeployment180EC5031415bce23b484655df855d90ebafb1d3",
+          "Ref": "RestApiDeployment180EC5033fc0c8ea808241777537b04b239b12f5",
         },
         "RestApiId": {
           "Ref": "RestApi0C43BF4B",
@@ -428,6 +431,148 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
       },
       "Type": "AWS::ApiGateway::Method",
+    },
+    "RestApipatronsubscriptioncreateC44D8A79": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "RestApipatronsubscriptionAE58DC90",
+        },
+        "PathPart": "create",
+        "RestApiId": {
+          "Ref": "RestApi0C43BF4B",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "RestApipatronsubscriptioncreatecountryId97F3026B": {
+      "Properties": {
+        "ParentId": {
+          "Ref": "RestApipatronsubscriptioncreateC44D8A79",
+        },
+        "PathPart": "{countryId}",
+        "RestApiId": {
+          "Ref": "RestApi0C43BF4B",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "RestApipatronsubscriptioncreatecountryIdPOST1E68C8CD": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "POST",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "stripepatronsdatasignup4E7F0A3F",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "RestApipatronsubscriptioncreatecountryId97F3026B",
+        },
+        "RestApiId": {
+          "Ref": "RestApi0C43BF4B",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "RestApipatronsubscriptioncreatecountryIdPOSTApiPermissionStripePatronsDataPRODRestApi790D3BDCPOSTpatronsubscriptioncreatecountryId951BC4E4": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "stripepatronsdatasignup4E7F0A3F",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "RestApi0C43BF4B",
+              },
+              "/",
+              {
+                "Ref": "RestApiDeploymentStageprod3855DE66",
+              },
+              "/POST/patron/subscription/create/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "RestApipatronsubscriptioncreatecountryIdPOSTApiPermissionTestStripePatronsDataPRODRestApi790D3BDCPOSTpatronsubscriptioncreatecountryId97211607": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "stripepatronsdatasignup4E7F0A3F",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region",
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId",
+              },
+              ":",
+              {
+                "Ref": "RestApi0C43BF4B",
+              },
+              "/test-invoke-stage/POST/patron/subscription/create/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
     },
     "StripePatronsDataPROD61F45521": {
       "DependsOn": [
@@ -756,43 +901,6 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "StripePatronsDataPRODStripePatronsDataPRODrate30minutes028F3FD32": {
-      "Properties": {
-        "ScheduleExpression": "rate(30 minutes)",
-        "State": "ENABLED",
-        "Targets": [
-          {
-            "Arn": {
-              "Fn::GetAtt": [
-                "StripePatronsDataPROD61F45521",
-                "Arn",
-              ],
-            },
-            "Id": "Target0",
-          },
-        ],
-      },
-      "Type": "AWS::Events::Rule",
-    },
-    "StripePatronsDataPRODStripePatronsDataPRODrate30minutes0AllowEventRuleStripePatronsDataPRODBF7BDE5FE71C5129": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "StripePatronsDataPROD61F45521",
-            "Arn",
-          ],
-        },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "StripePatronsDataPRODStripePatronsDataPRODrate30minutes028F3FD32",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
     "stripepatronsdatacancelled2E3CED96": {
       "DependsOn": [
         "stripepatronsdatacancelledServiceRoleDefaultPolicy46825C35",
@@ -1028,6 +1136,246 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         "Roles": [
           {
             "Ref": "stripepatronsdatacancelledServiceRole157E3052",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "stripepatronsdatasignup4E7F0A3F": {
+      "DependsOn": [
+        "stripepatronsdatasignupServiceRoleDefaultPolicy299A4882",
+        "stripepatronsdatasignupServiceRoleC639AAC9",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "DistributionBucketName",
+          },
+          "S3Key": "support/PROD/stripe-patrons-data/stripe-patrons-data.jar",
+        },
+        "Environment": {
+          "Variables": {
+            "APP": "stripe-patrons-data",
+            "STACK": "support",
+            "STAGE": "PROD",
+          },
+        },
+        "FunctionName": "stripe-patrons-data-sign-up-PROD",
+        "Handler": "com.gu.patrons.lambdas.PatronSignUpEventLambda::handleRequest",
+        "MemorySize": 1536,
+        "Role": {
+          "Fn::GetAtt": [
+            "stripepatronsdatasignupServiceRoleC639AAC9",
+            "Arn",
+          ],
+        },
+        "Runtime": "java11",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "stripe-patrons-data",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "stripepatronsdatasignupServiceRoleC639AAC9": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "stripe-patrons-data",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "stripepatronsdatasignupServiceRoleDefaultPolicy299A4882": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "DistributionBucketName",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "DistributionBucketName",
+                      },
+                      "/support/PROD/stripe-patrons-data/stripe-patrons-data.jar",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/PROD/support/stripe-patrons-data",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/PROD/support/stripe-patrons-data/*",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/PROD/support/stripe-patrons-data/*",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:Scan",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:Query",
+                "dynamodb:DescribeTable",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:dynamodb:*:*:table/SupporterProductData-PROD",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "stripepatronsdatasignupServiceRoleDefaultPolicy299A4882",
+        "Roles": [
+          {
+            "Ref": "stripepatronsdatasignupServiceRoleC639AAC9",
           },
         ],
       },

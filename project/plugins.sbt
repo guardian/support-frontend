@@ -4,7 +4,7 @@ addSbtPlugin("com.github.sbt" % "sbt-release" % "1.1.0")
 
 addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.2.1")
 
-addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.13")
+addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "3.9.17")
 
 addSbtPlugin(
   "com.typesafe.play" % "sbt-plugin" % "2.8.19",
@@ -22,7 +22,7 @@ addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.4.6")
 
 addSbtPlugin("com.gu" % "sbt-riffraff-artifact" % "1.1.18")
 
-addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.13")
+addSbtPlugin("com.github.sbt" % "sbt-native-packager" % "1.9.14")
 //Fix for sbt-native-packager 1.9.11 upgrade errors
 ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
 

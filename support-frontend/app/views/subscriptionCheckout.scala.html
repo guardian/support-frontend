@@ -20,7 +20,7 @@
   js: String,
   css: String,
   csrf: Option[String],
-  user: Option[IdUser],
+  idUser: Option[IdUser],
   uatMode: Boolean,
   productPrices: ProductPrices,
   defaultStripeConfig: StripeConfig,
@@ -40,11 +40,25 @@
 
       window.guardian.orderIsAGift = @orderIsAGift
 
-      window.guardian.user = {
-        firstName: "@user.map(_.privateFields.firstName).getOrElse("")",
-        lastName: "@user.map(_.privateFields.secondName).getOrElse("")",
-        email: "@user.map(_.primaryEmailAddress).getOrElse("")"
-      };
+      @idUser.map { user =>
+        window.guardian.user = {
+          id: "@user.id",
+          email: "@user.primaryEmailAddress",
+          @user.publicFields.displayName.map { displayName =>
+            displayName: "@displayName",
+          }
+          @for(firstName <- user.privateFields.firstName; lastName <- user.privateFields.secondName) {
+            firstName: "@firstName",
+            lastName: "@lastName",
+          }
+          @for(address4 <- user.privateFields.address4) {
+            address4: "@address4",
+          }
+          @for(country <- user.privateFields.country) {
+            country: "@country",
+          }
+        };
+      }
 
       window.guardian.stripeKeyDefaultCurrencies = {
         REGULAR: {

@@ -18,6 +18,7 @@ deployments:
       functionNames:
         - stripe-patrons-data-
         - stripe-patrons-data-cancelled-
+        - stripe-patrons-data-sign-up-
       fileName: stripe-patrons-data.jar
       prefixStack: false
     dependencies: [ cfn ]

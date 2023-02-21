@@ -97,5 +97,6 @@ export function CheckoutBenefitsListContainer({
 			selectedAmount,
 		),
 		handleButtonClick,
+		countryGroupId,
 	});
 }

@@ -18,7 +18,6 @@ const routes: Record<string, string> = {
 	recurringContribPending: '/contribute/recurring/pending',
 	contributionsSendMarketing: '/contribute/send-marketing',
 	getUserType: '/identity/get-user-type',
-	oneOffContribAutofill: '/contribute/one-off/autofill',
 	contributionsMarketingConfirm: '/contribute/marketing-confirm',
 	payPalSetupPayment: '/paypal/setup-payment',
 	payPalCreateAgreement: '/paypal/create-agreement',

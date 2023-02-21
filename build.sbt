@@ -73,6 +73,7 @@ lazy val releaseSettings = Seq(
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
   licenses := Seq("Apache V2" -> url("http://www.apache.org/licenses/LICENSE-2.0.html")),
+  releaseTagName := s"${name.value}-${version.value}",
   releaseProcess := release,
   releaseUseGlobalVersion := false,
   releaseVersionFile := file(name.value + "/version.sbt"),
@@ -180,13 +181,11 @@ lazy val `supporter-product-data` = (project in file("supporter-product-data"))
   .aggregate(`module-rest`, `module-aws`, `supporter-product-data-dynamo`)
 
 lazy val `supporter-product-data-dynamo` = (project in file("support-modules/supporter-product-data-dynamo"))
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
   .settings(
     libraryDependencies ++= commonDependencies,
+    releaseSettings,
     scalafmtSettings,
   )
-  .dependsOn(`module-aws`)
-  .aggregate(`module-aws`)
 
 lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
   .enablePlugins(RiffRaffArtifact)

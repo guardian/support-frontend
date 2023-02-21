@@ -35,7 +35,10 @@ import type {
 	ContributionsState,
 	ContributionsStore,
 } from 'helpers/redux/contributionsStore';
+import { getRecurringContributorStatus } from 'helpers/redux/user/thunks';
 import * as storage from 'helpers/storage/storage';
+import { setUpUserState } from 'helpers/user/reduxSetup';
+import { getUserStateField } from 'helpers/user/user';
 
 // ----- Functions ----- //
 function getInitialPaymentMethod(
@@ -179,20 +182,21 @@ function selectInitialContributionTypeAndPaymentMethod(
 	return contributionType;
 }
 
-function getStoredEmail(dispatch: ContributionsDispatch): void {
-	const sessionStorageEmail = storage.getSession('gu.email');
-	if (sessionStorageEmail) {
-		dispatch(setEmail(sessionStorageEmail));
-	}
-}
-
 export function setUpRedux(store: ContributionsStore): void {
 	const dispatch = store.dispatch;
 	const state = store.getState();
 	// TODO - move these settings out of the redux store, as they only change once, upon initialisation
 	const contributionTypes = getContributionTypes(state);
 	dispatch(setContributionTypes(contributionTypes));
-	getStoredEmail(dispatch);
+
+	setUpUserState(dispatch);
+	void dispatch(getRecurringContributorStatus());
+
+	const sessionStorageEmail = storage.getSession('gu.email');
+	if (sessionStorageEmail) {
+		dispatch(setEmail(sessionStorageEmail));
+	}
+
 	void dispatch(getExistingPaymentMethods());
 	const contributionType = selectInitialContributionTypeAndPaymentMethod(
 		state,
@@ -200,7 +204,7 @@ export function setUpRedux(store: ContributionsStore): void {
 		contributionTypes,
 	);
 	selectInitialAmounts(state, dispatch, contributionType);
-	const { email, stateField } = state.page.user;
+
 	// For PayPal one-off we need to get userType from session after the thankyou page redirect
 	const userType = storage.getSession('userTypeFromIdentityResponse');
 
@@ -209,9 +213,12 @@ export function setUpRedux(store: ContributionsStore): void {
 		(userType === 'new' || userType === 'guest' || userType === 'current')
 	) {
 		dispatch(setUserTypeFromIdentityResponse(userType));
-	} else {
-		void dispatch(getUserTypeFromIdentity(email));
+	} else if (sessionStorageEmail) {
+		void dispatch(getUserTypeFromIdentity(sessionStorageEmail));
 	}
 
-	dispatch(setBillingState(stateField));
+	const stateField = getUserStateField();
+	if (stateField) {
+		dispatch(setBillingState(stateField));
+	}
 }

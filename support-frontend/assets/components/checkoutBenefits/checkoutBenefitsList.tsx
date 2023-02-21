@@ -7,6 +7,8 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
+import Tooltip from 'components/tooltip/Tooltip';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CheckListData } from './checkoutBenefitsListData';
 
 const container = css`
@@ -61,8 +63,14 @@ const hr = (margin: string) => css`
 	margin: ${margin};
 `;
 
+const tooltipContainer = css`
+	display: flex;
+`;
+
 const para = css`
 	font-weight: bold;
+	display: inline-block;
+	margin-right: ${space[2]}px;
 
 	${until.tablet} {
 		margin-bottom: ${space[2]}px;
@@ -74,11 +82,13 @@ export type CheckoutBenefitsListProps = {
 	checkListData: CheckListData[];
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
+	countryGroupId: CountryGroupId;
 };
 
 export function CheckoutBenefitsList({
 	title,
 	checkListData,
+	countryGroupId,
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
 		<div css={container}>
@@ -95,7 +105,10 @@ export function CheckoutBenefitsList({
 				))}
 			</table>
 			<hr css={hr(`${space[5]}px 0 ${space[4]}px`)} />
-			<p css={para}>Cancel anytime</p>
+			<div css={tooltipContainer}>
+				<p css={para}>Cancel anytime</p>
+				<Tooltip countryGroupId={countryGroupId} />
+			</div>
 		</div>
 	);
 }

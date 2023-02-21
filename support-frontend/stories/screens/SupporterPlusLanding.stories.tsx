@@ -10,7 +10,7 @@ import {
 } from 'helpers/redux/checkout/personalDetails/actions';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
-import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
+import { setStorybookUser } from 'helpers/redux/user/actions';
 import { setUpRedux } from 'pages/supporter-plus-landing/setup/setUpRedux';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 
@@ -29,7 +29,7 @@ store.dispatch(setCountryInternationalisation('GBP'));
 setUpRedux(store);
 
 // These overrides ensure the user will arrive at this story with a blank slate
-store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
+store.dispatch(setStorybookUser(true));
 store.dispatch(setProductType('MONTHLY'));
 store.dispatch(setFirstName(''));
 store.dispatch(setLastName(''));

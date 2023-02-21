@@ -9,7 +9,7 @@ type PropTypes = SharedButtonPropTypes & {
 	disabled: boolean | null | undefined;
 };
 
-function Button(props: PropTypes) {
+function Button(props: PropTypes): JSX.Element {
 	return <SharedButton element="button" {...props} />;
 }
 
