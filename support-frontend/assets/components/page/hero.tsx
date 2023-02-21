@@ -1,7 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import type { Breakpoint } from '@guardian/source-foundations';
 import type { ReactElement, ReactNode } from 'react';
-import type { RoundelTheme } from './heroRoundel';
 import HeroRoundel from './heroRoundel';
 import {
 	hero,
@@ -11,6 +10,7 @@ import {
 	roundelNudgeDown,
 	roundelNudgeUp,
 } from './heroStyles';
+
 // Options for moving the roundel position on mobile
 type RoundelNudgeDirection = 'up' | 'down';
 type PropTypes = {
@@ -22,8 +22,8 @@ type PropTypes = {
 	roundelText?: ReactNode;
 	roundelNudgeDirection?: RoundelNudgeDirection;
 	hideRoundelBelow?: Breakpoint;
-	roundelTheme?: RoundelTheme;
 };
+
 const roundelNudges: Record<RoundelNudgeDirection, SerializedStyles> = {
 	up: roundelNudgeUp,
 	down: roundelNudgeDown,
@@ -37,7 +37,6 @@ function Hero({
 	roundelText,
 	hideRoundelBelow,
 	roundelNudgeDirection = 'up',
-	roundelTheme = 'base',
 }: PropTypes): ReactElement {
 	const nudgeCSS = roundelNudges[roundelNudgeDirection];
 	const hideRoundel = hideRoundelBelow
@@ -52,10 +51,7 @@ function Hero({
 		<div css={[hero, cssOverrides]}>
 			{roundelText && !roundelElement && (
 				<div css={heroRoundelContainer}>
-					<HeroRoundel
-						cssOverrides={heroRoundelCssOverrides}
-						theme={roundelTheme}
-					>
+					<HeroRoundel cssOverrides={heroRoundelCssOverrides}>
 						{roundelText}
 					</HeroRoundel>
 				</div>

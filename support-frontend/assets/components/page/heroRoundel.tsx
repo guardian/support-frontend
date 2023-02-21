@@ -48,33 +48,20 @@ const heroRoundelStyles = css`
 		margin-top: 100%;
 	}
 `;
+
 const roundelBase = css`
 	background-color: ${brandAlt[400]};
 	color: ${neutral[7]};
 `;
-const roundelDigital = css`
-	background-color: '#00568D';
-	color: ${neutral[100]};
-	border: 2px solid ${brandAlt[400]};
-`;
-export type RoundelTheme = 'base' | 'digital';
+
 type PropTypes = {
 	children?: string | ReactNode;
-	theme?: RoundelTheme;
 	cssOverrides?: SerializedStyles | SerializedStyles[];
 };
-const themes: Record<RoundelTheme, SerializedStyles> = {
-	base: roundelBase,
-	digital: roundelDigital,
-};
 
-function HeroRoundel({
-	children,
-	cssOverrides,
-	theme = 'base',
-}: PropTypes): ReactElement {
+function HeroRoundel({ children, cssOverrides }: PropTypes): ReactElement {
 	return (
-		<div css={[heroRoundelStyles, themes[theme], cssOverrides]}>{children}</div>
+		<div css={[heroRoundelStyles, roundelBase, cssOverrides]}>{children}</div>
 	);
 }
 

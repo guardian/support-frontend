@@ -1,5 +1,4 @@
 import CentredContainer from 'components/containers/centredContainer';
-import type { RoundelTheme } from 'components/page/heroRoundel';
 import HeroRoundel from 'components/page/heroRoundel';
 
 export default {
@@ -20,9 +19,9 @@ export default {
 	],
 };
 
-function Template(args: { theme: RoundelTheme }) {
+function Template() {
 	return (
-		<HeroRoundel theme={args.theme}>
+		<HeroRoundel>
 			<div>
 				<div
 					style={{
@@ -40,7 +39,3 @@ function Template(args: { theme: RoundelTheme }) {
 Template.args = {} as Record<string, unknown>;
 
 export const Base = Template.bind({});
-
-Base.args = {
-	theme: 'base',
-};
