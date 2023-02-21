@@ -45,7 +45,7 @@ function mapStateToProps(state: RedemptionPageState) {
 		email: state.page.checkoutForm.personalDetails.email,
 		confirmEmail: state.page.checkoutForm.personalDetails.confirmEmail,
 		telephone: state.page.checkoutForm.personalDetails.telephone,
-		isSignedIn: state.page.checkoutForm.personalDetails.isSignedIn,
+		isSignedIn: state.page.user.isSignedIn,
 		formErrors: state.page.checkout.errors,
 		currencyId: state.common.internationalisation.currencyId,
 		countryId: state.common.internationalisation.countryId,

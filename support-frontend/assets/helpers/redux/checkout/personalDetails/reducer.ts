@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import { setIsSignedIn } from 'helpers/redux/user/actions';
 import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
 import type { Title } from 'helpers/user/details';
 import { validateForm } from '../checkoutActions';
@@ -33,9 +34,6 @@ export const personalDetailsSlice = createSlice({
 			state.confirmEmail = action.payload;
 			delete state.errors?.confirmEmail;
 		},
-		setIsSignedIn(state, action: PayloadAction<boolean>) {
-			state.isSignedIn = action.payload;
-		},
 		setUserTypeFromIdentityResponse(
 			state,
 			action: PayloadAction<UserTypeFromIdentityResponse>,
@@ -63,6 +61,10 @@ export const personalDetailsSlice = createSlice({
 
 		builder.addCase(getUserTypeFromIdentity.rejected, (state) => {
 			state.userTypeFromIdentityResponse = 'requestFailed';
+		});
+
+		builder.addCase(setIsSignedIn, (state, action) => {
+			state.isSignedIn = action.payload;
 		});
 	},
 });

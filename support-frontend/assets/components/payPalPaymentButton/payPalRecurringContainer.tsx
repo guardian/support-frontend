@@ -61,7 +61,7 @@ export function PayPalButtonRecurringContainer({
 
 	const buttonProps = getPayPalButtonProps({
 		csrf,
-		isTestUser: isTestUser ?? false,
+		isTestUser,
 		setValidationControls,
 		onClick: () =>
 			trackCheckoutSubmitAttempt(
