@@ -257,7 +257,7 @@ export function SupporterPlusLandingPage({
 						</Box>
 						<CheckoutDivider
 							spacing="loose"
-							theme={optimisedMobileLayout ? 'light' : 'dark'}
+							mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
 						/>
 						<PatronsMessage
 							countryGroupId={countryGroupId}
@@ -265,7 +265,7 @@ export function SupporterPlusLandingPage({
 						/>
 						<CheckoutDivider
 							spacing="tight"
-							theme={optimisedMobileLayout ? 'light' : 'dark'}
+							mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
 						/>
 						<GuardianTsAndCs
 							mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}

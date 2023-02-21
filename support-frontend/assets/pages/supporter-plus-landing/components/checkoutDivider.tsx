@@ -27,12 +27,12 @@ type DividerSpacing = 'loose' | 'tight';
 
 type CheckoutDividerProps = {
 	spacing: DividerSpacing;
-	theme?: FinePrintTheme;
+	mobileTheme?: FinePrintTheme;
 };
 
 export function CheckoutDivider({
 	spacing,
-	theme = 'dark',
+	mobileTheme = 'dark',
 }: CheckoutDividerProps): JSX.Element {
-	return <Divider size="full" cssOverrides={divider(spacing, theme)} />;
+	return <Divider size="full" cssOverrides={divider(spacing, mobileTheme)} />;
 }
