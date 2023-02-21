@@ -13,8 +13,6 @@ export function ExistingCardPaymentButton(): JSX.Element {
 		(state) => state.page.checkoutForm.payment.existingPaymentMethods,
 	);
 
-	console.log('selectedPaymentMethod --->', selectedPaymentMethod);
-
 	const payWithExistingCard = useFormValidation(function pay() {
 		void dispatch(
 			onThirdPartyPaymentAuthorised({
