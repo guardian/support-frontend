@@ -57,6 +57,7 @@ const heading = (
 	${from.mobileMedium} {
 		margin-bottom: ${options.marginBottom ?? 0}px;
 		font-size: ${options.shrinkHeadline ? '23px' : '24px'};
+		line-height: 100%;
 	}
 	${from.tablet} {
 		margin-left: 12px;
