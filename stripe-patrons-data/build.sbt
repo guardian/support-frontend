@@ -9,7 +9,7 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.4.4",
+  "ch.qos.logback" % "logback-classic" % "1.4.5",
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.2",
