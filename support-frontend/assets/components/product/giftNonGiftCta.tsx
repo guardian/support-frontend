@@ -6,20 +6,24 @@ import {
 } from '@guardian/source-react-components';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
-type SubscriptionProduct = 'digital' | 'Guardian Weekly' | 'Student';
+type SubscriptionProduct = 'Guardian Weekly' | 'Student';
+
 type PropTypes = {
 	href: string;
 	product: SubscriptionProduct;
 	orderIsAGift: boolean;
 	isStudent?: boolean;
 };
+
 const giftOrPersonal = css`
 	padding: ${space[3]}px ${space[3]}px ${space[12]}px;
 `;
+
 const giftOrPersonalCopy = css`
 	${body.medium()};
 	margin-bottom: ${space[9]}px;
 `;
+
 const giftOrPersonalHeading = css`
 	${headline.medium({
 		fontWeight: 'bold',
@@ -31,10 +35,11 @@ function GiftOrPersonalOrStudent({
 	product,
 	orderIsAGift,
 	isStudent,
-}: PropTypes) {
+}: PropTypes): JSX.Element | null {
 	if (isStudent && orderIsAGift) {
 		return null;
 	}
+
 	return (
 		<section css={giftOrPersonal}>
 			<div css={giftOrPersonalCopy}>
