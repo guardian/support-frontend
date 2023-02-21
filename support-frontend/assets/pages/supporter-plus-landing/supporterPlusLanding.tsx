@@ -200,7 +200,17 @@ export function SupporterPlusLandingPage({
 					<Column span={[0, 2, 5]}></Column>
 					<Column span={[1, 8, 7]}>
 						<Hide from="desktop">
-							{optimisedMobileLayout ? <SecureTransactionIndicator /> : heading}
+							{optimisedMobileLayout ? (
+								<SecureTransactionIndicator
+									align="left"
+									theme="light"
+									cssOverrides={css`
+										margin-bottom: 10px;
+									`}
+								/>
+							) : (
+								heading
+							)}
 						</Hide>
 						<Box>
 							<AmountAndBenefits />

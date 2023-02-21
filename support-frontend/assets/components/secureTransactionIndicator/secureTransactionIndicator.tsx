@@ -1,16 +1,23 @@
 import { css } from '@emotion/react';
 import { neutral, textSans } from '@guardian/source-foundations';
+import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 import SecurePadlock from './securePadlock.svg';
 import SecurePadlockCircle from './securePadlockCircle.svg';
 
-export type SecureTransactionIndicatorProps = {
+export interface SecureTransactionIndicatorProps extends CSSOverridable {
+	align?: 'left' | 'right' | 'center';
+	theme?: 'dark' | 'light';
 	hideText?: boolean;
-};
+}
 
-const secureTransactionWithText = css`
+const theming = (theme: 'dark' | 'light') => css`
+	color: ${theme === 'dark' ? neutral[46] : neutral[100]};
+`;
+
+const secureTransactionWithText = (align: 'left' | 'right' | 'center') => css`
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: ${align};
 `;
 
 const secureTransactionIcon = css`
@@ -20,19 +27,28 @@ const secureTransactionIcon = css`
 
 const padlock = css`
 	margin-right: 5px;
+	path {
+		fill: currentColor;
+	}
 `;
 
 const text = css`
 	${textSans.xsmall({ fontWeight: 'bold' })};
-	color: ${neutral[46]};
 	letter-spacing: 0.01em;
 `;
 
 export function SecureTransactionIndicator({
+	align = 'center',
+	theme = 'dark',
 	hideText,
+	cssOverrides,
 }: SecureTransactionIndicatorProps): JSX.Element {
+	const mainCss = hideText
+		? secureTransactionIcon
+		: secureTransactionWithText(align);
+	const overrides = cssOverrides ?? css``;
 	return (
-		<div css={hideText ? secureTransactionIcon : secureTransactionWithText}>
+		<div css={[mainCss, theming(theme), overrides]}>
 			{hideText ? (
 				<SecurePadlockCircle css={padlock} />
 			) : (
