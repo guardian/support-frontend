@@ -8,9 +8,12 @@ import { onThirdPartyPaymentAuthorised } from 'pages/supporter-plus-landing/setu
 
 export function ExistingCardPaymentButton(): JSX.Element {
 	const dispatch = useContributionsDispatch();
+
 	const { selectedPaymentMethod } = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.existingPaymentMethods,
 	);
+
+	console.log('selectedPaymentMethod --->', selectedPaymentMethod);
 
 	const payWithExistingCard = useFormValidation(function pay() {
 		void dispatch(
