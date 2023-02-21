@@ -2,12 +2,12 @@ import type { FinePrintTheme } from './finePrint';
 import { FinePrint } from './finePrint';
 
 export function GuardianTsAndCs({
-	theme = 'dark',
+	mobileTheme = 'dark',
 }: {
-	theme?: FinePrintTheme;
+	mobileTheme?: FinePrintTheme;
 }): JSX.Element {
 	return (
-		<FinePrint theme={theme}>
+		<FinePrint mobileTheme={mobileTheme}>
 			<p>
 				The ultimate owner of the Guardian is The Scott Trust Limited, whose
 				role it is to secure the editorial and financial independence of the

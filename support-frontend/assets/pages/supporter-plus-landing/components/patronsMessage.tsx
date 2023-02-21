@@ -21,10 +21,10 @@ const intCMPParameter = 'gdnwb_copts_support_contributions_referral';
 
 export function PatronsMessage({
 	countryGroupId,
-	theme = 'dark',
+	mobileTheme = 'dark',
 }: {
 	countryGroupId: CountryGroupId;
-	theme?: FinePrintTheme;
+	mobileTheme?: FinePrintTheme;
 }): JSX.Element {
 	const patronageAmountsWithGlyph = {
 		GBPCountries: '£100',
@@ -38,7 +38,7 @@ export function PatronsMessage({
 	const isUSA = countryGroupId === 'UnitedStates';
 
 	return (
-		<FinePrint theme={theme}>
+		<FinePrint mobileTheme={mobileTheme}>
 			<h2 css={headingStyles}>
 				{isUSA ? 'Support another way' : 'Guardian Patrons programme'}
 			</h2>

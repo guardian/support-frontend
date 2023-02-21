@@ -261,13 +261,15 @@ export function SupporterPlusLandingPage({
 						/>
 						<PatronsMessage
 							countryGroupId={countryGroupId}
-							theme={optimisedMobileLayout ? 'light' : 'dark'}
+							mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
 						/>
 						<CheckoutDivider
 							spacing="tight"
 							theme={optimisedMobileLayout ? 'light' : 'dark'}
 						/>
-						<GuardianTsAndCs theme={optimisedMobileLayout ? 'light' : 'dark'} />
+						<GuardianTsAndCs
+							mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+						/>
 					</Column>
 				</Columns>
 			</Container>
