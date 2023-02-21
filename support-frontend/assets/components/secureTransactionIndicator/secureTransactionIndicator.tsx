@@ -1,53 +1,19 @@
 import { css } from '@emotion/react';
-import {
-	from,
-	neutral,
-	space,
-	textSans,
-	until,
-} from '@guardian/source-foundations';
+import { neutral, textSans } from '@guardian/source-foundations';
 import SecurePadlock from './securePadlock.svg';
 import SecurePadlockCircle from './securePadlockCircle.svg';
 
 export type SecureTransactionIndicatorProps = {
-	position: string;
 	hideText?: boolean;
 };
 
-const secureTransaction = (position: string) => css`
+const secureTransactionWithText = css`
 	display: flex;
 	align-items: center;
-
-	${position === 'top' &&
-	`
-    margin-bottom: 6px;
-
-    ${from.tablet} {
-      position: absolute;
-      visibility: hidden;
-      display: none;
-    }
-  `}
-
-	${position === 'middle' &&
-	`
-    margin-top: -${space[3]}px;
-
-    ${until.tablet} {
-      position: absolute;
-      visibility: hidden;
-      display: none;
-    }
-  `}
-
-	${position === 'center' &&
-	`
-    justify-content: center;
-    align-items: center;
-  `}
+	justify-content: center;
 `;
 
-const suppPlusPayMethodIndicator = css`
+const secureTransactionIcon = css`
 	display: flex;
 	align-items: center;
 `;
@@ -63,13 +29,10 @@ const text = css`
 `;
 
 export function SecureTransactionIndicator({
-	position,
 	hideText,
 }: SecureTransactionIndicatorProps): JSX.Element {
 	return (
-		<div
-			css={hideText ? suppPlusPayMethodIndicator : secureTransaction(position)}
-		>
+		<div css={hideText ? secureTransactionIcon : secureTransactionWithText}>
 			{hideText ? (
 				<SecurePadlockCircle css={padlock} />
 			) : (

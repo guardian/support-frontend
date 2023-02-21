@@ -199,7 +199,9 @@ export function SupporterPlusLandingPage({
 				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
 					<Column span={[0, 2, 5]}></Column>
 					<Column span={[1, 8, 7]}>
-						<Hide from="desktop">{heading}</Hide>
+						<Hide from="desktop">
+							{optimisedMobileLayout ? <SecureTransactionIndicator /> : heading}
+						</Hide>
 						<Box>
 							<AmountAndBenefits />
 						</Box>
@@ -207,7 +209,7 @@ export function SupporterPlusLandingPage({
 							<BoxContents>
 								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
 								<ContributionsStripe>
-									<SecureTransactionIndicator position="center" />
+									<SecureTransactionIndicator />
 									<PaymentRequestButtonContainer
 										CustomButton={SavedCardButton}
 									/>
