@@ -12,23 +12,8 @@ export const pageUrlRegexes = {
 		auLandingPage: '/au/contribute(/.*)?$',
 	},
 	subscriptions: {
-		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
-		digiSubLandingPages:
-			'(/??/subscribe/digital/gift(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
-		digiSubLandingPagesNotAus:
-			'(/(uk|us|ca|eu|nz|int)/subscribe/digital(\\?.*)?$)',
-		digiSub: {
-			// Requires /subscribe/digital, allows /checkout and/or /gift, allows any query string
-			allLandingAndCheckout:
-				/\/subscribe\/digital(\/checkout)?(\/gift)?(\?.*)?$/,
-			// Requires /subscribe/digital and /gift, allows /checkout before /gift, allows any query string
-			giftLandingAndCheckout: /\/subscribe\/digital(\/checkout)?\/gift(\?.*)?$/,
-			// Requires /subscribe/digital, allows /checkout, allows any query string
-			nonGiftLandingAndCheckoutWithGuest:
-				/\/subscribe\/digital(\/checkout|\/checkout\/guest)?(\?.*)?$/,
-			nonGiftLandingNotAusNotUS:
-				/((uk|ca|eu|nz|int)\/subscribe\/digital(?!\/gift).?(\\?.*)?$)|(\/subscribe\/digital\/checkout?(\\?.*)?$)/,
-		},
+		// Requires /subscribe, allows any query string
+		subsLandingPage: '(/??/subscribe(\\?.*)?$)',
 		paper: {
 			// Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
 			paperLandingWithGuestCheckout:
