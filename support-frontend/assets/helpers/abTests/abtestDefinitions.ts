@@ -59,4 +59,44 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 15,
 	},
+	guardianWeeklyPriceCards: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false,
+		targetPage: pageUrlRegexes.subscriptions.subsWeeklyPages,
+		seed: 11,
+	},
+	supporterPlusV2: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 0, //opt-in only at this stage
+			},
+		},
+		isActive: true,
+		referrerControlled: false,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		seed: 1,
+	},
 };

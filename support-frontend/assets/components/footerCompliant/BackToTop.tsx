@@ -52,7 +52,7 @@ const textStyles = css`
 	})};
 	padding-right: 5px;
 `;
-export function BackToTop() {
+export function BackToTop(): JSX.Element {
 	return (
 		<a css={link} href="#top">
 			<span css={textStyles}>Back to top</span>

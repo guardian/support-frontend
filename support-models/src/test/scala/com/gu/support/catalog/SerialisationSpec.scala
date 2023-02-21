@@ -12,7 +12,9 @@ import org.scalatest.flatspec.AsyncFlatSpec
 class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with LazyLogging {
 
   "The full Catalog" should "decode successfully" in {
-    val supporterPlusMonthlyId = "8a12865b8219d9b401822106192b64dc"
+    val supporterPlusV1MonthlyId = "8a12865b8219d9b401822106192b64dc"
+    val supporterPlusV2MonthlyId = "8a128ed885fc6ded018602296ace3eb8"
+    val supporterPlusV2AnnualId = "8a128ed885fc6ded01860228f77e3d5a"
     val digitalPackId = "2c92a0fb4edd70c8014edeaa4eae220a"
     val guardianWeeklyAnnualDomesticId = "2c92a0fe6619b4b901661aa8e66c1692"
     val numberOfPriceLists =
@@ -24,9 +26,11 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
       Fixtures.loadCatalog,
       catalog => {
         catalog.prices.length shouldBe numberOfPriceLists
-        checkPrice(catalog, supporterPlusMonthlyId, GBP, 11.99)
+        checkPrice(catalog, supporterPlusV1MonthlyId, GBP, 10)
+        checkPrice(catalog, supporterPlusV2MonthlyId, GBP, 10)
+        checkPrice(catalog, supporterPlusV2AnnualId, GBP, 95)
         checkPrice(catalog, digitalPackId, GBP, 11.99)
-        checkPrice(catalog, guardianWeeklyAnnualDomesticId, GBP, 150)
+        checkPrice(catalog, guardianWeeklyAnnualDomesticId, GBP, 165)
       },
     )
   }
@@ -39,7 +43,7 @@ class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with
   ): Assertion = {
     catalog.prices
       .find(_.productRatePlanId == productRatePlanId)
-      .getOrElse(fail())
+      .getOrElse(fail(s"Couldn't find price for productRatePlanId $productRatePlanId"))
       .prices
       .find(_.currency == currency)
       .getOrElse(fail())

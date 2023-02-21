@@ -1,5 +1,6 @@
 package com.gu.zuora.productHandlers
 
+import com.gu.support.acquisitions.AbTest
 import com.gu.support.workers.User
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{ContributionState, SupporterPlusState}
 import com.gu.support.workers.states.SendThankYouEmailState
@@ -18,11 +19,23 @@ class ZuoraSupporterPlusHandler(
     supporterPlusSubscriptionBuilder: SupporterPlusSubcriptionBuilder,
     user: User,
 ) {
-  def subscribe(state: SupporterPlusState, csrUsername: Option[String], salesforceCaseId: Option[String]) =
+  def subscribe(
+      state: SupporterPlusState,
+      csrUsername: Option[String],
+      salesforceCaseId: Option[String],
+      abTests: Option[Set[AbTest]],
+  ) =
     for {
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(
-        supporterPlusSubscriptionBuilder.build(state, csrUsername, salesforceCaseId),
+        supporterPlusSubscriptionBuilder.build(state, csrUsername, salesforceCaseId, abTests),
       )
-    } yield SendThankYouEmailSupporterPlusState(user, state.product, state.paymentMethod, account.value, sub.value)
+    } yield SendThankYouEmailSupporterPlusState(
+      user,
+      state.product,
+      state.paymentMethod,
+      account.value,
+      sub.value,
+      abTests,
+    )
 
 }

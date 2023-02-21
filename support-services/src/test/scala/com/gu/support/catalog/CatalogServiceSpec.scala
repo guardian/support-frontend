@@ -20,7 +20,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
   ): Option[Price] = {
     for {
       productRatePlan <- product.getProductRatePlan(PROD, billingPeriod, fulfilmentOptions, productOptions)
-      priceList <- serviceWithFixtures.getPriceList(productRatePlan)
+      priceList <- serviceWithFixtures.getPriceList(productRatePlan.id)
       price <- priceList.prices.find(_.currency == currency)
     } yield price
   }
@@ -40,7 +40,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       Monthly,
       HomeDelivery,
       Everyday,
-    ) shouldBe Some(Price(67.99, GBP))
+    ) shouldBe Some(Price(73.99, GBP))
 
     getPrice(
       Paper,
@@ -48,7 +48,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       Monthly,
       HomeDelivery,
       Sixday,
-    ) shouldBe Some(Price(57.99, GBP))
+    ) shouldBe Some(Price(64.99, GBP))
 
     getPrice(
       GuardianWeekly,
@@ -56,7 +56,7 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       Quarterly,
       Domestic,
       NoProductOptions,
-    ) shouldBe Some(Price(37.50, GBP))
+    ) shouldBe Some(Price(41.25, GBP))
 
     getPrice(
       GuardianWeekly,
@@ -64,12 +64,12 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
       Annual,
       RestOfWorld,
       NoProductOptions,
-    ) shouldBe Some(Price(325.20, USD))
+    ) shouldBe Some(Price(360, USD))
 
     (for {
       voucherEveryday <- Paper.getProductRatePlan(PROD, Monthly, Collection, Everyday)
-      priceList <- serviceWithFixtures.getPriceList(voucherEveryday)
-    } yield priceList.savingVsRetail shouldBe Some(43)).getOrElse(fail())
+      priceList <- serviceWithFixtures.getPriceList(voucherEveryday.id)
+    } yield priceList.savingVsRetail shouldBe Some(27)).getOrElse(fail())
 
   }
 }

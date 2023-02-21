@@ -5,6 +5,7 @@ import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
+import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
 import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery, RestOfWorld}
 import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
@@ -476,7 +477,12 @@ object JsonFixtures {
       None,
     ).asJson.spaces2
 
-  def createSupporterPlusZuoraSubscriptionJson(amount: BigDecimal, currency: Currency, country: Country = UK) =
+  def createSupporterPlusZuoraSubscriptionJson(
+      amount: BigDecimal,
+      currency: Currency,
+      country: Country = UK,
+      acquisitionData: Option[AcquisitionData] = None,
+  ) =
     CreateZuoraSubscriptionState(
       SupporterPlusState(
         SupporterPlus(amount, currency, Monthly),
@@ -491,7 +497,7 @@ object JsonFixtures {
       None,
       None,
       None,
-      None,
+      acquisitionData,
     ).asJson.spaces2
 
   val createDigiPackZuoraSubscriptionJson =

@@ -2,7 +2,7 @@ package com.gu.support.workers
 
 import com.gu.support.catalog
 import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPeriod
-import com.gu.support.catalog.{Product, ProductRatePlan}
+import com.gu.support.catalog.{Product, ProductRatePlan, SupporterPlusV1, SupporterPlusV2}
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.zuora.api.ReaderType
 import com.gu.support.zuora.api.ReaderType.Corporate
@@ -49,13 +49,27 @@ object ProductTypeRatePlans {
           (productRatePlan.readerType == Corporate && product.readerType == Corporate), // We don't care about the billing period for corporates
       )
 
-  def supporterPlusRatePlan(
+  def supporterPlusRatePlanV1(
       product: SupporterPlus,
       environment: TouchPointEnvironment,
   ): Option[ProductRatePlan[catalog.SupporterPlus.type]] =
     catalog.SupporterPlus.ratePlans
       .getOrElse(environment, Nil)
-      .find(productRatePlan => productRatePlan.billingPeriod == product.billingPeriod)
+      .find(productRatePlan =>
+        productRatePlan.billingPeriod == product.billingPeriod &&
+          productRatePlan.productOptions == SupporterPlusV1,
+      )
+
+  def supporterPlusRatePlanV2(
+      product: SupporterPlus,
+      environment: TouchPointEnvironment,
+  ): Option[ProductRatePlan[catalog.SupporterPlus.type]] =
+    catalog.SupporterPlus.ratePlans
+      .getOrElse(environment, Nil)
+      .find(productRatePlan =>
+        productRatePlan.billingPeriod == product.billingPeriod &&
+          productRatePlan.productOptions == SupporterPlusV2,
+      )
 
   def paperRatePlan(product: Paper, environment: TouchPointEnvironment): Option[ProductRatePlan[catalog.Paper.type]] =
     catalog.Paper.ratePlans

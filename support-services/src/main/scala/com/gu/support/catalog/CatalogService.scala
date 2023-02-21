@@ -101,7 +101,7 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     (product.ratePlans(environment) ++ legacyDigitalGiftRatePlans).find(_.id == id)
   }
 
-  def getPriceList[T <: Product](productRatePlan: ProductRatePlan[T]): Option[Pricelist] =
-    catalog.flatMap(_.prices.find(_.productRatePlanId == productRatePlan.id))
+  def getPriceList[T <: Product](productRatePlanId: ProductRatePlanId): Option[Pricelist] =
+    catalog.flatMap(_.prices.find(_.productRatePlanId == productRatePlanId))
 
 }
