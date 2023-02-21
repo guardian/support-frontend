@@ -36,7 +36,7 @@ libraryDependencies ++= Seq(
   "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % "test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "org.scalatestplus" %% "scalatestplus-selenium" % "1.0.0-M2" % Test,
-  "com.squareup.okhttp3" % "okhttp" % "3.14.9",
+  "com.squareup.okhttp3" % "okhttp" % "4.10.0",
   "com.gocardless" % "gocardless-pro" % "5.14.1",
   "com.googlecode.libphonenumber" % "libphonenumber" % "8.13.6",
   // This is required to force aws libraries to use the latest version of jackson
