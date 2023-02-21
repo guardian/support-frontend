@@ -21,7 +21,7 @@ object Catalog {
 
   implicit val encoder: Encoder[Catalog] = deriveEncoder
 
-  def sumPriceLists(priceLists: List[Price]): Iterable[(Price)] = {
+  def sumPriceLists(priceLists: List[Price]): Iterable[Price] = {
     // Paper products such as Everyday are represented in the catalog as multiple
     // product rate plan charges (one for every day of the week) and these each
     // have their own price list. To get the total prices for these products therefore
