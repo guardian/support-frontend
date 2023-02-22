@@ -30,8 +30,15 @@ case object EverydayPlus extends PaperProductOptions(true)
 
 case object Everyday extends PaperProductOptions(false)
 
+sealed abstract class SupporterPlusVersionOptions extends ProductOptions
+
+case object SupporterPlusV1 extends SupporterPlusVersionOptions
+
+case object SupporterPlusV2 extends SupporterPlusVersionOptions
+
 object ProductOptions {
-  val allProductOptions = NoProductOptions :: PaperProductOptions.productOptions
+  val allProductOptions =
+    NoProductOptions :: PaperProductOptions.productOptions ++ SupporterPlusVersionOptions.productOptions
 
   def fromString[T](code: String, productOptions: List[T]): Option[T] =
     productOptions.find(_.getClass.getSimpleName == s"$code$$")
@@ -56,4 +63,16 @@ object PaperProductOptions {
     Decoder.decodeString.emap(code => fromString(code, productOptions).toRight(s"unrecognised product options '$code'"))
 
   implicit val encode: Encoder[PaperProductOptions] = Encoder.encodeString.contramap[PaperProductOptions](_.toString)
+}
+
+object SupporterPlusVersionOptions {
+  val productOptions: List[SupporterPlusVersionOptions] = List(SupporterPlusV1, SupporterPlusV2)
+
+  implicit val decoder: Decoder[SupporterPlusVersionOptions] =
+    Decoder.decodeString.emap(code =>
+      fromString(code, productOptions).toRight(s"unrecognised supporter plus version '$code'"),
+    )
+
+  implicit val encode: Encoder[SupporterPlusVersionOptions] =
+    Encoder.encodeString.contramap[SupporterPlusVersionOptions](_.toString)
 }

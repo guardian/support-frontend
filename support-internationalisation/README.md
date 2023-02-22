@@ -10,7 +10,10 @@ Run `sbt +publishLocal`.
 Releasing to maven
 ==================
 
-We use sbt to release to Maven. Please check notes here to ensure you are set up to release to Maven:
-https://docs.google.com/document/d/1M_MiE8qntdDn97QIRnIUci5wdVQ8_defCqpeAwoKY8g/edit#heading=h.r815791vmxv5
+We use sbt to release to Maven. This document describes the setup steps required to enable you to release:
+https://docs.google.com/document/d/1rNXjoZDqZMsQblOVXPAIIOMWuwUKe3KzTCttuqS7AcY/edit#
 
-Then run `sbt release`.
+1. You should run the release on your local branch not `main` - this is because the final release step updates the library versions then commits and pushes the changes and this will not work on main as it is protected.
+2. Ensure that your branch is up to date with `main` in case of regressions - to do this you should run `git pull origin main` and fix any merge conflicts
+3. Run ` sbt "project support-internationalisation" +release` and follow the instructions - you will have to enter the passphrase for your pgp key during the process
+4. Make a PR and merge your branch to `main`

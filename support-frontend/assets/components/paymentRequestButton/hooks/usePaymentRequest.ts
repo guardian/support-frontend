@@ -38,7 +38,7 @@ export function usePaymentRequest(stripe: StripeJs | null): PaymentRequestData {
 
 	// Check if we can use the PRB once the Stripe SDK is available
 	useEffect(() => {
-		if (stripe) {
+		if (stripe && !Number.isNaN(amount)) {
 			const paymentRequestSdk = stripe.paymentRequest({
 				country: countryId,
 				currency: currencyId.toLowerCase(),

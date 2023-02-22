@@ -1,7 +1,4 @@
-import {
-	SvgCreditCard,
-	SvgDirectDebitWide,
-} from '@guardian/source-react-components';
+import { SvgDirectDebitWide } from '@guardian/source-react-components';
 import { AmazonPayFormContainer } from 'components/amazonPayForm/amazonPayFormContainer';
 import type { SepaFormProps } from 'components/sepaForm/SepaForm';
 import { SepaForm } from 'components/sepaForm/SepaForm';
@@ -10,7 +7,7 @@ import { StripeCardFormContainer } from 'components/stripeCardForm/stripeCardFor
 import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
 import SvgSepa from 'components/svgs/sepa';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import { CreditDebitIcons } from './creditDebitIcons';
+import { CreditDebitIcons, SvgCreditCardWithTheme } from './creditDebitIcons';
 import { PaypalIcon } from './paypalIcon';
 
 interface PaymentMethodData {
@@ -58,7 +55,7 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 	ExistingCard: {
 		id: 'qa-existing-card',
 		label: 'Credit/Debit card',
-		icon: <SvgCreditCard size="medium" />,
+		icon: <SvgCreditCardWithTheme />,
 	},
 	ExistingDirectDebit: {
 		id: 'qa-existing-direct-debit',
@@ -68,6 +65,6 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 	None: {
 		id: 'qa-none',
 		label: 'Other Payment Method',
-		icon: <SvgCreditCard size="medium" />,
+		icon: <SvgCreditCardWithTheme />,
 	},
 };

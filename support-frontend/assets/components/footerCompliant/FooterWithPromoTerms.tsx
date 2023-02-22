@@ -162,7 +162,7 @@ function GuardianWeeklyFooter({
 	productPrices,
 	orderIsAGift,
 	country,
-}: FooterWithPromoTermsProps) {
+}: FooterWithPromoTermsProps): JSX.Element {
 	const termsConditionsLink =
 		'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
 	return (
@@ -180,7 +180,7 @@ function DigitalFooter({
 	productPrices,
 	orderIsAGift,
 	country,
-}: FooterWithPromoTermsProps) {
+}: FooterWithPromoTermsProps): JSX.Element {
 	const termsConditionsLink = orderIsAGift
 		? 'https://www.theguardian.com/help/2020/nov/24/gift-digital-subscriptions-terms-and-conditions'
 		: 'https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions';

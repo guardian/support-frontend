@@ -36,6 +36,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           state,
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
+          zuoraSubscriptionState.acquisitionData.map(_.supportAbTests),
         )
       case state: DigitalSubscriptionGiftRedemptionState =>
         zuoraDigitalSubscriptionGiftRedemptionHandler.redeemGift(state)
@@ -142,6 +143,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     zuoraSubscriptionCreator,
     new SupporterPlusSubcriptionBuilder(
       services.config.zuoraConfigProvider.get(isTestUser).supporterPlusConfig,
+      services.catalogService,
       dateGenerator,
       touchPointEnvironment,
       subscribeItemBuilder,

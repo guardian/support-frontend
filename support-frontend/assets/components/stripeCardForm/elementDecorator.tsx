@@ -14,6 +14,7 @@ import type {
 	StripeElementStyleVariant,
 } from '@stripe/stripe-js';
 import { useState } from 'react';
+import { BrandedIcons } from 'components/paymentMethodSelector/creditDebitIcons';
 
 const inlineMessageMargin = css`
 	margin-top: 2px;
@@ -39,6 +40,8 @@ like our own inputs from Source.
 const stripeElementStyles = (isFocused: boolean, error?: string) => css`
 	display: block;
 	flex-grow: 1;
+	// credit card icons positioned absolutely on mobile breakpoints
+	position: relative;
 
 	& > div:first-child {
 		margin-bottom: ${space[1]}px;
@@ -53,6 +56,16 @@ const stripeElementStyles = (isFocused: boolean, error?: string) => css`
 	${isFocused && stripeElementFocusStyles};
 
 	${error && stripeElementErrorStyles}
+`;
+
+const mobileCreditDebitIcons = css`
+	position: absolute;
+	top: 0;
+	right: 0;
+
+	@media (min-width: 355px) {
+		display: none;
+	}
 `;
 
 type ElementRenderProps = {
@@ -106,6 +119,11 @@ export function ElementDecorator({
 				onFocus: () => setIsFocused(true),
 				onBlur: () => setIsFocused(false),
 			})}
+			{id === 'cardNumber' && (
+				<p css={mobileCreditDebitIcons}>
+					<BrandedIcons />
+				</p>
+			)}
 		</Label>
 	);
 }

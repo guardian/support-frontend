@@ -10,7 +10,7 @@ const mockElement = () => ({
 });
 
 const mockElements = () => {
-	const elements: Record<string, any> = {};
+	const elements: Record<string, unknown> = {};
 	return {
 		create: jest.fn((type) => {
 			elements[type] = mockElement();
@@ -41,10 +41,10 @@ jest.mock('@stripe/react-stripe-js', () => {
 	function createStripeElementMock(elementType: string) {
 		type MockStripeElementProps = {
 			id: string;
-			onChange: (...args: any[]) => any;
+			onChange: (...args: unknown[]) => void;
 		};
 		return function MockStripeElement(props: MockStripeElementProps) {
-			function onChange(evt: any) {
+			function onChange(evt: React.ChangeEvent<HTMLElement>) {
 				return props.onChange({
 					...evt,
 					elementType,

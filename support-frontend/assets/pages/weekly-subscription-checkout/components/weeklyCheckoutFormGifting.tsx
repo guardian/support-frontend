@@ -94,7 +94,7 @@ function mapStateToProps(state: SubscriptionsState) {
 		deliveryAddressErrors:
 			state.page.checkoutForm.deliveryAddress.fields.errors,
 		billingAddressErrors: state.page.checkoutForm.billingAddress.fields.errors,
-		isTestUser: state.page.checkout.isTestUser,
+		isTestUser: state.page.user.isTestUser,
 		country: state.common.internationalisation.countryId,
 		csrf: state.page.checkoutForm.csrf,
 		currencyId:

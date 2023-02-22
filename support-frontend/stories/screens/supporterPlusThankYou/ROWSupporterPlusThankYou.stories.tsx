@@ -26,8 +26,8 @@ import {
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
+import { setIsSignedIn, setStorybookUser } from 'helpers/redux/user/actions';
 import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
-import { defaultUserActionFunctions } from 'helpers/user/defaultUserActionFunctions';
 import {
 	largeDonations,
 	SupporterPlusThankYou,
@@ -111,7 +111,7 @@ OneOffNotSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
-		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
+		store.dispatch(setStorybookUser(true));
 		store.dispatch(setProductType('ONE_OFF'));
 		store.dispatch(setFirstName('Joe'));
 		store.dispatch(setLastName('Bloggs'));
@@ -162,8 +162,8 @@ OneOffSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
-		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
-		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
+		store.dispatch(setStorybookUser(true));
+		store.dispatch(setIsSignedIn(true));
 		store.dispatch(setProductType('ONE_OFF'));
 		store.dispatch(setFirstName('Joe'));
 		store.dispatch(setLastName('Bloggs'));
@@ -213,10 +213,10 @@ OneOffSignUp.decorators = [
 
 		const store = createTestStoreForContributions();
 
-		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
+		store.dispatch(setStorybookUser(true));
 		// is a new account
 		store.dispatch(setUserTypeFromIdentityResponse('new'));
-		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
+		store.dispatch(setIsSignedIn(true));
 		store.dispatch(setProductType('ONE_OFF'));
 		store.dispatch(setFirstName('Joe'));
 		store.dispatch(setLastName('Bloggs'));
@@ -273,7 +273,7 @@ RecurringNotSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
-		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
+		store.dispatch(setStorybookUser(true));
 		store.dispatch(setProductType(contributionType));
 		store.dispatch(setUserTypeFromIdentityResponse('guest'));
 		store.dispatch(
@@ -338,8 +338,8 @@ RecurringSignedIn.decorators = [
 
 		const store = createTestStoreForContributions();
 
-		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
-		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
+		store.dispatch(setStorybookUser(true));
+		store.dispatch(setIsSignedIn(true));
 		store.dispatch(setUserTypeFromIdentityResponse('current'));
 		store.dispatch(setProductType(contributionType));
 		store.dispatch(
@@ -404,10 +404,10 @@ RecurringSignUp.decorators = [
 
 		const store = createTestStoreForContributions();
 
-		store.dispatch(defaultUserActionFunctions.setStorybookUser(true));
+		store.dispatch(setStorybookUser(true));
 		// is a new account
 		store.dispatch(setUserTypeFromIdentityResponse('new'));
-		store.dispatch(defaultUserActionFunctions.setIsSignedIn(true));
+		store.dispatch(setIsSignedIn(true));
 		store.dispatch(setProductType(contributionType));
 		store.dispatch(
 			setFirstName(nameIsOverTenCharacters ? 'NameIsOverTenCharacters' : 'Joe'),

@@ -1,6 +1,7 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.gu.helpers.SupportWorkersV2Helper.isV2SupporterPlus
 import com.gu.monitoring.SafeLogger
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog._
@@ -94,9 +95,10 @@ object UpdateSupporterProductData {
           )
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
 
-      case SendThankYouEmailSupporterPlusState(user, product, _, _, subscriptionNumber) =>
+      case SendThankYouEmailSupporterPlusState(user, product, _, _, subscriptionNumber, abTests) =>
+        val supporterPlusVersion = if (isV2SupporterPlus(abTests)) SupporterPlusV2 else SupporterPlusV1
         catalogService
-          .getProductRatePlan(SupporterPlus, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
+          .getProductRatePlan(SupporterPlus, product.billingPeriod, NoFulfilmentOptions, supporterPlusVersion)
           .map(productRatePlan =>
             Some(
               supporterRatePlanItem(
