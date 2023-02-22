@@ -6,7 +6,10 @@ import HeadingBlock from 'components/headingBlock/headingBlock';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import Text, { LargeParagraph } from 'components/text/text';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import {
+	sendTrackingEventsOnClick,
+	SubscriptionRedemption,
+} from 'helpers/productPrice/subscriptions';
 import ThankYouHero from './components/thankYou/hero';
 
 // ----- Types ----- //
@@ -41,7 +44,7 @@ function ThankYouPendingContent(props: PropTypes): JSX.Element {
 							<a
 								onClick={sendTrackingEventsOnClick({
 									id: 'help',
-									product: 'DigitalPack',
+									product: SubscriptionRedemption,
 									componentType: 'ACQUISITIONS_BUTTON',
 								})}
 								href="https://manage.theguardian.com/help-centre"

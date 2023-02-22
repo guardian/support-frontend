@@ -7,7 +7,10 @@ import {
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
 import Content, { Divider, NarrowContent } from 'components/content/content';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import type {
+	SubscriptionProduct,
+	SubscriptionRedemption,
+} from 'helpers/productPrice/subscriptions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 const buttonStyles = css`
@@ -16,7 +19,7 @@ const buttonStyles = css`
 	}
 `;
 type PropTypes = {
-	subscriptionProduct: SubscriptionProduct | 'DigitalPack';
+	subscriptionProduct: SubscriptionProduct | typeof SubscriptionRedemption;
 };
 
 // ----- Component ----- //

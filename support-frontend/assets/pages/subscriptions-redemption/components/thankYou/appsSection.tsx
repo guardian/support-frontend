@@ -10,7 +10,10 @@ import 'helpers/internationalisation/countryGroup';
 import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
 import Text from 'components/text/text';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import {
+	sendTrackingEventsOnClick,
+	SubscriptionRedemption,
+} from 'helpers/productPrice/subscriptions';
 import {
 	androidAppUrl,
 	androidDailyUrl,
@@ -45,7 +48,7 @@ const marginTop = css`
 `;
 
 // ----- Component ----- //
-function AppsSection({ countryGroupId }: PropTypes) {
+function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 	return (
 		<div>
 			<div css={marginTop}>
@@ -69,7 +72,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 							href={getDailyEditionUrl(countryGroupId)}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_thankyou_daily_edition_apple',
-								product: 'DigitalPack',
+								product: SubscriptionRedemption,
 								componentType: 'ACQUISITIONS_BUTTON',
 							})}
 						>
@@ -88,7 +91,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 							href={androidDailyUrl}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_thankyou_daily_edition_android',
-								product: 'DigitalPack',
+								product: SubscriptionRedemption,
 								componentType: 'ACQUISITIONS_BUTTON',
 							})}
 						>
@@ -121,7 +124,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 							href={getIosAppUrl(countryGroupId)}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_thankyou_live_app_apple',
-								product: 'DigitalPack',
+								product: SubscriptionRedemption,
 								componentType: 'ACQUISITIONS_BUTTON',
 							})}
 						>
@@ -138,7 +141,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 							href={androidAppUrl}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_thankyou_live_app_android',
-								product: 'DigitalPack',
+								product: SubscriptionRedemption,
 								componentType: 'ACQUISITIONS_BUTTON',
 							})}
 						>
@@ -168,7 +171,7 @@ function AppsSection({ countryGroupId }: PropTypes) {
 						href="https://www.theguardian.com/"
 						onClick={sendTrackingEventsOnClick({
 							id: 'checkout_thankyou_sign_in',
-							product: 'DigitalPack',
+							product: SubscriptionRedemption,
 							componentType: 'ACQUISITIONS_BUTTON',
 						})}
 					>

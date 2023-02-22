@@ -18,7 +18,6 @@ export default function ({
 	countryGroupId: CountryGroupId;
 	listOfCountryGroups: CountryGroupId[];
 	trackProduct?: Option<SubscriptionProduct>;
-	hideDigiSub?: boolean;
 }) {
 	return function (): JSX.Element {
 		return (

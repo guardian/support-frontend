@@ -4,6 +4,7 @@ import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import ProgressMessage from 'components/progressMessage/progressMessage';
 import ReturnSection from 'components/subscriptionCheckouts/thankYou/returnSection';
+import { SubscriptionRedemption } from 'helpers/productPrice/subscriptions';
 import type { RedemptionPageState } from 'helpers/redux/redemptionsStore';
 
 // ----- State/Props Maps ----- //
@@ -29,7 +30,7 @@ function CheckoutStage(props: PropTypes) {
 				<div>
 					{props.thankYouContent}
 					{/* 'DigitalPack' subscription product used for tracking on the redemption page */}
-					<ReturnSection subscriptionProduct={'DigitalPack'} />
+					<ReturnSection subscriptionProduct={SubscriptionRedemption} />
 				</div>
 			);
 
@@ -37,7 +38,7 @@ function CheckoutStage(props: PropTypes) {
 			return (
 				<div>
 					{props.thankYouContentPending}
-					<ReturnSection subscriptionProduct={'DigitalPack'} />
+					<ReturnSection subscriptionProduct={SubscriptionRedemption} />
 				</div>
 			);
 
