@@ -24,10 +24,8 @@ import {
 } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getAppliedPromo } from 'helpers/productPrice/promotions';
-import { Direct, Gift } from 'helpers/productPrice/readerType';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
-	DigitalPack,
 	GuardianWeekly,
 	isPhysicalProduct,
 	Paper,
@@ -84,19 +82,11 @@ const getProduct = (
 	state: SubscriptionsState,
 	currencyId?: Option<IsoCurrency>,
 ): SubscriptionProductFields => {
-	const { billingPeriod, fulfilmentOption, productOption, orderIsAGift } =
+	const { billingPeriod, fulfilmentOption, productOption } =
 		state.page.checkoutForm.product;
 	const product = getSubscriptionType(state);
-	const readerType = orderIsAGift ? Gift : Direct;
 
-	if (product === DigitalPack) {
-		return {
-			productType: DigitalPack,
-			currency: currencyId ?? state.common.internationalisation.currencyId,
-			billingPeriod,
-			readerType,
-		};
-	} else if (product === GuardianWeekly) {
+	if (product === GuardianWeekly) {
 		return {
 			productType: GuardianWeekly,
 			currency: currencyId ?? state.common.internationalisation.currencyId,

@@ -163,16 +163,6 @@ function productToCheckoutEvents(
 	orderIsAGift: boolean,
 ) {
 	switch (product) {
-		case 'DigitalPack':
-			return orderIsAGift
-				? checkoutEvents(
-						SendEventSubscriptionCheckoutStart.DigiSubGift,
-						SendEventSubscriptionCheckoutConversion.DigiSubGift,
-				  )
-				: checkoutEvents(
-						SendEventSubscriptionCheckoutStart.DigiSub,
-						SendEventSubscriptionCheckoutConversion.DigiSub,
-				  );
 		case 'GuardianWeekly':
 			return orderIsAGift
 				? checkoutEvents(

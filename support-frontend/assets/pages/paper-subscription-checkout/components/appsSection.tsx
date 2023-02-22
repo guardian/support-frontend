@@ -130,7 +130,7 @@ type AppStoreLinkPropTypes = {
 	ariaLabel: string;
 	storeLink: string;
 	children: ReactNode;
-	onClick: (...args: any[]) => any;
+	onClick: () => void;
 };
 
 function AppStoreLink({
@@ -164,7 +164,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 					storeLink={getDailyEditionUrl(countryGroupId)}
 					onClick={sendTrackingEventsOnClick({
 						id: 'checkout_thankyou_daily_edition_apple',
-						product: 'DigitalPack',
+						product: 'PaperAndDigital',
 						componentType: 'ACQUISITIONS_BUTTON',
 					})}
 					ariaLabel="Click to download the Guardian Daily app on the Apple App Store"
@@ -175,7 +175,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 					storeLink={androidDailyUrl}
 					onClick={sendTrackingEventsOnClick({
 						id: 'checkout_thankyou_daily_edition_android',
-						product: 'DigitalPack',
+						product: 'PaperAndDigital',
 						componentType: 'ACQUISITIONS_BUTTON',
 					})}
 					ariaLabel="Click to download the Guardian Daily app on Google Play"
@@ -194,7 +194,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 					storeLink={getIosAppUrl(countryGroupId)}
 					onClick={sendTrackingEventsOnClick({
 						id: 'checkout_thankyou_live_app_apple',
-						product: 'DigitalPack',
+						product: 'PaperAndDigital',
 						componentType: 'ACQUISITIONS_BUTTON',
 					})}
 					ariaLabel="Click to download the Guardian Live app on the Apple App Store"
@@ -205,7 +205,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 					storeLink={androidAppUrl}
 					onClick={sendTrackingEventsOnClick({
 						id: 'checkout_thankyou_live_app_android',
-						product: 'DigitalPack',
+						product: 'PaperAndDigital',
 						componentType: 'ACQUISITIONS_BUTTON',
 					})}
 					ariaLabel="Click to download the Guardian Live app on Google Play"
@@ -229,7 +229,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 						href="https://www.theguardian.com/"
 						onClick={sendTrackingEventsOnClick({
 							id: 'checkout_thankyou_sign_in',
-							product: 'DigitalPack',
+							product: 'PaperAndDigital',
 							componentType: 'ACQUISITIONS_BUTTON',
 						})}
 					>
