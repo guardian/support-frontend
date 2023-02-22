@@ -38,7 +38,7 @@ export function PatronsMessage({
 	const isUSA = countryGroupId === 'UnitedStates';
 
 	return (
-		<FinePrint mobileTheme={mobileTheme}>
+		<FinePrint mobileTheme={mobileTheme} size="xsmall">
 			<h2 css={headingStyles}>
 				{isUSA ? 'Support another way' : 'Guardian Patrons programme'}
 			</h2>
