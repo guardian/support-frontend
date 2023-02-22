@@ -18,6 +18,8 @@ const GuardianWeekly = 'GuardianWeekly';
 const Paper = 'Paper';
 const PaperAndDigital = 'PaperAndDigital';
 
+export const SubscriptionRedemption = 'SubscriptionRedemption';
+
 export const paperProductTypes = [Paper, PaperAndDigital];
 
 export type SubscriptionProduct =

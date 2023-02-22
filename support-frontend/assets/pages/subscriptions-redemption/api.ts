@@ -4,6 +4,7 @@ import { appropriateErrorMessage } from 'helpers/forms/errorReasons';
 import { postRegularPaymentRequest } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type {
 	PaymentResult,
+	RedeemedSubscription,
 	RegularPaymentRequest,
 	SubscriptionProductFields,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
@@ -12,7 +13,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import type { ReaderType } from 'helpers/productPrice/readerType';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { SubscriptionRedemption } from 'helpers/productPrice/subscriptions';
 import type {
 	RedemptionDispatch,
 	RedemptionPageState,
@@ -174,8 +175,8 @@ function buildRegularPaymentRequest(
 	participations: Participations,
 	debugInfo: string,
 ): RegularPaymentRequest {
-	const product: SubscriptionProductFields = {
-		productType: DigitalPack,
+	const product: SubscriptionProductFields | RedeemedSubscription = {
+		productType: SubscriptionRedemption,
 		currency: currencyId,
 		billingPeriod: Monthly,
 		readerType,

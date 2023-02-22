@@ -25,7 +25,12 @@ import type {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import type { GuardianWeekly, Paper } from 'helpers/productPrice/subscriptions';
+import type { ReaderType } from 'helpers/productPrice/readerType';
+import type {
+	GuardianWeekly,
+	Paper,
+	SubscriptionRedemption,
+} from 'helpers/productPrice/subscriptions';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type {
 	AcquisitionABTest,
@@ -58,6 +63,14 @@ type SupporterPlus = {
 	billingPeriod: BillingPeriod;
 };
 
+export type RedeemedSubscription = {
+	productType: typeof SubscriptionRedemption;
+	currency: string;
+	billingPeriod: BillingPeriod;
+	readerType: ReaderType;
+	amount?: number;
+};
+
 export type PaperSubscription = {
 	productType: typeof Paper;
 	currency: string;
@@ -75,7 +88,10 @@ export type SubscriptionProductFields =
 	| SupporterPlus
 	| PaperSubscription
 	| GuardianWeeklySubscription;
-type ProductFields = RegularContribution | SubscriptionProductFields;
+type ProductFields =
+	| RegularContribution
+	| SubscriptionProductFields
+	| RedeemedSubscription;
 type RegularPayPalPaymentFields = {
 	baid: string;
 };
