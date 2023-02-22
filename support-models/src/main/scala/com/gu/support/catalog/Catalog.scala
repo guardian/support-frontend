@@ -20,54 +20,42 @@ object Catalog {
   } yield plan.id
 
   implicit val encoder: Encoder[Catalog] = deriveEncoder
-  implicit val decoder: Decoder[Catalog] = deriveDecoder[Catalog].prepare(mapFields)
 
-  private def mapFields(c: ACursor) = c.withFocus { json =>
-    val allRatePlans: Seq[Json] = json.\\("productRatePlans").flattenJsonArrays
-
-    val supportedRatePlans = allRatePlans
-      .filter(
-        _.getField("id")
-          .exists(id => productRatePlansWithPrices.exists(fromString(_) == id)),
-      )
-
-    val prices = supportedRatePlans.map { productRatePlan =>
-      val priceList = sumPriceLists(productRatePlan.\\("pricing"))
-      val id = productRatePlan.getField("id").getOrElse(Json.Null)
-      val saving = getSaving(productRatePlan)
-      Json.obj(
-        ("productRatePlanId", id),
-        ("savingVsRetail", saving),
-        ("prices", Json.fromValues(priceList)),
-      )
-    }
-    Json.obj(("prices", Json.fromValues(prices)))
-  }
-
-  def getSaving(json: Json) =
-    json
-      .getField("Saving__c")
-      .getOrElse(Json.fromString("null"))
-      .asString
-      .getOrElse("null") match {
-      case "null" => Json.Null
-      case i: String => Json.fromInt(i.toInt)
-    }
-
-  def sumPriceLists(priceLists: List[Json]): Iterable[Json] = {
+  def sumPriceLists(priceLists: List[Price]): List[Price] = {
     // Paper products such as Everyday are represented in the catalog as multiple
     // product rate plan charges (one for every day of the week) and these each
     // have their own price list. To get the total prices for these products therefore
     // we need to sum all of the price lists
-    priceLists.flattenJsonArrays
-      .flatMap(_.as[Price].toOption) // convert the Json to Price objects as they're easier to work with
+    priceLists
       .groupBy(_.currency)
       .map(sumPrices)
-      .map({ case (_, price) => price.asJson }) // convert back to Json
+      .map({ case (_, price) => price })
+      .toList
   }
 
-  def sumPrices(currencyPrices: (Currency, Seq[Price])): (Currency, Price) = currencyPrices match {
+  def sumPrices(currencyPrices: (Currency, List[Price])): (Currency, Price) = currencyPrices match {
     case (currency, priceList) =>
       (currency, priceList.reduceLeft((p1, p2) => Price(p1.value + p2.value, currency)))
+  }
+
+  def convert(zuoraCatalog: ZuoraCatalog): Catalog = {
+
+    // filter rate plans
+    val filteredProductRatePlans = zuoraCatalog.products
+      .map { _.productRatePlans }
+      .flatten
+      .filter(ratePlan => productRatePlansWithPrices.exists(_ == ratePlan.id))
+
+    // create list of priceList
+    val priceList: List[Pricelist] = filteredProductRatePlans.map { productRatePlan =>
+      val ratePlanCharges = productRatePlan.productRatePlanCharges.map { _.pricing }.flatten
+      val priceListSum = sumPriceLists(ratePlanCharges)
+      val id = productRatePlan.id
+      val saving = productRatePlan.Saving__c.map(_.toInt)
+      Pricelist(id, saving, priceListSum)
+    }
+
+    // Catalog list of prices
+    return Catalog(priceList)
   }
 }

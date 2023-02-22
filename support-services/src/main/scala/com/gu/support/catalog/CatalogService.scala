@@ -61,7 +61,7 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
   private lazy val catalog = {
 
     jsonProvider.get.flatMap { json =>
-      val attempt = json.as[Catalog]
+      val attempt = json.as[ZuoraCatalog].map(Catalog.convert)
       attempt.fold(
         err => {
           logger.error(s"Failed to load the catalog, error was: $err")
