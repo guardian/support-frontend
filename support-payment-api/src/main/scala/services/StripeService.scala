@@ -81,31 +81,32 @@ class SingleAccountStripeService(config: StripeAccountConfig)(implicit pool: Str
   ): EitherT[Future, StripeApiError, PaymentIntent] = {
     if (model.Currency.exceedsMaxAmount(data.paymentData.amount, data.paymentData.currency)) {
       Left(StripeApiError.fromString("Amount exceeds the maximum allowed ", Some(config.publicKey))).toEitherT[Future]
-    } else {
-      Future {
-        val params = PaymentIntentCreateParams.builder
-          .setPaymentMethod(data.paymentMethodId)
-          .setAmount((data.paymentData.amount * 100).toLong) // Stripe amount must be in pence
-          .setCurrency(data.paymentData.currency.entryName)
-          .setReceiptEmail(data.paymentData.email.value)
-          .setConfirmationMethod(
-            ConfirmationMethod.MANUAL,
-          ) // Allows us to do 3DS auth and final confirmation as separate steps
-          .setConfirm(true) // If 3DS is not required then it will go ahead and complete the payment
-          .build
+    } else
+      {
+        Future {
+          val params = PaymentIntentCreateParams.builder
+            .setPaymentMethod(data.paymentMethodId)
+            .setAmount((data.paymentData.amount * 100).toLong) // Stripe amount must be in pence
+            .setCurrency(data.paymentData.currency.entryName)
+            .setReceiptEmail(data.paymentData.email.value)
+            .setConfirmationMethod(
+              ConfirmationMethod.MANUAL,
+            ) // Allows us to do 3DS auth and final confirmation as separate steps
+            .setConfirm(true) // If 3DS is not required then it will go ahead and complete the payment
+            .build
 
-        PaymentIntent.create(params, requestOptions)
-      }
-    }.attemptT
-      .bimap(
-        err => StripeApiError.fromThrowable(err, Some(config.publicKey)),
-        paymentIntent => {
-          logger.info(
-            s"Created Stripe Payment Intent with id ${paymentIntent.getId}, status ${paymentIntent.getStatus}",
-          )
-          paymentIntent
-        },
-      )
+          PaymentIntent.create(params, requestOptions)
+        }
+      }.attemptT
+        .bimap(
+          err => StripeApiError.fromThrowable(err, Some(config.publicKey)),
+          paymentIntent => {
+            logger.info(
+              s"Created Stripe Payment Intent with id ${paymentIntent.getId}, status ${paymentIntent.getStatus}",
+            )
+            paymentIntent
+          },
+        )
   }
 
   def confirmPaymentIntent(
