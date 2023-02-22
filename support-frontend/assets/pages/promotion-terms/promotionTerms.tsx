@@ -4,10 +4,7 @@ import Page from 'components/page/page';
 import { detect } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
-import {
-	DigitalPack,
-	GuardianWeekly,
-} from 'helpers/productPrice/subscriptions';
+import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
 import LegalTerms from 'pages/promotion-terms/legalTerms';
 import PromoDetails from 'pages/promotion-terms/promoDetails';
@@ -18,9 +15,7 @@ import './promotionTerms.scss';
 setUpTrackingAndConsents();
 
 function getTermsConditionsLink({ product }: PromotionTerms) {
-	if (product === DigitalPack) {
-		return 'https://www.theguardian.com/digital-subscriptions-terms-conditions';
-	} else if (product === GuardianWeekly) {
+	if (product === GuardianWeekly) {
 		return 'https://www.theguardian.com/guardian-weekly-subscription-terms-conditions';
 	}
 

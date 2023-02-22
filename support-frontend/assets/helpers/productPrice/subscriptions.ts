@@ -36,7 +36,8 @@ export type ComponentAbTest = {
 
 export type TrackingProperties = {
 	id: string;
-	product?: SubscriptionProduct;
+	// DigitalPack sent for redemption page
+	product?: SubscriptionProduct | 'DigitalPack';
 	abTest?: ComponentAbTest;
 	componentType: OphanComponentType;
 };
@@ -132,7 +133,10 @@ const sendTrackingEvent = (
 		component: {
 			componentType,
 			id,
-			products: product ? [ophanProductFromSubscriptionProduct(product)] : [],
+			products:
+				product && product !== 'DigitalPack'
+					? [ophanProductFromSubscriptionProduct(product)]
+					: [],
 		},
 		action,
 		id,

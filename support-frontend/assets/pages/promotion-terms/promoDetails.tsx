@@ -4,15 +4,12 @@ import Content from 'components/content/content';
 import { List } from 'components/list/list';
 import { LargeParagraph, Title } from 'components/text/text';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
-import { DigitalPack, Paper } from 'helpers/productPrice/subscriptions';
+import { Paper } from 'helpers/productPrice/subscriptions';
 import { routes } from 'helpers/urls/routes';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 
 const landingPageForProduct = (props: PromotionTerms) => {
 	switch (props.product) {
-		case DigitalPack:
-			return routes.digitalSubscriptionLanding;
-
 		case Paper:
 			return routes.paperSubscriptionLanding;
 

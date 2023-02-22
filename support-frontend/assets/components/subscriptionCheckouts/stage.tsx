@@ -14,6 +14,7 @@ type PropTypes = {
 	stage: Stage;
 	formSubmitted: boolean;
 };
+
 type StagePropTypes = {
 	stage: Stage;
 	formSubmitted: boolean;
@@ -63,6 +64,6 @@ function CheckoutStage(props: StagePropTypes) {
 				</div>
 			);
 	}
-} // ----- Export ----- //
+}
 
 export default connect(mapStateToProps)(CheckoutStage);

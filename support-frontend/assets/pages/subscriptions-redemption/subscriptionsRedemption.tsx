@@ -23,6 +23,7 @@ const thankyouProps = {
 	countryGroupId,
 	marketingConsent: <MarketingConsent />,
 };
+
 // ----- Render ----- //
 const content = (
 	<Provider store={store}>

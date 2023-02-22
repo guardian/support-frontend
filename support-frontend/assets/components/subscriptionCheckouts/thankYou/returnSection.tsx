@@ -16,11 +16,11 @@ const buttonStyles = css`
 	}
 `;
 type PropTypes = {
-	subscriptionProduct: SubscriptionProduct;
+	subscriptionProduct: SubscriptionProduct | 'DigitalPack';
 };
 
 // ----- Component ----- //
-function ReturnSection(props: PropTypes) {
+function ReturnSection(props: PropTypes): JSX.Element {
 	return (
 		<Content>
 			<Divider />
