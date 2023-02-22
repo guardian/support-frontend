@@ -5,7 +5,7 @@ import type {
 	SubscriptionsState,
 } from 'helpers/redux/subscriptionsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
-import { checkoutFormIsValid } from 'helpers/subscriptionsForms/formValidation';
+import { withDeliveryFormIsValid } from 'helpers/subscriptionsForms/formValidation';
 
 // ----- Functions ----- //
 function enableOrDisablePayPalExpressCheckoutButton(
@@ -20,7 +20,9 @@ function enableOrDisablePayPalExpressCheckoutButton(
 
 function enableOrDisableForm() {
 	return (_dispatch: Dispatch, getState: () => SubscriptionsState): void => {
-		enableOrDisablePayPalExpressCheckoutButton(checkoutFormIsValid(getState()));
+		enableOrDisablePayPalExpressCheckoutButton(
+			withDeliveryFormIsValid(getState()),
+		);
 	};
 }
 

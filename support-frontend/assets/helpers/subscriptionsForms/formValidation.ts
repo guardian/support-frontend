@@ -1,5 +1,4 @@
 import type { Dispatch } from 'redux';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
 import {
 	setBillingAddressFormErrors,
 	setDeliveryAddressFormErrors,
@@ -47,13 +46,6 @@ export function validateWithDeliveryForm(
 	const allErrors = withDeliveryValidation(state);
 	dispatchAllErrors(dispatch, allErrors);
 	return allErrors.length === 0;
-}
-
-export function checkoutFormIsValid(state: SubscriptionsState): boolean {
-	if (state.page.checkoutForm.product.productType === DigitalPack) {
-		return checkoutValidation(state).length === 0;
-	}
-	return withDeliveryValidation(state).length === 0;
 }
 
 export function withDeliveryFormIsValid(state: SubscriptionsState): boolean {
