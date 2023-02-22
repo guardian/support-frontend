@@ -68,12 +68,7 @@ function getAddressFieldsSlice(type: AddressType) {
 			setState(state, action: PayloadAction<string>) {
 				state.state = action.payload;
 				state.errors = removeError('state', state.errors);
-				const validationResult = addressFieldsSchema.safeParse(state);
-				if (!validationResult.success) {
-					state.errorObject = getSliceErrorsFromZodResult(
-						validationResult.error.format(),
-					);
-				}
+				delete state.errorObject?.state;
 			},
 			setPostcode(state, action: PayloadAction<string>) {
 				state.postCode = action.payload;
