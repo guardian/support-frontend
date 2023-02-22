@@ -2,7 +2,6 @@ import type { ContributionType } from 'helpers/contributions';
 import { contributionTypes } from 'helpers/contributions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
-	DigitalPack,
 	GuardianWeekly,
 	Paper,
 	PaperAndDigital,
@@ -31,15 +30,12 @@ export function getContributionType(
 function isSubscription(
 	product: GuardianProduct,
 ): product is SubscriptionProduct {
-	return [DigitalPack, PaperAndDigital, Paper, GuardianWeekly].includes(
-		product,
-	);
+	return [PaperAndDigital, Paper, GuardianWeekly].includes(product);
 }
 
 function getSubscriptionTypeFromURL(): SubscriptionProduct {
 	const urlPathRegex = /\/subscribe\/(.+)\/checkout/;
 	const productsToUrlPath: Record<string, SubscriptionProduct> = {
-		digital: DigitalPack,
 		paper: Paper,
 		weekly: GuardianWeekly,
 	};
@@ -47,7 +43,7 @@ function getSubscriptionTypeFromURL(): SubscriptionProduct {
 	if (match) {
 		return productsToUrlPath[match];
 	}
-	return DigitalPack;
+	return GuardianWeekly;
 }
 
 export function getSubscriptionType(

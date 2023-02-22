@@ -19,7 +19,6 @@ const requiredFieldsForProduct: Record<
 	GuardianProduct,
 	(productState: ProductState) => boolean
 > = {
-	DigitalPack: () => true,
 	GuardianWeekly: (productState: ProductState) =>
 		productState.fulfilmentOption !== 'NoFulfilmentOptions',
 	Paper: canDeterminePaperPrice,

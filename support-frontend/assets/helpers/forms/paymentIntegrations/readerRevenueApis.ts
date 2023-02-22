@@ -25,12 +25,7 @@ import type {
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
-import type { ReaderType } from 'helpers/productPrice/readerType';
-import type {
-	DigitalPack,
-	GuardianWeekly,
-	Paper,
-} from 'helpers/productPrice/subscriptions';
+import type { GuardianWeekly, Paper } from 'helpers/productPrice/subscriptions';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type {
 	AcquisitionABTest,
@@ -62,13 +57,7 @@ type SupporterPlus = {
 	currency: string;
 	billingPeriod: BillingPeriod;
 };
-export type DigitalSubscription = {
-	productType: typeof DigitalPack;
-	currency: string;
-	billingPeriod: BillingPeriod;
-	readerType: ReaderType;
-	amount?: number;
-};
+
 export type PaperSubscription = {
 	productType: typeof Paper;
 	currency: string;
@@ -84,7 +73,6 @@ export type GuardianWeeklySubscription = {
 };
 export type SubscriptionProductFields =
 	| SupporterPlus
-	| DigitalSubscription
 	| PaperSubscription
 	| GuardianWeeklySubscription;
 type ProductFields = RegularContribution | SubscriptionProductFields;

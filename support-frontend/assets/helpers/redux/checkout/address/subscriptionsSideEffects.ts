@@ -32,14 +32,9 @@ export function addAddressSideEffects(
 		matcher: shouldUpdateInternationalisation,
 		effect(action, listener) {
 			const country = fromString(action.payload);
-			const { productType } = listener.getState().page.checkoutForm.product;
 			const isSettingDeliveryAddress = setDeliveryCountry.match(action);
 
-			// The billing address is only relevant to the displayed price for the digital subscription
-			const countryShouldBeUpdated =
-				isSettingDeliveryAddress || productType === 'DigitalPack';
-
-			if (country && countryShouldBeUpdated) {
+			if (country && isSettingDeliveryAddress) {
 				listener.dispatch(setCountryInternationalisation(country));
 			}
 		},

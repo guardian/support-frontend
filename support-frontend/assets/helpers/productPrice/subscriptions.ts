@@ -12,7 +12,6 @@ import type {
 } from '../tracking/ophan';
 
 // ----- Types ------ //
-const DigitalPack = 'DigitalPack';
 const PremiumTier = 'PremiumTier';
 const DailyEdition = 'DailyEdition';
 const GuardianWeekly = 'GuardianWeekly';
@@ -22,7 +21,6 @@ const PaperAndDigital = 'PaperAndDigital';
 export const paperProductTypes = [Paper, PaperAndDigital];
 
 export type SubscriptionProduct =
-	| typeof DigitalPack
 	| typeof PremiumTier
 	| typeof DailyEdition
 	| typeof GuardianWeekly
@@ -62,7 +60,6 @@ export const subscriptionPricesForDefaultBillingPeriod = {
 
 const defaultBillingPeriods: Record<SubscriptionProduct, BillingPeriod> = {
 	PremiumTier: Monthly,
-	DigitalPack: Monthly,
 	GuardianWeekly: Quarterly,
 	Paper: Monthly,
 	PaperAndDigital: Monthly,
@@ -113,7 +110,6 @@ function ophanProductFromSubscriptionProduct(
 	product: SubscriptionProduct,
 ): OphanSubscriptionsProduct {
 	switch (product) {
-		case 'DigitalPack':
 		case 'PremiumTier':
 		case 'DailyEdition':
 			return 'DIGITAL_SUBSCRIPTION';
@@ -196,7 +192,6 @@ export {
 	getNewsstandSavingPercentage,
 	getNewsstandPrice,
 	fixDecimals,
-	DigitalPack,
 	PaperAndDigital,
 	Paper,
 	PremiumTier,

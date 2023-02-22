@@ -15,7 +15,7 @@ jest.mock('ophan', () => () => ({}));
 describe('Subscription Checkout Reducer', () => {
 	it('should handle SET_STAGE to "thankyou"', () => {
 		const stage: Stage = 'thankyou';
-		const action = setStage(stage, 'DigitalPack', undefined);
+		const action = setStage(stage, 'PaperAndDigital', undefined);
 
 		const newState = createReducer()(undefined, action);
 
@@ -24,7 +24,7 @@ describe('Subscription Checkout Reducer', () => {
 
 	it('should handle SET_STAGE to "checkout"', () => {
 		const stage: Stage = 'checkout';
-		const action = setStage(stage, 'DigitalPack', undefined);
+		const action = setStage(stage, 'PaperAndDigital', undefined);
 
 		const newState = createReducer()(undefined, action);
 
