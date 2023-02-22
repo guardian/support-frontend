@@ -101,17 +101,6 @@ export const emailAddressesMatch: (
 export const checkOptionalEmail: (arg0: string | null) => boolean = (input) =>
 	isEmpty(input) || isValidEmail(input);
 
-export const checkGiftStartDate: (giftDeliveryDate?: string) => boolean = (
-	rawDate,
-) => {
-	const date = rawDate ? new Date(rawDate) : null;
-
-	if (isNotEmpty(rawDate) && date) {
-		return isNotTooFarInTheFuture(date);
-	}
-	return false;
-};
-
 export const amountIsValid = (
 	input: string,
 	countryGroupId: CountryGroupId,

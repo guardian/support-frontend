@@ -1,5 +1,4 @@
 import {
-	checkGiftStartDate,
 	checkOptionalEmail,
 	emailAddressesMatch,
 	isValidEmail,
@@ -87,7 +86,7 @@ function applyPersonalDetailsRules(
 }
 
 function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
-	const { orderIsAGift, product, isSignedIn } = fields;
+	const { orderIsAGift, isSignedIn } = fields;
 	const userFormFields: CheckoutRule[] = [
 		{
 			rule: nonEmptyString(fields.firstName),
@@ -147,105 +146,46 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 			error: formError('paymentMethod', 'Please select a payment method.'),
 		},
 	];
-	const giftFormFields: CheckoutRule[] =
-		product === 'DigitalPack'
-			? [
-					{
-						rule: nonEmptyString(fields.firstNameGiftRecipient),
-						error: formError(
-							'firstNameGiftRecipient',
-							"Please enter the recipient's first name.",
-						),
-					},
-					{
-						rule: nonSillyCharacters(fields.firstNameGiftRecipient),
-						error: formError(
-							'firstNameGiftRecipient',
-							'Please use only letters, numbers and punctuation.',
-						),
-					},
-					{
-						rule: nonEmptyString(fields.lastNameGiftRecipient),
-						error: formError(
-							'lastNameGiftRecipient',
-							"Please enter the recipient's last name.",
-						),
-					},
-					{
-						rule: nonSillyCharacters(fields.lastNameGiftRecipient),
-						error: formError(
-							'lastNameGiftRecipient',
-							'Please use only letters, numbers and punctuation.',
-						),
-					},
-					{
-						rule: nonEmptyString(fields.emailGiftRecipient),
-						error: formError(
-							'emailGiftRecipient',
-							'Please enter an email address for the recipient.',
-						),
-					},
-					{
-						rule: isValidEmail(fields.emailGiftRecipient),
-						error: formError(
-							'emailGiftRecipient',
-							'Please enter a valid email address for the recipient.',
-						),
-					},
-					{
-						rule: notLongerThan(fields.emailGiftRecipient, 80),
-						error: formError(
-							'emailGiftRecipient',
-							'Email address is too long.',
-						),
-					},
-					{
-						rule: checkGiftStartDate(fields.giftDeliveryDate),
-						error: formError(
-							'giftDeliveryDate',
-							'Please enter a valid delivery date for your gift.',
-						),
-					},
-			  ]
-			: [
-					{
-						rule: nonEmptyString(fields.firstNameGiftRecipient),
-						error: formError(
-							'firstNameGiftRecipient',
-							"Please enter the recipient's first name.",
-						),
-					},
-					{
-						rule: nonSillyCharacters(fields.firstNameGiftRecipient),
-						error: formError(
-							'firstNameGiftRecipient',
-							'Please use only letters, numbers and punctuation.',
-						),
-					},
-					{
-						rule: nonEmptyString(fields.lastNameGiftRecipient),
-						error: formError(
-							'lastNameGiftRecipient',
-							"Please enter the recipient's last name.",
-						),
-					},
-					{
-						rule: nonSillyCharacters(fields.lastNameGiftRecipient),
-						error: formError(
-							'lastNameGiftRecipient',
-							'Please use only letters, numbers and punctuation.',
-						),
-					},
-					{
-						rule:
-							checkOptionalEmail(fields.emailGiftRecipient) &&
-							nonSillyCharacters(fields.emailGiftRecipient),
-						error: formError(
-							'emailGiftRecipient',
-							'Please use a valid email address for the recipient.',
-						),
-					},
-			  ];
+
+	const giftFormFields: CheckoutRule[] = [
+		{
+			rule: nonEmptyString(fields.firstNameGiftRecipient),
+			error: formError(
+				'firstNameGiftRecipient',
+				"Please enter the recipient's first name.",
+			),
+		},
+		{
+			rule: nonSillyCharacters(fields.firstNameGiftRecipient),
+			error: formError(
+				'firstNameGiftRecipient',
+				'Please use only letters, numbers and punctuation.',
+			),
+		},
+		{
+			rule: nonEmptyString(fields.lastNameGiftRecipient),
+			error: formError(
+				'lastNameGiftRecipient',
+				"Please enter the recipient's last name.",
+			),
+		},
+		{
+			rule: nonSillyCharacters(fields.lastNameGiftRecipient),
+			error: formError(
+				'lastNameGiftRecipient',
+				'Please use only letters, numbers and punctuation.',
+			),
+		},
+		{
+			rule:
+				checkOptionalEmail(fields.emailGiftRecipient) &&
+				nonSillyCharacters(fields.emailGiftRecipient),
+			error: formError(
+				'emailGiftRecipient',
+				'Please use a valid email address for the recipient.',
+			),
+		},
+	];
 	const formFieldsToCheck = orderIsAGift
 		? [...userFormFields, ...giftFormFields]
 		: userFormFields;
