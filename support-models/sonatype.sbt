@@ -8,6 +8,3 @@ pomExtra := <url>https://github.com/guardian/support-models</url>
         <url>https://github.com/davidfurey</url>
       </developer>
     </developers>
-
-
-
