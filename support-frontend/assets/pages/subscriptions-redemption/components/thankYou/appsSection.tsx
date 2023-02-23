@@ -11,7 +11,7 @@ import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
 import Text from 'components/text/text';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
-	DigitalPackAddOn,
+	DigitalPack,
 	sendTrackingEventsOnClick,
 } from 'helpers/productPrice/subscriptions';
 import {
@@ -72,7 +72,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 							href={getDailyEditionUrl(countryGroupId)}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_thankyou_daily_edition_apple',
-								product: DigitalPackAddOn,
+								product: DigitalPack,
 								componentType: 'ACQUISITIONS_BUTTON',
 							})}
 						>
@@ -91,7 +91,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 							href={androidDailyUrl}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_thankyou_daily_edition_android',
-								product: DigitalPackAddOn,
+								product: DigitalPack,
 								componentType: 'ACQUISITIONS_BUTTON',
 							})}
 						>
@@ -124,7 +124,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 							href={getIosAppUrl(countryGroupId)}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_thankyou_live_app_apple',
-								product: DigitalPackAddOn,
+								product: DigitalPack,
 								componentType: 'ACQUISITIONS_BUTTON',
 							})}
 						>
@@ -141,7 +141,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 							href={androidAppUrl}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_thankyou_live_app_android',
-								product: DigitalPackAddOn,
+								product: DigitalPack,
 								componentType: 'ACQUISITIONS_BUTTON',
 							})}
 						>
@@ -171,7 +171,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 						href="https://www.theguardian.com/"
 						onClick={sendTrackingEventsOnClick({
 							id: 'checkout_thankyou_sign_in',
-							product: DigitalPackAddOn,
+							product: DigitalPack,
 							componentType: 'ACQUISITIONS_BUTTON',
 						})}
 					>

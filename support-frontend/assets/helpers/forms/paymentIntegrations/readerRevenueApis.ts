@@ -27,7 +27,7 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 import type {
-	DigitalPackAddOn,
+	DigitalPack,
 	GuardianWeekly,
 	Paper,
 } from 'helpers/productPrice/subscriptions';
@@ -64,7 +64,7 @@ type SupporterPlus = {
 };
 
 export type SubscriptionWithDigitalPack = {
-	productType: typeof DigitalPackAddOn;
+	productType: typeof DigitalPack;
 	currency: string;
 	billingPeriod: BillingPeriod;
 	readerType: ReaderType;
