@@ -79,18 +79,10 @@ function paperSubsUrl(
 	return baseURL;
 }
 
-function digitalSubscriptionLanding(
+function guardianWeeklyLanding(
 	countryGroupId: CountryGroupId,
 	gift: boolean,
-) {
-	return `${getOrigin()}/${countryPath(countryGroupId)}${
-		gift
-			? routes.digitalSubscriptionLandingGift
-			: routes.digitalSubscriptionLanding
-	}`;
-}
-
-function guardianWeeklyLanding(countryGroupId: CountryGroupId, gift: boolean) {
+): string {
 	return `${getOrigin()}/${countryPath(countryGroupId)}${
 		gift
 			? routes.guardianWeeklySubscriptionLandingGift
@@ -98,14 +90,14 @@ function guardianWeeklyLanding(countryGroupId: CountryGroupId, gift: boolean) {
 	}`;
 }
 
-const promotionTermsUrl = (promoCode: string) =>
+const promotionTermsUrl = (promoCode: string): string =>
 	`${getOrigin()}/p/${promoCode}/terms`;
 
 function paperCheckoutUrl(
 	fulfilmentOption: FulfilmentOptions,
 	productOptions: ProductOptions,
 	promoCode?: Option<string>,
-) {
+): string {
 	const url = `${getOrigin()}/subscribe/paper/checkout`;
 	return addQueryParamsToURL(url, {
 		promoCode,
@@ -135,7 +127,6 @@ export {
 	payPalReturnUrl,
 	paperSubsUrl,
 	paperCheckoutUrl,
-	digitalSubscriptionLanding,
 	guardianWeeklyLanding,
 	promotionTermsUrl,
 };

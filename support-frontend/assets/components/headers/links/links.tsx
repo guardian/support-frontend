@@ -44,12 +44,6 @@ const links: HeaderNavLink[] = [
 		internal: true,
 	},
 	{
-		href: routes.digitalSubscriptionLanding,
-		text: 'Digital',
-		trackAs: 'subscriptions:digital',
-		internal: true,
-	},
-	{
 		href: routes.paperSubscriptionLanding,
 		text: 'Newspaper',
 		trackAs: 'subscriptions:paper',
@@ -110,7 +104,6 @@ function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
 				{links
 					.filter(({ text }) => {
 						if (
-							text === 'Digital' ||
 							text === 'Support' ||
 							text === 'Contributions' ||
 							(text === 'Newspaper' && isNotUk) ||
