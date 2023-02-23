@@ -18,7 +18,7 @@ const GuardianWeekly = 'GuardianWeekly';
 const Paper = 'Paper';
 const PaperAndDigital = 'PaperAndDigital';
 
-export const DigitalPack = 'DigitalPackAddOn';
+export const DigitalPackAddOn = 'DigitalPackAddOn';
 
 export const paperProductTypes = [Paper, PaperAndDigital];
 
@@ -38,7 +38,7 @@ export type ComponentAbTest = {
 
 export type TrackingProperties = {
 	id: string;
-	product?: SubscriptionProduct | typeof DigitalPack;
+	product?: SubscriptionProduct | typeof DigitalPackAddOn;
 	abTest?: ComponentAbTest;
 	componentType: OphanComponentType;
 };
@@ -109,9 +109,10 @@ function displayPrice(
 
 // ----- Ophan Tracking ----- //
 function ophanProductFromSubscriptionProduct(
-	product: SubscriptionProduct | typeof DigitalPack,
+	product: SubscriptionProduct | typeof DigitalPackAddOn,
 ): OphanSubscriptionsProduct {
 	switch (product) {
+		case 'DigitalPackAddOn':
 		case 'PremiumTier':
 		case 'DailyEdition':
 			return 'DIGITAL_SUBSCRIPTION';

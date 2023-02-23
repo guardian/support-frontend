@@ -13,7 +13,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import type { ReaderType } from 'helpers/productPrice/readerType';
-import { DigitalPack } from 'helpers/productPrice/subscriptions';
+import { DigitalPackAddOn } from 'helpers/productPrice/subscriptions';
 import type {
 	RedemptionDispatch,
 	RedemptionPageState,
@@ -176,7 +176,7 @@ function buildRegularPaymentRequest(
 	debugInfo: string,
 ): RegularPaymentRequest {
 	const product: SubscriptionProductFields | SubscriptionWithDigitalPack = {
-		productType: DigitalPack,
+		productType: DigitalPackAddOn,
 		currency: currencyId,
 		billingPeriod: Monthly,
 		readerType,

@@ -8,7 +8,7 @@ import {
 } from '@guardian/source-react-components';
 import Content, { Divider, NarrowContent } from 'components/content/content';
 import type {
-	DigitalPack,
+	DigitalPackAddOn,
 	SubscriptionProduct,
 } from 'helpers/productPrice/subscriptions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
@@ -19,7 +19,7 @@ const buttonStyles = css`
 	}
 `;
 type PropTypes = {
-	subscriptionProduct: SubscriptionProduct | typeof DigitalPack;
+	subscriptionProduct: SubscriptionProduct | typeof DigitalPackAddOn;
 };
 
 // ----- Component ----- //
