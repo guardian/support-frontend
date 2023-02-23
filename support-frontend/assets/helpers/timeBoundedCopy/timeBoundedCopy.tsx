@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { DateYMDString } from 'helpers/types/DateString';
 import type { Option } from 'helpers/types/option';
 
-type LandingPage = 'digitalSubscription' | 'newspaper' | 'guardianWeekly';
+type LandingPage = 'newspaper' | 'guardianWeekly';
 
 type TimeBoundCopy = {
 	startShowingOn: DateYMDString;
@@ -13,23 +13,11 @@ type TimeBoundCopy = {
 export type TimedCopyCollection = Partial<Record<LandingPage, TimeBoundCopy[]>>;
 
 const timedCopy: TimedCopyCollection = {
-	digitalSubscription: [
+	newspaper: [
 		{
 			startShowingOn: '2022-04-14',
 			stopShowingOn: '2022-06-09',
-			copy: (
-				<>
-					<p>
-						<strong>With two innovative apps and ad-free reading,</strong> a
-						digital subscription gives you the richest experience of Guardian
-						journalism. It also sustains the independent reporting you love.
-					</p>
-					<p>
-						Plus, for a limited time, get inspiration for new ideas to improve
-						your life in our exclusive special edition, Self and Wellbeing.
-					</p>
-				</>
-			),
+			copy: <></>,
 		},
 	],
 };

@@ -19,7 +19,6 @@ import {
 import {
 	setEmail as setEmailGift,
 	setFirstName as setFirstNameGift,
-	setGiftDeliveryDate,
 	setGiftMessage,
 	setLastName as setLastNameGift,
 	setTitle as setTitleGift,
@@ -34,7 +33,6 @@ import {
 	setTitle,
 } from 'helpers/redux/checkout/personalDetails/actions';
 import {
-	setAddDigital,
 	setBillingPeriod,
 	setOrderIsAGift,
 	setStartDate,
@@ -164,8 +162,6 @@ const formActionCreators = {
 		instructions,
 	}),
 	setGiftMessage,
-	setDigitalGiftDeliveryDate: setGiftDeliveryDate,
-	setAddDigitalSubscription: setAddDigital,
 	setCsrUsername: (username: string): Action => ({
 		type: 'SET_CSR_USERNAME',
 		username,

@@ -2,24 +2,11 @@
 
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import type {
-	DigitalBillingPeriod,
-	DigitalGiftBillingPeriod,
-} from 'helpers/productPrice/billingPeriods';
-import { promoQueryParam } from 'helpers/productPrice/promotions';
-import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
-import type { Option } from 'helpers/types/option';
-import { getBaseDomain, getOrigin } from 'helpers/urls/url';
+import { getBaseDomain } from 'helpers/urls/url';
 
 // ----- Types ----- //
 
 export type MemProduct = 'events';
-export type SubsUrls = {
-	[key in SubscriptionProduct]: string;
-} & {
-	GuardianWeeklyGift: string;
-	DigitalPackGift: string;
-};
 
 // ----- Setup ----- //
 
@@ -60,27 +47,6 @@ function getPatronsLink(
 
 	const url = countryGroupId === 'UnitedStates' ? patronsUrlUS : patronsUrl;
 	return `${url}?${params.toString()}`;
-}
-
-// Builds a link to the digital pack checkout.
-function getDigitalCheckout(
-	billingPeriod: DigitalBillingPeriod | DigitalGiftBillingPeriod,
-	promoCode: Option<string>,
-	orderIsAGift: boolean,
-): string {
-	const params = new URLSearchParams(window.location.search);
-
-	if (promoCode) {
-		params.set(promoQueryParam, promoCode);
-	}
-
-	params.set('period', billingPeriod);
-
-	if (orderIsAGift) {
-		return `${getOrigin()}/subscribe/digital/checkout/gift?${params.toString()}`;
-	}
-
-	return `${getOrigin()}/subscribe/digital/checkout?${params.toString()}`;
 }
 
 function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
@@ -131,7 +97,6 @@ const getReauthenticateUrl = getProfileUrl('reauthenticate');
 export {
 	getMemLink,
 	getPatronsLink,
-	getDigitalCheckout,
 	getIosAppUrl,
 	androidAppUrl,
 	androidDailyUrl,
