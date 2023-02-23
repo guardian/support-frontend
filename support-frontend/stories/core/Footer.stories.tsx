@@ -21,7 +21,7 @@ export default {
 
 export function PageFooter(args: { showContents: boolean }): JSX.Element {
 	return (
-		<Footer termsConditionsLink="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
+		<Footer termsConditionsLink="https://www.theguardian.com/subscriber-direct/subscription-terms-and-conditions">
 			{args.showContents && <>Terms and conditions may apply</>}
 		</Footer>
 	);

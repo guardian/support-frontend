@@ -2,7 +2,7 @@ import { List } from 'components/list/list';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';
 
-function GiftBenefits() {
+function GiftBenefits(): JSX.Element {
 	return (
 		<BenefitsContainer
 			sections={[

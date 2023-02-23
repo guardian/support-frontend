@@ -11,8 +11,8 @@ import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
 import Text from 'components/text/text';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
+	DigitalPackAddOn,
 	sendTrackingEventsOnClick,
-	SubscriptionRedemption,
 } from 'helpers/productPrice/subscriptions';
 import {
 	androidAppUrl,
@@ -72,7 +72,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 							href={getDailyEditionUrl(countryGroupId)}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_thankyou_daily_edition_apple',
-								product: SubscriptionRedemption,
+								product: DigitalPackAddOn,
 								componentType: 'ACQUISITIONS_BUTTON',
 							})}
 						>
@@ -91,7 +91,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 							href={androidDailyUrl}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_thankyou_daily_edition_android',
-								product: SubscriptionRedemption,
+								product: DigitalPackAddOn,
 								componentType: 'ACQUISITIONS_BUTTON',
 							})}
 						>
@@ -124,7 +124,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 							href={getIosAppUrl(countryGroupId)}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_thankyou_live_app_apple',
-								product: SubscriptionRedemption,
+								product: DigitalPackAddOn,
 								componentType: 'ACQUISITIONS_BUTTON',
 							})}
 						>
@@ -141,7 +141,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 							href={androidAppUrl}
 							onClick={sendTrackingEventsOnClick({
 								id: 'checkout_thankyou_live_app_android',
-								product: SubscriptionRedemption,
+								product: DigitalPackAddOn,
 								componentType: 'ACQUISITIONS_BUTTON',
 							})}
 						>
@@ -171,7 +171,7 @@ function AppsSection({ countryGroupId }: PropTypes): JSX.Element {
 						href="https://www.theguardian.com/"
 						onClick={sendTrackingEventsOnClick({
 							id: 'checkout_thankyou_sign_in',
-							product: SubscriptionRedemption,
+							product: DigitalPackAddOn,
 							componentType: 'ACQUISITIONS_BUTTON',
 						})}
 					>

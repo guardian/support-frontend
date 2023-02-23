@@ -9,7 +9,7 @@ import {
 	WeekendPlus,
 } from 'helpers/productPrice/productOptions';
 
-export const getTitle = (productOption: ProductOptions) => {
+export const getTitle = (productOption: ProductOptions): string => {
 	switch (productOption) {
 		case Sixday:
 			return 'Six day';

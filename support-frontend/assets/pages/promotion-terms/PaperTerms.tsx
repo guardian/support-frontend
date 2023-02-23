@@ -3,13 +3,14 @@ import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 
-export default function PaperTerms(props: PromotionTerms) {
+export default function PaperTerms(props: PromotionTerms): JSX.Element {
 	const expiryCopy = props.expires
 		? `The closing date and time of the promotion is ${formatUserDate(
 				props.expires,
 		  )}.
     Purchases after that date and time will not be eligible for the promotion.`
 		: '';
+
 	const copy = [
 		'The promotion (the “Promotion”) is open to UK residents aged 18 and over ("you") subject to paragraph 2 below.',
 		'By entering the promotion you are accepting these terms and conditions.',
@@ -42,6 +43,7 @@ export default function PaperTerms(props: PromotionTerms) {
 		'GNM reserves the right at any time and from time to time to modify or discontinue, temporarily or permanently, this Promotion with or without prior notice due to reasons outside its control (including, without limitation, in the case of anticipated, suspected or actual fraud). The decision of GNM in all matters under its control is final and binding.',
 		'GNM shall not be liable for any failure to comply with its obligations where the failure is caused by something outside its reasonable control. Such circumstances shall include, but not be limited to, weather conditions, fire, flood, hurricane, strike, industrial dispute, war, hostilities, political unrest, riots, civil commotion, inevitable accidents, supervening legislation or any other circumstances amounting to force majeure.',
 	];
+
 	return (
 		<div>
 			<OrderedList items={copy} />

@@ -27,9 +27,9 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { ReaderType } from 'helpers/productPrice/readerType';
 import type {
+	DigitalPackAddOn,
 	GuardianWeekly,
 	Paper,
-	SubscriptionRedemption,
 } from 'helpers/productPrice/subscriptions';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type {
@@ -63,8 +63,8 @@ type SupporterPlus = {
 	billingPeriod: BillingPeriod;
 };
 
-export type RedeemedSubscription = {
-	productType: typeof SubscriptionRedemption;
+export type SubscriptionWithDigitalPack = {
+	productType: typeof DigitalPackAddOn;
 	currency: string;
 	billingPeriod: BillingPeriod;
 	readerType: ReaderType;
@@ -91,7 +91,7 @@ export type SubscriptionProductFields =
 type ProductFields =
 	| RegularContribution
 	| SubscriptionProductFields
-	| RedeemedSubscription;
+	| SubscriptionWithDigitalPack;
 type RegularPayPalPaymentFields = {
 	baid: string;
 };

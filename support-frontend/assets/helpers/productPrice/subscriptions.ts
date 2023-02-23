@@ -18,7 +18,7 @@ const GuardianWeekly = 'GuardianWeekly';
 const Paper = 'Paper';
 const PaperAndDigital = 'PaperAndDigital';
 
-export const SubscriptionRedemption = 'SubscriptionRedemption';
+export const DigitalPackAddOn = 'DigitalPackAddOn';
 
 export const paperProductTypes = [Paper, PaperAndDigital];
 
@@ -38,7 +38,7 @@ export type ComponentAbTest = {
 
 export type TrackingProperties = {
 	id: string;
-	product?: SubscriptionProduct | typeof SubscriptionRedemption;
+	product?: SubscriptionProduct | typeof DigitalPackAddOn;
 	abTest?: ComponentAbTest;
 	componentType: OphanComponentType;
 };
@@ -109,7 +109,7 @@ function displayPrice(
 
 // ----- Ophan Tracking ----- //
 function ophanProductFromSubscriptionProduct(
-	product: SubscriptionProduct,
+	product: SubscriptionProduct | typeof DigitalPackAddOn,
 ): OphanSubscriptionsProduct {
 	switch (product) {
 		case 'PremiumTier':
@@ -134,10 +134,7 @@ const sendTrackingEvent = (
 		component: {
 			componentType,
 			id,
-			products:
-				product && product !== 'SubscriptionRedemption'
-					? [ophanProductFromSubscriptionProduct(product)]
-					: [],
+			products: product ? [ophanProductFromSubscriptionProduct(product)] : [],
 		},
 		action,
 		id,
