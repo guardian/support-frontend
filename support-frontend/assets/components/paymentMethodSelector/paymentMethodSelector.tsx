@@ -50,11 +50,8 @@ export interface PaymentMethodSelectorProps {
 	existingPaymentMethodList: RecentlySignedInExistingPaymentMethod[];
 	pendingExistingPaymentMethods?: boolean;
 	showReauthenticateLink?: boolean;
-	onSelectPaymentMethod: (
-		paymentMethod: PaymentMethod,
-		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
-	) => void;
-	onRenderPaymentMethod: (
+	onPaymentMethodEvent: (
+		event: 'select' | 'render',
 		paymentMethod: PaymentMethod,
 		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 	) => void;
@@ -68,8 +65,7 @@ export function PaymentMethodSelector({
 	existingPaymentMethodList,
 	pendingExistingPaymentMethods,
 	showReauthenticateLink,
-	onSelectPaymentMethod,
-	onRenderPaymentMethod,
+	onPaymentMethodEvent,
 }: PaymentMethodSelectorProps): JSX.Element {
 	if (
 		existingPaymentMethodList.length < 1 &&
@@ -143,7 +139,8 @@ export function PaymentMethodSelector({
 													),
 												)}`}
 												onChange={() => {
-													onSelectPaymentMethod(
+													onPaymentMethodEvent(
+														'select',
 														paymentType,
 														preExistingPaymentMethod,
 													);
@@ -152,7 +149,8 @@ export function PaymentMethodSelector({
 													paymentMethodData[paymentType].accordionBody
 												}
 												onRender={() => {
-													onRenderPaymentMethod(
+													onPaymentMethodEvent(
+														'render',
 														paymentType,
 														preExistingPaymentMethod,
 													);
@@ -169,9 +167,9 @@ export function PaymentMethodSelector({
 									label={paymentMethodData[method].label}
 									name="paymentMethod"
 									checked={paymentMethod === method}
-									onChange={() => onSelectPaymentMethod(method)}
+									onChange={() => onPaymentMethodEvent('select', method)}
 									accordionBody={paymentMethodData[method].accordionBody}
-									onRender={() => onRenderPaymentMethod(method)}
+									onRender={() => onPaymentMethodEvent('render', method)}
 								/>
 							))}
 						</>,

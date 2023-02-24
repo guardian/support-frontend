@@ -80,39 +80,28 @@ function PaymentMethodSelectorContainer({
 			methodName !== ExistingCard && methodName !== ExistingDirectDebit,
 	);
 
-	function onSelectPaymentMethod(
+	function onPaymentMethodEvent(
+		event: 'select' | 'render',
 		paymentMethod: PaymentMethod,
 		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
-	) {
+	): void {
 		const paymentMethodDescription = existingPaymentMethod
 			? existingPaymentMethod.paymentType
 			: paymentMethod;
 
-		trackComponentClick(`payment-method-selector-${paymentMethodDescription}`);
-
-		sendEventContributionPaymentMethod(paymentMethodDescription);
-
-		dispatch(setPaymentMethod(paymentMethod));
-
-		existingPaymentMethod &&
-			dispatch(selectExistingPaymentMethod(existingPaymentMethod));
-	}
-
-	// TODO: Remove Duplication with onSelectPaymentMethod
-	function onRenderPaymentMethod(
-		paymentMethod: PaymentMethod,
-		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
-	) {
-		const paymentMethodDescription = existingPaymentMethod
-			? existingPaymentMethod.paymentType
-			: paymentMethod;
-
-		console.log(
-			'onRenderPaymentMethod --->',
-			`payment-method-selector-${paymentMethodDescription}`,
-		);
-
-		trackComponentInsert(`payment-method-selector-${paymentMethodDescription}`);
+		if (event === 'select') {
+			trackComponentClick(
+				`payment-method-selector-${paymentMethodDescription}`,
+			);
+			sendEventContributionPaymentMethod(paymentMethodDescription);
+			dispatch(setPaymentMethod(paymentMethod));
+			existingPaymentMethod &&
+				dispatch(selectExistingPaymentMethod(existingPaymentMethod));
+		} else {
+			trackComponentInsert(
+				`payment-method-selector-${paymentMethodDescription}`,
+			);
+		}
 	}
 
 	useEffect(() => {
@@ -125,8 +114,7 @@ function PaymentMethodSelectorContainer({
 		paymentMethod: name,
 		validationError: errors?.[0],
 		...getExistingPaymentMethodProps(existingPaymentMethods),
-		onSelectPaymentMethod,
-		onRenderPaymentMethod,
+		onPaymentMethodEvent,
 	});
 }
 
