@@ -89,18 +89,16 @@ function PaymentMethodSelectorContainer({
 			? existingPaymentMethod.paymentType
 			: paymentMethod;
 
+		const trackingId = `payment-method-selector-${paymentMethodDescription}`;
+
 		if (event === 'select') {
-			trackComponentClick(
-				`payment-method-selector-${paymentMethodDescription}`,
-			);
+			trackComponentClick(trackingId);
 			sendEventContributionPaymentMethod(paymentMethodDescription);
 			dispatch(setPaymentMethod(paymentMethod));
 			existingPaymentMethod &&
 				dispatch(selectExistingPaymentMethod(existingPaymentMethod));
 		} else {
-			trackComponentInsert(
-				`payment-method-selector-${paymentMethodDescription}`,
-			);
+			trackComponentInsert(trackingId);
 		}
 	}
 
