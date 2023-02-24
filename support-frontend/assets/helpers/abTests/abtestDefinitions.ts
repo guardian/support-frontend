@@ -52,9 +52,6 @@ export const tests: Tests = {
 			ALL: {
 				offset: 0,
 				size: 1,
-				breakpoint: {
-					minWidth: 'tablet',
-				},
 			},
 		},
 		isActive: true,
