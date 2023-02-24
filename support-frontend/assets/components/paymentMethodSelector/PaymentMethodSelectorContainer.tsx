@@ -14,7 +14,10 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import {
+	trackComponentClick,
+	trackComponentInsert,
+} from 'helpers/tracking/behaviour';
 import { sendEventContributionPaymentMethod } from 'helpers/tracking/quantumMetric';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
 
@@ -95,6 +98,23 @@ function PaymentMethodSelectorContainer({
 			dispatch(selectExistingPaymentMethod(existingPaymentMethod));
 	}
 
+	// TODO: Remove Duplication with onSelectPaymentMethod
+	function onRenderPaymentMethod(
+		paymentMethod: PaymentMethod,
+		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
+	) {
+		const paymentMethodDescription = existingPaymentMethod
+			? existingPaymentMethod.paymentType
+			: paymentMethod;
+
+		console.log(
+			'onRenderPaymentMethod --->',
+			`payment-method-selector-${paymentMethodDescription}`,
+		);
+
+		trackComponentInsert(`payment-method-selector-${paymentMethodDescription}`);
+	}
+
 	useEffect(() => {
 		availablePaymentMethods.length === 1 &&
 			dispatch(setPaymentMethod(availablePaymentMethods[0]));
@@ -106,6 +126,7 @@ function PaymentMethodSelectorContainer({
 		validationError: errors?.[0],
 		...getExistingPaymentMethodProps(existingPaymentMethods),
 		onSelectPaymentMethod,
+		onRenderPaymentMethod,
 	});
 }
 

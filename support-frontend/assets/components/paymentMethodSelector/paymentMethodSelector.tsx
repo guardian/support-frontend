@@ -54,6 +54,10 @@ export interface PaymentMethodSelectorProps {
 		paymentMethod: PaymentMethod,
 		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 	) => void;
+	onRenderPaymentMethod: (
+		paymentMethod: PaymentMethod,
+		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
+	) => void;
 }
 
 export function PaymentMethodSelector({
@@ -65,6 +69,7 @@ export function PaymentMethodSelector({
 	pendingExistingPaymentMethods,
 	showReauthenticateLink,
 	onSelectPaymentMethod,
+	onRenderPaymentMethod,
 }: PaymentMethodSelectorProps): JSX.Element {
 	if (
 		existingPaymentMethodList.length < 1 &&
@@ -146,6 +151,12 @@ export function PaymentMethodSelector({
 												accordionBody={
 													paymentMethodData[paymentType].accordionBody
 												}
+												onRender={() => {
+													onRenderPaymentMethod(
+														paymentType,
+														preExistingPaymentMethod,
+													);
+												}}
 											/>
 										);
 									},
@@ -160,6 +171,7 @@ export function PaymentMethodSelector({
 									checked={paymentMethod === method}
 									onChange={() => onSelectPaymentMethod(method)}
 									accordionBody={paymentMethodData[method].accordionBody}
+									onRender={() => onRenderPaymentMethod(method)}
 								/>
 							))}
 						</>,

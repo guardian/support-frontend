@@ -9,6 +9,7 @@ import {
 	space,
 	transitions,
 } from '@guardian/source-foundations';
+import { useEffect } from 'preact/hooks';
 import { RadioWithImage } from './radioWithImage';
 
 const radio = css`
@@ -80,6 +81,7 @@ interface AvailablePaymentMethodAccordionRowProps {
 	supportingText?: string;
 	onChange: () => void;
 	accordionBody?: () => JSX.Element;
+	onRender: () => void;
 }
 
 export function AvailablePaymentMethodAccordionRow({
@@ -91,7 +93,10 @@ export function AvailablePaymentMethodAccordionRow({
 	supportingText,
 	accordionBody,
 	onChange,
+	onRender,
 }: AvailablePaymentMethodAccordionRowProps): EmotionJSX.Element {
+	useEffect(onRender, []);
+
 	return (
 		<div css={checked ? focused : notFocused}>
 			<div css={[...(checked && accordionBody ? [borderBottom] : [])]}>
