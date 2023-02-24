@@ -11,7 +11,9 @@ import {
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
-import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
+import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
 
 const marginTop = css`
@@ -35,6 +37,25 @@ interface PaymentTsAndCsProps {
 	amountIsAboveThreshold: boolean;
 }
 
+const manageMyAccount = (
+	<a
+		href={manageSubsUrl}
+		onClick={sendTrackingEventsOnClick({
+			id: 'checkout_my_account',
+			product: 'PremiumTier',
+			componentType: 'ACQUISITIONS_BUTTON',
+		})}
+	>
+		Manage My Account
+	</a>
+);
+
+const termsSupporterPlus = (linkText: string) => (
+	<a href="https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions">
+		{linkText}
+	</a>
+);
+
 function TsAndCsFooterLinks({
 	countryGroupId,
 	amountIsAboveThreshold,
@@ -47,14 +68,9 @@ function TsAndCsFooterLinks({
 	const termsContributions = (
 		<a href={contributionsTermsLinks[countryGroupId]}>Terms and Conditions</a>
 	);
-	const termsSupporterPlus = (
-		<a href="https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions">
-			Terms and Conditions
-		</a>
-	);
 
 	const terms = amountIsAboveThreshold
-		? termsSupporterPlus
+		? termsSupporterPlus('Terms and Conditions')
 		: termsContributions;
 
 	return (
@@ -85,7 +101,6 @@ export function PaymentTsAndCs({
 		  )}`;
 
 	const currencyGlyph = glyph(detect(countryGroupId));
-	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
 
 	const frequencySingular = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'month' : 'year';
@@ -113,18 +128,26 @@ export function PaymentTsAndCs({
 	};
 
 	const copyAboveThreshold = (contributionType: ContributionType) => {
+		const supporterPlusThresholds =
+			benefitsThresholdsByCountryGroup[countryGroupId];
+
 		return (
 			<>
 				<div>
-					This arrangement auto-renews and you will be charged the applicable{' '}
-					{frequencyPlural(contributionType)} amount each time it renews unless
-					you cancel. You can change how much you pay at any time but{' '}
+					This subscription auto-renews each{' '}
+					{frequencySingular(contributionType)}. You will be charged the
+					applicable {frequencyPlural(contributionType)} amount at each renewal
+					unless you cancel. You can cancel or change how much you pay for these
+					benefits at any time before your next renewal date, but{' '}
 					{currencyGlyph}
-					{thresholdPrice} per {frequencySingular(contributionType)} is the
-					minimum payment to receive these benefits. You can cancel any time
-					before your next payment date and if you cancel within the first 14
-					days, you’ll receive a full refund. Cancellation of your payment will
-					result in the cancellation of these benefits.
+					{supporterPlusThresholds['MONTHLY']} per month or {currencyGlyph}
+					{supporterPlusThresholds['ANNUAL']} per year is the minimum payment to
+					receive this subscription. If you cancel within 14 days of taking out
+					this subscription, you’ll receive a full refund and your benefits will
+					stop immediately. Changes to your payment amount or cancellation made
+					after 14 days will take effect at the end of your current subscription{' '}
+					{frequencySingular(contributionType)}. To cancel, go to{' '}
+					{manageMyAccount} or see our {termsSupporterPlus('Terms')}.
 				</div>
 				<TsAndCsFooterLinks
 					countryGroupId={countryGroupId}
