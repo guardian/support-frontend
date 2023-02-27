@@ -64,8 +64,6 @@ trait AppComponents
     stripeController,
     identityController,
     subscriptionsController,
-    digitalPackController,
-    digitalPackFormController,
     weeklyController,
     weeklyFormController,
     paperController,

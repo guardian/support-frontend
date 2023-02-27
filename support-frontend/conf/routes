@@ -93,18 +93,9 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.S
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
 GET  /:country/subscribe                                           controllers.SubscriptionsController.legacyRedirect(country: String)
 
-GET  /digital                                                      controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
-GET  /subscribe/digital                                            controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
-GET  /subscribe/digital/gift                                       controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = true)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital          controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = false)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/gift     controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = true)
-
 # redirect from old checkout urls
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout       controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout/gift  controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout/gift")
-GET  /subscribe/digital/checkout                                         controllers.DigitalSubscriptionFormController.displayForm(orderIsAGift: Boolean = false)
-GET  /subscribe/digital/checkout/gift                                    controllers.DigitalSubscriptionFormController.displayForm(orderIsAGift: Boolean = true)
-GET  /subscribe/digital/checkout/thankyou-existing                       controllers.DigitalSubscriptionFormController.displayThankYouExisting()
 
 GET  /weekly                                                       controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/weekly                                             controllers.WeeklySubscriptionController.weeklyGeoRedirect(orderIsAGift: Boolean = false)

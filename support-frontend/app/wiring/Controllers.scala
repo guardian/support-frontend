@@ -75,18 +75,6 @@ trait Controllers {
     appConfig.stage,
   )
 
-  lazy val digitalPackController = new DigitalSubscriptionController(
-    priceSummaryServiceProvider,
-    landingCopyProvider,
-    assetsResolver,
-    actionRefiners,
-    appConfig.regularPayPalConfigProvider,
-    controllerComponents,
-    stringsConfig,
-    allSettingsProvider,
-    appConfig.supportUrl,
-  )
-
   lazy val paperController = new PaperSubscriptionController(
     priceSummaryServiceProvider,
     landingCopyProvider,
@@ -107,18 +95,6 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
-  )
-
-  lazy val digitalPackFormController = new DigitalSubscriptionFormController(
-    priceSummaryServiceProvider,
-    assetsResolver,
-    actionRefiners,
-    testUsers,
-    appConfig.regularStripeConfigProvider,
-    appConfig.regularPayPalConfigProvider,
-    controllerComponents,
-    allSettingsProvider,
-    appConfig.recaptchaConfigProvider,
   )
 
   lazy val paperFormController = new PaperSubscriptionFormController(

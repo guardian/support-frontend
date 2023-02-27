@@ -3,7 +3,7 @@ package controllers
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.{AssetsResolver, RefPath, StyleContent}
-import com.gu.support.catalog.{Contribution, DigitalPack, GuardianWeekly, Paper}
+import com.gu.support.catalog.{Contribution, GuardianWeekly, Paper}
 import com.gu.support.config.Stage
 import com.gu.support.encoding.CustomCodecs._
 import services.pricing.PriceSummaryServiceProvider
@@ -36,7 +36,6 @@ class Promotions(
     maybePromotionTerms.fold(NotFound("Invalid promo code")) { promotionTerms =>
       val productLandingPage = promotionTerms.product match {
         case GuardianWeekly => routes.WeeklySubscriptionController.weeklyGeoRedirect(promotionTerms.isGift).url
-        case DigitalPack => routes.DigitalSubscriptionController.digitalGeoRedirect(false).url
         case Paper => routes.PaperSubscriptionController.paper().url
         case Contribution => routes.Application.contributeGeoRedirect("").url
       }
