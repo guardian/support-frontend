@@ -49,7 +49,7 @@ class RedemptionController(
   val title = "Support the Guardian | Redeem your code"
   val id = EmptyDiv("subscriptions-redemption-page")
   val js = "subscriptionsRedemptionPage.js"
-  val css = "subscriptionsRedemptionPage.css" // TODO: Don't need this?
+  val css = "digitalSubscriptionCheckoutPage.css" // TODO: Don't need this?
 
   def displayForm(redemptionCode: RawRedemptionCode): Action[AnyContent] = MaybeAuthenticatedAction.async {
     implicit request =>

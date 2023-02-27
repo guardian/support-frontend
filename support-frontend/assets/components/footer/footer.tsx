@@ -9,6 +9,7 @@ import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { copyrightNotice, privacyLink } from 'helpers/legal';
 import './footer.scss';
 import Rows from '../base/rows';
+import 'pages/digital-subscription-landing/components/digitalSubscriptionLanding.scss';
 
 // ----- Props ----- //
 type PropTypes = {

@@ -6,9 +6,9 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { initReduxForRedemption } from 'helpers/redux/redemptionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import 'stylesheets/skeleton/skeleton.scss';
+import ThankYouPendingContent from 'pages/digital-subscription-checkout/thankYouPendingContent';
 import RedemptionForm from 'pages/subscriptions-redemption/components/redemptionForm';
 import ThankYouContent from 'pages/subscriptions-redemption/thankYouContainer';
-import ThankYouPendingContent from 'pages/subscriptions-redemption/thankYouPendingContent';
 import CheckoutStage from './components/stage';
 import MarketingConsent from './marketingConsentContainer';
 

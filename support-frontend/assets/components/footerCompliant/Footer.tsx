@@ -10,6 +10,7 @@ import type { ReactNode } from 'react';
 import { Children } from 'react';
 import { copyrightNotice } from 'helpers/legal';
 import Rows from '../base/rows';
+import 'pages/digital-subscription-landing/components/digitalSubscriptionLanding.scss';
 import { BackToTop } from './BackToTop';
 import FooterContent from './containers/FooterContent';
 import {

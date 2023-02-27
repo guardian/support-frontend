@@ -14,6 +14,7 @@ import type {
 	CountryGroup,
 	CountryGroupId,
 } from 'helpers/internationalisation/countryGroup';
+import { daysFromNowForGift } from 'pages/digital-subscription-checkout/components/helpers';
 import {
 	AUDCountries,
 	Canada,
@@ -21,8 +22,6 @@ import {
 	UnitedStates,
 } from '../internationalisation/countryGroup';
 import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
-
-const daysFromNowForGift = 89;
 
 export const emailRegexPattern =
 	"^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$";

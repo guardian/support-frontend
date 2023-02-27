@@ -1,0 +1,81 @@
+// -----  gu-sass ----- //
+@import '~stylesheets/gu-sass/gu-sass';
+
+// ----- Shared Components ----- //
+
+@import '~components/progressMessage/progressMessage';
+@import '~components/generalErrorMessage/generalErrorMessage';
+
+// ----- Page-Specific Styles ----- //
+
+#digital-subscription-checkout-page {
+	// ----- Heading
+
+	.component-product-hero {
+		@include mq($until: leftCol) {
+			overflow: hidden;
+		}
+		@include mq($until: tablet) {
+			display: none;
+		}
+
+		.component-grid-picture__image {
+			display: block;
+			margin: ($gu-v-spacing * 2) auto 0;
+			position: relative;
+
+			@include mq($from: tablet) {
+				margin-top: $gu-v-spacing * 3;
+			}
+
+			@include mq($from: leftCol) {
+				margin-left: 10px;
+			}
+		}
+	}
+
+	.component-heading-block {
+		// Makes sure the circle SVGs stay behind the heading.
+		position: relative;
+	}
+
+	// ----- Checkout
+
+	.component-paypal-button-checkout__container {
+		margin: 20px 0;
+	}
+
+	.component-button--hidden,
+	.component-paypal-button-checkout--hidden {
+		display: none;
+	}
+
+	// ----- Thank You
+
+	.thank-you-stage {
+		.component-checkout-heading {
+			position: relative;
+			.component-left-margin-section__content {
+				box-sizing: border-box;
+			}
+		}
+	}
+
+	.component-marketing-consent {
+		border-bottom: 0;
+		@include mq($from: desktop) {
+			position: relative;
+			padding-bottom: $gu-v-spacing * 2;
+		}
+		.svg-newsletters {
+			display: block;
+			@include mq($from: desktop) {
+				position: absolute;
+				bottom: 0;
+				width: auto;
+				max-height: 95%;
+				left: gu-span(7);
+			}
+		}
+	}
+}
