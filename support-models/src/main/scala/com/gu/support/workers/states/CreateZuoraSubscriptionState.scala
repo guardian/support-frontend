@@ -47,23 +47,6 @@ object CreateZuoraSubscriptionProductState {
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
 
-  case class DigitalSubscriptionDirectPurchaseState(
-      billingCountry: Country,
-      product: DigitalPack,
-      paymentMethod: PaymentMethod,
-      promoCode: Option[PromoCode],
-      salesForceContact: SalesforceContactRecord,
-  ) extends CreateZuoraSubscriptionProductState
-
-  case class DigitalSubscriptionGiftPurchaseState(
-      billingCountry: Country,
-      giftRecipient: DigitalSubscriptionGiftRecipient,
-      product: DigitalPack,
-      paymentMethod: PaymentMethod,
-      promoCode: Option[PromoCode],
-      salesforceContacts: SalesforceContactRecords,
-  ) extends CreateZuoraSubscriptionProductState
-
   case class DigitalSubscriptionCorporateRedemptionState(
       product: DigitalPack,
       redemptionData: RedemptionData,
@@ -102,8 +85,6 @@ object CreateZuoraSubscriptionProductState {
     List(
       discriminatedType.variant[ContributionState](contribution),
       discriminatedType.variant[SupporterPlusState](supporterPlus),
-      discriminatedType.variant[DigitalSubscriptionDirectPurchaseState](digitalSubscriptionDirectPurchase),
-      discriminatedType.variant[DigitalSubscriptionGiftPurchaseState](digitalSubscriptionGiftPurchase),
       discriminatedType.variant[DigitalSubscriptionCorporateRedemptionState](digitalSubscriptionCorporateRedemption),
       discriminatedType.variant[DigitalSubscriptionGiftRedemptionState](digitalSubscriptionGiftRedemption),
       discriminatedType.variant[PaperState](paper),

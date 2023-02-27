@@ -40,19 +40,6 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
         )
       case state: DigitalSubscriptionGiftRedemptionState =>
         zuoraDigitalSubscriptionGiftRedemptionHandler.redeemGift(state)
-      case state: DigitalSubscriptionDirectPurchaseState =>
-        zuoraDigitalSubscriptionDirectHandler.subscribe(
-          state,
-          zuoraSubscriptionState.csrUsername,
-          zuoraSubscriptionState.salesforceCaseId,
-          zuoraSubscriptionState.acquisitionData,
-        )
-      case state: DigitalSubscriptionGiftPurchaseState =>
-        zuoraDigitalSubscriptionGiftPurchaseHandler.subscribe(
-          state,
-          zuoraSubscriptionState.csrUsername,
-          zuoraSubscriptionState.salesforceCaseId,
-        )
       case state: DigitalSubscriptionCorporateRedemptionState =>
         zuoraDigitalSubscriptionCorporateRedemptionHandler.subscribe(state)
       case state: ContributionState =>
@@ -97,34 +84,11 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
     state.product.currency,
     services.config.zuoraConfigProvider.get(isTestUser).invoiceTemplateIds,
   )
-  lazy val zuoraDigitalSubscriptionGiftPurchaseHandler = new ZuoraDigitalSubscriptionGiftPurchaseHandler(
-    zuoraSubscriptionCreator,
-    dateGenerator,
-    new DigitalSubscriptionGiftPurchaseBuilder(
-      services.promotionService,
-      dateGenerator,
-      services.giftCodeGenerator,
-      touchPointEnvironment,
-      subscribeItemBuilder,
-    ),
-    state.user,
-  )
   lazy val zuoraDigitalSubscriptionCorporateRedemptionHandler = new ZuoraDigitalSubscriptionCorporateRedemptionHandler(
     zuoraSubscriptionCreator,
     CorporateCodeStatusUpdater.withDynamoUpdate(services.redemptionService),
     new DigitalSubscriptionCorporateRedemptionBuilder(
       CorporateCodeValidator.withDynamoLookup(services.redemptionService),
-      dateGenerator,
-      touchPointEnvironment,
-      subscribeItemBuilder,
-    ),
-    state.user,
-  )
-  lazy val zuoraDigitalSubscriptionDirectHandler = new ZuoraDigitalSubscriptionDirectHandler(
-    zuoraSubscriptionCreator,
-    new DigitalSubscriptionDirectPurchaseBuilder(
-      services.config.zuoraConfigProvider.get(isTestUser).digitalPack,
-      services.promotionService,
       dateGenerator,
       touchPointEnvironment,
       subscribeItemBuilder,

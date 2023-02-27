@@ -19,8 +19,6 @@ import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   ContributionState,
   DigitalSubscriptionCorporateRedemptionState,
-  DigitalSubscriptionDirectPurchaseState,
-  DigitalSubscriptionGiftPurchaseState,
   DigitalSubscriptionGiftRedemptionState,
   GuardianWeeklyState,
   PaperState,
@@ -71,10 +69,6 @@ class NextState(state: CreateSalesforceContactState) {
         toNextContribution(salesforceContactRecords, product, purchase)
       case (product: SupporterPlus, Purchase(purchase)) =>
         toNextSupporterPlus(salesforceContactRecords, product, purchase)
-      case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Direct =>
-        toNextDSDirect(salesforceContactRecords.buyer, product, purchase)
-      case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Gift =>
-        toNextDSGift(salesforceContactRecords, product, purchase)
       case (product: Paper, Purchase(purchase)) =>
         toNextPaper(salesforceContactRecords.buyer, product, purchase)
       case (product: GuardianWeekly, Purchase(purchase)) =>
@@ -211,55 +205,6 @@ class NextState(state: CreateSalesforceContactState) {
         product,
         purchase,
         firstDeliveryDate.get,
-        promoCode,
-        salesforceContactRecord,
-      ),
-      requestId,
-      user,
-      product,
-      analyticsInfo,
-      firstDeliveryDate,
-      promoCode,
-      state.csrUsername,
-      state.salesforceCaseId,
-      acquisitionData,
-    )
-
-  def toNextDSGift(
-      salesforceContactRecords: SalesforceContactRecords,
-      product: DigitalPack,
-      purchase: PaymentMethod,
-  ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(
-      DigitalSubscriptionGiftPurchaseState(
-        user.billingAddress.country,
-        giftRecipient.flatMap(_.asDigitalSubscriptionGiftRecipient).get,
-        product,
-        purchase,
-        promoCode,
-        salesforceContactRecords,
-      ),
-      requestId,
-      user,
-      product,
-      analyticsInfo,
-      firstDeliveryDate,
-      promoCode,
-      state.csrUsername,
-      state.salesforceCaseId,
-      acquisitionData,
-    )
-
-  def toNextDSDirect(
-      salesforceContactRecord: SalesforceContactRecord,
-      product: DigitalPack,
-      purchase: PaymentMethod,
-  ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(
-      DigitalSubscriptionDirectPurchaseState(
-        user.billingAddress.country,
-        product,
-        purchase,
         promoCode,
         salesforceContactRecord,
       ),
