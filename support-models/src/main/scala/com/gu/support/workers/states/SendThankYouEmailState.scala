@@ -38,30 +38,6 @@ object SendThankYouEmailState {
       abTests: Option[Set[AbTest]],
   ) extends SendThankYouEmailState
 
-  case class SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
-      user: User,
-      product: DigitalPack,
-      paymentMethod: PaymentMethod,
-      paymentSchedule: PaymentSchedule,
-      promoCode: Option[PromoCode],
-      accountNumber: String,
-      subscriptionNumber: String,
-  ) extends SendThankYouEmailDigitalSubscriptionState
-
-  case class SendThankYouEmailDigitalSubscriptionGiftPurchaseState(
-      user: User,
-      recipientSFContactId: SfContactId,
-      product: DigitalPack,
-      giftRecipient: DigitalSubscriptionGiftRecipient,
-      giftCode: GeneratedGiftCode,
-      lastRedemptionDate: LocalDate,
-      paymentMethod: PaymentMethod,
-      paymentSchedule: PaymentSchedule,
-      promoCode: Option[PromoCode],
-      accountNumber: String,
-      subscriptionNumber: String,
-  ) extends SendThankYouEmailDigitalSubscriptionState
-
   case class SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
       user: User,
       product: DigitalPack,
@@ -117,10 +93,6 @@ object SendThankYouEmailState {
     List(
       discriminatedType.variant[SendThankYouEmailContributionState](contribution),
       discriminatedType.variant[SendThankYouEmailSupporterPlusState](supporterPlus),
-      discriminatedType.variant[SendThankYouEmailDigitalSubscriptionDirectPurchaseState](
-        digitalSubscriptionDirectPurchase,
-      ),
-      discriminatedType.variant[SendThankYouEmailDigitalSubscriptionGiftPurchaseState](digitalSubscriptionGiftPurchase),
       discriminatedType.variant[SendThankYouEmailDigitalSubscriptionCorporateRedemptionState](
         digitalSubscriptionCorporateRedemption,
       ),

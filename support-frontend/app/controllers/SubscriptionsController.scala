@@ -79,15 +79,8 @@ class SubscriptionsController(
         countryGroup.currency,
       )
 
-    val digitalSubscription = service
-      .getPrices(
-        DigitalPack,
-        List(DefaultPromotions.DigitalSubscription.Monthly.fiftyPercentOff3Months),
-      )(countryGroup)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(countryGroup.currency)
-
     Map(
       GuardianWeekly.toString -> pricingCopy(weekly),
-      DigitalPack.toString -> pricingCopy(digitalSubscription),
     ) ++ paperMap
   }
 

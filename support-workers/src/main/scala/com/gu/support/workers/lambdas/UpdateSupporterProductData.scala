@@ -10,8 +10,6 @@ import com.gu.support.workers.lambdas.UpdateSupporterProductData.getSupporterRat
 import com.gu.support.workers.states.SendThankYouEmailState.{
   SendThankYouEmailContributionState,
   SendThankYouEmailDigitalSubscriptionCorporateRedemptionState,
-  SendThankYouEmailDigitalSubscriptionDirectPurchaseState,
-  SendThankYouEmailDigitalSubscriptionGiftPurchaseState,
   SendThankYouEmailDigitalSubscriptionGiftRedemptionState,
   SendThankYouEmailGuardianWeeklyState,
   SendThankYouEmailPaperState,
@@ -112,21 +110,6 @@ object UpdateSupporterProductData {
           )
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
 
-      case SendThankYouEmailDigitalSubscriptionDirectPurchaseState(user, product, _, _, _, _, subscriptionNumber) =>
-        catalogService
-          .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
-          .map(productRatePlan =>
-            Some(
-              supporterRatePlanItem(
-                subscriptionName = subscriptionNumber,
-                identityId = user.id,
-                productRatePlanId = productRatePlan.id,
-                productRatePlanName = s"support-workers added ${product.describe}",
-              ),
-            ),
-          )
-          .toRight(s"Unable to create SupporterRatePlanItem from state $state")
-
       case SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(user, product, _, subscriptionNumber) =>
         catalogService
           .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions, Corporate)
@@ -156,10 +139,6 @@ object UpdateSupporterProductData {
             ),
           )
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
-      case SendThankYouEmailDigitalSubscriptionGiftPurchaseState(_, _, _, _, _, _, _, _, _, _, _) =>
-        Right(
-          None,
-        ) // We don't want to write DS gift purchases to the data store because they don't give the purchaser DS benefits
       case SendThankYouEmailGuardianWeeklyState(user, product, giftRecipient, _, _, _, _, subscriptionNumber, _) =>
         val readerType = if (giftRecipient.isDefined) Gift else Direct
         catalogService

@@ -9,13 +9,6 @@ case class ZuoraContributionConfig(
     productRatePlanChargeId: ProductRatePlanChargeId,
 )
 
-case class ZuoraDigitalPackConfig(
-    defaultFreeTrialPeriod: Int,
-    paymentGracePeriod: Int,
-    monthlyChargeId: String,
-    annualChargeId: String,
-)
-
 case class ZuoraSupporterPlusConfig(
     monthlyChargeId: String,
     annualChargeId: String,
@@ -39,7 +32,6 @@ case class ZuoraConfig(
     invoiceTemplateIds: ZuoraInvoiceTemplatesConfig,
     monthlyContribution: ZuoraContributionConfig,
     annualContribution: ZuoraContributionConfig,
-    digitalPack: ZuoraDigitalPackConfig,
     supporterPlusConfig: ZuoraSupporterPlusConfig,
 ) {
 
@@ -60,20 +52,12 @@ class ZuoraConfigProvider(config: Config, defaultStage: Stage)
     invoiceTemplateIds = invoiceTemplatesFromConfig(config.getConfig("zuora.invoiceTemplateIds")),
     monthlyContribution = contributionFromConfig(config.getConfig("zuora.contribution.monthly")),
     annualContribution = contributionFromConfig(config.getConfig("zuora.contribution.annual")),
-    digitalPack = digitalPackFromConfig(config.getConfig("zuora.digitalpack")),
     supporterPlusConfig = supporterPlusFromConfig(config.getConfig("zuora.supporterplus")),
   )
 
   private def contributionFromConfig(config: Config): ZuoraContributionConfig = ZuoraContributionConfig(
     productRatePlanId = config.getString("productRatePlanId"),
     productRatePlanChargeId = config.getString("productRatePlanChargeId"),
-  )
-
-  private def digitalPackFromConfig(config: Config) = ZuoraDigitalPackConfig(
-    defaultFreeTrialPeriod = config.getInt("defaultFreeTrialPeriodDays"),
-    paymentGracePeriod = config.getInt("paymentGracePeriod"),
-    monthlyChargeId = config.getString("monthly.productRatePlanChargeId"),
-    annualChargeId = config.getString("annual.productRatePlanChargeId"),
   )
 
   private def supporterPlusFromConfig(config: Config) = ZuoraSupporterPlusConfig(

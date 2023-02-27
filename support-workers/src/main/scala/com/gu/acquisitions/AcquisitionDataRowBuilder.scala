@@ -192,24 +192,6 @@ object AcquisitionDataRowBuilder {
           Some(s.accountNumber),
           Some(s.subscriptionNumber),
         )
-      case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
-        AcquisitionTypeDetails(
-          Some(s.paymentMethod),
-          s.promoCode,
-          Direct,
-          Purchase,
-          Some(s.accountNumber),
-          Some(s.subscriptionNumber),
-        )
-      case s: SendThankYouEmailDigitalSubscriptionGiftPurchaseState =>
-        AcquisitionTypeDetails(
-          Some(s.paymentMethod),
-          s.promoCode,
-          Gift,
-          Purchase,
-          Some(s.accountNumber),
-          Some(s.subscriptionNumber),
-        )
       case s: SendThankYouEmailPaperState =>
         AcquisitionTypeDetails(
           Some(s.paymentMethod),

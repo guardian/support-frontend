@@ -166,7 +166,6 @@ object AnnualisedValueTwoCalculator {
     a.product match {
       case AcquisitionProduct.Contribution => getContributionOrSupporterPlusAV(a)
       case AcquisitionProduct.RecurringContribution => getContributionOrSupporterPlusAV(a)
-      case AcquisitionProduct.DigitalSubscription => getDigitalSubscriptionAV(a)
       case AcquisitionProduct.GuardianWeekly => getPrintAV(a)
       case AcquisitionProduct.Paper => getPrintAV(a)
       case AcquisitionProduct.SupporterPlus => getContributionOrSupporterPlusAV(a)

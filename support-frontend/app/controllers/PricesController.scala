@@ -35,7 +35,6 @@ object PricesController {
 
   case class CountryGroupPriceData(
       GuardianWeekly: Option[ProductPriceData],
-      Digisub: Option[ProductPriceData],
   )
 
   /** This is the model that we return from the prices endpoint. It gives us what we need for displaying prices in
@@ -104,14 +103,10 @@ class PricesController(
     val guardianWeeklyProductPrices = priceSummaryServiceProvider
       .forUser(false)
       .getPrices(GuardianWeekly, Nil, Direct)
-    val digisubProductPrices = priceSummaryServiceProvider
-      .forUser(false)
-      .getPrices(DigitalPack, DefaultPromotions.DigitalSubscription.all, Direct)
 
     CountryGroupPriceData(
       GuardianWeekly =
         buildProductPriceData(guardianWeeklyProductPrices, countryGroup, currency, Domestic, includeSummary),
-      Digisub = buildProductPriceData(digisubProductPrices, countryGroup, currency, NoFulfilmentOptions, includeSummary),
     )
   }
 
