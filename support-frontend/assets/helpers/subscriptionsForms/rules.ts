@@ -9,10 +9,10 @@ import type { FormField, FormFields } from './formFields';
 import {
 	formError,
 	nonEmptyString,
-	nonSillyCharacters,
 	notLongerThan,
 	notNull,
 	validate,
+	zuoraCompatibleString,
 } from './validation';
 import type { FormError } from './validation';
 
@@ -30,7 +30,7 @@ function applyPersonalDetailsRules(
 			error: formError('firstName', 'Please enter a first name.'),
 		},
 		{
-			rule: nonSillyCharacters(fields.firstName),
+			rule: zuoraCompatibleString(fields.firstName),
 			error: formError(
 				'firstName',
 				'Please use only letters, numbers and punctuation.',
@@ -45,7 +45,7 @@ function applyPersonalDetailsRules(
 			error: formError('lastName', 'Please enter a last name.'),
 		},
 		{
-			rule: nonSillyCharacters(fields.lastName),
+			rule: zuoraCompatibleString(fields.lastName),
 			error: formError(
 				'lastName',
 				'Please use only letters, numbers and punctuation.',
@@ -56,7 +56,7 @@ function applyPersonalDetailsRules(
 			error: formError('lastName', 'Last name is too long'),
 		},
 		{
-			rule: nonSillyCharacters(fields.telephone),
+			rule: zuoraCompatibleString(fields.telephone),
 			error: formError(
 				'telephone',
 				'Please use only letters, numbers and punctuation.',
@@ -94,7 +94,7 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 			error: formError('firstName', 'Please enter a first name.'),
 		},
 		{
-			rule: nonSillyCharacters(fields.firstName),
+			rule: zuoraCompatibleString(fields.firstName),
 			error: formError(
 				'firstName',
 				'Please use only letters, numbers and punctuation.',
@@ -109,7 +109,7 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 			error: formError('lastName', 'Please enter a last name.'),
 		},
 		{
-			rule: nonSillyCharacters(fields.lastName),
+			rule: zuoraCompatibleString(fields.lastName),
 			error: formError(
 				'lastName',
 				'Please use only letters, numbers and punctuation.',
@@ -120,7 +120,7 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 			error: formError('lastName', 'Last name is too long'),
 		},
 		{
-			rule: nonSillyCharacters(fields.telephone),
+			rule: zuoraCompatibleString(fields.telephone),
 			error: formError(
 				'telephone',
 				'Please use only letters, numbers and punctuation.',
@@ -158,7 +158,7 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 						),
 					},
 					{
-						rule: nonSillyCharacters(fields.firstNameGiftRecipient),
+						rule: zuoraCompatibleString(fields.firstNameGiftRecipient),
 						error: formError(
 							'firstNameGiftRecipient',
 							'Please use only letters, numbers and punctuation.',
@@ -172,7 +172,7 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 						),
 					},
 					{
-						rule: nonSillyCharacters(fields.lastNameGiftRecipient),
+						rule: zuoraCompatibleString(fields.lastNameGiftRecipient),
 						error: formError(
 							'lastNameGiftRecipient',
 							'Please use only letters, numbers and punctuation.',
@@ -216,7 +216,7 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 						),
 					},
 					{
-						rule: nonSillyCharacters(fields.firstNameGiftRecipient),
+						rule: zuoraCompatibleString(fields.firstNameGiftRecipient),
 						error: formError(
 							'firstNameGiftRecipient',
 							'Please use only letters, numbers and punctuation.',
@@ -230,7 +230,7 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 						),
 					},
 					{
-						rule: nonSillyCharacters(fields.lastNameGiftRecipient),
+						rule: zuoraCompatibleString(fields.lastNameGiftRecipient),
 						error: formError(
 							'lastNameGiftRecipient',
 							'Please use only letters, numbers and punctuation.',
@@ -239,7 +239,7 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 					{
 						rule:
 							checkOptionalEmail(fields.emailGiftRecipient) &&
-							nonSillyCharacters(fields.emailGiftRecipient),
+							zuoraCompatibleString(fields.emailGiftRecipient),
 						error: formError(
 							'emailGiftRecipient',
 							'Please use a valid email address for the recipient.',
@@ -263,6 +263,13 @@ function applyDeliveryRules(fields: FormFields): Array<FormError<FormField>> {
 			error: formError(
 				'billingAddressIsSame',
 				'Please indicate whether the billing address is the same as the delivery address',
+			),
+		},
+		{
+			rule: zuoraCompatibleString(fields.deliveryInstructions),
+			error: formError(
+				'deliveryInstructions',
+				'Please use only letters, numbers and punctuation.',
 			),
 		},
 	];

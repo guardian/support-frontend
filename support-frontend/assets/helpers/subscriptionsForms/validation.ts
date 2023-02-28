@@ -24,16 +24,14 @@ function notLongerThan(
 	return value.length < maxLength;
 }
 
-function nonSillyCharacters(s: string | null | undefined): boolean {
-	// This is a unicode property escape
-	// cf. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Unicode_Property_Escapes
-	const containsEmojiRegex = /\p{Emoji_Presentation}/u;
+function zuoraCompatibleString(s: string | null | undefined): boolean {
+	const takesFourBytesInUTF8Regex = /[\u{10000}-\u{10FFFF}]/u;
 
 	if (!s) {
 		return true;
 	}
 
-	return !containsEmojiRegex.test(s);
+	return !takesFourBytesInUTF8Regex.test(s);
 }
 
 // ----- Functions ----- //
@@ -80,5 +78,5 @@ export {
 	formError,
 	removeError,
 	validate,
-	nonSillyCharacters,
+	zuoraCompatibleString,
 };

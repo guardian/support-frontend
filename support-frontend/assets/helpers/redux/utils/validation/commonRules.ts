@@ -5,13 +5,13 @@ export const maxLengths = {
 	email: 80,
 };
 
-const containsEmojiRegex = /\p{Emoji_Presentation}/u;
+const takesFourBytesInUTF8Regex = /[\u{10000}-\u{10FFFF}]/u;
 
-export function nonSillyString(
+export function zuoraCompatibleString(
 	zodString: ZodString,
 	message = 'Please use only letters, numbers and punctuation.',
 ): ZodEffects<ZodString, string, string> {
-	return zodString.refine((string) => !containsEmojiRegex.test(string), {
+	return zodString.refine((string) => !takesFourBytesInUTF8Regex.test(string), {
 		message,
 	});
 }

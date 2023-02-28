@@ -9,10 +9,10 @@ import type { Rule } from 'helpers/subscriptionsForms/validation';
 import {
 	formError,
 	nonEmptyString,
-	nonSillyCharacters,
 	notLongerThan,
 	notNull,
 	validate,
+	zuoraCompatibleString,
 } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
 import type { AddressFields, AddressFormFieldError } from './state';
@@ -55,7 +55,7 @@ function getGenericRules(
 			),
 		},
 		{
-			rule: nonSillyCharacters(fields.lineOne),
+			rule: zuoraCompatibleString(fields.lineOne),
 			error: formError(
 				'lineOne',
 				'Please use only letters, numbers and punctuation.',
@@ -69,7 +69,7 @@ function getGenericRules(
 			),
 		},
 		{
-			rule: nonSillyCharacters(fields.lineTwo),
+			rule: zuoraCompatibleString(fields.lineTwo),
 			error: formError(
 				'lineTwo',
 				'Please use only letters, numbers and punctuation.',
@@ -80,7 +80,7 @@ function getGenericRules(
 			error: formError('city', `Please enter a ${addressType} city.`),
 		},
 		{
-			rule: nonSillyCharacters(fields.city),
+			rule: zuoraCompatibleString(fields.city),
 			error: formError(
 				'city',
 				'Please use only letters, numbers and punctuation.',
@@ -114,7 +114,7 @@ function getGenericRules(
 			rule:
 				isPostcodeOptional(fields.country) ||
 				(nonEmptyString(fields.postCode) &&
-					nonSillyCharacters(fields.postCode)),
+					zuoraCompatibleString(fields.postCode)),
 			error: formError('postCode', `Please enter a ${addressType} postcode.`),
 		},
 		{
@@ -125,7 +125,7 @@ function getGenericRules(
 			),
 		},
 		{
-			rule: nonSillyCharacters(fields.postCode),
+			rule: zuoraCompatibleString(fields.postCode),
 			error: formError(
 				'postCode',
 				'Please use only letters, numbers and punctuation.',
