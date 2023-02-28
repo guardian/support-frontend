@@ -58,7 +58,6 @@ import {
 	setAmazonPayWalletIsStale,
 } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import { setPaymentRequestError } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
-import { isSupporterPlusPurchase } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import * as cookie from 'helpers/storage/cookie';
@@ -190,12 +189,6 @@ function getBillingCountryAndState(
 	};
 }
 
-function getProductOptionsForSupporterPlusTest(state: ContributionsState) {
-	return isSupporterPlusPurchase(state)
-		? { productType: 'SupporterPlus' as const }
-		: { productType: 'Contribution' as const };
-}
-
 function regularPaymentRequestFromAuthorisation(
 	authorisation: PaymentAuthorisation,
 	state: ContributionsState,
@@ -213,8 +206,6 @@ function regularPaymentRequestFromAuthorisation(
 		state.page.checkoutForm.product.otherAmounts,
 		contributionType,
 	);
-
-	const productOptions = getProductOptionsForSupporterPlusTest(state);
 
 	return {
 		firstName: state.page.checkoutForm.personalDetails.firstName.trim(),
@@ -234,7 +225,8 @@ function regularPaymentRequestFromAuthorisation(
 			country: billingCountry, // required Zuora field
 		},
 		product: {
-			...productOptions,
+			productType: 'DigitalPack',
+			readerType: 'Direct',
 			amount,
 			currency: state.common.internationalisation.currencyId,
 			billingPeriod: contributionType === 'MONTHLY' ? Monthly : Annual,

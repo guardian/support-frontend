@@ -1,6 +1,12 @@
 import { css } from '@emotion/react';
 import { from, neutral, space, textSans } from '@guardian/source-foundations';
-import { Column, Columns, Hide } from '@guardian/source-react-components';
+import {
+	ChoiceCard,
+	ChoiceCardGroup,
+	Column,
+	Columns,
+	Hide,
+} from '@guardian/source-react-components';
 import {
 	Divider,
 	FooterLinks,
@@ -48,7 +54,6 @@ import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
 import { PaymentFailureMessage } from './components/paymentFailure';
 import { PaymentTsAndCs } from './components/paymentTsAndCs';
-import { AmountAndBenefits } from './formSections/amountAndBenefits';
 import { getPaymentMethodButtons } from './paymentButtons';
 
 const checkoutContainer = css`
@@ -174,7 +179,20 @@ export function SupporterPlusLandingPage({
 					<Column span={[1, 8, 7]}>
 						<Hide from="desktop">{heading}</Hide>
 						<Box>
-							<AmountAndBenefits />
+							<BoxContents>
+								<ChoiceCardGroup name="frequency">
+									<ChoiceCard
+										id="monthly"
+										label="Monthly for £10"
+										value="monthly"
+									/>
+									<ChoiceCard
+										id="annual"
+										label="Annual for £90"
+										value="annual"
+									/>
+								</ChoiceCardGroup>
+							</BoxContents>
 						</Box>
 						<Box>
 							<BoxContents>

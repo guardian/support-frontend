@@ -176,7 +176,7 @@ function selectInitialContributionTypeAndPaymentMethod(
 		countryGroupId,
 		switches,
 	);
-	dispatch(setProductType(contributionType));
+	dispatch(setProductType('DigitalPack'));
 	dispatch(setPaymentMethod(paymentMethod));
 
 	return contributionType;

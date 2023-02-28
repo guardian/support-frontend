@@ -1,17 +1,12 @@
 // ----- Imports ----- //
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {
-	countryGroups,
-	detect,
-} from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
-import { SupporterPlusLandingPage } from 'pages/kindle-subscriber-checkout/supporterPlusLanding';
+import { SupporterPlusLandingPage } from 'pages/kindle-subscriber-checkout/kindleSubscriptionLandingPage';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
 
@@ -23,7 +18,6 @@ setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
 
-const countryGroupId: CountryGroupId = detect();
 const store = initReduxForContributions();
 
 if (!window.guardian.polyfillScriptLoaded) {
@@ -45,7 +39,7 @@ if (typeof Object.values !== 'function') {
 setUpRedux(store);
 
 const reactElementId = 'digital-subscription-checkout-page';
-const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
+const thankYouRoute = `/subscribe/digital/checkout/thankyou`;
 // const countryIds = Object.values(countryGroups).map(
 // 	(group) => group.supportInternationalisationId,
 // );
