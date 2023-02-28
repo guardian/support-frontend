@@ -190,10 +190,30 @@ function getBillingCountryAndState(
 	};
 }
 
-function getProductOptionsForSupporterPlusTest(state: ContributionsState) {
-	return isSupporterPlusPurchase(state)
+function getProductFields(
+	state: ContributionsState,
+	amount: number,
+): RegularPaymentRequest['product'] {
+	if (state.page.checkoutForm.product.productType === 'DigitalPack') {
+		return {
+			productType: 'DigitalPack',
+			readerType: 'Direct',
+			currency: state.common.internationalisation.currencyId,
+			billingPeriod: state.page.checkoutForm.product.billingPeriod,
+		};
+	}
+
+	const contributionType = getContributionType(state);
+	const productOptions = isSupporterPlusPurchase(state)
 		? { productType: 'SupporterPlus' as const }
 		: { productType: 'Contribution' as const };
+
+	return {
+		amount,
+		currency: state.common.internationalisation.currencyId,
+		billingPeriod: contributionType === 'MONTHLY' ? Monthly : Annual,
+		...productOptions,
+	};
 }
 
 function regularPaymentRequestFromAuthorisation(
@@ -214,31 +234,24 @@ function regularPaymentRequestFromAuthorisation(
 		contributionType,
 	);
 
-	const productOptions = getProductOptionsForSupporterPlusTest(state);
-
 	return {
 		firstName: state.page.checkoutForm.personalDetails.firstName.trim(),
 		lastName: state.page.checkoutForm.personalDetails.lastName.trim(),
 		email: state.page.checkoutForm.personalDetails.email.trim(),
 		billingAddress: {
-			lineOne: null,
+			lineOne: 'Kings Place',
 			// required go cardless field
 			lineTwo: null,
 			// required go cardless field
-			city: null,
+			city: 'London',
 			// required go cardless field
 			state: billingState,
 			// required Zuora field if country is US or CA
-			postCode: null,
+			postCode: 'N1 9GU',
 			// required go cardless field
 			country: billingCountry, // required Zuora field
 		},
-		product: {
-			...productOptions,
-			amount,
-			currency: state.common.internationalisation.currencyId,
-			billingPeriod: contributionType === 'MONTHLY' ? Monthly : Annual,
-		},
+		product: getProductFields(state, amount),
 		firstDeliveryDate: null,
 		paymentFields: {
 			...regularPaymentFieldsFromAuthorisation(authorisation),
