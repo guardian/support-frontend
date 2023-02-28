@@ -1,0 +1,75 @@
+// ----- Imports ----- //
+import { Provider } from 'react-redux';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+	countryGroups,
+	detect,
+} from 'helpers/internationalisation/countryGroup';
+import { setUpTrackingAndConsents } from 'helpers/page/page';
+import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
+import { initReduxForContributions } from 'helpers/redux/contributionsStore';
+import { renderPage } from 'helpers/rendering/render';
+import { gaEvent } from 'helpers/tracking/googleTagManager';
+import { SupporterPlusLandingPage } from 'pages/kindle-subscriber-checkout/supporterPlusLanding';
+import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
+import { setUpRedux } from './setup/setUpRedux';
+
+if (!isDetailsSupported) {
+	polyfillDetails();
+}
+
+setUpTrackingAndConsents();
+
+// ----- Redux Store ----- //
+
+const countryGroupId: CountryGroupId = detect();
+const store = initReduxForContributions();
+
+if (!window.guardian.polyfillScriptLoaded) {
+	gaEvent({
+		category: 'polyfill',
+		action: 'not loaded',
+		label: window.guardian.polyfillVersion ?? '',
+	});
+}
+
+if (typeof Object.values !== 'function') {
+	gaEvent({
+		category: 'polyfill',
+		action: 'Object.values not available after polyfill',
+		label: window.guardian.polyfillVersion ?? '',
+	});
+}
+
+setUpRedux(store);
+
+const reactElementId = 'digital-subscription-checkout-page';
+const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
+// const countryIds = Object.values(countryGroups).map(
+// 	(group) => group.supportInternationalisationId,
+// );
+
+// ----- Render ----- //
+
+const router = () => {
+	const landingPage = (
+		<SupporterPlusLandingPage thankYouRoute={thankYouRoute} />
+	);
+
+	return (
+		<BrowserRouter>
+			<Provider store={store}>
+				<Routes>
+					<Route path={`/subscribe/digital/checkout`} element={landingPage} />
+					<Route
+						path={`/subscribe/digital/checkout/thankyou`}
+						element={<SupporterPlusThankYou />}
+					/>
+				</Routes>
+			</Provider>
+		</BrowserRouter>
+	);
+};
+
+renderPage(router(), reactElementId);
