@@ -63,7 +63,7 @@ export const maxTwoDecimals: (arg0: string) => boolean = (input) =>
 	new RegExp('^\\d+\\.?\\d{0,2}$').test(input);
 
 export const containsEmoji: (input: string | null) => boolean = (input) =>
-	/\p{Emoji_Presentation}/u.test(input ?? '');
+	/[\u{10000}-\u{10FFFF}]/u.test(input ?? '');
 
 export const notLongerThan = (
 	value: string | null,

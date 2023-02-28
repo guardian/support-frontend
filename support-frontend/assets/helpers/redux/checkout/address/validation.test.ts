@@ -34,7 +34,7 @@ describe('applyBillingAddressRules', () => {
 		]);
 	});
 
-	it('returns an error if lineOne contains silly characters', () => {
+	it('returns an error if lineOne contains non-zuora-compatible characters', () => {
 		const fields = buildAddressFields({ lineOne: '🏡' });
 
 		const errors = applyBillingAddressRules(fields);
@@ -60,7 +60,7 @@ describe('applyBillingAddressRules', () => {
 		]);
 	});
 
-	it('returns an error if lineTwo contains silly characters', () => {
+	it('returns an error if lineTwo contains non-zuora-compatible characters', () => {
 		const fields = buildAddressFields({ lineTwo: '🏡' });
 
 		const errors = applyBillingAddressRules(fields);
@@ -86,7 +86,7 @@ describe('applyBillingAddressRules', () => {
 		]);
 	});
 
-	it('returns an error if city contains silly characters', () => {
+	it('returns an error if city contains non-zuora-compatible characters', () => {
 		const fields = buildAddressFields({ city: '🏡' });
 
 		const errors = applyBillingAddressRules(fields);
@@ -166,7 +166,7 @@ describe('applyBillingAddressRules', () => {
 		]);
 	});
 
-	it('returns an error if postCode contains silly characters', () => {
+	it('returns an error if postCode contains non-zuora-compatible characters', () => {
 		const fields = buildAddressFields({ postCode: '🏡' });
 
 		const errors = applyBillingAddressRules(fields);

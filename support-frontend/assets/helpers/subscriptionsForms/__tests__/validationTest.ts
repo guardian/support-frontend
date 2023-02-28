@@ -3,23 +3,27 @@ import {
 	firstError,
 	formError,
 	nonEmptyString,
-	nonSillyCharacters,
 	notLongerThan,
 	notNull,
 	validate,
+	zuoraCompatibleString,
 } from '../validation';
 
 // ----- Tests ----- //
 describe('validation', () => {
-	describe('non silly characters', () => {
-		it('should return false if string contains an emoji', () => {
-			expect(nonSillyCharacters('😊')).toBe(false);
-			expect(nonSillyCharacters('jane✅')).toBe(false);
+	describe('zuoraCompatibleString', () => {
+		it('should return false if string contains characters which take more than 3 bytes to represent in UTF-8', () => {
+			expect(zuoraCompatibleString('😊')).toBe(false);
+			expect(zuoraCompatibleString('𐀀')).toBe(false);
+			expect(zuoraCompatibleString('𠀀')).toBe(false);
 		});
 
-		it('should return true if string does not contain silly characters', () => {
-			expect(nonSillyCharacters('joe')).toBe(true);
-			expect(nonSillyCharacters("King's Place")).toBe(true);
+		it('should return true if string only contains characters which take 3 or fewer bytes to represent in UTF-8', () => {
+			expect(zuoraCompatibleString('joe')).toBe(true);
+			expect(zuoraCompatibleString('jane✅')).toBe(true);
+			expect(zuoraCompatibleString("King's Place")).toBe(true);
+			expect(zuoraCompatibleString('￿')).toBe(true);
+			expect(zuoraCompatibleString('࿿')).toBe(true);
 		});
 	});
 

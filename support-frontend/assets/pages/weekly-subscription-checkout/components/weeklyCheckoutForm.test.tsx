@@ -210,11 +210,11 @@ describe('Guardian Weekly checkout form', () => {
 			});
 		});
 
-		it('should display an error if a silly character is entered into an input field', async () => {
+		it('should display an error if a non-zuora-compatible character is entered into an input field', async () => {
 			const firstNameInput = await screen.findByLabelText('First name');
 			fireEvent.change(firstNameInput, {
 				target: {
-					value: 'jane✅',
+					value: 'jane 😊',
 				},
 			});
 			const creditDebit = await screen.findByLabelText('Credit/Debit card');

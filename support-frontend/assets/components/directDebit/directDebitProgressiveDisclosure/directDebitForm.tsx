@@ -17,7 +17,7 @@ import {
 	setRecaptchaToken,
 } from 'helpers/redux/checkout/recaptcha/actions';
 import type { CheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
-import { nonSillyCharacters } from 'helpers/subscriptionsForms/validation';
+import { zuoraCompatibleString } from 'helpers/subscriptionsForms/validation';
 import Form from './components/form';
 import Playback from './components/playback';
 import type { DirectDebitFieldName } from './types';
@@ -72,7 +72,7 @@ const fieldValidationFunctions: {
 	[key in DirectDebitFieldName]: (fieldValue: string) => boolean;
 } = {
 	accountHolderName: (fieldValue) =>
-		!!/^\D+$/.exec(fieldValue) && nonSillyCharacters(fieldValue),
+		!!/^\D+$/.exec(fieldValue) && zuoraCompatibleString(fieldValue),
 	sortCodeString: (fieldValue) => !!/^\d{6}$/.exec(fieldValue),
 	accountNumber: (fieldValue) => !!/^\d{6,8}$/.exec(fieldValue),
 	accountHolderConfirmation: (fieldValue) => !!fieldValue,

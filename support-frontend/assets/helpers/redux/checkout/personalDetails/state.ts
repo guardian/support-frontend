@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import {
 	maxLengths,
-	nonSillyString,
+	zuoraCompatibleString,
 } from 'helpers/redux/utils/validation/commonRules';
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import { getUser } from 'helpers/user/user';
@@ -14,7 +14,7 @@ export type UserTypeFromIdentityResponse =
 	| 'requestPending'
 	| 'requestFailed';
 
-export const emailRules = nonSillyString(
+export const emailRules = zuoraCompatibleString(
 	z
 		.string()
 		.email('Please enter a valid email address.')
@@ -25,13 +25,13 @@ export const emailRules = nonSillyString(
 export const personalDetailsSchema = z
 	.object({
 		title: z.optional(z.string()),
-		firstName: nonSillyString(
+		firstName: zuoraCompatibleString(
 			z
 				.string()
 				.min(1, { message: 'Please enter a first name.' })
 				.max(maxLengths.name, { message: 'First name is too long' }),
 		),
-		lastName: nonSillyString(
+		lastName: zuoraCompatibleString(
 			z
 				.string()
 				.min(1, 'Please enter a last name.')
@@ -42,7 +42,7 @@ export const personalDetailsSchema = z
 		// isSignedIn is maintained in personal details state purely for the email matching check
 		// It should be set only in response to the setIsSignedIn action from the user slice
 		isSignedIn: z.boolean(),
-		telephone: z.optional(nonSillyString(z.string())),
+		telephone: z.optional(zuoraCompatibleString(z.string())),
 	})
 	.refine(
 		({ email, confirmEmail, isSignedIn }) => {
