@@ -1,12 +1,6 @@
 import { css } from '@emotion/react';
 import { from, neutral, space, textSans } from '@guardian/source-foundations';
-import {
-	ChoiceCard,
-	ChoiceCardGroup,
-	Column,
-	Columns,
-	Hide,
-} from '@guardian/source-react-components';
+import { Column, Columns, Hide } from '@guardian/source-react-components';
 import {
 	Divider,
 	FooterLinks,
@@ -47,6 +41,7 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
+import { BillingPeriodSelector } from './components/billingPeriodSelector';
 import { DirectDebitContainer } from './components/directDebitWrapper';
 import { ExistingRecurringContributorMessage } from './components/existingRecurringContributorMessage';
 import { GuardianTsAndCs } from './components/guardianTsAndCs';
@@ -179,20 +174,7 @@ export function SupporterPlusLandingPage({
 					<Column span={[1, 8, 7]}>
 						<Hide from="desktop">{heading}</Hide>
 						<Box>
-							<BoxContents>
-								<ChoiceCardGroup name="frequency">
-									<ChoiceCard
-										id="monthly"
-										label="Monthly for £10"
-										value="monthly"
-									/>
-									<ChoiceCard
-										id="annual"
-										label="Annual for £90"
-										value="annual"
-									/>
-								</ChoiceCardGroup>
-							</BoxContents>
+							<BillingPeriodSelector />
 						</Box>
 						<Box>
 							<BoxContents>
