@@ -149,8 +149,7 @@ export class Frontend extends GuStack {
         additionalPolicies: policies,
       },
       scaling,
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
-      // withoutImdsv2: true,
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL)
     });
 
     // ---- Alarms ---- //
