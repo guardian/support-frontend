@@ -26,7 +26,7 @@ object SubscribeRequest {
   implicit val encoder: Encoder[SubscribeRequest] = deriveEncoder
 }
 
-//The subscribe request documented here: https://www.zuora.com/developer/api-reference/#operation/Action_POSTsubscribe
+//The subscribe request documented here: https://www.zuora.com/developer/api-references/older-api/operation/Action_POSTsubscribe/
 //fields are upper case to match the expected json structure
 case class SubscribeRequest(subscribes: List[SubscribeItem])
 
