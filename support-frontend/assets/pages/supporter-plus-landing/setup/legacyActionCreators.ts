@@ -239,15 +239,15 @@ function regularPaymentRequestFromAuthorisation(
 		lastName: state.page.checkoutForm.personalDetails.lastName.trim(),
 		email: state.page.checkoutForm.personalDetails.email.trim(),
 		billingAddress: {
-			lineOne: 'Kings Place',
+			lineOne: null,
 			// required go cardless field
 			lineTwo: null,
 			// required go cardless field
-			city: 'London',
+			city: null,
 			// required go cardless field
 			state: billingState,
 			// required Zuora field if country is US or CA
-			postCode: 'N1 9GU',
+			postCode: null,
 			// required go cardless field
 			country: billingCountry, // required Zuora field
 		},

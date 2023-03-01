@@ -80,11 +80,13 @@ trait Controllers {
     landingCopyProvider,
     assetsResolver,
     actionRefiners,
+    appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
     appConfig.supportUrl,
+    appConfig.recaptchaConfigProvider,
   )
 
   lazy val paperController = new PaperSubscriptionController(

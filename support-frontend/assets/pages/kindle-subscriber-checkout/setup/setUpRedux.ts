@@ -17,7 +17,6 @@ import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { setBillingState } from 'helpers/redux/checkout/address/actions';
-import { getExistingPaymentMethods } from 'helpers/redux/checkout/payment/existingPaymentMethods/thunks';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import {
 	setEmail,
@@ -35,7 +34,6 @@ import type {
 	ContributionsState,
 	ContributionsStore,
 } from 'helpers/redux/contributionsStore';
-import { getRecurringContributorStatus } from 'helpers/redux/user/thunks';
 import * as storage from 'helpers/storage/storage';
 import { setUpUserState } from 'helpers/user/reduxSetup';
 import { getUserStateField } from 'helpers/user/user';
@@ -190,14 +188,12 @@ export function setUpRedux(store: ContributionsStore): void {
 	dispatch(setContributionTypes(contributionTypes));
 
 	setUpUserState(dispatch);
-	void dispatch(getRecurringContributorStatus());
 
 	const sessionStorageEmail = storage.getSession('gu.email');
 	if (sessionStorageEmail) {
 		dispatch(setEmail(sessionStorageEmail));
 	}
 
-	void dispatch(getExistingPaymentMethods());
 	const contributionType = selectInitialContributionTypeAndPaymentMethod(
 		state,
 		dispatch,

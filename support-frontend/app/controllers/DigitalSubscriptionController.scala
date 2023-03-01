@@ -4,12 +4,13 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.support.catalog.DigitalPack
-import com.gu.support.config.PayPalConfigProvider
+import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
+import com.gu.i18n.Currency.{AUD}
 import com.gu.support.promotions._
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
-import config.StringsConfig
+import config.{StringsConfig, RecaptchaConfigProvider}
 import play.api.mvc._
 import play.twirl.api.Html
 import views.EmptyDiv
@@ -23,11 +24,13 @@ class DigitalSubscriptionController(
     landingCopyProvider: LandingCopyProvider,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
+    stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     val supportUrl: String,
+    recaptchaConfigProvider: RecaptchaConfigProvider,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with GeoRedirect
@@ -51,12 +54,13 @@ class DigitalSubscriptionController(
       } else {
         val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift))
         val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+        val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(true).v2PublicKey
         Ok(
           views.html.main(
             title = s"Support the Guardian | The Guardian Digital ${if (orderIsAGift) "Gift " else ""}Subscription",
             mainElement = EmptyDiv("digital-subscription-landing-page-" + countryCode),
-            mainJsBundle = Left(RefPath("digitalSubscriptionLandingPage.js")),
-            mainStyleBundle = Left(RefPath("digitalSubscriptionLandingPage.css")),
+            mainJsBundle = Left(RefPath("kindleSubscriptionLandingPage.js")),
+            mainStyleBundle = Left(RefPath("kindleSubscriptionLandingPage.css")),
             description = stringsConfig.digitalPackLandingDescription,
             canonicalLink = canonicalLink,
             hrefLangLinks = getPaperHrefLangLinks(orderIsAGift),
@@ -77,6 +81,21 @@ class DigitalSubscriptionController(
             default: "${payPalConfigProvider.get().payPalEnvironment}",
             uat: "${payPalConfigProvider.get(true).payPalEnvironment}"
           };
+          window.guardian.stripeKeyDefaultCurrencies = {
+            REGULAR: {
+              default: "${stripeConfigProvider.get().forCurrency(None).publicKey}",
+              uat: "${stripeConfigProvider.get().forCurrency(None).publicKey}"
+            }
+          };
+          window.guardian.stripeKeyAustralia = {
+            REGULAR: {
+              default: "${stripeConfigProvider.get().forCurrency(Some(AUD)).publicKey}",
+              uat: "${stripeConfigProvider.get(true).forCurrency(Some(AUD)).publicKey}"
+            }
+          };
+          window.guardian.stripeKeyUnitedStates = window.guardian.stripeKeyDefaultCurrencies;
+           window.guardian.v2recaptchaPublicKey = "${v2recaptchaConfigPublicKey}";
+           window.guardian.recaptchaEnabled = true;
         </script>""",
             )
           },

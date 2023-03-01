@@ -1,6 +1,11 @@
 // ----- Imports ----- //
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+	countryGroups,
+	detect,
+} from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
@@ -18,6 +23,7 @@ setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
 
+const countryGroupId: CountryGroupId = detect();
 const store = initReduxForContributions();
 
 if (!window.guardian.polyfillScriptLoaded) {
@@ -38,11 +44,11 @@ if (typeof Object.values !== 'function') {
 
 setUpRedux(store);
 
-const reactElementId = 'digital-subscription-checkout-page';
-const thankYouRoute = `/subscribe/digital/checkout/thankyou`;
-// const countryIds = Object.values(countryGroups).map(
-// 	(group) => group.supportInternationalisationId,
-// );
+const reactElementId = `digital-subscription-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
+const thankYouRoute = `${countryGroups[countryGroupId].supportInternationalisationId}/subscribe/digital/thankyou`;
+const countryIds = Object.values(countryGroups).map(
+	(group) => group.supportInternationalisationId,
+);
 
 // ----- Render ----- //
 
@@ -55,11 +61,18 @@ const router = () => {
 		<BrowserRouter>
 			<Provider store={store}>
 				<Routes>
-					<Route path={`/subscribe/digital/checkout`} element={landingPage} />
-					<Route
-						path={`/subscribe/digital/checkout/thankyou`}
-						element={<SupporterPlusThankYou />}
-					/>
+					{countryIds.map((countryId) => (
+						<Route
+							path={`/${countryId}/subscribe/digital`}
+							element={landingPage}
+						/>
+					))}
+					{countryIds.map((countryId) => (
+						<Route
+							path={`/${countryId}/subscribe/digital/thankyou`}
+							element={<SupporterPlusThankYou />}
+						/>
+					))}
 				</Routes>
 			</Provider>
 		</BrowserRouter>
