@@ -4,9 +4,11 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { DefaultPaymentButtonContainer } from './defaultPaymentButtonContainer';
+import type { PaymentButtonComponentProps } from './paymentButtonController';
 
-export function DirectDebitPaymentButton(): JSX.Element {
+export function DirectDebitPaymentButton({
+	DefaultButtonContainer,
+}: PaymentButtonComponentProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const { paymentMethod } = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment,
@@ -16,5 +18,5 @@ export function DirectDebitPaymentButton(): JSX.Element {
 		dispatch(setPopupOpen());
 	}, paymentMethod.name !== 'DirectDebit');
 
-	return <DefaultPaymentButtonContainer onClick={payWithDirectDebit} />;
+	return <DefaultButtonContainer onClick={payWithDirectDebit} />;
 }

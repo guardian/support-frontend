@@ -1,4 +1,4 @@
-import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
+import type { PaymentButtonComponentProps } from 'components/paymentButton/paymentButtonController';
 import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { AmazonPay } from 'helpers/forms/paymentMethods';
 import {
@@ -8,7 +8,9 @@ import {
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import { onThirdPartyPaymentAuthorised } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 
-export function AmazonPaymentButton(): JSX.Element {
+export function AmazonPaymentButton({
+	DefaultButtonContainer,
+}: PaymentButtonComponentProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 
 	const hasAccessToken = useContributionsSelector(
@@ -32,7 +34,7 @@ export function AmazonPaymentButton(): JSX.Element {
 
 	trackComponentLoad('amazon-pay-login-loaded');
 	return (
-		<DefaultPaymentButtonContainer
+		<DefaultButtonContainer
 			onClick={payWithAmazonPay}
 			createButtonText={(amount) => `Pay ${amount} with Amazon Pay`}
 		/>

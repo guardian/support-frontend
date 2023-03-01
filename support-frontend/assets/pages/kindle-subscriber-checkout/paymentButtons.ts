@@ -2,6 +2,7 @@ import { AmazonPaymentButton } from 'components/amazonPayForm/amazonPaymentButto
 import { ExistingCardPaymentButton } from 'components/existingMethodPaymentButton/existingCardPaymentButton';
 import { ExistingDirectDebitPaymentButton } from 'components/existingMethodPaymentButton/existingDirectDebitPaymentButton';
 import { DirectDebitPaymentButton } from 'components/paymentButton/directDebitPaymentButton';
+import type { PaymentButtonComponentProps } from 'components/paymentButton/paymentButtonController';
 import { PayPalPaymentButton } from 'components/payPalPaymentButton/payPalPaymentButton';
 import { SepaPaymentButton } from 'components/sepaForm/sepaPaymentButton';
 import { StripePaymentButton } from 'components/stripeCardForm/stripePaymentButton';
@@ -12,7 +13,9 @@ import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-type PaymentMethodButtons = Partial<Record<PaymentMethod, React.FC>>;
+type PaymentMethodButtons = Partial<
+	Record<PaymentMethod, React.FC<PaymentButtonComponentProps>>
+>;
 
 const allPaymentMethodButtons: PaymentMethodButtons = {
 	AmazonPay: AmazonPaymentButton,

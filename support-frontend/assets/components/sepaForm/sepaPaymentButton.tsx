@@ -1,4 +1,4 @@
-import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
+import type { PaymentButtonComponentProps } from 'components/paymentButton/paymentButtonController';
 import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import {
 	useContributionsDispatch,
@@ -6,7 +6,9 @@ import {
 } from 'helpers/redux/storeHooks';
 import { onThirdPartyPaymentAuthorised } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 
-export function SepaPaymentButton(): JSX.Element {
+export function SepaPaymentButton({
+	DefaultButtonContainer,
+}: PaymentButtonComponentProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const { accountHolderName, iban, country, streetName } =
 		useContributionsSelector((state) => state.page.checkoutForm.payment.sepa);
@@ -23,5 +25,5 @@ export function SepaPaymentButton(): JSX.Element {
 		);
 	});
 
-	return <DefaultPaymentButtonContainer onClick={payWithSepa} />;
+	return <DefaultButtonContainer onClick={payWithSepa} />;
 }

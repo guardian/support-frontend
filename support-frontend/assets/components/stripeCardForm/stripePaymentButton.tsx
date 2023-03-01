@@ -5,7 +5,7 @@ import {
 } from '@stripe/react-stripe-js';
 import type { StripeError } from '@stripe/stripe-js';
 import { useEffect, useState } from 'preact/hooks';
-import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
+import type { PaymentButtonComponentProps } from 'components/paymentButton/paymentButtonController';
 import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { Stripe } from 'helpers/forms/paymentMethods';
 import {
@@ -20,7 +20,9 @@ import {
 	paymentWaiting,
 } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 
-export function StripePaymentButton(): JSX.Element {
+export function StripePaymentButton({
+	DefaultButtonContainer,
+}: PaymentButtonComponentProps): JSX.Element {
 	const [paymentAwaitingSetupIntent, setPaymentAwaitingSetupIntent] =
 		useState(false);
 
@@ -140,5 +142,5 @@ export function StripePaymentButton(): JSX.Element {
 		}
 	}, [setupIntentClientSecret, paymentAwaitingSetupIntent]);
 
-	return <DefaultPaymentButtonContainer onClick={payWithStripe} />;
+	return <DefaultButtonContainer onClick={payWithStripe} />;
 }
