@@ -93,11 +93,14 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.S
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
 GET  /:country/subscribe                                           controllers.SubscriptionsController.legacyRedirect(country: String)
 
-GET  /kindle                                                      controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
-GET  /kindle                                            controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
+GET  /digital                                                      controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
+GET  /subscribe/digital                                            controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/digital/gift                                       controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = true)
-GET  /$country<(uk|us|au|eu|int|nz|ca)>/kindle          controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = false)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital          controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = false)
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/gift     controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = true)
+
+GET  /kindle                                                      controllers.DigitalSubscriptionController.kindleGeoRedirect()
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/kindle                    controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = false)
 
 # redirect from old checkout urls
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout       controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")

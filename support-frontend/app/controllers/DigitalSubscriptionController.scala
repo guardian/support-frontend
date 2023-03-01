@@ -45,6 +45,8 @@ class DigitalSubscriptionController(
     if (orderIsAGift) "subscribe/digital/gift" else "subscribe/digital",
   )
 
+  def kindleGeoRedirect(): Action[AnyContent] = geoRedirect("kindle")
+
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = {
     MaybeAuthenticatedAction { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
