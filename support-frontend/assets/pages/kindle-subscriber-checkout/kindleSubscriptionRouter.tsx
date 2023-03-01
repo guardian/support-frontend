@@ -42,6 +42,18 @@ if (typeof Object.values !== 'function') {
 	});
 }
 
+window.guardian.settings = {
+	...window.guardian.settings,
+	// @ts-expect-error - The types for the switches object are all kinds of janky and we just need to override the Sepa switch
+	switches: {
+		...window.guardian.settings.switches,
+		recurringPaymentMethods: {
+			...window.guardian.settings.switches.recurringPaymentMethods,
+			sepa: 'Off',
+		},
+	},
+};
+
 setUpRedux(store);
 
 const reactElementId = `digital-subscription-checkout-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
