@@ -42,6 +42,7 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
+import { getPaymentMethodButtons } from 'pages/supporter-plus-landing/paymentButtons';
 import { BillingPeriodSelector } from './components/billingPeriodSelector';
 import { DirectDebitContainer } from './components/directDebitWrapper';
 import { ExistingRecurringContributorMessage } from './components/existingRecurringContributorMessage';
@@ -50,7 +51,6 @@ import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
 import { PaymentFailureMessage } from './components/paymentFailure';
 import { PaymentTsAndCs } from './components/paymentTsAndCs';
-import { getPaymentMethodButtons } from './paymentButtons';
 
 const checkoutContainer = css`
 	position: relative;
