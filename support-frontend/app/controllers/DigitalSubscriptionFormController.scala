@@ -53,8 +53,8 @@ class DigitalSubscriptionFormController(
       "Support the Guardian | The Guardian Digital Subscription"
     }
     val id = EmptyDiv("digital-subscription-checkout-page")
-    val js = "kindleSubscriptionLandingPage.js"
-    val css = "kindleSubscriptionLandingPage.css"
+    val js = "digitalSubscriptionCheckoutPage.js"
+    val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
 
     val uatMode = testUsers.isTestUser(request)

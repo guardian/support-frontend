@@ -44,7 +44,7 @@ if (typeof Object.values !== 'function') {
 
 setUpRedux(store);
 
-const reactElementId = `digital-subscription-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
+const reactElementId = `digital-subscription-checkout-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 const thankYouRoute = `${countryGroups[countryGroupId].supportInternationalisationId}/subscribe/digital/thankyou`;
 const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
