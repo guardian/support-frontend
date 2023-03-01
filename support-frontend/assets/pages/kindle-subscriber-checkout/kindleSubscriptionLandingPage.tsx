@@ -120,7 +120,7 @@ export function SupporterPlusLandingPage({
 			International,
 		],
 		selectedCountryGroup: countryGroupId,
-		subPath: '/subscribe/digital',
+		subPath: '/kindle',
 	};
 	const heading = <LandingPageHeading />;
 

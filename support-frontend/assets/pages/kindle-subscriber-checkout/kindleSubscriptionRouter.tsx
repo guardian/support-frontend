@@ -62,14 +62,11 @@ const router = () => {
 			<Provider store={store}>
 				<Routes>
 					{countryIds.map((countryId) => (
-						<Route
-							path={`/${countryId}/subscribe/digital`}
-							element={landingPage}
-						/>
+						<Route path={`/${countryId}/kindle`} element={landingPage} />
 					))}
 					{countryIds.map((countryId) => (
 						<Route
-							path={`/${countryId}/subscribe/digital/thankyou`}
+							path={`/${countryId}/kindle/thankyou`}
 							element={<SupporterPlusThankYou />}
 						/>
 					))}
