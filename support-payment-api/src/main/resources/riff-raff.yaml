@@ -7,7 +7,7 @@ deployments:
     parameters:
       amiParameter: AMIPaymentapi
       amiTags:
-        Recipe: bionic-membership-ARM
+        Recipe: bionic-membership-ARM-unified-cloudwatch
         AmigoStage: PROD
       amiEncrypted: true
       templateStagePaths:

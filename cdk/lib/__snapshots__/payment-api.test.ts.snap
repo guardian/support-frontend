@@ -274,6 +274,9 @@ exports[`The Payment API stack matches the snapshot 1`] = `
           "Ref": "AMIPaymentapi",
         },
         "InstanceType": "t4g.small",
+        "MetadataOptions": {
+          "HttpTokens": "required",
+        },
         "SecurityGroups": [
           {
             "Fn::GetAtt": [
