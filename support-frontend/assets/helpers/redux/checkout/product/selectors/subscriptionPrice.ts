@@ -1,8 +1,10 @@
 import {
-	displayPrice,
 	finalPrice,
+	getProductPrice,
 	showPrice,
 } from 'helpers/productPrice/productPrices';
+import type { Promotion } from 'helpers/productPrice/promotions';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 
 export function getSubscriptionPrices(
@@ -21,6 +23,7 @@ export function getSubscriptionPrices(
 				fulfilmentOption,
 				productOption,
 			),
+			false,
 		),
 		annualPrice: showPrice(
 			finalPrice(
@@ -30,6 +33,7 @@ export function getSubscriptionPrices(
 				fulfilmentOption,
 				productOption,
 			),
+			false,
 		),
 	};
 }
@@ -42,14 +46,45 @@ export function getSubscriptionPricesBeforeDiscount(
 		state.page.checkoutForm.product;
 
 	return {
-		monthlyPrice: displayPrice(
+		monthlyPrice: showPrice(
+			getProductPrice(
+				productPrices,
+				countryId,
+				'Monthly',
+				fulfilmentOption,
+				productOption,
+			),
+			false,
+		),
+		annualPrice: showPrice(
+			getProductPrice(
+				productPrices,
+				countryId,
+				'Annual',
+				fulfilmentOption,
+				productOption,
+			),
+			false,
+		),
+	};
+}
+
+export function getSubscriptionPromotions(
+	state: ContributionsState,
+): Partial<Record<'monthlyPrice' | 'annualPrice', Promotion>> {
+	const { countryId } = state.common.internationalisation;
+	const { productPrices, fulfilmentOption, productOption } =
+		state.page.checkoutForm.product;
+
+	return {
+		monthlyPrice: getPromotion(
 			productPrices,
 			countryId,
 			'Monthly',
 			fulfilmentOption,
 			productOption,
 		),
-		annualPrice: displayPrice(
+		annualPrice: getPromotion(
 			productPrices,
 			countryId,
 			'Annual',
@@ -74,5 +109,6 @@ export function getSubscriptionPriceForBillingPeriod(
 			fulfilmentOption,
 			productOption,
 		),
+		false,
 	);
 }
