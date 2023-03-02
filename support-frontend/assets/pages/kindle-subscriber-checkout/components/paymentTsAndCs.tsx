@@ -1,20 +1,14 @@
 import { css } from '@emotion/react';
 import { neutral, textSans } from '@guardian/source-foundations';
-import type { ContributionType } from 'helpers/contributions';
-import { formatAmount } from 'helpers/forms/checkouts';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import {
-	currencies,
-	detect,
-	glyph,
-	spokenCurrencies,
-} from 'helpers/internationalisation/currency';
-import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
+import { privacyLink } from 'helpers/legal';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
+import {
+	getSubscriptionPriceForBillingPeriod,
+	getSubscriptionPricesBeforeDiscount,
+} from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
-import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
 
 const marginTop = css`
 	margin-top: 4px;
@@ -29,14 +23,6 @@ const container = css`
 	}
 `;
 
-interface PaymentTsAndCsProps {
-	contributionType: ContributionType;
-	countryGroupId: CountryGroupId;
-	currency: IsoCurrency;
-	amount: number;
-	amountIsAboveThreshold: boolean;
-}
-
 const manageMyAccount = (
 	<a
 		href={manageSubsUrl}
@@ -50,32 +36,22 @@ const manageMyAccount = (
 	</a>
 );
 
-const termsSupporterPlus = (linkText: string) => (
-	<a href="https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions">
+const terms = (linkText: string) => (
+	<a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
 		{linkText}
 	</a>
 );
 
-function TsAndCsFooterLinks({
-	countryGroupId,
-	amountIsAboveThreshold,
-}: {
-	countryGroupId: CountryGroupId;
-	amountIsAboveThreshold: boolean;
-}) {
+function TsAndCsFooterLinks() {
 	const privacy = <a href={privacyLink}>Privacy Policy</a>;
-
-	const termsContributions = (
-		<a href={contributionsTermsLinks[countryGroupId]}>Terms and Conditions</a>
-	);
-
-	const terms = amountIsAboveThreshold
-		? termsSupporterPlus('Terms and Conditions')
-		: termsContributions;
 
 	return (
 		<div css={marginTop}>
-			By proceeding, you are agreeing to our {terms}.{' '}
+			By proceeding, you are agreeing to our{' '}
+			<a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
+				Terms and Conditions
+			</a>
+			.{' '}
 			<p css={marginTop}>
 				To find out what personal data we collect and how we use it, please
 				visit our {privacy}.
@@ -84,105 +60,35 @@ function TsAndCsFooterLinks({
 	);
 }
 
-export function PaymentTsAndCs({
-	contributionType,
-	countryGroupId,
-	currency,
-	amount,
-	amountIsAboveThreshold,
-}: PaymentTsAndCsProps): JSX.Element {
-	const amountCopy = isNaN(amount)
-		? null
-		: ` of ${formatAmount(
-				currencies[currency],
-				spokenCurrencies[currency],
-				amount,
-				false,
-		  )}`;
+export function PaymentTsAndCs(): JSX.Element {
+	const priceString = useContributionsSelector(
+		getSubscriptionPriceForBillingPeriod,
+	);
 
-	const currencyGlyph = glyph(detect(countryGroupId));
+	const basePrices = useContributionsSelector(
+		getSubscriptionPricesBeforeDiscount,
+	);
 
-	const frequencySingular = (contributionType: ContributionType) =>
-		contributionType === 'MONTHLY' ? 'month' : 'year';
+	const { billingPeriod } = useContributionsSelector(
+		(state) => state.page.checkoutForm.product,
+	);
 
-	const frequencyPlural = (contributionType: ContributionType) =>
-		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
-
-	const copyBelowThreshold = (contributionType: ContributionType) => {
-		return (
-			<>
-				<div>
-					We will attempt to take payment{amountCopy}, on the{' '}
-					{getDateWithOrdinal(new Date())} day of every{' '}
-					{frequencySingular(contributionType)}, from now until you cancel your
-					payment. Payments may take up to 6 days to be recorded in your bank
-					account. You can change how much you give or cancel your payment at
-					any time.
-				</div>
-				<TsAndCsFooterLinks
-					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
-				/>
-			</>
-		);
-	};
-
-	const copyAboveThreshold = (contributionType: ContributionType) => {
-		const supporterPlusThresholds =
-			benefitsThresholdsByCountryGroup[countryGroupId];
-
-		return (
-			<>
-				<div>
-					This subscription auto-renews each{' '}
-					{frequencySingular(contributionType)}. You will be charged the
-					applicable {frequencyPlural(contributionType)} amount at each renewal
-					unless you cancel. You can cancel or change how much you pay for these
-					benefits at any time before your next renewal date, but{' '}
-					{currencyGlyph}
-					{supporterPlusThresholds['MONTHLY']} per month or {currencyGlyph}
-					{supporterPlusThresholds['ANNUAL']} per year is the minimum payment to
-					receive this subscription. If you cancel within 14 days of taking out
-					this subscription, you’ll receive a full refund and your benefits will
-					stop immediately. Changes to your payment amount or cancellation made
-					after 14 days will take effect at the end of your current subscription{' '}
-					{frequencySingular(contributionType)}. To cancel, go to{' '}
-					{manageMyAccount} or see our {termsSupporterPlus('Terms')}.
-				</div>
-				<TsAndCsFooterLinks
-					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
-				/>
-			</>
-		);
-	};
-
-	if (contributionType === 'ONE_OFF') {
-		return (
-			<div css={container}>
-				<TsAndCsFooterLinks
-					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
-				/>
-			</div>
-		);
-	}
-
-	if (contributionType === 'MONTHLY') {
-		return (
-			<div css={container}>
-				{amountIsAboveThreshold
-					? copyAboveThreshold(contributionType)
-					: copyBelowThreshold(contributionType)}
-			</div>
-		);
-	}
+	const frequency = (billingPeriod: BillingPeriod) =>
+		billingPeriod === 'Monthly' ? 'month' : 'year';
 
 	return (
 		<div css={container}>
-			{amountIsAboveThreshold
-				? copyAboveThreshold(contributionType)
-				: copyBelowThreshold(contributionType)}
+			Introductory and free trial offers for new subscribers only. Offers can
+			only be applied once. Payment taken after the first 14 day free trial at{' '}
+			{priceString} per {frequency(billingPeriod)} for the first year.
+			Thereafter, your subscription will auto-renew, and you will be charged,
+			each {frequency(billingPeriod)} at the full price of{' '}
+			{basePrices.monthlyPrice} per month or {basePrices.annualPrice} per year
+			unless you cancel. You can cancel at any time before your next renewal
+			date. Cancellation will take effect at the end of your current
+			subscription {frequency(billingPeriod)} . To cancel, go to{' '}
+			{manageMyAccount} or see our {terms('Terms')}.
+			<TsAndCsFooterLinks />
 		</div>
 	);
 }

@@ -39,9 +39,7 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { getPaymentMethodButtons } from 'pages/supporter-plus-landing/paymentButtons';
 import { BillingPeriodSelector } from './components/billingPeriodSelector';
 import { DirectDebitContainer } from './components/directDebitWrapper';
@@ -84,24 +82,14 @@ export function SupporterPlusLandingPage({
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
-	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
+	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const { switches } = useContributionsSelector(
 		(state) => state.common.settings,
 	);
-	const { selectedAmounts, otherAmounts } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
-	const contributionType = useContributionsSelector(getContributionType);
-	const amount = useContributionsSelector(getUserSelectedAmount);
 
-	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
-		contributionType,
-		selectedAmounts,
-		otherAmounts,
-		countryGroupId,
-	);
+	const contributionType = useContributionsSelector(getContributionType);
 
 	const { paymentComplete, isWaiting } = useContributionsSelector(
 		(state) => state.page.form,
@@ -209,13 +197,7 @@ export function SupporterPlusLandingPage({
 									<PaymentFailureMessage />
 									<DirectDebitContainer />
 								</ContributionsStripe>
-								<PaymentTsAndCs
-									countryGroupId={countryGroupId}
-									contributionType={contributionType}
-									currency={currencyId}
-									amount={amount}
-									amountIsAboveThreshold={amountIsAboveThreshold}
-								/>
+								<PaymentTsAndCs />
 							</BoxContents>
 						</Box>
 						<Divider size="full" cssOverrides={divider} />
