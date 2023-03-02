@@ -1,4 +1,4 @@
-import { displayPrice } from 'helpers/productPrice/productPrices';
+import { finalPrice, showPrice } from 'helpers/productPrice/productPrices';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 
 export function getSubscriptionPrices(
@@ -9,19 +9,23 @@ export function getSubscriptionPrices(
 		state.page.checkoutForm.product;
 
 	return {
-		monthlyPrice: displayPrice(
-			productPrices,
-			countryId,
-			'Monthly',
-			fulfilmentOption,
-			productOption,
+		monthlyPrice: showPrice(
+			finalPrice(
+				productPrices,
+				countryId,
+				'Monthly',
+				fulfilmentOption,
+				productOption,
+			),
 		),
-		annualPrice: displayPrice(
-			productPrices,
-			countryId,
-			'Annual',
-			fulfilmentOption,
-			productOption,
+		annualPrice: showPrice(
+			finalPrice(
+				productPrices,
+				countryId,
+				'Annual',
+				fulfilmentOption,
+				productOption,
+			),
 		),
 	};
 }
@@ -33,11 +37,13 @@ export function getSubscriptionPriceForBillingPeriod(
 	const { productPrices, fulfilmentOption, productOption, billingPeriod } =
 		state.page.checkoutForm.product;
 
-	return displayPrice(
-		productPrices,
-		countryId,
-		billingPeriod,
-		fulfilmentOption,
-		productOption,
+	return showPrice(
+		finalPrice(
+			productPrices,
+			countryId,
+			billingPeriod,
+			fulfilmentOption,
+			productOption,
+		),
 	);
 }
