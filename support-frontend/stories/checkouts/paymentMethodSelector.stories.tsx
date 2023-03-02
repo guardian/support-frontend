@@ -64,9 +64,11 @@ function Template(args: Partial<PaymentMethodSelectorProps>): JSX.Element {
 						card: '0123',
 					},
 				]}
-				onSelectPaymentMethod={(paymentMethod) =>
-					setPaymentMethod(paymentMethod)
-				}
+				onPaymentMethodEvent={(event, paymentMethod) => {
+					if (event === 'select') {
+						setPaymentMethod(paymentMethod);
+					}
+				}}
 			/>
 		</div>
 	);

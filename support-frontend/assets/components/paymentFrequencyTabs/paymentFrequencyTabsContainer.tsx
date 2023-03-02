@@ -41,6 +41,7 @@ export function PaymentFrequencyTabsContainer({
 			countryId,
 			countryGroupId,
 		);
+
 		trackComponentClick(
 			`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`,
 		);

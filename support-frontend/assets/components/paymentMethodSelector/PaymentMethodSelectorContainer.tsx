@@ -14,6 +14,10 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import {
+	trackComponentClick,
+	trackComponentInsert,
+} from 'helpers/tracking/behaviour';
 import { sendEventContributionPaymentMethod } from 'helpers/tracking/quantumMetric';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
 
@@ -76,14 +80,26 @@ function PaymentMethodSelectorContainer({
 			methodName !== ExistingCard && methodName !== ExistingDirectDebit,
 	);
 
-	function onSelectPaymentMethod(
+	function onPaymentMethodEvent(
+		event: 'select' | 'render',
 		paymentMethod: PaymentMethod,
 		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
-	) {
-		sendEventContributionPaymentMethod(paymentMethod);
-		dispatch(setPaymentMethod(paymentMethod));
-		existingPaymentMethod &&
-			dispatch(selectExistingPaymentMethod(existingPaymentMethod));
+	): void {
+		const paymentMethodDescription = existingPaymentMethod
+			? existingPaymentMethod.paymentType
+			: paymentMethod;
+
+		const trackingId = `payment-method-selector-${paymentMethodDescription}`;
+
+		if (event === 'select') {
+			trackComponentClick(trackingId);
+			sendEventContributionPaymentMethod(paymentMethodDescription);
+			dispatch(setPaymentMethod(paymentMethod));
+			existingPaymentMethod &&
+				dispatch(selectExistingPaymentMethod(existingPaymentMethod));
+		} else {
+			trackComponentInsert(trackingId);
+		}
 	}
 
 	useEffect(() => {
@@ -96,7 +112,7 @@ function PaymentMethodSelectorContainer({
 		paymentMethod: name,
 		validationError: errors?.[0],
 		...getExistingPaymentMethodProps(existingPaymentMethods),
-		onSelectPaymentMethod,
+		onPaymentMethodEvent,
 	});
 }
 

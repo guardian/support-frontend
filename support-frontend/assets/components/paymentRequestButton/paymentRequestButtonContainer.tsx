@@ -48,7 +48,9 @@ export function PaymentRequestButtonContainer({
 		useOtherAmountValidation<StripePaymentRequestButtonElementClickEvent>(
 			function handleButtonClick() {
 				paymentRequest?.show();
-				trackComponentClick('apple-pay-clicked');
+				if (internalPaymentMethodName) {
+					trackComponentClick(`${internalPaymentMethodName}-${buttonType}`);
+				}
 				dispatch(setPaymentMethod(Stripe));
 			},
 			false,

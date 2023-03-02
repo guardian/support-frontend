@@ -1,6 +1,7 @@
 import { loadScript } from '@guardian/libs';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
+import type { ExistingPaymentType } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -290,7 +291,7 @@ function sendEventContributionCartValue(
 }
 
 function sendEventContributionPaymentMethod(
-	paymentMethod: PaymentMethod | null,
+	paymentMethod: PaymentMethod | ExistingPaymentType | null,
 ): void {
 	if (paymentMethod) {
 		void ifQmPermitted(() => {

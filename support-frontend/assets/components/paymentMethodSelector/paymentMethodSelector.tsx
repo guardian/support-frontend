@@ -50,7 +50,8 @@ export interface PaymentMethodSelectorProps {
 	existingPaymentMethodList: RecentlySignedInExistingPaymentMethod[];
 	pendingExistingPaymentMethods?: boolean;
 	showReauthenticateLink?: boolean;
-	onSelectPaymentMethod: (
+	onPaymentMethodEvent: (
+		event: 'select' | 'render',
 		paymentMethod: PaymentMethod,
 		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 	) => void;
@@ -64,7 +65,7 @@ export function PaymentMethodSelector({
 	existingPaymentMethodList,
 	pendingExistingPaymentMethods,
 	showReauthenticateLink,
-	onSelectPaymentMethod,
+	onPaymentMethodEvent,
 }: PaymentMethodSelectorProps): JSX.Element {
 	if (
 		existingPaymentMethodList.length < 1 &&
@@ -138,7 +139,8 @@ export function PaymentMethodSelector({
 													),
 												)}`}
 												onChange={() => {
-													onSelectPaymentMethod(
+													onPaymentMethodEvent(
+														'select',
 														paymentType,
 														preExistingPaymentMethod,
 													);
@@ -146,6 +148,13 @@ export function PaymentMethodSelector({
 												accordionBody={
 													paymentMethodData[paymentType].accordionBody
 												}
+												onRender={() => {
+													onPaymentMethodEvent(
+														'render',
+														paymentType,
+														preExistingPaymentMethod,
+													);
+												}}
 											/>
 										);
 									},
@@ -158,8 +167,9 @@ export function PaymentMethodSelector({
 									label={paymentMethodData[method].label}
 									name="paymentMethod"
 									checked={paymentMethod === method}
-									onChange={() => onSelectPaymentMethod(method)}
+									onChange={() => onPaymentMethodEvent('select', method)}
 									accordionBody={paymentMethodData[method].accordionBody}
+									onRender={() => onPaymentMethodEvent('render', method)}
 								/>
 							))}
 						</>,
