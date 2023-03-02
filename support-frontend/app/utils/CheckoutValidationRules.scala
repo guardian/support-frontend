@@ -9,6 +9,7 @@ import com.gu.support.catalog.{Collection, Domestic, FulfilmentOptions, HomeDeli
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
+import java.nio.charset.Charset
 import services.stepfunctions.CreateSupportWorkersRequest
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import utils.CheckoutValidationRules._
@@ -118,7 +119,8 @@ object SimpleCheckoutFormValidation {
 
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
     noEmptyNameFields(createSupportWorkersRequest.firstName, createSupportWorkersRequest.lastName) and
-      noExcessivelyLongNameFields(createSupportWorkersRequest.firstName, createSupportWorkersRequest.lastName)
+      noExcessivelyLongNameFields(createSupportWorkersRequest.firstName, createSupportWorkersRequest.lastName) and
+      noFieldsHaveUnsupportedCharacters(createSupportWorkersRequest)
 
   private def noEmptyNameFields(firstName: String, lastName: String): Result =
     firstName.nonEmpty.otherwise("first name was empty") and
@@ -128,6 +130,67 @@ object SimpleCheckoutFormValidation {
     (firstName.length <= 40).otherwise("first name was longer than 40 chars") and
       (lastName.length <= 80).otherwise("last name was longer than 80 chars")
 
+  def noFieldsHaveUnsupportedCharacters(request: CreateSupportWorkersRequest): Result =
+    noFourByteUtf8Characters("firstName", request.firstName) and
+      noFourByteUtf8Characters("lastName", request.lastName) and
+      request.billingAddress.lineOne.map(noFourByteUtf8Characters("billingAddress.lineOne", _)).getOrElse(Valid) and
+      request.billingAddress.lineTwo.map(noFourByteUtf8Characters("billingAddress.lineTwo", _)).getOrElse(Valid) and
+      request.billingAddress.city.map(noFourByteUtf8Characters("billingAddress.city", _)).getOrElse(Valid) and
+      request.billingAddress.state.map(noFourByteUtf8Characters("billingAddress.state", _)).getOrElse(Valid) and
+      request.billingAddress.postCode.map(noFourByteUtf8Characters("billingAddress.postCode", _)).getOrElse(Valid) and
+      request.deliveryAddress
+        .flatMap(_.lineOne)
+        .map(noFourByteUtf8Characters("deliveryAddress.lineOne", _))
+        .getOrElse(Valid) and
+      request.deliveryAddress
+        .flatMap(_.lineTwo)
+        .map(noFourByteUtf8Characters("deliveryAddress.lineTwo", _))
+        .getOrElse(Valid) and
+      request.deliveryAddress
+        .flatMap(_.city)
+        .map(noFourByteUtf8Characters("deliveryAddress.city", _))
+        .getOrElse(Valid) and
+      request.deliveryAddress
+        .flatMap(_.state)
+        .map(noFourByteUtf8Characters("deliveryAddress.state", _))
+        .getOrElse(Valid) and
+      request.deliveryAddress
+        .flatMap(_.postCode)
+        .map(noFourByteUtf8Characters("deliveryAddress.postCode", _))
+        .getOrElse(Valid) and
+      request.giftRecipient
+        .map(_.firstName)
+        .map(noFourByteUtf8Characters("giftRecipient.firstName", _))
+        .getOrElse(Valid) and
+      request.giftRecipient
+        .map(_.lastName)
+        .map(noFourByteUtf8Characters("giftRecipient.lastName", _))
+        .getOrElse(Valid) and
+      request.giftRecipient
+        .flatMap(_.email)
+        .map(noFourByteUtf8Characters("giftRecipient.email", _))
+        .getOrElse(Valid) and
+      request.giftRecipient
+        .flatMap(_.message)
+        .map(noFourByteUtf8Characters("giftRecipient.message", _))
+        .getOrElse(Valid) and
+      noFourByteUtf8Characters("email", request.email) and
+      request.telephoneNumber.map(noFourByteUtf8Characters("telephoneNumber", _)).getOrElse(Valid) and
+      request.deliveryInstructions.map(noFourByteUtf8Characters("deliveryInstructions", _)).getOrElse(Valid)
+
+  /** Fail validation for characters that Zuora doesn’t support.
+    *
+    * Zuora’s subscribe endpoint breaks when it receives characters that require more than 3 bytes to represent in UTF-8
+    * (which is the required encoding for JSON). Those characters are those above U+FFFF.
+    */
+  def noFourByteUtf8Characters(name: String, string: String): Result = {
+    "^[\\u0000-\\uFFFF]*$".r
+      .matches(string)
+      .otherwise(
+        s"""${name} contains characters which require more than 3 bytes to represent
+         |in UTF-8. These characters will break Zuora.""".stripMargin,
+      )
+  }
 }
 
 object PaidProductValidation {
