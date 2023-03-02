@@ -165,8 +165,8 @@ export function SupporterPlusLandingPage({
 			>
 				<p css={subheading}>
 					As a reader-funded news organisation, we rely on your generosity.
-					Please give what you can, so millions can benefit from quality
-					reporting on the events shaping our world.
+					Please subscribe today, so millions can benefit from quality reporting
+					on the events shaping our world.
 				</p>
 			</CheckoutHeading>
 			<Container sideBorders backgroundColor={neutral[97]}>

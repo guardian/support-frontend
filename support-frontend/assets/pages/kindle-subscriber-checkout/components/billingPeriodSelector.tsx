@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { from, space, until } from '@guardian/source-foundations';
 import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
-import { CheckoutBenefitsListContainer } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
 import { setBillingPeriod } from 'helpers/redux/checkout/product/actions';
 import { getSubscriptionPrices } from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
@@ -10,6 +9,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { KindleSubscriptionBenefitsListContainer } from './subscriptionBenefitsListContainer';
 
 const cardsContainer = css`
 	position: relative;
@@ -62,7 +62,7 @@ export function BillingPeriodSelector(): JSX.Element {
 					/>
 				</ChoiceCardGroup>
 			</div>
-			<CheckoutBenefitsListContainer
+			<KindleSubscriptionBenefitsListContainer
 				renderBenefitsList={(benefitsListProps) => (
 					<CheckoutBenefitsList {...benefitsListProps} />
 				)}
