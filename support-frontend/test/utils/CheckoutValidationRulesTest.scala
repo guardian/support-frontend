@@ -370,6 +370,24 @@ class SimpleCheckoutFormValidationTest extends AnyFlatSpec with Matchers {
     SimpleCheckoutFormValidation.passes(requestWithLongLastName) shouldBe an[Invalid]
   }
 
+  it should "reject invalid characters in strings" in {
+    SimpleCheckoutFormValidation.noFourByteUtf8Characters("test1", "hello😊") shouldBe an[Invalid];
+    SimpleCheckoutFormValidation.noFourByteUtf8Characters("test2", "𐀀goodbye") shouldBe an[Invalid];
+    SimpleCheckoutFormValidation.noFourByteUtf8Characters("test3", "wa𠀀it") shouldBe an[Invalid];
+  }
+
+  it should "not reject valid characters in strings" in {
+    SimpleCheckoutFormValidation.noFourByteUtf8Characters("test1", "hello✅") shouldBe Valid;
+    SimpleCheckoutFormValidation.noFourByteUtf8Characters("test2", "￿goodbye") shouldBe Valid;
+    SimpleCheckoutFormValidation.noFourByteUtf8Characters("test3", "wa퟿it") shouldBe Valid;
+    SimpleCheckoutFormValidation.noFourByteUtf8Characters("test4", "come  back!") shouldBe Valid;
+  }
+
+  it should "check fields for invalid characters" in {
+    SimpleCheckoutFormValidation.noFieldsHaveUnsupportedCharacters(
+      validDigitalPackRequest.copy(deliveryInstructions = Some("😊")),
+    ) shouldBe an[Invalid]
+  }
 }
 
 class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
