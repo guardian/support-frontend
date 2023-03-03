@@ -48,11 +48,15 @@ const cardsContainer = css`
 `;
 
 const headingContainer = css`
-	margin-bottom: ${space[4]}px;
+	margin-bottom: ${space[2]}px;
 `;
 
 const heading = css`
 	${headline.small({ fontWeight: 'bold' })}
+`;
+
+const subheading = css`
+	${textSans.medium()};
 `;
 
 const choiceCardWrapper = css`
@@ -95,6 +99,7 @@ export function BillingPeriodSelector(): JSX.Element {
 		<BoxContents>
 			<div css={headingContainer}>
 				<h2 css={heading}>Digital subscription</h2>
+				<p css={subheading}>Subscribe below to unlock the following benefits</p>
 			</div>
 			<div css={cardsContainer}>
 				<ChoiceCardGroup name="billingPeriod">

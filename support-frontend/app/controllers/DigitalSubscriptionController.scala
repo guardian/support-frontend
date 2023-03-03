@@ -10,7 +10,7 @@ import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
 import com.gu.i18n.Currency.{AUD}
 import com.gu.support.promotions._
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
-import config.{StringsConfig, RecaptchaConfigProvider}
+import config.RecaptchaConfigProvider
 import services._
 import play.api.mvc._
 import play.twirl.api.Html

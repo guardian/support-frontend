@@ -398,6 +398,7 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
     DigitalPackValidation.passes(requestMissingState, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
+  // Tests removed to facilitate purchase of digi subs via the S+ checkout for migrating Kindle customers
   // it should "also fail if the country is Australia and there is no postcode" in {
   //   val requestMissingPostcode = validDigitalPackRequest.copy(
   //     billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, postCode = None),

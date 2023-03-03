@@ -12,7 +12,7 @@ import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { gaEvent } from 'helpers/tracking/googleTagManager';
 import { SupporterPlusLandingPage } from 'pages/kindle-subscriber-checkout/kindleSubscriptionLandingPage';
-import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
+import { KindleSubscriptionThankYou } from 'pages/kindle-subscriber-thank-you/kindleSubscriptionThankYou';
 import { setUpRedux } from './setup/setUpRedux';
 
 if (!isDetailsSupported) {
@@ -42,6 +42,7 @@ if (typeof Object.values !== 'function') {
 	});
 }
 
+// Brute force override of the Sepa switch, as we can't accept Sepa for digi sub payments
 window.guardian.settings = {
 	...window.guardian.settings,
 	// @ts-expect-error - The types for the switches object are all kinds of janky and we just need to override the Sepa switch
@@ -79,7 +80,7 @@ const router = () => {
 					{countryIds.map((countryId) => (
 						<Route
 							path={`/${countryId}/kindle/thankyou`}
-							element={<SupporterPlusThankYou />}
+							element={<KindleSubscriptionThankYou />}
 						/>
 					))}
 				</Routes>
