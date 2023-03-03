@@ -18,10 +18,10 @@ export function AppDownloadBodyCopy(): JSX.Element {
 	);
 }
 
-export const appDownloadDigiSubHeader =
+export const appDownloadKindleHeader =
 	'Download The Guardian and Guardian Editions app';
 
-export function AppDownloadDigiSubBodyCopy(): JSX.Element {
+export function AppDownloadKindleBodyCopy(): JSX.Element {
 	return (
 		<span css={downloadCopy}>
 			Unlock full access to both of our quality news apps today

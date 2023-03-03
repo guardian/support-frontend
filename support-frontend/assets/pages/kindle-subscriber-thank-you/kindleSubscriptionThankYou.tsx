@@ -56,7 +56,7 @@ export function KindleSubscriptionThankYou(): JSX.Element {
 
 	useEffect(() => {
 		if (amount) {
-			// TO-DO - add DigiSub tracking for DigiSub
+			// TO-DO - add tracking for Kindle
 			//
 			// sendEventContributionCheckoutConversion(
 			// 	amount,
@@ -93,9 +93,9 @@ export function KindleSubscriptionThankYou(): JSX.Element {
 			!isNewAccount && !isSignedIn && email.length > 0,
 			'signIn',
 		),
-		'appDownloadDigiSub',
+		'appDownloadKindle',
 		// Disable Feedback module
-		// 'feedback',
+		// 'feedbackKindle', // we will need to create this
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];

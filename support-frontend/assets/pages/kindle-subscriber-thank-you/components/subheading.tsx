@@ -2,7 +2,7 @@
 // 	amountIsAboveSupporterPlusThreshold: boolean;
 // 	isSignedIn: boolean;
 // 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
-// billingPeriod: BillingPeriod // Monthly or Annual for digiSub
+//  billingPeriod: BillingPeriod // Monthly or Annual for kindle subscribers
 // }
 
 function MarketingCopy(): JSX.Element {

@@ -13,9 +13,9 @@ import {
 import AppDownloadBadges from './appDownload/AppDownloadBadges';
 import {
 	AppDownloadBodyCopy,
-	AppDownloadDigiSubBodyCopy,
-	appDownloadDigiSubHeader,
 	appDownloadHeader,
+	AppDownloadKindleBodyCopy,
+	appDownloadKindleHeader,
 } from './appDownload/appDownloadItems';
 import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
 import {
@@ -66,10 +66,10 @@ export const getThankYouModuleData = (
 			bodyCopy: <AppDownloadBodyCopy />,
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
 		},
-		appDownloadDigiSub: {
+		appDownloadKindle: {
 			icon: getThankYouModuleIcon('appDownload'),
-			header: appDownloadDigiSubHeader,
-			bodyCopy: <AppDownloadDigiSubBodyCopy />,
+			header: appDownloadKindleHeader,
+			bodyCopy: <AppDownloadKindleBodyCopy />,
 			ctas: null,
 		},
 		ausMap: {
