@@ -13,12 +13,8 @@ import { getAmount } from 'helpers/contributions';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import {
-	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
-	trackUserData,
-} from 'helpers/thankYouPages/utils/ophan';
+import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import {
 	buttonContainer,
@@ -26,7 +22,6 @@ import {
 	columnContainer,
 	firstColumnContainer,
 	headerContainer,
-	isLargeDonation,
 } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import ThankYouHeader from './components/thankYouHeader';
 
@@ -55,26 +50,26 @@ export function KindleSubscriptionThankYou(): JSX.Element {
 	const contributionType = useContributionsSelector(getContributionType);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
-	const isAmountLargeDonation = amount
-		? isLargeDonation(amount, contributionType, paymentMethod)
-		: false;
+	// const isAmountLargeDonation = amount
+	// 	? isLargeDonation(amount, contributionType, paymentMethod)
+	// 	: false;
 
 	useEffect(() => {
-		// TO-DO
 		if (amount) {
-			sendEventContributionCheckoutConversion(
-				amount,
-				contributionType,
-				currencyId,
-			);
-
-			trackUserData(
-				paymentMethod,
-				contributionType,
-				isSignedIn,
-				!isNewAccount,
-				isAmountLargeDonation,
-			);
+			// TO-DO - add DigiSub tracking for DigiSub
+			//
+			// sendEventContributionCheckoutConversion(
+			// 	amount,
+			// 	contributionType,
+			// 	currencyId,
+			// );
+			// trackUserData(
+			// 	paymentMethod,
+			// 	contributionType,
+			// 	isSignedIn,
+			// 	!isNewAccount,
+			// 	isAmountLargeDonation,
+			// );
 		}
 	}, []);
 
