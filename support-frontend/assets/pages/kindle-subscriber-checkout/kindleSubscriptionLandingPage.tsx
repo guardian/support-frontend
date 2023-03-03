@@ -23,10 +23,8 @@ import { KindleSubscriberPaymentButtonContainer } from 'components/paymentButton
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
 import { PaymentMethodSelector } from 'components/paymentMethodSelector/paymentMethodSelector';
 import PaymentMethodSelectorContainer from 'components/paymentMethodSelector/PaymentMethodSelectorContainer';
-import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
 import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
-import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import {
@@ -40,14 +38,14 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { DirectDebitContainer } from 'pages/supporter-plus-landing/components/directDebitWrapper';
+import { ExistingRecurringContributorMessage } from 'pages/supporter-plus-landing/components/existingRecurringContributorMessage';
+import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
+import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
+import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
+import { PaymentFailureMessage } from 'pages/supporter-plus-landing/components/paymentFailure';
 import { getPaymentMethodButtons } from 'pages/supporter-plus-landing/paymentButtons';
 import { BillingPeriodSelector } from './components/billingPeriodSelector';
-import { DirectDebitContainer } from './components/directDebitWrapper';
-import { ExistingRecurringContributorMessage } from './components/existingRecurringContributorMessage';
-import { GuardianTsAndCs } from './components/guardianTsAndCs';
-import { LandingPageHeading } from './components/landingPageHeading';
-import { PatronsMessage } from './components/patronsMessage';
-import { PaymentFailureMessage } from './components/paymentFailure';
 import { PaymentTsAndCs } from './components/paymentTsAndCs';
 
 const checkoutContainer = css`
@@ -167,12 +165,9 @@ export function SupporterPlusLandingPage({
 						</Box>
 						<Box>
 							<BoxContents>
-								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
+								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). */}
 								<ContributionsStripe>
 									<SecureTransactionIndicator position="center" />
-									<PaymentRequestButtonContainer
-										CustomButton={SavedCardButton}
-									/>
 									<PersonalDetailsContainer
 										renderPersonalDetails={(personalDetailsProps) => (
 											<PersonalDetails {...personalDetailsProps} />

@@ -42,6 +42,7 @@ if (typeof Object.values !== 'function') {
 	});
 }
 
+// Brute force override of the Sepa switch, as we can't accept Sepa for digi sub payments
 window.guardian.settings = {
 	...window.guardian.settings,
 	// @ts-expect-error - The types for the switches object are all kinds of janky and we just need to override the Sepa switch
