@@ -7,7 +7,12 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
+import {
+	ChoiceCard,
+	ChoiceCardGroup,
+	Hide,
+} from '@guardian/source-react-components';
+import { Divider } from '@guardian/source-react-components-development-kitchen';
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
 import { setBillingPeriod } from 'helpers/redux/checkout/product/actions';
@@ -52,12 +57,11 @@ const heading = css`
 
 const choiceCardWrapper = css`
 	width: 100%;
+`;
 
-	${until.tablet} {
-		&:first-of-type {
-			margin-bottom: 14px;
-		}
-	}
+const divider = css`
+	margin: 14px 0;
+	width: 100%;
 `;
 
 const offerText = css`
@@ -68,6 +72,7 @@ const offerText = css`
 const offerDetails = css`
 	${textSans.xxsmall()};
 	color: #606060;
+	width: 90%;
 `;
 
 export function BillingPeriodSelector(): JSX.Element {
@@ -107,10 +112,13 @@ export function BillingPeriodSelector(): JSX.Element {
 						/>
 						<p css={offerDetails}>
 							{monthlyPrice} per month for the first{' '}
-							{promotions.monthlyPrice?.discount?.durationMonths} months.
-							<br /> Then {basePrices.monthlyPrice} per month.
+							{promotions.monthlyPrice?.discount?.durationMonths} months. Then{' '}
+							{basePrices.monthlyPrice} per month.
 						</p>
 					</div>
+					<Hide from="tablet">
+						<Divider size="full" spaceAbove="tight" cssOverrides={divider} />
+					</Hide>
 					<div css={choiceCardWrapper}>
 						<p css={offerText}>
 							{promotions.annualPrice?.discount?.amount}% off for{' '}
