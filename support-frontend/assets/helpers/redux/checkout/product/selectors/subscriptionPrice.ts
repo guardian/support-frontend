@@ -98,8 +98,16 @@ export function getSubscriptionPromotionForBillingPeriod(
 	state: ContributionsState,
 ): Promotion | undefined {
 	const { countryId } = state.common.internationalisation;
-	const { productPrices, fulfilmentOption, productOption, billingPeriod } =
-		state.page.checkoutForm.product;
+	const {
+		productPrices,
+		fulfilmentOption,
+		productOption,
+		billingPeriod,
+		productType,
+	} = state.page.checkoutForm.product;
+	if (productType !== 'DigitalPack') {
+		return;
+	}
 	return getAppliedPromo(
 		getProductPrice(
 			productPrices,
