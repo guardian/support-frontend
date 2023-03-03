@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -6,17 +5,12 @@ import {
 	currencies,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
+import { amountText } from 'pages/supporter-plus-thank-you/components/thankYouHeader/heading';
 
 const MAX_DISPLAY_NAME_LENGTH = 10;
 
-export const amountText = css`
-	background-color: #ffe500;
-	padding: 0 5px;
-`;
-
 interface HeadingProps {
 	name: string | null;
-	isOneOffPayPal: boolean;
 	amount: number | undefined;
 	currency: IsoCurrency;
 	contributionType: ContributionType;
@@ -24,7 +18,6 @@ interface HeadingProps {
 
 function Heading({
 	name,
-	isOneOffPayPal,
 	amount,
 	currency,
 	contributionType,
@@ -32,11 +25,11 @@ function Heading({
 	const maybeNameAndTrailingSpace: string =
 		name && name.length < MAX_DISPLAY_NAME_LENGTH ? `${name} ` : '';
 
-	// Do not show special header to paypal/one-off as we don't have the relevant info after the redirect
-	if (isOneOffPayPal || !amount) {
+	if (!amount || contributionType === 'ONE_OFF') {
 		return (
 			<div>
-				Thank you {maybeNameAndTrailingSpace}for your valuable contribution
+				Thank you {maybeNameAndTrailingSpace}for supporting us with a Digital
+				Subscription ❤️
 			</div>
 		);
 	}
@@ -53,16 +46,11 @@ function Heading({
 	);
 
 	switch (contributionType) {
-		case 'ONE_OFF':
-			return (
-				<div>Thank you for supporting us today with {currencyAndAmount} ❤️</div>
-			);
-
 		case 'MONTHLY':
 			return (
 				<div>
 					Thank you {maybeNameAndTrailingSpace}for supporting us with{' '}
-					{currencyAndAmount} each month ❤️
+					{currencyAndAmount} each month for your first year ❤️
 				</div>
 			);
 
@@ -77,7 +65,8 @@ function Heading({
 		default:
 			return (
 				<div>
-					Thank you {maybeNameAndTrailingSpace}for your valuable contribution
+					Thank you {maybeNameAndTrailingSpace}for supporting us with a Digital
+					Subscription ❤️
 				</div>
 			);
 	}

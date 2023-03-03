@@ -7,7 +7,7 @@ import DirectDebitMessage from './directDebitMessage';
 import Heading from './heading';
 import Subheading from './subheading';
 
-const header = css`
+export const header = css`
 	background: white;
 	padding-top: ${space[4]}px;
 	padding-bottom: ${space[5]}px;
@@ -17,7 +17,7 @@ const header = css`
 	}
 `;
 
-const headerTitleText = css`
+export const headerTitleText = css`
 	${titlepiece.small()};
 	font-size: 24px;
 
@@ -26,7 +26,7 @@ const headerTitleText = css`
 	}
 `;
 
-const headerSupportingText = css`
+export const headerSupportingText = css`
 	${body.small()};
 	padding-top: ${space[3]}px;
 

@@ -29,13 +29,13 @@ import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantu
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
-const checkoutContainer = css`
+export const checkoutContainer = css`
 	${from.tablet} {
 		background-color: ${sport[800]};
 	}
 `;
 
-const columnContainer = css`
+export const columnContainer = css`
 	> *:not(:last-child) {
 		${from.tablet} {
 			margin-bottom: ${space[6]}px;
@@ -47,13 +47,13 @@ const columnContainer = css`
 	}
 `;
 
-const firstColumnContainer = css`
+export const firstColumnContainer = css`
 	${between.tablet.and.desktop} {
 		margin-bottom: ${space[6]}px;
 	}
 `;
 
-const headerContainer = css`
+export const headerContainer = css`
 	${from.desktop} {
 		width: 60%;
 	}
@@ -62,11 +62,11 @@ const headerContainer = css`
 	}
 `;
 
-const buttonContainer = css`
+export const buttonContainer = css`
 	padding: ${space[12]}px 0;
 `;
 
-function getAmountFromSessionStorage(): number | undefined {
+export function getAmountFromSessionStorage(): number | undefined {
 	const amount = getSession('contributionAmount');
 
 	if (amount) {
