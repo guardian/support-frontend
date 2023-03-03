@@ -2,7 +2,7 @@
 // 	amountIsAboveSupporterPlusThreshold: boolean;
 // 	isSignedIn: boolean;
 // 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
-// 	contributionType?: ContributionType;
+// billingPeriod: BillingPeriod // Monthly or Annual for digiSub
 // }
 
 function MarketingCopy(): JSX.Element {

@@ -1,5 +1,5 @@
-import type { ContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import DirectDebitMessage from 'pages/supporter-plus-thank-you/components/thankYouHeader/directDebitMessage';
 import {
 	header,
@@ -13,7 +13,7 @@ type ThankYouHeaderProps = {
 	name: string | null;
 	showDirectDebitMessage: boolean;
 	amount: number | undefined;
-	contributionType: ContributionType;
+	billingPeriod: BillingPeriod;
 	currency: IsoCurrency;
 
 	// Props needed for the Subheading component - currently unused
@@ -27,7 +27,7 @@ function ThankYouHeader({
 	name,
 	showDirectDebitMessage,
 	amount,
-	contributionType,
+	billingPeriod,
 	currency,
 }: ThankYouHeaderProps): JSX.Element {
 	return (
@@ -36,7 +36,7 @@ function ThankYouHeader({
 				<Heading
 					name={name}
 					amount={amount}
-					contributionType={contributionType}
+					billingPeriod={billingPeriod}
 					currency={currency}
 				/>
 			</h1>
