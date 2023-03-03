@@ -43,6 +43,9 @@ const appStoreImg = css`
 	display: block;
 `;
 
+const editionsPlayStoreUrl =
+	'https://play.google.com/store/apps/details?id=com.guardian.editions&hl=en_GB&gl=US';
+
 function AppDownloadBadges({
 	countryGroupId,
 }: {
@@ -409,7 +412,7 @@ export function AppDownloadBadgesKindle({
 
 			{/* Google Play */}
 			<a
-				href={getDailyEditionUrl(countryGroupId)}
+				href={editionsPlayStoreUrl}
 				target="blank"
 				onClick={() =>
 					trackComponentClick(OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE)
