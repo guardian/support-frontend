@@ -12,7 +12,7 @@ import Subheading from './subheading';
 type ThankYouHeaderProps = {
 	name: string | null;
 	showDirectDebitMessage: boolean;
-	amount: number | undefined;
+	amount: string;
 	billingPeriod: BillingPeriod;
 	currency: IsoCurrency;
 
