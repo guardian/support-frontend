@@ -1,5 +1,7 @@
 // ----- Imports ----- //
 
+import { css } from '@emotion/react';
+import { between, space } from '@guardian/source-foundations';
 import { useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
@@ -18,12 +20,12 @@ import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
 import { paperSubsUrl } from 'helpers/urls/routes';
+import { PaperProductInfo } from './components/content/paperProductInfo';
 import { PaperHero, PriceCardsPaperHero } from './components/hero/hero';
 import Prices from './components/paperPrices';
 import Tabs from './components/tabs';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
-import { tabsTabletSpacing } from './paperSubscriptionLandingStyles';
 import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
 
@@ -38,6 +40,16 @@ const paperSubsFooter = (
 );
 
 // ----- Render ----- //
+
+const tabsTabletSpacing = css`
+	${between.tablet.and.leftCol} {
+		padding: 0 ${space[5]}px;
+	}
+`;
+
+const paperHeroContainerOverrides = css`
+	display: flex;
+`;
 
 // ID for Selenium tests
 const pageQaId = 'qa-paper-subscriptions';
@@ -94,6 +106,7 @@ function PaperLandingPageControl({
 					</Block>
 				</CentredContainer>
 			</FullWidthContainer>
+
 			<FullWidthContainer theme="dark" hasOverlap>
 				<CentredContainer>
 					<Prices
@@ -142,7 +155,12 @@ function PaperLandingPageVariant({
 			header={<Header countryGroupId={GBPCountries} />}
 			footer={paperSubsFooter}
 		>
-			<FullWidthContainer theme="dark" hasOverlap>
+			<PriceCardsPaperHero
+				productPrices={productPrices}
+				promotionCopy={sanitisedPromoCopy}
+				participations={participations}
+			/>
+			<FullWidthContainer theme="dark">
 				<CentredContainer>
 					<Prices
 						productPrices={productPrices}
@@ -151,11 +169,11 @@ function PaperLandingPageVariant({
 					/>
 				</CentredContainer>
 			</FullWidthContainer>
-			<PriceCardsPaperHero
-				productPrices={productPrices}
-				promotionCopy={sanitisedPromoCopy}
-				participations={participations}
-			/>
+			<FullWidthContainer cssOverrides={paperHeroContainerOverrides}>
+				<CentredContainer>
+					<PaperProductInfo promotionCopy={sanitisedPromoCopy} />
+				</CentredContainer>
+			</FullWidthContainer>
 			<FullWidthContainer>
 				<CentredContainer>
 					<Block>

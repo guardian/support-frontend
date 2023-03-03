@@ -175,11 +175,6 @@ export function PriceCardsPaperHero({
 	const { roundel } = getDiscountCopy(maxSavingVsRetail);
 	const defaultRoundelText = roundel.length ? roundel.join(' ') : undefined;
 
-	const title = promotionCopy.title ?? defaultTitle;
-	const copy =
-		promotionHTML(promotionCopy.description, {
-			tag: 'p',
-		}) ?? defaultCopy;
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
 	return (
 		<PageTitle title="Newspaper subscription" theme="paper">
@@ -189,41 +184,6 @@ export function PriceCardsPaperHero({
 					bgCol={offerStraplineBlue}
 					copy={roundelText}
 				/>
-				<Hero
-					image={
-						<GridImage
-							gridId="printCampaignHeroHD"
-							srcSizes={[1000, 500, 140]}
-							sizes="(max-width: 740px) 100%,
-            (max-width: 1067px) 150%,
-            500px"
-							imgType="png"
-							altText="Newspapers"
-						/>
-					}
-					hideRoundelBelow="mobileMedium"
-					roundelElement={undefined}
-				>
-					<section css={heroCopy}>
-						<h2 css={heroTitle}>{title}</h2>
-						<p css={heroParagraph}>{copy}</p>
-						<ThemeProvider theme={buttonThemeBrand}>
-							<LinkButton
-								onClick={sendTrackingEventsOnClick({
-									id: 'options_cta_click',
-									product: 'Paper',
-									componentType: 'ACQUISITIONS_BUTTON',
-								})}
-								priority="tertiary"
-								iconSide="right"
-								icon={<SvgArrowDownStraight />}
-								href="#subscribe"
-							>
-								See pricing options
-							</LinkButton>
-						</ThemeProvider>
-					</section>
-				</Hero>
 			</CentredContainer>
 		</PageTitle>
 	);
