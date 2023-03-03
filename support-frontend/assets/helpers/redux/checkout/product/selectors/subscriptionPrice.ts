@@ -4,7 +4,7 @@ import {
 	showPrice,
 } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { getPromotion } from 'helpers/productPrice/promotions';
+import { getAppliedPromo, getPromotion } from 'helpers/productPrice/promotions';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 
 export function getSubscriptionPrices(
@@ -92,6 +92,23 @@ export function getSubscriptionPromotions(
 			productOption,
 		),
 	};
+}
+
+export function getSubscriptionPromotionForBillingPeriod(
+	state: ContributionsState,
+): Promotion | undefined {
+	const { countryId } = state.common.internationalisation;
+	const { productPrices, fulfilmentOption, productOption, billingPeriod } =
+		state.page.checkoutForm.product;
+	return getAppliedPromo(
+		getProductPrice(
+			productPrices,
+			countryId,
+			billingPeriod,
+			fulfilmentOption,
+			productOption,
+		).promotions,
+	);
 }
 
 export function getSubscriptionPriceForBillingPeriod(

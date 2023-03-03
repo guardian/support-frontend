@@ -60,6 +60,7 @@ import {
 import { setPaymentRequestError } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
 import { isSupporterPlusPurchase } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { getSubscriptionPromotionForBillingPeriod } from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import * as cookie from 'helpers/storage/cookie';
 import {
@@ -190,6 +191,17 @@ function getBillingCountryAndState(
 	};
 }
 
+// This exists *only* to support the purchase of digi subs for migrating Kindle subscribers
+function getPromoCode(state: ContributionsState) {
+	const promotion = getSubscriptionPromotionForBillingPeriod(state);
+	if (promotion) {
+		return {
+			promoCode: promotion.promoCode,
+		};
+	}
+	return {};
+}
+
 function getProductFields(
 	state: ContributionsState,
 	amount: number,
@@ -258,6 +270,7 @@ function regularPaymentRequestFromAuthorisation(
 			...regularPaymentFieldsFromAuthorisation(authorisation),
 			recaptchaToken,
 		},
+		...getPromoCode(state),
 		ophanIds: getOphanIds(),
 		referrerAcquisitionData: state.common.referrerAcquisitionData,
 		supportAbTests: getSupportAbTests(state.common.abParticipations),
