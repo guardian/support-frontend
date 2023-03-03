@@ -48,6 +48,7 @@ const header = css`
 	}
 
 	${from.desktop} {
+		width: 100%;
 		:before {
 			height: 370px;
 		}

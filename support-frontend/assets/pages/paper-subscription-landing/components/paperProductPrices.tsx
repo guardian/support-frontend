@@ -21,7 +21,7 @@ import {
 import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import { getTitle } from '../helpers/products';
-import Prices from './content/prices';
+import PaperPrices from './content/paperPrices';
 
 // ---- Helpers ----- //
 const getPriceCopyString = (
@@ -196,7 +196,11 @@ function PaperProductPrices({
 
 	const products = getPlans(tab, productPrices);
 	return (
-		<Prices activeTab={tab} products={products} setTabAction={setTabAction} />
+		<PaperPrices
+			activeTab={tab}
+			products={products}
+			setTabAction={setTabAction}
+		/>
 	);
 }
 

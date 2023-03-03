@@ -22,7 +22,7 @@ import { renderPage } from 'helpers/rendering/render';
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { PaperProductInfo } from './components/content/paperProductInfo';
 import { PaperHero, PriceCardsPaperHero } from './components/hero/hero';
-import Prices from './components/paperPrices';
+import Prices from './components/paperProductPrices';
 import Tabs from './components/tabs';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
@@ -155,11 +155,13 @@ function PaperLandingPageVariant({
 			header={<Header countryGroupId={GBPCountries} />}
 			footer={paperSubsFooter}
 		>
-			<PriceCardsPaperHero
-				productPrices={productPrices}
-				promotionCopy={sanitisedPromoCopy}
-				participations={participations}
-			/>
+			<FullWidthContainer cssOverrides={paperHeroContainerOverrides}>
+				<PriceCardsPaperHero
+					productPrices={productPrices}
+					promotionCopy={sanitisedPromoCopy}
+					participations={participations}
+				/>
+			</FullWidthContainer>
 			<FullWidthContainer theme="dark">
 				<CentredContainer>
 					<Prices
