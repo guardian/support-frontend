@@ -92,23 +92,22 @@ export function KindleSubscriptionThankYou(): JSX.Element {
 		moduleType: ThankYouModuleType,
 	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
 
-	// NB: We do not show marketing consent or support reminder modules for recurring
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'),
 		...maybeThankYouModule(
 			!isNewAccount && !isSignedIn && email.length > 0,
 			'signIn',
 		),
-		// Disable App Download module
-		// ...maybeThankYouModule(amountIsAboveThreshold, 'appDownload'),
+		'appDownloadDigiSub',
 		// Disable Feedback module
 		// 'feedback',
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];
 
-	const firstColumn = thankYouModules.slice(0, 1);
-	const secondColumn = thankYouModules.slice(1);
+	const numberOfModulesInFirstColumn = thankYouModules.length === 3 ? 1 : 2;
+	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
+	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
 	return (
 		<PageScaffold

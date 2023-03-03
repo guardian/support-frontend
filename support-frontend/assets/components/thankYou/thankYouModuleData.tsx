@@ -13,6 +13,8 @@ import {
 import AppDownloadBadges from './appDownload/AppDownloadBadges';
 import {
 	AppDownloadBodyCopy,
+	AppDownloadDigiSubBodyCopy,
+	appDownloadDigiSubHeader,
 	appDownloadHeader,
 } from './appDownload/appDownloadItems';
 import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
@@ -63,6 +65,12 @@ export const getThankYouModuleData = (
 			header: appDownloadHeader,
 			bodyCopy: <AppDownloadBodyCopy />,
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
+		},
+		appDownloadDigiSub: {
+			icon: getThankYouModuleIcon('appDownload'),
+			header: appDownloadDigiSubHeader,
+			bodyCopy: <AppDownloadDigiSubBodyCopy />,
+			ctas: null,
 		},
 		ausMap: {
 			icon: getThankYouModuleIcon('ausMap'),
