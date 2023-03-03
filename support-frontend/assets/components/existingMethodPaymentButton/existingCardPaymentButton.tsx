@@ -1,4 +1,4 @@
-import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
+import type { PaymentButtonComponentProps } from 'components/paymentButton/paymentButtonController';
 import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import {
 	useContributionsDispatch,
@@ -6,7 +6,9 @@ import {
 } from 'helpers/redux/storeHooks';
 import { onThirdPartyPaymentAuthorised } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 
-export function ExistingCardPaymentButton(): JSX.Element {
+export function ExistingCardPaymentButton({
+	DefaultButtonContainer,
+}: PaymentButtonComponentProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 
 	const { selectedPaymentMethod } = useContributionsSelector(
@@ -22,5 +24,5 @@ export function ExistingCardPaymentButton(): JSX.Element {
 		);
 	});
 
-	return <DefaultPaymentButtonContainer onClick={payWithExistingCard} />;
+	return <DefaultButtonContainer onClick={payWithExistingCard} />;
 }

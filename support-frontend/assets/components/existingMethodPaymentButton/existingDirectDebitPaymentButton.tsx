@@ -1,4 +1,4 @@
-import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
+import type { PaymentButtonComponentProps } from 'components/paymentButton/paymentButtonController';
 import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import {
 	useContributionsDispatch,
@@ -6,7 +6,9 @@ import {
 } from 'helpers/redux/storeHooks';
 import { onThirdPartyPaymentAuthorised } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 
-export function ExistingDirectDebitPaymentButton(): JSX.Element {
+export function ExistingDirectDebitPaymentButton({
+	DefaultButtonContainer,
+}: PaymentButtonComponentProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const { selectedPaymentMethod } = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.existingPaymentMethods,
@@ -21,5 +23,5 @@ export function ExistingDirectDebitPaymentButton(): JSX.Element {
 		);
 	});
 
-	return <DefaultPaymentButtonContainer onClick={payWithExistingDD} />;
+	return <DefaultButtonContainer onClick={payWithExistingDD} />;
 }

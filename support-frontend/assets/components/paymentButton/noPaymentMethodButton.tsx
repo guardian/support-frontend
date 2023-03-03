@@ -1,8 +1,10 @@
 import { useFormValidation } from 'helpers/customHooks/useFormValidation';
-import { DefaultPaymentButtonContainer } from './defaultPaymentButtonContainer';
+import type { PaymentButtonComponentProps } from './paymentButtonController';
 
-export function NoPaymentMethodButton(): JSX.Element {
+export function NoPaymentMethodButton({
+	DefaultButtonContainer,
+}: PaymentButtonComponentProps): JSX.Element {
 	const onClick = useFormValidation(() => undefined);
 
-	return <DefaultPaymentButtonContainer onClick={onClick} />;
+	return <DefaultButtonContainer onClick={onClick} />;
 }

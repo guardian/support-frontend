@@ -4,12 +4,14 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.support.catalog.DigitalPack
-import com.gu.support.config.PayPalConfigProvider
+import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
+import com.gu.i18n.Currency.{AUD}
 import com.gu.support.promotions._
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
-import config.StringsConfig
+import config.RecaptchaConfigProvider
+import services._
 import play.api.mvc._
 import play.twirl.api.Html
 import views.EmptyDiv
@@ -20,13 +22,14 @@ import scala.concurrent.ExecutionContext
 
 class DigitalSubscriptionController(
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
-    landingCopyProvider: LandingCopyProvider,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
+    testUsers: TestUserService,
+    stripeConfigProvider: StripeConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
-    stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
+    recaptchaConfigProvider: RecaptchaConfigProvider,
     val supportUrl: String,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
@@ -42,6 +45,8 @@ class DigitalSubscriptionController(
     if (orderIsAGift) "subscribe/digital/gift" else "subscribe/digital",
   )
 
+  def kindleGeoRedirectWithPromoCode(): Action[AnyContent] = geoRedirect("kindle?promoCode=DLESNCWON")
+
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = {
     MaybeAuthenticatedAction { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
@@ -49,38 +54,39 @@ class DigitalSubscriptionController(
       if (!settings.switches.subscriptionsSwitches.enableDigitalSubGifting.isOn && orderIsAGift) {
         Redirect(routes.DigitalSubscriptionController.digitalGeoRedirect(false)).withSettingsSurrogateKey
       } else {
-        val canonicalLink = Some(buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift))
-        val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+        val title = if (orderIsAGift) {
+          "Support the Guardian | The Guardian Digital Gift Subscription"
+        } else {
+          "Support the Guardian | The Guardian Digital Subscription"
+        }
+        val id = EmptyDiv("digital-subscription-checkout-page-" + countryCode)
+        val js = "kindleSubscriptionLandingPage.js"
+        val css = "kindleSubscriptionLandingPage.css"
+        val csrf = CSRF.getToken.value
+
+        val uatMode = testUsers.isTestUser(request)
+        val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
+        val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey
+        val readerType = if (orderIsAGift) Gift else Direct
+
         Ok(
-          views.html.main(
-            title = s"Support the Guardian | The Guardian Digital ${if (orderIsAGift) "Gift " else ""}Subscription",
-            mainElement = EmptyDiv("digital-subscription-landing-page-" + countryCode),
-            mainJsBundle = Left(RefPath("digitalSubscriptionLandingPage.js")),
-            mainStyleBundle = Left(RefPath("digitalSubscriptionLandingPage.css")),
-            description = stringsConfig.digitalPackLandingDescription,
-            canonicalLink = canonicalLink,
-            hrefLangLinks = getPaperHrefLangLinks(orderIsAGift),
-            shareImageUrl = Some(
-              "https://i.guim.co.uk/img/media/74422ad120c709448f433c34f5190e2465ffa65e/0_0_1200_1200/1200.png" +
-                "?width=1200&auto=format&fit=crop&quality=85&s=1407add4d016d15cc074b0f9de8f1433",
-            ),
-            shareUrl = canonicalLink,
-            csrf = Some(CSRF.getToken.value),
-          ) {
-            val maybePromotionCopy = landingCopyProvider.promotionCopy(queryPromos, DigitalPack, countryCode)
-            Html(
-              s"""<script type="text/javascript">
-          window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}
-          window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
-          window.guardian.orderIsAGift = $orderIsAGift
-          window.guardian.payPalEnvironment = {
-            default: "${payPalConfigProvider.get().payPalEnvironment}",
-            uat: "${payPalConfigProvider.get(true).payPalEnvironment}"
-          };
-        </script>""",
-            )
-          },
-        ).withSettingsSurrogateKey
+          views.html.subscriptionCheckout(
+            title,
+            id,
+            js,
+            css,
+            Some(csrf),
+            request.user,
+            uatMode,
+            priceSummaryServiceProvider.forUser(uatMode).getPrices(DigitalPack, promoCodes, readerType),
+            stripeConfigProvider.get(),
+            stripeConfigProvider.get(true),
+            payPalConfigProvider.get(),
+            payPalConfigProvider.get(true),
+            v2recaptchaConfigPublicKey,
+            orderIsAGift,
+          ),
+        )
       }
     }
   }

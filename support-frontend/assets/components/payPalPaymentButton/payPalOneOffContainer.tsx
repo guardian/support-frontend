@@ -1,4 +1,4 @@
-import { DefaultPaymentButtonContainer } from 'components/paymentButton/defaultPaymentButtonContainer';
+import type { PaymentButtonComponentProps } from 'components/paymentButton/paymentButtonController';
 import { useFormValidation } from 'helpers/customHooks/useFormValidation';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import {
@@ -11,7 +11,9 @@ import {
 	paymentWaiting,
 } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 
-export function PayPalButtonOneOffContainer(): JSX.Element {
+export function PayPalButtonOneOffContainer({
+	DefaultButtonContainer,
+}: PaymentButtonComponentProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const { currencyId, countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -35,7 +37,7 @@ export function PayPalButtonOneOffContainer(): JSX.Element {
 	});
 
 	return (
-		<DefaultPaymentButtonContainer
+		<DefaultButtonContainer
 			onClick={payOneOffWithPayPal}
 			createButtonText={(amount) => `Pay ${amount} with PayPal`}
 		/>

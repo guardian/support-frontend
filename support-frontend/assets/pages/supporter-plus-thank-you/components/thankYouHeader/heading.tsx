@@ -9,7 +9,7 @@ import {
 
 const MAX_DISPLAY_NAME_LENGTH = 10;
 
-const amountText = css`
+export const amountText = css`
 	background-color: #ffe500;
 	padding: 0 5px;
 `;

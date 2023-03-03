@@ -146,6 +146,7 @@ const marginTop = css`
 
 export type ThankYouModuleType =
 	| 'appDownload'
+	| 'appDownloadKindle'
 	| 'ausMap'
 	| 'feedback'
 	| 'marketingConsent'

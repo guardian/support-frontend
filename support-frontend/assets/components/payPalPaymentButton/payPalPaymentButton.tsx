@@ -1,4 +1,5 @@
-import { useEffect } from 'preact/hooks';
+import { useEffect } from 'react';
+import type { PaymentButtonComponentProps } from 'components/paymentButton/paymentButtonController';
 import AnimatedDots from 'components/spinners/animatedDots';
 import { usePayPal } from 'helpers/customHooks/usePayPal';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
@@ -11,7 +12,9 @@ import {
 import { PayPalButtonOneOffContainer } from './payPalOneOffContainer';
 import { PayPalButtonRecurringContainer } from './payPalRecurringContainer';
 
-export function PayPalPaymentButton(): JSX.Element {
+export function PayPalPaymentButton({
+	DefaultButtonContainer,
+}: PaymentButtonComponentProps): JSX.Element {
 	const payPalHasLoaded = usePayPal();
 
 	const dispatch = useContributionsDispatch();
@@ -33,5 +36,9 @@ export function PayPalPaymentButton(): JSX.Element {
 			<PayPalButtonRecurringContainer disabled={errorsPreventSubmission} />
 		);
 	}
-	return <PayPalButtonOneOffContainer />;
+	return (
+		<PayPalButtonOneOffContainer
+			DefaultButtonContainer={DefaultButtonContainer}
+		/>
+	);
 }

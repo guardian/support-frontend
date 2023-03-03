@@ -99,6 +99,11 @@ GET  /subscribe/digital/gift                                       controllers.D
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital          controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = false)
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/gift     controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = true)
 
+# route for kindle users to buy digi sub
+GET  /kindle                                                      controllers.DigitalSubscriptionController.kindleGeoRedirectWithPromoCode()
+
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/kindle                    controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = false)
+
 # redirect from old checkout urls
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout       controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital/checkout/gift  controllers.Application.permanentRedirectWithCountry(country, location="/subscribe/digital/checkout/gift")

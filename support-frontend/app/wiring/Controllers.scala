@@ -77,13 +77,14 @@ trait Controllers {
 
   lazy val digitalPackController = new DigitalSubscriptionController(
     priceSummaryServiceProvider,
-    landingCopyProvider,
     assetsResolver,
     actionRefiners,
+    testUsers,
+    appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
     controllerComponents,
-    stringsConfig,
     allSettingsProvider,
+    appConfig.recaptchaConfigProvider,
     appConfig.supportUrl,
   )
 

@@ -398,37 +398,38 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
     DigitalPackValidation.passes(requestMissingState, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
-  it should "also fail if the country is Australia and there is no postcode" in {
-    val requestMissingPostcode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, postCode = None),
-      product = DigitalPack(Currency.AUD, Monthly),
-    )
-    DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe an[Invalid]
-  }
+  // Tests removed to facilitate purchase of digi subs via the S+ checkout for migrating Kindle customers
+  // it should "also fail if the country is Australia and there is no postcode" in {
+  //   val requestMissingPostcode = validDigitalPackRequest.copy(
+  //     billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Australia, postCode = None),
+  //     product = DigitalPack(Currency.AUD, Monthly),
+  //   )
+  //   DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe an[Invalid]
+  // }
 
-  it should "also fail if the country is United Kingdom and there is no postcode" in {
-    val requestMissingPostcode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, postCode = None),
-      product = DigitalPack(Currency.GBP, Monthly),
-    )
-    DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe an[Invalid]
-  }
+  // it should "also fail if the country is United Kingdom and there is no postcode" in {
+  //   val requestMissingPostcode = validDigitalPackRequest.copy(
+  //     billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, postCode = None),
+  //     product = DigitalPack(Currency.GBP, Monthly),
+  //   )
+  //   DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe an[Invalid]
+  // }
 
-  it should "also fail if the country is United States and there is no postcode" in {
-    val requestMissingPostcode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress.copy(postCode = None),
-      product = DigitalPack(Currency.USD, Monthly),
-    )
-    DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe an[Invalid]
-  }
+  // it should "also fail if the country is United States and there is no postcode" in {
+  //   val requestMissingPostcode = validDigitalPackRequest.copy(
+  //     billingAddress = validDigitalPackRequest.billingAddress.copy(postCode = None),
+  //     product = DigitalPack(Currency.USD, Monthly),
+  //   )
+  //   DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe an[Invalid]
+  // }
 
-  it should "also fail if the country is Canada and there is no postcode" in {
-    val requestMissingPostcode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, postCode = None),
-      product = DigitalPack(Currency.CAD, Monthly),
-    )
-    DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe an[Invalid]
-  }
+  // it should "also fail if the country is Canada and there is no postcode" in {
+  //   val requestMissingPostcode = validDigitalPackRequest.copy(
+  //     billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.Canada, postCode = None),
+  //     product = DigitalPack(Currency.CAD, Monthly),
+  //   )
+  //   DigitalPackValidation.passes(requestMissingPostcode, monthlyDirectUSDProduct) shouldBe an[Invalid]
+  // }
 
   it should "also allow a missing postcode in other countries" in {
     val requestMissingPostcode = validDigitalPackRequest.copy(
@@ -459,18 +460,18 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
     DigitalPackValidation.passes(requestMissingState, monthlyDirectUSDProduct) shouldBe an[Invalid]
   }
 
-  it should "fail when missing an address line or a city for billing address" in {
-    val badBillingAddress = Address(
-      lineOne = None,
-      lineTwo = None,
-      city = None,
-      state = None,
-      postCode = None,
-      country = Country.UK,
-    )
-    val requestMissingAddressLineAndCity = validDigitalPackRequest.copy(billingAddress = badBillingAddress)
-    DigitalPackValidation.passes(requestMissingAddressLineAndCity, monthlyDirectUSDProduct) shouldBe an[Invalid]
-  }
+  // it should "fail when missing an address line or a city for billing address" in {
+  //   val badBillingAddress = Address(
+  //     lineOne = None,
+  //     lineTwo = None,
+  //     city = None,
+  //     state = None,
+  //     postCode = None,
+  //     country = Country.UK,
+  //   )
+  //   val requestMissingAddressLineAndCity = validDigitalPackRequest.copy(billingAddress = badBillingAddress)
+  //   DigitalPackValidation.passes(requestMissingAddressLineAndCity, monthlyDirectUSDProduct) shouldBe an[Invalid]
+  // }
 
   it should "succeed when there is a valid corporate sub" in {
     val product = DigitalPack(GBP, Monthly, Corporate)
@@ -482,14 +483,14 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
     DigitalPackValidation.passes(corporateSub, product) shouldBe Valid
   }
 
-  it should "fail if there are more than 20 characters in Billing Address postCode" in {
-    val requestDigiSubPostCode = validDigitalPackRequest.copy(
-      billingAddress = validDigitalPackRequest.billingAddress
-        .copy(country = Country.UK, postCode = Some("Testcase11111111111111111111")),
-      product = DigitalPack(Currency.GBP, Annual),
-    )
-    DigitalPackValidation.passes(requestDigiSubPostCode, monthlyDirectUSDProduct) shouldBe an[Invalid]
-  }
+  // it should "fail if there are more than 20 characters in Billing Address postCode" in {
+  //   val requestDigiSubPostCode = validDigitalPackRequest.copy(
+  //     billingAddress = validDigitalPackRequest.billingAddress
+  //       .copy(country = Country.UK, postCode = Some("Testcase11111111111111111111")),
+  //     product = DigitalPack(Currency.GBP, Annual),
+  //   )
+  //   DigitalPackValidation.passes(requestDigiSubPostCode, monthlyDirectUSDProduct) shouldBe an[Invalid]
+  // }
 
   it should "succeed when there is a valid gift sub purchase" in {
     val product = DigitalPack(USD, Monthly, Gift)
