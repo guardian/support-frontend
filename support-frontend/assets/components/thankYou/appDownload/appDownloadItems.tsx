@@ -18,13 +18,12 @@ export function AppDownloadBodyCopy(): JSX.Element {
 	);
 }
 
-export const appDownloadKindleHeader =
-	'Download The Guardian and Guardian Editions app';
+export const appDownloadKindleHeader = 'Download The Guardian Editions app';
 
 export function AppDownloadKindleBodyCopy(): JSX.Element {
 	return (
 		<span css={downloadCopy}>
-			Unlock full access to both of our quality news apps today
+			Unlock full access to our quality news app today
 		</span>
 	);
 }

@@ -9,9 +9,8 @@ import ThankYouModule from 'components/thankYou/thankYouModule';
 import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
-import { getAmount } from 'helpers/contributions';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { getSubscriptionPrices } from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -44,18 +43,20 @@ export function KindleSubscriptionThankYou(): JSX.Element {
 	const paymentMethod = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.paymentMethod.name,
 	);
-	const { selectedAmounts, otherAmounts, billingPeriod } =
-		useContributionsSelector((state) => state.page.checkoutForm.product);
+	const { billingPeriod } = useContributionsSelector(
+		(state) => state.page.checkoutForm.product,
+	);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
-	const contributionType = useContributionsSelector(getContributionType);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
-	const amount = getAmount(selectedAmounts, otherAmounts, contributionType);
+	const { monthlyPrice, annualPrice } = useContributionsSelector(
+		getSubscriptionPrices,
+	);
 	// const isAmountLargeDonation = amount
 	// 	? isLargeDonation(amount, contributionType, paymentMethod)
 	// 	: false;
 
 	useEffect(() => {
-		if (amount) {
+		if (monthlyPrice || annualPrice) {
 			// TO-DO - add tracking for Kindle
 			//
 			// sendEventContributionCheckoutConversion(
@@ -121,7 +122,7 @@ export function KindleSubscriptionThankYou(): JSX.Element {
 							name={firstName}
 							showDirectDebitMessage={paymentMethod === DirectDebit}
 							billingPeriod={billingPeriod}
-							amount={amount}
+							amount={billingPeriod === 'Monthly' ? monthlyPrice : annualPrice}
 							currency={currencyId}
 						/>
 					</div>

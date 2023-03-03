@@ -10,7 +10,9 @@ import {
 	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
-import AppDownloadBadges from './appDownload/AppDownloadBadges';
+import AppDownloadBadges, {
+	AppDownloadBadgesKindle,
+} from './appDownload/AppDownloadBadges';
 import {
 	AppDownloadBodyCopy,
 	appDownloadHeader,
@@ -70,7 +72,7 @@ export const getThankYouModuleData = (
 			icon: getThankYouModuleIcon('appDownload'),
 			header: appDownloadKindleHeader,
 			bodyCopy: <AppDownloadKindleBodyCopy />,
-			ctas: null,
+			ctas: <AppDownloadBadgesKindle countryGroupId={countryGroupId} />,
 		},
 		ausMap: {
 			icon: getThankYouModuleIcon('ausMap'),
