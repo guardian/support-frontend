@@ -18,6 +18,7 @@ import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
 import PageTitle from 'components/page/pageTitle';
+import type { Participations } from 'helpers/abTests/abtest';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperSavingsVsRetail';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
@@ -26,9 +27,16 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { offerStraplineBlue } from 'stylesheets/emotion/colours';
 import { getDiscountCopy } from './discountCopy';
 
-type PropTypes = {
+type PaperHeroPropTypes = {
 	productPrices: ProductPrices;
 	promotionCopy: PromotionCopy;
+	participations: Participations;
+};
+
+type PriceCardsPaperHeroPropTypes = {
+	productPrices: ProductPrices;
+	promotionCopy: PromotionCopy;
+	participations: Participations;
 };
 
 const heroCopy = css`
@@ -97,10 +105,10 @@ const defaultCopy = (
 	</>
 );
 
-function PaperHero({
+export function PaperHero({
 	productPrices,
 	promotionCopy,
-}: PropTypes): JSX.Element | null {
+}: PaperHeroPropTypes): JSX.Element | null {
 	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
 	const { roundel } = getDiscountCopy(maxSavingVsRetail);
 	const defaultRoundelText = roundel.length ? roundel.join(' ') : undefined;
@@ -159,4 +167,64 @@ function PaperHero({
 	);
 }
 
-export default PaperHero;
+export function PriceCardsPaperHero({
+	productPrices,
+	promotionCopy,
+}: PriceCardsPaperHeroPropTypes): JSX.Element | null {
+	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
+	const { roundel } = getDiscountCopy(maxSavingVsRetail);
+	const defaultRoundelText = roundel.length ? roundel.join(' ') : undefined;
+
+	const title = promotionCopy.title ?? defaultTitle;
+	const copy =
+		promotionHTML(promotionCopy.description, {
+			tag: 'p',
+		}) ?? defaultCopy;
+	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
+	return (
+		<PageTitle title="Newspaper subscription" theme="paper">
+			<CentredContainer>
+				<OfferStrapline
+					fgCol={text.primary}
+					bgCol={offerStraplineBlue}
+					copy={roundelText}
+				/>
+				<Hero
+					image={
+						<GridImage
+							gridId="printCampaignHeroHD"
+							srcSizes={[1000, 500, 140]}
+							sizes="(max-width: 740px) 100%,
+            (max-width: 1067px) 150%,
+            500px"
+							imgType="png"
+							altText="Newspapers"
+						/>
+					}
+					hideRoundelBelow="mobileMedium"
+					roundelElement={undefined}
+				>
+					<section css={heroCopy}>
+						<h2 css={heroTitle}>{title}</h2>
+						<p css={heroParagraph}>{copy}</p>
+						<ThemeProvider theme={buttonThemeBrand}>
+							<LinkButton
+								onClick={sendTrackingEventsOnClick({
+									id: 'options_cta_click',
+									product: 'Paper',
+									componentType: 'ACQUISITIONS_BUTTON',
+								})}
+								priority="tertiary"
+								iconSide="right"
+								icon={<SvgArrowDownStraight />}
+								href="#subscribe"
+							>
+								See pricing options
+							</LinkButton>
+						</ThemeProvider>
+					</section>
+				</Hero>
+			</CentredContainer>
+		</PageTitle>
+	);
+}
