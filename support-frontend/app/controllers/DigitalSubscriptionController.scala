@@ -45,7 +45,7 @@ class DigitalSubscriptionController(
     if (orderIsAGift) "subscribe/digital/gift" else "subscribe/digital",
   )
 
-  def kindleGeoRedirect(): Action[AnyContent] = geoRedirect("kindle")
+  def kindleGeoRedirectWithPromoCode(): Action[AnyContent] = geoRedirect("kindle?promoCode=DLESNCWON")
 
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = {
     MaybeAuthenticatedAction { implicit request =>
