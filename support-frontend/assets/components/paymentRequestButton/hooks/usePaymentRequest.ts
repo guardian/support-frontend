@@ -1,4 +1,8 @@
-import type { PaymentRequest, Stripe as StripeJs } from '@stripe/stripe-js';
+import type {
+	CanMakePaymentResult,
+	PaymentRequest,
+	Stripe as StripeJs,
+} from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import {
 	getAvailablePaymentRequestButtonPaymentMethod,
@@ -8,7 +12,7 @@ import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/read
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import { trackComponentInsert } from 'helpers/tracking/behaviour';
 
 type PaymentRequestButtonType = 'APPLE_PAY' | 'GOOGLE_PAY' | 'PAY_NOW' | 'NONE';
 
@@ -17,6 +21,20 @@ type PaymentRequestData = {
 	paymentRequest: PaymentRequest | null;
 	internalPaymentMethodName: StripePaymentMethod | null;
 };
+
+function buttonTypeFromResult(
+	result: CanMakePaymentResult,
+): PaymentRequestButtonType {
+	if (result.applePay) {
+		return 'APPLE_PAY';
+	}
+
+	if (result.googlePay) {
+		return 'GOOGLE_PAY';
+	}
+
+	return 'PAY_NOW';
+}
 
 // Orchestrates the entire payment request process via Stripe
 export function usePaymentRequest(stripe: StripeJs | null): PaymentRequestData {
@@ -58,19 +76,11 @@ export function usePaymentRequest(stripe: StripeJs | null): PaymentRequestData {
 					contributionType,
 				);
 				if (result && paymentMethod) {
-					trackComponentLoad(`${paymentMethod}-loaded`);
+					const buttonType = buttonTypeFromResult(result);
+					trackComponentInsert(`${paymentMethod}-${buttonType}`);
 					setPaymentRequest(paymentRequestSdk);
 					setInternalPaymentMethodName(paymentMethod);
-
-					if (result.applePay) {
-						setButtonType('APPLE_PAY');
-					} else if (result.googlePay) {
-						setButtonType('GOOGLE_PAY');
-					} else {
-						setButtonType('PAY_NOW');
-					}
-
-					trackComponentLoad(`${paymentMethod}-displayed`);
+					setButtonType(buttonType);
 				}
 			});
 		}

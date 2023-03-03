@@ -10,7 +10,7 @@ import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
 import com.gu.i18n.Currency.{AUD}
 import com.gu.support.promotions._
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
-import config.{StringsConfig, RecaptchaConfigProvider}
+import config.RecaptchaConfigProvider
 import services._
 import play.api.mvc._
 import play.twirl.api.Html
@@ -45,7 +45,7 @@ class DigitalSubscriptionController(
     if (orderIsAGift) "subscribe/digital/gift" else "subscribe/digital",
   )
 
-  def kindleGeoRedirect(): Action[AnyContent] = geoRedirect("kindle")
+  def kindleGeoRedirectWithPromoCode(): Action[AnyContent] = geoRedirect("kindle?promoCode=DLESNCWON")
 
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = {
     MaybeAuthenticatedAction { implicit request =>

@@ -175,6 +175,9 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           "Ref": "AMIFrontend",
         },
         "InstanceType": "t4g.small",
+        "MetadataOptions": {
+          "HttpTokens": "required",
+        },
         "SecurityGroups": [
           {
             "Fn::GetAtt": [
