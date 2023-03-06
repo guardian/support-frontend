@@ -38,11 +38,9 @@ const pricesHeadline = css`
 `;
 
 const pricesHeadlineVariant = css`
-	margin-top: ${space[3]}px;
-	margin-bottom: ${space[4]}px;
-
+	margin-top: ${space[4]}px;
 	${from.tablet} {
-		margin-top: ${space[9]}px;
+		margin-top: ${space[6]}px;
 	}
 `;
 
@@ -54,7 +52,7 @@ const priceBoxes = css`
 	}
 `;
 const priceBoxesVariant = css`
-	margin-top: ${space[4]}px;
+	margin-top: 0px;
 `;
 
 const productOverride = css`
@@ -95,7 +93,7 @@ const pricesInfo = css`
 	margin-top: ${space[6]}px;
 `;
 const pricesTabs = css`
-	margin-top: ${space[6]}px;
+	margin-bottom: 13px;
 	display: flex;
 	border-bottom: 1px solid ${brand[600]};
 `;
