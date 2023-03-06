@@ -120,6 +120,24 @@ export function PaperPrices({
 			>
 				Pick your subscription package below
 			</h2>
+			<div css={pricesTabs}>
+				<LinkTo
+					tab={Collection}
+					setTabAction={setTabAction}
+					activeTab={activeTab}
+					isPricesTabLink
+				>
+					Subscription card
+				</LinkTo>
+				<LinkTo
+					tab={HomeDelivery}
+					setTabAction={setTabAction}
+					activeTab={activeTab}
+					isPricesTabLink
+				>
+					Home Delivery
+				</LinkTo>
+			</div>
 			<FlexContainer
 				cssOverrides={
 					isPriceCardsAbTestVariant
@@ -144,24 +162,6 @@ export function PaperPrices({
 					/>
 				))}
 			</FlexContainer>
-			<div css={pricesTabs}>
-				<LinkTo
-					tab={Collection}
-					setTabAction={setTabAction}
-					activeTab={activeTab}
-					isPricesTabLink
-				>
-					Subscription card
-				</LinkTo>
-				<LinkTo
-					tab={HomeDelivery}
-					setTabAction={setTabAction}
-					activeTab={activeTab}
-					isPricesTabLink
-				>
-					Home Delivery
-				</LinkTo>
-			</div>
 			<div css={pricesInfo}>
 				<ProductInfoChip icon={<SvgInfo />}>{infoText}</ProductInfoChip>
 			</div>
