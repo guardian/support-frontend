@@ -105,8 +105,8 @@ export function BillingPeriodSelector(): JSX.Element {
 				<ChoiceCardGroup name="billingPeriod">
 					<div css={choiceCardWrapper}>
 						<p css={offerText}>
-							{promotions.monthlyPrice?.discount?.amount}% off for{' '}
-							{promotions.monthlyPrice?.numberOfDiscountedPeriods} months
+							{promotions.monthlyPrice?.discount?.amount}% off regular monthly{' '}
+							price
 						</p>
 						<ChoiceCard
 							id="monthly"
@@ -126,8 +126,8 @@ export function BillingPeriodSelector(): JSX.Element {
 					</Hide>
 					<div css={choiceCardWrapper}>
 						<p css={offerText}>
-							{promotions.annualPrice?.discount?.amount}% off for{' '}
-							{promotions.annualPrice?.numberOfDiscountedPeriods} year
+							{promotions.annualPrice?.discount?.amount}% off off regular annual{' '}
+							price
 						</p>
 						<ChoiceCard
 							id="annual"
