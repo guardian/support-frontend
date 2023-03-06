@@ -24,7 +24,10 @@ import { PaperProductInfo } from './components/content/paperProductInfo';
 import { PaperHero, PriceCardsPaperHero } from './components/hero/hero';
 import PaperProductPrices from './components/paperProductPrices';
 import Tabs from './components/tabs';
-import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
+import type {
+	PaperLandingContentPropTypes,
+	PaperLandingPropTypes,
+} from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
 import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
@@ -57,8 +60,7 @@ const pageQaId = 'qa-paper-subscriptions';
 function PaperLandingPageControl({
 	productPrices,
 	promotionCopy,
-	participations,
-}: PaperLandingPropTypes) {
+}: PaperLandingContentPropTypes) {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
 		'delivery',
@@ -92,7 +94,6 @@ function PaperLandingPageControl({
 			<PaperHero
 				productPrices={productPrices}
 				promotionCopy={sanitisedPromoCopy}
-				participations={participations}
 			/>
 			<FullWidthContainer>
 				<CentredContainer>
@@ -123,8 +124,8 @@ function PaperLandingPageControl({
 function PaperLandingPageVariant({
 	productPrices,
 	promotionCopy,
-	participations,
-}: PaperLandingPropTypes) {
+	isPriceCardsAbTestVariant,
+}: PaperLandingContentPropTypes) {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
 		'delivery',
@@ -159,7 +160,6 @@ function PaperLandingPageVariant({
 				<PriceCardsPaperHero
 					productPrices={productPrices}
 					promotionCopy={sanitisedPromoCopy}
-					participations={participations}
 				/>
 			</FullWidthContainer>
 			<FullWidthContainer theme="dark">
@@ -168,6 +168,7 @@ function PaperLandingPageVariant({
 						productPrices={productPrices}
 						tab={selectedTab}
 						setTabAction={setSelectedTab}
+						isPriceCardsAbTestVariant={isPriceCardsAbTestVariant}
 					/>
 				</CentredContainer>
 			</FullWidthContainer>
@@ -203,13 +204,12 @@ function PaperLandingPage({
 		<PaperLandingPageVariant
 			productPrices={productPrices}
 			promotionCopy={promotionCopy}
-			participations={participations}
+			isPriceCardsAbTestVariant={isPriceCardsAbTestVariant}
 		/>
 	) : (
 		<PaperLandingPageControl
 			productPrices={productPrices}
 			promotionCopy={promotionCopy}
-			participations={participations}
 		/>
 	);
 }

@@ -18,7 +18,6 @@ import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
 import PageTitle from 'components/page/pageTitle';
-import type { Participations } from 'helpers/abTests/abtest';
 import { getMaxSavingVsRetail } from 'helpers/productPrice/paperSavingsVsRetail';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
@@ -30,13 +29,11 @@ import { getDiscountCopy } from './discountCopy';
 type PaperHeroPropTypes = {
 	productPrices: ProductPrices;
 	promotionCopy: PromotionCopy;
-	participations: Participations;
 };
 
 type PriceCardsPaperHeroPropTypes = {
 	productPrices: ProductPrices;
 	promotionCopy: PromotionCopy;
-	participations: Participations;
 };
 
 const heroCopy = css`

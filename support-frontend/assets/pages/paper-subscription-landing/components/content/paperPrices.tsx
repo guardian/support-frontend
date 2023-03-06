@@ -18,10 +18,11 @@ import {
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import LinkTo from './linkTo';
 
-export type PropTypes = {
+export type PaperPricesPropTypes = {
 	activeTab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
 	products: Product[];
+	isPriceCardsAbTestVariant: boolean;
 };
 const pricesSection = css`
 	padding: 0 ${space[3]}px ${space[12]}px;
@@ -103,16 +104,29 @@ export function PaperPrices({
 	activeTab,
 	setTabAction,
 	products,
-}: PropTypes): JSX.Element {
+	isPriceCardsAbTestVariant,
+}: PaperPricesPropTypes): JSX.Element {
 	const infoText = `${
 		activeTab === HomeDelivery ? 'Delivery is included. ' : ''
 	}You can cancel your subscription at any time`;
 	return (
 		<section css={pricesSection} id="subscribe">
-			<h2 css={[pricesHeadline, pricesHeadlineVariant]}>
+			<h2
+				css={
+					isPriceCardsAbTestVariant
+						? [pricesHeadline, pricesHeadlineVariant]
+						: pricesHeadline
+				}
+			>
 				Pick your subscription package below
 			</h2>
-			<FlexContainer cssOverrides={[priceBoxes, priceBoxesVariant]}>
+			<FlexContainer
+				cssOverrides={
+					isPriceCardsAbTestVariant
+						? [priceBoxes, priceBoxesVariant]
+						: priceBoxes
+				}
+			>
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={

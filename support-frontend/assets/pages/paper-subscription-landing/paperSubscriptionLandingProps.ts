@@ -10,6 +10,12 @@ import { detect as detectCountryGroup } from 'helpers/internationalisation/count
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 
+export type PaperLandingContentPropTypes = {
+	productPrices: ProductPrices | null | undefined;
+	promotionCopy: PromotionCopy | null | undefined;
+	isPriceCardsAbTestVariant?: boolean;
+};
+
 export type PaperLandingPropTypes = {
 	productPrices: ProductPrices | null | undefined;
 	promotionCopy: PromotionCopy | null | undefined;
