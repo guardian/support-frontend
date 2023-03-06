@@ -126,7 +126,7 @@ export function BillingPeriodSelector(): JSX.Element {
 					</Hide>
 					<div css={choiceCardWrapper}>
 						<p css={offerText}>
-							{promotions.annualPrice?.discount?.amount}% off off regular annual{' '}
+							{promotions.annualPrice?.discount?.amount}% off regular annual{' '}
 							price
 						</p>
 						<ChoiceCard
