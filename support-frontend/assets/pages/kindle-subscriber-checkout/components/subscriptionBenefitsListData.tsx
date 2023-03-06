@@ -26,7 +26,7 @@ export const checkListData = (): CheckListData[] => {
 			text: (
 				<p>
 					<span css={boldText}>The Editions app. </span>Enjoy the Guardian and
-					Observer newspaper, reimagined for mobile
+					Observer newspaper, reimagined for mobile and tablet
 				</p>
 			),
 		},
