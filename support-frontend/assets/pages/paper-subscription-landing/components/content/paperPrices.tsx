@@ -99,7 +99,7 @@ const pricesTabs = css`
 	border-bottom: 1px solid ${brand[600]};
 `;
 
-function PaperPrices({
+export function PaperPrices({
 	activeTab,
 	setTabAction,
 	products,
@@ -154,5 +154,3 @@ function PaperPrices({
 		</section>
 	);
 }
-
-export default PaperPrices;

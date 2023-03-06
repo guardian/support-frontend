@@ -21,7 +21,7 @@ import {
 import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import { getTitle } from '../helpers/products';
-import PaperPrices from './content/paperPrices';
+import { PaperPrices } from './content/paperPrices';
 
 // ---- Helpers ----- //
 const getPriceCopyString = (

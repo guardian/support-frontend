@@ -22,7 +22,7 @@ import { renderPage } from 'helpers/rendering/render';
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { PaperProductInfo } from './components/content/paperProductInfo';
 import { PaperHero, PriceCardsPaperHero } from './components/hero/hero';
-import Prices from './components/paperProductPrices';
+import PaperProductPrices from './components/paperProductPrices';
 import Tabs from './components/tabs';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
@@ -109,7 +109,7 @@ function PaperLandingPageControl({
 
 			<FullWidthContainer theme="dark" hasOverlap>
 				<CentredContainer>
-					<Prices
+					<PaperProductPrices
 						productPrices={productPrices}
 						tab={selectedTab}
 						setTabAction={setSelectedTab}
@@ -164,7 +164,7 @@ function PaperLandingPageVariant({
 			</FullWidthContainer>
 			<FullWidthContainer theme="dark">
 				<CentredContainer>
-					<Prices
+					<PaperProductPrices
 						productPrices={productPrices}
 						tab={selectedTab}
 						setTabAction={setSelectedTab}
