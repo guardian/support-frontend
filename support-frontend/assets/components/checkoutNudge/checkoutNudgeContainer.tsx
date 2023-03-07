@@ -21,17 +21,10 @@ export function CheckoutNudgeContainer({
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
-	);
 
 	const [displayNudge, setDisplayNudge] = useState(true);
 
-	const recurringType =
-		abParticipations.singleToRecurringV3 === 'control' ||
-		!abParticipations.singleToRecurringV3
-			? 'MONTHLY'
-			: 'ANNUAL';
+	const recurringType = 'ANNUAL';
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId][recurringType].min;
 

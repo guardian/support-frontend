@@ -39,26 +39,6 @@ export const pageUrlRegexes = {
 	},
 };
 export const tests: Tests = {
-	singleToRecurringV3: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		seed: 15,
-	},
 	guardianWeeklyPriceCards: {
 		variants: [
 			{
