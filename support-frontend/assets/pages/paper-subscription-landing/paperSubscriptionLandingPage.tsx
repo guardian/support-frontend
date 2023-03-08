@@ -124,7 +124,6 @@ function PaperLandingPageControl({
 function PaperLandingPageVariant({
 	productPrices,
 	promotionCopy,
-	isPriceCardsAbTestVariant,
 }: PaperLandingContentPropTypes) {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
@@ -168,7 +167,7 @@ function PaperLandingPageVariant({
 						productPrices={productPrices}
 						tab={selectedTab}
 						setTabAction={setSelectedTab}
-						isPriceCardsAbTestVariant={isPriceCardsAbTestVariant}
+						isPriceCardsAbTestVariant={true}
 					/>
 				</CentredContainer>
 			</FullWidthContainer>
@@ -198,13 +197,10 @@ function PaperLandingPage({
 	promotionCopy,
 	participations,
 }: PaperLandingPropTypes) {
-	const isPriceCardsAbTestVariant =
-		participations.newspaperPriceCards === 'variant';
-	return isPriceCardsAbTestVariant ? (
+	return participations.newspaperPriceCards === 'variant' ? (
 		<PaperLandingPageVariant
 			productPrices={productPrices}
 			promotionCopy={promotionCopy}
-			isPriceCardsAbTestVariant={isPriceCardsAbTestVariant}
 		/>
 	) : (
 		<PaperLandingPageControl
