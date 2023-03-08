@@ -137,7 +137,7 @@
     "@guardian/eslint-plugin-source-foundations": "^4.0.2",
     "@guardian/eslint-plugin-source-react-components": "^4.0.2",
     "@guardian/paparazzi": "^0.3.1",
-    "@guardian/prettier": "^0.6.0",
+    "@guardian/prettier": "^2.1.5",
     "@khanacademy/flow-to-ts": "^0.5.1",
     "@storybook/addon-a11y": "^6.5.9",
     "@storybook/addon-actions": "^6.5.9",
