@@ -131,7 +131,7 @@
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
     "@emotion/babel-plugin": "^11.9.2",
-    "@emotion/eslint-plugin": "^11.7.0",
+    "@emotion/eslint-plugin": "^11.10.0",
     "@guardian/browserslist-config": "^1.0.1",
     "@guardian/eslint-config-typescript": "^0.6.0",
     "@guardian/eslint-plugin-source-foundations": "^4.0.2",
