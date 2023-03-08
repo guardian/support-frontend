@@ -1,0 +1,29 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/support-frontend"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/support-workers/cloud-formation/src"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: 'npm'
+    directory: '/cdk'
+    # The version of @aws-cdk/* libraries must match those from @guardian/cdk.
+    # We'd never be able to update them here independently, so just ignore them.
+    ignore:
+      - dependency-name: "aws-cdk"
+      - dependency-name: "@aws-cdk/*"
+    # The cdk directory does not run in a PROD environment, only CI, so we can afford to use old versions of libraries for a short time. Run Dependabot once a month to reduce the frequency of PRs.
+    schedule:
+      interval: 'monthly'
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
