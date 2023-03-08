@@ -106,7 +106,6 @@ export type CheckoutNudgeProps = {
 	nudgeSubtitle: string;
 	nudgeParagraph: string;
 	nudgeLinkCopy: string;
-	recurringType: string;
 	countryGroupId: CountryGroupId;
 	onNudgeClose: () => void;
 	onNudgeClick: () => void;
@@ -119,7 +118,6 @@ export function CheckoutNudge({
 	nudgeSubtitle,
 	nudgeParagraph,
 	nudgeLinkCopy,
-	recurringType,
 	countryGroupId,
 	onNudgeClose,
 	onNudgeClick,
@@ -133,12 +131,7 @@ export function CheckoutNudge({
 					</div>
 					<CheckoutNudgeCloseButton onClose={onNudgeClose} />
 				</div>
-				<h2
-					css={heading(
-						neutral[7],
-						recurringType === 'ANNUAL' && countryGroupId !== 'GBPCountries',
-					)}
-				>
+				<h2 css={heading(neutral[7], countryGroupId !== 'GBPCountries')}>
 					{nudgeSubtitle}
 				</h2>
 				<p css={para}>{nudgeParagraph}</p>

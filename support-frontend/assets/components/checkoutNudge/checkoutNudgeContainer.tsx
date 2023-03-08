@@ -21,19 +21,11 @@ export function CheckoutNudgeContainer({
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
-	);
 
 	const [displayNudge, setDisplayNudge] = useState(true);
 
-	const recurringType =
-		abParticipations.singleToRecurringV3 === 'control' ||
-		!abParticipations.singleToRecurringV3
-			? 'MONTHLY'
-			: 'ANNUAL';
 	const currencyGlyph = glyph(detect(countryGroupId));
-	const minAmount = config[countryGroupId][recurringType].min;
+	const minAmount = config[countryGroupId]['ANNUAL'].min;
 
 	const minWeeklyAmount =
 		countryGroupId === 'GBPCountries'
@@ -41,40 +33,19 @@ export function CheckoutNudgeContainer({
 			: currencyGlyph +
 			  (Math.ceil((minAmount * 100) / 52) / 100).toFixed(2).toString();
 
-	const [title, subtitle, paragraph] = copyNudge(
-		recurringType,
-		currencyGlyph + minAmount.toString(),
-		minWeeklyAmount,
-	);
+	const [title, subtitle, paragraph] = [
+		`Support us every year`,
+		`from just ${
+			currencyGlyph + minAmount.toString()
+		} (${minWeeklyAmount} a week)`,
+		`Funding Guardian journalism every year doesn’t need to be expensive. Make a bigger impact today, and protect our independence long term. Please consider annual support.`,
+	];
 
-	function copyNudge(
-		recurringType: string,
-		minAmount: string,
-		minWeeklyAmount: string,
-	): string[] {
-		switch (recurringType) {
-			case 'ANNUAL': {
-				return [
-					`Support us every year`,
-					`from just ${minAmount} (${minWeeklyAmount} a week)`,
-					`Funding Guardian journalism every year doesn’t need to be expensive. Make a bigger impact today, and protect our independence long term. Please consider annual support.`,
-				];
-			}
-			case 'MONTHLY':
-			default: {
-				return [
-					`Make a bigger impact`,
-					`Support us every month`,
-					`Regular, reliable support powers Guardian journalism in perpetuity. If you can, please consider setting up a ${recurringType.toLowerCase()} payment today from just  ${minAmount} – it takes less than a minute.`,
-				];
-			}
-		}
-	}
 	function onNudgeClose() {
 		setDisplayNudge(false);
 	}
 	function onNudgeClick() {
-		dispatch(setProductType(recurringType));
+		dispatch(setProductType('ANNUAL'));
 	}
 
 	return renderNudge({
@@ -83,8 +54,7 @@ export function CheckoutNudgeContainer({
 		nudgeTitle: title,
 		nudgeSubtitle: subtitle,
 		nudgeParagraph: paragraph,
-		nudgeLinkCopy: `See ${recurringType.toLowerCase()}`,
-		recurringType: recurringType,
+		nudgeLinkCopy: `See annual`,
 		countryGroupId: countryGroupId,
 		onNudgeClose,
 		onNudgeClick,
