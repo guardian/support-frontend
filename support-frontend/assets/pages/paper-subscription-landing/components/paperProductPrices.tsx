@@ -21,7 +21,7 @@ import {
 import type { TrackingProperties } from 'helpers/productPrice/subscriptions';
 import { paperCheckoutUrl } from 'helpers/urls/routes';
 import { getTitle } from '../helpers/products';
-import Prices from './content/prices';
+import { PaperPrices } from './content/paperPrices';
 
 // ---- Helpers ----- //
 const getPriceCopyString = (
@@ -183,12 +183,14 @@ type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
 	tab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
+	isPriceCardsAbTestVariant?: boolean;
 };
 
 function PaperProductPrices({
 	productPrices,
 	tab,
 	setTabAction,
+	isPriceCardsAbTestVariant,
 }: PaperProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
@@ -196,7 +198,12 @@ function PaperProductPrices({
 
 	const products = getPlans(tab, productPrices);
 	return (
-		<Prices activeTab={tab} products={products} setTabAction={setTabAction} />
+		<PaperPrices
+			activeTab={tab}
+			products={products}
+			setTabAction={setTabAction}
+			isPriceCardsAbTestVariant={isPriceCardsAbTestVariant ?? false}
+		/>
 	);
 }
 

@@ -18,21 +18,43 @@ import {
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import LinkTo from './linkTo';
 
-export type PropTypes = {
+export type PaperPricesPropTypes = {
 	activeTab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
 	products: Product[];
+	isPriceCardsAbTestVariant: boolean;
 };
 const pricesSection = css`
 	padding: 0 ${space[3]}px ${space[12]}px;
 `;
+
+const pricesHeadline = css`
+	${headline.xsmall({
+		fontWeight: 'bold',
+	})};
+	${from.tablet} {
+		font-size: 34px;
+	}
+`;
+
+const pricesHeadlineVariant = css`
+	margin-top: ${space[4]}px;
+	${from.tablet} {
+		margin-top: ${space[6]}px;
+	}
+`;
+
 const priceBoxes = css`
 	margin-top: ${space[6]}px;
 	justify-content: flex-start;
 	${from.tablet} {
-		margin-top: ${space[12]}px;
+		margin-top: 56px;
 	}
 `;
+const priceBoxesVariant = css`
+	margin-top: 0px;
+`;
+
 const productOverride = css`
 	&:not(:first-of-type) {
 		margin-top: ${space[4]}px;
@@ -54,6 +76,7 @@ const productOverride = css`
 		}
 	}
 `;
+
 const productOverrideWithLabel = css`
 	${productOverride}
 	&:not(:first-of-type) {
@@ -65,45 +88,36 @@ const productOverrideWithLabel = css`
 		}
 	}
 `;
-const pricesHeadline = css`
-	${headline.medium({
-		fontWeight: 'bold',
-	})};
-`;
+
 const pricesInfo = css`
 	margin-top: ${space[6]}px;
 `;
 const pricesTabs = css`
-	margin-top: ${space[6]}px;
+	margin-bottom: 13px;
 	display: flex;
 	border-bottom: 1px solid ${brand[600]};
 `;
 
-function Prices({ activeTab, setTabAction, products }: PropTypes) {
+export function PaperPrices({
+	activeTab,
+	setTabAction,
+	products,
+	isPriceCardsAbTestVariant,
+}: PaperPricesPropTypes): JSX.Element {
 	const infoText = `${
 		activeTab === HomeDelivery ? 'Delivery is included. ' : ''
 	}You can cancel your subscription at any time`;
 	return (
 		<section css={pricesSection} id="subscribe">
-			<h2 css={pricesHeadline}>Pick your subscription package below</h2>
-			<FlexContainer cssOverrides={priceBoxes}>
-				{products.map((product) => (
-					<ProductOption
-						cssOverrides={
-							product.label ? productOverrideWithLabel : productOverride
-						}
-						title={product.title}
-						price={product.price}
-						priceCopy={product.priceCopy}
-						offerCopy={product.offerCopy}
-						buttonCopy={product.buttonCopy}
-						href={product.href}
-						onClick={product.onClick}
-						onView={product.onView}
-						label={product.label}
-					/>
-				))}
-			</FlexContainer>
+			<h2
+				css={
+					isPriceCardsAbTestVariant
+						? [pricesHeadline, pricesHeadlineVariant]
+						: pricesHeadline
+				}
+			>
+				Pick your subscription package below
+			</h2>
 			<div css={pricesTabs}>
 				<LinkTo
 					tab={Collection}
@@ -122,11 +136,33 @@ function Prices({ activeTab, setTabAction, products }: PropTypes) {
 					Home Delivery
 				</LinkTo>
 			</div>
+			<FlexContainer
+				cssOverrides={
+					isPriceCardsAbTestVariant
+						? [priceBoxes, priceBoxesVariant]
+						: priceBoxes
+				}
+			>
+				{products.map((product) => (
+					<ProductOption
+						cssOverrides={
+							product.label ? productOverrideWithLabel : productOverride
+						}
+						title={product.title}
+						price={product.price}
+						priceCopy={product.priceCopy}
+						offerCopy={product.offerCopy}
+						buttonCopy={product.buttonCopy}
+						href={product.href}
+						onClick={product.onClick}
+						onView={product.onView}
+						label={product.label}
+					/>
+				))}
+			</FlexContainer>
 			<div css={pricesInfo}>
 				<ProductInfoChip icon={<SvgInfo />}>{infoText}</ProductInfoChip>
 			</div>
 		</section>
 	);
 }
-
-export default Prices;

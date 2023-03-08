@@ -26,7 +26,12 @@ import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { offerStraplineBlue } from 'stylesheets/emotion/colours';
 import { getDiscountCopy } from './discountCopy';
 
-type PropTypes = {
+type PaperHeroPropTypes = {
+	productPrices: ProductPrices;
+	promotionCopy: PromotionCopy;
+};
+
+type PriceCardsPaperHeroPropTypes = {
 	productPrices: ProductPrices;
 	promotionCopy: PromotionCopy;
 };
@@ -97,10 +102,10 @@ const defaultCopy = (
 	</>
 );
 
-function PaperHero({
+export function PaperHero({
 	productPrices,
 	promotionCopy,
-}: PropTypes): JSX.Element | null {
+}: PaperHeroPropTypes): JSX.Element | null {
 	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
 	const { roundel } = getDiscountCopy(maxSavingVsRetail);
 	const defaultRoundelText = roundel.length ? roundel.join(' ') : undefined;
@@ -159,4 +164,24 @@ function PaperHero({
 	);
 }
 
-export default PaperHero;
+export function PriceCardsPaperHero({
+	productPrices,
+	promotionCopy,
+}: PriceCardsPaperHeroPropTypes): JSX.Element | null {
+	const maxSavingVsRetail = getMaxSavingVsRetail(productPrices) ?? 0;
+	const { roundel } = getDiscountCopy(maxSavingVsRetail);
+	const defaultRoundelText = roundel.length ? roundel.join(' ') : undefined;
+
+	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
+	return (
+		<PageTitle title="Newspaper subscription" theme="paper">
+			<CentredContainer>
+				<OfferStrapline
+					fgCol={text.primary}
+					bgCol={offerStraplineBlue}
+					copy={roundelText}
+				/>
+			</CentredContainer>
+		</PageTitle>
+	);
+}

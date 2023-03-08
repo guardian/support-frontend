@@ -1,5 +1,7 @@
 // ----- Imports ----- //
 
+import { css } from '@emotion/react';
+import { between, space } from '@guardian/source-foundations';
 import { useState } from 'react';
 import CentredContainer from 'components/containers/centredContainer';
 import FullWidthContainer from 'components/containers/fullWidthContainer';
@@ -18,12 +20,15 @@ import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
 import { paperSubsUrl } from 'helpers/urls/routes';
-import PaperHero from './components/hero/hero';
-import Prices from './components/paperPrices';
+import { PaperProductInfo } from './components/content/paperProductInfo';
+import { PaperHero, PriceCardsPaperHero } from './components/hero/hero';
+import PaperProductPrices from './components/paperProductPrices';
 import Tabs from './components/tabs';
-import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
+import type {
+	PaperLandingContentPropTypes,
+	PaperLandingPropTypes,
+} from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
-import { tabsTabletSpacing } from './paperSubscriptionLandingStyles';
 import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
 
@@ -39,13 +44,23 @@ const paperSubsFooter = (
 
 // ----- Render ----- //
 
+const tabsTabletSpacing = css`
+	${between.tablet.and.leftCol} {
+		padding: 0 ${space[5]}px;
+	}
+`;
+
+const paperHeroContainerOverrides = css`
+	display: flex;
+`;
+
 // ID for Selenium tests
 const pageQaId = 'qa-paper-subscriptions';
 
-function PaperLandingPage({
+function PaperLandingPageControl({
 	productPrices,
 	promotionCopy,
-}: PaperLandingPropTypes) {
+}: PaperLandingContentPropTypes) {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
 		'delivery',
@@ -92,9 +107,10 @@ function PaperLandingPage({
 					</Block>
 				</CentredContainer>
 			</FullWidthContainer>
+
 			<FullWidthContainer theme="dark" hasOverlap>
 				<CentredContainer>
-					<Prices
+					<PaperProductPrices
 						productPrices={productPrices}
 						tab={selectedTab}
 						setTabAction={setSelectedTab}
@@ -102,6 +118,95 @@ function PaperLandingPage({
 				</CentredContainer>
 			</FullWidthContainer>
 		</Page>
+	);
+}
+
+function PaperLandingPageVariant({
+	productPrices,
+	promotionCopy,
+}: PaperLandingContentPropTypes) {
+	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
+	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
+		'delivery',
+	)
+		? HomeDelivery
+		: Collection;
+	const [selectedTab, setSelectedTab] =
+		useState<PaperFulfilmentOptions>(fulfilment);
+
+	if (!productPrices) {
+		return null;
+	}
+
+	function handleSetTabAction(newTab: PaperFulfilmentOptions) {
+		setSelectedTab(newTab);
+		sendTrackingEventsOnClick({
+			id: `Paper_${newTab}-tab`,
+			// eg. Paper_Collection-tab or Paper_HomeDelivery-tab
+			product: 'Paper',
+			componentType: 'ACQUISITIONS_BUTTON',
+		})();
+		window.history.replaceState({}, '', paperSubsUrl(newTab === HomeDelivery));
+	}
+
+	return (
+		<Page
+			id={pageQaId}
+			header={<Header countryGroupId={GBPCountries} />}
+			footer={paperSubsFooter}
+		>
+			<FullWidthContainer cssOverrides={paperHeroContainerOverrides}>
+				<PriceCardsPaperHero
+					productPrices={productPrices}
+					promotionCopy={sanitisedPromoCopy}
+				/>
+			</FullWidthContainer>
+			<FullWidthContainer theme="dark">
+				<CentredContainer>
+					<PaperProductPrices
+						productPrices={productPrices}
+						tab={selectedTab}
+						setTabAction={setSelectedTab}
+						isPriceCardsAbTestVariant={true}
+					/>
+				</CentredContainer>
+			</FullWidthContainer>
+			<FullWidthContainer cssOverrides={paperHeroContainerOverrides}>
+				<CentredContainer>
+					<PaperProductInfo promotionCopy={sanitisedPromoCopy} />
+				</CentredContainer>
+			</FullWidthContainer>
+			<FullWidthContainer>
+				<CentredContainer>
+					<Block>
+						<div css={tabsTabletSpacing}>
+							<Tabs
+								selectedTab={selectedTab}
+								setTabAction={handleSetTabAction}
+							/>
+						</div>
+					</Block>
+				</CentredContainer>
+			</FullWidthContainer>
+		</Page>
+	);
+}
+
+function PaperLandingPage({
+	productPrices,
+	promotionCopy,
+	participations,
+}: PaperLandingPropTypes) {
+	return participations.newspaperPriceCards === 'variant' ? (
+		<PaperLandingPageVariant
+			productPrices={productPrices}
+			promotionCopy={promotionCopy}
+		/>
+	) : (
+		<PaperLandingPageControl
+			productPrices={productPrices}
+			promotionCopy={promotionCopy}
+		/>
 	);
 }
 
