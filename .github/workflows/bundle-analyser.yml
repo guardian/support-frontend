@@ -32,7 +32,7 @@ jobs:
         run: yarn build-github-action
 
       - name: Run Bundle Analyser
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: bundle-analyser-report
           path: support-frontend/public/compiled-assets/webpack-stats.html
