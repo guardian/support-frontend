@@ -3,7 +3,7 @@
 //  See: http://codepen.io/tigt/post/optimizing-svgs-in-data-uris
 //
 //
-@use "sass:math";
+@use 'sass:math';
 
 @function svg-url($svg) {
 	//

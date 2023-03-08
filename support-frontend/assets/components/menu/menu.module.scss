@@ -25,7 +25,8 @@
 	box-sizing: border-box;
 	display: block;
 	@include gu-fontset-body-sans;
-	padding: $gu-v-spacing*0.5 $gu-h-spacing * 4 $gu-v-spacing * 1.5 $gu-h-spacing;
+	padding: $gu-v-spacing * 0.5 $gu-h-spacing * 4 $gu-v-spacing * 1.5
+		$gu-h-spacing;
 	color: gu-colour(neutral-7);
 	text-decoration: none;
 	position: relative;

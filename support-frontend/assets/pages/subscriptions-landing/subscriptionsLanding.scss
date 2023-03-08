@@ -241,12 +241,12 @@
 		bottom: 0;
 	}
 
-  // WHY DO WE DO THIS?
+	// WHY DO WE DO THIS?
 	@include mq($from: desktop) {
 		right: -50px;
 	}
 
-  // WHY DO WE DO THIS?
+	// WHY DO WE DO THIS?
 	@include mq($from: leftCol) {
 		right: -80px;
 	}
@@ -255,7 +255,7 @@
 .subscriptions__copy-container.subscriptions__product--feature {
 	position: relative;
 	width: 100%;
-  background-color: #052962;
+	background-color: #052962;
 
 	@include mq($from: tablet) {
 		width: 50%;
@@ -457,7 +457,7 @@
 	margin-top: -6px;
 }
 .subscriptions__product--feature .subscriptions__description::before {
-	border-top: solid #9AA4AD 1px;
+	border-top: solid #9aa4ad 1px;
 
 	@include mq($until: tablet) {
 		border-top: none;
@@ -550,53 +550,51 @@
 
 /****************** guardian weekly ********************/
 
-.subscriptions__guardian-weekly.subscriptions__product--feature
-{
-  color: #000;
+.subscriptions__guardian-weekly.subscriptions__product--feature {
+	color: #000;
 	background-color: #cadbe8;
 
-  .subscriptions__image-container {
-    right: 0;
-    margin-bottom: 0;
-    position: relative;
-  }
+	.subscriptions__image-container {
+		right: 0;
+		margin-bottom: 0;
+		position: relative;
+	}
 
-  .subscriptions__copy-container {
-    background-color: #cadbe8;
-  }
+	.subscriptions__copy-container {
+		background-color: #cadbe8;
+	}
 
-  .subscriptions-feature-packshot {
-    width: 100%;
+	.subscriptions-feature-packshot {
+		width: 100%;
 
+		@include mq($from: tablet) {
+			position: absolute;
+			bottom: 0;
+		}
 
-    @include mq($from: tablet) {
-      position: absolute;
-      bottom: 0;
-    }
+		img {
+			width: 100%;
+			vertical-align: bottom;
+		}
+	}
 
-    img {
-      width: 100%;
-      vertical-align: bottom;
-    }
-  }
+	.component-button--primary.component-button--guardian-weekly {
+		color: #ffffff;
+		background-color: #333333;
+	}
 
-  .component-button--primary.component-button--guardian-weekly {
-    color: #ffffff;
-    background-color: #333333;
-  }
+	.component-button--primary.component-button--guardian-weekly:hover,
+	.component-button--primary.component-button--guardian-weekly:focus {
+		background-color: #121212;
+	}
 
-  .component-button--primary.component-button--guardian-weekly:hover,
-  .component-button--primary.component-button--guardian-weekly:focus {
-    background-color: #121212;
-  }
-
-  .component-button--tertiaryFeature.component-button--guardian-weekly,
-  .component-button--tertiaryFeature.component-button--guardian-weekly:hover,
-  .component-button--tertiaryFeature.component-button--guardian-weekly:focus {
-    color: #333333;
-    border: solid 1px #333333;
-    background-color: transparent;
-  }
+	.component-button--tertiaryFeature.component-button--guardian-weekly,
+	.component-button--tertiaryFeature.component-button--guardian-weekly:hover,
+	.component-button--tertiaryFeature.component-button--guardian-weekly:focus {
+		color: #333333;
+		border: solid 1px #333333;
+		background-color: transparent;
+	}
 }
 
 /****************** premium app ********************/
@@ -670,14 +668,14 @@
 	position: relative;
 	width: 100%;
 
-  @include mq($from: tablet) {
-    position: absolute;
-    bottom: 0;
+	@include mq($from: tablet) {
+		position: absolute;
+		bottom: 0;
 	}
 
 	img {
 		width: 100%;
-    vertical-align: bottom;
+		vertical-align: bottom;
 	}
 }
 

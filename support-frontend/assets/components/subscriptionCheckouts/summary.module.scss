@@ -1,4 +1,4 @@
-@use "sass:math";
+@use 'sass:math';
 
 @import '~stylesheets/gu-sass/gu-sass';
 
@@ -34,7 +34,7 @@
 
 .contentWrapper,
 .content {
-	padding: $gu-v-spacing*0.5 $gu-h-spacing*0.5 $gu-v-spacing;
+	padding: $gu-v-spacing * 0.5 $gu-h-spacing * 0.5 $gu-v-spacing;
 	@include mq($until: tablet) {
 		background: gu-colour(neutral-97);
 	}
@@ -63,7 +63,7 @@
 	overflow: hidden;
 	background-color: gu-colour(neutral-97);
 	border-bottom: 1px solid gu-colour(neutral-86);
-	padding: $gu-v-spacing * 3 $gu-h-spacing*0.5 0;
+	padding: $gu-v-spacing * 3 $gu-h-spacing * 0.5 0;
 	@include mq($until: desktop) {
 		display: none;
 	}

@@ -31,7 +31,7 @@ $progress-bar-height: 10px;
 	align-items: flex-end;
 	padding-bottom: 6px;
 	line-height: 1;
-  font-size: 17px;
+	font-size: 17px;
 }
 
 .contributions-landing-ticker__goal,
@@ -62,12 +62,12 @@ $progress-bar-height: 10px;
 	width: calc(100%);
 	height: $progress-bar-height;
 	overflow: hidden;
-  background-color: #DDA7A1;
+	background-color: #dda7a1;
 	position: absolute;
 }
 
 .contributions-landing-ticker__filled-progress {
-  background-color: #C70000;
+	background-color: #c70000;
 	position: absolute;
 	top: 0;
 	left: 0;
