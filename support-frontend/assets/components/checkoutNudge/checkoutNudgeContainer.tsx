@@ -54,7 +54,7 @@ export function CheckoutNudgeContainer({
 		nudgeTitle: title,
 		nudgeSubtitle: subtitle,
 		nudgeParagraph: paragraph,
-		nudgeLinkCopy: `See Annual`,
+		nudgeLinkCopy: `See annual`,
 		countryGroupId: countryGroupId,
 		onNudgeClose,
 		onNudgeClick,
