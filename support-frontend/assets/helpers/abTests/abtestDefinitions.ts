@@ -74,7 +74,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.subscriptions.subsWeeklyPages,
 		seed: 11,
@@ -94,9 +94,10 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false,
-		targetPage: pageUrlRegexes.subscriptions.subsWeeklyPages,
+		targetPage:
+			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
 		seed: 3,
 	},
 	supporterPlusV2: {
