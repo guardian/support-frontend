@@ -83,6 +83,15 @@ const darkBackgroundContainerMobile = css`
 	${backgroundContainer}
 	${until.tablet} {
 		background-color: ${brand[400]};
+		border-bottom: 1px solid ${brand[600]};
+	}
+`;
+
+const shorterBoxMargin = css`
+	:not(:last-child) {
+		${until.tablet} {
+			margin-bottom: ${space[2]}px;
+		}
 	}
 `;
 
@@ -212,10 +221,14 @@ export function SupporterPlusLandingPage({
 								heading
 							)}
 						</Hide>
-						<Box>
+						<Box
+							cssOverrides={optimisedMobileLayout ? shorterBoxMargin : css``}
+						>
 							<AmountAndBenefits />
 						</Box>
-						<Box>
+						<Box
+							cssOverrides={optimisedMobileLayout ? shorterBoxMargin : css``}
+						>
 							<BoxContents>
 								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
 								<ContributionsStripe>
@@ -235,6 +248,9 @@ export function SupporterPlusLandingPage({
 										)}
 									/>
 									<PaymentButtonController
+										cssOverrides={css`
+											margin-top: 30px;
+										`}
 										paymentButtons={getPaymentMethodButtons(
 											contributionType,
 											switches,

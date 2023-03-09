@@ -12,6 +12,7 @@ export interface SecureTransactionIndicatorProps extends CSSOverridable {
 
 const theming = (theme: 'dark' | 'light') => css`
 	color: ${theme === 'dark' ? neutral[46] : neutral[100]};
+	opacity: ${theme === 'dark' ? 1 : 0.9};
 `;
 
 const secureTransactionWithText = (align: 'left' | 'right' | 'center') => css`
@@ -27,6 +28,7 @@ const secureTransactionIcon = css`
 
 const padlock = css`
 	margin-right: 5px;
+	opacity: inherit;
 	path {
 		fill: currentColor;
 	}
@@ -35,6 +37,7 @@ const padlock = css`
 const text = css`
 	${textSans.xsmall({ fontWeight: 'bold' })};
 	letter-spacing: 0.01em;
+	opacity: inherit;
 `;
 
 export function SecureTransactionIndicator({
