@@ -10,6 +10,7 @@ import { getSliceErrorsFromZodResult } from 'helpers/redux/utils/validation/erro
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { removeError } from 'helpers/subscriptionsForms/validation';
 import { validateForm } from '../checkoutActions';
+import { submitForm } from '../formSubmission/thunks';
 import type { AddressFormFieldError } from './state';
 import {
 	addressFieldsSchema,
@@ -93,6 +94,13 @@ function getAddressFieldsSlice(type: AddressType) {
 					state.errorObject = getSliceErrorsFromZodResult(
 						validationResult.error.format(),
 					);
+				}
+			});
+
+			builder.addCase(submitForm.rejected, (state) => {
+				if (type === 'billing') {
+					state.country = '';
+					state.state = '';
 				}
 			});
 		},

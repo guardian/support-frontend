@@ -1,6 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { validateForm } from '../../checkoutActions';
+import { submitForm } from '../../formSubmission/thunks';
 import { initialAmazonPayState } from './state';
 
 export const amazonPaySlice = createSlice({
@@ -44,6 +45,22 @@ export const amazonPaySlice = createSlice({
 					state.errors.consentStatus = [
 						'Please tick the box to agree to a recurring payment',
 					];
+				}
+			}
+		});
+
+		builder.addCase(submitForm.rejected, (state, action) => {
+			const { paymentMethod, errorMessage } = action.meta;
+			if (paymentMethod === 'AmazonPay') {
+				if (
+					errorMessage === 'amazon_pay_try_other_card' ||
+					errorMessage === 'amazon_pay_try_again'
+				) {
+					// Must re-render the wallet widget in order to display amazon's error message
+					state.walletIsStale = true;
+				} else {
+					// Disable Amazon Pay
+					state.fatalError = true;
 				}
 			}
 		});

@@ -1,7 +1,10 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import type { ContributionType } from 'helpers/contributions';
 import type { StripeAccount } from 'helpers/forms/stripe';
+import { stripeAccountForContributionType } from 'helpers/forms/stripe';
 import { validateForm } from '../../checkoutActions';
+import { submitForm } from '../../formSubmission/thunks';
 import type { PaymentRequestError } from './state';
 import { initialPaymentRequestButtonState } from './state';
 
@@ -39,6 +42,19 @@ export const paymentRequestButtonSlice = createSlice({
 				state.REGULAR.buttonClicked = false;
 				state.REGULAR.completed = false;
 				delete state.REGULAR.paymentError;
+			}
+		});
+
+		builder.addCase(submitForm.rejected, (state, action) => {
+			const { errorMessage, product, stripePaymentMethod } = action.meta;
+
+			if (
+				stripePaymentMethod === 'StripePaymentRequestButton' ||
+				stripePaymentMethod === 'StripeApplePay'
+			) {
+				const account =
+					stripeAccountForContributionType[product as ContributionType];
+				state[account].paymentError = errorMessage;
 			}
 		});
 	},
