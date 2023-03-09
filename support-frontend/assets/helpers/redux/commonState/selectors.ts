@@ -48,3 +48,10 @@ export function getMaximumContributionAmount(
 
 	return max;
 }
+
+export function checkUserAbTestStatus(abTestName: string, variantName: string) {
+	return function getAbTestStatus(state: ContributionsState): boolean {
+		const participations = state.common.abParticipations;
+		return participations[abTestName] === variantName;
+	};
+}

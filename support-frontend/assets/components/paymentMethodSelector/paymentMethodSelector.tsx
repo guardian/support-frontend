@@ -12,6 +12,7 @@ import {
 	subscriptionToExplainerPart,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 import { paymentMethodData } from './paymentMethodData';
 import { AvailablePaymentMethodAccordionRow } from './paymentMethodSelectorAccordionRow';
 import { ReauthenticateLink } from './reauthenticateLink';
@@ -43,7 +44,7 @@ function PaymentMethodSelectorLegend() {
 	);
 }
 
-export interface PaymentMethodSelectorProps {
+export interface PaymentMethodSelectorProps extends CSSOverridable {
 	cssOverrides?: SerializedStyles;
 	availablePaymentMethods: PaymentMethod[];
 	paymentMethod: PaymentMethod | null;
@@ -68,6 +69,7 @@ export function PaymentMethodSelector({
 	pendingExistingPaymentMethods,
 	showReauthenticateLink,
 	onPaymentMethodEvent,
+	cssOverrides,
 }: PaymentMethodSelectorProps): JSX.Element {
 	if (
 		existingPaymentMethodList.length < 1 &&
@@ -83,7 +85,7 @@ export function PaymentMethodSelector({
 	}
 
 	return (
-		<div css={container}>
+		<div css={[container, cssOverrides]}>
 			<PaymentMethodSelectorLegend />
 			<RadioGroup
 				id="paymentMethod"

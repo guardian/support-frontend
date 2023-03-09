@@ -45,6 +45,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import { checkUserAbTestStatus } from 'helpers/redux/commonState/selectors';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { CheckoutDivider } from './components/checkoutDivider';
@@ -124,8 +125,8 @@ export function SupporterPlusLandingPage({
 		countryGroupId,
 	);
 
-	const participations = useContributionsSelector(
-		(state) => state.common.abParticipations,
+	const optimisedMobileLayout = useContributionsSelector(
+		checkUserAbTestStatus('supporterPlusMobileTest1', 'variant'),
 	);
 
 	const { paymentComplete, isWaiting } = useContributionsSelector(
@@ -133,9 +134,6 @@ export function SupporterPlusLandingPage({
 	);
 
 	const navigate = useNavigate();
-
-	const optimisedMobileLayout =
-		participations.supporterPlusMobileTest1 === 'variant';
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
