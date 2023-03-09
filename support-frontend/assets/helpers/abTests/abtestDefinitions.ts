@@ -77,7 +77,7 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.subscriptions.subsWeeklyPages,
-		seed: 3,
+		seed: 11,
 	},
 	newspaperPriceCards: {
 		variants: [
