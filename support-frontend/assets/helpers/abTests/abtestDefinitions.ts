@@ -96,6 +96,8 @@ export const tests: Tests = {
 		},
 		isActive: true,
 		referrerControlled: false,
+		targetPage:
+			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
 		seed: 11,
 	},
 	supporterPlusV2: {
