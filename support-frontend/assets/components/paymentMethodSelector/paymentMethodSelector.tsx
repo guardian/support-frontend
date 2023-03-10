@@ -121,7 +121,7 @@ export function PaymentMethodSelector({
 												? 'ExistingCard'
 												: 'ExistingDirectDebit';
 										console.log(
-											'preExistingPaymentMethod',
+											'preExistingPaymentMethods',
 											preExistingPaymentMethod,
 										);
 										console.log(
