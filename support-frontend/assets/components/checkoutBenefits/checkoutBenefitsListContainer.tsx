@@ -24,6 +24,14 @@ const optimisedLayoutOverrides = css`
 		h2 {
 			${headline.xsmall({ fontWeight: 'bold' })}
 		}
+
+		tr {
+			border-bottom-width: 6px;
+		}
+
+		hr {
+			margin: 14px 0;
+		}
 	}
 `;
 
