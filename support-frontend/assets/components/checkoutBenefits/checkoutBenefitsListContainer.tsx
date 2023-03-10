@@ -7,8 +7,8 @@ import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import {
-	checkUserAbTestStatus,
 	getMinimumContributionAmount,
+	isUserInAbVariant,
 } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
@@ -67,7 +67,7 @@ export function CheckoutBenefitsListContainer({
 	);
 
 	const useOptimisedMobileLayout = useContributionsSelector(
-		checkUserAbTestStatus('supporterPlusMobileTest1', 'variant'),
+		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
 	);
 
 	const currency = currencies[currencyId];

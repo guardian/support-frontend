@@ -7,8 +7,8 @@ import {
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
 import {
-	checkUserAbTestStatus,
 	getMinimumContributionAmount,
+	isUserInAbVariant,
 } from 'helpers/redux/commonState/selectors';
 import { getOtherAmountErrors } from 'helpers/redux/selectors/formValidation/otherAmountValidation';
 import {
@@ -74,7 +74,7 @@ export function PriceCardsContainer({
 	const otherAmountErrors = useContributionsSelector(getOtherAmountErrors);
 
 	const useOptimisedMobileLayout = useContributionsSelector(
-		checkUserAbTestStatus('supporterPlusMobileTest1', 'variant'),
+		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
 	);
 
 	const otherAmount = otherAmounts[frequency].amount ?? '';

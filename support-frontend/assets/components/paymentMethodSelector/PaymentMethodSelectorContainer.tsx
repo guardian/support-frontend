@@ -12,7 +12,7 @@ import { selectExistingPaymentMethod } from 'helpers/redux/checkout/payment/exis
 import type { ExistingPaymentMethodsState } from 'helpers/redux/checkout/payment/existingPaymentMethods/state';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { checkUserAbTestStatus } from 'helpers/redux/commonState/selectors';
+import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -82,7 +82,7 @@ function PaymentMethodSelectorContainer({
 	);
 
 	const useOptimisedMobileLayout = useContributionsSelector(
-		checkUserAbTestStatus('supporterPlusMobileTest1', 'variant'),
+		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
 	);
 
 	const availablePaymentMethods = getValidPaymentMethods(
