@@ -246,9 +246,13 @@ export function SupporterPlusLandingPage({
 										)}
 									/>
 									<PaymentButtonController
-										cssOverrides={css`
-											margin-top: 30px;
-										`}
+										cssOverrides={
+											optimisedMobileLayout
+												? css`
+														margin-top: 30px;
+												  `
+												: css``
+										}
 										paymentButtons={getPaymentMethodButtons(
 											contributionType,
 											switches,
