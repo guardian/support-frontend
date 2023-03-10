@@ -120,7 +120,14 @@ export function PaymentMethodSelector({
 											existingPaymentMethodType === 'Card'
 												? 'ExistingCard'
 												: 'ExistingDirectDebit';
-
+										console.log(
+											'preExistingPaymentMethod',
+											preExistingPaymentMethod,
+										);
+										console.log(
+											'preExistingPaymentMethod.billingAccountId',
+											preExistingPaymentMethod.billingAccountId,
+										);
 										return (
 											<AvailablePaymentMethodAccordionRow
 												id={`paymentMethod-existing${preExistingPaymentMethod.billingAccountId}`}

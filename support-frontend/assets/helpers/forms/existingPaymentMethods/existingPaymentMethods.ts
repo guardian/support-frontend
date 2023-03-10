@@ -106,6 +106,7 @@ function subscriptionToExplainerPart(
 	subscription: ExistingPaymentMethodSubscription,
 ): string {
 	const activeOrRecentPrefix = subscription.isActive ? 'current' : 'recent';
+	console.log('subscription.name', subscription.name);
 	return `${
 		subscription.isCancelled ? 'recently cancelled' : activeOrRecentPrefix
 	} ${subscription.name}`;
@@ -118,7 +119,8 @@ function subscriptionsToExplainerList(subscriptionParts: string[]): string {
 		.concat(
 			subscriptionParts.length > 1 ? ' and ' : '',
 			subscriptionParts.slice(-1)[0],
-		);
+		)
+		.toLowerCase();
 }
 
 export {
