@@ -1,4 +1,4 @@
-@use "sass:math";
+@use 'sass:math';
 
 @import '~stylesheets/gu-sass/gu-sass';
 
@@ -34,7 +34,7 @@
 	font-weight: bold;
 	background-color: gu-colour(highlight-main);
 	color: gu-colour(neutral-7);
-	padding: ($gu-v-spacing*0.5) ($gu-h-spacing * 0.5);
+	padding: ($gu-v-spacing * 0.5) ($gu-h-spacing * 0.5);
 
 	.component-product-page-hero-heading--campaign & {
 		background-color: gu-colour(neutral-100);

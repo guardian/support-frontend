@@ -1,4 +1,4 @@
-@use "sass:math";
+@use 'sass:math';
 
 @import '~stylesheets/gu-sass/gu-sass';
 @import '~components/headers/veggieBurgerButton/veggieBurgerButton.scss';
@@ -52,9 +52,9 @@ $header-links-min-width: gu-span(12);
 }
 
 .component-header-mobile-menu-toggler {
-  @include mq($until: tablet) {
-    display: block;
-  }
+	@include mq($until: tablet) {
+		display: block;
+	}
 	display: none;
 	[data-not-hydrated] & {
 		display: none;
@@ -124,11 +124,11 @@ $header-links-min-width: gu-span(12);
 .component-header-topnav__utility {
 	padding-top: $gu-v-spacing * 0.5;
 
-  .component-country-group-switcher {
-    @include mq($until: tablet) {
-      display: none;
-    }
-  }
+	.component-country-group-switcher {
+		@include mq($until: tablet) {
+			display: none;
+		}
+	}
 }
 
 .component-header-topnav-logo {
@@ -136,20 +136,20 @@ $header-links-min-width: gu-span(12);
 		width: gu-span(5);
 		background-color: gu-colour(brand-main);
 		float: right;
-    .component-header--one-row-from-tablet & {
-		  border-left: 1px solid gu-colour(brand-pastel);
-		  z-index: 10;
-		  position: relative;
-    }
+		.component-header--one-row-from-tablet & {
+			border-left: 1px solid gu-colour(brand-pastel);
+			z-index: 10;
+			position: relative;
+		}
 	}
 
-  @include mq($from: leftCol) {
-    .component-header--one-row-from-leftCol & {
-		  border-left: 1px solid gu-colour(brand-pastel);
-		  z-index: 10;
-		  position: relative;
-    }
-  }
+	@include mq($from: leftCol) {
+		.component-header--one-row-from-leftCol & {
+			border-left: 1px solid gu-colour(brand-pastel);
+			z-index: 10;
+			position: relative;
+		}
+	}
 
 	@include mq($from: wide) {
 		padding-right: gu-span(1) + $gu-h-spacing;
@@ -163,11 +163,11 @@ $header-links-min-width: gu-span(12);
 }
 
 .component-header-links--desktop {
-  @include mq($until: tablet) {
-    display: none;
-  }
+	@include mq($until: tablet) {
+		display: none;
+	}
 
-  display: flex;
+	display: flex;
 	justify-content: flex-start;
 	background-color: gu-colour(brand-main);
 	border-top: 1px solid gu-colour(brand-pastel);
@@ -182,23 +182,23 @@ $header-links-min-width: gu-span(12);
 		border-right: 1px solid gu-colour(brand-pastel);
 	}
 
-  @include mq($from: tablet) {
-    .component-header--one-row-from-tablet & {
-      position: absolute;
-      bottom: 0;
-      left: $gu-h-spacing * 0.5;
-      right: gu-span(5);
-    }
-  }
+	@include mq($from: tablet) {
+		.component-header--one-row-from-tablet & {
+			position: absolute;
+			bottom: 0;
+			left: $gu-h-spacing * 0.5;
+			right: gu-span(5);
+		}
+	}
 
-  @include mq($from: leftCol) {
-    .component-header--one-row-from-leftCol & {
-      position: absolute;
-      bottom: 0;
-      left: $gu-h-spacing * 0.5;
-      right: gu-span(5);
-    }
-  }
+	@include mq($from: leftCol) {
+		.component-header--one-row-from-leftCol & {
+			position: absolute;
+			bottom: 0;
+			left: $gu-h-spacing * 0.5;
+			right: gu-span(5);
+		}
+	}
 
 	.component-header-links__ul {
 		list-style: none;
@@ -216,8 +216,8 @@ $header-links-min-width: gu-span(12);
 		text-decoration: none;
 		display: block;
 		height: $gu-v-spacing * 3.5;
-		padding: math.div($gu-v-spacing, 1.75) ($gu-h-spacing * 1.5) math.div($gu-v-spacing, 1.5)
-			math.div($gu-h-spacing, 3);
+		padding: math.div($gu-v-spacing, 1.75) ($gu-h-spacing * 1.5)
+			math.div($gu-v-spacing, 1.5) math.div($gu-h-spacing, 3);
 		overflow: hidden;
 		position: relative;
 		box-shadow: inset 0 0 0 gu-colour(highlight-main);
@@ -333,9 +333,9 @@ $header-links-min-width: gu-span(12);
 	}
 
 	.component-header-topnav-logo {
-    @include mq($from: desktop) {
-      border-left: 1px solid gu-colour(brand-pastel);
-    }
+		@include mq($from: desktop) {
+			border-left: 1px solid gu-colour(brand-pastel);
+		}
 		padding-right: $gu-h-spacing * 0.5;
 		padding-top: $gu-v-spacing * 0.5;
 	}
