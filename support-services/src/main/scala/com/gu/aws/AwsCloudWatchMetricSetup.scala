@@ -71,6 +71,14 @@ object AwsCloudWatchMetricSetup {
       ),
     )
 
+  def writeAcquisitionDataToBigQueryFailure(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("WriteAcquisitionDataToBigQueryFailure"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
   private def getMetricRequest(
       name: MetricName,
       dimensions: Map[MetricDimensionName, MetricDimensionValue],

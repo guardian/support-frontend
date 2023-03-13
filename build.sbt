@@ -280,7 +280,7 @@ lazy val `module-acquisition-events` = (project in file("support-modules/acquisi
     scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
   )
-  .dependsOn(`support-config`)
+  .dependsOn(`support-config`, `module-aws`, `support-services`)
 
 lazy val `support-internationalisation` = (project in file("support-internationalisation"))
   .configs(IntegrationTest)
