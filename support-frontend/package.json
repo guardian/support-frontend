@@ -200,7 +200,7 @@
     "react-svg-loader": "^3.0.3",
     "rimraf": "^2.6.2",
     "sass": "^1.50.0",
-    "sass-mq": "^5.0.1",
+    "sass-mq": "^6.0.0",
     "search-in-file": "^1.2.2",
     "ts-loader": "9.2.8",
     "tsc-files": "^1.1.3",
