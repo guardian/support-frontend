@@ -13,6 +13,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.Support
 import com.gu.support.zuora.api._
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.validateRatePlan
+import com.typesafe.scalalogging.LazyLogging
 
 class SupporterPlusSubcriptionBuilder(
     config: ZuoraSupporterPlusConfig,
@@ -20,7 +21,7 @@ class SupporterPlusSubcriptionBuilder(
     dateGenerator: DateGenerator,
     environment: TouchPointEnvironment,
     subscribeItemBuilder: SubscribeItemBuilder,
-) {
+) extends LazyLogging {
 
   def build(
       state: SupporterPlusState,
@@ -28,10 +29,17 @@ class SupporterPlusSubcriptionBuilder(
       salesforceCaseId: Option[String],
       abTests: Option[Set[AbTest]],
   ): SubscribeItem =
-    if (isV2SupporterPlus(abTests))
+    if (isV2SupporterPlus(abTests)) {
+      logger.info(
+        "Building Supporter Plus V2 subscribeItem because user is in supporterPlusV2 ab test 'variant' cohort",
+      )
       buildV2(state, csrUsername, salesforceCaseId)
-    else
+    } else {
+      logger.info(
+        "Building Supporter Plus V2 subscribeItem because user is in supporterPlusV2 ab test 'control' cohort",
+      )
       buildV1(state, csrUsername, salesforceCaseId)
+    }
 
   def buildV1(state: SupporterPlusState, csrUsername: Option[String], salesforceCaseId: Option[String]) = {
     val productRatePlanId =
