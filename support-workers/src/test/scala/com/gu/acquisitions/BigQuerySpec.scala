@@ -88,7 +88,7 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
       None,
     )
 
-    service.tableInsertRow(dataRow).value.map(_ shouldBe Right(()))
+    service.sendAcquisition(dataRow).value.map(_ shouldBe Right(()))
   }
 
 }
