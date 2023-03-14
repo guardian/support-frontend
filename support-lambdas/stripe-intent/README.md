@@ -1,7 +1,10 @@
 # Stripe Intent lambda plus API gateway
 
-This lambda just waits for a request, then loads the support-worker
-config for stripe, and gets a setup intent id for the relevant
+This lambda creates Stripe [SetupIntents](https://stripe.com/docs/api/setup_intents) for creating recurring payments.
+
+It is invoked by the `support-frontend` backend.
+
+It loads the support-workers config for Stripe, and gets a setup intent id for the relevant
 stripe account.
 
 It is a lambda because it doesn't need a whole auto scaling group,

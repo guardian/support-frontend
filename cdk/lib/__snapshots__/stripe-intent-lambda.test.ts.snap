@@ -1,0 +1,353 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The stripe-intent-lambda stack matches the snapshot 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuDistributionBucketParameter",
+      "GuLambdaFunction",
+      "GuLambdaErrorPercentageAlarm",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Parameters": {
+    "DistributionBucketName": {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "stripeintentlambdaA2E7A0E4": {
+      "DependsOn": [
+        "stripeintentlambdaServiceRoleDefaultPolicy6F420593",
+        "stripeintentlambdaServiceRole4A726C26",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "DistributionBucketName",
+          },
+          "S3Key": "support/PROD/stripe-intent-lambda/stripe-intent.jar",
+        },
+        "Environment": {
+          "Variables": {
+            "APP": "stripe-intent-lambda",
+            "STACK": "support",
+            "STAGE": "PROD",
+            "Stage": "PROD",
+          },
+        },
+        "FunctionName": "stripe-intent-PROD",
+        "Handler": "com.gu.stripeIntent.Handler::handleRequest",
+        "MemorySize": 2048,
+        "Role": {
+          "Fn::GetAtt": [
+            "stripeintentlambdaServiceRole4A726C26",
+            "Arn",
+          ],
+        },
+        "Runtime": "java8",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "stripe-intent-lambda",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Timeout": 300,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "stripeintentlambdaErrorPercentageAlarmForLambda8E83A08C": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":reader-revenue-dev",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": {
+          "Fn::Join": [
+            "",
+            [
+              {
+                "Ref": "stripeintentlambdaA2E7A0E4",
+              },
+              " exceeded 0% error rate",
+            ],
+          ],
+        },
+        "AlarmName": {
+          "Fn::Join": [
+            "",
+            [
+              "High error % from ",
+              {
+                "Ref": "stripeintentlambdaA2E7A0E4",
+              },
+              " lambda in PROD",
+            ],
+          ],
+        },
+        "ComparisonOperator": "GreaterThanThreshold",
+        "EvaluationPeriods": 1,
+        "Metrics": [
+          {
+            "Expression": "100*m1/m2",
+            "Id": "expr_1",
+            "Label": {
+              "Fn::Join": [
+                "",
+                [
+                  "Error % of ",
+                  {
+                    "Ref": "stripeintentlambdaA2E7A0E4",
+                  },
+                ],
+              ],
+            },
+          },
+          {
+            "Id": "m1",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "stripeintentlambdaA2E7A0E4",
+                    },
+                  },
+                ],
+                "MetricName": "Errors",
+                "Namespace": "AWS/Lambda",
+              },
+              "Period": 60,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+          {
+            "Id": "m2",
+            "MetricStat": {
+              "Metric": {
+                "Dimensions": [
+                  {
+                    "Name": "FunctionName",
+                    "Value": {
+                      "Ref": "stripeintentlambdaA2E7A0E4",
+                    },
+                  },
+                ],
+                "MetricName": "Invocations",
+                "Namespace": "AWS/Lambda",
+              },
+              "Period": 60,
+              "Stat": "Sum",
+            },
+            "ReturnData": false,
+          },
+        ],
+        "Threshold": 0,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "stripeintentlambdaServiceRole4A726C26": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "stripe-intent-lambda",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "stripeintentlambdaServiceRoleDefaultPolicy6F420593": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": "arn:aws:s3:::gu-reader-revenue-private/stripe/live-stripe-regular.private.conf",
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "DistributionBucketName",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "DistributionBucketName",
+                      },
+                      "/support/PROD/stripe-intent-lambda/stripe-intent.jar",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/PROD/support/stripe-intent-lambda",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/PROD/support/stripe-intent-lambda/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "stripeintentlambdaServiceRoleDefaultPolicy6F420593",
+        "Roles": [
+          {
+            "Ref": "stripeintentlambdaServiceRole4A726C26",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+}
+`;

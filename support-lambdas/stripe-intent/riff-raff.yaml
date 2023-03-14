@@ -8,7 +8,9 @@ deployments:
     type: cloud-formation
     app: stripe-intent
     parameters:
-      templatePath: cfn.yaml
+      templateStagePaths:
+        CODE: Stripe-Intent-CODE.template.json
+        PROD: Stripe-Intent-PROD.template.json
 
   stripe-intent:
     type: aws-lambda

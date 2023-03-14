@@ -2,6 +2,7 @@ import "source-map-support/register";
 import { App } from "aws-cdk-lib";
 import { Frontend } from "../lib/frontend";
 import { PaymentApi } from "../lib/payment-api";
+import {StripeIntentLambda} from "../lib/stripe-intent-lambda";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
 
 const app = new App();
@@ -68,4 +69,14 @@ new PaymentApi(app, "Payment-API-PROD", {
     minimumInstances: 3,
     maximumInstances: 6,
   },
+});
+
+new StripeIntentLambda(app, 'Stripe-Intent-CODE', {
+  stack: 'support',
+  stage: 'CODE'
+});
+
+new StripeIntentLambda(app, 'Stripe-Intent-PROD', {
+  stack: 'support',
+  stage: 'PROD'
 });
