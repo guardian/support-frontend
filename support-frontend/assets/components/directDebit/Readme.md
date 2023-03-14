@@ -8,5 +8,5 @@ in which you are adding the component.
 
 ### How this folder is organised
 
--   directDebitForm
--   directDebitPopUpForm
+- directDebitForm
+- directDebitPopUpForm
