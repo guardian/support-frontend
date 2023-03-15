@@ -18,7 +18,7 @@ export class StripeIntentLambda extends GuStack {
       app: 'stripe-intent-lambda',
       handler: 'com.gu.stripeIntent.Handler::handleRequest',
       functionName: `stripe-intent-${this.stage}`,
-      runtime: Runtime.JAVA_8,
+      runtime: Runtime.JAVA_11,
       fileName: 'stripe-intent.jar',
       timeout: Duration.seconds(300),
       memorySize: 2048,

@@ -47,7 +47,7 @@ exports[`The stripe-intent-lambda stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "java8",
+        "Runtime": "java11",
         "Tags": [
           {
             "Key": "App",
