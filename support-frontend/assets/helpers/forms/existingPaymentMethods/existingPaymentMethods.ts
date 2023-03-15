@@ -106,9 +106,17 @@ function subscriptionToExplainerPart(
 	subscription: ExistingPaymentMethodSubscription,
 ): string {
 	const activeOrRecentPrefix = subscription.isActive ? 'current' : 'recent';
+	const subscriptionName =
+		subscription.name === 'Supporter Plus'
+			? 'support'
+			: subscription.name === 'Guardian Weekly' ||
+			  subscription.name === 'Newspaper Digital Voucher' ||
+			  subscription.name === 'Newspaper Delivery'
+			? subscription.name
+			: subscription.name.toLowerCase();
 	return `${
 		subscription.isCancelled ? 'recently cancelled' : activeOrRecentPrefix
-	} ${subscription.name}`;
+	} ${subscriptionName}`;
 }
 
 function subscriptionsToExplainerList(subscriptionParts: string[]): string {
