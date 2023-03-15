@@ -10,6 +10,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
+import { CheckoutSupportOnce } from 'components/checkoutSupportOnce/checkoutSupportOnce';
+import { CheckoutSupportOnceContainer } from 'components/checkoutSupportOnce/checkoutSupportOnceContainer';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import GridImage from 'components/gridImage/gridImage';
@@ -175,6 +177,13 @@ export function SupporterPlusLandingPage({
 						<Hide from="desktop">{heading}</Hide>
 						<Box>
 							<AmountAndBenefits />
+						</Box>
+						<Box>
+							<CheckoutSupportOnceContainer
+								renderSupportOnce={(supportOnceProps) => (
+									<CheckoutSupportOnce {...supportOnceProps} />
+								)}
+							/>
 						</Box>
 						<Box>
 							<BoxContents>
