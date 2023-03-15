@@ -36,6 +36,17 @@ jobs:
           role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           aws-region: eu-west-1
 
+      - name: Setup Node for CDK
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "yarn"
+          cache-dependency-path: cdk/yarn.lock
+
+      - name: Build CFN from CDK
+        run: ./script/ci
+        working-directory: cdk
+
       - name: Setup Java 11
         uses: actions/setup-java@v3
         with:
