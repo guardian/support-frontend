@@ -35,7 +35,8 @@ object Lambda extends LazyLogging {
 
   def processEvent(event: APIGatewayProxyRequestEvent, bigQuery: BigQueryService): APIGatewayProxyResponseEvent = {
     val rawBody = event.getBody()
-    val result = EitherT
+    val requestId: String = event.getRequestContext().getRequestId()
+    val result: EitherT[Future, Error, Unit] = EitherT
       .fromEither[Future](decode[AcquisitionDataRow](rawBody))
       .leftMap[Error](error => ParseError(error.getMessage))
       .flatMap { acq =>
@@ -45,16 +46,16 @@ object Lambda extends LazyLogging {
       }
     Try(Await.result(result.value, 20.seconds)) match {
       case Success(Right(_)) =>
-        logger.info(s"successfully processed the event: $rawBody")
+        logger.info(s"$requestId: successfully processed the event: $rawBody")
         buildResponse(200)
       case Success(Left(ParseError(error))) =>
-        logger.error(s"failed to process an event: $error")
+        logger.error(s"$requestId: failed to process an event: $error")
         buildResponse(400)
       case Success(Left(BigQueryError(error))) =>
-        logger.error(s"failed to process an event: $error")
+        logger.error(s"$requestId: failed to process an event: $error")
         buildResponse(500)
       case Failure(error) =>
-        logger.error(s"failed to process an event: $error")
+        logger.error(s"$requestId: failed to process an event: $error")
         buildResponse(500)
     }
   }

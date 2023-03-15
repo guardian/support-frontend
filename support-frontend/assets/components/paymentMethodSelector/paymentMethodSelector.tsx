@@ -67,6 +67,7 @@ export function PaymentMethodSelector({
 	showReauthenticateLink,
 	onPaymentMethodEvent,
 }: PaymentMethodSelectorProps): JSX.Element {
+	console.log('existingPaymentMethodList', existingPaymentMethodList);
 	if (
 		existingPaymentMethodList.length < 1 &&
 		availablePaymentMethods.length < 1
