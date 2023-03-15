@@ -18,7 +18,7 @@ export function AppDownloadBodyCopy(): JSX.Element {
 	);
 }
 
-export const appDownloadKindleHeader = 'Download The Guardian Editions app';
+export const appDownloadKindleHeader = 'Download the Guardian Editions app';
 
 export function AppDownloadKindleBodyCopy(): JSX.Element {
 	return (
