@@ -67,7 +67,7 @@ export function CheckoutSupportOnce({
 	supportOnceParagraph,
 	onSupportOnceClick,
 }: CheckoutSupportOnceProps): JSX.Element | null {
-	if (contributionType === 'MONTHLY' && supportOnceDisplay) {
+	if (contributionType !== 'ONE_OFF' && supportOnceDisplay) {
 		return (
 			<Box>
 				<div css={container}>
