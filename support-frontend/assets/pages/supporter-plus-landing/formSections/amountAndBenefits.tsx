@@ -10,10 +10,18 @@ import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/p
 import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
 import { PriceCards } from 'components/priceCards/priceCards';
 import { PriceCardsContainer } from 'components/priceCards/priceCardsContainer';
+import type { Participations } from 'helpers/abTests/abtest';
 
-export function AmountAndBenefits(): JSX.Element {
+type AmountAndBenefitsProps = {
+	participations: Participations;
+};
+
+export function AmountAndBenefits({
+	participations,
+}: AmountAndBenefitsProps): JSX.Element {
 	return (
 		<PaymentFrequencyTabsContainer
+			participations={participations}
 			render={(tabProps) => (
 				<PaymentFrequencyTabs
 					{...tabProps}

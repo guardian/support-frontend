@@ -1,8 +1,6 @@
 import { useState } from 'preact/hooks';
-import { init as initAbTests } from 'helpers/abTests/abtest';
+import type { Participations } from 'helpers/abTests/abtest';
 import { config } from 'helpers/contributions';
-import { getSettings } from 'helpers/globalsAndSwitches/globals';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -13,10 +11,12 @@ import {
 import type { CheckoutSupportOnceProps } from './checkoutSupportOnce';
 
 type SupportOnceContainerProps = {
+	participations: Participations;
 	renderSupportOnce: (props: CheckoutSupportOnceProps) => JSX.Element;
 };
 
 export function CheckoutSupportOnceContainer({
+	participations,
 	renderSupportOnce,
 }: SupportOnceContainerProps): JSX.Element | null {
 	const dispatch = useContributionsDispatch();
@@ -37,11 +37,6 @@ export function CheckoutSupportOnceContainer({
 		} or much more`,
 	];
 
-	const participations = initAbTests(
-		detectCountry(),
-		countryGroupId,
-		getSettings(),
-	);
 	setSupportOnceDisplay(participations.singleLessProminent === 'variant');
 
 	function onSupportOnceClick() {
