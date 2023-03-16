@@ -6,6 +6,7 @@ import {
 	space,
 	textSans,
 } from '@guardian/source-foundations';
+import { Box } from 'components/checkoutBox/checkoutBox';
 import type { ContributionType } from 'helpers/contributions';
 import { CheckoutSupportOnceButton } from './checkoutSupportOnceButton';
 
@@ -68,15 +69,17 @@ export function CheckoutSupportOnce({
 }: CheckoutSupportOnceProps): JSX.Element | null {
 	if (contributionType === 'MONTHLY' && supportOnceDisplay) {
 		return (
-			<div css={container}>
-				<div css={top}>
-					<h2 css={heading(brand[500])}>{supportOnceTitle}</h2>
+			<Box>
+				<div css={container}>
+					<div css={top}>
+						<h2 css={heading(brand[500])}>{supportOnceTitle}</h2>
+					</div>
+					<div css={bottom}>
+						<p css={para}>{supportOnceParagraph}</p>
+						<CheckoutSupportOnceButton onClick={onSupportOnceClick} />
+					</div>
 				</div>
-				<div css={bottom}>
-					<p css={para}>{supportOnceParagraph}</p>
-					<CheckoutSupportOnceButton onClick={onSupportOnceClick} />
-				</div>
-			</div>
+			</Box>
 		);
 	} else {
 		return null;

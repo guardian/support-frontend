@@ -178,13 +178,11 @@ export function SupporterPlusLandingPage({
 						<Box>
 							<AmountAndBenefits />
 						</Box>
-						<Box>
-							<CheckoutSupportOnceContainer
-								renderSupportOnce={(supportOnceProps) => (
-									<CheckoutSupportOnce {...supportOnceProps} />
-								)}
-							/>
-						</Box>
+						<CheckoutSupportOnceContainer
+							renderSupportOnce={(supportOnceProps) => (
+								<CheckoutSupportOnce {...supportOnceProps} />
+							)}
+						/>
 						<Box>
 							<BoxContents>
 								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
