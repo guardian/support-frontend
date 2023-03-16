@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import {
 	Button,
-	SvgArrowRightStraight,
+	SvgChevronRightSingle,
 } from '@guardian/source-react-components';
 
 const button = css`
@@ -26,7 +26,7 @@ export function CheckoutSupportOnceButton({
 	return (
 		<Button
 			onClick={onClick}
-			icon={<SvgArrowRightStraight size="xsmall" />}
+			icon={<SvgChevronRightSingle size="xsmall" />}
 			size="small"
 			hideLabel
 			priority="secondary"
