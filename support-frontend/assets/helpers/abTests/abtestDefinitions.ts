@@ -121,7 +121,7 @@ export const tests: Tests = {
 		},
 		isActive: false,
 		referrerControlled: false,
-		targetPage: pageUrlRegexes.subscriptions.subsWeeklyPages,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 12,
 	},
 };
