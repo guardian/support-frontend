@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
 import { headline, space } from '@guardian/source-foundations';
-import { Accordion, RadioGroup } from '@guardian/source-react-components';
+import { Accordion, Hide, RadioGroup } from '@guardian/source-react-components';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import AnimatedDots from 'components/spinners/animatedDots';
@@ -12,6 +12,7 @@ import {
 	subscriptionToExplainerPart,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 import { paymentMethodData } from './paymentMethodData';
 import { AvailablePaymentMethodAccordionRow } from './paymentMethodSelectorAccordionRow';
 import { ReauthenticateLink } from './reauthenticateLink';
@@ -36,12 +37,14 @@ function PaymentMethodSelectorLegend() {
 			<legend id="payment_method">
 				<h2 css={header}>Payment method</h2>
 			</legend>
-			<SecureTransactionIndicator position="middle" hideText={true} />
+			<Hide until="tablet">
+				<SecureTransactionIndicator hideText={true} />
+			</Hide>
 		</div>
 	);
 }
 
-export interface PaymentMethodSelectorProps {
+export interface PaymentMethodSelectorProps extends CSSOverridable {
 	cssOverrides?: SerializedStyles;
 	availablePaymentMethods: PaymentMethod[];
 	paymentMethod: PaymentMethod | null;
@@ -66,6 +69,7 @@ export function PaymentMethodSelector({
 	pendingExistingPaymentMethods,
 	showReauthenticateLink,
 	onPaymentMethodEvent,
+	cssOverrides,
 }: PaymentMethodSelectorProps): JSX.Element {
 	if (
 		existingPaymentMethodList.length < 1 &&
@@ -81,7 +85,7 @@ export function PaymentMethodSelector({
 	}
 
 	return (
-		<div css={container}>
+		<div css={[container, cssOverrides]}>
 			<PaymentMethodSelectorLegend />
 			<RadioGroup
 				id="paymentMethod"

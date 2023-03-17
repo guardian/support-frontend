@@ -44,6 +44,7 @@ export function AmountAndBenefits({
 									onOtherAmountChange,
 									hideChooseYourAmount,
 									errors,
+									cssOverrides,
 								}) => (
 									<>
 										<PriceCards
@@ -53,6 +54,7 @@ export function AmountAndBenefits({
 											paymentInterval={paymentInterval}
 											onAmountChange={onAmountChange}
 											hideChooseYourAmount={hideChooseYourAmount}
+											cssOverrides={cssOverrides}
 											otherAmountField={
 												<OtherAmount
 													currency={currency}

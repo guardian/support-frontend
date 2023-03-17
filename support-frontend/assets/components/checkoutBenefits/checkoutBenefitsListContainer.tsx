@@ -1,10 +1,15 @@
+import { css } from '@emotion/react';
+import { headline, until } from '@guardian/source-foundations';
 import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
+import {
+	getMinimumContributionAmount,
+	isUserInAbVariant,
+} from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -13,6 +18,22 @@ import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { isOneOff } from 'helpers/supporterPlus/isContributionRecurring';
 import type { CheckoutBenefitsListProps } from './checkoutBenefitsList';
 import { checkListData } from './checkoutBenefitsListData';
+
+const optimisedLayoutOverrides = css`
+	${until.tablet} {
+		h2 {
+			${headline.xsmall({ fontWeight: 'bold' })}
+		}
+
+		tr {
+			border-bottom-width: 6px;
+		}
+
+		hr {
+			margin: 14px 0;
+		}
+	}
+`;
 
 type CheckoutBenefitsListContainerProps = {
 	renderBenefitsList: (props: CheckoutBenefitsListProps) => JSX.Element;
@@ -51,6 +72,10 @@ export function CheckoutBenefitsListContainer({
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const minimumContributionAmount = useContributionsSelector(
 		getMinimumContributionAmount,
+	);
+
+	const useOptimisedMobileLayout = useContributionsSelector(
+		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
 	);
 
 	const currency = currencies[currencyId];
@@ -98,5 +123,8 @@ export function CheckoutBenefitsListContainer({
 		),
 		handleButtonClick,
 		countryGroupId,
+		cssOverrides: useOptimisedMobileLayout
+			? optimisedLayoutOverrides
+			: undefined,
 	});
 }
