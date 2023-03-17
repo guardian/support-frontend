@@ -100,6 +100,26 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 1,
 	},
+	singleLessProminent: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		seed: 11,
+	},
 	supporterPlusMobileTest1: {
 		variants: [
 			{
@@ -117,13 +137,11 @@ export const tests: Tests = {
 					minWidth: 'mobile',
 					maxWidth: 'tablet',
 				},
-
 			},
 		},
 		isActive: false,
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		seed: 11,
-
+		seed: 12,
 	},
 };

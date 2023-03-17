@@ -52,7 +52,7 @@ import {
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
+import { isUserInAnyAbVariant as isUserInAbVariants } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -116,8 +116,6 @@ export function SupporterPlusLandingPage({
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
-	const [supportOnceDisplay, setSupportOnceDisplay] = useState(true);
-
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -138,7 +136,10 @@ export function SupporterPlusLandingPage({
 	);
 
 	const optimisedMobileLayout = useContributionsSelector(
-		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
+		isUserInAbVariants(
+			['supporterPlusMobileTest1', 'singleLessProminent'],
+			'variant',
+		),
 	);
 
 	const { paymentComplete, isWaiting } = useContributionsSelector(
@@ -166,6 +167,9 @@ export function SupporterPlusLandingPage({
 		detectCountry(),
 		countryGroupId,
 		getSettings(),
+	);
+	const [supportOnceDisplay, setSupportOnceDisplay] = useState(
+		participations.singleLessProminent === 'variant',
 	);
 
 	const dispatch = useContributionsDispatch();
@@ -251,7 +255,7 @@ export function SupporterPlusLandingPage({
 						>
 							<AmountAndBenefits hideOneOff={supportOnceDisplay} />
 						</Box>
-            <CheckoutSupportOnceContainer
+						<CheckoutSupportOnceContainer
 							supportOnceDisplay={supportOnceDisplay}
 							renderSupportOnce={(supportOnceProps) => (
 								<CheckoutSupportOnce {...supportOnceProps} />
