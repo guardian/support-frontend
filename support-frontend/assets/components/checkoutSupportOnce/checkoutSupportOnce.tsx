@@ -5,6 +5,7 @@ import {
 	headline,
 	space,
 	textSans,
+	until,
 } from '@guardian/source-foundations';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import type { ContributionType } from 'helpers/contributions';
@@ -51,7 +52,12 @@ const para = css`
 		${textSans.medium({ lineHeight: 'regular' })};
 	}
 `;
-const boxClickable = css`
+const box = css`
+	:not(:last-child) {
+		${until.tablet} {
+			margin-bottom: ${space[2]}px;
+		}
+	}
 	&:hover {
 		cursor: pointer;
 	}
@@ -74,7 +80,7 @@ export function CheckoutSupportOnce({
 }: CheckoutSupportOnceProps): JSX.Element | null {
 	if (contributionType !== 'ONE_OFF' && supportOnceDisplay) {
 		return (
-			<Box onClick={onSupportOnceClick} cssOverrides={boxClickable}>
+			<Box onClick={onSupportOnceClick} cssOverrides={box}>
 				<div css={container}>
 					<div css={top}>
 						<h2 css={heading(brand[500])}>{supportOnceTitle}</h2>
