@@ -106,14 +106,20 @@ function subscriptionToExplainerPart(
 	subscription: ExistingPaymentMethodSubscription,
 ): string {
 	const activeOrRecentPrefix = subscription.isActive ? 'current' : 'recent';
-	const subscriptionName =
-		subscription.name === 'Supporter Plus'
-			? 'support'
-			: subscription.name === 'Guardian Weekly' ||
-			  subscription.name === 'Newspaper Digital Voucher' ||
-			  subscription.name === 'Newspaper Delivery'
-			? subscription.name
-			: subscription.name.toLowerCase();
+	let subscriptionName: string;
+	switch (subscription.name) {
+		case 'Supporter Plus':
+			subscriptionName = 'support';
+			break;
+		case 'Guardian Weekly':
+		case 'Newspaper Digital Voucher':
+		case 'Newspaper Delivery':
+			subscriptionName = subscription.name;
+			break;
+		default:
+			subscriptionName = subscription.name.toLowerCase();
+			break;
+	}
 	return `${
 		subscription.isCancelled ? 'recently cancelled' : activeOrRecentPrefix
 	} ${subscriptionName}`;
