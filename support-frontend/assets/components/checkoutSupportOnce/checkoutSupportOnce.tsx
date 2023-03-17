@@ -51,6 +51,11 @@ const para = css`
 		${textSans.medium({ lineHeight: 'regular' })};
 	}
 `;
+const boxClickable = css`
+	&:hover {
+		cursor: pointer;
+	}
+`;
 
 export type CheckoutSupportOnceProps = {
 	contributionType: ContributionType;
@@ -69,7 +74,7 @@ export function CheckoutSupportOnce({
 }: CheckoutSupportOnceProps): JSX.Element | null {
 	if (contributionType !== 'ONE_OFF' && supportOnceDisplay) {
 		return (
-			<Box>
+			<Box onClick={onSupportOnceClick} cssOverrides={boxClickable}>
 				<div css={container}>
 					<div css={top}>
 						<h2 css={heading(brand[500])}>{supportOnceTitle}</h2>

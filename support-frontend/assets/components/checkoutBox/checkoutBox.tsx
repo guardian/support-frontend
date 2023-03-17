@@ -22,12 +22,16 @@ const mainStyles = css`
 export interface BoxProps extends CSSOverridable {
 	children: React.ReactNode;
 	tag?: keyof JSX.IntrinsicElements;
+	onClick?: () => void;
 }
 
 export function Box(props: BoxProps): JSX.Element {
 	const TagName = props.tag ?? 'section';
 	return (
-		<TagName css={[mainStyles, props.cssOverrides ?? '']}>
+		<TagName
+			css={[mainStyles, props.cssOverrides ?? '']}
+			onClick={props.onClick}
+		>
 			{props.children}
 		</TagName>
 	);
