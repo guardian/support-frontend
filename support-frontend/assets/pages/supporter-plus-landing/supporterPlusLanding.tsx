@@ -1,8 +1,14 @@
 import { css } from '@emotion/react';
-import { from, neutral, space, textSans } from '@guardian/source-foundations';
+import {
+	brand,
+	from,
+	neutral,
+	space,
+	textSans,
+	until,
+} from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
 import {
-	Divider,
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
@@ -46,11 +52,13 @@ import {
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
+import { CheckoutDivider } from './components/checkoutDivider';
 import { DirectDebitContainer } from './components/directDebitWrapper';
 import { ExistingRecurringContributorMessage } from './components/existingRecurringContributorMessage';
 import { GuardianTsAndCs } from './components/guardianTsAndCs';
@@ -78,9 +86,24 @@ const checkoutContainer = css`
 	}
 `;
 
-const divider = css`
-	max-width: 100%;
-	margin: 40px 0 ${space[6]}px;
+const backgroundContainer = css`
+	background-color: ${neutral[97]};
+`;
+
+const darkBackgroundContainerMobile = css`
+	${backgroundContainer}
+	${until.tablet} {
+		background-color: ${brand[400]};
+		border-bottom: 1px solid ${brand[600]};
+	}
+`;
+
+const shorterBoxMargin = css`
+	:not(:last-child) {
+		${until.tablet} {
+			margin-bottom: ${space[2]}px;
+		}
+	}
 `;
 
 const subheading = css`
@@ -112,6 +135,10 @@ export function SupporterPlusLandingPage({
 		selectedAmounts,
 		otherAmounts,
 		countryGroupId,
+	);
+
+	const optimisedMobileLayout = useContributionsSelector(
+		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
 	);
 
 	const { paymentComplete, isWaiting } = useContributionsSelector(
@@ -195,26 +222,49 @@ export function SupporterPlusLandingPage({
 					reporting on the events shaping our world.
 				</p>
 			</CheckoutHeading>
-			<Container sideBorders backgroundColor={neutral[97]}>
+			<Container
+				sideBorders
+				cssOverrides={
+					optimisedMobileLayout
+						? darkBackgroundContainerMobile
+						: backgroundContainer
+				}
+			>
 				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
 					<Column span={[0, 2, 5]}></Column>
 					<Column span={[1, 8, 7]}>
-						<Hide from="desktop">{heading}</Hide>
-						<Box>
+						<Hide from="desktop">
+							{optimisedMobileLayout ? (
+								<SecureTransactionIndicator
+									align="left"
+									theme="light"
+									cssOverrides={css`
+										margin-bottom: 10px;
+									`}
+								/>
+							) : (
+								heading
+							)}
+						</Hide>
+						<Box
+							cssOverrides={optimisedMobileLayout ? shorterBoxMargin : css``}
+						>
 							<AmountAndBenefits hideOneOff={supportOnceDisplay} />
 						</Box>
-						<CheckoutSupportOnceContainer
+            <CheckoutSupportOnceContainer
 							supportOnceDisplay={supportOnceDisplay}
 							renderSupportOnce={(supportOnceProps) => (
 								<CheckoutSupportOnce {...supportOnceProps} />
 							)}
 							onSupportOnceContainerClick={onSupportOnceContainerClick}
 						/>
-						<Box>
+						<Box
+							cssOverrides={optimisedMobileLayout ? shorterBoxMargin : css``}
+						>
 							<BoxContents>
 								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
 								<ContributionsStripe>
-									<SecureTransactionIndicator position="center" />
+									<SecureTransactionIndicator />
 									<PaymentRequestButtonContainer
 										CustomButton={SavedCardButton}
 									/>
@@ -223,13 +273,20 @@ export function SupporterPlusLandingPage({
 											<PersonalDetails {...personalDetailsProps} />
 										)}
 									/>
-									<Divider size="full" cssOverrides={divider} />
+									<CheckoutDivider spacing="loose" />
 									<PaymentMethodSelectorContainer
 										render={(paymentMethodSelectorProps) => (
 											<PaymentMethodSelector {...paymentMethodSelectorProps} />
 										)}
 									/>
 									<PaymentButtonController
+										cssOverrides={
+											optimisedMobileLayout
+												? css`
+														margin-top: 30px;
+												  `
+												: css``
+										}
 										paymentButtons={getPaymentMethodButtons(
 											contributionType,
 											switches,
@@ -250,16 +307,21 @@ export function SupporterPlusLandingPage({
 								/>
 							</BoxContents>
 						</Box>
-						<Divider size="full" cssOverrides={divider} />
-						<PatronsMessage countryGroupId={countryGroupId} />
-						<Divider
-							size="full"
-							cssOverrides={css`
-								max-width: 100%;
-								margin: ${space[4]}px 0 ${space[4]}px;
-							`}
+						<CheckoutDivider
+							spacing="loose"
+							mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
 						/>
-						<GuardianTsAndCs />
+						<PatronsMessage
+							countryGroupId={countryGroupId}
+							mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+						/>
+						<CheckoutDivider
+							spacing="tight"
+							mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+						/>
+						<GuardianTsAndCs
+							mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+						/>
 					</Column>
 				</Columns>
 			</Container>

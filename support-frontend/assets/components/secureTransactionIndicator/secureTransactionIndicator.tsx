@@ -1,75 +1,57 @@
 import { css } from '@emotion/react';
-import {
-	from,
-	neutral,
-	space,
-	textSans,
-	until,
-} from '@guardian/source-foundations';
+import { neutral, textSans } from '@guardian/source-foundations';
+import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 import SecurePadlock from './securePadlock.svg';
 import SecurePadlockCircle from './securePadlockCircle.svg';
 
-export type SecureTransactionIndicatorProps = {
-	position: string;
+export interface SecureTransactionIndicatorProps extends CSSOverridable {
+	align?: 'left' | 'right' | 'center';
+	theme?: 'dark' | 'light';
 	hideText?: boolean;
-};
+}
 
-const secureTransaction = (position: string) => css`
-	display: flex;
-	align-items: center;
-
-	${position === 'top' &&
-	`
-    margin-bottom: 6px;
-
-    ${from.tablet} {
-      position: absolute;
-      visibility: hidden;
-      display: none;
-    }
-  `}
-
-	${position === 'middle' &&
-	`
-    margin-top: -${space[3]}px;
-
-    ${until.tablet} {
-      position: absolute;
-      visibility: hidden;
-      display: none;
-    }
-  `}
-
-	${position === 'center' &&
-	`
-    justify-content: center;
-    align-items: center;
-  `}
+const theming = (theme: 'dark' | 'light') => css`
+	color: ${theme === 'dark' ? neutral[46] : neutral[100]};
+	opacity: ${theme === 'dark' ? 1 : 0.9};
 `;
 
-const suppPlusPayMethodIndicator = css`
+const secureTransactionWithText = (align: 'left' | 'right' | 'center') => css`
+	display: flex;
+	align-items: center;
+	justify-content: ${align};
+`;
+
+const secureTransactionIcon = css`
 	display: flex;
 	align-items: center;
 `;
 
 const padlock = css`
 	margin-right: 5px;
+	opacity: inherit;
+	path {
+		fill: currentColor;
+	}
 `;
 
 const text = css`
 	${textSans.xsmall({ fontWeight: 'bold' })};
-	color: ${neutral[46]};
 	letter-spacing: 0.01em;
+	opacity: inherit;
 `;
 
 export function SecureTransactionIndicator({
-	position,
+	align = 'center',
+	theme = 'dark',
 	hideText,
+	cssOverrides,
 }: SecureTransactionIndicatorProps): JSX.Element {
+	const mainCss = hideText
+		? secureTransactionIcon
+		: secureTransactionWithText(align);
+	const overrides = cssOverrides ?? css``;
 	return (
-		<div
-			css={hideText ? suppPlusPayMethodIndicator : secureTransaction(position)}
-		>
+		<div css={[mainCss, theming(theme), overrides]}>
 			{hideText ? (
 				<SecurePadlockCircle css={padlock} />
 			) : (

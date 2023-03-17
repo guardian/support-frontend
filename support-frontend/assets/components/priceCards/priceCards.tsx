@@ -4,6 +4,7 @@ import { ChoiceCardGroup } from '@guardian/source-react-components';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
+import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 import type { PriceCardPaymentInterval } from './priceCard';
 import { PriceCard } from './priceCard';
 
@@ -57,7 +58,7 @@ function getChoiceCardGroupStyles(lastButtonFullWidth: boolean) {
 	return [cardStyles, lastButtonFullWidthStyles, mobileGrid];
 }
 
-export type PriceCardsProps = {
+export interface PriceCardsProps extends CSSOverridable {
 	amounts: string[];
 	selectedAmount: string;
 	currency: IsoCurrency;
@@ -65,7 +66,7 @@ export type PriceCardsProps = {
 	paymentInterval?: PriceCardPaymentInterval;
 	otherAmountField?: React.ReactNode;
 	hideChooseYourAmount?: boolean;
-};
+}
 
 export function PriceCards({
 	amounts,
@@ -75,6 +76,7 @@ export function PriceCards({
 	paymentInterval,
 	otherAmountField,
 	hideChooseYourAmount,
+	cssOverrides,
 }: PriceCardsProps): JSX.Element {
 	// Override hideChooseYourAmount if no amounts supplied
 	const enableChooseYourAmountButton = !hideChooseYourAmount || !amounts.length;
@@ -84,7 +86,7 @@ export function PriceCards({
 	const lastButtonFullWidth = buttonCount % 2 !== 0;
 
 	return (
-		<div css={cardsContainer}>
+		<div css={[cardsContainer, cssOverrides]}>
 			<ChoiceCardGroup
 				cssOverrides={getChoiceCardGroupStyles(lastButtonFullWidth)}
 				name="amounts"
