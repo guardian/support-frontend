@@ -1,31 +1,24 @@
-import { useState } from 'preact/hooks';
-import type { Participations } from 'helpers/abTests/abtest';
 import { config } from 'helpers/contributions';
 import { detect, glyph } from 'helpers/internationalisation/currency';
-import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import {
-	useContributionsDispatch,
-	useContributionsSelector,
-} from 'helpers/redux/storeHooks';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { CheckoutSupportOnceProps } from './checkoutSupportOnce';
 
 type SupportOnceContainerProps = {
-	participations: Participations;
+	supportOnceDisplay: boolean;
 	renderSupportOnce: (props: CheckoutSupportOnceProps) => JSX.Element;
+	onSupportOnceContainerClick: (supportOnceDisplay: boolean) => void;
 };
 
 export function CheckoutSupportOnceContainer({
-	participations,
+	supportOnceDisplay,
 	renderSupportOnce,
+	onSupportOnceContainerClick,
 }: SupportOnceContainerProps): JSX.Element | null {
-	const dispatch = useContributionsDispatch();
 	const contributionType = useContributionsSelector(getContributionType);
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-
-	const [supportOnceDisplay, setSupportOnceDisplay] = useState(true);
 
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId]['ONE_OFF'].min;
@@ -37,11 +30,8 @@ export function CheckoutSupportOnceContainer({
 		} or much more`,
 	];
 
-	setSupportOnceDisplay(participations.singleLessProminent === 'variant');
-
 	function onSupportOnceClick() {
-		setSupportOnceDisplay(false);
-		dispatch(setProductType('ONE_OFF'));
+		onSupportOnceContainerClick(false);
 	}
 
 	return renderSupportOnce({
