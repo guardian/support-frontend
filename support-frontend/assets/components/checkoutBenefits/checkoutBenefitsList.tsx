@@ -8,6 +8,7 @@ import {
 } from '@guardian/source-foundations';
 import CancelAnytimeTooltip from 'components/tooltip/Tooltip';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 import type { CheckListData } from './checkoutBenefitsListData';
 
 const container = css`
@@ -62,21 +63,22 @@ const hr = (margin: string) => css`
 	margin: ${margin};
 `;
 
-export type CheckoutBenefitsListProps = {
+export interface CheckoutBenefitsListProps extends CSSOverridable {
 	title: string;
 	checkListData: CheckListData[];
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
 	countryGroupId: CountryGroupId;
-};
+}
 
 export function CheckoutBenefitsList({
 	title,
 	checkListData,
 	countryGroupId,
+	cssOverrides,
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
-		<div css={container}>
+		<div css={[container, cssOverrides]}>
 			<h2 css={heading}>{title}</h2>
 			<hr css={hr(`${space[4]}px 0`)} />
 			<table css={table}>

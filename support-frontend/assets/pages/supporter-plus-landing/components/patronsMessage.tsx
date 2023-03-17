@@ -1,32 +1,30 @@
 import { css } from '@emotion/react';
-import { headline, space, textSans } from '@guardian/source-foundations';
+import { headline, space } from '@guardian/source-foundations';
 import { Link } from '@guardian/source-react-components';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
+import type { FinePrintTheme } from './finePrint';
+import { FinePrint } from './finePrint';
 
 const headingStyles = css`
 	${headline.xxxsmall({ fontWeight: 'bold' })};
-	color: #606060;
 	margin-bottom: ${space[1]}px;
-`;
-
-const copyStyles = css`
-	${textSans.xsmall({ lineHeight: 'regular' })};
-	color: #606060;
 `;
 
 const linkStyles = css`
 	font-size: inherit;
 	line-height: inherit;
-	color: #606060;
+	color: inherit;
 `;
 
 const intCMPParameter = 'gdnwb_copts_support_contributions_referral';
 
 export function PatronsMessage({
 	countryGroupId,
+	mobileTheme = 'dark',
 }: {
 	countryGroupId: CountryGroupId;
+	mobileTheme?: FinePrintTheme;
 }): JSX.Element {
 	const patronageAmountsWithGlyph = {
 		GBPCountries: '£100',
@@ -40,12 +38,12 @@ export function PatronsMessage({
 	const isUSA = countryGroupId === 'UnitedStates';
 
 	return (
-		<>
+		<FinePrint mobileTheme={mobileTheme} size="xsmall">
 			<h2 css={headingStyles}>
 				{isUSA ? 'Support another way' : 'Guardian Patrons programme'}
 			</h2>
 			{isUSA ? (
-				<p css={copyStyles}>
+				<p>
 					To learn more about other ways to support the Guardian, including
 					checks and tax-exempt options, please visit our{' '}
 					<Link
@@ -58,7 +56,7 @@ export function PatronsMessage({
 					on this topic.
 				</p>
 			) : (
-				<p css={copyStyles}>
+				<p>
 					If you would like to support us at a higher level, from{' '}
 					{patronageAmountsWithGlyph[countryGroupId]} a month, you can join us
 					as a Guardian Patron.{' '}
@@ -71,6 +69,6 @@ export function PatronsMessage({
 					</Link>
 				</p>
 			)}
-		</>
+		</FinePrint>
 	);
 }
