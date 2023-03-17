@@ -10,18 +10,17 @@ import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/p
 import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
 import { PriceCards } from 'components/priceCards/priceCards';
 import { PriceCardsContainer } from 'components/priceCards/priceCardsContainer';
-import type { Participations } from 'helpers/abTests/abtest';
 
 type AmountAndBenefitsProps = {
-	participations: Participations;
+	hideOneOff?: boolean;
 };
 
 export function AmountAndBenefits({
-	participations,
+	hideOneOff,
 }: AmountAndBenefitsProps): JSX.Element {
 	return (
 		<PaymentFrequencyTabsContainer
-			participations={participations}
+			hideOneOff={hideOneOff}
 			render={(tabProps) => (
 				<PaymentFrequencyTabs
 					{...tabProps}

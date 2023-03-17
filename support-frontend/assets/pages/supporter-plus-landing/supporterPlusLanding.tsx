@@ -6,6 +6,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
+import { useState } from 'preact/hooks';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -42,9 +43,13 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { DirectDebitContainer } from './components/directDebitWrapper';
 import { ExistingRecurringContributorMessage } from './components/existingRecurringContributorMessage';
@@ -88,6 +93,8 @@ export function SupporterPlusLandingPage({
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
+	const [supportOnceDisplay, setSupportOnceDisplay] = useState(true);
+
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -133,6 +140,15 @@ export function SupporterPlusLandingPage({
 		countryGroupId,
 		getSettings(),
 	);
+
+	const dispatch = useContributionsDispatch();
+	function onSupportOnceContainerClick(displaySupportOnce: boolean) {
+		setSupportOnceDisplay(
+			participations.singleLessProminent !== 'variant' ||
+				(supportOnceDisplay && displaySupportOnce),
+		);
+		dispatch(setProductType('ONE_OFF'));
+	}
 
 	useEffect(() => {
 		if (paymentComplete) {
@@ -185,13 +201,14 @@ export function SupporterPlusLandingPage({
 					<Column span={[1, 8, 7]}>
 						<Hide from="desktop">{heading}</Hide>
 						<Box>
-							<AmountAndBenefits participations={participations} />
+							<AmountAndBenefits hideOneOff={supportOnceDisplay} />
 						</Box>
 						<CheckoutSupportOnceContainer
-							participations={participations}
+							supportOnceDisplay={supportOnceDisplay}
 							renderSupportOnce={(supportOnceProps) => (
 								<CheckoutSupportOnce {...supportOnceProps} />
 							)}
+							onSupportOnceContainerClick={onSupportOnceContainerClick}
 						/>
 						<Box>
 							<BoxContents>

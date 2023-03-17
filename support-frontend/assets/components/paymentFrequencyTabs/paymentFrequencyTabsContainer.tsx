@@ -1,4 +1,3 @@
-import type { Participations } from 'helpers/abTests/abtest';
 import type { ContributionType } from 'helpers/contributions';
 import {
 	getPaymentMethodToSelect,
@@ -18,13 +17,13 @@ import type {
 } from './paymentFrequenncyTabs';
 
 type PaymentFrequencyTabsContainerProps = {
-	participations: Participations;
+	hideOneOff?: boolean;
 	ariaLabel?: string;
 	render: (tabComponentProps: PaymentFrequencyTabsRenderProps) => JSX.Element;
 };
 
 export function PaymentFrequencyTabsContainer({
-	participations,
+	hideOneOff,
 	ariaLabel = 'Payment frequency options',
 	render,
 }: PaymentFrequencyTabsContainerProps): JSX.Element {
@@ -63,10 +62,7 @@ export function PaymentFrequencyTabsContainer({
 		},
 	);
 
-	if (
-		participations.singleLessProminent === 'variant' &&
-		(productType === 'MONTHLY' || productType === 'ANNUAL')
-	) {
+	if (hideOneOff) {
 		delete tabs[0];
 	}
 
