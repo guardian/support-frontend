@@ -66,9 +66,7 @@ class BigQueryService(config: BigQueryConfig) {
       .build()
   lazy val bigQueryWriteClient = BigQueryWriteClient.create(bigQueryWriteSettings)
 
-  def sendAcquisition(acquisitionDataRow: AcquisitionDataRow)(implicit
-      executionContext: ExecutionContext,
-  ): EitherT[Future, String, Unit] =
+  def sendAcquisition(acquisitionDataRow: AcquisitionDataRow): EitherT[Future, String, Unit] =
     EitherT(
       send(acquisitionDataRow),
     )
