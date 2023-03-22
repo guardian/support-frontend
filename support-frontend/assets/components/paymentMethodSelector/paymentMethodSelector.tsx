@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
 import { headline, space } from '@guardian/source-foundations';
-import { Accordion, Hide, RadioGroup } from '@guardian/source-react-components';
+import { Accordion, RadioGroup } from '@guardian/source-react-components';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import AnimatedDots from 'components/spinners/animatedDots';
@@ -26,6 +26,11 @@ const header = css`
 	${headline.small({ fontWeight: 'bold' })};
 `;
 
+const securetransactionindicator = css`
+	margin-bottom: ${space[3]}px;
+	${headline.small({ fontWeight: 'bold' })};
+`;
+
 function PaymentMethodSelectorLegend() {
 	return (
 		<div
@@ -37,9 +42,10 @@ function PaymentMethodSelectorLegend() {
 			<legend id="payment_method">
 				<h2 css={header}>Payment method</h2>
 			</legend>
-			<Hide until="tablet">
-				<SecureTransactionIndicator hideText={true} />
-			</Hide>
+			<SecureTransactionIndicator
+				hideText={true}
+				cssOverrides={securetransactionindicator}
+			/>
 		</div>
 	);
 }
