@@ -52,7 +52,7 @@ import {
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { isUserInAnyAbVariant as isUserInAbVariants } from 'helpers/redux/commonState/selectors';
+import { isUserInAbVariants } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,

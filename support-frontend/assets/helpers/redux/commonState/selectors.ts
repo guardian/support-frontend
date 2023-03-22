@@ -56,10 +56,7 @@ export function isUserInAbVariant(abTestName: string, variantName: string) {
 	};
 }
 
-export function isUserInAnyAbVariant(
-	abTestNames: string[],
-	variantName: string,
-) {
+export function isUserInAbVariants(abTestNames: string[], variantName: string) {
 	return function getAbTestStatus(state: ContributionsState): boolean {
 		const participations = state.common.abParticipations;
 		const foundAbTests = abTestNames.filter(
