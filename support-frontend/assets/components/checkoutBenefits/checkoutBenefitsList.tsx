@@ -46,7 +46,7 @@ const table = css`
 	padding-top: ${space[4]}px;
 
 	& tr:not(:last-child) {
-		border-bottom: 10px solid transparent;
+		border-bottom: 6px solid transparent;
 	}
 
 	${from.mobileLandscape} {
