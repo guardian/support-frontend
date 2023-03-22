@@ -28,7 +28,6 @@ const header = css`
 
 const securetransactionindicator = css`
 	margin-bottom: ${space[3]}px;
-	${headline.small({ fontWeight: 'bold' })};
 `;
 
 function PaymentMethodSelectorLegend() {
