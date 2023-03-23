@@ -52,19 +52,23 @@ export function PaymentFrequencyTabsContainer({
 		dispatch(setPaymentMethod(paymentMethodToSelect));
 	}
 
-	const tabs: TabProps[] = contributionTypes[countryGroupId].map(
-		({ contributionType }) => {
-			return {
-				id: contributionType,
-				labelText: toHumanReadableContributionType(contributionType),
-				selected: contributionType === productType,
-			};
-		},
-	);
+	const isTab = (tab: TabProps | undefined): tab is TabProps => {
+		return !!tab;
+	};
 
-	if (hideOneOff) {
-		delete tabs[0];
-	}
+	const tabs: TabProps[] = contributionTypes[countryGroupId]
+		.map(({ contributionType }) => {
+			if (hideOneOff && contributionType === 'ONE_OFF') {
+				return;
+			} else {
+				return {
+					id: contributionType,
+					labelText: toHumanReadableContributionType(contributionType),
+					selected: contributionType === productType,
+				};
+			}
+		})
+		.filter(isTab) as TabProps[];
 
 	return render({
 		ariaLabel,
