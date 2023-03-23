@@ -127,6 +127,7 @@ export function PaymentMethodSelector({
 
 										return (
 											<AvailablePaymentMethodAccordionRow
+												data-qm-masking="blocklist"
 												id={`paymentMethod-existing${preExistingPaymentMethod.billingAccountId}`}
 												name="paymentMethod"
 												label={getExistingPaymentMethodLabel(
