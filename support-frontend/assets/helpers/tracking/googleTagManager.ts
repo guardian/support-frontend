@@ -10,7 +10,7 @@ import { DirectDebit, PayPal } from '../forms/paymentMethods';
 import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
 
 // ----- Types ----- //
-type EventType = 'DataLayerReady';
+type EventType = 'DataLayerReady' | 'SuccessfulConversion';
 
 type PaymentRequestAPIStatus =
 	| 'PaymentRequestAPINotAvailable'
@@ -333,8 +333,12 @@ async function init(participations: Participations): Promise<void> {
 	pushToDataLayer('DataLayerReady', participations);
 }
 
+function successfulConversion(participations: Participations): void {
+	sendData('SuccessfulConversion', participations);
+}
+
 // ----- Exports ---//
-export { init };
+export { init, successfulConversion };
 
 // ----- For Tests ---//
 export const _ = {

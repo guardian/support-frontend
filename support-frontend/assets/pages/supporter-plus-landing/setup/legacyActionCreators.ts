@@ -316,7 +316,10 @@ const onPaymentResult =
 
 			switch (result.paymentStatus) {
 				case 'success':
-					trackConversion('/contribute/thankyou');
+					trackConversion(
+						state.common.abParticipations,
+						'/contribute/thankyou',
+					);
 					dispatch(paymentSuccess());
 					break;
 
@@ -453,6 +456,7 @@ function recurringPaymentAuthorisationHandler(
 		postRegularPaymentRequest(
 			routes.recurringContribCreate,
 			request,
+			state.common.abParticipations,
 			state.page.checkoutForm.csrf,
 		),
 		paymentAuthorisation,
