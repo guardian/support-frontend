@@ -52,7 +52,10 @@ import {
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { isUserInAbVariants } from 'helpers/redux/commonState/selectors';
+import {
+	isUserInAbVariant,
+	isUserInAbVariants,
+} from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -168,8 +171,11 @@ export function SupporterPlusLandingPage({
 		countryGroupId,
 		getSettings(),
 	);
+
 	const [supportOnceDisplay, setSupportOnceDisplay] = useState(
-		participations.singleLessProminent === 'variant',
+		useContributionsSelector(
+			isUserInAbVariant('singleLessProminent', 'variant'),
+		),
 	);
 
 	const dispatch = useContributionsDispatch();
