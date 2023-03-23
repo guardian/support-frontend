@@ -1,6 +1,5 @@
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { PaymentIntentResult } from '@stripe/stripe-js';
-import type { Participations } from 'helpers/abTests/abtest';
 import {
 	fetchJson,
 	getRequestOptions,
@@ -316,14 +315,13 @@ function regularPaymentFieldsFromAuthorisation(
  * - otherwise, we bubble up a success value
  */
 function checkRegularStatus(
-	participations: Participations,
 	csrf: CsrfState,
 ): (statusResponse: StatusResponse) => Promise<PaymentResult> {
 	const handleCompletion = (json: StatusResponse) => {
 		switch (json.status) {
 			case 'success':
 			case 'pending':
-				trackConversion(participations, routes.recurringContribPending);
+				trackConversion(routes.recurringContribPending);
 				return PaymentSuccess;
 
 			default: {
@@ -380,7 +378,6 @@ function checkRegularStatus(
 function postRegularPaymentRequest(
 	uri: string,
 	data: RegularPaymentRequest,
-	participations: Participations,
 	csrf: CsrfState,
 ): Promise<PaymentResult> {
 	return logPromise(
@@ -405,7 +402,7 @@ function postRegularPaymentRequest(
 				});
 			}
 
-			return response.json().then(checkRegularStatus(participations, csrf));
+			return response.json().then(checkRegularStatus(csrf));
 		})
 		.catch(() => {
 			logException(`Error while trying to interact with ${uri}`);

@@ -10,11 +10,7 @@ import { DirectDebit, PayPal } from '../forms/paymentMethods';
 import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
 
 // ----- Types ----- //
-type EventType =
-	| 'DataLayerReady'
-	| 'SuccessfulConversion'
-	| 'GAEvent'
-	| 'AppStoreCtaClick';
+type EventType = 'DataLayerReady';
 
 type PaymentRequestAPIStatus =
 	| 'PaymentRequestAPINotAvailable'
@@ -25,12 +21,6 @@ type PaymentRequestAPIStatus =
 	| 'PromiseNotSupported'
 	| 'PromiseRejected'
 	| 'PaymentApiPromiseRejected';
-
-type GaEventData = {
-	category: string;
-	action: string;
-	label: string | null | undefined;
-};
 
 // these values match the keys used by @guardian/consent-management-platform
 const googleTagManagerKey = 'google-tag-manager';
@@ -47,7 +37,6 @@ const vendorIds: Record<string, string> = {
 	[twitterKey]: '5e71760b69966540e4554f01',
 	[bingKey]: '5f353ea3f8baf8390b95ffd4',
 };
-const gaPropertyId = 'UA-51507017-5';
 
 /**
  * vendorConsentsLookup is a string we
@@ -344,47 +333,10 @@ async function init(participations: Participations): Promise<void> {
 	pushToDataLayer('DataLayerReady', participations);
 }
 
-function successfulConversion(participations: Participations): void {
-	sendData('SuccessfulConversion', participations);
-}
-
-function gaEvent(
-	gaEventData: GaEventData,
-	additionalFields?: Record<string, unknown> | null,
-): void {
-	const pushEventToGA = () => {
-		push({
-			event: 'GAEvent',
-			eventCategory: gaEventData.category,
-			eventAction: gaEventData.action,
-			eventLabel: gaEventData.label,
-			...additionalFields,
-		});
-	};
-
-	/**
-	 * If userConsentsToGTM and scriptReady then process event immediately,
-	 * else add to googleAnalyticsEventQueue.
-	 */
-	if (userConsentsToGTM && scriptReady) {
-		pushEventToGA();
-	} else {
-		googleAnalyticsEventQueue.push(pushEventToGA);
-	}
-}
-
-function appStoreCtaClick(): void {
-	sendData('AppStoreCtaClick', {
-		TestName: '',
-	});
-}
-
 // ----- Exports ---//
-export {
-	init,
-	gaEvent,
-	successfulConversion,
-	appStoreCtaClick,
-	gaPropertyId,
+export { init };
+
+// ----- For Tests ---//
+export const _ = {
 	mapFields,
 };
