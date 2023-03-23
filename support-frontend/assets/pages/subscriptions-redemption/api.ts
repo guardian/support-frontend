@@ -248,6 +248,7 @@ function createSubscription(
 	postRegularPaymentRequest(
 		routes.subscriptionCreate,
 		data,
+		state.common.abParticipations,
 		state.page.checkoutForm.csrf,
 	)
 		.then(handleSubscribeResult)
