@@ -197,6 +197,7 @@ function onPaymentAuthorised(
 	const productType = getSubscriptionType(state);
 	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { csrf } = state.page.checkoutForm;
+	const { abParticipations } = state.common;
 	const addresses = getAddresses(state);
 	const pricingCountry =
 		addresses.deliveryAddress?.country ?? addresses.billingAddress.country;
@@ -235,9 +236,12 @@ function onPaymentAuthorised(
 	};
 
 	dispatch(setFormSubmitted(true));
-	void postRegularPaymentRequest(routes.subscriptionCreate, data, csrf).then(
-		handleSubscribeResult,
-	);
+	void postRegularPaymentRequest(
+		routes.subscriptionCreate,
+		data,
+		abParticipations,
+		csrf,
+	).then(handleSubscribeResult);
 }
 
 function checkStripeUserType(
@@ -312,7 +316,12 @@ function trackSubmitAttempt(
 			: `subs-checkout-submit-${productType}-${productOption}-${
 					paymentMethod ?? ''
 			  }`;
-	trackCheckoutSubmitAttempt(componentId, productType);
+	trackCheckoutSubmitAttempt(
+		componentId,
+		productType,
+		paymentMethod,
+		productType,
+	);
 }
 
 function getPricingCountry(product: SubscriptionProduct, addresses: Addresses) {
