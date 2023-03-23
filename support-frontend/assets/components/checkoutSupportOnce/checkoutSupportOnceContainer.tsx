@@ -7,7 +7,7 @@ import type { CheckoutSupportOnceProps } from './checkoutSupportOnce';
 type SupportOnceContainerProps = {
 	supportOnceDisplay: boolean;
 	renderSupportOnce: (props: CheckoutSupportOnceProps) => JSX.Element;
-	onSupportOnceContainerClick: (supportOnceDisplay: boolean) => void;
+	onSupportOnceContainerClick: () => void;
 };
 
 export function CheckoutSupportOnceContainer({
@@ -31,7 +31,7 @@ export function CheckoutSupportOnceContainer({
 	];
 
 	function onSupportOnceClick() {
-		onSupportOnceContainerClick(false);
+		onSupportOnceContainerClick();
 	}
 
 	return renderSupportOnce({

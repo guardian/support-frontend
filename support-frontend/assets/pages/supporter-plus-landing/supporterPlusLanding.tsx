@@ -37,9 +37,6 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
-import { init as initAbTests } from 'helpers/abTests/abtest';
-import { getSettings } from 'helpers/globalsAndSwitches/globals';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
 import {
 	AUDCountries,
 	Canada,
@@ -166,12 +163,6 @@ export function SupporterPlusLandingPage({
 	};
 	const heading = <LandingPageHeading />;
 
-	const participations = initAbTests(
-		detectCountry(),
-		countryGroupId,
-		getSettings(),
-	);
-
 	const [supportOnceDisplay, setSupportOnceDisplay] = useState(
 		useContributionsSelector(
 			isUserInAbVariant('singleLessProminent', 'variant'),
@@ -179,11 +170,8 @@ export function SupporterPlusLandingPage({
 	);
 
 	const dispatch = useContributionsDispatch();
-	function onSupportOnceContainerClick(displaySupportOnce: boolean) {
-		setSupportOnceDisplay(
-			participations.singleLessProminent !== 'variant' ||
-				(supportOnceDisplay && displaySupportOnce),
-		);
+	function onSupportOnceContainerClick() {
+		setSupportOnceDisplay(false);
 		dispatch(setProductType('ONE_OFF'));
 	}
 
