@@ -1,6 +1,7 @@
 package com.gu.acquisitionEventsApi
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent.ProxyRequestContext
 import com.gu.i18n.{Country, OtherCurrency}
 import com.gu.support.acquisitions.QueryParameter
 import com.gu.support.acquisitions.models._
@@ -44,10 +45,28 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
     queryParameters = List(QueryParameter("name1", "value1"), QueryParameter("name2", "value2")),
     platform = None,
   )
+  // Create a new instance of ProxyRequestContext
+  val requestContext = new ProxyRequestContext()
+    .withAccountId("my-account-id")
+    .withStage("dev")
+    .withResourceId("my-resource-id")
+    .withRequestId("my-request-id")
+    .withHttpMethod("GET")
+    .withApiId("my-api-id")
+    .withPath("/my-resource-path")
+
+  // Set the authorizer map
+  val authorizer = None
+
+  // Set the RequestIdentity
+  val identity = None
 
   it should "run locally" in {
     val request = new APIGatewayProxyRequestEvent()
     request.setBody(acquisition.asJson.noSpaces)
+    request.setRequestContext(
+      requestContext,
+    ) // Updated as added request ID to acquisition-events-api logs and so in processEvent function in Lambda.scala
     val result = Lambda.handler(request)
     result.getStatusCode should be(200)
   }
