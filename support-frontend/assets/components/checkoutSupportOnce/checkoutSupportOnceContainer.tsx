@@ -5,13 +5,11 @@ import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { CheckoutSupportOnceProps } from './checkoutSupportOnce';
 
 type SupportOnceContainerProps = {
-	supportOnceDisplay: boolean;
 	renderSupportOnce: (props: CheckoutSupportOnceProps) => JSX.Element;
 	onSupportOnceContainerClick: () => void;
 };
 
 export function CheckoutSupportOnceContainer({
-	supportOnceDisplay,
 	renderSupportOnce,
 	onSupportOnceContainerClick,
 }: SupportOnceContainerProps): JSX.Element | null {
@@ -36,7 +34,6 @@ export function CheckoutSupportOnceContainer({
 
 	return renderSupportOnce({
 		contributionType,
-		supportOnceDisplay,
 		supportOnceTitle: title,
 		supportOnceParagraph: paragraph,
 		onSupportOnceClick,

@@ -97,7 +97,6 @@ const btnholder = css`
 
 export type CheckoutSupportOnceProps = {
 	contributionType: ContributionType;
-	supportOnceDisplay: boolean;
 	supportOnceTitle: string;
 	supportOnceParagraph: string;
 	onSupportOnceClick: () => void;
@@ -105,12 +104,11 @@ export type CheckoutSupportOnceProps = {
 
 export function CheckoutSupportOnce({
 	contributionType,
-	supportOnceDisplay,
 	supportOnceTitle,
 	supportOnceParagraph,
 	onSupportOnceClick,
 }: CheckoutSupportOnceProps): JSX.Element | null {
-	if (contributionType !== 'ONE_OFF' && supportOnceDisplay) {
+	if (contributionType !== 'ONE_OFF') {
 		return (
 			<div css={outside}>
 				<div css={btnholder}>

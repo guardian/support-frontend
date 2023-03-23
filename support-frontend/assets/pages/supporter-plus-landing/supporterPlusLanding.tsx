@@ -249,13 +249,14 @@ export function SupporterPlusLandingPage({
 						>
 							<AmountAndBenefits hideOneOff={supportOnceDisplay} />
 						</Box>
-						<CheckoutSupportOnceContainer
-							supportOnceDisplay={supportOnceDisplay}
-							renderSupportOnce={(supportOnceProps) => (
-								<CheckoutSupportOnce {...supportOnceProps} />
-							)}
-							onSupportOnceContainerClick={onSupportOnceContainerClick}
-						/>
+						{supportOnceDisplay && (
+							<CheckoutSupportOnceContainer
+								renderSupportOnce={(supportOnceProps) => (
+									<CheckoutSupportOnce {...supportOnceProps} />
+								)}
+								onSupportOnceContainerClick={onSupportOnceContainerClick}
+							/>
+						)}
 						<Box
 							cssOverrides={optimisedMobileLayout ? shorterBoxMargin : css``}
 						>
