@@ -26,15 +26,17 @@ const trackThankYouPageLoaded = (
 	productCheckout: SubscriptionProduct,
 	paymentMethod: PaymentMethod | null | undefined,
 ): void => {
-	trackComponentEvents({
-		component: {
-			componentType: 'ACQUISITIONS_OTHER',
-			id: 'thank-you-page',
-			labels: ['checkout-submit'],
-		},
-		action: 'VIEW',
-		value: `thank-you-page-loaded-${productCheckout}-${paymentMethod ?? ''}`,
-	});
+	if (typeof trackComponentEvents === 'function') {
+		trackComponentEvents({
+			component: {
+				componentType: 'ACQUISITIONS_OTHER',
+				id: 'thank-you-page',
+				labels: ['checkout-submit'],
+			},
+			action: 'VIEW',
+			value: `thank-you-page-loaded-${productCheckout}-${paymentMethod ?? ''}`,
+		});
+	}
 };
 
 const trackComponentClick = (componentId: string): void => {
