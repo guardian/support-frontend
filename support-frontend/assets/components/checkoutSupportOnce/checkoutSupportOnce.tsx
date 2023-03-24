@@ -8,8 +8,7 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import { Button, Label } from '@guardian/source-react-components';
-import { Box } from 'components/checkoutBox/checkoutBox';
+import { Label } from '@guardian/source-react-components';
 import type { ContributionType } from 'helpers/contributions';
 import { CheckoutSupportOnceButton } from './checkoutSupportOnceButton';
 
@@ -65,10 +64,7 @@ const box = css`
 	}
 `;
 const mainStyles = css`
-	height: auto;
-	padding: 0;
-
-	//display: block;
+	display: block;
 	overflow: hidden;
 	background-color: ${neutral[100]};
 	color: ${neutral[7]};
@@ -82,17 +78,6 @@ const mainStyles = css`
 			margin-bottom: ${space[4]}px;
 		}
 	}
-`;
-
-const outside = css`
-	justify-content: space-between;
-	flex-direction: column;
-	display: flex;
-`;
-
-const btnholder = css`
-	justify-content: flex-end;
-	display: flex;
 `;
 
 export type CheckoutSupportOnceProps = {
@@ -110,43 +95,17 @@ export function CheckoutSupportOnce({
 }: CheckoutSupportOnceProps): JSX.Element | null {
 	if (contributionType !== 'ONE_OFF') {
 		return (
-			<div css={outside}>
-				<div css={btnholder}>
-					<Button onClick={onSupportOnceClick} css={[mainStyles, box]}>
-						<div css={container}>
-							<div css={top}>
-								<h2 css={heading(brand[500])}>{supportOnceTitle}</h2>
-							</div>
-							<div css={bottom}>
-								<p css={para}>{supportOnceParagraph}</p>
-								<CheckoutSupportOnceButton onClick={onSupportOnceClick} />
-							</div>
-						</div>
-					</Button>
+			<Label onClick={onSupportOnceClick} css={[mainStyles, box]} text={''}>
+				<div css={container}>
+					<div css={top}>
+						<h2 css={heading(brand[500])}>{supportOnceTitle}</h2>
+					</div>
+					<div css={bottom}>
+						<p css={para}>{supportOnceParagraph}</p>
+						<CheckoutSupportOnceButton onClick={onSupportOnceClick} />
+					</div>
 				</div>
-				<Label onClick={onSupportOnceClick} css={[mainStyles, box]} text={''}>
-					<div css={container}>
-						<div css={top}>
-							<h2 css={heading(brand[500])}>{supportOnceTitle}</h2>
-						</div>
-						<div css={bottom}>
-							<p css={para}>{supportOnceParagraph}</p>
-							<CheckoutSupportOnceButton onClick={onSupportOnceClick} />
-						</div>
-					</div>
-				</Label>
-				<Box onClick={onSupportOnceClick} cssOverrides={box}>
-					<div css={container}>
-						<div css={top}>
-							<h2 css={heading(brand[500])}>{supportOnceTitle}</h2>
-						</div>
-						<div css={bottom}>
-							<p css={para}>{supportOnceParagraph}</p>
-							<CheckoutSupportOnceButton onClick={onSupportOnceClick} />
-						</div>
-					</div>
-				</Box>
-			</div>
+			</Label>
 		);
 	} else {
 		return null;
