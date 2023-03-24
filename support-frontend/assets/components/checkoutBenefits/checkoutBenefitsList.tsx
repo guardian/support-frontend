@@ -69,7 +69,7 @@ export interface CheckoutBenefitsListProps extends CSSOverridable {
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
 	countryGroupId: CountryGroupId;
-	rowSpacingNarrow: boolean;
+	rowSpacingNarrow?: boolean;
 }
 
 export function CheckoutBenefitsList({
