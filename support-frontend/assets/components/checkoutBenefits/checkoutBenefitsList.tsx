@@ -17,7 +17,7 @@ const container = css`
 
 const heading = css`
 	${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
-	max-width: 295px;
+	max-width: 280px;
 `;
 
 const checkListIcon = css`
@@ -42,11 +42,11 @@ const checkListText = css`
 	}
 `;
 
-const table = css`
+const table = (rowSpacing: string) => css`
 	padding-top: ${space[4]}px;
 
 	& tr:not(:last-child) {
-		border-bottom: 10px solid transparent;
+		border-bottom: ${rowSpacing}px solid transparent;
 	}
 
 	${from.mobileLandscape} {
@@ -69,19 +69,21 @@ export interface CheckoutBenefitsListProps extends CSSOverridable {
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
 	countryGroupId: CountryGroupId;
+	rowSpacingNarrow?: boolean;
 }
 
 export function CheckoutBenefitsList({
 	title,
 	checkListData,
 	countryGroupId,
+	rowSpacingNarrow,
 	cssOverrides,
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
 		<div css={[container, cssOverrides]}>
 			<h2 css={heading}>{title}</h2>
 			<hr css={hr(`${space[4]}px 0`)} />
-			<table css={table}>
+			<table css={table(rowSpacingNarrow ? `6` : `10`)}>
 				{checkListData.map((item) => (
 					<tr>
 						<td css={[checkListIcon, item.maybeGreyedOut]}>
