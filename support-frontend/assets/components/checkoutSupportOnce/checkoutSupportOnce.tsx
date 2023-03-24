@@ -8,12 +8,12 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import { Label } from '@guardian/source-react-components';
 import type { ContributionType } from 'helpers/contributions';
 import { CheckoutSupportOnceButton } from './checkoutSupportOnceButton';
 
 const container = css`
-	//border-radius: 12px;
+	display: flex;
+	flex-direction: column;
 	margin: 10px ${space[3]}px ${space[4]}px;
 
 	${from.desktop} {
@@ -32,7 +32,7 @@ const top = css`
 const bottom = css`
 	display: flex;
 	flex-direction: row;
-	margin-left: 2px;
+	justify-content: space-between;
 
 	${from.desktop} {
 		margin-left: 0px;
@@ -47,6 +47,7 @@ const heading = (color: string) => css`
 	}
 `;
 const para = css`
+	text-align: left;
 	${textSans.small({ lineHeight: 'regular' })};
 
 	${from.desktop} {
@@ -95,17 +96,17 @@ export function CheckoutSupportOnce({
 }: CheckoutSupportOnceProps): JSX.Element | null {
 	if (contributionType !== 'ONE_OFF') {
 		return (
-			<Label onClick={onSupportOnceClick} css={[mainStyles, box]} text={''}>
-				<div css={container}>
-					<div css={top}>
-						<h2 css={heading(brand[500])}>{supportOnceTitle}</h2>
-					</div>
-					<div css={bottom}>
-						<p css={para}>{supportOnceParagraph}</p>
+			<button onClick={onSupportOnceClick} css={[mainStyles, box]}>
+				<span css={container}>
+					<span css={top}>
+						<span css={heading(brand[500])}>{supportOnceTitle}</span>
+					</span>
+					<span css={bottom}>
+						<span css={para}>{supportOnceParagraph}</span>
 						<CheckoutSupportOnceButton onClick={onSupportOnceClick} />
-					</div>
-				</div>
-			</Label>
+					</span>
+				</span>
+			</button>
 		);
 	} else {
 		return null;
