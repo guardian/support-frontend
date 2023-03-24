@@ -8,7 +8,7 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import { Button } from '@guardian/source-react-components';
+import { Button, Label } from '@guardian/source-react-components';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import type { ContributionType } from 'helpers/contributions';
 import { CheckoutSupportOnceButton } from './checkoutSupportOnceButton';
@@ -124,6 +124,17 @@ export function CheckoutSupportOnce({
 						</div>
 					</Button>
 				</div>
+				<Label onClick={onSupportOnceClick} css={[mainStyles, box]} text={''}>
+					<div css={container}>
+						<div css={top}>
+							<h2 css={heading(brand[500])}>{supportOnceTitle}</h2>
+						</div>
+						<div css={bottom}>
+							<p css={para}>{supportOnceParagraph}</p>
+							<CheckoutSupportOnceButton onClick={onSupportOnceClick} />
+						</div>
+					</div>
+				</Label>
 				<Box onClick={onSupportOnceClick} cssOverrides={box}>
 					<div css={container}>
 						<div css={top}>
