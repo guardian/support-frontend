@@ -96,7 +96,7 @@
     "@reduxjs/toolkit": "^1.8.1",
     "@sentry/browser": "^5.4.0",
     "@stripe/react-stripe-js": "^1.8.0",
-    "@stripe/stripe-js": "^1.8.0",
+    "@stripe/stripe-js": "^1.52.0",
     "@types/dompurify": "^2.3.1",
     "@types/seedrandom": "^3.0.1",
     "@types/uuid": "^8.3.1",
