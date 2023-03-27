@@ -1,12 +1,14 @@
-import { GuApiGatewayWithLambdaByPath} from "@guardian/cdk";
+import { GuApiGatewayWithLambdaByPath, GuScheduledLambda } from "@guardian/cdk";
 import type {
   GuLambdaErrorPercentageMonitoringProps,
+  NoMonitoring,
 } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
 import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
+import { Schedule } from "aws-cdk-lib/aws-events";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 
@@ -41,7 +43,7 @@ function parameterStorePolicy(scope: GuStack, appName: string) {
   });
 }
 
-class StripePatronsDataLambda extends GuLambdaFunction {
+class StripePatronsDataLambda extends GuScheduledLambda {
   constructor(scope: GuStack, id: string, appName: string) {
     super(scope, id, {
       app: appName,
@@ -49,7 +51,8 @@ class StripePatronsDataLambda extends GuLambdaFunction {
       functionName: `${appName}-${scope.stage}`,
       handler:
         "com.gu.patrons.lambdas.ProcessStripeSubscriptionsLambda::handleRequest",
-      errorPercentageMonitoring: monitoringForEnvironment(scope.stage),
+      monitoringConfiguration: monitoringForEnvironment(scope.stage),
+      rules: [{ schedule: scheduleRateForEnvironment(scope.stage) }],
       runtime: Runtime.JAVA_11,
       memorySize: 1536,
       timeout: Duration.minutes(15),
@@ -57,7 +60,7 @@ class StripePatronsDataLambda extends GuLambdaFunction {
 
     function monitoringForEnvironment(
       stage: string
-    ): GuLambdaErrorPercentageMonitoringProps | undefined {
+    ): NoMonitoring | GuLambdaErrorPercentageMonitoringProps {
       if (stage == "PROD") {
         return {
           alarmName: `${appName}-${stage}-ErrorAlarm`,
@@ -67,7 +70,11 @@ class StripePatronsDataLambda extends GuLambdaFunction {
           numberOfMinutesAboveThresholdBeforeAlarm: 46,
         };
       }
-      return undefined;
+      return { noMonitoring: true };
+    }
+
+    function scheduleRateForEnvironment(stage: string) {
+      return Schedule.rate(Duration.minutes(stage == "PROD" ? 30 : 24 * 60));
     }
 
     this.addToRolePolicy(parameterStorePolicy(scope, appName));
