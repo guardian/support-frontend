@@ -82,6 +82,7 @@ interface AvailablePaymentMethodAccordionRowProps {
 	onChange: () => void;
 	accordionBody?: () => JSX.Element;
 	onRender: () => void;
+	addQuantumMetricBlockListAttribute?: boolean;
 }
 
 export function AvailablePaymentMethodAccordionRow({
@@ -94,12 +95,22 @@ export function AvailablePaymentMethodAccordionRow({
 	accordionBody,
 	onChange,
 	onRender,
+	addQuantumMetricBlockListAttribute,
 }: AvailablePaymentMethodAccordionRowProps): EmotionJSX.Element {
 	useEffect(onRender, []);
 
+	const quantumMetricBlockListAttribute = addQuantumMetricBlockListAttribute
+		? {
+				'data-qm-masking': 'blocklist',
+		  }
+		: {};
+
 	return (
 		<div css={checked ? focused : notFocused}>
-			<div css={[...(checked && accordionBody ? [borderBottom] : [])]}>
+			<div
+				{...quantumMetricBlockListAttribute}
+				css={[...(checked && accordionBody ? [borderBottom] : [])]}
+			>
 				<RadioWithImage
 					id={id}
 					image={image}

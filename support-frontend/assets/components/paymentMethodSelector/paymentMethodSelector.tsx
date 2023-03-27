@@ -151,6 +151,7 @@ export function PaymentMethodSelector({
 
 										return (
 											<AvailablePaymentMethodAccordionRow
+												addQuantumMetricBlockListAttribute={true}
 												id={`paymentMethod-existing${preExistingPaymentMethod.billingAccountId}`}
 												name="paymentMethod"
 												label={getExistingPaymentMethodLabel(
