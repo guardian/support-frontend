@@ -123,6 +123,7 @@ export function CheckoutBenefitsListContainer({
 		),
 		handleButtonClick,
 		countryGroupId,
+		rowSpacingNarrow: useOptimisedMobileLayout,
 		cssOverrides: useOptimisedMobileLayout
 			? optimisedLayoutOverrides
 			: undefined,

@@ -10,7 +10,6 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { gaEvent } from 'helpers/tracking/googleTagManager';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
@@ -25,22 +24,6 @@ setUpTrackingAndConsents();
 
 const countryGroupId: CountryGroupId = detect();
 const store = initReduxForContributions();
-
-if (!window.guardian.polyfillScriptLoaded) {
-	gaEvent({
-		category: 'polyfill',
-		action: 'not loaded',
-		label: window.guardian.polyfillVersion ?? '',
-	});
-}
-
-if (typeof Object.values !== 'function') {
-	gaEvent({
-		category: 'polyfill',
-		action: 'Object.values not available after polyfill',
-		label: window.guardian.polyfillVersion ?? '',
-	});
-}
 
 setUpRedux(store);
 

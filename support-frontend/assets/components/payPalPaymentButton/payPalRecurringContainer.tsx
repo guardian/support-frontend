@@ -4,7 +4,6 @@ import type { PayPalCheckoutDetails } from 'helpers/forms/paymentIntegrations/pa
 import { PayPal } from 'helpers/forms/paymentMethods';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
 import { setUpPayPalPayment } from 'helpers/redux/checkout/payment/payPal/thunks';
-import { isSupporterPlusPurchase } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	useContributionsDispatch,
@@ -42,7 +41,6 @@ export function PayPalButtonRecurringContainer({
 		(state) => state.page.checkoutForm.personalDetails,
 	);
 	const { isTestUser } = useContributionsSelector((state) => state.page.user);
-	const isSupporterPlus = useContributionsSelector(isSupporterPlusPurchase);
 
 	function onCompletion(payPalCheckoutDetails: PayPalCheckoutDetails) {
 		dispatch(paymentWaiting(true));
@@ -67,8 +65,6 @@ export function PayPalButtonRecurringContainer({
 			trackCheckoutSubmitAttempt(
 				`PayPal-${contributionType}-submit`,
 				`npf-allowed-for-user-type-${userTypeFromIdentityResponse}`,
-				'PayPal',
-				isSupporterPlus ? 'SupporterPlus' : 'Contribution',
 			),
 		onWindowOpen,
 		onCompletion,
