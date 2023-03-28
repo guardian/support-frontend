@@ -37,6 +37,7 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import { getPaymentMethodToSelect } from 'helpers/forms/checkouts';
 import {
 	AUDCountries,
 	Canada,
@@ -46,6 +47,7 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
@@ -172,7 +174,16 @@ export function SupporterPlusLandingPage({
 	const dispatch = useContributionsDispatch();
 	function onSupportOnceContainerClick() {
 		setSupportOnceDisplay(false);
+
+		const paymentMethodToSelect = getPaymentMethodToSelect(
+			contributionType,
+			switches,
+			countryId,
+			countryGroupId,
+		);
+
 		dispatch(setProductType('ONE_OFF'));
+		dispatch(setPaymentMethod(paymentMethodToSelect));
 	}
 
 	useEffect(() => {
