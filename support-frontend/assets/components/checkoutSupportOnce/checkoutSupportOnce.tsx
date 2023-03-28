@@ -96,17 +96,17 @@ export function CheckoutSupportOnce({
 }: CheckoutSupportOnceProps): JSX.Element | null {
 	if (contributionType !== 'ONE_OFF') {
 		return (
-			<button onClick={onSupportOnceClick} css={[mainStyles, box]}>
-				<span css={container}>
-					<span css={top}>
-						<span css={heading(brand[500])}>{supportOnceTitle}</span>
-					</span>
-					<span css={bottom}>
-						<span css={para}>{supportOnceParagraph}</span>
+			<a onClick={onSupportOnceClick} css={[mainStyles, box]}>
+				<div css={container}>
+					<div css={top}>
+						<h2 css={heading(brand[500])}>{supportOnceTitle}</h2>
+					</div>
+					<div css={bottom}>
+						<p css={para}>{supportOnceParagraph}</p>
 						<CheckoutSupportOnceButton onClick={onSupportOnceClick} />
-					</span>
-				</span>
-			</button>
+					</div>
+				</div>
+			</a>
 		);
 	} else {
 		return null;
