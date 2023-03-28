@@ -5,7 +5,6 @@ import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
-import { gaEvent } from 'helpers/tracking/googleTagManager';
 import { getQueryParameter } from 'helpers/urls/url';
 import { tests } from './abtestDefinitions';
 
@@ -60,14 +59,13 @@ export type Test = {
 	// e.g. Test of a banner design change on dotcom
 	// If true the A/B test participation info should be passed through in the acquisition data
 	// query parameter.
-	// In particular this allows 3rd party tests to be identified and tracked in support-frontend (and optimize)
+	// In particular this allows 3rd party tests to be identified and tracked in support-frontend
 	// without too much "magic" involving the shared mvtId.
 	referrerControlled: boolean;
 	seed: number;
 	// An optional regex that will be tested against the path of the current page
 	// before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
 	targetPage?: string | RegExp;
-	optimizeId?: string; // The id of the Optimize experiment which this test maps to
 };
 
 export type Tests = Record<string, Test>;
@@ -171,14 +169,6 @@ function getParticipations(
 		}
 
 		participations[testId] = test.variants[variantAssignment.variantIndex].id;
-
-		if (test.optimizeId) {
-			trackOptimizeExperiment(
-				test.optimizeId,
-				test.variants,
-				variantAssignment.variantIndex,
-			);
-		}
 	});
 	return participations;
 }
@@ -367,25 +357,6 @@ function randomNumber(mvtId: number, seed: number): number {
 	const rng = seedrandom(`${mvtId + seed}`);
 	return Math.abs(rng.int32());
 }
-
-const trackOptimizeExperiment = (
-	optimizeId: string,
-	variants: Variant[],
-	variantIndex: number,
-) => {
-	gaEvent(
-		{
-			category: 'ab-test-tracking',
-			action: optimizeId,
-			label: variants[variantIndex].id,
-		},
-		{
-			// these map to dataLayer variables in GTM
-			experimentId: optimizeId,
-			experimentVariant: variantIndex,
-		},
-	);
-};
 
 type VariantAssignment =
 	| { type: 'NOT_ASSIGNED' }

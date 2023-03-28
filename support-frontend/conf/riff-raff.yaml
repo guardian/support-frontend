@@ -18,7 +18,7 @@ deployments:
         PROD: Frontend-PROD.template.json
       amiParameter: AMIFrontend
       amiTags:
-        Recipe: bionic-membership-ARM-unified-cloudwatch
+        Recipe: jammy-membership-java8
         AmigoStage: PROD
       amiEncrypted: true
   frontend:

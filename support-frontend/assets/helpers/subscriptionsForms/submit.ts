@@ -316,12 +316,7 @@ function trackSubmitAttempt(
 			: `subs-checkout-submit-${productType}-${productOption}-${
 					paymentMethod ?? ''
 			  }`;
-	trackCheckoutSubmitAttempt(
-		componentId,
-		productType,
-		paymentMethod,
-		productType,
-	);
+	trackCheckoutSubmitAttempt(componentId, productType);
 }
 
 function getPricingCountry(product: SubscriptionProduct, addresses: Addresses) {

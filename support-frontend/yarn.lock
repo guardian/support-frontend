@@ -1699,12 +1699,12 @@
   resolved "https://registry.yarnpkg.com/@guardian/browserslist-config/-/browserslist-config-1.0.1.tgz#694ab24f6a028646ae752f5e035ea13a0746c30a"
   integrity sha512-xjQSUXmln96Qr/G8yRCaDWe5HbablzGU9lax1zDUZkfArV/rBj8P34x/RH0ksf3J8BaykVTma97W+g/WRz7Isw==
 
-"@guardian/consent-management-platform@^10.7.1":
-  version "10.7.1"
-  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-10.7.1.tgz#ed672e1a7cc0e177d820dc7b2ebbfd26531a2d86"
-  integrity sha512-9wN4Bu0VMfpDg0p1/PjO/hAuPN7pJrBm24YXLWmAnfvHci0Wr+WMSF5ZOwhbMA01jl5IP3Hr1TKpFbkg3NhGdg==
+"@guardian/consent-management-platform@^10.11.1":
+  version "10.11.1"
+  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-10.11.1.tgz#fa01a9262963ac07df9476e591d14601efbc4588"
+  integrity sha512-7dKcKZ3L/Y/hG9MB6i1invZmTVL6EepIv1ioGCW7uR9MVhWcuIGR1MJqKWMIzQgtZ2p0CXtSzKQOvbRtfX5fxQ==
   dependencies:
-    "@guardian/libs" "1.6.1 - 3.3.0"
+    "@guardian/libs" "^7.1.4"
 
 "@guardian/eslint-config-typescript@^0.6.0":
   version "0.6.1"
@@ -1742,15 +1742,15 @@
     "@typescript-eslint/eslint-plugin" "5.9.1"
     "@typescript-eslint/parser" "5.9.1"
 
-"@guardian/libs@1.6.1 - 3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-3.3.0.tgz#fa98c7b8216ab35b8cf3087cd9ba336958fac99a"
-  integrity sha512-XB9o8qtDOg+KlPh1sjEr4u+Ai3RFTRr2riZ/HJpdlh8Cu4ZpYjCSGUZXSGkxp1CwFWT9sduANnsWSqZ97iBloQ==
-
 "@guardian/libs@^5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-5.1.0.tgz#5f7a228d8382e07809e09aeffed6d472558ed41d"
   integrity sha512-AKVh+CraVAR49y60IX7UYrIMlfhS/zhN1f31FqJ/nHtGv92XFzCoijknkl+pFQUtuZvD2zYCygpqLGCWPVDk/Q==
+
+"@guardian/libs@^7.1.4":
+  version "7.1.4"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-7.1.4.tgz#f5de14f52a32cb677361d49157c94eb046a2b9a8"
+  integrity sha512-r2AJk+4EakNLCLXHhUEqdYSjFhuq19k7tsQO5+53YZc6x6ADEXFNRVE/7EzbODgu5pVwk5SQ/rMuWsE7+5qdVQ==
 
 "@guardian/paparazzi@^0.3.1":
   version "0.3.1"
@@ -1774,10 +1774,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/prettier/-/prettier-2.1.5.tgz#715fff5b110006408f92a3fe2a803ad0e4c79e06"
   integrity sha512-4fehERf5HHS9Nkaw+4u5EZ1OrFEHL4lYhLUWkpwEx4VmHI+RgcMezfDfosb3TD8cPFCKakrpdQEJUwNP283SJw==
 
-"@guardian/source-foundations@^5.2.1":
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/@guardian/source-foundations/-/source-foundations-5.2.1.tgz#5c6bc8967bdcd579ac307b8087028917933386eb"
-  integrity sha512-zBAZsT0thtWxR1d4Wl4PeNVHHcfrSfuNHExBMnQKZAPnwsGbHKF8ETPzP14YnU290Wb/fStNti6wTzCqmkRgnw==
+"@guardian/source-foundations@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@guardian/source-foundations/-/source-foundations-5.3.0.tgz#bfa9056af2271ab83e7a156b0c919e173d35e3b7"
+  integrity sha512-18a5mTZ33FQmuJYrJrfBR+WQsuQzP8naYdk386bRXmz3SAoTVZy6pfn+PsyvoeiJAIRrtJQrUAT5MTZIQrnLNw==
   dependencies:
     mini-svg-data-uri "^1.3.3"
 
@@ -5708,9 +5708,9 @@ caniuse-lite@^1.0.30001317:
   integrity sha512-ewtFBSfWjEmxUgNBSZItFSmVtvk9zkwkl1OfRZlKA8slltRN+/C/tuGVrF9styXkN36Yu3+SeJ1qkXxDEyNZ5w==
 
 caniuse-lite@^1.0.30001359:
-  version "1.0.30001469"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001469.tgz#3dd505430c8522fdc9f94b4a19518e330f5c945a"
-  integrity sha512-Rcp7221ScNqQPP3W+lVOYDyjdR6dC+neEQCttoNr5bAyz54AboB4iwpnWgyi8P4YUsPybVzT4LgWiBbI3drL4g==
+  version "1.0.30001468"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001468.tgz#0101837c6a4e38e6331104c33dcfb3bdf367a4b7"
+  integrity sha512-zgAo8D5kbOyUcRAgSmgyuvBkjrGk5CGYG5TYgFdpQv+ywcyEpo1LOWoG8YmoflGnh+V+UsNuKYedsoYs0hzV5A==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -7101,9 +7101,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.4.172:
-  version "1.4.337"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.337.tgz#710168240b2dc5fe5eb5f8e4ef9c16d70aedc0ba"
-  integrity sha512-W8gdzXG86mVPoc56eM8YA+QiLxaAxJ8cmDjxZgfhLLWVvZQxyA918w5tX2JEWApZta45T1/sYcmFHTsTOUE3nw==
+  version "1.4.333"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.333.tgz#ebb21f860f8a29923717b06ec0cb54e77ed34c04"
+  integrity sha512-YyE8+GKyGtPEP1/kpvqsdhD6rA/TP1DUFDN4uiU/YI52NzDxmwHkEb3qjId8hLBa5siJvG0sfC3O66501jMruQ==
 
 electron-to-chromium@^1.4.284:
   version "1.4.328"
@@ -11826,10 +11826,10 @@ opener@^1.5.2:
   resolved "https://registry.yarnpkg.com/opener/-/opener-1.5.2.tgz#5d37e1f35077b9dcac4301372271afdeb2a13598"
   integrity sha512-ur5UIdyw5Y7yEj9wLzhqXiy6GZ3Mwx0yGI+5sMn2r0N0v3cKJvUmFH5yPP+WXh9e0xfyzyJX95D8l088DNFj7A==
 
-ophan-tracker-js@^1.3.23:
-  version "1.3.29"
-  resolved "https://registry.yarnpkg.com/ophan-tracker-js/-/ophan-tracker-js-1.3.29.tgz#db211a121065173ebf45c1250d57768898f49cbb"
-  integrity sha512-PQ9iKiZ5hegavEzviZbrjCBHPYFMNKpyqyi49elD0Ehlt9Aeh75Yr8IM2GoP7iMS3nmtVjhMCmYNL8xSMCh7sQ==
+ophan-tracker-js@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/ophan-tracker-js/-/ophan-tracker-js-1.4.0.tgz#6c0e8f56157f2bd1473beaa6b79b54b99f5a7b1d"
+  integrity sha512-X5JoLOYxvfvNRI0Vo8xBT0UgJdiU9snPYOGgQUTk5ZnPYgX3xGW/yt7xdePeg9yM0eCuP5SeYQTLfF4bp0GFuw==
 
 optionator@^0.8.1, optionator@^0.8.3:
   version "0.8.3"
