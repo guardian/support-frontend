@@ -3,6 +3,7 @@ import { App } from "aws-cdk-lib";
 import { Frontend } from "../lib/frontend";
 import { PaymentApi } from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
+import {AcquisitionEventsApi} from "../lib/acquisition-events-api";
 
 const app = new App();
 const cloudFormationStackName = process.env.GU_CFN_STACK_NAME;
@@ -68,4 +69,14 @@ new PaymentApi(app, "Payment-API-PROD", {
     minimumInstances: 3,
     maximumInstances: 6,
   },
+});
+
+new AcquisitionEventsApi(app, "Acquisition-Events-API-CODE", {
+  stack: "support",
+  stage: "CODE",
+});
+
+new AcquisitionEventsApi(app, "Acquisition-Events-API-PROD", {
+  stack: "support",
+  stage: "PROD",
 });
