@@ -12,6 +12,7 @@ import trackConversion from 'helpers/tracking/conversions';
 import { routes } from 'helpers/urls/routes';
 import { getContributionType } from '../product/selectors/productType';
 import type { GuardianProduct } from '../product/state';
+import { isValidPaymentMethodForContributionType } from './paymentOptions';
 import { regularPaymentRequestFromAuthorisation } from './recurringPayment';
 import type { FormSubmissionStatus } from './state';
 
@@ -69,5 +70,15 @@ export const submitForm = createAsyncThunk<
 			product: getContributionType(state),
 			errorMessage: paymentRequestResult.error,
 		});
+	},
+	{
+		condition: (paymentAuthorisation, thunkApi) => {
+			const state = thunkApi.getState();
+			const contributionType = getContributionType(state);
+			return isValidPaymentMethodForContributionType(
+				contributionType,
+				paymentAuthorisation.paymentMethod,
+			);
+		},
 	},
 );
