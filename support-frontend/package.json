@@ -89,7 +89,7 @@
     "@guardian/consent-management-platform": "^10.11.1",
     "@guardian/libs": "^5.1.0",
     "@guardian/pasteup": "1.0.0-alpha.7",
-    "@guardian/source-foundations": "^5.2.1",
+    "@guardian/source-foundations": "^5.3.0",
     "@guardian/source-react-components": "^7.1.0",
     "@guardian/source-react-components-development-kitchen": "^6.0.3",
     "@juggle/resize-observer": "^3.3.1",
