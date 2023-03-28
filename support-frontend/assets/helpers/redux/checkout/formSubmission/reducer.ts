@@ -7,8 +7,19 @@ export const formSubmissionSlice = createSlice({
 	initialState,
 	reducers: {},
 	extraReducers: (builder) => {
-		builder.addCase(submitForm.fulfilled, (_state, action) => {
-			return action.payload;
+		builder.addCase(submitForm.fulfilled, (state, action) => {
+			state.status = action.payload;
+		});
+
+		builder.addCase(submitForm.pending, (state) => {
+			state.status = 'pending';
+		});
+
+		builder.addCase(submitForm.rejected, (state, action) => {
+			state.status = 'error';
+			state.error = action.meta.errorMessage;
 		});
 	},
 });
+
+export const formSubmissionReducer = formSubmissionSlice.reducer;

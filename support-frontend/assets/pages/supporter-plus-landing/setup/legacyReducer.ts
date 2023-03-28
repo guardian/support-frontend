@@ -6,6 +6,8 @@ import { billingAddressReducer } from 'helpers/redux/checkout/address/reducer';
 import type { AddressState } from 'helpers/redux/checkout/address/state';
 import { csrfReducer } from 'helpers/redux/checkout/csrf/reducer';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import { formSubmissionReducer } from 'helpers/redux/checkout/formSubmission/reducer';
+import type { FormSubmissionState } from 'helpers/redux/checkout/formSubmission/state';
 import { marketingConsentReducer } from 'helpers/redux/checkout/marketingConsent/reducer';
 import type { MarketingConsentState } from 'helpers/redux/checkout/marketingConsent/state';
 import type { PaymentState } from 'helpers/redux/checkout/payment/reducer';
@@ -41,6 +43,7 @@ export interface PageState {
 		payment: PaymentState;
 		billingAddress: AddressState;
 		thankYou: ThankYouState;
+		formSubmission: FormSubmissionState;
 	};
 	user: UserState;
 }
@@ -91,6 +94,7 @@ function initReducer(): Reducer<PageState> {
 			payment: paymentReducer,
 			billingAddress: billingAddressReducer,
 			thankYou: thankYouReducer,
+			formSubmission: formSubmissionReducer,
 		}),
 		user: userReducer,
 	});

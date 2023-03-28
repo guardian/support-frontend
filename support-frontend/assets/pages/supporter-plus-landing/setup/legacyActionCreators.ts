@@ -53,6 +53,7 @@ import {
 	setBillingCountry,
 	setBillingState,
 } from 'helpers/redux/checkout/address/actions';
+import { submitForm } from 'helpers/redux/checkout/formSubmission/thunks';
 import {
 	setAmazonPayFatalError,
 	setAmazonPayWalletIsStale,
@@ -595,6 +596,8 @@ const onThirdPartyPaymentAuthorised =
 		dispatch: Dispatch,
 		getState: () => ContributionsState,
 	): Promise<PaymentResult> => {
+		return dispatch(submitForm(paymentAuthorisation));
+
 		const state = getState();
 		const contributionType = getContributionType(state);
 		const paymentMethod = state.page.checkoutForm.payment.paymentMethod.name;

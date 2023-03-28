@@ -129,8 +129,8 @@ export function SupporterPlusLandingPage({
 		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
 	);
 
-	const { paymentComplete, isWaiting } = useContributionsSelector(
-		(state) => state.page.form,
+	const { formSubmission } = useContributionsSelector(
+		(state) => state.page.checkoutForm,
 	);
 
 	const navigate = useNavigate();
@@ -151,10 +151,10 @@ export function SupporterPlusLandingPage({
 	const heading = <LandingPageHeading />;
 
 	useEffect(() => {
-		if (paymentComplete) {
+		if (formSubmission.status === 'success') {
 			navigate(thankYouRoute, { replace: true });
 		}
-	}, [paymentComplete]);
+	}, [formSubmission.status]);
 
 	return (
 		<PageScaffold
@@ -291,7 +291,7 @@ export function SupporterPlusLandingPage({
 					</Column>
 				</Columns>
 			</Container>
-			{isWaiting && (
+			{formSubmission.status === 'pending' && (
 				<LoadingOverlay>
 					<p>Processing transaction</p>
 					<p>Please wait</p>
