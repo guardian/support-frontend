@@ -80,7 +80,7 @@ jobs:
                 parameters:
                   templateStagePaths:
                     CODE: StripePatronsData-CODE.template.json
-                    PROD: StripePatronsData-CODE.template.json
+                    PROD: StripePatronsData-PROD.template.json
 
               stripe-patrons-data:
                 type: aws-lambda
@@ -100,4 +100,4 @@ jobs:
               - stripe-patrons-data/target/scala-2.13/${{ github.run_number }}.jar
             cfn:
               - cdk/cdk.out/StripePatronsData-CODE.template.json
-              - cdk/cdk.out/StripePatronsData-CODE.template.json
+              - cdk/cdk.out/StripePatronsData-PROD.template.json
