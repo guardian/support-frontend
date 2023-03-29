@@ -84,6 +84,8 @@ jobs:
 
               stripe-patrons-data:
                 type: aws-lambda
+                actions:
+                  - uploadLambda
                 parameters:
                   bucket: membership-dist
                   functionNames:
