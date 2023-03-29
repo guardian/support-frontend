@@ -62,9 +62,9 @@ export function isUserInAnyAbVariant(
 ) {
 	return function getAbTestStatus(state: ContributionsState): boolean {
 		const participations = state.common.abParticipations;
-		const foundAbTests = abTestNames.findIndex(
+		const foundAbTests = abTestNames.find(
 			(abTestName) => participations[abTestName] === variantName,
 		);
-		return foundAbTests > 0;
+		return !!foundAbTests;
 	};
 }
