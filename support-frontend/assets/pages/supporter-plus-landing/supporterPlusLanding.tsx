@@ -53,7 +53,7 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import {
 	isUserInAbVariant,
-	isUserInAbVariants,
+	isUserInAnyAbVariant,
 } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
@@ -138,7 +138,7 @@ export function SupporterPlusLandingPage({
 	);
 
 	const optimisedMobileLayout = useContributionsSelector(
-		isUserInAbVariants(
+		isUserInAnyAbVariant(
 			['supporterPlusMobileTest1', 'singleLessProminent'],
 			'variant',
 		),
