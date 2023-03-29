@@ -1,7 +1,8 @@
 import "@aws-cdk/assert/jest";
 import { App } from "aws-cdk-lib";
-import {AcquisitionEventsApi} from "./acquisition-events-api";
 import {Template} from "aws-cdk-lib/assertions";
+import {AcquisitionEventsApi} from "./acquisition-events-api";
+
 
 describe("The Acquisition Events API stack", () => {
   it("matches the snapshot", () => {
