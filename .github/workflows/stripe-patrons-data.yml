@@ -81,6 +81,8 @@ jobs:
                   templateStagePaths:
                     CODE: StripePatronsData-CODE.template.json
                     PROD: StripePatronsData-PROD.template.json
+                dependencies:
+                  - stripe-patrons-data
 
               stripe-patrons-data:
                 type: aws-lambda
