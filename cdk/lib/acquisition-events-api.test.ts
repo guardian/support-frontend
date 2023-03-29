@@ -1,16 +1,17 @@
 import "@aws-cdk/assert/jest";
-import { SynthUtils } from "@aws-cdk/assert";
-import { App } from "@aws-cdk/core";
+import { App } from "aws-cdk-lib";
 import {AcquisitionEventsApi} from "./acquisition-events-api";
+import {Template} from "aws-cdk-lib/assertions";
 
 describe("The Acquisition Events API stack", () => {
   it("matches the snapshot", () => {
     const app = new App();
-    const stack = new AcquisitionEventsApi(app, "Frontend-PROD", {
+    const stack = new AcquisitionEventsApi(app, "Acquisition-Events-API-PROD", {
       stack: "support",
       stage: "PROD",
     });
 
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    const template = Template.fromStack(stack);
+    expect(template.toJSON()).toMatchSnapshot();
   });
 });

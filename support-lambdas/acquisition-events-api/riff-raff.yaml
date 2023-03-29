@@ -14,7 +14,6 @@ deployments:
     type: cloud-formation
     app: acquisition-events-api
     parameters:
-      templatePath: cfn.yaml
       templateStagePaths:
         CODE: Acquisition-Events-API-CODE.template.json
         PROD: Acquisition-Events-API-PROD.template.json
