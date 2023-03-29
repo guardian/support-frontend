@@ -9,7 +9,7 @@ import {
 	until,
 } from '@guardian/source-foundations';
 import type { ContributionType } from 'helpers/contributions';
-import { CheckoutSupportOnceButton } from './checkoutSupportOnceButton';
+import { CheckoutSupportOnceChevronRight } from './checkoutSupportOnceChevronRight';
 
 const container = css`
 	display: flex;
@@ -103,7 +103,7 @@ export function CheckoutSupportOnce({
 					</div>
 					<div css={bottom}>
 						<p css={para}>{supportOnceParagraph}</p>
-						<CheckoutSupportOnceButton onClick={onSupportOnceClick} />
+						<CheckoutSupportOnceChevronRight />
 					</div>
 				</div>
 			</a>
