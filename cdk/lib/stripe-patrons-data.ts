@@ -80,9 +80,10 @@ class StripePatronsDataLambda extends GuLambdaFunction {
     alias.addToRolePolicy(parameterStorePolicy(scope, appName));
     alias.addToRolePolicy(dynamoPolicy(scope.stage));
 
-    (alias.node.defaultChild as CfnFunction).addPropertyOverride('SnapStart', {
-      ApplyOn: 'PublishedVersions',
-    });
+    // (alias.node.defaultChild as CfnFunction).addPropertyOverride('SnapStart', {
+    //   ApplyOn: 'PublishedVersions',
+    // });
+    (alias.node.defaultChild as CfnFunction).snapStart = { applyOn: "PublishedVersions" };
   }
 }
 

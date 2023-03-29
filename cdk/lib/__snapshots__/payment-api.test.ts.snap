@@ -23,10 +23,10 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       "GuGetS3ObjectsPolicy",
       "GuVpcParameter",
       "GuSubnetListParameter",
+      "GuSubnetListParameter",
       "GuPlayApp",
       "GuCertificate",
       "GuInstanceRole",
-      "GuSSMRunCommandPolicy",
       "GuDescribeEC2Policy",
       "GuLoggingStreamNameParameter",
       "GuLogShippingPolicy",
@@ -37,7 +37,6 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       "GuHttpsEgressSecurityGroup",
       "GuAutoScalingGroup",
       "GuWazuhAccess",
-      "GuSubnetListParameter",
       "GuApplicationLoadBalancer",
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
@@ -204,11 +203,6 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Value": "payment-api",
           },
           {
-            "Key": "gu:cdk:pattern-name",
-            "PropagateAtLaunch": true,
-            "Value": "GuPlayApp",
-          },
-          {
             "Key": "gu:cdk:version",
             "PropagateAtLaunch": true,
             "Value": "TEST",
@@ -337,6 +331,10 @@ exports[`The Payment API stack matches the snapshot 1`] = `
           {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Name",
+            "Value": "Frontend-PROD/CertificatePaymentapi",
           },
           {
             "Key": "Stack",
@@ -619,22 +617,26 @@ exports[`The Payment API stack matches the snapshot 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "ec2.",
-                      {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
+                "Service": "ec2.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
+        ],
         "Path": "/",
         "Tags": [
           {
@@ -1213,42 +1215,6 @@ exports[`The Payment API stack matches the snapshot 1`] = `
           "Version": "2012-10-17",
         },
         "PolicyName": "SSMConfigParams2A7D5B05",
-        "Roles": [
-          {
-            "Ref": "InstanceRolePaymentapi2FA25312",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "SSMRunCommandPolicy244E1613": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ec2messages:AcknowledgeMessage",
-                "ec2messages:DeleteMessage",
-                "ec2messages:FailMessage",
-                "ec2messages:GetEndpoint",
-                "ec2messages:GetMessages",
-                "ec2messages:SendReply",
-                "ssm:UpdateInstanceInformation",
-                "ssm:ListInstanceAssociations",
-                "ssm:DescribeInstanceProperties",
-                "ssm:DescribeDocumentParameters",
-                "ssmmessages:CreateControlChannel",
-                "ssmmessages:CreateDataChannel",
-                "ssmmessages:OpenControlChannel",
-                "ssmmessages:OpenDataChannel",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ssm-run-command-policy",
         "Roles": [
           {
             "Ref": "InstanceRolePaymentapi2FA25312",

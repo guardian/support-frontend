@@ -641,9 +641,6 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           ],
         },
         "Name": "PROD",
-        "SnapStart": {
-          "ApplyOn": "PublishedVersions",
-        },
       },
       "Type": "AWS::Lambda::Alias",
     },

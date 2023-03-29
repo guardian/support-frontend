@@ -16,10 +16,10 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "GuAllowPolicy",
       "GuVpcParameter",
       "GuSubnetListParameter",
+      "GuSubnetListParameter",
       "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
-      "GuSSMRunCommandPolicy",
       "GuDescribeEC2Policy",
       "GuLoggingStreamNameParameter",
       "GuLogShippingPolicy",
@@ -30,7 +30,6 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "GuHttpsEgressSecurityGroup",
       "GuAutoScalingGroup",
       "GuWazuhAccess",
-      "GuSubnetListParameter",
       "GuApplicationLoadBalancer",
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
@@ -103,11 +102,6 @@ exports[`The Frontend stack matches the snapshot 1`] = `
             "Key": "App",
             "PropagateAtLaunch": true,
             "Value": "frontend",
-          },
-          {
-            "Key": "gu:cdk:pattern-name",
-            "PropagateAtLaunch": true,
-            "Value": "GuEc2App",
           },
           {
             "Key": "gu:cdk:version",
@@ -274,6 +268,10 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Name",
+            "Value": "Frontend-PROD/CertificateFrontend",
           },
           {
             "Key": "Stack",
@@ -703,22 +701,26 @@ exports[`The Frontend stack matches the snapshot 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "ec2.",
-                      {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
+                "Service": "ec2.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
+        ],
         "Path": "/",
         "Tags": [
           {
@@ -1169,42 +1171,6 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           "Version": "2012-10-17",
         },
         "PolicyName": "SSMGetF4C837D5",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleFrontend9A970131",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "SSMRunCommandPolicy244E1613": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ec2messages:AcknowledgeMessage",
-                "ec2messages:DeleteMessage",
-                "ec2messages:FailMessage",
-                "ec2messages:GetEndpoint",
-                "ec2messages:GetMessages",
-                "ec2messages:SendReply",
-                "ssm:UpdateInstanceInformation",
-                "ssm:ListInstanceAssociations",
-                "ssm:DescribeInstanceProperties",
-                "ssm:DescribeDocumentParameters",
-                "ssmmessages:CreateControlChannel",
-                "ssmmessages:CreateDataChannel",
-                "ssmmessages:OpenControlChannel",
-                "ssmmessages:OpenDataChannel",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ssm-run-command-policy",
         "Roles": [
           {
             "Ref": "InstanceRoleFrontend9A970131",
