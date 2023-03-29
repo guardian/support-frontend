@@ -8,7 +8,8 @@ import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
 import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
-import { Runtime } from "aws-cdk-lib/aws-lambda";
+import type { CfnFunction} from "aws-cdk-lib/aws-lambda";
+import {Alias, Runtime} from "aws-cdk-lib/aws-lambda";
 
 function environmentFromStage(stage: string) {
   return stage == "CODE" ? "DEV" : stage;
@@ -42,10 +43,10 @@ function parameterStorePolicy(scope: GuStack, appName: string) {
 }
 
 class StripePatronsDataLambda extends GuLambdaFunction {
-  constructor(scope: GuStack, id: string, appName: string) {
+  constructor(scope: GuStack, id: string, appName: string, buildNumber: string) {
     super(scope, id, {
       app: appName,
-      fileName: `${appName}.jar`,
+      fileName: `${buildNumber}.jar`,
       functionName: `${appName}-${scope.stage}`,
       handler:
         "com.gu.patrons.lambdas.ProcessStripeSubscriptionsLambda::handleRequest",
@@ -53,6 +54,12 @@ class StripePatronsDataLambda extends GuLambdaFunction {
       runtime: Runtime.JAVA_11,
       memorySize: 1536,
       timeout: Duration.minutes(15),
+    });
+
+    const version = this.currentVersion;
+    const alias = new Alias(this, 'Alias', {
+      aliasName: scope.stage,
+      version,
     });
 
     function monitoringForEnvironment(
@@ -70,8 +77,12 @@ class StripePatronsDataLambda extends GuLambdaFunction {
       return undefined;
     }
 
-    this.addToRolePolicy(parameterStorePolicy(scope, appName));
-    this.addToRolePolicy(dynamoPolicy(scope.stage));
+    alias.addToRolePolicy(parameterStorePolicy(scope, appName));
+    alias.addToRolePolicy(dynamoPolicy(scope.stage));
+
+    (alias.node.defaultChild as CfnFunction).addPropertyOverride('SnapStart', {
+      ApplyOn: 'PublishedVersions',
+    });
   }
 }
 
@@ -111,13 +122,17 @@ class PatronCancelledLambda extends GuLambdaFunction {
   }
 }
 
+export interface StripePatronsDataProps extends GuStackProps {
+  buildNumber: string;
+}
+
 export class StripePatronsData extends GuStack {
-  constructor(scope: App, id: string, props: GuStackProps) {
+  constructor(scope: App, id: string, props: StripePatronsDataProps) {
     super(scope, id, props);
 
     const appName = "stripe-patrons-data";
 
-    new StripePatronsDataLambda(this, id, appName);
+    new StripePatronsDataLambda(this, id, appName, props.buildNumber);
 
     const patronCancelledLambda = new PatronCancelledLambda(this, id, appName);
     const patronSignUpLambda = new PatronSignUpLambda(this, id, appName);

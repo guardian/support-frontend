@@ -41,12 +41,14 @@ new StripePatronsData(app, "StripePatronsData-CODE", {
   stack: "support",
   stage: "CODE",
   cloudFormationStackName,
+  buildNumber: process.env.BUILD_NUMBER ?? "DEV",
 });
 
 new StripePatronsData(app, "StripePatronsData-PROD", {
   stack: "support",
   stage: "PROD",
   cloudFormationStackName,
+  buildNumber: process.env.BUILD_NUMBER ?? "DEV",
 });
 
 new PaymentApi(app, "Payment-API-CODE", {

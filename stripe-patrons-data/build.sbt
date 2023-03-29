@@ -30,7 +30,8 @@ riffRaffArtifactResources += (
 riffRaffArtifactResources += (
   file("cdk/cdk.out/StripePatronsData-CODE.template.json"), "cfn/StripePatronsData-CODE.template.json"
 )
-assemblyJarName := s"${name.value}.jar"
+//assemblyJarName := s"${name.value}.jar"
+assemblyJarName := s"${sys.env.getOrElse("BUILD_NUMBER", "DEV")}.jar"
 assembly / assemblyMergeStrategy := {
   case PathList("models", xs @ _*) => MergeStrategy.discard
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first

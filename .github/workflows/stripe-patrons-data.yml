@@ -37,7 +37,6 @@ jobs:
         run: ./script/ci
         working-directory: cdk
 
-      # Required by sbt riffRaffUpload
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -57,6 +56,46 @@ jobs:
             ~/.coursier
           key: sbt
 
-      - name: Build and upload to RiffRaff
+      - name: Build
         run: |
-          sbt "project stripe-patrons-data" riffRaffUpload
+          sbt "project stripe-patrons-data" assembly
+
+      - name: Upload to RiffRaff
+        uses: guardian/actions-riff-raff@v2
+        with:
+          app: stripe-patrons-data
+          buildNumberOffset: 3000
+          config: |
+            stacks:
+              - support
+            regions:
+              - eu-west-1
+            allowedStages:
+              - CODE
+              - PROD
+            deployments:
+              cfn:
+                type: cloud-formation
+                app: stripe-patrons-data
+                parameters:
+                  templateStagePaths:
+                    CODE: StripePatronsData-CODE.template.json
+                    PROD: StripePatronsData-CODE.template.json
+
+              stripe-patrons-data:
+                type: aws-lambda
+                parameters:
+                  bucket: membership-dist
+                  functionNames:
+                    - stripe-patrons-data-
+                    - stripe-patrons-data-cancelled-
+                    - stripe-patrons-data-sign-up-
+                  fileName: ${{ github.run_number }}.jar
+                  prefixStack: false
+
+          contentDirectories: |
+            stripe-patrons-data:
+              - stripe-patrons-data/target/scala-2.13/${{ github.run_number }}.zip
+            cfn:
+              - cdk/cdk.out/StripePatronsData-CODE.template.json
+              - cdk/cdk.out/StripePatronsData-CODE.template.json
