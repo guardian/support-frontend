@@ -32,22 +32,18 @@ class ProcessStripeSubscriptionsLambda extends RequestHandler[Unit, Unit] {
 
 object ProcessStripeSubscriptionsLambda {
   private val stage = StageConstructors.fromEnvironment
-  private val stripeConfig = PatronsStripeConfig.fromParameterStore(stage)
-  private val identityConfig = PatronsIdentityConfig.fromParameterStore(stage)
+  private val stripeConfig = PatronsStripeConfig.fromParameterStoreSync(stage)
+  private val identityConfig = PatronsIdentityConfig.fromParameterStoreSync(stage)
 
   def processSubscriptions(account: PatronsStripeAccount) = {
     val runner = configurableFutureRunner(60.seconds)
-    for {
-      stripeConfig <- stripeConfig
-      stripeService = new PatronsStripeService(stripeConfig, runner)
-      identityConfig <- identityConfig
-      identityService = new PatronsIdentityService(identityConfig, runner)
-      dynamoService = SupporterDataDynamoService(stage)
-      processor = new StripeSubscriptionsProcessor(
-        stripeService,
-        new CreateMissingIdentityProcessor(identityService, dynamoService),
-      )
-      _ <- processor.processSubscriptions(account, 100)
-    } yield ()
+    val stripeService = new PatronsStripeService(stripeConfig, runner)
+    val identityService = new PatronsIdentityService(identityConfig, runner)
+    val dynamoService = SupporterDataDynamoService(stage)
+    val processor = new StripeSubscriptionsProcessor(
+      stripeService,
+      new CreateMissingIdentityProcessor(identityService, dynamoService),
+    )
+    processor.processSubscriptions(account, 100).map(_ => ())
   }
 }

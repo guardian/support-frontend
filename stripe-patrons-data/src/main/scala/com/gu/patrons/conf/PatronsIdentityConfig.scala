@@ -16,4 +16,12 @@ object PatronsIdentityConfig extends ConfigService {
       )
     }
   }
+
+  def fromParameterStoreSync(stage: Stage) = {
+    val params = ParameterStoreService(stage).getParametersByPathSync("identity-config")
+    PatronsIdentityConfig(
+      findParameterOrThrow("api-url", params),
+      findParameterOrThrow("api-token", params),
+    )
+  }
 }
