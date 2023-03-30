@@ -59,7 +59,7 @@ object ParameterStoreService {
   lazy val client = AWSSimpleSystemsManagementAsyncClientBuilder
     .standard()
     .withRegion(Regions.EU_WEST_1)
-    .withCredentials(CredentialsProvider)
+//    .withCredentials(CredentialsProvider)
     .build()
 
   def apply(stage: Stage) = new ParameterStoreService(client, stage)
