@@ -66,23 +66,9 @@ import { PaymentTsAndCs } from './components/paymentTsAndCs';
 import { AmountAndBenefits } from './formSections/amountAndBenefits';
 import { getPaymentMethodButtons } from './paymentButtons';
 
-export const sectionSpacing = css``;
-export const smallPrintCss = css`
-	${textSans.xxsmall()};
-	margin-top: 0;
-	margin-bottom: 0;
-	color: #606060;
-	> a {
-		color: inherit;
-		text-decoration: underline;
-	}
-	& + & {
-		margin-top: ${space[1]}px;
-	}
-`;
 const buttonContainerCss = css`
 	background-color: ${brand[400]};
-	padding: ${space[5]}px 0;
+	padding: ${space[5]}px 0 ${space[9]}px;
 	${until.tablet} {
 		display: flex;
 		flex-direction: column;
@@ -90,8 +76,8 @@ const buttonContainerCss = css`
 		bottom: 0;
 		margin-left: -${space[3]}px;
 		margin-right: -${space[3]}px;
-		padding-left: ${space[9]}px;
-		padding-right: ${space[9]}px;
+		padding-left: ${space[6]}px;
+		padding-right: ${space[6]}px;
 	}
 `;
 const buttonStuckCss = css`
@@ -100,7 +86,7 @@ const buttonStuckCss = css`
 		box-shadow: 0px -1px 16px rgba(0, 0, 0, 0.1);
 	}
 `;
-export const buttonCentredCss = css`
+const buttonCentredCss = css`
 	justify-content: center;
 `;
 
@@ -140,9 +126,6 @@ const displayContributionsStripe = (display?: boolean) => css`
 	${until.tablet} {
 		display: ${display ? 'inline' : 'none'};
 	}
-`;
-const displayFloatingButton = (display?: boolean) => css`
-	display: ${display ? 'none' : 'inline'};
 `;
 
 const subheading = css`
@@ -429,7 +412,7 @@ export function SupporterPlusLandingPage({
 			</PageScaffold>
 
 			{optimisedMobileLayout2 && (
-				<div css={displayFloatingButton(stripeDisplayed)}>
+				<div css={displayContributionsStripe(!stripeDisplayed)}>
 					<section
 						css={[
 							buttonContainerCss,
