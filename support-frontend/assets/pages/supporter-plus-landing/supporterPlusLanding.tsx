@@ -133,7 +133,10 @@ const shorterBoxMargin = css`
 	}
 `;
 const displayContributionsStripe = (display?: boolean) => css`
-	display: ${display ? 'inline' : 'none'};
+	display: inline;
+	${until.tablet} {
+		display: ${display ? 'inline' : 'none'};
+	}
 `;
 const displayFloatingButton = (display?: boolean) => css`
 	display: ${display ? 'none' : 'inline'};
