@@ -603,6 +603,9 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           ],
         },
         "Runtime": "java11",
+        "SnapStart": {
+          "ApplyOn": "PublishedVersions",
+        },
         "Tags": [
           {
             "Key": "App",
@@ -636,7 +639,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "StripePatronsDataPRODCurrentVersion700541B416ad2f2651daf8193400b648fb092eed",
+            "StripePatronsDataPRODCurrentVersion700541B4c1fbea68bf1891aa6a65c801b76582e1",
             "Version",
           ],
         },
@@ -644,7 +647,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "StripePatronsDataPRODCurrentVersion700541B416ad2f2651daf8193400b648fb092eed": {
+    "StripePatronsDataPRODCurrentVersion700541B4c1fbea68bf1891aa6a65c801b76582e1": {
       "Properties": {
         "FunctionName": {
           "Ref": "StripePatronsDataPROD61F45521",
