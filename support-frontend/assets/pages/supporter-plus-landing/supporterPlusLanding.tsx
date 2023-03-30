@@ -40,6 +40,8 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import type { ContributionType } from 'helpers/contributions';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import {
 	AUDCountries,
 	Canada,
@@ -49,6 +51,7 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import { currencies } from 'helpers/internationalisation/currency';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -152,17 +155,27 @@ export function SupporterPlusLandingPage({
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
+	const contributionTypeToPaymentInterval: Partial<
+		Record<ContributionType, 'month' | 'year'>
+	> = {
+		MONTHLY: 'month',
+		ANNUAL: 'year',
+	};
+
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
+	const currency = currencies[currencyId];
 	const { switches } = useContributionsSelector(
 		(state) => state.common.settings,
 	);
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
+	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
+	const amountWithCurrency = simpleFormatAmount(currency, selectedAmount);
 
 	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
 		contributionType,
@@ -231,8 +244,21 @@ export function SupporterPlusLandingPage({
 		};
 	}, [buttonContainerRef]);
 
-	function onFloatClick() {
+	function onStickyButtonClick() {
 		setStripeDisplayed(!stripeDisplayed);
+	}
+
+	function getStickyButtonText(
+		amountWithCurrency: string,
+		paymentInterval?: 'month' | 'year',
+	) {
+		if (!amountWithCurrency.includes('NaN')) {
+			if (paymentInterval) {
+				return `Continue with ${amountWithCurrency} per ${paymentInterval}`;
+			}
+			return `Continue with ${amountWithCurrency}`;
+		}
+		return `Continue`;
 	}
 
 	return (
@@ -418,9 +444,12 @@ export function SupporterPlusLandingPage({
 							<Button
 								size="small"
 								cssOverrides={buttonCentredCss}
-								onClick={() => onFloatClick()}
+								onClick={() => onStickyButtonClick()}
 							>
-								Show Stripe (Sticky CTA)
+								{getStickyButtonText(
+									amountWithCurrency,
+									contributionTypeToPaymentInterval[contributionType],
+								)}
 							</Button>
 						</ThemeProvider>
 					</section>
