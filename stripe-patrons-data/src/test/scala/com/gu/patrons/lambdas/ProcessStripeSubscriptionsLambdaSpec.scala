@@ -10,6 +10,6 @@ import com.gu.patrons.services.GnmPatronScheme
 class ProcessStripeSubscriptionsLambdaSpec extends AsyncFlatSpec with Matchers {
 
   ProcessStripeSubscriptionsLambda.getClass.getSimpleName should "process subscriptions" in {
-    ProcessStripeSubscriptionsLambda.processSubscriptions(GnmPatronScheme, DEV).map(result => result shouldBe ())
+    ProcessStripeSubscriptionsLambda.processSubscriptions(GnmPatronScheme).map(result => result shouldBe ())
   }
 }
