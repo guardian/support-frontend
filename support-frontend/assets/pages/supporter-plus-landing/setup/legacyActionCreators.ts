@@ -28,6 +28,7 @@ import {
 	postRegularPaymentRequest,
 	regularPaymentFieldsFromAuthorisation,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -137,7 +138,7 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
 	);
 
 function getBillingCountryAndState(
-	authorisation: PaymentAuthorisation,
+	paymentMethod: PaymentMethod,
 	state: ContributionsState,
 ): {
 	billingCountry: IsoCountry;
@@ -148,9 +149,7 @@ function getBillingCountryAndState(
 		state.page.checkoutForm.billingAddress.fields;
 
 	// If the user chose a Direct Debit payment method, then we must use the pageBaseCountry as the billingCountry.
-	if (
-		[DirectDebit, ExistingDirectDebit].includes(authorisation.paymentMethod)
-	) {
+	if ([DirectDebit, ExistingDirectDebit].includes(paymentMethod)) {
 		return {
 			billingCountry: pageBaseCountry,
 			billingState,
@@ -235,7 +234,7 @@ function regularPaymentRequestFromAuthorisation(
 ): RegularPaymentRequest {
 	const { actionHistory } = state.debug;
 	const { billingCountry, billingState } = getBillingCountryAndState(
-		authorisation,
+		authorisation.paymentMethod,
 		state,
 	);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
@@ -612,4 +611,5 @@ export {
 	paymentSuccess,
 	onThirdPartyPaymentAuthorised,
 	createOneOffPayPalPayment,
+	getBillingCountryAndState,
 };
