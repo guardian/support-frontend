@@ -6,12 +6,12 @@ import type { CheckoutSupportOnceProps } from './checkoutSupportOnce';
 
 type SupportOnceContainerProps = {
 	renderSupportOnce: (props: CheckoutSupportOnceProps) => JSX.Element;
-	onSupportOnceContainerClick: () => void;
+	onSupportOnceClick: () => void;
 };
 
 export function CheckoutSupportOnceContainer({
 	renderSupportOnce,
-	onSupportOnceContainerClick,
+	onSupportOnceClick,
 }: SupportOnceContainerProps): JSX.Element | null {
 	const contributionType = useContributionsSelector(getContributionType);
 	const { countryGroupId } = useContributionsSelector(
@@ -27,10 +27,6 @@ export function CheckoutSupportOnceContainer({
 			currencyGlyph + minAmount.toString()
 		} or much more`,
 	];
-
-	function onSupportOnceClick() {
-		onSupportOnceContainerClick();
-	}
 
 	return renderSupportOnce({
 		contributionType,

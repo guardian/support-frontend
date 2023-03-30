@@ -172,7 +172,7 @@ export function SupporterPlusLandingPage({
 	);
 
 	const dispatch = useContributionsDispatch();
-	function onSupportOnceContainerClick() {
+	function onSupportOnceClick() {
 		setSupportOnceDisplay(false);
 
 		const paymentMethodToSelect = getPaymentMethodToSelect(
@@ -265,7 +265,7 @@ export function SupporterPlusLandingPage({
 								renderSupportOnce={(supportOnceProps) => (
 									<CheckoutSupportOnce {...supportOnceProps} />
 								)}
-								onSupportOnceContainerClick={onSupportOnceContainerClick}
+								onSupportOnceClick={onSupportOnceClick}
 							/>
 						)}
 						<Box
