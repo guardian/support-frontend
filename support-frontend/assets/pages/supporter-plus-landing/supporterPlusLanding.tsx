@@ -261,7 +261,7 @@ export function SupporterPlusLandingPage({
 					</>
 				}
 				footer={
-					optimisedMobileLayout1 ? (
+					!optimisedMobileLayout2 ? (
 						<FooterWithContents>
 							<FooterLinks></FooterLinks>
 						</FooterWithContents>
@@ -361,23 +361,6 @@ export function SupporterPlusLandingPage({
 											<ExistingRecurringContributorMessage />
 											<PaymentFailureMessage />
 											<DirectDebitContainer />
-											{!optimisedMobileLayout && (
-												<>
-													<CheckoutDivider
-														spacing="loose"
-														mobileTheme={'dark'}
-													/>
-													<PatronsMessage
-														countryGroupId={countryGroupId}
-														mobileTheme={'dark'}
-													/>
-													<CheckoutDivider
-														spacing="tight"
-														mobileTheme={'dark'}
-													/>
-													<GuardianTsAndCs mobileTheme={'dark'} />
-												</>
-											)}
 										</ContributionsStripe>
 										<PaymentTsAndCs
 											countryGroupId={countryGroupId}
@@ -388,17 +371,21 @@ export function SupporterPlusLandingPage({
 										/>
 									</BoxContents>
 								</Box>
-								{optimisedMobileLayout && (
-									<>
-										<CheckoutDivider spacing="loose" mobileTheme={'light'} />
-										<PatronsMessage
-											countryGroupId={countryGroupId}
-											mobileTheme={'light'}
-										/>
-										<CheckoutDivider spacing="tight" mobileTheme={'light'} />
-										<GuardianTsAndCs mobileTheme={'light'} />
-									</>
-								)}
+								<CheckoutDivider
+									spacing="loose"
+									mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+								/>
+								<PatronsMessage
+									countryGroupId={countryGroupId}
+									mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+								/>
+								<CheckoutDivider
+									spacing="tight"
+									mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+								/>
+								<GuardianTsAndCs
+									mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+								/>
 							</div>
 						</Column>
 					</Columns>
