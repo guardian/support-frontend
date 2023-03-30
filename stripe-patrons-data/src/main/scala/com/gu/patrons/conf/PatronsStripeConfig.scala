@@ -34,7 +34,7 @@ object PatronsStripeConfig extends ConfigService {
   def fromParameterStoreSync(stage: Stage) = {
     val params = ParameterStoreService(stage).getParametersByPathSync(stripeConfigPath)
     PatronsStripeConfig(
-      findParameterOrThrow("api-key", params),
+      findParameterOrThrow("api-ke", params),
       findParameterOrThrow("api-key-au", params),
       findParameterOrThrow("cancelled-hook-signing-secret", params),
       findParameterOrThrow("cancelled-hook-signing-secret-au", params),
