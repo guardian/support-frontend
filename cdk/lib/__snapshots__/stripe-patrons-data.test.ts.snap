@@ -956,9 +956,6 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           ],
         },
         "Runtime": "java11",
-        "SnapStart": {
-          "ApplyOn": "PublishedVersions",
-        },
         "Tags": [
           {
             "Key": "App",
@@ -984,29 +981,6 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
-    },
-    "stripepatronsdatacancelledAlias92D0981E": {
-      "Properties": {
-        "FunctionName": {
-          "Ref": "stripepatronsdatacancelled2E3CED96",
-        },
-        "FunctionVersion": {
-          "Fn::GetAtt": [
-            "stripepatronsdatacancelledCurrentVersion23EC801E26cbec64da63ab4efe85f7a30eb42ca1",
-            "Version",
-          ],
-        },
-        "Name": "PROD",
-      },
-      "Type": "AWS::Lambda::Alias",
-    },
-    "stripepatronsdatacancelledCurrentVersion23EC801E26cbec64da63ab4efe85f7a30eb42ca1": {
-      "Properties": {
-        "FunctionName": {
-          "Ref": "stripepatronsdatacancelled2E3CED96",
-        },
-      },
-      "Type": "AWS::Lambda::Version",
     },
     "stripepatronsdatacancelledServiceRole157E3052": {
       "Properties": {
@@ -1222,9 +1196,6 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           ],
         },
         "Runtime": "java11",
-        "SnapStart": {
-          "ApplyOn": "PublishedVersions",
-        },
         "Tags": [
           {
             "Key": "App",
@@ -1250,29 +1221,6 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
-    },
-    "stripepatronsdatasignupAlias3E5561EB": {
-      "Properties": {
-        "FunctionName": {
-          "Ref": "stripepatronsdatasignup4E7F0A3F",
-        },
-        "FunctionVersion": {
-          "Fn::GetAtt": [
-            "stripepatronsdatasignupCurrentVersionCB0F0BAAe77bdf6360e5dc8f6ad4dc67807ef93a",
-            "Version",
-          ],
-        },
-        "Name": "PROD",
-      },
-      "Type": "AWS::Lambda::Alias",
-    },
-    "stripepatronsdatasignupCurrentVersionCB0F0BAAe77bdf6360e5dc8f6ad4dc67807ef93a": {
-      "Properties": {
-        "FunctionName": {
-          "Ref": "stripepatronsdatasignup4E7F0A3F",
-        },
-      },
-      "Type": "AWS::Lambda::Version",
     },
     "stripepatronsdatasignupServiceRoleC639AAC9": {
       "Properties": {

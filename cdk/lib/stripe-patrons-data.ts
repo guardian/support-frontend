@@ -42,16 +42,6 @@ function parameterStorePolicy(scope: GuStack, appName: string) {
   });
 }
 
-// Create a new lambda version, alias it, and enable Snapstart for faster lambda starts
-function configureSnapstart(lambda: GuLambdaFunction, stage: string) {
-  const version = lambda.currentVersion;
-  new Alias(lambda, 'Alias', {
-    aliasName: stage,
-    version,
-  });
-  (lambda.node.defaultChild as CfnFunction).snapStart = { applyOn: "PublishedVersions" };
-}
-
 class StripePatronsDataLambda extends GuLambdaFunction {
   constructor(scope: GuStack, id: string, appName: string, buildNumber: string) {
     super(scope, id, {
@@ -66,7 +56,13 @@ class StripePatronsDataLambda extends GuLambdaFunction {
       timeout: Duration.minutes(15),
     });
 
-    configureSnapstart(this, scope.stage);
+    // Create a new lambda version, alias it, and enable Snapstart for faster lambda starts
+    const version = this.currentVersion;
+    new Alias(this, 'Alias', {
+      aliasName: scope.stage,
+      version,
+    });
+    (this.node.defaultChild as CfnFunction).snapStart = { applyOn: "PublishedVersions" };
 
     function monitoringForEnvironment(
       stage: string
@@ -101,8 +97,6 @@ class PatronSignUpLambda extends GuLambdaFunction {
       timeout: Duration.minutes(15),
     });
 
-    configureSnapstart(this, scope.stage);
-
     this.addToRolePolicy(parameterStorePolicy(scope, appName));
     this.addToRolePolicy(dynamoPolicy(scope.stage));
   }
@@ -120,8 +114,6 @@ class PatronCancelledLambda extends GuLambdaFunction {
       memorySize: 1536,
       timeout: Duration.minutes(15),
     });
-
-    configureSnapstart(this, scope.stage);
 
     this.addToRolePolicy(parameterStorePolicy(scope, appName));
     this.addToRolePolicy(dynamoPolicy(scope.stage));
