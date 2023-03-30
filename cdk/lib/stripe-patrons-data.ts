@@ -42,6 +42,16 @@ function parameterStorePolicy(scope: GuStack, appName: string) {
   });
 }
 
+// Create a new lambda version, alias it, and enable Snapstart for faster lambda starts
+function configureSnapstart(lambda: GuLambdaFunction, stage: string) {
+  const version = lambda.currentVersion;
+  new Alias(lambda, 'Alias', {
+    aliasName: stage,
+    version,
+  });
+  (lambda.node.defaultChild as CfnFunction).snapStart = { applyOn: "PublishedVersions" };
+}
+
 class StripePatronsDataLambda extends GuLambdaFunction {
   constructor(scope: GuStack, id: string, appName: string, buildNumber: string) {
     super(scope, id, {
@@ -56,11 +66,7 @@ class StripePatronsDataLambda extends GuLambdaFunction {
       timeout: Duration.minutes(15),
     });
 
-    const version = this.currentVersion;
-    const alias = new Alias(this, 'Alias', {
-      aliasName: scope.stage,
-      version,
-    });
+    configureSnapstart(this, scope.stage);
 
     function monitoringForEnvironment(
       stage: string
@@ -79,11 +85,6 @@ class StripePatronsDataLambda extends GuLambdaFunction {
 
     this.addToRolePolicy(parameterStorePolicy(scope, appName));
     this.addToRolePolicy(dynamoPolicy(scope.stage));
-
-    // (alias.node.defaultChild as CfnFunction).addPropertyOverride('SnapStart', {
-    //   ApplyOn: 'PublishedVersions',
-    // });
-    (this.node.defaultChild as CfnFunction).snapStart = { applyOn: "PublishedVersions" };
   }
 }
 
@@ -99,6 +100,8 @@ class PatronSignUpLambda extends GuLambdaFunction {
       memorySize: 1536,
       timeout: Duration.minutes(15),
     });
+
+    configureSnapstart(this, scope.stage);
 
     this.addToRolePolicy(parameterStorePolicy(scope, appName));
     this.addToRolePolicy(dynamoPolicy(scope.stage));
@@ -117,6 +120,8 @@ class PatronCancelledLambda extends GuLambdaFunction {
       memorySize: 1536,
       timeout: Duration.minutes(15),
     });
+
+    configureSnapstart(this, scope.stage);
 
     this.addToRolePolicy(parameterStorePolicy(scope, appName));
     this.addToRolePolicy(dynamoPolicy(scope.stage));
