@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
 import {
 	brand,
 	from,
@@ -7,12 +7,18 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import { Column, Columns, Hide } from '@guardian/source-react-components';
+import {
+	Button,
+	buttonThemeReaderRevenueBrand,
+	Column,
+	Columns,
+	Hide,
+} from '@guardian/source-react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
@@ -57,6 +63,45 @@ import { PaymentTsAndCs } from './components/paymentTsAndCs';
 import { AmountAndBenefits } from './formSections/amountAndBenefits';
 import { getPaymentMethodButtons } from './paymentButtons';
 
+export const sectionSpacing = css``;
+export const smallPrintCss = css`
+	${textSans.xxsmall()};
+	margin-top: 0;
+	margin-bottom: 0;
+	color: #606060;
+	> a {
+		color: inherit;
+		text-decoration: underline;
+	}
+	& + & {
+		margin-top: ${space[1]}px;
+	}
+`;
+const buttonContainerCss = css`
+	background-color: ${brand[400]};
+	margin-top: ${space[1]}px;
+	padding: ${space[5]}px 0;
+	${until.tablet} {
+		display: flex;
+		flex-direction: column;
+		position: sticky;
+		bottom: 0;
+		margin-left: -${space[3]}px;
+		margin-right: -${space[3]}px;
+		padding-left: ${space[3]}px;
+		padding-right: ${space[3]}px;
+	}
+`;
+const buttonStuckCss = css`
+	${until.tablet} {
+		background-color: ${neutral[100]};
+		box-shadow: 0px -1px 16px rgba(0, 0, 0, 0.1);
+	}
+`;
+export const buttonCentredCss = css`
+	justify-content: center;
+`;
+
 const checkoutContainer = css`
 	position: relative;
 	color: ${neutral[7]};
@@ -88,6 +133,12 @@ const shorterBoxMargin = css`
 			margin-bottom: ${space[2]}px;
 		}
 	}
+`;
+const displayContributionsStripe = (display?: boolean) => css`
+	display: ${display ? 'inline' : 'none'};
+`;
+const displayFloatingButton = (display?: boolean) => css`
+	display: ${display ? 'none' : 'inline'};
 `;
 
 const subheading = css`
@@ -146,119 +197,203 @@ export function SupporterPlusLandingPage({
 		}
 	}, [paymentComplete]);
 
+	const buttonContainerRef = useRef(null);
+	const [stripeDisplayed, setStripeDisplayed] = useState(false);
+	const [buttonIsStuck, setButtonIsStuck] = useState(false);
+
+	// Use IntersectionObserver to detect when button is 'stuck' at the bottom
+	// of the viewport. The bottom of the observable area is set to -1px so that
+	// when the button is stuck it is not considered to be fully visible. The
+	// top edge is similarly extended upwards so the button is considered fully
+	// visible when scrolling off the top of the screen.
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				setButtonIsStuck(entry.intersectionRatio < 1);
+			},
+			{ threshold: [1], rootMargin: '100px 0px -1px 0px' },
+		);
+
+		return () => {
+			observer.disconnect();
+		};
+	}, [buttonContainerRef]);
+
+	function onFloatClick() {
+		setStripeDisplayed(!stripeDisplayed);
+	}
+
 	return (
-		<PageScaffold
-			id="supporter-plus-landing"
-			header={
-				<>
-					<Header>
-						<Hide from="desktop">
-							<CountrySwitcherContainer>
-								<CountryGroupSwitcher {...countrySwitcherProps} />
-							</CountrySwitcherContainer>
-						</Hide>
-					</Header>
-					<Nav {...countrySwitcherProps} />
-				</>
-			}
-			footer={
-				<FooterWithContents>
-					<FooterLinks></FooterLinks>
-				</FooterWithContents>
-			}
-		>
-			<CheckoutHeading
-				heading={heading}
-				image={
-					<GridImage
-						gridId="supporterPlusLanding"
-						srcSizes={[500]}
-						sizes="500px"
-						imgType="png"
-						altText=""
-					/>
+		<>
+			<PageScaffold
+				id="supporter-plus-landing"
+				header={
+					<>
+						<Header>
+							<Hide from="desktop">
+								<CountrySwitcherContainer>
+									<CountryGroupSwitcher {...countrySwitcherProps} />
+								</CountrySwitcherContainer>
+							</Hide>
+						</Header>
+						<Nav {...countrySwitcherProps} />
+					</>
 				}
 			>
-				<p css={subheading}>
-					As a reader-funded news organisation, we rely on your generosity.
-					Please give what you can, so millions can benefit from quality
-					reporting on the events shaping our world.
-				</p>
-			</CheckoutHeading>
-			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
-				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
-					<Column span={[0, 2, 5]}></Column>
-					<Column span={[1, 8, 7]}>
-						<Hide from="desktop">
-							<SecureTransactionIndicator
-								align="left"
-								theme="light"
-								cssOverrides={css`
-									margin-bottom: 10px;
-								`}
-							/>
-						</Hide>
-						<Box cssOverrides={shorterBoxMargin}>
-							<AmountAndBenefits />
-						</Box>
-						<Box cssOverrides={shorterBoxMargin}>
-							<BoxContents>
-								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
-								<ContributionsStripe>
-									<SecureTransactionIndicator />
-									<PaymentRequestButtonContainer
-										CustomButton={SavedCardButton}
-									/>
-									<PersonalDetailsContainer
-										renderPersonalDetails={(personalDetailsProps) => (
-											<PersonalDetails {...personalDetailsProps} />
-										)}
-									/>
-									<CheckoutDivider spacing="loose" />
-									<PaymentMethodSelectorContainer
-										render={(paymentMethodSelectorProps) => (
-											<PaymentMethodSelector {...paymentMethodSelectorProps} />
-										)}
-									/>
-									<PaymentButtonController
-										cssOverrides={css`
-											margin-top: 30px;
-										`}
-										paymentButtons={getPaymentMethodButtons(
-											contributionType,
-											switches,
-											countryId,
-											countryGroupId,
-										)}
-									/>
-									<PaymentFailureMessage />
-									<DirectDebitContainer />
-								</ContributionsStripe>
-								<PaymentTsAndCs
-									countryGroupId={countryGroupId}
-									contributionType={contributionType}
-									currency={currencyId}
-									amount={amount}
-									amountIsAboveThreshold={amountIsAboveThreshold}
-								/>
-							</BoxContents>
-						</Box>
-						<CheckoutDivider spacing="loose" mobileTheme={'light'} />
-						<PatronsMessage
-							countryGroupId={countryGroupId}
-							mobileTheme={'light'}
+				<CheckoutHeading
+					heading={heading}
+					image={
+						<GridImage
+							gridId="supporterPlusLanding"
+							srcSizes={[500]}
+							sizes="500px"
+							imgType="png"
+							altText=""
 						/>
-						<CheckoutDivider spacing="tight" mobileTheme={'light'} />
-						<GuardianTsAndCs mobileTheme={'light'} />
-					</Column>
-				</Columns>
-			</Container>
-			{isWaiting && (
-				<LoadingOverlay>
-					<p>Processing transaction</p>
-					<p>Please wait</p>
-				</LoadingOverlay>
-			)}
-		</PageScaffold>
+					}
+				>
+					<p css={subheading}>
+						As a reader-funded news organisation, we rely on your generosity.
+						Please give what you can, so millions can benefit from quality
+						reporting on the events shaping our world.
+					</p>
+				</CheckoutHeading>
+				<Container
+					sideBorders
+					cssOverrides={
+						optimisedMobileLayout
+							? darkBackgroundContainerMobile
+							: backgroundContainer
+					}
+				>
+					<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
+						<Column span={[0, 2, 5]}></Column>
+						<Column span={[1, 8, 7]}>
+							<Hide from="desktop">
+								{optimisedMobileLayout ? (
+									<SecureTransactionIndicator
+										align="left"
+										theme="light"
+										cssOverrides={css`
+											margin-bottom: 10px;
+										`}
+									/>
+								) : (
+									heading
+								)}
+							</Hide>
+							<Box
+								cssOverrides={optimisedMobileLayout ? shorterBoxMargin : css``}
+							>
+								<AmountAndBenefits />
+							</Box>
+							<div css={displayContributionsStripe(stripeDisplayed)}>
+								<Box
+									cssOverrides={
+										optimisedMobileLayout ? shorterBoxMargin : css``
+									}
+								>
+									<BoxContents>
+										{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
+										<ContributionsStripe>
+											<SecureTransactionIndicator />
+											<PaymentRequestButtonContainer
+												CustomButton={SavedCardButton}
+											/>
+											<PersonalDetailsContainer
+												renderPersonalDetails={(personalDetailsProps) => (
+													<PersonalDetails {...personalDetailsProps} />
+												)}
+											/>
+											<CheckoutDivider spacing="loose" />
+											<PaymentMethodSelectorContainer
+												render={(paymentMethodSelectorProps) => (
+													<PaymentMethodSelector
+														{...paymentMethodSelectorProps}
+													/>
+												)}
+											/>
+											<PaymentButtonController
+												cssOverrides={
+													optimisedMobileLayout
+														? css`
+																margin-top: 30px;
+														  `
+														: css``
+												}
+												paymentButtons={getPaymentMethodButtons(
+													contributionType,
+													switches,
+													countryId,
+													countryGroupId,
+												)}
+											/>
+											<ExistingRecurringContributorMessage />
+											<PaymentFailureMessage />
+											<DirectDebitContainer />
+											<PaymentTsAndCs
+												countryGroupId={countryGroupId}
+												contributionType={contributionType}
+												currency={currencyId}
+												amount={amount}
+												amountIsAboveThreshold={amountIsAboveThreshold}
+											/>
+											<CheckoutDivider
+												spacing="loose"
+												mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+											/>
+											<PatronsMessage
+												countryGroupId={countryGroupId}
+												mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+											/>
+											<CheckoutDivider
+												spacing="tight"
+												mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+											/>
+											<GuardianTsAndCs
+												mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+											/>
+										</ContributionsStripe>
+									</BoxContents>
+								</Box>
+							</div>
+						</Column>
+					</Columns>
+				</Container>
+				{isWaiting && (
+					<LoadingOverlay>
+						<p>Processing transaction</p>
+						<p>Please wait</p>
+					</LoadingOverlay>
+				)}
+			</PageScaffold>
+
+			<div css={displayFloatingButton(stripeDisplayed)}>
+				<section
+					css={[
+						buttonContainerCss,
+						buttonIsStuck && buttonStuckCss,
+						css`
+							display: none;
+						`,
+					]}
+					ref={buttonContainerRef}
+				>
+					<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
+						<Button
+							size="small"
+							cssOverrides={buttonCentredCss}
+							onClick={() => onFloatClick()}
+						>
+							Show Stripe (Sticky CTA)
+						</Button>
+					</ThemeProvider>
+				</section>
+			</div>
+			<FooterWithContents>
+				<FooterLinks></FooterLinks>
+			</FooterWithContents>
+		</>
 	);
 }
