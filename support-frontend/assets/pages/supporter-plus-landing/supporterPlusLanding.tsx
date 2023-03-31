@@ -54,6 +54,10 @@ import {
 import { currencies } from 'helpers/internationalisation/currency';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import {
+	isUserInAbVariant,
+	isUserInAnyAbVariant,
+} from 'helpers/redux/commonState/selectors';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { CheckoutDivider } from './components/checkoutDivider';
@@ -167,14 +171,16 @@ export function SupporterPlusLandingPage({
 		countryGroupId,
 	);
 
-	const optimisedMobileLayout1 = useContributionsSelector(
-		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
-	);
 	const optimisedMobileLayout2 = useContributionsSelector(
 		isUserInAbVariant('supporterPlusMobileTest2', 'variant'),
 	);
-	const optimisedMobileLayout =
-		optimisedMobileLayout1 || optimisedMobileLayout2;
+	const optimisedMobileLayout = useContributionsSelector(
+		isUserInAnyAbVariant(
+			['supporterPlusMobileTest1', 'supporterPlusMobileTest2'],
+			'variant',
+		),
+	);
+
 	const { paymentComplete, isWaiting } = useContributionsSelector(
 		(state) => state.page.form,
 	);
@@ -300,7 +306,7 @@ export function SupporterPlusLandingPage({
 						<Column span={[0, 2, 5]}></Column>
 						<Column span={[1, 8, 7]}>
 							<Hide from="desktop">
-								{optimisedMobileLayout1 ? (
+								{optimisedMobileLayout ? (
 									<SecureTransactionIndicator
 										align="left"
 										theme="light"
