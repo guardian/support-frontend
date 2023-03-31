@@ -386,35 +386,35 @@ export function SupporterPlusLandingPage({
 			</PageScaffold>
 
 			{optimisedMobileLayout2 && (
-				<div css={displayContributionsStripeCss(!stripeDisplayed)}>
-					<section
-						css={[
-							stickyContainerCss,
-							css`
-								display: none;
-							`,
-						]}
-						ref={buttonContainerRef}
-					>
-						<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-							<Button
-								size="small"
-								cssOverrides={buttonCentreCss}
-								onClick={() => onStickyButtonClick()}
-							>
-								{getStickyButtonText(
-									amountWithCurrency,
-									contributionTypeToPaymentInterval[contributionType],
-								)}
-							</Button>
-						</ThemeProvider>
-					</section>
-				</div>
-			)}
-			{optimisedMobileLayout2 && (
-				<FooterWithContents>
-					<FooterLinks></FooterLinks>
-				</FooterWithContents>
+				<>
+					<div css={displayContributionsStripeCss(!stripeDisplayed)}>
+						<section
+							css={[
+								stickyContainerCss,
+								css`
+									display: none;
+								`,
+							]}
+							ref={buttonContainerRef}
+						>
+							<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
+								<Button
+									size="small"
+									cssOverrides={buttonCentreCss}
+									onClick={() => onStickyButtonClick()}
+								>
+									{getStickyButtonText(
+										amountWithCurrency,
+										contributionTypeToPaymentInterval[contributionType],
+									)}
+								</Button>
+							</ThemeProvider>
+						</section>
+					</div>
+					<FooterWithContents>
+						<FooterLinks></FooterLinks>
+					</FooterWithContents>
+				</>
 			)}
 		</>
 	);
