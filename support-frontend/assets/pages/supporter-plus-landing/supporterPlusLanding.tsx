@@ -76,6 +76,7 @@ const stickyContainerCss = css`
 	${until.tablet} {
 		display: flex;
 		flex-direction: column;
+		position: -webkit-sticky; /* Safari */
 		position: sticky;
 		bottom: 0;
 		margin-left: -${space[3]}px;
