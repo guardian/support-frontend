@@ -55,3 +55,16 @@ export function isUserInAbVariant(abTestName: string, variantName: string) {
 		return participations[abTestName] === variantName;
 	};
 }
+
+export function isUserInAnyAbVariant(
+	abTestNames: string[],
+	variantName: string,
+) {
+	return function getAbTestStatus(state: ContributionsState): boolean {
+		const participations = state.common.abParticipations;
+		const matchingAbTest = abTestNames.find(
+			(abTestName) => participations[abTestName] === variantName,
+		);
+		return !!matchingAbTest;
+	};
+}
