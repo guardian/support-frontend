@@ -51,7 +51,12 @@ export function PaymentRequestButtonContainer({
 				if (internalPaymentMethodName) {
 					trackComponentClick(`${internalPaymentMethodName}-${buttonType}`);
 				}
-				dispatch(setPaymentMethod(Stripe));
+				dispatch(
+					setPaymentMethod({
+						paymentMethod: Stripe,
+						stripePaymentMethod: internalPaymentMethodName ?? undefined,
+					}),
+				);
 			},
 			false,
 		);

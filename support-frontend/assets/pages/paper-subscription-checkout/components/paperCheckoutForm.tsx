@@ -452,7 +452,9 @@ function PaperCheckoutForm(props: PropTypes) {
 							<PaymentMethodSelector
 								availablePaymentMethods={paymentMethods}
 								paymentMethod={props.paymentMethod}
-								setPaymentMethod={props.setPaymentMethod}
+								setPaymentMethod={(paymentMethod) =>
+									props.setPaymentMethod({ paymentMethod })
+								}
 								validationError={firstError('paymentMethod', props.formErrors)}
 							/>
 						</FormSection>

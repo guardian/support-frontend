@@ -116,7 +116,7 @@ OneOffNotSignedIn.decorators = [
 		store.dispatch(setFirstName('Joe'));
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
-		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(setPaymentMethod({ paymentMethod }));
 		store.dispatch(
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
@@ -168,7 +168,7 @@ OneOffSignedIn.decorators = [
 		store.dispatch(setFirstName('Joe'));
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
-		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(setPaymentMethod({ paymentMethod }));
 		store.dispatch(
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
@@ -221,7 +221,7 @@ OneOffSignUp.decorators = [
 		store.dispatch(setFirstName('Joe'));
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
-		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(setPaymentMethod({ paymentMethod }));
 		store.dispatch(
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
@@ -281,7 +281,7 @@ RecurringNotSignedIn.decorators = [
 		);
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
-		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(setPaymentMethod({ paymentMethod }));
 		store.dispatch(
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
@@ -347,7 +347,7 @@ RecurringSignedIn.decorators = [
 		);
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
-		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(setPaymentMethod({ paymentMethod }));
 		store.dispatch(
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
@@ -414,7 +414,7 @@ RecurringSignUp.decorators = [
 		);
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
-		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(setPaymentMethod({ paymentMethod }));
 		store.dispatch(
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);

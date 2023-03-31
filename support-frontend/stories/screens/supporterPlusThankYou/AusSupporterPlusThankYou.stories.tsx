@@ -124,7 +124,7 @@ OneOffNotSignedIn.decorators = [
 		store.dispatch(setFirstName('Joe'));
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
-		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(setPaymentMethod({ paymentMethod }));
 
 		store.dispatch(
 			setSelectedAmount(
@@ -171,7 +171,7 @@ OneOffSignedIn.decorators = [
 		store.dispatch(setFirstName('Joe'));
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
-		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(setPaymentMethod({ paymentMethod }));
 
 		store.dispatch(
 			setSelectedAmount(
@@ -220,7 +220,7 @@ OneOffSignUp.decorators = [
 		store.dispatch(setFirstName('Joe'));
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
-		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(setPaymentMethod({ paymentMethod }));
 
 		store.dispatch(
 			setSelectedAmount(
@@ -276,7 +276,7 @@ RecurringNotSignedIn.decorators = [
 		);
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
-		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(setPaymentMethod({ paymentMethod }));
 
 		const thresholdPrice =
 			benefitsThresholdsByCountryGroup['AUDCountries'][
@@ -338,7 +338,7 @@ RecurringSignedIn.decorators = [
 		);
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
-		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(setPaymentMethod({ paymentMethod }));
 
 		const thresholdPrice =
 			benefitsThresholdsByCountryGroup['AUDCountries'][
@@ -401,7 +401,7 @@ RecurringSignUp.decorators = [
 		);
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
-		store.dispatch(setPaymentMethod(paymentMethod));
+		store.dispatch(setPaymentMethod({ paymentMethod }));
 
 		const thresholdPrice =
 			benefitsThresholdsByCountryGroup['AUDCountries'][

@@ -42,7 +42,7 @@ export function usePaymentRequestCompletion(
 
 	useEffect(() => {
 		if (errorsPreventSubmission) {
-			dispatch(setPaymentMethod('None'));
+			dispatch(setPaymentMethod({ paymentMethod: 'None' }));
 			resetPayerDetails(dispatch);
 			errorHandler('incomplete_payment_request_details');
 			return;

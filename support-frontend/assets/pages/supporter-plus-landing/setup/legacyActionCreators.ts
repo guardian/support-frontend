@@ -138,8 +138,9 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
 	);
 
 function getBillingCountryAndState(
-	paymentMethod: PaymentMethod,
 	state: ContributionsState,
+	paymentMethod: PaymentMethod,
+	stripePaymentMethod?: StripePaymentMethod,
 ): {
 	billingCountry: IsoCountry;
 	billingState: Option<StateProvince>;
@@ -158,8 +159,12 @@ function getBillingCountryAndState(
 
 	// If the page form has a billingCountry, then it must have been provided by a wallet, ApplePay or
 	// Payment Request Button, which will already have filtered the billingState by stateProvinceFromString,
-	// so we can trust both values, verbatim.
-	if (billingCountry) {
+	// so we can trust both values, verbatim, as long as the current payment method is one of those.
+	const isPaymentRequestButton =
+		paymentMethod == Stripe &&
+		(stripePaymentMethod === 'StripePaymentRequestButton' ||
+			stripePaymentMethod === 'StripeApplePay');
+	if (billingCountry && isPaymentRequestButton) {
 		return {
 			billingCountry,
 			billingState,
@@ -234,8 +239,11 @@ function regularPaymentRequestFromAuthorisation(
 ): RegularPaymentRequest {
 	const { actionHistory } = state.debug;
 	const { billingCountry, billingState } = getBillingCountryAndState(
-		authorisation.paymentMethod,
 		state,
+		authorisation.paymentMethod,
+		authorisation.paymentMethod === 'Stripe'
+			? authorisation.stripePaymentMethod
+			: undefined,
 	);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const contributionType = getContributionType(state);
