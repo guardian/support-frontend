@@ -46,9 +46,18 @@ import { logException } from 'helpers/utilities/logger';
 // ----- Types ----- //
 export type StripePaymentMethod =
 	| 'StripeCheckout'
+	| 'StripeElements'
+	// We use Stripe’s payment request button element
+	// (https://stripe.com/docs/stripe-js/elements/payment-request-button) for
+	// taking Apple Pay and Google Pay payments (and possibly a third wallet I’m
+	// unaware of).
+	// However, we still use these values to distinguish Apple Pay payments from
+	// non-Apple Pay payments. Therefore `StripeApplePay` means ”Apple Pay, via
+	// the payment request button”, and `StripePaymentRequestButton` means “any
+	// non-Apple-Pay payment method (wallet) that uses the payment request
+	// button”
 	| 'StripeApplePay'
-	| 'StripePaymentRequestButton'
-	| 'StripeElements';
+	| 'StripePaymentRequestButton';
 export type StripePaymentRequestButtonMethod = 'none' | StripePaymentMethod;
 type RegularContribution = {
 	productType: 'Contribution';

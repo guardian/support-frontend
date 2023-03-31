@@ -34,7 +34,7 @@ store.dispatch(setProductType('MONTHLY'));
 store.dispatch(setFirstName(''));
 store.dispatch(setLastName(''));
 store.dispatch(setEmail(''));
-store.dispatch(setPaymentMethod('None'));
+store.dispatch(setPaymentMethod({ paymentMethod: 'None' }));
 
 export default {
 	component: SupporterPlusLandingPage,

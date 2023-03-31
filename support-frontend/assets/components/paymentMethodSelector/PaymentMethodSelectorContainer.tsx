@@ -109,7 +109,7 @@ function PaymentMethodSelectorContainer({
 		if (event === 'select') {
 			trackComponentClick(trackingId);
 			sendEventContributionPaymentMethod(paymentMethodDescription);
-			dispatch(setPaymentMethod(paymentMethod));
+			dispatch(setPaymentMethod({ paymentMethod }));
 			existingPaymentMethod &&
 				dispatch(selectExistingPaymentMethod(existingPaymentMethod));
 		} else {
@@ -119,7 +119,7 @@ function PaymentMethodSelectorContainer({
 
 	useEffect(() => {
 		availablePaymentMethods.length === 1 &&
-			dispatch(setPaymentMethod(availablePaymentMethods[0]));
+			dispatch(setPaymentMethod({ paymentMethod: availablePaymentMethods[0] }));
 	}, []);
 
 	return render({

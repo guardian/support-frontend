@@ -47,7 +47,7 @@ export function PaymentFrequencyTabsContainer({
 		);
 
 		dispatch(setProductType(contributionType));
-		dispatch(setPaymentMethod(paymentMethodToSelect));
+		dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
 	}
 
 	const tabs: TabProps[] = contributionTypes[countryGroupId].map(

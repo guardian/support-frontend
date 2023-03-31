@@ -11,7 +11,7 @@ export function addPaymentsSideEffects(
 	startListening({
 		actionCreator: setPaymentMethod,
 		effect(action, listenerApi) {
-			const paymentMethod = action.payload;
+			const { paymentMethod } = action.payload;
 			const { payPal } = listenerApi.getState().page.checkoutForm.payment;
 
 			storage.setSession('selectedPaymentMethod', paymentMethod);

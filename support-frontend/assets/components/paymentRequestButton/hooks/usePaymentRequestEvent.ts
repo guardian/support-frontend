@@ -72,7 +72,7 @@ export function usePaymentRequestEvent(
 				// cf. https://stripe.com/docs/js/payment_request/events/on_cancel
 				if (!paymentMethod) {
 					dispatch(unClickPaymentRequestButton(stripeAccount));
-					dispatch(setPaymentMethod('None'));
+					dispatch(setPaymentMethod({ paymentMethod: 'None' }));
 				}
 			});
 		}
