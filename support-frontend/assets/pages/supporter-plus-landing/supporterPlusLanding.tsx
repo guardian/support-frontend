@@ -70,7 +70,7 @@ import { PaymentTsAndCs } from './components/paymentTsAndCs';
 import { AmountAndBenefits } from './formSections/amountAndBenefits';
 import { getPaymentMethodButtons } from './paymentButtons';
 
-const buttonContainerCss = css`
+const stickyContainerCss = css`
 	background-color: ${brand[400]};
 	padding: ${space[5]}px 0 ${space[9]}px;
 	${until.tablet} {
@@ -84,17 +84,12 @@ const buttonContainerCss = css`
 		padding-right: ${space[6]}px;
 	}
 `;
-const buttonStuckCss = css`
-	${until.tablet} {
-		background-color: ${neutral[100]};
-		box-shadow: 0px -1px 16px rgba(0, 0, 0, 0.1);
-	}
-`;
-const buttonCentredCss = css`
+
+const buttonCentreCss = css`
 	justify-content: center;
 `;
 
-const checkoutContainer = css`
+const checkoutContainerCss = css`
 	position: relative;
 	color: ${neutral[7]};
 	${textSans.medium()};
@@ -111,28 +106,32 @@ const checkoutContainer = css`
 	}
 `;
 
-const darkBackgroundContainerMobile = css`
+const backgroundContainerCss = css`
 	background-color: ${neutral[97]};
+`;
+
+const darkBackgroundContainerMobileCss = css`
+	${backgroundContainerCss}
 	${until.tablet} {
 		background-color: ${brand[400]};
 	}
 `;
 
-const shorterBoxMargin = css`
+const shorterBoxMarginCss = css`
 	:not(:last-child) {
 		${until.tablet} {
 			margin-bottom: ${space[2]}px;
 		}
 	}
 `;
-const displayContributionsStripe = (display?: boolean) => css`
+const displayContributionsStripeCss = (display?: boolean) => css`
 	display: inline;
 	${until.tablet} {
 		display: ${display ? 'inline' : 'none'};
 	}
 `;
 
-const subheading = css`
+const subHeadingCss = css`
 	font-weight: normal;
 	padding-right: ${space[2]}px;
 `;
@@ -212,26 +211,6 @@ export function SupporterPlusLandingPage({
 	const [stripeDisplayed, setStripeDisplayed] = useState(
 		!optimisedMobileLayout2,
 	);
-	const [buttonIsStuck, setButtonIsStuck] = useState(false);
-
-	// Use IntersectionObserver to detect when button is 'stuck' at the bottom
-	// of the viewport. The bottom of the observable area is set to -1px so that
-	// when the button is stuck it is not considered to be fully visible. The
-	// top edge is similarly extended upwards so the button is considered fully
-	// visible when scrolling off the top of the screen.
-
-	useEffect(() => {
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				setButtonIsStuck(entry.intersectionRatio < 1);
-			},
-			{ threshold: [1], rootMargin: '100px 0px -1px 0px' },
-		);
-
-		return () => {
-			observer.disconnect();
-		};
-	}, [buttonContainerRef]);
 
 	function onStickyButtonClick() {
 		setStripeDisplayed(!stripeDisplayed);
@@ -288,7 +267,7 @@ export function SupporterPlusLandingPage({
 						/>
 					}
 				>
-					<p css={subheading}>
+					<p css={subHeadingCss}>
 						As a reader-funded news organisation, we rely on your generosity.
 						Please give what you can, so millions can benefit from quality
 						reporting on the events shaping our world.
@@ -298,11 +277,11 @@ export function SupporterPlusLandingPage({
 					sideBorders
 					cssOverrides={
 						optimisedMobileLayout
-							? darkBackgroundContainerMobile
-							: backgroundContainer
+							? darkBackgroundContainerMobileCss
+							: backgroundContainerCss
 					}
 				>
-					<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
+					<Columns cssOverrides={checkoutContainerCss} collapseUntil="tablet">
 						<Column span={[0, 2, 5]}></Column>
 						<Column span={[1, 8, 7]}>
 							<Hide from="desktop">
@@ -319,14 +298,16 @@ export function SupporterPlusLandingPage({
 								)}
 							</Hide>
 							<Box
-								cssOverrides={optimisedMobileLayout ? shorterBoxMargin : css``}
+								cssOverrides={
+									optimisedMobileLayout ? shorterBoxMarginCss : css``
+								}
 							>
 								<AmountAndBenefits />
 							</Box>
-							<div css={displayContributionsStripe(stripeDisplayed)}>
+							<div css={displayContributionsStripeCss(stripeDisplayed)}>
 								<Box
 									cssOverrides={
-										optimisedMobileLayout ? shorterBoxMargin : css``
+										optimisedMobileLayout ? shorterBoxMarginCss : css``
 									}
 								>
 									<BoxContents>
@@ -405,11 +386,10 @@ export function SupporterPlusLandingPage({
 			</PageScaffold>
 
 			{optimisedMobileLayout2 && (
-				<div css={displayContributionsStripe(!stripeDisplayed)}>
+				<div css={displayContributionsStripeCss(!stripeDisplayed)}>
 					<section
 						css={[
-							buttonContainerCss,
-							buttonIsStuck && buttonStuckCss,
+							stickyContainerCss,
 							css`
 								display: none;
 							`,
@@ -419,7 +399,7 @@ export function SupporterPlusLandingPage({
 						<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 							<Button
 								size="small"
-								cssOverrides={buttonCentredCss}
+								cssOverrides={buttonCentreCss}
 								onClick={() => onStickyButtonClick()}
 							>
 								{getStickyButtonText(
