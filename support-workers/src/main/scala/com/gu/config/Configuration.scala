@@ -34,6 +34,7 @@ object Configuration {
     .forEnvironment(Configuration.loadFromS3)
     .load(Configuration.stage, ConfigFactory.load(this.getClass.getClassLoader))
 
+  lazy val emailQueueName = System.getenv("EMAIL_QUEUE_NAME")
 }
 
 case class Configuration(config: Config) {
@@ -47,8 +48,6 @@ case class Configuration(config: Config) {
   val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
   val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
   val bigQueryConfigProvider = new BigQueryConfigProvider(config, stage)
-
-  val contributionThanksQueueName = config.getString("email.thankYou.queueName")
 
   val acquisitionsKinesisStreamName = config.getString("kinesis.streamName")
 }

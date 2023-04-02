@@ -1,9 +1,6 @@
 package com.gu.support.workers.lambdas
 
-import java.io.ByteArrayOutputStream
-
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.CheckoutFailureReasons.{
@@ -17,20 +14,21 @@ import com.gu.support.workers.encoding.Conversions.{FromOutputStream, StringInpu
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.states.CheckoutFailureState
 import com.gu.support.workers._
+import com.gu.support.workers.integration.util.EmailQueueName
+import com.gu.support.workers.integration.util.EmailQueueName.emailQueueName
 import com.gu.support.zuora.api.response.{ZuoraError, ZuoraErrorResponse}
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe.parser.decode
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.matchers.should.Matchers
 
+import java.io.ByteArrayOutputStream
 import scala.concurrent.{ExecutionContext, Future}
 
 @IntegrationTest
 class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
-
   "FailureHandler lambda" should "return a failed JsonWrapper and an Unknown failure reason for any errors except payment errors" in {
-    val failureHandler = new FailureHandler()
+    val failureHandler = new FailureHandler(emailService = new EmailService(emailQueueName))
 
     val outStream = new ByteArrayOutputStream()
 
@@ -46,7 +44,7 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
   }
 
   it should "return a non failed JsonWrapper and an appropriate failure reason for a payment error from Zuora" in {
-    val failureHandler = new FailureHandler()
+    val failureHandler = new FailureHandler(new EmailService(emailQueueName))
 
     val outStream = new ByteArrayOutputStream()
 
@@ -64,7 +62,7 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
   }
 
   it should "return a non failed JsonWrapper and an appropriate failure reason for Stripe payment errors" in {
-    val failureHandler = new FailureHandler()
+    val failureHandler = new FailureHandler(new EmailService(emailQueueName))
 
     val outStream = new ByteArrayOutputStream()
 
@@ -82,7 +80,7 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
   }
 
   it should "return a non failed JsonWrapper and an appropriate failure reason for Stripe payment errors for a digital pack, too" in {
-    val failureHandler = new FailureHandler()
+    val failureHandler = new FailureHandler(new EmailService(emailQueueName))
 
     val outStream = new ByteArrayOutputStream()
 
@@ -100,7 +98,7 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
   }
 
   it should "return a non failed JsonWrapper if we encounter the error caused by using a test token in PROD" in {
-    val failureHandler = new FailureHandler()
+    val failureHandler = new FailureHandler(new EmailService(emailQueueName))
 
     val outStream = new ByteArrayOutputStream()
 
@@ -117,7 +115,6 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
   }
 
   it should "send an email with FailedDigitalPackEmailFields when there are Stripe payment errors " in {
-
     val emailService = mock[EmailService]
     val result = mock[SendMessageResult]
 
@@ -183,7 +180,7 @@ object FailureHandlerManualTest extends Matchers {
 
   def sendFailureEmail(): Unit = {
     // This test will send a failure email to the address below - useful for quickly testing changes
-    val service = new EmailService(Configuration.load().contributionThanksQueueName)
+    val service = new EmailService(emailQueueName)
     val email = "rupert.bates@theguardian.com"
     service
       .send(FailedEmailFields.contribution(email, IdentityUserId("identityId")))
@@ -202,7 +199,7 @@ object DigiPackFailureHandlerManualTest extends Matchers {
 
   def sendFailureEmail(): Unit = {
     // This test will send a failure email to the address below - useful for quickly testing changes
-    val service = new EmailService(Configuration.load().contributionThanksQueueName)
+    val service = new EmailService(emailQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
       .send(FailedEmailFields.digitalPack(email, IdentityUserId("identityId")))
@@ -223,7 +220,7 @@ object GuardianWeeklyFailureHandlerTest extends Matchers {
 
   def sendFailureEmail(): Unit = {
     // This test will send a failure email to the address below - useful for quickly testing changes
-    val service = new EmailService(Configuration.load().contributionThanksQueueName)
+    val service = new EmailService(emailQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
       .send(FailedEmailFields.guardianWeekly(email, IdentityUserId("identityId")))
@@ -244,7 +241,7 @@ object PrintFailureHandlerTest extends Matchers {
 
   def sendFailureEmail(): Unit = {
     // This test will send a failure email to the address below - useful for quickly testing changes
-    val service = new EmailService(Configuration.load().contributionThanksQueueName)
+    val service = new EmailService(emailQueueName)
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
       .send(FailedEmailFields.paper(email, IdentityUserId("identityId")))

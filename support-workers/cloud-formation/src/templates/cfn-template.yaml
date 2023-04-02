@@ -77,12 +77,8 @@ Resources:
               Action:
               - sqs:GetQueueUrl
               - sqs:SendMessage
-              Resource: arn:aws:sqs:eu-west-1:865473395570:contributions-thanks
-            - Effect: Allow
-              Action:
-              - sqs:GetQueueUrl
-              - sqs:SendMessage
-              Resource: arn:aws:sqs:eu-west-1:865473395570:contributions-thanks-dev
+              Resource:
+                Fn::ImportValue: !Sub "comms-${Stage}-EmailQueueArn"
         - PolicyName: CloudWatchLogging
           PolicyDocument:
             Version: '2012-10-17'
