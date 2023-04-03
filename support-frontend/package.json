@@ -99,7 +99,7 @@
     "@stripe/stripe-js": "^1.8.0",
     "@types/dompurify": "^2.3.1",
     "@types/seedrandom": "^3.0.1",
-    "@types/uuid": "^8.3.1",
+    "@types/uuid": "^9.0.1",
     "classnames": "^2.2.6",
     "dompurify": "^2.2.8",
     "emotion-theming": "^10.0.27",
@@ -116,7 +116,7 @@
     "seedrandom": "^3.0.5",
     "snarkdown": "^2.0.0",
     "utility-types": "^3.10.0",
-    "uuid": "^3.2.1",
+    "uuid": "^9.0.0",
     "zod": "^3.11.6"
   },
   "devDependencies": {
