@@ -10,7 +10,7 @@ import com.gu.support.promotions.DefaultPromotions.GuardianWeekly.NonGift
 import com.gu.support.promotions.ServicesFixtures.{discountPromoCode, tenAnnual}
 import com.gu.support.promotions.{DiscountBenefit, PromotionServiceSpec}
 import com.gu.support.workers.{DigitalPack => _, GuardianWeekly => _, Paper => _, _}
-import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
+import com.gu.support.zuora.api.ReaderType.Gift
 import org.joda.time.Months
 import org.scalatest.OptionValues._
 import org.scalatest.Assertion
@@ -60,9 +60,6 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
     val dsGifts = service.getPrices(DigitalPack, Nil, Gift)
     dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Quarterly)(GBP).price shouldBe 36
     dsGifts(UK)(NoFulfilmentOptions)(NoProductOptions)(Annual)(GBP).price shouldBe 99
-
-    val dsCorporate = service.getPrices(DigitalPack, Nil, Corporate)
-    dsCorporate(UK)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(GBP).price shouldBe 0
 
     val weeklyGifts = service.getPrices(GuardianWeekly, Nil, Gift)
     weeklyGifts(US)(Domestic)(NoProductOptions)(Annual)(USD).price shouldBe 330

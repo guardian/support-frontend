@@ -115,7 +115,6 @@ object GoogleAnalyticsService extends LazyLogging {
         "cd25" -> acquisition.reusedExistingPaymentMethod.toString,
         "cd26" -> (acquisition.readerType == ReaderType.Gift).toString,
         "cd27" -> productCheckout.getOrElse(""),
-        "cd30" -> (acquisition.readerType == ReaderType.Corporate).toString,
 
         // Custom metrics
         "cm10" -> getSuccessfulSubscriptionSignUpMetric(conversionCategory),

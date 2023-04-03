@@ -9,7 +9,6 @@ import com.gu.support.workers.RequestInfo
 import com.gu.support.workers.lambdas.UpdateSupporterProductData.getSupporterRatePlanItemFromState
 import com.gu.support.workers.states.SendThankYouEmailState.{
   SendThankYouEmailContributionState,
-  SendThankYouEmailDigitalSubscriptionCorporateRedemptionState,
   SendThankYouEmailDigitalSubscriptionDirectPurchaseState,
   SendThankYouEmailDigitalSubscriptionGiftPurchaseState,
   SendThankYouEmailDigitalSubscriptionGiftRedemptionState,
@@ -18,7 +17,7 @@ import com.gu.support.workers.states.SendThankYouEmailState.{
   SendThankYouEmailSupporterPlusState,
 }
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
-import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import com.gu.supporterdata.model.{ContributionAmount, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.gu.threadpools.CustomPool.executionContext
@@ -115,21 +114,6 @@ object UpdateSupporterProductData {
       case SendThankYouEmailDigitalSubscriptionDirectPurchaseState(user, product, _, _, _, _, subscriptionNumber) =>
         catalogService
           .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
-          .map(productRatePlan =>
-            Some(
-              supporterRatePlanItem(
-                subscriptionName = subscriptionNumber,
-                identityId = user.id,
-                productRatePlanId = productRatePlan.id,
-                productRatePlanName = s"support-workers added ${product.describe}",
-              ),
-            ),
-          )
-          .toRight(s"Unable to create SupporterRatePlanItem from state $state")
-
-      case SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(user, product, _, subscriptionNumber) =>
-        catalogService
-          .getProductRatePlan(DigitalPack, product.billingPeriod, NoFulfilmentOptions, NoProductOptions, Corporate)
           .map(productRatePlan =>
             Some(
               supporterRatePlanItem(

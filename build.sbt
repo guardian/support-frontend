@@ -109,7 +109,6 @@ lazy val root = (project in file("."))
     `support-internationalisation`,
     `support-services`,
     `stripe-intent`,
-    `support-redemptiondb`,
     `it-test-runner`,
     `module-aws`,
     `module-acquisition-events`,
@@ -302,10 +301,6 @@ lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
   )
   .dependsOn(`module-rest`, `support-config`, `module-aws`)
   .aggregate(`module-rest`, `support-config`, `module-aws`)
-
-lazy val `support-redemptiondb` = (project in file("support-redemptiondb"))
-  .enablePlugins(RiffRaffArtifact)
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
 
 lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
   .enablePlugins(RiffRaffArtifact)

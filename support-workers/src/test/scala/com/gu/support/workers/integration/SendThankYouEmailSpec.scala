@@ -100,7 +100,6 @@ object SendThankYouEmailManualTest {
   def main(args: Array[String]): Unit = {
     SendContributionEmail.main(args)
     SendDigitalPackEmail.main(args)
-    SendDigitalPackCorpEmail.main(args)
     SendDigitalPackGiftPurchaseEmails.main(args)
     SendDigitalPackGiftRedemptionEmail.main(args)
     SendPaperSubscriptionEmail.main(args)
@@ -148,20 +147,6 @@ object SendDigitalPackEmail extends App {
         directDebitPaymentMethod,
         paymentSchedule,
         None,
-        acno,
-        subno,
-      ),
-    ),
-  )
-
-}
-object SendDigitalPackCorpEmail extends App {
-
-  send(
-    digitalPackEmailFields.build(
-      SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
-        billingOnlyUser,
-        DigitalPack(GBP, Annual, ReaderType.Corporate),
         acno,
         subno,
       ),

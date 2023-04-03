@@ -163,8 +163,6 @@ class DigitalPackEmailFields(
         } yield emails
       case directPurchase: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
         directThankYou(directPurchase).map(List(_))
-      case state: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState =>
-        Future.successful(List(corpRedemption(state)))
       case state: SendThankYouEmailDigitalSubscriptionGiftRedemptionState =>
         Future.successful(List(giftRedemption(state)))
     }
@@ -272,13 +270,6 @@ class DigitalPackEmailFields(
           unmanaged_digital_subscription_gift_end_date = ISODateTimeFormat.date().print(state.termDates.giftEndDate),
         ).asJsonObject,
       ),
-    )
-
-  private def corpRedemption(state: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState) =
-    wrap(
-      "digipack-corporate-redemption",
-      directOrCorpFields("Group subscription", state.subscriptionNumber, state.user),
-      state.user,
     )
 
   private def directThankYou(

@@ -14,7 +14,6 @@ import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.states.{AnalyticsInfo, CreateZuoraSubscriptionProductState, CreateZuoraSubscriptionState}
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   ContributionState,
-  DigitalSubscriptionCorporateRedemptionState,
   DigitalSubscriptionDirectPurchaseState,
   DigitalSubscriptionGiftPurchaseState,
   DigitalSubscriptionGiftRedemptionState,
@@ -197,16 +196,6 @@ object JsonFixtures {
         "currency": "GBP",
         "billingPeriod" : "Annual",
         "readerType": "Direct"
-      }
-    """
-
-  val digitalPackCorporateJson =
-    """
-      {
-        "productType": "DigitalPack",
-        "currency": "GBP",
-        "billingPeriod" : "Annual",
-        "readerType" : "Corporate"
       }
     """
 
@@ -507,24 +496,6 @@ object JsonFixtures {
         DigitalPack(GBP, Annual),
         stripePaymentMethodObj,
         None,
-        salesforceContact,
-      ),
-      UUID.randomUUID(),
-      user(),
-      DigitalPack(GBP, Annual),
-      AnalyticsInfo(false, Stripe),
-      None,
-      None,
-      None,
-      None,
-      None,
-    ).asJson.spaces2
-
-  val createDigiPackCorporateSubscriptionJson =
-    CreateZuoraSubscriptionState(
-      DigitalSubscriptionCorporateRedemptionState(
-        DigitalPack(GBP, Annual),
-        RedemptionData(RedemptionCode("it-mutable123").toOption.get),
         salesforceContact,
       ),
       UUID.randomUUID(),
