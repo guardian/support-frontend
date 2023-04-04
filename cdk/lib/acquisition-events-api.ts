@@ -1,6 +1,8 @@
+import { GuApiLambda } from "@guardian/cdk";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
+import { GuStack, GuStringParameter } from "@guardian/cdk/lib/constructs/core";
 import type { App } from "aws-cdk-lib";
-
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 
 export class AcquisitionEventsApi extends GuStack {
 
@@ -14,15 +16,6 @@ export class AcquisitionEventsApi extends GuStack {
       {
         description:
           "ARN of the certificate",
-      }
-    );
-
-    new GuStringParameter(
-      this,
-      "DatalakeBucket",
-      {
-        description:
-          "Bucket to upload data for ingestion into BigQuery",
       }
     );
 
@@ -62,34 +55,22 @@ export class AcquisitionEventsApi extends GuStack {
       }
     );
 
-    // ---- DNS Records ---- //
-    // new GuCname(this, id: string, props: GuCnameProps)
-
-    // ---- Lambdas ---- //
-    const lambda=new GuApiLambda(stack, "acquisition-events-api", {
+// ---- API-triggered lambda functions ---- //
+    const acquisitionEventsApiLambda= new GuApiLambda(this, "acquisition-events-api", {
       fileName: "${Stack}/${Stage}/${App}/${App}.jar",
       handler: 'com.gu.acquisitionEventsApi.Lambda.handler',
       runtime: Runtime.NODEJS_14_X,
-      functionName: `${app}-${stage}`,
-      code: lambda.Code.fromBucket(deployBucket, `${stackName || "support"}/${stage}/${app}/${fileName}`),
-      memorySize: 512,
-      role: lambdaRole,
-      timeout: cdk.Duration.seconds(300),
-      environment: {
-        STAGE: stage,
-      },
-      tags: {
-        "lambda:createdBy": "SAM",
-      },
       // Create an alarm
       monitoringConfiguration: {
-        http5xxAlarm: { tolerated5xxPercentage: 1 },
+        http5xxAlarm: {tolerated5xxPercentage: 5},
         snsTopicName: "conversion-dev",
       },
       app: "acquisition-events-api",
       api: {
-        id: props.api?.id || "default-api-id",
-        description: props.api?.description || "API Gateway created by CDK",
+        id: "acquisition-events-api",
+        description: "API Gateway created by CDK",
       },
     });
+
+  }
 }
