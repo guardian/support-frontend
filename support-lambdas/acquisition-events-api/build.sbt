@@ -19,4 +19,9 @@ riffRaffPackageType := assembly.value
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffManifestProjectName := s"support:lambdas:${name.value}"
-riffRaffArtifactResources += (file(s"support-lambdas/${name.value}/cfn.yaml"), "cfn/cfn.yaml")
+riffRaffArtifactResources += (file(
+  "cdk/cdk.out/Acquisition-Events-API-PROD.template.json",
+), "cfn/Acquisition-Events-API-PROD.template.json")
+riffRaffArtifactResources += (file(
+  "cdk/cdk.out/Acquisition-Events-API-CODE.template.json",
+), "cfn/Acquisition-Events-API-CODE.template.json")
