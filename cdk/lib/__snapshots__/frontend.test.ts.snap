@@ -391,10 +391,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 "dynamodb:DescribeTable",
               ],
               "Effect": "Allow",
-              "Resource": [
-                "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
-                "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT",
-              ],
+              "Resource": "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
             },
           ],
           "Version": "2012-10-17",
@@ -1026,7 +1023,6 @@ exports[`The Frontend stack matches the snapshot 1`] = `
               "Effect": "Allow",
               "Resource": [
                 "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json",
-                "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-UAT/catalog.json",
                 "arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-DEV/catalog.json",
               ],
             },
