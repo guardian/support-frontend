@@ -108,7 +108,9 @@ type RegularSepaPaymentFields = {
 	country?: Option<Country>;
 	streetName?: Option<string>;
 };
-
+type GiftRedemption = {
+	redemptionCode: string;
+};
 type RegularExistingPaymentFields = {
 	billingAccountId: string;
 };
@@ -121,6 +123,7 @@ export type RegularPaymentFields =
 	| RegularDirectDebitPaymentFields
 	| RegularSepaPaymentFields
 	| RegularExistingPaymentFields
+	| GiftRedemption
 	| RegularAmazonPayPaymentFields;
 export type RegularPaymentRequestAddress = {
 	country: IsoCountry;
