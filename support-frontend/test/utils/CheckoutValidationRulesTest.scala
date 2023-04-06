@@ -19,7 +19,7 @@ import com.gu.support.acquisitions.{OphanIds, ReferrerAcquisitionData}
 import com.gu.support.catalog.{Collection, Domestic, Everyday, HomeDelivery}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers._
-import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import org.joda.time.LocalDate
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -491,16 +491,6 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   //   DigitalPackValidation.passes(requestMissingAddressLineAndCity, monthlyDirectUSDProduct) shouldBe an[Invalid]
   // }
 
-  it should "succeed when there is a valid corporate sub" in {
-    val product = DigitalPack(GBP, Monthly, Corporate)
-    val corporateSub = validDigitalPackRequest.copy(
-      product = product,
-      paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)),
-    )
-
-    DigitalPackValidation.passes(corporateSub, product) shouldBe Valid
-  }
-
   // it should "fail if there are more than 20 characters in Billing Address postCode" in {
   //   val requestDigiSubPostCode = validDigitalPackRequest.copy(
   //     billingAddress = validDigitalPackRequest.billingAddress
@@ -605,12 +595,6 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
     PaperValidation.passes(requestMissingAddressLineAndCity, Collection) shouldBe an[Invalid]
   }
 
-  it should "not allow corporate redemptions for paper products" in {
-    val requestWithCorporateRedemption =
-      validPaperRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)))
-    PaperValidation.passes(requestWithCorporateRedemption, Collection) shouldBe an[Invalid]
-  }
-
   it should "fail if there are more than 20 characters in Billing Address postCode" in {
     val requestPostCode = validPaperRequest.copy(billingAddress =
       validPaperRequest.billingAddress.copy(postCode = Some("Test111111111111111111111111")),
@@ -688,13 +672,6 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
     val requestMissingAddressLineAndCity = validWeeklyRequest.copy(deliveryAddress = Some(emptyAddress))
     GuardianWeeklyValidation.passes(requestMissingAddressLineAndCity) shouldBe an[Invalid]
   }
-
-  it should "not allow corporate redemptions for paper products" in {
-    val requestWithCorporateRedemption =
-      validWeeklyRequest.copy(paymentFields = Right(RedemptionData(RedemptionCode("test-code-123").toOption.get)))
-    GuardianWeeklyValidation.passes(requestWithCorporateRedemption) shouldBe an[Invalid]
-  }
-
 }
 
 object TestData {

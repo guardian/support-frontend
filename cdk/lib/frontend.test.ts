@@ -10,7 +10,6 @@ describe("The Frontend stack", () => {
       stage: "PROD",
       membershipSubPromotionsTable:
         "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
-      redemptionCodesTable: "arn:aws:dynamodb:*:*:table/redemption-codes-PROD",
       domainName: "support.theguardian.com.origin.membership.guardianapis.com",
       scaling: {
         minimumInstances: 3,

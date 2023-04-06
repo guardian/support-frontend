@@ -18,7 +18,6 @@ import com.gu.support.workers.{
 import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   ContributionState,
-  DigitalSubscriptionCorporateRedemptionState,
   DigitalSubscriptionDirectPurchaseState,
   DigitalSubscriptionGiftPurchaseState,
   DigitalSubscriptionGiftRedemptionState,
@@ -79,9 +78,7 @@ class NextState(state: CreateSalesforceContactState) {
         toNextPaper(salesforceContactRecords.buyer, product, purchase)
       case (product: GuardianWeekly, Purchase(purchase)) =>
         toNextWeekly(salesforceContactRecords, product, purchase)
-      case (product: DigitalPack, redemptionData: Redemption) if product.readerType == ReaderType.Corporate =>
-        toNextDSCorporate(salesforceContactRecords.buyer, product, redemptionData.value)
-      case (product: DigitalPack, redemptionData: Redemption) if product.readerType == ReaderType.Gift =>
+      case (product: DigitalPack, redemptionData: Redemption) =>
         toNextDSRedemption(product, redemptionData.value)
       case _ => throw new RuntimeException("could not create value state")
     }
@@ -151,29 +148,6 @@ class NextState(state: CreateSalesforceContactState) {
       state.salesforceCaseId,
       acquisitionData,
     )
-
-  def toNextDSCorporate(
-      salesforceContactRecord: SalesforceContactRecord,
-      product: DigitalPack,
-      redemptionData: RedemptionData,
-  ): CreateZuoraSubscriptionState =
-    CreateZuoraSubscriptionState(
-      DigitalSubscriptionCorporateRedemptionState(
-        product,
-        redemptionData,
-        salesforceContactRecord,
-      ),
-      requestId,
-      user,
-      product,
-      analyticsInfo,
-      None,
-      None,
-      state.csrUsername,
-      state.salesforceCaseId,
-      acquisitionData,
-    )
-
   def toNextWeekly(
       salesforceContactRecords: SalesforceContactRecords,
       product: GuardianWeekly,

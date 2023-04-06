@@ -21,7 +21,6 @@ import { FilterPattern, LogGroup, MetricFilter } from "aws-cdk-lib/aws-logs";
 
 interface FrontendProps extends GuStackProps {
   membershipSubPromotionsTable: string;
-  redemptionCodesTable: string;
   domainName: string;
   scaling: GuAsgCapacity;
   shouldEnableAlarms: boolean;
@@ -31,7 +30,6 @@ export class Frontend extends GuStack {
   constructor(scope: App, id: string, props: FrontendProps) {
     const {
       membershipSubPromotionsTable,
-      redemptionCodesTable,
       domainName,
       scaling,
       shouldEnableAlarms,
@@ -101,13 +99,6 @@ export class Frontend extends GuStack {
         resources: [
           membershipSubPromotionsTable,
           "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT",
-        ],
-      }),
-      new GuAllowPolicy(this, "DynamoRedemptions", {
-        actions: ["dynamodb:GetItem"],
-        resources: [
-          redemptionCodesTable,
-          "arn:aws:dynamodb:*:*:table/redemption-codes-UAT",
         ],
       }),
       new GuAllowPolicy(this, "StripeSetupIntentLambda", {

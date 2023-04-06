@@ -62,13 +62,6 @@ object SendThankYouEmailState {
       subscriptionNumber: String,
   ) extends SendThankYouEmailDigitalSubscriptionState
 
-  case class SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
-      user: User,
-      product: DigitalPack,
-      accountNumber: String,
-      subscriptionNumber: String,
-  ) extends SendThankYouEmailDigitalSubscriptionState
-
   case class SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
       user: User,
       product: DigitalPack,
@@ -121,9 +114,6 @@ object SendThankYouEmailState {
         digitalSubscriptionDirectPurchase,
       ),
       discriminatedType.variant[SendThankYouEmailDigitalSubscriptionGiftPurchaseState](digitalSubscriptionGiftPurchase),
-      discriminatedType.variant[SendThankYouEmailDigitalSubscriptionCorporateRedemptionState](
-        digitalSubscriptionCorporateRedemption,
-      ),
       discriminatedType.variant[SendThankYouEmailDigitalSubscriptionGiftRedemptionState](
         digitalSubscriptionGiftRedemption,
       ),

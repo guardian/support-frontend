@@ -4,14 +4,10 @@ import com.gu.i18n.{Country, Currency}
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.RestOfWorld
 import com.gu.support.workers.Fixtures._
-import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
-  DigitalSubscriptionCorporateRedemptionState,
-  DigitalSubscriptionDirectPurchaseState,
-}
+import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
 import com.gu.support.workers.states._
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.EitherValues
-import org.scalatest.Inside.inside
 import org.scalatest.flatspec.AnyFlatSpec
 
 import java.util.UUID
@@ -52,12 +48,6 @@ class SerialisationSpec extends AnyFlatSpec with SerialisationTestHelpers with L
     testDecoding[CreateZuoraSubscriptionProductState](createContributionZuoraSubscriptionJson())
     testDecoding[CreateZuoraSubscriptionProductState](createContributionZuoraSubscriptionJson(Annual))
     testDecoding[CreateZuoraSubscriptionProductState](createDigiPackZuoraSubscriptionJson)
-    testDecoding[CreateZuoraSubscriptionProductState](
-      createCorporateDigiPackZuoraSubscriptionJson,
-      inside(_) { case state: DigitalSubscriptionCorporateRedemptionState =>
-        state.redemptionData.redemptionCode.value shouldBe "fake-code-123"
-      },
-    )
   }
 
   "FailureHandlerState" should "deserialise correctly from any lambda" in {

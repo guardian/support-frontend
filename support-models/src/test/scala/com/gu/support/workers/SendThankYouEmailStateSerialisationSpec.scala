@@ -19,7 +19,6 @@ class SendThankYouEmailStateSerialisationSpec extends AnyFlatSpec with Matchers 
     testRoundTripSerialisation[SendThankYouEmailState](contributionCreated)
     testRoundTripSerialisation[SendThankYouEmailState](digitalSubscriptionDirectPurchaseCreated)
     testRoundTripSerialisation[SendThankYouEmailState](digitalSubscriptionGiftPurchaseCreated)
-    testRoundTripSerialisation[SendThankYouEmailState](digitalSubscriptionCorporateRedemptionCreated)
     testRoundTripSerialisation[SendThankYouEmailState](digitalSubscriptionGiftRedemptionCreated)
     testRoundTripSerialisation[SendThankYouEmailState](paperCreated)
     testRoundTripSerialisation[SendThankYouEmailState](guardianWeeklyCreated)
@@ -64,12 +63,6 @@ object ProductTypeCreatedTestData {
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
     None,
-    "acno",
-    "subno",
-  )
-  val digitalSubscriptionCorporateRedemptionCreated = SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
-    user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    DigitalPack(GBP, Monthly, ReaderType.Corporate),
     "acno",
     "subno",
   )
