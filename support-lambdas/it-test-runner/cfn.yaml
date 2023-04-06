@@ -83,7 +83,7 @@ Resources:
                 - sqs:SendMessage
                 - sqs:GetQueueUrl
               Resource:
-                Fn::ImportValue: !Sub "comms-${Stage}-EmailQueueArn"
+                Fn::ImportValue: !Sub "comms-CODE-EmailQueueArn"
 
   LambdaLogGroup:
     Type: AWS::Logs::LogGroup
