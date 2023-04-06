@@ -1,4 +1,4 @@
-import { css, ThemeProvider } from '@emotion/react';
+import { css } from '@emotion/react';
 import {
 	brand,
 	from,
@@ -7,18 +7,12 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import {
-	Button,
-	buttonThemeReaderRevenueBrand,
-	Column,
-	Columns,
-	Hide,
-} from '@guardian/source-react-components';
+import { Column, Columns, Hide } from '@guardian/source-react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
@@ -67,28 +61,9 @@ import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
 import { PaymentFailureMessage } from './components/paymentFailure';
 import { PaymentTsAndCs } from './components/paymentTsAndCs';
+import StickyCta from './components/stickyCta';
 import { AmountAndBenefits } from './formSections/amountAndBenefits';
 import { getPaymentMethodButtons } from './paymentButtons';
-
-const stickyContainerCss = css`
-	background-color: ${brand[400]};
-	padding: ${space[5]}px 0 ${space[9]}px;
-	${until.tablet} {
-		display: flex;
-		flex-direction: column;
-		position: -webkit-sticky; /* Safari */
-		position: sticky;
-		bottom: 0;
-		margin-left: -${space[3]}px;
-		margin-right: -${space[3]}px;
-		padding-left: ${space[6]}px;
-		padding-right: ${space[6]}px;
-	}
-`;
-
-const buttonCentreCss = css`
-	justify-content: center;
-`;
 
 const checkoutContainerCss = css`
 	position: relative;
@@ -125,10 +100,10 @@ const shorterBoxMarginCss = css`
 		}
 	}
 `;
-const displayContributionsStripeCss = (display?: boolean) => css`
-	display: inline;
+const displayFullForm = (display?: boolean) => css`
+	display: block;
 	${until.tablet} {
-		display: ${display ? 'inline' : 'none'};
+		display: ${display ? 'block' : 'none'};
 	}
 `;
 
@@ -208,13 +183,12 @@ export function SupporterPlusLandingPage({
 		}
 	}, [paymentComplete]);
 
-	const buttonContainerRef = useRef(null);
-	const [stripeDisplayed, setStripeDisplayed] = useState(
+	const [fullFormDisplayed, setFullFormDisplayed] = useState(
 		!optimisedMobileLayout2,
 	);
 
 	function onStickyButtonClick() {
-		setStripeDisplayed(!stripeDisplayed);
+		setFullFormDisplayed(!fullFormDisplayed);
 	}
 
 	function getStickyButtonText(
@@ -297,7 +271,22 @@ export function SupporterPlusLandingPage({
 								>
 									<AmountAndBenefits />
 								</Box>
-								<div css={displayContributionsStripeCss(stripeDisplayed)}>
+								{optimisedMobileLayout2 && (
+									<StickyCta
+										isVisible={!fullFormDisplayed}
+										ctaLink="#detailsAndCheckout"
+										ariaControls="detailsAndCheckout"
+										onCtaClick={onStickyButtonClick}
+										buttonText={getStickyButtonText(
+											amountWithCurrency,
+											contributionTypeToPaymentInterval[contributionType],
+										)}
+									/>
+								)}
+								<div
+									id="detailsAndCheckout"
+									css={displayFullForm(fullFormDisplayed)}
+								>
 									<Box
 										cssOverrides={
 											optimisedMobileLayout ? shorterBoxMarginCss : css``
@@ -377,24 +366,6 @@ export function SupporterPlusLandingPage({
 						</LoadingOverlay>
 					)}
 				</PageScaffold>
-				{optimisedMobileLayout2 && (
-					<div css={displayContributionsStripeCss(!stripeDisplayed)}>
-						<section css={[stickyContainerCss]} ref={buttonContainerRef}>
-							<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-								<Button
-									size="small"
-									cssOverrides={buttonCentreCss}
-									onClick={() => onStickyButtonClick()}
-								>
-									{getStickyButtonText(
-										amountWithCurrency,
-										contributionTypeToPaymentInterval[contributionType],
-									)}
-								</Button>
-							</ThemeProvider>
-						</section>
-					</div>
-				)}
 			</>
 			<FooterWithContents>
 				<FooterLinks></FooterLinks>
