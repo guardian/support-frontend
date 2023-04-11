@@ -6,7 +6,7 @@ import com.gu.i18n.Country.Australia
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds}
-import com.gu.support.config.TouchPointEnvironments.SANDBOX
+import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig, ZuoraInvoiceTemplatesConfig}
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
 import com.gu.support.redemption.gifting.GiftCodeValidator
@@ -201,7 +201,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     ZuoraDigitalPackConfig(14, 2, monthlyChargeId = "monthlyChargeId", annualChargeId = "annualChargeId"),
     promotionService,
     DateGenerator(saleDate),
-    SANDBOX,
+    CODE,
     new SubscribeItemBuilder(
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
@@ -214,7 +214,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     promotionService,
     DateGenerator(saleDate),
     new GiftCodeGeneratorService,
-    SANDBOX,
+    CODE,
     new SubscribeItemBuilder(
       UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
       User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),

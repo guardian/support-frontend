@@ -1,7 +1,7 @@
 package com.gu.emailservices
 
 import com.gu.i18n.Currency.GBP
-import com.gu.support.config.TouchPointEnvironments.SANDBOX
+import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.workers.integration.TestData
 import com.gu.support.workers.integration.TestData.{countryOnlyAddress, directDebitPaymentMethod}
 import com.gu.support.workers.states.SendThankYouEmailState._
@@ -90,7 +90,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
     val actual = new DigitalPackEmailFields(
       new PaperFieldsGenerator(TestData.promotionService, TestData.getMandate),
       TestData.getMandate,
-      SANDBOX,
+      CODE,
     ).build(
       SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
         User("1234", "test@theguardian.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
@@ -133,7 +133,7 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
     val actual = new DigitalPackEmailFields(
       new PaperFieldsGenerator(TestData.promotionService, TestData.getMandate),
       TestData.getMandate,
-      SANDBOX,
+      CODE,
     ).build(
       SendThankYouEmailDigitalSubscriptionGiftRedemptionState(
         User("1234", "test@theguardian.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),

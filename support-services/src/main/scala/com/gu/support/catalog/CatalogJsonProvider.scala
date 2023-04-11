@@ -4,7 +4,7 @@ import com.amazonaws.services.s3.AmazonS3URI
 import com.gu.aws.AwsS3Client
 import com.gu.support.catalog.AwsS3ClientJson.fetchJson
 import com.gu.support.config.TouchPointEnvironment
-import com.gu.support.config.TouchPointEnvironments.SANDBOX
+import com.gu.support.config.TouchPointEnvironments.CODE
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.Json
 
@@ -21,8 +21,8 @@ class S3CatalogProvider(environment: TouchPointEnvironment) extends CatalogJsonP
   }
 
   private def keyFromEnvironment(environment: TouchPointEnvironment) = environment match {
-    case SANDBOX => "DEV"
-    case other: TouchPointEnvironment => other.toString
+    case CODE => "DEV" // TODO: remove this when we have a CODE catalog
+    case other: TouchPointEnvironment => other.envValue
   }
 }
 
