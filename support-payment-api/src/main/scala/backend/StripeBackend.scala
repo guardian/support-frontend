@@ -121,7 +121,7 @@ class StripeBackend(
       clientBrowserInfo: ClientBrowserInfo,
   ): EitherT[Future, StripeApiError, StripePaymentIntentsApiResponse] = {
 
-    def isApplePay = request.paymentData.stripePaymentMethod match {
+    def isApplePayOrPaymentRequestButton = request.paymentData.stripePaymentMethod match {
       case Some(StripeApplePay) | Some(StripePaymentRequestButton) => true
       case _ => false
     }
@@ -132,7 +132,7 @@ class StripeBackend(
       recaptchaEnabled.map {
         case true =>
           environment match {
-            case Live if isApplePay =>
+            case Live if isApplePayOrPaymentRequestButton =>
               false
             case Live =>
               true
