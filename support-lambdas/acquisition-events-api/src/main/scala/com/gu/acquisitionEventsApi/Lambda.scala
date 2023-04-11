@@ -49,13 +49,13 @@ object Lambda extends LazyLogging {
         logger.info(s"$requestId: successfully processed the event: $rawBody")
         buildResponse(200)
       case Success(Left(ParseError(error))) =>
-        logger.error(s"$requestId: failed to process an event: $error")
+        logger.error(s"$requestId: failed to process an event due to ParseError($error)")
         buildResponse(400)
       case Success(Left(BigQueryError(error))) =>
-        logger.error(s"$requestId: failed to process an event: $error")
+        logger.error(s"$requestId: failed to process an event due to BigQueryError($error)")
         buildResponse(500)
       case Failure(error) =>
-        logger.error(s"$requestId: failed to process an event: $error")
+        logger.error(s"$requestId: failed to process an event due to Failure($error)")
         buildResponse(500)
     }
   }
