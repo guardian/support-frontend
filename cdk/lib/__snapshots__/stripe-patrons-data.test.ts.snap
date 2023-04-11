@@ -901,6 +901,43 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
+    "StripePatronsDataPRODStripePatronsDataPRODrate30minutes028F3FD32": {
+      "Properties": {
+        "ScheduleExpression": "rate(30 minutes)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "StripePatronsDataPROD61F45521",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "StripePatronsDataPRODStripePatronsDataPRODrate30minutes0AllowEventRuleStripePatronsDataPRODBF7BDE5FE71C5129": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "StripePatronsDataPROD61F45521",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "StripePatronsDataPRODStripePatronsDataPRODrate30minutes028F3FD32",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
     "stripepatronsdatacancelled2E3CED96": {
       "DependsOn": [
         "stripepatronsdatacancelledServiceRoleDefaultPolicy46825C35",
