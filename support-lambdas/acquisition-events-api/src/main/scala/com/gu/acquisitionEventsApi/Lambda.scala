@@ -50,12 +50,15 @@ object Lambda extends LazyLogging {
         buildResponse(200)
       case Success(Left(ParseError(error))) =>
         logger.error(s"$requestId: failed to process an event due to ParseError($error)")
+        logger.error(s"Failed event was: $rawBody")
         buildResponse(400)
       case Success(Left(BigQueryError(error))) =>
         logger.error(s"$requestId: failed to process an event due to BigQueryError($error)")
+        logger.error(s"Failed event was: $rawBody")
         buildResponse(500)
       case Failure(error) =>
         logger.error(s"$requestId: failed to process an event due to Failure($error)")
+        logger.error(s"Failed event was: $rawBody")
         buildResponse(500)
     }
   }
