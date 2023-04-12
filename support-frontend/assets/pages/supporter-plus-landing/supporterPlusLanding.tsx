@@ -284,6 +284,7 @@ export function SupporterPlusLandingPage({
 									/>
 								)}
 								<div
+									role="region"
 									id="detailsAndCheckout"
 									css={displayFullForm(fullFormDisplayed)}
 								>
