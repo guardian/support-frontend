@@ -15,10 +15,10 @@ import {
 import { useState } from 'preact/hooks';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CardClickable } from 'components/cardClickable/cardClickable';
+import { CardClickableContainer } from 'components/cardClickable/cardClickableContainer';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
-import { CheckoutSupportOnce } from 'components/checkoutSupportOnce/checkoutSupportOnce';
-import { CheckoutSupportOnceContainer } from 'components/checkoutSupportOnce/checkoutSupportOnceContainer';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import GridImage from 'components/gridImage/gridImage';
@@ -172,7 +172,7 @@ export function SupporterPlusLandingPage({
 	);
 
 	const dispatch = useContributionsDispatch();
-	function onSupportOnceClick() {
+	function onCardClick() {
 		setSupportOnceDisplay(false);
 
 		const paymentMethodToSelect = getPaymentMethodToSelect(
@@ -261,11 +261,11 @@ export function SupporterPlusLandingPage({
 							<AmountAndBenefits hideOneOff={supportOnceDisplay} />
 						</Box>
 						{supportOnceDisplay && (
-							<CheckoutSupportOnceContainer
-								renderSupportOnce={(supportOnceProps) => (
-									<CheckoutSupportOnce {...supportOnceProps} />
+							<CardClickableContainer
+								renderCardClickable={(cardClickableProps) => (
+									<CardClickable {...cardClickableProps} />
 								)}
-								onSupportOnceClick={onSupportOnceClick}
+								onCardClick={onCardClick}
 							/>
 						)}
 						<Box
