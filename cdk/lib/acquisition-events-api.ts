@@ -49,7 +49,7 @@ export class AcquisitionEventsApi extends GuStack {
 // ---- API-triggered lambda functions ---- //
     const acquisitionEventsApiLambda= new GuApiLambda(this, "acquisition-events-api-cdk-lambda", {
       description: 'A lambda for acquisitions events api',
-      functionName: `${app}-${this.stage}-cdk`,
+      functionName: `${app}-cdk-${this.stage}`,
       fileName: `${this.stack}/${this.stage}/${app}/${app}.jar`,
       handler: 'com.gu.acquisitionEventsApi.Lambda::handler',
       runtime: Runtime.JAVA_8,
