@@ -53,8 +53,9 @@ export default function StickyCta({
 					size="small"
 					onClick={onCtaClick}
 					href={ctaLink}
+					role="button"
 					aria-controls={ariaControls}
-					aria-expanded={!isVisible}
+					aria-expanded={isVisible ? 'false' : 'true'}
 				>
 					{buttonText}
 				</LinkButton>
