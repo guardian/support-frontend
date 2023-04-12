@@ -20,7 +20,7 @@ import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.zuora.{ZuoraGiftService, ZuoraService}
-import com.gu.supporterdata.model.Stage.{DEV => DynamoStageDEV, PROD => DynamoStagePROD, UAT => DynamoStageUAT}
+import com.gu.supporterdata.model.Stage.{DEV => DynamoStageDEV, PROD => DynamoStagePROD}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -57,10 +57,8 @@ class Services(isTestUser: Boolean, val config: Configuration) {
     AcquisitionsStreamLambdaConfig(config.acquisitionsKinesisStreamName),
   )
   val supporterDynamoStage = (Configuration.stage, isTestUser) match {
-    case (DEV, false) => DynamoStageDEV
-    case (CODE, false) => DynamoStageDEV
     case (PROD, false) => DynamoStagePROD
-    case (_, true) => DynamoStageUAT
+    case _ => DynamoStageDEV
   }
   lazy val supporterDataDynamoService = SupporterDataDynamoService(supporterDynamoStage)
 }
