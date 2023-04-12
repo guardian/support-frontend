@@ -28,18 +28,18 @@ export class AcquisitionEventsApi extends GuStack {
 
     const app = "acquisition-events-api";
 
-     // ---- Existing CFN template ---- //
-    const yamlTemplateFilePath = join(
-      __dirname,
-      "../..",
-      "support-lambdas/acquisition-events-api/cfn.yaml"
-    );
-    const yamlDefinedResources = new CfnInclude(this, "YamlTemplate", {
-      templateFile: yamlTemplateFilePath,
-      parameters: {
-        Stage: props.stage,
-      },
-    });
+    //  // ---- Existing CFN template ---- //
+    // const yamlTemplateFilePath = join(
+    //   __dirname,
+    //   "../..",
+    //   "support-lambdas/acquisition-events-api/cfn.yaml"
+    // );
+    // const yamlDefinedResources = new CfnInclude(this, "YamlTemplate", {
+    //   templateFile: yamlTemplateFilePath,
+    //   parameters: {
+    //     Stage: props.stage,
+    //   },
+    // });
 
     const commonEnvironmentVariables = {
       App: app,

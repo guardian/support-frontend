@@ -1,10 +1,10 @@
 import "source-map-support/register";
 import { App } from "aws-cdk-lib";
-import { AcquisitionEventsApi , AcquisitionEventsApiProps} from "../lib/acquisition-events-api";
+import { AcquisitionEventsApi } from "../lib/acquisition-events-api";
+import type { AcquisitionEventsApiProps} from "../lib/acquisition-events-api";
 import { Frontend } from "../lib/frontend";
 import {PaymentApi} from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
-
 
 
 const app = new App();
