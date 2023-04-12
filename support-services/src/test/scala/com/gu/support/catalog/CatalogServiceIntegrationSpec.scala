@@ -1,7 +1,7 @@
 package com.gu.support.catalog
 
 import com.gu.support.config.TouchPointEnvironment
-import com.gu.support.config.TouchPointEnvironments.{PROD, SANDBOX}
+import com.gu.support.config.TouchPointEnvironments.{PROD, SANDBOX, UAT}
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.Inspectors
 import org.scalatest.flatspec.AsyncFlatSpec
@@ -13,6 +13,8 @@ class CatalogServiceIntegrationSpec extends AsyncFlatSpec with Matchers with Ins
   "CatalogService" should "be able to find a price list for all product rate plans in all environments" in {
     Console.println("Testing PROD")
     testEnvironment(PROD)
+    Console.println("Testing UAT")
+    testEnvironment(UAT)
     Console.println("Testing SANDBOX")
     testEnvironment(SANDBOX)
   }

@@ -6,6 +6,8 @@ object Stage {
 
   case object DEV extends Stage("DEV")
 
+  case object UAT extends Stage("UAT")
+
   case object PROD extends Stage("PROD")
 
 }

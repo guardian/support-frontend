@@ -27,23 +27,26 @@ Mappings:
     CODE:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
       RedemptionTables:
       - arn:aws:dynamodb:*:*:table/redemption-codes-DEV
+      - arn:aws:dynamodb:*:*:table/redemption-codes-UAT
       S3Files:
       - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-DEV/catalog.json
+      - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-UAT/catalog.json
       - arn:aws:s3:::support-workers-private/*
       SupporterProductDataTable: supporter-product-data-tables-DEV-SupporterProductDataTable
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-CODE
     PROD:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
-      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT
       RedemptionTables:
       - arn:aws:dynamodb:*:*:table/redemption-codes-UAT
       - arn:aws:dynamodb:*:*:table/redemption-codes-PROD
       S3Files:
       - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json
-      - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-DEV/catalog.json
+      - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-UAT/catalog.json
       - arn:aws:s3:::support-workers-private/*
       SupporterProductDataTable: supporter-product-data-tables-PROD-SupporterProductDataTable
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-PROD
@@ -126,7 +129,7 @@ Resources:
               - dynamodb:PutItem
               - dynamodb:UpdateItem
               Resource:
-              - Fn::ImportValue: supporter-product-data-tables-DEV-SupporterProductDataTable
+              - Fn::ImportValue: supporter-product-data-tables-UAT-SupporterProductDataTable
               - Fn::ImportValue: !FindInMap [ StageVariables, !Ref Stage, SupporterProductDataTable ]
   StatesExecutionRole:
     Type: "AWS::IAM::Role"

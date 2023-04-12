@@ -3,7 +3,7 @@ package com.gu.services
 import com.amazonaws.services.simplesystemsmanagement.model.Parameter
 import com.gu.conf.ZuoraQuerierConfig
 import com.gu.monitoring.SafeLogger
-import com.gu.supporterdata.model.Stage.{DEV, PROD}
+import com.gu.supporterdata.model.Stage.{DEV, PROD, UAT}
 import com.gu.services.ConfigService.{lastSuccessfulQueryTime, zuoraConfigPath}
 import com.gu.supporterdata.model.Stage
 import com.typesafe.scalalogging.StrictLogging
@@ -30,6 +30,7 @@ class ConfigService(stage: Stage) extends StrictLogging {
   private def getDiscountProductRatePlanIds(stage: Stage) =
     stage match {
       case DEV => List("2c92c0f852f2ebb20152f9269f067819")
+      case UAT => List("2c92c0f953078a5601531299dae54a4d")
       case PROD =>
         List(
           // These are all various types of discount so are there

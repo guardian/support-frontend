@@ -1,12 +1,12 @@
 package com.gu.model
 
 import com.gu.supporterdata.model.Stage
-import com.gu.supporterdata.model.Stage.{DEV, PROD}
+import com.gu.supporterdata.model.Stage.{DEV, PROD, UAT}
 
 object StageConstructors {
 
   def fromString(str: String): Option[Stage] =
-    List(DEV, PROD)
+    List(DEV, UAT, PROD)
       .find(_.value == str)
 
   def fromEnvironment: Stage =
