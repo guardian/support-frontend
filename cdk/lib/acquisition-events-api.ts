@@ -47,12 +47,12 @@ export class AcquisitionEventsApi extends GuStack {
       Stage: this.stage,
     };
 // ---- API-triggered lambda functions ---- //
-    const acquisitionEventsApiLambda= new GuApiLambda(this, "acquisition-events-api-lambda", {
+    const acquisitionEventsApiLambda= new GuApiLambda(this, "acquisition-events-api-cdk-lambda", {
       description: 'A lambda for acquisitions events api',
-      functionName: `${app}-cdk-${this.stage}`,
-      fileName: "acquisition-events-api.jar",
+      functionName: `${app}-${this.stage}-cdk`,
+      fileName: `${this.stack}/${this.stage}/${app}/${app}.jar`,
       handler: 'com.gu.acquisitionEventsApi.Lambda::handler',
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.JAVA_8,
       memorySize: 512,
       timeout:Duration.seconds(300),
       environment:commonEnvironmentVariables,
@@ -70,7 +70,7 @@ export class AcquisitionEventsApi extends GuStack {
 
     // ---- DNS ---- //
     const certificateArn = `arn:aws:acm:eu-west-1:${this.account}:certificate/${props.certificateId}`;
-    const cfnDomainName = new CfnDomainName(this, "ApiDomainName", {
+    const cfnDomainName = new CfnDomainName(this, "DomainName", {
       domainName: props.domainName,
       regionalCertificateArn: certificateArn,
       endpointConfiguration: {
@@ -78,7 +78,7 @@ export class AcquisitionEventsApi extends GuStack {
       }
     });
 
-    new CfnBasePathMapping(this, "ApiMapping", {
+    new CfnBasePathMapping(this, "BasePathMapping", {
       domainName: cfnDomainName.ref,
       // Uncomment the lines below to reroute traffic to the new API Gateway instance
       restApiId: acquisitionEventsApiLambda.api.restApiId,
