@@ -1,6 +1,7 @@
 import { App } from "aws-cdk-lib";
 import {Template} from "aws-cdk-lib/assertions";
-import {AcquisitionEventsApi} from "./acquisition-events-api";
+import { codeProps, prodProps } from "../bin/cdk";
+import { AcquisitionEventsApi} from "./acquisition-events-api";
 
 
 describe("The Acquisition Events API stack", () => {
