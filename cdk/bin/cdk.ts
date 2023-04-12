@@ -82,3 +82,24 @@ new AcquisitionEventsApi(app, "Acquisition-Events-API-PROD", {
   stack: "support",
   stage: "PROD",
 });
+
+export const codeProps: AcquisitionEventsApiProps = {
+  stack: "support",
+  stage: "CODE",
+  app: "acquisition-events-api",
+  certificateId:"b384a6a0-2f54-4874-b99b-96eeff96c009",
+  domainName: "acquisition-events-code.support.guardianapis.com",
+  hostedZoneName:"support.guardianapis.com.",
+};
+
+export const prodProps: AcquisitionEventsApiProps = {
+  stack: "support",
+  stage: "PROD",
+  app: "acquisition-events-api",
+  certificateId: "b384a6a0-2f54-4874-b99b-96eeff96c009",
+  domainName: "acquisition-events.support.guardianapis.com",
+  hostedZoneName: "support.guardianapis.com.",
+};
+
+new AcquisitionEventsApi(app, "AcquisitionEventsApi-CODE", codeProps);
+new AcquisitionEventsApi(app, "AcquisitionEventsApi-PROD", prodProps);
