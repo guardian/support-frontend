@@ -1,7 +1,7 @@
 package com.gu.support.catalog
 
 import com.gu.i18n.Currency
-import com.gu.support.config.TouchPointEnvironments.{PROD, SANDBOX}
+import com.gu.support.config.TouchPointEnvironments.{PROD, SANDBOX, UAT}
 import io.circe.Json.fromString
 import io.circe._
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
@@ -15,7 +15,7 @@ case class Catalog(
 object Catalog {
   lazy val productRatePlansWithPrices: List[ProductRatePlanId] = for {
     product <- List(SupporterPlus, DigitalPack, Paper, GuardianWeekly)
-    env <- List(PROD, SANDBOX)
+    env <- List(PROD, UAT, SANDBOX)
     plan <- product.ratePlans(env)
   } yield plan.id
 

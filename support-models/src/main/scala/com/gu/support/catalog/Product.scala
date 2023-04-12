@@ -2,11 +2,13 @@ package com.gu.support.catalog
 
 import com.gu.i18n.CountryGroup
 import com.gu.support.config.TouchPointEnvironment
-import com.gu.support.config.TouchPointEnvironments.{PROD, SANDBOX}
+import com.gu.support.config.TouchPointEnvironments.{PROD, SANDBOX, UAT}
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import io.circe.{Decoder, Encoder}
+
+import scala.collection.immutable
 
 sealed trait Product {
   val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[Product]]]
@@ -57,6 +59,12 @@ case object SupporterPlus extends Product {
         productRatePlan("8a128ed885fc6ded018602296ace3eb8", Monthly, SupporterPlusV2),
         productRatePlan("8a128ed885fc6ded01860228f77e3d5a", Annual, SupporterPlusV2),
       ),
+      UAT -> List(
+        productRatePlan("8ad088718219a6b601822036a6c91f5c", Monthly, SupporterPlusV1),
+        productRatePlan("8ad088718219a6b601822036a5801f34", Annual, SupporterPlusV1),
+        productRatePlan("8ad0940885f8901f0186024838f844a1", Monthly, SupporterPlusV2),
+        productRatePlan("8ad094b985f8901601860248d751315c", Annual, SupporterPlusV2),
+      ),
       SANDBOX -> List(
         productRatePlan("8ad09fc281de1ce70181de3b251736a4", Monthly, SupporterPlusV1),
         productRatePlan("8ad09fc281de1ce70181de3b28ee3783", Annual, SupporterPlusV1),
@@ -83,6 +91,12 @@ case object DigitalPack extends Product {
         productRatePlan("2c92a00d779932ef0177a65430d30ac1", Quarterly, "Digital Subscription Three Month Gift", Gift),
         productRatePlan("2c92a00c77992ba70177a6596f710265", Annual, "Digital Subscription One Year Gift", Gift),
       ),
+      UAT -> List(
+        productRatePlan("2c92c0f94f2acf73014f2c908f671591", Monthly, "Digital Subscription Monthly"),
+        productRatePlan("2c92c0f84f2ac59d014f2c94aea9199e", Annual, "Digital Subscription Annual"),
+        productRatePlan("2c92c0f9778c090d017795ef3000352f", Quarterly, "Digital Subscription Three Month Gift", Gift),
+        productRatePlan("2c92c0f9778c0900017795da493b4f85", Annual, "Digital Subscription One Year Gift", Gift),
+      ),
       SANDBOX -> List(
         productRatePlan("2c92c0f84bbfec8b014bc655f4852d9d", Monthly, "Digital Subscription Monthly"),
         productRatePlan("2c92c0f94bbffaaa014bc6a4212e205b", Annual, "Digital Subscription Annual"),
@@ -105,6 +119,22 @@ case object Contribution extends Product {
         ),
         ProductRatePlan(
           "2c92a0fc5e1dc084015e37f58c200eea",
+          Annual,
+          NoFulfilmentOptions,
+          NoProductOptions,
+          "Annual Contribution",
+        ),
+      ),
+      UAT -> List(
+        ProductRatePlan(
+          "2c92c0f85ab269be015acd9d014549b7",
+          Monthly,
+          NoFulfilmentOptions,
+          NoProductOptions,
+          "Monthly Contribution",
+        ),
+        ProductRatePlan(
+          "2c92c0f95e1d5c9c015e38f8c87d19a1",
           Annual,
           NoFulfilmentOptions,
           NoProductOptions,
@@ -200,6 +230,18 @@ case object Paper extends Product {
         homeDelivery("2c92a0fd560d132301560e43cf041a3c", EverydayPlus, "Home Delivery Everyday+"),
         homeDelivery("2c92a0fd560d13880156136b72e50f0c", Everyday, "Home Delivery Everyday"),
       )),
+      UAT -> (uatCollection ++ List(
+        homeDelivery("2c92c0f961f9cf300161fbfa943b6f54", SaturdayPlus, "Home Delivery Saturday+"),
+        homeDelivery("2c92c0f85b8fa30e015b9108a83253c7", Saturday, "Home Delivery Saturday"),
+        homeDelivery("2c92c0f955ca02900155da27f4872d4d", SundayPlus, "Home Delivery Sunday+"),
+        homeDelivery("2c92c0f95aff3b54015b0ede33bc04f2", Sunday, "Home Delivery Sunday"),
+        homeDelivery("2c92c0f955ca02900155da27f9402dad", WeekendPlus, "Home Delivery Weekend+"),
+        homeDelivery("2c92c0f955ca02900155da27f83c2d9b", Weekend, "Home Delivery Weekend"),
+        homeDelivery("2c92c0f955ca02900155da27f29e2d13", SixdayPlus, "Home Delivery Sixday+"),
+        homeDelivery("2c92c0f955ca02900155da27ff142e01", Sixday, "Home Delivery Sixday"),
+        homeDelivery("2c92c0f955ca02900155da2803b02e33", EverydayPlus, "Home Delivery Everyday+"),
+        homeDelivery("2c92c0f955ca02900155da27f55b2d5f", Everyday, "Home Delivery Everyday"),
+      )),
       SANDBOX -> (sandboxCollection ++ List(
         homeDelivery("2c92c0f961f9cf300161fc4f71473a34", SaturdayPlus, "Home Delivery Saturday+"),
         homeDelivery("2c92c0f961f9cf300161fc4d2e3e3664", Saturday, "Home Delivery Saturday"),
@@ -292,6 +334,50 @@ case object GuardianWeekly extends Product {
         domestic("2c92a0fd79ac64b00179ae3f9d474960", Monthly, "Guardian Weekly monthly, domestic delivery"),
         domestic(
           "2c92a00e6dd988e2016df85387417498",
+          Quarterly,
+          "Guardian Weekly three months, domestic delivery",
+          readerType = Gift,
+        ),
+      ),
+      UAT -> List(
+        restOfWorld(
+          "2c92c0f9660fc4c70166109dfd08092c",
+          SixWeekly,
+          "Guardian Weekly 6 for 6, rest of world delivery",
+          productRatePlanChargeId = Some("2c92c0f9660fc4c70166109dfd17092e"),
+        ),
+        restOfWorld("2c92c0f9660fc4d70166109a2eb0607c", Annual, "Guardian Weekly annual, rest of world delivery"),
+        restOfWorld(
+          "2c92c0f967caee360167f044cd0d4adc",
+          Annual,
+          "Guardian Weekly one year, rest of world delivery",
+          readerType = Gift,
+        ),
+        restOfWorld("2c92c0f9660fc4d70166109c01465f10", Quarterly, "Guardian Weekly quarterly, rest of world delivery"),
+        restOfWorld("2c92c0f979a6b0910179ae4611f1256f", Monthly, "Guardian Weekly monthly, rest of world delivery"),
+        restOfWorld(
+          "2c92c0f96df75b5a016df84084fb356d",
+          Quarterly,
+          "Guardian Weekly three months, rest of world delivery",
+          readerType = Gift,
+        ),
+        domestic(
+          "2c92c0f8660fb5dd016610858eb90658",
+          SixWeekly,
+          "Guardian Weekly 6 for 6, domestic delivery",
+          productRatePlanChargeId = Some("2c92c0f8660fb5dd016610858ed3065a"),
+        ),
+        domestic("2c92c0f9660fc4d70166107fa5412641", Annual, "Guardian Weekly annual, domestic delivery"),
+        domestic(
+          "2c92c0f867cae0700167f043870d6d0e",
+          Annual,
+          "Guardian Weekly one year, domestic delivery",
+          readerType = Gift,
+        ),
+        domestic("2c92c0f8660fb5d601661081ea010391", Quarterly, "Guardian Weekly quarterly, domestic delivery"),
+        domestic("2c92c0f879a6a11e0179ae3fa5bb1313", Monthly, "Guardian Weekly monthly, domestic delivery"),
+        domestic(
+          "2c92c0f96df75b51016df8444f36362f",
           Quarterly,
           "Guardian Weekly three months, domestic delivery",
           readerType = Gift,

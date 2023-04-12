@@ -19,11 +19,11 @@ Stage represents a runtime environment for the applications which use this libra
 
 ### Touchpoint Environment
 Touchpoint Environment represents a logical environment for our backend systems, mainly Zuora and Salesforce.
-Environments are: SANDBOX or PROD
+Environments are: SANDBOX, UAT or PROD
 
 Any environment *could* be used by any stage however in practice they are restricted to the following:
-DEV and CODE stages use the SANDBOX environment for all users
-PROD stage uses the PROD environment for non test users and SANDBOX for test users. See table below for full details.
+DEV and CODE stages use the SANDBOX environment for non test users the UAT environment for test users
+PROD stage uses the PROD environment for non test users and UAT for test users. See table below for full details.
 
 
 --------------------------------------
@@ -33,11 +33,11 @@ PROD stage uses the PROD environment for non test users and SANDBOX for test use
 |support-frontend stage| Is test user?|support-workers stage|Touchpoint Environment |
 |----------------------|--------------|---------------------|-----------------------|
 |DEV                   |No            |CODE                 |SANDBOX                |
-|DEV                   |Yes           |CODE                 |SANDBOX                     |
+|DEV                   |Yes           |CODE                 |UAT                    |
 |CODE                  |No            |CODE                 |SANDBOX                |
-|CODE                  |Yes           |CODE                 |SANDBOX                     |
+|CODE                  |Yes           |CODE                 |UAT                    |
 |PROD                  |No            |PROD                 |PROD                   |
-|PROD                  |Yes           |PROD                 |SANDBOX                  |
+|PROD                  |Yes           |PROD                 |UAT                    |
 
 
 
