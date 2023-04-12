@@ -1,11 +1,12 @@
 import { join } from "path";
 import { GuApiLambda } from "@guardian/cdk";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
-import { GuStack, GuStringParameter } from "@guardian/cdk/lib/constructs/core";
+import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
+import { CfnBasePathMapping, CfnDomainName } from "aws-cdk-lib/aws-apigateway";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
-import { CfnRecordSetGroup } from "aws-cdk-lib/aws-route53";
+import {CfnRecordSet} from "aws-cdk-lib/aws-route53";
 import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 
 export interface AcquisitionEventsApiProps extends GuStackProps {
@@ -15,6 +16,7 @@ export interface AcquisitionEventsApiProps extends GuStackProps {
   certificateId: string;
   domainName: string;
   hostedZoneName: string;
+  hostedZoneId: string;
 }
 
 
@@ -25,25 +27,6 @@ export class AcquisitionEventsApi extends GuStack {
 
 
     const app = "acquisition-events-api";
-
-    const parameters = {
-      CertificateArn: new GuStringParameter(this, "CertificateArn", {
-        description: "ARN of the certificate",
-      }),
-      App: new GuStringParameter(this, "App", {
-        description: "Acquisition Events Api",
-      }),
-      DeployBucket: new GuStringParameter(this, "DeployBucket", {
-        description: "Bucket to copy files to",
-      }),
-      Stack: new GuStringParameter(this, "Stack", {
-        description: "Stack name",
-      }),
-      Stage: new GuStringParameter(this, "Stage", {
-        description: "Set by RiffRaff on each deploy",
-      }),
-    };
-
 
      // ---- Existing CFN template ---- //
     const yamlTemplateFilePath = join(
@@ -66,22 +49,13 @@ export class AcquisitionEventsApi extends GuStack {
 // ---- API-triggered lambda functions ---- //
     const acquisitionEventsApiLambda= new GuApiLambda(this, "acquisition-events-api-lambda", {
       description: 'A lambda for acquisitions events api',
-      functionName: {
-        "Fn::Sub": [`${app}-cdk-${this.stage}`]
-      },
-      fileName: "${stack}/${this.stage}/${app}/${app}.jar",
+      functionName: `${app}-cdk-${this.stage}`,
+      fileName: "acquisition-events-api.jar",
       handler: 'com.gu.acquisitionEventsApi.Lambda::handler',
       runtime: Runtime.NODEJS_14_X,
       memorySize: 512,
       timeout:Duration.seconds(300),
-      Role: {
-        "Fn::GetAtt": ["LambdaRole", "Arn"]
-      },
-      environment: {
-        variables: {
-          STAGE: { 'Fn::ImportValue': 'Stage' },
-        },
-      },
+      environment:commonEnvironmentVariables,
       // Create an alarm
       monitoringConfiguration: {
         http5xxAlarm: {tolerated5xxPercentage: 5},
@@ -89,10 +63,8 @@ export class AcquisitionEventsApi extends GuStack {
       },
       app: "acquisition-events-api",
       api: {
-        id: "acquisition-events-api",
+        id: `${app}-${this.stage}`,
         description: "API Gateway created by CDK",
-
-      Tag.add(this, 'lambda:createdBy', 'SAM');
       },
     });
 
@@ -100,26 +72,29 @@ export class AcquisitionEventsApi extends GuStack {
     const certificateArn = `arn:aws:acm:eu-west-1:${this.account}:certificate/${props.certificateId}`;
     const cfnDomainName = new CfnDomainName(this, "ApiDomainName", {
       domainName: props.domainName,
-      certificateArn,
+      regionalCertificateArn: certificateArn,
+      endpointConfiguration: {
+        types: ["REGIONAL"]
+      }
     });
 
     new CfnBasePathMapping(this, "ApiMapping", {
       domainName: cfnDomainName.ref,
       // Uncomment the lines below to reroute traffic to the new API Gateway instance
-      // restApiId: acquisitionEventsApi.api.restApiId,
-      // stage: acquisitionEventsApi.api.deploymentStage.stageName,
-      restApiId: yamlDefinedResources.getResource("acquisitionEventsApi").ref,
-      stage: props.stage,
+      restApiId: acquisitionEventsApiLambda.api.restApiId,
+      stage: acquisitionEventsApiLambda.api.deploymentStage.stageName,
+      // restApiId: yamlDefinedResources.getResource("ServerlessRestApi").ref,
+      // stage: props.stage,
     });
 
-    new CfnRecordSetGroup(this, "ApiRoute53", {
+    new CfnRecordSet(this, "DNSRecord", {
+      name: props.domainName,
+      type: "CNAME",
       hostedZoneId: props.hostedZoneId,
-      recordSets: [
-        {
-          name: props.domainName,
-          type: "CNAME",
-        },
+      ttl: "60",
+      resourceRecords: [
+        cfnDomainName.attrRegionalDomainName
       ],
-  });
+    });
   }
 }
