@@ -35,7 +35,7 @@ object AwsCloudWatchMetricSetup {
       paymentProvider: PaymentProvider,
       productType: ProductType,
   ): MetricRequest = {
-    val qualifiedStage = stage.toString + (if (isTestUser) "-UAT" else "")
+    val qualifiedStage = stage.toString + (if (isTestUser) "-TEST" else "")
     getMetricRequest(
       MetricName("PaymentSuccess"),
       Map(

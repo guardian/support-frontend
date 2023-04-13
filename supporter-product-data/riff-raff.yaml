@@ -2,7 +2,6 @@ stacks: [support]
 regions: [eu-west-1]
 allowedStages:
   - DEV
-  - UAT
   - PROD
 deployments:
   cfn:
