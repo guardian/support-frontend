@@ -21,15 +21,15 @@ import scala.concurrent.duration._
 @IntegrationTest
 class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
-  def uatService: ZuoraService =
+  def codeService: ZuoraService =
     new ZuoraService(
-      Configuration.load().zuoraConfigProvider.get(true),
+      Configuration.load().zuoraConfigProvider.get(),
       RequestRunners.configurableFutureRunner(30.seconds),
     )
 
-  def uatGiftService: ZuoraGiftService =
+  def codeGiftService: ZuoraGiftService =
     new ZuoraGiftService(
-      Configuration.load().zuoraConfigProvider.get(true),
+      Configuration.load().zuoraConfigProvider.get(),
       Stages.DEV,
       RequestRunners.configurableFutureRunner(30.seconds),
     )
@@ -38,14 +38,14 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   val earlyDate = new DateTime(2010, 1, 1, 0, 0, 0, 0, DateTimeZone.UTC)
 
   "ZuoraService" should "retrieve an account" in {
-    uatService.getAccount(Fixtures.accountNumber).map { response =>
+    codeService.getAccount(Fixtures.accountNumber).map { response =>
       response.success should be(true)
       response.basicInfo.accountNumber should be(Fixtures.accountNumber)
     }
   }
 
   it should "retrieve account ids from an Identity id" in {
-    uatService.getAccountFields(IdentityId("104725102").get, earlyDate).map { response =>
+    codeService.getAccountFields(IdentityId("200110674").get, earlyDate).map { response =>
       response.nonEmpty should be(true)
     }
   }
@@ -54,7 +54,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   // testing with has just expired
   ignore should "retrieve subscription redemption information from a redemption code" in {
     val redemptionCode = "gd12-it-test1"
-    uatGiftService.getSubscriptionFromRedemptionCode(RedemptionCode(redemptionCode).toOption.get).map { response =>
+    codeGiftService.getSubscriptionFromRedemptionCode(RedemptionCode(redemptionCode).toOption.get).map { response =>
       response.records.size shouldBe 1
       response.records.head.gifteeIdentityId shouldBe None
     }
@@ -62,7 +62,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
   it should "handle invalid redemption codes" in {
     val invalidRedemptionCode = "xxxx-0000-111"
-    uatGiftService.getSubscriptionFromRedemptionCode(RedemptionCode(invalidRedemptionCode).toOption.get).map {
+    codeGiftService.getSubscriptionFromRedemptionCode(RedemptionCode(invalidRedemptionCode).toOption.get).map {
       response =>
         response.records.size shouldBe 0
     }
@@ -74,7 +74,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "retrieve subscriptions from an account id" in {
-    uatService.getSubscriptions(ZuoraAccountNumber("A00084679")).map { response =>
+    codeService.getSubscriptions(ZuoraAccountNumber("A00524080")).map { response =>
       response.nonEmpty should be(true)
       response.head.ratePlans.head.productRatePlanId should be(
         Configuration.load().zuoraConfigProvider.get(true).monthlyContribution.productRatePlanId,
@@ -84,9 +84,9 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
   it should "be able to find a monthly recurring subscription" in {
     GetSubscriptionWithCurrentRequestId(
-      uatService,
-      UUID.fromString("f131bfb4-bcd9-31e6-0000-00000001ac69"),
-      IdentityId("104725102").get,
+      codeService,
+      UUID.fromString("f5f42f0b-be6e-2d37-0000-00000000026c"),
+      IdentityId("200110674").get,
       DateGenerator(earlyDate),
     ).map {
       _.flatMap(_.ratePlans.headOption.map(_.productName)) should be(Some("Contributor"))
@@ -95,9 +95,9 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
   it should "ignore a subscription with wrong session id" in {
     GetSubscriptionWithCurrentRequestId(
-      uatService,
+      codeService,
       UUID.fromString("00000000-3001-4dbc-88c3-1f47d54c511c"),
-      IdentityId("104725102").get,
+      IdentityId("200110674").get,
       DateGenerator(earlyDate),
     ).map {
       _ should be(None)
@@ -105,39 +105,39 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   }
 
   it should "retrieve a default paymentMethodId from an account number" in {
-    val accountNumber = "A00084679"
-    val defaultPaymentMethodId = Some("2c92c0f8757974cc01757a3583e54333")
-    uatService.getDefaultPaymentMethodId(accountNumber).map { response =>
+    val accountNumber = "A00524105"
+    val defaultPaymentMethodId = Some("8ad094b9877a6f6001877adffe770aec")
+    codeService.getDefaultPaymentMethodId(accountNumber).map { response =>
       response should be(defaultPaymentMethodId)
     }
   }
 
   it should "retrieve a Direct Debit mandateId from a valid paymentMethodId" in {
-    val defaultPaymentMethodId = "2c92c0f8757974cc01757a3583e54333"
-    val mandateId = "Y5MD5CC"
-    uatService.getDirectDebitMandateId(defaultPaymentMethodId).map { response =>
+    val defaultPaymentMethodId = "8ad096ca877a6f4601877ae5adc86093"
+    val mandateId = "XPE6XQZ"
+    codeService.getDirectDebitMandateId(defaultPaymentMethodId).map { response =>
       response should be(Some(mandateId))
     }
   }
 
   it should "return None when given an invalid paymentMethodId" in {
     val invalidPaymentMethodId = "xxxx"
-    uatService.getDirectDebitMandateId(invalidPaymentMethodId).map { response =>
+    codeService.getDirectDebitMandateId(invalidPaymentMethodId).map { response =>
       response should be(None)
     }
   }
 
   it should "retrieve a Direct Debit mandateId from a valid account number" in {
-    val accountNumber = "A00084679"
-    val mandateId = Some("Y5MD5CC")
-    uatService.getMandateIdFromAccountNumber(accountNumber).map { response =>
+    val accountNumber = "A00524112"
+    val mandateId = Some("XPE6XQZ")
+    codeService.getMandateIdFromAccountNumber(accountNumber).map { response =>
       response should be(mandateId)
     }
   }
 
   it should "return None when given an invalid account number" in {
     val invalidAccountNumber = "xxxx"
-    uatService.getMandateIdFromAccountNumber(invalidAccountNumber).map { response =>
+    codeService.getMandateIdFromAccountNumber(invalidAccountNumber).map { response =>
       response should be(None)
     }
   }
