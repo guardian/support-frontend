@@ -39,7 +39,6 @@ import {
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { DirectDebitContainer } from 'pages/supporter-plus-landing/components/directDebitWrapper';
-import { ExistingRecurringContributorMessage } from 'pages/supporter-plus-landing/components/existingRecurringContributorMessage';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
@@ -188,7 +187,6 @@ export function SupporterPlusLandingPage({
 											countryGroupId,
 										)}
 									/>
-									<ExistingRecurringContributorMessage />
 									<PaymentFailureMessage />
 									<DirectDebitContainer />
 								</ContributionsStripe>

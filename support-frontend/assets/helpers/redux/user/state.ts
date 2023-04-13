@@ -20,7 +20,6 @@ export type UserState = {
 	isStorybookUser?: boolean;
 	isSignedIn: boolean;
 	isReturningContributor: boolean;
-	isRecurringContributorError?: boolean;
 };
 
 const userInfo = getGlobal<User>('user');
