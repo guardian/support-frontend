@@ -1,12 +1,12 @@
 package com.gu.patrons.model
 
 import com.gu.supporterdata.model.Stage
-import com.gu.supporterdata.model.Stage.{DEV, PROD, UAT}
+import com.gu.supporterdata.model.Stage.{DEV, PROD}
 
 object StageConstructors {
 
   def fromString(str: String): Option[Stage] =
-    List(DEV, UAT, PROD)
+    List(DEV, PROD)
       .find(_.value == str)
 
   def fromEnvironment: Stage =
