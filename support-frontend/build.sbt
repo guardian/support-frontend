@@ -27,7 +27,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-optics" % "0.14.1",
   "joda-time" % "joda-time" % "2.9.9",
-  "com.gu.identity" %% "identity-auth-play" % "3.255",
+  "com.gu.identity" %% "identity-auth-play" % "4.10",
   "com.gu" %% "identity-test-users" % "0.8",
   "com.google.guava" % "guava" % "31.1-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
