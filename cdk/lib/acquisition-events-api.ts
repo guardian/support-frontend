@@ -5,6 +5,7 @@ import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
 import { CfnBasePathMapping, CfnDomainName } from "aws-cdk-lib/aws-apigateway";
+import {Effect, Policy, PolicyStatement} from "aws-cdk-lib/aws-iam";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import {CfnRecordSet} from "aws-cdk-lib/aws-route53";
 import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
@@ -46,6 +47,7 @@ export class AcquisitionEventsApi extends GuStack {
       Stack: this.stack,
       Stage: this.stage,
     };
+
 // ---- API-triggered lambda functions ---- //
     const acquisitionEventsApiLambda= new GuApiLambda(this, "acquisition-events-api-cdk-lambda", {
       description: 'A lambda for acquisitions events api',
@@ -96,5 +98,38 @@ export class AcquisitionEventsApi extends GuStack {
         cfnDomainName.attrRegionalDomainName
       ],
     });
+
+    // ---- Apply policies ---- //
+    const ssmInlinePolicy: Policy = new Policy(this, "SSM inline policy", {
+      statements: [
+        new PolicyStatement({
+          effect: Effect.ALLOW,
+          actions: [
+            "ssm:GetParametersByPath",
+            ],
+          resources: [
+            `arn:aws:ssm:${this.region}:${this.account}:parameter/acquisition-events-api/bigquery-config/${props.stage}/*`,
+            ]
+        }),
+      ],
+    })
+
+    const s3InlinePolicy: Policy = new Policy(this, "S3 inline policy", {
+      statements: [
+        new PolicyStatement({
+          effect: Effect.ALLOW,
+          actions: [
+            "s3:GetObject"
+          ],
+          resources: [
+            "arn:aws:s3::*:membership-dist/*"
+          ]
+        }),
+      ],
+    })
+
+
+    acquisitionEventsApiLambda.role?.attachInlinePolicy(ssmInlinePolicy)
+    acquisitionEventsApiLambda.role?.attachInlinePolicy(s3InlinePolicy)
   }
 }
