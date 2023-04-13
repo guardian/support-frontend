@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import {
 	brand,
+	focus,
 	from,
 	headline,
 	neutral,
@@ -30,6 +31,12 @@ const cardCss = css`
 
 	&:hover {
 		cursor: pointer;
+	}
+
+	/* .src-focus-disabled is added by the Source FocusStyleManager */
+	html:not(.src-focus-disabled) &:focus {
+		outline: 5px solid ${focus[400]};
+		outline-offset: -5px;
 	}
 
 	${from.desktop} {
@@ -124,13 +131,42 @@ export function CardClickable({
 						card.removeAttribute('time-mousedown');
 					}
 				});
+
+				// focusin : Log
+				element.addEventListener('focusin', (event) => {
+					const card = (event.target as HTMLElement).closest('.card');
+					if (card) {
+						card.setAttribute('keyboard-focus', 'focusin');
+					}
+				});
+				// focusout : Log
+				element.addEventListener('focusout', (event) => {
+					const card = (event.target as HTMLElement).closest('.card');
+					if (card) {
+						card.removeAttribute('keyboard-focus');
+					}
+				});
+
+				// keypress: If card has focus and Enter pressed, raise click event
+				element.addEventListener('keypress', (event) => {
+					const card = (event.target as HTMLElement).closest('.card');
+					if (card) {
+						if (
+							(event as KeyboardEvent).key === `Enter` &&
+							card.getAttribute('keyboard-focus')
+						) {
+							cardClickableProp.onCardClick();
+							card.classList.add('visited');
+						}
+					}
+				});
 			});
 		}
 	}, []);
 
 	return (
 		<div className="card" css={containerCss}>
-			<div css={cardCss}>
+			<div css={cardCss} tabIndex={0}>
 				<div css={topCss}>
 					<h2 css={headingCss(brand[500])}>{cardTitle}</h2>
 				</div>
