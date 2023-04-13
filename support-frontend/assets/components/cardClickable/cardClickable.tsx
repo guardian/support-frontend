@@ -11,7 +11,17 @@ import {
 import { SvgChevronRightSingle } from '@guardian/source-react-components';
 import { useEffect } from 'preact/hooks';
 
-const cardContainerCss = css`
+const containerCss = css`
+	:not(:last-child) {
+		margin-bottom: ${space[2]}px;
+
+		${from.tablet} {
+			margin-bottom: ${space[4]}px;
+		}
+	}
+`;
+
+const cardCss = css`
 	padding: ${space[3]}px ${space[3]}px ${space[4]}px;
 	background-color: ${neutral[100]};
 	color: ${neutral[7]};
@@ -20,14 +30,6 @@ const cardContainerCss = css`
 
 	&:hover {
 		cursor: pointer;
-	}
-
-	:not(:last-child) {
-		margin-bottom: ${space[2]}px;
-
-		${from.tablet} {
-			margin-bottom: ${space[4]}px;
-		}
 	}
 
 	${from.desktop} {
@@ -90,61 +92,53 @@ export function CardClickable({
 	const cardClickableProp = { onCardClick };
 
 	useEffect(() => {
-		const cards = Array.from(document.querySelectorAll('.card'));
-		let elements: Element[] = [];
-		cards.forEach((card) => {
-			elements = elements.concat(Array.from(card.children));
-		});
+		const cardClick = document.querySelector('.card');
+		if (cardClick) {
+			const elements = Array.from(cardClick.children);
+			elements.forEach((element) => {
+				// click: Disable
+				element.addEventListener('click', (event) => event.preventDefault());
 
-		elements.forEach((element) => {
-			// click: Disable
-			element.addEventListener('click', (e) => e.preventDefault());
-
-			// mousedown: Log timestamp
-			element.addEventListener('mousedown', (e) => {
-				const card: Element | null = (e.target as HTMLElement).closest('.card');
-				if (card) {
-					const mousedownTime = new Date().getTime();
-					card.setAttribute('data-md', mousedownTime.toString());
-				}
-			});
-
-			// mouseup: Determine whether to raise click event
-			element.addEventListener('mouseup', (e) => {
-				e.stopPropagation();
-
-				const card: Element | null = (
-					e.target as HTMLElement
-				).classList.contains('card')
-					? (e.target as HTMLElement)
-					: (e.target as HTMLElement).closest('.card');
-
-				if (card) {
-					const mouseupTime = new Date().getTime();
-					const foundMouseDown = card.getAttribute('data-md');
-					const mousedownTime = foundMouseDown
-						? parseInt(foundMouseDown)
-						: mouseupTime;
-
-					if (mouseupTime - mousedownTime < 200) {
-						cardClickableProp.onCardClick();
-						card.classList.add('visited');
+				// mousedown: Log timestamp
+				element.addEventListener('mousedown', (event) => {
+					const card = (event.target as HTMLElement).closest('.card');
+					if (card) {
+						const mousedownTime = new Date().getTime();
+						card.setAttribute('time-mousedown', mousedownTime.toString());
 					}
-					card.removeAttribute('data-md');
-				}
+				});
+
+				// mouseup: Determine whether to raise click event
+				element.addEventListener('mouseup', (event) => {
+					event.stopPropagation();
+					const card = (event.target as HTMLElement).closest('.card');
+					if (card) {
+						const mouseUpTime = new Date().getTime();
+						const mouseDownTime = parseInt(
+							card.getAttribute('time-mousedown') ?? mouseUpTime.toString(),
+						);
+						if (mouseUpTime - mouseDownTime < 200) {
+							cardClickableProp.onCardClick();
+							card.classList.add('visited');
+						}
+						card.removeAttribute('time-mousedown');
+					}
+				});
 			});
-		});
+		}
 	}, []);
 
 	return (
-		<div className="card" css={cardContainerCss}>
-			<div css={topCss}>
-				<h2 css={headingCss(brand[500])}>{cardTitle}</h2>
-			</div>
-			<div css={bottomCss}>
-				<p css={paraCss}>{cardParagraph}</p>
-				<div css={chevronCss}>
-					<SvgChevronRightSingle size="xsmall" />
+		<div className="card" css={containerCss}>
+			<div css={cardCss}>
+				<div css={topCss}>
+					<h2 css={headingCss(brand[500])}>{cardTitle}</h2>
+				</div>
+				<div css={bottomCss}>
+					<p css={paraCss}>{cardParagraph}</p>
+					<div css={chevronCss}>
+						<SvgChevronRightSingle size="xsmall" />
+					</div>
 				</div>
 			</div>
 		</div>
