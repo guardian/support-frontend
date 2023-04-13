@@ -50,16 +50,3 @@ export function getPersonalDetailsErrors(
 		...stateOrProvinceErrors,
 	};
 }
-
-export function getUserCanTakeOutContribution(
-	state: ContributionsState,
-): boolean {
-	const contributionType = getContributionType(state);
-	if (contributionType === 'ONE_OFF') {
-		return true;
-	}
-
-	const userIsRecurringContributor =
-		state.page.user.isRecurringContributorError ?? false;
-	return !userIsRecurringContributor;
-}
