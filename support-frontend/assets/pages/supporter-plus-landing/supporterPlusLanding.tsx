@@ -12,8 +12,7 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
-import { useState } from 'preact/hooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CardClickable } from 'components/cardClickable/cardClickable';
 import { CardClickableContainer } from 'components/cardClickable/cardClickableContainer';

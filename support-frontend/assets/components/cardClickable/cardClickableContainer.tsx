@@ -18,13 +18,10 @@ export function CardClickableContainer({
 
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId]['ONE_OFF'].min;
-
-	const [cardTitle, cardParagraph] = [
-		`Support us just once`,
-		`We welcome support of any size, any time, whether you choose to give ${
-			currencyGlyph + minAmount.toString()
-		} or much more`,
-	];
+	const cardTitle = `Support us just once`;
+	const cardParagraph = `We welcome support of any size, any time, whether you choose to give ${
+		currencyGlyph + minAmount.toString()
+	} or much more`;
 
 	return renderCardClickable({
 		cardTitle,

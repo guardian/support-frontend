@@ -10,7 +10,7 @@ import {
 	until,
 } from '@guardian/source-foundations';
 import { SvgChevronRightSingle } from '@guardian/source-react-components';
-import { useEffect } from 'preact/hooks';
+import { useEffect } from 'react';
 
 const containerCss = css`
 	:not(:last-child) {
@@ -80,7 +80,7 @@ const chevronCss = css`
 		background-color: transparent;
 	}
 	& svg {
-		width: 24px;
+		width: ${space[6]}px;
 		margin: 2px;
 	}
 `;
@@ -99,10 +99,13 @@ export function CardClickable({
 	const cardClickableProp = { onCardClick };
 
 	useEffect(() => {
-		const cardClick = document.querySelector('.card');
-		if (cardClick) {
-			const elements = Array.from(cardClick.children);
+		const cardElement = document.querySelector('.card');
+		if (cardElement) {
+			const elements = Array.from(cardElement.children);
 			elements.forEach((element) => {
+				// All HTML elements inside the element labelled 'card' can be mouse
+				// clicked upon where a click event will be raised.
+
 				// click: Disable
 				element.addEventListener('click', (event) => event.preventDefault());
 
@@ -131,6 +134,9 @@ export function CardClickable({
 						card.removeAttribute('time-mousedown');
 					}
 				});
+
+				// If the HTML element 'card' has focus, enter can be depressed to
+				// raise a click event
 
 				// focusin : Log
 				element.addEventListener('focusin', (event) => {
