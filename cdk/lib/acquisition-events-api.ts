@@ -13,7 +13,6 @@ import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 export interface AcquisitionEventsApiProps extends GuStackProps {
   stack: string;
   stage: string;
-  app: string;
   certificateId: string;
   domainName: string;
   hostedZoneName: string;

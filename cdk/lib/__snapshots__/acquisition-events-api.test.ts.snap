@@ -260,7 +260,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
           },
           "S3Key": "support/CODE/acquisition-events-api/support/CODE/acquisition-events-api/acquisition-events-api.jar",
         },
-        "Description": "A lambda for acquisitions events api",
+        "Description": "A lambda that Sends in-app acquisitions (subscriptions) to BigQuery",
         "Environment": {
           "Variables": {
             "APP": "acquisition-events-api",
@@ -1129,7 +1129,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
           },
           "S3Key": "support/PROD/acquisition-events-api/support/PROD/acquisition-events-api/acquisition-events-api.jar",
         },
-        "Description": "A lambda for acquisitions events api",
+        "Description": "A lambda that Sends in-app acquisitions (subscriptions) to BigQuery",
         "Environment": {
           "Variables": {
             "APP": "acquisition-events-api",
