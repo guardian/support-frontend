@@ -50,7 +50,7 @@ export class AcquisitionEventsApi extends GuStack {
 
 // ---- API-triggered lambda functions ---- //
     const acquisitionEventsApiLambda= new GuApiLambda(this, "acquisition-events-api-cdk-lambda", {
-      description: 'A lambda for acquisitions events api',
+      description: 'A lambda that Sends in-app acquisitions (subscriptions) to BigQuery',
       functionName: `${app}-cdk-${this.stage}`,
       fileName: `${this.stack}/${this.stage}/${app}/${app}.jar`,
       handler: 'com.gu.acquisitionEventsApi.Lambda::handler',
@@ -85,6 +85,7 @@ export class AcquisitionEventsApi extends GuStack {
       // Uncomment the lines below to reroute traffic to the new API Gateway instance
       restApiId: acquisitionEventsApiLambda.api.restApiId,
       stage: acquisitionEventsApiLambda.api.deploymentStage.stageName,
+      // Uncomment the lines below to reroute traffic to the old (existing) API Gateway instance
       // restApiId: yamlDefinedResources.getResource("ServerlessRestApi").ref,
       // stage: props.stage,
     });
