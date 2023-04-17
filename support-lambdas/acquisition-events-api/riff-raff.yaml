@@ -7,8 +7,8 @@ deployments:
     parameters:
       bucket: membership-dist
       functionNames:
-       -acquisition-events-api-
-       -acquisition-events-api-cdk-
+       - acquisition-events-api-
+       - acquisition-events-api-cdk-
       fileName: acquisition-events-api.jar
       prefixStack: false
     dependencies: [ cfn ]
