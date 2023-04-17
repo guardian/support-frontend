@@ -349,16 +349,16 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.37.0.tgz#cf1b5fa24217fe007f6487a26d765274925efa7d"
   integrity sha512-x5vzdtOOGgFVDCUs81QRB2+liax8rFg3+7hqM+QhBG0/G3F1ZsoYl97UrqgHgQ9KKT7G6c4V+aTUCgu/n22v1A==
 
-"@guardian/cdk@48.0.1":
-  version "48.0.1"
-  resolved "https://registry.yarnpkg.com/@guardian/cdk/-/cdk-48.0.1.tgz#299da1ec8a27375840f04d26920a25e89975367d"
-  integrity sha512-oiRqEozzsi6kMrbBe1Fvv+wgVlQZnRUZ7DNF+CByVwpbfvAp7dAeE5K6cRrU7NlE/erR0QGPH1TZkO4g5fqnXQ==
+"@guardian/cdk@48.4.0":
+  version "48.4.0"
+  resolved "https://registry.yarnpkg.com/@guardian/cdk/-/cdk-48.4.0.tgz#7ffc78a3a9047a363af8f665491c6dae89e8efc0"
+  integrity sha512-lSslSam3149B41pyywve3MMjMNj3eeMYSZTIZyz04puQO5IqT9WiEkKLK11p+xU98OlsyzyO99HpHSeVRF6Y5g==
   dependencies:
-    "@oclif/core" "1.16.4"
+    "@oclif/core" "1.20.2"
     aws-cdk-lib "2.45.0"
-    aws-sdk "^2.1229.0"
+    aws-sdk "^2.1245.0"
     chalk "^4.1.2"
-    codemaker "^1.69.0"
+    codemaker "^1.70.0"
     constructs "10.1.127"
     git-url-parse "^13.1.0"
     js-yaml "^4.1.0"
@@ -707,10 +707,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@oclif/core@1.16.4":
-  version "1.16.4"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-1.16.4.tgz#fafa338ada0624d7f1adac036302b05a37cd96d0"
-  integrity sha512-l+xHtVMteJWeTZZ+f2yLyNjf69X0mhAH8GILXnmoAGAemXbc1DVstvloxOouarvm9xyHHhquzO1Qg5l6xa1VIw==
+"@oclif/core@1.20.2":
+  version "1.20.2"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-1.20.2.tgz#724713086355d693e578960f72c7e2d14fd3e7c3"
+  integrity sha512-c6CpDbDPS9UuKwGoajzsjrjfnwQywWEV3WI5FDvb87h0/WW2tGf1QwHUWgdKOojafEcMAa9DnP5j+mXdUTtpCg==
   dependencies:
     "@oclif/linewrap" "^1.0.0"
     "@oclif/screen" "^3.0.2"
@@ -1151,10 +1151,10 @@ aws-cdk@2.45.0:
   optionalDependencies:
     fsevents "2.3.2"
 
-aws-sdk@^2.1229.0:
-  version "2.1234.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1234.0.tgz#2a3883295c77c789f8a95fbadc0fd37a998ac026"
-  integrity sha512-QFuSeYM8DPiXytspLnWToy4MWJPGYFCgAy4hi+lRd6ueJtCey7MBIgFNHW814uAJzKUDEdJUJZPvDZvtLM1d/Q==
+aws-sdk@^2.1245.0:
+  version "2.1359.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1359.0.tgz#2cde4dce72a6681a9ac5b3c751545e13e5fec850"
+  integrity sha512-uGNIU4czx8P0YITV8uhuLFhmyYvLWsFYINlHJX77/fea4VuTwcCGktYy2OEnrErp3FK9NHQvwXBxZCbY0lcxBg==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -1165,7 +1165,7 @@ aws-sdk@^2.1229.0:
     url "0.10.3"
     util "^0.12.4"
     uuid "8.0.0"
-    xml2js "0.4.19"
+    xml2js "0.5.0"
 
 babel-jest@^29.2.0:
   version "29.2.0"
@@ -1385,15 +1385,6 @@ cli-progress@^3.10.0:
   dependencies:
     string-width "^4.2.3"
 
-cliui@^7.0.2:
-  version "7.0.4"
-  resolved "https://registry.yarnpkg.com/cliui/-/cliui-7.0.4.tgz#a0265ee655476fc807aea9df3df8df7783808b4f"
-  integrity sha512-OcRE68cOsVMXp1Yvonl/fzkQOyjLSu/8bhPDfQt0e0/Eb283TKP20Fs2MqoPsr9SwA595rRCA+QMzYc9nBP+JQ==
-  dependencies:
-    string-width "^4.2.0"
-    strip-ansi "^6.0.0"
-    wrap-ansi "^7.0.0"
-
 cliui@^8.0.1:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/cliui/-/cliui-8.0.1.tgz#0c04b075db02cbfe60dc8e6cf2f5486b1a3608aa"
@@ -1408,10 +1399,10 @@ co@^4.6.0:
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
   integrity sha1-bqa989hTrlTMuOR7+gvz+QMfsYQ=
 
-codemaker@^1.69.0:
-  version "1.69.0"
-  resolved "https://registry.yarnpkg.com/codemaker/-/codemaker-1.69.0.tgz#e8432ee60bf84ac59630be8390a18a422eb8707c"
-  integrity sha512-FbJeIr6isHvABZ56wdujvRLQOJOmS6MoptN4ylLKDNr/dp/+tzpa9kY2R2Y7eWxMW5sTYFBNsVJDpErMcMwhig==
+codemaker@^1.70.0:
+  version "1.80.0"
+  resolved "https://registry.yarnpkg.com/codemaker/-/codemaker-1.80.0.tgz#0a8ae49d88368a74841b31dedae91e969a73ad05"
+  integrity sha512-8d9TWXA+eLDFLkYiFKmyXDmXFBmASVxly2PyOK/kLryuhielDZEahSoltF+ES2Dm/F4IzZ4uL7ZjTgkjy69s0w==
   dependencies:
     camelcase "^6.3.0"
     decamelize "^5.0.1"
@@ -4128,18 +4119,18 @@ write-file-atomic@^4.0.1:
     imurmurhash "^0.1.4"
     signal-exit "^3.0.7"
 
-xml2js@0.4.19:
-  version "0.4.19"
-  resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.19.tgz#686c20f213209e94abf0d1bcf1efaa291c7827a7"
-  integrity sha512-esZnJZJOiJR9wWKMyuvSE1y6Dq5LCuJanqhxslH2bxM6duahNZ+HMpCLhBQGZkbX6xRf8x1Y2eJlgt2q3qo49Q==
+xml2js@0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.5.0.tgz#d9440631fbb2ed800203fad106f2724f62c493b7"
+  integrity sha512-drPFnkQJik/O+uPKpqSgr22mpuFHqKdbS835iAQrUC73L2F5WkboIRd63ai/2Yg6I1jzifPFKH2NTK+cfglkIA==
   dependencies:
     sax ">=0.6.0"
-    xmlbuilder "~9.0.1"
+    xmlbuilder "~11.0.0"
 
-xmlbuilder@~9.0.1:
-  version "9.0.7"
-  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
-  integrity sha512-7YXTQc3P2l9+0rjaUbLwMKRhtmwg1M1eDf6nag7urC7pIPYLD9W/jmzQ4ptRSUbodw5S0jfoGTflLemQibSpeQ==
+xmlbuilder@~11.0.0:
+  version "11.0.1"
+  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-11.0.1.tgz#be9bae1c8a046e76b31127726347d0ad7002beb3"
+  integrity sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==
 
 y18n@^5.0.5:
   version "5.0.8"
@@ -4161,20 +4152,7 @@ yargs-parser@^21.0.0, yargs-parser@^21.0.1:
   resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-21.1.1.tgz#9096bceebf990d21bb31fa9516e0ede294a77d35"
   integrity sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==
 
-yargs@^17.3.1:
-  version "17.5.1"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.5.1.tgz#e109900cab6fcb7fd44b1d8249166feb0b36e58e"
-  integrity sha512-t6YAJcxDkNX7NFYiVtKvWUz8l+PaKTLiL63mJYWR2GnHq2gjEWISzsLp9wg3aY36dY1j+gfIEL3pIF+XlJJfbA==
-  dependencies:
-    cliui "^7.0.2"
-    escalade "^3.1.1"
-    get-caller-file "^2.0.5"
-    require-directory "^2.1.1"
-    string-width "^4.2.3"
-    y18n "^5.0.5"
-    yargs-parser "^21.0.0"
-
-yargs@^17.6.0:
+yargs@^17.3.1, yargs@^17.6.0:
   version "17.6.0"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.6.0.tgz#e134900fc1f218bc230192bdec06a0a5f973e46c"
   integrity sha512-8H/wTDqlSwoSnScvV2N/JHfLWOKuh5MVla9hqLjK3nsfyy6Y4kDSYSvkU5YCUEPOSnRXfIyx3Sq+B/IWudTo4g==
