@@ -160,19 +160,6 @@ case object Paper extends Product {
       collection("2c92a00870ec598001710740c78d2f13", Everyday, "Voucher Everyday"),
     )
 
-  private val uatCollection: List[ProductRatePlan[Paper.type]] = List(
-    collection("2c92c0f870f682820171070489d542da", SaturdayPlus, "Voucher Saturday+"),
-    collection("2c92c0f870f682820171070488df42ce", Saturday, "Voucher Saturday"),
-    collection("2c92c0f870f68282017107047b214214", SundayPlus, "Voucher Sunday+"),
-    collection("2c92c0f870f682820171070487f142c4", Sunday, "Voucher Sunday"),
-    collection("2c92c0f870f682820171070478d441f5", WeekendPlus, "Voucher Weekends+"),
-    collection("2c92c0f870f682820171070477d841e2", Weekend, "Voucher Weekend"),
-    collection("2c92c0f870f682820171070470ad4120", SixdayPlus, "Voucher Sixday+"),
-    collection("2c92c0f870f68282017107047d054230", Sixday, "Voucher Sixday"),
-    collection("2c92c0f870f682820171070481bf4264", EverydayPlus, "Voucher Everyday+"),
-    collection("2c92c0f870f682820171070474ee419d", Everyday, "Voucher Everyday"),
-  )
-
   private val sandboxCollection: List[ProductRatePlan[Paper.type]] = List(
     collection("2c92c0f86fa49142016fa49eb1732a39", SaturdayPlus, "Voucher Saturday paper+"),
     collection("2c92c0f86fa49142016fa49ea442291b", Saturday, "Voucher Saturday paper"),

@@ -28,11 +28,11 @@ const stripeAccountForContributionType: Record<
 
 export interface StripeKey {
 	ONE_OFF: {
-		uat: string;
+		test: string;
 		default: string;
 	};
 	REGULAR: {
-		uat: string;
+		test: string;
 		default: string;
 	};
 }
@@ -45,17 +45,17 @@ function getStripeKey(
 	switch (country) {
 		case 'AU':
 			return isTestUser
-				? window.guardian.stripeKeyAustralia[stripeAccount].uat
+				? window.guardian.stripeKeyAustralia[stripeAccount].test
 				: window.guardian.stripeKeyAustralia[stripeAccount].default;
 
 		case 'US':
 			return isTestUser
-				? window.guardian.stripeKeyUnitedStates[stripeAccount].uat
+				? window.guardian.stripeKeyUnitedStates[stripeAccount].test
 				: window.guardian.stripeKeyUnitedStates[stripeAccount].default;
 
 		default:
 			return isTestUser
-				? window.guardian.stripeKeyDefaultCurrencies[stripeAccount].uat
+				? window.guardian.stripeKeyDefaultCurrencies[stripeAccount].test
 				: window.guardian.stripeKeyDefaultCurrencies[stripeAccount].default;
 	}
 }

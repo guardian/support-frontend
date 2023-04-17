@@ -40,11 +40,11 @@ declare global {
 		guardian: {
 			amazonPayClientId: {
 				default: string;
-				uat: string;
+				test: string;
 			};
 			amazonPaySellerId: {
 				default: string;
-				uat: string;
+				test: string;
 			};
 			csrf?: CsrfState;
 			email?: string;
@@ -61,7 +61,7 @@ declare global {
 			paymentApiUrl: string;
 			payPalEnvironment: {
 				default: string;
-				uat: string;
+				test: string;
 			};
 			polyfillScriptLoaded?: boolean;
 			polyfillVersion?: string;
@@ -72,7 +72,7 @@ declare global {
 			stripeKeyAustralia: StripeKey;
 			stripeKeyDefaultCurrencies: StripeKey;
 			stripeKeyUnitedStates: StripeKey;
-			uatMode?: boolean;
+			testMode?: boolean;
 			user?: User;
 			v2recaptchaPublicKey: string;
 		};

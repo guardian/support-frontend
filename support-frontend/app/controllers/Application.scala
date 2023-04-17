@@ -24,13 +24,13 @@ import play.twirl.api.Html
 
 case class ContributionsPaymentMethodConfigs(
     oneOffDefaultStripeConfig: StripeConfig,
-    oneOffUatStripeConfig: StripeConfig,
+    oneOffTestStripeConfig: StripeConfig,
     regularDefaultStripeConfig: StripeConfig,
-    regularUatStripeConfig: StripeConfig,
+    regularTestStripeConfig: StripeConfig,
     regularDefaultPayPalConfig: PayPalConfig,
-    regularUatPayPalConfig: PayPalConfig,
+    regularTestPayPalConfig: PayPalConfig,
     defaultAmazonPayConfig: AmazonPayConfig,
-    uatAmazonPayConfig: AmazonPayConfig,
+    testAmazonPayConfig: AmazonPayConfig,
 )
 
 class Application(
@@ -188,7 +188,7 @@ class Application(
     )
 
     val serversideTests = generateParticipations(Nil)
-    val uatMode = testUsers.isTestUser(request)
+    val testMode = testUsers.isTestUser(request)
 
     views.html.contributions(
       title = "Support the Guardian",
@@ -199,13 +199,13 @@ class Application(
       description = stringsConfig.contributionsLandingDescription,
       paymentMethodConfigs = ContributionsPaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
-        oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
+        oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
         regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
-        regularUatStripeConfig = regularStripeConfigProvider.get(true),
+        regularTestStripeConfig = regularStripeConfigProvider.get(true),
         regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-        regularUatPayPalConfig = payPalConfigProvider.get(true),
+        regularTestPayPalConfig = payPalConfigProvider.get(true),
         defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
-        uatAmazonPayConfig = amazonPayConfigProvider.get(true),
+        testAmazonPayConfig = amazonPayConfigProvider.get(true),
       ),
       paymentApiUrl = paymentAPIService.paymentAPIUrl,
       paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
@@ -215,7 +215,7 @@ class Application(
       geoData = geoData,
       shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
-      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey,
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey,
       serversideTests = serversideTests,
     )
   }
@@ -245,7 +245,7 @@ class Application(
 
     val geoData = request.geoData
     val serversideTests = generateParticipations(Nil)
-    val uatMode = testUsers.isTestUser(request)
+    val testMode = testUsers.isTestUser(request)
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     Ok(
@@ -259,13 +259,13 @@ class Application(
         description = stringsConfig.contributionsLandingDescription,
         paymentMethodConfigs = ContributionsPaymentMethodConfigs(
           oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
-          oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
+          oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
           regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
-          regularUatStripeConfig = regularStripeConfigProvider.get(true),
+          regularTestStripeConfig = regularStripeConfigProvider.get(true),
           regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-          regularUatPayPalConfig = payPalConfigProvider.get(true),
+          regularTestPayPalConfig = payPalConfigProvider.get(true),
           defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
-          uatAmazonPayConfig = amazonPayConfigProvider.get(true),
+          testAmazonPayConfig = amazonPayConfigProvider.get(true),
         ),
         paymentApiUrl = paymentAPIService.paymentAPIUrl,
         paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
@@ -275,7 +275,7 @@ class Application(
         geoData = geoData,
         shareImageUrl = shareImageUrl(settings),
         shareUrl = "https://support.theguardian.com/contribute",
-        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey,
+        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey,
         serversideTests = serversideTests,
       ),
     ).withSettingsSurrogateKey

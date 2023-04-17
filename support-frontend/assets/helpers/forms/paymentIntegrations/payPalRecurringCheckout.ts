@@ -219,7 +219,7 @@ const setupPayment = (
 
 const getPayPalEnvironment = (isTestUser: boolean): string =>
 	isTestUser
-		? window.guardian.payPalEnvironment.uat
+		? window.guardian.payPalEnvironment.test
 		: window.guardian.payPalEnvironment.default;
 
 const createAgreement = async (
