@@ -73,12 +73,12 @@ new PaymentApi(app, "Payment-API-PROD", {
   },
 });
 
-new AcquisitionEventsApi(app, "AcquisitionEventsAPI-CODE", {
+new AcquisitionEventsApi(app, "Acquisition-Events-API-CODE", {
   stack: "support",
   stage: "CODE",
 });
 
-new AcquisitionEventsApi(app, "AcquisitionEventsAPI-PROD", {
+new AcquisitionEventsApi(app, "Acquisition-Events-API-PROD", {
   stack: "support",
   stage: "PROD",
 });
