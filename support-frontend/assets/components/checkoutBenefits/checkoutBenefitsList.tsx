@@ -17,7 +17,7 @@ const container = css`
 
 const heading = css`
 	${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
-	max-width: 280px;
+	max-width: 250px;
 `;
 
 const checkListIcon = css`
