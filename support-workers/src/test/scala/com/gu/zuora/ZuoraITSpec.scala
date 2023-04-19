@@ -159,7 +159,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   it should "work for a paper subscription" in doRequest(Right(directDebitSubscriptionRequestPaper))
 
   private def doRequest(request: Either[PreviewSubscribeRequest, SubscribeRequest]) = {
-    // Accounts will be created (or previewed) in Sandbox
+    // Accounts will be created (or previewed) in CODE
     val zuoraService = new ZuoraService(
       Configuration.load().zuoraConfigProvider.get(),
       RequestRunners.configurableFutureRunner(30.seconds),

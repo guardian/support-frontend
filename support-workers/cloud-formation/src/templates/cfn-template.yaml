@@ -38,9 +38,6 @@ Mappings:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
-      RedemptionTables:
-      - arn:aws:dynamodb:*:*:table/redemption-codes-UAT
-      - arn:aws:dynamodb:*:*:table/redemption-codes-PROD
       S3Files:
       - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json
       - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-DEV/catalog.json

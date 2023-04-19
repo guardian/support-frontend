@@ -40,7 +40,7 @@ type PropTypes = {
 
 const getSellerId = (isTestUser: boolean): string =>
 	isTestUser
-		? window.guardian.amazonPaySellerId.uat
+		? window.guardian.amazonPaySellerId.test
 		: window.guardian.amazonPaySellerId.default;
 
 function AmazonPayForm(props: PropTypes): JSX.Element | null {

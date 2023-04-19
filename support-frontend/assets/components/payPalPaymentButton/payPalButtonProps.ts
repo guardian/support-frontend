@@ -37,7 +37,7 @@ export function getPayPalButtonProps({
 }: PayPalPropsRequirements): PayPalButtonProps {
 	return {
 		env: isTestUser
-			? window.guardian.payPalEnvironment.uat
+			? window.guardian.payPalEnvironment.test
 			: window.guardian.payPalEnvironment.default,
 		style: {
 			color: 'blue',

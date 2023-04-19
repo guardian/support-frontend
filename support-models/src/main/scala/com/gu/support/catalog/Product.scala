@@ -2,7 +2,7 @@ package com.gu.support.catalog
 
 import com.gu.i18n.CountryGroup
 import com.gu.support.config.TouchPointEnvironment
-import com.gu.support.config.TouchPointEnvironments.{PROD, SANDBOX}
+import com.gu.support.config.TouchPointEnvironments.{PROD, CODE}
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
@@ -57,7 +57,7 @@ case object SupporterPlus extends Product {
         productRatePlan("8a128ed885fc6ded018602296ace3eb8", Monthly, SupporterPlusV2),
         productRatePlan("8a128ed885fc6ded01860228f77e3d5a", Annual, SupporterPlusV2),
       ),
-      SANDBOX -> List(
+      CODE -> List(
         productRatePlan("8ad09fc281de1ce70181de3b251736a4", Monthly, SupporterPlusV1),
         productRatePlan("8ad09fc281de1ce70181de3b28ee3783", Annual, SupporterPlusV1),
         productRatePlan("8ad08cbd8586721c01858804e3275376", Monthly, SupporterPlusV2),
@@ -83,7 +83,7 @@ case object DigitalPack extends Product {
         productRatePlan("2c92a00d779932ef0177a65430d30ac1", Quarterly, "Digital Subscription Three Month Gift", Gift),
         productRatePlan("2c92a00c77992ba70177a6596f710265", Annual, "Digital Subscription One Year Gift", Gift),
       ),
-      SANDBOX -> List(
+      CODE -> List(
         productRatePlan("2c92c0f84bbfec8b014bc655f4852d9d", Monthly, "Digital Subscription Monthly"),
         productRatePlan("2c92c0f94bbffaaa014bc6a4212e205b", Annual, "Digital Subscription Annual"),
         productRatePlan("2c92c0f8778bf8f60177915b477714aa", Quarterly, "Digital Subscription Three Month Gift", Gift),
@@ -111,7 +111,7 @@ case object Contribution extends Product {
           "Annual Contribution",
         ),
       ),
-      SANDBOX -> List(
+      CODE -> List(
         ProductRatePlan(
           "2c92c0f85a6b134e015a7fcd9f0c7855",
           Monthly,
@@ -160,20 +160,7 @@ case object Paper extends Product {
       collection("2c92a00870ec598001710740c78d2f13", Everyday, "Voucher Everyday"),
     )
 
-  private val uatCollection: List[ProductRatePlan[Paper.type]] = List(
-    collection("2c92c0f870f682820171070489d542da", SaturdayPlus, "Voucher Saturday+"),
-    collection("2c92c0f870f682820171070488df42ce", Saturday, "Voucher Saturday"),
-    collection("2c92c0f870f68282017107047b214214", SundayPlus, "Voucher Sunday+"),
-    collection("2c92c0f870f682820171070487f142c4", Sunday, "Voucher Sunday"),
-    collection("2c92c0f870f682820171070478d441f5", WeekendPlus, "Voucher Weekends+"),
-    collection("2c92c0f870f682820171070477d841e2", Weekend, "Voucher Weekend"),
-    collection("2c92c0f870f682820171070470ad4120", SixdayPlus, "Voucher Sixday+"),
-    collection("2c92c0f870f68282017107047d054230", Sixday, "Voucher Sixday"),
-    collection("2c92c0f870f682820171070481bf4264", EverydayPlus, "Voucher Everyday+"),
-    collection("2c92c0f870f682820171070474ee419d", Everyday, "Voucher Everyday"),
-  )
-
-  private val sandboxCollection: List[ProductRatePlan[Paper.type]] = List(
+  private val codeCollection: List[ProductRatePlan[Paper.type]] = List(
     collection("2c92c0f86fa49142016fa49eb1732a39", SaturdayPlus, "Voucher Saturday paper+"),
     collection("2c92c0f86fa49142016fa49ea442291b", Saturday, "Voucher Saturday paper"),
     collection("2c92c0f86fa49142016fa49ea90e2976", SundayPlus, "Voucher Sunday paper+"),
@@ -200,7 +187,7 @@ case object Paper extends Product {
         homeDelivery("2c92a0fd560d132301560e43cf041a3c", EverydayPlus, "Home Delivery Everyday+"),
         homeDelivery("2c92a0fd560d13880156136b72e50f0c", Everyday, "Home Delivery Everyday"),
       )),
-      SANDBOX -> (sandboxCollection ++ List(
+      CODE -> (codeCollection ++ List(
         homeDelivery("2c92c0f961f9cf300161fc4f71473a34", SaturdayPlus, "Home Delivery Saturday+"),
         homeDelivery("2c92c0f961f9cf300161fc4d2e3e3664", Saturday, "Home Delivery Saturday"),
         homeDelivery("2c92c0f955c3cf0f0155c5d9e83a3cb7", SundayPlus, "Home Delivery Sunday+"),
@@ -297,7 +284,7 @@ case object GuardianWeekly extends Product {
           readerType = Gift,
         ),
       ),
-      SANDBOX -> List(
+      CODE -> List(
         restOfWorld(
           "2c92c0f965f2122101660fbc75a16c38",
           SixWeekly,

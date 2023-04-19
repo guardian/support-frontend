@@ -17,8 +17,8 @@ import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporter
 global.window.guardian = {
 	...global.window.guardian,
 	stripeKeyDefaultCurrencies: {
-		ONE_OFF: { uat: '', default: '' },
-		REGULAR: { uat: '', default: '' },
+		ONE_OFF: { test: '', default: '' },
+		REGULAR: { test: '', default: '' },
 	},
 };
 
