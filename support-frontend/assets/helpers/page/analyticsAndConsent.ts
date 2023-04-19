@@ -58,13 +58,8 @@ function shouldInitCmp(): boolean {
 	 * We only init the CMP on condition we're not:
 	 *   - server side rendering (ssr) the page (@guardian/consent-management-platform breaks ssr)
 	 *   - a post deploy user
-	 *   - on the in-Epic checkout page (this page is iframed into dotcom, so doesn't need its own CMP)
 	 */
-	return !isPostDeployUser() && !isInEpicCheckoutPage();
-}
-
-function isInEpicCheckoutPage(): boolean {
-	return window.location.pathname.includes('contribute-in-epic');
+	return !isPostDeployUser();
 }
 
 // ----- Exports ----- //

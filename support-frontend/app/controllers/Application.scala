@@ -100,14 +100,6 @@ class Application(
     RedirectWithEncodedQueryString(url, request.queryString, status = FOUND)
   }
 
-  def contributeInEpicGeoRedirect(): Action[AnyContent] = GeoTargetedCachedAction() { implicit request =>
-    RedirectWithEncodedQueryString(
-      getGeoRedirectUrl(request.geoData.countryGroup, "contribute-in-epic"),
-      request.queryString,
-      status = FOUND,
-    )
-  }
-
   def redirect(location: String): Action[AnyContent] = CachedAction() { implicit request =>
     RedirectWithEncodedQueryString(location, request.queryString, status = FOUND)
   }
@@ -237,47 +229,6 @@ class Application(
           ausMomentMapSocialImageUrl,
         ),
       )(),
-    ).withSettingsSurrogateKey
-  }
-
-  def contributionsCheckoutInEpic(countryCode: String): Action[AnyContent] = PrivateAction { implicit request =>
-    implicit val settings: AllSettings = settingsProvider.getAllSettings()
-
-    val geoData = request.geoData
-    val serversideTests = generateParticipations(Nil)
-    val uatMode = testUsers.isTestUser(request)
-    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
-
-    Ok(
-      views.html.contributions(
-        title = "Contributions checkout in Epic",
-        id = s"contributions-landing-page-in-epic-$countryCode",
-        mainElement =
-          assets.getSsrCacheContentsAsHtml("contributions-checkout-in-epic", "contributions-checkout-in-epic.html"),
-        js = Left(RefPath("contributionsCheckoutInEpic.js")),
-        css = Right(StyleContent(Html("body { margin: 0; }"))),
-        description = stringsConfig.contributionsLandingDescription,
-        paymentMethodConfigs = ContributionsPaymentMethodConfigs(
-          oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
-          oneOffUatStripeConfig = oneOffStripeConfigProvider.get(true),
-          regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
-          regularUatStripeConfig = regularStripeConfigProvider.get(true),
-          regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-          regularUatPayPalConfig = payPalConfigProvider.get(true),
-          defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
-          uatAmazonPayConfig = amazonPayConfigProvider.get(true),
-        ),
-        paymentApiUrl = paymentAPIService.paymentAPIUrl,
-        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-        membersDataApiUrl = membersDataApiUrl,
-        idUser = None,
-        guestAccountCreationToken = guestAccountCreationToken,
-        geoData = geoData,
-        shareImageUrl = shareImageUrl(settings),
-        shareUrl = "https://support.theguardian.com/contribute",
-        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(uatMode).v2PublicKey,
-        serversideTests = serversideTests,
-      ),
     ).withSettingsSurrogateKey
   }
 
