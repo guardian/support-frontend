@@ -27,8 +27,6 @@ Mappings:
     CODE:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
-      RedemptionTables:
-      - arn:aws:dynamodb:*:*:table/redemption-codes-DEV
       S3Files:
       - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-DEV/catalog.json
       - arn:aws:s3:::support-workers-private/*
@@ -107,14 +105,6 @@ Resources:
               - dynamodb:Query
               - dynamodb:DescribeTable
               Resource: !FindInMap [StageVariables, !Ref Stage, DynamoDBTables]
-        - PolicyName: DynamoRedemptions
-          PolicyDocument:
-            Statement:
-            - Effect: Allow
-              Action:
-              - dynamodb:GetItem
-              - dynamodb:UpdateItem
-              Resource: !FindInMap [StageVariables, !Ref Stage, RedemptionTables]
         - PolicyName: SupporterProductDataDynamoTable
           PolicyDocument:
             Statement:
