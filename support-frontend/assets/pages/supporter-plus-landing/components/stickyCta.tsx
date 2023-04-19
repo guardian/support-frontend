@@ -50,7 +50,6 @@ export default function StickyCta({
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<LinkButton
 					cssOverrides={buttonOverrides}
-					size="small"
 					onClick={onCtaClick}
 					href={ctaLink}
 					role="button"
