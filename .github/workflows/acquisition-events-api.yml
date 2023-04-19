@@ -62,4 +62,6 @@ jobs:
 
       - name: Build and upload to RiffRaff
         run: |
+          export LAST_TEAMCITY_BUILD=6000
+          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
           sbt "project acquisition-events-api" riffRaffUpload
