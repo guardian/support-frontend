@@ -65,8 +65,6 @@ export function CheckoutBenefitsListContainer({
 		isUserInAbVariant('emotionalBenefitTest', 'variant'),
 	);
 
-	console.log('isEmotionalBenefitTestVariant', isEmotionalBenefitTestVariant);
-
 	const contributionType = useContributionsSelector(getContributionType);
 	if (isOneOff(contributionType)) {
 		return null;
@@ -83,7 +81,6 @@ export function CheckoutBenefitsListContainer({
 	const useOptimisedMobileLayout = useContributionsSelector(
 		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
 	);
-	console.log('useOptimisedMobileLayout', useOptimisedMobileLayout);
 
 	const currency = currencies[currencyId];
 
