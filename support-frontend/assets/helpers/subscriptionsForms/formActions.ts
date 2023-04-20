@@ -72,16 +72,8 @@ export type Action =
 			formSubmitted: boolean;
 	  }
 	| {
-			type: 'SET_BILLING_ADDRESS_IS_SAME';
-			isSame: boolean;
-	  }
-	| {
 			type: 'SET_ORDER_IS_GIFT';
 			orderIsAGift: boolean;
-	  }
-	| {
-			type: 'SET_DELIVERY_INSTRUCTIONS';
-			instructions: Option<string>;
 	  }
 	| {
 			type: 'SET_GIFT_MESSAGE';
