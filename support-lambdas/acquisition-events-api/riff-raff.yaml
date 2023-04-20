@@ -15,5 +15,5 @@ deployments:
     app: acquisition-events-api
     parameters:
       templateStagePaths:
-        CODE: Acquisition-Events-API-CODE.template.json
-        PROD: Acquisition-Events-API-PROD.template.json
+        CODE: AcquisitionEventsAPI-CODE.template.json
+        PROD: AcquisitionEventsAPI-PROD.template.json
