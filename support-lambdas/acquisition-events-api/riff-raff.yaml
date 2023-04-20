@@ -6,9 +6,7 @@ deployments:
     type: aws-lambda
     parameters:
       bucket: membership-dist
-      functionNames:
-       - acquisition-events-api-
-       - acquisition-events-api-cdk-
+      functionNames: [acquisition-events-api-]
       fileName: acquisition-events-api.jar
       prefixStack: false
     dependencies: [ cfn ]
