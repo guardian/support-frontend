@@ -1,6 +1,7 @@
 import "source-map-support/register";
 import { App } from "aws-cdk-lib";
-import {AcquisitionEventsApi} from "../lib/acquisition-events-api";
+import { AcquisitionEventsApi } from "../lib/acquisition-events-api";
+import type { AcquisitionEventsApiProps} from "../lib/acquisition-events-api";
 import { Frontend } from "../lib/frontend";
 import {PaymentApi} from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
@@ -73,12 +74,25 @@ new PaymentApi(app, "Payment-API-PROD", {
   },
 });
 
-new AcquisitionEventsApi(app, "Acquisition-Events-API-CODE", {
+export const codeProps: AcquisitionEventsApiProps = {
   stack: "support",
   stage: "CODE",
-});
+  app: "acquisition-events-api",
+  certificateId:"b384a6a0-2f54-4874-b99b-96eeff96c009",
+  domainName: "acquisition-events-code.support.guardianapis.com",
+  hostedZoneName:"support.guardianapis.com.",
+  hostedZoneId:"Z3KO35ELNWZMSX",
+};
 
-new AcquisitionEventsApi(app, "Acquisition-Events-API-PROD", {
+export const prodProps: AcquisitionEventsApiProps = {
   stack: "support",
   stage: "PROD",
-});
+  app: "acquisition-events-api",
+  certificateId: "b384a6a0-2f54-4874-b99b-96eeff96c009",
+  domainName: "acquisition-events.support.guardianapis.com",
+  hostedZoneName: "support.guardianapis.com.",
+  hostedZoneId: "Z3KO35ELNWZMSX",
+};
+
+new AcquisitionEventsApi(app, "AcquisitionEventsApi-CODE", codeProps);
+new AcquisitionEventsApi(app, "AcquisitionEventsApi-PROD", prodProps);
