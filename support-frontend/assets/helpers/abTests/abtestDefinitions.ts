@@ -124,4 +124,27 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 12,
 	},
+	emotionalBenefitTest: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+				breakpoint: {
+					minWidth: 'tablet',
+				},
+			},
+		},
+		isActive: true,
+		referrerControlled: false,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		seed: 13,
+	},
 };

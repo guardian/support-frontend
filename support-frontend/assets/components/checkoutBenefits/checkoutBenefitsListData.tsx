@@ -32,10 +32,12 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 		<SvgCrossRound isAnnouncedByScreenReader size="small" />
 	);
 
-export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
+export const checkListData = (
+	{ higherTier }: TierUnlocks,
+	isemotionalBenefitTestVariant: boolean,
+): CheckListData[] => {
 	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
-
-	return [
+	const dataWithoutEmotionalBenefits = [
 		{
 			icon: getSvgIcon(true),
 			text: (
@@ -75,4 +77,19 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
 	];
+
+	return isemotionalBenefitTestVariant
+		? [
+				{
+					icon: getSvgIcon(true),
+					text: (
+						<p>
+							<span css={boldText}>Make a bigger impact. </span>Sustain open,
+							independent journalism long term
+						</p>
+					),
+				},
+				...dataWithoutEmotionalBenefits,
+		  ]
+		: dataWithoutEmotionalBenefits;
 };

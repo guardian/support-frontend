@@ -61,6 +61,12 @@ export function CheckoutBenefitsListContainer({
 }: CheckoutBenefitsListContainerProps): JSX.Element | null {
 	const dispatch = useContributionsDispatch();
 
+	const isEmotionalBenefitTestVariant = useContributionsSelector(
+		isUserInAbVariant('emotionalBenefitTest', 'variant'),
+	);
+
+	console.log('isEmotionalBenefitTestVariant', isEmotionalBenefitTestVariant);
+
 	const contributionType = useContributionsSelector(getContributionType);
 	if (isOneOff(contributionType)) {
 		return null;
@@ -77,6 +83,7 @@ export function CheckoutBenefitsListContainer({
 	const useOptimisedMobileLayout = useContributionsSelector(
 		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
 	);
+	console.log('useOptimisedMobileLayout', useOptimisedMobileLayout);
 
 	const currency = currencies[currencyId];
 
@@ -113,9 +120,12 @@ export function CheckoutBenefitsListContainer({
 			userSelectedAmountWithCurrency,
 			contributionType,
 		),
-		checkListData: checkListData({
-			higherTier,
-		}),
+		checkListData: checkListData(
+			{
+				higherTier,
+			},
+			isEmotionalBenefitTestVariant,
+		),
 		buttonCopy: getbuttonCopy(
 			higherTier,
 			thresholdPriceWithCurrency,
