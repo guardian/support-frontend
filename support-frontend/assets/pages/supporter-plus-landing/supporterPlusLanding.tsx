@@ -12,8 +12,10 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CardClickable } from 'components/cardClickable/cardClickable';
+import { CardClickableContainer } from 'components/cardClickable/cardClickableContainer';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -34,6 +36,7 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import { getPaymentMethodToSelect } from 'helpers/forms/checkouts';
 import {
 	AUDCountries,
 	Canada,
@@ -43,10 +46,18 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
+import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import {
+	isUserInAbVariant,
+	isUserInAnyAbVariant,
+} from 'helpers/redux/commonState/selectors';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { CheckoutDivider } from './components/checkoutDivider';
 import { DirectDebitContainer } from './components/directDebitWrapper';
@@ -125,7 +136,10 @@ export function SupporterPlusLandingPage({
 	);
 
 	const optimisedMobileLayout = useContributionsSelector(
-		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
+		isUserInAnyAbVariant(
+			['supporterPlusMobileTest1', 'singleLessProminent'],
+			'variant',
+		),
 	);
 
 	const { paymentComplete, isWaiting } = useContributionsSelector(
@@ -148,6 +162,27 @@ export function SupporterPlusLandingPage({
 		subPath: '/contribute',
 	};
 	const heading = <LandingPageHeading />;
+
+	const [supportOnceDisplay, setSupportOnceDisplay] = useState(
+		useContributionsSelector(
+			isUserInAbVariant('singleLessProminent', 'variant'),
+		),
+	);
+
+	const dispatch = useContributionsDispatch();
+	function onCardClick() {
+		setSupportOnceDisplay(false);
+
+		const paymentMethodToSelect = getPaymentMethodToSelect(
+			contributionType,
+			switches,
+			countryId,
+			countryGroupId,
+		);
+
+		dispatch(setProductType('ONE_OFF'));
+		dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
+	}
 
 	useEffect(() => {
 		if (paymentComplete) {
@@ -221,8 +256,16 @@ export function SupporterPlusLandingPage({
 						<Box
 							cssOverrides={optimisedMobileLayout ? shorterBoxMargin : css``}
 						>
-							<AmountAndBenefits />
+							<AmountAndBenefits hideOneOff={supportOnceDisplay} />
 						</Box>
+						{supportOnceDisplay && (
+							<CardClickableContainer
+								renderCardClickable={(cardClickableProps) => (
+									<CardClickable {...cardClickableProps} />
+								)}
+								onCardClick={onCardClick}
+							/>
+						)}
 						<Box
 							cssOverrides={optimisedMobileLayout ? shorterBoxMargin : css``}
 						>

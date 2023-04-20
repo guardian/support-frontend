@@ -11,9 +11,16 @@ import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFre
 import { PriceCards } from 'components/priceCards/priceCards';
 import { PriceCardsContainer } from 'components/priceCards/priceCardsContainer';
 
-export function AmountAndBenefits(): JSX.Element {
+type AmountAndBenefitsProps = {
+	hideOneOff?: boolean;
+};
+
+export function AmountAndBenefits({
+	hideOneOff,
+}: AmountAndBenefitsProps): JSX.Element {
 	return (
 		<PaymentFrequencyTabsContainer
+			hideOneOff={hideOneOff}
 			render={(tabProps) => (
 				<PaymentFrequencyTabs
 					{...tabProps}
