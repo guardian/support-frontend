@@ -381,7 +381,7 @@ function PaperCheckoutForm(props: PropTypes) {
 									label="Yes"
 									name="billingAddressIsSame"
 									checked={props.billingAddressIsSame}
-									onChange={() => props.setBillingAddressIsSame(true)}
+									onChange={() => props.setIsBillingAddressSame(true)}
 								/>
 
 								<Radio
@@ -390,7 +390,7 @@ function PaperCheckoutForm(props: PropTypes) {
 									value="no"
 									name="billingAddressIsSame"
 									checked={!props.billingAddressIsSame}
-									onChange={() => props.setBillingAddressIsSame(false)}
+									onChange={() => props.setIsBillingAddressSame(false)}
 								/>
 							</RadioGroup>
 						</Rows>

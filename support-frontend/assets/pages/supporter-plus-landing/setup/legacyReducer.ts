@@ -4,6 +4,8 @@ import { combineReducers } from 'redux';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { billingAddressReducer } from 'helpers/redux/checkout/address/reducer';
 import type { AddressState } from 'helpers/redux/checkout/address/state';
+import { addressMetaReducer } from 'helpers/redux/checkout/addressMeta/reducer';
+import type { AddressMetaState } from 'helpers/redux/checkout/addressMeta/state';
 import { csrfReducer } from 'helpers/redux/checkout/csrf/reducer';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { marketingConsentReducer } from 'helpers/redux/checkout/marketingConsent/reducer';
@@ -40,6 +42,7 @@ export interface PageState {
 		recaptcha: RecaptchaState;
 		payment: PaymentState;
 		billingAddress: AddressState;
+		addressMeta: AddressMetaState;
 		thankYou: ThankYouState;
 	};
 	user: UserState;
@@ -90,6 +93,7 @@ function initReducer(): Reducer<PageState> {
 			recaptcha: recaptchaReducer,
 			payment: paymentReducer,
 			billingAddress: billingAddressReducer,
+			addressMeta: addressMetaReducer,
 			thankYou: thankYouReducer,
 		}),
 		user: userReducer,

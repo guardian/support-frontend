@@ -163,8 +163,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
 			? 'Sorry there was a problem'
 			: 'Sorry we could not process your payment';
 
-	const setBillingAddressIsSameHandler = (newState: boolean) => {
-		props.setBillingAddressIsSame(newState);
+	const setIsBillingAddressSameHandler = (newState: boolean) => {
+		props.setIsBillingAddressSame(newState);
 		props.setBillingCountry(props.deliveryCountry);
 	};
 
@@ -251,7 +251,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 									label="Yes"
 									name="billingAddressIsSame"
 									checked={props.billingAddressIsSame}
-									onChange={() => setBillingAddressIsSameHandler(true)}
+									onChange={() => setIsBillingAddressSameHandler(true)}
 								/>
 
 								<Radio
@@ -260,7 +260,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 									value="no"
 									name="billingAddressIsSame"
 									checked={!props.billingAddressIsSame}
-									onChange={() => setBillingAddressIsSameHandler(false)}
+									onChange={() => setIsBillingAddressSameHandler(false)}
 								/>
 							</RadioGroup>
 						</Rows>

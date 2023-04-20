@@ -17,6 +17,10 @@ import {
 	setDeliveryTownCity,
 } from 'helpers/redux/checkout/address/actions';
 import {
+	setDeliveryInstructions,
+	setIsBillingAddressSame,
+} from 'helpers/redux/checkout/addressMeta/actions';
+import {
 	setEmail as setEmailGift,
 	setFirstName as setFirstNameGift,
 	setGiftDeliveryDate,
@@ -145,10 +149,7 @@ const formActionCreators = {
 	setStartDate,
 	setBillingPeriod,
 	setPaymentMethod,
-	setBillingAddressIsSame: (isSame: boolean): Action => ({
-		type: 'SET_BILLING_ADDRESS_IS_SAME',
-		isSame,
-	}),
+	setIsBillingAddressSame,
 	onPaymentAuthorised:
 		(authorisation: PaymentAuthorisation) =>
 		(
@@ -159,10 +160,7 @@ const formActionCreators = {
 			onPaymentAuthorised(authorisation, dispatch, state);
 		},
 	setGiftStatus: setOrderIsAGift,
-	setDeliveryInstructions: (instructions: string | null): Action => ({
-		type: 'SET_DELIVERY_INSTRUCTIONS',
-		instructions,
-	}),
+	setDeliveryInstructions,
 	setGiftMessage,
 	setDigitalGiftDeliveryDate: setGiftDeliveryDate,
 	setAddDigitalSubscription: setAddDigital,

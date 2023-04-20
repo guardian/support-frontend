@@ -5,6 +5,7 @@ import {
 	deliveryAddressReducer,
 } from 'helpers/redux/checkout/address/reducer';
 import type { AddressState } from 'helpers/redux/checkout/address/state';
+import { addressMetaReducer } from 'helpers/redux/checkout/addressMeta/reducer';
 import { csrfReducer } from 'helpers/redux/checkout/csrf/reducer';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { giftingReducer } from 'helpers/redux/checkout/giftingState/reducer';
@@ -70,6 +71,7 @@ export function createReducer() {
 			recaptcha: recaptchaReducer,
 			deliveryAddress: deliveryAddressReducer,
 			billingAddress: billingAddressReducer,
+			addressMeta: addressMetaReducer,
 			payment: paymentReducer,
 			thankYou: thankYouReducer,
 		}),

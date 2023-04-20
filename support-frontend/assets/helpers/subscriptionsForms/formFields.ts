@@ -38,7 +38,7 @@ export type FormFields = PersonalDetailsState &
 	ProductFields & {
 		paymentMethod: PaymentMethod;
 		billingAddressIsSame: boolean;
-		deliveryInstructions: Option<string>;
+		deliveryInstructions?: string;
 		csrUsername?: string;
 		salesforceCaseId?: string;
 	};
@@ -77,9 +77,11 @@ function getFormFields(state: SubscriptionsState): FormFields {
 		fulfilmentOption: state.page.checkoutForm.product.fulfilmentOption,
 		productOption: state.page.checkoutForm.product.productOption,
 		product: getSubscriptionType(state),
-		billingAddressIsSame: state.page.checkout.billingAddressIsSame,
+		billingAddressIsSame:
+			state.page.checkoutForm.addressMeta.billingAddressIsSame,
 		orderIsAGift: state.page.checkoutForm.product.orderIsAGift,
-		deliveryInstructions: state.page.checkout.deliveryInstructions,
+		deliveryInstructions:
+			state.page.checkoutForm.addressMeta.deliveryInstructions,
 		giftMessage: state.page.checkoutForm.gifting.giftMessage,
 		giftDeliveryDate: state.page.checkoutForm.gifting.giftDeliveryDate,
 	};
