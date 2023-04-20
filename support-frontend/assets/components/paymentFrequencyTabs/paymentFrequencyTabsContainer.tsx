@@ -62,7 +62,7 @@ export function PaymentFrequencyTabsContainer({
 		return !!tab;
 	};
 
-	const tabs: TabProps[] = contributionTypes[countryGroupId]
+	const tabs = contributionTypes[countryGroupId]
 		.map(({ contributionType }) => {
 			if (hideOneOff && contributionType === 'ONE_OFF') {
 				return;
@@ -74,7 +74,7 @@ export function PaymentFrequencyTabsContainer({
 				};
 			}
 		})
-		.filter(isTab) as TabProps[];
+		.filter(isTab);
 
 	return render({
 		ariaLabel,
