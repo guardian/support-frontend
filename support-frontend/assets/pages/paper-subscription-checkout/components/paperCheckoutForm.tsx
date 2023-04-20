@@ -237,6 +237,10 @@ function PaperCheckoutForm(props: PropTypes) {
 
 	const expandedPricingText = `${cleanedPrice} per month`;
 
+	const deliveryInstructionsError = props.formErrors.find(
+		(error) => error.field === 'deliveryInstructions',
+	);
+
 	useEffect(() => {
 		// Price of the 'Plus' product that corresponds to the selected product option
 		const plusPrice = includesDigiSub
@@ -351,6 +355,7 @@ function PaperCheckoutForm(props: PropTypes) {
 						<DeliveryAddress countries={newspaperCountries} />
 						{isHomeDelivery ? (
 							<TextArea
+								error={deliveryInstructionsError?.message}
 								css={controlTextAreaResizing}
 								id="delivery-instructions"
 								data-qm-masking="blocklist"
