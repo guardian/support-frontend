@@ -178,8 +178,7 @@ export function SupporterPlusLandingPage({
 		);
 
 		dispatch(setProductType('ONE_OFF'));
-		dispatch(setPaymentMethod(paymentMethodToSelect));
-		//dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
+		dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
 	}
 
 	useEffect(() => {
