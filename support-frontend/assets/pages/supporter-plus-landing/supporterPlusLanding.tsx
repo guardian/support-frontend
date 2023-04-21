@@ -61,7 +61,6 @@ import {
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { CheckoutDivider } from './components/checkoutDivider';
 import { DirectDebitContainer } from './components/directDebitWrapper';
-import { ExistingRecurringContributorMessage } from './components/existingRecurringContributorMessage';
 import { GuardianTsAndCs } from './components/guardianTsAndCs';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
@@ -74,14 +73,11 @@ const checkoutContainer = css`
 	position: relative;
 	color: ${neutral[7]};
 	${textSans.medium()};
-
 	padding-top: ${space[3]}px;
 	padding-bottom: ${space[9]}px;
-
 	${from.tablet} {
 		padding-bottom: ${space[12]}px;
 	}
-
 	${from.desktop} {
 		padding-top: ${space[6]}px;
 	}
@@ -183,6 +179,7 @@ export function SupporterPlusLandingPage({
 
 		dispatch(setProductType('ONE_OFF'));
 		dispatch(setPaymentMethod(paymentMethodToSelect));
+		//dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
 	}
 
 	useEffect(() => {
@@ -303,7 +300,6 @@ export function SupporterPlusLandingPage({
 											countryGroupId,
 										)}
 									/>
-									<ExistingRecurringContributorMessage />
 									<PaymentFailureMessage />
 									<DirectDebitContainer />
 								</ContributionsStripe>

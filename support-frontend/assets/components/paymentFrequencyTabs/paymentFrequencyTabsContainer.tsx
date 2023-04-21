@@ -56,6 +56,7 @@ export function PaymentFrequencyTabsContainer({
 
 		dispatch(setProductType(contributionType));
 		dispatch(setPaymentMethod(paymentMethodToSelect));
+		//dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
 	}
 
 	const isTab = (tab: TabProps | undefined): tab is TabProps => {
