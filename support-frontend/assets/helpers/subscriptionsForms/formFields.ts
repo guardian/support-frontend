@@ -37,7 +37,7 @@ export type FormFields = PersonalDetailsState &
 	GiftingFields &
 	ProductFields & {
 		paymentMethod: PaymentMethod;
-		billingAddressIsSame: boolean;
+		billingAddressMatchesDelivery: boolean;
 		deliveryInstructions?: string;
 		csrUsername?: string;
 		salesforceCaseId?: string;
@@ -49,6 +49,7 @@ export type FormState = Omit<
 	| keyof GiftingFields
 	| keyof ProductFields
 	| 'paymentMethod'
+	| 'billingAddressMatchesDelivery'
 > & {
 	stage: Stage;
 	formErrors: Array<FormError<FormField>>;
@@ -77,8 +78,8 @@ function getFormFields(state: SubscriptionsState): FormFields {
 		fulfilmentOption: state.page.checkoutForm.product.fulfilmentOption,
 		productOption: state.page.checkoutForm.product.productOption,
 		product: getSubscriptionType(state),
-		billingAddressIsSame:
-			state.page.checkoutForm.addressMeta.billingAddressIsSame,
+		billingAddressMatchesDelivery:
+			state.page.checkoutForm.addressMeta.billingAddressMatchesDelivery,
 		orderIsAGift: state.page.checkoutForm.product.orderIsAGift,
 		deliveryInstructions:
 			state.page.checkoutForm.addressMeta.deliveryInstructions,

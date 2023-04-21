@@ -1,8 +1,8 @@
 export type AddressMetaState = {
-	billingAddressIsSame: boolean;
+	billingAddressMatchesDelivery: boolean;
 	deliveryInstructions?: string;
 };
 
 export const initialState: AddressMetaState = {
-	billingAddressIsSame: true,
+	billingAddressMatchesDelivery: true,
 };

@@ -5,7 +5,6 @@ import type { FormState } from 'helpers/subscriptionsForms/formFields';
 function createFormReducer() {
 	const initialState: FormState = {
 		stage: 'checkout',
-		billingAddressIsSame: true,
 		formErrors: [],
 		submissionError: null,
 		formSubmitted: false,

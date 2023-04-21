@@ -79,12 +79,13 @@ const marginBottom = css`
 
 // ----- Map State/Props ----- //
 function mapStateToProps(state: SubscriptionsState) {
-	const { billingAddress, deliveryAddress } = state.page.checkoutForm;
-	const { billingAddressIsSame } = state.page.checkout;
+	const { billingAddress, deliveryAddress, addressMeta } =
+		state.page.checkoutForm;
+	const { billingAddressMatchesDelivery } = addressMeta;
 
 	return {
 		...getFormFields(state),
-		billingCountry: billingAddressIsSame
+		billingCountry: billingAddressMatchesDelivery
 			? deliveryAddress.fields.country
 			: billingAddress.fields.country,
 		deliveryCountry: deliveryAddress.fields.country,
@@ -162,8 +163,8 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 			? 'Sorry there was a problem'
 			: 'Sorry we could not process your payment';
 
-	const setIsBillingAddressSameHandler = (newState: boolean) => {
-		props.setIsBillingAddressSame(newState);
+	const setBillingAddressMatchesDeliveryHandler = (newState: boolean) => {
+		props.setBillingAddressMatchesDelivery(newState);
 		props.setBillingCountry(props.deliveryCountry);
 	};
 
@@ -330,33 +331,38 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 							<RadioGroup
 								label="Is the billing address the same as the recipient's address?"
 								hideLabel
-								id="billingAddressIsSame"
-								name="billingAddressIsSame"
+								id="billingAddressMatchesDelivery"
+								name="billingAddressMatchesDelivery"
 								orientation="vertical"
 								error={
-									firstError('billingAddressIsSame', props.formErrors) as string
+									firstError(
+										'billingAddressMatchesDelivery',
+										props.formErrors,
+									) as string
 								}
 							>
 								<Radio
 									value="yes"
 									label="Yes"
-									name="billingAddressIsSame"
-									checked={props.billingAddressIsSame}
-									onChange={() => setIsBillingAddressSameHandler(true)}
+									name="billingAddressMatchesDelivery"
+									checked={props.billingAddressMatchesDelivery}
+									onChange={() => setBillingAddressMatchesDeliveryHandler(true)}
 								/>
 
 								<Radio
 									id="qa-billing-address-different"
 									label="No"
 									value="no"
-									name="billingAddressIsSame"
-									checked={!props.billingAddressIsSame}
-									onChange={() => setIsBillingAddressSameHandler(false)}
+									name="billingAddressMatchesDelivery"
+									checked={!props.billingAddressMatchesDelivery}
+									onChange={() =>
+										setBillingAddressMatchesDeliveryHandler(false)
+									}
 								/>
 							</RadioGroup>
 						</Rows>
 					</FormSection>
-					{!props.billingAddressIsSame ? (
+					{!props.billingAddressMatchesDelivery ? (
 						<FormSection title="Your billing address">
 							<BillingAddress countries={countries} />
 						</FormSection>

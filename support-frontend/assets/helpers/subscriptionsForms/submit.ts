@@ -69,7 +69,8 @@ function getAddresses(state: SubscriptionsState): Addresses {
 
 		return {
 			deliveryAddress: deliveryAddressFields,
-			billingAddress: state.page.checkoutForm.addressMeta.billingAddressIsSame
+			billingAddress: state.page.checkoutForm.addressMeta
+				.billingAddressMatchesDelivery
 				? deliveryAddressFields
 				: billingAddressFields,
 		};

@@ -17,8 +17,8 @@ import {
 	setDeliveryTownCity,
 } from 'helpers/redux/checkout/address/actions';
 import {
+	setBillingAddressMatchesDelivery,
 	setDeliveryInstructions,
-	setIsBillingAddressSame,
 } from 'helpers/redux/checkout/addressMeta/actions';
 import {
 	setEmail as setEmailGift,
@@ -141,7 +141,7 @@ const formActionCreators = {
 	setStartDate,
 	setBillingPeriod,
 	setPaymentMethod,
-	setIsBillingAddressSame,
+	setBillingAddressMatchesDelivery,
 	onPaymentAuthorised:
 		(authorisation: PaymentAuthorisation) =>
 		(

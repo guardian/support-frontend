@@ -121,7 +121,7 @@ function withDeliveryValidation(state: SubscriptionsState): AnyErrorType[] {
 }
 
 function shouldValidateBillingAddress(fields: FormFields) {
-	return !fields.billingAddressIsSame;
+	return !fields.billingAddressMatchesDelivery;
 }
 
 function dispatchAllErrors(dispatch: Dispatch, allErrors: AnyErrorType[]) {

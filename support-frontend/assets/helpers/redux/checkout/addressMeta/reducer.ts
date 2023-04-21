@@ -6,8 +6,8 @@ export const addressMetaSlice = createSlice({
 	name: 'addressMeta',
 	initialState,
 	reducers: {
-		setIsBillingAddressSame(state, action: PayloadAction<boolean>) {
-			state.billingAddressIsSame = action.payload;
+		setBillingAddressMatchesDelivery(state, action: PayloadAction<boolean>) {
+			state.billingAddressMatchesDelivery = action.payload;
 		},
 		setDeliveryInstructions(state, action: PayloadAction<string>) {
 			state.deliveryInstructions = action.payload;

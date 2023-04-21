@@ -208,7 +208,7 @@ function PaperCheckoutForm(props: PropTypes) {
 
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,
-		props.billingAddressIsSame ? props.country : props.billingCountry,
+		props.billingAddressMatchesDelivery ? props.country : props.billingCountry,
 	);
 
 	const isSubscriptionCard = props.fulfilmentOption === Collection;
@@ -375,32 +375,35 @@ function PaperCheckoutForm(props: PropTypes) {
 							<RadioGroup
 								label="Is the billing address the same as the delivery address?"
 								hideLabel
-								id="billingAddressIsSame"
-								name="billingAddressIsSame"
+								id="billingAddressMatchesDelivery"
+								name="billingAddressMatchesDelivery"
 								orientation="vertical"
-								error={firstError('billingAddressIsSame', props.formErrors)}
+								error={firstError(
+									'billingAddressMatchesDelivery',
+									props.formErrors,
+								)}
 							>
 								<Radio
 									id="qa-billing-address-same"
 									value="yes"
 									label="Yes"
-									name="billingAddressIsSame"
-									checked={props.billingAddressIsSame}
-									onChange={() => props.setIsBillingAddressSame(true)}
+									name="billingAddressMatchesDelivery"
+									checked={props.billingAddressMatchesDelivery}
+									onChange={() => props.setBillingAddressMatchesDelivery(true)}
 								/>
 
 								<Radio
 									id="qa-billing-address-different"
 									label="No"
 									value="no"
-									name="billingAddressIsSame"
-									checked={!props.billingAddressIsSame}
-									onChange={() => props.setIsBillingAddressSame(false)}
+									name="billingAddressMatchesDelivery"
+									checked={!props.billingAddressMatchesDelivery}
+									onChange={() => props.setBillingAddressMatchesDelivery(false)}
 								/>
 							</RadioGroup>
 						</Rows>
 					</FormSection>
-					{!props.billingAddressIsSame ? (
+					{!props.billingAddressMatchesDelivery ? (
 						<FormSection title="Your billing address">
 							<BillingAddress countries={newspaperCountries} />
 						</FormSection>

@@ -85,7 +85,7 @@ describe('Guardian Weekly checkout form', () => {
 						},
 					},
 					addressMeta: {
-						billingAddressIsSame: true,
+						billingAddressMatchesDelivery: true,
 					},
 				},
 			},
