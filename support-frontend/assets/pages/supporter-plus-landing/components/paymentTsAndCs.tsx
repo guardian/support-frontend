@@ -14,7 +14,10 @@ import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
-import { getDateWithOrdinal } from 'helpers/utilities/dateFormatting';
+import {
+	getDateWithOrdinal,
+	getLongMonth,
+} from 'helpers/utilities/dateFormatting';
 
 const marginTop = css`
 	margin-top: 4px;
@@ -55,6 +58,23 @@ const termsSupporterPlus = (linkText: string) => (
 		{linkText}
 	</a>
 );
+
+function TsAndCsRenewal({
+	contributionType,
+}: {
+	contributionType: ContributionType;
+}): JSX.Element {
+	const today = new Date();
+	if (contributionType === 'ANNUAL') {
+		return (
+			<>
+				on the {getDateWithOrdinal(today)} day of {getLongMonth(today)} every{' '}
+				year
+			</>
+		);
+	}
+	return <>on the {getDateWithOrdinal(today)} day of every month</>;
+}
 
 function TsAndCsFooterLinks({
 	countryGroupId,
@@ -112,12 +132,11 @@ export function PaymentTsAndCs({
 		return (
 			<>
 				<div>
-					We will attempt to take payment{amountCopy}, on the{' '}
-					{getDateWithOrdinal(new Date())} day of every{' '}
-					{frequencySingular(contributionType)}, from now until you cancel your
-					payment. Payments may take up to 6 days to be recorded in your bank
-					account. You can change how much you give or cancel your payment at
-					any time.
+					We will attempt to take payment{amountCopy},{' '}
+					<TsAndCsRenewal contributionType={contributionType} />, from now until
+					you cancel your payment. Payments may take up to 6 days to be recorded
+					in your bank account. You can change how much you give or cancel your
+					payment at any time.
 				</div>
 				<TsAndCsFooterLinks
 					countryGroupId={countryGroupId}
