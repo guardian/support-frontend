@@ -94,5 +94,5 @@ export const prodProps: AcquisitionEventsApiProps = {
   hostedZoneId: "Z3KO35ELNWZMSX",
 };
 
-new AcquisitionEventsApi(app, "AcquisitionEventsApi-CODE", codeProps);
-new AcquisitionEventsApi(app, "AcquisitionEventsApi-PROD", prodProps);
+new AcquisitionEventsApi(app, "Acquisition-Events-Api-CODE", codeProps);
+new AcquisitionEventsApi(app, "Acquisition-Events-Api-PROD", prodProps);
