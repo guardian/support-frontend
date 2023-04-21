@@ -1,4 +1,4 @@
-// import { join } from "path";
+import { join } from "path";
 import { GuApiLambda } from "@guardian/cdk";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
@@ -8,7 +8,7 @@ import { CfnBasePathMapping, CfnDomainName } from "aws-cdk-lib/aws-apigateway";
 import {Effect, Policy, PolicyStatement} from "aws-cdk-lib/aws-iam";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import {CfnRecordSet} from "aws-cdk-lib/aws-route53";
-// import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
+import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 
 export interface AcquisitionEventsApiProps extends GuStackProps {
   stack: string;
@@ -29,18 +29,18 @@ export class AcquisitionEventsApi extends GuStack {
 
     const app = "acquisition-events-api";
 
-    //  // ---- Existing CFN template ---- //
-    // const yamlTemplateFilePath = join(
-    //   __dirname,
-    //   "../..",
-    //   "support-lambdas/acquisition-events-api/cfn.yaml"
-    // );
-    // const yamlDefinedResources = new CfnInclude(this, "YamlTemplate", {
-    //   templateFile: yamlTemplateFilePath,
-    //   parameters: {
-    //     Stage: props.stage,
-    //   },
-    // });
+     // ---- Existing CFN template ---- //
+    const yamlTemplateFilePath = join(
+      __dirname,
+      "../..",
+      "support-lambdas/acquisition-events-api/cfn.yaml"
+    );
+    const yamlDefinedResources = new CfnInclude(this, "YamlTemplate", {
+      templateFile: yamlTemplateFilePath,
+      parameters: {
+        Stage: props.stage,
+      },
+    });
 
     const commonEnvironmentVariables = {
       App: app,
