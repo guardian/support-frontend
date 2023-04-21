@@ -17,11 +17,13 @@ import type {
 } from './paymentFrequenncyTabs';
 
 type PaymentFrequencyTabsContainerProps = {
+	hideOneOff?: boolean;
 	ariaLabel?: string;
 	render: (tabComponentProps: PaymentFrequencyTabsRenderProps) => JSX.Element;
 };
 
 export function PaymentFrequencyTabsContainer({
+	hideOneOff,
 	ariaLabel = 'Payment frequency options',
 	render,
 }: PaymentFrequencyTabsContainerProps): JSX.Element {
@@ -33,6 +35,12 @@ export function PaymentFrequencyTabsContainer({
 		(state) => state.common.internationalisation,
 	);
 	const productType = useContributionsSelector(getContributionType);
+
+	// Force to monthly if hideOneOff, OneOff and refresh pressed
+	const contributionType = useContributionsSelector(getContributionType);
+	if (hideOneOff && contributionType === 'ONE_OFF') {
+		onTabChange('MONTHLY');
+	}
 
 	function onTabChange(contributionType: ContributionType) {
 		const paymentMethodToSelect = getPaymentMethodToSelect(
@@ -50,15 +58,23 @@ export function PaymentFrequencyTabsContainer({
 		dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
 	}
 
-	const tabs: TabProps[] = contributionTypes[countryGroupId].map(
-		({ contributionType }) => {
-			return {
-				id: contributionType,
-				labelText: toHumanReadableContributionType(contributionType),
-				selected: contributionType === productType,
-			};
-		},
-	);
+	const isTab = (tab: TabProps | undefined): tab is TabProps => {
+		return !!tab;
+	};
+
+	const tabs = contributionTypes[countryGroupId]
+		.map(({ contributionType }) => {
+			if (hideOneOff && contributionType === 'ONE_OFF') {
+				return;
+			} else {
+				return {
+					id: contributionType,
+					labelText: toHumanReadableContributionType(contributionType),
+					selected: contributionType === productType,
+				};
+			}
+		})
+		.filter(isTab);
 
 	return render({
 		ariaLabel,
