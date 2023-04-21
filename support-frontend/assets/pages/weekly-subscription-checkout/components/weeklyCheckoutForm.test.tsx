@@ -63,7 +63,6 @@ describe('Guardian Weekly checkout form', () => {
 			page: {
 				checkout: {
 					formErrors: [],
-					billingAddressIsSame: true,
 				},
 				checkoutForm: {
 					product: {
@@ -84,6 +83,9 @@ describe('Guardian Weekly checkout form', () => {
 							country: 'GB',
 							errors: [],
 						},
+					},
+					addressMeta: {
+						billingAddressMatchesDelivery: true,
 					},
 				},
 			},

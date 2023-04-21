@@ -17,6 +17,10 @@ import {
 	setDeliveryTownCity,
 } from 'helpers/redux/checkout/address/actions';
 import {
+	setBillingAddressMatchesDelivery,
+	setDeliveryInstructions,
+} from 'helpers/redux/checkout/addressMeta/actions';
+import {
 	setEmail as setEmailGift,
 	setFirstName as setFirstNameGift,
 	setGiftDeliveryDate,
@@ -68,16 +72,8 @@ export type Action =
 			formSubmitted: boolean;
 	  }
 	| {
-			type: 'SET_BILLING_ADDRESS_IS_SAME';
-			isSame: boolean;
-	  }
-	| {
 			type: 'SET_ORDER_IS_GIFT';
 			orderIsAGift: boolean;
-	  }
-	| {
-			type: 'SET_DELIVERY_INSTRUCTIONS';
-			instructions: Option<string>;
 	  }
 	| {
 			type: 'SET_GIFT_MESSAGE';
@@ -145,10 +141,7 @@ const formActionCreators = {
 	setStartDate,
 	setBillingPeriod,
 	setPaymentMethod,
-	setBillingAddressIsSame: (isSame: boolean): Action => ({
-		type: 'SET_BILLING_ADDRESS_IS_SAME',
-		isSame,
-	}),
+	setBillingAddressMatchesDelivery,
 	onPaymentAuthorised:
 		(authorisation: PaymentAuthorisation) =>
 		(
@@ -159,10 +152,7 @@ const formActionCreators = {
 			onPaymentAuthorised(authorisation, dispatch, state);
 		},
 	setGiftStatus: setOrderIsAGift,
-	setDeliveryInstructions: (instructions: string | null): Action => ({
-		type: 'SET_DELIVERY_INSTRUCTIONS',
-		instructions,
-	}),
+	setDeliveryInstructions,
 	setGiftMessage,
 	setDigitalGiftDeliveryDate: setGiftDeliveryDate,
 	setAddDigitalSubscription: setAddDigital,

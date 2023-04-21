@@ -75,7 +75,7 @@ describe('Direct debit form', () => {
 			page: {
 				checkout: {
 					formErrors: [],
-					billingAddressIsSame: true,
+					billingAddressMatchesDelivery: true,
 				},
 				checkoutForm: {
 					product: {

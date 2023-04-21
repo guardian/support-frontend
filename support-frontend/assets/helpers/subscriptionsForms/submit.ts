@@ -69,7 +69,8 @@ function getAddresses(state: SubscriptionsState): Addresses {
 
 		return {
 			deliveryAddress: deliveryAddressFields,
-			billingAddress: state.page.checkout.billingAddressIsSame
+			billingAddress: state.page.checkoutForm.addressMeta
+				.billingAddressMatchesDelivery
 				? deliveryAddressFields
 				: billingAddressFields,
 		};
@@ -148,8 +149,8 @@ function buildRegularPaymentRequest(
 	const { actionHistory } = state.debug;
 	const { title, firstName, lastName, email, telephone } =
 		state.page.checkoutForm.personalDetails;
-	const { deliveryInstructions, csrUsername, salesforceCaseId } =
-		state.page.checkout;
+	const { deliveryInstructions } = state.page.checkoutForm.addressMeta;
+	const { csrUsername, salesforceCaseId } = state.page.checkout;
 	const product = getProduct(state, currencyId);
 	const paymentFields =
 		regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
