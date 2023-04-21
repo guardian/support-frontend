@@ -11,10 +11,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import type {
-	PaymentFrequencyTabsRenderProps,
-	TabProps,
-} from './paymentFrequenncyTabs';
+import type { PaymentFrequencyTabsRenderProps } from './paymentFrequenncyTabs';
 
 type PaymentFrequencyTabsContainerProps = {
 	hideOneOff?: boolean;
@@ -58,23 +55,17 @@ export function PaymentFrequencyTabsContainer({
 		dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
 	}
 
-	const isTab = (tab: TabProps | undefined): tab is TabProps => {
-		return !!tab;
-	};
-
 	const tabs = contributionTypes[countryGroupId]
+		.filter(
+			({ contributionType }) => !(contributionType === 'ONE_OFF' && hideOneOff),
+		)
 		.map(({ contributionType }) => {
-			if (hideOneOff && contributionType === 'ONE_OFF') {
-				return;
-			} else {
-				return {
-					id: contributionType,
-					labelText: toHumanReadableContributionType(contributionType),
-					selected: contributionType === productType,
-				};
-			}
-		})
-		.filter(isTab);
+			return {
+				id: contributionType,
+				labelText: toHumanReadableContributionType(contributionType),
+				selected: contributionType === productType,
+			};
+		});
 
 	return render({
 		ariaLabel,

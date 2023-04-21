@@ -102,7 +102,7 @@ function getValidContributionTypesFromUrlOrElse(
 
 function toHumanReadableContributionType(
 	contributionType: ContributionType,
-): string {
+): 'Single' | 'Monthly' | 'Annual' {
 	switch (contributionType) {
 		case 'ONE_OFF':
 			return 'Single';
