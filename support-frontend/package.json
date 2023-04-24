@@ -147,7 +147,7 @@
     "@storybook/builder-webpack5": "^6.5.9",
     "@storybook/jest": "^0.0.10",
     "@storybook/manager-webpack5": "^6.5.9",
-    "@storybook/preact": "^6.5.9",
+    "@storybook/preact": "^7.0.6",
     "@storybook/testing-library": "^0.0.13",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
