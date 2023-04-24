@@ -137,7 +137,7 @@
     "@guardian/paparazzi": "^0.3.1",
     "@guardian/prettier": "^2.1.5",
     "@khanacademy/flow-to-ts": "^0.5.1",
-    "@storybook/addon-a11y": "^6.5.9",
+    "@storybook/addon-a11y": "^7.0.6",
     "@storybook/addon-actions": "^6.5.9",
     "@storybook/addon-essentials": "^6.5.9",
     "@storybook/addon-interactions": "^6.5.9",
