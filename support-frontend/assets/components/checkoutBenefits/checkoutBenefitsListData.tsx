@@ -19,8 +19,9 @@ const highlightText = css`
 	color: red;
 `;
 
-type TierUnlocks = {
+type CheckListDataProps = {
 	higherTier: boolean;
+	isAustralia: boolean;
 };
 
 export type CheckListData = {
@@ -36,28 +37,13 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 		<SvgCrossRound isAnnouncedByScreenReader size="small" />
 	);
 
-export const checkListData = (
-	{ higherTier }: TierUnlocks,
-	isAustralia: boolean,
-): CheckListData[] => {
+export const checkListData = ({
+	higherTier,
+	isAustralia,
+}: CheckListDataProps): CheckListData[] => {
 	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
 
 	return [
-		...(isAustralia
-			? [
-					{
-						icon: getSvgIcon(true),
-						text: (
-							<p>
-								<span css={boldText}>
-									Limited-edition Guardian Australia tote bag.{' '}
-								</span>
-								<span css={highlightText}>Offer ends 31 May</span>
-							</p>
-						),
-					},
-			  ]
-			: []),
 		{
 			icon: getSvgIcon(true),
 			text: (
@@ -76,6 +62,22 @@ export const checkListData = (
 				</p>
 			),
 		},
+		...(isAustralia
+			? [
+					{
+						icon: getSvgIcon(higherTier),
+						text: (
+							<p>
+								<span css={boldText}>
+									Limited-edition Guardian Australia tote bag.{' '}
+								</span>
+								<span css={highlightText}>Offer ends 31 May</span>
+							</p>
+						),
+						maybeGreyedOut: maybeGreyedOutHigherTier,
+					},
+			  ]
+			: []),
 		{
 			icon: getSvgIcon(higherTier),
 			text: (

@@ -69,12 +69,12 @@ export function CheckoutBenefitsListContainer({
 	const { countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
+	const isAustralia = countryGroupId === 'AUDCountries' ? true : false;
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const minimumContributionAmount = useContributionsSelector(
 		getMinimumContributionAmount,
 	);
 
-	const isAustralia = countryGroupId === 'AUDCountries' ? true : false;
 	const useOptimisedMobileLayout = useContributionsSelector(
 		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
 	);
@@ -114,12 +114,10 @@ export function CheckoutBenefitsListContainer({
 			userSelectedAmountWithCurrency,
 			contributionType,
 		),
-		checkListData: checkListData(
-			{
-				higherTier,
-			},
+		checkListData: checkListData({
+			higherTier,
 			isAustralia,
-		),
+		}),
 		buttonCopy: getbuttonCopy(
 			higherTier,
 			thresholdPriceWithCurrency,
