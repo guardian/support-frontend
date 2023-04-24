@@ -142,7 +142,7 @@ export const tests: Tests = {
 				},
 			},
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 13,
