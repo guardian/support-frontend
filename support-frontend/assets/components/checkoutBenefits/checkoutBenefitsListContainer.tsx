@@ -74,6 +74,7 @@ export function CheckoutBenefitsListContainer({
 		getMinimumContributionAmount,
 	);
 
+	const isAustralia = countryGroupId === 'AUDCountries' ? true : false;
 	const useOptimisedMobileLayout = useContributionsSelector(
 		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
 	);
@@ -113,9 +114,12 @@ export function CheckoutBenefitsListContainer({
 			userSelectedAmountWithCurrency,
 			contributionType,
 		),
-		checkListData: checkListData({
-			higherTier,
-		}),
+		checkListData: checkListData(
+			{
+				higherTier,
+			},
+			isAustralia,
+		),
 		buttonCopy: getbuttonCopy(
 			higherTier,
 			thresholdPriceWithCurrency,
