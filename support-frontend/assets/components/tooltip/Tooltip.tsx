@@ -20,7 +20,6 @@ import {
 } from '@guardian/source-foundations';
 import { Button, SvgCross } from '@guardian/source-react-components';
 import { useState } from 'react';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { InfoRound } from './InfoRound';
 
 const buttonAndTooltipContainer = css`
@@ -162,11 +161,17 @@ const arrowTop = css`
 	}
 `;
 
+type TooltipProps = {
+	promptText: string;
+	buttonLabel?: string;
+	children: React.ReactNode;
+};
+
 export default function Tooltip({
-	countryGroupId,
-}: {
-	countryGroupId: CountryGroupId;
-}): JSX.Element {
+	promptText,
+	buttonLabel = 'More information',
+	children,
+}: TooltipProps): JSX.Element {
 	const [open, setOpen] = useState(false);
 
 	const { x, y, refs, strategy, context } = useFloating({
@@ -204,7 +209,7 @@ export default function Tooltip({
 			ref={refs.setReference}
 			{...getReferenceProps()}
 		>
-			<p css={copy}>Cancel anytime</p>
+			<p css={copy}>{promptText}</p>
 			<div css={buttonAndTooltipContainer}>
 				<div>
 					<Button
@@ -213,7 +218,7 @@ export default function Tooltip({
 						priority="tertiary"
 						css={buttonOverrides}
 					>
-						More information
+						{buttonLabel}
 					</Button>
 				</div>
 				<FloatingPortal>
@@ -237,10 +242,7 @@ export default function Tooltip({
 						{...getFloatingProps()}
 					>
 						<div css={tooltipCss}>
-							You can cancel
-							{countryGroupId === 'GBPCountries' ? '' : ' online'} anytime
-							before your next payment date. If you cancel in the first 14 days,
-							you will receive a full refund.
+							{children}
 							<Button
 								onClick={() => setOpen(false)}
 								icon={<SvgCross size="xsmall" />}
@@ -248,7 +250,9 @@ export default function Tooltip({
 								hideLabel
 								priority="secondary"
 								cssOverrides={closeButtonOverrides}
-							/>
+							>
+								Close
+							</Button>
 							<div
 								css={context.placement === 'top' ? arrowBottom : arrowTop}
 							></div>

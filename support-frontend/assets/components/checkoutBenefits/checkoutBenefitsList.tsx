@@ -6,7 +6,7 @@ import {
 	space,
 	textSans,
 } from '@guardian/source-foundations';
-import CancelAnytimeTooltip from 'components/tooltip/Tooltip';
+import Tooltip from 'components/tooltip/Tooltip';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 import type { CheckListData } from './checkoutBenefitsListData';
@@ -97,7 +97,14 @@ export function CheckoutBenefitsList({
 				))}
 			</table>
 			<hr css={hr(`${space[5]}px 0 ${space[4]}px`)} />
-			<CancelAnytimeTooltip countryGroupId={countryGroupId} />
+			<Tooltip promptText="Cancel anytime">
+				<p>
+					You can cancel
+					{countryGroupId === 'GBPCountries' ? '' : ' online'} anytime before
+					your next payment date. If you cancel in the first 14 days, you will
+					receive a full refund.
+				</p>
+			</Tooltip>
 		</div>
 	);
 }
