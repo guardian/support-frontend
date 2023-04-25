@@ -1,4 +1,4 @@
-import { join } from "path";
+import path from "path";
 import { GuApiLambda } from "@guardian/cdk";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
@@ -29,7 +29,7 @@ export class AcquisitionEventsApi extends GuStack {
     const app = "acquisition-events-api";
 
     //  // ---- Existing CFN template ---- //
-    const yamlTemplateFilePath = join(
+    const yamlTemplateFilePath = path.join(
       __dirname,
       "../..",
       "support-lambdas/acquisition-events-api/cfn.yaml"
@@ -50,7 +50,7 @@ export class AcquisitionEventsApi extends GuStack {
 // ---- API-triggered lambda functions ---- //
     const acquisitionEventsApiLambda= new GuApiLambda(this, "acquisition-events-api-cdk-lambda", {
       description: 'A lambda that Sends in-app acquisitions (subscriptions) to BigQuery',
-      functionName: `${app}-cdk-${this.stage}`,
+      functionName: `${app}-${this.stage}-CDK`,
       fileName: `${app}.jar`,
       handler: 'com.gu.acquisitionEventsApi.Lambda::handler',
       runtime: Runtime.JAVA_8,
