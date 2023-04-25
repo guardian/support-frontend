@@ -52,19 +52,19 @@ Resources:
       Period: 60
       EvaluationPeriods: 1
       Statistic: Sum
-  DomainName:
-    Type: AWS::ApiGateway::DomainName
-    Properties:
-      RegionalCertificateArn:
-        Ref: CertificateArn
-      DomainName:
-        Fn::FindInMap:
-          - StageMap
-          - Ref: Stage
-          - DomainName
-      EndpointConfiguration:
-        Types:
-          - REGIONAL
+#  DomainName:
+#    Type: AWS::ApiGateway::DomainName
+#    Properties:
+#      RegionalCertificateArn:
+#        Ref: CertificateArn
+#      DomainName:
+#        Fn::FindInMap:
+#          - StageMap
+#          - Ref: Stage
+#          - DomainName
+#      EndpointConfiguration:
+#        Types:
+#          - REGIONAL
   LambdaAcquisitionEventPermissionProd:
     Type: AWS::Lambda::Permission
     Properties:
@@ -148,33 +148,33 @@ Resources:
       Period: 300
       EvaluationPeriods: 1
       Statistic: Sum
-  BasePathMapping:
-    Type: AWS::ApiGateway::BasePathMapping
-    Properties:
-      RestApiId:
-        Ref: ServerlessRestApi
-      DomainName:
-        Ref: DomainName
-      Stage:
-        Fn::Sub: Prod
-    DependsOn: ServerlessRestApiProdStage
-  DNSRecord:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      HostedZoneName: support.guardianapis.com.
-      Name:
-        Fn::FindInMap:
-          - StageMap
-          - Ref: Stage
-          - DomainName
-      Comment:
-        Fn::Sub: CNAME for acquisition events endpoints ${Stage}
-      Type: CNAME
-      TTL: '120'
-      ResourceRecords:
-        - Fn::GetAtt:
-            - DomainName
-            - RegionalDomainName
+#  BasePathMapping:
+#    Type: AWS::ApiGateway::BasePathMapping
+#    Properties:
+#      RestApiId:
+#        Ref: ServerlessRestApi
+#      DomainName:
+#        Ref: DomainName
+#      Stage:
+#        Fn::Sub: Prod
+#    DependsOn: ServerlessRestApiProdStage
+#  DNSRecord:
+#    Type: AWS::Route53::RecordSet
+#    Properties:
+#      HostedZoneName: support.guardianapis.com.
+#      Name:
+#        Fn::FindInMap:
+#          - StageMap
+#          - Ref: Stage
+#          - DomainName
+#      Comment:
+#        Fn::Sub: CNAME for acquisition events endpoints ${Stage}
+#      Type: CNAME
+#      TTL: '120'
+#      ResourceRecords:
+#        - Fn::GetAtt:
+#            - DomainName
+#            - RegionalDomainName
   ServerlessRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
