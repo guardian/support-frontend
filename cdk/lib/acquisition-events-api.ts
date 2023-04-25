@@ -50,7 +50,7 @@ export class AcquisitionEventsApi extends GuStack {
 // ---- API-triggered lambda functions ---- //
     const acquisitionEventsApiLambda= new GuApiLambda(this, "acquisition-events-api-cdk-lambda", {
       description: 'A lambda that Sends in-app acquisitions (subscriptions) to BigQuery',
-      functionName: `${app}-${this.stage}-CDK`,
+      functionName: `${app}-cdk-${this.stage}`,
       fileName: `${app}.jar`,
       handler: 'com.gu.acquisitionEventsApi.Lambda::handler',
       runtime: Runtime.JAVA_8,

@@ -669,7 +669,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
             "Stage": "CODE",
           },
         },
-        "FunctionName": "acquisition-events-api-CODE-CDK",
+        "FunctionName": "acquisition-events-api-cdk-CODE",
         "Handler": "com.gu.acquisitionEventsApi.Lambda::handler",
         "MemorySize": 512,
         "Role": {
@@ -1079,7 +1079,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEDeployment956B13099c613d98ef0412621975dac0e0e33a77": {
+    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEDeployment956B130990ded7266015c7967956b54b7b69a4df": {
       "DependsOn": [
         "acquisitioneventsapicdklambdaacquisitioneventsapiCODEproxyANY0D8D3990",
         "acquisitioneventsapicdklambdaacquisitioneventsapiCODEproxy4473084F",
@@ -1099,7 +1099,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODEDeployment956B13099c613d98ef0412621975dac0e0e33a77",
+          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODEDeployment956B130990ded7266015c7967956b54b7b69a4df",
         },
         "RestApiId": {
           "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
@@ -1936,7 +1936,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
             "Stage": "PROD",
           },
         },
-        "FunctionName": "acquisition-events-api-PROD-CDK",
+        "FunctionName": "acquisition-events-api-cdk-PROD",
         "Handler": "com.gu.acquisitionEventsApi.Lambda::handler",
         "MemorySize": 512,
         "Role": {
@@ -2346,7 +2346,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODDeployment5D86426B579e69890250dbae99802a41e3383857": {
+    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODDeployment5D86426Bfd37a23db7e90bdd870479dca7dc4d79": {
       "DependsOn": [
         "acquisitioneventsapicdklambdaacquisitioneventsapiPRODproxyANY1BE80837",
         "acquisitioneventsapicdklambdaacquisitioneventsapiPRODproxyE717EAC5",
@@ -2366,7 +2366,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPRODDeployment5D86426B579e69890250dbae99802a41e3383857",
+          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPRODDeployment5D86426Bfd37a23db7e90bdd870479dca7dc4d79",
         },
         "RestApiId": {
           "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
