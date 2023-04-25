@@ -250,7 +250,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "TTL": "60",
+        "TTL": "120",
         "Type": "CNAME",
       },
       "Type": "AWS::Route53::RecordSet",
@@ -656,7 +656,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/CODE/acquisition-events-api/support/CODE/acquisition-events-api/acquisition-events-api.jar",
+          "S3Key": "support/CODE/acquisition-events-api/acquisition-events-api.jar",
         },
         "Description": "A lambda that Sends in-app acquisitions (subscriptions) to BigQuery",
         "Environment": {
@@ -797,7 +797,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/CODE/acquisition-events-api/support/CODE/acquisition-events-api/acquisition-events-api.jar",
+                      "/support/CODE/acquisition-events-api/acquisition-events-api.jar",
                     ],
                   ],
                 },
@@ -1517,7 +1517,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
             ],
           },
         ],
-        "TTL": "60",
+        "TTL": "120",
         "Type": "CNAME",
       },
       "Type": "AWS::Route53::RecordSet",
@@ -1923,7 +1923,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/acquisition-events-api/support/PROD/acquisition-events-api/acquisition-events-api.jar",
+          "S3Key": "support/PROD/acquisition-events-api/acquisition-events-api.jar",
         },
         "Description": "A lambda that Sends in-app acquisitions (subscriptions) to BigQuery",
         "Environment": {
@@ -2064,7 +2064,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/acquisition-events-api/support/PROD/acquisition-events-api/acquisition-events-api.jar",
+                      "/support/PROD/acquisition-events-api/acquisition-events-api.jar",
                     ],
                   ],
                 },

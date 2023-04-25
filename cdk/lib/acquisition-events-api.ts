@@ -51,7 +51,7 @@ export class AcquisitionEventsApi extends GuStack {
     const acquisitionEventsApiLambda= new GuApiLambda(this, "acquisition-events-api-cdk-lambda", {
       description: 'A lambda that Sends in-app acquisitions (subscriptions) to BigQuery',
       functionName: `${app}-cdk-${this.stage}`,
-      fileName: `${this.stack}/${this.stage}/${app}/${app}.jar`,
+      fileName: `${app}.jar`,
       handler: 'com.gu.acquisitionEventsApi.Lambda::handler',
       runtime: Runtime.JAVA_8,
       memorySize: 512,
@@ -93,7 +93,7 @@ export class AcquisitionEventsApi extends GuStack {
       name: props.domainName,
       type: "CNAME",
       hostedZoneId: props.hostedZoneId,
-      ttl: "60",
+      ttl: "120",
       resourceRecords: [
         cfnDomainName.attrRegionalDomainName
       ],
