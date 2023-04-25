@@ -117,12 +117,10 @@ export function CheckoutBenefitsListContainer({
 			userSelectedAmountWithCurrency,
 			contributionType,
 		),
-		checkListData: checkListData(
-			{
-				higherTier,
-			},
+		checkListData: checkListData({
+			higherTier,
 			isEmotionalBenefitTestVariant,
-		),
+		}),
 		buttonCopy: getbuttonCopy(
 			higherTier,
 			thresholdPriceWithCurrency,

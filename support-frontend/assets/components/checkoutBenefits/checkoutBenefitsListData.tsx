@@ -15,8 +15,9 @@ const boldText = css`
 	font-weight: bold;
 `;
 
-type TierUnlocks = {
+type CheckListDataProps = {
 	higherTier: boolean;
+	isEmotionalBenefitTestVariant: boolean;
 };
 
 export type CheckListData = {
@@ -32,10 +33,10 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 		<SvgCrossRound isAnnouncedByScreenReader size="small" />
 	);
 
-export const checkListData = (
-	{ higherTier }: TierUnlocks,
-	isEmotionalBenefitTestVariant: boolean,
-): CheckListData[] => {
+export const checkListData = ({
+	higherTier,
+	isEmotionalBenefitTestVariant,
+}: CheckListDataProps): CheckListData[] => {
 	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
 	return [
 		...(isEmotionalBenefitTestVariant
