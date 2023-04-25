@@ -21,7 +21,7 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "org.mockito" %% "mockito-scala" % "1.17.14" % "it,test",
-  "org.mockito" %% "mockito-scala-scalatest" % "1.17.12" % "it,test",
+  "org.mockito" %% "mockito-scala-scalatest" % "1.17.14" % "it,test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % "it,test",
   "org.scalatestplus" %% "scalatestplus-selenium" % "1.0.0-M2" % "it,test",
   "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "it,test",
