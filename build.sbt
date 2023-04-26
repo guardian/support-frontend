@@ -347,9 +347,9 @@ lazy val `bigquery-acquisitions-publisher` = (project in file("support-lambdas/b
 lazy val `support-lambdas` = (project in file("support-lambdas"))
   .settings(scalafmtSettings)
   .aggregate(
-    `stripe-intent`,
-    `it-test-runner`,
-    `acquisitions-firehose-transformer`,
-    `acquisition-events-api`,
+//    `stripe-intent`,
+//    `it-test-runner`,
+//    `acquisitions-firehose-transformer`,
+//    `acquisition-events-api`,
     `bigquery-acquisitions-publisher`
   )
