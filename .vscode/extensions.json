@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "esbenp.prettier-vscode", // fix prettier issues on save
+        "dbaeumer.vscode-eslint", // fix lint issues on save
+        "styled-components.vscode-styled-components", // auto complete style rules in IDE
+        "wanfu.jump-to-alias-file" // jump to alias imports
+    ]
+}
