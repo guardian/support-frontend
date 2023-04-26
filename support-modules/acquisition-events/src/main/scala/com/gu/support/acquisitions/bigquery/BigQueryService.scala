@@ -110,6 +110,9 @@ class BigQueryService(config: BigQueryConfig) {
 }
 
 object BigQueryService {
+
+  def build(config: BigQueryConfig): BigQueryService = {}
+
   case class AppendCompleteCallback(stage: Stage, promise: Promise[Either[String, Unit]])
       extends ApiFutureCallback[AppendRowsResponse] {
     val executor = Executors.newSingleThreadExecutor();
