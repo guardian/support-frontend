@@ -62,7 +62,7 @@ class StripePatronsDataLambda extends GuLambdaFunction {
       aliasName: scope.stage,
       version,
     });
-    (this.node.defaultChild as CfnFunction).snapStart = { applyOn: "PublishedVersions" };
+    // (this.node.defaultChild as CfnFunction).snapStart = { applyOn: "PublishedVersions" };
 
     function monitoringForEnvironment(
       stage: string
