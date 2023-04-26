@@ -8,7 +8,7 @@ export function addPaymentsSideEffects(
 	startListening({
 		actionCreator: setPaymentMethod,
 		effect(action) {
-			storage.setSession('selectedPaymentMethod', action.payload);
+			storage.setSession('selectedPaymentMethod', action.payload.paymentMethod);
 		},
 	});
 }

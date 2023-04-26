@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import type { FullPaymentMethod } from 'helpers/forms/paymentMethods';
 import { setDeliveryCountry } from '../../address/actions';
 import { validateForm } from '../../checkoutActions';
 import { initialState } from './state';
@@ -9,8 +9,9 @@ export const paymentMethodSlice = createSlice({
 	name: 'paymentMethod',
 	initialState,
 	reducers: {
-		setPaymentMethod(state, action: PayloadAction<PaymentMethod>) {
-			state.name = action.payload;
+		setPaymentMethod(state, action: PayloadAction<FullPaymentMethod>) {
+			state.name = action.payload.paymentMethod;
+			state.stripePaymentMethod = action.payload.stripePaymentMethod;
 			state.errors = [];
 		},
 	},

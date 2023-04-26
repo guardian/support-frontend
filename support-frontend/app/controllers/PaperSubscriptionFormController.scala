@@ -52,9 +52,9 @@ class PaperSubscriptionFormController(
     val css = "paperSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
 
-    val uatMode = testUsers.isTestUser(request)
+    val testMode = testUsers.isTestUser(request)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
-    val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = uatMode).v2PublicKey
+    val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = testMode).v2PublicKey
 
     subscriptionCheckout(
       title,
@@ -63,8 +63,8 @@ class PaperSubscriptionFormController(
       css,
       Some(csrf),
       maybeIdUser,
-      uatMode,
-      priceSummaryServiceProvider.forUser(uatMode).getPrices(Paper, promoCodes),
+      testMode,
+      priceSummaryServiceProvider.forUser(testMode).getPrices(Paper, promoCodes),
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),

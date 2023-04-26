@@ -8,7 +8,7 @@ import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.catalog.{Collection, Domestic, Saturday}
-import com.gu.support.config.TouchPointEnvironments.SANDBOX
+import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.config.{PromotionsConfig, PromotionsDiscountConfig, PromotionsTablesConfig}
 import com.gu.support.promotions.{PromotionService, SimplePromotionCollection}
 import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
@@ -194,7 +194,7 @@ object SendDigitalPackGiftRedemptionEmail extends App {
 object SendPaperSubscriptionEmail extends App {
 
   sendSingle(
-    new PaperEmailFields(paperFieldsGenerator, SANDBOX).build(
+    new PaperEmailFields(paperFieldsGenerator, CODE).build(
       SendThankYouEmailPaperState(
         officeUser,
         Paper(GBP, Monthly, Collection, Saturday),
@@ -212,7 +212,7 @@ object SendPaperSubscriptionEmail extends App {
 object SendWeeklySubscriptionEmail extends App {
 
   sendSingle(
-    new GuardianWeeklyEmailFields(paperFieldsGenerator, SANDBOX).build(
+    new GuardianWeeklyEmailFields(paperFieldsGenerator, CODE).build(
       SendThankYouEmailGuardianWeeklyState(
         officeUser,
         GuardianWeekly(GBP, Quarterly, Domestic),
@@ -236,7 +236,7 @@ object SendWeeklySubscriptionEmail extends App {
 object SendWeeklySubscriptionGiftEmail extends App {
 
   sendSingle(
-    new GuardianWeeklyEmailFields(paperFieldsGenerator, SANDBOX).build(
+    new GuardianWeeklyEmailFields(paperFieldsGenerator, CODE).build(
       SendThankYouEmailGuardianWeeklyState(
         officeUser,
         GuardianWeekly(GBP, Quarterly, Domestic),
@@ -318,7 +318,7 @@ object TestData {
       getMandate,
     ),
     getMandate,
-    SANDBOX,
+    CODE,
   )
 
 }

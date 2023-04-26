@@ -21,12 +21,12 @@
   css: String,
   csrf: Option[String],
   idUser: Option[IdUser],
-  uatMode: Boolean,
+  testMode: Boolean,
   productPrices: ProductPrices,
   defaultStripeConfig: StripeConfig,
-  uatStripeConfig: StripeConfig,
+  testStripeConfig: StripeConfig,
   defaultPayPalConfig: PayPalConfig,
-  uatPayPalConfig: PayPalConfig,
+  testPayPalConfig: PayPalConfig,
   v2recaptchaConfigPublicKey: String,
   orderIsAGift: Boolean = false,
   homeDeliveryPostcodes: Option[List[String]] = None,
@@ -63,19 +63,19 @@
       window.guardian.stripeKeyDefaultCurrencies = {
         REGULAR: {
           default: "@defaultStripeConfig.forCurrency(None).publicKey",
-          uat: "@uatStripeConfig.forCurrency(None).publicKey"
+          test: "@testStripeConfig.forCurrency(None).publicKey"
         }
       };
       window.guardian.stripeKeyAustralia = {
         REGULAR: {
           default: "@defaultStripeConfig.forCurrency(Some(AUD)).publicKey",
-          uat: "@uatStripeConfig.forCurrency(Some(AUD)).publicKey"
+          test: "@testStripeConfig.forCurrency(Some(AUD)).publicKey"
         }
       };
       window.guardian.stripeKeyUnitedStates = window.guardian.stripeKeyDefaultCurrencies;
       window.guardian.payPalEnvironment = {
         default: "@defaultPayPalConfig.payPalEnvironment",
-        uat: "@uatPayPalConfig.payPalEnvironment"
+        test: "@testPayPalConfig.payPalEnvironment"
       };
 
       window.guardian.checkoutPostcodeLookup = @settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.isOn
@@ -84,7 +84,7 @@
 
       window.guardian.recaptchaEnabled = @settings.switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
 
-      window.guardian.isTestUser = @uatMode
+      window.guardian.isTestUser = @testMode
 
     </script>
 

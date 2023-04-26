@@ -259,9 +259,9 @@ function applyDeliveryRules(fields: FormFields): Array<FormError<FormField>> {
 			error: formError('startDate', 'Please select a start date'),
 		},
 		{
-			rule: notNull(fields.billingAddressIsSame),
+			rule: notNull(fields.billingAddressMatchesDelivery),
 			error: formError(
-				'billingAddressIsSame',
+				'billingAddressMatchesDelivery',
 				'Please indicate whether the billing address is the same as the delivery address',
 			),
 		},

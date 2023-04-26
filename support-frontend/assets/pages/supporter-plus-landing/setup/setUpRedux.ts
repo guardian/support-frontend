@@ -177,7 +177,7 @@ function selectInitialContributionTypeAndPaymentMethod(
 		switches,
 	);
 	dispatch(setProductType(contributionType));
-	dispatch(setPaymentMethod(paymentMethod));
+	dispatch(setPaymentMethod({ paymentMethod }));
 
 	return contributionType;
 }

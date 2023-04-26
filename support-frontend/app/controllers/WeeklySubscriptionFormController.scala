@@ -52,10 +52,10 @@ class WeeklySubscriptionFormController(
     val css = "weeklySubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
 
-    val uatMode = testUsers.isTestUser(request)
+    val testMode = testUsers.isTestUser(request)
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val readerType = if (orderIsAGift) Gift else Direct
-    val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = uatMode).v2PublicKey
+    val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser = testMode).v2PublicKey
 
     subscriptionCheckout(
       title,
@@ -64,8 +64,8 @@ class WeeklySubscriptionFormController(
       css,
       Some(csrf),
       maybeIdUser,
-      uatMode,
-      priceSummaryServiceProvider.forUser(uatMode).getPrices(GuardianWeekly, promoCodes, readerType),
+      testMode,
+      priceSummaryServiceProvider.forUser(testMode).getPrices(GuardianWeekly, promoCodes, readerType),
       stripeConfigProvider.get(),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),

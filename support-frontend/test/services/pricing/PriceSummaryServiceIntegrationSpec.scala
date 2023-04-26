@@ -21,7 +21,7 @@ class PriceSummaryServiceIntegrationSpec extends AsyncFlatSpec with Matchers wit
     new PriceSummaryService(
       PromotionServiceSpec.serviceWithDynamo,
       defaultPromotionsService,
-      CatalogService(TouchPointEnvironments.SANDBOX),
+      CatalogService(TouchPointEnvironments.CODE),
     )
 
   "PriceSummaryService" should "return prices" in {

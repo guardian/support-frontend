@@ -2,11 +2,12 @@ package selenium.util
 
 import java.net.URL
 import java.util.Date
-
 import io.github.bonigarcia.wdm.WebDriverManager
 import org.openqa.selenium.chrome.{ChromeDriver, ChromeOptions}
 import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.{Cookie, JavascriptExecutor, WebDriver}
+
+import scala.collection.immutable.HashMap
 
 class DriverConfig {
 
@@ -30,6 +31,11 @@ class DriverConfig {
     val chromeOptions = new ChromeOptions
     chromeOptions.setCapability("platform", "WINDOWS")
     chromeOptions.setCapability("name", "support-frontend")
+
+    val networkLogsOptions = HashMap("captureContent" -> true)
+    chromeOptions.setCapability("browserstack.networkLogs", true)
+    chromeOptions.setCapability("browserstack.networkLogsOptions", networkLogsOptions)
+
     new RemoteWebDriver(new URL(Config.webDriverRemoteUrl), chromeOptions)
   }
 

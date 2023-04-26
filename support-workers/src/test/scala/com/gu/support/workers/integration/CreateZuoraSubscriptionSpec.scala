@@ -183,8 +183,8 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
 
   val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get())
 
-  private val jsonProvider = new S3CatalogProvider(TouchPointEnvironments.SANDBOX)
-  lazy val realCatalogService = new CatalogService(TouchPointEnvironments.SANDBOX, jsonProvider)
+  private val jsonProvider = new S3CatalogProvider(TouchPointEnvironments.CODE)
+  lazy val realCatalogService = new CatalogService(TouchPointEnvironments.CODE, jsonProvider)
 
   lazy val mockZuoraService = {
     val mockZuora = mock[ZuoraService]

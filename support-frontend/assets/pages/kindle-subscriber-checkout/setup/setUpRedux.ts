@@ -175,7 +175,7 @@ function selectInitialContributionTypeAndPaymentMethod(
 		switches,
 	);
 	dispatch(setProductType('DigitalPack'));
-	dispatch(setPaymentMethod(paymentMethod));
+	dispatch(setPaymentMethod({ paymentMethod }));
 
 	return contributionType;
 }

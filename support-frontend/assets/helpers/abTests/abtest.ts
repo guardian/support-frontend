@@ -212,7 +212,7 @@ function getAmountsTestParticipations(
 	if (
 		!targetPageMatches(
 			window.location.pathname,
-			'/??/contribute|contribute-in-epic|thankyou(/.*)?$',
+			'/??/contribute|thankyou(/.*)?$',
 		)
 	) {
 		return null;

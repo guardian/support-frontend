@@ -1,6 +1,6 @@
 package com.gu.support.config
 
-import TouchPointEnvironments.{SANDBOX, fromStage}
+import TouchPointEnvironments.{CODE, fromStage}
 import com.typesafe.config.{Config, ConfigValueFactory}
 
 /** Touchpoint represents 3rd party enterprise systems which have a number of different stages or environments (DEV, and
@@ -11,7 +11,7 @@ import com.typesafe.config.{Config, ConfigValueFactory}
 abstract class TouchpointConfigProvider[T](config: Config, defaultStage: Stage) {
 
   private lazy val defaultConfig: T = fromConfig(getTouchpointBackend(fromStage(defaultStage)))
-  private lazy val testConfig: T = fromConfig(getTouchpointBackend(SANDBOX))
+  private lazy val testConfig: T = fromConfig(getTouchpointBackend(CODE))
 
   def get(isTestUser: Boolean = false): T =
     if (isTestUser) testConfig else defaultConfig
@@ -20,6 +20,6 @@ abstract class TouchpointConfigProvider[T](config: Config, defaultStage: Stage) 
 
   private def getTouchpointBackend(environment: TouchPointEnvironment) =
     config
-      .getConfig(s"touchpoint.backend.environments.${environment.toString}")
-      .withValue("environment", ConfigValueFactory.fromAnyRef(environment.toString))
+      .getConfig(s"touchpoint.backend.environments.${environment.envValue}")
+      .withValue("environment", ConfigValueFactory.fromAnyRef(environment.envValue))
 }

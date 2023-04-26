@@ -100,5 +100,5 @@ const getAmazonRegion = (
 
 const getAmazonPayClientId = (isSandbox: boolean): string =>
 	isSandbox
-		? window.guardian.amazonPayClientId.uat
+		? window.guardian.amazonPayClientId.test
 		: window.guardian.amazonPayClientId.default;

@@ -58,19 +58,6 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     }
   }
 
-  it should "get a different auth token for each stage" in {
-    val config = Configuration.load().salesforceConfigProvider.get()
-
-    val futureAuths = for {
-      devAuth <- AuthService.getAuth(Configuration.load().salesforceConfigProvider.get())
-      uatAuth <- AuthService.getAuth(Configuration.load().salesforceConfigProvider.get(true))
-    } yield (devAuth, uatAuth)
-
-    futureAuths.map { auths: (Authentication, Authentication) =>
-      auths._1.access_token should not be auths._2.access_token
-    }
-  }
-
   "SalesforceService" should "be able to upsert a customer" in {
     val service =
       new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))

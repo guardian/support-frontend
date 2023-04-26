@@ -10,7 +10,7 @@ import org.scalatest.matchers.should.Matchers
 class AwsCloudWatchMetricPutSpec extends AsyncFlatSpec with Matchers {
 
   "CatalogFailures" should "be logged to CloudWatch" in {
-    AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(catalogFailureRequest(TouchPointEnvironments.SANDBOX))
+    AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(catalogFailureRequest(TouchPointEnvironments.CODE))
       .fold(
         err => fail(err),
         _ => succeed,

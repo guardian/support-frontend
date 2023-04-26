@@ -4,10 +4,7 @@ import {
 	getPaymentMethodErrors,
 	getPaymentRequestButtonErrors,
 } from './paymentValidation';
-import {
-	getPersonalDetailsErrors,
-	getUserCanTakeOutContribution,
-} from './personalDetailsValidation';
+import { getPersonalDetailsErrors } from './personalDetailsValidation';
 import type { ErrorCollection } from './utils';
 import { errorCollectionHasErrors } from './utils';
 
@@ -41,8 +38,5 @@ export function getAllErrorsForContributions(
 }
 
 export function contributionsFormHasErrors(state: ContributionsState): boolean {
-	const errorObject = getAllErrorsForContributions(state);
-	const userCanTakeOutContribution = getUserCanTakeOutContribution(state);
-
-	return errorCollectionHasErrors(errorObject) || !userCanTakeOutContribution;
+	return errorCollectionHasErrors(getAllErrorsForContributions(state));
 }

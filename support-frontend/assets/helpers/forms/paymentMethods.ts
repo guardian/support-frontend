@@ -1,3 +1,5 @@
+import type { StripePaymentMethod } from './paymentIntegrations/readerRevenueApis';
+
 const Stripe = 'Stripe';
 const PayPal = 'PayPal';
 const DirectDebit = 'DirectDebit';
@@ -27,6 +29,11 @@ export type PaymentMethod =
 	| typeof ExistingDirectDebit
 	| typeof AmazonPay
 	| typeof None;
+
+export type FullPaymentMethod = {
+	paymentMethod: PaymentMethod;
+	stripePaymentMethod?: StripePaymentMethod;
+};
 
 export const recaptchaRequiredPaymentMethods: PaymentMethod[] = [
 	DirectDebit,

@@ -6,7 +6,7 @@ import com.gu.i18n.Country.Australia
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.catalog.Domestic
-import com.gu.support.config.TouchPointEnvironments.SANDBOX
+import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.config.ZuoraInvoiceTemplatesConfig
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
 import com.gu.support.workers.GiftRecipient.WeeklyGiftRecipient
@@ -160,7 +160,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
 
   lazy val gift: SubscriptionData = new GuardianWeeklySubscriptionBuilder(
     promotionService,
-    SANDBOX,
+    CODE,
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
@@ -207,7 +207,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
 
   lazy val nonGift = new GuardianWeeklySubscriptionBuilder(
     promotionService,
-    SANDBOX,
+    CODE,
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
@@ -220,7 +220,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
 
   lazy val csrSubscription = new GuardianWeeklySubscriptionBuilder(
     promotionService,
-    SANDBOX,
+    CODE,
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
@@ -249,7 +249,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
 
   lazy val nonGiftPatron = new GuardianWeeklySubscriptionBuilder(
     promotionService,
-    SANDBOX,
+    CODE,
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(
@@ -262,7 +262,7 @@ class GuardianWeeklySubscriptionBuildersSpec extends AnyFlatSpec with Matchers {
 
   lazy val nonGiftPromo = new GuardianWeeklySubscriptionBuilder(
     promotionService,
-    SANDBOX,
+    CODE,
     DateGenerator(saleDate),
     subscribeItemBuilder,
   ).build(

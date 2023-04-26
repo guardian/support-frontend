@@ -36,9 +36,9 @@ function isTestUser(): boolean {
 	const isDefined = (x: boolean | string | null | undefined) =>
 		x !== null && x !== undefined;
 
-	const uatMode = window.guardian.uatMode;
+	const testMode = window.guardian.testMode;
 	const testCookie = cookie.get('_test_username');
-	return isDefined(uatMode) || isDefined(testCookie);
+	return isDefined(testMode) || isDefined(testCookie);
 }
 
 function getUserStateField(): string | undefined {

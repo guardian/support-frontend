@@ -1,6 +1,5 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { validateForm } from '../checkout/checkoutActions';
 import { initialState } from './state';
 import { getRecurringContributorStatus } from './thunks';
 
@@ -29,12 +28,6 @@ export const userSlice = createSlice({
 				state.supporterStatus = action.payload;
 			},
 		);
-
-		builder.addCase(validateForm, (state) => {
-			if (state.supporterStatus.recurringContributor) {
-				state.isRecurringContributorError = true;
-			}
-		});
 	},
 });
 
