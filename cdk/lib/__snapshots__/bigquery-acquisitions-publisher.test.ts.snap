@@ -17,31 +17,31 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
-    "BigqueryAcquisitionsPublisherLambda993BD8E0": {
+    "bigqueryacquisitionspublisherLambdaD7F059E6": {
       "DependsOn": [
-        "BigqueryAcquisitionsPublisherLambdaServiceRoleDefaultPolicyD43DEA78",
-        "BigqueryAcquisitionsPublisherLambdaServiceRole01F85863",
+        "bigqueryacquisitionspublisherLambdaServiceRoleDefaultPolicy1C7997C3",
+        "bigqueryacquisitionspublisherLambdaServiceRole7C9A373D",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/BigqueryAcquisitionsPublisher/bigquery-acquisitions-publisher.jar",
+          "S3Key": "support/PROD/bigquery-acquisitions-publisher/bigquery-acquisitions-publisher.jar",
         },
         "Environment": {
           "Variables": {
-            "APP": "BigqueryAcquisitionsPublisher",
+            "APP": "bigquery-acquisitions-publisher",
             "STACK": "support",
             "STAGE": "PROD",
           },
         },
-        "FunctionName": "BigqueryAcquisitionsPublisher-PROD",
-        "Handler": "com.gu.bigqueryAcquisitionsPublisher::handleRequest",
+        "FunctionName": "bigquery-acquisitions-publisher-PROD",
+        "Handler": "com.gu.bigqueryAcquisitionsPublisher.Lambda::handleRequest",
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "BigqueryAcquisitionsPublisherLambdaServiceRole01F85863",
+            "bigqueryacquisitionspublisherLambdaServiceRole7C9A373D",
             "Arn",
           ],
         },
@@ -49,7 +49,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "BigqueryAcquisitionsPublisher",
+            "Value": "bigquery-acquisitions-publisher",
           },
           {
             "Key": "gu:cdk:version",
@@ -72,7 +72,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "BigqueryAcquisitionsPublisherLambdaServiceRole01F85863": {
+    "bigqueryacquisitionspublisherLambdaServiceRole7C9A373D": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -103,7 +103,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
         "Tags": [
           {
             "Key": "App",
-            "Value": "BigqueryAcquisitionsPublisher",
+            "Value": "bigquery-acquisitions-publisher",
           },
           {
             "Key": "gu:cdk:version",
@@ -125,7 +125,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "BigqueryAcquisitionsPublisherLambdaServiceRoleDefaultPolicyD43DEA78": {
+    "bigqueryacquisitionspublisherLambdaServiceRoleDefaultPolicy1C7997C3": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -140,7 +140,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "BigqueryAcquisitionsPublisherQueue8CDF0B4F",
+                  "bigqueryacquisitionspublisherQueue3F783231",
                   "Arn",
                 ],
               },
@@ -180,7 +180,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/BigqueryAcquisitionsPublisher/bigquery-acquisitions-publisher.jar",
+                      "/support/PROD/bigquery-acquisitions-publisher/bigquery-acquisitions-publisher.jar",
                     ],
                   ],
                 },
@@ -201,7 +201,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/BigqueryAcquisitionsPublisher",
+                    ":parameter/PROD/support/bigquery-acquisitions-publisher",
                   ],
                 ],
               },
@@ -224,7 +224,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/BigqueryAcquisitionsPublisher/*",
+                    ":parameter/PROD/support/bigquery-acquisitions-publisher/*",
                   ],
                 ],
               },
@@ -232,33 +232,33 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "BigqueryAcquisitionsPublisherLambdaServiceRoleDefaultPolicyD43DEA78",
+        "PolicyName": "bigqueryacquisitionspublisherLambdaServiceRoleDefaultPolicy1C7997C3",
         "Roles": [
           {
-            "Ref": "BigqueryAcquisitionsPublisherLambdaServiceRole01F85863",
+            "Ref": "bigqueryacquisitionspublisherLambdaServiceRole7C9A373D",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "BigqueryAcquisitionsPublisherLambdaSqsEventSourceBigqueryAcquisitionsPublisherPRODBigqueryAcquisitionsPublisherQueue3FE52437B13B952C": {
+    "bigqueryacquisitionspublisherLambdaSqsEventSourceBigqueryAcquisitionsPublisherPRODbigqueryacquisitionspublisherQueue4510DFFB25270BDD": {
       "Properties": {
         "EventSourceArn": {
           "Fn::GetAtt": [
-            "BigqueryAcquisitionsPublisherQueue8CDF0B4F",
+            "bigqueryacquisitionspublisherQueue3F783231",
             "Arn",
           ],
         },
         "FunctionName": {
-          "Ref": "BigqueryAcquisitionsPublisherLambda993BD8E0",
+          "Ref": "bigqueryacquisitionspublisherLambdaD7F059E6",
         },
       },
       "Type": "AWS::Lambda::EventSourceMapping",
     },
-    "BigqueryAcquisitionsPublisherQueue8CDF0B4F": {
+    "bigqueryacquisitionspublisherQueue3F783231": {
       "DeletionPolicy": "Delete",
       "Properties": {
-        "QueueName": "BigqueryAcquisitionsPublisherQueue",
+        "QueueName": "bigquery-acquisitions-publisherQueue",
         "Tags": [
           {
             "Key": "gu:cdk:version",

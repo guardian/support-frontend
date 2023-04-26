@@ -6,7 +6,7 @@ import {Runtime} from 'aws-cdk-lib/aws-lambda';
 import {SqsEventSource} from "aws-cdk-lib/aws-lambda-event-sources";
 import {Queue} from "aws-cdk-lib/aws-sqs";
 
-const appName = 'BigqueryAcquisitionsPublisher';
+const appName = 'bigquery-acquisitions-publisher';
 
 export class BigqueryAcquisitionsPublisher extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
@@ -20,9 +20,9 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
     new GuLambdaFunction(this, `${appName}Lambda`, {
       app: appName,
       runtime: Runtime.JAVA_11,
-      fileName: 'bigquery-acquisitions-publisher.jar',
+      fileName: `${appName}.jar`,
       functionName: `${appName}-${props.stage}`,
-      handler: 'com.gu.bigqueryAcquisitionsPublisher::handleRequest',
+      handler: 'com.gu.bigqueryAcquisitionsPublisher.Lambda::handler',
       events: [eventSource],
     });
   }
