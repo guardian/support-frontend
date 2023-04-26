@@ -161,7 +161,7 @@ const arrowTop = css`
 	}
 `;
 
-type TooltipProps = {
+export type TooltipProps = {
 	promptText: string;
 	buttonLabel?: string;
 	children: React.ReactNode;
