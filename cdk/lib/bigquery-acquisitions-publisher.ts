@@ -20,7 +20,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
     new GuLambdaFunction(this, `${appName}Lambda`, {
       app: appName,
       runtime: Runtime.JAVA_11,
-      fileName: `${appName}.jar`,
+      fileName: 'bigquery-acquisitions-publisher.jar',
       functionName: `${appName}-${props.stage}`,
       handler: 'com.gu.bigqueryAcquisitionsPublisher::handleRequest',
       events: [eventSource],

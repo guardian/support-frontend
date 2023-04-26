@@ -27,7 +27,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/BigqueryAcquisitionsPublisher/BigqueryAcquisitionsPublisher.jar",
+          "S3Key": "support/PROD/BigqueryAcquisitionsPublisher/bigquery-acquisitions-publisher.jar",
         },
         "Environment": {
           "Variables": {
@@ -180,7 +180,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/BigqueryAcquisitionsPublisher/BigqueryAcquisitionsPublisher.jar",
+                      "/support/PROD/BigqueryAcquisitionsPublisher/bigquery-acquisitions-publisher.jar",
                     ],
                   ],
                 },
