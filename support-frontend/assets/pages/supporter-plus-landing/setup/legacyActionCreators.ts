@@ -186,7 +186,7 @@ function getBillingCountryAndState(
 	const fallbackCountry =
 		findIsoCountry(window.guardian.geoip?.countryCode) ?? pageBaseCountry;
 	const fallbackState = stateProvinceFromString(
-		billingCountry,
+		fallbackCountry,
 		window.guardian.geoip?.stateCode,
 	);
 	return {
