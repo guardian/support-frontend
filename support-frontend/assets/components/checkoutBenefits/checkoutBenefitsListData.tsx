@@ -16,7 +16,7 @@ const boldText = css`
 `;
 
 const highlightText = css`
-	color: red;
+	color: #c70000;
 `;
 
 type CheckListDataProps = {
