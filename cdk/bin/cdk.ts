@@ -1,8 +1,11 @@
 import "source-map-support/register";
 import { App } from "aws-cdk-lib";
+import {AcquisitionEventsApi} from "../lib/acquisition-events-api";
 import { Frontend } from "../lib/frontend";
-import { PaymentApi } from "../lib/payment-api";
+import {PaymentApi} from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
+
+
 
 const app = new App();
 const cloudFormationStackName = process.env.GU_CFN_STACK_NAME;
@@ -11,9 +14,11 @@ new Frontend(app, "Frontend-PROD", {
   stack: "support",
   stage: "PROD",
   cloudFormationStackName,
-  membershipSubPromotionsTable:
-    "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
-  redemptionCodesTable: "arn:aws:dynamodb:*:*:table/redemption-codes-PROD",
+  membershipSubPromotionsTables:
+    [
+      "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
+      "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV",
+    ],
   domainName: "support.theguardian.com.origin.membership.guardianapis.com",
   scaling: {
     minimumInstances: 3,
@@ -26,9 +31,7 @@ new Frontend(app, "Frontend-CODE", {
   stack: "support",
   stage: "CODE",
   cloudFormationStackName,
-  membershipSubPromotionsTable:
-    "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV",
-  redemptionCodesTable: "arn:aws:dynamodb:*:*:table/redemption-codes-DEV",
+  membershipSubPromotionsTables: ["arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV"],
   domainName: "support.code.theguardian.com.origin.membership.guardianapis.com",
   scaling: {
     minimumInstances: 1,
@@ -70,4 +73,14 @@ new PaymentApi(app, "Payment-API-PROD", {
     minimumInstances: 3,
     maximumInstances: 6,
   },
+});
+
+new AcquisitionEventsApi(app, "Acquisition-Events-API-CODE", {
+  stack: "support",
+  stage: "CODE",
+});
+
+new AcquisitionEventsApi(app, "Acquisition-Events-API-PROD", {
+  stack: "support",
+  stage: "PROD",
 });

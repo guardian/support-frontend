@@ -18,8 +18,10 @@ import scala.concurrent.Future
 
 case class StateNotValidException(message: String) extends RuntimeException(message)
 
-class SendThankYouEmail(serviceProvider: ServiceProvider = ServiceProvider)
-    extends SubsetServicesHandler[SendAcquisitionEventState, List[SendMessageResult], SendThankYouEmailState](
+class SendThankYouEmail(
+    serviceProvider: ServiceProvider = ServiceProvider,
+    emailService: EmailService = new EmailService(Configuration.emailQueueName),
+) extends SubsetServicesHandler[SendAcquisitionEventState, List[SendMessageResult], SendThankYouEmailState](
       serviceProvider,
       _.sendThankYouEmailState,
     ) {
@@ -32,7 +34,6 @@ class SendThankYouEmail(serviceProvider: ServiceProvider = ServiceProvider)
       context: Context,
       services: Services,
   ): FutureHandlerResult = {
-    val thankYouEmailService: EmailService = new EmailService(services.config.contributionThanksQueueName)
     val emailBuilder = new EmailBuilder(
       services.zuoraService.getMandateIdFromAccountNumber,
       services.promotionService,
@@ -41,7 +42,7 @@ class SendThankYouEmail(serviceProvider: ServiceProvider = ServiceProvider)
 
     for {
       emailFields <- emailBuilder.buildEmail(state)
-      emailResult <- Future.sequence(emailFields.map(thankYouEmailService.send))
+      emailResult <- Future.sequence(emailFields.map(emailService.send))
     } yield HandlerResult(emailResult, requestInfo)
   }
 

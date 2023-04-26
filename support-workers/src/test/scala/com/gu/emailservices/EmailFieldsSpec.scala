@@ -107,41 +107,6 @@ class DigitalPackEmailFieldsSpec extends AsyncFlatSpec with Matchers with Inside
     })
   }
 
-  it should "generate the right json for corporate subs" in {
-    val expectedJson = parse("""{
-        |"To" : {
-        |  "Address" : "test@theguardian.com",
-        |  "ContactAttributes" : {
-        |    "SubscriberAttributes" : {
-        |      "first_name" : "Mickey",
-        |      "emailaddress" : "test@theguardian.com",
-        |      "subscription_details" : "Group subscription",
-        |      "zuorasubscriberid" : "subscription number",
-        |      "last_name" : "Mouse"
-        |    }
-        |  }
-        |},
-        |"DataExtensionName" : "digipack-corporate-redemption",
-        |"IdentityUserId" : "1234"
-        |}
-        |""".stripMargin)
-    val actual = new DigitalPackEmailFields(
-      new PaperFieldsGenerator(TestData.promotionService, TestData.getMandate),
-      TestData.getMandate,
-      SANDBOX,
-    ).build(
-      SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
-        User("1234", "test@theguardian.com", None, "Mickey", "Mouse", billingAddress = countryOnlyAddress),
-        DigitalPack(GBP, Annual),
-        "A-S00045678",
-        "subscription number",
-      ),
-    ).map(_.map(ef => parse(ef.payload)))
-    actual.map(inside(_) { case actualJson :: Nil =>
-      actualJson should be(expectedJson)
-    })
-  }
-
   it should "generate the right json for gift redemption subs" in {
     val expectedJson = parse("""{
         |  "To" : {

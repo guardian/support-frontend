@@ -21,7 +21,7 @@ import scala.concurrent.Future
 
 class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerState, CheckoutFailureState] {
 
-  def this() = this(new EmailService(Configuration.load().contributionThanksQueueName))
+  def this() = this(new EmailService(Configuration.emailQueueName))
 
   override protected def handlerFuture(
       state: FailureHandlerState,

@@ -28,7 +28,7 @@ import com.gu.support.workers.{
   StripePaymentType,
   SupporterPlus,
 }
-import com.gu.support.zuora.api.ReaderType.{Corporate, Direct, Gift}
+import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
 import com.gu.support.acquisitions.models.AcquisitionType.{Purchase, Redemption}
 import com.gu.support.acquisitions.models.PaymentProvider.{
@@ -228,15 +228,6 @@ object AcquisitionDataRowBuilder {
           Some(s.accountNumber),
           Some(s.subscriptionNumber),
         )
-      case s: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState =>
-        AcquisitionTypeDetails(
-          None,
-          None,
-          Corporate,
-          Redemption,
-          Some(s.accountNumber),
-          Some(s.subscriptionNumber),
-        )
       case s: SendThankYouEmailDigitalSubscriptionGiftRedemptionState =>
         AcquisitionTypeDetails(
           None,
@@ -255,10 +246,6 @@ object AcquisitionDataRowBuilder {
       if (accountExists) Some("REUSED_EXISTING_PAYMENT_METHOD") else None,
       if (isSixForSix(state)) Some("GUARDIAN_WEEKLY_SIX_FOR_SIX") else None,
       if (state.analyticsInfo.isGiftPurchase) Some("GIFT_SUBSCRIPTION") else None,
-      state.sendThankYouEmailState match {
-        case _: SendThankYouEmailDigitalSubscriptionCorporateRedemptionState => Some("CORPORATE_SUBSCRIPTION")
-        case _ => None
-      },
     ).flatten.union(referrerLabels).toList
   }
 

@@ -9,12 +9,6 @@ import com.gu.support.catalog.{CatalogService, Everyday, S3CatalogProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
 import com.gu.support.redemption.CodeAlreadyUsed
-import com.gu.support.redemption.corporate.{
-  CorporateCodeStatusUpdater,
-  CorporateCodeValidator,
-  DynamoTableAsync,
-  RedemptionTable,
-}
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers._
@@ -89,20 +83,6 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
       .createSubscription(createDigiPackZuoraSubscriptionJson)
       .map(_ should matchPattern { case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
       })
-  }
-
-  it should "create a Digital Pack corporate subscription" in {
-    val dynamoTableAsync: DynamoTableAsync = RedemptionTable.forEnvAsync(TouchPointEnvironments.SANDBOX)
-    val corporateCodeStatusUpdater = CorporateCodeStatusUpdater.withDynamoUpdate(dynamoTableAsync)
-    val codeValidator = CorporateCodeValidator.withDynamoLookup(dynamoTableAsync)
-    val mutableCode: RedemptionCode = RedemptionCode("it-mutable123").toOption.get
-    for {
-      _ <- corporateCodeStatusUpdater.setStatus(mutableCode, RedemptionTable.AvailableField.CodeIsAvailable)
-      _ <- createZuoraHelper.createSubscription(createDigiPackCorporateSubscriptionJson)
-      r <- codeValidator.getStatus(mutableCode).map {
-        _ should be(CodeAlreadyUsed)
-      }
-    } yield r
   }
 
   it should "create a Digital Pack subscription with a discount" in {
@@ -203,8 +183,6 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
 
   val realPromotionService = new PromotionService(realConfig.promotionsConfigProvider.get())
 
-  val realRedemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(Stages.DEV))
-
   private val jsonProvider = new S3CatalogProvider(TouchPointEnvironments.SANDBOX)
   lazy val realCatalogService = new CatalogService(TouchPointEnvironments.SANDBOX, jsonProvider)
 
@@ -234,7 +212,6 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
     (s => s.zuoraService, mockZuoraService),
     (s => s.zuoraGiftService, realZuoraGiftService),
     (s => s.promotionService, realPromotionService),
-    (s => s.redemptionService, realRedemptionService),
     (s => s.config, realConfig),
     (s => s.giftCodeGenerator, giftCodeGenerator),
     (s => s.catalogService, realCatalogService),

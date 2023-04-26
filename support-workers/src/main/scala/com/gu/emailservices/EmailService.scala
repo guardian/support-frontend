@@ -9,14 +9,14 @@ import com.gu.monitoring.SafeLogger._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EmailService(contributionThanksQueueName: String)(implicit val executionContext: ExecutionContext) {
+class EmailService(emailQueueName: String)(implicit val executionContext: ExecutionContext) {
 
   private val sqsClient = AmazonSQSAsyncClientBuilder.standard
     .withCredentials(CredentialsProvider)
     .withRegion(Regions.EU_WEST_1)
     .build()
 
-  private val queueUrl = sqsClient.getQueueUrl(contributionThanksQueueName).getQueueUrl
+  private val queueUrl = sqsClient.getQueueUrl(emailQueueName).getQueueUrl
 
   def send(fields: EmailFields): Future[SendMessageResult] = {
     SafeLogger.info(s"Sending message to SQS queue $queueUrl")

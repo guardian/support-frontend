@@ -5,7 +5,6 @@ import com.gu.config.Configuration
 import com.gu.helpers.DateGenerator
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.TouchPointEnvironments
-import com.gu.support.redemption.corporate._
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState._
 import com.gu.support.workers.states.{CreateZuoraSubscriptionState, SendAcquisitionEventState}
@@ -53,8 +52,6 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
           zuoraSubscriptionState.csrUsername,
           zuoraSubscriptionState.salesforceCaseId,
         )
-      case state: DigitalSubscriptionCorporateRedemptionState =>
-        zuoraDigitalSubscriptionCorporateRedemptionHandler.subscribe(state)
       case state: ContributionState =>
         zuoraContributionHandler.subscribe(state)
       case state: PaperState =>
@@ -78,9 +75,7 @@ class CreateZuoraSubscription(servicesProvider: ServiceProvider = ServiceProvide
         requestInfo,
       )
     }
-
   }
-
 }
 
 class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionState) {
@@ -104,17 +99,6 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
       services.promotionService,
       dateGenerator,
       services.giftCodeGenerator,
-      touchPointEnvironment,
-      subscribeItemBuilder,
-    ),
-    state.user,
-  )
-  lazy val zuoraDigitalSubscriptionCorporateRedemptionHandler = new ZuoraDigitalSubscriptionCorporateRedemptionHandler(
-    zuoraSubscriptionCreator,
-    CorporateCodeStatusUpdater.withDynamoUpdate(services.redemptionService),
-    new DigitalSubscriptionCorporateRedemptionBuilder(
-      CorporateCodeValidator.withDynamoLookup(services.redemptionService),
-      dateGenerator,
       touchPointEnvironment,
       subscribeItemBuilder,
     ),

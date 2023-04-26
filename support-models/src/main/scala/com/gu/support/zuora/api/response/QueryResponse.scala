@@ -3,7 +3,6 @@ package com.gu.support.zuora.api.response
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.JsonHelpers.JsonObjectExtensions
-import com.gu.support.redemptions.RedemptionCode
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import org.joda.time.LocalDate

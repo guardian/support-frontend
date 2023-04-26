@@ -9,12 +9,11 @@ import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.redemption._
-import com.gu.support.redemption.corporate.{CorporateCodeValidator, DynamoTableAsync, DynamoTableAsyncProvider}
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import com.gu.support.zuora.api.ReaderType
-import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
+import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.zuora.{ZuoraGiftLookupService, ZuoraGiftLookupServiceProvider}
 import io.circe.syntax._
 import lib.RedirectWithEncodedQueryString
@@ -34,7 +33,6 @@ class RedemptionController(
     settingsProvider: AllSettingsProvider,
     testUsers: TestUserService,
     components: ControllerComponents,
-    dynamoTableProvider: DynamoTableAsyncProvider,
     zuoraLookupServiceProvider: ZuoraGiftLookupServiceProvider,
 )(implicit
     val ec: ExecutionContext,
@@ -55,7 +53,7 @@ class RedemptionController(
     implicit request =>
       val isTestUser = testUsers.isTestUser(request)
       val codeValidator =
-        new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser), dynamoTableProvider.forUser(isTestUser))
+        new CodeValidator(zuoraLookupServiceProvider.forUser(isTestUser))
       val normalisedCode = redemptionCode.toLowerCase(Locale.UK)
       for {
         form <- codeValidator
@@ -110,7 +108,7 @@ class RedemptionController(
     CachedAction().async {
       val testUser = isTestUser.getOrElse(false)
       val codeValidator =
-        new CodeValidator(zuoraLookupServiceProvider.forUser(testUser), dynamoTableProvider.forUser(testUser))
+        new CodeValidator(zuoraLookupServiceProvider.forUser(testUser))
       codeValidator.validate(redemptionCode).value.map { validationResult =>
         SafeLogger.info(s"Validating code ${redemptionCode}: ${validationResult}")
         Ok(
@@ -132,11 +130,10 @@ class RedemptionController(
   }
 }
 
-class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoTableAsync: DynamoTableAsync) {
+class CodeValidator(zuoraLookupService: ZuoraGiftLookupService) {
 
   def validate(inputCode: String)(implicit ec: ExecutionContext): EitherT[Future, String, ReaderType] =
     EitherT(getValidationResult(inputCode).map {
-      case ValidCorporateCode(_) => Right(Corporate)
       case ValidGiftCode(_) => Right(Gift)
       case CodeAlreadyUsed => Left("This code has already been redeemed")
       case CodeExpired => Left("This code has expired")
@@ -144,21 +141,11 @@ class CodeValidator(zuoraLookupService: ZuoraGiftLookupService, dynamoTableAsync
     })
 
   private def getValidationResult(inputCode: String)(implicit ec: ExecutionContext): Future[CodeStatus] = {
-    val corporateValidator = CorporateCodeValidator.withDynamoLookup(dynamoTableAsync)
     val giftValidator = new GiftCodeValidator(zuoraLookupService)
 
     RedemptionCode(inputCode)
       .leftMap(_ => Future.successful(CodeMalformed))
-      .map { redemptionCode =>
-        for {
-          giftValidationResult <- giftValidator.getStatus(redemptionCode, None)
-          mergedResult <-
-            if (giftValidationResult == CodeNotFound)
-              corporateValidator.getStatus(redemptionCode)
-            else
-              Future.successful(giftValidationResult)
-        } yield mergedResult
-      }
+      .map(redemptionCode => giftValidator.getStatus(redemptionCode, None))
       .merge
   }
 

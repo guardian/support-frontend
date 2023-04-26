@@ -121,7 +121,6 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
       payloadMap.get("pr1ca") shouldEqual Some("PrintSubscription")
       payloadMap.get("cd17") shouldEqual Some("Stripe")
       payloadMap.get("cd25") shouldEqual Some("false")
-      payloadMap.get("cd30") shouldEqual Some("false")
       payloadMap.get("cd16") shouldEqual Some("test_name=variant_name,second_test=control")
       payloadMap.get("pr1pr") shouldEqual Some("0.0")
       payloadMap.get("dh") shouldEqual Some("support.code.dev-theguardian.com")

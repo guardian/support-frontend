@@ -24,7 +24,5 @@ object RedemptionCode {
 
   implicit val decoder: Decoder[RedemptionCode] = Decoder.decodeString.emap(apply)
 
-  implicit val corporateCodec: Codec[RedemptionCode] = new Codec[RedemptionCode](encoder, decoder)
-
 }
 case class RedemptionCode private (value: String)

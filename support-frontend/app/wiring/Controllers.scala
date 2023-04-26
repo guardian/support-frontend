@@ -66,7 +66,6 @@ trait Controllers {
     allSettingsProvider,
     testUsers,
     controllerComponents,
-    dynamoTableAsyncProvider,
     zuoraGiftLookupServiceProvider,
   )
 

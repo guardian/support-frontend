@@ -1,8 +1,0 @@
-stacks: [support]
-regions: [eu-west-1]
-deployments:
-  cfn:
-    app: redemptiondb
-    type: cloud-formation
-    parameters:
-      templatePath: cfn.yaml

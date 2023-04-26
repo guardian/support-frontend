@@ -279,18 +279,6 @@ object Fixtures {
             }
         """
 
-  def createCorporateDigiPackZuoraSubscriptionJson: String =
-    s"""
-          {
-            "productType": "DigitalSubscriptionCorporateRedemption",
-            $requestIdJson,
-            $userJson,
-            "product": $digitalPackJson,
-            "redemptionData": {"redemptionCode": "fake-code-123"},
-            "salesForceContact": $salesforceContactJson
-            }
-        """
-
   val zuoraErrorResponse =
     """[{"Code": "TRANSACTION_FAILED","Message": "Transaction declined.do_not_honor - Your card was declined."}]"""
 

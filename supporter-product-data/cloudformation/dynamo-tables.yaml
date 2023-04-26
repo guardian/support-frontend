@@ -6,7 +6,6 @@ Parameters:
     Type: String
     AllowedValues:
       - PROD
-      - UAT
       - DEV
     Default: DEV
 

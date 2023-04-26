@@ -20,8 +20,7 @@ import { InstanceClass, InstanceSize, InstanceType } from "aws-cdk-lib/aws-ec2";
 import { FilterPattern, LogGroup, MetricFilter } from "aws-cdk-lib/aws-logs";
 
 interface FrontendProps extends GuStackProps {
-  membershipSubPromotionsTable: string;
-  redemptionCodesTable: string;
+  membershipSubPromotionsTables: string[];
   domainName: string;
   scaling: GuAsgCapacity;
   shouldEnableAlarms: boolean;
@@ -30,8 +29,7 @@ interface FrontendProps extends GuStackProps {
 export class Frontend extends GuStack {
   constructor(scope: App, id: string, props: FrontendProps) {
     const {
-      membershipSubPromotionsTable,
-      redemptionCodesTable,
+      membershipSubPromotionsTables,
       domainName,
       scaling,
       shouldEnableAlarms,
@@ -59,7 +57,6 @@ export class Frontend extends GuStack {
         bucketName: "gu-zuora-catalog",
         paths: [
           "PROD/Zuora-PROD/catalog.json",
-          "PROD/Zuora-UAT/catalog.json",
           "PROD/Zuora-DEV/catalog.json",
         ],
       }),
@@ -98,17 +95,7 @@ export class Frontend extends GuStack {
           "dynamodb:Query",
           "dynamodb:DescribeTable",
         ],
-        resources: [
-          membershipSubPromotionsTable,
-          "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-UAT",
-        ],
-      }),
-      new GuAllowPolicy(this, "DynamoRedemptions", {
-        actions: ["dynamodb:GetItem"],
-        resources: [
-          redemptionCodesTable,
-          "arn:aws:dynamodb:*:*:table/redemption-codes-UAT",
-        ],
+        resources: membershipSubPromotionsTables,
       }),
       new GuAllowPolicy(this, "StripeSetupIntentLambda", {
         actions: ["lambda:InvokeFunction"],

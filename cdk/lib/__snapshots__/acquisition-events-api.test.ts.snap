@@ -1,0 +1,493 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The Acquisition Events API stack matches the snapshot 1`] = `
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Conditions": {
+    "IsProd": {
+      "Fn::Equals": [
+        "PROD",
+        "PROD",
+      ],
+    },
+  },
+  "Description": "API for acquisition events",
+  "Mappings": {
+    "StageMap": {
+      "CODE": {
+        "CorsOrigin": "'*'",
+        "DomainName": "acquisition-events-code.support.guardianapis.com",
+      },
+      "PROD": {
+        "CorsOrigin": "'*'",
+        "DomainName": "acquisition-events.support.guardianapis.com",
+      },
+    },
+  },
+  "Metadata": {
+    "gu:cdk:constructs": [],
+    "gu:cdk:version": "TEST",
+  },
+  "Parameters": {
+    "App": {
+      "Default": "acquisition-events-api",
+      "Description": "Acquisition Events Api",
+      "Type": "String",
+    },
+    "CertificateArn": {
+      "Description": "ARN of the certificate",
+      "Type": "String",
+    },
+    "DeployBucket": {
+      "Default": "membership-dist",
+      "Description": "Bucket to copy files to",
+      "Type": "String",
+    },
+    "Stack": {
+      "Default": "support",
+      "Description": "Stack name",
+      "Type": "String",
+    },
+  },
+  "Resources": {
+    "ApiGateway4XXAlarm": {
+      "Condition": "IsProd",
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:contributions-dev",
+          },
+        ],
+        "AlarmDescription": "Acquisition Events API received an invalid request",
+        "AlarmName": {
+          "Fn::Sub": "acquisition-events-api-PROD API gateway 4XX response",
+        },
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": {
+              "Fn::Sub": "acquisition-events-api-PROD",
+            },
+          },
+          {
+            "Name": "Method",
+            "Value": "POST",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "4XXError",
+        "Namespace": "AWS/ApiGateway",
+        "Period": 300,
+        "Statistic": "Sum",
+        "Threshold": 1,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "ApiGateway5XXAlarm": {
+      "Condition": "IsProd",
+      "Properties": {
+        "AlarmActions": [
+          {
+            "Fn::Sub": "arn:aws:sns:\${AWS::Region}:\${AWS::AccountId}:contributions-dev",
+          },
+        ],
+        "AlarmDescription": "Acquisition events API failed to process an event",
+        "AlarmName": {
+          "Fn::Sub": "acquisition-events-api-PROD API gateway 5XX response",
+        },
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": {
+              "Fn::Sub": "acquisition-events-api-PROD",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway",
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 1,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "BasePathMapping": {
+      "DependsOn": [
+        "ServerlessRestApiProdStage",
+      ],
+      "Properties": {
+        "DomainName": {
+          "Ref": "DomainName",
+        },
+        "RestApiId": {
+          "Ref": "ServerlessRestApi",
+        },
+        "Stage": {
+          "Fn::Sub": "Prod",
+        },
+      },
+      "Type": "AWS::ApiGateway::BasePathMapping",
+    },
+    "DNSRecord": {
+      "Properties": {
+        "Comment": {
+          "Fn::Sub": "CNAME for acquisition events endpoints PROD",
+        },
+        "HostedZoneName": "support.guardianapis.com.",
+        "Name": {
+          "Fn::FindInMap": [
+            "StageMap",
+            "PROD",
+            "DomainName",
+          ],
+        },
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "DomainName",
+              "RegionalDomainName",
+            ],
+          },
+        ],
+        "TTL": "120",
+        "Type": "CNAME",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "DomainName": {
+      "Properties": {
+        "DomainName": {
+          "Fn::FindInMap": [
+            "StageMap",
+            "PROD",
+            "DomainName",
+          ],
+        },
+        "EndpointConfiguration": {
+          "Types": [
+            "REGIONAL",
+          ],
+        },
+        "RegionalCertificateArn": {
+          "Ref": "CertificateArn",
+        },
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::ApiGateway::DomainName",
+    },
+    "Lambda": {
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "DeployBucket",
+          },
+          "S3Key": {
+            "Fn::Sub": "\${Stack}/PROD/\${App}/\${App}.jar",
+          },
+        },
+        "Description": "A lambda for acquisitions events api",
+        "Environment": {
+          "Variables": {
+            "STAGE": "PROD",
+          },
+        },
+        "FunctionName": {
+          "Fn::Sub": "\${App}-PROD",
+        },
+        "Handler": "com.gu.acquisitionEventsApi.Lambda::handler",
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": [
+            "LambdaRole",
+            "Arn",
+          ],
+        },
+        "Runtime": "java8.al2",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "lambda:createdBy",
+            "Value": "SAM",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Timeout": 300,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "LambdaAcquisitionEventPermissionProd": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Ref": "Lambda",
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Sub": [
+            "arn:aws:execute-api:\${AWS::Region}:\${AWS::AccountId}:\${__ApiId__}/\${__Stage__}/POST/acquisition",
+            {
+              "__ApiId__": {
+                "Ref": "ServerlessRestApi",
+              },
+              "__Stage__": "*",
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "LambdaRole": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sts:AssumeRole",
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": {
+                "Action": [
+                  "ssm:GetParametersByPath",
+                ],
+                "Effect": "Allow",
+                "Resource": [
+                  {
+                    "Fn::Sub": "arn:aws:ssm:\${AWS::Region}:\${AWS::AccountId}:parameter/acquisition-events-api/bigquery-config/PROD/*",
+                  },
+                ],
+              },
+            },
+            "PolicyName": "LambdaRolePolicy1",
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "s3:GetObject",
+                  "Effect": "Allow",
+                  "Resource": [
+                    "arn:aws:s3::*:membership-dist/*",
+                  ],
+                },
+              ],
+            },
+            "PolicyName": "LambdaRolePolicy2",
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "lambda:createdBy",
+            "Value": "SAM",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ServerlessRestApi": {
+      "Properties": {
+        "Body": {
+          "info": {
+            "title": {
+              "Ref": "AWS::StackName",
+            },
+            "version": "1.0",
+          },
+          "paths": {
+            "/acquisition": {
+              "options": {
+                "consumes": [
+                  "application/json",
+                ],
+                "produces": [
+                  "application/json",
+                ],
+                "responses": {
+                  "200": {
+                    "description": "Default response for CORS method",
+                    "headers": {
+                      "Access-Control-Allow-Headers": {
+                        "type": "string",
+                      },
+                      "Access-Control-Allow-Methods": {
+                        "type": "string",
+                      },
+                      "Access-Control-Allow-Origin": {
+                        "type": "string",
+                      },
+                    },
+                  },
+                },
+                "summary": "CORS support",
+                "x-amazon-apigateway-integration": {
+                  "requestTemplates": {
+                    "application/json": "{
+  "statusCode" : 200
+}
+",
+                  },
+                  "responses": {
+                    "default": {
+                      "responseParameters": {
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type'",
+                        "method.response.header.Access-Control-Allow-Methods": "'*'",
+                        "method.response.header.Access-Control-Allow-Origin": {
+                          "Fn::FindInMap": [
+                            "StageMap",
+                            "PROD",
+                            "CorsOrigin",
+                          ],
+                        },
+                      },
+                      "responseTemplates": {
+                        "application/json": "{}
+",
+                      },
+                      "statusCode": "200",
+                    },
+                  },
+                  "type": "mock",
+                },
+              },
+              "post": {
+                "responses": {},
+                "x-amazon-apigateway-integration": {
+                  "httpMethod": "POST",
+                  "type": "aws_proxy",
+                  "uri": {
+                    "Fn::Sub": "arn:aws:apigateway:\${AWS::Region}:lambda:path/2015-03-31/functions/\${Lambda.Arn}/invocations",
+                  },
+                },
+              },
+            },
+          },
+          "swagger": "2.0",
+        },
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::ApiGateway::RestApi",
+    },
+    "ServerlessRestApiDeployment0eaecd80e2": {
+      "Properties": {
+        "Description": "RestApi deployment id: 0eaecd80e2ee9fd80faf745412676700de78c061",
+        "RestApiId": {
+          "Ref": "ServerlessRestApi",
+        },
+        "StageName": "Stage",
+      },
+      "Type": "AWS::ApiGateway::Deployment",
+    },
+    "ServerlessRestApiProdStage": {
+      "Properties": {
+        "DeploymentId": {
+          "Ref": "ServerlessRestApiDeployment0eaecd80e2",
+        },
+        "RestApiId": {
+          "Ref": "ServerlessRestApi",
+        },
+        "StageName": "Prod",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::ApiGateway::Stage",
+    },
+  },
+}
+`;

@@ -115,9 +115,6 @@ object ReaderType {
   case object Gift extends ReaderType {
     val value = "Gift"
   }
-  case object Corporate extends ReaderType {
-    val value = "Corporate"
-  }
   case object Agent extends ReaderType {
     val value = "Agent"
   }
@@ -136,7 +133,6 @@ object ReaderType {
     s match {
       case Gift.value => Gift
       case Agent.value => Agent
-      case Corporate.value => Corporate
       case Direct.value => Direct
       case Patron.value => Patron
       case _ => Unknown
@@ -193,7 +189,6 @@ object Subscription {
       .renameField("PromoCode", "InitialPromotionCode__c")
       .renameField("ReaderType", "ReaderType__c")
       .renameField("RedemptionCode", "RedemptionCode__c")
-      .renameField("CorporateAccountId", "CorporateAccountId__c")
       .renameField("CreatedRequestId", "CreatedRequestId__c")
       .renameField("GiftNotificationEmailDate", "GiftNotificationEmailDate__c")
       .renameField("AcquisitionSource", "AcquisitionSource__c")
@@ -215,7 +210,6 @@ case class Subscription(
     readerType: ReaderType = ReaderType.Direct,
     promoCode: Option[PromoCode] = None,
     redemptionCode: Option[RawRedemptionCode] = None,
-    corporateAccountId: Option[String] = None,
     giftNotificationEmailDate: Option[LocalDate] = None,
     acquisitionSource: Option[AcquisitionSource] = None,
     createdByCsr: Option[String] = None,

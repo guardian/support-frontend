@@ -5,7 +5,6 @@ import com.gu.support.catalog.GuardianWeekly.postIntroductorySixForSixBillingPer
 import com.gu.support.catalog.{Product, ProductRatePlan, SupporterPlusV1, SupporterPlusV2}
 import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.zuora.api.ReaderType
-import com.gu.support.zuora.api.ReaderType.Corporate
 
 object ProductTypeRatePlans {
 
@@ -45,8 +44,7 @@ object ProductTypeRatePlans {
     catalog.DigitalPack.ratePlans
       .getOrElse(environment, Nil)
       .find(productRatePlan =>
-        (productRatePlan.billingPeriod == product.billingPeriod && productRatePlan.readerType == product.readerType) ||
-          (productRatePlan.readerType == Corporate && product.readerType == Corporate), // We don't care about the billing period for corporates
+        productRatePlan.billingPeriod == product.billingPeriod && productRatePlan.readerType == product.readerType,
       )
 
   def supporterPlusRatePlanV1(

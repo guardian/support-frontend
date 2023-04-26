@@ -9,19 +9,17 @@ import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds}
 import com.gu.support.config.TouchPointEnvironments.SANDBOX
 import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig, ZuoraInvoiceTemplatesConfig}
 import com.gu.support.promotions.{Promotion, PromotionService, PromotionWithCode}
-import com.gu.support.redemption.corporate.{CorporateCodeValidator, DynamoLookup}
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers._
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
-  DigitalSubscriptionCorporateRedemptionState,
   DigitalSubscriptionDirectPurchaseState,
   DigitalSubscriptionGiftPurchaseState,
 }
 import com.gu.support.zuora.api.AcquisitionSource.CSR
-import com.gu.support.zuora.api.ReaderType.{Corporate, Gift}
+import com.gu.support.zuora.api.ReaderType.Gift
 import com.gu.support.zuora.api._
 import com.gu.zuora.Fixtures.blankReferrerAcquisitionData
 import org.joda.time.LocalDate
@@ -37,28 +35,6 @@ import scala.concurrent.Future
 
 //noinspection RedundantDefaultArgument
 class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
-
-  "SubscriptionData for a corporate subscription redemption" should "be correct" in
-    corporate.map { subData =>
-      subData.subscriptionData shouldBe SubscriptionData(
-        List(RatePlanData(RatePlan("2c92c0f971c65dfe0171c6c1f86e603c"), List(), List())),
-        Subscription(
-          contractAcceptanceDate = saleDate,
-          contractEffectiveDate = saleDate,
-          termStartDate = saleDate,
-          createdRequestId = "f7651338-5d94-4f57-85fd-262030de9ad5",
-          autoRenew = true,
-          initialTermPeriodType = Month,
-          initialTerm = 12,
-          renewalTerm = 12,
-          termType = "TERMED",
-          readerType = ReaderType.Corporate,
-          promoCode = None,
-          redemptionCode = Some(testCode),
-          corporateAccountId = Some("1"),
-        ),
-      )
-    }
 
   "SubscriptionData for a monthly subscription" should "be correct" in {
     monthly.subscriptionData shouldBe SubscriptionData(
@@ -76,7 +52,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         readerType = ReaderType.Direct,
         promoCode = None,
         redemptionCode = None,
-        corporateAccountId = None,
       ),
     )
   }
@@ -93,7 +68,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     initialTerm shouldBe GiftCodeValidator.expirationTimeInMonths + 1
     initialTermPeriodType shouldBe Month
     promoCode shouldBe None
-    corporateAccountId shouldBe None
     giftNotificationEmailDate shouldBe Some(new LocalDate(2020, 12, 1))
   }
 
@@ -170,7 +144,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         readerType = ReaderType.Direct,
         promoCode = Some("NOTAPATRONPROMO"),
         redemptionCode = None,
-        corporateAccountId = None,
       ),
     )
   }
@@ -212,7 +185,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         readerType = ReaderType.Patron,
         promoCode = Some("FOOPATRON"),
         redemptionCode = None,
-        corporateAccountId = None,
       ),
     )
   }
@@ -224,41 +196,6 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
     auTemplateId = "auInvoiceTemplateId",
     defaultTemplateId = "defaultInvoiceTemplateId",
   )
-
-  val testCode = "test-code-123"
-
-  lazy val corporateRedemptionBuilder = new DigitalSubscriptionCorporateRedemptionBuilder(
-    new CorporateCodeValidator({ case `testCode` =>
-      Future.successful(
-        Some(
-          Map(
-            "available" -> DynamoLookup.DynamoBoolean(true),
-            "corporateId" -> DynamoLookup.DynamoString("1"),
-          ),
-        ),
-      )
-    }),
-    DateGenerator(saleDate),
-    TouchPointEnvironments.SANDBOX,
-    new SubscribeItemBuilder(
-      UUID.fromString("f7651338-5d94-4f57-85fd-262030de9ad5"),
-      User("1234", "hi@thegulocal.com", None, "bob", "smith", Address(None, None, None, None, None, Country.UK)),
-      GBP,
-      invoiceTemplateIds,
-    ),
-  )
-
-  lazy val corporate =
-    corporateRedemptionBuilder
-      .build(
-        DigitalSubscriptionCorporateRedemptionState(
-          DigitalPack(GBP, null /* FIXME should be Option-al for a corp sub */, Corporate), // scalastyle:ignore null
-          RedemptionData(RedemptionCode(testCode).toOption.get),
-          SalesforceContactRecord("", ""),
-        ),
-      )
-      .value
-      .map(_.toOption.get)
 
   lazy val subscriptionDirectPurchaseBuilder = new DigitalSubscriptionDirectPurchaseBuilder(
     ZuoraDigitalPackConfig(14, 2, monthlyChargeId = "monthlyChargeId", annualChargeId = "annualChargeId"),

@@ -1,9 +1,7 @@
 package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
-
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.i18n.Country
 import com.gu.i18n.Country.UK
@@ -19,6 +17,8 @@ import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.integration.TestData.{billingOnlyUser, directDebitPaymentMethod}
+import com.gu.support.workers.integration.util.EmailQueueName
+import com.gu.support.workers.integration.util.EmailQueueName.emailQueueName
 import com.gu.support.workers.lambdas.SendThankYouEmail
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.zuora.api.ReaderType
@@ -28,14 +28,14 @@ import io.circe.Json
 import io.circe.generic.auto._
 import io.circe.parser._
 import org.joda.time.{DateTime, LocalDate}
+import org.mockito.ArgumentMatchers.any
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
 class SendThankYouEmailITSpec extends AsyncLambdaSpec with MockContext {
-
   "SendThankYouEmail lambda" should "add message to sqs queue" taggedAs IntegrationTest in {
-    val sendThankYouEmail = new SendThankYouEmail()
+    val sendThankYouEmail = new SendThankYouEmail(emailService = new EmailService(emailQueueName))
 
     val outStream = new ByteArrayOutputStream()
 
@@ -100,7 +100,6 @@ object SendThankYouEmailManualTest {
   def main(args: Array[String]): Unit = {
     SendContributionEmail.main(args)
     SendDigitalPackEmail.main(args)
-    SendDigitalPackCorpEmail.main(args)
     SendDigitalPackGiftPurchaseEmails.main(args)
     SendDigitalPackGiftRedemptionEmail.main(args)
     SendPaperSubscriptionEmail.main(args)
@@ -108,14 +107,12 @@ object SendThankYouEmailManualTest {
     SendWeeklySubscriptionGiftEmail.main(args)
   }
 
-  val queueName = Configuration.load().contributionThanksQueueName
-
   def send(eventualEF: Future[List[EmailFields]]): Unit = {
-    val service = new EmailService(queueName)
+    val service = new EmailService(emailQueueName)
     Await.ready(eventualEF.flatMap(efList => Future.sequence(efList.map(service.send))), Duration.Inf)
   }
   def sendSingle(ef: Future[EmailFields]): Unit = {
-    val service = new EmailService(queueName)
+    val service = new EmailService(emailQueueName)
     Await.ready(ef.flatMap(service.send), Duration.Inf)
   }
 }
@@ -148,20 +145,6 @@ object SendDigitalPackEmail extends App {
         directDebitPaymentMethod,
         paymentSchedule,
         None,
-        acno,
-        subno,
-      ),
-    ),
-  )
-
-}
-object SendDigitalPackCorpEmail extends App {
-
-  send(
-    digitalPackEmailFields.build(
-      SendThankYouEmailDigitalSubscriptionCorporateRedemptionState(
-        billingOnlyUser,
-        DigitalPack(GBP, Annual, ReaderType.Corporate),
         acno,
         subno,
       ),

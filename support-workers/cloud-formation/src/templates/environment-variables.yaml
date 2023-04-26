@@ -3,3 +3,6 @@ Environment:
     "SENTRY_DSN" : "https://55945d73ad654abd856d1523de4f9d56:cf9b33aaff3c483899dfa986abce55df@sentry.io/1212214"
     "SENTRY_ENVIRONMENT" : !Ref Stage
     "GU_SUPPORT_WORKERS_STAGE" : !Ref Stage
+    "EMAIL_QUEUE_NAME":
+      Fn::ImportValue:
+        !Sub "comms-${Stage}-EmailQueueName"

@@ -1,4 +1,4 @@
-import { GuApiGatewayWithLambdaByPath} from "@guardian/cdk";
+import { GuApiGatewayWithLambdaByPath, GuScheduledLambda } from "@guardian/cdk";
 import type {
   GuLambdaErrorPercentageMonitoringProps,
 } from "@guardian/cdk/lib/constructs/cloudwatch";
@@ -7,6 +7,7 @@ import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
 import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
+import { Schedule } from "aws-cdk-lib/aws-events";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { CfnFunction} from "aws-cdk-lib/aws-lambda";
 import {Alias, Runtime} from "aws-cdk-lib/aws-lambda";
@@ -51,6 +52,7 @@ class StripePatronsDataLambda extends GuLambdaFunction {
       handler:
         "com.gu.patrons.lambdas.ProcessStripeSubscriptionsLambda::handleRequest",
       errorPercentageMonitoring: monitoringForEnvironment(scope.stage),
+      // rules: [{ schedule: scheduleRateForEnvironment(scope.stage) }],
       runtime: Runtime.JAVA_11,
       memorySize: 1536,
       timeout: Duration.minutes(15),
@@ -76,7 +78,11 @@ class StripePatronsDataLambda extends GuLambdaFunction {
           numberOfMinutesAboveThresholdBeforeAlarm: 46,
         };
       }
-      return undefined;
+      return;
+    }
+
+    function scheduleRateForEnvironment(stage: string) {
+      return Schedule.rate(Duration.minutes(stage == "PROD" ? 30 : 24 * 60));
     }
 
     this.addToRolePolicy(parameterStorePolicy(scope, appName));

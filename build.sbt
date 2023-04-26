@@ -109,7 +109,6 @@ lazy val root = (project in file("."))
     `support-internationalisation`,
     `support-services`,
     `stripe-intent`,
-    `support-redemptiondb`,
     `it-test-runner`,
     `module-aws`,
     `module-acquisition-events`,
@@ -281,7 +280,7 @@ lazy val `module-acquisition-events` = (project in file("support-modules/acquisi
     scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
   )
-  .dependsOn(`support-config`)
+  .dependsOn(`support-config`, `module-aws`, `support-services`)
 
 lazy val `support-internationalisation` = (project in file("support-internationalisation"))
   .configs(IntegrationTest)
@@ -303,10 +302,6 @@ lazy val `stripe-intent` = (project in file("support-lambdas/stripe-intent"))
   )
   .dependsOn(`module-rest`, `support-config`, `module-aws`)
   .aggregate(`module-rest`, `support-config`, `module-aws`)
-
-lazy val `support-redemptiondb` = (project in file("support-redemptiondb"))
-  .enablePlugins(RiffRaffArtifact)
-  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
 
 lazy val `it-test-runner` = (project in file("support-lambdas/it-test-runner"))
   .enablePlugins(RiffRaffArtifact)

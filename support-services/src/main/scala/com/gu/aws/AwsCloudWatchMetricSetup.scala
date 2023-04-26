@@ -35,7 +35,7 @@ object AwsCloudWatchMetricSetup {
       paymentProvider: PaymentProvider,
       productType: ProductType,
   ): MetricRequest = {
-    val qualifiedStage = stage.toString + (if (isTestUser) "-UAT" else "")
+    val qualifiedStage = stage.toString + (if (isTestUser) "-TEST" else "")
     getMetricRequest(
       MetricName("PaymentSuccess"),
       Map(
@@ -66,6 +66,14 @@ object AwsCloudWatchMetricSetup {
   def defaultPromotionsLoadingFailure(stage: Stage): MetricRequest =
     getMetricRequest(
       MetricName("DefaultPromotionsLoadingFailure"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
+  def writeAcquisitionDataToBigQueryFailure(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("WriteAcquisitionDataToBigQueryFailure"),
       Map(
         MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
       ),

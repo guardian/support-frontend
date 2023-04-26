@@ -1,7 +1,5 @@
 package com.gu.support.redemption
 
-import com.gu.support.redemption.corporate.CorporateCodeValidator.CorporateId
-
 sealed abstract class CodeStatus(val clientCode: String)
 
 sealed abstract class ValidCode(clientCode: String) extends CodeStatus(clientCode)
@@ -27,5 +25,3 @@ case class ValidGiftCode(subscriptionId: String) extends ValidCode(ValidGiftCode
 // until after the CreateZuoraSubscription lambda has timed out meaning that the redemption will be retried with the
 // same requestId. In this case we want the lambda to succeed so that we progress to the next lambda
 case class CodeRedeemedInThisRequest(subscriptionId: String) extends ValidCode(CodeRedeemedInThisRequest.clientCode)
-
-case class ValidCorporateCode(corporateId: CorporateId) extends ValidCode("valid_corporate_code")

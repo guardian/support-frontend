@@ -57,7 +57,7 @@ object PaymentProvider {
     case Some(_: SepaPaymentFields) => Sepa
     case Some(_: ExistingPaymentFields) => Existing
     case Some(_: AmazonPayPaymentFields) => AmazonPay
-    case None /* Corporate*/ => RedemptionNoProvider
+    case None => RedemptionNoProvider
   }
 
 }

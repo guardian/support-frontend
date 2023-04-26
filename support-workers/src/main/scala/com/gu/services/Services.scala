@@ -18,10 +18,9 @@ import com.gu.support.catalog.CatalogService
 import com.gu.support.config.Stages.{CODE, DEV, PROD}
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService
-import com.gu.support.redemption.corporate.RedemptionTable
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.zuora.{ZuoraGiftService, ZuoraService}
-import com.gu.supporterdata.model.Stage.{DEV => DynamoStageDEV, PROD => DynamoStagePROD, UAT => DynamoStageUAT}
+import com.gu.supporterdata.model.Stage.{DEV => DynamoStageDEV, PROD => DynamoStagePROD}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -51,7 +50,6 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val gaService = GoogleAnalyticsServiceBuilder.build(isTestUser)
   lazy val promotionService = new PromotionService(promotionsConfigProvider.get(isTestUser))
   lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
-  lazy val redemptionService = RedemptionTable.forEnvAsync(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
   lazy val bigQueryService = new BigQueryService(bigQueryConfigProvider.get(isTestUser))
@@ -59,10 +57,8 @@ class Services(isTestUser: Boolean, val config: Configuration) {
     AcquisitionsStreamLambdaConfig(config.acquisitionsKinesisStreamName),
   )
   val supporterDynamoStage = (Configuration.stage, isTestUser) match {
-    case (DEV, false) => DynamoStageDEV
-    case (CODE, false) => DynamoStageDEV
     case (PROD, false) => DynamoStagePROD
-    case (_, true) => DynamoStageUAT
+    case _ => DynamoStageDEV
   }
   lazy val supporterDataDynamoService = SupporterDataDynamoService(supporterDynamoStage)
 }
