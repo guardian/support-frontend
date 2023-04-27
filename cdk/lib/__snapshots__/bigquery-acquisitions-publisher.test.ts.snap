@@ -37,7 +37,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
           },
         },
         "FunctionName": "bigquery-acquisitions-publisher-PROD",
-        "Handler": "com.gu.bigqueryAcquisitionsPublisher.Lambda::handleRequest",
+        "Handler": "com.gu.bigqueryAcquisitionsPublisher.Lambda::handler",
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
@@ -258,7 +258,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
     "bigqueryacquisitionspublisherQueue3F783231": {
       "DeletionPolicy": "Delete",
       "Properties": {
-        "QueueName": "bigquery-acquisitions-publisherQueue",
+        "QueueName": "bigquery-acquisitions-publisher-queue-PROD",
         "Tags": [
           {
             "Key": "gu:cdk:version",
