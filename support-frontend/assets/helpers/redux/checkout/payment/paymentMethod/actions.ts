@@ -1,3 +1,4 @@
 import { paymentMethodSlice } from './reducer';
 
-export const { setPaymentMethod } = paymentMethodSlice.actions;
+export const { setPaymentMethod, setPaymentMethodCountryAndState } =
+	paymentMethodSlice.actions;
