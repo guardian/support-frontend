@@ -17,3 +17,4 @@ deployments:
       templateStagePaths:
         CODE: BigqueryAcquisitionsPublisher-CODE.template.json
         PROD: BigqueryAcquisitionsPublisher-PROD.template.json
+      prependStackToCloudFormationStackName: false
