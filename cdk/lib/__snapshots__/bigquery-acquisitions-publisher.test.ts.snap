@@ -297,6 +297,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
             "Value": "PROD",
           },
         ],
+        "VisibilityTimeout": 120,
       },
       "Type": "AWS::SQS::Queue",
       "UpdateReplacePolicy": "Delete",

@@ -15,7 +15,8 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
     super(scope, id, props);
 
     const queue = new Queue(this, `${appName}Queue`, {
-      queueName: `${appName}-queue-${props.stage}`
+      queueName: `${appName}-queue-${props.stage}`,
+      visibilityTimeout: Duration.minutes(2),
     })
     const eventSource = new SqsEventSource(queue);
 
