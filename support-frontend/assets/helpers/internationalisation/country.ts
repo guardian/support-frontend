@@ -818,6 +818,10 @@ function fromGeolocation(): IsoCountry | null | undefined {
 	return null;
 }
 
+function fromOldGeolocation(): IsoCountry | null | undefined {
+	return findIsoCountry(window.guardian.geoip?.countryCode);
+}
+
 function setCountry(country: IsoCountry): void {
 	cookie.set('GU_country', country, 7);
 }
@@ -901,6 +905,7 @@ function detect(
 			fromQueryParameter() ??
 			fromCookie() ??
 			fromGeolocation() ??
+			fromOldGeolocation() ??
 			'GB';
 	}
 
@@ -908,9 +913,14 @@ function detect(
 	return country;
 }
 
+function detectState(country: IsoCountry): Option<StateProvince> {
+	return stateProvinceFromString(country, window.guardian.geoip?.stateCode);
+}
+
 // ----- Exports ----- //
 export {
 	detect,
+	detectState,
 	setCountry,
 	usStates,
 	caStates,
