@@ -29,7 +29,7 @@ object Lambda extends LazyLogging {
           .collect { case Left(messageId) => messageId }
 
         new SQSBatchResponse(
-          failedMessageIds.map(messageId => new BatchItemFailure(messageId)).asJava,
+//          failedMessageIds.map(messageId => new BatchItemFailure(messageId)).asJava,
         )
 
       case Left(error) =>
