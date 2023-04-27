@@ -1,6 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { neutral } from '@guardian/source-foundations';
+import { from, neutral, news } from '@guardian/source-foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
 
 const greyedOut = css`
@@ -16,7 +16,13 @@ const boldText = css`
 `;
 
 const highlightText = css`
-	color: #c70000;
+	color: ${news[500]};
+`;
+
+const highlightTextSpacing = css`
+	${from.tablet} {
+		display: block;
+	} ;
 `;
 
 type CheckListDataProps = {
@@ -69,8 +75,9 @@ export const checkListData = ({
 						text: (
 							<p>
 								<span css={boldText}>
-									Limited-edition Guardian Australia tote bag.{' '}
+									Limited-edition Guardian Australia tote bag.
 								</span>
+								<span css={highlightTextSpacing} />
 								<span css={highlightText}>Offer ends 31 May</span>
 							</p>
 						),
