@@ -28,7 +28,6 @@ import {
 	postRegularPaymentRequest,
 	regularPaymentFieldsFromAuthorisation,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -41,11 +40,6 @@ import {
 	getStripeKey,
 	stripeAccountForContributionType,
 } from 'helpers/forms/stripe';
-import type {
-	IsoCountry,
-	StateProvince,
-} from 'helpers/internationalisation/country';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import {
 	setBillingCountry,
@@ -68,7 +62,6 @@ import {
 } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
 import { sendEventConversionPaymentMethod } from 'helpers/tracking/quantumMetric';
-import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 
@@ -134,34 +127,6 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
 		state,
 	);
 
-function getBillingCountryAndState(
-	paymentMethod: PaymentMethod,
-	state: ContributionsState,
-): {
-	billingCountry: IsoCountry;
-	billingState: Option<StateProvince>;
-} {
-	const pageBaseCountry = state.common.internationalisation.countryId; // Needed later
-	const { country: billingCountry, state: billingState } =
-		state.page.checkoutForm.billingAddress.fields;
-
-	// If the user chose a Direct Debit payment method, then we must use the pageBaseCountry as the billingCountry.
-	if ([DirectDebit, ExistingDirectDebit].includes(paymentMethod)) {
-		return {
-			billingCountry: pageBaseCountry,
-			billingState,
-		};
-	}
-
-	// If the page form has a billingCountry, then it must have been provided by a wallet, ApplePay or
-	// Payment Request Button, which will already have filtered the billingState by stateProvinceFromString,
-	// so we can trust both values, verbatim.
-	return {
-		billingCountry,
-		billingState,
-	};
-}
-
 // This exists *only* to support the purchase of digi subs for migrating Kindle subscribers
 function getPromoCode(state: ContributionsState) {
 	const promotion = getSubscriptionPromotionForBillingPeriod(state);
@@ -205,10 +170,8 @@ function regularPaymentRequestFromAuthorisation(
 	state: ContributionsState,
 ): RegularPaymentRequest {
 	const { actionHistory } = state.debug;
-	const { billingCountry, billingState } = getBillingCountryAndState(
-		authorisation.paymentMethod,
-		state,
-	);
+	const { country: billingCountry, state: billingState } =
+		state.page.checkoutForm.billingAddress.fields;
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const contributionType = getContributionType(state);
 
@@ -583,5 +546,4 @@ export {
 	paymentSuccess,
 	onThirdPartyPaymentAuthorised,
 	createOneOffPayPalPayment,
-	getBillingCountryAndState,
 };

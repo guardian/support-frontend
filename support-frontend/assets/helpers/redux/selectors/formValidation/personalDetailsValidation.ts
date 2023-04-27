@@ -2,7 +2,6 @@ import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import { shouldCollectStateForContributions } from 'helpers/internationalisation/shouldCollectStateForContribs';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
-import { getBillingCountryAndState } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 import type { ErrorCollection } from './utils';
 
 export function getStateOrProvinceError(
@@ -10,10 +9,7 @@ export function getStateOrProvinceError(
 ): ErrorCollection {
 	const contributionType = getContributionType(state);
 	const billingCountryGroup = fromCountry(
-		getBillingCountryAndState(
-			state.page.checkoutForm.payment.paymentMethod.name,
-			state,
-		).billingCountry,
+		state.page.checkoutForm.billingAddress.fields.country,
 	);
 	if (
 		billingCountryGroup != null &&
