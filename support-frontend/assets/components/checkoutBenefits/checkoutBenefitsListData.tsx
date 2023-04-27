@@ -75,7 +75,7 @@ export const checkListData = ({
 						text: (
 							<p>
 								<span css={boldText}>
-									Limited-edition Guardian Australia tote bag.
+									Limited-edition Guardian Australia tote bag.{' '}
 								</span>
 								<span css={highlightTextSpacing} />
 								<span css={highlightText}>Offer ends 31 May</span>
