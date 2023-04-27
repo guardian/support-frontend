@@ -1,6 +1,10 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { FullPaymentMethod } from 'helpers/forms/paymentMethods';
+import type {
+	IsoCountry,
+	StateProvince,
+} from 'helpers/internationalisation/country';
 import { setDeliveryCountry } from '../../address/actions';
 import { validateForm } from '../../checkoutActions';
 import { initialState } from './state';
@@ -12,7 +16,16 @@ export const paymentMethodSlice = createSlice({
 		setPaymentMethod(state, action: PayloadAction<FullPaymentMethod>) {
 			state.name = action.payload.paymentMethod;
 			state.stripePaymentMethod = action.payload.stripePaymentMethod;
+			state.country = undefined;
+			state.state = undefined;
 			state.errors = [];
+		},
+		setPaymentMethodCountryAndState(
+			state,
+			action: PayloadAction<[IsoCountry, StateProvince | undefined]>,
+		) {
+			state.country = action.payload[0];
+			state.state = action.payload[1];
 		},
 	},
 	extraReducers: (builder) => {

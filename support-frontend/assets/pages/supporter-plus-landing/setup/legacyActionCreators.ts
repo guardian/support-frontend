@@ -40,11 +40,11 @@ import {
 	getStripeKey,
 	stripeAccountForContributionType,
 } from 'helpers/forms/stripe';
+import type {
+	IsoCountry,
+	StateProvince,
+} from 'helpers/internationalisation/country';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
-import {
-	setBillingCountry,
-	setBillingState,
-} from 'helpers/redux/checkout/address/actions';
 import {
 	setAmazonPayFatalError,
 	setAmazonPayWalletIsStale,
@@ -62,6 +62,7 @@ import {
 } from 'helpers/tracking/acquisitions';
 import trackConversion from 'helpers/tracking/conversions';
 import { sendEventConversionPaymentMethod } from 'helpers/tracking/quantumMetric';
+import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 
@@ -127,6 +128,30 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
 		state,
 	);
 
+function getBillingCountryAndState(state: ContributionsState): {
+	billingCountry: IsoCountry;
+	billingState: Option<StateProvince>;
+} {
+	const paymentMethod = state.page.checkoutForm.payment.paymentMethod;
+	const isPaymentRequestButton =
+		paymentMethod.name == Stripe &&
+		(paymentMethod.stripePaymentMethod === 'StripePaymentRequestButton' ||
+			paymentMethod.stripePaymentMethod === 'StripeApplePay');
+	const { country: formCountry, state: formState } =
+		state.page.checkoutForm.billingAddress.fields;
+	if (isPaymentRequestButton && paymentMethod.country) {
+		return {
+			billingCountry: paymentMethod.country,
+			billingState: paymentMethod.state ?? '',
+		};
+	} else {
+		return {
+			billingCountry: formCountry,
+			billingState: formState,
+		};
+	}
+}
+
 // This exists *only* to support the purchase of digi subs for migrating Kindle subscribers
 function getPromoCode(state: ContributionsState) {
 	const promotion = getSubscriptionPromotionForBillingPeriod(state);
@@ -170,8 +195,7 @@ function regularPaymentRequestFromAuthorisation(
 	state: ContributionsState,
 ): RegularPaymentRequest {
 	const { actionHistory } = state.debug;
-	const { country: billingCountry, state: billingState } =
-		state.page.checkoutForm.billingAddress.fields;
+	const { billingCountry, billingState } = getBillingCountryAndState(state);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const contributionType = getContributionType(state);
 
@@ -287,10 +311,6 @@ const onPaymentResult =
 								dispatch(setAmazonPayFatalError());
 							}
 						}
-
-						// Reset any updates the previous payment method had made to the form's billingCountry or billingState
-						dispatch(setBillingCountry(detectCountry()));
-						dispatch(setBillingState(''));
 						// Finally, trigger the form display
 						if (result.error) {
 							dispatch(paymentFailure(result.error));
@@ -546,4 +566,5 @@ export {
 	paymentSuccess,
 	onThirdPartyPaymentAuthorised,
 	createOneOffPayPalPayment,
+	getBillingCountryAndState,
 };
