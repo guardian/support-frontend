@@ -80,7 +80,7 @@ export class AcquisitionEventsApi extends GuStack {
     const alarmDescription = (description: string) =>
       `Impact - ${description}. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit`;
 
-    new GuAlarm(this, "ApiGateway4XXAlarm", {
+    new GuAlarm(this, "ApiGateway4XXAlarmCDK", {
       app,
       alarmName: alarmName("API gateway 4XX response"),
       alarmDescription: alarmDescription(

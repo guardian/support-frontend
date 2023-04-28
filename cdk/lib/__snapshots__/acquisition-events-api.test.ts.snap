@@ -122,7 +122,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ApiGateway4XXAlarm59D14AA2": {
+    "ApiGateway4XXAlarmCDKC83EACCA": {
       "Properties": {
         "ActionsEnabled": true,
         "AlarmActions": [
@@ -1423,7 +1423,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ApiGateway4XXAlarm59D14AA2": {
+    "ApiGateway4XXAlarmCDKC83EACCA": {
       "Properties": {
         "ActionsEnabled": true,
         "AlarmActions": [
