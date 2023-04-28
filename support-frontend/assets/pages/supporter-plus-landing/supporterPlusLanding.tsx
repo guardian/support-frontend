@@ -171,7 +171,7 @@ export function SupporterPlusLandingPage({
 		setSupportOnceDisplay(false);
 
 		const paymentMethodToSelect = getPaymentMethodToSelect(
-			contributionType,
+			'ONE_OFF',
 			switches,
 			countryId,
 			countryGroupId,
