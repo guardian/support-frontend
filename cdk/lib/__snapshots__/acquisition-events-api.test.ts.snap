@@ -144,8 +144,14 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "Impact - Acquisition Events API received an invalid request. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": "URGENT 9-5 - CODE API gateway 4XX response",
+        "AlarmName": "ACQUISITION-EVENTS-API-CDK- CODE API gateway 4XX response",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": "acquisition-events-api-CODE",
+          },
+        ],
         "EvaluationPeriods": 1,
         "MetricName": "4XXError",
         "Namespace": "AWS/ApiGateway",
@@ -1445,8 +1451,14 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
           },
         ],
         "AlarmDescription": "Impact - Acquisition Events API received an invalid request. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
-        "AlarmName": "URGENT 9-5 - PROD API gateway 4XX response",
+        "AlarmName": "ACQUISITION-EVENTS-API-CDK- PROD API gateway 4XX response",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": "acquisition-events-api-PROD",
+          },
+        ],
         "EvaluationPeriods": 1,
         "MetricName": "4XXError",
         "Namespace": "AWS/ApiGateway",

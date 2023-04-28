@@ -75,7 +75,7 @@ export class AcquisitionEventsApi extends GuStack {
 
     // ---- Alarms ---- //
     const alarmName = (shortDescription: string) =>
-      `URGENT 9-5 - ${this.stage} ${shortDescription}`;
+      `ACQUISITION-EVENTS-API-CDK- ${this.stage} ${shortDescription}`;
 
     const alarmDescription = (description: string) =>
       `Impact - ${description}. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit`;
@@ -96,6 +96,9 @@ export class AcquisitionEventsApi extends GuStack {
         namespace: "AWS/ApiGateway",
         statistic: "Sum",
         period: Duration.seconds(300),
+        dimensionsMap: {
+          ApiName: `${app}-${this.stage}`,
+        },
       }),
     });
 
