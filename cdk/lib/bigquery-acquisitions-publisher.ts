@@ -3,7 +3,7 @@ import {GuStack} from '@guardian/cdk/lib/constructs/core';
 import {GuLambdaFunction} from '@guardian/cdk/lib/constructs/lambda';
 import type {App} from 'aws-cdk-lib';
 import {Duration} from "aws-cdk-lib";
-import {PolicyStatement} from "aws-cdk-lib/aws-iam";
+import {PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 import {Runtime} from 'aws-cdk-lib/aws-lambda';
 import {SqsEventSource} from "aws-cdk-lib/aws-lambda-event-sources";
 import {Queue} from "aws-cdk-lib/aws-sqs";
@@ -20,6 +20,29 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
     })
     const eventSource = new SqsEventSource(queue);
 
+    const role = new Role(this, 'bigquery-to-s3-role', {
+      roleName: `bq-acq-${this.stage}`,
+      assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
+    });
+    role.addToPolicy(
+      new PolicyStatement({
+        actions: [
+          'logs:CreateLogGroup',
+          'logs:CreateLogStream',
+          'logs:PutLogEvents',
+        ],
+        resources: ['*'],
+      }),
+    );
+    role.addToPolicy(
+      new PolicyStatement({
+        actions: ['ssm:GetParameter'],
+        resources: [
+          `arn:aws:ssm:${this.region}:${this.account}:parameter/${appName}/${props.stage}/gcp-wif-credentials-config`,
+        ],
+      }),
+    );
+
     new GuLambdaFunction(this, `${appName}Lambda`, {
       app: appName,
       runtime: Runtime.JAVA_8_CORRETTO,
@@ -28,14 +51,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       handler: 'com.gu.bigqueryAcquisitionsPublisher.Lambda::handler',
       events: [eventSource],
       timeout: Duration.minutes(2),
-      initialPolicy: [
-        new PolicyStatement({
-          actions: ["ssm:GetParameter"],
-          resources: [
-            `arn:aws:ssm:${this.region}:${this.account}:parameter/${appName}/${props.stage}/gcp-wif-credentials-config`,
-          ],
-        })
-      ]
+      role,
     });
   }
 }

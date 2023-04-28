@@ -19,8 +19,8 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
   "Resources": {
     "bigqueryacquisitionspublisherLambdaD7F059E6": {
       "DependsOn": [
-        "bigqueryacquisitionspublisherLambdaServiceRoleDefaultPolicy1C7997C3",
-        "bigqueryacquisitionspublisherLambdaServiceRole7C9A373D",
+        "bigquerytos3roleDefaultPolicy0D20CB1A",
+        "bigquerytos3role8B775EB2",
       ],
       "Properties": {
         "Code": {
@@ -41,7 +41,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
         "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
-            "bigqueryacquisitionspublisherLambdaServiceRole7C9A373D",
+            "bigquerytos3role8B775EB2",
             "Arn",
           ],
         },
@@ -72,7 +72,48 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
-    "bigqueryacquisitionspublisherLambdaServiceRole7C9A373D": {
+    "bigqueryacquisitionspublisherLambdaSqsEventSourceBigqueryAcquisitionsPublisherPRODbigqueryacquisitionspublisherQueue4510DFFB25270BDD": {
+      "Properties": {
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "bigqueryacquisitionspublisherQueue3F783231",
+            "Arn",
+          ],
+        },
+        "FunctionName": {
+          "Ref": "bigqueryacquisitionspublisherLambdaD7F059E6",
+        },
+      },
+      "Type": "AWS::Lambda::EventSourceMapping",
+    },
+    "bigqueryacquisitionspublisherQueue3F783231": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "QueueName": "bigquery-acquisitions-publisher-queue-PROD",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "VisibilityTimeout": 120,
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "bigquerytos3role8B775EB2": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -86,25 +127,8 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
+        "RoleName": "bq-acq-PROD",
         "Tags": [
-          {
-            "Key": "App",
-            "Value": "bigquery-acquisitions-publisher",
-          },
           {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -125,10 +149,19 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "bigqueryacquisitionspublisherLambdaServiceRoleDefaultPolicy1C7997C3": {
+    "bigquerytos3roleDefaultPolicy0D20CB1A": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
             {
               "Action": "ssm:GetParameter",
               "Effect": "Allow",
@@ -252,55 +285,14 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "bigqueryacquisitionspublisherLambdaServiceRoleDefaultPolicy1C7997C3",
+        "PolicyName": "bigquerytos3roleDefaultPolicy0D20CB1A",
         "Roles": [
           {
-            "Ref": "bigqueryacquisitionspublisherLambdaServiceRole7C9A373D",
+            "Ref": "bigquerytos3role8B775EB2",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
-    },
-    "bigqueryacquisitionspublisherLambdaSqsEventSourceBigqueryAcquisitionsPublisherPRODbigqueryacquisitionspublisherQueue4510DFFB25270BDD": {
-      "Properties": {
-        "EventSourceArn": {
-          "Fn::GetAtt": [
-            "bigqueryacquisitionspublisherQueue3F783231",
-            "Arn",
-          ],
-        },
-        "FunctionName": {
-          "Ref": "bigqueryacquisitionspublisherLambdaD7F059E6",
-        },
-      },
-      "Type": "AWS::Lambda::EventSourceMapping",
-    },
-    "bigqueryacquisitionspublisherQueue3F783231": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "QueueName": "bigquery-acquisitions-publisher-queue-PROD",
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
-          },
-        ],
-        "VisibilityTimeout": 120,
-      },
-      "Type": "AWS::SQS::Queue",
-      "UpdateReplacePolicy": "Delete",
     },
   },
 }
