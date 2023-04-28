@@ -17,9 +17,11 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
     const queue = new Queue(this, `${appName}Queue`, {
       queueName: `${appName}-queue-${props.stage}`,
       visibilityTimeout: Duration.minutes(2),
+      // TODO - dead letter queue?
     })
     const eventSource = new SqsEventSource(queue);
 
+    // Create a custom role because the name needs to be short, otherwise the request to Google Cloud fails
     const role = new Role(this, 'bigquery-to-s3-role', {
       roleName: `bq-acq-${this.stage}`,
       assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
@@ -43,6 +45,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       }),
     );
 
+    // TODO - alarms
     new GuLambdaFunction(this, `${appName}Lambda`, {
       app: appName,
       runtime: Runtime.JAVA_8_CORRETTO,
