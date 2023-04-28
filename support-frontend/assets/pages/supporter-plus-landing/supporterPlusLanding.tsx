@@ -160,10 +160,12 @@ export function SupporterPlusLandingPage({
 	};
 	const heading = <LandingPageHeading />;
 
-	const [supportOnceDisplay, setSupportOnceDisplay] = useState(
-		useContributionsSelector(
-			isUserInAbVariant('singleLessProminent', 'variant'),
-		),
+	const [supportOnceDisplay, setSupportOnceDisplay] = useState(() =>
+		contributionType === 'ONE_OFF'
+			? false
+			: useContributionsSelector(
+					isUserInAbVariant('singleLessProminent', 'variant'),
+			  ),
 	);
 
 	const dispatch = useContributionsDispatch();
