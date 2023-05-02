@@ -124,7 +124,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
     },
     "ApiGateway4XXAlarmCDKC83EACCA": {
       "Properties": {
-        "ActionsEnabled": true,
+        "ActionsEnabled": false,
         "AlarmActions": [
           {
             "Fn::Join": [

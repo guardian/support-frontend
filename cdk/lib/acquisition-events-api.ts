@@ -89,7 +89,7 @@ export class AcquisitionEventsApi extends GuStack {
       evaluationPeriods: 1,
       threshold: 1,
       snsTopicName: "contributions-dev",
-      actionsEnabled: true,
+      actionsEnabled: this.stage === "PROD",
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
       metric: new Metric({
         metricName: "4XXError",
