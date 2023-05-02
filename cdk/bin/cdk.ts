@@ -6,7 +6,6 @@ import {PaymentApi} from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
 
 
-
 const app = new App();
 const cloudFormationStackName = process.env.GU_CFN_STACK_NAME;
 
@@ -76,9 +75,17 @@ new PaymentApi(app, "Payment-API-PROD", {
 new AcquisitionEventsApi(app, "Acquisition-Events-API-CODE", {
   stack: "support",
   stage: "CODE",
+  certificateId:"b384a6a0-2f54-4874-b99b-96eeff96c009",
+  domainName: "acquisition-events-code.support.guardianapis.com",
+  hostedZoneName:"support.guardianapis.com.",
+  hostedZoneId:"Z3KO35ELNWZMSX",
 });
 
 new AcquisitionEventsApi(app, "Acquisition-Events-API-PROD", {
   stack: "support",
   stage: "PROD",
+  certificateId: "b384a6a0-2f54-4874-b99b-96eeff96c009",
+  domainName: "acquisition-events.support.guardianapis.com",
+  hostedZoneName: "support.guardianapis.com.",
+  hostedZoneId: "Z3KO35ELNWZMSX",
 });
