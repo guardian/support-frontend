@@ -7,15 +7,15 @@ Parameters:
     Type: String
     AllowedValues:
       - PROD
-      - DEV
-    Default: DEV
+      - CODE
+    Default: CODE
 
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
 
 Mappings:
   StageVariables:
-    DEV:
+    CODE:
       S3Bucket: supporter-product-data-export-dev
       # Run once at 6am Mon-Fri
       scheduleRate: "cron(0 6 ? * 1-5 *)"
@@ -465,7 +465,7 @@ Resources:
       AlarmDescription: >
         Impact - On or more subscriber will not get their digital benefits
         For details of the record which failed search for 'Error writing item to Dynamo' in the ProcessSupporterRatePlanItemLambda Cloudwatch logs:
-        https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fsupport-SupporterProductDataProcessSupporterRatePlanItem-DEV
+        https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fsupport-SupporterProductDataProcessSupporterRatePlanItem-CODE
       MetricName: DynamoWriteFailure
       Namespace: supporter-product-data
       Dimensions:

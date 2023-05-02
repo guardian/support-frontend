@@ -1,7 +1,7 @@
 package com.gu.services
 
 import com.gu.{model, supporterdata}
-import com.gu.supporterdata.model.Stage.DEV
+import com.gu.supporterdata.model.Stage.CODE
 import com.gu.supporterdata.model.{ContributionAmount, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.gu.test.tags.annotations.IntegrationTest
@@ -14,7 +14,7 @@ import java.time.LocalDate
 class DynamoDBServiceSpec extends AsyncFlatSpec with Matchers {
 
   SupporterDataDynamoService.getClass.getSimpleName should "be able to insert an item with no contribution amount" in {
-    val service = SupporterDataDynamoService(DEV)
+    val service = SupporterDataDynamoService(CODE)
     val item = supporterdata.model.SupporterRatePlanItem(
       identityId = "999965",
       gifteeIdentityId = None,
@@ -31,7 +31,7 @@ class DynamoDBServiceSpec extends AsyncFlatSpec with Matchers {
   }
 
   SupporterDataDynamoService.getClass.getSimpleName should "be able to insert an item with a contribution amount" in {
-    val service = SupporterDataDynamoService(DEV)
+    val service = SupporterDataDynamoService(CODE)
     val item = supporterdata.model.SupporterRatePlanItem(
       identityId = "999965",
       gifteeIdentityId = None,
