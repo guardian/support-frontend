@@ -16,7 +16,7 @@ Conditions:
 Mappings:
   StageVariables:
     CODE:
-      S3Bucket: supporter-product-data-export-dev
+      S3Bucket: supporter-product-data-export-code
       # Run once at 6am Mon-Fri
       scheduleRate: "cron(0 6 ? * 1-5 *)"
       lambdaConcurrency: 30
