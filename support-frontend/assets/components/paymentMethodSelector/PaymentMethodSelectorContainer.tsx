@@ -123,7 +123,6 @@ function PaymentMethodSelectorContainer({
 		validationError: errors?.[0],
 		...getExistingPaymentMethodProps(existingPaymentMethods),
 		onPaymentMethodEvent,
-		showSecureTransacationIndicator: true,
 		cssOverrides: optimisedLayoutOverrides,
 	});
 }

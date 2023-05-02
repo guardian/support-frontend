@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
-import { headline, space, until } from '@guardian/source-foundations';
+import { headline, space } from '@guardian/source-foundations';
 import { Accordion, RadioGroup } from '@guardian/source-react-components';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -26,11 +26,6 @@ const header = css`
 	${headline.small({ fontWeight: 'bold' })};
 `;
 
-const hidesecuretransactionindicator = css`
-	${until.tablet} {
-		display: none;
-	}
-`;
 const showsecuretransactionindicator = css`
 	margin-bottom: ${space[3]}px;
 `;
@@ -69,7 +64,6 @@ export interface PaymentMethodSelectorProps extends CSSOverridable {
 	existingPaymentMethodList: RecentlySignedInExistingPaymentMethod[];
 	pendingExistingPaymentMethods?: boolean;
 	showReauthenticateLink?: boolean;
-	showSecureTransacationIndicator?: boolean;
 	onPaymentMethodEvent: (
 		event: 'select' | 'render',
 		paymentMethod: PaymentMethod,
@@ -85,7 +79,6 @@ export function PaymentMethodSelector({
 	existingPaymentMethodList,
 	pendingExistingPaymentMethods,
 	showReauthenticateLink,
-	showSecureTransacationIndicator,
 	onPaymentMethodEvent,
 	cssOverrides,
 }: PaymentMethodSelectorProps): JSX.Element {
@@ -105,11 +98,7 @@ export function PaymentMethodSelector({
 	return (
 		<div css={[container, cssOverrides]}>
 			<PaymentMethodSelectorLegend
-				cssOverrides={
-					showSecureTransacationIndicator
-						? showsecuretransactionindicator
-						: hidesecuretransactionindicator
-				}
+				cssOverrides={showsecuretransactionindicator}
 			/>
 			<RadioGroup
 				id="paymentMethod"
