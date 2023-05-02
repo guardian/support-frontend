@@ -116,7 +116,6 @@ export function CheckoutBenefitsListContainer({
 		),
 		handleButtonClick,
 		countryGroupId,
-		rowSpacingNarrow: true,
 		cssOverrides: optimisedLayoutOverrides,
 	});
 }

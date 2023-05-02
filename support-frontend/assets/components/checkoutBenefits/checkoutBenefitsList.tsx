@@ -72,21 +72,19 @@ export interface CheckoutBenefitsListProps extends CSSOverridable {
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
 	countryGroupId: CountryGroupId;
-	rowSpacingNarrow?: boolean;
 }
 
 export function CheckoutBenefitsList({
 	title,
 	checkListData,
 	countryGroupId,
-	rowSpacingNarrow,
 	cssOverrides,
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
 		<div css={[container, cssOverrides]}>
 			<h2 css={heading}>{title}</h2>
 			<hr css={hr(`${space[4]}px 0`)} />
-			<table css={table(rowSpacingNarrow ? `6` : `10`)}>
+			<table css={table(`6`)}>
 				{checkListData.map((item) => (
 					<tr>
 						<td css={[checkListIcon, item.maybeGreyedOut]}>
