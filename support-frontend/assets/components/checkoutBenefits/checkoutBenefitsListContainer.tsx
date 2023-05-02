@@ -16,7 +16,7 @@ import { isOneOff } from 'helpers/supporterPlus/isContributionRecurring';
 import type { CheckoutBenefitsListProps } from './checkoutBenefitsList';
 import { checkListData } from './checkoutBenefitsListData';
 
-const optimisedLayoutOverrides = css`
+const layoutOverrides = css`
 	${until.tablet} {
 		h2 {
 			${headline.xsmall({ fontWeight: 'bold' })}
@@ -116,6 +116,6 @@ export function CheckoutBenefitsListContainer({
 		),
 		handleButtonClick,
 		countryGroupId,
-		cssOverrides: optimisedLayoutOverrides,
+		cssOverrides: layoutOverrides,
 	});
 }

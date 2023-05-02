@@ -23,7 +23,7 @@ import {
 import { sendEventContributionPaymentMethod } from 'helpers/tracking/quantumMetric';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
 
-const optimisedLayoutOverrides = css`
+const layoutOverrides = css`
 	${until.tablet} {
 		h2 {
 			${headline.xsmall({ fontWeight: 'bold' })}
@@ -123,7 +123,7 @@ function PaymentMethodSelectorContainer({
 		validationError: errors?.[0],
 		...getExistingPaymentMethodProps(existingPaymentMethods),
 		onPaymentMethodEvent,
-		cssOverrides: optimisedLayoutOverrides,
+		cssOverrides: layoutOverrides,
 	});
 }
 

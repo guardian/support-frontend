@@ -15,7 +15,7 @@ import {
 import type { PriceCardPaymentInterval } from './priceCard';
 import type { PriceCardsProps } from './priceCards';
 
-const optimisedLayoutOverrides = css`
+const layoutOverrides = css`
 	${until.tablet} {
 		&:not(:last-child) {
 			padding-bottom: ${space[1]}px;
@@ -101,6 +101,6 @@ export function PriceCardsContainer({
 		onOtherAmountChange,
 		hideChooseYourAmount,
 		errors: otherAmountErrors,
-		cssOverrides: optimisedLayoutOverrides,
+		cssOverrides: layoutOverrides,
 	});
 }
