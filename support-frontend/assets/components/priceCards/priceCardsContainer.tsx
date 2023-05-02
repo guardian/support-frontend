@@ -6,10 +6,7 @@ import {
 	setOtherAmount,
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
-import {
-	getMinimumContributionAmount,
-	isUserInAbVariant,
-} from 'helpers/redux/commonState/selectors';
+import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
 import { getOtherAmountErrors } from 'helpers/redux/selectors/formValidation/otherAmountValidation';
 import {
 	useContributionsDispatch,
@@ -73,10 +70,6 @@ export function PriceCardsContainer({
 	).toString();
 	const otherAmountErrors = useContributionsSelector(getOtherAmountErrors);
 
-	const useOptimisedMobileLayout = useContributionsSelector(
-		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
-	);
-
 	const otherAmount = otherAmounts[frequency].amount ?? '';
 
 	function onAmountChange(newAmount: string) {
@@ -108,8 +101,6 @@ export function PriceCardsContainer({
 		onOtherAmountChange,
 		hideChooseYourAmount,
 		errors: otherAmountErrors,
-		cssOverrides: useOptimisedMobileLayout
-			? optimisedLayoutOverrides
-			: undefined,
+		cssOverrides: optimisedLayoutOverrides,
 	});
 }

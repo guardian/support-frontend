@@ -6,10 +6,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import {
-	getMinimumContributionAmount,
-	isUserInAbVariant,
-} from 'helpers/redux/commonState/selectors';
+import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -74,10 +71,6 @@ export function CheckoutBenefitsListContainer({
 		getMinimumContributionAmount,
 	);
 
-	const useOptimisedMobileLayout = useContributionsSelector(
-		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
-	);
-
 	const currency = currencies[currencyId];
 
 	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
@@ -123,9 +116,7 @@ export function CheckoutBenefitsListContainer({
 		),
 		handleButtonClick,
 		countryGroupId,
-		rowSpacingNarrow: useOptimisedMobileLayout,
-		cssOverrides: useOptimisedMobileLayout
-			? optimisedLayoutOverrides
-			: undefined,
+		rowSpacingNarrow: true,
+		cssOverrides: optimisedLayoutOverrides,
 	});
 }
