@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
-import { headline, space } from '@guardian/source-foundations';
+import { from, headline, space } from '@guardian/source-foundations';
 import { Accordion, RadioGroup } from '@guardian/source-react-components';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -12,7 +12,6 @@ import {
 	subscriptionToExplainerPart,
 } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 import { paymentMethodData } from './paymentMethodData';
 import { AvailablePaymentMethodAccordionRow } from './paymentMethodSelectorAccordionRow';
 import { ReauthenticateLink } from './reauthenticateLink';
@@ -23,7 +22,10 @@ const container = css`
 
 const header = css`
 	margin-bottom: ${space[3]}px;
-	${headline.small({ fontWeight: 'bold' })};
+	${headline.xsmall({ fontWeight: 'bold' })}
+	${from.tablet} {
+		${headline.small({ fontWeight: 'bold' })};
+	}
 `;
 
 const showsecuretransactionindicator = css`
@@ -55,8 +57,7 @@ function PaymentMethodSelectorLegend({
 	);
 }
 
-export interface PaymentMethodSelectorProps extends CSSOverridable {
-	cssOverrides?: SerializedStyles;
+export type PaymentMethodSelectorProps = {
 	availablePaymentMethods: PaymentMethod[];
 	paymentMethod: PaymentMethod | null;
 	validationError: string | undefined;
@@ -69,7 +70,7 @@ export interface PaymentMethodSelectorProps extends CSSOverridable {
 		paymentMethod: PaymentMethod,
 		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 	) => void;
-}
+};
 
 export function PaymentMethodSelector({
 	availablePaymentMethods,
@@ -80,7 +81,6 @@ export function PaymentMethodSelector({
 	pendingExistingPaymentMethods,
 	showReauthenticateLink,
 	onPaymentMethodEvent,
-	cssOverrides,
 }: PaymentMethodSelectorProps): JSX.Element {
 	if (
 		existingPaymentMethodList.length < 1 &&
@@ -96,7 +96,7 @@ export function PaymentMethodSelector({
 	}
 
 	return (
-		<div css={[container, cssOverrides]}>
+		<div css={container}>
 			<PaymentMethodSelectorLegend
 				cssOverrides={showsecuretransactionindicator}
 			/>

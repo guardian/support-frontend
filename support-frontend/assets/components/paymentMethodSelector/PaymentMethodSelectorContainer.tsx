@@ -1,5 +1,3 @@
-import { css } from '@emotion/react';
-import { headline, until } from '@guardian/source-foundations';
 import { useEffect } from 'react';
 import { getValidPaymentMethods } from 'helpers/forms/checkouts';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
@@ -22,14 +20,6 @@ import {
 } from 'helpers/tracking/behaviour';
 import { sendEventContributionPaymentMethod } from 'helpers/tracking/quantumMetric';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
-
-const layoutOverrides = css`
-	${until.tablet} {
-		h2 {
-			${headline.xsmall({ fontWeight: 'bold' })}
-		}
-	}
-`;
 
 function getExistingPaymentMethodProps(
 	existingPaymentMethods: ExistingPaymentMethodsState,
@@ -123,7 +113,6 @@ function PaymentMethodSelectorContainer({
 		validationError: errors?.[0],
 		...getExistingPaymentMethodProps(existingPaymentMethods),
 		onPaymentMethodEvent,
-		cssOverrides: layoutOverrides,
 	});
 }
 
