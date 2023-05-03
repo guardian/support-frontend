@@ -1,5 +1,3 @@
-import { css } from '@emotion/react';
-import { headline, until } from '@guardian/source-foundations';
 import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -15,22 +13,6 @@ import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { isOneOff } from 'helpers/supporterPlus/isContributionRecurring';
 import type { CheckoutBenefitsListProps } from './checkoutBenefitsList';
 import { checkListData } from './checkoutBenefitsListData';
-
-const layoutOverrides = css`
-	${until.tablet} {
-		h2 {
-			${headline.xsmall({ fontWeight: 'bold' })}
-		}
-
-		tr {
-			border-bottom-width: 6px;
-		}
-
-		hr {
-			margin: 14px 0;
-		}
-	}
-`;
 
 type CheckoutBenefitsListContainerProps = {
 	renderBenefitsList: (props: CheckoutBenefitsListProps) => JSX.Element;
@@ -116,6 +98,5 @@ export function CheckoutBenefitsListContainer({
 		),
 		handleButtonClick,
 		countryGroupId,
-		cssOverrides: layoutOverrides,
 	});
 }

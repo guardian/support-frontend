@@ -5,6 +5,7 @@ import {
 	headline,
 	space,
 	textSans,
+	until,
 } from '@guardian/source-foundations';
 import Tooltip from 'components/tooltip/Tooltip';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -13,10 +14,18 @@ import type { CheckListData } from './checkoutBenefitsListData';
 
 const container = css`
 	${textSans.medium({ lineHeight: 'tight' })};
+	${until.tablet} {
+		tr {
+			border-bottom-width: 6px;
+		}
+	}
 `;
 
 const heading = css`
-	${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
+	${headline.xsmall({ fontWeight: 'bold' })}
+	${from.tablet} {
+		${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
+	}
 	max-width: 250px;
 	${from.desktop} {
 		max-width: 280px;
@@ -64,6 +73,9 @@ const hr = (margin: string) => css`
 	height: 1px;
 	background-color: #dcdcdc;
 	margin: ${margin};
+	${until.tablet} {
+		margin: 14px 0;
+	}
 `;
 
 export interface CheckoutBenefitsListProps extends CSSOverridable {
@@ -78,10 +90,9 @@ export function CheckoutBenefitsList({
 	title,
 	checkListData,
 	countryGroupId,
-	cssOverrides,
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
-		<div css={[container, cssOverrides]}>
+		<div css={container}>
 			<h2 css={heading}>{title}</h2>
 			<hr css={hr(`${space[4]}px 0`)} />
 			<table css={table(`6`)}>
