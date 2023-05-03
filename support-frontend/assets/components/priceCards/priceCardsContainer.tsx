@@ -1,5 +1,3 @@
-import { css } from '@emotion/react';
-import { space, until } from '@guardian/source-foundations';
 import type { OtherAmountProps } from 'components/otherAmount/otherAmount';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import {
@@ -14,14 +12,6 @@ import {
 } from 'helpers/redux/storeHooks';
 import type { PriceCardPaymentInterval } from './priceCard';
 import type { PriceCardsProps } from './priceCards';
-
-const layoutOverrides = css`
-	${until.tablet} {
-		&:not(:last-child) {
-			padding-bottom: ${space[1]}px;
-		}
-	}
-`;
 
 type PriceCardsRenderProps = PriceCardsProps & OtherAmountProps;
 
@@ -101,6 +91,5 @@ export function PriceCardsContainer({
 		onOtherAmountChange,
 		hideChooseYourAmount,
 		errors: otherAmountErrors,
-		cssOverrides: layoutOverrides,
 	});
 }
