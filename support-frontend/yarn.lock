@@ -1632,12 +1632,10 @@
   resolved "https://registry.yarnpkg.com/@guardian/browserslist-config/-/browserslist-config-1.0.1.tgz#694ab24f6a028646ae752f5e035ea13a0746c30a"
   integrity sha512-xjQSUXmln96Qr/G8yRCaDWe5HbablzGU9lax1zDUZkfArV/rBj8P34x/RH0ksf3J8BaykVTma97W+g/WRz7Isw==
 
-"@guardian/consent-management-platform@^10.11.1":
-  version "10.11.1"
-  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-10.11.1.tgz#fa01a9262963ac07df9476e591d14601efbc4588"
-  integrity sha512-7dKcKZ3L/Y/hG9MB6i1invZmTVL6EepIv1ioGCW7uR9MVhWcuIGR1MJqKWMIzQgtZ2p0CXtSzKQOvbRtfX5fxQ==
-  dependencies:
-    "@guardian/libs" "^7.1.4"
+"@guardian/consent-management-platform@^13.0.2":
+  version "13.0.2"
+  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-13.0.2.tgz#3625f10ca355e1f0296f17fbf8eee3fffd693b95"
+  integrity sha512-rhuDQeZW//WJue9Uhj5JgWc7juV18CgwpOJXcmzYUkYcvi1wcf+kW/BvqfJjNjyd/kpx5eNQ2pCZtj4HuTQBEA==
 
 "@guardian/eslint-config-typescript@^0.6.0":
   version "0.6.1"
@@ -1679,11 +1677,6 @@
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-5.1.0.tgz#5f7a228d8382e07809e09aeffed6d472558ed41d"
   integrity sha512-AKVh+CraVAR49y60IX7UYrIMlfhS/zhN1f31FqJ/nHtGv92XFzCoijknkl+pFQUtuZvD2zYCygpqLGCWPVDk/Q==
-
-"@guardian/libs@^7.1.4":
-  version "7.1.4"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-7.1.4.tgz#f5de14f52a32cb677361d49157c94eb046a2b9a8"
-  integrity sha512-r2AJk+4EakNLCLXHhUEqdYSjFhuq19k7tsQO5+53YZc6x6ADEXFNRVE/7EzbODgu5pVwk5SQ/rMuWsE7+5qdVQ==
 
 "@guardian/paparazzi@^0.3.1":
   version "0.3.1"
