@@ -23,7 +23,8 @@ const containerCss = css`
 const headingCss = css`
 	${headline.xsmall({ fontWeight: 'bold' })}
 	${from.tablet} {
-		${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
+		font-size: 28px;
+		line-height: 115%;
 	}
 	max-width: 250px;
 	${from.desktop} {

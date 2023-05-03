@@ -22,9 +22,9 @@ const container = css`
 
 const header = css`
 	margin-bottom: ${space[3]}px;
-	${headline.xsmall({ fontWeight: 'bold' })}
+	${headline.xsmall({ fontWeight: 'bold' })};
 	${from.tablet} {
-		${headline.small({ fontWeight: 'bold' })};
+		font-size: 28px;
 	}
 `;
 
