@@ -4,7 +4,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.patrons.conf.{PatronsIdentityConfig, PatronsStripeConfig}
 import com.gu.patrons.model.{StripeSubscription, ExpandedStripeCustomer}
-import com.gu.supporterdata.model.Stage.{DEV, PROD}
+import com.gu.supporterdata.model.Stage.{CODE, PROD}
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -14,7 +14,7 @@ import scala.concurrent.duration.DurationInt
 @IntegrationTest
 class StripeSubscriptionsProcessorSpec extends AsyncFlatSpec with Matchers {
   "StripeSubscriptionsProcessor" should "process subscriptions from Stripe" in {
-    val stage = DEV
+    val stage = CODE
     val runner = configurableFutureRunner(60.seconds)
     for {
       stripeConfig <- PatronsStripeConfig.fromParameterStore(stage)

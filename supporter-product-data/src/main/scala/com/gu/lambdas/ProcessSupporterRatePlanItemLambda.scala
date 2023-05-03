@@ -9,7 +9,7 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{AlarmService, ConfigService, ZuoraSubscriptionService}
-import com.gu.supporterdata.model.Stage.{DEV, PROD}
+import com.gu.supporterdata.model.Stage.{CODE, PROD}
 import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import io.circe.parser._
@@ -99,6 +99,6 @@ class ContributionAmountFetcher(config: ZuoraQuerierConfig) {
 object ContributionIds {
   def forStage(stage: Stage) = stage match {
     case PROD => List("2c92a0fc5aacfadd015ad24db4ff5e97", "2c92a0fc5e1dc084015e37f58c200eea")
-    case DEV => List("2c92c0f85a6b134e015a7fcd9f0c7855", "2c92c0f85e2d19af015e3896e824092c")
+    case CODE => List("2c92c0f85a6b134e015a7fcd9f0c7855", "2c92c0f85e2d19af015e3896e824092c")
   }
 }

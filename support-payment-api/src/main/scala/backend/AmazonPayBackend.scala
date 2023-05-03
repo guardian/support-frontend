@@ -16,7 +16,7 @@ import com.gu.support.acquisitions.{
   BigQueryConfig,
   BigQueryService,
 }
-import com.gu.supporterdata.model.Stage.{DEV, PROD}
+import com.gu.supporterdata.model.Stage.{CODE, PROD}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
@@ -32,7 +32,7 @@ import model.db.ContributionData
 import model.email.ContributorRow
 import model.Environment.Live
 import play.api.libs.ws.WSClient
-import services.{CloudWatchService, _}
+import services._
 import util.EnvironmentBasedBuilder
 
 import scala.concurrent.Future

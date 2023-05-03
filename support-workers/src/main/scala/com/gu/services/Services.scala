@@ -20,7 +20,7 @@ import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.zuora.{ZuoraGiftService, ZuoraService}
-import com.gu.supporterdata.model.Stage.{DEV => DynamoStageDEV, PROD => DynamoStagePROD}
+import com.gu.supporterdata.model.Stage.{CODE => DynamoStageDEV, PROD => DynamoStagePROD}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 
 import scala.concurrent.ExecutionContext.Implicits.global

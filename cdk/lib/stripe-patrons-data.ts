@@ -12,9 +12,6 @@ import { Schedule } from "aws-cdk-lib/aws-events";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 
-function environmentFromStage(stage: string) {
-  return stage == "CODE" ? "DEV" : stage;
-}
 
 function dynamoPolicy(stage: string) {
   return new PolicyStatement({
@@ -27,9 +24,7 @@ function dynamoPolicy(stage: string) {
       "dynamodb:DescribeTable",
     ],
     resources: [
-      `arn:aws:dynamodb:*:*:table/SupporterProductData-${environmentFromStage(
-        stage
-      )}`,
+      `arn:aws:dynamodb:*:*:table/SupporterProductData-${stage}`,
     ],
   });
 }
