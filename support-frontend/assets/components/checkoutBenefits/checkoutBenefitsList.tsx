@@ -9,7 +9,6 @@ import {
 } from '@guardian/source-foundations';
 import Tooltip from 'components/tooltip/Tooltip';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 import type { CheckListData } from './checkoutBenefitsListData';
 
 const container = css`
@@ -78,13 +77,13 @@ const hr = (margin: string) => css`
 	}
 `;
 
-export interface CheckoutBenefitsListProps extends CSSOverridable {
+export type CheckoutBenefitsListProps = {
 	title: string;
 	checkListData: CheckListData[];
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
 	countryGroupId: CountryGroupId;
-}
+};
 
 export function CheckoutBenefitsList({
 	title,
