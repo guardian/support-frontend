@@ -28,7 +28,7 @@ const header = css`
 	}
 `;
 
-const showsecuretransactionindicator = css`
+const paymentLegendOverrides = css`
 	margin-bottom: ${space[3]}px;
 `;
 
@@ -97,9 +97,7 @@ export function PaymentMethodSelector({
 
 	return (
 		<div css={container}>
-			<PaymentMethodSelectorLegend
-				cssOverrides={showsecuretransactionindicator}
-			/>
+			<PaymentMethodSelectorLegend cssOverrides={paymentLegendOverrides} />
 			<RadioGroup
 				id="paymentMethod"
 				role="radiogroup"
