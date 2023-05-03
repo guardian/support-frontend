@@ -15,12 +15,12 @@ import com.gu.support.acquisitions.{
   BigQueryService,
 }
 import com.gu.support.catalog.CatalogService
-import com.gu.support.config.Stages.{CODE, DEV, PROD}
+import com.gu.support.config.Stages.PROD
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.zuora.{ZuoraGiftService, ZuoraService}
-import com.gu.supporterdata.model.Stage.{CODE => DynamoStageDEV, PROD => DynamoStagePROD}
+import com.gu.supporterdata.model.Stage.{CODE => DynamoStageCODE, PROD => DynamoStagePROD}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -58,7 +58,7 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   )
   val supporterDynamoStage = (Configuration.stage, isTestUser) match {
     case (PROD, false) => DynamoStagePROD
-    case _ => DynamoStageDEV
+    case _ => DynamoStageCODE
   }
   lazy val supporterDataDynamoService = SupporterDataDynamoService(supporterDynamoStage)
 }

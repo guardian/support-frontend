@@ -16,7 +16,7 @@ new Frontend(app, "Frontend-PROD", {
   membershipSubPromotionsTables:
     [
       "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
-      "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV",
+      "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
     ],
   domainName: "support.theguardian.com.origin.membership.guardianapis.com",
   scaling: {
@@ -30,7 +30,7 @@ new Frontend(app, "Frontend-CODE", {
   stack: "support",
   stage: "CODE",
   cloudFormationStackName,
-  membershipSubPromotionsTables: ["arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV"],
+  membershipSubPromotionsTables: ["arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE"],
   domainName: "support.code.theguardian.com.origin.membership.guardianapis.com",
   scaling: {
     minimumInstances: 1,

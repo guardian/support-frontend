@@ -3,8 +3,8 @@ package com.gu.support.config
 import TouchPointEnvironments.{CODE, fromStage}
 import com.typesafe.config.{Config, ConfigValueFactory}
 
-/** Touchpoint represents 3rd party enterprise systems which have a number of different stages or environments (DEV, and
-  * PROD) TouchpointConfig abstracts the details of talking to the correct environment based on the user details
+/** Touchpoint represents 3rd party enterprise systems which have a number of different stages or environments (CODE,
+  * and PROD) TouchpointConfig abstracts the details of talking to the correct environment based on the user details
   * contained in the request.
   */
 

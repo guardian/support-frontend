@@ -62,7 +62,7 @@ IntegrationTest / assembly / test := {}
 assembly / aggregate := false
 
 lazy val deployToCode =
-  inputKey[Unit]("Directly update AWS lambda code from DEV instead of via RiffRaff for faster feedback loop")
+  inputKey[Unit]("Directly update AWS lambda code from CODE instead of via RiffRaff for faster feedback loop")
 
 deployToCode := {
   import scala.sys.process._

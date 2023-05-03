@@ -66,11 +66,11 @@ Resources:
               Action: s3:GetObject
               Resource:
                - arn:aws:s3:::support-workers-private/CODE/support-workers.private.conf
-               - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-DEV/catalog.json
+               - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json
         - Statement:
             - Effect: Allow
               Action: dynamodb:Scan
-              Resource: arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
+              Resource: arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE
         - Statement:
             - Effect: Allow
               Action:
@@ -98,7 +98,7 @@ Resources:
           - 'IT Tests are failing'
       AlarmDescription: !Join
         - ' '
-        - - 'Impact - There may be improperly tested code in PROD or DEV test data is broken.'
+        - - 'Impact - There may be improperly tested code in PROD or CODE test data is broken.'
           - !FindInMap [ Constants, Alarm, Process ]
       Metrics:
         - Id: total

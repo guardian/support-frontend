@@ -31,7 +31,7 @@ You will need to give whatever application is using this library the the correct
       - dynamodb:PutItem
       - dynamodb:UpdateItem
       Resource:
-      - Fn::ImportValue: supporter-product-data-tables-DEV-SupporterProductDataTable
+      - Fn::ImportValue: supporter-product-data-tables-CODE-SupporterProductDataTable
 ```
 Then you can use it as follows:
 
