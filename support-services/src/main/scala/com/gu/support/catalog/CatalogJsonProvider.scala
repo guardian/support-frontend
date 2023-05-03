@@ -14,15 +14,10 @@ trait CatalogJsonProvider {
 
 class S3CatalogProvider(environment: TouchPointEnvironment) extends CatalogJsonProvider with LazyLogging {
   override def get: Option[Json] = {
-    val bucket = s"s3://gu-zuora-catalog/PROD/Zuora-${keyFromEnvironment(environment)}"
+    val bucket = s"s3://gu-zuora-catalog/PROD/Zuora-${environment}"
     logger.info(s"Attempting to load catalog from s3://$bucket/catalog.json")
     val catalog = new AmazonS3URI(bucket + "/catalog.json")
     fetchJson(AwsS3Client, catalog)
-  }
-
-  private def keyFromEnvironment(environment: TouchPointEnvironment) = environment match {
-    case CODE => "DEV" // TODO: remove this when we have a CODE catalog
-    case other: TouchPointEnvironment => other.envValue
   }
 }
 

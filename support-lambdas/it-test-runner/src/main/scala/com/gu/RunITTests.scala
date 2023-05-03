@@ -22,7 +22,7 @@ class RunITTests extends RequestStreamHandler {
 }
 object RunITTests {
 
-  lazy val stage = System.getenv().asScala.toMap.getOrElse("Stage", "DEV")
+  lazy val stage = System.getenv().asScala.toMap.getOrElse("Stage", "CODE")
   // todo should we also check the build id to make sure support-workers deploy is keeping the remote jar in sync?
 
   def main(args: Array[String]): Unit = {

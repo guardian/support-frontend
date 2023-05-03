@@ -1,6 +1,8 @@
 stacks: [support]
 regions: [eu-west-1]
-
+allowedStages:
+  - CODE
+  - PROD
 deployments:
   acquisitions-firehose-transformer:
     type: aws-lambda
