@@ -4,7 +4,10 @@ import { currencies } from 'helpers/internationalisation/currency';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
+import {
+	getMinimumContributionAmount,
+	isUserInAbVariant,
+} from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -21,9 +24,13 @@ type CheckoutBenefitsListContainerProps = {
 function getBenefitsListTitle(
 	priceString: string,
 	contributionType: ContributionType,
+	isEmotionalBenefitTestVariant: boolean,
+	isAustralia: boolean,
 ) {
 	const billingPeriod = contributionType === 'MONTHLY' ? 'month' : 'year';
-	return `For ${priceString} per ${billingPeriod}, you’ll unlock`;
+	return isEmotionalBenefitTestVariant && !isAustralia
+		? `For ${priceString} per ${billingPeriod}`
+		: `For ${priceString} per ${billingPeriod}, you’ll unlock`;
 }
 
 const getbuttonCopy = (
@@ -52,6 +59,10 @@ export function CheckoutBenefitsListContainer({
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const minimumContributionAmount = useContributionsSelector(
 		getMinimumContributionAmount,
+	);
+
+	const isEmotionalBenefitTestVariant = useContributionsSelector(
+		isUserInAbVariant('emotionalBenefitTest', 'variant'),
 	);
 
 	const currency = currencies[currencyId];
@@ -88,10 +99,13 @@ export function CheckoutBenefitsListContainer({
 		title: getBenefitsListTitle(
 			userSelectedAmountWithCurrency,
 			contributionType,
+			isEmotionalBenefitTestVariant,
+			isAustralia,
 		),
 		checkListData: checkListData({
 			higherTier,
 			isAustralia,
+			isEmotionalBenefitTestVariant,
 		}),
 		buttonCopy: getbuttonCopy(
 			higherTier,
