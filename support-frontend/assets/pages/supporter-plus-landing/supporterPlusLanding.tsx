@@ -74,12 +74,8 @@ const checkoutContainer = css`
 	}
 `;
 
-const backgroundContainer = css`
-	background-color: ${neutral[97]};
-`;
-
 const darkBackgroundContainerMobile = css`
-	${backgroundContainer}
+	background-color: ${neutral[97]};
 	${until.tablet} {
 		background-color: ${brand[400]};
 		border-bottom: 1px solid ${brand[600]};
