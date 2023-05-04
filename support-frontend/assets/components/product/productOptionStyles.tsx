@@ -36,6 +36,8 @@ export const productOption = css`
 export const specialOfferOption = css`
 	background-color: #fffdeb;
 	border: 5px solid ${brandAlt[400]};
+	/* Reduce top and bottom padding to account for the border */
+	padding: 7px ${space[3]}px;
 `;
 
 export const productOptionUnderline = css`

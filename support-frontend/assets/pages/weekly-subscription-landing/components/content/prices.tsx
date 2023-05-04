@@ -144,6 +144,7 @@ function Prices({
 						onClick={product.onClick}
 						onView={product.onView}
 						label={product.label}
+						isSpecialOffer={product.isSpecialOffer}
 					/>
 				))}
 			</FlexContainer>

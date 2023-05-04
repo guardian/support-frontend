@@ -52,7 +52,7 @@ const getPriceWithSymbol = (currencyId: IsoCurrency, price: number) =>
 
 const getPromotionLabel = (promotion?: Promotion) => {
 	if (!promotion || !promotion.discount) {
-		return null;
+		return '';
 	}
 
 	return `Save ${Math.round(promotion.discount.amount)}%`;
@@ -90,6 +90,14 @@ const weeklyProductProps = (
 		componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
 	};
 
+	// TODO: remove/review this when the 12 for 12 offer is over
+	const isSpecialOffer = promotion?.promoCode === '12for12';
+	const label = isSpecialOffer
+		? `Special Offer: 12 for ${currencies[productPrice.currency].glyph}${
+				promotion.discountedPrice ?? '12'
+		  }`
+		: getPromotionLabel(promotion);
+
 	return {
 		title: billingPeriodTitle(billingPeriod, orderIsAGift),
 		price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
@@ -99,9 +107,10 @@ const weeklyProductProps = (
 		),
 		buttonCopy: 'Subscribe now',
 		href: getCheckoutUrl(billingPeriod, orderIsAGift),
-		label: getPromotionLabel(promotion) ?? '',
+		label,
 		onClick: sendTrackingEventsOnClick(trackingProperties),
 		onView: sendTrackingEventsOnView(trackingProperties),
+		isSpecialOffer,
 	};
 };
 
