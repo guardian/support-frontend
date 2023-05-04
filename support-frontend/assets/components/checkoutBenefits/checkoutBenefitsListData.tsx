@@ -84,8 +84,8 @@ export const checkListData = ({
 					icon: getSvgIcon(higherTier),
 					text: (
 						<p>
-							<span css={boldText}>Unlock all premium app features </span>to
-							enjoy our Live and Discover tabs
+							<span css={boldText}>Gain full access to our news app </span>to
+							read our reporting on the go
 						</p>
 					),
 					maybeGreyedOut: maybeGreyedOutHigherTier,
