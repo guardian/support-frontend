@@ -5,25 +5,29 @@ import {
 	headline,
 	space,
 	textSans,
+	until,
 } from '@guardian/source-foundations';
 import Tooltip from 'components/tooltip/Tooltip';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 import type { CheckListData } from './checkoutBenefitsListData';
 
-const container = css`
+const containerCss = css`
 	${textSans.medium({ lineHeight: 'tight' })};
 `;
 
-const heading = css`
-	${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })};
+const headingCss = css`
+	${headline.xsmall({ fontWeight: 'bold' })}
+	${from.tablet} {
+		font-size: 28px;
+		line-height: 115%;
+	}
 	max-width: 250px;
 	${from.desktop} {
 		max-width: 280px;
 	}
 `;
 
-const checkListIcon = css`
+const checkListIconCss = css`
 	vertical-align: top;
 	padding-right: 10px;
 	line-height: 0;
@@ -33,11 +37,11 @@ const checkListIcon = css`
 	}
 `;
 
-const iconContainer = css`
+const iconContainerCss = css`
 	margin-top: -2px;
 `;
 
-const checkListText = css`
+const checkListTextCss = css`
 	display: inline-block;
 
 	& p {
@@ -45,11 +49,11 @@ const checkListText = css`
 	}
 `;
 
-const table = (rowSpacing: string) => css`
+const tableCss = css`
 	padding-top: ${space[4]}px;
 
 	& tr:not(:last-child) {
-		border-bottom: ${rowSpacing}px solid transparent;
+		border-bottom: 6px solid transparent;
 	}
 
 	${from.mobileLandscape} {
@@ -59,44 +63,44 @@ const table = (rowSpacing: string) => css`
 	}
 `;
 
-const hr = (margin: string) => css`
+const hrCss = (margin: string) => css`
 	border: none;
 	height: 1px;
 	background-color: #dcdcdc;
 	margin: ${margin};
+	${until.tablet} {
+		margin: 14px 0;
+	}
 `;
 
-export interface CheckoutBenefitsListProps extends CSSOverridable {
+export type CheckoutBenefitsListProps = {
 	title: string;
 	checkListData: CheckListData[];
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
 	countryGroupId: CountryGroupId;
-	rowSpacingNarrow?: boolean;
-}
+};
 
 export function CheckoutBenefitsList({
 	title,
 	checkListData,
 	countryGroupId,
-	rowSpacingNarrow,
-	cssOverrides,
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
-		<div css={[container, cssOverrides]}>
-			<h2 css={heading}>{title}</h2>
-			<hr css={hr(`${space[4]}px 0`)} />
-			<table css={table(rowSpacingNarrow ? `6` : `10`)}>
+		<div css={containerCss}>
+			<h2 css={headingCss}>{title}</h2>
+			<hr css={hrCss(`${space[4]}px 0`)} />
+			<table css={tableCss}>
 				{checkListData.map((item) => (
 					<tr>
-						<td css={[checkListIcon, item.maybeGreyedOut]}>
-							<div css={iconContainer}>{item.icon}</div>
+						<td css={[checkListIconCss, item.maybeGreyedOut]}>
+							<div css={iconContainerCss}>{item.icon}</div>
 						</td>
-						<td css={[checkListText, item.maybeGreyedOut]}>{item.text}</td>
+						<td css={[checkListTextCss, item.maybeGreyedOut]}>{item.text}</td>
 					</tr>
 				))}
 			</table>
-			<hr css={hr(`${space[5]}px 0 ${space[4]}px`)} />
+			<hr css={hrCss(`${space[5]}px 0 ${space[4]}px`)} />
 			<Tooltip promptText="Cancel anytime">
 				<p>
 					You can cancel
