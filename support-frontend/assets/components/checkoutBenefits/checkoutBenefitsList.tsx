@@ -13,11 +13,6 @@ import type { CheckListData } from './checkoutBenefitsListData';
 
 const containerCss = css`
 	${textSans.medium({ lineHeight: 'tight' })};
-	${until.tablet} {
-		tr {
-			border-bottom-width: 6px;
-		}
-	}
 `;
 
 const headingCss = css`
