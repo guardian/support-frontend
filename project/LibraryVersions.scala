@@ -6,7 +6,7 @@ object LibraryVersions {
 
   val catsVersion = "2.9.0"
   val jacksonVersion = "2.15.0"
-  val jacksonDatabindVersion = "2.14.2"
+  val jacksonDatabindVersion = "2.15.0"
   val okhttpVersion = "3.10.0"
   val scalaUriVersion = "4.0.3"
   val playCirceVersion = "2814.2"
