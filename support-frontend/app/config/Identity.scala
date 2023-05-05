@@ -15,4 +15,13 @@ class Identity(config: Config) {
   lazy val testUserSecret = config.getString("test.users.secret")
 
   lazy val useStub = config.getOptionalBoolean("useStub").getOrElse(false)
+
+  lazy val idTokenCookieName = config.getString("id.token.cookie.name")
+  lazy val accessTokenCookieName = config.getString("access.token.cookie.name")
+
+  lazy val oauthClientId = config.getString("oauth.client.id")
+  lazy val oauthAuthorizeUrl = config.getString("oauth.authorize.url")
+  lazy val oauthTokenUrl = config.getString("oauth.token.url")
+  lazy val oauthCallbackUrl = config.getString("oauth.callback.url")
+  lazy val oauthScopes = config.getString("oauth.scopes")
 }

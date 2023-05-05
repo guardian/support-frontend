@@ -200,6 +200,9 @@ trait Controllers {
     appConfig.guardianDomain,
   )
 
+  lazy val authCodeFlowController =
+    new AuthCodeFlowController(controllerComponents, asyncAuthenticationService, appConfig.identity)
+
   lazy val siteMapController = new SiteMap(
     actionRefiners,
     controllerComponents,
