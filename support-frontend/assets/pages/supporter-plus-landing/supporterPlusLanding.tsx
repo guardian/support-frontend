@@ -48,10 +48,7 @@ import {
 import { currencies } from 'helpers/internationalisation/currency';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import {
-	isUserInAbVariant,
-	isUserInAnyAbVariant,
-} from 'helpers/redux/commonState/selectors';
+import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { CheckoutDivider } from './components/checkoutDivider';
@@ -82,12 +79,8 @@ const checkoutContainerCss = css`
 	}
 `;
 
-const backgroundContainerCss = css`
-	background-color: ${neutral[97]};
-`;
-
 const darkBackgroundContainerMobileCss = css`
-	${backgroundContainerCss}
+	background-color: ${neutral[97]};
 	${until.tablet} {
 		background-color: ${brand[400]};
 	}
@@ -148,12 +141,6 @@ export function SupporterPlusLandingPage({
 
 	const optimisedMobileLayout2 = useContributionsSelector(
 		isUserInAbVariant('supporterPlusMobileTest2', 'variant'),
-	);
-	const optimisedMobileLayout = useContributionsSelector(
-		isUserInAnyAbVariant(
-			['supporterPlusMobileTest1', 'supporterPlusMobileTest2'],
-			'variant',
-		),
 	);
 
 	const { paymentComplete, isWaiting } = useContributionsSelector(
@@ -242,33 +229,21 @@ export function SupporterPlusLandingPage({
 					</CheckoutHeading>
 					<Container
 						sideBorders
-						cssOverrides={
-							optimisedMobileLayout
-								? darkBackgroundContainerMobileCss
-								: backgroundContainerCss
-						}
+						cssOverrides={darkBackgroundContainerMobileCss}
 					>
 						<Columns cssOverrides={checkoutContainerCss} collapseUntil="tablet">
 							<Column span={[0, 2, 5]}></Column>
 							<Column span={[1, 8, 7]}>
 								<Hide from="desktop">
-									{optimisedMobileLayout ? (
-										<SecureTransactionIndicator
-											align="left"
-											theme="light"
-											cssOverrides={css`
-												margin-bottom: 10px;
-											`}
-										/>
-									) : (
-										heading
-									)}
+									<SecureTransactionIndicator
+										align="left"
+										theme="light"
+										cssOverrides={css`
+											margin-bottom: 10px;
+										`}
+									/>
 								</Hide>
-								<Box
-									cssOverrides={
-										optimisedMobileLayout ? shorterBoxMarginCss : css``
-									}
-								>
+								<Box cssOverrides={shorterBoxMarginCss}>
 									<AmountAndBenefits />
 								</Box>
 								{optimisedMobileLayout2 && (
@@ -288,11 +263,7 @@ export function SupporterPlusLandingPage({
 									id="detailsAndCheckout"
 									css={displayFullForm(fullFormDisplayed)}
 								>
-									<Box
-										cssOverrides={
-											optimisedMobileLayout ? shorterBoxMarginCss : css``
-										}
-									>
+									<Box cssOverrides={shorterBoxMarginCss}>
 										<BoxContents>
 											{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
 											<ContributionsStripe>
@@ -314,13 +285,9 @@ export function SupporterPlusLandingPage({
 													)}
 												/>
 												<PaymentButtonController
-													cssOverrides={
-														optimisedMobileLayout
-															? css`
-																	margin-top: 30px;
-															  `
-															: css``
-													}
+													cssOverrides={css`
+														margin-top: 30px;
+													`}
 													paymentButtons={getPaymentMethodButtons(
 														contributionType,
 														switches,
@@ -328,7 +295,6 @@ export function SupporterPlusLandingPage({
 														countryGroupId,
 													)}
 												/>
-												<ExistingRecurringContributorMessage />
 												<PaymentFailureMessage />
 												<DirectDebitContainer />
 											</ContributionsStripe>
@@ -341,21 +307,13 @@ export function SupporterPlusLandingPage({
 											/>
 										</BoxContents>
 									</Box>
-									<CheckoutDivider
-										spacing="loose"
-										mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
-									/>
+									<CheckoutDivider spacing="loose" mobileTheme={'light'} />
 									<PatronsMessage
 										countryGroupId={countryGroupId}
-										mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
+										mobileTheme={'light'}
 									/>
-									<CheckoutDivider
-										spacing="tight"
-										mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
-									/>
-									<GuardianTsAndCs
-										mobileTheme={optimisedMobileLayout ? 'light' : 'dark'}
-									/>
+									<CheckoutDivider spacing="tight" mobileTheme={'light'} />
+									<GuardianTsAndCs mobileTheme={'light'} />
 								</div>
 							</Column>
 						</Columns>
