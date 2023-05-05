@@ -167,7 +167,7 @@ export type RegularPaymentRequest = {
 	supportAbTests: AcquisitionABTest[];
 	telephoneNumber?: string;
 	promoCode?: Option<string>;
-	deliveryInstructions?: Option<string>;
+	deliveryInstructions?: string;
 	csrUsername?: string;
 	salesforceCaseId?: string;
 	recaptchaToken?: string;

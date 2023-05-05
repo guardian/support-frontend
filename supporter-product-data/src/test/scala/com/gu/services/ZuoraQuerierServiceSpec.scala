@@ -1,6 +1,6 @@
 package com.gu.services
 
-import com.gu.supporterdata.model.Stage.DEV
+import com.gu.supporterdata.model.Stage.CODE
 import com.gu.model.states.QueryType.Full
 import com.gu.model.zuora.response.JobStatus.Submitted
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
@@ -13,7 +13,7 @@ import scala.concurrent.duration._
 @IntegrationTest
 class ZuoraQuerierServiceSpec extends AsyncFlatSpec with Matchers {
   "ZuoraQuerierService" should "run a query successfully" in {
-    val config = ConfigService(DEV).load
+    val config = ConfigService(CODE).load
     val service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
 
     service.postQuery(Full).map { response =>

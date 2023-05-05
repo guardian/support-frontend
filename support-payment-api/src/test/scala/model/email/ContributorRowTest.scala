@@ -25,7 +25,7 @@ class ContributorRowTest extends AnyFlatSpec with Matchers {
         |        "payment method": "PayPal",
         |        "first_name": "Peter",
         |        "amount": "5.10",
-        |        "currency": "£",
+        |        "currency": "GBP",
         |        "date_of_payment": "$formattedDate"
         |      }
         |    }

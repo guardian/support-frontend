@@ -11,9 +11,8 @@ export function getStateOrProvinceError(
 	const contributionType = getContributionType(state);
 	const billingCountryGroup = fromCountry(
 		getBillingCountryAndState(
-			state,
 			state.page.checkoutForm.payment.paymentMethod.name,
-			state.page.checkoutForm.payment.paymentMethod.stripePaymentMethod,
+			state,
 		).billingCountry,
 	);
 	if (

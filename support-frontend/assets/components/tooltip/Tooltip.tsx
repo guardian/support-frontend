@@ -8,9 +8,7 @@ import {
 	useClick,
 	useDismiss,
 	useFloating,
-	useFocus,
 	useInteractions,
-	useRole,
 } from '@floating-ui/react';
 import {
 	between,
@@ -18,10 +16,10 @@ import {
 	space,
 	textSans,
 	until,
+	visuallyHidden,
 } from '@guardian/source-foundations';
 import { Button, SvgCross } from '@guardian/source-react-components';
 import { useState } from 'react';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { InfoRound } from './InfoRound';
 
 const buttonAndTooltipContainer = css`
@@ -163,11 +161,17 @@ const arrowTop = css`
 	}
 `;
 
+export type TooltipProps = {
+	promptText: string;
+	buttonLabel?: string;
+	children: React.ReactNode;
+};
+
 export default function Tooltip({
-	countryGroupId,
-}: {
-	countryGroupId: CountryGroupId;
-}): JSX.Element {
+	promptText,
+	buttonLabel = 'More information',
+	children,
+}: TooltipProps): JSX.Element {
 	const [open, setOpen] = useState(false);
 
 	const { x, y, refs, strategy, context } = useFloating({
@@ -190,19 +194,13 @@ export default function Tooltip({
 	});
 
 	// Event listeners to change the open state
-	const click = useClick(context);
-	const focus = useFocus(context);
+	const click = useClick(context, { toggle: false });
 	const dismiss = useDismiss(context);
-
-	// Role props for screen readers
-	const role = useRole(context, { role: 'tooltip' });
 
 	// Merge all the interactions into prop getters
 	const { getReferenceProps, getFloatingProps } = useInteractions([
 		click,
-		focus,
 		dismiss,
-		role,
 	]);
 
 	return (
@@ -211,7 +209,7 @@ export default function Tooltip({
 			ref={refs.setReference}
 			{...getReferenceProps()}
 		>
-			<p css={copy}>Cancel anytime</p>
+			<p css={copy}>{promptText}</p>
 			<div css={buttonAndTooltipContainer}>
 				<div>
 					<Button
@@ -219,42 +217,47 @@ export default function Tooltip({
 						icon={<InfoRound />}
 						priority="tertiary"
 						css={buttonOverrides}
-					/>
+					>
+						{buttonLabel}
+					</Button>
 				</div>
 				<FloatingPortal>
-					{open ? (
-						<div css={tooltipContainer}>
-							<div
-								css={tooltipCss}
-								ref={refs.setFloating}
-								style={{
-									// Positioning styles
-									position: strategy,
-									top: y ?? 0,
-									left: x ?? 0,
-								}}
-								{...getFloatingProps()}
+					<div
+						role="status"
+						css={[
+							tooltipContainer,
+							open
+								? css``
+								: css`
+										${visuallyHidden}
+								  `,
+						]}
+						ref={refs.setFloating}
+						style={{
+							// Positioning styles
+							position: strategy,
+							top: y ?? 0,
+							left: x ?? 0,
+						}}
+						{...getFloatingProps()}
+					>
+						<div css={tooltipCss}>
+							{children}
+							<Button
+								onClick={() => setOpen(false)}
+								icon={<SvgCross size="xsmall" />}
+								size="small"
+								hideLabel
+								priority="secondary"
+								cssOverrides={closeButtonOverrides}
 							>
-								You can cancel
-								{countryGroupId === 'GBPCountries' ? '' : ' online'} anytime
-								before your next payment date. If you cancel in the first 14
-								days, you will receive a full refund.
-								<Button
-									onClick={() => setOpen(false)}
-									icon={<SvgCross size="xsmall" />}
-									size="small"
-									hideLabel
-									priority="secondary"
-									cssOverrides={closeButtonOverrides}
-								/>
-								<div
-									css={context.placement === 'top' ? arrowBottom : arrowTop}
-								></div>
-							</div>
+								Close
+							</Button>
+							<div
+								css={context.placement === 'top' ? arrowBottom : arrowTop}
+							></div>
 						</div>
-					) : (
-						<div />
-					)}
+					</div>
 				</FloatingPortal>
 			</div>
 		</div>

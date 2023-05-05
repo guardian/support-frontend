@@ -1,15 +1,10 @@
-import { css } from '@emotion/react';
-import { space, until } from '@guardian/source-foundations';
 import type { OtherAmountProps } from 'components/otherAmount/otherAmount';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import {
 	setOtherAmount,
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
-import {
-	getMinimumContributionAmount,
-	isUserInAbVariant,
-} from 'helpers/redux/commonState/selectors';
+import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
 import { getOtherAmountErrors } from 'helpers/redux/selectors/formValidation/otherAmountValidation';
 import {
 	useContributionsDispatch,
@@ -17,14 +12,6 @@ import {
 } from 'helpers/redux/storeHooks';
 import type { PriceCardPaymentInterval } from './priceCard';
 import type { PriceCardsProps } from './priceCards';
-
-const optimisedLayoutOverrides = css`
-	${until.tablet} {
-		&:not(:last-child) {
-			padding-bottom: ${space[1]}px;
-		}
-	}
-`;
 
 type PriceCardsRenderProps = PriceCardsProps & OtherAmountProps;
 
@@ -73,10 +60,6 @@ export function PriceCardsContainer({
 	).toString();
 	const otherAmountErrors = useContributionsSelector(getOtherAmountErrors);
 
-	const useOptimisedMobileLayout = useContributionsSelector(
-		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
-	);
-
 	const otherAmount = otherAmounts[frequency].amount ?? '';
 
 	function onAmountChange(newAmount: string) {
@@ -108,8 +91,5 @@ export function PriceCardsContainer({
 		onOtherAmountChange,
 		hideChooseYourAmount,
 		errors: otherAmountErrors,
-		cssOverrides: useOptimisedMobileLayout
-			? optimisedLayoutOverrides
-			: undefined,
 	});
 }

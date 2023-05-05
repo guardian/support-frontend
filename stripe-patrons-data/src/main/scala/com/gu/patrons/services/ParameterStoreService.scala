@@ -13,17 +13,13 @@ import com.amazonaws.services.simplesystemsmanagement.{
 }
 import com.gu.aws.{AwsAsync, CredentialsProvider}
 import com.gu.supporterdata.model.Stage
-import com.gu.supporterdata.model.Stage.DEV
+import com.gu.supporterdata.model.Stage.CODE
 
 import scala.concurrent.ExecutionContext
 import scala.jdk.CollectionConverters._
 
 class ParameterStoreService(client: AWSSimpleSystemsManagementAsync, stage: Stage) {
-  def parameterKeyFromStage(stage: Stage) = stage match {
-    case DEV => "CODE"
-    case _ => stage.value
-  }
-  val configRoot = s"/${parameterKeyFromStage(stage)}/support/stripe-patrons-data"
+  val configRoot = s"/$stage/support/stripe-patrons-data"
 
   def getParametersByPath(path: String)(implicit executionContext: ExecutionContext) = {
     val request: GetParametersByPathRequest = new GetParametersByPathRequest()

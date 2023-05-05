@@ -1,6 +1,6 @@
 # supporter-product-data-dynamo
-This library provides a standard means of adding records to the SupporterProductData dynamo store. 
-It is releasable via Maven/Sonatype to allow us to use it from support-service-lambdas 
+This library provides a standard means of adding records to the SupporterProductData dynamo store.
+It is releasable via Maven/Sonatype to allow us to use it from support-service-lambdas
 
 Releasing to local repo
 ==================
@@ -31,17 +31,18 @@ You will need to give whatever application is using this library the the correct
       - dynamodb:PutItem
       - dynamodb:UpdateItem
       Resource:
-      - Fn::ImportValue: supporter-product-data-tables-DEV-SupporterProductDataTable
+      - Fn::ImportValue: supporter-product-data-tables-CODE-SupporterProductDataTable
 ```
 Then you can use it as follows:
+
 ```scala
-import com.gu.supporterdata.model.Stage.{DEV, PROD, UAT}
+import com.gu.supporterdata.model.Stage.{CODE, PROD}
 import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import java.time.LocalDate
 import scala.concurrent.ExecutionContext.Implicits.global
 
-val dynamoService = SupporterDataDynamoService(DEV)
+val dynamoService = SupporterDataDynamoService(CODE)
 
 dynamoService
   .writeItem(
