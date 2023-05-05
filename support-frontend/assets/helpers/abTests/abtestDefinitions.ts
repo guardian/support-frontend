@@ -120,28 +120,4 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 11,
 	},
-	supporterPlusMobileTest1: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-				breakpoint: {
-					minWidth: 'mobile',
-					maxWidth: 'tablet',
-				},
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		seed: 12,
-	},
 };
