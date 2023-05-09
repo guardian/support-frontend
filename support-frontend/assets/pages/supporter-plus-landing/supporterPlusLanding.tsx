@@ -46,6 +46,7 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
+import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
@@ -176,6 +177,10 @@ export function SupporterPlusLandingPage({
 
 	function onStickyButtonClick() {
 		setFullFormDisplayed(!fullFormDisplayed);
+		sendTrackingEventsOnClick({
+			id: 'sticky_cta',
+			componentType: 'ACQUISITIONS_BUTTON',
+		})();
 	}
 
 	function getStickyButtonText(
