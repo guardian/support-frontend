@@ -10,6 +10,7 @@ import type {
 	OtherAmounts,
 	SelectedAmounts,
 } from 'helpers/contributions';
+import { fromString as isoCountryFromString } from 'helpers/internationalisation/country';
 import type {
 	CountryGroup,
 	CountryGroupId,
@@ -188,9 +189,10 @@ export const checkStateIfApplicable: (
 					(c) => c !== 'AU',
 				);
 
-				if (
-					AUDCountriesWithNoStates.includes(window.guardian.geoip.countryCode)
-				) {
+				const geoCountry = isoCountryFromString(
+					window.guardian.geoip.countryCode,
+				);
+				if (geoCountry && AUDCountriesWithNoStates.includes(geoCountry)) {
 					return true;
 				}
 			}

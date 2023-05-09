@@ -1,4 +1,5 @@
 import type { ContributionType } from 'helpers/contributions';
+import { fromString as isoCountryFromString } from './country';
 import type { CountryGroup, CountryGroupId } from './countryGroup';
 import {
 	AUDCountries,
@@ -25,9 +26,15 @@ export function shouldCollectStateForContributions(
 				(c) => c !== 'AU',
 			);
 
-			const doesNotRequireState = AUDCountriesWithNoStates.includes(
+			const isoCountry = isoCountryFromString(
 				window.guardian.geoip.countryCode,
 			);
+
+			if (!isoCountry) {
+				return false;
+			}
+
+			const doesNotRequireState = AUDCountriesWithNoStates.includes(isoCountry);
 
 			return !doesNotRequireState;
 		}

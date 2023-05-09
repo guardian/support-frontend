@@ -5,7 +5,7 @@ import type {
 	SelectedAmounts,
 } from 'helpers/contributions';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -54,7 +54,7 @@ export type ProductState = {
 	errors: ProductErrors;
 };
 
-const currency = getCurrency(detectCountryGroup());
+const currency = getCurrency(detectCountry());
 
 export const initialProductState: ProductState = {
 	productType: 'NoProduct',

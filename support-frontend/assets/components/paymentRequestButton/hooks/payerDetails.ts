@@ -3,6 +3,7 @@ import type {
 	PaymentRequestPaymentMethodEvent,
 } from '@stripe/stripe-js';
 import {
+	detect as detectCountry,
 	findIsoCountry,
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
@@ -81,6 +82,6 @@ export function resetPayerDetails(dispatch: ContributionsDispatch): void {
 	dispatch(setEmail(''));
 	dispatch(setFirstName(''));
 	dispatch(setLastName(''));
-	dispatch(setBillingCountry(''));
+	dispatch(setBillingCountry(detectCountry()));
 	dispatch(setBillingState(''));
 }

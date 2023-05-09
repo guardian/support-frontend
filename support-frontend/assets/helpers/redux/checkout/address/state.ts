@@ -1,13 +1,13 @@
 import { z } from 'zod';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import { detect } from 'helpers/internationalisation/country';
+import { detect, isoCountries } from 'helpers/internationalisation/country';
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { isPostCodeValid } from './validationFunctions';
 
 export const addressFieldsSchema = z
 	.object({
-		country: z.string().min(1, 'Please select a country'),
+		country: z.enum(isoCountries),
 		state: z
 			.string()
 			.min(1, 'Please enter a state, province or territory')

@@ -67,9 +67,34 @@ describe('getProductPrice', () => {
 				},
 			},
 		},
+		'United States': {
+			Collection: {
+				Weekend: {
+					Monthly: {
+						USD: {
+							price: 12.34,
+							savingVsRetail: 21,
+							currency: 'USD',
+							fixedTerm: false,
+							promotions: [],
+						},
+					},
+				},
+			},
+		},
 	} as unknown as ProductPrices;
 
 	it('should return product price information for a given currency', () => {
+		expect(
+			getProductPrice(productPrices, 'US', 'Monthly', 'Collection', 'Weekend'),
+		).toEqual({
+			currency: 'USD',
+			fixedTerm: false,
+			price: 12.34,
+			promotions: [],
+			savingVsRetail: 21,
+		});
+
 		expect(
 			getProductPrice(productPrices, 'GB', 'Monthly', 'Collection', 'Weekend'),
 		).toEqual({
