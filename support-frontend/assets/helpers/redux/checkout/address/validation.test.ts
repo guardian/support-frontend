@@ -275,7 +275,7 @@ function buildAddressFields({
 	lineTwo = 'line two',
 	city = 'city',
 	state = 'state',
-	country = 'country',
+	country = 'IE',
 	postCode = 'postcode',
 }: Partial<AddressFields>): AddressFields {
 	return {
