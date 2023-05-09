@@ -3,7 +3,10 @@ import * as abTest from 'helpers/abTests/abtest';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
+import {
+	detect as detectCountry,
+	fromString as isoCountryFromString,
+} from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -23,10 +26,12 @@ import { getAmounts } from '../../abTests/helpers';
 import type { CommonState, Internationalisation } from '../commonState/state';
 
 function getLocalCurrencyCountry(): LocalCurrencyCountry | null | undefined {
-	const queryParam = getQueryParameter('local-currency-country');
+	const queryParam = isoCountryFromString(
+		getQueryParameter('local-currency-country'),
+	);
 
 	if (queryParam) {
-		return localCurrencyCountries[queryParam.toUpperCase()];
+		return localCurrencyCountries[queryParam];
 	}
 
 	return null;

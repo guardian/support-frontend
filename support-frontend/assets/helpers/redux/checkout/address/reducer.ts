@@ -5,6 +5,7 @@ import {
 	createSlice,
 } from '@reduxjs/toolkit';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromString } from 'helpers/internationalisation/country';
 import { getSliceErrorsFromZodResult } from 'helpers/redux/utils/validation/errors';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
@@ -74,7 +75,7 @@ function getAddressFieldsSlice(type: AddressType) {
 				state.postCode = action.payload;
 				state.errors = removeError('postCode', state.errors);
 			},
-			setCountry(state, action: PayloadAction<string>) {
+			setCountry(state, action: PayloadAction<IsoCountry>) {
 				const country = fromString(action.payload);
 
 				if (country) {

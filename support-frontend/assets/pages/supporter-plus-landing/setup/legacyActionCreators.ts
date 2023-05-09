@@ -45,10 +45,7 @@ import type {
 	IsoCountry,
 	StateProvince,
 } from 'helpers/internationalisation/country';
-import {
-	findIsoCountry,
-	stateProvinceFromString,
-} from 'helpers/internationalisation/country';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import {
 	setBillingCountry,
@@ -159,34 +156,9 @@ function getBillingCountryAndState(
 	// If the page form has a billingCountry, then it must have been provided by a wallet, ApplePay or
 	// Payment Request Button, which will already have filtered the billingState by stateProvinceFromString,
 	// so we can trust both values, verbatim.
-	if (billingCountry) {
-		return {
-			billingCountry,
-			billingState,
-		};
-	}
-
-	// If we have a billingState but no billingCountry then the state must have come from the drop-down on the website,
-	// wherupon it must match with the page's base country.
-	if (billingState && !billingCountry) {
-		return {
-			billingCountry: pageBaseCountry,
-			billingState: stateProvinceFromString(pageBaseCountry, billingState),
-		};
-	}
-
-	// Else, it's not a wallet transaction, and it's a no-state checkout page, so the only other option is to determine
-	// the country and state from GEO-IP, and failing that, the page's base country, ultimately from the countryGroup
-	// (e.g. DE for Europe, IN for International, GB for United Kingdom).
-	const fallbackCountry =
-		findIsoCountry(window.guardian.geoip?.countryCode) ?? pageBaseCountry;
-	const fallbackState = stateProvinceFromString(
-		fallbackCountry,
-		window.guardian.geoip?.stateCode,
-	);
 	return {
-		billingCountry: fallbackCountry,
-		billingState: fallbackState,
+		billingCountry,
+		billingState,
 	};
 }
 
@@ -354,7 +326,7 @@ const onPaymentResult =
 						}
 
 						// Reset any updates the previous payment method had made to the form's billingCountry or billingState
-						dispatch(setBillingCountry(''));
+						dispatch(setBillingCountry(detectCountry()));
 						dispatch(setBillingState(''));
 						// Finally, trigger the form display
 						if (result.error) {

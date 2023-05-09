@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 
 import type { JSDOM } from 'jsdom';
+import type { IsoCountry } from '../country';
 import { detect, findIsoCountry, stateProvinceFromString } from '../country';
 import {
 	AUDCountries,
@@ -265,7 +266,7 @@ describe('find a state for a given country using stateProvinceFromString', () =>
 		expect(stateProvinceFromString('US')).toBe(null);
 		expect(stateProvinceFromString('US', '')).toBe(null);
 		expect(stateProvinceFromString(null, 'NY')).toBe(null);
-		expect(stateProvinceFromString('', 'NY')).toBe(null);
+		expect(stateProvinceFromString('' as IsoCountry, 'NY')).toBe(null);
 	});
 
 	it("should return the StateCode that's within a given country's set", () => {
