@@ -28,6 +28,7 @@ const highlightTextSpacing = css`
 type CheckListDataProps = {
 	higherTier: boolean;
 	isAustralia: boolean;
+	isEmotionalBenefitTestVariant: boolean;
 };
 
 export type CheckListData = {
@@ -46,10 +47,60 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 export const checkListData = ({
 	higherTier,
 	isAustralia,
+	isEmotionalBenefitTestVariant,
 }: CheckListDataProps): CheckListData[] => {
 	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
 
-	return [
+	const emotionalBenefits = [
+		{
+			icon: getSvgIcon(true),
+			text: (
+				<p>
+					<span css={boldText}>Fund fearless, independent reporting </span>
+					that's open and free for everyone
+				</p>
+			),
+		},
+		{
+			icon: getSvgIcon(true),
+			text: (
+				<p>
+					<span css={boldText}>Get a regular supporter newsletter </span> with
+					exclusive insights from our newsroom
+				</p>
+			),
+		},
+		{
+			icon: getSvgIcon(true),
+			text: (
+				<p>
+					<span css={boldText}>See fewer asks for support </span>so you can read
+					uninterrupted
+				</p>
+			),
+		},
+		{
+			icon: getSvgIcon(higherTier),
+			text: (
+				<p>
+					<span css={boldText}>Gain full access to our news app </span>to read
+					our reporting on the go
+				</p>
+			),
+			maybeGreyedOut: maybeGreyedOutHigherTier,
+		},
+		{
+			icon: getSvgIcon(higherTier),
+			text: (
+				<p>
+					<span css={boldText}>Read ad-free </span>on all devices
+				</p>
+			),
+			maybeGreyedOut: maybeGreyedOutHigherTier,
+		},
+	];
+
+	const existingBenefits = [
 		{
 			icon: getSvgIcon(true),
 			text: (
@@ -106,4 +157,8 @@ export const checkListData = ({
 			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
 	];
+
+	return isEmotionalBenefitTestVariant && !isAustralia
+		? emotionalBenefits
+		: existingBenefits;
 };
