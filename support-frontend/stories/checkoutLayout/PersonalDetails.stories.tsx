@@ -6,10 +6,6 @@ import type { PersonalDetailsProps } from 'components/personalDetails/personalDe
 import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import Signout from 'components/signout/signout';
-import {
-	GBPCountries,
-	UnitedStates,
-} from 'helpers/internationalisation/countryGroup';
 
 export default {
 	title: 'Checkouts/Personal Details',
@@ -66,7 +62,7 @@ SingleContribSignedIn.args = {
 			state=""
 			onStateChange={() => null}
 			contributionType={'ONE_OFF'}
-			countryGroupId={GBPCountries}
+			countryId={'GB'}
 		/>
 	),
 };
@@ -85,7 +81,7 @@ SingleContribSignedOut.args = {
 			state=""
 			onStateChange={() => null}
 			contributionType={'ONE_OFF'}
-			countryGroupId={GBPCountries}
+			countryId={'GB'}
 		/>
 	),
 };
@@ -104,7 +100,7 @@ MultiContribSignedIn.args = {
 			state=""
 			onStateChange={() => null}
 			contributionType={'MONTHLY'}
-			countryGroupId={GBPCountries}
+			countryId={'GB'}
 		/>
 	),
 };
@@ -123,7 +119,7 @@ MultiContribSignedOut.args = {
 			state=""
 			onStateChange={() => null}
 			contributionType={'MONTHLY'}
-			countryGroupId={GBPCountries}
+			countryId={'GB'}
 		/>
 	),
 };
@@ -142,7 +138,7 @@ MultiContribUSSignedIn.args = {
 			state=""
 			onStateChange={() => null}
 			contributionType={'MONTHLY'}
-			countryGroupId={UnitedStates}
+			countryId={'US'}
 		/>
 	),
 };
@@ -161,7 +157,7 @@ MultiContribUSSignedOut.args = {
 			state=""
 			onStateChange={() => null}
 			contributionType={'MONTHLY'}
-			countryGroupId={UnitedStates}
+			countryId={'US'}
 		/>
 	),
 };
@@ -186,7 +182,7 @@ WithErrors.args = {
 			error="Please select your state, province or territory"
 			onStateChange={() => null}
 			contributionType={'MONTHLY'}
-			countryGroupId={UnitedStates}
+			countryId={'US'}
 		/>
 	),
 };

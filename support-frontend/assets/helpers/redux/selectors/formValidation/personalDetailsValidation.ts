@@ -1,4 +1,3 @@
-import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import { shouldCollectStateForContributions } from 'helpers/internationalisation/shouldCollectStateForContribs';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
@@ -9,13 +8,8 @@ export function getStateOrProvinceError(
 	state: ContributionsState,
 ): ErrorCollection {
 	const contributionType = getContributionType(state);
-	const billingCountryGroup = fromCountry(
-		getBillingCountryAndState(state).billingCountry,
-	);
-	if (
-		billingCountryGroup != null &&
-		shouldCollectStateForContributions(billingCountryGroup, contributionType)
-	) {
+	const billingCountry = getBillingCountryAndState(state).billingCountry;
+	if (shouldCollectStateForContributions(billingCountry, contributionType)) {
 		return {
 			state: state.page.checkoutForm.billingAddress.fields.errorObject?.state,
 		};
