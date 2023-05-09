@@ -1,15 +1,17 @@
 import { Option, Select } from '@guardian/source-react-components';
 import type { ContributionType } from 'helpers/contributions';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	auStates,
 	caStates,
 	usStates,
 } from 'helpers/internationalisation/country';
+import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { shouldCollectStateForContributions } from 'helpers/internationalisation/shouldCollectStateForContribs';
 
 type StateSelectProps = {
-	countryGroupId: CountryGroupId;
+	countryId: IsoCountry;
 	contributionType: ContributionType;
 	state: string;
 	onStateChange: (newState: string) => void;
@@ -29,29 +31,30 @@ const stateLists: Partial<Record<CountryGroupId, Record<string, string>>> = {
 };
 
 export function StateSelect({
-	countryGroupId,
+	countryId,
 	contributionType,
 	state,
 	onStateChange,
 	error,
 }: StateSelectProps): JSX.Element | null {
-	const statesList = stateLists[countryGroupId] ?? {};
+	const countryGroupId = fromCountry(countryId);
+	const statesList = (countryGroupId ? stateLists[countryGroupId] : {}) ?? {};
+	const stateDescriptor =
+		(countryGroupId ? stateDescriptors[countryGroupId] : 'State') ?? 'State';
 
-	if (shouldCollectStateForContributions(countryGroupId, contributionType)) {
+	if (shouldCollectStateForContributions(countryId, contributionType)) {
 		return (
 			<div>
 				<Select
 					id="state"
-					label={stateDescriptors[countryGroupId] ?? 'State'}
+					label={stateDescriptor}
 					value={state}
 					onChange={(e) => onStateChange(e.target.value)}
 					error={error}
 				>
 					<>
 						<Option value="">
-							{`Select your ${
-								stateDescriptors[countryGroupId]?.toLowerCase() ?? 'state'
-							}`}
+							{`Select your ${stateDescriptor.toLowerCase()}`}
 						</Option>
 						{Object.entries(statesList).map(([abbreviation, name]) => {
 							return (

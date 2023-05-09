@@ -5,17 +5,7 @@ import type {
 	OtherAmounts,
 	SelectedAmounts,
 } from 'helpers/contributions';
-import { fromString as isoCountryFromString } from 'helpers/internationalisation/country';
-import type {
-	CountryGroup,
-	CountryGroupId,
-} from 'helpers/internationalisation/countryGroup';
-import {
-	AUDCountries,
-	Canada,
-	countryGroups,
-	UnitedStates,
-} from '../internationalisation/countryGroup';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
 
 const daysFromNowForGift = 89;
@@ -168,40 +158,6 @@ export const amountOrOtherAmountIsValid = (
 		localCurrencyCountry,
 		useLocalCurrency,
 	);
-};
-export const checkStateIfApplicable: (
-	arg0: string | null,
-	arg1: CountryGroupId,
-	arg2: ContributionType,
-) => boolean = (
-	billingState: string | null,
-	countryGroupId: CountryGroupId,
-	contributionType: ContributionType,
-) => {
-	if (contributionType !== 'ONE_OFF') {
-		if (countryGroupId === UnitedStates || countryGroupId === Canada) {
-			return checkBillingState(billingState);
-		} else if (countryGroupId === AUDCountries) {
-			// Allow no state to be selected if the user is GEO-IP'd to one of the non AU countries that use AUD.
-			if (window.guardian.geoip) {
-				const AUDCountryGroup: CountryGroup = countryGroups[AUDCountries];
-				const AUDCountriesWithNoStates = AUDCountryGroup.countries.filter(
-					(c) => c !== 'AU',
-				);
-
-				const geoCountry = isoCountryFromString(
-					window.guardian.geoip.countryCode,
-				);
-				if (geoCountry && AUDCountriesWithNoStates.includes(geoCountry)) {
-					return true;
-				}
-			}
-
-			return checkBillingState(billingState);
-		}
-	}
-
-	return true;
 };
 // ignores all spaces
 export const isValidIban = (iban?: string): boolean =>
