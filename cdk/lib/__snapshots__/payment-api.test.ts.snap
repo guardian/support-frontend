@@ -11,6 +11,9 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       "GuStringParameter",
       "GuStringParameter",
       "GuStringParameter",
+      "GuStringParameter",
+      "GuStringParameter",
+      "GuAllowPolicy",
       "GuAllowPolicy",
       "GuAllowPolicy",
       "GuAllowPolicy",
@@ -103,6 +106,14 @@ exports[`The Payment API stack matches the snapshot 1`] = `
     },
     "OphanRole": {
       "Description": "ARN of the Ophan cross-account role",
+      "Type": "String",
+    },
+    "SoftOptInsSqsQueueCodeArn": {
+      "Description": "For the PROD stack you still need to supply this, because PROD instances need access to both PROD and CODE email queues.",
+      "Type": "String",
+    },
+    "SoftOptInsSqsQueueProdArn": {
+      "Description": "For the CODE stack you can leave this empty since it won't be used.  For the PROD stack you need to set it.",
       "Type": "String",
     },
     "SqsKmsArn": {
@@ -395,6 +406,37 @@ exports[`The Payment API stack matches the snapshot 1`] = `
           "Version": "2012-10-17",
         },
         "PolicyName": "describe-ec2-policy",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "EmailSqsMessagesA7CADC68": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sqs:GetQueueUrl",
+                "sqs:SendMessage",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Ref": "EmailSqsQueueCodeArn",
+                },
+                {
+                  "Ref": "EmailSqsQueueProdArn",
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "EmailSqsMessagesA7CADC68",
         "Roles": [
           {
             "Ref": "InstanceRolePaymentapi2FA25312",
@@ -1278,6 +1320,37 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "SoftOptInsSqsMessagesAF185939": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sqs:GetQueueUrl",
+                "sqs:SendMessage",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Ref": "SoftOptInsSqsQueueCodeArn",
+                },
+                {
+                  "Ref": "SoftOptInsSqsQueueProdArn",
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SoftOptInsSqsMessagesAF185939",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
     "SqsKmsEncryption08744558": {
       "Properties": {
         "PolicyDocument": {
@@ -1293,37 +1366,6 @@ exports[`The Payment API stack matches the snapshot 1`] = `
           "Version": "2012-10-17",
         },
         "PolicyName": "SqsKmsEncryption08744558",
-        "Roles": [
-          {
-            "Ref": "InstanceRolePaymentapi2FA25312",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "SqsMessages5A6DF6BE": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "sqs:GetQueueUrl",
-                "sqs:SendMessage",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Ref": "EmailSqsQueueCodeArn",
-                },
-                {
-                  "Ref": "EmailSqsQueueProdArn",
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "SqsMessages5A6DF6BE",
         "Roles": [
           {
             "Ref": "InstanceRolePaymentapi2FA25312",
