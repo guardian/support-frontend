@@ -14,7 +14,7 @@ const coreBenefits = [
 		content: 'A weekly email newsletter from the editor',
 	},
 	{
-		content: "The very best of the Guardian's puzzles",
+		content: 'The very best of the Guardian's puzzles',
 	},
 ];
 
