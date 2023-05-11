@@ -1,8 +1,3 @@
-// Copied from
-// https://github.com/playframework/playframework/blob/master/framework/src/play/
-// src/main/scala/play/api/data/validation/Validation.scala#L81
-// but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
-// for compatibility with Stripe
 import { DateUtils } from 'react-day-picker';
 import { config } from 'helpers/contributions';
 import type {
@@ -25,6 +20,11 @@ import type { LocalCurrencyCountry } from '../internationalisation/localCurrency
 
 const daysFromNowForGift = 89;
 
+// Copied from
+// https://github.com/playframework/playframework/blob/master/framework/src/play/
+// src/main/scala/play/api/data/validation/Validation.scala#L81
+// but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
+// for compatibility with Stripe
 export const emailRegexPattern =
 	"^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$";
 
