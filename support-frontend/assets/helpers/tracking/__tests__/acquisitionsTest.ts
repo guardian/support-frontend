@@ -60,7 +60,7 @@ describe('acquisitions', () => {
 
 	describe('getOphanIds', () => {
 		it('should return null for the browserId when it is not present in the cookies', () => {
-			const { pageviewId, browserId} = getOphanIds();
+			const { pageviewId, browserId } = getOphanIds();
 
 			expect(pageviewId).toBe('123456');
 			expect(browserId).toBeNull();
@@ -69,7 +69,7 @@ describe('acquisitions', () => {
 		it('should read the browserId and pageViewId cookies from ophan', () => {
 			document.cookie = 'bwid=123';
 
-			const { pageviewId, browserId} = getOphanIds();
+			const { pageviewId, browserId } = getOphanIds();
 
 			expect(pageviewId).toBe('123456');
 			expect(browserId).toBe('123');
