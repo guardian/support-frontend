@@ -1,12 +1,18 @@
-import { css } from '@emotion/react';
+import { css, ThemeProvider } from '@emotion/react';
 import {
 	body,
 	from,
 	headline,
 	neutral,
 	space,
+	textSans,
 } from '@guardian/source-foundations';
-import { SvgGift, SvgInfo } from '@guardian/source-react-components';
+import {
+	Link,
+	linkThemeBrand,
+	SvgGift,
+	SvgInfo,
+} from '@guardian/source-react-components';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
@@ -98,6 +104,15 @@ const pricesInfo = css`
 	margin-top: ${space[6]}px;
 `;
 
+const termsLink = css`
+	${textSans.xxsmall()};
+	margin-left: ${space[9]}px;
+	margin-top: -12px;
+`;
+
+const termsConditionsLink =
+	'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
+
 function Prices({
 	orderIsAGift,
 	products,
@@ -144,6 +159,7 @@ function Prices({
 						onClick={product.onClick}
 						onView={product.onView}
 						label={product.label}
+						isSpecialOffer={product.isSpecialOffer}
 					/>
 				))}
 			</FlexContainer>
@@ -156,6 +172,13 @@ function Prices({
 				<ProductInfoChip icon={<SvgInfo />}>
 					Delivery cost included.{' '}
 					{!orderIsAGift && 'You can cancel your subscription at any time'}
+				</ProductInfoChip>
+				<ProductInfoChip>
+					<ThemeProvider theme={linkThemeBrand}>
+						<Link href={termsConditionsLink} cssOverrides={termsLink}>
+							Click here to see full Terms and Conditions
+						</Link>
+					</ThemeProvider>
 				</ProductInfoChip>
 			</div>
 		</section>

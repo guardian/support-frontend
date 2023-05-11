@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Product } from 'components/product/productOption';
 import ProductOptionComponent from 'components/product/productOption';
 
 export default {
@@ -40,14 +41,7 @@ export default {
 	],
 };
 
-export function ProductOption(args: {
-	title: string;
-	price: string;
-	offerCopy: string;
-	priceCopy: string;
-	buttonCopy: string;
-	label: string;
-}): JSX.Element {
+function Template(args: Product) {
 	return (
 		<ProductOptionComponent
 			title={args.title}
@@ -56,12 +50,17 @@ export function ProductOption(args: {
 			priceCopy={args.priceCopy}
 			buttonCopy={args.buttonCopy}
 			label={args.label}
+			isSpecialOffer={args.isSpecialOffer}
 			onClick={() => undefined}
 			onView={() => undefined}
 			href=""
 		/>
 	);
 }
+
+Template.args = {} as Record<string, unknown>;
+
+export const ProductOption = Template.bind({});
 
 ProductOption.args = {
 	title: '6 for 6',
@@ -70,4 +69,16 @@ ProductOption.args = {
 	priceCopy: 'then £37.50 per quarter',
 	buttonCopy: 'Subscribe now',
 	label: 'Best deal',
+};
+
+export const SpecialOfferProductOption = Template.bind({});
+
+SpecialOfferProductOption.args = {
+	title: '12 for 12',
+	price: '£12',
+	offerCopy: '£12 for the first 6 issues',
+	priceCopy: 'then £13.50 per month',
+	buttonCopy: 'Subscribe now',
+	label: 'Special offer',
+	isSpecialOffer: true,
 };
