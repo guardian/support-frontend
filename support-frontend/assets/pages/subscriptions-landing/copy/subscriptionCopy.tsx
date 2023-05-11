@@ -71,6 +71,16 @@ const getWeeklyImage = (isTop: boolean) => {
 	return <GuardianWeeklyPackShot />;
 };
 
+function get12for12Subtitle(): string | undefined {
+	const today = new Date();
+	const startDate = new Date('2023-05-12');
+	const endDate = new Date('2023-06-12');
+
+	if (today >= startDate && today <= endDate) {
+		return '£12 for 12 issues';
+	}
+}
+
 const guardianWeekly = (
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
@@ -78,7 +88,8 @@ const guardianWeekly = (
 	participations: Participations,
 ): ProductCopy => ({
 	title: 'Guardian Weekly',
-	subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
+	subtitle:
+		get12for12Subtitle() ?? getDisplayPrice(countryGroupId, priceCopy.price),
 	description:
 		'Gain a deeper understanding of the issues that matter with the Guardian Weekly magazine. Every week, take your time over handpicked articles from the Guardian and Observer, delivered for free to wherever you are in the world.',
 	offer: getGuardianWeeklyOfferCopy(priceCopy.discountCopy),
