@@ -222,7 +222,7 @@ const weeklyDeliverableCountries: Record<string, string> = {
 	VG: 'British Virgin Islands',
 	VI: 'United States Virgin Islands',
 	VN: 'Vietnam',
-	VU: 'AcVanuatu',
+	VU: 'Vanuatu',
 	YE: 'Yemen',
 	ZA: 'South Africa',
 	ZM: 'Zambia',
