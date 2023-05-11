@@ -15,8 +15,11 @@ import services.SoftOptInsService.Message
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
-class SoftOptInsService(sqsClient: AmazonSQSAsync, queueUrlResponse: Future[Either[SoftOptInsServiceError, String]]) extends StrictLogging {
-  def sendMessage(message: Message)(implicit executionContext: ExecutionContext): EitherT[Future, SoftOptInsServiceError, Unit] = {
+class SoftOptInsService(sqsClient: AmazonSQSAsync, queueUrlResponse: Future[Either[SoftOptInsServiceError, String]])
+    extends StrictLogging {
+  def sendMessage(
+      message: Message,
+  )(implicit executionContext: ExecutionContext): EitherT[Future, SoftOptInsServiceError, Unit] = {
     logger.info(s"Preparing to send message: ${message.asJson.noSpaces}")
 
     EitherT(queueUrlResponse).flatMap { queueUrl =>
@@ -27,8 +30,12 @@ class SoftOptInsService(sqsClient: AmazonSQSAsync, queueUrlResponse: Future[Eith
       logger.info(s"Sending message to queue: $queueUrl")
 
       val response = Try(sqsClient.sendMessage(request)).toEither
-      val responseConverted = response
-        .left.map(e => SoftOptInsServiceError(s"An error occurred sending a message to the soft opt-ins queue with message: ${e.getMessage}"))
+      val responseConverted = response.left
+        .map(e =>
+          SoftOptInsServiceError(
+            s"An error occurred sending a message to the soft opt-ins queue with message: ${e.getMessage}",
+          ),
+        )
         .map(_ => ())
 
       EitherT.fromEither[Future](responseConverted)
