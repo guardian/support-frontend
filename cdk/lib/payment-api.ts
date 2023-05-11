@@ -45,24 +45,6 @@ export class PaymentApi extends GuStack {
       }
     );
 
-    const softOptInsSqsCodeArn = new GuStringParameter(
-      this,
-      "SoftOptInsSqsQueueCodeArn",
-      {
-        description:
-          "For the PROD stack you still need to supply this, because PROD instances need access to both PROD and CODE email queues.",
-      }
-    );
-
-    const softOptInsSqsProdArn = new GuStringParameter(
-      this,
-      "SoftOptInsSqsQueueProdArn",
-      {
-        description:
-          "For the CODE stack you can leave this empty since it won't be used.  For the PROD stack you need to set it.",
-      }
-    );
-
     const ophanRole = new GuStringParameter(this, "OphanRole", {
       description: "ARN of the Ophan cross-account role",
     });
@@ -160,8 +142,8 @@ export class PaymentApi extends GuStack {
             actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
             resources:
               this.stage === "PROD"
-                ? [softOptInsSqsCodeArn.valueAsString, softOptInsSqsProdArn.valueAsString]
-                : [softOptInsSqsCodeArn.valueAsString],
+                ? [`arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-PROD`,]
+                : [`arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-DEV`,],
           }),
           new GuPutCloudwatchMetricsPolicy(this),
           new GuAllowPolicy(this, "AssumeOphanRole", {
