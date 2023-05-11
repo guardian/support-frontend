@@ -22,24 +22,38 @@ class SoftOptInsService(sqsClient: AmazonSQSAsync, queueUrlResponse: Future[Eith
   )(implicit executionContext: ExecutionContext): EitherT[Future, SoftOptInsServiceError, Unit] = {
     logger.info(s"Preparing to send message: ${message.asJson.noSpaces}")
 
-    EitherT(queueUrlResponse).flatMap { queueUrl =>
-      val request = new SendMessageRequest()
-        .withQueueUrl(queueUrl)
-        .withMessageBody(message.asJson.noSpaces)
+    message.identityId match {
+      case None =>
+        val error = SoftOptInsServiceError("Identity ID is None, soft opt-ins cannot be set")
+        EitherT.leftT[Future, Unit](error)
 
-      logger.info(s"Sending message to queue: $queueUrl")
-
-      val response = Try(sqsClient.sendMessage(request)).toEither
-      val responseConverted = response.left
-        .map(e =>
-          SoftOptInsServiceError(
-            s"An error occurred sending a message to the soft opt-ins queue with message: ${e.getMessage}",
-          ),
-        )
-        .map(_ => ())
-
-      EitherT.fromEither[Future](responseConverted)
+      case Some(_) =>
+        for {
+          queueUrl <- EitherT(queueUrlResponse)
+          _ <- sendRequest(queueUrl, message)
+        } yield ()
     }
+  }
+
+  private def sendRequest(queueUrl: String, message: Message)(implicit
+      executionContext: ExecutionContext,
+  ): EitherT[Future, SoftOptInsServiceError, Unit] = {
+    val request = new SendMessageRequest()
+      .withQueueUrl(queueUrl)
+      .withMessageBody(message.asJson.noSpaces)
+
+    logger.info(s"Sending message to queue: $queueUrl")
+
+    val response = Try(sqsClient.sendMessage(request)).toEither
+    val responseConverted = response.left
+      .map(e =>
+        SoftOptInsServiceError(
+          s"An error occurred sending a message to the soft opt-ins queue with message: ${e.getMessage}",
+        ),
+      )
+      .map(_ => ())
+
+    EitherT.fromEither[Future](responseConverted)
   }
 }
 
@@ -75,5 +89,9 @@ object SoftOptInsService extends StrictLogging {
     )
   }
 
-  case class Message(i: String)
+  case class Message(
+      identityId: Option[Long],
+      eventType: String = "Acquisition",
+      productName: String = "Contribution",
+  )
 }
