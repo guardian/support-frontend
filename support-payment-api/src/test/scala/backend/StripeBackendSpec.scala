@@ -298,7 +298,8 @@ class StripeBackendSpec
 
         populatePaymentIntentMock()
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
-        when(mockSupporterProductDataService.insertContributionData(any())(any())).thenReturn(supporterProductDataResponseError)
+        when(mockSupporterProductDataService.insertContributionData(any())(any()))
+          .thenReturn(supporterProductDataResponseError)
         when(mockSoftOptInsService.sendMessage(any())(any())).thenReturn(softOptInsResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
