@@ -84,6 +84,7 @@ const darkBackgroundContainerMobileCss = css`
 	background-color: ${neutral[97]};
 	${until.tablet} {
 		background-color: ${brand[400]};
+		border-bottom: 1px solid ${brand[600]};
 	}
 `;
 
