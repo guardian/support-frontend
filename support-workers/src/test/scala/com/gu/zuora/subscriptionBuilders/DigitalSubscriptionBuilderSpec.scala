@@ -253,7 +253,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         None,
         None,
         Some(
-          AcquisitionData(OphanIds(None, None, None), blankReferrerAcquisitionData, Set(AbTest("PP_V3", "V2_BULLET"))),
+          AcquisitionData(OphanIds(None, None), blankReferrerAcquisitionData, Set(AbTest("PP_V3", "V2_BULLET"))),
         ),
       )
       .toOption
@@ -272,7 +272,7 @@ class DigitalSubscriptionBuilderSpec extends AsyncFlatSpec with Matchers {
         None,
         None,
         Some(
-          AcquisitionData(OphanIds(None, None, None), blankReferrerAcquisitionData, Set(AbTest("PP_V3", "V2_BULLET"))),
+          AcquisitionData(OphanIds(None, None), blankReferrerAcquisitionData, Set(AbTest("PP_V3", "V2_BULLET"))),
         ),
       )
       .toOption

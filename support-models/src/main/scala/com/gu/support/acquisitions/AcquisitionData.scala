@@ -48,7 +48,7 @@ object ReferrerAcquisitionData {
   implicit val referrerAcquisitionDataEncoder: Encoder[ReferrerAcquisitionData] = deriveEncoder[ReferrerAcquisitionData]
 }
 
-case class OphanIds(pageviewId: Option[String], visitId: Option[String], browserId: Option[String])
+case class OphanIds(pageviewId: Option[String], browserId: Option[String])
 
 object OphanIds {
   import io.circe._

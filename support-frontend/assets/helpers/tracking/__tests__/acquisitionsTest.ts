@@ -59,23 +59,20 @@ describe('acquisitions', () => {
 	});
 
 	describe('getOphanIds', () => {
-		it('should return null for the browserId and visitId when they are not present in the cookies', () => {
-			const { pageviewId, browserId, visitId } = getOphanIds();
+		it('should return null for the browserId when it is not present in the cookies', () => {
+			const { pageviewId, browserId} = getOphanIds();
 
 			expect(pageviewId).toBe('123456');
 			expect(browserId).toBeNull();
-			expect(visitId).toBeNull();
 		});
 
-		it('should read the browserId and visitId from cookie and pageViewId from ophan', () => {
+		it('should read the browserId and pageViewId cookies from ophan', () => {
 			document.cookie = 'bwid=123';
-			document.cookie = 'vsid=456';
 
-			const { pageviewId, browserId, visitId } = getOphanIds();
+			const { pageviewId, browserId} = getOphanIds();
 
 			expect(pageviewId).toBe('123456');
 			expect(browserId).toBe('123');
-			expect(visitId).toBe('456');
 		});
 	});
 
