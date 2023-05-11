@@ -140,7 +140,7 @@ class CreateSubscriptionController(
     else if (IdentityError.isBadEmailError(identityError))
       RequestValidationError(BadEmailAddress.errorReasonCode)
     else
-      ServerError(identityError.description)
+      ServerError(identityError.message.concat(identityError.description))
 
   private def logIncomingRequest(
       request: OptionalAuthRequest[CreateSupportWorkersRequest],

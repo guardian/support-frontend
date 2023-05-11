@@ -164,6 +164,10 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
           ),
         )
         .map(userResponse => userResponse.user.id)
+    }.leftMap { e =>
+      e match {
+        case IdentityError(message, description) => IdentityError("Error calling /user:".concat(message), description)
+      }
     }
 
   def createUserIdFromEmailUser(
@@ -210,6 +214,10 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
           ),
         )
         .map(response => response.guestRegistrationRequest.userId)
+    }.leftMap { e =>
+      e match {
+        case IdentityError(message, description) => IdentityError("Error calling /guest:".concat(message), description)
+      }
     }
   }
 
