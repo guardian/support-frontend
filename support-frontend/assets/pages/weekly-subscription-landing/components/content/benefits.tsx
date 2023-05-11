@@ -8,7 +8,7 @@ const coreBenefits = [
 		content: 'Every issue delivered with up to 35% off the cover price',
 	},
 	{
-		content: "Access to the magazine's digital archive",
+		content: 'Access to the magazine's digital archive',
 	},
 	{
 		content: 'A weekly email newsletter from the editor',
