@@ -105,7 +105,7 @@ const pricesInfo = css`
 `;
 
 const termsLink = css`
-	${textSans.xxsmall()}
+	${textSans.xxsmall()};
 	margin-left: ${space[9]}px;
 	margin-top: -12px;
 `;
