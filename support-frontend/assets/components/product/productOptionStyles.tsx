@@ -11,7 +11,7 @@ import {
 } from '@guardian/source-foundations';
 
 export const productOption = css`
-	${textSans.medium()}
+	${textSans.medium()};
 	position: relative;
 	display: grid;
 	grid-template-columns: 2fr 1fr;
