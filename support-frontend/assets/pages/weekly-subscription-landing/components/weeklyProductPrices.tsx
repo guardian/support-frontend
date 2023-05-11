@@ -91,10 +91,10 @@ const weeklyProductProps = (
 	};
 
 	// TODO: remove/review this when the 12 for 12 offer is over
-	const isSpecialOffer = promotion?.promoCode === '12for12';
+	const isSpecialOffer = promotion?.promoCode.startsWith('12for12');
 	const label = isSpecialOffer
 		? `Special Offer: 12 for ${currencies[productPrice.currency].glyph}${
-				promotion.discountedPrice ?? '12'
+				promotion?.discountedPrice ?? '12'
 		  }`
 		: getPromotionLabel(promotion);
 
