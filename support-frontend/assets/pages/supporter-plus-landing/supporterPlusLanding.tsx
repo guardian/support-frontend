@@ -84,6 +84,7 @@ const darkBackgroundContainerMobileCss = css`
 	background-color: ${neutral[97]};
 	${until.tablet} {
 		background-color: ${brand[400]};
+		border-bottom: 1px solid ${brand[600]};
 	}
 `;
 
@@ -197,143 +198,138 @@ export function SupporterPlusLandingPage({
 	}
 
 	return (
-		<>
-			<>
-				<PageScaffold
-					id="supporter-plus-landing"
-					header={
-						<>
-							<Header>
-								<Hide from="desktop">
-									<CountrySwitcherContainer>
-										<CountryGroupSwitcher {...countrySwitcherProps} />
-									</CountrySwitcherContainer>
-								</Hide>
-							</Header>
-							<Nav {...countrySwitcherProps} />
-						</>
-					}
-				>
-					<CheckoutHeading
-						heading={heading}
-						image={
-							<GridImage
-								gridId="supporterPlusLanding"
-								srcSizes={[500]}
-								sizes="500px"
-								imgType="png"
-								altText=""
+		<PageScaffold
+			id="supporter-plus-landing"
+			header={
+				<>
+					<Header>
+						<Hide from="desktop">
+							<CountrySwitcherContainer>
+								<CountryGroupSwitcher {...countrySwitcherProps} />
+							</CountrySwitcherContainer>
+						</Hide>
+					</Header>
+					<Nav {...countrySwitcherProps} />
+				</>
+			}
+			footer={
+				<FooterWithContents>
+					<FooterLinks></FooterLinks>
+				</FooterWithContents>
+			}
+		>
+			<CheckoutHeading
+				heading={heading}
+				image={
+					<GridImage
+						gridId="supporterPlusLanding"
+						srcSizes={[500]}
+						sizes="500px"
+						imgType="png"
+						altText=""
+					/>
+				}
+			>
+				<p css={subHeadingCss}>
+					As a reader-funded news organisation, we rely on your generosity.
+					Please give what you can, so millions can benefit from quality
+					reporting on the events shaping our world.
+				</p>
+			</CheckoutHeading>
+			<Container sideBorders cssOverrides={darkBackgroundContainerMobileCss}>
+				<Columns cssOverrides={checkoutContainerCss} collapseUntil="tablet">
+					<Column span={[0, 2, 5]}></Column>
+					<Column span={[1, 8, 7]}>
+						<Hide from="desktop">
+							<SecureTransactionIndicator
+								align="left"
+								theme="light"
+								cssOverrides={css`
+									margin-bottom: 10px;
+								`}
 							/>
-						}
-					>
-						<p css={subHeadingCss}>
-							As a reader-funded news organisation, we rely on your generosity.
-							Please give what you can, so millions can benefit from quality
-							reporting on the events shaping our world.
-						</p>
-					</CheckoutHeading>
-					<Container
-						sideBorders
-						cssOverrides={darkBackgroundContainerMobileCss}
-					>
-						<Columns cssOverrides={checkoutContainerCss} collapseUntil="tablet">
-							<Column span={[0, 2, 5]}></Column>
-							<Column span={[1, 8, 7]}>
-								<Hide from="desktop">
-									<SecureTransactionIndicator
-										align="left"
-										theme="light"
-										cssOverrides={css`
-											margin-bottom: 10px;
-										`}
-									/>
-								</Hide>
-								<Box cssOverrides={shorterBoxMarginCss}>
-									<AmountAndBenefits />
-								</Box>
-								{optimisedMobileLayout2 && (
-									<StickyCta
-										isVisible={!fullFormDisplayed}
-										ctaLink="#detailsAndCheckout"
-										ariaControls="detailsAndCheckout"
-										onCtaClick={onStickyButtonClick}
-										buttonText={getStickyButtonText(
-											amountWithCurrency,
-											contributionTypeToPaymentInterval[contributionType],
-										)}
-									/>
+						</Hide>
+						<Box cssOverrides={shorterBoxMarginCss}>
+							<AmountAndBenefits />
+						</Box>
+						{optimisedMobileLayout2 && (
+							<StickyCta
+								isVisible={!fullFormDisplayed}
+								ctaLink="#detailsAndCheckout"
+								ariaControls="detailsAndCheckout"
+								onCtaClick={onStickyButtonClick}
+								buttonText={getStickyButtonText(
+									amountWithCurrency,
+									contributionTypeToPaymentInterval[contributionType],
 								)}
-								<div
-									role="region"
-									id="detailsAndCheckout"
-									css={displayFullForm(fullFormDisplayed)}
-								>
-									<Box cssOverrides={shorterBoxMarginCss}>
-										<BoxContents>
-											{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
-											<ContributionsStripe>
-												<SecureTransactionIndicator />
-												<PaymentRequestButtonContainer
-													CustomButton={SavedCardButton}
+							/>
+						)}
+						<div
+							role="region"
+							id="detailsAndCheckout"
+							css={displayFullForm(fullFormDisplayed)}
+						>
+							<Box cssOverrides={shorterBoxMarginCss}>
+								<BoxContents>
+									{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
+									<ContributionsStripe>
+										<SecureTransactionIndicator />
+										<PaymentRequestButtonContainer
+											CustomButton={SavedCardButton}
+										/>
+										<PersonalDetailsContainer
+											renderPersonalDetails={(personalDetailsProps) => (
+												<PersonalDetails {...personalDetailsProps} />
+											)}
+										/>
+										<CheckoutDivider spacing="loose" />
+										<PaymentMethodSelectorContainer
+											render={(paymentMethodSelectorProps) => (
+												<PaymentMethodSelector
+													{...paymentMethodSelectorProps}
 												/>
-												<PersonalDetailsContainer
-													renderPersonalDetails={(personalDetailsProps) => (
-														<PersonalDetails {...personalDetailsProps} />
-													)}
-												/>
-												<CheckoutDivider spacing="loose" />
-												<PaymentMethodSelectorContainer
-													render={(paymentMethodSelectorProps) => (
-														<PaymentMethodSelector
-															{...paymentMethodSelectorProps}
-														/>
-													)}
-												/>
-												<PaymentButtonController
-													cssOverrides={css`
-														margin-top: 30px;
-													`}
-													paymentButtons={getPaymentMethodButtons(
-														contributionType,
-														switches,
-														countryId,
-														countryGroupId,
-													)}
-												/>
-												<PaymentFailureMessage />
-												<DirectDebitContainer />
-											</ContributionsStripe>
-											<PaymentTsAndCs
-												countryGroupId={countryGroupId}
-												contributionType={contributionType}
-												currency={currencyId}
-												amount={amount}
-												amountIsAboveThreshold={amountIsAboveThreshold}
-											/>
-										</BoxContents>
-									</Box>
-									<CheckoutDivider spacing="loose" mobileTheme={'light'} />
-									<PatronsMessage
+											)}
+										/>
+										<PaymentButtonController
+											cssOverrides={css`
+												margin-top: 30px;
+											`}
+											paymentButtons={getPaymentMethodButtons(
+												contributionType,
+												switches,
+												countryId,
+												countryGroupId,
+											)}
+										/>
+										<PaymentFailureMessage />
+										<DirectDebitContainer />
+									</ContributionsStripe>
+									<PaymentTsAndCs
 										countryGroupId={countryGroupId}
-										mobileTheme={'light'}
+										contributionType={contributionType}
+										currency={currencyId}
+										amount={amount}
+										amountIsAboveThreshold={amountIsAboveThreshold}
 									/>
-									<CheckoutDivider spacing="tight" mobileTheme={'light'} />
-									<GuardianTsAndCs mobileTheme={'light'} />
-								</div>
-							</Column>
-						</Columns>
-					</Container>
-					{isWaiting && (
-						<LoadingOverlay>
-							<p>Processing transaction</p>
-							<p>Please wait</p>
-						</LoadingOverlay>
-					)}
-				</PageScaffold>
-			</>
-			<FooterWithContents>
-				<FooterLinks></FooterLinks>
-			</FooterWithContents>
-		</>
+								</BoxContents>
+							</Box>
+							<CheckoutDivider spacing="loose" mobileTheme={'light'} />
+							<PatronsMessage
+								countryGroupId={countryGroupId}
+								mobileTheme={'light'}
+							/>
+							<CheckoutDivider spacing="tight" mobileTheme={'light'} />
+							<GuardianTsAndCs mobileTheme={'light'} />
+						</div>
+					</Column>
+				</Columns>
+			</Container>
+			{isWaiting && (
+				<LoadingOverlay>
+					<p>Processing transaction</p>
+					<p>Please wait</p>
+				</LoadingOverlay>
+			)}
+		</PageScaffold>
 	);
 }
