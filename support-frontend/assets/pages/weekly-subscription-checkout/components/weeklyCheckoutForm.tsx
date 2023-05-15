@@ -425,9 +425,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						errorHeading={submissionErrorHeading}
 					/>
 					<Total
-						price={props.price.price}
+						price={props.discountedPrice.price}
 						currency={props.currencyId}
-						promotions={props.price.promotions}
 					/>
 					<PaymentTerms paymentMethod={props.paymentMethod} />
 				</Form>
