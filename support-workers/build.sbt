@@ -27,7 +27,7 @@ libraryDependencies ++= Seq(
   "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "it,test",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "io.circe" %% "circe-generic-extras" % circeVersion,
+  "io.circe" %% "circe-generic-extras" % "0.14.3",
   "io.circe" %% "circe-parser" % circeVersion,
   "io.sentry" % "sentry-logback" % "1.7.30",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
