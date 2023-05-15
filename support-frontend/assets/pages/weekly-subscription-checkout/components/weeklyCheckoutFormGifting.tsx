@@ -37,9 +37,9 @@ import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import { countries } from 'helpers/internationalisation/country';
+import { billableCountries } from 'helpers/internationalisation/billableCountries';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
-import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
+import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
@@ -283,7 +283,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 						</Rows>
 					</FormSection>
 					<FormSection title="Gift recipient's address">
-						<DeliveryAddress countries={weeklyDeliverableCountries} />
+						<DeliveryAddress countries={gwDeliverableCountries} />
 					</FormSection>
 					<FormSection
 						border="top"
@@ -358,7 +358,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 					</FormSection>
 					{!props.billingAddressIsSame ? (
 						<FormSection title="Your billing address">
-							<BillingAddress countries={countries} />
+							<BillingAddress countries={billableCountries} />
 						</FormSection>
 					) : null}
 					{paymentMethods.length > 0 ? (
