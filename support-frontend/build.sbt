@@ -23,7 +23,7 @@ libraryDependencies ++= Seq(
   "com.dripower" %% "play-circe" % playCirceVersion,
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "io.circe" %% "circe-generic-extras" % circeVersion,
+  "io.circe" %% "circe-generic-extras" % "0.14.3",
   "io.circe" %% "circe-parser" % circeVersion,
   "io.circe" %% "circe-optics" % "0.14.1",
   "joda-time" % "joda-time" % "2.9.9",
