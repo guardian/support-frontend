@@ -44,7 +44,10 @@ import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
 import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
-import { selectPriceForProduct } from 'helpers/redux/checkout/product/selectors/productPrice';
+import {
+	selectDiscountedPrice,
+	selectPriceForProduct,
+} from 'helpers/redux/checkout/product/selectors/productPrice';
 import type {
 	SubscriptionsDispatch,
 	SubscriptionsState,
@@ -103,6 +106,7 @@ function mapStateToProps(state: SubscriptionsState) {
 			currencyFromCountryCode(deliveryAddress.fields.country) ?? 'USD',
 		payPalHasLoaded: state.page.checkoutForm.payment.payPal.hasLoaded,
 		price: selectPriceForProduct(state),
+		discountedPrice: selectDiscountedPrice(state),
 	};
 }
 
@@ -406,7 +410,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							validateForm={props.validateForm}
 							isTestUser={props.isTestUser}
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-							amount={props.price.price}
+							amount={props.discountedPrice.price}
 							billingPeriod={props.billingPeriod}
 							// @ts-expect-error TODO: fix when we can fix error states for all checkouts
 							allErrors={[
