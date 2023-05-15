@@ -432,7 +432,7 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
         val expectedBody =
           Json.obj(
             "type" -> "error",
-            "error" -> "Empty string is not permitted for this field: DownField(token),DownField(paymentData)",
+            "error" -> "DecodingFailure at .paymentData.token: Empty string is not permitted for this field",
           )
         contentAsJson(stripeControllerResult).mustBe(expectedBody)
 

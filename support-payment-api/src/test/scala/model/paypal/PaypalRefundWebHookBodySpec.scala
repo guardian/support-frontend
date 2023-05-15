@@ -111,7 +111,7 @@ class PaypalRefundWebHookBodySpec extends AnyWordSpec with Matchers with EitherV
         val body = io.circe.parser.decode[PaypalRefundWebHookBody](event).left.value
 
         body.getMessage mustEqual
-          "event type PAYMENT.SALE.COMPLETED is not a valid refund event type: DownField(event_type)"
+          "DecodingFailure at .event_type: event type PAYMENT.SALE.COMPLETED is not a valid refund event type"
       }
     }
   }
