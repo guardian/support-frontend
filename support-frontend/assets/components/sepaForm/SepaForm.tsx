@@ -8,7 +8,7 @@ import {
 	Stack,
 	TextInput,
 } from '@guardian/source-react-components';
-import { sepaEligibleCountries } from 'helpers/internationalisation/sepaEligibleCountries';
+import { countries } from 'helpers/internationalisation/country';
 import type { SepaState } from 'helpers/redux/checkout/payment/sepa/state';
 import { sortedOptions } from '../forms/customFields/sortedOptions';
 
@@ -106,7 +106,7 @@ export function SepaForm({
 						onChange={(e) => updateAddressCountry(e.target.value)}
 					>
 						<OptionForSelect value="">Select a country</OptionForSelect>
-						{sortedOptions(sepaEligibleCountries)}
+						{sortedOptions(countries)}
 					</Select>
 				</div>
 			</Stack>

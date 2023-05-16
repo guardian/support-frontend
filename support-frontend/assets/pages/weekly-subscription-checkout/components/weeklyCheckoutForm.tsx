@@ -37,9 +37,8 @@ import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
-import { billableCountries } from 'helpers/internationalisation/billableCountries';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
-import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
+import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
@@ -239,7 +238,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						/>
 					</FormSection>
 					<FormSection title="Where should we deliver your magazine?">
-						<DeliveryAddress countries={gwDeliverableCountries} />
+						<DeliveryAddress countries={weeklyDeliverableCountries} />
 					</FormSection>
 					<FormSection title="Is the billing address the same as the delivery address?">
 						<Rows>
@@ -278,7 +277,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					</FormSection>
 					{!props.billingAddressMatchesDelivery ? (
 						<FormSection title="Your billing address">
-							<BillingAddress countries={billableCountries} />
+							<BillingAddress countries={weeklyDeliverableCountries} />
 						</FormSection>
 					) : null}
 					<FormSection title="Please select the first publication you’d like to receive">
