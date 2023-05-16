@@ -1,4 +1,3 @@
-import path from "path";
 import { GuApiLambda } from "@guardian/cdk";
 import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
@@ -10,7 +9,6 @@ import { ComparisonOperator, Metric } from "aws-cdk-lib/aws-cloudwatch";
 import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { CfnRecordSet } from "aws-cdk-lib/aws-route53";
-import { CfnInclude } from "aws-cdk-lib/cloudformation-include";
 
 export interface AcquisitionEventsApiProps extends GuStackProps {
   stack: string;
@@ -26,19 +24,6 @@ export class AcquisitionEventsApi extends GuStack {
     super(scope, id, props);
 
     const app = "acquisition-events-api";
-
-    //  // ---- Existing CFN template ---- //
-    const yamlTemplateFilePath = path.join(
-      __dirname,
-      "../..",
-      "support-lambdas/acquisition-events-api/cfn.yaml"
-    );
-    const yamlDefinedResources = new CfnInclude(this, "YamlTemplate", {
-      templateFile: yamlTemplateFilePath,
-      parameters: {
-        Stage: props.stage,
-      },
-    });
 
     const commonEnvironmentVariables = {
       App: app,
