@@ -1,4 +1,4 @@
-// This was a temporary list which was valid during the COVID-19 pandemic
+// This is temporary list which is valid during the COVID-19 pandemic
 // the original country list is in country.js
 const weeklyDeliverableCountries: Record<string, string> = {
 	GB: 'United Kingdom',
