@@ -1,4 +1,6 @@
-const sepaEligibleCountries: Record<string, string> = {
+import type { IsoCountry } from './country';
+
+const sepaEligibleCountries: Record<IsoCountry, string> = {
 	// EUR countries
 	AD: 'Andorra',
 	AT: 'Austria',

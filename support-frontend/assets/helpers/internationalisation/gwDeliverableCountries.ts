@@ -1,4 +1,6 @@
-const gwDeliverableCountries: Record<string, string> = {
+import type { IsoCountry } from './country';
+
+const gwDeliverableCountries: Record<IsoCountry, string> = {
 	GB: 'United Kingdom',
 	US: 'United States',
 	AU: 'Australia',
