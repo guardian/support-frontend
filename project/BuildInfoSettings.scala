@@ -14,9 +14,9 @@ object BuildInfoSettings {
 
   val buildInfoKeys: Seq[BuildInfoKey] = Seq[BuildInfoKey](
     name,
-    BuildInfoKey.constant("buildNumber", env("BUILD_NUMBER", "DEV")),
-    BuildInfoKey.constant("buildTime", System.currentTimeMillis),
-    BuildInfoKey.constant("gitCommitId", Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse commitId()),
+    "buildNumber" -> env("BUILD_NUMBER", "DEV"),
+    "buildTime" -> System.currentTimeMillis,
+    "gitCommitId" -> (Option(System.getenv("BUILD_VCS_NUMBER")) getOrElse commitId()),
   )
 
 }
