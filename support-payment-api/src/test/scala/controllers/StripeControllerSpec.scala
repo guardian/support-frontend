@@ -127,7 +127,6 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
               |  "amount": 1,
               |  "token": "token",
               |  "email": "email",
-              |  "ophanVisitId": "ophanVisitId",
               |  "ophanBrowserId": "ophanBrowserId",
               |  "ophanPageviewId": "jducx5kjl3u7cwf5ocud",
               |  "refererPageviewId": "refererPageviewId",
@@ -218,7 +217,6 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
               |  },
               |  "acquisitionData": {
               |    "platform": "android",
-              |    "visitId": "visitId",
               |    "browserId": "ophanBrowserId",
               |    "pageviewId": "ophanPageviewId",
               |    "referrerPageviewId": "refererPageviewId",
@@ -266,7 +264,6 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
               |  },
               |  "acquisitionData": {
               |    "platform": "android",
-              |    "visitId": "visitId",
               |    "browserId": "ophanBrowserId",
               |    "pageviewId": "ophanPageviewId",
               |    "referrerPageviewId": "refererPageviewId",
@@ -314,7 +311,6 @@ class StripeControllerSpec extends AnyWordSpec with Status with Matchers {
               |  },
               |  "acquisitionData": {
               |    "platform": "android",
-              |    "visitId": "visitId",
               |    "browserId": "ophanBrowserId",
               |    "pageviewId": "ophanPageviewId",
               |    "referrerPageviewId": "refererPageviewId",
