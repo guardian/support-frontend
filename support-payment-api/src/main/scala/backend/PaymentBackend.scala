@@ -10,7 +10,7 @@ import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import com.typesafe.scalalogging.StrictLogging
 import model.DefaultThreadPool
 import model.db.ContributionData
-import services.{ContributionsStoreService, SoftOptInsService, SupporterProductDataService}
+import services.{ContributionsStoreService, SoftOptInsService, SupporterProductDataService, SwitchService}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
@@ -22,6 +22,11 @@ trait PaymentBackend extends StrictLogging {
   val databaseService: ContributionsStoreService
   val supporterProductDataService: SupporterProductDataService
   val softOptInsService: SoftOptInsService
+  val switchService: SwitchService
+  private def softOptInsEnabled()(implicit executionContext: ExecutionContext): EitherT[Future, Nothing, Boolean] =
+    switchService.allSwitches.map(switch =>
+      switch.featureSwitches.exists(s => s.switches.enableSoftOptInsForSingle.state.isOn),
+    )
 
   private def insertContributionDataIntoDatabase(
       contributionData: ContributionData,
@@ -62,6 +67,12 @@ trait PaymentBackend extends StrictLogging {
     val supporterDataFuture = insertContributionIntoSupporterProductData(contributionData)
 
     val softOptInFuture = softOptInsService.sendMessage(SoftOptInsService.Message(contributionData.identityId))
+
+    softOptInsEnabled().flatMap {
+      case true =>
+        softOptInsService.sendMessage(SoftOptInsService.Message(contributionData.identityId))
+      case false => EitherT.rightT(())
+    }
 
     Future
       .sequence(

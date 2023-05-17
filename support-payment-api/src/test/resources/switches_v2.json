@@ -101,6 +101,10 @@
       "usStripeAccountForSingle": {
         "description": "US Stripe account for single contributions",
         "state": "On"
+      },
+      "enableSoftOptInsForSingle": {
+        "description": "Turns on soft opt-ins for single contributors",
+        "state": "Off"
       }
     }
   },

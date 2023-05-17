@@ -36,9 +36,12 @@ object SwitchState {
 case class Switches(
     recaptchaSwitches: Option[RecaptchaSwitches],
     oneOffPaymentMethods: Option[OneOffPaymentMethodsSwitches],
+    featureSwitches: Option[FeatureSwitches],
 )
 case class RecaptchaSwitches(switches: RecaptchaSwitchTypes)
 case class OneOffPaymentMethodsSwitches(switches: OneOffPaymentMethodsSwitchesTypes)
+
+case class FeatureSwitches(switches: FeatureSwitchesTypes)
 
 case class SwitchDetails(state: SwitchState)
 
@@ -55,12 +58,18 @@ case class OneOffPaymentMethodsSwitchesTypes(
     amazonPay: SwitchDetails,
 )
 
+case class FeatureSwitchesTypes(
+    enableSoftOptInsForSingle: SwitchDetails,
+)
+
 object Switches {
   implicit val switchesCodec: Codec[Switches] = deriveCodec
   implicit val recaptchaSwitchesCodec: Codec[RecaptchaSwitches] = deriveCodec
   implicit val recaptchaSwitchesTypesCodec: Codec[RecaptchaSwitchTypes] = deriveCodec
   implicit val oneOffPaymentMethodsSwitchesCodec: Codec[OneOffPaymentMethodsSwitches] = deriveCodec
   implicit val oneOffPaymentMethodsSwitchesTypesCodec: Codec[OneOffPaymentMethodsSwitchesTypes] = deriveCodec
+  implicit val featureSwitches: Codec[FeatureSwitches] = deriveCodec
+  implicit val featureSwitchesTypes: Codec[FeatureSwitchesTypes] = deriveCodec
   implicit val switchDetailsCodec: Codec[SwitchDetails] = deriveCodec
 }
 
