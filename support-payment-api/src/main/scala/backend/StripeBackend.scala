@@ -49,7 +49,7 @@ class StripeBackend(
     cloudWatchService: CloudWatchService,
     val supporterProductDataService: SupporterProductDataService,
     val softOptInsService: SoftOptInsService,
-    switchService: SwitchService,
+    val switchService: SwitchService,
     environment: Environment,
 )(implicit pool: DefaultThreadPool, WSClient: WSClient)
     extends StrictLogging

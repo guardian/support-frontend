@@ -85,7 +85,7 @@ class SwitchService(env: Environment)(implicit s3: AmazonS3, system: ActorSystem
       .recordStats()
       .expireAfterWrite(1.minutes)
       .maximumSize(10)
-      .buildAsync(s => fromS3().getOrElse(Switches(None, None)))
+      .buildAsync(s => fromS3().getOrElse(Switches(None, None, None)))
 
   def allSwitches: EitherT[Future, Nothing, Switches] =
     EitherT.right(cache.get(cacheKey))

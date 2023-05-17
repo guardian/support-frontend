@@ -71,7 +71,8 @@ trait PaymentBackend extends StrictLogging {
     softOptInsEnabled().flatMap {
       case true =>
         softOptInsService.sendMessage(SoftOptInsService.Message(contributionData.identityId))
-      case false => EitherT.rightT(())
+      case false =>
+        EitherT.rightT[Future, BackendError.SoftOptInsServiceError](())
     }
 
     Future

@@ -119,6 +119,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
               ),
             ),
           ),
+          Some(FeatureSwitches(FeatureSwitchesTypes(SwitchDetails(On)))),
         ),
       ),
     )
@@ -197,6 +198,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
                     ),
                   ),
                 ),
+                Some(FeatureSwitches(FeatureSwitchesTypes(SwitchDetails(On)))),
               ),
             ),
           )

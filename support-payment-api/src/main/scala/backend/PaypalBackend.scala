@@ -47,7 +47,7 @@ class PaypalBackend(
     cloudWatchService: CloudWatchService,
     val supporterProductDataService: SupporterProductDataService,
     val softOptInsService: SoftOptInsService,
-    switchService: SwitchService,
+    val switchService: SwitchService,
 )(implicit pool: DefaultThreadPool)
     extends StrictLogging
     with PaymentBackend {

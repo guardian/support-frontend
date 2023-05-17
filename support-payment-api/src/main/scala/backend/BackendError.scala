@@ -3,7 +3,7 @@ package backend
 import cats.data.EitherT
 import cats.kernel.Semigroup
 import model.DefaultThreadPool
-import services.{ContributionsStoreService, EmailService, IdentityClient, SoftOptInsService}
+import services.{ContributionsStoreService, EmailService, IdentityClient}
 import model.paypal.{PaypalApiError => PaypalAPIError}
 import cats.implicits._
 import model.amazonpay.{AmazonPayApiError => AmazonPayError}

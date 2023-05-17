@@ -131,6 +131,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
               ),
             ),
           ),
+          Some(FeatureSwitches(FeatureSwitchesTypes(SwitchDetails(On)))),
         ),
       ),
     )
@@ -150,6 +151,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
               ),
             ),
           ),
+          Some(FeatureSwitches(FeatureSwitchesTypes(SwitchDetails(On)))),
         ),
       ),
     )
