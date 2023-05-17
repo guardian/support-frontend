@@ -18,6 +18,7 @@ const stickyContainerCss = (isVisible: boolean) => css`
 	bottom: -4px;
 	background-color: ${brand[400]};
 	padding: ${space[5]}px 0 30px;
+	z-index: 10000; // ensure stickyCta remains selectable above all content in viewport
 
 	${isVisible ? '' : visuallyHidden}
 
