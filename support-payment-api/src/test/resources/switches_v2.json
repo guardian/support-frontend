@@ -104,7 +104,7 @@
       },
       "enableSoftOptInsForSingle": {
         "description": "Turns on soft opt-ins for single contributors",
-        "state": "Off"
+        "state": "On"
       }
     }
   },
