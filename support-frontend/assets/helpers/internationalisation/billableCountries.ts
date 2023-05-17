@@ -1,6 +1,6 @@
 import type { IsoCountry } from './country';
 
-const billableCountries: Record<IsoCountry, string> = {
+const billableCountries: Partial<Record<IsoCountry, string>> = {
 	GB: 'United Kingdom',
 	US: 'United States',
 	AU: 'Australia',

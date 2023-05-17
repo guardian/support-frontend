@@ -1,6 +1,6 @@
 import type { IsoCountry } from './country';
 
-const sepaEligibleCountries: Record<IsoCountry, string> = {
+const sepaEligibleCountries: Partial<Record<IsoCountry, string>> = {
 	// EUR countries
 	AD: 'Andorra',
 	AT: 'Austria',
@@ -36,7 +36,7 @@ const sepaEligibleCountries: Record<IsoCountry, string> = {
 	LI: 'Liechtenstein',
 	NO: 'Norway',
 	PL: 'Poland',
-	RL: 'Romania',
+	RO: 'Romania',
 	SE: 'Sweden',
 	CH: 'Switzerland',
 	GB: 'United Kingdom',
