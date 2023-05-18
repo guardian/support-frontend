@@ -26,12 +26,14 @@ export function CheckoutNudgeContainer({
 
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId]['ANNUAL'].min;
-
+	const roundToNearest = 10;
+	const minAmountRounded =
+		Math.round(Math.ceil((minAmount * 100) / 52) / roundToNearest) *
+		roundToNearest;
 	const minWeeklyAmount =
 		countryGroupId === 'GBPCountries'
-			? Math.ceil((minAmount * 100) / 52).toString() + `p`
-			: currencyGlyph +
-			  (Math.ceil((minAmount * 100) / 52) / 100).toFixed(2).toString();
+			? minAmountRounded.toString() + `p`
+			: currencyGlyph + minAmountRounded.toFixed(2).toString();
 
 	const [title, subtitle, paragraph] = [
 		`Support us every year`,
