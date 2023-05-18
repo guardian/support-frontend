@@ -163,8 +163,8 @@ const numbersInWords: Record<string, string> = {
 
 const defaultConfig: Config = {
 	ANNUAL: {
-		min: 10,
-		minInWords: numbersInWords['10'],
+		min: 30,
+		minInWords: numbersInWords['30'],
 		max: 2000,
 		maxInWords: numbersInWords['2000'],
 		default: 50,
