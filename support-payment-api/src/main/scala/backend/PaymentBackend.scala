@@ -66,11 +66,9 @@ trait PaymentBackend extends StrictLogging {
 
     val supporterDataFuture = insertContributionIntoSupporterProductData(contributionData)
 
-    val softOptInFuture = softOptInsService.sendMessage(SoftOptInsService.Message(contributionData.identityId))
-
-    softOptInsEnabled().flatMap {
+    val softOptInFuture = softOptInsEnabled().flatMap {
       case true =>
-        softOptInsService.sendMessage(SoftOptInsService.Message(contributionData.identityId))
+        softOptInsService.sendMessage(contributionData.identityId)
       case false =>
         EitherT.rightT[Future, BackendError.SoftOptInsServiceError](())
     }

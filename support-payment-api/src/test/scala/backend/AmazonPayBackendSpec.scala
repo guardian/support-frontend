@@ -16,7 +16,7 @@ import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
 import model.amazonpay.{AmazonPayApiError, AmazonPaymentData}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.{times, verify, when}
 import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -224,6 +224,8 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com"))
           .thenReturn(identityResponseError)
         amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
+
+        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
       }
     }
 
@@ -278,6 +280,8 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
           when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com"))
             .thenReturn(identityResponseError)
           amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
+
+          verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
         }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new AmazonPayBackendFixture {
@@ -297,8 +301,10 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponseError)
+
         when(mockSoftOptInsService.sendMessage(any())(any()))
           .thenReturn(softOptInsResponseError)
+
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
           .thenReturn(streamResponseError)
@@ -306,6 +312,8 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 
         amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
+
+        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
       }
 
       "Not call setOrderRef if state is suspended" in new AmazonPayBackendFixture {

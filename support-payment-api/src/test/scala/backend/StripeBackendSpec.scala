@@ -314,6 +314,8 @@ class StripeBackendSpec
 
         stripeBackend.createPaymentIntent(createPaymentIntentWithStripeCheckout, clientBrowserInfo).futureRight mustBe
           StripePaymentIntentsApiResponse.Success()
+
+        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
       }
 
       "return Success if stripe apple pay switch is On in support-admin-console" in new StripeBackendFixture {
@@ -405,6 +407,8 @@ class StripeBackendSpec
             .futureRight mustBe StripeCreateChargeResponse.fromCharge(
             chargeMock,
           )
+
+          verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
         }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new StripeBackendFixture {
@@ -422,6 +426,8 @@ class StripeBackendSpec
           .fromCharge(
             chargeMock,
           )
+
+        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
       }
     }
 
@@ -462,6 +468,8 @@ class StripeBackendSpec
         val result =
           stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
         result.futureValue mustBe List(BackendError.Database(dbError))
+
+        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
       }
 
       "return a combined error if BigQuery and DB fail" in new StripeBackendFixture {
@@ -481,6 +489,8 @@ class StripeBackendSpec
           BackendError.Database(dbError),
         )
         result.futureValue mustBe error
+
+        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
       }
     }
 
@@ -503,6 +513,8 @@ class StripeBackendSpec
 
         stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureRight mustBe
           StripePaymentIntentsApiResponse.Success()
+
+        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
       }
 
       "return RequiresAction if 3DS required" in new StripeBackendFixture {
@@ -555,6 +567,8 @@ class StripeBackendSpec
 
         stripeBackend.createPaymentIntent(createPaymentIntent, clientBrowserInfo).futureLeft mustBe
           StripeApiError.fromString(s"Stripe error", None)
+
+        verify(mockSoftOptInsService, times(0)).sendMessage(any())(any())
       }
     }
 
@@ -576,6 +590,8 @@ class StripeBackendSpec
 
         stripeBackend.confirmPaymentIntent(confirmPaymentIntent, clientBrowserInfo).futureRight mustBe
           StripePaymentIntentsApiResponse.Success()
+
+        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
       }
 
       "return an error if confirmation failed" in new StripeBackendFixture {
