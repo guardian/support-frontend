@@ -5,17 +5,13 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions.ga.models.GAData
-import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import com.gu.support.acquisitions.models.AcquisitionDataRow
-import com.gu.supporterdata.model.{ContributionAmount, SupporterRatePlanItem}
-import com.gu.supporterdata.services.SupporterDataDynamoService
+import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import com.typesafe.scalalogging.StrictLogging
 import model.DefaultThreadPool
 import model.db.ContributionData
-import services.{ContributionsStoreService, SupporterProductDataService}
-import software.amazon.awssdk.services.dynamodb.model.UpdateItemResponse
+import services.{ContributionsStoreService, SoftOptInsService, SupporterProductDataService, SwitchService}
 
-import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
@@ -25,6 +21,12 @@ trait PaymentBackend extends StrictLogging {
   val acquisitionsStreamService: AcquisitionsStreamService
   val databaseService: ContributionsStoreService
   val supporterProductDataService: SupporterProductDataService
+  val softOptInsService: SoftOptInsService
+  val switchService: SwitchService
+  private def softOptInsEnabled()(implicit executionContext: ExecutionContext): EitherT[Future, Nothing, Boolean] =
+    switchService.allSwitches.map(switch =>
+      switch.featureSwitches.exists(s => s.switches.enableSoftOptInsForSingle.state.isOn),
+    )
 
   private def insertContributionDataIntoDatabase(
       contributionData: ContributionData,
@@ -64,9 +66,25 @@ trait PaymentBackend extends StrictLogging {
 
     val supporterDataFuture = insertContributionIntoSupporterProductData(contributionData)
 
+    val softOptInFuture = softOptInsService.sendMessage(SoftOptInsService.Message(contributionData.identityId))
+
+    softOptInsEnabled().flatMap {
+      case true =>
+        softOptInsService.sendMessage(SoftOptInsService.Message(contributionData.identityId))
+      case false =>
+        EitherT.rightT[Future, BackendError.SoftOptInsServiceError](())
+    }
+
     Future
       .sequence(
-        List(gaFuture.value, bigQueryFuture.value, streamFuture.value, dbFuture.value, supporterDataFuture.value),
+        List(
+          gaFuture.value,
+          bigQueryFuture.value,
+          streamFuture.value,
+          dbFuture.value,
+          supporterDataFuture.value,
+          softOptInFuture.value,
+        ),
       )
       .map { results =>
         results.collect { case Left(err) => err }

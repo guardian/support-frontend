@@ -1,5 +1,6 @@
 package backend
 
+import backend.BackendError.SoftOptInsServiceError
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.sqs.model.SendMessageResult
@@ -82,6 +83,10 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.right(Future.successful(()))
   val supporterProductDataResponseError: EitherT[Future, String, Unit] =
     EitherT.left(Future.successful("an error from supporter product data"))
+  val softOptInsServiceResponse: EitherT[Future, SoftOptInsServiceError, Unit] =
+    EitherT.right(Future.successful(()))
+  val softOptInsServiceResponseError: EitherT[Future, SoftOptInsServiceError, Unit] =
+    EitherT.left(Future.successful(SoftOptInsServiceError("an error from soft opt-ins")))
   val bigQueryResponse: EitherT[Future, List[String], Unit] =
     EitherT.right(Future.successful(()))
   val bigQueryErrorMessage = "a BigQuery error"
@@ -114,6 +119,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
               ),
             ),
           ),
+          Some(FeatureSwitches(FeatureSwitchesTypes(SwitchDetails(On)))),
         ),
       ),
     )
@@ -128,6 +134,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
   val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
   val mockSupporterProductDataService: SupporterProductDataService = mock[SupporterProductDataService]
+  val mockSoftOptInsService: SoftOptInsService = mock[SoftOptInsService]
   val mockSwitchService: SwitchService = mock[SwitchService]
 
   // -- test obj
@@ -141,6 +148,7 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockEmailService,
     mockCloudWatchService,
     mockSupporterProductDataService,
+    mockSoftOptInsService,
     mockSwitchService,
   )(new DefaultThreadPool(ec))
 
@@ -190,6 +198,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
                     ),
                   ),
                 ),
+                Some(FeatureSwitches(FeatureSwitchesTypes(SwitchDetails(On)))),
               ),
             ),
           )
@@ -267,6 +276,8 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
           when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
           when(mockSupporterProductDataService.insertContributionData(any())(any()))
             .thenReturn(supporterProductDataResponseError)
+          when(mockSoftOptInsService.sendMessage(any())(any()))
+            .thenReturn(softOptInsServiceResponseError)
           when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
           when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
             .thenReturn(streamResponseError)
@@ -286,6 +297,8 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponseError)
+        when(mockSoftOptInsService.sendMessage(any())(any()))
+          .thenReturn(softOptInsServiceResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
           .thenReturn(streamResponseError)
@@ -324,7 +337,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
     "tracking the contribution" should {
 
-      "return just a DB error if BigQuery and SupporterProductData succeed but DB fails" in new PaypalBackendFixture {
+      "return just a DB error if BigQuery and SupporterProductData and SoftOptInsService succeed but DB fails" in new PaypalBackendFixture {
         populatePaymentMock()
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
@@ -332,6 +345,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
+        when(mockSoftOptInsService.sendMessage(any())(any())).thenReturn(softOptInsServiceResponse)
 
         val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
         val result = paypalBackend invokePrivate trackContribution(
@@ -351,6 +365,8 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
+        when(mockSoftOptInsService.sendMessage(any())(any()))
+          .thenReturn(softOptInsServiceResponse)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
           .thenReturn(streamResponseError)
