@@ -59,7 +59,8 @@ const tooltipContainer = css`
 	}
 `;
 
-const tooltipCss = css`
+const tooltipCss = (hide: boolean) => css`
+	display: ${hide ? 'none' : 'block'};
 	${textSans.small()};
 	background-color: #606060;
 	color: white;
@@ -241,7 +242,7 @@ export default function Tooltip({
 						}}
 						{...getFloatingProps()}
 					>
-						<div css={tooltipCss}>
+						<div css={tooltipCss(!open)}>
 							{children}
 							<Button
 								onClick={() => setOpen(false)}
