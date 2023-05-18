@@ -27,13 +27,13 @@ class SoftOptInsService(sqsClient: AmazonSQSAsync, queueUrlResponse: Future[Eith
 
       case Some(id) =>
         val identityIdString = id.toString
-        val message = Message(identityIdString, "", "")
+        val message = Message(identityIdString)
 
         logger.info(s"Preparing to send message: ${message.asJson.noSpaces}")
 
         for {
           queueUrl <- EitherT(queueUrlResponse)
-          _ <- sendRequest(queueUrl, Message(identityIdString))
+          _ <- sendRequest(queueUrl, message)
         } yield ()
     }
   }
