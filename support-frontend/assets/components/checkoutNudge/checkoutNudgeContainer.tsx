@@ -33,7 +33,7 @@ export function CheckoutNudgeContainer({
 	const minWeeklyAmount =
 		countryGroupId === 'GBPCountries'
 			? minAmountRounded.toString() + `p`
-			: currencyGlyph + minAmountRounded.toFixed(2).toString();
+			: currencyGlyph + (minAmountRounded / 100).toFixed(2).toString();
 
 	const [title, subtitle, paragraph] = [
 		`Support us every year`,
