@@ -117,7 +117,7 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
           }
 
       case (None, _, _, Some(error), _) if error == "login_required" =>
-        logger.error(s"Failed to generate auth tokens: user is signed out")
+        // Failed to generate auth tokens as user is signed out - this is expected.
         Future.successful(redirect)
 
       case (None, _, _, Some(error), Some(errorDescription)) =>
