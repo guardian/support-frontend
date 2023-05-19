@@ -145,6 +145,15 @@ export function SupporterPlusLandingPage({
 		isUserInAbVariant('supporterPlusMobileTest2', 'variant'),
 	);
 
+	const nudgeMinAmountsVariantA = useContributionsSelector(
+		isUserInAbVariant('nudgeMinAmountsTest', 'variantA'),
+	);
+	const nudgeMinAmountsVariantB = useContributionsSelector(
+		isUserInAbVariant('nudgeMinAmountsTest', 'variantB'),
+	);
+	console.log('nudgeMinAmountsVariantA=', nudgeMinAmountsVariantA);
+	console.log('nudgeMinAmountsVariantB=', nudgeMinAmountsVariantB);
+
 	const { paymentComplete, isWaiting } = useContributionsSelector(
 		(state) => state.page.form,
 	);
