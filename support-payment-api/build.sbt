@@ -55,7 +55,7 @@ libraryDependencies ++= Seq(
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
-resolvers += Resolver.sonatypeRepo("releases")
+resolvers ++= Resolver.sonatypeOssRepos("releases")
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 Debian / packageName := name.value
