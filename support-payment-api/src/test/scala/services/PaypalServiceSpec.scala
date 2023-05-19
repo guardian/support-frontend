@@ -36,8 +36,8 @@ class PaypalServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar with
     val transaction: Transaction = transactionList.asScala.head
     transaction.getAmount.getCurrency mustBe ("GBP")
     transaction.getAmount.getTotal mustBe ("50.00")
-    transaction.getDescription mustBe ("Contribution to the guardian")
-    transaction.getItemList.getItems.asScala.head.getDescription mustBe ("Contribution to the guardian")
+    transaction.getDescription mustBe ("Contribution to the Guardian")
+    transaction.getItemList.getItems.asScala.head.getDescription mustBe ("Contribution to the Guardian")
     transaction.getItemList.getItems.asScala.head.getQuantity mustBe ("1")
     transaction.getItemList.getItems.asScala.head.getPrice mustBe ("50.00")
     transaction.getItemList.getItems.asScala.head.getCurrency mustBe ("GBP")
