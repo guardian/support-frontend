@@ -57,7 +57,6 @@ dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacks
 
 resolvers += Resolver.sonatypeRepo("releases")
 
-debianPackageDependencies := Seq("openjdk-11-jre-headless")
 Debian / packageName := name.value
 packageSummary := "Payment API Play App"
 packageDescription := """API for reader revenue payments"""
