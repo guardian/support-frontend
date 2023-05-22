@@ -108,7 +108,6 @@ class AmazonPayControllerSpec extends AnyWordSpec with Status with Matchers {
               |  },
               |  "acquisitionData": {
               |    "platform": "android",
-              |    "visitId": "visitId",
               |    "browserId": "ophanBrowserId",
               |    "pageviewId": "ophanPageviewId",
               |    "referrerPageviewId": "refererPageviewId",
@@ -155,7 +154,6 @@ class AmazonPayControllerSpec extends AnyWordSpec with Status with Matchers {
               |  },
               |  "acquisitionData": {
               |    "platform": "android",
-              |    "visitId": "visitId",
               |    "browserId": "ophanBrowserId",
               |    "pageviewId": "ophanPageviewId",
               |    "referrerPageviewId": "refererPageviewId",
@@ -202,7 +200,6 @@ class AmazonPayControllerSpec extends AnyWordSpec with Status with Matchers {
               |  },
               |  "acquisitionData": {
               |    "platform": "android",
-              |    "visitId": "visitId",
               |    "browserId": "ophanBrowserId",
               |    "pageviewId": "ophanPageviewId",
               |    "referrerPageviewId": "refererPageviewId",

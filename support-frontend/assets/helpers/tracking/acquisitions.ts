@@ -29,7 +29,6 @@ export type AcquisitionQueryParameters = QueryParameter[];
 
 export type OphanIds = {
 	pageviewId: string;
-	visitId?: string | null;
 	browserId?: string | null;
 };
 
@@ -50,7 +49,6 @@ export type ReferrerAcquisitionData = {
 
 export type PaymentAPIAcquisitionData = {
 	pageviewId: string;
-	visitId?: string | null;
 	browserId?: string | null;
 	platform?: string;
 	referrerPageviewId?: string;
@@ -193,7 +191,6 @@ function buildReferrerAcquisitionData(
 const getOphanIds = (): OphanIds => ({
 	pageviewId: viewId,
 	browserId: getCookie('bwid'),
-	visitId: getCookie('vsid'),
 });
 
 function getSupportAbTests(
@@ -232,7 +229,6 @@ function derivePaymentApiAcquisitionData(
 
 	return {
 		platform: 'SUPPORT',
-		visitId: ophanIds.visitId,
 		browserId: ophanIds.browserId,
 		pageviewId: ophanIds.pageviewId,
 		referrerPageviewId: referrerAcquisitionData.referrerPageviewId,

@@ -240,7 +240,6 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
           FakeRequest("POST", "/contribute/one-off/paypal/capture-payment").withJsonBody(parse("""
             |{
             |  "paymentId": "PAY-4JG67395EA359543HLKKVTFI",
-            |  "ophanVisitId": "ophanVisitId",
             |  "ophanBrowserId": "ophanBrowserId",
             |  "platform": "android",
             |  "cmp": "cmp",
@@ -330,7 +329,6 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
             |  },
             |  "acquisitionData": {
             |    "platform": "android",
-            |    "visitId": "ophanVisitId",
             |    "browserId": "ophanBrowserId",
             |    "pageviewId": "jducx5kjl3u7cwf5ocud",
             |    "referrerPageviewId": "refererPageviewId",
@@ -483,7 +481,6 @@ class PaypalControllerSpec extends AnyWordSpec with Status with Matchers {
             |  },
             |  "acquisitionData": {
             |    "platform": "android",
-            |    "visitId": "ophanVisitId",
             |    "browserId": "ophanBrowserId",
             |    "pageviewId": "jducx5kjl3u7cwf5ocud",
             |    "referrerPageviewId": "refererPageviewId",

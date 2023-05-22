@@ -23,7 +23,6 @@ object StripeJsonDecoder {
       token <- downField("token").as[NonEmptyString]
       email <- downField("email").as[NonEmptyString]
       browserId <- downField("ophanBrowserId").as[Option[String]]
-      visitId <- downField("ophanVisitId").as[Option[String]]
       pageviewId <- downField("ophanPageviewId").as[Option[String]]
       referrerPageviewId <- downField("refererPageviewId").as[Option[String]]
       refererUrl <- downField("refererUrl").as[Option[String]]
@@ -53,7 +52,6 @@ object StripeJsonDecoder {
         ),
         acquisitionData = AcquisitionData(
           platform = platform,
-          visitId = visitId,
           browserId = browserId,
           pageviewId = pageviewId,
           referrerPageviewId = referrerPageviewId,

@@ -17,7 +17,6 @@ object PaypalJsonDecoder {
     import cursor._
     for {
       paymentId <- downField("paymentId").as[String]
-      visitId <- downField("ophanVisitId").as[Option[String]]
       browserId <- downField("ophanBrowserId").as[Option[String]]
       platform <- downField("platform").as[Option[String]]
       cmp <- downField("cmp").as[Option[String]]
@@ -42,7 +41,6 @@ object PaypalJsonDecoder {
         ),
         acquisitionData = AcquisitionData(
           platform = platform,
-          visitId = visitId,
           browserId = browserId,
           pageviewId = ophanPageviewId,
           referrerPageviewId = refererPageviewId,

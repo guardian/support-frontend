@@ -59,7 +59,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a Supporter Plus V2 subscription" in {
     val acquisitionData = Some(
       AcquisitionData(
-        OphanIds(None, None, None),
+        OphanIds(None, None),
         ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
         Set(AbTest("supporterPlusV2", "variant")),
       ),

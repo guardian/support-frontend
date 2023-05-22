@@ -699,7 +699,7 @@ object TestData {
     firstDeliveryDate = None,
     paymentFields =
       Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
-    ophanIds = OphanIds(None, None, None),
+    ophanIds = OphanIds(None, None),
     referrerAcquisitionData =
       ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
@@ -739,7 +739,7 @@ object TestData {
     firstDeliveryDate = Some(someDateNextMonth),
     paymentFields =
       Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
-    ophanIds = OphanIds(None, None, None),
+    ophanIds = OphanIds(None, None),
     referrerAcquisitionData =
       ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),
@@ -763,7 +763,7 @@ object TestData {
     firstDeliveryDate = Some(someDateNextMonth),
     paymentFields =
       Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
-    ophanIds = OphanIds(None, None, None),
+    ophanIds = OphanIds(None, None),
     referrerAcquisitionData =
       ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
     supportAbTests = Set(),

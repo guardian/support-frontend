@@ -37,14 +37,18 @@ import Total from 'components/subscriptionCheckouts/total/total';
 import Text from 'components/text/text';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
+import { billableCountries } from 'helpers/internationalisation/billableCountries';
 import { currencyFromCountryCode } from 'helpers/internationalisation/currency';
-import { weeklyDeliverableCountries } from 'helpers/internationalisation/weeklyDeliverableCountries';
+import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
 import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
 import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
-import { selectPriceForProduct } from 'helpers/redux/checkout/product/selectors/productPrice';
+import {
+	selectDiscountedPrice,
+	selectPriceForProduct,
+} from 'helpers/redux/checkout/product/selectors/productPrice';
 import type {
 	SubscriptionsDispatch,
 	SubscriptionsState,
@@ -103,6 +107,7 @@ function mapStateToProps(state: SubscriptionsState) {
 			currencyFromCountryCode(deliveryAddress.fields.country) ?? 'USD',
 		payPalHasLoaded: state.page.checkoutForm.payment.payPal.hasLoaded,
 		price: selectPriceForProduct(state),
+		discountedPrice: selectDiscountedPrice(state),
 	};
 }
 
@@ -234,7 +239,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						/>
 					</FormSection>
 					<FormSection title="Where should we deliver your magazine?">
-						<DeliveryAddress countries={weeklyDeliverableCountries} />
+						<DeliveryAddress countries={gwDeliverableCountries} />
 					</FormSection>
 					<FormSection title="Is the billing address the same as the delivery address?">
 						<Rows>
@@ -273,7 +278,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					</FormSection>
 					{!props.billingAddressMatchesDelivery ? (
 						<FormSection title="Your billing address">
-							<BillingAddress countries={weeklyDeliverableCountries} />
+							<BillingAddress countries={billableCountries} />
 						</FormSection>
 					) : null}
 					<FormSection title="Please select the first publication you’d like to receive">
@@ -406,7 +411,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							validateForm={props.validateForm}
 							isTestUser={props.isTestUser}
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-							amount={props.price.price}
+							amount={props.discountedPrice.price}
 							billingPeriod={props.billingPeriod}
 							// @ts-expect-error TODO: fix when we can fix error states for all checkouts
 							allErrors={[
@@ -421,9 +426,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						errorHeading={submissionErrorHeading}
 					/>
 					<Total
-						price={props.price.price}
+						price={props.discountedPrice.price}
 						currency={props.currencyId}
-						promotions={props.price.promotions}
 					/>
 					<PaymentTerms paymentMethod={props.paymentMethod} />
 				</Form>
