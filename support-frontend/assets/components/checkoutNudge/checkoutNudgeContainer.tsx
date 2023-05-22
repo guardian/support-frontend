@@ -31,11 +31,13 @@ export function CheckoutNudgeContainer({
 	const nudgeMinAmountsVariantB = useContributionsSelector(
 		isUserInAbVariant('nudgeMinAmountsTest', 'variantB'),
 	);
-	console.log('nudgeMinAmountsVariantA=', nudgeMinAmountsVariantA);
-	console.log('nudgeMinAmountsVariantB=', nudgeMinAmountsVariantB);
 
 	const currencyGlyph = glyph(detect(countryGroupId));
-	const minAmount = config[countryGroupId]['ANNUAL'].min;
+	const minAmount = nudgeMinAmountsVariantA
+		? 30
+		: nudgeMinAmountsVariantB
+		? 50
+		: config[countryGroupId]['ANNUAL'].min;
 	const roundToNearest = 10;
 	const minAmountRounded =
 		Math.round(Math.ceil((minAmount * 100) / 52) / roundToNearest) *
