@@ -3,6 +3,7 @@ import { config } from 'helpers/contributions';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -23,6 +24,15 @@ export function CheckoutNudgeContainer({
 	);
 
 	const [displayNudge, setDisplayNudge] = useState(true);
+
+	const nudgeMinAmountsVariantA = useContributionsSelector(
+		isUserInAbVariant('nudgeMinAmountsTest', 'variantA'),
+	);
+	const nudgeMinAmountsVariantB = useContributionsSelector(
+		isUserInAbVariant('nudgeMinAmountsTest', 'variantB'),
+	);
+	console.log('nudgeMinAmountsVariantA=', nudgeMinAmountsVariantA);
+	console.log('nudgeMinAmountsVariantB=', nudgeMinAmountsVariantB);
 
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = config[countryGroupId]['ANNUAL'].min;
