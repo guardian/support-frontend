@@ -31,7 +31,6 @@ object AcquisitionDataRowMapper {
       acquisition.componentType.map("component_type" -> _),
       acquisition.source.map("source" -> _),
       acquisition.campaignCode.map(code => "campaign_codes" -> new JSONArray(List(code).asJava)),
-      acquisition.zuoraAccountNumber.map("zuora_account_number" -> _),
       acquisition.zuoraSubscriptionNumber.map("zuora_subscription_number" -> _),
       acquisition.contributionId.map("contribution_id" -> _),
       acquisition.paymentId.map("payment_id" -> _),
