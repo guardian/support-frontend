@@ -4,7 +4,7 @@ import com.gu.identity.auth.IdentityClient.Error
 import com.gu.identity.auth.{IdapiAuthConfig, IdentityClient}
 import com.gu.identity.model.User
 import com.gu.identity.play.IdapiPlayAuthService
-import com.gu.identity.play.IdentityPlayAuthService.UserCredentialsMissingError
+import com.gu.identity.play.IdapiPlayAuthService.UserCredentialsMissingError
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import config.Identity
