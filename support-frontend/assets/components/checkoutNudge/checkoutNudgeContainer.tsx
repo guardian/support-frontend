@@ -31,7 +31,7 @@ export function CheckoutNudgeContainer({
 		Math.round(Math.ceil((minAmount * 100) / 52) / roundToNearest) *
 		roundToNearest;
 	const minWeeklyAmount =
-		countryGroupId === 'GBPCountries'
+		countryGroupId === 'GBPCountries' && minAmountRounded < 100
 			? minAmountRounded.toString() + `p`
 			: currencyGlyph + (minAmountRounded / 100).toFixed(2).toString();
 
