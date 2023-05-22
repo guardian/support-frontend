@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks';
-import { config } from 'helpers/contributions';
+import { getConfigAbTestMin } from 'helpers/contributions';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -33,11 +33,12 @@ export function CheckoutNudgeContainer({
 	);
 
 	const currencyGlyph = glyph(detect(countryGroupId));
-	const minAmount = nudgeMinAmountsVariantA
-		? 30
-		: nudgeMinAmountsVariantB
-		? 50
-		: config[countryGroupId]['ANNUAL'].min;
+	const minAmount = getConfigAbTestMin(
+		countryGroupId,
+		contributionType,
+		nudgeMinAmountsVariantA,
+		nudgeMinAmountsVariantB,
+	);
 	const roundToNearest = 10;
 	const minAmountRounded =
 		Math.round(Math.ceil((minAmount * 100) / 52) / roundToNearest) *
