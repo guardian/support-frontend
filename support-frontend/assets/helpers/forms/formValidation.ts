@@ -1,13 +1,11 @@
 import { DateUtils } from 'react-day-picker';
-import { config, getConfigAbTestMin } from 'helpers/contributions';
+import { config } from 'helpers/contributions';
 import type {
 	ContributionType,
 	OtherAmounts,
 	SelectedAmounts,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
 
 const daysFromNowForGift = 89;
@@ -112,21 +110,10 @@ export const amountIsValid = (
 	localCurrencyCountry?: LocalCurrencyCountry | null,
 	useLocalCurrency?: boolean | null,
 ): boolean => {
-	const nudgeMinAmountsVariantA = useContributionsSelector(
-		isUserInAbVariant('nudgeMinAmountsTest', 'variantA'),
-	);
-	const nudgeMinAmountsVariantB = useContributionsSelector(
-		isUserInAbVariant('nudgeMinAmountsTest', 'variantB'),
-	);
 	const min =
 		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
 			? localCurrencyCountry.config[contributionType].min
-			: getConfigAbTestMin(
-					countryGroupId,
-					contributionType,
-					nudgeMinAmountsVariantA,
-					nudgeMinAmountsVariantB,
-			  );
+			: config[countryGroupId][contributionType].min;
 	const max =
 		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
 			? localCurrencyCountry.config[contributionType].max
