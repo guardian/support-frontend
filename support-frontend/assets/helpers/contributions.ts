@@ -269,90 +269,6 @@ const config: Record<CountryGroupId, Config> = {
 	},
 };
 
-const defaultConfigVariantA: Config = {
-	...defaultConfig,
-	ANNUAL: {
-		min: 30,
-		minInWords: numbersInWords['30'],
-		max: 2000,
-		maxInWords: numbersInWords['2000'],
-		default: 50,
-	},
-};
-const configVariantA: Record<CountryGroupId, Config> = {
-	GBPCountries: defaultConfigVariantA,
-	AUDCountries: {
-		...config.AUDCountries,
-		ANNUAL: defaultConfigVariantA.ANNUAL,
-	},
-	EURCountries: {
-		...config.EURCountries,
-		ANNUAL: defaultConfigVariantA.ANNUAL,
-	},
-	UnitedStates: {
-		...config.UnitedStates,
-		ANNUAL: {
-			...defaultConfigVariantA.ANNUAL,
-			max: 10000,
-			maxInWords: numbersInWords['10000'],
-		},
-	},
-	International: {
-		...config.International,
-		ANNUAL: defaultConfigVariantA.ANNUAL,
-	},
-	NZDCountries: {
-		...config.NZDCountries,
-		ANNUAL: defaultConfigVariantA.ANNUAL,
-	},
-	Canada: {
-		...config.Canada,
-		ANNUAL: defaultConfigVariantA.ANNUAL,
-	},
-};
-
-const defaultConfigVariantB: Config = {
-	...defaultConfig,
-	ANNUAL: {
-		min: 50,
-		minInWords: numbersInWords['50'],
-		max: 2000,
-		maxInWords: numbersInWords['2000'],
-		default: 50,
-	},
-};
-const configVariantB: Record<CountryGroupId, Config> = {
-	GBPCountries: defaultConfigVariantB,
-	AUDCountries: {
-		...config.AUDCountries,
-		ANNUAL: defaultConfigVariantB.ANNUAL,
-	},
-	EURCountries: {
-		...config.EURCountries,
-		ANNUAL: defaultConfigVariantB.ANNUAL,
-	},
-	UnitedStates: {
-		...config.UnitedStates,
-		ANNUAL: {
-			...defaultConfigVariantB.ANNUAL,
-			max: 10000,
-			maxInWords: numbersInWords['10000'],
-		},
-	},
-	International: {
-		...config.International,
-		ANNUAL: defaultConfigVariantB.ANNUAL,
-	},
-	NZDCountries: {
-		...config.NZDCountries,
-		ANNUAL: defaultConfigVariantB.ANNUAL,
-	},
-	Canada: {
-		...config.Canada,
-		ANNUAL: defaultConfigVariantB.ANNUAL,
-	},
-};
-
 // ----- Functions ----- //
 function getConfigAbTestMin(
 	countryGroupId: CountryGroupId,
@@ -361,9 +277,9 @@ function getConfigAbTestMin(
 	nudgeMinAmountsVariantB: boolean,
 ): number {
 	return nudgeMinAmountsVariantA
-		? configVariantA[countryGroupId][contribType].min
+		? 30
 		: nudgeMinAmountsVariantB
-		? configVariantB[countryGroupId][contribType].min
+		? 50
 		: config[countryGroupId][contribType].min;
 }
 
