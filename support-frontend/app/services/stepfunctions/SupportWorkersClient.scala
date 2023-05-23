@@ -253,6 +253,8 @@ object StepFunctionExecutionStatus {
         StatusResponse(Status.Success, trackingUri, None)
       case detailsAttempt if detailsAttempt.map(_.getName) == Success("SucceedOrFailChoice") =>
         StatusResponse(Status.Failure, trackingUri, getFailureDetails(stateWrapper, detailsAttempt.get))
+      case detailsAttempt if detailsAttempt.map(_.getName) == Success("FailState") =>
+        StatusResponse(Status.Failure, trackingUri, getFailureDetails(stateWrapper, detailsAttempt.get))
     }
 
     searchForFinishedCheckout.getOrElse(StatusResponse(Status.Pending, trackingUri, None))
