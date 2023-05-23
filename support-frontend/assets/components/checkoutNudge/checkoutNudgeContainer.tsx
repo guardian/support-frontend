@@ -35,7 +35,7 @@ export function CheckoutNudgeContainer({
 	const currencyGlyph = glyph(detect(countryGroupId));
 	const minAmount = getConfigAbTestMin(
 		countryGroupId,
-		contributionType,
+		'ANNUAL',
 		nudgeMinAmountsVariantA,
 		nudgeMinAmountsVariantB,
 	);
