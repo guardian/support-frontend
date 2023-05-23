@@ -25,20 +25,18 @@ export function CheckoutNudgeContainer({
 
 	const [displayNudge, setDisplayNudge] = useState(true);
 
-	const nudgeMinAmountsVariantA = useContributionsSelector(
+	const nudgeMinVariantA = useContributionsSelector(
 		isUserInAbVariant('nudgeMinAmountsTest', 'variantA'),
 	);
-	const nudgeMinAmountsVariantB = useContributionsSelector(
+	const nudgeMinVariantB = useContributionsSelector(
 		isUserInAbVariant('nudgeMinAmountsTest', 'variantB'),
 	);
 
 	const currencyGlyph = glyph(detect(countryGroupId));
-	const minAmount = getConfigAbTestMin(
-		countryGroupId,
-		'ANNUAL',
-		nudgeMinAmountsVariantA,
-		nudgeMinAmountsVariantB,
-	);
+	const minAmount = getConfigAbTestMin(countryGroupId, 'ANNUAL', {
+		variantA: nudgeMinVariantA,
+		variantB: nudgeMinVariantB,
+	});
 	const roundToNearest = 10;
 	const minAmountRounded =
 		Math.round(Math.ceil((minAmount * 100) / 52) / roundToNearest) *

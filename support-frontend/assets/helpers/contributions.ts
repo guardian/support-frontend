@@ -31,6 +31,11 @@ export type RegularContributionType = keyof RegularContributionTypeMap<null>;
 export type ContributionType = keyof ContributionTypeMap<null>;
 export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
 
+export type VariantData = {
+	variantA: boolean;
+	variantB: boolean;
+};
+
 export const contributionTypeIsRecurring = (
 	contributionType: ContributionType,
 ): boolean => contributionType === 'MONTHLY' || contributionType === 'ANNUAL';
@@ -273,12 +278,11 @@ const config: Record<CountryGroupId, Config> = {
 function getConfigAbTestMin(
 	countryGroupId: CountryGroupId,
 	contribType: ContributionType,
-	nudgeMinAmountsVariantA: boolean,
-	nudgeMinAmountsVariantB: boolean,
+	VariantData: VariantData,
 ): number {
-	return nudgeMinAmountsVariantA
+	return VariantData.variantA
 		? 30
-		: nudgeMinAmountsVariantB
+		: VariantData.variantB
 		? 50
 		: config[countryGroupId][contribType].min;
 }
