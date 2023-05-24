@@ -37,7 +37,6 @@ case class AcquisitionDataRow(
     readerType: ReaderType,
     acquisitionType: AcquisitionType,
     zuoraSubscriptionNumber: Option[String],
-    zuoraAccountNumber: Option[String],
     contributionId: Option[String],
     paymentId: Option[String],
     queryParameters: List[QueryParameter],

@@ -85,7 +85,6 @@ object AcquisitionDataRowBuilder {
       readerType = acquisitionTypeDetails.readerType,
       acquisitionType = acquisitionTypeDetails.acquisitionType,
       zuoraSubscriptionNumber = acquisitionTypeDetails.zuoraSubscriptionNumber,
-      zuoraAccountNumber = acquisitionTypeDetails.zuoraAccountNumber,
       contributionId = None,
       paymentId = None,
       queryParameters = state.acquisitionData.map(getQueryParameters).getOrElse(Nil),
