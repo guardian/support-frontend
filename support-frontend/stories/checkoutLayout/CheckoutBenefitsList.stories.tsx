@@ -48,7 +48,6 @@ AllBenefitsUnlocked.args = {
 	checkListData: checkListData({
 		higherTier: true,
 		isAustralia: false,
-		isEmotionalBenefitTestVariant: false,
 	}),
 	buttonCopy: null,
 	countryGroupId: 'GBPCountries',
@@ -61,7 +60,6 @@ LowerTierUnlocked.args = {
 	checkListData: checkListData({
 		higherTier: false,
 		isAustralia: false,
-		isEmotionalBenefitTestVariant: false,
 	}),
 	buttonCopy: 'Switch to £12 per month to unlock all extras',
 	countryGroupId: 'GBPCountries',
