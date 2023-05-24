@@ -10,15 +10,14 @@ import com.gu.monitoring.SafeLogger._
 import config.Identity
 import org.http4s.Uri
 import play.api.http.ContentTypes.FORM
-import play.api.http.HeaderNames.{AUTHORIZATION, CONTENT_TYPE}
+import play.api.http.HeaderNames.CONTENT_TYPE
 import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.mvc.RequestHeader
 
-import java.util.Base64
 import scala.concurrent.{ExecutionContext, Future}
 
-class AsyncAuthenticationService(identityPlayAuthService: IdapiPlayAuthService, ws: WSClient, config: Identity)(
-    implicit ec: ExecutionContext,
+class AsyncAuthenticationService(identityPlayAuthService: IdapiPlayAuthService, ws: WSClient, config: Identity)(implicit
+    ec: ExecutionContext,
 ) {
 
   def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[User]] =
