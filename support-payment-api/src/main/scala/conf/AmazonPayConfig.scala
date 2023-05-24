@@ -24,7 +24,7 @@ object AmazonPayConfig {
           data: Map[String, String],
       ): Validated[InitializationError, AmazonPayConfig] = {
         val validator = new ParameterStoreValidator[AmazonPayConfig, Environment](environment, data); import validator._
-        val sandboxMode = environment.enumEntry == Environment.Test
+        val sandboxMode = environment.in(Environment.Test)
         (validate("us-merchant-id"), validate("us-access-key"), validate("us-secret-key"), validated(sandboxMode)).mapN(
           AmazonPayConfig.apply,
         )

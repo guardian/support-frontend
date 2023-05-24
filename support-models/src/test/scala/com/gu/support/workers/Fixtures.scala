@@ -98,7 +98,6 @@ object Fixtures {
       {
         "ophanIds":{
           "pageviewId":"jkcg440imu1c0m8pxpxe",
-          "visitId":null,
           "browserId":null
         },
         "referrerAcquisitionData":{

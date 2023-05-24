@@ -131,12 +131,19 @@ export class PaymentApi extends GuStack {
               `arn:aws:ssm:${this.region}:${this.account}:parameter/${app}/*`,
             ],
           }),
-          new GuAllowPolicy(this, "SqsMessages", {
+          new GuAllowPolicy(this, "EmailSqsMessages", {
             actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
             resources:
               this.stage === "PROD"
                 ? [emailSqsCodeArn.valueAsString, emailSqsProdArn.valueAsString]
                 : [emailSqsCodeArn.valueAsString],
+          }),
+          new GuAllowPolicy(this, "SoftOptInsSqsMessages", {
+            actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
+            resources:
+              this.stage === "PROD"
+                ? [`arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-PROD`,]
+                : [`arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-DEV`,],
           }),
           new GuPutCloudwatchMetricsPolicy(this),
           new GuAllowPolicy(this, "AssumeOphanRole", {

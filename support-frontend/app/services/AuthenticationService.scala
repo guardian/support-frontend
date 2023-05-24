@@ -1,10 +1,10 @@
 package services
 
-import com.gu.identity.auth.IdentityClient
 import com.gu.identity.auth.IdentityClient.Error
+import com.gu.identity.auth.{IdapiAuthConfig, IdentityClient}
 import com.gu.identity.model.User
-import com.gu.identity.play.IdentityPlayAuthService
-import com.gu.identity.play.IdentityPlayAuthService.UserCredentialsMissingError
+import com.gu.identity.play.IdapiPlayAuthService
+import com.gu.identity.play.IdapiPlayAuthService.UserCredentialsMissingError
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import config.Identity
@@ -17,13 +17,13 @@ import play.api.mvc.RequestHeader
 import java.util.Base64
 import scala.concurrent.{ExecutionContext, Future}
 
-class AsyncAuthenticationService(identityPlayAuthService: IdentityPlayAuthService, ws: WSClient, config: Identity)(
+class AsyncAuthenticationService(identityPlayAuthService: IdapiPlayAuthService, ws: WSClient, config: Identity)(
     implicit ec: ExecutionContext,
 ) {
 
   def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[User]] =
     identityPlayAuthService
-      .getUserFromRequest(requestHeader)
+      .getUserFromRequestUsingSCGUUCookie(requestHeader)
       .map { case (_, user) => user }
       .unsafeToFuture()
       .map(user => Some(user))
@@ -56,7 +56,8 @@ object AsyncAuthenticationService {
 
   def apply(config: Identity, ws: WSClient)(implicit ec: ExecutionContext): AsyncAuthenticationService = {
     val apiUrl = Uri.unsafeFromString(config.apiUrl)
-    val identityPlayAuthService = IdentityPlayAuthService.unsafeInit(apiUrl, config.apiClientToken, targetClient = None)
+    val identityPlayAuthService =
+      IdapiPlayAuthService.unsafeInit(IdapiAuthConfig(identityApiUri = apiUrl, accessToken = config.apiClientToken))
     new AsyncAuthenticationService(identityPlayAuthService, ws, config)
   }
 

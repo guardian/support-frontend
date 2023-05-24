@@ -1,11 +1,6 @@
 import { extendedGlyph } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { displayPrice } from 'helpers/productPrice/priceDescriptions';
-import {
-	getAppliedPromo,
-	hasDiscount,
-	hasIntroductoryPrice,
-} from 'helpers/productPrice/promotions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import * as styles from './totalStyles';
 
@@ -15,22 +10,9 @@ type Props = {
 	promotions?: Promotion[];
 };
 
-const getPrice = (promotion: Promotion | undefined, price: number): number => {
-	if (hasIntroductoryPrice(promotion)) {
-		return promotion.introductoryPrice.price;
-	}
-
-	if (hasDiscount(promotion)) {
-		return promotion.discountedPrice;
-	}
-
-	return price;
-};
-
-function Total({ price, currency, promotions }: Props) {
+function Total({ price, currency }: Props) {
 	const glyph = extendedGlyph(currency);
-	const appliedPromotion = getAppliedPromo(promotions);
-	const formattedPrice = displayPrice(glyph, getPrice(appliedPromotion, price));
+	const formattedPrice = displayPrice(glyph, price);
 	return (
 		<div css={styles.container}>
 			<div css={styles.wrapper}>
