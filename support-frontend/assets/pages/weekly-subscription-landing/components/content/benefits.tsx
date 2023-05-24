@@ -5,9 +5,6 @@ import BenefitsHeading from './benefitsHeading';
 
 const coreBenefits = [
 	{
-		content: 'Every issue delivered with up to 35% off the cover price',
-	},
-	{
 		content: "Access to the magazine's digital archive",
 	},
 	{
@@ -21,6 +18,9 @@ const coreBenefits = [
 function getBenefits(countryId: IsoCountry) {
 	if (countryId === 'GB') {
 		return [
+			{
+				content: 'Every issue delivered with up to 79% off the cover price',
+			},
 			...coreBenefits,
 			{
 				content:
@@ -28,7 +28,12 @@ function getBenefits(countryId: IsoCountry) {
 			},
 		];
 	}
-	return coreBenefits;
+	return [
+		{
+			content: 'Every issue delivered with up to 35% off the cover price',
+		},
+		...coreBenefits,
+	];
 }
 
 function Benefits({ countryId }: { countryId: IsoCountry }): JSX.Element {
