@@ -19,6 +19,7 @@ class SoftOptInsService(sqsClient: AmazonSQSAsync, queueUrlResponse: Future[Eith
     extends StrictLogging {
   def sendMessage(
       identityId: Option[Long],
+      contributionId: String,
   )(implicit executionContext: ExecutionContext): EitherT[Future, SoftOptInsServiceError, Unit] = {
     identityId match {
       case None =>
@@ -27,7 +28,7 @@ class SoftOptInsService(sqsClient: AmazonSQSAsync, queueUrlResponse: Future[Eith
 
       case Some(id) =>
         val identityIdString = id.toString
-        val message = Message(identityIdString)
+        val message = Message(identityId = identityIdString, subscriptionId = contributionId)
 
         logger.info(s"Preparing to send message: ${message.asJson.noSpaces}")
 
@@ -96,5 +97,6 @@ object SoftOptInsService extends StrictLogging {
       identityId: String,
       eventType: String = "Acquisition",
       productName: String = "Contribution",
+      subscriptionId: String,
   )
 }
