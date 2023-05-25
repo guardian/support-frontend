@@ -9,11 +9,16 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import config.Identity
 import org.http4s.Uri
+import play.api.http.ContentTypes.FORM
+import play.api.http.HeaderNames.CONTENT_TYPE
+import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.mvc.RequestHeader
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AsyncAuthenticationService(identityPlayAuthService: IdapiPlayAuthService)(implicit ec: ExecutionContext) {
+class AsyncAuthenticationService(identityPlayAuthService: IdapiPlayAuthService, ws: WSClient, config: Identity)(implicit
+    ec: ExecutionContext,
+) {
 
   def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[User]] =
     identityPlayAuthService
@@ -37,17 +42,22 @@ class AsyncAuthenticationService(identityPlayAuthService: IdapiPlayAuthService)(
           None
       }
 
+  // See AuthCodeFlowController.callback
+  def getTokens(requestBody: String): Future[WSResponse] =
+    ws.url(config.oauthTokenUrl)
+      .addHttpHeaders(CONTENT_TYPE -> FORM)
+      .post(requestBody)
 }
 
 object AsyncAuthenticationService {
 
   case class IdentityIdAndEmail(id: String, primaryEmailAddress: String)
 
-  def apply(config: Identity)(implicit ec: ExecutionContext): AsyncAuthenticationService = {
+  def apply(config: Identity, ws: WSClient)(implicit ec: ExecutionContext): AsyncAuthenticationService = {
     val apiUrl = Uri.unsafeFromString(config.apiUrl)
     val identityPlayAuthService =
       IdapiPlayAuthService.unsafeInit(IdapiAuthConfig(identityApiUri = apiUrl, accessToken = config.apiClientToken))
-    new AsyncAuthenticationService(identityPlayAuthService)
+    new AsyncAuthenticationService(identityPlayAuthService, ws, config)
   }
 
 }
