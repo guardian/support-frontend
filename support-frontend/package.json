@@ -83,7 +83,7 @@
     "@emotion/cache": "^10.0.29",
     "@emotion/core": "^10.0.35",
     "@emotion/react": "^11.1.5",
-    "@emotion/serialize": "^0.11.16",
+    "@emotion/serialize": "^1.1.2",
     "@emotion/utils": "^1.1.0",
     "@floating-ui/react": "^0.19.2",
     "@guardian/consent-management-platform": "^13.0.2",
