@@ -37,10 +37,8 @@ export function CheckoutNudgeContainer({
 		variantA: nudgeMinVariantA,
 		variantB: nudgeMinVariantB,
 	});
-	const roundToNearest = 10;
 	const minAmountRounded =
-		Math.round(Math.ceil((minAmount * 100) / 52) / roundToNearest) *
-		roundToNearest;
+		Math.round(Math.ceil((minAmount * 100) / 52) / 10) * 10;
 	const minWeeklyAmount =
 		countryGroupId === 'GBPCountries' && minAmountRounded < 100
 			? minAmountRounded.toString() + `p`
