@@ -1,5 +1,8 @@
 package admin.settings
 
+import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.auto._
+import io.circe.generic.extras.semiauto._
 import io.circe.{Decoder, Encoder}
 
 case class AmountsSelection(
@@ -14,36 +17,27 @@ case class ContributionAmounts(
     ANNUAL: AmountsSelection,
 )
 
-case class AmountsTestVariant(
-    name: String,
-    amounts: ContributionAmounts,
+case class AmountsVariant(
+    variantName: String,
+    defaultContributionType: String,
+    displayContributionType: List[String],
+    amountsCardData: ContributionAmounts,
 )
 
 case class AmountsTest(
-    name: String,
+    testName: String,
+    liveTestName: Option[String],
     isLive: Boolean,
-    variants: List[AmountsTestVariant],
+    target: String,
     seed: Int,
+    variants: List[AmountsVariant],
 )
 
-case class ConfiguredRegionAmounts(
-    control: ContributionAmounts,
-    test: Option[AmountsTest],
-)
-
-case class ConfiguredAmounts(
-    GBPCountries: ConfiguredRegionAmounts,
-    UnitedStates: ConfiguredRegionAmounts,
-    EURCountries: ConfiguredRegionAmounts,
-    AUDCountries: ConfiguredRegionAmounts,
-    International: ConfiguredRegionAmounts,
-    NZDCountries: ConfiguredRegionAmounts,
-    Canada: ConfiguredRegionAmounts,
-)
-
-object Amounts {
-  import io.circe.generic.auto._
-
-  implicit val amountsEncoder = Encoder[ConfiguredAmounts]
-  implicit val amountsDecoder = Decoder[ConfiguredAmounts]
+object AmountsTests {
+  type AmountsTests = List[AmountsTest]
+  implicit val customConfig: Configuration = Configuration.default.withDefaults
+  implicit val amountsTestDecoder = Decoder[AmountsTest]
+  implicit val amountsTestEncoder = Encoder[AmountsTest]
+  implicit val amountsTestsDecoder = Decoder[AmountsTests]
+  implicit val amountsTestsEncoder = Encoder[AmountsTests]
 }

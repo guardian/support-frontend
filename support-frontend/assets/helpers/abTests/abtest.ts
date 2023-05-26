@@ -91,6 +91,7 @@ export function init(
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
 	const amountsTestParticipations = getAmountsTestParticipations(
+		country,
 		countryGroupId,
 		settings,
 		acquisitionDataTests,
@@ -188,7 +189,6 @@ function getServerSideParticipations(): Participations | null | undefined {
 	if (window.guardian.serversideTests) {
 		return window.guardian.serversideTests;
 	}
-
 	return null;
 }
 
@@ -205,6 +205,7 @@ function getAmountsTestFromURL(data: AcquisitionABTest[]) {
 }
 
 function getAmountsTestParticipations(
+	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	settings: Settings,
 	acquisitionDataTests: AcquisitionABTest[],
@@ -224,16 +225,37 @@ function getAmountsTestParticipations(
 		return urlTest;
 	}
 
-	const { test } = settings.amounts?.[countryGroupId] ?? {};
-
-	if (!test || !test.isLive) {
+	if (!settings.amounts) {
 		return null;
 	}
 
-	const variants = ['CONTROL', ...test.variants.map((variant) => variant.name)];
-	const assignmentIndex = randomNumber(getMvtId(), test.seed) % variants.length;
+	const AMOUNTS = settings.amounts;
+
+	let testArray = AMOUNTS.filter((t) => t.target === country);
+	if (!testArray.length) {
+		testArray = AMOUNTS.filter((t) => t.target === countryGroupId);
+	}
+
+	if (!testArray.length) {
+		return null;
+	}
+
+	const targetTest = testArray[0];
+	const { testName, liveTestName, isLive, seed, variants } = targetTest;
+
+	if (!variants.length) {
+		return null;
+	}
+
+	if (!isLive || variants.length === 1) {
+		return null;
+	}
+
+	const currentTestName = liveTestName ?? testName;
+	const variantNames = variants.map((variant) => variant.variantName);
+	const assignmentIndex = randomNumber(getMvtId(), seed) % variantNames.length;
 	return {
-		[test.name]: variants[assignmentIndex],
+		[currentTestName]: variantNames[assignmentIndex],
 	};
 }
 

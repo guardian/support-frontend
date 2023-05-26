@@ -34,6 +34,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
+    // This needs to fail - mapping old amounts model # STARTS
     val amount = 25
     val selection = AmountsSelection(
       amounts = List(amount),
@@ -58,6 +59,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       NZDCountries = configuredRegionAmounts,
       Canada = configuredRegionAmounts,
     )
+    // This needs to fail # ENDS
 
     val contributionTypesSettings = List(
       ContributionTypeSetting(

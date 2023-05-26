@@ -1,7 +1,7 @@
 import type { Settings, Status } from 'helpers/globalsAndSwitches/settings';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
-import type { ConfiguredRegionAmounts } from '../contributions';
+import type { AmountsTest, AmountsVariant } from '../contributions';
 
 function isRecord(
 	item: Record<string, unknown> | unknown,
@@ -28,21 +28,38 @@ function getGlobal<T>(path = ''): T | null {
 	return null;
 }
 
-export const emptyConfiguredRegionAmounts: ConfiguredRegionAmounts = {
-	control: {
-		ONE_OFF: {
-			amounts: [],
-			defaultAmount: 0,
-		},
-		MONTHLY: {
-			amounts: [],
-			defaultAmount: 0,
-		},
-		ANNUAL: {
-			amounts: [],
-			defaultAmount: 0,
+const emptyAmountsTestVariants: AmountsVariant[] = [
+	{
+		variantName: 'CONTROL',
+		defaultContributionType: 'MONTHLY',
+		displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+		amountsCardData: {
+			ONE_OFF: {
+				amounts: [],
+				defaultAmount: 0,
+				hideChooseYourAmount: false,
+			},
+			MONTHLY: {
+				amounts: [],
+				defaultAmount: 0,
+				hideChooseYourAmount: false,
+			},
+			ANNUAL: {
+				amounts: [],
+				defaultAmount: 0,
+				hideChooseYourAmount: false,
+			},
 		},
 	},
+];
+
+export const emptyConfiguredRegionAmounts: AmountsTest = {
+	testName: '',
+	liveTestName: '',
+	isLive: false,
+	target: '',
+	seed: 0,
+	variants: emptyAmountsTestVariants,
 };
 
 const getSettings = (): Settings => {
@@ -51,15 +68,52 @@ const getSettings = (): Settings => {
 		switches: {
 			experiments: {},
 		},
-		amounts: {
-			GBPCountries: emptyConfiguredRegionAmounts,
-			UnitedStates: emptyConfiguredRegionAmounts,
-			EURCountries: emptyConfiguredRegionAmounts,
-			AUDCountries: emptyConfiguredRegionAmounts,
-			International: emptyConfiguredRegionAmounts,
-			NZDCountries: emptyConfiguredRegionAmounts,
-			Canada: emptyConfiguredRegionAmounts,
-		},
+		// amounts: {
+		// 	GBPCountries: emptyConfiguredRegionAmounts,
+		// 	UnitedStates: emptyConfiguredRegionAmounts,
+		// 	EURCountries: emptyConfiguredRegionAmounts,
+		// 	AUDCountries: emptyConfiguredRegionAmounts,
+		// 	International: emptyConfiguredRegionAmounts,
+		// 	NZDCountries: emptyConfiguredRegionAmounts,
+		// 	Canada: emptyConfiguredRegionAmounts,
+		// },
+		amounts: [
+			{
+				...emptyConfiguredRegionAmounts,
+				testName: 'EMPTY_TEST__GBPCountries',
+				target: 'GBPCountries',
+			},
+			{
+				...emptyConfiguredRegionAmounts,
+				testName: 'EMPTY_TEST__UnitedStates',
+				target: 'UnitedStates',
+			},
+			{
+				...emptyConfiguredRegionAmounts,
+				testName: 'EMPTY_TEST__Canada',
+				target: 'Canada',
+			},
+			{
+				...emptyConfiguredRegionAmounts,
+				testName: 'EMPTY_TEST__NZDCountries',
+				target: 'NZDCountries',
+			},
+			{
+				...emptyConfiguredRegionAmounts,
+				testName: 'EMPTY_TEST__EURCountries',
+				target: 'EURCountries',
+			},
+			{
+				...emptyConfiguredRegionAmounts,
+				testName: 'EMPTY_TEST__International',
+				target: 'International',
+			},
+			{
+				...emptyConfiguredRegionAmounts,
+				testName: 'EMPTY_TEST__AUDCountries',
+				target: 'AUDCountries',
+			},
+		],
 		contributionTypes: {
 			GBPCountries: [],
 			UnitedStates: [],

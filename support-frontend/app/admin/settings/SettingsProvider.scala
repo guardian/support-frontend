@@ -19,6 +19,8 @@ import services.fastly.FastlyService
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
+import admin.settings.AmountsTests.AmountsTests
+
 abstract class SettingsProvider[T] {
 
   // Models the possibility of settings changing over the application life cycle.
@@ -29,7 +31,7 @@ abstract class SettingsProvider[T] {
 
 class AllSettingsProvider private (
     switchesProvider: SettingsProvider[Switches],
-    amountsProvider: SettingsProvider[ConfiguredAmounts],
+    amountsProvider: SettingsProvider[AmountsTests],
     contributionTypesProvider: SettingsProvider[ContributionTypes],
     metricUrl: MetricUrl,
 ) {
@@ -45,7 +47,7 @@ class AllSettingsProvider private (
 }
 
 object AllSettingsProvider {
-  import admin.settings.Amounts.amountsDecoder
+  import admin.settings.AmountsTests.amountsTestsDecoder
   import admin.settings.ContributionTypes.contributionTypesDecoder
 
   def fromConfig(
@@ -53,7 +55,7 @@ object AllSettingsProvider {
   )(implicit client: AwsS3Client, system: ActorSystem, wsClient: WSClient): Either[Throwable, AllSettingsProvider] = {
     for {
       switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
-      amountsProvider <- SettingsProvider.fromAppConfig[ConfiguredAmounts](config.settingsSources.amounts, config)
+      amountsProvider <- SettingsProvider.fromAppConfig[AmountsTests](config.settingsSources.amounts, config)
       contributionTypesProvider <- SettingsProvider
         .fromAppConfig[ContributionTypes](config.settingsSources.contributionTypes, config)
     } yield new AllSettingsProvider(

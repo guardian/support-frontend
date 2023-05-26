@@ -1,8 +1,12 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+// import type {
+// 	AmountsCardData,
+// 	ContributionTypes,
+// } from 'helpers/contributions';
 import type {
-	ContributionAmounts,
 	ContributionTypes,
+	SelectedAmountsVariant,
 } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
@@ -37,7 +41,7 @@ function getLocalisedCurrencyId(
 
 function getLocalisedAmounts(
 	internationalisation: Internationalisation,
-	defaultAmounts: ContributionAmounts,
+	defaultAmounts: SelectedAmountsVariant,
 	shouldUseLocalCurrency: boolean,
 ) {
 	if (shouldUseLocalCurrency && internationalisation.localCurrencyCountry) {

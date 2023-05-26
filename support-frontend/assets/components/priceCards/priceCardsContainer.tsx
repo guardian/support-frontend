@@ -44,6 +44,7 @@ export function PriceCardsContainer({
 		(state) => state.common.internationalisation.currencyId,
 	);
 	const { amounts } = useContributionsSelector((state) => state.common);
+	const { amountsCardData } = amounts;
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
@@ -52,7 +53,7 @@ export function PriceCardsContainer({
 		amounts: frequencyAmounts,
 		defaultAmount,
 		hideChooseYourAmount,
-	} = amounts[frequency];
+	} = amountsCardData[frequency];
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
 		frequency,
