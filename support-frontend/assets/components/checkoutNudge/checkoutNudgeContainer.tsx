@@ -37,14 +37,14 @@ export function CheckoutNudgeContainer({
 		variantA: nudgeMinVariantA,
 		variantB: nudgeMinVariantB,
 	});
-	const minAmountRounded =
+	const weeklyMinAmount =
 		Math.round(Math.ceil((minAmount * 100) / 52) / 10) * 10;
 	const minWeeklyAmount =
-		countryGroupId === 'GBPCountries' && minAmountRounded < 100
-			? minAmountRounded.toString() + `p`
+		countryGroupId === 'GBPCountries' && weeklyMinAmount < 100
+			? weeklyMinAmount.toString() + `p`
 			: currencyGlyph +
-			  (minAmountRounded / 100)
-					.toFixed(minAmountRounded % 100 === 0 ? 0 : 2)
+			  (weeklyMinAmount / 100)
+					.toFixed(weeklyMinAmount % 100 === 0 ? 0 : 2)
 					.toString();
 	const [title, subtitle, paragraph] = [
 		`Support us every year`,
