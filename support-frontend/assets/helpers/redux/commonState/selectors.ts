@@ -26,9 +26,9 @@ export function getMinimumContributionAmount(
 		state.common.internationalisation;
 	const contributionType = getContributionType(state);
 	const nudgeMinVariantA =
-		state.common.abParticipations['nudgeMinAmountsTest'] === 'variantA';
+		state.common.abParticipations.nudgeMinAmountsTest === 'variantA';
 	const nudgeMinVariantB =
-		state.common.abParticipations['nudgeMinAmountsTest'] === 'variantB';
+		state.common.abParticipations.nudgeMinAmountsTest === 'variantB';
 	const min =
 		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
 			? localCurrencyCountry.config[contributionType].min
