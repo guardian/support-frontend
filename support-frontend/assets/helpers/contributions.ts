@@ -278,11 +278,11 @@ const config: Record<CountryGroupId, Config> = {
 function getConfigAbTestMin(
 	countryGroupId: CountryGroupId,
 	contribType: ContributionType,
-	VariantData: VariantData,
+	variantData: VariantData,
 ): number {
-	return VariantData.variantA
+	return variantData.variantA
 		? 30
-		: VariantData.variantB
+		: variantData.variantB
 		? 50
 		: config[countryGroupId][contribType].min;
 }
