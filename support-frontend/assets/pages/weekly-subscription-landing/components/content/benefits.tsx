@@ -1,5 +1,4 @@
 import { List } from 'components/list/list';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';
 
@@ -15,19 +14,7 @@ const coreBenefits = [
 	},
 ];
 
-function getBenefits(countryId: IsoCountry) {
-	if (countryId === 'GB') {
-		return [
-			{
-				content: 'Every issue delivered with up to 79% off the cover price',
-			},
-			...coreBenefits,
-			{
-				content:
-					'A free Gift! £10 Guardian Bookshop voucher - exclusive to 12 for £12 quarterly subscribers',
-			},
-		];
-	}
+function getBenefits() {
 	return [
 		{
 			content: 'Every issue delivered with up to 35% off the cover price',
@@ -36,7 +23,7 @@ function getBenefits(countryId: IsoCountry) {
 	];
 }
 
-function Benefits({ countryId }: { countryId: IsoCountry }): JSX.Element {
+function Benefits(): JSX.Element {
 	return (
 		<BenefitsContainer
 			sections={[
@@ -45,7 +32,7 @@ function Benefits({ countryId }: { countryId: IsoCountry }): JSX.Element {
 					content: (
 						<>
 							<BenefitsHeading text="As a subscriber you’ll enjoy" />
-							<List items={getBenefits(countryId)} />
+							<List items={getBenefits()} />
 						</>
 					),
 				},
