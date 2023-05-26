@@ -1,3 +1,4 @@
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { emptyConfiguredRegionAmounts, getGlobal } from './globals';
 
 describe('getGlobal', () => {
@@ -8,15 +9,43 @@ describe('getGlobal', () => {
 				switches: {
 					experiments: {},
 				},
-				amounts: {
-					GBPCountries: emptyConfiguredRegionAmounts,
-					UnitedStates: emptyConfiguredRegionAmounts,
-					EURCountries: emptyConfiguredRegionAmounts,
-					AUDCountries: emptyConfiguredRegionAmounts,
-					International: emptyConfiguredRegionAmounts,
-					NZDCountries: emptyConfiguredRegionAmounts,
-					Canada: emptyConfiguredRegionAmounts,
-				},
+				amounts: [
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__GBPCountries',
+						target: 'GBPCountries' as CountryGroupId,
+					},
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__UnitedStates',
+						target: 'UnitedStates' as CountryGroupId,
+					},
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__Canada',
+						target: 'Canada' as CountryGroupId,
+					},
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__NZDCountries',
+						target: 'NZDCountries' as CountryGroupId,
+					},
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__EURCountries',
+						target: 'EURCountries' as CountryGroupId,
+					},
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__International',
+						target: 'International' as CountryGroupId,
+					},
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__AUDCountries',
+						target: 'AUDCountries' as CountryGroupId,
+					},
+				],
 				contributionTypes: {
 					GBPCountries: [],
 					UnitedStates: [],

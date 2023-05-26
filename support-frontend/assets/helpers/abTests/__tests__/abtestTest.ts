@@ -34,10 +34,70 @@ describe('init', () => {
 		switches: {
 			experiments: {},
 		},
-		amounts: {
-			GBPCountries: {},
-			UnitedStates: {},
-		},
+		amounts: [
+			{
+				testName: 'FALLBACK_AMOUNTS__GBPCountries',
+				liveTestName: '',
+				isLive: false,
+				target: 'GBPCountries',
+				seed: 0,
+				variants: [
+					{
+						variantName: 'CONTROL',
+						defaultContributionType: 'MONTHLY',
+						displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+						amountsCardData: {
+							ONE_OFF: {
+								amounts: [30, 60, 120, 240],
+								defaultAmount: 60,
+								hideChooseYourAmount: false,
+							},
+							MONTHLY: {
+								amounts: [3, 7, 12],
+								defaultAmount: 7,
+								hideChooseYourAmount: false,
+							},
+							ANNUAL: {
+								amounts: [60, 120, 240, 480],
+								defaultAmount: 120,
+								hideChooseYourAmount: false,
+							},
+						},
+					},
+				],
+			},
+			{
+				testName: 'FALLBACK_AMOUNTS__UnitedStates',
+				liveTestName: '',
+				isLive: false,
+				target: 'UnitedStates',
+				seed: 0,
+				variants: [
+					{
+						variantName: 'CONTROL',
+						defaultContributionType: 'MONTHLY',
+						displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+						amountsCardData: {
+							ONE_OFF: {
+								amounts: [25, 50, 100, 250],
+								defaultAmount: 50,
+								hideChooseYourAmount: false,
+							},
+							MONTHLY: {
+								amounts: [7, 15, 30],
+								defaultAmount: 15,
+								hideChooseYourAmount: false,
+							},
+							ANNUAL: {
+								amounts: [50, 100, 250, 500],
+								defaultAmount: 50,
+								hideChooseYourAmount: false,
+							},
+						},
+					},
+				],
+			},
+		],
 	} as Settings;
 
 	afterEach(() => {

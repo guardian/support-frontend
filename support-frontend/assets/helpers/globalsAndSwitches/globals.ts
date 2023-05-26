@@ -1,4 +1,5 @@
 import type { Settings, Status } from 'helpers/globalsAndSwitches/settings';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 import type { AmountsTest, AmountsVariant } from '../contributions';
@@ -57,7 +58,7 @@ export const emptyConfiguredRegionAmounts: AmountsTest = {
 	testName: '',
 	liveTestName: '',
 	isLive: false,
-	target: '',
+	target: 'GBPCountries' as CountryGroupId,
 	seed: 0,
 	variants: emptyAmountsTestVariants,
 };
@@ -68,50 +69,41 @@ const getSettings = (): Settings => {
 		switches: {
 			experiments: {},
 		},
-		// amounts: {
-		// 	GBPCountries: emptyConfiguredRegionAmounts,
-		// 	UnitedStates: emptyConfiguredRegionAmounts,
-		// 	EURCountries: emptyConfiguredRegionAmounts,
-		// 	AUDCountries: emptyConfiguredRegionAmounts,
-		// 	International: emptyConfiguredRegionAmounts,
-		// 	NZDCountries: emptyConfiguredRegionAmounts,
-		// 	Canada: emptyConfiguredRegionAmounts,
-		// },
 		amounts: [
 			{
 				...emptyConfiguredRegionAmounts,
 				testName: 'EMPTY_TEST__GBPCountries',
-				target: 'GBPCountries',
+				target: 'GBPCountries' as CountryGroupId,
 			},
 			{
 				...emptyConfiguredRegionAmounts,
 				testName: 'EMPTY_TEST__UnitedStates',
-				target: 'UnitedStates',
+				target: 'UnitedStates' as CountryGroupId,
 			},
 			{
 				...emptyConfiguredRegionAmounts,
 				testName: 'EMPTY_TEST__Canada',
-				target: 'Canada',
+				target: 'Canada' as CountryGroupId,
 			},
 			{
 				...emptyConfiguredRegionAmounts,
 				testName: 'EMPTY_TEST__NZDCountries',
-				target: 'NZDCountries',
+				target: 'NZDCountries' as CountryGroupId,
 			},
 			{
 				...emptyConfiguredRegionAmounts,
 				testName: 'EMPTY_TEST__EURCountries',
-				target: 'EURCountries',
+				target: 'EURCountries' as CountryGroupId,
 			},
 			{
 				...emptyConfiguredRegionAmounts,
 				testName: 'EMPTY_TEST__International',
-				target: 'International',
+				target: 'International' as CountryGroupId,
 			},
 			{
 				...emptyConfiguredRegionAmounts,
 				testName: 'EMPTY_TEST__AUDCountries',
-				target: 'AUDCountries',
+				target: 'AUDCountries' as CountryGroupId,
 			},
 		],
 		contributionTypes: {
