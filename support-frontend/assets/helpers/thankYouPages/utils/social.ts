@@ -53,7 +53,7 @@ const emailBodyCopy = (
 
 export const getFacebookShareLink = (
 	campaignCode: string | null | undefined,
-	referralCode: string | null | undefined,
+	referralCode: null,
 ): string => {
 	const intcmp = campaignCode
 		? `${INTCMP_FACEBOOK}-${campaignCode}`

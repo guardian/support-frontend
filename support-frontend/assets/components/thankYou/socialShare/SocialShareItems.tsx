@@ -7,7 +7,6 @@ import {
 	SvgLinkedIn,
 	SvgTwitter,
 } from '@guardian/source-react-components';
-import { generateReferralCode } from 'helpers/campaigns/campaignReferralCodes';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
@@ -47,13 +46,8 @@ const getSocialShareCopy = (countryId: IsoCountry): string =>
 function SocialShareIcons({
 	countryId,
 	campaignCode,
-	createReferralCodes,
-	email,
 }: SocialShareIconsProps): JSX.Element {
-	const referralCode =
-		createReferralCodes && campaignCode
-			? generateReferralCode(email, campaignCode)
-			: null;
+	const referralCode = null;
 
 	return (
 		<div css={buttonsContainer}>
