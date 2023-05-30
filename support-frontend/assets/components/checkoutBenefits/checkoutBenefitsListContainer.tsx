@@ -48,7 +48,6 @@ export function CheckoutBenefitsListContainer({
 	const { countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const isAustralia = countryGroupId === 'AUDCountries' ? true : false;
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const minimumContributionAmount = useContributionsSelector(
 		getMinimumContributionAmount,
@@ -91,7 +90,6 @@ export function CheckoutBenefitsListContainer({
 		),
 		checkListData: checkListData({
 			higherTier,
-			isAustralia,
 		}),
 		buttonCopy: getbuttonCopy(
 			higherTier,
