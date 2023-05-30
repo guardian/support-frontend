@@ -25,8 +25,6 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 interface SocialShareIconsProps {
 	countryId: IsoCountry;
 	campaignCode?: string;
-	createReferralCodes: boolean;
-	email: string;
 }
 
 const buttonsContainer = css`

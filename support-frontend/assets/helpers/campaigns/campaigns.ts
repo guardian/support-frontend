@@ -21,7 +21,6 @@ export type CampaignSettings = {
 	tickerSettings?: TickerSettings;
 	goalReachedCopy?: JSX.Element;
 	// If set, the form will be replaced with this if goal reached
-	createReferralCodes: boolean;
 };
 
 const currentCampaignPath: string | null = 'us/contribute';
@@ -45,7 +44,6 @@ export const campaign: CampaignSettings = {
 			goalReachedSecondary: 'but you can still support us',
 		},
 	},
-	createReferralCodes: false,
 };
 
 function campaignEnabledForUser(
