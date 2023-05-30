@@ -47,12 +47,10 @@ function SocialShareIcons({
 	countryId,
 	campaignCode,
 }: SocialShareIconsProps): JSX.Element {
-	const referralCode = null;
-
 	return (
 		<div css={buttonsContainer}>
 			<LinkButton
-				href={getFacebookShareLink(campaignCode, referralCode)}
+				href={getFacebookShareLink(campaignCode)}
 				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)}
 				target="_blank"
 				rel="noopener noreferrer"
@@ -65,7 +63,7 @@ function SocialShareIcons({
 			</LinkButton>
 
 			<LinkButton
-				href={getTwitterShareLink(countryId, campaignCode, referralCode)}
+				href={getTwitterShareLink(countryId, campaignCode)}
 				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
 				target="_blank"
 				rel="noopener noreferrer"
@@ -78,7 +76,7 @@ function SocialShareIcons({
 			</LinkButton>
 
 			<LinkButton
-				href={getLinkedInShareLink(referralCode)}
+				href={getLinkedInShareLink()}
 				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)}
 				target="_blank"
 				rel="noopener noreferrer"
@@ -91,7 +89,7 @@ function SocialShareIcons({
 			</LinkButton>
 
 			<LinkButton
-				href={getEmailShareLink(countryId, campaignCode, referralCode)}
+				href={getEmailShareLink(countryId, campaignCode)}
 				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
 				target="_blank"
 				rel="noopener noreferrer"
