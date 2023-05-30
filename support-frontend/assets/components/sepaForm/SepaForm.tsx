@@ -1,7 +1,6 @@
 import { css } from '@emotion/react';
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
-import { space } from '@guardian/source-foundations';
-import { textSans } from '@guardian/source-foundations/dist/cjs/typography/api';
+import { space, textSans } from '@guardian/source-foundations';
 import {
 	Option as OptionForSelect,
 	Select,

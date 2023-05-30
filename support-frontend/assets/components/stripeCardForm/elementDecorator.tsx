@@ -1,14 +1,17 @@
 import { css } from '@emotion/react';
 import {
 	descriptionId,
-	error,
 	focusHalo,
 	height,
-	neutral,
+	palette,
 	space,
 } from '@guardian/source-foundations';
 import type { LabelProps } from '@guardian/source-react-components';
-import { InlineError, Label } from '@guardian/source-react-components';
+import {
+	InlineError,
+	Label,
+	textInputThemeDefault,
+} from '@guardian/source-react-components';
 import type {
 	StripeCardElementOptions,
 	StripeElementStyleVariant,
@@ -22,7 +25,7 @@ const inlineMessageMargin = css`
 
 const stripeElementErrorStyles = css`
 	& .StripeElement {
-		border: 4px solid ${error[400]};
+		border: 2px solid ${textInputThemeDefault.textInput.borderError};
 	}
 `;
 
@@ -49,7 +52,8 @@ const stripeElementStyles = (isFocused: boolean, error?: string) => css`
 
 	& .StripeElement {
 		height: ${height.inputMedium}px;
-		border: 2px solid ${neutral[46]};
+		border: 1px solid ${textInputThemeDefault.textInput.border};
+		border-radius: ${space[1]}px;
 		padding: 10px ${space[2]}px;
 	}
 
@@ -84,7 +88,7 @@ type ElementDecoratorProps = LabelProps & {
 // Styles for stripe elements
 const baseStyles: StripeElementStyleVariant = {
 	fontSize: `${space[4]}px`,
-	color: neutral[7],
+	color: palette.neutral[7],
 };
 
 /**
