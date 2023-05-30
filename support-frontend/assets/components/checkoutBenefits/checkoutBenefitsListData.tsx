@@ -1,6 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from, neutral, news } from '@guardian/source-foundations';
+import { neutral } from '@guardian/source-foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
 
 const greyedOut = css`
@@ -15,19 +15,8 @@ const boldText = css`
 	font-weight: bold;
 `;
 
-const highlightText = css`
-	color: ${news[500]};
-`;
-
-const highlightTextSpacing = css`
-	${from.tablet} {
-		display: block;
-	} ;
-`;
-
-type CheckListDataProps = {
+type TierUnlocks = {
 	higherTier: boolean;
-	isAustralia: boolean;
 };
 
 export type CheckListData = {
@@ -43,10 +32,7 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 		<SvgCrossRound isAnnouncedByScreenReader size="small" />
 	);
 
-export const checkListData = ({
-	higherTier,
-	isAustralia,
-}: CheckListDataProps): CheckListData[] => {
+export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
 
 	return [
@@ -68,23 +54,6 @@ export const checkListData = ({
 				</p>
 			),
 		},
-		...(isAustralia
-			? [
-					{
-						icon: getSvgIcon(higherTier),
-						text: (
-							<p>
-								<span css={boldText}>
-									Limited-edition Guardian Australia tote bag.{' '}
-								</span>
-								<span css={highlightTextSpacing} />
-								<span css={highlightText}>Offer ends 31 May</span>
-							</p>
-						),
-						maybeGreyedOut: maybeGreyedOutHigherTier,
-					},
-			  ]
-			: []),
 		{
 			icon: getSvgIcon(higherTier),
 			text: (
