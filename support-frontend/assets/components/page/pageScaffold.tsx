@@ -13,7 +13,7 @@ const container = css`
 	flex-direction: column;
 	min-height: 100vh;
 	max-width: 100%;
-	overflow-x: clip;
+	overflow-x: hidden;
 
 	& main {
 		flex: 1;
