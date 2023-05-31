@@ -56,4 +56,4 @@ function Template() {
 	return <SupporterPlusLandingPage thankYouRoute={'/uk/thankyou'} />;
 }
 
-export const Default = Template.bind({});
+export const LandingPage = Template.bind({});
