@@ -1,3 +1,7 @@
+import {
+	getContributionTypeFromSession,
+	getContributionTypeFromUrl,
+} from 'helpers/forms/checkouts';
 import type { Tests } from './abtest';
 // ----- Tests ----- //
 // Note: When setting up a test to run on the contributions thank you page
@@ -119,5 +123,15 @@ export const tests: Tests = {
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 11,
+		canRun: () => {
+			// If URL query string parameter contains annual or monthly contributionType apply abTest
+			const contributionTypesFromUrl = getContributionTypeFromUrl();
+			if (contributionTypesFromUrl) {
+				return contributionTypesFromUrl !== 'ONE_OFF';
+			}
+			// If Session storage contains annual or monthly contributionType apply abTest
+			const contributionTypesFromSession = getContributionTypeFromSession();
+			return contributionTypesFromSession !== 'ONE_OFF';
+		},
 	},
 };
