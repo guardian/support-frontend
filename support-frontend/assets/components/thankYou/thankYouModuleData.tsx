@@ -54,7 +54,6 @@ interface ThankYouModuleData {
 export const getThankYouModuleData = (
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
-	createReferralCodes: boolean,
 	csrf: CsrfState,
 	email: string,
 	campaignCode?: string,
@@ -131,12 +130,7 @@ export const getThankYouModuleData = (
 			header: socialShareHeader,
 			bodyCopy: getSocialShareCopy(countryId),
 			ctas: (
-				<SocialShareIcons
-					countryId={countryId}
-					campaignCode={campaignCode}
-					createReferralCodes={createReferralCodes}
-					email={email}
-				/>
+				<SocialShareIcons countryId={countryId} campaignCode={campaignCode} />
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SOCIAL,
 		},

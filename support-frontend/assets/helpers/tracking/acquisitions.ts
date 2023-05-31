@@ -67,7 +67,6 @@ export type PaymentAPIAcquisitionData = {
 
 const ACQUISITIONS_PARAM = 'acquisitionData';
 const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
-const REFERRAL_DATA_PARAM = 'referralData';
 
 // ----- Campaigns ----- //
 
@@ -253,21 +252,6 @@ function deriveSubsAcquisitionData(
 	return { ...referrerAcquisitionData, abTests };
 }
 
-function deserialiseReferralData(serialised: string): Record<string, unknown> {
-	const [source, socialPlatform, referralCode] = serialised.split('_');
-
-	return {
-		componentId: `${source}_${socialPlatform}`,
-		source: 'SOCIAL',
-		queryParameters: [
-			{
-				name: 'referralCode',
-				value: referralCode,
-			},
-		],
-	};
-}
-
 // Reads the acquisition data from sessionStorage.
 function getReferrerAcquisitionDataFromSessionStorage():
 	| ReferrerAcquisitionData
@@ -287,18 +271,6 @@ function getAcquisitionDataFromAcquisitionDataParam():
 	| undefined {
 	if (getQueryParameter(ACQUISITIONS_PARAM)) {
 		return deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM));
-	}
-
-	return null;
-}
-
-// Reads the acquisition data from the &referralData param containing _ separated values.
-function getAcquisitionDataFromReferralDataParam():
-	| Record<string, unknown>
-	| null
-	| undefined {
-	if (getQueryParameter(REFERRAL_DATA_PARAM)) {
-		return deserialiseReferralData(getQueryParameter(REFERRAL_DATA_PARAM));
 	}
 
 	return null;
@@ -325,7 +297,6 @@ function getAcquisitionDataFromPPCParams():
 function getReferrerAcquisitionData(): ReferrerAcquisitionData {
 	// Read acquisitonData from the various query params, or from sessionStorage, in the following precedence
 	const candidateAcquisitionData =
-		getAcquisitionDataFromReferralDataParam() ??
 		getAcquisitionDataFromAcquisitionDataParam() ??
 		getAcquisitionDataFromPPCParams() ??
 		getReferrerAcquisitionDataFromSessionStorage();
