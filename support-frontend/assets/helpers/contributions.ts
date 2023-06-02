@@ -280,11 +280,14 @@ function getConfigAbTestMin(
 	contribType: ContributionType,
 	variantData: VariantData,
 ): number {
-	return variantData.variantA
-		? 30
-		: variantData.variantB
-		? 50
-		: config[countryGroupId][contribType].min;
+	if (contribType === 'ANNUAL') {
+		if (variantData.variantA) {
+			return 30;
+		} else if (variantData.variantB) {
+			return 50;
+		}
+	}
+	return config[countryGroupId][contribType].min;
 }
 
 function validateContribution(
