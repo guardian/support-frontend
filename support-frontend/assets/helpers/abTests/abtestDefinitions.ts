@@ -121,7 +121,7 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 11,
 		canRun: () => {
-			// If URL query string parameter contains annual or monthly contributionType apply abTest
+			// If contributionTypesFromUrl is not ONE_OFF apply the abTest
 			const contributionTypesFromUrl = getContributionTypeFromUrl();
 			return contributionTypesFromUrl !== 'ONE_OFF';
 		},
