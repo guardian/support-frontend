@@ -33,12 +33,6 @@ export function PaymentFrequencyTabsContainer({
 	);
 	const productType = useContributionsSelector(getContributionType);
 
-	// Force to monthly if hideOneOff, OneOff and refresh pressed
-	const contributionType = useContributionsSelector(getContributionType);
-	if (hideOneOff && contributionType === 'ONE_OFF') {
-		onTabChange('MONTHLY');
-	}
-
 	function onTabChange(contributionType: ContributionType) {
 		const paymentMethodToSelect = getPaymentMethodToSelect(
 			contributionType,
