@@ -94,7 +94,6 @@ const alink = css`
 	color: ${brand[500]};
 	text-decoration: underline;
 	&:hover {
-		font-weight: 'bold';
 		cursor: pointer;
 	}
 `;
