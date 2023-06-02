@@ -1,6 +1,6 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from, neutral, news } from '@guardian/source-foundations';
+import { neutral } from '@guardian/source-foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
 
 const greyedOut = css`
@@ -15,20 +15,8 @@ const boldText = css`
 	font-weight: bold;
 `;
 
-const highlightText = css`
-	color: ${news[500]};
-`;
-
-const highlightTextSpacing = css`
-	${from.tablet} {
-		display: block;
-	} ;
-`;
-
-type CheckListDataProps = {
+type TierUnlocks = {
 	higherTier: boolean;
-	isAustralia: boolean;
-	isEmotionalBenefitTestVariant: boolean;
 };
 
 export type CheckListData = {
@@ -44,63 +32,10 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 		<SvgCrossRound isAnnouncedByScreenReader size="small" />
 	);
 
-export const checkListData = ({
-	higherTier,
-	isAustralia,
-	isEmotionalBenefitTestVariant,
-}: CheckListDataProps): CheckListData[] => {
+export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
 
-	const emotionalBenefits = [
-		{
-			icon: getSvgIcon(true),
-			text: (
-				<p>
-					<span css={boldText}>Fund fearless, independent reporting </span>
-					that's open and free for everyone
-				</p>
-			),
-		},
-		{
-			icon: getSvgIcon(true),
-			text: (
-				<p>
-					<span css={boldText}>Get a regular supporter newsletter </span> with
-					exclusive insights from our newsroom
-				</p>
-			),
-		},
-		{
-			icon: getSvgIcon(true),
-			text: (
-				<p>
-					<span css={boldText}>See fewer asks for support </span>so you can read
-					uninterrupted
-				</p>
-			),
-		},
-		{
-			icon: getSvgIcon(higherTier),
-			text: (
-				<p>
-					<span css={boldText}>Gain full access to our news app </span>to read
-					our reporting on the go
-				</p>
-			),
-			maybeGreyedOut: maybeGreyedOutHigherTier,
-		},
-		{
-			icon: getSvgIcon(higherTier),
-			text: (
-				<p>
-					<span css={boldText}>Read ad-free </span>on all devices
-				</p>
-			),
-			maybeGreyedOut: maybeGreyedOutHigherTier,
-		},
-	];
-
-	const existingBenefits = [
+	return [
 		{
 			icon: getSvgIcon(true),
 			text: (
@@ -119,23 +54,6 @@ export const checkListData = ({
 				</p>
 			),
 		},
-		...(isAustralia
-			? [
-					{
-						icon: getSvgIcon(higherTier),
-						text: (
-							<p>
-								<span css={boldText}>
-									Limited-edition Guardian Australia tote bag.{' '}
-								</span>
-								<span css={highlightTextSpacing} />
-								<span css={highlightText}>Offer ends 31 May</span>
-							</p>
-						),
-						maybeGreyedOut: maybeGreyedOutHigherTier,
-					},
-			  ]
-			: []),
 		{
 			icon: getSvgIcon(higherTier),
 			text: (
@@ -157,8 +75,4 @@ export const checkListData = ({
 			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
 	];
-
-	return isEmotionalBenefitTestVariant && !isAustralia
-		? emotionalBenefits
-		: existingBenefits;
 };

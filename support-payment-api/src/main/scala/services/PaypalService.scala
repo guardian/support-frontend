@@ -103,7 +103,7 @@ class PaypalService(config: PaypalConfig)(implicit pool: PaypalThreadPool) exten
   private def buildPaypalTransactions(currencyCode: String, amount: BigDecimal): java.util.List[Transaction] = {
     import scala.jdk.CollectionConverters._
 
-    val description = "Contribution to the guardian"
+    val description = "Contribution to the Guardian"
     val stringAmount = amount.setScale(2, RoundingMode.HALF_UP).toString
 
     val paypalAmount = new Amount()

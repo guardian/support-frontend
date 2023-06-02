@@ -3,12 +3,12 @@
 import { css } from '@emotion/react';
 import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import {
-	brand,
 	from,
-	neutral,
+	palette,
 	space,
 	transitions,
 } from '@guardian/source-foundations';
+import { textInputThemeDefault } from '@guardian/source-react-components';
 import { useEffect } from 'preact/hooks';
 import { RadioWithImage } from './radioWithImage';
 
@@ -27,19 +27,24 @@ const radio = css`
 `;
 
 const focused = css`
-	border: 2px solid ${brand[500]};
+	box-shadow: inset 0 0 0 2px ${textInputThemeDefault.textInput.borderActive};
 	margin-top: ${space[2]}px;
 	border-radius: 4px;
 `;
 
 const notFocused = css`
-	border: 2px solid ${neutral[46]};
+	/* Using box shadows prevents layout shift when the rows are expanded */
+	box-shadow: inset 0 0 0 1px ${textInputThemeDefault.textInput.border};
 	margin-top: ${space[2]}px;
 	border-radius: 4px;
 `;
 
 const borderBottom = css`
-	background-image: linear-gradient(to top, ${brand[500]} 2px, transparent 2px);
+	background-image: linear-gradient(
+		to top,
+		${palette.brand[500]} 2px,
+		transparent 2px
+	);
 `;
 
 const accordionBodyPadding = css`

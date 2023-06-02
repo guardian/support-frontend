@@ -287,6 +287,8 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
           paypalBackend
             .executePayment(executePaypalPaymentData, clientBrowserInfo)
             .futureRight mustBe enrichedPaypalPaymentMock
+
+          verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
         }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new PaypalBackendFixture {
@@ -308,6 +310,8 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         paypalBackend
           .executePayment(executePaypalPaymentData, clientBrowserInfo)
           .futureRight mustBe enrichedPaypalPaymentMock
+
+        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
       }
     }
 
@@ -357,6 +361,8 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         )
 
         result.futureValue mustBe List(BackendError.Database(dbError))
+
+        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
       }
 
       "return a combined error if stream and BigQuery fail" in new PaypalBackendFixture {
@@ -384,6 +390,8 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
           clientBrowserInfo,
         )
         result.futureValue mustEqual errors
+
+        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
       }
 
     }

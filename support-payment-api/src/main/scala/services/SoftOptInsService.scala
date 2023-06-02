@@ -18,16 +18,19 @@ import scala.util.Try
 class SoftOptInsService(sqsClient: AmazonSQSAsync, queueUrlResponse: Future[Either[SoftOptInsServiceError, String]])
     extends StrictLogging {
   def sendMessage(
-      message: Message,
+      identityId: Option[Long],
   )(implicit executionContext: ExecutionContext): EitherT[Future, SoftOptInsServiceError, Unit] = {
-    logger.info(s"Preparing to send message: ${message.asJson.noSpaces}")
-
-    message.identityId match {
+    identityId match {
       case None =>
         val error = SoftOptInsServiceError("Identity ID is None, soft opt-ins cannot be set")
         EitherT.leftT[Future, Unit](error)
 
-      case Some(_) =>
+      case Some(id) =>
+        val identityIdString = id.toString
+        val message = Message(identityIdString)
+
+        logger.info(s"Preparing to send message: ${message.asJson.noSpaces}")
+
         for {
           queueUrl <- EitherT(queueUrlResponse)
           _ <- sendRequest(queueUrl, message)
@@ -90,7 +93,7 @@ object SoftOptInsService extends StrictLogging {
   }
 
   case class Message(
-      identityId: Option[Long],
+      identityId: String,
       eventType: String = "Acquisition",
       productName: String = "Contribution",
   )

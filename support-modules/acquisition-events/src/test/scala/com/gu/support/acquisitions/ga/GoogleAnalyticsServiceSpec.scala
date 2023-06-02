@@ -59,7 +59,6 @@ class GoogleAnalyticsServiceSpec extends AsyncWordSpecLike with Matchers with La
     readerType = ReaderType.Direct,
     acquisitionType = AcquisitionType.Purchase,
     zuoraSubscriptionNumber = None,
-    zuoraAccountNumber = None,
     contributionId = None,
     paymentId = None,
     queryParameters = Nil,
