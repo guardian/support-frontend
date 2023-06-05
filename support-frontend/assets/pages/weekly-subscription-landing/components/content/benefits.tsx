@@ -1,4 +1,5 @@
 import { List } from 'components/list/list';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';
 
@@ -14,7 +15,10 @@ const coreBenefits = [
 	},
 ];
 
-function getBenefits() {
+function getBenefits(countryId: IsoCountry) {
+	if (countryId === 'AU') {
+		return [...coreBenefits];
+	}
 	return [
 		{
 			content: 'Every issue delivered with up to 35% off the cover price',
@@ -23,7 +27,7 @@ function getBenefits() {
 	];
 }
 
-function Benefits(): JSX.Element {
+function Benefits({ countryId }: { countryId: IsoCountry }): JSX.Element {
 	return (
 		<BenefitsContainer
 			sections={[
@@ -32,7 +36,7 @@ function Benefits(): JSX.Element {
 					content: (
 						<>
 							<BenefitsHeading text="As a subscriber you’ll enjoy" />
-							<List items={getBenefits()} />
+							<List items={getBenefits(countryId)} />
 						</>
 					),
 				},
