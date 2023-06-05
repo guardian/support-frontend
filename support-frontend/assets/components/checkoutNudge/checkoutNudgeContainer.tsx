@@ -1,8 +1,9 @@
 import { useState } from 'preact/hooks';
-import { config } from 'helpers/contributions';
+import { getConfigAbTestMin } from 'helpers/contributions';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -24,15 +25,27 @@ export function CheckoutNudgeContainer({
 
 	const [displayNudge, setDisplayNudge] = useState(true);
 
+	const nudgeMinVariantA = useContributionsSelector(
+		isUserInAbVariant('nudgeMinAmountsTest', 'variantA'),
+	);
+	const nudgeMinVariantB = useContributionsSelector(
+		isUserInAbVariant('nudgeMinAmountsTest', 'variantB'),
+	);
+
 	const currencyGlyph = glyph(detect(countryGroupId));
-	const minAmount = config[countryGroupId]['ANNUAL'].min;
-
+	const minAmount = getConfigAbTestMin(countryGroupId, 'ANNUAL', {
+		variantA: nudgeMinVariantA,
+		variantB: nudgeMinVariantB,
+	});
+	const weeklyMinAmount =
+		Math.round(Math.ceil((minAmount * 100) / 52) / 10) * 10;
 	const minWeeklyAmount =
-		countryGroupId === 'GBPCountries'
-			? Math.ceil((minAmount * 100) / 52).toString() + `p`
+		countryGroupId === 'GBPCountries' && weeklyMinAmount < 100
+			? weeklyMinAmount.toString() + `p`
 			: currencyGlyph +
-			  (Math.ceil((minAmount * 100) / 52) / 100).toFixed(2).toString();
-
+			  (weeklyMinAmount / 100)
+					.toFixed(weeklyMinAmount % 100 === 0 ? 0 : 2)
+					.toString();
 	const [title, subtitle, paragraph] = [
 		`Support us every year`,
 		`from just ${
