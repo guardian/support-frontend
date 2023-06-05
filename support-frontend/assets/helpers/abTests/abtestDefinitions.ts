@@ -60,27 +60,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.subscriptions.subsWeeklyPages,
 		seed: 11,
 	},
-	newspaperPriceCards: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage:
-			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
-		seed: 11,
-	},
 	supporterPlusV2: {
 		variants: [
 			{
