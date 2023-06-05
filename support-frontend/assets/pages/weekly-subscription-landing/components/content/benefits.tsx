@@ -16,7 +16,7 @@ const coreBenefits = [
 ];
 
 function getBenefits(countryId: IsoCountry) {
-	if (countryId === 'AU') {
+	if (countryId === 'GB') {
 		return [...coreBenefits];
 	}
 	return [
