@@ -1,7 +1,5 @@
 import type { Participations } from 'helpers/abTests/abtest';
-// import { FALLBACK_AMOUNTS } from 'helpers/abTests/helpers';
 import { getFallbackAmounts } from 'helpers/abTests/helpers';
-// import type { ContributionAmounts } from 'helpers/contributions';
 import type { SelectedAmountsVariant } from 'helpers/contributions';
 import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';

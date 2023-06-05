@@ -1,9 +1,5 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-// import type {
-// 	AmountsCardData,
-// 	ContributionTypes,
-// } from 'helpers/contributions';
 import type {
 	ContributionTypes,
 	SelectedAmountsVariant,

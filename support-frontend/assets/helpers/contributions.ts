@@ -45,35 +45,6 @@ export const logInvalidCombination = (
 	);
 };
 
-// export type AmountSelection = {
-// 	amounts: number[];
-// 	defaultAmount: number;
-// 	hideChooseYourAmount?: boolean;
-// };
-
-// export type ContributionAmounts = {
-// 	[type in ContributionType]: AmountSelection;
-// };
-
-// export type AmountsTestVariant = {
-// 	name: string;
-// 	amounts: ContributionAmounts;
-// };
-
-// export type AmountsTest = {
-// 	name: string;
-// 	isLive: boolean;
-// 	variants: AmountsTestVariant[];
-// 	seed: number;
-// };
-
-// export type ConfiguredRegionAmounts = {
-// 	control: ContributionAmounts;
-// 	test?: AmountsTest;
-// };
-
-// export type ConfiguredAmounts = Record<CountryGroupId, ConfiguredRegionAmounts>;
-
 export interface AmountValuesObject {
 	amounts: number[];
 	defaultAmount: number;
