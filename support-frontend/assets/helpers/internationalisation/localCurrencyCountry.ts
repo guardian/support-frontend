@@ -1,4 +1,4 @@
-import type { Config, ContributionAmounts } from '../contributions';
+import type { AmountsCardData, Config } from '../contributions';
 import type { IsoCountry } from './country';
 import type { IsoCurrency } from './currency';
 
@@ -6,7 +6,7 @@ export type LocalCurrencyCountry = {
 	countryCode: IsoCountry;
 	countryName: string;
 	currency: IsoCurrency;
-	amounts: Omit<ContributionAmounts, 'MONTHLY' | 'ANNUAL'>;
+	amounts: Omit<AmountsCardData, 'MONTHLY' | 'ANNUAL'>;
 	config: Omit<Config, 'MONTHLY' | 'ANNUAL'>;
 };
 export const localCurrencyCountries: {
@@ -20,6 +20,7 @@ export const localCurrencyCountries: {
 			ONE_OFF: {
 				amounts: [250, 500, 1000, 2500],
 				defaultAmount: 500,
+				hideChooseYourAmount: false,
 			},
 		},
 		config: {
@@ -40,6 +41,7 @@ export const localCurrencyCountries: {
 			ONE_OFF: {
 				amounts: [27, 55, 110, 275],
 				defaultAmount: 55,
+				hideChooseYourAmount: false,
 			},
 		},
 		config: {
@@ -60,6 +62,7 @@ export const localCurrencyCountries: {
 			ONE_OFF: {
 				amounts: [250, 500, 1000, 2500],
 				defaultAmount: 500,
+				hideChooseYourAmount: false,
 			},
 		},
 		config: {
@@ -80,6 +83,7 @@ export const localCurrencyCountries: {
 			ONE_OFF: {
 				amounts: [185, 375, 745, 1850],
 				defaultAmount: 375,
+				hideChooseYourAmount: false,
 			},
 		},
 		config: {
