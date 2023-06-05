@@ -16,8 +16,13 @@ const coreBenefits = [
 ];
 
 function getBenefits(countryId: IsoCountry) {
-	if (countryId === 'GB') {
-		return [...coreBenefits];
+	if (countryId === 'AU') {
+		return [
+			{
+				content: 'Every issue delivered with up to 35% off the cover price',
+			},
+			...coreBenefits,
+		];
 	}
 	return [
 		{
