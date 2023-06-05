@@ -32,7 +32,7 @@ class SupporterProductDataService(environment: Environment) extends StrictLoggin
               productRatePlanName = "Single Contribution",
               termEndDate = contributionData.created.toLocalDate
                 .plusYears(8)
-                .plusMonths(1), // 8 years and 1 month is our standard data retention period. As there are no benefits attached to a single contribution we don't need to remove them sooner
+                .plusWeeks(1), // 8 years and 1 week is our standard data retention period. As there are no benefits attached to a single contribution we don't need to remove them sooner
               contractEffectiveDate = contributionData.created.toLocalDate,
               contributionAmount = Some(
                 ContributionAmount(contributionData.amount, contributionData.currency.toString),
