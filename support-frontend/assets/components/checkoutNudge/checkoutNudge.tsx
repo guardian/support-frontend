@@ -91,12 +91,13 @@ const link = css`
 	}
 `;
 const alink = css`
-	color: ${brand[500]};
-	text-decoration: underline;
-	&:hover {
-		cursor: pointer;
-	}
-`;
+		color: ${brand[500]};
+		text-decoration: underline;
+		&:hover {
+      fontWeight:'bold';
+			cursor: pointer;
+		},
+	`;
 
 export type CheckoutNudgeProps = {
 	contributionType: ContributionType;

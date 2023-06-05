@@ -31,11 +31,6 @@ export type RegularContributionType = keyof RegularContributionTypeMap<null>;
 export type ContributionType = keyof ContributionTypeMap<null>;
 export type PaymentMatrix<T> = ContributionTypeMap<PaymentMethodMap<T>>;
 
-export type VariantData = {
-	variantA: boolean;
-	variantB: boolean;
-};
-
 export const contributionTypeIsRecurring = (
 	contributionType: ContributionType,
 ): boolean => contributionType === 'MONTHLY' || contributionType === 'ANNUAL';
@@ -275,21 +270,6 @@ const config: Record<CountryGroupId, Config> = {
 };
 
 // ----- Functions ----- //
-function getConfigAbTestMin(
-	countryGroupId: CountryGroupId,
-	contribType: ContributionType,
-	variantData: VariantData,
-): number {
-	if (contribType === 'ANNUAL') {
-		if (variantData.variantA) {
-			return 30;
-		} else if (variantData.variantB) {
-			return 50;
-		}
-	}
-	return config[countryGroupId][contribType].min;
-}
-
 function validateContribution(
 	input: number,
 	contributionType: ContributionType,
@@ -529,7 +509,6 @@ const contributionTypeAvailable = (
 // ----- Exports ----- //
 export {
 	config,
-	getConfigAbTestMin,
 	toContributionType,
 	generateContributionTypes,
 	validateContribution,

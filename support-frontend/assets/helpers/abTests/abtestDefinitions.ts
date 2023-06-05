@@ -126,27 +126,4 @@ export const tests: Tests = {
 			return contributionTypesFromUrl !== 'ONE_OFF';
 		},
 	},
-	nudgeMinAmountsTest: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variantA',
-			},
-			{
-				id: 'variantB',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: false,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		seed: 9,
-	},
 };
