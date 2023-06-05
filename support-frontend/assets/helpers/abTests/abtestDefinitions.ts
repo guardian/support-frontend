@@ -1,3 +1,4 @@
+import { getContributionTypeFromUrl } from 'helpers/forms/checkouts';
 import type { Tests } from './abtest';
 // ----- Tests ----- //
 // Note: When setting up a test to run on the contributions thank you page
@@ -100,27 +101,52 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 1,
 	},
-	nudgeMinAmountsTest: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variantA',
-			},
-			{
-				id: 'variantB',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: false,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		seed: 9,
-	},
+  singleLessProminent: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variant',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+    seed: 11,
+    canRun: () => {
+      // If contributionTypesFromUrl is not ONE_OFF apply the abTest
+      const contributionTypesFromUrl = getContributionTypeFromUrl();
+      return contributionTypesFromUrl !== 'ONE_OFF';
+    },
+  },
+  nudgeMinAmountsTest: {
+    variants: [
+      {
+        id: 'control',
+      },
+      {
+        id: 'variantA',
+      },
+      {
+        id: 'variantB',
+      },
+    ],
+    audiences: {
+      ALL: {
+        offset: 0,
+        size: 1,
+      },
+    },
+    isActive: false,
+    referrerControlled: false,
+    targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+    seed: 9,
+  },
 };
