@@ -74,7 +74,7 @@ const getWeeklyImage = (isTop: boolean) => {
 function get12for12Subtitle(): string | undefined {
 	const today = new Date();
 	const startDate = new Date('2023-05-12');
-	const endDate = new Date('2023-06-12');
+	const endDate = new Date('2023-06-25');
 
 	if (today >= startDate && today <= endDate) {
 		return '£12 for 12 issues';
