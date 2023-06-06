@@ -117,7 +117,6 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 				test: /\.([jt]sx?|mjs)$/,
 				exclude: {
 					and: [/node_modules/],
-					not: [/@guardian\/(?!(automat-modules))/],
 				},
 				use: [
 					{

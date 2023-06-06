@@ -142,7 +142,9 @@ function getBillingCountryAndState(state: ContributionsState): {
 	if (isPaymentRequestButton && paymentMethod.country) {
 		return {
 			billingCountry: paymentMethod.country,
-			billingState: paymentMethod.state ?? '',
+			billingState:
+				paymentMethod.state ??
+				(formCountry === paymentMethod.country ? formState : ''),
 		};
 	} else {
 		return {

@@ -1,3 +1,4 @@
+import { getContributionTypeFromUrl } from 'helpers/forms/checkouts';
 import type { Tests } from './abtest';
 // ----- Tests ----- //
 // Note: When setting up a test to run on the contributions thank you page
@@ -59,27 +60,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.subscriptions.subsWeeklyPages,
 		seed: 11,
 	},
-	newspaperPriceCards: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage:
-			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
-		seed: 11,
-	},
 	supporterPlusV2: {
 		variants: [
 			{
@@ -100,7 +80,7 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 1,
 	},
-	emotionalBenefitTest: {
+	singleLessProminent: {
 		variants: [
 			{
 				id: 'control',
@@ -113,36 +93,37 @@ export const tests: Tests = {
 			ALL: {
 				offset: 0,
 				size: 1,
-				breakpoint: {
-					minWidth: 'tablet',
-				},
 			},
 		},
 		isActive: true,
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		seed: 13,
+		seed: 11,
+		canRun: () => {
+			// If contributionTypesFromUrl is not ONE_OFF apply the abTest
+			const contributionTypesFromUrl = getContributionTypeFromUrl();
+			return contributionTypesFromUrl !== 'ONE_OFF';
+		},
 	},
-	supporterPlusMobileTest2: {
+	nudgeMinAmountsTest: {
 		variants: [
 			{
 				id: 'control',
 			},
 			{
-				id: 'variant',
+				id: 'variantA',
+			},
+			{
+				id: 'variantB',
 			},
 		],
 		audiences: {
 			ALL: {
 				offset: 0,
 				size: 1,
-				breakpoint: {
-					minWidth: 'mobile',
-					maxWidth: 'tablet',
-				},
 			},
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 9,

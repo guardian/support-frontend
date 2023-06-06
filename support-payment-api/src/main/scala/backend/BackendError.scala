@@ -25,6 +25,8 @@ sealed abstract class BackendError extends Exception {
     case BackendError.Email(err) => err.getMessage
     case BackendError.TrackingError(err) => err.getMessage
     case BackendError.MultipleErrors(errors) => errors.map(_.getMessage).mkString(" & ")
+    case BackendError.SoftOptInsServiceError(err) => err
+    case BackendError.SupporterProductDataError(err) => err
   }
 }
 

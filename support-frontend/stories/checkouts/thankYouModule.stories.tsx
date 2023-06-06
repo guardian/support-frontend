@@ -149,14 +149,7 @@ ShareYourSupport.args = {
 	icon: getThankYouModuleIcon('socialShare'),
 	header: socialShareHeader,
 	bodyCopy: getSocialShareCopy('GB'),
-	ctas: (
-		<SocialShareIcons
-			countryId="GB"
-			campaignCode="Us_eoy_2021"
-			createReferralCodes={false}
-			email=""
-		/>
-	),
+	ctas: <SocialShareIcons countryId="GB" campaignCode="Us_eoy_2021" />,
 };
 
 export const Feedback = Template.bind({});

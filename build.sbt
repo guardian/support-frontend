@@ -43,7 +43,7 @@ inThisBuild(
     scalaVersion := "2.13.10",
     // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
     updateOptions := updateOptions.value.withCachedResolution(true),
-    resolvers ++= Seq(Resolver.sonatypeRepo("releases")), // libraries that haven't yet synced to maven central
+    resolvers ++= Resolver.sonatypeOssRepos("releases"), // libraries that haven't yet synced to maven central
   ),
 )
 
@@ -333,4 +333,4 @@ lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisitio
 
 lazy val `support-lambdas` = (project in file("support-lambdas"))
   .settings(scalafmtSettings)
-  .aggregate(`stripe-intent`, `it-test-runner`, `acquisitions-firehose-transformer`, `acquisition-events-api`)
+  .aggregate(`stripe-intent`, `it-test-runner`, `acquisitions-firehose-transformer`)

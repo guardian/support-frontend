@@ -81,7 +81,6 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
       Direct,
       Purchase,
       Some("subscription number"),
-      Some("account number"),
       Some("contributionId"),
       Some("paymentId1234"),
       List(QueryParameter("foo", "bar")),

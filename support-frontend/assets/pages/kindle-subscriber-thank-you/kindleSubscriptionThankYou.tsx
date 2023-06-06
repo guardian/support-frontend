@@ -77,7 +77,6 @@ export function KindleSubscriptionThankYou(): JSX.Element {
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
-		campaignSettings?.createReferralCodes ?? false,
 		csrf,
 		email,
 		campaignSettings?.campaignCode,

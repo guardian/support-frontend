@@ -60,6 +60,7 @@ const tooltipContainer = css`
 `;
 
 const tooltipCss = css`
+	overflow: hidden;
 	${textSans.small()};
 	background-color: #606060;
 	color: white;
