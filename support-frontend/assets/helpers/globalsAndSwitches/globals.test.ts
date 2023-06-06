@@ -1,5 +1,21 @@
+import type { AmountsTest, AmountsTests } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { emptyConfiguredRegionAmounts, getGlobal } from './globals';
+
+const getSpecifiedRegionAmountsFromGlobal = (
+	target: string,
+	path: string,
+): AmountsTest | Record<string, never> => {
+	const allAmountsTests: AmountsTests | null = getGlobal(path);
+	if (!allAmountsTests) {
+		return {};
+	}
+	const testArray = allAmountsTests.filter((t) => t.target === target);
+	if (!testArray.length) {
+		return {};
+	}
+	return testArray[0];
+};
 
 describe('getGlobal', () => {
 	beforeEach(() => {
@@ -61,15 +77,26 @@ describe('getGlobal', () => {
 	});
 
 	it('uses the passed path to traverse the window.guardian settings object', () => {
-		expect(getGlobal('settings.amounts.GBPCountries')).toEqual(
-			emptyConfiguredRegionAmounts,
-		);
+		expect(
+			getSpecifiedRegionAmountsFromGlobal('GBPCountries', 'settings.amounts'),
+		).toEqual({
+			...emptyConfiguredRegionAmounts,
+			testName: 'EMPTY_TEST__GBPCountries',
+			target: 'GBPCountries',
+		});
 	});
 
 	it('uses the passed path to traverse the window.guardian settings object even if given a fully qualified path', () => {
-		expect(getGlobal('window.guardian.settings.amounts.GBPCountries')).toEqual(
-			emptyConfiguredRegionAmounts,
-		);
+		expect(
+			getSpecifiedRegionAmountsFromGlobal(
+				'GBPCountries',
+				'window.guardian.settings.amounts',
+			),
+		).toEqual({
+			...emptyConfiguredRegionAmounts,
+			testName: 'EMPTY_TEST__GBPCountries',
+			target: 'GBPCountries',
+		});
 	});
 
 	it('returns any item reached in traversal that is not an object', () => {
