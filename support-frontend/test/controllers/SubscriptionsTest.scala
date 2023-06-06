@@ -34,51 +34,18 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    // This needs to fail - mapping old amounts model # STARTS
-
-    // val amount = 25
-    // val selection = AmountsSelection(
-    //   amounts = List(amount),
-    //   defaultAmount = 25,
-    //   hideChooseYourAmount = None,
-    // )
-    // val contributionAmounts = ContributionAmounts(
-    //   ONE_OFF = selection,
-    //   MONTHLY = selection,
-    //   ANNUAL = selection,
-    // )
-    // val configuredRegionAmounts = ConfiguredRegionAmounts(
-    //   control = contributionAmounts,
-    //   test = None,
-    // )
-    // val configuredAmounts = ConfiguredAmounts(
-    //   GBPCountries = configuredRegionAmounts,
-    //   UnitedStates = configuredRegionAmounts,
-    //   EURCountries = configuredRegionAmounts,
-    //   AUDCountries = configuredRegionAmounts,
-    //   International = configuredRegionAmounts,
-    //   NZDCountries = configuredRegionAmounts,
-    //   Canada = configuredRegionAmounts,
-    // )
-
     val amount = 25
-    val selection = AmountValuesObject(
+    val selection = AmountsSelection(
       amounts = List(amount),
       defaultAmount = 25,
-      hideChooseYourAmount = false,
+      hideChooseYourAmount = Option(false),
     )
-    val amountsCardData = AmountsCardData(
+    val amountsCardData = ContributionAmounts(
       ONE_OFF = selection,
       MONTHLY = selection,
       ANNUAL = selection,
     )
 
-// export interface AmountsVariant {
-//   variantName: string;
-//   defaultContributionType: ContributionType;
-//   displayContributionType: ContributionType[];
-//   amountsCardData: AmountsCardData;
-// }
     val amountsVariant = AmountsVariant(
       variantName = "subscriptions-test-variant",
       defaultContributionType = "MONTHLY",
@@ -86,38 +53,16 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       amountsCardData = amountsCardData,
     )
 
-// export interface AmountsTest {
-//   testName: string;
-//   liveTestName?: string;
-//   isLive: boolean;
-//   target: CountryGroupId | IsoCountry;
-//   seed: number;
-//   variants: AmountsVariant[];
-// }
     val amountsTest = AmountsTest(
-      testName = "subscriptions-test",
+      testName = "subscriptions-default-test",
+      liveTestName = Option("subscriptions-AB-test"),
       isLive = false,
       target = "GBPCountries",
       seed = 0,
       variants = List(amountsVariant),
     )
 
-    // val amountsTests = List(amountsTest)
-
-    // val configuredRegionAmounts = ConfiguredRegionAmounts(
-    //   control = contributionAmounts,
-    //   test = None,
-    // )
-    // val configuredAmounts = ConfiguredAmounts(
-    //   GBPCountries = configuredRegionAmounts,
-    //   UnitedStates = configuredRegionAmounts,
-    //   EURCountries = configuredRegionAmounts,
-    //   AUDCountries = configuredRegionAmounts,
-    //   International = configuredRegionAmounts,
-    //   NZDCountries = configuredRegionAmounts,
-    //   Canada = configuredRegionAmounts,
-    // )
-    // This needs to fail # ENDS
+    val amountsTests = List(amountsTest)
 
     val contributionTypesSettings = List(
       ContributionTypeSetting(
@@ -145,8 +90,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         campaignSwitches = CampaignSwitches(On, On),
         recaptchaSwitches = RecaptchaSwitches(On, On),
       ),
-      // amounts = amountsTests,
-      AmountsTests(List(amountsTest)),
+      amountsTests,
       ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),
       MetricUrl("http://localhost"),
     )
@@ -216,6 +160,5 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       status(result) mustBe 200
       contentAsString(result) must include("digitalSubscriptionCheckoutPage.js")
     }
-
   }
 }
