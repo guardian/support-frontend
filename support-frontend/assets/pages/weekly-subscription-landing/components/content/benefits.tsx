@@ -15,8 +15,19 @@ const coreBenefits = [
 	},
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- per country benefits list will have frequent future use
 function getBenefits(countryId: IsoCountry) {
+	if (countryId === 'AU') {
+		return [
+			{
+				content: 'Every issue delivered with up to 91% off the cover price',
+			},
+			...coreBenefits,
+			{
+				content:
+					'A free Guardian Weekly tote bag with every 12 for 12 subscription',
+			},
+		];
+	}
 	return [
 		{
 			content: 'Every issue delivered with up to 35% off the cover price',
