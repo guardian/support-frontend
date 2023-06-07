@@ -16,7 +16,7 @@ const cardContainerCss = css`
 
 	padding: ${space[3]}px ${space[3]}px ${space[4]}px;
 	background-color: ${neutral[100]};
-	color: ${neutral[7]};
+	color: #606060;
 	border: 1px solid ${neutral[86]};
 	border-radius: ${space[3]}px;
 	&:hover {
