@@ -1,5 +1,5 @@
 import type { ContributionType } from 'helpers/contributions';
-import { config, getConfigAbTestMin } from 'helpers/contributions';
+import { config } from 'helpers/contributions';
 import { getValidContributionTypesFromUrlOrElse } from 'helpers/forms/checkouts';
 import { getContributionType } from '../checkout/product/selectors/productType';
 import type { ContributionsState } from '../contributionsStore';
@@ -25,17 +25,10 @@ export function getMinimumContributionAmount(
 	const { countryGroupId, useLocalCurrency, localCurrencyCountry } =
 		state.common.internationalisation;
 	const contributionType = getContributionType(state);
-	const nudgeMinVariantA =
-		state.common.abParticipations.nudgeMinAmountsTest === 'variantA';
-	const nudgeMinVariantB =
-		state.common.abParticipations.nudgeMinAmountsTest === 'variantB';
-	const min =
+	const { min } =
 		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
-			? localCurrencyCountry.config[contributionType].min
-			: getConfigAbTestMin(countryGroupId, contributionType, {
-					variantA: nudgeMinVariantA,
-					variantB: nudgeMinVariantB,
-			  });
+			? localCurrencyCountry.config[contributionType]
+			: config[countryGroupId][contributionType];
 
 	return min;
 }
