@@ -2,18 +2,87 @@ import type { GuStackProps} from '@guardian/cdk/lib/constructs/core';
 import {GuStack} from '@guardian/cdk/lib/constructs/core';
 import {GuLambdaFunction} from '@guardian/cdk/lib/constructs/lambda';
 import type {App} from 'aws-cdk-lib';
-import {Duration} from "aws-cdk-lib";
-import {PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
+import {CfnOutput, Duration} from "aws-cdk-lib";
+import {Effect, PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 import {Runtime} from 'aws-cdk-lib/aws-lambda';
 import {SqsEventSource} from "aws-cdk-lib/aws-lambda-event-sources";
 import {Queue} from "aws-cdk-lib/aws-sqs";
-
+import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
+import { LogGroup } from 'aws-cdk-lib/aws-logs';
+import {CloudWatchLogGroup} from "aws-cdk-lib/aws-events-targets";
+import { CfnIntegration, CfnRoute } from 'aws-cdk-lib/aws-apigatewayv2';
+import { HttpApi } from '@aws-cdk/aws-apigatewayv2-alpha';
 const appName = 'bigquery-acquisitions-publisher';
 
 export class BigqueryAcquisitionsPublisher extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
     super(scope, id, props);
 
+    // Event bus
+    const eventBus = new EventBus(this, 'acquisitions-bus', {
+      eventBusName: 'AcquisitionsBus',
+    });
+
+    // Event logger
+    const eventLoggerRule = new Rule(this, "EventLoggerRule", {
+      description: "Log all events",
+      eventPattern: {
+        region: [ "eu-west-1" ]
+      },
+      eventBus: eventBus
+    });
+
+    const logGroup = new LogGroup(this, 'EventLogGroup', {
+      logGroupName: '/aws/events/acquisitions-bus',
+    });
+
+    eventLoggerRule.addTarget(new CloudWatchLogGroup(logGroup));
+
+    // Api
+    const httpApi = new HttpApi(this, 'MyHttpApi');
+
+    /* There's no Eventbridge integration available as CDK L2 yet, so we have to use L1 and create Role, Integration and Route */
+    const apiRole = new Role(this, 'EventBridgeIntegrationRole', {
+      assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
+    });
+
+    apiRole.addToPolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        resources: [eventBus.eventBusArn],
+        actions: ['events:PutEvents'],
+      })
+    );
+
+    const eventbridgeIntegration = new CfnIntegration(
+      this,
+      'EventBridgeIntegration',
+      {
+        apiId: httpApi.httpApiId,
+        integrationType: 'AWS_PROXY',
+        integrationSubtype: 'EventBridge-PutEvents',
+        credentialsArn: apiRole.roleArn,
+        requestParameters: {
+          Source: 'WebApp',
+          DetailType: 'MyDetailType',
+          Detail: '$request.body',
+          EventBusName: eventBus.eventBusArn,
+        },
+        payloadFormatVersion: '1.0',
+        timeoutInMillis: 10000,
+      }
+    );
+
+    new CfnRoute(this, 'EventRoute', {
+      apiId: httpApi.httpApiId,
+      routeKey: 'POST /',
+      target: `integrations/${eventbridgeIntegration.ref}`,
+    });
+
+    new CfnOutput(this, 'apiUrl', { value: httpApi.url!, description: "HTTP API endpoint URL" });
+
+
+    // Queue
     const queue = new Queue(this, `${appName}Queue`, {
       queueName: `${appName}-queue-${props.stage}`,
       visibilityTimeout: Duration.minutes(2),
