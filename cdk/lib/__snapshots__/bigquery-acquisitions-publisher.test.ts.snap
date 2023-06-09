@@ -2,6 +2,109 @@
 
 exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
 {
+  "Mappings": {
+    "DefaultCrNodeVersionMap": {
+      "af-south-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-east-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-northeast-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-northeast-2": {
+        "value": "nodejs16.x",
+      },
+      "ap-northeast-3": {
+        "value": "nodejs16.x",
+      },
+      "ap-south-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-south-2": {
+        "value": "nodejs16.x",
+      },
+      "ap-southeast-1": {
+        "value": "nodejs16.x",
+      },
+      "ap-southeast-2": {
+        "value": "nodejs16.x",
+      },
+      "ap-southeast-3": {
+        "value": "nodejs16.x",
+      },
+      "ca-central-1": {
+        "value": "nodejs16.x",
+      },
+      "cn-north-1": {
+        "value": "nodejs16.x",
+      },
+      "cn-northwest-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-central-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-central-2": {
+        "value": "nodejs16.x",
+      },
+      "eu-north-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-south-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-south-2": {
+        "value": "nodejs16.x",
+      },
+      "eu-west-1": {
+        "value": "nodejs16.x",
+      },
+      "eu-west-2": {
+        "value": "nodejs16.x",
+      },
+      "eu-west-3": {
+        "value": "nodejs16.x",
+      },
+      "me-central-1": {
+        "value": "nodejs16.x",
+      },
+      "me-south-1": {
+        "value": "nodejs16.x",
+      },
+      "sa-east-1": {
+        "value": "nodejs16.x",
+      },
+      "us-east-1": {
+        "value": "nodejs16.x",
+      },
+      "us-east-2": {
+        "value": "nodejs16.x",
+      },
+      "us-gov-east-1": {
+        "value": "nodejs16.x",
+      },
+      "us-gov-west-1": {
+        "value": "nodejs16.x",
+      },
+      "us-iso-east-1": {
+        "value": "nodejs14.x",
+      },
+      "us-iso-west-1": {
+        "value": "nodejs14.x",
+      },
+      "us-isob-east-1": {
+        "value": "nodejs14.x",
+      },
+      "us-west-1": {
+        "value": "nodejs16.x",
+      },
+      "us-west-2": {
+        "value": "nodejs16.x",
+      },
+    },
+  },
   "Metadata": {
     "gu:cdk:constructs": [
       "GuDistributionBucketParameter",
@@ -10,16 +113,16 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
     "gu:cdk:version": "TEST",
   },
   "Parameters": {
-    "AssetParameters6dbd112fe448437b3438da4382c72fccbb7d2ee1543db222620d7447fffebc50ArtifactHash304852AE": {
-      "Description": "Artifact hash for asset "6dbd112fe448437b3438da4382c72fccbb7d2ee1543db222620d7447fffebc50"",
+    "AssetParametersbb459fac5f6b4b052aac9803443226d161a5cfe96f4648b21f9e4912c698bf30ArtifactHashF0E91DFB": {
+      "Description": "Artifact hash for asset "bb459fac5f6b4b052aac9803443226d161a5cfe96f4648b21f9e4912c698bf30"",
       "Type": "String",
     },
-    "AssetParameters6dbd112fe448437b3438da4382c72fccbb7d2ee1543db222620d7447fffebc50S3Bucket41B151F4": {
-      "Description": "S3 bucket for asset "6dbd112fe448437b3438da4382c72fccbb7d2ee1543db222620d7447fffebc50"",
+    "AssetParametersbb459fac5f6b4b052aac9803443226d161a5cfe96f4648b21f9e4912c698bf30S3BucketE5E33D80": {
+      "Description": "S3 bucket for asset "bb459fac5f6b4b052aac9803443226d161a5cfe96f4648b21f9e4912c698bf30"",
       "Type": "String",
     },
-    "AssetParameters6dbd112fe448437b3438da4382c72fccbb7d2ee1543db222620d7447fffebc50S3VersionKey6146B69E": {
-      "Description": "S3 key for asset version "6dbd112fe448437b3438da4382c72fccbb7d2ee1543db222620d7447fffebc50"",
+    "AssetParametersbb459fac5f6b4b052aac9803443226d161a5cfe96f4648b21f9e4912c698bf30S3VersionKey2264B1D2": {
+      "Description": "S3 key for asset version "bb459fac5f6b4b052aac9803443226d161a5cfe96f4648b21f9e4912c698bf30"",
       "Type": "String",
     },
     "DistributionBucketName": {
@@ -36,7 +139,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": {
-            "Ref": "AssetParameters6dbd112fe448437b3438da4382c72fccbb7d2ee1543db222620d7447fffebc50S3Bucket41B151F4",
+            "Ref": "AssetParametersbb459fac5f6b4b052aac9803443226d161a5cfe96f4648b21f9e4912c698bf30S3BucketE5E33D80",
           },
           "S3Key": {
             "Fn::Join": [
@@ -49,7 +152,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters6dbd112fe448437b3438da4382c72fccbb7d2ee1543db222620d7447fffebc50S3VersionKey6146B69E",
+                          "Ref": "AssetParametersbb459fac5f6b4b052aac9803443226d161a5cfe96f4648b21f9e4912c698bf30S3VersionKey2264B1D2",
                         },
                       ],
                     },
@@ -62,7 +165,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
                       "Fn::Split": [
                         "||",
                         {
-                          "Ref": "AssetParameters6dbd112fe448437b3438da4382c72fccbb7d2ee1543db222620d7447fffebc50S3VersionKey6146B69E",
+                          "Ref": "AssetParametersbb459fac5f6b4b052aac9803443226d161a5cfe96f4648b21f9e4912c698bf30S3VersionKey2264B1D2",
                         },
                       ],
                     },
@@ -79,7 +182,15 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs14.x",
+        "Runtime": {
+          "Fn::FindInMap": [
+            "DefaultCrNodeVersionMap",
+            {
+              "Ref": "AWS::Region",
+            },
+            "value",
+          ],
+        },
         "Tags": [
           {
             "Key": "gu:cdk:version",
