@@ -265,7 +265,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
     "EventBridgeIntegration": {
       "Properties": {
         "ApiId": {
-          "Ref": "acquisitionseventbridgeapiBD610165",
+          "Ref": "acquisitionseventbridgeapiPROD575D58B4",
         },
         "CredentialsArn": {
           "Fn::GetAtt": [
@@ -281,7 +281,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
           "DetailType": "AcquisitionsEvent",
           "EventBusName": {
             "Fn::GetAtt": [
-              "acquisitionsbusFE7F6297",
+              "acquisitionsbusPROD768AFDE3",
               "Arn",
             ],
           },
@@ -335,7 +335,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "acquisitionsbusFE7F6297",
+                  "acquisitionsbusPROD768AFDE3",
                   "Arn",
                 ],
               },
@@ -356,7 +356,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       "Properties": {
         "Description": "Send all events to SQS",
         "EventBusName": {
-          "Ref": "acquisitionsbusFE7F6297",
+          "Ref": "acquisitionsbusPROD768AFDE3",
         },
         "EventPattern": {
           "region": [
@@ -381,7 +381,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
     "EventLogGroupD7F451ED": {
       "DeletionPolicy": "Retain",
       "Properties": {
-        "LogGroupName": "/aws/events/acquisitions-bus",
+        "LogGroupName": "/aws/events/acquisitions-bus-PROD",
         "RetentionInDays": 731,
         "Tags": [
           {
@@ -409,7 +409,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       "Properties": {
         "Description": "Log all events",
         "EventBusName": {
-          "Ref": "acquisitionsbusFE7F6297",
+          "Ref": "acquisitionsbusPROD768AFDE3",
         },
         "EventPattern": {
           "region": [
@@ -451,7 +451,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
     "EventRoute": {
       "Properties": {
         "ApiId": {
-          "Ref": "acquisitionseventbridgeapiBD610165",
+          "Ref": "acquisitionseventbridgeapiPROD575D58B4",
         },
         "RouteKey": "POST /",
         "Target": {
@@ -542,15 +542,15 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "acquisitionsbusFE7F6297": {
+    "acquisitionsbusPROD768AFDE3": {
       "Properties": {
-        "Name": "AcquisitionsBus",
+        "Name": "acquisitions-bus-PROD",
       },
       "Type": "AWS::Events::EventBus",
     },
-    "acquisitionseventbridgeapiBD610165": {
+    "acquisitionseventbridgeapiPROD575D58B4": {
       "Properties": {
-        "Name": "acquisitions-eventbridge-api",
+        "Name": "acquisitions-eventbridge-api-PROD",
         "ProtocolType": "HTTP",
         "Tags": {
           "Stack": "support",
@@ -561,10 +561,10 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       },
       "Type": "AWS::ApiGatewayV2::Api",
     },
-    "acquisitionseventbridgeapiDefaultStage484DB007": {
+    "acquisitionseventbridgeapiPRODDefaultStageEB205C3C": {
       "Properties": {
         "ApiId": {
-          "Ref": "acquisitionseventbridgeapiBD610165",
+          "Ref": "acquisitionseventbridgeapiPROD575D58B4",
         },
         "AutoDeploy": true,
         "StageName": "$default",

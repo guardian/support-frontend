@@ -24,14 +24,16 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
     super(scope, id, props);
 
+    const busName = `acquisitions-bus-${props.stage}`;
+
     // Event bus
-    const eventBus = new EventBus(this, "acquisitions-bus", {
-      eventBusName: "AcquisitionsBus",
+    const eventBus = new EventBus(this, busName, {
+      eventBusName: busName,
     });
 
     // Event logger
     const logGroup = new LogGroup(this, "EventLogGroup", {
-      logGroupName: "/aws/events/acquisitions-bus",
+      logGroupName: `/aws/events/${busName}`,
     });
 
     const cloudWatchLogGroup = new CloudWatchLogGroup(logGroup);
@@ -47,7 +49,10 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
     });
 
     // Api Gateway and Eventbridge integration
-    const httpApi = new HttpApi(this, "acquisitions-eventbridge-api");
+    const httpApi = new HttpApi(
+      this,
+      `acquisitions-eventbridge-api-${props.stage}`
+    );
 
     // There's no Eventbridge integration available as CDK L2 yet, so we have to use L1 and create Role, Integration and Route
     const apiRole = new Role(this, "EventBridgeIntegrationRole", {
