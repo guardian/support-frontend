@@ -31,22 +31,22 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       eventBusName: busName,
     });
 
-    // Event logger
-    const logGroup = new LogGroup(this, "EventLogGroup", {
-      logGroupName: `/aws/events/${busName}`,
-    });
-
-    const cloudWatchLogGroup = new CloudWatchLogGroup(logGroup);
-
-    // Rule which sends events to the logGroup
-    new Rule(this, "EventLoggerRule", {
-      description: "Log all events",
-      eventPattern: {
-        region: ["eu-west-1"],
-      },
-      eventBus: eventBus,
-      targets: [cloudWatchLogGroup],
-    });
+    // // Event logger
+    // const logGroup = new LogGroup(this, "EventLogGroup", {
+    //   logGroupName: `/aws/events/${busName}`,
+    // });
+    //
+    // const cloudWatchLogGroup = new CloudWatchLogGroup(logGroup);
+    //
+    // // Rule which sends events to the logGroup
+    // new Rule(this, "EventLoggerRule", {
+    //   description: "Log all events",
+    //   eventPattern: {
+    //     region: ["eu-west-1"],
+    //   },
+    //   eventBus: eventBus,
+    //   targets: [cloudWatchLogGroup],
+    // });
 
     // Api Gateway and Eventbridge integration
     const httpApi = new HttpApi(
