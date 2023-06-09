@@ -154,7 +154,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
     "EventBridgeIntegration": {
       "Properties": {
         "ApiId": {
-          "Ref": "MyHttpApi8AEAAC21",
+          "Ref": "acquisitionseventbridgeapiBD610165",
         },
         "CredentialsArn": {
           "Fn::GetAtt": [
@@ -167,14 +167,14 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
         "PayloadFormatVersion": "1.0",
         "RequestParameters": {
           "Detail": "$request.body",
-          "DetailType": "MyDetailType",
+          "DetailType": "AcquisitionsEvent",
           "EventBusName": {
             "Fn::GetAtt": [
               "acquisitionsbusFE7F6297",
               "Arn",
             ],
           },
-          "Source": "WebApp",
+          "Source": "ApiGateway",
         },
         "TimeoutInMillis": 10000,
       },
@@ -240,6 +240,32 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "EventBusToSQSRule72D08395": {
+      "Properties": {
+        "Description": "Send all events to SQS",
+        "EventBusName": {
+          "Ref": "acquisitionsbusFE7F6297",
+        },
+        "EventPattern": {
+          "region": [
+            "eu-west-1",
+          ],
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "bigqueryacquisitionspublisherQueue3F783231",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
     },
     "EventLogGroupD7F451ED": {
       "DeletionPolicy": "Retain",
@@ -314,7 +340,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
     "EventRoute": {
       "Properties": {
         "ApiId": {
-          "Ref": "MyHttpApi8AEAAC21",
+          "Ref": "acquisitionseventbridgeapiBD610165",
         },
         "RouteKey": "POST /",
         "Target": {
@@ -405,9 +431,15 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "MyHttpApi8AEAAC21": {
+    "acquisitionsbusFE7F6297": {
       "Properties": {
-        "Name": "MyHttpApi",
+        "Name": "AcquisitionsBus",
+      },
+      "Type": "AWS::Events::EventBus",
+    },
+    "acquisitionseventbridgeapiBD610165": {
+      "Properties": {
+        "Name": "acquisitions-eventbridge-api",
         "ProtocolType": "HTTP",
         "Tags": {
           "Stack": "support",
@@ -418,10 +450,10 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       },
       "Type": "AWS::ApiGatewayV2::Api",
     },
-    "MyHttpApiDefaultStageDCB9BC49": {
+    "acquisitionseventbridgeapiDefaultStage484DB007": {
       "Properties": {
         "ApiId": {
-          "Ref": "MyHttpApi8AEAAC21",
+          "Ref": "acquisitionseventbridgeapiBD610165",
         },
         "AutoDeploy": true,
         "StageName": "$default",
@@ -433,12 +465,6 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
         },
       },
       "Type": "AWS::ApiGatewayV2::Stage",
-    },
-    "acquisitionsbusFE7F6297": {
-      "Properties": {
-        "Name": "AcquisitionsBus",
-      },
-      "Type": "AWS::Events::EventBus",
     },
     "bigqueryacquisitionspublisherLambdaD7F059E6": {
       "DependsOn": [
@@ -535,6 +561,48 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       },
       "Type": "AWS::SQS::Queue",
       "UpdateReplacePolicy": "Delete",
+    },
+    "bigqueryacquisitionspublisherQueuePolicy28887A75": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sqs:SendMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:GetQueueUrl",
+              ],
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": {
+                    "Fn::GetAtt": [
+                      "EventBusToSQSRule72D08395",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com",
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "bigqueryacquisitionspublisherQueue3F783231",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Queues": [
+          {
+            "Ref": "bigqueryacquisitionspublisherQueue3F783231",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::QueuePolicy",
     },
     "bigquerytos3role8B775EB2": {
       "Properties": {

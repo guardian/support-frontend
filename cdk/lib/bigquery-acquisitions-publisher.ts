@@ -6,7 +6,7 @@ import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
 import { CfnIntegration, CfnRoute } from "aws-cdk-lib/aws-apigatewayv2";
 import { EventBus, Rule } from "aws-cdk-lib/aws-events";
-import { CloudWatchLogGroup } from "aws-cdk-lib/aws-events-targets";
+import { CloudWatchLogGroup, SqsQueue } from "aws-cdk-lib/aws-events-targets";
 import {
   Effect,
   PolicyStatement,
@@ -30,24 +30,26 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
     });
 
     // Event logger
-    const eventLoggerRule = new Rule(this, "EventLoggerRule", {
+    const logGroup = new LogGroup(this, "EventLogGroup", {
+      logGroupName: "/aws/events/acquisitions-bus",
+    });
+
+    const cloudWatchLogGroup = new CloudWatchLogGroup(logGroup);
+
+    // Rule which sends events to the logGroup
+    new Rule(this, "EventLoggerRule", {
       description: "Log all events",
       eventPattern: {
         region: ["eu-west-1"],
       },
       eventBus: eventBus,
+      targets: [cloudWatchLogGroup],
     });
 
-    const logGroup = new LogGroup(this, "EventLogGroup", {
-      logGroupName: "/aws/events/acquisitions-bus",
-    });
+    // Api Gateway and Eventbridge integration
+    const httpApi = new HttpApi(this, "acquisitions-eventbridge-api");
 
-    eventLoggerRule.addTarget(new CloudWatchLogGroup(logGroup));
-
-    // Api
-    const httpApi = new HttpApi(this, "MyHttpApi");
-
-    /* There's no Eventbridge integration available as CDK L2 yet, so we have to use L1 and create Role, Integration and Route */
+    // There's no Eventbridge integration available as CDK L2 yet, so we have to use L1 and create Role, Integration and Route
     const apiRole = new Role(this, "EventBridgeIntegrationRole", {
       assumedBy: new ServicePrincipal("apigateway.amazonaws.com"),
     });
@@ -69,8 +71,8 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
         integrationSubtype: "EventBridge-PutEvents",
         credentialsArn: apiRole.roleArn,
         requestParameters: {
-          Source: "WebApp",
-          DetailType: "MyDetailType",
+          Source: "ApiGateway",
+          DetailType: "AcquisitionsEvent",
           Detail: "$request.body",
           EventBusName: eventBus.eventBusArn,
         },
@@ -85,12 +87,23 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       target: `integrations/${eventBridgeIntegration.ref}`,
     });
 
-    // Queue
+    // SQS Queue
     const queue = new Queue(this, `${appName}Queue`, {
       queueName: `${appName}-queue-${props.stage}`,
       visibilityTimeout: Duration.minutes(2),
       // TODO - dead letter queue?
     });
+
+    // Rule which passes events on to SQS
+    new Rule(this, "EventBusToSQSRule", {
+      description: "Send all events to SQS",
+      eventPattern: {
+        region: ["eu-west-1"],
+      },
+      eventBus: eventBus,
+      targets: [new SqsQueue(queue)],
+    });
+
     const eventSource = new SqsEventSource(queue);
 
     // Create a custom role because the name needs to be short, otherwise the request to Google Cloud fails
