@@ -6,7 +6,7 @@ import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
 import { CfnIntegration, CfnRoute } from "aws-cdk-lib/aws-apigatewayv2";
 import { EventBus, Rule } from "aws-cdk-lib/aws-events";
-import { CloudWatchLogGroup, SqsQueue } from "aws-cdk-lib/aws-events-targets";
+import { SqsQueue } from "aws-cdk-lib/aws-events-targets";
 import {
   Effect,
   PolicyStatement,
@@ -15,7 +15,6 @@ import {
 } from "aws-cdk-lib/aws-iam";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
-import { LogGroup } from "aws-cdk-lib/aws-logs";
 import { Queue } from "aws-cdk-lib/aws-sqs";
 
 const appName = "bigquery-acquisitions-publisher";
@@ -30,23 +29,6 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
     const eventBus = new EventBus(this, busName, {
       eventBusName: busName,
     });
-
-    // // Event logger
-    // const logGroup = new LogGroup(this, "EventLogGroup", {
-    //   logGroupName: `/aws/events/${busName}`,
-    // });
-    //
-    // const cloudWatchLogGroup = new CloudWatchLogGroup(logGroup);
-    //
-    // // Rule which sends events to the logGroup
-    // new Rule(this, "EventLoggerRule", {
-    //   description: "Log all events",
-    //   eventPattern: {
-    //     region: ["eu-west-1"],
-    //   },
-    //   eventBus: eventBus,
-    //   targets: [cloudWatchLogGroup],
-    // });
 
     // Api Gateway and Eventbridge integration
     const httpApi = new HttpApi(
