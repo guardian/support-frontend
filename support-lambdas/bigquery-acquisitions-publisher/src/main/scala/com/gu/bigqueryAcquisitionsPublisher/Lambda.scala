@@ -19,6 +19,7 @@ object Lambda extends LazyLogging {
   private val stage = sys.env.getOrElse("STAGE", "CODE")
 
   def handler(event: SQSEvent): SQSBatchResponse = {
+    logger.info(s"Input was $event")
     SSMService.getParam(s"/bigquery-acquisitions-publisher/$stage/gcp-wif-credentials-config") match {
       case Right(clientConfig) =>
         val bigQuery = BigQueryService.build(clientConfig)
@@ -49,12 +50,13 @@ object Lambda extends LazyLogging {
 
   private def processEvent(message: SQSMessage, bigQuery: BigQueryService): Either[SQSMessageId, Unit] = {
     val rawBody = message.getBody
+    logger.info(s"Processing event: $rawBody")
     val result: EitherT[Future, Error, Unit] = EitherT
-      .fromEither[Future](decode[AcquisitionDataRow](rawBody))
+      .fromEither[Future](decode[EventBridgeEvent](rawBody))
       .leftMap[Error](error => ParseError(error.getMessage))
-      .flatMap { acq =>
+      .flatMap { event =>
         bigQuery
-          .tableInsertRowWithRetry(acq, 0)
+          .tableInsertRowWithRetry(event.detail, 0)
           .leftMap[Error](error => BigQueryError(error))
       }
     Try(Await.result(result.value, 20.seconds)) match {
