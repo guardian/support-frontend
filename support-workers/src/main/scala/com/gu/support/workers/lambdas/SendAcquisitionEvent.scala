@@ -75,19 +75,20 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
     val eventBridgeClient: EventBridgeClient = EventBridgeClient.builder().build()
 
-    val entry: PutEventsRequestEntry = PutEventsRequestEntry.builder()
+    val entry: PutEventsRequestEntry = PutEventsRequestEntry
+      .builder()
       .source("Support-workers")
       .detail(acquisition.toJson)
       .detailType("AcquisitionEvent")
       .eventBusName("acquisition-event-testing-CODE")
       .build()
 
-    val eventsRequest: PutEventsRequest = PutEventsRequest.builder()
+    val eventsRequest: PutEventsRequest = PutEventsRequest
+      .builder()
       .entries(entry)
       .build()
 
     val eventBridgeFuture = eventBridgeClient.putEvents(eventsRequest)
-
 
 //    val streamFuture = services.acquisitionsStreamService.putAcquisitionWithRetry(acquisition, maxRetries = 5)
 //    val biqQueryFuture = services.bigQueryService.tableInsertRowWithRetry(acquisition, maxRetries = 5)
@@ -104,12 +105,12 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 //      _ <- gaFuture
 //    } yield ()
 
-      val result = for {
-        _ <- eventBridgeFuture
-        _ <- gaFuture
-      } yield ()
+    val result = for {
+      _ <- eventBridgeFuture
+      _ <- gaFuture
+    } yield ()
 
-    val result= gaFuture.map(_ => ())
+    val result = gaFuture.map(_ => ())
 
     result.value.map {
       case Left(errorMessage) => throw new RetryNone(errorMessage.mkString(" & "))
