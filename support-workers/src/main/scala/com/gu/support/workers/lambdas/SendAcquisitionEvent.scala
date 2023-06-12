@@ -1,5 +1,8 @@
 package com.gu.support.workers.lambdas
 
+import software.amazon.awssdk.services.eventbridge.EventBridgeClient
+import software.amazon.awssdk.services.eventbridge.model.{PutEventsRequest, PutEventsRequestEntry}
+import software.amazon.awssdk.services.eventbridge.model._
 import cats.data.EitherT
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.acquisitions.AcquisitionDataRowBuilder
@@ -70,8 +73,24 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
     val acquisition = AcquisitionDataRowBuilder.buildFromState(state, requestInfo)
 
-    val streamFuture = services.acquisitionsStreamService.putAcquisitionWithRetry(acquisition, maxRetries = 5)
-    val biqQueryFuture = services.bigQueryService.tableInsertRowWithRetry(acquisition, maxRetries = 5)
+    val eventBridgeClient: EventBridgeClient = EventBridgeClient.builder().build()
+
+    val entry: PutEventsRequestEntry = PutEventsRequestEntry.builder()
+      .source("Support-workers")
+      .detail(acquisition.toJson)
+      .detailType("AcquisitionEvent")
+      .eventBusName("acquisition-event-testing-CODE")
+      .build()
+
+    val eventsRequest: PutEventsRequest = PutEventsRequest.builder()
+      .entries(entry)
+      .build()
+
+    val eventBridgeFuture = eventBridgeClient.putEvents(eventsRequest)
+
+
+//    val streamFuture = services.acquisitionsStreamService.putAcquisitionWithRetry(acquisition, maxRetries = 5)
+//    val biqQueryFuture = services.bigQueryService.tableInsertRowWithRetry(acquisition, maxRetries = 5)
     val gaFuture = for {
       gaData <- EitherT.fromEither(buildGaData(state, requestInfo)).leftMap(err => List(err))
       result <- services.gaService
@@ -79,11 +98,18 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
         .leftMap(gaErrors => gaErrors.map(_.getMessage))
     } yield result
 
-    val result = for {
-      _ <- streamFuture
-      _ <- biqQueryFuture
-      _ <- gaFuture
-    } yield ()
+//    val result = for {
+//      _ <- streamFuture
+//      _ <- biqQueryFuture
+//      _ <- gaFuture
+//    } yield ()
+
+      val result = for {
+        _ <- eventBridgeFuture
+        _ <- gaFuture
+      } yield ()
+
+    val result= gaFuture.map(_ => ())
 
     result.value.map {
       case Left(errorMessage) => throw new RetryNone(errorMessage.mkString(" & "))
