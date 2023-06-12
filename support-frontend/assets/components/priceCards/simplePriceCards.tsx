@@ -14,9 +14,15 @@ import {
 	SvgChevronDownSingle,
 } from '@guardian/source-react-components';
 import { useState } from 'react';
-import type { RegularContributionType } from 'helpers/contributions';
+import type {
+	ContributionType,
+	RegularContributionType,
+} from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { fromCountryGroupId } from 'helpers/internationalisation/currency';
+import {
+	fromCountryGroupId,
+	glyph,
+} from 'helpers/internationalisation/currency';
 import { Tooltip } from '../../../stories/content/Tooltip.stories';
 
 const containerCss = css`
@@ -70,9 +76,18 @@ export type SimplePriceCardsProps = {
 	tagline: string;
 	prices: Prices;
 	onPriceChange: (priceSelection: PriceSelection) => void;
+	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
 	children: React.ReactNode;
 };
+
+function getLabel(
+	countryGroupId: CountryGroupId,
+	amount: number,
+	period: string,
+) {
+	return `${glyph(fromCountryGroupId(countryGroupId))}${amount} per ${period}`;
+}
 
 export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 	const [showDetails, setShowDetails] = useState(false);
@@ -91,11 +106,9 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 							amount: props.prices.monthly,
 						})
 					}
-					checked={false}
+					checked={props.contributionType === 'MONTHLY'}
 					value="monthly"
-					label={`${fromCountryGroupId(props.countryGroupId)}${
-						props.prices.monthly
-					} per month`}
+					label={getLabel(props.countryGroupId, props.prices.monthly, 'month')}
 				/>
 				<ChoiceCard
 					id="annual"
@@ -107,11 +120,9 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 							amount: props.prices.annual,
 						})
 					}
-					checked={false}
+					checked={props.contributionType === 'ANNUAL'}
 					value="annual"
-					label={`${fromCountryGroupId(props.countryGroupId)}${
-						props.prices.annual
-					} per year`}
+					label={getLabel(props.countryGroupId, props.prices.annual, 'year')}
 				/>
 			</ChoiceCardGroup>
 			<p>{props.tagline}</p>

@@ -12,17 +12,17 @@ export default {
 	argTypes: {
 		onPriceChange: { action: 'price changed' },
 		countryGroupId: {
+			options: [
+				'GBPCountries',
+				'UnitedStates',
+				'AUDCountries',
+				'EURCountries',
+				'NZDCountries',
+				'Canada',
+				'International',
+			],
 			control: {
 				type: 'select',
-				options: [
-					'GBPCountries',
-					'UnitedStates',
-					'AUDCountries',
-					'EURCountries',
-					'NZDCountries',
-					'Canada',
-					'International',
-				],
 			},
 		},
 	},
@@ -52,18 +52,18 @@ function Template(args: SimplePriceCardsProps) {
 	return <SimplePriceCards {...args} />;
 }
 
-Template.args = {} as SimplePriceCardsProps;
+Template.args = {} as Omit<SimplePriceCardsProps, 'onPriceChange'>;
 
 export const Default = Template.bind({});
 
 Default.args = {
 	title: 'Start your recurring support with exclusive extras',
 	tagline: 'Extras include unlimited access to the app',
+	contributionType: 'MONTHLY',
 	countryGroupId: 'GBPCountries',
 	prices: {
 		monthly: 10,
 		annual: 95,
 	},
-	onPriceChange: () => undefined,
 	children: <p>Details go here</p>,
 };
