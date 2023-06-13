@@ -5,6 +5,7 @@ import type { SimplePriceCardsProps } from 'components/priceCards/simplePriceCar
 import { SimplePriceCards } from 'components/priceCards/simplePriceCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+import { Default as InfoBlock } from '../content/InfoBlock.stories';
 
 export default {
 	title: 'Checkouts/Simple Price Cards',
@@ -65,5 +66,9 @@ Default.args = {
 		monthly: 10,
 		annual: 95,
 	},
-	children: <p>Details go here</p>,
+	children: (
+		<div>
+			<InfoBlock {...InfoBlock.args} />
+		</div>
+	),
 };
