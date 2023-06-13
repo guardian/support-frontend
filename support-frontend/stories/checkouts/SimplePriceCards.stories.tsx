@@ -57,8 +57,8 @@ Template.args = {} as Omit<SimplePriceCardsProps, 'onPriceChange'>;
 export const Default = Template.bind({});
 
 Default.args = {
-	title: 'Start your recurring support with exclusive extras',
-	tagline: 'Extras include unlimited access to the app',
+	title: 'Support Guardian journalism',
+	subtitle: 'and unlock exclusive extras',
 	contributionType: 'MONTHLY',
 	countryGroupId: 'GBPCountries',
 	prices: {

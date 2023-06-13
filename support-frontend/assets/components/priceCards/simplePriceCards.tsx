@@ -5,7 +5,6 @@ import {
 	palette,
 	space,
 	textSans,
-	until,
 } from '@guardian/source-foundations';
 import {
 	Button,
@@ -23,7 +22,6 @@ import {
 	fromCountryGroupId,
 	glyph,
 } from 'helpers/internationalisation/currency';
-import { Tooltip } from '../../../stories/content/Tooltip.stories';
 
 const containerCss = css`
 	${textSans.medium({ lineHeight: 'tight' })};
@@ -32,29 +30,54 @@ const containerCss = css`
 const headingCss = css`
 	${headline.xsmall({ fontWeight: 'bold' })}
 	${from.tablet} {
+		${headline.small({ fontWeight: 'bold' })}
 		font-size: 28px;
 		line-height: 115%;
 	}
 `;
 
-const hrCss = (margin: string) => css`
+const headingSubtitle = css`
+	color: ${palette.brand[500]};
+`;
+
+const cardsContainer = css`
+	margin: ${space[4]}px 0 ${space[3]}px 0;
+	${from.tablet} {
+		margin: ${space[5]}px 0 ${space[4]}px 0;
+	}
+`;
+
+const boldText = css`
+	font-weight: 700;
+`;
+
+const hrCss = css`
 	border: none;
 	height: 1px;
 	background-color: ${palette.neutral[86]};
-	margin: ${margin};
-	${until.tablet} {
-		margin: 14px 0 0;
+	margin: 14px -${space[3]}px 12px;
+	${from.tablet} {
+		margin: ${space[4]}px -${space[5]}px 12px;
+	}
+
+	${from.desktop} {
+		margin: ${space[4]}px -${space[6]}px 12px;
 	}
 `;
 
 const buttonOverrides = css`
 	width: 100%;
+	min-height: unset;
+	height: min-content;
 	justify-content: center;
 	text-decoration: none;
+	${textSans.xsmall()};
+	color: ${palette.neutral[20]};
 `;
 
 const iconCss = (flip: boolean) => css`
 	svg {
+		max-width: 12px;
 		transition: transform 0.3s ease-in-out;
 
 		${flip && 'transform: rotate(180deg);'}
@@ -73,7 +96,7 @@ type PriceSelection = {
 
 export type SimplePriceCardsProps = {
 	title: string;
-	tagline: string;
+	subtitle: string;
 	prices: Prices;
 	onPriceChange: (priceSelection: PriceSelection) => void;
 	contributionType: ContributionType;
@@ -86,7 +109,18 @@ function getLabel(
 	amount: number,
 	period: string,
 ) {
-	return `${glyph(fromCountryGroupId(countryGroupId))}${amount} per ${period}`;
+	return `${glyph(fromCountryGroupId(countryGroupId))}${amount}/${period}`;
+}
+
+function getTaglinePrice(
+	countryGroupId: CountryGroupId,
+	prices: Prices,
+	contributionType: ContributionType,
+) {
+	const period = contributionType === 'ANNUAL' ? 'year' : 'month';
+	const price = contributionType === 'ANNUAL' ? prices.annual : prices.monthly;
+
+	return `${glyph(fromCountryGroupId(countryGroupId))}${price} per ${period}`;
 }
 
 export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
@@ -94,22 +128,10 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 
 	return (
 		<div css={containerCss}>
-			<h2 css={headingCss}>{props.title}</h2>
-			<ChoiceCardGroup name="paymentFrequency" columns={2}>
-				<ChoiceCard
-					id="monthly"
-					key="monthly"
-					name="frequency"
-					onChange={() =>
-						props.onPriceChange({
-							contributionType: 'MONTHLY',
-							amount: props.prices.monthly,
-						})
-					}
-					checked={props.contributionType === 'MONTHLY'}
-					value="monthly"
-					label={getLabel(props.countryGroupId, props.prices.monthly, 'month')}
-				/>
+			<h2 css={headingCss}>
+				{props.title} <span css={headingSubtitle}>{props.subtitle}</span>
+			</h2>
+			<ChoiceCardGroup name="paymentFrequency" columns={2} css={cardsContainer}>
 				<ChoiceCard
 					id="annual"
 					key="annual"
@@ -124,17 +146,34 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 					value="annual"
 					label={getLabel(props.countryGroupId, props.prices.annual, 'year')}
 				/>
+				<ChoiceCard
+					id="monthly"
+					key="monthly"
+					name="frequency"
+					onChange={() =>
+						props.onPriceChange({
+							contributionType: 'MONTHLY',
+							amount: props.prices.monthly,
+						})
+					}
+					checked={props.contributionType === 'MONTHLY'}
+					value="monthly"
+					label={getLabel(props.countryGroupId, props.prices.monthly, 'month')}
+				/>
 			</ChoiceCardGroup>
-			<p>{props.tagline}</p>
-			<Tooltip promptText="Cancel anytime">
-				<p>
-					You can cancel
-					{props.countryGroupId === 'GBPCountries' ? '' : ' online'} anytime
-					before your next payment date. If you cancel in the first 14 days, you
-					will receive a full refund.
-				</p>
-			</Tooltip>
-			<hr css={hrCss(`${space[4]}px 0 0`)} />
+			<p>
+				You will fund fearless, independent journalism for{' '}
+				<strong css={boldText}>
+					{getTaglinePrice(
+						props.countryGroupId,
+						props.prices,
+						props.contributionType,
+					)}
+					. Cancel or change anytime.
+				</strong>
+			</p>
+			<hr css={hrCss} />
+			{showDetails && <div>{props.children}</div>}
 			<Button
 				priority="subdued"
 				aria-expanded={showDetails ? 'true' : 'false'}
@@ -143,9 +182,8 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 				iconSide="right"
 				cssOverrides={[buttonOverrides, iconCss(showDetails)]}
 			>
-				view details
+				{showDetails ? 'Hide details' : 'View details'}
 			</Button>
-			{showDetails && <div>{props.children}</div>}
 		</div>
 	);
 }
