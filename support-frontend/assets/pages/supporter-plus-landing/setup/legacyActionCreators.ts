@@ -44,6 +44,7 @@ import type {
 	IsoCountry,
 	StateProvince,
 } from 'helpers/internationalisation/country';
+import { shouldCollectStateForContributions } from 'helpers/internationalisation/shouldCollectStateForContribs';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
 import {
 	setAmazonPayFatalError,
@@ -218,7 +219,12 @@ function regularPaymentRequestFromAuthorisation(
 			// required go cardless field
 			city: null,
 			// required go cardless field
-			state: billingState,
+			state: shouldCollectStateForContributions(
+				billingCountry,
+				contributionType,
+			)
+				? billingState
+				: null,
 			// required Zuora field if country is US or CA
 			postCode: null,
 			// required go cardless field
