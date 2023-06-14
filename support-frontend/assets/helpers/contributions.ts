@@ -282,32 +282,31 @@ function getConfigAbTestMin(
 ): number {
 	if (contribType === 'ANNUAL') {
 		if (variantData.variantA) {
-			if (
-				countryGroupId === 'AUDCountries' ||
-				countryGroupId === 'NZDCountries'
-			) {
-				return 40;
-			} else if (countryGroupId === 'Canada') {
-				return 35;
-			}
-			if (
-				countryGroupId === 'EURCountries' ||
-				countryGroupId === 'International'
-			) {
-				return 30;
-			} else {
-				return 25;
+			switch (countryGroupId) {
+				case 'AUDCountries':
+				case 'NZDCountries':
+					return 40;
+				case 'Canada':
+					return 35;
+				case 'EURCountries':
+				case 'International':
+					return 30;
+				case 'GBPCountries':
+				case 'UnitedStates':
+					return 25;
 			}
 		} else if (variantData.variantB) {
-			if (
-				countryGroupId === 'AUDCountries' ||
-				countryGroupId === 'NZDCountries'
-			) {
-				return 75;
-			} else if (countryGroupId === 'Canada') {
-				return 60;
-			} else {
-				return 50;
+			switch (countryGroupId) {
+				case 'AUDCountries':
+				case 'NZDCountries':
+					return 75;
+				case 'Canada':
+					return 60;
+				case 'EURCountries':
+				case 'International':
+				case 'GBPCountries':
+				case 'UnitedStates':
+					return 50;
 			}
 		}
 	}
