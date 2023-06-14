@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchJson } from 'helpers/async/fetch';
 import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
-import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import { getGlobal, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
+import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
 import { doesUserAppearToBeSignedIn } from 'helpers/user/user';
 import { getExistingPaymentMethodSwitchState } from './utils';
@@ -28,11 +29,24 @@ export const getExistingPaymentMethods = createAsyncThunk<
 		const mdapiUrl = getGlobal<string>('mdapiUrl');
 
 		if (mdapiUrl) {
+			const authWithOkta = isSwitchOn('featureSwitches.authenticateWithOkta');
+			const accessToken = cookie.get('GU_ACCESS_TOKEN');
+
+			// No point in making the call if we don't have an access token as we know it's going to fail
+			if (authWithOkta && !accessToken) return [];
+
+			// Okta authorization uses the Authorization header rather than a cookie
+			const authHeader =
+				authWithOkta && accessToken
+					? { Authorization: `Bearer ${accessToken}` }
+					: undefined;
+
 			const existingPaymentMethods = await fetchJson(
 				`${mdapiUrl}/user-attributes/me/existing-payment-options?currencyFilter=${currencyId}`,
 				{
 					mode: 'cors',
 					credentials: 'include',
+					headers: authHeader,
 				},
 			);
 			if (isValidPaymentList(existingPaymentMethods)) {

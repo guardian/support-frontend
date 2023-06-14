@@ -159,7 +159,7 @@ object AuthCodeFlow {
   }
 
   def secureCookie(name: String, value: String): Cookie =
-    Cookie(name, value, maxAge = Some(3600), secure = true, httpOnly = true, sameSite = Some(SameSite.Lax))
+    Cookie(name, value, maxAge = Some(3600), secure = true, httpOnly = false, sameSite = Some(SameSite.Lax))
 
   /*
    * Methods to help with Proof Keys for Code Exchange (PKCE).
