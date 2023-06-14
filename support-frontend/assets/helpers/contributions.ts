@@ -282,9 +282,32 @@ function getConfigAbTestMin(
 ): number {
 	if (contribType === 'ANNUAL') {
 		if (variantData.variantA) {
-			return 30;
+			switch (countryGroupId) {
+				case 'AUDCountries':
+				case 'NZDCountries':
+					return 40;
+				case 'Canada':
+					return 35;
+				case 'EURCountries':
+				case 'International':
+					return 30;
+				case 'GBPCountries':
+				case 'UnitedStates':
+					return 25;
+			}
 		} else if (variantData.variantB) {
-			return 50;
+			switch (countryGroupId) {
+				case 'AUDCountries':
+				case 'NZDCountries':
+					return 75;
+				case 'Canada':
+					return 60;
+				case 'EURCountries':
+				case 'International':
+				case 'GBPCountries':
+				case 'UnitedStates':
+					return 50;
+			}
 		}
 	}
 	return config[countryGroupId][contribType].min;
