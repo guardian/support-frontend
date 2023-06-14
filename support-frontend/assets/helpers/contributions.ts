@@ -283,25 +283,29 @@ function getConfigAbTestMin(
 	if (contribType === 'ANNUAL') {
 		if (variantData.variantA) {
 			if (
-				countryGroupId === 'GBPCountries' ||
-				countryGroupId === 'EURCountries' ||
-				countryGroupId === 'UnitedStates'
-			) {
-				return 25;
-			} else if (
 				countryGroupId === 'AUDCountries' ||
 				countryGroupId === 'NZDCountries'
 			) {
 				return 40;
-			} else {
+			} else if (countryGroupId === 'Canada') {
+				return 35;
+			}
+			if (
+				countryGroupId === 'EURCountries' ||
+				countryGroupId === 'International'
+			) {
 				return 30;
+			} else {
+				return 25;
 			}
 		} else if (variantData.variantB) {
 			if (
 				countryGroupId === 'AUDCountries' ||
 				countryGroupId === 'NZDCountries'
 			) {
-				return 80;
+				return 75;
+			} else if (countryGroupId === 'Canada') {
+				return 60;
 			} else {
 				return 50;
 			}
