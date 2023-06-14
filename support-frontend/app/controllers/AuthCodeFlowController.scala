@@ -61,7 +61,10 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
       "prompt" -> "none",
     )
     val authorizeUrl = s"${config.oauthAuthorizeUrl}?${toQuery(queryParams)}"
-    Redirect(authorizeUrl).addingToSession(SessionKey.state -> state, SessionKey.codeVerifier -> codeVerifier)
+    Redirect(authorizeUrl).addingToSession(
+      SessionKey.state -> state,
+      SessionKey.codeVerifier -> codeVerifier,
+    )
   }
 
   /*
