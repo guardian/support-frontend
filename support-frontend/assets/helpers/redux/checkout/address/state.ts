@@ -7,7 +7,7 @@ import {
 } from 'helpers/internationalisation/country';
 import type { SliceErrors } from 'helpers/redux/utils/validation/errors';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
-import { isPostCodeValid } from './validationFunctions';
+import { isPostCodeValid, isStateInCountry } from './validationFunctions';
 
 export const addressFieldsSchema = z
 	.object({
@@ -29,6 +29,9 @@ export const addressFieldsSchema = z
 	})
 	.refine(({ country, postCode }) => isPostCodeValid(country, postCode), {
 		message: 'Please enter a valid postal or zip code',
+	})
+	.refine(({ country, state }) => isStateInCountry(country, state), {
+		message: 'Please choose a state',
 	});
 
 type AddressFieldsValidatedState = z.infer<typeof addressFieldsSchema>;
