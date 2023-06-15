@@ -16,6 +16,18 @@ const coreBenefits = [
 ];
 
 function getBenefits(countryId: IsoCountry) {
+	if (countryId === 'AU') {
+		return [
+			{
+				content: 'Every issue delivered with up to 91% off the cover price',
+			},
+			...coreBenefits,
+			{
+				content:
+					'A free Guardian Weekly tote bag with every 12 for 12 subscription',
+			},
+		];
+	}
 	if (countryId === 'GB') {
 		return [
 			{
