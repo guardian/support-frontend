@@ -24,16 +24,16 @@ libraryDependencies ++= Seq(
   "com.dripower" %% "play-circe" % playCirceVersion,
   "org.typelevel" %% "simulacrum" % "1.0.1",
   "com.stripe" % "stripe-java" % stripeVersion,
-  "com.gocardless" % "gocardless-pro" % "5.18.0",
+  "com.gocardless" % "gocardless-pro" % "2.10.0",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "org.playframework.anorm" %% "anorm" % "2.7.0",
   "org.scalatest" %% "scalatest" % "3.0.9" % "test",
   "org.scalatestplus" %% "mockito-3-4" % "3.2.10.0" % "test",
-  "org.mockito" % "mockito-core" % "5.3.1",
+  "org.mockito" % "mockito-core" % "4.11.0",
   "org.typelevel" %% "cats-core" % catsVersion,
-  "com.github.blemale" %% "scaffeine" % "5.2.1",
+  "com.github.blemale" %% "scaffeine" % "4.1.0",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
@@ -50,7 +50,7 @@ libraryDependencies ++= Seq(
   ws,
   "com.lihaoyi" %% "pprint" % "0.8.1",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
-  "org.scala-lang.modules" %% "scala-xml" % "2.1.0",
+  "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
