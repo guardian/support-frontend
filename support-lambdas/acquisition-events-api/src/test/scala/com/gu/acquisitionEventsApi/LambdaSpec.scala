@@ -39,7 +39,6 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
     readerType = ReaderType.Direct,
     acquisitionType = AcquisitionType.Purchase,
     zuoraSubscriptionNumber = None,
-    zuoraAccountNumber = None,
     contributionId = None,
     paymentId = None,
     queryParameters = List(QueryParameter("name1", "value1"), QueryParameter("name2", "value2")),

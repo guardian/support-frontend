@@ -25,7 +25,6 @@ export function getMinimumContributionAmount(
 	const { countryGroupId, useLocalCurrency, localCurrencyCountry } =
 		state.common.internationalisation;
 	const contributionType = getContributionType(state);
-
 	const { min } =
 		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
 			? localCurrencyCountry.config[contributionType]

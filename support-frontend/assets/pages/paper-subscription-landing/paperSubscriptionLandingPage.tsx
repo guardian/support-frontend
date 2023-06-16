@@ -20,14 +20,10 @@ import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
 import { paperSubsUrl } from 'helpers/urls/routes';
-import { PaperProductInfo } from './components/content/paperProductInfo';
-import { PaperHero, PriceCardsPaperHero } from './components/hero/hero';
+import { PaperHero } from './components/hero/hero';
 import PaperProductPrices from './components/paperProductPrices';
 import Tabs from './components/tabs';
-import type {
-	PaperLandingContentPropTypes,
-	PaperLandingPropTypes,
-} from './paperSubscriptionLandingProps';
+import type { PaperLandingContentPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
 import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
@@ -50,14 +46,10 @@ const tabsTabletSpacing = css`
 	}
 `;
 
-const paperHeroContainerOverrides = css`
-	display: flex;
-`;
-
 // ID for Selenium tests
 const pageQaId = 'qa-paper-subscriptions';
 
-function PaperLandingPageControl({
+function PaperLandingPage({
 	productPrices,
 	promotionCopy,
 }: PaperLandingContentPropTypes) {
@@ -118,95 +110,6 @@ function PaperLandingPageControl({
 				</CentredContainer>
 			</FullWidthContainer>
 		</Page>
-	);
-}
-
-function PaperLandingPageVariant({
-	productPrices,
-	promotionCopy,
-}: PaperLandingContentPropTypes) {
-	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
-		'delivery',
-	)
-		? HomeDelivery
-		: Collection;
-	const [selectedTab, setSelectedTab] =
-		useState<PaperFulfilmentOptions>(fulfilment);
-
-	if (!productPrices) {
-		return null;
-	}
-
-	function handleSetTabAction(newTab: PaperFulfilmentOptions) {
-		setSelectedTab(newTab);
-		sendTrackingEventsOnClick({
-			id: `Paper_${newTab}-tab`,
-			// eg. Paper_Collection-tab or Paper_HomeDelivery-tab
-			product: 'Paper',
-			componentType: 'ACQUISITIONS_BUTTON',
-		})();
-		window.history.replaceState({}, '', paperSubsUrl(newTab === HomeDelivery));
-	}
-
-	return (
-		<Page
-			id={pageQaId}
-			header={<Header countryGroupId={GBPCountries} />}
-			footer={paperSubsFooter}
-		>
-			<FullWidthContainer cssOverrides={paperHeroContainerOverrides}>
-				<PriceCardsPaperHero
-					productPrices={productPrices}
-					promotionCopy={sanitisedPromoCopy}
-				/>
-			</FullWidthContainer>
-			<FullWidthContainer theme="dark">
-				<CentredContainer>
-					<PaperProductPrices
-						productPrices={productPrices}
-						tab={selectedTab}
-						setTabAction={setSelectedTab}
-						isPriceCardsAbTestVariant={true}
-					/>
-				</CentredContainer>
-			</FullWidthContainer>
-			<FullWidthContainer cssOverrides={paperHeroContainerOverrides}>
-				<CentredContainer>
-					<PaperProductInfo promotionCopy={sanitisedPromoCopy} />
-				</CentredContainer>
-			</FullWidthContainer>
-			<FullWidthContainer>
-				<CentredContainer>
-					<Block>
-						<div css={tabsTabletSpacing}>
-							<Tabs
-								selectedTab={selectedTab}
-								setTabAction={handleSetTabAction}
-							/>
-						</div>
-					</Block>
-				</CentredContainer>
-			</FullWidthContainer>
-		</Page>
-	);
-}
-
-function PaperLandingPage({
-	productPrices,
-	promotionCopy,
-	participations,
-}: PaperLandingPropTypes) {
-	return participations.newspaperPriceCards === 'variant' ? (
-		<PaperLandingPageVariant
-			productPrices={productPrices}
-			promotionCopy={promotionCopy}
-		/>
-	) : (
-		<PaperLandingPageControl
-			productPrices={productPrices}
-			promotionCopy={promotionCopy}
-		/>
 	);
 }
 

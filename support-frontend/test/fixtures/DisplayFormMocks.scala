@@ -1,6 +1,7 @@
 package controllers
 
-import actions.CustomActionBuilders
+import actions.{CustomActionBuilders, UserFromAuthCookiesActionBuilder}
+import admin.settings.{FeatureSwitches, Off, On}
 import assets.{AssetsResolver, RefPath}
 import com.gu.identity.model.{PublicFields, User}
 import com.gu.support.config.Stages
@@ -39,11 +40,13 @@ trait DisplayFormMocks extends TestCSRFComponents {
 
   val loggedInActionRefiner = new CustomActionBuilders(
     asyncAuthenticationService,
+    userFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder],
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
     stage = stage,
+    featureSwitches = FeatureSwitches(On, On, Off),
   )
 
 }

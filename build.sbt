@@ -333,4 +333,4 @@ lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisitio
 
 lazy val `support-lambdas` = (project in file("support-lambdas"))
   .settings(scalafmtSettings)
-  .aggregate(`stripe-intent`, `it-test-runner`, `acquisitions-firehose-transformer`, `acquisition-events-api`)
+  .aggregate(`stripe-intent`, `it-test-runner`, `acquisitions-firehose-transformer`)

@@ -9,10 +9,12 @@ trait ActionBuilders {
 
   implicit lazy val actionRefiners = new CustomActionBuilders(
     asyncAuthenticationService = asyncAuthenticationService,
+    userFromAuthCookiesActionBuilder = userFromAuthCookiesActionBuilder,
     cc = controllerComponents,
     addToken = csrfAddToken,
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
     stage = appConfig.stage,
+    featureSwitches = allSettingsProvider.getAllSettings().switches.featureSwitches,
   )
 }
