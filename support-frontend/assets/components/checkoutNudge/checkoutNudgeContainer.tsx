@@ -46,9 +46,11 @@ export function CheckoutNudgeContainer({
 			  (weeklyMinAmount / 100)
 					.toFixed(weeklyMinAmount % 100 === 0 ? 0 : 2)
 					.toString();
+	const subTitleStart =
+		nudgeMinVariantA || nudgeMinVariantB ? `for` : `from just`;
 	const [title, subtitle, paragraph] = [
 		`Support us every year`,
-		`from just ${
+		`${subTitleStart} ${
 			currencyGlyph + minAmount.toString()
 		} (${minWeeklyAmount} a week)`,
 		`Funding Guardian journalism every year doesn’t need to be expensive. Make a bigger impact today, and protect our independence long term. Please consider annual support.`,
