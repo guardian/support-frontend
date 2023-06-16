@@ -1,23 +1,22 @@
 package controllers
 
-import actions.CustomActionBuilders
-import admin.settings.AllSettingsProvider
+import actions.{CustomActionBuilders, UserFromAuthCookiesActionBuilder}
+import admin.settings.{AllSettingsProvider, FeatureSwitches, On}
+import akka.util.Timeout
+import assets.AssetsResolver
+import com.gu.support.config._
+import config.{RecaptchaConfigProvider, StringsConfig}
+import fixtures.TestCSRFComponents
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.mockito.MockitoSugar.mock
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
-import akka.util.Timeout
-import assets.{AssetsResolver, RefPath, StyleContent}
-import config.{Configuration, RecaptchaConfigProvider, StringsConfig}
-import fixtures.TestCSRFComponents
-import org.scalatestplus.mockito.MockitoSugar.mock
 import services._
-import com.gu.support.config.{AmazonPayConfigProvider, PayPalConfigProvider, Stage, Stages, StripeConfigProvider}
-import config.Configuration.{GuardianDomain, IdentityUrl}
 
 import scala.concurrent.ExecutionContext
-import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.must.Matchers
+import scala.concurrent.duration._
 
 class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents {
 
@@ -26,11 +25,13 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
 
   val actionRefiner = new CustomActionBuilders(
     asyncAuthenticationService = mock[AsyncAuthenticationService],
+    userFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder],
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
     stage = stage,
+    featureSwitches = FeatureSwitches(On, On, On),
   )
 
   "/healthcheck" should {

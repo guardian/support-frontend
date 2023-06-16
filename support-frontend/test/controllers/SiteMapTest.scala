@@ -1,20 +1,20 @@
 package controllers
 
-import fixtures.TestCSRFComponents
-import actions.CustomActionBuilders
-import play.api.test.FakeRequest
-import play.api.test.Helpers.{status, stubControllerComponents}
+import actions.{CustomActionBuilders, UserFromAuthCookiesActionBuilder}
+import admin.settings.{FeatureSwitches, On}
 import akka.util.Timeout
 import com.gu.support.config.Stages
+import fixtures.TestCSRFComponents
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar.mock
-import config.Configuration.IdentityUrl
+import play.api.test.FakeRequest
+import play.api.test.Helpers.{status, stubControllerComponents}
 import services.AsyncAuthenticationService
 
 import scala.concurrent.ExecutionContext
-import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.must.Matchers
+import scala.concurrent.duration._
 
 class SiteMapTest extends AnyWordSpec with Matchers with TestCSRFComponents {
 
@@ -23,11 +23,13 @@ class SiteMapTest extends AnyWordSpec with Matchers with TestCSRFComponents {
 
   val actionRefiner = new CustomActionBuilders(
     asyncAuthenticationService = mock[AsyncAuthenticationService],
+    userFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder],
     cc = stubControllerComponents(),
     addToken = csrfAddToken,
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
     stage = stage,
+    featureSwitches = FeatureSwitches(On, On, On),
   )
 
   "GET /sitemap.xml" should {

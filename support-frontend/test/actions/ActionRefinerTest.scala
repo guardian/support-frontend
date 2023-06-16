@@ -1,11 +1,13 @@
 package actions
 
+import admin.settings.{FeatureSwitches, Off, On}
 import com.gu.identity.model.User
-import com.gu.support.config.{Stage, Stages}
-import config.Configuration.IdentityUrl
+import com.gu.support.config.Stages
 import fixtures.TestCSRFComponents
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
 import play.api.mvc.Results._
@@ -15,17 +17,18 @@ import services._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.must.Matchers
 
 class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponents with MockitoSugar {
 
   val path = "/test-path"
   val fakeRequest = FakeRequest("GET", path)
   val stage = Stages.DEV
+  val featureSwitches =
+    FeatureSwitches(enableQuantumMetric = On, usStripeAccountForSingle = On, authenticateWithOkta = Off)
 
   trait Mocks {
     val asyncAuthenticationService = mock[AsyncAuthenticationService]
+    val userFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder]
   }
 
   "PrivateAction" should {
@@ -34,11 +37,13 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
       val actionRefiner =
         new CustomActionBuilders(
           asyncAuthenticationService,
+          userFromAuthCookiesActionBuilder,
           stubControllerComponents(),
           csrfAddToken,
           csrfCheck,
           csrfConfig,
           stage,
+          featureSwitches,
         )
       val result = actionRefiner.PrivateAction(Ok("")).apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
@@ -56,16 +61,18 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
+        userFromAuthCookiesActionBuilder,
         stubControllerComponents(),
         csrfAddToken,
         csrfCheck,
         csrfConfig,
         stage,
+        featureSwitches,
       )
 
       val result = actionRefiner
         .MaybeAuthenticatedAction(_.user match {
-          case Some(user) if (user == passedInUser) => Ok("authentication-test")
+          case Some(user) if user == passedInUser => Ok("authentication-test")
           case u => InternalServerError(s"didn't get (right) user $u")
         })
         .apply(fakeRequest)
@@ -79,11 +86,13 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
       when(asyncAuthenticationService.tryAuthenticateUser(any())).thenReturn(Future.successful(None))
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
+        userFromAuthCookiesActionBuilder,
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
         stage = stage,
+        featureSwitches,
       )
 
       val result = actionRefiner
@@ -102,11 +111,13 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         .thenReturn(Future.successful(Some(mock[User])))
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
+        userFromAuthCookiesActionBuilder,
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
         stage = stage,
+        featureSwitches,
       )
       val result = actionRefiner.MaybeAuthenticatedAction(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
@@ -116,11 +127,13 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
       when(asyncAuthenticationService.tryAuthenticateUser(any())).thenReturn(Future.successful(None))
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
+        userFromAuthCookiesActionBuilder,
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
         stage = stage,
+        featureSwitches,
       )
       val result = actionRefiner.MaybeAuthenticatedAction(Ok("authentication-test")).apply(fakeRequest)
       header("Cache-Control", result) mustBe Some("no-cache, private")
