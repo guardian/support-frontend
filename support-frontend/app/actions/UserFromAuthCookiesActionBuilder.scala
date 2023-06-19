@@ -53,7 +53,7 @@ class UserFromAuthCookiesActionBuilder(
       processRequestWithoutUser()
     } else {
 
-      val accessScopes = config.oauthScopes.split(" ").map(scope => ClientAccessScope(scope)).toList
+      val accessScopes = config.oauthScopes.trim.split("\\s+").map(scope => ClientAccessScope(scope)).toList
 
       val result: Either[ValidationError, Future[Result]] = for {
         idTokenCookie <- request.cookies

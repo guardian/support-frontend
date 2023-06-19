@@ -49,7 +49,7 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
       "response_type" -> "code",
       "client_id" -> config.oauthClientId,
       "redirect_uri" -> config.oauthCallbackUrl,
-      "scope" -> config.oauthScopes,
+      "scope" -> config.oauthScopes.trim.replaceAll("\\s+", " "),
       "state" -> state,
       "code_challenge" -> codeChallenge,
       "code_challenge_method" -> "S256",
