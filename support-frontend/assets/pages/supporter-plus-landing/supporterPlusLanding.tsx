@@ -12,8 +12,10 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CardClickable } from 'components/cardClickable/cardClickable';
+import { CardClickableContainer } from 'components/cardClickable/cardClickableContainer';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -34,6 +36,7 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import { getPaymentMethodToSelect } from 'helpers/forms/checkouts';
 import {
 	AUDCountries,
 	Canada,
@@ -43,9 +46,15 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
+import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { CheckoutDivider } from './components/checkoutDivider';
 import { DirectDebitContainer } from './components/directDebitWrapper';
@@ -137,6 +146,29 @@ export function SupporterPlusLandingPage({
 	};
 	const heading = <LandingPageHeading />;
 
+	const [supportOnceDisplay, setSupportOnceDisplay] = useState(() =>
+		contributionType === 'ONE_OFF'
+			? false
+			: useContributionsSelector(
+					isUserInAbVariant('singleLessProminent', 'variant'),
+			  ),
+	);
+
+	const dispatch = useContributionsDispatch();
+	function onCardClick() {
+		setSupportOnceDisplay(false);
+
+		const paymentMethodToSelect = getPaymentMethodToSelect(
+			'ONE_OFF',
+			switches,
+			countryId,
+			countryGroupId,
+		);
+
+		dispatch(setProductType('ONE_OFF'));
+		dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
+	}
+
 	useEffect(() => {
 		if (paymentComplete) {
 			navigate(thankYouRoute, { replace: true });
@@ -196,8 +228,16 @@ export function SupporterPlusLandingPage({
 							/>
 						</Hide>
 						<Box cssOverrides={shorterBoxMargin}>
-							<AmountAndBenefits />
+							<AmountAndBenefits hideOneOff={supportOnceDisplay} />
 						</Box>
+						{supportOnceDisplay && (
+							<CardClickableContainer
+								renderCardClickable={(cardClickableProps) => (
+									<CardClickable {...cardClickableProps} />
+								)}
+								onCardClick={onCardClick}
+							/>
+						)}
 						<Box cssOverrides={shorterBoxMargin}>
 							<BoxContents>
 								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
