@@ -14,13 +14,11 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { PaymentFrequencyTabsRenderProps } from './paymentFrequenncyTabs';
 
 type PaymentFrequencyTabsContainerProps = {
-	hideOneOff?: boolean;
 	ariaLabel?: string;
 	render: (tabComponentProps: PaymentFrequencyTabsRenderProps) => JSX.Element;
 };
 
 export function PaymentFrequencyTabsContainer({
-	hideOneOff,
 	ariaLabel = 'Payment frequency options',
 	render,
 }: PaymentFrequencyTabsContainerProps): JSX.Element {
@@ -49,17 +47,13 @@ export function PaymentFrequencyTabsContainer({
 		dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
 	}
 
-	const tabs = contributionTypes[countryGroupId]
-		.filter(
-			({ contributionType }) => !(contributionType === 'ONE_OFF' && hideOneOff),
-		)
-		.map(({ contributionType }) => {
-			return {
-				id: contributionType,
-				labelText: toHumanReadableContributionType(contributionType),
-				selected: contributionType === productType,
-			};
-		});
+	const tabs = contributionTypes[countryGroupId].map(({ contributionType }) => {
+		return {
+			id: contributionType,
+			labelText: toHumanReadableContributionType(contributionType),
+			selected: contributionType === productType,
+		};
+	});
 
 	return render({
 		ariaLabel,
