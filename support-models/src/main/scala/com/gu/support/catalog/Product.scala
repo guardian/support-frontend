@@ -39,29 +39,28 @@ case object SupporterPlus extends Product {
   private def productRatePlan(
       id: String,
       billingPeriod: BillingPeriod,
-      versionOptions: SupporterPlusVersionOptions,
   ) =
     ProductRatePlan(
       id,
       billingPeriod,
       NoFulfilmentOptions,
-      versionOptions,
+      NoProductOptions,
       s"Supporter Plus ${billingPeriod.getClass.getSimpleName}",
     )
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[SupporterPlus.type]]] =
     Map(
       PROD -> List(
-        productRatePlan("8a12865b8219d9b401822106192b64dc", Monthly, SupporterPlusV1),
-        productRatePlan("8a12865b8219d9b40182210618a464ba", Annual, SupporterPlusV1),
-        productRatePlan("8a128ed885fc6ded018602296ace3eb8", Monthly, SupporterPlusV2),
-        productRatePlan("8a128ed885fc6ded01860228f77e3d5a", Annual, SupporterPlusV2),
+        productRatePlan("8a12865b8219d9b401822106192b64dc", Monthly),
+        productRatePlan("8a12865b8219d9b40182210618a464ba", Annual),
+        productRatePlan("8a128ed885fc6ded018602296ace3eb8", Monthly),
+        productRatePlan("8a128ed885fc6ded01860228f77e3d5a", Annual),
       ),
       CODE -> List(
-        productRatePlan("8ad09fc281de1ce70181de3b251736a4", Monthly, SupporterPlusV1),
-        productRatePlan("8ad09fc281de1ce70181de3b28ee3783", Annual, SupporterPlusV1),
-        productRatePlan("8ad08cbd8586721c01858804e3275376", Monthly, SupporterPlusV2),
-        productRatePlan("8ad08e1a8586721801858805663f6fab", Annual, SupporterPlusV2),
+        productRatePlan("8ad09fc281de1ce70181de3b251736a4", Monthly),
+        productRatePlan("8ad09fc281de1ce70181de3b28ee3783", Annual),
+        productRatePlan("8ad08cbd8586721c01858804e3275376", Monthly),
+        productRatePlan("8ad08e1a8586721801858805663f6fab", Annual),
       ),
     )
 }

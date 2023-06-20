@@ -32,7 +32,9 @@ object S3Service extends StrictLogging {
     transfer.waitForCompletion()
   }
 
-  def streamFromS3(stage: Stage, filename: String) =
+  def streamFromS3(stage: Stage, filename: String) = {
+    logger.info(s"Trying to stream from S3 - bucketName: ${bucketName(stage)}, filename: $filename")
     s3Client.getObject(new GetObjectRequest(bucketName(stage), filename))
+  }
 
 }
