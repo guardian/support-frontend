@@ -60,7 +60,7 @@ export const Default = Template.bind({});
 Default.args = {
 	title: 'Support Guardian journalism',
 	subtitle: 'and unlock exclusive extras',
-	contributionType: 'MONTHLY',
+	contributionType: 'ANNUAL',
 	countryGroupId: 'GBPCountries',
 	prices: {
 		monthly: 10,

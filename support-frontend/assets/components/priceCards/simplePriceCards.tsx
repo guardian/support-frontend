@@ -55,13 +55,13 @@ const hrCss = css`
 	border: none;
 	height: 1px;
 	background-color: ${palette.neutral[86]};
-	margin: 14px -${space[3]}px 12px;
+	margin: 14px -${space[3]}px ${space[3]}px;
 	${from.tablet} {
-		margin: ${space[4]}px -${space[5]}px 12px;
+		margin: ${space[4]}px -${space[5]}px ${space[3]}px;
 	}
 
 	${from.desktop} {
-		margin: ${space[4]}px -${space[6]}px 12px;
+		margin: ${space[4]}px -${space[6]}px ${space[3]}px;
 	}
 `;
 
@@ -82,6 +82,15 @@ const iconCss = (flip: boolean) => css`
 
 		${flip && 'transform: rotate(180deg);'}
 	}
+`;
+
+const detailsSection = css`
+	display: flex;
+	flex-direction: column-reverse;
+`;
+
+const detailsContainer = css`
+	margin-bottom: ${space[3]}px;
 `;
 
 type Prices = {
@@ -106,10 +115,28 @@ export type SimplePriceCardsProps = {
 
 function getLabel(
 	countryGroupId: CountryGroupId,
-	amount: number,
-	period: string,
+	prices: Prices,
+	contributionType: ContributionType,
 ) {
-	return `${glyph(fromCountryGroupId(countryGroupId))}${amount}/${period}`;
+	const currencyGlyph = glyph(fromCountryGroupId(countryGroupId));
+	if (contributionType === 'ANNUAL') {
+		return (
+			<span>
+				<s>
+					{currencyGlyph}
+					{prices.monthly * 12}
+				</s>{' '}
+				{currencyGlyph}
+				{prices.annual}/year
+			</span>
+		);
+	}
+	return (
+		<span>
+			{currencyGlyph}
+			{prices.monthly}/month
+		</span>
+	);
 }
 
 function getTaglinePrice(
@@ -144,7 +171,7 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 					}
 					checked={props.contributionType === 'ANNUAL'}
 					value="annual"
-					label={getLabel(props.countryGroupId, props.prices.annual, 'year')}
+					label={getLabel(props.countryGroupId, props.prices, 'ANNUAL')}
 				/>
 				<ChoiceCard
 					id="monthly"
@@ -158,7 +185,7 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 					}
 					checked={props.contributionType === 'MONTHLY'}
 					value="monthly"
-					label={getLabel(props.countryGroupId, props.prices.monthly, 'month')}
+					label={getLabel(props.countryGroupId, props.prices, 'MONTHLY')}
 				/>
 			</ChoiceCardGroup>
 			<p>
@@ -173,17 +200,19 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 				</strong>
 			</p>
 			<hr css={hrCss} />
-			{showDetails && <div>{props.children}</div>}
-			<Button
-				priority="subdued"
-				aria-expanded={showDetails ? 'true' : 'false'}
-				onClick={() => setShowDetails(!showDetails)}
-				icon={<SvgChevronDownSingle />}
-				iconSide="right"
-				cssOverrides={[buttonOverrides, iconCss(showDetails)]}
-			>
-				{showDetails ? 'Hide details' : 'View details'}
-			</Button>
+			<div css={detailsSection}>
+				<Button
+					priority="subdued"
+					aria-expanded={showDetails ? 'true' : 'false'}
+					onClick={() => setShowDetails(!showDetails)}
+					icon={<SvgChevronDownSingle />}
+					iconSide="right"
+					cssOverrides={[buttonOverrides, iconCss(showDetails)]}
+				>
+					{showDetails ? 'Hide details' : 'View details'}
+				</Button>
+				{showDetails && <div css={detailsContainer}>{props.children}</div>}
+			</div>
 		</div>
 	);
 }
