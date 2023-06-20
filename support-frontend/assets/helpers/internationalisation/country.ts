@@ -913,14 +913,9 @@ function detect(
 	return country;
 }
 
-function detectState(country: IsoCountry): Option<StateProvince> {
-	return stateProvinceFromString(country, window.guardian.geoip?.stateCode);
-}
-
 // ----- Exports ----- //
 export {
 	detect,
-	detectState,
 	setCountry,
 	usStates,
 	caStates,

@@ -43,7 +43,7 @@ function isTestUser(): boolean {
 
 function getUserStateField(): string | undefined {
 	const user = getGlobal<User>('user');
-	return user?.address4 ?? window.guardian.geoip?.stateCode;
+	return user?.address4;
 }
 
 const isPostDeployUser = (): boolean =>
