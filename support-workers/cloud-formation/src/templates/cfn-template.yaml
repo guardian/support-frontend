@@ -173,7 +173,7 @@ Resources:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub Support Workers Failure in ${Stage} (Recurring Contributions or Subscriptions Checkout)
-      AlarmDescription: There was a failure whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-${Stage}?statusFilter=FAILED
+      AlarmDescription: !Sub There was a failure whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-${Stage}?statusFilter=FAILED
       MetricName: ExecutionsFailed
       Namespace: AWS/States
       Dimensions:
