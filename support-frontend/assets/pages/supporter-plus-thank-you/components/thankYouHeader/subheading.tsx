@@ -9,20 +9,19 @@ interface SubheadingProps {
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 }
 
-function MarketingCopy({
+function ThankyouCopyYourAccount({
 	contributionType,
 }: {
 	contributionType: ContributionType;
 }) {
-	return contributionType === 'ONE_OFF' ? (
+	const thankyouCopy =
+		contributionType === 'ONE_OFF'
+			? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
+			: 'Adjust your email preferences at any time via ';
+
+	return (
 		<span>
-			You can amend your email preferences at any time via{' '}
-			<a href="https://manage.theguardian.com">your account</a>.
-		</span>
-	) : (
-		<span>
-			Adjust your email preferences at any time via{' '}
-			<a href="https://manage.theguardian.com">your account</a>.
+			{thankyouCopy} <a href="https://manage.theguardian.com">your account.</a>.
 		</span>
 	);
 }
@@ -74,21 +73,14 @@ const getSubHeadingCopy = (
 		};
 	};
 
-	const oneOffCopy = (
-		<span>
-			Thank you for your contribution. We’ll be in touch to bring you closer to
-			our journalism. You can amend your email preferences at any time via{' '}
-			<a href="https://manage.theguardian.com">your account</a>.
-		</span>
+	return (
+		contributionType !== 'ONE_OFF' &&
+		recurringCopy(amountIsAboveThreshold)[
+			userTypeFromIdentityResponse === 'current' || isSignedIn
+				? 'isSignedIn'
+				: 'notSignedIn'
+		]
 	);
-
-	return contributionType === 'ONE_OFF'
-		? oneOffCopy
-		: recurringCopy(amountIsAboveThreshold)[
-				userTypeFromIdentityResponse === 'current' || isSignedIn
-					? 'isSignedIn'
-					: 'notSignedIn'
-		  ];
 };
 
 function Subheading({
@@ -107,9 +99,7 @@ function Subheading({
 	return (
 		<>
 			{subheadingCopy}
-			{contributionType !== 'ONE_OFF' && (
-				<MarketingCopy contributionType={contributionType} />
-			)}
+			<ThankyouCopyYourAccount contributionType={contributionType} />
 			{userTypeFromIdentityResponse !== 'current' &&
 				contributionType !== 'ONE_OFF' && (
 					<span
