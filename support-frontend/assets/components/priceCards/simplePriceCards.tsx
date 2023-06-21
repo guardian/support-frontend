@@ -122,10 +122,6 @@ function getLabel(
 	if (contributionType === 'ANNUAL') {
 		return (
 			<span>
-				<s>
-					{currencyGlyph}
-					{prices.monthly * 12}
-				</s>{' '}
 				{currencyGlyph}
 				{prices.annual}/year
 			</span>
