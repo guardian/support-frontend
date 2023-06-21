@@ -1,15 +1,15 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from, palette, space } from '@guardian/source-foundations';
+import { from, palette, space, textSans } from '@guardian/source-foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
 
-const checkListIconCss = css`
+const checkListIconCss = (style: CheckmarkListStyle) => css`
 	vertical-align: top;
 	padding-right: 10px;
 	line-height: 0;
 
 	svg {
-		fill: ${palette.brand[500]};
+		fill: ${style === 'compact' ? palette.success[400] : palette.brand[500]};
 	}
 `;
 
@@ -25,7 +25,11 @@ const checkListTextCss = css`
 	}
 `;
 
-const tableCss = css`
+const tableCss = (style: CheckmarkListStyle) => css`
+	${style === 'standard'
+		? textSans.medium({ lineHeight: 'tight' })
+		: textSans.small()}
+
 	padding-top: ${space[4]}px;
 
 	& tr:not(:last-child) {
@@ -45,28 +49,44 @@ export type CheckListData = {
 	maybeGreyedOut?: SerializedStyles;
 };
 
+type CheckmarkListStyle = 'standard' | 'compact';
+
 export type CheckmarkListProps = {
 	checkListData: CheckListData[];
+	style?: CheckmarkListStyle;
 };
 
-function ChecklistItemIcon({ checked }: { checked: boolean }): JSX.Element {
+function ChecklistItemIcon({
+	checked,
+	style,
+}: {
+	checked: boolean;
+	style: CheckmarkListStyle;
+}): JSX.Element {
 	return checked ? (
-		<SvgTickRound isAnnouncedByScreenReader size="small" />
+		<SvgTickRound
+			isAnnouncedByScreenReader
+			size={style === 'standard' ? 'small' : 'xsmall'}
+		/>
 	) : (
-		<SvgCrossRound isAnnouncedByScreenReader size="small" />
+		<SvgCrossRound
+			isAnnouncedByScreenReader
+			size={style === 'standard' ? 'small' : 'xsmall'}
+		/>
 	);
 }
 
 export function CheckmarkList({
 	checkListData,
+	style = 'standard',
 }: CheckmarkListProps): JSX.Element {
 	return (
-		<table css={tableCss}>
+		<table css={tableCss(style)}>
 			{checkListData.map((item) => (
 				<tr>
-					<td css={[checkListIconCss, item.maybeGreyedOut]}>
-						<div css={iconContainerCss}>
-							<ChecklistItemIcon checked={item.isChecked} />
+					<td css={[checkListIconCss(style), item.maybeGreyedOut]}>
+						<div css={style === 'standard' ? iconContainerCss : css``}>
+							<ChecklistItemIcon checked={item.isChecked} style={style} />
 						</div>
 					</td>
 					<td css={[checkListTextCss, item.maybeGreyedOut]}>{item.text}</td>
