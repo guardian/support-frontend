@@ -21,7 +21,7 @@ function ThankyouCopyYourAccount({
 
 	return (
 		<span>
-			{thankyouCopy} <a href="https://manage.theguardian.com">your account.</a>.
+			{thankyouCopy} <a href="https://manage.theguardian.com">your account</a>.
 		</span>
 	);
 }
