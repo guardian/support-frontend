@@ -5,7 +5,7 @@ import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
 
 const checkListIconCss = (style: CheckmarkListStyle) => css`
 	vertical-align: top;
-	padding-right: 10px;
+	padding-right: ${style === 'compact' ? '4px' : '10px'};
 	line-height: 0;
 
 	svg {

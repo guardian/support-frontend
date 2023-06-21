@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
+import { textSans } from '@guardian/source-foundations';
 import { Column, Columns } from '@guardian/source-react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { SimplePriceCardsProps } from 'components/priceCards/simplePriceCards';
 import { SimplePriceCards } from 'components/priceCards/simplePriceCards';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
 import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
+import { Compact as List } from '../content/CheckmarkList.stories';
 import { Default as InfoBlock } from '../content/InfoBlock.stories';
 
 export default {
@@ -68,6 +70,22 @@ Default.args = {
 	},
 	children: (
 		<div>
+			<h2
+				css={css`
+					${textSans.small()};
+					color: #606060;
+					margin-bottom: 10px;
+				`}
+			>
+				Exclusive extras include:
+			</h2>
+			<div
+				css={css`
+					margin-bottom: 16px;
+				`}
+			>
+				<List {...List.args} />
+			</div>
 			<InfoBlock {...InfoBlock.args} />
 		</div>
 	),
