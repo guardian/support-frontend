@@ -181,10 +181,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 		),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && email.length > 0,
-			'marketingConsent',
-		),
-		...maybeThankYouModule(
-			contributionType === 'ONE_OFF' && email.length > 0,
 			'supportReminder',
 		),
 		// 'feedback', // <-- Temporarily disable supporter plus thank you page survey
