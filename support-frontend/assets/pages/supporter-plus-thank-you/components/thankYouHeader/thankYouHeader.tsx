@@ -42,7 +42,6 @@ type ThankYouHeaderProps = {
 	contributionType: ContributionType;
 	amount: number | undefined;
 	currency: IsoCurrency;
-	shouldShowLargeDonationMessage: boolean;
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
@@ -55,7 +54,6 @@ function ThankYouHeader({
 	contributionType,
 	amount,
 	currency,
-	shouldShowLargeDonationMessage,
 	amountIsAboveThreshold,
 	isSignedIn,
 	userTypeFromIdentityResponse,
@@ -74,7 +72,6 @@ function ThankYouHeader({
 			<p css={headerSupportingText}>
 				{showDirectDebitMessage && <DirectDebitMessage />}
 				<Subheading
-					shouldShowLargeDonationMessage={shouldShowLargeDonationMessage}
 					contributionType={contributionType}
 					amountIsAboveThreshold={amountIsAboveThreshold}
 					isSignedIn={isSignedIn}

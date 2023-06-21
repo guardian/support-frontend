@@ -3,7 +3,6 @@ import type { ContributionType } from 'helpers/contributions';
 import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
 
 interface SubheadingProps {
-	shouldShowLargeDonationMessage: boolean;
 	contributionType: ContributionType;
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
@@ -29,7 +28,6 @@ function MarketingCopy({
 }
 
 const getSubHeadingCopy = (
-	shouldShowLargeDonationMessage: boolean,
 	amountIsAboveThreshold: boolean,
 	contributionType: ContributionType,
 	isSignedIn: boolean,
@@ -76,9 +74,13 @@ const getSubHeadingCopy = (
 		};
 	};
 
-	const oneOffCopy = shouldShowLargeDonationMessage
-		? 'It’s not every day we receive such a generous amount. We would love to stay in touch. So that we can, please select the add-ons that suit you best. '
-		: 'We would love to stay in touch. So that we can, please select the add-ons that suit you best. ';
+	const oneOffCopy = (
+		<span>
+			Thank you for your contribution. We’ll be in touch to bring you closer to
+			our journalism. You can amend your email preferences at any time via{' '}
+			<a href="https://manage.theguardian.com">your account</a>.
+		</span>
+	);
 
 	return contributionType === 'ONE_OFF'
 		? oneOffCopy
@@ -90,14 +92,12 @@ const getSubHeadingCopy = (
 };
 
 function Subheading({
-	shouldShowLargeDonationMessage,
 	contributionType,
 	amountIsAboveThreshold,
 	isSignedIn,
 	userTypeFromIdentityResponse,
 }: SubheadingProps): JSX.Element {
 	const subheadingCopy = getSubHeadingCopy(
-		shouldShowLargeDonationMessage,
 		amountIsAboveThreshold,
 		contributionType,
 		isSignedIn,

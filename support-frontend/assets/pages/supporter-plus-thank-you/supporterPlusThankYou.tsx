@@ -216,7 +216,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 							contributionType={contributionType}
 							amount={amount}
 							currency={currencyId}
-							shouldShowLargeDonationMessage={isAmountLargeDonation}
 							amountIsAboveThreshold={amountIsAboveThreshold}
 							isSignedIn={isSignedIn}
 							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
