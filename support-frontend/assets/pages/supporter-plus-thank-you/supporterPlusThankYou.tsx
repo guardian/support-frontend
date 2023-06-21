@@ -60,6 +60,9 @@ export const headerContainer = css`
 	${from.leftCol} {
 		width: calc(60% - ${space[3]}px);
 	}
+	${from.wide} {
+		width: calc(55% - ${space[3]}px);
+	}
 `;
 
 export const buttonContainer = css`
