@@ -3,39 +3,19 @@ import * as abTest from 'helpers/abTests/abtest';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import {
-	detect as detectCountry,
-	fromString as isoCountryFromString,
-} from 'helpers/internationalisation/country';
+import { detect as detectCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
-import type { LocalCurrencyCountry } from 'helpers/internationalisation/localCurrencyCountry';
-import { localCurrencyCountries } from 'helpers/internationalisation/localCurrencyCountry';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
 	getCampaign,
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-import {
-	getAllQueryParamsWithExclusions,
-	getQueryParameter,
-} from 'helpers/urls/url';
+import { getAllQueryParamsWithExclusions } from 'helpers/urls/url';
 import { getAmounts } from '../../abTests/helpers';
 import type { CommonState, Internationalisation } from '../commonState/state';
-
-function getLocalCurrencyCountry(): LocalCurrencyCountry | null | undefined {
-	const queryParam = isoCountryFromString(
-		getQueryParameter('local-currency-country'),
-	);
-
-	if (queryParam) {
-		return localCurrencyCountries[queryParam];
-	}
-
-	return null;
-}
 
 // Creates the initial state for the common reducer.
 function buildInitialState(
@@ -48,7 +28,6 @@ function buildInitialState(
 ): CommonState {
 	const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
 	const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
-	const localCurrencyCountry = getLocalCurrencyCountry();
 	const internationalisation: Internationalisation = {
 		countryGroupId,
 		countryId,
@@ -56,10 +35,6 @@ function buildInitialState(
 		useLocalCurrency: false,
 		defaultCurrency: currencyId,
 	};
-
-	if (localCurrencyCountry) {
-		internationalisation.localCurrencyCountry = localCurrencyCountry;
-	}
 
 	const amounts = getAmounts(settings, abParticipations, countryGroupId);
 
