@@ -6,7 +6,7 @@ import type {
 	SelectedAmounts,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
+// import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
 
 const daysFromNowForGift = 89;
 
@@ -107,17 +107,19 @@ export const amountIsValid = (
 	input: string,
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
-	localCurrencyCountry?: LocalCurrencyCountry | null,
-	useLocalCurrency?: boolean | null,
+	// localCurrencyCountry?: LocalCurrencyCountry | null,
+	// useLocalCurrency?: boolean | null,
 ): boolean => {
-	const min =
-		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
-			? localCurrencyCountry.config[contributionType].min
-			: config[countryGroupId][contributionType].min;
-	const max =
-		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
-			? localCurrencyCountry.config[contributionType].max
-			: config[countryGroupId][contributionType].max;
+	// const min =
+	// 	useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
+	// 		? localCurrencyCountry.config[contributionType].min
+	// 		: config[countryGroupId][contributionType].min;
+	// const max =
+	// 	useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
+	// 		? localCurrencyCountry.config[contributionType].max
+	// 		: config[countryGroupId][contributionType].max;
+	const min = config[countryGroupId][contributionType].min;
+	const max = config[countryGroupId][contributionType].max;
 	return (
 		isNotEmpty(input) &&
 		isNotNaN(input) &&
@@ -132,8 +134,8 @@ export const amountOrOtherAmountIsValid = (
 	otherAmounts: OtherAmounts,
 	contributionType: ContributionType,
 	countryGroupId: CountryGroupId,
-	localCurrencyCountry?: LocalCurrencyCountry | null,
-	useLocalCurrency?: boolean | null,
+	// localCurrencyCountry?: LocalCurrencyCountry | null,
+	// useLocalCurrency?: boolean | null,
 ): boolean => {
 	let amt = '';
 
@@ -155,8 +157,8 @@ export const amountOrOtherAmountIsValid = (
 		amt,
 		countryGroupId,
 		contributionType,
-		localCurrencyCountry,
-		useLocalCurrency,
+		// localCurrencyCountry,
+		// useLocalCurrency,
 	);
 };
 // ignores all spaces

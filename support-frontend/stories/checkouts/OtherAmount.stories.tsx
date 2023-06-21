@@ -35,11 +35,11 @@ Default.args = {
 	minAmount: 2,
 };
 
-export const WithSuffix = Template.bind({});
+// export const WithSuffix = Template.bind({});
 
-WithSuffix.args = {
-	selectedAmount: 'other',
-	otherAmount: '',
-	currency: 'SEK',
-	minAmount: 10,
-};
+// WithSuffix.args = {
+// 	selectedAmount: 'other',
+// 	otherAmount: '',
+// 	currency: 'SEK',
+// 	minAmount: 10,
+// };
