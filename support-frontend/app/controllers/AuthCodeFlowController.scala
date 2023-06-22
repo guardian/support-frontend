@@ -49,7 +49,7 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
       "response_type" -> "code",
       "client_id" -> config.oauthClientId,
       "redirect_uri" -> config.oauthCallbackUrl,
-      "scope" -> config.oauthScopes,
+      "scope" -> config.oauthScopes.trim.replaceAll("\\s+", " "),
       "state" -> state,
       "code_challenge" -> codeChallenge,
       "code_challenge_method" -> "S256",
@@ -159,7 +159,7 @@ object AuthCodeFlow {
   }
 
   def secureCookie(name: String, value: String): Cookie =
-    Cookie(name, value, maxAge = Some(3600), secure = true, httpOnly = true, sameSite = Some(SameSite.Lax))
+    Cookie(name, value, maxAge = Some(3600), secure = true, httpOnly = false, sameSite = Some(SameSite.Lax))
 
   /*
    * Methods to help with Proof Keys for Code Exchange (PKCE).
