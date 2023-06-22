@@ -220,5 +220,6 @@ const gwDeliverableCountries: Partial<Record<IsoCountry, string>> = {
 	MU: 'Mauritius',
 	NP: 'Nepal',
 	MR: 'Mauritania',
+	LK: 'Sri Lanka',
 };
 export { gwDeliverableCountries };
