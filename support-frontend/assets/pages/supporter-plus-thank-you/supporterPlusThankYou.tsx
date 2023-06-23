@@ -188,6 +188,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 			'supportReminder',
 		),
 		// 'feedback', // <-- Temporarily disable supporter plus thank you page survey
+		...maybeThankYouModule(email.length > 0, 'feedback'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];
