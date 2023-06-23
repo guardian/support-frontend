@@ -56,6 +56,8 @@ export const getThankYouModuleData = (
 	countryGroupId: CountryGroupId,
 	csrf: CsrfState,
 	email: string,
+	isOneOff: boolean,
+	amountIsAboveThreshold: boolean,
 	campaignCode?: string,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
 	const { feedbackSurveyHasBeenCompleted, marketingConsent, supportReminder } =
@@ -92,7 +94,11 @@ export const getThankYouModuleData = (
 			ctas: feedbackSurveyHasBeenCompleted ? null : (
 				<FeedbackCTA
 					feedbackSurveyLink={
-						'https://guardiannewsandmedia.formstack.com/forms/guardian_supporter'
+						isOneOff
+							? 'https://guardiannewsandmedia.formstack.com/forms/guardian_supporter_single'
+							: amountIsAboveThreshold
+							? 'https://guardiannewsandmedia.formstack.com/forms/guardian_supporter_above'
+							: 'https://guardiannewsandmedia.formstack.com/forms/guardian_supporter_below'
 					}
 				/>
 			),
