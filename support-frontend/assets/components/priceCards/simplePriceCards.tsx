@@ -94,8 +94,8 @@ const detailsContainer = css`
 `;
 
 type Prices = {
-	monthly: number;
-	annual: number;
+	MONTHLY: number;
+	ANNUAL: number;
 };
 
 type PriceSelection = {
@@ -123,14 +123,14 @@ function getLabel(
 		return (
 			<span>
 				{currencyGlyph}
-				{prices.annual}/year
+				{prices.ANNUAL}/year
 			</span>
 		);
 	}
 	return (
 		<span>
 			{currencyGlyph}
-			{prices.monthly}/month
+			{prices.MONTHLY}/month
 		</span>
 	);
 }
@@ -141,7 +141,7 @@ function getTaglinePrice(
 	contributionType: ContributionType,
 ) {
 	const period = contributionType === 'ANNUAL' ? 'year' : 'month';
-	const price = contributionType === 'ANNUAL' ? prices.annual : prices.monthly;
+	const price = contributionType === 'ANNUAL' ? prices.ANNUAL : prices.MONTHLY;
 
 	return `${glyph(fromCountryGroupId(countryGroupId))}${price} per ${period}`;
 }
@@ -162,7 +162,7 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 					onChange={() =>
 						props.onPriceChange({
 							contributionType: 'ANNUAL',
-							amount: props.prices.annual,
+							amount: props.prices.ANNUAL,
 						})
 					}
 					checked={props.contributionType === 'ANNUAL'}
@@ -176,7 +176,7 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 					onChange={() =>
 						props.onPriceChange({
 							contributionType: 'MONTHLY',
-							amount: props.prices.monthly,
+							amount: props.prices.MONTHLY,
 						})
 					}
 					checked={props.contributionType === 'MONTHLY'}
