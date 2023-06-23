@@ -9,19 +9,17 @@ interface SubheadingProps {
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 }
 
-function ThankyouCopyYourAccount({
+function MarketingCopy({
 	contributionType,
 }: {
 	contributionType: ContributionType;
 }) {
-	const thankyouCopy =
-		contributionType === 'ONE_OFF'
-			? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
-			: 'Adjust your email preferences at any time via ';
-
 	return (
 		<span>
-			{thankyouCopy} <a href="https://manage.theguardian.com">your account</a>.
+			{contributionType === 'ONE_OFF'
+				? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
+				: 'Adjust your email preferences at any time via '}
+			<a href="https://manage.theguardian.com">your account</a>.
 		</span>
 	);
 }
@@ -99,7 +97,7 @@ function Subheading({
 	return (
 		<>
 			{subheadingCopy}
-			<ThankyouCopyYourAccount contributionType={contributionType} />
+			<MarketingCopy contributionType={contributionType} />
 			{userTypeFromIdentityResponse !== 'current' &&
 				contributionType !== 'ONE_OFF' && (
 					<span
