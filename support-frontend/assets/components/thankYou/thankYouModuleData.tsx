@@ -89,7 +89,13 @@ export const getThankYouModuleData = (
 					feedbackSurveyHasBeenCompleted={feedbackSurveyHasBeenCompleted}
 				/>
 			),
-			ctas: feedbackSurveyHasBeenCompleted ? null : <FeedbackCTA />,
+			ctas: feedbackSurveyHasBeenCompleted ? null : (
+				<FeedbackCTA
+					feedbackSurveyLink={
+						'https://guardiannewsandmedia.formstack.com/forms/guardian_supporter'
+					}
+				/>
+			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
 		},
 		marketingConsent: {
