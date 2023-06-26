@@ -77,7 +77,7 @@ const buttonOverrides = css`
 
 const iconCss = (flip: boolean) => css`
 	svg {
-		max-width: 12px;
+		max-width: ${space[3]}px;
 		transition: transform 0.3s ease-in-out;
 
 		${flip && 'transform: rotate(180deg);'}
