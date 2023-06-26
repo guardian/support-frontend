@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { textSans } from '@guardian/source-foundations';
 import { useEffect } from 'react';
+import type { CheckListData } from 'components/checkmarkList/checkmarkList';
 import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
-import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutErrorSummary } from 'components/errorSummary/errorSummary';
 import { CheckoutErrorSummaryContainer } from 'components/errorSummary/errorSummaryContainer';
@@ -43,6 +43,47 @@ const infoBlockHeading = css`
 const boldText = css`
 	font-weight: 700;
 `;
+
+const testCheckListData = (): CheckListData[] => {
+	return [
+		{
+			isChecked: true,
+			text: (
+				<p>
+					<span css={boldText}>A regular supporter newsletter. </span>Get
+					exclusive insight from our newsroom
+				</p>
+			),
+		},
+		{
+			isChecked: true,
+			text: (
+				<p>
+					<span css={boldText}>Uninterrupted reading. </span> See far fewer asks
+					for support
+				</p>
+			),
+		},
+		{
+			isChecked: true,
+			text: (
+				<p>
+					<span css={boldText}>Full access to the Guardian app. </span>Enjoy
+					unlimited articles and enhanced offline reading
+				</p>
+			),
+		},
+		{
+			isChecked: true,
+			text: (
+				<p>
+					<span css={boldText}>Ad-free reading. </span>Avoid ads on all your
+					devices
+				</p>
+			),
+		},
+	];
+};
 
 export function LimitedPriceCards(): JSX.Element {
 	const dispatch = useContributionsDispatch();
@@ -95,7 +136,7 @@ export function LimitedPriceCards(): JSX.Element {
 									<h2 css={accordionHeading}>Exclusive extras include:</h2>
 									<div css={listSpacing}>
 										<CheckmarkList
-											checkListData={checkListData({ higherTier: true })}
+											checkListData={testCheckListData()}
 											style="compact"
 										/>
 									</div>
@@ -111,14 +152,11 @@ export function LimitedPriceCards(): JSX.Element {
 											</h3>
 										}
 										content={
-											<ul>
-												<li>Next billing date will be XX Month Year.</li>
-												<li>
-													Cancel or change your support anytime. If you cancel
-													within the first 14 days, you will receive a full
-													refund.
-												</li>
-											</ul>
+											<p>
+												Cancel or change your support anytime. If you cancel
+												within the first 14 days, you will receive a full
+												refund.
+											</p>
 										}
 									/>
 								</div>
