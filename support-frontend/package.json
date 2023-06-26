@@ -137,7 +137,7 @@
     "@guardian/prettier": "^2.1.5",
     "@khanacademy/flow-to-ts": "^0.5.1",
     "@storybook/addon-a11y": "^7.0.17",
-    "@storybook/addon-actions": "^7.0.17",
+    "@storybook/addon-actions": "^7.0.23",
     "@storybook/addon-essentials": "^7.0.17",
     "@storybook/addon-interactions": "^7.0.17",
     "@storybook/addon-links": "^7.0.17",
