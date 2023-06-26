@@ -55,13 +55,10 @@ export const firstColumnContainer = css`
 
 export const headerContainer = css`
 	${from.desktop} {
-		width: 70%;
+		width: 60%;
 	}
 	${from.leftCol} {
-		width: calc(60% - ${space[3]}px);
-	}
-	${from.wide} {
-		width: calc(55% - ${space[3]}px);
+		width: calc(50% - ${space[3]}px);
 	}
 `;
 
