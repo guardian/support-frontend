@@ -14,13 +14,11 @@ import type {
 	Campaign,
 	ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-// import type { LocalCurrencyCountry } from '../../internationalisation/localCurrencyCountry';
 
 export type Internationalisation = {
 	currencyId: IsoCurrency;
 	countryGroupId: CountryGroupId;
 	countryId: IsoCountry;
-	// localCurrencyCountry?: LocalCurrencyCountry;
 	useLocalCurrency: boolean;
 	defaultCurrency: IsoCurrency;
 };

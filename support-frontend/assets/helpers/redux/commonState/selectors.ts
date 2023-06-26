@@ -22,16 +22,6 @@ export function getDefaultContributionType(
 export function getMinimumContributionAmount(
 	state: ContributionsState,
 ): number {
-	// ----------------------------------------------------------------------------
-	// Need to remove all code associated with localised currency (eg Danish Krone)
-	// ----------------------------------------------------------------------------
-	// const { countryGroupId, useLocalCurrency, localCurrencyCountry } =
-	// 	state.common.internationalisation;
-	// const contributionType = getContributionType(state);
-	// const { min } =
-	// 	useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
-	// 		? localCurrencyCountry.config[contributionType]
-	// 		: config[countryGroupId][contributionType];
 	const { countryGroupId } = state.common.internationalisation;
 	const contributionType = getContributionType(state);
 	const { min } = config[countryGroupId][contributionType];
@@ -42,19 +32,6 @@ export function getMinimumContributionAmount(
 export function getMaximumContributionAmount(
 	state: ContributionsState,
 ): number {
-	// ----------------------------------------------------------------------------
-	// Need to remove all code associated with localised currency (eg Danish Krone)
-	// ----------------------------------------------------------------------------
-	// const { countryGroupId, useLocalCurrency, localCurrencyCountry } =
-	// 	state.common.internationalisation;
-	// const contributionType = getContributionType(state);
-
-	// const { max } =
-	// 	useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
-	// 		? localCurrencyCountry.config[contributionType]
-	// 		: config[countryGroupId][contributionType];
-
-	// return max;
 	const { countryGroupId } = state.common.internationalisation;
 	const contributionType = getContributionType(state);
 
