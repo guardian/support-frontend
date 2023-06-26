@@ -28,15 +28,15 @@ function getInternationalisationFromCountry(
 // ----------------------------------------------------------------------------
 // Need to remove all code associated with localised currency (eg Danish Krone)
 // ----------------------------------------------------------------------------
-// function getLocalisedCurrencyId(
-// 	internationalisation: Internationalisation,
-// 	shouldUseLocalCurrency: boolean,
-// ) {
-// 	if (shouldUseLocalCurrency && internationalisation.localCurrencyCountry) {
-// 		return internationalisation.localCurrencyCountry.currency;
-// 	}
-// 	return internationalisation.defaultCurrency;
-// }
+function getLocalisedCurrencyId(
+	internationalisation: Internationalisation,
+	// shouldUseLocalCurrency: boolean,
+) {
+	// if (shouldUseLocalCurrency && internationalisation.localCurrencyCountry) {
+	// 	return internationalisation.localCurrencyCountry.currency;
+	// }
+	return internationalisation.defaultCurrency;
+}
 
 // function getLocalisedAmounts(
 // 	internationalisation: Internationalisation,
@@ -95,11 +95,12 @@ export const commonSlice = createSlice({
 		// Need to remove all code associated with localised currency (eg Danish Krone)
 		// ----------------------------------------------------------------------------
 		// setCurrencyId(state, action: PayloadAction<boolean>) {
-		// 	state.internationalisation.currencyId = getLocalisedCurrencyId(
-		// 		state.internationalisation,
-		// 		action.payload,
-		// 	);
-		// },
+		setCurrencyId(state) {
+			state.internationalisation.currencyId = getLocalisedCurrencyId(
+				state.internationalisation,
+				// action.payload,
+			);
+		},
 		// setUseLocalCurrencyFlag(state, action: PayloadAction<boolean>) {
 		// 	state.internationalisation.useLocalCurrency = action.payload;
 		// },
