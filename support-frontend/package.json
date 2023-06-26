@@ -98,7 +98,7 @@
     "@stripe/stripe-js": "^1.8.0",
     "@types/dompurify": "^3.0.2",
     "@types/seedrandom": "^3.0.5",
-    "@types/uuid": "^9.0.1",
+    "@types/uuid": "^9.0.2",
     "classnames": "^2.2.6",
     "dompurify": "^3.0.3",
     "emotion-theming": "^10.0.27",
