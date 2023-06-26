@@ -28,18 +28,6 @@ function getBenefits(countryId: IsoCountry) {
 			},
 		];
 	}
-	if (countryId === 'GB') {
-		return [
-			{
-				content: 'Every issue delivered with up to 79% off the cover price',
-			},
-			...coreBenefits,
-			{
-				content:
-					'A free Gift! £10 Guardian Bookshop voucher - exclusive to 12 for £12 quarterly subscribers',
-			},
-		];
-	}
 	return [
 		{
 			content: 'Every issue delivered with up to 35% off the cover price',
