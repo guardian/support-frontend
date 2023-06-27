@@ -28,7 +28,7 @@ sealed trait Product {
       case head :: Nil => Some(head)
       case _ =>
         throw new IllegalStateException(
-          s"Multiple rate plans found for $this with billing period $billingPeriod, fulfilment options $fulfilmentOptions and product options $productOptions and reader type $readerType",
+          s"Multiple rate plans found for $this with billing period $billingPeriod, fulfilment options $fulfilmentOptions, product options $productOptions and reader type $readerType",
         )
     }
 

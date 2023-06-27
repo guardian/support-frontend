@@ -40,7 +40,7 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec {
     }
   }
 
-  "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a Supporter Plus V2 purchase" in {
+  "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a Supporter Plus purchase" in {
     val state = decode[SendThankYouEmailState](supporterPlusState)
     state.isRight shouldBe true
     val supporterRatePlanItem = UpdateSupporterProductData
