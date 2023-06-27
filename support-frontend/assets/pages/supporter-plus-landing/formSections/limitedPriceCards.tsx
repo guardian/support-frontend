@@ -14,10 +14,7 @@ import {
 	fromCountryGroupId,
 	glyph,
 } from 'helpers/internationalisation/currency';
-import {
-	setProductType,
-	setSelectedAmount,
-} from 'helpers/redux/checkout/product/actions';
+import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	useContributionsDispatch,
@@ -50,8 +47,17 @@ const testCheckListData = (): CheckListData[] => {
 			isChecked: true,
 			text: (
 				<p>
-					<span css={boldText}>A regular supporter newsletter. </span>Get
-					exclusive insight from our newsroom
+					<span css={boldText}>Full access to the Guardian app. </span>Enjoy
+					unlimited articles and enhanced offline reading
+				</p>
+			),
+		},
+		{
+			isChecked: true,
+			text: (
+				<p>
+					<span css={boldText}>Ad-free reading. </span>Avoid ads on all your
+					devices
 				</p>
 			),
 		},
@@ -68,17 +74,8 @@ const testCheckListData = (): CheckListData[] => {
 			isChecked: true,
 			text: (
 				<p>
-					<span css={boldText}>Full access to the Guardian app. </span>Enjoy
-					unlimited articles and enhanced offline reading
-				</p>
-			),
-		},
-		{
-			isChecked: true,
-			text: (
-				<p>
-					<span css={boldText}>Ad-free reading. </span>Avoid ads on all your
-					devices
+					<span css={boldText}>A regular supporter newsletter. </span>Get
+					exclusive insight from our newsroom
 				</p>
 			),
 		},
@@ -94,12 +91,14 @@ export function LimitedPriceCards(): JSX.Element {
 	const contributionType = useContributionsSelector(getContributionType);
 
 	useEffect(() => {
-		dispatch(setProductType('ANNUAL'));
+		// The contribution type will be set by the query param to be either MONTHLY or ANNUAL, but we
+		// need to eliminate ONE_OFF for the type check
+		const type = contributionType !== 'ONE_OFF' ? contributionType : 'ANNUAL';
 		dispatch(
 			setSelectedAmount({
-				contributionType: 'ANNUAL',
+				contributionType,
 				amount:
-					benefitsThresholdsByCountryGroup[countryGroupId].ANNUAL.toString(),
+					benefitsThresholdsByCountryGroup[countryGroupId][type].toString(),
 			}),
 		);
 	}, []);
