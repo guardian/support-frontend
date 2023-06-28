@@ -73,7 +73,7 @@ const parseCustomerData = (data: string): CsrCustomerData => {
 	const customer = {
 		...otherData,
 		title: salutation,
-		...(isoCountry && { country: isoCountry }),
+		country: isoCountry ?? undefined,
 	};
 	return {
 		csr: salesforceData.csr,

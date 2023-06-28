@@ -23,7 +23,7 @@ global.window.guardian = {
 };
 
 const store = createTestStoreForContributions();
-store.dispatch(setCountryInternationalisation('GBP'));
+store.dispatch(setCountryInternationalisation('GB'));
 
 // This function has side effects such as retrieving the user email from session storage
 setUpRedux(store);

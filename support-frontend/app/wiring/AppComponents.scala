@@ -74,6 +74,7 @@ trait AppComponents
     getAddressController,
     loginController,
     testUsersController,
+    authCodeFlowController,
     payPalRegularController,
     payPalOneOffController,
     directDebitController,

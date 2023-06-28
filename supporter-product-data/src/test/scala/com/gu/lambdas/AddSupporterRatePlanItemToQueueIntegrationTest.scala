@@ -1,7 +1,7 @@
 package com.gu.lambdas
 
 import com.gu.model.states.AddSupporterRatePlanItemToQueueState
-import com.gu.supporterdata.model.Stage.DEV
+import com.gu.supporterdata.model.Stage.CODE
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -14,7 +14,7 @@ class AddSupporterRatePlanItemToQueueIntegrationTest extends AsyncFlatSpec with 
   "AddSupporterRatePlanItemToQueueLambda" should "process records correctly" in {
     val csvFilename = "select-active-rate-plans-2023-01-12T05:59:45.210958.csv"
     AddSupporterRatePlanItemToQueueLambda.addToQueue(
-      DEV,
+      CODE,
       AddSupporterRatePlanItemToQueueState(
         csvFilename,
         248,

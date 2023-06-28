@@ -1,26 +1,18 @@
 package backend
 
 import akka.actor.ActorSystem
-import com.amazonaws.services.s3.AmazonS3
 import cats.data.EitherT
 import cats.implicits._
 import com.amazon.pay.response.ipn.model.{Notification, NotificationType, RefundNotification}
 import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetails, Status}
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
+import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
-import com.gu.support.acquisitions.{
-  AcquisitionsStreamEc2OrLocalConfig,
-  AcquisitionsStreamService,
-  AcquisitionsStreamServiceImpl,
-  BigQueryConfig,
-  BigQueryService,
-}
-import com.gu.supporterdata.model.Stage.{DEV, PROD}
-import com.gu.supporterdata.services.SupporterDataDynamoService
+import com.gu.support.acquisitions._
 import com.typesafe.scalalogging.StrictLogging
-import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
+import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import conf.ConfigLoader.environmentShow
 import conf._
 import model._
@@ -30,9 +22,8 @@ import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
 import model.amazonpay.{AmazonPayApiError, AmazonPaymentData}
 import model.db.ContributionData
 import model.email.ContributorRow
-import model.Environment.Live
 import play.api.libs.ws.WSClient
-import services.{CloudWatchService, _}
+import services._
 import util.EnvironmentBasedBuilder
 
 import scala.concurrent.Future
@@ -47,7 +38,8 @@ class AmazonPayBackend(
     val acquisitionsStreamService: AcquisitionsStreamService,
     val databaseService: ContributionsStoreService,
     val supporterProductDataService: SupporterProductDataService,
-    switchService: SwitchService,
+    val softOptInsService: SoftOptInsService,
+    val switchService: SwitchService,
 )(implicit pool: DefaultThreadPool)
     extends StrictLogging
     with PaymentBackend {
@@ -243,6 +235,7 @@ object AmazonPayBackend {
       emailService: EmailService,
       cloudWatchService: CloudWatchService,
       supporterProductDataService: SupporterProductDataService,
+      softOptInsService: SoftOptInsService,
       switchService: SwitchService,
   )(implicit pool: DefaultThreadPool): AmazonPayBackend = {
     new AmazonPayBackend(
@@ -255,6 +248,7 @@ object AmazonPayBackend {
       acquisitionsStreamService,
       databaseService,
       supporterProductDataService,
+      softOptInsService,
       switchService,
     )
   }
@@ -266,7 +260,6 @@ object AmazonPayBackend {
       awsClient: AmazonS3,
       system: ActorSystem,
   ) extends EnvironmentBasedBuilder[AmazonPayBackend] {
-
     override def build(env: Environment): InitializationResult[AmazonPayBackend] = (
       configLoader
         .loadConfig[Environment, AmazonPayConfig](env)
@@ -291,6 +284,7 @@ object AmazonPayBackend {
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
       new SupporterProductDataService(env).valid: InitializationResult[SupporterProductDataService],
+      SoftOptInsService(env).valid: InitializationResult[SoftOptInsService],
       new SwitchService(env)(awsClient, system, defaultThreadPool).valid: InitializationResult[SwitchService],
     ).mapN(AmazonPayBackend.apply)
   }

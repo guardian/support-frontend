@@ -2,7 +2,7 @@ package services
 
 import cats.data.EitherT
 import com.gu.supporterdata.model.{ContributionAmount, SupporterRatePlanItem}
-import com.gu.supporterdata.model.Stage.{DEV, PROD}
+import com.gu.supporterdata.model.Stage.{CODE, PROD}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 import com.typesafe.scalalogging.StrictLogging
 import model.db.ContributionData
@@ -15,7 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SupporterProductDataService(environment: Environment) extends StrictLogging {
   val dynamoService = SupporterDataDynamoService(environment match {
     case Live => PROD
-    case _ => DEV
+    case _ => CODE
   })
   def insertContributionData(
       contributionData: ContributionData,
@@ -31,9 +31,8 @@ class SupporterProductDataService(environment: Environment) extends StrictLoggin
               productRatePlanId = "single_contribution",
               productRatePlanName = "Single Contribution",
               termEndDate = contributionData.created.toLocalDate
-                .plusYears(
-                  999,
-                ), // I don't think we need these to expire as they are for information only, no benefits attached
+                .plusYears(8)
+                .plusWeeks(1), // 8 years and 1 week is our standard data retention period. As there are no benefits attached to a single contribution we don't need to remove them sooner
               contractEffectiveDate = contributionData.created.toLocalDate,
               contributionAmount = Some(
                 ContributionAmount(contributionData.amount, contributionData.currency.toString),

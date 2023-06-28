@@ -140,6 +140,10 @@ GET  /oauth2callback                                               controllers.L
 GET  /logout                                                       controllers.Login.logout()
 GET  /test-users                                                   controllers.TestUsersManagement.createTestUser()
 
+# ----- Okta auth ----- #
+
+GET /oauth/authorize                                               controllers.AuthCodeFlowController.authorize()
+GET /oauth/callback                                                controllers.AuthCodeFlowController.callback(code: Option[String], state: String, error: Option[String], error_description: Option[String])
 
 # ----- PayPal (Recurring Endpoints) ----- #
 

@@ -43,6 +43,5 @@ Object {
   "referrerPageviewId": "123456",
   "referrerUrl": "https://example.com",
   "source": "exampleSource",
-  "visitId": null,
 }
 `;

@@ -26,19 +26,19 @@ Mappings:
   StageVariables:
     CODE:
       DynamoDBTables:
-      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE
       S3Files:
-      - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-DEV/catalog.json
+      - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json
       - arn:aws:s3:::support-workers-private/*
-      SupporterProductDataTable: supporter-product-data-tables-DEV-SupporterProductDataTable
+      SupporterProductDataTable: supporter-product-data-tables-CODE-SupporterProductDataTable
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-CODE
     PROD:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
-      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-DEV
+      - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE
       S3Files:
       - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json
-      - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-DEV/catalog.json
+      - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json
       - arn:aws:s3:::support-workers-private/*
       SupporterProductDataTable: supporter-product-data-tables-PROD-SupporterProductDataTable
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-PROD
@@ -113,7 +113,7 @@ Resources:
               - dynamodb:PutItem
               - dynamodb:UpdateItem
               Resource:
-              - Fn::ImportValue: supporter-product-data-tables-DEV-SupporterProductDataTable
+              - Fn::ImportValue: supporter-product-data-tables-CODE-SupporterProductDataTable
               - Fn::ImportValue: !FindInMap [ StageVariables, !Ref Stage, SupporterProductDataTable ]
   StatesExecutionRole:
     Type: "AWS::IAM::Role"
@@ -173,7 +173,7 @@ Resources:
       AlarmActions:
       - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub Support Workers Failure in ${Stage} (Recurring Contributions or Subscriptions Checkout)
-      AlarmDescription: There was a failure whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://support-logs.gutools.co.uk/_plugin/kibana/goto/bcce8e6d0d4fbda9f2c58755c79e5332
+      AlarmDescription: There was a failure whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-${Stage}?statusFilter=FAILED
       MetricName: ExecutionsFailed
       Namespace: AWS/States
       Dimensions:

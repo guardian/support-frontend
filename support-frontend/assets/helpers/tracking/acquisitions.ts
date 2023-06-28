@@ -29,7 +29,6 @@ export type AcquisitionQueryParameters = QueryParameter[];
 
 export type OphanIds = {
 	pageviewId: string;
-	visitId?: string | null;
 	browserId?: string | null;
 };
 
@@ -50,7 +49,6 @@ export type ReferrerAcquisitionData = {
 
 export type PaymentAPIAcquisitionData = {
 	pageviewId: string;
-	visitId?: string | null;
 	browserId?: string | null;
 	platform?: string;
 	referrerPageviewId?: string;
@@ -69,7 +67,6 @@ export type PaymentAPIAcquisitionData = {
 
 const ACQUISITIONS_PARAM = 'acquisitionData';
 const ACQUISITIONS_STORAGE_KEY = 'acquisitionData';
-const REFERRAL_DATA_PARAM = 'referralData';
 
 // ----- Campaigns ----- //
 
@@ -193,7 +190,6 @@ function buildReferrerAcquisitionData(
 const getOphanIds = (): OphanIds => ({
 	pageviewId: viewId,
 	browserId: getCookie('bwid'),
-	visitId: getCookie('vsid'),
 });
 
 function getSupportAbTests(
@@ -232,7 +228,6 @@ function derivePaymentApiAcquisitionData(
 
 	return {
 		platform: 'SUPPORT',
-		visitId: ophanIds.visitId,
 		browserId: ophanIds.browserId,
 		pageviewId: ophanIds.pageviewId,
 		referrerPageviewId: referrerAcquisitionData.referrerPageviewId,
@@ -255,21 +250,6 @@ function deriveSubsAcquisitionData(
 	const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations);
 
 	return { ...referrerAcquisitionData, abTests };
-}
-
-function deserialiseReferralData(serialised: string): Record<string, unknown> {
-	const [source, socialPlatform, referralCode] = serialised.split('_');
-
-	return {
-		componentId: `${source}_${socialPlatform}`,
-		source: 'SOCIAL',
-		queryParameters: [
-			{
-				name: 'referralCode',
-				value: referralCode,
-			},
-		],
-	};
 }
 
 // Reads the acquisition data from sessionStorage.
@@ -296,18 +276,6 @@ function getAcquisitionDataFromAcquisitionDataParam():
 	return null;
 }
 
-// Reads the acquisition data from the &referralData param containing _ separated values.
-function getAcquisitionDataFromReferralDataParam():
-	| Record<string, unknown>
-	| null
-	| undefined {
-	if (getQueryParameter(REFERRAL_DATA_PARAM)) {
-		return deserialiseReferralData(getQueryParameter(REFERRAL_DATA_PARAM));
-	}
-
-	return null;
-}
-
 // Generates appropriate acquisition data from the various, known, PPC params
 function getAcquisitionDataFromPPCParams():
 	| Record<string, unknown>
@@ -329,7 +297,6 @@ function getAcquisitionDataFromPPCParams():
 function getReferrerAcquisitionData(): ReferrerAcquisitionData {
 	// Read acquisitonData from the various query params, or from sessionStorage, in the following precedence
 	const candidateAcquisitionData =
-		getAcquisitionDataFromReferralDataParam() ??
 		getAcquisitionDataFromAcquisitionDataParam() ??
 		getAcquisitionDataFromPPCParams() ??
 		getReferrerAcquisitionDataFromSessionStorage();

@@ -11,7 +11,7 @@ scalacOptions ++= Seq(
 addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.13.2")
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.2.11",
+  "ch.qos.logback" % "logback-classic" % "1.2.12",
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
@@ -19,8 +19,8 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.2",
-  "com.beachape" %% "enumeratum" % "1.7.0",
-  "com.beachape" %% "enumeratum-circe" % "1.7.0",
+  "com.beachape" %% "enumeratum" % "1.7.2",
+  "com.beachape" %% "enumeratum-circe" % "1.7.2",
   "com.dripower" %% "play-circe" % playCirceVersion,
   "org.typelevel" %% "simulacrum" % "1.0.1",
   "com.stripe" % "stripe-java" % stripeVersion,
@@ -55,7 +55,7 @@ libraryDependencies ++= Seq(
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
-resolvers += Resolver.sonatypeRepo("releases")
+resolvers ++= Resolver.sonatypeOssRepos("releases")
 
 debianPackageDependencies := Seq("openjdk-8-jre-headless")
 Debian / packageName := name.value

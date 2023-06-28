@@ -28,7 +28,6 @@ import {
 	postRegularPaymentRequest,
 	regularPaymentFieldsFromAuthorisation,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -45,15 +44,8 @@ import type {
 	IsoCountry,
 	StateProvince,
 } from 'helpers/internationalisation/country';
-import {
-	findIsoCountry,
-	stateProvinceFromString,
-} from 'helpers/internationalisation/country';
+import { shouldCollectStateForContributions } from 'helpers/internationalisation/shouldCollectStateForContribs';
 import { Annual, Monthly } from 'helpers/productPrice/billingPeriods';
-import {
-	setBillingCountry,
-	setBillingState,
-} from 'helpers/redux/checkout/address/actions';
 import {
 	setAmazonPayFatalError,
 	setAmazonPayWalletIsStale,
@@ -137,62 +129,30 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
 		state,
 	);
 
-function getBillingCountryAndState(
-	state: ContributionsState,
-	paymentMethod: PaymentMethod,
-	stripePaymentMethod?: StripePaymentMethod,
-): {
+function getBillingCountryAndState(state: ContributionsState): {
 	billingCountry: IsoCountry;
 	billingState: Option<StateProvince>;
 } {
-	const pageBaseCountry = state.common.internationalisation.countryId; // Needed later
-	const { country: billingCountry, state: billingState } =
-		state.page.checkoutForm.billingAddress.fields;
-
-	// If the user chose a Direct Debit payment method, then we must use the pageBaseCountry as the billingCountry.
-	if ([DirectDebit, ExistingDirectDebit].includes(paymentMethod)) {
-		return {
-			billingCountry: pageBaseCountry,
-			billingState,
-		};
-	}
-
-	// If the page form has a billingCountry, then it must have been provided by a wallet, ApplePay or
-	// Payment Request Button, which will already have filtered the billingState by stateProvinceFromString,
-	// so we can trust both values, verbatim, as long as the current payment method is one of those.
+	const paymentMethod = state.page.checkoutForm.payment.paymentMethod;
 	const isPaymentRequestButton =
-		paymentMethod == Stripe &&
-		(stripePaymentMethod === 'StripePaymentRequestButton' ||
-			stripePaymentMethod === 'StripeApplePay');
-	if (billingCountry && isPaymentRequestButton) {
+		paymentMethod.name == Stripe &&
+		(paymentMethod.stripePaymentMethod === 'StripePaymentRequestButton' ||
+			paymentMethod.stripePaymentMethod === 'StripeApplePay');
+	const { country: formCountry, state: formState } =
+		state.page.checkoutForm.billingAddress.fields;
+	if (isPaymentRequestButton && paymentMethod.country) {
 		return {
-			billingCountry,
-			billingState,
+			billingCountry: paymentMethod.country,
+			billingState:
+				paymentMethod.state ??
+				(formCountry === paymentMethod.country ? formState : ''),
+		};
+	} else {
+		return {
+			billingCountry: formCountry,
+			billingState: formState,
 		};
 	}
-
-	// If we have a billingState but no billingCountry then the state must have come from the drop-down on the website,
-	// wherupon it must match with the page's base country.
-	if (billingState && !billingCountry) {
-		return {
-			billingCountry: pageBaseCountry,
-			billingState: stateProvinceFromString(pageBaseCountry, billingState),
-		};
-	}
-
-	// Else, it's not a wallet transaction, and it's a no-state checkout page, so the only other option is to determine
-	// the country and state from GEO-IP, and failing that, the page's base country, ultimately from the countryGroup
-	// (e.g. DE for Europe, IN for International, GB for United Kingdom).
-	const fallbackCountry =
-		findIsoCountry(window.guardian.geoip?.countryCode) ?? pageBaseCountry;
-	const fallbackState = stateProvinceFromString(
-		billingCountry,
-		window.guardian.geoip?.stateCode,
-	);
-	return {
-		billingCountry: fallbackCountry,
-		billingState: fallbackState,
-	};
 }
 
 // This exists *only* to support the purchase of digi subs for migrating Kindle subscribers
@@ -238,13 +198,7 @@ function regularPaymentRequestFromAuthorisation(
 	state: ContributionsState,
 ): RegularPaymentRequest {
 	const { actionHistory } = state.debug;
-	const { billingCountry, billingState } = getBillingCountryAndState(
-		state,
-		authorisation.paymentMethod,
-		authorisation.paymentMethod === 'Stripe'
-			? authorisation.stripePaymentMethod
-			: undefined,
-	);
+	const { billingCountry, billingState } = getBillingCountryAndState(state);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const contributionType = getContributionType(state);
 
@@ -265,7 +219,12 @@ function regularPaymentRequestFromAuthorisation(
 			// required go cardless field
 			city: null,
 			// required go cardless field
-			state: billingState,
+			state: shouldCollectStateForContributions(
+				billingCountry,
+				contributionType,
+			)
+				? billingState
+				: null,
 			// required Zuora field if country is US or CA
 			postCode: null,
 			// required go cardless field
@@ -360,10 +319,6 @@ const onPaymentResult =
 								dispatch(setAmazonPayFatalError());
 							}
 						}
-
-						// Reset any updates the previous payment method had made to the form's billingCountry or billingState
-						dispatch(setBillingCountry(''));
-						dispatch(setBillingState(''));
 						// Finally, trigger the form display
 						if (result.error) {
 							dispatch(paymentFailure(result.error));

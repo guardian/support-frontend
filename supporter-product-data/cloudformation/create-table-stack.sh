@@ -3,6 +3,6 @@
 # aws cloudformation delete-stack --stack-name supporter-product-data-tables-PROD
 aws cloudformation create-stack \
   --capabilities CAPABILITY_IAM  \
-  --stack-name supporter-product-data-tables-PROD \
+  --stack-name supporter-product-data-tables-CODE \
   --template-body file://dynamo-tables.yaml \
-  --parameters  ParameterKey=Stage,ParameterValue=PROD
+  --parameters  ParameterKey=Stage,ParameterValue=CODE

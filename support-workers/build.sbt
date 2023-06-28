@@ -9,7 +9,7 @@ libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "2.2.3",
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
-  "ch.qos.logback" % "logback-classic" % "1.2.11",
+  "ch.qos.logback" % "logback-classic" % "1.2.12",
   "io.symphonia" % "lambda-logging" % "1.0.1",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
@@ -20,14 +20,14 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
-  "org.mockito" %% "mockito-scala" % "1.17.12" % "it,test",
-  "org.mockito" %% "mockito-scala-scalatest" % "1.17.12" % "it,test",
+  "org.mockito" %% "mockito-scala" % "1.17.14" % "it,test",
+  "org.mockito" %% "mockito-scala-scalatest" % "1.17.14" % "it,test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % "it,test",
   "org.scalatestplus" %% "scalatestplus-selenium" % "1.0.0-M2" % "it,test",
   "com.squareup.okhttp3" % "mockwebserver" % okhttpVersion % "it,test",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "io.circe" %% "circe-generic-extras" % circeVersion,
+  "io.circe" %% "circe-generic-extras" % "0.14.3",
   "io.circe" %% "circe-parser" % circeVersion,
   "io.sentry" % "sentry-logback" % "1.7.30",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
@@ -62,7 +62,7 @@ IntegrationTest / assembly / test := {}
 assembly / aggregate := false
 
 lazy val deployToCode =
-  inputKey[Unit]("Directly update AWS lambda code from DEV instead of via RiffRaff for faster feedback loop")
+  inputKey[Unit]("Directly update AWS lambda code from CODE instead of via RiffRaff for faster feedback loop")
 
 deployToCode := {
   import scala.sys.process._

@@ -75,10 +75,6 @@ export class PaymentApi extends GuStack {
       description: "ARN of the KMS key for encrypting SQS data",
     });
 
-    function environmentFromStage(stage: string) {
-      return stage == "CODE" ? "DEV" : stage;
-    }
-
     // TODO: Should these remain as cloudformation parameters?
     const projectName = "payment-api";
     const projectVersion = "0.1";
@@ -116,9 +112,7 @@ export class PaymentApi extends GuStack {
               "dynamodb:DescribeTable",
             ],
             resources: [
-              `arn:aws:dynamodb:*:*:table/SupporterProductData-${environmentFromStage(
-                this.stage
-              )}`,
+              `arn:aws:dynamodb:*:*:table/SupporterProductData-${this.stage}`,
             ],
           }),
 
@@ -137,12 +131,19 @@ export class PaymentApi extends GuStack {
               `arn:aws:ssm:${this.region}:${this.account}:parameter/${app}/*`,
             ],
           }),
-          new GuAllowPolicy(this, "SqsMessages", {
+          new GuAllowPolicy(this, "EmailSqsMessages", {
             actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
             resources:
               this.stage === "PROD"
                 ? [emailSqsCodeArn.valueAsString, emailSqsProdArn.valueAsString]
                 : [emailSqsCodeArn.valueAsString],
+          }),
+          new GuAllowPolicy(this, "SoftOptInsSqsMessages", {
+            actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
+            resources:
+              this.stage === "PROD"
+                ? [`arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-PROD`,]
+                : [`arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-DEV`,],
           }),
           new GuPutCloudwatchMetricsPolicy(this),
           new GuAllowPolicy(this, "AssumeOphanRole", {

@@ -1,3 +1,4 @@
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { AddressFields } from './state';
 import {
 	applyBillingAddressRules,
@@ -127,7 +128,7 @@ describe('applyBillingAddressRules', () => {
 	});
 
 	it('returns an error if country is empty', () => {
-		const fields = buildAddressFields({ country: '' });
+		const fields = buildAddressFields({ country: '' as IsoCountry });
 
 		const errors = applyBillingAddressRules(fields);
 
@@ -275,7 +276,7 @@ function buildAddressFields({
 	lineTwo = 'line two',
 	city = 'city',
 	state = 'state',
-	country = 'country',
+	country = 'IE',
 	postCode = 'postcode',
 }: Partial<AddressFields>): AddressFields {
 	return {

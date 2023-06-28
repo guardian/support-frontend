@@ -1,3 +1,4 @@
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -51,9 +52,8 @@ interface ThankYouModuleData {
 }
 
 export const getThankYouModuleData = (
-	countryId: string,
+	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
-	createReferralCodes: boolean,
 	csrf: CsrfState,
 	email: string,
 	campaignCode?: string,
@@ -130,12 +130,7 @@ export const getThankYouModuleData = (
 			header: socialShareHeader,
 			bodyCopy: getSocialShareCopy(countryId),
 			ctas: (
-				<SocialShareIcons
-					countryId={countryId}
-					campaignCode={campaignCode}
-					createReferralCodes={createReferralCodes}
-					email={email}
-				/>
+				<SocialShareIcons countryId={countryId} campaignCode={campaignCode} />
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SOCIAL,
 		},

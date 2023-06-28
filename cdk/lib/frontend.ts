@@ -57,7 +57,7 @@ export class Frontend extends GuStack {
         bucketName: "gu-zuora-catalog",
         paths: [
           "PROD/Zuora-PROD/catalog.json",
-          "PROD/Zuora-DEV/catalog.json",
+          "PROD/Zuora-CODE/catalog.json",
         ],
       }),
       new GuGetS3ObjectsPolicy(this, "SettingsBucket", {

@@ -69,19 +69,6 @@ case class ContributorRow(
     case _ => "international"
   }
 
-  private val currencyGlyph: String = currency match {
-    case "GBP" => "£"
-    case "EUR" => "€"
-    case "AUD" => "AU$"
-    case "CAD" => "CA$"
-    case "NZD" => "NZ$"
-    case "SEK" => "kr"
-    case "CHF" => "fr."
-    case "NOK" => "kr"
-    case "DKK" => "kr."
-    case _ => "$"
-  }
-
   private def formattedDate: String = new SimpleDateFormat("d MMMM yyyy").format(Date.from(Instant.now))
 
   private def renderPaymentMethod: String = paymentMethod match {
@@ -100,7 +87,7 @@ case class ContributorRow(
             EmailAddress = email,
             edition = edition,
             `payment method` = renderPaymentMethod,
-            currency = currencyGlyph,
+            currency,
             amount = amount.setScale(2).toString,
             first_name = firstName,
             date_of_payment = formattedDate,

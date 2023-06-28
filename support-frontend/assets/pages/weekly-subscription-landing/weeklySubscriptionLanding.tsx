@@ -56,7 +56,7 @@ const styles = {
 		${from.phablet} {
 			display: flex;
 			flex-direction: row;
-			justify-content: space-evenly:
+			justify-content: space-evenly;
 		}
 	`,
 	weeklyHeroContainerOverrides: css`
@@ -91,7 +91,11 @@ function WeeklyLPControl({
 			<FullWidthContainer>
 				<CentredContainer>
 					<Block cssOverrides={styles.closeGapAfterPageTitle}>
-						{orderIsAGift ? <GiftBenefits /> : <Benefits />}
+						{orderIsAGift ? (
+							<GiftBenefits />
+						) : (
+							<Benefits countryId={countryId} />
+						)}
 					</Block>
 				</CentredContainer>
 			</FullWidthContainer>
@@ -173,7 +177,11 @@ function WeeklyLPVariant({
 			<FullWidthContainer>
 				<CentredContainer>
 					<Block cssOverrides={styles.closeGapAfterPageTitle}>
-						{orderIsAGift ? <GiftBenefits /> : <Benefits />}
+						{orderIsAGift ? (
+							<GiftBenefits />
+						) : (
+							<Benefits countryId={countryId} />
+						)}
 					</Block>
 				</CentredContainer>
 			</FullWidthContainer>

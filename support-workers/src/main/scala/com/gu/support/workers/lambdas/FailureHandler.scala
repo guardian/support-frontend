@@ -58,12 +58,15 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     val pattern =
       "No such token: (.*); a similar object exists in test mode, but a live mode key was used to make this request.".r
     error.flatMap(extractUnderlyingError) match {
-      case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", _)))) =>
+      case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", message)))) =>
         val checkoutFailureReason = toCheckoutFailureReason(ze, state.analyticsInfo.paymentProvider)
+        val updatedRequestInfo = requestInfo.appendMessage(s"Zuora reported a payment failure: $ze");
         exitHandler(
           state,
           checkoutFailureReason,
-          requestInfo.appendMessage(s"Zuora reported a payment failure: $ze"),
+          if (message.contains("postal_code is required if any address fields are provided"))
+            updatedRequestInfo.copy(failed = true)
+          else updatedRequestInfo,
         )
       case Some(se @ StripeError("card_error", _, _, _, _)) =>
         val checkoutFailureReason = toCheckoutFailureReason(se)

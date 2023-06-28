@@ -32,8 +32,8 @@ export function PersonalDetailsContainer({
 	const isSignedIn = useContributionsSelector(
 		(state) => state.page.user.isSignedIn,
 	);
-	const countryGroupId = useContributionsSelector(
-		(state) => state.common.internationalisation.countryGroupId,
+	const countryId = useContributionsSelector(
+		(state) => state.common.internationalisation.countryId,
 	);
 
 	function onEmailChange(email: string) {
@@ -65,7 +65,7 @@ export function PersonalDetailsContainer({
 		signOutLink: <Signout isSignedIn={isSignedIn} />,
 		contributionState: (
 			<StateSelect
-				countryGroupId={countryGroupId}
+				countryId={countryId}
 				contributionType={contributionType}
 				state={state}
 				onStateChange={onBillingStateChange}

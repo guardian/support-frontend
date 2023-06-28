@@ -1,4 +1,5 @@
 import { configureStore, createListenerMiddleware } from '@reduxjs/toolkit';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -26,7 +27,7 @@ export function createTestStoreForSubscriptions(
 	initialBillingPeriod: BillingPeriod,
 	startDate?: DateYMDString,
 	productOption?: ProductOptions,
-	getFulfilmentOptionForCountry?: (country: string) => FulfilmentOptions,
+	getFulfilmentOptionForCountry?: (country: IsoCountry) => FulfilmentOptions,
 	initialState?: SubscriptionsState,
 ): SubscriptionsStore {
 	const subscriptionsPageReducer = createReducer();

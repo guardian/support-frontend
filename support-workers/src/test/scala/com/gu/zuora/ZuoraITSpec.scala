@@ -30,7 +30,7 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
   def codeGiftService: ZuoraGiftService =
     new ZuoraGiftService(
       Configuration.load().zuoraConfigProvider.get(),
-      Stages.DEV,
+      Stages.CODE,
       RequestRunners.configurableFutureRunner(30.seconds),
     )
 

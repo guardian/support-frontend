@@ -106,7 +106,262 @@ const newspaperCountries: Record<string, string> = {
 	GB: 'United Kingdom',
 	IM: 'Isle of Man',
 };
-const countries: Record<string, string> = {
+export type IsoCountry = typeof isoCountries[number];
+export const isoCountries = [
+	'GB',
+	'US',
+	'AU',
+	'NZ',
+	'CK',
+	'CA',
+	'AD',
+	'AL',
+	'AT',
+	'BA',
+	'BE',
+	'BG',
+	'BL',
+	'CH',
+	'CY',
+	'CZ',
+	'DE',
+	'DK',
+	'EE',
+	'ES',
+	'FI',
+	'FO',
+	'FR',
+	'GF',
+	'GL',
+	'GP',
+	'GR',
+	'HR',
+	'HU',
+	'IE',
+	'IT',
+	'LI',
+	'LT',
+	'LU',
+	'LV',
+	'MC',
+	'ME',
+	'MF',
+	'IS',
+	'MQ',
+	'MT',
+	'NL',
+	'NO',
+	'PF',
+	'PL',
+	'PM',
+	'PT',
+	'RE',
+	'RO',
+	'RS',
+	'SE',
+	'SI',
+	'SJ',
+	'SK',
+	'SM',
+	'TF',
+	'TR',
+	'WF',
+	'YT',
+	'VA',
+	'AX',
+	'KI',
+	'NR',
+	'NF',
+	'TV',
+	'AE',
+	'AF',
+	'AG',
+	'AI',
+	'AM',
+	'AO',
+	'AQ',
+	'AR',
+	'AS',
+	'AW',
+	'AZ',
+	'BB',
+	'BD',
+	'BF',
+	'BH',
+	'BI',
+	'BJ',
+	'BM',
+	'BN',
+	'BO',
+	'BQ',
+	'BR',
+	'BS',
+	'BT',
+	'BV',
+	'BW',
+	'BY',
+	'BZ',
+	'CC',
+	'CD',
+	'CF',
+	'CG',
+	'CI',
+	'CL',
+	'CM',
+	'CN',
+	'CO',
+	'CR',
+	'CU',
+	'CV',
+	'CW',
+	'CX',
+	'DJ',
+	'DM',
+	'DO',
+	'DZ',
+	'EC',
+	'EG',
+	'EH',
+	'ER',
+	'ET',
+	'FJ',
+	'FM',
+	'GA',
+	'GD',
+	'GE',
+	'GH',
+	'GM',
+	'GN',
+	'GQ',
+	'GS',
+	'GT',
+	'GU',
+	'GW',
+	'GY',
+	'HK',
+	'HM',
+	'HN',
+	'HT',
+	'ID',
+	'IL',
+	'IN',
+	'IO',
+	'IQ',
+	'IR',
+	'JM',
+	'JO',
+	'JP',
+	'KE',
+	'KG',
+	'KH',
+	'KM',
+	'KN',
+	'KP',
+	'KR',
+	'KW',
+	'KY',
+	'KZ',
+	'LA',
+	'LB',
+	'LC',
+	'LK',
+	'LR',
+	'LS',
+	'LY',
+	'MA',
+	'MD',
+	'MG',
+	'MH',
+	'MK',
+	'ML',
+	'MM',
+	'MN',
+	'MO',
+	'MP',
+	'MR',
+	'MS',
+	'MU',
+	'MV',
+	'MW',
+	'MX',
+	'MY',
+	'MZ',
+	'NA',
+	'NC',
+	'NE',
+	'NG',
+	'NI',
+	'NP',
+	'NU',
+	'OM',
+	'PA',
+	'PE',
+	'PG',
+	'PH',
+	'PK',
+	'PN',
+	'PR',
+	'PS',
+	'PW',
+	'PY',
+	'QA',
+	'RU',
+	'RW',
+	'SA',
+	'SB',
+	'SC',
+	'SD',
+	'SG',
+	'SL',
+	'SN',
+	'SO',
+	'SR',
+	'SS',
+	'ST',
+	'SV',
+	'SX',
+	'SY',
+	'SZ',
+	'TC',
+	'TD',
+	'TG',
+	'TH',
+	'TJ',
+	'TK',
+	'TL',
+	'TM',
+	'TN',
+	'TO',
+	'TT',
+	'TW',
+	'TZ',
+	'UA',
+	'UG',
+	'UM',
+	'UY',
+	'UZ',
+	'VC',
+	'VE',
+	'VG',
+	'VI',
+	'VN',
+	'VU',
+	'WS',
+	'YE',
+	'ZA',
+	'ZM',
+	'ZW',
+	'FK',
+	'GI',
+	'GG',
+	'IM',
+	'JE',
+	'SH',
+] as const;
+
+const isoCountrySet: Set<IsoCountry> = new Set(isoCountries);
+
+const countries: Record<IsoCountry, string> = {
 	GB: 'United Kingdom',
 	US: 'United States',
 	AU: 'Australia',
@@ -361,7 +616,6 @@ const countries: Record<string, string> = {
 export type UsState = $Keys<typeof usStates>;
 export type CaState = $Keys<typeof caStates>;
 export type AuState = $Keys<typeof auStates>;
-export type IsoCountry = $Keys<typeof countries>;
 export type StateProvince = UsState | CaState | AuState;
 // Annoyingly, this isn't Stripe's documentation, but if you try and submit
 // a country that isn't on this list, you get an error
@@ -480,18 +734,19 @@ function stateProvinceFromString(
 
 function fromString(s: string): IsoCountry | null | undefined {
 	const candidateIso = s.toUpperCase();
-	const isoCountryArray: IsoCountry[] = Object.keys(countries);
-	const isoIndex = isoCountryArray.indexOf(candidateIso);
-
 	if (candidateIso === 'UK') {
 		return 'GB';
 	}
 
-	if (isoIndex > -1) {
-		return isoCountryArray[isoIndex];
+	if (isIsoCountry(candidateIso)) {
+		return candidateIso;
 	}
 
 	return null;
+}
+
+function isIsoCountry(s: string): s is IsoCountry {
+	return isoCountrySet.has(s as IsoCountry);
 }
 
 function findIsoCountry(country?: string | null): Option<IsoCountry> {
@@ -501,7 +756,7 @@ function findIsoCountry(country?: string | null): Option<IsoCountry> {
 
 	return (
 		fromString(country) ??
-		Object.keys(countries).find((key) => countries[key] === country) ??
+		isoCountries.find((key) => countries[key] === country) ??
 		null
 	);
 }
@@ -561,6 +816,10 @@ function fromGeolocation(): IsoCountry | null | undefined {
 	}
 
 	return null;
+}
+
+function fromOldGeolocation(): IsoCountry | null | undefined {
+	return findIsoCountry(window.guardian.geoip?.countryCode);
 }
 
 function setCountry(country: IsoCountry): void {
@@ -646,6 +905,7 @@ function detect(
 			fromQueryParameter() ??
 			fromCookie() ??
 			fromGeolocation() ??
+			fromOldGeolocation() ??
 			'GB';
 	}
 

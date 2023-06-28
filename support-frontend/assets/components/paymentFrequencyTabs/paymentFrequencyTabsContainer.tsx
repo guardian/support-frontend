@@ -11,10 +11,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import type {
-	PaymentFrequencyTabsRenderProps,
-	TabProps,
-} from './paymentFrequenncyTabs';
+import type { PaymentFrequencyTabsRenderProps } from './paymentFrequenncyTabs';
 
 type PaymentFrequencyTabsContainerProps = {
 	ariaLabel?: string;
@@ -50,15 +47,13 @@ export function PaymentFrequencyTabsContainer({
 		dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
 	}
 
-	const tabs: TabProps[] = contributionTypes[countryGroupId].map(
-		({ contributionType }) => {
-			return {
-				id: contributionType,
-				labelText: toHumanReadableContributionType(contributionType),
-				selected: contributionType === productType,
-			};
-		},
-	);
+	const tabs = contributionTypes[countryGroupId].map(({ contributionType }) => {
+		return {
+			id: contributionType,
+			labelText: toHumanReadableContributionType(contributionType),
+			selected: contributionType === productType,
+		};
+	});
 
 	return render({
 		ariaLabel,

@@ -15,4 +15,19 @@ class Identity(config: Config) {
   lazy val testUserSecret = config.getString("test.users.secret")
 
   lazy val useStub = config.getOptionalBoolean("useStub").getOrElse(false)
+
+  // This cookie indicates that user has recently signed out
+  lazy val signedOutCookieName = config.getString("signed.out.cookie.name")
+
+  // These cookies are used to store OAuth tokens
+  lazy val idTokenCookieName = config.getString("id.token.cookie.name")
+  lazy val accessTokenCookieName = config.getString("access.token.cookie.name")
+
+  lazy val oauthClientId = config.getString("oauth.client.id")
+  lazy val oauthIssuerUrl = config.getString("oauth.issuer.url")
+  lazy val oauthAudience = config.getString("oauth.audience")
+  lazy val oauthAuthorizeUrl = config.getString("oauth.authorize.url")
+  lazy val oauthTokenUrl = config.getString("oauth.token.url")
+  lazy val oauthCallbackUrl = config.getString("oauth.callback.url")
+  lazy val oauthScopes = config.getString("oauth.scopes")
 }

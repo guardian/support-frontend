@@ -1,7 +1,7 @@
 package com.gu.services
 
 import com.gu.model.ZuoraFieldNames._
-import com.gu.supporterdata.model.Stage.{DEV, PROD}
+import com.gu.supporterdata.model.Stage.{CODE, PROD}
 import com.gu.supporterdata.model.Stage
 
 import java.time.LocalDate

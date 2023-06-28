@@ -25,6 +25,8 @@ sealed abstract class BackendError extends Exception {
     case BackendError.Email(err) => err.getMessage
     case BackendError.TrackingError(err) => err.getMessage
     case BackendError.MultipleErrors(errors) => errors.map(_.getMessage).mkString(" & ")
+    case BackendError.SoftOptInsServiceError(err) => err
+    case BackendError.SupporterProductDataError(err) => err
   }
 }
 
@@ -35,6 +37,7 @@ object BackendError {
   final case class GoogleAnalyticsError(error: String) extends BackendError
   final case class Database(error: ContributionsStoreService.Error) extends BackendError
   final case class SupporterProductDataError(error: String) extends BackendError
+  final case class SoftOptInsServiceError(error: String) extends BackendError
   final case class IdentityServiceError(error: IdentityClient.ContextualError) extends BackendError
   final case class PaypalApiError(error: PaypalAPIError) extends BackendError
   final case class StripeApiError(error: StripeError) extends BackendError
@@ -63,6 +66,7 @@ object BackendError {
   def identityIdMissingError(err: String): BackendError = IdentityIdMissingError(err)
   def fromIdentityError(err: IdentityClient.ContextualError): BackendError = IdentityServiceError(err)
   def fromDatabaseError(err: ContributionsStoreService.Error): BackendError = Database(err)
+
   def fromPaypalAPIError(err: PaypalAPIError): BackendError = PaypalApiError(err)
   def fromStripeApiError(err: StripeError): BackendError = StripeApiError(err)
   def fromEmailError(err: EmailService.Error): BackendError = Email(err)

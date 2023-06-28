@@ -1,5 +1,3 @@
-import { css } from '@emotion/react';
-import { headline, until } from '@guardian/source-foundations';
 import { useEffect } from 'react';
 import { getValidPaymentMethods } from 'helpers/forms/checkouts';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
@@ -12,7 +10,6 @@ import { selectExistingPaymentMethod } from 'helpers/redux/checkout/payment/exis
 import type { ExistingPaymentMethodsState } from 'helpers/redux/checkout/payment/existingPaymentMethods/state';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -23,14 +20,6 @@ import {
 } from 'helpers/tracking/behaviour';
 import { sendEventContributionPaymentMethod } from 'helpers/tracking/quantumMetric';
 import type { PaymentMethodSelectorProps } from './paymentMethodSelector';
-
-const optimisedLayoutOverrides = css`
-	${until.tablet} {
-		h2 {
-			${headline.xsmall({ fontWeight: 'bold' })}
-		}
-	}
-`;
 
 function getExistingPaymentMethodProps(
 	existingPaymentMethods: ExistingPaymentMethodsState,
@@ -81,10 +70,6 @@ function PaymentMethodSelectorContainer({
 		(state) => state.common.settings,
 	);
 
-	const useOptimisedMobileLayout = useContributionsSelector(
-		isUserInAbVariant('supporterPlusMobileTest1', 'variant'),
-	);
-
 	const availablePaymentMethods = getValidPaymentMethods(
 		contributionType,
 		switches,
@@ -128,10 +113,6 @@ function PaymentMethodSelectorContainer({
 		validationError: errors?.[0],
 		...getExistingPaymentMethodProps(existingPaymentMethods),
 		onPaymentMethodEvent,
-		showSecureTransacationIndicator: useOptimisedMobileLayout,
-		cssOverrides: useOptimisedMobileLayout
-			? optimisedLayoutOverrides
-			: undefined,
 	});
 }
 

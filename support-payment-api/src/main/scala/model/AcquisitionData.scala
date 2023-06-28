@@ -5,7 +5,6 @@ import com.gu.support.acquisitions.{AbTest, QueryParameter}
 //-- common for stripe and paypal
 case class AcquisitionData(
     platform: Option[String],
-    visitId: Option[String],
     browserId: Option[String],
     pageviewId: Option[String],
     referrerPageviewId: Option[String],

@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { fromString as isoCountryFromString } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
@@ -375,11 +376,9 @@ function fromString(countryGroup: string): CountryGroupId | null | undefined {
 	}
 }
 
-function fromCountry(isoCountry: string): CountryGroupId | null | undefined {
-	if (isoCountry === 'UK') {
-		return GBPCountries;
-	}
-
+function fromCountry(
+	isoCountry: IsoCountry,
+): CountryGroupId | null | undefined {
 	const countryGroup = (Object.keys(countryGroups) as CountryGroupId[]).find(
 		(countryGroupId) =>
 			countryGroups[countryGroupId].countries.includes(isoCountry),
@@ -402,7 +401,10 @@ function fromCookie(): CountryGroupId | null | undefined {
 	const country = cookie.get('GU_country');
 
 	if (country) {
-		return fromCountry(country);
+		const isoCountry = isoCountryFromString(country);
+		if (isoCountry) {
+			return fromCountry(isoCountry);
+		}
 	}
 
 	return null;
@@ -412,7 +414,10 @@ function fromGeolocation(): CountryGroupId | null | undefined {
 	const country = cookie.get('GU_geo_country');
 
 	if (country) {
-		return fromCountry(country);
+		const isoCountry = isoCountryFromString(country);
+		if (isoCountry) {
+			return fromCountry(isoCountry);
+		}
 	}
 
 	return null;

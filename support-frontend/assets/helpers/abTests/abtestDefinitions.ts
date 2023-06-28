@@ -59,27 +59,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.subscriptions.subsWeeklyPages,
 		seed: 11,
 	},
-	newspaperPriceCards: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage:
-			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
-		seed: 11,
-	},
 	supporterPlusV2: {
 		variants: [
 			{
@@ -100,28 +79,27 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 1,
 	},
-	supporterPlusMobileTest1: {
+	nudgeMinAmountsTest: {
 		variants: [
 			{
 				id: 'control',
 			},
 			{
-				id: 'variant',
+				id: 'variantA',
+			},
+			{
+				id: 'variantB',
 			},
 		],
 		audiences: {
 			ALL: {
 				offset: 0,
 				size: 1,
-				breakpoint: {
-					minWidth: 'mobile',
-					maxWidth: 'tablet',
-				},
 			},
 		},
 		isActive: true,
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		seed: 12,
+		seed: 9,
 	},
 };

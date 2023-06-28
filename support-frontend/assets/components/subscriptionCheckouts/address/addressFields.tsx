@@ -12,6 +12,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	auStates,
 	caStates,
+	fromString as isoCountryFromString,
 	usStates,
 } from 'helpers/internationalisation/country';
 import type {
@@ -37,7 +38,7 @@ type PropTypes = StatePropTypes & {
 	setTownCity: (city: string) => void;
 	setState: (state: string) => void;
 	setPostcode: (postCode: string) => void;
-	setCountry: (countryRaw: string) => void;
+	setCountry: (countryRaw: IsoCountry) => void;
 	setPostcodeForFinder: (postcode: string) => void;
 	setPostcodeErrorForFinder: (error: string) => void;
 	onFindAddress: (postcode: string) => void;
@@ -83,7 +84,12 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				data-qm-masking="blocklist"
 				label="Country"
 				value={props.country}
-				onChange={(e) => props.setCountry(e.target.value)}
+				onChange={(e) => {
+					const isoCountry = isoCountryFromString(e.target.value);
+					if (isoCountry) {
+						props.setCountry(isoCountry);
+					}
+				}}
 				error={firstError('country', props.errors)}
 			>
 				<OptionForSelect value="">Select a country</OptionForSelect>

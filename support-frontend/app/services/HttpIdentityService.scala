@@ -151,7 +151,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         .url(s"$apiUrl/user")
         .withHttpHeaders(List("X-GU-ID-Client-Access-Token" -> s"Bearer $apiClientToken"): _*)
         .withQueryStringParameters(List("emailAddress" -> email): _*)
-        .withRequestTimeout(3.seconds)
+        .withRequestTimeout(5.seconds)
         .withMethod("GET"),
     ) { resp =>
       resp.json
@@ -164,6 +164,10 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
           ),
         )
         .map(userResponse => userResponse.user.id)
+    }.leftMap { e =>
+      e match {
+        case IdentityError(message, description) => IdentityError("Error calling /user:".concat(message), description)
+      }
     }
 
   def createUserIdFromEmailUser(
@@ -190,7 +194,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
           ).flattenValues: _*,
         )
         .withBody(body)
-        .withRequestTimeout(3.seconds)
+        .withRequestTimeout(5.seconds)
         .withMethod("POST")
         .withQueryStringParameters(
           List(
@@ -210,6 +214,10 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
           ),
         )
         .map(response => response.guestRegistrationRequest.userId)
+    }.leftMap { e =>
+      e match {
+        case IdentityError(message, description) => IdentityError("Error calling /guest:".concat(message), description)
+      }
     }
   }
 

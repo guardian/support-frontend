@@ -1,12 +1,14 @@
 stacks: [support]
 regions: [eu-west-1]
-
+allowedStages:
+  - CODE
+  - PROD
 deployments:
   acquisition-events-api:
     type: aws-lambda
     parameters:
       bucket: membership-dist
-      functionNames: [acquisition-events-api-]
+      functionNames: [acquisition-events-api-cdk-]
       fileName: acquisition-events-api.jar
       prefixStack: false
     dependencies: [ cfn ]

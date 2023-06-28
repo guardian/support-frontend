@@ -1,7 +1,7 @@
 package model.acquisition
 
 import com.gu.i18n.Currency._
-import com.gu.i18n.{Country, CountryGroup, Currency, OtherCurrency}
+import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.acquisitions.models.PaymentProvider.{
   AmazonPay,
   PayPal,
@@ -56,7 +56,6 @@ object AcquisitionDataRowBuilder {
       readerType = ReaderType.Direct,
       acquisitionType = AcquisitionType.Purchase,
       zuoraSubscriptionNumber = None,
-      zuoraAccountNumber = None,
       contributionId = Some(contributionData.contributionId.toString),
       paymentId = Some(contributionData.paymentId),
       queryParameters = acquisitionData.queryParameters.map(_.toList).getOrElse(Nil),
@@ -93,7 +92,6 @@ object AcquisitionDataRowBuilder {
       readerType = ReaderType.Direct,
       acquisitionType = AcquisitionType.Purchase,
       zuoraSubscriptionNumber = None,
-      zuoraAccountNumber = None,
       contributionId = Some(contributionData.contributionId.toString),
       paymentId = Some(contributionData.paymentId),
       queryParameters = acquisitionData.flatMap(_.queryParameters.map(_.toList)).getOrElse(Nil),
@@ -132,7 +130,6 @@ object AcquisitionDataRowBuilder {
       readerType = ReaderType.Direct,
       acquisitionType = AcquisitionType.Purchase,
       zuoraSubscriptionNumber = None,
-      zuoraAccountNumber = None,
       contributionId = Some(contributionData.contributionId.toString),
       paymentId = Some(contributionData.paymentId),
       queryParameters = acquisitionData.queryParameters.map(_.toList).getOrElse(Nil),

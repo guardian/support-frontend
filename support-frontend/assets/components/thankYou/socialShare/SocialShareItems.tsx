@@ -7,7 +7,6 @@ import {
 	SvgLinkedIn,
 	SvgTwitter,
 } from '@guardian/source-react-components';
-import { generateReferralCode } from 'helpers/campaigns/campaignReferralCodes';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	OPHAN_COMPONENT_ID_SOCIAL_EMAIL,
@@ -26,8 +25,6 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 interface SocialShareIconsProps {
 	countryId: IsoCountry;
 	campaignCode?: string;
-	createReferralCodes: boolean;
-	email: string;
 }
 
 const buttonsContainer = css`
@@ -47,18 +44,11 @@ const getSocialShareCopy = (countryId: IsoCountry): string =>
 function SocialShareIcons({
 	countryId,
 	campaignCode,
-	createReferralCodes,
-	email,
 }: SocialShareIconsProps): JSX.Element {
-	const referralCode =
-		createReferralCodes && campaignCode
-			? generateReferralCode(email, campaignCode)
-			: null;
-
 	return (
 		<div css={buttonsContainer}>
 			<LinkButton
-				href={getFacebookShareLink(campaignCode, referralCode)}
+				href={getFacebookShareLink(campaignCode)}
 				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)}
 				target="_blank"
 				rel="noopener noreferrer"
@@ -71,7 +61,7 @@ function SocialShareIcons({
 			</LinkButton>
 
 			<LinkButton
-				href={getTwitterShareLink(countryId, campaignCode, referralCode)}
+				href={getTwitterShareLink(countryId, campaignCode)}
 				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
 				target="_blank"
 				rel="noopener noreferrer"
@@ -84,7 +74,7 @@ function SocialShareIcons({
 			</LinkButton>
 
 			<LinkButton
-				href={getLinkedInShareLink(referralCode)}
+				href={getLinkedInShareLink()}
 				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)}
 				target="_blank"
 				rel="noopener noreferrer"
@@ -97,7 +87,7 @@ function SocialShareIcons({
 			</LinkButton>
 
 			<LinkButton
-				href={getEmailShareLink(countryId, campaignCode, referralCode)}
+				href={getEmailShareLink(countryId, campaignCode)}
 				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
 				target="_blank"
 				rel="noopener noreferrer"

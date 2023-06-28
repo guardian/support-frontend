@@ -1,8 +1,3 @@
-// Copied from
-// https://github.com/playframework/playframework/blob/master/framework/src/play/
-// src/main/scala/play/api/data/validation/Validation.scala#L81
-// but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
-// for compatibility with Stripe
 import { DateUtils } from 'react-day-picker';
 import { config } from 'helpers/contributions';
 import type {
@@ -10,20 +5,16 @@ import type {
 	OtherAmounts,
 	SelectedAmounts,
 } from 'helpers/contributions';
-import type {
-	CountryGroup,
-	CountryGroupId,
-} from 'helpers/internationalisation/countryGroup';
-import {
-	AUDCountries,
-	Canada,
-	countryGroups,
-	UnitedStates,
-} from '../internationalisation/countryGroup';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { LocalCurrencyCountry } from '../internationalisation/localCurrencyCountry';
 
 const daysFromNowForGift = 89;
 
+// Copied from
+// https://github.com/playframework/playframework/blob/master/framework/src/play/
+// src/main/scala/play/api/data/validation/Validation.scala#L81
+// but with minor modification (last * becomes +) to enforce at least one dot in domain.  This is
+// for compatibility with Stripe
 export const emailRegexPattern =
 	"^[a-zA-Z0-9\\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$";
 
@@ -167,39 +158,6 @@ export const amountOrOtherAmountIsValid = (
 		localCurrencyCountry,
 		useLocalCurrency,
 	);
-};
-export const checkStateIfApplicable: (
-	arg0: string | null,
-	arg1: CountryGroupId,
-	arg2: ContributionType,
-) => boolean = (
-	billingState: string | null,
-	countryGroupId: CountryGroupId,
-	contributionType: ContributionType,
-) => {
-	if (contributionType !== 'ONE_OFF') {
-		if (countryGroupId === UnitedStates || countryGroupId === Canada) {
-			return checkBillingState(billingState);
-		} else if (countryGroupId === AUDCountries) {
-			// Allow no state to be selected if the user is GEO-IP'd to one of the non AU countries that use AUD.
-			if (window.guardian.geoip) {
-				const AUDCountryGroup: CountryGroup = countryGroups[AUDCountries];
-				const AUDCountriesWithNoStates = AUDCountryGroup.countries.filter(
-					(c) => c !== 'AU',
-				);
-
-				if (
-					AUDCountriesWithNoStates.includes(window.guardian.geoip.countryCode)
-				) {
-					return true;
-				}
-			}
-
-			return checkBillingState(billingState);
-		}
-	}
-
-	return true;
 };
 // ignores all spaces
 export const isValidIban = (iban?: string): boolean =>

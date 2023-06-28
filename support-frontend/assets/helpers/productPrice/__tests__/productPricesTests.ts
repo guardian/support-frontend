@@ -67,17 +67,36 @@ describe('getProductPrice', () => {
 				},
 			},
 		},
+		'United States': {
+			Collection: {
+				Weekend: {
+					Monthly: {
+						USD: {
+							price: 12.34,
+							savingVsRetail: 21,
+							currency: 'USD',
+							fixedTerm: false,
+							promotions: [],
+						},
+					},
+				},
+			},
+		},
 	} as unknown as ProductPrices;
 
 	it('should return product price information for a given currency', () => {
 		expect(
-			getProductPrice(
-				productPrices,
-				'United Kingdom',
-				'Monthly',
-				'Collection',
-				'Weekend',
-			),
+			getProductPrice(productPrices, 'US', 'Monthly', 'Collection', 'Weekend'),
+		).toEqual({
+			currency: 'USD',
+			fixedTerm: false,
+			price: 12.34,
+			promotions: [],
+			savingVsRetail: 21,
+		});
+
+		expect(
+			getProductPrice(productPrices, 'GB', 'Monthly', 'Collection', 'Weekend'),
 		).toEqual({
 			currency: 'GBP',
 			fixedTerm: false,
@@ -87,7 +106,7 @@ describe('getProductPrice', () => {
 		});
 
 		expect(
-			getProductPrice(productPrices, 'United Kingdom', 'Monthly', 'Collection'),
+			getProductPrice(productPrices, 'GB', 'Monthly', 'Collection'),
 		).toEqual({
 			currency: 'GBP',
 			fixedTerm: false,
@@ -96,15 +115,13 @@ describe('getProductPrice', () => {
 			savingVsRetail: 5,
 		});
 
-		expect(getProductPrice(productPrices, 'United Kingdom', 'Monthly')).toEqual(
-			{
-				currency: 'GBP',
-				fixedTerm: false,
-				price: 15.95,
-				promotions: [],
-				savingVsRetail: 10,
-			},
-		);
+		expect(getProductPrice(productPrices, 'GB', 'Monthly')).toEqual({
+			currency: 'GBP',
+			fixedTerm: false,
+			price: 15.95,
+			promotions: [],
+			savingVsRetail: 10,
+		});
 	});
 });
 
@@ -139,13 +156,7 @@ describe('finalPrice', () => {
 
 	it('should return the final price with any discounts applied', () => {
 		expect(
-			finalPrice(
-				productPrices,
-				'United Kingdom',
-				'Monthly',
-				'Collection',
-				'Sunday',
-			),
+			finalPrice(productPrices, 'GB', 'Monthly', 'Collection', 'Sunday'),
 		).toEqual({
 			currency: 'GBP',
 			fixedTerm: false,
@@ -234,13 +245,7 @@ describe('displayPrice', () => {
 
 	it('should return the price prepended with a glyph', () => {
 		expect(
-			displayPrice(
-				productPrices,
-				'United Kingdom',
-				'Monthly',
-				'Collection',
-				'Weekend',
-			),
+			displayPrice(productPrices, 'GB', 'Monthly', 'Collection', 'Weekend'),
 		).toEqual('£20.76');
 	});
 });

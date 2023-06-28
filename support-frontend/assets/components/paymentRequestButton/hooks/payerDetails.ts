@@ -6,16 +6,14 @@ import {
 	findIsoCountry,
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
-import {
-	setBillingCountry,
-	setBillingState,
-} from 'helpers/redux/checkout/address/actions';
+import { setPaymentMethodCountryAndState } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import {
 	setEmail,
 	setFirstName,
 	setLastName,
 } from 'helpers/redux/checkout/personalDetails/actions';
 import type { ContributionsDispatch } from 'helpers/redux/contributionsStore';
+import * as storage from 'helpers/storage/storage';
 import { logException } from 'helpers/utilities/logger';
 
 function setPayerName(
@@ -48,7 +46,7 @@ function setPayerEmail(
 	}
 }
 
-function setBillingCountryAndState(
+function dispatchPaymentMethodCountryAndState(
 	dispatch: ContributionsDispatch,
 	billingDetails: PaymentMethod.BillingDetails,
 ): void {
@@ -62,8 +60,12 @@ function setBillingCountryAndState(
 			state ?? undefined,
 		);
 
-		dispatch(setBillingCountry(validatedCountry));
-		dispatch(setBillingState(validatedState ?? ''));
+		dispatch(
+			setPaymentMethodCountryAndState([
+				validatedCountry,
+				validatedState ?? undefined,
+			]),
+		);
 	}
 }
 
@@ -74,13 +76,9 @@ export function addPayerDetailsToRedux(
 	const { paymentMethod, payerName, payerEmail } = paymentMethodEvent;
 	payerName && setPayerName(dispatch, payerName);
 	setPayerEmail(dispatch, payerEmail);
-	setBillingCountryAndState(dispatch, paymentMethod.billing_details);
+	dispatchPaymentMethodCountryAndState(dispatch, paymentMethod.billing_details);
 }
 
 export function resetPayerDetails(dispatch: ContributionsDispatch): void {
-	dispatch(setEmail(''));
-	dispatch(setFirstName(''));
-	dispatch(setLastName(''));
-	dispatch(setBillingCountry(''));
-	dispatch(setBillingState(''));
+	dispatch(setEmail(storage.getSession('gu.email') ?? ''));
 }

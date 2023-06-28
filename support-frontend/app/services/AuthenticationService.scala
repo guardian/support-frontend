@@ -1,38 +1,28 @@
 package services
 
-import com.gu.identity.auth.IdentityClient
 import com.gu.identity.auth.IdentityClient.Error
+import com.gu.identity.auth.{IdapiAuthConfig, IdentityClient}
 import com.gu.identity.model.User
-import com.gu.identity.play.IdentityPlayAuthService
-import com.gu.identity.play.IdentityPlayAuthService.UserCredentialsMissingError
+import com.gu.identity.play.IdapiPlayAuthService
+import com.gu.identity.play.IdapiPlayAuthService.UserCredentialsMissingError
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import config.Identity
 import org.http4s.Uri
-import play.api.mvc.{Cookie, RequestHeader}
+import play.api.http.ContentTypes.FORM
+import play.api.http.HeaderNames.CONTENT_TYPE
+import play.api.libs.ws.{WSClient, WSResponse}
+import play.api.mvc.RequestHeader
 
 import scala.concurrent.{ExecutionContext, Future}
 
-// The following classes were previously defined in identity-play-auth,
-// but have been removed as part of the changes to that library:
-// authenticating users via a call to identity API; removing periphery functionality.
-// They have been redefined here to reduce diff across PRs,
-// but these classes could get refactored / simplified / removed in subsequent PRs.
-sealed trait AccessCredentials
-object AccessCredentials {
-  case class Cookies(scGuU: String, guU: Option[String] = None) extends AccessCredentials {
-    val cookies: Seq[Cookie] = Seq(
-      Cookie(name = "SC_GU_U", scGuU),
-    ) ++ guU.map(c => Cookie(name = "GU_U", c))
-  }
-  case class Token(tokenText: String) extends AccessCredentials
-}
-
-class AsyncAuthenticationService(identityPlayAuthService: IdentityPlayAuthService)(implicit ec: ExecutionContext) {
+class AsyncAuthenticationService(identityPlayAuthService: IdapiPlayAuthService, ws: WSClient, config: Identity)(implicit
+    ec: ExecutionContext,
+) {
 
   def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[User]] =
     identityPlayAuthService
-      .getUserFromRequest(requestHeader)
+      .getUserFromRequestUsingSCGUUCookie(requestHeader)
       .map { case (_, user) => user }
       .unsafeToFuture()
       .map(user => Some(user))
@@ -52,20 +42,22 @@ class AsyncAuthenticationService(identityPlayAuthService: IdentityPlayAuthServic
           None
       }
 
+  // See AuthCodeFlowController.callback
+  def getTokens(requestBody: String): Future[WSResponse] =
+    ws.url(config.oauthTokenUrl)
+      .addHttpHeaders(CONTENT_TYPE -> FORM)
+      .post(requestBody)
 }
 
 object AsyncAuthenticationService {
 
   case class IdentityIdAndEmail(id: String, primaryEmailAddress: String)
 
-  def apply(config: Identity, testUserService: TestUserService)(implicit
-      ec: ExecutionContext,
-  ): AsyncAuthenticationService = {
+  def apply(config: Identity, ws: WSClient)(implicit ec: ExecutionContext): AsyncAuthenticationService = {
     val apiUrl = Uri.unsafeFromString(config.apiUrl)
-    // TOOD: targetClient could probably be None - check and release in subsequent PR.
     val identityPlayAuthService =
-      IdentityPlayAuthService.unsafeInit(apiUrl, config.apiClientToken, targetClient = Some("membership"))
-    new AsyncAuthenticationService(identityPlayAuthService)
+      IdapiPlayAuthService.unsafeInit(IdapiAuthConfig(identityApiUri = apiUrl, accessToken = config.apiClientToken))
+    new AsyncAuthenticationService(identityPlayAuthService, ws, config)
   }
 
 }

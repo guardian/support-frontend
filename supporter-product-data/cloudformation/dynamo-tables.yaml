@@ -6,12 +6,12 @@ Parameters:
     Type: String
     AllowedValues:
       - PROD
-      - DEV
-    Default: DEV
+      - CODE
+    Default: CODE
 
 Conditions:
   CreateProdResources: !Equals [!Ref "Stage", "PROD"]
-  CreateDevOrUatResources: !Not [ !Equals [ !Ref "Stage", "PROD"]]
+  CreateCodeResources: !Not [ !Equals [ !Ref "Stage", "PROD"]]
 
 Resources:
   ProdTable:
@@ -102,8 +102,8 @@ Resources:
         PredefinedMetricSpecification:
           PredefinedMetricType: DynamoDBWriteCapacityUtilization
 
-  DevOrUatTable:
-    Condition: CreateDevOrUatResources
+  CodeTable:
+    Condition: CreateCodeResources
     Type: "AWS::DynamoDB::Table"
     Properties:
       AttributeDefinitions:
@@ -134,7 +134,7 @@ Outputs:
     Export:
       Name: !Sub ${AWS::StackName}-SupporterProductDataTable
   OnDemandTableOutput:
-    Condition: CreateDevOrUatResources
+    Condition: CreateCodeResources
     Description: This Dynamo table is used to store rate plan information about supporters
     Value: !GetAtt [ DevOrUatTable, "Arn" ]
     Export:

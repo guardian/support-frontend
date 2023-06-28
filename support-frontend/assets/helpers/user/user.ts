@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import { getGlobal, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import * as cookie from 'helpers/storage/cookie';
 import type { Option } from 'helpers/types/option';
 import { getSignoutUrl } from 'helpers/urls/externalLinks';
@@ -43,7 +43,7 @@ function isTestUser(): boolean {
 
 function getUserStateField(): string | undefined {
 	const user = getGlobal<User>('user');
-	return user?.address4 ?? window.guardian.geoip?.stateCode;
+	return user?.address4;
 }
 
 const isPostDeployUser = (): boolean =>
@@ -53,7 +53,10 @@ const signOut = (): void => {
 	window.location.href = getSignoutUrl();
 };
 
-const doesUserAppearToBeSignedIn = (): boolean => !!cookie.get('GU_U');
+const doesUserAppearToBeSignedIn = (): boolean =>
+	isSwitchOn('featureSwitches.authenticateWithOkta')
+		? !!cookie.get('GU_ID_TOKEN')
+		: !!cookie.get('GU_U');
 
 // JTL: The user cookie is built to have particular values at
 // particular indices by design. Index 7 in the cookie object represents
