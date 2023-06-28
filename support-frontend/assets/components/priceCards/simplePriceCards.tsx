@@ -5,6 +5,7 @@ import {
 	palette,
 	space,
 	textSans,
+	until,
 } from '@guardian/source-foundations';
 import {
 	Button,
@@ -24,15 +25,28 @@ import {
 } from 'helpers/internationalisation/currency';
 
 const containerCss = css`
-	${textSans.medium({ lineHeight: 'tight' })};
+	${textSans.small()}
+	${from.desktop} {
+		${textSans.medium()};
+	}
 `;
 
 const headingCss = css`
-	${headline.xsmall({ fontWeight: 'bold' })}
+	${headline.xsmall({ fontWeight: 'bold', lineHeight: 'tight' })}
 	${from.tablet} {
-		${headline.small({ fontWeight: 'bold' })}
+		${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })}
 		font-size: 28px;
 		line-height: 115%;
+	}
+`;
+
+const mobileGrid = css`
+	> div {
+		${until.mobileLandscape} {
+			display: grid;
+			column-gap: ${space[2]}px;
+			grid-template-columns: repeat(2, 1fr);
+		}
 	}
 `;
 
@@ -77,7 +91,7 @@ const buttonOverrides = css`
 
 const iconCss = (flip: boolean) => css`
 	svg {
-		max-width: 12px;
+		max-width: ${space[3]}px;
 		transition: transform 0.3s ease-in-out;
 
 		${flip && 'transform: rotate(180deg);'}
@@ -94,8 +108,8 @@ const detailsContainer = css`
 `;
 
 type Prices = {
-	monthly: number;
-	annual: number;
+	MONTHLY: number;
+	ANNUAL: number;
 };
 
 type PriceSelection = {
@@ -123,14 +137,14 @@ function getLabel(
 		return (
 			<span>
 				{currencyGlyph}
-				{prices.annual}/year
+				{prices.ANNUAL}/year
 			</span>
 		);
 	}
 	return (
 		<span>
 			{currencyGlyph}
-			{prices.monthly}/month
+			{prices.MONTHLY}/month
 		</span>
 	);
 }
@@ -141,7 +155,7 @@ function getTaglinePrice(
 	contributionType: ContributionType,
 ) {
 	const period = contributionType === 'ANNUAL' ? 'year' : 'month';
-	const price = contributionType === 'ANNUAL' ? prices.annual : prices.monthly;
+	const price = contributionType === 'ANNUAL' ? prices.ANNUAL : prices.MONTHLY;
 
 	return `${glyph(fromCountryGroupId(countryGroupId))}${price} per ${period}`;
 }
@@ -154,7 +168,11 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 			<h2 css={headingCss}>
 				{props.title} <span css={headingSubtitle}>{props.subtitle}</span>
 			</h2>
-			<ChoiceCardGroup name="paymentFrequency" columns={2} css={cardsContainer}>
+			<ChoiceCardGroup
+				name="paymentFrequency"
+				columns={2}
+				cssOverrides={[cardsContainer, mobileGrid]}
+			>
 				<ChoiceCard
 					id="annual"
 					key="annual"
@@ -162,7 +180,7 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 					onChange={() =>
 						props.onPriceChange({
 							contributionType: 'ANNUAL',
-							amount: props.prices.annual,
+							amount: props.prices.ANNUAL,
 						})
 					}
 					checked={props.contributionType === 'ANNUAL'}
@@ -176,7 +194,7 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 					onChange={() =>
 						props.onPriceChange({
 							contributionType: 'MONTHLY',
-							amount: props.prices.monthly,
+							amount: props.prices.MONTHLY,
 						})
 					}
 					checked={props.contributionType === 'MONTHLY'}

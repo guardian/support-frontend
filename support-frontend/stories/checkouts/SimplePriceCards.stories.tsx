@@ -65,8 +65,8 @@ Default.args = {
 	contributionType: 'ANNUAL',
 	countryGroupId: 'GBPCountries',
 	prices: {
-		monthly: 10,
-		annual: 95,
+		MONTHLY: 10,
+		ANNUAL: 95,
 	},
 	children: (
 		<div>

@@ -55,6 +55,7 @@ import { PatronsMessage } from './components/patronsMessage';
 import { PaymentFailureMessage } from './components/paymentFailure';
 import { PaymentTsAndCs } from './components/paymentTsAndCs';
 import { AmountAndBenefits } from './formSections/amountAndBenefits';
+import { LimitedPriceCards } from './formSections/limitedPriceCards';
 import { getPaymentMethodButtons } from './paymentButtons';
 
 const checkoutContainer = css`
@@ -115,6 +116,12 @@ export function SupporterPlusLandingPage({
 		otherAmounts,
 		countryGroupId,
 	);
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
+	);
+
+	const displayLimitedPriceCards =
+		abParticipations.supporterPlusOnly === 'variant';
 
 	const { paymentComplete, isWaiting } = useContributionsSelector(
 		(state) => state.page.form,
@@ -196,7 +203,11 @@ export function SupporterPlusLandingPage({
 							/>
 						</Hide>
 						<Box cssOverrides={shorterBoxMargin}>
-							<AmountAndBenefits />
+							{displayLimitedPriceCards ? (
+								<LimitedPriceCards />
+							) : (
+								<AmountAndBenefits />
+							)}
 						</Box>
 						<Box cssOverrides={shorterBoxMargin}>
 							<BoxContents>
