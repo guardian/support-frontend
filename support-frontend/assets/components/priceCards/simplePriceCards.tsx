@@ -5,6 +5,7 @@ import {
 	palette,
 	space,
 	textSans,
+	until,
 } from '@guardian/source-foundations';
 import {
 	Button,
@@ -24,15 +25,28 @@ import {
 } from 'helpers/internationalisation/currency';
 
 const containerCss = css`
-	${textSans.medium({ lineHeight: 'tight' })};
+	${textSans.small()}
+	${from.desktop} {
+		${textSans.medium()};
+	}
 `;
 
 const headingCss = css`
-	${headline.xsmall({ fontWeight: 'bold' })}
+	${headline.xsmall({ fontWeight: 'bold', lineHeight: 'tight' })}
 	${from.tablet} {
-		${headline.small({ fontWeight: 'bold' })}
+		${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })}
 		font-size: 28px;
 		line-height: 115%;
+	}
+`;
+
+const mobileGrid = css`
+	> div {
+		${until.mobileLandscape} {
+			display: grid;
+			column-gap: ${space[2]}px;
+			grid-template-columns: repeat(2, 1fr);
+		}
 	}
 `;
 
@@ -154,7 +168,11 @@ export function SimplePriceCards(props: SimplePriceCardsProps): JSX.Element {
 			<h2 css={headingCss}>
 				{props.title} <span css={headingSubtitle}>{props.subtitle}</span>
 			</h2>
-			<ChoiceCardGroup name="paymentFrequency" columns={2} css={cardsContainer}>
+			<ChoiceCardGroup
+				name="paymentFrequency"
+				columns={2}
+				cssOverrides={[cardsContainer, mobileGrid]}
+			>
 				<ChoiceCard
 					id="annual"
 					key="annual"

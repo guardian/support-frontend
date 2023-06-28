@@ -117,7 +117,7 @@ export function LimitedPriceCards(): JSX.Element {
 						renderPriceCards={({ selectedAmount }) => (
 							<SimplePriceCards
 								title="Support Guardian journalism"
-								subtitle="and unlock exclusive extras"
+								subtitle="and&nbsp;unlock exclusive extras"
 								contributionType={selectedTab}
 								countryGroupId={countryGroupId}
 								prices={benefitsThresholdsByCountryGroup[countryGroupId]}
@@ -132,7 +132,7 @@ export function LimitedPriceCards(): JSX.Element {
 								}}
 							>
 								<div>
-									<h2 css={accordionHeading}>Exclusive extras include:</h2>
+									<h3 css={accordionHeading}>Exclusive extras include:</h3>
 									<div css={listSpacing}>
 										<CheckmarkList
 											checkListData={testCheckListData()}
