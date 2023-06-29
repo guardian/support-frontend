@@ -16,6 +16,7 @@ const hrCss = css`
 
 const infoBlockContent = css`
 	color: #606060;
+	font-size: 13px;
 	ul {
 		list-style: disc;
 		padding-left: ${space[4]}px;
