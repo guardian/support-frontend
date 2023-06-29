@@ -43,23 +43,23 @@ import scala.util.{Failure, Success, Try}
 object PatronSignUpEventLambda extends StrictLogging {
   val runner = configurableFutureRunner(60.seconds)
 
+  implicit val stage = StageConstructors.fromEnvironment
+  private val stripeConfig = PatronsStripeConfig.fromParameterStoreSync(stage)
+  private val identityConfig = PatronsIdentityConfig.fromParameterStoreSync(stage)
+
   def handleRequest(event: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent = {
     Await.result(
-      signUpCustomerInDynamoDb(event, StageConstructors.fromEnvironment),
+      signUpCustomerInDynamoDb(event),
       Duration(15, MINUTES),
     )
   }
 
-  def signUpCustomerInDynamoDb(
-      event: APIGatewayProxyRequestEvent,
-      stage: Stage,
-  ): Future[APIGatewayProxyResponseEvent] = {
+  def signUpCustomerInDynamoDb(event: APIGatewayProxyRequestEvent): Future[APIGatewayProxyResponseEvent] = {
     implicit val stage = StageConstructors.fromEnvironment
+    val identityService = new PatronsIdentityService(identityConfig, runner)
+    val account = if (event.getPathParameters.get("countryId") == "au") GnmPatronSchemeAus else GnmPatronScheme
+
     (for {
-      stripeConfig <- getStripeConfig(stage)
-      identityConfig <- getIdentityConfig(stage)
-      identityService = new PatronsIdentityService(identityConfig, runner)
-      account = if (event.getPathParameters.get("countryId") == "au") GnmPatronSchemeAus else GnmPatronScheme
       payload <- getPayload(
         event,
         account match {
@@ -94,28 +94,6 @@ object PatronSignUpEventLambda extends StrictLogging {
         response.setBody("Successfully created Patron subscription")
     }
     response
-  }
-
-  def getStripeConfig(stage: Stage): EitherT[Future, SignUpError, PatronsStripeConfig] = {
-    logger.info("Attempting to fetch Stripe config information from parameter store")
-    val futureConfig: Future[Either[SignUpError, PatronsStripeConfig]] = PatronsStripeConfig
-      .fromParameterStore(stage)
-      .transform {
-        case Success(config) => Try(Right(config))
-        case Failure(err) => Try(Left(ConfigLoadingError(err.getMessage)))
-      }
-    EitherT(futureConfig)
-  }
-
-  def getIdentityConfig(stage: Stage): EitherT[Future, SignUpError, PatronsIdentityConfig] = {
-    logger.info("Attempting to fetch Identity config information from parameter store")
-    val futureConfig: Future[Either[SignUpError, PatronsIdentityConfig]] = PatronsIdentityConfig
-      .fromParameterStore(stage)
-      .transform {
-        case Success(config) => Try(Right(config))
-        case Failure(err) => Try(Left(ConfigLoadingError(err.getMessage)))
-      }
-    EitherT(futureConfig)
   }
 
   def getPayload(

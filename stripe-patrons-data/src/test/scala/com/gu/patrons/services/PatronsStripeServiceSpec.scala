@@ -13,17 +13,14 @@ import scala.concurrent.duration._
 class PatronsStripeServiceSpec extends AsyncFlatSpec with Matchers {
 
   "PatronsStripeService" should "get subscriptions from Stripe" in {
-    PatronsStripeConfig
-      .fromParameterStore(CODE)
-      .flatMap { config =>
-        val stripeService = new PatronsStripeService(config, configurableFutureRunner(60.seconds))
-        stripeService.getSubscriptions(GnmPatronScheme, 1).map { response =>
-          response.data.length should be > 0
-          response.hasMore shouldBe true
-          response.data.head.customer.email.length should be > 0
-          response.data.head.status shouldBe "active"
-        }
-      }
+    val config = PatronsStripeConfig.fromParameterStoreSync(CODE)
+    val stripeService = new PatronsStripeService(config, configurableFutureRunner(60.seconds))
+    stripeService.getSubscriptions(GnmPatronScheme, 1).map { response =>
+      response.data.length should be > 0
+      response.hasMore shouldBe true
+      response.data.head.customer.email.length should be > 0
+      response.data.head.status shouldBe "active"
+    }
   }
 
 }
