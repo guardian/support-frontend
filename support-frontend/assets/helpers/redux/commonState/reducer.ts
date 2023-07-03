@@ -21,10 +21,6 @@ function getInternationalisationFromCountry(
 	};
 }
 
-function getLocalisedCurrencyId(internationalisation: Internationalisation) {
-	return internationalisation.defaultCurrency;
-}
-
 export const commonSlice = createSlice({
 	name: 'common',
 	initialState: initialCommonState,
@@ -65,9 +61,8 @@ export const commonSlice = createSlice({
 			state.settings.contributionTypes = action.payload;
 		},
 		setCurrencyId(state) {
-			state.internationalisation.currencyId = getLocalisedCurrencyId(
-				state.internationalisation,
-			);
+			state.internationalisation.currencyId =
+				state.internationalisation.defaultCurrency;
 		},
 	},
 });
