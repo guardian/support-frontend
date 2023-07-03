@@ -120,6 +120,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const isOneOffPayPal =
 		paymentMethod === PayPal && contributionType === 'ONE_OFF';
+	const isOneOff = contributionType === 'ONE_OFF';
 	const amount = isOneOffPayPal
 		? getAmountFromSessionStorage()
 		: getAmount(selectedAmounts, otherAmounts, contributionType);
@@ -161,6 +162,8 @@ export function SupporterPlusThankYou(): JSX.Element {
 		countryGroupId,
 		csrf,
 		email,
+		isOneOff,
+		amountIsAboveThreshold,
 		campaignSettings?.campaignCode,
 	);
 
@@ -187,7 +190,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 			contributionType === 'ONE_OFF' && email.length > 0,
 			'supportReminder',
 		),
-		// 'feedback', // <-- Temporarily disable supporter plus thank you page survey
+		...maybeThankYouModule(email.length > 0, 'feedback'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];

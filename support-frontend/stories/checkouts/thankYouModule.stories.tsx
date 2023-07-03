@@ -160,7 +160,13 @@ Feedback.args = {
 	icon: getThankYouModuleIcon('feedback'),
 	header: getFeedbackHeader(false),
 	bodyCopy: <FeedbackBodyCopy feedbackSurveyHasBeenCompleted={false} />,
-	ctas: <FeedbackCTA />,
+	ctas: (
+		<FeedbackCTA
+			feedbackSurveyLink={
+				'https://guardiannewsandmedia.formstack.com/forms/guardian_supporter'
+			}
+		/>
+	),
 };
 
 Feedback.decorators = [

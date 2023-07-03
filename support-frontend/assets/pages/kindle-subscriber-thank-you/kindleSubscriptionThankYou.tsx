@@ -10,8 +10,10 @@ import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getSubscriptionPrices } from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
@@ -43,14 +45,22 @@ export function KindleSubscriptionThankYou(): JSX.Element {
 	const paymentMethod = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.paymentMethod.name,
 	);
-	const { billingPeriod } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
+	const { selectedAmounts, otherAmounts, billingPeriod } =
+		useContributionsSelector((state) => state.page.checkoutForm.product);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const { monthlyPrice, annualPrice } = useContributionsSelector(
 		getSubscriptionPrices,
 	);
+	const contributionType = useContributionsSelector(getContributionType);
+	const isOneOff = contributionType === 'ONE_OFF';
+	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
+		contributionType,
+		selectedAmounts,
+		otherAmounts,
+		countryGroupId,
+	);
+
 	// const isAmountLargeDonation = amount
 	// 	? isLargeDonation(amount, contributionType, paymentMethod)
 	// 	: false;
@@ -79,6 +89,8 @@ export function KindleSubscriptionThankYou(): JSX.Element {
 		countryGroupId,
 		csrf,
 		email,
+		isOneOff,
+		amountIsAboveThreshold,
 		campaignSettings?.campaignCode,
 	);
 

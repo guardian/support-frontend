@@ -59,11 +59,12 @@ function FeedbackBodyCopy({
 	);
 }
 
-function FeedbackCTA(): JSX.Element {
+function FeedbackCTA({
+	feedbackSurveyLink,
+}: {
+	feedbackSurveyLink: string;
+}): JSX.Element {
 	const dispatch = useContributionsDispatch();
-
-	const SURVEY_LINK =
-		'https://guardiannewsandmedia.formstack.com/forms/guardian_supporter';
 
 	const onClick = () => {
 		trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
@@ -73,7 +74,7 @@ function FeedbackCTA(): JSX.Element {
 	return (
 		<LinkButton
 			onClick={onClick}
-			href={SURVEY_LINK}
+			href={feedbackSurveyLink}
 			target="_blank"
 			rel="noopener noreferrer"
 			priority="primary"
