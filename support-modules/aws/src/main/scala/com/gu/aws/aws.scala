@@ -3,7 +3,7 @@ package com.gu
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.auth.{
   AWSCredentialsProviderChain,
-  ContainerCredentialsProvider,
+  EC2ContainerCredentialsProviderWrapper,
   EnvironmentVariableCredentialsProvider,
   InstanceProfileCredentialsProvider,
 }
@@ -15,7 +15,7 @@ package object aws {
     new ProfileCredentialsProvider(ProfileName),
     new InstanceProfileCredentialsProvider(false),
     new EnvironmentVariableCredentialsProvider(),
-    new ContainerCredentialsProvider(), // for use with lambda snapstart
+    new EC2ContainerCredentialsProviderWrapper(), // for use with lambda snapstart
   )
 
 }
