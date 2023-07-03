@@ -40,7 +40,7 @@ import scala.concurrent.duration.{Duration, DurationInt, MINUTES}
 import scala.jdk.CollectionConverters.MapHasAsScala
 import scala.util.{Failure, Success, Try}
 
-object PatronCancelledEventLambda extends StrictLogging {
+class PatronCancelledEventLambda extends StrictLogging {
   val runner = configurableFutureRunner(60.seconds)
 
   implicit val stage = StageConstructors.fromEnvironment
