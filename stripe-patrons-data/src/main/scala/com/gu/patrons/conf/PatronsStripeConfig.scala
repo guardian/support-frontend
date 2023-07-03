@@ -1,5 +1,6 @@
 package com.gu.patrons.conf
 
+import com.gu.monitoring.SafeLogger
 import com.gu.patrons.services.{ConfigService, ParameterStoreService}
 import com.gu.supporterdata.model.Stage
 
@@ -16,6 +17,7 @@ object PatronsStripeConfig extends ConfigService {
   private val stripeConfigPath = "stripe-config"
 
   def fromParameterStoreSync(stage: Stage): PatronsStripeConfig = {
+    SafeLogger.info(s"Loading Stripe config")
     val params = ParameterStoreService(stage).getParametersByPathSync(stripeConfigPath)
     PatronsStripeConfig(
       findParameterOrThrow("api-key", params),
