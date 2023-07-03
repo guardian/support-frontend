@@ -1,9 +1,5 @@
 import type { ContributionType } from 'helpers/contributions';
-import {
-	getPaymentMethodToSelect,
-	toHumanReadableContributionType,
-} from 'helpers/forms/checkouts';
-import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
+import { toHumanReadableContributionType } from 'helpers/forms/checkouts';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
@@ -23,28 +19,20 @@ export function PaymentFrequencyTabsContainer({
 	render,
 }: PaymentFrequencyTabsContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
-	const { contributionTypes, switches } = useContributionsSelector(
+	const { contributionTypes } = useContributionsSelector(
 		(state) => state.common.settings,
 	);
-	const { countryGroupId, countryId } = useContributionsSelector(
+	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const productType = useContributionsSelector(getContributionType);
 
 	function onTabChange(contributionType: ContributionType) {
-		const paymentMethodToSelect = getPaymentMethodToSelect(
-			contributionType,
-			switches,
-			countryId,
-			countryGroupId,
-		);
-
 		trackComponentClick(
 			`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`,
 		);
 
 		dispatch(setProductType(contributionType));
-		dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
 	}
 
 	const tabs = contributionTypes[countryGroupId].map(({ contributionType }) => {
