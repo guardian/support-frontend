@@ -30,6 +30,7 @@ riffRaffArtifactResources += (
 riffRaffArtifactResources += (
   file("cdk/cdk.out/StripePatronsData-CODE.template.json"), "cfn/StripePatronsData-CODE.template.json"
 )
+// We use the buildNumber to set the lambda fileName, because lambda versioning requires a new fileName each time
 assemblyJarName := s"${sys.env.getOrElse("GITHUB_RUN_NUMBER", "DEV")}.jar"
 assembly / assemblyMergeStrategy := {
   case PathList("models", xs @ _*) => MergeStrategy.discard

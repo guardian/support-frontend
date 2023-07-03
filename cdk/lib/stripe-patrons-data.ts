@@ -129,6 +129,7 @@ class PatronCancelledLambda extends GuLambdaFunction {
 }
 
 export interface StripePatronsDataProps extends GuStackProps {
+  // We use the buildNumber to set the lambda fileName, because lambda versioning requires a new fileName each time
   buildNumber: string;
 }
 
