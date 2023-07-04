@@ -23,10 +23,6 @@ trait PaymentBackend extends StrictLogging {
   val supporterProductDataService: SupporterProductDataService
   val softOptInsService: SoftOptInsService
   val switchService: SwitchService
-  private def softOptInsEnabled()(implicit executionContext: ExecutionContext): EitherT[Future, Nothing, Boolean] =
-    switchService.allSwitches.map(switch =>
-      switch.featureSwitches.exists(s => s.switches.enableSoftOptInsForSingle.state.isOn),
-    )
 
   private def insertContributionDataIntoDatabase(
       contributionData: ContributionData,
@@ -66,12 +62,7 @@ trait PaymentBackend extends StrictLogging {
 
     val supporterDataFuture = insertContributionIntoSupporterProductData(contributionData)
 
-    val softOptInFuture = softOptInsEnabled().flatMap {
-      case true =>
-        softOptInsService.sendMessage(contributionData.identityId)
-      case false =>
-        EitherT.rightT[Future, BackendError.SoftOptInsServiceError](())
-    }
+    val softOptInFuture = softOptInsService.sendMessage(contributionData.identityId)
 
     Future
       .sequence(
