@@ -53,7 +53,7 @@ export function CheckoutNudgeContainer({
 		`${subTitleStart} ${
 			currencyGlyph + minAmount.toString()
 		} (${minWeeklyAmount} a week)`,
-		`Funding Guardian journalism every year doesn’t need to be expensive. Make a bigger impact today, and protect our independence long term. Please consider annual support.`,
+		`Funding Guardian journalism every year is great value on a weekly basis. Make a bigger impact today, and protect our independence long term. Please consider annual support.`,
 	];
 
 	function onNudgeClose() {
