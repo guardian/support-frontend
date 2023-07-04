@@ -4,7 +4,6 @@ import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import {
 	OPHAN_COMPONENT_ID_AUS_MAP,
-	OPHAN_COMPONENT_ID_MARKETING,
 	OPHAN_COMPONENT_ID_SET_REMINDER,
 	OPHAN_COMPONENT_ID_SIGN_IN,
 	OPHAN_COMPONENT_ID_SIGN_UP,
@@ -26,9 +25,6 @@ import {
 	FeedbackCTA,
 	getFeedbackHeader,
 } from './feedback/FeedbackItems';
-import ThankYouMarketingConsentCTA, {
-	ThankYouMarketingConsentBodyCopy,
-} from './marketingConsent/marketingConsentItems';
 import { SignInBodyCopy, SignInCTA, signInHeader } from './signIn/signInItems';
 import { SignUpBodyCopy, signUpHeader } from './signUp/signUpItems';
 import {
@@ -60,7 +56,7 @@ export const getThankYouModuleData = (
 	amountIsAboveThreshold: boolean,
 	campaignCode?: string,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
-	const { feedbackSurveyHasBeenCompleted, marketingConsent, supportReminder } =
+	const { feedbackSurveyHasBeenCompleted, supportReminder } =
 		useContributionsSelector((state) => state.page.checkoutForm.thankYou);
 
 	const thankYouModuleData: Record<ThankYouModuleType, ThankYouModuleData> = {
@@ -103,25 +99,6 @@ export const getThankYouModuleData = (
 				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
-		},
-		marketingConsent: {
-			icon: getThankYouModuleIcon('marketingConsent'),
-			header: marketingConsent.hasBeenCompleted
-				? "You're signed up"
-				: 'Hear from our newsroom',
-			bodyCopy: (
-				<ThankYouMarketingConsentBodyCopy
-					marketingConsentState={marketingConsent}
-				/>
-			),
-			ctas: (
-				<ThankYouMarketingConsentCTA
-					email={email}
-					csrf={csrf}
-					marketingConsentState={marketingConsent}
-				/>
-			),
-			trackComponentLoadId: OPHAN_COMPONENT_ID_MARKETING,
 		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),

@@ -184,10 +184,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 		),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && email.length > 0,
-			'marketingConsent',
-		),
-		...maybeThankYouModule(
-			contributionType === 'ONE_OFF' && email.length > 0,
 			'supportReminder',
 		),
 		...maybeThankYouModule(email.length > 0, 'feedback'),
@@ -219,7 +215,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 							contributionType={contributionType}
 							amount={amount}
 							currency={currencyId}
-							shouldShowLargeDonationMessage={isAmountLargeDonation}
 							amountIsAboveThreshold={amountIsAboveThreshold}
 							isSignedIn={isSignedIn}
 							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
