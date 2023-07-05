@@ -13,12 +13,14 @@ import model.Environment
 import model.Environment.Live
 import services.SoftOptInsService.Message
 
+import java.util.UUID
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 class SoftOptInsService(sqsClient: AmazonSQSAsync, queueUrlResponse: Future[Either[SoftOptInsServiceError, String]])
     extends StrictLogging {
   def sendMessage(
       identityId: Option[Long],
+      contributionId: UUID,
   )(implicit executionContext: ExecutionContext): EitherT[Future, SoftOptInsServiceError, Unit] = {
     identityId match {
       case None =>
@@ -27,7 +29,11 @@ class SoftOptInsService(sqsClient: AmazonSQSAsync, queueUrlResponse: Future[Eith
 
       case Some(id) =>
         val identityIdString = id.toString
-        val message = Message(identityIdString)
+        val contributionIdString = contributionId.toString
+        val message = Message(
+          identityId = identityIdString,
+          subscriptionId = contributionIdString,
+        ) // we send the contribution ID as a stand-in for a sub ID
 
         logger.info(s"Preparing to send message: ${message.asJson.noSpaces}")
 
@@ -93,6 +99,7 @@ object SoftOptInsService extends StrictLogging {
   }
 
   case class Message(
+      subscriptionId: String,
       identityId: String,
       eventType: String = "Acquisition",
       productName: String = "Contribution",

@@ -62,7 +62,7 @@ trait PaymentBackend extends StrictLogging {
 
     val supporterDataFuture = insertContributionIntoSupporterProductData(contributionData)
 
-    val softOptInFuture = softOptInsService.sendMessage(contributionData.identityId)
+    val softOptInFuture = softOptInsService.sendMessage(contributionData.identityId, contributionData.contributionId)
 
     Future
       .sequence(
