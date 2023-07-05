@@ -1,9 +1,8 @@
 import { useState } from 'preact/hooks';
-import { getConfigAbTestMin } from 'helpers/contributions';
+import { getConfigMinAmount } from 'helpers/contributions';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -25,18 +24,8 @@ export function CheckoutNudgeContainer({
 
 	const [displayNudge, setDisplayNudge] = useState(true);
 
-	const nudgeMinVariantA = useContributionsSelector(
-		isUserInAbVariant('nudgeMinAmountsTest', 'variantA'),
-	);
-	const nudgeMinVariantB = useContributionsSelector(
-		isUserInAbVariant('nudgeMinAmountsTest', 'variantB'),
-	);
-
 	const currencyGlyph = glyph(detect(countryGroupId));
-	const minAmount = getConfigAbTestMin(countryGroupId, 'ANNUAL', {
-		variantA: nudgeMinVariantA,
-		variantB: nudgeMinVariantB,
-	});
+	const minAmount = getConfigMinAmount(countryGroupId, 'ANNUAL');
 	const weeklyMinAmount =
 		Math.round(Math.ceil((minAmount * 100) / 52) / 10) * 10;
 	const minWeeklyAmount =
@@ -46,15 +35,13 @@ export function CheckoutNudgeContainer({
 			  (weeklyMinAmount / 100)
 					.toFixed(weeklyMinAmount % 100 === 0 ? 0 : 2)
 					.toString();
-	const subTitleStart =
-		nudgeMinVariantA || nudgeMinVariantB ? `for` : `from just`;
-	const [title, subtitle, paragraph] = [
-		`Support us every year`,
-		`${subTitleStart} ${
-			currencyGlyph + minAmount.toString()
-		} (${minWeeklyAmount} a week)`,
-		`Funding Guardian journalism every year doesn’t need to be expensive. Make a bigger impact today, and protect our independence long term. Please consider annual support.`,
-	];
+
+	const title = 'Support us every year';
+	const subtitle = `with ${
+		currencyGlyph + minAmount.toString()
+	} (${minWeeklyAmount} per week)`;
+	const paragraph =
+		'Funding Guardian journalism every year is great value on a weekly basis. Make a bigger impact today, and protect our independence long term. Please consider annual support.';
 
 	function onNudgeClose() {
 		setDisplayNudge(false);
