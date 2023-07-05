@@ -79,29 +79,6 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 1,
 	},
-	nudgeMinAmountsTest: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variantA',
-			},
-			{
-				id: 'variantB',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		seed: 9,
-	},
 	supporterPlusOnly: {
 		variants: [
 			{
