@@ -39,7 +39,7 @@ export function CheckoutNudgeContainer({
 	const title = 'Support us every year';
 	const subtitle = `with ${
 		currencyGlyph + minAmount.toString()
-	} if you can (${minWeeklyAmount} per week)`;
+	} (${minWeeklyAmount} per week)`;
 	const paragraph =
 		'Funding Guardian journalism every year is great value on a weekly basis. Make a bigger impact today, and protect our independence long term. Please consider annual support.';
 
