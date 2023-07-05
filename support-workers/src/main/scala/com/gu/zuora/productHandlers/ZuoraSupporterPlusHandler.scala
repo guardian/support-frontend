@@ -23,11 +23,10 @@ class ZuoraSupporterPlusHandler(
       state: SupporterPlusState,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
-      abTests: Option[Set[AbTest]],
   ) =
     for {
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(
-        supporterPlusSubscriptionBuilder.build(state, csrUsername, salesforceCaseId, abTests),
+        supporterPlusSubscriptionBuilder.build(state, csrUsername, salesforceCaseId),
       )
     } yield SendThankYouEmailSupporterPlusState(
       user,
@@ -35,7 +34,6 @@ class ZuoraSupporterPlusHandler(
       state.paymentMethod,
       account.value,
       sub.value,
-      abTests,
     )
 
 }

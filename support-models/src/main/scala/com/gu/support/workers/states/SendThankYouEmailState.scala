@@ -35,7 +35,6 @@ object SendThankYouEmailState {
       paymentMethod: PaymentMethod,
       accountNumber: String,
       subscriptionNumber: String,
-      abTests: Option[Set[AbTest]],
   ) extends SendThankYouEmailState
 
   case class SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
