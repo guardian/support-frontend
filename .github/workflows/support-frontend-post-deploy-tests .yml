@@ -1,0 +1,38 @@
+name: Run support-frontend-post-deploy-tests
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  support-frontend-post-deploy-tests:
+    if: >-
+        (github.repository_owner == 'guardian' ||
+          github.event_name == 'push')
+
+
+    name: run support-frontend-post-deployment-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Env
+        run: env
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      # (Respects .nvmrc)
+      - name: Setup Node
+        uses: guardian/actions-setup-node@v2.4.1
+        with:
+          cache: "yarn"
+          cache-dependency-path: support-frontend/yarn.lock
+
+      - name: Run post deployment test script
+        run: ./build-postDeployTests.sh
+        working-directory: support-frontend
+
+
