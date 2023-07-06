@@ -115,7 +115,7 @@
     "snarkdown": "^2.0.0",
     "utility-types": "^3.10.0",
     "uuid": "^9.0.0",
-    "zod": "^3.11.6"
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@axe-core/react": "^4.2.1",
