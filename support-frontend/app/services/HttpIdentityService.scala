@@ -11,7 +11,7 @@ import config.Identity
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
 import models.identity.requests.CreateGuestAccountRequestBody
-import models.identity.responses.IdentityErrorResponse.IdentityError
+import models.identity.responses.IdentityErrorResponse.{IdentityError, OtherIdentityError, GuestEndpoint, UserEndpoint}
 import models.identity.responses.{GuestRegistrationResponse, IdentityErrorResponse, UserResponse}
 import play.api.libs.json.{Json, JsonValidationError, JsPath, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
@@ -158,17 +158,14 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         .validate[UserResponse]
         .asEither
         .leftMap(err =>
-          IdentityError(
+          OtherIdentityError(
             message = "Error deserialising json to UserResponse",
             description = err.mkString(","),
+            endpoint = Some(UserEndpoint),
           ),
         )
         .map(userResponse => userResponse.user.id)
-    }.leftMap { e =>
-      e match {
-        case IdentityError(message, description) => IdentityError("Error calling /user:".concat(message), description)
-      }
-    }
+    }.leftMap(e => e.setEndpoint(UserEndpoint))
 
   def createUserIdFromEmailUser(
       email: String,
@@ -208,16 +205,13 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         .validate[GuestRegistrationResponse]
         .asEither
         .leftMap(err =>
-          IdentityError(
+          OtherIdentityError(
             message = "Error deserialising json to GuestRegistrationResponse",
             description = err.mkString(","),
+            endpoint = Some(GuestEndpoint),
           ),
         )
         .map(response => response.guestRegistrationRequest.userId)
-    }.leftMap { e =>
-      e match {
-        case IdentityError(message, description) => IdentityError("Error calling /guest:".concat(message), description)
-      }
     }
   }
 
@@ -228,7 +222,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
   )(func: (WSResponse) => Either[IdentityError, A])(implicit ec: ExecutionContext, scheduler: Scheduler) = {
 
     EitherT(requestHolder.execute().map(response => Right(response)).recover { case t =>
-      Left(IdentityError("An exception was thrown in HttpIdentityService.execute", t.getMessage))
+      Left(OtherIdentityError("An exception was thrown in HttpIdentityService.execute", t.getMessage, endpoint = None))
     }).subflatMap {
       case r if r.success => func(r)
       case r =>
@@ -236,10 +230,11 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
           .validate[IdentityErrorResponse]
           .asEither
           .leftMap(_ =>
-            IdentityError(
+            OtherIdentityError(
               message = s"${r.body}",
               description =
                 s"Identity API error: ${requestHolder.method} ${uriWithoutQuery(requestHolder.uri)} STATUS ${r.status}, BODY: ${r.body}",
+              endpoint = None,
             ),
           )
           .flatMap(error => Left(error.errors.head))

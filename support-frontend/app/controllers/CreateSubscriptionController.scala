@@ -17,7 +17,7 @@ import io.circe.generic.semiauto._
 import io.circe.syntax._
 import lib.PlayImplicits._
 import models.identity.responses.IdentityErrorResponse.IdentityError
-import models.identity.responses.IdentityErrorResponse.IdentityError.{InvalidEmailAddress, BadEmailAddress}
+import models.identity.responses.IdentityErrorResponse._
 import org.joda.time.DateTime
 import play.api.http.Writeable
 import play.api.libs.circe.Circe
@@ -135,12 +135,16 @@ class CreateSubscriptionController(
   }
 
   private def mapIdentityErrorToCreateSubscriptionError(identityError: IdentityError) =
-    if (IdentityError.isDisallowedEmailError(identityError))
-      RequestValidationError(InvalidEmailAddress.errorReasonCode)
-    else if (IdentityError.isBadEmailError(identityError))
-      RequestValidationError(BadEmailAddress.errorReasonCode)
-    else
-      ServerError(identityError.message.concat(identityError.description))
+    identityError match {
+      case RejectedEmailProvider(_endpoint) => RequestValidationError(emailProviderRejectedCode)
+      case InvalidEmailAddress(_endpoint) => RequestValidationError(invalidEmailAddressCode)
+      case OtherIdentityError(message, description, endpoint) =>
+        endpoint match {
+          case Some(GuestEndpoint) => ServerError(s"Error calling /guest: ${message}; ${description}")
+          case Some(UserEndpoint) => ServerError(s"Error calling /user: ${message}; ${description}")
+          case None => ServerError(s"${message}: ${description}")
+        }
+    }
 
   private def logIncomingRequest(
       request: OptionalAuthRequest[CreateSupportWorkersRequest],
@@ -338,5 +342,4 @@ class CreateSubscriptionController(
       deliveryInstructions = request.deliveryInstructions,
     )
   }
-
 }
