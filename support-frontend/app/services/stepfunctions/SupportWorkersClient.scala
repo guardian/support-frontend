@@ -147,8 +147,6 @@ class SupportWorkersClient(
       user: User,
       requestId: UUID,
   ): EitherT[Future, String, StatusResponse] = {
-    SafeLogger.info(s"$requestId: debug info ${request.body.debugInfo}")
-
     for {
       giftRecipient <- EitherT.fromEither[Future](
         request.body.giftRecipient.map(getGiftRecipient(_, request.body.product)).sequence,

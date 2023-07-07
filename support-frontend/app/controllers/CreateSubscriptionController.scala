@@ -62,6 +62,7 @@ class CreateSubscriptionController(
     LoggingAndAlarmOnFailure {
       MaybeAuthenticatedAction.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
         implicit val settings: AllSettings = settingsProvider.getAllSettings()
+        SafeLogger.info(s"${request.uuid}: debug info ${request.body.debugInfo}")
         val errorOrStatusResponse = for {
           _ <- getRecaptchaTokenFromRequest(request) match {
             case Some(token) => validateRecaptcha(token, testUsers.isTestUser(request))
