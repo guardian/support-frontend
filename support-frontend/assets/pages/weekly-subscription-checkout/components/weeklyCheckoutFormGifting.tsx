@@ -160,8 +160,8 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 
 	const submissionErrorHeading =
 		props.submissionError === 'personal_details_incorrect'
-			? 'Sorry there was a problem'
-			: 'Sorry we could not process your payment';
+			? 'Sorry, there was a problem'
+			: 'Sorry, we could not process your payment';
 
 	const setBillingAddressMatchesDeliveryHandler = (newState: boolean) => {
 		props.setBillingAddressMatchesDelivery(newState);
