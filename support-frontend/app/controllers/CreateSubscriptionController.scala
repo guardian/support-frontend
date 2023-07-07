@@ -136,7 +136,7 @@ class CreateSubscriptionController(
 
   private def mapIdentityErrorToCreateSubscriptionError(identityError: IdentityError) =
     identityError match {
-      case RejectedEmailProvider(_endpoint) => RequestValidationError(emailProviderRejectedCode)
+      case EmailProviderRejected(_endpoint) => RequestValidationError(emailProviderRejectedCode)
       case InvalidEmailAddress(_endpoint) => RequestValidationError(invalidEmailAddressCode)
       case OtherIdentityError(message, description, endpoint) =>
         endpoint match {

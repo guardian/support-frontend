@@ -26,14 +26,14 @@ case class IdentityErrorResponse(
 
 object IdentityErrorResponse {
   implicit val reads: Reads[IdentityErrorResponse] = Json.reads[IdentityErrorResponse]
-  val emailProviderRejectedCode = "invalid_email_address"
-  val invalidEmailAddressCode = "bad_email_address"
+  val emailProviderRejectedCode = "email_provider_rejected"
+  val invalidEmailAddressCode = "invalid_email_address"
 
   sealed trait IdentityError {
     def endpoint: Option[IdentityEndpoint]
     def setEndpoint(e: IdentityEndpoint): IdentityError = {
       this match {
-        case RejectedEmailProvider(_) => RejectedEmailProvider(Some(e))
+        case EmailProviderRejected(_) => EmailProviderRejected(Some(e))
         case InvalidEmailAddress(_) => InvalidEmailAddress(Some(e))
         case OtherIdentityError(m, d, _endpoint) => OtherIdentityError(m, d, endpoint = Some(e))
       }
@@ -41,7 +41,7 @@ object IdentityErrorResponse {
   }
 
   /** We don’t accept email addresses from this provider. */
-  case class RejectedEmailProvider(endpoint: Option[IdentityEndpoint]) extends IdentityError
+  case class EmailProviderRejected(endpoint: Option[IdentityEndpoint]) extends IdentityError
 
   /** The email address is invalid. */
   case class InvalidEmailAddress(endpoint: Option[IdentityEndpoint]) extends IdentityError
@@ -62,7 +62,7 @@ object IdentityErrorResponse {
       if (
         message == "Registration Error" && description == "Please sign up using an email address from a different provider"
       ) {
-        RejectedEmailProvider(endpoint = None)
+        EmailProviderRejected(endpoint = None)
       } else if (message == "Invalid emailAddress:" && description == "Please enter a valid email address") {
         InvalidEmailAddress(endpoint = None)
       } else {
