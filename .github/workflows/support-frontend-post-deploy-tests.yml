@@ -18,6 +18,16 @@ jobs:
     runs-on: ubuntu-latest
     env :
       JAVA_TOOL_OPTIONS: -Xss4m
+      IDAPI_CLIENT_ACCESS_TOKEN_SECRET : ${{ secrets.IDAPI_CLIENT_ACCESS_TOKEN_SECRET }}
+      IDENTITY_TEST_USERS_SECRET : ${{ secrets.IDENTITY_TEST_USERS_SECRET }}
+      GOOGLE_CHAT_WEB_HOOK : ${{ secrets.GOOGLE_CHAT_WEB_HOOK }}
+      WEBDRIVER_REMOTE_URL : ${{ secrets.WEBDRIVER_REMOTE_URL }}
+      SUPPORT_URL : https://support.theguardian.com
+      IDAPI_NEW_TEST_USER_URL : https://idapi.theguardian.com/user/test
+      IDAPI_CLIENT_ACCESS_TOKEN_NAME : X-GU-ID-Client-Access-Token
+      GUARDIAN_DOMAIN : .theguardian.com
+      STAGE : PROD
+
     steps:
       - name: Env
         run: env
