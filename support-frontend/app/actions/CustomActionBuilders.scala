@@ -8,7 +8,7 @@ import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.support.config.Stage
-import models.identity.responses.IdentityErrorResponse.IdentityError.{BadEmailAddress, InvalidEmailAddress}
+import models.identity.responses.IdentityErrorResponse._
 import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import play.filters.csrf._
@@ -50,9 +50,9 @@ class CustomActionBuilders(
     private def maybePushAlarmMetric(result: Result) =
       if (
         result.header.status.toString.head != '2' && !result.header.reasonPhrase.contains(
-          InvalidEmailAddress.errorReasonCode,
+          emailProviderRejectedCode,
         ) && !result.header.reasonPhrase.contains(
-          BadEmailAddress.errorReasonCode,
+          invalidEmailAddressCode,
         )
       ) {
         SafeLogger.error(scrub"pushing alarm metric - non 2xx response ${result.toString()}")
