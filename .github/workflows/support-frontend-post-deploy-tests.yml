@@ -14,18 +14,19 @@ jobs:
         (github.repository_owner == 'guardian' ||
           github.event_name == 'push')
 
-    name: run support-frontend-post-deployment-tests
+    name: Run support-frontend-post-deployment-tests
     runs-on: ubuntu-latest
     env :
       JAVA_TOOL_OPTIONS: -Xss4m
-      IDAPI_CLIENT_ACCESS_TOKEN_SECRET : ${{ secrets.IDAPI_CLIENT_ACCESS_TOKEN_SECRET }}
-      IDENTITY_TEST_USERS_SECRET : ${{ secrets.IDENTITY_TEST_USERS_SECRET }}
       GOOGLE_CHAT_WEB_HOOK : ${{ secrets.GOOGLE_CHAT_WEB_HOOK }}
       WEBDRIVER_REMOTE_URL : ${{ secrets.WEBDRIVER_REMOTE_URL }}
       SUPPORT_URL : https://support.theguardian.com
       IDAPI_NEW_TEST_USER_URL : https://idapi.theguardian.com/user/test
-      IDAPI_CLIENT_ACCESS_TOKEN_NAME : X-GU-ID-Client-Access-Token
+      IDENTITY_TEST_USERS_SECRET : ${{ secrets.IDENTITY_TEST_USERS_SECRET }}
+      IDAPI_CLIENT_ACCESS_TOKEN_NAME : ${{ secrets.IDAPI_CLIENT_ACCESS_TOKEN_NAME }}
+      IDAPI_CLIENT_ACCESS_TOKEN_SECRET : ${{ secrets.IDAPI_CLIENT_ACCESS_TOKEN_SECRET }}
       GUARDIAN_DOMAIN : .theguardian.com
+      IDENTITY_API_TOKEN : ${{ secrets.IDENTITY_API_TOKEN }}
       STAGE : PROD
 
     steps:
