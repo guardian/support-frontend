@@ -5,6 +5,4 @@ export const {
 	setCountryInternationalisation,
 	setContributionTypes,
 	setCurrencyId,
-	setUseLocalCurrencyFlag,
-	setUseLocalAmounts,
 } = commonSlice.actions;

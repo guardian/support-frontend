@@ -22,13 +22,9 @@ export function getDefaultContributionType(
 export function getMinimumContributionAmount(
 	state: ContributionsState,
 ): number {
-	const { countryGroupId, useLocalCurrency, localCurrencyCountry } =
-		state.common.internationalisation;
+	const { countryGroupId } = state.common.internationalisation;
 	const contributionType = getContributionType(state);
-	const { min } =
-		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
-			? localCurrencyCountry.config[contributionType]
-			: config[countryGroupId][contributionType];
+	const { min } = config[countryGroupId][contributionType];
 
 	return min;
 }
@@ -36,14 +32,10 @@ export function getMinimumContributionAmount(
 export function getMaximumContributionAmount(
 	state: ContributionsState,
 ): number {
-	const { countryGroupId, useLocalCurrency, localCurrencyCountry } =
-		state.common.internationalisation;
+	const { countryGroupId } = state.common.internationalisation;
 	const contributionType = getContributionType(state);
 
-	const { max } =
-		useLocalCurrency && localCurrencyCountry && contributionType === 'ONE_OFF'
-			? localCurrencyCountry.config[contributionType]
-			: config[countryGroupId][contributionType];
+	const { max } = config[countryGroupId][contributionType];
 
 	return max;
 }
