@@ -55,10 +55,7 @@ export class Frontend extends GuStack {
       }),
       new GuGetS3ObjectsPolicy(this, "PrivateBucket", {
         bucketName: "gu-zuora-catalog",
-        paths: [
-          "PROD/Zuora-PROD/catalog.json",
-          "PROD/Zuora-CODE/catalog.json",
-        ],
+        paths: ["PROD/Zuora-PROD/catalog.json", "PROD/Zuora-CODE/catalog.json"],
       }),
       new GuGetS3ObjectsPolicy(this, "SettingsBucket", {
         bucketName: "support-admin-console",
@@ -120,7 +117,7 @@ export class Frontend extends GuStack {
         hostedZoneId: "Z1E4V12LQGXFEC",
       },
       monitoringConfiguration: {
-        snsTopicName: "reader-revenue-dev",
+        snsTopicName: "conversions-dev",
         http5xxAlarm: {
           alarmName: alarmName("support-frontend is returning 5XX errors"),
           alarmDescription: alarmDescription(
@@ -136,7 +133,7 @@ export class Frontend extends GuStack {
         additionalPolicies: policies,
       },
       scaling,
-      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL)
+      instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.SMALL),
     });
 
     // ---- Alarms ---- //
@@ -161,7 +158,7 @@ export class Frontend extends GuStack {
         statistic: "Average",
         period: Duration.seconds(60),
       }),
-      snsTopicName: "reader-revenue-dev",
+      snsTopicName: "conversions-dev",
     });
 
     new GuAlarm(this, "ReducedHealthyInstancesAlarm", {
@@ -186,7 +183,7 @@ export class Frontend extends GuStack {
         statistic: "Average",
         period: Duration.seconds(300),
       }),
-      snsTopicName: "reader-revenue-dev",
+      snsTopicName: "conversions-dev",
     });
 
     new GuAlarm(this, "LatencyNotificationAlarm", {
@@ -209,7 +206,7 @@ export class Frontend extends GuStack {
         statistic: "Average",
         period: Duration.seconds(60),
       }),
-      snsTopicName: "reader-revenue-dev",
+      snsTopicName: "conversions-dev",
     });
 
     // TODO: Do we still need this?
@@ -233,7 +230,7 @@ export class Frontend extends GuStack {
         statistic: "Average",
         period: Duration.seconds(60),
       }),
-      snsTopicName: "reader-revenue-dev",
+      snsTopicName: "conversions-dev",
     });
 
     new GuAlarm(this, "DefaultPromotionsLoadingFailureAlarm", {
@@ -256,7 +253,7 @@ export class Frontend extends GuStack {
         statistic: "Sum",
         period: Duration.seconds(60),
       }),
-      snsTopicName: "reader-revenue-dev",
+      snsTopicName: "conversions-dev",
     });
 
     const stateMachineUnavailableMetricFilter = new MetricFilter(
@@ -292,7 +289,7 @@ export class Frontend extends GuStack {
         statistic: "Sum",
       }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: "reader-revenue-dev",
+      snsTopicName: "conversions-dev",
     });
 
     new GuAlarm(this, "ServerSideCreateFailureAlarm", {
@@ -317,7 +314,7 @@ export class Frontend extends GuStack {
         period: Duration.seconds(60),
       }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: "reader-revenue-dev",
+      snsTopicName: "conversions-dev",
     });
   }
 }
