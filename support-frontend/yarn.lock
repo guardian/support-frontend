@@ -2007,10 +2007,10 @@
     aria-hidden "^1.1.3"
     tabbable "^6.0.1"
 
-"@guardian/browserslist-config@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@guardian/browserslist-config/-/browserslist-config-4.1.0.tgz#fbb093e737570dc31a20734d5ea075c8ea9c85b3"
-  integrity sha512-DPE8cNnN6m8CNgVD9buVVjBkPYu9TADcuvi/kD6Z2XQSkAP6HHOrC5Vt/Jq5xnU8vUEHJwQihpCyGlVtbY9l7w==
+"@guardian/browserslist-config@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/browserslist-config/-/browserslist-config-5.0.0.tgz#734603a4553670abb69ff290e9ff20ef61b17218"
+  integrity sha512-NrmQflwQKWYSNHUXsq9uroPIp+d5+mzZrDUy8MEFdNDqVjy8WPfbhANhQtFWGGjRifL0Z7yrfG/cYyBxbKFY3w==
 
 "@guardian/consent-management-platform@13.5.0":
   version "13.5.0"
