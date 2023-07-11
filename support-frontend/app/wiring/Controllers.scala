@@ -229,6 +229,12 @@ trait Controllers {
     actionRefiners,
   )
 
+  lazy val paperRoundController = new PaperRound(
+    controllerComponents,
+    paperRoundService,
+    actionRefiners,
+  )
+
   lazy val promotionsController = new Promotions(
     promotionServiceProvider,
     priceSummaryServiceProvider,
