@@ -165,7 +165,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":conversions-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -271,7 +271,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":conversions-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -518,7 +518,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":conversions-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -678,7 +678,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":conversions-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -884,7 +884,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":conversions-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -1041,7 +1041,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":conversions-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -1130,7 +1130,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":conversions-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -1191,7 +1191,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":conversions-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -1346,7 +1346,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":conversions-dev",
+                ":conversion-dev",
               ],
             ],
           },
