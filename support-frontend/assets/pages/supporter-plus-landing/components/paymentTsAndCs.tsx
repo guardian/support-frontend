@@ -146,27 +146,35 @@ export function PaymentTsAndCs({
 		);
 	};
 
-	const thresholdDescriptions = () => {
+	const thresholdDescription = (contributionType: ContributionType) => {
 		const supporterPlusThresholds =
 			benefitsThresholdsByCountryGroup[countryGroupId];
-		return `${currencyGlyph}${supporterPlusThresholds['MONTHLY']} per month or ${currencyGlyph}${supporterPlusThresholds['ANNUAL']} per year`;
+		const threshold: number =
+			contributionType === 'MONTHLY'
+				? supporterPlusThresholds['MONTHLY']
+				: supporterPlusThresholds['ANNUAL'];
+		return `${currencyGlyph}${threshold} per ${frequencySingular(
+			contributionType,
+		)}`;
 	};
 
 	const copyAboveThreshold = (contributionType: ContributionType) => {
 		return (
 			<>
 				<div>
-					If you pay at least {thresholdDescriptions()}, you will receive the
-					Supporter Plus benefits on a subscription basis. If you pay more than{' '}
-					{thresholdDescriptions()}, these additional amounts will be a separate{' '}
-					{frequencyPlural(contributionType)} voluntary financial contribution
-					to the Guardian. The Supporter Plus subscription and any contributions
-					will auto-renew each {frequencySingular(contributionType)}. You will
-					be charged the subscription and contribution amounts using your chosen
-					payment method at each renewal unless you cancel. You can cancel your
-					subscription or change your contributions at any time before your next
-					renewal date. If you cancel within 14 days of taking out a Supporter
-					Plus subscription, you’ll receive a full refund (including of any
+					If you pay at least {thresholdDescription('MONTHLY')} or{' '}
+					{thresholdDescription('ANNUAL')}, you will receive the Supporter Plus
+					benefits on a subscription basis. If you pay more than{' '}
+					{thresholdDescription(contributionType)}, these additional amounts
+					will be separate {frequencyPlural(contributionType)} voluntary
+					financial contributions to the Guardian. The Supporter Plus
+					subscription and any contributions will auto-renew each{' '}
+					{frequencySingular(contributionType)}. You will be charged the
+					subscription and contribution amounts using your chosen payment method
+					at each renewal unless you cancel. You can cancel your subscription or
+					change your contributions at any time before your next renewal date.
+					If you cancel within 14 days of taking out a Supporter Plus
+					subscription, you’ll receive a full refund (including of any
 					contributions) and your subscription and any contribution will stop
 					immediately. Cancellation of your subscription (which will also cancel
 					any contribution) or cancellation of your contribution made after 14
