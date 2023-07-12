@@ -58,6 +58,7 @@ GET  /contribute                                                   controllers.A
 GET  /contribute/:campaignCode                                     controllers.Application.contributeGeoRedirect(campaignCode: String)
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute                 controllers.Application.contributionsLanding(country: String, campaignCode = "")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/checkout        controllers.Application.contributionsLanding(country: String, campaignCode = "")
 
 GET  /aus-2020-map                                                 controllers.Application.ausMomentMap()
 GET  /aus-map                                                      controllers.Application.ausMomentMap()

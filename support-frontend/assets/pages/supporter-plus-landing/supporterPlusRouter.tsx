@@ -13,6 +13,7 @@ import { renderPage } from 'helpers/rendering/render';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
+import { SupporterPlusFirstStep } from './supporterPlusFirstStep';
 
 if (!isDetailsSupported) {
 	polyfillDetails();
@@ -36,9 +37,9 @@ const countryIds = Object.values(countryGroups).map(
 // ----- Render ----- //
 
 const router = () => {
-	const landingPage = (
-		<SupporterPlusLandingPage thankYouRoute={thankYouRoute} />
-	);
+	const landingPage = <SupporterPlusFirstStep thankYouRoute={thankYouRoute} />;
+
+	const checkout = <SupporterPlusLandingPage thankYouRoute={thankYouRoute} />;
 
 	return (
 		<BrowserRouter>
@@ -51,6 +52,12 @@ const router = () => {
 						<Route
 							path={`/${countryId}/contribute/:campaignCode`}
 							element={landingPage}
+						/>
+					))}
+					{countryIds.map((countryId) => (
+						<Route
+							path={`/${countryId}/contribute/checkout`}
+							element={checkout}
 						/>
 					))}
 					{countryIds.map((countryId) => (
