@@ -47,8 +47,7 @@ export class AcquisitionEventsApi extends GuStack {
         environment: commonEnvironmentVariables,
         // Create an alarm
         monitoringConfiguration: {
-          http5xxAlarm: { tolerated5xxPercentage: 5 },
-          snsTopicName: "conversion-dev",
+          noMonitoring: true,
         },
         app: "acquisition-events-api",
         api: {
