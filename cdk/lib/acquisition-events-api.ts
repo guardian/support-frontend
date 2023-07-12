@@ -42,7 +42,7 @@ export class AcquisitionEventsApi extends GuStack {
         fileName: `${app}.jar`,
         handler: "com.gu.acquisitionEventsApi.Lambda::handler",
         runtime: Runtime.JAVA_8,
-        memorySize: 512,
+        memorySize: 1024,
         timeout: Duration.seconds(300),
         environment: commonEnvironmentVariables,
         // Create an alarm
