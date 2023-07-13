@@ -108,7 +108,7 @@ class OneOffContributionsSpec
 
       Then("the browser should navigate to *paypal.com*")
       eventually {
-        assert(webDriver.getCurrentUrl.contains("paypals.com"))
+        assert(webDriver.getCurrentUrl.contains("paypal.com"))
       }
     }
   }
