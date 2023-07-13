@@ -1,9 +1,6 @@
 name: Run support-frontend-post-deploy-tests
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
