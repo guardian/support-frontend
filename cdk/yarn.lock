@@ -364,14 +364,14 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.43.0.tgz#559ca3d9ddbd6bf907ad524320a0d14b85586af0"
   integrity sha512-s2UHCoiXfxMvmfzqoN+vrQ84ahUSYde9qNO1MdxmoEhyHWsfmwOpFlwYV+ePJEVc7gFnATGUi376WowX1N7tFg==
 
-"@guardian/cdk@50.7.0":
-  version "50.7.0"
-  resolved "https://registry.yarnpkg.com/@guardian/cdk/-/cdk-50.7.0.tgz#8e2768390956daf7542a76a7605f18eae5d5e3ba"
-  integrity sha512-7b/vvTwK4iJ/nrIpHi39EtVUIrMbpN388eFhuHon/TBxUwwYTVEw3iLy3MWBj51izeAjvwoEybu4Gh3/KZGdEQ==
+"@guardian/cdk@50.10.0":
+  version "50.10.0"
+  resolved "https://registry.yarnpkg.com/@guardian/cdk/-/cdk-50.10.0.tgz#983aa2255801e62a64644238338c1944944df3bf"
+  integrity sha512-rdgO4H4SuZAfjsBOwCRjT2zkZxVhxzYAw8ca84/T9gU9zHRuPkl01z3OZ3LmY3mQ56wo0fT6PCK3FTTZ/qlB9Q==
   dependencies:
-    "@oclif/core" "2.8.6"
+    "@oclif/core" "2.8.10"
     aws-cdk-lib "2.78.0"
-    aws-sdk "^2.1397.0"
+    aws-sdk "^2.1408.0"
     chalk "^4.1.2"
     codemaker "^1.84.0"
     constructs "10.2.18"
@@ -722,10 +722,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@oclif/core@2.8.6":
-  version "2.8.6"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-2.8.6.tgz#7eb6984108f471ad0d719d3c07cde14c47ab17c5"
-  integrity sha512-1QlPaHMhOORySCXkQyzjsIsy2GYTilOw3LkjeHkCgsPJQjAT4IclVytJusWktPbYNys9O+O4V23J44yomQvnBQ==
+"@oclif/core@2.8.10":
+  version "2.8.10"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-2.8.10.tgz#01d2ce3ad9f9f8679e3d4c506f528e9de7de74a5"
+  integrity sha512-coRn9vYDEnoE8Vg20aavts9+Bt5QrHhbdh0cDkImopV0MgT8i/VmgL04D33+qoHQH20XzBOMqrjk+bqQzqyaHg==
   dependencies:
     "@types/cli-progress" "^3.11.0"
     ansi-escapes "^4.3.2"
@@ -1183,10 +1183,10 @@ aws-cdk@2.78.0:
   optionalDependencies:
     fsevents "2.3.2"
 
-aws-sdk@^2.1397.0:
-  version "2.1406.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1406.0.tgz#56b83d00912575ec32181ada8fb58c92eb03eaa7"
-  integrity sha512-kzZm+DF1OZHr7MXW++NWCbopZgTxQExth9ZEHdSrtm2iBdPSw5yM+0NS7+iIOGEDvwTzTJOZM4yHEaw3zRA3QQ==
+aws-sdk@^2.1408.0:
+  version "2.1414.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1414.0.tgz#5888319adba0e98fc95f7b6044bb598edcbf6713"
+  integrity sha512-WhqTWiTZRUxWITvUG5VMPYGdCLNAm4zOTDIiotbErR9x+uDExk2CAGbXE8HH11+tD8PhZVXyukymSiG+7rJMMg==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"

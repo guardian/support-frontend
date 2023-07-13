@@ -10,15 +10,10 @@ import { Duration } from "aws-cdk-lib";
 import { Schedule } from "aws-cdk-lib/aws-events";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import type { CfnFunction} from "aws-cdk-lib/aws-lambda";
-import {Alias, Runtime} from "aws-cdk-lib/aws-lambda";
+import { Runtime } from "aws-cdk-lib/aws-lambda";
 
-// Create a new lambda version, alias it, and enable Snapstart for faster lambda starts
-function createLambdaVersionWithSnapstart(lambda: GuLambdaFunction, stage: string): void {
-  const version = lambda.currentVersion;
-  new Alias(lambda, 'Alias', {
-    aliasName: stage,
-    version,
-  });
+// enable Snapstart for faster lambda starts
+function enableSnapstart(lambda: GuLambdaFunction): void {
   (lambda.node.defaultChild as CfnFunction).snapStart = { applyOn: "PublishedVersions" };
 }
 
@@ -60,9 +55,10 @@ class StripePatronsDataLambda extends GuScheduledLambda {
       runtime: Runtime.JAVA_11,
       memorySize: 1536,
       timeout: Duration.minutes(15),
+      enableVersioning: true,
     });
 
-    createLambdaVersionWithSnapstart(this, scope.stage);
+    enableSnapstart(this);
 
     function monitoringForEnvironment(
       stage: string
@@ -73,7 +69,8 @@ class StripePatronsDataLambda extends GuScheduledLambda {
           alarmDescription: `Triggers if there are errors from ${appName} on ${stage}`,
           snsTopicName: "reader-revenue-dev",
           toleratedErrorPercentage: 1,
-          numberOfMinutesAboveThresholdBeforeAlarm: 46,
+          lengthOfEvaluationPeriod: Duration.minutes(1),
+          numberOfEvaluationPeriodsAboveThresholdBeforeAlarm: 46,
         };
       }
       return { noMonitoring: true };
@@ -99,9 +96,10 @@ class PatronSignUpLambda extends GuLambdaFunction {
       runtime: Runtime.JAVA_11,
       memorySize: 1536,
       timeout: Duration.minutes(15),
+      enableVersioning: true,
     });
 
-    createLambdaVersionWithSnapstart(this, scope.stage);
+    enableSnapstart(this);
 
     this.addToRolePolicy(parameterStorePolicy(scope, appName));
     this.addToRolePolicy(dynamoPolicy(scope.stage));
@@ -119,9 +117,10 @@ class PatronCancelledLambda extends GuLambdaFunction {
       runtime: Runtime.JAVA_11,
       memorySize: 1536,
       timeout: Duration.minutes(15),
+      enableVersioning: true,
     });
 
-    createLambdaVersionWithSnapstart(this, scope.stage);
+    enableSnapstart(this);
 
     this.addToRolePolicy(parameterStorePolicy(scope, appName));
     this.addToRolePolicy(dynamoPolicy(scope.stage));
