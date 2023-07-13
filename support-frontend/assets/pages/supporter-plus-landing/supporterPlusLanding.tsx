@@ -13,7 +13,7 @@ import {
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -35,14 +35,23 @@ import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import {
+	formatAmount,
+	toHumanReadableContributionType,
+} from 'helpers/forms/checkouts';
+import {
 	AUDCountries,
 	Canada,
+	countryGroups,
 	EURCountries,
 	GBPCountries,
 	International,
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import {
+	currencies,
+	spokenCurrencies,
+} from 'helpers/internationalisation/currency';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -196,8 +205,19 @@ export function SupporterPlusLandingPage({
 						</Hide>
 						<Box cssOverrides={shorterBoxMargin}>
 							<BoxContents>
-								You have selected {contributionType}{' '}
-								{selectedAmounts[contributionType]}
+								You have selected{' '}
+								{formatAmount(
+									currencies[currencyId],
+									spokenCurrencies[currencyId],
+									amount,
+									false,
+								)}{' '}
+								{toHumanReadableContributionType(contributionType)}{' '}
+								<Link
+									to={`/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`}
+								>
+									Changed your mind?
+								</Link>
 							</BoxContents>
 						</Box>
 						<Box cssOverrides={shorterBoxMargin}>

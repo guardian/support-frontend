@@ -13,8 +13,8 @@ import {
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Box } from 'components/checkoutBox/checkoutBox';
+import { Link, useNavigate } from 'react-router-dom';
+import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -22,9 +22,13 @@ import GridImage from 'components/gridImage/gridImage';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
+import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
+import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import {
 	AUDCountries,
 	Canada,
@@ -34,6 +38,8 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { CheckoutDivider } from './components/checkoutDivider';
 import { GuardianTsAndCs } from './components/guardianTsAndCs';
@@ -93,9 +99,12 @@ export function SupporterPlusFirstStep({
 	const displayLimitedPriceCards =
 		abParticipations.supporterPlusOnly === 'variant';
 
-	const { paymentComplete } = useContributionsSelector(
+	const { paymentComplete, isWaiting } = useContributionsSelector(
 		(state) => state.page.form,
 	);
+
+	const contributionType = useContributionsSelector(getContributionType);
+	const amount = useContributionsSelector(getUserSelectedAmount);
 
 	const navigate = useNavigate();
 
@@ -179,6 +188,22 @@ export function SupporterPlusFirstStep({
 								<AmountAndBenefits />
 							)}
 						</Box>
+						<Box cssOverrides={shorterBoxMargin}>
+							<BoxContents>
+								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
+								<ContributionsStripe>
+									<SecureTransactionIndicator />
+									<PaymentRequestButtonContainer
+										CustomButton={SavedCardButton}
+									/>
+									<Link
+										to={`checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`}
+									>
+										Go to checkout
+									</Link>
+								</ContributionsStripe>
+							</BoxContents>
+						</Box>
 						<CheckoutDivider spacing="loose" mobileTheme={'light'} />
 						<PatronsMessage
 							countryGroupId={countryGroupId}
@@ -189,6 +214,12 @@ export function SupporterPlusFirstStep({
 					</Column>
 				</Columns>
 			</Container>
+			{isWaiting && (
+				<LoadingOverlay>
+					<p>Processing transaction</p>
+					<p>Please wait</p>
+				</LoadingOverlay>
+			)}
 		</PageScaffold>
 	);
 }

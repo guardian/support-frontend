@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { CheckoutBenefitsListContainer } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -68,11 +67,6 @@ export function AmountAndBenefits(): JSX.Element {
 												<CheckoutNudge {...nudgeProps} />
 											)}
 										/>
-										<Link
-											to={`checkout?selected-amount=${selectedAmount}&selected-contribution-type=${tabId.toLowerCase()}`}
-										>
-											checkout
-										</Link>
 									</>
 								)}
 							/>
