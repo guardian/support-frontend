@@ -4,7 +4,7 @@ The lambdas are [versioned](https://docs.aws.amazon.com/lambda/latest/dg/configu
 
 This means that the lambdas are initialised during the riffraff deploy, resulting in faster invocations.
 
-Config is fetched from SSM during initialisation, not during invocation. This means that if you want to change the lambda config you need to also deploy a different build number - otherwise a new lambda version will not be created and the new config will not be picked up.
+Config is fetched from SSM during initialisation, not during invocation. This means that if you want to change the lambda config you need to also deploy a different build number - otherwise a new lambda version will not be created and the new config will not be picked up. If you don't have a new build then you can [manually run a build from the github UI](https://docs.github.com/en/actions/using-workflows/manually-running-a-workflow).
 
 ### stripe-patrons-data
 
