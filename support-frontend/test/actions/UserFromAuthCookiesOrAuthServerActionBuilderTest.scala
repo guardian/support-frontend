@@ -20,7 +20,7 @@ import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, redirectLocati
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class UserFromAuthCookiesActionBuilderTest extends AnyWordSpec with Matchers {
+class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with Matchers {
 
   private def toJson(request: OptionalAuthRequest[AnyContent]) =
     request.user.map(user => Json.obj("userId" -> user.id)).getOrElse(JsNull)
@@ -47,7 +47,7 @@ class UserFromAuthCookiesActionBuilderTest extends AnyWordSpec with Matchers {
       when(config.oauthScopes).thenReturn(accessScopes)
       val request = FakeRequest().withCookies(Cookie(name = config.signedOutCookieName, value = "1684759360"))
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-      val actionBuilder = new UserFromAuthCookiesActionBuilder(parser, authService, config)
+      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
       val result = actionBuilder.invokeBlock(request, block)
       "give an OK response" in {
         status(result) mustBe 200
@@ -64,7 +64,7 @@ class UserFromAuthCookiesActionBuilderTest extends AnyWordSpec with Matchers {
       when(config.oauthScopes).thenReturn(accessScopes)
       val request = FakeRequest()
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-      val actionBuilder = new UserFromAuthCookiesActionBuilder(parser, authService, config)
+      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
       val result = actionBuilder.invokeBlock(request, block)
       "be a redirect" in {
         status(result) mustBe 303
@@ -86,7 +86,7 @@ class UserFromAuthCookiesActionBuilderTest extends AnyWordSpec with Matchers {
       when(config.accessTokenCookieName).thenReturn(accessTokenCookieName)
       val request = FakeRequest().withCookies(Cookie(name = config.accessTokenCookieName, value = accessToken.value))
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-      val actionBuilder = new UserFromAuthCookiesActionBuilder(parser, authService, config)
+      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
       val result = actionBuilder.invokeBlock(request, block)
       "be a redirect" in {
         status(result) mustBe 303
@@ -109,7 +109,7 @@ class UserFromAuthCookiesActionBuilderTest extends AnyWordSpec with Matchers {
       when(config.accessTokenCookieName).thenReturn(accessTokenCookieName)
       val request = FakeRequest().withCookies(Cookie(name = config.idTokenCookieName, value = idToken.value))
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-      val actionBuilder = new UserFromAuthCookiesActionBuilder(parser, authService, config)
+      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
       val result = actionBuilder.invokeBlock(request, block)
       "be a redirect" in {
         status(result) mustBe 303
@@ -135,7 +135,7 @@ class UserFromAuthCookiesActionBuilderTest extends AnyWordSpec with Matchers {
         Cookie(name = config.idTokenCookieName, value = idToken.value),
         Cookie(name = config.accessTokenCookieName, value = accessToken.value),
       )
-      val actionBuilder = new UserFromAuthCookiesActionBuilder(parser, authService, config)
+      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
       val result = actionBuilder.invokeBlock(request, block)
       "give an OK response" in {
@@ -160,7 +160,7 @@ class UserFromAuthCookiesActionBuilderTest extends AnyWordSpec with Matchers {
         Cookie(name = config.accessTokenCookieName, value = accessToken.value),
       )
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-      val actionBuilder = new UserFromAuthCookiesActionBuilder(parser, authService, config)
+      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
       val result = actionBuilder.invokeBlock(request, block)
       "be a redirect" in {
         status(result) mustBe 303
@@ -189,7 +189,7 @@ class UserFromAuthCookiesActionBuilderTest extends AnyWordSpec with Matchers {
         )
         .withFlash(authTried -> "true")
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-      val actionBuilder = new UserFromAuthCookiesActionBuilder(parser, authService, config)
+      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
       val result = actionBuilder.invokeBlock(request, block)
       "give an OK response" in {
         status(result) mustBe 200

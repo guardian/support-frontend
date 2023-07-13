@@ -1,6 +1,6 @@
 package controllers
 
-import actions.{CustomActionBuilders, UserFromAuthCookiesActionBuilder}
+import actions.{CustomActionBuilders, UserFromAuthCookiesActionBuilder, UserFromAuthCookiesOrAuthServerActionBuilder}
 import admin.settings.{AllSettingsProvider, FeatureSwitches, On}
 import akka.util.Timeout
 import assets.AssetsResolver
@@ -25,6 +25,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
 
   val actionRefiner = new CustomActionBuilders(
     asyncAuthenticationService = mock[AsyncAuthenticationService],
+    userFromAuthCookiesOrAuthServerActionBuilder = mock[UserFromAuthCookiesOrAuthServerActionBuilder],
     userFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder],
     cc = stubControllerComponents(),
     addToken = csrfAddToken,

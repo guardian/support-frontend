@@ -19,6 +19,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CustomActionBuilders(
     val asyncAuthenticationService: AsyncAuthenticationService,
+    userFromAuthCookiesOrAuthServerActionBuilder: UserFromAuthCookiesOrAuthServerActionBuilder,
     userFromAuthCookiesActionBuilder: UserFromAuthCookiesActionBuilder,
     cc: ControllerComponents,
     addToken: CSRFAddToken,
@@ -32,6 +33,15 @@ class CustomActionBuilders(
     new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
 
   def MaybeAuthenticatedAction: ActionBuilder[OptionalAuthRequest, AnyContent] =
+    if (featureSwitches.authenticateWithOkta.isOn)
+      PrivateAction andThen userFromAuthCookiesOrAuthServerActionBuilder
+    else
+      PrivateAction andThen new AsyncAuthenticatedBuilder(
+        asyncAuthenticationService.tryAuthenticateUser,
+        cc.parsers.defaultBodyParser,
+      )
+
+  def MaybeAuthenticatedActionOnFormSubmission: ActionBuilder[OptionalAuthRequest, AnyContent] =
     if (featureSwitches.authenticateWithOkta.isOn)
       PrivateAction andThen userFromAuthCookiesActionBuilder
     else
