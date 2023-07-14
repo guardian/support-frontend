@@ -1,13 +1,9 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type {
-	ContributionTypes,
-	SelectedAmountsVariant,
-} from 'helpers/contributions';
+import type { ContributionTypes } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
-import { setProductType } from 'helpers/redux/checkout/product/actions';
 import type { CommonStateSetupData, Internationalisation } from './state';
 import { initialCommonState } from './state';
 
@@ -23,30 +19,6 @@ function getInternationalisationFromCountry(
 		currencyId,
 		countryId,
 	};
-}
-
-function getLocalisedCurrencyId(
-	internationalisation: Internationalisation,
-	shouldUseLocalCurrency: boolean,
-) {
-	if (shouldUseLocalCurrency && internationalisation.localCurrencyCountry) {
-		return internationalisation.localCurrencyCountry.currency;
-	}
-	return internationalisation.defaultCurrency;
-}
-
-function getLocalisedAmounts(
-	internationalisation: Internationalisation,
-	defaultAmounts: SelectedAmountsVariant,
-	shouldUseLocalCurrency: boolean,
-) {
-	if (shouldUseLocalCurrency && internationalisation.localCurrencyCountry) {
-		return {
-			...defaultAmounts,
-			...internationalisation.localCurrencyCountry.amounts,
-		};
-	}
-	return defaultAmounts;
 }
 
 export const commonSlice = createSlice({
@@ -88,40 +60,10 @@ export const commonSlice = createSlice({
 		setContributionTypes(state, action: PayloadAction<ContributionTypes>) {
 			state.settings.contributionTypes = action.payload;
 		},
-		setCurrencyId(state, action: PayloadAction<boolean>) {
-			state.internationalisation.currencyId = getLocalisedCurrencyId(
-				state.internationalisation,
-				action.payload,
-			);
+		setCurrencyId(state) {
+			state.internationalisation.currencyId =
+				state.internationalisation.defaultCurrency;
 		},
-		setUseLocalCurrencyFlag(state, action: PayloadAction<boolean>) {
-			state.internationalisation.useLocalCurrency = action.payload;
-		},
-		setUseLocalAmounts(state, action: PayloadAction<boolean>) {
-			state.amounts = getLocalisedAmounts(
-				state.internationalisation,
-				state.defaultAmounts,
-				action.payload,
-			);
-		},
-	},
-	extraReducers: (builder) => {
-		builder.addCase(setProductType, (state, action) => {
-			// Reset amount localisation when the contributions product changes
-			const { useLocalCurrency } = state.internationalisation;
-			const shouldUseLocalCurrency =
-				action.payload === 'ONE_OFF' ? useLocalCurrency : false;
-
-			state.amounts = getLocalisedAmounts(
-				state.internationalisation,
-				state.defaultAmounts,
-				shouldUseLocalCurrency,
-			);
-			state.internationalisation.currencyId = getLocalisedCurrencyId(
-				state.internationalisation,
-				shouldUseLocalCurrency,
-			);
-		});
 	},
 });
 

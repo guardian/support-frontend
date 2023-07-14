@@ -18,6 +18,7 @@ export type ErrorReason =
 	| 'amazon_pay_try_other_card'
 	| 'amazon_pay_try_again'
 	| 'amazon_pay_fatal'
+	| 'email_provider_rejected'
 	| 'invalid_email_address'
 	| 'unknown';
 
@@ -67,10 +68,10 @@ function appropriateErrorMessage(errorReason: ErrorReason | string): string {
 		case 'incomplete_payment_request_details':
 			return 'Please complete all relevant fields for your saved cards and billing addresses within your browser settings and try your payment again. Alternatively, you can use the form below.';
 
-		case 'invalid_email_address':
+		case 'email_provider_rejected':
 			return 'Please use an email address from a different provider';
 
-		case 'bad_email_address':
+		case 'invalid_email_address':
 			return 'Please enter a valid email address';
 
 		default:

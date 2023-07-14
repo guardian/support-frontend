@@ -276,7 +276,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
           when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
           when(mockSupporterProductDataService.insertContributionData(any())(any()))
             .thenReturn(supporterProductDataResponseError)
-          when(mockSoftOptInsService.sendMessage(any())(any()))
+          when(mockSoftOptInsService.sendMessage(any(), any())(any()))
             .thenReturn(softOptInsServiceResponseError)
           when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
           when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
@@ -288,7 +288,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
             .executePayment(executePaypalPaymentData, clientBrowserInfo)
             .futureRight mustBe enrichedPaypalPaymentMock
 
-          verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
+          verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
         }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new PaypalBackendFixture {
@@ -299,7 +299,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponseError)
-        when(mockSoftOptInsService.sendMessage(any())(any()))
+        when(mockSoftOptInsService.sendMessage(any(), any())(any()))
           .thenReturn(softOptInsServiceResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
@@ -311,7 +311,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
           .executePayment(executePaypalPaymentData, clientBrowserInfo)
           .futureRight mustBe enrichedPaypalPaymentMock
 
-        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
+        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
     }
 
@@ -349,7 +349,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponseError)
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
-        when(mockSoftOptInsService.sendMessage(any())(any())).thenReturn(softOptInsServiceResponse)
+        when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsServiceResponse)
 
         val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
         val result = paypalBackend invokePrivate trackContribution(
@@ -362,7 +362,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
         result.futureValue mustBe List(BackendError.Database(dbError))
 
-        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
+        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
 
       "return a combined error if stream and BigQuery fail" in new PaypalBackendFixture {
@@ -371,7 +371,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         when(mockDatabaseService.insertContributionData(any())).thenReturn(databaseResponse)
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
-        when(mockSoftOptInsService.sendMessage(any())(any()))
+        when(mockSoftOptInsService.sendMessage(any(), any())(any()))
           .thenReturn(softOptInsServiceResponse)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
@@ -391,7 +391,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         )
         result.futureValue mustEqual errors
 
-        verify(mockSoftOptInsService, times(1)).sendMessage(any())(any())
+        verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
 
     }

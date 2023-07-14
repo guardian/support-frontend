@@ -1,18 +1,20 @@
 package wiring
 
+import actions.UserFromAuthCookiesActionBuilder
+import actions.UserFromAuthCookiesActionBuilder.UserClaims
 import admin.settings.AllSettingsProvider
 import cats.syntax.either._
 import com.gu.aws.AwsS3Client
+import com.gu.identity.auth._
 import com.gu.okhttp.RequestRunners
-import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.getaddressio.GetAddressIOService
-import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import com.gu.support.promotions.PromotionServiceProvider
 import com.gu.zuora.ZuoraGiftLookupServiceProvider
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
 import services.paypal.PayPalNvpServiceProvider
+import services.pricing.{DefaultPromotionServiceS3, PriceSummaryServiceProvider}
 import services.stepfunctions.{StateWrapper, SupportWorkersClient}
 
 trait Services {
@@ -42,6 +44,21 @@ trait Services {
   lazy val testUsers = TestUserService(appConfig.identity.testUserSecret)
 
   lazy val asyncAuthenticationService = AsyncAuthenticationService(appConfig.identity, wsClient)
+
+  lazy val oktaAuthService = OktaAuthService[DefaultAccessClaims, UserClaims](
+    config = OktaTokenValidationConfig(
+      issuerUrl = OktaIssuerUrl(appConfig.identity.oauthIssuerUrl),
+      audience = Some(OktaAudience(appConfig.identity.oauthAudience)),
+      clientId = Some(OktaClientId(appConfig.identity.oauthClientId)),
+    ),
+    defaultIdentityClaimsParser = UserClaims.parser,
+  )
+
+  lazy val userFromAuthCookiesActionBuilder = new UserFromAuthCookiesActionBuilder(
+    controllerComponents.parsers.defaultBodyParser,
+    oktaAuthService,
+    appConfig.identity,
+  )
 
   lazy val paymentAPIService = new PaymentAPIService(wsClient, appConfig.paymentApiUrl)
 

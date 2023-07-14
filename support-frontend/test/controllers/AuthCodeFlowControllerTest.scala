@@ -74,6 +74,7 @@ class AuthCodeFlowControllerTest extends AnyWordSpec with Matchers {
           maxAge = Some(3600),
           secure = true,
           sameSite = Some(Lax),
+          httpOnly = false,
         ),
       )
       cookies(result).get(config.accessTokenCookieName) must contain(
@@ -83,6 +84,7 @@ class AuthCodeFlowControllerTest extends AnyWordSpec with Matchers {
           maxAge = Some(3600),
           secure = true,
           sameSite = Some(Lax),
+          httpOnly = false,
         ),
       )
       session(result).get(SessionKey.originUrl) must be(None)

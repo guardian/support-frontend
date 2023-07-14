@@ -203,8 +203,8 @@ function PaperCheckoutForm(props: PropTypes) {
 
 	const submissionErrorHeading =
 		props.submissionError === 'personal_details_incorrect'
-			? 'Sorry there was a problem'
-			: 'Sorry we could not process your payment';
+			? 'Sorry, there was a problem'
+			: 'Sorry, we could not process your payment';
 
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,

@@ -193,21 +193,6 @@ function getValidPaymentMethods(
 	);
 }
 
-function getPaymentMethodToSelect(
-	contributionType: ContributionType,
-	allSwitches: Switches,
-	countryId: IsoCountry,
-	countryGroupId: CountryGroupId,
-): PaymentMethod {
-	const validPaymentMethods = getValidPaymentMethods(
-		contributionType,
-		allSwitches,
-		countryId,
-		countryGroupId,
-	);
-	return validPaymentMethods[0] || 'None';
-}
-
 function getPaymentMethodFromSession(): PaymentMethod | null | undefined {
 	const pm: string | null | undefined = storage.getSession(
 		'selectedPaymentMethod',
@@ -374,7 +359,6 @@ export {
 	getAmountFromUrl,
 	toHumanReadableContributionType,
 	getValidPaymentMethods,
-	getPaymentMethodToSelect,
 	getPaymentMethodFromSession,
 	getPaymentDescription,
 	getPaymentLabel,

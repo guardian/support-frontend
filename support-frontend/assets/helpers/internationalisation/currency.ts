@@ -7,17 +7,7 @@ import { countryGroups, fromCountry } from './countryGroup';
 
 // ----- Types ----- //
 
-export type IsoCurrency =
-	| 'GBP'
-	| 'USD'
-	| 'AUD'
-	| 'EUR'
-	| 'NZD'
-	| 'CAD'
-	| 'SEK'
-	| 'CHF'
-	| 'NOK'
-	| 'DKK';
+export type IsoCurrency = 'GBP' | 'USD' | 'AUD' | 'EUR' | 'NZD' | 'CAD';
 export type Currency = {
 	glyph: string;
 	extendedGlyph: string;
@@ -68,30 +58,6 @@ const currencies: Record<IsoCurrency, Currency> = {
 		isSuffixGlyph: false,
 		isPaddedGlyph: false,
 	},
-	SEK: {
-		glyph: 'kr',
-		extendedGlyph: 'SEK',
-		isSuffixGlyph: true,
-		isPaddedGlyph: true,
-	},
-	CHF: {
-		glyph: 'fr.',
-		extendedGlyph: 'CHF',
-		isSuffixGlyph: true,
-		isPaddedGlyph: true,
-	},
-	NOK: {
-		glyph: 'kr',
-		extendedGlyph: 'NOK',
-		isSuffixGlyph: true,
-		isPaddedGlyph: true,
-	},
-	DKK: {
-		glyph: 'kr.',
-		extendedGlyph: 'DKK',
-		isSuffixGlyph: true,
-		isPaddedGlyph: true,
-	},
 };
 const spokenCurrencies: Record<IsoCurrency, SpokenCurrency> = {
 	GBP: {
@@ -117,22 +83,6 @@ const spokenCurrencies: Record<IsoCurrency, SpokenCurrency> = {
 	CAD: {
 		singular: 'dollar',
 		plural: 'dollars',
-	},
-	SEK: {
-		singular: 'krona',
-		plural: 'kronor',
-	},
-	CHF: {
-		singular: 'franc',
-		plural: 'francs',
-	},
-	NOK: {
-		singular: 'krone',
-		plural: 'kroner',
-	},
-	DKK: {
-		singular: 'krone',
-		plural: 'kroner',
 	},
 };
 
@@ -162,18 +112,6 @@ function fromString(s: string): IsoCurrency | null | undefined {
 
 		case 'cad':
 			return 'CAD';
-
-		case 'sek':
-			return 'SEK';
-
-		case 'chf':
-			return 'CHF';
-
-		case 'nok':
-			return 'NOK';
-
-		case 'dkk':
-			return 'DKK';
 
 		default:
 			return null;

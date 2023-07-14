@@ -1,13 +1,13 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { neutral } from '@guardian/source-foundations';
+import { palette } from '@guardian/source-foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
 
 const greyedOut = css`
-	color: ${neutral[60]};
+	color: ${palette.neutral[60]};
 
 	svg {
-		fill: ${neutral[60]};
+		fill: ${palette.neutral[60]};
 	}
 `;
 
@@ -20,7 +20,7 @@ type TierUnlocks = {
 };
 
 export type CheckListData = {
-	icon: JSX.Element;
+	isChecked: boolean;
 	text?: JSX.Element;
 	maybeGreyedOut?: SerializedStyles;
 };
@@ -37,7 +37,7 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 
 	return [
 		{
-			icon: getSvgIcon(true),
+			isChecked: true,
 			text: (
 				<p>
 					<span css={boldText}>A regular supporter newsletter. </span>Get
@@ -46,7 +46,7 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			),
 		},
 		{
-			icon: getSvgIcon(true),
+			isChecked: true,
 			text: (
 				<p>
 					<span css={boldText}>Uninterrupted reading. </span> See far fewer asks
@@ -55,7 +55,7 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			),
 		},
 		{
-			icon: getSvgIcon(higherTier),
+			isChecked: higherTier,
 			text: (
 				<p>
 					<span css={boldText}>Full access to our news app. </span>Read our
@@ -65,7 +65,7 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
 		{
-			icon: getSvgIcon(higherTier),
+			isChecked: higherTier,
 			text: (
 				<p>
 					<span css={boldText}>Ad-free reading. </span>Avoid ads on all your

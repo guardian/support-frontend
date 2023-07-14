@@ -6,7 +6,7 @@ import com.gu.support.workers.lambdas.UpdateSupporterProductDataSpec.{
   digitalSubscriptionGiftRedemptionState,
   digitalSusbcriptionGiftPurchaseState,
   serviceWithFixtures,
-  supporterPlusV2State,
+  supporterPlusState,
 }
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.supporterdata.model.ContributionAmount
@@ -40,8 +40,8 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec {
     }
   }
 
-  "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a Supporter Plus V2 purchase" in {
-    val state = decode[SendThankYouEmailState](supporterPlusV2State)
+  "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a Supporter Plus purchase" in {
+    val state = decode[SendThankYouEmailState](supporterPlusState)
     state.isRight shouldBe true
     val supporterRatePlanItem = UpdateSupporterProductData
       .getSupporterRatePlanItemFromState(state.toOption.get, serviceWithFixtures)
@@ -54,7 +54,7 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec {
 
 object UpdateSupporterProductDataSpec {
 
-  val supporterPlusV2State =
+  val supporterPlusState =
     """
       {
           "user": {

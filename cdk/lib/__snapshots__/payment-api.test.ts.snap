@@ -24,10 +24,10 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       "GuGetS3ObjectsPolicy",
       "GuVpcParameter",
       "GuSubnetListParameter",
+      "GuSubnetListParameter",
       "GuPlayApp",
       "GuCertificate",
       "GuInstanceRole",
-      "GuSSMRunCommandPolicy",
       "GuDescribeEC2Policy",
       "GuLoggingStreamNameParameter",
       "GuLogShippingPolicy",
@@ -36,9 +36,8 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       "GuParameterStoreReadPolicy",
       "GuAmiParameter",
       "GuHttpsEgressSecurityGroup",
-      "GuAutoScalingGroup",
       "GuWazuhAccess",
-      "GuSubnetListParameter",
+      "GuAutoScalingGroup",
       "GuApplicationLoadBalancer",
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
@@ -193,8 +192,16 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       "Properties": {
         "HealthCheckGracePeriod": 120,
         "HealthCheckType": "ELB",
-        "LaunchConfigurationName": {
-          "Ref": "AutoScalingGroupPaymentapiLaunchConfig1F95A9C2",
+        "LaunchTemplate": {
+          "LaunchTemplateId": {
+            "Ref": "supportPRODpaymentapiF3F3A4D6",
+          },
+          "Version": {
+            "Fn::GetAtt": [
+              "supportPRODpaymentapiF3F3A4D6",
+              "LatestVersionNumber",
+            ],
+          },
         },
         "MaxSize": "6",
         "MinSize": "3",
@@ -203,11 +210,6 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Key": "App",
             "PropagateAtLaunch": true,
             "Value": "payment-api",
-          },
-          {
-            "Key": "gu:cdk:pattern-name",
-            "PropagateAtLaunch": true,
-            "Value": "GuPlayApp",
           },
           {
             "Key": "gu:cdk:version",
@@ -225,11 +227,6 @@ exports[`The Payment API stack matches the snapshot 1`] = `
             "Value": {
               "Ref": "LoggingStreamName",
             },
-          },
-          {
-            "Key": "Name",
-            "PropagateAtLaunch": true,
-            "Value": "Frontend-PROD/AutoScalingGroupPaymentapi",
           },
           {
             "Key": "Stack",
@@ -253,69 +250,6 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
     },
-    "AutoScalingGroupPaymentapiInstanceProfileFFF22F7E": {
-      "Properties": {
-        "Roles": [
-          {
-            "Ref": "InstanceRolePaymentapi2FA25312",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "AutoScalingGroupPaymentapiLaunchConfig1F95A9C2": {
-      "DependsOn": [
-        "InstanceRolePaymentapi2FA25312",
-      ],
-      "Properties": {
-        "IamInstanceProfile": {
-          "Ref": "AutoScalingGroupPaymentapiInstanceProfileFFF22F7E",
-        },
-        "ImageId": {
-          "Ref": "AMIPaymentapi",
-        },
-        "InstanceType": "t4g.small",
-        "MetadataOptions": {
-          "HttpTokens": "required",
-        },
-        "SecurityGroups": [
-          {
-            "Fn::GetAtt": [
-              "GuHttpsEgressSecurityGroupPaymentapiEFC7370C",
-              "GroupId",
-            ],
-          },
-          {
-            "Fn::GetAtt": [
-              "WazuhSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "UserData": {
-          "Fn::Base64": {
-            "Fn::Join": [
-              "",
-              [
-                "#!/bin/bash -ev
-    mkdir /etc/gu
-
-    echo PROD > /etc/gu/stage
-
-    aws --region ",
-                {
-                  "Ref": "AWS::Region",
-                },
-                " s3 cp s3://membership-dist/support/PROD/payment-api/payment-api_0.1_all.deb /tmp
-    dpkg -i /tmp/payment-api_0.1_all.deb
-    /opt/cloudwatch-logs/configure-logs application support PROD payment-api /var/log/payment-api/application.log",
-              ],
-            ],
-          },
-        },
-      },
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
-    },
     "CertificatePaymentapi8AACB639": {
       "DeletionPolicy": "Retain",
       "Properties": {
@@ -338,6 +272,10 @@ exports[`The Payment API stack matches the snapshot 1`] = `
           {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Name",
+            "Value": "Frontend-PROD/CertificatePaymentapi",
           },
           {
             "Key": "Stack",
@@ -651,22 +589,26 @@ exports[`The Payment API stack matches the snapshot 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "ec2.",
-                      {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
+                "Service": "ec2.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
+        ],
         "Path": "/",
         "Tags": [
           {
@@ -833,6 +775,27 @@ exports[`The Payment API stack matches the snapshot 1`] = `
         "DestinationSecurityGroupId": {
           "Fn::GetAtt": [
             "GuHttpsEgressSecurityGroupPaymentapiEFC7370C",
+            "GroupId",
+          ],
+        },
+        "FromPort": 9000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "LoadBalancerPaymentapiSecurityGroupA9F891D2",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 9000,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "LoadBalancerPaymentapiSecurityGrouptoFrontendPRODWazuhSecurityGroup0567114B90008BF9C532": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "WazuhSecurityGroup",
             "GroupId",
           ],
         },
@@ -1253,42 +1216,6 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "SSMRunCommandPolicy244E1613": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ec2messages:AcknowledgeMessage",
-                "ec2messages:DeleteMessage",
-                "ec2messages:FailMessage",
-                "ec2messages:GetEndpoint",
-                "ec2messages:GetMessages",
-                "ec2messages:SendReply",
-                "ssm:UpdateInstanceInformation",
-                "ssm:ListInstanceAssociations",
-                "ssm:DescribeInstanceProperties",
-                "ssm:DescribeDocumentParameters",
-                "ssmmessages:CreateControlChannel",
-                "ssmmessages:CreateDataChannel",
-                "ssmmessages:OpenControlChannel",
-                "ssmmessages:OpenDataChannel",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ssm-run-command-policy",
-        "Roles": [
-          {
-            "Ref": "InstanceRolePaymentapi2FA25312",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
     "SettingsBucket420EA4B0": {
       "Properties": {
         "PolicyDocument": {
@@ -1569,6 +1496,173 @@ exports[`The Payment API stack matches the snapshot 1`] = `
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
+    },
+    "WazuhSecurityGroupfromFrontendPRODLoadBalancerPaymentapiSecurityGroupB8716EA590007A031ECB": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "FromPort": 9000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "WazuhSecurityGroup",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "LoadBalancerPaymentapiSecurityGroupA9F891D2",
+            "GroupId",
+          ],
+        },
+        "ToPort": 9000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "supportPRODpaymentapiF3F3A4D6": {
+      "Properties": {
+        "LaunchTemplateData": {
+          "IamInstanceProfile": {
+            "Arn": {
+              "Fn::GetAtt": [
+                "supportPRODpaymentapiProfile8FBF023E",
+                "Arn",
+              ],
+            },
+          },
+          "ImageId": {
+            "Ref": "AMIPaymentapi",
+          },
+          "InstanceType": "t4g.small",
+          "MetadataOptions": {
+            "HttpTokens": "required",
+          },
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "GuHttpsEgressSecurityGroupPaymentapiEFC7370C",
+                "GroupId",
+              ],
+            },
+            {
+              "Fn::GetAtt": [
+                "WazuhSecurityGroup",
+                "GroupId",
+              ],
+            },
+          ],
+          "TagSpecifications": [
+            {
+              "ResourceType": "instance",
+              "Tags": [
+                {
+                  "Key": "gu:cdk:version",
+                  "Value": "TEST",
+                },
+                {
+                  "Key": "gu:repo",
+                  "Value": "guardian/support-frontend",
+                },
+                {
+                  "Key": "Name",
+                  "Value": "Frontend-PROD/support-PROD-payment-api",
+                },
+                {
+                  "Key": "Stack",
+                  "Value": "support",
+                },
+                {
+                  "Key": "Stage",
+                  "Value": "PROD",
+                },
+              ],
+            },
+            {
+              "ResourceType": "volume",
+              "Tags": [
+                {
+                  "Key": "gu:cdk:version",
+                  "Value": "TEST",
+                },
+                {
+                  "Key": "gu:repo",
+                  "Value": "guardian/support-frontend",
+                },
+                {
+                  "Key": "Name",
+                  "Value": "Frontend-PROD/support-PROD-payment-api",
+                },
+                {
+                  "Key": "Stack",
+                  "Value": "support",
+                },
+                {
+                  "Key": "Stage",
+                  "Value": "PROD",
+                },
+              ],
+            },
+          ],
+          "UserData": {
+            "Fn::Base64": {
+              "Fn::Join": [
+                "",
+                [
+                  "#!/bin/bash -ev
+    mkdir /etc/gu
+
+    echo PROD > /etc/gu/stage
+
+    aws --region ",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  " s3 cp s3://membership-dist/support/PROD/payment-api/payment-api_0.1_all.deb /tmp
+    dpkg -i /tmp/payment-api_0.1_all.deb
+    /opt/cloudwatch-logs/configure-logs application support PROD payment-api /var/log/payment-api/application.log",
+                ],
+              ],
+            },
+          },
+        },
+        "TagSpecifications": [
+          {
+            "ResourceType": "launch-template",
+            "Tags": [
+              {
+                "Key": "gu:cdk:version",
+                "Value": "TEST",
+              },
+              {
+                "Key": "gu:repo",
+                "Value": "guardian/support-frontend",
+              },
+              {
+                "Key": "Name",
+                "Value": "Frontend-PROD/support-PROD-payment-api",
+              },
+              {
+                "Key": "Stack",
+                "Value": "support",
+              },
+              {
+                "Key": "Stage",
+                "Value": "PROD",
+              },
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::EC2::LaunchTemplate",
+    },
+    "supportPRODpaymentapiProfile8FBF023E": {
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
     },
   },
 }

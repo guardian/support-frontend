@@ -12,7 +12,7 @@ import java.time.ZonedDateTime
 class AddSupporterRatePlanItemToQueueIntegrationTest extends AsyncFlatSpec with Matchers {
 
   "AddSupporterRatePlanItemToQueueLambda" should "process records correctly" in {
-    val csvFilename = "select-active-rate-plans-2023-01-12T05:59:45.210958.csv"
+    val csvFilename = "test-fixture.csv"
     AddSupporterRatePlanItemToQueueLambda.addToQueue(
       CODE,
       AddSupporterRatePlanItemToQueueState(
@@ -25,6 +25,6 @@ class AddSupporterRatePlanItemToQueueIntegrationTest extends AsyncFlatSpec with 
         override def timeRemainingMillis: Int = 1000 * 60 * 5
       },
     )
-  }.map(outState => outState.processedCount shouldBe 248)
+  }.map(outState => outState.processedCount shouldBe 9)
 
 }

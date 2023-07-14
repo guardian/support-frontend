@@ -15,10 +15,10 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "GuAllowPolicy",
       "GuVpcParameter",
       "GuSubnetListParameter",
+      "GuSubnetListParameter",
       "GuEc2App",
       "GuCertificate",
       "GuInstanceRole",
-      "GuSSMRunCommandPolicy",
       "GuDescribeEC2Policy",
       "GuLoggingStreamNameParameter",
       "GuLogShippingPolicy",
@@ -27,9 +27,8 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "GuParameterStoreReadPolicy",
       "GuAmiParameter",
       "GuHttpsEgressSecurityGroup",
-      "GuAutoScalingGroup",
       "GuWazuhAccess",
-      "GuSubnetListParameter",
+      "GuAutoScalingGroup",
       "GuApplicationLoadBalancer",
       "GuApplicationTargetGroup",
       "GuHttpsApplicationListener",
@@ -92,8 +91,16 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "Properties": {
         "HealthCheckGracePeriod": 120,
         "HealthCheckType": "ELB",
-        "LaunchConfigurationName": {
-          "Ref": "AutoScalingGroupFrontendLaunchConfig038C27B1",
+        "LaunchTemplate": {
+          "LaunchTemplateId": {
+            "Ref": "supportPRODfrontend47D51027",
+          },
+          "Version": {
+            "Fn::GetAtt": [
+              "supportPRODfrontend47D51027",
+              "LatestVersionNumber",
+            ],
+          },
         },
         "MaxSize": "6",
         "MinSize": "3",
@@ -102,11 +109,6 @@ exports[`The Frontend stack matches the snapshot 1`] = `
             "Key": "App",
             "PropagateAtLaunch": true,
             "Value": "frontend",
-          },
-          {
-            "Key": "gu:cdk:pattern-name",
-            "PropagateAtLaunch": true,
-            "Value": "GuEc2App",
           },
           {
             "Key": "gu:cdk:version",
@@ -124,11 +126,6 @@ exports[`The Frontend stack matches the snapshot 1`] = `
             "Value": {
               "Ref": "LoggingStreamName",
             },
-          },
-          {
-            "Key": "Name",
-            "PropagateAtLaunch": true,
-            "Value": "Frontend-PROD/AutoScalingGroupFrontend",
           },
           {
             "Key": "Stack",
@@ -152,66 +149,6 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       },
       "Type": "AWS::AutoScaling::AutoScalingGroup",
     },
-    "AutoScalingGroupFrontendInstanceProfileB9C04B01": {
-      "Properties": {
-        "Roles": [
-          {
-            "Ref": "InstanceRoleFrontend9A970131",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::InstanceProfile",
-    },
-    "AutoScalingGroupFrontendLaunchConfig038C27B1": {
-      "DependsOn": [
-        "InstanceRoleFrontend9A970131",
-      ],
-      "Properties": {
-        "IamInstanceProfile": {
-          "Ref": "AutoScalingGroupFrontendInstanceProfileB9C04B01",
-        },
-        "ImageId": {
-          "Ref": "AMIFrontend",
-        },
-        "InstanceType": "t4g.small",
-        "MetadataOptions": {
-          "HttpTokens": "required",
-        },
-        "SecurityGroups": [
-          {
-            "Fn::GetAtt": [
-              "GuHttpsEgressSecurityGroupFrontend71EF7DC2",
-              "GroupId",
-            ],
-          },
-          {
-            "Fn::GetAtt": [
-              "WazuhSecurityGroup",
-              "GroupId",
-            ],
-          },
-        ],
-        "UserData": {
-          "Fn::Base64": {
-            "Fn::Join": [
-              "",
-              [
-                "#!/bin/bash -ev
-    mkdir /etc/gu
-    aws --region ",
-                {
-                  "Ref": "AWS::Region",
-                },
-                " s3 cp s3://membership-dist/support/PROD/frontend/support-frontend_1.0-SNAPSHOT_all.deb /tmp
-    dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
-    /opt/cloudwatch-logs/configure-logs application support PROD frontend /var/log/support-frontend/application.log '%Y-%m-%dT%H:%M:%S,%f%z'",
-              ],
-            ],
-          },
-        },
-      },
-      "Type": "AWS::AutoScaling::LaunchConfiguration",
-    },
     "CatalogLoadingFailureAlarmD11891D9": {
       "Properties": {
         "ActionsEnabled": true,
@@ -228,7 +165,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -273,6 +210,10 @@ exports[`The Frontend stack matches the snapshot 1`] = `
           {
             "Key": "gu:repo",
             "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Name",
+            "Value": "Frontend-PROD/CertificateFrontend",
           },
           {
             "Key": "Stack",
@@ -330,7 +271,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -577,7 +518,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -675,22 +616,26 @@ exports[`The Frontend stack matches the snapshot 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "Service": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "ec2.",
-                      {
-                        "Ref": "AWS::URLSuffix",
-                      },
-                    ],
-                  ],
-                },
+                "Service": "ec2.amazonaws.com",
               },
             },
           ],
           "Version": "2012-10-17",
         },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/AmazonSSMManagedInstanceCore",
+              ],
+            ],
+          },
+        ],
         "Path": "/",
         "Tags": [
           {
@@ -733,7 +678,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -902,6 +847,27 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       },
       "Type": "AWS::EC2::SecurityGroupEgress",
     },
+    "LoadBalancerFrontendSecurityGrouptoFrontendPRODWazuhSecurityGroup0567114B90003A4D0F5B": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": {
+          "Fn::GetAtt": [
+            "WazuhSecurityGroup",
+            "GroupId",
+          ],
+        },
+        "FromPort": 9000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "LoadBalancerFrontendSecurityGroup3E7708CD",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 9000,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
     "NoHealthyInstancesAlarm4A3DBA9E": {
       "Properties": {
         "ActionsEnabled": true,
@@ -918,7 +884,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -1075,7 +1041,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -1148,42 +1114,6 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "SSMRunCommandPolicy244E1613": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ec2messages:AcknowledgeMessage",
-                "ec2messages:DeleteMessage",
-                "ec2messages:FailMessage",
-                "ec2messages:GetEndpoint",
-                "ec2messages:GetMessages",
-                "ec2messages:SendReply",
-                "ssm:UpdateInstanceInformation",
-                "ssm:ListInstanceAssociations",
-                "ssm:DescribeInstanceProperties",
-                "ssm:DescribeDocumentParameters",
-                "ssmmessages:CreateControlChannel",
-                "ssmmessages:CreateDataChannel",
-                "ssmmessages:OpenControlChannel",
-                "ssmmessages:OpenDataChannel",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ssm-run-command-policy",
-        "Roles": [
-          {
-            "Ref": "InstanceRoleFrontend9A970131",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
     "ServerSideCreateFailureAlarm3FA2BA71": {
       "Properties": {
         "ActionsEnabled": true,
@@ -1200,7 +1130,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -1261,7 +1191,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -1416,7 +1346,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":reader-revenue-dev",
+                ":conversion-dev",
               ],
             ],
           },
@@ -1543,6 +1473,170 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         },
       },
       "Type": "AWS::EC2::SecurityGroup",
+    },
+    "WazuhSecurityGroupfromFrontendPRODLoadBalancerFrontendSecurityGroup76ED83889000EA0D8FCD": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "FromPort": 9000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "WazuhSecurityGroup",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "LoadBalancerFrontendSecurityGroup3E7708CD",
+            "GroupId",
+          ],
+        },
+        "ToPort": 9000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "supportPRODfrontend47D51027": {
+      "Properties": {
+        "LaunchTemplateData": {
+          "IamInstanceProfile": {
+            "Arn": {
+              "Fn::GetAtt": [
+                "supportPRODfrontendProfileC5715BB6",
+                "Arn",
+              ],
+            },
+          },
+          "ImageId": {
+            "Ref": "AMIFrontend",
+          },
+          "InstanceType": "t4g.small",
+          "MetadataOptions": {
+            "HttpTokens": "required",
+          },
+          "SecurityGroupIds": [
+            {
+              "Fn::GetAtt": [
+                "GuHttpsEgressSecurityGroupFrontend71EF7DC2",
+                "GroupId",
+              ],
+            },
+            {
+              "Fn::GetAtt": [
+                "WazuhSecurityGroup",
+                "GroupId",
+              ],
+            },
+          ],
+          "TagSpecifications": [
+            {
+              "ResourceType": "instance",
+              "Tags": [
+                {
+                  "Key": "gu:cdk:version",
+                  "Value": "TEST",
+                },
+                {
+                  "Key": "gu:repo",
+                  "Value": "guardian/support-frontend",
+                },
+                {
+                  "Key": "Name",
+                  "Value": "Frontend-PROD/support-PROD-frontend",
+                },
+                {
+                  "Key": "Stack",
+                  "Value": "support",
+                },
+                {
+                  "Key": "Stage",
+                  "Value": "PROD",
+                },
+              ],
+            },
+            {
+              "ResourceType": "volume",
+              "Tags": [
+                {
+                  "Key": "gu:cdk:version",
+                  "Value": "TEST",
+                },
+                {
+                  "Key": "gu:repo",
+                  "Value": "guardian/support-frontend",
+                },
+                {
+                  "Key": "Name",
+                  "Value": "Frontend-PROD/support-PROD-frontend",
+                },
+                {
+                  "Key": "Stack",
+                  "Value": "support",
+                },
+                {
+                  "Key": "Stage",
+                  "Value": "PROD",
+                },
+              ],
+            },
+          ],
+          "UserData": {
+            "Fn::Base64": {
+              "Fn::Join": [
+                "",
+                [
+                  "#!/bin/bash -ev
+    mkdir /etc/gu
+    aws --region ",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  " s3 cp s3://membership-dist/support/PROD/frontend/support-frontend_1.0-SNAPSHOT_all.deb /tmp
+    dpkg -i /tmp/support-frontend_1.0-SNAPSHOT_all.deb
+    /opt/cloudwatch-logs/configure-logs application support PROD frontend /var/log/support-frontend/application.log '%Y-%m-%dT%H:%M:%S,%f%z'",
+                ],
+              ],
+            },
+          },
+        },
+        "TagSpecifications": [
+          {
+            "ResourceType": "launch-template",
+            "Tags": [
+              {
+                "Key": "gu:cdk:version",
+                "Value": "TEST",
+              },
+              {
+                "Key": "gu:repo",
+                "Value": "guardian/support-frontend",
+              },
+              {
+                "Key": "Name",
+                "Value": "Frontend-PROD/support-PROD-frontend",
+              },
+              {
+                "Key": "Stack",
+                "Value": "support",
+              },
+              {
+                "Key": "Stage",
+                "Value": "PROD",
+              },
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::EC2::LaunchTemplate",
+    },
+    "supportPRODfrontendProfileC5715BB6": {
+      "Properties": {
+        "Roles": [
+          {
+            "Ref": "InstanceRoleFrontend9A970131",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
     },
   },
 }

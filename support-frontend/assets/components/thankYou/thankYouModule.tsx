@@ -149,7 +149,6 @@ export type ThankYouModuleType =
 	| 'appDownloadKindle'
 	| 'ausMap'
 	| 'feedback'
-	| 'marketingConsent'
 	| 'signIn'
 	| 'signUp'
 	| 'socialShare'

@@ -9,10 +9,7 @@ import {
 } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {
-	getPaymentMethodToSelect,
-	getValidPaymentMethods,
-} from '../forms/checkouts';
+import { getValidPaymentMethods } from '../forms/checkouts';
 
 jest.mock('helpers/globalsAndSwitches/globals', () => ({
 	__esModule: true,
@@ -24,7 +21,7 @@ const mock = (mockFn: unknown) => mockFn as jest.Mock;
 // ----- Tests ----- //
 
 describe('checkouts', () => {
-	describe('getValidPaymentMethods and getPaymentMethodToSelect', () => {
+	describe('getValidPaymentMethods', () => {
 		const allSwitches = {
 			experiments: {},
 		};
@@ -49,15 +46,6 @@ describe('checkouts', () => {
 				Stripe,
 				PayPal,
 			]);
-
-			expect(
-				getPaymentMethodToSelect(
-					contributionType,
-					allSwitches,
-					countryId,
-					countryGroupId,
-				),
-			).toEqual(DirectDebit);
 		});
 
 		it("should return en empty array/'None' for Monthly Recurring UK when switches are all off", () => {
@@ -74,14 +62,6 @@ describe('checkouts', () => {
 					countryGroupId,
 				),
 			).toEqual([]);
-			expect(
-				getPaymentMethodToSelect(
-					contributionType,
-					allSwitches,
-					countryId,
-					countryGroupId,
-				),
-			).toEqual('None');
 		});
 
 		it('should return just Stripe for One Off US when only Stripe is on', () => {
@@ -100,15 +80,6 @@ describe('checkouts', () => {
 					countryGroupId,
 				),
 			).toEqual([Stripe]);
-
-			expect(
-				getPaymentMethodToSelect(
-					contributionType,
-					allSwitches,
-					countryId,
-					countryGroupId,
-				),
-			).toEqual(Stripe);
 		});
 	});
 });

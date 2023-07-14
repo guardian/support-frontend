@@ -3,7 +3,6 @@ import type { ContributionType } from 'helpers/contributions';
 import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
 
 interface SubheadingProps {
-	shouldShowLargeDonationMessage: boolean;
 	contributionType: ContributionType;
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
@@ -15,21 +14,17 @@ function MarketingCopy({
 }: {
 	contributionType: ContributionType;
 }) {
-	return contributionType === 'ONE_OFF' ? (
+	return (
 		<span>
-			You can amend your email preferences at any time via{' '}
-			<a href="https://manage.theguardian.com">your account</a>.
-		</span>
-	) : (
-		<span>
-			Adjust your email preferences at any time via{' '}
+			{contributionType === 'ONE_OFF'
+				? 'Thank you for your contribution. We’ll be in touch to bring you closer to our journalism. You can amend your email preferences at any time via '
+				: 'Adjust your email preferences at any time via '}
 			<a href="https://manage.theguardian.com">your account</a>.
 		</span>
 	);
 }
 
 const getSubHeadingCopy = (
-	shouldShowLargeDonationMessage: boolean,
 	amountIsAboveThreshold: boolean,
 	contributionType: ContributionType,
 	isSignedIn: boolean,
@@ -76,28 +71,23 @@ const getSubHeadingCopy = (
 		};
 	};
 
-	const oneOffCopy = shouldShowLargeDonationMessage
-		? 'It’s not every day we receive such a generous amount. We would love to stay in touch. So that we can, please select the add-ons that suit you best. '
-		: 'We would love to stay in touch. So that we can, please select the add-ons that suit you best. ';
-
-	return contributionType === 'ONE_OFF'
-		? oneOffCopy
-		: recurringCopy(amountIsAboveThreshold)[
-				userTypeFromIdentityResponse === 'current' || isSignedIn
-					? 'isSignedIn'
-					: 'notSignedIn'
-		  ];
+	return (
+		contributionType !== 'ONE_OFF' &&
+		recurringCopy(amountIsAboveThreshold)[
+			userTypeFromIdentityResponse === 'current' || isSignedIn
+				? 'isSignedIn'
+				: 'notSignedIn'
+		]
+	);
 };
 
 function Subheading({
-	shouldShowLargeDonationMessage,
 	contributionType,
 	amountIsAboveThreshold,
 	isSignedIn,
 	userTypeFromIdentityResponse,
 }: SubheadingProps): JSX.Element {
 	const subheadingCopy = getSubHeadingCopy(
-		shouldShowLargeDonationMessage,
 		amountIsAboveThreshold,
 		contributionType,
 		isSignedIn,
@@ -107,9 +97,7 @@ function Subheading({
 	return (
 		<>
 			{subheadingCopy}
-			{contributionType !== 'ONE_OFF' && (
-				<MarketingCopy contributionType={contributionType} />
-			)}
+			<MarketingCopy contributionType={contributionType} />
 			{userTypeFromIdentityResponse !== 'current' &&
 				contributionType !== 'ONE_OFF' && (
 					<span

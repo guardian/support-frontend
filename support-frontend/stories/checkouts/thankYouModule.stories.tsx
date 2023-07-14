@@ -19,9 +19,6 @@ import {
 	FeedbackCTA,
 	getFeedbackHeader,
 } from 'components/thankYou/feedback/FeedbackItems';
-import ThankYouMarketingConsentCTA, {
-	ThankYouMarketingConsentBodyCopy,
-} from 'components/thankYou/marketingConsent/marketingConsentItems';
 import {
 	SignInBodyCopy,
 	SignInCTA,
@@ -160,7 +157,13 @@ Feedback.args = {
 	icon: getThankYouModuleIcon('feedback'),
 	header: getFeedbackHeader(false),
 	bodyCopy: <FeedbackBodyCopy feedbackSurveyHasBeenCompleted={false} />,
-	ctas: <FeedbackCTA />,
+	ctas: (
+		<FeedbackCTA
+			feedbackSurveyLink={
+				'https://guardiannewsandmedia.formstack.com/forms/guardian_supporter'
+			}
+		/>
+	),
 };
 
 Feedback.decorators = [
@@ -219,47 +222,6 @@ AusMap.args = {
 	bodyCopy: ausMapBodyCopy,
 	ctas: <AusMapCTA />,
 };
-
-export const MarketingConsent = Template.bind({});
-
-MarketingConsent.args = {
-	moduleType: 'marketingConsent',
-	isSignedIn: true,
-	icon: getThankYouModuleIcon('marketingConsent'),
-	header: 'Hear from our newsroom',
-	bodyCopy: (
-		<ThankYouMarketingConsentBodyCopy
-			marketingConsentState={{
-				hasBeenCompleted: false,
-				hasConsented: false,
-				errorMessage: '',
-			}}
-		/>
-	),
-	ctas: (
-		<ThankYouMarketingConsentCTA
-			email={''}
-			csrf={{ token: undefined }}
-			marketingConsentState={{
-				hasBeenCompleted: false,
-				hasConsented: false,
-				errorMessage: '',
-			}}
-		/>
-	),
-};
-
-MarketingConsent.decorators = [
-	(Story: React.FC): JSX.Element => {
-		const store = createTestStoreForContributions();
-
-		return (
-			<Provider store={store}>
-				<Story />
-			</Provider>
-		);
-	},
-];
 
 export const SupportReminder = Template.bind({});
 

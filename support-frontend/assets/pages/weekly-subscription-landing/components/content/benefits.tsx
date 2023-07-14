@@ -16,15 +16,15 @@ const coreBenefits = [
 ];
 
 function getBenefits(countryId: IsoCountry) {
-	if (countryId === 'GB') {
+	if (countryId === 'AU') {
 		return [
 			{
-				content: 'Every issue delivered with up to 79% off the cover price',
+				content: 'Every issue delivered with up to 91% off the cover price',
 			},
 			...coreBenefits,
 			{
 				content:
-					'A free Gift! £10 Guardian Bookshop voucher - exclusive to 12 for £12 quarterly subscribers',
+					'A free Guardian Weekly tote bag with every 12 for 12 subscription',
 			},
 		];
 	}

@@ -468,12 +468,12 @@ object JsonFixtures {
   def createSupporterPlusZuoraSubscriptionJson(
       amount: BigDecimal,
       currency: Currency,
+      billingPeriod: BillingPeriod,
       country: Country = UK,
-      acquisitionData: Option[AcquisitionData] = None,
   ) =
     CreateZuoraSubscriptionState(
       SupporterPlusState(
-        SupporterPlus(amount, currency, Monthly),
+        SupporterPlus(amount, currency, billingPeriod),
         stripePaymentMethodObj,
         salesforceContact,
       ),
@@ -485,7 +485,7 @@ object JsonFixtures {
       None,
       None,
       None,
-      acquisitionData,
+      None,
     ).asJson.spaces2
 
   val createDigiPackZuoraSubscriptionJson =

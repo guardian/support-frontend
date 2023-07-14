@@ -1,9 +1,5 @@
 import type { ContributionType } from 'helpers/contributions';
-import {
-	getPaymentMethodToSelect,
-	toHumanReadableContributionType,
-} from 'helpers/forms/checkouts';
-import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
+import { toHumanReadableContributionType } from 'helpers/forms/checkouts';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
@@ -14,52 +10,38 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { PaymentFrequencyTabsRenderProps } from './paymentFrequenncyTabs';
 
 type PaymentFrequencyTabsContainerProps = {
-	hideOneOff?: boolean;
 	ariaLabel?: string;
 	render: (tabComponentProps: PaymentFrequencyTabsRenderProps) => JSX.Element;
 };
 
 export function PaymentFrequencyTabsContainer({
-	hideOneOff,
 	ariaLabel = 'Payment frequency options',
 	render,
 }: PaymentFrequencyTabsContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
-	const { contributionTypes, switches } = useContributionsSelector(
+	const { contributionTypes } = useContributionsSelector(
 		(state) => state.common.settings,
 	);
-	const { countryGroupId, countryId } = useContributionsSelector(
+	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const productType = useContributionsSelector(getContributionType);
 
 	function onTabChange(contributionType: ContributionType) {
-		const paymentMethodToSelect = getPaymentMethodToSelect(
-			contributionType,
-			switches,
-			countryId,
-			countryGroupId,
-		);
-
 		trackComponentClick(
 			`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`,
 		);
 
 		dispatch(setProductType(contributionType));
-		dispatch(setPaymentMethod({ paymentMethod: paymentMethodToSelect }));
 	}
 
-	const tabs = contributionTypes[countryGroupId]
-		.filter(
-			({ contributionType }) => !(contributionType === 'ONE_OFF' && hideOneOff),
-		)
-		.map(({ contributionType }) => {
-			return {
-				id: contributionType,
-				labelText: toHumanReadableContributionType(contributionType),
-				selected: contributionType === productType,
-			};
-		});
+	const tabs = contributionTypes[countryGroupId].map(({ contributionType }) => {
+		return {
+			id: contributionType,
+			labelText: toHumanReadableContributionType(contributionType),
+			selected: contributionType === productType,
+		};
+	});
 
 	return render({
 		ariaLabel,

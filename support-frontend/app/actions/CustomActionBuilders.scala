@@ -1,13 +1,14 @@
 package actions
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
+import admin.settings.FeatureSwitches
 import akka.stream.scaladsl.Flow
 import akka.util.ByteString
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.support.config.Stage
-import models.identity.responses.IdentityErrorResponse.IdentityError.{InvalidEmailAddress, BadEmailAddress}
+import models.identity.responses.IdentityErrorResponse._
 import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import play.filters.csrf._
@@ -18,21 +19,26 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class CustomActionBuilders(
     val asyncAuthenticationService: AsyncAuthenticationService,
+    userFromAuthCookiesActionBuilder: UserFromAuthCookiesActionBuilder,
     cc: ControllerComponents,
     addToken: CSRFAddToken,
     checkToken: CSRFCheck,
     csrfConfig: CSRFConfig,
     stage: Stage,
+    featureSwitches: => FeatureSwitches,
 )(implicit private val ec: ExecutionContext) {
 
   val PrivateAction =
     new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
 
-  val MaybeAuthenticatedAction: ActionBuilder[OptionalAuthRequest, AnyContent] =
-    PrivateAction andThen new AsyncAuthenticatedBuilder(
-      asyncAuthenticationService.tryAuthenticateUser,
-      cc.parsers.defaultBodyParser,
-    )
+  def MaybeAuthenticatedAction: ActionBuilder[OptionalAuthRequest, AnyContent] =
+    if (featureSwitches.authenticateWithOkta.isOn)
+      PrivateAction andThen userFromAuthCookiesActionBuilder
+    else
+      PrivateAction andThen new AsyncAuthenticatedBuilder(
+        asyncAuthenticationService.tryAuthenticateUser,
+        cc.parsers.defaultBodyParser,
+      )
 
   case class LoggingAndAlarmOnFailure[A](chainedAction: Action[A]) extends EssentialAction {
 
@@ -44,9 +50,9 @@ class CustomActionBuilders(
     private def maybePushAlarmMetric(result: Result) =
       if (
         result.header.status.toString.head != '2' && !result.header.reasonPhrase.contains(
-          InvalidEmailAddress.errorReasonCode,
+          emailProviderRejectedCode,
         ) && !result.header.reasonPhrase.contains(
-          BadEmailAddress.errorReasonCode,
+          invalidEmailAddressCode,
         )
       ) {
         SafeLogger.error(scrub"pushing alarm metric - non 2xx response ${result.toString()}")

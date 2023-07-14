@@ -49,23 +49,16 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
       })
   }
 
-  it should "create a Supporter Plus subscription" in {
+  it should "create a monthly Supporter Plus subscription" in {
     createZuoraHelper
-      .createSubscription(createSupporterPlusZuoraSubscriptionJson(20, GBP))
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(20, GBP, Monthly))
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }
 
-  it should "create a Supporter Plus V2 subscription" in {
-    val acquisitionData = Some(
-      AcquisitionData(
-        OphanIds(None, None),
-        ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
-        Set(AbTest("supporterPlusV2", "variant")),
-      ),
-    )
+  it should "create an annual Supporter Plus subscription" in {
     createZuoraHelper
-      .createSubscription(createSupporterPlusZuoraSubscriptionJson(20, GBP, acquisitionData = acquisitionData))
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(95, GBP, Annual))
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }
@@ -73,7 +66,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a Supporter Plus subscription in a country where it is taxed" in {
     val austria = CountryGroup.Europe.countries.find(_.alpha2 == "AT").get // Fail here if we can't find it
     createZuoraHelper
-      .createSubscription(createSupporterPlusZuoraSubscriptionJson(10, EUR, austria))
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(10, EUR, Monthly, austria))
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }
