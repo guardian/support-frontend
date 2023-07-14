@@ -82,7 +82,7 @@
     "@babel/runtime": "^7.21.5",
     "@emotion/cache": "^10.0.29",
     "@emotion/core": "^10.0.35",
-    "@emotion/react": "^11.1.5",
+    "@emotion/react": "^11.11.1",
     "@emotion/serialize": "^1.1.2",
     "@emotion/utils": "^1.1.0",
     "@floating-ui/react": "^0.19.2",
