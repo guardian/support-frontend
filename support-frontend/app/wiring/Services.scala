@@ -1,6 +1,6 @@
 package wiring
 
-import actions.UserFromAuthCookiesActionBuilder
+import actions.{UserFromAuthCookiesOrAuthServerActionBuilder, UserFromAuthCookiesActionBuilder}
 import actions.UserFromAuthCookiesActionBuilder.UserClaims
 import admin.settings.AllSettingsProvider
 import cats.syntax.either._
@@ -52,6 +52,12 @@ trait Services {
       clientId = Some(OktaClientId(appConfig.identity.oauthClientId)),
     ),
     defaultIdentityClaimsParser = UserClaims.parser,
+  )
+
+  lazy val userFromAuthCookiesOrAuthServerActionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(
+    controllerComponents.parsers.defaultBodyParser,
+    oktaAuthService,
+    appConfig.identity,
   )
 
   lazy val userFromAuthCookiesActionBuilder = new UserFromAuthCookiesActionBuilder(

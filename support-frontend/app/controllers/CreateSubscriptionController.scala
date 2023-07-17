@@ -60,7 +60,7 @@ class CreateSubscriptionController(
 
   def create: EssentialAction =
     LoggingAndAlarmOnFailure {
-      MaybeAuthenticatedAction.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
+      MaybeAuthenticatedActionOnFormSubmission.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
         implicit val settings: AllSettings = settingsProvider.getAllSettings()
         SafeLogger.info(s"${request.uuid}: debug info ${request.body.debugInfo}")
         val errorOrStatusResponse = for {
