@@ -32,23 +32,33 @@ class CustomActionBuilders(
   val PrivateAction =
     new PrivateActionBuilder(addToken, checkToken, csrfConfig, cc.parsers.defaultBodyParser, cc.executionContext)
 
+  /** This is the action builder that should be used for all actions requiring authentication that are triggered by a
+    * page load.
+    *
+    * The difference between this builder and [[MaybeAuthenticatedActionOnFormSubmission]] is that this builder will
+    * redirect to the auth server to find auth tokens if there are no cookies present containing them.
+    */
   def MaybeAuthenticatedAction: ActionBuilder[OptionalAuthRequest, AnyContent] =
-    if (featureSwitches.authenticateWithOkta.isOn)
-      PrivateAction andThen userFromAuthCookiesOrAuthServerActionBuilder
-    else
-      PrivateAction andThen new AsyncAuthenticatedBuilder(
-        asyncAuthenticationService.tryAuthenticateUser,
-        cc.parsers.defaultBodyParser,
-      )
+    chooseActionBuilder(userFromAuthCookiesOrAuthServerActionBuilder)
 
+  /** This is the action builder that should be used for all actions requiring authentication that are triggered by a
+    * form submission.
+    *
+    * The difference between this builder and [[MaybeAuthenticatedAction]] is that this builder will not redirect to the
+    * auth server. It just checks for the presence of cookies containing auth tokens.
+    */
   def MaybeAuthenticatedActionOnFormSubmission: ActionBuilder[OptionalAuthRequest, AnyContent] =
-    if (featureSwitches.authenticateWithOkta.isOn)
-      PrivateAction andThen userFromAuthCookiesActionBuilder
-    else
-      PrivateAction andThen new AsyncAuthenticatedBuilder(
-        asyncAuthenticationService.tryAuthenticateUser,
-        cc.parsers.defaultBodyParser,
-      )
+    chooseActionBuilder(userFromAuthCookiesActionBuilder)
+
+  private def chooseActionBuilder(
+      oktaAuthBuilder: ActionBuilder[OptionalAuthRequest, AnyContent],
+  ): ActionBuilder[OptionalAuthRequest, AnyContent] =
+    PrivateAction andThen (
+      if (featureSwitches.authenticateWithOkta.isOn)
+        oktaAuthBuilder
+      else
+        new AsyncAuthenticatedBuilder(asyncAuthenticationService.tryAuthenticateUser, cc.parsers.defaultBodyParser)
+    )
 
   case class LoggingAndAlarmOnFailure[A](chainedAction: Action[A]) extends EssentialAction {
 
