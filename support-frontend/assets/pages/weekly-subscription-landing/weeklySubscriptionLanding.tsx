@@ -94,7 +94,7 @@ function WeeklyLPControl({
 						{orderIsAGift ? (
 							<GiftBenefits />
 						) : (
-							<Benefits countryId={countryId} />
+							<Benefits countryId={countryId} countryGroupId={countryGroupId} />
 						)}
 					</Block>
 				</CentredContainer>
@@ -180,7 +180,7 @@ function WeeklyLPVariant({
 						{orderIsAGift ? (
 							<GiftBenefits />
 						) : (
-							<Benefits countryId={countryId} />
+							<Benefits countryId={countryId} countryGroupId={countryGroupId} />
 						)}
 					</Block>
 				</CentredContainer>
