@@ -58,18 +58,18 @@ export const mockSettings: Settings = {
 					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
 					amountsCardData: {
 						ONE_OFF: {
-							amounts: [5, 10, 20, 25, 30],
-							defaultAmount: 20,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						MONTHLY: {
-							amounts: [5, 15, 30, 40, 80],
-							defaultAmount: 15,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 20,
 							hideChooseYourAmount: false,
 						},
 						ANNUAL: {
-							amounts: [100, 150, 250, 500],
-							defaultAmount: 250,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 					},
