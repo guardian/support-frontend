@@ -58,18 +58,18 @@ export const mockSettings: Settings = {
 					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
 					amountsCardData: {
 						ONE_OFF: {
-							amounts: [30, 60, 120, 240],
-							defaultAmount: 60,
+							amounts: [5, 10, 20, 25, 30],
+							defaultAmount: 20,
 							hideChooseYourAmount: false,
 						},
 						MONTHLY: {
-							amounts: [3, 7, 12],
-							defaultAmount: 7,
+							amounts: [5, 15, 30, 40, 80],
+							defaultAmount: 15,
 							hideChooseYourAmount: false,
 						},
 						ANNUAL: {
-							amounts: [60, 120, 240, 480],
-							defaultAmount: 120,
+							amounts: [100, 150, 250, 500],
+							defaultAmount: 250,
 							hideChooseYourAmount: false,
 						},
 					},
@@ -89,18 +89,18 @@ export const mockSettings: Settings = {
 					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
 					amountsCardData: {
 						ONE_OFF: {
-							amounts: [25, 50, 100, 250],
-							defaultAmount: 50,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						MONTHLY: {
-							amounts: [7, 15, 30],
-							defaultAmount: 15,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						ANNUAL: {
-							amounts: [50, 100, 250, 500],
-							defaultAmount: 50,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 					},
@@ -120,18 +120,18 @@ export const mockSettings: Settings = {
 					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
 					amountsCardData: {
 						ONE_OFF: {
-							amounts: [25, 50, 100, 250],
-							defaultAmount: 50,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						MONTHLY: {
-							amounts: [6, 10, 20],
-							defaultAmount: 10,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						ANNUAL: {
-							amounts: [50, 100, 250, 500],
-							defaultAmount: 50,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 					},
@@ -151,18 +151,18 @@ export const mockSettings: Settings = {
 					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
 					amountsCardData: {
 						ONE_OFF: {
-							amounts: [25, 50, 100, 250],
-							defaultAmount: 50,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						MONTHLY: {
-							amounts: [5, 10, 20],
-							defaultAmount: 10,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						ANNUAL: {
-							amounts: [60, 100, 250, 500],
-							defaultAmount: 60,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 					},
@@ -182,18 +182,18 @@ export const mockSettings: Settings = {
 					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
 					amountsCardData: {
 						ONE_OFF: {
-							amounts: [25, 50, 100, 250],
-							defaultAmount: 50,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						MONTHLY: {
-							amounts: [5, 10, 20],
-							defaultAmount: 10,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						ANNUAL: {
-							amounts: [60, 100, 250, 500],
-							defaultAmount: 60,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 					},
@@ -213,18 +213,18 @@ export const mockSettings: Settings = {
 					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
 					amountsCardData: {
 						ONE_OFF: {
-							amounts: [60, 100, 250, 500],
-							defaultAmount: 100,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						MONTHLY: {
-							amounts: [10, 20, 40],
-							defaultAmount: 20,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						ANNUAL: {
-							amounts: [80, 250, 500, 750],
-							defaultAmount: 80,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 					},
@@ -244,18 +244,18 @@ export const mockSettings: Settings = {
 					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
 					amountsCardData: {
 						ONE_OFF: {
-							amounts: [50, 100, 250, 500],
-							defaultAmount: 100,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						MONTHLY: {
-							amounts: [10, 20, 50],
-							defaultAmount: 20,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 						ANNUAL: {
-							amounts: [50, 100, 250, 500],
-							defaultAmount: 50,
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
 							hideChooseYourAmount: false,
 						},
 					},
