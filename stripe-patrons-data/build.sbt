@@ -31,7 +31,8 @@ riffRaffArtifactResources += (
   file("cdk/cdk.out/StripePatronsData-CODE.template.json"), "cfn/StripePatronsData-CODE.template.json"
 )
 // We use the buildNumber to set the lambda fileName, because lambda versioning requires a new fileName each time
-assemblyJarName := s"${sys.env.getOrElse("GITHUB_RUN_NUMBER", "DEV")}.jar"
+val buildNumber = sys.env.getOrElse("GITHUB_RUN_NUMBER", "DEV")
+assemblyJarName := s"$buildNumber.jar"
 assembly / assemblyMergeStrategy := {
   case PathList("models", xs @ _*) => MergeStrategy.discard
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
@@ -42,6 +43,13 @@ assembly / assemblyMergeStrategy := {
     val oldStrategy = (assembly / assemblyMergeStrategy).value
     oldStrategy(y)
 }
+
+// We also have to put the build number in the .jar, because AWS refuses to create a new lambda version if the jar is the same!
+resourceGenerators in Compile += Def.task {
+  val file = (resourceManaged ).value / "build.number"
+  IO.write(file, buildNumber)
+  Seq(file)
+}.taskValue
 
 lazy val deployToCode =
   inputKey[Unit]("Directly update AWS lambda code from local instead of via RiffRaff for faster feedback loop")
