@@ -33,8 +33,8 @@ class PayPalRegular(
   implicit val a: AssetsResolver = assets
 
   // Sets up a payment by contacting PayPal, returns the token as JSON.
-  def setupPayment: Action[PayPalBillingDetails] = MaybeAuthenticatedAction.async(circe.json[PayPalBillingDetails]) {
-    implicit request =>
+  def setupPayment: Action[PayPalBillingDetails] =
+    MaybeAuthenticatedActionOnFormSubmission.async(circe.json[PayPalBillingDetails]) { implicit request =>
       val paypalBillingDetails = request.body
       withPaypalServiceForRequest(request) { service =>
         service.retrieveToken(
@@ -46,20 +46,21 @@ class PayPalRegular(
           .map(s => Ok(Token(s).asJson))
           .getOrElse(BadRequest("We were unable to set up a payment for this request (missing PayPal token)"))
       }
-  }
-
-  def createAgreement: Action[Token] = MaybeAuthenticatedAction.async(circe.json[Token]) { implicit request =>
-    withPaypalServiceForRequest(request) { service =>
-      service.createBillingAgreement(request.body)
-    }.map { maybeString =>
-      maybeString
-        .map(s => Ok(Token(s).asJson))
-        .getOrElse(BadRequest("We were unable to create an agreement for this request (missing PayPal token)"))
     }
+
+  def createAgreement: Action[Token] = MaybeAuthenticatedActionOnFormSubmission.async(circe.json[Token]) {
+    implicit request =>
+      withPaypalServiceForRequest(request) { service =>
+        service.createBillingAgreement(request.body)
+      }.map { maybeString =>
+        maybeString
+          .map(s => Ok(Token(s).asJson))
+          .getOrElse(BadRequest("We were unable to create an agreement for this request (missing PayPal token)"))
+      }
   }
 
-  def createAgreementAndRetrieveUser: Action[Token] = MaybeAuthenticatedAction.async(circe.json[Token]) {
-    implicit request =>
+  def createAgreementAndRetrieveUser: Action[Token] =
+    MaybeAuthenticatedActionOnFormSubmission.async(circe.json[Token]) { implicit request =>
       withPaypalServiceForRequest(request) { service =>
         service.createAgreementAndRetrieveUser(request.body)
       }.map { maybePayPalCheckoutDetails =>
@@ -69,7 +70,7 @@ class PayPalRegular(
             BadRequest("We were unable to create an agreement for this request (missing user details or baid)"),
           )
       }
-  }
+    }
 
   private def withPaypalServiceForRequest[T](request: OptionalAuthRequest[_])(fn: PayPalNvpService => T): T = {
     val isTestUser = testUsers.isTestUser(request)

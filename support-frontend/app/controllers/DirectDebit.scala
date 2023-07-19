@@ -21,7 +21,7 @@ class DirectDebit(
   import actionBuilders._
 
   def checkAccount: Action[CheckBankAccountDetails] =
-    MaybeAuthenticatedAction.async(circe.json[CheckBankAccountDetails]) { implicit request =>
+    MaybeAuthenticatedActionOnFormSubmission.async(circe.json[CheckBankAccountDetails]) { implicit request =>
       {
         val goCardlessService = goCardlessServiceProvider.forUser(testUsers.isTestUser(request))
         goCardlessService.checkBankDetails(request.body).map { isAccountValid =>
