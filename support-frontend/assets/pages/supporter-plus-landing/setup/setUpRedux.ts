@@ -96,7 +96,6 @@ function selectInitialAmounts(
 ) {
 	const { amounts } = state.common;
 	const { amountsCardData } = amounts;
-	console.log(amounts);
 	const amountFromUrl = getAmountFromUrl();
 
 	const amountForSelectedContributionType = () => {

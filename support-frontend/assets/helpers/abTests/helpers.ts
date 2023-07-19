@@ -253,6 +253,41 @@ export function getAmounts(
 
 	const AMOUNTS = settings.amounts;
 
+	// Has user arrived at landing page with an URL detailing a specific amounts test variant?
+	if (Object.keys(abParticipations).length) {
+		for (const [test, variant] of Object.entries(abParticipations)) {
+			const testArray = AMOUNTS.filter((t) => {
+				if (t.isLive) {
+					return t.liveTestName === test;
+				} else {
+					return t.testName === test;
+				}
+			});
+			if (testArray.length) {
+				const candidate = testArray[0];
+				const variants = candidate.variants;
+				if (variants.length) {
+					if (variant === 'CONTROL' || variants.length === 1) {
+						return {
+							testName: test,
+							...variants[0],
+						};
+					} else {
+						for (let i = 0; i < variants.length; i++) {
+							const v = variants[i];
+							if (v.variantName === variant) {
+								return {
+									testName: test,
+									...v,
+								};
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	let testArray = AMOUNTS.filter((t) => t.target === countryCode);
 	if (!testArray.length) {
 		testArray = AMOUNTS.filter((t) => t.target === countryGroupId);

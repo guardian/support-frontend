@@ -194,7 +194,6 @@ function getServerSideParticipations(): Participations | null | undefined {
 
 function getAmountsTestFromURL(data: AcquisitionABTest[]) {
 	const amountTests = data.filter((t) => t.testType === 'AMOUNTS_TEST');
-
 	if (amountTests.length) {
 		const test = amountTests[0];
 		return {
