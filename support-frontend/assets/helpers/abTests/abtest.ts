@@ -230,8 +230,10 @@ function getAmountsTestParticipations(
 
 	const AMOUNTS = settings.amounts;
 
+	// Two-tier amounts - check for country test, then region test
 	let testArray = AMOUNTS.filter((t) => t.target === country);
-	if (!testArray.length) {
+	// If there is a country level test we need to discount it if its isLive boolean is false
+	if (!testArray.length || !testArray[0].isLive) {
 		testArray = AMOUNTS.filter((t) => t.target === countryGroupId);
 	}
 
