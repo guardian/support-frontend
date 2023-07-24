@@ -77,8 +77,8 @@ jobs:
             ~/.coursier
           key: sbt
 
-      - name: Build and upload to RiffRaff
+      - name: Build, test, and upload to RiffRaff
         run: |
           export LAST_TEAMCITY_BUILD=10000
           export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
-          sbt "project support-frontend" riffRaffUpload
+          sbt "project support-frontend" test riffRaffUpload
