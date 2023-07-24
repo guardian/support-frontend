@@ -1,6 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Product data information for supporters."
-
 Parameters:
   Stage:
     Description: Stage name
@@ -16,11 +15,13 @@ Conditions:
 Mappings:
   StageVariables:
     CODE:
+      EventBusName: supporter-product-data-CODE
       S3Bucket: supporter-product-data-export-code
       # Run once at 6am Mon-Fri
       scheduleRate: "cron(0 6 ? * 1-5 *)"
       lambdaConcurrency: 30
     PROD:
+      EventBusName: supporter-product-data-PROD
       S3Bucket: supporter-product-data-export-prod
       # Every 5 mins
       scheduleRate: "cron(*/5 * ? * * *)"
@@ -384,6 +385,44 @@ Resources:
     DependsOn:
       - SupporterProductDataQueue
       - ProcessSupporterRatePlanItemLambda
+
+  EventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: !FindInMap [StageVariables, !Ref Stage, EventBusName]
+
+  EventBridgeToSQSRule:
+    Type: AWS::Events::Rule
+    Properties:
+      EventPattern:
+        source:
+          - "com.gu.supporter-product-data.add-item"
+        detail-type:
+          - "SupporterRatePlanItem"
+      EventBusName: !FindInMap [StageVariables, !Ref Stage, EventBusName]
+      Targets:
+        - Arn: !GetAtt SupporterProductDataQueue.Arn
+          Id: EventBridgeToSQSRuleTarget
+          InputPath: $.detail
+    DependsOn:
+      - SupporterProductDataQueue
+      - EventBus
+
+  # Allow EventBridge to invoke SQS
+  EventBridgeToToSqsPolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: SQS:SendMessage
+            Resource:  !GetAtt SupporterProductDataQueue.Arn
+      Queues:
+        - Ref: SupporterProductDataQueue
+    DependsOn:
+      - SupporterProductDataQueue
 
   UnprocessedSupporterProductDataRecordAlarm:
     Type: 'AWS::CloudWatch::Alarm'

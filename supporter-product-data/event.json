@@ -1,0 +1,9 @@
+[
+  {
+    "DetailType": "SupporterRatePlanItem",
+    "Source": "com.gu.supporter-product-data.add-item",
+    "EventBusName": "supporter-product-data-CODE",
+    "Detail": "{\"subscriptionName\": \"A-S00614934\", \"identityId\": \"9999999\", \"gifteeIdentityId\": null, \"productRatePlanId\": \"2c92c0f85a6b134e015a7fcd9f0c7855\", \"productRatePlanName\": \"Monthly Contribution\", \"termEndDate\": \"2023-07-17\", \"contractEffectiveDate\": \"2023-07-16\", \"contributionAmount\": {  \"amount\": 20,  \"currency\": \"GBP\" }}"
+  }
+]
+
