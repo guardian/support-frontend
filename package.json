@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@guardian/consent-management-platform": "^13.6.1"
+  }
+}
