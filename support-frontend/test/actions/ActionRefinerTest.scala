@@ -28,6 +28,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
   trait Mocks {
     val asyncAuthenticationService = mock[AsyncAuthenticationService]
+    val userFromAuthCookiesOrAuthServerActionBuilder = mock[UserFromAuthCookiesOrAuthServerActionBuilder]
     val userFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder]
   }
 
@@ -37,6 +38,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
       val actionRefiner =
         new CustomActionBuilders(
           asyncAuthenticationService,
+          userFromAuthCookiesOrAuthServerActionBuilder,
           userFromAuthCookiesActionBuilder,
           stubControllerComponents(),
           csrfAddToken,
@@ -61,6 +63,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
+        userFromAuthCookiesOrAuthServerActionBuilder,
         userFromAuthCookiesActionBuilder,
         stubControllerComponents(),
         csrfAddToken,
@@ -86,6 +89,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
       when(asyncAuthenticationService.tryAuthenticateUser(any())).thenReturn(Future.successful(None))
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
+        userFromAuthCookiesOrAuthServerActionBuilder,
         userFromAuthCookiesActionBuilder,
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
@@ -111,6 +115,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         .thenReturn(Future.successful(Some(mock[User])))
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
+        userFromAuthCookiesOrAuthServerActionBuilder,
         userFromAuthCookiesActionBuilder,
         cc = stubControllerComponents(),
         addToken = csrfAddToken,
@@ -127,6 +132,7 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
       when(asyncAuthenticationService.tryAuthenticateUser(any())).thenReturn(Future.successful(None))
       val actionRefiner = new CustomActionBuilders(
         asyncAuthenticationService,
+        userFromAuthCookiesOrAuthServerActionBuilder,
         userFromAuthCookiesActionBuilder,
         cc = stubControllerComponents(),
         addToken = csrfAddToken,

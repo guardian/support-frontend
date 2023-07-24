@@ -313,7 +313,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
         },
         "FunctionName": "acquisition-events-api-cdk-CODE",
         "Handler": "com.gu.acquisitionEventsApi.Lambda::handler",
-        "MemorySize": 512,
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "acquisitioneventsapicdklambdaServiceRole3289A569",
@@ -1222,7 +1222,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
         },
         "FunctionName": "acquisition-events-api-cdk-PROD",
         "Handler": "com.gu.acquisitionEventsApi.Lambda::handler",
-        "MemorySize": 512,
+        "MemorySize": 1024,
         "Role": {
           "Fn::GetAtt": [
             "acquisitioneventsapicdklambdaServiceRole3289A569",

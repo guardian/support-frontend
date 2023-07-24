@@ -1,5 +1,6 @@
 import { List } from 'components/list/list';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';
 
@@ -15,7 +16,7 @@ const coreBenefits = [
 	},
 ];
 
-function getBenefits(countryId: IsoCountry) {
+function getBenefits(countryId: IsoCountry, countryGroupId: CountryGroupId) {
 	if (countryId === 'AU') {
 		return [
 			{
@@ -28,15 +29,22 @@ function getBenefits(countryId: IsoCountry) {
 			},
 		];
 	}
+	const discount = countryGroupId === 'EURCountries' ? '87' : '35';
 	return [
 		{
-			content: 'Every issue delivered with up to 35% off the cover price',
+			content: `Every issue delivered with up to ${discount}% off the cover price`,
 		},
 		...coreBenefits,
 	];
 }
 
-function Benefits({ countryId }: { countryId: IsoCountry }): JSX.Element {
+function Benefits({
+	countryId,
+	countryGroupId,
+}: {
+	countryId: IsoCountry;
+	countryGroupId: CountryGroupId;
+}): JSX.Element {
 	return (
 		<BenefitsContainer
 			sections={[
@@ -45,7 +53,7 @@ function Benefits({ countryId }: { countryId: IsoCountry }): JSX.Element {
 					content: (
 						<>
 							<BenefitsHeading text="As a subscriber you’ll enjoy" />
-							<List items={getBenefits(countryId)} />
+							<List items={getBenefits(countryId, countryGroupId)} />
 						</>
 					),
 				},

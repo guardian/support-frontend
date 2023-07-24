@@ -20,7 +20,7 @@ class SupportWorkersStatus(
     extends AbstractController(components)
     with Circe {
   import actionRefiners._
-  def status(jobId: String): Action[AnyContent] = MaybeAuthenticatedAction.async { implicit request =>
+  def status(jobId: String): Action[AnyContent] = MaybeAuthenticatedActionOnFormSubmission.async { implicit request =>
     client
       .status(jobId, request.uuid)
       .fold(

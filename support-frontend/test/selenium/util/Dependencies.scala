@@ -10,7 +10,8 @@ object Dependencies {
   trait Availability {
     val url: String
     def isAvailable: Boolean = {
-      val request = new Builder().url(url).build()
+      // Cookie is to avoid a chain of auth redirects as this check is purely to ensure site is up
+      val request = new Builder().url(url).addHeader("Cookie", "GU_SO=true").build()
       client.newCall(request).execute.isSuccessful
     }
   }
