@@ -213,7 +213,7 @@
     "webpack-manifest-plugin": "^5.0.0",
     "webpack-merge": "^5.9.0",
     "webpack-stats-plugin": "^0.3.2",
-    "yargs": "^17.4.0"
+    "yargs": "^17.7.2"
   },
   "resolutions": {
     "cssnano/cosmiconfig/js-yaml": "3.13.1",
