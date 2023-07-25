@@ -33,6 +33,12 @@ const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
 );
 
+const {
+	common: { abParticipations },
+} = store.getState();
+
+const isInTwoStepTest = abParticipations.twoStepCheckout === 'variant';
+
 // ----- Render ----- //
 
 const router = () => {
@@ -40,26 +46,39 @@ const router = () => {
 		<SupporterPlusLandingPage thankYouRoute={thankYouRoute} />
 	);
 
+	const oneStepRoutes = countryIds.map((countryId) => (
+		<>
+			<Route path={`/${countryId}/contribute/`} element={landingPage} />
+			<Route
+				path={`/${countryId}/contribute/:campaignCode`}
+				element={landingPage}
+			/>
+			<Route
+				path={`/${countryId}/thankyou`}
+				element={<SupporterPlusThankYou />}
+			/>
+		</>
+	));
+
+	const twoStepRoutes = countryIds.map((countryId) => (
+		<>
+			<Route path={`/${countryId}/contribute/`} element={landingPage} />
+			<Route
+				path={`/${countryId}/contribute/:campaignCode`}
+				element={landingPage}
+			/>
+			<Route path={`/${countryId}/contribute/checkout`} element={landingPage} />
+			<Route
+				path={`/${countryId}/thankyou`}
+				element={<SupporterPlusThankYou />}
+			/>
+		</>
+	));
+
 	return (
 		<BrowserRouter>
 			<Provider store={store}>
-				<Routes>
-					{countryIds.map((countryId) => (
-						<Route path={`/${countryId}/contribute/`} element={landingPage} />
-					))}
-					{countryIds.map((countryId) => (
-						<Route
-							path={`/${countryId}/contribute/:campaignCode`}
-							element={landingPage}
-						/>
-					))}
-					{countryIds.map((countryId) => (
-						<Route
-							path={`/${countryId}/thankyou`}
-							element={<SupporterPlusThankYou />}
-						/>
-					))}
-				</Routes>
+				<Routes>{isInTwoStepTest ? twoStepRoutes : oneStepRoutes}</Routes>
 			</Provider>
 		</BrowserRouter>
 	);
