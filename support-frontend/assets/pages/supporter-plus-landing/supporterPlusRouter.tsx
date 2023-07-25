@@ -13,6 +13,8 @@ import { renderPage } from 'helpers/rendering/render';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
+import { SupporterPlusInitialLandingPage } from './twoStepTest/firstStepLanding';
+import { SupporterPlusCheckout } from './twoStepTest/secondStepCheckout';
 
 if (!isDetailsSupported) {
 	polyfillDetails();
@@ -46,6 +48,10 @@ const router = () => {
 		<SupporterPlusLandingPage thankYouRoute={thankYouRoute} />
 	);
 
+	const firstStepLandingPage = (
+		<SupporterPlusInitialLandingPage thankYouRoute={thankYouRoute} />
+	);
+
 	const oneStepRoutes = countryIds.map((countryId) => (
 		<>
 			<Route path={`/${countryId}/contribute/`} element={landingPage} />
@@ -62,12 +68,18 @@ const router = () => {
 
 	const twoStepRoutes = countryIds.map((countryId) => (
 		<>
-			<Route path={`/${countryId}/contribute/`} element={landingPage} />
+			<Route
+				path={`/${countryId}/contribute/`}
+				element={firstStepLandingPage}
+			/>
 			<Route
 				path={`/${countryId}/contribute/:campaignCode`}
-				element={landingPage}
+				element={firstStepLandingPage}
 			/>
-			<Route path={`/${countryId}/contribute/checkout`} element={landingPage} />
+			<Route
+				path={`/${countryId}/contribute/checkout`}
+				element={<SupporterPlusCheckout thankYouRoute={thankYouRoute} />}
+			/>
 			<Route
 				path={`/${countryId}/thankyou`}
 				element={<SupporterPlusThankYou />}
