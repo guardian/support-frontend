@@ -194,10 +194,14 @@ object SimpleCheckoutFormValidation {
 }
 
 object PaidProductValidation {
-
+  import AddressAndCurrencyValidationRules._
   def passes(createSupportWorkersRequest: CreateSupportWorkersRequest): Result =
     SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) and
-      hasValidPaymentDetailsForPaidProduct(createSupportWorkersRequest.paymentFields)
+      hasValidPaymentDetailsForPaidProduct(createSupportWorkersRequest.paymentFields) and
+      hasStateIfRequired(
+        createSupportWorkersRequest.billingAddress.country,
+        createSupportWorkersRequest.billingAddress.state,
+      )
 
   def hasValidPaymentDetailsForPaidProduct(paymentDetails: Either[PaymentFields, RedemptionData]): Result =
     paymentDetails match {
@@ -243,7 +247,7 @@ object AddressAndCurrencyValidationRules {
       stateFromRequest.isDefined.otherwise(s"state is required for $countryFromRequest")
     } else Valid
 
-//    hasValidPostcodeLength checks if the length of postCodeIsShortEnoughForSalesforce(must be less than or equal to 20 characters)
+//     hasValidPostcodeLength checks if the length of postCodeIsShortEnoughForSalesforce(must be less than or equal to 20 characters)
   def hasValidPostcodeLength(postcodeFromRequest: Option[String], addressType: String): Result = {
     val validPostCode = postcodeFromRequest match {
       case Some(postCode) if (postCode.length > 20) =>
@@ -277,7 +281,6 @@ object AddressAndCurrencyValidationRules {
   }
 
 }
-
 object DigitalPackValidation {
 
   import AddressAndCurrencyValidationRules._
