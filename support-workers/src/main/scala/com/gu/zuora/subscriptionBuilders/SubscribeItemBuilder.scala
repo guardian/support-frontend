@@ -81,6 +81,7 @@ class SubscribeItemBuilder(
       giftNotificationEmailDate: Option[LocalDate] = None,
       csrUsername: Option[String] = None,
       salesforceCaseId: Option[String] = None,
+      deliveryAgent: Option[String] = None,
   ): SubscriptionData =
     SubscriptionData(
       List(
@@ -104,6 +105,7 @@ class SubscribeItemBuilder(
         createdByCsr = csrUsername,
         acquisitionSource = csrUsername.map(_ => CSR),
         acquisitionCase = salesforceCaseId,
+        deliveryAgent = deliveryAgent,
       ),
     )
 }

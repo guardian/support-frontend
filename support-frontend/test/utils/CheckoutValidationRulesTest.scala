@@ -562,7 +562,8 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "fail if the currency is USD" in {
-    val requestDeliveredToUs = validPaperRequest.copy(product = Paper(Currency.USD, Monthly, HomeDelivery, Everyday))
+    val requestDeliveredToUs =
+      validPaperRequest.copy(product = Paper(Currency.USD, Monthly, HomeDelivery, Everyday, None))
     PaperValidation.passes(requestDeliveredToUs, Collection) shouldBe an[Invalid]
   }
 
@@ -641,7 +642,8 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "succeed if the currency is USD" in {
-    val requestDeliveredToUs = validWeeklyRequest.copy(product = Paper(Currency.USD, Monthly, HomeDelivery, Everyday))
+    val requestDeliveredToUs =
+      validWeeklyRequest.copy(product = GuardianWeekly(Currency.USD, Monthly, HomeDelivery))
     GuardianWeeklyValidation.passes(requestDeliveredToUs) shouldBe Valid
   }
 
@@ -755,7 +757,7 @@ object TestData {
     title = None,
     firstName = "grace",
     lastName = "hopper",
-    product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday),
+    product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday, Some("delivery agent (oho)")),
     firstDeliveryDate = Some(someDateNextMonth),
     paymentFields =
       Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),

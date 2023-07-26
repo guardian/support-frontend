@@ -140,6 +140,9 @@ object AcquisitionDataRowBuilder {
         case (HomeDelivery, SaturdayPlus) => HomeDeliverySaturdayPlus
         case (HomeDelivery, Sunday) => HomeDeliverySunday
         case (HomeDelivery, SundayPlus) => HomeDeliverySundayPlus
+        case (NationalDelivery, Everyday) => NationalDeliveryEveryday
+        case (NationalDelivery, Sixday) => NationalDeliverySixday
+        case (NationalDelivery, Weekend) => NationalDeliveryWeekend
         case (Collection, Everyday) => VoucherEveryday
         case (Collection, EverydayPlus) => VoucherEverydayPlus
         case (Collection, Sixday) => VoucherSixday
@@ -149,7 +152,14 @@ object AcquisitionDataRowBuilder {
         case (Collection, Saturday) => VoucherSaturday
         case (Collection, SaturdayPlus) => VoucherSaturdayPlus
         case (Collection, Sunday) => VoucherSunday
-        case _ => VoucherSundayPlus
+        case (Collection, SundayPlus) => VoucherSundayPlus
+        case (NoFulfilmentOptions, _) | (_, NoProductOptions) | (Domestic, _) | (RestOfWorld, _) |
+            (NationalDelivery, Saturday) | (NationalDelivery, Sunday) | (NationalDelivery, EverydayPlus) |
+            (NationalDelivery, SixdayPlus) | (NationalDelivery, WeekendPlus) | (NationalDelivery, SaturdayPlus) |
+            (NationalDelivery, SundayPlus) =>
+          throw new RuntimeException(
+            s"Invalid combination of fulfilmentOptions ($fulfilmentOptions) and productOptions ($productOptions)",
+          )
       }
 
     product match {
