@@ -8,7 +8,7 @@ import com.gu.model.sqs.SqsEvent
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
-import com.gu.services.{AlarmService, ConfigService, ZuoraSubscriptionService}
+import com.gu.services.{AlarmService, ConfigService, DiscountService, ZuoraSubscriptionService}
 import com.gu.supporterdata.model.Stage.{CODE, PROD}
 import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import com.gu.supporterdata.services.SupporterDataDynamoService
@@ -43,24 +43,32 @@ object ProcessSupporterRatePlanItemLambda {
   val config = ConfigService(stage).load
   val dynamoService = SupporterDataDynamoService(stage)
   val contributionIds = ContributionIds.forStage(stage)
+  val discountIds = DiscountService(stage).getDiscountProductRatePlanIds.get
   lazy val contributionAmountFetcher = new ContributionAmountFetcher(config)
   lazy val alarmService = AlarmService(stage)
 
-  def isRecurringContribution(supporterRatePlanItem: SupporterRatePlanItem) =
+  private def isRecurringContribution(supporterRatePlanItem: SupporterRatePlanItem) =
     contributionIds.contains(supporterRatePlanItem.productRatePlanId)
 
-  def addAmountIfContribution(supporterRatePlanItem: SupporterRatePlanItem) =
+  private def addAmountIfContribution(supporterRatePlanItem: SupporterRatePlanItem) =
     if (isRecurringContribution(supporterRatePlanItem)) {
       SafeLogger.info(s"Supporter ${supporterRatePlanItem.identityId} is a recurring contributor")
       contributionAmountFetcher.fetchContributionAmountFromZuora(supporterRatePlanItem)
     } else
       Future.successful(supporterRatePlanItem)
 
-  def processItem(supporterRatePlanItem: SupporterRatePlanItem) =
-    addAmountIfContribution(supporterRatePlanItem)
-      .flatMap(writeItemToDynamo)
+  private def itemIsDiscount(supporterRatePlanItem: SupporterRatePlanItem) =
+    discountIds.contains(supporterRatePlanItem.productRatePlanId)
 
-  def writeItemToDynamo(supporterRatePlanItem: SupporterRatePlanItem) = {
+  def processItem(supporterRatePlanItem: SupporterRatePlanItem) = {
+    if (itemIsDiscount(supporterRatePlanItem)) {
+      SafeLogger.info(s"Supporter ${supporterRatePlanItem.identityId} is a discount")
+      Future.successful(())
+    } else
+      addAmountIfContribution(supporterRatePlanItem).flatMap(writeItemToDynamo)
+  }
+
+  private def writeItemToDynamo(supporterRatePlanItem: SupporterRatePlanItem) = {
     SafeLogger.info(s"Attempting to write item to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}")
 
     dynamoService
