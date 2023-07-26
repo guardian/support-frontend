@@ -148,6 +148,13 @@ case object Paper extends Product {
   ): ProductRatePlan[Paper.type] =
     ProductRatePlan(productRatePlanId, Monthly, HomeDelivery, productOptions, description, List(CountryGroup.UK))
 
+  private def nationalDelivery(
+      productRatePlanId: ProductRatePlanId,
+      productOptions: ProductOptions,
+      description: String,
+  ): ProductRatePlan[Paper.type] =
+    ProductRatePlan(productRatePlanId, Monthly, NationalDelivery, productOptions, description, List(CountryGroup.UK))
+
   private val prodCollection: List[ProductRatePlan[Paper.type]] =
     List(
       collection("2c92a00870ec598001710740ce702ff0", SaturdayPlus, "Voucher Saturday+"),
@@ -200,6 +207,9 @@ case object Paper extends Product {
         homeDelivery("2c92c0f955c3cf0f0155c5d9ddf13bc5", Sixday, "Home Delivery Sixday"),
         homeDelivery("2c92c0f85aff3453015b10496b5e3d17", EverydayPlus, "Home Delivery Everyday+"),
         homeDelivery("2c92c0f955c3cf0f0155c5d9e2493c43", Everyday, "Home Delivery Everyday"),
+        nationalDelivery("8ad096ca8992481d018992a36256175e", Weekend, "National Delivery Weekend"),
+        nationalDelivery("8ad096ca8992481d018992a35f60171b", Sixday, "National Delivery Sixday"),
+        nationalDelivery("8ad096ca8992481d018992a363bd17ad", Everyday, "National Delivery Everyday"),
       )),
     )
 }
