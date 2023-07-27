@@ -1,4 +1,4 @@
-name: Run support-frontend-post-deploy-tests
+name: Test support-frontend-post-deploy-tests
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ jobs:
       (github.repository_owner == 'guardian' ||
         github.event_name == 'push')
 
-    name: Run support-frontend-post-deployment-tests
+    name: Test  support-frontend-post-deployment-tests
     runs-on: ubuntu-latest
     env :
       JAVA_TOOL_OPTIONS: -Xss4m
