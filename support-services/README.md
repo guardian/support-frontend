@@ -138,6 +138,10 @@ For example:
 
 This is the number of days each week that the agent does deliveries: 7 means every day of the week, and 6 means Monday to Saturday. I believe we have agreed with PaperRound that only agents who deliver every day will be available, so this should always be 7.
 
+###### summary
+
+A brief summary of the shop. Empty on the test responses, but shouldn’t be empty in production.
+
 #### Not Covered
 
 If the status is `"NC"`, the postcode is not covered by any agents, and `data.agents` will be empty.
@@ -1340,10 +1344,6 @@ i.e. is the naming/typing correct?
 #### What’s the error behaviour?
 
 Do we only get the error type when the status is non-2xx? Can we always distinguish the error and success types?
-
-#### What’s the `summary` field on `GuardianAgentsCoverage`?
-
-So far it seems to always be empty: what does it mean?
 
 #### Is it right that the postcode returned for each agent in the /coverage list is the same?
 
