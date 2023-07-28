@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { space, until } from '@guardian/source-foundations';
+import { Link } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
 import { PaymentMethodSelector } from 'components/paymentMethodSelector/paymentMethodSelector';
@@ -10,6 +11,7 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -57,7 +59,14 @@ export function SupporterPlusCheckout({
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute}>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
-					<p>Your amount</p>
+					<p>
+						{amount} {contributionType}
+					</p>
+					<Link
+						to={`/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`}
+					>
+						Changed your mind?
+					</Link>
 				</BoxContents>
 			</Box>
 			<Box cssOverrides={shorterBoxMargin}>
