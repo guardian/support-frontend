@@ -48,7 +48,8 @@ import {
 } from 'helpers/subscriptionsForms/formValidation';
 import type { AnyCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
+// import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
+import { trackSubscriptionConversion } from 'helpers/tracking/conversions';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
@@ -224,11 +225,15 @@ function onPaymentAuthorised(
 				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
 			// Notify Quantum Metric of successfull subscription conversion
-			sendEventSubscriptionCheckoutConversion(
+			// console.log(
+			// 	'*** sendEventSubscriptionCheckoutConversion in submit.ts ***',
+			// );
+			trackSubscriptionConversion(
 				productType,
 				!!orderIsAGift,
 				productPrice,
 				billingPeriod,
+				abParticipations,
 			);
 		} else if (result.error) {
 			dispatch(setSubmissionError(result.error));

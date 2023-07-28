@@ -25,7 +25,8 @@ import {
 	trackUserData,
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
+// import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
+import { trackContributionConversion } from 'helpers/tracking/conversions';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
@@ -127,13 +128,26 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const isAmountLargeDonation = amount
 		? isLargeDonation(amount, contributionType, paymentMethod)
 		: false;
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
+	);
 
 	useEffect(() => {
 		if (amount) {
-			sendEventContributionCheckoutConversion(
+			// console.log('*** TRACK EVERY CONVERSION 4 QM ***');
+			// console.log(
+			// 	'*** sendEventContributionCheckoutConversion in supporterPlusThankYou.ts ***',
+			// );
+			// sendEventContributionCheckoutConversion(
+			// 	amount,
+			// 	contributionType,
+			// 	currencyId,
+			// );
+			trackContributionConversion(
 				amount,
 				contributionType,
 				currencyId,
+				abParticipations,
 			);
 
 			trackUserData(

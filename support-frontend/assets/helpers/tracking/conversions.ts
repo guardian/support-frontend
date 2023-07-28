@@ -1,11 +1,13 @@
 import { getAbsoluteURL } from '../urls/url';
 import { successfulConversion } from './googleTagManager';
-import { pageView } from './ophan';
+// import { pageView } from './ophan';
 
 export default function trackConversion(currentRoute: string): void {
 	// Fire GTM conversion events
 	successfulConversion();
 	// Send an Ophan pageview. Because this function is used to track page views
 	// from client side routed thank you pages, the referrer will always be the current location
-	pageView(getAbsoluteURL(currentRoute), document.location.href);
+	// pageView(getAbsoluteURL(currentRoute), document.location.href);
 }
+
+export { trackContributionConversion, trackSubscriptionConversion };
