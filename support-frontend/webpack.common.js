@@ -5,7 +5,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const pxtorem = require('postcss-pxtorem');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const babelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except');
 const { paletteAsSass } = require('./scripts/pasteup-sass');
 const { getClassName } = require('./scripts/css');
 const entryPoints = require('./webpack.entryPoints');
@@ -116,10 +115,7 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 		rules: [
 			{
 				test: /\.([jt]sx?|mjs)$/,
-				exclude: babelLoaderExcludeNodeModulesExcept([
-					// es6 modules from node_modules/
-					'@guardian/*',
-				]),
+        exclude: /node_modules\/(?!(\@guardian\/*)\/).*/,
 				use: [
 					{
 						loader: 'babel-loader',
