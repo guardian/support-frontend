@@ -34,10 +34,12 @@ trait CheckoutPage extends Page with Browser {
   }
 
   def pageHasLoaded: Boolean = {
+    Console.println("personalDetails ", personalDetails)
     pageHasElement(personalDetails)
   }
 
   def stripeFormHasLoaded: Boolean = {
+    Console.println("Reached stripeFormHasLoaded")
     switchToFrame(0)
     pageHasElement(cardNumber)
   }
@@ -47,6 +49,7 @@ trait CheckoutPage extends Page with Browser {
   }
 
   def directDebitPlaybackHasLoaded: Boolean = {
+    Console.println("directDebitPlaybackSubmit", directDebitPlaybackSubmit)
     pageHasElement(directDebitPlaybackSubmit)
   }
 
@@ -83,6 +86,7 @@ trait CheckoutPage extends Page with Browser {
   def clickDirectDebitConfirm(): Unit = clickOn(directDebitSubmitButton)
 
   def clickDirectDebitPay(): Unit = {
+    Console.println("We reached here clickDirectDebitPay", clickDirectDebitPay)
     clickRecaptcha
     clickOn(directDebitPlaybackSubmit)
   }

@@ -63,6 +63,10 @@ class CheckoutsSpec
       productPage: ProductPage,
       paymentFunction: CheckoutPage => Unit,
   ): Unit = {
+    Console.println("checkoutName", checkoutName)
+    Console.println("checkoutPage", checkoutPage)
+    Console.println("productPage", productPage)
+    Console.println("paymentFunction", paymentFunction)
     val testUserRequest = new IdapiTestUserRequest()
     testUserRequest.getCookies() match {
       case Left(error) => fail(error)
@@ -127,6 +131,7 @@ class CheckoutsSpec
   }
 
   def thankYouPage(checkoutPage: CheckoutPage): Unit = {
+    Console.println("Thank you Page for ", checkoutPage)
     Then("the thank you page should display")
     eventually {
       assert(checkoutPage.thankYouPageHasLoaded)
