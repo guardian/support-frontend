@@ -103,7 +103,6 @@ class CheckoutsSpec
   }
 
   def payWithDirectDebit(checkoutPage: CheckoutPage): Unit = {
-    Console.println("Have reached payWithDirectDebit")
     Given("that the user selects to pay with Direct Debit")
     When("they press the Direct Debit payment button")
     checkoutPage.selectDirectDebitPaymentMethod()
@@ -119,7 +118,6 @@ class CheckoutsSpec
 
     Given("the playback of the user's details has loaded")
     assert(checkoutPage.directDebitPlaybackHasLoaded)
-    Console.println("Have completed directDebitPlaybackHasLoaded")
 
     When("they click Pay")
     checkoutPage.clickDirectDebitPay()
@@ -128,7 +126,6 @@ class CheckoutsSpec
   }
 
   def thankYouPage(checkoutPage: CheckoutPage): Unit = {
-    Console.println("Thank you Page for ", checkoutPage)
     Then("the thank you page should display")
     eventually {
       assert(checkoutPage.thankYouPageHasLoaded)
