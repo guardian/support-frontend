@@ -20,7 +20,7 @@ function getBenefits(countryId: IsoCountry, countryGroupId: CountryGroupId) {
 	if (countryId === 'AU') {
 		return [
 			{
-				content: 'Every issue delivered with up to 91% off the cover price',
+				content: 'Every issue delivered with up to 35% off the cover price',
 			},
 			...coreBenefits,
 			{
