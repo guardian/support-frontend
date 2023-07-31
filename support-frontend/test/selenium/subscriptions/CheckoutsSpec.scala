@@ -27,7 +27,7 @@ class CheckoutsSpec
 
   override def beforeAll(): Unit = {
     Config.printSummary(driverConfig.sessionId)
-    Dependencies.dependencyCheck
+    Dependencies.dependencyCheck2
   }
 
   override def afterAll(): Unit = {

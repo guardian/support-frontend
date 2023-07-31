@@ -11,9 +11,13 @@ object Dependencies {
     val url: String
     def isAvailable: Boolean = {
       // Cookie is to avoid a chain of auth redirects as this check is purely to ensure site is up
-      val request = new Builder().url(url).build()
+      val request = new Builder().url(url).addHeader("Cookie", "GU_SO=true").build()
+      client.newCall(request).execute.isSuccessful
+    }
 
-      //  val request = new Builder().url(url).addHeader("Cookie", "GU_SO=true").build()
+    def isAvailableForSignedUser: Boolean = {
+      // Cookie is to avoid a chain of auth redirects as this check is purely to ensure site is up
+      val request = new Builder().url(url).addHeader("Cookie", "GU_SO=false").build()
       client.newCall(request).execute.isSuccessful
     }
   }
@@ -25,6 +29,13 @@ object Dependencies {
   def dependencyCheck: Unit = {
     assume(
       SupportFrontend.isAvailable,
+      s"${Dependencies.SupportFrontend.url} is unavailable! Please run support-frontend locally before running these tests.",
+    )
+  }
+
+  def dependencyCheck2: Unit = {
+    assume(
+      SupportFrontend.isAvailableForSignedUser,
       s"${Dependencies.SupportFrontend.url} is unavailable! Please run support-frontend locally before running these tests.",
     )
   }
