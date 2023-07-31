@@ -354,7 +354,7 @@ const referrerControlledActiveParticipation = (
 });
 
 function randomNumber(mvtId: number, seed: number): number {
-	const rng = seedrandom(`${mvtId + seed}`);
+	const rng = new seedrandom(`${mvtId + seed}`);
 	return Math.abs(rng.int32());
 }
 
