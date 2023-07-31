@@ -34,7 +34,6 @@ trait CheckoutPage extends Page with Browser {
   }
 
   def pageHasLoaded: Boolean = {
-    Console.println("personalDetails ", personalDetails)
     pageHasElement(personalDetails)
   }
 
@@ -88,7 +87,7 @@ trait CheckoutPage extends Page with Browser {
   def clickDirectDebitConfirm(): Unit = clickOn(directDebitSubmitButton)
 
   def clickDirectDebitPay(): Unit = {
-    Console.println("We reached here clickDirectDebitPay", clickDirectDebitPay)
+    Console.println("We reached here clickDirectDebitPay")
     clickRecaptcha
     clickOn(directDebitPlaybackSubmit)
   }
