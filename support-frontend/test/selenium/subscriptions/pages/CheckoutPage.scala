@@ -48,7 +48,6 @@ trait CheckoutPage extends Page with Browser {
   }
 
   def directDebitPlaybackHasLoaded: Boolean = {
-    Console.println("pageHasElement(directDebitPlaybackSubmit)", pageHasElement(directDebitPlaybackSubmit))
     pageHasElement(directDebitPlaybackSubmit)
   }
 
@@ -75,6 +74,7 @@ trait CheckoutPage extends Page with Browser {
   }
 
   def thankYouPageHasLoaded: Boolean = {
+    Console.println("pageHasElement(className(\"thank-you-stage\"))", pageHasElement(className("thank-you-stage")))
     pageHasElement(className("thank-you-stage"))
   }
 
@@ -86,9 +86,7 @@ trait CheckoutPage extends Page with Browser {
 
   def clickDirectDebitPay(): Unit = {
     clickRecaptcha
-    Console.println("Start directDebitPlaybackSubmit")
     clickOn(directDebitPlaybackSubmit)
-    Console.println("End directDebitPlaybackSubmit")
   }
 
   def fillForm(): Unit
