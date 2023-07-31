@@ -63,10 +63,6 @@ class CheckoutsSpec
       productPage: ProductPage,
       paymentFunction: CheckoutPage => Unit,
   ): Unit = {
-    Console.println("checkoutName", checkoutName)
-    Console.println("checkoutPage", checkoutPage)
-    Console.println("productPage", productPage)
-    Console.println("paymentFunction", paymentFunction)
     val testUserRequest = new IdapiTestUserRequest()
     testUserRequest.getCookies() match {
       case Left(error) => fail(error)
@@ -107,7 +103,7 @@ class CheckoutsSpec
   }
 
   def payWithDirectDebit(checkoutPage: CheckoutPage): Unit = {
-
+    Console.println("Have reached payWithDirectDebit")
     Given("that the user selects to pay with Direct Debit")
     When("they press the Direct Debit payment button")
     checkoutPage.selectDirectDebitPaymentMethod()
@@ -123,6 +119,7 @@ class CheckoutsSpec
 
     Given("the playback of the user's details has loaded")
     assert(checkoutPage.directDebitPlaybackHasLoaded)
+    Console.println("Have completed directDebitPlaybackHasLoaded")
 
     When("they click Pay")
     checkoutPage.clickDirectDebitPay()
