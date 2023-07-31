@@ -103,6 +103,7 @@ class CheckoutsSpec
   }
 
   def payWithDirectDebit(checkoutPage: CheckoutPage): Unit = {
+
     Given("that the user selects to pay with Direct Debit")
     When("they press the Direct Debit payment button")
     checkoutPage.selectDirectDebitPaymentMethod()

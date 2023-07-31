@@ -38,7 +38,6 @@ trait CheckoutPage extends Page with Browser {
   }
 
   def stripeFormHasLoaded: Boolean = {
-    Console.println("Reached stripeFormHasLoaded")
     switchToFrame(0)
     pageHasElement(cardNumber)
   }
@@ -64,7 +63,7 @@ trait CheckoutPage extends Page with Browser {
     clickRecaptcha
   }
 
-  def waitForTestRecaptchaToComplete: Unit = Thread.sleep(15000)
+  def waitForTestRecaptchaToComplete: Unit = Thread.sleep(1000)
 
   def fillDirectDebitForm(): Unit = {
     setValue(accountName, "Test user")
@@ -74,7 +73,6 @@ trait CheckoutPage extends Page with Browser {
   }
 
   def thankYouPageHasLoaded: Boolean = {
-    Console.println("pageHasElement(className(\"thank-you-stage\"))", pageHasElement(className("thank-you-stage")))
     pageHasElement(className("thank-you-stage"))
   }
 
