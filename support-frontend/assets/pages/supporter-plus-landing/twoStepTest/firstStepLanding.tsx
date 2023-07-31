@@ -65,7 +65,11 @@ export function SupporterPlusInitialLandingPage({
 					<ContributionsStripe>
 						<SecureTransactionIndicator />
 						<PaymentRequestButtonContainer CustomButton={SavedCardButton} />
-						<Link to="checkout">Continue to checkout</Link>
+						<Link
+							to={`checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`}
+						>
+							Continue to checkout
+						</Link>
 					</ContributionsStripe>
 					<PaymentTsAndCs
 						countryGroupId={countryGroupId}
