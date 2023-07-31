@@ -316,6 +316,34 @@ describe('init', () => {
 
 		expect(participations).toEqual({});
 	});
+
+	it('assigns mvtIds to the same variant on subsequent visits', () => {
+		const mvt = 879_134;
+
+		const tests = {
+			t1: buildTest({
+				audiences: { GB: buildAudience({ offset: 0, size: 1 }) },
+			}),
+		};
+
+		const participations1: Participations = abInit(
+			country,
+			countryGroupId,
+			emptySettings,
+			tests,
+			mvt,
+		);
+
+		const participations2: Participations = abInit(
+			country,
+			countryGroupId,
+			emptySettings,
+			tests,
+			mvt,
+		);
+
+		expect(participations1).toEqual(participations2);
+	});
 });
 
 it('targetPage matching', () => {
