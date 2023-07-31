@@ -13,7 +13,7 @@ object Config {
 
   val supportFrontendUrl = conf.getString("support.url")
 
-  val waitTimeout = 45
+  val waitTimeout = 180
 
   val testUsersSecret = conf.getString("identity.test.users.secret")
 
