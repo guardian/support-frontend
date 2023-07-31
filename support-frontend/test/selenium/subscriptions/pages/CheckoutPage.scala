@@ -29,10 +29,8 @@ trait CheckoutPage extends Page with Browser {
   def selectDirectDebitPaymentMethod(): Unit = clickOn(directDebitButton)
 
   def clickRecaptcha: Unit = {
-    Console.println("Clicked Recaptcha")
     clickOn(recaptchaButton)
     waitForTestRecaptchaToComplete
-    Console.println("Finished  Recaptcha")
   }
 
   def pageHasLoaded: Boolean = {
@@ -67,7 +65,7 @@ trait CheckoutPage extends Page with Browser {
     clickRecaptcha
   }
 
-  def waitForTestRecaptchaToComplete: Unit = Thread.sleep(3000)
+  def waitForTestRecaptchaToComplete: Unit = Thread.sleep(15000)
 
   def fillDirectDebitForm(): Unit = {
     setValue(accountName, "Test user")
@@ -87,9 +85,8 @@ trait CheckoutPage extends Page with Browser {
   def clickDirectDebitConfirm(): Unit = clickOn(directDebitSubmitButton)
 
   def clickDirectDebitPay(): Unit = {
-    Console.println("Entered clickDirectDebitPay")
     clickRecaptcha
-    Console.println("Came back")
+    Console.println("Start directDebitPlaybackSubmit")
     clickOn(directDebitPlaybackSubmit)
   }
 
