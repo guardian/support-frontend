@@ -94,7 +94,6 @@ function DirectDebitForm(props: PropTypes) {
 	return (
 		<div className="component-direct-debit-form">
 			<AccountHolderNameInput
-				phase={props.phase}
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 					props.setAccountHolderName(e.target.value)
 				}
@@ -201,21 +200,9 @@ function AccountNumberInput(props: {
  https://developer.gocardless.com/api-reference/
  * */
 function AccountHolderNameInput(props: {
-	phase: Phase;
 	value: string;
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
-	const editable = (
-		<input
-			id="account-holder-name-input"
-			data-qm-masking="blocklist"
-			value={props.value}
-			onChange={props.onChange}
-			maxLength={40}
-			className="component-direct-debit-form__text-field focus-target"
-		/>
-	);
-	const locked = <span>{props.value}</span>;
 	return (
 		<div className="component-direct-debit-form__account-holder-name">
 			<label
@@ -224,7 +211,14 @@ function AccountHolderNameInput(props: {
 			>
 				Account name
 			</label>
-			{props.phase === 'entry' ? editable : locked}
+			<input
+				id="account-holder-name-input"
+				data-qm-masking="blocklist"
+				value={props.value}
+				onChange={props.onChange}
+				maxLength={40}
+				className="component-direct-debit-form__text-field focus-target"
+			/>
 		</div>
 	);
 }
