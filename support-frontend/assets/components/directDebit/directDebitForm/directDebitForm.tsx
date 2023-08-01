@@ -108,7 +108,6 @@ function DirectDebitForm(props: PropTypes) {
 			/>
 
 			<SortCodeInput
-				phase={props.phase}
 				onChange={(
 					index: SortCodeIndex,
 					e: React.ChangeEvent<HTMLInputElement>,
