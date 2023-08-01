@@ -26,7 +26,6 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropTypes = ConnectedProps<typeof connector> & {
-	buttonText: string;
 	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void;
 };
 
@@ -50,7 +49,6 @@ function DirectDebitPopUpForm(props: PropTypes): JSX.Element {
 						</span>
 					</button>
 					<DirectDebitForm
-						buttonText={props.buttonText}
 						onPaymentAuthorisation={props.onPaymentAuthorisation}
 					/>
 				</div>

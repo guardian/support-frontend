@@ -74,7 +74,6 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropTypes = ConnectedProps<typeof connector> & {
-	buttonText: string;
 	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void;
 };
 
@@ -138,7 +137,6 @@ function DirectDebitForm(props: PropTypes) {
 			)}
 
 			<PaymentButton
-				buttonText={props.buttonText}
 				phase={props.phase}
 				onPayClick={props.confirmAccountDetails}
 				onEditClick={() => props.setPhase('entry')}
@@ -270,7 +268,6 @@ function ConfirmationInput(props: {
 }
 
 function PaymentButton(props: {
-	buttonText: string;
 	phase: Phase;
 	onPayClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	onEditClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -285,7 +282,7 @@ function PaymentButton(props: {
 			>
 				<SvgDirectDebitSymbol />
 				<span className="component-direct-debit-form__cta-text">
-					{props.buttonText}
+					Pay with Direct Debit
 				</span>
 				<SvgArrowRightStraight />
 			</button>
