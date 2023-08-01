@@ -1,6 +1,5 @@
 import { getAbsoluteURL } from '../urls/url';
 import { successfulConversion } from './googleTagManager';
-// import { pageView } from './ophan';
 
 export default function trackConversion(currentRoute: string): void {
 	// Fire GTM conversion events

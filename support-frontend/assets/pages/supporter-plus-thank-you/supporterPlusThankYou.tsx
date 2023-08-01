@@ -25,10 +25,8 @@ import {
 	trackUserData,
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-// import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { trackContributionConversion } from 'helpers/tracking/conversions';
 import { pageView } from 'helpers/tracking/ophan';
-// import { routes } from 'helpers/urls/routes';
 import { getAbsoluteURL } from 'helpers/urls/url';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
@@ -137,15 +135,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 
 	useEffect(() => {
 		if (amount) {
-			// console.log('*** TRACK EVERY CONVERSION 4 QM ***');
-			// console.log(
-			// 	'*** sendEventContributionCheckoutConversion in supporterPlusThankYou.ts ***',
-			// );
-			// sendEventContributionCheckoutConversion(
-			// 	amount,
-			// 	contributionType,
-			// 	currencyId,
-			// );
 			trackContributionConversion(
 				amount,
 				contributionType,

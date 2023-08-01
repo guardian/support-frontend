@@ -224,10 +224,6 @@ function onPaymentAuthorised(
 			} else {
 				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
-			// Notify Quantum Metric of successfull subscription conversion
-			// console.log(
-			// 	'*** sendEventSubscriptionCheckoutConversion in submit.ts ***',
-			// );
 			trackSubscriptionConversion(
 				productType,
 				!!orderIsAGift,
