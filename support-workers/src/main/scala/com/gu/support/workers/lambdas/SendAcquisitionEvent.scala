@@ -86,8 +86,14 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     } yield ()
 
     result.value.map {
-      case Left(errorMessage) => throw new RetryNone(errorMessage.mkString(" & "))
-      case Right(_) => HandlerResult((), requestInfo)
+      case Left(errorMessage) => {
+        services.bigQueryService.shutdown()
+        throw new RetryNone(errorMessage.mkString(" & "))
+      }
+      case Right(_) => {
+        services.bigQueryService.shutdown()
+        HandlerResult((), requestInfo)
+      }
     }
   }
 

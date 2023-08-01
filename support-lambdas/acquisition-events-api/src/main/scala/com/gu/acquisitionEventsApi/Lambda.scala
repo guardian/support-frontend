@@ -44,22 +44,24 @@ object Lambda extends LazyLogging {
           .tableInsertRowWithRetry(acq, 5)
           .leftMap[Error](error => BigQueryError(error))
       }
-    Try(Await.result(result.value, 20.seconds)) match {
+    val responseCode = Try(Await.result(result.value, 20.seconds)) match {
       case Success(Right(_)) =>
         logger.info(s"$requestId: successfully processed the event: $rawBody")
-        buildResponse(200)
+        200
       case Success(Left(ParseError(error))) =>
         logger.error(s"$requestId: failed to process an event due to ParseError($error)")
         logger.error(s"Failed event was: $rawBody")
-        buildResponse(400)
+        400
       case Success(Left(BigQueryError(error))) =>
         logger.error(s"$requestId: failed to process an event due to BigQueryError($error)")
         logger.error(s"Failed event was: $rawBody")
-        buildResponse(500)
+        500
       case Failure(error) =>
         logger.error(s"$requestId: failed to process an event due to Failure($error)")
         logger.error(s"Failed event was: $rawBody")
-        buildResponse(500)
+        500
     }
+    bigQuery.shutdown()
+    buildResponse(responseCode)
   }
 }
