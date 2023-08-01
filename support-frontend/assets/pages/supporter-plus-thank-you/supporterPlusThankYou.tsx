@@ -151,6 +151,11 @@ export function SupporterPlusThankYou(): JSX.Element {
 			isAmountLargeDonation,
 		);
 
+		/**
+		 *  The TY page is client side routed for all Contributions
+		 * 	apart from Single paid with Paypal. For  client side routed pages we
+		 * 	manually fire an Ophan pageView.
+		 **/
 		if (!isOneOffPayPal) {
 			pageView(getAbsoluteURL('/thankyou'), document.location.href);
 		}
