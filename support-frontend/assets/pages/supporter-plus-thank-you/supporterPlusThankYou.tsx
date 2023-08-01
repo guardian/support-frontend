@@ -27,6 +27,9 @@ import {
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 // import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { trackContributionConversion } from 'helpers/tracking/conversions';
+import { pageView } from 'helpers/tracking/ophan';
+// import { routes } from 'helpers/urls/routes';
+import { getAbsoluteURL } from 'helpers/urls/url';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
@@ -149,14 +152,19 @@ export function SupporterPlusThankYou(): JSX.Element {
 				currencyId,
 				abParticipations,
 			);
+		}
 
-			trackUserData(
-				paymentMethod,
-				contributionType,
-				isSignedIn,
-				!isNewAccount,
-				isAmountLargeDonation,
-			);
+		trackUserData(
+			paymentMethod,
+			contributionType,
+			isSignedIn,
+			!isNewAccount,
+			isAmountLargeDonation,
+		);
+
+		if (!isOneOffPayPal) {
+			console.log('*********', getAbsoluteURL('/thankyou'));
+			pageView(getAbsoluteURL('/thankyou'), document.location.href);
 		}
 
 		if (contributionType === 'ONE_OFF') {
