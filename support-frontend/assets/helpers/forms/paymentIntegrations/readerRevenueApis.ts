@@ -36,9 +36,7 @@ import type {
 	OphanIds,
 	ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-// import trackConversion from 'helpers/tracking/conversions';
 import type { Option } from 'helpers/types/option';
-// import { routes } from 'helpers/urls/routes';
 import type { Title } from 'helpers/user/details';
 import { logException } from 'helpers/utilities/logger';
 

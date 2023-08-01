@@ -152,7 +152,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 		);
 
 		if (!isOneOffPayPal) {
-			console.log('*********', getAbsoluteURL('/thankyou'));
 			pageView(getAbsoluteURL('/thankyou'), document.location.href);
 		}
 

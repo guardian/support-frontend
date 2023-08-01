@@ -48,7 +48,6 @@ import {
 } from 'helpers/subscriptionsForms/formValidation';
 import type { AnyCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-// import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { trackSubscriptionConversion } from 'helpers/tracking/conversions';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
