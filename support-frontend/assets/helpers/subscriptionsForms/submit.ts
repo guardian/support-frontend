@@ -48,7 +48,8 @@ import {
 } from 'helpers/subscriptionsForms/formValidation';
 import type { AnyCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { trackSubscriptionConversion } from 'helpers/tracking/conversions';
+import { successfulConversion } from 'helpers/tracking/googleTagManager';
+import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
@@ -223,12 +224,14 @@ function onPaymentAuthorised(
 			} else {
 				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
-			trackSubscriptionConversion(
+			// track conversion with GTM
+			successfulConversion(abParticipations);
+			// track conversion with QM
+			sendEventSubscriptionCheckoutConversion(
 				productType,
 				!!orderIsAGift,
 				productPrice,
 				billingPeriod,
-				abParticipations,
 			);
 		} else if (result.error) {
 			dispatch(setSubmissionError(result.error));

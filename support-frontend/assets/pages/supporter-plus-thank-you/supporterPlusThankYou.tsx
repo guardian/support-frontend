@@ -25,8 +25,9 @@ import {
 	trackUserData,
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { trackContributionConversion } from 'helpers/tracking/conversions';
+import { successfulConversion } from 'helpers/tracking/googleTagManager';
 import { pageView } from 'helpers/tracking/ophan';
+import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { getAbsoluteURL } from 'helpers/urls/url';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
@@ -134,12 +135,15 @@ export function SupporterPlusThankYou(): JSX.Element {
 	);
 
 	useEffect(() => {
+		// track conversion with GTM
+		successfulConversion(abParticipations);
+
 		if (amount) {
-			trackContributionConversion(
+			// track conversion with QM
+			sendEventContributionCheckoutConversion(
 				amount,
 				contributionType,
 				currencyId,
-				abParticipations,
 			);
 		}
 
