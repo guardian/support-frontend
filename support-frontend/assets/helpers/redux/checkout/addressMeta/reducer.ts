@@ -12,6 +12,9 @@ export const addressMetaSlice = createSlice({
 		setDeliveryInstructions(state, action: PayloadAction<string>) {
 			state.deliveryInstructions = action.payload;
 		},
+		setDeliveryAgent(state, action: PayloadAction<number>) {
+			state.deliveryAgent = action.payload;
+		},
 	},
 });
 
