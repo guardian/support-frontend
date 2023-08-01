@@ -1,4 +1,3 @@
-// ----- Imports ----- //
 import * as React from 'react';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
@@ -116,7 +115,6 @@ function DirectDebitForm(props: PropTypes) {
 			/>
 
 			<ConfirmationInput
-				phase={props.phase}
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 					props.setAccountHolderConfirmation(e.target.checked)
 				}
@@ -238,58 +236,33 @@ function RecaptchaInput(props: {
 }
 
 function ConfirmationInput(props: {
-	phase: Phase;
 	checked: boolean;
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
-	const editable = (
-		<span>
-			<div className="component-direct-debit-form__confirmation-css-checkbox">
-				<input
-					className="component-direct-debit-form__confirmation-input"
-					id="confirmation-input"
-					type="checkbox"
-					onChange={props.onChange}
-					checked={props.checked}
-				/>
-				<label
-					id="qa-confirmation-input"
-					className="component-direct-debit-form__confirmation-label"
-					htmlFor="confirmation-input"
-				/>
-			</div>
-			<span className="component-direct-debit-form__confirmation-text">
-				I confirm that I am the account holder and I am solely able to authorise
-				debit from the account
-			</span>
-		</span>
-	);
-	const locked = (
-		<span>
-			<label
-				htmlFor="confirmation-text__locked"
-				className="component-direct-debit-form__field-label"
-			>
-				Declaration
-			</label>
-			<div
-				id="confirmation-text__locked"
-				className="component-direct-debit-form__confirmation-text__locked"
-			>
-				I have confirmed that I am the account holder and that I am solely able
-				to authorise debit from the account
-			</div>
-			<div className="component-direct-debit-form__confirmation-guidance">
-				If the details above are correct press confirm to set up your direct
-				debit, otherwise press back to make changes
-			</div>
-		</span>
-	);
 	return (
 		<div className="component-direct-debit-form__account-holder-confirmation">
 			<div>
 				<label htmlFor="confirmation-input">
-					{props.phase === 'entry' ? editable : locked}
+					<span>
+						<div className="component-direct-debit-form__confirmation-css-checkbox">
+							<input
+								className="component-direct-debit-form__confirmation-input"
+								id="confirmation-input"
+								type="checkbox"
+								onChange={props.onChange}
+								checked={props.checked}
+							/>
+							<label
+								id="qa-confirmation-input"
+								className="component-direct-debit-form__confirmation-label"
+								htmlFor="confirmation-input"
+							/>
+						</div>
+						<span className="component-direct-debit-form__confirmation-text">
+							I confirm that I am the account holder and I am solely able to
+							authorise debit from the account
+						</span>
+					</span>
 				</label>
 			</div>
 		</div>
@@ -377,6 +350,6 @@ function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 			<SvgDirectDebitSymbolAndText />
 		</div>
 	);
-} // ----- Exports ----- //
+}
 
 export default connector(DirectDebitForm);
