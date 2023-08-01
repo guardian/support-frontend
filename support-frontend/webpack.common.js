@@ -113,10 +113,9 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 
 	module: {
 		rules: [
+			{},
 			{
-				test: /\.([jt]sx?|mjs)$/,
-				exclude:
-					/node_modules\/(?!(\@guardian\/consent-management-platform|@guardian\/libs)\/).*/,
+				test: /^(assets|node_modules\/\@guardian\/consent-management-platform|node_modules\/\@guardian\/libs)\/.*\.([jt]sx?|mjs)$/,
 				use: [
 					{
 						loader: 'babel-loader',
