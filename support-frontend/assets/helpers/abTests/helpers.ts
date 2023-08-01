@@ -256,15 +256,14 @@ export function getAmounts(
 	// Has user arrived at landing page with an URL detailing a specific amounts test variant?
 	if (Object.keys(abParticipations).length) {
 		for (const [test, variant] of Object.entries(abParticipations)) {
-			const testArray = AMOUNTS.filter((t) => {
+			const candidate = AMOUNTS.find((t) => {
 				if (t.isLive) {
 					return t.liveTestName === test;
 				} else {
 					return t.testName === test;
 				}
 			});
-			if (testArray.length) {
-				const candidate = testArray[0];
+			if (candidate) {
 				const variants = candidate.variants;
 				if (variants.length) {
 					if (variant === 'CONTROL' || variants.length === 1) {
@@ -288,17 +287,16 @@ export function getAmounts(
 		}
 	}
 
-	let testArray = AMOUNTS.filter((t) => t.target === countryCode);
-	if (!testArray.length) {
-		testArray = AMOUNTS.filter((t) => t.target === countryGroupId);
+	let targetTest = AMOUNTS.find((t) => t.target === countryCode);
+	if (!targetTest) {
+		targetTest = AMOUNTS.find((t) => t.target === countryGroupId);
 	}
 
 	// Unable to locate a test which maps to the argument data supplied
-	if (!testArray.length) {
+	if (!targetTest) {
 		return getFallbackAmounts(countryGroupId);
 	}
 
-	const targetTest = testArray[0];
 	const { testName, liveTestName, isLive, variants } = targetTest;
 
 	// No control or variants in data
