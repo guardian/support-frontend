@@ -107,7 +107,6 @@ function push(data: Record<string, unknown>) {
 
 function getData(event: EventType): Record<string, unknown> {
 	const orderId = getOrderId();
-	const value = getContributionValue();
 	const currency = getCurrency();
 	return {
 		event,
@@ -125,6 +124,8 @@ function getData(event: EventType): Record<string, unknown> {
 		 * to "OptedIn".
 		 * */
 		thirdPartyTrackingConsent: 'OptedIn',
+		contributionType:
+			storage.getSession('selectedContributionType') ?? undefined,
 		paymentMethod: storage.getSession('selectedPaymentMethod') ?? undefined,
 		campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
 		campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
