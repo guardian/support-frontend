@@ -101,7 +101,6 @@ function DirectDebitForm(props: PropTypes) {
 			/>
 
 			<AccountNumberInput
-				phase={props.phase}
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 					props.setAccountNumber(e.target.value)
 				}
@@ -162,23 +161,9 @@ function DirectDebitForm(props: PropTypes) {
 
 // ----- Auxiliary components ----- //
 function AccountNumberInput(props: {
-	phase: Phase;
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	value: string;
 }) {
-	const editable = (
-		<input
-			id="account-number-input"
-			data-qm-masking="blocklist"
-			value={props.value}
-			onChange={props.onChange}
-			pattern="[0-9]*"
-			minLength={6}
-			maxLength={10}
-			className="component-direct-debit-form__text-field focus-target"
-		/>
-	);
-	const locked = <span>{props.value}</span>;
 	return (
 		<div className="component-direct-debit-form__account-number">
 			<label
@@ -187,7 +172,16 @@ function AccountNumberInput(props: {
 			>
 				Account number
 			</label>
-			{props.phase === 'entry' ? editable : locked}
+			<input
+				id="account-number-input"
+				data-qm-masking="blocklist"
+				value={props.value}
+				onChange={props.onChange}
+				pattern="[0-9]*"
+				minLength={6}
+				maxLength={10}
+				className="component-direct-debit-form__text-field focus-target"
+			/>
 		</div>
 	);
 }
