@@ -15,6 +15,7 @@ import type { ContributionType } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
@@ -162,7 +163,13 @@ export function SupporterPlusThankYou(): JSX.Element {
 		 * 	manually fire an Ophan pageView.
 		 **/
 		if (!isOneOffPayPal) {
-			pageView(getAbsoluteURL('/thankyou'), document.location.href);
+			const internationalisationIDValue =
+				countryGroups[countryGroupId].supportInternationalisationId;
+
+			pageView(
+				document.location.href,
+				getAbsoluteURL(`/${internationalisationIDValue}/contribute`),
+			);
 		}
 
 		if (contributionType === 'ONE_OFF') {
