@@ -225,7 +225,7 @@ function onPaymentAuthorised(
 				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
 			// track conversion with GTM
-			successfulConversion(abParticipations);
+			successfulConversion();
 			// track conversion with QM
 			sendEventSubscriptionCheckoutConversion(
 				productType,

@@ -328,7 +328,6 @@ function checkRegularStatus(
 		switch (json.status) {
 			case 'success':
 			case 'pending':
-				trackConversion(routes.recurringContribPending);
 				return PaymentSuccess;
 
 			default: {

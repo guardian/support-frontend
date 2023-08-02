@@ -62,16 +62,6 @@ function getCurrency(): string {
 	return storage.getSession('currency') ?? 'GBP';
 }
 
-function getContributionValue(): number {
-	const param = getQueryParameter('contributionValue');
-
-	if (param) {
-		storage.setSession('contributionValue', String(parseFloat(param)));
-	}
-
-	return parseFloat(storage.getSession('contributionValue') as string) || 0;
-}
-
 function ophanPaymentMethod(paymentMethod: PaymentMethod | null | undefined) {
 	switch (paymentMethod) {
 		case DirectDebit:
@@ -117,7 +107,7 @@ function getData(event: EventType): Record<string, unknown> {
 		 * */
 		orderId,
 		currency,
-		value,
+		value: storage.getSession('contributionAmount') ?? undefined,
 		/**
 		 * getData is only executed via runWithConsentCheck when user has
 		 * Opted In to tracking, so we can hardcode thirdPartyTrackingConsent

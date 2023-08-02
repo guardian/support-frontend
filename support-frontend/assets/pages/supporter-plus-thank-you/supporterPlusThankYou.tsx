@@ -130,13 +130,10 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const isAmountLargeDonation = amount
 		? isLargeDonation(amount, contributionType, paymentMethod)
 		: false;
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
-	);
 
 	useEffect(() => {
 		// track conversion with GTM
-		successfulConversion(abParticipations);
+		successfulConversion();
 
 		if (amount) {
 			// track conversion with QM

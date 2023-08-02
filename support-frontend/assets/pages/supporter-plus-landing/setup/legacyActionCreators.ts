@@ -281,7 +281,6 @@ const onPaymentResult =
 
 			switch (result.paymentStatus) {
 				case 'success':
-					trackConversion('/contribute/thankyou');
 					dispatch(paymentSuccess());
 					break;
 
