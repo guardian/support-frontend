@@ -85,7 +85,7 @@ class BigQueryService(config: BigQueryConfig) {
     val promise = Promise[Either[String, Unit]]()
     try {
       val responseFuture = streamWriter.append(new JSONArray(List(rowContent).asJava));
-      val callback = new BigQueryService.AppendCompleteCallback(stage, promise, bigQueryWriteClient, streamWriter);
+      val callback = new BigQueryService.AppendCompleteCallback(stage, promise);
       ApiFutures.addCallback(
         responseFuture,
         callback,
@@ -103,19 +103,13 @@ class BigQueryService(config: BigQueryConfig) {
 }
 
 object BigQueryService {
-  case class AppendCompleteCallback(
-      stage: Stage,
-      promise: Promise[Either[String, Unit]],
-      client: BigQueryWriteClient,
-      writer: JsonStreamWriter,
-  ) extends ApiFutureCallback[AppendRowsResponse] {
+  case class AppendCompleteCallback(stage: Stage, promise: Promise[Either[String, Unit]])
+      extends ApiFutureCallback[AppendRowsResponse] {
     val executor = Executors.newSingleThreadExecutor();
 
     def onSuccess(response: AppendRowsResponse): Unit = {
       SafeLogger.info(s"Rows successfully inserted into table $tableName")
       promise.success(Right(()))
-      writer.close()
-      client.close()
       executor.shutdown()
     }
     def onFailure(throwable: Throwable): Unit = {
@@ -130,8 +124,6 @@ object BigQueryService {
       promise.success(
         Left(s"There was an exception inserting a row into $tableName: ${throwable.getMessage}; $detail"),
       )
-      writer.close()
-      client.close()
       executor.shutdown()
     }
   }
