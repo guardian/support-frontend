@@ -12,16 +12,6 @@ import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion';
 
-type PaymentRequestAPIStatus =
-	| 'PaymentRequestAPINotAvailable'
-	| 'CanMakePaymentNotAvailable'
-	| 'AvailableNotInUse'
-	| 'AvailableInUse'
-	| 'PaymentRequestAPIError'
-	| 'PromiseNotSupported'
-	| 'PromiseRejected'
-	| 'PaymentApiPromiseRejected';
-
 // these values match the keys used by @guardian/consent-management-platform
 const googleTagManagerKey = 'google-tag-manager';
 const googleAnalyticsKey = 'google-analytics';
@@ -84,62 +74,6 @@ function getContributionValue(): number {
 	return parseFloat(storage.getSession('contributionValue') as string) || 0;
 }
 
-function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
-	return new Promise((resolve) => {
-		try {
-			const { PaymentRequest } = window;
-
-			if (typeof PaymentRequest !== 'function') {
-				resolve('PaymentRequestAPINotAvailable');
-			}
-
-			const supportedInstruments = [
-				{
-					supportedMethods: 'basic-card',
-					data: {
-						supportedNetworks: [
-							'visa',
-							'mastercard',
-							'amex',
-							'jcb',
-							'diners',
-							'discover',
-							'mir',
-							'unionpay',
-						],
-						supportedTypes: ['credit', 'debit'],
-					},
-				},
-			];
-			const details = {
-				total: {
-					label: 'tracking',
-					amount: {
-						value: '1',
-						currency: getCurrency(),
-					},
-				},
-			};
-			const request = new PaymentRequest(supportedInstruments, details);
-
-			request
-				.canMakePayment()
-				.then((result) => {
-					if (result) {
-						resolve('AvailableInUse');
-					} else {
-						resolve('AvailableNotInUse');
-					}
-				})
-				.catch(() => {
-					resolve('PaymentApiPromiseRejected');
-				});
-		} catch (e) {
-			resolve('PaymentRequestAPIError');
-		}
-	});
-}
-
 function ophanPaymentMethod(paymentMethod: PaymentMethod | null | undefined) {
 	switch (paymentMethod) {
 		case DirectDebit:
@@ -176,14 +110,12 @@ function push(data: Record<string, unknown>) {
 function getData(
 	event: EventType,
 	participations: Participations,
-	paymentRequestApiStatus?: PaymentRequestAPIStatus,
 ): Record<string, unknown> {
 	const orderId = getOrderId();
 	const value = getContributionValue();
 	const currency = getCurrency();
 	return {
 		event,
-
 		/**
 		 * orderId anonymously identifies this user in this session.
 		 * We need this to prevent page refreshes on conversion pages being
@@ -192,7 +124,6 @@ function getData(
 		orderId,
 		currency,
 		value,
-
 		/**
 		 * getData is only executed via runWithConsentCheck when user has
 		 * Opted In to tracking, so we can hardcode thirdPartyTrackingConsent
@@ -204,18 +135,13 @@ function getData(
 		campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
 		internalCampaignCode: getQueryParameter('INTCMP') || undefined,
 		experience: getVariantsAsString(participations),
-		paymentRequestApiStatus,
 		vendorConsentsLookup, // eg. "google-analytics,twitter"
 	};
 }
 
-function sendData(
-	event: EventType,
-	participations: Participations,
-	paymentRequestApiStatus?: PaymentRequestAPIStatus,
-) {
+function sendData(event: EventType, participations: Participations) {
 	const pushDataToGTM = () => {
-		const dataToPush = getData(event, participations, paymentRequestApiStatus);
+		const dataToPush = getData(event, participations);
 		push(dataToPush);
 	};
 
@@ -227,20 +153,6 @@ function sendData(
 		pushDataToGTM();
 	} else {
 		googleTagManagerDataQueue.push(pushDataToGTM);
-	}
-}
-
-function pushToDataLayer(event: EventType, participations: Participations) {
-	try {
-		getPaymentAPIStatus()
-			.then((paymentRequestApiStatus) => {
-				sendData(event, participations, paymentRequestApiStatus);
-			})
-			.catch(() => {
-				sendData(event, participations, 'PromiseRejected');
-			});
-	} catch (e) {
-		sendData(event, participations, 'PromiseNotSupported');
 	}
 }
 
@@ -330,7 +242,7 @@ async function init(participations: Participations): Promise<void> {
 		},
 		vendorIds,
 	);
-	pushToDataLayer('DataLayerReady', participations);
+	sendData('DataLayerReady', participations);
 }
 
 function successfulConversion(participations: Participations): void {
