@@ -18,6 +18,7 @@ class CheckoutsSpec
 
   val driverConfig = new DriverConfig
   override implicit val webDriver: WebDriver = driverConfig.webDriver
+
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(Span(1, Minute), Span(5, Seconds))
 
   before {
