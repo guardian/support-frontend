@@ -18,7 +18,7 @@ class CheckoutsSpec
 
   val driverConfig = new DriverConfig
   override implicit val webDriver: WebDriver = driverConfig.webDriver
-
+  val cookie = driverConfig.addCookie("GU_SO", "true")
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(Span(1, Minute), Span(5, Seconds))
 
   before {
@@ -27,7 +27,7 @@ class CheckoutsSpec
 
   override def beforeAll(): Unit = {
     Config.printSummary(driverConfig.sessionId)
-    Dependencies.dependencyCheck2
+    Dependencies.dependencyCheck
   }
 
   override def afterAll(): Unit = {
