@@ -1,6 +1,4 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { Participations } from 'helpers/abTests/abtest';
-import { getVariantsAsString } from 'helpers/abTests/abtest';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage/storage';
@@ -107,10 +105,7 @@ function push(data: Record<string, unknown>) {
 	window.googleTagManagerDataLayer.push(mapFields(data));
 }
 
-function getData(
-	event: EventType,
-	participations: Participations,
-): Record<string, unknown> {
+function getData(event: EventType): Record<string, unknown> {
 	const orderId = getOrderId();
 	const value = getContributionValue();
 	const currency = getCurrency();
@@ -134,14 +129,13 @@ function getData(
 		campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
 		campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
 		internalCampaignCode: getQueryParameter('INTCMP') || undefined,
-		experience: getVariantsAsString(participations),
 		vendorConsentsLookup, // eg. "google-analytics,twitter"
 	};
 }
 
-function sendData(event: EventType, participations: Participations) {
+function sendData(event: EventType) {
 	const pushDataToGTM = () => {
-		const dataToPush = getData(event, participations);
+		const dataToPush = getData(event);
 		push(dataToPush);
 	};
 
@@ -197,7 +191,7 @@ function addTagManagerScript() {
 	}
 }
 
-async function init(participations: Participations): Promise<void> {
+async function init(): Promise<void> {
 	/**
 	 * The callback passed to onConsentChangeEvent is called
 	 * each time consent changes. EG. if a user consents via the CMP.
@@ -242,11 +236,11 @@ async function init(participations: Participations): Promise<void> {
 		},
 		vendorIds,
 	);
-	sendData('DataLayerReady', participations);
+	sendData('DataLayerReady');
 }
 
-function successfulConversion(participations: Participations): void {
-	sendData('SuccessfulConversion', participations);
+function successfulConversion(): void {
+	sendData('SuccessfulConversion');
 }
 
 // ----- Exports ---//
