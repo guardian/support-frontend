@@ -25,7 +25,7 @@ import {
 	trackUserData,
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { successfulConversion } from 'helpers/tracking/googleTagManager';
+import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import { pageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { getAbsoluteURL } from 'helpers/urls/url';
@@ -132,10 +132,14 @@ export function SupporterPlusThankYou(): JSX.Element {
 		: false;
 
 	useEffect(() => {
-		// track conversion with GTM
-		successfulConversion();
-
 		if (amount) {
+			// track conversion with GTM
+			successfulContributionConversion(
+				amount,
+				contributionType,
+				currencyId,
+				paymentMethod,
+			);
 			// track conversion with QM
 			sendEventContributionCheckoutConversion(
 				amount,

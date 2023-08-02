@@ -48,7 +48,7 @@ import {
 } from 'helpers/subscriptionsForms/formValidation';
 import type { AnyCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { successfulConversion } from 'helpers/tracking/googleTagManager';
+import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagManager';
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
@@ -225,7 +225,7 @@ function onPaymentAuthorised(
 				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
 			// track conversion with GTM
-			successfulConversion();
+			successfulSubscriptionConversion();
 			// track conversion with QM
 			sendEventSubscriptionCheckoutConversion(
 				productType,
