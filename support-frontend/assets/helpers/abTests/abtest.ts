@@ -228,12 +228,16 @@ function getAmountsTestParticipations(
 		return null;
 	}
 
-	const AMOUNTS = settings.amounts;
+	const amounts = settings.amounts;
 
-	// Two-tier amounts - check for live country test, else get a region test
-	let targetTest = AMOUNTS.find((t) => t.target === country && t.isLive);
+	/* 
+		For country-level tests, the isLive boolean tells us whether the test is live (true: show the test) or draft (false: show the region-level test instead)
+
+		For region-level tests, the isLive boolean tells us whether there is an AB test running (true: select a test variant from all avaliable) or not (false: select the control variant)
+	*/
+	let targetTest = amounts.find((t) => t.target === country && t.isLive);
 	if (!targetTest) {
-		targetTest = AMOUNTS.find((t) => t.target === countryGroupId);
+		targetTest = amounts.find((t) => t.target === countryGroupId);
 	}
 
 	if (!targetTest) {
@@ -246,6 +250,9 @@ function getAmountsTestParticipations(
 		return null;
 	}
 
+	/* 
+		We return null if there's no live AB test running (for a regional test) or just a single variant in the test (which will always be the control variant)
+	*/
 	if (!isLive || variants.length === 1) {
 		return null;
 	}

@@ -251,12 +251,12 @@ export function getAmounts(
 		return getFallbackAmounts(countryGroupId);
 	}
 
-	const AMOUNTS = settings.amounts;
+	const amounts = settings.amounts;
 
 	// Has user arrived at landing page with an URL detailing a specific amounts test variant?
 	if (Object.keys(abParticipations).length) {
 		for (const [test, variant] of Object.entries(abParticipations)) {
-			const candidate = AMOUNTS.find((t) => {
+			const candidate = amounts.find((t) => {
 				if (t.isLive) {
 					return t.liveTestName === test;
 				} else {
@@ -287,9 +287,14 @@ export function getAmounts(
 		}
 	}
 
-	let targetTest = AMOUNTS.find((t) => t.target === countryCode);
+	/* 
+		For country-level tests, the isLive boolean tells us whether the test is live (true: show the test) or draft (false: show the region-level test instead)
+
+		For region-level tests, the isLive boolean tells us whether there is an AB test running (true: select a test variant from all avaliable) or not (false: select the control variant)
+	*/
+	let targetTest = amounts.find((t) => t.target === countryCode && t.isLive);
 	if (!targetTest) {
-		targetTest = AMOUNTS.find((t) => t.target === countryGroupId);
+		targetTest = amounts.find((t) => t.target === countryGroupId);
 	}
 
 	// Unable to locate a test which maps to the argument data supplied
@@ -304,7 +309,9 @@ export function getAmounts(
 		return getFallbackAmounts(countryGroupId);
 	}
 
-	// Return the control variant (which is always the first variant in the array) if there's no test or just a single variant
+	/* 
+		We return the control variant (which is always the first variant in the array) if there's no live AB test running (for a regional test) or just a single variant in the test
+	*/
 	if (!isLive || variants.length === 1) {
 		return {
 			testName,
