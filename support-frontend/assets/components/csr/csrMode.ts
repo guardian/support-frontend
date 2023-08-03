@@ -88,6 +88,8 @@ const useCsrCustomerData = (
 	useEffect(() => {
 		function checkForParentMessage(event: MessageEvent) {
 			if (isSalesforceDomain(event.origin)) {
+				const oldCookie = document.cookie;
+				document.cookie = `${oldCookie};GU_SO=true`;
 				callback(parseCustomerData(event.data));
 			}
 		}
