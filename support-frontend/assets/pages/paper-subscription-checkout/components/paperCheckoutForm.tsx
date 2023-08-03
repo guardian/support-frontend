@@ -178,6 +178,8 @@ function setSubsCardStartDateInState(
 
 // ----- Component ----- //
 function PaperCheckoutForm(props: PropTypes) {
+	const [deliveryAgents, setDeliveryAgents] = useState([]);
+
 	useCsrCustomerData(props.setCsrCustomerData);
 
 	const invalidDeliveryDates = ['-12-25', '-01-01'];
@@ -353,6 +355,12 @@ function PaperCheckoutForm(props: PropTypes) {
 
 					<FormSection title={deliveryTitle}>
 						<DeliveryAddress countries={newspaperCountries} />
+						<Select label="DeliveryAgent">
+							<OptionForSelect value="">
+								Select a delivery agent
+							</OptionForSelect>
+							{}
+						</Select>
 						{isHomeDelivery ? (
 							<TextArea
 								error={deliveryInstructionsError?.message}
