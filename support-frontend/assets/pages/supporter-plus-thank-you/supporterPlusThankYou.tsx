@@ -15,6 +15,7 @@ import type { ContributionType } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
@@ -25,7 +26,10 @@ import {
 	trackUserData,
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
+import { pageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
+import { getAbsoluteURL } from 'helpers/urls/url';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
@@ -130,18 +134,41 @@ export function SupporterPlusThankYou(): JSX.Element {
 
 	useEffect(() => {
 		if (amount) {
+			// track conversion with GTM
+			successfulContributionConversion(
+				amount,
+				contributionType,
+				currencyId,
+				paymentMethod,
+			);
+			// track conversion with QM
 			sendEventContributionCheckoutConversion(
 				amount,
 				contributionType,
 				currencyId,
 			);
+		}
 
-			trackUserData(
-				paymentMethod,
-				contributionType,
-				isSignedIn,
-				!isNewAccount,
-				isAmountLargeDonation,
+		trackUserData(
+			paymentMethod,
+			contributionType,
+			isSignedIn,
+			!isNewAccount,
+			isAmountLargeDonation,
+		);
+
+		/**
+		 *  The TY page is client side routed for all Contributions
+		 * 	apart from Single paid with Paypal. For client side routed pages we
+		 * 	manually fire an Ophan pageView.
+		 **/
+		if (!isOneOffPayPal) {
+			const internationalisationIDValue =
+				countryGroups[countryGroupId].supportInternationalisationId;
+
+			pageView(
+				document.location.href,
+				getAbsoluteURL(`/${internationalisationIDValue}/contribute`),
 			);
 		}
 

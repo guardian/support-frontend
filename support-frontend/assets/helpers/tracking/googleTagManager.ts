@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { detect as detectCurrency } from 'helpers/internationalisation/currency';
+import type { ContributionType } from 'helpers/contributions';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { PaymentMethod } from '../forms/paymentMethods';
@@ -9,6 +9,13 @@ import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
 
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion';
+
+type ContributionConversionData = {
+	value: number;
+	contributionType: ContributionType;
+	currency: IsoCurrency;
+	paymentMethod: PaymentMethod;
+};
 
 // these values match the keys used by @guardian/consent-management-platform
 const googleTagManagerKey = 'google-tag-manager';
@@ -56,22 +63,6 @@ function getOrderId() {
 	return value;
 }
 
-function getCurrency(): string {
-	const currency = detectCurrency(detectCountryGroup());
-	storage.setSession('currency', currency);
-	return storage.getSession('currency') ?? 'GBP';
-}
-
-function getContributionValue(): number {
-	const param = getQueryParameter('contributionValue');
-
-	if (param) {
-		storage.setSession('contributionValue', String(parseFloat(param)));
-	}
-
-	return parseFloat(storage.getSession('contributionValue') as string) || 0;
-}
-
 function ophanPaymentMethod(paymentMethod: PaymentMethod | null | undefined) {
 	switch (paymentMethod) {
 		case DirectDebit:
@@ -105,37 +96,46 @@ function push(data: Record<string, unknown>) {
 	window.googleTagManagerDataLayer.push(mapFields(data));
 }
 
-function getData(event: EventType): Record<string, unknown> {
-	const orderId = getOrderId();
-	const value = getContributionValue();
-	const currency = getCurrency();
-	return {
+function getData(
+	event: EventType,
+	contributionConversionData?: ContributionConversionData,
+): Record<string, unknown> {
+	const commonData = {
 		event,
 		/**
 		 * orderId anonymously identifies this user in this session.
 		 * We need this to prevent page refreshes on conversion pages being
 		 * treated as new conversions
 		 * */
-		orderId,
-		currency,
-		value,
+		orderId: getOrderId(),
 		/**
 		 * getData is only executed via runWithConsentCheck when user has
 		 * Opted In to tracking, so we can hardcode thirdPartyTrackingConsent
 		 * to "OptedIn".
 		 * */
 		thirdPartyTrackingConsent: 'OptedIn',
-		paymentMethod: storage.getSession('selectedPaymentMethod') ?? undefined,
 		campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
 		campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
 		internalCampaignCode: getQueryParameter('INTCMP') || undefined,
-		vendorConsentsLookup, // eg. "google-analytics,twitter"
+		vendorConsentsLookup, // eg. "google-analytics,twitter",
 	};
+
+	if (contributionConversionData) {
+		return {
+			...commonData,
+			...contributionConversionData,
+		};
+	}
+
+	return commonData;
 }
 
-function sendData(event: EventType) {
+function sendData(
+	event: EventType,
+	contributionConversionData?: ContributionConversionData,
+) {
 	const pushDataToGTM = () => {
-		const dataToPush = getData(event);
+		const dataToPush = getData(event, contributionConversionData);
 		push(dataToPush);
 	};
 
@@ -239,12 +239,32 @@ async function init(): Promise<void> {
 	sendData('DataLayerReady');
 }
 
-function successfulConversion(): void {
+function successfulContributionConversion(
+	amount: number,
+	contributionType: ContributionType,
+	sourceCurrency: IsoCurrency,
+	paymentMethod: PaymentMethod,
+): void {
+	const contributionConversionData: ContributionConversionData = {
+		value: amount,
+		contributionType,
+		currency: sourceCurrency,
+		paymentMethod,
+	};
+
+	sendData('SuccessfulConversion', contributionConversionData);
+}
+
+function successfulSubscriptionConversion(): void {
 	sendData('SuccessfulConversion');
 }
 
 // ----- Exports ---//
-export { init, successfulConversion };
+export {
+	init,
+	successfulContributionConversion,
+	successfulSubscriptionConversion,
+};
 
 // ----- For Tests ---//
 export const _ = {
