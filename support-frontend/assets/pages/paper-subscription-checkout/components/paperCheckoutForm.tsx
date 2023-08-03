@@ -89,6 +89,7 @@ import {
 	getFormattedStartDate,
 	getPaymentStartDate,
 } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { setDeliveryAgent } from 'helpers/redux/checkout/addressMeta/actions';
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -124,6 +125,8 @@ function mapStateToProps(state: SubscriptionsState) {
 		correspondingProductOptionPrice:
 			selectCorrespondingProductOptionPrice(state),
 		participations: state.common.abParticipations,
+		deliveryAgentsResponse:
+			state.page.checkoutForm.addressMeta.deliveryAgent.response,
 	};
 }
 
@@ -158,6 +161,7 @@ function mapDispatchToProps() {
 		signOut,
 		setCsrCustomerData: (customerData: CsrCustomerData) =>
 			setCsrCustomerData('delivery', customerData),
+		setDeliveryAgent,
 	};
 }
 
@@ -178,8 +182,6 @@ function setSubsCardStartDateInState(
 
 // ----- Component ----- //
 function PaperCheckoutForm(props: PropTypes) {
-	const [deliveryAgents, setDeliveryAgents] = useState([]);
-
 	useCsrCustomerData(props.setCsrCustomerData);
 
 	const invalidDeliveryDates = ['-12-25', '-01-01'];
@@ -355,12 +357,31 @@ function PaperCheckoutForm(props: PropTypes) {
 
 					<FormSection title={deliveryTitle}>
 						<DeliveryAddress countries={newspaperCountries} />
-						<Select label="DeliveryAgent">
-							<OptionForSelect value="">
-								Select a delivery agent
-							</OptionForSelect>
-							{}
-						</Select>
+						{/* // possible paperRound responses
+						// Success
+						// NotCovered
+						// UnknownOrInvalidPostcode
+						// PaperRoundError */}
+
+						{props.deliveryAgentsResponse.type === 'Success' ? (
+							<Select
+								label="DeliveryAgent"
+								onChange={(e) =>
+									props.setDeliveryAgent(parseInt(e.target.value))
+								}
+							>
+								<OptionForSelect value="">
+									Select a delivery agent
+								</OptionForSelect>
+								{props.deliveryAgentsResponse.agents.map((agent: any) => (
+									<OptionForSelect value={agent.agentId}>
+										{agent.agentName}
+									</OptionForSelect>
+								))}
+							</Select>
+						) : (
+							<>sorry</>
+						)}
 						{isHomeDelivery ? (
 							<TextArea
 								error={deliveryInstructionsError?.message}

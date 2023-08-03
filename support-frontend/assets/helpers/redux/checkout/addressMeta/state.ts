@@ -7,11 +7,11 @@ export type AddressMetaState = {
 type DeliveryAgentState = {
 	isLoading: boolean;
 	error?: any;
-	agents: any[];
+	response: any;
 	chosenAgent?: number;
 };
 
 export const initialState: AddressMetaState = {
 	billingAddressMatchesDelivery: true,
-	deliveryAgent: { isLoading: false, agents: [] },
+	deliveryAgent: { isLoading: false, response: [] },
 };

@@ -149,7 +149,7 @@ function buildRegularPaymentRequest(
 	const { actionHistory } = state.debug;
 	const { title, firstName, lastName, email, telephone } =
 		state.page.checkoutForm.personalDetails;
-	const { deliveryInstructions } = state.page.checkoutForm.addressMeta;
+	const { deliveryInstructions, deliveryAgent } = state.page.checkoutForm.addressMeta;
 	const { csrUsername, salesforceCaseId } = state.page.checkout;
 	const product = getProduct(state, currencyId);
 	const paymentFields =
@@ -157,6 +157,8 @@ function buildRegularPaymentRequest(
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const promoCode = getPromoCode(promotions);
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
+	const chosenDeliveryAgent = deliveryAgent.chosenAgent;
+
 	return {
 		title,
 		firstName: firstName.trim(),
@@ -179,6 +181,7 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
+		deliveryAgent: chosenDeliveryAgent
 	};
 }
 

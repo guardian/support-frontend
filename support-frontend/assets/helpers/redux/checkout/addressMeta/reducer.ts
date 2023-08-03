@@ -23,7 +23,7 @@ export const addressMetaSlice = createSlice({
 		});
 		builder.addCase(getDeliveryAgentsThunk.fulfilled, (state, action) => {
 			state.deliveryAgent.isLoading = false;
-			state.deliveryAgent.agents = action.payload;
+			state.deliveryAgent.response = action.payload;
 		});
 		builder.addCase(getDeliveryAgentsThunk.rejected, (state, action) => {
 			state.deliveryAgent.isLoading = false;
@@ -32,15 +32,14 @@ export const addressMetaSlice = createSlice({
 	},
 });
 
-const getDeliveryAgentsThunk = createAsyncThunk(
-	`AddressMeta/getDeliveryAgents`,
+export const getDeliveryAgentsThunk = createAsyncThunk(
+	`addressMeta/getDeliveryAgents`,
 	getDeliveryAgents,
 );
 
 async function getDeliveryAgents(postcode: string) {
 	const agentsResponse = await fetch(`/delivery-agents/${postcode}`);
-	const agents = await agentsResponse.json();
-	return agents;
+	return agentsResponse.json();
 }
 
 export const addressMetaReducer = addressMetaSlice.reducer;
