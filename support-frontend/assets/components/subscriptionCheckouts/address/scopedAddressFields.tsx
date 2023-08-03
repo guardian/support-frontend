@@ -25,6 +25,7 @@ import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { AddressFields } from './addressFields';
 import { getDeliveryAgentsThunk } from 'helpers/redux/checkout/addressMeta/reducer';
+import { bindActionCreators } from 'redux';
 
 // ---- Billing address ---- //
 
@@ -77,19 +78,23 @@ function mapDeliveryAddressStateToProps(state: SubscriptionsState) {
 
 const mapDeliveryAddressDispatchToProps = (dispatch: any) => {
 	return {
-		setLineOne: setDeliveryAddressLineOne,
-		setLineTwo: setDeliveryAddressLineTwo,
-		setTownCity: setDeliveryTownCity,
-		setState: setDeliveryState,
 		setPostcode: (postcode: string) => {
 			dispatch(getDeliveryAgentsThunk(postcode));
 			dispatch(setDeliveryPostcode(postcode));
 		},
-		setCountry: setDeliveryCountry,
-		setPostcodeForFinder: (postcode: string) =>
-			dispatch(setDeliveryPostcodeForFinder(postcode)),
-		setPostcodeErrorForFinder: setDeliveryPostcodeErrorForFinder,
-		onFindAddress: deliveryAddressFindAddresses,
+		...bindActionCreators(
+			{
+				setLineOne: setDeliveryAddressLineOne,
+				setLineTwo: setDeliveryAddressLineTwo,
+				setTownCity: setDeliveryTownCity,
+				setState: setDeliveryState,
+				setCountry: setDeliveryCountry,
+				setPostcodeForFinder: setDeliveryPostcodeForFinder,
+				setPostcodeErrorForFinder: setDeliveryPostcodeErrorForFinder,
+				onFindAddress: deliveryAddressFindAddresses,
+			},
+			dispatch,
+		),
 	};
 };
 
