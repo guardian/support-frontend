@@ -27,6 +27,8 @@ class PostDeployTestUser(driverConfig: DriverConfig, bypassRecaptchaCookies: Opt
     bypassRecaptchaCookies.toList.flatten.foreach { cookie =>
       driverConfig.addCookie(name = cookie.key, value = cookie.value)
     }
+    driverConfig.addCookie(name = "GU_ID_TOKEN", value = "testUsername")
+    driverConfig.addCookie(name = "GU_ACCESS_TOKEN", value = "testUsername")
   }
 
   val username = testUsers.generate()
