@@ -10,7 +10,9 @@ class IdapiTestUserRequest {
 
   private def getResult: Either[String, Json] = {
     val response: Response = IdapiTestUserRequest.client.newCall(IdapiTestUserRequest.request).execute()
+    Console.println("Response", response)
     val body: String = response.body().string()
+    Console.println("Body", body)
     parse(body).leftMap { error =>
       s"Could not parse $body as JSON from response with code ${response.code()}: $error"
     }

@@ -85,8 +85,6 @@ trait CheckoutPage extends Page with Browser {
   def clickDirectDebitPay(): Unit = {
     clickRecaptcha
     clickOn(directDebitPlaybackSubmit)
-    Console.println("The response received")
-    Thread.sleep(20000)
   }
 
   def fillForm(): Unit
