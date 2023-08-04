@@ -18,7 +18,7 @@ if [ ! -e $SBT_JAR ]; then
 
 fi
 
-java -jar sbt-launch.jar selenium:testOnly ChoeckoutsSpec
+java -jar sbt-launch.jar selenium:testOnly CheckoutsSpec
 RC=$?
 if [[ $RC -ne 0 ]]
 then
