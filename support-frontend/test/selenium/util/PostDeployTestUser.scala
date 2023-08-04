@@ -38,4 +38,5 @@ class PostDeployTestUser(
 
   val username = testUsers.generate()
   addTestUserCookies(username)
+
 }
