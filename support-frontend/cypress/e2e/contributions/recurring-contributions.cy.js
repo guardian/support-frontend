@@ -1,86 +1,37 @@
 describe('Sign up for a Recurring Contribution (New Contributions Flow)', () => {
 	context('Monthly contribution sign-up with Stripe - GBP', () => {
+
+		const userName = 'asdfasdfdsaf';
+		const userLastName = 'dfgslksdfgkjbsdf';
+		const userEmail = 'asdfa@example.com';
+
 		beforeEach(() => {
-			const landingPage = 'https://support.thegulocal.com/uk/contribute'; //Defined in support-frontend/conf/DEV.public.conf
+			const landingPage = 'https://support.thegulocal.com/uk/contribute';
 
-      cy.session('auth', () => {
-          cy.setCookie('gu-cmp-disabled', 'true');
-          cy.setCookie('ccpaApplies', 'true');
-      });
+			cy.setCookie('pre-signin-test-user', userName);
+			cy.setCookie('_test_username', userName);
+			cy.setCookie('_post_deploy_user', 'true');
+			cy.setCookie('GU_TK', '1.1');
 
-      cy.visit(landingPage);
+			cy.visit(landingPage);
 		});
 
-		it('should load correctly  when a test user goes to the contributions landing page', () => {
+		it('should load correctly when a test user goes to the contributions landing page', () => {
 			cy.url().should('include', 'uk/contribute');
 		});
-	});
-});
-/*
-describe('Sign up for a Recurring Contribution (New Contributions Flow)', () => {
 
-  context('Monthly contribution sign-up with Stripe - GBP', () => {
-    beforeEach(() => {
-      const landingPage = "https://support.thegulocal.com/uk/contribute" //Defined in support-frontend/conf/DEV.public.conf
-      cy.visit(landingPage)
+    it('should display the thankyou page when a user fills in the form and submits', () => {
+			cy.get('#firstName').type(userName);
+			cy.get('#lastName').type(userLastName);
+			cy.get('#email').type(userEmail);
 
+      cy.get('#qa-credit-card').click();
+      /*
+      cy.get("input[name='cardnumber']").type("4242424242424242");
+      cy.get("input[name='expiry']").type("0150");
+      cy.get("input[name='cvc']").type("111");
+      */
     })
 
-    it('should load correctly  when a test user goes to the contributions landing page', () => {
-      cy.url().should('include', 'uk/contribute');
-    });
-
-    it('should display the contributeButton', () => {
-      const contributeButton = "#qa-contributions-landing-submit-contribution-button";
-      cy.get(contributeButton).should('be.visible')
-    });
-
-    it('should keep the contributeButton  clickable', () => {
-      const contributeButton = "#qa-contributions-landing-submit-contribution-button";//Defined in support-frontend/conf/DEV.public.conf
-      cy.window().its('ga').should('not.exist');
-      const cmpIframe = () => {
-        return cy
-          .get('iframe[id^="sp_message_iframe"]')
-          .its('0.contentDocument.body')
-          .should('be.empty')
-          .then(cy.wrap);
-      };
-
-      cmpIframe().contains("It's your choice");
-      // cmpIframe().find('button.sp_choice_type_12').click();
-      cy.get(contributeButton).click().should('be.enabled');
-    });
-
-  })
-
-  // context('When the user selects the monthly option', () => {
-  //
-  //   class MissingPageElementException extends Error {
-  //     constructor(queryString) {
-  //       super(`Could not find element with selector: ${queryString}`);
-  //       this.name = 'MissingPageElementException';
-  //       // if (Error.captureStackTrace) {
-  //       //   Error.captureStackTrace(this, MissingPageElementException);
-  //       // }
-  //     }
-  //   }
-  //
-  //   function clickOn(buttonType){
-  //
-  //     cy.get(buttonType).focus().click();
-  //     // else
-  //     //   throw new MissingPageElementException(buttonType)
-  //   }
-  //
-  //   function clickMonthly() {
-  //     const monthlyButton = 'input[id="MONTHLY"]'
-  //     clickOn(monthlyButton)
-  //   }
-  //
-  //   it('should keep the contributeButton  clickable', () => {
-  //     clickMonthly()
-  //   })
-  // })
-
-})
-*/
+	});
+});
