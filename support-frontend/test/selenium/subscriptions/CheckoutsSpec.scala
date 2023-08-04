@@ -27,7 +27,7 @@ class CheckoutsSpec
 
   override def beforeAll(): Unit = {
     Config.printSummary(driverConfig.sessionId)
-    Dependencies.dependencyCheckForSubscribe
+    Dependencies.dependencyCheck
   }
 
   override def afterAll(): Unit = {
@@ -66,7 +66,7 @@ class CheckoutsSpec
     val testUserRequest = new IdapiTestUserRequest()
     testUserRequest.getCookies() match {
       case Left(error) => fail(error)
-      case Right(cookies) => new PostDeployTestUser(driverConfig, Some(cookies))
+      case Right(cookies) => new PostDeployTestUser(driverConfig, Some(cookies), true)
     }
 
     Given("that a user goes to the UK product page")

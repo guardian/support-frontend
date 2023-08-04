@@ -8,8 +8,11 @@ trait TestUser {
   val username: String
 }
 
-class PostDeployTestUser(driverConfig: DriverConfig, bypassRecaptchaCookies: Option[List[IdapiCookie]] = None)
-    extends TestUser {
+class PostDeployTestUser(
+    driverConfig: DriverConfig,
+    bypassRecaptchaCookies: Option[List[IdapiCookie]] = None,
+    userSignedIn: Boolean,
+) extends TestUser {
 
   private val testUsers = TestUsernames(
     com.gu.identity.testing.usernames.Encoder.withSecret(Config.testUsersSecret),
@@ -26,6 +29,10 @@ class PostDeployTestUser(driverConfig: DriverConfig, bypassRecaptchaCookies: Opt
     driverConfig.addCookie(name = "GU_TK", value = "1.1") // To avoid consent banner, which messes with selenium
     bypassRecaptchaCookies.toList.flatten.foreach { cookie =>
       driverConfig.addCookie(name = cookie.key, value = cookie.value)
+    }
+    if (userSignedIn) {
+      driverConfig.addCookie(name = "GU_ID_TOKEN", value = "dwfhdfbkewbbdfjwejkbf")
+      driverConfig.addCookie(name = "GU_ACCESS_TOKEN", value = "fgewfruwrgwgb")
     }
   }
 
