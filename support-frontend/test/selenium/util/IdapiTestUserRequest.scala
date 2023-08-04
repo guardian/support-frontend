@@ -38,8 +38,6 @@ object IdapiTestUserRequest {
   private val request: Request = new Request.Builder()
     .url(Config.idapiNewTestUserUrl)
     .addHeader(Config.idapiClientAccessTokenName, Config.idapiClientAccessTokenSecret)
-    .addHeader("Cookie", "GU_ID_TOKEN=true")
-    .addHeader("Cookie", "GU_ACCESS_TOKEN=true")
     .post(RequestBody.create(MediaType.parse("application/json"), "{}"))
     .build()
 }
