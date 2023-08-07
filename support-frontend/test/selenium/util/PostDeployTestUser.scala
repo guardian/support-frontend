@@ -11,7 +11,6 @@ trait TestUser {
 class PostDeployTestUser(
     driverConfig: DriverConfig,
     bypassRecaptchaCookies: Option[List[IdapiCookie]] = None,
-    userSignedIn: Boolean,
 ) extends TestUser {
 
   private val testUsers = TestUsernames(
@@ -29,10 +28,6 @@ class PostDeployTestUser(
     driverConfig.addCookie(name = "GU_TK", value = "1.1") // To avoid consent banner, which messes with selenium
     bypassRecaptchaCookies.toList.flatten.foreach { cookie =>
       driverConfig.addCookie(name = cookie.key, value = cookie.value)
-    }
-    if (userSignedIn) {
-      driverConfig.addCookie(name = "GU_ID_TOKEN", value = "dwfhdfbkewbbdfjwejkbf")
-      driverConfig.addCookie(name = "GU_ACCESS_TOKEN", value = "fgewfruwrgwgb")
     }
   }
 

@@ -65,8 +65,8 @@ class CheckoutsSpec
   ): Unit = {
     val testUserRequest = new IdapiTestUserRequest()
     testUserRequest.getCookies() match {
-      case Left(error) => fail("This has failed to match")
-      case Right(cookies) => new PostDeployTestUser(driverConfig, Some(cookies), true)
+      case Left(error) => fail(error)
+      case Right(cookies) => new PostDeployTestUser(driverConfig, Some(cookies))
     }
 
     Given("that a user goes to the UK product page")
