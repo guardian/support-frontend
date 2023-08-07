@@ -19,13 +19,9 @@ import {
 	setDDGuaranteeClose,
 	setDDGuaranteeOpen,
 	setFormError,
-	setPhase,
 	setSortCode,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
-import type {
-	Phase,
-	SortCodeIndex,
-} from 'helpers/redux/checkout/payment/directDebit/state';
+import type { SortCodeIndex } from 'helpers/redux/checkout/payment/directDebit/state';
 import {
 	confirmAccountDetails,
 	directDebitErrorMessages,
@@ -38,7 +34,6 @@ import {
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import './directDebitForm.scss';
 
-// ----- Map State/Props ----- //
 function mapStateToProps(state: ContributionsState) {
 	return {
 		isDDGuaranteeOpen:
@@ -50,7 +45,6 @@ function mapStateToProps(state: ContributionsState) {
 		accountHolderConfirmation:
 			state.page.checkoutForm.payment.directDebit.accountHolderConfirmation,
 		formError: state.page.checkoutForm.payment.directDebit.formError,
-		phase: state.page.checkoutForm.payment.directDebit.phase,
 		countryGroupId: state.common.internationalisation.countryGroupId,
 		recaptchaCompleted: state.page.checkoutForm.recaptcha.completed,
 	};
@@ -59,7 +53,6 @@ function mapStateToProps(state: ContributionsState) {
 const mapDispatchToProps = {
 	confirmAccountDetails,
 	payWithDirectDebit,
-	setPhase,
 	setDDGuaranteeOpen,
 	setDDGuaranteeClose,
 	setSortCode,
@@ -82,6 +75,8 @@ const recaptchaId = 'robot_checkbox';
 // ----- Component ----- //
 function DirectDebitForm(props: PropTypes) {
 	function onSubmit() {
+		void props.confirmAccountDetails();
+
 		if (props.recaptchaCompleted) {
 			void props.payWithDirectDebit(props.onPaymentAuthorisation);
 		} else {
@@ -120,12 +115,10 @@ function DirectDebitForm(props: PropTypes) {
 				checked={props.accountHolderConfirmation}
 			/>
 
-			{props.phase === 'confirmation' && (
-				<RecaptchaInput
-					setRecaptchaToken={props.setRecaptchaToken}
-					expireRecaptchaToken={props.expireRecaptchaToken}
-				/>
-			)}
+			<RecaptchaInput
+				setRecaptchaToken={props.setRecaptchaToken}
+				expireRecaptchaToken={props.expireRecaptchaToken}
+			/>
 
 			{props.formError && (
 				<div className="component-direct-debit-form__error-message-container">
@@ -136,12 +129,7 @@ function DirectDebitForm(props: PropTypes) {
 				</div>
 			)}
 
-			<PaymentButton
-				phase={props.phase}
-				onPayClick={props.confirmAccountDetails}
-				onEditClick={() => props.setPhase('entry')}
-				onConfirmClick={onSubmit}
-			/>
+			<PaymentButton onConfirmClick={onSubmit} />
 
 			<LegalNotice countryGroupId={props.countryGroupId} />
 
@@ -268,49 +256,21 @@ function ConfirmationInput(props: {
 }
 
 function PaymentButton(props: {
-	phase: Phase;
-	onPayClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-	onEditClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	onConfirmClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
-	if (props.phase === 'entry') {
-		return (
-			<button
-				id="qa-submit-button-1"
-				className="component-direct-debit-form__cta component-direct-debit-form__cta--pay-button focus-target"
-				onClick={props.onPayClick}
-			>
-				<SvgDirectDebitSymbol />
-				<span className="component-direct-debit-form__cta-text">
-					Pay with Direct Debit
-				</span>
-				<SvgArrowRightStraight />
-			</button>
-		);
-	} else {
-		// confirmation phase
-		return (
-			<span>
-				<button
-					className="component-direct-debit-form__cta component-direct-debit-form__cta--edit-button focus-target"
-					onClick={props.onEditClick}
-				>
-					<SvgArrowRightStraight />
-					<span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--inverse">
-						Back
-					</span>
-				</button>
-				<button
-					id="qa-submit-button-2"
-					className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
-					onClick={props.onConfirmClick}
-				>
-					<span className="component-direct-debit-form__cta-text">Confirm</span>
-					<SvgArrowRightStraight />
-				</button>
+	return (
+		<button
+			id="qa-submit-button"
+			className="component-direct-debit-form__cta component-direct-debit-form__cta--pay-button focus-target"
+			onClick={props.onConfirmClick}
+		>
+			<SvgDirectDebitSymbol />
+			<span className="component-direct-debit-form__cta-text">
+				Pay with Direct Debit
 			</span>
-		);
-	}
+			<SvgArrowRightStraight />
+		</button>
+	);
 }
 
 function LegalNotice(props: { countryGroupId: CountryGroupId }) {
