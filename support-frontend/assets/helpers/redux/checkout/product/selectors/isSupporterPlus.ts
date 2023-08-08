@@ -25,3 +25,23 @@ export function isSupporterPlusPurchase(state: ContributionsState): boolean {
 
 	return amountIsHighEnough;
 }
+
+export function shouldHideBenefitsList(state: ContributionsState): boolean {
+	const contributionType = getContributionType(state);
+
+	if (isOneOff(contributionType)) {
+		return true;
+	}
+
+	const thresholdPrice = getThresholdPrice(
+		state.common.internationalisation.countryGroupId,
+		contributionType,
+	);
+	const displayedAmounts = state.common.amounts[contributionType];
+	const customAmountIsHidden = displayedAmounts.hideChooseYourAmount ?? false;
+
+	const thresholdPriceIsNotOffered =
+		Math.max(...displayedAmounts.amounts) < thresholdPrice;
+
+	return thresholdPriceIsNotOffered && customAmountIsHidden;
+}
