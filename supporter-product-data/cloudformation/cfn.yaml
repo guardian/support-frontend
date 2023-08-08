@@ -17,13 +17,13 @@ Mappings:
   StageVariables:
     CODE:
       S3Bucket: supporter-product-data-export-code
-      CatalogBucket: arn:aws:s3:::gu-reader-revenue-private/membership/support-service-lambdas/PROD/zuoraRest-CODE.*.json
+      CatalogBucket: arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json
       # Run once at 6am Mon-Fri
       scheduleRate: "cron(0 6 ? * 1-5 *)"
       lambdaConcurrency: 30
     PROD:
       S3Bucket: supporter-product-data-export-prod
-      CatalogBucket: arn:aws:s3:::gu-reader-revenue-private/membership/support-service-lambdas/PROD/zuoraRest-PROD.*.json
+      CatalogBucket: arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json
       # Every 5 mins
       scheduleRate: "cron(*/5 * ? * * *)"
       lambdaConcurrency: 50 # May need to reduce this number if we see downstream systems getting overwhelmed during a full refresh, I've tested with 30 and that was fine
