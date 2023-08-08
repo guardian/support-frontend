@@ -62,7 +62,7 @@ object ProcessSupporterRatePlanItemLambda {
 
   def processItem(supporterRatePlanItem: SupporterRatePlanItem) = {
     if (itemIsDiscount(supporterRatePlanItem)) {
-      SafeLogger.info(s"Supporter ${supporterRatePlanItem.identityId} is a discount")
+      SafeLogger.info(s"Supporter rate plan item ${supporterRatePlanItem.asJson.spaces2} is a discount")
       Future.successful(())
     } else
       addAmountIfContribution(supporterRatePlanItem).flatMap(writeItemToDynamo)
