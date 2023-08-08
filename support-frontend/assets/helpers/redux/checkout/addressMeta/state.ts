@@ -4,14 +4,33 @@ export type AddressMetaState = {
 	deliveryAgent: DeliveryAgentState;
 };
 
-type DeliveryAgentState = {
+export type DeliveryAgentState = {
 	isLoading: boolean;
-	error?: any;
-	response: any;
+	error?: string;
+	response?: DeliveryAgentsResponse;
 	chosenAgent?: number;
 };
 
 export const initialState: AddressMetaState = {
 	billingAddressMatchesDelivery: true,
-	deliveryAgent: { isLoading: false, response: [] },
+	deliveryAgent: { isLoading: false, response: undefined },
+};
+
+export type DeliveryAgentsResponse = {
+	type:
+		| 'Success'
+		| 'NotCovered'
+		| 'UnknownOrInvalidPostcode'
+		| 'PaperRoundError';
+	agents: DeliveryAgentOption[];
+};
+
+export type DeliveryAgentOption = {
+	agentId: number;
+	agentName: string;
+	deliveryMethod: string;
+	nbrDeliveryDays: number;
+	postcode: string;
+	refGroupId: number;
+	summary: string;
 };

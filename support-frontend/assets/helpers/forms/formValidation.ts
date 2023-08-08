@@ -148,3 +148,9 @@ export const isValidIban = (iban?: string): boolean =>
 	/[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}/.test(
 		iban.replace(/ /g, ''),
 	);
+
+export function isValidPostcode(postcode: string): boolean {
+	const postcodeRegex =
+		/^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])))) {0,1}[0-9][A-Za-z]{2})$/g;
+	return postcodeRegex.test(postcode);
+}

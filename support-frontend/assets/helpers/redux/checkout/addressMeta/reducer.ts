@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import type { DeliveryAgentsResponse } from './state';
 import { initialState } from './state';
 
 export const addressMetaSlice = createSlice({
@@ -12,8 +13,14 @@ export const addressMetaSlice = createSlice({
 		setDeliveryInstructions(state, action: PayloadAction<string>) {
 			state.deliveryInstructions = action.payload;
 		},
-		setDeliveryAgent(state, action: PayloadAction<number>) {
+		setDeliveryAgent(state, action: PayloadAction<number | undefined>) {
 			state.deliveryAgent.chosenAgent = action.payload;
+		},
+		setDeliveryAgentResponse(
+			state,
+			action: PayloadAction<DeliveryAgentsResponse | undefined>,
+		) {
+			state.deliveryAgent.response = action.payload;
 		},
 	},
 	extraReducers: (builder) => {
@@ -21,10 +28,13 @@ export const addressMetaSlice = createSlice({
 			state.deliveryAgent.isLoading = true;
 			state.deliveryAgent.error = undefined;
 		});
-		builder.addCase(getDeliveryAgentsThunk.fulfilled, (state, action) => {
-			state.deliveryAgent.isLoading = false;
-			state.deliveryAgent.response = action.payload;
-		});
+		builder.addCase(
+			getDeliveryAgentsThunk.fulfilled,
+			(state, action: PayloadAction<DeliveryAgentsResponse>) => {
+				state.deliveryAgent.isLoading = false;
+				state.deliveryAgent.response = action.payload;
+			},
+		);
 		builder.addCase(getDeliveryAgentsThunk.rejected, (state, action) => {
 			state.deliveryAgent.isLoading = false;
 			state.deliveryAgent.error = action.error.message;

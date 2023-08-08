@@ -26,6 +26,7 @@ import GridImage from 'components/gridImage/gridImage';
 import {
 	BillingAddress,
 	DeliveryAddress,
+	PaperAddress,
 } from 'components/subscriptionCheckouts/address/scopedAddressFields';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
@@ -44,6 +45,7 @@ import {
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { Paper } from 'helpers/productPrice/subscriptions';
+import { setDeliveryAgent } from 'helpers/redux/checkout/addressMeta/actions';
 import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import {
 	selectCorrespondingProductOptionPrice,
@@ -89,7 +91,6 @@ import {
 	getFormattedStartDate,
 	getPaymentStartDate,
 } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
-import { setDeliveryAgent } from 'helpers/redux/checkout/addressMeta/actions';
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -196,6 +197,8 @@ function PaperCheckoutForm(props: PropTypes) {
 	);
 
 	const isHomeDelivery = props.fulfilmentOption === HomeDelivery;
+	const isNationalDeliveryAbTest =
+		props.participations.nationalDelivery === 'variant';
 
 	const fulfilmentOptionDescriptor = isHomeDelivery
 		? 'Newspaper'
@@ -356,32 +359,32 @@ function PaperCheckoutForm(props: PropTypes) {
 					</FormSection>
 
 					<FormSection title={deliveryTitle}>
-						<DeliveryAddress countries={newspaperCountries} />
-						{/* // possible paperRound responses
-						// Success
-						// NotCovered
-						// UnknownOrInvalidPostcode
-						// PaperRoundError */}
-
-						{props.deliveryAgentsResponse.type === 'Success' ? (
+						{isNationalDeliveryAbTest && isHomeDelivery ? (
+							<PaperAddress countries={newspaperCountries} />
+						) : (
+							<DeliveryAddress countries={newspaperCountries} />
+						)}
+						{isNationalDeliveryAbTest &&
+						isHomeDelivery &&
+						props.deliveryAgentsResponse?.type === 'Success' ? (
 							<Select
-								label="DeliveryAgent"
+								label="Select courier"
+								id="courier"
+								css={marginBottom}
 								onChange={(e) =>
 									props.setDeliveryAgent(parseInt(e.target.value))
 								}
 							>
-								<OptionForSelect value="">
-									Select a delivery agent
-								</OptionForSelect>
-								{props.deliveryAgentsResponse.agents.map((agent: any) => (
-									<OptionForSelect value={agent.agentId}>
-										{agent.agentName}
-									</OptionForSelect>
-								))}
+								<OptionForSelect value="">Click to select</OptionForSelect>
+								<>
+									{props.deliveryAgentsResponse.agents.map((agent) => (
+										<OptionForSelect value={agent.agentId}>
+											{agent.agentName}
+										</OptionForSelect>
+									))}
+								</>
 							</Select>
-						) : (
-							<>sorry</>
-						)}
+						) : null}
 						{isHomeDelivery ? (
 							<TextArea
 								error={deliveryInstructionsError?.message}

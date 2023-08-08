@@ -1,4 +1,11 @@
 import { connect } from 'react-redux';
+import type { Action, Dispatch } from 'redux';
+import { bindActionCreators } from 'redux';
+import {
+	M25_POSTCODE_PREFIXES,
+	postcodeIsWithinDeliveryArea,
+} from 'helpers/forms/deliveryCheck';
+import { isValidPostcode } from 'helpers/forms/formValidation';
 import {
 	setBillingAddressLineOne,
 	setBillingAddressLineTwo,
@@ -21,11 +28,14 @@ import {
 	billingAddressFindAddresses,
 	deliveryAddressFindAddresses,
 } from 'helpers/redux/checkout/address/reducer';
+import {
+	setDeliveryAgent,
+	setDeliveryAgentResponse,
+} from 'helpers/redux/checkout/addressMeta/actions';
+import { getDeliveryAgentsThunk } from 'helpers/redux/checkout/addressMeta/reducer';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { AddressFields } from './addressFields';
-import { getDeliveryAgentsThunk } from 'helpers/redux/checkout/addressMeta/reducer';
-import { bindActionCreators } from 'redux';
 
 // ---- Billing address ---- //
 
@@ -76,10 +86,36 @@ function mapDeliveryAddressStateToProps(state: SubscriptionsState) {
 	};
 }
 
-const mapDeliveryAddressDispatchToProps = (dispatch: any) => {
+const mapDeliveryAddressDispatchToProps = {
+	setLineOne: setDeliveryAddressLineOne,
+	setLineTwo: setDeliveryAddressLineTwo,
+	setTownCity: setDeliveryTownCity,
+	setState: setDeliveryState,
+	setCountry: setDeliveryCountry,
+	setPostcode: setDeliveryPostcode,
+	setPostcodeForFinder: setDeliveryPostcodeForFinder,
+	setPostcodeErrorForFinder: setDeliveryPostcodeErrorForFinder,
+	onFindAddress: deliveryAddressFindAddresses,
+};
+
+export const DeliveryAddress = connect(
+	mapDeliveryAddressStateToProps,
+	mapDeliveryAddressDispatchToProps,
+)(AddressFields);
+
+// ---- Delivery address for papers ---- //
+
+const mapPaperDeliveryAddressDispatchToProps = (dispatch: Dispatch<Action>) => {
 	return {
 		setPostcode: (postcode: string) => {
-			dispatch(getDeliveryAgentsThunk(postcode));
+			if (isValidPostcode(postcode)) {
+				if (!postcodeIsWithinDeliveryArea(postcode, M25_POSTCODE_PREFIXES)) {
+					dispatch(getDeliveryAgentsThunk(postcode));
+				} else {
+					dispatch(setDeliveryAgent());
+					dispatch(setDeliveryAgentResponse());
+				}
+			}
 			dispatch(setDeliveryPostcode(postcode));
 		},
 		...bindActionCreators(
@@ -98,7 +134,7 @@ const mapDeliveryAddressDispatchToProps = (dispatch: any) => {
 	};
 };
 
-export const DeliveryAddress = connect(
+export const PaperAddress = connect(
 	mapDeliveryAddressStateToProps,
-	mapDeliveryAddressDispatchToProps,
+	mapPaperDeliveryAddressDispatchToProps,
 )(AddressFields);

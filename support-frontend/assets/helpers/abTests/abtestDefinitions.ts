@@ -78,4 +78,18 @@ export const tests: Tests = {
 		referrerControlled: true,
 		seed: 2,
 	},
+	nationalDelivery: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		isActive: false,
+		audiences: {},
+		referrerControlled: false,
+		seed: 0,
+	},
 };
