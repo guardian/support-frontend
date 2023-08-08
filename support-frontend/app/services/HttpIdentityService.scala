@@ -151,7 +151,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
         .url(s"$apiUrl/user")
         .withHttpHeaders(List("X-GU-ID-Client-Access-Token" -> s"Bearer $apiClientToken"): _*)
         .withQueryStringParameters(List("emailAddress" -> email): _*)
-        .withRequestTimeout(5.seconds)
+        .withRequestTimeout(7.seconds)
         .withMethod("GET"),
     ) { resp =>
       resp.json
@@ -191,7 +191,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
           ).flattenValues: _*,
         )
         .withBody(body)
-        .withRequestTimeout(5.seconds)
+        .withRequestTimeout(7.seconds)
         .withMethod("POST")
         .withQueryStringParameters(
           List(
