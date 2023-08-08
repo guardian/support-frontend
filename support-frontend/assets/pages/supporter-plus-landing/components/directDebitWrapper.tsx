@@ -15,9 +15,6 @@ export function DirectDebitContainer(): JSX.Element {
 	}
 
 	return (
-		<DirectDebitPopUpForm
-			buttonText="Pay with Direct Debit"
-			onPaymentAuthorisation={onPaymentAuthorisation}
-		/>
+		<DirectDebitPopUpForm onPaymentAuthorisation={onPaymentAuthorisation} />
 	);
 }

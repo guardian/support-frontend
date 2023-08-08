@@ -48,28 +48,6 @@
 	border-radius: 20px;
 }
 
-.component-direct-debit-pop-up-form__heading {
-	float: left;
-	font-family: $gu-headline;
-	font-weight: bolder;
-	font-size: 24px;
-	line-height: 30px;
-	max-width: 260px;
-	margin-top: $gu-v-spacing;
-	margin-bottom: $gu-v-spacing;
-	@include mq($from: mobileMedium) {
-		max-width: 280px;
-	}
-	@include mq($from: mobileLandscape) {
-		max-width: 400px;
-	}
-}
-
-.component-direct-debit-pop-up-form__heading--title {
-	display: block;
-	margin-left: 20px;
-}
-
 .component-direct-debit-pop-up-form__close-button {
 	border: solid 1px gu-colour(neutral-7);
 	border-radius: 800px;
