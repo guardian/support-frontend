@@ -16,7 +16,10 @@ import {
 	zuoraCompatibleString,
 } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
-import type { DeliveryAgentState } from '../addressMeta/state';
+import type {
+	DeliveryAgentsResponse,
+	DeliveryAgentState,
+} from '../addressMeta/state';
 import type { AddressFields, AddressFormFieldError } from './state';
 
 // ---- Validators ---- //
@@ -153,11 +156,7 @@ function getDeliveryOnlyRules(
 		{
 			rule:
 				abParticipations.nationalDelivery === 'variant' ||
-				isDeliveryAgentRequired(
-					fulfilmentOption,
-					fields.postCode,
-					deliveryAgent,
-				),
+				deliveryAgentChosen(fulfilmentOption, fields.postCode, deliveryAgent),
 			error: formError('postCode', 'Please select a delivery provider'),
 		},
 		{
@@ -191,21 +190,18 @@ export const isHomeDeliveryInM25 = (
 	return true;
 };
 
-export const isDeliveryAgentRequired = (
+export const deliveryAgentChosen = (
 	fulfilmentOption: Option<FulfilmentOptions>,
 	postcode: Option<string>,
 	deliveryAgent: DeliveryAgentState,
 	allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
 ): boolean => {
 	if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
-		const deliveryAgentsAreAvailable =
-			(deliveryAgent.response?.agents.length ?? 0) > 0;
-
 		if (
 			!postcodeIsWithinDeliveryArea(postcode, allowedPrefixes) &&
-			deliveryAgentsAreAvailable
+			deliveryAgentsAreAvailable(deliveryAgent.response)
 		) {
-			return deliveryAgent.chosenAgent ? true : false;
+			return deliveryAgentHasBeenChosen(deliveryAgent);
 		}
 	}
 
@@ -220,12 +216,20 @@ export const isHomeDeliveryAvailable = (
 ): boolean => {
 	if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
 		if (!postcodeIsWithinDeliveryArea(postcode, allowedPrefixes)) {
-			return deliveryAgent.chosenAgent ? true : false;
+			return deliveryAgentHasBeenChosen(deliveryAgent);
 		}
 	}
 
 	return true;
 };
+
+const deliveryAgentHasBeenChosen = (
+	deliveryAgent: DeliveryAgentState,
+): boolean => (deliveryAgent.chosenAgent ? true : false);
+
+const deliveryAgentsAreAvailable = (
+	deliveryAgentResponse?: DeliveryAgentsResponse,
+): boolean => (deliveryAgentResponse?.agents.length ?? 0) > 0;
 
 export const isPostcodeOptional = (country: IsoCountry | null): boolean =>
 	country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
