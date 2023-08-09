@@ -158,7 +158,7 @@ function getDeliveryOnlyRules(
 					fields.postCode,
 					deliveryAgent,
 				),
-			error: formError('postCode', 'Please select a courier'),
+			error: formError('postCode', 'Please select a delivery provider'),
 		},
 		{
 			rule:
