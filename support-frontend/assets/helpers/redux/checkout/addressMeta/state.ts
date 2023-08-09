@@ -18,9 +18,10 @@ export const initialState: AddressMetaState = {
 
 export type DeliveryAgentsResponse = {
 	type:
-		| 'Success'
+		| 'Covered'
 		| 'NotCovered'
-		| 'UnknownOrInvalidPostcode'
+		| 'UnknownPostcode'
+		| 'ProblemWithInput'
 		| 'PaperRoundError';
 	agents: DeliveryAgentOption[];
 };

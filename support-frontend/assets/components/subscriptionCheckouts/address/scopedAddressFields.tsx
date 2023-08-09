@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import type { Action, Dispatch } from 'redux';
+import type { Dispatch } from 'redux';
 import { bindActionCreators } from 'redux';
 import {
 	M25_POSTCODE_PREFIXES,
@@ -105,7 +105,7 @@ export const DeliveryAddress = connect(
 
 // ---- Delivery address for papers ---- //
 
-const mapPaperDeliveryAddressDispatchToProps = (dispatch: Dispatch<Action>) => {
+const mapPaperDeliveryAddressDispatchToProps = (dispatch: Dispatch) => {
 	return {
 		setPostcode: (postcode: string) => {
 			if (isValidPostcode(postcode)) {

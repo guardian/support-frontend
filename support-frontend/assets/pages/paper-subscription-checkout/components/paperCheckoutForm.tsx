@@ -366,10 +366,10 @@ function PaperCheckoutForm(props: PropTypes) {
 						)}
 						{isNationalDeliveryAbTest &&
 						isHomeDelivery &&
-						props.deliveryAgentsResponse?.type === 'Success' ? (
+						props.deliveryAgentsResponse?.type === 'Covered' ? (
 							<Select
-								label="Select courier"
-								id="courier"
+								label="Select delivery provider"
+								id="delivery-provider"
 								css={marginBottom}
 								onChange={(e) =>
 									props.setDeliveryAgent(parseInt(e.target.value))

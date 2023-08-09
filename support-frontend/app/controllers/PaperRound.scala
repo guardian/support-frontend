@@ -27,9 +27,9 @@ class PaperRound(
   def getAgents(postcode: String): Action[AnyContent] = NoCacheAction().async { implicit request =>
     service.coverage(CoverageEndpoint.RequestBody(postcode = postcode)).map { result =>
       result.data.status match {
-        case CO => Ok(toJson(Agents(result.data.agents.map(fromAgentsCoverage(_)))))
+        case CO => Ok(toJson(Covered(result.data.agents.map(fromAgentsCoverage(_)))))
         case NC => Ok(toJson(NotCovered))
-        case MP => NotFound(toJson(UnknownOrInvalidPostcode))
+        case MP => NotFound(toJson(UnknownPostcode))
         case IP => BadRequest(toJson(ProblemWithInput))
         case IE =>
           val errorMessage = s"${result.message}: ${result.data.message}"
@@ -67,9 +67,9 @@ sealed trait GetAgentsResponse
 object GetAgentsResponse {
   implicit val responseEncoder: Encoder[GetAgentsResponse] = new Encoder[GetAgentsResponse] {
     final def apply(r: GetAgentsResponse): Json = r match {
-      case Agents(agents) => Json.obj("type" -> Json.fromString("Success"), "agents" -> agents.asJson)
+      case Covered(agents) => Json.obj("type" -> Json.fromString("Covered"), "agents" -> agents.asJson)
       case NotCovered => Json.obj("type" -> Json.fromString("NotCovered"))
-      case UnknownOrInvalidPostcode => Json.obj("type" -> Json.fromString("UnknownOrInvalidPostcode"))
+      case UnknownPostcode => Json.obj("type" -> Json.fromString("UnknownPostcode"))
       case ProblemWithInput => Json.obj("type" -> Json.fromString("ProblemWithInput"))
       case PaperRoundError(message) =>
         Json.obj("type" -> Json.fromString("PaperRoundError"), "message" -> Json.fromString(message))
@@ -77,7 +77,7 @@ object GetAgentsResponse {
   }
 }
 
-case class Agents(agents: List[Agent]) extends GetAgentsResponse
+case class Covered(agents: List[Agent]) extends GetAgentsResponse
 case class Agent(
     agentId: Integer,
     agentName: String,
@@ -95,8 +95,11 @@ object Agent {
 /** There are no delivery agents for this postcode. */
 case object NotCovered extends GetAgentsResponse
 
-case object UnknownOrInvalidPostcode extends GetAgentsResponse
+/** This looks like a postcode but is not recognised. */
+case object UnknownPostcode extends GetAgentsResponse
 
+/** Input not a postcode (or not understood). */
 case object ProblemWithInput extends GetAgentsResponse
 
+/** Unknown error. */
 case class PaperRoundError(message: String) extends GetAgentsResponse
