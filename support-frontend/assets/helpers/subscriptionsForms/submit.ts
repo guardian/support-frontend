@@ -149,7 +149,8 @@ function buildRegularPaymentRequest(
 	const { actionHistory } = state.debug;
 	const { title, firstName, lastName, email, telephone } =
 		state.page.checkoutForm.personalDetails;
-	const { deliveryInstructions, deliveryAgent } = state.page.checkoutForm.addressMeta;
+	const { deliveryInstructions, deliveryAgent } =
+		state.page.checkoutForm.addressMeta;
 	const { csrUsername, salesforceCaseId } = state.page.checkout;
 	const product = getProduct(state, currencyId);
 	const paymentFields =
@@ -181,7 +182,7 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
-		deliveryAgent: chosenDeliveryAgent
+		deliveryAgent: chosenDeliveryAgent,
 	};
 }
 
