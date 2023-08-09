@@ -1,7 +1,7 @@
 package wiring
 
-import actions.{UserFromAuthCookiesOrAuthServerActionBuilder, UserFromAuthCookiesActionBuilder}
 import actions.UserFromAuthCookiesActionBuilder.UserClaims
+import actions.{UserFromAuthCookiesActionBuilder, UserFromAuthCookiesOrAuthServerActionBuilder}
 import admin.settings.AllSettingsProvider
 import cats.syntax.either._
 import com.gu.aws.AwsS3Client
@@ -59,6 +59,7 @@ trait Services {
     controllerComponents.parsers.defaultBodyParser,
     oktaAuthService,
     appConfig.identity,
+    isAuthServerUp = asyncAuthenticationService.isAuthServerUp,
   )
 
   lazy val userFromAuthCookiesActionBuilder = new UserFromAuthCookiesActionBuilder(

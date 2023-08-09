@@ -47,6 +47,13 @@ class AsyncAuthenticationService(identityPlayAuthService: IdapiPlayAuthService, 
     ws.url(config.oauthTokenUrl)
       .addHttpHeaders(CONTENT_TYPE -> FORM)
       .post(requestBody)
+
+  /** eventually true iff auth server is available for requests */
+  def isAuthServerUp(): Future[Boolean] =
+    ws.url(config.oauthAuthorizeUrl)
+      .head()
+      .map(_.status < 500)
+      .recover { case _ => false }
 }
 
 object AsyncAuthenticationService {
