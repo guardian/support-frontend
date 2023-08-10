@@ -10,8 +10,14 @@ import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/p
 import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
 import { PriceCards } from 'components/priceCards/priceCards';
 import { PriceCardsContainer } from 'components/priceCards/priceCardsContainer';
+import Tooltip from 'components/tooltip/Tooltip';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
-export function AmountAndBenefits(): JSX.Element {
+export function AmountAndBenefits({
+	countryGroupId,
+}: {
+	countryGroupId: CountryGroupId;
+}): JSX.Element {
 	return (
 		<PaymentFrequencyTabsContainer
 			render={(tabProps) => (
@@ -65,6 +71,14 @@ export function AmountAndBenefits(): JSX.Element {
 									<CheckoutBenefitsList {...benefitsListProps} />
 								)}
 							/>
+							<Tooltip promptText="Cancel anytime">
+								<p>
+									You can cancel
+									{countryGroupId === 'GBPCountries' ? '' : ' online'} anytime
+									before your next payment date. If you cancel in the first 14
+									days, you will receive a full refund.
+								</p>
+							</Tooltip>
 							<CheckoutNudgeContainer
 								renderNudge={(nudgeProps) => <CheckoutNudge {...nudgeProps} />}
 							/>
