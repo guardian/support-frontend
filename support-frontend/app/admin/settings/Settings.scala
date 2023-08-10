@@ -61,7 +61,7 @@ object SettingsSources {
   def fromConfig(config: Config, stage: Stage): Either[Throwable, SettingsSources] = {
     for {
       switchesSource <- SettingsSource.fromConfig(config, "switches_v2", stage)
-      amountsSource <- SettingsSource.fromConfig(config, "configured-amounts-v2", stage)
+      amountsSource <- SettingsSource.fromConfig(config, "configured-amounts-v3", stage)
       contributionTypesSource <- SettingsSource.fromConfig(config, "contributionTypes", stage)
     } yield SettingsSources(switchesSource, amountsSource, contributionTypesSource)
   }

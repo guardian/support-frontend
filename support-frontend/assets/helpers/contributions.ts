@@ -71,7 +71,9 @@ export interface AmountsTest {
 	testName: string;
 	liveTestName?: string;
 	isLive: boolean;
-	target: CountryGroupId | IsoCountry;
+	region: CountryGroupId | '';
+	country: IsoCountry[];
+	order: number;
 	seed: number;
 	variants: AmountsVariant[];
 }

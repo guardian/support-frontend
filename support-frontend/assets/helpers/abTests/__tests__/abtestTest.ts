@@ -39,7 +39,9 @@ describe('init', () => {
 				testName: 'FALLBACK_AMOUNTS__GBPCountries',
 				liveTestName: '',
 				isLive: false,
-				target: 'GBPCountries',
+				region: 'GBPCountries',
+				country: [],
+				order: 0,
 				seed: 0,
 				variants: [
 					{
@@ -70,7 +72,9 @@ describe('init', () => {
 				testName: 'FALLBACK_AMOUNTS__UnitedStates',
 				liveTestName: '',
 				isLive: false,
-				target: 'UnitedStates',
+				region: 'UnitedStates',
+				country: [],
+				order: 0,
 				seed: 0,
 				variants: [
 					{

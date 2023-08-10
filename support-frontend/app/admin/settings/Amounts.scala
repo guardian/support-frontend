@@ -28,7 +28,9 @@ case class AmountsTest(
     testName: String,
     liveTestName: Option[String],
     isLive: Boolean,
-    target: String,
+    region: String,
+    country: List[String],
+    order: Int,
     seed: Int,
     variants: List[AmountsVariant],
 )

@@ -10,7 +10,7 @@ const getSpecifiedRegionAmountsFromGlobal = (
 	if (!allAmountsTests) {
 		return {};
 	}
-	const testArray = allAmountsTests.filter((t) => t.target === target);
+	const testArray = allAmountsTests.filter((t) => t.region === target);
 	if (!testArray.length) {
 		return {};
 	}
@@ -29,37 +29,37 @@ describe('getGlobal', () => {
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__GBPCountries',
-						target: 'GBPCountries' as CountryGroupId,
+						region: 'GBPCountries' as CountryGroupId,
 					},
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__UnitedStates',
-						target: 'UnitedStates' as CountryGroupId,
+						region: 'UnitedStates' as CountryGroupId,
 					},
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__Canada',
-						target: 'Canada' as CountryGroupId,
+						region: 'Canada' as CountryGroupId,
 					},
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__NZDCountries',
-						target: 'NZDCountries' as CountryGroupId,
+						region: 'NZDCountries' as CountryGroupId,
 					},
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__EURCountries',
-						target: 'EURCountries' as CountryGroupId,
+						region: 'EURCountries' as CountryGroupId,
 					},
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__International',
-						target: 'International' as CountryGroupId,
+						region: 'International' as CountryGroupId,
 					},
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__AUDCountries',
-						target: 'AUDCountries' as CountryGroupId,
+						region: 'AUDCountries' as CountryGroupId,
 					},
 				],
 				contributionTypes: {
@@ -82,7 +82,7 @@ describe('getGlobal', () => {
 		).toEqual({
 			...emptyConfiguredRegionAmounts,
 			testName: 'EMPTY_TEST__GBPCountries',
-			target: 'GBPCountries',
+			region: 'GBPCountries',
 		});
 	});
 
@@ -95,7 +95,7 @@ describe('getGlobal', () => {
 		).toEqual({
 			...emptyConfiguredRegionAmounts,
 			testName: 'EMPTY_TEST__GBPCountries',
-			target: 'GBPCountries',
+			region: 'GBPCountries',
 		});
 	});
 

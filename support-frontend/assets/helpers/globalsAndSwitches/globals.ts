@@ -58,7 +58,9 @@ export const emptyConfiguredRegionAmounts: AmountsTest = {
 	testName: '',
 	liveTestName: '',
 	isLive: false,
-	target: 'GBPCountries' as CountryGroupId,
+	region: 'GBPCountries' as CountryGroupId,
+	country: [],
+	order: 0,
 	seed: 0,
 	variants: emptyAmountsTestVariants,
 };

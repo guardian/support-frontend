@@ -57,7 +57,9 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       testName = "subscriptions-default-test",
       liveTestName = Option("subscriptions-AB-test"),
       isLive = false,
-      target = "GBPCountries",
+      region = "GBPCountries",
+      country = List(),
+      order = 0,
       seed = 0,
       variants = List(amountsVariant),
     )

@@ -49,7 +49,9 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__GBPCountries',
 			liveTestName: '',
 			isLive: false,
-			target: 'GBPCountries',
+			region: 'GBPCountries',
+			country: [],
+			order: 0,
 			seed: 0,
 			variants: [
 				{
@@ -80,7 +82,9 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__UnitedStates',
 			liveTestName: '',
 			isLive: false,
-			target: 'UnitedStates',
+			region: 'UnitedStates',
+			country: [],
+			order: 0,
 			seed: 0,
 			variants: [
 				{
@@ -111,7 +115,9 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__EURCountries',
 			liveTestName: '',
 			isLive: false,
-			target: 'EURCountries',
+			region: 'EURCountries',
+			country: [],
+			order: 0,
 			seed: 0,
 			variants: [
 				{
@@ -142,7 +148,9 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__International',
 			liveTestName: '',
 			isLive: false,
-			target: 'International',
+			region: 'International',
+			country: [],
+			order: 0,
 			seed: 0,
 			variants: [
 				{
@@ -173,7 +181,9 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__Canada',
 			liveTestName: '',
 			isLive: false,
-			target: 'Canada',
+			region: 'Canada',
+			country: [],
+			order: 0,
 			seed: 0,
 			variants: [
 				{
@@ -204,7 +214,9 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__AUDCountries',
 			liveTestName: '',
 			isLive: false,
-			target: 'AUDCountries',
+			region: 'AUDCountries',
+			country: [],
+			order: 0,
 			seed: 0,
 			variants: [
 				{
@@ -235,7 +247,9 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__NZDCountries',
 			liveTestName: '',
 			isLive: false,
-			target: 'NZDCountries',
+			region: 'NZDCountries',
+			country: [],
+			order: 0,
 			seed: 0,
 			variants: [
 				{

@@ -231,13 +231,22 @@ function getAmountsTestParticipations(
 	const amounts = settings.amounts;
 
 	/* 
-		For country-level tests, the isLive boolean tells us whether the test is live (true: show the test) or draft (false: show the region-level test instead)
+		For country-level tests, the isLive boolean tells us whether the test is live (true: show the test) or draft (false: show the region-level test instead).
+
+		Countries can appear in more than one country-level test; we sort the filtered tests according to their order attribute and select the test with the lowest order.
 
 		For region-level tests, the isLive boolean tells us whether there is an AB test running (true: select a test variant from all avaliable) or not (false: select the control variant)
 	*/
-	let targetTest = amounts.find((t) => t.target === country && t.isLive);
+	const targetTestArray = amounts.filter(
+		(t) => t.isLive && t.country.includes(country),
+	);
+	let targetTest;
+	if (targetTestArray.length) {
+		targetTestArray.sort((a, b) => a.order - b.order);
+		targetTest = targetTestArray[0];
+	}
 	if (!targetTest) {
-		targetTest = amounts.find((t) => t.target === countryGroupId);
+		targetTest = amounts.find((t) => t.region === countryGroupId);
 	}
 
 	if (!targetTest) {

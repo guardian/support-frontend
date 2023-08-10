@@ -12,7 +12,9 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__GBPCountries',
 		liveTestName: '',
 		isLive: false,
-		target: 'GBPCountries',
+		region: 'GBPCountries',
+		country: [],
+		order: 0,
 		seed: 0,
 		variants: [
 			{
@@ -43,7 +45,9 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__UnitedStates',
 		liveTestName: '',
 		isLive: false,
-		target: 'UnitedStates',
+		region: 'UnitedStates',
+		country: [],
+		order: 0,
 		seed: 0,
 		variants: [
 			{
@@ -74,7 +78,9 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__EURCountries',
 		liveTestName: '',
 		isLive: false,
-		target: 'EURCountries',
+		region: 'EURCountries',
+		country: [],
+		order: 0,
 		seed: 0,
 		variants: [
 			{
@@ -105,7 +111,9 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__International',
 		liveTestName: '',
 		isLive: false,
-		target: 'International',
+		region: 'International',
+		country: [],
+		order: 0,
 		seed: 0,
 		variants: [
 			{
@@ -136,7 +144,9 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__Canada',
 		liveTestName: '',
 		isLive: false,
-		target: 'Canada',
+		region: 'Canada',
+		country: [],
+		order: 0,
 		seed: 0,
 		variants: [
 			{
@@ -167,7 +177,9 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__AUDCountries',
 		liveTestName: '',
 		isLive: false,
-		target: 'AUDCountries',
+		region: 'AUDCountries',
+		country: [],
+		order: 0,
 		seed: 0,
 		variants: [
 			{
@@ -198,7 +210,9 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__NZDCountries',
 		liveTestName: '',
 		isLive: false,
-		target: 'NZDCountries',
+		region: 'NZDCountries',
+		country: [],
+		order: 0,
 		seed: 0,
 		variants: [
 			{
@@ -231,13 +245,20 @@ export function getFallbackAmounts(
 	countryGroupId: CountryGroupId,
 ): SelectedAmountsVariant {
 	// Create fallback data - the amounts card must always have data to dsplay
-	const fallbackTest = FALLBACK_AMOUNTS.filter(
-		(t) => t.target === countryGroupId,
-	)[0];
-	return {
-		...fallbackTest.variants[0],
-		testName: fallbackTest.testName,
-	};
+	const fallbackTest = FALLBACK_AMOUNTS.find(
+		(t) => t.region === countryGroupId,
+	);
+	if (fallbackTest) {
+		return {
+			...fallbackTest.variants[0],
+			testName: fallbackTest.testName,
+		};
+	} else {
+		return {
+			...FALLBACK_AMOUNTS[0].variants[0],
+			testName: FALLBACK_AMOUNTS[0].testName,
+		};
+	}
 }
 
 export function getAmounts(
@@ -290,11 +311,20 @@ export function getAmounts(
 	/* 
 		For country-level tests, the isLive boolean tells us whether the test is live (true: show the test) or draft (false: show the region-level test instead)
 
+		Countries can appear in more than one country-level test; we sort the filtered tests according to their order attribute and select the test with the lowest order.
+
 		For region-level tests, the isLive boolean tells us whether there is an AB test running (true: select a test variant from all avaliable) or not (false: select the control variant)
 	*/
-	let targetTest = amounts.find((t) => t.target === countryCode && t.isLive);
+	const targetTestArray = amounts.filter(
+		(t) => t.isLive && t.country.includes(countryCode),
+	);
+	let targetTest;
+	if (targetTestArray.length) {
+		targetTestArray.sort((a, b) => a.order - b.order);
+		targetTest = targetTestArray[0];
+	}
 	if (!targetTest) {
-		targetTest = amounts.find((t) => t.target === countryGroupId);
+		targetTest = amounts.find((t) => t.region === countryGroupId);
 	}
 
 	// Unable to locate a test which maps to the argument data supplied
