@@ -5,9 +5,6 @@ import BenefitsHeading from './benefitsHeading';
 
 const coreBenefits = [
 	{
-		content: `Every issue delivered with up to 35% off the cover price`,
-	},
-	{
 		content: "Access to the magazine's digital archive",
 	},
 	{
