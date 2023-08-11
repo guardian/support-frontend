@@ -1,6 +1,11 @@
 import type { CsrCustomerData } from 'components/csr/csrMode';
 import { csrUserName } from 'components/csr/csrMode';
+import {
+	M25_POSTCODE_PREFIXES,
+	postcodeIsWithinDeliveryArea,
+} from 'helpers/forms/deliveryCheck';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { isValidPostcode } from 'helpers/forms/formValidation';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
@@ -18,8 +23,11 @@ import {
 } from 'helpers/redux/checkout/address/actions';
 import {
 	setBillingAddressMatchesDelivery,
+	setDeliveryAgent,
+	setDeliveryAgentResponse,
 	setDeliveryInstructions,
 } from 'helpers/redux/checkout/addressMeta/actions';
+import { getDeliveryAgentsThunk } from 'helpers/redux/checkout/addressMeta/reducer';
 import {
 	setEmail as setEmailGift,
 	setFirstName as setFirstNameGift,
@@ -207,6 +215,21 @@ function addressActionCreatorsFor(addressType: AddressType) {
 				setPostcode: setDeliveryPostcode,
 				setState: setDeliveryState,
 		  };
+}
+
+export function setPostcode(postcode: string) {
+	return (dispatch: SubscriptionsDispatch): void => {
+		if (
+			isValidPostcode(postcode) &&
+			!postcodeIsWithinDeliveryArea(postcode, M25_POSTCODE_PREFIXES)
+		) {
+			void dispatch(getDeliveryAgentsThunk(postcode));
+		} else {
+			dispatch(setDeliveryAgent());
+			dispatch(setDeliveryAgentResponse());
+		}
+		dispatch(setDeliveryPostcode(postcode));
+	};
 }
 
 export type FormActionCreators = typeof formActionCreators;

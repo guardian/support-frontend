@@ -42,10 +42,10 @@ export const addressMetaSlice = createSlice({
 	},
 });
 
-export const getDeliveryAgentsThunk = createAsyncThunk(
-	`addressMeta/getDeliveryAgents`,
-	getDeliveryAgents,
-);
+export const getDeliveryAgentsThunk = createAsyncThunk<
+	DeliveryAgentsResponse,
+	string
+>(`addressMeta/getDeliveryAgents`, getDeliveryAgents);
 
 async function getDeliveryAgents(postcode: string) {
 	const agentsResponse = await fetch(`/delivery-agents/${postcode}`);
