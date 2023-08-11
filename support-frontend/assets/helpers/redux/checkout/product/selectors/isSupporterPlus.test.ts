@@ -9,7 +9,7 @@ describe('isInHideBenefitsTest', () => {
 			BAR: 'FOO',
 		};
 
-		expect(isInHideBenefitsTest(abParticipations)).toBeTruthy();
+		expect(isInHideBenefitsTest(abParticipations)).toBe(true);
 	});
 
 	it('returns false if user not in hide benefits test', () => {
@@ -18,7 +18,7 @@ describe('isInHideBenefitsTest', () => {
 			BAR: 'FOO',
 		};
 
-		expect(isInHideBenefitsTest(abParticipations)).toBeFalsy();
+		expect(isInHideBenefitsTest(abParticipations)).toBe(false);
 	});
 
 	it('returns false if user in hide benefits test but not in V1/V3 variant', () => {
@@ -28,12 +28,12 @@ describe('isInHideBenefitsTest', () => {
 			BAR: 'FOO',
 		};
 
-		expect(isInHideBenefitsTest(abParticipations)).toBeFalsy();
+		expect(isInHideBenefitsTest(abParticipations)).toBe(false);
 	});
 
 	it('returns false if users is not in any ab test', () => {
 		const abParticipations = {};
 
-		expect(isInHideBenefitsTest(abParticipations)).toBeFalsy();
+		expect(isInHideBenefitsTest(abParticipations)).toBe(false);
 	});
 });
