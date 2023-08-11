@@ -91,7 +91,11 @@ function WeeklyLPControl({
 			<FullWidthContainer>
 				<CentredContainer>
 					<Block cssOverrides={styles.closeGapAfterPageTitle}>
-						{orderIsAGift ? <GiftBenefits /> : <Benefits />}
+						{orderIsAGift ? (
+							<GiftBenefits />
+						) : (
+							<Benefits countryGroupId={countryGroupId} />
+						)}
 					</Block>
 				</CentredContainer>
 			</FullWidthContainer>
@@ -173,7 +177,11 @@ function WeeklyLPVariant({
 			<FullWidthContainer>
 				<CentredContainer>
 					<Block cssOverrides={styles.closeGapAfterPageTitle}>
-						{orderIsAGift ? <GiftBenefits /> : <Benefits />}
+						{orderIsAGift ? (
+							<GiftBenefits />
+						) : (
+							<Benefits countryGroupId={countryGroupId} />
+						)}
 					</Block>
 				</CentredContainer>
 			</FullWidthContainer>
