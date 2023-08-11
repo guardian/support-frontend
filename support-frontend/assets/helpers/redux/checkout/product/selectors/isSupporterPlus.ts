@@ -83,3 +83,8 @@ export function shouldHideBenefitsList(state: ContributionsState): boolean {
 
 	return thresholdPriceIsNotOffered && customAmountIsHidden;
 }
+
+// Exports to test
+export const _ = {
+	isInHideBenefitsTest,
+};
