@@ -17,10 +17,6 @@ const coreBenefits = [
 	},
 ];
 
-function getBenefits() {
-	return coreBenefits;
-}
-
 function Benefits(): JSX.Element {
 	return (
 		<BenefitsContainer
@@ -30,7 +26,7 @@ function Benefits(): JSX.Element {
 					content: (
 						<>
 							<BenefitsHeading text="As a subscriber you’ll enjoy" />
-							<List items={getBenefits()} />
+							<List items={coreBenefits} />
 						</>
 					),
 				},
