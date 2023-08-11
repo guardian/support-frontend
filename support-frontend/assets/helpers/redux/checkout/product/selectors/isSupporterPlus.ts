@@ -38,7 +38,7 @@ function isInHideBenefitsTest(abParticipations: Participations): boolean {
 		'ROW',
 	];
 
-	return regionalSuffixList.reduce((hideBenefits, suffix): boolean => {
+	const result = regionalSuffixList.reduce((hideBenefits, suffix): boolean => {
 		const testName = `2023-08-08_BENEFITS_GONE__${suffix}`;
 
 		if (
@@ -50,6 +50,8 @@ function isInHideBenefitsTest(abParticipations: Participations): boolean {
 
 		return hideBenefits;
 	}, false);
+
+	return result;
 }
 
 export function shouldHideBenefitsList(state: ContributionsState): boolean {
