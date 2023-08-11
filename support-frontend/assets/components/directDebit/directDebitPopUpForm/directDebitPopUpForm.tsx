@@ -1,6 +1,4 @@
 // ----- Imports ----- //
-import type { ConnectedProps } from 'react-redux';
-import { connect } from 'react-redux';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import SvgCross from 'components/svgs/cross';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
@@ -10,41 +8,35 @@ import {
 	setPopupClose,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
 import type { Phase } from 'helpers/redux/checkout/payment/directDebit/state';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 
-// ----- Map State/Props ----- //
-function mapStateToProps(state: ContributionsState) {
-	return {
-		isPopUpOpen: state.page.checkoutForm.payment.directDebit.isPopUpOpen,
-		phase: state.page.checkoutForm.payment.directDebit.phase,
-	};
-}
-
-const mapDispatchToProps = {
-	setPopupClose,
-	resetFormError,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropTypes = ConnectedProps<typeof connector> & {
+type PropTypes = {
 	buttonText: string;
 	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void;
 };
 
 // ----- Component ----- //
-function DirectDebitPopUpForm(props: PropTypes): JSX.Element {
+export default function DirectDebitPopUpForm(props: PropTypes): JSX.Element {
+	const { isPopUpOpen, phase } = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.directDebit,
+	);
+
+	const dispatch = useContributionsDispatch();
+
 	function closePopup() {
-		props.setPopupClose();
-		props.resetFormError();
+		dispatch(setPopupClose);
+		dispatch(resetFormError);
 	}
 
-	if (props.isPopUpOpen) {
+	if (isPopUpOpen) {
 		return (
 			<div className="component-direct-debit-pop-up-form">
 				<div className="component-direct-debit-pop-up-form__content">
 					<h1 className="component-direct-debit-pop-up-form__heading">
-						<PageTitle phase={props.phase} />
+						<PageTitle phase={phase} />
 					</h1>
 					<button
 						id="qa-pay-with-direct-debit-close-pop-up"
@@ -92,6 +84,4 @@ function PageTitle(props: { phase: Phase }) {
 			</span>
 		</span>
 	);
-} // ----- Exports ----- //
-
-export default connector(DirectDebitPopUpForm);
+}
