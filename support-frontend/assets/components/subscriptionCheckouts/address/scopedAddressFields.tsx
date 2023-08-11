@@ -1,11 +1,4 @@
 import { connect } from 'react-redux';
-import type { Dispatch } from 'redux';
-import { bindActionCreators } from 'redux';
-import {
-	M25_POSTCODE_PREFIXES,
-	postcodeIsWithinDeliveryArea,
-} from 'helpers/forms/deliveryCheck';
-import { isValidPostcode } from 'helpers/forms/formValidation';
 import {
 	setBillingAddressLineOne,
 	setBillingAddressLineTwo,
@@ -28,13 +21,9 @@ import {
 	billingAddressFindAddresses,
 	deliveryAddressFindAddresses,
 } from 'helpers/redux/checkout/address/reducer';
-import {
-	setDeliveryAgent,
-	setDeliveryAgentResponse,
-} from 'helpers/redux/checkout/addressMeta/actions';
-import { getDeliveryAgentsThunk } from 'helpers/redux/checkout/addressMeta/reducer';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
+import { setPostcode } from 'helpers/subscriptionsForms/formActions';
 import { AddressFields } from './addressFields';
 
 // ---- Billing address ---- //
@@ -105,32 +94,17 @@ export const DeliveryAddress = connect(
 
 // ---- Delivery address for papers ---- //
 
-const mapPaperDeliveryAddressDispatchToProps = (dispatch: Dispatch) => {
+const mapPaperDeliveryAddressDispatchToProps = () => {
 	return {
-		setPostcode: (postcode: string) => {
-			if (isValidPostcode(postcode)) {
-				if (!postcodeIsWithinDeliveryArea(postcode, M25_POSTCODE_PREFIXES)) {
-					dispatch(getDeliveryAgentsThunk(postcode));
-				} else {
-					dispatch(setDeliveryAgent());
-					dispatch(setDeliveryAgentResponse());
-				}
-			}
-			dispatch(setDeliveryPostcode(postcode));
-		},
-		...bindActionCreators(
-			{
-				setLineOne: setDeliveryAddressLineOne,
-				setLineTwo: setDeliveryAddressLineTwo,
-				setTownCity: setDeliveryTownCity,
-				setState: setDeliveryState,
-				setCountry: setDeliveryCountry,
-				setPostcodeForFinder: setDeliveryPostcodeForFinder,
-				setPostcodeErrorForFinder: setDeliveryPostcodeErrorForFinder,
-				onFindAddress: deliveryAddressFindAddresses,
-			},
-			dispatch,
-		),
+		setPostcode: (postcode: string) => setPostcode(postcode),
+		setLineOne: setDeliveryAddressLineOne,
+		setLineTwo: setDeliveryAddressLineTwo,
+		setTownCity: setDeliveryTownCity,
+		setState: setDeliveryState,
+		setCountry: setDeliveryCountry,
+		setPostcodeForFinder: setDeliveryPostcodeForFinder,
+		setPostcodeErrorForFinder: setDeliveryPostcodeErrorForFinder,
+		onFindAddress: deliveryAddressFindAddresses,
 	};
 };
 
