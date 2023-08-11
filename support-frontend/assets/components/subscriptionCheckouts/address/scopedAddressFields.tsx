@@ -108,13 +108,14 @@ export const DeliveryAddress = connect(
 const mapPaperDeliveryAddressDispatchToProps = (dispatch: Dispatch) => {
 	return {
 		setPostcode: (postcode: string) => {
-			if (isValidPostcode(postcode)) {
-				if (!postcodeIsWithinDeliveryArea(postcode, M25_POSTCODE_PREFIXES)) {
-					dispatch(getDeliveryAgentsThunk(postcode));
-				} else {
-					dispatch(setDeliveryAgent());
-					dispatch(setDeliveryAgentResponse());
-				}
+			if (
+				isValidPostcode(postcode) &&
+				!postcodeIsWithinDeliveryArea(postcode, M25_POSTCODE_PREFIXES)
+			) {
+				dispatch(getDeliveryAgentsThunk(postcode));
+			} else {
+				dispatch(setDeliveryAgent());
+				dispatch(setDeliveryAgentResponse());
 			}
 			dispatch(setDeliveryPostcode(postcode));
 		},

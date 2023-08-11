@@ -81,6 +81,7 @@ import {
 	formatMachineDate,
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
+import { logException } from 'helpers/utilities/logger';
 import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
 import {
@@ -91,6 +92,7 @@ import {
 	getFormattedStartDate,
 	getPaymentStartDate,
 } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { DeliveryAgentsSelect } from './deliveryAgentsSelect';
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -199,6 +201,10 @@ function PaperCheckoutForm(props: PropTypes) {
 	const isHomeDelivery = props.fulfilmentOption === HomeDelivery;
 	const isNationalDeliveryAbTest =
 		props.participations.nationalDelivery === 'variant';
+
+	if (props.deliveryAgentsResponse?.type === 'PaperRoundError') {
+		logException(`Error fetching delivery providers`);
+	}
 
 	const fulfilmentOptionDescriptor = isHomeDelivery
 		? 'Newspaper'
@@ -364,27 +370,12 @@ function PaperCheckoutForm(props: PropTypes) {
 						) : (
 							<DeliveryAddress countries={newspaperCountries} />
 						)}
-						{isNationalDeliveryAbTest &&
-						isHomeDelivery &&
-						props.deliveryAgentsResponse?.type === 'Covered' ? (
-							<Select
-								label="Select delivery provider"
-								id="delivery-provider"
-								css={marginBottom}
-								onChange={(e) =>
-									props.setDeliveryAgent(parseInt(e.target.value))
-								}
-							>
-								<OptionForSelect value="">Click to select</OptionForSelect>
-								<>
-									{props.deliveryAgentsResponse.agents.map((agent) => (
-										<OptionForSelect value={agent.agentId}>
-											{agent.agentName}
-										</OptionForSelect>
-									))}
-								</>
-							</Select>
-						) : null}
+						{isNationalDeliveryAbTest && isHomeDelivery && (
+							<DeliveryAgentsSelect
+								deliveryAgentsResponse={props.deliveryAgentsResponse}
+								setDeliveryAgent={props.setDeliveryAgent}
+							/>
+						)}
 						{isHomeDelivery ? (
 							<TextArea
 								error={deliveryInstructionsError?.message}
