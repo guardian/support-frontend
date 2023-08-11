@@ -23,7 +23,7 @@ function analyticsInitialisation(
 	acquisitionData: ReferrerAcquisitionData,
 ): void {
 	setReferrerDataInLocalStorage(acquisitionData);
-	void googleTagManager.init(participations);
+	void googleTagManager.init();
 	ophan.init();
 	initQuantumMetric(participations);
 	trackAbTests(participations);

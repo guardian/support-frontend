@@ -48,6 +48,7 @@ import {
 } from 'helpers/subscriptionsForms/formValidation';
 import type { AnyCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
+import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagManager';
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
@@ -202,7 +203,6 @@ function onPaymentAuthorised(
 	const productType = getSubscriptionType(state);
 	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { csrf } = state.page.checkoutForm;
-	const { abParticipations } = state.common;
 	const addresses = getAddresses(state);
 	const pricingCountry =
 		addresses.deliveryAddress?.country ?? addresses.billingAddress.country;
@@ -228,7 +228,9 @@ function onPaymentAuthorised(
 			} else {
 				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
-			// Notify Quantum Metric of successfull subscription conversion
+			// track conversion with GTM
+			successfulSubscriptionConversion();
+			// track conversion with QM
 			sendEventSubscriptionCheckoutConversion(
 				productType,
 				!!orderIsAGift,
@@ -241,12 +243,9 @@ function onPaymentAuthorised(
 	};
 
 	dispatch(setFormSubmitted(true));
-	void postRegularPaymentRequest(
-		routes.subscriptionCreate,
-		data,
-		abParticipations,
-		csrf,
-	).then(handleSubscribeResult);
+	void postRegularPaymentRequest(routes.subscriptionCreate, data, csrf).then(
+		handleSubscribeResult,
+	);
 }
 
 function checkStripeUserType(

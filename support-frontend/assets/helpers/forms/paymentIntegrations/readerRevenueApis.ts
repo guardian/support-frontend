@@ -1,6 +1,5 @@
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { PaymentIntentResult } from '@stripe/stripe-js';
-import type { Participations } from 'helpers/abTests/abtest';
 import {
 	fetchJson,
 	getRequestOptions,
@@ -37,9 +36,7 @@ import type {
 	OphanIds,
 	ReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-import trackConversion from 'helpers/tracking/conversions';
 import type { Option } from 'helpers/types/option';
-import { routes } from 'helpers/urls/routes';
 import type { Title } from 'helpers/user/details';
 import { logException } from 'helpers/utilities/logger';
 
@@ -326,14 +323,12 @@ function regularPaymentFieldsFromAuthorisation(
  * - otherwise, we bubble up a success value
  */
 function checkRegularStatus(
-	participations: Participations,
 	csrf: CsrfState,
 ): (statusResponse: StatusResponse) => Promise<PaymentResult> {
 	const handleCompletion = (json: StatusResponse) => {
 		switch (json.status) {
 			case 'success':
 			case 'pending':
-				trackConversion(participations, routes.recurringContribPending);
 				return PaymentSuccess;
 
 			default: {
@@ -390,7 +385,6 @@ function checkRegularStatus(
 function postRegularPaymentRequest(
 	uri: string,
 	data: RegularPaymentRequest,
-	participations: Participations,
 	csrf: CsrfState,
 ): Promise<PaymentResult> {
 	return logPromise(
@@ -415,7 +409,7 @@ function postRegularPaymentRequest(
 				});
 			}
 
-			return response.json().then(checkRegularStatus(participations, csrf));
+			return response.json().then(checkRegularStatus(csrf));
 		})
 		.catch(() => {
 			logException(`Error while trying to interact with ${uri}`);

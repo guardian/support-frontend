@@ -78,7 +78,27 @@ export const tests: Tests = {
 		referrerControlled: true,
 		seed: 2,
 	},
-	nationalDelivery: {
+	twoStepCheckout: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		isActive: false,
+		referrerControlled: false,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		seed: 3,
+	},
+  nationalDelivery: {
 		variants: [
 			{
 				id: 'control',

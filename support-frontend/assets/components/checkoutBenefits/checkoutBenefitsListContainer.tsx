@@ -2,6 +2,7 @@ import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
+import { shouldHideBenefitsList } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
@@ -41,7 +42,9 @@ export function CheckoutBenefitsListContainer({
 	const dispatch = useContributionsDispatch();
 
 	const contributionType = useContributionsSelector(getContributionType);
-	if (isOneOff(contributionType)) {
+	const benefitsListIsHidden = useContributionsSelector(shouldHideBenefitsList);
+
+	if (benefitsListIsHidden || isOneOff(contributionType)) {
 		return null;
 	}
 
@@ -97,6 +100,5 @@ export function CheckoutBenefitsListContainer({
 			selectedAmount,
 		),
 		handleButtonClick,
-		countryGroupId,
 	});
 }

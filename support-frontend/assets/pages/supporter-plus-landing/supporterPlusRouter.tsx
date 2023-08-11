@@ -13,6 +13,8 @@ import { renderPage } from 'helpers/rendering/render';
 import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
+import { SupporterPlusInitialLandingPage } from './twoStepTest/firstStepLanding';
+import { SupporterPlusCheckout } from './twoStepTest/secondStepCheckout';
 
 if (!isDetailsSupported) {
 	polyfillDetails();
@@ -33,6 +35,12 @@ const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
 );
 
+const {
+	common: { abParticipations },
+} = store.getState();
+
+const isInTwoStepTest = abParticipations.twoStepCheckout === 'variant';
+
 // ----- Render ----- //
 
 const router = () => {
@@ -40,26 +48,49 @@ const router = () => {
 		<SupporterPlusLandingPage thankYouRoute={thankYouRoute} />
 	);
 
+	const firstStepLandingPage = (
+		<SupporterPlusInitialLandingPage thankYouRoute={thankYouRoute} />
+	);
+
+	const oneStepRoutes = countryIds.map((countryId) => (
+		<>
+			<Route path={`/${countryId}/contribute/`} element={landingPage} />
+			<Route
+				path={`/${countryId}/contribute/:campaignCode`}
+				element={landingPage}
+			/>
+			<Route
+				path={`/${countryId}/thankyou`}
+				element={<SupporterPlusThankYou />}
+			/>
+		</>
+	));
+
+	const twoStepRoutes = countryIds.map((countryId) => (
+		<>
+			<Route
+				path={`/${countryId}/contribute/`}
+				element={firstStepLandingPage}
+			/>
+			<Route
+				path={`/${countryId}/contribute/:campaignCode`}
+				element={firstStepLandingPage}
+			/>
+			<Route
+				path={`/${countryId}/contribute/checkout`}
+				element={<SupporterPlusCheckout thankYouRoute={thankYouRoute} />}
+			/>
+			<Route
+				path={`/${countryId}/thankyou`}
+				element={<SupporterPlusThankYou />}
+			/>
+		</>
+	));
+
 	return (
 		<BrowserRouter>
 			<Provider store={store}>
-				<Routes>
-					{countryIds.map((countryId) => (
-						<Route path={`/${countryId}/contribute/`} element={landingPage} />
-					))}
-					{countryIds.map((countryId) => (
-						<Route
-							path={`/${countryId}/contribute/:campaignCode`}
-							element={landingPage}
-						/>
-					))}
-					{countryIds.map((countryId) => (
-						<Route
-							path={`/${countryId}/thankyou`}
-							element={<SupporterPlusThankYou />}
-						/>
-					))}
-				</Routes>
+				<Routes>{isInTwoStepTest ? twoStepRoutes : oneStepRoutes}</Routes>
 			</Provider>
 		</BrowserRouter>
 	);

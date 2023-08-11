@@ -25,3 +25,35 @@ export function isSupporterPlusPurchase(state: ContributionsState): boolean {
 
 	return amountIsHighEnough;
 }
+
+export function shouldHideBenefitsList(state: ContributionsState): boolean {
+	const contributionType = getContributionType(state);
+
+	if (isOneOff(contributionType)) {
+		return true;
+	}
+
+	/**
+	 * Hide benefits if participating in RRCP
+	 * configured amounts test 2023-08-08_BENEFITS_GONE
+	 */
+	const { abParticipations } = state.common;
+	if (
+		abParticipations['2023-08-08_BENEFITS_GONE'] === 'V1' ||
+		abParticipations['2023-08-08_BENEFITS_GONE'] === 'V3'
+	) {
+		return true;
+	}
+
+	const thresholdPrice = getThresholdPrice(
+		state.common.internationalisation.countryGroupId,
+		contributionType,
+	);
+	const displayedAmounts = state.common.amounts[contributionType];
+	const customAmountIsHidden = displayedAmounts.hideChooseYourAmount ?? false;
+
+	const thresholdPriceIsNotOffered =
+		Math.max(...displayedAmounts.amounts) < thresholdPrice;
+
+	return thresholdPriceIsNotOffered && customAmountIsHidden;
+}

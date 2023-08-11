@@ -8,8 +8,6 @@ import {
 } from '@guardian/source-foundations';
 import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
 import type { CheckListData } from 'components/checkmarkList/checkmarkList';
-import Tooltip from 'components/tooltip/Tooltip';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 const containerCss = css`
 	${textSans.medium({ lineHeight: 'tight' })};
@@ -42,13 +40,11 @@ export type CheckoutBenefitsListProps = {
 	checkListData: CheckListData[];
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
-	countryGroupId: CountryGroupId;
 };
 
 export function CheckoutBenefitsList({
 	title,
 	checkListData,
-	countryGroupId,
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
 		<div css={containerCss}>
@@ -56,14 +52,6 @@ export function CheckoutBenefitsList({
 			<hr css={hrCss(`${space[4]}px 0`)} />
 			<CheckmarkList checkListData={checkListData} />
 			<hr css={hrCss(`${space[5]}px 0 ${space[4]}px`)} />
-			<Tooltip promptText="Cancel anytime">
-				<p>
-					You can cancel
-					{countryGroupId === 'GBPCountries' ? '' : ' online'} anytime before
-					your next payment date. If you cancel in the first 14 days, you will
-					receive a full refund.
-				</p>
-			</Tooltip>
 		</div>
 	);
 }
