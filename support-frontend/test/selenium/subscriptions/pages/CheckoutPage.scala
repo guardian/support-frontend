@@ -38,6 +38,7 @@ trait CheckoutPage extends Page with Browser {
   }
 
   def stripeFormHasLoaded: Boolean = {
+    Thread.sleep(100)
     switchToFrame(0)
     pageHasElement(cardNumber)
   }

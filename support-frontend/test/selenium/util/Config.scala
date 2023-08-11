@@ -9,13 +9,17 @@ object Config {
 
   private def logger = LoggerFactory.getLogger(this.getClass)
 
-  private val conf = ConfigFactory.load()
+  private val conf = ConfigFactory.load("selenium-test")
 
   val supportFrontendUrl = conf.getString("support.url")
 
   val waitTimeout = 45
 
+  val identityGatewayUrl = conf.getString("identity.webapp.url")
+
   val testUsersSecret = conf.getString("identity.test.users.secret")
+  val testUserEmailAddress = conf.getString("identity.test.user.email")
+  val testUserPassword = conf.getString("identity.test.user.password")
 
   val idapiNewTestUserUrl = conf.getString("idapi.newTestUser.url")
 

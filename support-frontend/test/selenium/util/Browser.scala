@@ -19,6 +19,9 @@ trait Browser extends WebBrowser with LazyLogging {
   def elementHasText(q: Query, text: String): Boolean =
     waitUntil(ExpectedConditions.textToBePresentInElementLocated(q.by, text))
 
+  def elementHasTextImmediately(q: Query, text: String): Boolean =
+    Try(webDriver.findElement(q.by)).toOption.exists(_.getText.contains(text))
+
   def pageHasElement(q: Query): Boolean =
     waitUntil(ExpectedConditions.visibilityOfElementLocated(q.by))
 
