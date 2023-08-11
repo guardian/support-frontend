@@ -1,3 +1,4 @@
+import type { Participations } from 'helpers/abTests/abtest';
 import { getAmount } from 'helpers/contributions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
@@ -26,6 +27,31 @@ export function isSupporterPlusPurchase(state: ContributionsState): boolean {
 	return amountIsHighEnough;
 }
 
+function isInHideBenefitsTest(abParticipations: Participations): boolean {
+	const regionalSuffixList: string[] = [
+		'UK',
+		'US',
+		'CA',
+		'EU',
+		'AU',
+		'NZ',
+		'ROW',
+	];
+
+	return regionalSuffixList.reduce((hideBenefits, suffix): boolean => {
+		const testName = `2023-08-08_BENEFITS_GONE__${suffix}`;
+
+		if (
+			abParticipations[testName] === 'V1' ||
+			abParticipations[testName] === 'V3'
+		) {
+			return true;
+		}
+
+		return hideBenefits;
+	}, false);
+}
+
 export function shouldHideBenefitsList(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
 
@@ -38,10 +64,8 @@ export function shouldHideBenefitsList(state: ContributionsState): boolean {
 	 * configured amounts test 2023-08-08_BENEFITS_GONE
 	 */
 	const { abParticipations } = state.common;
-	if (
-		abParticipations['2023-08-08_BENEFITS_GONE'] === 'V1' ||
-		abParticipations['2023-08-08_BENEFITS_GONE'] === 'V3'
-	) {
+
+	if (isInHideBenefitsTest(abParticipations)) {
 		return true;
 	}
 
