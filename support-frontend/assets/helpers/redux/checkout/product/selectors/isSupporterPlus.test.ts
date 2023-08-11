@@ -30,4 +30,10 @@ describe('isInHideBenefitsTest', () => {
 
 		expect(isInHideBenefitsTest(abParticipations)).toBeFalsy();
 	});
+
+	it('returns false if users is not in any ab test', () => {
+		const abParticipations = {};
+
+		expect(isInHideBenefitsTest(abParticipations)).toBeFalsy();
+	});
 });
