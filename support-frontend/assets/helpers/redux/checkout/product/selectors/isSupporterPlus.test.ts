@@ -2,7 +2,7 @@ import { _ } from './isSupporterPlus';
 
 describe('isInHideBenefitsTest', () => {
 	const { isInHideBenefitsTest } = _;
-	it('returns true if user in hide benefirts test and in V1 variant', () => {
+	it('returns true if user in hide benefits test and in V1 variant', () => {
 		const abParticipations = {
 			FOO: 'BAR',
 			'2023-08-08_BENEFITS_GONE__UK': 'V1',
