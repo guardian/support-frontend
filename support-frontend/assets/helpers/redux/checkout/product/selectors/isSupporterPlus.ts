@@ -33,6 +33,18 @@ export function shouldHideBenefitsList(state: ContributionsState): boolean {
 		return true;
 	}
 
+	/**
+	 * Hide benefits if participating in RRCP
+	 * configured amounts test 2023-08-08_BENEFITS_GONE
+	 */
+	const { abParticipations } = state.common;
+	if (
+		abParticipations['2023-08-08_BENEFITS_GONE'] === 'V1' ||
+		abParticipations['2023-08-08_BENEFITS_GONE'] === 'V3'
+	) {
+		return true;
+	}
+
 	const thresholdPrice = getThresholdPrice(
 		state.common.internationalisation.countryGroupId,
 		contributionType,
