@@ -1,5 +1,4 @@
 import { List } from 'components/list/list';
-import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';
@@ -16,19 +15,7 @@ const coreBenefits = [
 	},
 ];
 
-function getBenefits(countryId: IsoCountry, countryGroupId: CountryGroupId) {
-	if (countryId === 'AU') {
-		return [
-			{
-				content: 'Every issue delivered with up to 35% off the cover price',
-			},
-			...coreBenefits,
-			{
-				content:
-					'A free Guardian Weekly tote bag with every 12 for 12 subscription',
-			},
-		];
-	}
+function getBenefits(countryGroupId: CountryGroupId) {
 	const discount = countryGroupId === 'EURCountries' ? '87' : '35';
 	return [
 		{
@@ -39,10 +26,8 @@ function getBenefits(countryId: IsoCountry, countryGroupId: CountryGroupId) {
 }
 
 function Benefits({
-	countryId,
 	countryGroupId,
 }: {
-	countryId: IsoCountry;
 	countryGroupId: CountryGroupId;
 }): JSX.Element {
 	return (
@@ -53,7 +38,7 @@ function Benefits({
 					content: (
 						<>
 							<BenefitsHeading text="As a subscriber you’ll enjoy" />
-							<List items={getBenefits(countryId, countryGroupId)} />
+							<List items={getBenefits(countryGroupId)} />
 						</>
 					),
 				},
