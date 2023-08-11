@@ -98,7 +98,7 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 3,
 	},
-  nationalDelivery: {
+	nationalDelivery: {
 		variants: [
 			{
 				id: 'control',
