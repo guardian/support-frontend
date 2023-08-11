@@ -110,5 +110,5 @@ const mapPaperDeliveryAddressDispatchToProps = () => {
 
 export const PaperAddress = connect(
 	mapDeliveryAddressStateToProps,
-	mapPaperDeliveryAddressDispatchToProps,
+	mapPaperDeliveryAddressDispatchToProps(),
 )(AddressFields);
