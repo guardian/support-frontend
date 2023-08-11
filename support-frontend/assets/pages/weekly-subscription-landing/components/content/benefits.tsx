@@ -1,9 +1,11 @@
 import { List } from 'components/list/list';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import BenefitsContainer from './benefitsContainer';
 import BenefitsHeading from './benefitsHeading';
 
 const coreBenefits = [
+	{
+		content: `Every issue delivered with up to 35% off the cover price`,
+	},
 	{
 		content: "Access to the magazine's digital archive",
 	},
@@ -15,31 +17,11 @@ const coreBenefits = [
 	},
 ];
 
-function getBenefits(countryGroupId: CountryGroupId) {
-	const discount = getDiscountGW(countryGroupId);
-	return [
-		{
-			content: `Every issue delivered with up to ${discount}% off the cover price`,
-		},
-		...coreBenefits,
-	];
+function getBenefits() {
+	return coreBenefits;
 }
 
-function getDiscountGW(countryGroupId: CountryGroupId): number {
-	switch (countryGroupId) {
-		case 'Canada':
-		case 'UnitedStates':
-			return 50;
-		default:
-			return 20;
-	}
-}
-
-function Benefits({
-	countryGroupId,
-}: {
-	countryGroupId: CountryGroupId;
-}): JSX.Element {
+function Benefits(): JSX.Element {
 	return (
 		<BenefitsContainer
 			sections={[
@@ -48,7 +30,7 @@ function Benefits({
 					content: (
 						<>
 							<BenefitsHeading text="As a subscriber you’ll enjoy" />
-							<List items={getBenefits(countryGroupId)} />
+							<List items={getBenefits()} />
 						</>
 					),
 				},
