@@ -315,9 +315,12 @@ export function getAmounts(
 
 		For region-level tests, the isLive boolean tells us whether there is an AB test running (true: select a test variant from all avaliable) or not (false: select the control variant)
 	*/
-	const targetTestArray = amounts.filter(
-		(t) => t.isLive && t.country.includes(countryCode),
-	);
+	let targetTestArray: AmountsTest[] = [];
+	if (countryCode) {
+		targetTestArray = amounts.filter(
+			(t) => t.isLive && t.country.includes(countryCode),
+		);
+	}
 	let targetTest;
 	if (targetTestArray.length) {
 		targetTestArray.sort((a, b) => a.order - b.order);
