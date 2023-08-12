@@ -27,6 +27,7 @@ case class AmountsVariant(
 case class AmountsTest(
     testName: String,
     liveTestName: Option[String],
+    testLabel: Option[String],
     isLive: Boolean,
     region: String,
     country: List[String],
