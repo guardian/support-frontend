@@ -56,6 +56,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
     val amountsTest = AmountsTest(
       testName = "subscriptions-default-test",
       liveTestName = Option("subscriptions-AB-test"),
+      testLabel = Option("Subscription AB Test"),
       isLive = false,
       region = "GBPCountries",
       country = List(),
