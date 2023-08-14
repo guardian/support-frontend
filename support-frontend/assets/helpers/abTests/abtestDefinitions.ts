@@ -98,4 +98,18 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 3,
 	},
+	nationalDelivery: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		isActive: false,
+		audiences: {},
+		referrerControlled: false,
+		seed: 0,
+	},
 };

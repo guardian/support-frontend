@@ -1,3 +1,4 @@
+import type { Participations } from 'helpers/abTests/abtest';
 import {
 	M25_POSTCODE_PREFIXES,
 	postcodeIsWithinDeliveryArea,
@@ -15,6 +16,10 @@ import {
 	zuoraCompatibleString,
 } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
+import type {
+	DeliveryAgentsResponse,
+	DeliveryAgentState,
+} from '../addressMeta/state';
 import type { AddressFields, AddressFormFieldError } from './state';
 
 // ---- Validators ---- //
@@ -28,10 +33,17 @@ export function applyBillingAddressRules(
 export function applyDeliveryAddressRules(
 	fulfilmentOption: Option<FulfilmentOptions>,
 	fields: AddressFields,
+	deliveryAgent: DeliveryAgentState,
+	abParticipations: Participations,
 ): AddressFormFieldError[] {
 	return validate([
 		...getGenericRules(fields, 'delivery'),
-		...getDeliveryOnlyRules(fulfilmentOption, fields),
+		...getDeliveryOnlyRules(
+			fulfilmentOption,
+			fields,
+			deliveryAgent,
+			abParticipations,
+		),
 	]);
 }
 
@@ -137,10 +149,25 @@ function getGenericRules(
 function getDeliveryOnlyRules(
 	fulfilmentOption: Option<FulfilmentOptions>,
 	fields: AddressFields,
+	deliveryAgent: DeliveryAgentState,
+	abParticipations: Participations,
 ): Array<Rule<AddressFormFieldError>> {
 	return [
 		{
-			rule: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
+			rule:
+				abParticipations.nationalDelivery === 'variant' ||
+				deliveryAgentChosen(fulfilmentOption, fields.postCode, deliveryAgent),
+			error: formError('postCode', 'Please select a delivery provider'),
+		},
+		{
+			rule:
+				abParticipations.nationalDelivery === 'variant'
+					? isHomeDeliveryAvailable(
+							fulfilmentOption,
+							fields.postCode,
+							deliveryAgent,
+					  )
+					: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
 			error: formError(
 				'postCode',
 				'The address and postcode you entered is outside of our delivery area. Please go back to purchase a voucher subscription instead.',
@@ -162,6 +189,47 @@ export const isHomeDeliveryInM25 = (
 
 	return true;
 };
+
+export const deliveryAgentChosen = (
+	fulfilmentOption: FulfilmentOptions | null,
+	postcode: string | null,
+	deliveryAgent: DeliveryAgentState,
+	allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
+): boolean => {
+	if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
+		if (
+			!postcodeIsWithinDeliveryArea(postcode, allowedPrefixes) &&
+			deliveryAgentsAreAvailable(deliveryAgent.response)
+		) {
+			return deliveryAgentHasBeenChosen(deliveryAgent);
+		}
+	}
+
+	return true;
+};
+
+export const isHomeDeliveryAvailable = (
+	fulfilmentOption: FulfilmentOptions | null,
+	postcode: string | null,
+	deliveryAgent: DeliveryAgentState,
+	allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
+): boolean => {
+	if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
+		if (!postcodeIsWithinDeliveryArea(postcode, allowedPrefixes)) {
+			return deliveryAgentHasBeenChosen(deliveryAgent);
+		}
+	}
+
+	return true;
+};
+
+const deliveryAgentHasBeenChosen = (
+	deliveryAgent: DeliveryAgentState,
+): boolean => (deliveryAgent.chosenAgent ? true : false);
+
+const deliveryAgentsAreAvailable = (
+	deliveryAgentResponse?: DeliveryAgentsResponse,
+): boolean => (deliveryAgentResponse?.agents.length ?? 0) > 0;
 
 export const isPostcodeOptional = (country: IsoCountry | null): boolean =>
 	country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
