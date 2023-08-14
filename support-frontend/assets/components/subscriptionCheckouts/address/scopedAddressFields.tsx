@@ -23,7 +23,7 @@ import {
 } from 'helpers/redux/checkout/address/reducer';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
-import { setPostcode } from 'helpers/subscriptionsForms/formActions';
+import { setPaperDeliveryPostcode } from 'helpers/subscriptionsForms/formActions';
 import { AddressFields } from './addressFields';
 
 // ---- Billing address ---- //
@@ -96,7 +96,7 @@ export const DeliveryAddress = connect(
 
 const mapPaperDeliveryAddressDispatchToProps = () => {
 	return {
-		setPostcode: (postcode: string) => setPostcode(postcode),
+		setPostcode: (postcode: string) => setPaperDeliveryPostcode(postcode),
 		setLineOne: setDeliveryAddressLineOne,
 		setLineTwo: setDeliveryAddressLineTwo,
 		setTownCity: setDeliveryTownCity,

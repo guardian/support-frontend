@@ -27,7 +27,7 @@ import {
 	setDeliveryAgentResponse,
 	setDeliveryInstructions,
 } from 'helpers/redux/checkout/addressMeta/actions';
-import { getDeliveryAgentsThunk } from 'helpers/redux/checkout/addressMeta/reducer';
+import { getDeliveryAgentsThunk } from 'helpers/redux/checkout/addressMeta/thunks';
 import {
 	setEmail as setEmailGift,
 	setFirstName as setFirstNameGift,
@@ -217,7 +217,7 @@ function addressActionCreatorsFor(addressType: AddressType) {
 		  };
 }
 
-export function setPostcode(postcode: string) {
+export function setPaperDeliveryPostcode(postcode: string) {
 	return (dispatch: SubscriptionsDispatch): void => {
 		if (
 			isValidPostcode(postcode) &&

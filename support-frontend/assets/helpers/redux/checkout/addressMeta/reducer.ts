@@ -1,7 +1,8 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import type { DeliveryAgentsResponse } from './state';
 import { initialState } from './state';
+import { getDeliveryAgentsThunk } from './thunks';
 
 export const addressMetaSlice = createSlice({
 	name: 'addressMeta',
@@ -41,15 +42,5 @@ export const addressMetaSlice = createSlice({
 		});
 	},
 });
-
-export const getDeliveryAgentsThunk = createAsyncThunk<
-	DeliveryAgentsResponse,
-	string
->(`addressMeta/getDeliveryAgents`, getDeliveryAgents);
-
-async function getDeliveryAgents(postcode: string) {
-	const agentsResponse = await fetch(`/delivery-agents/${postcode}`);
-	return agentsResponse.json();
-}
 
 export const addressMetaReducer = addressMetaSlice.reducer;

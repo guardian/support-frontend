@@ -191,8 +191,8 @@ export const isHomeDeliveryInM25 = (
 };
 
 export const deliveryAgentChosen = (
-	fulfilmentOption: Option<FulfilmentOptions>,
-	postcode: Option<string>,
+	fulfilmentOption: FulfilmentOptions | null,
+	postcode: string | null,
 	deliveryAgent: DeliveryAgentState,
 	allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
 ): boolean => {
@@ -209,8 +209,8 @@ export const deliveryAgentChosen = (
 };
 
 export const isHomeDeliveryAvailable = (
-	fulfilmentOption: Option<FulfilmentOptions>,
-	postcode: Option<string>,
+	fulfilmentOption: FulfilmentOptions | null,
+	postcode: string | null,
 	deliveryAgent: DeliveryAgentState,
 	allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
 ): boolean => {
