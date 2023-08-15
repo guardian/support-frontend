@@ -27,7 +27,8 @@
     "build-storybook": "storybook build -o storybook-static",
     "cache-ssr": "node scripts/ssrScript.js",
     "orphans": "echo 'Checking for orphan modules' && node scripts/orphans.js",
-    "check-images": "echo 'Purging unused images' && node scripts/gridImages.js"
+    "check-images": "echo 'Purging unused images' && node scripts/gridImages.js",
+    "wdio": "wdio run ./wdio.conf.js"
   },
   "browserslist": [
     "extends @guardian/browserslist-config"
@@ -156,6 +157,10 @@
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
+    "@wdio/cli": "^8.14.4",
+    "@wdio/local-runner": "^8.14.3",
+    "@wdio/mocha-framework": "^8.14.0",
+    "@wdio/spec-reporter": "^8.14.0",
     "autoprefixer": "^10.4.14",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^24.9.0",
