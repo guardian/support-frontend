@@ -110,6 +110,9 @@ export function ContributionsOrderSummary({
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showDetails, setShowDetails] = useState(false);
 
+	const showAccordion =
+		contributionType !== 'ONE_OFF' && checkListData.length > 0;
+
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing]}>
@@ -120,18 +123,20 @@ export function ContributionsOrderSummary({
 			<div css={[detailsSection, rowSpacing]}>
 				<div css={summaryRow}>
 					<p>{supportTypes[contributionType]} support</p>
-					<Button
-						priority="subdued"
-						aria-expanded={showDetails ? 'true' : 'false'}
-						onClick={() => setShowDetails(!showDetails)}
-						icon={<SvgChevronDownSingle />}
-						iconSide="right"
-						cssOverrides={[buttonOverrides, iconCss(showDetails)]}
-					>
-						{showDetails ? 'Hide details' : 'View details'}
-					</Button>
+					{showAccordion && (
+						<Button
+							priority="subdued"
+							aria-expanded={showDetails ? 'true' : 'false'}
+							onClick={() => setShowDetails(!showDetails)}
+							icon={<SvgChevronDownSingle />}
+							iconSide="right"
+							cssOverrides={[buttonOverrides, iconCss(showDetails)]}
+						>
+							{showDetails ? 'Hide details' : 'View details'}
+						</Button>
+					)}
 				</div>
-				{showDetails && (
+				{showAccordion && showDetails && (
 					<div css={checklistContainer}>
 						<CheckmarkList checkListData={checkListData} style="compact" />
 					</div>

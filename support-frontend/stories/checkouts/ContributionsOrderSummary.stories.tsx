@@ -52,7 +52,42 @@ Default.args = {
 	tsAndCs: (
 		<>
 			<p>Auto renews every month until you cancel.</p>
+			<p>
+				Cancel or change your support anytime. If you cancel within the first 14
+				days, you will receive a full refund.
+			</p>
+		</>
+	),
+};
+
+export const BelowThreshold = Template.bind({});
+
+BelowThreshold.args = {
+	contributionType: 'ANNUAL',
+	total: '$25',
+	checkListData: checkListData({ higherTier: false }),
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
+	),
+	tsAndCs: (
+		<>
+			<p>Auto renews every month until you cancel.</p>
 			<p>Cancel or change your support anytime.</p>
 		</>
+	),
+};
+
+export const SingleContribution = Template.bind({});
+
+SingleContribution.args = {
+	contributionType: 'ONE_OFF',
+	total: '$25',
+	checkListData: [],
+	headerButton: (
+		<Button priority="tertiary" size="xsmall">
+			Change
+		</Button>
 	),
 };
