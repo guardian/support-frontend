@@ -10,6 +10,9 @@ import {
 	SvgChevronDownSingle,
 } from '@guardian/source-react-components';
 import { useState } from 'react';
+import type { CheckListData } from 'components/checkmarkList/checkmarkList';
+import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
+import type { ContributionType } from 'helpers/contributions';
 
 const componentStyles = css`
 	${textSans.medium()}
@@ -58,18 +61,52 @@ const iconCss = (flip: boolean) => css`
 	}
 `;
 
+const checklistContainer = css`
+	margin-top: ${space[5]}px;
+`;
+
 const detailsSection = css`
 	display: flex;
 	flex-direction: column;
 `;
 
+const termsAndConditions = css`
+	${textSans.xxsmall()}
+	color: #606060;
+`;
+
 export type ContributionsOrderSummaryProps = {
+	contributionType: ContributionType;
+	total: string;
+	checkListData: CheckListData[];
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 };
 
+const supportTypes = {
+	ONE_OFF: 'Single',
+	MONTHLY: 'Monthly',
+	ANNUAL: 'Annual',
+};
+
+const timePeriods = {
+	MONTHLY: 'month',
+	ANNUAL: 'year',
+};
+
+function totalWithFrequency(total: string, contributionType: ContributionType) {
+	if (contributionType === 'ONE_OFF') {
+		return total;
+	}
+	return `${total}/${timePeriods[contributionType]}`;
+}
+
 export function ContributionsOrderSummary({
+	contributionType,
+	total,
+	checkListData,
 	headerButton,
+	tsAndCs,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showDetails, setShowDetails] = useState(false);
 
@@ -82,7 +119,7 @@ export function ContributionsOrderSummary({
 			<hr css={hrCss} />
 			<div css={[detailsSection, rowSpacing]}>
 				<div css={summaryRow}>
-					<p>Monthly support</p>
+					<p>{supportTypes[contributionType]} support</p>
 					<Button
 						priority="subdued"
 						aria-expanded={showDetails ? 'true' : 'false'}
@@ -94,13 +131,25 @@ export function ContributionsOrderSummary({
 						{showDetails ? 'Hide details' : 'View details'}
 					</Button>
 				</div>
-				{showDetails && <div>hello</div>}
+				{showDetails && (
+					<div css={checklistContainer}>
+						<CheckmarkList checkListData={checkListData} style="compact" />
+					</div>
+				)}
 			</div>
 			<hr css={hrCss} />
 			<div css={[summaryRow, rowSpacing, boldText]}>
 				<p>Total</p>
-				<p>£10/month</p>
+				<p>{totalWithFrequency(total, contributionType)}</p>
 			</div>
+			{tsAndCs ? (
+				<div css={termsAndConditions}>
+					<hr css={hrCss} />
+					{tsAndCs}
+				</div>
+			) : (
+				<></>
+			)}
 		</div>
 	);
 }
