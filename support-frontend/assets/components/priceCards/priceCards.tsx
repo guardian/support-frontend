@@ -77,14 +77,16 @@ export function PriceCards({
 	onAmountChange,
 	paymentInterval,
 	otherAmountField,
-	hideChooseYourAmount,
-}: PriceCardsProps): JSX.Element {
-	console.log('*** PriceCards hideChooseYourAmount ***', hideChooseYourAmount);
+}: // hideChooseYourAmount,
+PriceCardsProps): JSX.Element {
+	// console.log('*** PriceCards hideChooseYourAmount ***', hideChooseYourAmount);
 	// Override hideChooseYourAmount if no amounts supplied
-	const enableChooseYourAmountButton = !hideChooseYourAmount || !amounts.length;
-	const buttonCount = enableChooseYourAmountButton
-		? amounts.length + 1
-		: amounts.length;
+	// const enableChooseYourAmountButton = !hideChooseYourAmount || !amounts.length;
+	// const enableChooseYourAmountButton = false;
+	// const buttonCount = enableChooseYourAmountButton
+	// 	? amounts.length + 1
+	// 	: amounts.length;
+	const buttonCount = amounts.length;
 	const lastButtonFullWidth = buttonCount % 2 !== 0;
 
 	return (
@@ -107,7 +109,16 @@ export function PriceCards({
 							paymentInterval={paymentInterval}
 						/>
 					))}
-					{enableChooseYourAmountButton && (
+					<PriceCard
+						amount="other"
+						amountWithCurrency="other"
+						isSelected={selectedAmount === 'other'}
+						onClick={onAmountChange}
+						alternateLabel={
+							!lastButtonFullWidth ? 'Other' : 'Choose your amount'
+						}
+					/>
+					{/* {enableChooseYourAmountButton && (
 						<PriceCard
 							amount="other"
 							amountWithCurrency="other"
@@ -117,7 +128,7 @@ export function PriceCards({
 								!lastButtonFullWidth ? 'Other' : 'Choose your amount'
 							}
 						/>
-					)}
+					)} */}
 				</>
 			</ChoiceCardGroup>
 			{otherAmountField}

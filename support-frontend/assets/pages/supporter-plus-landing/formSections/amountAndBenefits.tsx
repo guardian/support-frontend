@@ -35,7 +35,7 @@ export function AmountAndBenefits(): JSX.Element {
 									onAmountChange,
 									minAmount,
 									onOtherAmountChange,
-									hideChooseYourAmount,
+									// hideChooseYourAmount,
 									errors,
 								}) => (
 									<>
@@ -45,7 +45,7 @@ export function AmountAndBenefits(): JSX.Element {
 											currency={currency}
 											paymentInterval={paymentInterval}
 											onAmountChange={onAmountChange}
-											hideChooseYourAmount={hideChooseYourAmount}
+											// hideChooseYourAmount={hideChooseYourAmount}
 											otherAmountField={
 												<OtherAmount
 													currency={currency}
