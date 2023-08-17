@@ -93,6 +93,8 @@ const subHeading = css`
 	padding-right: ${space[2]}px;
 `;
 
+console.log('*** SupporterPlusLandingPage ***');
+
 export function SupporterPlusLandingPage({
 	thankYouRoute,
 }: {
