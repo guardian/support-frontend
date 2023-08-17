@@ -54,17 +54,17 @@ export function PriceCardsContainer({
 
 	console.log('*** amounts ***', amounts);
 	console.log('*** amountsCardData ***', amountsCardData);
-	// console.log('*** frequency ***', frequency, amountsCardData[frequency]);
+	console.log('*** frequency ***', frequency);
 
 	const {
 		amounts: frequencyAmounts,
 		defaultAmount,
-		// hideChooseYourAmount,
+		hideChooseYourAmount,
 	} = amountsCardData[frequency];
 
 	console.log('*** frequencyAmounts ***', frequencyAmounts);
 	console.log('*** defaultAmount ***', defaultAmount);
-	// console.log('*** hideChooseYourAmount ***', hideChooseYourAmount);
+	console.log('*** hideChooseYourAmount ***', hideChooseYourAmount);
 
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
@@ -102,7 +102,7 @@ export function PriceCardsContainer({
 		minAmount,
 		onAmountChange,
 		onOtherAmountChange,
-		// hideChooseYourAmount,
+		hideChooseYourAmount,
 		errors: otherAmountErrors,
 	});
 }
