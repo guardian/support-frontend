@@ -143,7 +143,11 @@ export function ContributionsOrderSummary({
 				</div>
 				{showAccordion && showDetails && (
 					<div css={checklistContainer}>
-						<CheckmarkList checkListData={checkListData} style="compact" />
+						<CheckmarkList
+							checkListData={checkListData}
+							style="compact"
+							iconColor={palette.brand[500]}
+						/>
 					</div>
 				)}
 			</div>
