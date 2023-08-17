@@ -150,6 +150,8 @@ export function SupporterPlusLandingPage({
 		}
 	}, [paymentComplete]);
 
+	console.log('*** gh-two-tier-amounts-tests ***');
+
 	return (
 		<PageScaffold
 			id="supporter-plus-landing"
