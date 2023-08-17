@@ -1,16 +1,23 @@
-import { css } from '@emotion/react';
-import { space, until } from '@guardian/source-foundations';
-import { Link } from 'react-router-dom';
-import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
-import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
-import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
-import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
-import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import { css, ThemeProvider } from '@emotion/react';
+import {
+	from,
+	neutral,
+	space,
+	textSans,
+	until,
+} from '@guardian/source-foundations';
+import {
+	Button,
+	buttonThemeReaderRevenueBrand,
+} from '@guardian/source-react-components';
+import { useNavigate } from 'react-router';
+import { Box } from 'components/checkoutBox/checkoutBox';
+import { BrandedIcons } from 'components/paymentMethodSelector/creditDebitIcons';
+import { PaypalIcon } from 'components/paymentMethodSelector/paypalIcon';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
-import { PaymentTsAndCs } from '../components/paymentTsAndCs';
+import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { LimitedPriceCards } from '../formSections/limitedPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
@@ -23,32 +30,82 @@ const shorterBoxMargin = css`
 	}
 `;
 
+const checkoutBtnAndPaymentIconsHolder = css`
+	padding: 0 ${space[5]}px;
+	${until.tablet} {
+		margin-top: ${space[2]}px;
+	}
+	${from.tablet} {
+		padding: 0 ${space[6]}px;
+	}
+`;
+
+const checkoutBtnStyleOverrides = css`
+	width: 100%;
+	justify-content: center;
+`;
+
+const cancelAnytime = css`
+	${textSans.xsmall()};
+	text-align: center;
+	color: ${neutral[20]};
+	margin: ${space[3]}px 0;
+	${from.tablet} {
+		margin: ${space[4]}px 0 ${space[3]}px;
+	}
+`;
+
+const cancelAnytimeDescription = css`
+	${textSans.xxsmall()};
+	color: ${neutral[20]};
+	margin: ${space[4]}px 0 ${space[3]}px;
+	${from.tablet} {
+		margin: ${space[5]}px 0 ${space[6]}px;
+	}
+`;
+
 export function SupporterPlusInitialLandingPage({
 	thankYouRoute,
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
-	const { countryGroupId, currencyId } = useContributionsSelector(
+	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const { selectedAmounts, otherAmounts } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
+	const navigate = useNavigate();
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
+	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
 
-	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
-		contributionType,
-		selectedAmounts,
-		otherAmounts,
-		countryGroupId,
-	);
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
 
 	const displayLimitedPriceCards =
 		abParticipations.supporterPlusOnly === 'variant';
+
+	const paymentMethodsMarginOneOff = css`
+		margin: ${space[4]}px 0;
+		${from.tablet} {
+			margin: ${space[5]}px 0 ${space[6]}px;
+		}
+	`;
+
+	const paymentMethodsMarginRecurring = css`
+		margin: ${space[3]}px 0 ${space[4]}px;
+		${from.tablet} {
+			margin: ${space[3]}px 0 ${space[5]}px;
+		}
+	`;
+
+	const paymentMethods = css`
+		display: flex;
+		gap: 3px;
+		justify-content: center;
+		${contributionType === 'ONE_OFF'
+			? paymentMethodsMarginOneOff
+			: paymentMethodsMarginRecurring}
+	`;
 
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute}>
@@ -58,30 +115,44 @@ export function SupporterPlusInitialLandingPage({
 				) : (
 					<AmountAndBenefits
 						countryGroupId={countryGroupId}
-						amountIsAboveThreshold={amountIsAboveThreshold}
+						amountIsAboveThreshold={
+							!!(thresholdPrice && amount >= thresholdPrice)
+						}
+						addBackgroundToBenefitsList
+						isTwoStepBenefitsList
 					/>
 				)}
-			</Box>
-			<Box cssOverrides={shorterBoxMargin}>
-				<BoxContents>
-					{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
-					<ContributionsStripe>
-						<SecureTransactionIndicator />
-						<PaymentRequestButtonContainer CustomButton={SavedCardButton} />
-						<Link
-							to={`checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`}
+				<div css={checkoutBtnAndPaymentIconsHolder}>
+					<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
+						<Button
+							iconSide="left"
+							priority="primary"
+							size="default"
+							cssOverrides={checkoutBtnStyleOverrides}
+							onClick={() => {
+								navigate(
+									`checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`,
+								);
+							}}
 						>
 							Continue to checkout
-						</Link>
-					</ContributionsStripe>
-					<PaymentTsAndCs
-						countryGroupId={countryGroupId}
-						contributionType={contributionType}
-						currency={currencyId}
-						amount={amount}
-						amountIsAboveThreshold={amountIsAboveThreshold}
-					/>
-				</BoxContents>
+						</Button>
+					</ThemeProvider>
+					{contributionType !== 'ONE_OFF' && (
+						<p css={cancelAnytime}>Cancel or change at anytime</p>
+					)}
+					<div css={paymentMethods}>
+						<PaypalIcon justLogoAndBorder />
+						<BrandedIcons />
+					</div>
+					{thresholdPrice && amount >= thresholdPrice && (
+						<p css={cancelAnytimeDescription}>
+							You can cancel or change your support at anytime before your next
+							billing date. If you cancel in the first 14 days, you will receive
+							a full refund.
+						</p>
+					)}
+				</div>
 			</Box>
 		</SupporterPlusCheckoutScaffold>
 	);

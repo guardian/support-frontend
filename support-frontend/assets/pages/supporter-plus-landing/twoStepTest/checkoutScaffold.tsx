@@ -23,7 +23,6 @@ import { Container } from 'components/layout/container';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import {
 	AUDCountries,
 	Canada,
@@ -43,13 +42,10 @@ const checkoutContainer = css`
 	position: relative;
 	color: ${palette.neutral[7]};
 	${textSans.medium()};
-	padding-top: ${space[3]}px;
+	padding-top: ${space[6]}px;
 	padding-bottom: ${space[9]}px;
 	${from.tablet} {
 		padding-bottom: ${space[12]}px;
-	}
-	${from.desktop} {
-		padding-top: ${space[6]}px;
 	}
 `;
 
@@ -147,15 +143,6 @@ export function SupporterPlusCheckoutScaffold({
 				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
 					<Column span={[0, 2, 5]}></Column>
 					<Column span={[1, 8, 7]}>
-						<Hide from="desktop">
-							<SecureTransactionIndicator
-								align="left"
-								theme="light"
-								cssOverrides={css`
-									margin-bottom: 10px;
-								`}
-							/>
-						</Hide>
 						{children}
 						<CheckoutDivider spacing="loose" mobileTheme={'light'} />
 						<PatronsMessage
