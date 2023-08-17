@@ -79,6 +79,7 @@ export type ContributionsOrderSummaryProps = {
 	contributionType: ContributionType;
 	total: string;
 	checkListData: CheckListData[];
+	onAccordionClick?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 };
@@ -105,6 +106,7 @@ export function ContributionsOrderSummary({
 	contributionType,
 	total,
 	checkListData,
+	onAccordionClick,
 	headerButton,
 	tsAndCs,
 }: ContributionsOrderSummaryProps): JSX.Element {
@@ -127,7 +129,10 @@ export function ContributionsOrderSummary({
 						<Button
 							priority="subdued"
 							aria-expanded={showDetails ? 'true' : 'false'}
-							onClick={() => setShowDetails(!showDetails)}
+							onClick={() => {
+								onAccordionClick?.(!showDetails);
+								setShowDetails(!showDetails);
+							}}
 							icon={<SvgChevronDownSingle />}
 							iconSide="right"
 							cssOverrides={[buttonOverrides, iconCss(showDetails)]}

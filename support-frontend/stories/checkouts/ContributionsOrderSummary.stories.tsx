@@ -10,6 +10,7 @@ import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 export default {
 	title: 'Checkouts/Contributions Order Summary',
 	component: ContributionsOrderSummary,
+	argTypes: { onAccordionClick: { action: 'accordion clicked' } },
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Columns
@@ -73,7 +74,7 @@ BelowThreshold.args = {
 	),
 	tsAndCs: (
 		<>
-			<p>Auto renews every month until you cancel.</p>
+			<p>Auto renews every year until you cancel.</p>
 			<p>Cancel or change your support anytime.</p>
 		</>
 	),
