@@ -44,7 +44,7 @@ export const Default = Template.bind({});
 Default.args = {
 	contributionType: 'MONTHLY',
 	total: '£10',
-	checkListData: checkListData({ higherTier: true }),
+	checkListData: checkListData({ higherTier: true, showUnchecked: false }),
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -66,7 +66,7 @@ export const BelowThreshold = Template.bind({});
 BelowThreshold.args = {
 	contributionType: 'ANNUAL',
 	total: '$25',
-	checkListData: checkListData({ higherTier: false }),
+	checkListData: checkListData({ higherTier: false, showUnchecked: false }),
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change

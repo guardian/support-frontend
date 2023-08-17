@@ -26,11 +26,15 @@ const summaryRow = css`
 `;
 
 const rowSpacing = css`
-	margin-bottom: 18px;
+	margin-bottom: ${space[5]}px;
 `;
 
 const boldText = css`
 	font-weight: 700;
+`;
+
+const headingRow = css`
+	padding-top: ${space[2]}px;
 `;
 
 const heading = css`
@@ -50,11 +54,15 @@ const buttonOverrides = css`
 	text-decoration: none;
 	${textSans.xsmall()};
 	color: ${palette.neutral[20]};
+
+	.src-button-space {
+		width: ${space[1]}px;
+	}
 `;
 
 const iconCss = (flip: boolean) => css`
 	svg {
-		max-width: ${space[3]}px;
+		max-width: ${space[4]}px;
 		transition: transform 0.3s ease-in-out;
 
 		${flip && 'transform: rotate(180deg);'}
@@ -68,11 +76,16 @@ const checklistContainer = css`
 const detailsSection = css`
 	display: flex;
 	flex-direction: column;
+	margin-bottom: ${space[6]}px;
 `;
 
 const termsAndConditions = css`
 	${textSans.xxsmall()}
 	color: #606060;
+
+	p {
+		margin-top: ${space[1]}px;
+	}
 `;
 
 export type ContributionsOrderSummaryProps = {
@@ -117,12 +130,12 @@ export function ContributionsOrderSummary({
 
 	return (
 		<div css={componentStyles}>
-			<div css={[summaryRow, rowSpacing]}>
+			<div css={[summaryRow, rowSpacing, headingRow]}>
 				<h2 css={heading}>Your support</h2>
 				{headerButton}
 			</div>
 			<hr css={hrCss} />
-			<div css={[detailsSection, rowSpacing]}>
+			<div css={[rowSpacing, detailsSection]}>
 				<div css={summaryRow}>
 					<p>{supportTypes[contributionType]} support</p>
 					{showAccordion && (

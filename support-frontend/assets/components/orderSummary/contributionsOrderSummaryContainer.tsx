@@ -59,6 +59,7 @@ export function ContributionsOrderSummaryContainer({
 			? []
 			: checkListData({
 					higherTier: isSupporterPlus,
+					showUnchecked: false,
 			  });
 
 	function onAccordionClick(isOpen: boolean) {
