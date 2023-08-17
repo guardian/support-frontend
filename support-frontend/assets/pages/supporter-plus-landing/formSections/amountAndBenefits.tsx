@@ -75,7 +75,7 @@ export function AmountAndBenefits(): JSX.Element {
 			// 	/>
 			// )}
 			render={(tabProps) => {
-				console.log('*** tabProps ***', tabProps);
+				console.log(tabProps);
 				return <p>hello world</p>;
 			}}
 		/>
