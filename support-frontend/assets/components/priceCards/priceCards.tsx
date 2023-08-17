@@ -79,7 +79,6 @@ export function PriceCards({
 	otherAmountField,
 	hideChooseYourAmount,
 }: PriceCardsProps): JSX.Element {
-	console.log('*** PriceCards hideChooseYourAmount ***', hideChooseYourAmount);
 	// Override hideChooseYourAmount if no amounts supplied
 	const enableChooseYourAmountButton = !hideChooseYourAmount || !amounts.length;
 	const buttonCount = enableChooseYourAmountButton
