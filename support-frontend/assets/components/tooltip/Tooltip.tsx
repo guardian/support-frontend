@@ -31,6 +31,7 @@ const tooltipAndCopyContainer = css`
 	display: flex;
 	cursor: pointer;
 	position: relative;
+	margin-top: ${space[3]}px;
 `;
 
 const tooltipContainer = css`

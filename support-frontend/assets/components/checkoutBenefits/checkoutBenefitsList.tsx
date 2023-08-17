@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import {
 	from,
 	headline,
+	palette,
 	space,
 	textSans,
 	until,
@@ -13,15 +14,24 @@ const containerCss = css`
 	${textSans.medium({ lineHeight: 'tight' })};
 `;
 
+const containerWithBackgroundCss = css`
+	background-color: ${palette.neutral[97]};
+	border: 1px solid ${palette.neutral[86]};
+	padding: ${space[3]}px ${space[3]}px ${space[4]}px;
+	border-radius: 7px;
+`;
+
+const maxWidth = css`
+	max-width: 250px;
+	${from.desktop} {
+		max-width: 280px;
+	}
+`;
 const headingCss = css`
 	${headline.xsmall({ fontWeight: 'bold' })}
 	${from.tablet} {
 		font-size: 28px;
 		line-height: 115%;
-	}
-	max-width: 250px;
-	${from.desktop} {
-		max-width: 280px;
 	}
 `;
 
@@ -40,18 +50,34 @@ export type CheckoutBenefitsListProps = {
 	checkListData: CheckListData[];
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
+	withBackground?: boolean;
+	isCompactList?: boolean;
 };
 
 export function CheckoutBenefitsList({
 	title,
 	checkListData,
+	withBackground,
+	isCompactList,
 }: CheckoutBenefitsListProps): JSX.Element {
 	return (
-		<div css={containerCss}>
-			<h2 css={headingCss}>{title}</h2>
+		<div
+			css={
+				withBackground
+					? [containerCss, containerWithBackgroundCss]
+					: [containerCss]
+			}
+		>
+			<h2 css={withBackground ? headingCss : [headingCss, maxWidth]}>
+				{title}
+			</h2>
 			<hr css={hrCss(`${space[4]}px 0`)} />
-			<CheckmarkList checkListData={checkListData} />
-			<hr css={hrCss(`${space[5]}px 0 ${space[4]}px`)} />
+			<CheckmarkList
+				checkListData={checkListData}
+				style={isCompactList ? 'compact' : 'standard'}
+				iconColor={palette.brand[500]}
+			/>
+			{!withBackground && <hr css={hrCss(`${space[5]}px 0 ${space[4]}px`)} />}
 		</div>
 	);
 }

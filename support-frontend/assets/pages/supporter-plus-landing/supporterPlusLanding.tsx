@@ -209,6 +209,7 @@ export function SupporterPlusLandingPage({
 								<AmountAndBenefits
 									countryGroupId={countryGroupId}
 									amountIsAboveThreshold={amountIsAboveThreshold}
+									showCancelTooltip
 								/>
 							)}
 						</Box>
