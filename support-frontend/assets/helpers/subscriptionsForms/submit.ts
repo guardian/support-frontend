@@ -48,6 +48,7 @@ import {
 } from 'helpers/subscriptionsForms/formValidation';
 import type { AnyCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
+import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagManager';
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
@@ -149,7 +150,8 @@ function buildRegularPaymentRequest(
 	const { actionHistory } = state.debug;
 	const { title, firstName, lastName, email, telephone } =
 		state.page.checkoutForm.personalDetails;
-	const { deliveryInstructions } = state.page.checkoutForm.addressMeta;
+	const { deliveryInstructions, deliveryAgent } =
+		state.page.checkoutForm.addressMeta;
 	const { csrUsername, salesforceCaseId } = state.page.checkout;
 	const product = getProduct(state, currencyId);
 	const paymentFields =
@@ -157,6 +159,8 @@ function buildRegularPaymentRequest(
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const promoCode = getPromoCode(promotions);
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
+	const chosenDeliveryAgent = deliveryAgent.chosenAgent;
+
 	return {
 		title,
 		firstName: firstName.trim(),
@@ -179,6 +183,7 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
+		deliveryAgent: chosenDeliveryAgent,
 	};
 }
 
@@ -198,7 +203,6 @@ function onPaymentAuthorised(
 	const productType = getSubscriptionType(state);
 	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { csrf } = state.page.checkoutForm;
-	const { abParticipations } = state.common;
 	const addresses = getAddresses(state);
 	const pricingCountry =
 		addresses.deliveryAddress?.country ?? addresses.billingAddress.country;
@@ -224,7 +228,9 @@ function onPaymentAuthorised(
 			} else {
 				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
-			// Notify Quantum Metric of successfull subscription conversion
+			// track conversion with GTM
+			successfulSubscriptionConversion();
+			// track conversion with QM
 			sendEventSubscriptionCheckoutConversion(
 				productType,
 				!!orderIsAGift,
@@ -237,12 +243,9 @@ function onPaymentAuthorised(
 	};
 
 	dispatch(setFormSubmitted(true));
-	void postRegularPaymentRequest(
-		routes.subscriptionCreate,
-		data,
-		abParticipations,
-		csrf,
-	).then(handleSubscribeResult);
+	void postRegularPaymentRequest(routes.subscriptionCreate, data, csrf).then(
+		handleSubscribeResult,
+	);
 }
 
 function checkStripeUserType(

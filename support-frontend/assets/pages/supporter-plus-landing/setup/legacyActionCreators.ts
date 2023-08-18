@@ -61,7 +61,6 @@ import {
 	getOphanIds,
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
-import trackConversion from 'helpers/tracking/conversions';
 import { sendEventConversionPaymentMethod } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
@@ -282,10 +281,6 @@ const onPaymentResult =
 
 			switch (result.paymentStatus) {
 				case 'success':
-					trackConversion(
-						state.common.abParticipations,
-						'/contribute/thankyou',
-					);
 					dispatch(paymentSuccess());
 					break;
 
@@ -418,7 +413,6 @@ function recurringPaymentAuthorisationHandler(
 		postRegularPaymentRequest(
 			routes.recurringContribCreate,
 			request,
-			state.common.abParticipations,
 			state.page.checkoutForm.csrf,
 		),
 		paymentAuthorisation,

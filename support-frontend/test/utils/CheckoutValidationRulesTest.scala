@@ -390,6 +390,26 @@ class SimpleCheckoutFormValidationTest extends AnyFlatSpec with Matchers {
   }
 }
 
+class PaidProductValidationTest extends AnyFlatSpec with Matchers {
+  import TestData.validDigitalPackRequest
+
+  "PaidProductValidation.passes" should " fail if the country is United States and there is no state" in {
+    val requestMissingState = validDigitalPackRequest.copy(
+      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = None),
+      product = SupporterPlus(50, Currency.USD, Annual),
+    )
+    PaidProductValidation.passes(requestMissingState) shouldBe an[Invalid]
+  }
+
+  it should "succeed  if the country is UK and there is no state" in {
+    val requestSupporterPlus = validDigitalPackRequest.copy(
+      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, state = None),
+      product = SupporterPlus(50, Currency.GBP, Annual),
+    )
+    PaidProductValidation.passes(requestSupporterPlus) shouldBe Valid
+  }
+
+}
 class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
 
   import TestData.validDigitalPackRequest

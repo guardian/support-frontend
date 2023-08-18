@@ -1,13 +1,14 @@
 package wiring
 
-import actions.{UserFromAuthCookiesOrAuthServerActionBuilder, UserFromAuthCookiesActionBuilder}
 import actions.UserFromAuthCookiesActionBuilder.UserClaims
+import actions.{UserFromAuthCookiesActionBuilder, UserFromAuthCookiesOrAuthServerActionBuilder}
 import admin.settings.AllSettingsProvider
 import cats.syntax.either._
 import com.gu.aws.AwsS3Client
 import com.gu.identity.auth._
 import com.gu.okhttp.RequestRunners
 import com.gu.support.getaddressio.GetAddressIOService
+import com.gu.support.paperround.PaperRoundService
 import com.gu.support.promotions.PromotionServiceProvider
 import com.gu.zuora.ZuoraGiftLookupServiceProvider
 import play.api.BuiltInComponentsFromContext
@@ -58,6 +59,7 @@ trait Services {
     controllerComponents.parsers.defaultBodyParser,
     oktaAuthService,
     appConfig.identity,
+    isAuthServerUp = asyncAuthenticationService.isAuthServerUp,
   )
 
   lazy val userFromAuthCookiesActionBuilder = new UserFromAuthCookiesActionBuilder(
@@ -81,6 +83,9 @@ trait Services {
 
   lazy val getAddressIOService: GetAddressIOService =
     new GetAddressIOService(appConfig.getAddressIOConfig, RequestRunners.futureRunner)
+
+  lazy val paperRoundService: PaperRoundService =
+    new PaperRoundService(appConfig.paperRoundConfig, RequestRunners.futureRunner)
 
   lazy val promotionServiceProvider = new PromotionServiceProvider(appConfig.promotionsConfigProvider)
 
