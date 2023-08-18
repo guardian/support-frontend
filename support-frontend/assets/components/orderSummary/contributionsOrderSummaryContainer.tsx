@@ -21,13 +21,15 @@ function getTermsConditions(
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
 
 	if (isSupporterPlus) {
-		<>
-			<p>Auto renews every {period} until you cancel.</p>
-			<p>
-				Cancel or change your support anytime. If you cancel within the first 14
-				days, you will receive a full refund.
-			</p>
-		</>;
+		return (
+			<>
+				<p>Auto renews every {period} until you cancel.</p>
+				<p>
+					Cancel or change your support anytime. If you cancel within the first
+					14 days, you will receive a full refund.
+				</p>
+			</>
+		);
 	}
 	return (
 		<>
