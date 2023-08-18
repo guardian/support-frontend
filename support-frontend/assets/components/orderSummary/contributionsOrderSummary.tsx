@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import {
+	from,
 	headline,
 	palette,
 	space,
@@ -26,7 +27,13 @@ const summaryRow = css`
 `;
 
 const rowSpacing = css`
-	margin-bottom: ${space[5]}px;
+	&:not(:last-child) {
+		margin-bottom: ${space[5]}px;
+
+		${from.desktop} {
+			margin-bottom: ${space[6]}px;
+		}
+	}
 `;
 
 const boldText = css`
@@ -35,6 +42,18 @@ const boldText = css`
 
 const headingRow = css`
 	padding-top: ${space[2]}px;
+
+	${from.desktop} {
+		padding-top: 0;
+	}
+`;
+
+const totalRow = (hasTsAncCs: boolean) => css`
+	${!hasTsAncCs ? `margin-bottom: ${space[3]}px;` : 'margin-bottom: 0;'}
+
+	${from.desktop} {
+		margin-bottom: 0;
+	}
 `;
 
 const heading = css`
@@ -165,7 +184,7 @@ export function ContributionsOrderSummary({
 				)}
 			</div>
 			<hr css={hrCss} />
-			<div css={[summaryRow, rowSpacing, boldText]}>
+			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
 				<p>{totalWithFrequency(total, contributionType)}</p>
 			</div>
