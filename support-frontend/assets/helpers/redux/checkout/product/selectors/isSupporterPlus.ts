@@ -75,8 +75,9 @@ export function shouldHideBenefitsList(state: ContributionsState): boolean {
 		state.common.internationalisation.countryGroupId,
 		contributionType,
 	);
-	const displayedAmounts = state.common.amounts[contributionType];
-	const customAmountIsHidden = displayedAmounts.hideChooseYourAmount ?? false;
+	const displayedAmounts =
+		state.common.amounts.amountsCardData[contributionType];
+	const customAmountIsHidden = displayedAmounts.hideChooseYourAmount;
 
 	const thresholdPriceIsNotOffered =
 		Math.max(...displayedAmounts.amounts) < thresholdPrice;
