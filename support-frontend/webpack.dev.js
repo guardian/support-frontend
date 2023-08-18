@@ -14,7 +14,8 @@ module.exports = merge(common('[name].css', '[name].js', false), {
 			},
 		},
 		client: {
-			webSocketURL: 'https://support.thegulocal.com/ws'
+			webSocketURL: 'https://support.thegulocal.com/ws',
+      overlay: false,
 		},
 	},
 	resolve: {
