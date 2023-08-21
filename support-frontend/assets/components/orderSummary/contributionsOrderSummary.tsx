@@ -84,7 +84,7 @@ const iconCss = (flip: boolean) => css`
 		max-width: ${space[4]}px;
 		transition: transform 0.3s ease-in-out;
 
-		${flip && 'transform: rotate(180deg);'}
+		${flip ? 'transform: rotate(180deg);' : ''}
 	}
 `;
 
