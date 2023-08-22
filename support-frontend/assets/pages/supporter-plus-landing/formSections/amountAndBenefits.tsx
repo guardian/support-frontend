@@ -16,8 +16,10 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 export function AmountAndBenefits({
 	countryGroupId,
+	amountIsAboveThreshold,
 }: {
 	countryGroupId: CountryGroupId;
+	amountIsAboveThreshold: boolean;
 }): JSX.Element {
 	return (
 		<PaymentFrequencyTabsContainer
@@ -78,8 +80,14 @@ export function AmountAndBenefits({
 										<p>
 											You can cancel
 											{countryGroupId === 'GBPCountries' ? '' : ' online'}{' '}
-											anytime before your next payment date. If you cancel in
-											the first 14 days, you will receive a full refund.
+											anytime before your next payment date.
+											{amountIsAboveThreshold && (
+												<>
+													{' '}
+													If you cancel in the first 14 days, you will receive a
+													full refund.
+												</>
+											)}
 										</p>
 									</Tooltip>
 								)}

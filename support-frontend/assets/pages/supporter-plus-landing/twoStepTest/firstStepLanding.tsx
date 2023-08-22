@@ -56,7 +56,10 @@ export function SupporterPlusInitialLandingPage({
 				{displayLimitedPriceCards ? (
 					<LimitedPriceCards />
 				) : (
-					<AmountAndBenefits countryGroupId={countryGroupId} />
+					<AmountAndBenefits
+						countryGroupId={countryGroupId}
+						amountIsAboveThreshold={amountIsAboveThreshold}
+					/>
 				)}
 			</Box>
 			<Box cssOverrides={shorterBoxMargin}>
