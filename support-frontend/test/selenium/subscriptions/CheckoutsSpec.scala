@@ -140,5 +140,7 @@ class CheckoutsSpec
     eventually {
       assert(checkoutPage.thankYouPageHasLoaded)
     }
+    val signOutPage = new SignOutPage
+    goTo(signOutPage)
   }
 }
