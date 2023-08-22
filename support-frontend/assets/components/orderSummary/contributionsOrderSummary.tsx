@@ -188,13 +188,11 @@ export function ContributionsOrderSummary({
 				<p>Total</p>
 				<p>{totalWithFrequency(total, contributionType)}</p>
 			</div>
-			{tsAndCs ? (
+			{!!tsAndCs && (
 				<div css={termsAndConditions}>
 					<hr css={hrCss} />
 					{tsAndCs}
 				</div>
-			) : (
-				<></>
 			)}
 		</div>
 	);
