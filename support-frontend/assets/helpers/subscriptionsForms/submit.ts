@@ -15,7 +15,7 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { Quarterly } from 'helpers/productPrice/billingPeriods';
-import type { type FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
 	HomeDelivery,
 	NationalDelivery,
