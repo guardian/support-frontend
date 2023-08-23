@@ -16,10 +16,7 @@ import {
 	zuoraCompatibleString,
 } from 'helpers/subscriptionsForms/validation';
 import type { Option } from 'helpers/types/option';
-import type {
-	DeliveryAgentsResponse,
-	DeliveryAgentState,
-} from '../addressMeta/state';
+import type { DeliveryAgentState } from '../addressMeta/state';
 import type { AddressFields, AddressFormFieldError } from './state';
 
 // ---- Validators ---- //
@@ -199,7 +196,7 @@ export const deliveryAgentChosen = (
 	if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
 		if (
 			!postcodeIsWithinDeliveryArea(postcode, allowedPrefixes) &&
-			deliveryAgentsAreAvailable(deliveryAgent.response)
+			deliveryAgentsAreAvailable(deliveryAgent)
 		) {
 			return deliveryAgentHasBeenChosen(deliveryAgent);
 		}
@@ -216,7 +213,7 @@ export const isHomeDeliveryAvailable = (
 ): boolean => {
 	if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
 		if (!postcodeIsWithinDeliveryArea(postcode, allowedPrefixes)) {
-			return deliveryAgentHasBeenChosen(deliveryAgent);
+			return deliveryAgentsAreAvailable(deliveryAgent);
 		}
 	}
 
@@ -228,8 +225,8 @@ const deliveryAgentHasBeenChosen = (
 ): boolean => (deliveryAgent.chosenAgent ? true : false);
 
 const deliveryAgentsAreAvailable = (
-	deliveryAgentResponse?: DeliveryAgentsResponse,
-): boolean => (deliveryAgentResponse?.agents.length ?? 0) > 0;
+	deliveryAgent: DeliveryAgentState,
+): boolean => (deliveryAgent.response?.agents.length ?? 0) > 0;
 
 export const isPostcodeOptional = (country: IsoCountry | null): boolean =>
 	country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';
