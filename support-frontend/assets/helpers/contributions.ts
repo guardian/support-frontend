@@ -67,12 +67,15 @@ export interface AmountsVariant {
 	amountsCardData: AmountsCardData;
 }
 
+export type AmountsTestTargeting =
+	| { targetingType: 'Region'; region: CountryGroupId }
+	| { targetingType: 'Country'; countries: IsoCountry[] };
+
 export interface AmountsTest {
 	testName: string;
 	liveTestName?: string;
 	isLive: boolean;
-	region: CountryGroupId | '';
-	country: IsoCountry[];
+	targeting: AmountsTestTargeting;
 	order: number;
 	seed: number;
 	variants: AmountsVariant[];

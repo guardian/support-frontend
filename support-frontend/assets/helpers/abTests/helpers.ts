@@ -12,8 +12,10 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__GBPCountries',
 		liveTestName: '',
 		isLive: false,
-		region: 'GBPCountries',
-		country: [],
+		targeting: {
+			targetingType: 'Region',
+			region: 'GBPCountries',
+		},
 		order: 0,
 		seed: 0,
 		variants: [
@@ -45,8 +47,10 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__UnitedStates',
 		liveTestName: '',
 		isLive: false,
-		region: 'UnitedStates',
-		country: [],
+		targeting: {
+			targetingType: 'Region',
+			region: 'UnitedStates',
+		},
 		order: 0,
 		seed: 0,
 		variants: [
@@ -78,8 +82,10 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__EURCountries',
 		liveTestName: '',
 		isLive: false,
-		region: 'EURCountries',
-		country: [],
+		targeting: {
+			targetingType: 'Region',
+			region: 'EURCountries',
+		},
 		order: 0,
 		seed: 0,
 		variants: [
@@ -111,8 +117,10 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__International',
 		liveTestName: '',
 		isLive: false,
-		region: 'International',
-		country: [],
+		targeting: {
+			targetingType: 'Region',
+			region: 'International',
+		},
 		order: 0,
 		seed: 0,
 		variants: [
@@ -144,8 +152,10 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__Canada',
 		liveTestName: '',
 		isLive: false,
-		region: 'Canada',
-		country: [],
+		targeting: {
+			targetingType: 'Region',
+			region: 'Canada',
+		},
 		order: 0,
 		seed: 0,
 		variants: [
@@ -177,8 +187,10 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__AUDCountries',
 		liveTestName: '',
 		isLive: false,
-		region: 'AUDCountries',
-		country: [],
+		targeting: {
+			targetingType: 'Region',
+			region: 'AUDCountries',
+		},
 		order: 0,
 		seed: 0,
 		variants: [
@@ -210,8 +222,10 @@ export const FALLBACK_AMOUNTS: AmountsTest[] = [
 		testName: 'FALLBACK_AMOUNTS__NZDCountries',
 		liveTestName: '',
 		isLive: false,
-		region: 'NZDCountries',
-		country: [],
+		targeting: {
+			targetingType: 'Region',
+			region: 'NZDCountries',
+		},
 		order: 0,
 		seed: 0,
 		variants: [
@@ -246,7 +260,9 @@ export function getFallbackAmounts(
 ): SelectedAmountsVariant {
 	// Create fallback data - the amounts card must always have data to dsplay
 	const fallbackTest = FALLBACK_AMOUNTS.find(
-		(t) => t.region === countryGroupId,
+		(t) =>
+			t.targeting.targetingType === 'Region' &&
+			t.targeting.region === countryGroupId,
 	);
 	if (fallbackTest) {
 		return {
@@ -308,7 +324,7 @@ export function getAmounts(
 		}
 	}
 
-	/* 
+	/*
 		For country-level tests, the isLive boolean tells us whether the test is live (true: show the test) or draft (false: show the region-level test instead)
 
 		Countries can appear in more than one country-level test; we sort the filtered tests according to their order attribute and select the test with the lowest order.
@@ -318,7 +334,10 @@ export function getAmounts(
 	let targetTestArray: AmountsTest[] = [];
 	if (countryCode) {
 		targetTestArray = amounts.filter(
-			(t) => t.isLive && t.country.includes(countryCode),
+			(t) =>
+				t.isLive &&
+				t.targeting.targetingType === 'Country' &&
+				t.targeting.countries.includes(countryCode),
 		);
 	}
 	let targetTest;
@@ -327,7 +346,11 @@ export function getAmounts(
 		targetTest = targetTestArray[0];
 	}
 	if (!targetTest) {
-		targetTest = amounts.find((t) => t.region === countryGroupId);
+		targetTest = amounts.find(
+			(t) =>
+				t.targeting.targetingType === 'Region' &&
+				t.targeting.region === countryGroupId,
+		);
 	}
 
 	// Unable to locate a test which maps to the argument data supplied
@@ -342,7 +365,7 @@ export function getAmounts(
 		return getFallbackAmounts(countryGroupId);
 	}
 
-	/* 
+	/*
 		We return the control variant (which is always the first variant in the array) if there's no live AB test running (for a regional test) or just a single variant in the test
 	*/
 	if (!isLive || variants.length === 1) {

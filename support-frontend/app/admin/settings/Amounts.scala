@@ -24,13 +24,25 @@ case class AmountsVariant(
     amountsCardData: ContributionAmounts,
 )
 
+sealed trait AmountsTestTargeting
+
+object AmountsTestTargeting {
+  case class Region(targetingType: String = "Region", region: String) extends AmountsTestTargeting
+  case class Country(targetingType: String = "Country", countries: List[String]) extends AmountsTestTargeting
+
+  import io.circe.generic.extras.auto._
+  implicit val customConfig: Configuration = Configuration.default.withDiscriminator("targetingType")
+
+  implicit val amountsTestTargetingDecoder = Decoder[AmountsTestTargeting]
+  implicit val amountsTestTargetingEncoder = Encoder[AmountsTestTargeting]
+}
+
 case class AmountsTest(
     testName: String,
     liveTestName: Option[String],
     testLabel: Option[String],
     isLive: Boolean,
-    region: String,
-    country: List[String],
+    targeting: AmountsTestTargeting,
     order: Int,
     seed: Int,
     variants: List[AmountsVariant],

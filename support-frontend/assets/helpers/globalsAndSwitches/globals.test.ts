@@ -1,5 +1,4 @@
 import type { AmountsTest, AmountsTests } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { emptyConfiguredRegionAmounts, getGlobal } from './globals';
 
 const getSpecifiedRegionAmountsFromGlobal = (
@@ -10,7 +9,10 @@ const getSpecifiedRegionAmountsFromGlobal = (
 	if (!allAmountsTests) {
 		return {};
 	}
-	const testArray = allAmountsTests.filter((t) => t.region === target);
+	const testArray = allAmountsTests.filter(
+		(t) =>
+			t.targeting.targetingType === 'Region' && t.targeting.region === target,
+	);
 	if (!testArray.length) {
 		return {};
 	}
@@ -29,37 +31,58 @@ describe('getGlobal', () => {
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__GBPCountries',
-						region: 'GBPCountries' as CountryGroupId,
+						targeting: {
+							targetingType: 'Region',
+							region: 'GBPCountries',
+						},
 					},
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__UnitedStates',
-						region: 'UnitedStates' as CountryGroupId,
+						targeting: {
+							targetingType: 'Region',
+							region: 'UnitedStates',
+						},
 					},
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__Canada',
-						region: 'Canada' as CountryGroupId,
+						targeting: {
+							targetingType: 'Region',
+							region: 'Canada',
+						},
 					},
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__NZDCountries',
-						region: 'NZDCountries' as CountryGroupId,
+						targeting: {
+							targetingType: 'Region',
+							region: 'NZDCountries',
+						},
 					},
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__EURCountries',
-						region: 'EURCountries' as CountryGroupId,
+						targeting: {
+							targetingType: 'Region',
+							region: 'EURCountries',
+						},
 					},
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__International',
-						region: 'International' as CountryGroupId,
+						targeting: {
+							targetingType: 'Region',
+							region: 'International',
+						},
 					},
 					{
 						...emptyConfiguredRegionAmounts,
 						testName: 'EMPTY_TEST__AUDCountries',
-						region: 'AUDCountries' as CountryGroupId,
+						targeting: {
+							targetingType: 'Region',
+							region: 'AUDCountries',
+						},
 					},
 				],
 				contributionTypes: {

@@ -49,8 +49,10 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__GBPCountries',
 			liveTestName: '',
 			isLive: false,
-			region: 'GBPCountries',
-			country: [],
+			targeting: {
+				targetingType: 'Region',
+				region: 'GBPCountries',
+			},
 			order: 0,
 			seed: 0,
 			variants: [
@@ -82,8 +84,10 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__UnitedStates',
 			liveTestName: '',
 			isLive: false,
-			region: 'UnitedStates',
-			country: [],
+			targeting: {
+				targetingType: 'Region',
+				region: 'UnitedStates',
+			},
 			order: 0,
 			seed: 0,
 			variants: [
@@ -115,8 +119,10 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__EURCountries',
 			liveTestName: '',
 			isLive: false,
-			region: 'EURCountries',
-			country: [],
+			targeting: {
+				targetingType: 'Region',
+				region: 'EURCountries',
+			},
 			order: 0,
 			seed: 0,
 			variants: [
@@ -148,8 +154,10 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__International',
 			liveTestName: '',
 			isLive: false,
-			region: 'International',
-			country: [],
+			targeting: {
+				targetingType: 'Region',
+				region: 'International',
+			},
 			order: 0,
 			seed: 0,
 			variants: [
@@ -181,8 +189,10 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__Canada',
 			liveTestName: '',
 			isLive: false,
-			region: 'Canada',
-			country: [],
+			targeting: {
+				targetingType: 'Region',
+				region: 'Canada',
+			},
 			order: 0,
 			seed: 0,
 			variants: [
@@ -214,8 +224,10 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__AUDCountries',
 			liveTestName: '',
 			isLive: false,
-			region: 'AUDCountries',
-			country: [],
+			targeting: {
+				targetingType: 'Region',
+				region: 'AUDCountries',
+			},
 			order: 0,
 			seed: 0,
 			variants: [
@@ -247,8 +259,10 @@ export const mockSettings: Settings = {
 			testName: 'FALLBACK_AMOUNTS__NZDCountries',
 			liveTestName: '',
 			isLive: false,
-			region: 'NZDCountries',
-			country: [],
+			targeting: {
+				targetingType: 'Region',
+				region: 'NZDCountries',
+			},
 			order: 0,
 			seed: 0,
 			variants: [
