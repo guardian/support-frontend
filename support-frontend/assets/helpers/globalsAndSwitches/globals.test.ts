@@ -105,7 +105,10 @@ describe('getGlobal', () => {
 		).toEqual({
 			...emptyConfiguredRegionAmounts,
 			testName: 'EMPTY_TEST__GBPCountries',
-			region: 'GBPCountries',
+			targeting: {
+				targetingType: 'Region',
+				region: 'GBPCountries',
+			},
 		});
 	});
 
@@ -118,7 +121,10 @@ describe('getGlobal', () => {
 		).toEqual({
 			...emptyConfiguredRegionAmounts,
 			testName: 'EMPTY_TEST__GBPCountries',
-			region: 'GBPCountries',
+			targeting: {
+				targetingType: 'Region',
+				region: 'GBPCountries',
+			},
 		});
 	});
 
