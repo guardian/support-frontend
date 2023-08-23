@@ -155,7 +155,7 @@ function getDeliveryOnlyRules(
 	return [
 		{
 			rule:
-				abParticipations.nationalDelivery === 'variant' ||
+				abParticipations.nationalDelivery === 'control' ||
 				deliveryAgentChosen(fulfilmentOption, fields.postCode, deliveryAgent),
 			error: formError('postCode', 'Please select a delivery provider'),
 		},
