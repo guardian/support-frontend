@@ -15,6 +15,11 @@ import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { Quarterly } from 'helpers/productPrice/billingPeriods';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import {
+	HomeDelivery,
+	NationalDelivery,
+} from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import {
@@ -112,9 +117,19 @@ const getProduct = (
 		productType: Paper,
 		currency: currencyId ?? state.common.internationalisation.currencyId,
 		billingPeriod,
-		fulfilmentOptions: fulfilmentOption,
+		fulfilmentOptions: getPaperFulfilmentOption(fulfilmentOption, state),
 		productOptions: productOption,
 	};
+};
+
+const getPaperFulfilmentOption = (
+	fulfilmentOption: FulfilmentOptions,
+	state: SubscriptionsState,
+) => {
+	return fulfilmentOption === HomeDelivery &&
+		state.page.checkoutForm.addressMeta.deliveryAgent.chosenAgent
+		? NationalDelivery
+		: fulfilmentOption;
 };
 
 const getPromoCode = (promotions?: Promotion[]) => {
