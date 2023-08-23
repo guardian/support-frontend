@@ -7,9 +7,11 @@ const checkListIconCss = (style: CheckmarkListStyle) => css`
 	vertical-align: top;
 	padding-right: ${style === 'compact' ? '4px' : '10px'};
 	line-height: 0;
+`;
 
+const checkListIconColor = (color: string) => css`
 	svg {
-		fill: ${style === 'compact' ? palette.success[400] : palette.brand[500]};
+		fill: ${color};
 	}
 `;
 
@@ -54,6 +56,7 @@ type CheckmarkListStyle = 'standard' | 'compact';
 export type CheckmarkListProps = {
 	checkListData: CheckListData[];
 	style?: CheckmarkListStyle;
+	iconColor?: string;
 };
 
 function ChecklistItemIcon({
@@ -79,12 +82,19 @@ function ChecklistItemIcon({
 export function CheckmarkList({
 	checkListData,
 	style = 'standard',
+	iconColor = style === 'compact' ? palette.success[400] : palette.brand[500],
 }: CheckmarkListProps): JSX.Element {
 	return (
 		<table css={tableCss(style)}>
 			{checkListData.map((item) => (
 				<tr>
-					<td css={[checkListIconCss(style), item.maybeGreyedOut]}>
+					<td
+						css={[
+							checkListIconCss(style),
+							checkListIconColor(iconColor),
+							item.maybeGreyedOut,
+						]}
+					>
 						<div css={style === 'standard' ? iconContainerCss : css``}>
 							<ChecklistItemIcon checked={item.isChecked} style={style} />
 						</div>

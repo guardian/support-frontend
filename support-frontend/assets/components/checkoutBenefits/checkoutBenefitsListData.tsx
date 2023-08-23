@@ -17,6 +17,7 @@ const boldText = css`
 
 type TierUnlocks = {
 	higherTier: boolean;
+	showUnchecked?: boolean;
 };
 
 export type CheckListData = {
@@ -32,28 +33,14 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 		<SvgCrossRound isAnnouncedByScreenReader size="small" />
 	);
 
-export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
+export const checkListData = ({
+	higherTier,
+	showUnchecked = true,
+}: TierUnlocks): CheckListData[] => {
 	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
+	const showHigherTier = higherTier || showUnchecked;
 
-	return [
-		{
-			isChecked: true,
-			text: (
-				<p>
-					<span css={boldText}>A regular supporter newsletter. </span>Get
-					exclusive insight from our newsroom
-				</p>
-			),
-		},
-		{
-			isChecked: true,
-			text: (
-				<p>
-					<span css={boldText}>Uninterrupted reading. </span> See far fewer asks
-					for support
-				</p>
-			),
-		},
+	const higherTierItems = [
 		{
 			isChecked: higherTier,
 			text: (
@@ -74,5 +61,27 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			),
 			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
+	];
+
+	return [
+		{
+			isChecked: true,
+			text: (
+				<p>
+					<span css={boldText}>A regular supporter newsletter. </span>Get
+					exclusive insight from our newsroom
+				</p>
+			),
+		},
+		{
+			isChecked: true,
+			text: (
+				<p>
+					<span css={boldText}>Uninterrupted reading. </span> See far fewer asks
+					for support
+				</p>
+			),
+		},
+		...(showHigherTier ? higherTierItems : []),
 	];
 };
