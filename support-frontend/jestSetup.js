@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 
 // General-purpose mock; any and all functions called off the 'ophan' object
 // will be proxied to a mock Jest function
