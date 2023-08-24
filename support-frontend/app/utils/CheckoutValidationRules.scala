@@ -246,8 +246,6 @@ object AddressAndCurrencyValidationRules {
     ) {
       {
         val validState = stateFromRequest match {
-          case Some(validState) if (validState.isEmpty) =>
-            Invalid(s"state is required for $countryFromRequest")
           case None =>
             Invalid(s"state is required for $countryFromRequest")
           case Some("") =>
