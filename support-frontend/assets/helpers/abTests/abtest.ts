@@ -231,11 +231,30 @@ function getAmountsTestParticipations(
 	const amounts = settings.amounts;
 
 	/*
-		For country-level tests, the isLive boolean tells us whether the test is live (true: show the test) or draft (false: show the region-level test instead).
+	An amounts test can be in one of two forms:
 
-		Countries can appear in more than one country-level test; we sort the filtered tests according to their order attribute and select the test with the lowest order.
+	Country test:
+	  Bespoke tests targeted at one or more geographical countries
+	  `targeting` object will include a `countries` attribute
+	    - a String array containing 2-letter ISO country codes
+	  When the `isLive` boolean is `false`:
+	    - the test is ignored; users will see their appropriate region test
+	  When the `isLive` boolean is `true`:
+	    - users will be randomly segregated into an AB test and see the appropriate variant
+	    - analytics will use the `liveTestName` label, if available, else the `testName` label
+	  A country can appear in more than one country test:
+	    - if 2+ live tests include the country, the test with the lowest `order` value will display
 
-		For region-level tests, the isLive boolean tells us whether there is an AB test running (true: select a test variant from all avaliable) or not (false: select the control variant)
+	Region test:
+	  Evergreen tests, one per geographical region
+	  `targeting` object will include a `region` attribute
+	    - the region label, as defined by the Region type
+	  When the `isLive` boolean is `false`:
+	    - the CONTROL variant will display
+	    - analytics will use the `testName` label
+	  When the `isLive` boolean is `true`:
+	    - users will be randomly segregated into an AB test and see the appropriate variant
+	    - analytics will use the `liveTestName` label
 	*/
 	const targetTestArray = amounts.filter(
 		(t) =>
