@@ -53,7 +53,7 @@ describe('Newspaper checkout form', () => {
 	console.warn = jest.fn();
 	console.error = jest.fn();
 
-	let initialState: unknown;
+	let initialState: Record<string, unknown>;
 	beforeEach(() => {
 		initialState = {
 			page: {
