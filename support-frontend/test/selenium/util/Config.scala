@@ -15,7 +15,7 @@ object Config {
 
   val supportFrontendUrl = conf.getString("support.url")
 
-  val waitTimeout = Duration.ofSeconds(45)
+  val waitTimeout = 45
 
   val identityGatewayUrl = conf.getString("identity.webapp.url")
 
