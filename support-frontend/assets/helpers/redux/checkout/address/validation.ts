@@ -152,12 +152,6 @@ function getDeliveryOnlyRules(
 	return [
 		{
 			rule:
-				abParticipations.nationalDelivery === 'control' ||
-				deliveryAgentChosen(fulfilmentOption, fields.postCode, deliveryAgent),
-			error: formError('postCode', 'Please select a delivery provider'),
-		},
-		{
-			rule:
 				abParticipations.nationalDelivery === 'variant'
 					? isHomeDeliveryAvailable(
 							fulfilmentOption,
@@ -187,24 +181,6 @@ export const isHomeDeliveryInM25 = (
 	return true;
 };
 
-export const deliveryAgentChosen = (
-	fulfilmentOption: FulfilmentOptions | null,
-	postcode: string | null,
-	deliveryAgent: DeliveryAgentState,
-	allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
-): boolean => {
-	if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
-		if (
-			!postcodeIsWithinDeliveryArea(postcode, allowedPrefixes) &&
-			deliveryAgentsAreAvailable(deliveryAgent)
-		) {
-			return deliveryAgentHasBeenChosen(deliveryAgent);
-		}
-	}
-
-	return true;
-};
-
 export const isHomeDeliveryAvailable = (
 	fulfilmentOption: FulfilmentOptions | null,
 	postcode: string | null,
@@ -220,13 +196,9 @@ export const isHomeDeliveryAvailable = (
 	return true;
 };
 
-const deliveryAgentHasBeenChosen = (
-	deliveryAgent: DeliveryAgentState,
-): boolean => (deliveryAgent.chosenAgent ? true : false);
-
 const deliveryAgentsAreAvailable = (
 	deliveryAgent: DeliveryAgentState,
-): boolean => (deliveryAgent.response?.agents.length ?? 0) > 0;
+): boolean => (deliveryAgent.response?.agents?.length ?? 0) > 0;
 
 export const isPostcodeOptional = (country: IsoCountry | null): boolean =>
 	country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';

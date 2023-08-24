@@ -23,7 +23,7 @@ export type DeliveryAgentsResponse = {
 		| 'UnknownPostcode'
 		| 'ProblemWithInput'
 		| 'PaperRoundError';
-	agents: DeliveryAgentOption[];
+	agents?: DeliveryAgentOption[];
 };
 
 export type DeliveryAgentOption = {
