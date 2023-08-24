@@ -3,6 +3,8 @@ package selenium.util
 import com.typesafe.config.ConfigFactory
 import org.openqa.selenium.remote.SessionId
 import org.slf4j.LoggerFactory
+
+import java.time.Duration
 import scala.util.{Failure, Success, Try}
 
 object Config {
@@ -13,7 +15,7 @@ object Config {
 
   val supportFrontendUrl = conf.getString("support.url")
 
-  val waitTimeout = 45
+  val waitTimeout = Duration.ofSeconds(45)
 
   val identityGatewayUrl = conf.getString("identity.webapp.url")
 
