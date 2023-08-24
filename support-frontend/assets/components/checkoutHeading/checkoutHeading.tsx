@@ -41,6 +41,7 @@ export interface CheckoutHeadingProps extends CSSOverridable {
 	heading: React.ReactNode;
 	children?: React.ReactNode;
 	image?: React.ReactNode;
+	withTopborder?: true;
 }
 
 export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
@@ -48,6 +49,7 @@ export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
 		<div css={mainStyles}>
 			<Container
 				sideBorders={true}
+				topBorder={props.withTopborder}
 				borderColor={brand[600]}
 				backgroundColor={brand[400]}
 			>

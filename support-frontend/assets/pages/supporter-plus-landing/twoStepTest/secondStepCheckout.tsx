@@ -1,7 +1,10 @@
 import { css } from '@emotion/react';
 import { space, until } from '@guardian/source-foundations';
-import { Link } from 'react-router-dom';
+import { Button } from '@guardian/source-react-components';
+import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
+import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
+import { ContributionsOrderSummaryContainer } from 'components/orderSummary/contributionsOrderSummaryContainer';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
 import { PaymentMethodSelector } from 'components/paymentMethodSelector/paymentMethodSelector';
 import PaymentMethodSelectorContainer from 'components/paymentMethodSelector/PaymentMethodSelectorContainer';
@@ -9,7 +12,6 @@ import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/p
 import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
-import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -55,35 +57,56 @@ export function SupporterPlusCheckout({
 		countryGroupId,
 	);
 
+	const navigate = useNavigate();
+
+	const changeButton = (
+		<Button
+			priority="tertiary"
+			size="xsmall"
+			onClick={() =>
+				navigate(
+					`/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`,
+				)
+			}
+		>
+			Change
+		</Button>
+	);
+
 	return (
-		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute}>
+		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
-					<p>
-						{amount} {contributionType}
-					</p>
-					<Link
-						to={`/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`}
-					>
-						Changed your mind?
-					</Link>
+					<ContributionsOrderSummaryContainer
+						renderOrderSummary={(orderSummaryProps) => (
+							<ContributionsOrderSummary
+								{...orderSummaryProps}
+								headerButton={changeButton}
+							/>
+						)}
+					/>
 				</BoxContents>
 			</Box>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
 					<ContributionsStripe>
-						<SecureTransactionIndicator />
 						<PaymentRequestButtonContainer CustomButton={SavedCardButton} />
 						<PersonalDetailsContainer
 							renderPersonalDetails={(personalDetailsProps) => (
-								<PersonalDetails {...personalDetailsProps} />
+								<PersonalDetails
+									{...personalDetailsProps}
+									overrideHeadingCopy="1. Your details"
+								/>
 							)}
 						/>
 						<CheckoutDivider spacing="loose" />
 						<PaymentMethodSelectorContainer
 							render={(paymentMethodSelectorProps) => (
-								<PaymentMethodSelector {...paymentMethodSelectorProps} />
+								<PaymentMethodSelector
+									{...paymentMethodSelectorProps}
+									overrideHeadingCopy="2. Payment method"
+								/>
 							)}
 						/>
 						<PaymentButtonController

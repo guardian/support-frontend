@@ -223,7 +223,10 @@ export function SupporterPlusLandingPage({
 									/>
 									<PersonalDetailsContainer
 										renderPersonalDetails={(personalDetailsProps) => (
-											<PersonalDetails {...personalDetailsProps} />
+											<PersonalDetails
+												{...personalDetailsProps}
+												hideDetailsHeading
+											/>
 										)}
 									/>
 									<CheckoutDivider spacing="loose" />

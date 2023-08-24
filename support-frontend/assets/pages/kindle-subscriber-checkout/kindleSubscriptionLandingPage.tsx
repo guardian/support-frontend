@@ -169,7 +169,10 @@ export function SupporterPlusLandingPage({
 									<SecureTransactionIndicator align="center" />
 									<PersonalDetailsContainer
 										renderPersonalDetails={(personalDetailsProps) => (
-											<PersonalDetails {...personalDetailsProps} />
+											<PersonalDetails
+												{...personalDetailsProps}
+												hideDetailsHeading
+											/>
 										)}
 									/>
 									<Divider size="full" cssOverrides={divider} />
