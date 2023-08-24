@@ -35,7 +35,7 @@ describe('Guardian Weekly checkout form', () => {
 	// Suppress warnings related to our version of Redux and improper JSX
 	console.warn = jest.fn();
 	console.error = jest.fn();
-	let initialState: unknown;
+	let initialState: Record<string, unknown>;
 	beforeEach(() => {
 		initialState = {
 			page: {
