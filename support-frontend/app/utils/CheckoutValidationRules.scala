@@ -244,10 +244,21 @@ object AddressAndCurrencyValidationRules {
     if (
       countryFromRequest == Country.US || countryFromRequest == Country.Canada || countryFromRequest == Country.Australia
     ) {
-      stateFromRequest.isDefined.otherwise(s"state is required for $countryFromRequest")
+      {
+        val validState = stateFromRequest match {
+          case Some(validState) if (validState.isEmpty) =>
+            Invalid(s"state is required for $countryFromRequest")
+          case None =>
+            Invalid(s"state is required for $countryFromRequest")
+          case Some("") =>
+            Invalid(s"state is required for $countryFromRequest")
+          case _ => Valid
+        }
+        validState
+      }
     } else Valid
 
-//     hasValidPostcodeLength checks if the length of postCodeIsShortEnoughForSalesforce(must be less than or equal to 20 characters)
+  //     hasValidPostcodeLength checks if the length of postCodeIsShortEnoughForSalesforce(must be less than or equal to 20 characters)
   def hasValidPostcodeLength(postcodeFromRequest: Option[String], addressType: String): Result = {
     val validPostCode = postcodeFromRequest match {
       case Some(postCode) if (postCode.length > 20) =>
