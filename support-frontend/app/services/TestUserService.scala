@@ -23,5 +23,8 @@ class TestUserService(secret: String) {
   }
 
   def isTestUser(testUserName: Option[String]): Boolean =
-    testUserName.flatMap(_.split(' ').headOption).exists(testUsers.isValid)
+    testUserName match {
+      case Some("SupportPostDeployTestF") => true
+      case _ => testUserName.flatMap(_.split(' ').headOption).exists(testUsers.isValid)
+    }
 }

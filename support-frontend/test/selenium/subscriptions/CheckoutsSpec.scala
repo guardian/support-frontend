@@ -74,6 +74,8 @@ class CheckoutsSpec
     Given("that a user goes to the UK product page")
     goTo(productPage)
 
+    checkoutPage.addTestUserCookies("SupportPostDeployTestF")
+
     Given(s"that a user goes to the $checkoutName checkout page")
     goTo(
       checkoutPage,
@@ -81,6 +83,7 @@ class CheckoutsSpec
 
     Then(s"they should be redirected to the $checkoutName checkout page")
     assert(checkoutPage.pageHasLoaded)
+    checkoutPage.disableConsentBanner()
 
     Given("the user fills in their details correctly")
     checkoutPage.fillForm()
