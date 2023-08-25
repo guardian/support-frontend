@@ -244,15 +244,12 @@ object AddressAndCurrencyValidationRules {
     if (
       countryFromRequest == Country.US || countryFromRequest == Country.Canada || countryFromRequest == Country.Australia
     ) {
-      {
-        val validState = stateFromRequest match {
-          case None =>
-            Invalid(s"state is required for $countryFromRequest")
-          case Some("") =>
-            Invalid(s"state is required for $countryFromRequest")
-          case _ => Valid
-        }
-        validState
+      stateFromRequest match {
+        case None =>
+          Invalid(s"state is required for $countryFromRequest")
+        case Some("") =>
+          Invalid(s"state is required for $countryFromRequest")
+        case _ => Valid
       }
     } else Valid
 
