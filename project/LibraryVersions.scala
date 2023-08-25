@@ -2,7 +2,7 @@ object LibraryVersions {
   val circeVersion = "0.14.5"
 
   val awsClientVersion = "1.12.537"
-  val awsClientVersion2 = "2.20.128"
+  val awsClientVersion2 = "2.20.134"
 
   val catsVersion = "2.9.0"
   val jacksonVersion = "2.15.0"
