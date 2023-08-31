@@ -1,5 +1,6 @@
 import { SvgDirectDebitWide } from '@guardian/source-react-components';
 import { AmazonPayFormContainer } from 'components/amazonPayForm/amazonPayFormContainer';
+import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import type { SepaFormProps } from 'components/sepaForm/SepaForm';
 import { SepaForm } from 'components/sepaForm/SepaForm';
 import { SepaFormContainer } from 'components/sepaForm/SepaFormContainer';
@@ -33,6 +34,10 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 		id: 'qa-direct-debit',
 		label: 'Direct debit',
 		icon: <SvgDirectDebitWide size="xsmall" />,
+		// Currently only for visual purposes
+		accordionBody: () => (
+			<DirectDebitForm onPaymentAuthorisation={() => null} />
+		),
 	},
 	Sepa: {
 		id: 'qa-direct-debit-sepa',
