@@ -6,7 +6,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
-import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery, RestOfWorld}
+import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery, NationalDelivery, RestOfWorld}
 import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
@@ -566,7 +566,7 @@ object JsonFixtures {
     CreateZuoraSubscriptionState(
       PaperState(
         userJsonWithDeliveryAddress,
-        Paper(GBP, Monthly, HomeDelivery, Everyday),
+        Paper(GBP, Monthly, HomeDelivery, Everyday, None),
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC),
         None,
@@ -574,7 +574,7 @@ object JsonFixtures {
       ),
       UUID.randomUUID(),
       userJsonWithDeliveryAddress,
-      Paper(GBP, Monthly, HomeDelivery, Everyday),
+      Paper(GBP, Monthly, HomeDelivery, Everyday, None),
       AnalyticsInfo(false, Stripe),
       None,
       None,
@@ -582,6 +582,29 @@ object JsonFixtures {
       None,
       None,
     ).asJson.spaces2
+
+  val createEverydayNationalDeliveryPaperSubscriptionJson = {
+    val paper = Paper(GBP, Monthly, NationalDelivery, Everyday, Some("Some delivery agent ID"))
+    CreateZuoraSubscriptionState(
+      PaperState(
+        userJsonWithDeliveryAddress,
+        paper,
+        stripePaymentMethodObj,
+        LocalDate.now(DateTimeZone.UTC),
+        None,
+        salesforceContact,
+      ),
+      UUID.randomUUID(),
+      userJsonWithDeliveryAddress,
+      paper,
+      AnalyticsInfo(false, Stripe),
+      None,
+      None,
+      None,
+      None,
+      None,
+    ).asJson.spaces2
+  }
 
   def createGuardianWeeklySubscriptionJson(
       billingPeriod: BillingPeriod,

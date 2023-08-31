@@ -3,6 +3,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
 const HomeDelivery = 'HomeDelivery';
+const NationalDelivery = 'NationalDelivery';
 const Collection = 'Collection';
 const Domestic = 'Domestic';
 const RestOfWorld = 'RestOfWorld';
@@ -18,12 +19,20 @@ export type DigitalPackFulfilmentOptions = typeof NoFulfilmentOptions;
 
 export type FulfilmentOptions =
 	| typeof HomeDelivery
+	| typeof NationalDelivery
 	| typeof Collection
 	| typeof Domestic
 	| typeof RestOfWorld
 	| typeof NoFulfilmentOptions;
 
-export { HomeDelivery, Collection, Domestic, RestOfWorld, NoFulfilmentOptions };
+export {
+	HomeDelivery,
+	NationalDelivery,
+	Collection,
+	Domestic,
+	RestOfWorld,
+	NoFulfilmentOptions,
+};
 
 const getWeeklyFulfilmentOption = (
 	country: IsoCountry,

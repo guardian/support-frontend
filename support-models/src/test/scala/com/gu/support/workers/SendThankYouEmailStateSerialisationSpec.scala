@@ -78,7 +78,11 @@ object ProductTypeCreatedTestData {
   )
   val paperCreated = SendThankYouEmailPaperState(
     user = User("111222", "email@blah.com", None, "bertha", "smith", Address(None, None, None, None, None, Country.UK)),
-    Paper(fulfilmentOptions = Collection, productOptions = Saturday),
+    Paper(
+      fulfilmentOptions = Collection,
+      productOptions = Saturday,
+      deliveryAgent = Some("A delivery agent ID"),
+    ),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),
     None,

@@ -14,7 +14,6 @@ import { CheckoutNudgeCloseButton } from './checkoutNudgeButtonClose';
 const container = css`
 	border-radius: 12px;
 	background-color: ${neutral[97]};
-	margin-bottom: ${space[3]}px;
 	background-size: auto 100%;
 	background-repeat: no-repeat;
 	background-position: right;

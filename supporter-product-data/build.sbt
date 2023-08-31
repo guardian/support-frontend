@@ -11,13 +11,14 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
-  "com.amazonaws" % "aws-lambda-java-core" % "1.2.2",
+  "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser" % circeVersion,
   "org.scala-lang.modules" %% "scala-java8-compat" % "1.0.2",
   "com.nrinaudo" %% "kantan.csv-generic" % "0.7.0",
   "com.nrinaudo" %% "kantan.csv-java8" % "0.7.0",
+  "com.jayway.jsonpath" % "json-path" % "2.8.0",
 )
 
 riffRaffPackageType := assembly.value

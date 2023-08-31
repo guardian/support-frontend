@@ -53,7 +53,7 @@ describe('Guardian Weekly checkout form', () => {
 	console.warn = jest.fn();
 	console.error = jest.fn();
 
-	let initialState: unknown;
+	let initialState: Record<string, unknown>;
 	const billingPeriod: BillingPeriod = 'Monthly';
 	const productOption: ProductOptions = 'NoProductOptions';
 	const fulfilmentOption: FulfilmentOptions = 'Domestic';

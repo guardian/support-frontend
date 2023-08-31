@@ -1,6 +1,4 @@
 import * as React from 'react';
-import type { ConnectedProps } from 'react-redux';
-import { connect } from 'react-redux';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
@@ -31,56 +29,48 @@ import {
 	expireRecaptchaToken,
 	setRecaptchaToken,
 } from 'helpers/redux/checkout/recaptcha/actions';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import './directDebitForm.scss';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 
-function mapStateToProps(state: ContributionsState) {
-	return {
-		isDDGuaranteeOpen:
-			state.page.checkoutForm.payment.directDebit.isDDGuaranteeOpen,
-		sortCodeArray: state.page.checkoutForm.payment.directDebit.sortCodeArray,
-		accountNumber: state.page.checkoutForm.payment.directDebit.accountNumber,
-		accountHolderName:
-			state.page.checkoutForm.payment.directDebit.accountHolderName,
-		accountHolderConfirmation:
-			state.page.checkoutForm.payment.directDebit.accountHolderConfirmation,
-		formError: state.page.checkoutForm.payment.directDebit.formError,
-		countryGroupId: state.common.internationalisation.countryGroupId,
-		recaptchaCompleted: state.page.checkoutForm.recaptcha.completed,
-	};
-}
-
-const mapDispatchToProps = {
-	confirmAccountDetails,
-	payWithDirectDebit,
-	setDDGuaranteeOpen,
-	setDDGuaranteeClose,
-	setSortCode,
-	setAccountHolderConfirmation,
-	setAccountHolderName,
-	setAccountNumber,
-	setFormError,
-	setRecaptchaToken,
-	expireRecaptchaToken,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropTypes = ConnectedProps<typeof connector> & {
+type PropTypes = {
 	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void;
 };
 
 const recaptchaId = 'robot_checkbox';
 
 // ----- Component ----- //
-function DirectDebitForm(props: PropTypes) {
-	function onSubmit() {
-		void props.confirmAccountDetails();
+export default function DirectDebitForm(props: PropTypes): JSX.Element {
+	const {
+		isDDGuaranteeOpen,
+		sortCodeArray,
+		accountNumber,
+		accountHolderName,
+		accountHolderConfirmation,
+		formError,
+	} = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.directDebit,
+	);
 
-		if (props.recaptchaCompleted) {
-			void props.payWithDirectDebit(props.onPaymentAuthorisation);
+	const { countryGroupId } = useContributionsSelector(
+		(state) => state.common.internationalisation,
+	);
+
+	const recaptchaCompleted = useContributionsSelector(
+		(state) => state.page.checkoutForm.recaptcha.completed,
+	);
+
+	const dispatch = useContributionsDispatch();
+
+	function onSubmit() {
+		void confirmAccountDetails();
+
+		if (recaptchaCompleted) {
+			void dispatch(payWithDirectDebit(props.onPaymentAuthorisation));
 		} else {
-			props.setFormError(directDebitErrorMessages.notCompletedRecaptcha);
+			dispatch(setFormError(directDebitErrorMessages.notCompletedRecaptcha));
 		}
 	}
 
@@ -88,55 +78,52 @@ function DirectDebitForm(props: PropTypes) {
 		<div className="component-direct-debit-form">
 			<AccountHolderNameInput
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					props.setAccountHolderName(e.target.value)
+					dispatch(setAccountHolderName(e.target.value))
 				}
-				value={props.accountHolderName}
+				value={accountHolderName}
 			/>
 
 			<AccountNumberInput
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					props.setAccountNumber(e.target.value)
+					dispatch(setAccountNumber(e.target.value))
 				}
-				value={props.accountNumber}
+				value={accountNumber}
 			/>
 
 			<SortCodeInput
 				onChange={(
 					index: SortCodeIndex,
 					e: React.ChangeEvent<HTMLInputElement>,
-				) => props.setSortCode({ index, partialSortCode: e.target.value })}
-				sortCodeArray={props.sortCodeArray}
+				) => dispatch(setSortCode({ index, partialSortCode: e.target.value }))}
+				sortCodeArray={sortCodeArray}
 			/>
 
 			<ConfirmationInput
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					props.setAccountHolderConfirmation(e.target.checked)
+					dispatch(setAccountHolderConfirmation(e.target.checked))
 				}
-				checked={props.accountHolderConfirmation}
+				checked={accountHolderConfirmation}
 			/>
 
 			<RecaptchaInput
-				setRecaptchaToken={props.setRecaptchaToken}
-				expireRecaptchaToken={props.expireRecaptchaToken}
+				setRecaptchaToken={(token) => dispatch(setRecaptchaToken(token))}
+				expireRecaptchaToken={() => dispatch(expireRecaptchaToken())}
 			/>
 
-			{props.formError && (
+			{formError && (
 				<div className="component-direct-debit-form__error-message-container">
-					<ErrorMessage
-						message={props.formError}
-						svg={<SvgExclamationAlternate />}
-					/>
+					<ErrorMessage message={formError} svg={<SvgExclamationAlternate />} />
 				</div>
 			)}
 
 			<PaymentButton onConfirmClick={onSubmit} />
 
-			<LegalNotice countryGroupId={props.countryGroupId} />
+			<LegalNotice countryGroupId={countryGroupId} />
 
 			<DirectDebitGuarantee
-				isDDGuaranteeOpen={props.isDDGuaranteeOpen}
-				openDirectDebitGuarantee={props.setDDGuaranteeOpen}
-				closeDirectDebitGuarantee={props.setDDGuaranteeClose}
+				isDDGuaranteeOpen={isDDGuaranteeOpen}
+				openDirectDebitGuarantee={setDDGuaranteeOpen}
+				closeDirectDebitGuarantee={() => dispatch(setDDGuaranteeClose())}
 			/>
 		</div>
 	);
@@ -308,5 +295,3 @@ function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 		</div>
 	);
 }
-
-export default connector(DirectDebitForm);

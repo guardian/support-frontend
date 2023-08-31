@@ -47,7 +47,13 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       when(config.oauthScopes).thenReturn(accessScopes)
       val request = FakeRequest().withCookies(Cookie(name = config.signedOutCookieName, value = "1684759360"))
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
+      val actionBuilder =
+        new UserFromAuthCookiesOrAuthServerActionBuilder(
+          parser,
+          authService,
+          config,
+          isAuthServerUp = () => Future.successful(true),
+        )
       val result = actionBuilder.invokeBlock(request, block)
       "give an OK response" in {
         status(result) mustBe 200
@@ -64,7 +70,13 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       when(config.oauthScopes).thenReturn(accessScopes)
       val request = FakeRequest()
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
+      val actionBuilder =
+        new UserFromAuthCookiesOrAuthServerActionBuilder(
+          parser,
+          authService,
+          config,
+          isAuthServerUp = () => Future.successful(true),
+        )
       val result = actionBuilder.invokeBlock(request, block)
       "be a redirect" in {
         status(result) mustBe 303
@@ -86,7 +98,13 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       when(config.accessTokenCookieName).thenReturn(accessTokenCookieName)
       val request = FakeRequest().withCookies(Cookie(name = config.accessTokenCookieName, value = accessToken.value))
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
+      val actionBuilder =
+        new UserFromAuthCookiesOrAuthServerActionBuilder(
+          parser,
+          authService,
+          config,
+          isAuthServerUp = () => Future.successful(true),
+        )
       val result = actionBuilder.invokeBlock(request, block)
       "be a redirect" in {
         status(result) mustBe 303
@@ -109,7 +127,13 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       when(config.accessTokenCookieName).thenReturn(accessTokenCookieName)
       val request = FakeRequest().withCookies(Cookie(name = config.idTokenCookieName, value = idToken.value))
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
+      val actionBuilder =
+        new UserFromAuthCookiesOrAuthServerActionBuilder(
+          parser,
+          authService,
+          config,
+          isAuthServerUp = () => Future.successful(true),
+        )
       val result = actionBuilder.invokeBlock(request, block)
       "be a redirect" in {
         status(result) mustBe 303
@@ -135,7 +159,13 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
         Cookie(name = config.idTokenCookieName, value = idToken.value),
         Cookie(name = config.accessTokenCookieName, value = accessToken.value),
       )
-      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
+      val actionBuilder =
+        new UserFromAuthCookiesOrAuthServerActionBuilder(
+          parser,
+          authService,
+          config,
+          isAuthServerUp = () => Future.successful(true),
+        )
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
       val result = actionBuilder.invokeBlock(request, block)
       "give an OK response" in {
@@ -160,7 +190,13 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
         Cookie(name = config.accessTokenCookieName, value = accessToken.value),
       )
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
+      val actionBuilder =
+        new UserFromAuthCookiesOrAuthServerActionBuilder(
+          parser,
+          authService,
+          config,
+          isAuthServerUp = () => Future.successful(true),
+        )
       val result = actionBuilder.invokeBlock(request, block)
       "be a redirect" in {
         status(result) mustBe 303
@@ -189,7 +225,47 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
         )
         .withFlash(authTried -> "true")
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-      val actionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(parser, authService, config)
+      val actionBuilder =
+        new UserFromAuthCookiesOrAuthServerActionBuilder(
+          parser,
+          authService,
+          config,
+          isAuthServerUp = () => Future.successful(true),
+        )
+      val result = actionBuilder.invokeBlock(request, block)
+      "give an OK response" in {
+        status(result) mustBe 200
+      }
+      "provide no User instance to the wrapped block" in {
+        contentAsJson(result) mustBe JsNull
+      }
+      "give a response with a clean session" in {
+        session(result).isEmpty mustBe true
+      }
+    }
+
+    "auth server is down" must {
+      val parser = mock[BodyParser[AnyContent]]
+      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Left(InvalidOrExpiredToken))
+      when(authService.validateAccessTokenLocally(accessToken, Nil)).thenReturn(Left(InvalidOrExpiredToken))
+      val config = mock[Identity]
+      when(config.oauthScopes).thenReturn(accessScopes)
+      when(config.idTokenCookieName).thenReturn(idTokenCookieName)
+      when(config.accessTokenCookieName).thenReturn(accessTokenCookieName)
+      val request = FakeRequest()
+        .withCookies(
+          Cookie(name = config.idTokenCookieName, value = idToken.value),
+          Cookie(name = config.accessTokenCookieName, value = accessToken.value),
+        )
+      def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
+      val actionBuilder =
+        new UserFromAuthCookiesOrAuthServerActionBuilder(
+          parser,
+          authService,
+          config,
+          isAuthServerUp = () => Future.successful(false),
+        )
       val result = actionBuilder.invokeBlock(request, block)
       "give an OK response" in {
         status(result) mustBe 200

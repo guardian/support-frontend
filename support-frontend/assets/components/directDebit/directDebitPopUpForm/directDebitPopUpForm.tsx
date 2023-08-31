@@ -1,6 +1,4 @@
 // ----- Imports ----- //
-import type { ConnectedProps } from 'react-redux';
-import { connect } from 'react-redux';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import SvgCross from 'components/svgs/cross';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
@@ -9,33 +7,29 @@ import {
 	resetFormError,
 	setPopupClose,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
-import type { ContributionsState } from 'helpers/redux/contributionsStore';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 
-// ----- Map State/Props ----- //
-function mapStateToProps(state: ContributionsState) {
-	return {
-		isPopUpOpen: state.page.checkoutForm.payment.directDebit.isPopUpOpen,
-	};
-}
-
-const mapDispatchToProps = {
-	setPopupClose,
-	resetFormError,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropTypes = ConnectedProps<typeof connector> & {
+type PropTypes = {
 	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void;
 };
 
-function DirectDebitPopUpForm(props: PropTypes): JSX.Element {
+// ----- Component ----- //
+export default function DirectDebitPopUpForm(props: PropTypes): JSX.Element {
+	const { isPopUpOpen } = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.directDebit,
+	);
+
+	const dispatch = useContributionsDispatch();
+
 	function closePopup() {
-		props.setPopupClose();
-		props.resetFormError();
+		dispatch(setPopupClose());
+		dispatch(resetFormError);
 	}
 
-	if (props.isPopUpOpen) {
+	if (isPopUpOpen) {
 		return (
 			<div className="component-direct-debit-pop-up-form">
 				<div className="component-direct-debit-pop-up-form__content">
@@ -58,5 +52,3 @@ function DirectDebitPopUpForm(props: PropTypes): JSX.Element {
 
 	return <></>;
 }
-
-export default connector(DirectDebitPopUpForm);

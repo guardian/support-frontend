@@ -206,7 +206,11 @@ export function SupporterPlusLandingPage({
 							{displayLimitedPriceCards ? (
 								<LimitedPriceCards />
 							) : (
-								<AmountAndBenefits />
+								<AmountAndBenefits
+									countryGroupId={countryGroupId}
+									amountIsAboveThreshold={amountIsAboveThreshold}
+									showCancelTooltip
+								/>
 							)}
 						</Box>
 						<Box cssOverrides={shorterBoxMargin}>

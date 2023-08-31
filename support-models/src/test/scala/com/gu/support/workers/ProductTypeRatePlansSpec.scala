@@ -1,7 +1,7 @@
 package com.gu.support.workers
 
 import com.gu.i18n.Currency.{GBP, USD}
-import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery}
+import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery, NationalDelivery}
 import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.workers.ProductTypeRatePlans._
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
@@ -15,9 +15,12 @@ class ProductTypeRatePlansSpec extends AsyncFlatSpec with Matchers {
     val weekly = GuardianWeekly(GBP, Annual, Domestic)
     weeklyRatePlan(weekly, CODE, Direct).value.description shouldBe "Guardian Weekly annual, domestic delivery"
 
-    val paper = Paper(USD, Monthly, HomeDelivery, Everyday)
+    val paper = Paper(USD, Monthly, HomeDelivery, Everyday, Some("any delivery agent! It shouldn’t matter"))
     paperRatePlan(paper, CODE).value.id shouldBe "2c92c0f955c3cf0f0155c5d9e2493c43"
 
+    val nationalDeliveryPaper =
+      Paper(USD, Monthly, NationalDelivery, Everyday, Some("any delivery agent! It shouldn’t matter"))
+    paperRatePlan(nationalDeliveryPaper, CODE).value.id shouldBe "8ad096ca8992481d018992a363bd17ad"
   }
 
 }

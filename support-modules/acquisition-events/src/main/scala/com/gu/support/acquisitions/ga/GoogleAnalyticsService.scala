@@ -187,6 +187,7 @@ object GoogleAnalyticsService extends LazyLogging {
             HomeDeliveryWeekendPlus =>
           "PaperAndDigital"
         case PrintProduct.GuardianWeekly => "GuardianWeekly"
+        case NationalDeliveryEveryday | NationalDeliveryWeekend | NationalDeliverySixday => "PaperNationalDelivery"
       },
     )
   }

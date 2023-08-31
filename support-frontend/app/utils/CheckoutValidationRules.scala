@@ -5,7 +5,15 @@ import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
 import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
 import com.gu.support.acquisitions.AbTest
-import com.gu.support.catalog.{Collection, Domestic, FulfilmentOptions, HomeDelivery, NoFulfilmentOptions, RestOfWorld}
+import com.gu.support.catalog.{
+  Collection,
+  Domestic,
+  FulfilmentOptions,
+  NationalDelivery,
+  HomeDelivery,
+  NoFulfilmentOptions,
+  RestOfWorld,
+}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
@@ -244,10 +252,16 @@ object AddressAndCurrencyValidationRules {
     if (
       countryFromRequest == Country.US || countryFromRequest == Country.Canada || countryFromRequest == Country.Australia
     ) {
-      stateFromRequest.isDefined.otherwise(s"state is required for $countryFromRequest")
+      stateFromRequest match {
+        case None =>
+          Invalid(s"state is required for $countryFromRequest")
+        case Some("") =>
+          Invalid(s"state is required for $countryFromRequest")
+        case _ => Valid
+      }
     } else Valid
 
-//     hasValidPostcodeLength checks if the length of postCodeIsShortEnoughForSalesforce(must be less than or equal to 20 characters)
+  //     hasValidPostcodeLength checks if the length of postCodeIsShortEnoughForSalesforce(must be less than or equal to 20 characters)
   def hasValidPostcodeLength(postcodeFromRequest: Option[String], addressType: String): Result = {
     val validPostCode = postcodeFromRequest match {
       case Some(postCode) if (postCode.length > 20) =>
@@ -368,7 +382,8 @@ object PaperValidation {
         deliveredToUkAndPaidInGbp(address.country, createSupportWorkersRequest.product.currency)
       val deliveryAddressHasAddressLine1AndCity = hasAddressLine1AndCity(address)
       val validPostcode = fulfilmentOptions match {
-        case HomeDelivery => postcodeIsWithinDeliveryArea(postCode)
+        case NationalDelivery => postcodeIsWithinNationalDeliveryArea(postCode)
+        case HomeDelivery => postcodeIsWithinHomeDeliveryArea(postCode)
         case Collection => Valid
         case Domestic => Invalid("domestic is not valid for paper")
         case RestOfWorld => Invalid("rest of world is not valid for paper")
@@ -398,7 +413,11 @@ object PaperValidation {
 
   }
 
-  def postcodeIsWithinDeliveryArea(postcode: String): Result =
+  def postcodeIsWithinNationalDeliveryArea(postcode: String): Result = {
+    Valid // TODO: determine valid postcodes
+  }
+
+  def postcodeIsWithinHomeDeliveryArea(postcode: String): Result =
     M25_POSTCODE_PREFIXES.contains(getPrefix(postcode)).otherwise(s"postcode $postcode is not within M25")
 
   val M25_POSTCODE_OLD_PREFIXES = List(

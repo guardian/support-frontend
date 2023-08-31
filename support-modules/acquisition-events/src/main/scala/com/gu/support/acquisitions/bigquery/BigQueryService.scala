@@ -65,23 +65,30 @@ class BigQueryService(config: BigQueryConfig) {
       )
       .build()
   lazy val bigQueryWriteClient = BigQueryWriteClient.create(bigQueryWriteSettings)
+  lazy val tableId = TableName.of(config.projectId, datasetName, tableName)
+  lazy val streamWriter = JsonStreamWriter.newBuilder(tableId.toString(), bigQueryWriteClient).build();
+
+  def tableInsertRowWithRetry(acquisitionDataRow: AcquisitionDataRow, maxRetries: Int)(implicit
+      executionContext: ExecutionContext,
+  ): EitherT[Future, List[String], Unit] = Retry(maxRetries)(sendAcquisition(acquisitionDataRow))
 
   def sendAcquisition(acquisitionDataRow: AcquisitionDataRow): EitherT[Future, String, Unit] =
     EitherT(
       send(acquisitionDataRow),
     )
 
-  def tableInsertRowWithRetry(acquisitionDataRow: AcquisitionDataRow, maxRetries: Int)(implicit
-      executionContext: ExecutionContext,
-  ): EitherT[Future, List[String], Unit] = Retry(maxRetries)(sendAcquisition(acquisitionDataRow))
+  /** Release resources held by the service.
+    */
+  def shutdown(): Unit = {
+    streamWriter.close()
+    bigQueryWriteClient.close()
+  }
 
   private def send(
       acquisitionDataRow: AcquisitionDataRow,
   ): Future[Either[String, Unit]] = {
-    val tableId = TableName.of(config.projectId, datasetName, tableName)
     val rowContent: JSONObject = AcquisitionDataRowMapper.mapToTableRow(acquisitionDataRow)
     SafeLogger.info(s"Attempting to append row ($rowContent) created from ($acquisitionDataRow)")
-    val streamWriter = JsonStreamWriter.newBuilder(tableId.toString(), bigQueryWriteClient).build();
     val promise = Promise[Either[String, Unit]]()
     try {
       val responseFuture = streamWriter.append(new JSONArray(List(rowContent).asJava));

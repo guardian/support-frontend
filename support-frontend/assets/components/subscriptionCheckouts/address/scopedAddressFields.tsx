@@ -23,6 +23,7 @@ import {
 } from 'helpers/redux/checkout/address/reducer';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
+import { setPaperDeliveryPostcode } from 'helpers/subscriptionsForms/formActions';
 import { AddressFields } from './addressFields';
 
 // ---- Billing address ---- //
@@ -79,8 +80,8 @@ const mapDeliveryAddressDispatchToProps = {
 	setLineTwo: setDeliveryAddressLineTwo,
 	setTownCity: setDeliveryTownCity,
 	setState: setDeliveryState,
-	setPostcode: setDeliveryPostcode,
 	setCountry: setDeliveryCountry,
+	setPostcode: setDeliveryPostcode,
 	setPostcodeForFinder: setDeliveryPostcodeForFinder,
 	setPostcodeErrorForFinder: setDeliveryPostcodeErrorForFinder,
 	onFindAddress: deliveryAddressFindAddresses,
@@ -89,4 +90,25 @@ const mapDeliveryAddressDispatchToProps = {
 export const DeliveryAddress = connect(
 	mapDeliveryAddressStateToProps,
 	mapDeliveryAddressDispatchToProps,
+)(AddressFields);
+
+// ---- Delivery address for papers ---- //
+
+const mapPaperDeliveryAddressDispatchToProps = () => {
+	return {
+		setPostcode: (postcode: string) => setPaperDeliveryPostcode(postcode),
+		setLineOne: setDeliveryAddressLineOne,
+		setLineTwo: setDeliveryAddressLineTwo,
+		setTownCity: setDeliveryTownCity,
+		setState: setDeliveryState,
+		setCountry: setDeliveryCountry,
+		setPostcodeForFinder: setDeliveryPostcodeForFinder,
+		setPostcodeErrorForFinder: setDeliveryPostcodeErrorForFinder,
+		onFindAddress: deliveryAddressFindAddresses,
+	};
+};
+
+export const PaperAddress = connect(
+	mapDeliveryAddressStateToProps,
+	mapPaperDeliveryAddressDispatchToProps(),
 )(AddressFields);

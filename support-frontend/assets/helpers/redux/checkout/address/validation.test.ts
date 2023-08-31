@@ -187,7 +187,12 @@ describe('applyDeliveryAddressRules', () => {
 	it('returns an error if postCode is outside of the M25', () => {
 		const fields = buildAddressFields({ postCode: 'DA11 7NP' });
 
-		const errors = applyDeliveryAddressRules('HomeDelivery', fields);
+		const errors = applyDeliveryAddressRules(
+			'HomeDelivery',
+			fields,
+			{ isLoading: false },
+			{},
+		);
 
 		expect(errors).toEqual([
 			{

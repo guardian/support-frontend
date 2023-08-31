@@ -6,7 +6,7 @@ import com.gu.i18n.{Country, Currency}
 import com.gu.stripe.StripeServiceForCurrency
 import com.gu.support.acquisitions.ReferrerAcquisitionData
 import com.gu.support.catalog
-import com.gu.support.catalog.{Everyday, HomeDelivery}
+import com.gu.support.catalog.{Everyday, HomeDelivery, NationalDelivery}
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.workers._
 import com.gu.support.zuora.api._
@@ -97,18 +97,30 @@ object Fixtures {
     ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None)
 
   val touchpointEnvironment = TouchPointEnvironments.fromStage(Configuration.stage)
-  val everydayHDProductRatePlanId =
+  val everydayHomeDeliveryProductRatePlanId =
     catalog.Paper.getProductRatePlan(touchpointEnvironment, Monthly, HomeDelivery, Everyday) map (_.id)
+  val everydayNationalDeliveryProductRatePlanId =
+    catalog.Paper.getProductRatePlan(touchpointEnvironment, Monthly, NationalDelivery, Everyday) map (_.id)
 
   val everydayPaperSubscriptionData = SubscriptionData(
     List(
       RatePlanData(
-        RatePlan(everydayHDProductRatePlanId.get), // Everyday HD product
+        RatePlan(everydayHomeDeliveryProductRatePlanId.get),
         Nil,
         Nil,
       ),
     ),
     Subscription(date, date, date, "id123"),
+  )
+  val everydayNationalDeliveryPaperSubscriptionData = SubscriptionData(
+    List(
+      RatePlanData(
+        RatePlan(everydayNationalDeliveryProductRatePlanId.get),
+        Nil,
+        Nil,
+      ),
+    ),
+    Subscription(date, date, date, "id123", deliveryAgent = Some("delivery agent ID")),
   )
 
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
@@ -148,6 +160,20 @@ object Fixtures {
           Some(differentContactDetails),
           Some(directDebitPaymentMethod),
           everydayPaperSubscriptionData,
+          SubscribeOptions(),
+        ),
+      ),
+    )
+
+  def directDebitSubscriptionRequestNationalDelivery: SubscribeRequest =
+    SubscribeRequest(
+      List(
+        SubscribeItem(
+          account(paymentGateway = DirectDebitGateway),
+          contactDetails,
+          Some(differentContactDetails),
+          Some(directDebitPaymentMethod),
+          everydayNationalDeliveryPaperSubscriptionData,
           SubscribeOptions(),
         ),
       ),
