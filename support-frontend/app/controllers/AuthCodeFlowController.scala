@@ -80,13 +80,36 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
       errorDescription: Option[String],
   ): Action[AnyContent] = Action.async { implicit request =>
     val originUrl = request.session.get(SessionKey.originUrl)
+    val referringUrl = request.session.get(SessionKey.referringUrl)
     val codeVerifier = request.session.get(SessionKey.codeVerifier)
     val sessionState = request.session.get(SessionKey.state)
 
     def cleansed(result: Result) =
-      result.removingFromSession(SessionKey.originUrl, SessionKey.state, SessionKey.codeVerifier)
+      result.removingFromSession(
+        SessionKey.originUrl,
+        SessionKey.referringUrl,
+        SessionKey.state,
+        SessionKey.codeVerifier,
+      )
 
-    lazy val redirect = cleansed(Redirect(originUrl.getOrElse("/"))).flashing(FlashKey.authTried -> "true")
+    /*
+     * We redirect back to the URL where the auth flow began and append a query param to identify the referring URL.
+     * The referring URL is appended because it's lost during the auth flow, as the authorize() call on the auth server has a 'no-referrer'
+     * in its Referrer-Policy response header.  This enables any analytics to know the referring URL of the page that gets redirected to at the end
+     * of the auth flow as it will be the same as the referrer of the page that triggered the auth flow.
+     */
+    lazy val redirect = {
+      val origin = originUrl.getOrElse("/")
+      val url = referringUrl
+        .map { refUrl =>
+          val referrer = s"pre-auth-ref=${urlEncode(refUrl)}"
+          if (origin.contains("?")) s"$origin&$referrer"
+          else s"$origin?$referrer"
+        }
+        .getOrElse(origin)
+      cleansed(Redirect(url))
+        .flashing(FlashKey.authTried -> "true")
+    }
 
     (code, codeVerifier, sessionState, error, errorDescription) match {
 
@@ -141,6 +164,9 @@ object AuthCodeFlow {
     // URL from which the auth flow was triggered, and where the flow should end up
     val originUrl = "oauth.originUrl"
 
+    // Referring URL of the origin URL
+    val referringUrl = "oauth.referrerUrl"
+
     // To be compared with state param in callback request to avoid CSRF
     val state = "oauth.state"
 
@@ -153,10 +179,10 @@ object AuthCodeFlow {
     val authTried = "oauth.authTried"
   }
 
-  def toQuery(ss: Map[String, String]): String = {
-    def urlEncode(s: String) = URLEncoder.encode(s, UTF_8.name())
+  def urlEncode(s: String): String = URLEncoder.encode(s, UTF_8.name())
+
+  def toQuery(ss: Map[String, String]): String =
     ss.map { case (k, v) => s"$k=${urlEncode(v)}" }.mkString("&")
-  }
 
   def secureCookie(name: String, value: String): Cookie =
     Cookie(name, value, maxAge = Some(3600), secure = true, httpOnly = false, sameSite = Some(SameSite.Lax))
