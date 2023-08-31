@@ -1,4 +1,23 @@
+import type { AmountsTest, AmountsTests } from 'helpers/contributions';
 import { emptyConfiguredRegionAmounts, getGlobal } from './globals';
+
+const getSpecifiedRegionAmountsFromGlobal = (
+	target: string,
+	path: string,
+): AmountsTest | Record<string, never> => {
+	const allAmountsTests: AmountsTests | null = getGlobal(path);
+	if (!allAmountsTests) {
+		return {};
+	}
+	const testArray = allAmountsTests.filter(
+		(t) =>
+			t.targeting.targetingType === 'Region' && t.targeting.region === target,
+	);
+	if (!testArray.length) {
+		return {};
+	}
+	return testArray[0];
+};
 
 describe('getGlobal', () => {
 	beforeEach(() => {
@@ -8,15 +27,64 @@ describe('getGlobal', () => {
 				switches: {
 					experiments: {},
 				},
-				amounts: {
-					GBPCountries: emptyConfiguredRegionAmounts,
-					UnitedStates: emptyConfiguredRegionAmounts,
-					EURCountries: emptyConfiguredRegionAmounts,
-					AUDCountries: emptyConfiguredRegionAmounts,
-					International: emptyConfiguredRegionAmounts,
-					NZDCountries: emptyConfiguredRegionAmounts,
-					Canada: emptyConfiguredRegionAmounts,
-				},
+				amounts: [
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__GBPCountries',
+						targeting: {
+							targetingType: 'Region',
+							region: 'GBPCountries',
+						},
+					},
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__UnitedStates',
+						targeting: {
+							targetingType: 'Region',
+							region: 'UnitedStates',
+						},
+					},
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__Canada',
+						targeting: {
+							targetingType: 'Region',
+							region: 'Canada',
+						},
+					},
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__NZDCountries',
+						targeting: {
+							targetingType: 'Region',
+							region: 'NZDCountries',
+						},
+					},
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__EURCountries',
+						targeting: {
+							targetingType: 'Region',
+							region: 'EURCountries',
+						},
+					},
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__International',
+						targeting: {
+							targetingType: 'Region',
+							region: 'International',
+						},
+					},
+					{
+						...emptyConfiguredRegionAmounts,
+						testName: 'EMPTY_TEST__AUDCountries',
+						targeting: {
+							targetingType: 'Region',
+							region: 'AUDCountries',
+						},
+					},
+				],
 				contributionTypes: {
 					GBPCountries: [],
 					UnitedStates: [],
@@ -32,15 +100,32 @@ describe('getGlobal', () => {
 	});
 
 	it('uses the passed path to traverse the window.guardian settings object', () => {
-		expect(getGlobal('settings.amounts.GBPCountries')).toEqual(
-			emptyConfiguredRegionAmounts,
-		);
+		expect(
+			getSpecifiedRegionAmountsFromGlobal('GBPCountries', 'settings.amounts'),
+		).toEqual({
+			...emptyConfiguredRegionAmounts,
+			testName: 'EMPTY_TEST__GBPCountries',
+			targeting: {
+				targetingType: 'Region',
+				region: 'GBPCountries',
+			},
+		});
 	});
 
 	it('uses the passed path to traverse the window.guardian settings object even if given a fully qualified path', () => {
-		expect(getGlobal('window.guardian.settings.amounts.GBPCountries')).toEqual(
-			emptyConfiguredRegionAmounts,
-		);
+		expect(
+			getSpecifiedRegionAmountsFromGlobal(
+				'GBPCountries',
+				'window.guardian.settings.amounts',
+			),
+		).toEqual({
+			...emptyConfiguredRegionAmounts,
+			testName: 'EMPTY_TEST__GBPCountries',
+			targeting: {
+				targetingType: 'Region',
+				region: 'GBPCountries',
+			},
+		});
 	});
 
 	it('returns any item reached in traversal that is not an object', () => {

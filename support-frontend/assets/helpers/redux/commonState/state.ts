@@ -1,6 +1,6 @@
 import type { Participations } from 'helpers/abTests/abtest';
-import { FALLBACK_AMOUNTS } from 'helpers/abTests/helpers';
-import type { ContributionAmounts } from 'helpers/contributions';
+import { getFallbackAmounts } from 'helpers/abTests/helpers';
+import type { SelectedAmountsVariant } from 'helpers/contributions';
 import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
@@ -29,8 +29,8 @@ export type CommonState = {
 	otherQueryParams: Array<[string, string]>;
 	abParticipations: Participations;
 	settings: Settings;
-	amounts: ContributionAmounts;
-	defaultAmounts: ContributionAmounts;
+	amounts: SelectedAmountsVariant;
+	defaultAmounts: SelectedAmountsVariant;
 	internationalisation: Internationalisation;
 	existingPaymentMethods?: ExistingPaymentMethod[];
 };
@@ -42,8 +42,8 @@ export type CommonStateSetupData = {
 	internationalisation: Internationalisation;
 	abParticipations: Participations;
 	settings: Settings;
-	amounts: ContributionAmounts;
-	defaultAmounts: ContributionAmounts;
+	amounts: SelectedAmountsVariant;
+	defaultAmounts: SelectedAmountsVariant;
 };
 
 const countryGroupId = detectCountryGroup();
@@ -54,8 +54,8 @@ export const initialCommonState: CommonState = {
 	otherQueryParams: [],
 	abParticipations: {},
 	settings: getSettings(),
-	amounts: FALLBACK_AMOUNTS[countryGroupId],
-	defaultAmounts: FALLBACK_AMOUNTS[countryGroupId],
+	amounts: getFallbackAmounts(countryGroupId),
+	defaultAmounts: getFallbackAmounts(countryGroupId),
 	internationalisation: {
 		currencyId: detectCurrency(countryGroupId),
 		countryGroupId,

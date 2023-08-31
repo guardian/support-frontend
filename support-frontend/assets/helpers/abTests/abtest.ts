@@ -91,6 +91,7 @@ export function init(
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
 	const amountsTestParticipations = getAmountsTestParticipations(
+		country,
 		countryGroupId,
 		settings,
 		acquisitionDataTests,
@@ -188,13 +189,11 @@ function getServerSideParticipations(): Participations | null | undefined {
 	if (window.guardian.serversideTests) {
 		return window.guardian.serversideTests;
 	}
-
 	return null;
 }
 
 function getAmountsTestFromURL(data: AcquisitionABTest[]) {
 	const amountTests = data.filter((t) => t.testType === 'AMOUNTS_TEST');
-
 	if (amountTests.length) {
 		const test = amountTests[0];
 		return {
@@ -205,6 +204,7 @@ function getAmountsTestFromURL(data: AcquisitionABTest[]) {
 }
 
 function getAmountsTestParticipations(
+	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	settings: Settings,
 	acquisitionDataTests: AcquisitionABTest[],
@@ -224,16 +224,79 @@ function getAmountsTestParticipations(
 		return urlTest;
 	}
 
-	const { test } = settings.amounts?.[countryGroupId] ?? {};
-
-	if (!test || !test.isLive) {
+	if (!settings.amounts) {
 		return null;
 	}
 
-	const variants = ['CONTROL', ...test.variants.map((variant) => variant.name)];
-	const assignmentIndex = randomNumber(getMvtId(), test.seed) % variants.length;
+	const amounts = settings.amounts;
+
+	/*
+	An amounts test can be in one of two forms:
+
+	Country test:
+	  Bespoke tests targeted at one or more geographical countries
+	  `targeting` object will include a `countries` attribute
+	    - a String array containing 2-letter ISO country codes
+	  When the `isLive` boolean is `false`:
+	    - the test is ignored; users will see their appropriate region test
+	  When the `isLive` boolean is `true`:
+	    - users will be randomly segregated into an AB test and see the appropriate variant
+	    - analytics will use the `liveTestName` label, if available, else the `testName` label
+	  A country can appear in more than one country test:
+	    - if 2+ live tests include the country, the test with the lowest `order` value will display
+
+	Region test:
+	  Evergreen tests, one per geographical region
+	  `targeting` object will include a `region` attribute
+	    - the region label, as defined by the Region type
+	  When the `isLive` boolean is `false`:
+	    - the CONTROL variant will display
+	    - analytics will use the `testName` label
+	  When the `isLive` boolean is `true`:
+	    - users will be randomly segregated into an AB test and see the appropriate variant
+	    - analytics will use the `liveTestName` label
+	*/
+	const targetTestArray = amounts.filter(
+		(t) =>
+			t.isLive &&
+			t.targeting.targetingType === 'Country' &&
+			t.targeting.countries.includes(country),
+	);
+	let targetTest;
+	if (targetTestArray.length) {
+		targetTestArray.sort((a, b) => a.order - b.order);
+		targetTest = targetTestArray[0];
+	}
+	if (!targetTest) {
+		targetTest = amounts.find(
+			(t) =>
+				t.targeting.targetingType === 'Region' &&
+				t.targeting.region === countryGroupId,
+		);
+	}
+
+	if (!targetTest) {
+		return null;
+	}
+
+	const { testName, liveTestName, isLive, seed, variants } = targetTest;
+
+	if (!variants.length) {
+		return null;
+	}
+
+	/*
+		We return null if there's no live AB test running (for a regional test) or just a single variant in the test (which will always be the control variant)
+	*/
+	if (!isLive || variants.length === 1) {
+		return null;
+	}
+
+	const currentTestName = liveTestName ?? testName;
+	const variantNames = variants.map((variant) => variant.variantName);
+	const assignmentIndex = randomNumber(getMvtId(), seed) % variantNames.length;
 	return {
-		[test.name]: variants[assignmentIndex],
+		[currentTestName]: variantNames[assignmentIndex],
 	};
 }
 

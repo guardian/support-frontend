@@ -34,10 +34,17 @@ describe('init', () => {
 		switches: {
 			experiments: {},
 		},
-		amounts: {
-			GBPCountries: {},
-			UnitedStates: {},
+		amounts: [],
+		contributionTypes: {
+			GBPCountries: [],
+			UnitedStates: [],
+			AUDCountries: [],
+			EURCountries: [],
+			NZDCountries: [],
+			Canada: [],
+			International: [],
 		},
+		metricUrl: '',
 	} as Settings;
 
 	afterEach(() => {
