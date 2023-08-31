@@ -58,6 +58,9 @@ const totalRow = (hasTsAncCs: boolean) => css`
 
 const heading = css`
 	${headline.xsmall({ fontWeight: 'bold' })}
+	${from.tablet} {
+		font-size: 28px;
+	}
 `;
 
 const hrCss = css`
