@@ -1,6 +1,5 @@
 package wiring
 
-import actions.UserFromAuthCookiesActionBuilder.UserClaims
 import actions.{UserFromAuthCookiesActionBuilder, UserFromAuthCookiesOrAuthServerActionBuilder}
 import admin.settings.AllSettingsProvider
 import cats.syntax.either._
@@ -46,13 +45,12 @@ trait Services {
 
   lazy val asyncAuthenticationService = AsyncAuthenticationService(appConfig.identity, wsClient)
 
-  lazy val oktaAuthService = OktaAuthService[DefaultAccessClaims, UserClaims](
+  lazy val oktaAuthService = OktaAuthService(
     config = OktaTokenValidationConfig(
       issuerUrl = OktaIssuerUrl(appConfig.identity.oauthIssuerUrl),
       audience = Some(OktaAudience(appConfig.identity.oauthAudience)),
       clientId = Some(OktaClientId(appConfig.identity.oauthClientId)),
     ),
-    defaultIdentityClaimsParser = UserClaims.parser,
   )
 
   lazy val userFromAuthCookiesOrAuthServerActionBuilder = new UserFromAuthCookiesOrAuthServerActionBuilder(

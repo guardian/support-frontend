@@ -2,7 +2,7 @@ package actions
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.UserFromAuthCookiesActionBuilder.UserClaims.toUser
-import actions.UserFromAuthCookiesActionBuilder.{UserClaims, processRequestWithoutUser, tryToProcessRequest}
+import actions.UserFromAuthCookiesActionBuilder.{processRequestWithoutUser, tryToProcessRequest}
 import com.gu.identity.auth._
 import com.gu.identity.model.{PrivateFields, User}
 import config.Identity
@@ -21,7 +21,7 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 class UserFromAuthCookiesActionBuilder(
     override val parser: BodyParser[AnyContent],
-    oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims],
+    oktaAuthService: OktaAuthService,
     config: Identity,
 )(implicit val executionContext: ExecutionContext)
     extends ActionBuilder[OptionalAuthRequest, AnyContent]
@@ -41,7 +41,7 @@ class UserFromAuthCookiesActionBuilder(
   */
 class UserFromAuthCookiesOrAuthServerActionBuilder(
     override val parser: BodyParser[AnyContent],
-    oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims],
+    oktaAuthService: OktaAuthService,
     config: Identity,
     isAuthServerUp: () => Future[Boolean],
 )(implicit val executionContext: ExecutionContext)
@@ -99,8 +99,9 @@ object UserFromAuthCookiesActionBuilder {
     */
   def tryToProcessRequest[A](
       config: Identity,
-      oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims],
+      oktaAuthService: OktaAuthService,
   )(request: Request[A], block: OptionalAuthRequest[A] => Future[Result]): Either[ValidationError, Future[Result]] = {
+    implicit val userParser: IdentityClaimsParser[UserClaims] = UserClaims.parser
     val accessScopes = config.oauthScopes.trim.split("\\s+").map(scope => ClientAccessScope(scope)).toList
     for {
       idTokenCookie <- request.cookies
@@ -123,27 +124,16 @@ object UserFromAuthCookiesActionBuilder {
 
   object UserClaims {
 
-    val parser: IdentityClaimsParser[UserClaims] = new IdentityClaimsParser[UserClaims] {
-
-      // Not used
-      override protected def fromDefaultAndRaw(
-          defaultClaims: DefaultIdentityClaims,
-          rawClaims: JsonString,
-      ): Either[ValidationError, UserClaims] = throw new UnsupportedOperationException()
-
-      override protected def fromDefaultAndUnparsed(
-          defaultClaims: DefaultIdentityClaims,
-          unparsedClaims: UnparsedClaims,
-      ): Either[ValidationError, UserClaims] =
-        Right(
-          UserClaims(
-            primaryEmailAddress = defaultClaims.primaryEmailAddress,
-            identityId = defaultClaims.identityId,
-            firstName = unparsedClaims.getOptional("first_name"),
-            lastName = unparsedClaims.getOptional("last_name"),
-          ),
-        )
-    }
+    val parser: IdentityClaimsParser[UserClaims] = unparsedClaims =>
+      for {
+        emailAddress <- IdentityClaimsParser.primaryEmailAddress(unparsedClaims)
+        idnttyId <- IdentityClaimsParser.identityId(unparsedClaims)
+      } yield UserClaims(
+        primaryEmailAddress = emailAddress,
+        identityId = idnttyId,
+        firstName = unparsedClaims.getOptional("first_name"),
+        lastName = unparsedClaims.getOptional("last_name"),
+      )
 
     def toUser(claims: UserClaims): User = User(
       id = claims.identityId,

@@ -41,7 +41,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has recently-signed-out cookie" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       val config = mock[Identity]
       when(config.signedOutCookieName).thenReturn(signedOutCookieName)
       when(config.oauthScopes).thenReturn(accessScopes)
@@ -65,7 +65,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no token cookies" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
       val request = FakeRequest()
@@ -91,7 +91,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no ID token cookie" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
       when(config.idTokenCookieName).thenReturn(idTokenCookieName)
@@ -119,7 +119,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has no access token cookie" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Right(idClaims))
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
@@ -148,7 +148,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has both ID and access token cookies and they contain valid tokens" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Right(idClaims))
       when(authService.validateAccessTokenLocally(accessToken, accessScopeList)).thenReturn(Right(accessClaims))
       val config = mock[Identity]
@@ -178,7 +178,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has both ID and access token cookies but one is invalid" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Right(idClaims))
       when(authService.validateAccessTokenLocally(accessToken, accessScopeList)).thenReturn(Left(InvalidOrExpiredToken))
       val config = mock[Identity]
@@ -211,7 +211,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "request has both ID and access token cookies but both are invalid and we've already tried to authenticate" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Left(InvalidOrExpiredToken))
       when(authService.validateAccessTokenLocally(accessToken, Nil)).thenReturn(Left(InvalidOrExpiredToken))
       val config = mock[Identity]
@@ -246,7 +246,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
 
     "auth server is down" must {
       val parser = mock[BodyParser[AnyContent]]
-      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val authService = mock[OktaAuthService]
       when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Left(InvalidOrExpiredToken))
       when(authService.validateAccessTokenLocally(accessToken, Nil)).thenReturn(Left(InvalidOrExpiredToken))
       val config = mock[Identity]
