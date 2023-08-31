@@ -27,7 +27,7 @@ export default function DirectDebitPopUpForm(props: PropTypes): JSX.Element {
 	const dispatch = useContributionsDispatch();
 
 	function closePopup() {
-		dispatch(setPopupClose);
+		dispatch(setPopupClose());
 		dispatch(resetFormError);
 	}
 
