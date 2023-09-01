@@ -34,7 +34,7 @@ export const paymentMethodData: Record<PaymentMethod, PaymentMethodData> = {
 		id: 'qa-direct-debit',
 		label: 'Direct debit',
 		icon: <SvgDirectDebitWide size="xsmall" />,
-		// Currently only for visual purposes
+		// TODO: Currently only in use for styling purposes
 		accordionBody: () => (
 			<DirectDebitForm onPaymentAuthorisation={() => null} />
 		),
