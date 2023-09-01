@@ -8,6 +8,7 @@ import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import type { Rule } from 'helpers/subscriptionsForms/validation';
 import {
+	deliveryAgentsAreAvailable,
 	formError,
 	nonEmptyString,
 	notLongerThan,
@@ -195,10 +196,6 @@ export const isHomeDeliveryAvailable = (
 
 	return true;
 };
-
-const deliveryAgentsAreAvailable = (
-	deliveryAgent: DeliveryAgentState,
-): boolean => (deliveryAgent.response?.agents?.length ?? 0) > 0;
 
 export const isPostcodeOptional = (country: IsoCountry | null): boolean =>
 	country !== 'GB' && country !== 'AU' && country !== 'US' && country !== 'CA';

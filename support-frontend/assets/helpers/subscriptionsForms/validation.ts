@@ -109,4 +109,5 @@ export {
 	validate,
 	zuoraCompatibleString,
 	requiredDeliveryAgentChosen,
+	deliveryAgentsAreAvailable,
 };
