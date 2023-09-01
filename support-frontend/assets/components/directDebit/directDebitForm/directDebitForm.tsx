@@ -5,8 +5,6 @@ import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directD
 import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
-// import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
-// import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -18,9 +16,8 @@ import {
 	setDDGuaranteeClose,
 	setDDGuaranteeOpen,
 	setFormError,
-	setSortCode,
+	setSortCodeString,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
-import type { SortCodeIndex } from 'helpers/redux/checkout/payment/directDebit/state';
 import {
 	confirmAccountDetails,
 	directDebitErrorMessages,
@@ -59,7 +56,7 @@ const recaptchaId = 'robot_checkbox';
 export default function DirectDebitForm(props: PropTypes): JSX.Element {
 	const {
 		isDDGuaranteeOpen,
-		sortCodeArray,
+		sortCodeString,
 		accountNumber,
 		accountHolderName,
 		accountHolderConfirmation,
@@ -78,7 +75,7 @@ export default function DirectDebitForm(props: PropTypes): JSX.Element {
 
 	const dispatch = useContributionsDispatch();
 
-	// Currently unused as the payment button is commented out for styling purposes
+	// TODO: Currently unused as the payment button is commented out for styling purposes
 	void function onSubmit() {
 		void confirmAccountDetails();
 
@@ -100,13 +97,8 @@ export default function DirectDebitForm(props: PropTypes): JSX.Element {
 
 			<div css={accountNumberSortCodeContainer}>
 				<SortCodeInput
-					onChange={(
-						index: SortCodeIndex,
-						e: React.ChangeEvent<HTMLInputElement>,
-					) =>
-						dispatch(setSortCode({ index, partialSortCode: e.target.value }))
-					}
-					sortCodeArray={sortCodeArray}
+					onChange={(e) => dispatch(setSortCodeString(e.target.value))}
+					sortCodeString={sortCodeString}
 				/>
 
 				<AccountNumberInput

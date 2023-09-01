@@ -96,25 +96,6 @@ export const recaptcha = css`
 	max-width: 304px;
 `;
 
-export const sortCodeField = css`
-	text-align: center;
-	font-size: 14px;
-	background-color: white;
-	color: ${palette.neutral[7]};
-	border: 1px solid #707070;
-	height: 41px;
-	width: 5ch;
-
-	height: 44px;
-	border-radius: 4px;
-	padding: 10px 8px;
-`;
-
-export const sortCodeSeparator = css`
-	margin: 4px;
-	font-size: 18px;
-`;
-
 export const legalNotice = css`
 	font-size: 12px;
 	color: ${palette.neutral[46]};
