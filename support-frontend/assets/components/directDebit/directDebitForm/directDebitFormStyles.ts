@@ -15,9 +15,9 @@ export const fieldLabel = css`
 
 export const textField = css`
 	height: 44px;
-	border: 1px solid #707070;
+	border: 1px solid ${palette.neutral[46]};
 	border-radius: ${space[1]}px;
-	padding: 10px 8px;
+	padding: 10px ${space[2]}px;
 	width: 100%;
 `;
 
@@ -50,7 +50,7 @@ export const confirmationInput = css`
 
 export const confirmationText = css`
 	font-size: 14px;
-	padding-left: 12px;
+	padding-left: ${space[3]}px;
 	display: block;
 	overflow: hidden;
 `;
@@ -63,8 +63,8 @@ export const confirmationCheckbox = css`
 export const confirmationLabel = css`
 	cursor: pointer;
 	position: absolute;
-	width: 20px;
-	height: 20px;
+	width: ${space[5]}px;
+	height: ${space[5]}px;
 	top: 2px;
 	left: 0;
 	background: #fff;
@@ -90,17 +90,17 @@ export const confirmationLabel = css`
 }`;
 
 export const recaptcha = css`
-	margin-top: 24px;
-	margin-bottom: 4px;
+	margin-top: ${space[5]}px;
+	margin-bottom: ${space[1]}px;
 	// This is the set width of the recaptcha iframe, to fix the helper text below to the same size
 	max-width: 304px;
 `;
 
 export const legalNotice = css`
-	font-size: 12px;
+	font-size: ${space[3]}px;
 	color: ${palette.neutral[46]};
-	margin-top: 20px;
-	margin-bottom: 20px;
+	margin-top: ${space[5]}px;
+	margin-bottom: ${space[3]}px;
 	display: inline-block;
 
 	a {
@@ -119,9 +119,9 @@ export const legalNotice = css`
 `;
 
 export const guarantee = css`
-	font-size: 12px;
+	font-size: ${space[3]}px;
 	color: ${palette.neutral[46]};
-	margin-bottom: 20px;
+	margin-bottom: ${space[5]}px;
 	a {
 		color: ${palette.neutral[46]};
 	}
@@ -129,7 +129,7 @@ export const guarantee = css`
 
 export const guaranteeList = css`
 	list-style-type: disc;
-	margin-left: 16px;
+	margin-left: ${space[4]}px;
 `;
 
 export const guaranteeListClosed = css`
