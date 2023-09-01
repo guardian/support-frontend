@@ -1,4 +1,4 @@
-import { HttpApi } from "@aws-cdk/aws-apigatewayv2-alpha";
+import { DomainName, HttpApi } from "@aws-cdk/aws-apigatewayv2-alpha";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
@@ -37,6 +37,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
     );
 
     // There's no Eventbridge integration available as CDK L2 yet, so we have to use L1 and create Role, Integration and Route
+    // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-apigatewayv2-alpha-readme.html#defining-http-apis
     const apiRole = new Role(this, "EventBridgeIntegrationRole", {
       assumedBy: new ServicePrincipal("apigateway.amazonaws.com"),
     });
