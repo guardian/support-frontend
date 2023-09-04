@@ -5,7 +5,6 @@ import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
 import { CfnIntegration, CfnRoute } from "aws-cdk-lib/aws-apigatewayv2";
-import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { ComparisonOperator, Metric } from "aws-cdk-lib/aws-cloudwatch";
 import {
   Effect,
@@ -62,17 +61,23 @@ export class AcquisitionEventsApi extends GuStack {
     // ---- DNS ---- //
     const certificateArn = `arn:aws:acm:eu-west-1:${this.account}:certificate/${props.certificateId}`;
 
-    const dn = new DomainName(this, "DomainName2", {
-      domainName: props.domainName,
-      certificate: Certificate.fromCertificateArn(this, "cert", certificateArn),
+    const domainName = DomainName.fromDomainNameAttributes(this, "DomainName", {
+      name: props.domainName,
+      regionalDomainName: props.hostedZoneId,
+      regionalHostedZoneId: props.hostedZoneId,
     });
+
+    // const dn = new DomainName(this, "DomainName2", {
+    //   domainName: props.domainName,
+    //   certificate: Certificate.fromCertificateArn(this, "cert", certificateArn),
+    // });
 
     new CfnRecordSet(this, "DNSRecord", {
       name: props.domainName,
       type: "CNAME",
       hostedZoneId: props.hostedZoneId,
       ttl: "120",
-      resourceRecords: [dn.regionalDomainName],
+      resourceRecords: [domainName.regionalDomainName],
     });
 
     // ---- Eventbridge stuff ---- //
@@ -87,7 +92,7 @@ export class AcquisitionEventsApi extends GuStack {
       `acquisitions-eventbridge-api-${props.stage}`,
       {
         defaultDomainMapping: {
-          domainName: dn,
+          domainName: domainName,
         },
       }
     );
