@@ -62,7 +62,7 @@ export class AcquisitionEventsApi extends GuStack {
     // ---- DNS ---- //
     const certificateArn = `arn:aws:acm:eu-west-1:${this.account}:certificate/${props.certificateId}`;
 
-    const dn = new DomainName(this, "DomainName", {
+    const dn = new DomainName(this, "DomainName2", {
       domainName: props.domainName,
       certificate: Certificate.fromCertificateArn(this, "cert", certificateArn),
     });
