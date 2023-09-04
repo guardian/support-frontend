@@ -17,96 +17,6 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
-    "EventBridgeIntegration": {
-      "Properties": {
-        "ApiId": {
-          "Ref": "acquisitionseventbridgeapiPROD575D58B4",
-        },
-        "CredentialsArn": {
-          "Fn::GetAtt": [
-            "EventBridgeIntegrationRoleB322760B",
-            "Arn",
-          ],
-        },
-        "IntegrationSubtype": "EventBridge-PutEvents",
-        "IntegrationType": "AWS_PROXY",
-        "PayloadFormatVersion": "1.0",
-        "RequestParameters": {
-          "Detail": "$request.body",
-          "DetailType": "AcquisitionsEvent",
-          "EventBusName": {
-            "Fn::GetAtt": [
-              "acquisitionsbusPROD768AFDE3",
-              "Arn",
-            ],
-          },
-          "Source": "ApiGateway",
-        },
-        "TimeoutInMillis": 10000,
-      },
-      "Type": "AWS::ApiGatewayV2::Integration",
-    },
-    "EventBridgeIntegrationRoleB322760B": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "apigateway.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": [
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "EventBridgeIntegrationRoleDefaultPolicy16371A00": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "events:PutEvents",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "acquisitionsbusPROD768AFDE3",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "EventBridgeIntegrationRoleDefaultPolicy16371A00",
-        "Roles": [
-          {
-            "Ref": "EventBridgeIntegrationRoleB322760B",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
     "EventBusToSQSRule72D08395": {
       "Properties": {
         "Description": "Send all events to SQS",
@@ -133,60 +43,11 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Events::Rule",
     },
-    "EventRoute": {
-      "Properties": {
-        "ApiId": {
-          "Ref": "acquisitionseventbridgeapiPROD575D58B4",
-        },
-        "RouteKey": "POST /",
-        "Target": {
-          "Fn::Join": [
-            "",
-            [
-              "integrations/",
-              {
-                "Ref": "EventBridgeIntegration",
-              },
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::ApiGatewayV2::Route",
-    },
     "acquisitionsbusPROD768AFDE3": {
       "Properties": {
         "Name": "acquisitions-bus-PROD",
       },
       "Type": "AWS::Events::EventBus",
-    },
-    "acquisitionseventbridgeapiPROD575D58B4": {
-      "Properties": {
-        "Name": "acquisitions-eventbridge-api-PROD",
-        "ProtocolType": "HTTP",
-        "Tags": {
-          "Stack": "support",
-          "Stage": "PROD",
-          "gu:cdk:version": "TEST",
-          "gu:repo": "guardian/support-frontend",
-        },
-      },
-      "Type": "AWS::ApiGatewayV2::Api",
-    },
-    "acquisitionseventbridgeapiPRODDefaultStageEB205C3C": {
-      "Properties": {
-        "ApiId": {
-          "Ref": "acquisitionseventbridgeapiPROD575D58B4",
-        },
-        "AutoDeploy": true,
-        "StageName": "$default",
-        "Tags": {
-          "Stack": "support",
-          "Stage": "PROD",
-          "gu:cdk:version": "TEST",
-          "gu:repo": "guardian/support-frontend",
-        },
-      },
-      "Type": "AWS::ApiGatewayV2::Stage",
     },
     "bigqueryacquisitionspublisherLambdaD7F059E6": {
       "DependsOn": [

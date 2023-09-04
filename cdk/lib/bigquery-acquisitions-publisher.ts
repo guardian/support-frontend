@@ -1,18 +1,11 @@
-import { DomainName, HttpApi } from "@aws-cdk/aws-apigatewayv2-alpha";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
 import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
 import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
-import { CfnIntegration, CfnRoute } from "aws-cdk-lib/aws-apigatewayv2";
 import { EventBus, Rule } from "aws-cdk-lib/aws-events";
 import { SqsQueue } from "aws-cdk-lib/aws-events-targets";
-import {
-  Effect,
-  PolicyStatement,
-  Role,
-  ServicePrincipal,
-} from "aws-cdk-lib/aws-iam";
+import { PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue } from "aws-cdk-lib/aws-sqs";
@@ -28,51 +21,6 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
     // Event bus
     const eventBus = new EventBus(this, busName, {
       eventBusName: busName,
-    });
-
-    // Api Gateway and Eventbridge integration
-    const httpApi = new HttpApi(
-      this,
-      `acquisitions-eventbridge-api-${props.stage}`
-    );
-
-    // There's no Eventbridge integration available as CDK L2 yet, so we have to use L1 and create Role, Integration and Route
-    // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-apigatewayv2-alpha-readme.html#defining-http-apis
-    const apiRole = new Role(this, "EventBridgeIntegrationRole", {
-      assumedBy: new ServicePrincipal("apigateway.amazonaws.com"),
-    });
-
-    apiRole.addToPolicy(
-      new PolicyStatement({
-        effect: Effect.ALLOW,
-        resources: [eventBus.eventBusArn],
-        actions: ["events:PutEvents"],
-      })
-    );
-
-    const eventBridgeIntegration = new CfnIntegration(
-      this,
-      "EventBridgeIntegration",
-      {
-        apiId: httpApi.httpApiId,
-        integrationType: "AWS_PROXY",
-        integrationSubtype: "EventBridge-PutEvents",
-        credentialsArn: apiRole.roleArn,
-        requestParameters: {
-          Source: "ApiGateway",
-          DetailType: "AcquisitionsEvent",
-          Detail: "$request.body",
-          EventBusName: eventBus.eventBusArn,
-        },
-        payloadFormatVersion: "1.0",
-        timeoutInMillis: 10000,
-      }
-    );
-
-    new CfnRoute(this, "EventRoute", {
-      apiId: httpApi.httpApiId,
-      routeKey: "POST /",
-      target: `integrations/${eventBridgeIntegration.ref}`,
     });
 
     // SQS Queue
