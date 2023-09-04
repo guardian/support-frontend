@@ -55,7 +55,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
         "ResourceRecords": [
           {
             "Fn::GetAtt": [
-              "DomainNameEC95A6E9",
+              "DomainName28BEE6C11",
               "RegionalDomainName",
             ],
           },
@@ -65,7 +65,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Route53::RecordSet",
     },
-    "DomainNameEC95A6E9": {
+    "DomainName28BEE6C11": {
       "Properties": {
         "DomainName": "acquisition-events-code.support.guardianapis.com",
         "DomainNameConfigurations": [
@@ -209,7 +209,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
     },
     "acquisitionseventbridgeapiCODEDefaultStage8CFF60B0": {
       "DependsOn": [
-        "DomainNameEC95A6E9",
+        "DomainName28BEE6C11",
       ],
       "Properties": {
         "ApiId": {
@@ -226,17 +226,17 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::ApiGatewayV2::Stage",
     },
-    "acquisitionseventbridgeapiCODEDefaultStageAcquisitionEventsAPICODEDomainNameundefined4F0D5A11": {
+    "acquisitionseventbridgeapiCODEDefaultStageAcquisitionEventsAPICODEDomainName2undefinedB7332337": {
       "DependsOn": [
         "acquisitionseventbridgeapiCODEDefaultStage8CFF60B0",
-        "DomainNameEC95A6E9",
+        "DomainName28BEE6C11",
       ],
       "Properties": {
         "ApiId": {
           "Ref": "acquisitionseventbridgeapiCODE8060A47C",
         },
         "DomainName": {
-          "Ref": "DomainNameEC95A6E9",
+          "Ref": "DomainName28BEE6C11",
         },
         "Stage": "$default",
       },
@@ -301,7 +301,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
         "ResourceRecords": [
           {
             "Fn::GetAtt": [
-              "DomainNameEC95A6E9",
+              "DomainName28BEE6C11",
               "RegionalDomainName",
             ],
           },
@@ -311,7 +311,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
       },
       "Type": "AWS::Route53::RecordSet",
     },
-    "DomainNameEC95A6E9": {
+    "DomainName28BEE6C11": {
       "Properties": {
         "DomainName": "acquisition-events.support.guardianapis.com",
         "DomainNameConfigurations": [
@@ -453,17 +453,17 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
       },
       "Type": "AWS::ApiGatewayV2::Api",
     },
-    "acquisitionseventbridgeapiPRODDefaultStageAcquisitionEventsAPIPRODDomainNameundefined36D98266": {
+    "acquisitionseventbridgeapiPRODDefaultStageAcquisitionEventsAPIPRODDomainName2undefined2FECD588": {
       "DependsOn": [
         "acquisitionseventbridgeapiPRODDefaultStageEB205C3C",
-        "DomainNameEC95A6E9",
+        "DomainName28BEE6C11",
       ],
       "Properties": {
         "ApiId": {
           "Ref": "acquisitionseventbridgeapiPROD575D58B4",
         },
         "DomainName": {
-          "Ref": "DomainNameEC95A6E9",
+          "Ref": "DomainName28BEE6C11",
         },
         "Stage": "$default",
       },
@@ -471,7 +471,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
     },
     "acquisitionseventbridgeapiPRODDefaultStageEB205C3C": {
       "DependsOn": [
-        "DomainNameEC95A6E9",
+        "DomainName28BEE6C11",
       ],
       "Properties": {
         "ApiId": {
