@@ -1,11 +1,10 @@
+import { css } from '@emotion/react';
+import { Label } from '@guardian/source-react-components';
 import * as React from 'react';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
 import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
-import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
-import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
-import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -17,9 +16,8 @@ import {
 	setDDGuaranteeClose,
 	setDDGuaranteeOpen,
 	setFormError,
-	setSortCode,
+	setSortCodeString,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
-import type { SortCodeIndex } from 'helpers/redux/checkout/payment/directDebit/state';
 import {
 	confirmAccountDetails,
 	directDebitErrorMessages,
@@ -34,6 +32,19 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import {
+	accountHolderConfirmation,
+	accountNumberSortCodeContainer,
+	confirmationCheckbox,
+	confirmationInput,
+	confirmationInputContainer,
+	confirmationLabel,
+	confirmationText,
+	fieldLabel,
+	legalNotice,
+	recaptcha,
+	textField,
+} from './directDebitFormStyles';
 
 type PropTypes = {
 	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void;
@@ -45,7 +56,7 @@ const recaptchaId = 'robot_checkbox';
 export default function DirectDebitForm(props: PropTypes): JSX.Element {
 	const {
 		isDDGuaranteeOpen,
-		sortCodeArray,
+		sortCodeString,
 		accountNumber,
 		accountHolderName,
 		accountHolderConfirmation,
@@ -64,7 +75,8 @@ export default function DirectDebitForm(props: PropTypes): JSX.Element {
 
 	const dispatch = useContributionsDispatch();
 
-	function onSubmit() {
+	// TODO: Currently unused as the payment button is commented out for styling purposes
+	void function onSubmit() {
 		void confirmAccountDetails();
 
 		if (recaptchaCompleted) {
@@ -72,10 +84,10 @@ export default function DirectDebitForm(props: PropTypes): JSX.Element {
 		} else {
 			dispatch(setFormError(directDebitErrorMessages.notCompletedRecaptcha));
 		}
-	}
+	};
 
 	return (
-		<div className="component-direct-debit-form">
+		<div>
 			<AccountHolderNameInput
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
 					dispatch(setAccountHolderName(e.target.value))
@@ -83,20 +95,19 @@ export default function DirectDebitForm(props: PropTypes): JSX.Element {
 				value={accountHolderName}
 			/>
 
-			<AccountNumberInput
-				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					dispatch(setAccountNumber(e.target.value))
-				}
-				value={accountNumber}
-			/>
+			<div css={accountNumberSortCodeContainer}>
+				<SortCodeInput
+					onChange={(e) => dispatch(setSortCodeString(e.target.value))}
+					sortCodeString={sortCodeString}
+				/>
 
-			<SortCodeInput
-				onChange={(
-					index: SortCodeIndex,
-					e: React.ChangeEvent<HTMLInputElement>,
-				) => dispatch(setSortCode({ index, partialSortCode: e.target.value }))}
-				sortCodeArray={sortCodeArray}
-			/>
+				<AccountNumberInput
+					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+						dispatch(setAccountNumber(e.target.value))
+					}
+					value={accountNumber}
+				/>
+			</div>
 
 			<ConfirmationInput
 				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -111,12 +122,16 @@ export default function DirectDebitForm(props: PropTypes): JSX.Element {
 			/>
 
 			{formError && (
-				<div className="component-direct-debit-form__error-message-container">
+				<div
+					css={css`
+						margin-top: 8px;
+					`}
+				>
 					<ErrorMessage message={formError} svg={<SvgExclamationAlternate />} />
 				</div>
 			)}
 
-			<PaymentButton onConfirmClick={onSubmit} />
+			{/* <PaymentButton onConfirmClick={onSubmit} /> */}
 
 			<LegalNotice countryGroupId={countryGroupId} />
 
@@ -135,13 +150,12 @@ function AccountNumberInput(props: {
 	value: string;
 }) {
 	return (
-		<div className="component-direct-debit-form__account-number">
-			<label
+		<div>
+			<Label
+				text="Account number"
 				htmlFor="account-number-input"
-				className="component-direct-debit-form__field-label"
-			>
-				Account number
-			</label>
+				css={fieldLabel}
+			/>
 			<input
 				id="account-number-input"
 				data-qm-masking="blocklist"
@@ -150,7 +164,7 @@ function AccountNumberInput(props: {
 				pattern="[0-9]*"
 				minLength={6}
 				maxLength={10}
-				className="component-direct-debit-form__text-field focus-target"
+				css={textField}
 			/>
 		</div>
 	);
@@ -168,20 +182,22 @@ function AccountHolderNameInput(props: {
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
 	return (
-		<div className="component-direct-debit-form__account-holder-name">
-			<label
+		<div>
+			<Label
+				text="Account name"
 				htmlFor="account-holder-name-input"
-				className="component-direct-debit-form__field-label"
-			>
-				Account name
-			</label>
+				css={css`
+					${fieldLabel};
+					margin-top: 0 !important;
+				`}
+			/>
 			<input
 				id="account-holder-name-input"
 				data-qm-masking="blocklist"
 				value={props.value}
 				onChange={props.onChange}
 				maxLength={40}
-				className="component-direct-debit-form__text-field focus-target"
+				css={textField}
 			/>
 		</div>
 	);
@@ -192,13 +208,8 @@ function RecaptchaInput(props: {
 	expireRecaptchaToken?: () => void;
 }) {
 	return (
-		<div className="component-direct-debit-form__recaptcha">
-			<label
-				htmlFor={recaptchaId}
-				className="component-direct-debit-form__field-label"
-			>
-				Security check
-			</label>
+		<div css={recaptcha}>
+			<Label text="Security check" htmlFor={recaptchaId} css={fieldLabel} />
 			<Recaptcha
 				id={recaptchaId}
 				onRecaptchaCompleted={props.setRecaptchaToken}
@@ -213,13 +224,13 @@ function ConfirmationInput(props: {
 	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
 	return (
-		<div className="component-direct-debit-form__account-holder-confirmation">
+		<div css={accountHolderConfirmation}>
 			<div>
 				<label htmlFor="confirmation-input">
-					<span>
-						<div className="component-direct-debit-form__confirmation-css-checkbox">
+					<span css={confirmationInputContainer}>
+						<div css={confirmationCheckbox}>
 							<input
-								className="component-direct-debit-form__confirmation-input"
+								css={confirmationInput}
 								id="confirmation-input"
 								type="checkbox"
 								onChange={props.onChange}
@@ -227,11 +238,11 @@ function ConfirmationInput(props: {
 							/>
 							<label
 								id="qa-confirmation-input"
-								className="component-direct-debit-form__confirmation-label"
+								css={confirmationLabel}
 								htmlFor="confirmation-input"
 							/>
 						</div>
-						<span className="component-direct-debit-form__confirmation-text">
+						<span css={confirmationText}>
 							I confirm that I am the account holder and I am solely able to
 							authorise debit from the account
 						</span>
@@ -242,27 +253,27 @@ function ConfirmationInput(props: {
 	);
 }
 
-function PaymentButton(props: {
-	onConfirmClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}) {
-	return (
-		<button
-			id="qa-submit-button"
-			className="component-direct-debit-form__cta component-direct-debit-form__cta--pay-button focus-target"
-			onClick={props.onConfirmClick}
-		>
-			<SvgDirectDebitSymbol />
-			<span className="component-direct-debit-form__cta-text">
-				Pay with Direct Debit
-			</span>
-			<SvgArrowRightStraight />
-		</button>
-	);
-}
+// function PaymentButton(props: {
+// 	onConfirmClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+// }) {
+// 	return (
+// 		<button
+// 			id="qa-submit-button"
+// 			className="component-direct-debit-form__cta component-direct-debit-form__cta--pay-button focus-target"
+// 			onClick={props.onConfirmClick}
+// 		>
+// 			<SvgDirectDebitSymbol />
+// 			<span className="component-direct-debit-form__cta-text">
+// 				Pay with Direct Debit
+// 			</span>
+// 			<SvgArrowRightStraight />
+// 		</button>
+// 	);
+// }
 
 function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 	return (
-		<div className="component-direct-debit-form__legal-notice">
+		<div css={legalNotice}>
 			<p>
 				<strong>Payments by GoCardless </strong>
 				<a
@@ -279,8 +290,8 @@ function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 				will be sent to you within three working days. All the normal Direct
 				Debit safeguards and guarantees apply.
 			</p>
-			<strong>Direct Debit</strong>
 			<p>
+				<strong>Direct Debit</strong>
 				The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch,
 				LE65 1JT United Kingdom
 				<br />
@@ -291,7 +302,6 @@ function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 					{contributionsEmail[props.countryGroupId].replace('mailto:', '')}
 				</a>
 			</p>
-			<SvgDirectDebitSymbolAndText />
 		</div>
 	);
 }
