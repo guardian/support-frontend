@@ -4,6 +4,7 @@ import {
 	emailAddressesMatch,
 	isValidEmail,
 } from 'helpers/forms/formValidation';
+import type { DeliveryAgentState } from 'helpers/redux/checkout/addressMeta/state';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 import type { FormField, FormFields } from './formFields';
 import {
@@ -11,6 +12,7 @@ import {
 	nonEmptyString,
 	notLongerThan,
 	notNull,
+	requiredDeliveryAgentChosen,
 	validate,
 	zuoraCompatibleString,
 } from './validation';
@@ -252,7 +254,10 @@ function applyCheckoutRules(fields: FormFields): Array<FormError<FormField>> {
 	return validate(formFieldsToCheck);
 }
 
-function applyDeliveryRules(fields: FormFields): Array<FormError<FormField>> {
+function applyDeliveryRules(
+	fields: FormFields,
+	deliveryAgent: DeliveryAgentState,
+): Array<FormError<FormField>> {
 	const deliveryRules: CheckoutRule[] = [
 		{
 			rule: notNull(fields.startDate),
@@ -271,6 +276,10 @@ function applyDeliveryRules(fields: FormFields): Array<FormError<FormField>> {
 				'deliveryInstructions',
 				'Please use only letters, numbers and punctuation.',
 			),
+		},
+		{
+			rule: requiredDeliveryAgentChosen(fields.fulfilmentOption, deliveryAgent),
+			error: formError('deliveryProvider', 'Please select a delivery provider'),
 		},
 	];
 	return validate(deliveryRules).concat(applyCheckoutRules(fields));

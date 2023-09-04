@@ -41,6 +41,7 @@ export type FormFields = PersonalDetailsState &
 		deliveryInstructions?: string;
 		csrUsername?: string;
 		salesforceCaseId?: string;
+		deliveryProvider?: number;
 	};
 export type FormField = keyof FormFields | 'recaptcha';
 export type FormState = Omit<
@@ -85,6 +86,8 @@ function getFormFields(state: SubscriptionsState): FormFields {
 			state.page.checkoutForm.addressMeta.deliveryInstructions,
 		giftMessage: state.page.checkoutForm.gifting.giftMessage,
 		giftDeliveryDate: state.page.checkoutForm.gifting.giftDeliveryDate,
+		deliveryProvider:
+			state.page.checkoutForm.addressMeta.deliveryAgent.chosenAgent,
 	};
 }
 

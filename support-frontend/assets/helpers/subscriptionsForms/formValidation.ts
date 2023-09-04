@@ -84,7 +84,11 @@ function checkoutValidation(state: SubscriptionsState): AnyErrorType[] {
 function withDeliveryValidation(state: SubscriptionsState): AnyErrorType[] {
 	const formFields = getFormFields(state);
 
-	const deliveryErrors = applyDeliveryRules(formFields);
+	const deliveryErrors = applyDeliveryRules(
+		formFields,
+		state.page.checkoutForm.addressMeta.deliveryAgent,
+	);
+
 	const deliveryErrorsList = getErrorList({
 		errors: deliveryErrors,
 		dispatchErrors: (dispatch) => dispatch(setFormErrors(deliveryErrors)),

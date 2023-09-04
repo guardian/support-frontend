@@ -374,6 +374,7 @@ function PaperCheckoutForm(props: PropTypes) {
 							<DeliveryAgentsSelect
 								deliveryAgentsResponse={props.deliveryAgentsResponse}
 								setDeliveryAgent={props.setDeliveryAgent}
+								formErrors={props.formErrors}
 							/>
 						)}
 						{isHomeDelivery ? (
