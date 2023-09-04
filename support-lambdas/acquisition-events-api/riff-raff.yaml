@@ -4,14 +4,6 @@ allowedStages:
   - CODE
   - PROD
 deployments:
-  acquisition-events-api:
-    type: aws-lambda
-    parameters:
-      bucket: membership-dist
-      functionNames: [acquisition-events-api-cdk-]
-      fileName: acquisition-events-api.jar
-      prefixStack: false
-    dependencies: [ cfn ]
   cfn:
     type: cloud-formation
     app: acquisition-events-api
