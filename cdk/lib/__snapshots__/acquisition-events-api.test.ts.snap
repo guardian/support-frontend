@@ -48,6 +48,23 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
+    "DNSRecord": {
+      "Properties": {
+        "HostedZoneId": "Z3KO35ELNWZMSX",
+        "Name": "acquisition-events-code.support.guardianapis.com",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "DomainNameEC95A6E9",
+              "RegionalDomainName",
+            ],
+          },
+        ],
+        "TTL": "120",
+        "Type": "CNAME",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
     "DomainNameEC95A6E9": {
       "Properties": {
         "DomainName": "acquisition-events-code.support.guardianapis.com",
@@ -276,6 +293,23 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
         "Threshold": 1,
       },
       "Type": "AWS::CloudWatch::Alarm",
+    },
+    "DNSRecord": {
+      "Properties": {
+        "HostedZoneId": "Z3KO35ELNWZMSX",
+        "Name": "acquisition-events.support.guardianapis.com",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "DomainNameEC95A6E9",
+              "RegionalDomainName",
+            ],
+          },
+        ],
+        "TTL": "120",
+        "Type": "CNAME",
+      },
+      "Type": "AWS::Route53::RecordSet",
     },
     "DomainNameEC95A6E9": {
       "Properties": {

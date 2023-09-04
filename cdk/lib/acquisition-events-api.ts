@@ -133,6 +133,14 @@ export class AcquisitionEventsApi extends GuStack {
       certificate: Certificate.fromCertificateArn(this, "cert", certificateArn),
     });
 
+    new CfnRecordSet(this, "DNSRecord", {
+      name: props.domainName,
+      type: "CNAME",
+      hostedZoneId: props.hostedZoneId,
+      ttl: "120",
+      resourceRecords: [dn.regionalDomainName],
+    });
+
     const httpApi = new HttpApi(
       this,
       `acquisitions-eventbridge-api-${props.stage}`,
