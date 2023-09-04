@@ -209,7 +209,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::ApiGatewayV2::Stage",
     },
-    "acquisitionseventbridgeapiCODEDefaultStageAcquisitionEventsAPICODEDomainNamefoo001B9FAA": {
+    "acquisitionseventbridgeapiCODEDefaultStageAcquisitionEventsAPICODEDomainNameundefined4F0D5A11": {
       "DependsOn": [
         "acquisitionseventbridgeapiCODEDefaultStage8CFF60B0",
         "DomainNameEC95A6E9",
@@ -218,7 +218,6 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
         "ApiId": {
           "Ref": "acquisitionseventbridgeapiCODE8060A47C",
         },
-        "ApiMappingKey": "foo",
         "DomainName": {
           "Ref": "DomainNameEC95A6E9",
         },
@@ -420,7 +419,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
       },
       "Type": "AWS::ApiGatewayV2::Api",
     },
-    "acquisitionseventbridgeapiPRODDefaultStageAcquisitionEventsAPIPRODDomainNamefooB026F16B": {
+    "acquisitionseventbridgeapiPRODDefaultStageAcquisitionEventsAPIPRODDomainNameundefined36D98266": {
       "DependsOn": [
         "acquisitionseventbridgeapiPRODDefaultStageEB205C3C",
         "DomainNameEC95A6E9",
@@ -429,7 +428,6 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
         "ApiId": {
           "Ref": "acquisitionseventbridgeapiPROD575D58B4",
         },
-        "ApiMappingKey": "foo",
         "DomainName": {
           "Ref": "DomainNameEC95A6E9",
         },

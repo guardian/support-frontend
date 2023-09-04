@@ -139,7 +139,6 @@ export class AcquisitionEventsApi extends GuStack {
       {
         defaultDomainMapping: {
           domainName: dn,
-          mappingKey: "foo",
         },
       }
     );
