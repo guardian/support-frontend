@@ -128,7 +128,7 @@ export class AcquisitionEventsApi extends GuStack {
     const eventBusArn = `arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-${props.stage}`;
     // There's no Eventbridge integration available as CDK L2 yet, so we have to use L1 and create Role, Integration and Route
     // https://docs.aws.amazon.com/cdk/api/v2/docs/aws-apigatewayv2-alpha-readme.html#defining-http-apis
-    const dn = new DomainName(this, "DN", {
+    const dn = new DomainName(this, "DomainName", {
       domainName: props.domainName,
       certificate: Certificate.fromCertificateArn(this, "cert", certificateArn),
     });

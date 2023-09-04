@@ -48,7 +48,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "DNFDC76583": {
+    "DomainNameEC95A6E9": {
       "Properties": {
         "DomainName": "acquisition-events-code.support.guardianapis.com",
         "DomainNameConfigurations": [
@@ -192,7 +192,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
     },
     "acquisitionseventbridgeapiCODEDefaultStage8CFF60B0": {
       "DependsOn": [
-        "DNFDC76583",
+        "DomainNameEC95A6E9",
       ],
       "Properties": {
         "ApiId": {
@@ -209,10 +209,10 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::ApiGatewayV2::Stage",
     },
-    "acquisitionseventbridgeapiCODEDefaultStageAcquisitionEventsAPICODEDNfoo2130996A": {
+    "acquisitionseventbridgeapiCODEDefaultStageAcquisitionEventsAPICODEDomainNamefoo001B9FAA": {
       "DependsOn": [
         "acquisitionseventbridgeapiCODEDefaultStage8CFF60B0",
-        "DNFDC76583",
+        "DomainNameEC95A6E9",
       ],
       "Properties": {
         "ApiId": {
@@ -220,7 +220,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
         },
         "ApiMappingKey": "foo",
         "DomainName": {
-          "Ref": "DNFDC76583",
+          "Ref": "DomainNameEC95A6E9",
         },
         "Stage": "$default",
       },
@@ -278,7 +278,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "DNFDC76583": {
+    "DomainNameEC95A6E9": {
       "Properties": {
         "DomainName": "acquisition-events.support.guardianapis.com",
         "DomainNameConfigurations": [
@@ -420,10 +420,10 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
       },
       "Type": "AWS::ApiGatewayV2::Api",
     },
-    "acquisitionseventbridgeapiPRODDefaultStageAcquisitionEventsAPIPRODDNfoo11AB4BEA": {
+    "acquisitionseventbridgeapiPRODDefaultStageAcquisitionEventsAPIPRODDomainNamefooB026F16B": {
       "DependsOn": [
         "acquisitionseventbridgeapiPRODDefaultStageEB205C3C",
-        "DNFDC76583",
+        "DomainNameEC95A6E9",
       ],
       "Properties": {
         "ApiId": {
@@ -431,7 +431,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
         },
         "ApiMappingKey": "foo",
         "DomainName": {
-          "Ref": "DNFDC76583",
+          "Ref": "DomainNameEC95A6E9",
         },
         "Stage": "$default",
       },
@@ -439,7 +439,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
     },
     "acquisitionseventbridgeapiPRODDefaultStageEB205C3C": {
       "DependsOn": [
-        "DNFDC76583",
+        "DomainNameEC95A6E9",
       ],
       "Properties": {
         "ApiId": {
