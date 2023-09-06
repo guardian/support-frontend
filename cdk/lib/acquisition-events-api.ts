@@ -13,6 +13,7 @@ import {
   ServicePrincipal,
 } from "aws-cdk-lib/aws-iam";
 import { CfnRecordSet } from "aws-cdk-lib/aws-route53";
+import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 
 export interface AcquisitionEventsApiProps extends GuStackProps {
   stack: string;
@@ -61,16 +62,10 @@ export class AcquisitionEventsApi extends GuStack {
     // ---- DNS ---- //
     const certificateArn = `arn:aws:acm:eu-west-1:${this.account}:certificate/${props.certificateId}`;
 
-    const domainName = DomainName.fromDomainNameAttributes(this, "DomainName", {
-      name: props.domainName,
-      regionalDomainName: props.hostedZoneId,
-      regionalHostedZoneId: props.hostedZoneId,
+    const domainName = new DomainName(this, "DomainName", {
+      domainName: props.domainName,
+      certificate: Certificate.fromCertificateArn(this, "cert", certificateArn),
     });
-
-    // const dn = new DomainName(this, "DomainName2", {
-    //   domainName: props.domainName,
-    //   certificate: Certificate.fromCertificateArn(this, "cert", certificateArn),
-    // });
 
     new CfnRecordSet(this, "DNSRecord", {
       name: props.domainName,
