@@ -5,6 +5,7 @@ import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
 import { CfnIntegration, CfnRoute } from "aws-cdk-lib/aws-apigatewayv2";
+import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { ComparisonOperator, Metric } from "aws-cdk-lib/aws-cloudwatch";
 import {
   Effect,
@@ -13,7 +14,6 @@ import {
   ServicePrincipal,
 } from "aws-cdk-lib/aws-iam";
 import { CfnRecordSet } from "aws-cdk-lib/aws-route53";
-import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 
 export interface AcquisitionEventsApiProps extends GuStackProps {
   stack: string;
