@@ -53,12 +53,46 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
         "HostedZoneId": "Z3KO35ELNWZMSX",
         "Name": "acquisition-events-code.support.guardianapis.com",
         "ResourceRecords": [
-          "Z3KO35ELNWZMSX",
+          {
+            "Fn::GetAtt": [
+              "DomainNameEC95A6E9",
+              "RegionalDomainName",
+            ],
+          },
         ],
         "TTL": "120",
         "Type": "CNAME",
       },
       "Type": "AWS::Route53::RecordSet",
+    },
+    "DomainNameEC95A6E9": {
+      "Properties": {
+        "DomainName": "acquisition-events-code.support.guardianapis.com",
+        "DomainNameConfigurations": [
+          {
+            "CertificateArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:acm:eu-west-1:",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":certificate/b384a6a0-2f54-4874-b99b-96eeff96c009",
+                ],
+              ],
+            },
+            "EndpointType": "REGIONAL",
+          },
+        ],
+        "Tags": {
+          "Stack": "support",
+          "Stage": "CODE",
+          "gu:cdk:version": "TEST",
+          "gu:repo": "guardian/support-frontend",
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::DomainName",
     },
     "EventBridgeIntegration": {
       "Properties": {
@@ -174,6 +208,9 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       "Type": "AWS::ApiGatewayV2::Api",
     },
     "acquisitionseventbridgeapiCODEDefaultStage8CFF60B0": {
+      "DependsOn": [
+        "DomainNameEC95A6E9",
+      ],
       "Properties": {
         "ApiId": {
           "Ref": "acquisitionseventbridgeapiCODE8060A47C",
@@ -192,12 +229,15 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
     "acquisitionseventbridgeapiCODEDefaultStageAcquisitionEventsAPICODEDomainNameundefined4F0D5A11": {
       "DependsOn": [
         "acquisitionseventbridgeapiCODEDefaultStage8CFF60B0",
+        "DomainNameEC95A6E9",
       ],
       "Properties": {
         "ApiId": {
           "Ref": "acquisitionseventbridgeapiCODE8060A47C",
         },
-        "DomainName": "acquisition-events-code.support.guardianapis.com",
+        "DomainName": {
+          "Ref": "DomainNameEC95A6E9",
+        },
         "Stage": "$default",
       },
       "Type": "AWS::ApiGatewayV2::ApiMapping",
@@ -259,12 +299,46 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
         "HostedZoneId": "Z3KO35ELNWZMSX",
         "Name": "acquisition-events.support.guardianapis.com",
         "ResourceRecords": [
-          "Z3KO35ELNWZMSX",
+          {
+            "Fn::GetAtt": [
+              "DomainNameEC95A6E9",
+              "RegionalDomainName",
+            ],
+          },
         ],
         "TTL": "120",
         "Type": "CNAME",
       },
       "Type": "AWS::Route53::RecordSet",
+    },
+    "DomainNameEC95A6E9": {
+      "Properties": {
+        "DomainName": "acquisition-events.support.guardianapis.com",
+        "DomainNameConfigurations": [
+          {
+            "CertificateArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:acm:eu-west-1:",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":certificate/b384a6a0-2f54-4874-b99b-96eeff96c009",
+                ],
+              ],
+            },
+            "EndpointType": "REGIONAL",
+          },
+        ],
+        "Tags": {
+          "Stack": "support",
+          "Stage": "PROD",
+          "gu:cdk:version": "TEST",
+          "gu:repo": "guardian/support-frontend",
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::DomainName",
     },
     "EventBridgeIntegration": {
       "Properties": {
@@ -382,17 +456,23 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
     "acquisitionseventbridgeapiPRODDefaultStageAcquisitionEventsAPIPRODDomainNameundefined36D98266": {
       "DependsOn": [
         "acquisitionseventbridgeapiPRODDefaultStageEB205C3C",
+        "DomainNameEC95A6E9",
       ],
       "Properties": {
         "ApiId": {
           "Ref": "acquisitionseventbridgeapiPROD575D58B4",
         },
-        "DomainName": "acquisition-events.support.guardianapis.com",
+        "DomainName": {
+          "Ref": "DomainNameEC95A6E9",
+        },
         "Stage": "$default",
       },
       "Type": "AWS::ApiGatewayV2::ApiMapping",
     },
     "acquisitionseventbridgeapiPRODDefaultStageEB205C3C": {
+      "DependsOn": [
+        "DomainNameEC95A6E9",
+      ],
       "Properties": {
         "ApiId": {
           "Ref": "acquisitionseventbridgeapiPROD575D58B4",
