@@ -31,7 +31,7 @@ libraryDependencies ++= Seq(
   "com.okta.jwt" % "okta-jwt-verifier" % oktaJwtVerifierVersion,
   "com.okta.jwt" % "okta-jwt-verifier-impl" % oktaJwtVerifierVersion % Runtime,
   "com.gu" %% "identity-test-users" % "0.8",
-  "com.google.guava" % "guava" % "32.1.1-jre",
+  "com.google.guava" % "guava" % "32.1.2-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.gu.play-googleauth" %% "play-v28" % "2.2.7",
   "io.github.bonigarcia" % "webdrivermanager" % "5.5.3" % "test",
