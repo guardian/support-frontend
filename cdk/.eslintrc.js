@@ -17,4 +17,11 @@ module.exports = {
     "import/no-namespace": 2,
   },
   ignorePatterns: ["**/*.js", "node_modules"],
+  settings: {
+    "import/resolver": {
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
+    },
+  },
 };
