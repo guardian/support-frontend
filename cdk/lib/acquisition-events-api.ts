@@ -125,8 +125,14 @@ export class AcquisitionEventsApi extends GuStack {
       }
     );
 
-    // Route
-    new CfnRoute(this, "EventRoute", {
+    // Routes
+    new CfnRoute(this, "AcquisitionRoute", {
+      apiId: httpApi.httpApiId,
+      routeKey: "POST /acquisition",
+      target: `integrations/${eventBridgeIntegration.ref}`,
+    });
+
+    new CfnRoute(this, "FallbackRoute", {
       apiId: httpApi.httpApiId,
       routeKey: "POST /",
       target: `integrations/${eventBridgeIntegration.ref}`,

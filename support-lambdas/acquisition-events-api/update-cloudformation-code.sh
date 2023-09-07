@@ -2,12 +2,12 @@
 
 cd ../../cdk
 
-yarn synth
+yarn synth # If this fails check you are using the correct node version
 
 # Exit if any of these commands fail, print commands to console
 set -ex
 
-aws cloudformation create-stack \
+aws cloudformation update-stack \
   --capabilities '["CAPABILITY_AUTO_EXPAND", "CAPABILITY_NAMED_IAM", "CAPABILITY_IAM"]'  \
   --stack-name support-CODE-acquisition-events-api \
   --template-body file://cdk.out/Acquisition-Events-Api-CODE.template.json \
