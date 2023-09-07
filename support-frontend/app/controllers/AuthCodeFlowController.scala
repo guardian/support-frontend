@@ -99,16 +99,18 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
      * of the auth flow as it will be the same as the referrer of the page that triggered the auth flow.
      */
     lazy val redirect = {
+      /* This has to correspond with the param name at
+       * https://github.com/guardian/ophan/blob/7cb4283cb6543c009a9e7a0d3d2486744facc902/tracker-js/assets/coffee/ophan/core.coffee#L41
+       */
+      val referrerParamName = "pre-auth-ref"
       val origin = originUrl.getOrElse("/")
       val url = referringUrl
         .map { refUrl =>
-          val referrer = s"pre-auth-ref=${urlEncode(refUrl)}"
-          if (origin.contains("?")) s"$origin&$referrer"
-          else s"$origin?$referrer"
+          val paramValue = urlEncode(refUrl)
+          replaceParam(origin, referrerParamName, paramValue)
         }
         .getOrElse(origin)
-      cleansed(Redirect(url))
-        .flashing(FlashKey.authTried -> "true")
+      cleansed(Redirect(url)).flashing(FlashKey.authTried -> "true")
     }
 
     (code, codeVerifier, sessionState, error, errorDescription) match {
@@ -186,6 +188,17 @@ object AuthCodeFlow {
 
   def secureCookie(name: String, value: String): Cookie =
     Cookie(name, value, maxAge = Some(3600), secure = true, httpOnly = false, sameSite = Some(SameSite.Lax))
+
+  def replaceParam(url: String, paramName: String, paramValue: String): String = {
+    val withoutParam = {
+      val (path, query) = url.span(_ != '?')
+      val params = query.drop(1).split('&').filter(_.takeWhile(_ != '=') != paramName).mkString("&")
+      if (params.isEmpty) path else s"$path?$params"
+    }
+    val paramToAdd = s"$paramName=$paramValue"
+    if (withoutParam.contains("?")) s"$withoutParam&$paramToAdd"
+    else s"$withoutParam?$paramToAdd"
+  }
 
   /*
    * Methods to help with Proof Keys for Code Exchange (PKCE).
