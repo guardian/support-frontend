@@ -13,6 +13,8 @@ import {
 import { useState } from 'react';
 import type { CheckListData } from 'components/checkmarkList/checkmarkList';
 import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
+import { CheckoutTopUpAmounts } from 'components/checkoutTopUpAmounts/checkoutTopUpAmounts';
+import { CheckoutTopUpAmountsContainer } from 'components/checkoutTopUpAmounts/checkoutTopUpAmountsContainer';
 import type { ContributionType } from 'helpers/contributions';
 
 const componentStyles = css`
@@ -117,6 +119,7 @@ export type ContributionsOrderSummaryProps = {
 	onAccordionClick?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
+	showTopUpAmounts?: boolean;
 };
 
 const supportTypes = {
@@ -144,6 +147,7 @@ export function ContributionsOrderSummary({
 	onAccordionClick,
 	headerButton,
 	tsAndCs,
+	showTopUpAmounts,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showDetails, setShowDetails] = useState(false);
 
@@ -186,6 +190,16 @@ export function ContributionsOrderSummary({
 					</div>
 				)}
 			</div>
+			{showTopUpAmounts && (
+				<CheckoutTopUpAmountsContainer
+					renderCheckoutTopUpAmounts={(checkoutTopUpAmounts) => (
+						<CheckoutTopUpAmounts
+							{...checkoutTopUpAmounts}
+							customMargin={`${space[5]}px 0 ${space[4]}px`}
+						/>
+					)}
+				/>
+			)}
 			<hr css={hrCss} />
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>

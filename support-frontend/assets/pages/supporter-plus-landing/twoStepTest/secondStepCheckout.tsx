@@ -35,8 +35,10 @@ const shorterBoxMargin = css`
 
 export function SupporterPlusCheckout({
 	thankYouRoute,
+	showTopUpAmounts,
 }: {
 	thankYouRoute: string;
+	showTopUpAmounts: boolean;
 }): JSX.Element {
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -82,6 +84,7 @@ export function SupporterPlusCheckout({
 							<ContributionsOrderSummary
 								{...orderSummaryProps}
 								headerButton={changeButton}
+								showTopUpAmounts={showTopUpAmounts}
 							/>
 						)}
 					/>
