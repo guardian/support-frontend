@@ -34,6 +34,7 @@ export const accountNumberSortCodeContainer = css`
 		flex-direction: row;
 		gap: ${space[3]}px;
 	}
+	margin: ${space[3]}px 0;
 `;
 
 export const accountHolderConfirmation = css`

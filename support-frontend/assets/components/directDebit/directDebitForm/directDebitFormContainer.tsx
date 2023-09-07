@@ -1,28 +1,25 @@
+import { Recaptcha } from 'components/recaptcha/recaptcha';
 import {
 	setAccountHolderConfirmation,
 	setAccountHolderName,
 	setAccountNumber,
-	// setDDGuaranteeClose,
-	// setDDGuaranteeOpen,
+	setFormError,
 	setSortCodeString,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
-import type { DirectDebitState } from 'helpers/redux/checkout/payment/directDebit/state';
+import {
+	confirmAccountDetails,
+	directDebitErrorMessages,
+} from 'helpers/redux/checkout/payment/directDebit/thunks';
+import {
+	expireRecaptchaToken,
+	setRecaptchaToken,
+} from 'helpers/redux/checkout/recaptcha/actions';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-
-type DirectDebitFormProps = {
-	accountHolderName: string;
-	accountNumber: string;
-	accountHolderConfirmation: boolean;
-	sortCode: string;
-	updateAccountHolderName: (name: string) => void;
-	updateAccountNumber: (number: string) => void;
-	updateSortCode: (sortCode: string) => void;
-	updateAccountHolderConfirmation: (confirmation: boolean) => void;
-	errors: DirectDebitState['errors'];
-};
+import { trackComponentLoad } from 'helpers/tracking/behaviour';
+import type { DirectDebitFormProps } from './directDebitForm';
 
 type DirectDebitFormContainerProps = {
 	render: (directDebitFormProps: DirectDebitFormProps) => JSX.Element;
@@ -33,12 +30,21 @@ export function DirectDebitFormContainer({
 }: DirectDebitFormContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 
+	const recaptchaCompleted = useContributionsSelector(
+		(state) => state.page.checkoutForm.recaptcha.completed,
+	);
+
+	const { countryGroupId } = useContributionsSelector(
+		(state) => state.common.internationalisation,
+	);
+
 	const {
 		accountHolderName,
 		accountNumber,
 		accountHolderConfirmation,
 		sortCodeString,
 		errors,
+		formError,
 	} = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.directDebit,
 	);
@@ -59,15 +65,40 @@ export function DirectDebitFormContainer({
 		dispatch(setAccountHolderConfirmation(confirmed));
 	}
 
+	// TODO: This functionality should be moving to a payment button in future
+	void function onSubmit() {
+		void confirmAccountDetails();
+
+		if (recaptchaCompleted) {
+			// void dispatch(payWithDirectDebit(props.onPaymentAuthorisation));
+		} else {
+			dispatch(setFormError(directDebitErrorMessages.notCompletedRecaptcha));
+		}
+	};
+
+	function onRecaptchaCompleted(token: string) {
+		trackComponentLoad('contributions-recaptcha-client-token-received');
+		dispatch(setRecaptchaToken(token));
+	}
+
 	return render({
+		countryGroupId,
 		accountHolderName,
 		accountNumber,
 		accountHolderConfirmation,
 		sortCode: sortCodeString,
+		recaptchaCompleted,
 		updateAccountHolderName,
 		updateAccountNumber,
 		updateSortCode,
 		updateAccountHolderConfirmation,
+		formError,
 		errors,
+		recaptcha: (
+			<Recaptcha
+				onRecaptchaCompleted={onRecaptchaCompleted}
+				onRecaptchaExpired={() => dispatch(expireRecaptchaToken())}
+			/>
+		),
 	});
 }
