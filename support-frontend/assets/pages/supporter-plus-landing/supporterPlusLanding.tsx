@@ -206,7 +206,11 @@ export function SupporterPlusLandingPage({
 							{displayLimitedPriceCards ? (
 								<LimitedPriceCards />
 							) : (
-								<AmountAndBenefits />
+								<AmountAndBenefits
+									countryGroupId={countryGroupId}
+									amountIsAboveThreshold={amountIsAboveThreshold}
+									showCancelTooltip
+								/>
 							)}
 						</Box>
 						<Box cssOverrides={shorterBoxMargin}>
@@ -219,7 +223,10 @@ export function SupporterPlusLandingPage({
 									/>
 									<PersonalDetailsContainer
 										renderPersonalDetails={(personalDetailsProps) => (
-											<PersonalDetails {...personalDetailsProps} />
+											<PersonalDetails
+												{...personalDetailsProps}
+												hideDetailsHeading
+											/>
 										)}
 									/>
 									<CheckoutDivider spacing="loose" />

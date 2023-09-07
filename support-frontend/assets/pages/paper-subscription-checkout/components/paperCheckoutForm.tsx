@@ -26,6 +26,7 @@ import GridImage from 'components/gridImage/gridImage';
 import {
 	BillingAddress,
 	DeliveryAddress,
+	PaperAddress,
 } from 'components/subscriptionCheckouts/address/scopedAddressFields';
 import DirectDebitPaymentTerms from 'components/subscriptionCheckouts/directDebit/directDebitPaymentTerms';
 import Layout, { Content } from 'components/subscriptionCheckouts/layout';
@@ -44,6 +45,7 @@ import {
 import type { ActivePaperProducts } from 'helpers/productPrice/productOptions';
 import { showPrice } from 'helpers/productPrice/productPrices';
 import { Paper } from 'helpers/productPrice/subscriptions';
+import { setDeliveryAgent } from 'helpers/redux/checkout/addressMeta/actions';
 import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import {
 	selectCorrespondingProductOptionPrice,
@@ -79,6 +81,7 @@ import {
 	formatMachineDate,
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
+import { logException } from 'helpers/utilities/logger';
 import PaperOrderSummary from 'pages/paper-subscription-checkout/components/orderSummary/orderSummary';
 import { getDays } from 'pages/paper-subscription-checkout/helpers/options';
 import {
@@ -89,6 +92,7 @@ import {
 	getFormattedStartDate,
 	getPaymentStartDate,
 } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { DeliveryAgentsSelect } from './deliveryAgentsSelect';
 
 const marginBottom = css`
 	margin-bottom: ${space[6]}px;
@@ -124,6 +128,8 @@ function mapStateToProps(state: SubscriptionsState) {
 		correspondingProductOptionPrice:
 			selectCorrespondingProductOptionPrice(state),
 		participations: state.common.abParticipations,
+		deliveryAgentsResponse:
+			state.page.checkoutForm.addressMeta.deliveryAgent.response,
 	};
 }
 
@@ -158,6 +164,7 @@ function mapDispatchToProps() {
 		signOut,
 		setCsrCustomerData: (customerData: CsrCustomerData) =>
 			setCsrCustomerData('delivery', customerData),
+		setDeliveryAgent,
 	};
 }
 
@@ -192,6 +199,12 @@ function PaperCheckoutForm(props: PropTypes) {
 	);
 
 	const isHomeDelivery = props.fulfilmentOption === HomeDelivery;
+	const isNationalDeliveryAbTest =
+		props.participations.nationalDelivery === 'variant';
+
+	if (props.deliveryAgentsResponse?.type === 'PaperRoundError') {
+		logException(`Error fetching delivery providers`);
+	}
 
 	const fulfilmentOptionDescriptor = isHomeDelivery
 		? 'Newspaper'
@@ -352,7 +365,18 @@ function PaperCheckoutForm(props: PropTypes) {
 					</FormSection>
 
 					<FormSection title={deliveryTitle}>
-						<DeliveryAddress countries={newspaperCountries} />
+						{isNationalDeliveryAbTest && isHomeDelivery ? (
+							<PaperAddress countries={newspaperCountries} />
+						) : (
+							<DeliveryAddress countries={newspaperCountries} />
+						)}
+						{isNationalDeliveryAbTest && isHomeDelivery && (
+							<DeliveryAgentsSelect
+								deliveryAgentsResponse={props.deliveryAgentsResponse}
+								setDeliveryAgent={props.setDeliveryAgent}
+								formErrors={props.formErrors}
+							/>
+						)}
 						{isHomeDelivery ? (
 							<TextArea
 								error={deliveryInstructionsError?.message}

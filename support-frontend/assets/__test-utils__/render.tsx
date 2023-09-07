@@ -10,7 +10,7 @@ type RenderWithStoreOptions<S> = {
 	store?: Store<S>;
 } & RenderOptions;
 
-export function renderWithStore<StateType>(
+export function renderWithStore<StateType extends Record<string, unknown>>(
 	component: React.ReactElement,
 	{
 		initialState = {} as StateType,

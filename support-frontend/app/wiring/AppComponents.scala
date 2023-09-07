@@ -72,6 +72,7 @@ trait AppComponents
     paperFormController,
     redemptionController,
     getAddressController,
+    paperRoundController,
     loginController,
     testUsersController,
     authCodeFlowController,

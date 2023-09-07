@@ -19,8 +19,8 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.2",
-  "com.beachape" %% "enumeratum" % "1.7.2",
-  "com.beachape" %% "enumeratum-circe" % "1.7.2",
+  "com.beachape" %% "enumeratum" % "1.7.3",
+  "com.beachape" %% "enumeratum-circe" % "1.7.3",
   "com.dripower" %% "play-circe" % playCirceVersion,
   "org.typelevel" %% "simulacrum" % "1.0.1",
   "com.stripe" % "stripe-java" % stripeVersion,
@@ -50,7 +50,7 @@ libraryDependencies ++= Seq(
   ws,
   "com.lihaoyi" %% "pprint" % "0.8.1",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
-  "org.scala-lang.modules" %% "scala-xml" % "1.3.0",
+  "org.scala-lang.modules" %% "scala-xml" % "1.3.1",
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion

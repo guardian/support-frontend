@@ -37,7 +37,45 @@ class ProductTypeDecoderTest extends AnyWordSpec with SerialisationTestHelpers {
 
       testDecoding[Paper](
         json,
-        _ shouldBe Paper(GBP, Monthly, Collection, Sixday),
+        _ shouldBe Paper(GBP, Monthly, Collection, Sixday, None),
+      )
+    }
+
+    "decode a paper sub with a delivery agent" in {
+      val json =
+        """
+          |{
+          |  "billingPeriod": "Monthly",
+          |  "currency": "GBP",
+          |  "fulfilmentOptions": "Collection",
+          |  "productOptions": "Sixday",
+          |  "productType": "Paper",
+          |  "deliveryAgent": "delivery agent (aha!)"
+          |}
+        """.stripMargin
+
+      testDecoding[Paper](
+        json,
+        _ shouldBe Paper(GBP, Monthly, Collection, Sixday, Some("delivery agent (aha!)")),
+      )
+    }
+
+    "decode a paper sub with a null delivery agent" in {
+      val json =
+        """
+          |{
+          |  "billingPeriod": "Monthly",
+          |  "currency": "GBP",
+          |  "fulfilmentOptions": "Collection",
+          |  "productOptions": "Sixday",
+          |  "productType": "Paper",
+          |  "deliveryAgent": null
+          |}
+        """.stripMargin
+
+      testDecoding[Paper](
+        json,
+        _ shouldBe Paper(GBP, Monthly, Collection, Sixday, None),
       )
     }
 

@@ -44,80 +44,253 @@ export const mockSettings: Settings = {
 		},
 		experiments: {},
 	},
-	amounts: {
-		GBPCountries: {
-			control: {
-				ONE_OFF: { amounts: [5, 10, 15, 45], defaultAmount: 10 },
-				MONTHLY: { amounts: [5, 10, 15, 20], defaultAmount: 20 },
-				ANNUAL: { amounts: [5, 10, 15, 20], defaultAmount: 15 },
+	amounts: [
+		{
+			testName: 'FALLBACK_AMOUNTS__GBPCountries',
+			liveTestName: '',
+			isLive: false,
+			targeting: {
+				targetingType: 'Region',
+				region: 'GBPCountries',
 			},
-			test: {
-				name: 'GBP_COUNTRIES_AMOUNTS_TEST',
-				isLive: true,
-				variants: [
-					{
-						name: 'V1',
-						amounts: {
-							ONE_OFF: { amounts: [5, 10, 20, 25, 30], defaultAmount: 20 },
-							MONTHLY: { amounts: [5, 15, 30, 40, 80], defaultAmount: 15 },
-							ANNUAL: { amounts: [100, 150, 250, 500], defaultAmount: 250 },
+			order: 0,
+			seed: 0,
+			variants: [
+				{
+					variantName: 'CONTROL',
+					defaultContributionType: 'MONTHLY',
+					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+					amountsCardData: {
+						ONE_OFF: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						MONTHLY: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 20,
+							hideChooseYourAmount: false,
+						},
+						ANNUAL: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
 						},
 					},
-					{
-						name: 'V2',
-						amounts: {
-							ONE_OFF: { amounts: [10, 50, 100, 150], defaultAmount: 100 },
-							MONTHLY: { amounts: [10, 20, 40, 50], defaultAmount: 50 },
-							ANNUAL: { amounts: [150, 300, 500, 750], defaultAmount: 500 },
+				},
+			],
+		},
+		{
+			testName: 'FALLBACK_AMOUNTS__UnitedStates',
+			liveTestName: '',
+			isLive: false,
+			targeting: {
+				targetingType: 'Region',
+				region: 'UnitedStates',
+			},
+			order: 0,
+			seed: 0,
+			variants: [
+				{
+					variantName: 'CONTROL',
+					defaultContributionType: 'MONTHLY',
+					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+					amountsCardData: {
+						ONE_OFF: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						MONTHLY: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						ANNUAL: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
 						},
 					},
-				],
-				seed: 398375,
-			},
+				},
+			],
 		},
-		UnitedStates: {
-			control: {
-				ONE_OFF: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-				MONTHLY: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-				ANNUAL: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
+		{
+			testName: 'FALLBACK_AMOUNTS__EURCountries',
+			liveTestName: '',
+			isLive: false,
+			targeting: {
+				targetingType: 'Region',
+				region: 'EURCountries',
 			},
+			order: 0,
+			seed: 0,
+			variants: [
+				{
+					variantName: 'CONTROL',
+					defaultContributionType: 'MONTHLY',
+					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+					amountsCardData: {
+						ONE_OFF: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						MONTHLY: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						ANNUAL: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+					},
+				},
+			],
 		},
-		EURCountries: {
-			control: {
-				ONE_OFF: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-				MONTHLY: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-				ANNUAL: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
+		{
+			testName: 'FALLBACK_AMOUNTS__International',
+			liveTestName: '',
+			isLive: false,
+			targeting: {
+				targetingType: 'Region',
+				region: 'International',
 			},
+			order: 0,
+			seed: 0,
+			variants: [
+				{
+					variantName: 'CONTROL',
+					defaultContributionType: 'MONTHLY',
+					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+					amountsCardData: {
+						ONE_OFF: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						MONTHLY: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						ANNUAL: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+					},
+				},
+			],
 		},
-		AUDCountries: {
-			control: {
-				ONE_OFF: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-				MONTHLY: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-				ANNUAL: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
+		{
+			testName: 'FALLBACK_AMOUNTS__Canada',
+			liveTestName: '',
+			isLive: false,
+			targeting: {
+				targetingType: 'Region',
+				region: 'Canada',
 			},
+			order: 0,
+			seed: 0,
+			variants: [
+				{
+					variantName: 'CONTROL',
+					defaultContributionType: 'MONTHLY',
+					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+					amountsCardData: {
+						ONE_OFF: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						MONTHLY: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						ANNUAL: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+					},
+				},
+			],
 		},
-		International: {
-			control: {
-				ONE_OFF: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-				MONTHLY: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-				ANNUAL: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
+		{
+			testName: 'FALLBACK_AMOUNTS__AUDCountries',
+			liveTestName: '',
+			isLive: false,
+			targeting: {
+				targetingType: 'Region',
+				region: 'AUDCountries',
 			},
+			order: 0,
+			seed: 0,
+			variants: [
+				{
+					variantName: 'CONTROL',
+					defaultContributionType: 'MONTHLY',
+					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+					amountsCardData: {
+						ONE_OFF: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						MONTHLY: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						ANNUAL: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+					},
+				},
+			],
 		},
-		NZDCountries: {
-			control: {
-				ONE_OFF: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-				MONTHLY: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-				ANNUAL: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
+		{
+			testName: 'FALLBACK_AMOUNTS__NZDCountries',
+			liveTestName: '',
+			isLive: false,
+			targeting: {
+				targetingType: 'Region',
+				region: 'NZDCountries',
 			},
+			order: 0,
+			seed: 0,
+			variants: [
+				{
+					variantName: 'CONTROL',
+					defaultContributionType: 'MONTHLY',
+					displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+					amountsCardData: {
+						ONE_OFF: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						MONTHLY: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+						ANNUAL: {
+							amounts: [5, 10, 15, 20],
+							defaultAmount: 5,
+							hideChooseYourAmount: false,
+						},
+					},
+				},
+			],
 		},
-		Canada: {
-			control: {
-				ONE_OFF: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-				MONTHLY: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-				ANNUAL: { amounts: [5, 10, 15, 20], defaultAmount: 5 },
-			},
-		},
-	},
+	],
 	contributionTypes: {
 		GBPCountries: [
 			{ contributionType: 'ONE_OFF' },

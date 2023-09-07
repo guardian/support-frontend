@@ -7,6 +7,7 @@ import org.mockito.Mockito.when
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar.mock
+import play.api.http.HeaderNames.{LOCATION, REFERER}
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
 import play.api.mvc.Cookie
@@ -31,7 +32,7 @@ class AuthCodeFlowControllerTest extends AnyWordSpec with Matchers {
       val controller = new AuthCodeFlowController(stubControllerComponents(), authService, config)
       val result = controller.authorize()(FakeRequest())
       status(result) mustEqual 303
-      val locationHeader = headers(result).get("Location").get
+      val locationHeader = headers(result).get(LOCATION).get
       locationHeader must startWith("authServerUrl?")
       locationHeader must include("state=")
       locationHeader must include("scope=a+b+c")
@@ -60,13 +61,14 @@ class AuthCodeFlowControllerTest extends AnyWordSpec with Matchers {
       val controller = new AuthCodeFlowController(stubControllerComponents(), authService, config)
       val request = FakeRequest().withSession(
         SessionKey.originUrl -> "origin",
+        SessionKey.referringUrl -> "referrer",
         SessionKey.codeVerifier -> "verifier",
         SessionKey.state -> "state",
       )
       val result =
         controller.callback(code = Some("code"), state = "state", error = None, errorDescription = None)(request)
       status(result) mustEqual 303
-      headers(result).get("Location") must contain("origin")
+      headers(result).get(LOCATION) must contain("origin?pre-auth-ref=referrer")
       cookies(result).get(config.idTokenCookieName) must contain(
         Cookie(
           name = "id_token",
@@ -88,6 +90,7 @@ class AuthCodeFlowControllerTest extends AnyWordSpec with Matchers {
         ),
       )
       session(result).get(SessionKey.originUrl) must be(None)
+      session(result).get(SessionKey.referringUrl) must be(None)
       session(result).get(SessionKey.codeVerifier) must be(None)
       session(result).get(SessionKey.state) must be(None)
       flash(result).get(FlashKey.authTried) must be(defined)
@@ -102,6 +105,7 @@ class AuthCodeFlowControllerTest extends AnyWordSpec with Matchers {
       val controller = new AuthCodeFlowController(stubControllerComponents(), authService, config)
       val request = FakeRequest().withSession(
         SessionKey.originUrl -> "origin",
+        SessionKey.referringUrl -> "referrer",
         SessionKey.codeVerifier -> "verifier",
         SessionKey.state -> "state",
       )
@@ -113,10 +117,11 @@ class AuthCodeFlowControllerTest extends AnyWordSpec with Matchers {
           errorDescription = Some("error desc"),
         )(request)
       status(result) mustEqual 303
-      headers(result).get("Location") must contain("origin")
+      headers(result).get(LOCATION) must contain("origin?pre-auth-ref=referrer")
       cookies(result).get(config.idTokenCookieName) must be(None)
       cookies(result).get(config.accessTokenCookieName) must be(None)
       session(result).get(SessionKey.originUrl) must be(None)
+      session(result).get(SessionKey.referringUrl) must be(None)
       session(result).get(SessionKey.codeVerifier) must be(None)
       session(result).get(SessionKey.state) must be(None)
       flash(result).get(FlashKey.authTried) must be(defined)

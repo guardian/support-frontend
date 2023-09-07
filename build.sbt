@@ -17,6 +17,7 @@ lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ S
 )
 
 lazy val scalafmtSettings = Seq(
+  scalafmtFilter.withRank(KeyRanks.Invisible) := "diff-dirty",
   (Test / test) := ((Test / test) dependsOn (Test / scalafmtCheckAll)).value,
   (Test / testOnly) := ((Test / testOnly) dependsOn (Test / scalafmtCheckAll)).evaluated,
   (Test / testQuick) := ((Test / testQuick) dependsOn (Test / scalafmtCheckAll)).evaluated,

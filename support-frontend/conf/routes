@@ -59,6 +59,9 @@ GET  /contribute/:campaignCode                                     controllers.A
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute                 controllers.Application.contributionsLanding(country: String, campaignCode = "")
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/:campaignCode   controllers.Application.contributionsLanding(country: String, campaignCode: String)
 
+GET  /contribute/checkout                                          controllers.Application.contributeGeoRedirect(campaignCode = "")
+GET  /$country<(uk|us|au|eu|int|nz|ca)>/contribute/checkout        controllers.Application.contributionsLanding(country: String, campaignCode = "")
+
 GET  /aus-2020-map                                                 controllers.Application.ausMomentMap()
 GET  /aus-map                                                      controllers.Application.ausMomentMap()
 GET  /thank-you-shareable-articles                                 controllers.ArticleShare.getArticles()
@@ -129,6 +132,7 @@ GET  /subscribe/redeem/validate/:redemptionCode                    controllers.R
 GET  /r/:redemptionCode                                            controllers.RedemptionController.redirect(redemptionCode: String)
 
 GET /postcode-lookup/:postcode                                     controllers.GetAddress.findAddress(postcode: String)
+GET /delivery-agents/:postcode                                     controllers.PaperRound.getAgents(postcode: String)
 
 POST /subscribe/create                                             controllers.CreateSubscriptionController.create()
 

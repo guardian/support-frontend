@@ -193,7 +193,8 @@ object Subscription {
       .renameField("GiftNotificationEmailDate", "GiftNotificationEmailDate__c")
       .renameField("AcquisitionSource", "AcquisitionSource__c")
       .renameField("CreatedByCsr", "CreatedByCSR__c")
-      .renameField("AcquisitionCase", "AcquisitionCase__c"),
+      .renameField("AcquisitionCase", "AcquisitionCase__c")
+      .renameField("DeliveryAgent", "DeliveryAgent__c"),
   )
 }
 
@@ -214,6 +215,7 @@ case class Subscription(
     acquisitionSource: Option[AcquisitionSource] = None,
     createdByCsr: Option[String] = None,
     acquisitionCase: Option[String] = None,
+    deliveryAgent: Option[String] = None,
 )
 
 object RatePlanChargeData {

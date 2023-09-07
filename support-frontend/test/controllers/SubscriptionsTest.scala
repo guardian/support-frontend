@@ -38,26 +38,33 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
     val selection = AmountsSelection(
       amounts = List(amount),
       defaultAmount = 25,
-      hideChooseYourAmount = None,
+      hideChooseYourAmount = Option(false),
     )
-    val contributionAmounts = ContributionAmounts(
+    val amountsCardData = ContributionAmounts(
       ONE_OFF = selection,
       MONTHLY = selection,
       ANNUAL = selection,
     )
-    val configuredRegionAmounts = ConfiguredRegionAmounts(
-      control = contributionAmounts,
-      test = None,
+
+    val amountsVariant = AmountsVariant(
+      variantName = "subscriptions-test-variant",
+      defaultContributionType = "MONTHLY",
+      displayContributionType = List("ONE_OFF", "MONTHLY", "ANNUAL"),
+      amountsCardData = amountsCardData,
     )
-    val configuredAmounts = ConfiguredAmounts(
-      GBPCountries = configuredRegionAmounts,
-      UnitedStates = configuredRegionAmounts,
-      EURCountries = configuredRegionAmounts,
-      AUDCountries = configuredRegionAmounts,
-      International = configuredRegionAmounts,
-      NZDCountries = configuredRegionAmounts,
-      Canada = configuredRegionAmounts,
+
+    val amountsTest = AmountsTest(
+      testName = "subscriptions-default-test",
+      liveTestName = Option("subscriptions-AB-test"),
+      testLabel = Option("Subscription AB Test"),
+      isLive = false,
+      targeting = AmountsTestTargeting.Region(region = "GBPCountries"),
+      order = 0,
+      seed = 0,
+      variants = List(amountsVariant),
     )
+
+    val amountsTests = List(amountsTest)
 
     val contributionTypesSettings = List(
       ContributionTypeSetting(
@@ -85,7 +92,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         campaignSwitches = CampaignSwitches(On, On),
         recaptchaSwitches = RecaptchaSwitches(On, On),
       ),
-      configuredAmounts,
+      amountsTests,
       ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),
       MetricUrl("http://localhost"),
     )
@@ -155,6 +162,5 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       status(result) mustBe 200
       contentAsString(result) must include("digitalSubscriptionCheckoutPage.js")
     }
-
   }
 }

@@ -197,7 +197,7 @@ object SendPaperSubscriptionEmail extends App {
     new PaperEmailFields(paperFieldsGenerator, CODE).build(
       SendThankYouEmailPaperState(
         officeUser,
-        Paper(GBP, Monthly, Collection, Saturday),
+        Paper(GBP, Monthly, Collection, Saturday, None),
         directDebitPaymentMethod,
         PaymentSchedule(List(Payment(new LocalDate(2019, 3, 25), 62.79))),
         None,

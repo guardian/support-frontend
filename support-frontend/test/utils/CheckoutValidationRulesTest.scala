@@ -390,6 +390,42 @@ class SimpleCheckoutFormValidationTest extends AnyFlatSpec with Matchers {
   }
 }
 
+class PaidProductValidationTest extends AnyFlatSpec with Matchers {
+  import TestData.validDigitalPackRequest
+
+  "PaidProductValidation.passes" should " fail if the country is United States and there is no state" in {
+    val requestMissingState = validDigitalPackRequest.copy(
+      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = None),
+      product = SupporterPlus(50, Currency.USD, Annual),
+    )
+    PaidProductValidation.passes(requestMissingState) shouldBe an[Invalid]
+  }
+
+  it should " fail if the country is United States and there is no state for Contribution product" in {
+    val requestMissingState = validDigitalPackRequest.copy(
+      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = None),
+      product = SupporterPlus(5, Currency.USD, Annual),
+    )
+    PaidProductValidation.passes(requestMissingState) shouldBe an[Invalid]
+  }
+
+  it should " fail if the country is United States and there is empty string in state for Contribution product" in {
+    val requestMissingState = validDigitalPackRequest.copy(
+      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = Some("")),
+      product = SupporterPlus(5, Currency.USD, Annual),
+    )
+    PaidProductValidation.passes(requestMissingState) shouldBe an[Invalid]
+  }
+
+  it should "succeed  if the country is UK and there is no state" in {
+    val requestSupporterPlus = validDigitalPackRequest.copy(
+      billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, state = None),
+      product = SupporterPlus(50, Currency.GBP, Annual),
+    )
+    PaidProductValidation.passes(requestSupporterPlus) shouldBe Valid
+  }
+
+}
 class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
 
   import TestData.validDigitalPackRequest
@@ -542,7 +578,8 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "fail if the currency is USD" in {
-    val requestDeliveredToUs = validPaperRequest.copy(product = Paper(Currency.USD, Monthly, HomeDelivery, Everyday))
+    val requestDeliveredToUs =
+      validPaperRequest.copy(product = Paper(Currency.USD, Monthly, HomeDelivery, Everyday, None))
     PaperValidation.passes(requestDeliveredToUs, Collection) shouldBe an[Invalid]
   }
 
@@ -621,7 +658,8 @@ class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "succeed if the currency is USD" in {
-    val requestDeliveredToUs = validWeeklyRequest.copy(product = Paper(Currency.USD, Monthly, HomeDelivery, Everyday))
+    val requestDeliveredToUs =
+      validWeeklyRequest.copy(product = GuardianWeekly(Currency.USD, Monthly, HomeDelivery))
     GuardianWeeklyValidation.passes(requestDeliveredToUs) shouldBe Valid
   }
 
@@ -735,7 +773,7 @@ object TestData {
     title = None,
     firstName = "grace",
     lastName = "hopper",
-    product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday),
+    product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday, Some("delivery agent (oho)")),
     firstDeliveryDate = Some(someDateNextMonth),
     paymentFields =
       Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),

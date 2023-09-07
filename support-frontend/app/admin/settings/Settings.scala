@@ -17,15 +17,16 @@ import io.circe.{Decoder, Encoder}
 import scala.io.Source
 import scala.util.Try
 
+import AmountsTests._ // intellij doesn't think this is needed, but it is
+
 case class AllSettings(
     switches: Switches,
-    amounts: ConfiguredAmounts,
+    amounts: AmountsTests,
     contributionTypes: ContributionTypes,
     metricUrl: MetricUrl,
 )
 
 object AllSettings {
-  import Amounts._ // intellij doesn't think this is needed, but it is
   import ContributionTypes._
 
   implicit val metricUrlEncoder: Encoder[MetricUrl] = Encoder.encodeString.contramap(_.value)
@@ -60,7 +61,7 @@ object SettingsSources {
   def fromConfig(config: Config, stage: Stage): Either[Throwable, SettingsSources] = {
     for {
       switchesSource <- SettingsSource.fromConfig(config, "switches_v2", stage)
-      amountsSource <- SettingsSource.fromConfig(config, "configured-amounts", stage)
+      amountsSource <- SettingsSource.fromConfig(config, "configured-amounts-v3", stage)
       contributionTypesSource <- SettingsSource.fromConfig(config, "contributionTypes", stage)
     } yield SettingsSources(switchesSource, amountsSource, contributionTypesSource)
   }

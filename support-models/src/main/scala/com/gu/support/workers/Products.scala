@@ -51,6 +51,7 @@ case class Paper(
     billingPeriod: BillingPeriod = Monthly,
     fulfilmentOptions: FulfilmentOptions,
     productOptions: PaperProductOptions,
+    deliveryAgent: Option[String],
 ) extends ProductType {
   override def describe: String = s"Paper-$fulfilmentOptions-$productOptions"
 }

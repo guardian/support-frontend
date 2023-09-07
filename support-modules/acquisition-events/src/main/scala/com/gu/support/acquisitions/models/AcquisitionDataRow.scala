@@ -2,6 +2,7 @@ package com.gu.support.acquisitions.models
 
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.acquisitions.{AbTest, QueryParameter}
+import com.gu.support.catalog.{FulfilmentOptions, ProductOptions}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.CustomCodecs._
@@ -144,6 +145,12 @@ object PrintProduct {
 
   case object HomeDeliverySundayPlus extends PrintProduct("HOME_DELIVERY_SUNDAY_PLUS")
 
+  case object NationalDeliveryEveryday extends PrintProduct("NATIONAL_DELIVERY_EVERYDAY")
+
+  case object NationalDeliverySixday extends PrintProduct("NATIONAL_DELIVERY_SIXDAY")
+
+  case object NationalDeliveryWeekend extends PrintProduct("NATIONAL_DELIVERY_WEEKEND")
+
   case object VoucherEveryday extends PrintProduct("VOUCHER_EVERYDAY")
 
   case object VoucherEverydayPlus extends PrintProduct("VOUCHER_EVERYDAY_PLUS")
@@ -178,6 +185,9 @@ object PrintProduct {
       HomeDeliverySaturdayPlus,
       HomeDeliverySunday,
       HomeDeliverySundayPlus,
+      NationalDeliveryEveryday,
+      NationalDeliverySixday,
+      NationalDeliveryWeekend,
       VoucherEveryday,
       VoucherEverydayPlus,
       VoucherSixday,

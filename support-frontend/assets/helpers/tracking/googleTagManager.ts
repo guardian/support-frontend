@@ -1,8 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { Participations } from 'helpers/abTests/abtest';
-import { getVariantsAsString } from 'helpers/abTests/abtest';
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
-import { detect as detectCurrency } from 'helpers/internationalisation/currency';
+import type { ContributionType } from 'helpers/contributions';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { PaymentMethod } from '../forms/paymentMethods';
@@ -12,15 +10,12 @@ import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion';
 
-type PaymentRequestAPIStatus =
-	| 'PaymentRequestAPINotAvailable'
-	| 'CanMakePaymentNotAvailable'
-	| 'AvailableNotInUse'
-	| 'AvailableInUse'
-	| 'PaymentRequestAPIError'
-	| 'PromiseNotSupported'
-	| 'PromiseRejected'
-	| 'PaymentApiPromiseRejected';
+type ContributionConversionData = {
+	value: number;
+	contributionType: ContributionType;
+	currency: IsoCurrency;
+	paymentMethod: PaymentMethod;
+};
 
 // these values match the keys used by @guardian/consent-management-platform
 const googleTagManagerKey = 'google-tag-manager';
@@ -68,78 +63,6 @@ function getOrderId() {
 	return value;
 }
 
-function getCurrency(): string {
-	const currency = detectCurrency(detectCountryGroup());
-	storage.setSession('currency', currency);
-	return storage.getSession('currency') ?? 'GBP';
-}
-
-function getContributionValue(): number {
-	const param = getQueryParameter('contributionValue');
-
-	if (param) {
-		storage.setSession('contributionValue', String(parseFloat(param)));
-	}
-
-	return parseFloat(storage.getSession('contributionValue') as string) || 0;
-}
-
-function getPaymentAPIStatus(): Promise<PaymentRequestAPIStatus> {
-	return new Promise((resolve) => {
-		try {
-			const { PaymentRequest } = window;
-
-			if (typeof PaymentRequest !== 'function') {
-				resolve('PaymentRequestAPINotAvailable');
-			}
-
-			const supportedInstruments = [
-				{
-					supportedMethods: 'basic-card',
-					data: {
-						supportedNetworks: [
-							'visa',
-							'mastercard',
-							'amex',
-							'jcb',
-							'diners',
-							'discover',
-							'mir',
-							'unionpay',
-						],
-						supportedTypes: ['credit', 'debit'],
-					},
-				},
-			];
-			const details = {
-				total: {
-					label: 'tracking',
-					amount: {
-						value: '1',
-						currency: getCurrency(),
-					},
-				},
-			};
-			const request = new PaymentRequest(supportedInstruments, details);
-
-			request
-				.canMakePayment()
-				.then((result) => {
-					if (result) {
-						resolve('AvailableInUse');
-					} else {
-						resolve('AvailableNotInUse');
-					}
-				})
-				.catch(() => {
-					resolve('PaymentApiPromiseRejected');
-				});
-		} catch (e) {
-			resolve('PaymentRequestAPIError');
-		}
-	});
-}
-
 function ophanPaymentMethod(paymentMethod: PaymentMethod | null | undefined) {
 	switch (paymentMethod) {
 		case DirectDebit:
@@ -175,47 +98,44 @@ function push(data: Record<string, unknown>) {
 
 function getData(
 	event: EventType,
-	participations: Participations,
-	paymentRequestApiStatus?: PaymentRequestAPIStatus,
+	contributionConversionData?: ContributionConversionData,
 ): Record<string, unknown> {
-	const orderId = getOrderId();
-	const value = getContributionValue();
-	const currency = getCurrency();
-	return {
+	const commonData = {
 		event,
-
 		/**
 		 * orderId anonymously identifies this user in this session.
 		 * We need this to prevent page refreshes on conversion pages being
 		 * treated as new conversions
 		 * */
-		orderId,
-		currency,
-		value,
-
+		orderId: getOrderId(),
 		/**
 		 * getData is only executed via runWithConsentCheck when user has
 		 * Opted In to tracking, so we can hardcode thirdPartyTrackingConsent
 		 * to "OptedIn".
 		 * */
 		thirdPartyTrackingConsent: 'OptedIn',
-		paymentMethod: storage.getSession('selectedPaymentMethod') ?? undefined,
 		campaignCodeBusinessUnit: getQueryParameter('CMP_BUNIT') || undefined,
 		campaignCodeTeam: getQueryParameter('CMP_TU') || undefined,
 		internalCampaignCode: getQueryParameter('INTCMP') || undefined,
-		experience: getVariantsAsString(participations),
-		paymentRequestApiStatus,
-		vendorConsentsLookup, // eg. "google-analytics,twitter"
+		vendorConsentsLookup, // eg. "google-analytics,twitter",
 	};
+
+	if (contributionConversionData) {
+		return {
+			...commonData,
+			...contributionConversionData,
+		};
+	}
+
+	return commonData;
 }
 
 function sendData(
 	event: EventType,
-	participations: Participations,
-	paymentRequestApiStatus?: PaymentRequestAPIStatus,
+	contributionConversionData?: ContributionConversionData,
 ) {
 	const pushDataToGTM = () => {
-		const dataToPush = getData(event, participations, paymentRequestApiStatus);
+		const dataToPush = getData(event, contributionConversionData);
 		push(dataToPush);
 	};
 
@@ -227,20 +147,6 @@ function sendData(
 		pushDataToGTM();
 	} else {
 		googleTagManagerDataQueue.push(pushDataToGTM);
-	}
-}
-
-function pushToDataLayer(event: EventType, participations: Participations) {
-	try {
-		getPaymentAPIStatus()
-			.then((paymentRequestApiStatus) => {
-				sendData(event, participations, paymentRequestApiStatus);
-			})
-			.catch(() => {
-				sendData(event, participations, 'PromiseRejected');
-			});
-	} catch (e) {
-		sendData(event, participations, 'PromiseNotSupported');
 	}
 }
 
@@ -285,7 +191,7 @@ function addTagManagerScript() {
 	}
 }
 
-async function init(participations: Participations): Promise<void> {
+async function init(): Promise<void> {
 	/**
 	 * The callback passed to onConsentChangeEvent is called
 	 * each time consent changes. EG. if a user consents via the CMP.
@@ -330,15 +236,35 @@ async function init(participations: Participations): Promise<void> {
 		},
 		vendorIds,
 	);
-	pushToDataLayer('DataLayerReady', participations);
+	sendData('DataLayerReady');
 }
 
-function successfulConversion(participations: Participations): void {
-	sendData('SuccessfulConversion', participations);
+function successfulContributionConversion(
+	amount: number,
+	contributionType: ContributionType,
+	sourceCurrency: IsoCurrency,
+	paymentMethod: PaymentMethod,
+): void {
+	const contributionConversionData: ContributionConversionData = {
+		value: amount,
+		contributionType,
+		currency: sourceCurrency,
+		paymentMethod,
+	};
+
+	sendData('SuccessfulConversion', contributionConversionData);
+}
+
+function successfulSubscriptionConversion(): void {
+	sendData('SuccessfulConversion');
 }
 
 // ----- Exports ---//
-export { init, successfulConversion };
+export {
+	init,
+	successfulContributionConversion,
+	successfulSubscriptionConversion,
+};
 
 // ----- For Tests ---//
 export const _ = {

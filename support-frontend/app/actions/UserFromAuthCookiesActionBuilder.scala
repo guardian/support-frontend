@@ -7,9 +7,10 @@ import com.gu.identity.auth._
 import com.gu.identity.model.{PrivateFields, User}
 import config.Identity
 import controllers.AuthCodeFlow.FlashKey.authTried
-import controllers.AuthCodeFlow.SessionKey.originUrl
+import controllers.AuthCodeFlow.SessionKey.{originUrl, referringUrl}
 import controllers.routes
 import play.api.Logging
+import play.api.http.HeaderNames.REFERER
 import play.api.mvc.Results.Redirect
 import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
@@ -43,6 +44,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilder(
     override val parser: BodyParser[AnyContent],
     oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims],
     config: Identity,
+    isAuthServerUp: () => Future[Boolean],
 )(implicit val executionContext: ExecutionContext)
     extends ActionBuilder[OptionalAuthRequest, AnyContent]
     with Logging {
@@ -60,8 +62,18 @@ class UserFromAuthCookiesOrAuthServerActionBuilder(
             processRequestWithoutUser(config)(request, block)
           } else {
             // Haven't tried to authenticate this request yet so redirect to auth
-            val session = request.session + (originUrl -> request.uri)
-            Future.successful(Redirect(routes.AuthCodeFlowController.authorize()).withSession(session))
+            isAuthServerUp().flatMap {
+              case true =>
+                val session = request.session ++ Seq(
+                  originUrl -> request.uri,
+                  referringUrl -> request.headers.get(REFERER).getOrElse(""),
+                )
+                Future.successful(Redirect(routes.AuthCodeFlowController.authorize()).withSession(session))
+              case false =>
+                // If auth server is down, just pass request through without a user
+                logger.warn(s"Auth server is down, can't authenticate request ${request.id}")
+                processRequestWithoutUser(config)(request, block)
+            }
           }
         })
         .merge

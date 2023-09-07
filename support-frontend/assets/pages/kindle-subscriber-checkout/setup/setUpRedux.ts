@@ -98,7 +98,7 @@ function selectInitialAmounts(
 	const amountForSelectedContributionType = () => {
 		if (!amountFromUrl) {
 			return {
-				amount: amounts[selectedContributionType].defaultAmount,
+				amount: amounts.amountsCardData[selectedContributionType].defaultAmount,
 			};
 		}
 
@@ -106,7 +106,11 @@ function selectInitialAmounts(
 			return { amount: 'other' };
 		}
 
-		if (amounts[selectedContributionType].amounts.includes(amountFromUrl)) {
+		if (
+			amounts.amountsCardData[selectedContributionType].amounts.includes(
+				amountFromUrl,
+			)
+		) {
 			return { amount: amountFromUrl };
 		}
 
@@ -118,9 +122,9 @@ function selectInitialAmounts(
 	};
 
 	const defaults = {
-		ONE_OFF: amounts.ONE_OFF.defaultAmount,
-		MONTHLY: amounts.MONTHLY.defaultAmount,
-		ANNUAL: amounts.ANNUAL.defaultAmount,
+		ONE_OFF: amounts.amountsCardData.ONE_OFF.defaultAmount,
+		MONTHLY: amounts.amountsCardData.MONTHLY.defaultAmount,
+		ANNUAL: amounts.amountsCardData.ANNUAL.defaultAmount,
 	};
 
 	const { amount: selectedAmount, otherAmount } =

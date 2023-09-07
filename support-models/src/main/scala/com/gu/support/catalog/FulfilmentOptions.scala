@@ -6,6 +6,8 @@ sealed trait FulfilmentOptions
 
 case object HomeDelivery extends FulfilmentOptions
 
+case object NationalDelivery extends FulfilmentOptions
+
 case object Collection extends FulfilmentOptions
 
 case object Domestic extends FulfilmentOptions
@@ -15,7 +17,8 @@ case object RestOfWorld extends FulfilmentOptions
 case object NoFulfilmentOptions extends FulfilmentOptions
 
 object FulfilmentOptions {
-  lazy val allFulfilmentOptions = List(HomeDelivery, Collection, Domestic, RestOfWorld, NoFulfilmentOptions)
+  lazy val allFulfilmentOptions =
+    List(HomeDelivery, NationalDelivery, Collection, Domestic, RestOfWorld, NoFulfilmentOptions)
 
   def fromString(code: String): Option[FulfilmentOptions] =
     allFulfilmentOptions.find(_.getClass.getSimpleName == s"$code$$")

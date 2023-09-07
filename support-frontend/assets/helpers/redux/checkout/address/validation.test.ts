@@ -3,6 +3,7 @@ import type { AddressFields } from './state';
 import {
 	applyBillingAddressRules,
 	applyDeliveryAddressRules,
+	isHomeDeliveryAvailable,
 	isHomeDeliveryInM25,
 	isPostcodeOptional,
 	isStateNullable,
@@ -187,7 +188,12 @@ describe('applyDeliveryAddressRules', () => {
 	it('returns an error if postCode is outside of the M25', () => {
 		const fields = buildAddressFields({ postCode: 'DA11 7NP' });
 
-		const errors = applyDeliveryAddressRules('HomeDelivery', fields);
+		const errors = applyDeliveryAddressRules(
+			'HomeDelivery',
+			fields,
+			{ isLoading: false },
+			{},
+		);
 
 		expect(errors).toEqual([
 			{
@@ -248,6 +254,74 @@ describe('isHomeDeliveryInM25 ', () => {
 		const result = isHomeDeliveryInM25(
 			fulfilmentOption,
 			postcode,
+			homeDeliveryPostcodes,
+		);
+
+		expect(result).toBeFalsy();
+	});
+
+	it('returns true when the fulfilment option is not home delivery', () => {
+		const fulfilmentOption = 'Collection';
+		const postcode = 'DA11 7NP';
+		const homeDeliveryPostcodes = ['SE23'];
+
+		const result = isHomeDeliveryInM25(
+			fulfilmentOption,
+			postcode,
+			homeDeliveryPostcodes,
+		);
+
+		expect(result).toBeTruthy();
+	});
+});
+
+describe('isHomeDeliveryAvailable', () => {
+	it('returns true when the order is a home delivery and the postcode is outside the M25 and a delivery agent is available', () => {
+		const fulfilmentOption = 'HomeDelivery';
+		const postcode = 'DE 2AB';
+		const homeDeliveryPostcodes = ['SE23'];
+
+		const result = isHomeDeliveryAvailable(
+			fulfilmentOption,
+			postcode,
+			{
+				isLoading: false,
+				response: {
+					type: 'Covered',
+					agents: [
+						{
+							agentId: 1,
+							agentName: 'Delivery Company',
+							deliveryMethod: 'Car',
+							nbrDeliveryDays: 7,
+							postcode: '',
+							refGroupId: 1,
+							summary: '',
+						},
+					],
+				},
+			},
+			homeDeliveryPostcodes,
+		);
+
+		expect(result).toBeTruthy();
+	});
+
+	it('returns false when the order is a home delivery and the postcode is outside the M25 and a delivery agent is NOT available', () => {
+		const fulfilmentOption = 'HomeDelivery';
+		const postcode = 'DE 2AB';
+		const homeDeliveryPostcodes = ['SE23'];
+
+		const result = isHomeDeliveryAvailable(
+			fulfilmentOption,
+			postcode,
+			{
+				isLoading: false,
+				response: {
+					type: 'Covered',
+					agents: [],
+				},
+			},
 			homeDeliveryPostcodes,
 		);
 

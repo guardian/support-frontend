@@ -34,6 +34,7 @@ class PaperSubscriptionBuilder(
       readerType = Direct,
       csrUsername = csrUsername,
       salesforceCaseId = salesforceCaseId,
+      deliveryAgent = product.deliveryAgent,
     )
 
     applyPromoCodeIfPresent(
