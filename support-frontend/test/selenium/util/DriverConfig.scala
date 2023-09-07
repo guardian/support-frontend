@@ -22,7 +22,6 @@ class DriverConfig {
   // Used in dev to run tests locally
   private def instantiateLocalBrowser(): WebDriver = {
     WebDriverManager.chromedriver().setup()
-    System.setProperty("webdriver.chrome.driver", "/Users/lakshmi_pillai/Downloads/chromedriver-mac-arm64/chromedriver")
     new ChromeDriver()
   }
 
