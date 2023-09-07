@@ -3,6 +3,8 @@ package selenium.util
 import com.typesafe.config.ConfigFactory
 import org.openqa.selenium.remote.SessionId
 import org.slf4j.LoggerFactory
+
+import java.time.Duration
 import scala.util.{Failure, Success, Try}
 
 object Config {
@@ -15,7 +17,13 @@ object Config {
 
   val waitTimeout = 45
 
+  val identityGatewayUrl = conf.getString("identity.webapp.url")
+
   val testUsersSecret = conf.getString("identity.test.users.secret")
+
+  val testUserEmailAddress = conf.getString("identity.test.user.email")
+
+  val testUserPassword = conf.getString("identity.test.user.password")
 
   val idapiNewTestUserUrl = conf.getString("idapi.newTestUser.url")
 

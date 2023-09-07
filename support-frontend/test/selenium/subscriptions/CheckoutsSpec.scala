@@ -1,10 +1,10 @@
 package selenium.subscriptions
 
-import org.openqa.selenium.WebDriver
+import org.openqa.selenium._
 import org.scalatest.concurrent.Eventually
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.time.{Minute, Seconds, Span}
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, GivenWhenThen, Ignore}
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, GivenWhenThen}
 import selenium.subscriptions.pages._
 import selenium.util._
 
@@ -32,6 +32,7 @@ class CheckoutsSpec
 
   override def afterAll(): Unit = {
     driverConfig.quit()
+    Thread.sleep(100)
   }
 
   Feature("Paper checkout") {
@@ -63,24 +64,31 @@ class CheckoutsSpec
       productPage: ProductPage,
       paymentFunction: CheckoutPage => Unit,
   ): Unit = {
-    val testUserRequest = new IdapiTestUserRequest()
-    testUserRequest.getCookies() match {
-      case Left(error) => fail(error)
-      case Right(cookies) => new PostDeployTestUser(driverConfig, Some(cookies))
-    }
+    new PostDeployTestUser(driverConfig)
+
+    Given("that a user is signed in")
+    val signInPage = new SignInPage
+    goTo(signInPage)
+    signInPage.signIn()
 
     Given("that a user goes to the UK product page")
     goTo(productPage)
 
+    checkoutPage.addTestUserCookies("SupportPostDeployTestF")
+
     Given(s"that a user goes to the $checkoutName checkout page")
-    goTo(checkoutPage)
+    goTo(
+      checkoutPage,
+    ) // TODO: why is this recognised as a test user on https://support.theguardian.com/uk/contribute but not here?
 
     Then(s"they should be redirected to the $checkoutName checkout page")
     assert(checkoutPage.pageHasLoaded)
+    checkoutPage.disableConsentBanner()
 
     Given("the user fills in their details correctly")
     checkoutPage.fillForm()
 
+    Thread.sleep(1000)
     paymentFunction(checkoutPage)
   }
 
@@ -90,15 +98,19 @@ class CheckoutsSpec
     checkoutPage.selectStripePaymentMethod()
 
     Then("the stripe form loads")
+    Thread.sleep(100)
     assert(checkoutPage.stripeFormHasLoaded)
 
     Given("they fill in the stripe form")
+    Thread.sleep(100)
     checkoutPage.fillStripeForm()
 
     When("they click to process payment")
+    Thread.sleep(100)
     checkoutPage.clickStripeSubmit()
 
     And("the mock calls the backend using a test Stripe token")
+    Thread.sleep(100)
     thankYouPage(checkoutPage)
   }
 
@@ -131,5 +143,7 @@ class CheckoutsSpec
     eventually {
       assert(checkoutPage.thankYouPageHasLoaded)
     }
+    val signOutPage = new SignOutPage
+    goTo(signOutPage)
   }
 }
