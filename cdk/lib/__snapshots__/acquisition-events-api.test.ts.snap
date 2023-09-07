@@ -9,6 +9,26 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
     "gu:cdk:version": "TEST",
   },
   "Resources": {
+    "AcquisitionRoute": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "acquisitionseventbridgeapiCODE8060A47C",
+        },
+        "RouteKey": "POST /acquisition",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "EventBridgeIntegration",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
     "ApiGateway4XXAlarmCDKC83EACCA": {
       "Properties": {
         "ActionsEnabled": false,
@@ -174,7 +194,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "EventRoute": {
+    "FallbackRoute": {
       "Properties": {
         "ApiId": {
           "Ref": "acquisitionseventbridgeapiCODE8060A47C",
@@ -255,6 +275,26 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
     "gu:cdk:version": "TEST",
   },
   "Resources": {
+    "AcquisitionRoute": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "acquisitionseventbridgeapiPROD575D58B4",
+        },
+        "RouteKey": "POST /acquisition",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "EventBridgeIntegration",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
     "ApiGateway4XXAlarmCDKC83EACCA": {
       "Properties": {
         "ActionsEnabled": true,
@@ -420,7 +460,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "EventRoute": {
+    "FallbackRoute": {
       "Properties": {
         "ApiId": {
           "Ref": "acquisitionseventbridgeapiPROD575D58B4",
