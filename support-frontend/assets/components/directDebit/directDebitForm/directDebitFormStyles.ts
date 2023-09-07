@@ -2,25 +2,6 @@ import { css } from '@emotion/react';
 import { from, space, until } from '@guardian/source-foundations';
 import { palette } from '@guardian/source-foundations/cjs/colour/palette';
 
-export const fieldLabel = css`
-	display: block;
-	margin-top: ${space[3]}px;
-	margin-bottom: ${space[1]}px;
-
-	${from.tablet} {
-		margin-top: ${space[5]}px;
-		margin-bottom: ${space[1]}px;
-	}
-`;
-
-export const textField = css`
-	height: 44px;
-	border: 1px solid ${palette.neutral[46]};
-	border-radius: ${space[1]}px;
-	padding: 10px ${space[2]}px;
-	width: 100%;
-`;
-
 export const accountNumberSortCodeContainer = css`
 	display: flex;
 	flex-direction: column;
@@ -36,59 +17,6 @@ export const accountNumberSortCodeContainer = css`
 	}
 	margin: ${space[3]}px 0;
 `;
-
-export const accountHolderConfirmation = css`
-	margin-top: ${space[5]}px;
-`;
-
-export const confirmationInputContainer = css`
-	display: flex;
-`;
-
-export const confirmationInput = css`
-	margin-top: ${space[2]}px;
-`;
-
-export const confirmationText = css`
-	font-size: 14px;
-	padding-left: ${space[3]}px;
-	display: block;
-	overflow: hidden;
-`;
-
-export const confirmationCheckbox = css`
-	width: 25px;
-	position: relative;
-`;
-
-export const confirmationLabel = css`
-	cursor: pointer;
-	position: absolute;
-	width: ${space[5]}px;
-	height: ${space[5]}px;
-	top: 2px;
-	left: 0;
-	background: #fff;
-	border: solid 1px #121212;
-	border-radius: 2px;
-	&:after {
-		opacity: 0;
-		content: '';
-		position: absolute;
-		width: 9px;
-		height: 5px;
-		background: transparent;
-		top: 4px;
-		left: 4px;
-		border: 3px solid #333;
-		border-top: none;
-		border-right: none;
-		transform: rotate(-45deg);
-	}
-	&:hover::after {
-		opacity: 0.5;
-	}
-}`;
 
 export const recaptcha = css`
 	margin-top: ${space[5]}px;

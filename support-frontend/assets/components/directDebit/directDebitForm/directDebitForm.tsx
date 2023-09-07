@@ -8,13 +8,12 @@ import { ElementDecorator } from 'components/stripeCardForm/elementDecorator';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
-import type { DirectDebitState } from 'helpers/redux/checkout/payment/directDebit/state';
 import {
 	accountNumberSortCodeContainer,
 	legalNotice,
 	recaptcha,
 } from './directDebitFormStyles';
-import './directDebitForm.scss';
+import type { DirectDebitFormDisplayErrors } from './selectors';
 
 export type DirectDebitFormProps = {
 	countryGroupId: CountryGroupId;
@@ -29,7 +28,7 @@ export type DirectDebitFormProps = {
 	updateAccountHolderConfirmation: (confirmation: boolean) => void;
 	recaptcha: React.ReactNode;
 	formError: string;
-	errors: DirectDebitState['errors'];
+	errors: DirectDebitFormDisplayErrors;
 };
 
 // ----- Component ----- //
@@ -48,19 +47,19 @@ export default function DirectDebitForm(
       * */}
 			<TextInput
 				label="Account name"
-				id="account-holder-name-input"
+				id="accountHolderName"
 				data-qm-masking="blocklist"
 				value={props.accountHolderName}
 				onChange={(e) => props.updateAccountHolderName(e.target.value)}
 				maxLength={40}
-				error={props.errors?.accountHolderName?.[0]}
+				error={props.errors.accountHolderName?.[0]}
 			/>
 
 			<div css={accountNumberSortCodeContainer}>
 				<div>
 					<TextInput
 						label="Sort code"
-						id="account-number-input"
+						id="sortCodeString"
 						data-qm-masking="blocklist"
 						value={props.sortCode}
 						onChange={(e) => props.updateSortCode(e.target.value)}
@@ -68,14 +67,14 @@ export default function DirectDebitForm(
 						minLength={6}
 						maxLength={6}
 						inputMode="numeric"
-						error={props.errors?.sortCodeString?.[0]}
+						error={props.errors.sortCodeString?.[0]}
 					/>
 				</div>
 
 				<div>
 					<TextInput
 						label="Account number"
-						id="account-number-input"
+						id="accountNumber"
 						data-qm-masking="blocklist"
 						value={props.accountNumber}
 						onChange={(e) => props.updateAccountNumber(e.target.value)}
@@ -83,15 +82,16 @@ export default function DirectDebitForm(
 						minLength={6}
 						maxLength={10}
 						inputMode="numeric"
-						error={props.errors?.accountNumber?.[0]}
+						error={props.errors.accountNumber?.[0]}
 					/>
 				</div>
 			</div>
 
 			<Checkbox
-				id="confirmation-input"
+				id="accountHolderConfirmation"
 				label="I confirm that I am the account holder and I am solely able to
 							authorise debit from the account"
+				error={!!props.errors.accountHolderConfirmation?.[0]}
 				onChange={(e) =>
 					props.updateAccountHolderConfirmation(e.target.checked)
 				}
@@ -103,7 +103,7 @@ export default function DirectDebitForm(
 					<ElementDecorator
 						id="robot-checkbox"
 						text="Security check"
-						// error={props.errors.recaptcha?.[0]}
+						error={props.errors.recaptcha?.[0]}
 						renderElement={() => props.recaptcha}
 					/>
 				</div>

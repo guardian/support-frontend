@@ -57,9 +57,8 @@ export function getPaymentMethodErrors(
 		case 'Stripe':
 			return getStripeFormErrors(state);
 
-		// TODO: implement this once we have a new DD form
-		// case 'DirectDebit':
-		// 	return payment.directDebit.errors ?? {};
+		case 'DirectDebit':
+			return payment.directDebit.errors ?? {};
 
 		case 'Sepa':
 			return payment.sepa.errors;

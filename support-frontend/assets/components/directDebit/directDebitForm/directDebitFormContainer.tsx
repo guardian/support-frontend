@@ -20,6 +20,7 @@ import {
 } from 'helpers/redux/storeHooks';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import type { DirectDebitFormProps } from './directDebitForm';
+import { getDirectDebitFormErrors } from './selectors';
 
 type DirectDebitFormContainerProps = {
 	render: (directDebitFormProps: DirectDebitFormProps) => JSX.Element;
@@ -43,11 +44,12 @@ export function DirectDebitFormContainer({
 		accountNumber,
 		accountHolderConfirmation,
 		sortCodeString,
-		errors,
 		formError,
 	} = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.directDebit,
 	);
+
+	const errors = useContributionsSelector(getDirectDebitFormErrors);
 
 	function updateAccountHolderName(newAccountHolderName: string) {
 		dispatch(setAccountHolderName(newAccountHolderName));
