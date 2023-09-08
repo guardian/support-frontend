@@ -32,7 +32,9 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       queueName: `${appName}-queue-${props.stage}`,
       visibilityTimeout: Duration.minutes(2),
       deadLetterQueue: {
-        maxReceiveCount: 1, //The number of times a message can be unsuccessfully dequeued before being moved to the dead-letter queue.
+        // The number of times a message can be unsuccessfully dequeued before being moved to the dead-letter queue.
+        // This has been set to 1 to avoid duplicate acquisition events being send to bigquery
+        maxReceiveCount: 1,
         queue: deadLetterQueue,
       },
     });
