@@ -1,6 +1,7 @@
 import "source-map-support/register";
 import { App } from "aws-cdk-lib";
 import {AcquisitionEventsApi} from "../lib/acquisition-events-api";
+import {BigqueryAcquisitionsPublisher} from "../lib/bigquery-acquisitions-publisher";
 import { Frontend } from "../lib/frontend";
 import {PaymentApi} from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
@@ -88,4 +89,14 @@ new AcquisitionEventsApi(app, "Acquisition-Events-API-PROD", {
   domainName: "acquisition-events.support.guardianapis.com",
   hostedZoneName: "support.guardianapis.com.",
   hostedZoneId: "Z3KO35ELNWZMSX",
+});
+
+new BigqueryAcquisitionsPublisher(app, "BigqueryAcquisitionsPublisher-CODE", {
+  stack: "support",
+  stage: "CODE",
+});
+
+new BigqueryAcquisitionsPublisher(app, "BigqueryAcquisitionsPublisher-PROD", {
+  stack: "support",
+  stage: "PROD",
 });
