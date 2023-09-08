@@ -50,13 +50,13 @@ class ProductTypeDecoderTest extends AnyWordSpec with SerialisationTestHelpers {
           |  "fulfilmentOptions": "Collection",
           |  "productOptions": "Sixday",
           |  "productType": "Paper",
-          |  "deliveryAgent": "delivery agent (aha!)"
+          |  "deliveryAgent": 67812
           |}
         """.stripMargin
 
       testDecoding[Paper](
         json,
-        _ shouldBe Paper(GBP, Monthly, Collection, Sixday, Some("delivery agent (aha!)")),
+        _ shouldBe Paper(GBP, Monthly, Collection, Sixday, Some(67812)),
       )
     }
 

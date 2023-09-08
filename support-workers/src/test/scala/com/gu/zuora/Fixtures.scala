@@ -120,7 +120,7 @@ object Fixtures {
         Nil,
       ),
     ),
-    Subscription(date, date, date, "id123", deliveryAgent = Some("delivery agent ID")),
+    Subscription(date, date, date, "id123", deliveryAgent = Some(7583)),
   )
 
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =

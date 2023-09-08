@@ -81,7 +81,7 @@ class SubscribeItemBuilder(
       giftNotificationEmailDate: Option[LocalDate] = None,
       csrUsername: Option[String] = None,
       salesforceCaseId: Option[String] = None,
-      deliveryAgent: Option[String] = None,
+      deliveryAgent: Option[Integer] = None,
   ): SubscriptionData =
     SubscriptionData(
       List(

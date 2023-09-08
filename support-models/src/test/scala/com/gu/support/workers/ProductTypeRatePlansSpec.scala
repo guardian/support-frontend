@@ -15,11 +15,11 @@ class ProductTypeRatePlansSpec extends AsyncFlatSpec with Matchers {
     val weekly = GuardianWeekly(GBP, Annual, Domestic)
     weeklyRatePlan(weekly, CODE, Direct).value.description shouldBe "Guardian Weekly annual, domestic delivery"
 
-    val paper = Paper(USD, Monthly, HomeDelivery, Everyday, Some("any delivery agent! It shouldn’t matter"))
+    val paper = Paper(USD, Monthly, HomeDelivery, Everyday, Some(0))
     paperRatePlan(paper, CODE).value.id shouldBe "2c92c0f955c3cf0f0155c5d9e2493c43"
 
     val nationalDeliveryPaper =
-      Paper(USD, Monthly, NationalDelivery, Everyday, Some("any delivery agent! It shouldn’t matter"))
+      Paper(USD, Monthly, NationalDelivery, Everyday, Some(8172))
     paperRatePlan(nationalDeliveryPaper, CODE).value.id shouldBe "8ad096ca8992481d018992a363bd17ad"
   }
 

@@ -773,7 +773,7 @@ object TestData {
     title = None,
     firstName = "grace",
     lastName = "hopper",
-    product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday, Some("delivery agent (oho)")),
+    product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday, Some(134789)),
     firstDeliveryDate = Some(someDateNextMonth),
     paymentFields =
       Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
