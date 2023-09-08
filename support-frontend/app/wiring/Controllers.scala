@@ -155,6 +155,7 @@ trait Controllers {
     testUsers,
     controllerComponents,
     appConfig.guardianDomain,
+    paperRoundService,
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(

@@ -16,17 +16,22 @@ import admin.settings.{
 import com.gu.i18n.Currency.{GBP, USD}
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.acquisitions.{OphanIds, ReferrerAcquisitionData}
-import com.gu.support.catalog.{Collection, Domestic, Everyday, HomeDelivery}
+import com.gu.support.catalog.{Collection, Domestic, Everyday, HomeDelivery, NationalDelivery}
+import com.gu.support.paperround.PaperRoundAPI
+import com.gu.support.paperround.PaperRoundService.CoverageEndpoint
+import com.gu.support.paperround.PaperRoundService.CoverageEndpoint.{NC, CO, PostcodeCoverage}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import org.joda.time.LocalDate
-import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.flatspec.{AnyFlatSpec, AsyncFlatSpec}
 import org.scalatest.matchers.should.Matchers
 import services.stepfunctions.CreateSupportWorkersRequest
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.TestData.monthlyDirectUSDProduct
+
+import scala.concurrent.Future
 
 class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
 
@@ -567,9 +572,24 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
 
 }
 
-class PaperValidationTest extends AnyFlatSpec with Matchers {
+class PaperValidationTest extends AsyncFlatSpec with Matchers {
 
   import TestData.validPaperRequest
+
+  case class TestPaperRound(agentMap: Map[String, List[Integer]]) extends PaperRoundAPI {
+    def toResponse(coverage: PostcodeCoverage) = CoverageEndpoint.Response(200, "", coverage)
+    def toAgentsCoverage(agentId: Integer) = CoverageEndpoint.AgentsCoverage(agentId, "", "", 0, "", 0, "")
+    def coverage(body: CoverageEndpoint.RequestBody): Future[CoverageEndpoint.Response] =
+      Future {
+        agentMap
+          .get(body.postcode)
+          .fold(
+            toResponse(PostcodeCoverage(List(), "", NC)),
+          )(xs => toResponse(PostcodeCoverage(xs.map(toAgentsCoverage), "", CO)))
+      }
+    def agents() = Future.failed(new NotImplementedError("Not used"))
+    def chargebands() = Future.failed(new NotImplementedError("Not used"))
+  }
 
   "PaperValidation.passes" should "fail if the delivery country is US" in {
     val requestDeliveredToUs =
@@ -645,6 +665,45 @@ class PaperValidationTest extends AnyFlatSpec with Matchers {
     PaperValidation.passes(requestDeliveryPostCode, Collection) shouldBe an[Invalid]
   }
 
+  "PaperValidation.deliveryAgentChosenWhichCoversPostcode" should "fail if the user has chosen a delivery agent that PaperRound doesn’t return for their postcode" in {
+    PaperValidation
+      .deliveryAgentChosenWhichCoversPostcode(
+        TestPaperRound(Map("DE10FD" -> List(2, 3))),
+        Some(1),
+        "DE10FD",
+      )
+      .map(r => r shouldBe an[Invalid])
+  }
+
+  it should "succeed if the user has chosen a delivery agent that PaperRound does return for their postcode" in {
+    PaperValidation
+      .deliveryAgentChosenWhichCoversPostcode(
+        TestPaperRound(Map("DE10HN" -> List(1, 2))),
+        Some(1),
+        "DE10HN",
+      )
+      .map(r => r shouldBe Valid)
+  }
+
+  it should "fail if PaperRound doesn’t return any delivery agents for their postcode" in {
+    PaperValidation
+      .deliveryAgentChosenWhichCoversPostcode(
+        TestPaperRound(Map("DE10HN" -> List(1, 2))),
+        Some(1),
+        "DE10FD",
+      )
+      .map(r => r shouldBe an[Invalid])
+  }
+
+  it should "fail if the user hasn’t chosen an agent" in {
+    PaperValidation
+      .deliveryAgentChosenWhichCoversPostcode(
+        TestPaperRound(Map("DE10HN" -> List(1, 2))),
+        None,
+        "DE10FD",
+      )
+      .map(r => r shouldBe an[Invalid])
+  }
 }
 
 class GuardianWeeklyValidationTest extends AnyFlatSpec with Matchers {
