@@ -110,7 +110,7 @@ class CheckoutsSpec
     checkoutPage.clickStripeSubmit()
 
     And("the mock calls the backend using a test Stripe token")
-    Thread.sleep(100)
+    Thread.sleep(1000)
     thankYouPage(checkoutPage)
   }
 
@@ -135,6 +135,7 @@ class CheckoutsSpec
     When("they click Pay")
     checkoutPage.clickDirectDebitPay()
 
+    Thread.sleep(1000)
     thankYouPage(checkoutPage)
   }
 
