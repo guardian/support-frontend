@@ -135,6 +135,7 @@ class CheckoutsSpec
     When("they click Pay")
     checkoutPage.clickDirectDebitPay()
 
+    Thread.sleep(100)
     thankYouPage(checkoutPage)
   }
 
