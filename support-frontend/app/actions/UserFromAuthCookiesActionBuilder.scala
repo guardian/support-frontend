@@ -64,10 +64,13 @@ class UserFromAuthCookiesOrAuthServerActionBuilder(
             // Haven't tried to authenticate this request yet so redirect to auth
             isAuthServerUp().flatMap {
               case true =>
-                val session = request.session ++ Seq(
-                  originUrl -> request.uri,
-                  referringUrl -> request.headers.get(REFERER).getOrElse(""),
-                )
+                val session = {
+                  val withoutReferrer = request.session + (originUrl -> request.uri)
+                  request.headers
+                    .get(REFERER)
+                    .map(referrer => withoutReferrer + (referringUrl -> referrer))
+                    .getOrElse(withoutReferrer)
+                }
                 Future.successful(Redirect(routes.AuthCodeFlowController.authorize()).withSession(session))
               case false =>
                 // If auth server is down, just pass request through without a user
