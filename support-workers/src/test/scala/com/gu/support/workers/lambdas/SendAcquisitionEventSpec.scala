@@ -67,7 +67,7 @@ object MockAcquisitionHelper extends MockitoSugar {
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
     val gaService = GoogleAnalyticsServiceBuilder.build(isTestService = true)
-    val bigQueryService = new BigQueryService(configuration.bigQueryConfigProvider.get())
+    val bigQueryService = BigQueryService.build(configuration.bigQueryConfigProvider.get())
 
     when(services.gaService).thenReturn(gaService)
     when(services.bigQueryService).thenReturn(bigQueryService)

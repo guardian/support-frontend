@@ -275,7 +275,7 @@ object AmazonPayBackend {
       GoogleAnalyticsServices(env).valid: InitializationResult[GoogleAnalyticsService],
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
-        .map(new BigQueryService(_)): InitializationResult[BigQueryService],
+        .map(BigQueryService.build): InitializationResult[BigQueryService],
       configLoader
         .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
         .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],

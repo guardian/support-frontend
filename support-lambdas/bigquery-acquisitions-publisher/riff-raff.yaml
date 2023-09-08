@@ -1,0 +1,20 @@
+stacks: [support]
+regions: [eu-west-1]
+
+deployments:
+  bigquery-acquisitions-publisher:
+    type: aws-lambda
+    parameters:
+      bucket: membership-dist
+      functionNames: [  bigquery-acquisitions-publisher-]
+      fileName:   bigquery-acquisitions-publisher.jar
+      prefixStack: false
+    dependencies: [ cfn ]
+  cfn:
+    type: cloud-formation
+    app: bigquery-acquisitions-publisher
+    parameters:
+      templateStagePaths:
+        CODE: BigqueryAcquisitionsPublisher-CODE.template.json
+        PROD: BigqueryAcquisitionsPublisher-PROD.template.json
+      prependStackToCloudFormationStackName: false

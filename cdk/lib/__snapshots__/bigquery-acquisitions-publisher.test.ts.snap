@@ -1,0 +1,373 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
+{
+  "Metadata": {
+    "gu:cdk:constructs": [
+      "GuDistributionBucketParameter",
+      "GuLambdaFunction",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Parameters": {
+    "DistributionBucketName": {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "EventBusToSQSRule72D08395": {
+      "Properties": {
+        "Description": "Send all events to SQS",
+        "EventBusName": {
+          "Ref": "acquisitionsbusPROD768AFDE3",
+        },
+        "EventPattern": {
+          "region": [
+            "eu-west-1",
+          ],
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Fn::GetAtt": [
+                "bigqueryacquisitionspublisherQueue3F783231",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "acquisitionsbusPROD768AFDE3": {
+      "Properties": {
+        "Name": "acquisitions-bus-PROD",
+      },
+      "Type": "AWS::Events::EventBus",
+    },
+    "bigqueryacquisitionspublisherLambdaD7F059E6": {
+      "DependsOn": [
+        "bigquerytos3roleDefaultPolicy0D20CB1A",
+        "bigquerytos3role8B775EB2",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "DistributionBucketName",
+          },
+          "S3Key": "support/PROD/bigquery-acquisitions-publisher/bigquery-acquisitions-publisher.jar",
+        },
+        "Environment": {
+          "Variables": {
+            "APP": "bigquery-acquisitions-publisher",
+            "STACK": "support",
+            "STAGE": "PROD",
+          },
+        },
+        "FunctionName": "bigquery-acquisitions-publisher-PROD",
+        "Handler": "com.gu.bigqueryAcquisitionsPublisher.Lambda::handler",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "bigquerytos3role8B775EB2",
+            "Arn",
+          ],
+        },
+        "Runtime": "java8.al2",
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "bigquery-acquisitions-publisher",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Timeout": 120,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "bigqueryacquisitionspublisherLambdaSqsEventSourceBigqueryAcquisitionsPublisherPRODbigqueryacquisitionspublisherQueue4510DFFB25270BDD": {
+      "Properties": {
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "bigqueryacquisitionspublisherQueue3F783231",
+            "Arn",
+          ],
+        },
+        "FunctionName": {
+          "Ref": "bigqueryacquisitionspublisherLambdaD7F059E6",
+        },
+      },
+      "Type": "AWS::Lambda::EventSourceMapping",
+    },
+    "bigqueryacquisitionspublisherQueue3F783231": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "QueueName": "bigquery-acquisitions-publisher-queue-PROD",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "VisibilityTimeout": 120,
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "bigqueryacquisitionspublisherQueuePolicy28887A75": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sqs:SendMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:GetQueueUrl",
+              ],
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": {
+                    "Fn::GetAtt": [
+                      "EventBusToSQSRule72D08395",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com",
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "bigqueryacquisitionspublisherQueue3F783231",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Queues": [
+          {
+            "Ref": "bigqueryacquisitionspublisherQueue3F783231",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::QueuePolicy",
+    },
+    "bigquerytos3role8B775EB2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "RoleName": "bq-acq-PROD",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "bigquerytos3roleDefaultPolicy0D20CB1A": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "ssm:GetParameter",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/bigquery-acquisitions-publisher/PROD/gcp-wif-credentials-config",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "sqs:ReceiveMessage",
+                "sqs:ChangeMessageVisibility",
+                "sqs:GetQueueUrl",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "bigqueryacquisitionspublisherQueue3F783231",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "DistributionBucketName",
+                      },
+                    ],
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "DistributionBucketName",
+                      },
+                      "/support/PROD/bigquery-acquisitions-publisher/bigquery-acquisitions-publisher.jar",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/PROD/support/bigquery-acquisitions-publisher",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:ssm:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/PROD/support/bigquery-acquisitions-publisher/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "bigquerytos3roleDefaultPolicy0D20CB1A",
+        "Roles": [
+          {
+            "Ref": "bigquerytos3role8B775EB2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+}
+`;

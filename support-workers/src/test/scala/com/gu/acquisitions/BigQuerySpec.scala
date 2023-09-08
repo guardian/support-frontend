@@ -51,7 +51,7 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "be able to run an insert" in {
-    val service = new BigQueryService(config)
+    val service = BigQueryService.build(config)
 
     val dataRow = AcquisitionDataRow(
       DateTime.now(),
