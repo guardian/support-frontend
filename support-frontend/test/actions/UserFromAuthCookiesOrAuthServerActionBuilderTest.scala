@@ -298,6 +298,35 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
     }
   }
 
+  "request has no referrer" must {
+    val parser = mock[BodyParser[AnyContent]]
+    val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+    val config = mock[Identity]
+    when(config.oauthScopes).thenReturn(accessScopes)
+    val request = FakeRequest()
+    def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
+    val actionBuilder =
+      new UserFromAuthCookiesOrAuthServerActionBuilder(
+        parser,
+        authService,
+        config,
+        isAuthServerUp = () => Future.successful(true),
+      )
+    val result = actionBuilder.invokeBlock(request, block)
+    "be a redirect" in {
+      status(result) mustBe 303
+    }
+    "redirect to authorize endpoint" in {
+      redirectLocation(result) mustBe Some(routes.AuthCodeFlowController.authorize().url)
+    }
+    "include origin URL in response session" in {
+      session(result).get(SessionKey.originUrl) mustBe Some(request.uri)
+    }
+    "not include referrer URL in response session" in {
+      session(result).get(SessionKey.referringUrl) mustBe None
+    }
+  }
+
   "UserClaims.fromDefaultAndUnparsed" when {
     "no raw claims" must {
       "fail with missing required claim" in {
