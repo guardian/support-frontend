@@ -90,6 +90,7 @@ function getAddresses(state: SubscriptionsState): Addresses {
 const getProduct = (
 	state: SubscriptionsState,
 	currencyId?: Option<IsoCurrency>,
+	deliveryAgent?: number,
 ): SubscriptionProductFields => {
 	const { billingPeriod, fulfilmentOption, productOption, orderIsAGift } =
 		state.page.checkoutForm.product;
@@ -119,6 +120,7 @@ const getProduct = (
 		billingPeriod,
 		fulfilmentOptions: getPaperFulfilmentOption(fulfilmentOption, state),
 		productOptions: productOption,
+		deliveryAgent,
 	};
 };
 
@@ -165,16 +167,17 @@ function buildRegularPaymentRequest(
 	const { actionHistory } = state.debug;
 	const { title, firstName, lastName, email, telephone } =
 		state.page.checkoutForm.personalDetails;
-	const { deliveryInstructions, deliveryAgent } =
-		state.page.checkoutForm.addressMeta;
+	const {
+		deliveryInstructions,
+		deliveryAgent: { chosenAgent: chosenDeliveryAgent },
+	} = state.page.checkoutForm.addressMeta;
 	const { csrUsername, salesforceCaseId } = state.page.checkout;
-	const product = getProduct(state, currencyId);
+	const product = getProduct(state, currencyId, chosenDeliveryAgent);
 	const paymentFields =
 		regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const promoCode = getPromoCode(promotions);
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
-	const chosenDeliveryAgent = deliveryAgent.chosenAgent;
 
 	return {
 		title,
@@ -198,7 +201,6 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
-		deliveryAgent: chosenDeliveryAgent,
 	};
 }
 
