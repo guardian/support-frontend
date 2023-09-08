@@ -3,6 +3,8 @@ package utils
 import admin.settings.{RecurringPaymentMethodSwitches, SubscriptionsPaymentMethodSwitches, Switches}
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger._
 import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
 import com.gu.support.acquisitions.AbTest
 import com.gu.support.catalog.{
@@ -14,6 +16,8 @@ import com.gu.support.catalog.{
   NoFulfilmentOptions,
   RestOfWorld,
 }
+import com.gu.support.paperround.PaperRoundAPI
+import com.gu.support.paperround.PaperRoundService.CoverageEndpoint.{CO, RequestBody}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
@@ -21,6 +25,9 @@ import java.nio.charset.Charset
 import services.stepfunctions.CreateSupportWorkersRequest
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import utils.CheckoutValidationRules._
+
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
 object CheckoutValidationRules {
 
@@ -382,7 +389,7 @@ object PaperValidation {
         deliveredToUkAndPaidInGbp(address.country, createSupportWorkersRequest.product.currency)
       val deliveryAddressHasAddressLine1AndCity = hasAddressLine1AndCity(address)
       val validPostcode = fulfilmentOptions match {
-        case NationalDelivery => postcodeIsWithinNationalDeliveryArea(postCode)
+        case NationalDelivery => Valid // checked separately
         case HomeDelivery => postcodeIsWithinHomeDeliveryArea(postCode)
         case Collection => Valid
         case Domestic => Invalid("domestic is not valid for paper")
@@ -413,8 +420,29 @@ object PaperValidation {
 
   }
 
-  def postcodeIsWithinNationalDeliveryArea(postcode: String): Result = {
-    Valid // TODO: determine valid postcodes
+  def deliveryAgentChosenWhichCoversPostcode(
+      paperRound: PaperRoundAPI,
+      deliveryAgent: Option[Integer],
+      postcode: String,
+  )(implicit
+      ex: ExecutionContext,
+  ): Future[Result] = deliveryAgent match {
+    case None => Future.successful(Invalid(s"User has not chosen a delivery agent"))
+    case Some(agent) =>
+      paperRound
+        .coverage(RequestBody(postcode))
+        .map(response =>
+          response.data.status match {
+            case CO if response.data.agents.map(_.agentId).contains(agent) => Valid
+            case _ =>
+              SafeLogger.error(
+                scrub"User’s postcode $postcode wasn’t covered by their chosen delivery agent $agent: PaperRound response was $response",
+              )
+              Invalid(
+                s"User’s postcode $postcode wasn’t covered by their chosen delivery agent $agent",
+              )
+          },
+        )
   }
 
   def postcodeIsWithinHomeDeliveryArea(postcode: String): Result =
