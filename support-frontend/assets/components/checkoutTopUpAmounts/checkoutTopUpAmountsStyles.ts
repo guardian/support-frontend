@@ -49,15 +49,11 @@ export const amountsContainer = css`
 	transform: translateX(-${space[2]}px);
 	${from.mobileMedium} {
 		gap: ${fromMobileMediumOptionGap}px;
-	}
-	${from.mobileLandscape} {
-		width: calc(100% + 8px);
-		transform: translateX(-4px);
+		width: 100%;
+		transform: none;
 	}
 	${from.tablet} {
 		gap: ${fromTabletOptionGap}px;
-		width: 100%;
-		transform: none;
 	}
 `;
 
@@ -134,11 +130,5 @@ export const amountOptionAction = (
 	display: none;
 	${from.mobile} {
 		display: inline;
-	}
-	${from.tablet} {
-		:before {
-			content: '${isSelected ? '-' : '+'}';
-			margin-right: 2px;
-		}
 	}
 `;
