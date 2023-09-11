@@ -1,9 +1,13 @@
-import {
-	currencies,
-	spokenCurrencies,
-} from 'helpers/internationalisation/currency';
+import { useEffect, useState } from 'react';
+import { checkoutTopUpUpperThresholdsByCountryGroup } from 'helpers/checkoutTopUp/upperThreshold';
+import { currencies } from 'helpers/internationalisation/currency';
+import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import type { CheckoutTopUpAmountsProps } from './checkoutTopUpAmounts';
 
 type CheckoutTopUpAmountsContainerProps = {
@@ -13,12 +17,25 @@ type CheckoutTopUpAmountsContainerProps = {
 export function CheckoutTopUpAmountsContainer({
 	renderCheckoutTopUpAmounts,
 }: CheckoutTopUpAmountsContainerProps): JSX.Element {
-	const { currencyId } = useContributionsSelector(
+	const dispatch = useContributionsDispatch();
+	const { currencyId, countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
+	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const contributionType = useContributionsSelector(getContributionType);
-	const currencyWord = spokenCurrencies[currencyId].singular;
 	const currencySymbol = currencies[currencyId].glyph;
+	const [hasAmountChangedWithTopUp, setHasAmountChangedWithTopUp] =
+		useState<boolean>(false);
+	const [isWithinThreshold, setIsWithinThreshold] = useState<boolean>(
+		contributionType !== 'ONE_OFF' &&
+			selectedAmount <=
+				checkoutTopUpUpperThresholdsByCountryGroup[countryGroupId][
+					contributionType
+				],
+	);
+	useEffect(() => {
+		hasAmountChangedWithTopUp && setIsWithinThreshold(true);
+	}, [selectedAmount]);
 
 	const timePeriods = {
 		ONE_OFF: 'one-off',
@@ -28,7 +45,15 @@ export function CheckoutTopUpAmountsContainer({
 
 	const timePeriod = timePeriods[contributionType];
 
-	// const selectedAmount = useContributionsSelector(getUserSelectedAmount);
+	const handleAmountUpdate = (updateAmountBy: number) => {
+		dispatch(
+			setSelectedAmount({
+				contributionType: contributionType,
+				amount: `${selectedAmount + updateAmountBy}`,
+			}),
+		);
+		setHasAmountChangedWithTopUp(true);
+	};
 
 	const amounts = Array.from(
 		{ length: 5 },
@@ -36,9 +61,10 @@ export function CheckoutTopUpAmountsContainer({
 	);
 
 	return renderCheckoutTopUpAmounts({
-		currencyWord,
 		currencySymbol,
 		timePeriod,
 		amounts,
+		handleAmountUpdate,
+		isWithinThreshold,
 	});
 }

@@ -1,12 +1,6 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/react';
-import {
-	from,
-	palette,
-	space,
-	textSans,
-	until,
-} from '@guardian/source-foundations';
+import { from, palette, space, textSans } from '@guardian/source-foundations';
 
 export const container = (customMargin?: string): SerializedStyles => css`
 	background-color: #f0f6fe;
@@ -43,60 +37,85 @@ export const amountsAndNavigationContainer = css`
 	margin: ${space[6]}px 0 ${space[4]}px;
 `;
 
-export const amountsContainer = (
-	hasLeftSideOverflow: boolean,
-	hasRightSideOverflow: boolean,
-): SerializedStyles => css`
+const defaultOptionGap = space[2];
+const fromMobileMediumOptionGap = 10;
+const fromTabletOptionGap = space[3];
+
+export const amountsContainer = css`
 	display: flex;
 	flex-wrap: nowrap;
-	gap: 3%;
-	overflow-x: hidden;
-	min-height: 20px;
-	mask-image: linear-gradient(
-		to right,
-		rgba(0, 0, 0, ${hasLeftSideOverflow ? '0' : '1'}),
-		rgba(0, 0, 0, 1) 15%,
-		rgba(0, 0, 0, 1) 85%,
-		rgba(0, 0, 0, ${hasRightSideOverflow ? '0' : '1'}) 100%
-	);
+	gap: ${defaultOptionGap}px;
+	width: calc(100% + ${space[4]}px);
+	transform: translateX(-${space[2]}px);
+	${from.mobileMedium} {
+		gap: ${fromMobileMediumOptionGap}px;
+	}
+	${from.mobileLandscape} {
+		width: calc(100% + 8px);
+		transform: translateX(-4px);
+	}
+	${from.tablet} {
+		gap: ${fromTabletOptionGap}px;
+		width: 100%;
+		transform: none;
+	}
 `;
 
 export const amountOption = (
-	optionPercentageWidth: number,
-	xOffset: number,
 	isSelected: boolean,
-): SerializedStyles => css`
-	flex-shrink: 0;
-	flex-grow: 0;
-	flex-basis: ${optionPercentageWidth}%;
-	display: grid;
-	text-align: center;
-	border: ${isSelected ? 2 : 1}px solid
-		${isSelected ? palette.brand[500] : palette.neutral[60]};
-	background-color: ${isSelected ? '#e3f6ff' : palette.neutral[100]};
-	border-radius: 10px;
-	aspect-ratio: 1 / 1;
-	${from.tablet} {
-		aspect-ratio: 1.6 / 1;
-	}
-	cursor: pointer;
-	transition: transform 0.2s ease;
-	transform: translateX(${xOffset}%);
-	:hover {
-		border: 2px solid ${palette.brand[500]};
-		& span {
-			color: ${palette.brand[400]};
+	numOfOptions: number,
+): SerializedStyles => {
+	const defaultOptionWidth = `calc(${100 / numOfOptions}% - ${
+		(defaultOptionGap * (numOfOptions - 1)) / numOfOptions
+	}px)`;
+	const fromMobileMediumOptionWidth = `calc(${100 / numOfOptions}% - ${
+		(fromMobileMediumOptionGap * (numOfOptions - 1)) / numOfOptions
+	}px)`;
+	const fromTabletOptionWidth = `calc(${100 / numOfOptions}% - ${
+		(fromTabletOptionGap * (numOfOptions - 1)) / numOfOptions
+	}px)`;
+	return css`
+		width: ${defaultOptionWidth};
+		${from.mobileMedium} {
+			width: ${fromMobileMediumOptionWidth};
 		}
-		& span[data-amount-action] {
-			font-weight: bold;
+		${from.tablet} {
+			width: ${fromTabletOptionWidth};
 		}
-	}
-`;
+		display: grid;
+		text-align: center;
+		outline: ${isSelected ? 2 : 1}px solid
+			${isSelected ? palette.brand[500] : palette.neutral[60]};
+		background-color: ${isSelected ? '#e3f6ff' : palette.neutral[100]};
+		border-radius: 10px;
+		aspect-ratio: 1 / 1;
+		${from.mobileLandscape} {
+			aspect-ratio: 1.25 / 1;
+		}
+		cursor: pointer;
+		:hover {
+			outline: 2px solid ${palette.brand[500]};
+			& span {
+				color: ${palette.brand[400]};
+			}
+			& span[data-amount-action] {
+				font-weight: bold;
+			}
+		}
+	`;
+};
 
 export const amountOptionValue = (isSelected: boolean): SerializedStyles => css`
 	${textSans.xlarge({ fontWeight: 'bold' })};
+	line-height: 1;
+	${from.tablet} {
+		line-height: 1.25;
+	}
 	color: ${isSelected ? palette.brand[400] : palette.neutral[46]};
-	align-self: end;
+	align-self: center;
+	${from.mobile} {
+		align-self: end;
+	}
 	pointer-events: none;
 	user-select: none;
 `;
@@ -112,26 +131,14 @@ export const amountOptionAction = (
 	align-self: start;
 	pointer-events: none;
 	user-select: none;
-`;
-
-export const progressBtnLeft = css`
-	position: absolute;
-	top: 50%;
-	left: 0;
-	transform: translate(-${space[6] + space[1]}px, -50%);
-	background-color: ${palette.neutral[100]};
-	${until.tablet} {
-		display: none;
+	display: none;
+	${from.mobile} {
+		display: inline;
 	}
-`;
-
-export const progressBtnRight = css`
-	position: absolute;
-	top: 50%;
-	right: 0;
-	transform: translate(${space[6] + space[1]}px, -50%);
-	background-color: ${palette.neutral[100]};
-	${until.tablet} {
-		display: none;
+	${from.tablet} {
+		:before {
+			content: '${isSelected ? '-' : '+'}';
+			margin-right: 2px;
+		}
 	}
 `;
