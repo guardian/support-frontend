@@ -16,6 +16,7 @@ import com.gu.support.acquisitions.{
   BigQueryConfig,
   BigQueryService,
 }
+import com.gu.support.config.Stages.{CODE, PROD}
 import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
@@ -23,6 +24,7 @@ import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoa
 import play.api.libs.ws.WSClient
 import conf._
 import conf.ConfigLoader._
+import model.Environment.Live
 import model._
 import model.acquisition.{AcquisitionDataRowBuilder, PaypalAcquisition}
 import model.db.ContributionData
@@ -307,7 +309,12 @@ object PaypalBackend {
       GoogleAnalyticsServices(env).valid: InitializationResult[GoogleAnalyticsService],
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
-        .map(BigQueryService.build): InitializationResult[BigQueryService],
+        .map(config =>
+          BigQueryService.build(
+            if (env == Live) PROD else CODE,
+            config,
+          ),
+        ): InitializationResult[BigQueryService],
       configLoader
         .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
         .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],
