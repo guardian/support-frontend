@@ -8,6 +8,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { CheckoutTopUpAmountsProps } from './checkoutTopUpAmounts';
 
 type CheckoutTopUpAmountsContainerProps = {
@@ -45,7 +46,7 @@ export function CheckoutTopUpAmountsContainer({
 
 	const timePeriod = timePeriods[contributionType];
 
-	const handleAmountUpdate = (updateAmountBy: number) => {
+	const handleAmountUpdate = (updateAmountBy: number, index: number) => {
 		dispatch(
 			setSelectedAmount({
 				contributionType: contributionType,
@@ -53,6 +54,11 @@ export function CheckoutTopUpAmountsContainer({
 			}),
 		);
 		setHasAmountChangedWithTopUp(true);
+		trackComponentClick(
+			`contribution-topup-amount-${
+				updateAmountBy > 0 ? 'select' : 'deselect'
+			}-${countryGroupId}-${contributionType}-option${index}`,
+		);
 	};
 
 	const amounts = Array.from(

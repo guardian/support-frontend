@@ -16,13 +16,15 @@ import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
 import { CheckoutTopUpAmounts } from 'components/checkoutTopUpAmounts/checkoutTopUpAmounts';
 import { CheckoutTopUpAmountsContainer } from 'components/checkoutTopUpAmounts/checkoutTopUpAmountsContainer';
 import type { ContributionType } from 'helpers/contributions';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import type { Currency } from 'helpers/internationalisation/currency';
 
 const componentStyles = css`
 	${textSans.medium()}
 `;
 
-const summaryRow = css`
-	display: flex;
+const summaryRow = (withFlexWrap?: boolean) => css`
+	display: ${withFlexWrap ? 'flex-wrap' : 'flex'};
 	justify-content: space-between;
 	align-items: baseline;
 	padding-top: 4px;
@@ -36,6 +38,11 @@ const rowSpacing = css`
 			margin-bottom: ${space[6]}px;
 		}
 	}
+`;
+
+const spaceBetween = css`
+	display: flex;
+	justify-content: space-between;
 `;
 
 const boldText = css`
@@ -114,7 +121,9 @@ const termsAndConditions = css`
 
 export type ContributionsOrderSummaryProps = {
 	contributionType: ContributionType;
-	total: string;
+	total: number;
+	totalBeforeAmended: number;
+	currency: Currency;
 	checkListData: CheckListData[];
 	onAccordionClick?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
@@ -143,6 +152,8 @@ function totalWithFrequency(total: string, contributionType: ContributionType) {
 export function ContributionsOrderSummary({
 	contributionType,
 	total,
+	totalBeforeAmended,
+	currency,
 	checkListData,
 	onAccordionClick,
 	headerButton,
@@ -156,14 +167,25 @@ export function ContributionsOrderSummary({
 
 	return (
 		<div css={componentStyles}>
-			<div css={[summaryRow, rowSpacing, headingRow]}>
+			<div css={[summaryRow(), rowSpacing, headingRow]}>
 				<h2 css={heading}>Your support</h2>
 				{headerButton}
 			</div>
 			<hr css={hrCss} />
 			<div css={[rowSpacing, detailsSection]}>
-				<div css={summaryRow}>
-					<p>{supportTypes[contributionType]} support</p>
+				<div css={summaryRow(showTopUpAmounts)}>
+					<p css={showTopUpAmounts && spaceBetween}>
+						{supportTypes[contributionType]} support
+						{showTopUpAmounts && (
+							<span>
+								{totalWithFrequency(
+									simpleFormatAmount(currency, totalBeforeAmended),
+									contributionType,
+								)}
+							</span>
+						)}
+					</p>
+
 					{showAccordion && (
 						<Button
 							priority="subdued"
@@ -201,9 +223,14 @@ export function ContributionsOrderSummary({
 				/>
 			)}
 			<hr css={hrCss} />
-			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
+			<div css={[summaryRow(), rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
-				<p>{totalWithFrequency(total, contributionType)}</p>
+				<p>
+					{totalWithFrequency(
+						simpleFormatAmount(currency, total),
+						contributionType,
+					)}
+				</p>
 			</div>
 			{!!tsAndCs && (
 				<div css={termsAndConditions}>

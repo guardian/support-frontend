@@ -17,7 +17,7 @@ export interface CheckoutTopUpAmountsProps {
 	timePeriod: string;
 	amounts: number[];
 	isWithinThreshold: boolean;
-	handleAmountUpdate?: (updateAmountBy: number) => void;
+	handleAmountUpdate?: (updateAmountBy: number, index: number) => void;
 	customMargin?: string;
 }
 
@@ -48,7 +48,7 @@ export function CheckoutTopUpAmounts({
 			</section>
 			<div css={amountsAndNavigationContainer}>
 				<div css={amountsContainer}>
-					{amounts.map((amount) => {
+					{amounts.map((amount, index) => {
 						const isSelected = amount === selectedTopUpamount;
 						return (
 							<div
@@ -57,6 +57,7 @@ export function CheckoutTopUpAmounts({
 									if (handleAmountUpdate) {
 										handleAmountUpdate(
 											isSelected ? -amount : amount - selectedTopUpamount,
+											index,
 										);
 									}
 									setSelectedTopUpamount(isSelected ? 0 : amount);

@@ -14,7 +14,10 @@ import {
 	fromCountryGroupId,
 	glyph,
 } from 'helpers/internationalisation/currency';
-import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
+import {
+	setSelectedAmount,
+	setSelectedAmountBeforeAmendment,
+} from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	useContributionsDispatch,
@@ -101,6 +104,13 @@ export function LimitedPriceCards(): JSX.Element {
 					benefitsThresholdsByCountryGroup[countryGroupId][type].toString(),
 			}),
 		);
+		dispatch(
+			setSelectedAmountBeforeAmendment({
+				contributionType,
+				amount:
+					benefitsThresholdsByCountryGroup[countryGroupId][type].toString(),
+			}),
+		);
 	}, []);
 
 	return (
@@ -125,6 +135,12 @@ export function LimitedPriceCards(): JSX.Element {
 									onTabChange(contributionType);
 									dispatch(
 										setSelectedAmount({
+											contributionType,
+											amount: amount.toString(),
+										}),
+									);
+									dispatch(
+										setSelectedAmountBeforeAmendment({
 											contributionType,
 											amount: amount.toString(),
 										}),
