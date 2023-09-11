@@ -26,7 +26,7 @@ jobs:
       - name: Env
         run: env
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Required by sbt riffRaffUpload
       - name: Configure AWS credentials
