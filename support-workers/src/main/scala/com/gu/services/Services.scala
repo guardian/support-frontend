@@ -20,7 +20,8 @@ import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.zuora.{ZuoraGiftService, ZuoraService}
-import com.gu.supporterdata.model.Stage.{CODE => DynamoStageCODE, PROD => DynamoStagePROD}
+import com.gu.supporterdata.model.Stage.{CODE, CODE => DynamoStageCODE, PROD => DynamoStagePROD}
+import com.gu.support.config.Stages.{CODE => ConfigCode, PROD => ConfigProd}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -52,7 +53,10 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
-  lazy val bigQueryService = BigQueryService.build(Configuration.stage, bigQueryConfigProvider.get(isTestUser))
+  lazy val bigQueryService = BigQueryService.build(
+    if (Configuration.stage == PROD && !isTestUser) ConfigProd else ConfigCode,
+    bigQueryConfigProvider.get(isTestUser),
+  )
   lazy val acquisitionsStreamService: AcquisitionsStreamService = new AcquisitionsStreamServiceImpl(
     AcquisitionsStreamLambdaConfig(config.acquisitionsKinesisStreamName),
   )
