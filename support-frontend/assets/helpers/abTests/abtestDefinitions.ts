@@ -80,9 +80,9 @@ export const tests: Tests = {
 	},
 	twoStepCheckout: {
 		variants: [
-			// {
-			// 	id: 'control',
-			// },
+			{
+				id: 'control',
+			},
 			{
 				id: 'variant_a',
 			},
@@ -96,7 +96,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 3,
