@@ -23,13 +23,13 @@ function getInternationalisationFromCountry(
 }
 
 function getABTestNames(abParticipations: Participations) {
-	if ('supporterPlusOnly' in abParticipations) {
-		const abTestType = {
-			supporterPlusOnly: abParticipations.supporterPlusOnly,
-		};
-		return abTestType;
-	}
-	return abParticipations; // Return the original object if 'supporterPlusOnly' doesn't exist.
+	const isUserInSupporterPlusABTest = 'supporterPlusOnly' in abParticipations;
+
+	const abTestType = isUserInSupporterPlusABTest
+		? { supporterPlusOnly: abParticipations.supporterPlusOnly }
+		: abParticipations;
+
+	return abTestType;
 }
 
 export const commonSlice = createSlice({
@@ -40,7 +40,6 @@ export const commonSlice = createSlice({
 			action.payload.abParticipations = getABTestNames(
 				action.payload.abParticipations,
 			);
-			console.log('Yet', action.payload.abParticipations);
 			const {
 				campaign,
 				referrerAcquisitionData,
