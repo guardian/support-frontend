@@ -1,254 +1,136 @@
 import { css } from '@emotion/react';
-import { Label } from '@guardian/source-react-components';
+import { Checkbox, TextInput } from '@guardian/source-react-components';
 import * as React from 'react';
+import { useState } from 'react';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
-import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
 import ErrorMessage from 'components/errorMessage/errorMessage';
-import { Recaptcha } from 'components/recaptcha/recaptcha';
+import { ElementDecorator } from 'components/stripeCardForm/elementDecorator';
 import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
-import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
 import {
-	setAccountHolderConfirmation,
-	setAccountHolderName,
-	setAccountNumber,
-	setDDGuaranteeClose,
-	setDDGuaranteeOpen,
-	setFormError,
-	setSortCodeString,
-} from 'helpers/redux/checkout/payment/directDebit/actions';
-import {
-	confirmAccountDetails,
-	directDebitErrorMessages,
-	payWithDirectDebit,
-} from 'helpers/redux/checkout/payment/directDebit/thunks';
-import {
-	expireRecaptchaToken,
-	setRecaptchaToken,
-} from 'helpers/redux/checkout/recaptcha/actions';
-import './directDebitForm.scss';
-import {
-	useContributionsDispatch,
-	useContributionsSelector,
-} from 'helpers/redux/storeHooks';
-import {
-	accountHolderConfirmation,
 	accountNumberSortCodeContainer,
-	confirmationCheckbox,
-	confirmationInput,
-	confirmationInputContainer,
-	confirmationLabel,
-	confirmationText,
-	fieldLabel,
 	legalNotice,
 	recaptcha,
-	textField,
 } from './directDebitFormStyles';
+import type { DirectDebitFormDisplayErrors } from './selectors';
 
-type PropTypes = {
-	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void;
+export type DirectDebitFormProps = {
+	countryGroupId: CountryGroupId;
+	accountHolderName: string;
+	accountNumber: string;
+	accountHolderConfirmation: boolean;
+	sortCode: string;
+	recaptchaCompleted: boolean;
+	updateAccountHolderName: (name: string) => void;
+	updateAccountNumber: (number: string) => void;
+	updateSortCode: (sortCode: string) => void;
+	updateAccountHolderConfirmation: (confirmation: boolean) => void;
+	recaptcha: React.ReactNode;
+	formError: string;
+	errors: DirectDebitFormDisplayErrors;
 };
 
-const recaptchaId = 'robot_checkbox';
-
 // ----- Component ----- //
-export default function DirectDebitForm(props: PropTypes): JSX.Element {
-	const {
-		isDDGuaranteeOpen,
-		sortCodeString,
-		accountNumber,
-		accountHolderName,
-		accountHolderConfirmation,
-		formError,
-	} = useContributionsSelector(
-		(state) => state.page.checkoutForm.payment.directDebit,
-	);
-
-	const { countryGroupId } = useContributionsSelector(
-		(state) => state.common.internationalisation,
-	);
-
-	const recaptchaCompleted = useContributionsSelector(
-		(state) => state.page.checkoutForm.recaptcha.completed,
-	);
-
-	const dispatch = useContributionsDispatch();
-
-	// TODO: Currently unused as the payment button is commented out for styling purposes
-	void function onSubmit() {
-		void confirmAccountDetails();
-
-		if (recaptchaCompleted) {
-			void dispatch(payWithDirectDebit(props.onPaymentAuthorisation));
-		} else {
-			dispatch(setFormError(directDebitErrorMessages.notCompletedRecaptcha));
-		}
-	};
+export default function DirectDebitForm(
+	props: DirectDebitFormProps,
+): JSX.Element {
+	const [guaranteeOpen, setGuaranteeOpen] = useState(false);
 
 	return (
 		<div>
-			<AccountHolderNameInput
-				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					dispatch(setAccountHolderName(e.target.value))
-				}
-				value={accountHolderName}
+			{/** BACS requirement:
+        "Name of the account holder, as known by the bank. Usually this is the
+        same as the name stored with the linked creditor. This field will be
+        transliterated, upcased and truncated to 18 characters."
+        https://developer.gocardless.com/api-reference/
+      * */}
+			<TextInput
+				label="Account name"
+				id="accountHolderName"
+				data-qm-masking="blocklist"
+				value={props.accountHolderName}
+				onChange={(e) => props.updateAccountHolderName(e.target.value)}
+				maxLength={40}
+				error={props.errors.accountHolderName?.[0]}
 			/>
 
 			<div css={accountNumberSortCodeContainer}>
-				<SortCodeInput
-					onChange={(e) => dispatch(setSortCodeString(e.target.value))}
-					sortCodeString={sortCodeString}
-				/>
+				<div>
+					<TextInput
+						label="Sort code"
+						id="sortCodeString"
+						data-qm-masking="blocklist"
+						value={props.sortCode}
+						onChange={(e) => props.updateSortCode(e.target.value)}
+						pattern="[0-9]*"
+						minLength={6}
+						maxLength={6}
+						inputMode="numeric"
+						error={props.errors.sortCodeString?.[0]}
+					/>
+				</div>
 
-				<AccountNumberInput
-					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-						dispatch(setAccountNumber(e.target.value))
-					}
-					value={accountNumber}
-				/>
+				<div>
+					<TextInput
+						label="Account number"
+						id="accountNumber"
+						data-qm-masking="blocklist"
+						value={props.accountNumber}
+						onChange={(e) => props.updateAccountNumber(e.target.value)}
+						pattern="[0-9]*"
+						minLength={6}
+						maxLength={10}
+						inputMode="numeric"
+						error={props.errors.accountNumber?.[0]}
+					/>
+				</div>
 			</div>
 
-			<ConfirmationInput
-				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					dispatch(setAccountHolderConfirmation(e.target.checked))
+			<Checkbox
+				id="accountHolderConfirmation"
+				label="I confirm that I am the account holder and I am solely able to
+							authorise debit from the account"
+				error={!!props.errors.accountHolderConfirmation?.[0]}
+				onChange={(e) =>
+					props.updateAccountHolderConfirmation(e.target.checked)
 				}
-				checked={accountHolderConfirmation}
+				checked={props.accountHolderConfirmation}
 			/>
 
-			<RecaptchaInput
-				setRecaptchaToken={(token) => dispatch(setRecaptchaToken(token))}
-				expireRecaptchaToken={() => dispatch(expireRecaptchaToken())}
-			/>
+			{props.recaptcha && (
+				<div css={recaptcha}>
+					<ElementDecorator
+						id="robot-checkbox"
+						text="Security check"
+						error={props.errors.recaptcha?.[0]}
+						renderElement={() => props.recaptcha}
+					/>
+				</div>
+			)}
 
-			{formError && (
+			{props.formError && (
 				<div
 					css={css`
 						margin-top: 8px;
 					`}
 				>
-					<ErrorMessage message={formError} svg={<SvgExclamationAlternate />} />
+					<ErrorMessage
+						message={props.formError}
+						svg={<SvgExclamationAlternate />}
+					/>
 				</div>
 			)}
 
-			{/* <PaymentButton onConfirmClick={onSubmit} /> */}
+			{/* <PaymentButton onConfirmClick={props.onSubmit} /> */}
 
-			<LegalNotice countryGroupId={countryGroupId} />
+			<LegalNotice countryGroupId={props.countryGroupId} />
 
 			<DirectDebitGuarantee
-				isDDGuaranteeOpen={isDDGuaranteeOpen}
-				openDirectDebitGuarantee={setDDGuaranteeOpen}
-				closeDirectDebitGuarantee={() => dispatch(setDDGuaranteeClose())}
+				isDDGuaranteeOpen={guaranteeOpen}
+				openDirectDebitGuarantee={() => setGuaranteeOpen(true)}
+				closeDirectDebitGuarantee={() => setGuaranteeOpen(false)}
 			/>
-		</div>
-	);
-}
-
-// ----- Auxiliary components ----- //
-function AccountNumberInput(props: {
-	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-	value: string;
-}) {
-	return (
-		<div>
-			<Label
-				text="Account number"
-				htmlFor="account-number-input"
-				css={fieldLabel}
-			/>
-			<input
-				id="account-number-input"
-				data-qm-masking="blocklist"
-				value={props.value}
-				onChange={props.onChange}
-				pattern="[0-9]*"
-				minLength={6}
-				maxLength={10}
-				css={textField}
-			/>
-		</div>
-	);
-}
-
-/*
- * BACS requirement:
- "Name of the account holder, as known by the bank. Usually this is the
- same as the name stored with the linked creditor. This field will be
- transliterated, upcased and truncated to 18 characters."
- https://developer.gocardless.com/api-reference/
- * */
-function AccountHolderNameInput(props: {
-	value: string;
-	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
-	return (
-		<div>
-			<Label
-				text="Account name"
-				htmlFor="account-holder-name-input"
-				css={css`
-					${fieldLabel};
-					margin-top: 0 !important;
-				`}
-			/>
-			<input
-				id="account-holder-name-input"
-				data-qm-masking="blocklist"
-				value={props.value}
-				onChange={props.onChange}
-				maxLength={40}
-				css={textField}
-			/>
-		</div>
-	);
-}
-
-function RecaptchaInput(props: {
-	setRecaptchaToken: (token: string) => void;
-	expireRecaptchaToken?: () => void;
-}) {
-	return (
-		<div css={recaptcha}>
-			<Label text="Security check" htmlFor={recaptchaId} css={fieldLabel} />
-			<Recaptcha
-				id={recaptchaId}
-				onRecaptchaCompleted={props.setRecaptchaToken}
-				onRecaptchaExpired={props.expireRecaptchaToken}
-			/>
-		</div>
-	);
-}
-
-function ConfirmationInput(props: {
-	checked: boolean;
-	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
-	return (
-		<div css={accountHolderConfirmation}>
-			<div>
-				<label htmlFor="confirmation-input">
-					<span css={confirmationInputContainer}>
-						<div css={confirmationCheckbox}>
-							<input
-								css={confirmationInput}
-								id="confirmation-input"
-								type="checkbox"
-								onChange={props.onChange}
-								checked={props.checked}
-							/>
-							<label
-								id="qa-confirmation-input"
-								css={confirmationLabel}
-								htmlFor="confirmation-input"
-							/>
-						</div>
-						<span css={confirmationText}>
-							I confirm that I am the account holder and I am solely able to
-							authorise debit from the account
-						</span>
-					</span>
-				</label>
-			</div>
 		</div>
 	);
 }
