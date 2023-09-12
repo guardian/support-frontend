@@ -22,6 +22,7 @@ import cats.implicits._
 import com.gu.config.Configuration
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
+import com.gu.support.config.Stages.CODE
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -67,7 +68,7 @@ object MockAcquisitionHelper extends MockitoSugar {
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
     val gaService = GoogleAnalyticsServiceBuilder.build(isTestService = true)
-    val bigQueryService = BigQueryService.build(configuration.bigQueryConfigProvider.get())
+    val bigQueryService = BigQueryService.build(CODE, configuration.bigQueryConfigProvider.get())
 
     when(services.gaService).thenReturn(gaService)
     when(services.bigQueryService).thenReturn(bigQueryService)

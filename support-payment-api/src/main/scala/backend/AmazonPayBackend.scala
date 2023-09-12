@@ -10,11 +10,13 @@ import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions._
+import com.gu.support.config.Stages.{CODE, PROD}
 import com.typesafe.scalalogging.StrictLogging
 import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import conf.ConfigLoader.environmentShow
 import conf._
+import model.Environment.Live
 import model._
 import model.acquisition.{AcquisitionDataRowBuilder, AmazonPayAcquisition}
 import model.amazonpay.AmazonPayApiError.amazonPayErrorText
@@ -275,7 +277,12 @@ object AmazonPayBackend {
       GoogleAnalyticsServices(env).valid: InitializationResult[GoogleAnalyticsService],
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
-        .map(BigQueryService.build): InitializationResult[BigQueryService],
+        .map(config =>
+          BigQueryService.build(
+            if (env == Live) PROD else CODE,
+            config,
+          ),
+        ): InitializationResult[BigQueryService],
       configLoader
         .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
         .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],

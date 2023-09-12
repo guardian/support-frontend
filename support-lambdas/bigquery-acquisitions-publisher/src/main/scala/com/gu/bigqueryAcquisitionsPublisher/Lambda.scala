@@ -5,7 +5,8 @@ import com.amazonaws.services.lambda.runtime.events.SQSBatchResponse.BatchItemFa
 import com.amazonaws.services.lambda.runtime.events.{SQSBatchResponse, SQSEvent}
 import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage
 import com.gu.support.acquisitions.BigQueryService
-import com.gu.support.acquisitions.models.AcquisitionDataRow
+import com.gu.support.config.Stage
+import com.gu.support.config.Stages.CODE
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.parser.decode
 
@@ -22,7 +23,7 @@ object Lambda extends LazyLogging {
     logger.info(s"Input was $event")
     SSMService.getParam(s"/bigquery-acquisitions-publisher/$stage/gcp-wif-credentials-config") match {
       case Right(clientConfig) =>
-        val bigQuery = BigQueryService.build(clientConfig)
+        val bigQuery = BigQueryService.build(Stage.fromString(stage).getOrElse(CODE), clientConfig)
         val messages = event.getRecords.asScala.toList
 
         val failedMessageIds = messages

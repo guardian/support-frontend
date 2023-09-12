@@ -16,6 +16,7 @@ import com.gu.support.acquisitions.{
   BigQueryConfig,
   BigQueryService,
 }
+import com.gu.support.config.Stages.{CODE, PROD}
 import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
@@ -396,7 +397,12 @@ object StripeBackend {
       GoogleAnalyticsServices(env).valid: InitializationResult[GoogleAnalyticsService],
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
-        .map(BigQueryService.build): InitializationResult[BigQueryService],
+        .map(config =>
+          BigQueryService.build(
+            if (env == Live) PROD else CODE,
+            config,
+          ),
+        ): InitializationResult[BigQueryService],
       configLoader
         .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
         .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],

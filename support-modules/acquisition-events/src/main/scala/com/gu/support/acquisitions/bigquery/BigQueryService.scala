@@ -32,8 +32,7 @@ import java.util.concurrent.Executors
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.jdk.CollectionConverters._
 
-class BigQueryService(credentials: Credentials) {
-  private val stage: Stage = sys.env.get("STAGE").flatMap(Stage.fromString).getOrElse(CODE)
+class BigQueryService(stage: Stage, credentials: Credentials) {
   private val projectId = s"datatech-platform-${stage.toString.toLowerCase}"
 
   lazy val bigQueryWriteSettings =
@@ -46,7 +45,7 @@ class BigQueryService(credentials: Credentials) {
       .build()
   lazy val bigQueryWriteClient = BigQueryWriteClient.create(bigQueryWriteSettings)
   lazy val tableId = TableName.of(projectId, datasetName, tableName)
-  lazy val streamWriter = JsonStreamWriter.newBuilder(tableId.toString(), bigQueryWriteClient).build();
+  lazy val streamWriter = JsonStreamWriter.newBuilder(tableId.toString, bigQueryWriteClient).build()
 
   def tableInsertRowWithRetry(acquisitionDataRow: AcquisitionDataRow, maxRetries: Int)(implicit
       executionContext: ExecutionContext,
@@ -71,8 +70,8 @@ class BigQueryService(credentials: Credentials) {
     SafeLogger.info(s"Attempting to append row ($rowContent) created from ($acquisitionDataRow)")
     val promise = Promise[Either[String, Unit]]()
     try {
-      val responseFuture = streamWriter.append(new JSONArray(List(rowContent).asJava));
-      val callback = new BigQueryService.AppendCompleteCallback(stage, promise);
+      val responseFuture = streamWriter.append(new JSONArray(List(rowContent).asJava))
+      val callback = BigQueryService.AppendCompleteCallback(stage, promise)
       ApiFutures.addCallback(
         responseFuture,
         callback,
@@ -81,7 +80,7 @@ class BigQueryService(credentials: Credentials) {
     } catch {
       case e: AppendSerializtionError =>
         val errorMessage =
-          e.getRowIndexToErrorMessage().asScala.map { case (i, message) => s"$i: $message" }.mkString(", ")
+          e.getRowIndexToErrorMessage.asScala.map { case (i, message) => s"$i: $message" }.mkString(", ")
         SafeLogger.error(scrub"There was an exception appending to $tableName: $errorMessage", e)
         promise.success(Left(s"Error appending to table $tableName: $errorMessage"))
     }
@@ -91,13 +90,15 @@ class BigQueryService(credentials: Credentials) {
 
 object BigQueryService {
 
-  def build(jsonCredentials: String): BigQueryService =
+  def build(stage: Stage, jsonCredentials: String): BigQueryService =
     new BigQueryService(
+      stage,
       GoogleCredentials.fromStream(new ByteArrayInputStream(jsonCredentials.getBytes())),
     )
 
-  def build(config: BigQueryConfig): BigQueryService =
+  def build(stage: Stage, config: BigQueryConfig): BigQueryService =
     new BigQueryService(
+      stage,
       ServiceAccountCredentials.fromPkcs8(
         config.clientId,
         config.clientEmail,
@@ -109,7 +110,7 @@ object BigQueryService {
 
   case class AppendCompleteCallback(stage: Stage, promise: Promise[Either[String, Unit]])
       extends ApiFutureCallback[AppendRowsResponse] {
-    val executor = Executors.newSingleThreadExecutor();
+    val executor = Executors.newSingleThreadExecutor()
 
     def onSuccess(response: AppendRowsResponse): Unit = {
       SafeLogger.info(s"Rows successfully inserted into table $tableName")
@@ -118,9 +119,8 @@ object BigQueryService {
     }
     def onFailure(throwable: Throwable): Unit = {
       val detail: String = throwable match {
-        case e: AppendSerializtionError => {
-          e.getRowIndexToErrorMessage().asScala.map { case (i, message) => s"$i: $message" }.mkString(", ")
-        }
+        case e: AppendSerializtionError =>
+          e.getRowIndexToErrorMessage.asScala.map { case (i, message) => s"$i: $message" }.mkString(", ")
         case _ => ""
       }
       SafeLogger.error(scrub"There was an exception inserting a row into $tableName: $detail", throwable)

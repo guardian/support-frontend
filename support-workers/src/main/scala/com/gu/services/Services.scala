@@ -52,7 +52,7 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
-  lazy val bigQueryService = BigQueryService.build(bigQueryConfigProvider.get(isTestUser))
+  lazy val bigQueryService = BigQueryService.build(Configuration.stage, bigQueryConfigProvider.get(isTestUser))
   lazy val acquisitionsStreamService: AcquisitionsStreamService = new AcquisitionsStreamServiceImpl(
     AcquisitionsStreamLambdaConfig(config.acquisitionsKinesisStreamName),
   )
