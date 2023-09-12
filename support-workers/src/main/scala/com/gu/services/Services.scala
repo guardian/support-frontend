@@ -20,7 +20,7 @@ import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.zuora.{ZuoraGiftService, ZuoraService}
-import com.gu.supporterdata.model.Stage.{CODE, CODE => DynamoStageCODE, PROD => DynamoStagePROD}
+import com.gu.supporterdata.model.Stage.{CODE => DynamoStageCODE, PROD => DynamoStagePROD}
 import com.gu.support.config.Stages.{CODE => ConfigCode, PROD => ConfigProd}
 import com.gu.supporterdata.services.SupporterDataDynamoService
 
