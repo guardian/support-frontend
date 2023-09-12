@@ -56,7 +56,7 @@ export function StripeCardFormContainer(): JSX.Element {
 	);
 	const { isTestUser } = useContributionsSelector((state) => state.page.user);
 
-	const showZipCode = isUsCustomer && mandatoryZipCode === 'control';
+	const showZipCode = isUsCustomer && mandatoryZipCode !== 'variant';
 
 	function onCardFieldChange(field: StripeField) {
 		return function onChange(event: StripeChangeEvents[typeof field]) {

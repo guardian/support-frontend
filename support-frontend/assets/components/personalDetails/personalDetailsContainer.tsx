@@ -90,7 +90,7 @@ export function PersonalDetailsContainer({
 		contributionZipcode: showZipCodeField ? (
 			<div>
 				<TextInput
-					id="postCode"
+					id="zipCode"
 					name="zip-code"
 					label="ZIP code"
 					value={postCode}
