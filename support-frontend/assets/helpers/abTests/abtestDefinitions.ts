@@ -126,7 +126,7 @@ export const tests: Tests = {
 		audiences: {
 			UnitedStates: {
 				offset: 0,
-				size: 0,
+				size: 1,
 			},
 		},
 		referrerControlled: false,
