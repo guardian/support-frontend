@@ -13,6 +13,7 @@ import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import { checkoutTopUpUpperThresholdsByCountryGroup } from 'helpers/checkoutTopUp/upperThreshold';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -70,6 +71,14 @@ export function SupporterPlusCheckout({
 		countryGroupId,
 	);
 
+	const showPreAmendedTotal =
+		showTopUpAmounts &&
+		contributionType !== 'ONE_OFF' &&
+		amountBeforeAmendments <=
+			checkoutTopUpUpperThresholdsByCountryGroup[countryGroupId][
+				contributionType
+			];
+
 	const navigate = useNavigate();
 
 	const changeButton = (
@@ -102,6 +111,7 @@ export function SupporterPlusCheckout({
 								{...orderSummaryProps}
 								headerButton={changeButton}
 								showTopUpAmounts={showTopUpAmounts}
+								showPreAmendedTotal={showPreAmendedTotal}
 							/>
 						)}
 					/>

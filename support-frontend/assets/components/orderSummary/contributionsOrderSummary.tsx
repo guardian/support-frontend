@@ -23,7 +23,7 @@ const componentStyles = css`
 	${textSans.medium()}
 `;
 
-const summaryRow = (withFlexWrap?: boolean) => css`
+const summaryRow = (withFlexWrap = false) => css`
 	display: ${withFlexWrap ? 'flex-wrap' : 'flex'};
 	justify-content: space-between;
 	align-items: baseline;
@@ -129,6 +129,7 @@ export type ContributionsOrderSummaryProps = {
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	showTopUpAmounts?: boolean;
+	showPreAmendedTotal?: boolean;
 };
 
 const supportTypes = {
@@ -159,6 +160,7 @@ export function ContributionsOrderSummary({
 	headerButton,
 	tsAndCs,
 	showTopUpAmounts,
+	showPreAmendedTotal,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showDetails, setShowDetails] = useState(false);
 
@@ -173,10 +175,10 @@ export function ContributionsOrderSummary({
 			</div>
 			<hr css={hrCss} />
 			<div css={[rowSpacing, detailsSection]}>
-				<div css={summaryRow(showTopUpAmounts)}>
-					<p css={showTopUpAmounts && spaceBetween}>
+				<div css={summaryRow(showPreAmendedTotal)}>
+					<p css={showPreAmendedTotal && spaceBetween}>
 						{supportTypes[contributionType]} support
-						{showTopUpAmounts && (
+						{showPreAmendedTotal && (
 							<span>
 								{totalWithFrequency(
 									simpleFormatAmount(currency, totalBeforeAmended),

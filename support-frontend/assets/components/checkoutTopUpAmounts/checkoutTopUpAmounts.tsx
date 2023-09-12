@@ -32,7 +32,8 @@ export function CheckoutTopUpAmounts({
 	const [selectedTopUpamount, setSelectedTopUpamount] = useState<number>(0);
 	const amountsLength = amounts.length;
 
-	return isWithinThreshold ? (
+	if (!isWithinThreshold) return <></>;
+	return (
 		<section css={container(customMargin)}>
 			<h3 css={title}>Your support funds our journalism</h3>
 			<p css={standfirst}>
@@ -76,7 +77,5 @@ export function CheckoutTopUpAmounts({
 				</div>
 			</div>
 		</section>
-	) : (
-		<></>
 	);
 }

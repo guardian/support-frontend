@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
 import { checkoutTopUpUpperThresholdsByCountryGroup } from 'helpers/checkoutTopUp/upperThreshold';
 import { currencies } from 'helpers/internationalisation/currency';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import {
+	getUserSelectedAmount,
+	getUserSelectedAmountBeforeAmendment,
+} from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -23,20 +25,18 @@ export function CheckoutTopUpAmountsContainer({
 		(state) => state.common.internationalisation,
 	);
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
+	const amountBeforeAmendments = useContributionsSelector(
+		getUserSelectedAmountBeforeAmendment,
+	);
 	const contributionType = useContributionsSelector(getContributionType);
 	const currencySymbol = currencies[currencyId].glyph;
-	const [hasAmountChangedWithTopUp, setHasAmountChangedWithTopUp] =
-		useState<boolean>(false);
-	const [isWithinThreshold, setIsWithinThreshold] = useState<boolean>(
+
+	const isWithinThreshold =
 		contributionType !== 'ONE_OFF' &&
-			selectedAmount <=
-				checkoutTopUpUpperThresholdsByCountryGroup[countryGroupId][
-					contributionType
-				],
-	);
-	useEffect(() => {
-		hasAmountChangedWithTopUp && setIsWithinThreshold(true);
-	}, [selectedAmount]);
+		amountBeforeAmendments <=
+			checkoutTopUpUpperThresholdsByCountryGroup[countryGroupId][
+				contributionType
+			];
 
 	const timePeriods = {
 		ONE_OFF: 'one-off',
@@ -53,7 +53,6 @@ export function CheckoutTopUpAmountsContainer({
 				amount: `${selectedAmount + updateAmountBy}`,
 			}),
 		);
-		setHasAmountChangedWithTopUp(true);
 		trackComponentClick(
 			`contribution-topup-amount-${
 				updateAmountBy > 0 ? 'select' : 'deselect'
