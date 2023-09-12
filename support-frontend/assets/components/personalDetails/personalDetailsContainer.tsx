@@ -1,5 +1,9 @@
+import { TextInput } from '@guardian/source-react-components';
 import Signout from 'components/signout/signout';
-import { setBillingState } from 'helpers/redux/checkout/address/actions';
+import {
+	setBillingPostcode,
+	setBillingState,
+} from 'helpers/redux/checkout/address/actions';
 import {
 	setEmail,
 	setFirstName,
@@ -22,11 +26,16 @@ export function PersonalDetailsContainer({
 }: PersonalDetailsContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 
+	const { mandatoryZipCode } = useContributionsSelector(
+		(state) => state.common.abParticipations,
+	);
+
 	const { email, firstName, lastName, errors } = useContributionsSelector(
 		(state) => state.page.checkoutForm.personalDetails,
 	);
+
 	const contributionType = useContributionsSelector(getContributionType);
-	const { state, errorObject } = useContributionsSelector(
+	const { state, postCode, errorObject } = useContributionsSelector(
 		(state) => state.page.checkoutForm.billingAddress.fields,
 	);
 	const isSignedIn = useContributionsSelector(
@@ -35,6 +44,8 @@ export function PersonalDetailsContainer({
 	const countryId = useContributionsSelector(
 		(state) => state.common.internationalisation.countryId,
 	);
+
+	const showZipCodeField = mandatoryZipCode === 'variant' && countryId === 'US';
 
 	function onEmailChange(email: string) {
 		dispatch(setEmail(email));
@@ -50,6 +61,10 @@ export function PersonalDetailsContainer({
 
 	function onBillingStateChange(billingState: string) {
 		dispatch(setBillingState(billingState));
+	}
+
+	function onZipCodeChange(newZipCode: string) {
+		dispatch(setBillingPostcode(newZipCode));
 	}
 
 	return renderPersonalDetails({
@@ -72,5 +87,17 @@ export function PersonalDetailsContainer({
 				error={errorObject?.state?.[0]}
 			/>
 		),
+		contributionZipcode: showZipCodeField ? (
+			<div>
+				<TextInput
+					id="postCode"
+					name="zip-code"
+					label="ZIP code"
+					value={postCode}
+					error={errorObject?.postCode?.[0]}
+					onChange={(e) => onZipCodeChange(e.target.value)}
+				/>
+			</div>
+		) : undefined,
 	});
 }

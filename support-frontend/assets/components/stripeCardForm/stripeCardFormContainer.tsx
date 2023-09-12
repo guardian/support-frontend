@@ -45,13 +45,18 @@ export function StripeCardFormContainer(): JSX.Element {
 	const zipCode = useContributionsSelector(
 		(state) => state.page.checkoutForm.billingAddress.fields.postCode,
 	);
-	const showZipCode = useContributionsSelector(
+	const { mandatoryZipCode } = useContributionsSelector(
+		(state) => state.common.abParticipations,
+	);
+	const isUsCustomer = useContributionsSelector(
 		(state) => state.common.internationalisation.countryId === 'US',
 	);
 	const { publicKey, stripeAccount } = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.stripeAccountDetails,
 	);
 	const { isTestUser } = useContributionsSelector((state) => state.page.user);
+
+	const showZipCode = isUsCustomer && mandatoryZipCode === 'control';
 
 	function onCardFieldChange(field: StripeField) {
 		return function onChange(event: StripeChangeEvents[typeof field]) {

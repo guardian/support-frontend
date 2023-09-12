@@ -10,6 +10,7 @@ export const pageUrlRegexes = {
 		allLandingPagesAndThankyouPages: '/contribute|thankyou(/.*)?$',
 		notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
 		auLandingPage: '/au/contribute(/.*)?$',
+		usLandingPage: '/us/contribute(/.*)?$',
 	},
 	subscriptions: {
 		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
@@ -111,5 +112,25 @@ export const tests: Tests = {
 		audiences: {},
 		referrerControlled: false,
 		seed: 0,
+	},
+	mandatoryZipCode: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		isActive: false,
+		audiences: {
+			UnitedStates: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		referrerControlled: false,
+		targetPage: pageUrlRegexes.contributions.usLandingPage,
+		seed: 4,
 	},
 };
