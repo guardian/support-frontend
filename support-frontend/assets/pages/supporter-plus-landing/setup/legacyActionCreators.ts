@@ -131,25 +131,31 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
 function getBillingCountryAndState(state: ContributionsState): {
 	billingCountry: IsoCountry;
 	billingState: Option<StateProvince>;
+	postCode: string;
 } {
 	const paymentMethod = state.page.checkoutForm.payment.paymentMethod;
 	const isPaymentRequestButton =
 		paymentMethod.name == Stripe &&
 		(paymentMethod.stripePaymentMethod === 'StripePaymentRequestButton' ||
 			paymentMethod.stripePaymentMethod === 'StripeApplePay');
-	const { country: formCountry, state: formState } =
-		state.page.checkoutForm.billingAddress.fields;
+	const {
+		country: formCountry,
+		state: formState,
+		postCode,
+	} = state.page.checkoutForm.billingAddress.fields;
 	if (isPaymentRequestButton && paymentMethod.country) {
 		return {
 			billingCountry: paymentMethod.country,
 			billingState:
 				paymentMethod.state ??
 				(formCountry === paymentMethod.country ? formState : ''),
+			postCode,
 		};
 	} else {
 		return {
 			billingCountry: formCountry,
 			billingState: formState,
+			postCode,
 		};
 	}
 }
@@ -197,7 +203,8 @@ function regularPaymentRequestFromAuthorisation(
 	state: ContributionsState,
 ): RegularPaymentRequest {
 	const { actionHistory } = state.debug;
-	const { billingCountry, billingState } = getBillingCountryAndState(state);
+	const { billingCountry, billingState, postCode } =
+		getBillingCountryAndState(state);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const contributionType = getContributionType(state);
 
@@ -225,7 +232,7 @@ function regularPaymentRequestFromAuthorisation(
 				? billingState
 				: null,
 			// required Zuora field if country is US or CA
-			postCode: null,
+			postCode: billingCountry === 'US' ? postCode : null,
 			// required go cardless field
 			country: billingCountry, // required Zuora field
 		},
