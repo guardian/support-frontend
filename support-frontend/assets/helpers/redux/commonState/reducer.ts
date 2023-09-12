@@ -23,13 +23,13 @@ function getInternationalisationFromCountry(
 }
 
 function getABTestNames(abParticipations: Participations) {
-	const isUserInSupporterPlusABTest = 'supporterPlusOnly' in abParticipations;
-
-	const abTestType = isUserInSupporterPlusABTest
-		? { supporterPlusOnly: abParticipations.supporterPlusOnly }
-		: abParticipations;
-
-	return abTestType;
+	if ('supporterPlusOnly' in abParticipations) {
+		const abTestType = {
+			supporterPlusOnly: abParticipations.supporterPlusOnly,
+		};
+		return abTestType;
+	}
+	return abParticipations; // Return the original object if 'supporterPlusOnly' doesn't exist.
 }
 
 export const commonSlice = createSlice({
