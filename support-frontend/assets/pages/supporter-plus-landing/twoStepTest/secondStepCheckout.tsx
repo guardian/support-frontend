@@ -26,6 +26,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
+import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { DirectDebitContainer } from '../components/directDebitWrapper';
 import { PaymentFailureMessage } from '../components/paymentFailure';
@@ -92,9 +93,8 @@ export function SupporterPlusCheckout({
 						amount: `${amountBeforeAmendments}`,
 					}),
 				);
-				navigate(
-					`/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`,
-				);
+				const destination = `/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`;
+				navigateWithPageView(navigate, destination);
 			}}
 		>
 			Change
