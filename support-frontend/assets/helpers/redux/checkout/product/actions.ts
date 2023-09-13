@@ -10,6 +10,8 @@ export const {
 	setAllAmounts,
 	setSelectedAmount,
 	setOtherAmount,
+	setSelectedAmountBeforeAmendment,
+	setOtherAmountBeforeAmendment,
 	setCurrency,
 	setOrderIsAGift,
 	setStartDate,

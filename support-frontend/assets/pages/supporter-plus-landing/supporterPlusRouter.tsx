@@ -39,7 +39,9 @@ const {
 	common: { abParticipations },
 } = store.getState();
 
-const isInTwoStepTest = abParticipations.twoStepCheckout === 'variant';
+const isInTwoStepTest = abParticipations.twoStepCheckout !== 'control';
+const showCheckoutTopUpAmounts =
+	abParticipations.twoStepCheckout === 'variant_b';
 
 // ----- Render ----- //
 
@@ -78,7 +80,12 @@ const router = () => {
 			/>
 			<Route
 				path={`/${countryId}/contribute/checkout`}
-				element={<SupporterPlusCheckout thankYouRoute={thankYouRoute} />}
+				element={
+					<SupporterPlusCheckout
+						thankYouRoute={thankYouRoute}
+						showTopUpAmounts={showCheckoutTopUpAmounts}
+					/>
+				}
 			/>
 			<Route
 				path={`/${countryId}/thankyou`}

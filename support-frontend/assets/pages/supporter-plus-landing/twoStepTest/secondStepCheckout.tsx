@@ -13,10 +13,18 @@ import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import { checkoutTopUpUpperThresholdsByCountryGroup } from 'helpers/checkoutTopUp/upperThreshold';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import {
+	getUserSelectedAmount,
+	getUserSelectedAmountBeforeAmendment,
+} from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { DirectDebitContainer } from '../components/directDebitWrapper';
@@ -35,9 +43,12 @@ const shorterBoxMargin = css`
 
 export function SupporterPlusCheckout({
 	thankYouRoute,
+	showTopUpAmounts,
 }: {
 	thankYouRoute: string;
+	showTopUpAmounts: boolean;
 }): JSX.Element {
+	const dispatch = useContributionsDispatch();
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -49,6 +60,9 @@ export function SupporterPlusCheckout({
 	);
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
+	const amountBeforeAmendments = useContributionsSelector(
+		getUserSelectedAmountBeforeAmendment,
+	);
 
 	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
 		contributionType,
@@ -57,17 +71,31 @@ export function SupporterPlusCheckout({
 		countryGroupId,
 	);
 
+	const showPreAmendedTotal =
+		showTopUpAmounts &&
+		contributionType !== 'ONE_OFF' &&
+		amountBeforeAmendments <=
+			checkoutTopUpUpperThresholdsByCountryGroup[countryGroupId][
+				contributionType
+			];
+
 	const navigate = useNavigate();
 
 	const changeButton = (
 		<Button
 			priority="tertiary"
 			size="xsmall"
-			onClick={() =>
+			onClick={() => {
+				dispatch(
+					setSelectedAmount({
+						contributionType: contributionType,
+						amount: `${amountBeforeAmendments}`,
+					}),
+				);
 				navigate(
 					`/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`,
-				)
-			}
+				);
+			}}
 		>
 			Change
 		</Button>
@@ -82,6 +110,8 @@ export function SupporterPlusCheckout({
 							<ContributionsOrderSummary
 								{...orderSummaryProps}
 								headerButton={changeButton}
+								showTopUpAmounts={showTopUpAmounts}
+								showPreAmendedTotal={showPreAmendedTotal}
 							/>
 						)}
 					/>

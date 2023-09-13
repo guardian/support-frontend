@@ -43,7 +43,14 @@ export const Default = Template.bind({});
 
 Default.args = {
 	contributionType: 'MONTHLY',
-	total: '£10',
+	total: 10,
+	totalBeforeAmended: 10,
+	currency: {
+		glyph: '£',
+		extendedGlyph: '£',
+		isSuffixGlyph: false,
+		isPaddedGlyph: false,
+	},
 	checkListData: checkListData({ higherTier: true, showUnchecked: false }),
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
@@ -65,7 +72,14 @@ export const BelowThreshold = Template.bind({});
 
 BelowThreshold.args = {
 	contributionType: 'ANNUAL',
-	total: '$25',
+	total: 25,
+	totalBeforeAmended: 25,
+	currency: {
+		glyph: '$',
+		extendedGlyph: 'US$',
+		isSuffixGlyph: false,
+		isPaddedGlyph: false,
+	},
 	checkListData: checkListData({ higherTier: false, showUnchecked: false }),
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
@@ -84,7 +98,14 @@ export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {
 	contributionType: 'ONE_OFF',
-	total: '$25',
+	total: 25,
+	totalBeforeAmended: 25,
+	currency: {
+		glyph: '$',
+		extendedGlyph: 'US$',
+		isSuffixGlyph: false,
+		isPaddedGlyph: false,
+	},
 	checkListData: [],
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
