@@ -39,7 +39,9 @@ const {
 	common: { abParticipations },
 } = store.getState();
 
-const isInTwoStepTest = abParticipations.twoStepCheckout !== 'control';
+const isInTwoStepTest =
+	abParticipations.twoStepCheckout &&
+	abParticipations.twoStepCheckout !== 'control';
 const showCheckoutTopUpAmounts =
 	abParticipations.twoStepCheckout === 'variant_b';
 
