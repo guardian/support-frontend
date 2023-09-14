@@ -80,12 +80,12 @@ export const tests: Tests = {
 	},
 	twoStepCheckout: {
 		variants: [
-			// {
-			// 	id: 'control',
-			// },
-			// {
-			// 	id: 'variant_a',
-			// },
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant_a',
+			},
 			{
 				id: 'variant_b',
 			},
@@ -93,10 +93,10 @@ export const tests: Tests = {
 		audiences: {
 			ALL: {
 				offset: 0,
-				size: 1,
+				size: 0,
 			},
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 3,

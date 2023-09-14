@@ -66,6 +66,7 @@ export type Test = {
 	// An optional regex that will be tested against the path of the current page
 	// before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
 	targetPage?: string | RegExp;
+	omitCountries?: IsoCountry[];
 };
 
 export type Tests = Record<string, Test>;
@@ -143,6 +144,10 @@ function getParticipations(
 		}
 
 		if (test.canRun && !test.canRun()) {
+			return;
+		}
+
+		if (test.omitCountries?.includes(country)) {
 			return;
 		}
 
