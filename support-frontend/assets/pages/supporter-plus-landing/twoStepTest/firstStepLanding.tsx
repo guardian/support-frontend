@@ -18,6 +18,7 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
+import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { LimitedPriceCards } from '../formSections/limitedPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
@@ -130,9 +131,8 @@ export function SupporterPlusInitialLandingPage({
 							size="default"
 							cssOverrides={checkoutBtnStyleOverrides}
 							onClick={() => {
-								navigate(
-									`checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`,
-								);
+								const destination = `checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`;
+								navigateWithPageView(navigate, destination);
 							}}
 						>
 							Continue to checkout

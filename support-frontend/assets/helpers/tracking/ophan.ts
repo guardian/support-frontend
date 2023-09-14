@@ -1,8 +1,10 @@
 // ----- Imports ----- //
 import * as ophan from 'ophan';
+import type { NavigateFunction } from 'react-router';
 import type { Participations } from 'helpers/abTests/abtest';
 import { getLocal, setLocal } from 'helpers/storage/storage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
+import { getAbsoluteURL } from 'helpers/urls/url';
 
 // ----- Types ----- //
 // These are to match Thrift definitions which can be found here:
@@ -127,9 +129,35 @@ const setReferrerDataInLocalStorage = (
 	}
 };
 
+const getPageViewId = (): string => ophan.viewId;
+
+/**
+ * To be used when navigating with React Router
+ * in order to generate new Page View event in Ophan
+ */
+const navigateWithPageView = (
+	navigate: NavigateFunction,
+	destination: string,
+): void => {
+	const reffererData = {
+		referrerUrl: document.location.href,
+		referrerPageviewId: getPageViewId(),
+	};
+
+	// store reffer data to be read and transmitted on manual pageView
+	setReferrerDataInLocalStorage(reffererData);
+
+	// navigate to next page
+	navigate(destination);
+
+	// manual pageView
+	pageView(document.location.href, getAbsoluteURL(destination));
+};
+
 export {
 	trackComponentEvents,
 	pageView,
 	trackAbTests,
 	setReferrerDataInLocalStorage,
+	navigateWithPageView,
 };
