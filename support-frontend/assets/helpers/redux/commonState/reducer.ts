@@ -24,12 +24,9 @@ function getInternationalisationFromCountry(
 
 function getABTestNames(abParticipations: Participations) {
 	const isUserInSupporterPlusABTest = 'supporterPlusOnly' in abParticipations;
-	const isUserInVATCompliantcountry = 'VAT_COMPLIANCE' in abParticipations;
 
 	const abTestType = isUserInSupporterPlusABTest
 		? { supporterPlusOnly: abParticipations.supporterPlusOnly }
-		: isUserInVATCompliantcountry
-		? { VAT_COMPLIANCE: abParticipations.VAT_COMPLIANCE }
 		: abParticipations;
 
 	return abTestType;

@@ -80,12 +80,12 @@ export const tests: Tests = {
 	},
 	twoStepCheckout: {
 		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant_a',
-			},
+			// {
+			// 	id: 'control',
+			// },
+			// {
+			// 	id: 'variant_a',
+			// },
 			{
 				id: 'variant_b',
 			},
@@ -93,13 +93,52 @@ export const tests: Tests = {
 		audiences: {
 			ALL: {
 				offset: 0,
-				size: 0,
+				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 3,
+		omitCountries: [
+			'RS',
+			'EG',
+			'PK',
+			'MU',
+			'BH',
+			'MA',
+			'MC',
+			'OM',
+			'GE',
+			'NC',
+			'TZ',
+			'ZM',
+			'AL',
+			'BD',
+			'KZ',
+			'CW',
+			'DO',
+			'GP',
+			'MQ',
+			'PF',
+			'TN',
+			'BQ',
+			'AX',
+			'SN',
+			'AM',
+			'CM',
+			'AO',
+			'KG',
+			'GA',
+			'UZ',
+			'MD',
+			'DZ',
+			'TJ',
+			'LS',
+			'CG',
+			'TG',
+			'NE',
+		],
 	},
 	nationalDelivery: {
 		variants: [
