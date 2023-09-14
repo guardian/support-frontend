@@ -63,6 +63,7 @@ export function CheckoutTopUpAmounts({
 									}
 									setSelectedTopUpamount(isSelected ? 0 : amount);
 								}}
+								data-qm-clickable={true}
 							>
 								<span css={[amountOptionValue(isSelected)]}>
 									{currencySymbol}
