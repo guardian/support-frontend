@@ -90,10 +90,10 @@ export const tests: Tests = {
 		audiences: {
 			ALL: {
 				offset: 0,
-				size: 1,
+				size: 0,
 			},
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: false,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		seed: 3,
