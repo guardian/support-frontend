@@ -71,6 +71,7 @@ describe('Guardian Weekly checkout form', () => {
 				},
 			},
 			common: {
+				abParticipations: {},
 				internationalisation: {
 					countryGroupId: 'GBPCountries',
 					countryId: 'GB',

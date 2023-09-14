@@ -4,6 +4,7 @@ import type { ContributionTypes } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
+import type { Participations } from '../../abTests/abtest';
 import type { CommonStateSetupData, Internationalisation } from './state';
 import { initialCommonState } from './state';
 
@@ -21,11 +22,27 @@ function getInternationalisationFromCountry(
 	};
 }
 
+function getABTestNames(abParticipations: Participations) {
+	const isUserInSupporterPlusABTest = 'supporterPlusOnly' in abParticipations;
+	const isUserInVATCompliantcountry = 'VAT_COMPLIANCE' in abParticipations;
+
+	const abTestType = isUserInSupporterPlusABTest
+		? { supporterPlusOnly: abParticipations.supporterPlusOnly }
+		: isUserInVATCompliantcountry
+		? { VAT_COMPLIANCE: abParticipations.VAT_COMPLIANCE }
+		: abParticipations;
+
+	return abTestType;
+}
+
 export const commonSlice = createSlice({
 	name: 'common',
 	initialState: initialCommonState,
 	reducers: {
 		setInitialCommonState(state, action: PayloadAction<CommonStateSetupData>) {
+			action.payload.abParticipations = getABTestNames(
+				action.payload.abParticipations,
+			);
 			const {
 				campaign,
 				referrerAcquisitionData,
