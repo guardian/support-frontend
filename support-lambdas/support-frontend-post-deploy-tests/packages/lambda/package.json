@@ -1,0 +1,18 @@
+{
+  "name": "lambda",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "DOTENV_CONFIG_PATH=.env ts-node src/run-locally.ts",
+    "prebuild": "rm -rf dist",
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outdir=dist",
+    "postbuild": "cd dist && zip -r example-typescript-lambda.zip .",
+    "playwright-dev": "yarn playwright test --ui"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.36.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "esbuild": "^0.19.2"
+  }
+}
