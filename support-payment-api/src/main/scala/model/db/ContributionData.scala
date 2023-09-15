@@ -27,6 +27,7 @@ case class ContributionData private (
     amount: BigDecimal,
     countryCode: Option[String],
     countrySubdivisionCode: Option[String],
+    postalCode: Option[String],
     // Used as primary key on current contribution_metadata and payment_hooks table
     // https://github.com/guardian/contributions-platform/blob/master/Postgres/schema.sql
     contributionId: UUID = UUID.randomUUID,
@@ -44,6 +45,7 @@ object ContributionData extends StrictLogging {
       identityId: Option[Long],
       charge: Charge,
       countrySubdivisionCode: Option[String],
+      postalCode: Option[String],
       paymentProvider: PaymentProvider,
   ): ContributionData =
     // TODO: error handling
@@ -61,6 +63,7 @@ object ContributionData extends StrictLogging {
       amount = BigDecimal(charge.getAmount, 2),
       countryCode = StripeCharge.getCountryCode(charge),
       countrySubdivisionCode = countrySubdivisionCode,
+      postalCode = postalCode,
     )
 
   import scala.jdk.CollectionConverters._
@@ -80,6 +83,7 @@ object ContributionData extends StrictLogging {
       email: String,
       identityId: Option[Long],
       countrySubdivisionCode: Option[String],
+      postalCode: Option[String],
   ): Either[PaypalApiError, ContributionData] = {
     for {
       transactions <- Either.fromOption(
@@ -110,6 +114,7 @@ object ContributionData extends StrictLogging {
       amount = amount,
       countryCode = Some(countryCode),
       countrySubdivisionCode = getPaypalCountrySubdivisionCode(payment),
+      postalCode = postalCode,
     )
   }
 
@@ -120,6 +125,7 @@ object ContributionData extends StrictLogging {
       countryCode: Option[String],
       countrySubdivisionCode: Option[String],
       orderRef: String,
+      postalCode: Option[String],
   ): ContributionData = {
     ContributionData(
       paymentProvider = AmazonPay,
@@ -137,6 +143,7 @@ object ContributionData extends StrictLogging {
       amount = BigDecimal(amazonPayment.getAuthorizationAmount.getAmount),
       countryCode = countryCode,
       countrySubdivisionCode = countrySubdivisionCode,
+      postalCode = postalCode,
     )
   }
 }

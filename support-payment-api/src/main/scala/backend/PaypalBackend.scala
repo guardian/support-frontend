@@ -184,7 +184,13 @@ class PaypalBackend(
       identityId: Option[Long],
       clientBrowserInfo: ClientBrowserInfo,
   ): Future[List[BackendError]] = {
-    ContributionData.fromPaypalCharge(payment, email, identityId, clientBrowserInfo.countrySubdivisionCode) match {
+    ContributionData.fromPaypalCharge(
+      payment,
+      email,
+      identityId,
+      clientBrowserInfo.countrySubdivisionCode,
+      acquisitionData.postalCode,
+    ) match {
       case Left(err) => Future.successful(List(BackendError.fromPaypalAPIError(err)))
       case Right(contributionData) =>
         val paypalAcquisition =

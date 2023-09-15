@@ -31,7 +31,22 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
 
   // -- entities
   val acquisitionData =
-    AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None)
+    AcquisitionData(
+      Some("platform"),
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      Some("N1 9GU"),
+    )
   val countrySubdivisionCode = Some("NY")
   val dbError = ContributionsStoreService.Error(new Exception("DB error response"))
   val identityError = IdentityClient.ContextualError(

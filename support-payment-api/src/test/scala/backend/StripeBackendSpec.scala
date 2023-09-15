@@ -38,14 +38,36 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val token = Json.fromString("token").as[NonEmptyString].right.get
   val recaptchaToken = "recaptchaToken"
   val acquisitionData =
-    AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None)
+    AcquisitionData(
+      Some("platform"),
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      Some("N1 9GU"),
+    )
   val stripePaymentData = StripePaymentData(email, Currency.USD, 12, None)
   val legacyStripePaymentData = LegacyStripePaymentData(email, Currency.USD, 12, None, token)
   val stripePublicKey = StripePublicKey("pk_test_FOOBAR")
   val stripeChargeRequest = LegacyStripeChargeRequest(legacyStripePaymentData, acquisitionData, Some(stripePublicKey))
   val createPaymentIntent =
-    CreatePaymentIntent("payment-method-id", stripePaymentData, acquisitionData, Some(stripePublicKey), recaptchaToken)
-  val confirmPaymentIntent = ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, Some(stripePublicKey))
+    CreatePaymentIntent(
+      "payment-method-id",
+      stripePaymentData,
+      acquisitionData,
+      Some(stripePublicKey),
+      recaptchaToken,
+    )
+  val confirmPaymentIntent =
+    ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, Some(stripePublicKey))
 
   val countrySubdivisionCode = Some("NY")
   val clientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)
