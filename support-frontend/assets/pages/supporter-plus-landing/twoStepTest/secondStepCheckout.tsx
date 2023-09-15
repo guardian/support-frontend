@@ -25,6 +25,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { DirectDebitContainer } from '../components/directDebitWrapper';
@@ -74,6 +75,8 @@ export function SupporterPlusCheckout({
 	const showPreAmendedTotal =
 		showTopUpAmounts &&
 		contributionType !== 'ONE_OFF' &&
+		amountBeforeAmendments >=
+			benefitsThresholdsByCountryGroup[countryGroupId][contributionType] &&
 		amountBeforeAmendments <=
 			checkoutTopUpUpperThresholdsByCountryGroup[countryGroupId][
 				contributionType
