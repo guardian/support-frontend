@@ -35,7 +35,7 @@ jobs:
         run: env
 
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # (Respects .nvmrc)
       - name: Setup Node
