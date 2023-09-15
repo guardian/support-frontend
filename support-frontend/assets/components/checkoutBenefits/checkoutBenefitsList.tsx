@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import {
+	between,
 	from,
 	headline,
 	palette,
@@ -21,10 +22,18 @@ const containerWithBackgroundCss = css`
 	border-radius: 7px;
 `;
 
-const maxWidth = css`
+const smallMaxWidth = css`
 	max-width: 250px;
 	${from.desktop} {
 		max-width: 280px;
+	}
+`;
+const maxWidth = css`
+	${until.mobileLandscape} {
+		max-width: 15ch;
+	}
+	${between.tablet.and.desktop} {
+		max-width: 15ch;
 	}
 `;
 const headingCss = css`
@@ -68,7 +77,11 @@ export function CheckoutBenefitsList({
 					: [containerCss]
 			}
 		>
-			<h2 css={withBackground ? headingCss : [headingCss, maxWidth]}>
+			<h2
+				css={
+					withBackground ? [headingCss, maxWidth] : [headingCss, smallMaxWidth]
+				}
+			>
 				{title}
 			</h2>
 			<hr css={hrCss(`${space[4]}px 0`)} />
