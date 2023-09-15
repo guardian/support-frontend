@@ -284,6 +284,7 @@ class StripeBackend(
       identityId,
       charge,
       clientBrowserInfo.countrySubdivisionCode,
+      data.acquisitionData.postalCode,
       PaymentProvider.fromStripePaymentMethod(data.paymentData.stripePaymentMethod),
     )
 

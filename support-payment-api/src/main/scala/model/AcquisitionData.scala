@@ -2,7 +2,7 @@ package model
 
 import com.gu.support.acquisitions.{AbTest, QueryParameter}
 
-//-- common for stripe and paypal
+//-- common for stripe, paypal, and amazon pay
 case class AcquisitionData(
     platform: Option[String],
     browserId: Option[String],
@@ -17,4 +17,5 @@ case class AcquisitionData(
     queryParameters: Option[Set[QueryParameter]],
     gaId: Option[String],
     labels: Option[Set[String]],
+    postalCode: Option[String],
 )

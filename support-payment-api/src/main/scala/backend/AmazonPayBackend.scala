@@ -176,6 +176,7 @@ class AmazonPayBackend(
       acquisitionData.countryCode,
       clientBrowserInfo.countrySubdivisionCode,
       acquisitionData.amazonPayment.orderReferenceId,
+      acquisitionData.acquisitionData.flatMap(_.postalCode),
     )
 
     track(
