@@ -6,10 +6,12 @@
     "prebuild": "rm -rf dist",
     "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outdir=dist",
     "postbuild": "cd dist && zip -r example-typescript-lambda.zip .",
-    "playwright-dev": "yarn playwright test --ui"
+    "pw-local-test":"npx playwright test ./src/playwright/tests/local_test.ts",
+    "pw-test":"npx playwright test ./src/playwright/tests/sample_test.ts"
   },
   "dependencies": {
-    "@playwright/test": "^1.36.2"
+    "@playwright/test": "^1.36.2",
+    "browserstack-local": "^1.5.4"
   },
   "devDependencies": {
     "dotenv": "^16.3.1",
