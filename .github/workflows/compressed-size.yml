@@ -17,7 +17,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version-file: .nvmrc
+          node-version-file: '.nvmrc'
 
       # Cache npm dependencies using https://github.com/bahmutov/npm-install
       - name: Cache dependencies
