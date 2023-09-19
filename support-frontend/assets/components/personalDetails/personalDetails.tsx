@@ -49,6 +49,7 @@ export type PersonalDetailsProps = {
 	onLastNameChange: (lastName: string) => void;
 	signOutLink: React.ReactNode;
 	contributionState: React.ReactNode;
+	contributionZipcode?: React.ReactNode;
 	overrideHeadingCopy?: string;
 	hideDetailsHeading?: true;
 	errors?: PersonalDetailsState['errors'];
@@ -66,6 +67,7 @@ export function PersonalDetails({
 	errors,
 	signOutLink,
 	contributionState,
+	contributionZipcode,
 	hideDetailsHeading,
 	overrideHeadingCopy,
 }: PersonalDetailsProps): JSX.Element {
@@ -123,6 +125,8 @@ export function PersonalDetails({
 			) : null}
 
 			{contributionState}
+
+			{contributionZipcode}
 		</div>
 	);
 }
