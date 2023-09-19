@@ -133,31 +133,17 @@ function getBillingCountryAndState(state: ContributionsState): {
 	billingState: Option<StateProvince>;
 	postCode: string;
 } {
-	const paymentMethod = state.page.checkoutForm.payment.paymentMethod;
-	const isPaymentRequestButton =
-		paymentMethod.name == Stripe &&
-		(paymentMethod.stripePaymentMethod === 'StripePaymentRequestButton' ||
-			paymentMethod.stripePaymentMethod === 'StripeApplePay');
 	const {
 		country: formCountry,
 		state: formState,
 		postCode,
 	} = state.page.checkoutForm.billingAddress.fields;
-	if (isPaymentRequestButton && paymentMethod.country) {
-		return {
-			billingCountry: paymentMethod.country,
-			billingState:
-				paymentMethod.state ??
-				(formCountry === paymentMethod.country ? formState : ''),
-			postCode,
-		};
-	} else {
-		return {
-			billingCountry: formCountry,
-			billingState: formState,
-			postCode,
-		};
-	}
+
+	return {
+		billingCountry: formCountry,
+		billingState: formState,
+		postCode,
+	};
 }
 
 // This exists *only* to support the purchase of digi subs for migrating Kindle subscribers

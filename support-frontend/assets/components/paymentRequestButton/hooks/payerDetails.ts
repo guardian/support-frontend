@@ -6,7 +6,10 @@ import {
 	findIsoCountry,
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
-import { setPaymentMethodCountryAndState } from 'helpers/redux/checkout/payment/paymentMethod/actions';
+import {
+	setBillingCountry,
+	setBillingState,
+} from 'helpers/redux/checkout/address/actions';
 import {
 	setEmail,
 	setFirstName,
@@ -60,12 +63,8 @@ function dispatchPaymentMethodCountryAndState(
 			state ?? undefined,
 		);
 
-		dispatch(
-			setPaymentMethodCountryAndState([
-				validatedCountry,
-				validatedState ?? undefined,
-			]),
-		);
+		dispatch(setBillingCountry(validatedCountry));
+		dispatch(setBillingState(validatedState ?? ''));
 	}
 }
 
