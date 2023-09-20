@@ -110,6 +110,7 @@ const buildStripeChargeDataFromAuthorisation = (
 	acquisitionData: derivePaymentApiAcquisitionData(
 		state.common.referrerAcquisitionData,
 		state.common.abParticipations,
+		state.page.checkoutForm.billingAddress.fields.postCode,
 	),
 	publicKey: getStripeKey(
 		stripeAccountForContributionType[getContributionType(state)],
@@ -267,6 +268,7 @@ const amazonPayDataFromAuthorisation = (
 	acquisitionData: derivePaymentApiAcquisitionData(
 		state.common.referrerAcquisitionData,
 		state.common.abParticipations,
+		state.page.checkoutForm.billingAddress.fields.postCode,
 	),
 });
 
@@ -342,6 +344,7 @@ const onCreateOneOffPayPalPaymentResponse =
 			const acquisitionData = derivePaymentApiAcquisitionData(
 				state.common.referrerAcquisitionData,
 				state.common.abParticipations,
+				state.page.checkoutForm.billingAddress.fields.postCode,
 			);
 			// We've only created a payment at this point, and the user has to get through
 			// the PayPal flow on their site before we can actually try and execute the payment.
