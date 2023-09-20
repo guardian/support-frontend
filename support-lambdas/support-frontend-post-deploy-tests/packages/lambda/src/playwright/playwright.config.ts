@@ -7,8 +7,8 @@ import { globalTeardown } from './global-teardown';
  * @type {import('@playwright/test').PlaywrightTestConfig}
  */
 const config = {
-	testDir: './tests',
-	testMatch: '**/*.ts',
+	// testDir: './tests',
+	testMatch: 'src/playwright/tests/**/*.ts',
 
 	globalSetup: globalSetup,
 	globalTeardown: globalTeardown,

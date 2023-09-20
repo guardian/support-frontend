@@ -6,8 +6,8 @@
     "prebuild": "rm -rf dist",
     "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outdir=dist",
     "postbuild": "cd dist && zip -r example-typescript-lambda.zip .",
-    "pw-local-test":"npx playwright test ./src/playwright/tests/local_test.ts",
-    "pw-test":"npx playwright test ./src/playwright/tests/sample_test.ts"
+    "pw-local-test": "npx playwright test local.test.ts",
+    "pw-test": "npx playwright test src/playwright/tests/sample_test.ts"
   },
   "dependencies": {
     "@playwright/test": "^1.36.2",
