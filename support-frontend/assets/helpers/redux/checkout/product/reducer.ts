@@ -15,7 +15,7 @@ import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import type { DateYMDString } from 'helpers/types/DateString';
 import { setDeliveryCountry } from '../address/actions';
-import { validateForm } from '../checkoutActions';
+import { validateForm, validatePartialForm } from '../checkoutActions';
 import { isContribution } from './selectors/productType';
 import type { AmountChange, GuardianProduct, ProductState } from './state';
 import { initialProductState, otherAmountSchema } from './state';
@@ -113,6 +113,13 @@ export const productSlice = createSlice({
 		});
 
 		builder.addCase(validateForm, validateOtherAmount);
+
+		builder.addCase(validatePartialForm, (state, action) => {
+			if (action.payload === 'otherAmount') {
+				console.log('otherAmount validate called');
+				validateOtherAmount(state);
+			}
+		});
 	},
 });
 

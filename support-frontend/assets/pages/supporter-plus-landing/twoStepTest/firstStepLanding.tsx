@@ -10,15 +10,19 @@ import {
 	Button,
 	buttonThemeReaderRevenueBrand,
 } from '@guardian/source-react-components';
-import { useNavigate } from 'react-router';
+// import { useNavigate } from 'react-router';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import { BrandedIcons } from 'components/paymentMethodSelector/creditDebitIcons';
 import { PaypalIcon } from 'components/paymentMethodSelector/paypalIcon';
+import { validatePartialForm } from 'helpers/redux/checkout/checkoutActions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
-import { navigateWithPageView } from 'helpers/tracking/ophan';
+// import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { LimitedPriceCards } from '../formSections/limitedPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
@@ -73,7 +77,8 @@ export function SupporterPlusInitialLandingPage({
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
+	const dispatch = useContributionsDispatch();
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
 	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
@@ -131,8 +136,9 @@ export function SupporterPlusInitialLandingPage({
 							size="default"
 							cssOverrides={checkoutBtnStyleOverrides}
 							onClick={() => {
-								const destination = `checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`;
-								navigateWithPageView(navigate, destination);
+								// const destination = `checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`;
+								dispatch(validatePartialForm('otherAmount'));
+								// navigateWithPageView(navigate, destination);
 							}}
 						>
 							Continue to checkout
