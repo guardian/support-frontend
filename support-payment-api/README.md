@@ -17,7 +17,13 @@ Run `sbt run` and the project will start up locally under:
 
 ## Running tests
 
-Run `sbt run`. No integration test provided so far.
+From the root of the `support-frontend` repository, run:
+
+```
+sbt "project support-payment-api" run
+```
+
+No integration test provided so far.
 
 ### Testing manually
 
