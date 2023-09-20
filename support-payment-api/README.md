@@ -9,7 +9,7 @@ The payment service provides an API for creating PayPal and Stripe payments.
 
 ## Running Locally
 
-Get AWS credentials from Janus
+Get AWS credentials from Janus.
 
 From the root of the `support-frontend` repository, run `sbt "project support-payment-api" run` and the project will start up locally under:
 
