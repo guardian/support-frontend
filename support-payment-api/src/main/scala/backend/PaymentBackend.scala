@@ -8,7 +8,13 @@ import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import com.typesafe.scalalogging.StrictLogging
 import model.DefaultThreadPool
 import model.db.ContributionData
-import services.{ContributionsStoreService, SoftOptInsService, SupporterProductDataService, SwitchService}
+import services.{
+  ContributionsStoreService,
+  SingleContributionRecordService,
+  SoftOptInsService,
+  SupporterProductDataService,
+  SwitchService,
+}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
@@ -19,6 +25,7 @@ trait PaymentBackend extends StrictLogging {
   val databaseService: ContributionsStoreService
   val supporterProductDataService: SupporterProductDataService
   val softOptInsService: SoftOptInsService
+  val singleContributionRecordService: SingleContributionRecordService
   val switchService: SwitchService
 
   private def insertContributionDataIntoDatabase(
@@ -58,6 +65,8 @@ trait PaymentBackend extends StrictLogging {
 
     val softOptInFuture = softOptInsService.sendMessage(contributionData.identityId, contributionData.contributionId)
 
+    val singleContributionRecordFuture = singleContributionRecordService.sendMessage(contributionData)
+
     Future
       .sequence(
         List(
@@ -66,6 +75,7 @@ trait PaymentBackend extends StrictLogging {
           dbFuture.value,
           supporterDataFuture.value,
           softOptInFuture.value,
+          singleContributionRecordFuture.value,
         ),
       )
       .map { results =>
