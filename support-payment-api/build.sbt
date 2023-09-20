@@ -31,9 +31,9 @@ libraryDependencies ++= Seq(
   "org.playframework.anorm" %% "anorm" % "2.7.0",
   "org.scalatest" %% "scalatest" % "3.0.9" % "test",
   "org.scalatestplus" %% "mockito-3-4" % "3.2.10.0" % "test",
-  "org.mockito" % "mockito-core" % "5.3.1",
+  "org.mockito" % "mockito-core" % "4.11.0",
   "org.typelevel" %% "cats-core" % catsVersion,
-  "com.github.blemale" %% "scaffeine" % "5.2.0",
+  "com.github.blemale" %% "scaffeine" % "4.1.0",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
@@ -57,6 +57,7 @@ dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacks
 
 resolvers ++= Resolver.sonatypeOssRepos("releases")
 
+debianPackageDependencies := Seq("openjdk-8-jre-headless")
 Debian / packageName := name.value
 packageSummary := "Payment API Play App"
 packageDescription := """API for reader revenue payments"""
