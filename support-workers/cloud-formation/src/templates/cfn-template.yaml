@@ -32,6 +32,7 @@ Mappings:
       - arn:aws:s3:::support-workers-private/*
       SupporterProductDataTable: supporter-product-data-tables-CODE-SupporterProductDataTable
       KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-CODE
+      EventBusArn: arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE
     PROD:
       DynamoDBTables:
       - arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD
@@ -41,7 +42,7 @@ Mappings:
       - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json
       - arn:aws:s3:::support-workers-private/*
       SupporterProductDataTable: supporter-product-data-tables-PROD-SupporterProductDataTable
-      KinesisStreamArn: arn:aws:kinesis:eu-west-1:865473395570:stream/acquisitions-stream-PROD
+      EventBusArn: arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-PROD
 Resources:
   LambdaExecutionRole:
     Type: "AWS::IAM::Role"
@@ -71,6 +72,14 @@ Resources:
               - sqs:SendMessage
               Resource:
                 Fn::ImportValue: !Sub "comms-${Stage}-EmailQueueArn"
+        - PolicyName: AcquisitionsEventBus
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - events:PutEvents
+              Resource: !FindInMap [StageVariables, !Ref Stage, EventBusArn]
         - PolicyName: CloudWatchLogging
           PolicyDocument:
             Version: '2012-10-17'
