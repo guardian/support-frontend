@@ -47,7 +47,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
   }
 
-  private def buildGaData(state: SendAcquisitionEventState, requestInfo: RequestInfo): Either[String, GAData] = {
+  private def buildGaData(state: SendAcquisitionEventState): Either[String, GAData] = {
     import cats.syntax.either._
     for {
       acquisitionData <- Either.fromOption(state.acquisitionData, "acquisition data not included")
@@ -70,10 +70,15 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
     val acquisition = AcquisitionDataRowBuilder.buildFromState(state, requestInfo)
 
+    // TODO: This can be done via the eventbus
     val streamFuture = services.acquisitionsStreamService.putAcquisitionWithRetry(acquisition, maxRetries = 5)
-    val biqQueryFuture = services.bigQueryService.tableInsertRowWithRetry(acquisition, maxRetries = 5)
+
+    val eventBridgeFuture = EitherT(services.acquisitionsEventBusService.putAcquisitionEvent(acquisition))
+      .leftMap(List(_)) // TODO: If we get rid of the retries in the other futures we won't need this
+
+    // TODO: Can we stop sending data to GA?
     val gaFuture = for {
-      gaData <- EitherT.fromEither(buildGaData(state, requestInfo)).leftMap(err => List(err))
+      gaData <- EitherT.fromEither(buildGaData(state)).leftMap(err => List(err))
       result <- services.gaService
         .submit(acquisition, gaData, maxRetries = 5)
         .leftMap(gaErrors => gaErrors.map(_.getMessage))
@@ -81,7 +86,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
     val result = for {
       _ <- streamFuture
-      _ <- biqQueryFuture
+      _ <- eventBridgeFuture
       _ <- gaFuture
     } yield ()
 

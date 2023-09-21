@@ -7,6 +7,7 @@ description := "aws services only (sdk v1)"
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
+  "software.amazon.awssdk" % "eventbridge" % awsClientVersion2,
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
