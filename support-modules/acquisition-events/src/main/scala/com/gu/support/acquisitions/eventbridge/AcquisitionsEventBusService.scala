@@ -7,6 +7,7 @@ import com.gu.support.acquisitions.AcquisitionDataRowMapper
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 import com.gu.support.config.Stage
 import com.gu.support.config.Stages.CODE
+import io.circe.syntax.EncoderOps
 import org.json.JSONObject
 import software.amazon.awssdk.auth.credentials.{
   AwsCredentialsProviderChain,
@@ -26,13 +27,13 @@ class AcquisitionsEventBusService(source: String, stage: Stage, client: EventBri
   val eventBusName = s"acquisitions-bus-${stage.toString}"
   val detailType = "AcquisitionsEvent"
   def putAcquisitionEvent(acquisition: AcquisitionDataRow) = {
-    val acquisitionDataRow: JSONObject = AcquisitionDataRowMapper.mapToTableRow(acquisition)
-    SafeLogger.info(s"Attempting to send event $acquisitionDataRow")
+    val acquisitionJson = acquisition.asJson
+    SafeLogger.info(s"Attempting to send event ${acquisitionJson.spaces2}")
     val entry = PutEventsRequestEntry.builder
       .eventBusName(eventBusName)
       .source(source)
       .detailType(detailType)
-      .detail(acquisitionDataRow.toString)
+      .detail(acquisitionJson.noSpaces)
       .time(Instant.now)
       .build
 
@@ -44,7 +45,7 @@ class AcquisitionsEventBusService(source: String, stage: Stage, client: EventBri
       if (result.failedEntryCount > 0) {
         // We only ever send one event at a time
         val failureMessage = result.entries.get(0).errorMessage
-        val errorMessage = s"There was failure writing $acquisitionDataRow to Eventbridge: $failureMessage"
+        val errorMessage = s"There was failure writing ${acquisitionJson.spaces2} to Eventbridge: $failureMessage"
         SafeLogger.warn(s"$errorMessage")
         promise.success(Left(errorMessage))
       } else {
@@ -52,7 +53,7 @@ class AcquisitionsEventBusService(source: String, stage: Stage, client: EventBri
       }
     } catch {
       case e: SdkException =>
-        val errorMessage = s"There was an exception writing $acquisitionDataRow to Eventbridge: ${e.getMessage}"
+        val errorMessage = s"There was an exception writing ${acquisitionJson.spaces2} to Eventbridge: ${e.getMessage}"
         SafeLogger.error(scrub"$errorMessage", e)
         promise.success(Left(errorMessage))
     }
@@ -77,7 +78,9 @@ object AcquisitionsEventBusService {
   /** @param source
     *   \- A string which is passed to the source value of Eventbridge to identify the system that this event comes from
     * @param stage
+    *   \- CODE or PROD
     * @param isTestUser
+    *   \- Whether the current user is a test user
     * @return
     */
   def apply(source: String, stage: Stage, isTestUser: Boolean) =
