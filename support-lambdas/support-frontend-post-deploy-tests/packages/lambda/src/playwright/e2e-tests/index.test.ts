@@ -1,6 +1,8 @@
-import { test, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { test } from './page-object/create-browser';
 
-let page;
+let page: Page;
 
 test.beforeEach(async ({ browser }) => {
 	const pageUrl = 'https://support.theguardian.com/uk/contribute';
@@ -17,7 +19,7 @@ test.beforeEach(async ({ browser }) => {
 test.describe('load support frontend homepage', () => {
 	test('load homepage', async () => {
 		const monthlyTab = '#MONTHLY';
-		await expect(page.url()).toContain('/contribute');
+		expect(page.url()).toContain('/contribute');
 		await expect(page.locator(monthlyTab)).toBeVisible();
 	});
 });
