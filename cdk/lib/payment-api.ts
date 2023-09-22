@@ -142,8 +142,12 @@ export class PaymentApi extends GuStack {
             actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
             resources:
               this.stage === "PROD"
-                ? [`arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-PROD`,]
-                : [`arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-DEV`,],
+                ? [
+                    `arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-PROD`,
+                  ]
+                : [
+                    `arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-DEV`,
+                  ],
           }),
           new GuPutCloudwatchMetricsPolicy(this),
           new GuAllowPolicy(this, "AssumeOphanRole", {
@@ -153,6 +157,12 @@ export class PaymentApi extends GuStack {
           new GuAllowPolicy(this, "KinesisPut", {
             actions: ["kinesis:*"],
             resources: [kinesisStreamArn.valueAsString],
+          }),
+          new GuAllowPolicy(this, "EventBusPut", {
+            actions: ["events:PutEvents"],
+            resources: [
+              `arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-${this.stage}`,
+            ],
           }),
           new GuAllowPolicy(this, "SQSPut", {
             actions: ["sqs:SendMessage"],
