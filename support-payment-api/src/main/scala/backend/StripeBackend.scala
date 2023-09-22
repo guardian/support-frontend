@@ -8,6 +8,7 @@ import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
+import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.acquisitions.{
   AcquisitionsStreamEc2OrLocalConfig,
   AcquisitionsStreamService,
@@ -41,7 +42,7 @@ class StripeBackend(
     stripeService: StripeService,
     val databaseService: ContributionsStoreService,
     identityService: IdentityService,
-    val bigQueryService: BigQueryService,
+    val acquisitionsEventBusService: AcquisitionsEventBusService,
     val acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
     recaptchaService: RecaptchaService,
@@ -341,7 +342,7 @@ object StripeBackend {
       stripeService: StripeService,
       databaseService: ContributionsStoreService,
       identityService: IdentityService,
-      bigQueryService: BigQueryService,
+      acquisitionsEventBusService: AcquisitionsEventBusService,
       acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
       recaptchaService: RecaptchaService,
@@ -355,7 +356,7 @@ object StripeBackend {
       stripeService,
       databaseService,
       identityService,
-      bigQueryService,
+      acquisitionsEventBusService,
       acquisitionsStreamService,
       emailService,
       recaptchaService,
@@ -388,14 +389,8 @@ object StripeBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      configLoader
-        .loadConfig[Environment, BigQueryConfig](env)
-        .map(config =>
-          BigQueryService.build(
-            if (env == Live) PROD else CODE,
-            config,
-          ),
-        ): InitializationResult[BigQueryService],
+      // TODO: Does payment-api know about test users?
+      AcquisitionsEventBusService("payment-api", if (env == Live) PROD else CODE, isTestUser = false).valid,
       configLoader
         .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
         .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],

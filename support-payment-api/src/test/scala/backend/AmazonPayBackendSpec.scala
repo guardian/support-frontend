@@ -7,9 +7,8 @@ import com.amazon.pay.response.ipn.model.{AuthorizationNotification, Notificatio
 import com.amazon.pay.response.model._
 import com.amazon.pay.response.parser.{CloseOrderReferenceResponseData, ConfirmOrderReferenceResponseData, ResponseData}
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
-
-import javax.xml.datatype.DatatypeFactory
+import com.gu.support.acquisitions.AcquisitionsStreamService
+import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import model._
 import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
 import model.amazonpay.{AmazonPayApiError, AmazonPaymentData}
@@ -24,6 +23,7 @@ import services.SwitchState.{Off, On}
 import services._
 import util.FutureEitherValues
 
+import javax.xml.datatype.DatatypeFactory
 import scala.concurrent.{ExecutionContext, Future}
 
 class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
@@ -98,8 +98,8 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     EitherT.left(Future.successful(SoftOptInsServiceError("an error from soft opt-ins")))
   val bigQueryResponse: EitherT[Future, List[String], Unit] =
     EitherT.right(Future.successful(()))
-  val bigQueryResponseError: EitherT[Future, List[String], Unit] =
-    EitherT.left(Future.successful(List("a BigQuery error")))
+  val acquisitionEventBusResponseError: Future[Either[String, Unit]] =
+    Future.successful(Left("an event bus error"))
   val streamResponseError: EitherT[Future, List[String], Unit] =
     EitherT.left(Future.successful(List("stream error")))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
@@ -133,7 +133,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val mockAmazonPayService: AmazonPayService = mock[AmazonPayService]
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
-  val mockBigQueryService: BigQueryService = mock[BigQueryService]
+  val mockAcquisitionsEventBusService: AcquisitionsEventBusService = mock[AcquisitionsEventBusService]
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
   val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
@@ -147,7 +147,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     mockAmazonPayService,
     mockIdentityService,
     mockEmailService,
-    mockBigQueryService,
+    mockAcquisitionsEventBusService,
     mockAcquisitionsStreamService,
     mockDatabaseService,
     mockSupporterProductDataService,
@@ -215,7 +215,8 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
           .thenReturn(supporterProductDataResponseError)
         when(mockSoftOptInsService.sendMessage(any(), any())(any()))
           .thenReturn(softOptInsResponseError)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+          .thenReturn(acquisitionEventBusResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
           .thenReturn(streamResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com"))
@@ -271,7 +272,8 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
             .thenReturn(supporterProductDataResponseError)
           when(mockSoftOptInsService.sendMessage(any(), any())(any()))
             .thenReturn(softOptInsResponseError)
-          when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+          when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+            .thenReturn(acquisitionEventBusResponseError)
           when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
             .thenReturn(streamResponseError)
           when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com"))
@@ -302,7 +304,8 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         when(mockSoftOptInsService.sendMessage(any(), any())(any()))
           .thenReturn(softOptInsResponseError)
 
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+          .thenReturn(acquisitionEventBusResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
           .thenReturn(streamResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com")).thenReturn(identityResponse)
