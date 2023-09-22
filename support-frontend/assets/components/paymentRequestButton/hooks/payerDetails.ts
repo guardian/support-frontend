@@ -3,6 +3,7 @@ import type {
 	PaymentRequestPaymentMethodEvent,
 } from '@stripe/stripe-js';
 import {
+	detect as detectCountry,
 	findIsoCountry,
 	stateProvinceFromString,
 } from 'helpers/internationalisation/country';
@@ -80,4 +81,8 @@ export function addPayerDetailsToRedux(
 
 export function resetPayerDetails(dispatch: ContributionsDispatch): void {
 	dispatch(setEmail(storage.getSession('gu.email') ?? ''));
+	dispatch(setFirstName(''));
+	dispatch(setLastName(''));
+	dispatch(setBillingCountry(detectCountry()));
+	dispatch(setBillingState(''));
 }
