@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import { BrandedIcons } from 'components/paymentMethodSelector/creditDebitIcons';
 import { PaypalIcon } from 'components/paymentMethodSelector/paypalIcon';
+import { useOtherAmountValidation } from 'helpers/customHooks/useFormValidation';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -85,6 +86,11 @@ export function SupporterPlusInitialLandingPage({
 	const displayLimitedPriceCards =
 		abParticipations.supporterPlusOnly === 'variant';
 
+	const proceedToNextStep = useOtherAmountValidation(() => {
+		const destination = `checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`;
+		navigateWithPageView(navigate, destination);
+	}, false);
+
 	const paymentMethodsMarginOneOff = css`
 		margin: ${space[4]}px 0;
 		${from.tablet} {
@@ -130,10 +136,7 @@ export function SupporterPlusInitialLandingPage({
 							priority="primary"
 							size="default"
 							cssOverrides={checkoutBtnStyleOverrides}
-							onClick={() => {
-								const destination = `checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`;
-								navigateWithPageView(navigate, destination);
-							}}
+							onClick={proceedToNextStep}
 						>
 							Continue to checkout
 						</Button>
