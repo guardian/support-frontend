@@ -145,6 +145,13 @@ export class PaymentApi extends GuStack {
                 ? [`arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-PROD`,]
                 : [`arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-DEV`,],
           }),
+          new GuAllowPolicy(this, "SingleContributionRecordSqsMessages", {
+            actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
+            resources:
+              this.stage === "PROD"
+                ? [`arn:aws:sqs:${this.region}:${this.account}:single-contribution-record-queue-PROD`,]
+                : [`arn:aws:sqs:${this.region}:${this.account}:single-contribution-record-queue-DEV`,],
+          }),
           new GuPutCloudwatchMetricsPolicy(this),
           new GuAllowPolicy(this, "AssumeOphanRole", {
             actions: ["sts:AssumeRole"],
