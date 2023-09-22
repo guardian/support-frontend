@@ -4,6 +4,7 @@ import com.gu.acquisitions.GoogleAnalyticsServiceBuilder
 import com.gu.config.Configuration
 import com.gu.config.Configuration._
 import com.gu.gocardless.GoCardlessWorkersService
+import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.SalesforceService
@@ -53,6 +54,7 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
+  SafeLogger.info("test")
   lazy val bigQueryService = BigQueryService.build(
     if (Configuration.stage == PROD && !isTestUser) ConfigProd else ConfigCode,
     bigQueryConfigProvider.get(isTestUser),
