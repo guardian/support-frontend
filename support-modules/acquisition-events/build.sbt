@@ -9,6 +9,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "com.amazonaws" % "aws-java-sdk-kinesis" % awsClientVersion,
+  "com.amazonaws" % "aws-java-sdk-eventbridge" % awsClientVersion,
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
 
   // This is required to force aws libraries to use the latest version of jackson
