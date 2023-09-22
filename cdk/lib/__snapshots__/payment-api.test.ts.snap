@@ -21,6 +21,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       "GuAllowPolicy",
       "GuAllowPolicy",
       "GuAllowPolicy",
+      "GuAllowPolicy",
       "GuGetS3ObjectsPolicy",
       "GuVpcParameter",
       "GuSubnetListParameter",
@@ -365,6 +366,27 @@ exports[`The Payment API stack matches the snapshot 1`] = `
           "Version": "2012-10-17",
         },
         "PolicyName": "EmailSqsMessagesA7CADC68",
+        "Roles": [
+          {
+            "Ref": "InstanceRolePaymentapi2FA25312",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "EventBusPutD6945E89": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "events:PutEvents",
+              "Effect": "Allow",
+              "Resource": "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-PROD",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "EventBusPutD6945E89",
         "Roles": [
           {
             "Ref": "InstanceRolePaymentapi2FA25312",
