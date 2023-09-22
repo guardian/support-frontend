@@ -3,10 +3,10 @@ package services
 import cats.Monad
 import cats.instances.future._
 import com.typesafe.scalalogging.StrictLogging
-import play.api.libs.ws.WSClient
 import conf.IdentityConfig
 import model.DefaultThreadPool
-import services.IdentityClient.{ApiError, ContextualError, GuestRegistrationResponse}
+import play.api.libs.ws.WSClient
+import services.IdentityClient.{ApiError, ContextualError}
 
 trait IdentityService extends StrictLogging {
 

@@ -1,6 +1,5 @@
 package com.gu.services
 
-import com.gu.acquisitions.GoogleAnalyticsServiceBuilder
 import com.gu.config.Configuration
 import com.gu.config.Configuration._
 import com.gu.gocardless.GoCardlessWorkersService
@@ -47,7 +46,6 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val zuoraService = new ZuoraService(zuoraConfigProvider.get(isTestUser), configurableFutureRunner(60.seconds))
   lazy val zuoraGiftService =
     new ZuoraGiftService(zuoraConfigProvider.get(isTestUser), Configuration.stage, configurableFutureRunner(60.seconds))
-  lazy val gaService = GoogleAnalyticsServiceBuilder.build(isTestUser)
   lazy val promotionService = new PromotionService(promotionsConfigProvider.get(isTestUser))
   lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))

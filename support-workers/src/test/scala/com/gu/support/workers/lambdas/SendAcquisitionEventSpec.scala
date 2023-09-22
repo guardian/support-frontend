@@ -1,7 +1,6 @@
 package com.gu.support.workers.lambdas
 
 import cats.data.EitherT
-import com.gu.acquisitions.GoogleAnalyticsServiceBuilder
 import com.gu.config.Configuration
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.acquisitions.AcquisitionsStreamService
@@ -61,10 +60,8 @@ object MockAcquisitionHelper extends MockitoSugar {
     // Mock the Acquisition service
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
-    val gaService = GoogleAnalyticsServiceBuilder.build(isTestService = true)
     val eventBridgeService = AcquisitionsEventBusService("Integration Test", CODE, false)
 
-    when(services.gaService).thenReturn(gaService)
     when(services.acquisitionsEventBusService).thenReturn(eventBridgeService)
     when(services.acquisitionsStreamService).thenReturn(mockAcquisitionsStreamService)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)

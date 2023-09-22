@@ -4,7 +4,6 @@ import backend.BackendError.SoftOptInsServiceError
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.ga.{GoogleAnalyticsService, GoogleAnalyticsServiceMock}
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import com.paypal.api.payments.{Amount, Payer, PayerInfo, Payment}
 import model.paypal._
@@ -128,7 +127,6 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockPaypalService: PaypalService = mock[PaypalService]
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
-  val mockGaService: GoogleAnalyticsService = GoogleAnalyticsServiceMock
   val mockBigQueryService: BigQueryService = mock[BigQueryService]
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
@@ -142,7 +140,6 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockPaypalService,
     mockDatabaseService,
     mockIdentityService,
-    mockGaService,
     mockBigQueryService,
     mockAcquisitionsStreamService,
     mockEmailService,

@@ -11,7 +11,6 @@ import play.api.mvc.{Result, Results}
 import model.{AcquisitionData, ResultBody}
 
 object JsonReadableOps {
-  import com.gu.support.acquisitions.ReferrerAcquisitionData._
 
   implicit val acquisitionPaypalDataDecoder: Decoder[AcquisitionData] =
     deriveDecoder[AcquisitionData]

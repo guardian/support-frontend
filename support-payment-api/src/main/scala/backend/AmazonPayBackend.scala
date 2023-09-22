@@ -8,7 +8,6 @@ import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetail
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions._
 import com.gu.support.config.Stages.{CODE, PROD}
 import com.typesafe.scalalogging.StrictLogging
@@ -35,7 +34,6 @@ class AmazonPayBackend(
     service: AmazonPayService,
     identityService: IdentityService,
     emailService: EmailService,
-    val gaService: GoogleAnalyticsService,
     val bigQueryService: BigQueryService,
     val acquisitionsStreamService: AcquisitionsStreamService,
     val databaseService: ContributionsStoreService,
@@ -179,12 +177,10 @@ class AmazonPayBackend(
       clientBrowserInfo.countrySubdivisionCode,
       acquisitionData.amazonPayment.orderReferenceId,
     )
-    val gaData = ClientBrowserInfo.toGAData(clientBrowserInfo)
 
     track(
       acquisition = AcquisitionDataRowBuilder.buildFromAmazonPay(acquisitionData, contributionData),
       contributionData,
-      gaData,
     )
   }
 
@@ -231,7 +227,6 @@ object AmazonPayBackend {
       amazonPayService: AmazonPayService,
       databaseService: ContributionsStoreService,
       identityService: IdentityService,
-      gaService: GoogleAnalyticsService,
       bigQueryService: BigQueryService,
       acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
@@ -245,7 +240,6 @@ object AmazonPayBackend {
       amazonPayService,
       identityService,
       emailService,
-      gaService,
       bigQueryService,
       acquisitionsStreamService,
       databaseService,
@@ -274,7 +268,6 @@ object AmazonPayBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      GoogleAnalyticsServices(env).valid: InitializationResult[GoogleAnalyticsService],
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
         .map(config =>

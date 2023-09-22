@@ -3,8 +3,6 @@ package backend
 import backend.BackendError.SupporterProductDataError
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.support.acquisitions.ga.GoogleAnalyticsService
-import com.gu.support.acquisitions.ga.models.GAData
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import com.typesafe.scalalogging.StrictLogging
@@ -16,7 +14,6 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
 trait PaymentBackend extends StrictLogging {
-  val gaService: GoogleAnalyticsService
   val bigQueryService: BigQueryService
   val acquisitionsStreamService: AcquisitionsStreamService
   val databaseService: ContributionsStoreService
@@ -43,12 +40,9 @@ trait PaymentBackend extends StrictLogging {
       .leftMap(SupporterProductDataError)
   }
 
-  def track(acquisition: AcquisitionDataRow, contributionData: ContributionData, gaData: GAData)(implicit
+  def track(acquisition: AcquisitionDataRow, contributionData: ContributionData)(implicit
       pool: DefaultThreadPool,
   ): Future[List[BackendError]] = {
-    val gaFuture = gaService
-      .submit(acquisition, gaData, maxRetries = 5)
-      .leftMap(errors => BackendError.GoogleAnalyticsError(errors.mkString(" & ")))
 
     val bigQueryFuture =
       bigQueryService
@@ -67,7 +61,6 @@ trait PaymentBackend extends StrictLogging {
     Future
       .sequence(
         List(
-          gaFuture.value,
           bigQueryFuture.value,
           streamFuture.value,
           dbFuture.value,

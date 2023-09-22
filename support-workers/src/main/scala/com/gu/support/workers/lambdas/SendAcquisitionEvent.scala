@@ -9,7 +9,6 @@ import com.gu.config.Configuration
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.acquisitions.ga.models.GAData
 import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _}
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers._
@@ -47,23 +46,6 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
   }
 
-  private def buildGaData(state: SendAcquisitionEventState): Either[String, GAData] = {
-    import cats.syntax.either._
-    for {
-      acquisitionData <- Either.fromOption(state.acquisitionData, "acquisition data not included")
-      ref = acquisitionData.referrerAcquisitionData
-      hostname <- Either.fromOption(ref.hostname, "missing hostname in referrer acquisition data")
-      gaClientId = ref.gaClientId.getOrElse(UUID.randomUUID().toString)
-      ipAddress = ref.ipAddress
-      userAgent = ref.userAgent
-    } yield GAData(
-      hostname = hostname,
-      clientId = gaClientId,
-      clientIpAddress = ipAddress,
-      clientUserAgent = userAgent,
-    )
-  }
-
   private def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
     sendPaymentSuccessMetric(state).toEither.left
       .foreach(SafeLogger.error(scrub"failed to send PaymentSuccess metric", _))
@@ -76,18 +58,9 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     val eventBridgeFuture = EitherT(services.acquisitionsEventBusService.putAcquisitionEvent(acquisition))
       .leftMap(List(_)) // TODO: If we get rid of the retries in the other futures we won't need this
 
-    // TODO: Can we stop sending data to GA?
-    val gaFuture = for {
-      gaData <- EitherT.fromEither(buildGaData(state)).leftMap(err => List(err))
-      result <- services.gaService
-        .submit(acquisition, gaData, maxRetries = 5)
-        .leftMap(gaErrors => gaErrors.map(_.getMessage))
-    } yield result
-
     val result = for {
       _ <- streamFuture
       _ <- eventBridgeFuture
-      _ <- gaFuture
     } yield ()
 
     result.value.map {

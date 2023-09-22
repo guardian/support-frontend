@@ -8,7 +8,6 @@ import cats.syntax.either._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
-import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions.{
   AcquisitionsStreamEc2OrLocalConfig,
   AcquisitionsStreamService,
@@ -42,7 +41,6 @@ class PaypalBackend(
     paypalService: PaypalService,
     val databaseService: ContributionsStoreService,
     identityService: IdentityService,
-    val gaService: GoogleAnalyticsService,
     val bigQueryService: BigQueryService,
     val acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
@@ -189,12 +187,10 @@ class PaypalBackend(
       case Right(contributionData) =>
         val paypalAcquisition =
           PaypalAcquisition(payment, acquisitionData, contributionData.identityId, clientBrowserInfo)
-        val gaData = ClientBrowserInfo.toGAData(clientBrowserInfo)
 
         track(
           acquisition = AcquisitionDataRowBuilder.buildFromPayPal(paypalAcquisition, contributionData),
           contributionData,
-          gaData,
         )
     }
   }
@@ -261,7 +257,6 @@ object PaypalBackend {
       paypalService: PaypalService,
       databaseService: ContributionsStoreService,
       identityService: IdentityService,
-      gaService: GoogleAnalyticsService,
       bigQueryService: BigQueryService,
       acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
@@ -274,7 +269,6 @@ object PaypalBackend {
       paypalService,
       databaseService,
       identityService,
-      gaService,
       bigQueryService,
       acquisitionsStreamService,
       emailService,
@@ -306,7 +300,6 @@ object PaypalBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      GoogleAnalyticsServices(env).valid: InitializationResult[GoogleAnalyticsService],
       configLoader
         .loadConfig[Environment, BigQueryConfig](env)
         .map(config =>
