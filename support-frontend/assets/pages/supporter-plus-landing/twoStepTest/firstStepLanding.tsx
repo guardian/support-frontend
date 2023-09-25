@@ -88,7 +88,7 @@ export function SupporterPlusInitialLandingPage({
 
 	const proceedToNextStep = useOtherAmountValidation(() => {
 		const destination = `checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`;
-		navigateWithPageView(navigate, destination);
+		navigateWithPageView(navigate, destination, abParticipations);
 	}, false);
 
 	const paymentMethodsMarginOneOff = css`
