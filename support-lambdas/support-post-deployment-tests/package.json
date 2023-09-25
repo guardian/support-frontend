@@ -1,6 +1,7 @@
 {
   "name": "example-typecript-lambda",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "test": "npm run test --workspaces --if-present",
     "lint": "eslint packages/** --ext .ts --no-error-on-unmatched-pattern",

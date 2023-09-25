@@ -1,0 +1,20 @@
+{
+  "name": "lambda",
+  "version": "0.0.0",
+  "scripts": {
+    "test": "jest --detectOpenHandles --config ../../jest.config.js --selectProjects lambda",
+    "start": "DOTENV_CONFIG_PATH=.env ts-node src/run-locally.ts",
+    "prebuild": "rm -rf dist",
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outdir=dist",
+    "postbuild": "cd dist && zip -r example-typescript-lambda.zip .",
+    "sample-local-test":"npx playwright test --config=src/playwright/playwright.config.ts  src/playwright/tests/local_test.ts",
+    "sample-test":"npx playwright test --config=src/playwright/playwright.config.ts  src/playwright/tests/sample_test.ts"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "esbuild": "^0.19.2",
+    "playwright": "1.29.1",
+    "@playwright/test": "1.29.1",
+    "browserstack-local": "^1.5.1"
+  }
+}
