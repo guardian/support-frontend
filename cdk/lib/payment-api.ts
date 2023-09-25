@@ -150,7 +150,7 @@ export class PaymentApi extends GuStack {
             resources:
               this.stage === "PROD"
                 ? [`arn:aws:sqs:${this.region}:${this.account}:single-contribution-record-queue-PROD`,]
-                : [`arn:aws:sqs:${this.region}:${this.account}:single-contribution-record-queue-DEV`,],
+                : [`arn:aws:sqs:${this.region}:${this.account}:single-contribution-record-queue-CODE`,],
           }),
           new GuPutCloudwatchMetricsPolicy(this),
           new GuAllowPolicy(this, "AssumeOphanRole", {
