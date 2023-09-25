@@ -1,0 +1,71 @@
+# Find full documentation here https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions
+name: CI
+
+on:
+  pull_request:
+
+  # Manual invocation.
+  workflow_dispatch:
+
+  push:
+    branches:
+      - example-typescript-lambda
+
+# Ensure we only ever have one build running at a time.
+# If we push twice in quick succession, the first build will be stopped once the second starts.
+# This avoids any race conditions.
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+
+    # See https://docs.github.com/en/actions/security-guides/automatic-token-authentication#permissions-for-the-github_token
+    permissions:
+      # required by aws-actions/configure-aws-credentials
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Synth CDK
+        run: npm -w cdk run synth
+
+      # Setup AWS credentials to enable uploading to S3 for Riff-Raff.
+      # See https://github.com/aws-actions/configure-aws-credentials
+      - uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          aws-region: eu-west-1
+
+      # See https://github.com/guardian/actions-riff-raff
+      - name: Upload to riff-raff
+        uses: guardian/actions-riff-raff@v2
+        with:
+          projectName: playground::example-typescript-lambda
+          configPath: packages/cdk/cdk.out/riff-raff.yaml
+          contentDirectories: |
+            cdk.out:
+              - packages/cdk/cdk.out
+            example-typescript-lambda:
+              - packages/lambda/dist/example-typescript-lambda.zip

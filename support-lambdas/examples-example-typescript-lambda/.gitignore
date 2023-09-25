@@ -1,0 +1,9 @@
+*.js
+!jest.config.js
+!jest.setup.js
+!.eslintrc.js
+*.d.ts
+node_modules
+dist
+
+tsconfig.tsbuildinfo
