@@ -26,7 +26,7 @@ sealed abstract class BackendError extends Exception {
     case BackendError.TrackingError(err) => err.getMessage
     case BackendError.MultipleErrors(errors) => errors.map(_.getMessage).mkString(" & ")
     case BackendError.SoftOptInsServiceError(err) => err
-    case BackendError.SingleContributionRecordServiceError(err) => err
+    case BackendError.SingleContributionsServiceError(err) => err
     case BackendError.SupporterProductDataError(err) => err
   }
 }
@@ -39,7 +39,7 @@ object BackendError {
   final case class Database(error: ContributionsStoreService.Error) extends BackendError
   final case class SupporterProductDataError(error: String) extends BackendError
   final case class SoftOptInsServiceError(error: String) extends BackendError
-  final case class SingleContributionRecordServiceError(error: String) extends BackendError
+  final case class SingleContributionsServiceError(error: String) extends BackendError
   final case class IdentityServiceError(error: IdentityClient.ContextualError) extends BackendError
   final case class PaypalApiError(error: PaypalAPIError) extends BackendError
   final case class StripeApiError(error: StripeError) extends BackendError

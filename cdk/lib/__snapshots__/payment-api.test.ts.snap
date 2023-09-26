@@ -1238,7 +1238,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
-    "SingleContributionRecordSqsMessages2EC23518": {
+    "SingleContributionsSqsMessages35DDA378": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -1260,7 +1260,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":single-contribution-record-queue-PROD",
+                    ":single-contributions-queue-PROD",
                   ],
                 ],
               },
@@ -1268,7 +1268,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "SingleContributionRecordSqsMessages2EC23518",
+        "PolicyName": "SingleContributionsSqsMessages35DDA378",
         "Roles": [
           {
             "Ref": "InstanceRolePaymentapi2FA25312",

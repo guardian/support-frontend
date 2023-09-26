@@ -10,7 +10,7 @@ import model.DefaultThreadPool
 import model.db.ContributionData
 import services.{
   ContributionsStoreService,
-  SingleContributionRecordService,
+  SingleContributionsService,
   SoftOptInsService,
   SupporterProductDataService,
   SwitchService,
@@ -25,7 +25,7 @@ trait PaymentBackend extends StrictLogging {
   val databaseService: ContributionsStoreService
   val supporterProductDataService: SupporterProductDataService
   val softOptInsService: SoftOptInsService
-  val singleContributionRecordService: SingleContributionRecordService
+  val SingleContributionsService: SingleContributionsService
   val switchService: SwitchService
 
   private def insertContributionDataIntoDatabase(
@@ -65,7 +65,7 @@ trait PaymentBackend extends StrictLogging {
 
     val softOptInFuture = softOptInsService.sendMessage(contributionData.identityId, contributionData.contributionId)
 
-    val singleContributionRecordFuture = singleContributionRecordService.sendMessage(contributionData)
+    val SingleContributionsFuture = SingleContributionsService.sendMessage(contributionData)
 
     Future
       .sequence(
@@ -75,7 +75,7 @@ trait PaymentBackend extends StrictLogging {
           dbFuture.value,
           supporterDataFuture.value,
           softOptInFuture.value,
-          singleContributionRecordFuture.value,
+          SingleContributionsFuture.value,
         ),
       )
       .map { results =>

@@ -1,7 +1,7 @@
 package services
 
 import aws.AWSClientBuilder
-import backend.BackendError.SingleContributionRecordServiceError
+import backend.BackendError.SingleContributionsServiceError
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.sqs.AmazonSQSAsync
@@ -12,17 +12,17 @@ import io.circe.syntax.EncoderOps
 import model.db.ContributionData
 import model.Environment
 import model.Environment.Live
-import services.SingleContributionRecordService.Message
+import services.SingleContributionsService.Message
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
-class SingleContributionRecordService(
+class SingleContributionsService(
     sqsClient: AmazonSQSAsync,
-    queueUrlResponse: Future[Either[SingleContributionRecordServiceError, String]],
+    queueUrlResponse: Future[Either[SingleContributionsServiceError, String]],
 ) extends StrictLogging {
   def sendMessage(
       contributionData: ContributionData,
-  )(implicit executionContext: ExecutionContext): EitherT[Future, SingleContributionRecordServiceError, Unit] = {
+  )(implicit executionContext: ExecutionContext): EitherT[Future, SingleContributionsServiceError, Unit] = {
     val message = Message(
       contributionData = contributionData,
     )
@@ -37,7 +37,7 @@ class SingleContributionRecordService(
 
   private def sendRequest(queueUrl: String, message: Message)(implicit
       executionContext: ExecutionContext,
-  ): EitherT[Future, SingleContributionRecordServiceError, Unit] = {
+  ): EitherT[Future, SingleContributionsServiceError, Unit] = {
     val request = new SendMessageRequest()
       .withQueueUrl(queueUrl)
       .withMessageBody(message.asJson.noSpaces)
@@ -47,8 +47,8 @@ class SingleContributionRecordService(
     val response = Try(sqsClient.sendMessage(request)).toEither
     val responseConverted = response.left
       .map(e =>
-        SingleContributionRecordServiceError(
-          s"An error occurred sending a message to the single contribution record queue with message: ${e.getMessage}",
+        SingleContributionsServiceError(
+          s"An error occurred sending a message to the single contributions queue with message: ${e.getMessage}",
         ),
       )
       .map(_ => ())
@@ -57,24 +57,24 @@ class SingleContributionRecordService(
   }
 }
 
-object SingleContributionRecordService extends StrictLogging {
-  def apply(environment: Environment): SingleContributionRecordService = {
-    logger.info(s"Setting up SingleContributionRecordService for environment: $environment")
+object SingleContributionsService extends StrictLogging {
+  def apply(environment: Environment): SingleContributionsService = {
+    logger.info(s"Setting up SingleContributionsService for environment: $environment")
 
     val sqsClient: AmazonSQSAsync = AWSClientBuilder.buildAmazonSQSAsyncClient()
     val queueName = environment match {
-      case Live => "single-contribution-record-queue-PROD"
-      case _ => "single-contribution-record-queue-CODE"
+      case Live => "single-contributions-queue-PROD"
+      case _ => "single-contributions-queue-CODE"
     }
 
-    val queueUrlResponse: Future[Either[SingleContributionRecordServiceError, String]] = getQueue(sqsClient, queueName)
-    new SingleContributionRecordService(sqsClient, queueUrlResponse)
+    val queueUrlResponse: Future[Either[SingleContributionsServiceError, String]] = getQueue(sqsClient, queueName)
+    new SingleContributionsService(sqsClient, queueUrlResponse)
   }
 
   private def getQueue(
       sqsClient: AmazonSQSAsync,
       queueName: String,
-  ): Future[Either[SingleContributionRecordServiceError, String]] = {
+  ): Future[Either[SingleContributionsServiceError, String]] = {
     logger.info(s"Retrieving queue URL for queue name: $queueName")
 
     val queueUrlRequest = new GetQueueUrlRequest(queueName)
@@ -82,8 +82,8 @@ object SingleContributionRecordService extends StrictLogging {
 
     Future.successful(
       response.toEither.left.map(e =>
-        SingleContributionRecordServiceError(
-          s"An error occurred getting the queue for the SingleContributionRecordService with message: ${e.getMessage}",
+        SingleContributionsServiceError(
+          s"An error occurred getting the queue for the SingleContributionsService with message: ${e.getMessage}",
         ),
       ),
     )
