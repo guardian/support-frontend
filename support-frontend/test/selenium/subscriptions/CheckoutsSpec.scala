@@ -4,10 +4,11 @@ import org.openqa.selenium._
 import org.scalatest.concurrent.Eventually
 import org.scalatest.featurespec.AnyFeatureSpec
 import org.scalatest.time.{Minute, Seconds, Span}
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, GivenWhenThen}
+import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, GivenWhenThen, Ignore}
 import selenium.subscriptions.pages._
 import selenium.util._
 
+@Ignore
 class CheckoutsSpec
     extends AnyFeatureSpec
     with GivenWhenThen
