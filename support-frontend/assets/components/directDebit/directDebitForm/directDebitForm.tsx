@@ -39,6 +39,20 @@ export default function DirectDebitForm(
 
 	return (
 		<div>
+			{props.formError && (
+				<div
+					id="directDebitDetails"
+					css={css`
+						margin-top: 8px;
+					`}
+				>
+					<ErrorMessage
+						message={props.formError}
+						svg={<SvgExclamationAlternate />}
+					/>
+				</div>
+			)}
+
 			{/** BACS requirement:
         "Name of the account holder, as known by the bank. Usually this is the
         same as the name stored with the linked creditor. This field will be
@@ -109,21 +123,6 @@ export default function DirectDebitForm(
 				</div>
 			)}
 
-			{props.formError && (
-				<div
-					css={css`
-						margin-top: 8px;
-					`}
-				>
-					<ErrorMessage
-						message={props.formError}
-						svg={<SvgExclamationAlternate />}
-					/>
-				</div>
-			)}
-
-			{/* <PaymentButton onConfirmClick={props.onSubmit} /> */}
-
 			<LegalNotice countryGroupId={props.countryGroupId} />
 
 			<DirectDebitGuarantee
@@ -134,24 +133,6 @@ export default function DirectDebitForm(
 		</div>
 	);
 }
-
-// function PaymentButton(props: {
-// 	onConfirmClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-// }) {
-// 	return (
-// 		<button
-// 			id="qa-submit-button"
-// 			className="component-direct-debit-form__cta component-direct-debit-form__cta--pay-button focus-target"
-// 			onClick={props.onConfirmClick}
-// 		>
-// 			<SvgDirectDebitSymbol />
-// 			<span className="component-direct-debit-form__cta-text">
-// 				Pay with Direct Debit
-// 			</span>
-// 			<SvgArrowRightStraight />
-// 		</button>
-// 	);
-// }
 
 function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 	return (
