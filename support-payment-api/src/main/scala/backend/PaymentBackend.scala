@@ -65,7 +65,7 @@ trait PaymentBackend extends StrictLogging {
 
     val softOptInFuture = softOptInsService.sendMessage(contributionData.identityId, contributionData.contributionId)
 
-    val SingleContributionsFuture = SingleContributionsService.sendMessage(contributionData)
+    val singleContributionFuture = SingleContributionsService.sendMessage(contributionData)
 
     Future
       .sequence(
@@ -75,7 +75,7 @@ trait PaymentBackend extends StrictLogging {
           dbFuture.value,
           supporterDataFuture.value,
           softOptInFuture.value,
-          SingleContributionsFuture.value,
+          singleContributionFuture.value,
         ),
       )
       .map { results =>
