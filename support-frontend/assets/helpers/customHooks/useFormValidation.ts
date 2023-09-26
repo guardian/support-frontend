@@ -114,9 +114,10 @@ export function useDirectDebitValidation<
 
 	const validateAndPay = useCallback(
 		function validateAndPay(event: EventType) {
+			dispatchPaymentWaiting && dispatch(paymentWaiting(true));
 			event.preventDefault();
-			void dispatch(confirmAccountDetails());
 			dispatch(validateForm());
+			void dispatch(confirmAccountDetails());
 			setClickEvent(event);
 		},
 		[dispatch],
@@ -124,12 +125,11 @@ export function useDirectDebitValidation<
 
 	useEffect(() => {
 		if (errorsPreventSubmission) {
+			dispatch(paymentWaiting(false));
 			setClickEvent(null);
 			return;
 		}
 		if (clickEvent && phase === 'confirmation') {
-			dispatchPaymentWaiting && dispatch(paymentWaiting(true));
-
 			paymentHandler(clickEvent);
 		}
 	}, [clickEvent, errorsPreventSubmission, phase]);
