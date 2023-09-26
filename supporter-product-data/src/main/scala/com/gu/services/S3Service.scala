@@ -21,11 +21,12 @@ object S3Service extends StrictLogging {
 
   def bucketName(stage: Stage) = s"supporter-product-data-export-${stage.value.toLowerCase}"
 
-  def streamToS3(stage: Stage, filename: String, inputStream: InputStream, length: Long) = {
+  def streamToS3(stage: Stage, filename: String, inputStream: InputStream, length: Option[Long]) = {
     logger.info(s"Trying to stream to S3 - bucketName: ${bucketName(stage)}, filename: $filename, length: $length")
     val objectMetadata = new ObjectMetadata()
-    objectMetadata.setContentLength(length)
-
+    if (length.isDefined) {
+      objectMetadata.setContentLength(length.get)
+    }
     val putObjectRequest = new PutObjectRequest(bucketName(stage), filename, inputStream, objectMetadata)
     val transfer = transferManager.upload(putObjectRequest)
 
