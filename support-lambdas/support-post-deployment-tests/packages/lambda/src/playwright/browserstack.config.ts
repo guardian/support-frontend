@@ -1,54 +1,66 @@
-const base = require('@playwright/test');
-const cp = require('child_process');
-const clientPlaywrightVersion = cp
-  .execSync('npx playwright --version')
-  .toString()
-  .trim()
-  .split(' ')[1];
-const BrowserStackLocal = require('browserstack-local');
-const util = require('util');
 import 'dotenv/config';
+import { exec } from 'child_process';
+import BrowserStackLocal from 'browserstack-local';
 
-// BrowserStack Specific Capabilities.
-// Set 'browserstack.local:true For Local testing
-
-const caps = {
-  browser: 'chrome',
-  os: 'osx',
-  os_version: 'catalina',
-  name: 'My first playwright test',
-  build: 'playwright-build',
-  'browserstack.username': process.env.BROWSERSTACK_USERNAME ,
-  'browserstack.accessKey': process.env.BROWSERSTACK_ACCESS_KEY ,
-  'browserstack.local':  true,
-  'client.playwrightVersion': clientPlaywrightVersion,
-};
-
-exports.bsLocal = new BrowserStackLocal.Local();
-
-// replace YOUR_ACCESS_KEY with your key. You can also set an environment variable - "BROWSERSTACK_ACCESS_KEY".
-exports.BS_LOCAL_ARGS = {
-  key: process.env.BROWSERSTACK_ACCESS_KEY ,
-};
-
-// Patching the capabilities dynamically according to the project name.
-const patchCaps = (name, title) => {
-  let combination = name.split(/@browserstack/)[0];
-  let [browerCaps, osCaps] = combination.split(/:/);
-  let [browser, browser_version] = browerCaps.split(/@/);
-  let osCapsSplit = osCaps.split(/ /);
-  let os = osCapsSplit.shift();
-  let os_version = osCapsSplit.join(' ');
-  caps.browser = browser ? browser : 'chrome';
-  caps.os_version = browser_version ? browser_version : 'latest';
-  caps.os = os ? os : 'osx';
-  caps.os_version = os_version ? os_version : 'catalina';
-  caps.name = title;
-};
-
-exports.getCdpEndpoint = (name, title) => {
-    patchCaps(name, title)
-    const cdpUrl = `wss://cdp.browserstack.com/playwright?caps=${encodeURIComponent(JSON.stringify(caps))}`
-    console.log(`--> ${cdpUrl}`)
-    return cdpUrl;
+interface BrowserDetails {
+	browserName: string;
+	browserVersion?: string;
+	osName: string;
+	osVersion?: string;
 }
+
+interface BrowserCapabilities {
+	browser: string;
+	browser_version?: string;
+	os: string;
+	os_version: string;
+	name: string;
+	build: string;
+	'browserstack.username': string;
+	'browserstack.accessKey': string;
+	'browserstack.local': boolean;
+	'client.playwrightVersion': string;
+}
+
+const clientPlaywrightVersion = exec('npx playwright --version')
+	.toString()
+	.trim()
+	.split(' ')[1] as string;
+
+const caps: BrowserCapabilities = {
+	browser: 'chrome',
+	os: 'osx',
+	os_version: 'catalina',
+	name: 'My first playwright test',
+	build: 'playwright-build',
+	'browserstack.username': process.env.BROWSERSTACK_USERNAME ?? '',
+	'browserstack.accessKey': process.env.BROWSERSTACK_ACCESS_KEY ?? '',
+	'browserstack.local': false,
+	'client.playwrightVersion': clientPlaywrightVersion,
+};
+
+export const bsLocal = new BrowserStackLocal.Local();
+
+export const BS_LOCAL_ARGS = {
+	key: process.env.BROWSERSTACK_ACCESS_KEY,
+};
+
+const patchCaps = (browserDetails: BrowserDetails, title: string) => {
+	caps.browser = browserDetails.browserName;
+	caps.browser_version = browserDetails.browserVersion ?? 'latest';
+	caps.os = browserDetails.osName;
+	caps.os_version = browserDetails.osVersion ?? 'latest';
+	caps.name = title;
+};
+
+export const getCdpEndpoint = (
+	browserDetails: BrowserDetails,
+	title: string,
+) => {
+	patchCaps(browserDetails, title);
+	const cdpUrl = `wss://cdp.browserstack.com/playwright?caps=${encodeURIComponent(
+		JSON.stringify(caps),
+	)}`;
+	console.log(`--> ${cdpUrl}`);
+	return cdpUrl;
+};

@@ -2,4 +2,5 @@ node_modules
 playwright-report
 local.log
 test-results
+browserstack.err
 .env
