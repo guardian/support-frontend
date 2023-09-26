@@ -3,13 +3,8 @@ import {
 	setAccountHolderConfirmation,
 	setAccountHolderName,
 	setAccountNumber,
-	setFormError,
 	setSortCodeString,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
-import {
-	confirmAccountDetails,
-	directDebitErrorMessages,
-} from 'helpers/redux/checkout/payment/directDebit/thunks';
 import {
 	expireRecaptchaToken,
 	setRecaptchaToken,
@@ -66,17 +61,6 @@ export function DirectDebitFormContainer({
 	function updateAccountHolderConfirmation(confirmed: boolean) {
 		dispatch(setAccountHolderConfirmation(confirmed));
 	}
-
-	// TODO: This functionality should be moving to a payment button in future
-	void function onSubmit() {
-		void confirmAccountDetails();
-
-		if (recaptchaCompleted) {
-			// void dispatch(payWithDirectDebit(props.onPaymentAuthorisation));
-		} else {
-			dispatch(setFormError(directDebitErrorMessages.notCompletedRecaptcha));
-		}
-	};
 
 	function onRecaptchaCompleted(token: string) {
 		trackComponentLoad('contributions-recaptcha-client-token-received');

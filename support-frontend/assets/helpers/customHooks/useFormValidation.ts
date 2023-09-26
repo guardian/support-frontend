@@ -1,6 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { useCallback, useEffect, useState } from 'react';
 import { validateForm } from 'helpers/redux/checkout/checkoutActions';
+import { confirmAccountDetails } from 'helpers/redux/checkout/payment/directDebit/thunks';
 import { validateOtherAmount } from 'helpers/redux/checkout/product/actions';
 import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
 import {
@@ -89,6 +90,49 @@ export function useOtherAmountValidation<
 		validateOtherAmount,
 		dispatchPaymentWaiting,
 	);
+
+	return validateAndPay;
+}
+
+export function useDirectDebitValidation<
+	EventType extends PreventableEvent = React.MouseEvent<HTMLButtonElement>,
+>(
+	paymentHandler: (event: EventType) => void,
+	dispatchPaymentWaiting = true,
+): (event: EventType) => void {
+	const [clickEvent, setClickEvent] = useState<EventType | null>(null);
+
+	const dispatch = useContributionsDispatch();
+
+	const errorsPreventSubmission = useContributionsSelector(
+		contributionsFormHasErrors,
+	);
+
+	const { phase } = useContributionsSelector(
+		(state) => state.page.checkoutForm.payment.directDebit,
+	);
+
+	const validateAndPay = useCallback(
+		function validateAndPay(event: EventType) {
+			event.preventDefault();
+			void dispatch(confirmAccountDetails());
+			dispatch(validateForm());
+			setClickEvent(event);
+		},
+		[dispatch],
+	);
+
+	useEffect(() => {
+		if (errorsPreventSubmission) {
+			setClickEvent(null);
+			return;
+		}
+		if (clickEvent && phase === 'confirmation') {
+			dispatchPaymentWaiting && dispatch(paymentWaiting(true));
+
+			paymentHandler(clickEvent);
+		}
+	}, [clickEvent, errorsPreventSubmission, phase]);
 
 	return validateAndPay;
 }
