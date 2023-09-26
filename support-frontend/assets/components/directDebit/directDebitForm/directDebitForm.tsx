@@ -1,11 +1,12 @@
-import { css } from '@emotion/react';
-import { Checkbox, TextInput } from '@guardian/source-react-components';
+import {
+	Checkbox,
+	InlineError,
+	TextInput,
+} from '@guardian/source-react-components';
 import * as React from 'react';
 import { useState } from 'react';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
-import ErrorMessage from 'components/errorMessage/errorMessage';
 import { ElementDecorator } from 'components/stripeCardForm/elementDecorator';
-import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
 import {
@@ -40,16 +41,8 @@ export default function DirectDebitForm(
 	return (
 		<div>
 			{props.formError && (
-				<div
-					id="directDebitDetails"
-					css={css`
-						margin-top: 8px;
-					`}
-				>
-					<ErrorMessage
-						message={props.formError}
-						svg={<SvgExclamationAlternate />}
-					/>
+				<div id="directDebitDetails">
+					<InlineError>{props.formError}</InlineError>
 				</div>
 			)}
 
