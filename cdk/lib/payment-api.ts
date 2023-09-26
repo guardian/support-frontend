@@ -149,8 +149,8 @@ export class PaymentApi extends GuStack {
             actions: ["sqs:GetQueueUrl", "sqs:SendMessage"],
             resources:
               this.stage === "PROD"
-                ? [`arn:aws:sqs:${this.region}:${this.account}:single-contributions-queue-PROD`,]
-                : [`arn:aws:sqs:${this.region}:${this.account}:single-contributions-queue-CODE`,],
+                ? [`arn:aws:sqs:${this.region}:${this.account}:single-contributions-processor-queue-PROD`,]
+                : [`arn:aws:sqs:${this.region}:${this.account}:single-contributions-processor-queue-CODE`,],
           }),
           new GuPutCloudwatchMetricsPolicy(this),
           new GuAllowPolicy(this, "AssumeOphanRole", {

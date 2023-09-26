@@ -1260,7 +1260,7 @@ exports[`The Payment API stack matches the snapshot 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":single-contributions-queue-PROD",
+                    ":single-contributions-processor-queue-PROD",
                   ],
                 ],
               },

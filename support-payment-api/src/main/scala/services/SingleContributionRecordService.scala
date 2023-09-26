@@ -63,8 +63,8 @@ object SingleContributionsService extends StrictLogging {
 
     val sqsClient: AmazonSQSAsync = AWSClientBuilder.buildAmazonSQSAsyncClient()
     val queueName = environment match {
-      case Live => "single-contributions-queue-PROD"
-      case _ => "single-contributions-queue-CODE"
+      case Live => "single-contributions-processor-queue-PROD"
+      case _ => "single-contributions-processor-queue-CODE"
     }
 
     val queueUrlResponse: Future[Either[SingleContributionsServiceError, String]] = getQueue(sqsClient, queueName)
