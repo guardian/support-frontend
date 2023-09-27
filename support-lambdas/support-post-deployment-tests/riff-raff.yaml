@@ -1,0 +1,17 @@
+stacks: [support]
+regions: [eu-west-1]
+allowedStages:
+  - CODE
+  - PROD
+deployments:
+  support-frontend-post-deployment-tests-lambda:
+    type: aws-lambda
+    stacks:
+      - support
+    regions:
+      - eu-west-1
+    app: support-frontend-post-deployment-tests-lambda
+    parameters:
+      bucketSsmLookup: true
+      lookupByTags: true
+      fileName: support-frontend-post-deployment-tests-lambda.zip
