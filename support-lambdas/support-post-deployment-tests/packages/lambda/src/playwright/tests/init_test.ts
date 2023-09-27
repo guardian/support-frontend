@@ -4,8 +4,9 @@ const userName = 'asdfasdfdsaf';
 const userLastName = 'dfgslksdfgkjbsdf';
 const userEmail = 'asdfa@example.com';
 
-test.beforeEach(async ({ page, context }) => {
-	const pageUrl = 'https://support.theguardian.com/uk/contribute';
+test.beforeEach(async ({ page, context, baseURL }) => {
+	// const dobedo = 'http://support.theguardian.com';
+	const pageUrl = `${baseURL}/uk/contribute`;
 	await context.addCookies([
 		{ name: 'pre-signin-test-user', value: userName, url: pageUrl },
 		{ name: '_test_username', value: userName, url: pageUrl },

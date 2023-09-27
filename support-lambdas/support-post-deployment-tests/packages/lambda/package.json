@@ -7,8 +7,9 @@
     "prebuild": "rm -rf dist",
     "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outdir=dist",
     "postbuild": "cd dist && zip -r support-frontend-post-deployment-tests-lambda.zip .",
-    "pw-browserstack": "playwright test --config=src/playwright/playwright.browserstack.config.ts  src/playwright/tests/init_test.ts",
-    "pw-local": "playwright test --ui --config=src/playwright/playwright.local.config.ts  src/playwright/tests/init_test.ts"
+    "pw-browserstack-test": "playwright test --config=src/playwright/playwright.browserstack.config.ts",
+    "pw-local-test": "playwright test --ui --config=src/playwright/playwright.local.config.ts",
+    "pw-prod-test": "playwright test --ui --config=src/playwright/playwright.prod.config.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.36.0",
