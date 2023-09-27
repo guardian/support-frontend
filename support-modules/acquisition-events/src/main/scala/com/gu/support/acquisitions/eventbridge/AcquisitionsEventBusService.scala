@@ -56,22 +56,12 @@ class AcquisitionsEventBusService(source: String, stage: Stage, client: AmazonEv
 }
 
 object AcquisitionsEventBusService {
-//  lazy val CredentialsProvider = AwsCredentialsProviderChain.builder
-//    .credentialsProviders(
-//      ProfileCredentialsProvider.builder.profileName(ProfileName).build,
-//      InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build,
-//      EnvironmentVariableCredentialsProvider.create(),
-//    )
-//    .build
 
   lazy val eventBridgeClient = AmazonEventBridgeClient
     .builder()
     .withRegion(Regions.EU_WEST_1)
     .withCredentials(CredentialsProvider)
     .build
-//    .region(Region.EU_WEST_1)
-//    .credentialsProvider(CredentialsProvider)
-//    .build
 
   /** @param source
     *   \- A string which is passed to the source value of Eventbridge to identify the system that this event comes from
