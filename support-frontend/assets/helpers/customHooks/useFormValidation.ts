@@ -116,7 +116,7 @@ export function useDirectDebitValidation<
 		function validateAndPay(event: EventType) {
 			dispatchPaymentWaiting && dispatch(paymentWaiting(true));
 			event.preventDefault();
-			dispatch(validateForm());
+			dispatch(validateForm('DirectDebit'));
 			void dispatch(confirmAccountDetails());
 			setClickEvent(event);
 		},
