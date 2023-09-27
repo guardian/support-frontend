@@ -8,21 +8,20 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.paypal.PayPalService
 import com.gu.salesforce.SalesforceService
 import com.gu.stripe.StripeService
+import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.acquisitions.{
   AcquisitionsStreamLambdaConfig,
   AcquisitionsStreamService,
   AcquisitionsStreamServiceImpl,
-  BigQueryService,
 }
 import com.gu.support.catalog.CatalogService
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config.TouchPointEnvironments
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
-import com.gu.zuora.{ZuoraGiftService, ZuoraService}
 import com.gu.supporterdata.model.Stage.{CODE => DynamoStageCODE, PROD => DynamoStagePROD}
-import com.gu.support.config.Stages.{CODE => ConfigCode, PROD => ConfigProd}
 import com.gu.supporterdata.services.SupporterDataDynamoService
+import com.gu.zuora.{ZuoraGiftService, ZuoraService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -53,10 +52,8 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
-  lazy val bigQueryService = BigQueryService.build(
-    if (Configuration.stage == PROD && !isTestUser) ConfigProd else ConfigCode,
-    bigQueryConfigProvider.get(isTestUser),
-  )
+  lazy val acquisitionsEventBusService = AcquisitionsEventBusService("support-workers", stage, isTestUser)
+
   lazy val acquisitionsStreamService: AcquisitionsStreamService = new AcquisitionsStreamServiceImpl(
     AcquisitionsStreamLambdaConfig(config.acquisitionsKinesisStreamName),
   )
