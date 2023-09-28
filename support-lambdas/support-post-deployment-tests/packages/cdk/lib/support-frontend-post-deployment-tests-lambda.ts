@@ -37,7 +37,7 @@ export class SupportFrontendPostDeploymentTestsLambda extends GuStack {
     };
 
     new GuScheduledLambda(this, APP_NAME, {
-      handler: "com.gu.supportFrontendPostDeploymentTests.Lambda::handler",
+      handler: 'dist/lambda/index.handler',
       rules: [
         {
           schedule: Schedule.cron({ hour: '10', minute: '00', weekDay: '2' }),
