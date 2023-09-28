@@ -195,6 +195,9 @@ case object Paper extends Product {
         homeDelivery("2c92a0ff560d311b0156136f2afe5315", Sixday, "Home Delivery Sixday"),
         homeDelivery("2c92a0fd560d132301560e43cf041a3c", EverydayPlus, "Home Delivery Everyday+"),
         homeDelivery("2c92a0fd560d13880156136b72e50f0c", Everyday, "Home Delivery Everyday"),
+        nationalDelivery("8a12999f8a268c57018a27ebe868150c", Weekend, "National Delivery Weekend"),
+        nationalDelivery("8a12999f8a268c57018a27ebfd721883", Sixday, "National Delivery Sixday"),
+        nationalDelivery("8a12999f8a268c57018a27ebe31414a4", Everyday, "National Delivery Everyday"),
       )),
       CODE -> (codeCollection ++ List(
         homeDelivery("2c92c0f961f9cf300161fc4f71473a34", SaturdayPlus, "Home Delivery Saturday+"),

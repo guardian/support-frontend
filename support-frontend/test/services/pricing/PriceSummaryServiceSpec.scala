@@ -172,7 +172,7 @@ class PriceSummaryServiceSpec extends AsyncFlatSpec with Matchers {
         CatalogServiceSpec.serviceWithFixtures,
       )
     val prices = service.getPricesForCountryGroup(Paper, UK, Nil)
-    prices(Collection)(Sixday)(Monthly)(GBP).savingVsRetail shouldBe Some(22)
+    prices(Collection)(Sixday)(Monthly)(GBP).savingVsRetail shouldBe Some(30)
     succeed
   }
 
