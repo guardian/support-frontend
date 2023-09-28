@@ -14,6 +14,6 @@ class DiscountServiceSpec extends AnyFlatSpec with Matchers {
 
   DiscountService.getClass.getSimpleName should "find discount product rate plan ids successfully" in {
     val res = new DiscountService(new FixtureCatalogLoader).getDiscountProductRatePlanIds
-    res.map(_.size) shouldBe Success(43)
+    res.map(_.size) shouldBe Success(49)
   }
 }
