@@ -6,7 +6,6 @@ import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.ga.{GoogleAnalyticsService, GoogleAnalyticsServiceMock}
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 import com.stripe.model.Charge.PaymentMethodDetails
 import com.stripe.model.{Charge, ChargeCollection, Event, PaymentIntent}
@@ -160,7 +159,6 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockStripeService: StripeService = mock[StripeService]
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
-  val mockGaService: GoogleAnalyticsService = GoogleAnalyticsServiceMock
   val mockBigQueryService: BigQueryService = mock[BigQueryService]
   val mockEmailService: EmailService = mock[EmailService]
   val mockRecaptchaService: RecaptchaService = mock[RecaptchaService]
@@ -181,7 +179,6 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockStripeService,
     mockDatabaseService,
     mockIdentityService,
-    mockGaService,
     mockBigQueryService,
     mockAcquisitionsStreamService,
     mockEmailService,

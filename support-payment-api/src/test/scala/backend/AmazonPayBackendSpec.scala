@@ -7,7 +7,6 @@ import com.amazon.pay.response.ipn.model.{AuthorizationNotification, Notificatio
 import com.amazon.pay.response.model._
 import com.amazon.pay.response.parser.{CloseOrderReferenceResponseData, ConfirmOrderReferenceResponseData, ResponseData}
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.ga.{GoogleAnalyticsService, GoogleAnalyticsServiceMock}
 import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 
 import javax.xml.datatype.DatatypeFactory
@@ -134,7 +133,6 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val mockAmazonPayService: AmazonPayService = mock[AmazonPayService]
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
-  val mockGaService: GoogleAnalyticsService = GoogleAnalyticsServiceMock
   val mockBigQueryService: BigQueryService = mock[BigQueryService]
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
@@ -149,7 +147,6 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     mockAmazonPayService,
     mockIdentityService,
     mockEmailService,
-    mockGaService,
     mockBigQueryService,
     mockAcquisitionsStreamService,
     mockDatabaseService,

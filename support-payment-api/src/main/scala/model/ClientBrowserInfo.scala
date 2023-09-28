@@ -1,7 +1,5 @@
 package model
 
-import com.gu.support.acquisitions.ga.models.GAData
-
 import java.util.UUID
 import play.api.mvc.Request
 
@@ -25,10 +23,4 @@ object ClientBrowserInfo {
     )
   }
 
-  def toGAData(clientBrowserInfo: ClientBrowserInfo) = GAData(
-    hostname = clientBrowserInfo.hostname,
-    clientId = clientBrowserInfo.gaClientId,
-    clientIpAddress = clientBrowserInfo.ipAddress,
-    clientUserAgent = clientBrowserInfo.userAgent,
-  )
 }
