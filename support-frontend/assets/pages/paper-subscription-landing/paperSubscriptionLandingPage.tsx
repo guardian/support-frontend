@@ -23,7 +23,7 @@ import { paperSubsUrl } from 'helpers/urls/routes';
 import { PaperHero } from './components/hero/hero';
 import PaperProductPrices from './components/paperProductPrices';
 import Tabs from './components/tabs';
-import type { PaperLandingContentPropTypes } from './paperSubscriptionLandingProps';
+import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
 import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
@@ -53,7 +53,7 @@ function PaperLandingPage({
 	productPrices,
 	promotionCopy,
 	participations,
-}: PaperLandingContentPropTypes) {
+}: PaperLandingPropTypes) {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
 	const isNationalDeliveryAbTestVariant =
