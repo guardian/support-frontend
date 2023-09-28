@@ -44,6 +44,27 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Events::Rule",
     },
+    "EventBusToSingleContributionSalesforceWritesSqsRuleFFDAB862": {
+      "Properties": {
+        "Description": "Send all events to SingleContributionSalesforceWrites SQS Queue",
+        "EventBusName": {
+          "Ref": "acquisitionsbusPROD768AFDE3",
+        },
+        "EventPattern": {
+          "region": [
+            "eu-west-1",
+          ],
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": "arn:aws:sqs:eu-west-1:865473395570:single-contribution-salesforce-writes-queue-CODE",
+            "Id": "Target0",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
     "acquisitionsbusPROD768AFDE3": {
       "Properties": {
         "Name": "acquisitions-bus-PROD",
