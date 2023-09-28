@@ -1,4 +1,4 @@
-name: 'CI: Support Frontend Post Deployment Tests Using Playwright Lambda'
+name: ' Support Frontend Post Deployment Tests Using Playwright Lambda'
 on: [push]
 jobs:
   CI:
