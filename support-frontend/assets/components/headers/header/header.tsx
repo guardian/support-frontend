@@ -14,7 +14,7 @@ export type PropTypes = {
 	utility?: JSX.Element;
 	countryGroupId: CountryGroupId;
 	display?: 'navigation' | 'checkout' | 'guardianLogo' | void;
-	participations: Participations;
+	participations?: Participations;
 };
 export type State = {
 	isTestUser: boolean | null | undefined;

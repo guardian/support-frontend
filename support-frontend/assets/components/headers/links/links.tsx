@@ -28,7 +28,7 @@ type PropTypes = {
 	location: 'desktop' | 'mobile';
 	countryGroupId?: CountryGroupId;
 	getRef?: (element: Element | null) => void;
-	participations: Participations;
+	participations?: Participations;
 };
 
 const links: HeaderNavLink[] = [
@@ -159,7 +159,7 @@ function Links({
 					.map((link) => {
 						// Link to Home Delivery tab if in the ab test
 						if (
-							participations.nationalDelivery === 'variant' &&
+							participations?.nationalDelivery === 'variant' &&
 							link.text === 'Newspaper'
 						) {
 							return {
