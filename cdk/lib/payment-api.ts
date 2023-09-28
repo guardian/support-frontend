@@ -160,9 +160,15 @@ export class PaymentApi extends GuStack {
           }),
           new GuAllowPolicy(this, "EventBusPut", {
             actions: ["events:PutEvents"],
-            resources: [
-              `arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-${this.stage}`,
-            ],
+            resources:
+              this.stage === "PROD"
+                ? [
+                    `arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE`,
+                    `arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-PROD`,
+                  ]
+                : [
+                    `arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE`,
+                  ],
           }),
           new GuAllowPolicy(this, "SQSPut", {
             actions: ["sqs:SendMessage"],
