@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { Outset } from 'components/content/content';
 import Tabs from 'components/tabs/tabs';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { paperSubsUrl } from 'helpers/urls/routes';
 import { ContentDeliveryFaqBlock } from './content/deliveryTab';
@@ -34,11 +35,21 @@ export const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 type PropTypes = {
 	selectedTab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
+	participations: Participations;
 };
 
 // ----- Component ----- //
-function PaperTabs({ selectedTab, setTabAction }: PropTypes): JSX.Element {
-	const tabItems = (Object.keys(tabs) as PaperFulfilmentOptions[]).map(
+function PaperTabs({
+	selectedTab,
+	setTabAction,
+	participations,
+}: PropTypes): JSX.Element {
+	/* Show Home Delivery tab first if in ab test */
+	const tabOptions =
+		participations.nationalDelivery === 'variant'
+			? Object.keys(tabs).reverse()
+			: Object.keys(tabs);
+	const tabItems = (tabOptions as PaperFulfilmentOptions[]).map(
 		(fulfilmentMethod) => {
 			const TabContent = tabs[fulfilmentMethod].content;
 			return {

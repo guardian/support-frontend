@@ -13,6 +13,7 @@ import type { PromotionCopy } from 'helpers/productPrice/promotions';
 export type PaperLandingContentPropTypes = {
 	productPrices: ProductPrices | null | undefined;
 	promotionCopy: PromotionCopy | null | undefined;
+	participations: Participations;
 };
 
 export type PaperLandingPropTypes = {

@@ -52,6 +52,7 @@ const pageQaId = 'qa-paper-subscriptions';
 function PaperLandingPage({
 	productPrices,
 	promotionCopy,
+	participations,
 }: PaperLandingContentPropTypes) {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
@@ -80,7 +81,9 @@ function PaperLandingPage({
 	return (
 		<Page
 			id={pageQaId}
-			header={<Header countryGroupId={GBPCountries} />}
+			header={
+				<Header countryGroupId={GBPCountries} participations={participations} />
+			}
 			footer={paperSubsFooter}
 		>
 			<PaperHero
@@ -94,6 +97,7 @@ function PaperLandingPage({
 							<Tabs
 								selectedTab={selectedTab}
 								setTabAction={handleSetTabAction}
+								participations={participations}
 							/>
 						</div>
 					</Block>
@@ -106,6 +110,7 @@ function PaperLandingPage({
 						productPrices={productPrices}
 						tab={selectedTab}
 						setTabAction={setSelectedTab}
+						participations={participations}
 					/>
 				</CentredContainer>
 			</FullWidthContainer>

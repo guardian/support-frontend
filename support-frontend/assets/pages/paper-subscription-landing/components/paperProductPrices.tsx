@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { Participations } from 'helpers/abTests/abtest';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
@@ -184,6 +185,7 @@ type PaperProductPricesProps = {
 	tab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
 	isPriceCardsAbTestVariant?: boolean;
+	participations: Participations;
 };
 
 function PaperProductPrices({
@@ -191,6 +193,7 @@ function PaperProductPrices({
 	tab,
 	setTabAction,
 	isPriceCardsAbTestVariant,
+	participations,
 }: PaperProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
@@ -203,6 +206,7 @@ function PaperProductPrices({
 			products={products}
 			setTabAction={setTabAction}
 			isPriceCardsAbTestVariant={isPriceCardsAbTestVariant ?? false}
+			participations={participations}
 		/>
 	);
 }
