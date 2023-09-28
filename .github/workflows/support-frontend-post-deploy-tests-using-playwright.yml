@@ -13,7 +13,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: .nvmrc
-          cache: 'node'
+          cache: 'yarn'
       - run: |
           yarn install
           yarn build
@@ -31,15 +31,15 @@ jobs:
         with:
           role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           aws-region: eu-west-1
-      - name: Upload to riff-raff
-        uses: guardian/actions-riff-raff@v2
-        with:
-          configPath: cdk/cdk.out/riff-raff.yaml
-          projectName: membership::support-frontend-post-deployment-tests-lambda
-          buildNumberOffset: 60
-          contentDirectories: |
-            cdk.out:
-              - cdk/cdk.out/support-frontend-post-deployment-tests-lambda-CODE.template.json
-              - cdk/cdk.out/support-frontend-post-deployment-tests-lambda-PROD.template.json
-            support-frontend-post-deployment-tests-lambda:
-              - cdk/support-frontend-post-deployment-tests-lambda.zip
+#      - name: Upload to riff-raff
+#        uses: guardian/actions-riff-raff@v2
+#        with:
+#          configPath: cdk/cdk.out/riff-raff.yaml
+#          projectName: membership::support-frontend-post-deployment-tests-lambda
+#          buildNumberOffset: 60
+#          contentDirectories: |
+#            cdk.out:
+#              - cdk/cdk.out/support-frontend-post-deployment-tests-lambda-CODE.template.json
+#              - cdk/cdk.out/support-frontend-post-deployment-tests-lambda-PROD.template.json
+#            support-frontend-post-deployment-tests-lambda:
+#              - cdk/support-frontend-post-deployment-tests-lambda.zip
