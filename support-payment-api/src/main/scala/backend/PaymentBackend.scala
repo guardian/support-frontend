@@ -48,6 +48,7 @@ trait PaymentBackend extends StrictLogging {
     val acquisitionEventFuture = EitherT(acquisitionsEventBusService.putAcquisitionEvent(acquisition))
       .leftMap(errorMessage => BackendError.AcquisitionsEventBusError(errorMessage))
 
+    // TODO: This can be done via the eventBus
     val streamFuture = acquisitionsStreamService
       .putAcquisitionWithRetry(acquisition, maxRetries = 5)
       .leftMap(errors => BackendError.AcquisitionsStreamError(errors.mkString(" & ")))
