@@ -48,7 +48,7 @@ class StripeBackend(
     cloudWatchService: CloudWatchService,
     val supporterProductDataService: SupporterProductDataService,
     val softOptInsService: SoftOptInsService,
-    val SingleContributionsService: SingleContributionsService,
+    val SingleContributionSalesforceWritesService: SingleContributionSalesforceWritesService,
     val switchService: SwitchService,
     environment: Environment,
 )(implicit pool: DefaultThreadPool, WSClient: WSClient)
@@ -349,7 +349,7 @@ object StripeBackend {
       cloudWatchService: CloudWatchService,
       supporterProductDataService: SupporterProductDataService,
       softOptInsService: SoftOptInsService,
-      SingleContributionsService: SingleContributionsService,
+      SingleContributionSalesforceWritesService: SingleContributionSalesforceWritesService,
       switchService: SwitchService,
       environment: Environment,
   )(implicit pool: DefaultThreadPool, WSClient: WSClient, awsClient: AmazonS3): StripeBackend = {
@@ -364,7 +364,7 @@ object StripeBackend {
       cloudWatchService,
       supporterProductDataService,
       softOptInsService,
-      SingleContributionsService,
+      SingleContributionSalesforceWritesService,
       switchService,
       environment,
     )
@@ -411,7 +411,9 @@ object StripeBackend {
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
       new SupporterProductDataService(env).valid: InitializationResult[SupporterProductDataService],
       SoftOptInsService(env).valid: InitializationResult[SoftOptInsService],
-      SingleContributionsService(env).valid: InitializationResult[SingleContributionsService],
+      SingleContributionSalesforceWritesService(env).valid: InitializationResult[
+        SingleContributionSalesforceWritesService,
+      ],
       new SwitchService(env)(awsClient, system, stripeThreadPool).valid: InitializationResult[SwitchService],
       env.valid: InitializationResult[Environment],
     ).mapN(StripeBackend.apply)

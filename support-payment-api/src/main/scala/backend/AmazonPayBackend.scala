@@ -39,7 +39,7 @@ class AmazonPayBackend(
     val databaseService: ContributionsStoreService,
     val supporterProductDataService: SupporterProductDataService,
     val softOptInsService: SoftOptInsService,
-    val SingleContributionsService: SingleContributionsService,
+    val SingleContributionSalesforceWritesService: SingleContributionSalesforceWritesService,
     val switchService: SwitchService,
 )(implicit pool: DefaultThreadPool)
     extends StrictLogging
@@ -234,7 +234,7 @@ object AmazonPayBackend {
       cloudWatchService: CloudWatchService,
       supporterProductDataService: SupporterProductDataService,
       softOptInsService: SoftOptInsService,
-      SingleContributionsService: SingleContributionsService,
+      SingleContributionSalesforceWritesService: SingleContributionSalesforceWritesService,
       switchService: SwitchService,
   )(implicit pool: DefaultThreadPool): AmazonPayBackend = {
     new AmazonPayBackend(
@@ -247,7 +247,7 @@ object AmazonPayBackend {
       databaseService,
       supporterProductDataService,
       softOptInsService,
-      SingleContributionsService,
+      SingleContributionSalesforceWritesService,
       switchService,
     )
   }
@@ -288,7 +288,9 @@ object AmazonPayBackend {
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
       new SupporterProductDataService(env).valid: InitializationResult[SupporterProductDataService],
       SoftOptInsService(env).valid: InitializationResult[SoftOptInsService],
-      SingleContributionsService(env).valid: InitializationResult[SingleContributionsService],
+      SingleContributionSalesforceWritesService(env).valid: InitializationResult[
+        SingleContributionSalesforceWritesService,
+      ],
       new SwitchService(env)(awsClient, system, defaultThreadPool).valid: InitializationResult[SwitchService],
     ).mapN(AmazonPayBackend.apply)
   }

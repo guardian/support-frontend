@@ -1,6 +1,6 @@
 package backend
 
-import backend.BackendError.{SingleContributionsServiceError, SoftOptInsServiceError}
+import backend.BackendError.{SingleContributionSalesforceWritesServiceError, SoftOptInsServiceError}
 import cats.data.EitherT
 import cats.implicits._
 import com.amazon.pay.response.ipn.model.{AuthorizationNotification, NotificationType}
@@ -96,8 +96,13 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     EitherT.left(Future.successful("an error from supporter product data"))
   val softOptInsResponseError: EitherT[Future, SoftOptInsServiceError, Unit] =
     EitherT.left(Future.successful(SoftOptInsServiceError("an error from soft opt-ins")))
-  val SingleContributionsServiceResponseError: EitherT[Future, SingleContributionsServiceError, Unit] =
-    EitherT.left(Future.successful(SingleContributionsServiceError("an error from single contributions")))
+  val SingleContributionSalesforceWritesServiceResponseError
+      : EitherT[Future, SingleContributionSalesforceWritesServiceError, Unit] =
+    EitherT.left(
+      Future.successful(
+        SingleContributionSalesforceWritesServiceError("an error from single contribution salesforce writes"),
+      ),
+    )
   val bigQueryResponse: EitherT[Future, List[String], Unit] =
     EitherT.right(Future.successful(()))
   val bigQueryResponseError: EitherT[Future, List[String], Unit] =
@@ -141,7 +146,8 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
   val mockSupporterProductDataService: SupporterProductDataService = mock[SupporterProductDataService]
   val mockSoftOptInsService: SoftOptInsService = mock[SoftOptInsService]
-  val mockSingleContributionsService: SingleContributionsService = mock[SingleContributionsService]
+  val mockSingleContributionSalesforceWritesService: SingleContributionSalesforceWritesService =
+    mock[SingleContributionSalesforceWritesService]
   val mockSwitchService: SwitchService = mock[SwitchService]
 
   // -- test obj
@@ -155,7 +161,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     mockDatabaseService,
     mockSupporterProductDataService,
     mockSoftOptInsService,
-    mockSingleContributionsService,
+    mockSingleContributionSalesforceWritesService,
     mockSwitchService,
   )(new DefaultThreadPool(ec))
 
@@ -219,8 +225,8 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
           .thenReturn(supporterProductDataResponseError)
         when(mockSoftOptInsService.sendMessage(any(), any())(any()))
           .thenReturn(softOptInsResponseError)
-        when(mockSingleContributionsService.sendMessage(any())(any()))
-          .thenReturn(SingleContributionsServiceResponseError)
+        when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+          .thenReturn(SingleContributionSalesforceWritesServiceResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
           .thenReturn(streamResponseError)
@@ -229,7 +235,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-        verify(mockSingleContributionsService, times(1)).sendMessage(any())(any())
+        verify(mockSingleContributionSalesforceWritesService, times(1)).sendMessage(any())(any())
       }
     }
 
@@ -278,8 +284,8 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
             .thenReturn(supporterProductDataResponseError)
           when(mockSoftOptInsService.sendMessage(any(), any())(any()))
             .thenReturn(softOptInsResponseError)
-          when(mockSingleContributionsService.sendMessage(any())(any()))
-            .thenReturn(SingleContributionsServiceResponseError)
+          when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+            .thenReturn(SingleContributionSalesforceWritesServiceResponseError)
           when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
           when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
             .thenReturn(streamResponseError)
@@ -288,7 +294,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
           amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
 
           verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-          verify(mockSingleContributionsService, times(1)).sendMessage(any())(any())
+          verify(mockSingleContributionSalesforceWritesService, times(1)).sendMessage(any())(any())
         }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new AmazonPayBackendFixture {
@@ -311,8 +317,8 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
 
         when(mockSoftOptInsService.sendMessage(any(), any())(any()))
           .thenReturn(softOptInsResponseError)
-        when(mockSingleContributionsService.sendMessage(any())(any()))
-          .thenReturn(SingleContributionsServiceResponseError)
+        when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+          .thenReturn(SingleContributionSalesforceWritesServiceResponseError)
 
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
@@ -323,7 +329,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-        verify(mockSingleContributionsService, times(1)).sendMessage(any())(any())
+        verify(mockSingleContributionSalesforceWritesService, times(1)).sendMessage(any())(any())
       }
 
       "Not call setOrderRef if state is suspended" in new AmazonPayBackendFixture {

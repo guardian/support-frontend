@@ -47,7 +47,7 @@ class PaypalBackend(
     cloudWatchService: CloudWatchService,
     val supporterProductDataService: SupporterProductDataService,
     val softOptInsService: SoftOptInsService,
-    val SingleContributionsService: SingleContributionsService,
+    val SingleContributionSalesforceWritesService: SingleContributionSalesforceWritesService,
     val switchService: SwitchService,
 )(implicit pool: DefaultThreadPool)
     extends StrictLogging
@@ -264,7 +264,7 @@ object PaypalBackend {
       cloudWatchService: CloudWatchService,
       supporterProductDataService: SupporterProductDataService,
       softOptInsService: SoftOptInsService,
-      SingleContributionsService: SingleContributionsService,
+      SingleContributionSalesforceWritesService: SingleContributionSalesforceWritesService,
       switchService: SwitchService,
   )(implicit pool: DefaultThreadPool): PaypalBackend = {
     new PaypalBackend(
@@ -277,7 +277,7 @@ object PaypalBackend {
       cloudWatchService,
       supporterProductDataService,
       softOptInsService,
-      SingleContributionsService,
+      SingleContributionSalesforceWritesService,
       switchService,
     )
   }
@@ -320,7 +320,9 @@ object PaypalBackend {
       new CloudWatchService(cloudWatchAsyncClient, env).valid: InitializationResult[CloudWatchService],
       new SupporterProductDataService(env).valid: InitializationResult[SupporterProductDataService],
       SoftOptInsService(env).valid: InitializationResult[SoftOptInsService],
-      SingleContributionsService(env).valid: InitializationResult[SingleContributionsService],
+      SingleContributionSalesforceWritesService(env).valid: InitializationResult[
+        SingleContributionSalesforceWritesService,
+      ],
       new SwitchService(env)(awsClient, system, paypalThreadPool).valid: InitializationResult[SwitchService],
     ).mapN(PaypalBackend.apply)
   }

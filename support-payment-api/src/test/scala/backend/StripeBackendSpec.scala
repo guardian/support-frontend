@@ -1,7 +1,7 @@
 package backend
 
 import akka.actor.ActorSystem
-import backend.BackendError.{SingleContributionsServiceError, SoftOptInsServiceError}
+import backend.BackendError.{SingleContributionSalesforceWritesServiceError, SoftOptInsServiceError}
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.s3.AmazonS3
@@ -95,10 +95,16 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(SoftOptInsServiceError("an error from soft opt-ins")))
   val softOptInsResponse: EitherT[Future, SoftOptInsServiceError, Unit] =
     EitherT.right(Future.successful(()))
-  val SingleContributionsServiceResponse: EitherT[Future, SingleContributionsServiceError, Unit] =
+  val SingleContributionSalesforceWritesServiceResponse
+      : EitherT[Future, SingleContributionSalesforceWritesServiceError, Unit] =
     EitherT.right(Future.successful(()))
-  val SingleContributionsServiceResponseError: EitherT[Future, SingleContributionsServiceError, Unit] =
-    EitherT.left(Future.successful(SingleContributionsServiceError("an error from single contributions")))
+  val SingleContributionSalesforceWritesServiceResponseError
+      : EitherT[Future, SingleContributionSalesforceWritesServiceError, Unit] =
+    EitherT.left(
+      Future.successful(
+        SingleContributionSalesforceWritesServiceError("an error from single contribution salesforce writes"),
+      ),
+    )
   val bigQueryResponse: EitherT[Future, List[String], Unit] =
     EitherT.right(Future.successful(()))
   val bigQueryErrorMessage = "a BigQuery error"
@@ -169,7 +175,8 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
   val mockSupporterProductDataService: SupporterProductDataService = mock[SupporterProductDataService]
   val mockSoftOptInsService: SoftOptInsService = mock[SoftOptInsService]
-  val mockSingleContributionsService: SingleContributionsService = mock[SingleContributionsService]
+  val mockSingleContributionSalesforceWritesService: SingleContributionSalesforceWritesService =
+    mock[SingleContributionSalesforceWritesService]
   val mockSwitchService: SwitchService = mock[SwitchService]
   val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
   implicit val mockWsClient: WSClient = mock[WSClient]
@@ -191,7 +198,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockCloudWatchService,
     mockSupporterProductDataService,
     mockSoftOptInsService,
-    mockSingleContributionsService,
+    mockSingleContributionSalesforceWritesService,
     mockSwitchService,
     Live,
   )(new DefaultThreadPool(ec), mockWsClient)
@@ -306,8 +313,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponseError)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-        when(mockSingleContributionsService.sendMessage(any())(any()))
-          .thenReturn(SingleContributionsServiceResponseError)
+        when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+          .thenReturn(SingleContributionSalesforceWritesServiceResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntentWithStripeCheckout))
@@ -321,7 +328,7 @@ class StripeBackendSpec
           StripePaymentIntentsApiResponse.Success()
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-        verify(mockSingleContributionsService, times(1)).sendMessage(any())(any())
+        verify(mockSingleContributionSalesforceWritesService, times(1)).sendMessage(any())(any())
       }
 
       "return Success if stripe apple pay switch is On in support-admin-console" in new StripeBackendFixture {
@@ -342,8 +349,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponseError)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-        when(mockSingleContributionsService.sendMessage(any())(any()))
-          .thenReturn(SingleContributionsServiceResponseError)
+        when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+          .thenReturn(SingleContributionSalesforceWritesServiceResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntentWithStripeApplePay))
@@ -375,8 +382,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponseError)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-        when(mockSingleContributionsService.sendMessage(any())(any()))
-          .thenReturn(SingleContributionsServiceResponseError)
+        when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+          .thenReturn(SingleContributionSalesforceWritesServiceResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntentWithStripePaymentRequest))
@@ -407,8 +414,8 @@ class StripeBackendSpec
           when(mockSupporterProductDataService.insertContributionData(any())(any()))
             .thenReturn(supporterProductDataResponseError)
           when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-          when(mockSingleContributionsService.sendMessage(any())(any()))
-            .thenReturn(SingleContributionsServiceResponseError)
+          when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+            .thenReturn(SingleContributionSalesforceWritesServiceResponseError)
           when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
           when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
           when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
@@ -421,7 +428,7 @@ class StripeBackendSpec
           )
 
           verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-          verify(mockSingleContributionsService, times(1)).sendMessage(any())(any())
+          verify(mockSingleContributionSalesforceWritesService, times(1)).sendMessage(any())(any())
         }
 
       "return successful payment response with guestAccountRegistrationToken if available" in new StripeBackendFixture {
@@ -430,8 +437,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponseError)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-        when(mockSingleContributionsService.sendMessage(any())(any()))
-          .thenReturn(SingleContributionsServiceResponseError)
+        when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+          .thenReturn(SingleContributionSalesforceWritesServiceResponseError)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
@@ -443,7 +450,7 @@ class StripeBackendSpec
           )
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-        verify(mockSingleContributionsService, times(1)).sendMessage(any())(any())
+        verify(mockSingleContributionSalesforceWritesService, times(1)).sendMessage(any())(any())
       }
     }
 
@@ -478,8 +485,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
-        when(mockSingleContributionsService.sendMessage(any())(any()))
-          .thenReturn(SingleContributionsServiceResponse)
+        when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+          .thenReturn(SingleContributionSalesforceWritesServiceResponse)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         val trackContribution = PrivateMethod[Future[List[BackendError]]]('trackContribution)
@@ -488,7 +495,7 @@ class StripeBackendSpec
         result.futureValue mustBe List(BackendError.Database(dbError))
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-        verify(mockSingleContributionsService, times(1)).sendMessage(any())(any())
+        verify(mockSingleContributionSalesforceWritesService, times(1)).sendMessage(any())(any())
       }
 
       "return a combined error if BigQuery and DB fail" in new StripeBackendFixture {
@@ -498,8 +505,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
-        when(mockSingleContributionsService.sendMessage(any())(any()))
-          .thenReturn(SingleContributionsServiceResponse)
+        when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+          .thenReturn(SingleContributionSalesforceWritesServiceResponse)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         val trackContribution = PrivateMethod[Future[List[BackendError]]]('trackContribution)
@@ -512,7 +519,7 @@ class StripeBackendSpec
         result.futureValue mustBe error
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-        verify(mockSingleContributionsService, times(1)).sendMessage(any())(any())
+        verify(mockSingleContributionSalesforceWritesService, times(1)).sendMessage(any())(any())
       }
     }
 
@@ -526,8 +533,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
-        when(mockSingleContributionsService.sendMessage(any())(any()))
-          .thenReturn(SingleContributionsServiceResponse)
+        when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+          .thenReturn(SingleContributionSalesforceWritesServiceResponse)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntent)).thenReturn(paymentServiceIntentResponse)
@@ -539,7 +546,7 @@ class StripeBackendSpec
           StripePaymentIntentsApiResponse.Success()
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-        verify(mockSingleContributionsService, times(1)).sendMessage(any())(any())
+        verify(mockSingleContributionSalesforceWritesService, times(1)).sendMessage(any())(any())
       }
 
       "return RequiresAction if 3DS required" in new StripeBackendFixture {
@@ -585,8 +592,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
-        when(mockSingleContributionsService.sendMessage(any())(any()))
-          .thenReturn(SingleContributionsServiceResponse)
+        when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+          .thenReturn(SingleContributionSalesforceWritesServiceResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntent)).thenReturn(paymentServiceIntentResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
@@ -596,7 +603,7 @@ class StripeBackendSpec
           StripeApiError.fromString(s"Stripe error", None)
 
         verify(mockSoftOptInsService, times(0)).sendMessage(any(), any())(any())
-        verify(mockSingleContributionsService, times(0)).sendMessage(any())(any())
+        verify(mockSingleContributionSalesforceWritesService, times(0)).sendMessage(any())(any())
       }
     }
 
@@ -610,8 +617,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
-        when(mockSingleContributionsService.sendMessage(any())(any()))
-          .thenReturn(SingleContributionsServiceResponse)
+        when(mockSingleContributionSalesforceWritesService.sendMessage(any())(any()))
+          .thenReturn(SingleContributionSalesforceWritesServiceResponse)
         when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.confirmPaymentIntent(confirmPaymentIntent)).thenReturn(paymentServiceIntentResponse)
@@ -622,7 +629,7 @@ class StripeBackendSpec
           StripePaymentIntentsApiResponse.Success()
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
-        verify(mockSingleContributionsService, times(1)).sendMessage(any())(any())
+        verify(mockSingleContributionSalesforceWritesService, times(1)).sendMessage(any())(any())
       }
 
       "return an error if confirmation failed" in new StripeBackendFixture {
