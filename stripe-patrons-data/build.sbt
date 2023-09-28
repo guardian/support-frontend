@@ -32,7 +32,7 @@ riffRaffArtifactResources += (
 )
 // We use the buildNumber to set the lambda fileName, because lambda versioning requires a new fileName each time
 val buildNumber = sys.env.getOrElse("GITHUB_RUN_NUMBER", "DEV")
-assemblyJarName := s"$buildNumber.jar"
+assemblyJarName := s"${name.value}-$buildNumber.jar"
 assembly / assemblyMergeStrategy := {
   case PathList("models", xs @ _*) => MergeStrategy.discard
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first

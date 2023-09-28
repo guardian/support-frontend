@@ -566,7 +566,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/stripe-patrons-data/DEV.jar",
+          "S3Key": "support/PROD/stripe-patrons-data/stripe-patrons-data-DEV.jar",
         },
         "Environment": {
           "Variables": {
@@ -621,7 +621,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "StripePatronsDataPRODCurrentVersion700541B4c1fbea68bf1891aa6a65c801b76582e1",
+            "StripePatronsDataPRODCurrentVersion700541B42effd2f99f91df5bb62353bc4f5861fb",
             "Version",
           ],
         },
@@ -629,7 +629,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "StripePatronsDataPRODCurrentVersion700541B4c1fbea68bf1891aa6a65c801b76582e1": {
+    "StripePatronsDataPRODCurrentVersion700541B42effd2f99f91df5bb62353bc4f5861fb": {
       "Properties": {
         "FunctionName": {
           "Ref": "StripePatronsDataPROD61F45521",
@@ -763,7 +763,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/stripe-patrons-data/DEV.jar",
+                      "/support/PROD/stripe-patrons-data/stripe-patrons-data-DEV.jar",
                     ],
                   ],
                 },
@@ -950,7 +950,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/stripe-patrons-data/DEV.jar",
+          "S3Key": "support/PROD/stripe-patrons-data/stripe-patrons-data-DEV.jar",
         },
         "Environment": {
           "Variables": {
@@ -1005,7 +1005,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "stripepatronsdatacancelledCurrentVersion23EC801Ec59567c5fe3b5223c7ef5b8c2d2ac5c0",
+            "stripepatronsdatacancelledCurrentVersion23EC801E668c829e508d52168af15fd98d6b51b2",
             "Version",
           ],
         },
@@ -1013,7 +1013,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "stripepatronsdatacancelledCurrentVersion23EC801Ec59567c5fe3b5223c7ef5b8c2d2ac5c0": {
+    "stripepatronsdatacancelledCurrentVersion23EC801E668c829e508d52168af15fd98d6b51b2": {
       "Properties": {
         "FunctionName": {
           "Ref": "stripepatronsdatacancelled2E3CED96",
@@ -1113,7 +1113,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/stripe-patrons-data/DEV.jar",
+                      "/support/PROD/stripe-patrons-data/stripe-patrons-data-DEV.jar",
                     ],
                   ],
                 },
@@ -1216,7 +1216,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/stripe-patrons-data/DEV.jar",
+          "S3Key": "support/PROD/stripe-patrons-data/stripe-patrons-data-DEV.jar",
         },
         "Environment": {
           "Variables": {
@@ -1271,7 +1271,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "stripepatronsdatasignupCurrentVersionCB0F0BAAdbefb0eba18dc0dc72a6e524ae544a81",
+            "stripepatronsdatasignupCurrentVersionCB0F0BAAee23f55eebd2989f259cf31bd84411f7",
             "Version",
           ],
         },
@@ -1279,7 +1279,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "stripepatronsdatasignupCurrentVersionCB0F0BAAdbefb0eba18dc0dc72a6e524ae544a81": {
+    "stripepatronsdatasignupCurrentVersionCB0F0BAAee23f55eebd2989f259cf31bd84411f7": {
       "Properties": {
         "FunctionName": {
           "Ref": "stripepatronsdatasignup4E7F0A3F",
@@ -1379,7 +1379,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/stripe-patrons-data/DEV.jar",
+                      "/support/PROD/stripe-patrons-data/stripe-patrons-data-DEV.jar",
                     ],
                   ],
                 },

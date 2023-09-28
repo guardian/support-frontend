@@ -95,12 +95,12 @@ jobs:
                     - stripe-patrons-data-
                     - stripe-patrons-data-cancelled-
                     - stripe-patrons-data-sign-up-
-                  fileName: ${{ github.run_number }}.jar
+                  fileName: stripe-patrons-data-${{ github.run_number }}.jar
                   prefixStack: false
 
           contentDirectories: |
             stripe-patrons-data:
-              - stripe-patrons-data/target/scala-2.13/${{ github.run_number }}.jar
+              - stripe-patrons-data/target/scala-2.13/stripe-patrons-data-${{ github.run_number }}.jar
             cfn:
               - cdk/cdk.out/StripePatronsData-CODE.template.json
               - cdk/cdk.out/StripePatronsData-PROD.template.json

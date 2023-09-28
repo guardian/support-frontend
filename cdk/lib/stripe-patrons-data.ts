@@ -46,7 +46,7 @@ class StripePatronsDataLambda extends GuScheduledLambda {
   constructor(scope: GuStack, id: string, appName: string, buildNumber: string) {
     super(scope, id, {
       app: appName,
-      fileName: `${buildNumber}.jar`,
+      fileName: `${appName}-${buildNumber}.jar`,
       functionName: `${appName}-${scope.stage}`,
       handler:
         "com.gu.patrons.lambdas.ProcessStripeSubscriptionsLambda::handleRequest",
@@ -89,7 +89,7 @@ class PatronSignUpLambda extends GuLambdaFunction {
   constructor(scope: GuStack, id: string, appName: string, buildNumber: string) {
     super(scope, `${appName}-sign-up`, {
       app: appName,
-      fileName: `${buildNumber}.jar`,
+      fileName: `${appName}-${buildNumber}.jar`,
       functionName: `${appName}-sign-up-${scope.stage}`,
       handler:
         "com.gu.patrons.lambdas.PatronSignUpEventLambda::handleRequest",
@@ -110,7 +110,7 @@ class PatronCancelledLambda extends GuLambdaFunction {
   constructor(scope: GuStack, id: string, appName: string, buildNumber: string) {
     super(scope, `${appName}-cancelled`, {
       app: appName,
-      fileName: `${buildNumber}.jar`,
+      fileName: `${appName}-${buildNumber}.jar`,
       functionName: `${appName}-cancelled-${scope.stage}`,
       handler:
         "com.gu.patrons.lambdas.PatronCancelledEventLambda::handleRequest",
