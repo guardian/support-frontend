@@ -238,7 +238,6 @@ function WeeklyLandingPage({
 			International,
 		],
 		trackProduct: 'GuardianWeekly',
-		participations,
 	});
 
 	const isPriceCardsAbTestVariant =

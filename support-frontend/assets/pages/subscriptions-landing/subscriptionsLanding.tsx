@@ -18,12 +18,7 @@ function SubscriptionsLandingPage({
 }: SubscriptionsLandingPropTypes) {
 	return (
 		<Page
-			header={
-				<Header
-					countryGroupId={countryGroupId}
-					participations={participations}
-				/>
-			}
+			header={<Header countryGroupId={countryGroupId} />}
 			footer={<Footer centred />}
 		>
 			<SubscriptionLandingContent

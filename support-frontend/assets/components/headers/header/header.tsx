@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import { Component } from 'react';
 import SvgGuardianLogo from 'components/svgs/guardianLogo';
-import type { Participations } from 'helpers/abTests/abtest';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { classNameWithModifiers } from 'helpers/utilities/utilities';
@@ -14,7 +13,6 @@ export type PropTypes = {
 	utility?: JSX.Element;
 	countryGroupId: CountryGroupId;
 	display?: 'navigation' | 'checkout' | 'guardianLogo' | void;
-	participations?: Participations;
 };
 export type State = {
 	isTestUser: boolean | null | undefined;
@@ -73,7 +71,7 @@ export default class Header extends Component<PropTypes, State> {
 	}
 
 	render(): JSX.Element {
-		const { utility, display, countryGroupId, participations } = this.props;
+		const { utility, display, countryGroupId } = this.props;
 		const { isTestUser } = this.state;
 
 		return (
@@ -100,11 +98,7 @@ export default class Header extends Component<PropTypes, State> {
 						{display === 'navigation' && (
 							<MobileMenuToggler
 								links={
-									<Links
-										countryGroupId={countryGroupId}
-										location="mobile"
-										participations={participations}
-									/>
+									<Links countryGroupId={countryGroupId} location="mobile" />
 								}
 								utility={utility}
 							/>
@@ -112,11 +106,7 @@ export default class Header extends Component<PropTypes, State> {
 					</div>
 					{display === 'navigation' && (
 						<div className="component-header__row">
-							<Links
-								countryGroupId={countryGroupId}
-								location="desktop"
-								participations={participations}
-							/>
+							<Links countryGroupId={countryGroupId} location="desktop" />
 						</div>
 					)}
 					{display === 'checkout' && (

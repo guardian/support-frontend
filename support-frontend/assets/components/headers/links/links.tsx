@@ -1,5 +1,4 @@
 import cx from 'classnames';
-import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -28,7 +27,6 @@ type PropTypes = {
 	location: 'desktop' | 'mobile';
 	countryGroupId?: CountryGroupId;
 	getRef?: (element: Element | null) => void;
-	participations?: Participations;
 };
 
 const links: HeaderNavLink[] = [
@@ -91,10 +89,7 @@ function getActiveLinkClassModifiers(
 ): string | null {
 	if (
 		urlWithoutParams.endsWith(href) ||
-		urlWithoutParams.endsWith(`${href}/delivery`) ||
-		// When in nationalDelivery AB test
-		(urlWithoutParams.endsWith(routes.paperSubscriptionLanding) &&
-			href === routes.paperSubscriptionLandingHomeDelivery)
+		urlWithoutParams.endsWith(`${href}/delivery`)
 	) {
 		return 'active';
 	}
@@ -102,12 +97,7 @@ function getActiveLinkClassModifiers(
 }
 
 // Export
-function Links({
-	location,
-	getRef,
-	countryGroupId,
-	participations,
-}: PropTypes): JSX.Element {
+function Links({ location, getRef, countryGroupId }: PropTypes): JSX.Element {
 	const { protocol, host, pathname } = window.location;
 	const urlWithoutParams = `${protocol}//${host}${pathname}`;
 	const internationalisationIDValue = internationalisationID(countryGroupId);
@@ -158,20 +148,6 @@ function Links({
 							...link,
 							href: `/${internationalisationIDValue}${link.href}`,
 						};
-					})
-					.map((link) => {
-						// Link to Home Delivery tab if in the ab test
-						if (
-							participations?.nationalDelivery === 'variant' &&
-							link.text === 'Newspaper'
-						) {
-							return {
-								...link,
-								href: routes.paperSubscriptionLandingHomeDelivery,
-							};
-						}
-
-						return link;
 					})
 					.map(
 						({ href, text, trackAs, opensInNewWindow, additionalClasses }) => (

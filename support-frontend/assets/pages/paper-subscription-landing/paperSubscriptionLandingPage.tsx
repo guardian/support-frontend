@@ -55,11 +55,26 @@ function PaperLandingPage({
 	participations,
 }: PaperLandingContentPropTypes) {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
-	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
-		'delivery',
-	)
-		? HomeDelivery
-		: Collection;
+
+	const isNationalDeliveryAbTestVariant =
+		participations.nationalDelivery === 'variant';
+
+	const [redirectToHomeDelivery, setRedirectToHomeDelivery] = useState<boolean>(
+		isNationalDeliveryAbTestVariant,
+	);
+
+	if (
+		redirectToHomeDelivery &&
+		!window.location.pathname.includes('delivery')
+	) {
+		window.history.pushState({}, '', window.location.href + '/delivery');
+		setRedirectToHomeDelivery(false);
+	}
+
+	const fulfilment: PaperFulfilmentOptions =
+		window.location.pathname.includes('delivery') || redirectToHomeDelivery
+			? HomeDelivery
+			: Collection;
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
 
@@ -81,9 +96,7 @@ function PaperLandingPage({
 	return (
 		<Page
 			id={pageQaId}
-			header={
-				<Header countryGroupId={GBPCountries} participations={participations} />
-			}
+			header={<Header countryGroupId={GBPCountries} />}
 			footer={paperSubsFooter}
 		>
 			<PaperHero
@@ -97,7 +110,9 @@ function PaperLandingPage({
 							<Tabs
 								selectedTab={selectedTab}
 								setTabAction={handleSetTabAction}
-								participations={participations}
+								isNationalDeliveryAbTestVariant={
+									isNationalDeliveryAbTestVariant
+								}
 							/>
 						</div>
 					</Block>
@@ -110,7 +125,7 @@ function PaperLandingPage({
 						productPrices={productPrices}
 						tab={selectedTab}
 						setTabAction={setSelectedTab}
-						participations={participations}
+						isNationalDeliveryAbTestVariant={isNationalDeliveryAbTestVariant}
 					/>
 				</CentredContainer>
 			</FullWidthContainer>

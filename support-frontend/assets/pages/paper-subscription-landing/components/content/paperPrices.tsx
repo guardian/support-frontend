@@ -11,7 +11,6 @@ import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';
 import ProductOption from 'components/product/productOption';
-import type { Participations } from 'helpers/abTests/abtest';
 import {
 	Collection,
 	HomeDelivery,
@@ -24,7 +23,7 @@ export type PaperPricesPropTypes = {
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
 	products: Product[];
 	isPriceCardsAbTestVariant: boolean;
-	participations: Participations;
+	isNationalDeliveryAbTestVariant: boolean;
 };
 const pricesSection = css`
 	padding: 0 ${space[3]}px ${space[12]}px;
@@ -105,7 +104,7 @@ export function PaperPrices({
 	setTabAction,
 	products,
 	isPriceCardsAbTestVariant,
-	participations,
+	isNationalDeliveryAbTestVariant,
 }: PaperPricesPropTypes): JSX.Element {
 	const infoText = `${
 		activeTab === HomeDelivery ? 'Delivery is included. ' : ''
@@ -145,7 +144,7 @@ export function PaperPrices({
 			</h2>
 			<div css={pricesTabs}>
 				{/* Show Home Delivery tab first if in ab test */}
-				{participations.nationalDelivery === 'variant' ? (
+				{isNationalDeliveryAbTestVariant ? (
 					<>
 						{homeDeliveryTab}
 						{collectionTab}

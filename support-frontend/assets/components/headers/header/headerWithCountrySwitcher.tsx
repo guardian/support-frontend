@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
@@ -14,14 +13,12 @@ export default function ({
 	countryGroupId,
 	listOfCountryGroups,
 	trackProduct,
-	participations,
 }: {
 	path: string;
 	countryGroupId: CountryGroupId;
 	listOfCountryGroups: CountryGroupId[];
 	trackProduct?: Option<SubscriptionProduct>;
 	hideDigiSub?: boolean;
-	participations: Participations;
 }) {
 	return function (): JSX.Element {
 		return (
@@ -35,7 +32,6 @@ export default function ({
 						trackProduct={trackProduct}
 					/>
 				}
-				participations={participations}
 			/>
 		);
 	};
