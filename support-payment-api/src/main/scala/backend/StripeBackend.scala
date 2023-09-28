@@ -389,11 +389,7 @@ object StripeBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      // I think this initialisation code is correct because at this point the env variable has been set
-      // correctly to live or test based on whether the environment is PROD or CODE and whether the user is
-      // a test user. The AcquisitionEventBusService class has some logic within it to deal with test users,
-      // but that is not needed in this case so we just pass in `isTestUser = false`
-      AcquisitionsEventBusService("payment-api", if (env == Live) PROD else CODE, isTestUser = false).valid,
+      AcquisitionsEventBusService("payment-api", if (env == Live) PROD else CODE).valid,
       configLoader
         .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
         .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],

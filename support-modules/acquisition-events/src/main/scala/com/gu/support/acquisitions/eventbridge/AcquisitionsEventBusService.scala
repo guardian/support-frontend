@@ -71,6 +71,7 @@ object AcquisitionsEventBusService {
     *   \- Whether the current user is a test user
     * @return
     */
-  def apply(source: String, stage: Stage, isTestUser: Boolean) =
+  def apply(source: String, stage: Stage, isTestUser: Boolean = false) =
     new AcquisitionsEventBusService(source, if (isTestUser) CODE else stage, eventBridgeClient)
+
 }
