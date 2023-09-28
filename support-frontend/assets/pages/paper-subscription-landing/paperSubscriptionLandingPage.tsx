@@ -59,20 +59,20 @@ function PaperLandingPage({
 	const isNationalDeliveryAbTestVariant =
 		participations.nationalDelivery === 'variant';
 
-	const [redirectToHomeDelivery, setRedirectToHomeDelivery] = useState<boolean>(
-		isNationalDeliveryAbTestVariant,
-	);
+	const [shouldRedirectToHomeDelivery, setShouldRedirectToHomeDelivery] =
+		useState<boolean>(isNationalDeliveryAbTestVariant);
 
 	if (
-		redirectToHomeDelivery &&
+		shouldRedirectToHomeDelivery &&
 		!window.location.pathname.includes('delivery')
 	) {
-		window.history.pushState({}, '', window.location.href + '/delivery');
-		setRedirectToHomeDelivery(false);
+		window.history.replaceState({}, '', paperSubsUrl(true));
+		setShouldRedirectToHomeDelivery(false);
 	}
 
 	const fulfilment: PaperFulfilmentOptions =
-		window.location.pathname.includes('delivery') || redirectToHomeDelivery
+		window.location.pathname.includes('delivery') ||
+		shouldRedirectToHomeDelivery
 			? HomeDelivery
 			: Collection;
 	const [selectedTab, setSelectedTab] =
@@ -124,7 +124,7 @@ function PaperLandingPage({
 					<PaperProductPrices
 						productPrices={productPrices}
 						tab={selectedTab}
-						setTabAction={setSelectedTab}
+						setTabAction={handleSetTabAction}
 						isNationalDeliveryAbTestVariant={isNationalDeliveryAbTestVariant}
 					/>
 				</CentredContainer>
