@@ -6,7 +6,9 @@ const userEmail = 'asdfa@example.com';
 
 test.beforeEach(async ({ page, context, baseURL }) => {
 	// const dobedo = 'http://support.theguardian.com';
-	const pageUrl = `${baseURL}/uk/contribute`;
+	const pageUrl = `${
+		baseURL ?? 'http://support.theguardian.com'
+	}/uk/contribute`;
 	await context.addCookies([
 		{ name: 'pre-signin-test-user', value: userName, url: pageUrl },
 		{ name: '_test_username', value: userName, url: pageUrl },
