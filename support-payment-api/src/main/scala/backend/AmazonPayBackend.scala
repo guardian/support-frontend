@@ -268,7 +268,10 @@ object AmazonPayBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      // TODO: Does payment-api know about test users?
+      // I think this initialisation code is correct because at this point the env variable has been set
+      // correctly to live or test based on whether the environment is PROD or CODE and whether the user is
+      // a test user. The AcquisitionEventBusService class has some logic within it to deal with test users,
+      // but that is not needed in this case so we just pass in `isTestUser = false`
       AcquisitionsEventBusService("payment-api", if (env == Live) PROD else CODE, isTestUser = false).valid,
       configLoader
         .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
