@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - main
+      - ad/event-bus-rule-single-contribution-sqs
 
 jobs:
   CI:
