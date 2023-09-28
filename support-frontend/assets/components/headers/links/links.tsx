@@ -91,7 +91,10 @@ function getActiveLinkClassModifiers(
 ): string | null {
 	if (
 		urlWithoutParams.endsWith(href) ||
-		urlWithoutParams.endsWith(`${href}/delivery`)
+		urlWithoutParams.endsWith(`${href}/delivery`) ||
+		// When in nationalDelivery AB test
+		(urlWithoutParams.endsWith(routes.paperSubscriptionLanding) &&
+			href === routes.paperSubscriptionLandingHomeDelivery)
 	) {
 		return 'active';
 	}
