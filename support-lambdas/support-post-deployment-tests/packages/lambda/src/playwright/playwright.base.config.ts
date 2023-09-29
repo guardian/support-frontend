@@ -1,7 +1,7 @@
 import { devices } from '@playwright/test';
 import type { PlaywrightTestConfig } from '@playwright/test';
 
-export const baseObject:PlaywrightTestConfig = {
+export const baseObject: PlaywrightTestConfig = {
 	testDir: './tests',
 	testMatch: '**/*.ts',
 

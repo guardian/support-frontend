@@ -8,16 +8,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version-file: .nvmrc
+          node-version-file: 'support-lambdas/support-post-deployment-tests/.nvmrc'
           cache: "yarn"
+          cache-dependency-path: |
+            support-lambdas/support-post-deployment-tests/yarn.lock
       - run: |
           yarn install
           yarn build
-          yarn package
+          yarn postbuild
+        working-directory: support-lambdas/support-post-deployment-tests
       - name: CDK synth
         run: |
           yarn install

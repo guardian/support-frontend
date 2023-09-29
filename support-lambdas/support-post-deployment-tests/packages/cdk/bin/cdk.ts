@@ -1,6 +1,9 @@
 import 'source-map-support/register';
 import { GuRootExperimental } from '@guardian/cdk/lib/experimental/constructs';
-import { LoggingLevel,SupportFrontendPostDeploymentTestsLambda } from '../lib/support-frontend-post-deployment-tests-lambda';
+import {
+	LoggingLevel,
+	SupportFrontendPostDeploymentTestsLambda,
+} from '../lib/support-frontend-post-deployment-tests-lambda';
 
 /**
  * GuRootExperimental will generate a `riff-raff.yaml` configuration file to deploy this project with Riff-Raff.
@@ -9,50 +12,58 @@ import { LoggingLevel,SupportFrontendPostDeploymentTestsLambda } from '../lib/su
  */
 const app = new GuRootExperimental();
 
-new SupportFrontendPostDeploymentTestsLambda(app, 'SupportFrontendPostDeploymentTestsLambda-CODE', {
-	/**
-	 * This becomes the value of the STACK tag on provisioned resources.
-	 *
-	 * It is also used by Riff-Raff to determine the AWS account to deploy into.
-	 *
-	 * @see https://riffraff.gutools.co.uk/deployinfo/data?key=credentials%3Aaws-cfn-role
-	 */
-	stack: 'membership',
-
-	/**
-	 * This becomes the value of the STAGE tag on provisioned resources.
-	 */
-	stage: 'CODE',
-
-	env: {
+new SupportFrontendPostDeploymentTestsLambda(
+	app,
+	'SupportFrontendPostDeploymentTestsLambda-CODE',
+	{
 		/**
-		 * Which AWS region should this service be deployed into?
+		 * This becomes the value of the STACK tag on provisioned resources.
+		 *
+		 * It is also used by Riff-Raff to determine the AWS account to deploy into.
+		 *
+		 * @see https://riffraff.gutools.co.uk/deployinfo/data?key=credentials%3Aaws-cfn-role
 		 */
-		region: 'eu-west-1',
+		stack: 'membership',
+
+		/**
+		 * This becomes the value of the STAGE tag on provisioned resources.
+		 */
+		stage: 'CODE',
+
+		env: {
+			/**
+			 * Which AWS region should this service be deployed into?
+			 */
+			region: 'eu-west-1',
+		},
 	},
+	LoggingLevel.DEBUG,
+);
 
-},LoggingLevel.DEBUG);
+new SupportFrontendPostDeploymentTestsLambda(
+	app,
+	'SupportFrontendPostDeploymentTestsLambda-PROD',
+	{
+		/**
+		 * This becomes the value of the STACK tag on provisioned resources.
+		 *
+		 * It is also used by Riff-Raff to determine the AWS account to deploy into.
+		 *
+		 * @see https://riffraff.gutools.co.uk/deployinfo/data?key=credentials%3Aaws-cfn-role
+		 */
+		stack: 'membership',
 
-new SupportFrontendPostDeploymentTestsLambda(app, 'SupportFrontendPostDeploymentTestsLambda-PROD', {
-  /**
-   * This becomes the value of the STACK tag on provisioned resources.
-   *
-   * It is also used by Riff-Raff to determine the AWS account to deploy into.
-   *
-   * @see https://riffraff.gutools.co.uk/deployinfo/data?key=credentials%3Aaws-cfn-role
-   */
-  stack: 'membership',
+		/**
+		 * This becomes the value of the STAGE tag on provisioned resources.
+		 */
+		stage: 'PROD',
 
-  /**
-   * This becomes the value of the STAGE tag on provisioned resources.
-   */
-  stage: 'PROD',
-
-  env: {
-    /**
-     * Which AWS region should this service be deployed into?
-     */
-    region: 'eu-west-1',
-  },
-},LoggingLevel.INFO);
-
+		env: {
+			/**
+			 * Which AWS region should this service be deployed into?
+			 */
+			region: 'eu-west-1',
+		},
+	},
+	LoggingLevel.INFO,
+);

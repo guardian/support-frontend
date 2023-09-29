@@ -1,12 +1,13 @@
 {
-  "name": "example-typecript-lambda",
+  "name": "support-frontend-post-deployments-tests-lambda",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "test": "npm run test --workspaces --if-present",
     "lint": "eslint packages/** --ext .ts --no-error-on-unmatched-pattern",
     "format": "prettier --write packages/**/*.ts",
-    "build": "npm run build --workspaces --if-present"
+    "build": "npm run build --workspaces --if-present",
+    "postbuild":"npm run postbuild --workspaces --if-present"
   },
   "workspaces": [
     "packages/*"
