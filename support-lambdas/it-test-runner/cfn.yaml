@@ -78,6 +78,10 @@ Resources:
                 - sqs:GetQueueUrl
               Resource:
                 Fn::ImportValue: !Sub "comms-CODE-EmailQueueArn"
+        - Statement:
+            - Effect: Allow
+              Action: events:PutEvents
+              Resource: arn:aws:events:${AWS::Region}:${AWS::AccountId}:event-bus/acquisitions-bus-CODE
 
   LambdaLogGroup:
     Type: AWS::Logs::LogGroup
