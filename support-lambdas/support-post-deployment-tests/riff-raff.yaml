@@ -10,7 +10,7 @@ deployments:
     templateStagePaths:
       CODE: SupportFrontendPostDeploymentTestsLambda-CODE.template.json
       PROD: SupportFrontendPostDeploymentTestsLambda-PROD.template.json
-  support-frontend-post-deployment-tests:
+  support-frontend-post-deployment-tests-lambda:
     type: aws-lambda
     stacks:
       - support

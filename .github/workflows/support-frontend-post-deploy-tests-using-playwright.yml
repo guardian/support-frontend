@@ -34,14 +34,14 @@ jobs:
         with:
           role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           aws-region: eu-west-1
-#      - name: Upload to riff-raff
-#        uses: guardian/actions-riff-raff@v2
-#        with:
-#          configPath: ./support-lambdas/support-post-deployment-tests/riff-raff.yaml
-#          projectName: Support::support-frontend-post-deployment-tests
-#          contentDirectories: |
-#            cdk.out:
-#              - cdk/cdk.out/support-frontend-post-deployment-tests-lambda-CODE.template.json
-#              - cdk/cdk.out/support-frontend-post-deployment-tests-lambda-PROD.template.json
-#            support-frontend-post-deployment-tests-lambda:
-#              - support-lambdas/support-post-deployment-tests/packages/lambda/dist/support-frontend-post-deployment-tests.zip
+      - name: Upload to riff-raff
+        uses: guardian/actions-riff-raff@v2
+        with:
+          configPath: ./support-lambdas/support-post-deployment-tests/riff-raff.yaml
+          projectName: Support::support-frontend-post-deployment-tests
+          contentDirectories: |
+            cdk.out:
+              - cdk/cdk.out/support-frontend-post-deployment-tests-lambda-CODE.template.json
+              - cdk/cdk.out/support-frontend-post-deployment-tests-lambda-PROD.template.json
+            support-frontend-post-deployment-tests-lambda:
+              - support-lambdas/support-post-deployment-tests/packages/lambda/dist/support-frontend-post-deployment-tests.zip
