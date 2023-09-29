@@ -10,20 +10,18 @@ import org.scalatest.matchers.should.Matchers
 class ConfigServiceSpec extends AsyncFlatSpec with Matchers {
 
   PatronsStripeConfig.getClass.getSimpleName should "load config from SSM" in {
-    PatronsStripeConfig
-      .fromParameterStore(CODE)
-      .map { config =>
-        config.apiKey.length should be > 0
-      }
+    val config = PatronsStripeConfig
+      .fromParameterStoreSync(CODE)
+
+    config.apiKey.length should be > 0
   }
 
   PatronsIdentityConfig.getClass.getSimpleName should "load config from SSM" in {
-    PatronsIdentityConfig
-      .fromParameterStore(CODE)
-      .map { config =>
-        config.apiClientToken.length should be > 0
-        config.apiUrl shouldBe "https://idapi.code.dev-theguardian.com"
-      }
+    val config = PatronsIdentityConfig
+      .fromParameterStoreSync(CODE)
+
+    config.apiClientToken.length should be > 0
+    config.apiUrl shouldBe "https://idapi.code.dev-theguardian.com"
   }
 
 }

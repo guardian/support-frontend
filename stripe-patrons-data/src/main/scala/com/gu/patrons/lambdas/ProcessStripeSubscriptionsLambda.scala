@@ -7,10 +7,10 @@ import com.gu.patrons.lambdas.ProcessStripeSubscriptionsLambda.processSubscripti
 import com.gu.patrons.model.StageConstructors
 import com.gu.patrons.services.{
   CreateMissingIdentityProcessor,
-  PatronsIdentityService,
-  PatronsStripeService,
   GnmPatronScheme,
+  PatronsIdentityService,
   PatronsStripeAccount,
+  PatronsStripeService,
   StripeSubscriptionsProcessor,
 }
 import com.gu.supporterdata.model.Stage
@@ -22,29 +22,35 @@ import scala.concurrent.duration.{Duration, DurationInt, MILLISECONDS}
 
 class ProcessStripeSubscriptionsLambda extends RequestHandler[Unit, Unit] {
 
+  private val stage = StageConstructors.fromEnvironment
+  private val stripeConfig = PatronsStripeConfig.fromParameterStoreSync(stage)
+  private val identityConfig = PatronsIdentityConfig.fromParameterStoreSync(stage)
+
   override def handleRequest(input: Unit, context: Context) = {
     val account = GnmPatronScheme // TODO: allow this to be set by the caller
     Await.result(
-      processSubscriptions(account, StageConstructors.fromEnvironment),
+      processSubscriptions(account, stage, stripeConfig, identityConfig),
       Duration(context.getRemainingTimeInMillis.toLong, MILLISECONDS),
     )
   }
 }
 
 object ProcessStripeSubscriptionsLambda {
-  def processSubscriptions(account: PatronsStripeAccount, stage: Stage) = {
+
+  def processSubscriptions(
+      account: PatronsStripeAccount,
+      stage: Stage,
+      stripeConfig: PatronsStripeConfig,
+      identityConfig: PatronsIdentityConfig,
+  ) = {
     val runner = configurableFutureRunner(60.seconds)
-    for {
-      stripeConfig <- PatronsStripeConfig.fromParameterStore(stage)
-      stripeService = new PatronsStripeService(stripeConfig, runner)
-      identityConfig <- PatronsIdentityConfig.fromParameterStore(stage)
-      identityService = new PatronsIdentityService(identityConfig, runner)
-      dynamoService = SupporterDataDynamoService(stage)
-      processor = new StripeSubscriptionsProcessor(
-        stripeService,
-        new CreateMissingIdentityProcessor(identityService, dynamoService),
-      )
-      _ <- processor.processSubscriptions(account, 100)
-    } yield ()
+    val stripeService = new PatronsStripeService(stripeConfig, runner)
+    val identityService = new PatronsIdentityService(identityConfig, runner)
+    val dynamoService = SupporterDataDynamoService(stage)
+    val processor = new StripeSubscriptionsProcessor(
+      stripeService,
+      new CreateMissingIdentityProcessor(identityService, dynamoService),
+    )
+    processor.processSubscriptions(account, 100).map(_ => ())
   }
 }

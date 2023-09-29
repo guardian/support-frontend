@@ -185,6 +185,7 @@ lazy val `supporter-product-data-dynamo` = (project in file("support-modules/sup
     libraryDependencies ++= commonDependencies,
     releaseSettings,
     scalafmtSettings,
+    mergeStrategySettings
   )
 
 lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))

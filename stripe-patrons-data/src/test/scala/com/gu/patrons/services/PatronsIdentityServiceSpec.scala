@@ -14,36 +14,33 @@ import scala.concurrent.duration.DurationInt
 @IntegrationTest
 class PatronsIdentityServiceSpec extends AsyncFlatSpec with Matchers {
   "PatronsIdentityService" should "get an identity id from an email address" in {
-    PatronsIdentityConfig.fromParameterStore(CODE).flatMap { config =>
-      val service = new PatronsIdentityService(config, configurableFutureRunner(60.seconds))
-      service.getUserIdFromEmail("test@guardian.co.uk").map(id => id.isDefined shouldBe true)
-    }
+    val config = PatronsIdentityConfig.fromParameterStoreSync(CODE)
+    val service = new PatronsIdentityService(config, configurableFutureRunner(60.seconds))
+    service.getUserIdFromEmail("test@guardian.co.uk").map(id => id.isDefined shouldBe true)
   }
 
   "PatronsIdentityService" should "not get an identity id from an unknown email address" in {
-    PatronsIdentityConfig.fromParameterStore(CODE).flatMap { config =>
-      val service = new PatronsIdentityService(config, configurableFutureRunner(60.seconds))
-      val email = s"${UUID.randomUUID()}@gu.com"
-      service
-        .getUserIdFromEmail(email)
-        .map {
-          case Some(_) =>
-            fail("This email shouldn't exist!")
-          case None =>
-            succeed
-        }
-    }
+    val config = PatronsIdentityConfig.fromParameterStoreSync(CODE)
+    val service = new PatronsIdentityService(config, configurableFutureRunner(60.seconds))
+    val email = s"${UUID.randomUUID()}@gu.com"
+    service
+      .getUserIdFromEmail(email)
+      .map {
+        case Some(_) =>
+          fail("This email shouldn't exist!")
+        case None =>
+          succeed
+      }
   }
 
   // Ignored as we don't want to create a guest account in Identity every time this test runs
   "PatronsIdentityService" should "create a guest account for an unknown email address" ignore {
-    PatronsIdentityConfig.fromParameterStore(CODE).flatMap { config =>
-      val service = new PatronsIdentityService(config, configurableFutureRunner(60.seconds))
-      val email = s"${UUID.randomUUID()}@gu.com"
-      service
-        .getOrCreateUserFromEmail(email, None)
-        .map(id => id.length should be > 0)
-    }
+    val config = PatronsIdentityConfig.fromParameterStoreSync(CODE)
+    val service = new PatronsIdentityService(config, configurableFutureRunner(60.seconds))
+    val email = s"${UUID.randomUUID()}@gu.com"
+    service
+      .getOrCreateUserFromEmail(email, None)
+      .map(id => id.length should be > 0)
   }
 
 }

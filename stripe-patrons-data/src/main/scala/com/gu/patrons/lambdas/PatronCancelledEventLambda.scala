@@ -40,8 +40,12 @@ import scala.concurrent.duration.{Duration, DurationInt, MINUTES}
 import scala.jdk.CollectionConverters.MapHasAsScala
 import scala.util.{Failure, Success, Try}
 
-object PatronCancelledEventLambda extends StrictLogging {
+class PatronCancelledEventLambda extends StrictLogging {
   val runner = configurableFutureRunner(60.seconds)
+
+  implicit val stage = StageConstructors.fromEnvironment
+  private val stripeConfig = PatronsStripeConfig.fromParameterStoreSync(stage)
+  private val identityConfig = PatronsIdentityConfig.fromParameterStoreSync(stage)
 
   def handleRequest(event: APIGatewayProxyRequestEvent): APIGatewayProxyResponseEvent = {
     Await.result(
@@ -51,14 +55,11 @@ object PatronCancelledEventLambda extends StrictLogging {
   }
 
   def cancelCustomerInDynamoDb(event: APIGatewayProxyRequestEvent): Future[APIGatewayProxyResponseEvent] = {
-    implicit val stage = StageConstructors.fromEnvironment
     val countryId = event.getPathParameters.get("countryId")
     SafeLogger.info(s"Path is ${countryId}")
     val account = if (countryId == "au") GnmPatronSchemeAus else GnmPatronScheme
 
     (for {
-      stripeConfig <- getStripeConfig(stage)
-      identityConfig <- getIdentityConfig(stage)
       payload <- getPayload(
         event,
         account match {
@@ -120,28 +121,6 @@ object PatronCancelledEventLambda extends StrictLogging {
         response.setBody("Successfully cancelled Patron subscription")
     }
     response
-  }
-
-  def getStripeConfig(stage: Stage): EitherT[Future, CancelError, PatronsStripeConfig] = {
-    logger.info("Attempting to fetch Stripe config information from parameter store")
-    val futureConfig: Future[Either[CancelError, PatronsStripeConfig]] = PatronsStripeConfig
-      .fromParameterStore(stage)
-      .transform {
-        case Success(config) => Try(Right(config))
-        case Failure(err) => Try(Left(ConfigLoadingError(err.getMessage)))
-      }
-    EitherT(futureConfig)
-  }
-
-  def getIdentityConfig(stage: Stage): EitherT[Future, CancelError, PatronsIdentityConfig] = {
-    logger.info("Attempting to fetch Identity config information from parameter store")
-    val futureConfig: Future[Either[CancelError, PatronsIdentityConfig]] = PatronsIdentityConfig
-      .fromParameterStore(stage)
-      .transform {
-        case Success(config) => Try(Right(config))
-        case Failure(err) => Try(Left(ConfigLoadingError(err.getMessage)))
-      }
-    EitherT(futureConfig)
   }
 
   def getPayload(
