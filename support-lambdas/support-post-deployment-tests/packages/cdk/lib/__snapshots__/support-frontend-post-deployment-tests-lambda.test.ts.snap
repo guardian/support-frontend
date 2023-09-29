@@ -32,8 +32,11 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
         "Environment": {
           "Variables": {
             "APP": "support-frontend-post-deployment-tests-lambda",
+            "Bucket": "membership-dist",
+            "LoggingLevel": "2",
             "STACK": "support",
             "STAGE": "CODE",
+            "Stage": "CODE",
           },
         },
         "Handler": "dist/lambda/index.handler",
@@ -289,8 +292,11 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
         "Environment": {
           "Variables": {
             "APP": "support-frontend-post-deployment-tests-lambda",
+            "Bucket": "membership-dist",
+            "LoggingLevel": "3",
             "STACK": "support",
             "STAGE": "PROD",
+            "Stage": "PROD",
           },
         },
         "Handler": "dist/lambda/index.handler",
