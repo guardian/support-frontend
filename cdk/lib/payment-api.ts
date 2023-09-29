@@ -146,7 +146,7 @@ export class PaymentApi extends GuStack {
                     `arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-PROD`,
                   ]
                 : [
-                    `arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-DEV`,
+                    `arn:aws:sqs:${this.region}:${this.account}:soft-opt-in-consent-setter-queue-CODE`,
                   ],
           }),
           new GuPutCloudwatchMetricsPolicy(this),
