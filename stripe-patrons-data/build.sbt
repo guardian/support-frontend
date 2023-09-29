@@ -50,21 +50,3 @@ resourceGenerators in Compile += Def.task {
   IO.write(file, buildNumber)
   Seq(file)
 }.taskValue
-
-lazy val deployToCode =
-  inputKey[Unit]("Directly update AWS lambda code from local instead of via RiffRaff for faster feedback loop")
-
-deployToCode := {
-  import scala.sys.process._
-  val s3Bucket = "membership-dist"
-  val s3Path = "support/CODE/stripe-patrons-data/stripe-patrons-data.jar"
-  (s"aws s3 cp ${assembly.value} s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!
-  List(
-    "stripe-patrons-data-CODE",
-    "stripe-patrons-data-cancelled-CODE",
-    "stripe-patrons-data-sign-up-CODE",
-  ).foreach(functionPartial => {
-    System.out.println(s"Updating function $functionPartial")
-    s"aws lambda update-function-code --function-name $functionPartial --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!
-  })
-}
