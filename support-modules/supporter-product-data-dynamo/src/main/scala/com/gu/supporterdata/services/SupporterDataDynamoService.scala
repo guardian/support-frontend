@@ -4,6 +4,7 @@ import com.gu.supporterdata.model.FieldNames._
 import com.gu.supporterdata.model.{Stage, SupporterRatePlanItem}
 import software.amazon.awssdk.auth.credentials.{
   AwsCredentialsProviderChain,
+  ContainerCredentialsProvider,
   EnvironmentVariableCredentialsProvider,
   InstanceProfileCredentialsProvider,
   ProfileCredentialsProvider,
@@ -140,6 +141,7 @@ object SupporterDataDynamoService {
       ProfileCredentialsProvider.builder.profileName(ProfileName).build,
       InstanceProfileCredentialsProvider.builder.asyncCredentialUpdateEnabled(false).build,
       EnvironmentVariableCredentialsProvider.create(),
+      ContainerCredentialsProvider.builder.build(),
     )
     .build
 
