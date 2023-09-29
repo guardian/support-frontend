@@ -8,30 +8,28 @@ import cats.syntax.either._
 import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
+import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.acquisitions.{
   AcquisitionsStreamEc2OrLocalConfig,
   AcquisitionsStreamService,
   AcquisitionsStreamServiceImpl,
-  BigQueryConfig,
-  BigQueryService,
 }
 import com.gu.support.config.Stages.{CODE, PROD}
 import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
-import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
-import play.api.libs.ws.WSClient
-import conf._
 import conf.ConfigLoader._
+import conf._
 import model.Environment.Live
 import model._
 import model.acquisition.{AcquisitionDataRowBuilder, PaypalAcquisition}
 import model.db.ContributionData
 import model.email.ContributorRow
+import model.paypal.PaypalApiError.paypalErrorText
 import model.paypal._
+import play.api.libs.ws.WSClient
 import services._
 import util.EnvironmentBasedBuilder
-import model.paypal.PaypalApiError.paypalErrorText
 
 import scala.concurrent.Future
 import scala.jdk.CollectionConverters._
@@ -41,7 +39,7 @@ class PaypalBackend(
     paypalService: PaypalService,
     val databaseService: ContributionsStoreService,
     identityService: IdentityService,
-    val bigQueryService: BigQueryService,
+    val acquisitionsEventBusService: AcquisitionsEventBusService,
     val acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
     cloudWatchService: CloudWatchService,
@@ -263,7 +261,7 @@ object PaypalBackend {
       paypalService: PaypalService,
       databaseService: ContributionsStoreService,
       identityService: IdentityService,
-      bigQueryService: BigQueryService,
+      acquisitionsEventBusService: AcquisitionsEventBusService,
       acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
       cloudWatchService: CloudWatchService,
@@ -275,7 +273,7 @@ object PaypalBackend {
       paypalService,
       databaseService,
       identityService,
-      bigQueryService,
+      acquisitionsEventBusService,
       acquisitionsStreamService,
       emailService,
       cloudWatchService,
@@ -306,14 +304,7 @@ object PaypalBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      configLoader
-        .loadConfig[Environment, BigQueryConfig](env)
-        .map(config =>
-          BigQueryService.build(
-            if (env == Live) PROD else CODE,
-            config,
-          ),
-        ): InitializationResult[BigQueryService],
+      AcquisitionsEventBusService("payment-api", if (env == Live) PROD else CODE).valid,
       configLoader
         .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
         .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],

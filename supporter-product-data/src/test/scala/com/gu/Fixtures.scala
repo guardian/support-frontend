@@ -22,7 +22,7 @@ object Fixtures {
             "messageAttributes": {},
             "md5OfBody": "b10a8db164e0754105b7a99be72e3fe5",
             "eventSource": "aws:sqs",
-            "eventSourceARN": "arn:aws:sqs:eu-west-1:865473395570:supporter-product-data-DEV",
+            "eventSourceARN": "arn:aws:sqs:eu-west-1:865473395570:supporter-product-data-CODE",
             "awsRegion": "eu-west-1"
         }
     ]

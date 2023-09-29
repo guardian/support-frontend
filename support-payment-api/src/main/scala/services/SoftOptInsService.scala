@@ -73,7 +73,7 @@ object SoftOptInsService extends StrictLogging {
     val sqsClient: AmazonSQSAsync = AWSClientBuilder.buildAmazonSQSAsyncClient()
     val queueName = environment match {
       case Live => "soft-opt-in-consent-setter-queue-PROD"
-      case _ => "soft-opt-in-consent-setter-queue-DEV"
+      case _ => "soft-opt-in-consent-setter-queue-CODE"
     }
 
     val queueUrlResponse: Future[Either[SoftOptInsServiceError, String]] = getQueue(sqsClient, queueName)
