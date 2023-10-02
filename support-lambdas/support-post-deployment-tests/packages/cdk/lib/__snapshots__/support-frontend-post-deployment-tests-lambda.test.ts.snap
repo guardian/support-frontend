@@ -17,30 +17,33 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
     },
   },
   "Resources": {
-    "supportfrontendpostdeploymenttestslambdaE5242CB4": {
+    "supportfrontendpostdeploymenttestsDCE32CCB": {
       "DependsOn": [
-        "supportfrontendpostdeploymenttestslambdaServiceRoleDefaultPolicy01096A9D",
-        "supportfrontendpostdeploymenttestslambdaServiceRole46E96403",
+        "supportfrontendpostdeploymenttestsServiceRoleDefaultPolicyC5E1293F",
+        "supportfrontendpostdeploymenttestsServiceRoleE9B7AFAC",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/CODE/support-frontend-post-deployment-tests-lambda/support-frontend-post-deployment-tests-lambda.zip",
+          "S3Key": "support/CODE/support-frontend-post-deployment-tests/support-frontend-post-deployment-tests.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "support-frontend-post-deployment-tests-lambda",
+            "APP": "support-frontend-post-deployment-tests",
+            "Bucket": "membership-dist",
+            "LoggingLevel": "2",
             "STACK": "support",
             "STAGE": "CODE",
+            "Stage": "CODE",
           },
         },
         "Handler": "dist/lambda/index.handler",
         "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
-            "supportfrontendpostdeploymenttestslambdaServiceRole46E96403",
+            "supportfrontendpostdeploymenttestsServiceRoleE9B7AFAC",
             "Arn",
           ],
         },
@@ -48,7 +51,7 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-frontend-post-deployment-tests-lambda",
+            "Value": "support-frontend-post-deployment-tests",
           },
           {
             "Key": "gu:cdk:version",
@@ -71,60 +74,7 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
       },
       "Type": "AWS::Lambda::Function",
     },
-    "supportfrontendpostdeploymenttestslambdaServiceRole46E96403": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": "support-frontend-post-deployment-tests-lambda",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "CODE",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "supportfrontendpostdeploymenttestslambdaServiceRoleDefaultPolicy01096A9D": {
+    "supportfrontendpostdeploymenttestsServiceRoleDefaultPolicyC5E1293F": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -163,7 +113,7 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/CODE/support-frontend-post-deployment-tests-lambda/support-frontend-post-deployment-tests-lambda.zip",
+                      "/support/CODE/support-frontend-post-deployment-tests/support-frontend-post-deployment-tests.zip",
                     ],
                   ],
                 },
@@ -180,7 +130,7 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/CODE/support/support-frontend-post-deployment-tests-lambda",
+                    ":parameter/CODE/support/support-frontend-post-deployment-tests",
                   ],
                 ],
               },
@@ -199,7 +149,7 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/CODE/support/support-frontend-post-deployment-tests-lambda/*",
+                    ":parameter/CODE/support/support-frontend-post-deployment-tests/*",
                   ],
                 ],
               },
@@ -207,35 +157,69 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "supportfrontendpostdeploymenttestslambdaServiceRoleDefaultPolicy01096A9D",
+        "PolicyName": "supportfrontendpostdeploymenttestsServiceRoleDefaultPolicyC5E1293F",
         "Roles": [
           {
-            "Ref": "supportfrontendpostdeploymenttestslambdaServiceRole46E96403",
+            "Ref": "supportfrontendpostdeploymenttestsServiceRoleE9B7AFAC",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "supportfrontendpostdeploymenttestslambdasupportfrontendpostdeploymenttestslambdacron001020AllowEventRuleSupportFrontendPostDeploymentTestsLambdaCODEsupportfrontendpostdeploymenttestslambdaC5EDC961D51AF495": {
+    "supportfrontendpostdeploymenttestsServiceRoleE9B7AFAC": {
       "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "supportfrontendpostdeploymenttestslambdaE5242CB4",
-            "Arn",
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
           ],
+          "Version": "2012-10-17",
         },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "supportfrontendpostdeploymenttestslambdasupportfrontendpostdeploymenttestslambdacron001020F22140C1",
-            "Arn",
-          ],
-        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "support-frontend-post-deployment-tests",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "CODE",
+          },
+        ],
       },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::IAM::Role",
     },
-    "supportfrontendpostdeploymenttestslambdasupportfrontendpostdeploymenttestslambdacron001020F22140C1": {
+    "supportfrontendpostdeploymenttestssupportfrontendpostdeploymenttestscron0010202A339068": {
       "Properties": {
         "ScheduleExpression": "cron(00 10 ? * 2 *)",
         "State": "ENABLED",
@@ -243,7 +227,7 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
           {
             "Arn": {
               "Fn::GetAtt": [
-                "supportfrontendpostdeploymenttestslambdaE5242CB4",
+                "supportfrontendpostdeploymenttestsDCE32CCB",
                 "Arn",
               ],
             },
@@ -252,6 +236,25 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
         ],
       },
       "Type": "AWS::Events::Rule",
+    },
+    "supportfrontendpostdeploymenttestssupportfrontendpostdeploymenttestscron001020AllowEventRuleSupportFrontendPostDeploymentTestsLambdaCODEsupportfrontendpostdeploymenttests4DB94A665CD2D1FF": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "supportfrontendpostdeploymenttestsDCE32CCB",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "supportfrontendpostdeploymenttestssupportfrontendpostdeploymenttestscron0010202A339068",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
     },
   },
 }
@@ -274,30 +277,33 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
     },
   },
   "Resources": {
-    "supportfrontendpostdeploymenttestslambdaE5242CB4": {
+    "supportfrontendpostdeploymenttestsDCE32CCB": {
       "DependsOn": [
-        "supportfrontendpostdeploymenttestslambdaServiceRoleDefaultPolicy01096A9D",
-        "supportfrontendpostdeploymenttestslambdaServiceRole46E96403",
+        "supportfrontendpostdeploymenttestsServiceRoleDefaultPolicyC5E1293F",
+        "supportfrontendpostdeploymenttestsServiceRoleE9B7AFAC",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/support-frontend-post-deployment-tests-lambda/support-frontend-post-deployment-tests-lambda.zip",
+          "S3Key": "support/PROD/support-frontend-post-deployment-tests/support-frontend-post-deployment-tests.zip",
         },
         "Environment": {
           "Variables": {
-            "APP": "support-frontend-post-deployment-tests-lambda",
+            "APP": "support-frontend-post-deployment-tests",
+            "Bucket": "membership-dist",
+            "LoggingLevel": "3",
             "STACK": "support",
             "STAGE": "PROD",
+            "Stage": "PROD",
           },
         },
         "Handler": "dist/lambda/index.handler",
         "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
-            "supportfrontendpostdeploymenttestslambdaServiceRole46E96403",
+            "supportfrontendpostdeploymenttestsServiceRoleE9B7AFAC",
             "Arn",
           ],
         },
@@ -305,7 +311,7 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
         "Tags": [
           {
             "Key": "App",
-            "Value": "support-frontend-post-deployment-tests-lambda",
+            "Value": "support-frontend-post-deployment-tests",
           },
           {
             "Key": "gu:cdk:version",
@@ -328,60 +334,7 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
       },
       "Type": "AWS::Lambda::Function",
     },
-    "supportfrontendpostdeploymenttestslambdaServiceRole46E96403": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": "support-frontend-post-deployment-tests-lambda",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "supportfrontendpostdeploymenttestslambdaServiceRoleDefaultPolicy01096A9D": {
+    "supportfrontendpostdeploymenttestsServiceRoleDefaultPolicyC5E1293F": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -420,7 +373,7 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/support-frontend-post-deployment-tests-lambda/support-frontend-post-deployment-tests-lambda.zip",
+                      "/support/PROD/support-frontend-post-deployment-tests/support-frontend-post-deployment-tests.zip",
                     ],
                   ],
                 },
@@ -437,7 +390,7 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-frontend-post-deployment-tests-lambda",
+                    ":parameter/PROD/support/support-frontend-post-deployment-tests",
                   ],
                 ],
               },
@@ -456,7 +409,7 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":parameter/PROD/support/support-frontend-post-deployment-tests-lambda/*",
+                    ":parameter/PROD/support/support-frontend-post-deployment-tests/*",
                   ],
                 ],
               },
@@ -464,35 +417,69 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "supportfrontendpostdeploymenttestslambdaServiceRoleDefaultPolicy01096A9D",
+        "PolicyName": "supportfrontendpostdeploymenttestsServiceRoleDefaultPolicyC5E1293F",
         "Roles": [
           {
-            "Ref": "supportfrontendpostdeploymenttestslambdaServiceRole46E96403",
+            "Ref": "supportfrontendpostdeploymenttestsServiceRoleE9B7AFAC",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "supportfrontendpostdeploymenttestslambdasupportfrontendpostdeploymenttestslambdacron001020AllowEventRuleSupportFrontendPostDeploymentTestsLambdaPRODsupportfrontendpostdeploymenttestslambdaC8D75E64431B5C3B": {
+    "supportfrontendpostdeploymenttestsServiceRoleE9B7AFAC": {
       "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "supportfrontendpostdeploymenttestslambdaE5242CB4",
-            "Arn",
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
           ],
+          "Version": "2012-10-17",
         },
-        "Principal": "events.amazonaws.com",
-        "SourceArn": {
-          "Fn::GetAtt": [
-            "supportfrontendpostdeploymenttestslambdasupportfrontendpostdeploymenttestslambdacron001020F22140C1",
-            "Arn",
-          ],
-        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "App",
+            "Value": "support-frontend-post-deployment-tests",
+          },
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
       },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::IAM::Role",
     },
-    "supportfrontendpostdeploymenttestslambdasupportfrontendpostdeploymenttestslambdacron001020F22140C1": {
+    "supportfrontendpostdeploymenttestssupportfrontendpostdeploymenttestscron0010202A339068": {
       "Properties": {
         "ScheduleExpression": "cron(00 10 ? * 2 *)",
         "State": "ENABLED",
@@ -500,7 +487,7 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
           {
             "Arn": {
               "Fn::GetAtt": [
-                "supportfrontendpostdeploymenttestslambdaE5242CB4",
+                "supportfrontendpostdeploymenttestsDCE32CCB",
                 "Arn",
               ],
             },
@@ -509,6 +496,25 @@ exports[`The SupportFrontendPostDeploymentTestsLambda stack matches the snapshot
         ],
       },
       "Type": "AWS::Events::Rule",
+    },
+    "supportfrontendpostdeploymenttestssupportfrontendpostdeploymenttestscron001020AllowEventRuleSupportFrontendPostDeploymentTestsLambdaPRODsupportfrontendpostdeploymenttests7C9EDBBAF4CCD072": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "supportfrontendpostdeploymenttestsDCE32CCB",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "supportfrontendpostdeploymenttestssupportfrontendpostdeploymenttestscron0010202A339068",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
     },
   },
 }

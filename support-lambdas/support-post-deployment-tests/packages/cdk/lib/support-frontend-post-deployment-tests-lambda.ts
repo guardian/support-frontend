@@ -8,7 +8,7 @@ import type { App } from 'aws-cdk-lib';
 import { Schedule } from 'aws-cdk-lib/aws-events';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 
-const APP_NAME = 'support-frontend-post-deployment-tests-lambda';
+const APP_NAME = 'support-frontend-post-deployment-tests';
 
 export enum LoggingLevel {
 	SILLY,

@@ -6,7 +6,7 @@
 		"start": "DOTENV_CONFIG_PATH=.env ts-node src/run-locally.ts",
 		"prebuild": "rm -rf dist",
 		"build": "esbuild src/index.ts src/playwright/playwright.browserstack.config.ts --bundle --platform=node --target=node18 --outdir=dist && esbuild src/playwright/tests/*.ts --platform=node --target=node18 --outdir=dist/tests && cp -r ../../node_modules dist",
-		"postbuild": "cd dist && zip -r support-frontend-post-deployment-tests-lambda.zip .",
+    "postbuild": "cd dist && zip -r support-frontend-post-deployment-tests.zip .",
 		"pw-browserstack-test": "playwright test --config=src/playwright/playwright.browserstack.config.ts",
 		"pw-local-test": "playwright test --ui --config=src/playwright/playwright.local.config.ts",
 		"pw-prod-test": "playwright test --ui --config=src/playwright/playwright.prod.config.ts"

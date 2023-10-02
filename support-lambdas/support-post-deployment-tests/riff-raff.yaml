@@ -4,14 +4,22 @@ allowedStages:
   - CODE
   - PROD
 deployments:
+  type: cloud-formation
+  app: support-frontend-post-deployment-tests
+  parameters:
+    templateStagePaths:
+      CODE: SupportFrontendPostDeploymentTestsLambda-CODE.template.json
+      PROD: SupportFrontendPostDeploymentTestsLambda-PROD.template.json
   support-frontend-post-deployment-tests-lambda:
     type: aws-lambda
     stacks:
       - support
     regions:
       - eu-west-1
-    app: support-frontend-post-deployment-tests-lambda
+    app: support-frontend-post-deployment-tests
     parameters:
       bucketSsmLookup: true
       lookupByTags: true
-      fileName: support-frontend-post-deployment-tests-lambda.zip
+      fileName: support-frontend-post-deployment-tests.zip
+      prefixStack: false
+    dependencies: [ cloud-formation]
