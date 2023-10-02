@@ -53,22 +53,22 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       targets: [new SqsQueue(queue)],
     });
 
-    const singleContributionSalesforceWritesSqsQueueArn = Queue.fromQueueArn(
-      this,
-      "SingleContributionSalesforceWritesSqsQueueArn",
-      "arn:aws:sqs:eu-west-1:865473395570:single-contribution-salesforce-writes-queue-CODE"
-    );
+    // const singleContributionSalesforceWritesSqsQueueArn = Queue.fromQueueArn(
+    //   this,
+    //   "SingleContributionSalesforceWritesSqsQueueArn",
+    //   "arn:aws:sqs:eu-west-1:865473395570:single-contribution-salesforce-writes-queue-CODE"
+    // );
 
-    new Rule(this, "EventBusToSingleContributionSalesforceWritesSqsRule", {
-      description:
-        "Send all events to SingleContributionSalesforceWrites SQS Queue",
-      eventPattern: {
-        region: ["eu-west-1"],
-        source: [AcquisitionEventBusSource.PaymentApi],
-      },
-      eventBus: eventBus,
-      targets: [new SqsQueue(singleContributionSalesforceWritesSqsQueueArn)],
-    });
+    // new Rule(this, "EventBusToSingleContributionSalesforceWritesSqsRule", {
+    //   description:
+    //     "Send all events to SingleContributionSalesforceWrites SQS Queue",
+    //   eventPattern: {
+    //     region: [this.region],
+    //     source: [AcquisitionEventBusSource.PaymentApi],
+    //   },
+    //   eventBus: eventBus,
+    //   targets: [new SqsQueue(singleContributionSalesforceWritesSqsQueueArn)],
+    // });
 
     const eventSource = new SqsEventSource(queue);
 
