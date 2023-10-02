@@ -31,7 +31,7 @@ export function DeliveryAgentsSelect(
 	if (props.deliveryAgentsResponse?.type === 'Covered') {
 		if (props.deliveryAgentsResponse.agents?.length === 1) {
 			const singleDeliveryProvider = props.deliveryAgentsResponse.agents[0];
-			props.setDeliveryAgent(singleDeliveryProvider.agentId);
+
 			return (
 				<InfoSummary
 					css={singleDeliveryProviderCss}

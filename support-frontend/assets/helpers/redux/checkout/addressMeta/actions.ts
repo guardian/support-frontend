@@ -4,5 +4,5 @@ export const {
 	setBillingAddressMatchesDelivery,
 	setDeliveryInstructions,
 	setDeliveryAgent,
-	setDeliveryAgentResponse,
+	clearDeliveryAgentResponse,
 } = addressMetaSlice.actions;

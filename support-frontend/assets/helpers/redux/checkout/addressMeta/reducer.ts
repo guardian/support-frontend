@@ -17,11 +17,8 @@ export const addressMetaSlice = createSlice({
 		setDeliveryAgent(state, action: PayloadAction<number | undefined>) {
 			state.deliveryAgent.chosenAgent = action.payload;
 		},
-		setDeliveryAgentResponse(
-			state,
-			action: PayloadAction<DeliveryAgentsResponse | undefined>,
-		) {
-			state.deliveryAgent.response = action.payload;
+		clearDeliveryAgentResponse(state) {
+			state.deliveryAgent.response = undefined;
 		},
 	},
 	extraReducers: (builder) => {
@@ -34,6 +31,9 @@ export const addressMetaSlice = createSlice({
 			(state, action: PayloadAction<DeliveryAgentsResponse>) => {
 				state.deliveryAgent.isLoading = false;
 				state.deliveryAgent.response = action.payload;
+				if (action.payload.agents?.length === 1) {
+					state.deliveryAgent.chosenAgent = action.payload.agents[0].agentId;
+				}
 			},
 		);
 		builder.addCase(getDeliveryAgentsThunk.rejected, (state, action) => {

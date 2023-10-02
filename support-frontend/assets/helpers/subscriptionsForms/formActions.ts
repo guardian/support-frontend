@@ -22,9 +22,9 @@ import {
 	setDeliveryTownCity,
 } from 'helpers/redux/checkout/address/actions';
 import {
+	clearDeliveryAgentResponse,
 	setBillingAddressMatchesDelivery,
 	setDeliveryAgent,
-	setDeliveryAgentResponse,
 	setDeliveryInstructions,
 } from 'helpers/redux/checkout/addressMeta/actions';
 import { getDeliveryAgentsThunk } from 'helpers/redux/checkout/addressMeta/thunks';
@@ -226,7 +226,7 @@ export function setPaperDeliveryPostcode(postcode: string) {
 			void dispatch(getDeliveryAgentsThunk(postcode));
 		} else {
 			dispatch(setDeliveryAgent());
-			dispatch(setDeliveryAgentResponse());
+			dispatch(clearDeliveryAgentResponse());
 		}
 		dispatch(setDeliveryPostcode(postcode));
 	};
