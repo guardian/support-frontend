@@ -54,6 +54,9 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
           "region": [
             "eu-west-1",
           ],
+          "source": [
+            "payment-api",
+          ],
         },
         "State": "ENABLED",
         "Targets": [
