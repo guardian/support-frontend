@@ -2,7 +2,7 @@ import { devices } from '@playwright/test';
 import type { PlaywrightTestConfig } from '@playwright/test';
 
 export const baseObject: PlaywrightTestConfig = {
-	testDir: './tests',
+	testDir: 'tests',
 	testMatch: '**/*.ts',
 
 	/* Maximum time one test can run for. */

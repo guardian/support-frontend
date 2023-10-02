@@ -1,21 +1,24 @@
 {
-  "name": "lambda",
-  "version": "0.0.0",
-  "scripts": {
-    "test": "jest --detectOpenHandles --config ../../jest.config.js --selectProjects lambda",
-    "start": "DOTENV_CONFIG_PATH=.env ts-node src/run-locally.ts",
-    "prebuild": "rm -rf dist",
-    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outdir=dist",
-    "postbuild": "cd dist && zip -r support-frontend-post-deployment-tests-lambda.zip .",
-    "pw-browserstack-test": "playwright test --config=src/playwright/playwright.browserstack.config.ts",
-    "pw-local-test": "playwright test --ui --config=src/playwright/playwright.local.config.ts",
-    "pw-prod-test": "playwright test --ui --config=src/playwright/playwright.prod.config.ts"
-  },
-  "devDependencies": {
-    "@playwright/test": "1.36.0",
-    "browserstack-local": "^1.5.1",
-    "dotenv": "^16.3.1",
-    "esbuild": "^0.19.2",
-    "prettier": "^3.0.3"
-  }
+	"name": "lambda",
+	"version": "0.0.0",
+	"scripts": {
+		"test": "jest --detectOpenHandles --config ../../jest.config.js --selectProjects lambda",
+		"start": "DOTENV_CONFIG_PATH=.env ts-node src/run-locally.ts",
+		"prebuild": "rm -rf dist",
+		"build": "esbuild src/index.ts src/playwright/playwright.browserstack.config.ts --bundle --platform=node --target=node18 --outdir=dist && esbuild src/playwright/tests/*.ts --platform=node --target=node18 --outdir=dist/tests && cp -r ../../node_modules dist",
+		"postbuild": "cd dist && zip -r support-frontend-post-deployment-tests-lambda.zip .",
+		"pw-browserstack-test": "playwright test --config=src/playwright/playwright.browserstack.config.ts",
+		"pw-local-test": "playwright test --ui --config=src/playwright/playwright.local.config.ts",
+		"pw-prod-test": "playwright test --ui --config=src/playwright/playwright.prod.config.ts"
+	},
+	"dependencies": {
+		"@playwright/test": "1.36.0",
+		"browserstack-local": "^1.5.1",
+		"node-fetch": "^3.3.2"
+	},
+	"devDependencies": {
+		"dotenv": "^16.3.1",
+		"esbuild": "^0.19.2",
+		"prettier": "^3.0.3"
+	}
 }
