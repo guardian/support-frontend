@@ -12,6 +12,10 @@ import { Queue } from "aws-cdk-lib/aws-sqs";
 
 const appName = "bigquery-acquisitions-publisher";
 
+enum AcquisitionEventBusSource {
+  PaymentApi = "payment-api",
+}
+
 export class BigqueryAcquisitionsPublisher extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
     super(scope, id, props);
@@ -60,6 +64,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
         "Send all events to SingleContributionSalesforceWrites SQS Queue",
       eventPattern: {
         region: ["eu-west-1"],
+        source: [AcquisitionEventBusSource.PaymentApi],
       },
       eventBus: eventBus,
       targets: [new SqsQueue(singleContributionSalesforceWritesSqsQueueArn)],
