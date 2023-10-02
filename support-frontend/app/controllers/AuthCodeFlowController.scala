@@ -110,7 +110,10 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
           replaceParam(origin, referrerParamName, paramValue)
         }
         .getOrElse(origin)
-      cleansed(Redirect(url)).flashing(FlashKey.authTried -> "true")
+      cleansed(Redirect(url))
+        .flashing(FlashKey.authTried -> "true")
+        // Reinstate indexing in the target page
+        .withHeaders("X-Robots-Tag" -> "index,follow")
     }
 
     (code, codeVerifier, sessionState, error, errorDescription) match {
