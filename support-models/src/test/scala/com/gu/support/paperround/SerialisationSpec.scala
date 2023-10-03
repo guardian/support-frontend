@@ -1,14 +1,15 @@
 package com.gu.support.paperround
 
-import com.gu.support.paperround.PaperRoundService.{AgentsEndpoint, ChargeBandsEndpoint, CoverageEndpoint}
-import com.gu.support.paperround.PaperRoundService.CoverageEndpoint._
+import com.gu.support.SerialisationTestHelpers
+import com.gu.support.paperround.{AgentsEndpoint, ChargeBandsEndpoint, CoverageEndpoint}
+import com.gu.support.paperround.CoverageEndpoint._
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.{Decoder, Error}
 import io.circe.parser.{decode}
 import org.scalatest.Assertion
 import org.scalatest.flatspec.AsyncFlatSpec
 
-class SerialisationSpec extends AsyncFlatSpec with LazyLogging {
+class SerialisationSpec extends AsyncFlatSpec with SerialisationTestHelpers with LazyLogging {
   "AgentsEndpoint.Response" should "deserialise correctly" in {
     testDecoding[AgentsEndpoint.Response](s"$agentsSuccessJson")
   }
@@ -34,22 +35,8 @@ class SerialisationSpec extends AsyncFlatSpec with LazyLogging {
   }
 
   "PaperRoundService.Error" should "deserialise example value correctly" in {
-    testDecoding[PaperRoundService.Error](s"$errorJson")
+    testDecoding[PaperRound.Error](s"$errorJson")
   }
-
-  def testDecoding[T: Decoder](fixture: String, objectChecks: T => Assertion = (_: T) => succeed): Assertion = {
-    val decodeResult = decode[T](fixture)
-    assertDecodingSucceeded(decodeResult, objectChecks)
-  }
-
-  def assertDecodingSucceeded[T](
-      decodeResult: Either[Error, T],
-      objectChecks: T => Assertion = (_: T) => succeed,
-  ): Assertion =
-    decodeResult.fold(
-      e => fail(e.getMessage),
-      result => objectChecks(result),
-    )
 
   val agentsSuccessJson =
     """

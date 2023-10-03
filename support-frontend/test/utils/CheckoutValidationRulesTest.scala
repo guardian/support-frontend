@@ -17,9 +17,8 @@ import com.gu.i18n.Currency.{GBP, USD}
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.acquisitions.{OphanIds, ReferrerAcquisitionData}
 import com.gu.support.catalog.{Collection, Domestic, Everyday, HomeDelivery, NationalDelivery}
-import com.gu.support.paperround.PaperRoundAPI
-import com.gu.support.paperround.PaperRoundService.CoverageEndpoint
-import com.gu.support.paperround.PaperRoundService.CoverageEndpoint.{NC, CO, PostcodeCoverage}
+import com.gu.support.paperround.{AgentId, CoverageEndpoint, PaperRoundAPI}
+import com.gu.support.paperround.CoverageEndpoint.{NC, CO, PostcodeCoverage}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
@@ -576,16 +575,16 @@ class PaperValidationTest extends AsyncFlatSpec with Matchers {
 
   import TestData.validPaperRequest
 
-  case class TestPaperRound(agentMap: Map[String, List[Integer]]) extends PaperRoundAPI {
+  case class TestPaperRound(agentMap: Map[String, List[BigInt]]) extends PaperRoundAPI {
     def toResponse(coverage: PostcodeCoverage) = CoverageEndpoint.Response(200, "", coverage)
-    def toAgentsCoverage(agentId: Integer) = CoverageEndpoint.AgentsCoverage(agentId, "", "", 0, "", 0, "")
+    def toAgentsCoverage(agentId: AgentId) = CoverageEndpoint.AgentsCoverage(agentId, "", "", 0, "", AgentId(0), "")
     def coverage(body: CoverageEndpoint.RequestBody): Future[CoverageEndpoint.Response] =
       Future {
         agentMap
           .get(body.postcode)
           .fold(
             toResponse(PostcodeCoverage(List(), "", NC)),
-          )(xs => toResponse(PostcodeCoverage(xs.map(toAgentsCoverage), "", CO)))
+          )(xs => toResponse(PostcodeCoverage(xs.map(x => toAgentsCoverage(AgentId(x))), "", CO)))
       }
     def agents() = Future.failed(new NotImplementedError("Not used"))
     def chargebands() = Future.failed(new NotImplementedError("Not used"))
@@ -669,7 +668,7 @@ class PaperValidationTest extends AsyncFlatSpec with Matchers {
     PaperValidation
       .deliveryAgentChosenWhichCoversPostcode(
         TestPaperRound(Map("DE10FD" -> List(2, 3))),
-        Some(1),
+        Some(AgentId(1)),
         "DE10FD",
       )
       .map(r => r shouldBe an[Invalid])
@@ -679,7 +678,7 @@ class PaperValidationTest extends AsyncFlatSpec with Matchers {
     PaperValidation
       .deliveryAgentChosenWhichCoversPostcode(
         TestPaperRound(Map("DE10HN" -> List(1, 2))),
-        Some(1),
+        Some(AgentId(1)),
         "DE10HN",
       )
       .map(r => r shouldBe Valid)
@@ -689,7 +688,7 @@ class PaperValidationTest extends AsyncFlatSpec with Matchers {
     PaperValidation
       .deliveryAgentChosenWhichCoversPostcode(
         TestPaperRound(Map("DE10HN" -> List(1, 2))),
-        Some(1),
+        Some(AgentId(1)),
         "DE10FD",
       )
       .map(r => r shouldBe an[Invalid])
@@ -832,7 +831,7 @@ object TestData {
     title = None,
     firstName = "grace",
     lastName = "hopper",
-    product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday, Some(134789)),
+    product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday, Some(AgentId(134789))),
     firstDeliveryDate = Some(someDateNextMonth),
     paymentFields =
       Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
