@@ -182,38 +182,48 @@ case object Paper extends Product {
     collection("2c92c0f86fa49142016fa49ea56a2938", Everyday, "Voucher Everyday"),
   )
 
+  private val codeNationalDelivery: List[ProductRatePlan[Paper.type]] = List(
+    nationalDelivery("8ad096ca8992481d018992a36256175e", Weekend, "National Delivery Weekend"),
+    nationalDelivery("8ad096ca8992481d018992a35f60171b", Sixday, "National Delivery Sixday"),
+    nationalDelivery("8ad096ca8992481d018992a363bd17ad", Everyday, "National Delivery Everyday"),
+  )
+
+  private val prodNationalDelivery: List[ProductRatePlan[Paper.type]] = List(
+    nationalDelivery("8a12999f8a268c57018a27ebe868150c", Weekend, "National Delivery Weekend"),
+    nationalDelivery("8a12999f8a268c57018a27ebfd721883", Sixday, "National Delivery Sixday"),
+    nationalDelivery("8a12999f8a268c57018a27ebe31414a4", Everyday, "National Delivery Everyday"),
+  )
+
+  private val codeHomeDelivery: List[ProductRatePlan[Paper.type]] = List(
+    homeDelivery("2c92c0f961f9cf300161fc4f71473a34", SaturdayPlus, "Home Delivery Saturday+"),
+    homeDelivery("2c92c0f961f9cf300161fc4d2e3e3664", Saturday, "Home Delivery Saturday"),
+    homeDelivery("2c92c0f955c3cf0f0155c5d9e83a3cb7", SundayPlus, "Home Delivery Sunday+"),
+    homeDelivery("2c92c0f85aff3453015b1041dfd2317f", Sunday, "Home Delivery Sunday"),
+    homeDelivery("2c92c0f95aff3b56015b104aa9a13ea5", WeekendPlus, "Home Delivery Weekend+"),
+    homeDelivery("2c92c0f955c3cf0f0155c5d9df433bf7", Weekend, "Home Delivery Weekend"),
+    homeDelivery("2c92c0f85aff33ff015b1042d4ba0a05", SixdayPlus, "Home Delivery Sixday+"),
+    homeDelivery("2c92c0f955c3cf0f0155c5d9ddf13bc5", Sixday, "Home Delivery Sixday"),
+    homeDelivery("2c92c0f85aff3453015b10496b5e3d17", EverydayPlus, "Home Delivery Everyday+"),
+    homeDelivery("2c92c0f955c3cf0f0155c5d9e2493c43", Everyday, "Home Delivery Everyday"),
+  )
+
+  private val prodHomeDelivery: List[ProductRatePlan[Paper.type]] = List(
+    homeDelivery("2c92a0ff6205708e01622484bb2c4613", SaturdayPlus, "Home Delivery Saturday+"),
+    homeDelivery("2c92a0fd5e1dcf0d015e3cb39d0a7ddb", Saturday, "Home Delivery Saturday"),
+    homeDelivery("2c92a0fd560d13880156136b8e490f8b", SundayPlus, "Home Delivery Sunday+"),
+    homeDelivery("2c92a0ff5af9b657015b0fea5b653f81", Sunday, "Home Delivery Sunday"),
+    homeDelivery("2c92a0ff560d311b0156136b9f5c3968", WeekendPlus, "Home Delivery Weekend+"),
+    homeDelivery("2c92a0fd5614305c01561dc88f3275be", Weekend, "Home Delivery Weekend"),
+    homeDelivery("2c92a0ff560d311b0156136b697438a9", SixdayPlus, "Home Delivery Sixday+"),
+    homeDelivery("2c92a0ff560d311b0156136f2afe5315", Sixday, "Home Delivery Sixday"),
+    homeDelivery("2c92a0fd560d132301560e43cf041a3c", EverydayPlus, "Home Delivery Everyday+"),
+    homeDelivery("2c92a0fd560d13880156136b72e50f0c", Everyday, "Home Delivery Everyday"),
+  )
+
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[Paper.type]]] =
     Map(
-      PROD -> (prodCollection ++ List(
-        homeDelivery("2c92a0ff6205708e01622484bb2c4613", SaturdayPlus, "Home Delivery Saturday+"),
-        homeDelivery("2c92a0fd5e1dcf0d015e3cb39d0a7ddb", Saturday, "Home Delivery Saturday"),
-        homeDelivery("2c92a0fd560d13880156136b8e490f8b", SundayPlus, "Home Delivery Sunday+"),
-        homeDelivery("2c92a0ff5af9b657015b0fea5b653f81", Sunday, "Home Delivery Sunday"),
-        homeDelivery("2c92a0ff560d311b0156136b9f5c3968", WeekendPlus, "Home Delivery Weekend+"),
-        homeDelivery("2c92a0fd5614305c01561dc88f3275be", Weekend, "Home Delivery Weekend"),
-        homeDelivery("2c92a0ff560d311b0156136b697438a9", SixdayPlus, "Home Delivery Sixday+"),
-        homeDelivery("2c92a0ff560d311b0156136f2afe5315", Sixday, "Home Delivery Sixday"),
-        homeDelivery("2c92a0fd560d132301560e43cf041a3c", EverydayPlus, "Home Delivery Everyday+"),
-        homeDelivery("2c92a0fd560d13880156136b72e50f0c", Everyday, "Home Delivery Everyday"),
-        nationalDelivery("8a12999f8a268c57018a27ebe868150c", Weekend, "National Delivery Weekend"),
-        nationalDelivery("8a12999f8a268c57018a27ebfd721883", Sixday, "National Delivery Sixday"),
-        nationalDelivery("8a12999f8a268c57018a27ebe31414a4", Everyday, "National Delivery Everyday"),
-      )),
-      CODE -> (codeCollection ++ List(
-        homeDelivery("2c92c0f961f9cf300161fc4f71473a34", SaturdayPlus, "Home Delivery Saturday+"),
-        homeDelivery("2c92c0f961f9cf300161fc4d2e3e3664", Saturday, "Home Delivery Saturday"),
-        homeDelivery("2c92c0f955c3cf0f0155c5d9e83a3cb7", SundayPlus, "Home Delivery Sunday+"),
-        homeDelivery("2c92c0f85aff3453015b1041dfd2317f", Sunday, "Home Delivery Sunday"),
-        homeDelivery("2c92c0f95aff3b56015b104aa9a13ea5", WeekendPlus, "Home Delivery Weekend+"),
-        homeDelivery("2c92c0f955c3cf0f0155c5d9df433bf7", Weekend, "Home Delivery Weekend"),
-        homeDelivery("2c92c0f85aff33ff015b1042d4ba0a05", SixdayPlus, "Home Delivery Sixday+"),
-        homeDelivery("2c92c0f955c3cf0f0155c5d9ddf13bc5", Sixday, "Home Delivery Sixday"),
-        homeDelivery("2c92c0f85aff3453015b10496b5e3d17", EverydayPlus, "Home Delivery Everyday+"),
-        homeDelivery("2c92c0f955c3cf0f0155c5d9e2493c43", Everyday, "Home Delivery Everyday"),
-        nationalDelivery("8ad096ca8992481d018992a36256175e", Weekend, "National Delivery Weekend"),
-        nationalDelivery("8ad096ca8992481d018992a35f60171b", Sixday, "National Delivery Sixday"),
-        nationalDelivery("8ad096ca8992481d018992a363bd17ad", Everyday, "National Delivery Everyday"),
-      )),
+      PROD -> (prodCollection ++ prodHomeDelivery ++ prodNationalDelivery),
+      CODE -> (codeCollection ++ codeHomeDelivery ++ codeNationalDelivery),
     )
 }
 
