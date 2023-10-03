@@ -7,6 +7,7 @@ import com.gu.support.catalog.{FulfilmentOptions, PaperProductOptions}
 import com.gu.support.encoding.{Codec, DiscriminatedType}
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.JsonHelpers._
+import com.gu.support.paperround.AgentId
 import com.gu.support.zuora.api.ReaderType
 import com.gu.support.zuora.api.ReaderType.Direct
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
@@ -51,7 +52,7 @@ case class Paper(
     billingPeriod: BillingPeriod = Monthly,
     fulfilmentOptions: FulfilmentOptions,
     productOptions: PaperProductOptions,
-    deliveryAgent: Option[Integer],
+    deliveryAgent: Option[AgentId],
 ) extends ProductType {
   override def describe: String = s"Paper-$fulfilmentOptions-$productOptions"
 }

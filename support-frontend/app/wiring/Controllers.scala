@@ -155,7 +155,7 @@ trait Controllers {
     testUsers,
     controllerComponents,
     appConfig.guardianDomain,
-    paperRoundService,
+    paperRoundServiceProvider,
   )
 
   lazy val supportWorkersStatusController = new SupportWorkersStatus(
@@ -232,8 +232,9 @@ trait Controllers {
 
   lazy val paperRoundController = new PaperRound(
     controllerComponents,
-    paperRoundService,
+    paperRoundServiceProvider,
     actionRefiners,
+    testUsers,
   )
 
   lazy val promotionsController = new Promotions(

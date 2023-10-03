@@ -3,6 +3,7 @@ package com.gu.support.workers
 import com.gu.i18n.Currency.GBP
 import com.gu.support.SerialisationTestHelpers
 import com.gu.support.catalog.{Collection, RestOfWorld, Sixday}
+import com.gu.support.paperround.AgentId
 import com.gu.support.workers.ProductType._
 import com.gu.support.zuora.api.ReaderType
 import org.scalatest.wordspec.AnyWordSpec
@@ -56,7 +57,7 @@ class ProductTypeDecoderTest extends AnyWordSpec with SerialisationTestHelpers {
 
       testDecoding[Paper](
         json,
-        _ shouldBe Paper(GBP, Monthly, Collection, Sixday, Some(67812)),
+        _ shouldBe Paper(GBP, Monthly, Collection, Sixday, Some(AgentId(67812))),
       )
     }
 

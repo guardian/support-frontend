@@ -6,6 +6,8 @@ import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.config.{Stage, TouchPointEnvironments}
+import com.gu.support.paperround.AgentId
+import com.gu.support.paperround.AgentsEndpoint.AgentDetails
 import com.gu.support.promotions.PromotionService
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendThankYouEmailState._
@@ -34,8 +36,17 @@ class SendThankYouEmail(
       context: Context,
       services: Services,
   ): FutureHandlerResult = {
+    def getAgentDetails(agentId: Option[AgentId]): Future[Option[AgentDetails]] =
+      agentId match {
+        case None => Future.successful(None)
+        case Some(id) =>
+          for {
+            response <- services.paperRoundService.agents()
+          } yield response.data.agents.find(_.refId == id)
+      }
     val emailBuilder = new EmailBuilder(
       services.zuoraService.getMandateIdFromAccountNumber,
+      getAgentDetails,
       services.promotionService,
       Configuration.stage,
     )
@@ -50,6 +61,7 @@ class SendThankYouEmail(
 
 class EmailBuilder(
     getMandate: String => Future[Option[String]],
+    getAgentDetails: Option[AgentId] => Future[Option[AgentDetails]],
     promotionService: PromotionService,
     stage: Stage,
 ) {
@@ -69,7 +81,8 @@ class EmailBuilder(
       case supporterPlus: SendThankYouEmailSupporterPlusState =>
         supporterPlusEmailFields.build(supporterPlus).map(List(_))
       case digi: SendThankYouEmailDigitalSubscriptionState => digitalPackEmailFields.build(digi)
-      case paper: SendThankYouEmailPaperState => paperEmailFields.build(paper).map(List(_))
+      case paper: SendThankYouEmailPaperState =>
+        getAgentDetails(paper.product.deliveryAgent).flatMap(paperEmailFields.build(paper, _)).map(List(_))
       case weekly: SendThankYouEmailGuardianWeeklyState => guardianWeeklyEmailFields.build(weekly).map(List(_))
     }
   }

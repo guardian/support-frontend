@@ -20,7 +20,7 @@ class Configuration(config: TypesafeConfig) {
 
   lazy val getAddressIOConfig = GetAddressIOConfig.fromConfig(config)
 
-  lazy val paperRoundConfig = PaperRoundConfig.fromConfig(config)
+  lazy val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 
   lazy val guardianDomain = GuardianDomain(config.getString("guardianDomain"))
 

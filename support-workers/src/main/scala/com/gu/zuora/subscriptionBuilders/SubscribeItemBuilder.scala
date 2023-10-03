@@ -5,6 +5,7 @@ import com.gu.i18n.Currency.AUD
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.catalog.ProductRatePlanId
 import com.gu.support.config.ZuoraInvoiceTemplatesConfig
+import com.gu.support.paperround.AgentId
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import com.gu.support.workers.{Address, PaymentMethod, SalesforceContactRecord, User}
 import com.gu.support.zuora.api.AcquisitionSource.CSR
@@ -81,7 +82,7 @@ class SubscribeItemBuilder(
       giftNotificationEmailDate: Option[LocalDate] = None,
       csrUsername: Option[String] = None,
       salesforceCaseId: Option[String] = None,
-      deliveryAgent: Option[Integer] = None,
+      deliveryAgent: Option[AgentId] = None,
   ): SubscriptionData =
     SubscriptionData(
       List(

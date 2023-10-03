@@ -4,40 +4,44 @@ import actions.CustomActionBuilders
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.rest.{CodeBody, WebServiceHelperError}
-import com.gu.support.paperround.PaperRoundService
-import com.gu.support.paperround.PaperRoundService.CoverageEndpoint
-import com.gu.support.paperround.PaperRoundService.CoverageEndpoint._
+import com.gu.support.paperround.{AgentId, CoverageEndpoint, PaperRound, PaperRoundService, PaperRoundServiceProvider}
+import com.gu.support.paperround.CoverageEndpoint._
 import io.circe._
 import io.circe.generic.semiauto._
 import io.circe.syntax._
 import play.api.libs.circe.Circe
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
+import services.TestUserService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class PaperRound(
     components: ControllerComponents,
-    service: PaperRoundService,
+    serviceProvider: PaperRoundServiceProvider,
     actionRefiners: CustomActionBuilders,
+    testUserService: TestUserService,
 ) extends AbstractController(components)
     with Circe {
   import actionRefiners._
 
   def getAgents(postcode: String): Action[AnyContent] = NoCacheAction().async { implicit request =>
-    service.coverage(CoverageEndpoint.RequestBody(postcode = postcode)).map { result =>
-      result.data.status match {
-        case CO => Ok(toJson(Covered(result.data.agents.map(fromAgentsCoverage(_)))))
-        case NC => Ok(toJson(NotCovered))
-        case MP => NotFound(toJson(UnknownPostcode))
-        case IP => BadRequest(toJson(ProblemWithInput))
-        case IE =>
-          val errorMessage = s"${result.message}: ${result.data.message}"
-          SafeLogger.error(scrub"Got internal error from PaperRound: $errorMessage")
-          InternalServerError(toJson(PaperRoundError(errorMessage)))
-      }
-    } recover {
-      case PaperRoundService.Error(statusCode, message, errorCode) =>
+    serviceProvider
+      .forUser(testUserService.isTestUser(request))
+      .coverage(CoverageEndpoint.RequestBody(postcode = postcode))
+      .map { result =>
+        result.data.status match {
+          case CO => Ok(toJson(Covered(result.data.agents.map(fromAgentsCoverage(_)))))
+          case NC => Ok(toJson(NotCovered))
+          case MP => NotFound(toJson(UnknownPostcode))
+          case IP => BadRequest(toJson(ProblemWithInput))
+          case IE =>
+            val errorMessage = s"${result.message}: ${result.data.message}"
+            SafeLogger.error(scrub"Got internal error from PaperRound: $errorMessage")
+            InternalServerError(toJson(PaperRoundError(errorMessage)))
+        }
+      } recover {
+      case PaperRound.Error(statusCode, message, errorCode) =>
         val responseBody = s"$errorCode – Got $statusCode reponse with message $message"
         SafeLogger.error(scrub"Error calling PaperRound, returning $responseBody")
         InternalServerError(responseBody)
@@ -79,12 +83,12 @@ object GetAgentsResponse {
 
 case class Covered(agents: List[Agent]) extends GetAgentsResponse
 case class Agent(
-    agentId: Integer,
+    agentId: AgentId,
     agentName: String,
     deliveryMethod: String,
     nbrDeliveryDays: Integer,
     postcode: String,
-    refGroupId: Integer,
+    refGroupId: AgentId,
     summary: String,
 )
 

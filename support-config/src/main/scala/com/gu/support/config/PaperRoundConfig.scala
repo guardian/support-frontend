@@ -4,7 +4,8 @@ import com.typesafe.config.Config
 
 case class PaperRoundConfig(apiUrl: String, apiKey: String)
 
-object PaperRoundConfig {
+class PaperRoundConfigProvider(config: Config, defaultStage: Stage)
+    extends TouchpointConfigProvider[PaperRoundConfig](config, defaultStage) {
   def fromConfig(config: Config): PaperRoundConfig =
     PaperRoundConfig(
       config.getString("paper-round-api.url"),
