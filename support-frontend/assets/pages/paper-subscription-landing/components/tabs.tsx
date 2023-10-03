@@ -34,11 +34,20 @@ export const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 type PropTypes = {
 	selectedTab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
+	isNationalDeliveryAbTestVariant: boolean;
 };
 
 // ----- Component ----- //
-function PaperTabs({ selectedTab, setTabAction }: PropTypes): JSX.Element {
-	const tabItems = (Object.keys(tabs) as PaperFulfilmentOptions[]).map(
+function PaperTabs({
+	selectedTab,
+	setTabAction,
+	isNationalDeliveryAbTestVariant,
+}: PropTypes): JSX.Element {
+	/* Show Home Delivery tab first if in ab test */
+	const tabOptions = isNationalDeliveryAbTestVariant
+		? Object.keys(tabs).reverse()
+		: Object.keys(tabs);
+	const tabItems = (tabOptions as PaperFulfilmentOptions[]).map(
 		(fulfilmentMethod) => {
 			const TabContent = tabs[fulfilmentMethod].content;
 			return {

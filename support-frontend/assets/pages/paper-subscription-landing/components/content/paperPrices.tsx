@@ -23,6 +23,7 @@ export type PaperPricesPropTypes = {
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
 	products: Product[];
 	isPriceCardsAbTestVariant: boolean;
+	isNationalDeliveryAbTestVariant: boolean;
 };
 const pricesSection = css`
 	padding: 0 ${space[3]}px ${space[12]}px;
@@ -103,10 +104,33 @@ export function PaperPrices({
 	setTabAction,
 	products,
 	isPriceCardsAbTestVariant,
+	isNationalDeliveryAbTestVariant,
 }: PaperPricesPropTypes): JSX.Element {
 	const infoText = `${
 		activeTab === HomeDelivery ? 'Delivery is included. ' : ''
 	}You can cancel your subscription at any time`;
+
+	const collectionTab = (
+		<LinkTo
+			tab={Collection}
+			setTabAction={setTabAction}
+			activeTab={activeTab}
+			isPricesTabLink
+		>
+			Subscription card
+		</LinkTo>
+	);
+	const homeDeliveryTab = (
+		<LinkTo
+			tab={HomeDelivery}
+			setTabAction={setTabAction}
+			activeTab={activeTab}
+			isPricesTabLink
+		>
+			Home Delivery
+		</LinkTo>
+	);
+
 	return (
 		<section css={pricesSection} id="subscribe">
 			<h2
@@ -119,22 +143,18 @@ export function PaperPrices({
 				Pick your subscription package below
 			</h2>
 			<div css={pricesTabs}>
-				<LinkTo
-					tab={Collection}
-					setTabAction={setTabAction}
-					activeTab={activeTab}
-					isPricesTabLink
-				>
-					Subscription card
-				</LinkTo>
-				<LinkTo
-					tab={HomeDelivery}
-					setTabAction={setTabAction}
-					activeTab={activeTab}
-					isPricesTabLink
-				>
-					Home Delivery
-				</LinkTo>
+				{/* Show Home Delivery tab first if in ab test */}
+				{isNationalDeliveryAbTestVariant ? (
+					<>
+						{homeDeliveryTab}
+						{collectionTab}
+					</>
+				) : (
+					<>
+						{collectionTab}
+						{homeDeliveryTab}
+					</>
+				)}
 			</div>
 			<FlexContainer
 				cssOverrides={
