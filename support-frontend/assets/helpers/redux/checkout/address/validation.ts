@@ -5,6 +5,7 @@ import {
 } from 'helpers/forms/deliveryCheck';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import type { Rule } from 'helpers/subscriptionsForms/validation';
 import {
@@ -32,6 +33,7 @@ export function applyDeliveryAddressRules(
 	fulfilmentOption: Option<FulfilmentOptions>,
 	fields: AddressFields,
 	deliveryAgent: DeliveryAgentState,
+	productOption: ProductOptions,
 	abParticipations: Participations,
 ): AddressFormFieldError[] {
 	return validate([
@@ -40,6 +42,7 @@ export function applyDeliveryAddressRules(
 			fulfilmentOption,
 			fields,
 			deliveryAgent,
+			productOption,
 			abParticipations,
 		),
 	]);
@@ -148,6 +151,7 @@ function getDeliveryOnlyRules(
 	fulfilmentOption: Option<FulfilmentOptions>,
 	fields: AddressFields,
 	deliveryAgent: DeliveryAgentState,
+	productOption: ProductOptions,
 	abParticipations: Participations,
 ): Array<Rule<AddressFormFieldError>> {
 	return [
@@ -163,6 +167,19 @@ function getDeliveryOnlyRules(
 			error: formError(
 				'postCode',
 				'The address and postcode you entered is outside of our delivery area. Please go back to purchase a voucher subscription instead.',
+			),
+		},
+		{
+			rule:
+				abParticipations.nationalDelivery === 'variant' &&
+				isSaturdayOrSundayDeliveryAvailable(
+					fulfilmentOption,
+					fields.postCode,
+					productOption,
+				),
+			error: formError(
+				'postCode',
+				'Saturday or Sunday delivery is available for Greater London only',
 			),
 		},
 	];
@@ -191,6 +208,21 @@ export const isHomeDeliveryAvailable = (
 	if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
 		if (!postcodeIsWithinDeliveryArea(postcode, allowedPrefixes)) {
 			return deliveryAgentsAreAvailable(deliveryAgent);
+		}
+	}
+
+	return true;
+};
+
+export const isSaturdayOrSundayDeliveryAvailable = (
+	fulfilmentOption: FulfilmentOptions | null,
+	postcode: string | null,
+	productOption: ProductOptions,
+	allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
+): boolean => {
+	if (productOption === 'Saturday' || productOption === 'Sunday') {
+		if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
+			return postcodeIsWithinDeliveryArea(postcode, allowedPrefixes);
 		}
 	}
 

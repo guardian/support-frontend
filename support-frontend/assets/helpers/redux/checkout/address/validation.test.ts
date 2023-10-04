@@ -1,4 +1,5 @@
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { AddressFields } from './state';
 import {
 	applyBillingAddressRules,
@@ -6,6 +7,7 @@ import {
 	isHomeDeliveryAvailable,
 	isHomeDeliveryInM25,
 	isPostcodeOptional,
+	isSaturdayOrSundayDeliveryAvailable,
 	isStateNullable,
 } from './validation';
 
@@ -192,6 +194,7 @@ describe('applyDeliveryAddressRules', () => {
 			'HomeDelivery',
 			fields,
 			{ isLoading: false },
+			'Everyday',
 			{},
 		);
 
@@ -336,6 +339,72 @@ describe('isHomeDeliveryAvailable', () => {
 		const result = isHomeDeliveryInM25(
 			fulfilmentOption,
 			postcode,
+			homeDeliveryPostcodes,
+		);
+
+		expect(result).toBeTruthy();
+	});
+});
+
+describe('isSaturdayOrSundayDeliveryAvailable', () => {
+	it('returns true if postcode inside area', () => {
+		const fulfilmentOption = 'HomeDelivery';
+		const productOption = 'Sunday';
+		const postcode = 'SE23 2AB';
+		const homeDeliveryPostcodes = ['SE23'];
+
+		const result = isSaturdayOrSundayDeliveryAvailable(
+			fulfilmentOption,
+			postcode,
+			productOption,
+			homeDeliveryPostcodes,
+		);
+
+		expect(result).toBeTruthy();
+	});
+
+	it('returns false if postcode outside area', () => {
+		const fulfilmentOption = 'HomeDelivery';
+		const productOption = 'Sunday';
+		const postcode = 'DE 2AB';
+		const homeDeliveryPostcodes = ['SE23'];
+
+		const result = isSaturdayOrSundayDeliveryAvailable(
+			fulfilmentOption,
+			postcode,
+			productOption,
+			homeDeliveryPostcodes,
+		);
+
+		expect(result).toBeFalsy();
+	});
+
+	it('returns true if not Sunday or Saturday product', () => {
+		const fulfilmentOption = 'HomeDelivery';
+		const productOption = 'Everyday';
+		const postcode = 'DE 2AB';
+		const homeDeliveryPostcodes = ['SE23'];
+
+		const result = isSaturdayOrSundayDeliveryAvailable(
+			fulfilmentOption,
+			postcode,
+			productOption,
+			homeDeliveryPostcodes,
+		);
+
+		expect(result).toBeTruthy();
+	});
+
+	it('returns true if not HomeDelivery fulfilment option', () => {
+		const fulfilmentOption: FulfilmentOptions = 'Collection';
+		const productOption = 'Sunday';
+		const postcode = 'DE 2AB';
+		const homeDeliveryPostcodes = ['SE23'];
+
+		const result = isSaturdayOrSundayDeliveryAvailable(
+			fulfilmentOption,
+			postcode,
+			productOption,
 			homeDeliveryPostcodes,
 		);
 

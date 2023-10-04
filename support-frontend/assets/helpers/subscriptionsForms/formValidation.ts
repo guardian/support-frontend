@@ -98,6 +98,7 @@ function withDeliveryValidation(state: SubscriptionsState): AnyErrorType[] {
 		getFulfilmentOption(state),
 		state.page.checkoutForm.deliveryAddress.fields,
 		state.page.checkoutForm.addressMeta.deliveryAgent,
+		state.page.checkoutForm.product.productOption,
 		state.common.abParticipations,
 	);
 	const deliveryAddressErrorsList = getErrorList({
