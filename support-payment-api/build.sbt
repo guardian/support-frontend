@@ -18,7 +18,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-ec2" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
-  "com.amazon.pay" % "amazon-pay-java-sdk" % "3.7.1",
+  "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.5",
   "com.beachape" %% "enumeratum" % "1.7.3",
   "com.beachape" %% "enumeratum-circe" % "1.7.3",
   "com.dripower" %% "play-circe" % playCirceVersion,
