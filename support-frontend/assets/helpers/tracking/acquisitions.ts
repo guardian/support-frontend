@@ -242,8 +242,7 @@ function derivePaymentApiAcquisitionData(
 		gaId: getCookie('_ga'),
 		queryParameters: referrerAcquisitionData.queryParameters,
 		labels: referrerAcquisitionData.labels,
-		postalCode:
-			nativeAbParticipations.mandatoryZipCode === 'variant' ? postalCode : null,
+		postalCode: postalCode,
 	};
 }
 

@@ -155,24 +155,4 @@ export const tests: Tests = {
 		referrerControlled: false,
 		seed: 0,
 	},
-	mandatoryZipCode: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		isActive: false,
-		audiences: {
-			UnitedStates: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.contributions.usLandingPage,
-		seed: 4,
-	},
 };

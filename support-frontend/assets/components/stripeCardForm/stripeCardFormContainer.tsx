@@ -4,7 +4,6 @@ import type {
 	StripeCardNumberElementChangeEvent,
 } from '@stripe/stripe-js';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
-import { setBillingPostcode } from 'helpers/redux/checkout/address/actions';
 import { setStripeFormError } from 'helpers/redux/checkout/payment/stripe/actions';
 import type { StripeField } from 'helpers/redux/checkout/payment/stripe/state';
 import { getStripeSetupIntent } from 'helpers/redux/checkout/payment/stripe/thunks';
@@ -42,21 +41,10 @@ export function StripeCardFormContainer(): JSX.Element {
 	const dispatch = useContributionsDispatch();
 
 	const { errors, showErrors } = useContributionsSelector(getDisplayErrors);
-	const zipCode = useContributionsSelector(
-		(state) => state.page.checkoutForm.billingAddress.fields.postCode,
-	);
-	const { mandatoryZipCode } = useContributionsSelector(
-		(state) => state.common.abParticipations,
-	);
-	const isUsCustomer = useContributionsSelector(
-		(state) => state.common.internationalisation.countryId === 'US',
-	);
 	const { publicKey, stripeAccount } = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.stripeAccountDetails,
 	);
 	const { isTestUser } = useContributionsSelector((state) => state.page.user);
-
-	const showZipCode = isUsCustomer && mandatoryZipCode !== 'variant';
 
 	function onCardFieldChange(field: StripeField) {
 		return function onChange(event: StripeChangeEvents[typeof field]) {
@@ -75,10 +63,6 @@ export function StripeCardFormContainer(): JSX.Element {
 				);
 			}
 		};
-	}
-
-	function onZipCodeChange(newZipCode: string) {
-		dispatch(setBillingPostcode(newZipCode));
 	}
 
 	function onRecaptchaCompleted(token: string) {
@@ -105,9 +89,6 @@ export function StripeCardFormContainer(): JSX.Element {
 			onCardNumberChange={onCardFieldChange('cardNumber')}
 			onExpiryChange={onCardFieldChange('expiry')}
 			onCvcChange={onCardFieldChange('cvc')}
-			onZipCodeChange={onZipCodeChange}
-			zipCode={zipCode}
-			showZipCode={showZipCode}
 			errors={showErrors ? errors : {}}
 			recaptcha={
 				<Recaptcha
