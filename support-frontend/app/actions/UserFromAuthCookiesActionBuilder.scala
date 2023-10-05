@@ -52,6 +52,10 @@ class UserFromAuthCookiesOrAuthServerActionBuilder(
   override def invokeBlock[A](request: Request[A], block: OptionalAuthRequest[A] => Future[Result]): Future[Result] =
     if (request.cookies.get(config.signedOutCookieName).isDefined) {
       processRequestWithoutUser(config)(request, block)
+    } else if (
+      request.cookies.get(config.idTokenCookieName).isEmpty || request.cookies.get(config.accessTokenCookieName).isEmpty
+    ) {
+      processRequestWithoutUser(config)(request, block)
     } else {
       val result = tryToProcessRequest(config, oktaAuthService)(request, block)
       result.left
