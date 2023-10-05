@@ -171,12 +171,13 @@ function getDeliveryOnlyRules(
 		},
 		{
 			rule:
-				abParticipations.nationalDelivery === 'variant' &&
-				isSaturdayOrSundayDeliveryAvailable(
-					fulfilmentOption,
-					fields.postCode,
-					productOption,
-				),
+				abParticipations.nationalDelivery === 'variant'
+					? isSaturdayOrSundayDeliveryAvailable(
+							fulfilmentOption,
+							fields.postCode,
+							productOption,
+					  )
+					: true,
 			error: formError(
 				'postCode',
 				'Saturday or Sunday delivery is available for Greater London only',
