@@ -220,6 +220,7 @@ export const isSaturdayOrSundayDeliveryAvailable = (
 	productOption: ProductOptions,
 	allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
 ): boolean => {
+	// For financial reasons Saturday or Sunday only papers are not available for delivery outside M25
 	if (productOption === 'Saturday' || productOption === 'Sunday') {
 		if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
 			return postcodeIsWithinDeliveryArea(postcode, allowedPrefixes);
