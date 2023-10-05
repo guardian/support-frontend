@@ -5,6 +5,7 @@ import {
 	buttonThemeReaderRevenue,
 	LinkButton,
 } from '@guardian/source-react-components';
+import { InfoSummary } from '@guardian/source-react-components-development-kitchen';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';
@@ -40,6 +41,7 @@ export type Product = {
 	cssOverrides?: SerializedStyles;
 	billingPeriod?: BillingPeriod;
 	isSpecialOffer?: boolean;
+	unavailableOutsideLondon?: boolean;
 };
 
 function ProductOption(props: Product): JSX.Element {
@@ -105,6 +107,15 @@ function ProductOption(props: Product): JSX.Element {
 			<div css={productOptionVerticalLine}>
 				<p css={[productOptionOfferCopy, productOptionUnderline]}>
 					{props.offerCopy}
+					{!props.offerCopy && props.unavailableOutsideLondon && (
+						<InfoSummary
+							cssOverrides={css`
+								border: 0;
+							`}
+							message=""
+							context="Only available inside Greater London."
+						/>
+					)}
 				</p>
 			</div>
 			<div css={priceCopyGridPlacement}>
