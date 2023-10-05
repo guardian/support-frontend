@@ -8,11 +8,9 @@ import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetail
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions._
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.config.Stages.{CODE, PROD}
 import com.typesafe.scalalogging.StrictLogging
-import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
 import conf.ConfigLoader.environmentShow
 import conf._
 import model.Environment.Live
@@ -35,7 +33,6 @@ class AmazonPayBackend(
     identityService: IdentityService,
     emailService: EmailService,
     val acquisitionsEventBusService: AcquisitionsEventBusService,
-    val acquisitionsStreamService: AcquisitionsStreamService,
     val databaseService: ContributionsStoreService,
     val supporterProductDataService: SupporterProductDataService,
     val softOptInsService: SoftOptInsService,
@@ -229,7 +226,6 @@ object AmazonPayBackend {
       databaseService: ContributionsStoreService,
       identityService: IdentityService,
       acquisitionsEventBusService: AcquisitionsEventBusService,
-      acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
       cloudWatchService: CloudWatchService,
       supporterProductDataService: SupporterProductDataService,
@@ -242,7 +238,6 @@ object AmazonPayBackend {
       identityService,
       emailService,
       acquisitionsEventBusService,
-      acquisitionsStreamService,
       databaseService,
       supporterProductDataService,
       softOptInsService,
@@ -269,10 +264,7 @@ object AmazonPayBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      AcquisitionsEventBusService("payment-api", if (env == Live) PROD else CODE).valid,
-      configLoader
-        .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
-        .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],
+      AcquisitionsEventBusService("payment-api.1", if (env == Live) PROD else CODE).valid,
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
