@@ -23,12 +23,15 @@ interface DeliveryAgentsSelectProps {
 		'addressMeta/setDeliveryAgent'
 	>;
 	formErrors: Array<FormError<string>>;
+	deliveryAddressErrors: Array<FormError<string>>;
 }
 
 export function DeliveryAgentsSelect(
 	props: DeliveryAgentsSelectProps,
 ): JSX.Element | null {
-	if (props.deliveryAgentsResponse?.type === 'Covered') {
+	const postcodeError = firstError('postCode', props.deliveryAddressErrors);
+
+	if (props.deliveryAgentsResponse?.type === 'Covered' && !postcodeError) {
 		if (props.deliveryAgentsResponse.agents?.length === 1) {
 			const singleDeliveryProvider = props.deliveryAgentsResponse.agents[0];
 
