@@ -9,6 +9,7 @@ import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
+import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService.Sources
 import com.gu.support.config.Stages.{CODE, PROD}
 import com.typesafe.scalalogging.StrictLogging
 import conf.ConfigLoader.environmentShow
@@ -264,7 +265,7 @@ object AmazonPayBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      AcquisitionsEventBusService("payment-api.1", if (env == Live) PROD else CODE).valid,
+      AcquisitionsEventBusService(Sources.paymentApi, if (env == Live) PROD else CODE).valid,
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
