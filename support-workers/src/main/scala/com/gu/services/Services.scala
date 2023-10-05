@@ -45,7 +45,7 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
-  lazy val acquisitionsEventBusService = AcquisitionsEventBusService("support-workers", stage, isTestUser)
+  lazy val acquisitionsEventBusService = AcquisitionsEventBusService("support-workers.1", stage, isTestUser)
 
   val supporterDynamoStage = (Configuration.stage, isTestUser) match {
     case (PROD, false) => DynamoStagePROD
