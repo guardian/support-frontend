@@ -13,14 +13,18 @@ import {
 import { useState } from 'react';
 import type { CheckListData } from 'components/checkmarkList/checkmarkList';
 import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
+import { CheckoutTopUpAmounts } from 'components/checkoutTopUpAmounts/checkoutTopUpAmounts';
+import { CheckoutTopUpAmountsContainer } from 'components/checkoutTopUpAmounts/checkoutTopUpAmountsContainer';
 import type { ContributionType } from 'helpers/contributions';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import type { Currency } from 'helpers/internationalisation/currency';
 
 const componentStyles = css`
 	${textSans.medium()}
 `;
 
-const summaryRow = css`
-	display: flex;
+const summaryRow = (withFlexWrap = false) => css`
+	display: ${withFlexWrap ? 'flex-wrap' : 'flex'};
 	justify-content: space-between;
 	align-items: baseline;
 	padding-top: 4px;
@@ -34,6 +38,11 @@ const rowSpacing = css`
 			margin-bottom: ${space[6]}px;
 		}
 	}
+`;
+
+const spaceBetween = css`
+	display: flex;
+	justify-content: space-between;
 `;
 
 const boldText = css`
@@ -58,6 +67,9 @@ const totalRow = (hasTsAncCs: boolean) => css`
 
 const heading = css`
 	${headline.xsmall({ fontWeight: 'bold' })}
+	${from.tablet} {
+		font-size: 28px;
+	}
 `;
 
 const hrCss = css`
@@ -109,11 +121,15 @@ const termsAndConditions = css`
 
 export type ContributionsOrderSummaryProps = {
 	contributionType: ContributionType;
-	total: string;
+	total: number;
+	totalBeforeAmended: number;
+	currency: Currency;
 	checkListData: CheckListData[];
 	onAccordionClick?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
+	showTopUpAmounts?: boolean;
+	showPreAmendedTotal?: boolean;
 };
 
 const supportTypes = {
@@ -137,10 +153,14 @@ function totalWithFrequency(total: string, contributionType: ContributionType) {
 export function ContributionsOrderSummary({
 	contributionType,
 	total,
+	totalBeforeAmended,
+	currency,
 	checkListData,
 	onAccordionClick,
 	headerButton,
 	tsAndCs,
+	showTopUpAmounts,
+	showPreAmendedTotal,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showDetails, setShowDetails] = useState(false);
 
@@ -149,14 +169,25 @@ export function ContributionsOrderSummary({
 
 	return (
 		<div css={componentStyles}>
-			<div css={[summaryRow, rowSpacing, headingRow]}>
+			<div css={[summaryRow(), rowSpacing, headingRow]}>
 				<h2 css={heading}>Your support</h2>
 				{headerButton}
 			</div>
 			<hr css={hrCss} />
 			<div css={[rowSpacing, detailsSection]}>
-				<div css={summaryRow}>
-					<p>{supportTypes[contributionType]} support</p>
+				<div css={summaryRow(showPreAmendedTotal)}>
+					<p css={showPreAmendedTotal && spaceBetween}>
+						{supportTypes[contributionType]} support
+						{showPreAmendedTotal && (
+							<span>
+								{totalWithFrequency(
+									simpleFormatAmount(currency, totalBeforeAmended),
+									contributionType,
+								)}
+							</span>
+						)}
+					</p>
+
 					{showAccordion && (
 						<Button
 							priority="subdued"
@@ -183,10 +214,25 @@ export function ContributionsOrderSummary({
 					</div>
 				)}
 			</div>
+			{showTopUpAmounts && (
+				<CheckoutTopUpAmountsContainer
+					renderCheckoutTopUpAmounts={(checkoutTopUpAmounts) => (
+						<CheckoutTopUpAmounts
+							{...checkoutTopUpAmounts}
+							customMargin={`${space[5]}px 0 ${space[4]}px`}
+						/>
+					)}
+				/>
+			)}
 			<hr css={hrCss} />
-			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
+			<div css={[summaryRow(), rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
-				<p>{totalWithFrequency(total, contributionType)}</p>
+				<p>
+					{totalWithFrequency(
+						simpleFormatAmount(currency, total),
+						contributionType,
+					)}
+				</p>
 			</div>
 			{!!tsAndCs && (
 				<div css={termsAndConditions}>

@@ -9,6 +9,7 @@ import com.gu.support.acquisitions.models.PaymentFrequency.Monthly
 import com.gu.support.acquisitions.models.PaymentProvider.PayPal
 import com.gu.support.acquisitions.models.{AcquisitionDataRow, AcquisitionProduct, PrintOptions, PrintProduct}
 import com.gu.support.acquisitions.{AbTest, AcquisitionEventTable, BigQueryService, QueryParameter}
+import com.gu.support.config.Stages.CODE
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
@@ -42,7 +43,8 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
 
     val yesterday = ISODateTimeFormat.dateTime().print(DateTime.now().minusDays(1))
     val query =
-      s"""select * from ${AcquisitionEventTable.datasetName}.${AcquisitionEventTable.tableName} where amount = 9999 and event_timestamp > TIMESTAMP("$yesterday");"""
+      s"""select * from ${AcquisitionEventTable.datasetName}.${AcquisitionEventTable.tableName}
+         |where amount = 9999 and event_timestamp > TIMESTAMP("$yesterday");""".stripMargin
     val queryConfig = QueryJobConfiguration.newBuilder(query).build
 
     val tableResult = bigQuery.query(queryConfig)
@@ -51,7 +53,7 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
   }
 
   it should "be able to run an insert" in {
-    val service = new BigQueryService(config)
+    val service = BigQueryService.build(CODE, config)
 
     val dataRow = AcquisitionDataRow(
       DateTime.now(),

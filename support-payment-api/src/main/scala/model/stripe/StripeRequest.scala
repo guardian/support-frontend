@@ -41,6 +41,7 @@ object StripeJsonDecoder {
       labels <- downField("labels").as[Option[Set[String]]]
       stripePaymentMethod <- downField("stripePaymentMethod").as[Option[StripePaymentMethod]]
       stripePublicKey <- downField("publicKey").as[Option[StripePublicKey]]
+      postalCode <- downField("postalCode").as[Option[String]]
     } yield {
       LegacyStripeChargeRequest(
         paymentData = LegacyStripePaymentData(
@@ -68,6 +69,7 @@ object StripeJsonDecoder {
           queryParameters = queryParameters,
           gaId = gaId,
           labels = labels,
+          postalCode = postalCode,
         ),
         publicKey = stripePublicKey,
       )

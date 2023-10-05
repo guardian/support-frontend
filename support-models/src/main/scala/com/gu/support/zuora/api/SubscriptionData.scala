@@ -215,7 +215,7 @@ case class Subscription(
     acquisitionSource: Option[AcquisitionSource] = None,
     createdByCsr: Option[String] = None,
     acquisitionCase: Option[String] = None,
-    deliveryAgent: Option[String] = None,
+    deliveryAgent: Option[Integer] = None,
 )
 
 object RatePlanChargeData {

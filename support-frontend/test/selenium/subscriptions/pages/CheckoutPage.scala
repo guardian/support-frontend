@@ -1,5 +1,6 @@
 package selenium.subscriptions.pages
 
+import org.openqa.selenium.Cookie
 import org.scalatestplus.selenium.Page
 import selenium.util.Browser
 
@@ -24,6 +25,19 @@ trait CheckoutPage extends Page with Browser {
   private val directDebitSubmitButton = id("qa-direct-debit-submit")
   private val directDebitPlaybackSubmit = id("qa-submit-button-2")
 
+  def addTestUserCookies(testUsername: String) = {
+    webDriver.manage.addCookie(new Cookie("pre-signin-test-user", testUsername))
+    webDriver.manage.addCookie(new Cookie("_test_username", testUsername))
+    webDriver.manage.addCookie(
+      new Cookie("_post_deploy_user", "true"),
+    ) // This enables the tests to use the mocked payment services
+    webDriver.manage.addCookie(new Cookie("GU_TK", "1.1")) // To avoid consent banner, which messes with selenium
+  }
+
+  def disableConsentBanner(): Unit = {
+    webDriver.manage.addCookie(new Cookie("gu-cmp-disabled", "true", "/", null))
+    goTo(url)
+  }
   def selectStripePaymentMethod(): Unit = clickOn(stripeRadioButton)
 
   def selectDirectDebitPaymentMethod(): Unit = clickOn(directDebitButton)
@@ -38,6 +52,7 @@ trait CheckoutPage extends Page with Browser {
   }
 
   def stripeFormHasLoaded: Boolean = {
+    Thread.sleep(100)
     switchToFrame(0)
     pageHasElement(cardNumber)
   }
@@ -83,7 +98,9 @@ trait CheckoutPage extends Page with Browser {
   def clickDirectDebitConfirm(): Unit = clickOn(directDebitSubmitButton)
 
   def clickDirectDebitPay(): Unit = {
+    Thread.sleep(1000)
     clickRecaptcha
+    Thread.sleep(1000)
     clickOn(directDebitPlaybackSubmit)
   }
 

@@ -10,11 +10,13 @@ jobs:
         working-directory: support-frontend
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Install Node
-        uses: guardian/actions-setup-node@v2.4.1
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
 
       # Cache npm dependencies using https://github.com/bahmutov/npm-install
       - name: Cache dependencies

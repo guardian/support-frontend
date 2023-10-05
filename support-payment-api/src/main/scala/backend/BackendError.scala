@@ -16,7 +16,7 @@ sealed abstract class BackendError extends Exception {
     case BackendError.IdentityIdMissingError(err) => err
     case BackendError.Database(err) => err.getMessage
     case BackendError.IdentityServiceError(err) => err.getMessage
-    case BackendError.BigQueryError(err) => err
+    case BackendError.AcquisitionsEventBusError(err) => err
     case BackendError.AcquisitionsStreamError(err) => err
     case BackendError.GoogleAnalyticsError(err) => err
     case BackendError.StripeApiError(err) => err.getMessage
@@ -32,7 +32,7 @@ sealed abstract class BackendError extends Exception {
 
 object BackendError {
   final case class IdentityIdMissingError(error: String) extends BackendError
-  final case class BigQueryError(error: String) extends BackendError
+  final case class AcquisitionsEventBusError(error: String) extends BackendError
   final case class AcquisitionsStreamError(error: String) extends BackendError
   final case class GoogleAnalyticsError(error: String) extends BackendError
   final case class Database(error: ContributionsStoreService.Error) extends BackendError

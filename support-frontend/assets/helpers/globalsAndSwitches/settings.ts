@@ -1,7 +1,4 @@
-import type {
-	ConfiguredAmounts,
-	ContributionTypes,
-} from 'helpers/contributions';
+import type { AmountsTests, ContributionTypes } from 'helpers/contributions';
 import 'helpers/contributions';
 
 export type Status = 'On' | 'Off';
@@ -21,7 +18,7 @@ export type Switches = Record<string, SwitchObject> & {
 
 export type Settings = {
 	switches: Switches;
-	amounts?: ConfiguredAmounts;
+	amounts?: AmountsTests;
 	contributionTypes: ContributionTypes;
 	metricUrl: string;
 };

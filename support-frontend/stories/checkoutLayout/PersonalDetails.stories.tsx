@@ -65,11 +65,32 @@ SingleContribSignedIn.args = {
 			countryId={'GB'}
 		/>
 	),
+	hideDetailsHeading: true,
 };
 
 export const SingleContribSignedOut = Template.bind({});
 
 SingleContribSignedOut.args = {
+	email: '',
+	firstName: '',
+	lastName: '',
+	contributionType: 'ONE_OFF',
+	isSignedIn: false,
+	signOutLink: <Signout isSignedIn={false} />,
+	contributionState: (
+		<StateSelect
+			state=""
+			onStateChange={() => null}
+			contributionType={'ONE_OFF'}
+			countryId={'GB'}
+		/>
+	),
+	hideDetailsHeading: true,
+};
+
+export const SingleContribSignedOutWithVisibleHeader = Template.bind({});
+
+SingleContribSignedOutWithVisibleHeader.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
@@ -103,6 +124,7 @@ MultiContribSignedIn.args = {
 			countryId={'GB'}
 		/>
 	),
+	hideDetailsHeading: true,
 };
 
 export const MultiContribSignedOut = Template.bind({});
@@ -122,6 +144,7 @@ MultiContribSignedOut.args = {
 			countryId={'GB'}
 		/>
 	),
+	hideDetailsHeading: true,
 };
 
 export const MultiContribUSSignedIn = Template.bind({});
@@ -141,6 +164,7 @@ MultiContribUSSignedIn.args = {
 			countryId={'US'}
 		/>
 	),
+	hideDetailsHeading: true,
 };
 
 export const MultiContribUSSignedOut = Template.bind({});
@@ -160,6 +184,7 @@ MultiContribUSSignedOut.args = {
 			countryId={'US'}
 		/>
 	),
+	hideDetailsHeading: true,
 };
 
 export const WithErrors = Template.bind({});
@@ -185,4 +210,5 @@ WithErrors.args = {
 			countryId={'US'}
 		/>
 	),
+	hideDetailsHeading: true,
 };

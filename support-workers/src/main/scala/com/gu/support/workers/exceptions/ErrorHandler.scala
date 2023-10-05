@@ -6,7 +6,6 @@ import com.gu.paypal.PayPalError
 import com.gu.rest.{WebServiceClientError, WebServiceHelperError}
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
 import com.gu.stripe.StripeError
-import com.gu.support.acquisitions.ga.models.GAError
 import com.gu.support.workers.lambdas.StateNotValidException
 import com.gu.support.zuora.api.response.ZuoraErrorResponse
 import com.gu.zuora.productHandlers.{BuildSubscribePromoError, BuildSubscribeRedemptionError}
@@ -33,7 +32,6 @@ object ErrorHandler {
       case e: PayPalError => e.asRetryException
       case e: ZuoraErrorResponse => e.asRetryException
       case e: SalesforceErrorResponse => e.asRetryException
-      case e: GAError => fromGAServiceError(e)
       case e: BuildSubscribePromoError => new RetryNone(e.cause.msg, cause = e)
       case e: BuildSubscribeRedemptionError => new RetryNone(e.cause.clientCode, cause = e)
       case e: StateNotValidException => new RetryNone(e.message, cause = e)
@@ -75,15 +73,6 @@ object ErrorHandler {
     case "authentication_error" => new RetryLimited(throwable.asJson.noSpaces, cause = throwable)
     case "card_error" | "invalid_request_error" | "validation_error" =>
       new RetryNone(throwable.asJson.noSpaces, cause = throwable)
-  }
-
-  def fromGAServiceError(error: GAError): RetryException = {
-    import GAError._
-    error match {
-      case BuildError(message) => new RetryNone(message)
-      case _: NetworkFailure => new RetryUnlimited(error.getMessage, error)
-      case _: ResponseUnsuccessful => new RetryLimited(error.getMessage, error)
-    }
   }
 
 }

@@ -14,10 +14,12 @@ import { useNavigate } from 'react-router';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import { BrandedIcons } from 'components/paymentMethodSelector/creditDebitIcons';
 import { PaypalIcon } from 'components/paymentMethodSelector/paypalIcon';
+import { useOtherAmountValidation } from 'helpers/customHooks/useFormValidation';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
+import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { LimitedPriceCards } from '../formSections/limitedPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
@@ -84,6 +86,11 @@ export function SupporterPlusInitialLandingPage({
 	const displayLimitedPriceCards =
 		abParticipations.supporterPlusOnly === 'variant';
 
+	const proceedToNextStep = useOtherAmountValidation(() => {
+		const destination = `checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`;
+		navigateWithPageView(navigate, destination, abParticipations);
+	}, false);
+
 	const paymentMethodsMarginOneOff = css`
 		margin: ${space[4]}px 0;
 		${from.tablet} {
@@ -129,11 +136,7 @@ export function SupporterPlusInitialLandingPage({
 							priority="primary"
 							size="default"
 							cssOverrides={checkoutBtnStyleOverrides}
-							onClick={() => {
-								navigate(
-									`checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`,
-								);
-							}}
+							onClick={proceedToNextStep}
 						>
 							Continue to checkout
 						</Button>

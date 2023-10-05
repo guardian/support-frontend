@@ -26,6 +26,7 @@ class ContributionsStoreServiceSpec extends AnyFlatSpec with Matchers {
     countryCode = Some("GB"),
     countrySubdivisionCode = None,
     contributionId = uuid,
+    postalCode = Some("N1 9GU"),
   )
 
   val expectedJson = parse(
@@ -41,7 +42,8 @@ class ContributionsStoreServiceSpec extends AnyFlatSpec with Matchers {
       |    "amount" : 20,
       |    "countryCode" : "GB",
       |    "countrySubdivisionCode" : null,
-      |    "contributionId" : "$uuid"
+      |    "contributionId" : "$uuid",
+      |    "postalCode" : "N1 9GU"
       |  }
       |}""".stripMargin,
   ).right.get

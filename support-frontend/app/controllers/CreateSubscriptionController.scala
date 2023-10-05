@@ -8,6 +8,8 @@ import cats.data.EitherT
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import com.gu.support.catalog.NationalDelivery
+import com.gu.support.paperround.PaperRoundService
 import com.gu.support.workers._
 import config.Configuration.GuardianDomain
 import config.RecaptchaConfigProvider
@@ -26,7 +28,7 @@ import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
 import services.{IdentityService, RecaptchaService, StripeSetupIntentService, TestUserService}
 import utils.CheckoutValidationRules.{Invalid, Valid}
-import utils.{CheckoutValidationRules, NormalisedTelephoneNumber}
+import utils.{CheckoutValidationRules, NormalisedTelephoneNumber, PaperValidation}
 
 import java.net.URLEncoder
 import scala.concurrent.{ExecutionContext, Future}
@@ -52,6 +54,7 @@ class CreateSubscriptionController(
     testUsers: TestUserService,
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
+    paperRoundService: PaperRoundService,
 )(implicit val ec: ExecutionContext, system: ActorSystem)
     extends AbstractController(components)
     with Circe {
@@ -178,22 +181,36 @@ class CreateSubscriptionController(
       request: Request[CreateSupportWorkersRequest],
       switches: Switches,
   ): EitherT[Future, CreateSubscriptionError, Unit] = {
-
-    val paymentMethodEnabledValidation =
-      CheckoutValidationRules.checkPaymentMethodEnabled(
-        request.body.product,
-        request.body.paymentFields,
-        switches,
-      )
-
-    val validationRulesResult = CheckoutValidationRules.validate(request.body)
-
-    paymentMethodEnabledValidation and validationRulesResult match {
-      case Valid =>
-        EitherT.pure(())
-      case Invalid(message) =>
-        EitherT.leftT(RequestValidationError(message))
+    val validationResult = request.body.product match {
+      case Paper(_, _, NationalDelivery, _, deliveryAgent) =>
+        request.body.deliveryAddress match {
+          case Some(Address(_, _, _, _, Some(postcode), _)) =>
+            PaperValidation.deliveryAgentChosenWhichCoversPostcode(
+              paperRoundService,
+              deliveryAgent,
+              postcode,
+            )
+          case Some(Address(_, _, _, _, None, _)) => Future.successful(Invalid("No delivery postcode"))
+          case None => Future.successful(Invalid("No delivery address"))
+        }
+      case _ => Future.successful(Valid)
     }
+    EitherT(
+      validationResult.map(deliveryAgentValid => {
+        val paymentMethodEnabledValidation = CheckoutValidationRules
+          .checkPaymentMethodEnabled(
+            request.body.product,
+            request.body.paymentFields,
+            switches,
+          )
+        val validationRulesResult = CheckoutValidationRules.validate(request.body)
+
+        paymentMethodEnabledValidation and validationRulesResult and deliveryAgentValid match {
+          case Valid => Right(())
+          case Invalid(message) => Left(RequestValidationError(message))
+        }
+      }),
+    )
   }
 
   private def toHttpResponse(

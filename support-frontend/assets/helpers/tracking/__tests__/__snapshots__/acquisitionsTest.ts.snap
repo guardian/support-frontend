@@ -30,6 +30,7 @@ Object {
   "labels": undefined,
   "pageviewId": "123456",
   "platform": "SUPPORT",
+  "postalCode": null,
   "queryParameters": Array [
     Object {
       "name": "param1",

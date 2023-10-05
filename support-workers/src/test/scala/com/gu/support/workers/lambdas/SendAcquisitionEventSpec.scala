@@ -1,16 +1,13 @@
 package com.gu.support.workers.lambdas
 
 import cats.data.EitherT
-
-import java.io.ByteArrayOutputStream
-import com.gu.acquisitions.GoogleAnalyticsServiceBuilder
+import com.gu.config.Configuration
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.workers.JsonFixtures.{
-  sendAcquisitionEventGWJson,
-  sendAcquisitionEventJson,
-  sendAcquisitionEventPrintJson,
-  wrapFixture,
-}
+import com.gu.support.acquisitions.AcquisitionsStreamService
+import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
+import com.gu.support.acquisitions.models.AcquisitionDataRow
+import com.gu.support.config.Stages.CODE
+import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventGWJson, sendAcquisitionEventPrintJson, wrapFixture}
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.{AsyncLambdaSpec, MockContext}
@@ -18,12 +15,9 @@ import com.gu.test.tags.objects.IntegrationTest
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import cats.implicits._
-import com.gu.config.Configuration
-import com.gu.support.acquisitions.models.AcquisitionDataRow
-import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
 
-import scala.concurrent.{ExecutionContext, Future}
+import java.io.ByteArrayOutputStream
+import scala.concurrent.Future
 
 class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
@@ -66,11 +60,9 @@ object MockAcquisitionHelper extends MockitoSugar {
     // Mock the Acquisition service
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
-    val gaService = GoogleAnalyticsServiceBuilder.build(isTestService = true)
-    val bigQueryService = new BigQueryService(configuration.bigQueryConfigProvider.get())
+    val eventBridgeService = AcquisitionsEventBusService("Integration Test", CODE, false)
 
-    when(services.gaService).thenReturn(gaService)
-    when(services.bigQueryService).thenReturn(bigQueryService)
+    when(services.acquisitionsEventBusService).thenReturn(eventBridgeService)
     when(services.acquisitionsStreamService).thenReturn(mockAcquisitionsStreamService)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
     serviceProvider

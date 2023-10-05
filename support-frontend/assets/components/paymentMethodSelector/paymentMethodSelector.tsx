@@ -32,12 +32,14 @@ const paymentLegendOverrides = css`
 	margin-bottom: ${space[3]}px;
 `;
 
-export type PaymentMethodSelectorLegendProps = {
+type PaymentMethodSelectorLegendProps = {
 	cssOverrides?: SerializedStyles;
+	overrideHeadingCopy?: string;
 };
 
 function PaymentMethodSelectorLegend({
 	cssOverrides,
+	overrideHeadingCopy,
 }: PaymentMethodSelectorLegendProps) {
 	return (
 		<div
@@ -47,7 +49,7 @@ function PaymentMethodSelectorLegend({
 			`}
 		>
 			<legend id="payment_method">
-				<h2 css={header}>Payment method</h2>
+				<h2 css={header}>{overrideHeadingCopy ?? 'Payment method'}</h2>
 			</legend>
 			<SecureTransactionIndicator
 				hideText={true}
@@ -70,6 +72,7 @@ export type PaymentMethodSelectorProps = {
 		paymentMethod: PaymentMethod,
 		existingPaymentMethod?: RecentlySignedInExistingPaymentMethod,
 	) => void;
+	overrideHeadingCopy?: string;
 };
 
 export function PaymentMethodSelector({
@@ -81,6 +84,7 @@ export function PaymentMethodSelector({
 	pendingExistingPaymentMethods,
 	showReauthenticateLink,
 	onPaymentMethodEvent,
+	overrideHeadingCopy,
 }: PaymentMethodSelectorProps): JSX.Element {
 	if (
 		existingPaymentMethodList.length < 1 &&
@@ -97,7 +101,10 @@ export function PaymentMethodSelector({
 
 	return (
 		<div css={container}>
-			<PaymentMethodSelectorLegend cssOverrides={paymentLegendOverrides} />
+			<PaymentMethodSelectorLegend
+				cssOverrides={paymentLegendOverrides}
+				overrideHeadingCopy={overrideHeadingCopy}
+			/>
 			<RadioGroup
 				id="paymentMethod"
 				role="radiogroup"

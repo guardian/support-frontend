@@ -34,6 +34,7 @@ object PaypalJsonDecoder {
       queryParameters <- downField("queryParameters").as[Option[Set[QueryParameter]]]
       gaId <- downField("gaId").as[Option[String]]
       labels <- downField("labels").as[Option[Set[String]]]
+      postalCode <- downField("postalCode").as[Option[String]]
     } yield {
       CapturePaypalPaymentData(
         paymentData = CapturePaymentData(
@@ -57,6 +58,7 @@ object PaypalJsonDecoder {
           queryParameters = queryParameters,
           gaId = gaId,
           labels = labels,
+          postalCode = postalCode,
         ),
         signedInUserEmail = None,
       )

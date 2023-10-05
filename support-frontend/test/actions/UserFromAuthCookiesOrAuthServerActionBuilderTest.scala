@@ -11,6 +11,7 @@ import org.mockito.Mockito.when
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar.mock
+import play.api.http.HeaderNames.REFERER
 import play.api.libs.json.{JsNull, Json}
 import play.api.mvc.Results._
 import play.api.mvc.{AnyContent, BodyParser, Cookie}
@@ -68,7 +69,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
-      val request = FakeRequest()
+      val request = FakeRequest().withHeaders(REFERER -> "referrer")
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
       val actionBuilder =
         new UserFromAuthCookiesOrAuthServerActionBuilder(
@@ -86,6 +87,9 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       }
       "include origin URL in response session" in {
         session(result).get(SessionKey.originUrl) mustBe Some(request.uri)
+      }
+      "include referrer URL in response session" in {
+        session(result).get(SessionKey.referringUrl) mustBe request.headers.get(REFERER)
       }
     }
 
@@ -96,7 +100,9 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       when(config.oauthScopes).thenReturn(accessScopes)
       when(config.idTokenCookieName).thenReturn(idTokenCookieName)
       when(config.accessTokenCookieName).thenReturn(accessTokenCookieName)
-      val request = FakeRequest().withCookies(Cookie(name = config.accessTokenCookieName, value = accessToken.value))
+      val request = FakeRequest()
+        .withHeaders(REFERER -> "referrer")
+        .withCookies(Cookie(name = config.accessTokenCookieName, value = accessToken.value))
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
       val actionBuilder =
         new UserFromAuthCookiesOrAuthServerActionBuilder(
@@ -114,6 +120,9 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       }
       "include origin URL in response session" in {
         session(result).get(SessionKey.originUrl) mustBe Some(request.uri)
+      }
+      "include referrer URL in response session" in {
+        session(result).get(SessionKey.referringUrl) mustBe request.headers.get(REFERER)
       }
     }
 
@@ -125,7 +134,9 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       when(config.oauthScopes).thenReturn(accessScopes)
       when(config.idTokenCookieName).thenReturn(idTokenCookieName)
       when(config.accessTokenCookieName).thenReturn(accessTokenCookieName)
-      val request = FakeRequest().withCookies(Cookie(name = config.idTokenCookieName, value = idToken.value))
+      val request = FakeRequest()
+        .withHeaders(REFERER -> "referrer")
+        .withCookies(Cookie(name = config.idTokenCookieName, value = idToken.value))
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
       val actionBuilder =
         new UserFromAuthCookiesOrAuthServerActionBuilder(
@@ -143,6 +154,9 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       }
       "include origin URL in response session" in {
         session(result).get(SessionKey.originUrl) mustBe Some(request.uri)
+      }
+      "include referrer URL in response session" in {
+        session(result).get(SessionKey.referringUrl) mustBe request.headers.get(REFERER)
       }
     }
 
@@ -185,10 +199,12 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       when(config.oauthScopes).thenReturn(accessScopes)
       when(config.idTokenCookieName).thenReturn(idTokenCookieName)
       when(config.accessTokenCookieName).thenReturn(accessTokenCookieName)
-      val request = FakeRequest().withCookies(
-        Cookie(name = config.idTokenCookieName, value = idToken.value),
-        Cookie(name = config.accessTokenCookieName, value = accessToken.value),
-      )
+      val request = FakeRequest()
+        .withHeaders(REFERER -> "referrer")
+        .withCookies(
+          Cookie(name = config.idTokenCookieName, value = idToken.value),
+          Cookie(name = config.accessTokenCookieName, value = accessToken.value),
+        )
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
       val actionBuilder =
         new UserFromAuthCookiesOrAuthServerActionBuilder(
@@ -206,6 +222,9 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       }
       "include origin URL in response session" in {
         session(result).get(SessionKey.originUrl) mustBe Some(request.uri)
+      }
+      "include referrer URL in response session" in {
+        session(result).get(SessionKey.referringUrl) mustBe request.headers.get(REFERER)
       }
     }
 
@@ -276,6 +295,35 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       "give a response with a clean session" in {
         session(result).isEmpty mustBe true
       }
+    }
+  }
+
+  "request has no referrer" must {
+    val parser = mock[BodyParser[AnyContent]]
+    val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+    val config = mock[Identity]
+    when(config.oauthScopes).thenReturn(accessScopes)
+    val request = FakeRequest()
+    def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
+    val actionBuilder =
+      new UserFromAuthCookiesOrAuthServerActionBuilder(
+        parser,
+        authService,
+        config,
+        isAuthServerUp = () => Future.successful(true),
+      )
+    val result = actionBuilder.invokeBlock(request, block)
+    "be a redirect" in {
+      status(result) mustBe 303
+    }
+    "redirect to authorize endpoint" in {
+      redirectLocation(result) mustBe Some(routes.AuthCodeFlowController.authorize().url)
+    }
+    "include origin URL in response session" in {
+      session(result).get(SessionKey.originUrl) mustBe Some(request.uri)
+    }
+    "not include referrer URL in response session" in {
+      session(result).get(SessionKey.referringUrl) mustBe None
     }
   }
 

@@ -10,6 +10,7 @@ import { createReducer } from 'helpers/subscriptionsForms/subscriptionCheckoutRe
 import type { DateYMDString } from 'helpers/types/DateString';
 import { setUpUserState } from 'helpers/user/reduxSetup';
 import { addAddressSideEffects } from './checkout/address/subscriptionsSideEffects';
+import { addAddressMetaSideEffects } from './checkout/addressMeta/subscriptionsSideEffects';
 import { addPaymentsSideEffects } from './checkout/payment/subscriptionsSideEffects';
 import { addPersonalDetailsSideEffects } from './checkout/personalDetails/subscriptionsSideEffects';
 import {
@@ -68,6 +69,7 @@ export function initReduxForSubscriptions(
 		addPersonalDetailsSideEffects(startListening);
 		addAddressSideEffects(startListening);
 		addPaymentsSideEffects(startListening);
+		addAddressMetaSideEffects(startListening);
 		const initialState = getInitialState();
 
 		store.dispatch(setInitialCommonState(initialState));

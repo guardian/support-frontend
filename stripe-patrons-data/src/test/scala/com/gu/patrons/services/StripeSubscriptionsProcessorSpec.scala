@@ -15,14 +15,15 @@ import scala.concurrent.duration.DurationInt
 class StripeSubscriptionsProcessorSpec extends AsyncFlatSpec with Matchers {
   "StripeSubscriptionsProcessor" should "process subscriptions from Stripe" in {
     val stage = CODE
+    val stripeConfig = PatronsStripeConfig.fromParameterStoreSync(stage)
+    val identityConfig = PatronsIdentityConfig.fromParameterStoreSync(stage)
     val runner = configurableFutureRunner(60.seconds)
+    val stripeService = new PatronsStripeService(stripeConfig, runner)
+    val identityService = new PatronsIdentityService(identityConfig, runner)
+    val loggingProcessor = new LoggingSubscriptionProcessor(identityService)
+    val processor = new StripeSubscriptionsProcessor(stripeService, loggingProcessor)
+
     for {
-      stripeConfig <- PatronsStripeConfig.fromParameterStore(stage)
-      stripeService = new PatronsStripeService(stripeConfig, runner)
-      identityConfig <- PatronsIdentityConfig.fromParameterStore(stage)
-      identityService = new PatronsIdentityService(identityConfig, runner)
-      loggingProcessor = new LoggingSubscriptionProcessor(identityService)
-      processor = new StripeSubscriptionsProcessor(stripeService, loggingProcessor)
       _ <- processor.processSubscriptions(GnmPatronScheme, 100)
     } yield succeed
   }

@@ -9,7 +9,6 @@ import com.gu.config.Configuration
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.acquisitions.ga.models.GAData
 import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _}
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers._
@@ -47,42 +46,21 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
   }
 
-  private def buildGaData(state: SendAcquisitionEventState, requestInfo: RequestInfo): Either[String, GAData] = {
-    import cats.syntax.either._
-    for {
-      acquisitionData <- Either.fromOption(state.acquisitionData, "acquisition data not included")
-      ref = acquisitionData.referrerAcquisitionData
-      hostname <- Either.fromOption(ref.hostname, "missing hostname in referrer acquisition data")
-      gaClientId = ref.gaClientId.getOrElse(UUID.randomUUID().toString)
-      ipAddress = ref.ipAddress
-      userAgent = ref.userAgent
-    } yield GAData(
-      hostname = hostname,
-      clientId = gaClientId,
-      clientIpAddress = ipAddress,
-      clientUserAgent = userAgent,
-    )
-  }
-
   private def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
     sendPaymentSuccessMetric(state).toEither.left
       .foreach(SafeLogger.error(scrub"failed to send PaymentSuccess metric", _))
 
     val acquisition = AcquisitionDataRowBuilder.buildFromState(state, requestInfo)
 
+    // TODO: This can be done via the eventbus
     val streamFuture = services.acquisitionsStreamService.putAcquisitionWithRetry(acquisition, maxRetries = 5)
-    val biqQueryFuture = services.bigQueryService.tableInsertRowWithRetry(acquisition, maxRetries = 5)
-    val gaFuture = for {
-      gaData <- EitherT.fromEither(buildGaData(state, requestInfo)).leftMap(err => List(err))
-      result <- services.gaService
-        .submit(acquisition, gaData, maxRetries = 5)
-        .leftMap(gaErrors => gaErrors.map(_.getMessage))
-    } yield result
+
+    val eventBridgeFuture = EitherT(services.acquisitionsEventBusService.putAcquisitionEvent(acquisition))
+      .leftMap(List(_)) // TODO: If we get rid of the retries in the other futures we won't need this
 
     val result = for {
       _ <- streamFuture
-      _ <- biqQueryFuture
-      _ <- gaFuture
+      _ <- eventBridgeFuture
     } yield ()
 
     result.value.map {

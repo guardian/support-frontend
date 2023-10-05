@@ -81,7 +81,7 @@ object ProductTypeCreatedTestData {
     Paper(
       fulfilmentOptions = Collection,
       productOptions = Saturday,
-      deliveryAgent = Some("A delivery agent ID"),
+      deliveryAgent = Some(-1),
     ),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),

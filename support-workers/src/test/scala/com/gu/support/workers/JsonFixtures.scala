@@ -584,7 +584,7 @@ object JsonFixtures {
     ).asJson.spaces2
 
   val createEverydayNationalDeliveryPaperSubscriptionJson = {
-    val paper = Paper(GBP, Monthly, NationalDelivery, Everyday, Some("Some delivery agent ID"))
+    val paper = Paper(GBP, Monthly, NationalDelivery, Everyday, Some(-43))
     CreateZuoraSubscriptionState(
       PaperState(
         userJsonWithDeliveryAddress,

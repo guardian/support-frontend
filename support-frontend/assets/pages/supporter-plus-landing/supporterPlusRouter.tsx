@@ -1,6 +1,7 @@
 // ----- Imports ----- //
+import { useEffect } from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	countryGroups,
@@ -39,7 +40,23 @@ const {
 	common: { abParticipations },
 } = store.getState();
 
-const isInTwoStepTest = abParticipations.twoStepCheckout === 'variant';
+const isInTwoStepTest =
+	abParticipations.twoStepCheckout &&
+	abParticipations.twoStepCheckout !== 'control';
+const showCheckoutTopUpAmounts =
+	abParticipations.twoStepCheckout === 'variant_b';
+
+// ----- ScrollToTop on Navigate: https://v5.reactrouter.com/web/guides/scroll-restoration ---- //
+
+function ScrollToTop() {
+	const { pathname } = useLocation();
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [pathname]);
+
+	return null;
+}
 
 // ----- Render ----- //
 
@@ -78,7 +95,12 @@ const router = () => {
 			/>
 			<Route
 				path={`/${countryId}/contribute/checkout`}
-				element={<SupporterPlusCheckout thankYouRoute={thankYouRoute} />}
+				element={
+					<SupporterPlusCheckout
+						thankYouRoute={thankYouRoute}
+						showTopUpAmounts={showCheckoutTopUpAmounts}
+					/>
+				}
 			/>
 			<Route
 				path={`/${countryId}/thankyou`}
@@ -89,6 +111,7 @@ const router = () => {
 
 	return (
 		<BrowserRouter>
+			<ScrollToTop />
 			<Provider store={store}>
 				<Routes>{isInTwoStepTest ? twoStepRoutes : oneStepRoutes}</Routes>
 			</Provider>

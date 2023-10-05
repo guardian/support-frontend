@@ -7,9 +7,11 @@ import com.typesafe.scalalogging.StrictLogging
 trait ConfigService extends StrictLogging {
 
   protected def findParameterOrThrow(name: String, params: List[Parameter]) =
-    findParameterValue(name, params).getOrElse(
-      throw new RuntimeException(s"Missing config value for parameter $name"),
-    )
+    findParameterValue(name, params).getOrElse {
+      val error = s"Missing config value for parameter $name"
+      logger.error(error)
+      throw new RuntimeException(error)
+    }
 
   protected def findParameterValue(name: String, params: List[Parameter]) =
     params

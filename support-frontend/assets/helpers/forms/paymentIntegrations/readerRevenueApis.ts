@@ -81,6 +81,7 @@ export type PaperSubscription = {
 	billingPeriod: BillingPeriod;
 	fulfilmentOptions: FulfilmentOptions;
 	productOptions: ProductOptions;
+	deliveryAgent?: number;
 };
 export type GuardianWeeklySubscription = {
 	productType: typeof GuardianWeekly;
@@ -169,7 +170,6 @@ export type RegularPaymentRequest = {
 	salesforceCaseId?: string;
 	recaptchaToken?: string;
 	debugInfo: string;
-	deliveryAgent?: number;
 };
 export type StripePaymentIntentAuthorisation = {
 	paymentMethod: typeof Stripe;

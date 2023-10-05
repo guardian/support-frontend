@@ -4,49 +4,31 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
 {
   "Metadata": {
     "gu:cdk:constructs": [
-      "GuDistributionBucketParameter",
-      "GuApiLambda",
-      "GuApiGateway5xxPercentageAlarm",
       "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
-  "Outputs": {
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEEndpoint07C195A6": {
-      "Value": {
-        "Fn::Join": [
-          "",
-          [
-            "https://",
-            {
-              "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-            },
-            ".execute-api.",
-            {
-              "Ref": "AWS::Region",
-            },
-            ".",
-            {
-              "Ref": "AWS::URLSuffix",
-            },
-            "/",
-            {
-              "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODEDeploymentStageprod29285704",
-            },
-            "/",
-          ],
-        ],
-      },
-    },
-  },
-  "Parameters": {
-    "DistributionBucketName": {
-      "Default": "/account/services/artifact.bucket",
-      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
-      "Type": "AWS::SSM::Parameter::Value<String>",
-    },
-  },
   "Resources": {
+    "AcquisitionRoute": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "acquisitionseventbridgeapiCODE8060A47C",
+        },
+        "RouteKey": "POST /acquisition",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "EventBridgeIntegration",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
     "ApiGateway4XXAlarmCDKC83EACCA": {
       "Properties": {
         "ActionsEnabled": false,
@@ -86,93 +68,6 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ApiGatewayHigh5xxPercentageAlarmAcquisitioneventsapi36134E2A": {
-      "Properties": {
-        "ActionsEnabled": true,
-        "AlarmActions": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
-                {
-                  "Ref": "AWS::AccountId",
-                },
-                ":conversion-dev",
-              ],
-            ],
-          },
-        ],
-        "AlarmDescription": "acquisition-events-api exceeded 5% error rate",
-        "AlarmName": "High 5XX error % from acquisition-events-api (ApiGateway) in CODE",
-        "ComparisonOperator": "GreaterThanThreshold",
-        "EvaluationPeriods": 1,
-        "Metrics": [
-          {
-            "Expression": "100*m1/m2",
-            "Id": "expr_1",
-            "Label": "% of 5XX responses served for acquisition-events-api",
-          },
-          {
-            "Id": "m1",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "ApiName",
-                    "Value": "support-CODE-acquisition-events-api-CODE",
-                  },
-                ],
-                "MetricName": "5XXError",
-                "Namespace": "AWS/ApiGateway",
-              },
-              "Period": 60,
-              "Stat": "Sum",
-            },
-            "ReturnData": false,
-          },
-          {
-            "Id": "m2",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "ApiName",
-                    "Value": "support-CODE-acquisition-events-api-CODE",
-                  },
-                ],
-                "MetricName": "Count",
-                "Namespace": "AWS/ApiGateway",
-              },
-              "Period": 60,
-              "Stat": "SampleCount",
-            },
-            "ReturnData": false,
-          },
-        ],
-        "Threshold": 5,
-        "TreatMissingData": "notBreaching",
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
-    "BasePathMapping": {
-      "Properties": {
-        "DomainName": {
-          "Ref": "DomainName",
-        },
-        "RestApiId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-        },
-        "Stage": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODEDeploymentStageprod29285704",
-        },
-      },
-      "Type": "AWS::ApiGateway::BasePathMapping",
-    },
     "DNSRecord": {
       "Properties": {
         "HostedZoneId": "Z3KO35ELNWZMSX",
@@ -180,7 +75,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
         "ResourceRecords": [
           {
             "Fn::GetAtt": [
-              "DomainName",
+              "DomainNameEC95A6E9",
               "RegionalDomainName",
             ],
           },
@@ -190,484 +85,60 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Route53::RecordSet",
     },
-    "DomainName": {
+    "DomainNameEC95A6E9": {
       "Properties": {
         "DomainName": "acquisition-events-code.support.guardianapis.com",
-        "EndpointConfiguration": {
-          "Types": [
-            "REGIONAL",
-          ],
-        },
-        "RegionalCertificateArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:aws:acm:eu-west-1:",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              ":certificate/b384a6a0-2f54-4874-b99b-96eeff96c009",
-            ],
-          ],
-        },
-        "Tags": [
+        "DomainNameConfigurations": [
           {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "CODE",
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::DomainName",
-    },
-    "S3inlinepolicy3B07399A": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:GetObject",
-              "Effect": "Allow",
-              "Resource": "arn:aws:s3::*:membership-dist/*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "S3inlinepolicy3B07399A",
-        "Roles": [
-          {
-            "Ref": "acquisitioneventsapicdklambdaServiceRole3289A569",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "SSMinlinepolicyB56CB2A2": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "ssm:GetParametersByPath",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":parameter/acquisition-events-api/bigquery-config/CODE/*",
-                  ],
+            "CertificateArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:acm:eu-west-1:",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":certificate/b384a6a0-2f54-4874-b99b-96eeff96c009",
                 ],
-              },
+              ],
             },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "SSMinlinepolicyB56CB2A2",
-        "Roles": [
-          {
-            "Ref": "acquisitioneventsapicdklambdaServiceRole3289A569",
+            "EndpointType": "REGIONAL",
           },
         ],
+        "Tags": {
+          "Stack": "support",
+          "Stage": "CODE",
+          "gu:cdk:version": "TEST",
+          "gu:repo": "guardian/support-frontend",
+        },
       },
-      "Type": "AWS::IAM::Policy",
+      "Type": "AWS::ApiGatewayV2::DomainName",
     },
-    "acquisitioneventsapicdklambda964B2B53": {
-      "DependsOn": [
-        "acquisitioneventsapicdklambdaServiceRoleDefaultPolicyE1C6ED02",
-        "acquisitioneventsapicdklambdaServiceRole3289A569",
-      ],
+    "EventBridgeIntegration": {
       "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "DistributionBucketName",
-          },
-          "S3Key": "support/CODE/acquisition-events-api/acquisition-events-api.jar",
+        "ApiId": {
+          "Ref": "acquisitionseventbridgeapiCODE8060A47C",
         },
-        "Description": "A lambda that Sends in-app acquisitions (subscriptions) to BigQuery",
-        "Environment": {
-          "Variables": {
-            "APP": "acquisition-events-api",
-            "App": "acquisition-events-api",
-            "STACK": "support",
-            "STAGE": "CODE",
-            "Stack": "support",
-            "Stage": "CODE",
-          },
-        },
-        "FunctionName": "acquisition-events-api-cdk-CODE",
-        "Handler": "com.gu.acquisitionEventsApi.Lambda::handler",
-        "MemorySize": 1024,
-        "Role": {
+        "CredentialsArn": {
           "Fn::GetAtt": [
-            "acquisitioneventsapicdklambdaServiceRole3289A569",
+            "EventBridgeIntegrationRoleB322760B",
             "Arn",
           ],
         },
-        "Runtime": "java8",
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": "acquisition-events-api",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "CODE",
-          },
-        ],
-        "Timeout": 300,
+        "IntegrationSubtype": "EventBridge-PutEvents",
+        "IntegrationType": "AWS_PROXY",
+        "PayloadFormatVersion": "1.0",
+        "RequestParameters": {
+          "Detail": "$request.body",
+          "DetailType": "AcquisitionsEvent",
+          "EventBusName": "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE",
+          "Source": "ApiGateway",
+        },
+        "TimeoutInMillis": 10000,
       },
-      "Type": "AWS::Lambda::Function",
+      "Type": "AWS::ApiGatewayV2::Integration",
     },
-    "acquisitioneventsapicdklambdaServiceRole3289A569": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": "acquisition-events-api",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "CODE",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "acquisitioneventsapicdklambdaServiceRoleDefaultPolicyE1C6ED02": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "s3:GetObject*",
-                "s3:GetBucket*",
-                "s3:List*",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":s3:::",
-                      {
-                        "Ref": "DistributionBucketName",
-                      },
-                    ],
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":s3:::",
-                      {
-                        "Ref": "DistributionBucketName",
-                      },
-                      "/support/CODE/acquisition-events-api/acquisition-events-api.jar",
-                    ],
-                  ],
-                },
-              ],
-            },
-            {
-              "Action": "ssm:GetParametersByPath",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":parameter/CODE/support/acquisition-events-api",
-                  ],
-                ],
-              },
-            },
-            {
-              "Action": [
-                "ssm:GetParameters",
-                "ssm:GetParameter",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":parameter/CODE/support/acquisition-events-api/*",
-                  ],
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "acquisitioneventsapicdklambdaServiceRoleDefaultPolicyE1C6ED02",
-        "Roles": [
-          {
-            "Ref": "acquisitioneventsapicdklambdaServiceRole3289A569",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E": {
-      "Properties": {
-        "Description": "API Gateway created by CDK",
-        "Name": "support-CODE-acquisition-events-api-CODE",
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": "acquisition-events-api",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "CODE",
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::RestApi",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEANYApiPermissionAcquisitionEventsAPICODEacquisitioneventsapicdklambdaacquisitioneventsapiCODE4A2BE0EEANY0D5E6D8C": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambda964B2B53",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              {
-                "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-              },
-              "/",
-              {
-                "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODEDeploymentStageprod29285704",
-              },
-              "/*/",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEANYApiPermissionTestAcquisitionEventsAPICODEacquisitioneventsapicdklambdaacquisitioneventsapiCODE4A2BE0EEANY773A8E45": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambda964B2B53",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              {
-                "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-              },
-              "/test-invoke-stage/*/",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEANYED33E000": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "ANY",
-        "Integration": {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
-                {
-                  "Fn::GetAtt": [
-                    "acquisitioneventsapicdklambda964B2B53",
-                    "Arn",
-                  ],
-                },
-                "/invocations",
-              ],
-            ],
-          },
-        },
-        "ResourceId": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-            "RootResourceId",
-          ],
-        },
-        "RestApiId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEAccount055A410A": {
-      "DeletionPolicy": "Retain",
-      "DependsOn": [
-        "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-      ],
-      "Properties": {
-        "CloudWatchRoleArn": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambdaacquisitioneventsapiCODECloudWatchRole8AAB5301",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::ApiGateway::Account",
-      "UpdateReplacePolicy": "Retain",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODECloudWatchRole8AAB5301": {
-      "DeletionPolicy": "Retain",
+    "EventBridgeIntegrationRoleB322760B": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -681,25 +152,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
-              ],
-            ],
-          },
-        ],
         "Tags": [
-          {
-            "Key": "App",
-            "Value": "acquisition-events-api",
-          },
           {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -719,191 +172,95 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
         ],
       },
       "Type": "AWS::IAM::Role",
-      "UpdateReplacePolicy": "Retain",
     },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEDeployment956B130990ded7266015c7967956b54b7b69a4df": {
-      "DependsOn": [
-        "acquisitioneventsapicdklambdaacquisitioneventsapiCODEproxyANY0D8D3990",
-        "acquisitioneventsapicdklambdaacquisitioneventsapiCODEproxy4473084F",
-        "acquisitioneventsapicdklambdaacquisitioneventsapiCODEANYED33E000",
-      ],
+    "EventBridgeIntegrationRoleDefaultPolicy16371A00": {
       "Properties": {
-        "Description": "API Gateway created by CDK",
-        "RestApiId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "events:PutEvents",
+              "Effect": "Allow",
+              "Resource": "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-CODE",
+            },
+          ],
+          "Version": "2012-10-17",
         },
-      },
-      "Type": "AWS::ApiGateway::Deployment",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEDeploymentStageprod29285704": {
-      "DependsOn": [
-        "acquisitioneventsapicdklambdaacquisitioneventsapiCODEAccount055A410A",
-      ],
-      "Properties": {
-        "DeploymentId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODEDeployment956B130990ded7266015c7967956b54b7b69a4df",
-        },
-        "RestApiId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-        },
-        "StageName": "prod",
-        "Tags": [
+        "PolicyName": "EventBridgeIntegrationRoleDefaultPolicy16371A00",
+        "Roles": [
           {
-            "Key": "App",
-            "Value": "acquisition-events-api",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "CODE",
+            "Ref": "EventBridgeIntegrationRoleB322760B",
           },
         ],
       },
-      "Type": "AWS::ApiGateway::Stage",
+      "Type": "AWS::IAM::Policy",
     },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEproxy4473084F": {
+    "FallbackRoute": {
       "Properties": {
-        "ParentId": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-            "RootResourceId",
-          ],
+        "ApiId": {
+          "Ref": "acquisitionseventbridgeapiCODE8060A47C",
         },
-        "PathPart": "{proxy+}",
-        "RestApiId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-        },
-      },
-      "Type": "AWS::ApiGateway::Resource",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEproxyANY0D8D3990": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "ANY",
-        "Integration": {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
-                {
-                  "Fn::GetAtt": [
-                    "acquisitioneventsapicdklambda964B2B53",
-                    "Arn",
-                  ],
-                },
-                "/invocations",
-              ],
-            ],
-          },
-        },
-        "ResourceId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODEproxy4473084F",
-        },
-        "RestApiId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEproxyANYApiPermissionAcquisitionEventsAPICODEacquisitioneventsapicdklambdaacquisitioneventsapiCODE4A2BE0EEANYproxy2789BC98": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambda964B2B53",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
+        "RouteKey": "POST /",
+        "Target": {
           "Fn::Join": [
             "",
             [
-              "arn:",
+              "integrations/",
               {
-                "Ref": "AWS::Partition",
+                "Ref": "EventBridgeIntegration",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              {
-                "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-              },
-              "/",
-              {
-                "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODEDeploymentStageprod29285704",
-              },
-              "/*/*",
             ],
           ],
         },
       },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::ApiGatewayV2::Route",
     },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiCODEproxyANYApiPermissionTestAcquisitionEventsAPICODEacquisitioneventsapicdklambdaacquisitioneventsapiCODE4A2BE0EEANYproxy42EB793D": {
+    "acquisitionseventbridgeapiCODE8060A47C": {
       "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambda964B2B53",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              {
-                "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiCODE1A986C8E",
-              },
-              "/test-invoke-stage/*/*",
-            ],
-          ],
+        "Name": "acquisitions-eventbridge-api-CODE",
+        "ProtocolType": "HTTP",
+        "Tags": {
+          "Stack": "support",
+          "Stage": "CODE",
+          "gu:cdk:version": "TEST",
+          "gu:repo": "guardian/support-frontend",
         },
       },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::ApiGatewayV2::Api",
+    },
+    "acquisitionseventbridgeapiCODEDefaultStage8CFF60B0": {
+      "DependsOn": [
+        "DomainNameEC95A6E9",
+      ],
+      "Properties": {
+        "ApiId": {
+          "Ref": "acquisitionseventbridgeapiCODE8060A47C",
+        },
+        "AutoDeploy": true,
+        "StageName": "$default",
+        "Tags": {
+          "Stack": "support",
+          "Stage": "CODE",
+          "gu:cdk:version": "TEST",
+          "gu:repo": "guardian/support-frontend",
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Stage",
+    },
+    "acquisitionseventbridgeapiCODEDefaultStageAcquisitionEventsAPICODEDomainNameundefined4F0D5A11": {
+      "DependsOn": [
+        "acquisitionseventbridgeapiCODEDefaultStage8CFF60B0",
+        "DomainNameEC95A6E9",
+      ],
+      "Properties": {
+        "ApiId": {
+          "Ref": "acquisitionseventbridgeapiCODE8060A47C",
+        },
+        "DomainName": {
+          "Ref": "DomainNameEC95A6E9",
+        },
+        "Stage": "$default",
+      },
+      "Type": "AWS::ApiGatewayV2::ApiMapping",
     },
   },
 }
@@ -913,49 +270,31 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
 {
   "Metadata": {
     "gu:cdk:constructs": [
-      "GuDistributionBucketParameter",
-      "GuApiLambda",
-      "GuApiGateway5xxPercentageAlarm",
       "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
-  "Outputs": {
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODEndpointB644BDA6": {
-      "Value": {
-        "Fn::Join": [
-          "",
-          [
-            "https://",
-            {
-              "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
-            },
-            ".execute-api.",
-            {
-              "Ref": "AWS::Region",
-            },
-            ".",
-            {
-              "Ref": "AWS::URLSuffix",
-            },
-            "/",
-            {
-              "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPRODDeploymentStageprodE31383C6",
-            },
-            "/",
-          ],
-        ],
-      },
-    },
-  },
-  "Parameters": {
-    "DistributionBucketName": {
-      "Default": "/account/services/artifact.bucket",
-      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
-      "Type": "AWS::SSM::Parameter::Value<String>",
-    },
-  },
   "Resources": {
+    "AcquisitionRoute": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "acquisitionseventbridgeapiPROD575D58B4",
+        },
+        "RouteKey": "POST /acquisition",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "EventBridgeIntegration",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
     "ApiGateway4XXAlarmCDKC83EACCA": {
       "Properties": {
         "ActionsEnabled": true,
@@ -995,93 +334,6 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
       },
       "Type": "AWS::CloudWatch::Alarm",
     },
-    "ApiGatewayHigh5xxPercentageAlarmAcquisitioneventsapi36134E2A": {
-      "Properties": {
-        "ActionsEnabled": true,
-        "AlarmActions": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:aws:sns:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":",
-                {
-                  "Ref": "AWS::AccountId",
-                },
-                ":conversion-dev",
-              ],
-            ],
-          },
-        ],
-        "AlarmDescription": "acquisition-events-api exceeded 5% error rate",
-        "AlarmName": "High 5XX error % from acquisition-events-api (ApiGateway) in PROD",
-        "ComparisonOperator": "GreaterThanThreshold",
-        "EvaluationPeriods": 1,
-        "Metrics": [
-          {
-            "Expression": "100*m1/m2",
-            "Id": "expr_1",
-            "Label": "% of 5XX responses served for acquisition-events-api",
-          },
-          {
-            "Id": "m1",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "ApiName",
-                    "Value": "support-PROD-acquisition-events-api-PROD",
-                  },
-                ],
-                "MetricName": "5XXError",
-                "Namespace": "AWS/ApiGateway",
-              },
-              "Period": 60,
-              "Stat": "Sum",
-            },
-            "ReturnData": false,
-          },
-          {
-            "Id": "m2",
-            "MetricStat": {
-              "Metric": {
-                "Dimensions": [
-                  {
-                    "Name": "ApiName",
-                    "Value": "support-PROD-acquisition-events-api-PROD",
-                  },
-                ],
-                "MetricName": "Count",
-                "Namespace": "AWS/ApiGateway",
-              },
-              "Period": 60,
-              "Stat": "SampleCount",
-            },
-            "ReturnData": false,
-          },
-        ],
-        "Threshold": 5,
-        "TreatMissingData": "notBreaching",
-      },
-      "Type": "AWS::CloudWatch::Alarm",
-    },
-    "BasePathMapping": {
-      "Properties": {
-        "DomainName": {
-          "Ref": "DomainName",
-        },
-        "RestApiId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
-        },
-        "Stage": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPRODDeploymentStageprodE31383C6",
-        },
-      },
-      "Type": "AWS::ApiGateway::BasePathMapping",
-    },
     "DNSRecord": {
       "Properties": {
         "HostedZoneId": "Z3KO35ELNWZMSX",
@@ -1089,7 +341,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
         "ResourceRecords": [
           {
             "Fn::GetAtt": [
-              "DomainName",
+              "DomainNameEC95A6E9",
               "RegionalDomainName",
             ],
           },
@@ -1099,484 +351,60 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
       },
       "Type": "AWS::Route53::RecordSet",
     },
-    "DomainName": {
+    "DomainNameEC95A6E9": {
       "Properties": {
         "DomainName": "acquisition-events.support.guardianapis.com",
-        "EndpointConfiguration": {
-          "Types": [
-            "REGIONAL",
-          ],
-        },
-        "RegionalCertificateArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:aws:acm:eu-west-1:",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              ":certificate/b384a6a0-2f54-4874-b99b-96eeff96c009",
-            ],
-          ],
-        },
-        "Tags": [
+        "DomainNameConfigurations": [
           {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::DomainName",
-    },
-    "S3inlinepolicy3B07399A": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:GetObject",
-              "Effect": "Allow",
-              "Resource": "arn:aws:s3::*:membership-dist/*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "S3inlinepolicy3B07399A",
-        "Roles": [
-          {
-            "Ref": "acquisitioneventsapicdklambdaServiceRole3289A569",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "SSMinlinepolicyB56CB2A2": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "ssm:GetParametersByPath",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":parameter/acquisition-events-api/bigquery-config/PROD/*",
-                  ],
+            "CertificateArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:acm:eu-west-1:",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":certificate/b384a6a0-2f54-4874-b99b-96eeff96c009",
                 ],
-              },
+              ],
             },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "SSMinlinepolicyB56CB2A2",
-        "Roles": [
-          {
-            "Ref": "acquisitioneventsapicdklambdaServiceRole3289A569",
+            "EndpointType": "REGIONAL",
           },
         ],
+        "Tags": {
+          "Stack": "support",
+          "Stage": "PROD",
+          "gu:cdk:version": "TEST",
+          "gu:repo": "guardian/support-frontend",
+        },
       },
-      "Type": "AWS::IAM::Policy",
+      "Type": "AWS::ApiGatewayV2::DomainName",
     },
-    "acquisitioneventsapicdklambda964B2B53": {
-      "DependsOn": [
-        "acquisitioneventsapicdklambdaServiceRoleDefaultPolicyE1C6ED02",
-        "acquisitioneventsapicdklambdaServiceRole3289A569",
-      ],
+    "EventBridgeIntegration": {
       "Properties": {
-        "Code": {
-          "S3Bucket": {
-            "Ref": "DistributionBucketName",
-          },
-          "S3Key": "support/PROD/acquisition-events-api/acquisition-events-api.jar",
+        "ApiId": {
+          "Ref": "acquisitionseventbridgeapiPROD575D58B4",
         },
-        "Description": "A lambda that Sends in-app acquisitions (subscriptions) to BigQuery",
-        "Environment": {
-          "Variables": {
-            "APP": "acquisition-events-api",
-            "App": "acquisition-events-api",
-            "STACK": "support",
-            "STAGE": "PROD",
-            "Stack": "support",
-            "Stage": "PROD",
-          },
-        },
-        "FunctionName": "acquisition-events-api-cdk-PROD",
-        "Handler": "com.gu.acquisitionEventsApi.Lambda::handler",
-        "MemorySize": 1024,
-        "Role": {
+        "CredentialsArn": {
           "Fn::GetAtt": [
-            "acquisitioneventsapicdklambdaServiceRole3289A569",
+            "EventBridgeIntegrationRoleB322760B",
             "Arn",
           ],
         },
-        "Runtime": "java8",
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": "acquisition-events-api",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
-          },
-        ],
-        "Timeout": 300,
+        "IntegrationSubtype": "EventBridge-PutEvents",
+        "IntegrationType": "AWS_PROXY",
+        "PayloadFormatVersion": "1.0",
+        "RequestParameters": {
+          "Detail": "$request.body",
+          "DetailType": "AcquisitionsEvent",
+          "EventBusName": "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-PROD",
+          "Source": "ApiGateway",
+        },
+        "TimeoutInMillis": 10000,
       },
-      "Type": "AWS::Lambda::Function",
+      "Type": "AWS::ApiGatewayV2::Integration",
     },
-    "acquisitioneventsapicdklambdaServiceRole3289A569": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": "acquisition-events-api",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "acquisitioneventsapicdklambdaServiceRoleDefaultPolicyE1C6ED02": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "s3:GetObject*",
-                "s3:GetBucket*",
-                "s3:List*",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":s3:::",
-                      {
-                        "Ref": "DistributionBucketName",
-                      },
-                    ],
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":s3:::",
-                      {
-                        "Ref": "DistributionBucketName",
-                      },
-                      "/support/PROD/acquisition-events-api/acquisition-events-api.jar",
-                    ],
-                  ],
-                },
-              ],
-            },
-            {
-              "Action": "ssm:GetParametersByPath",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":parameter/PROD/support/acquisition-events-api",
-                  ],
-                ],
-              },
-            },
-            {
-              "Action": [
-                "ssm:GetParameters",
-                "ssm:GetParameter",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:aws:ssm:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":parameter/PROD/support/acquisition-events-api/*",
-                  ],
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "acquisitioneventsapicdklambdaServiceRoleDefaultPolicyE1C6ED02",
-        "Roles": [
-          {
-            "Ref": "acquisitioneventsapicdklambdaServiceRole3289A569",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4": {
-      "Properties": {
-        "Description": "API Gateway created by CDK",
-        "Name": "support-PROD-acquisition-events-api-PROD",
-        "Tags": [
-          {
-            "Key": "App",
-            "Value": "acquisition-events-api",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::RestApi",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODANYApiPermissionAcquisitionEventsAPIPRODacquisitioneventsapicdklambdaacquisitioneventsapiPROD744C4B0EANY624B6DF1": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambda964B2B53",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              {
-                "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
-              },
-              "/",
-              {
-                "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPRODDeploymentStageprodE31383C6",
-              },
-              "/*/",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODANYApiPermissionTestAcquisitionEventsAPIPRODacquisitioneventsapicdklambdaacquisitioneventsapiPROD744C4B0EANY9FDBF1AD": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambda964B2B53",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              {
-                "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
-              },
-              "/test-invoke-stage/*/",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODANYB36C6883": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "ANY",
-        "Integration": {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
-                {
-                  "Fn::GetAtt": [
-                    "acquisitioneventsapicdklambda964B2B53",
-                    "Arn",
-                  ],
-                },
-                "/invocations",
-              ],
-            ],
-          },
-        },
-        "ResourceId": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
-            "RootResourceId",
-          ],
-        },
-        "RestApiId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODAccount1A4962D4": {
-      "DeletionPolicy": "Retain",
-      "DependsOn": [
-        "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
-      ],
-      "Properties": {
-        "CloudWatchRoleArn": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambdaacquisitioneventsapiPRODCloudWatchRole65AD9A7F",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::ApiGateway::Account",
-      "UpdateReplacePolicy": "Retain",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODCloudWatchRole65AD9A7F": {
-      "DeletionPolicy": "Retain",
+    "EventBridgeIntegrationRoleB322760B": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -1590,25 +418,7 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
           ],
           "Version": "2012-10-17",
         },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
-              ],
-            ],
-          },
-        ],
         "Tags": [
-          {
-            "Key": "App",
-            "Value": "acquisition-events-api",
-          },
           {
             "Key": "gu:cdk:version",
             "Value": "TEST",
@@ -1628,191 +438,95 @@ exports[`The Acquisition Events API stack matches the snapshot 2`] = `
         ],
       },
       "Type": "AWS::IAM::Role",
-      "UpdateReplacePolicy": "Retain",
     },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODDeployment5D86426Bfd37a23db7e90bdd870479dca7dc4d79": {
-      "DependsOn": [
-        "acquisitioneventsapicdklambdaacquisitioneventsapiPRODproxyANY1BE80837",
-        "acquisitioneventsapicdklambdaacquisitioneventsapiPRODproxyE717EAC5",
-        "acquisitioneventsapicdklambdaacquisitioneventsapiPRODANYB36C6883",
-      ],
+    "EventBridgeIntegrationRoleDefaultPolicy16371A00": {
       "Properties": {
-        "Description": "API Gateway created by CDK",
-        "RestApiId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "events:PutEvents",
+              "Effect": "Allow",
+              "Resource": "arn:aws:events:eu-west-1:865473395570:event-bus/acquisitions-bus-PROD",
+            },
+          ],
+          "Version": "2012-10-17",
         },
-      },
-      "Type": "AWS::ApiGateway::Deployment",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODDeploymentStageprodE31383C6": {
-      "DependsOn": [
-        "acquisitioneventsapicdklambdaacquisitioneventsapiPRODAccount1A4962D4",
-      ],
-      "Properties": {
-        "DeploymentId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPRODDeployment5D86426Bfd37a23db7e90bdd870479dca7dc4d79",
-        },
-        "RestApiId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
-        },
-        "StageName": "prod",
-        "Tags": [
+        "PolicyName": "EventBridgeIntegrationRoleDefaultPolicy16371A00",
+        "Roles": [
           {
-            "Key": "App",
-            "Value": "acquisition-events-api",
-          },
-          {
-            "Key": "gu:cdk:version",
-            "Value": "TEST",
-          },
-          {
-            "Key": "gu:repo",
-            "Value": "guardian/support-frontend",
-          },
-          {
-            "Key": "Stack",
-            "Value": "support",
-          },
-          {
-            "Key": "Stage",
-            "Value": "PROD",
+            "Ref": "EventBridgeIntegrationRoleB322760B",
           },
         ],
       },
-      "Type": "AWS::ApiGateway::Stage",
+      "Type": "AWS::IAM::Policy",
     },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODproxyANY1BE80837": {
+    "FallbackRoute": {
       "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "ANY",
-        "Integration": {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:",
-                {
-                  "Ref": "AWS::Region",
-                },
-                ":lambda:path/2015-03-31/functions/",
-                {
-                  "Fn::GetAtt": [
-                    "acquisitioneventsapicdklambda964B2B53",
-                    "Arn",
-                  ],
-                },
-                "/invocations",
-              ],
-            ],
-          },
+        "ApiId": {
+          "Ref": "acquisitionseventbridgeapiPROD575D58B4",
         },
-        "ResourceId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPRODproxyE717EAC5",
-        },
-        "RestApiId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODproxyANYApiPermissionAcquisitionEventsAPIPRODacquisitioneventsapicdklambdaacquisitioneventsapiPROD744C4B0EANYproxy4394C974": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambda964B2B53",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
+        "RouteKey": "POST /",
+        "Target": {
           "Fn::Join": [
             "",
             [
-              "arn:",
+              "integrations/",
               {
-                "Ref": "AWS::Partition",
+                "Ref": "EventBridgeIntegration",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              {
-                "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
-              },
-              "/",
-              {
-                "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPRODDeploymentStageprodE31383C6",
-              },
-              "/*/*",
             ],
           ],
         },
       },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::ApiGatewayV2::Route",
     },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODproxyANYApiPermissionTestAcquisitionEventsAPIPRODacquisitioneventsapicdklambdaacquisitioneventsapiPROD744C4B0EANYproxy5110C041": {
+    "acquisitionseventbridgeapiPROD575D58B4": {
       "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambda964B2B53",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
-              {
-                "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
-              },
-              "/test-invoke-stage/*/*",
-            ],
-          ],
+        "Name": "acquisitions-eventbridge-api-PROD",
+        "ProtocolType": "HTTP",
+        "Tags": {
+          "Stack": "support",
+          "Stage": "PROD",
+          "gu:cdk:version": "TEST",
+          "gu:repo": "guardian/support-frontend",
         },
       },
-      "Type": "AWS::Lambda::Permission",
+      "Type": "AWS::ApiGatewayV2::Api",
     },
-    "acquisitioneventsapicdklambdaacquisitioneventsapiPRODproxyE717EAC5": {
+    "acquisitionseventbridgeapiPRODDefaultStageAcquisitionEventsAPIPRODDomainNameundefined36D98266": {
+      "DependsOn": [
+        "acquisitionseventbridgeapiPRODDefaultStageEB205C3C",
+        "DomainNameEC95A6E9",
+      ],
       "Properties": {
-        "ParentId": {
-          "Fn::GetAtt": [
-            "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
-            "RootResourceId",
-          ],
+        "ApiId": {
+          "Ref": "acquisitionseventbridgeapiPROD575D58B4",
         },
-        "PathPart": "{proxy+}",
-        "RestApiId": {
-          "Ref": "acquisitioneventsapicdklambdaacquisitioneventsapiPROD939774E4",
+        "DomainName": {
+          "Ref": "DomainNameEC95A6E9",
+        },
+        "Stage": "$default",
+      },
+      "Type": "AWS::ApiGatewayV2::ApiMapping",
+    },
+    "acquisitionseventbridgeapiPRODDefaultStageEB205C3C": {
+      "DependsOn": [
+        "DomainNameEC95A6E9",
+      ],
+      "Properties": {
+        "ApiId": {
+          "Ref": "acquisitionseventbridgeapiPROD575D58B4",
+        },
+        "AutoDeploy": true,
+        "StageName": "$default",
+        "Tags": {
+          "Stack": "support",
+          "Stage": "PROD",
+          "gu:cdk:version": "TEST",
+          "gu:repo": "guardian/support-frontend",
         },
       },
-      "Type": "AWS::ApiGateway::Resource",
+      "Type": "AWS::ApiGatewayV2::Stage",
     },
   },
 }

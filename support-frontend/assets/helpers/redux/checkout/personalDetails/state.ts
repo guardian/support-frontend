@@ -28,12 +28,14 @@ export const personalDetailsSchema = z
 		firstName: zuoraCompatibleString(
 			z
 				.string()
+				.trim()
 				.min(1, { message: 'Please enter a first name.' })
 				.max(maxLengths.name, { message: 'First name is too long' }),
 		),
 		lastName: zuoraCompatibleString(
 			z
 				.string()
+				.trim()
 				.min(1, 'Please enter a last name.')
 				.max(maxLengths.name, 'Last name is too long'),
 		),

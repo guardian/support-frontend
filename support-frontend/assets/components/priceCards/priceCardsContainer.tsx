@@ -2,7 +2,9 @@ import type { OtherAmountProps } from 'components/otherAmount/otherAmount';
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import {
 	setOtherAmount,
+	setOtherAmountBeforeAmendment,
 	setSelectedAmount,
+	setSelectedAmountBeforeAmendment,
 } from 'helpers/redux/checkout/product/actions';
 import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
 import { getOtherAmountErrors } from 'helpers/redux/selectors/formValidation/otherAmountValidation';
@@ -44,6 +46,7 @@ export function PriceCardsContainer({
 		(state) => state.common.internationalisation.currencyId,
 	);
 	const { amounts } = useContributionsSelector((state) => state.common);
+	const { amountsCardData } = amounts;
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
@@ -52,7 +55,7 @@ export function PriceCardsContainer({
 		amounts: frequencyAmounts,
 		defaultAmount,
 		hideChooseYourAmount,
-	} = amounts[frequency];
+	} = amountsCardData[frequency];
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
 		frequency,
@@ -69,11 +72,23 @@ export function PriceCardsContainer({
 				amount: newAmount,
 			}),
 		);
+		dispatch(
+			setSelectedAmountBeforeAmendment({
+				contributionType: frequency,
+				amount: newAmount,
+			}),
+		);
 	}
 
 	function onOtherAmountChange(newAmount: string) {
 		dispatch(
 			setOtherAmount({
+				contributionType: frequency,
+				amount: newAmount,
+			}),
+		);
+		dispatch(
+			setOtherAmountBeforeAmendment({
 				contributionType: frequency,
 				amount: newAmount,
 			}),

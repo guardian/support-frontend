@@ -110,6 +110,7 @@ const buildStripeChargeDataFromAuthorisation = (
 	acquisitionData: derivePaymentApiAcquisitionData(
 		state.common.referrerAcquisitionData,
 		state.common.abParticipations,
+		state.page.checkoutForm.billingAddress.fields.postCode,
 	),
 	publicKey: getStripeKey(
 		stripeAccountForContributionType[getContributionType(state)],
@@ -131,27 +132,19 @@ const stripeChargeDataFromPaymentIntentAuthorisation = (
 function getBillingCountryAndState(state: ContributionsState): {
 	billingCountry: IsoCountry;
 	billingState: Option<StateProvince>;
+	postCode: string;
 } {
-	const paymentMethod = state.page.checkoutForm.payment.paymentMethod;
-	const isPaymentRequestButton =
-		paymentMethod.name == Stripe &&
-		(paymentMethod.stripePaymentMethod === 'StripePaymentRequestButton' ||
-			paymentMethod.stripePaymentMethod === 'StripeApplePay');
-	const { country: formCountry, state: formState } =
-		state.page.checkoutForm.billingAddress.fields;
-	if (isPaymentRequestButton && paymentMethod.country) {
-		return {
-			billingCountry: paymentMethod.country,
-			billingState:
-				paymentMethod.state ??
-				(formCountry === paymentMethod.country ? formState : ''),
-		};
-	} else {
-		return {
-			billingCountry: formCountry,
-			billingState: formState,
-		};
-	}
+	const {
+		country: formCountry,
+		state: formState,
+		postCode,
+	} = state.page.checkoutForm.billingAddress.fields;
+
+	return {
+		billingCountry: formCountry,
+		billingState: formState,
+		postCode,
+	};
 }
 
 // This exists *only* to support the purchase of digi subs for migrating Kindle subscribers
@@ -197,7 +190,8 @@ function regularPaymentRequestFromAuthorisation(
 	state: ContributionsState,
 ): RegularPaymentRequest {
 	const { actionHistory } = state.debug;
-	const { billingCountry, billingState } = getBillingCountryAndState(state);
+	const { billingCountry, billingState, postCode } =
+		getBillingCountryAndState(state);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const contributionType = getContributionType(state);
 
@@ -225,7 +219,7 @@ function regularPaymentRequestFromAuthorisation(
 				? billingState
 				: null,
 			// required Zuora field if country is US or CA
-			postCode: null,
+			postCode: billingCountry === 'US' ? postCode : null,
 			// required go cardless field
 			country: billingCountry, // required Zuora field
 		},
@@ -260,6 +254,7 @@ const amazonPayDataFromAuthorisation = (
 	acquisitionData: derivePaymentApiAcquisitionData(
 		state.common.referrerAcquisitionData,
 		state.common.abParticipations,
+		state.page.checkoutForm.billingAddress.fields.postCode,
 	),
 });
 
@@ -335,6 +330,7 @@ const onCreateOneOffPayPalPaymentResponse =
 			const acquisitionData = derivePaymentApiAcquisitionData(
 				state.common.referrerAcquisitionData,
 				state.common.abParticipations,
+				state.page.checkoutForm.billingAddress.fields.postCode,
 			);
 			// We've only created a payment at this point, and the user has to get through
 			// the PayPal flow on their site before we can actually try and execute the payment.

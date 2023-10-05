@@ -1,7 +1,10 @@
 import { css } from '@emotion/react';
 import { space, until } from '@guardian/source-foundations';
-import { Link } from 'react-router-dom';
+import { Button } from '@guardian/source-react-components';
+import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
+import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
+import { ContributionsOrderSummaryContainer } from 'components/orderSummary/contributionsOrderSummaryContainer';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
 import { PaymentMethodSelector } from 'components/paymentMethodSelector/paymentMethodSelector';
 import PaymentMethodSelectorContainer from 'components/paymentMethodSelector/PaymentMethodSelectorContainer';
@@ -9,13 +12,22 @@ import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/p
 import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
-import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import { checkoutTopUpUpperThresholdsByCountryGroup } from 'helpers/checkoutTopUp/upperThreshold';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import {
+	getUserSelectedAmount,
+	getUserSelectedAmountBeforeAmendment,
+} from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
+import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
+import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
@@ -32,9 +44,12 @@ const shorterBoxMargin = css`
 
 export function SupporterPlusCheckout({
 	thankYouRoute,
+	showTopUpAmounts,
 }: {
 	thankYouRoute: string;
+	showTopUpAmounts: boolean;
 }): JSX.Element {
+	const dispatch = useContributionsDispatch();
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -46,6 +61,9 @@ export function SupporterPlusCheckout({
 	);
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
+	const amountBeforeAmendments = useContributionsSelector(
+		getUserSelectedAmountBeforeAmendment,
+	);
 
 	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
 		contributionType,
@@ -54,35 +72,73 @@ export function SupporterPlusCheckout({
 		countryGroupId,
 	);
 
+	const showPreAmendedTotal =
+		showTopUpAmounts &&
+		contributionType !== 'ONE_OFF' &&
+		amountBeforeAmendments >=
+			benefitsThresholdsByCountryGroup[countryGroupId][contributionType] &&
+		amountBeforeAmendments <=
+			checkoutTopUpUpperThresholdsByCountryGroup[countryGroupId][
+				contributionType
+			];
+
+	const navigate = useNavigate();
+
+	const changeButton = (
+		<Button
+			priority="tertiary"
+			size="xsmall"
+			onClick={() => {
+				dispatch(
+					setSelectedAmount({
+						contributionType: contributionType,
+						amount: `${amountBeforeAmendments}`,
+					}),
+				);
+				const destination = `/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`;
+				navigateWithPageView(navigate, destination);
+			}}
+		>
+			Change
+		</Button>
+	);
+
 	return (
-		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute}>
+		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
-					<p>
-						{amount} {contributionType}
-					</p>
-					<Link
-						to={`/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`}
-					>
-						Changed your mind?
-					</Link>
+					<ContributionsOrderSummaryContainer
+						renderOrderSummary={(orderSummaryProps) => (
+							<ContributionsOrderSummary
+								{...orderSummaryProps}
+								headerButton={changeButton}
+								showTopUpAmounts={showTopUpAmounts}
+								showPreAmendedTotal={showPreAmendedTotal}
+							/>
+						)}
+					/>
 				</BoxContents>
 			</Box>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). Also enclosing the PRB reduces re-renders. */}
 					<ContributionsStripe>
-						<SecureTransactionIndicator />
 						<PaymentRequestButtonContainer CustomButton={SavedCardButton} />
 						<PersonalDetailsContainer
 							renderPersonalDetails={(personalDetailsProps) => (
-								<PersonalDetails {...personalDetailsProps} />
+								<PersonalDetails
+									{...personalDetailsProps}
+									overrideHeadingCopy="1. Your details"
+								/>
 							)}
 						/>
 						<CheckoutDivider spacing="loose" />
 						<PaymentMethodSelectorContainer
 							render={(paymentMethodSelectorProps) => (
-								<PaymentMethodSelector {...paymentMethodSelectorProps} />
+								<PaymentMethodSelector
+									{...paymentMethodSelectorProps}
+									overrideHeadingCopy="2. Payment method"
+								/>
 							)}
 						/>
 						<PaymentButtonController

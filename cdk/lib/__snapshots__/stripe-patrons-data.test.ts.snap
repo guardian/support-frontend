@@ -211,7 +211,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       "Type": "AWS::IAM::Role",
       "UpdateReplacePolicy": "Retain",
     },
-    "RestApiDeployment180EC5033fc0c8ea808241777537b04b239b12f5": {
+    "RestApiDeployment180EC503851006d93cab4ec73fd0e0302c05aec2": {
       "DependsOn": [
         "RestApipatron1DDE9314",
         "RestApipatronsubscriptioncancelcountryIdPOSTFA2082F3",
@@ -236,7 +236,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "RestApiDeployment180EC5033fc0c8ea808241777537b04b239b12f5",
+          "Ref": "RestApiDeployment180EC503851006d93cab4ec73fd0e0302c05aec2",
         },
         "RestApiId": {
           "Ref": "RestApi0C43BF4B",
@@ -318,10 +318,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "stripepatronsdatacancelled2E3CED96",
-            "Arn",
-          ],
+          "Ref": "stripepatronsdatacancelledAliasForLambdaB42D6F65",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -359,10 +356,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "stripepatronsdatacancelled2E3CED96",
-            "Arn",
-          ],
+          "Ref": "stripepatronsdatacancelledAliasForLambdaB42D6F65",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -413,10 +407,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                 },
                 ":lambda:path/2015-03-31/functions/",
                 {
-                  "Fn::GetAtt": [
-                    "stripepatronsdatacancelled2E3CED96",
-                    "Arn",
-                  ],
+                  "Ref": "stripepatronsdatacancelledAliasForLambdaB42D6F65",
                 },
                 "/invocations",
               ],
@@ -477,10 +468,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                 },
                 ":lambda:path/2015-03-31/functions/",
                 {
-                  "Fn::GetAtt": [
-                    "stripepatronsdatasignup4E7F0A3F",
-                    "Arn",
-                  ],
+                  "Ref": "stripepatronsdatasignupAliasForLambdaA9908BA0",
                 },
                 "/invocations",
               ],
@@ -500,10 +488,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "stripepatronsdatasignup4E7F0A3F",
-            "Arn",
-          ],
+          "Ref": "stripepatronsdatasignupAliasForLambdaA9908BA0",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -541,10 +526,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "stripepatronsdatasignup4E7F0A3F",
-            "Arn",
-          ],
+          "Ref": "stripepatronsdatasignupAliasForLambdaA9908BA0",
         },
         "Principal": "apigateway.amazonaws.com",
         "SourceArn": {
@@ -584,7 +566,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/stripe-patrons-data/stripe-patrons-data.jar",
+          "S3Key": "support/PROD/stripe-patrons-data/stripe-patrons-data-DEV.jar",
         },
         "Environment": {
           "Variables": {
@@ -603,6 +585,9 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           ],
         },
         "Runtime": "java11",
+        "SnapStart": {
+          "ApplyOn": "PublishedVersions",
+        },
         "Tags": [
           {
             "Key": "App",
@@ -628,6 +613,29 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
+    },
+    "StripePatronsDataPRODAliasForLambda66975A7A": {
+      "Properties": {
+        "FunctionName": {
+          "Ref": "StripePatronsDataPROD61F45521",
+        },
+        "FunctionVersion": {
+          "Fn::GetAtt": [
+            "StripePatronsDataPRODCurrentVersion700541B42effd2f99f91df5bb62353bc4f5861fb",
+            "Version",
+          ],
+        },
+        "Name": "PROD",
+      },
+      "Type": "AWS::Lambda::Alias",
+    },
+    "StripePatronsDataPRODCurrentVersion700541B42effd2f99f91df5bb62353bc4f5861fb": {
+      "Properties": {
+        "FunctionName": {
+          "Ref": "StripePatronsDataPROD61F45521",
+        },
+      },
+      "Type": "AWS::Lambda::Version",
     },
     "StripePatronsDataPRODErrorPercentageAlarmForLambda610D37CA": {
       "Properties": {
@@ -755,7 +763,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/stripe-patrons-data/stripe-patrons-data.jar",
+                      "/support/PROD/stripe-patrons-data/stripe-patrons-data-DEV.jar",
                     ],
                   ],
                 },
@@ -908,10 +916,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         "Targets": [
           {
             "Arn": {
-              "Fn::GetAtt": [
-                "StripePatronsDataPROD61F45521",
-                "Arn",
-              ],
+              "Ref": "StripePatronsDataPRODAliasForLambda66975A7A",
             },
             "Id": "Target0",
           },
@@ -919,14 +924,11 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Events::Rule",
     },
-    "StripePatronsDataPRODStripePatronsDataPRODrate30minutes0AllowEventRuleStripePatronsDataPRODBF7BDE5FE71C5129": {
+    "StripePatronsDataPRODStripePatronsDataPRODrate30minutes0AllowEventRuleStripePatronsDataPRODStripePatronsDataPRODAliasForLambdaCD51164A080DA81B": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
-          "Fn::GetAtt": [
-            "StripePatronsDataPROD61F45521",
-            "Arn",
-          ],
+          "Ref": "StripePatronsDataPRODAliasForLambda66975A7A",
         },
         "Principal": "events.amazonaws.com",
         "SourceArn": {
@@ -948,7 +950,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/stripe-patrons-data/stripe-patrons-data.jar",
+          "S3Key": "support/PROD/stripe-patrons-data/stripe-patrons-data-DEV.jar",
         },
         "Environment": {
           "Variables": {
@@ -967,6 +969,9 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           ],
         },
         "Runtime": "java11",
+        "SnapStart": {
+          "ApplyOn": "PublishedVersions",
+        },
         "Tags": [
           {
             "Key": "App",
@@ -992,6 +997,29 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
+    },
+    "stripepatronsdatacancelledAliasForLambdaB42D6F65": {
+      "Properties": {
+        "FunctionName": {
+          "Ref": "stripepatronsdatacancelled2E3CED96",
+        },
+        "FunctionVersion": {
+          "Fn::GetAtt": [
+            "stripepatronsdatacancelledCurrentVersion23EC801E668c829e508d52168af15fd98d6b51b2",
+            "Version",
+          ],
+        },
+        "Name": "PROD",
+      },
+      "Type": "AWS::Lambda::Alias",
+    },
+    "stripepatronsdatacancelledCurrentVersion23EC801E668c829e508d52168af15fd98d6b51b2": {
+      "Properties": {
+        "FunctionName": {
+          "Ref": "stripepatronsdatacancelled2E3CED96",
+        },
+      },
+      "Type": "AWS::Lambda::Version",
     },
     "stripepatronsdatacancelledServiceRole157E3052": {
       "Properties": {
@@ -1085,7 +1113,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/stripe-patrons-data/stripe-patrons-data.jar",
+                      "/support/PROD/stripe-patrons-data/stripe-patrons-data-DEV.jar",
                     ],
                   ],
                 },
@@ -1188,7 +1216,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           "S3Bucket": {
             "Ref": "DistributionBucketName",
           },
-          "S3Key": "support/PROD/stripe-patrons-data/stripe-patrons-data.jar",
+          "S3Key": "support/PROD/stripe-patrons-data/stripe-patrons-data-DEV.jar",
         },
         "Environment": {
           "Variables": {
@@ -1207,6 +1235,9 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           ],
         },
         "Runtime": "java11",
+        "SnapStart": {
+          "ApplyOn": "PublishedVersions",
+        },
         "Tags": [
           {
             "Key": "App",
@@ -1232,6 +1263,29 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
+    },
+    "stripepatronsdatasignupAliasForLambdaA9908BA0": {
+      "Properties": {
+        "FunctionName": {
+          "Ref": "stripepatronsdatasignup4E7F0A3F",
+        },
+        "FunctionVersion": {
+          "Fn::GetAtt": [
+            "stripepatronsdatasignupCurrentVersionCB0F0BAAee23f55eebd2989f259cf31bd84411f7",
+            "Version",
+          ],
+        },
+        "Name": "PROD",
+      },
+      "Type": "AWS::Lambda::Alias",
+    },
+    "stripepatronsdatasignupCurrentVersionCB0F0BAAee23f55eebd2989f259cf31bd84411f7": {
+      "Properties": {
+        "FunctionName": {
+          "Ref": "stripepatronsdatasignup4E7F0A3F",
+        },
+      },
+      "Type": "AWS::Lambda::Version",
     },
     "stripepatronsdatasignupServiceRoleC639AAC9": {
       "Properties": {
@@ -1325,7 +1379,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
                       {
                         "Ref": "DistributionBucketName",
                       },
-                      "/support/PROD/stripe-patrons-data/stripe-patrons-data.jar",
+                      "/support/PROD/stripe-patrons-data/stripe-patrons-data-DEV.jar",
                     ],
                   ],
                 },

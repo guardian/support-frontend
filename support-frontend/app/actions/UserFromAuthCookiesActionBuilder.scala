@@ -7,9 +7,10 @@ import com.gu.identity.auth._
 import com.gu.identity.model.{PrivateFields, User}
 import config.Identity
 import controllers.AuthCodeFlow.FlashKey.authTried
-import controllers.AuthCodeFlow.SessionKey.originUrl
+import controllers.AuthCodeFlow.SessionKey.{originUrl, referringUrl}
 import controllers.routes
 import play.api.Logging
+import play.api.http.HeaderNames.REFERER
 import play.api.mvc.Results.Redirect
 import play.api.mvc.Security.AuthenticatedRequest
 import play.api.mvc._
@@ -63,7 +64,13 @@ class UserFromAuthCookiesOrAuthServerActionBuilder(
             // Haven't tried to authenticate this request yet so redirect to auth
             isAuthServerUp().flatMap {
               case true =>
-                val session = request.session + (originUrl -> request.uri)
+                val session = {
+                  val withoutReferrer = request.session + (originUrl -> request.uri)
+                  request.headers
+                    .get(REFERER)
+                    .map(referrer => withoutReferrer + (referringUrl -> referrer))
+                    .getOrElse(withoutReferrer)
+                }
                 Future.successful(Redirect(routes.AuthCodeFlowController.authorize()).withSession(session))
               case false =>
                 // If auth server is down, just pass request through without a user

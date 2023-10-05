@@ -185,6 +185,7 @@ lazy val `supporter-product-data-dynamo` = (project in file("support-modules/sup
     libraryDependencies ++= commonDependencies,
     releaseSettings,
     scalafmtSettings,
+    mergeStrategySettings
   )
 
 lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
@@ -332,6 +333,24 @@ lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisitio
   .dependsOn(`module-acquisition-events`, `module-aws`)
   .aggregate(`module-acquisition-events`)
 
+lazy val `bigquery-acquisitions-publisher` = (project in file("support-lambdas/bigquery-acquisitions-publisher"))
+  .enablePlugins(RiffRaffArtifact)
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .settings(
+    scalafmtSettings,
+    scalacOptions += "-Ytasty-reader",
+    libraryDependencies ++= commonDependencies,
+    mergeStrategySettings,
+  )
+  .dependsOn(`module-acquisition-events`, `module-aws`)
+  .aggregate(`module-acquisition-events`)
+
 lazy val `support-lambdas` = (project in file("support-lambdas"))
   .settings(scalafmtSettings)
-  .aggregate(`stripe-intent`, `it-test-runner`, `acquisitions-firehose-transformer`)
+  .aggregate(
+    `stripe-intent`,
+    `it-test-runner`,
+    `acquisitions-firehose-transformer`,
+    `acquisition-events-api`,
+    `bigquery-acquisitions-publisher`
+  )

@@ -6,8 +6,8 @@ import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.ga.{GoogleAnalyticsService, GoogleAnalyticsServiceMock}
-import com.gu.support.acquisitions.{AcquisitionsStreamService, BigQueryService}
+import com.gu.support.acquisitions.AcquisitionsStreamService
+import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.stripe.model.Charge.PaymentMethodDetails
 import com.stripe.model.{Charge, ChargeCollection, Event, PaymentIntent}
 import io.circe.Json
@@ -15,8 +15,8 @@ import model.Environment.Live
 import model.paypal.PaypalApiError
 import model.stripe.StripePaymentIntentRequest.{ConfirmPaymentIntent, CreatePaymentIntent}
 import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripePaymentRequestButton}
-import model.stripe.{StripeApiError, _}
-import model.{AcquisitionData, _}
+import model.stripe._
+import model._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.PrivateMethodTester._
@@ -38,14 +38,36 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val token = Json.fromString("token").as[NonEmptyString].right.get
   val recaptchaToken = "recaptchaToken"
   val acquisitionData =
-    AcquisitionData(Some("platform"), None, None, None, None, None, None, None, None, None, None, None, None)
+    AcquisitionData(
+      Some("platform"),
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      None,
+      Some("N1 9GU"),
+    )
   val stripePaymentData = StripePaymentData(email, Currency.USD, 12, None)
   val legacyStripePaymentData = LegacyStripePaymentData(email, Currency.USD, 12, None, token)
   val stripePublicKey = StripePublicKey("pk_test_FOOBAR")
   val stripeChargeRequest = LegacyStripeChargeRequest(legacyStripePaymentData, acquisitionData, Some(stripePublicKey))
   val createPaymentIntent =
-    CreatePaymentIntent("payment-method-id", stripePaymentData, acquisitionData, Some(stripePublicKey), recaptchaToken)
-  val confirmPaymentIntent = ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, Some(stripePublicKey))
+    CreatePaymentIntent(
+      "payment-method-id",
+      stripePaymentData,
+      acquisitionData,
+      Some(stripePublicKey),
+      recaptchaToken,
+    )
+  val confirmPaymentIntent =
+    ConfirmPaymentIntent("id", stripePaymentData, acquisitionData, Some(stripePublicKey))
 
   val countrySubdivisionCode = Some("NY")
   val clientBrowserInfo = ClientBrowserInfo("", "", None, None, countrySubdivisionCode)
@@ -96,11 +118,11 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(SoftOptInsServiceError("an error from soft opt-ins")))
   val softOptInsResponse: EitherT[Future, SoftOptInsServiceError, Unit] =
     EitherT.right(Future.successful(()))
-  val bigQueryResponse: EitherT[Future, List[String], Unit] =
-    EitherT.right(Future.successful(()))
-  val bigQueryErrorMessage = "a BigQuery error"
-  val bigQueryResponseError: EitherT[Future, List[String], Unit] =
-    EitherT.left(Future.successful(List(bigQueryErrorMessage)))
+  val acquisitionsEventBusResponse: Future[Either[String, Unit]] =
+    Future.successful(Right())
+  val acquisitionsEventBusErrorMessage = "an event bus error"
+  val acquisitionsEventBusResponseError: Future[Either[String, Unit]] =
+    Future.successful(Left(acquisitionsEventBusErrorMessage))
   val streamResponse: EitherT[Future, List[String], Unit] =
     EitherT.right(Future.successful(()))
   val streamResponseError: EitherT[Future, List[String], Unit] =
@@ -160,8 +182,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockStripeService: StripeService = mock[StripeService]
   val mockDatabaseService: ContributionsStoreService = mock[ContributionsStoreService]
   val mockIdentityService: IdentityService = mock[IdentityService]
-  val mockGaService: GoogleAnalyticsService = GoogleAnalyticsServiceMock
-  val mockBigQueryService: BigQueryService = mock[BigQueryService]
+  val mockAcquisitionsEventBusService: AcquisitionsEventBusService = mock[AcquisitionsEventBusService]
   val mockEmailService: EmailService = mock[EmailService]
   val mockRecaptchaService: RecaptchaService = mock[RecaptchaService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
@@ -181,8 +202,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockStripeService,
     mockDatabaseService,
     mockIdentityService,
-    mockGaService,
-    mockBigQueryService,
+    mockAcquisitionsEventBusService,
     mockAcquisitionsStreamService,
     mockEmailService,
     mockRecaptchaService,
@@ -303,7 +323,7 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponseError)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any())).thenReturn(acquisitionsEventBusResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntentWithStripeCheckout))
           .thenReturn(paymentServiceIntentResponse)
@@ -336,7 +356,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponseError)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+          .thenReturn(acquisitionsEventBusResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntentWithStripeApplePay))
           .thenReturn(paymentServiceIntentResponse)
@@ -367,7 +388,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponseError)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+          .thenReturn(acquisitionsEventBusResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntentWithStripePaymentRequest))
           .thenReturn(paymentServiceIntentResponse)
@@ -399,7 +421,8 @@ class StripeBackendSpec
           when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
           when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
           when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
-          when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+          when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+            .thenReturn(acquisitionsEventBusResponseError)
           when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
             .thenReturn(streamResponseError)
           stripeBackend
@@ -417,7 +440,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponseError)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+          .thenReturn(acquisitionsEventBusResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
@@ -462,7 +486,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+          .thenReturn(acquisitionsEventBusResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         val trackContribution = PrivateMethod[Future[List[BackendError]]]('trackContribution)
         val result =
@@ -479,13 +504,14 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponseError)
+        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+          .thenReturn(acquisitionsEventBusResponseError)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         val trackContribution = PrivateMethod[Future[List[BackendError]]]('trackContribution)
         val result =
           stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
         val error = List(
-          BackendError.BigQueryError(bigQueryErrorMessage),
+          BackendError.AcquisitionsEventBusError(acquisitionsEventBusErrorMessage),
           BackendError.Database(dbError),
         )
         result.futureValue mustBe error
@@ -504,7 +530,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+          .thenReturn(acquisitionsEventBusResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntent)).thenReturn(paymentServiceIntentResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
@@ -582,7 +609,8 @@ class StripeBackendSpec
         when(mockSupporterProductDataService.insertContributionData(any())(any()))
           .thenReturn(supporterProductDataResponse)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
-        when(mockBigQueryService.tableInsertRowWithRetry(any(), any[Int])(any())).thenReturn(bigQueryResponse)
+        when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
+          .thenReturn(acquisitionsEventBusResponse)
         when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.confirmPaymentIntent(confirmPaymentIntent)).thenReturn(paymentServiceIntentResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)

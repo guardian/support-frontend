@@ -23,6 +23,7 @@ import { Container } from 'components/layout/container';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import {
 	AUDCountries,
 	Canada,
@@ -38,13 +39,14 @@ import { GuardianTsAndCs } from '../components/guardianTsAndCs';
 import { LandingPageHeading } from '../components/landingPageHeading';
 import { PatronsMessage } from '../components/patronsMessage';
 
-const checkoutContainer = css`
+const checkoutContainer = (isPaymentPage?: boolean) => css`
 	position: relative;
 	color: ${palette.neutral[7]};
 	${textSans.medium()};
-	padding-top: ${space[6]}px;
+	padding-top: ${space[isPaymentPage ? 2 : 6]}px;
 	padding-bottom: ${space[9]}px;
 	${from.tablet} {
+		padding-top: 40px;
 		padding-bottom: ${space[12]}px;
 	}
 `;
@@ -62,12 +64,21 @@ const subHeading = css`
 	padding-right: ${space[2]}px;
 `;
 
+const secureIndicatorSpacing = css`
+	margin-bottom: ${space[3]}px;
+	${from.tablet} {
+		margin-bottom: ${space[4]}px;
+	}
+`;
+
 export function SupporterPlusCheckoutScaffold({
 	children,
 	thankYouRoute,
+	isPaymentPage,
 }: {
 	children: React.ReactNode;
 	thankYouRoute: string;
+	isPaymentPage?: true;
 }): JSX.Element {
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -106,13 +117,15 @@ export function SupporterPlusCheckoutScaffold({
 			header={
 				<>
 					<Header>
-						<Hide from="desktop">
-							<CountrySwitcherContainer>
-								<CountryGroupSwitcher {...countrySwitcherProps} />
-							</CountrySwitcherContainer>
-						</Hide>
+						{!isPaymentPage && (
+							<Hide from="desktop">
+								<CountrySwitcherContainer>
+									<CountryGroupSwitcher {...countrySwitcherProps} />
+								</CountrySwitcherContainer>
+							</Hide>
+						)}
 					</Header>
-					<Nav {...countrySwitcherProps} />
+					{!isPaymentPage && <Nav {...countrySwitcherProps} />}
 				</>
 			}
 			footer={
@@ -122,27 +135,43 @@ export function SupporterPlusCheckoutScaffold({
 			}
 		>
 			<CheckoutHeading
-				heading={heading}
+				heading={!isPaymentPage && heading}
 				image={
-					<GridImage
-						gridId="supporterPlusLanding"
-						srcSizes={[500]}
-						sizes="500px"
-						imgType="png"
-						altText=""
-					/>
+					!isPaymentPage && (
+						<GridImage
+							gridId="supporterPlusLanding"
+							srcSizes={[500]}
+							sizes="500px"
+							imgType="png"
+							altText=""
+						/>
+					)
 				}
+				withTopborder={isPaymentPage}
 			>
-				<p css={subHeading}>
-					As a reader-funded news organisation, we rely on your generosity.
-					Please give what you can, so millions can benefit from quality
-					reporting on the events shaping our world.
-				</p>
+				{!isPaymentPage && (
+					<p css={subHeading}>
+						As a reader-funded news organisation, we rely on your generosity.
+						Please give what you can, so millions can benefit from quality
+						reporting on the events shaping our world.
+					</p>
+				)}
 			</CheckoutHeading>
+
 			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
-				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
+				<Columns
+					cssOverrides={checkoutContainer(isPaymentPage)}
+					collapseUntil="tablet"
+				>
 					<Column span={[0, 2, 5]}></Column>
 					<Column span={[1, 8, 7]}>
+						{isPaymentPage && (
+							<SecureTransactionIndicator
+								align="center"
+								theme="light"
+								cssOverrides={secureIndicatorSpacing}
+							/>
+						)}
 						{children}
 						<CheckoutDivider spacing="loose" mobileTheme={'light'} />
 						<PatronsMessage

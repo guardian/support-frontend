@@ -8,13 +8,14 @@ import com.amazon.pay.response.model.{AuthorizationDetails, OrderReferenceDetail
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.ga.GoogleAnalyticsService
 import com.gu.support.acquisitions._
+import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
+import com.gu.support.config.Stages.{CODE, PROD}
 import com.typesafe.scalalogging.StrictLogging
 import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
-import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
 import conf.ConfigLoader.environmentShow
 import conf._
+import model.Environment.Live
 import model._
 import model.acquisition.{AcquisitionDataRowBuilder, AmazonPayAcquisition}
 import model.amazonpay.AmazonPayApiError.amazonPayErrorText
@@ -33,8 +34,7 @@ class AmazonPayBackend(
     service: AmazonPayService,
     identityService: IdentityService,
     emailService: EmailService,
-    val gaService: GoogleAnalyticsService,
-    val bigQueryService: BigQueryService,
+    val acquisitionsEventBusService: AcquisitionsEventBusService,
     val acquisitionsStreamService: AcquisitionsStreamService,
     val databaseService: ContributionsStoreService,
     val supporterProductDataService: SupporterProductDataService,
@@ -176,13 +176,12 @@ class AmazonPayBackend(
       acquisitionData.countryCode,
       clientBrowserInfo.countrySubdivisionCode,
       acquisitionData.amazonPayment.orderReferenceId,
+      acquisitionData.acquisitionData.flatMap(_.postalCode),
     )
-    val gaData = ClientBrowserInfo.toGAData(clientBrowserInfo)
 
     track(
       acquisition = AcquisitionDataRowBuilder.buildFromAmazonPay(acquisitionData, contributionData),
       contributionData,
-      gaData,
     )
   }
 
@@ -229,8 +228,7 @@ object AmazonPayBackend {
       amazonPayService: AmazonPayService,
       databaseService: ContributionsStoreService,
       identityService: IdentityService,
-      gaService: GoogleAnalyticsService,
-      bigQueryService: BigQueryService,
+      acquisitionsEventBusService: AcquisitionsEventBusService,
       acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
       cloudWatchService: CloudWatchService,
@@ -243,8 +241,7 @@ object AmazonPayBackend {
       amazonPayService,
       identityService,
       emailService,
-      gaService,
-      bigQueryService,
+      acquisitionsEventBusService,
       acquisitionsStreamService,
       databaseService,
       supporterProductDataService,
@@ -272,10 +269,7 @@ object AmazonPayBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      GoogleAnalyticsServices(env).valid: InitializationResult[GoogleAnalyticsService],
-      configLoader
-        .loadConfig[Environment, BigQueryConfig](env)
-        .map(new BigQueryService(_)): InitializationResult[BigQueryService],
+      AcquisitionsEventBusService("payment-api", if (env == Live) PROD else CODE).valid,
       configLoader
         .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
         .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],

@@ -8,7 +8,7 @@ import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.ga.GoogleAnalyticsService
+import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.acquisitions.{
   AcquisitionsStreamEc2OrLocalConfig,
   AcquisitionsStreamService,
@@ -16,6 +16,7 @@ import com.gu.support.acquisitions.{
   BigQueryConfig,
   BigQueryService,
 }
+import com.gu.support.config.Stages.{CODE, PROD}
 import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
 import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
@@ -41,8 +42,7 @@ class StripeBackend(
     stripeService: StripeService,
     val databaseService: ContributionsStoreService,
     identityService: IdentityService,
-    val gaService: GoogleAnalyticsService,
-    val bigQueryService: BigQueryService,
+    val acquisitionsEventBusService: AcquisitionsEventBusService,
     val acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
     recaptchaService: RecaptchaService,
@@ -285,16 +285,15 @@ class StripeBackend(
       identityId,
       charge,
       clientBrowserInfo.countrySubdivisionCode,
+      data.acquisitionData.postalCode,
       PaymentProvider.fromStripePaymentMethod(data.paymentData.stripePaymentMethod),
     )
 
     val stripeAcquisition = StripeAcquisition(data, charge, identityId, clientBrowserInfo)
-    val gaData = ClientBrowserInfo.toGAData(clientBrowserInfo)
 
     track(
       acquisition = AcquisitionDataRowBuilder.buildFromStripe(stripeAcquisition, contributionData),
       contributionData,
-      gaData,
     )
   }
 
@@ -344,8 +343,7 @@ object StripeBackend {
       stripeService: StripeService,
       databaseService: ContributionsStoreService,
       identityService: IdentityService,
-      gaService: GoogleAnalyticsService,
-      bigQueryService: BigQueryService,
+      acquisitionsEventBusService: AcquisitionsEventBusService,
       acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
       recaptchaService: RecaptchaService,
@@ -359,8 +357,7 @@ object StripeBackend {
       stripeService,
       databaseService,
       identityService,
-      gaService,
-      bigQueryService,
+      acquisitionsEventBusService,
       acquisitionsStreamService,
       emailService,
       recaptchaService,
@@ -393,10 +390,7 @@ object StripeBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      GoogleAnalyticsServices(env).valid: InitializationResult[GoogleAnalyticsService],
-      configLoader
-        .loadConfig[Environment, BigQueryConfig](env)
-        .map(new BigQueryService(_)): InitializationResult[BigQueryService],
+      AcquisitionsEventBusService("payment-api", if (env == Live) PROD else CODE).valid,
       configLoader
         .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
         .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],

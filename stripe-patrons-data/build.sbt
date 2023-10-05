@@ -9,7 +9,7 @@ scalacOptions ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.4.7",
+  "ch.qos.logback" % "logback-classic" % "1.4.11",
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
@@ -30,7 +30,9 @@ riffRaffArtifactResources += (
 riffRaffArtifactResources += (
   file("cdk/cdk.out/StripePatronsData-CODE.template.json"), "cfn/StripePatronsData-CODE.template.json"
 )
-assemblyJarName := s"${name.value}.jar"
+// We use the buildNumber to set the lambda fileName, because lambda versioning requires a new fileName each time
+val buildNumber = sys.env.getOrElse("GITHUB_RUN_NUMBER", "DEV")
+assemblyJarName := s"${name.value}-$buildNumber.jar"
 assembly / assemblyMergeStrategy := {
   case PathList("models", xs @ _*) => MergeStrategy.discard
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
@@ -42,20 +44,9 @@ assembly / assemblyMergeStrategy := {
     oldStrategy(y)
 }
 
-lazy val deployToCode =
-  inputKey[Unit]("Directly update AWS lambda code from local instead of via RiffRaff for faster feedback loop")
-
-deployToCode := {
-  import scala.sys.process._
-  val s3Bucket = "membership-dist"
-  val s3Path = "support/CODE/stripe-patrons-data/stripe-patrons-data.jar"
-  (s"aws s3 cp ${assembly.value} s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!
-  List(
-    "stripe-patrons-data-CODE",
-    "stripe-patrons-data-cancelled-CODE",
-    "stripe-patrons-data-sign-up-CODE",
-  ).foreach(functionPartial => {
-    System.out.println(s"Updating function $functionPartial")
-    s"aws lambda update-function-code --function-name $functionPartial --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!
-  })
-}
+// We also have to put the build number in the .jar, because AWS refuses to create a new lambda version if the jar is the same!
+resourceGenerators in Compile += Def.task {
+  val file = (resourceManaged ).value / "build.number"
+  IO.write(file, buildNumber)
+  Seq(file)
+}.taskValue

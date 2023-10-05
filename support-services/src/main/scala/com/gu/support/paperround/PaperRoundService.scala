@@ -14,9 +14,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 import PaperRoundService.{AgentsEndpoint, CoverageEndpoint, ChargeBandsEndpoint}
 
+trait PaperRoundAPI {
+  def coverage(body: CoverageEndpoint.RequestBody): Future[CoverageEndpoint.Response]
+  def agents(): Future[AgentsEndpoint.Response]
+  def chargebands(): Future[ChargeBandsEndpoint.Response]
+}
+
 class PaperRoundService(config: PaperRoundConfig, client: FutureHttpClient)(implicit
     executionContext: ExecutionContext,
-) extends WebServiceHelper[PaperRoundService.Error] {
+) extends WebServiceHelper[PaperRoundService.Error]
+    with PaperRoundAPI {
   override val wsUrl: String = config.apiUrl
   override val httpClient: FutureHttpClient = client
 

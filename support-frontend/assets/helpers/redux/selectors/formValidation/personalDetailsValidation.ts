@@ -17,6 +17,23 @@ export function getStateOrProvinceError(
 	return {};
 }
 
+function getZipCodeErrors(state: ContributionsState): ErrorCollection {
+	const { abParticipations, internationalisation } = state.common;
+	const shouldShowZipCode =
+		internationalisation.countryId === 'US' &&
+		abParticipations.mandatoryZipCode === 'variant';
+
+	if (shouldShowZipCode) {
+		const zipCode =
+			state.page.checkoutForm.billingAddress.fields.errorObject?.postCode;
+		return {
+			zipCode,
+		};
+	}
+
+	return {};
+}
+
 export function getPersonalDetailsErrors(
 	state: ContributionsState,
 ): ErrorCollection {
@@ -26,11 +43,13 @@ export function getPersonalDetailsErrors(
 		state.page.checkoutForm.personalDetails.errors ?? {};
 
 	const stateOrProvinceErrors = getStateOrProvinceError(state);
+	const zipCodeErrors = getZipCodeErrors(state);
 
 	if (contributionType === 'ONE_OFF') {
 		return {
 			email,
 			...stateOrProvinceErrors,
+			...zipCodeErrors,
 		};
 	}
 	return {
@@ -38,5 +57,6 @@ export function getPersonalDetailsErrors(
 		firstName,
 		lastName,
 		...stateOrProvinceErrors,
+		...zipCodeErrors,
 	};
 }

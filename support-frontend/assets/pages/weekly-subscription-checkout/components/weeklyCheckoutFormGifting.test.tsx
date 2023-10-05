@@ -64,10 +64,14 @@ describe('Guardian Weekly checkout form', () => {
 					},
 					addressMeta: {
 						billingAddressMatchesDelivery: true,
+						deliveryAgent: {
+							isLoading: false,
+						},
 					},
 				},
 			},
 			common: {
+				abParticipations: {},
 				internationalisation: {
 					countryGroupId: 'GBPCountries',
 					countryId: 'GB',

@@ -3,6 +3,7 @@ import type {
 	PaymentMethod,
 	PaymentMethodMap,
 } from 'helpers/forms/paymentMethods';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -49,34 +50,42 @@ export const logInvalidCombination = (
 	);
 };
 
-export type AmountSelection = {
+export interface AmountValuesObject {
 	amounts: number[];
 	defaultAmount: number;
-	hideChooseYourAmount?: boolean;
+	hideChooseYourAmount: boolean;
+}
+
+export type AmountsCardData = {
+	[key in ContributionType]: AmountValuesObject;
 };
 
-export type ContributionAmounts = {
-	[type in ContributionType]: AmountSelection;
-};
+export interface AmountsVariant {
+	variantName: string;
+	defaultContributionType: ContributionType;
+	displayContributionType: ContributionType[];
+	amountsCardData: AmountsCardData;
+}
 
-export type AmountsTestVariant = {
-	name: string;
-	amounts: ContributionAmounts;
-};
+export type AmountsTestTargeting =
+	| { targetingType: 'Region'; region: CountryGroupId }
+	| { targetingType: 'Country'; countries: IsoCountry[] };
 
-export type AmountsTest = {
-	name: string;
+export interface AmountsTest {
+	testName: string;
+	liveTestName?: string;
 	isLive: boolean;
-	variants: AmountsTestVariant[];
+	targeting: AmountsTestTargeting;
+	order: number;
 	seed: number;
-};
+	variants: AmountsVariant[];
+}
 
-export type ConfiguredRegionAmounts = {
-	control: ContributionAmounts;
-	test?: AmountsTest;
-};
+export type AmountsTests = AmountsTest[];
 
-export type ConfiguredAmounts = Record<CountryGroupId, ConfiguredRegionAmounts>;
+export interface SelectedAmountsVariant extends AmountsVariant {
+	testName: string;
+}
 
 export type ContributionTypeSetting = {
 	contributionType: ContributionType;

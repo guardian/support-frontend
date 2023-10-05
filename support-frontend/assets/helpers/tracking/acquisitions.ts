@@ -61,6 +61,7 @@ export type PaymentAPIAcquisitionData = {
 	gaId?: string | null;
 	queryParameters?: AcquisitionQueryParameters;
 	labels?: string[];
+	postalCode: string | null;
 };
 
 // ----- Setup ----- //
@@ -219,6 +220,7 @@ const getAbTests = (
 function derivePaymentApiAcquisitionData(
 	referrerAcquisitionData: ReferrerAcquisitionData,
 	nativeAbParticipations: Participations,
+	postalCode: string | null,
 ): PaymentAPIAcquisitionData {
 	const ophanIds: OphanIds = getOphanIds();
 	const abTests = getAbTests(referrerAcquisitionData, nativeAbParticipations);
@@ -240,6 +242,8 @@ function derivePaymentApiAcquisitionData(
 		gaId: getCookie('_ga'),
 		queryParameters: referrerAcquisitionData.queryParameters,
 		labels: referrerAcquisitionData.labels,
+		postalCode:
+			nativeAbParticipations.mandatoryZipCode === 'variant' ? postalCode : null,
 	};
 }
 

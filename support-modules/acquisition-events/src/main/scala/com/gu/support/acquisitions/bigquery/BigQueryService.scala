@@ -4,7 +4,8 @@ import cats.data.EitherT
 import com.google.api.core.ApiFutureCallback
 import com.google.api.core.ApiFutures
 import com.google.api.gax.core.FixedCredentialsProvider
-import com.google.auth.oauth2.ServiceAccountCredentials
+import com.google.auth.Credentials
+import com.google.auth.oauth2.{GoogleCredentials, ServiceAccountCredentials}
 import com.google.cloud.bigquery.storage.v1.{
   AppendRowsResponse,
   BigQueryWriteClient,
@@ -26,47 +27,25 @@ import com.gu.support.config.Stage
 import com.gu.support.config.Stages._
 import org.json.{JSONArray, JSONObject}
 
+import java.io.ByteArrayInputStream
 import java.util.concurrent.Executors
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.jdk.CollectionConverters._
 
-class BigQueryService(config: BigQueryConfig) {
-  private val stage: Stage = sys.env.get("STAGE").flatMap(Stage.fromString).getOrElse(CODE)
+class BigQueryService(stage: Stage, credentials: Credentials) {
+  private val projectId = s"datatech-platform-${stage.toString.toLowerCase}"
 
-  lazy val bigQuery =
-    BigQueryOptions
-      .newBuilder()
-      .setProjectId(config.projectId)
-      .setCredentials(
-        ServiceAccountCredentials.fromPkcs8(
-          config.clientId,
-          config.clientEmail,
-          config.privateKey,
-          config.privateKeyId,
-          Nil.asJavaCollection,
-        ),
-      )
-      .build()
-      .getService
   lazy val bigQueryWriteSettings =
     BigQueryWriteSettings
       .newBuilder()
-      .setQuotaProjectId(config.projectId)
+      .setQuotaProjectId(projectId)
       .setCredentialsProvider(
-        FixedCredentialsProvider.create(
-          ServiceAccountCredentials.fromPkcs8(
-            config.clientId,
-            config.clientEmail,
-            config.privateKey,
-            config.privateKeyId,
-            Nil.asJavaCollection,
-          ),
-        ),
+        FixedCredentialsProvider.create(credentials),
       )
       .build()
   lazy val bigQueryWriteClient = BigQueryWriteClient.create(bigQueryWriteSettings)
-  lazy val tableId = TableName.of(config.projectId, datasetName, tableName)
-  lazy val streamWriter = JsonStreamWriter.newBuilder(tableId.toString(), bigQueryWriteClient).build();
+  lazy val tableId = TableName.of(projectId, datasetName, tableName)
+  lazy val streamWriter = JsonStreamWriter.newBuilder(tableId.toString, bigQueryWriteClient).build()
 
   def tableInsertRowWithRetry(acquisitionDataRow: AcquisitionDataRow, maxRetries: Int)(implicit
       executionContext: ExecutionContext,
@@ -91,8 +70,8 @@ class BigQueryService(config: BigQueryConfig) {
     SafeLogger.info(s"Attempting to append row ($rowContent) created from ($acquisitionDataRow)")
     val promise = Promise[Either[String, Unit]]()
     try {
-      val responseFuture = streamWriter.append(new JSONArray(List(rowContent).asJava));
-      val callback = new BigQueryService.AppendCompleteCallback(stage, promise);
+      val responseFuture = streamWriter.append(new JSONArray(List(rowContent).asJava))
+      val callback = BigQueryService.AppendCompleteCallback(stage, promise)
       ApiFutures.addCallback(
         responseFuture,
         callback,
@@ -101,7 +80,7 @@ class BigQueryService(config: BigQueryConfig) {
     } catch {
       case e: AppendSerializtionError =>
         val errorMessage =
-          e.getRowIndexToErrorMessage().asScala.map { case (i, message) => s"$i: $message" }.mkString(", ")
+          e.getRowIndexToErrorMessage.asScala.map { case (i, message) => s"$i: $message" }.mkString(", ")
         SafeLogger.error(scrub"There was an exception appending to $tableName: $errorMessage", e)
         promise.success(Left(s"Error appending to table $tableName: $errorMessage"))
     }
@@ -110,9 +89,28 @@ class BigQueryService(config: BigQueryConfig) {
 }
 
 object BigQueryService {
+
+  def build(stage: Stage, jsonCredentials: String): BigQueryService =
+    new BigQueryService(
+      stage,
+      GoogleCredentials.fromStream(new ByteArrayInputStream(jsonCredentials.getBytes())),
+    )
+
+  def build(stage: Stage, config: BigQueryConfig): BigQueryService =
+    new BigQueryService(
+      stage,
+      ServiceAccountCredentials.fromPkcs8(
+        config.clientId,
+        config.clientEmail,
+        config.privateKey,
+        config.privateKeyId,
+        Nil.asJavaCollection,
+      ),
+    )
+
   case class AppendCompleteCallback(stage: Stage, promise: Promise[Either[String, Unit]])
       extends ApiFutureCallback[AppendRowsResponse] {
-    val executor = Executors.newSingleThreadExecutor();
+    val executor = Executors.newSingleThreadExecutor()
 
     def onSuccess(response: AppendRowsResponse): Unit = {
       SafeLogger.info(s"Rows successfully inserted into table $tableName")
@@ -121,9 +119,8 @@ object BigQueryService {
     }
     def onFailure(throwable: Throwable): Unit = {
       val detail: String = throwable match {
-        case e: AppendSerializtionError => {
-          e.getRowIndexToErrorMessage().asScala.map { case (i, message) => s"$i: $message" }.mkString(", ")
-        }
+        case e: AppendSerializtionError =>
+          e.getRowIndexToErrorMessage.asScala.map { case (i, message) => s"$i: $message" }.mkString(", ")
         case _ => ""
       }
       SafeLogger.error(scrub"There was an exception inserting a row into $tableName: $detail", throwable)

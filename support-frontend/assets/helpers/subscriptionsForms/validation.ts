@@ -1,3 +1,6 @@
+import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { DeliveryAgentState } from 'helpers/redux/checkout/addressMeta/state';
+
 // ----- Types ----- //
 export type Rule<Err> = {
 	rule: boolean;
@@ -32,6 +35,20 @@ function zuoraCompatibleString(s: string | null | undefined): boolean {
 	}
 
 	return !takesFourBytesInUTF8Regex.test(s);
+}
+
+function requiredDeliveryAgentChosen(
+	fulfilmentOption: FulfilmentOptions | null,
+	deliveryAgent: DeliveryAgentState,
+): boolean {
+	if (
+		fulfilmentOption === 'HomeDelivery' &&
+		deliveryAgentsAreAvailable(deliveryAgent)
+	) {
+		return deliveryAgentHasBeenChosen(deliveryAgent);
+	}
+
+	return true;
 }
 
 // ----- Functions ----- //
@@ -69,6 +86,18 @@ function validate<Err>(rules: Array<Rule<Err>>): Err[] {
 	);
 }
 
+function deliveryAgentHasBeenChosen(
+	deliveryAgent: DeliveryAgentState,
+): boolean {
+	return deliveryAgent.chosenAgent ? true : false;
+}
+
+function deliveryAgentsAreAvailable(
+	deliveryAgent: DeliveryAgentState,
+): boolean {
+	return (deliveryAgent.response?.agents?.length ?? 0) > 0;
+}
+
 // ----- Exports ----- //
 export {
 	nonEmptyString,
@@ -79,4 +108,6 @@ export {
 	removeError,
 	validate,
 	zuoraCompatibleString,
+	requiredDeliveryAgentChosen,
+	deliveryAgentsAreAvailable,
 };
