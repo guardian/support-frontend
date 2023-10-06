@@ -7,7 +7,6 @@ import com.amazon.pay.response.ipn.model.{AuthorizationNotification, Notificatio
 import com.amazon.pay.response.model._
 import com.amazon.pay.response.parser.{CloseOrderReferenceResponseData, ConfirmOrderReferenceResponseData, ResponseData}
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.AcquisitionsStreamService
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import model._
 import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
@@ -115,8 +114,6 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     EitherT.right(Future.successful(()))
   val acquisitionEventBusResponseError: Future[Either[String, Unit]] =
     Future.successful(Left("an event bus error"))
-  val streamResponseError: EitherT[Future, List[String], Unit] =
-    EitherT.left(Future.successful(List("stream error")))
   val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
     EitherT.right(Future.successful(1L))
   val identityResponseError: EitherT[Future, IdentityClient.ContextualError, Long] =
@@ -151,7 +148,6 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
   val mockAcquisitionsEventBusService: AcquisitionsEventBusService = mock[AcquisitionsEventBusService]
   val mockEmailService: EmailService = mock[EmailService]
   val mockCloudWatchService: CloudWatchService = mock[CloudWatchService]
-  val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
   val mockSupporterProductDataService: SupporterProductDataService = mock[SupporterProductDataService]
   val mockSoftOptInsService: SoftOptInsService = mock[SoftOptInsService]
   val mockSwitchService: SwitchService = mock[SwitchService]
@@ -163,12 +159,11 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     mockIdentityService,
     mockEmailService,
     mockAcquisitionsEventBusService,
-    mockAcquisitionsStreamService,
     mockDatabaseService,
     mockSupporterProductDataService,
     mockSoftOptInsService,
     mockSwitchService,
-  )(new DefaultThreadPool(ec))
+  )(DefaultThreadPool(ec))
 
   val paymentdata = AmazonPaymentData("refId", BigDecimal(25), Currency.USD, "email@thegulocal.com")
   val amazonPayRequest = AmazonPayRequest(paymentdata, Some(acquisitionData))
@@ -232,8 +227,6 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
           .thenReturn(softOptInsResponseError)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionEventBusResponseError)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
-          .thenReturn(streamResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com"))
           .thenReturn(identityResponseError)
         amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
@@ -289,8 +282,6 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
             .thenReturn(softOptInsResponseError)
           when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
             .thenReturn(acquisitionEventBusResponseError)
-          when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
-            .thenReturn(streamResponseError)
           when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com"))
             .thenReturn(identityResponseError)
           amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureRight mustBe ()
@@ -321,8 +312,6 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
 
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionEventBusResponseError)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
-          .thenReturn(streamResponseError)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@thegulocal.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailResponseError)
 

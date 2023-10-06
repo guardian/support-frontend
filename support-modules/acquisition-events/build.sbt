@@ -8,7 +8,6 @@ libraryDependencies ++= Seq(
   "com.google.cloud" % "google-cloud-bigquery" % "2.31.2",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "com.amazonaws" % "aws-java-sdk-kinesis" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-eventbridge" % awsClientVersion,
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
 

@@ -50,6 +50,28 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Events::EventBus",
     },
+    "acquisitionsbusPRODarchiveArchiveCA0B270E": {
+      "Properties": {
+        "ArchiveName": "acquisitions-bus-PROD-archive",
+        "Description": "Archive for all events sent to acquisitions-bus-PROD-archive",
+        "EventPattern": {
+          "account": [
+            "account",
+          ],
+          "region": [
+            "eu-west-1",
+          ],
+        },
+        "RetentionDays": 90,
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "acquisitionsbusPROD768AFDE3",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Events::Archive",
+    },
     "bigqueryacquisitionspublisherLambdaD7F059E6": {
       "DependsOn": [
         "bigquerytos3roleDefaultPolicy0D20CB1A",

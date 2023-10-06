@@ -9,18 +9,10 @@ import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
-import com.gu.support.acquisitions.{
-  AcquisitionsStreamEc2OrLocalConfig,
-  AcquisitionsStreamService,
-  AcquisitionsStreamServiceImpl,
-  BigQueryConfig,
-  BigQueryService,
-}
+import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService.Sources
 import com.gu.support.config.Stages.{CODE, PROD}
 import com.stripe.model.{Charge, PaymentIntent}
 import com.typesafe.scalalogging.StrictLogging
-import conf.BigQueryConfigLoader.bigQueryConfigParameterStoreLoadable
-import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
 import conf.ConfigLoader._
 import conf._
 import model.Environment.{Live, Test}
@@ -30,20 +22,19 @@ import model.db.ContributionData
 import model.email.ContributorRow
 import model.stripe.StripeApiError.{recaptchaErrorText, stripeDisabledErrorText}
 import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripePaymentRequestButton}
-import model.stripe.{StripePaymentIntentRequest, _}
+import model.stripe._
 import play.api.libs.ws.WSClient
 import services._
 import util.EnvironmentBasedBuilder
 
-import scala.jdk.CollectionConverters._
 import scala.concurrent.Future
+import scala.jdk.CollectionConverters._
 
 class StripeBackend(
     stripeService: StripeService,
     val databaseService: ContributionsStoreService,
     identityService: IdentityService,
     val acquisitionsEventBusService: AcquisitionsEventBusService,
-    val acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
     recaptchaService: RecaptchaService,
     cloudWatchService: CloudWatchService,
@@ -344,7 +335,6 @@ object StripeBackend {
       databaseService: ContributionsStoreService,
       identityService: IdentityService,
       acquisitionsEventBusService: AcquisitionsEventBusService,
-      acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
       recaptchaService: RecaptchaService,
       cloudWatchService: CloudWatchService,
@@ -358,7 +348,6 @@ object StripeBackend {
       databaseService,
       identityService,
       acquisitionsEventBusService,
-      acquisitionsStreamService,
       emailService,
       recaptchaService,
       cloudWatchService,
@@ -390,10 +379,7 @@ object StripeBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      AcquisitionsEventBusService("payment-api", if (env == Live) PROD else CODE).valid,
-      configLoader
-        .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
-        .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],
+      AcquisitionsEventBusService(Sources.paymentApi, if (env == Live) PROD else CODE).valid,
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
