@@ -107,7 +107,7 @@ function ProductOption(props: Product): JSX.Element {
 			<div css={productOptionVerticalLine}>
 				<p css={[productOptionOfferCopy, productOptionUnderline]}>
 					{props.offerCopy}
-					{!props.offerCopy && props.unavailableOutsideLondon && (
+					{props.unavailableOutsideLondon && (
 						<InfoSummary
 							cssOverrides={css`
 								border: 0;
