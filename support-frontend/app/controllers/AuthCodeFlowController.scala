@@ -113,7 +113,7 @@ class AuthCodeFlowController(cc: ControllerComponents, authService: AsyncAuthent
       cleansed(Redirect(url))
         .flashing(FlashKey.authTried -> "true")
         // Reinstate indexing in the target page
-        .withHeaders("X-Robots-Tag" -> "index,follow")
+        .withHeaders("X-Robots-Tag" -> "all")
     }
 
     (code, codeVerifier, sessionState, error, errorDescription) match {
