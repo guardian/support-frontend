@@ -177,6 +177,7 @@ export function PaperPrices({
 						onClick={product.onClick}
 						onView={product.onView}
 						label={product.label}
+						unavailableOutsideLondon={product.unavailableOutsideLondon}
 					/>
 				))}
 			</FlexContainer>
