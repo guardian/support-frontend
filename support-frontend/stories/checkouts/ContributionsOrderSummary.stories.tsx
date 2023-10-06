@@ -80,7 +80,9 @@ BelowThreshold.args = {
 		isSuffixGlyph: false,
 		isPaddedGlyph: false,
 	},
-	checkListData: checkListData({ higherTier: false, showUnchecked: false }),
+	checkListData: checkListData({ higherTier: false, showUnchecked: true }),
+	showTopUpToggle: true,
+	showPreAmendedTotal: true,
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -92,6 +94,7 @@ BelowThreshold.args = {
 			<p>Cancel or change your support anytime.</p>
 		</>
 	),
+	version: 'FULL',
 };
 
 export const SingleContribution = Template.bind({});
