@@ -13950,12 +13950,13 @@ schema-utils@^4.0.0:
     ajv-formats "^2.1.1"
     ajv-keywords "^5.0.0"
 
-search-in-file@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/search-in-file/-/search-in-file-1.2.2.tgz#259f72247cdf66d3ad3d63ac450d0a703cd1cb19"
-  integrity sha512-6mqEn/nAwuewdyTrry487RPB14ciy9JS45bBop4SNgYTPOOgXcW3JRzloeMwJ1GnxZyG4ylbf1Tzmtk3DqKFlA==
+search-in-file@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/search-in-file/-/search-in-file-2.2.2.tgz#91d9116702883498597bf69019c157e0f4543634"
+  integrity sha512-XCuD677UTU9eYaylUCR14pRiQ8uy9vWBXRwxhALl1cIqHuQ+hoqYr3WpSzm5WnRscUjGVGcfuLUAPBAwx4COIw==
   dependencies:
     commander "^4.1.0"
+    typescript "^4.7.4"
 
 seedrandom@^3.0.5:
   version "3.0.5"
@@ -15204,7 +15205,7 @@ typescript@^3.9.10, typescript@^3.9.3, typescript@^3.9.7:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.10.tgz#70f3910ac7a51ed6bef79da7800690b19bf778b8"
   integrity sha512-w6fIxVE/H1PkLKcCPsFqKE7Kv7QUwhU8qQY2MueZXWx5cPZdwFupLgKK3vntcK98BtNHZtAF4LA/yl2a7k8R6Q==
 
-typescript@^4.0.0, typescript@^4.9.5:
+typescript@^4.0.0, typescript@^4.7.4, typescript@^4.9.5:
   version "4.9.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
