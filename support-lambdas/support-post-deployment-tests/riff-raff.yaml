@@ -4,12 +4,13 @@ allowedStages:
   - CODE
   - PROD
 deployments:
-  type: cloud-formation
-  app: support-frontend-post-deployment-tests
-  parameters:
-    templateStagePaths:
-      CODE: SupportFrontendPostDeploymentTestsLambda-CODE.template.json
-      PROD: SupportFrontendPostDeploymentTestsLambda-PROD.template.json
+  cloud-formation:
+    type: cloud-formation
+    app: support-frontend-post-deployment-tests
+    parameters:
+      templateStagePaths:
+        CODE: SupportFrontendPostDeploymentTestsLambda-CODE.template.json
+        PROD: SupportFrontendPostDeploymentTestsLambda-PROD.template.json
   support-frontend-post-deployment-tests-lambda:
     type: aws-lambda
     stacks:
