@@ -128,7 +128,7 @@
     "@emotion/babel-plugin": "^11.11.0",
     "@emotion/eslint-plugin": "^11.11.0",
     "@guardian/browserslist-config": "^5.0.0",
-    "@guardian/eslint-config-typescript": "^0.6.0",
+    "@guardian/eslint-config-typescript": "^0.7.0",
     "@guardian/eslint-plugin-source-foundations": "^4.0.2",
     "@guardian/eslint-plugin-source-react-components": "^4.0.2",
     "@guardian/paparazzi": "^0.3.1",
