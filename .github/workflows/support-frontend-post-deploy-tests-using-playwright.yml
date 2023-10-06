@@ -40,7 +40,7 @@ jobs:
           configPath: ./support-lambdas/support-post-deployment-tests/riff-raff.yaml
           projectName: Support::support-frontend-post-deployment-tests
           contentDirectories: |
-            cdk.out:
+            cloud-formation:
               - ./support-lambdas/support-post-deployment-tests/packages/cdk/cdk.out/SupportFrontendPostDeploymentTestsLambda-CODE.template.json
               - ./support-lambdas/support-post-deployment-tests/packages/cdk/cdk.out/SupportFrontendPostDeploymentTestsLambda-PROD.template.json
             support-frontend-post-deployment-tests-lambda:
