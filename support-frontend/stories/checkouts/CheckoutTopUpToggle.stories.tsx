@@ -27,7 +27,7 @@ function Template(args: CheckoutTopUpToggleProps) {
 	return (
 		<CheckoutTopUpToggle
 			{...args}
-			isSelected={isSelected}
+			checked={isSelected}
 			onChange={() => onChange(!isSelected)}
 		/>
 	);

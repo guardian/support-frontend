@@ -16,6 +16,7 @@ import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
 import { CheckoutTopUpAmounts } from 'components/checkoutTopUpAmounts/checkoutTopUpAmounts';
 import { CheckoutTopUpAmountsContainer } from 'components/checkoutTopUpAmounts/checkoutTopUpAmountsContainer';
 import { CheckoutTopUpToggle } from 'components/checkoutTopUpToggle/checkoutTopUpToggle';
+import { CheckoutTopUpToggleContainer } from 'components/checkoutTopUpToggle/checkoutTopUpToggleContainer';
 import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -173,7 +174,6 @@ export type ContributionsOrderSummaryProps = {
 	version?: ContributionsOrderSummaryVersion;
 	topUpToggleChecked?: boolean;
 	topUpToggleOnChange?: () => void;
-	topUpThreshold?: number;
 };
 
 const supportTypes = {
@@ -238,9 +238,6 @@ export function ContributionsOrderSummary({
 	showTopUpToggle,
 	showPreAmendedTotal,
 	version = 'COMPACT',
-	topUpToggleChecked = false,
-	topUpToggleOnChange = () => null,
-	topUpThreshold = 0,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showDetails, setShowDetails] = useState(false);
 
@@ -311,11 +308,10 @@ export function ContributionsOrderSummary({
 			)}
 			{showTopUpToggle && contributionType !== 'ONE_OFF' && (
 				<div css={toggleContainer}>
-					<CheckoutTopUpToggle
-						isSelected={topUpToggleChecked}
-						onChange={topUpToggleOnChange}
-						contributionType={contributionType}
-						threshold={topUpThreshold}
+					<CheckoutTopUpToggleContainer
+						renderCheckoutTopUpToggle={(checkoutTopUpToggleProps) => (
+							<CheckoutTopUpToggle {...checkoutTopUpToggleProps} />
+						)}
 					/>
 				</div>
 			)}

@@ -68,35 +68,6 @@ Default.args = {
 	),
 };
 
-export const BelowThreshold = Template.bind({});
-
-BelowThreshold.args = {
-	contributionType: 'ANNUAL',
-	total: 25,
-	totalBeforeAmended: 25,
-	currency: {
-		glyph: '$',
-		extendedGlyph: 'US$',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
-	},
-	checkListData: checkListData({ higherTier: false, showUnchecked: true }),
-	showTopUpToggle: true,
-	showPreAmendedTotal: true,
-	headerButton: (
-		<Button priority="tertiary" size="xsmall">
-			Change
-		</Button>
-	),
-	tsAndCs: (
-		<>
-			<p>Auto renews every year until you cancel.</p>
-			<p>Cancel or change your support anytime.</p>
-		</>
-	),
-	version: 'FULL',
-};
-
 export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {

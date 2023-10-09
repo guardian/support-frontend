@@ -14,14 +14,14 @@ const timePeriods = {
 };
 
 export interface CheckoutTopUpToggleProps {
-	isSelected: boolean;
+	checked: boolean;
 	onChange(): void;
 	contributionType: RegularContributionType;
 	threshold: number;
 }
 
 export function CheckoutTopUpToggle({
-	isSelected,
+	checked,
 	onChange,
 	contributionType,
 	threshold = 10,
@@ -30,18 +30,18 @@ export function CheckoutTopUpToggle({
 		<section css={topUpToggleContainer}>
 			<div>
 				<h3 css={title}>
-					{isSelected && <SvgTickRound size="xsmall" />}
-					{isSelected ? 'All extras unlocked' : 'Want to unlock all extras?'}
+					{checked && <SvgTickRound size="xsmall" />}
+					{checked ? 'All extras unlocked' : 'Want to unlock all extras?'}
 				</h3>
 				<p css={standfirst}>
-					{isSelected
-						? `Change your support to £${threshold}/${timePeriods[contributionType]}`
-						: `Your support is now £${threshold}/${timePeriods[contributionType]}`}
+					{checked
+						? `Your support is now £${threshold}/${timePeriods[contributionType]}`
+						: `Change your support to £${threshold}/${timePeriods[contributionType]}`}
 				</p>
 			</div>
 			<ToggleSwitch
 				onClick={() => onChange()}
-				checked={isSelected}
+				checked={checked}
 				cssOverrides={toggleSwitchOverrides}
 			/>
 		</section>
