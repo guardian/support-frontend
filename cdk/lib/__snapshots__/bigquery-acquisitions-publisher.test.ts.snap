@@ -4,6 +4,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
 {
   "Metadata": {
     "gu:cdk:constructs": [
+      "GuAlarm",
       "GuDistributionBucketParameter",
       "GuLambdaFunction",
       "GuLambdaErrorPercentageAlarm",
@@ -20,6 +21,25 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
   "Resources": {
     "DeadLetterQueueAlarm48D9D867": {
       "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":contributions-dev",
+              ],
+            ],
+          },
+        ],
         "AlarmDescription": {
           "Fn::Join": [
             "",
