@@ -4,10 +4,10 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
 {
   "Metadata": {
     "gu:cdk:constructs": [
-      "GuAlarm",
       "GuDistributionBucketParameter",
       "GuLambdaFunction",
       "GuLambdaErrorPercentageAlarm",
+      "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -40,20 +40,11 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
             ],
           },
         ],
-        "AlarmDescription": {
-          "Fn::Join": [
-            "",
-            [
-              "Alarm for dead letter ",
-              {
-                "Fn::GetAtt": [
-                  "deadlettersbigqueryacquisitionspublisherQueue2B5FA5C1",
-                  "QueueName",
-                ],
-              },
-            ],
-          ],
-        },
+        "AlarmDescription": "There is one or more event in the dead-letters-bigquery-acquisitions-publisher-PROD dead letter queue. Check the logs for details of the exception and then use the dead letter queue redrive functionality to replay the failed event if appropriate. If the redrive functionality is not used then purge the queue instead or the alarm will remain in an alarm state and not send this email again in future.
+The main queue is at https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/queues/https%3A%2F%2Fsqs.eu-west-1.amazonaws.com%2F865473395570%2Fbigquery-acquisitions-publisher-queue-PROD
+The dead letter queue is at https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/queues/https%3A%2F%2Fsqs.eu-west-1.amazonaws.com%2F865473395570%2Fdead-letters-bigquery-acquisitions-publisher-PROD
+Logs are at https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fbigquery-acquisitions-publisher-PROD",
+        "AlarmName": "The PROD big-query-acquisitions-publisher lambda has failed",
         "ComparisonOperator": "GreaterThanOrEqualToThreshold",
         "Dimensions": [
           {

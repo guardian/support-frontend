@@ -40,12 +40,15 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
     });
 
     // SQS Queues
+    const queueName = `${appName}-queue-${props.stage}`;
+    const deadLetterQueueName = `dead-letters-${appName}-${props.stage}`;
+
     const deadLetterQueue = new Queue(this, `dead-letters-${appName}Queue`, {
-      queueName: `dead-letters-${appName}-${props.stage}`,
+      queueName: deadLetterQueueName,
     });
 
     const queue = new Queue(this, `${appName}Queue`, {
-      queueName: `${appName}-queue-${props.stage}`,
+      queueName,
       visibilityTimeout: Duration.minutes(2),
       deadLetterQueue: {
         // The number of times a message can be unsuccessfully dequeued before being moved to the dead-letter queue.
@@ -53,18 +56,6 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
         maxReceiveCount: 1,
         queue: deadLetterQueue,
       },
-    });
-
-    new GuAlarm(this, "DeadLetterQueueAlarm", {
-      app: appName,
-      alarmDescription: `Alarm for dead letter ${deadLetterQueue.queueName}`,
-      metric: deadLetterQueue.metricApproximateNumberOfMessagesVisible(),
-      threshold: 1,
-      evaluationPeriods: 1,
-      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
-      treatMissingData: TreatMissingData.IGNORE,
-      snsTopicName: "contributions-dev",
-      actionsEnabled: this.stage === "PROD",
     });
 
     // Rule which passes events on to SQS
@@ -117,16 +108,38 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       reportBatchItemFailures: true,
     });
 
+    const functionName = `${appName}-${props.stage}`;
+
     new GuLambdaFunction(this, `${appName}Lambda`, {
       app: appName,
       runtime: Runtime.JAVA_8_CORRETTO,
       fileName: `${appName}.jar`,
-      functionName: `${appName}-${props.stage}`,
+      functionName,
       handler: "com.gu.bigqueryAcquisitionsPublisher.Lambda::handler",
       events: [eventSource],
       timeout: Duration.minutes(2),
       role,
       errorPercentageMonitoring: monitoring,
+    });
+
+    new GuAlarm(this, "DeadLetterQueueAlarm", {
+      app: appName,
+      alarmName: `The ${props.stage} big-query-acquisitions-publisher lambda has failed`,
+      alarmDescription:
+        `There is one or more event in the ${deadLetterQueueName} dead letter queue. ` +
+        "Check the logs for details of the exception and then use the dead letter queue redrive functionality " +
+        "to replay the failed event if appropriate. If the redrive functionality is not used then purge the queue " +
+        "instead or the alarm will remain in an alarm state and not send this email again in future.\n" +
+        `The main queue is at https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/queues/https%3A%2F%2Fsqs.eu-west-1.amazonaws.com%2F865473395570%2F${queueName}\n` +
+        `The dead letter queue is at https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/queues/https%3A%2F%2Fsqs.eu-west-1.amazonaws.com%2F865473395570%2F${deadLetterQueueName}\n` +
+        `Logs are at https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252F${functionName}`,
+      metric: deadLetterQueue.metricApproximateNumberOfMessagesVisible(),
+      threshold: 1,
+      evaluationPeriods: 1,
+      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+      treatMissingData: TreatMissingData.IGNORE,
+      snsTopicName: "contributions-dev",
+      actionsEnabled: this.stage === "PROD",
     });
   }
 }
