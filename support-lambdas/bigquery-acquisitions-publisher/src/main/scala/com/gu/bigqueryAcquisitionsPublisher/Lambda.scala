@@ -32,12 +32,9 @@ object Lambda extends LazyLogging {
 
         bigQuery.shutdown()
 
-        val response = new SQSBatchResponse(
-          List(new BatchItemFailure(messages.head.getMessageId)).asJava,
-            // failedMessageIds.map(messageId => new BatchItemFailure(messageId)).asJava,
+        new SQSBatchResponse(
+          failedMessageIds.map(messageId => new BatchItemFailure(messageId)).asJava,
         )
-        logger.info(s"Response was $response")
-        response
 
       case Left(error) =>
         logger.error(s"Error fetching BigQuery config from SSM: $error")
@@ -58,7 +55,7 @@ object Lambda extends LazyLogging {
     val rawBody = message.getBody
     logger.info(s"Processing event: $rawBody")
     val result: EitherT[Future, Error, Unit] = EitherT
-      .fromEither[Future](decode[EventBridgeEvent](s"{$rawBody}")) // Breaking parsing to test errors
+      .fromEither[Future](decode[EventBridgeEvent](rawBody))
       .leftMap[Error](error => ParseError(error.getMessage))
       .flatMap { event =>
         bigQuery
