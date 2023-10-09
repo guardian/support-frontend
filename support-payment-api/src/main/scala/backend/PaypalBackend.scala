@@ -9,15 +9,10 @@ import cats.syntax.validated._
 import com.amazonaws.services.cloudwatch.AmazonCloudWatchAsync
 import com.amazonaws.services.s3.AmazonS3
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
-import com.gu.support.acquisitions.{
-  AcquisitionsStreamEc2OrLocalConfig,
-  AcquisitionsStreamService,
-  AcquisitionsStreamServiceImpl,
-}
+import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService.Sources
 import com.gu.support.config.Stages.{CODE, PROD}
 import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
-import conf.AcquisitionsStreamConfigLoader.acquisitionsStreamec2OrLocalConfigLoader
 import conf.ConfigLoader._
 import conf._
 import model.Environment.Live
@@ -40,7 +35,6 @@ class PaypalBackend(
     val databaseService: ContributionsStoreService,
     identityService: IdentityService,
     val acquisitionsEventBusService: AcquisitionsEventBusService,
-    val acquisitionsStreamService: AcquisitionsStreamService,
     emailService: EmailService,
     cloudWatchService: CloudWatchService,
     val supporterProductDataService: SupporterProductDataService,
@@ -262,7 +256,6 @@ object PaypalBackend {
       databaseService: ContributionsStoreService,
       identityService: IdentityService,
       acquisitionsEventBusService: AcquisitionsEventBusService,
-      acquisitionsStreamService: AcquisitionsStreamService,
       emailService: EmailService,
       cloudWatchService: CloudWatchService,
       supporterProductDataService: SupporterProductDataService,
@@ -274,7 +267,6 @@ object PaypalBackend {
       databaseService,
       identityService,
       acquisitionsEventBusService,
-      acquisitionsStreamService,
       emailService,
       cloudWatchService,
       supporterProductDataService,
@@ -304,10 +296,7 @@ object PaypalBackend {
       configLoader
         .loadConfig[Environment, IdentityConfig](env)
         .map(IdentityService.fromIdentityConfig): InitializationResult[IdentityService],
-      AcquisitionsEventBusService("payment-api", if (env == Live) PROD else CODE).valid,
-      configLoader
-        .loadConfig[Environment, AcquisitionsStreamEc2OrLocalConfig](env)
-        .map(new AcquisitionsStreamServiceImpl(_)): InitializationResult[AcquisitionsStreamService],
+      AcquisitionsEventBusService(Sources.paymentApi, if (env == Live) PROD else CODE).valid,
       configLoader
         .loadConfig[Environment, EmailConfig](env)
         .andThen(EmailService.fromEmailConfig): InitializationResult[EmailService],
