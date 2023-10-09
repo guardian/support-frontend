@@ -33,7 +33,8 @@ object Lambda extends LazyLogging {
         bigQuery.shutdown()
 
         new SQSBatchResponse(
-          failedMessageIds.map(messageId => new BatchItemFailure(messageId)).asJava,
+          List(new BatchItemFailure(messages.head.getMessageId)).asJava,
+            // failedMessageIds.map(messageId => new BatchItemFailure(messageId)).asJava,
         )
 
       case Left(error) =>

@@ -3,6 +3,11 @@ import { GuStack } from "@guardian/cdk/lib/constructs/core";
 import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
 import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
+import {
+  Alarm,
+  ComparisonOperator,
+  TreatMissingData,
+} from "aws-cdk-lib/aws-cloudwatch";
 import { Archive, EventBus, Rule } from "aws-cdk-lib/aws-events";
 import { SqsQueue } from "aws-cdk-lib/aws-events-targets";
 import { PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
@@ -48,6 +53,15 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
         maxReceiveCount: 1,
         queue: deadLetterQueue,
       },
+    });
+
+    new Alarm(this, "DeadLetterQueueAlarm", {
+      alarmDescription: `Alarm for dead letter ${deadLetterQueue.queueName}`,
+      metric: deadLetterQueue.metricApproximateNumberOfMessagesVisible(),
+      threshold: 1,
+      evaluationPeriods: 1,
+      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+      treatMissingData: TreatMissingData.IGNORE,
     });
 
     // Rule which passes events on to SQS

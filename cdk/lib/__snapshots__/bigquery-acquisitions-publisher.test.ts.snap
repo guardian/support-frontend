@@ -18,6 +18,44 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
+    "DeadLetterQueueAlarm48D9D867": {
+      "Properties": {
+        "AlarmDescription": {
+          "Fn::Join": [
+            "",
+            [
+              "Alarm for dead letter ",
+              {
+                "Fn::GetAtt": [
+                  "deadlettersbigqueryacquisitionspublisherQueue2B5FA5C1",
+                  "QueueName",
+                ],
+              },
+            ],
+          ],
+        },
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "QueueName",
+            "Value": {
+              "Fn::GetAtt": [
+                "deadlettersbigqueryacquisitionspublisherQueue2B5FA5C1",
+                "QueueName",
+              ],
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Namespace": "AWS/SQS",
+        "Period": 300,
+        "Statistic": "Maximum",
+        "Threshold": 1,
+        "TreatMissingData": "ignore",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
     "EventBusToSQSRule72D08395": {
       "Properties": {
         "Description": "Send all events to SQS",
