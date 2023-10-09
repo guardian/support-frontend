@@ -74,8 +74,6 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       targets: [new SqsQueue(queue)],
     });
 
-    const eventSource = new SqsEventSource(queue);
-
     // Create a custom role because the name needs to be short, otherwise the request to Google Cloud fails
     const role = new Role(this, "bigquery-to-s3-role", {
       roleName: `bq-acq-${this.stage}`,
@@ -110,6 +108,11 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
               "Check the logs for details https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fbigquery-acquisitions-publisher-PROD",
           }
         : undefined;
+
+    // SQS to Lambda event source mapping
+    const eventSource = new SqsEventSource(queue, {
+      reportBatchItemFailures: true,
+    });
 
     new GuLambdaFunction(this, `${appName}Lambda`, {
       app: appName,
