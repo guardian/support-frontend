@@ -22,7 +22,7 @@ export default {
 };
 
 function Template(args: CheckoutTopUpToggleProps) {
-	const [isSelected, onChange] = useState<boolean>(args.isSelected);
+	const [isSelected, onChange] = useState<boolean>(args.checked);
 
 	return (
 		<CheckoutTopUpToggle
