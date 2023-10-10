@@ -44,7 +44,6 @@ export const Default = Template.bind({});
 Default.args = {
 	contributionType: 'MONTHLY',
 	total: 10,
-	totalBeforeAmended: 10,
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
@@ -73,7 +72,6 @@ export const SingleContribution = Template.bind({});
 SingleContribution.args = {
 	contributionType: 'ONE_OFF',
 	total: 25,
-	totalBeforeAmended: 25,
 	currency: {
 		glyph: '$',
 		extendedGlyph: 'US$',

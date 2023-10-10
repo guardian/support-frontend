@@ -162,7 +162,6 @@ type ContributionsOrderSummaryVersion = 'COMPACT' | 'FULL';
 export type ContributionsOrderSummaryProps = {
 	contributionType: ContributionType;
 	total: number;
-	totalBeforeAmended: number;
 	currency: Currency;
 	checkListData: CheckListData[];
 	onAccordionClick?: (opening: boolean) => void;
@@ -228,7 +227,6 @@ function containerStyles(version: ContributionsOrderSummaryVersion) {
 export function ContributionsOrderSummary({
 	contributionType,
 	total,
-	totalBeforeAmended,
 	currency,
 	checkListData,
 	onAccordionClick,
@@ -266,7 +264,7 @@ export function ContributionsOrderSummary({
 						{showPreAmendedTotal && (
 							<span>
 								{totalWithFrequency(
-									simpleFormatAmount(currency, totalBeforeAmended),
+									simpleFormatAmount(currency, total),
 									contributionType,
 								)}
 							</span>

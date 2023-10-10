@@ -3,10 +3,7 @@ import type { ContributionType } from 'helpers/contributions';
 import { currencies } from 'helpers/internationalisation/currency';
 import { isSupporterPlusPurchase } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import {
-	getUserSelectedAmount,
-	getUserSelectedAmountBeforeAmendment,
-} from 'helpers/redux/checkout/product/selectors/selectedAmount';
+import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary';
@@ -52,9 +49,6 @@ export function ContributionsOrderSummaryContainer({
 		(state) => state.common.internationalisation,
 	);
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
-	const selectedAmountBeforeAmendment = useContributionsSelector(
-		getUserSelectedAmountBeforeAmendment,
-	);
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusPurchase);
 
 	const currency = currencies[currencyId];
@@ -76,7 +70,6 @@ export function ContributionsOrderSummaryContainer({
 	return renderOrderSummary({
 		contributionType,
 		total: selectedAmount,
-		totalBeforeAmended: selectedAmountBeforeAmendment,
 		currency: currency,
 		checkListData: checklist,
 		onAccordionClick,
