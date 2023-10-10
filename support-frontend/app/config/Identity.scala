@@ -16,6 +16,9 @@ class Identity(config: Config) {
 
   lazy val useStub = config.getOptionalBoolean("useStub").getOrElse(false)
 
+  // This cookie indicates that user is signed in
+  lazy val signedInCookieName = config.getString("signed.in.cookie.name")
+
   // This cookie indicates that user has recently signed out
   lazy val signedOutCookieName = config.getString("signed.out.cookie.name")
 
