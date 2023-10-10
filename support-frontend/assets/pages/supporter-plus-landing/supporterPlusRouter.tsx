@@ -43,8 +43,10 @@ const {
 const isInTwoStepTest =
 	abParticipations.twoStepCheckoutWithNudgeBelow &&
 	abParticipations.twoStepCheckoutWithNudgeBelow !== 'control';
+
+console.log(abParticipations);
 const showCheckoutTopUpToggle =
-	abParticipations.twoStepCheckoutWithNudgeBelow === 'variant';
+	abParticipations.twoStepCheckoutWithNudgeBelow === 'variant_b';
 
 // ----- ScrollToTop on Navigate: https://v5.reactrouter.com/web/guides/scroll-restoration ---- //
 

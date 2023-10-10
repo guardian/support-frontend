@@ -147,7 +147,10 @@ export const tests: Tests = {
 				id: 'control',
 			},
 			{
-				id: 'variant',
+				id: 'variant_a',
+			},
+			{
+				id: 'variant_b',
 			},
 		],
 		audiences: {
