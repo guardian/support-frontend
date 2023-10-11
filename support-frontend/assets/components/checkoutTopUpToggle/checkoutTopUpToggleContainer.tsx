@@ -34,14 +34,14 @@ export function CheckoutTopUpToggleContainer({
 		return null;
 	}
 
-	const threshold =
+	const benefitsThreshold =
 		benefitsThresholdsByCountryGroup[countryGroupId][contributionType];
 
 	useEffect(() => {
 		dispatch(
 			setSelectedAmount({
 				contributionType: contributionType,
-				amount: checked ? `${threshold}` : `${amountBeforeAmendments}`,
+				amount: checked ? `${benefitsThreshold}` : `${amountBeforeAmendments}`,
 			}),
 		);
 		trackComponentClick(
@@ -53,7 +53,7 @@ export function CheckoutTopUpToggleContainer({
 
 	return renderCheckoutTopUpToggle({
 		contributionType,
-		threshold,
+		benefitsThreshold,
 		checked,
 		onChange: () => setChecked(!checked),
 	});

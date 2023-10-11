@@ -17,14 +17,14 @@ export interface CheckoutTopUpToggleProps {
 	checked: boolean;
 	onChange(): void;
 	contributionType: RegularContributionType;
-	threshold: number;
+	benefitsThreshold: number;
 }
 
 export function CheckoutTopUpToggle({
 	checked,
 	onChange,
 	contributionType,
-	threshold = 10,
+	benefitsThreshold,
 }: CheckoutTopUpToggleProps): JSX.Element {
 	return (
 		<section css={topUpToggleContainer}>
@@ -35,8 +35,8 @@ export function CheckoutTopUpToggle({
 				</h3>
 				<p css={standfirst}>
 					{checked
-						? `Your support is now £${threshold}/${timePeriods[contributionType]}`
-						: `Change your support to £${threshold}/${timePeriods[contributionType]}`}
+						? `Your support is now £${benefitsThreshold}/${timePeriods[contributionType]}`
+						: `Change your support to £${benefitsThreshold}/${timePeriods[contributionType]}`}
 				</p>
 			</div>
 			<ToggleSwitch
