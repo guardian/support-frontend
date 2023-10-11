@@ -115,7 +115,7 @@ Each entry in `data.agents` is a value of type `GuardianAgentsCoverage` (as call
 
 ###### postcode
 
-This seems to be the postcode used for the request. (Not, e.g., the postcode of the delivery agent.)
+This is the postcode sent in the request, sent back again in the response. (Not, e.g., the postcode of the delivery agent.) I checked this with PaperRound and it’s not a mistake, and there are no plans to change it.
 
 ###### deliverymethod
 
@@ -1344,10 +1344,6 @@ Do we only get the error type when the status is non-2xx? Can we always distingu
 #### What’s the `summary` field on `GuardianAgentsCoverage`?
 
 So far it seems to always be empty: what does it mean?
-
-#### Is it right that the postcode returned for each agent in the /coverage list is the same?
-
-Or should it match the postcode returned from the /agents endpoint?
 
 #### How often does the list of agents change? Can an agent suddenly stop being valid?
 
