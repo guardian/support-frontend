@@ -85,8 +85,10 @@ object UserFromAuthCookiesActionBuilder extends Logging {
     if (isSignedOut || !isSignedIn) {
       responseWithNoUser(config)(request, block)
     } else {
-      val result = validateUserLocally(config, oktaAuthService)(request).map(responseWithUser(request, block))
-      result.left.map(handleFailure).merge
+      validateUserLocally(config, oktaAuthService)(request).fold(
+        handleFailure,
+        responseWithUser(request, block),
+      )
     }
   }
 
