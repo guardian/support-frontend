@@ -60,6 +60,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
 
     // Rule which passes events on to SQS
     new Rule(this, "EventBusToSQSRule", {
+      ruleName: "bigquery-acquisitions-publisher-queue",
       description: "Send all events to SQS",
       eventPattern: {
         region: ["eu-west-1"],

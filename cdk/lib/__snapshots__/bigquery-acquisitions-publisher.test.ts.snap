@@ -78,6 +78,7 @@ Logs are at https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-w
             "eu-west-1",
           ],
         },
+        "Name": "bigquery-acquisitions-publisher-queue",
         "State": "ENABLED",
         "Targets": [
           {
