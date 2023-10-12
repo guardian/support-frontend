@@ -132,7 +132,7 @@ const fullDetailsSection = css`
 	padding: ${space[2]}px;
 	margin-bottom: 0;
 
-	${from.desktop} {
+	${from.mobileMedium} {
 		margin-bottom: 0;
 		padding: ${space[4]}px;
 	}
