@@ -40,4 +40,5 @@ export const Default = Template.bind({});
 Default.args = {
 	isSelected: true,
 	contributionType: 'MONTHLY',
+	benefitsThreshold: 10,
 };
