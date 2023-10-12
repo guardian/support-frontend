@@ -79,7 +79,7 @@ export const tests: Tests = {
 		referrerControlled: true,
 		seed: 2,
 	},
-	twoStepCheckout: {
+	twoStepCheckoutWithNudgeBelow: {
 		variants: [
 			{
 				id: 'control',
