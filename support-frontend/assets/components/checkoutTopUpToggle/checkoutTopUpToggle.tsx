@@ -43,6 +43,7 @@ export function CheckoutTopUpToggle({
 				onClick={() => onChange()}
 				checked={checked}
 				cssOverrides={toggleSwitchOverrides}
+				data-qm-clickable={true}
 			/>
 		</section>
 	);
