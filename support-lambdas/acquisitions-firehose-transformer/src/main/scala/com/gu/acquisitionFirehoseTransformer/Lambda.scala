@@ -32,6 +32,7 @@ object Lambda extends LazyLogging {
 
     def decodeAcquisitions(): Either[String, List[AcquisitionWithRecordId]] = records.toList.map { record =>
       val inputJson = new String(record.getData.array)
+      logger.info(s"Input json is $inputJson")
       decode[AcquisitionDataRow](inputJson)
         .map { acq =>
           AcquisitionWithRecordId(acq, record.getRecordId)

@@ -14,24 +14,11 @@ import { errorCollectionHasErrors } from './utils';
 export function getStripeFormErrors(
 	state: ContributionsState,
 ): ErrorCollection {
-	const { abParticipations, internationalisation } = state.common;
 	const { errors, showErrors } = state.page.checkoutForm.payment.stripe;
-	const shouldShowZipCode =
-		internationalisation.countryId === 'US' &&
-		abParticipations.mandatoryZipCode !== 'variant';
 	const recaptchaErrors = getRecaptchaError(state);
 
 	if (!showErrors) return {};
 
-	if (shouldShowZipCode) {
-		const zipCode =
-			state.page.checkoutForm.billingAddress.fields.errorObject?.postCode;
-		return {
-			...errors,
-			zipCode,
-			robot_checkbox: recaptchaErrors,
-		};
-	}
 	return { ...errors, robot_checkbox: recaptchaErrors };
 }
 

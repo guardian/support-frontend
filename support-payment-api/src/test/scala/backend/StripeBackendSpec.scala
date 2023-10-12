@@ -6,17 +6,16 @@ import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.sqs.model.SendMessageResult
-import com.gu.support.acquisitions.AcquisitionsStreamService
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.stripe.model.Charge.PaymentMethodDetails
 import com.stripe.model.{Charge, ChargeCollection, Event, PaymentIntent}
 import io.circe.Json
 import model.Environment.Live
+import model._
 import model.paypal.PaypalApiError
 import model.stripe.StripePaymentIntentRequest.{ConfirmPaymentIntent, CreatePaymentIntent}
 import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripePaymentRequestButton}
 import model.stripe._
-import model._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatest.PrivateMethodTester._
@@ -34,8 +33,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
 
   // -- entities
-  val email = Json.fromString("email@email.com").as[NonEmptyString].right.get
-  val token = Json.fromString("token").as[NonEmptyString].right.get
+  val email = Json.fromString("email@email.com").as[NonEmptyString].toOption.get
+  val token = Json.fromString("token").as[NonEmptyString].toOption.get
   val recaptchaToken = "recaptchaToken"
   val acquisitionData =
     AcquisitionData(
@@ -119,14 +118,10 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val softOptInsResponse: EitherT[Future, SoftOptInsServiceError, Unit] =
     EitherT.right(Future.successful(()))
   val acquisitionsEventBusResponse: Future[Either[String, Unit]] =
-    Future.successful(Right())
+    Future.successful(Right(()))
   val acquisitionsEventBusErrorMessage = "an event bus error"
   val acquisitionsEventBusResponseError: Future[Either[String, Unit]] =
     Future.successful(Left(acquisitionsEventBusErrorMessage))
-  val streamResponse: EitherT[Future, List[String], Unit] =
-    EitherT.right(Future.successful(()))
-  val streamResponseError: EitherT[Future, List[String], Unit] =
-    EitherT.left(Future.successful(List("stream error")))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
   val emailServiceErrorResponse: EitherT[Future, EmailService.Error, SendMessageResult] =
@@ -189,7 +184,6 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val mockSupporterProductDataService: SupporterProductDataService = mock[SupporterProductDataService]
   val mockSoftOptInsService: SoftOptInsService = mock[SoftOptInsService]
   val mockSwitchService: SwitchService = mock[SwitchService]
-  val mockAcquisitionsStreamService: AcquisitionsStreamService = mock[AcquisitionsStreamService]
   implicit val mockWsClient: WSClient = mock[WSClient]
   implicit val mockActorSystem: ActorSystem = mock[ActorSystem]
   implicit val mockS3Client: AmazonS3 = mock[AmazonS3]
@@ -203,7 +197,6 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockDatabaseService,
     mockIdentityService,
     mockAcquisitionsEventBusService,
-    mockAcquisitionsStreamService,
     mockEmailService,
     mockRecaptchaService,
     mockCloudWatchService,
@@ -211,7 +204,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     mockSoftOptInsService,
     mockSwitchService,
     Live,
-  )(new DefaultThreadPool(ec), mockWsClient)
+  )(DefaultThreadPool(ec), mockWsClient)
 
   def populateChargeMock(): Unit = {
     when(chargeMock.getId).thenReturn("id")
@@ -324,7 +317,6 @@ class StripeBackendSpec
           .thenReturn(supporterProductDataResponseError)
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any())).thenReturn(acquisitionsEventBusResponse)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntentWithStripeCheckout))
           .thenReturn(paymentServiceIntentResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
@@ -358,7 +350,6 @@ class StripeBackendSpec
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionsEventBusResponse)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntentWithStripeApplePay))
           .thenReturn(paymentServiceIntentResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
@@ -390,7 +381,6 @@ class StripeBackendSpec
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionsEventBusResponse)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntentWithStripePaymentRequest))
           .thenReturn(paymentServiceIntentResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
@@ -423,8 +413,6 @@ class StripeBackendSpec
           when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponseError)
           when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
             .thenReturn(acquisitionsEventBusResponseError)
-          when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any()))
-            .thenReturn(streamResponseError)
           stripeBackend
             .createCharge(stripeChargeRequest, clientBrowserInfo)
             .futureRight mustBe StripeCreateChargeResponse.fromCharge(
@@ -442,7 +430,6 @@ class StripeBackendSpec
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponseError)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionsEventBusResponse)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
@@ -472,7 +459,7 @@ class StripeBackendSpec
       "return success if refund hook is valid and databaseService succeeds" in new StripeBackendFixture {
         when(mockStripeService.validateRefundHook(stripeHook)).thenReturn(validateRefundHookSuccess)
         when(mockDatabaseService.flagContributionAsRefunded(any())).thenReturn(databaseResponse)
-        stripeBackend.processRefundHook(stripeHook).futureRight mustBe (())
+        stripeBackend.processRefundHook(stripeHook).futureRight mustBe ()
       }
 
     }
@@ -488,8 +475,7 @@ class StripeBackendSpec
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionsEventBusResponse)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
-        val trackContribution = PrivateMethod[Future[List[BackendError]]]('trackContribution)
+        val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
         val result =
           stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
         result.futureValue mustBe List(BackendError.Database(dbError))
@@ -506,8 +492,7 @@ class StripeBackendSpec
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionsEventBusResponseError)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
-        val trackContribution = PrivateMethod[Future[List[BackendError]]]('trackContribution)
+        val trackContribution = PrivateMethod[Future[List[BackendError]]](Symbol("trackContribution"))
         val result =
           stripeBackend invokePrivate trackContribution(chargeMock, stripeChargeRequest, None, clientBrowserInfo)
         val error = List(
@@ -532,7 +517,6 @@ class StripeBackendSpec
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionsEventBusResponse)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.createPaymentIntent(createPaymentIntent)).thenReturn(paymentServiceIntentResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)
@@ -611,7 +595,6 @@ class StripeBackendSpec
         when(mockSoftOptInsService.sendMessage(any(), any())(any())).thenReturn(softOptInsResponse)
         when(mockAcquisitionsEventBusService.putAcquisitionEvent(any()))
           .thenReturn(acquisitionsEventBusResponse)
-        when(mockAcquisitionsStreamService.putAcquisitionWithRetry(any(), any[Int])(any())).thenReturn(streamResponse)
         when(mockStripeService.confirmPaymentIntent(confirmPaymentIntent)).thenReturn(paymentServiceIntentResponse)
         when(mockIdentityService.getOrCreateIdentityIdFromEmail("email@email.com")).thenReturn(identityResponse)
         when(mockEmailService.sendThankYouEmail(any())).thenReturn(emailServiceErrorResponse)

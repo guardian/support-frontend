@@ -199,7 +199,7 @@ describe('applyDeliveryAddressRules', () => {
 			{
 				field: 'postCode',
 				message:
-					'The address and postcode you entered is outside of our delivery area. Please go back to purchase a voucher subscription instead.',
+					'The postcode you entered is outside of our delivery area. Please go back to purchase a subscription card instead.',
 			},
 		]);
 	});

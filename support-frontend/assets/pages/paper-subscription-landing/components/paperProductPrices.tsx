@@ -1,5 +1,9 @@
 import type { ReactNode } from 'react';
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { Product } from 'components/product/productOption';
+import type {
+	FulfilmentOptions,
+	PaperFulfilmentOptions,
+} from 'helpers/productPrice/fulfilmentOptions';
 import type { PaperProductOptions } from 'helpers/productPrice/productOptions';
 import { ActivePaperProductTypes } from 'helpers/productPrice/productOptions';
 import type {
@@ -62,6 +66,13 @@ const getOfferText = (price: ProductPrice, promo?: Promotion) => {
 
 	return '';
 };
+
+const getUnavailableOutsideLondon = (
+	fulfilmentOption: FulfilmentOptions,
+	productOption: PaperProductOptions,
+) =>
+	fulfilmentOption === 'HomeDelivery' &&
+	(productOption === 'Saturday' || productOption === 'Sunday');
 
 // ---- Plans ----- //
 const copy: Record<
@@ -139,7 +150,8 @@ const copy: Record<
 const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
-) =>
+	isNationalDeliveryAbTestVariant: boolean,
+): Product[] =>
 	ActivePaperProductTypes.map((productOption) => {
 		const priceAfterPromosApplied = finalPrice(
 			productPrices,
@@ -176,6 +188,9 @@ const getPlans = (
 			),
 			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
 			label: labelText,
+			unavailableOutsideLondon:
+				isNationalDeliveryAbTestVariant &&
+				getUnavailableOutsideLondon(fulfilmentOption, productOption),
 		};
 	});
 
@@ -198,7 +213,11 @@ function PaperProductPrices({
 		return null;
 	}
 
-	const products = getPlans(tab, productPrices);
+	const products = getPlans(
+		tab,
+		productPrices,
+		isNationalDeliveryAbTestVariant,
+	);
 	return (
 		<PaperPrices
 			activeTab={tab}

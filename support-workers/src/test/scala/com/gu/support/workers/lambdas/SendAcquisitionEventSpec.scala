@@ -3,7 +3,6 @@ package com.gu.support.workers.lambdas
 import cats.data.EitherT
 import com.gu.config.Configuration
 import com.gu.services.{ServiceProvider, Services}
-import com.gu.support.acquisitions.AcquisitionsStreamService
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 import com.gu.support.config.Stages.CODE
@@ -46,24 +45,14 @@ class SendAcquisitionEventSpec extends AsyncLambdaSpec with MockContext {
 
 object MockAcquisitionHelper extends MockitoSugar {
 
-  val mockAcquisitionsStreamService = new AcquisitionsStreamService {
-    def putAcquisition(acquisition: AcquisitionDataRow): EitherT[Future, String, Unit] =
-      EitherT(
-        Future.successful(
-          Right(()): Either[String, Unit],
-        ),
-      )
-  }
-
   lazy val mockServices = {
     val configuration = Configuration.load()
     // Mock the Acquisition service
     val serviceProvider = mock[ServiceProvider]
     val services = mock[Services]
-    val eventBridgeService = AcquisitionsEventBusService("Integration Test", CODE, false)
+    val eventBridgeService = AcquisitionsEventBusService("Integration Test", CODE)
 
     when(services.acquisitionsEventBusService).thenReturn(eventBridgeService)
-    when(services.acquisitionsStreamService).thenReturn(mockAcquisitionsStreamService)
     when(serviceProvider.forUser(any[Boolean])).thenReturn(services)
     serviceProvider
   }

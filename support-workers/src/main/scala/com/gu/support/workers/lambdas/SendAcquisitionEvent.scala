@@ -1,6 +1,5 @@
 package com.gu.support.workers.lambdas
 
-import cats.data.EitherT
 import com.amazonaws.services.lambda.runtime.Context
 import com.gu.acquisitions.AcquisitionDataRowBuilder
 import com.gu.aws.AwsCloudWatchMetricPut
@@ -10,20 +9,16 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _}
-import com.gu.support.promotions.PromoCode
 import com.gu.support.workers._
 import com.gu.support.workers.exceptions.RetryNone
+import com.gu.support.workers.states.SendAcquisitionEventState
 import com.gu.support.workers.states.SendThankYouEmailState._
-import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
 
-import java.util.UUID
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
     extends ServicesHandler[SendAcquisitionEventState, Unit](serviceProvider) {
-
-  import cats.instances.future._
 
   def this() = this(ServiceProvider)
 
@@ -52,21 +47,12 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
     val acquisition = AcquisitionDataRowBuilder.buildFromState(state, requestInfo)
 
-    // TODO: This can be done via the eventbus
-    val streamFuture = services.acquisitionsStreamService.putAcquisitionWithRetry(acquisition, maxRetries = 5)
-
-    val eventBridgeFuture = EitherT(services.acquisitionsEventBusService.putAcquisitionEvent(acquisition))
-      .leftMap(List(_)) // TODO: If we get rid of the retries in the other futures we won't need this
-
-    val result = for {
-      _ <- streamFuture
-      _ <- eventBridgeFuture
-    } yield ()
-
-    result.value.map {
-      case Left(errorMessage) => throw new RetryNone(errorMessage.mkString(" & "))
-      case Right(_) => HandlerResult((), requestInfo)
-    }
+    services.acquisitionsEventBusService
+      .putAcquisitionEvent(acquisition)
+      .map {
+        case Left(errorMessage) => throw new RetryNone(errorMessage.mkString(" & "))
+        case Right(_) => HandlerResult((), requestInfo)
+      }
   }
 
   private def sendPaymentSuccessMetric(state: SendAcquisitionEventState) = {

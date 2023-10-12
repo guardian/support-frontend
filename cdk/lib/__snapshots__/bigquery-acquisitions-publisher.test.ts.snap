@@ -7,6 +7,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       "GuDistributionBucketParameter",
       "GuLambdaFunction",
       "GuLambdaErrorPercentageAlarm",
+      "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -18,6 +19,54 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
     },
   },
   "Resources": {
+    "DeadLetterQueueAlarm48D9D867": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":contributions-dev",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "There is one or more event in the dead-letters-bigquery-acquisitions-publisher-PROD dead letter queue. Check the logs for details of the exception and then use the dead letter queue redrive functionality to replay the failed event if appropriate. If the redrive functionality is not used then purge the queue instead or the alarm will remain in an alarm state and not send this email again in future.
+The main queue is at https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/queues/https%3A%2F%2Fsqs.eu-west-1.amazonaws.com%2F865473395570%2Fbigquery-acquisitions-publisher-queue-PROD
+The dead letter queue is at https://eu-west-1.console.aws.amazon.com/sqs/v2/home?region=eu-west-1#/queues/https%3A%2F%2Fsqs.eu-west-1.amazonaws.com%2F865473395570%2Fdead-letters-bigquery-acquisitions-publisher-PROD
+Logs are at https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fbigquery-acquisitions-publisher-PROD",
+        "AlarmName": "The PROD big-query-acquisitions-publisher lambda has failed",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "QueueName",
+            "Value": {
+              "Fn::GetAtt": [
+                "deadlettersbigqueryacquisitionspublisherQueue2B5FA5C1",
+                "QueueName",
+              ],
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Namespace": "AWS/SQS",
+        "Period": 300,
+        "Statistic": "Maximum",
+        "Threshold": 1,
+        "TreatMissingData": "ignore",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
     "EventBusToSQSRule72D08395": {
       "Properties": {
         "Description": "Send all events to SQS",
@@ -49,6 +98,28 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
         "Name": "acquisitions-bus-PROD",
       },
       "Type": "AWS::Events::EventBus",
+    },
+    "acquisitionsbusPRODarchiveArchiveCA0B270E": {
+      "Properties": {
+        "ArchiveName": "acquisitions-bus-PROD-archive",
+        "Description": "Archive for all events sent to acquisitions-bus-PROD-archive",
+        "EventPattern": {
+          "account": [
+            "account",
+          ],
+          "region": [
+            "eu-west-1",
+          ],
+        },
+        "RetentionDays": 90,
+        "SourceArn": {
+          "Fn::GetAtt": [
+            "acquisitionsbusPROD768AFDE3",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Events::Archive",
     },
     "bigqueryacquisitionspublisherLambdaD7F059E6": {
       "DependsOn": [
@@ -203,6 +274,9 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
         "FunctionName": {
           "Ref": "bigqueryacquisitionspublisherLambdaD7F059E6",
         },
+        "FunctionResponseTypes": [
+          "ReportBatchItemFailures",
+        ],
       },
       "Type": "AWS::Lambda::EventSourceMapping",
     },

@@ -10,7 +10,7 @@ deployments:
     parameters:
       amiParameter: AMIPaymentapi
       amiTags:
-        Recipe: jammy-membership-java11
+        Recipe: jammy-membership-java8
         AmigoStage: PROD
       amiEncrypted: true
       templateStagePaths:

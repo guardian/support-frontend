@@ -9,7 +9,7 @@ const init = (): Promise<void> =>
 
 		Sentry.init({
 			dsn,
-			whitelistUrls: ['support.theguardian.com'],
+			allowUrls: ['support.theguardian.com'],
 			release: gitCommitId,
 		});
 	});

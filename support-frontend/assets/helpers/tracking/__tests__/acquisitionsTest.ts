@@ -58,7 +58,7 @@ describe('acquisitions', () => {
 			expect(paymentApiAcquisitionData.campaignCodes?.length).toEqual(1);
 		});
 
-		it('should send the postal code only if in the mandatoryZipCode test variant', () => {
+		it('should send the postal code', () => {
 			const referrerAcquisitionData = {
 				campaignCode: 'Example',
 				referrerPageviewId: '123456',
@@ -86,29 +86,13 @@ describe('acquisitions', () => {
 
 			const postcode = 'N1 9GU';
 
-			const nativeAbParticipations = {
-				mandatoryZipCode: 'variant',
-			};
-
 			const paymentApiAcquisitionData = derivePaymentApiAcquisitionData(
 				referrerAcquisitionData,
-				nativeAbParticipations,
+				{},
 				postcode,
 			);
 
 			expect(paymentApiAcquisitionData.postalCode).toBe(postcode);
-
-			const nativeAbParticipationsControl = {
-				mandatoryZipCode: 'control',
-			};
-
-			const paymentApiAcquisitionDataControl = derivePaymentApiAcquisitionData(
-				referrerAcquisitionData,
-				nativeAbParticipationsControl,
-				postcode,
-			);
-
-			expect(paymentApiAcquisitionDataControl.postalCode).toBe(null);
 		});
 	});
 
