@@ -117,7 +117,7 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 				test: /\.([jt]sx?|mjs)$/,
 				exclude: {
 					and: [/node_modules/],
-					not: [/@guardian\/consent-management-platform/, /@guardian\/libs/],
+					not: [/@guardian\/consent-management-platform/, /@guardian\/libs/, /@guardian\/source/],
 				},
 				use: [
 					{
