@@ -92,13 +92,15 @@ class RecurringContributionsSpec
       Given("that the user selects to pay with direct debit")
       When("they press the direct debit payment button")
       landingPage.selectDirectDebit()
-      landingPage.clickContribute
 
       And("enter direct debit details")
       landingPage.fillInDirectDebitDetails()
 
+      And("click the recaptcha")
+      landingPage.clickRecaptcha
+
       When("they click to pay")
-      landingPage.payDirectDebit()
+      landingPage.clickContribute
 
       Then("the thankyou page should display")
       eventually {
