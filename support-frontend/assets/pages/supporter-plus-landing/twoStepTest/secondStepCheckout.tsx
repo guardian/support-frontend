@@ -29,7 +29,6 @@ import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefits
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { CheckoutDivider } from '../components/checkoutDivider';
-import { DirectDebitContainer } from '../components/directDebitWrapper';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
@@ -154,7 +153,6 @@ export function SupporterPlusCheckout({
 							)}
 						/>
 						<PaymentFailureMessage />
-						<DirectDebitContainer />
 					</ContributionsStripe>
 					<PaymentTsAndCs
 						countryGroupId={countryGroupId}

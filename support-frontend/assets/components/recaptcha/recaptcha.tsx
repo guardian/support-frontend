@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, textSans, until } from '@guardian/source-foundations';
+import { palette, textSans, until } from '@guardian/source-foundations';
 import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 
 const container = css`
@@ -16,13 +16,14 @@ const container = css`
 `;
 
 const terms = css`
-	color: ${neutral[20]};
+	color: ${palette.neutral[46]};
 	${textSans.xxsmall()}
 
 	margin-top: 5px;
 
 	a {
-		color: inherit;
+		color: ${palette.brand[500]};
+		text-decoration: none;
 	}
 `;
 
@@ -50,7 +51,7 @@ export function Recaptcha({
 					rel="noopener noreferrer"
 					href="https://policies.google.com/terms"
 				>
-					Terms
+					terms
 				</a>{' '}
 				and{' '}
 				<a
@@ -58,7 +59,7 @@ export function Recaptcha({
 					rel="noopener noreferrer"
 					href="https://policies.google.com/privacy"
 				>
-					Privacy
+					privacy
 				</a>{' '}
 				policies.
 			</p>

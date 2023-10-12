@@ -37,6 +37,20 @@ export function getAmazonPayFormErrors(
 	return errors;
 }
 
+function getDirectDebitFormErrors(state: ContributionsState): ErrorCollection {
+	const { errors, formError } = state.page.checkoutForm.payment.directDebit;
+	if (formError) {
+		return {
+			...errors,
+			directDebitDetails: [formError],
+		};
+	}
+
+	return {
+		...errors,
+	};
+}
+
 export function getPaymentMethodErrors(
 	state: ContributionsState,
 ): ErrorCollection {
@@ -46,9 +60,8 @@ export function getPaymentMethodErrors(
 		case 'Stripe':
 			return getStripeFormErrors(state);
 
-		// TODO: implement this once we have a new DD form
-		// case 'DirectDebit':
-		// 	return payment.directDebit.errors ?? {};
+		case 'DirectDebit':
+			return getDirectDebitFormErrors(state);
 
 		case 'Sepa':
 			return payment.sepa.errors;

@@ -1,349 +1,135 @@
-// ----- Imports ----- //
+import {
+	Checkbox,
+	InlineError,
+	TextInput,
+} from '@guardian/source-react-components';
 import * as React from 'react';
+import { useState } from 'react';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';
-import SortCodeInput from 'components/directDebit/directDebitForm/sortCodeInput';
-import ErrorMessage from 'components/errorMessage/errorMessage';
-import { Recaptcha } from 'components/recaptcha/recaptcha';
-import SvgArrowRightStraight from 'components/svgs/arrowRightStraight';
-import SvgDirectDebitSymbol from 'components/svgs/directDebitSymbol';
-import SvgDirectDebitSymbolAndText from 'components/svgs/directDebitSymbolAndText';
-import SvgExclamationAlternate from 'components/svgs/exclamationAlternate';
-import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import { ElementDecorator } from 'components/stripeCardForm/elementDecorator';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { contributionsEmail } from 'helpers/legal';
 import {
-	setAccountHolderConfirmation,
-	setAccountHolderName,
-	setAccountNumber,
-	setDDGuaranteeClose,
-	setDDGuaranteeOpen,
-	setFormError,
-	setPhase,
-	setSortCode,
-} from 'helpers/redux/checkout/payment/directDebit/actions';
-import type {
-	Phase,
-	SortCodeIndex,
-} from 'helpers/redux/checkout/payment/directDebit/state';
-import {
-	confirmAccountDetails,
-	directDebitErrorMessages,
-	payWithDirectDebit,
-} from 'helpers/redux/checkout/payment/directDebit/thunks';
-import {
-	expireRecaptchaToken,
-	setRecaptchaToken,
-} from 'helpers/redux/checkout/recaptcha/actions';
-import './directDebitForm.scss';
-import {
-	useContributionsDispatch,
-	useContributionsSelector,
-} from 'helpers/redux/storeHooks';
+	accountNumberSortCodeContainer,
+	legalNotice,
+	recaptcha,
+} from './directDebitFormStyles';
+import type { DirectDebitFormDisplayErrors } from './selectors';
 
-type PropTypes = {
-	buttonText: string;
-	onPaymentAuthorisation: (authorisation: PaymentAuthorisation) => void;
+export type DirectDebitFormProps = {
+	countryGroupId: CountryGroupId;
+	accountHolderName: string;
+	accountNumber: string;
+	accountHolderConfirmation: boolean;
+	sortCode: string;
+	recaptchaCompleted: boolean;
+	updateAccountHolderName: (name: string) => void;
+	updateAccountNumber: (number: string) => void;
+	updateSortCode: (sortCode: string) => void;
+	updateAccountHolderConfirmation: (confirmation: boolean) => void;
+	recaptcha: React.ReactNode;
+	formError: string;
+	errors: DirectDebitFormDisplayErrors;
 };
 
-const recaptchaId = 'robot_checkbox';
-
 // ----- Component ----- //
-export default function DirectDebitForm(props: PropTypes): JSX.Element {
-	const {
-		isDDGuaranteeOpen,
-		sortCodeArray,
-		accountNumber,
-		accountHolderName,
-		accountHolderConfirmation,
-		formError,
-		phase,
-	} = useContributionsSelector(
-		(state) => state.page.checkoutForm.payment.directDebit,
-	);
-
-	const { countryGroupId } = useContributionsSelector(
-		(state) => state.common.internationalisation,
-	);
-
-	const recaptchaCompleted = useContributionsSelector(
-		(state) => state.page.checkoutForm.recaptcha.completed,
-	);
-
-	const dispatch = useContributionsDispatch();
-
-	function onSubmit() {
-		if (recaptchaCompleted) {
-			void dispatch(payWithDirectDebit(props.onPaymentAuthorisation));
-		} else {
-			dispatch(setFormError(directDebitErrorMessages.notCompletedRecaptcha));
-		}
-	}
+export default function DirectDebitForm(
+	props: DirectDebitFormProps,
+): JSX.Element {
+	const [guaranteeOpen, setGuaranteeOpen] = useState(false);
 
 	return (
-		<div className="component-direct-debit-form">
-			<AccountHolderNameInput
-				phase={phase}
-				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					dispatch(setAccountHolderName(e.target.value))
-				}
-				value={accountHolderName}
-			/>
-
-			<AccountNumberInput
-				phase={phase}
-				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					dispatch(setAccountNumber(e.target.value))
-				}
-				value={accountNumber}
-			/>
-
-			<SortCodeInput
-				phase={phase}
-				onChange={(
-					index: SortCodeIndex,
-					e: React.ChangeEvent<HTMLInputElement>,
-				) => dispatch(setSortCode({ index, partialSortCode: e.target.value }))}
-				sortCodeArray={sortCodeArray}
-			/>
-
-			<ConfirmationInput
-				phase={phase}
-				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					dispatch(setAccountHolderConfirmation(e.target.checked))
-				}
-				checked={accountHolderConfirmation}
-			/>
-
-			{phase === 'confirmation' && (
-				<RecaptchaInput
-					setRecaptchaToken={(token) => dispatch(setRecaptchaToken(token))}
-					expireRecaptchaToken={() => dispatch(expireRecaptchaToken())}
-				/>
-			)}
-
-			{formError && (
-				<div className="component-direct-debit-form__error-message-container">
-					<ErrorMessage message={formError} svg={<SvgExclamationAlternate />} />
+		<div>
+			{props.formError && (
+				<div id="directDebitDetails">
+					<InlineError>{props.formError}</InlineError>
 				</div>
 			)}
 
-			<PaymentButton
-				buttonText={props.buttonText}
-				phase={phase}
-				onPayClick={() => dispatch(confirmAccountDetails())}
-				onEditClick={() => dispatch(setPhase('entry'))}
-				onConfirmClick={onSubmit}
+			{/** BACS requirement:
+        "Name of the account holder, as known by the bank. Usually this is the
+        same as the name stored with the linked creditor. This field will be
+        transliterated, upcased and truncated to 18 characters."
+        https://developer.gocardless.com/api-reference/
+      * */}
+			<TextInput
+				label="Account name"
+				id="accountHolderName"
+				data-qm-masking="blocklist"
+				value={props.accountHolderName}
+				onChange={(e) => props.updateAccountHolderName(e.target.value)}
+				maxLength={40}
+				error={props.errors.accountHolderName?.[0]}
 			/>
 
-			<LegalNotice countryGroupId={countryGroupId} />
+			<div css={accountNumberSortCodeContainer}>
+				<div>
+					<TextInput
+						label="Sort code"
+						id="sortCodeString"
+						data-qm-masking="blocklist"
+						value={props.sortCode}
+						onChange={(e) => props.updateSortCode(e.target.value)}
+						pattern="[0-9]*"
+						minLength={6}
+						maxLength={6}
+						inputMode="numeric"
+						error={props.errors.sortCodeString?.[0]}
+					/>
+				</div>
+
+				<div>
+					<TextInput
+						label="Account number"
+						id="accountNumber"
+						data-qm-masking="blocklist"
+						value={props.accountNumber}
+						onChange={(e) => props.updateAccountNumber(e.target.value)}
+						pattern="[0-9]*"
+						minLength={6}
+						maxLength={10}
+						inputMode="numeric"
+						error={props.errors.accountNumber?.[0]}
+					/>
+				</div>
+			</div>
+
+			<Checkbox
+				id="accountHolderConfirmation"
+				label="I confirm that I am the account holder and I am solely able to
+							authorise debit from the account"
+				error={!!props.errors.accountHolderConfirmation?.[0]}
+				onChange={(e) =>
+					props.updateAccountHolderConfirmation(e.target.checked)
+				}
+				checked={props.accountHolderConfirmation}
+			/>
+
+			{props.recaptcha && (
+				<div css={recaptcha}>
+					<ElementDecorator
+						id="robot-checkbox"
+						text="Security check"
+						error={props.errors.recaptcha?.[0]}
+						renderElement={() => props.recaptcha}
+					/>
+				</div>
+			)}
+
+			<LegalNotice countryGroupId={props.countryGroupId} />
 
 			<DirectDebitGuarantee
-				isDDGuaranteeOpen={isDDGuaranteeOpen}
-				openDirectDebitGuarantee={setDDGuaranteeOpen}
-				closeDirectDebitGuarantee={() => dispatch(setDDGuaranteeClose())}
+				isDDGuaranteeOpen={guaranteeOpen}
+				openDirectDebitGuarantee={() => setGuaranteeOpen(true)}
+				closeDirectDebitGuarantee={() => setGuaranteeOpen(false)}
 			/>
 		</div>
 	);
-}
-
-// ----- Auxiliary components ----- //
-function AccountNumberInput(props: {
-	phase: Phase;
-	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-	value: string;
-}) {
-	const editable = (
-		<input
-			id="account-number-input"
-			data-qm-masking="blocklist"
-			value={props.value}
-			onChange={props.onChange}
-			pattern="[0-9]*"
-			minLength={6}
-			maxLength={10}
-			className="component-direct-debit-form__text-field focus-target"
-		/>
-	);
-	const locked = <span>{props.value}</span>;
-	return (
-		<div className="component-direct-debit-form__account-number">
-			<label
-				htmlFor="account-number-input"
-				className="component-direct-debit-form__field-label"
-			>
-				Account number
-			</label>
-			{props.phase === 'entry' ? editable : locked}
-		</div>
-	);
-}
-
-/*
- * BACS requirement:
- "Name of the account holder, as known by the bank. Usually this is the
- same as the name stored with the linked creditor. This field will be
- transliterated, upcased and truncated to 18 characters."
- https://developer.gocardless.com/api-reference/
- * */
-function AccountHolderNameInput(props: {
-	phase: Phase;
-	value: string;
-	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
-	const editable = (
-		<input
-			id="account-holder-name-input"
-			data-qm-masking="blocklist"
-			value={props.value}
-			onChange={props.onChange}
-			maxLength={40}
-			className="component-direct-debit-form__text-field focus-target"
-		/>
-	);
-	const locked = <span>{props.value}</span>;
-	return (
-		<div className="component-direct-debit-form__account-holder-name">
-			<label
-				htmlFor="account-holder-name-input"
-				className="component-direct-debit-form__field-label"
-			>
-				Account name
-			</label>
-			{props.phase === 'entry' ? editable : locked}
-		</div>
-	);
-}
-
-function RecaptchaInput(props: {
-	setRecaptchaToken: (token: string) => void;
-	expireRecaptchaToken?: () => void;
-}) {
-	return (
-		<div className="component-direct-debit-form__recaptcha">
-			<label
-				htmlFor={recaptchaId}
-				className="component-direct-debit-form__field-label"
-			>
-				Security check
-			</label>
-			<Recaptcha
-				id={recaptchaId}
-				onRecaptchaCompleted={props.setRecaptchaToken}
-				onRecaptchaExpired={props.expireRecaptchaToken}
-			/>
-		</div>
-	);
-}
-
-function ConfirmationInput(props: {
-	phase: Phase;
-	checked: boolean;
-	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}) {
-	const editable = (
-		<span>
-			<div className="component-direct-debit-form__confirmation-css-checkbox">
-				<input
-					className="component-direct-debit-form__confirmation-input"
-					id="confirmation-input"
-					type="checkbox"
-					onChange={props.onChange}
-					checked={props.checked}
-				/>
-				<label
-					id="qa-confirmation-input"
-					className="component-direct-debit-form__confirmation-label"
-					htmlFor="confirmation-input"
-				/>
-			</div>
-			<span className="component-direct-debit-form__confirmation-text">
-				I confirm that I am the account holder and I am solely able to authorise
-				debit from the account
-			</span>
-		</span>
-	);
-	const locked = (
-		<span>
-			<label
-				htmlFor="confirmation-text__locked"
-				className="component-direct-debit-form__field-label"
-			>
-				Declaration
-			</label>
-			<div
-				id="confirmation-text__locked"
-				className="component-direct-debit-form__confirmation-text__locked"
-			>
-				I have confirmed that I am the account holder and that I am solely able
-				to authorise debit from the account
-			</div>
-			<div className="component-direct-debit-form__confirmation-guidance">
-				If the details above are correct press confirm to set up your direct
-				debit, otherwise press back to make changes
-			</div>
-		</span>
-	);
-	return (
-		<div className="component-direct-debit-form__account-holder-confirmation">
-			<div>
-				<label htmlFor="confirmation-input">
-					{props.phase === 'entry' ? editable : locked}
-				</label>
-			</div>
-		</div>
-	);
-}
-
-function PaymentButton(props: {
-	buttonText: string;
-	phase: Phase;
-	onPayClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-	onEditClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-	onConfirmClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}) {
-	if (props.phase === 'entry') {
-		return (
-			<button
-				id="qa-submit-button-1"
-				className="component-direct-debit-form__cta component-direct-debit-form__cta--pay-button focus-target"
-				onClick={props.onPayClick}
-			>
-				<SvgDirectDebitSymbol />
-				<span className="component-direct-debit-form__cta-text">
-					{props.buttonText}
-				</span>
-				<SvgArrowRightStraight />
-			</button>
-		);
-	} else {
-		// confirmation phase
-		return (
-			<span>
-				<button
-					className="component-direct-debit-form__cta component-direct-debit-form__cta--edit-button focus-target"
-					onClick={props.onEditClick}
-				>
-					<SvgArrowRightStraight />
-					<span className="component-direct-debit-form__cta-text component-direct-debit-form__cta-text--inverse">
-						Back
-					</span>
-				</button>
-				<button
-					id="qa-submit-button-2"
-					className="component-direct-debit-form__cta component-direct-debit-form__cta--confirm-button focus-target"
-					onClick={props.onConfirmClick}
-				>
-					<span className="component-direct-debit-form__cta-text">Confirm</span>
-					<SvgArrowRightStraight />
-				</button>
-			</span>
-		);
-	}
 }
 
 function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 	return (
-		<div className="component-direct-debit-form__legal-notice">
+		<div css={legalNotice}>
 			<p>
 				<strong>Payments by GoCardless </strong>
 				<a
@@ -360,8 +146,8 @@ function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 				will be sent to you within three working days. All the normal Direct
 				Debit safeguards and guarantees apply.
 			</p>
-			<strong>Direct Debit</strong>
 			<p>
+				<strong>Direct Debit</strong>
 				The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch,
 				LE65 1JT United Kingdom
 				<br />
@@ -372,7 +158,6 @@ function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 					{contributionsEmail[props.countryGroupId].replace('mailto:', '')}
 				</a>
 			</p>
-			<SvgDirectDebitSymbolAndText />
 		</div>
 	);
 }
