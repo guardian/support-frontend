@@ -2,6 +2,9 @@ name: Compressed Size
 
 on: [pull_request]
 
+permissions:
+  pull-requests: write
+
 jobs:
   compressed_size:
     if: github.repository_owner == 'guardian'
