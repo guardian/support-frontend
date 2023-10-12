@@ -23,7 +23,6 @@ trait CheckoutPage extends Page with Browser {
   private val accountNumber = id("account-number-input")
   private val accountConfirmation = id("account-holder-confirmation")
   private val directDebitSubmitButton = id("qa-direct-debit-submit")
-  private val directDebitPlaybackSubmit = id("qa-submit-button-2")
 
   def addTestUserCookies(testUsername: String) = {
     webDriver.manage.addCookie(new Cookie("pre-signin-test-user", testUsername))
@@ -61,10 +60,6 @@ trait CheckoutPage extends Page with Browser {
     pageHasElement(accountNumber)
   }
 
-  def directDebitPlaybackHasLoaded: Boolean = {
-    pageHasElement(directDebitPlaybackSubmit)
-  }
-
   def fillStripeForm(): Unit = {
     for (_ <- 1 to 8) setValue(cardNumber, "42")
     switchToParentFrame
@@ -95,13 +90,11 @@ trait CheckoutPage extends Page with Browser {
 
   def clickStripeSubmit(): Unit = clickOn(stripeSubmitButton)
 
-  def clickDirectDebitConfirm(): Unit = clickOn(directDebitSubmitButton)
-
   def clickDirectDebitPay(): Unit = {
     Thread.sleep(1000)
     clickRecaptcha
     Thread.sleep(1000)
-    clickOn(directDebitPlaybackSubmit)
+    clickOn(directDebitSubmitButton)
   }
 
   def fillForm(): Unit

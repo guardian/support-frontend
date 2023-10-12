@@ -85,28 +85,16 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   }
 
   private object DirectDebitFields {
-    val accountHolderName = cssSelector("#account-holder-name-input")
-    val accountNumber = cssSelector("#account-number-input")
-    val sortCode1 = cssSelector("#qa-sort-code-1")
-    val sortCode2 = cssSelector("#qa-sort-code-2")
-    val sortCode3 = cssSelector("#qa-sort-code-3")
-    val confirmation = cssSelector("#qa-confirmation-input")
-    val submitButton = cssSelector("#qa-submit-button-1")
-    val payButton = cssSelector("#qa-submit-button-2")
+    val accountHolderName = cssSelector("#accountHolderName")
+    val accountNumber = cssSelector("#accountNumber")
+    val sortCode = cssSelector("#sortCodeString")
+    val confirmation = cssSelector("#accountHolderConfirmation")
 
     def fillIn(): Unit = {
       setValue(accountHolderName, "CP Scott")
       setValue(accountNumber, "55779911")
-      setValue(sortCode1, "20")
-      setValue(sortCode2, "00")
-      setValue(sortCode3, "00")
+      setValue(sortCode, "200000")
       clickOn(confirmation)
-      clickOn(submitButton)
-    }
-
-    def pay(): Unit = {
-      clickRecaptcha
-      clickOn(payButton)
     }
   }
 
@@ -123,8 +111,6 @@ case class ContributionsLanding(region: String, testUser: TestUser)(implicit val
   def fillInCardDetails(hasZipCodeField: Boolean): Unit = CardDetailsFields.fillIn(hasZipCodeField)
 
   def fillInDirectDebitDetails(): Unit = DirectDebitFields.fillIn()
-
-  def payDirectDebit(): Unit = DirectDebitFields.pay()
 
   def selectPayPalPayment(): Unit = clickOn(payPalSelector)
 

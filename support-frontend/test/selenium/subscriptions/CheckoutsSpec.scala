@@ -127,12 +127,6 @@ class CheckoutsSpec
     Given("they fill in the direct debit form")
     checkoutPage.fillDirectDebitForm()
 
-    When("they click Confirm")
-    checkoutPage.clickDirectDebitConfirm()
-
-    Given("the playback of the user's details has loaded")
-    assert(checkoutPage.directDebitPlaybackHasLoaded)
-
     When("they click Pay")
     checkoutPage.clickDirectDebitPay()
 
