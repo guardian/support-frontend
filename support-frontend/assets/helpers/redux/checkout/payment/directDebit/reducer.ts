@@ -1,7 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
-import { validateForm } from '../../checkoutActions';
+import { resetValidation, validateForm } from '../../checkoutActions';
 import type { Phase, SortCodeUpdate } from './state';
 import { directDebitSchema, initialDirectDebitState } from './state';
 import {
@@ -86,6 +86,10 @@ export const directDebitSlice = createSlice({
 				(paymentMethod) => paymentMethod === 'DirectDebit',
 			),
 		);
+
+		builder.addCase(resetValidation, (state) => {
+			state.errors = {};
+		});
 	},
 });
 

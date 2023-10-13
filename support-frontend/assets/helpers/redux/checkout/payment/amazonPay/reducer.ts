@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { validateForm } from '../../checkoutActions';
+import { resetValidation, validateForm } from '../../checkoutActions';
 import { initialAmazonPayState } from './state';
 
 export const amazonPaySlice = createSlice({
@@ -46,6 +46,9 @@ export const amazonPaySlice = createSlice({
 					];
 				}
 			}
+		});
+		builder.addCase(resetValidation, (state) => {
+			state.errors = {};
 		});
 	},
 });

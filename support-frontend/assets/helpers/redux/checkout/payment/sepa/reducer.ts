@@ -1,7 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
-import { validateForm } from '../../checkoutActions';
+import { resetValidation, validateForm } from '../../checkoutActions';
 import { initialSepaState, sepaSchema } from './state';
 
 export const sepaSlice = createSlice({
@@ -33,6 +33,10 @@ export const sepaSlice = createSlice({
 				(paymentMethod) => paymentMethod === 'Sepa',
 			),
 		);
+
+		builder.addCase(resetValidation, (state) => {
+			state.errors = {};
+		});
 	},
 });
 

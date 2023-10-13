@@ -14,6 +14,7 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
@@ -90,6 +91,7 @@ export function SupporterPlusCheckout({
 						amount: `${amountBeforeAmendments}`,
 					}),
 				);
+				dispatch(resetValidation());
 				const destination = `/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`;
 				navigateWithPageView(navigate, destination);
 			}}

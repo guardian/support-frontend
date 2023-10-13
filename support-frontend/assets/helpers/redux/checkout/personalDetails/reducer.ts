@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { setIsSignedIn } from 'helpers/redux/user/actions';
 import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
 import type { Title } from 'helpers/user/details';
-import { validateForm } from '../checkoutActions';
+import { resetValidation, validateForm } from '../checkoutActions';
 import type { UserTypeFromIdentityResponse } from './state';
 import { initialPersonalDetailsState, personalDetailsSchema } from './state';
 import { getUserTypeFromIdentity } from './thunks';
@@ -50,6 +50,10 @@ export const personalDetailsSlice = createSlice({
 			validateForm,
 			createSliceValidatorFor(personalDetailsSchema),
 		);
+
+		builder.addCase(resetValidation, (state) => {
+			state.errors = {};
+		});
 
 		builder.addCase(getUserTypeFromIdentity.pending, (state) => {
 			state.userTypeFromIdentityResponse = 'requestPending';

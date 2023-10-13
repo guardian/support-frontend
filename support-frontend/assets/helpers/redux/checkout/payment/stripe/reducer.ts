@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { validateForm } from '../../checkoutActions';
+import { resetValidation, validateForm } from '../../checkoutActions';
 import type { StripeErrorPayload } from './state';
 import { initialStripeCardState } from './state';
 import { getStripeSetupIntent } from './thunks';
@@ -35,6 +35,10 @@ export const stripeCardSlice = createSlice({
 			if (action.payload === 'Stripe') {
 				state.showErrors = true;
 			}
+		});
+
+		builder.addCase(resetValidation, (state) => {
+			state.errors = {};
 		});
 	},
 });

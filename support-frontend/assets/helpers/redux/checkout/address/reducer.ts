@@ -10,7 +10,7 @@ import { fromString } from 'helpers/internationalisation/country';
 import { getSliceErrorsFromZodResult } from 'helpers/redux/utils/validation/errors';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { removeError } from 'helpers/subscriptionsForms/validation';
-import { validateForm } from '../checkoutActions';
+import { resetValidation, validateForm } from '../checkoutActions';
 import type { AddressFormFieldError } from './state';
 import {
 	addressFieldsSchema,
@@ -95,6 +95,10 @@ function getAddressFieldsSlice(type: AddressType) {
 						validationResult.error.format(),
 					);
 				}
+			});
+
+			builder.addCase(resetValidation, (state) => {
+				state.errorObject = {};
 			});
 		},
 	});
