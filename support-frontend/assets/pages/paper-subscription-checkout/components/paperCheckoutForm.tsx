@@ -115,8 +115,9 @@ function mapStateToProps(state: SubscriptionsState) {
 		formErrors: state.page.checkout.formErrors,
 		submissionError: state.page.checkout.submissionError,
 		productPrices: state.page.checkoutForm.product.productPrices,
-		billingAddressErrors: state.page.checkoutForm.deliveryAddress.fields.errors,
-		deliveryAddressErrors: state.page.checkoutForm.billingAddress.fields.errors,
+		billingAddressErrors: state.page.checkoutForm.billingAddress.fields.errors,
+		deliveryAddressErrors:
+			state.page.checkoutForm.deliveryAddress.fields.errors,
 		isTestUser: state.page.user.isTestUser,
 		country: state.common.internationalisation.countryId,
 		billingCountry: state.page.checkoutForm.billingAddress.fields.country,
@@ -375,6 +376,7 @@ function PaperCheckoutForm(props: PropTypes) {
 								deliveryAgentsResponse={props.deliveryAgentsResponse}
 								setDeliveryAgent={props.setDeliveryAgent}
 								formErrors={props.formErrors}
+								deliveryAddressErrors={props.deliveryAddressErrors}
 							/>
 						)}
 						{isHomeDelivery ? (
