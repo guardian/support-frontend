@@ -1,22 +1,24 @@
-import { useFormValidation } from 'helpers/customHooks/useFormValidation';
-import { setPopupOpen } from 'helpers/redux/checkout/payment/directDebit/actions';
-import {
-	useContributionsDispatch,
-	useContributionsSelector,
-} from 'helpers/redux/storeHooks';
+import { useDirectDebitValidation } from 'helpers/customHooks/useFormValidation';
+import type { PaymentAuthorisation } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
+import { payWithDirectDebit } from 'helpers/redux/checkout/payment/directDebit/thunks';
+import { useContributionsDispatch } from 'helpers/redux/storeHooks';
+import { onThirdPartyPaymentAuthorised } from 'pages/supporter-plus-landing/setup/legacyActionCreators';
 import type { PaymentButtonComponentProps } from './paymentButtonController';
 
 export function DirectDebitPaymentButton({
 	DefaultButtonContainer,
 }: PaymentButtonComponentProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
-	const { paymentMethod } = useContributionsSelector(
-		(state) => state.page.checkoutForm.payment,
-	);
 
-	const payWithDirectDebit = useFormValidation(function openDDForm() {
-		dispatch(setPopupOpen());
-	}, paymentMethod.name !== 'DirectDebit');
+	function onSubmit() {
+		void dispatch(
+			payWithDirectDebit((paymentAuthorisation: PaymentAuthorisation) => {
+				void dispatch(onThirdPartyPaymentAuthorised(paymentAuthorisation));
+			}),
+		);
+	}
 
-	return <DefaultButtonContainer onClick={payWithDirectDebit} />;
+	const onClick = useDirectDebitValidation(onSubmit);
+
+	return <DefaultButtonContainer onClick={onClick} />;
 }

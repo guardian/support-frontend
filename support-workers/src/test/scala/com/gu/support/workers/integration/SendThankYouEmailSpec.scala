@@ -10,6 +10,8 @@ import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.catalog.{Collection, Domestic, Saturday}
 import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.config.{PromotionsConfig, PromotionsDiscountConfig, PromotionsTablesConfig}
+import com.gu.support.paperround.AgentId
+import com.gu.support.paperround.AgentsEndpoint.AgentDetails
 import com.gu.support.promotions.{PromotionService, SimplePromotionCollection}
 import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventJson, wrapFixture}
@@ -204,6 +206,22 @@ object SendPaperSubscriptionEmail extends App {
         acno,
         subno,
         firstDeliveryDate = new LocalDate(2019, 3, 26),
+      ),
+      Some(
+        AgentDetails(
+          agentName = "Example delivery agent",
+          refId = AgentId(912),
+          refGroupId = AgentId(1923),
+          startDate = "2023-10-09",
+          endDate = "2100-01-01",
+          address1 = "Somewhere,",
+          address2 = "Somewhere,",
+          town = "A place!",
+          county = "Here",
+          postcode = "N1 9GU",
+          telephone = "07912345678",
+          email = "hello@theguardian.com",
+        ),
       ),
     ),
   )

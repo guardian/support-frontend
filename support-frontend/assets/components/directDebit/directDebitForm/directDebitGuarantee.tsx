@@ -1,5 +1,10 @@
 // ----- Imports ----- //
-import { classNameWithModifiers } from 'helpers/utilities/utilities';
+import {
+	guarantee,
+	guaranteeList,
+	guaranteeListClosed,
+	guaranteeListOpenLink,
+} from './directDebitFormStyles';
 
 type PropTypes = {
 	isDDGuaranteeOpen: boolean;
@@ -7,38 +12,26 @@ type PropTypes = {
 	closeDirectDebitGuarantee: () => void;
 };
 
-function className(baseClass: string, open: boolean) {
-	return classNameWithModifiers(baseClass, open ? ['open'] : ['closed']);
-}
-
 function DirectDebitGuarantee(props: PropTypes): JSX.Element {
 	const onClick = props.isDDGuaranteeOpen
 		? props.closeDirectDebitGuarantee
 		: props.openDirectDebitGuarantee;
 	return (
-		<div className="component-direct-debit-guarantee">
+		<div css={guarantee}>
 			<p>
-				<span
-					className={className(
-						'component-direct-debit-guarantee__intro',
-						props.isDDGuaranteeOpen,
-					)}
-				>
+				<span>
 					Your payments are protected by the&nbsp;
-					<button
-						className="component-direct-debit-form__open-link"
-						onClick={onClick}
-					>
+					<button css={guaranteeListOpenLink} onClick={onClick}>
 						Direct Debit guarantee
 					</button>
 					.
 				</span>
 				<div>
 					<ul
-						className={className(
-							'component-direct-debit-guarantee__list',
-							props.isDDGuaranteeOpen,
-						)}
+						css={[
+							guaranteeList,
+							!props.isDDGuaranteeOpen && guaranteeListClosed,
+						]}
 					>
 						<li>
 							The Guarantee is offered by all banks and building societies that

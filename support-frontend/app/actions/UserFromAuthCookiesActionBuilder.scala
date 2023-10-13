@@ -1,8 +1,13 @@
 package actions
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
+import actions.UserFromAuthCookiesActionBuilder.{
+  UserClaims,
+  responseWithNoUser,
+  shouldValidateUser,
+  validateUserRemotely,
+}
 import actions.UserFromAuthCookiesActionBuilder.UserClaims.toUser
-import actions.UserFromAuthCookiesActionBuilder.{UserClaims, processRequestWithoutUser, tryToProcessRequest}
 import com.gu.identity.auth._
 import com.gu.identity.model.{PrivateFields, User}
 import config.Identity
@@ -29,12 +34,7 @@ class UserFromAuthCookiesActionBuilder(
     with Logging {
 
   override def invokeBlock[A](request: Request[A], block: OptionalAuthRequest[A] => Future[Result]): Future[Result] =
-    if (request.cookies.get(config.signedOutCookieName).isDefined) {
-      processRequestWithoutUser(config)(request, block)
-    } else {
-      val result = tryToProcessRequest(config, oktaAuthService)(request, block)
-      result.left.map(_ => processRequestWithoutUser(config)(request, block)).merge
-    }
+    shouldValidateUser(config, oktaAuthService)(request, block, _ => responseWithNoUser(config)(request, block))
 }
 
 /** Tries to authenticate the user from ID and access token cookies. If there are no cookies, queries the auth server to
@@ -49,44 +49,99 @@ class UserFromAuthCookiesOrAuthServerActionBuilder(
     extends ActionBuilder[OptionalAuthRequest, AnyContent]
     with Logging {
 
-  override def invokeBlock[A](request: Request[A], block: OptionalAuthRequest[A] => Future[Result]): Future[Result] =
-    if (request.cookies.get(config.signedOutCookieName).isDefined) {
-      processRequestWithoutUser(config)(request, block)
-    } else {
-      val result = tryToProcessRequest(config, oktaAuthService)(request, block)
-      result.left
-        .map(failure => {
-          logger.info(s"Request ${request.id} doesn't have valid token cookies: ${failure.message}")
-          if (request.flash.get(authTried).isDefined) {
-            // Already tried to authenticate this request so just pass it through without a user
-            processRequestWithoutUser(config)(request, block)
-          } else {
-            // Haven't tried to authenticate this request yet so redirect to auth
-            isAuthServerUp().flatMap {
-              case true =>
-                val session = {
-                  val withoutReferrer = request.session + (originUrl -> request.uri)
-                  request.headers
-                    .get(REFERER)
-                    .map(referrer => withoutReferrer + (referringUrl -> referrer))
-                    .getOrElse(withoutReferrer)
-                }
-                Future.successful(Redirect(routes.AuthCodeFlowController.authorize()).withSession(session))
-              case false =>
-                // If auth server is down, just pass request through without a user
-                logger.warn(s"Auth server is down, can't authenticate request ${request.id}")
-                processRequestWithoutUser(config)(request, block)
-            }
-          }
-        })
-        .merge
-    }
+  override def invokeBlock[A](request: Request[A], block: OptionalAuthRequest[A] => Future[Result]): Future[Result] = {
+    shouldValidateUser(config, oktaAuthService)(
+      request,
+      block,
+      failure => {
+        logger.info(s"Request ${request.id} doesn't have valid token cookies: ${failure.message}")
+        val alreadyAttempted = request.flash.get(authTried).isDefined
+        if (alreadyAttempted) {
+          // Already tried to authenticate this request so just pass it through without a user
+          responseWithNoUser(config)(request, block)
+        } else {
+          // Haven't tried to authenticate this request yet so redirect to auth server
+          validateUserRemotely(config, isAuthServerUp)(request, block)
+        }
+      },
+    )
+  }
 }
 
-object UserFromAuthCookiesActionBuilder {
+object UserFromAuthCookiesActionBuilder extends Logging {
 
-  /** Processes a request where the [[OptionalAuthRequest]] doesn't have a user. */
-  def processRequestWithoutUser[A](
+  /** Provides an authenticated [[User]] to the given block if authentication is possible. Otherwise, processes the
+    * given block without a user.
+    */
+  def shouldValidateUser[A](config: Identity, oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims])(
+      request: Request[A],
+      block: OptionalAuthRequest[A] => Future[Result],
+      handleFailure: ValidationError => Future[Result],
+  )(implicit ctx: ExecutionContext): Future[Result] = {
+    def isCookiePresent(name: String) = request.cookies.get(name).isDefined
+    val isSignedOut = isCookiePresent(config.signedOutCookieName)
+    val isSignedIn = isCookiePresent(config.signedInCookieName)
+    // If user is signed out or there are no cookies, just pass request through without a user
+    if (isSignedOut || !isSignedIn) {
+      responseWithNoUser(config)(request, block)
+    } else {
+      validateUserLocally(config, oktaAuthService)(request).fold(
+        handleFailure,
+        responseWithUser(request, block),
+      )
+    }
+  }
+
+  /** Validates auth tokens cached in cookies to find a user.
+    */
+  private def validateUserLocally[A](
+      config: Identity,
+      oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims],
+  )(request: Request[A]): Either[ValidationError, User] = {
+    val accessScopes = config.oauthScopes.trim.split("\\s+").map(scope => ClientAccessScope(scope)).toList
+    for {
+      idTokenCookie <- request.cookies
+        .get(config.idTokenCookieName)
+        .toRight(GenericValidationError("No id token cookie"))
+      accessTokenCookie <- request.cookies
+        .get(config.accessTokenCookieName)
+        .toRight(GenericValidationError("No access token cookie"))
+      userClaims <- oktaAuthService.validateIdTokenLocally(IdToken(idTokenCookie.value), nonce = None)
+      _ <- oktaAuthService.validateAccessTokenLocally(AccessToken(accessTokenCookie.value), accessScopes)
+    } yield toUser(userClaims)
+  }
+
+  /** Redirects to auth server to validate user.
+    */
+  def validateUserRemotely[A](config: Identity, isAuthServerUp: () => Future[Boolean])(
+      request: Request[A],
+      block: OptionalAuthRequest[A] => Future[Result],
+  )(implicit ctx: ExecutionContext): Future[Result] = {
+    isAuthServerUp().flatMap {
+      case true =>
+        val session = {
+          val withoutReferrer = request.session + (originUrl -> request.uri)
+          request.headers
+            .get(REFERER)
+            .map(referrer => withoutReferrer + (referringUrl -> referrer))
+            .getOrElse(withoutReferrer)
+        }
+        Future.successful(Redirect(routes.AuthCodeFlowController.authorize()).withSession(session))
+      case false =>
+        // If auth server is down, just pass request through without a user
+        logger.warn(s"Auth server is down, can't authenticate request ${request.id}")
+        responseWithNoUser(config)(request, block)
+    }
+  }
+
+  /** Processes a request that has an authenticated user. */
+  private def responseWithUser[A](request: Request[A], block: OptionalAuthRequest[A] => Future[Result])(
+      user: User,
+  ): Future[Result] =
+    block(new AuthenticatedRequest(Some(user), request))
+
+  /** Processes a request that has no authenticated user. */
+  def responseWithNoUser[A](
       config: Identity,
   )(request: Request[A], block: OptionalAuthRequest[A] => Future[Result])(implicit
       ctx: ExecutionContext,
@@ -99,26 +154,6 @@ object UserFromAuthCookiesActionBuilder {
         toDiscardingCookie(config.accessTokenCookieName),
       ),
     )
-  }
-
-  /** Tries to process a request with the given block. If the request doesn't have valid token cookies, returns a
-    * [[ValidationError]].
-    */
-  def tryToProcessRequest[A](
-      config: Identity,
-      oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims],
-  )(request: Request[A], block: OptionalAuthRequest[A] => Future[Result]): Either[ValidationError, Future[Result]] = {
-    val accessScopes = config.oauthScopes.trim.split("\\s+").map(scope => ClientAccessScope(scope)).toList
-    for {
-      idTokenCookie <- request.cookies
-        .get(config.idTokenCookieName)
-        .toRight(GenericValidationError("No id token cookie"))
-      accessTokenCookie <- request.cookies
-        .get(config.accessTokenCookieName)
-        .toRight(GenericValidationError("No access token cookie"))
-      userClaims <- oktaAuthService.validateIdTokenLocally(IdToken(idTokenCookie.value), nonce = None)
-      _ <- oktaAuthService.validateAccessTokenLocally(AccessToken(accessTokenCookie.value), accessScopes)
-    } yield block(new AuthenticatedRequest(Some(toUser(userClaims)), request))
   }
 
   case class UserClaims(

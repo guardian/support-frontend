@@ -7,6 +7,7 @@ import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
 import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery, NationalDelivery, RestOfWorld}
+import com.gu.support.paperround.AgentId
 import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
@@ -584,7 +585,7 @@ object JsonFixtures {
     ).asJson.spaces2
 
   val createEverydayNationalDeliveryPaperSubscriptionJson = {
-    val paper = Paper(GBP, Monthly, NationalDelivery, Everyday, Some(-43))
+    val paper = Paper(GBP, Monthly, NationalDelivery, Everyday, Some(AgentId(-43)))
     CreateZuoraSubscriptionState(
       PaperState(
         userJsonWithDeliveryAddress,

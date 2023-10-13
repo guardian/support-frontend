@@ -9,7 +9,7 @@ import cats.implicits._
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
 import com.gu.support.catalog.NationalDelivery
-import com.gu.support.paperround.PaperRoundService
+import com.gu.support.paperround.PaperRoundServiceProvider
 import com.gu.support.workers._
 import config.Configuration.GuardianDomain
 import config.RecaptchaConfigProvider
@@ -54,7 +54,7 @@ class CreateSubscriptionController(
     testUsers: TestUserService,
     components: ControllerComponents,
     guardianDomain: GuardianDomain,
-    paperRoundService: PaperRoundService,
+    paperRoundServiceProvider: PaperRoundServiceProvider,
 )(implicit val ec: ExecutionContext, system: ActorSystem)
     extends AbstractController(components)
     with Circe {
@@ -186,7 +186,7 @@ class CreateSubscriptionController(
         request.body.deliveryAddress match {
           case Some(Address(_, _, _, _, Some(postcode), _)) =>
             PaperValidation.deliveryAgentChosenWhichCoversPostcode(
-              paperRoundService,
+              paperRoundServiceProvider.forUser(testUsers.isTestUser(request)),
               deliveryAgent,
               postcode,
             )

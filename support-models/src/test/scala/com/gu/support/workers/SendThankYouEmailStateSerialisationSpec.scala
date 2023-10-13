@@ -5,6 +5,7 @@ import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.SerialisationTestHelpers.testRoundTripSerialisation
 import com.gu.support.catalog.{Collection, Domestic, Saturday}
+import com.gu.support.paperround.AgentId
 import com.gu.support.workers.ProductTypeCreatedTestData._
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.support.workers.states.SendThankYouEmailState._
@@ -81,7 +82,7 @@ object ProductTypeCreatedTestData {
     Paper(
       fulfilmentOptions = Collection,
       productOptions = Saturday,
-      deliveryAgent = Some(-1),
+      deliveryAgent = Some(AgentId(-1)),
     ),
     PayPalReferenceTransaction("baid", "email@emaail.com"),
     PaymentSchedule(List(Payment(new LocalDate(2020, 6, 16), 1.49))),

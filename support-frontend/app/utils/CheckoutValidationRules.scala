@@ -17,7 +17,7 @@ import com.gu.support.catalog.{
   RestOfWorld,
 }
 import com.gu.support.paperround.PaperRoundAPI
-import com.gu.support.paperround.PaperRoundService.CoverageEndpoint.{CO, RequestBody}
+import com.gu.support.paperround.CoverageEndpoint.{CO, RequestBody}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
@@ -28,6 +28,7 @@ import utils.CheckoutValidationRules._
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext
+import com.gu.support.paperround.AgentId
 
 object CheckoutValidationRules {
 
@@ -422,7 +423,7 @@ object PaperValidation {
 
   def deliveryAgentChosenWhichCoversPostcode(
       paperRound: PaperRoundAPI,
-      deliveryAgent: Option[Integer],
+      deliveryAgent: Option[AgentId],
       postcode: String,
   )(implicit
       ex: ExecutionContext,

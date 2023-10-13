@@ -8,6 +8,7 @@ import com.gu.support.acquisitions.ReferrerAcquisitionData
 import com.gu.support.catalog
 import com.gu.support.catalog.{Everyday, HomeDelivery, NationalDelivery}
 import com.gu.support.config.TouchPointEnvironments
+import com.gu.support.paperround.AgentId
 import com.gu.support.workers._
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
@@ -120,7 +121,7 @@ object Fixtures {
         Nil,
       ),
     ),
-    Subscription(date, date, date, "id123", deliveryAgent = Some(7583)),
+    Subscription(date, date, date, "id123", deliveryAgent = Some(AgentId(7583))),
   )
 
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =

@@ -36,6 +36,8 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
     List(ClientAccessScope("scope1"), ClientAccessScope("scope2"), ClientAccessScope("scope3"))
   private val idTokenCookieName = "guIdToken"
   private val accessTokenCookieName = "guAccessToken"
+  private val signedInCookieName = "guu"
+  private val signedInCookie = Cookie(name = signedInCookieName, value = "present")
   private val signedOutCookieName = "guso"
 
   "invokeBlock" when {
@@ -44,9 +46,34 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       val parser = mock[BodyParser[AnyContent]]
       val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
       val config = mock[Identity]
+      when(config.signedInCookieName).thenReturn(signedInCookieName)
       when(config.signedOutCookieName).thenReturn(signedOutCookieName)
       when(config.oauthScopes).thenReturn(accessScopes)
       val request = FakeRequest().withCookies(Cookie(name = config.signedOutCookieName, value = "1684759360"))
+      def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
+      val actionBuilder =
+        new UserFromAuthCookiesOrAuthServerActionBuilder(
+          parser,
+          authService,
+          config,
+          isAuthServerUp = () => Future.successful(true),
+        )
+      val result = actionBuilder.invokeBlock(request, block)
+      "give an OK response" in {
+        status(result) mustBe 200
+      }
+      "provide no User instance to the wrapped block" in {
+        contentAsJson(result) mustBe JsNull
+      }
+    }
+
+    "request has no signed-in cookie" must {
+      val parser = mock[BodyParser[AnyContent]]
+      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val config = mock[Identity]
+      when(config.signedInCookieName).thenReturn(signedInCookieName)
+      when(config.signedOutCookieName).thenReturn(signedOutCookieName)
+      val request = FakeRequest()
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
       val actionBuilder =
         new UserFromAuthCookiesOrAuthServerActionBuilder(
@@ -69,7 +96,11 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
-      val request = FakeRequest().withHeaders(REFERER -> "referrer")
+      when(config.signedInCookieName).thenReturn(signedInCookieName)
+      when(config.signedOutCookieName).thenReturn(signedOutCookieName)
+      val request = FakeRequest()
+        .withHeaders(REFERER -> "referrer")
+        .withCookies(signedInCookie)
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
       val actionBuilder =
         new UserFromAuthCookiesOrAuthServerActionBuilder(
@@ -98,11 +129,16 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
+      when(config.signedInCookieName).thenReturn(signedInCookieName)
+      when(config.signedOutCookieName).thenReturn(signedOutCookieName)
       when(config.idTokenCookieName).thenReturn(idTokenCookieName)
       when(config.accessTokenCookieName).thenReturn(accessTokenCookieName)
       val request = FakeRequest()
         .withHeaders(REFERER -> "referrer")
-        .withCookies(Cookie(name = config.accessTokenCookieName, value = accessToken.value))
+        .withCookies(
+          signedInCookie,
+          Cookie(name = config.accessTokenCookieName, value = accessToken.value),
+        )
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
       val actionBuilder =
         new UserFromAuthCookiesOrAuthServerActionBuilder(
@@ -132,11 +168,16 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       when(authService.validateIdTokenLocally(idToken, nonce = None)).thenReturn(Right(idClaims))
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
+      when(config.signedInCookieName).thenReturn(signedInCookieName)
+      when(config.signedOutCookieName).thenReturn(signedOutCookieName)
       when(config.idTokenCookieName).thenReturn(idTokenCookieName)
       when(config.accessTokenCookieName).thenReturn(accessTokenCookieName)
       val request = FakeRequest()
         .withHeaders(REFERER -> "referrer")
-        .withCookies(Cookie(name = config.idTokenCookieName, value = idToken.value))
+        .withCookies(
+          signedInCookie,
+          Cookie(name = config.idTokenCookieName, value = idToken.value),
+        )
       def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
       val actionBuilder =
         new UserFromAuthCookiesOrAuthServerActionBuilder(
@@ -167,9 +208,12 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       when(authService.validateAccessTokenLocally(accessToken, accessScopeList)).thenReturn(Right(accessClaims))
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
+      when(config.signedInCookieName).thenReturn(signedInCookieName)
+      when(config.signedOutCookieName).thenReturn(signedOutCookieName)
       when(config.idTokenCookieName).thenReturn(idTokenCookieName)
       when(config.accessTokenCookieName).thenReturn(accessTokenCookieName)
       val request = FakeRequest().withCookies(
+        signedInCookie,
         Cookie(name = config.idTokenCookieName, value = idToken.value),
         Cookie(name = config.accessTokenCookieName, value = accessToken.value),
       )
@@ -197,11 +241,14 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
       when(authService.validateAccessTokenLocally(accessToken, accessScopeList)).thenReturn(Left(InvalidOrExpiredToken))
       val config = mock[Identity]
       when(config.oauthScopes).thenReturn(accessScopes)
+      when(config.signedInCookieName).thenReturn(signedInCookieName)
+      when(config.signedOutCookieName).thenReturn(signedOutCookieName)
       when(config.idTokenCookieName).thenReturn(idTokenCookieName)
       when(config.accessTokenCookieName).thenReturn(accessTokenCookieName)
       val request = FakeRequest()
         .withHeaders(REFERER -> "referrer")
         .withCookies(
+          signedInCookie,
           Cookie(name = config.idTokenCookieName, value = idToken.value),
           Cookie(name = config.accessTokenCookieName, value = accessToken.value),
         )
@@ -296,34 +343,36 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
         session(result).isEmpty mustBe true
       }
     }
-  }
 
-  "request has no referrer" must {
-    val parser = mock[BodyParser[AnyContent]]
-    val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
-    val config = mock[Identity]
-    when(config.oauthScopes).thenReturn(accessScopes)
-    val request = FakeRequest()
-    def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
-    val actionBuilder =
-      new UserFromAuthCookiesOrAuthServerActionBuilder(
-        parser,
-        authService,
-        config,
-        isAuthServerUp = () => Future.successful(true),
-      )
-    val result = actionBuilder.invokeBlock(request, block)
-    "be a redirect" in {
-      status(result) mustBe 303
-    }
-    "redirect to authorize endpoint" in {
-      redirectLocation(result) mustBe Some(routes.AuthCodeFlowController.authorize().url)
-    }
-    "include origin URL in response session" in {
-      session(result).get(SessionKey.originUrl) mustBe Some(request.uri)
-    }
-    "not include referrer URL in response session" in {
-      session(result).get(SessionKey.referringUrl) mustBe None
+    "request has no referrer" must {
+      val parser = mock[BodyParser[AnyContent]]
+      val authService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+      val config = mock[Identity]
+      when(config.oauthScopes).thenReturn(accessScopes)
+      when(config.signedInCookieName).thenReturn(signedInCookieName)
+      when(config.signedOutCookieName).thenReturn(signedOutCookieName)
+      val request = FakeRequest().withCookies(signedInCookie)
+      def block(request: OptionalAuthRequest[AnyContent]) = Future.successful(Ok(toJson(request)))
+      val actionBuilder =
+        new UserFromAuthCookiesOrAuthServerActionBuilder(
+          parser,
+          authService,
+          config,
+          isAuthServerUp = () => Future.successful(true),
+        )
+      val result = actionBuilder.invokeBlock(request, block)
+      "be a redirect" in {
+        status(result) mustBe 303
+      }
+      "redirect to authorize endpoint" in {
+        redirectLocation(result) mustBe Some(routes.AuthCodeFlowController.authorize().url)
+      }
+      "include origin URL in response session" in {
+        session(result).get(SessionKey.originUrl) mustBe Some(request.uri)
+      }
+      "not include referrer URL in response session" in {
+        session(result).get(SessionKey.referringUrl) mustBe None
+      }
     }
   }
 
