@@ -60,6 +60,9 @@ object AcquisitionDataRowBuilder {
       paymentId = Some(contributionData.paymentId),
       queryParameters = acquisitionData.queryParameters.map(_.toList).getOrElse(Nil),
       platform = acquisitionData.platform,
+      postalCode = contributionData.postalCode,
+      state = contributionData.countrySubdivisionCode,
+      email = Some(contributionData.email),
     )
   }
 
@@ -96,6 +99,9 @@ object AcquisitionDataRowBuilder {
       paymentId = Some(contributionData.paymentId),
       queryParameters = acquisitionData.flatMap(_.queryParameters.map(_.toList)).getOrElse(Nil),
       platform = acquisitionData.flatMap(_.platform),
+      postalCode = contributionData.postalCode,
+      state = contributionData.countrySubdivisionCode,
+      email = Some(contributionData.email),
     )
   }
 
@@ -134,6 +140,9 @@ object AcquisitionDataRowBuilder {
       paymentId = Some(contributionData.paymentId),
       queryParameters = acquisitionData.queryParameters.map(_.toList).getOrElse(Nil),
       platform = acquisitionData.platform,
+      postalCode = contributionData.postalCode,
+      state = contributionData.countrySubdivisionCode,
+      email = Some(contributionData.email),
     )
   }
 

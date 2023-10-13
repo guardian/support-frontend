@@ -87,6 +87,9 @@ class BigQuerySpec extends AsyncFlatSpec with Matchers with LazyLogging {
       Some("paymentId1234"),
       List(QueryParameter("foo", "bar")),
       None,
+      Some("postalCode"),
+      Some("state"),
+      Some("email")
     )
 
     service.sendAcquisition(dataRow).value.map(_ shouldBe Right(()))
