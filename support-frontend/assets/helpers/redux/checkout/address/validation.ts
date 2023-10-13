@@ -180,7 +180,7 @@ function getDeliveryOnlyRules(
 					: true,
 			error: formError(
 				'postCode',
-				'Saturday or Sunday delivery is available for Greater London only',
+				'Saturday or Sunday delivery is available for Greater London only. Go back and select Weekend delivery or choose a Digital Voucher.',
 			),
 		},
 	];
