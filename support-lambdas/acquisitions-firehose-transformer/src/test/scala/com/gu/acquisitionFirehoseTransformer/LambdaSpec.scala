@@ -88,6 +88,9 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
       paymentId = None,
       queryParameters = Nil,
       platform = None,
+      postalCode = Some("postalCode"),
+      state = Some("state"),
+      email = Some("email")
     )
 
     val record = new KinesisFirehoseEvent.Record()
