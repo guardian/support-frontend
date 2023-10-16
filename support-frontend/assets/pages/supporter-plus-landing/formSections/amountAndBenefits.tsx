@@ -109,6 +109,8 @@ export function AmountAndBenefits({
 
 							<CheckoutNudgeContainer
 								renderNudge={(nudgeProps) => <CheckoutNudge {...nudgeProps} />}
+								dynamic={true}
+								frequency={tabId}
 							/>
 						</BoxContents>
 					)}

@@ -1,11 +1,12 @@
 import type { OtherAmountProps } from 'components/otherAmount/otherAmount';
-import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import {
 	setOtherAmount,
 	setOtherAmountBeforeAmendment,
 	setSelectedAmount,
 	setSelectedAmountBeforeAmendment,
 } from 'helpers/redux/checkout/product/actions';
+import { getSelectedAmount } from 'helpers/redux/checkout/product/selectors/productType';
 import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
 import { getOtherAmountErrors } from 'helpers/redux/selectors/formValidation/otherAmountValidation';
 import {
@@ -28,14 +29,6 @@ const contributionTypeToPaymentInterval: Partial<
 	MONTHLY: 'month',
 	ANNUAL: 'year',
 };
-
-function getSelectedAmount(
-	selectedAmounts: SelectedAmounts,
-	contributionType: ContributionType,
-	defaultAmount: number,
-) {
-	return selectedAmounts[contributionType] || defaultAmount;
-}
 
 export function PriceCardsContainer({
 	frequency,
