@@ -7,7 +7,7 @@ permissions:
 
 jobs:
   compressed_size:
-    if: github.repository_owner == 'guardian'
+    if: ${{ github.actor != 'gu-scala-steward-public-repos[bot]' }}
     name: Compressed Size
     defaults:
       run:
