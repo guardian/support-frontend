@@ -63,9 +63,15 @@ export function CheckoutNudgeContainer({
 	const min = useContributionsSelector(getMinimumContributionAmount('ANNUAL'));
 	const max = useContributionsSelector(getMaximumContributionAmount('ANNUAL'));
 
-	const otherAmount = otherAmounts[frequency].amount?.length
-		? otherAmounts[frequency].amount
-		: '0';
+	const otherAmount =
+		otherAmounts[frequency].amount?.length &&
+		// Regex pattern matches valid currency value;
+		// 1234 or 1234.56
+		/^\d*(\.?\d{2})?$/g.test(
+			`${parseInt(otherAmounts[frequency].amount ?? '')}`,
+		)
+			? otherAmounts[frequency].amount
+			: '0';
 
 	const annualAmount =
 		selectedAmount === 'other' ? otherAmount : selectedAmount;
