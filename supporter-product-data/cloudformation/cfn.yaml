@@ -401,7 +401,7 @@ Resources:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub Supporter Product Data step function Failure in ${Stage}
-      AlarmDescription: !Sub The supporter-product-data-${Stage} step function has failed. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:supporter-product-data-PROD?statusFilter=FAILED for details.
+      AlarmDescription: !Sub The supporter-product-data-${Stage} step function has failed. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:supporter-product-data-${STAGE}?statusFilter=FAILED for details.
       MetricName: ExecutionsFailed
       Namespace: AWS/States
       Dimensions:
