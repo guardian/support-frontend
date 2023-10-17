@@ -16,6 +16,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { CheckoutNudgeProps } from './checkoutNudge';
 
 type CheckoutNudgeContainerProps = {
@@ -102,7 +103,15 @@ export function CheckoutNudgeContainer({
 		setDisplayNudge(false);
 	}
 
-	function onNudgeClick() {
+	function onNudgeClick(event: React.MouseEvent<HTMLAnchorElement>) {
+		event.preventDefault();
+		trackComponentClick('contribution-annual-nudge');
+
+		if (dynamic) {
+			window.location.href = event.currentTarget.href;
+			return;
+		}
+
 		dispatch(setProductType('ANNUAL'));
 	}
 
@@ -118,6 +127,6 @@ export function CheckoutNudgeContainer({
 			: undefined,
 		countryGroupId: countryGroupId,
 		onNudgeClose,
-		onNudgeClick: !dynamic ? onNudgeClick : undefined,
+		onNudgeClick,
 	});
 }

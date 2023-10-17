@@ -107,7 +107,7 @@ export type CheckoutNudgeProps = {
 	nudgeLinkHref?: string;
 	countryGroupId: CountryGroupId;
 	onNudgeClose: () => void;
-	onNudgeClick?: () => void;
+	onNudgeClick: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 };
 
 export function CheckoutNudge({
