@@ -32,7 +32,6 @@ abstract class SettingsProvider[T] {
 class AllSettingsProvider private (
     switchesProvider: SettingsProvider[Switches],
     amountsProvider: SettingsProvider[AmountsTests],
-    contributionTypesProvider: SettingsProvider[ContributionTypes],
     metricUrl: MetricUrl,
 ) {
 
@@ -40,7 +39,6 @@ class AllSettingsProvider private (
     AllSettings(
       switchesProvider.settings(),
       amountsProvider.settings(),
-      contributionTypesProvider.settings(),
       metricUrl,
     )
   }
@@ -48,7 +46,6 @@ class AllSettingsProvider private (
 
 object AllSettingsProvider {
   import admin.settings.AmountsTests.amountsTestsDecoder
-  import admin.settings.ContributionTypes.contributionTypesDecoder
 
   def fromConfig(
       config: Configuration,
@@ -56,12 +53,9 @@ object AllSettingsProvider {
     for {
       switchesProvider <- SettingsProvider.fromAppConfig[Switches](config.settingsSources.switches, config)
       amountsProvider <- SettingsProvider.fromAppConfig[AmountsTests](config.settingsSources.amounts, config)
-      contributionTypesProvider <- SettingsProvider
-        .fromAppConfig[ContributionTypes](config.settingsSources.contributionTypes, config)
     } yield new AllSettingsProvider(
       switchesProvider,
       amountsProvider,
-      contributionTypesProvider,
       config.metricUrl,
     )
   }

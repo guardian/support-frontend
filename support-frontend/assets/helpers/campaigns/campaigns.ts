@@ -1,5 +1,5 @@
 import type { TickerSettings } from 'components/ticker/contributionTicker';
-import type { ContributionTypes } from 'helpers/contributions';
+import type { AmountsTests } from 'helpers/contributions';
 
 type CampaignCopy = {
 	headerCopy?: string | JSX.Element;
@@ -15,7 +15,7 @@ export type CampaignSettings = {
 		contactEmail: string,
 	) => JSX.Element;
 	cssModifiers?: string[];
-	contributionTypes?: ContributionTypes;
+	amountsTests?: AmountsTests;
 	backgroundImage?: string;
 	extraComponent?: JSX.Element;
 	tickerSettings?: TickerSettings;

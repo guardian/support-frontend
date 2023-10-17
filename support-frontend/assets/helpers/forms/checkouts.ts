@@ -1,17 +1,11 @@
 // ----- Imports ----- //
 import type { CanMakePaymentResult } from '@stripe/stripe-js';
-import {
-	generateContributionTypes,
-	getFrequency,
-	toContributionType,
-} from 'helpers/contributions';
 import type {
+	AmountsTests,
 	ContributionType,
-	ContributionTypes,
-	ContributionTypeSetting,
 	SelectedAmounts,
 } from 'helpers/contributions';
-import 'helpers/globalsAndSwitches/settings';
+import { getFrequency, toContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
@@ -80,22 +74,18 @@ function toPaymentMethodSwitchNaming(
 	}
 }
 
-function getValidContributionTypesFromUrlOrElse(
-	fallback: ContributionTypes,
-): ContributionTypes {
-	const contributionTypesFromUrl = getQueryParameter('contribution-types');
-
-	if (contributionTypesFromUrl) {
-		return generateContributionTypes(
-			contributionTypesFromUrl
-				.split(',')
-				.map(toContributionType)
-				.filter(Boolean)
-				.map((contributionType) => ({
-					contributionType,
-				})) as ContributionTypeSetting[],
-		);
-	}
+function getValidContributionTypesFromUrlOrElse( //HANDLE THIS
+	fallback: AmountsTests,
+): AmountsTests {
+	// const contributionTypesFromUrl = getQueryParameter('contribution-types');
+	//
+	// if (contributionTypesFromUrl) {
+	// 	return
+	// 		contributionTypesFromUrl
+	// 			.split(',')
+	// 			.map(toContributionType)
+	// 			.filter(Boolean);
+	// }
 
 	return fallback;
 }
@@ -119,11 +109,11 @@ function toHumanReadableContributionType(
 }
 
 function getContributionTypeFromSession(): ContributionType | null | undefined {
-	return toContributionType(storage.getSession('selectedContributionType'));
+	return toContributionType(storage.getSession('selectedContributionType')); ///CHECK THIS
 }
 
 function getContributionTypeFromUrl(): ContributionType | null | undefined {
-	return toContributionType(getQueryParameter('selected-contribution-type'));
+	return toContributionType(getQueryParameter('selected-contribution-type')); ///CHECK QUERY PARAMETER
 }
 
 function getAmountFromUrl(): number | 'other' | null {

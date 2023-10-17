@@ -22,12 +22,10 @@ import AmountsTests._ // intellij doesn't think this is needed, but it is
 case class AllSettings(
     switches: Switches,
     amounts: AmountsTests,
-    contributionTypes: ContributionTypes,
     metricUrl: MetricUrl,
 )
 
 object AllSettings {
-  import ContributionTypes._
 
   implicit val metricUrlEncoder: Encoder[MetricUrl] = Encoder.encodeString.contramap(_.value)
   implicit val metricUrlDecoder: Decoder[MetricUrl] = Decoder.decodeString.map(MetricUrl)

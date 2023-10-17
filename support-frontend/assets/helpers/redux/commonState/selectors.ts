@@ -1,22 +1,55 @@
-import type { ContributionType } from 'helpers/contributions';
+import type {
+	AmountsTest,
+	AmountsTests,
+	ContributionType,
+} from 'helpers/contributions';
 import { config } from 'helpers/contributions';
-import { getValidContributionTypesFromUrlOrElse } from 'helpers/forms/checkouts';
 import { getContributionType } from '../checkout/product/selectors/productType';
 import type { ContributionsState } from '../contributionsStore';
+import { useContributionsSelector } from '../storeHooks';
 
-export function getDefaultContributionType(
+////////
+const getSpecifiedRegionAmountsTest = (
+	target: string,
+	amounts: AmountsTests | undefined,
+): AmountsTest | Record<string, never> => {
+	if (!amounts) {
+		return {};
+	}
+	const testArray = amounts.filter(
+		(t) =>
+			t.targeting.targetingType === 'Region' && t.targeting.region === target,
+	);
+	if (!testArray.length) {
+		return {};
+	}
+	return testArray[0];
+};
+//////
+
+export function getDefaultContributionType( ///HANDLE THIS
 	state: ContributionsState,
 ): ContributionType {
 	const { countryGroupId } = state.common.internationalisation;
-	const contributionTypes = getValidContributionTypesFromUrlOrElse(
-		state.common.settings.contributionTypes,
+	const { amounts } = useContributionsSelector(
+		(state) => state.common.settings,
 	);
-	const contribTypesForLocale = contributionTypes[countryGroupId];
-	const defaultContributionType =
-		contribTypesForLocale.find((contribType) => contribType.isDefault) ??
-		contribTypesForLocale[0];
+	const contributionTypesForSpecificRegions = getSpecifiedRegionAmountsTest(
+		countryGroupId,
+		amounts,
+	);
 
-	return defaultContributionType.contributionType;
+	// const contributionTypes = getValidContributionTypesFromUrlOrElse(
+	// 	//HANDLE THIS
+	// 	state.common.settings.amounts,
+	// );
+	// const contribTypesForLocale =
+	// 	contributionTypesForSpecificRegions.variants[0].displayContributionType;
+
+	const defaultContributionType =
+		contributionTypesForSpecificRegions.variants[0].defaultContributionType;
+
+	return defaultContributionType;
 }
 
 export function getMinimumContributionAmount(

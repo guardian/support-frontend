@@ -87,16 +87,6 @@ export interface SelectedAmountsVariant extends AmountsVariant {
 	testName: string;
 }
 
-export type ContributionTypeSetting = {
-	contributionType: ContributionType;
-	isDefault?: boolean;
-};
-
-export type ContributionTypes = Record<
-	CountryGroupId,
-	ContributionTypeSetting[]
->;
-
 type ParseError = 'ParseError';
 
 export type ValidationError = 'TooMuch' | 'TooLittle';
@@ -366,20 +356,6 @@ function toContributionType(
 	return null;
 }
 
-function generateContributionTypes(
-	contributionTypes: ContributionTypeSetting[],
-): ContributionTypes {
-	return {
-		GBPCountries: contributionTypes,
-		UnitedStates: contributionTypes,
-		AUDCountries: contributionTypes,
-		EURCountries: contributionTypes,
-		NZDCountries: contributionTypes,
-		Canada: contributionTypes,
-		International: contributionTypes,
-	};
-}
-
 function parseRegularContributionType(s: string): RegularContributionType {
 	if (s === 'ANNUAL') {
 		return 'ANNUAL';
@@ -532,21 +508,11 @@ function getContributionAmountRadios(
 	}));
 }
 
-const contributionTypeAvailable = (
-	contributionType: ContributionType,
-	countryGroupId: CountryGroupId,
-	contributionTypes: ContributionTypes,
-): boolean =>
-	contributionTypes[countryGroupId].some(
-		(settings) => settings.contributionType === contributionType,
-	);
-
 // ----- Exports ----- //
 export {
 	config,
 	getConfigMinAmount,
 	toContributionType,
-	generateContributionTypes,
 	validateContribution,
 	parseContribution,
 	getMinContribution,
@@ -560,5 +526,4 @@ export {
 	getContributionAmountRadios,
 	parseRegularContributionType,
 	getAmount,
-	contributionTypeAvailable,
 };

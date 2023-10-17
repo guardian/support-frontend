@@ -3,6 +3,6 @@ import { commonSlice } from './reducer';
 export const {
 	setInitialCommonState,
 	setCountryInternationalisation,
-	setContributionTypes,
+	setAmountsTestsTypes,
 	setCurrencyId,
 } = commonSlice.actions;

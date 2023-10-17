@@ -66,22 +66,6 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
 
     val amountsTests = List(amountsTest)
 
-    val contributionTypesSettings = List(
-      ContributionTypeSetting(
-        contributionType = ONE_OFF,
-        isDefault = Some(true),
-      ),
-    )
-    val contributionTypes = ContributionTypes(
-      GBPCountries = contributionTypesSettings,
-      UnitedStates = contributionTypesSettings,
-      EURCountries = contributionTypesSettings,
-      AUDCountries = contributionTypesSettings,
-      International = contributionTypesSettings,
-      NZDCountries = contributionTypesSettings,
-      Canada = contributionTypesSettings,
-    )
-
     val allSettings = AllSettings(
       Switches(
         oneOffPaymentMethods = OneOffPaymentMethodSwitches(On, On, On, On, On),
@@ -93,7 +77,6 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
         recaptchaSwitches = RecaptchaSwitches(On, On),
       ),
       amountsTests,
-      ContributionTypes(Nil, Nil, Nil, Nil, Nil, Nil, Nil),
       MetricUrl("http://localhost"),
     )
 

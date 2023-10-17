@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type { ContributionTypes } from 'helpers/contributions';
+import type { AmountsTests } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import { fromCountryGroupId } from 'helpers/internationalisation/currency';
@@ -71,8 +71,8 @@ export const commonSlice = createSlice({
 				),
 			};
 		},
-		setContributionTypes(state, action: PayloadAction<ContributionTypes>) {
-			state.settings.contributionTypes = action.payload;
+		setAmountsTestsTypes(state, action: PayloadAction<AmountsTests>) {
+			state.settings.amounts = action.payload;
 		},
 		setCurrencyId(state) {
 			state.internationalisation.currencyId =

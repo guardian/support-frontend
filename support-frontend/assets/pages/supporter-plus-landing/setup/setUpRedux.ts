@@ -1,8 +1,9 @@
 // ----- Imports ----- //
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type {
+	AmountsTest,
+	AmountsTests,
 	ContributionType,
-	ContributionTypes,
 } from 'helpers/contributions';
 import {
 	getAmountFromUrl,
@@ -29,7 +30,7 @@ import {
 	setOtherAmount,
 	setProductType,
 } from 'helpers/redux/checkout/product/actions';
-import { setContributionTypes } from 'helpers/redux/commonState/actions';
+import { setAmountsTestsTypes } from 'helpers/redux/commonState/actions';
 import type {
 	ContributionsDispatch,
 	ContributionsState,
@@ -63,30 +64,52 @@ function getInitialPaymentMethod(
 	}
 	return 'None';
 }
-
+////////
+const getSpecifiedRegionAmountsTest = (
+	target: string,
+	amounts: AmountsTests,
+): AmountsTest | Record<string, never> => {
+	const testArray = amounts.filter(
+		(t) =>
+			t.targeting.targetingType === 'Region' && t.targeting.region === target,
+	);
+	if (!testArray.length) {
+		return {};
+	}
+	return testArray[0];
+};
+//////
 function getInitialContributionType(
 	countryGroupId: CountryGroupId,
-	contributionTypes: ContributionTypes,
+	amountsTests: AmountsTests,
 ): ContributionType {
+	const contributionTypesForSpecificRegions = getSpecifiedRegionAmountsTest(
+		countryGroupId,
+		amountsTests,
+	);
+
 	const contributionType =
 		getContributionTypeFromUrl() ?? getContributionTypeFromSession();
+
+	// console.log("amountsTestsXXX", amountsTests)
+	// console.log("contributionTypeXXX",contributionType)
+	// console.log(" getContributionTypeFromUrl()", getContributionTypeFromUrl())
+	// console.log("getContributionTypeFromSession()",getContributionTypeFromSession())
+	// console.log("contributionTypeXXX2",  contributionTypesForSpecificRegions.variants[0].displayContributionType)
 
 	// make sure we don't select a contribution type which isn't on the page
 	if (
 		contributionType &&
-		contributionTypes[countryGroupId].find(
-			(ct) => ct.contributionType === contributionType,
-		)
+		contributionType in
+			contributionTypesForSpecificRegions.variants[0].displayContributionType
 	) {
 		return contributionType;
 	}
 
-	const defaultContributionType = contributionTypes[countryGroupId].find(
-		(ct) => ct.isDefault,
-	);
-	return defaultContributionType
-		? defaultContributionType.contributionType
-		: contributionTypes[countryGroupId][0].contributionType;
+	const defaultContributionType =
+		contributionTypesForSpecificRegions.variants[0].defaultContributionType;
+	// console.log("defaultContributionType", defaultContributionType)
+	return defaultContributionType;
 }
 
 function selectInitialAmounts(
@@ -149,29 +172,28 @@ function selectInitialAmounts(
 }
 
 // Override the settings from the server if contributionTypes are defined in url params or campaign settings
-function getContributionTypes(state: ContributionsState): ContributionTypes {
+function getAmounsTestsTypes(state: ContributionsState): AmountsTests {
+	///HANDLE THIS
 	const campaignSettings = getCampaignSettings();
 
-	if (campaignSettings?.contributionTypes) {
-		return campaignSettings.contributionTypes;
+	if (campaignSettings?.amountsTests) {
+		return campaignSettings.amountsTests; ///HANDLE THIS
 	}
 
-	return getValidContributionTypesFromUrlOrElse(
-		state.common.settings.contributionTypes,
-	);
+	return getValidContributionTypesFromUrlOrElse(state.common.settings.amounts);
 }
 
 function selectInitialContributionTypeAndPaymentMethod(
 	state: ContributionsState,
 	dispatch: ContributionsDispatch,
-	contributionTypes: ContributionTypes,
+	amountsTests: AmountsTests,
 ): ContributionType {
 	const { countryId } = state.common.internationalisation;
 	const { switches } = state.common.settings;
 	const { countryGroupId } = state.common.internationalisation;
 	const contributionType = getInitialContributionType(
 		countryGroupId,
-		contributionTypes,
+		amountsTests,
 	);
 	const paymentMethod = getInitialPaymentMethod(
 		contributionType,
@@ -189,8 +211,8 @@ export function setUpRedux(store: ContributionsStore): void {
 	const dispatch = store.dispatch;
 	const state = store.getState();
 	// TODO - move these settings out of the redux store, as they only change once, upon initialisation
-	const contributionTypes = getContributionTypes(state);
-	dispatch(setContributionTypes(contributionTypes));
+	const amountsTestsTypes = getAmounsTestsTypes(state); ///HANDLE THIS
+	dispatch(setAmountsTestsTypes(amountsTestsTypes)); ///HANDLE THIS
 
 	setUpUserState(dispatch);
 	void dispatch(getRecurringContributorStatus());
@@ -204,7 +226,7 @@ export function setUpRedux(store: ContributionsStore): void {
 	const contributionType = selectInitialContributionTypeAndPaymentMethod(
 		state,
 		dispatch,
-		contributionTypes,
+		amountsTestsTypes,
 	);
 	selectInitialAmounts(state, dispatch, contributionType);
 
