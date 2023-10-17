@@ -18,7 +18,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-ec2" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
-  "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.2",
+  "com.amazon.pay" % "amazon-pay-java-sdk" % "3.7.1",
   "com.beachape" %% "enumeratum" % "1.7.3",
   "com.beachape" %% "enumeratum-circe" % "1.7.3",
   "com.dripower" %% "play-circe" % playCirceVersion,
@@ -51,6 +51,7 @@ libraryDependencies ++= Seq(
   "com.lihaoyi" %% "pprint" % "0.8.1",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
   "org.scala-lang.modules" %% "scala-xml" % "1.3.1",
+  "xerces" % "xercesImpl" % "2.12.2",
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
