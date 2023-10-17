@@ -7,7 +7,11 @@ import {
 	getContributionType,
 	getSelectedAmount,
 } from 'helpers/redux/checkout/product/selectors/productType';
-import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
+import {
+	getMaximumContributionAmount,
+	getMinimumContributionAmount,
+	isUserInAbVariant,
+} from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -51,11 +55,28 @@ export function CheckoutNudgeContainer({
 		isUserInAbVariant('makeItAnnualNudge', 'variant'),
 	);
 
+	const { otherAmounts } = useContributionsSelector(
+		(state) => state.page.checkoutForm.product,
+	);
+
+	const min = useContributionsSelector(getMinimumContributionAmount('ANNUAL'));
+	const max = useContributionsSelector(getMaximumContributionAmount('ANNUAL'));
+
+	const annualAmount =
+		selectedAmount === 'other'
+			? otherAmounts[frequency].amount ?? '0'
+			: selectedAmount;
+
+	const clampedAmount = Math.min(
+		Math.max(Number.parseInt(annualAmount), min),
+		max,
+	);
+
 	let title, subtitle;
 
 	if (dynamic) {
 		title = 'Make it annual';
-		subtitle = `change to ${currencyGlyph}${selectedAmount} per year`;
+		subtitle = `change to ${currencyGlyph}${clampedAmount} per year`;
 	} else {
 		const minAmount = getConfigMinAmount(countryGroupId, 'ANNUAL');
 		const weeklyMinAmount =
@@ -93,7 +114,7 @@ export function CheckoutNudgeContainer({
 		nudgeParagraph: paragraph,
 		nudgeLinkCopy: `See annual`,
 		nudgeLinkHref: dynamic
-			? `/contribute?selected-amount=${selectedAmount}&selected-contribution-type=annual`
+			? `/contribute?selected-amount=${clampedAmount}&selected-contribution-type=annual`
 			: undefined,
 		countryGroupId: countryGroupId,
 		onNudgeClose,
