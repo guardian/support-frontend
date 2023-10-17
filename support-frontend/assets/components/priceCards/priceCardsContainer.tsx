@@ -43,7 +43,7 @@ export function PriceCardsContainer({
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
-	const minAmount = useContributionsSelector(getMinimumContributionAmount);
+	const minAmount = useContributionsSelector(getMinimumContributionAmount());
 	const {
 		amounts: frequencyAmounts,
 		defaultAmount,

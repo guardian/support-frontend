@@ -63,13 +63,15 @@ export function CheckoutNudgeContainer({
 	const min = useContributionsSelector(getMinimumContributionAmount('ANNUAL'));
 	const max = useContributionsSelector(getMaximumContributionAmount('ANNUAL'));
 
+	const otherAmount = otherAmounts[frequency].amount?.length
+		? otherAmounts[frequency].amount
+		: '0';
+
 	const annualAmount =
-		selectedAmount === 'other'
-			? otherAmounts[frequency].amount ?? '0'
-			: selectedAmount;
+		selectedAmount === 'other' ? otherAmount : selectedAmount;
 
 	const clampedAmount = Math.min(
-		Math.max(Number.parseInt(annualAmount), min),
+		Math.max(Number.parseInt(annualAmount ?? '0'), min),
 		max,
 	);
 
