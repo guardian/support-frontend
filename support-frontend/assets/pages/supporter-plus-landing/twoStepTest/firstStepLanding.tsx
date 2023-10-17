@@ -10,14 +10,19 @@ import {
 	Button,
 	buttonThemeReaderRevenueBrand,
 } from '@guardian/source-react-components';
+import { useEffect } from 'preact/hooks';
 import { useNavigate } from 'react-router';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import { BrandedIcons } from 'components/paymentMethodSelector/creditDebitIcons';
 import { PaypalIcon } from 'components/paymentMethodSelector/paypalIcon';
 import { useOtherAmountValidation } from 'helpers/customHooks/useFormValidation';
+import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
@@ -71,6 +76,7 @@ export function SupporterPlusInitialLandingPage({
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
+	const dispatch = useContributionsDispatch();
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -113,6 +119,10 @@ export function SupporterPlusInitialLandingPage({
 			? paymentMethodsMarginOneOff
 			: paymentMethodsMarginRecurring}
 	`;
+
+	useEffect(() => {
+		dispatch(resetValidation());
+	}, []);
 
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute}>
