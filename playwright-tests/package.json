@@ -1,0 +1,17 @@
+{
+	"name": "playwright-tests",
+	"version": "0.0.0",
+	"scripts": {
+		"pw-browserstack-test": "playwright test --config=playwright.browserstack.config.ts",
+		"pw-local-test": "playwright test --ui --config=playwright.local.config.ts",
+		"pw-prod-test": "playwright test --ui --config=playwright.prod.config.ts"
+	},
+	"dependencies": {
+		"@playwright/test": "1.36.0",
+		"browserstack-local": "^1.5.1"
+	},
+	"devDependencies": {
+		"dotenv": "^16.3.1",
+		"prettier": "^3.0.3"
+	}
+}
