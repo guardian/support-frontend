@@ -1,7 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { StripeAccount } from 'helpers/forms/stripe';
-import { validateForm } from '../../checkoutActions';
+import { resetValidation, validateForm } from '../../checkoutActions';
 import type { PaymentRequestError } from './state';
 import { initialPaymentRequestButtonState } from './state';
 
@@ -40,6 +40,11 @@ export const paymentRequestButtonSlice = createSlice({
 				state.REGULAR.completed = false;
 				delete state.REGULAR.paymentError;
 			}
+		});
+
+		builder.addCase(resetValidation, (state) => {
+			delete state.ONE_OFF.paymentError;
+			delete state.REGULAR.paymentError;
 		});
 	},
 });

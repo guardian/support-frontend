@@ -2,7 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { FullPaymentMethod } from 'helpers/forms/paymentMethods';
 import { setDeliveryCountry } from '../../address/actions';
-import { validateForm } from '../../checkoutActions';
+import { resetValidation, validateForm } from '../../checkoutActions';
 import { setProductType } from '../../product/actions';
 import { initialState } from './state';
 
@@ -30,6 +30,10 @@ export const paymentMethodSlice = createSlice({
 			if (state.name === 'None') {
 				state.errors = ['Please select a payment method'];
 			}
+		});
+
+		builder.addCase(resetValidation, (state) => {
+			state.errors = [];
 		});
 	},
 });
