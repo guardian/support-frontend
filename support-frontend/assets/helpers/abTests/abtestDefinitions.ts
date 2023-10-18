@@ -76,7 +76,14 @@ export const tests: Tests = {
 		seed: 0,
 	},
 	makeItAnnualNudge: {
-		variants: [{ id: 'control' }, { id: 'variant' }],
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
 		isActive: false,
 		audiences: {
 			UnitedStates: {
