@@ -1,0 +1,133 @@
+import './contributionTicker.scss';
+import {
+	tickerCount,
+	tickerGoal,
+	tickerLabel,
+	tickerProgressBar,
+	tickerProgressBarBackground,
+	tickerProgressBarFill,
+	tickerStatus,
+} from './tickerStyles';
+
+type TickerEndType = 'unlimited' | 'hardstop';
+
+type TickerCountType = 'money' | 'people';
+
+type TickerCopy = {
+	countLabel: string;
+	goalReachedPrimary: string;
+	goalReachedSecondary: string;
+};
+
+export type TickerProps = {
+	total: number;
+	goal: number;
+	end: number;
+	countType: TickerCountType;
+	endType: TickerEndType;
+	currencySymbol: string;
+	copy: TickerCopy;
+};
+
+export type TickerBodyProps = {
+	goalReached: boolean;
+	total: number;
+	countType: TickerCountType;
+	endType: TickerEndType;
+	currencySymbol: string;
+	copy: TickerCopy;
+};
+
+function percentageToTranslate(total: number, end: number) {
+	const percentage = (total / end) * 100 - 100;
+	return percentage > 0 ? 0 : percentage;
+}
+
+function TickerBody({
+	goalReached,
+	total,
+	countType,
+	endType,
+	currencySymbol,
+	copy,
+}: TickerBodyProps) {
+	if (!goalReached) {
+		return (
+			<div css={[tickerLabel, tickerStatus]}>
+				<div css={tickerCount}>
+					{countType === 'money' ? currencySymbol : ''}
+					{Math.floor(total).toLocaleString()}&nbsp;
+				</div>
+				<div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">
+					{copy.countLabel}
+				</div>
+			</div>
+		);
+	}
+
+	if (endType === 'unlimited') {
+		return (
+			<div css={[tickerLabel, tickerStatus]}>
+				<div css={tickerCount}>{copy.goalReachedPrimary}&nbsp;</div>
+				<div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">
+					{copy.goalReachedSecondary}
+				</div>
+			</div>
+		);
+	}
+
+	return (
+		<div css={[tickerLabel, tickerStatus]}>
+			<div css={tickerCount}>{copy.goalReachedPrimary}&nbsp;</div>
+		</div>
+	);
+}
+
+export function Ticker(props: TickerProps): JSX.Element {
+	const progressBarAnimation = `translate3d(${percentageToTranslate(
+		props.total,
+		props.end,
+	)}%, 0, 0)`;
+	const markerAnimation = `translate3d(${
+		(props.goal / props.end) * 100 - 100
+	}%, 0, 0)`;
+
+	const goalReached = props.total >= props.goal;
+
+	return (
+		<div>
+			<div className="contributions-landing-ticker__values">
+				<TickerBody {...props} goalReached={goalReached} />
+				<div css={[tickerLabel, tickerGoal]}>
+					<div css={tickerCount}>
+						{props.countType === 'money' ? props.currencySymbol : ''}
+						{Math.floor(props.goal).toLocaleString()}
+					</div>
+					<div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">
+						{props.endType === 'unlimited' && goalReached ? (
+							props.copy.countLabel
+						) : (
+							<>&nbsp;goal</>
+						)}
+					</div>
+				</div>
+			</div>
+			<div css={tickerProgressBar}>
+				<div css={tickerProgressBarBackground}>
+					<div
+						css={tickerProgressBarFill}
+						style={{
+							transform: progressBarAnimation,
+						}}
+					/>
+				</div>
+				<div
+					className="contributions-landing-ticker__marker"
+					style={{
+						transform: markerAnimation,
+					}}
+				/>
+			</div>
+		</div>
+	);
+}

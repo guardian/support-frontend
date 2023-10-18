@@ -1,0 +1,43 @@
+import { css } from '@emotion/react';
+import { palette, space } from '@guardian/source-foundations';
+
+export const tickerProgressBar = css`
+	position: relative;
+`;
+
+export const tickerProgressBarBackground = css`
+	width: calc(100%);
+	height: ${space[3]}px;
+	overflow: hidden;
+	background-color: #d9d9d9;
+	position: absolute;
+`;
+
+export const tickerProgressBarFill = css`
+	background-color: ${palette.neutral[0]};
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	transform: translateX(-100%);
+	transition: transform 3s cubic-bezier(0.25, 0.55, 0.2, 0.85);
+`;
+
+export const tickerCount = css`
+	font-weight: bold;
+`;
+
+export const tickerLabel = css`
+	display: flex;
+	flex-wrap: wrap;
+	flex-grow: 1;
+`;
+
+export const tickerGoal = css`
+	justify-content: flex-end;
+`;
+
+export const tickerStatus = css`
+	justify-content: flex-start;
+`;
