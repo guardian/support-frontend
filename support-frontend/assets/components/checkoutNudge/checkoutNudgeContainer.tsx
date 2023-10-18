@@ -81,11 +81,13 @@ export function CheckoutNudgeContainer({
 		max,
 	);
 
-	let title, subtitle;
+	let title, subtitle, paragraph;
 
 	if (dynamic) {
-		title = 'Make it annual';
+		title = 'Make it an annual gift';
 		subtitle = `change to ${currencyGlyph}${clampedAmount} per year`;
+		paragraph =
+			'Choose to support us annually, and you’ll make a bigger impact with your year-end gift. Help protect our open, independent journalism long term.';
 	} else {
 		const minAmount = getConfigMinAmount(countryGroupId, 'ANNUAL');
 		const weeklyMinAmount =
@@ -102,10 +104,9 @@ export function CheckoutNudgeContainer({
 		subtitle = `with ${
 			currencyGlyph + minAmount.toString()
 		} (${minWeeklyAmount} per week)`;
+		paragraph =
+			'Funding Guardian journalism every year is great value on a weekly basis. Make a bigger impact today, and protect our independence long term. Please consider annual support.';
 	}
-
-	const paragraph =
-		'Funding Guardian journalism every year is great value on a weekly basis. Make a bigger impact today, and protect our independence long term. Please consider annual support.';
 
 	function onNudgeClose() {
 		setDisplayNudge(false);
