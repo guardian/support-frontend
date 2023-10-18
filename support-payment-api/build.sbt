@@ -2,6 +2,19 @@ import LibraryVersions._
 
 name := "payment-api"
 
+/**
+  * We've added this as part of the upgrade from `amazon-pay-java-sdk` `3.6.2` => `3.7.1`
+  * In version `3.6.4`, stricter XML parsing was added, namely adding "External Entity Prevention"
+  * see: https://github.com/amzn/amazon-pay-sdk-java/compare/3.6.2...3.6.4#diff-d6aa52c278cef70f54019b3ccbbec94e6985cf71dbd86e732d66f9dae9b8ac24R126-R127
+  *
+  * This is not supported in the native `javax.xml.transform.TransformerFactory` so we explicitly set this to the
+  * Xalan implementation that does support this.
+  *
+  * There is a bug opened on the `aws-pay-java-sdk` library with no resolution
+  * see: https://github.com/amzn/amazon-pay-sdk-java/issues/38
+  */
+javaOptions += "-Djavax.xml.transform.TransformerFactory=com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl"
+
 version := "0.1"
 scalacOptions ++= Seq(
   "-Ywarn-unused:imports",
@@ -18,7 +31,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-ec2" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-cloudwatch" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
-  "com.amazon.pay" % "amazon-pay-java-sdk" % "3.6.2",
+  "com.amazon.pay" % "amazon-pay-java-sdk" % "3.7.1",
   "com.beachape" %% "enumeratum" % "1.7.3",
   "com.beachape" %% "enumeratum-circe" % "1.7.3",
   "com.dripower" %% "play-circe" % playCirceVersion,
