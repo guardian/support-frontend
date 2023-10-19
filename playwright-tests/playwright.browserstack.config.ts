@@ -16,15 +16,17 @@ export default defineConfig({
 				connectOptions: {
 					wsEndpoint: getCdpEndpoint(
 						{
-							browserName: 'chrome',
-							browserVersion: 'latest',
-							osName: 'Windows',
-							osVersion: '11',
+							browser: 'chrome',
+							browser_version: 'latest',
+							os: 'Windows',
+							os_version: '11',
+              name: 'testing the browserstack with new node',
 						},
-						'testing the browserstack with new node',
+
 					),
 				},
 			},
 		},
 	],
 });
+

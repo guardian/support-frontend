@@ -7,6 +7,7 @@ const whiteColour = '\x1b[0m';
 module.exports = async () => {
 	console.log('Starting BrowserStackLocal ...');
 	// Starts the Local instance with the required arguments
+  let shortCircuitCount = 0;
 	let localResponseReceived = false;
 	bsLocal.start(BS_LOCAL_ARGS, (err) => {
 		if (err) {
@@ -19,6 +20,12 @@ module.exports = async () => {
 		localResponseReceived = true;
 	});
 	while (!localResponseReceived) {
-		await sleep(1000);
+    shortCircuitCount ++;
+    if (shortCircuitCount < 10) {
+      await sleep(1000);
+    } else {
+      console.error('Tried 10 times to start BrowserStackLocal and failed');
+      break;
+    }
 	}
 };
