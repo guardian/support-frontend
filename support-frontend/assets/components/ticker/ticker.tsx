@@ -3,21 +3,14 @@ import {
 	tickerCount,
 	tickerGoal,
 	tickerLabel,
+	tickerLabelContainer,
+	tickerMarker,
 	tickerProgressBar,
 	tickerProgressBarBackground,
 	tickerProgressBarFill,
 	tickerStatus,
 } from './tickerStyles';
-
-type TickerEndType = 'unlimited' | 'hardstop';
-
-type TickerCountType = 'money' | 'people';
-
-type TickerCopy = {
-	countLabel: string;
-	goalReachedPrimary: string;
-	goalReachedSecondary: string;
-};
+import type { TickerCopy, TickerCountType, TickerEndType } from './types';
 
 export type TickerProps = {
 	total: number;
@@ -29,7 +22,7 @@ export type TickerProps = {
 	copy: TickerCopy;
 };
 
-export type TickerBodyProps = {
+export type TickerMainLabelProps = {
 	goalReached: boolean;
 	total: number;
 	countType: TickerCountType;
@@ -43,14 +36,14 @@ function percentageToTranslate(total: number, end: number) {
 	return percentage > 0 ? 0 : percentage;
 }
 
-function TickerBody({
+function TickerMainLabel({
 	goalReached,
 	total,
 	countType,
 	endType,
 	currencySymbol,
 	copy,
-}: TickerBodyProps) {
+}: TickerMainLabelProps) {
 	if (!goalReached) {
 		return (
 			<div css={[tickerLabel, tickerStatus]}>
@@ -58,9 +51,7 @@ function TickerBody({
 					{countType === 'money' ? currencySymbol : ''}
 					{Math.floor(total).toLocaleString()}&nbsp;
 				</div>
-				<div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">
-					{copy.countLabel}
-				</div>
+				<div>{copy.countLabel}</div>
 			</div>
 		);
 	}
@@ -69,9 +60,7 @@ function TickerBody({
 		return (
 			<div css={[tickerLabel, tickerStatus]}>
 				<div css={tickerCount}>{copy.goalReachedPrimary}&nbsp;</div>
-				<div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">
-					{copy.goalReachedSecondary}
-				</div>
+				<div>{copy.goalReachedSecondary}</div>
 			</div>
 		);
 	}
@@ -84,26 +73,26 @@ function TickerBody({
 }
 
 export function Ticker(props: TickerProps): JSX.Element {
-	const progressBarAnimation = `translate3d(${percentageToTranslate(
+	const progressBarTransform = `translate3d(${percentageToTranslate(
 		props.total,
 		props.end,
 	)}%, 0, 0)`;
-	const markerAnimation = `translate3d(${
+	const markerTransform = `translate3d(${
 		(props.goal / props.end) * 100 - 100
-	}%, 0, 0)`;
+	}%, -2px, 0)`;
 
 	const goalReached = props.total >= props.goal;
 
 	return (
 		<div>
-			<div className="contributions-landing-ticker__values">
-				<TickerBody {...props} goalReached={goalReached} />
+			<div css={tickerLabelContainer}>
+				<TickerMainLabel {...props} goalReached={goalReached} />
 				<div css={[tickerLabel, tickerGoal]}>
 					<div css={tickerCount}>
 						{props.countType === 'money' ? props.currencySymbol : ''}
 						{Math.floor(props.goal).toLocaleString()}
 					</div>
-					<div className="contributions-landing-ticker__count-label contributions-landing-ticker__label">
+					<div>
 						{props.endType === 'unlimited' && goalReached ? (
 							props.copy.countLabel
 						) : (
@@ -117,14 +106,14 @@ export function Ticker(props: TickerProps): JSX.Element {
 					<div
 						css={tickerProgressBarFill}
 						style={{
-							transform: progressBarAnimation,
+							transform: progressBarTransform,
 						}}
 					/>
 				</div>
 				<div
-					className="contributions-landing-ticker__marker"
+					css={tickerMarker}
 					style={{
-						transform: markerAnimation,
+						transform: markerTransform,
 					}}
 				/>
 			</div>

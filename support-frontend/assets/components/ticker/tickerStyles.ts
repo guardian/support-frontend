@@ -28,6 +28,12 @@ export const tickerCount = css`
 	font-weight: bold;
 `;
 
+export const tickerLabelContainer = css`
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: ${space[1]}px;
+`;
+
 export const tickerLabel = css`
 	display: flex;
 	flex-wrap: wrap;
@@ -40,4 +46,11 @@ export const tickerGoal = css`
 
 export const tickerStatus = css`
 	justify-content: flex-start;
+`;
+
+export const tickerMarker = css`
+	border-right: 2px solid ${palette.neutral[7]};
+	content: ' ';
+	display: block;
+	height: ${space[4]}px;
 `;

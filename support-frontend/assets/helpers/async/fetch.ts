@@ -3,12 +3,12 @@ import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 type Credentials = 'omit' | 'same-origin' | 'include';
 
 /** Sends a request to an API and converts the response into a JSON object */
-async function fetchJson(
+async function fetchJson<T extends Record<string, unknown>>(
 	endpoint: RequestInfo,
 	settings: RequestInit,
-): Promise<Record<string, unknown>> {
+): Promise<T> {
 	const resp = await fetch(endpoint, settings);
-	return (await resp.json()) as Record<string, unknown>;
+	return (await resp.json()) as T;
 }
 
 type GetRequestHeaders = {
