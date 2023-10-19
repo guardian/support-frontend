@@ -94,19 +94,24 @@ export function ContentDeliveryFaqBlock({
 								trackingId={accordionTrackingId}
 								label="Delivery details"
 							>
-								<p>
-									Your newspaper will arrive before 8am from Monday to Saturday
-									and before 8.30am on Sunday.
-								</p>
+								{isNationalDeliveryAbTestVariant ? (
+									<p>Your newspaper will arrive before 9am.</p>
+								) : (
+									<p>
+										Your newspaper will arrive before 8am from Monday to
+										Saturday and before 8.30am on Sunday.
+									</p>
+								)}
 								<p>
 									We can’t deliver to individual flats, or apartments within
 									blocks because we need access to your post box to deliver your
 									newspaper.
 								</p>
 								<p>
-									You can pause your subscription for up to 36 days a year. So
-									if you’re going away anywhere, you won’t have to pay for the
-									newspapers that you miss.
+									You can pause your subscription for up to{' '}
+									{isNationalDeliveryAbTestVariant ? '5 weeks' : '36 days'} a
+									year. So if you’re going away anywhere, you won’t have to pay
+									for the newspapers that you miss.
 								</p>
 							</TabAccordionRow>,
 						]}
