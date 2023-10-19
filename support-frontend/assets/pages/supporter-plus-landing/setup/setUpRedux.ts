@@ -134,19 +134,6 @@ function selectInitialAmounts(
 	}
 }
 
-// Override the settings from the server if contributionTypes are defined in url params or campaign settings
-// function getContributionTypes(state: ContributionsState): ContributionTypes {
-// 	// const campaignSettings = getCampaignSettings();
-//   //
-// 	// if (campaignSettings?.contributionTypes) {
-// 	// 	return campaignSettings.contributionTypes;
-// 	// }
-//   //
-// 	// return getValidContributionTypesFromUrlOrElse(
-// 	// 	state.common.settings.contributionTypes,
-// 	// );
-// }
-
 function selectInitialContributionTypeAndPaymentMethod(
 	state: ContributionsState,
 	dispatch: ContributionsDispatch,
@@ -171,9 +158,6 @@ function selectInitialContributionTypeAndPaymentMethod(
 export function setUpRedux(store: ContributionsStore): void {
 	const dispatch = store.dispatch;
 	const state = store.getState();
-	// TODO - move these settings out of the redux store, as they only change once, upon initialisation
-	// const contributionTypes = getContributionTypes(state);
-	// dispatch(setContributionTypes(contributionTypes));
 
 	setUpUserState(dispatch);
 	void dispatch(getRecurringContributorStatus());
@@ -187,7 +171,6 @@ export function setUpRedux(store: ContributionsStore): void {
 	const contributionType = selectInitialContributionTypeAndPaymentMethod(
 		state,
 		dispatch,
-		// contributionTypes,
 	);
 	selectInitialAmounts(state, dispatch, contributionType);
 
