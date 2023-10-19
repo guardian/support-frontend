@@ -44,7 +44,6 @@ const isInTwoStepTest =
 	abParticipations.twoStepCheckoutWithNudgeBelow &&
 	abParticipations.twoStepCheckoutWithNudgeBelow !== 'control';
 
-console.log(abParticipations);
 const showCheckoutTopUpToggle =
 	abParticipations.twoStepCheckoutWithNudgeBelow === 'variant_b';
 
