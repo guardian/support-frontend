@@ -10,14 +10,7 @@ import { SubsCardFaqBlock } from './content/subsCardTab';
 type TabOptions = {
 	name: string;
 	href: string;
-	content: (
-		args: any,
-	) => React.ReactElement<
-		React.ComponentProps<
-			(props: any) => React.ReactElement<React.ComponentProps<'div'>, 'div'>
-		>,
-		(props: any) => React.ReactElement<React.ComponentProps<'div'>, 'div'>
-	>;
+	content: typeof SubsCardFaqBlock | typeof ContentDeliveryFaqBlock;
 };
 export const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 	Collection: {
