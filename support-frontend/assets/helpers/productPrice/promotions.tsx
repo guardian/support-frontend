@@ -10,6 +10,7 @@ import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
+// eslint-disable-next-line import/no-cycle -- these are quite gnarly to unpick, so we'll come back one the build is working
 import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';

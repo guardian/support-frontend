@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import type { IsoCountry } from 'helpers/internationalisation/country';
+// eslint-disable-next-line import/no-cycle -- these are quite gnarly to unpick, so we'll come back one the build is working
 import { fromString as isoCountryFromString } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import * as cookie from 'helpers/storage/cookie';

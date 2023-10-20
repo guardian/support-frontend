@@ -55,6 +55,7 @@ import type {
 	SubscriptionsDispatch,
 	SubscriptionsState,
 } from 'helpers/redux/subscriptionsStore';
+// eslint-disable-next-line import/no-cycle -- these are quite gnarly to unpick, so we'll come back one the build is working
 import { onPaymentAuthorised } from 'helpers/subscriptionsForms/submit';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import { trackThankYouPageLoaded } from 'helpers/tracking/behaviour';
