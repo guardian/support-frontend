@@ -67,7 +67,7 @@ function getInitialContributionType(
 	const contributionType =
 		getContributionTypeFromUrl() ?? getContributionTypeFromSession();
 
-	// // make sure we don't select a contribution type which isn't on the page
+	// make sure we don't select a contribution type which isn't on the page
 	if (contributionType && displayContributionType.includes(contributionType)) {
 		return contributionType;
 	}
