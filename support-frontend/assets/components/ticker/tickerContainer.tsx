@@ -24,15 +24,8 @@ function getInitialTickerValues(
 	});
 }
 
-function getTickerEndAmount(
-	endType: TickerEndType,
-	tickerConfig: TickerConfigData,
-) {
-	const goalReached = tickerConfig.total > tickerConfig.goal;
-	if (endType === 'unlimited' && goalReached) {
-		return tickerConfig.total + tickerConfig.total * 0.15;
-	}
-	return tickerConfig.goal;
+function getDefaultTickerEnd(_total: number, goal: number) {
+	return goal + goal * 0.15;
 }
 
 type TickerContainerProps = {
@@ -40,6 +33,7 @@ type TickerContainerProps = {
 	endType: TickerEndType;
 	currencySymbol: string;
 	copy: TickerCopy;
+	calculateEnd?: (total: number, goal: number) => number;
 	render: (props: TickerProps) => JSX.Element;
 };
 
@@ -49,13 +43,14 @@ export function TickerContainer({
 	endType,
 	currencySymbol,
 	copy,
+	calculateEnd = getDefaultTickerEnd,
 }: TickerContainerProps): JSX.Element {
 	const [tickerConfig, setTickerConfig] = useState<TickerConfigData>({
 		total: 0,
 		goal: 0,
 	});
 
-	const end = getTickerEndAmount(endType, tickerConfig);
+	const end = calculateEnd(tickerConfig.total, tickerConfig.goal);
 
 	useEffect(() => {
 		void getInitialTickerValues(countType).then(setTickerConfig);
