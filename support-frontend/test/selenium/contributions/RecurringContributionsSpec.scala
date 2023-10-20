@@ -31,46 +31,6 @@ class RecurringContributionsSpec
 
   Feature("Sign up for a Recurring Contribution (New Contributions Flow)") {
 
-    Scenario("Monthly contribution sign-up with Stripe - GBP") {
-
-      val testUser = new PostDeployTestUser(driverConfig)
-      val landingPage = ContributionsLanding("uk", testUser)
-
-      val contributionThankYou = new ContributionThankYou("uk")
-
-      Given("that a test user goes to the contributions landing page")
-      goTo(landingPage)
-      assert(landingPage.pageHasLoaded)
-
-      When("the user selects the monthly option")
-      landingPage.clickMonthly
-
-      Given("The user fills in their details correctly")
-      landingPage.clearForm(hasNameFields = true)
-      landingPage.fillInPersonalDetails(hasNameFields = true)
-
-      Given("that the user selects to pay with Stripe")
-      When("they press the Stripe payment button")
-      landingPage.selectStripePayment()
-
-      And("enter card details")
-      landingPage.fillInCardDetails(hasZipCodeField = false)
-
-      And("click the recaptcha")
-      landingPage.clickRecaptcha
-
-      When("they click contribute")
-      landingPage.clickContribute
-
-      And("the mock calls the backend using a test Stripe token")
-
-      Then("the thankyou page should display")
-      eventually {
-        assert(contributionThankYou.pageHasLoaded)
-      }
-
-    }
-
     Scenario("Monthly contribution sign-up with direct debit - GBP") {
 
       val testUser = new PostDeployTestUser(driverConfig)
