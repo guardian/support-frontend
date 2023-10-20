@@ -24,37 +24,50 @@ function getInitialTickerValues(
 	});
 }
 
+function getTickerEndAmount(
+	endType: TickerEndType,
+	tickerConfig: TickerConfigData,
+) {
+	const goalReached = tickerConfig.total > tickerConfig.goal;
+	if (endType === 'unlimited' && goalReached) {
+		return tickerConfig.total + tickerConfig.total * 0.15;
+	}
+	return tickerConfig.goal;
+}
+
 type TickerContainerProps = {
-	tickerCountType: TickerCountType;
-	tickerEndType: TickerEndType;
+	countType: TickerCountType;
+	endType: TickerEndType;
 	currencySymbol: string;
 	copy: TickerCopy;
 	render: (props: TickerProps) => JSX.Element;
 };
 
-export function TickerContainer(props: TickerContainerProps): JSX.Element {
+export function TickerContainer({
+	render,
+	countType,
+	endType,
+	currencySymbol,
+	copy,
+}: TickerContainerProps): JSX.Element {
 	const [tickerConfig, setTickerConfig] = useState<TickerConfigData>({
 		total: 0,
 		goal: 0,
 	});
 
-	const end =
-		props.tickerEndType === 'unlimited' &&
-		tickerConfig.total > tickerConfig.goal
-			? tickerConfig.total + tickerConfig.total * 0.15
-			: tickerConfig.goal;
+	const end = getTickerEndAmount(endType, tickerConfig);
 
 	useEffect(() => {
-		void getInitialTickerValues(props.tickerCountType).then(setTickerConfig);
+		void getInitialTickerValues(countType).then(setTickerConfig);
 	}, []);
 
-	return props.render({
+	return render({
 		total: tickerConfig.total,
 		goal: tickerConfig.goal,
-		countType: props.tickerCountType,
-		endType: props.tickerEndType,
-		currencySymbol: props.currencySymbol,
-		copy: props.copy,
+		countType,
+		endType,
+		currencySymbol,
+		copy,
 		end,
 	});
 }
