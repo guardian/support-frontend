@@ -5,7 +5,6 @@ import com.gu.i18n.Country.UK
 import com.gu.i18n.Currency.GBP
 import com.gu.salesforce.Fixtures.{emailAddress, idId}
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
-import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
 import com.gu.support.catalog.{Domestic, Everyday, HomeDelivery, NationalDelivery, RestOfWorld}
 import com.gu.support.paperround.AgentId
 import com.gu.support.promotions.PromoCode
@@ -23,6 +22,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   SupporterPlusState,
 }
 import com.gu.support.zuora.api.StripeGatewayDefault
+import com.gu.zuora.Fixtures.deliveryAgentId
 import io.circe.parser
 import io.circe.syntax._
 import org.joda.time.{DateTimeZone, LocalDate}
@@ -139,6 +139,33 @@ object JsonFixtures {
       deliveryInstructions = Some("Leave with neighbour"),
     )
 
+  val userJsonWithDeliveryAddressOutsideLondon =
+    User(
+      idId,
+      emailAddress,
+      None,
+      "test-user",
+      "from support-frontend integration tests",
+      billingAddress = Address(
+        Some("4 Hackins Hey"),
+        None,
+        Some("Liverpool"),
+        None,
+        Some("L2 2AW"),
+        Country.UK,
+      ),
+      deliveryAddress = Some(
+        Address(
+          Some("4 Hackins Hey"),
+          None,
+          Some("Liverpool"),
+          None,
+          Some("L2 2AW"),
+          Country.UK,
+        ),
+      ),
+      deliveryInstructions = Some("Leave with neighbour - support-frontend"),
+    )
   def requestIdJson: String = s""""requestId": "${UUID.randomUUID()}\""""
   val validBaid = "B-23637766K5365543J"
   val payPalEmail = "test@paypal.com"
@@ -390,7 +417,7 @@ object JsonFixtures {
           {
             $requestIdJson,
             ${userJson()},
-            "product": ${weeklyJson},
+            "product": $weeklyJson,
             "analyticsInfo": {
               "paymentProvider": "PayPal",
               "isGiftPurchase": true
@@ -458,7 +485,7 @@ object JsonFixtures {
       UUID.randomUUID(),
       user(),
       Contribution(amount, GBP, billingPeriod),
-      AnalyticsInfo(false, Stripe),
+      AnalyticsInfo(isGiftPurchase = false, Stripe),
       None,
       None,
       None,
@@ -471,7 +498,7 @@ object JsonFixtures {
       currency: Currency,
       billingPeriod: BillingPeriod,
       country: Country = UK,
-  ) =
+  ): String =
     CreateZuoraSubscriptionState(
       SupporterPlusState(
         SupporterPlus(amount, currency, billingPeriod),
@@ -481,7 +508,7 @@ object JsonFixtures {
       UUID.randomUUID(),
       user("9999998", country),
       SupporterPlus(amount, currency, Monthly),
-      AnalyticsInfo(false, Stripe),
+      AnalyticsInfo(isGiftPurchase = false, Stripe),
       None,
       None,
       None,
@@ -501,7 +528,7 @@ object JsonFixtures {
       UUID.randomUUID(),
       user(),
       DigitalPack(GBP, Annual),
-      AnalyticsInfo(false, Stripe),
+      AnalyticsInfo(isGiftPurchase = false, Stripe),
       None,
       None,
       None,
@@ -528,7 +555,7 @@ object JsonFixtures {
       requestId,
       user(),
       DigitalPack(GBP, Annual),
-      AnalyticsInfo(false, Stripe),
+      AnalyticsInfo(isGiftPurchase = false, Stripe),
       None,
       None,
       None,
@@ -555,7 +582,7 @@ object JsonFixtures {
       UUID.randomUUID(),
       user(),
       DigitalPack(GBP, Annual),
-      AnalyticsInfo(false, Stripe),
+      AnalyticsInfo(isGiftPurchase = false, Stripe),
       None,
       None,
       None,
@@ -576,7 +603,7 @@ object JsonFixtures {
       UUID.randomUUID(),
       userJsonWithDeliveryAddress,
       Paper(GBP, Monthly, HomeDelivery, Everyday, None),
-      AnalyticsInfo(false, Stripe),
+      AnalyticsInfo(isGiftPurchase = false, Stripe),
       None,
       None,
       None,
@@ -585,10 +612,10 @@ object JsonFixtures {
     ).asJson.spaces2
 
   val createEverydayNationalDeliveryPaperSubscriptionJson = {
-    val paper = Paper(GBP, Monthly, NationalDelivery, Everyday, Some(AgentId(-43)))
+    val paper = Paper(GBP, Monthly, NationalDelivery, Everyday, Some(AgentId(deliveryAgentId)))
     CreateZuoraSubscriptionState(
       PaperState(
-        userJsonWithDeliveryAddress,
+        userJsonWithDeliveryAddressOutsideLondon,
         paper,
         stripePaymentMethodObj,
         LocalDate.now(DateTimeZone.UTC),
@@ -596,9 +623,9 @@ object JsonFixtures {
         salesforceContact,
       ),
       UUID.randomUUID(),
-      userJsonWithDeliveryAddress,
+      userJsonWithDeliveryAddressOutsideLondon,
       paper,
-      AnalyticsInfo(false, Stripe),
+      AnalyticsInfo(isGiftPurchase = false, Stripe),
       None,
       None,
       None,
@@ -624,7 +651,7 @@ object JsonFixtures {
       UUID.randomUUID(),
       userJsonWithDeliveryAddress,
       GuardianWeekly(GBP, billingPeriod, RestOfWorld),
-      AnalyticsInfo(false, Stripe),
+      AnalyticsInfo(isGiftPurchase = false, Stripe),
       Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
       maybePromoCode,
       None,
@@ -653,7 +680,7 @@ object JsonFixtures {
       UUID.randomUUID(),
       userJsonWithDeliveryAddress,
       GuardianWeekly(GBP, Quarterly, RestOfWorld),
-      AnalyticsInfo(false, Stripe),
+      AnalyticsInfo(isGiftPurchase = false, Stripe),
       Some(LocalDate.now(DateTimeZone.UTC).plusDays(10)),
       None,
       None,
@@ -951,7 +978,7 @@ object JsonFixtures {
       UUID.randomUUID(),
       user(),
       DigitalPack(GBP, Annual),
-      AnalyticsInfo(false, Stripe),
+      AnalyticsInfo(isGiftPurchase = false, Stripe),
       None,
       Some("DJRHYMDS8"),
       None,
