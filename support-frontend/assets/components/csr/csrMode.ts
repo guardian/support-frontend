@@ -87,7 +87,7 @@ const useCsrCustomerData = (
 ): void => {
 	useEffect(() => {
 		function checkForParentMessage(event: MessageEvent) {
-			if (isSalesforceDomain(event.origin)) {
+			if (isSalesforceDomain(event.origin) && typeof event.data === 'string') {
 				callback(parseCustomerData(event.data));
 			}
 		}
