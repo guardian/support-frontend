@@ -268,10 +268,7 @@ function getReferrerAcquisitionDataFromSessionStorage():
 }
 
 // Reads the acquisition data from the &acquistionData param containing a serialised JSON string.
-function getAcquisitionDataFromAcquisitionDataParam():
-	| Record<string, unknown>
-	| null
-	| undefined {
+function getAcquisitionDataFromAcquisitionDataParam() {
 	if (getQueryParameter(ACQUISITIONS_PARAM)) {
 		return deserialiseJsonObject(getQueryParameter(ACQUISITIONS_PARAM));
 	}

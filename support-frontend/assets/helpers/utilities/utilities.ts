@@ -28,14 +28,22 @@ function hiddenIf(shouldHide: boolean, className: string): string {
 	return shouldHide ? classNameWithModifiers(className, ['hidden']) : className;
 }
 
+function isObject(obj: unknown): obj is Record<string, unknown> {
+	if (obj instanceof Object && !(obj instanceof Array)) {
+		return true;
+	}
+
+	return false;
+}
+
 // Deserialises a JSON object from a string.
 function deserialiseJsonObject(
 	serialised: string,
-): Record<string, any> | null | undefined {
+): Record<string, unknown> | null | undefined {
 	try {
 		const deserialised: unknown = JSON.parse(serialised);
 
-		if (deserialised instanceof Object && !(deserialised instanceof Array)) {
+		if (isObject(deserialised)) {
 			return deserialised;
 		}
 
