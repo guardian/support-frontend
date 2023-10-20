@@ -4,8 +4,9 @@ import com.gu.config.Configuration
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
+import com.gu.services.ServiceProvider
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
-import com.gu.support.catalog.{CatalogService, Everyday, S3CatalogProvider, NationalDelivery}
+import com.gu.support.catalog.{CatalogService, Everyday, NationalDelivery, S3CatalogProvider}
 import com.gu.support.config.{Stages, TouchPointEnvironments}
 import com.gu.support.promotions.{DefaultPromotions, PromotionService}
 import com.gu.support.redemption.CodeAlreadyUsed
@@ -100,7 +101,9 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
       })
   }
 
-  it should "create an everyday national-delivery paper subscription" in {
+  // ignored while we test with PaperRound to avoid possible data quality issues
+  // it can be added back in when the initial testing period is over
+  ignore should "create an everyday national-delivery paper subscription" in {
     createZuoraHelper
       .createSubscription(createEverydayNationalDeliveryPaperSubscriptionJson)
       .map(_ should matchPattern {
@@ -210,7 +213,7 @@ class CreateZuoraSubscriptionHelper(implicit executionContext: ExecutionContext)
     mockZuora
   }
 
-  def mockServiceProvider(giftCodeGenerator: GiftCodeGeneratorService) = mockServices[Any](
+  def mockServiceProvider(giftCodeGenerator: GiftCodeGeneratorService): ServiceProvider = mockServices[Any](
     (s => s.zuoraService, mockZuoraService),
     (s => s.zuoraGiftService, realZuoraGiftService),
     (s => s.promotionService, realPromotionService),

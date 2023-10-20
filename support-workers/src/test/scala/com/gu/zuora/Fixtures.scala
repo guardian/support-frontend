@@ -24,6 +24,7 @@ object Fixtures {
   val secondTokenId = "cus_AaynKIp19IIGDz"
   val cardNumber = "4242"
   val payPalBaid = "B-23637766K5365543J"
+  val deliveryAgentId = 2532
 
   val date = new LocalDate(2017, 5, 4)
 
@@ -44,7 +45,7 @@ object Fixtures {
   val contactDetails = ContactDetails("Test-FirstName", "Test-LastName", Some("test@thegulocal.com"), Country.UK)
   val differentContactDetails = ContactDetails(
     "Test-FirstName",
-    "Test-LastName",
+    "from support-frontend integration tests",
     Some("test@thegulocal.com"),
     Country.UK,
     Some("123 easy street"),
@@ -52,7 +53,19 @@ object Fixtures {
     Some("london"),
     Some("n1 9gu"),
     None,
-    Some("Leave with neighbour"),
+    Some("Leave with neighbour - support-frontend"),
+  )
+  val differentContactDetailsOutsideLondon = ContactDetails(
+    "Test-FirstName",
+    "from support-frontend integration tests",
+    Some("test@thegulocal.com"),
+    Country.UK,
+    Some("4 Hackins Hey"),
+    None,
+    Some("Liverpool"),
+    Some("L2 2AW"),
+    None,
+    Some("Leave with neighbour - support-frontend"),
   )
   val creditCardPaymentMethod = CreditCardReferenceTransaction(
     tokenId,
@@ -113,6 +126,7 @@ object Fixtures {
     ),
     Subscription(date, date, date, "id123"),
   )
+
   val everydayNationalDeliveryPaperSubscriptionData = SubscriptionData(
     List(
       RatePlanData(
@@ -121,7 +135,7 @@ object Fixtures {
         Nil,
       ),
     ),
-    Subscription(date, date, date, "id123", deliveryAgent = Some(AgentId(1821))),
+    Subscription(date, date, date, "id123", deliveryAgent = Some(AgentId(deliveryAgentId))),
   )
 
   def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
@@ -172,7 +186,7 @@ object Fixtures {
         SubscribeItem(
           account(paymentGateway = DirectDebitGateway),
           contactDetails,
-          Some(differentContactDetails),
+          Some(differentContactDetailsOutsideLondon),
           Some(directDebitPaymentMethod),
           everydayNationalDeliveryPaperSubscriptionData,
           SubscribeOptions(),
