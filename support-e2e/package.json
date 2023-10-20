@@ -1,5 +1,5 @@
 {
-	"name": "playwright-tests",
+	"name": "support-e2e",
 	"version": "0.0.0",
 	"scripts": {
 		"pw-browserstack-test": "playwright test --config=playwright.browserstack.config.ts",

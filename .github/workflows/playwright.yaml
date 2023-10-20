@@ -29,11 +29,11 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-        working-directory: ./playwright-tests
+        working-directory: ./support-e2e
 
       - name: Run Playwright
         run: yarn pw-browserstack-test
-        working-directory: ./playwright-tests
+        working-directory: ./support-e2e
 
       - name: Notify on Failure
         if: ${{ failure() }}

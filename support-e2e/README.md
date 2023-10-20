@@ -21,7 +21,7 @@ Running the Playwright tests with Browserstack requires the following environmen
 
 When the tests are run from the github action these are made available via github secrets. When running the tests locally on your machine you can either set these environment variables globally however you like, or add them to a .env file in the following location:
 
-`support-frontend/playwright-tests/.env`
+`support-frontend/support-e2e/.env`
 
 
 > [!Note]
