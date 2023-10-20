@@ -102,6 +102,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   }
 
   // ignored while we test with PaperRound to avoid possible data quality issues
+  // it can be added back in when the initial testing period is over
   ignore should "create an everyday national-delivery paper subscription" in {
     createZuoraHelper
       .createSubscription(createEverydayNationalDeliveryPaperSubscriptionJson)
