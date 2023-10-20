@@ -1,5 +1,6 @@
 import type { ContributionType } from 'helpers/contributions';
 import { contributionTypes } from 'helpers/contributions';
+import { getValidContributionTypesFromUrlOrElse } from 'helpers/forms/checkouts';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
 	DigitalPack,
@@ -7,7 +8,6 @@ import {
 	Paper,
 	PaperAndDigital,
 } from 'helpers/productPrice/subscriptions';
-import { getDefaultContributionType } from 'helpers/redux/commonState/selectors';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { GuardianProduct } from '../state';
@@ -26,6 +26,21 @@ export function getContributionType(
 		return productType;
 	}
 	return getDefaultContributionType(state);
+}
+
+function getDefaultContributionType(
+	state: ContributionsState,
+): ContributionType {
+	const { countryGroupId } = state.common.internationalisation;
+	const contributionTypes = getValidContributionTypesFromUrlOrElse(
+		state.common.settings.contributionTypes,
+	);
+	const contribTypesForLocale = contributionTypes[countryGroupId];
+	const defaultContributionType =
+		contribTypesForLocale.find((contribType) => contribType.isDefault) ??
+		contribTypesForLocale[0];
+
+	return defaultContributionType.contributionType;
 }
 
 function isSubscription(
