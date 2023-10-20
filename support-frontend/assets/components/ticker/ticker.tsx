@@ -2,6 +2,7 @@ import './contributionTicker.scss';
 import {
 	tickerCount,
 	tickerGoal,
+	tickerGoalPosition,
 	tickerLabel,
 	tickerLabelContainer,
 	tickerMarker,
@@ -31,9 +32,13 @@ export type TickerMainLabelProps = {
 	copy: TickerCopy;
 };
 
-function percentageToTranslate(total: number, end: number) {
+function progressBarTranslation(total: number, end: number) {
 	const percentage = (total / end) * 100 - 100;
 	return percentage > 0 ? 0 : percentage;
+}
+
+function markerTranslation(goal: number, end: number) {
+	return (goal / end) * 100 - 100;
 }
 
 function TickerMainLabel({
@@ -73,13 +78,14 @@ function TickerMainLabel({
 }
 
 export function Ticker(props: TickerProps): JSX.Element {
-	const progressBarTransform = `translate3d(${percentageToTranslate(
+	const markerPosition = markerTranslation(props.goal, props.end);
+
+	const progressBarTransform = `translate3d(${progressBarTranslation(
 		props.total,
 		props.end,
 	)}%, 0, 0)`;
-	const markerTransform = `translate3d(${
-		(props.goal / props.end) * 100 - 100
-	}%, -2px, 0)`;
+	const markerTransform = `translate3d(${markerPosition}%, -2px, 0)`;
+	const markerLabelTransform = `translate3d(${markerPosition}%, 0, 0)`;
 
 	const goalReached = props.total >= props.goal;
 
@@ -87,17 +93,24 @@ export function Ticker(props: TickerProps): JSX.Element {
 		<div>
 			<div css={tickerLabelContainer}>
 				<TickerMainLabel {...props} goalReached={goalReached} />
-				<div css={[tickerLabel, tickerGoal]}>
-					<div css={tickerCount}>
-						{props.countType === 'money' ? props.currencySymbol : ''}
-						{Math.floor(props.goal).toLocaleString()}
-					</div>
-					<div>
-						{props.endType === 'unlimited' && goalReached ? (
-							props.copy.countLabel
-						) : (
-							<>&nbsp;goal</>
-						)}
+				<div
+					css={tickerGoalPosition}
+					style={{
+						transform: markerLabelTransform,
+					}}
+				>
+					<div css={[tickerLabel, tickerGoal]}>
+						<div css={tickerCount}>
+							{props.countType === 'money' ? props.currencySymbol : ''}
+							{Math.floor(props.goal).toLocaleString()}
+						</div>
+						<div>
+							{props.endType === 'unlimited' && goalReached ? (
+								props.copy.countLabel
+							) : (
+								<>&nbsp;goal</>
+							)}
+						</div>
 					</div>
 				</div>
 			</div>

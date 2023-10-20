@@ -57,7 +57,7 @@ export const MoneyTicker = Template.bind({});
 MoneyTicker.args = {
 	total: 50000,
 	goal: 200000,
-	end: 250000,
+	end: 230000,
 	countType: 'money',
 	endType: 'hardstop',
 	currencySymbol: '$',
