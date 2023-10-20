@@ -32,7 +32,7 @@ declare global {
 			reject: (error: Error) => void,
 		) => void;
 		// This function is called when the user finishes with PayPal interface (approves payment).
-		onAuthorize: (data: Record<string, unknown>) => void;
+		onAuthorize: (data: Record<string, unknown>) => void | Promise<void>;
 		onError?: () => void;
 	};
 
