@@ -1,7 +1,11 @@
 import { useState } from 'preact/hooks';
 import type { ContributionType } from 'helpers/contributions';
 import { getConfigMinAmount } from 'helpers/contributions';
-import { detect, glyph } from 'helpers/internationalisation/currency';
+import {
+	currencies,
+	detect,
+	glyph,
+} from 'helpers/internationalisation/currency';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import {
 	getContributionType,
@@ -44,7 +48,8 @@ export function CheckoutNudgeContainer({
 
 	const [displayNudge, setDisplayNudge] = useState(true);
 
-	const currencyGlyph = glyph(detect(countryGroupId));
+	const currency = detect(countryGroupId);
+	const currencyGlyph = glyph(currency);
 
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
@@ -65,11 +70,9 @@ export function CheckoutNudgeContainer({
 
 	const otherAmount =
 		otherAmounts[frequency].amount?.length &&
-		// Regex pattern matches valid currency value;
-		// 1234 or 1234.56
-		/^\d*(\.?\d{2})?$/g.test(
-			`${parseInt(otherAmounts[frequency].amount ?? '')}`,
-		)
+		// Regex pattern matches valid 'other amount' input;
+		// 1234 or 1234.5 or 1234.56
+		/^\d*(\.?\d{1,2})?$/g.test(otherAmounts[frequency].amount ?? '')
 			? otherAmounts[frequency].amount
 			: '0';
 
@@ -77,15 +80,21 @@ export function CheckoutNudgeContainer({
 		selectedAmount === 'other' ? otherAmount : selectedAmount;
 
 	const clampedAmount = Math.min(
-		Math.max(Number.parseInt(annualAmount ?? '0'), min),
+		Math.max(Number(annualAmount ?? '0'), min),
 		max,
 	);
+
+	const clampedAmountToCurrenyStr = `${
+		currencies[currency].glyph
+	}${new Intl.NumberFormat('en-GB', {
+		minimumFractionDigits: clampedAmount % 1 == 0 ? 0 : 2,
+	}).format(clampedAmount)}`;
 
 	let title, subtitle, paragraph;
 
 	if (dynamic) {
 		title = 'Make it an annual gift';
-		subtitle = `change to ${currencyGlyph}${clampedAmount} per year`;
+		subtitle = `change to ${clampedAmountToCurrenyStr} per year`;
 		paragraph =
 			'Choose to support us annually, and you’ll make a bigger impact with your year-end gift. Help protect our open, independent journalism long term.';
 	} else {
