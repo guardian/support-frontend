@@ -42,7 +42,6 @@ type PriceCardsWeeklyHeroPropTypes = {
 	promotionCopy: PromotionCopy;
 	countryId: IsoCountry;
 	productPrices: ProductPrices;
-	isPriceCardsAbTestVariant: boolean;
 };
 
 const styles = {
@@ -217,7 +216,6 @@ export function PriceCardsWeeklyHero({
 	promotionCopy,
 	countryId,
 	productPrices,
-	isPriceCardsAbTestVariant,
 }: PriceCardsWeeklyHeroPropTypes): JSX.Element {
 	const defaultRoundelText = 'Save up to 35% a year';
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;
@@ -242,7 +240,6 @@ export function PriceCardsWeeklyHero({
 						countryId={countryId}
 						productPrices={productPrices}
 						orderIsAGift={orderIsAGift}
-						isPriceCardsAbTestVariant={isPriceCardsAbTestVariant}
 					/>
 				</CentredContainer>
 			</div>

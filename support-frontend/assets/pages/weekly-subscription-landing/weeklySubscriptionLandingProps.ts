@@ -32,7 +32,6 @@ export type WeeklyLPContentPropTypes = {
 	pageQaId: string;
 	header: JSX.Element;
 	giftNonGiftLink: string;
-	isPriceCardsAbTestVariant?: boolean;
 };
 
 const countryGroupId = detectCountryGroup();

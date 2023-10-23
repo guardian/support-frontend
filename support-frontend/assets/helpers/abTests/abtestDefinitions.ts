@@ -40,26 +40,6 @@ export const pageUrlRegexes = {
 	},
 };
 export const tests: Tests = {
-	guardianWeeklyPriceCards: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: false,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.subscriptions.subsWeeklyPages,
-		seed: 11,
-	},
 	supporterPlusOnly: {
 		variants: [
 			{
