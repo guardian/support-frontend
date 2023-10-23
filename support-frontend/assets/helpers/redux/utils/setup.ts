@@ -51,7 +51,6 @@ function buildInitialState(
 		abParticipations,
 		settings,
 		amounts,
-		defaultAmounts: amounts,
 	};
 }
 
