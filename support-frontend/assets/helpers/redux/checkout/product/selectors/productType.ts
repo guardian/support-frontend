@@ -7,6 +7,7 @@ import {
 	Paper,
 	PaperAndDigital,
 } from 'helpers/productPrice/subscriptions';
+// eslint-disable-next-line import/no-cycle -- these are quite tricky to unpick so we should come back to this
 import { getDefaultContributionType } from 'helpers/redux/commonState/selectors';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
