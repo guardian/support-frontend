@@ -1,3 +1,5 @@
+import { css } from '@emotion/react';
+import { visuallyHidden } from '@guardian/source-foundations';
 import './contributionTicker.scss';
 import {
 	tickerCount,
@@ -91,6 +93,13 @@ export function Ticker(props: TickerProps): JSX.Element {
 
 	return (
 		<div>
+			<h2
+				css={css`
+					${visuallyHidden}
+				`}
+			>
+				Current campaign progress
+			</h2>
 			<div css={tickerLabelContainer}>
 				<TickerMainLabel {...props} goalReached={goalReached} />
 				<div

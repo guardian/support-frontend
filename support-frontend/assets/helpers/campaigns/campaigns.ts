@@ -32,7 +32,7 @@ const usEoy2021Copy = (): CampaignCopy => ({
 });
 
 export const campaign: CampaignSettings = {
-	campaignCode: 'Us_eoy_2021',
+	campaignCode: 'Us_eoy_2023',
 	copy: usEoy2021Copy,
 	tickerSettings: {
 		tickerCountType: 'money',
