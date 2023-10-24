@@ -176,7 +176,7 @@ export type ContributionsOrderSummaryProps = {
 };
 
 const supportTypes = {
-	ONE_OFF: 'Single',
+	ONE_OFF: 'One-Time',
 	MONTHLY: 'Monthly',
 	ANNUAL: 'Annual',
 };
