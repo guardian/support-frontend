@@ -21,7 +21,6 @@ import ProductOption from 'components/product/productOption';
 export type PropTypes = {
 	orderIsAGift: boolean;
 	products: Product[];
-	isPriceCardsAbTestVariant: boolean;
 };
 
 const pricesSection = css`
@@ -36,10 +35,6 @@ const priceBoxes = css`
 	${from.desktop} {
 		margin-top: ${space[9]}px;
 	}
-`;
-
-const priceBoxesVariant = css`
-	margin-top: ${space[4]}px;
 `;
 
 const productOverride = css`
@@ -80,24 +75,9 @@ const pricesHeadline = css`
 	}
 `;
 
-const pricesHeadlineVariant = css`
-	margin-top: ${space[3]}px;
-	margin-bottom: ${space[4]}px;
-
-	${from.tablet} {
-		margin-top: ${space[9]}px;
-	}
-`;
-
 const pricesSubHeadline = css`
 	${body.medium()}
 	padding-bottom: ${space[2]}px;
-`;
-
-const pricesSubHeadlineVariant = css`
-	${from.tablet} {
-		margin-bottom: ${space[12]}px;
-	}
 `;
 
 const pricesInfo = css`
@@ -113,38 +93,14 @@ const termsLink = css`
 const termsConditionsLink =
 	'https://www.theguardian.com/info/2014/jul/10/guardian-weekly-print-subscription-services-terms-conditions';
 
-function Prices({
-	orderIsAGift,
-	products,
-	isPriceCardsAbTestVariant,
-}: PropTypes): JSX.Element {
+function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 	return (
 		<section css={pricesSection} id="subscribe">
-			<h2
-				css={
-					isPriceCardsAbTestVariant
-						? [pricesHeadline, pricesHeadlineVariant]
-						: pricesHeadline
-				}
-			>
-				Subscribe to the Guardian Weekly today
-			</h2>
-			<p
-				css={
-					isPriceCardsAbTestVariant
-						? [pricesSubHeadline, pricesSubHeadlineVariant]
-						: pricesSubHeadline
-				}
-			>
+			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
+			<p css={pricesSubHeadline}>
 				{orderIsAGift ? 'Select a gift period' : "Choose how you'd like to pay"}
 			</p>
-			<FlexContainer
-				cssOverrides={
-					isPriceCardsAbTestVariant
-						? [priceBoxes, priceBoxesVariant]
-						: priceBoxes
-				}
-			>
+			<FlexContainer cssOverrides={priceBoxes}>
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={

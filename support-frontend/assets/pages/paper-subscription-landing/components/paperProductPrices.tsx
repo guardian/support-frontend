@@ -198,7 +198,6 @@ type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
 	tab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
-	isPriceCardsAbTestVariant?: boolean;
 	isNationalDeliveryAbTestVariant: boolean;
 };
 
@@ -206,7 +205,6 @@ function PaperProductPrices({
 	productPrices,
 	tab,
 	setTabAction,
-	isPriceCardsAbTestVariant,
 	isNationalDeliveryAbTestVariant,
 }: PaperProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
@@ -223,7 +221,6 @@ function PaperProductPrices({
 			activeTab={tab}
 			products={products}
 			setTabAction={setTabAction}
-			isPriceCardsAbTestVariant={isPriceCardsAbTestVariant ?? false}
 			isNationalDeliveryAbTestVariant={isNationalDeliveryAbTestVariant}
 		/>
 	);
