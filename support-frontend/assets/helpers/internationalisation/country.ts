@@ -107,7 +107,7 @@ const newspaperCountries: Record<string, string> = {
 	GB: 'United Kingdom',
 	IM: 'Isle of Man',
 };
-export type IsoCountry = typeof isoCountries[number];
+export type IsoCountry = (typeof isoCountries)[number];
 export const isoCountries = [
 	'GB',
 	'US',
