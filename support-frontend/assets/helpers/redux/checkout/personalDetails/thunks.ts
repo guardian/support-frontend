@@ -19,10 +19,10 @@ export const getUserTypeFromIdentity = createAsyncThunk<
 	async function getUserType(email, thunkApi) {
 		const { csrf } = thunkApi.getState().page.checkoutForm;
 
-		const resp = (await fetchJson(
+		const resp = await fetchJson<UserTypeResponse>(
 			`${routes.getUserType}?maybeEmail=${encodeURIComponent(email)}`,
 			getRequestOptions('same-origin', csrf),
-		)) as UserTypeResponse;
+		);
 
 		if (typeof resp.userType !== 'string') {
 			throw new Error('userType string was not present in response');

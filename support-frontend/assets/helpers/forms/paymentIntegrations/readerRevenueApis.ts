@@ -365,10 +365,10 @@ function checkRegularStatus(
 						MAX_POLLS,
 						POLLING_INTERVAL,
 						() =>
-							fetchJson(
+							fetchJson<StatusResponse>(
 								statusResponse.trackingUri,
 								getRequestOptions('same-origin', csrf),
-							) as Promise<StatusResponse>,
+							),
 						(json2: StatusResponse) => json2.status === 'pending',
 					)
 						.then(handleCompletion)
