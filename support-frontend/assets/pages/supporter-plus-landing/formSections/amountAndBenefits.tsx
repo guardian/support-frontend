@@ -10,9 +10,12 @@ import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/p
 import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
 import { PriceCards } from 'components/priceCards/priceCards';
 import { PriceCardsContainer } from 'components/priceCards/priceCardsContainer';
+import { Ticker } from 'components/ticker/ticker';
+import { TickerContainer } from 'components/ticker/tickerContainer';
 import Tooltip from 'components/tooltip/Tooltip';
 import { TooltipContainer } from 'components/tooltip/TooltipContainer';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 
 export function AmountAndBenefits({
 	countryGroupId,
@@ -27,6 +30,9 @@ export function AmountAndBenefits({
 	addBackgroundToBenefitsList?: boolean;
 	isCompactBenefitsList?: boolean;
 }): JSX.Element {
+	const { usCampaignTicker } = useContributionsSelector(
+		(state) => state.common.abParticipations,
+	);
 	return (
 		<PaymentFrequencyTabsContainer
 			render={(tabProps) => (
@@ -39,6 +45,19 @@ export function AmountAndBenefits({
 									<CheckoutErrorSummary errorList={errorList} />
 								)}
 							/>
+							{usCampaignTicker === 'variant' && (
+								<TickerContainer
+									countType="money"
+									endType="unlimited"
+									currencySymbol="$"
+									copy={{
+										countLabel: '',
+										goalReachedPrimary: '',
+										goalReachedSecondary: '',
+									}}
+									render={(tickerProps) => <Ticker {...tickerProps} />}
+								/>
+							)}
 							<PriceCardsContainer
 								frequency={tabId}
 								renderPriceCards={({

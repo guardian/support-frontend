@@ -155,4 +155,24 @@ export const tests: Tests = {
 		referrerControlled: false,
 		seed: 0,
 	},
+	usCampaignTicker: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		isActive: false,
+		audiences: {
+			UnitedStates: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		referrerControlled: false,
+		seed: 4,
+	},
 };
