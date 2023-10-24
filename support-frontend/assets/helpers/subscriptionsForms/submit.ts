@@ -1,4 +1,5 @@
 // ----- Imports ----- //
+import type { PaymentMethod as StripePaymentMethod } from '@stripe/stripe-js';
 import type { Dispatch } from 'redux';
 import type {
 	PaymentAuthorisation,
@@ -267,7 +268,7 @@ function onPaymentAuthorised(
 
 function checkStripeUserType(
 	onAuthorised: (pa: PaymentAuthorisation) => void,
-	stripePaymentMethodId?: string,
+	stripePaymentMethodId?: string | StripePaymentMethod,
 ) {
 	if (stripePaymentMethodId != null) {
 		onAuthorised({
@@ -297,7 +298,7 @@ const directDebitAuthorised = (
 function showPaymentMethod(
 	onAuthorised: (pa: PaymentAuthorisation) => void,
 	paymentMethod: Option<PaymentMethod>,
-	stripePaymentMethod: string | undefined,
+	stripePaymentMethod: string | StripePaymentMethod | undefined,
 	state: AnyCheckoutState,
 ): void {
 	switch (paymentMethod) {

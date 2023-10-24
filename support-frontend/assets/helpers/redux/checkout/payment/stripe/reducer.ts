@@ -1,5 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import type { PaymentMethod } from '@stripe/stripe-js';
 import { resetValidation, validateForm } from '../../checkoutActions';
 import type { StripeErrorPayload } from './state';
 import { initialStripeCardState } from './state';
@@ -15,7 +16,10 @@ export const stripeCardSlice = createSlice({
 		setClientSecret(state, action: PayloadAction<string>) {
 			state.setupIntentClientSecret = action.payload;
 		},
-		setStripePaymentMethod(state, action: PayloadAction<string | undefined>) {
+		setStripePaymentMethod(
+			state,
+			action: PayloadAction<string | PaymentMethod | undefined>,
+		) {
 			state.stripePaymentMethod = action.payload;
 		},
 		setStripeFormError(state, action: PayloadAction<StripeErrorPayload>) {

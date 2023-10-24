@@ -1,4 +1,4 @@
-import type { PaymentIntentResult } from '@stripe/stripe-js';
+import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
 import { fetchJson, requestOptions } from 'helpers/async/fetch';
 import { logPromise } from 'helpers/async/promise';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
@@ -71,7 +71,7 @@ export type StripeChargeData = {
 };
 
 export type CreateStripePaymentIntentRequest = StripeChargeData & {
-	paymentMethodId: string;
+	paymentMethodId: string | PaymentMethod;
 };
 
 export type ConfirmStripePaymentIntentRequest = StripeChargeData & {
