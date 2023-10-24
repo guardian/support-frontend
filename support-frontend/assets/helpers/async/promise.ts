@@ -29,7 +29,7 @@ function pollUntilPromise<A>(
 
 // Logs any error produced by the promise
 function logPromise<A>(p: Promise<A>): Promise<A> {
-	return p.catch((error) => {
+	return p.catch((error: string) => {
 		logException(error);
 		throw error;
 	});
