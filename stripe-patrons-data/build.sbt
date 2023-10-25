@@ -13,7 +13,7 @@ libraryDependencies ++= Seq(
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
-  "com.amazonaws" % "aws-lambda-java-events" % "3.11.2",
+  "com.amazonaws" % "aws-lambda-java-events" % "3.11.3",
   "com.stripe" % "stripe-java" % "20.136.0",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
@@ -46,7 +46,7 @@ assembly / assemblyMergeStrategy := {
 
 // We also have to put the build number in the .jar, because AWS refuses to create a new lambda version if the jar is the same!
 resourceGenerators in Compile += Def.task {
-  val file = (resourceManaged ).value / "build.number"
+  val file = (resourceManaged).value / "build.number"
   IO.write(file, buildNumber)
   Seq(file)
 }.taskValue
