@@ -11,7 +11,6 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { SupporterPlusLandingPage } from 'pages/supporter-plus-landing/supporterPlusLanding';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
 import { SupporterPlusInitialLandingPage } from './twoStepTest/firstStepLanding';
@@ -36,17 +35,6 @@ const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
 );
 
-const {
-	common: { abParticipations },
-} = store.getState();
-
-const isInTwoStepTest =
-	abParticipations.twoStepCheckoutWithNudgeBelow &&
-	abParticipations.twoStepCheckoutWithNudgeBelow !== 'control';
-
-const showCheckoutTopUpToggle =
-	abParticipations.twoStepCheckoutWithNudgeBelow === 'variant_b';
-
 // ----- ScrollToTop on Navigate: https://v5.reactrouter.com/web/guides/scroll-restoration ---- //
 
 function ScrollToTop() {
@@ -62,59 +50,38 @@ function ScrollToTop() {
 // ----- Render ----- //
 
 const router = () => {
-	const landingPage = (
-		<SupporterPlusLandingPage thankYouRoute={thankYouRoute} />
-	);
-
 	const firstStepLandingPage = (
 		<SupporterPlusInitialLandingPage thankYouRoute={thankYouRoute} />
 	);
-
-	const oneStepRoutes = countryIds.map((countryId) => (
-		<>
-			<Route path={`/${countryId}/contribute/`} element={landingPage} />
-			<Route
-				path={`/${countryId}/contribute/:campaignCode`}
-				element={landingPage}
-			/>
-			<Route
-				path={`/${countryId}/thankyou`}
-				element={<SupporterPlusThankYou />}
-			/>
-		</>
-	));
-
-	const twoStepRoutes = countryIds.map((countryId) => (
-		<>
-			<Route
-				path={`/${countryId}/contribute/`}
-				element={firstStepLandingPage}
-			/>
-			<Route
-				path={`/${countryId}/contribute/:campaignCode`}
-				element={firstStepLandingPage}
-			/>
-			<Route
-				path={`/${countryId}/contribute/checkout`}
-				element={
-					<SupporterPlusCheckout
-						thankYouRoute={thankYouRoute}
-						showTopUpToggle={showCheckoutTopUpToggle}
-					/>
-				}
-			/>
-			<Route
-				path={`/${countryId}/thankyou`}
-				element={<SupporterPlusThankYou />}
-			/>
-		</>
-	));
 
 	return (
 		<BrowserRouter>
 			<ScrollToTop />
 			<Provider store={store}>
-				<Routes>{isInTwoStepTest ? twoStepRoutes : oneStepRoutes}</Routes>
+				<Routes>
+					{countryIds.map((countryId) => (
+						<>
+							<Route
+								path={`/${countryId}/contribute/`}
+								element={firstStepLandingPage}
+							/>
+							<Route
+								path={`/${countryId}/contribute/:campaignCode`}
+								element={firstStepLandingPage}
+							/>
+							<Route
+								path={`/${countryId}/contribute/checkout`}
+								element={
+									<SupporterPlusCheckout thankYouRoute={thankYouRoute} />
+								}
+							/>
+							<Route
+								path={`/${countryId}/thankyou`}
+								element={<SupporterPlusThankYou />}
+							/>
+						</>
+					))}
+				</Routes>
 			</Provider>
 		</BrowserRouter>
 	);

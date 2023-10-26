@@ -10,7 +10,6 @@ import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary
 
 type ContributionsOrderSummaryContainerProps = {
 	renderOrderSummary: (props: ContributionsOrderSummaryProps) => JSX.Element;
-	showUnchecked?: boolean;
 };
 
 function getTermsConditions(
@@ -41,7 +40,6 @@ function getTermsConditions(
 
 export function ContributionsOrderSummaryContainer({
 	renderOrderSummary,
-	showUnchecked = false,
 }: ContributionsOrderSummaryContainerProps): JSX.Element {
 	const contributionType = useContributionsSelector(getContributionType);
 
@@ -58,7 +56,6 @@ export function ContributionsOrderSummaryContainer({
 			? []
 			: checkListData({
 					higherTier: isSupporterPlus,
-					showUnchecked,
 			  });
 
 	function onAccordionClick(isOpen: boolean) {
