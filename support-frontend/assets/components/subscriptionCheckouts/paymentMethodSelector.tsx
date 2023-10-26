@@ -7,7 +7,7 @@ import {
 	SvgPayPal,
 } from '@guardian/source-react-components';
 import type { ReactNode } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Rows from 'components/base/rows';
 import AnimatedDots from 'components/spinners/animatedDots';
 import SvgAmazonPayLogoDs from 'components/svgs/amazonPayLogoDs';
@@ -184,7 +184,7 @@ function PaymentMethodSelector({
 	existingPaymentMethods,
 	updateExistingPaymentMethod,
 }: PropTypes): JSX.Element {
-	React.useEffect(() => {
+	useEffect(() => {
 		availablePaymentMethods.length === 1 &&
 			setPaymentMethod(availablePaymentMethods[0]);
 	}, []);

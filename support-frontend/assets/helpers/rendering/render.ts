@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM, { render } from 'react-dom';
 import { logException } from 'helpers/utilities/logger';
 import { isSafari } from 'helpers/utilities/userAgent';
 
@@ -33,7 +33,7 @@ const renderError = (e: Error, id?: string | null): void => {
 	);
 	void import('pages/error/components/errorPage').then(
 		({ default: ErrorPage }) => {
-			ReactDOM.render(
+			render(
 				ErrorPage({
 					headings: [
 						'Sorry - we seem',
@@ -67,10 +67,10 @@ const renderPage = (
 				void import('@axe-core/react').then((axe) => {
 					console.log('Loading react-axe for accessibility analysis');
 					void axe.default(React, ReactDOM, 1000);
-					ReactDOM.render(content, element, callBack);
+					render(content, element, callBack);
 				});
 			} else {
-				ReactDOM.render(content, element, callBack);
+				render(content, element, callBack);
 			}
 		} catch (e) {
 			renderError(e as Error, id);
