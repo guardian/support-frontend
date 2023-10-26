@@ -4,6 +4,7 @@ import { email, firstName, lastName } from "./utils/users";
 
 test.beforeEach(async ({ page, context, baseURL }) => {
   const baseUrlWithFallback = baseURL ?? "https://support.theguardian.com";
+  // We should remove the forcing into the ab test once this has been made live
   const pageUrl = `${baseUrlWithFallback}/uk/contribute#ab-twoStepCheckoutWithNudgeBelow=variant_a`;
 
   const domain = new URL(pageUrl).hostname;
