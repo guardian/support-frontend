@@ -4,11 +4,11 @@ import { email, firstName, lastName } from "./utils/users";
 
 test.beforeEach(async ({ page, context, baseURL }) => {
   const baseUrlWithFallback = baseURL ?? "https://support.theguardian.com";
-  const pageUrl = `${baseUrlWithFallback}/uk/contribute`;
+  const pageUrl = `${baseUrlWithFallback}/uk/contribute#ab-twoStepCheckoutWithNudgeBelow=variant_a`;
 
   const domain = new URL(pageUrl).hostname;
   await setTestCookies(context, firstName, domain);
-  await page.goto(pageUrl, {waitUntil: "networkidle"});
+  await page.goto(pageUrl, { waitUntil: "networkidle" });
 });
 
 test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", () => {
@@ -23,7 +23,9 @@ test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", (
     await page.locator("#qa-credit-card").click();
 
     await expect(
-      await page.frameLocator('[title="reCAPTCHA"]').locator('#recaptcha-anchor-label')
+      await page
+        .frameLocator('[title="reCAPTCHA"]')
+        .locator("#recaptcha-anchor-label"),
     ).toBeVisible();
 
     const cardNumber = page
@@ -40,19 +42,19 @@ test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", (
     await cvc.fill("123");
 
     const recaptchaIframe = page.frameLocator('[title="reCAPTCHA"]');
-    const recaptchaCheckbox = recaptchaIframe.locator('.recaptcha-checkbox');
+    const recaptchaCheckbox = recaptchaIframe.locator(".recaptcha-checkbox");
     await expect(recaptchaCheckbox).toBeEnabled();
 
     await recaptchaCheckbox.click();
     await expect(
-      recaptchaIframe.locator("#recaptcha-accessible-status")
+      recaptchaIframe.locator("#recaptcha-accessible-status"),
     ).toContainText("You are verified");
 
     const contributeButton =
       "#qa-contributions-landing-submit-contribution-button";
 
     await expect(page.locator(contributeButton)).toContainText(
-      /Pay £([0-9]+) per month/
+      /Pay £([0-9]+) per month/,
     );
 
     await page.locator(contributeButton).click();
