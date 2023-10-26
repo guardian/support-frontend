@@ -35,7 +35,6 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 
 export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
-	const showHigherTier = higherTier;
 
 	const higherTierItems = [
 		{
@@ -79,6 +78,6 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 				</p>
 			),
 		},
-		...(showHigherTier ? higherTierItems : []),
+		...higherTierItems,
 	];
 };
