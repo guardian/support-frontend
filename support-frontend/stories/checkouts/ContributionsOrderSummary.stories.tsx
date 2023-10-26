@@ -50,7 +50,7 @@ Default.args = {
 		isSuffixGlyph: false,
 		isPaddedGlyph: false,
 	},
-	checkListData: checkListData({ higherTier: true, showUnchecked: false }),
+	checkListData: checkListData({ higherTier: true }),
 	headerButton: (
 		<Button priority="tertiary" size="xsmall">
 			Change
@@ -65,7 +65,7 @@ Default.args = {
 			</p>
 		</>
 	),
-};
+} as ContributionsOrderSummaryProps;
 
 export const SingleContribution = Template.bind({});
 
