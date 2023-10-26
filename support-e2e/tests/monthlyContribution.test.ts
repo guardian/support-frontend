@@ -13,33 +13,37 @@ test.beforeEach(async ({ page, context, baseURL }) => {
 
 test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", () => {
   test("Monthly contribution sign-up with Stripe - GBP", async ({ page }) => {
-    const monthlyTab = "#MONTHLY";
-    await page.locator(monthlyTab).click();
+    await page.getByRole("tab").getByText("Monthly").click();
+    await page.getByText("Continue to checkout").click();
 
-    await page.locator("#email").type(email);
-    await page.locator("#firstName").type(firstName);
-    await page.locator("#lastName").type(lastName);
+    await page.getByLabel("Email address").type(email);
+    await page.getByLabel("First name").type(firstName);
+    await page.getByLabel("Last name").type(lastName);
 
-    await page.locator("#qa-credit-card").click();
+    await page.getByLabel("Credit/Debit card").click();
+
+    // it would be nice to use aria style selectors here, but given Stripes
+    // very secure implementation, it is quite hard
+    await page
+      .frameLocator("#cardNumber iframe")
+      .locator('input[name="cardnumber"]')
+      .fill("4242424242424242");
+
+    await page
+      .frameLocator("#expiry iframe")
+      .locator('input[name="exp-date"]')
+      .fill("01/50");
+
+    await page
+      .frameLocator("#cvc iframe")
+      .locator('input[name="cvc"]')
+      .fill("123");
 
     await expect(
       await page
         .frameLocator('[title="reCAPTCHA"]')
         .locator("#recaptcha-anchor-label"),
     ).toBeVisible();
-
-    const cardNumber = page
-      .frameLocator("#cardNumber iframe")
-      .locator('input[name="cardnumber"]');
-    await cardNumber.fill("4242424242424242");
-
-    const expiryDate = page
-      .frameLocator("#expiry iframe")
-      .locator('input[name="exp-date"]');
-    await expiryDate.fill("01/50");
-
-    const cvc = page.frameLocator("#cvc iframe").locator('input[name="cvc"]');
-    await cvc.fill("123");
 
     const recaptchaIframe = page.frameLocator('[title="reCAPTCHA"]');
     const recaptchaCheckbox = recaptchaIframe.locator(".recaptcha-checkbox");
@@ -50,14 +54,7 @@ test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", (
       recaptchaIframe.locator("#recaptcha-accessible-status"),
     ).toContainText("You are verified");
 
-    const contributeButton =
-      "#qa-contributions-landing-submit-contribution-button";
-
-    await expect(page.locator(contributeButton)).toContainText(
-      /Pay £([0-9]+) per month/,
-    );
-
-    await page.locator(contributeButton).click();
+    await page.getByText(/Pay £([0-9]+) per month/).click();
 
     await expect(page).toHaveURL(/\/uk\/thankyou/, { timeout: 60000 });
   });
