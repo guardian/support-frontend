@@ -2,7 +2,7 @@
   "typescript.format.enable": false, // disable default VS code TS formatting in favour of ESLint
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,
-    "source.fixAll.prettier": true,
+    "source.fixAll.prettier": true
   },
   "eslint.workingDirectories": ["support-frontend"],
   "eslint.validate": ["typescript", "typescriptreact"],
@@ -11,4 +11,7 @@
     "react-dom": "preact-compat",
     "ophan": "ophan-tracker-js/build/ophan.support"
   },
+  "files.watcherExclude": {
+    "**/target": true
+  }
 }
