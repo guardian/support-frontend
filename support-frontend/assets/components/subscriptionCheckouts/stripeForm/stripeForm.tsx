@@ -7,7 +7,11 @@ import {
 } from '@guardian/source-react-components';
 import * as stripeJs from '@stripe/react-stripe-js';
 import { CardNumberElement } from '@stripe/react-stripe-js';
-import type { StripeElementChangeEvent, StripeError } from '@stripe/stripe-js';
+import type {
+	PaymentMethod,
+	StripeElementChangeEvent,
+	StripeError,
+} from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import './stripeForm.scss';
@@ -308,7 +312,7 @@ function StripeForm(props: StripeFormPropTypes): JSX.Element {
 
 	const handleCardSetupAndPay = () =>
 		handleCardSetup(setupIntentClientSecret)
-			?.then((paymentMethod?: string) =>
+			?.then((paymentMethod?: string | PaymentMethod) =>
 				dispatch(setStripePaymentMethod(paymentMethod)),
 			)
 			.then(() => {

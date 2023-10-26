@@ -1,5 +1,5 @@
 import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
-import type { PaymentIntentResult } from '@stripe/stripe-js';
+import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
 import {
 	fetchJson,
 	getRequestOptions,
@@ -99,7 +99,7 @@ type RegularPayPalPaymentFields = {
 	baid: string;
 };
 type RegularStripePaymentIntentFields = {
-	paymentMethod: string;
+	paymentMethod: string | PaymentMethod;
 	// The ID of the Stripe Payment Method
 	stripePaymentType: StripePaymentMethod; // The type of Stripe payment, e.g. Apple Pay
 };
@@ -174,7 +174,7 @@ export type RegularPaymentRequest = {
 export type StripePaymentIntentAuthorisation = {
 	paymentMethod: typeof Stripe;
 	stripePaymentMethod: StripePaymentMethod;
-	paymentMethodId: string;
+	paymentMethodId: string | PaymentMethod;
 	handle3DS?: (clientSecret: string) => Promise<PaymentIntentResult>;
 };
 export type PayPalAuthorisation = {
