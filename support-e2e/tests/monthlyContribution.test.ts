@@ -15,7 +15,7 @@ test.beforeEach(async ({ page, context, baseURL }) => {
 test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", () => {
   test("Monthly contribution sign-up with Stripe - GBP", async ({ page }) => {
     await page.getByRole("tab").getByText("Monthly").click();
-    await page.getByText("Continue to checkout").click();
+    await page.getByRole("button", { name: "Continue to checkout" }).click();
 
     await page.getByLabel("Email address").type(email);
     await page.getByLabel("First name").type(firstName);
