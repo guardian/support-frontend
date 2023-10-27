@@ -1,13 +1,13 @@
 import { expect, test } from "@playwright/test";
 import { setTestCookies } from "./utils/cookies";
-import { email, firstName } from "./utils/users";
+import {email, firstName} from "./utils/users";
 import {checkRecaptcha} from "./utils/recaptcha";
 import {fillInCardDetails} from "./utils/cardDetails";
 
 test.beforeEach(async ({ page, context, baseURL }) => {
   const baseUrlWithFallback = baseURL ?? "https://support.theguardian.com";
   // We should remove the forcing into the ab test once this has been made live
-  const pageUrl = `${baseUrlWithFallback}/au/contribute#ab-twoStepCheckoutWithNudgeBelow=variant_a`;
+  const pageUrl = `${baseUrlWithFallback}/au/contribute`;//to be updated after merging the changes to making the two step as default
 
   const domain = new URL(pageUrl).hostname;
   await setTestCookies(context, firstName, domain);
@@ -17,7 +17,7 @@ test.beforeEach(async ({ page, context, baseURL }) => {
 test.describe("Sign up for a one-off contribution (New Contributions Flow)", () => {
   test("One-off contribution sign-up with Stripe - AUD", async ({ page}) => {
 
-    await page.getByRole("tab").getByText("Single").click();
+    await page.getByRole("tab").getByText("One-time").click();
 
     await page.locator('label[for=\'amount-other\']').click();
 
@@ -41,7 +41,7 @@ test.describe("Sign up for a one-off contribution (New Contributions Flow)", () 
 test.describe("Sign up for a one-off contribution (New Contributions Flow)", () => {
   test("Check browser navigates to paypal", async ({ page, }) => {
 
-    await page.getByRole("tab").getByText("Single").click();
+    await page.getByRole("tab").getByText("One-time").click();
     await page.getByRole("button", { name: "Continue to checkout" }).click();
 
     await page.getByLabel("Email address").type(email);

@@ -11,7 +11,7 @@ test.beforeEach(async ({ page, context, baseURL }) => {
 
   const baseUrlWithFallback = baseURL ?? "https://support.theguardian.com";
   // We should remove the forcing into the ab test once this has been made live
-  const pageUrl = `${baseUrlWithFallback}/uk/contribute#ab-twoStepCheckoutWithNudgeBelow=variant_a`;
+  const pageUrl = `${baseUrlWithFallback}/uk/contribute`;
 
   const domain = new URL(pageUrl).hostname;
   await setTestCookies(context, firstName, domain);
@@ -61,15 +61,8 @@ test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", (
 test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", () => {
   test("Annual contribution sign-up with Stripe - USD", async ({ page,baseURL,context }) => {
 
-    const baseUrlWithFallback = baseURL ?? "https://support.theguardian.com";
-    const pageUrl = `${baseUrlWithFallback}/us/contribute#ab-twoStepCheckoutWithNudgeBelow=variant_a`;
-
-    const domain = new URL(pageUrl).hostname;
-    await setTestCookies(context, firstName, domain);
-    await page.goto(pageUrl, { waitUntil: "networkidle" });
-
-    // await page.getByRole("button", { name: "Select a country" }).click();
-    // await page.getByRole('link', { name: 'United States US$' }).click();
+    await page.getByRole("button", { name: "Select a country" }).click();
+    await page.getByRole('link', { name: 'United States US$' }).click();
 
     await page.getByRole("tab").getByText("Annual").click();
     await page.getByRole("button", { name: "Continue to checkout" }).click();
