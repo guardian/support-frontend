@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { setTestCookies } from "./utils/cookies";
-import { email, firstName, lastName } from "./utils/users";
+import { email, firstName } from "./utils/users";
+import {checkRecaptcha} from "./utils/recaptcha";
+import {fillInCardDetails} from "./utils/cardDetails";
 
 test.beforeEach(async ({ page, context, baseURL }) => {
   const baseUrlWithFallback = baseURL ?? "https://support.theguardian.com";
@@ -13,7 +15,7 @@ test.beforeEach(async ({ page, context, baseURL }) => {
 });
 
 test.describe("Sign up for a one-off contribution (New Contributions Flow)", () => {
-  test("One-off contribution sign-up with Stripe - AUD", async ({ page, baseURL, context}) => {
+  test("One-off contribution sign-up with Stripe - AUD", async ({ page}) => {
 
     await page.getByRole("tab").getByText("Single").click();
 
@@ -26,35 +28,9 @@ test.describe("Sign up for a one-off contribution (New Contributions Flow)", () 
 
     await page.getByRole('radio', { name: 'Credit/Debit card' }).click();
 
-    await page
-      .frameLocator("#cardNumber iframe")
-      .locator('input[name="cardnumber"]')
-      .fill("4242424242424242");
+    await fillInCardDetails(page);
 
-    await page
-      .frameLocator("#expiry iframe")
-      .locator('input[name="exp-date"]')
-      .fill("01/50");
-
-    await page
-      .frameLocator("#cvc iframe")
-      .locator('input[name="cvc"]')
-      .fill("123");
-
-    await expect(
-      await page
-        .frameLocator('[title="reCAPTCHA"]')
-        .locator("#recaptcha-anchor-label"),
-    ).toBeVisible();
-
-    const recaptchaIframe = page.frameLocator('[title="reCAPTCHA"]');
-    const recaptchaCheckbox = recaptchaIframe.locator(".recaptcha-checkbox");
-    await expect(recaptchaCheckbox).toBeEnabled();
-
-    await recaptchaCheckbox.click();
-    await expect(
-      recaptchaIframe.locator("#recaptcha-accessible-status"),
-    ).toContainText("You are verified");
+    await checkRecaptcha(page);
 
     await page.locator('button:has-text("Support us with")').click();
 
@@ -63,7 +39,7 @@ test.describe("Sign up for a one-off contribution (New Contributions Flow)", () 
 });
 
 test.describe("Sign up for a one-off contribution (New Contributions Flow)", () => {
-  test("Check browser navigates to paypal", async ({ page,baseURL,context }) => {
+  test("Check browser navigates to paypal", async ({ page, }) => {
 
     await page.getByRole("tab").getByText("Single").click();
     await page.getByRole("button", { name: "Continue to checkout" }).click();
