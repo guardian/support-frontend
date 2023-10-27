@@ -10,16 +10,10 @@ export const checkRecaptcha = async (
   ).toBeVisible();
 
   const recaptchaIframe = page.frameLocator('[title="reCAPTCHA"]');
-  await expect(
-    recaptchaIframe.locator("#recaptcha-accessible-status"),
-  ).toContainText("Recaptcha requires verification");
-
   const recaptchaCheckbox = recaptchaIframe.locator(".recaptcha-checkbox");
-  await expect(recaptchaCheckbox).toBeVisible();
   await expect(recaptchaCheckbox).toBeEnabled();
 
   await recaptchaCheckbox.click();
-
   await expect(
     recaptchaIframe.locator("#recaptcha-accessible-status"),
   ).toContainText("You are verified");

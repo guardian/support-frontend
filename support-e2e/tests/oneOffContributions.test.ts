@@ -39,7 +39,7 @@ test.describe("Sign up for a one-off contribution (New Contributions Flow)", () 
 });
 
 test.describe("Sign up for a one-off contribution (New Contributions Flow)", () => {
-  test("Check browser navigates to paypal", async ({ page, }) => {
+  test("Check browser navigation to paypal", async ({ page, }) => {
 
     await page.getByRole("tab").getByText("One-time").click();
     await page.getByRole("button", { name: "Continue to checkout" }).click();
