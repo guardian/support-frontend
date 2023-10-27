@@ -48,6 +48,7 @@ case class Configuration(config: Config) {
   val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
   val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
   val bigQueryConfigProvider = new BigQueryConfigProvider(config, stage)
+  val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 
   val acquisitionsKinesisStreamName = config.getString("kinesis.streamName")
 }

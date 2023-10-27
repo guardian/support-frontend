@@ -57,6 +57,11 @@ class AcquisitionsEventBusService(source: String, stage: Stage, client: AmazonEv
 
 object AcquisitionsEventBusService {
 
+  object Sources {
+    val paymentApi = "payment-api.1"
+    val supportWorkers = "support-workers.1"
+  }
+
   lazy val eventBridgeClient = AmazonEventBridgeClient
     .builder()
     .withRegion(Regions.EU_WEST_1)

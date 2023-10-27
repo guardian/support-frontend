@@ -3,7 +3,6 @@ package backend
 import backend.BackendError.SupporterProductDataError
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.support.acquisitions.AcquisitionsStreamService
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 import com.typesafe.scalalogging.StrictLogging
@@ -16,7 +15,6 @@ import scala.util.control.NonFatal
 
 trait PaymentBackend extends StrictLogging {
   val acquisitionsEventBusService: AcquisitionsEventBusService
-  val acquisitionsStreamService: AcquisitionsStreamService
   val databaseService: ContributionsStoreService
   val supporterProductDataService: SupporterProductDataService
   val softOptInsService: SoftOptInsService
@@ -48,11 +46,6 @@ trait PaymentBackend extends StrictLogging {
     val acquisitionEventFuture = EitherT(acquisitionsEventBusService.putAcquisitionEvent(acquisition))
       .leftMap(errorMessage => BackendError.AcquisitionsEventBusError(errorMessage))
 
-    // TODO: This can be done via the eventBus
-    val streamFuture = acquisitionsStreamService
-      .putAcquisitionWithRetry(acquisition, maxRetries = 5)
-      .leftMap(errors => BackendError.AcquisitionsStreamError(errors.mkString(" & ")))
-
     val dbFuture = insertContributionDataIntoDatabase(contributionData)
 
     val supporterDataFuture = insertContributionIntoSupporterProductData(contributionData)
@@ -63,7 +56,6 @@ trait PaymentBackend extends StrictLogging {
       .sequence(
         List(
           acquisitionEventFuture.value,
-          streamFuture.value,
           dbFuture.value,
           supporterDataFuture.value,
           softOptInFuture.value,

@@ -18,11 +18,12 @@ export function shouldShowSupporterPlusMessaging(
 	}
 
 	const benefitsThreshold = getThresholdPrice(countryGroupId, contributionType);
+	const selectedAmount = selectedAmounts[contributionType];
 
-	if (selectedAmounts[contributionType] === 'other') {
+	if (selectedAmount === 'other') {
 		const otherAmount = otherAmounts[contributionType].amount;
 		return otherAmount ? parseInt(otherAmount) >= benefitsThreshold : false;
 	}
 
-	return selectedAmounts[contributionType] >= benefitsThreshold;
+	return selectedAmount >= benefitsThreshold;
 }

@@ -14,24 +14,11 @@ import { errorCollectionHasErrors } from './utils';
 export function getStripeFormErrors(
 	state: ContributionsState,
 ): ErrorCollection {
-	const { abParticipations, internationalisation } = state.common;
 	const { errors, showErrors } = state.page.checkoutForm.payment.stripe;
-	const shouldShowZipCode =
-		internationalisation.countryId === 'US' &&
-		abParticipations.mandatoryZipCode !== 'variant';
 	const recaptchaErrors = getRecaptchaError(state);
 
 	if (!showErrors) return {};
 
-	if (shouldShowZipCode) {
-		const zipCode =
-			state.page.checkoutForm.billingAddress.fields.errorObject?.postCode;
-		return {
-			...errors,
-			zipCode,
-			robot_checkbox: recaptchaErrors,
-		};
-	}
 	return { ...errors, robot_checkbox: recaptchaErrors };
 }
 
@@ -50,6 +37,20 @@ export function getAmazonPayFormErrors(
 	return errors;
 }
 
+function getDirectDebitFormErrors(state: ContributionsState): ErrorCollection {
+	const { errors, formError } = state.page.checkoutForm.payment.directDebit;
+	if (formError) {
+		return {
+			...errors,
+			directDebitDetails: [formError],
+		};
+	}
+
+	return {
+		...errors,
+	};
+}
+
 export function getPaymentMethodErrors(
 	state: ContributionsState,
 ): ErrorCollection {
@@ -59,9 +60,8 @@ export function getPaymentMethodErrors(
 		case 'Stripe':
 			return getStripeFormErrors(state);
 
-		// TODO: implement this once we have a new DD form
-		// case 'DirectDebit':
-		// 	return payment.directDebit.errors ?? {};
+		case 'DirectDebit':
+			return getDirectDebitFormErrors(state);
 
 		case 'Sepa':
 			return payment.sepa.errors;

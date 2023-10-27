@@ -89,6 +89,9 @@ object AcquisitionDataRowBuilder {
       paymentId = None,
       queryParameters = state.acquisitionData.map(getQueryParameters).getOrElse(Nil),
       platform = None,
+      postalCode = commonState.user.billingAddress.postCode,
+      state = commonState.user.billingAddress.state,
+      email = Some(commonState.user.primaryEmailAddress),
     )
   }
 

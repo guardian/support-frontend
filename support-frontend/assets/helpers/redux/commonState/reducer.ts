@@ -48,7 +48,6 @@ export const commonSlice = createSlice({
 				abParticipations,
 				settings,
 				amounts,
-				defaultAmounts,
 			} = action.payload;
 			return {
 				...state,
@@ -59,7 +58,6 @@ export const commonSlice = createSlice({
 				abParticipations,
 				settings,
 				amounts,
-				defaultAmounts,
 			};
 		},
 		setCountryInternationalisation(state, action: PayloadAction<IsoCountry>) {

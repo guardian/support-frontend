@@ -1,7 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
-import { validateForm } from '../checkoutActions';
+import { resetValidation, validateForm } from '../checkoutActions';
 import { initialState } from './state';
 
 export const recaptchaSlice = createSlice({
@@ -28,6 +28,10 @@ export const recaptchaSlice = createSlice({
 			if (!state.completed) {
 				state.errors = ["Please check the 'I'm not a robot' checkbox"];
 			}
+		});
+
+		builder.addCase(resetValidation, (state) => {
+			state.errors = [];
 		});
 	},
 });

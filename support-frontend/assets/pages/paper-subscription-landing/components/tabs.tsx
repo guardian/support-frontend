@@ -55,7 +55,12 @@ function PaperTabs({
 				text: tabs[fulfilmentMethod].name,
 				href: tabs[fulfilmentMethod].href,
 				selected: fulfilmentMethod === selectedTab,
-				content: <TabContent setTabAction={setTabAction} />,
+				content: (
+					<TabContent
+						setTabAction={setTabAction}
+						isNationalDeliveryAbTestVariant={isNationalDeliveryAbTestVariant}
+					/>
+				),
 			};
 		},
 	);

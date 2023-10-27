@@ -26,8 +26,7 @@ import 'stylesheets/skeleton/skeleton.scss';
 import { GuardianWeeklyFooter } from '../../components/footerCompliant/FooterWithPromoTerms';
 import Benefits from './components/content/benefits';
 import GiftBenefits from './components/content/giftBenefits';
-import ProductInfo from './components/content/productInfo';
-import { PriceCardsWeeklyHero, WeeklyHero } from './components/hero/hero';
+import { WeeklyHero } from './components/hero/hero';
 import WeeklyProductPrices from './components/weeklyProductPrices';
 import './weeklySubscriptionLanding.scss';
 import type {
@@ -64,7 +63,7 @@ const styles = {
 	`,
 };
 
-function WeeklyLPControl({
+function WeeklyLPContent({
 	countryId,
 	productPrices,
 	promotionCopy,
@@ -73,7 +72,6 @@ function WeeklyLPControl({
 	pageQaId,
 	header,
 	giftNonGiftLink,
-	isPriceCardsAbTestVariant,
 }: WeeklyLPContentPropTypes) {
 	return (
 		<Page
@@ -101,83 +99,9 @@ function WeeklyLPControl({
 						countryId={countryId}
 						productPrices={productPrices}
 						orderIsAGift={orderIsAGift}
-						isPriceCardsAbTestVariant={isPriceCardsAbTestVariant ?? false}
 					/>
 				</CentredContainer>
 			</FullWidthContainer>
-			<FullWidthContainer theme="white">
-				<CentredContainer>
-					<div css={styles.displayRowEvenly}>
-						<GiftNonGiftCta
-							product="Guardian Weekly"
-							href={giftNonGiftLink}
-							orderIsAGift={orderIsAGift}
-						/>
-						{countryGroupId === 'GBPCountries' && (
-							<GiftNonGiftCta
-								product="Student"
-								href={routes.guardianWeeklyStudent}
-								orderIsAGift={orderIsAGift}
-								isStudent={true}
-							/>
-						)}
-					</div>
-				</CentredContainer>
-			</FullWidthContainer>
-		</Page>
-	);
-}
-
-function WeeklyLPVariant({
-	countryId,
-	productPrices,
-	promotionCopy,
-	orderIsAGift,
-	countryGroupId,
-	pageQaId,
-	header,
-	giftNonGiftLink,
-	isPriceCardsAbTestVariant,
-}: WeeklyLPContentPropTypes) {
-	return (
-		<Page
-			id={pageQaId}
-			header={header}
-			footer={
-				<GuardianWeeklyFooter
-					productPrices={productPrices}
-					orderIsAGift={!!orderIsAGift}
-					country={countryId}
-				/>
-			}
-		>
-			<FullWidthContainer cssOverrides={styles.weeklyHeroContainerOverrides}>
-				<PriceCardsWeeklyHero
-					orderIsAGift={orderIsAGift}
-					promotionCopy={promotionCopy}
-					countryId={countryId}
-					productPrices={productPrices}
-					isPriceCardsAbTestVariant={isPriceCardsAbTestVariant ?? false}
-				/>
-			</FullWidthContainer>
-
-			<FullWidthContainer>
-				<CentredContainer>
-					<ProductInfo
-						promotionCopy={promotionCopy}
-						orderIsAGift={orderIsAGift}
-					/>
-				</CentredContainer>
-			</FullWidthContainer>
-
-			<FullWidthContainer>
-				<CentredContainer>
-					<Block cssOverrides={styles.closeGapAfterPageTitle}>
-						{orderIsAGift ? <GiftBenefits /> : <Benefits />}
-					</Block>
-				</CentredContainer>
-			</FullWidthContainer>
-
 			<FullWidthContainer theme="white">
 				<CentredContainer>
 					<div css={styles.displayRowEvenly}>
@@ -240,11 +164,8 @@ function WeeklyLandingPage({
 		trackProduct: 'GuardianWeekly',
 	});
 
-	const isPriceCardsAbTestVariant =
-		participations.guardianWeeklyPriceCards === 'variant';
-
-	return isPriceCardsAbTestVariant ? (
-		<WeeklyLPVariant
+	return (
+		<WeeklyLPContent
 			countryId={countryId}
 			countryGroupId={countryGroupId}
 			productPrices={productPrices}
@@ -254,20 +175,6 @@ function WeeklyLandingPage({
 			pageQaId={pageQaId}
 			header={<Header />}
 			giftNonGiftLink={giftNonGiftLink}
-			isPriceCardsAbTestVariant={isPriceCardsAbTestVariant}
-		/>
-	) : (
-		<WeeklyLPControl
-			countryId={countryId}
-			countryGroupId={countryGroupId}
-			productPrices={productPrices}
-			promotionCopy={sanitisedPromoCopy}
-			orderIsAGift={orderIsAGift ?? false}
-			participations={participations}
-			pageQaId={pageQaId}
-			header={<Header />}
-			giftNonGiftLink={giftNonGiftLink}
-			isPriceCardsAbTestVariant={isPriceCardsAbTestVariant}
 		/>
 	);
 }

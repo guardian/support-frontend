@@ -53,14 +53,11 @@ const accordionBodyPadding = css`
 
 const expandedBody = css`
 	/*
-	TODO:
-	Hardcoded max-height because auto is invalid.
-	If content is longer, we'll need to set overflow: auto
-	but only after max-height has been reached.
-	Otherwise, for short content we'll always see a flash
-	of a scrollbar as the row height is transitioning
+	Hardcoded max-height to exceed existing max content height
+	Otherwise, there will be a temporary scrollbar visible as 
+	the row height transitions
 	*/
-	max-height: 500px;
+	max-height: 1200px;
 	transition: max-height ${transitions.medium};
 	overflow: hidden;
 	height: auto;

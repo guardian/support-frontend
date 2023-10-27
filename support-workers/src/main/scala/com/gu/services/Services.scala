@@ -8,14 +8,11 @@ import com.gu.paypal.PayPalService
 import com.gu.salesforce.SalesforceService
 import com.gu.stripe.StripeService
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
-import com.gu.support.acquisitions.{
-  AcquisitionsStreamLambdaConfig,
-  AcquisitionsStreamService,
-  AcquisitionsStreamServiceImpl,
-}
+import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService.Sources
 import com.gu.support.catalog.CatalogService
 import com.gu.support.config.Stages.PROD
 import com.gu.support.config.TouchPointEnvironments
+import com.gu.support.paperround.PaperRoundService
 import com.gu.support.promotions.PromotionService
 import com.gu.support.redemption.gifting.generator.GiftCodeGeneratorService
 import com.gu.supporterdata.model.Stage.{CODE => DynamoStageCODE, PROD => DynamoStagePROD}
@@ -50,11 +47,10 @@ class Services(isTestUser: Boolean, val config: Configuration) {
   lazy val goCardlessService = GoCardlessWorkersService(goCardlessConfigProvider.get(isTestUser))
   lazy val catalogService = CatalogService(TouchPointEnvironments.fromStage(stage, isTestUser))
   lazy val giftCodeGenerator = new GiftCodeGeneratorService
-  lazy val acquisitionsEventBusService = AcquisitionsEventBusService("support-workers", stage, isTestUser)
+  lazy val acquisitionsEventBusService = AcquisitionsEventBusService(Sources.supportWorkers, stage, isTestUser)
+  lazy val paperRoundService =
+    new PaperRoundService(paperRoundConfigProvider.get(isTestUser), configurableFutureRunner(40.seconds))
 
-  lazy val acquisitionsStreamService: AcquisitionsStreamService = new AcquisitionsStreamServiceImpl(
-    AcquisitionsStreamLambdaConfig(config.acquisitionsKinesisStreamName),
-  )
   val supporterDynamoStage = (Configuration.stage, isTestUser) match {
     case (PROD, false) => DynamoStagePROD
     case _ => DynamoStageCODE

@@ -6,6 +6,7 @@ import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs.{monthDecoder, _}
 import com.gu.support.encoding.JsonHelpers._
+import com.gu.support.paperround.AgentId
 import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.redemptions.RawRedemptionCode
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
@@ -215,7 +216,7 @@ case class Subscription(
     acquisitionSource: Option[AcquisitionSource] = None,
     createdByCsr: Option[String] = None,
     acquisitionCase: Option[String] = None,
-    deliveryAgent: Option[Integer] = None,
+    deliveryAgent: Option[AgentId] = None,
 )
 
 object RatePlanChargeData {

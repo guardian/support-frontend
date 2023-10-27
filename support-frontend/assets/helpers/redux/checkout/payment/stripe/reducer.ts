@@ -1,6 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import { validateForm } from '../../checkoutActions';
+import type { PaymentMethod } from '@stripe/stripe-js';
+import { resetValidation, validateForm } from '../../checkoutActions';
 import type { StripeErrorPayload } from './state';
 import { initialStripeCardState } from './state';
 import { getStripeSetupIntent } from './thunks';
@@ -15,7 +16,10 @@ export const stripeCardSlice = createSlice({
 		setClientSecret(state, action: PayloadAction<string>) {
 			state.setupIntentClientSecret = action.payload;
 		},
-		setStripePaymentMethod(state, action: PayloadAction<string | undefined>) {
+		setStripePaymentMethod(
+			state,
+			action: PayloadAction<string | PaymentMethod | undefined>,
+		) {
 			state.stripePaymentMethod = action.payload;
 		},
 		setStripeFormError(state, action: PayloadAction<StripeErrorPayload>) {
@@ -35,6 +39,10 @@ export const stripeCardSlice = createSlice({
 			if (action.payload === 'Stripe') {
 				state.showErrors = true;
 			}
+		});
+
+		builder.addCase(resetValidation, (state) => {
+			state.errors = {};
 		});
 	},
 });

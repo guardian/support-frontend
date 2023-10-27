@@ -117,7 +117,14 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 				test: /\.([jt]sx?|mjs)$/,
 				exclude: {
 					and: [/node_modules/],
-					not: [/@guardian\/consent-management-platform/, /@guardian\/libs/],
+					not: [
+            /@guardian\/consent-management-platform/,
+            /@guardian\/libs/,
+            // we need to include this here to support Safari < v14 which doens't support private class fields
+            // used here: https://github.com/guardian/csnx/blob/e3678d2fffb206ec560891db8ff0ce8c47b05328/libs/%40guardian/source-foundations/src/accessibility/focus-style-manager.ts#L9
+            // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields
+            /@guardian\/source-foundations/
+          ],
 				},
 				use: [
 					{

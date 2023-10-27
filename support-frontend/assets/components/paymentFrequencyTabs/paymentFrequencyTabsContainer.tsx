@@ -19,8 +19,9 @@ export function PaymentFrequencyTabsContainer({
 	render,
 }: PaymentFrequencyTabsContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
-	const { contributionTypes } = useContributionsSelector(
-		(state) => state.common.settings,
+
+	const { displayContributionType } = useContributionsSelector(
+		(state) => state.common.amounts,
 	);
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -34,15 +35,13 @@ export function PaymentFrequencyTabsContainer({
 
 		dispatch(setProductType(contributionType));
 	}
-
-	const tabs = contributionTypes[countryGroupId].map(({ contributionType }) => {
+	const tabs = displayContributionType.map((contributionType) => {
 		return {
 			id: contributionType,
 			labelText: toHumanReadableContributionType(contributionType),
 			selected: contributionType === productType,
 		};
 	});
-
 	return render({
 		ariaLabel,
 		tabs,

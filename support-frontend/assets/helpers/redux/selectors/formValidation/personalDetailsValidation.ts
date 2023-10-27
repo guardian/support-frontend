@@ -18,10 +18,8 @@ export function getStateOrProvinceError(
 }
 
 function getZipCodeErrors(state: ContributionsState): ErrorCollection {
-	const { abParticipations, internationalisation } = state.common;
-	const shouldShowZipCode =
-		internationalisation.countryId === 'US' &&
-		abParticipations.mandatoryZipCode === 'variant';
+	const { internationalisation } = state.common;
+	const shouldShowZipCode = internationalisation.countryId === 'US';
 
 	if (shouldShowZipCode) {
 		const zipCode =

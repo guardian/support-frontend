@@ -26,10 +26,6 @@ export function PersonalDetailsContainer({
 }: PersonalDetailsContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 
-	const { mandatoryZipCode } = useContributionsSelector(
-		(state) => state.common.abParticipations,
-	);
-
 	const { email, firstName, lastName, errors } = useContributionsSelector(
 		(state) => state.page.checkoutForm.personalDetails,
 	);
@@ -45,7 +41,7 @@ export function PersonalDetailsContainer({
 		(state) => state.common.internationalisation.countryId,
 	);
 
-	const showZipCodeField = mandatoryZipCode === 'variant' && countryId === 'US';
+	const showZipCodeField = countryId === 'US';
 
 	function onEmailChange(email: string) {
 		dispatch(setEmail(email));

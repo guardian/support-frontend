@@ -158,7 +158,9 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
   it should "work for a paper subscription" in doRequest(Right(directDebitSubscriptionRequestPaper))
 
-  it should "work for a national delivery paper subscription" in doRequest(
+  // ignored for now to avoid overwhelming PaperRound with test data
+  // it can be added back in when the initial testing period is over
+  ignore should "work for a national delivery paper subscription" in doRequest(
     Right(directDebitSubscriptionRequestNationalDelivery),
   )
 

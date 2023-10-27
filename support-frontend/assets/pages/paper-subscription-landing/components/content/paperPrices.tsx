@@ -22,7 +22,6 @@ export type PaperPricesPropTypes = {
 	activeTab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
 	products: Product[];
-	isPriceCardsAbTestVariant: boolean;
 	isNationalDeliveryAbTestVariant: boolean;
 };
 const pricesSection = css`
@@ -38,22 +37,12 @@ const pricesHeadline = css`
 	}
 `;
 
-const pricesHeadlineVariant = css`
-	margin-top: ${space[4]}px;
-	${from.tablet} {
-		margin-top: ${space[6]}px;
-	}
-`;
-
 const priceBoxes = css`
 	margin-top: ${space[6]}px;
 	justify-content: flex-start;
 	${from.tablet} {
 		margin-top: 56px;
 	}
-`;
-const priceBoxesVariant = css`
-	margin-top: 0px;
 `;
 
 const productOverride = css`
@@ -103,7 +92,6 @@ export function PaperPrices({
 	activeTab,
 	setTabAction,
 	products,
-	isPriceCardsAbTestVariant,
 	isNationalDeliveryAbTestVariant,
 }: PaperPricesPropTypes): JSX.Element {
 	const infoText = `${
@@ -133,15 +121,7 @@ export function PaperPrices({
 
 	return (
 		<section css={pricesSection} id="subscribe">
-			<h2
-				css={
-					isPriceCardsAbTestVariant
-						? [pricesHeadline, pricesHeadlineVariant]
-						: pricesHeadline
-				}
-			>
-				Pick your subscription package below
-			</h2>
+			<h2 css={pricesHeadline}>Pick your subscription package below</h2>
 			<div css={pricesTabs}>
 				{/* Show Home Delivery tab first if in ab test */}
 				{isNationalDeliveryAbTestVariant ? (
@@ -156,13 +136,7 @@ export function PaperPrices({
 					</>
 				)}
 			</div>
-			<FlexContainer
-				cssOverrides={
-					isPriceCardsAbTestVariant
-						? [priceBoxes, priceBoxesVariant]
-						: priceBoxes
-				}
-			>
+			<FlexContainer cssOverrides={priceBoxes}>
 				{products.map((product) => (
 					<ProductOption
 						cssOverrides={
@@ -177,6 +151,7 @@ export function PaperPrices({
 						onClick={product.onClick}
 						onView={product.onView}
 						label={product.label}
+						unavailableOutsideLondon={product.unavailableOutsideLondon}
 					/>
 				))}
 			</FlexContainer>

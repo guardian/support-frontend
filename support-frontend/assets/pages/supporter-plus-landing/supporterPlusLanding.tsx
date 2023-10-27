@@ -48,7 +48,6 @@ import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { CheckoutDivider } from './components/checkoutDivider';
-import { DirectDebitContainer } from './components/directDebitWrapper';
 import { GuardianTsAndCs } from './components/guardianTsAndCs';
 import { LandingPageHeading } from './components/landingPageHeading';
 import { PatronsMessage } from './components/patronsMessage';
@@ -247,7 +246,6 @@ export function SupporterPlusLandingPage({
 										)}
 									/>
 									<PaymentFailureMessage />
-									<DirectDebitContainer />
 								</ContributionsStripe>
 								<PaymentTsAndCs
 									countryGroupId={countryGroupId}

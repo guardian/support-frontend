@@ -59,20 +59,30 @@ export const accordionContainer = css`
 const accordionTrackingId = 'Paper_HomeDelivery-tab_Delivery-accordion';
 export function ContentDeliveryFaqBlock({
 	setTabAction,
+	isNationalDeliveryAbTestVariant,
 }: {
 	setTabAction: (paperFulfilmentOption: PaperFulfilmentOptions) => void;
+	isNationalDeliveryAbTestVariant: boolean;
 }): JSX.Element {
 	return (
 		<FlexContainer cssOverrides={flexContainerOverride}>
 			<div css={faqsContainer}>
-				<p css={paragraph}>
-					If you live in Greater London, you can use the Guardian’s home
-					delivery service. If not, you can use our{' '}
-					<LinkTo tab={Collection} setTabAction={setTabAction}>
-						subscription cards
-					</LinkTo>
-					.
-				</p>
+				{isNationalDeliveryAbTestVariant ? (
+					<p css={paragraph}>
+						Use the Guardian’s home delivery service to get our newspaper direct
+						to your door.
+					</p>
+				) : (
+					<p css={paragraph}>
+						If you live in Greater London, you can use the Guardian’s home
+						delivery service. If not, you can use our{' '}
+						<LinkTo tab={Collection} setTabAction={setTabAction}>
+							subscription cards
+						</LinkTo>
+						.
+					</p>
+				)}
+
 				<p css={paragraph}>
 					Select your subscription below and checkout. You&apos;ll receive your
 					first newspaper as quickly as five days from subscribing.
@@ -84,19 +94,24 @@ export function ContentDeliveryFaqBlock({
 								trackingId={accordionTrackingId}
 								label="Delivery details"
 							>
-								<p>
-									Your newspaper will arrive before 8am from Monday to Saturday
-									and before 8.30am on Sunday.
-								</p>
+								{isNationalDeliveryAbTestVariant ? (
+									<p>Your newspaper will arrive before 9am.</p>
+								) : (
+									<p>
+										Your newspaper will arrive before 8am from Monday to
+										Saturday and before 8.30am on Sunday.
+									</p>
+								)}
 								<p>
 									We can’t deliver to individual flats, or apartments within
 									blocks because we need access to your post box to deliver your
 									newspaper.
 								</p>
 								<p>
-									You can pause your subscription for up to 36 days a year. So
-									if you’re going away anywhere, you won’t have to pay for the
-									newspapers that you miss.
+									You can pause your subscription for up to{' '}
+									{isNationalDeliveryAbTestVariant ? '5 weeks' : '36 days'} a
+									year. So if you’re going away anywhere, you won’t have to pay
+									for the newspapers that you miss.
 								</p>
 							</TabAccordionRow>,
 						]}

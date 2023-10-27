@@ -7,9 +7,17 @@ export type SortCodeIndex = 0 | 1 | 2;
 const numericStringRegex = /^\d+$/;
 
 export const directDebitSchema = z.object({
-	sortCodeString: z.string().length(6).regex(numericStringRegex),
-	accountNumber: z.string().min(1).regex(numericStringRegex),
-	accountHolderName: z.string().min(1),
+	sortCodeString: z
+		.string()
+		.length(6, 'Please enter your sort code')
+		.regex(numericStringRegex, 'Please enter a valid sort code'),
+	accountNumber: z
+		.string()
+		.min(1, 'Please enter your account number')
+		.regex(numericStringRegex, 'Please enter a valid account number'),
+	accountHolderName: z
+		.string()
+		.min(1, 'Please provide your account holder name'),
 	accountHolderConfirmation: z.boolean().refine((confirmed) => confirmed, {
 		message: 'Please confirm you are the account holder',
 	}),

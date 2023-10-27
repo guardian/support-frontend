@@ -13,8 +13,8 @@ import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
-import { checkoutTopUpUpperThresholdsByCountryGroup } from 'helpers/checkoutTopUp/upperThreshold';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
@@ -29,7 +29,6 @@ import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefits
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { CheckoutDivider } from '../components/checkoutDivider';
-import { DirectDebitContainer } from '../components/directDebitWrapper';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
@@ -45,10 +44,10 @@ const shorterBoxMargin = css`
 
 export function SupporterPlusCheckout({
 	thankYouRoute,
-	showTopUpAmounts,
+	showTopUpToggle,
 }: {
 	thankYouRoute: string;
-	showTopUpAmounts: boolean;
+	showTopUpToggle: boolean;
 }): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
@@ -73,15 +72,11 @@ export function SupporterPlusCheckout({
 		countryGroupId,
 	);
 
-	const showPreAmendedTotal =
-		showTopUpAmounts &&
+	const belowThreshold =
+		showTopUpToggle &&
 		contributionType !== 'ONE_OFF' &&
-		amountBeforeAmendments >=
-			benefitsThresholdsByCountryGroup[countryGroupId][contributionType] &&
-		amountBeforeAmendments <=
-			checkoutTopUpUpperThresholdsByCountryGroup[countryGroupId][
-				contributionType
-			];
+		amountBeforeAmendments <
+			benefitsThresholdsByCountryGroup[countryGroupId][contributionType];
 
 	const navigate = useNavigate();
 
@@ -96,6 +91,7 @@ export function SupporterPlusCheckout({
 						amount: `${amountBeforeAmendments}`,
 					}),
 				);
+				dispatch(resetValidation());
 				const destination = `/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`;
 				navigateWithPageView(navigate, destination);
 			}}
@@ -109,12 +105,14 @@ export function SupporterPlusCheckout({
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					<ContributionsOrderSummaryContainer
+						showUnchecked={showTopUpToggle}
 						renderOrderSummary={(orderSummaryProps) => (
 							<ContributionsOrderSummary
 								{...orderSummaryProps}
 								headerButton={changeButton}
-								showTopUpAmounts={showTopUpAmounts}
-								showPreAmendedTotal={showPreAmendedTotal}
+								showTopUpToggle={belowThreshold}
+								showPreAmendedTotal={belowThreshold}
+								version={belowThreshold ? 'FULL' : 'COMPACT'}
 							/>
 						)}
 					/>
@@ -154,7 +152,6 @@ export function SupporterPlusCheckout({
 							)}
 						/>
 						<PaymentFailureMessage />
-						<DirectDebitContainer />
 					</ContributionsStripe>
 					<PaymentTsAndCs
 						countryGroupId={countryGroupId}

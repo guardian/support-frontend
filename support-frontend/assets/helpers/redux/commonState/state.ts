@@ -30,7 +30,6 @@ export type CommonState = {
 	abParticipations: Participations;
 	settings: Settings;
 	amounts: SelectedAmountsVariant;
-	defaultAmounts: SelectedAmountsVariant;
 	internationalisation: Internationalisation;
 	existingPaymentMethods?: ExistingPaymentMethod[];
 };
@@ -43,7 +42,6 @@ export type CommonStateSetupData = {
 	abParticipations: Participations;
 	settings: Settings;
 	amounts: SelectedAmountsVariant;
-	defaultAmounts: SelectedAmountsVariant;
 };
 
 const countryGroupId = detectCountryGroup();
@@ -55,7 +53,6 @@ export const initialCommonState: CommonState = {
 	abParticipations: {},
 	settings: getSettings(),
 	amounts: getFallbackAmounts(countryGroupId),
-	defaultAmounts: getFallbackAmounts(countryGroupId),
 	internationalisation: {
 		currencyId: detectCurrency(countryGroupId),
 		countryGroupId,

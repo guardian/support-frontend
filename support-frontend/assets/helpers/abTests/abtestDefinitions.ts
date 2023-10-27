@@ -40,26 +40,6 @@ export const pageUrlRegexes = {
 	},
 };
 export const tests: Tests = {
-	guardianWeeklyPriceCards: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: true,
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.subscriptions.subsWeeklyPages,
-		seed: 11,
-	},
 	supporterPlusOnly: {
 		variants: [
 			{
@@ -79,7 +59,7 @@ export const tests: Tests = {
 		referrerControlled: true,
 		seed: 2,
 	},
-	twoStepCheckout: {
+	twoStepCheckoutWithNudgeBelow: {
 		variants: [
 			{
 				id: 'control',
@@ -154,25 +134,5 @@ export const tests: Tests = {
 		audiences: {},
 		referrerControlled: false,
 		seed: 0,
-	},
-	mandatoryZipCode: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		isActive: false,
-		audiences: {
-			UnitedStates: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		referrerControlled: false,
-		targetPage: pageUrlRegexes.contributions.usLandingPage,
-		seed: 4,
 	},
 };

@@ -2,7 +2,6 @@ package com.gu.support.acquisitions.models
 
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.acquisitions.{AbTest, QueryParameter}
-import com.gu.support.catalog.{FulfilmentOptions, ProductOptions}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec.deriveCodec
 import com.gu.support.encoding.CustomCodecs._
@@ -42,6 +41,9 @@ case class AcquisitionDataRow(
     paymentId: Option[String],
     queryParameters: List[QueryParameter],
     platform: Option[String],
+    postalCode: Option[String],
+    state: Option[String],
+    email: Option[String],
 )
 
 object AcquisitionDataRow {

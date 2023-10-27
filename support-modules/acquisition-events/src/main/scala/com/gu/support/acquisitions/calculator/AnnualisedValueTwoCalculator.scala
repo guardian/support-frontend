@@ -13,6 +13,9 @@ import com.gu.support.acquisitions.models.PrintProduct.{
   HomeDeliverySundayPlus,
   HomeDeliveryWeekend,
   HomeDeliveryWeekendPlus,
+  NationalDeliveryEveryday,
+  NationalDeliverySixday,
+  NationalDeliveryWeekend,
   VoucherEveryday,
   VoucherEverydayPlus,
   VoucherSaturday,
@@ -25,6 +28,7 @@ import com.gu.support.acquisitions.models.PrintProduct.{
   VoucherWeekendPlus,
 }
 import com.gu.support.acquisitions.models.{AcquisitionProduct, PaymentFrequency}
+import com.gu.support.catalog.NationalDelivery
 
 object AnnualisedValueTwoCalculator {
 
@@ -84,7 +88,7 @@ object AnnualisedValueTwoCalculator {
       case (Annually, USD) => Right(68.18)
       case (Annually, AUD) => Right(98.1855)
       case (Annually, _) => Right(40.28)
-      case (_) => Left("Error calculating AV for membership supporter")
+      case _ => Left("Error calculating AV for membership supporter")
     }
 
   def getMembershipPartnerAV(a: AcquisitionModel): Either[String, Double] =
@@ -141,6 +145,9 @@ object AnnualisedValueTwoCalculator {
           case (HomeDeliverySixdayPlus, _) => Right(345.54)
           case (HomeDeliveryEveryday, _) => Right(320.04)
           case (HomeDeliveryEverydayPlus, _) => Right(346.65)
+          case (NationalDeliveryEveryday, _) => Right(320.04)
+          case (NationalDeliverySixday, _) => Right(298.53)
+          case (NationalDeliveryWeekend, _) => Right(129.01)
           case _ => Left(s"No pricing information for ${x.product.value}")
         }
       })

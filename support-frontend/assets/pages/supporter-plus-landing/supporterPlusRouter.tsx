@@ -41,10 +41,11 @@ const {
 } = store.getState();
 
 const isInTwoStepTest =
-	abParticipations.twoStepCheckout &&
-	abParticipations.twoStepCheckout !== 'control';
-const showCheckoutTopUpAmounts =
-	abParticipations.twoStepCheckout === 'variant_b';
+	abParticipations.twoStepCheckoutWithNudgeBelow &&
+	abParticipations.twoStepCheckoutWithNudgeBelow !== 'control';
+
+const showCheckoutTopUpToggle =
+	abParticipations.twoStepCheckoutWithNudgeBelow === 'variant_b';
 
 // ----- ScrollToTop on Navigate: https://v5.reactrouter.com/web/guides/scroll-restoration ---- //
 
@@ -98,7 +99,7 @@ const router = () => {
 				element={
 					<SupporterPlusCheckout
 						thankYouRoute={thankYouRoute}
-						showTopUpAmounts={showCheckoutTopUpAmounts}
+						showTopUpToggle={showCheckoutTopUpToggle}
 					/>
 				}
 			/>

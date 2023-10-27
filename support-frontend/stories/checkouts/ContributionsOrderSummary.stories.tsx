@@ -44,7 +44,6 @@ export const Default = Template.bind({});
 Default.args = {
 	contributionType: 'MONTHLY',
 	total: 10,
-	totalBeforeAmended: 10,
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
@@ -68,38 +67,11 @@ Default.args = {
 	),
 };
 
-export const BelowThreshold = Template.bind({});
-
-BelowThreshold.args = {
-	contributionType: 'ANNUAL',
-	total: 25,
-	totalBeforeAmended: 25,
-	currency: {
-		glyph: '$',
-		extendedGlyph: 'US$',
-		isSuffixGlyph: false,
-		isPaddedGlyph: false,
-	},
-	checkListData: checkListData({ higherTier: false, showUnchecked: false }),
-	headerButton: (
-		<Button priority="tertiary" size="xsmall">
-			Change
-		</Button>
-	),
-	tsAndCs: (
-		<>
-			<p>Auto renews every year until you cancel.</p>
-			<p>Cancel or change your support anytime.</p>
-		</>
-	),
-};
-
 export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {
 	contributionType: 'ONE_OFF',
 	total: 25,
-	totalBeforeAmended: 25,
 	currency: {
 		glyph: '$',
 		extendedGlyph: 'US$',
