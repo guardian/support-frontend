@@ -5,26 +5,27 @@ import { email, firstName, lastName } from "./utils/users";
 test.beforeEach(async ({ page, context, baseURL }) => {
   const baseUrlWithFallback = baseURL ?? "https://support.theguardian.com";
   // We should remove the forcing into the ab test once this has been made live
-  const pageUrl = `${baseUrlWithFallback}/uk/contribute#ab-twoStepCheckoutWithNudgeBelow=variant_a`;
+  const pageUrl = `${baseUrlWithFallback}/au/contribute#ab-twoStepCheckoutWithNudgeBelow=variant_a`;
 
   const domain = new URL(pageUrl).hostname;
   await setTestCookies(context, firstName, domain);
   await page.goto(pageUrl, { waitUntil: "networkidle" });
 });
 
-test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", () => {
-  test("Monthly contribution sign-up with Stripe - GBP", async ({ page }) => {
-    await page.getByRole("tab").getByText("Monthly").click();
+test.describe("Sign up for a one-off contribution (New Contributions Flow)", () => {
+  test("One-off contribution sign-up with Stripe - AUD", async ({ page, baseURL, context}) => {
+
+    await page.getByRole("tab").getByText("Single").click();
+
+    await page.locator('label[for=\'amount-other\']').click();
+
+    await page.getByLabel("Enter your amount").type("22.55");
     await page.getByRole("button", { name: "Continue to checkout" }).click();
 
     await page.getByLabel("Email address").type(email);
-    await page.getByLabel("First name").type(firstName);
-    await page.getByLabel("Last name").type(lastName);
 
-    await page.getByLabel("Credit/Debit card").click();
+    await page.getByRole('radio', { name: 'Credit/Debit card' }).click();
 
-    // it would be nice to use aria style selectors here, but given Stripes
-    // very secure implementation, it is quite hard
     await page
       .frameLocator("#cardNumber iframe")
       .locator('input[name="cardnumber"]')
@@ -55,8 +56,25 @@ test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", (
       recaptchaIframe.locator("#recaptcha-accessible-status"),
     ).toContainText("You are verified");
 
-    await page.getByText(/Pay £([0-9]+) per month/).click();
+    await page.locator('button:has-text("Support us with")').click();
 
-    await expect(page).toHaveURL(/\/uk\/thankyou/, { timeout: 60000 });
+    await expect(page).toHaveURL(/\/au\/thankyou/, { timeout: 600000 });
+  });
+});
+
+test.describe("Sign up for a one-off contribution (New Contributions Flow)", () => {
+  test("Check browser navigates to paypal", async ({ page,baseURL,context }) => {
+
+    await page.getByRole("tab").getByText("Single").click();
+    await page.getByRole("button", { name: "Continue to checkout" }).click();
+
+    await page.getByLabel("Email address").type(email);
+
+    await page.getByRole('radio', { name: 'Paypal' }).click();
+
+    await page.locator('button:has-text("Pay")').click();
+
+    await expect(page).toHaveURL(/.*paypal.com/,{ timeout: 600000 });
+
   });
 });
