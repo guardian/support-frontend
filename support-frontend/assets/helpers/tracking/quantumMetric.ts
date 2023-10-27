@@ -356,11 +356,11 @@ function sendEventABTestParticipations(participations: Participations): void {
 
 function addQM() {
 	return loadScript(
-		'https://cdn.quantummetric.com/instrumentation/1.31.5/quantum-gnm.js',
+		'https://cdn.quantummetric.com/instrumentation/1.34.1/quantum-gnm.js',
 		{
 			async: true,
 			integrity:
-				'sha384-QqJrp8s9Nl3x7Z6sc9kQG5eYJLVWYwlEsvhjCukLSwFsWtK17WdC5whHVwSXQh1F',
+				'sha384-wDpTvwv5DbDAQ34iR2LD1BTr6V9EtbW7S8JLuwbT7HRQ1etRrL5yKlC0RGZhyDc7',
 			crossOrigin: 'anonymous',
 		},
 	).catch(() => {
