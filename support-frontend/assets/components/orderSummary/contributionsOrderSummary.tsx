@@ -13,8 +13,6 @@ import {
 import { useState } from 'react';
 import type { CheckListData } from 'components/checkmarkList/checkmarkList';
 import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
-import { CheckoutTopUpAmounts } from 'components/checkoutTopUpAmounts/checkoutTopUpAmounts';
-import { CheckoutTopUpAmountsContainer } from 'components/checkoutTopUpAmounts/checkoutTopUpAmountsContainer';
 import { CheckoutTopUpToggle } from 'components/checkoutTopUpToggle/checkoutTopUpToggle';
 import { CheckoutTopUpToggleContainer } from 'components/checkoutTopUpToggle/checkoutTopUpToggleContainer';
 import type { ContributionType } from 'helpers/contributions';
@@ -169,7 +167,6 @@ export function ContributionsOrderSummary({
 	onAccordionClick,
 	headerButton,
 	tsAndCs,
-	showTopUpAmounts,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showDetails, setShowDetails] = useState(false);
 
@@ -215,16 +212,7 @@ export function ContributionsOrderSummary({
 					<div css={checklistContainer}>{checkmarkList}</div>
 				)}
 			</div>
-			{showTopUpAmounts && (
-				<CheckoutTopUpAmountsContainer
-					renderCheckoutTopUpAmounts={(checkoutTopUpAmounts) => (
-						<CheckoutTopUpAmounts
-							{...checkoutTopUpAmounts}
-							customMargin={`${space[5]}px 0 ${space[4]}px`}
-						/>
-					)}
-				/>
-			)}
+
 			{contributionType !== 'ONE_OFF' && (
 				<div css={toggleContainer}>
 					<CheckoutTopUpToggleContainer
