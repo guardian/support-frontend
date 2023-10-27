@@ -32,7 +32,7 @@ export type PropTypes = {
 	setEmail: (email: string) => void;
 	confirmEmail?: string;
 	setConfirmEmail?: (confirmEmail: string) => void;
-	fetchAndStoreUserType?: (email: string) => void;
+	fetchAndStoreUserType?: (email: string) => unknown | Promise<unknown>;
 	isSignedIn: boolean;
 	telephone?: string;
 	setTelephone: (telephone: string) => void;

@@ -28,13 +28,14 @@ export function useAmazonPayObjects(
 	useEffect(() => {
 		const hasLoaded = loginObject !== undefined || paymentsObject !== undefined;
 
-		if (hasSelectedAmazonPay && !hasLoaded)
+		if (hasSelectedAmazonPay && !hasLoaded) {
 			setupAmazonPay(
 				countryGroupId,
 				setLoginObject,
 				setPaymentsObject,
 				isTestUser,
 			);
+		}
 	}, [hasSelectedAmazonPay]);
 
 	return { loginObject, paymentsObject };

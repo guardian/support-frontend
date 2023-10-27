@@ -65,7 +65,7 @@ function sendGetExistingPaymentMethodsRequest(
 				throw new Error('existing payment options response was not an array');
 			}
 		})
-		.catch((error) => {
+		.catch((error: Record<string, unknown>) => {
 			logException('Failed to get existing payment options', error);
 			storeResponse([]);
 		});

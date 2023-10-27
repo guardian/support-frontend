@@ -6,7 +6,7 @@ import {
 	LinkButton,
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
-import type { ReactNode } from 'react';
+import type { MouseEventHandler, ReactNode } from 'react';
 import GridImage from 'components/gridImage/gridImage';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
@@ -130,7 +130,7 @@ type AppStoreLinkPropTypes = {
 	ariaLabel: string;
 	storeLink: string;
 	children: ReactNode;
-	onClick: (...args: any[]) => any;
+	onClick: MouseEventHandler;
 };
 
 function AppStoreLink({
