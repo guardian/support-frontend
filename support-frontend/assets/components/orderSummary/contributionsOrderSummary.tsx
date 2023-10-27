@@ -22,7 +22,7 @@ const componentStyles = css`
 `;
 
 const summaryRow = css`
-	display: 'flex';
+	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
 	padding-top: 4px;
