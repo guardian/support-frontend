@@ -13,8 +13,6 @@ import {
 import { useState } from 'react';
 import type { CheckListData } from 'components/checkmarkList/checkmarkList';
 import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
-import { CheckoutTopUpToggle } from 'components/checkoutTopUpToggle/checkoutTopUpToggle';
-import { CheckoutTopUpToggleContainer } from 'components/checkoutTopUpToggle/checkoutTopUpToggleContainer';
 import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -106,16 +104,6 @@ const detailsSection = css`
 
 	${from.desktop} {
 		margin-bottom: ${space[6]}px;
-	}
-`;
-
-const toggleContainer = css`
-	margin-top: ${space[3]}px;
-	margin-bottom: ${space[3]}px;
-
-	${from.desktop} {
-		margin-top: ${space[4]}px;
-		margin-bottom: ${space[4]}px;
 	}
 `;
 
@@ -213,15 +201,6 @@ export function ContributionsOrderSummary({
 				)}
 			</div>
 
-			{contributionType !== 'ONE_OFF' && (
-				<div css={toggleContainer}>
-					<CheckoutTopUpToggleContainer
-						renderCheckoutTopUpToggle={(checkoutTopUpToggleProps) => (
-							<CheckoutTopUpToggle {...checkoutTopUpToggleProps} />
-						)}
-					/>
-				</div>
-			)}
 			<hr css={hrCss} />
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
