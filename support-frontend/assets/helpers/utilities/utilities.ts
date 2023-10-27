@@ -31,12 +31,12 @@ function hiddenIf(shouldHide: boolean, className: string): string {
 // Deserialises a JSON object from a string.
 function deserialiseJsonObject(
 	serialised: string,
-): Record<string, any> | null | undefined {
+): Record<string, unknown> | null | undefined {
 	try {
 		const deserialised: unknown = JSON.parse(serialised);
 
 		if (deserialised instanceof Object && !(deserialised instanceof Array)) {
-			return deserialised;
+			return deserialised as Record<string, unknown>;
 		}
 
 		return null;

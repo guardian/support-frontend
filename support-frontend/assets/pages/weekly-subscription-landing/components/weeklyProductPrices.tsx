@@ -51,7 +51,7 @@ const getPriceWithSymbol = (currencyId: IsoCurrency, price: number) =>
 	getCurrencySymbol(currencyId) + fixDecimals(price);
 
 const getPromotionLabel = (promotion?: Promotion) => {
-	if (!promotion || !promotion.discount) {
+	if (!promotion?.discount) {
 		return '';
 	}
 

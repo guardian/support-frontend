@@ -75,7 +75,7 @@ const loadAmazonPayScript = (isSandbox: boolean): void => {
 		script.src = widgetsUrl;
 
 		document.head.appendChild(script);
-	}).catch((error) => {
+	}).catch((error: Record<string, unknown>) => {
 		logException(`Error loading ${widgetsUrl}`, error);
 	});
 };
