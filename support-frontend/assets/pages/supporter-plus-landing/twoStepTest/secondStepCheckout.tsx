@@ -25,7 +25,6 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { CheckoutDivider } from '../components/checkoutDivider';
@@ -44,10 +43,8 @@ const shorterBoxMargin = css`
 
 export function SupporterPlusCheckout({
 	thankYouRoute,
-	showTopUpToggle,
 }: {
 	thankYouRoute: string;
-	showTopUpToggle: boolean;
 }): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
@@ -71,12 +68,6 @@ export function SupporterPlusCheckout({
 		otherAmounts,
 		countryGroupId,
 	);
-
-	const belowThreshold =
-		showTopUpToggle &&
-		contributionType !== 'ONE_OFF' &&
-		amountBeforeAmendments <
-			benefitsThresholdsByCountryGroup[countryGroupId][contributionType];
 
 	const navigate = useNavigate();
 
@@ -105,14 +96,10 @@ export function SupporterPlusCheckout({
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					<ContributionsOrderSummaryContainer
-						showUnchecked={showTopUpToggle}
 						renderOrderSummary={(orderSummaryProps) => (
 							<ContributionsOrderSummary
 								{...orderSummaryProps}
 								headerButton={changeButton}
-								showTopUpToggle={belowThreshold}
-								showPreAmendedTotal={belowThreshold}
-								version={belowThreshold ? 'FULL' : 'COMPACT'}
 							/>
 						)}
 					/>

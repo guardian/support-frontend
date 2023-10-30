@@ -33,12 +33,8 @@ export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
 		<SvgCrossRound isAnnouncedByScreenReader size="small" />
 	);
 
-export const checkListData = ({
-	higherTier,
-	showUnchecked = true,
-}: TierUnlocks): CheckListData[] => {
+export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 	const maybeGreyedOutHigherTier = higherTier ? undefined : greyedOut;
-	const showHigherTier = higherTier || showUnchecked;
 
 	const higherTierItems = [
 		{
@@ -82,6 +78,6 @@ export const checkListData = ({
 				</p>
 			),
 		},
-		...(showHigherTier ? higherTierItems : []),
+		...higherTierItems,
 	];
 };
