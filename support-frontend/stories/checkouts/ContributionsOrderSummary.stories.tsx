@@ -65,7 +65,7 @@ Default.args = {
 			</p>
 		</>
 	),
-} as ContributionsOrderSummaryProps;
+};
 
 export const SingleContribution = Template.bind({});
 
