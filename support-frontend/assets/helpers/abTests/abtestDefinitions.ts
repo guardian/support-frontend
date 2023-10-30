@@ -62,14 +62,16 @@ export const tests: Tests = {
 	nationalDelivery: {
 		variants: [
 			{
-				id: 'control',
-			},
-			{
 				id: 'variant',
 			},
 		],
-		isActive: false,
-		audiences: {},
+		isActive: true,
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
 		referrerControlled: false,
 		seed: 0,
 	},
