@@ -121,6 +121,7 @@ lazy val root = (project in file("."))
 lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
+  .configs(IntegrationTest)
   .settings(
     integrationTestSettings,
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
