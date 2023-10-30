@@ -75,4 +75,23 @@ export const tests: Tests = {
 		referrerControlled: false,
 		seed: 0,
 	},
+	makeItAnnualNudge: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		isActive: false,
+		audiences: {
+			US: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		referrerControlled: false,
+		seed: 1,
+	},
 };
