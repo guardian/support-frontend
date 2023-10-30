@@ -1,4 +1,3 @@
-import SeleniumTestConfig.SeleniumTest
 import sbt.Keys.{organization, publishTo, resolvers, scalaVersion, skip, updateOptions}
 import sbtrelease.ReleaseStateTransformations._
 import LibraryVersions._
@@ -122,10 +121,8 @@ lazy val root = (project in file("."))
 lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .configs(SeleniumTest, IntegrationTest)
   .settings(
     integrationTestSettings,
-    inConfig(SeleniumTest)(Defaults.testTasks),
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
@@ -185,7 +182,7 @@ lazy val `supporter-product-data-dynamo` = (project in file("support-modules/sup
     libraryDependencies ++= commonDependencies,
     releaseSettings,
     scalafmtSettings,
-    mergeStrategySettings
+    mergeStrategySettings,
   )
 
 lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
@@ -352,5 +349,5 @@ lazy val `support-lambdas` = (project in file("support-lambdas"))
     `it-test-runner`,
     `acquisitions-firehose-transformer`,
     `acquisition-events-api`,
-    `bigquery-acquisitions-publisher`
+    `bigquery-acquisitions-publisher`,
   )
