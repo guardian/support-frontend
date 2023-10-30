@@ -17,17 +17,15 @@ export function getUserSelectedAmount(state: ContributionsState): number {
 
 export function getUserSelectedAmountBeforeAmendment(
 	state: ContributionsState,
-): number {
+): number|string {
 	const contributionType = getContributionType(state);
-	const { selectedAmountsBeforeAmendment, otherAmountsBeforeAmendment } =
+	const { selectedAmountsBeforeAmendment } =
 		state.page.checkoutForm.product;
 	const priceCardAmountSelected =
 		selectedAmountsBeforeAmendment[contributionType];
 
 	if (priceCardAmountSelected === 'other') {
-		const customAmount = otherAmountsBeforeAmendment[contributionType];
-		// TODO: what do we do when this is NaN? Do we handle elsewhere?
-		return Number.parseFloat(customAmount.amount ?? '');
+    return 'other';
 	}
 
 	return priceCardAmountSelected;
