@@ -4886,10 +4886,10 @@
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
   integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
-"@types/seedrandom@^3.0.5":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@types/seedrandom/-/seedrandom-3.0.5.tgz#31fb257427742a9cc33fcf0c25dacca92e8f45a1"
-  integrity sha512-kopEpYpFQvQdYsZkZVwht/0THHmTFFYXDaqV/lM45eweJ8kcGVDgZHs0RVTolSq55UPZNmjhKc9r7UvLu/mQQg==
+"@types/seedrandom@^3.0.7":
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/@types/seedrandom/-/seedrandom-3.0.7.tgz#679f6bc26bb59245662398a3770bcbf9d29c5af4"
+  integrity sha512-2kwVU6ijXQblfsC8uqhBxslJC2wJfgTE1hINNkj29TL37fc8Uli5Ew43xTv2tShH3FeoKv8jkH2WgeVLd5QWzA==
 
 "@types/semver@^7.3.12", "@types/semver@^7.3.4":
   version "7.5.0"
