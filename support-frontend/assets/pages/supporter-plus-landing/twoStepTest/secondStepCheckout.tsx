@@ -18,8 +18,8 @@ import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
-	getUserSelectedAmount,
-	getUserSelectedAmountBeforeAmendment,
+  getUserSelectedAmount,
+  getUserSelectedAmountBeforeAmendment, getUserSelectedOtherAmount,
 } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import {
 	useContributionsDispatch,
@@ -61,7 +61,7 @@ export function SupporterPlusCheckout({
 	const amountBeforeAmendments = useContributionsSelector(
 		getUserSelectedAmountBeforeAmendment,
 	);
-
+  const otherAmount = useContributionsSelector(getUserSelectedOtherAmount);
 	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
 		contributionType,
 		selectedAmounts,
@@ -76,10 +76,11 @@ export function SupporterPlusCheckout({
 			priority="tertiary"
 			size="xsmall"
 			onClick={() => {
-				dispatch(
+        const amountToBePassed = otherAmount==='other'? 'other':amountBeforeAmendments;
+        dispatch(
 					setSelectedAmount({
 						contributionType: contributionType,
-						amount: `${amountBeforeAmendments}`,
+						amount: `${amountToBePassed}`,
 					}),
 				);
 				dispatch(resetValidation());
