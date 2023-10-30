@@ -4,8 +4,6 @@ version := "1.0-SNAPSHOT"
 
 packageSummary := "Support Play APP"
 
-Test / testOptions ++= Seq(Tests.Filter(unitTestFilter))
-
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.4.2",
   "com.gu" %% "simple-configuration-ssm" % "1.5.7",
