@@ -17,15 +17,14 @@ export function getUserSelectedAmount(state: ContributionsState): number {
 
 export function getUserSelectedAmountBeforeAmendment(
 	state: ContributionsState,
-): number|string {
+): number | string {
 	const contributionType = getContributionType(state);
-	const { selectedAmountsBeforeAmendment } =
-		state.page.checkoutForm.product;
+	const { selectedAmountsBeforeAmendment } = state.page.checkoutForm.product;
 	const priceCardAmountSelected =
 		selectedAmountsBeforeAmendment[contributionType];
 
 	if (priceCardAmountSelected === 'other') {
-    return 'other';
+		return 'other';
 	}
 
 	return priceCardAmountSelected;
