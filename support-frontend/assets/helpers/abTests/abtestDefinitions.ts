@@ -75,4 +75,15 @@ export const tests: Tests = {
 		referrerControlled: false,
 		seed: 0,
 	},
+	canMakePaymentsWithActiveCard: {
+		variants: [
+			{
+				id: 'control',
+			},
+		],
+		isActive: false,
+		audiences: {},
+		referrerControlled: false,
+		seed: 1,
+	},
 };
