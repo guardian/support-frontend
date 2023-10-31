@@ -18,7 +18,7 @@ test.beforeEach(async ({ page, context, baseURL }) => {
   await page.goto(pageUrl, { waitUntil: "networkidle" });
 });
 
-test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", () => {
+test.describe("Sign up for a Recurring Contribution (Two-Step checkout)", () => {
   test("Monthly contribution sign-up with Stripe - GBP", async ({ page }) => {
 
     await page.getByRole("tab").getByText("Monthly").click();
@@ -36,9 +36,7 @@ test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", (
 
     await expect(page).toHaveURL(/\/uk\/thankyou/, { timeout: 600000 });
   });
-});
 
-test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", () => {
   test("Monthly contribution sign-up with direct debit - GBP", async ({ page }) => {
     await page.getByRole("tab").getByText("Monthly").click();
     await page.getByRole("button", { name: "Continue to checkout" }).click();
@@ -55,10 +53,7 @@ test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", (
 
     await expect(page).toHaveURL(/\/uk\/thankyou/, { timeout: 600000 });
   });
-});
 
-
-test.describe("Sign up for a Recurring Contribution (New Contributions Flow)", () => {
   test("Annual contribution sign-up with Stripe - USD", async ({ page,baseURL,context }) => {
 
     await page.getByRole("button", { name: "Select a country" }).click();
