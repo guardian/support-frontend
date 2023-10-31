@@ -2,11 +2,6 @@ import { expect, test } from "@playwright/test";
 import { setTestCookies } from "./utils/cookies";
 import { email, firstName, lastName } from "./utils/users";
 
-test.beforeEach(async ({ page, context, baseURL }) => {
-  const baseUrlWithFallback = baseURL ?? "https://support.theguardian.com";
-
-});
-
 test.describe("Paper product page", () => {
   test("Basic loading-when a user goes to the Newspapar Subscriptions page,it should display the page", async ({ page,baseURL,context }) => {
     const baseUrlWithFallback = baseURL ?? "https://support.theguardian.com";
