@@ -35,42 +35,6 @@ const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
 );
 
-const {
-	common: { abParticipations },
-} = store.getState();
-
-/**
- * Temporary check behind disabled AB test to validate whether
- * window.ApplePaySession.canMakePaymentsWithActiveCard works
- * on support.theguardian.com
- */
-
-const checkCanMakePaymentsWithActiveCard =
-	abParticipations.canMakePaymentsWithActiveCard &&
-	abParticipations.canMakePaymentsWithActiveCard == 'control';
-
-if (checkCanMakePaymentsWithActiveCard) {
-	const merchantIdentifier = 'merchant.uk.co.guardian.contributions';
-
-	const canMakePaymentsWithActiveCard = (): Promise<boolean> => {
-		return new Promise((resolve) => {
-			if (window.ApplePaySession) {
-				void window.ApplePaySession.canMakePaymentsWithActiveCard(
-					merchantIdentifier,
-				).then((result) => {
-					resolve(result);
-				});
-			} else {
-				resolve(false);
-			}
-		});
-	};
-
-	void canMakePaymentsWithActiveCard().then((result) => {
-		console.log(`canMakePaymentsWithActiveCard? ${result.toString()}`);
-	});
-}
-
 // ----- ScrollToTop on Navigate: https://v5.reactrouter.com/web/guides/scroll-restoration ---- //
 
 function ScrollToTop() {
