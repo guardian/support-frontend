@@ -5,7 +5,7 @@ import com.google.api.core.ApiFutureCallback
 import com.google.api.core.ApiFutures
 import com.google.api.gax.core.FixedCredentialsProvider
 import com.google.auth.Credentials
-import com.google.auth.oauth2.{GoogleCredentials, ServiceAccountCredentials}
+import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.bigquery.storage.v1.{
   AppendRowsResponse,
   BigQueryWriteClient,
@@ -14,7 +14,6 @@ import com.google.cloud.bigquery.storage.v1.{
   TableName,
 }
 import com.google.cloud.bigquery.storage.v1.Exceptions.AppendSerializtionError
-import com.google.cloud.bigquery.BigQueryOptions
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.writeAcquisitionDataToBigQueryFailure
@@ -24,7 +23,6 @@ import com.gu.support.acquisitions.AcquisitionEventTable.{datasetName, tableName
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 import com.gu.support.acquisitions.utils.Retry
 import com.gu.support.config.Stage
-import com.gu.support.config.Stages._
 import org.json.{JSONArray, JSONObject}
 
 import java.io.ByteArrayInputStream
@@ -94,18 +92,6 @@ object BigQueryService {
     new BigQueryService(
       stage,
       GoogleCredentials.fromStream(new ByteArrayInputStream(jsonCredentials.getBytes())),
-    )
-
-  def build(stage: Stage, config: BigQueryConfig): BigQueryService =
-    new BigQueryService(
-      stage,
-      ServiceAccountCredentials.fromPkcs8(
-        config.clientId,
-        config.clientEmail,
-        config.privateKey,
-        config.privateKeyId,
-        Nil.asJavaCollection,
-      ),
     )
 
   case class AppendCompleteCallback(stage: Stage, promise: Promise[Either[String, Unit]])
