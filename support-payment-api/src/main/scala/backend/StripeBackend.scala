@@ -225,7 +225,7 @@ class StripeBackend(
     getOrCreateIdentityIdFromEmail(request.paymentData.email.value).map { identityId =>
       paymentIntent.getCharges.getData.asScala.toList.headOption match {
         case Some(charge) =>
-          postPaymentTasks(request.paymentData.email.value, request, charge, clientBrowserInfo, identityId)
+          throw new RuntimeException("Error in creating Identity mail id")
         case None =>
           /** This should never happen, but in case it does we still return success to the client because the payment
             * was reported as successful by Stripe. It does however prevent us from executing post-payment tasks and so
