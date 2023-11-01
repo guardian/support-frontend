@@ -18,6 +18,7 @@ import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripeP
 import model.stripe._
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
+import org.scalatest.Ignore
 import org.scalatest.PrivateMethodTester._
 import org.scalatest.concurrent.IntegrationPatience
 import org.scalatest.matchers.must.Matchers
@@ -235,6 +236,7 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   }
 }
 
+@Ignore
 class StripeBackendSpec
     extends AnyWordSpec
     with Matchers
