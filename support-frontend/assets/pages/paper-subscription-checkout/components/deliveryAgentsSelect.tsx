@@ -42,38 +42,37 @@ export function DeliveryAgentsSelect(
 		}
 
 		return (
-			<>
-				<RadioGroup
-					label="Select delivery provider"
-					id="delivery-provider"
-					css={marginBottom}
-					error={firstError('deliveryProvider', props.formErrors)}
-				>
-					<>
-						{props.deliveryAgentsResponse.agents?.map((agent) => (
-							<div
-								css={css`
-									border-bottom: 1px solid ${palette.neutral[86]};
-								`}
-							>
-								<Radio
-									value={agent.agentId}
-									checked={props.chosenDeliveryAgent === agent.agentId}
-									onChange={() => props.setDeliveryAgent(agent.agentId)}
-									label={
-										<>
-											{agent.agentName}{' '}
-											<GreenLabel deliveryMethod={agent.deliveryMethod} />
-										</>
-									}
-								/>
-								<DeliveryProviderSummary summary={agent.summary} />
-								<GreenDeliverySummary deliveryMethod={agent.deliveryMethod} />
-							</div>
-						))}
-					</>
-				</RadioGroup>
-			</>
+			<RadioGroup
+				label="Select delivery provider"
+				id="delivery-provider"
+				css={marginBottom}
+				error={firstError('deliveryProvider', props.formErrors)}
+			>
+				<>
+					{props.deliveryAgentsResponse.agents?.map((agent) => (
+						<div
+							css={css`
+								border-bottom: 1px solid ${palette.neutral[86]};
+							`}
+							key={agent.agentId}
+						>
+							<Radio
+								value={agent.agentId}
+								checked={props.chosenDeliveryAgent === agent.agentId}
+								onChange={() => props.setDeliveryAgent(agent.agentId)}
+								label={
+									<>
+										{agent.agentName}{' '}
+										<GreenLabel deliveryMethod={agent.deliveryMethod} />
+									</>
+								}
+							/>
+							<DeliveryProviderSummary summary={agent.summary} />
+							<GreenDeliverySummary deliveryMethod={agent.deliveryMethod} />
+						</div>
+					))}
+				</>
+			</RadioGroup>
 		);
 	}
 
