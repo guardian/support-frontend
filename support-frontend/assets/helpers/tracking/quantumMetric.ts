@@ -356,11 +356,11 @@ function sendEventABTestParticipations(participations: Participations): void {
 
 function addQM() {
 	return loadScript(
-		'https://cdn.quantummetric.com/instrumentation/1.34.1/quantum-gnm.js',
+		'https://cdn.quantummetric.com/instrumentation/new-worker-gnm-sri/quantum-gnm.js',
 		{
 			async: true,
 			integrity:
-				'sha384-wDpTvwv5DbDAQ34iR2LD1BTr6V9EtbW7S8JLuwbT7HRQ1etRrL5yKlC0RGZhyDc7',
+				'sha384-s5S5gOJeOYsKXL7ew5daQ9q8c5sVTe9opFXN8mEoXszrOuzBLkV5/7tYfWgPzSNC',
 			crossOrigin: 'anonymous',
 		},
 	).catch(() => {
