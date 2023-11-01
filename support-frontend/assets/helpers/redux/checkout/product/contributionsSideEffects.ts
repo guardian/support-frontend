@@ -100,8 +100,8 @@ export function addProductSideEffects(
 			if (isContribution(productType)) {
 				if (selectedAmounts[productType] === 'other') {
 					const customAmount = otherAmounts[productType].amount ?? '';
-					const minAmount = getMinimumContributionAmount(state);
-					const maxAmount = getMaximumContributionAmount(state);
+					const minAmount = getMinimumContributionAmount(productType)(state);
+					const maxAmount = getMaximumContributionAmount(productType)(state);
 
 					if (amountIsNotInRange(customAmount, minAmount, maxAmount)) {
 						const currency = currencies[currencyId];

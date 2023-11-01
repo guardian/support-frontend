@@ -53,7 +53,7 @@ export function CheckoutBenefitsListContainer({
 	);
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const minimumContributionAmount = useContributionsSelector(
-		getMinimumContributionAmount,
+		getMinimumContributionAmount(),
 	);
 
 	const currency = currencies[currencyId];

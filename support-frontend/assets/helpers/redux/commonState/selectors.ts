@@ -12,24 +12,27 @@ export function getDefaultContributionType(
 }
 
 export function getMinimumContributionAmount(
-	state: ContributionsState,
-): number {
-	const { countryGroupId } = state.common.internationalisation;
-	const contributionType = getContributionType(state);
-	const { min } = config[countryGroupId][contributionType];
+	contributionType?: ContributionType,
+) {
+	return (state: ContributionsState): number => {
+		const { countryGroupId } = state.common.internationalisation;
+		const { min } =
+			config[countryGroupId][contributionType ?? getContributionType(state)];
 
-	return min;
+		return min;
+	};
 }
 
 export function getMaximumContributionAmount(
-	state: ContributionsState,
-): number {
-	const { countryGroupId } = state.common.internationalisation;
-	const contributionType = getContributionType(state);
+	contributionType?: ContributionType,
+) {
+	return (state: ContributionsState): number => {
+		const { countryGroupId } = state.common.internationalisation;
+		const { max } =
+			config[countryGroupId][contributionType ?? getContributionType(state)];
 
-	const { max } = config[countryGroupId][contributionType];
-
-	return max;
+		return max;
+	};
 }
 
 export function isUserInAbVariant(abTestName: string, variantName: string) {
