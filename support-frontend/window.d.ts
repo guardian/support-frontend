@@ -37,9 +37,6 @@ declare global {
 	};
 
 	interface Window {
-		ApplePaySession?: {
-			canMakePaymentsWithActiveCard: (merchantId: string) => Promise<boolean>;
-		};
 		guardian: {
 			amazonPayClientId: {
 				default: string;
