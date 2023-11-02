@@ -289,16 +289,17 @@ class StripeBackend(
   }
 
   private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[Long]] =
-    identityService
-      .getOrCreateIdentityIdFromEmail(email)
-      .fold(
-        err => {
-          logger
-            .warn(s"unable to get identity id for email $email, tracking acquisition anyway. Error: ${err.getMessage}")
-          None
-        },
-        identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken),
-      )
+    Future.successful(None)
+//    identityService
+//      .getOrCreateIdentityIdFromEmail(email)
+//      .fold(
+//        err => {
+//          logger
+//            .warn(s"unable to get identity id for email $email, tracking acquisition anyway. Error: ${err.getMessage}")
+//          None
+//        },
+//        identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken),
+//      )
 
   private def validateRefundHook(refundHook: StripeRefundHook): EitherT[Future, BackendError, Unit] =
     stripeService
