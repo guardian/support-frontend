@@ -44,7 +44,7 @@ PeopleTicker.args = {
 	end: 250000,
 	countType: 'people',
 	endType: 'unlimited',
-	currencySymbol: '£',
+	countryGroupId: 'AUDCountries',
 	headline: 'End of year campaign',
 };
 
@@ -56,6 +56,6 @@ MoneyTicker.args = {
 	end: 230000,
 	countType: 'money',
 	endType: 'hardstop',
-	currencySymbol: '$',
+	countryGroupId: 'UnitedStates',
 	headline: 'End of year campaign',
 };
