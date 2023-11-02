@@ -63,14 +63,12 @@ export function AmountAndBenefits({
 									`}
 								>
 									<TickerContainer
-										countType="money"
-										endType="unlimited"
-										currencySymbol="$"
-										copy={{
-											countLabel: '',
-											goalReachedPrimary: '',
-											goalReachedSecondary: '',
-										}}
+										countType={campaignSettings.tickerSettings.tickerCountType}
+										endType={campaignSettings.tickerSettings.tickerEndType}
+										currencySymbol={
+											campaignSettings.tickerSettings.currencySymbol
+										}
+										copy={campaignSettings.tickerSettings.copy}
 										render={(tickerProps) => <Ticker {...tickerProps} />}
 									/>
 								</div>

@@ -18,7 +18,7 @@ export type CampaignSettings = {
 	contributionTypes?: ContributionTypes;
 	backgroundImage?: string;
 	extraComponent?: JSX.Element;
-	tickerSettings?: TickerSettings;
+	tickerSettings: TickerSettings;
 	goalReachedCopy?: JSX.Element;
 	// If set, the form will be replaced with this if goal reached
 };
@@ -40,8 +40,8 @@ export const campaign: CampaignSettings = {
 		currencySymbol: '$',
 		copy: {
 			countLabel: 'contributed',
-			goalReachedPrimary: "We've hit our goal!",
-			goalReachedSecondary: 'but you can still support us',
+			goalReachedPrimary: "We've met our goal - thank you",
+			goalReachedSecondary: 'but you can still contribute',
 		},
 	},
 };
