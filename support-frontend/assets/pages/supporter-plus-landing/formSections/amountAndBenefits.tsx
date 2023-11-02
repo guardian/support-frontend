@@ -68,7 +68,7 @@ export function AmountAndBenefits({
 										currencySymbol={
 											campaignSettings.tickerSettings.currencySymbol
 										}
-										copy={campaignSettings.tickerSettings.copy}
+										headline="Test ticker headline"
 										render={(tickerProps) => <Ticker {...tickerProps} />}
 									/>
 								</div>

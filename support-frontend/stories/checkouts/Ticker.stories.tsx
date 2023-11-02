@@ -45,11 +45,7 @@ PeopleTicker.args = {
 	countType: 'people',
 	endType: 'unlimited',
 	currencySymbol: '£',
-	copy: {
-		countLabel: 'supporters in Australia',
-		goalReachedPrimary: "We've hit our goal!",
-		goalReachedSecondary: 'but you can still support us',
-	},
+	headline: 'End of year campaign',
 };
 
 export const MoneyTicker = Template.bind({});
@@ -61,9 +57,5 @@ MoneyTicker.args = {
 	countType: 'money',
 	endType: 'hardstop',
 	currencySymbol: '$',
-	copy: {
-		countLabel: 'contributed',
-		goalReachedPrimary: "We've hit our goal!",
-		goalReachedSecondary: 'but you can still support us',
-	},
+	headline: 'End of year campaign',
 };

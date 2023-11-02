@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchJson } from 'helpers/async/fetch';
 import type { TickerProps } from './ticker';
-import type {
-	TickerConfigData,
-	TickerCopy,
-	TickerCountType,
-	TickerEndType,
-} from './types';
+import type { TickerConfigData, TickerCountType, TickerEndType } from './types';
 
 function getInitialTickerValues(
 	tickerCountType: TickerCountType,
@@ -25,14 +20,14 @@ function getInitialTickerValues(
 }
 
 function getDefaultTickerEnd(_total: number, goal: number) {
-	return goal + goal * 0.15;
+	return goal;
 }
 
 type TickerContainerProps = {
 	countType: TickerCountType;
 	endType: TickerEndType;
 	currencySymbol: string;
-	copy: TickerCopy;
+	headline: string;
 	calculateEnd?: (total: number, goal: number) => number;
 	render: (props: TickerProps) => JSX.Element;
 };
@@ -42,7 +37,7 @@ export function TickerContainer({
 	countType,
 	endType,
 	currencySymbol,
-	copy,
+	headline,
 	calculateEnd = getDefaultTickerEnd,
 }: TickerContainerProps): JSX.Element {
 	const [tickerConfig, setTickerConfig] = useState<TickerConfigData>({
@@ -62,7 +57,7 @@ export function TickerContainer({
 		countType,
 		endType,
 		currencySymbol,
-		copy,
+		headline,
 		end,
 	});
 }

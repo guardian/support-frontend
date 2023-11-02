@@ -1,19 +1,13 @@
-import { css } from '@emotion/react';
-import { visuallyHidden } from '@guardian/source-foundations';
-import './contributionTicker.scss';
 import {
-	tickerCount,
-	tickerGoal,
-	tickerGoalPosition,
+	tickerHeadline,
 	tickerLabel,
 	tickerLabelContainer,
-	tickerMarker,
+	tickerLabelTotal,
 	tickerProgressBar,
 	tickerProgressBarBackground,
 	tickerProgressBarFill,
-	tickerStatus,
 } from './tickerStyles';
-import type { TickerCopy, TickerCountType, TickerEndType } from './types';
+import type { TickerCountType, TickerEndType } from './types';
 
 export type TickerProps = {
 	total: number;
@@ -22,16 +16,14 @@ export type TickerProps = {
 	countType: TickerCountType;
 	endType: TickerEndType;
 	currencySymbol: string;
-	copy: TickerCopy;
+	headline: string;
 };
 
-export type TickerMainLabelProps = {
-	goalReached: boolean;
+type TickerLabelProps = {
 	total: number;
+	goal: number;
 	countType: TickerCountType;
-	endType: TickerEndType;
 	currencySymbol: string;
-	copy: TickerCopy;
 };
 
 function progressBarTranslation(total: number, end: number) {
@@ -39,90 +31,40 @@ function progressBarTranslation(total: number, end: number) {
 	return percentage > 0 ? 0 : percentage;
 }
 
-function markerTranslation(goal: number, end: number) {
-	return (goal / end) * 100 - 100;
-}
-
-function TickerMainLabel({
-	goalReached,
-	total,
-	countType,
-	endType,
-	currencySymbol,
-	copy,
-}: TickerMainLabelProps) {
-	if (!goalReached) {
+function TickerLabel(props: TickerLabelProps) {
+	if (props.countType === 'people') {
 		return (
-			<div css={[tickerLabel, tickerStatus]}>
-				<div css={tickerCount}>
-					{countType === 'money' ? currencySymbol : ''}
-					{Math.floor(total).toLocaleString()}&nbsp;
-				</div>
-				<div>{copy.countLabel}</div>
+			<div css={tickerLabelContainer}>
+				<p css={tickerLabel}>
+					<span css={tickerLabelTotal}>{props.total} supporters</span> of{' '}
+					{props.goal} goal
+				</p>
 			</div>
 		);
 	}
-
-	if (endType === 'unlimited') {
-		return (
-			<div css={[tickerLabel, tickerStatus]}>
-				<div css={tickerCount}>{copy.goalReachedPrimary}&nbsp;</div>
-				<div>{copy.goalReachedSecondary}</div>
-			</div>
-		);
-	}
-
 	return (
-		<div css={[tickerLabel, tickerStatus]}>
-			<div css={tickerCount}>{copy.goalReachedPrimary}&nbsp;</div>
+		<div css={tickerLabelContainer}>
+			<p css={tickerLabel}>
+				<span css={tickerLabelTotal}>
+					{props.currencySymbol}
+					{props.total}
+				</span>{' '}
+				of {props.currencySymbol}
+				{props.goal} goal
+			</p>
 		</div>
 	);
 }
 
 export function Ticker(props: TickerProps): JSX.Element {
-	const markerPosition = markerTranslation(props.goal, props.end);
-
 	const progressBarTransform = `translate3d(${progressBarTranslation(
 		props.total,
 		props.end,
 	)}%, 0, 0)`;
-	const markerTransform = `translate3d(${markerPosition}%, -2px, 0)`;
-	const markerLabelTransform = `translate3d(${markerPosition}%, 0, 0)`;
-
-	const goalReached = props.total >= props.goal;
 
 	return (
 		<div>
-			<h2
-				css={css`
-					${visuallyHidden}
-				`}
-			>
-				Current campaign progress
-			</h2>
-			<div css={tickerLabelContainer}>
-				<TickerMainLabel {...props} goalReached={goalReached} />
-				<div
-					css={tickerGoalPosition}
-					style={{
-						transform: markerLabelTransform,
-					}}
-				>
-					<div css={[tickerLabel, tickerGoal]}>
-						<div css={tickerCount}>
-							{props.countType === 'money' ? props.currencySymbol : ''}
-							{Math.floor(props.goal).toLocaleString()}
-						</div>
-						<div>
-							{props.endType === 'unlimited' && goalReached ? (
-								props.copy.countLabel
-							) : (
-								<>&nbsp;goal</>
-							)}
-						</div>
-					</div>
-				</div>
-			</div>
+			<h2 css={tickerHeadline}>{props.headline}</h2>
 			<div css={tickerProgressBar}>
 				<div css={tickerProgressBarBackground}>
 					<div
@@ -132,13 +74,13 @@ export function Ticker(props: TickerProps): JSX.Element {
 						}}
 					/>
 				</div>
-				<div
-					css={tickerMarker}
-					style={{
-						transform: markerTransform,
-					}}
-				/>
 			</div>
+			<TickerLabel
+				countType={props.countType}
+				currencySymbol={props.currencySymbol}
+				total={props.total}
+				goal={props.goal}
+			/>
 		</div>
 	);
 }

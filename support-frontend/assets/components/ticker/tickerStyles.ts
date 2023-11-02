@@ -1,8 +1,9 @@
 import { css } from '@emotion/react';
-import { palette, space } from '@guardian/source-foundations';
+import { palette, space, textSans } from '@guardian/source-foundations';
 
 export const tickerProgressBar = css`
 	position: relative;
+	height: ${space[3]}px;
 `;
 
 export const tickerProgressBarBackground = css`
@@ -11,6 +12,7 @@ export const tickerProgressBarBackground = css`
 	overflow: hidden;
 	background-color: #d9d9d9;
 	position: absolute;
+	border-radius: ${space[2]}px;
 `;
 
 export const tickerProgressBarFill = css`
@@ -24,43 +26,21 @@ export const tickerProgressBarFill = css`
 	transition: transform 3s cubic-bezier(0.25, 0.55, 0.2, 0.85);
 `;
 
-export const tickerCount = css`
-	font-weight: bold;
+export const tickerHeadline = css`
+	${textSans.medium({ fontWeight: 'bold' })}
+	margin-bottom: ${space[2]}px;
 `;
 
 export const tickerLabelContainer = css`
 	position: relative;
 	display: flex;
-	justify-content: space-between;
-	margin-bottom: ${space[1]}px;
+	margin-top: ${space[1]}px;
 `;
 
 export const tickerLabel = css`
-	display: flex;
-	flex-wrap: wrap;
-	max-width: 40%;
+	${textSans.medium()}
 `;
 
-export const tickerGoal = css`
-	justify-content: flex-end;
-	margin-right: -10%;
-`;
-
-export const tickerGoalPosition = css`
-	display: flex;
-	justify-content: flex-end;
-	position: absolute;
-	right: 0;
-	width: 100%;
-`;
-
-export const tickerStatus = css`
-	justify-content: flex-start;
-`;
-
-export const tickerMarker = css`
-	border-right: 2px solid ${palette.neutral[7]};
-	content: ' ';
-	display: block;
-	height: ${space[4]}px;
+export const tickerLabelTotal = css`
+	font-weight: 700;
 `;
