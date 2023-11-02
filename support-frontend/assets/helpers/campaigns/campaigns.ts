@@ -1,4 +1,4 @@
-import type { TickerSettings } from 'components/ticker/contributionTicker';
+import type { TickerSettings } from 'components/ticker/types';
 import type { ContributionTypes } from 'helpers/contributions';
 
 type CampaignCopy = {
@@ -35,14 +35,9 @@ export const campaign: CampaignSettings = {
 	campaignCode: 'Us_eoy_2023',
 	copy: usEoy2021Copy,
 	tickerSettings: {
-		tickerCountType: 'money',
-		tickerEndType: 'unlimited',
-		currencySymbol: '$',
-		copy: {
-			countLabel: 'contributed',
-			goalReachedPrimary: "We've met our goal - thank you",
-			goalReachedSecondary: 'but you can still contribute',
-		},
+		countType: 'money',
+		endType: 'unlimited',
+		headline: 'End of year campaign',
 	},
 };
 

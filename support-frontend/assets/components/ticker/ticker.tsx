@@ -1,3 +1,8 @@
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+	fromCountryGroupId,
+	glyph,
+} from 'helpers/internationalisation/currency';
 import {
 	tickerHeadline,
 	tickerLabel,
@@ -15,7 +20,7 @@ export type TickerProps = {
 	end: number;
 	countType: TickerCountType;
 	endType: TickerEndType;
-	currencySymbol: string;
+	countryGroupId: CountryGroupId;
 	headline: string;
 };
 
@@ -23,7 +28,17 @@ type TickerLabelProps = {
 	total: number;
 	goal: number;
 	countType: TickerCountType;
-	currencySymbol: string;
+	countryGroupId: CountryGroupId;
+};
+
+const localesByCountryGroup: Record<CountryGroupId, string> = {
+	UnitedStates: 'en-US',
+	Canada: 'en-US',
+	International: 'en-US',
+	GBPCountries: 'en-GB',
+	EURCountries: 'en-GB',
+	AUDCountries: 'en-GB',
+	NZDCountries: 'en-GB',
 };
 
 function progressBarTranslation(total: number, end: number) {
@@ -31,8 +46,8 @@ function progressBarTranslation(total: number, end: number) {
 	return percentage > 0 ? 0 : percentage;
 }
 
-function localiseAmount(amount: number) {
-	return amount.toLocaleString('en-US');
+function localiseAmount(amount: number, countryGroupId: CountryGroupId) {
+	return amount.toLocaleString(localesByCountryGroup[countryGroupId]);
 }
 
 function TickerLabel(props: TickerLabelProps) {
@@ -41,22 +56,24 @@ function TickerLabel(props: TickerLabelProps) {
 			<div css={tickerLabelContainer}>
 				<p css={tickerLabel}>
 					<span css={tickerLabelTotal}>
-						{localiseAmount(props.total)} supporters
+						{localiseAmount(props.total, props.countryGroupId)} supporters
 					</span>{' '}
-					of {localiseAmount(props.goal)} goal
+					of {localiseAmount(props.goal, props.countryGroupId)} goal
 				</p>
 			</div>
 		);
 	}
+
+	const currencySymbol = glyph(fromCountryGroupId(props.countryGroupId));
 	return (
 		<div css={tickerLabelContainer}>
 			<p css={tickerLabel}>
 				<span css={tickerLabelTotal}>
-					{props.currencySymbol}
-					{localiseAmount(props.total)}
+					{currencySymbol}
+					{localiseAmount(props.total, props.countryGroupId)}
 				</span>{' '}
-				of {props.currencySymbol}
-				{localiseAmount(props.goal)} goal
+				of {currencySymbol}
+				{localiseAmount(props.goal, props.countryGroupId)} goal
 			</p>
 		</div>
 	);
@@ -83,7 +100,7 @@ export function Ticker(props: TickerProps): JSX.Element {
 			</div>
 			<TickerLabel
 				countType={props.countType}
-				currencySymbol={props.currencySymbol}
+				countryGroupId={props.countryGroupId}
 				total={props.total}
 				goal={props.goal}
 			/>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchJson } from 'helpers/async/fetch';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { TickerProps } from './ticker';
 import type { TickerConfigData, TickerCountType, TickerEndType } from './types';
 
@@ -27,7 +28,6 @@ function getDefaultTickerEnd(total: number, goal: number) {
 type TickerContainerProps = {
 	countType: TickerCountType;
 	endType: TickerEndType;
-	currencySymbol: string;
 	headline: string;
 	calculateEnd?: (total: number, goal: number) => number;
 	render: (props: TickerProps) => JSX.Element;
@@ -37,10 +37,12 @@ export function TickerContainer({
 	render,
 	countType,
 	endType,
-	currencySymbol,
 	headline,
 	calculateEnd = getDefaultTickerEnd,
 }: TickerContainerProps): JSX.Element {
+	const { countryGroupId } = useContributionsSelector(
+		(state) => state.common.internationalisation,
+	);
 	const [tickerConfig, setTickerConfig] = useState<TickerConfigData>({
 		total: 0,
 		goal: 0,
@@ -57,7 +59,7 @@ export function TickerContainer({
 		goal: tickerConfig.goal,
 		countType,
 		endType,
-		currencySymbol,
+		countryGroupId,
 		headline,
 		end,
 	});

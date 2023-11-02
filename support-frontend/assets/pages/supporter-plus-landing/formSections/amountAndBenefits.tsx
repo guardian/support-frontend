@@ -59,16 +59,13 @@ export function AmountAndBenefits({
 								<div
 									css={css`
 										margin-top: -${space[2]}px;
-										margin-bottom: ${space[4]}px;
+										margin-bottom: ${space[3]}px;
 									`}
 								>
 									<TickerContainer
-										countType={campaignSettings.tickerSettings.tickerCountType}
-										endType={campaignSettings.tickerSettings.tickerEndType}
-										currencySymbol={
-											campaignSettings.tickerSettings.currencySymbol
-										}
-										headline="Test ticker headline"
+										countType={campaignSettings.tickerSettings.countType}
+										endType={campaignSettings.tickerSettings.endType}
+										headline={campaignSettings.tickerSettings.headline}
 										render={(tickerProps) => <Ticker {...tickerProps} />}
 									/>
 								</div>
