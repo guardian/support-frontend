@@ -31,13 +31,19 @@ function progressBarTranslation(total: number, end: number) {
 	return percentage > 0 ? 0 : percentage;
 }
 
+function localiseAmount(amount: number) {
+	return amount.toLocaleString('en-US');
+}
+
 function TickerLabel(props: TickerLabelProps) {
 	if (props.countType === 'people') {
 		return (
 			<div css={tickerLabelContainer}>
 				<p css={tickerLabel}>
-					<span css={tickerLabelTotal}>{props.total} supporters</span> of{' '}
-					{props.goal} goal
+					<span css={tickerLabelTotal}>
+						{localiseAmount(props.total)} supporters
+					</span>{' '}
+					of {localiseAmount(props.goal)} goal
 				</p>
 			</div>
 		);
@@ -47,10 +53,10 @@ function TickerLabel(props: TickerLabelProps) {
 			<p css={tickerLabel}>
 				<span css={tickerLabelTotal}>
 					{props.currencySymbol}
-					{props.total}
+					{localiseAmount(props.total)}
 				</span>{' '}
 				of {props.currencySymbol}
-				{props.goal} goal
+				{localiseAmount(props.goal)} goal
 			</p>
 		</div>
 	);

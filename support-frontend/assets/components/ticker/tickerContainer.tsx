@@ -19,8 +19,9 @@ function getInitialTickerValues(
 	});
 }
 
-function getDefaultTickerEnd(_total: number, goal: number) {
-	return goal;
+function getDefaultTickerEnd(total: number, goal: number) {
+	if (goal > total) return goal;
+	return total;
 }
 
 type TickerContainerProps = {
