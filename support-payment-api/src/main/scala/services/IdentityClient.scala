@@ -110,7 +110,7 @@ object IdentityClient extends StrictLogging {
   )
 
   object GuestRegistrationResponse {
-    @JsonCodec case class GuestRegistrationRequest(userId: Long)
+    @JsonCodec case class GuestRegistrationRequest(userId: String)
   }
 
   // Models the response of successfully looking up user details via email address.
@@ -129,7 +129,7 @@ object IdentityClient extends StrictLogging {
   @JsonCodec case class UserResponse(user: UserResponse.User)
 
   object UserResponse {
-    @JsonCodec case class User(id: Long)
+    @JsonCodec case class User(id: String)
   }
 
   // Models an error created by a request to the identity client; either:

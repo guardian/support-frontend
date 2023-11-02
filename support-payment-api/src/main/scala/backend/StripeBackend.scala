@@ -246,7 +246,7 @@ class StripeBackend(
       chargeData: StripeRequest,
       charge: Charge,
       clientBrowserInfo: ClientBrowserInfo,
-      identityId: Option[Long],
+      identityId: Option[String],
   ): Unit = {
     trackContribution(charge, chargeData, identityId, clientBrowserInfo)
       .map(errors =>
@@ -269,7 +269,7 @@ class StripeBackend(
   private def trackContribution(
       charge: Charge,
       data: StripeRequest,
-      identityId: Option[Long],
+      identityId: Option[String],
       clientBrowserInfo: ClientBrowserInfo,
   ): Future[List[BackendError]] = {
     val contributionData = ContributionData.fromStripeCharge(
@@ -288,18 +288,17 @@ class StripeBackend(
     )
   }
 
-  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[Long]] =
-    Future.successful(None)
-//    identityService
-//      .getOrCreateIdentityIdFromEmail(email)
-//      .fold(
-//        err => {
-//          logger
-//            .warn(s"unable to get identity id for email $email, tracking acquisition anyway. Error: ${err.getMessage}")
-//          None
-//        },
-//        identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken),
-//      )
+  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[String]] =
+    identityService
+      .getOrCreateIdentityIdFromEmail(email)
+      .fold(
+        err => {
+          logger
+            .warn(s"unable to get identity id for email $email, tracking acquisition anyway. Error: ${err.getMessage}")
+          None
+        },
+        identityIdWithGuestAccountCreationToken => Some(identityIdWithGuestAccountCreationToken),
+      )
 
   private def validateRefundHook(refundHook: StripeRefundHook): EitherT[Future, BackendError, Unit] =
     stripeService
@@ -314,7 +313,7 @@ class StripeBackend(
   private def sendThankYouEmail(
       email: String,
       data: StripeRequest,
-      identityId: Long,
+      identityId: String,
   ): EitherT[Future, BackendError, SendMessageResult] = {
     val contributorRow = ContributorRow(
       email,
