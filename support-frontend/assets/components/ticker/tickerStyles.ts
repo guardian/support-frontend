@@ -10,13 +10,13 @@ export const tickerProgressBarBackground = css`
 	width: calc(100%);
 	height: ${space[3]}px;
 	overflow: hidden;
-	background-color: #d9d9d9;
+	background-color: rgba(5, 41, 98, 0.35);
 	position: absolute;
 	border-radius: ${space[2]}px;
 `;
 
 export const tickerProgressBarFill = css`
-	background-color: ${palette.neutral[0]};
+	background-color: ${palette.brand[400]};
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -24,6 +24,7 @@ export const tickerProgressBarFill = css`
 	bottom: 0;
 	transform: translateX(-100%);
 	transition: transform 3s cubic-bezier(0.25, 0.55, 0.2, 0.85);
+	border-radius: ${space[2]}px;
 `;
 
 export const tickerHeadline = css`
@@ -43,4 +44,5 @@ export const tickerLabel = css`
 
 export const tickerLabelTotal = css`
 	font-weight: 700;
+	color: ${palette.brand[400]};
 `;
