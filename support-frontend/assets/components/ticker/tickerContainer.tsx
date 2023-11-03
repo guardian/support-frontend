@@ -5,6 +5,7 @@ import { isCodeOrProd } from 'helpers/urls/url';
 import type { TickerProps } from './ticker';
 import type { TickerConfigData, TickerCountType, TickerEndType } from './types';
 
+// In dev we use a dummy route for ticker data; in CODE and PROD this needs to point to the specific ticker ID
 function getTickerUrl(tickerCountType: TickerCountType, tickerId: string) {
 	if (isCodeOrProd()) {
 		return `/ticker/${tickerId}.json`;
