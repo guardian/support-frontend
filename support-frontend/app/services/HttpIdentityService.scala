@@ -7,7 +7,7 @@ import com.google.common.net.InetAddresses
 import com.gu.identity.model.PrivateFields
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
-import com.gu.retry.EitherTRetry
+import com.gu.retry.EitherTRetry.retry
 import config.Identity
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
@@ -134,7 +134,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     // each attempt.
     // We try to fetch the user information at the start of each attempt in case a previous `createUser`
     // call succeeded but timed out before returning a valid response
-    EitherTRetry.retry(
+    retry(
       getUserIdFromEmail(email).leftFlatMap(_ =>
         createUserIdFromEmailUser(email, firstName, lastName, pageViewId, referer),
       ),
