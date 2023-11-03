@@ -71,6 +71,25 @@ const secureIndicatorSpacing = css`
 	}
 `;
 
+const leftColImage = css`
+	height: 140px;
+	margin-top: ${space[6]}px;
+	margin-left: -${space[9]}px;
+	margin-right: ${space[5]}px;
+
+	img {
+		max-width: 100%;
+	}
+`;
+
+const leftColImageUnitedStates = css`
+	margin-left: -${space[5]}px;
+
+	img {
+		display: block;
+	}
+`;
+
 export function SupporterPlusCheckoutScaffold({
 	children,
 	thankYouRoute,
@@ -103,7 +122,12 @@ export function SupporterPlusCheckoutScaffold({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/contribute',
 	};
-	const heading = <LandingPageHeading />;
+	const heading =
+		countryGroupId === 'UnitedStates' ? (
+			<LandingPageHeading heading="Make a year-end gift to the Guardian" />
+		) : (
+			<LandingPageHeading heading="Support&nbsp;fearless, independent journalism" />
+		);
 
 	useEffect(() => {
 		if (paymentComplete) {
@@ -137,25 +161,45 @@ export function SupporterPlusCheckoutScaffold({
 			<CheckoutHeading
 				heading={!isPaymentPage && heading}
 				image={
-					!isPaymentPage && (
-						<GridImage
-							gridId="supporterPlusLanding"
-							srcSizes={[500]}
-							sizes="500px"
-							imgType="png"
-							altText=""
-						/>
-					)
+					!isPaymentPage &&
+					(countryGroupId === 'UnitedStates' ? (
+						<figure css={leftColImageUnitedStates}>
+							<GridImage
+								gridId="supporterPlusLandingUnitedStates"
+								srcSizes={[420]}
+								sizes="420px"
+								imgType="jpg"
+								altText=""
+							/>
+						</figure>
+					) : (
+						<figure css={leftColImage}>
+							<GridImage
+								gridId="supporterPlusLanding"
+								srcSizes={[500]}
+								sizes="500px"
+								imgType="png"
+								altText=""
+							/>
+						</figure>
+					))
 				}
 				withTopborder={isPaymentPage}
 			>
-				{!isPaymentPage && (
-					<p css={subHeading}>
-						As a reader-funded news organisation, we rely on your generosity.
-						Please give what you can, so millions can benefit from quality
-						reporting on the events shaping our world.
-					</p>
-				)}
+				{!isPaymentPage &&
+					(countryGroupId === 'UnitedStates' ? (
+						<p css={subHeading}>
+							We rely on funding from readers, not from a billionaire owner or
+							shareholders. Join the more than 250,000 recurring supporters in
+							the US who help sustain our journalism.
+						</p>
+					) : (
+						<p css={subHeading}>
+							As a reader-funded news organisation, we rely on your generosity.
+							Please give what you can, so millions can benefit from quality
+							reporting on the events shaping our world.
+						</p>
+					))}
 			</CheckoutHeading>
 
 			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
