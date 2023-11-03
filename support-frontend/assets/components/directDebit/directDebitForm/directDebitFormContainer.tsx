@@ -3,7 +3,7 @@ import {
 	setAccountHolderConfirmation,
 	setAccountHolderName,
 	setAccountNumber,
-	setSortCodeString,
+	setSortCode,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
 import {
 	expireRecaptchaToken,
@@ -38,7 +38,7 @@ export function DirectDebitFormContainer({
 		accountHolderName,
 		accountNumber,
 		accountHolderConfirmation,
-		sortCodeString,
+		sortCode,
 		formError,
 	} = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.directDebit,
@@ -55,7 +55,7 @@ export function DirectDebitFormContainer({
 	}
 
 	function updateSortCode(newSortCode: string) {
-		dispatch(setSortCodeString(newSortCode));
+		dispatch(setSortCode(newSortCode));
 	}
 
 	function updateAccountHolderConfirmation(confirmed: boolean) {
@@ -72,7 +72,7 @@ export function DirectDebitFormContainer({
 		accountHolderName,
 		accountNumber,
 		accountHolderConfirmation,
-		sortCode: sortCodeString,
+		sortCode,
 		recaptchaCompleted,
 		updateAccountHolderName,
 		updateAccountNumber,

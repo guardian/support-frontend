@@ -11,6 +11,5 @@ export const {
 	setPopupOpen,
 	setPhase,
 	setSortCode,
-	setSortCodeString,
 	resetFormError,
 } = directDebitSlice.actions;

@@ -292,7 +292,7 @@ const directDebitAuthorised = (
 	onAuthorised({
 		paymentMethod: DirectDebit,
 		accountHolderName: ddState.accountHolderName,
-		sortCode: ddState.sortCodeString,
+		sortCode: ddState.sortCode,
 		accountNumber: ddState.accountNumber,
 	});
 };

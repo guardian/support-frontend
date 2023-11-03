@@ -37,7 +37,7 @@ type EventHandler = (newVal: string) => void;
 
 type PropTypes = {
 	accountHolderName: string;
-	sortCodeString: string;
+	sortCode: string;
 	accountNumber: string;
 	accountHolderConfirmation: boolean;
 	accountHolderNameError: string;
@@ -51,7 +51,7 @@ type PropTypes = {
 	submissionErrorHeading: string;
 	formError: Option<string>;
 	updateAccountHolderName: EventHandler;
-	updateSortCodeString: EventHandler;
+	updateSortCode: EventHandler;
 	updateAccountNumber: EventHandler;
 	updateAccountHolderConfirmation: (isConfirmed: boolean) => void;
 	onChange: (field: DirectDebitFieldName, dispatchUpdate: () => void) => void;
@@ -87,10 +87,10 @@ function Form(props: PropTypes): JSX.Element {
 					type="text"
 					inputMode="numeric"
 					pattern="[0-9]*"
-					value={props.sortCodeString}
+					value={props.sortCode}
 					onChange={(e) =>
-						props.onChange('sortCodeString', () =>
-							props.updateSortCodeString(e.target.value),
+						props.onChange('sortCode', () =>
+							props.updateSortCode(e.target.value),
 						)
 					}
 					error={props.sortCodeError}

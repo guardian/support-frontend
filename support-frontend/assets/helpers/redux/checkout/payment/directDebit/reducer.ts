@@ -2,7 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { createSliceValidatorFor } from 'helpers/redux/utils/validation/errors';
 import { resetValidation, validateForm } from '../../checkoutActions';
-import type { Phase, SortCodeUpdate } from './state';
+import type { Phase } from './state';
 import { directDebitSchema, initialDirectDebitState } from './state';
 import {
 	confirmAccountDetails,
@@ -26,12 +26,8 @@ export const directDebitSlice = createSlice({
 		setDDGuaranteeClose(state) {
 			state.isDDGuaranteeOpen = false;
 		},
-		setSortCode(state, action: PayloadAction<SortCodeUpdate>) {
-			const { index, partialSortCode } = action.payload;
-			state.sortCodeArray.splice(index, 1, partialSortCode);
-		},
-		setSortCodeString(state, action: PayloadAction<string>) {
-			state.sortCodeString = action.payload;
+		setSortCode(state, action: PayloadAction<string>) {
+			state.sortCode = action.payload;
 		},
 		setAccountNumber(state, action: PayloadAction<string>) {
 			state.accountNumber = action.payload;
