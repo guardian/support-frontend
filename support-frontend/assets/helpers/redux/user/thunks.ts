@@ -23,7 +23,7 @@ export const getRecurringContributorStatus = createAsyncThunk<
 		// No point in making the call if we don't have an access token as we know it's going to fail
 		if (authWithOkta && !accessToken) return {};
 
-		const attributes = (await fetchJson(
+		const attributes = await fetchJson<UserAttributes>(
 			`${window.guardian.mdapiUrl}/user-attributes/me`,
 			{
 				mode: 'cors',
@@ -31,7 +31,7 @@ export const getRecurringContributorStatus = createAsyncThunk<
 				// Okta authorization uses the Authorization header rather than a cookie
 				headers: oktaAuthHeader(authWithOkta, accessToken!),
 			},
-		)) as UserAttributes;
+		);
 
 		return attributes.contentAccess ?? {};
 	},

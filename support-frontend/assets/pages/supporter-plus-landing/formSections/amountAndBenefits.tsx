@@ -1,3 +1,5 @@
+import { css } from '@emotion/react';
+import { space } from '@guardian/source-foundations';
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { CheckoutBenefitsListContainer } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -10,9 +12,13 @@ import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/p
 import { PaymentFrequencyTabs } from 'components/paymentFrequencyTabs/paymentFrequenncyTabs';
 import { PriceCards } from 'components/priceCards/priceCards';
 import { PriceCardsContainer } from 'components/priceCards/priceCardsContainer';
+import { Ticker } from 'components/ticker/ticker';
+import { TickerContainer } from 'components/ticker/tickerContainer';
 import Tooltip from 'components/tooltip/Tooltip';
 import { TooltipContainer } from 'components/tooltip/TooltipContainer';
+import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 
 export function AmountAndBenefits({
 	countryGroupId,
@@ -27,6 +33,14 @@ export function AmountAndBenefits({
 	addBackgroundToBenefitsList?: boolean;
 	isCompactBenefitsList?: boolean;
 }): JSX.Element {
+	const { internationalisation } = useContributionsSelector(
+		(state) => state.common,
+	);
+	const campaignSettings = getCampaignSettings('Us_eoy_2023');
+
+	const showUSCampaignTicker =
+		internationalisation.countryGroupId === 'UnitedStates' && campaignSettings;
+
 	return (
 		<PaymentFrequencyTabsContainer
 			render={(tabProps) => (
@@ -39,6 +53,22 @@ export function AmountAndBenefits({
 									<CheckoutErrorSummary errorList={errorList} />
 								)}
 							/>
+							{showUSCampaignTicker && (
+								<div
+									css={css`
+										margin-top: -${space[2]}px;
+										margin-bottom: ${space[3]}px;
+									`}
+								>
+									<TickerContainer
+										tickerId="US"
+										countType={campaignSettings.tickerSettings.countType}
+										endType={campaignSettings.tickerSettings.endType}
+										headline={campaignSettings.tickerSettings.headline}
+										render={(tickerProps) => <Ticker {...tickerProps} />}
+									/>
+								</div>
+							)}
 							<PriceCardsContainer
 								frequency={tabId}
 								renderPriceCards={({

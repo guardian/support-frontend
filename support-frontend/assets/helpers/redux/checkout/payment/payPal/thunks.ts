@@ -45,15 +45,18 @@ export const setUpPayPalPayment = createAsyncThunk<
 			requireShippingAddress: false,
 		};
 
-		const payPalResponse = (await fetchJson(routes.payPalSetupPayment, {
-			credentials: 'include',
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Csrf-Token': csrfToken,
+		const payPalResponse = await fetchJson<{ token?: string }>(
+			routes.payPalSetupPayment,
+			{
+				credentials: 'include',
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Csrf-Token': csrfToken,
+				},
+				body: JSON.stringify(requestBody),
 			},
-			body: JSON.stringify(requestBody),
-		})) as { token?: string };
+		);
 
 		if (payPalResponse.token) {
 			resolve(payPalResponse.token);

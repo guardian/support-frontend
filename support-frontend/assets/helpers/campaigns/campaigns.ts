@@ -1,4 +1,4 @@
-import type { TickerSettings } from 'components/ticker/contributionTicker';
+import type { TickerSettings } from 'components/ticker/types';
 import type { ContributionTypes } from 'helpers/contributions';
 
 type CampaignCopy = {
@@ -18,7 +18,7 @@ export type CampaignSettings = {
 	contributionTypes?: ContributionTypes;
 	backgroundImage?: string;
 	extraComponent?: JSX.Element;
-	tickerSettings?: TickerSettings;
+	tickerSettings: TickerSettings;
 	goalReachedCopy?: JSX.Element;
 	// If set, the form will be replaced with this if goal reached
 };
@@ -32,17 +32,12 @@ const usEoy2021Copy = (): CampaignCopy => ({
 });
 
 export const campaign: CampaignSettings = {
-	campaignCode: 'Us_eoy_2021',
+	campaignCode: 'Us_eoy_2023',
 	copy: usEoy2021Copy,
 	tickerSettings: {
-		tickerCountType: 'money',
-		tickerEndType: 'unlimited',
-		currencySymbol: '$',
-		copy: {
-			countLabel: 'contributed',
-			goalReachedPrimary: "We've hit our goal!",
-			goalReachedSecondary: 'but you can still support us',
-		},
+		countType: 'money',
+		endType: 'unlimited',
+		headline: 'End of year campaign',
 	},
 };
 
