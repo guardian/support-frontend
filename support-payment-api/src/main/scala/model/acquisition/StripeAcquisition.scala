@@ -7,6 +7,6 @@ import model.stripe.StripeRequest
 case class StripeAcquisition(
     stripeChargeData: StripeRequest,
     charge: Charge,
-    identityId: Option[Long],
+    identityId: Option[String],
     clientBrowserInfo: ClientBrowserInfo,
 )

@@ -6,7 +6,7 @@ import model.{AcquisitionData, ClientBrowserInfo}
 case class AmazonPayAcquisition(
     amazonPayment: AmazonPaymentData,
     acquisitionData: Option[AcquisitionData],
-    identityId: Option[Long],
+    identityId: Option[String],
     countryCode: Option[String],
     clientBrowserInfo: ClientBrowserInfo,
 ) {}

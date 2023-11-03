@@ -39,7 +39,7 @@ class ContributorRowTest extends AnyFlatSpec with Matchers {
       ContributorRow(
         "email@email.email",
         "GBP",
-        123L,
+        "123",
         PaymentProvider.Paypal,
         Some("Peter"),
         BigDecimal(5.1),

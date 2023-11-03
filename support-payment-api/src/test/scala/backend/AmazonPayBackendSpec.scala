@@ -114,9 +114,9 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
     EitherT.right(Future.successful(()))
   val acquisitionEventBusResponseError: Future[Either[String, Unit]] =
     Future.successful(Left("an event bus error"))
-  val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
-    EitherT.right(Future.successful(1L))
-  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, Long] =
+  val identityResponse: EitherT[Future, IdentityClient.ContextualError, String] =
+    EitherT.right(Future.successful("1"))
+  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, String] =
     EitherT.left(Future.successful(identityError))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))

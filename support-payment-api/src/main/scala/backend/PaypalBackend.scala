@@ -138,7 +138,7 @@ class PaypalBackend(
   private def postPaymentTasks(
       payment: Payment,
       email: String,
-      identityId: Option[Long],
+      identityId: Option[String],
       acquisitionData: AcquisitionData,
       clientBrowserInfo: ClientBrowserInfo,
   ): Unit = {
@@ -171,7 +171,7 @@ class PaypalBackend(
       payment: Payment,
       acquisitionData: AcquisitionData,
       email: String,
-      identityId: Option[Long],
+      identityId: Option[String],
       clientBrowserInfo: ClientBrowserInfo,
   ): Future[List[BackendError]] = {
     ContributionData.fromPaypalCharge(
@@ -193,7 +193,7 @@ class PaypalBackend(
     }
   }
 
-  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[Long]] =
+  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[String]] =
     identityService
       .getOrCreateIdentityIdFromEmail(email)
       .fold(
@@ -217,7 +217,7 @@ class PaypalBackend(
 
   private def contributorRowFromPayment(
       email: String,
-      identityId: Long,
+      identityId: String,
       payment: Payment,
   ): EitherT[Future, BackendError, ContributorRow] = {
 

@@ -20,7 +20,7 @@ case class ContributionData private (
     paymentProvider: PaymentProvider,
     paymentStatus: PaymentStatus,
     paymentId: String,
-    identityId: Option[Long],
+    identityId: Option[String],
     email: String,
     created: LocalDateTime,
     currency: Currency,
@@ -42,7 +42,7 @@ object ContributionData extends StrictLogging {
   }
 
   def fromStripeCharge(
-      identityId: Option[Long],
+      identityId: Option[String],
       charge: Charge,
       countrySubdivisionCode: Option[String],
       postalCode: Option[String],
@@ -81,7 +81,7 @@ object ContributionData extends StrictLogging {
   def fromPaypalCharge(
       payment: Payment,
       email: String,
-      identityId: Option[Long],
+      identityId: Option[String],
       countrySubdivisionCode: Option[String],
       postalCode: Option[String],
   ): Either[PaypalApiError, ContributionData] = {
@@ -120,7 +120,7 @@ object ContributionData extends StrictLogging {
 
   def fromAmazonPay(
       amazonPayment: AuthorizationDetails,
-      identity: Option[Long],
+      identity: Option[String],
       email: String,
       countryCode: Option[String],
       countrySubdivisionCode: Option[String],

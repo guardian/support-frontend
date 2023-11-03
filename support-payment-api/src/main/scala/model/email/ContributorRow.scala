@@ -57,7 +57,7 @@ import model.PaymentProvider._
 case class ContributorRow(
     email: String,
     currency: String,
-    identityId: Long,
+    identityId: String,
     paymentMethod: PaymentProvider,
     firstName: Option[String],
     amount: BigDecimal,
