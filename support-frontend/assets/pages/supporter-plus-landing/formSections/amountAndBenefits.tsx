@@ -33,15 +33,13 @@ export function AmountAndBenefits({
 	addBackgroundToBenefitsList?: boolean;
 	isCompactBenefitsList?: boolean;
 }): JSX.Element {
-	const { abParticipations, internationalisation } = useContributionsSelector(
+	const { internationalisation } = useContributionsSelector(
 		(state) => state.common,
 	);
 	const campaignSettings = getCampaignSettings('Us_eoy_2023');
 
 	const showUSCampaignTicker =
-		abParticipations.usCampaignTicker === 'variant' &&
-		internationalisation.countryGroupId === 'UnitedStates' &&
-		campaignSettings;
+		internationalisation.countryGroupId === 'UnitedStates' && campaignSettings;
 
 	return (
 		<PaymentFrequencyTabsContainer
