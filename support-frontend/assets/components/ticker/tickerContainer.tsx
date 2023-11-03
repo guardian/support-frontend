@@ -1,14 +1,25 @@
 import { useEffect, useState } from 'react';
 import { fetchJson } from 'helpers/async/fetch';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { isCodeOrProd } from 'helpers/urls/url';
 import type { TickerProps } from './ticker';
 import type { TickerConfigData, TickerCountType, TickerEndType } from './types';
 
+function getTickerUrl(tickerCountType: TickerCountType, tickerId: string) {
+	if (isCodeOrProd()) {
+		return `/ticker/${tickerId}.json`;
+	}
+	return tickerCountType === 'money'
+		? '/ticker.json'
+		: '/supporters-ticker.json';
+}
+
 function getInitialTickerValues(
 	tickerCountType: TickerCountType,
+	tickerId: string,
 ): Promise<TickerConfigData> {
 	return fetchJson<TickerConfigData>(
-		tickerCountType === 'money' ? '/ticker.json' : '/supporters-ticker.json',
+		getTickerUrl(tickerCountType, tickerId),
 		{},
 	).then((data: TickerConfigData) => {
 		const total = Math.floor(data.total);
@@ -29,6 +40,7 @@ type TickerContainerProps = {
 	countType: TickerCountType;
 	endType: TickerEndType;
 	headline: string;
+	tickerId: string;
 	calculateEnd?: (total: number, goal: number) => number;
 	render: (props: TickerProps) => JSX.Element;
 };
@@ -38,6 +50,7 @@ export function TickerContainer({
 	countType,
 	endType,
 	headline,
+	tickerId,
 	calculateEnd = getDefaultTickerEnd,
 }: TickerContainerProps): JSX.Element {
 	const { countryGroupId } = useContributionsSelector(
@@ -51,7 +64,7 @@ export function TickerContainer({
 	const end = calculateEnd(tickerConfig.total, tickerConfig.goal);
 
 	useEffect(() => {
-		void getInitialTickerValues(countType).then(setTickerConfig);
+		void getInitialTickerValues(countType, tickerId).then(setTickerConfig);
 	}, []);
 
 	return render({

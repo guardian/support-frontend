@@ -63,6 +63,7 @@ export function AmountAndBenefits({
 									`}
 								>
 									<TickerContainer
+										tickerId="US"
 										countType={campaignSettings.tickerSettings.countType}
 										endType={campaignSettings.tickerSettings.endType}
 										headline={campaignSettings.tickerSettings.headline}
