@@ -7,16 +7,16 @@ import com.google.common.net.InetAddresses
 import com.gu.identity.model.PrivateFields
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import com.gu.retry.EitherTRetry
 import config.Identity
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
 import models.identity.requests.CreateGuestAccountRequestBody
-import models.identity.responses.IdentityErrorResponse.{IdentityError, OtherIdentityError, GuestEndpoint, UserEndpoint}
+import models.identity.responses.IdentityErrorResponse.{GuestEndpoint, IdentityError, OtherIdentityError, UserEndpoint}
 import models.identity.responses.{GuestRegistrationResponse, IdentityErrorResponse, UserResponse}
-import play.api.libs.json.{Json, JsonValidationError, JsPath, Reads}
+import play.api.libs.json.{JsPath, Json, JsonValidationError, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
-import utils.EitherTRetry
 
 import java.net.URI
 import scala.collection.Seq
@@ -101,12 +101,12 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     request(s"user/type/$email")
       .get()
       .attemptT
-      .leftMap(GetUserTypeError.CallFailed(_))
+      .leftMap(GetUserTypeError.CallFailed)
       .subflatMap(resp =>
         if (resp.status >= 300) {
           Left(GetUserTypeError.GotErrorResponse(resp))
         } else {
-          resp.json.validate[GetUserTypeResponse].asEither.leftMap(GetUserTypeError.DecodeFailed(_))
+          resp.json.validate[GetUserTypeResponse].asEither.leftMap(GetUserTypeError.DecodeFailed)
         },
       )
   }
@@ -219,7 +219,7 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
 
   private def execute[A](
       requestHolder: WSRequest,
-  )(func: (WSResponse) => Either[IdentityError, A])(implicit ec: ExecutionContext, scheduler: Scheduler) = {
+  )(func: WSResponse => Either[IdentityError, A])(implicit ec: ExecutionContext, scheduler: Scheduler) = {
 
     EitherT(requestHolder.execute().map(response => Right(response)).recover { case t =>
       Left(OtherIdentityError("An exception was thrown in HttpIdentityService.execute", t.getMessage, endpoint = None))

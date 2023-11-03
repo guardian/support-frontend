@@ -47,7 +47,7 @@ object Lambda extends LazyLogging {
 
   sealed trait Error
   case class ParseError(error: String) extends Error
-  case class BigQueryError(errors: List[String]) extends Error
+  case class BigQueryError(errors: String) extends Error
 
   type SQSMessageId = String
 
@@ -59,7 +59,7 @@ object Lambda extends LazyLogging {
       .leftMap[Error](error => ParseError(error.getMessage))
       .flatMap { event =>
         bigQuery
-          .tableInsertRowWithRetry(event.detail, 0)
+          .sendAcquisition(event.detail)
           .leftMap[Error](error => BigQueryError(error))
       }
     Try(Await.result(result.value, 20.seconds)) match {

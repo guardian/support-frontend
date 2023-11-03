@@ -21,7 +21,6 @@ import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.support.acquisitions.AcquisitionEventTable.{datasetName, tableName}
 import com.gu.support.acquisitions.models.AcquisitionDataRow
-import com.gu.support.acquisitions.utils.Retry
 import com.gu.support.config.Stage
 import org.json.{JSONArray, JSONObject}
 
@@ -44,10 +43,6 @@ class BigQueryService(stage: Stage, credentials: Credentials) {
   lazy val bigQueryWriteClient = BigQueryWriteClient.create(bigQueryWriteSettings)
   lazy val tableId = TableName.of(projectId, datasetName, tableName)
   lazy val streamWriter = JsonStreamWriter.newBuilder(tableId.toString, bigQueryWriteClient).build()
-
-  def tableInsertRowWithRetry(acquisitionDataRow: AcquisitionDataRow, maxRetries: Int)(implicit
-      executionContext: ExecutionContext,
-  ): EitherT[Future, List[String], Unit] = Retry(maxRetries)(sendAcquisition(acquisitionDataRow))
 
   def sendAcquisition(acquisitionDataRow: AcquisitionDataRow): EitherT[Future, String, Unit] =
     EitherT(
