@@ -84,7 +84,7 @@ export const tests: Tests = {
 				id: 'variant',
 			},
 		],
-		isActive: false,
+		isActive: true,
 		audiences: {
 			UnitedStates: {
 				offset: 0,
