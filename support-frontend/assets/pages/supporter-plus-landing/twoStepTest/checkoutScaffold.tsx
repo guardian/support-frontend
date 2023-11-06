@@ -168,7 +168,7 @@ export function SupporterPlusCheckoutScaffold({
 								gridId="supporterPlusLandingUnitedStates"
 								srcSizes={[420]}
 								sizes="420px"
-								imgType="jpg"
+								imgType="png"
 								altText=""
 							/>
 						</figure>
