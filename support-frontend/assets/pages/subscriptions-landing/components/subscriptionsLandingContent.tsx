@@ -32,11 +32,19 @@ function SubscriptionsLandingContent({
 				{subscriptionCopy.map((product, index) => (
 					<SubscriptionsProduct
 						title={product.title}
-						subtitle={product.subtitle ?? ''}
+						subtitle={
+							product.title === 'Guardian Weekly'
+								? 'Annual'
+								: product.subtitle ?? ''
+						}
 						description={product.description}
 						productImage={product.productImage}
 						buttons={product.buttons}
-						offer={product.offer}
+						offer={
+							product.title === 'Guardian Weekly'
+								? 'Black Friday Offer: 1/3 off'
+								: product.offer
+						}
 						isFeature={isFeature(index)}
 						classModifier={product.classModifier ?? []}
 						participations={participations}
