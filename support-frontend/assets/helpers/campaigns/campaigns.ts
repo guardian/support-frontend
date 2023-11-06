@@ -73,3 +73,7 @@ export function getCampaignCode(campaignCode?: string): string | null {
 
 	return null;
 }
+
+export function isCampaignEnabled(campaignCode: string): boolean {
+	return !!window.guardian.campaigns[campaignCode];
+}
