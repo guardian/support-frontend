@@ -3,7 +3,7 @@ import catalogue from './imageCatalogue.json';
 // ----- Types ----- //
 export type ImageType = 'jpg' | 'png';
 // ----- Setup ----- //
-export const GRID_DOMAIN = 'https://i.guim.co.uk/img/media/';
+export const GRID_DOMAIN = 'https://i.guim.co.uk';
 export const imageCatalogue: Record<string, string> = catalogue;
 // Utility type: https://flow.org/en/docs/types/utilities/#toc-keys
 export type ImageId = $Keys<typeof imageCatalogue>;
@@ -16,7 +16,7 @@ export function gridUrl(
 	size: number,
 	imgType: ImageType = 'jpg',
 ): string {
-	const path = `${imageCatalogue[gridId]}/master/${size}.${imgType}?dpr=1&s=none&width=${size}`;
+	const path = `/img/media/${imageCatalogue[gridId]}/master/${size}.${imgType}?dpr=1&s=none&width=${size}`;
 	const url = new URL(path, GRID_DOMAIN);
 	return url.toString();
 }
