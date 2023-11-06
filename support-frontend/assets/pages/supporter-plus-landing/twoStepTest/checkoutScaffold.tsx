@@ -189,9 +189,9 @@ export function SupporterPlusCheckoutScaffold({
 				{!isPaymentPage &&
 					(countryGroupId === 'UnitedStates' ? (
 						<p css={subHeading}>
-							We rely on funding from readers, not from a billionaire owner or
-							shareholders. Join the more than 250,000 recurring supporters in
-							the US who help sustain our journalism.
+							We rely on funding from readers, not from a billionaire owner.
+							Join the more than 250,000 readers in the US whose regular support
+							helps to sustain our journalism long term.
 						</p>
 					) : (
 						<p css={subHeading}>
