@@ -58,10 +58,10 @@ const getPromotionLabel = (currency: IsoCurrency, promotion?: Promotion) => {
 		return `Special Offer: 12 for ${currencies[currency].glyph}${
 			promotion.discountedPrice ?? '12'
 		}`;
-	} else if (promotion.name.startsWith('BlackFriday')) {
+	} else if (promotion.promoCode.startsWith('GWBLACKFRIDAY')) {
 		return `Black Friday Offer: ${
 			currency === 'GBP' || currency === 'EUR'
-				? `1/3rd off`
+				? `1/3 off`
 				: `${Math.round(promotion.discount.amount)}%`
 		}`;
 	} else {
@@ -102,7 +102,8 @@ const weeklyProductProps = (
 	};
 
 	const is12for12 = promotion?.promoCode.startsWith('12for12') ?? false;
-	const isBlackFriday = promotion?.promoCode.startsWith('BlackFriday') ?? false;
+	const isBlackFriday =
+		promotion?.promoCode.startsWith('GWBLACKFRIDAY') ?? false;
 	const label = getPromotionLabel(productPrice.currency, promotion);
 	return {
 		title: billingPeriodTitle(billingPeriod, orderIsAGift),
