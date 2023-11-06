@@ -47,7 +47,7 @@ object Lambda extends LazyLogging {
 
   sealed trait Error
   case class ParseError(error: String) extends Error
-  case class BigQueryError(errors: String) extends Error
+  case class BigQueryError(error: String) extends Error
 
   type SQSMessageId = String
 
