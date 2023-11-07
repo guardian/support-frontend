@@ -3,6 +3,7 @@ import {
 	M25_POSTCODE_PREFIXES,
 	postcodeIsWithinDeliveryArea,
 } from 'helpers/forms/deliveryCheck';
+import { isValidPostcode } from 'helpers/forms/formValidation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -156,6 +157,13 @@ function getDeliveryOnlyRules(
 ): Array<Rule<AddressFormFieldError>> {
 	return [
 		{
+			rule: isValidPostcodeForHomeDelivery(fulfilmentOption, fields.postCode),
+			error: formError(
+				'postCode',
+				'Please enter a valid postcode.',
+			),
+		},
+		{
 			rule:
 				abParticipations.nationalDelivery === 'variant'
 					? isHomeDeliveryAvailable(
@@ -187,6 +195,16 @@ function getDeliveryOnlyRules(
 }
 
 // ---- Helpers --- //
+
+export function isValidPostcodeForHomeDelivery(fulfilmentOption: FulfilmentOptions | null,
+	postcode: string,
+){
+	if (fulfilmentOption === 'HomeDelivery') {
+		return isValidPostcode(postcode);
+	}
+
+	return true;
+}
 
 export const isHomeDeliveryInM25 = (
 	fulfilmentOption: Option<FulfilmentOptions>,

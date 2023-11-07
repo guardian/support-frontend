@@ -9,6 +9,7 @@ import {
 	isPostcodeOptional,
 	isSaturdayOrSundayDeliveryAvailable,
 	isStateNullable,
+	isValidPostcodeForHomeDelivery,
 } from './validation';
 
 describe('applyBillingAddressRules', () => {
@@ -233,6 +234,44 @@ describe('isStateNullable', () => {
 		expect(isStateNullable('HK')).toBeTruthy();
 	});
 });
+
+describe('isValidPostcodeForHomeDelivery', () => {
+	it('returns true when not a home delivery', () => {
+		const fulfilmentOption = 'Collection';
+		const postcode = 'DA11 7NP';
+
+		const result = isValidPostcodeForHomeDelivery(
+			fulfilmentOption,
+			postcode,
+		);
+
+		expect(result).toBeTruthy();
+	})
+
+	it('returns true when valid UK postcode', () => {
+		const fulfilmentOption = 'HomeDelivery';
+		const postcode = 'DA11 7NP';
+
+		const result = isValidPostcodeForHomeDelivery(
+			fulfilmentOption,
+			postcode,
+		);
+
+		expect(result).toBeTruthy();
+	})
+
+	it('returns false when invalid UK postcode', () => {
+		const fulfilmentOption = 'HomeDelivery';
+		const postcode = 'DA11 7NP ';
+
+		const result = isValidPostcodeForHomeDelivery(
+			fulfilmentOption,
+			postcode,
+		);
+
+		expect(result).toBeFalsy();
+	})
+})
 
 describe('isHomeDeliveryInM25 ', () => {
 	it('returns true when the order is a home delivery and the postcode is within the M25', () => {
