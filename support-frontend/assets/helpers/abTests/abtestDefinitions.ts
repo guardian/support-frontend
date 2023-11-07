@@ -94,4 +94,19 @@ export const tests: Tests = {
 		referrerControlled: false,
 		seed: 0,
 	},
+	makeItAnnualNudgeGlobal: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		isActive: false,
+		audiences: {},
+		omitCountries: ['US'],
+		referrerControlled: false,
+		seed: 0,
+	},
 };

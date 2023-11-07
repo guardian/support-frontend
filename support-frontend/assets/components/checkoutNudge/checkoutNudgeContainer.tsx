@@ -57,9 +57,15 @@ export function CheckoutNudgeContainer({
 		defaultAmount,
 	).toString();
 
-	const dynamic = useContributionsSelector(
+	const isDynamicUs = useContributionsSelector(
 		isUserInAbVariant('makeItAnnualNudge', 'variant'),
 	);
+
+	const isDynamicGlobal = useContributionsSelector(
+		isUserInAbVariant('makeItAnnualNudgeGlobal', 'variant'),
+	);
+
+	const isDynamic = isDynamicUs || isDynamicGlobal;
 
 	const { otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
@@ -92,27 +98,44 @@ export function CheckoutNudgeContainer({
 
 	let title, subtitle, paragraph;
 
-	if (dynamic) {
+	const calcWeeklyAmount = (annualAmount: number, toNearest?: number) => {
+		const weeklyAmount = Math.ceil((annualAmount * 100) / 52);
+
+		// Current/control solution is to round to the nearest 10p so this may be
+		// disposable if the variant is adopted as we want the dynamic version to be
+		// rounded to the nearest 1p
+		const roundedWeeklyAmount =
+			toNearest !== undefined
+				? Math.round(weeklyAmount / toNearest) * toNearest
+				: weeklyAmount;
+
+		return countryGroupId === 'GBPCountries' && roundedWeeklyAmount < 100
+			? roundedWeeklyAmount.toString() + `p`
+			: currencyGlyph +
+					(roundedWeeklyAmount / 100).toFixed(
+						roundedWeeklyAmount % 100 === 0 ? 0 : 2,
+					);
+	};
+
+	if (isDynamicUs) {
 		title = 'Make it annual';
 		subtitle = `change to ${clampedAmountToCurrenyStr} per year`;
 		paragraph =
 			'Regular, reliable funding from readers is vital for our future. Help protect our open, independent journalism long term.';
 	} else {
-		const minAmount = getConfigMinAmount(countryGroupId, 'ANNUAL');
-		const weeklyMinAmount =
-			Math.round(Math.ceil((minAmount * 100) / 52) / 10) * 10;
-		const minWeeklyAmount =
-			countryGroupId === 'GBPCountries' && weeklyMinAmount < 100
-				? weeklyMinAmount.toString() + `p`
-				: currencyGlyph +
-				  (weeklyMinAmount / 100)
-						.toFixed(weeklyMinAmount % 100 === 0 ? 0 : 2)
-						.toString();
+		if (isDynamicGlobal) {
+			subtitle = `with ${clampedAmountToCurrenyStr} (${calcWeeklyAmount(
+				clampedAmount,
+			)} per week)`;
+		} else {
+			const minAmount = getConfigMinAmount(countryGroupId, 'ANNUAL');
+
+			subtitle = `with ${
+				currencyGlyph + minAmount.toString()
+			} (${calcWeeklyAmount(minAmount, 10)} per week)`;
+		}
 
 		title = 'Support us every year';
-		subtitle = `with ${
-			currencyGlyph + minAmount.toString()
-		} (${minWeeklyAmount} per week)`;
 		paragraph =
 			'Funding Guardian journalism every year is great value on a weekly basis. Make a bigger impact today, and protect our independence long term. Please consider annual support.';
 	}
@@ -125,7 +148,7 @@ export function CheckoutNudgeContainer({
 		event.preventDefault();
 		trackComponentClick('contribution-annual-nudge');
 
-		if (dynamic) {
+		if (isDynamic) {
 			window.location.href = event.currentTarget.href;
 			return;
 		}
@@ -140,7 +163,7 @@ export function CheckoutNudgeContainer({
 		nudgeSubtitle: subtitle,
 		nudgeParagraph: paragraph,
 		nudgeLinkCopy: `See annual`,
-		nudgeLinkHref: dynamic
+		nudgeLinkHref: isDynamic
 			? `/contribute?selected-amount=${clampedAmount}&selected-contribution-type=annual`
 			: undefined,
 		countryGroupId: countryGroupId,
