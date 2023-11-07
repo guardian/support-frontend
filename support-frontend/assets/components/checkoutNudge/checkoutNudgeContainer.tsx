@@ -93,10 +93,10 @@ export function CheckoutNudgeContainer({
 	let title, subtitle, paragraph;
 
 	if (dynamic) {
-		title = 'Make it an annual gift';
+		title = 'Make it annual';
 		subtitle = `change to ${clampedAmountToCurrenyStr} per year`;
 		paragraph =
-			'Choose to support us annually, and you’ll make a bigger impact with your year-end gift. Help protect our open, independent journalism long term.';
+			'Regular, reliable funding from readers is vital for our future. Help protect our open, independent journalism long term.';
 	} else {
 		const minAmount = getConfigMinAmount(countryGroupId, 'ANNUAL');
 		const weeklyMinAmount =
