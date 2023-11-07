@@ -19,7 +19,7 @@ import scala.util.Try
 class SoftOptInsService(sqsClient: AmazonSQSAsync, queueUrlResponse: Future[Either[SoftOptInsServiceError, String]])
     extends StrictLogging {
   def sendMessage(
-      identityId: Option[Long],
+      identityId: Option[String],
       contributionId: UUID,
   )(implicit executionContext: ExecutionContext): EitherT[Future, SoftOptInsServiceError, Unit] = {
     identityId match {

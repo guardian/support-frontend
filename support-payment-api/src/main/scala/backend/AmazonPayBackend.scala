@@ -164,7 +164,7 @@ class AmazonPayBackend(
       payment: AuthorizationDetails,
       acquisitionData: AmazonPayAcquisition,
       email: String,
-      identityId: Option[Long],
+      identityId: Option[String],
       clientBrowserInfo: ClientBrowserInfo,
   ): Future[List[BackendError]] = {
     val contributionData = ContributionData.fromAmazonPay(
@@ -186,7 +186,7 @@ class AmazonPayBackend(
   private def sendThankYouEmail(
       email: String,
       payment: AmazonPaymentData,
-      identityId: Long,
+      identityId: String,
   ): EitherT[Future, BackendError, SendMessageResult] = {
     val contributorRow =
       ContributorRow(email, payment.currency.toString, identityId, PaymentProvider.AmazonPay, None, payment.amount)

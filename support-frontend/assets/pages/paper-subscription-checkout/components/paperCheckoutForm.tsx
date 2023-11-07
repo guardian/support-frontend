@@ -131,6 +131,8 @@ function mapStateToProps(state: SubscriptionsState) {
 		participations: state.common.abParticipations,
 		deliveryAgentsResponse:
 			state.page.checkoutForm.addressMeta.deliveryAgent.response,
+		chosenDeliveryAgent:
+			state.page.checkoutForm.addressMeta.deliveryAgent.chosenAgent,
 	};
 }
 
@@ -374,6 +376,7 @@ function PaperCheckoutForm(props: PropTypes) {
 						{isNationalDeliveryAbTest && isHomeDelivery && (
 							<DeliveryAgentsSelect
 								deliveryAgentsResponse={props.deliveryAgentsResponse}
+								chosenDeliveryAgent={props.chosenDeliveryAgent}
 								setDeliveryAgent={props.setDeliveryAgent}
 								formErrors={props.formErrors}
 								deliveryAddressErrors={props.deliveryAddressErrors}

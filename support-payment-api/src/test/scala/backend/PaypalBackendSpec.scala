@@ -106,9 +106,9 @@ class PaypalBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val acquisitionsEventBusErrorMessage = "an event bus error"
   val acquisitionsEventBusResponseError: Future[Either[String, Unit]] =
     Future.successful(Left(acquisitionsEventBusErrorMessage))
-  val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
-    EitherT.right(Future.successful(1L))
-  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, Long] =
+  val identityResponse: EitherT[Future, IdentityClient.ContextualError, String] =
+    EitherT.right(Future.successful("1"))
+  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, String] =
     EitherT.left(Future.successful(identityError))
   val emailResponseError: EitherT[Future, EmailService.Error, SendMessageResult] =
     EitherT.left(Future.successful(emailError))
