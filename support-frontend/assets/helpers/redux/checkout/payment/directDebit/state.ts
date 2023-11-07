@@ -7,7 +7,7 @@ export type SortCodeIndex = 0 | 1 | 2;
 const numericStringRegex = /^\d+$/;
 
 export const directDebitSchema = z.object({
-	sortCodeString: z
+	sortCode: z
 		.string()
 		.length(6, 'Please enter your sort code')
 		.regex(numericStringRegex, 'Please enter a valid sort code'),
@@ -28,22 +28,15 @@ export type DirectDebitValidateableState = z.infer<typeof directDebitSchema>;
 export type DirectDebitState = DirectDebitValidateableState & {
 	isPopUpOpen: boolean;
 	isDDGuaranteeOpen: boolean;
-	sortCodeArray: string[];
 	formError: string;
 	phase: Phase;
 	errors?: SliceErrors<DirectDebitValidateableState>;
 };
 
-export type SortCodeUpdate = {
-	index: SortCodeIndex;
-	partialSortCode: string;
-};
-
 export const initialDirectDebitState: DirectDebitState = {
 	isPopUpOpen: false,
 	isDDGuaranteeOpen: false,
-	sortCodeArray: Array<string>(3).fill(''),
-	sortCodeString: '',
+	sortCode: '',
 	accountNumber: '',
 	accountHolderName: '',
 	accountHolderConfirmation: false,

@@ -28,13 +28,8 @@ export const confirmAccountDetails = createAsyncThunk<
 >(
 	'directDebit/confirmAccountDetails',
 	async function confirmAccountDetails(_, { getState }) {
-		const {
-			sortCodeString,
-			sortCodeArray,
-			accountNumber,
-			accountHolderConfirmation,
-		} = getState().page.checkoutForm.payment.directDebit;
-		const sortCode = sortCodeArray.join('') || sortCodeString;
+		const { sortCode, accountNumber, accountHolderConfirmation } =
+			getState().page.checkoutForm.payment.directDebit;
 		const isTestUser = getState().page.user.isTestUser;
 		const { csrf } = getState().page.checkoutForm;
 
@@ -68,9 +63,8 @@ export const payWithDirectDebit = createAsyncThunk<
 >(
 	'directDebit/payWithDirectDebit',
 	function payWithDirectDebit(onPaymentAuthorisation, { getState }) {
-		const { sortCodeString, sortCodeArray, accountNumber, accountHolderName } =
+		const { sortCode, accountNumber, accountHolderName } =
 			getState().page.checkoutForm.payment.directDebit;
-		const sortCode = sortCodeArray.join('') || sortCodeString;
 		onPaymentAuthorisation({
 			paymentMethod: DirectDebit,
 			accountHolderName,
