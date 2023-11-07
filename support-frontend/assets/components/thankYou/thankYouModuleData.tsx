@@ -131,7 +131,7 @@ export const getThankYouModuleData = (
 			bodyCopy: (
 				<SupportReminderBodyCopy supportReminderState={supportReminder} />
 			),
-			ctas:supportReminder.hasBeenCompleted? null:(
+			ctas: supportReminder.hasBeenCompleted ? null : (
 				<SupportReminderCTAandPrivacy
 					email={email}
 					supportReminderState={supportReminder}
