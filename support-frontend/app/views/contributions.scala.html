@@ -110,14 +110,6 @@
     window.guardian.guestAccountCreationToken = "@guestAccountCreationToken";
   }
 
-  window.guardian.forceContributionsCampaign = @settings.switches.campaignSwitches.forceContributionsCampaign.isOn
-  window.guardian.enableContributionsCampaign = @settings.switches.campaignSwitches.enableContributionsCampaign.isOn
-
-  // These are transient campaigns that may or may not be running
-  window.guardian.campaigns = {
-    usEoy2023: @settings.switches.campaignSwitches.usEoy2023.exists(_.isOn)
-  }
-
   window.guardian.recaptchaEnabled = @settings.switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
   window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey"
   </script>
