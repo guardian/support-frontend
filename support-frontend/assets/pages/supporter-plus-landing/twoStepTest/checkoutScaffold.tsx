@@ -94,10 +94,12 @@ export function SupporterPlusCheckoutScaffold({
 	children,
 	thankYouRoute,
 	isPaymentPage,
+	isUsEoy2023CampaignEnabled = false,
 }: {
 	children: React.ReactNode;
 	thankYouRoute: string;
 	isPaymentPage?: true;
+	isUsEoy2023CampaignEnabled?: boolean;
 }): JSX.Element {
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -122,12 +124,15 @@ export function SupporterPlusCheckoutScaffold({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/contribute',
 	};
-	const heading =
-		countryGroupId === 'UnitedStates' ? (
-			<LandingPageHeading heading="Make a year-end gift to the Guardian" />
-		) : (
-			<LandingPageHeading heading="Support&nbsp;fearless, independent journalism" />
-		);
+
+	const showUsEoy2023Content =
+		isUsEoy2023CampaignEnabled && countryGroupId === 'UnitedStates';
+
+	const heading = showUsEoy2023Content ? (
+		<LandingPageHeading heading="Make a year-end gift to the Guardian" />
+	) : (
+		<LandingPageHeading heading="Support&nbsp;fearless, independent journalism" />
+	);
 
 	useEffect(() => {
 		if (paymentComplete) {
@@ -162,7 +167,7 @@ export function SupporterPlusCheckoutScaffold({
 				heading={!isPaymentPage && heading}
 				image={
 					!isPaymentPage &&
-					(countryGroupId === 'UnitedStates' ? (
+					(showUsEoy2023Content ? (
 						<figure css={leftColImageUnitedStates}>
 							<GridImage
 								gridId="supporterPlusLandingUnitedStates"
@@ -187,7 +192,7 @@ export function SupporterPlusCheckoutScaffold({
 				withTopborder={isPaymentPage}
 			>
 				{!isPaymentPage &&
-					(countryGroupId === 'UnitedStates' ? (
+					(showUsEoy2023Content ? (
 						<p css={subHeading}>
 							We rely on funding from readers, not from a billionaire owner.
 							Join the more than 250,000 readers in the US whose regular support
