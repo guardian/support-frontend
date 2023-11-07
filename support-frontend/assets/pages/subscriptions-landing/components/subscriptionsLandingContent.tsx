@@ -26,6 +26,13 @@ function SubscriptionsLandingContent({
 	const blackFridayPeriod = new Date(2023, 11, 30);
 	const isBlackFriday = new Date() < blackFridayPeriod;
 
+	const validBlackFridayProduct = (
+		isBlackFriday: boolean,
+		productTitle: string,
+	): boolean => {
+		return isBlackFriday && productTitle === 'Guardian Weekly';
+	};
+
 	return (
 		<div
 			className="subscriptions-landing-page"
@@ -37,7 +44,7 @@ function SubscriptionsLandingContent({
 					<SubscriptionsProduct
 						title={product.title}
 						subtitle={
-							isBlackFriday && product.title === 'Guardian Weekly'
+							validBlackFridayProduct(isBlackFriday, product.title)
 								? 'Annual'
 								: product.subtitle ?? ''
 						}
@@ -45,7 +52,7 @@ function SubscriptionsLandingContent({
 						productImage={product.productImage}
 						buttons={product.buttons}
 						offer={
-							isBlackFriday && product.title === 'Guardian Weekly'
+							validBlackFridayProduct(isBlackFriday, product.title)
 								? 'Black Friday Offer: 1/3 off'
 								: product.offer
 						}
