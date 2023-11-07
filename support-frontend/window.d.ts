@@ -73,7 +73,6 @@ declare global {
 			testMode?: boolean;
 			user?: User;
 			v2recaptchaPublicKey: string;
-      campaigns: Record<string, boolean>;
 		};
 
 		amazon?: AmazonObject;
