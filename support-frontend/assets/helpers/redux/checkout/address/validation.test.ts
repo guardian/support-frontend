@@ -240,38 +240,29 @@ describe('isValidPostcodeForHomeDelivery', () => {
 		const fulfilmentOption = 'Collection';
 		const postcode = 'DA11 7NP';
 
-		const result = isValidPostcodeForHomeDelivery(
-			fulfilmentOption,
-			postcode,
-		);
+		const result = isValidPostcodeForHomeDelivery(fulfilmentOption, postcode);
 
 		expect(result).toBeTruthy();
-	})
+	});
 
 	it('returns true when valid UK postcode', () => {
 		const fulfilmentOption = 'HomeDelivery';
 		const postcode = 'DA11 7NP';
 
-		const result = isValidPostcodeForHomeDelivery(
-			fulfilmentOption,
-			postcode,
-		);
+		const result = isValidPostcodeForHomeDelivery(fulfilmentOption, postcode);
 
 		expect(result).toBeTruthy();
-	})
+	});
 
 	it('returns false when invalid UK postcode', () => {
 		const fulfilmentOption = 'HomeDelivery';
 		const postcode = 'DA11 7NP ';
 
-		const result = isValidPostcodeForHomeDelivery(
-			fulfilmentOption,
-			postcode,
-		);
+		const result = isValidPostcodeForHomeDelivery(fulfilmentOption, postcode);
 
 		expect(result).toBeFalsy();
-	})
-})
+	});
+});
 
 describe('isHomeDeliveryInM25 ', () => {
 	it('returns true when the order is a home delivery and the postcode is within the M25', () => {

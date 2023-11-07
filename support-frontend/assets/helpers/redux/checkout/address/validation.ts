@@ -158,10 +158,7 @@ function getDeliveryOnlyRules(
 	return [
 		{
 			rule: isValidPostcodeForHomeDelivery(fulfilmentOption, fields.postCode),
-			error: formError(
-				'postCode',
-				'Please enter a valid postcode.',
-			),
+			error: formError('postCode', 'Please enter a valid postcode.'),
 		},
 		{
 			rule:
@@ -196,9 +193,10 @@ function getDeliveryOnlyRules(
 
 // ---- Helpers --- //
 
-export function isValidPostcodeForHomeDelivery(fulfilmentOption: FulfilmentOptions | null,
+export function isValidPostcodeForHomeDelivery(
+	fulfilmentOption: FulfilmentOptions | null,
 	postcode: string,
-){
+) {
 	if (fulfilmentOption === 'HomeDelivery') {
 		return isValidPostcode(postcode);
 	}
