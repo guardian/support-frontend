@@ -6,11 +6,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
-import type {
-	AmountsTest,
-	AmountsVariant,
-	SelectedAmountsVariant,
-} from '../contributions';
+import type { AmountsTest, SelectedAmountsVariant } from '../contributions';
 import { tests } from './abtestDefinitions';
 import { getFallbackAmounts } from './helpers';
 
@@ -213,6 +209,7 @@ export function getAmountsTestVariant(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	settings: Settings,
+	mvt: number = getMvtId(),
 	acquisitionDataTests: AcquisitionABTest[] = getTestFromAcquisitionData() ??
 		[],
 ): GetAmountsTestVariantResult {
@@ -222,9 +219,11 @@ export function getAmountsTestVariant(
 			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
 		};
 	}
+	console.log('window.location.pathname', window.location.pathname);
+	console.log({ acquisitionDataTests });
 
 	const buildParticipation = (
-		variants: AmountsVariant[],
+		test: AmountsTest,
 		testName: string,
 		variantName: string,
 	): Participations | undefined => {
@@ -233,7 +232,7 @@ export function getAmountsTestVariant(
 			window.location.pathname,
 			'/??/contribute|thankyou(/.*)?$',
 		);
-		if (pathMatches && variants.length > 1) {
+		if (pathMatches && test.variants.length > 1 && test.isLive) {
 			return {
 				[testName]: variantName,
 			};
@@ -252,13 +251,14 @@ export function getAmountsTestVariant(
 			}
 		});
 		if (candidate) {
+			console.log({ candidate });
 			const variants = candidate.variants;
 			if (variants.length) {
 				const variant =
 					variants.find((variant) => variant.variantName === urlTest.variant) ??
 					variants[0];
 				const amountsParticipation = buildParticipation(
-					variants,
+					candidate,
 					urlTest.name,
 					variant.variantName,
 				);
@@ -304,6 +304,7 @@ export function getAmountsTestVariant(
 				t.targeting.region === countryGroupId,
 		);
 	}
+	console.log({ targetedTest });
 
 	if (!targetedTest) {
 		return {
@@ -311,19 +312,19 @@ export function getAmountsTestVariant(
 		};
 	}
 
-	const { testName, liveTestName, isLive, seed, variants } = targetedTest;
+	const { testName, liveTestName, seed, variants } = targetedTest;
 
-	if (!variants.length || !isLive) {
+	if (!variants.length) {
 		return {
 			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
 		};
 	}
 
 	const currentTestName = liveTestName ?? testName;
-	const assignmentIndex = randomNumber(getMvtId(), seed) % variants.length;
+	const assignmentIndex = randomNumber(mvt, seed) % variants.length;
 	const variant = variants[assignmentIndex];
 	const amountsParticipation = buildParticipation(
-		variants,
+		targetedTest,
 		currentTestName,
 		variant.variantName,
 	);

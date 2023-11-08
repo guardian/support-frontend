@@ -1,11 +1,23 @@
 // ----- Imports ----- //
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
 import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
+import type {
+	AmountsTest,
+	AmountsTests,
+	AmountsTestTargeting,
+	AmountsVariant,
+} from '../../contributions';
+import { emptySwitches } from '../../globalsAndSwitches/globals';
+import type { Settings } from '../../globalsAndSwitches/settings';
 import {
 	GBPCountries,
 	UnitedStates,
 } from '../../internationalisation/countryGroup';
-import { init as abInit, targetPageMatches } from '../abtest';
+import {
+	init as abInit,
+	getAmountsTestVariant,
+	targetPageMatches,
+} from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../abtest';
 
 const { subsDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
@@ -359,6 +371,239 @@ it('targetPage matching', () => {
 	).toEqual(false);
 });
 
+describe('getAmountsTestVariant', () => {
+	delete global.window.location;
+	global.window.location = {
+		...global.window.location, // makes TS happy
+		pathname: '/uk/contribute',
+	};
+
+	const mvt = 123456;
+	const country = 'GB';
+	const countryGroupId = GBPCountries;
+
+	const buildAmountsTest = (
+		testName: string,
+		targeting: AmountsTestTargeting,
+		withVariant: boolean,
+	): AmountsTest => {
+		const variants: AmountsVariant[] = [
+			{
+				variantName: 'CONTROL',
+				defaultContributionType: 'MONTHLY',
+				displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+				amountsCardData: {
+					ONE_OFF: {
+						amounts: [50, 100, 250, 500],
+						defaultAmount: 100,
+						hideChooseYourAmount: false,
+					},
+					MONTHLY: {
+						amounts: [10, 20, 50],
+						defaultAmount: 20,
+						hideChooseYourAmount: false,
+					},
+					ANNUAL: {
+						amounts: [50, 100, 250, 500],
+						defaultAmount: 50,
+						hideChooseYourAmount: false,
+					},
+				},
+			},
+		];
+		if (withVariant) {
+			variants.push({
+				variantName: 'V1',
+				defaultContributionType: 'MONTHLY',
+				displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+				amountsCardData: {
+					ONE_OFF: {
+						amounts: [50, 100, 250, 500],
+						defaultAmount: 100,
+						hideChooseYourAmount: false,
+					},
+					MONTHLY: {
+						amounts: [10, 20, 50],
+						defaultAmount: 20,
+						hideChooseYourAmount: false,
+					},
+					ANNUAL: {
+						amounts: [50, 100, 250, 500],
+						defaultAmount: 50,
+						hideChooseYourAmount: false,
+					},
+				},
+			});
+		}
+		return {
+			testName,
+			liveTestName: testName,
+			isLive: withVariant,
+			targeting,
+			order: 0,
+			seed: 0,
+			variants,
+		};
+	};
+
+	const buildSettings = (amounts: AmountsTests): Settings => ({
+		switches: emptySwitches,
+		amounts,
+		contributionTypes: {
+			GBPCountries: [],
+			UnitedStates: [],
+			AUDCountries: [],
+			EURCountries: [],
+			NZDCountries: [],
+			Canada: [],
+			International: [],
+		},
+		metricUrl: '',
+	});
+
+	it('uses amounts test from url, and returns no participation because there is no variant', () => {
+		const testName = 'AMOUNTS_TEST';
+		const acquisitionAbTests = [
+			buildAmountsAbTest({
+				name: testName,
+				variant: 'CONTROL',
+			}),
+		];
+		const test = buildAmountsTest(
+			testName,
+			{
+				targetingType: 'Region',
+				region: 'GBPCountries',
+			},
+			false,
+		);
+
+		const result = getAmountsTestVariant(
+			country,
+			countryGroupId,
+			buildSettings([test]),
+			mvt,
+			acquisitionAbTests,
+		);
+
+		expect(result.amountsParticipation).toBeUndefined();
+		expect(result.selectedAmountsVariant.testName).toEqual(testName);
+	});
+
+	it('uses amounts test from url, and returns a participation because there is a variant', () => {
+		const testName = 'AMOUNTS_TEST';
+		const acquisitionAbTests = [
+			buildAmountsAbTest({
+				name: testName,
+				variant: 'CONTROL',
+			}),
+		];
+		const test = buildAmountsTest(
+			testName,
+			{
+				targetingType: 'Region',
+				region: 'GBPCountries',
+			},
+			true,
+		);
+
+		const result = getAmountsTestVariant(
+			country,
+			countryGroupId,
+			buildSettings([test]),
+			mvt,
+			acquisitionAbTests,
+		);
+
+		expect(result.amountsParticipation).toEqual({ [testName]: 'CONTROL' });
+		expect(result.selectedAmountsVariant.testName).toEqual(testName);
+	});
+
+	it('targets amounts test based on region, and returns a participation because there is a variant', () => {
+		const acquisitionAbTests: AcquisitionABTest[] = [];
+		const tests = [
+			buildAmountsTest(
+				'AUD_TEST',
+				{
+					targetingType: 'Region',
+					region: 'AUDCountries',
+				},
+				true,
+			),
+			buildAmountsTest(
+				'GBP_TEST',
+				{
+					targetingType: 'Region',
+					region: 'GBPCountries',
+				},
+				true,
+			),
+			buildAmountsTest(
+				'USD_TEST',
+				{
+					targetingType: 'Region',
+					region: 'UnitedStates',
+				},
+				true,
+			),
+		];
+
+		const result = getAmountsTestVariant(
+			country,
+			countryGroupId,
+			buildSettings(tests),
+			mvt,
+			acquisitionAbTests,
+		);
+		console.log({ result });
+
+		expect(result.amountsParticipation).toEqual({ GBP_TEST: 'CONTROL' });
+		expect(result.selectedAmountsVariant.testName).toEqual('GBP_TEST');
+	});
+
+	it('targets amounts test based on region, and returns no participation because there is no variant', () => {
+		const acquisitionAbTests: AcquisitionABTest[] = [];
+		const tests = [
+			buildAmountsTest(
+				'AUD_TEST',
+				{
+					targetingType: 'Region',
+					region: 'AUDCountries',
+				},
+				true,
+			),
+			buildAmountsTest(
+				'GBP_TEST',
+				{
+					targetingType: 'Region',
+					region: 'GBPCountries',
+				},
+				false,
+			),
+			buildAmountsTest(
+				'USD_TEST',
+				{
+					targetingType: 'Region',
+					region: 'UnitedStates',
+				},
+				true,
+			),
+		];
+
+		const result = getAmountsTestVariant(
+			country,
+			countryGroupId,
+			buildSettings(tests),
+			mvt,
+			acquisitionAbTests,
+		);
+		console.log({ result });
+
+		expect(result.amountsParticipation).toBeUndefined();
+		expect(result.selectedAmountsVariant.testName).toEqual('GBP_TEST');
+	});
+});
+
 // ----- Helpers ----- //
 
 function buildVariant({ id = 'control' }: Partial<Variant>): Variant {
@@ -396,5 +641,16 @@ function buildAcquisitionAbTest({
 	return {
 		name,
 		variant,
+	};
+}
+
+function buildAmountsAbTest({
+	name = 't',
+	variant = 'control',
+}: Partial<AcquisitionABTest>): AcquisitionABTest {
+	return {
+		name,
+		variant,
+		testType: 'AMOUNTS_TEST',
 	};
 }
