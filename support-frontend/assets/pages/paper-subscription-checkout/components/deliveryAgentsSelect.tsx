@@ -110,9 +110,7 @@ function SingleDeliveryProvider({
 }
 
 function GreenLabel({ deliveryMethod }: { deliveryMethod: string }) {
-	deliveryMethod = deliveryMethod.toLowerCase();
-
-	if (!isGreenOption(deliveryMethod)) {
+	if (!isGreenOption(deliveryMethod.toLowerCase())) {
 		return null;
 	}
 
