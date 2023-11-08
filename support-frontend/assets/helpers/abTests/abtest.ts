@@ -6,7 +6,13 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
+import type {
+	AmountsTest,
+	AmountsVariant,
+	SelectedAmountsVariant,
+} from '../contributions';
 import { tests } from './abtestDefinitions';
+import { getFallbackAmounts } from './helpers';
 
 // ----- Types ----- //
 
@@ -91,17 +97,10 @@ export function init(
 	);
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
-	const amountsTestParticipations = getAmountsTestParticipations(
-		country,
-		countryGroupId,
-		settings,
-		acquisitionDataTests,
-	);
 
 	return {
 		...participations,
 		...serverSideParticipations,
-		...amountsTestParticipations,
 		...urlParticipations,
 	};
 }
@@ -197,119 +196,152 @@ function getServerSideParticipations(): Participations | null | undefined {
 	return null;
 }
 
-function getAmountsTestFromURL(data: AcquisitionABTest[]) {
+function getAmountsTestFromURL(
+	data: AcquisitionABTest[],
+): AcquisitionABTest | null {
 	const amountTests = data.filter((t) => t.testType === 'AMOUNTS_TEST');
 	if (amountTests.length) {
 		const test = amountTests[0];
 		return {
-			[test.name]: test.variant,
+			name: test.name,
+			variant: test.variant,
 		};
 	}
 	return null;
 }
 
-function getAmountsTestParticipations(
+interface GetAmountsTestVariantResult {
+	selectedAmountsVariant: SelectedAmountsVariant; // Always return an AmountsVariant, even if it's a fallback
+	participation?: Participations; // Optional because we only add participation if we want to track an amounts test that has multiple variants
+}
+export function getAmountsTestVariant(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	settings: Settings,
-	acquisitionDataTests: AcquisitionABTest[],
-): Participations | null | undefined {
-	if (
-		!targetPageMatches(
+	acquisitionDataTests: AcquisitionABTest[] = getTestFromAcquisitionData() ??
+		[],
+): GetAmountsTestVariantResult {
+	const { amounts } = settings;
+	if (!amounts) {
+		return {
+			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
+		};
+	}
+
+	const buildParticipation = (
+		variants: AmountsVariant[],
+		testName: string,
+		variantName: string,
+	): Participations | undefined => {
+		// Check if we actually want to track this test
+		const pathMatches = targetPageMatches(
 			window.location.pathname,
 			'/??/contribute|thankyou(/.*)?$',
-		)
-	) {
-		return null;
-	}
+		);
+		if (pathMatches && variants.length > 1) {
+			return {
+				[testName]: variantName,
+			};
+		}
+	};
 
-	// Amounts test/variant has been set in the Epic and coded into the Epic CTA URL
+	// Is an amounts test defined in the url?
 	const urlTest = getAmountsTestFromURL(acquisitionDataTests);
-	if (urlTest != null) {
-		return urlTest;
+	if (urlTest) {
+		// Attempt to find urlTest in the configured amounts tests
+		const candidate = amounts.find((t) => {
+			if (t.isLive) {
+				return t.liveTestName === urlTest.name;
+			} else {
+				return t.testName === urlTest.name;
+			}
+		});
+		if (candidate) {
+			const variants = candidate.variants;
+			if (variants.length) {
+				const variant =
+					variants.find((variant) => variant.variantName === urlTest.variant) ??
+					variants[0];
+				const participation = buildParticipation(
+					variants,
+					urlTest.name,
+					urlTest.variant,
+				);
+				return {
+					selectedAmountsVariant: {
+						...variant,
+						testName: urlTest.name,
+					},
+					participation,
+				};
+			}
+		}
 	}
 
-	if (!settings.amounts) {
-		return null;
-	}
+	// No url test was found, use targeting
+	let targetedTest: AmountsTest | undefined;
 
-	const amounts = settings.amounts;
-
-	/*
-	An amounts test can be in one of two forms:
-
-	Country test:
-	  Bespoke tests targeted at one or more geographical countries
-	  `targeting` object will include a `countries` attribute
-	    - a String array containing 2-letter ISO country codes
-	  When the `isLive` boolean is `false`:
-	    - the test is ignored; users will see their appropriate region test
-	  When the `isLive` boolean is `true`:
-	    - users will be randomly segregated into an AB test and see the appropriate variant
-	    - analytics will use the `liveTestName` label, if available, else the `testName` label
-	  A country can appear in more than one country test:
-	    - if 2+ live tests include the country, the test with the lowest `order` value will display
-
-	Region test:
-	  Evergreen tests, one per geographical region
-	  `targeting` object will include a `region` attribute
-	    - the region label, as defined by the Region type
-	  When the `isLive` boolean is `false`:
-	    - the CONTROL variant will display
-	    - analytics will use the `testName` label
-	  When the `isLive` boolean is `true`:
-	    - users will be randomly segregated into an AB test and see the appropriate variant
-	    - analytics will use the `liveTestName` label
-	*/
-	const targetTestArray = amounts.filter(
-		(t) =>
-			t.isLive &&
-			t.targeting.targetingType === 'Country' &&
-			t.targeting.countries.includes(country),
-	);
-	let targetTest;
+	// First try country-targeted tests
 	const source = getSourceFromAcquisitionData() ?? '';
-	if (
-		!['APPLE_NEWS', 'GOOGLE_AMP'].includes(source) &&
-		targetTestArray.length
-	) {
-		targetTestArray.sort((a, b) => a.order - b.order);
-		targetTest = targetTestArray[0];
+	const enableCountryTargetedTests = !['APPLE_NEWS', 'GOOGLE_AMP'].includes(
+		source,
+	);
+	if (enableCountryTargetedTests) {
+		const countryTargetedTests = amounts
+			.filter(
+				(t) =>
+					t.isLive &&
+					t.targeting.targetingType === 'Country' &&
+					t.targeting.countries.includes(country),
+			)
+			.sort((a, b) => a.order - b.order);
+
+		if (countryTargetedTests[0]) {
+			targetedTest = countryTargetedTests[0];
+		}
 	}
-	if (!targetTest) {
-		targetTest = amounts.find(
+
+	// Then try region-targeted tests
+	if (!targetedTest) {
+		targetedTest = amounts.find(
 			(t) =>
 				t.targeting.targetingType === 'Region' &&
 				t.targeting.region === countryGroupId,
 		);
 	}
 
-	if (!targetTest) {
-		return null;
+	if (!targetedTest) {
+		return {
+			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
+		};
 	}
 
-	const { testName, liveTestName, isLive, seed, variants } = targetTest;
+	const { testName, liveTestName, isLive, seed, variants } = targetedTest;
 
-	if (!variants.length) {
-		return null;
-	}
-
-	/*
-		We return null if there's no live AB test running (for a regional test) or just a single variant in the test (which will always be the control variant)
-	*/
-	if (!isLive || variants.length === 1) {
-		return null;
+	if (!variants.length || !isLive) {
+		return {
+			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
+		};
 	}
 
 	const currentTestName = liveTestName ?? testName;
-	const variantNames = variants.map((variant) => variant.variantName);
-	const assignmentIndex = randomNumber(getMvtId(), seed) % variantNames.length;
+	const assignmentIndex = randomNumber(getMvtId(), seed) % variants.length;
+	const variant = variants[assignmentIndex];
+	const participation = buildParticipation(
+		variants,
+		currentTestName,
+		variant.variantName,
+	);
 	return {
-		[currentTestName]: variantNames[assignmentIndex],
+		selectedAmountsVariant: {
+			...variant,
+			testName: currentTestName,
+		},
+		participation,
 	};
 }
 
-function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
+export function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
 	const acquisitionDataParam = getQueryParameter('acquisitionData');
 
 	if (!acquisitionDataParam) {

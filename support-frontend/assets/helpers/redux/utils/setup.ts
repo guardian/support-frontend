@@ -1,5 +1,6 @@
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -14,7 +15,7 @@ import {
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { getAllQueryParamsWithExclusions } from 'helpers/urls/url';
-import { getAmounts } from '../../abTests/helpers';
+import type { SelectedAmountsVariant } from '../../contributions';
 import type { CommonState, Internationalisation } from '../commonState/state';
 
 // Creates the initial state for the common reducer.
@@ -25,6 +26,7 @@ function buildInitialState(
 	currencyId: IsoCurrency,
 	settings: Settings,
 	acquisitionData: ReferrerAcquisitionData,
+	amounts: SelectedAmountsVariant,
 ): CommonState {
 	const excludedParameters = ['REFPVID', 'INTCMP', 'acquisitionData'];
 	const otherQueryParams = getAllQueryParamsWithExclusions(excludedParameters);
@@ -35,13 +37,6 @@ function buildInitialState(
 		useLocalCurrency: false,
 		defaultCurrency: currencyId,
 	};
-
-	const amounts = getAmounts(
-		settings,
-		abParticipations,
-		countryGroupId,
-		countryId,
-	);
 
 	return {
 		campaign: getCampaign(acquisitionData),
@@ -59,18 +54,27 @@ export function getInitialState(): CommonState {
 	const countryGroupId: CountryGroupId = detectCountryGroup();
 	const currencyId: IsoCurrency = detectCurrency(countryGroupId);
 	const settings = getSettings();
+	const { selectedAmountsVariant, participation: amountsParticipation } =
+		getAmountsTestVariant(countryId, countryGroupId, settings);
+
 	const participations: Participations = abTest.init(
 		countryId,
 		countryGroupId,
 		settings,
 	);
+	const participationsWithAmountsTest = {
+		...participations,
+		...amountsParticipation,
+	};
+
 	const acquisitionData: ReferrerAcquisitionData = getReferrerAcquisitionData();
 	return buildInitialState(
-		participations,
+		participationsWithAmountsTest,
 		countryGroupId,
 		countryId,
 		currencyId,
 		settings,
 		acquisitionData,
+		selectedAmountsVariant,
 	);
 }
