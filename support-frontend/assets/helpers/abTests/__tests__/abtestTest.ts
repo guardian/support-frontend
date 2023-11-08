@@ -459,10 +459,11 @@ describe('getAmountsTestVariant', () => {
 	it('uses amounts test from url, and returns no participation because there is no variant', () => {
 		const testName = 'AMOUNTS_TEST';
 		const acquisitionAbTests = [
-			buildAmountsAbTest({
+			{
 				name: testName,
 				variant: 'CONTROL',
-			}),
+				testType: 'AMOUNTS_TEST',
+			},
 		];
 		const test = buildAmountsTest(
 			testName,
@@ -489,10 +490,10 @@ describe('getAmountsTestVariant', () => {
 	it('uses amounts test from url, and returns a participation because there is a variant', () => {
 		const testName = 'AMOUNTS_TEST';
 		const acquisitionAbTests = [
-			buildAmountsAbTest({
+			{
 				name: testName,
 				variant: 'CONTROL',
-			}),
+			},
 		];
 		const test = buildAmountsTest(
 			testName,
@@ -672,16 +673,5 @@ function buildAcquisitionAbTest({
 	return {
 		name,
 		variant,
-	};
-}
-
-function buildAmountsAbTest({
-	name = 't',
-	variant = 'control',
-}: Partial<AcquisitionABTest>): AcquisitionABTest {
-	return {
-		name,
-		variant,
-		testType: 'AMOUNTS_TEST',
 	};
 }
