@@ -110,6 +110,8 @@ function SingleDeliveryProvider({
 }
 
 function GreenLabel({ deliveryMethod }: { deliveryMethod: string }) {
+	deliveryMethod = deliveryMethod.toLowerCase();
+
 	if (!isGreenOption(deliveryMethod)) {
 		return null;
 	}
@@ -144,6 +146,8 @@ function DeliveryProviderSummary({ summary }: { summary: string }) {
 }
 
 function GreenDeliverySummary({ deliveryMethod }: { deliveryMethod: string }) {
+	deliveryMethod = deliveryMethod.toLowerCase();
+
 	if (!isGreenOption(deliveryMethod)) {
 		return null;
 	}
@@ -166,7 +170,7 @@ function isGreenOption(
 ): deliveryMethod is GreenDeliveryMethod {
 	const isGreenDeliveryMethod = isOneOf(greenDeliveryMethods);
 
-	return isGreenDeliveryMethod(deliveryMethod.toLowerCase());
+	return isGreenDeliveryMethod(deliveryMethod);
 }
 
 function getGreenSummary(deliveryMethod: GreenDeliveryMethod) {
