@@ -60,7 +60,7 @@ const darkBackgroundContainerMobile = css`
 `;
 
 const subHeading = css`
-	font-weight: normal;
+	${textSans.medium()};
 	padding-right: ${space[2]}px;
 `;
 

@@ -56,7 +56,7 @@ function Playback(props: {
 	onSubmit: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	accountHolderName: string;
 	accountNumber: string;
-	sortCodeString: string;
+	sortCode: string;
 	buttonText: string;
 	allErrors: Array<Record<string, string>>;
 	setRecaptchaToken: (token: string) => void;
@@ -82,7 +82,7 @@ function Playback(props: {
 				<label htmlFor="sort-code-input" css={fieldLabel}>
 					Sort Code
 				</label>
-				<span css={fieldData}>{props.sortCodeString}</span>
+				<span css={fieldData}>{props.sortCode}</span>
 
 				<label htmlFor="account-number-input" css={fieldLabel}>
 					Account number

@@ -1,5 +1,9 @@
 import type { AmountsTest, AmountsTests } from 'helpers/contributions';
-import { emptyConfiguredRegionAmounts, getGlobal } from './globals';
+import {
+	emptyConfiguredRegionAmounts,
+	emptySwitches,
+	getGlobal,
+} from './globals';
 
 const getSpecifiedRegionAmountsFromGlobal = (
 	target: string,
@@ -24,9 +28,7 @@ describe('getGlobal', () => {
 		// @ts-expect-error -- incomplete type
 		window.guardian = {
 			settings: {
-				switches: {
-					experiments: {},
-				},
+				switches: emptySwitches,
 				amounts: [
 					{
 						...emptyConfiguredRegionAmounts,

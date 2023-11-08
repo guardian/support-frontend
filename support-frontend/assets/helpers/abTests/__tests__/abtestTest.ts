@@ -1,5 +1,6 @@
 // ----- Imports ----- //
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
+import { emptySwitches } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import {
@@ -31,9 +32,7 @@ describe('init', () => {
 	const country = 'GB';
 	const countryGroupId = GBPCountries;
 	const emptySettings = {
-		switches: {
-			experiments: {},
-		},
+		switches: emptySwitches,
 		amounts: [],
 		contributionTypes: {
 			GBPCountries: [],
