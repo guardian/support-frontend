@@ -209,6 +209,7 @@ export function getAmountsTestVariant(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	settings: Settings,
+	path: string = window.location.pathname,
 	mvt: number = getMvtId(),
 	acquisitionDataTests: AcquisitionABTest[] = getTestFromAcquisitionData() ??
 		[],
@@ -219,8 +220,6 @@ export function getAmountsTestVariant(
 			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
 		};
 	}
-	console.log('window.location.pathname', window.location.pathname);
-	console.log({ acquisitionDataTests });
 
 	const buildParticipation = (
 		test: AmountsTest,
@@ -229,7 +228,7 @@ export function getAmountsTestVariant(
 	): Participations | undefined => {
 		// Check if we actually want to track this test
 		const pathMatches = targetPageMatches(
-			window.location.pathname,
+			path,
 			'/??/contribute|thankyou(/.*)?$',
 		);
 		if (pathMatches && test.variants.length > 1 && test.isLive) {
@@ -251,7 +250,6 @@ export function getAmountsTestVariant(
 			}
 		});
 		if (candidate) {
-			console.log({ candidate });
 			const variants = candidate.variants;
 			if (variants.length) {
 				const variant =
@@ -304,7 +302,6 @@ export function getAmountsTestVariant(
 				t.targeting.region === countryGroupId,
 		);
 	}
-	console.log({ targetedTest });
 
 	if (!targetedTest) {
 		return {

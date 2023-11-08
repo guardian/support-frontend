@@ -372,15 +372,10 @@ it('targetPage matching', () => {
 });
 
 describe('getAmountsTestVariant', () => {
-	delete global.window.location;
-	global.window.location = {
-		...global.window.location, // makes TS happy
-		pathname: '/uk/contribute',
-	};
-
 	const mvt = 123456;
 	const country = 'GB';
 	const countryGroupId = GBPCountries;
+	const path = '/uk/contribute';
 
 	const buildAmountsTest = (
 		testName: string,
@@ -482,6 +477,7 @@ describe('getAmountsTestVariant', () => {
 			country,
 			countryGroupId,
 			buildSettings([test]),
+			path,
 			mvt,
 			acquisitionAbTests,
 		);
@@ -511,6 +507,7 @@ describe('getAmountsTestVariant', () => {
 			country,
 			countryGroupId,
 			buildSettings([test]),
+			path,
 			mvt,
 			acquisitionAbTests,
 		);
@@ -552,12 +549,12 @@ describe('getAmountsTestVariant', () => {
 			country,
 			countryGroupId,
 			buildSettings(tests),
+			path,
 			mvt,
 			acquisitionAbTests,
 		);
-		console.log({ result });
 
-		expect(result.amountsParticipation).toEqual({ GBP_TEST: 'CONTROL' });
+		expect(result.amountsParticipation).toEqual({ GBP_TEST: 'V1' });
 		expect(result.selectedAmountsVariant.testName).toEqual('GBP_TEST');
 	});
 
@@ -594,13 +591,47 @@ describe('getAmountsTestVariant', () => {
 			country,
 			countryGroupId,
 			buildSettings(tests),
+			path,
 			mvt,
 			acquisitionAbTests,
 		);
-		console.log({ result });
 
 		expect(result.amountsParticipation).toBeUndefined();
 		expect(result.selectedAmountsVariant.testName).toEqual('GBP_TEST');
+	});
+
+	it('targets amounts test based on country, and returns no participation because there is no variant', () => {
+		const acquisitionAbTests: AcquisitionABTest[] = [];
+		const tests = [
+			buildAmountsTest(
+				'GBP_TEST',
+				{
+					targetingType: 'Region',
+					region: 'GBPCountries',
+				},
+				false,
+			),
+			buildAmountsTest(
+				'COUNTRY_TEST',
+				{
+					targetingType: 'Country',
+					countries: ['GB'],
+				},
+				true,
+			),
+		];
+
+		const result = getAmountsTestVariant(
+			country,
+			countryGroupId,
+			buildSettings(tests),
+			path,
+			mvt,
+			acquisitionAbTests,
+		);
+
+		expect(result.amountsParticipation).toEqual({ COUNTRY_TEST: 'V1' });
+		expect(result.selectedAmountsVariant.testName).toEqual('COUNTRY_TEST');
 	});
 });
 
