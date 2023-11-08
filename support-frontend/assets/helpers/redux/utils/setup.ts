@@ -54,7 +54,7 @@ export function getInitialState(): CommonState {
 	const countryGroupId: CountryGroupId = detectCountryGroup();
 	const currencyId: IsoCurrency = detectCurrency(countryGroupId);
 	const settings = getSettings();
-	const { selectedAmountsVariant, participation: amountsParticipation } =
+	const { selectedAmountsVariant, amountsParticipation } =
 		getAmountsTestVariant(countryId, countryGroupId, settings);
 
 	const participations: Participations = abTest.init(countryId, countryGroupId);

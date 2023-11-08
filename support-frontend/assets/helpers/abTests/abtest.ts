@@ -207,7 +207,7 @@ function getAmountsTestFromURL(
 
 interface GetAmountsTestVariantResult {
 	selectedAmountsVariant: SelectedAmountsVariant; // Always return an AmountsVariant, even if it's a fallback
-	participation?: Participations; // Optional because we only add participation if we want to track an amounts test that has multiple variants
+	amountsParticipation?: Participations; // Optional because we only add participation if we want to track an amounts test that has multiple variants
 }
 export function getAmountsTestVariant(
 	country: IsoCountry,
@@ -257,7 +257,7 @@ export function getAmountsTestVariant(
 				const variant =
 					variants.find((variant) => variant.variantName === urlTest.variant) ??
 					variants[0];
-				const participation = buildParticipation(
+				const amountsParticipation = buildParticipation(
 					variants,
 					urlTest.name,
 					variant.variantName,
@@ -267,7 +267,7 @@ export function getAmountsTestVariant(
 						...variant,
 						testName: urlTest.name,
 					},
-					participation,
+					amountsParticipation,
 				};
 			}
 		}
@@ -322,7 +322,7 @@ export function getAmountsTestVariant(
 	const currentTestName = liveTestName ?? testName;
 	const assignmentIndex = randomNumber(getMvtId(), seed) % variants.length;
 	const variant = variants[assignmentIndex];
-	const participation = buildParticipation(
+	const amountsParticipation = buildParticipation(
 		variants,
 		currentTestName,
 		variant.variantName,
@@ -332,11 +332,11 @@ export function getAmountsTestVariant(
 			...variant,
 			testName: currentTestName,
 		},
-		participation,
+		amountsParticipation,
 	};
 }
 
-export function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
+function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
 	const acquisitionDataParam = getQueryParameter('acquisitionData');
 
 	if (!acquisitionDataParam) {
