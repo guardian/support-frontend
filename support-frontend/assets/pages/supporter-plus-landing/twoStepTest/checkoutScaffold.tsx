@@ -71,14 +71,36 @@ const secureIndicatorSpacing = css`
 	}
 `;
 
+const leftColImage = css`
+	height: 140px;
+	margin-top: ${space[6]}px;
+	margin-left: -${space[9]}px;
+	margin-right: ${space[5]}px;
+
+	img {
+		max-width: 100%;
+	}
+`;
+
+const leftColImageUnitedStates = css`
+	margin-left: -${space[5]}px;
+	margin-top: 6px;
+
+	img {
+		display: block;
+	}
+`;
+
 export function SupporterPlusCheckoutScaffold({
 	children,
 	thankYouRoute,
 	isPaymentPage,
+	isUsEoy2023CampaignEnabled = false,
 }: {
 	children: React.ReactNode;
 	thankYouRoute: string;
 	isPaymentPage?: true;
+	isUsEoy2023CampaignEnabled?: boolean;
 }): JSX.Element {
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -103,7 +125,15 @@ export function SupporterPlusCheckoutScaffold({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/contribute',
 	};
-	const heading = <LandingPageHeading />;
+
+	const showUsEoy2023Content =
+		isUsEoy2023CampaignEnabled && countryGroupId === 'UnitedStates';
+
+	const heading = showUsEoy2023Content ? (
+		<LandingPageHeading heading="Make a year-end gift to the Guardian" />
+	) : (
+		<LandingPageHeading heading="Support&nbsp;fearless, independent journalism" />
+	);
 
 	useEffect(() => {
 		if (paymentComplete) {
@@ -137,25 +167,45 @@ export function SupporterPlusCheckoutScaffold({
 			<CheckoutHeading
 				heading={!isPaymentPage && heading}
 				image={
-					!isPaymentPage && (
-						<GridImage
-							gridId="supporterPlusLanding"
-							srcSizes={[500]}
-							sizes="500px"
-							imgType="png"
-							altText=""
-						/>
-					)
+					!isPaymentPage &&
+					(showUsEoy2023Content ? (
+						<figure css={leftColImageUnitedStates}>
+							<GridImage
+								gridId="supporterPlusLandingUnitedStates"
+								srcSizes={[420]}
+								sizes="420px"
+								imgType="png"
+								altText=""
+							/>
+						</figure>
+					) : (
+						<figure css={leftColImage}>
+							<GridImage
+								gridId="supporterPlusLanding"
+								srcSizes={[500]}
+								sizes="500px"
+								imgType="png"
+								altText=""
+							/>
+						</figure>
+					))
 				}
 				withTopborder={isPaymentPage}
 			>
-				{!isPaymentPage && (
-					<p css={subHeading}>
-						As a reader-funded news organisation, we rely on your generosity.
-						Please give what you can, so millions can benefit from quality
-						reporting on the events shaping our world.
-					</p>
-				)}
+				{!isPaymentPage &&
+					(showUsEoy2023Content ? (
+						<p css={subHeading}>
+							We rely on funding from readers, not from a billionaire owner.
+							Join the more than 250,000 readers in the US whose regular support
+							helps to sustain our journalism long term.
+						</p>
+					) : (
+						<p css={subHeading}>
+							As a reader-funded news organisation, we rely on your generosity.
+							Please give what you can, so millions can benefit from quality
+							reporting on the events shaping our world.
+						</p>
+					))}
 			</CheckoutHeading>
 
 			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
