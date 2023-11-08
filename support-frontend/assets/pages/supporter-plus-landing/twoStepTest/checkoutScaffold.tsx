@@ -84,6 +84,7 @@ const leftColImage = css`
 
 const leftColImageUnitedStates = css`
 	margin-left: -${space[5]}px;
+	margin-top: 6px;
 
 	img {
 		display: block;
