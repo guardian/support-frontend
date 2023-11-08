@@ -141,7 +141,7 @@ export function SupporterPlusCheckoutScaffold({
 			}
 		/>
 	) : (
-		<LandingPageHeading heading="Support&nbsp;fearless, independent journalism" />
+		<LandingPageHeading heading="Support fearless, independent journalism" />
 	);
 
 	useEffect(() => {
