@@ -93,8 +93,8 @@ export function CheckoutNudgeContainer({
 	let title, subtitle, paragraph;
 
 	if (dynamic) {
-		title = 'Make it annual';
-		subtitle = `change to ${clampedAmountToCurrenyStr} per year`;
+		title = 'Make it an annual gift';
+		subtitle = `Change to ${clampedAmountToCurrenyStr} per year`;
 		paragraph =
 			'Regular, reliable funding from readers is vital for our future. Help protect our open, independent journalism long term.';
 	} else {
