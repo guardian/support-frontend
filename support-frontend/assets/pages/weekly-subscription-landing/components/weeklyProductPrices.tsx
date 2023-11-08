@@ -62,7 +62,7 @@ const getPromotionLabel = (currency: IsoCurrency, promotion?: Promotion) => {
 		return `Black Friday Offer: ${
 			currency === 'GBP' || currency === 'EUR'
 				? `1/3 off`
-				: `${Math.round(promotion.discount.amount)}%`
+				: `${Math.round(promotion.discount.amount)}% off`
 		}`;
 	} else {
 		return `Save ${Math.round(promotion.discount.amount)}%`;
