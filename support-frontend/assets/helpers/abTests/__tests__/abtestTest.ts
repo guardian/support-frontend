@@ -1,7 +1,5 @@
 // ----- Imports ----- //
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
-import { emptySwitches } from 'helpers/globalsAndSwitches/globals';
-import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import {
 	GBPCountries,
@@ -31,20 +29,6 @@ describe('init', () => {
 	const mvt = 123456;
 	const country = 'GB';
 	const countryGroupId = GBPCountries;
-	const emptySettings = {
-		switches: emptySwitches,
-		amounts: [],
-		contributionTypes: {
-			GBPCountries: [],
-			UnitedStates: [],
-			AUDCountries: [],
-			EURCountries: [],
-			NZDCountries: [],
-			Canada: [],
-			International: [],
-		},
-		metricUrl: '',
-	} as Settings;
 
 	afterEach(() => {
 		window.localStorage.clear();
@@ -58,7 +42,6 @@ describe('init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
 			tests,
 			mvt,
 		);
@@ -96,7 +79,6 @@ describe('init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
 			tests,
 			mvt,
 			acquisitionAbTests,
@@ -133,7 +115,6 @@ describe('init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
 			tests,
 			mvt,
 			acquisitionAbTests,
@@ -156,7 +137,6 @@ describe('init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
 			tests,
 			mvt,
 		);
@@ -174,7 +154,6 @@ describe('init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
 			tests,
 			mvt,
 		);
@@ -196,7 +175,6 @@ describe('init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
 			tests,
 			mvt,
 		);
@@ -221,7 +199,6 @@ describe('init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
 			tests,
 			mvt,
 		);
@@ -246,7 +223,6 @@ describe('init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
 			tests,
 			mvt,
 		);
@@ -273,7 +249,6 @@ describe('init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
 			tests,
 			mvt,
 		);
@@ -295,7 +270,6 @@ describe('init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
 			tests,
 			mvt,
 		);
@@ -315,7 +289,6 @@ describe('init', () => {
 		const participations: Participations = abInit(
 			country,
 			countryGroupId,
-			emptySettings,
 			tests,
 			mvt,
 		);

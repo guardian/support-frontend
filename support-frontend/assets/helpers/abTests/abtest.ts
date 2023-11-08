@@ -82,7 +82,6 @@ export type Tests = Record<string, Test>;
 export function init(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
-	settings: Settings,
 	abTests: Tests = tests,
 	mvt: number = getMvtId(),
 	acquisitionDataTests: AcquisitionABTest[] = getTestFromAcquisitionData() ??
@@ -261,7 +260,7 @@ export function getAmountsTestVariant(
 				const participation = buildParticipation(
 					variants,
 					urlTest.name,
-					urlTest.variant,
+					variant.variantName,
 				);
 				return {
 					selectedAmountsVariant: {
