@@ -201,11 +201,7 @@ function getAmountsTestFromURL(
 ): AcquisitionABTest | null {
 	const amountTests = data.filter((t) => t.testType === 'AMOUNTS_TEST');
 	if (amountTests.length) {
-		const test = amountTests[0];
-		return {
-			name: test.name,
-			variant: test.variant,
-		};
+		return amountTests[0];
 	}
 	return null;
 }
