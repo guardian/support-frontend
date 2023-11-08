@@ -513,7 +513,7 @@ describe('getAmountsTestVariant', () => {
 			acquisitionAbTests,
 		);
 
-		expect(result.amountsParticipation).toEqual({ [testName]: 'CONTROL' });
+		expect(result.amountsParticipation).toEqual({ [testName]: 'V1' });
 		expect(result.selectedAmountsVariant.testName).toEqual(testName);
 	});
 
