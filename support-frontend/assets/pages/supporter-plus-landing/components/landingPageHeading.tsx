@@ -29,7 +29,7 @@ const headingStyles = css`
 	}
 `;
 
-type Props = { heading?: string };
+type Props = { heading?: string | JSX.Element };
 export function LandingPageHeading({
 	heading = 'Support&nbsp;fearless, independent journalism',
 }: Props): JSX.Element {

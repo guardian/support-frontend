@@ -130,7 +130,16 @@ export function SupporterPlusCheckoutScaffold({
 		isUsEoy2023CampaignEnabled && countryGroupId === 'UnitedStates';
 
 	const heading = showUsEoy2023Content ? (
-		<LandingPageHeading heading="Make a year-end gift to the Guardian" />
+		<LandingPageHeading
+			heading={
+				<>
+					Make a<br />
+					year-end gift
+					<br />
+					to the Guardian
+				</>
+			}
+		/>
 	) : (
 		<LandingPageHeading heading="Support&nbsp;fearless, independent journalism" />
 	);
@@ -195,9 +204,9 @@ export function SupporterPlusCheckoutScaffold({
 				{!isPaymentPage &&
 					(showUsEoy2023Content ? (
 						<p css={subHeading}>
-							We rely on funding from readers, not from a billionaire owner.
-							Join the more than 250,000 readers in the US whose regular support
-							helps to sustain our journalism long term.
+							We rely on funding from readers, not shareholders or a billionaire
+							owner. Join the more than 250,000 readers in the US whose regular
+							support helps to sustain our journalism.
 						</p>
 					) : (
 						<p css={subHeading}>
