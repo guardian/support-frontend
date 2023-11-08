@@ -80,6 +80,8 @@ export function getCampaignCode(campaignCode?: string): string | null {
 
 export function isCampaignEnabled(campaignCode: string): boolean {
 	return (
+		window.location.hash ===
+			`#settings.switches.campaignSwitches.${campaignCode}=On` ||
 		window.guardian.settings.switches.campaignSwitches[campaignCode] === 'On'
 	);
 }
