@@ -7,7 +7,7 @@ import {
 	PayPal,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { emptySwitches, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getValidPaymentMethods } from '../forms/checkouts';
 
@@ -22,10 +22,6 @@ const mock = (mockFn: unknown) => mockFn as jest.Mock;
 
 describe('checkouts', () => {
 	describe('getValidPaymentMethods', () => {
-		const allSwitches = {
-			experiments: {},
-		};
-
 		it('should return correct values for Monthly Recurring UK when switches are all on', () => {
 			const contributionType = 'MONTHLY';
 			const countryId = 'GB';
@@ -35,7 +31,7 @@ describe('checkouts', () => {
 			expect(
 				getValidPaymentMethods(
 					contributionType,
-					allSwitches,
+					emptySwitches,
 					countryId,
 					countryGroupId,
 				),
@@ -57,7 +53,7 @@ describe('checkouts', () => {
 			expect(
 				getValidPaymentMethods(
 					contributionType,
-					allSwitches,
+					emptySwitches,
 					countryId,
 					countryGroupId,
 				),
@@ -75,7 +71,7 @@ describe('checkouts', () => {
 			expect(
 				getValidPaymentMethods(
 					contributionType,
-					allSwitches,
+					emptySwitches,
 					countryId,
 					countryGroupId,
 				),

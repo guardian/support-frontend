@@ -3,9 +3,25 @@ import 'helpers/contributions';
 
 export type Status = 'On' | 'Off';
 
-export type SwitchObject = Record<string, Status>;
+export type SwitchObject = Record<string, Status | undefined>;
 
-export type Switches = Record<string, SwitchObject> & {
+/**
+ * These keys are generated in Switches.scala
+ * @see {@link file://./../../../app/admin/settings/Switches.scala}
+ *
+ * And added to the `window.guardian` object in settingsScript.scala.html
+ * @see {@link file://./../../../app/views/settingsScript.scala.html}
+ */
+type SwitchesKeys =
+	| 'oneOffPaymentMethods'
+	| 'recurringPaymentMethods'
+	| 'subscriptionsPaymentMethods'
+	| 'subscriptionsSwitches'
+	| 'featureSwitches'
+	| 'campaignSwitches'
+	| 'recaptchaSwitches';
+
+export type Switches = Record<SwitchesKeys, SwitchObject> & {
 	experiments: Record<
 		string,
 		{

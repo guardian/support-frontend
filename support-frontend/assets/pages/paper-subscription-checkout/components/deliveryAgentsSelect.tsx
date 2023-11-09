@@ -16,6 +16,9 @@ const marginBottom = css`
 
 const singleDeliveryProviderCss = css(marginBottom, `border: 0;`);
 
+const greenDeliveryMethods = ['green delivery', 'green options'] as const;
+type GreenDeliveryMethod = typeof greenDeliveryMethods[number];
+
 interface DeliveryAgentsSelectProps {
 	chosenDeliveryAgent?: number;
 	deliveryAgentsResponse?: DeliveryAgentsResponse;
@@ -107,7 +110,7 @@ function SingleDeliveryProvider({
 }
 
 function GreenLabel({ deliveryMethod }: { deliveryMethod: string }) {
-	if (!isGreenOption(deliveryMethod)) {
+	if (!isGreenOption(deliveryMethod.toLowerCase())) {
 		return null;
 	}
 
@@ -141,6 +144,8 @@ function DeliveryProviderSummary({ summary }: { summary: string }) {
 }
 
 function GreenDeliverySummary({ deliveryMethod }: { deliveryMethod: string }) {
+	deliveryMethod = deliveryMethod.toLowerCase();
+
 	if (!isGreenOption(deliveryMethod)) {
 		return null;
 	}
@@ -160,19 +165,17 @@ function GreenDeliverySummary({ deliveryMethod }: { deliveryMethod: string }) {
 
 function isGreenOption(
 	deliveryMethod: string,
-): deliveryMethod is 'Green delivery' | 'Green options' {
-	const greenDeliveryMethods = ['Green delivery', 'Green options'] as const;
+): deliveryMethod is GreenDeliveryMethod {
+	const isGreenDeliveryMethod = isOneOf(greenDeliveryMethods);
 
-	const isGreenDeliveryMethods = isOneOf(greenDeliveryMethods);
-
-	return isGreenDeliveryMethods(deliveryMethod);
+	return isGreenDeliveryMethod(deliveryMethod);
 }
 
-function getGreenSummary(deliveryMethod: 'Green delivery' | 'Green options') {
+function getGreenSummary(deliveryMethod: GreenDeliveryMethod) {
 	switch (deliveryMethod) {
-		case 'Green delivery':
+		case 'green delivery':
 			return 'This provider will deliver your newspaper via foot, bicycle, or electric vehicle.';
-		case 'Green options':
+		case 'green options':
 			return 'This provider may deliver your newspaper via foot, bicycle, electric vehicle or petrol/diesel vehicle.';
 	}
 }
