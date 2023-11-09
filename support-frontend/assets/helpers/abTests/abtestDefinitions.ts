@@ -103,7 +103,7 @@ export const tests: Tests = {
 				id: 'variant',
 			},
 		],
-		isActive: false,
+		isActive: true,
 		audiences: {},
 		omitCountries: ['US'],
 		referrerControlled: false,
