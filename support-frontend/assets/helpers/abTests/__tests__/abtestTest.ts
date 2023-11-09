@@ -601,7 +601,7 @@ describe('getAmountsTestVariant', () => {
 		expect(result.selectedAmountsVariant.testName).toEqual('GBP_TEST');
 	});
 
-	it('targets amounts test based on country, and returns no participation because there is no variant', () => {
+	it('targets amounts test based on country, and returns a participation because there is a variant', () => {
 		const acquisitionAbTests: AcquisitionABTest[] = [];
 		const tests = [
 			buildAmountsTest(
