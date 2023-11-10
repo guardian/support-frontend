@@ -8,7 +8,7 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
-import  type { ReferrerAcquisitionData } from "./acquisitions";
+import type { ReferrerAcquisitionData } from './acquisitions';
 import {
 	canRunQuantumMetric,
 	getContributionAnnualValue,
@@ -16,20 +16,18 @@ import {
 	waitForQuantumMetricAPi,
 } from './quantumMetricHelpers';
 
-
 // ---- Types ---- //
 
 type SendEventTestParticipationId = 30;
 
 enum SendEventAcquisitionDataFromQueryParam {
-  Source = 94,
-  ComponentId = 95,
-  ComponentType = 96,
-  CampaignCode = 97,
-  ReferrerUrl = 99,
-  IsRemote = 100,
+	Source = 94,
+	ComponentId = 95,
+	ComponentType = 96,
+	CampaignCode = 97,
+	ReferrerUrl = 99,
+	IsRemote = 100,
 }
-
 
 enum SendEventSubscriptionCheckoutStart {
 	DigiSub = 75,
@@ -69,7 +67,7 @@ type SendEventId =
 	| SendEventContributionAmountUpdate
 	| SendEventContributionCheckoutConversion
 	| SendEventContributionPaymentMethodUpdate
-  | SendEventAcquisitionDataFromQueryParam;
+	| SendEventAcquisitionDataFromQueryParam;
 
 // ---- sendEvent logic ---- //
 
@@ -117,7 +115,6 @@ function sendEvent(
 		: cartValueEventIds.includes(id)
 		? 64
 		: 0;
-
 	if (window.QuantumMetricAPI?.isOn()) {
 		window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value);
 	}
@@ -142,30 +139,53 @@ function sendEventWhenReadyTrigger(sendEventWhenReady: () => void): void {
 }
 
 function sendEventAcquisitionDataFromQueryParamEvent(
-  acquisitionData :ReferrerAcquisitionData,
+	acquisitionData: ReferrerAcquisitionData,
 ): void {
-  void ifQmPermitted(() => {
-    const sendEventWhenReady = () => {
-     if (window.QuantumMetricAPI?.isOn()) {
-       const source = acquisitionData.source;
-       const componentId = acquisitionData.componentId;
-       const componentType = acquisitionData.componentType;
-       const campaignCode = acquisitionData.campaignCode;
-       const referrerUrl = acquisitionData.referrerUrl;
-       const isRemote = true;
+	void ifQmPermitted(() => {
+		const sendEventWhenReady = () => {
+			if (window.QuantumMetricAPI?.isOn()) {
+				const source = acquisitionData.source ?? '';
+				const componentId = acquisitionData.componentId ?? '';
+				const componentType = acquisitionData.componentType ?? '';
+				const campaignCode = acquisitionData.campaignCode ?? '';
+				const referrerUrl = acquisitionData.referrerUrl ?? '';
+				const isRemote = acquisitionData.isRemote ?? '';
 
+				sendEvent(
+					SendEventAcquisitionDataFromQueryParam.Source,
+					false,
+					source.toString(),
+				);
+				sendEvent(
+					SendEventAcquisitionDataFromQueryParam.ComponentId,
+					false,
+					componentId.toString(),
+				);
+				sendEvent(
+					SendEventAcquisitionDataFromQueryParam.ComponentType,
+					false,
+					componentType.toString(),
+				);
+				sendEvent(
+					SendEventAcquisitionDataFromQueryParam.CampaignCode,
+					false,
+					campaignCode.toString(),
+				);
+				sendEvent(
+					SendEventAcquisitionDataFromQueryParam.ReferrerUrl,
+					false,
+					referrerUrl.toString(),
+				);
+				sendEvent(
+					SendEventAcquisitionDataFromQueryParam.IsRemote,
+					false,
+					isRemote.toString(),
+				);
+			}
+		};
 
-       sendEvent(SendEventAcquisitionDataFromQueryParam.Source, false, source?.toString());
-       sendEvent(SendEventAcquisitionDataFromQueryParam.ComponentId, false, componentId?.toString());
-       sendEvent(SendEventAcquisitionDataFromQueryParam.ComponentType, false, componentType?.toString());
-       sendEvent(SendEventAcquisitionDataFromQueryParam.CampaignCode, false, campaignCode ?.toString());
-       sendEvent(SendEventAcquisitionDataFromQueryParam.ReferrerUrl, false, referrerUrl.toString());
-       sendEvent(SendEventAcquisitionDataFromQueryParam.IsRemote, false, isRemote.toString());
-      }
-    };
-
-    sendEventWhenReadyTrigger(sendEventWhenReady);
-  });
+		sendEventWhenReadyTrigger(sendEventWhenReady);
+	});
 }
 
 function sendEventSubscriptionCheckoutEvent(
@@ -428,5 +448,5 @@ export {
 	sendEventContributionCartValue,
 	sendEventContributionPaymentMethod,
 	sendEventConversionPaymentMethod,
-  sendEventAcquisitionDataFromQueryParamEvent,
+	sendEventAcquisitionDataFromQueryParamEvent,
 };

@@ -45,6 +45,7 @@ export type ReferrerAcquisitionData = {
 	// as we want to include query parameters in the acquisition event to e.g. facilitate off-platform tracking
 	queryParameters?: AcquisitionQueryParameters;
 	labels?: string[];
+	isRemote?: boolean;
 };
 
 export type PaymentAPIAcquisitionData = {

@@ -11,8 +11,8 @@ import {
 	trackAbTests,
 } from 'helpers/tracking/ophan';
 import {
-  init as initQuantumMetric,
-  sendEventAcquisitionDataFromQueryParamEvent
+	init as initQuantumMetric,
+	sendEventAcquisitionDataFromQueryParamEvent,
 } from 'helpers/tracking/quantumMetric';
 import { isPostDeployUser } from 'helpers/user/user';
 import { init as initLogger } from 'helpers/utilities/logger';
@@ -25,7 +25,7 @@ function analyticsInitialisation(
 	participations: Participations,
 	acquisitionData: ReferrerAcquisitionData,
 ): void {
-  sendEventAcquisitionDataFromQueryParamEvent(acquisitionData);
+	sendEventAcquisitionDataFromQueryParamEvent(acquisitionData);
 	setReferrerDataInLocalStorage(acquisitionData);
 	void googleTagManager.init();
 	ophan.init();
