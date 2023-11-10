@@ -309,7 +309,7 @@ export function getAmountsTestVariant(
 		};
 	}
 
-	const { testName, liveTestName, seed, variants } = targetedTest;
+	const { testName, liveTestName, seed, variants, isLive } = targetedTest;
 
 	if (!variants.length) {
 		return {
@@ -317,7 +317,7 @@ export function getAmountsTestVariant(
 		};
 	}
 
-	const currentTestName = liveTestName ?? testName;
+	const currentTestName = isLive && liveTestName ? liveTestName : testName;
 	const assignmentIndex = randomNumber(mvt, seed) % variants.length;
 	const variant = variants[assignmentIndex];
 	const amountsParticipation = buildParticipation(
