@@ -143,44 +143,56 @@ function sendEventAcquisitionDataFromQueryParamEvent(
 ): void {
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
-			if (window.QuantumMetricAPI?.isOn()) {
-				const source = acquisitionData.source ?? '';
-				const componentId = acquisitionData.componentId ?? '';
-				const componentType = acquisitionData.componentType ?? '';
-				const campaignCode = acquisitionData.campaignCode ?? '';
-				const referrerUrl = acquisitionData.referrerUrl ?? '';
-				const isRemote = acquisitionData.isRemote ?? '';
+			const source = acquisitionData.source;
+			const componentId = acquisitionData.componentId;
+			const componentType = acquisitionData.componentType;
+			const campaignCode = acquisitionData.campaignCode;
+			const referrerUrl = acquisitionData.referrerUrl;
+			const isRemote = acquisitionData.isRemote;
 
-				sendEvent(
-					SendEventAcquisitionDataFromQueryParam.Source,
-					false,
-					source.toString(),
-				);
-				sendEvent(
-					SendEventAcquisitionDataFromQueryParam.ComponentId,
-					false,
-					componentId.toString(),
-				);
-				sendEvent(
-					SendEventAcquisitionDataFromQueryParam.ComponentType,
-					false,
-					componentType.toString(),
-				);
-				sendEvent(
-					SendEventAcquisitionDataFromQueryParam.CampaignCode,
-					false,
-					campaignCode.toString(),
-				);
-				sendEvent(
-					SendEventAcquisitionDataFromQueryParam.ReferrerUrl,
-					false,
-					referrerUrl.toString(),
-				);
-				sendEvent(
-					SendEventAcquisitionDataFromQueryParam.IsRemote,
-					false,
-					isRemote.toString(),
-				);
+			if (window.QuantumMetricAPI?.isOn()) {
+				if (source) {
+					sendEvent(
+						SendEventAcquisitionDataFromQueryParam.Source,
+						false,
+						source.toString(),
+					);
+				}
+				if (componentId) {
+					sendEvent(
+						SendEventAcquisitionDataFromQueryParam.ComponentId,
+						false,
+						componentId.toString(),
+					);
+				}
+				if (componentType) {
+					sendEvent(
+						SendEventAcquisitionDataFromQueryParam.ComponentType,
+						false,
+						componentType.toString(),
+					);
+				}
+				if (campaignCode) {
+					sendEvent(
+						SendEventAcquisitionDataFromQueryParam.CampaignCode,
+						false,
+						campaignCode.toString(),
+					);
+				}
+				if (referrerUrl) {
+					sendEvent(
+						SendEventAcquisitionDataFromQueryParam.ReferrerUrl,
+						false,
+						referrerUrl.toString(),
+					);
+				}
+				if (isRemote) {
+					sendEvent(
+						SendEventAcquisitionDataFromQueryParam.IsRemote,
+						false,
+						isRemote.toString(),
+					);
+				}
 			}
 		};
 
