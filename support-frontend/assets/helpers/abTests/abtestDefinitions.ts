@@ -58,7 +58,7 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: true,
 		seed: 2,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
 	nationalDelivery: {
 		variants: [
@@ -75,7 +75,8 @@ export const tests: Tests = {
 		},
 		referrerControlled: false,
 		seed: 0,
-		targetPage: pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout 
+		targetPage:
+			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
 	},
 	makeItAnnualNudge: {
 		variants: [
@@ -95,6 +96,6 @@ export const tests: Tests = {
 		},
 		referrerControlled: false,
 		seed: 0,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
 };
