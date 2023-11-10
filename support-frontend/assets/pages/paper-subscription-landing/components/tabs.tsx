@@ -30,7 +30,6 @@ type PropTypes = {
 
 // ----- Component ----- //
 function PaperTabs({ selectedTab, setTabAction }: PropTypes): JSX.Element {
-	/* Show Home Delivery tab first if in ab test */
 	const tabOptions = Object.keys(tabs);
 	const tabItems = (tabOptions as PaperFulfilmentOptions[]).map(
 		(fulfilmentMethod) => {
