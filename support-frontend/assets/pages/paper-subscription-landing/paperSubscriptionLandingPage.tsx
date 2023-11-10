@@ -52,15 +52,11 @@ const pageQaId = 'qa-paper-subscriptions';
 function PaperLandingPage({
 	productPrices,
 	promotionCopy,
-	participations,
 }: PaperLandingPropTypes) {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
-	const isNationalDeliveryAbTestVariant =
-		participations.nationalDelivery === 'variant';
-
 	const [shouldRedirectToHomeDelivery, setShouldRedirectToHomeDelivery] =
-		useState<boolean>(isNationalDeliveryAbTestVariant);
+		useState<boolean>(true);
 
 	if (
 		shouldRedirectToHomeDelivery &&
@@ -110,9 +106,6 @@ function PaperLandingPage({
 							<Tabs
 								selectedTab={selectedTab}
 								setTabAction={handleSetTabAction}
-								isNationalDeliveryAbTestVariant={
-									isNationalDeliveryAbTestVariant
-								}
 							/>
 						</div>
 					</Block>
@@ -125,7 +118,6 @@ function PaperLandingPage({
 						productPrices={productPrices}
 						tab={selectedTab}
 						setTabAction={handleSetTabAction}
-						isNationalDeliveryAbTestVariant={isNationalDeliveryAbTestVariant}
 					/>
 				</CentredContainer>
 			</FullWidthContainer>

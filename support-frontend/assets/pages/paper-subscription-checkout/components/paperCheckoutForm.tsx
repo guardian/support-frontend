@@ -202,8 +202,6 @@ function PaperCheckoutForm(props: PropTypes) {
 	);
 
 	const isHomeDelivery = props.fulfilmentOption === HomeDelivery;
-	const isNationalDeliveryAbTest =
-		props.participations.nationalDelivery === 'variant';
 
 	if (props.deliveryAgentsResponse?.type === 'PaperRoundError') {
 		logException(`Error fetching delivery providers`);
@@ -368,12 +366,12 @@ function PaperCheckoutForm(props: PropTypes) {
 					</FormSection>
 
 					<FormSection title={deliveryTitle}>
-						{isNationalDeliveryAbTest && isHomeDelivery ? (
+						{isHomeDelivery ? (
 							<PaperAddress countries={newspaperCountries} />
 						) : (
 							<DeliveryAddress countries={newspaperCountries} />
 						)}
-						{isNationalDeliveryAbTest && isHomeDelivery && (
+						{isHomeDelivery && (
 							<DeliveryAgentsSelect
 								deliveryAgentsResponse={props.deliveryAgentsResponse}
 								chosenDeliveryAgent={props.chosenDeliveryAgent}

@@ -150,7 +150,6 @@ const copy: Record<
 const getPlans = (
 	fulfilmentOption: PaperFulfilmentOptions,
 	productPrices: ProductPrices,
-	isNationalDeliveryAbTestVariant: boolean,
 ): Product[] =>
 	ActivePaperProductTypes.map((productOption) => {
 		const priceAfterPromosApplied = finalPrice(
@@ -188,9 +187,10 @@ const getPlans = (
 			),
 			offerCopy: getOfferText(priceAfterPromosApplied, promotion),
 			label: labelText,
-			unavailableOutsideLondon:
-				isNationalDeliveryAbTestVariant &&
-				getUnavailableOutsideLondon(fulfilmentOption, productOption),
+			unavailableOutsideLondon: getUnavailableOutsideLondon(
+				fulfilmentOption,
+				productOption,
+			),
 		};
 	});
 
@@ -198,30 +198,23 @@ type PaperProductPricesProps = {
 	productPrices: ProductPrices | null | undefined;
 	tab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
-	isNationalDeliveryAbTestVariant: boolean;
 };
 
 function PaperProductPrices({
 	productPrices,
 	tab,
 	setTabAction,
-	isNationalDeliveryAbTestVariant,
 }: PaperProductPricesProps): JSX.Element | null {
 	if (!productPrices) {
 		return null;
 	}
 
-	const products = getPlans(
-		tab,
-		productPrices,
-		isNationalDeliveryAbTestVariant,
-	);
+	const products = getPlans(tab, productPrices);
 	return (
 		<PaperPrices
 			activeTab={tab}
 			products={products}
 			setTabAction={setTabAction}
-			isNationalDeliveryAbTestVariant={isNationalDeliveryAbTestVariant}
 		/>
 	);
 }

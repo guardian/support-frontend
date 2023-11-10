@@ -12,33 +12,26 @@ type TabOptions = {
 	content: typeof SubsCardFaqBlock | typeof ContentDeliveryFaqBlock;
 };
 export const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
-	Collection: {
-		name: 'Subscription Card',
-		href: paperSubsUrl(false),
-		content: SubsCardFaqBlock,
-	},
 	HomeDelivery: {
 		name: 'Home Delivery',
 		href: paperSubsUrl(true),
 		content: ContentDeliveryFaqBlock,
 	},
+	Collection: {
+		name: 'Subscription Card',
+		href: paperSubsUrl(false),
+		content: SubsCardFaqBlock,
+	},
 };
 type PropTypes = {
 	selectedTab: PaperFulfilmentOptions;
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
-	isNationalDeliveryAbTestVariant: boolean;
 };
 
 // ----- Component ----- //
-function PaperTabs({
-	selectedTab,
-	setTabAction,
-	isNationalDeliveryAbTestVariant,
-}: PropTypes): JSX.Element {
+function PaperTabs({ selectedTab, setTabAction }: PropTypes): JSX.Element {
 	/* Show Home Delivery tab first if in ab test */
-	const tabOptions = isNationalDeliveryAbTestVariant
-		? Object.keys(tabs).reverse()
-		: Object.keys(tabs);
+	const tabOptions = Object.keys(tabs);
 	const tabItems = (tabOptions as PaperFulfilmentOptions[]).map(
 		(fulfilmentMethod) => {
 			const TabContent = tabs[fulfilmentMethod].content;
@@ -47,12 +40,7 @@ function PaperTabs({
 				text: tabs[fulfilmentMethod].name,
 				href: tabs[fulfilmentMethod].href,
 				selected: fulfilmentMethod === selectedTab,
-				content: (
-					<TabContent
-						setTabAction={setTabAction}
-						isNationalDeliveryAbTestVariant={isNationalDeliveryAbTestVariant}
-					/>
-				),
+				content: <TabContent />,
 			};
 		},
 	);
