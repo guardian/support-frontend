@@ -92,6 +92,7 @@ GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.S
 GET  /:country/subscribe                                           controllers.SubscriptionsController.legacyRedirect(country: String)
 
 # Digital subscriptions
+GET  /digital                                                      controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/digital                                            controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = false)
 GET  /subscribe/digital/gift                                       controllers.DigitalSubscriptionController.digitalGeoRedirect(orderIsAGift: Boolean = true)
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe/digital          controllers.DigitalSubscriptionController.digital(country: String, orderIsAGift: Boolean = false)
