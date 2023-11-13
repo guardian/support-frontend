@@ -125,9 +125,7 @@ export function SupporterPlusCheckoutScaffold({
 					{!isPaymentPage && <Nav {...countrySwitcherProps} />}
 				</>
 			}
-			footer={
-				<Footer/>
-			}
+			footer={<Footer />}
 		>
 			<CheckoutHeading
 				heading={!isPaymentPage && heading}
