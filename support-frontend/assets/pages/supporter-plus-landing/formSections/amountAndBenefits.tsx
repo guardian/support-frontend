@@ -53,22 +53,6 @@ export function AmountAndBenefits({
 									<CheckoutErrorSummary errorList={errorList} />
 								)}
 							/>
-							{showUSCampaignTicker && (
-								<div
-									css={css`
-										margin-top: -${space[2]}px;
-										margin-bottom: ${space[3]}px;
-									`}
-								>
-									<TickerContainer
-										tickerId="US"
-										countType={campaignSettings.tickerSettings.countType}
-										endType={campaignSettings.tickerSettings.endType}
-										headline={campaignSettings.tickerSettings.headline}
-										render={(tickerProps) => <Ticker {...tickerProps} />}
-									/>
-								</div>
-							)}
 							<PriceCardsContainer
 								frequency={tabId}
 								renderPriceCards={({
@@ -105,6 +89,22 @@ export function AmountAndBenefits({
 									</>
 								)}
 							/>
+							{showUSCampaignTicker && (
+								<div
+									css={css`
+										margin-top: -${space[2]}px;
+										margin-bottom: ${space[3]}px;
+									`}
+								>
+									<TickerContainer
+										tickerId="US"
+										countType={campaignSettings.tickerSettings.countType}
+										endType={campaignSettings.tickerSettings.endType}
+										headline={campaignSettings.tickerSettings.headline}
+										render={(tickerProps) => <Ticker {...tickerProps} />}
+									/>
+								</div>
+							)}
 							<CheckoutBenefitsListContainer
 								renderBenefitsList={(benefitsListProps) => (
 									<CheckoutBenefitsList
