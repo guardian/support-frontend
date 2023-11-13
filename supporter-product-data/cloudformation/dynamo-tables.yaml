@@ -40,6 +40,10 @@ Resources:
       TimeToLiveSpecification:
         AttributeName: "expiryDate"
         Enabled: true
+      # This table is used as a cache (which can be easily repopulated), so there is no need to back it up
+      Tags:
+        - Key: devx-backup-enabled
+          Value: false
 
   WriteCapacityScalableTarget:
     Condition: CreateProdResources
@@ -126,6 +130,10 @@ Resources:
       TimeToLiveSpecification:
         AttributeName: "expiryDate"
         Enabled: true
+      # This table is used as a cache (which can be easily repopulated), so there is no need to back it up
+      Tags:
+        - Key: devx-backup-enabled
+          Value: false
 Outputs:
   ProvisionedTableOutput:
     Condition: CreateProdResources
