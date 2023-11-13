@@ -268,7 +268,11 @@ function getAmountsTestParticipations(
 			t.targeting.countries.includes(country),
 	);
 	let targetTest;
-	if (targetTestArray.length) {
+	const source = getSourceFromAcquisitionData() ?? '';
+	if (
+		!['APPLE_NEWS', 'GOOGLE_AMP'].includes(source) &&
+		targetTestArray.length
+	) {
 		targetTestArray.sort((a, b) => a.order - b.order);
 		targetTest = targetTestArray[0];
 	}
@@ -321,6 +325,25 @@ function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
 		return acquisitionData.abTest
 			? [acquisitionData.abTest]
 			: acquisitionData.abTests;
+	} catch {
+		console.error('Cannot parse acquisition data from query string');
+		return undefined;
+	}
+}
+
+export function getSourceFromAcquisitionData(): string | undefined {
+	const acquisitionDataParam = getQueryParameter('acquisitionData');
+
+	if (!acquisitionDataParam) {
+		return undefined;
+	}
+
+	try {
+		const acquisitionData = JSON.parse(acquisitionDataParam) as {
+			source?: string;
+		};
+
+		return acquisitionData.source;
 	} catch {
 		console.error('Cannot parse acquisition data from query string');
 		return undefined;
