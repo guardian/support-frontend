@@ -67,12 +67,22 @@ export const emptyConfiguredRegionAmounts: AmountsTest = {
 	variants: emptyAmountsTestVariants,
 };
 
+export const emptySwitches = {
+	experiments: {},
+	oneOffPaymentMethods: {},
+	recurringPaymentMethods: {},
+	subscriptionsPaymentMethods: {},
+	subscriptionsSwitches: {},
+	featureSwitches: {},
+	campaignSwitches: {},
+	recaptchaSwitches: {},
+};
+
 const getSettings = (): Settings => {
 	const globalSettings = getGlobal<Settings>('settings');
+
 	const defaultSettings = {
-		switches: {
-			experiments: {},
-		},
+		switches: emptySwitches,
 		amounts: [
 			{
 				...emptyConfiguredRegionAmounts,

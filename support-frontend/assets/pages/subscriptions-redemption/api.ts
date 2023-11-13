@@ -48,7 +48,7 @@ function validate(userCode: string): Promise<ValidationResult> {
 		isTestUser ? '?isTestUser=true' : ''
 	}`;
 
-	return fetchJson(validationUrl, {}) as Promise<ValidationResult>;
+	return fetchJson<ValidationResult>(validationUrl, {});
 }
 
 function dispatchError(dispatch: RedemptionDispatch, error: Option<string>) {

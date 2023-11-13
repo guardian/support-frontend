@@ -6,6 +6,6 @@ import model.{AcquisitionData, ClientBrowserInfo}
 case class PaypalAcquisition(
     payment: Payment,
     acquisitionData: AcquisitionData,
-    identityId: Option[Long],
+    identityId: Option[String],
     clientBrowserInfo: ClientBrowserInfo,
 )

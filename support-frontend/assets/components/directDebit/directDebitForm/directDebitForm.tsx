@@ -66,7 +66,7 @@ export default function DirectDebitForm(
 				<div>
 					<TextInput
 						label="Sort code"
-						id="sortCodeString"
+						id="sortCode"
 						data-qm-masking="blocklist"
 						value={props.sortCode}
 						onChange={(e) => props.updateSortCode(e.target.value)}
@@ -74,7 +74,7 @@ export default function DirectDebitForm(
 						minLength={6}
 						maxLength={6}
 						inputMode="numeric"
-						error={props.errors.sortCodeString?.[0]}
+						error={props.errors.sortCode?.[0]}
 					/>
 				</div>
 

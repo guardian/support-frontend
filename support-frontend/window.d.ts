@@ -37,9 +37,6 @@ declare global {
 	};
 
 	interface Window {
-		ApplePaySession?: {
-			canMakePaymentsWithActiveCard: (merchantId: string) => Promise<boolean>;
-		};
 		guardian: {
 			amazonPayClientId: {
 				default: string;
@@ -51,8 +48,6 @@ declare global {
 			};
 			csrf?: CsrfState;
 			email?: string;
-			enableContributionsCampaign: boolean;
-			forceContributionsCampaign: boolean;
 			geoip?: {
 				countryCode: string;
 				stateCode?: string;

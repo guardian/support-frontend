@@ -97,9 +97,9 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
     EitherT.left(Future.successful(stripeApiError))
   val paymentServiceIntentResponse: EitherT[Future, StripeApiError, PaymentIntent] =
     EitherT.right(Future.successful(paymentIntentMock))
-  val identityResponse: EitherT[Future, IdentityClient.ContextualError, Long] =
-    EitherT.right(Future.successful(1L))
-  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, Long] =
+  val identityResponse: EitherT[Future, IdentityClient.ContextualError, String] =
+    EitherT.right(Future.successful("1"))
+  val identityResponseError: EitherT[Future, IdentityClient.ContextualError, String] =
     EitherT.left(Future.successful(identityError))
   val validateRefundHookSuccess: EitherT[Future, StripeApiError, Unit] =
     EitherT.right(Future.successful(()))

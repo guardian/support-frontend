@@ -33,7 +33,7 @@ export const pageUrlRegexes = {
 		paper: {
 			// Requires /subscribe/paper, allows /checkout or /checkout/guest, allows any query string
 			paperLandingWithGuestCheckout:
-				/\/subscribe\/paper(\/checkout|\/checkout\/guest)?(\?.*)?$/,
+				/\/subscribe\/paper(\/delivery|\/checkout|\/checkout\/guest)?(\?.*)?$/,
 		},
 		subsWeeklyPages:
 			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
@@ -58,6 +58,7 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: true,
 		seed: 2,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
 	nationalDelivery: {
 		variants: [
@@ -74,16 +75,27 @@ export const tests: Tests = {
 		},
 		referrerControlled: false,
 		seed: 0,
+		targetPage:
+			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
 	},
-	canMakePaymentsWithActiveCard: {
+	makeItAnnualNudge: {
 		variants: [
 			{
 				id: 'control',
 			},
+			{
+				id: 'variant',
+			},
 		],
-		isActive: false,
-		audiences: {},
+		isActive: true,
+		audiences: {
+			UnitedStates: {
+				offset: 0,
+				size: 1,
+			},
+		},
 		referrerControlled: false,
-		seed: 1,
+		seed: 0,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
 };

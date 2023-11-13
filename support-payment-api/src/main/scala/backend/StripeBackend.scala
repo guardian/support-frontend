@@ -246,7 +246,7 @@ class StripeBackend(
       chargeData: StripeRequest,
       charge: Charge,
       clientBrowserInfo: ClientBrowserInfo,
-      identityId: Option[Long],
+      identityId: Option[String],
   ): Unit = {
     trackContribution(charge, chargeData, identityId, clientBrowserInfo)
       .map(errors =>
@@ -269,7 +269,7 @@ class StripeBackend(
   private def trackContribution(
       charge: Charge,
       data: StripeRequest,
-      identityId: Option[Long],
+      identityId: Option[String],
       clientBrowserInfo: ClientBrowserInfo,
   ): Future[List[BackendError]] = {
     val contributionData = ContributionData.fromStripeCharge(
@@ -288,7 +288,7 @@ class StripeBackend(
     )
   }
 
-  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[Long]] =
+  private def getOrCreateIdentityIdFromEmail(email: String): Future[Option[String]] =
     identityService
       .getOrCreateIdentityIdFromEmail(email)
       .fold(
@@ -313,7 +313,7 @@ class StripeBackend(
   private def sendThankYouEmail(
       email: String,
       data: StripeRequest,
-      identityId: Long,
+      identityId: String,
   ): EitherT[Future, BackendError, SendMessageResult] = {
     val contributorRow = ContributorRow(
       email,
