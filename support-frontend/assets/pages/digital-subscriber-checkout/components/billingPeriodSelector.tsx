@@ -95,7 +95,8 @@ export function BillingPeriodSelector(): JSX.Element {
 	);
 	const promotions = useContributionsSelector(getSubscriptionPromotions);
 
-	return <BoxContents>
+	return (
+		<BoxContents>
 			<div css={headingContainer}>
 				<h2 css={heading}>Digital subscription</h2>
 				<p css={subheading}>Subscribe below to unlock the following benefits</p>
@@ -104,9 +105,9 @@ export function BillingPeriodSelector(): JSX.Element {
 				<ChoiceCardGroup name="billingPeriod">
 					<div css={choiceCardWrapper}>
 						<p css={offerText}>
-              {promotions.monthlyPrice?.discount?.amount
-                ? `${promotions.monthlyPrice.discount.amount}% off regular monthly price`
-                : ''}
+							{promotions.monthlyPrice?.discount?.amount
+								? `${promotions.monthlyPrice.discount.amount}% off regular monthly price`
+								: ''}
 						</p>
 						<ChoiceCard
 							id="monthly"
@@ -115,11 +116,13 @@ export function BillingPeriodSelector(): JSX.Element {
 							checked={billingPeriod === 'Monthly'}
 							onChange={() => dispatch(setBillingPeriod('Monthly'))}
 						/>
-            {promotions.monthlyPrice?.discount?.amount &&( <p css={offerDetails}>
-              {monthlyPrice} per month for the first{' '}
-              {promotions.monthlyPrice.discount.durationMonths} months. Then{' '}
-              {basePrices.monthlyPrice} per month.
-            </p>)}
+						{promotions.monthlyPrice?.discount?.amount && (
+							<p css={offerDetails}>
+								{monthlyPrice} per month for the first{' '}
+								{promotions.monthlyPrice.discount.durationMonths} months. Then{' '}
+								{basePrices.monthlyPrice} per month.
+							</p>
+						)}
 					</div>
 					<Hide from="tablet">
 						<Divider size="full" spaceAbove="tight" cssOverrides={divider} />
@@ -127,8 +130,8 @@ export function BillingPeriodSelector(): JSX.Element {
 					<div css={choiceCardWrapper}>
 						<p css={offerText}>
 							{promotions.annualPrice?.discount?.amount
-              ? `${promotions.annualPrice.discount.amount}% off regular regular annual`
-              : ''}
+								? `${promotions.annualPrice.discount.amount}% off regular regular annual`
+								: ''}
 						</p>
 						<ChoiceCard
 							id="annual"
@@ -137,16 +140,21 @@ export function BillingPeriodSelector(): JSX.Element {
 							checked={billingPeriod === 'Annual'}
 							onChange={() => dispatch(setBillingPeriod('Annual'))}
 						/>
-            {promotions.annualPrice?.discount?.amount && (  <p css={offerDetails}>
-              {annualPrice} for{' '}
-              {promotions.annualPrice.numberOfDiscountedPeriods} year. Then{' '}
-              {basePrices.annualPrice} per year.
-            </p>)}
+						{promotions.annualPrice?.discount?.amount && (
+							<p css={offerDetails}>
+								{annualPrice} for{' '}
+								{promotions.annualPrice.numberOfDiscountedPeriods} year. Then{' '}
+								{basePrices.annualPrice} per year.
+							</p>
+						)}
 					</div>
 				</ChoiceCardGroup>
 			</div>
 			<KindleSubscriptionBenefitsListContainer
-				renderBenefitsList={(benefitsListProps) => <CheckoutBenefitsList {...benefitsListProps} />}
+				renderBenefitsList={(benefitsListProps) => (
+					<CheckoutBenefitsList {...benefitsListProps} />
+				)}
 			/>
-		</BoxContents>;
+		</BoxContents>
+	);
 }
