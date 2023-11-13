@@ -10,8 +10,8 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { SupporterPlusLandingPage } from 'pages/kindle-subscriber-checkout/kindleSubscriptionLandingPage';
-import { KindleSubscriptionThankYou } from 'pages/kindle-subscriber-thank-you/kindleSubscriptionThankYou';
+import { SupporterPlusLandingPage } from 'pages/digital-subscriber-checkout/digitalSubscriptionLandingPage';
+import { DigitalSubscriptionThankYou } from 'pages/digital-subscriber-thank-you/digitalSubscriptionThankYou';
 import { setUpRedux } from './setup/setUpRedux';
 
 if (!isDetailsSupported) {
@@ -57,12 +57,19 @@ const router = () => {
 			<Provider store={store}>
 				<Routes>
 					{countryIds.map((countryId) => (
-						<Route path={`/${countryId}/kindle`} element={landingPage} />
+						<>
+							{/* We're supporting both routes for now until we make `/kindle` obsolete */}
+							<Route path={`/${countryId}/kindle`} element={landingPage} />
+							<Route
+								path={`/${countryId}/subscribe/digital`}
+								element={landingPage}
+							/>
+						</>
 					))}
 					{countryIds.map((countryId) => (
 						<Route
-							path={`/${countryId}/kindle/thankyou`}
-							element={<KindleSubscriptionThankYou />}
+							path={`/${countryId}/thankyou`}
+							element={<DigitalSubscriptionThankYou />}
 						/>
 					))}
 				</Routes>
