@@ -9,6 +9,7 @@ export const pageUrlRegexes = {
 	contributions: {
 		allLandingPagesAndThankyouPages: '/contribute|thankyou(/.*)?$',
 		notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
+		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
 		auLandingPage: '/au/contribute(/.*)?$',
 		usLandingPage: '/us/contribute(/.*)?$',
 	},
@@ -147,5 +148,6 @@ export const tests: Tests = {
 		],
 		referrerControlled: false,
 		seed: 0,
+		targetPage: pageUrlRegexes.contributions.notUsLandingPage,
 	},
 };
