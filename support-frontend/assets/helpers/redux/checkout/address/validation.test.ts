@@ -294,6 +294,23 @@ describe('isHomeDeliveryAvailable', () => {
 		expect(result).toBeTruthy();
 	});
 
+	it('returns true when the order is a home delivery and the postcode is inside the M25', () => {
+		const fulfilmentOption = 'HomeDelivery';
+		const postcode = 'SE23 2AB';
+		const homeDeliveryPostcodes = ['SE23'];
+
+		const result = isHomeDeliveryAvailable(
+			fulfilmentOption,
+			postcode,
+			{
+				isLoading: false,
+			},
+			homeDeliveryPostcodes,
+		);
+
+		expect(result).toBeTruthy();
+	});
+
 	it('returns false when the order is a home delivery and the postcode is outside the M25 and a delivery agent is NOT available', () => {
 		const fulfilmentOption = 'HomeDelivery';
 		const postcode = 'DE 2AB';
