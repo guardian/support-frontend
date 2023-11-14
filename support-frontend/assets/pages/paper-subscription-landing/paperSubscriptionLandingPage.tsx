@@ -55,11 +55,22 @@ function PaperLandingPage({
 }: PaperLandingPropTypes) {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
-	const fulfilment: PaperFulfilmentOptions = window.location.pathname.includes(
-		'delivery',
-	)
-		? HomeDelivery
-		: Collection;
+	const [shouldRedirectToHomeDelivery, setShouldRedirectToHomeDelivery] =
+		useState<boolean>(true);
+
+	if (
+		shouldRedirectToHomeDelivery &&
+		!window.location.pathname.includes('delivery')
+	) {
+		window.history.replaceState({}, '', paperSubsUrl(true));
+		setShouldRedirectToHomeDelivery(false);
+	}
+
+	const fulfilment: PaperFulfilmentOptions =
+		window.location.pathname.includes('delivery') ||
+		shouldRedirectToHomeDelivery
+			? HomeDelivery
+			: Collection;
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
 

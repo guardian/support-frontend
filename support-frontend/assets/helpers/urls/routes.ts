@@ -29,7 +29,6 @@ const routes: Record<string, string> = {
 	digitalSubscriptionLanding: '/subscribe/digital',
 	digitalSubscriptionLandingGift: '/subscribe/digital/gift',
 	paperSubscriptionLanding: '/subscribe/paper',
-	paperSubscriptionDeliveryLanding: '/subscribe/paper/delivery',
 	paperSubscriptionProductChoices: '/subscribe/paper#subscribe',
 	paperSubscriptionDeliveryProductChoices:
 		'/subscribe/paper/delivery#subscribe',

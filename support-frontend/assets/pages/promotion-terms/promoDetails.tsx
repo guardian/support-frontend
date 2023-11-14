@@ -14,7 +14,7 @@ const landingPageForProduct = (props: PromotionTerms) => {
 			return routes.digitalSubscriptionLanding;
 
 		case Paper:
-			return routes.paperSubscriptionDeliveryLanding;
+			return routes.paperSubscriptionLanding;
 
 		default:
 			return props.isGift
