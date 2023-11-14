@@ -23,7 +23,7 @@ object AgentId {
 }
 
 object AgentsEndpoint {
-  case class Response(statusCode: Integer, message: String, data: AgentsList)
+  case class Response(statusCode: Integer, data: AgentsList)
 
   case class AgentsList(agents: List[AgentDetails])
   case class AgentDetails(
