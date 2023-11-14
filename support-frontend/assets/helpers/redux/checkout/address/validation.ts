@@ -1,4 +1,3 @@
-import type { Participations } from 'helpers/abTests/abtest';
 import {
 	M25_POSTCODE_PREFIXES,
 	postcodeIsWithinDeliveryArea,
@@ -35,7 +34,6 @@ export function applyDeliveryAddressRules(
 	fields: AddressFields,
 	deliveryAgent: DeliveryAgentState,
 	productOption: ProductOptions,
-	abParticipations: Participations,
 ): AddressFormFieldError[] {
 	return validate([
 		...getGenericRules(fields, 'delivery'),
@@ -44,7 +42,6 @@ export function applyDeliveryAddressRules(
 			fields,
 			deliveryAgent,
 			productOption,
-			abParticipations,
 		),
 	]);
 }
@@ -153,7 +150,6 @@ function getDeliveryOnlyRules(
 	fields: AddressFields,
 	deliveryAgent: DeliveryAgentState,
 	productOption: ProductOptions,
-	abParticipations: Participations,
 ): Array<Rule<AddressFormFieldError>> {
 	return [
 		{
@@ -161,28 +157,22 @@ function getDeliveryOnlyRules(
 			error: formError('postCode', 'Please enter a valid postcode.'),
 		},
 		{
-			rule:
-				abParticipations.nationalDelivery === 'variant'
-					? isHomeDeliveryAvailable(
-							fulfilmentOption,
-							fields.postCode,
-							deliveryAgent,
-					  )
-					: isHomeDeliveryInM25(fulfilmentOption, fields.postCode),
+			rule: isHomeDeliveryAvailable(
+				fulfilmentOption,
+				fields.postCode,
+				deliveryAgent,
+			),
 			error: formError(
 				'postCode',
 				'The postcode you entered is outside of our delivery area. Please go back to purchase a subscription card instead.',
 			),
 		},
 		{
-			rule:
-				abParticipations.nationalDelivery === 'variant'
-					? isSaturdayOrSundayDeliveryAvailable(
-							fulfilmentOption,
-							fields.postCode,
-							productOption,
-					  )
-					: true,
+			rule: isSaturdayOrSundayDeliveryAvailable(
+				fulfilmentOption,
+				fields.postCode,
+				productOption,
+			),
 			error: formError(
 				'postCode',
 				'Saturday or Sunday delivery is available for Greater London only. Go back and select Weekend delivery or choose a Digital Voucher.',
@@ -204,18 +194,6 @@ export function isValidPostcodeForHomeDelivery(
 	return true;
 }
 
-export const isHomeDeliveryInM25 = (
-	fulfilmentOption: Option<FulfilmentOptions>,
-	postcode: Option<string>,
-	allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
-): boolean => {
-	if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
-		return postcodeIsWithinDeliveryArea(postcode, allowedPrefixes);
-	}
-
-	return true;
-};
-
 export const isHomeDeliveryAvailable = (
 	fulfilmentOption: FulfilmentOptions | null,
 	postcode: string | null,
@@ -223,6 +201,7 @@ export const isHomeDeliveryAvailable = (
 	allowedPrefixes: string[] = M25_POSTCODE_PREFIXES,
 ): boolean => {
 	if (fulfilmentOption === 'HomeDelivery' && postcode !== null) {
+		// if outside M25 area there must be a delivery agent available
 		if (!postcodeIsWithinDeliveryArea(postcode, allowedPrefixes)) {
 			return deliveryAgentsAreAvailable(deliveryAgent);
 		}
