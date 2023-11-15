@@ -1,5 +1,6 @@
 const FASTLY_SERVICE_ID = process.env.FASTLY_SERVICE_ID;
 const FASTLY_API_TOKEN = process.env.FASTLY_API_TOKEN;
+const DELETE_FASTLY_SNIPPETS = process.env.DELETE_FASTLY_SNIPPETS === "true";
 
 const snippets = [
   // redirects table
@@ -58,7 +59,7 @@ const snippets = [
     name: "support-frontend - gu_geo_country cookie deliver",
     type: "deliver",
   },
-]
+];
 
 /**
  * This method
@@ -70,9 +71,11 @@ const snippets = [
  * - Locks the new version
  */
 async function run() {
+  // Find and clone the active version
   const activeVersionData = await fetch(
     `https://api.fastly.com/service/${FASTLY_SERVICE_ID}/version`,
     {
+      method: "GET",
       headers: {
         "Fastly-Key": FASTLY_API_TOKEN,
         Accept: "application/json",
@@ -97,6 +100,41 @@ async function run() {
   const clonedVersion = clonedVersionData.number;
   console.info(`Cloned version ${activeVersion} => ${clonedVersion}`);
 
+  // Delete all the snippets to ensure that what's in code is representative of what's
+  // in Fastly.
+  if (DELETE_FASTLY_SNIPPETS) {
+    const snippetsData = await fetch(
+      `https://api.fastly.com/service/${FASTLY_SERVICE_ID}/version/${activeVersion}/snippet`,
+      {
+        method: "GET",
+        headers: {
+          "Fastly-Key": FASTLY_API_TOKEN,
+          Accept: "application/json",
+        },
+      }
+    ).then((resp) => resp.json());
+
+    const deletedSnippetPromises = snippetsData.map(async ({ name }) => {
+      const deleteSnippetData = await fetch(
+        `https://api.fastly.com/service/${FASTLY_SERVICE_ID}/version/${clonedVersion}/snippet/${encodeURIComponent(
+          name
+        )}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Fastly-Key": FASTLY_API_TOKEN,
+            Accept: "application/json",
+          },
+        }
+      ).then((resp) => resp.json());
+
+      console.info(`Deleted snippet ${name}`);
+      return deleteSnippetData;
+    });
+
+    await Promise.all(deletedSnippetPromises);
+    console.info(`Deleted all snippets`);
+  }
 
   // Loop through the snippets
   for (const { file, name, type } of snippets) {
@@ -106,6 +144,7 @@ async function run() {
         name
       )}`,
       {
+        method: "GET",
         headers: {
           "Fastly-Key": FASTLY_API_TOKEN,
           Accept: "application/json",
