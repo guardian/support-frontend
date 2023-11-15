@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 18
       - name: Fastly snippet - Redirects table
-        run: node .github/workflows/scripts/deploy-fastly-snippet.js
+        run: node .github/workflows/scripts/deploy-fastly-snippets.js
         env:
           FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/redirects-table.vcl
           FASTLY_SERVICE_SNIPPET_NAME: support-frontend - Redirects table
