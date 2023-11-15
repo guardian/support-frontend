@@ -576,7 +576,7 @@ class PaperValidationTest extends AsyncFlatSpec with Matchers {
   import TestData.validPaperRequest
 
   case class TestPaperRound(agentMap: Map[String, List[BigInt]]) extends PaperRoundAPI {
-    def toResponse(coverage: PostcodeCoverage) = CoverageEndpoint.Response(200, "", coverage)
+    def toResponse(coverage: PostcodeCoverage) = CoverageEndpoint.Response(200, coverage)
     def toAgentsCoverage(agentId: AgentId) = CoverageEndpoint.AgentsCoverage(agentId, "", "", 0, "", AgentId(0), "")
     def coverage(body: CoverageEndpoint.RequestBody): Future[CoverageEndpoint.Response] =
       Future {

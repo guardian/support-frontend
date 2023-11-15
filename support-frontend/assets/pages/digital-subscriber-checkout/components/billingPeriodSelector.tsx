@@ -105,8 +105,9 @@ export function BillingPeriodSelector(): JSX.Element {
 				<ChoiceCardGroup name="billingPeriod">
 					<div css={choiceCardWrapper}>
 						<p css={offerText}>
-							{promotions.monthlyPrice?.discount?.amount}% off regular monthly{' '}
-							price
+							{promotions.monthlyPrice?.discount?.amount
+								? `${promotions.monthlyPrice.discount.amount}% off regular monthly price`
+								: ''}
 						</p>
 						<ChoiceCard
 							id="monthly"
@@ -115,19 +116,22 @@ export function BillingPeriodSelector(): JSX.Element {
 							checked={billingPeriod === 'Monthly'}
 							onChange={() => dispatch(setBillingPeriod('Monthly'))}
 						/>
-						<p css={offerDetails}>
-							{monthlyPrice} per month for the first{' '}
-							{promotions.monthlyPrice?.discount?.durationMonths} months. Then{' '}
-							{basePrices.monthlyPrice} per month.
-						</p>
+						{promotions.monthlyPrice?.discount?.amount && (
+							<p css={offerDetails}>
+								{monthlyPrice} per month for the first{' '}
+								{promotions.monthlyPrice.discount.durationMonths} months. Then{' '}
+								{basePrices.monthlyPrice} per month.
+							</p>
+						)}
 					</div>
 					<Hide from="tablet">
 						<Divider size="full" spaceAbove="tight" cssOverrides={divider} />
 					</Hide>
 					<div css={choiceCardWrapper}>
 						<p css={offerText}>
-							{promotions.annualPrice?.discount?.amount}% off regular annual{' '}
-							price
+							{promotions.annualPrice?.discount?.amount
+								? `${promotions.annualPrice.discount.amount}% off regular annual price`
+								: ''}
 						</p>
 						<ChoiceCard
 							id="annual"
@@ -136,11 +140,13 @@ export function BillingPeriodSelector(): JSX.Element {
 							checked={billingPeriod === 'Annual'}
 							onChange={() => dispatch(setBillingPeriod('Annual'))}
 						/>
-						<p css={offerDetails}>
-							{annualPrice} for{' '}
-							{promotions.annualPrice?.numberOfDiscountedPeriods} year. Then{' '}
-							{basePrices.annualPrice} per year.
-						</p>
+						{promotions.annualPrice?.discount?.amount && (
+							<p css={offerDetails}>
+								{annualPrice} for{' '}
+								{promotions.annualPrice.numberOfDiscountedPeriods} year. Then{' '}
+								{basePrices.annualPrice} per year.
+							</p>
+						)}
 					</div>
 				</ChoiceCardGroup>
 			</div>

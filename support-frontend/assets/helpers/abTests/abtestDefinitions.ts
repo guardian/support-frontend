@@ -9,6 +9,7 @@ export const pageUrlRegexes = {
 	contributions: {
 		allLandingPagesAndThankyouPages: '/contribute|thankyou(/.*)?$',
 		notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
+		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
 		auLandingPage: '/au/contribute(/.*)?$',
 		usLandingPage: '/us/contribute(/.*)?$',
 	},
@@ -60,24 +61,6 @@ export const tests: Tests = {
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
-	nationalDelivery: {
-		variants: [
-			{
-				id: 'variant',
-			},
-		],
-		isActive: true,
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		referrerControlled: false,
-		seed: 0,
-		targetPage:
-			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
-	},
 	makeItAnnualNudge: {
 		variants: [
 			{
@@ -97,5 +80,60 @@ export const tests: Tests = {
 		referrerControlled: false,
 		seed: 0,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+	},
+	makeItAnnualNudgeGlobal: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		isActive: true,
+		audiences: {},
+		omitCountries: [
+			'US',
+			'RS',
+			'EG',
+			'PK',
+			'MU',
+			'BH',
+			'MA',
+			'MC',
+			'OM',
+			'GE',
+			'NC',
+			'TZ',
+			'ZM',
+			'AL',
+			'BD',
+			'KZ',
+			'CW',
+			'DO',
+			'GP',
+			'MQ',
+			'PF',
+			'TN',
+			'BQ',
+			'AX',
+			'SN',
+			'AM',
+			'CM',
+			'AO',
+			'KG',
+			'GA',
+			'UZ',
+			'MD',
+			'DZ',
+			'TJ',
+			'LS',
+			'CG',
+			'TG',
+			'NE',
+		],
+		referrerControlled: false,
+		seed: 0,
+		targetPage: pageUrlRegexes.contributions.notUsLandingPage,
 	},
 };
