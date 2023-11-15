@@ -19,9 +19,69 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+      # Redirects table
       - name: Fastly snippet - Redirects table
         run: node .github/workflows/deploy-fastly-snippets.js
         env:
-          FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/redirects-table.vcl
+          FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/fastly-snippets/redirects-table.vcl
           FASTLY_SERVICE_SNIPPET_NAME: support-frontend - Redirects table
           FASTLY_SERVICE_SNIPPET_TYPE: init
+      - name: Fastly snippet - Redirects table recv
+          run: node .github/workflows/deploy-fastly-snippets.js
+          env:
+            FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/fastly-snippets/redirects-table-recv.vcl
+            FASTLY_SERVICE_SNIPPET_NAME: support-frontend - Redirects table recv
+            FASTLY_SERVICE_SNIPPET_TYPE: recv
+      - name: Fastly snippet - Redirects table deliver
+          run: node .github/workflows/deploy-fastly-snippets.js
+          env:
+            FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/fastly-snippets/redirects-table-deliver.vcl
+            FASTLY_SERVICE_SNIPPET_NAME: support-frontend - Redirects table deliver
+            FASTLY_SERVICE_SNIPPET_TYPE: deliver
+      # Redirects error
+      - name: Fastly snippet - Redirects error
+          run: node .github/workflows/deploy-fastly-snippets.js
+          env:
+            FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/fastly-snippets/redirects-error.vcl
+            FASTLY_SERVICE_SNIPPET_NAME: support-frontend - Redirects error
+            FASTLY_SERVICE_SNIPPET_TYPE: error
+      # Compliance redirect
+      - name: Fastly snippet - Compliance redirect recv
+          run: node .github/workflows/deploy-fastly-snippets.js
+          env:
+            FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/fastly-snippets/compliance-redirect-recv.vcl
+            FASTLY_SERVICE_SNIPPET_NAME: support-frontend - Compliance redirect recv
+            FASTLY_SERVICE_SNIPPET_TYPE: recv
+      - name: Fastly snippet - Compliance redirect deliver
+          run: node .github/workflows/deploy-fastly-snippets.js
+          env:
+            FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/fastly-snippets/compliance-redirect-deliver.vcl
+            FASTLY_SERVICE_SNIPPET_NAME: support-frontend - Compliance redirect deliver
+            FASTLY_SERVICE_SNIPPET_TYPE: deliver
+      # Frontline redirect
+      - name: Fastly snippet - Frontline redirect recv
+          run: node .github/workflows/deploy-fastly-snippets.js
+          env:
+            FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/fastly-snippets/frontline-redirect-recv.vcl
+            FASTLY_SERVICE_SNIPPET_NAME: support-frontend - Frontline redirect recv
+            FASTLY_SERVICE_SNIPPET_TYPE: recv
+      - name: Fastly snippet - Frontline redirect deliver
+          run: node .github/workflows/deploy-fastly-snippets.js
+          env:
+            FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/fastly-snippets/frontline-redirect-deliver.vcl
+            FASTLY_SERVICE_SNIPPET_NAME: support-frontend - Frontline redirect deliver
+            FASTLY_SERVICE_SNIPPET_TYPE: deliver
+      # Books redirect
+      - name: Fastly snippet - Books redirect recv
+          run: node .github/workflows/deploy-fastly-snippets.js
+          env:
+            FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/fastly-snippets/books-redirect-rec.vcl
+            FASTLY_SERVICE_SNIPPET_NAME: support-frontend - Books redirect recv
+            FASTLY_SERVICE_SNIPPET_TYPE: recv
+      # gu_geo_country cookie
+      - name: Fastly snippet - gu_geo_country cookie deliver
+          run: node .github/workflows/deploy-fastly-snippets.js
+          env:
+            FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/fastly-snippets/gu_geo_country-cookie.vcl
+            FASTLY_SERVICE_SNIPPET_NAME: support-frontend - gu_geo_country cookie deliver
+            FASTLY_SERVICE_SNIPPET_TYPE: deliver
