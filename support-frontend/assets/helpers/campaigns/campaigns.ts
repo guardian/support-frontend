@@ -37,7 +37,7 @@ export const campaign: CampaignSettings = {
 	tickerSettings: {
 		countType: 'money',
 		endType: 'unlimited',
-		headline: 'End of year campaign',
+		headline: 'Help us reach our end-of-year goal',
 	},
 };
 
