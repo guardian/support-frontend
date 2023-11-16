@@ -186,6 +186,7 @@ function buildReferrerAcquisitionData(
 			: acquisitionData.abTests) as AcquisitionABTest[] | undefined,
 		queryParameters: queryParameters.length > 0 ? queryParameters : [],
 		labels: acquisitionData.labels as string[] | undefined,
+		isRemote: acquisitionData.isRemote as boolean | undefined,
 	};
 }
 

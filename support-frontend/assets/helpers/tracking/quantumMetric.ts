@@ -143,57 +143,26 @@ function sendEventAcquisitionDataFromQueryParamEvent(
 ): void {
 	void ifQmPermitted(() => {
 		const sendEventWhenReady = () => {
-			const source = acquisitionData.source;
-			const componentId = acquisitionData.componentId;
-			const componentType = acquisitionData.componentType;
-			const campaignCode = acquisitionData.campaignCode;
-			const referrerUrl = acquisitionData.referrerUrl;
-			const isRemote = acquisitionData.isRemote;
-
-			if (window.QuantumMetricAPI?.isOn()) {
-				if (source) {
+			type ReferrerAcquisitionDataKeysToLogType = Record<string, number>;
+			const acquisitionDataKeysToLog: ReferrerAcquisitionDataKeysToLogType = {
+				source: SendEventAcquisitionDataFromQueryParam.Source,
+				componentId: SendEventAcquisitionDataFromQueryParam.ComponentId,
+				componentType: SendEventAcquisitionDataFromQueryParam.ComponentType,
+				campaignCode: SendEventAcquisitionDataFromQueryParam.CampaignCode,
+				referrerUrl: SendEventAcquisitionDataFromQueryParam.ReferrerUrl,
+				isRemote: SendEventAcquisitionDataFromQueryParam.IsRemote,
+			};
+			Object.keys(acquisitionDataKeysToLog).forEach((key) => {
+				const acquisitionDataValueToLog =
+					acquisitionData[key as keyof ReferrerAcquisitionData]?.toString();
+				if (acquisitionDataValueToLog) {
 					sendEvent(
-						SendEventAcquisitionDataFromQueryParam.Source,
+						acquisitionDataKeysToLog[key],
 						false,
-						source.toString(),
+						acquisitionDataValueToLog.toString(),
 					);
 				}
-				if (componentId) {
-					sendEvent(
-						SendEventAcquisitionDataFromQueryParam.ComponentId,
-						false,
-						componentId.toString(),
-					);
-				}
-				if (componentType) {
-					sendEvent(
-						SendEventAcquisitionDataFromQueryParam.ComponentType,
-						false,
-						componentType.toString(),
-					);
-				}
-				if (campaignCode) {
-					sendEvent(
-						SendEventAcquisitionDataFromQueryParam.CampaignCode,
-						false,
-						campaignCode.toString(),
-					);
-				}
-				if (referrerUrl) {
-					sendEvent(
-						SendEventAcquisitionDataFromQueryParam.ReferrerUrl,
-						false,
-						referrerUrl.toString(),
-					);
-				}
-				if (isRemote) {
-					sendEvent(
-						SendEventAcquisitionDataFromQueryParam.IsRemote,
-						false,
-						isRemote.toString(),
-					);
-				}
-			}
+			});
 		};
 
 		sendEventWhenReadyTrigger(sendEventWhenReady);
@@ -440,7 +409,10 @@ function addQM() {
 	});
 }
 
-function init(participations: Participations): void {
+function init(
+	participations: Participations,
+	acquisitionData: ReferrerAcquisitionData,
+): void {
 	void ifQmPermitted(() => {
 		void addQM().then(() => {
 			/**
@@ -448,6 +420,7 @@ function init(participations: Participations): void {
 			 * send user AB test participations via the sendEvent function.
 			 */
 			sendEventABTestParticipations(participations);
+			sendEventAcquisitionDataFromQueryParamEvent(acquisitionData);
 		});
 	});
 }
