@@ -5,7 +5,6 @@ import {
 	applyBillingAddressRules,
 	applyDeliveryAddressRules,
 	isHomeDeliveryAvailable,
-	isHomeDeliveryInM25,
 	isPostcodeOptional,
 	isSaturdayOrSundayDeliveryAvailable,
 	isStateNullable,
@@ -196,7 +195,6 @@ describe('applyDeliveryAddressRules', () => {
 			fields,
 			{ isLoading: false },
 			'Everyday',
-			{},
 		);
 
 		expect(errors).toEqual([
@@ -264,50 +262,6 @@ describe('isValidPostcodeForHomeDelivery', () => {
 	});
 });
 
-describe('isHomeDeliveryInM25 ', () => {
-	it('returns true when the order is a home delivery and the postcode is within the M25', () => {
-		const fulfilmentOption = 'HomeDelivery';
-		const postcode = 'SE23 2AB';
-		const homeDeliveryPostcodes = ['SE23'];
-
-		const result = isHomeDeliveryInM25(
-			fulfilmentOption,
-			postcode,
-			homeDeliveryPostcodes,
-		);
-
-		expect(result).toBeTruthy();
-	});
-
-	it('returns false when the order is a home delivery and the postcode is outside the M25', () => {
-		const fulfilmentOption = 'HomeDelivery';
-		const postcode = 'DA11 7NP';
-		const homeDeliveryPostcodes = ['SE23'];
-
-		const result = isHomeDeliveryInM25(
-			fulfilmentOption,
-			postcode,
-			homeDeliveryPostcodes,
-		);
-
-		expect(result).toBeFalsy();
-	});
-
-	it('returns true when the fulfilment option is not home delivery', () => {
-		const fulfilmentOption = 'Collection';
-		const postcode = 'DA11 7NP';
-		const homeDeliveryPostcodes = ['SE23'];
-
-		const result = isHomeDeliveryInM25(
-			fulfilmentOption,
-			postcode,
-			homeDeliveryPostcodes,
-		);
-
-		expect(result).toBeTruthy();
-	});
-});
-
 describe('isHomeDeliveryAvailable', () => {
 	it('returns true when the order is a home delivery and the postcode is outside the M25 and a delivery agent is available', () => {
 		const fulfilmentOption = 'HomeDelivery';
@@ -333,6 +287,23 @@ describe('isHomeDeliveryAvailable', () => {
 						},
 					],
 				},
+			},
+			homeDeliveryPostcodes,
+		);
+
+		expect(result).toBeTruthy();
+	});
+
+	it('returns true when the order is a home delivery and the postcode is inside the M25', () => {
+		const fulfilmentOption = 'HomeDelivery';
+		const postcode = 'SE23 2AB';
+		const homeDeliveryPostcodes = ['SE23'];
+
+		const result = isHomeDeliveryAvailable(
+			fulfilmentOption,
+			postcode,
+			{
+				isLoading: false,
 			},
 			homeDeliveryPostcodes,
 		);
@@ -366,9 +337,16 @@ describe('isHomeDeliveryAvailable', () => {
 		const postcode = 'DA11 7NP';
 		const homeDeliveryPostcodes = ['SE23'];
 
-		const result = isHomeDeliveryInM25(
+		const result = isHomeDeliveryAvailable(
 			fulfilmentOption,
 			postcode,
+			{
+				isLoading: false,
+				response: {
+					type: 'Covered',
+					agents: [],
+				},
+			},
 			homeDeliveryPostcodes,
 		);
 

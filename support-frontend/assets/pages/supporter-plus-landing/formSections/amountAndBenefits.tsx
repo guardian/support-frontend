@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
+import { from, space } from '@guardian/source-foundations';
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { CheckoutBenefitsListContainer } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
@@ -19,6 +19,15 @@ import { TooltipContainer } from 'components/tooltip/TooltipContainer';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+
+const tickerSpacing = css`
+	margin-top: ${space[2]}px;
+	margin-bottom: ${space[5]}px;
+
+	${from.desktop} {
+		margin-bottom: 32px;
+	}
+`;
 
 export function AmountAndBenefits({
 	countryGroupId,
@@ -53,22 +62,6 @@ export function AmountAndBenefits({
 									<CheckoutErrorSummary errorList={errorList} />
 								)}
 							/>
-							{showUSCampaignTicker && (
-								<div
-									css={css`
-										margin-top: -${space[2]}px;
-										margin-bottom: ${space[3]}px;
-									`}
-								>
-									<TickerContainer
-										tickerId="US"
-										countType={campaignSettings.tickerSettings.countType}
-										endType={campaignSettings.tickerSettings.endType}
-										headline={campaignSettings.tickerSettings.headline}
-										render={(tickerProps) => <Ticker {...tickerProps} />}
-									/>
-								</div>
-							)}
 							<PriceCardsContainer
 								frequency={tabId}
 								renderPriceCards={({
@@ -105,6 +98,17 @@ export function AmountAndBenefits({
 									</>
 								)}
 							/>
+							{showUSCampaignTicker && (
+								<div css={tickerSpacing}>
+									<TickerContainer
+										tickerId="US"
+										countType={campaignSettings.tickerSettings.countType}
+										endType={campaignSettings.tickerSettings.endType}
+										headline={campaignSettings.tickerSettings.headline}
+										render={(tickerProps) => <Ticker {...tickerProps} />}
+									/>
+								</div>
+							)}
 							<CheckoutBenefitsListContainer
 								renderBenefitsList={(benefitsListProps) => (
 									<CheckoutBenefitsList
