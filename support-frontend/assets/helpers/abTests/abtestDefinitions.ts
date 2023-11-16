@@ -80,7 +80,7 @@ const countriesAffectedByVATStatus: IsoCountry[] = [
 	'CG',
 	'TG',
 	'NE',
-],
+];
 
 export const tests: Tests = {
 	supporterPlusOnly: {
@@ -139,10 +139,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		omitCountries: [
-			'US',
-			...countriesAffectedByVATStatus,
-		],
+		omitCountries: ['US', ...countriesAffectedByVATStatus],
 		referrerControlled: false,
 		seed: 0,
 		targetPage: pageUrlRegexes.contributions.notUsLandingPage,
