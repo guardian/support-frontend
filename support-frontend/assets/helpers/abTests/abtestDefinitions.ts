@@ -1,3 +1,4 @@
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Tests } from './abtest';
 // ----- Tests ----- //
 // Note: When setting up a test to run on the contributions thank you page
@@ -9,6 +10,7 @@ export const pageUrlRegexes = {
 	contributions: {
 		allLandingPagesAndThankyouPages: '/contribute|thankyou(/.*)?$',
 		notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
+		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
 		auLandingPage: '/au/contribute(/.*)?$',
 		usLandingPage: '/us/contribute(/.*)?$',
 	},
@@ -39,6 +41,47 @@ export const pageUrlRegexes = {
 			'(/??/subscribe(\\?.*)?$|/??/subscribe/weekly(\\/checkout)?(\\?.*)?$)',
 	},
 };
+
+const countriesAffectedByVATStatus: IsoCountry[] = [
+	'RS',
+	'EG',
+	'PK',
+	'MU',
+	'BH',
+	'MA',
+	'MC',
+	'OM',
+	'GE',
+	'NC',
+	'TZ',
+	'ZM',
+	'AL',
+	'BD',
+	'KZ',
+	'CW',
+	'DO',
+	'GP',
+	'MQ',
+	'PF',
+	'TN',
+	'BQ',
+	'AX',
+	'SN',
+	'AM',
+	'CM',
+	'AO',
+	'KG',
+	'GA',
+	'UZ',
+	'MD',
+	'DZ',
+	'TJ',
+	'LS',
+	'CG',
+	'TG',
+	'NE',
+];
+
 export const tests: Tests = {
 	supporterPlusOnly: {
 		variants: [
@@ -60,8 +103,31 @@ export const tests: Tests = {
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
-	nationalDelivery: {
+	makeItAnnualNudge: {
 		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		isActive: false,
+		audiences: {
+			UnitedStates: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		referrerControlled: false,
+		seed: 0,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+	},
+	makeItAnnualNudgeGlobal: {
+		variants: [
+			{
+				id: 'control',
+			},
 			{
 				id: 'variant',
 			},
@@ -73,29 +139,9 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
+		omitCountries: ['US', ...countriesAffectedByVATStatus],
 		referrerControlled: false,
 		seed: 0,
-		targetPage:
-			pageUrlRegexes.subscriptions.paper.paperLandingWithGuestCheckout,
-	},
-	makeItAnnualNudge: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		isActive: true,
-		audiences: {
-			UnitedStates: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		referrerControlled: false,
-		seed: 0,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		targetPage: pageUrlRegexes.contributions.notUsLandingPage,
 	},
 };
