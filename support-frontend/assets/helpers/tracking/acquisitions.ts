@@ -45,6 +45,7 @@ export type ReferrerAcquisitionData = {
 	// as we want to include query parameters in the acquisition event to e.g. facilitate off-platform tracking
 	queryParameters?: AcquisitionQueryParameters;
 	labels?: string[];
+	isRemote?: boolean;
 };
 
 export type PaymentAPIAcquisitionData = {
@@ -185,6 +186,7 @@ function buildReferrerAcquisitionData(
 			: acquisitionData.abTests) as AcquisitionABTest[] | undefined,
 		queryParameters: queryParameters.length > 0 ? queryParameters : [],
 		labels: acquisitionData.labels as string[] | undefined,
+		isRemote: acquisitionData.isRemote as boolean | undefined,
 	};
 }
 

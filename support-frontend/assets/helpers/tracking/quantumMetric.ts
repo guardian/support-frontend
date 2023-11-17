@@ -8,6 +8,7 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { logException } from 'helpers/utilities/logger';
+import type { ReferrerAcquisitionData } from './acquisitions';
 import {
 	canRunQuantumMetric,
 	getContributionAnnualValue,
@@ -18,6 +19,15 @@ import {
 // ---- Types ---- //
 
 type SendEventTestParticipationId = 30;
+
+enum SendEventAcquisitionDataFromQueryParam {
+	Source = 94,
+	ComponentId = 95,
+	ComponentType = 96,
+	CampaignCode = 97,
+	ReferrerUrl = 99,
+	IsRemote = 100,
+}
 
 enum SendEventSubscriptionCheckoutStart {
 	DigiSub = 75,
@@ -56,7 +66,8 @@ type SendEventId =
 	| SendEventSubscriptionCheckoutConversion
 	| SendEventContributionAmountUpdate
 	| SendEventContributionCheckoutConversion
-	| SendEventContributionPaymentMethodUpdate;
+	| SendEventContributionPaymentMethodUpdate
+	| SendEventAcquisitionDataFromQueryParam;
 
 // ---- sendEvent logic ---- //
 
@@ -104,7 +115,6 @@ function sendEvent(
 		: cartValueEventIds.includes(id)
 		? 64
 		: 0;
-
 	if (window.QuantumMetricAPI?.isOn()) {
 		window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value);
 	}
@@ -126,6 +136,37 @@ function sendEventWhenReadyTrigger(sendEventWhenReady: () => void): void {
 			sendEventWhenReady();
 		});
 	}
+}
+
+function sendEventAcquisitionDataFromQueryParamEvent(
+	acquisitionData: ReferrerAcquisitionData,
+): void {
+	void ifQmPermitted(() => {
+		const sendEventWhenReady = () => {
+			type ReferrerAcquisitionDataKeysToLogType = Record<string, number>;
+			const acquisitionDataKeysToLog: ReferrerAcquisitionDataKeysToLogType = {
+				source: SendEventAcquisitionDataFromQueryParam.Source,
+				componentId: SendEventAcquisitionDataFromQueryParam.ComponentId,
+				componentType: SendEventAcquisitionDataFromQueryParam.ComponentType,
+				campaignCode: SendEventAcquisitionDataFromQueryParam.CampaignCode,
+				referrerUrl: SendEventAcquisitionDataFromQueryParam.ReferrerUrl,
+				isRemote: SendEventAcquisitionDataFromQueryParam.IsRemote,
+			};
+			Object.keys(acquisitionDataKeysToLog).forEach((key) => {
+				const acquisitionDataValueToLog =
+					acquisitionData[key as keyof ReferrerAcquisitionData]?.toString();
+				if (acquisitionDataValueToLog) {
+					sendEvent(
+						acquisitionDataKeysToLog[key],
+						false,
+						acquisitionDataValueToLog.toString(),
+					);
+				}
+			});
+		};
+
+		sendEventWhenReadyTrigger(sendEventWhenReady);
+	});
 }
 
 function sendEventSubscriptionCheckoutEvent(
@@ -368,7 +409,10 @@ function addQM() {
 	});
 }
 
-function init(participations: Participations): void {
+function init(
+	participations: Participations,
+	acquisitionData: ReferrerAcquisitionData,
+): void {
 	void ifQmPermitted(() => {
 		void addQM().then(() => {
 			/**
@@ -376,6 +420,7 @@ function init(participations: Participations): void {
 			 * send user AB test participations via the sendEvent function.
 			 */
 			sendEventABTestParticipations(participations);
+			sendEventAcquisitionDataFromQueryParamEvent(acquisitionData);
 		});
 	});
 }
@@ -388,4 +433,5 @@ export {
 	sendEventContributionCartValue,
 	sendEventContributionPaymentMethod,
 	sendEventConversionPaymentMethod,
+	sendEventAcquisitionDataFromQueryParamEvent,
 };
