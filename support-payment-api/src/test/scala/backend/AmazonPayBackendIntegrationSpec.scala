@@ -2,8 +2,9 @@ package backend
 
 import cats.data.EitherT
 import com.gu.support.acquisitions.eventbridge.AcquisitionsEventBusService
+import com.gu.support.config.Stage
+import com.gu.support.config.Stages.DEV
 import org.scalatest.time.{Millis, Span}
-import com.gu.test.tags.annotations.IntegrationTest
 import conf.{AmazonPayConfig, ConfigLoaderProvider}
 import model._
 import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
@@ -35,13 +36,21 @@ import util.FutureEitherValues
 
 import scala.concurrent.Future
 
-@IntegrationTest
+/** This test was written to debug why we were getting XML marshalling errors when upgrading to Java 11. See the PR for
+  * more detials: https://github.com/guardian/support-frontend/pull/5350
+  *
+  * We have kept it in case we need something similar in the future.
+  *
+  * The test assumes your stage is DEV or skips.
+  */
 class AmazonPayBackendIntegrationSpec
     extends AsyncFlatSpec
     with Matchers
     with FutureEitherValues
     with MockitoSugar
     with ConfigLoaderProvider {
+
+  private val stage = Stage.fromString(sys.env.getOrElse("STAGE", "DEV")).getOrElse(DEV)
 
   lazy val config: AmazonPayConfig = configForTestEnvironment[AmazonPayConfig]()
   val amazonPayService = new AmazonPayService(config)(DefaultThreadPool(executionContext))
@@ -99,6 +108,10 @@ class AmazonPayBackendIntegrationSpec
   val paymentError = AmazonPayApiError.fromString("Error response")
 
   "AmazonPayBackend.makePayment" should "not returning an XML marshalling error" in {
+    // We only ever run this test locally for debugging.
+    // We shouldn't run this in CI as it actually calls out to the AmazonPay API
+    assume(stage == DEV)
+
     when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
     amazonPayBackend
       .makePayment(amazonPayRequest, clientBrowserInfo)
