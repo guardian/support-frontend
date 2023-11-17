@@ -50,11 +50,6 @@ class AmazonPayBackendIntegrationSpec
     with MockitoSugar
     with ConfigLoaderProvider {
 
-  private val stage = Stage.fromString(sys.env.getOrElse("STAGE", "DEV")).getOrElse(DEV)
-
-  lazy val config: AmazonPayConfig = configForTestEnvironment[AmazonPayConfig]()
-  val amazonPayService = new AmazonPayService(config)(DefaultThreadPool(executionContext))
-
   val switchServiceOnResponse: EitherT[Future, Nothing, Switches] =
     EitherT.right(
       Future.successful(
@@ -89,25 +84,26 @@ class AmazonPayBackendIntegrationSpec
   val mockSoftOptInsService: SoftOptInsService = mock[SoftOptInsService]
   val mockSwitchService: SwitchService = mock[SwitchService]
 
-  // -- test obj
-  val amazonPayBackend = new AmazonPayBackend(
-    mockCloudWatchService,
-    amazonPayService,
-    mockIdentityService,
-    mockEmailService,
-    mockAcquisitionsEventBusService,
-    mockDatabaseService,
-    mockSupporterProductDataService,
-    mockSoftOptInsService,
-    mockSwitchService,
-  )(DefaultThreadPool(executionContext))
-
   val paymentdata = AmazonPaymentData("refId", BigDecimal(25), Currency.USD, "email@thegulocal.com")
   val amazonPayRequest = AmazonPayRequest(paymentdata, None)
   val clientBrowserInfo = ClientBrowserInfo("", "", None, None, None)
   val paymentError = AmazonPayApiError.fromString("Error response")
 
   "AmazonPayBackend.makePayment" should "not returning an XML marshalling error" in {
+    lazy val config: AmazonPayConfig = configForTestEnvironment[AmazonPayConfig]()
+    val amazonPayService = new AmazonPayService(config)(DefaultThreadPool(executionContext))
+    val amazonPayBackend = new AmazonPayBackend(
+      mockCloudWatchService,
+      amazonPayService,
+      mockIdentityService,
+      mockEmailService,
+      mockAcquisitionsEventBusService,
+      mockDatabaseService,
+      mockSupporterProductDataService,
+      mockSoftOptInsService,
+      mockSwitchService,
+    )(DefaultThreadPool(executionContext))
+
     when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
     amazonPayBackend
       .makePayment(amazonPayRequest, clientBrowserInfo)
