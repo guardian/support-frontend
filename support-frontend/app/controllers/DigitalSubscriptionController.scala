@@ -2,12 +2,11 @@ package controllers
 
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath, StyleContent}
+import assets.{AssetsResolver}
 import com.gu.support.catalog.DigitalPack
 import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
-import com.gu.i18n.Currency.{AUD}
 import com.gu.support.promotions._
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import config.RecaptchaConfigProvider
@@ -22,6 +21,7 @@ import scala.concurrent.ExecutionContext
 
 class DigitalSubscriptionController(
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    landingCopyProvider: LandingCopyProvider,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
     testUsers: TestUserService,
@@ -50,6 +50,8 @@ class DigitalSubscriptionController(
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = {
     MaybeAuthenticatedAction { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
+      val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(DigitalPack)
+      val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
 
       if (!settings.switches.subscriptionsSwitches.enableDigitalSubGifting.isOn && orderIsAGift) {
         Redirect(routes.DigitalSubscriptionController.digitalGeoRedirect(false)).withSettingsSurrogateKey
@@ -63,12 +65,13 @@ class DigitalSubscriptionController(
         val js = "digitalSubscriptionLandingPage.js"
         val css = "digitalSubscriptionLandingPage.css"
         val csrf = CSRF.getToken.value
-
         val testMode = testUsers.isTestUser(request)
         val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
         val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey
         val readerType = if (orderIsAGift) Gift else Direct
-
+        val maybePromotionCopy = {
+          landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, DigitalPack, "uk", orderIsAGift)
+        }
         Ok(
           views.html.subscriptionCheckout(
             title,
@@ -86,13 +89,22 @@ class DigitalSubscriptionController(
             v2recaptchaConfigPublicKey,
             orderIsAGift,
             noindex = true,
-          ),
-        )
+          ) {
+            Html(
+              s"""<script type="text/javascript">
+                    window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}
+                    window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
+                    window.guardian.orderIsAGift = $orderIsAGift
+                  </script>""",
+            )
+          },
+        ).withSettingsSurrogateKey
+
       }
     }
   }
 
-  private def getPaperHrefLangLinks(orderIsAGift: Boolean): Map[String, String] = {
+  private def getDigitalHrefLangLinks(orderIsAGift: Boolean): Map[String, String] = {
     Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us", orderIsAGift),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift),
