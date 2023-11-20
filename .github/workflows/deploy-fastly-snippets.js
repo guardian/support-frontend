@@ -1,6 +1,7 @@
 const FASTLY_SERVICE_ID = process.env.FASTLY_SERVICE_ID;
 const FASTLY_API_TOKEN = process.env.FASTLY_API_TOKEN;
-const DELETE_FASTLY_SNIPPETS = process.env.DELETE_FASTLY_SNIPPETS === "true";
+const DELETE_SNIPPETS = process.env.DELETE_SNIPPETS === "true";
+const LOCK_AND_ACTIVATE_SERVICE = process.env.LOCK_AND_ACTIVATE_SERVICE === "true";
 
 const snippets = [
   // redirects table
@@ -197,31 +198,35 @@ async function run() {
     }
   }
 
-  const activatedVersionData = await fetch(
-    `https://api.fastly.com/service/${FASTLY_SERVICE_ID}/version/${clonedVersion}/activate`,
-    {
-      method: "PUT",
-      headers: {
-        "Fastly-Key": FASTLY_API_TOKEN,
-        Accept: "application/json",
-      },
-    }
-  ).then((resp) => resp.json());
-  const activatedVersion = activatedVersionData.number;
-  console.info(`Activated version ${activatedVersion}`);
+  if (LOCK_AND_ACTIVATE_SERVICE) {
+    const activatedVersionData = await fetch(
+      `https://api.fastly.com/service/${FASTLY_SERVICE_ID}/version/${clonedVersion}/activate`,
+      {
+        method: "PUT",
+        headers: {
+          "Fastly-Key": FASTLY_API_TOKEN,
+          Accept: "application/json",
+        },
+      }
+    ).then((resp) => resp.json());
+    const activatedVersion = activatedVersionData.number;
+    console.info(`Activated version ${activatedVersion}`);
 
-  const lockedVersionData = await fetch(
-    `https://api.fastly.com/service/${FASTLY_SERVICE_ID}/version/${clonedVersion}/lock`,
-    {
-      method: "PUT",
-      headers: {
-        "Fastly-Key": FASTLY_API_TOKEN,
-        Accept: "application/json",
-      },
-    }
-  ).then((resp) => resp.json());
-  const lockedVersion = lockedVersionData.number;
-  console.info(`Locked version ${lockedVersion}`);
+    const lockedVersionData = await fetch(
+      `https://api.fastly.com/service/${FASTLY_SERVICE_ID}/version/${clonedVersion}/lock`,
+      {
+        method: "PUT",
+        headers: {
+          "Fastly-Key": FASTLY_API_TOKEN,
+          Accept: "application/json",
+        },
+      }
+    ).then((resp) => resp.json());
+    const lockedVersion = lockedVersionData.number;
+    console.info(`Locked version ${lockedVersion}`);
+  } else {
+    console.info(`Version ${clonedVersion} created, but not activated and locked`);
+  }
 }
 
 run();

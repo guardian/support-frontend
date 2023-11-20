@@ -4,7 +4,16 @@ on:
     inputs:
       environment:
         type: environment
+        description: Environment
         required: true
+      delete-snippets:
+        type: boolean
+        description: Delete all Fastly snippets before deploying
+        required: true
+      lock-and-activate-service:
+        type: boolean
+        description: Lock and activate the service version after snippets are deployed
+        default: true
 jobs:
   deploy_fastly_snippets:
     name: Deploy Fastly snippets [${{ github.event.inputs.environment }}]
@@ -13,6 +22,8 @@ jobs:
     env:
       FASTLY_SERVICE_ID: ${{ secrets.FASTLY_SERVICE_ID }}
       FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_TOKEN }}
+      DELETE_SNIPPETS: ${{ github.event.inputs.delete-fastly-snippets }}
+      LOCK_AND_ACTIVATE_SERVICE: ${{ github.event.inputs.lock-and-activate-service }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -22,4 +33,4 @@ jobs:
       - name: Deploy Fastly snippets
         run: node .github/workflows/deploy-fastly-snippets.js
         env:
-          DELETE_FASTLY_SNIPPETS: ${{ github.event.inputs.delete-fastly-snippets }}
+
