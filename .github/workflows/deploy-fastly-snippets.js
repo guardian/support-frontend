@@ -49,7 +49,7 @@ const snippets = [
   },
   // Books redirect
   {
-    file: "./support-frontend/conf/fastly-snippets/books-redirect-rec.vcl",
+    file: "./support-frontend/conf/fastly-snippets/books-redirect-recv.vcl",
     name: "support-frontend - Books redirect recv",
     type: "recv",
   },
