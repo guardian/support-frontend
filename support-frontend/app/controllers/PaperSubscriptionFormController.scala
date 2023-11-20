@@ -72,7 +72,7 @@ class PaperSubscriptionFormController(
       v2recaptchaConfigPublicKey,
       orderIsAGift = false,
       Some(PaperValidation.M25_POSTCODE_PREFIXES),
-    )
+    )()
   }
 
 }

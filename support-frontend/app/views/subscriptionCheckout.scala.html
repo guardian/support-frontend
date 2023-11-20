@@ -31,7 +31,7 @@
   orderIsAGift: Boolean = false,
   homeDeliveryPostcodes: Option[List[String]] = None,
   noindex: Boolean = false
-)(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
+)(body: Html = Html(""))(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
   @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf, noindex = noindex) {
     <script type="text/javascript">

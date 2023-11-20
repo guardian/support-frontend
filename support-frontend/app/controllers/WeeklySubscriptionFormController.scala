@@ -72,7 +72,7 @@ class WeeklySubscriptionFormController(
       payPalConfigProvider.get(true),
       v2recaptchaConfigPublicKey,
       orderIsAGift,
-    )
+    )()
   }
 
 }

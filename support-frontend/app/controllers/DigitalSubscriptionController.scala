@@ -94,12 +94,10 @@ class DigitalSubscriptionController(
               s"""<script type="text/javascript">
                     window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}
                     window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
-                    window.guardian.orderIsAGift = $orderIsAGift
                   </script>""",
             )
           },
-        ).withSettingsSurrogateKey
-
+        )
       }
     }
   }

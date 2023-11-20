@@ -77,7 +77,7 @@ class DigitalSubscriptionFormController(
       payPalConfigProvider.get(true),
       v2recaptchaConfigPublicKey,
       orderIsAGift,
-    )
+    )()
   }
 
   def displayThankYouExisting(): Action[AnyContent] = CachedAction() { implicit request =>
