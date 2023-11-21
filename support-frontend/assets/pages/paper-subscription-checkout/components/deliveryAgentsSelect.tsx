@@ -17,7 +17,7 @@ const marginBottom = css`
 const singleDeliveryProviderCss = css(marginBottom, `border: 0;`);
 
 const greenDeliveryMethods = ['green delivery', 'green options'] as const;
-type GreenDeliveryMethod = typeof greenDeliveryMethods[number];
+type GreenDeliveryMethod = (typeof greenDeliveryMethods)[number];
 
 interface DeliveryAgentsSelectProps {
 	chosenDeliveryAgent?: number;
