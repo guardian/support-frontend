@@ -111,7 +111,7 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
       val recaptchaConfigProvider = mock[RecaptchaConfigProvider]
       when(recaptchaConfigProvider.get(any[Boolean])).thenReturn(RecaptchaConfig("", ""))
-
+      val maybePromotionCopy = None
       val prices: ProductPrices = Map(
         CountryGroup.UK ->
           Map(
