@@ -50,8 +50,6 @@ class DigitalSubscriptionController(
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = {
     MaybeAuthenticatedAction { implicit request =>
       implicit val settings: AllSettings = settingsProvider.getAllSettings()
-      val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(DigitalPack)
-      val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
 
       if (!settings.switches.subscriptionsSwitches.enableDigitalSubGifting.isOn && orderIsAGift) {
         Redirect(routes.DigitalSubscriptionController.digitalGeoRedirect(false)).withSettingsSurrogateKey
@@ -69,8 +67,9 @@ class DigitalSubscriptionController(
         val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
         val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey
         val readerType = if (orderIsAGift) Gift else Direct
+        val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(DigitalPack)
         val maybePromotionCopy = {
-          landingCopyProvider.promotionCopy(queryPromos ++ defaultPromos, DigitalPack, "uk", orderIsAGift)
+          landingCopyProvider.promotionCopy(promoCodes ++ defaultPromos, DigitalPack, "uk", orderIsAGift)
         }
         Ok(
           views.html.subscriptionCheckout(
@@ -82,6 +81,7 @@ class DigitalSubscriptionController(
             request.user,
             testMode,
             priceSummaryServiceProvider.forUser(testMode).getPrices(DigitalPack, promoCodes, readerType),
+            maybePromotionCopy,
             stripeConfigProvider.get(),
             stripeConfigProvider.get(true),
             payPalConfigProvider.get(),
@@ -89,14 +89,7 @@ class DigitalSubscriptionController(
             v2recaptchaConfigPublicKey,
             orderIsAGift,
             noindex = true,
-          ) {
-            Html(
-              s"""<script type="text/javascript">
-                    window.guardian.productPrices = ${outputJson(productPrices(queryPromos, orderIsAGift))}
-                    window.guardian.promotionCopy = ${outputJson(maybePromotionCopy)}
-                  </script>""",
-            )
-          },
+          ),
         )
       }
     }

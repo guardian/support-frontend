@@ -65,6 +65,7 @@ class PaperSubscriptionFormController(
       maybeIdUser,
       testMode,
       priceSummaryServiceProvider.forUser(testMode).getPrices(Paper, promoCodes),
+      maybePromotionCopy = None,
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),
@@ -72,7 +73,7 @@ class PaperSubscriptionFormController(
       v2recaptchaConfigPublicKey,
       orderIsAGift = false,
       Some(PaperValidation.M25_POSTCODE_PREFIXES),
-    )()
+    )
   }
 
 }
