@@ -1,0 +1,27 @@
+name: Deploy Fastly Snippets
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        required: true
+jobs:
+  deploy_fastly_snippets:
+    name: Deploy Fastly snippets [${{ github.event.inputs.environment }}]
+    environment: ${{ github.event.inputs.environment }}
+    runs-on: ubuntu-latest
+    env:
+      FASTLY_SERVICE_ID: ${{ secrets.FASTLY_SERVICE_ID }}
+      FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_TOKEN }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Fastly snippet - Redirects table
+        run: node .github/workflows/deploy-fastly-snippets.js
+        env:
+          FASTLY_SERVICE_SNIPPET_FILE: ./support-frontend/conf/redirects-table.vcl
+          FASTLY_SERVICE_SNIPPET_NAME: support-frontend - Redirects table
+          FASTLY_SERVICE_SNIPPET_TYPE: init

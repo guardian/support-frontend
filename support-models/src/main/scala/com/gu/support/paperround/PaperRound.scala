@@ -23,7 +23,7 @@ object AgentId {
 }
 
 object AgentsEndpoint {
-  case class Response(statusCode: Integer, message: String, data: AgentsList)
+  case class Response(statusCode: Integer, data: AgentsList)
 
   case class AgentsList(agents: List[AgentDetails])
   case class AgentDetails(
@@ -108,7 +108,7 @@ object ChargeBandsEndpoint {
 object CoverageEndpoint {
   case class RequestBody(postcode: String)
 
-  case class Response(statusCode: Integer, message: String, data: PostcodeCoverage)
+  case class Response(statusCode: Integer, data: PostcodeCoverage)
 
   case class PostcodeCoverage(agents: List[AgentsCoverage], message: String, status: CoverageStatus)
   case class AgentsCoverage(

@@ -7,15 +7,12 @@ import {
 	until,
 } from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
-import {
-	FooterLinks,
-	FooterWithContents,
-} from '@guardian/source-react-components-development-kitchen';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
+import Footer from 'components/footerCompliant/Footer';
 import GridImage from 'components/gridImage/gridImage';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
@@ -167,11 +164,7 @@ export function SupporterPlusCheckoutScaffold({
 					{!isPaymentPage && <Nav {...countrySwitcherProps} />}
 				</>
 			}
-			footer={
-				<FooterWithContents>
-					<FooterLinks></FooterLinks>
-				</FooterWithContents>
-			}
+			footer={<Footer />}
 		>
 			<CheckoutHeading
 				heading={!isPaymentPage && heading}

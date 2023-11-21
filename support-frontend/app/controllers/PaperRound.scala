@@ -36,7 +36,7 @@ class PaperRound(
           case MP => NotFound(toJson(UnknownPostcode))
           case IP => BadRequest(toJson(ProblemWithInput))
           case IE =>
-            val errorMessage = s"${result.message}: ${result.data.message}"
+            val errorMessage = s"${result.data.message}"
             SafeLogger.error(scrub"Got internal error from PaperRound: $errorMessage")
             InternalServerError(toJson(PaperRoundError(errorMessage)))
         }

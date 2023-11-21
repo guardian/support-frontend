@@ -26,7 +26,7 @@ import {
 } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import ThankYouHeader from './components/thankYouHeader';
 
-export function KindleSubscriptionThankYou(): JSX.Element {
+export function DigitalSubscriptionThankYou(): JSX.Element {
 	const campaignSettings = useMemo<CampaignSettings | null>(
 		() => getCampaignSettings(campaignCode),
 		[],
