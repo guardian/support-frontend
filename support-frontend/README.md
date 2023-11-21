@@ -44,3 +44,13 @@ To test locally, copy the `switches_v2.json` file stored in S3 to the specified 
 # Make sure you have Janus credentials and `~/.gu/support-admin-console` exists
 aws s3 cp s3://$SUPPORT_ADMIN_BUCKET/ENV/switches_v2.json  ~/.gu/support-admin-console/switches_v2.json --profile membership
 ```
+
+#### Accessing the value in the client code
+
+```ts
+// MyComponentContainer.tsx
+import { isCampaignEnabled } from 'helpers/campaigns/campaigns';
+
+const isUsEoy2023CampaignEnabled = isCampaignEnabled(`usEoy2023`);
+// ... rest of component
+```
