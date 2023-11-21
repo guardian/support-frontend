@@ -26,10 +26,9 @@ case class CampaignSwitches(
     enableContributionsCampaign: SwitchState,
     forceContributionsCampaign: SwitchState,
 
-    /** These are Optional as they are transient campaigns and having to update our tests and other code to accommodate
-      * them adds to much overhead.
-      */
+    /** These are Optional as they are transient campaigns. */
     usEoy2023: Option[SwitchState] = None,
+    ausTicker2023: Option[SwitchState] = None,
 )
 
 case class SubscriptionsSwitches(
