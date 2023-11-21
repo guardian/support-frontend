@@ -108,7 +108,7 @@ object ChargeBandsEndpoint {
 object CoverageEndpoint {
   case class RequestBody(postcode: String)
 
-  case class Response(statusCode: Integer, data: PostcodeCoverage)
+  case class Response(statusCode: Integer, data: PostcodeCoverage, message: String)
 
   case class PostcodeCoverage(agents: List[AgentsCoverage], message: String, status: CoverageStatus)
   case class AgentsCoverage(
