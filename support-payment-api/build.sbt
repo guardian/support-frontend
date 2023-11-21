@@ -51,6 +51,21 @@ libraryDependencies ++= Seq(
   "com.lihaoyi" %% "pprint" % "0.8.1",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
   "org.scala-lang.modules" %% "scala-xml" % "1.3.1",
+
+  /** This is to satisfy `amazon-pay-java-sdk` dependencies as jaxb has been removed from Java 8 => Java 11.
+    *
+    * As per the docs, this should work: see https://eclipse-ee4j.github.io/jaxb-ri/
+    *
+    * ```
+    * "jakarta.xml.bind" % "jakarta.xml.bind-api" % "4.0.0",
+    * "com.sun.xml.bind" % "jaxb-impl" % "4.0.3" % Runtime,
+    * ```
+    *
+    * But annoyingly we still get this error: `java.lang.NoClassDefFoundError: javax/xml/bind/JAXBException`
+    */
+  "com.sun.xml.bind" % "jaxb-core" % "2.3.0.1",
+  "javax.xml.bind" % "jaxb-api" % "2.3.1",
+  "com.sun.xml.bind" % "jaxb-impl" % "2.3.1",
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
