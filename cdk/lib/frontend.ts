@@ -316,5 +316,28 @@ export class Frontend extends GuStack {
       treatMissingData: TreatMissingData.NOT_BREACHING,
       snsTopicName: "conversion-dev",
     });
+
+    new GuAlarm(this, "GetDeliveryAgentsFailure", {
+      app,
+      alarmName: alarmName("support-frontend GetDeliveryAgentsFailure"),
+      alarmDescription: alarmDescription(
+        "support-frontend failed to get delivery agents from PaperRound"
+      ),
+      actionsEnabled: shouldEnableAlarms,
+      threshold: 1,
+      evaluationPeriods: 1,
+      comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
+      metric: new Metric({
+        metricName: "GetDeliveryAgentsFailure",
+        namespace: "support-frontend",
+        dimensionsMap: {
+          Stage: this.stage,
+        },
+        statistic: "Sum",
+        period: Duration.seconds(60),
+      }),
+      treatMissingData: TreatMissingData.NOT_BREACHING,
+      snsTopicName: "conversion-dev",
+    });
   }
 }

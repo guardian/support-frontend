@@ -235,6 +235,7 @@ trait Controllers {
     paperRoundServiceProvider,
     actionRefiners,
     testUsers,
+    appConfig.stage,
   )
 
   lazy val promotionsController = new Promotions(
