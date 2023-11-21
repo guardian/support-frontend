@@ -3,7 +3,6 @@ import { init as initAbTests } from 'helpers/abTests/abtest';
 import {
 	getProductPrices,
 	getPromotionCopy,
-	getSettings,
 } from 'helpers/globalsAndSwitches/globals';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
 import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
@@ -26,5 +25,5 @@ const countryGroupId = detectCountryGroup();
 export const paperLandingProps = (): PaperLandingPropTypes => ({
 	productPrices: getProductPrices(),
 	promotionCopy: getPromotionCopy(),
-	participations: initAbTests(detectCountry(), countryGroupId, getSettings()),
+	participations: initAbTests(detectCountry(), countryGroupId),
 });
