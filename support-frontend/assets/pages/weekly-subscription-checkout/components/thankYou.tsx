@@ -10,6 +10,7 @@ import { HeroWrapper } from 'components/productPage/productPageHero/productPageH
 import { SubscriptionsSurvey } from 'components/subscriptionCheckouts/subscriptionsSurvey/SubscriptionsSurvey';
 import moduleStyles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
 import Text, { LargeParagraph, SansParagraph } from 'components/text/text';
+import { useScrollToTop } from 'helpers/customHooks/useScrollToTop';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
@@ -158,6 +159,9 @@ function ThankYouContent({
 					national post services.
 				</span>,
 		  ];
+
+	useScrollToTop();
+
 	return (
 		<div className="thank-you-stage">
 			<HeroWrapper
