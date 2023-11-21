@@ -50,12 +50,23 @@ const getCurrencySymbol = (currencyId: IsoCurrency): string =>
 const getPriceWithSymbol = (currencyId: IsoCurrency, price: number) =>
 	getCurrencySymbol(currencyId) + fixDecimals(price);
 
-const getPromotionLabel = (promotion?: Promotion) => {
+const getPromotionLabel = (currency: IsoCurrency, promotion?: Promotion) => {
 	if (!promotion?.discount) {
 		return '';
 	}
-
-	return `Save ${Math.round(promotion.discount.amount)}%`;
+	if (promotion.name.startsWith('12for12')) {
+		return `Special Offer: 12 for ${currencies[currency].glyph}${
+			promotion.discountedPrice ?? '12'
+		}`;
+	} else if (promotion.promoCode.startsWith('GWBLACKFRIDAY')) {
+		return `Black Friday Offer: ${
+			currency === 'GBP' || currency === 'EUR'
+				? `1/3 off`
+				: `${Math.round(promotion.discount.amount)}% off`
+		}`;
+	} else {
+		return `Save ${Math.round(promotion.discount.amount)}%`;
+	}
 };
 
 const getMainDisplayPrice = (
@@ -90,14 +101,10 @@ const weeklyProductProps = (
 		componentType: 'ACQUISITIONS_BUTTON' as OphanComponentType,
 	};
 
-	// TODO: remove/review this when the 12 for 12 offer is over
-	const isSpecialOffer = promotion?.promoCode.startsWith('12for12');
-	const label = isSpecialOffer
-		? `Special Offer: 12 for ${currencies[productPrice.currency].glyph}${
-				promotion?.discountedPrice ?? '12'
-		  }`
-		: getPromotionLabel(promotion);
-
+	const is12for12 = promotion?.promoCode.startsWith('12for12') ?? false;
+	const isBlackFriday =
+		promotion?.promoCode.startsWith('GWBLACKFRIDAY') ?? false;
+	const label = getPromotionLabel(productPrice.currency, promotion);
 	return {
 		title: billingPeriodTitle(billingPeriod, orderIsAGift),
 		price: getPriceWithSymbol(productPrice.currency, mainDisplayPrice),
@@ -110,7 +117,7 @@ const weeklyProductProps = (
 		label,
 		onClick: sendTrackingEventsOnClick(trackingProperties),
 		onView: sendTrackingEventsOnView(trackingProperties),
-		isSpecialOffer,
+		isSpecialOffer: is12for12 || isBlackFriday,
 	};
 };
 

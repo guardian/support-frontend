@@ -9,7 +9,7 @@ import {
 	setAccountHolderName,
 	setAccountNumber,
 	setPhase,
-	setSortCodeString,
+	setSortCode,
 } from 'helpers/redux/checkout/payment/directDebit/actions';
 import { confirmAccountDetails } from 'helpers/redux/checkout/payment/directDebit/thunks';
 import {
@@ -25,7 +25,7 @@ import type { DirectDebitFieldName } from './types';
 // ----- Map State/Props ----- //
 function mapStateToProps(state: CheckoutState) {
 	return {
-		sortCodeString: state.page.checkoutForm.payment.directDebit.sortCodeString,
+		sortCode: state.page.checkoutForm.payment.directDebit.sortCode,
 		accountNumber: state.page.checkoutForm.payment.directDebit.accountNumber,
 		accountHolderName:
 			state.page.checkoutForm.payment.directDebit.accountHolderName,
@@ -41,7 +41,7 @@ function mapStateToProps(state: CheckoutState) {
 const mapDispatchToProps = {
 	confirmAccountDetails,
 	setPhase,
-	updateSortCodeString: setSortCodeString,
+	updateSortCode: setSortCode,
 	updateAccountNumber: setAccountNumber,
 	updateAccountHolderName: setAccountHolderName,
 	updateAccountHolderConfirmation: setAccountHolderConfirmation,
@@ -61,7 +61,7 @@ export type PropTypes = ConnectedProps<typeof connector> & {
 
 const fieldErrorMessages: { [key in DirectDebitFieldName]: string } = {
 	accountHolderName: 'Please enter a valid account name',
-	sortCodeString: 'Please enter a valid sort code',
+	sortCode: 'Please enter a valid sort code',
 	accountNumber: 'Please enter a valid account number',
 	accountHolderConfirmation: 'Please confirm you are the account holder',
 };
@@ -73,7 +73,7 @@ const fieldValidationFunctions: {
 } = {
 	accountHolderName: (fieldValue) =>
 		!!/^\D+$/.exec(fieldValue) && zuoraCompatibleString(fieldValue),
-	sortCodeString: (fieldValue) => !!/^\d{6}$/.exec(fieldValue),
+	sortCode: (fieldValue) => !!/^\d{6}$/.exec(fieldValue),
 	accountNumber: (fieldValue) => !!/^\d{6,8}$/.exec(fieldValue),
 	accountHolderConfirmation: (fieldValue) => !!fieldValue,
 };
@@ -84,7 +84,7 @@ function DirectDebitForm(props: PropTypes) {
 		Record<DirectDebitFieldName, string>
 	>({
 		accountHolderName: '',
-		sortCodeString: '',
+		sortCode: '',
 		accountNumber: '',
 		accountHolderConfirmation: '',
 	});
@@ -123,11 +123,9 @@ function DirectDebitForm(props: PropTypes) {
 			)
 				? ''
 				: fieldErrorMessages.accountHolderName,
-			sortCodeString: fieldValidationFunctions.sortCodeString(
-				props.sortCodeString,
-			)
+			sortCode: fieldValidationFunctions.sortCode(props.sortCode)
 				? ''
-				: fieldErrorMessages.sortCodeString,
+				: fieldErrorMessages.sortCode,
 			accountNumber: fieldValidationFunctions.accountNumber(props.accountNumber)
 				? ''
 				: fieldErrorMessages.accountNumber,
@@ -173,7 +171,7 @@ function DirectDebitForm(props: PropTypes) {
 					accountErrorsLength={allErrors.length}
 					accountHolderNameError={fieldErrors.accountHolderName}
 					accountNumberError={fieldErrors.accountNumber}
-					sortCodeError={fieldErrors.sortCodeString}
+					sortCodeError={fieldErrors.sortCode}
 					accountHolderConfirmationError={fieldErrors.accountHolderConfirmation}
 					onSubmit={handleErrorsAndCheckAccount}
 					onChange={onChange}
@@ -185,7 +183,7 @@ function DirectDebitForm(props: PropTypes) {
 					onSubmit={onSubmit}
 					accountHolderName={props.accountHolderName}
 					accountNumber={props.accountNumber}
-					sortCodeString={props.sortCodeString}
+					sortCode={props.sortCode}
 					buttonText={props.buttonText}
 					allErrors={props.allErrors}
 					setRecaptchaToken={props.setRecaptchaToken}

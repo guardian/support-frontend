@@ -37,16 +37,20 @@ export const campaign: CampaignSettings = {
 	tickerSettings: {
 		countType: 'money',
 		endType: 'unlimited',
-		headline: 'End of year campaign',
+		headline: 'Help us reach our end-of-year goal',
 	},
 };
 
 function campaignEnabledForUser(
 	campaignCode: string | null | undefined,
 ): boolean {
-	if (currentCampaignPath && window.guardian.enableContributionsCampaign) {
+	const { campaignSwitches } = window.guardian.settings.switches;
+	if (
+		currentCampaignPath &&
+		campaignSwitches.enableContributionsCampaign === 'On'
+	) {
 		return (
-			window.guardian.forceContributionsCampaign ||
+			campaignSwitches.forceContributionsCampaign === 'On' ||
 			window.location.pathname.endsWith(`/${currentCampaignPath}`) ||
 			campaign.campaignCode === campaignCode
 		);
@@ -72,4 +76,12 @@ export function getCampaignCode(campaignCode?: string): string | null {
 	}
 
 	return null;
+}
+
+export function isCampaignEnabled(campaignCode: string): boolean {
+	return (
+		window.location.hash ===
+			`#settings.switches.campaignSwitches.${campaignCode}=On` ||
+		window.guardian.settings.switches.campaignSwitches[campaignCode] === 'On'
+	);
 }

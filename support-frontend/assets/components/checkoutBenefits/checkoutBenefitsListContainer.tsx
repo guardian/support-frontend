@@ -65,7 +65,7 @@ export function CheckoutBenefitsListContainer({
 	);
 	const userSelectedAmountWithCurrency = simpleFormatAmount(
 		currency,
-		selectedAmount.toFixed(2),
+		+parseFloat(selectedAmount.toFixed(2)),
 	);
 
 	const higherTier = thresholdPrice <= selectedAmount;

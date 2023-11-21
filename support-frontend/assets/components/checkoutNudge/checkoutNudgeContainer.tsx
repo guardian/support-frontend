@@ -1,11 +1,8 @@
 import { useState } from 'preact/hooks';
 import type { ContributionType } from 'helpers/contributions';
 import { getConfigMinAmount } from 'helpers/contributions';
-import {
-	currencies,
-	detect,
-	glyph,
-} from 'helpers/internationalisation/currency';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { detect, glyph } from 'helpers/internationalisation/currency';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import {
 	getContributionType,
@@ -28,6 +25,82 @@ type CheckoutNudgeContainerProps = {
 	frequency: ContributionType;
 };
 
+function calcWeeklyAmount(
+	countryGroupId: CountryGroupId,
+	currencyGlyph: string,
+	annualAmount: number,
+	toNearest = 1,
+) {
+	const weeklyAmount = Math.ceil((annualAmount * 100) / 52);
+	// Current/control solution is to round to the nearest 10p so this may be
+	// disposable if the variant is adopted as we want the dynamic version to be
+	// rounded to the nearest 1p
+	const roundedWeeklyAmount = Math.round(weeklyAmount / toNearest) * toNearest;
+
+	if (countryGroupId === 'GBPCountries' && roundedWeeklyAmount < 100) {
+		return `${roundedWeeklyAmount.toString()}p`;
+	} else {
+		const fixedDigitAmount = roundedWeeklyAmount % 100 === 0 ? 0 : 2;
+		const amountString = (roundedWeeklyAmount / 100).toFixed(fixedDigitAmount);
+		return `${currencyGlyph}${amountString}`;
+	}
+}
+
+function getDynamicCopy(
+	isDynamicUs: boolean,
+	isDynamicGlobal: boolean,
+	countryGroupId: CountryGroupId,
+	clampedAmount: number,
+): { title: string; subtitle: string; paragraph: string } {
+	const currency = detect(countryGroupId);
+	const currencyGlyph = glyph(currency);
+
+	const clampedAmountToCurrenyStr = `${currencyGlyph}${new Intl.NumberFormat(
+		'en-GB',
+		{
+			minimumFractionDigits: clampedAmount % 1 == 0 ? 0 : 2,
+		},
+	).format(clampedAmount)}`;
+
+	if (isDynamicUs) {
+		return {
+			title: 'Make it annual',
+			subtitle: `change to ${clampedAmountToCurrenyStr} per year`,
+			paragraph:
+				'Regular, reliable funding from readers is vital for our future. Help protect our open, independent journalism long term.',
+		};
+	}
+
+	const title = 'Support us every year';
+	const paragraph =
+		'Funding Guardian journalism every year is great value on a weekly basis. Make a bigger impact today, and protect our independence long term. Please consider annual support.';
+
+	if (isDynamicGlobal) {
+		return {
+			title,
+			paragraph,
+			subtitle: `with ${clampedAmountToCurrenyStr} (${calcWeeklyAmount(
+				countryGroupId,
+				currencyGlyph,
+				clampedAmount,
+			)} per week)`,
+		};
+	}
+
+	const minAmount = getConfigMinAmount(countryGroupId, 'ANNUAL');
+
+	return {
+		title,
+		paragraph,
+		subtitle: `with ${currencyGlyph + minAmount.toString()} (${calcWeeklyAmount(
+			countryGroupId,
+			currencyGlyph,
+			minAmount,
+			10,
+		)} per week)`,
+	};
+}
+
 export function CheckoutNudgeContainer({
 	renderNudge: renderNudge,
 	frequency,
@@ -48,18 +121,21 @@ export function CheckoutNudgeContainer({
 
 	const [displayNudge, setDisplayNudge] = useState(true);
 
-	const currency = detect(countryGroupId);
-	const currencyGlyph = glyph(currency);
-
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
 		frequency,
 		defaultAmount,
 	).toString();
 
-	const dynamic = useContributionsSelector(
+	const isDynamicUs = useContributionsSelector(
 		isUserInAbVariant('makeItAnnualNudge', 'variant'),
 	);
+
+	const isDynamicGlobal = useContributionsSelector(
+		isUserInAbVariant('makeItAnnualNudgeGlobal', 'variant'),
+	);
+
+	const isDynamic = isDynamicUs || isDynamicGlobal;
 
 	const { otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
@@ -84,38 +160,12 @@ export function CheckoutNudgeContainer({
 		max,
 	);
 
-	const clampedAmountToCurrenyStr = `${
-		currencies[currency].glyph
-	}${new Intl.NumberFormat('en-GB', {
-		minimumFractionDigits: clampedAmount % 1 == 0 ? 0 : 2,
-	}).format(clampedAmount)}`;
-
-	let title, subtitle, paragraph;
-
-	if (dynamic) {
-		title = 'Make it an annual gift';
-		subtitle = `change to ${clampedAmountToCurrenyStr} per year`;
-		paragraph =
-			'Choose to support us annually, and you’ll make a bigger impact with your year-end gift. Help protect our open, independent journalism long term.';
-	} else {
-		const minAmount = getConfigMinAmount(countryGroupId, 'ANNUAL');
-		const weeklyMinAmount =
-			Math.round(Math.ceil((minAmount * 100) / 52) / 10) * 10;
-		const minWeeklyAmount =
-			countryGroupId === 'GBPCountries' && weeklyMinAmount < 100
-				? weeklyMinAmount.toString() + `p`
-				: currencyGlyph +
-				  (weeklyMinAmount / 100)
-						.toFixed(weeklyMinAmount % 100 === 0 ? 0 : 2)
-						.toString();
-
-		title = 'Support us every year';
-		subtitle = `with ${
-			currencyGlyph + minAmount.toString()
-		} (${minWeeklyAmount} per week)`;
-		paragraph =
-			'Funding Guardian journalism every year is great value on a weekly basis. Make a bigger impact today, and protect our independence long term. Please consider annual support.';
-	}
+	const { title, subtitle, paragraph } = getDynamicCopy(
+		isDynamicUs,
+		isDynamicGlobal,
+		countryGroupId,
+		clampedAmount,
+	);
 
 	function onNudgeClose() {
 		setDisplayNudge(false);
@@ -125,7 +175,7 @@ export function CheckoutNudgeContainer({
 		event.preventDefault();
 		trackComponentClick('contribution-annual-nudge');
 
-		if (dynamic) {
+		if (isDynamic) {
 			window.location.href = event.currentTarget.href;
 			return;
 		}
@@ -140,7 +190,7 @@ export function CheckoutNudgeContainer({
 		nudgeSubtitle: subtitle,
 		nudgeParagraph: paragraph,
 		nudgeLinkCopy: `See annual`,
-		nudgeLinkHref: dynamic
+		nudgeLinkHref: isDynamic
 			? `/contribute?selected-amount=${clampedAmount}&selected-contribution-type=annual`
 			: undefined,
 		countryGroupId: countryGroupId,

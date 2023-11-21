@@ -1,4 +1,5 @@
 import type { Participations } from 'helpers/abTests/abtest';
+import { getSourceFromAcquisitionData } from 'helpers/abTests/abtest';
 import type {
 	AmountsTest,
 	SelectedAmountsVariant,
@@ -341,7 +342,11 @@ export function getAmounts(
 		);
 	}
 	let targetTest;
-	if (targetTestArray.length) {
+	const source = getSourceFromAcquisitionData() ?? '';
+	if (
+		!['APPLE_NEWS', 'GOOGLE_AMP'].includes(source) &&
+		targetTestArray.length
+	) {
 		targetTestArray.sort((a, b) => a.order - b.order);
 		targetTest = targetTestArray[0];
 	}

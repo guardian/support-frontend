@@ -8,6 +8,7 @@ import Content from 'components/content/contentSimple';
 import HeadingBlock from 'components/headingBlock/headingBlock';
 import { HeroWrapper } from 'components/productPage/productPageHero/productPageHero';
 import moduleStyles from 'components/subscriptionCheckouts/thankYou/thankYou.module.scss';
+import { useScrollToTop } from 'helpers/customHooks/useScrollToTop';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import {
@@ -15,7 +16,6 @@ import {
 	HomeDelivery,
 } from 'helpers/productPrice/fulfilmentOptions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import 'helpers/internationalisation/countryGroup';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import { myAccountUrl } from 'helpers/urls/externalLinks';
@@ -160,6 +160,9 @@ function ThankYouContent({
 	const packageName = `${cleanProductOption} ${
 		!hasAddedDigitalSubscription ? 'package ' : ''
 	}`;
+
+	useScrollToTop();
+
 	return (
 		<div className="thank-you-stage">
 			<HeroWrapper appearance="custom" className={styles.hero}>

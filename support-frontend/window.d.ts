@@ -48,8 +48,6 @@ declare global {
 			};
 			csrf?: CsrfState;
 			email?: string;
-			enableContributionsCampaign: boolean;
-			forceContributionsCampaign: boolean;
 			geoip?: {
 				countryCode: string;
 				stateCode?: string;

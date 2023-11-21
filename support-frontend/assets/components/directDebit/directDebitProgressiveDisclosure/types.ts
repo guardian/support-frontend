@@ -1,5 +1,5 @@
 export type DirectDebitFieldName =
 	| 'accountHolderName'
-	| 'sortCodeString'
+	| 'sortCode'
 	| 'accountNumber'
 	| 'accountHolderConfirmation';

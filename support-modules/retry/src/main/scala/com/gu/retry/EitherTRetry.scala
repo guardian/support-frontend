@@ -1,11 +1,9 @@
-package utils
+package com.gu.retry
 
-import akka.actor.Scheduler
-import akka.pattern.after
 import cats.data.EitherT
 
+import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration._
 
 /** retry implementation based on this gist from Scala Future contributor https://gist.github.com/viktorklang/9414163
   */
@@ -18,9 +16,14 @@ object EitherTRetry {
     */
   def retry[A, B](op: => EitherT[Future, A, B], delay: FiniteDuration, retries: Int)(implicit
       ec: ExecutionContext,
-      s: Scheduler,
   ): EitherT[Future, A, B] = {
-    op.recoverWith { case _ if retries > 0 => EitherT(after(delay, s)(retry(op, delay, retries - 1).value)) }
+    op.recoverWith {
+      case _ if retries > 0 =>
+        println(s"Number of remaining attempts is $retries")
+        EitherT(
+          DelayedFuture(delay)(retry(op, delay, retries - 1).value),
+        )
+    }
   }
 
 }
