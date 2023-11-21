@@ -13,10 +13,19 @@ ssm ssh --profile membership --tags frontend,support,CODE -a -x --newest --ssm-t
 ---
 
 ### How to: Using campaign switches
-We often run campaigns that have certain features or modifications to the site enabled.
+We often run campaigns that have certain features or modifications enabled across the site for the length of that
+campaign.
+
+To add or remove these features without code changes, allowing for quick and out of hours releasing, we use the Campaign
+switches on the Reader [Revenue Support Console (RRCP) switchboard](https://support.gutools.co.uk/switches).
+
+This allows for sending these changes to colleagues for testing using a URL hash. E.g.
+https://support.theguardian.com/us/contribute#settings.switches.campaignSwitches.usEoy2023=On
+
+The switch is only enabled for that browser session and is not persisted.
 
 To create a new campaign
-1. Go to the [Reader Revenue Support Console switchboard](https://support.gutools.co.uk/switches)
+1. Go to the [RRCP switchboard](https://support.gutools.co.uk/switches)
 1. Create a new switch under "Campaign switches"
 1. Save the switchboard
 1. Add the switch to [Switches.scala](./app/admin/settings/Switches.scala) under `CampaignSwitches` as
@@ -24,7 +33,7 @@ To create a new campaign
 
 ![An screenshow of the steps to adding a campaign switch in RRCP](./wiki-images/add-campaign-switches.png)
 
-#### CODE / Local
+#### CODE / Local testing
 To test in code, you would need to follow step 1. on
 [the CODE switchboard](https://support.code.dev-gutools.co.uk/switches).
 
