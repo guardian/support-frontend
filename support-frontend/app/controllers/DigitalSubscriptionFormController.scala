@@ -60,7 +60,6 @@ class DigitalSubscriptionFormController(
     val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey
     val readerType = if (orderIsAGift) Gift else Direct
-    val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(DigitalPack)
 
     subscriptionCheckout(
       title,
