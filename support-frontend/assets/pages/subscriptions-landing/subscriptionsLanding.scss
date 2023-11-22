@@ -129,6 +129,7 @@
 	background-color: gu-colour(neutral-97);
 	margin-top: 40px;
 	z-index: 1;
+	padding-top: 0.625rem;
 
 	@include mq($until: desktop) {
 		min-height: 250px;
@@ -548,6 +549,13 @@
 	}
 }
 
+/****************** digital ********************/
+
+.subscriptions__digital.subscriptions__product {
+	color: gu-colour('neutral-100');
+	background-color: #052962;
+}
+
 /****************** guardian weekly ********************/
 
 .subscriptions__guardian-weekly.subscriptions__product--feature {
@@ -595,6 +603,16 @@
 		border: solid 1px #333333;
 		background-color: transparent;
 	}
+}
+
+.component-button--secondary.component-button--digital {
+	color: gu-colour(neutral-7);
+	background-color: #ffe500;
+}
+
+.component-button--secondary.component-button--digital:hover,
+.component-button--secondary.component-button--digital:focus {
+	background-color: #f3c100;
 }
 
 /****************** premium app ********************/
