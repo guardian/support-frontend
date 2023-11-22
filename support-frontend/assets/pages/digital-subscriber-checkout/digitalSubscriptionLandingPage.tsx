@@ -164,7 +164,7 @@ export function SupporterPlusLandingPage({
 						<Box>
 							<BoxContents>
 								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). */}
-								<ContributionsStripe>
+								<ContributionsStripe overrideStripeAccount="REGULAR">
 									<SecureTransactionIndicator align="center" />
 									<PersonalDetailsContainer
 										renderPersonalDetails={(personalDetailsProps) => (
