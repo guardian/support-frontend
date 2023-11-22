@@ -15,12 +15,10 @@ import services._
 import views.EmptyDiv
 import views.html.helper.CSRF
 import views.html.subscriptionCheckout
-
 import scala.concurrent.ExecutionContext
 
 class DigitalSubscriptionFormController(
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
-    landingCopyProvider: LandingCopyProvider,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
     testUsers: TestUserService,
@@ -63,9 +61,7 @@ class DigitalSubscriptionFormController(
     val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey
     val readerType = if (orderIsAGift) Gift else Direct
     val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(DigitalPack)
-    val maybePromotionCopy = {
-      landingCopyProvider.promotionCopy(promoCodes ++ defaultPromos, DigitalPack, "uk", orderIsAGift)
-    }
+
     subscriptionCheckout(
       title,
       id,
@@ -75,7 +71,7 @@ class DigitalSubscriptionFormController(
       maybeIdUser,
       testMode,
       priceSummaryServiceProvider.forUser(testMode).getPrices(DigitalPack, promoCodes, readerType),
-      maybePromotionCopy,
+      maybePromotionCopy = None,
       stripeConfigProvider.get(),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),
