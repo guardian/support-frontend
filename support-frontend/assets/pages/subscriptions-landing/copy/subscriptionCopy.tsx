@@ -1,5 +1,7 @@
 import * as React from 'react';
 // constants
+import DigitalPackshot from 'components/packshots/digital-packshot';
+import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
 import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packshot';
 import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
 import PaperPackshot from 'components/packshots/paper-packshot';
@@ -17,13 +19,18 @@ import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import {
+	DigitalPack,
 	fixDecimals,
 	GuardianWeekly,
 	Paper,
 	sendTrackingEventsOnClick,
 } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
-import { guardianWeeklyLanding, paperSubsUrl } from 'helpers/urls/routes';
+import {
+	digitalSubscriptionLanding,
+	guardianWeeklyLanding,
+	paperSubsUrl,
+} from 'helpers/urls/routes';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
 
 // types
@@ -70,6 +77,35 @@ const getWeeklyImage = (isTop: boolean) => {
 
 	return <GuardianWeeklyPackShot />;
 };
+
+const getDigitalImage = (isTop: boolean) => {
+	if (isTop) {
+		return <DigitalPackshotHero />;
+	}
+	return <DigitalPackshot />;
+};
+
+const digital = (
+	countryGroupId: CountryGroupId,
+	priceCopy: PriceCopy,
+	isTop: boolean,
+): ProductCopy => ({
+	title: 'The Guardian Digital Edition',
+	subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
+	description: 'Enjoy the Guardian and Observe newspaper on your screen',
+	buttons: [
+		{
+			ctaButtonText: 'Find out more',
+			link: digitalSubscriptionLanding(countryGroupId, false),
+			analyticsTracking: sendTrackingEventsOnClick({
+				id: 'digipack_cta',
+				product: 'DigitalPack',
+				componentType: 'ACQUISITIONS_BUTTON',
+			}),
+		},
+	],
+	productImage: getDigitalImage(isTop),
+});
 
 const guardianWeekly = (
 	countryGroupId: CountryGroupId,
@@ -165,7 +201,7 @@ const getSubscriptionCopy = (
 	if (countryGroupId === GBPCountries) {
 		productcopy.push(paper(countryGroupId, pricingCopy[Paper], false));
 	}
-
+	productcopy.push(digital(countryGroupId, pricingCopy[DigitalPack], false));
 	return productcopy;
 };
 
