@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import type { StripeAccount } from 'helpers/forms/stripe';
+import type { ContributionType } from 'helpers/contributions';
 import {
 	getStripeKey,
 	stripeAccountForContributionType,
@@ -17,18 +17,18 @@ import { StripeElements } from './stripeElements';
 
 type ContributionsStripeProps = {
 	children: React.ReactNode;
-	// Overriding this allows us to
-	overrideStripeAccount?: StripeAccount;
+	contributionTypeOverride?: ContributionType;
 };
 
 export function ContributionsStripe({
 	children,
-	overrideStripeAccount,
+	contributionTypeOverride,
 }: ContributionsStripeProps): JSX.Element {
 	const country = useContributionsSelector(
 		(state) => state.common.internationalisation.countryId,
 	);
-	const contributionType = useContributionsSelector(getContributionType);
+	const contributionType =
+		contributionTypeOverride ?? useContributionsSelector(getContributionType);
 	const { isTestUser } = useContributionsSelector((state) => state.page.user);
 	const { publicKey } = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.stripeAccountDetails,
@@ -37,9 +37,7 @@ export function ContributionsStripe({
 	const dispatch = useContributionsDispatch();
 
 	useEffect(() => {
-		const stripeAccount =
-			overrideStripeAccount ??
-			stripeAccountForContributionType[contributionType];
+		const stripeAccount = stripeAccountForContributionType[contributionType];
 		const publicKey = getStripeKey(stripeAccount, country, isTestUser);
 
 		dispatch(setStripeAccountName(stripeAccount));
