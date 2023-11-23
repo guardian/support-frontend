@@ -38,17 +38,19 @@ export function getAmazonPayFormErrors(
 
 function getDirectDebitFormErrors(state: ContributionsState): ErrorCollection {
 	const { errors, formError } = state.page.checkoutForm.payment.directDebit;
-  const recaptchaErrors = getRecaptchaError(state);
+	const recaptchaErrors = getRecaptchaError(state);
 
-  if (formError) {
+	if (formError) {
 		return {
-			...errors,robot_checkbox: recaptchaErrors,
+			...errors,
+			robot_checkbox: recaptchaErrors,
 			directDebitDetails: [formError],
 		};
 	}
 
 	return {
-		...errors,robot_checkbox: recaptchaErrors
+		...errors,
+		robot_checkbox: recaptchaErrors,
 	};
 }
 
