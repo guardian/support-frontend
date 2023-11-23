@@ -32,5 +32,3 @@ jobs:
           node-version: 18
       - name: Deploy Fastly snippets
         run: node .github/workflows/deploy-fastly-snippets.js
-        env:
-
