@@ -18,7 +18,6 @@ export function getStripeFormErrors(
 	const recaptchaErrors = getRecaptchaError(state);
 
 	if (!showErrors) return {};
-
 	return { ...errors, robot_checkbox: recaptchaErrors };
 }
 
@@ -39,15 +38,17 @@ export function getAmazonPayFormErrors(
 
 function getDirectDebitFormErrors(state: ContributionsState): ErrorCollection {
 	const { errors, formError } = state.page.checkoutForm.payment.directDebit;
-	if (formError) {
+  const recaptchaErrors = getRecaptchaError(state);
+
+  if (formError) {
 		return {
-			...errors,
+			...errors,robot_checkbox: recaptchaErrors,
 			directDebitDetails: [formError],
 		};
 	}
 
 	return {
-		...errors,
+		...errors,robot_checkbox: recaptchaErrors
 	};
 }
 
