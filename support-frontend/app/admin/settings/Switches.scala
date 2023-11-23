@@ -28,7 +28,7 @@ case class CampaignSwitches(
 
     /** These are Optional as they are transient campaigns.
       * @see
-      *   support-frontend/README.md for usage notes
+      *   https://github.com/guardian/support-frontend/wiki/Quickstart:-Campaign-feature-development for usage notes
       */
     usEoy2023: Option[SwitchState] = None,
     ausTicker2023: Option[SwitchState] = None,
