@@ -107,6 +107,7 @@ const digital = (
 	],
 	productImage: getDigitalImage(isTop),
 	classModifier: ['subscriptions__digital'],
+	offer: priceCopy.discountCopy,
 });
 
 const guardianWeekly = (
