@@ -1,4 +1,5 @@
-import { useEffect } from 'preact/hooks';
+import { useEffect } from 'react';
+import type { ContributionType } from 'helpers/contributions';
 import {
 	getStripeKey,
 	stripeAccountForContributionType,
@@ -14,15 +15,20 @@ import {
 } from 'helpers/redux/storeHooks';
 import { StripeElements } from './stripeElements';
 
+type ContributionsStripeProps = {
+	children: React.ReactNode;
+	contributionTypeOverride?: ContributionType;
+};
+
 export function ContributionsStripe({
 	children,
-}: {
-	children: React.ReactNode;
-}): JSX.Element {
+	contributionTypeOverride,
+}: ContributionsStripeProps): JSX.Element {
 	const country = useContributionsSelector(
 		(state) => state.common.internationalisation.countryId,
 	);
-	const contributionType = useContributionsSelector(getContributionType);
+	const contributionType =
+		contributionTypeOverride ?? useContributionsSelector(getContributionType);
 	const { isTestUser } = useContributionsSelector((state) => state.page.user);
 	const { publicKey } = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.stripeAccountDetails,

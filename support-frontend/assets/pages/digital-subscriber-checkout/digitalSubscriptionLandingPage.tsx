@@ -36,13 +36,12 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { getPaymentMethodButtons } from 'pages/digital-subscriber-checkout/paymentButtons';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentFailureMessage } from 'pages/supporter-plus-landing/components/paymentFailure';
-import { getPaymentMethodButtons } from 'pages/supporter-plus-landing/paymentButtons';
 import { BillingPeriodSelector } from './components/billingPeriodSelector';
 import { PaymentTsAndCs } from './components/paymentTsAndCs';
 
@@ -85,7 +84,7 @@ export function SupporterPlusLandingPage({
 		(state) => state.common.settings,
 	);
 
-	const contributionType = useContributionsSelector(getContributionType);
+	const contributionType = 'MONTHLY';
 
 	const { paymentComplete, isWaiting } = useContributionsSelector(
 		(state) => state.page.form,
@@ -164,7 +163,9 @@ export function SupporterPlusLandingPage({
 						<Box>
 							<BoxContents>
 								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). */}
-								<ContributionsStripe>
+								<ContributionsStripe
+									contributionTypeOverride={contributionType}
+								>
 									<SecureTransactionIndicator align="center" />
 									<PersonalDetailsContainer
 										renderPersonalDetails={(personalDetailsProps) => (
@@ -176,6 +177,7 @@ export function SupporterPlusLandingPage({
 									/>
 									<Divider size="full" cssOverrides={divider} />
 									<PaymentMethodSelectorContainer
+										contributionTypeOverride={contributionType}
 										render={(paymentMethodSelectorProps) => (
 											<PaymentMethodSelector {...paymentMethodSelectorProps} />
 										)}
