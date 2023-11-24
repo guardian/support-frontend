@@ -54,7 +54,7 @@ export function AmountAndBenefits({
 
 	const campaignSettings = getCampaignSettings(campaignCode);
 
-	const showCampaignTicker = campaignSettings;
+	const showCampaignTicker = !!campaignSettings;
 
 	return (
 		<PaymentFrequencyTabsContainer
