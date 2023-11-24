@@ -179,7 +179,7 @@
     "jest": "^24.9.0",
     "jest-environment-jsdom-fifteen": "^1.0.2",
     "json-sass-vars": "^3.1.0",
-    "lint-staged": "^11.0.0",
+    "lint-staged": "^15.1.0",
     "madge": "^6.1.0",
     "mini-css-extract-plugin": "^2.6.0",
     "npm-run-all": "^4.1.3",
