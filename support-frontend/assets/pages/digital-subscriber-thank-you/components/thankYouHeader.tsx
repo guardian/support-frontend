@@ -10,12 +10,6 @@ import Subheading from './subheading';
 type ThankYouHeaderProps = {
 	name: string | null;
 	showDirectDebitMessage: boolean;
-
-	// Props needed for the Subheading component - currently unused
-	//
-	// amountIsAboveSupporterPlusThreshold: boolean;
-	// isSignedIn: boolean;
-	// userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 };
 
 function ThankYouHeader({
