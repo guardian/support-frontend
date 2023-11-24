@@ -4,7 +4,6 @@ import {
 	getGlobal,
 	getProductPrices,
 	getPromotionCopy,
-	getSettings,
 } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { detect as detectCountry } from 'helpers/internationalisation/country';
@@ -42,5 +41,5 @@ export const weeklyLandingProps = (): WeeklyLandingPropTypes => ({
 	productPrices: getProductPrices(),
 	promotionCopy: getPromotionCopy(),
 	orderIsAGift: getGlobal('orderIsAGift'),
-	participations: initAbTests(detectCountry(), countryGroupId, getSettings()),
+	participations: initAbTests(detectCountry(), countryGroupId),
 });

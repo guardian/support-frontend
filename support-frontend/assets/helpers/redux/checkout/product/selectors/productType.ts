@@ -1,4 +1,4 @@
-import type { ContributionType } from 'helpers/contributions';
+import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
 import { contributionTypes } from 'helpers/contributions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
@@ -60,4 +60,12 @@ export function getSubscriptionType(
 		return productType;
 	}
 	return getSubscriptionTypeFromURL();
+}
+
+export function getSelectedAmount(
+	selectedAmounts: SelectedAmounts,
+	contributionType: ContributionType,
+	defaultAmount: number,
+): number | string {
+	return selectedAmounts[contributionType] || defaultAmount;
 }

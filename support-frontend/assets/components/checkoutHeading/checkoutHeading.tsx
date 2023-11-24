@@ -26,17 +26,6 @@ const headingContentContainer = css`
 	${textSans.large({ fontWeight: 'bold' })}
 `;
 
-const headingImage = css`
-	height: 140px;
-	margin-top: ${space[6]}px;
-	margin-left: -${space[9]}px;
-	margin-right: ${space[5]}px;
-
-	img {
-		max-width: 100%;
-	}
-`;
-
 export interface CheckoutHeadingProps extends CSSOverridable {
 	heading: React.ReactNode;
 	children?: React.ReactNode;
@@ -59,9 +48,7 @@ export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
 							<Hide until="desktop">
 								{props.heading}
 								{props.children}
-								{props.image && (
-									<figure css={headingImage}>{props.image}</figure>
-								)}
+								{props.image}
 							</Hide>
 						</div>
 					</Column>

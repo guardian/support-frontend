@@ -33,8 +33,8 @@ export const getExistingPaymentMethods = createAsyncThunk<
 			const authWithOkta = isSwitchOn('featureSwitches.authenticateWithOkta');
 			const accessToken = cookie.get('GU_ACCESS_TOKEN');
 
-			// No point in making the call if we don't have an access token as we know it's going to fail
-			if (authWithOkta && !accessToken) return [];
+			// Exit early if Okta isn't enabled or we're missing the access token
+			if (!authWithOkta || !accessToken) return [];
 
 			const existingPaymentMethods = await fetchJson(
 				`${mdapiUrl}/user-attributes/me/existing-payment-options?currencyFilter=${currencyId}`,
@@ -42,7 +42,7 @@ export const getExistingPaymentMethods = createAsyncThunk<
 					mode: 'cors',
 					credentials: 'include',
 					// Okta authorization uses the Authorization header rather than a cookie
-					headers: oktaAuthHeader(authWithOkta, accessToken!),
+					headers: oktaAuthHeader(authWithOkta, accessToken),
 				},
 			);
 			if (isValidPaymentList(existingPaymentMethods)) {

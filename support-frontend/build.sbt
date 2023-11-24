@@ -1,13 +1,8 @@
-import SeleniumTestConfig._
 import LibraryVersions._
 
 version := "1.0-SNAPSHOT"
 
 packageSummary := "Support Play APP"
-
-SeleniumTest / testOptions := Seq(Tests.Filter(seleniumTestFilter))
-
-Test / testOptions ++= Seq(Tests.Filter(unitTestFilter))
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.4.2",
@@ -35,9 +30,7 @@ libraryDependencies ++= Seq(
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.gu.play-googleauth" %% "play-v28" % "2.2.7",
   "io.github.bonigarcia" % "webdrivermanager" % "5.5.3" % "test",
-  "org.seleniumhq.selenium" % "selenium-java" % "3.141.59" % "test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
-  "org.scalatestplus" %% "scalatestplus-selenium" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "4.11.0",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
   "com.googlecode.libphonenumber" % "libphonenumber" % "8.13.20",
@@ -89,8 +82,6 @@ Universal / javaOptions ++= Seq(
   "-J-XX:+PrintGCDateStamps",
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log",
 )
-
-Test / javaOptions += "-Dconfig.file=test/selenium/conf/selenium-test.conf"
 
 addCommandAlias(
   "devrun",

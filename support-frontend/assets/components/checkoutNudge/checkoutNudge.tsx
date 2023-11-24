@@ -104,9 +104,10 @@ export type CheckoutNudgeProps = {
 	nudgeSubtitle: string;
 	nudgeParagraph: string;
 	nudgeLinkCopy: string;
+	nudgeLinkHref?: string;
 	countryGroupId: CountryGroupId;
 	onNudgeClose: () => void;
-	onNudgeClick: () => void;
+	onNudgeClick: (event: React.MouseEvent<HTMLAnchorElement>) => void;
 };
 
 export function CheckoutNudge({
@@ -116,6 +117,7 @@ export function CheckoutNudge({
 	nudgeSubtitle,
 	nudgeParagraph,
 	nudgeLinkCopy,
+	nudgeLinkHref,
 	countryGroupId,
 	onNudgeClose,
 	onNudgeClick,
@@ -134,7 +136,7 @@ export function CheckoutNudge({
 				</h2>
 				<p css={para}>{nudgeParagraph}</p>
 				<div css={link}>
-					<a onClick={onNudgeClick} css={alink}>
+					<a href={nudgeLinkHref} onClick={onNudgeClick} css={alink}>
 						{nudgeLinkCopy}
 					</a>
 				</div>

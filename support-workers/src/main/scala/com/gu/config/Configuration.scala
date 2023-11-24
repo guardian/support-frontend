@@ -1,6 +1,5 @@
 package com.gu.config
 
-import com.gu.acquisitions.BigQueryConfigProvider
 import com.gu.config.loaders.PrivateConfigLoader
 import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.SalesforceConfigProvider
@@ -47,7 +46,6 @@ case class Configuration(config: Config) {
   val zuoraConfigProvider = new ZuoraConfigProvider(config, stage)
   val promotionsConfigProvider = new PromotionsConfigProvider(config, stage)
   val goCardlessConfigProvider = new GoCardlessConfigProvider(config, stage)
-  val bigQueryConfigProvider = new BigQueryConfigProvider(config, stage)
   val paperRoundConfigProvider = new PaperRoundConfigProvider(config, stage)
 
   val acquisitionsKinesisStreamName = config.getString("kinesis.streamName")

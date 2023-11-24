@@ -1,4 +1,3 @@
-import SeleniumTestConfig.SeleniumTest
 import sbt.Keys.{organization, publishTo, resolvers, scalaVersion, skip, updateOptions}
 import sbtrelease.ReleaseStateTransformations._
 import LibraryVersions._
@@ -122,10 +121,9 @@ lazy val root = (project in file("."))
 lazy val `support-frontend` = (project in file("support-frontend"))
   .enablePlugins(PlayScala, BuildInfoPlugin, RiffRaffArtifact, JDebPackaging)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
-  .configs(SeleniumTest, IntegrationTest)
+  .configs(IntegrationTest)
   .settings(
     integrationTestSettings,
-    inConfig(SeleniumTest)(Defaults.testTasks),
     buildInfoKeys := BuildInfoSettings.buildInfoKeys,
     buildInfoPackage := "app",
     buildInfoOptions += BuildInfoOption.ToMap,
@@ -138,8 +136,15 @@ lazy val `support-frontend` = (project in file("support-frontend"))
     `support-models`,
     `support-config`,
     `support-internationalisation`,
+    `module-retry`,
   )
-  .aggregate(`support-services`, `support-models`, `support-config`, `support-internationalisation`)
+  .aggregate(
+    `support-services`,
+    `support-models`,
+    `support-config`,
+    `support-internationalisation`,
+    `module-retry`,
+  )
 
 lazy val `support-workers` = (project in file("support-workers"))
   .enablePlugins(RiffRaffArtifact)
@@ -185,7 +190,7 @@ lazy val `supporter-product-data-dynamo` = (project in file("support-modules/sup
     libraryDependencies ++= commonDependencies,
     releaseSettings,
     scalafmtSettings,
-    mergeStrategySettings
+    mergeStrategySettings,
   )
 
 lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
@@ -216,12 +221,14 @@ lazy val `support-payment-api` = (project in file("support-payment-api"))
     `support-internationalisation`,
     `module-acquisition-events`,
     `supporter-product-data-dynamo`,
+    `module-retry`,
   )
   .aggregate(
     `support-models`,
     `support-internationalisation`,
     `module-acquisition-events`,
     `supporter-product-data-dynamo`,
+    `module-retry`,
   )
 
 lazy val `support-models` = (project in file("support-models"))
@@ -268,6 +275,13 @@ lazy val `module-rest` = (project in file("support-modules/rest"))
   )
 
 lazy val `module-aws` = (project in file("support-modules/aws"))
+  .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
+  .settings(
+    scalafmtSettings,
+    libraryDependencies ++= commonDependencies,
+  )
+
+lazy val `module-retry` = (project in file("support-modules/retry"))
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype, AssemblyPlugin)
   .settings(
     scalafmtSettings,
@@ -352,5 +366,5 @@ lazy val `support-lambdas` = (project in file("support-lambdas"))
     `it-test-runner`,
     `acquisitions-firehose-transformer`,
     `acquisition-events-api`,
-    `bigquery-acquisitions-publisher`
+    `bigquery-acquisitions-publisher`,
   )

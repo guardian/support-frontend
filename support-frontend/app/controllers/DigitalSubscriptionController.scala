@@ -22,6 +22,7 @@ import scala.concurrent.ExecutionContext
 
 class DigitalSubscriptionController(
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    landingCopyProvider: LandingCopyProvider,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
     testUsers: TestUserService,
@@ -60,15 +61,17 @@ class DigitalSubscriptionController(
           "Support the Guardian | The Guardian Digital Subscription"
         }
         val id = EmptyDiv("digital-subscription-checkout-page-" + countryCode)
-        val js = "kindleSubscriptionLandingPage.js"
-        val css = "kindleSubscriptionLandingPage.css"
+        val js = "digitalSubscriptionLandingPage.js"
+        val css = "digitalSubscriptionLandingPage.css"
         val csrf = CSRF.getToken.value
-
         val testMode = testUsers.isTestUser(request)
         val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
         val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey
         val readerType = if (orderIsAGift) Gift else Direct
-
+        val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(DigitalPack)
+        val maybePromotionCopy = {
+          landingCopyProvider.promotionCopy(promoCodes ++ defaultPromos, DigitalPack, "uk", orderIsAGift)
+        }
         Ok(
           views.html.subscriptionCheckout(
             title,
@@ -79,6 +82,7 @@ class DigitalSubscriptionController(
             request.user,
             testMode,
             priceSummaryServiceProvider.forUser(testMode).getPrices(DigitalPack, promoCodes, readerType),
+            maybePromotionCopy,
             stripeConfigProvider.get(),
             stripeConfigProvider.get(true),
             payPalConfigProvider.get(),
@@ -92,7 +96,7 @@ class DigitalSubscriptionController(
     }
   }
 
-  private def getPaperHrefLangLinks(orderIsAGift: Boolean): Map[String, String] = {
+  private def getDigitalHrefLangLinks(orderIsAGift: Boolean): Map[String, String] = {
     Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us", orderIsAGift),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift),

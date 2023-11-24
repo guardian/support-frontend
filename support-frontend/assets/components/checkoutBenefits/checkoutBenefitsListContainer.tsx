@@ -53,7 +53,7 @@ export function CheckoutBenefitsListContainer({
 	);
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const minimumContributionAmount = useContributionsSelector(
-		getMinimumContributionAmount,
+		getMinimumContributionAmount(),
 	);
 
 	const currency = currencies[currencyId];
@@ -65,7 +65,7 @@ export function CheckoutBenefitsListContainer({
 	);
 	const userSelectedAmountWithCurrency = simpleFormatAmount(
 		currency,
-		selectedAmount,
+		+parseFloat(selectedAmount.toFixed(2)),
 	);
 
 	const higherTier = thresholdPrice <= selectedAmount;

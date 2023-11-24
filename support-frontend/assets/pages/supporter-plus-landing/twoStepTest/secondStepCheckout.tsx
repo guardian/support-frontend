@@ -20,12 +20,12 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import {
 	getUserSelectedAmount,
 	getUserSelectedAmountBeforeAmendment,
+	getUserSelectedOtherAmount,
 } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { CheckoutDivider } from '../components/checkoutDivider';
@@ -44,10 +44,8 @@ const shorterBoxMargin = css`
 
 export function SupporterPlusCheckout({
 	thankYouRoute,
-	showTopUpToggle,
 }: {
 	thankYouRoute: string;
-	showTopUpToggle: boolean;
 }): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
@@ -64,19 +62,13 @@ export function SupporterPlusCheckout({
 	const amountBeforeAmendments = useContributionsSelector(
 		getUserSelectedAmountBeforeAmendment,
 	);
-
+	const otherAmount = useContributionsSelector(getUserSelectedOtherAmount);
 	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
 		contributionType,
 		selectedAmounts,
 		otherAmounts,
 		countryGroupId,
 	);
-
-	const belowThreshold =
-		showTopUpToggle &&
-		contributionType !== 'ONE_OFF' &&
-		amountBeforeAmendments <
-			benefitsThresholdsByCountryGroup[countryGroupId][contributionType];
 
 	const navigate = useNavigate();
 
@@ -85,10 +77,12 @@ export function SupporterPlusCheckout({
 			priority="tertiary"
 			size="xsmall"
 			onClick={() => {
+				const amountToBePassed =
+					otherAmount === 'other' ? 'other' : amountBeforeAmendments;
 				dispatch(
 					setSelectedAmount({
 						contributionType: contributionType,
-						amount: `${amountBeforeAmendments}`,
+						amount: `${amountToBePassed}`,
 					}),
 				);
 				dispatch(resetValidation());
@@ -105,14 +99,10 @@ export function SupporterPlusCheckout({
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					<ContributionsOrderSummaryContainer
-						showUnchecked={showTopUpToggle}
 						renderOrderSummary={(orderSummaryProps) => (
 							<ContributionsOrderSummary
 								{...orderSummaryProps}
 								headerButton={changeButton}
-								showTopUpToggle={belowThreshold}
-								showPreAmendedTotal={belowThreshold}
-								version={belowThreshold ? 'FULL' : 'COMPACT'}
 							/>
 						)}
 					/>
