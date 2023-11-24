@@ -15,8 +15,8 @@ import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.{AnalyticsInfo, CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers._
-import io.circe.Decoder
-import io.circe.generic.semiauto.deriveDecoder
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import org.joda.time.LocalDate
 import play.api.mvc.{Call, Request}
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
@@ -33,6 +33,7 @@ object CreateSupportWorkersRequest {
   implicit val giftRecipientCodec: Codec[GiftRecipientRequest] = deriveCodec
 
   implicit val decoder: Decoder[CreateSupportWorkersRequest] = deriveDecoder[CreateSupportWorkersRequest]
+  implicit val encoder: Encoder[CreateSupportWorkersRequest] = deriveEncoder[CreateSupportWorkersRequest]
 
   case class GiftRecipientRequest(
       title: Option[Title],

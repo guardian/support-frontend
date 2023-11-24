@@ -2,6 +2,8 @@ package services
 
 import cats.data.EitherT
 import cats.implicits._
+import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogger.Sanitizer
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
 import play.api.libs.json._
@@ -26,6 +28,9 @@ class RecaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) {
       .withMethod("POST")
       .execute()
       .attemptT
-      .leftMap(_.toString)
+      .leftMap(err => {
+        SafeLogger.error(scrub"Recaptcha failed on ${err.toString}")
+        err.toString
+      })
       .subflatMap(resp => (resp.json).validate[RecaptchaResponse].asEither.leftMap(_.mkString(",")))
 }
