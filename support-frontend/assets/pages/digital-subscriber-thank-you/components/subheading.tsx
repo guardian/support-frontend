@@ -43,8 +43,10 @@ function SubHeadingCopy() {
 
 	return (
 		<span>
-			Look out for your exclusive newsletter from our supporter editor. We’ll
-			also be in touch with other great ways to get closer to Guardian
+			You have now unlocked access to the Guardian and Observer newspapers,
+			which you can enjoy across all your devices, wherever you are in the
+			world. Soon, you will receive weekly newsletters from our supporter
+			editor. We'll also be in touch with other ways to get closer to our
 			journalism.{' '}
 		</span>
 	);
