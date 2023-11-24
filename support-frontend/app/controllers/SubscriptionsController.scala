@@ -82,7 +82,7 @@ class SubscriptionsController(
     val digitalSubscription = service
       .getPrices(
         DigitalPack,
-        List(DefaultPromotions.DigitalSubscription.Monthly.fiftyPercentOff3Months),
+        Nil,
       )(countryGroup)(NoFulfilmentOptions)(NoProductOptions)(Monthly)(countryGroup.currency)
 
     Map(
