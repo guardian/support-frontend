@@ -39,7 +39,7 @@ export const activeCampaigns: Record<string, CampaignSettings> = {
 	ausTicker2023: {
 		campaignCode: 'ausTicker2023',
 		campaignPath: 'au/contribute',
-		tickerId: 'AUS',
+		tickerId: 'AU',
 		tickerSettings: {
 			countType: 'money',
 			endType: 'unlimited',
