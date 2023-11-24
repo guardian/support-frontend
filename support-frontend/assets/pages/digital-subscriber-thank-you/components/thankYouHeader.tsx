@@ -24,7 +24,7 @@ function ThankYouHeader({
 }: ThankYouHeaderProps): JSX.Element {
 	return (
 		<header css={header}>
-			<h1 css={headerTitleText}>
+			<h1 css={headerTitleText(true)}>
 				<Heading name={name} />
 			</h1>
 			<p css={headerSupportingText}>

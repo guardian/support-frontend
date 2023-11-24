@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { body, from, space, titlepiece } from '@guardian/source-foundations';
 import type { ContributionType } from 'helpers/contributions';
@@ -17,12 +18,14 @@ export const header = css`
 	}
 `;
 
-export const headerTitleText = css`
+export const headerTitleText = (
+	digitalFontSizeReduce?: boolean,
+): SerializedStyles => css`
 	${titlepiece.small()};
 	font-size: 24px;
 
 	${from.tablet} {
-		font-size: 40px;
+		font-size: ${digitalFontSizeReduce ? '34px' : '40px'};
 	}
 `;
 
@@ -60,7 +63,7 @@ function ThankYouHeader({
 }: ThankYouHeaderProps): JSX.Element {
 	return (
 		<header css={header}>
-			<h1 css={headerTitleText}>
+			<h1 css={headerTitleText()}>
 				<Heading
 					name={name}
 					isOneOffPayPal={isOneOffPayPal}
