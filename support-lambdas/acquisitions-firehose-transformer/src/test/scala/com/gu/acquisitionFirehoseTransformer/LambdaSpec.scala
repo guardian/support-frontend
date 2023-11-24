@@ -90,7 +90,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
       platform = None,
       postalCode = Some("postalCode"),
       state = Some("state"),
-      email = Some("email")
+      email = Some("email"),
     )
 
     val record = new KinesisFirehoseEvent.Record()
