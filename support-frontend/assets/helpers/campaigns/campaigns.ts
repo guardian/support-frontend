@@ -49,9 +49,7 @@ export const activeCampaigns: Record<string, CampaignSettings> = {
 };
 
 function campaignEnabledForUser(campaignCode?: string): boolean {
-	const { campaignSwitches } = window.guardian.settings.switches;
-
-	if (campaignCode && campaignSwitches.enableContributionsCampaign === 'On') {
+	if (campaignCode && isCampaignEnabled(campaignCode)) {
 		const matchingCampaign = activeCampaigns[campaignCode];
 		return window.location.pathname.endsWith(
 			`/${matchingCampaign.campaignPath}`,
@@ -82,9 +80,10 @@ export function getCampaignCode(campaignCode?: string): string | null {
 }
 
 export function isCampaignEnabled(campaignCode: string): boolean {
+	const { campaignSwitches } = window.guardian.settings.switches;
 	return (
 		window.location.hash ===
 			`#settings.switches.campaignSwitches.${campaignCode}=On` ||
-		window.guardian.settings.switches.campaignSwitches[campaignCode] === 'On'
+		campaignSwitches[campaignCode] === 'On'
 	);
 }

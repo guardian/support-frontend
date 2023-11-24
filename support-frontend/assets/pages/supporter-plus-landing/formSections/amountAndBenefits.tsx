@@ -17,7 +17,6 @@ import { TickerContainer } from 'components/ticker/tickerContainer';
 import Tooltip from 'components/tooltip/Tooltip';
 import { TooltipContainer } from 'components/tooltip/TooltipContainer';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
-import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 
@@ -54,11 +53,8 @@ export function AmountAndBenefits({
 	const campaignCode = tickerCampaigns[internationalisation.countryGroupId];
 
 	const campaignSettings = getCampaignSettings(campaignCode);
-	const campaignEnabled =
-		campaignCode &&
-		isSwitchOn(`settings.switches.campaignSwitches.${campaignCode}`);
 
-	const showCampaignTicker = campaignEnabled && campaignSettings;
+	const showCampaignTicker = campaignSettings;
 
 	return (
 		<PaymentFrequencyTabsContainer
