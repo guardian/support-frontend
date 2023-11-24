@@ -41,6 +41,7 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "GuAlarm",
       "GuAlarm",
       "GuAlarm",
+      "GuAlarm",
     ],
     "gu:cdk:version": "TEST",
   },
@@ -345,6 +346,46 @@ exports[`The Frontend stack matches the snapshot 1`] = `
         ],
       },
       "Type": "AWS::IAM::Policy",
+    },
+    "GetDeliveryAgentsFailure4BEED0AC": {
+      "Properties": {
+        "ActionsEnabled": true,
+        "AlarmActions": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:aws:sns:",
+                {
+                  "Ref": "AWS::Region",
+                },
+                ":",
+                {
+                  "Ref": "AWS::AccountId",
+                },
+                ":conversion-dev",
+              ],
+            ],
+          },
+        ],
+        "AlarmDescription": "Impact - support-frontend failed to get delivery agents from PaperRound. Follow the process in https://docs.google.com/document/d/1_3El3cly9d7u_jPgTcRjLxmdG2e919zCLvmcFCLOYAk/edit",
+        "AlarmName": "URGENT 9-5 - PROD support-frontend GetDeliveryAgentsFailure",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "GetDeliveryAgentsFailure",
+        "Namespace": "support-frontend",
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 1,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
     },
     "GetDistributablePolicyFrontendA36D2A61": {
       "Properties": {

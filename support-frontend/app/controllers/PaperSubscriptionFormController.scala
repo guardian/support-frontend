@@ -65,6 +65,7 @@ class PaperSubscriptionFormController(
       maybeIdUser,
       testMode,
       priceSummaryServiceProvider.forUser(testMode).getPrices(Paper, promoCodes),
+      maybePromotionCopy = None,
       stripeConfigProvider.get(false),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(false),

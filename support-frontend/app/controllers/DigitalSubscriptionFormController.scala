@@ -15,7 +15,6 @@ import services._
 import views.EmptyDiv
 import views.html.helper.CSRF
 import views.html.subscriptionCheckout
-
 import scala.concurrent.ExecutionContext
 
 class DigitalSubscriptionFormController(
@@ -71,6 +70,7 @@ class DigitalSubscriptionFormController(
       maybeIdUser,
       testMode,
       priceSummaryServiceProvider.forUser(testMode).getPrices(DigitalPack, promoCodes, readerType),
+      maybePromotionCopy = None,
       stripeConfigProvider.get(),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),
