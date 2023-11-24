@@ -31,7 +31,7 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		() => getCampaignSettings(campaignCode),
 		[],
 	);
-	const { countryId, countryGroupId, currencyId } = useContributionsSelector(
+	const { countryId, countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const { csrf } = useContributionsSelector((state) => state.page.checkoutForm);
@@ -45,8 +45,9 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 	const paymentMethod = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.paymentMethod.name,
 	);
-	const { selectedAmounts, otherAmounts, billingPeriod } =
-		useContributionsSelector((state) => state.page.checkoutForm.product);
+	const { selectedAmounts, otherAmounts } = useContributionsSelector(
+		(state) => state.page.checkoutForm.product,
+	);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const { monthlyPrice, annualPrice } = useContributionsSelector(
@@ -132,9 +133,6 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 						<ThankYouHeader
 							name={firstName}
 							showDirectDebitMessage={paymentMethod === DirectDebit}
-							billingPeriod={billingPeriod}
-							amount={billingPeriod === 'Monthly' ? monthlyPrice : annualPrice}
-							currency={currencyId}
 						/>
 					</div>
 
