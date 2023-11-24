@@ -17,6 +17,7 @@ import { TickerContainer } from 'components/ticker/tickerContainer';
 import Tooltip from 'components/tooltip/Tooltip';
 import { TooltipContainer } from 'components/tooltip/TooltipContainer';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 
@@ -28,6 +29,11 @@ const tickerSpacing = css`
 		margin-bottom: 32px;
 	}
 `;
+
+const tickerCampaigns: Partial<Record<CountryGroupId, string>> = {
+	UnitedStates: 'usEoy2023',
+	AUDCountries: 'ausTicker2023',
+};
 
 export function AmountAndBenefits({
 	countryGroupId,
@@ -45,10 +51,14 @@ export function AmountAndBenefits({
 	const { internationalisation } = useContributionsSelector(
 		(state) => state.common,
 	);
-	const campaignSettings = getCampaignSettings('Us_eoy_2023');
+	const campaignCode = tickerCampaigns[internationalisation.countryGroupId];
 
-	const showUSCampaignTicker =
-		internationalisation.countryGroupId === 'UnitedStates' && campaignSettings;
+	const campaignSettings = getCampaignSettings(campaignCode);
+	const campaignEnabled =
+		campaignCode &&
+		isSwitchOn(`settings.switches.campaignSwitches.${campaignCode}`);
+
+	const showCampaignTicker = campaignEnabled && campaignSettings;
 
 	return (
 		<PaymentFrequencyTabsContainer
@@ -98,10 +108,10 @@ export function AmountAndBenefits({
 									</>
 								)}
 							/>
-							{showUSCampaignTicker && (
+							{showCampaignTicker && (
 								<div css={tickerSpacing}>
 									<TickerContainer
-										tickerId="US"
+										tickerId={campaignSettings.tickerId}
 										countType={campaignSettings.tickerSettings.countType}
 										endType={campaignSettings.tickerSettings.endType}
 										headline={campaignSettings.tickerSettings.headline}
