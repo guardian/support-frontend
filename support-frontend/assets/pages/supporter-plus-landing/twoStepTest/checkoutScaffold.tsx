@@ -98,11 +98,11 @@ const links = [
 		text: 'Privacy policy',
 		isExternal: true,
 	},
-  {
+	{
 		text: 'Privacy settings',
-    onClick: () => {
-      cmp.showPrivacyManager();
-    }
+		onClick: () => {
+			cmp.showPrivacyManager();
+		},
 	},
 	{
 		href: 'https://www.theguardian.com/help/contact-us',
@@ -114,7 +114,7 @@ const links = [
 		text: 'Help centre',
 		isExternal: true,
 	},
-]
+];
 
 export function SupporterPlusCheckoutScaffold({
 	children,
