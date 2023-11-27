@@ -22,7 +22,7 @@ jobs:
     env:
       FASTLY_SERVICE_ID: ${{ secrets.FASTLY_SERVICE_ID }}
       FASTLY_API_TOKEN: ${{ secrets.FASTLY_API_TOKEN }}
-      DELETE_SNIPPETS: ${{ github.event.inputs.delete-fastly-snippets }}
+      DELETE_SNIPPETS: ${{ github.event.inputs.delete-snippets }}
       LOCK_AND_ACTIVATE_SERVICE: ${{ github.event.inputs.lock-and-activate-service }}
     steps:
       - name: Checkout repo
