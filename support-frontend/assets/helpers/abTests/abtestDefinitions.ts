@@ -103,26 +103,6 @@ export const tests: Tests = {
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
-	makeItAnnualNudge: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		isActive: false,
-		audiences: {
-			UnitedStates: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		referrerControlled: false,
-		seed: 0,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-	},
 	makeItAnnualNudgeGlobal: {
 		variants: [
 			{
@@ -139,7 +119,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		omitCountries: ['US', ...countriesAffectedByVATStatus],
+		omitCountries: countriesAffectedByVATStatus,
 		referrerControlled: false,
 		seed: 0,
 		targetPage: pageUrlRegexes.contributions.notUsLandingPage,
