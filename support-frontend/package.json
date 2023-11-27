@@ -91,7 +91,7 @@
     "@guardian/pasteup": "1.0.0-alpha.7",
     "@guardian/source-foundations": "^13.0.0",
     "@guardian/source-react-components": "^16.0.1",
-    "@guardian/source-react-components-development-kitchen": "^14.0.2",
+    "@guardian/source-react-components-development-kitchen": "^14.1.0",
     "@reduxjs/toolkit": "^1.9.4",
     "@sentry/browser": "^7.72.0",
     "@stripe/react-stripe-js": "^1.8.1",
