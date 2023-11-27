@@ -1,0 +1,4 @@
+# type: recv
+if (table.contains(support_frontend_redirects, req.url.path)) {
+  error 618 "redirect";
+}
