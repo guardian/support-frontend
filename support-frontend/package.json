@@ -195,7 +195,7 @@
     "react-dom": "^18.2.0",
     "react-svg-loader": "^3.0.3",
     "rimraf": "^5.0.1",
-    "sass": "^1.50.0",
+    "sass": "^1.69.5",
     "sass-mq": "^5.0.1",
     "search-in-file": "^2.2.2",
     "storybook": "^7.3.2",
