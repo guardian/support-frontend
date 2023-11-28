@@ -1,6 +1,6 @@
 import { Column, Columns, LinkButton } from '@guardian/source-react-components';
 import { FooterWithContents } from '@guardian/source-react-components-development-kitchen';
-import { useEffect, useMemo } from 'preact/hooks';
+import { useMemo } from 'preact/hooks';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -55,29 +55,6 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 	const contributionType = useContributionsSelector(getContributionType);
 	const isOneOff = contributionType === 'ONE_OFF';
 
-	// const isAmountLargeDonation = amount
-	// 	? isLargeDonation(amount, contributionType, paymentMethod)
-	// 	: false;
-
-	useEffect(() => {
-		if (monthlyPrice || annualPrice) {
-			// TO-DO - add tracking for Kindle
-			//
-			// sendEventContributionCheckoutConversion(
-			// 	amount,
-			// 	contributionType,
-			// 	currencyId,
-			// );
-			// trackUserData(
-			// 	paymentMethod,
-			// 	contributionType,
-			// 	isSignedIn,
-			// 	!isNewAccount,
-			// 	isAmountLargeDonation,
-			// );
-		}
-	}, []);
-
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
@@ -99,8 +76,6 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 			'signIn',
 		),
 		'appDownloadKindle',
-		// Disable Feedback module
-		// 'feedbackKindle', // we will need to create this
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];
