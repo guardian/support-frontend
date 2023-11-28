@@ -265,7 +265,7 @@ function AppDownloadBadges({
 	);
 }
 
-export function AppDownloadBadgesKindle({
+export function AppDownloadBadgesEditions({
 	countryGroupId,
 }: {
 	countryGroupId: CountryGroupId;

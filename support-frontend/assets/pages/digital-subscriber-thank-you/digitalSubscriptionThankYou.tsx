@@ -66,7 +66,7 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 			!isNewAccount && !isSignedIn && email.length > 0,
 			'signIn',
 		),
-		'appDownloadKindle',
+		'appDownloadEditions',
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];
