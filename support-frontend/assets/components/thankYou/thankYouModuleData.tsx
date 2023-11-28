@@ -11,13 +11,13 @@ import {
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
 import AppDownloadBadges, {
-	AppDownloadBadgesKindle,
+	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
 import {
 	AppDownloadBodyCopy,
+	AppDownloadEditionsBodyCopy,
+	appDownloadEditionsHeader,
 	appDownloadHeader,
-	AppDownloadKindleBodyCopy,
-	appDownloadKindleHeader,
 } from './appDownload/appDownloadItems';
 import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
 import {
@@ -66,11 +66,11 @@ export const getThankYouModuleData = (
 			bodyCopy: <AppDownloadBodyCopy />,
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
 		},
-		appDownloadKindle: {
+		appDownloadEditions: {
 			icon: getThankYouModuleIcon('appDownload'),
-			header: appDownloadKindleHeader,
-			bodyCopy: <AppDownloadKindleBodyCopy />,
-			ctas: <AppDownloadBadgesKindle countryGroupId={countryGroupId} />,
+			header: appDownloadEditionsHeader,
+			bodyCopy: <AppDownloadEditionsBodyCopy />,
+			ctas: <AppDownloadBadgesEditions countryGroupId={countryGroupId} />,
 		},
 		ausMap: {
 			icon: getThankYouModuleIcon('ausMap'),
