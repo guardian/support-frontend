@@ -1,16 +1,24 @@
+import { css } from '@emotion/react';
+import { from } from '@guardian/source-foundations';
+
 const MAX_DISPLAY_NAME_LENGTH = 10;
 
-interface HeadingProps {
+const containerCss = css`
+	font-size: 24px;
+	${from.tablet} {
+		font-size: 34px;
+	}
+`;
+
+interface HeadingProp {
 	name: string | null;
-	style?: Record<string, string | number>;
 }
 
-function Heading({ name, style }: HeadingProps): JSX.Element {
+function Heading({ name }: HeadingProp): JSX.Element {
 	const maybeNameCommaAndSpacing: string =
 		name && name.length < MAX_DISPLAY_NAME_LENGTH ? `, ${name}, ` : ` `;
-
 	return (
-		<div style={style}>
+		<div css={containerCss}>
 			Thank you{maybeNameCommaAndSpacing}for subscribing to the digital edition
 		</div>
 	);

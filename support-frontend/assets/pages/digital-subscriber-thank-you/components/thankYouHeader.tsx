@@ -1,4 +1,3 @@
-import { from } from '@guardian/source-foundations';
 import DirectDebitMessage from 'pages/supporter-plus-thank-you/components/thankYouHeader/directDebitMessage';
 import {
 	header,
@@ -20,12 +19,7 @@ function ThankYouHeader({
 	return (
 		<header css={header}>
 			<h1 css={headerTitleText}>
-				<Heading
-					name={name}
-					style={{
-						fontSize: from.tablet ? '34px' : '24px',
-					}}
-				/>
+				<Heading name={name} />
 			</h1>
 			<p css={headerSupportingText}>
 				{showDirectDebitMessage && <DirectDebitMessage />}
