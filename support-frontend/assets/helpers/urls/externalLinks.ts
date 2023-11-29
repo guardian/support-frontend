@@ -125,7 +125,7 @@ const getProfileUrl = (path: string) => (returnUrl?: string | null) => {
 		'URL',
 		`https://profile.${getBaseDomain()}/${path}?returnUrl=${encodedReturn}`,
 	);
-	return encodedReturn;
+	return `https://profile.${getBaseDomain()}/${path}?returnUrl=${encodedReturn}`;
 };
 
 const getSignoutUrl = getProfileUrl('signout');
