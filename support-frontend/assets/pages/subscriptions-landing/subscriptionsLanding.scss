@@ -550,10 +550,6 @@
 			bottom: 0;
 		}
 
-		@include mq($from: wide) {
-			position: relative;
-		}
-
 		img {
 			width: 100%;
 			vertical-align: bottom;
