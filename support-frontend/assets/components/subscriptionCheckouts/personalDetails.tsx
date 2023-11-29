@@ -80,8 +80,6 @@ function SignedOutEmailFooter() {
 export default function PersonalDetails(props: PropTypes): JSX.Element {
 	const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		const currentUrl = window.location.href;
-		console.log('currentUrl', currentUrl);
 		props.signOut();
 	};
 
