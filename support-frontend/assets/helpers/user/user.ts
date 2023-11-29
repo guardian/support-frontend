@@ -51,6 +51,8 @@ const isPostDeployUser = (): boolean =>
 
 const signOut = (): void => {
 	window.location.href = getSignoutUrl();
+	console.log('\twindow.location.href', window.location.href);
+	console.log('getSignoutUrl()', getSignoutUrl());
 };
 
 const doesUserAppearToBeSignedIn = (): boolean =>
