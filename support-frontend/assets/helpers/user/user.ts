@@ -3,7 +3,6 @@ import { getGlobal, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import * as cookie from 'helpers/storage/cookie';
 import type { Option } from 'helpers/types/option';
 
-
 export type User = {
 	firstName: Option<string>;
 	lastName: Option<string>;
