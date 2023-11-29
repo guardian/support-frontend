@@ -50,7 +50,7 @@ const isPostDeployUser = (): boolean =>
 	cookie.get('_post_deploy_user') === 'true';
 
 const signOut = (): void => {
-	window.location.href = getSignoutUrl();
+	// window.location.href = getSignoutUrl();
 	console.log('\twindow.location.href', window.location.href);
 	console.log('getSignoutUrl()', getSignoutUrl());
 };
