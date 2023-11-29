@@ -35,8 +35,7 @@ test.describe("Sign up for a Recurring Contribution (Two-Step checkout)", () => 
         page,
         context,
         baseURL,
-        `/${testDetails.country?.toLowerCase() || "uk"}/contribute`,
-        testFirstName
+        `/${testDetails.country?.toLowerCase() || "uk"}/contribute`
       );
       await page.getByRole("tab").getByText(testDetails.frequency).click();
       await page.getByRole("button", { name: "Continue to checkout" }).click();
@@ -56,6 +55,7 @@ test.describe("Sign up for a Recurring Contribution (Two-Step checkout)", () => 
           break;
         case "PayPal":
           const popupPagePromise = page.waitForEvent("popup");
+          await page.locator("iframe[name^='xcomponent__ppbutton']").scrollIntoViewIfNeeded();
           await page
             .frameLocator("iframe[name^='xcomponent__ppbutton']")
             // this class gets added to the iframe body after the JavaScript has finished executing

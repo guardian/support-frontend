@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { email, firstName } from "./utils/users";
+import { email } from "./utils/users";
 import { checkRecaptcha } from "./utils/recaptcha";
 import { fillInCardDetails } from "./utils/cardDetails";
 import { fillInPayPalDetails } from "./utils/paypal";
@@ -26,7 +26,7 @@ test.describe("Sign up for a one-off contribution", () => {
       baseURL,
     }) => {
       const page = await context.newPage();
-      setupPage(page, context, baseURL, "/uk/contribute", firstName());
+      setupPage(page, context, baseURL, "/uk/contribute");
       await page.getByRole("tab").getByText("One-time").click();
       if (testDetails.customAmount) {
         await page.locator("label[for='amount-other']").click();

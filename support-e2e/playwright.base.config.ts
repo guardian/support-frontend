@@ -6,7 +6,6 @@ export const baseObject: PlaywrightTestConfig = {
 	testMatch: '**/*.test.ts',
 
 	/* Maximum time one test can run for. */
-	// timeout: 600 * 1000,
 	timeout: 120 * 1000,
 	expect: {
 		timeout: 90000,

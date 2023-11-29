@@ -82,7 +82,7 @@ test.describe("Sign up for a Guardian Weekly subscription", () => {
       const page = await context.newPage();
       const testFirstName = firstName();
       const testEmail = email();
-      setupPage(page, context, baseURL, "/uk/subscribe/weekly", testFirstName);
+      setupPage(page, context, baseURL, "/uk/subscribe/weekly");
       await page
         .locator(`a[aria-label='${testDetails.frequency}- Subscribe now']`)
         .click();
@@ -110,6 +110,7 @@ test.describe("Sign up for a Guardian Weekly subscription", () => {
           break;
         case "PayPal":
           const popupPagePromise = page.waitForEvent("popup");
+          await page.locator("iframe[name^='xcomponent__ppbutton']").scrollIntoViewIfNeeded();
           await page
             .frameLocator("iframe[name^='xcomponent__ppbutton']")
             // this class gets added to the iframe body after the JavaScript has finished executing
@@ -162,13 +163,7 @@ test.describe("Gifted subscriptions", () => {
       const testFirstName = firstName();
       const testLastName = lastName();
       const testEmail = email();
-      setupPage(
-        page,
-        context,
-        baseURL,
-        "/uk/subscribe/weekly/gift",
-        testFirstName
-      );
+      setupPage(page, context, baseURL, "/uk/subscribe/weekly/gift");
       await page
         .locator(`a[aria-label='${testDetails.frequency}- Subscribe now']`)
         .click();
@@ -219,6 +214,7 @@ test.describe("Gifted subscriptions", () => {
           break;
         case "PayPal":
           const popupPagePromise = page.waitForEvent("popup");
+          await page.locator("iframe[name^='xcomponent__ppbutton']").scrollIntoViewIfNeeded();
           await page
             .frameLocator("iframe[name^='xcomponent__ppbutton']")
             // this class gets added to the iframe body after the JavaScript has finished executing

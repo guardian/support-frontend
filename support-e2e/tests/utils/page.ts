@@ -6,10 +6,9 @@ export const setupPage = async (
   context: BrowserContext,
   baseURL: string = "https://support.theguardian.com",
   pathName: string,
-  cookieUserName: string
 ) => {
   const pageUrl = `${baseURL}${pathName}`;
   const domain = new URL(pageUrl).hostname;
-  await setTestCookies(context, cookieUserName, domain);
+  await setTestCookies(context, "SupportPostDeployTestF", domain);
   await page.goto(pageUrl);
 };

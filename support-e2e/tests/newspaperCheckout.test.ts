@@ -74,13 +74,7 @@ test.describe("Sign up newspaper subscription", () => {
       const page = await context.newPage();
       const testFirstName = firstName();
       const testEmail = email();
-      setupPage(
-        page,
-        context,
-        baseURL,
-        "/uk/subscribe/paper/delivery",
-        testFirstName
-      );
+      setupPage(page, context, baseURL, "/uk/subscribe/paper/delivery");
       await page
         .locator(`a[aria-label='${testDetails.frequency}- Subscribe']`)
         .click();
@@ -109,6 +103,7 @@ test.describe("Sign up newspaper subscription", () => {
           break;
         case "Paypal":
           const popupPagePromise = page.waitForEvent("popup");
+          await page.locator("iframe[name^='xcomponent__ppbutton']").scrollIntoViewIfNeeded();
           await page
             .frameLocator("iframe[name^='xcomponent__ppbutton']")
             // this class gets added to the iframe body after the JavaScript has finished executing

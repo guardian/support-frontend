@@ -12,9 +12,7 @@ test.describe("Paper product page", () => {
     const pageUrl = `${baseUrlWithFallback}/uk/subscribe/paper`;
     const domain = new URL(pageUrl).hostname;
     await setTestCookies(context, firstName(), domain);
-    // await page.goto(pageUrl, { waitUntil: "networkidle" });
     await page.goto(pageUrl);
-
     await page.locator("id=qa-paper-subscriptions").isVisible();
     await expect(page).toHaveURL(/\/uk\/subscribe\/paper/);
     await page.close();
