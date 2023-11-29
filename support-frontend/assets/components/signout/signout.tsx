@@ -13,6 +13,7 @@ interface SignoutProps {
 }
 
 function Signout({ isSignedIn, returnUrl }: SignoutProps): JSX.Element | null {
+  console.log("isSignedIn, returnUrl",isSignedIn, returnUrl)
 	if (!isSignedIn) {
 		return null;
 	}

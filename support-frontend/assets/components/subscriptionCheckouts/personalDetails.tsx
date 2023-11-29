@@ -41,10 +41,11 @@ export type PropTypes = {
 };
 
 type SignedInEmailFooterTypes = {
-	handleSignOut: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleSignOut: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 function SignedInEmailFooter(props: SignedInEmailFooterTypes) {
+  console.log("I am inside  SignedInEmailFooter")
 	return (
 		<div css={marginBottom}>
 			<CheckoutExpander copy="Want to use a different email address?">
