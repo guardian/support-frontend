@@ -1,6 +1,6 @@
 import * as React from 'react';
 // constants
-import DigitalPackshot from 'components/packshots/digital-packshot';
+import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
 import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
 import PaperPackshot from 'components/packshots/paper-packshot';
 // images
@@ -81,7 +81,7 @@ const digital = (
 			modifierClasses: 'digital',
 		},
 	],
-	productImage: <DigitalPackshot />,
+	productImage: <DigitalPackshotHero />,
 	classModifier: ['subscriptions__digital'],
 	offer: priceCopy.discountCopy,
 });

@@ -213,6 +213,7 @@
 	position: relative;
 	overflow: hidden;
 	width: 30%;
+	//width: 100%;
 
 	@include mq($until: mobileMedium) {
 		width: 35%;
@@ -229,27 +230,12 @@
 .subscriptions__image-container.subscriptions__product--feature {
 	padding: 10px 10px 0 10px;
 	width: 100%;
-	margin-bottom: -40px;
+	margin-bottom: 0;
 
 	@include mq($from: tablet) {
 		position: relative;
-		right: -15px;
 		width: 50%;
 		padding: 0;
-	}
-
-	@media (min-width: 881px) {
-		bottom: 0;
-	}
-
-	// WHY DO WE DO THIS?
-	@include mq($from: desktop) {
-		right: -50px;
-	}
-
-	// WHY DO WE DO THIS?
-	@include mq($from: leftCol) {
-		right: -80px;
 	}
 }
 
@@ -555,6 +541,24 @@
 .subscriptions__digital.subscriptions__product {
 	color: gu-colour(neutral-100);
 	background-color: #052962;
+
+	.subscriptions__digital-feature-packshot {
+		width: 100%;
+
+		@include mq($from: tablet) {
+			position: absolute;
+			bottom: 0;
+		}
+
+		@include mq($from: wide) {
+			position: relative;
+		}
+
+		img {
+			width: 100%;
+			vertical-align: bottom;
+		}
+	}
 }
 
 /****************** guardian weekly ********************/
