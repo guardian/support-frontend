@@ -45,7 +45,6 @@ type SignedInEmailFooterTypes = {
 };
 
 function SignedInEmailFooter(props: SignedInEmailFooterTypes) {
-	console.log('I am inside  SignedInEmailFooter');
 	return (
 		<div css={marginBottom}>
 			<CheckoutExpander copy="Want to use a different email address?">

@@ -13,9 +13,8 @@ interface SignoutProps {
 }
 
 function Signout({ isSignedIn, returnUrl }: SignoutProps): JSX.Element | null {
-	console.log('isSignedIn, returnUrl', isSignedIn, returnUrl);
 	if (!isSignedIn) {
-		return null;
+		return <a css={signOutStyles} href={window.location.href}></a>;
 	}
 
 	return (

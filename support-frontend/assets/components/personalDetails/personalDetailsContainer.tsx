@@ -73,9 +73,7 @@ export function PersonalDetailsContainer({
 		onFirstNameChange,
 		onLastNameChange,
 		errors,
-		signOutLink: (
-			<Signout isSignedIn={isSignedIn} returnUrl={window.location.href} />
-		),
+		signOutLink: <Signout isSignedIn={isSignedIn} />,
 		contributionState: (
 			<StateSelect
 				countryId={countryId}
