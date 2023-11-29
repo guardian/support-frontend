@@ -7,7 +7,7 @@ function DigitalPackshotShotHero(): JSX.Element {
 				sources={[
 					{
 						gridId: 'editionsPackshotMobile',
-						srcSizes: [500, 140],
+						srcSizes: [1000],
 						imgType: 'jpg',
 						sizes: '100vw',
 						media: '(max-width: 739px)',
