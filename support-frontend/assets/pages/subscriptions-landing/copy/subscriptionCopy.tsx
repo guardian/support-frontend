@@ -68,7 +68,8 @@ const digital = (
 ): ProductCopy => ({
 	title: 'The Guardian Digital Edition',
 	subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
-	description: 'Enjoy the Guardian and Observer newspaper on your screen.',
+	description:
+		'Keep informed on the day’s top stories with the Guardian digital edition. Read the headlines, along with your favourite political commentators, lifestyle columnists, sport pundits and more – in a daily, digestible read, across all your devices.',
 	buttons: [
 		{
 			ctaButtonText: 'Find out more',
