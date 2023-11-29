@@ -35,11 +35,11 @@ function Template(args: PropTypes) {
 }
 Template.args = {} as PropTypes;
 
-export const EditionsPackshot = Template.bind({});
-EditionsPackshot.args = {
+export const EditionsPackshotShort = Template.bind({});
+EditionsPackshotShort.args = {
 	sources: [
 		{
-			gridId: 'editionsPackshot',
+			gridId: 'editionsPackshotShort',
 			srcSizes: [500, 140],
 			imgType: 'png',
 			sizes: '(min-width: 740px) 500px, 140vw',
@@ -53,7 +53,7 @@ EditionsPackshot.args = {
 			media: '(min-width: 1140px)',
 		},
 	],
-	fallback: 'editionsPackshot',
+	fallback: 'editionsPackshotShort',
 	fallbackSize: 500,
 	altText: '',
 	fallbackImgType: 'png',
