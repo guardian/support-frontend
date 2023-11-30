@@ -105,7 +105,9 @@ export function SupporterPlusLandingPage({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/kindle',
 	};
-	const heading = <LandingPageHeading />;
+	const heading = (
+		<LandingPageHeading heading="Under no one’s thumb but yours" />
+	);
 
 	useEffect(() => {
 		if (paymentComplete) {
@@ -147,9 +149,10 @@ export function SupporterPlusLandingPage({
 				}
 			>
 				<p css={subheading}>
-					As a reader-funded news organisation, we rely on your generosity.
-					Please subscribe today, so millions can benefit from quality reporting
-					on the events shaping our world.
+					Keep informed on the day’s top stories with the Guardian digital
+					edition. Read the headlines, along with your favourite political
+					commentators, lifestyle columnists, sport pundits and more - in a
+					daily, digestible read, across all your devices.
 				</p>
 			</CheckoutHeading>
 			<Container sideBorders backgroundColor={neutral[97]}>
