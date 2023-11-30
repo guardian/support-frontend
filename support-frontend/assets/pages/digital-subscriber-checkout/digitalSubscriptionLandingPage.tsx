@@ -40,7 +40,6 @@ import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getPaymentMethodButtons } from 'pages/digital-subscriber-checkout/paymentButtons';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
-import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentFailureMessage } from 'pages/supporter-plus-landing/components/paymentFailure';
 import { BillingPeriodSelector } from './components/billingPeriodSelector';
 import { PaymentTsAndCs } from './components/paymentTsAndCs';
@@ -214,8 +213,6 @@ export function SupporterPlusLandingPage({
 								<PaymentTsAndCs />
 							</BoxContents>
 						</Box>
-						<Divider size="full" cssOverrides={divider} />
-						<PatronsMessage countryGroupId={countryGroupId} />
 						<Divider
 							size="full"
 							cssOverrides={css`

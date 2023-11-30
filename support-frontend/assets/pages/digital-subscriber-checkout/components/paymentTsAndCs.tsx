@@ -1,14 +1,6 @@
 import { css } from '@emotion/react';
 import { neutral, textSans } from '@guardian/source-foundations';
 import { privacyLink } from 'helpers/legal';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import {
-	getSubscriptionPriceForBillingPeriod,
-	getSubscriptionPricesBeforeDiscount,
-} from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { manageSubsUrl } from 'helpers/urls/externalLinks';
 
 const marginTop = css`
 	margin-top: 4px;
@@ -22,19 +14,6 @@ const container = css`
 		color: ${neutral[20]};
 	}
 `;
-
-const manageMyAccount = (
-	<a
-		href={manageSubsUrl}
-		onClick={sendTrackingEventsOnClick({
-			id: 'checkout_my_account',
-			product: 'PremiumTier',
-			componentType: 'ACQUISITIONS_BUTTON',
-		})}
-	>
-		Manage My Account
-	</a>
-);
 
 const terms = (linkText: string) => (
 	<a href="https://www.theguardian.com/info/2014/aug/06/guardian-observer-digital-subscriptions-terms-conditions">
@@ -61,33 +40,14 @@ function TsAndCsFooterLinks() {
 }
 
 export function PaymentTsAndCs(): JSX.Element {
-	const priceString = useContributionsSelector(
-		getSubscriptionPriceForBillingPeriod,
-	);
-
-	const basePrices = useContributionsSelector(
-		getSubscriptionPricesBeforeDiscount,
-	);
-
-	const { billingPeriod } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
-
-	const frequency = (billingPeriod: BillingPeriod) =>
-		billingPeriod === 'Monthly' ? 'month' : 'year';
-
 	return (
 		<div css={container}>
-			Introductory and free trial offers for new subscribers only. Offers can
-			only be applied once. Payment taken after the first 14 day free trial at{' '}
-			{priceString} per {frequency(billingPeriod)} for the first year.
-			Thereafter, your subscription will auto-renew, and you will be charged,
-			each {frequency(billingPeriod)} at the full price of{' '}
-			{basePrices.monthlyPrice} per month or {basePrices.annualPrice} per year
-			unless you cancel. You can cancel at any time before your next renewal
-			date. Cancellation will take effect at the end of your current
-			subscription {frequency(billingPeriod)} . To cancel, go to{' '}
-			{manageMyAccount} or see our {terms('Terms')}.
+			Payment taken after the first 14 day free trial. At the end of the free
+			trial period your subscription will auto-renew, and you will be charged,
+			each month at the full price of £14.99 per month or £149 per year unless
+			you cancel. You can cancel at any time before your next renewal date.
+			Cancellation will take effect at the end of your current subscription
+			month. To cancel, go to Manage My Account or see our {terms('Terms')}.
 			<TsAndCsFooterLinks />
 		</div>
 	);
