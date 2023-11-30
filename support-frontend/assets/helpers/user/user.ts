@@ -2,6 +2,7 @@
 import { getGlobal, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import * as cookie from 'helpers/storage/cookie';
 import type { Option } from 'helpers/types/option';
+import { getSignoutUrl } from '../urls/externalLinks';
 
 export type User = {
 	firstName: Option<string>;
@@ -49,8 +50,7 @@ const isPostDeployUser = (): boolean =>
 	cookie.get('_post_deploy_user') === 'true';
 
 const signOut = (): void => {
-	window.location.href =
-		'https://support.code.dev-theguardian.com/subscribe/paper/checkout?promoCode=NATIONAL-TEST&fulfilment=HomeDelivery&product=Everyday';
+	window.location.href = getSignoutUrl();
 };
 
 const doesUserAppearToBeSignedIn = (): boolean =>
