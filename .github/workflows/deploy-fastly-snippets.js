@@ -60,6 +60,16 @@ const snippets = [
     name: "support-frontend - gu_geo_country cookie deliver",
     type: "deliver",
   },
+  {
+    file: "./support-frontend/conf/fastly-snippets/vat-compliance-redirects-recv.vcl",
+    name: "support-frontend - VAT compliance redirect",
+    type: "recv",
+  },
+  {
+    file: "./support-frontend/conf/fastly-snippets/vat-compliance-redirects-error.vcl",
+    name: "support-frontend - VAT compliance redirect error",
+    type: "error",
+  },
 ];
 
 /**
