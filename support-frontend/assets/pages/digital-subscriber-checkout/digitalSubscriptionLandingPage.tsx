@@ -154,9 +154,9 @@ export function SupporterPlusLandingPage({
 				heading={heading}
 				image={
 					<GridImage
-						gridId="supporterPlusLanding"
-						srcSizes={[500]}
-						sizes="500px"
+						gridId="digitalEditionLanding"
+						srcSizes={[420]}
+						sizes="420px"
 						imgType="png"
 						altText=""
 					/>
