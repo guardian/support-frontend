@@ -44,14 +44,12 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 	);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
-
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
 		csrf,
 		email,
 		false,
-		true,
 		campaignSettings?.campaignCode,
 	);
 

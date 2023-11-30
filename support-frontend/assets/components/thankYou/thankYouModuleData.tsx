@@ -53,7 +53,6 @@ export const getThankYouModuleData = (
 	csrf: CsrfState,
 	email: string,
 	isOneOff: boolean,
-	amountIsAboveThreshold: boolean,
 	campaignCode?: string,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
 	const { feedbackSurveyHasBeenCompleted, supportReminder } =
@@ -89,13 +88,9 @@ export const getThankYouModuleData = (
 			),
 			ctas: feedbackSurveyHasBeenCompleted ? null : (
 				<FeedbackCTA
-					feedbackSurveyLink={
-						isOneOff
-							? 'https://guardiannewsandmedia.formstack.com/forms/guardian_supporter_single'
-							: amountIsAboveThreshold
-							? 'https://guardiannewsandmedia.formstack.com/forms/guardian_supporter_above'
-							: 'https://guardiannewsandmedia.formstack.com/forms/guardian_supporter_below'
-					}
+					feedbackSurveyLink={`https://guardiannewsandmedia.formstack.com/forms/eoy_ny_23_24_${
+						isOneOff ? 'onetime' : 'recurring'
+					}`}
 				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
