@@ -159,7 +159,6 @@ export function SupporterPlusLandingPage({
 				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
 					<Column span={[0, 2, 5]}></Column>
 					<Column span={[1, 8, 7]}>
-						<Hide from="desktop">{heading}</Hide>
 						<Box>
 							<BillingPeriodSelector />
 						</Box>
