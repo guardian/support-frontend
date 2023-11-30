@@ -10,8 +10,6 @@ import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { getSubscriptionPrices } from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -30,7 +28,7 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		() => getCampaignSettings(campaignCode),
 		[],
 	);
-	const { countryId, countryGroupId, currencyId } = useContributionsSelector(
+	const { countryId, countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const { csrf } = useContributionsSelector((state) => state.page.checkoutForm);
@@ -43,24 +41,15 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		);
 	const paymentMethod = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.paymentMethod.name,
-	);
-	const { billingPeriod } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
-	const { monthlyPrice, annualPrice } = useContributionsSelector(
-		getSubscriptionPrices,
-	);
-	const contributionType = useContributionsSelector(getContributionType);
-	const isOneOff = contributionType === 'ONE_OFF';
-
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
 		csrf,
 		email,
-		isOneOff,
+		false,
+		true,
 		campaignSettings?.campaignCode,
 	);
 
@@ -75,7 +64,7 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 			!isNewAccount && !isSignedIn && email.length > 0,
 			'signIn',
 		),
-		'appDownloadKindle',
+		'appDownloadEditions',
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];
@@ -100,9 +89,6 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 						<ThankYouHeader
 							name={firstName}
 							showDirectDebitMessage={paymentMethod === DirectDebit}
-							billingPeriod={billingPeriod}
-							amount={billingPeriod === 'Monthly' ? monthlyPrice : annualPrice}
-							currency={currencyId}
 						/>
 					</div>
 
