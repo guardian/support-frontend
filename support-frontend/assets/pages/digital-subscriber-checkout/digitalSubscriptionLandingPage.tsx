@@ -175,7 +175,7 @@ export function SupporterPlusLandingPage({
 					<Column span={[1, 8, 7]}>
 						<Box>
 							<BillingPeriodSelector />
-							<p css={cancelAnytime}>Cancel or change at anytime</p>
+							<p css={cancelAnytime}>Cancel at anytime</p>
 						</Box>
 						<Box>
 							<BoxContents>
