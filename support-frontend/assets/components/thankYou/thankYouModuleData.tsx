@@ -88,11 +88,9 @@ export const getThankYouModuleData = (
 			),
 			ctas: feedbackSurveyHasBeenCompleted ? null : (
 				<FeedbackCTA
-					feedbackSurveyLink={
-						isOneOff
-							? 'https://guardiannewsandmedia.formstack.com/forms/eoy_ny_23_24_onetime'
-							: 'https://guardiannewsandmedia.formstack.com/forms/eoy_ny_23_24_recurring'
-					}
+					feedbackSurveyLink={`https://guardiannewsandmedia.formstack.com/forms/eoy_ny_23_24_${
+						isOneOff ? 'onetime' : 'recurring'
+					}`}
 				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,

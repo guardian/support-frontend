@@ -41,6 +41,7 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		);
 	const paymentMethod = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.paymentMethod.name,
+	);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const thankYouModuleData = getThankYouModuleData(
@@ -49,7 +50,6 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		csrf,
 		email,
 		false,
-		true,
 		campaignSettings?.campaignCode,
 	);
 
