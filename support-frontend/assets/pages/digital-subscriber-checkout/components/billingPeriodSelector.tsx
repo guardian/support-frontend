@@ -98,7 +98,7 @@ export function BillingPeriodSelector(): JSX.Element {
 	return (
 		<BoxContents>
 			<div css={headingContainer}>
-				<h2 css={heading}>Digital subscription</h2>
+				<h2 css={heading}>The Guardian Digital Edition</h2>
 				<p css={subheading}>Subscribe below to unlock the following benefits</p>
 			</div>
 			<div css={cardsContainer}>
