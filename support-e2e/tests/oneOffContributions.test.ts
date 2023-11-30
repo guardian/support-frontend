@@ -30,10 +30,10 @@ test.describe("Sign up for a one-off contribution", () => {
       await page.getByRole("tab").getByText("One-time").click();
       if (testDetails.customAmount) {
         await page.locator("label[for='amount-other']").click();
-        await page.getByLabel("Enter your amount").type("22.55");
+        await page.getByLabel("Enter your amount").fill("22.55");
       }
       await page.getByRole("button", { name: "Continue to checkout" }).click();
-      await page.getByLabel("Email address").type(email());
+      await page.getByLabel("Email address").fill(email());
       await page.getByRole("radio", { name: testDetails.paymentType }).click();
       switch (testDetails.paymentType) {
         case "Credit/Debit card":

@@ -8,9 +8,9 @@ export const fillInDirectDebitDetails = async (
     .getByLabel(
       pageType === "subscription" ? "Bank account holder name" : "Account name"
     )
-    .type("CP Scott");
-  await page.getByLabel("Sort code").type("200000");
-  await page.getByLabel("Account number").type("55779911");
+    .fill("CP Scott");
+  await page.getByLabel("Sort code").fill("200000");
+  await page.getByLabel("Account number").fill("55779911");
 
   await page
     .getByRole("checkbox", {

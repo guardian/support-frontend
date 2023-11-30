@@ -41,8 +41,8 @@ test.describe("Sign up for a Recurring Contribution (Two-Step checkout)", () => 
       await page.getByRole("button", { name: "Continue to checkout" }).click();
       await setTestUserDetails(page, testFirstName, testLastName, testEmail);
       if (testDetails.country === "US") {
-        await page.getByLabel("State").type("NY");
-        await page.getByLabel("ZIP code").type("90210");
+        await page.getByLabel("State").fill("NY");
+        await page.getByLabel("ZIP code").fill("90210");
       }
       await page.getByRole("radio", { name: testDetails.paymentType }).check();
       switch (testDetails.paymentType) {
