@@ -72,6 +72,21 @@ const subheading = css`
 	padding-right: ${space[2]}px;
 `;
 
+const cancelAnytime = css`
+	${textSans.xsmall()};
+	text-align: center;
+	color: ${neutral[20]};
+	margin-bottom: ${space[3]}px;
+	/* We use negative margin here as BillingPeriodSelector,
+	which this is below has a tonne of margin on it.
+	It felt better to do this than change that component
+	as it's used elsewhere. */
+	margin-top: -${space[4]}px;
+	${from.tablet} {
+		margin-top: -${space[4] * 2}px;
+	}
+`;
+
 export function SupporterPlusLandingPage({
 	thankYouRoute,
 }: {
@@ -161,6 +176,7 @@ export function SupporterPlusLandingPage({
 					<Column span={[1, 8, 7]}>
 						<Box>
 							<BillingPeriodSelector />
+							<p css={cancelAnytime}>Cancel or change at anytime</p>
 						</Box>
 						<Box>
 							<BoxContents>
