@@ -122,6 +122,6 @@ export const tests: Tests = {
 		omitCountries: countriesAffectedByVATStatus,
 		referrerControlled: false,
 		seed: 0,
-		targetPage: pageUrlRegexes.contributions.notUsLandingPage,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
 };

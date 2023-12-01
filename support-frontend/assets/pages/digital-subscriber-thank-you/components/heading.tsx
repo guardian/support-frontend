@@ -1,50 +1,25 @@
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { css } from '@emotion/react';
+import { from } from '@guardian/source-foundations';
 
 const MAX_DISPLAY_NAME_LENGTH = 10;
 
-interface HeadingProps {
+const containerCss = css`
+	font-size: 24px;
+	${from.tablet} {
+		font-size: 34px;
+	}
+`;
+
+interface HeadingProp {
 	name: string | null;
-	amount: string;
-	currency: IsoCurrency;
-	billingPeriod: BillingPeriod;
 }
 
-function Heading({ name, amount, billingPeriod }: HeadingProps): JSX.Element {
-	const maybeNameAndTrailingSpace: string =
-		name && name.length < MAX_DISPLAY_NAME_LENGTH ? `${name} ` : '';
-
-	if (!amount) {
-		return (
-			<div>
-				Thank you {maybeNameAndTrailingSpace}for supporting us with a Digital
-				Subscription ❤️
-			</div>
-		);
-	}
-
-	if (billingPeriod === 'Monthly') {
-		return (
-			<div>
-				Thank you {maybeNameAndTrailingSpace}for supporting us with {amount}{' '}
-				each month for your first year ❤️
-			</div>
-		);
-	}
-
-	if (billingPeriod === 'Annual') {
-		return (
-			<div>
-				Thank you {maybeNameAndTrailingSpace}for supporting us with {amount}{' '}
-				each year ❤️
-			</div>
-		);
-	}
-
+function Heading({ name }: HeadingProp): JSX.Element {
+	const maybeNameCommaAndSpacing: string =
+		name && name.length < MAX_DISPLAY_NAME_LENGTH ? `, ${name}, ` : ` `;
 	return (
-		<div>
-			Thank you {maybeNameAndTrailingSpace}for supporting us with a Digital
-			Subscription ❤️
+		<div css={containerCss}>
+			Thank you{maybeNameCommaAndSpacing}for subscribing to the digital edition
 		</div>
 	);
 }
