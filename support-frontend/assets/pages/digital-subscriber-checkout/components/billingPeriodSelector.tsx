@@ -59,6 +59,17 @@ const subheading = css`
 	${textSans.medium()};
 `;
 
+const choiceCardContainer = css`
+	div {
+		${from.mobileLandscape} {
+			column-gap: ${space[1]}px;
+		}
+		${from.tablet} {
+			column-gap: ${space[2]}px;
+		}
+	}
+`;
+
 const choiceCardWrapper = css`
 	width: 100%;
 `;
@@ -102,7 +113,10 @@ export function BillingPeriodSelector(): JSX.Element {
 				<p css={subheading}>Subscribe below to unlock the following benefits</p>
 			</div>
 			<div css={cardsContainer}>
-				<ChoiceCardGroup name="billingPeriod">
+				<ChoiceCardGroup
+					name="billingPeriod"
+					cssOverrides={choiceCardContainer}
+				>
 					<div css={choiceCardWrapper}>
 						<p css={offerText}>
 							{promotions.monthlyPrice?.discount?.amount
