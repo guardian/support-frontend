@@ -86,6 +86,14 @@ const cancelAnytime = css`
 	}
 `;
 
+const leftColImageEditions = css`
+	height: 129px;
+
+	img {
+		max-width: 100%;
+	}
+`;
+
 export function SupporterPlusLandingPage({
 	thankYouRoute,
 }: {
@@ -153,13 +161,15 @@ export function SupporterPlusLandingPage({
 			<CheckoutHeading
 				heading={heading}
 				image={
-					<GridImage
-						gridId="digitalEditionLanding"
-						srcSizes={[420]}
-						sizes="420px"
-						imgType="png"
-						altText=""
-					/>
+					<figure css={leftColImageEditions}>
+						<GridImage
+							gridId="digitalEditionLanding"
+							srcSizes={[420]}
+							sizes="420px"
+							imgType="png"
+							altText=""
+						/>
+					</figure>
 				}
 			>
 				<p css={subheading}>
