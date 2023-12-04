@@ -1,5 +1,5 @@
 import { isAnyOf } from '@reduxjs/toolkit';
-import { fromString } from 'helpers/internationalisation/country';
+import { Country } from 'helpers/internationalisation/helpers';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsStore';
 import { enableOrDisableForm } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';
@@ -31,7 +31,7 @@ export function addAddressSideEffects(
 	startListening({
 		matcher: shouldUpdateInternationalisation,
 		effect(action, listener) {
-			const country = fromString(action.payload);
+			const country = Country.fromString(action.payload);
 			const { productType } = listener.getState().page.checkoutForm.product;
 			const isSettingDeliveryAddress = setDeliveryCountry.match(action);
 

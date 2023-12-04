@@ -11,13 +11,13 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
-	detect,
 	EURCountries,
 	GBPCountries,
 	International,
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import { CountryGroup } from 'helpers/internationalisation/helpers';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';
@@ -35,7 +35,7 @@ import type {
 } from './weeklySubscriptionLandingProps';
 import { weeklyLandingProps } from './weeklySubscriptionLandingProps';
 
-const countryGroupId: CountryGroupId = detect();
+const countryGroupId: CountryGroupId = CountryGroup.detect();
 
 const reactElementId: Record<CountryGroupId, string> = {
 	GBPCountries: 'weekly-landing-page-uk',

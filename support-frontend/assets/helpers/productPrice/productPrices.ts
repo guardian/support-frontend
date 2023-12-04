@@ -5,11 +5,11 @@ import type {
 } from 'helpers/internationalisation/countryGroup';
 import {
 	countryGroups,
-	fromCountry,
 	GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { extendedGlyph, glyph } from 'helpers/internationalisation/currency';
+import { CountryGroup as CountryGroupHelper } from 'helpers/internationalisation/helpers';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -51,7 +51,7 @@ function getFirstValidPrice(
 }
 
 function getCountryGroup(country: IsoCountry): CountryGroup {
-	return countryGroups[fromCountry(country) ?? GBPCountries];
+	return countryGroups[CountryGroupHelper.fromCountry(country) ?? GBPCountries];
 }
 
 function getProductPrice(

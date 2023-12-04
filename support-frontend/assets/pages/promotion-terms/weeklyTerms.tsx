@@ -1,10 +1,8 @@
 import { SansParagraph } from 'components/text/text';
 import type { CountryGroupName } from 'helpers/internationalisation/countryGroup';
-import {
-	fromCountryGroupName,
-	International,
-} from 'helpers/internationalisation/countryGroup';
+import { International } from 'helpers/internationalisation/countryGroup';
 import { extendedGlyph } from 'helpers/internationalisation/currency';
+import { CountryGroup } from 'helpers/internationalisation/helpers';
 import {
 	Annual,
 	postIntroductorySixForSixBillingPeriod,
@@ -69,7 +67,7 @@ function getCountryPrice(
 	countryGroupName: CountryGroupName,
 	prices: CountryGroupPrices,
 ) {
-	const { currency } = fromCountryGroupName(countryGroupName);
+	const { currency } = CountryGroup.fromCountryGroupName(countryGroupName);
 	const currencyGlyph = extendedGlyph(currency);
 	const fulfilmentOption =
 		countryGroupName === International ? RestOfWorld : Domestic;

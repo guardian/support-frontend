@@ -3,7 +3,8 @@
 import { getQueryParameter } from 'helpers/urls/url';
 import type { IsoCountry } from './country';
 import type { CountryGroupId } from './countryGroup';
-import { countryGroups, fromCountry } from './countryGroup';
+import { countryGroups } from './countryGroup';
+import { CountryGroup } from './helpers';
 
 // ----- Types ----- //
 
@@ -121,7 +122,7 @@ function fromString(s: string): IsoCurrency | null | undefined {
 function currencyFromCountryCode(
 	countryCode: IsoCountry,
 ): IsoCurrency | null | undefined {
-	const countryGroupId = fromCountry(countryCode);
+	const countryGroupId = CountryGroup.fromCountry(countryCode);
 	return countryGroupId ? fromCountryGroupId(countryGroupId) : null;
 }
 

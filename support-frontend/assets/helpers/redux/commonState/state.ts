@@ -5,11 +5,10 @@ import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
+import { Country, CountryGroup } from 'helpers/internationalisation/helpers';
 import type {
 	Campaign,
 	ReferrerAcquisitionData,
@@ -44,7 +43,7 @@ export type CommonStateSetupData = {
 	amounts: SelectedAmountsVariant;
 };
 
-const countryGroupId = detectCountryGroup();
+const countryGroupId = CountryGroup.detect();
 
 export const initialCommonState: CommonState = {
 	campaign: null,
@@ -56,7 +55,7 @@ export const initialCommonState: CommonState = {
 	internationalisation: {
 		currencyId: detectCurrency(countryGroupId),
 		countryGroupId,
-		countryId: detectCountry(),
+		countryId: Country.detect(),
 		useLocalCurrency: false,
 		defaultCurrency: 'USD',
 	},

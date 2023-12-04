@@ -5,14 +5,17 @@ import Header from 'components/headers/header/header';
 import Page from 'components/page/page';
 import PageSection from 'components/pageSection/pageSection';
 import QuestionsContact from 'components/questionsContact/questionsContact';
-import { detect } from 'helpers/internationalisation/countryGroup';
+import { CountryGroup } from 'helpers/internationalisation/helpers';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 // ----- Page Startup ----- //
 setUpTrackingAndConsents();
 // ----- Render ----- //
 const content = (
-	<Page header={<Header countryGroupId={detect()} />} footer={<Footer />}>
+	<Page
+		header={<Header countryGroupId={CountryGroup.detect()} />}
+		footer={<Footer />}
+	>
 		<div className="paypal-error">
 			<PageSection modifierClass="paypal-error">
 				<h1 className="paypal-error__heading">Please try again</h1>

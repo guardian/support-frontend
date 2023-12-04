@@ -4,11 +4,10 @@ import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
+import { Country, CountryGroup } from 'helpers/internationalisation/helpers';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
 	getCampaign,
@@ -50,8 +49,8 @@ function buildInitialState(
 }
 
 export function getInitialState(): CommonState {
-	const countryId: IsoCountry = detectCountry();
-	const countryGroupId: CountryGroupId = detectCountryGroup();
+	const countryId: IsoCountry = Country.detect();
+	const countryGroupId: CountryGroupId = CountryGroup.detect();
 	const currencyId: IsoCurrency = detectCurrency(countryGroupId);
 	const settings = getSettings();
 	const { selectedAmountsVariant, amountsParticipation } =

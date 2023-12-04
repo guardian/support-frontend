@@ -2,9 +2,8 @@
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
+import { Country, CountryGroup } from 'helpers/internationalisation/helpers';
 import {
 	analyticsInitialisation,
 	consentInitialisation,
@@ -12,8 +11,8 @@ import {
 import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 
 function setUpTrackingAndConsents(): void {
-	const countryId: IsoCountry = detectCountry();
-	const countryGroupId: CountryGroupId = detectCountryGroup();
+	const countryId: IsoCountry = Country.detect();
+	const countryGroupId: CountryGroupId = CountryGroup.detect();
 	const participations: Participations = abTest.init(countryId, countryGroupId);
 	const acquisitionData = getReferrerAcquisitionData();
 	void consentInitialisation(countryId);

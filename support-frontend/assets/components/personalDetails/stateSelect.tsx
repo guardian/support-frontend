@@ -6,8 +6,8 @@ import {
 	caStates,
 	usStates,
 } from 'helpers/internationalisation/country';
-import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { CountryGroup } from 'helpers/internationalisation/helpers';
 import { shouldCollectStateForContributions } from 'helpers/internationalisation/shouldCollectStateForContribs';
 
 type StateSelectProps = {
@@ -37,7 +37,7 @@ export function StateSelect({
 	onStateChange,
 	error,
 }: StateSelectProps): JSX.Element | null {
-	const countryGroupId = fromCountry(countryId);
+	const countryGroupId = CountryGroup.fromCountry(countryId);
 	const statesList = (countryGroupId ? stateLists[countryGroupId] : {}) ?? {};
 	const stateDescriptor =
 		(countryGroupId ? stateDescriptors[countryGroupId] : 'State') ?? 'State';
