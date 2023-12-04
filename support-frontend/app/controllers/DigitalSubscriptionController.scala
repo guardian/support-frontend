@@ -89,7 +89,6 @@ class DigitalSubscriptionController(
             payPalConfigProvider.get(true),
             v2recaptchaConfigPublicKey,
             orderIsAGift,
-            noindex = true,
           ),
         )
       }
