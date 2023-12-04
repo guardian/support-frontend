@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { cmp } from '@guardian/consent-management-platform';
 import {
 	from,
 	palette,
@@ -7,12 +8,15 @@ import {
 	until,
 } from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
+import {
+	FooterLinks,
+	FooterWithContents,
+} from '@guardian/source-react-components-development-kitchen';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import Footer from 'components/footerCompliant/Footer';
 import GridImage from 'components/gridImage/gridImage';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
@@ -87,6 +91,30 @@ const leftColImageUnitedStates = css`
 		display: block;
 	}
 `;
+
+const links = [
+	{
+		href: 'https://www.theguardian.com/info/privacy',
+		text: 'Privacy policy',
+		isExternal: true,
+	},
+	{
+		text: 'Privacy settings',
+		onClick: () => {
+			cmp.showPrivacyManager();
+		},
+	},
+	{
+		href: 'https://www.theguardian.com/help/contact-us',
+		text: 'Contact us',
+		isExternal: true,
+	},
+	{
+		href: 'https://www.theguardian.com/help',
+		text: 'Help centre',
+		isExternal: true,
+	},
+];
 
 export function SupporterPlusCheckoutScaffold({
 	children,
@@ -164,7 +192,11 @@ export function SupporterPlusCheckoutScaffold({
 					{!isPaymentPage && <Nav {...countrySwitcherProps} />}
 				</>
 			}
-			footer={<Footer />}
+			footer={
+				<FooterWithContents>
+					<FooterLinks links={links}></FooterLinks>
+				</FooterWithContents>
+			}
 		>
 			<CheckoutHeading
 				heading={!isPaymentPage && heading}

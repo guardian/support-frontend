@@ -190,7 +190,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 		csrf,
 		email,
 		isOneOff,
-		amountIsAboveThreshold,
 		campaignSettings?.campaignCode,
 	);
 

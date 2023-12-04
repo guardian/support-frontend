@@ -212,6 +212,26 @@ class Application(
     )
   }
 
+  val ausMomentMapSocialImageUrl =
+    "https://i.guim.co.uk/img/media/3c2c30cccd48c91f55217bd0d961dbd20cf07274/0_0_1000_525/1000.png?quality=85&s=b1394cf888724cd40646850b807659f0"
+
+  def ausMomentMap(): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    Ok(
+      views.html.main(
+        title = "Guardian Supporters Map",
+        mainElement = assets.getSsrCacheContentsAsHtml("aus-moment-map", "aus-moment-map.html"),
+        mainJsBundle = Left(RefPath("ausMomentMap.js")),
+        mainStyleBundle = Left(RefPath("ausMomentMap.css")),
+        description = stringsConfig.contributionsLandingDescription,
+        canonicalLink = Some("https://support.theguardian.com/aus-map"),
+        shareImageUrl = Some(
+          ausMomentMapSocialImageUrl,
+        ),
+      )(),
+    ).withSettingsSurrogateKey
+  }
+
   def healthcheck: Action[AnyContent] = PrivateAction {
     Ok("healthy")
   }

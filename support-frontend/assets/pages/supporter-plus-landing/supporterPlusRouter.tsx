@@ -13,8 +13,8 @@ import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
-import { SupporterPlusInitialLandingPage } from './twoStepTest/firstStepLanding';
-import { SupporterPlusCheckout } from './twoStepTest/secondStepCheckout';
+import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
+import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
 
 if (!isDetailsSupported) {
 	polyfillDetails();
