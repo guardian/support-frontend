@@ -38,7 +38,6 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getPaymentMethodButtons } from 'pages/digital-subscriber-checkout/paymentButtons';
-import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
 import { PaymentFailureMessage } from 'pages/supporter-plus-landing/components/paymentFailure';
 import { BillingPeriodSelector } from './components/billingPeriodSelector';
@@ -164,7 +163,7 @@ export function SupporterPlusLandingPage({
 					<figure css={leftColImageEditions}>
 						<GridImage
 							gridId="digitalEditionLanding"
-							srcSizes={[420]}
+							srcSizes={[420, 840, 1680]}
 							sizes="420px"
 							imgType="png"
 							altText=""
@@ -223,14 +222,6 @@ export function SupporterPlusLandingPage({
 								<PaymentTsAndCs />
 							</BoxContents>
 						</Box>
-						<Divider
-							size="full"
-							cssOverrides={css`
-								max-width: 100%;
-								margin: ${space[4]}px 0 ${space[4]}px;
-							`}
-						/>
-						<GuardianTsAndCs />
 					</Column>
 				</Columns>
 			</Container>
