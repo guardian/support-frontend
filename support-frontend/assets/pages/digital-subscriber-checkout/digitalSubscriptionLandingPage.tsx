@@ -71,8 +71,8 @@ const subheading = css`
 `;
 
 const cancelAnytime = css`
-	${textSans.xsmall()};
-	color: ${neutral[20]};
+	${textSans.medium()};
+	color: ${neutral[7]};
 	margin-bottom: ${space[3]}px;
 	margin-left: ${space[5]}px;
 	font-weight: 800;
