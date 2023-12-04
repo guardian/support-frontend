@@ -27,5 +27,5 @@ if (
   client.geo.country_code == "SO" ||
   client.geo.country_code == "ZW"
 ) {
-  error 618;
+  error 618 "redirect";
 }

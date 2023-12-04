@@ -16,14 +16,8 @@ const snippets = [
     type: "recv",
   },
   {
-    file: "./support-frontend/conf/fastly-snippets/redirects-table-deliver.vcl",
-    name: "support-frontend - Redirects table deliver",
-    type: "deliver",
-  },
-  // redirects error
-  {
-    file: "./support-frontend/conf/fastly-snippets/redirects-error.vcl",
-    name: "support-frontend - Redirects error",
+    file: "./support-frontend/conf/fastly-snippets/redirects-table-error.vcl",
+    name: "support-frontend - Redirects table error",
     type: "error",
   },
   // Compliance redirect
@@ -33,9 +27,9 @@ const snippets = [
     type: "recv",
   },
   {
-    file: "./support-frontend/conf/fastly-snippets/compliance-redirect-deliver.vcl",
-    name: "support-frontend - Compliance redirect deliver",
-    type: "deliver",
+    file: "./support-frontend/conf/fastly-snippets/compliance-redirect-error.vcl",
+    name: "support-frontend - Compliance redirect error",
+    type: "error",
   },
   // Frontline redirect
   {
