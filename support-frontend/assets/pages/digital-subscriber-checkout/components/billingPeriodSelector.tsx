@@ -7,12 +7,7 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import {
-	ChoiceCard,
-	ChoiceCardGroup,
-	Hide,
-} from '@guardian/source-react-components';
-import { Divider } from '@guardian/source-react-components-development-kitchen';
+import { ChoiceCard, ChoiceCardGroup } from '@guardian/source-react-components';
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
 import { setBillingPeriod } from 'helpers/redux/checkout/product/actions';
@@ -25,7 +20,6 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { KindleSubscriptionBenefitsListContainer } from './subscriptionBenefitsListContainer';
 
 const cardsContainer = css`
 	position: relative;
@@ -74,11 +68,6 @@ const choiceCardWrapper = css`
 	width: 100%;
 `;
 
-const divider = css`
-	margin: 14px 0;
-	width: 100%;
-`;
-
 const offerText = css`
 	${textSans.xsmall({ fontWeight: 'bold' })}
 	color: ${brand[500]};
@@ -88,6 +77,10 @@ const offerDetails = css`
 	${textSans.xxsmall()};
 	color: #606060;
 	width: 90%;
+`;
+
+const boldText = css`
+	font-weight: bold;
 `;
 
 export function BillingPeriodSelector(): JSX.Element {
@@ -138,9 +131,6 @@ export function BillingPeriodSelector(): JSX.Element {
 							</p>
 						)}
 					</div>
-					<Hide from="tablet">
-						<Divider size="full" spaceAbove="tight" cssOverrides={divider} />
-					</Hide>
 					<div css={choiceCardWrapper}>
 						<p css={offerText}>
 							{promotions.annualPrice?.discount?.amount
@@ -164,10 +154,49 @@ export function BillingPeriodSelector(): JSX.Element {
 					</div>
 				</ChoiceCardGroup>
 			</div>
-			<KindleSubscriptionBenefitsListContainer
-				renderBenefitsList={(benefitsListProps) => (
-					<CheckoutBenefitsList {...benefitsListProps} />
-				)}
+
+			<CheckoutBenefitsList
+				title=""
+				buttonCopy={null}
+				handleButtonClick={() => undefined}
+				checkListData={[
+					{
+						isChecked: true,
+						text: (
+							<p>
+								<span css={boldText}>The Editions app. </span>Enjoy the Guardian
+								and Observer newspaper, reimagined for mobile and tablet
+							</p>
+						),
+					},
+					{
+						isChecked: true,
+						text: (
+							<p>
+								<span css={boldText}>Full access to our news app. </span>Read
+								our reporting on the go
+							</p>
+						),
+					},
+					{
+						isChecked: true,
+						text: (
+							<p>
+								<span css={boldText}>Ad-free reading. </span>Avoid ads on all
+								your devices
+							</p>
+						),
+					},
+					{
+						isChecked: true,
+						text: (
+							<p>
+								<span css={boldText}>Free 14 day trial. </span>Enjoy a free
+								trial of your subscription, before you pay
+							</p>
+						),
+					},
+				]}
 			/>
 		</BoxContents>
 	);
