@@ -13,4 +13,4 @@ function generateString(length:number) {
 
 export const firstName = () => `${generateString(5)}TestF`;
 export const lastName = () => `${generateString(5)}TestL`;
-export const email = () => `${uuidv4()}test@theguardian.com`;
+export const email = () => `test${uuidv4()}@theguardian.com`;
