@@ -1,3 +1,4 @@
+import { countriesAffectedByVATStatus } from 'helpers/internationalisation/country';
 import type { Tests } from './abtest';
 // ----- Tests ----- //
 // Note: When setting up a test to run on the contributions thank you page
@@ -12,6 +13,8 @@ export const pageUrlRegexes = {
 		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
 		auLandingPage: '/au/contribute(/.*)?$',
 		usLandingPage: '/us/contribute(/.*)?$',
+		allLandingPagesExecptSupportPlus:
+			'\bcontribute\b(?!.*acquisitionData.*abTest.*supporterPlusOnly.*variant.*variant)',
 	},
 	subscriptions: {
 		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
@@ -61,5 +64,23 @@ export const tests: Tests = {
 		referrerControlled: true,
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+	},
+	threeTierCheckout: {
+		variants: [
+			{
+				id: 'variant',
+			},
+		],
+		isActive: false,
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		omitCountries: countriesAffectedByVATStatus,
+		referrerControlled: false,
+		seed: 0,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesExecptSupportPlus,
 	},
 };
