@@ -1,8 +1,8 @@
 {
   "typescript.format.enable": false, // disable default VS code TS formatting in favour of ESLint
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    "source.fixAll.prettier": true
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.prettier": "explicit"
   },
   "eslint.workingDirectories": ["support-frontend"],
   "eslint.validate": ["typescript", "typescriptreact"],
