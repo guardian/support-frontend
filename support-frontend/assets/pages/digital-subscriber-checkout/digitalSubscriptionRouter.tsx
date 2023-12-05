@@ -63,7 +63,6 @@ const router = () => {
 								element={landingPage}
 							/>
 							<Route
-								// path={`/${countryId}/thankyou`}
 								path={`/${countryId}/subscribe/digitaledition/thankyou`}
 								element={<DigitalSubscriptionThankYou />}
 							/>
