@@ -15,6 +15,7 @@ import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterP
 import { setUpRedux } from './setup/setUpRedux';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
 import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
+import {ThreeTierLandingPage} from './twoStepPages/threeTierFirstStepLanding';
 
 if (!isDetailsSupported) {
 	polyfillDetails();
@@ -50,7 +51,14 @@ function ScrollToTop() {
 // ----- Render ----- //
 
 const router = () => {
-	const firstStepLandingPage = (
+	const {
+		common: { abParticipations },
+	} = store.getState();
+	const isInThreeTierCheckoutTest =
+		abParticipations.threeTierCheckout === 'variant';
+	const firstStepLandingPage = isInThreeTierCheckoutTest ? (
+		<ThreeTierLandingPage thankYouRoute={thankYouRoute} />
+	) : (
 		<SupporterPlusInitialLandingPage thankYouRoute={thankYouRoute} />
 	);
 
