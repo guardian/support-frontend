@@ -99,6 +99,7 @@
     "@types/dompurify": "^3.0.2",
     "@types/seedrandom": "^3.0.7",
     "@types/uuid": "^9.0.2",
+    "circular-dependency-plugin": "^5.2.2",
     "classnames": "^2.2.6",
     "dompurify": "^3.0.3",
     "emotion-theming": "^11.0.0",

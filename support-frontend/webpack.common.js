@@ -10,6 +10,7 @@ const { getClassName } = require('./scripts/css');
 const entryPoints = require('./webpack.entryPoints');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 
 const cssLoaders = [
 	{
@@ -83,6 +84,10 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 		}),
 		...(minimizeCss ? [new CssMinimizerPlugin()] : []),
 		new CleanUpStatsPlugin(),
+		new CircularDependencyPlugin({
+			// exclude detection of files based on a RegExp
+			exclude: /a\.js|node_modules/,
+		}),
 	],
 
 	context: path.resolve(__dirname, 'assets'),
@@ -118,13 +123,13 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 				exclude: {
 					and: [/node_modules/],
 					not: [
-            /@guardian\/consent-management-platform/,
-            /@guardian\/libs/,
-            // we need to include this here to support Safari < v14 which doens't support private class fields
-            // used here: https://github.com/guardian/csnx/blob/e3678d2fffb206ec560891db8ff0ce8c47b05328/libs/%40guardian/source-foundations/src/accessibility/focus-style-manager.ts#L9
-            // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields
-            /@guardian\/source-foundations/
-          ],
+						/@guardian\/consent-management-platform/,
+						/@guardian\/libs/,
+						// we need to include this here to support Safari < v14 which doens't support private class fields
+						// used here: https://github.com/guardian/csnx/blob/e3678d2fffb206ec560891db8ff0ce8c47b05328/libs/%40guardian/source-foundations/src/accessibility/focus-style-manager.ts#L9
+						// see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields
+						/@guardian\/source-foundations/,
+					],
 				},
 				use: [
 					{
