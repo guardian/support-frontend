@@ -7,6 +7,7 @@ import headerWithCountrySwitcherContainer from 'components/headers/header/header
 import Block from 'components/page/block';
 import Page from 'components/page/page';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
+import { CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
@@ -17,7 +18,6 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { CountryGroup } from 'helpers/internationalisation/helpers';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { renderPage } from 'helpers/rendering/render';

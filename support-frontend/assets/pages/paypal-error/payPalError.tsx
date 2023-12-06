@@ -5,7 +5,7 @@ import Header from 'components/headers/header/header';
 import Page from 'components/page/page';
 import PageSection from 'components/pageSection/pageSection';
 import QuestionsContact from 'components/questionsContact/questionsContact';
-import { CountryGroup } from 'helpers/internationalisation/helpers';
+import { CountryGroup } from 'helpers/internationalisation';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
 // ----- Page Startup ----- //

@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 
 import type { JSDOM } from 'jsdom';
+import { CountryGroup } from '..';
 import {
 	AUDCountries,
 	EURCountries,
@@ -8,7 +9,6 @@ import {
 	International,
 	UnitedStates,
 } from '../countryGroup';
-import { CountryGroup } from '../helpers';
 
 // @ts-expect-error -- This is added to the global scope by the test setup
 const jsdom = global.jsdom as JSDOM;

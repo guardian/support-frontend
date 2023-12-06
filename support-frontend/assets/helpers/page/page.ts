@@ -1,9 +1,9 @@
 // ----- Imports ----- //
 import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
+import { Country, CountryGroup } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { Country, CountryGroup } from 'helpers/internationalisation/helpers';
 import {
 	analyticsInitialisation,
 	consentInitialisation,

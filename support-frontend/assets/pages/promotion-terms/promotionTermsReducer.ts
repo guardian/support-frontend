@@ -3,8 +3,8 @@ import {
 	getGlobal,
 	getProductPrices,
 } from 'helpers/globalsAndSwitches/globals';
+import { CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { CountryGroup } from 'helpers/internationalisation/helpers';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionTerms } from 'helpers/productPrice/promotions';
 import type { CommonState } from 'helpers/redux/commonState/state';

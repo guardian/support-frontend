@@ -8,13 +8,13 @@ import {
 import React from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
+import { Country } from 'helpers/internationalisation';
 import {
 	auStates,
 	caStates,
 	usStates,
 } from 'helpers/internationalisation/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { Country } from 'helpers/internationalisation/helpers';
 import type {
 	AddressFieldsState,
 	PostcodeFinderState,

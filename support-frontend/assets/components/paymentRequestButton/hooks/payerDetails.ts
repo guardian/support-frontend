@@ -2,7 +2,7 @@ import type {
 	PaymentMethod,
 	PaymentRequestPaymentMethodEvent,
 } from '@stripe/stripe-js';
-import { Country } from 'helpers/internationalisation/helpers';
+import { Country } from 'helpers/internationalisation';
 import {
 	setBillingCountry,
 	setBillingState,

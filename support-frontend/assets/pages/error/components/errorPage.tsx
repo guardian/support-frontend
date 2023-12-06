@@ -8,7 +8,7 @@ import Page from 'components/page/page';
 import PageSection from 'components/pageSection/pageSection';
 import Text, { LargeParagraph } from 'components/text/text';
 import '../error.scss';
-import { CountryGroup } from 'helpers/internationalisation/helpers';
+import { CountryGroup } from 'helpers/internationalisation';
 import { contributionsEmail } from 'helpers/legal';
 
 // ----- Types ----- //

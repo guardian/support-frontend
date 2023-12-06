@@ -1,9 +1,9 @@
 // ----- Imports ----- //
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { CountryGroup } from 'helpers/internationalisation/helpers';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';

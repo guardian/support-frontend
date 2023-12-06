@@ -3,11 +3,11 @@ import * as abTest from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
+import { Country, CountryGroup } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { detect as detectCurrency } from 'helpers/internationalisation/currency';
-import { Country, CountryGroup } from 'helpers/internationalisation/helpers';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import {
 	getCampaign,

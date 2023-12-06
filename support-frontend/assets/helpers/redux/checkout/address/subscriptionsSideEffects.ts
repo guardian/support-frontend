@@ -1,5 +1,5 @@
 import { isAnyOf } from '@reduxjs/toolkit';
-import { Country } from 'helpers/internationalisation/helpers';
+import { Country } from 'helpers/internationalisation';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import type { SubscriptionsStartListening } from 'helpers/redux/subscriptionsStore';
 import { enableOrDisableForm } from 'helpers/subscriptionsForms/checkoutFormIsSubmittableActions';

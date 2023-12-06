@@ -4,7 +4,7 @@ import {
 	getProductPrices,
 	getPromotionCopy,
 } from 'helpers/globalsAndSwitches/globals';
-import { Country, CountryGroup } from 'helpers/internationalisation/helpers';
+import { Country, CountryGroup } from 'helpers/internationalisation';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
 

@@ -4,7 +4,7 @@ import { getQueryParameter } from 'helpers/urls/url';
 import type { IsoCountry } from './country';
 import type { CountryGroupId } from './countryGroup';
 import { countryGroups } from './countryGroup';
-import { CountryGroup } from './helpers';
+import { CountryGroup } from '.';
 
 // ----- Types ----- //
 

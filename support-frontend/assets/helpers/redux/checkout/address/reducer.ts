@@ -5,8 +5,8 @@ import {
 	createSlice,
 } from '@reduxjs/toolkit';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import { Country } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { Country } from 'helpers/internationalisation/helpers';
 import { getSliceErrorsFromZodResult } from 'helpers/redux/utils/validation/errors';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
 import { removeError } from 'helpers/subscriptionsForms/validation';

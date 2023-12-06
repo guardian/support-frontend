@@ -1,3 +1,4 @@
+import { CountryGroup as CountryGroupHelper } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type {
 	CountryGroup,
@@ -9,7 +10,6 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { extendedGlyph, glyph } from 'helpers/internationalisation/currency';
-import { CountryGroup as CountryGroupHelper } from 'helpers/internationalisation/helpers';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';

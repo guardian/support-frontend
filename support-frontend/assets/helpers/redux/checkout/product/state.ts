@@ -5,8 +5,8 @@ import type {
 	SelectedAmounts,
 } from 'helpers/contributions';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
+import { Country } from 'helpers/internationalisation';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import { Country } from 'helpers/internationalisation/helpers';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
