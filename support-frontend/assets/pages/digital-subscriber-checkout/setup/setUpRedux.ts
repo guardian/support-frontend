@@ -1,15 +1,10 @@
 // ----- Imports ----- //
-import { getCampaignSettings } from 'helpers/campaigns/campaigns';
-import type {
-	ContributionType,
-	ContributionTypes,
-} from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import {
 	getAmountFromUrl,
 	getContributionTypeFromSession,
 	getContributionTypeFromUrl,
 	getPaymentMethodFromSession,
-	getValidContributionTypesFromUrlOrElse,
 	getValidPaymentMethods,
 } from 'helpers/forms/checkouts';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -17,6 +12,7 @@ import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { setBillingState } from 'helpers/redux/checkout/address/actions';
+import { getExistingPaymentMethods } from 'helpers/redux/checkout/payment/existingPaymentMethods/thunks';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import {
 	setEmail,
@@ -28,12 +24,12 @@ import {
 	setOtherAmount,
 	setProductType,
 } from 'helpers/redux/checkout/product/actions';
-import { setContributionTypes } from 'helpers/redux/commonState/actions';
 import type {
 	ContributionsDispatch,
 	ContributionsState,
 	ContributionsStore,
 } from 'helpers/redux/contributionsStore';
+import { getRecurringContributorStatus } from 'helpers/redux/user/thunks';
 import * as storage from 'helpers/storage/storage';
 import { setUpUserState } from 'helpers/user/reduxSetup';
 import { getUserStateField } from 'helpers/user/user';
@@ -63,28 +59,20 @@ function getInitialPaymentMethod(
 }
 
 function getInitialContributionType(
-	countryGroupId: CountryGroupId,
-	contributionTypes: ContributionTypes,
+	state: ContributionsState,
 ): ContributionType {
+	const { defaultContributionType, displayContributionType } =
+		state.common.amounts;
+
 	const contributionType =
 		getContributionTypeFromUrl() ?? getContributionTypeFromSession();
 
 	// make sure we don't select a contribution type which isn't on the page
-	if (
-		contributionType &&
-		contributionTypes[countryGroupId].find(
-			(ct) => ct.contributionType === contributionType,
-		)
-	) {
+	if (contributionType && displayContributionType.includes(contributionType)) {
 		return contributionType;
 	}
 
-	const defaultContributionType = contributionTypes[countryGroupId].find(
-		(ct) => ct.isDefault,
-	);
-	return defaultContributionType
-		? defaultContributionType.contributionType
-		: contributionTypes[countryGroupId][0].contributionType;
+	return defaultContributionType;
 }
 
 function selectInitialAmounts(
@@ -93,12 +81,13 @@ function selectInitialAmounts(
 	selectedContributionType: ContributionType,
 ) {
 	const { amounts } = state.common;
+	const { amountsCardData } = amounts;
 	const amountFromUrl = getAmountFromUrl();
 
 	const amountForSelectedContributionType = () => {
 		if (!amountFromUrl) {
 			return {
-				amount: amounts.amountsCardData[selectedContributionType].defaultAmount,
+				amount: amountsCardData[selectedContributionType].defaultAmount,
 			};
 		}
 
@@ -107,9 +96,7 @@ function selectInitialAmounts(
 		}
 
 		if (
-			amounts.amountsCardData[selectedContributionType].amounts.includes(
-				amountFromUrl,
-			)
+			amountsCardData[selectedContributionType].amounts.includes(amountFromUrl)
 		) {
 			return { amount: amountFromUrl };
 		}
@@ -122,9 +109,9 @@ function selectInitialAmounts(
 	};
 
 	const defaults = {
-		ONE_OFF: amounts.amountsCardData.ONE_OFF.defaultAmount,
-		MONTHLY: amounts.amountsCardData.MONTHLY.defaultAmount,
-		ANNUAL: amounts.amountsCardData.ANNUAL.defaultAmount,
+		ONE_OFF: amountsCardData.ONE_OFF.defaultAmount,
+		MONTHLY: amountsCardData.MONTHLY.defaultAmount,
+		ANNUAL: amountsCardData.ANNUAL.defaultAmount,
 	};
 
 	const { amount: selectedAmount, otherAmount } =
@@ -147,38 +134,22 @@ function selectInitialAmounts(
 	}
 }
 
-// Override the settings from the server if contributionTypes are defined in url params or campaign settings
-function getContributionTypes(state: ContributionsState): ContributionTypes {
-	const campaignSettings = getCampaignSettings();
-
-	if (campaignSettings?.contributionTypes) {
-		return campaignSettings.contributionTypes;
-	}
-
-	return getValidContributionTypesFromUrlOrElse(
-		state.common.settings.contributionTypes,
-	);
-}
-
 function selectInitialContributionTypeAndPaymentMethod(
 	state: ContributionsState,
 	dispatch: ContributionsDispatch,
-	contributionTypes: ContributionTypes,
 ): ContributionType {
 	const { countryId } = state.common.internationalisation;
 	const { switches } = state.common.settings;
 	const { countryGroupId } = state.common.internationalisation;
-	const contributionType = getInitialContributionType(
-		countryGroupId,
-		contributionTypes,
-	);
+
+	const contributionType = getInitialContributionType(state);
 	const paymentMethod = getInitialPaymentMethod(
 		contributionType,
 		countryId,
 		countryGroupId,
 		switches,
 	);
-	dispatch(setProductType('DigitalPack'));
+	dispatch(setProductType(contributionType));
 	dispatch(setPaymentMethod({ paymentMethod }));
 
 	return contributionType;
@@ -187,21 +158,19 @@ function selectInitialContributionTypeAndPaymentMethod(
 export function setUpRedux(store: ContributionsStore): void {
 	const dispatch = store.dispatch;
 	const state = store.getState();
-	// TODO - move these settings out of the redux store, as they only change once, upon initialisation
-	const contributionTypes = getContributionTypes(state);
-	dispatch(setContributionTypes(contributionTypes));
 
 	setUpUserState(dispatch);
+	void dispatch(getRecurringContributorStatus());
 
 	const sessionStorageEmail = storage.getSession('gu.email');
 	if (sessionStorageEmail) {
 		dispatch(setEmail(sessionStorageEmail));
 	}
 
+	void dispatch(getExistingPaymentMethods());
 	const contributionType = selectInitialContributionTypeAndPaymentMethod(
 		state,
 		dispatch,
-		contributionTypes,
 	);
 	selectInitialAmounts(state, dispatch, contributionType);
 
