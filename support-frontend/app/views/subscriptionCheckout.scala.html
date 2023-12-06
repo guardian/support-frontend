@@ -14,6 +14,8 @@
 @import views.EmptyDiv
 @import views.ReactDiv
 @import assets.StyleContent
+@import com.gu.support.promotions.PromotionCopy
+
 @(
   title: String,
   mainElement: ReactDiv,
@@ -23,6 +25,7 @@
   idUser: Option[IdUser],
   testMode: Boolean,
   productPrices: ProductPrices,
+  maybePromotionCopy: Option[PromotionCopy] = None,
   defaultStripeConfig: StripeConfig,
   testStripeConfig: StripeConfig,
   defaultPayPalConfig: PayPalConfig,
@@ -30,14 +33,15 @@
   v2recaptchaConfigPublicKey: String,
   orderIsAGift: Boolean = false,
   homeDeliveryPostcodes: Option[List[String]] = None,
-  noindex: Boolean = false
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
-  @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf, noindex = noindex) {
+  @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf) {
     <script type="text/javascript">
       window.guardian = window.guardian || {};
 
       window.guardian.productPrices = @{Html(outputJson(productPrices))}
+
+      window.guardian.promotionCopy = @{Html(outputJson(maybePromotionCopy))}
 
       window.guardian.orderIsAGift = @orderIsAGift
 

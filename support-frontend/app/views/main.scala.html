@@ -14,7 +14,6 @@
   csrf: Option[String] = None,
   shareImageUrl: Option[String] = None,
   shareUrl: Option[String] = None,
-  noindex: Boolean = false,
   serversideTests: Map[String,Participation] = Map()
 )(body: Html = Html(""))(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
@@ -56,10 +55,6 @@
 
     @canonicalLink.map { definedCanonicalLink =>
       <link rel="canonical" href="@definedCanonicalLink" />
-    }
-
-    @if(noindex) {
-      <meta name="robots" content="noindex" />
     }
 
     @for((lang, link) <- hrefLangLinks){

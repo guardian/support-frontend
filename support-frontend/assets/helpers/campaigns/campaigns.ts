@@ -8,6 +8,8 @@ type CampaignCopy = {
 
 export type CampaignSettings = {
 	campaignCode: string;
+	campaignPath: string;
+	tickerId: string;
 	copy?: (goalReached: boolean) => CampaignCopy;
 	formMessage?: JSX.Element;
 	termsAndConditions?: (
@@ -23,36 +25,34 @@ export type CampaignSettings = {
 	// If set, the form will be replaced with this if goal reached
 };
 
-const currentCampaignPath: string | null = 'us/contribute';
-
-const usEoy2021Copy = (): CampaignCopy => ({
-	headerCopy: "Join us in the fight for America's future",
-	contributeCopy:
-		'Quality, independent journalism that is freely accessible to all has never been more crucial. We’re raising $1.25m to fund our reporting in 2022. If you can, support the Guardian today.',
-});
-
-export const campaign: CampaignSettings = {
-	campaignCode: 'Us_eoy_2023',
-	copy: usEoy2021Copy,
-	tickerSettings: {
-		countType: 'money',
-		endType: 'unlimited',
-		headline: 'Help us reach our end-of-year goal',
+export const activeCampaigns: Record<string, CampaignSettings> = {
+	usEoy2023: {
+		campaignCode: 'usEoy2023',
+		campaignPath: 'us/contribute',
+		tickerId: 'US',
+		tickerSettings: {
+			countType: 'money',
+			endType: 'unlimited',
+			headline: 'Help us reach our end-of-year goal',
+		},
+	},
+	ausTicker2023: {
+		campaignCode: 'ausTicker2023',
+		campaignPath: 'au/contribute',
+		tickerId: 'AU',
+		tickerSettings: {
+			countType: 'money',
+			endType: 'unlimited',
+			headline: 'Help us reach our end-of-year goal',
+		},
 	},
 };
 
-function campaignEnabledForUser(
-	campaignCode: string | null | undefined,
-): boolean {
-	const { campaignSwitches } = window.guardian.settings.switches;
-	if (
-		currentCampaignPath &&
-		campaignSwitches.enableContributionsCampaign === 'On'
-	) {
-		return (
-			campaignSwitches.forceContributionsCampaign === 'On' ||
-			window.location.pathname.endsWith(`/${currentCampaignPath}`) ||
-			campaign.campaignCode === campaignCode
+function campaignEnabledForUser(campaignCode?: string): boolean {
+	if (campaignCode && isCampaignEnabled(campaignCode)) {
+		const matchingCampaign = activeCampaigns[campaignCode];
+		return window.location.pathname.endsWith(
+			`/${matchingCampaign.campaignPath}`,
 		);
 	}
 
@@ -62,14 +62,15 @@ function campaignEnabledForUser(
 export function getCampaignSettings(
 	campaignCode?: string,
 ): CampaignSettings | null {
-	if (campaignEnabledForUser(campaignCode)) {
-		return campaign;
+	if (campaignCode && campaignEnabledForUser(campaignCode)) {
+		return activeCampaigns[campaignCode];
 	}
 
 	return null;
 }
+
 export function getCampaignCode(campaignCode?: string): string | null {
-	const campaignSettings = getCampaignSettings(campaignCode);
+	const campaignSettings = getCampaignSettings(campaignCode ?? '');
 
 	if (campaignSettings) {
 		return campaignSettings.campaignCode;
@@ -79,9 +80,10 @@ export function getCampaignCode(campaignCode?: string): string | null {
 }
 
 export function isCampaignEnabled(campaignCode: string): boolean {
+	const { campaignSwitches } = window.guardian.settings.switches;
 	return (
 		window.location.hash ===
 			`#settings.switches.campaignSwitches.${campaignCode}=On` ||
-		window.guardian.settings.switches.campaignSwitches[campaignCode] === 'On'
+		campaignSwitches[campaignCode] === 'On'
 	);
 }

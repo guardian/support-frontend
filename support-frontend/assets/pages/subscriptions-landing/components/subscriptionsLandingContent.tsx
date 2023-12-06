@@ -23,7 +23,7 @@ function SubscriptionsLandingContent({
 		participations,
 	);
 
-	const blackFridayPeriod = new Date(2023, 11, 30);
+	const blackFridayPeriod = new Date(2023, 11, 1);
 	const isBlackFriday = new Date() < blackFridayPeriod;
 
 	const validBlackFridayProduct = (

@@ -79,6 +79,22 @@ object AwsCloudWatchMetricSetup {
       ),
     )
 
+  def getDeliveryAgentsFailure(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("GetDeliveryAgentsFailure"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
+  def getDeliveryAgentsSuccess(stage: Stage): MetricRequest =
+    getMetricRequest(
+      MetricName("GetDeliveryAgentsSuccess"),
+      Map(
+        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
+      ),
+    )
+
   private def getMetricRequest(
       name: MetricName,
       dimensions: Map[MetricDimensionName, MetricDimensionValue],

@@ -22,6 +22,7 @@ import scala.concurrent.ExecutionContext
 
 class DigitalSubscriptionController(
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    landingCopyProvider: LandingCopyProvider,
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
     testUsers: TestUserService,
@@ -45,7 +46,7 @@ class DigitalSubscriptionController(
     if (orderIsAGift) "subscribe/digital/gift" else "subscribe/digital",
   )
 
-  def kindleGeoRedirectWithPromoCode(): Action[AnyContent] = geoRedirect("kindle?promoCode=DLESNCWON")
+  def digitalEditionGeoRedirect(): Action[AnyContent] = geoRedirect("subscribe/digitaledition")
 
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = {
     MaybeAuthenticatedAction { implicit request =>
@@ -63,12 +64,14 @@ class DigitalSubscriptionController(
         val js = "digitalSubscriptionLandingPage.js"
         val css = "digitalSubscriptionLandingPage.css"
         val csrf = CSRF.getToken.value
-
         val testMode = testUsers.isTestUser(request)
         val promoCodes = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
         val v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey
         val readerType = if (orderIsAGift) Gift else Direct
-
+        val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(DigitalPack)
+        val maybePromotionCopy = {
+          landingCopyProvider.promotionCopy(promoCodes ++ defaultPromos, DigitalPack, "uk", orderIsAGift)
+        }
         Ok(
           views.html.subscriptionCheckout(
             title,
@@ -79,20 +82,20 @@ class DigitalSubscriptionController(
             request.user,
             testMode,
             priceSummaryServiceProvider.forUser(testMode).getPrices(DigitalPack, promoCodes, readerType),
+            maybePromotionCopy,
             stripeConfigProvider.get(),
             stripeConfigProvider.get(true),
             payPalConfigProvider.get(),
             payPalConfigProvider.get(true),
             v2recaptchaConfigPublicKey,
             orderIsAGift,
-            noindex = true,
           ),
         )
       }
     }
   }
 
-  private def getPaperHrefLangLinks(orderIsAGift: Boolean): Map[String, String] = {
+  private def getDigitalHrefLangLinks(orderIsAGift: Boolean): Map[String, String] = {
     Map(
       "en-us" -> buildCanonicalDigitalSubscriptionLink("us", orderIsAGift),
       "en-gb" -> buildCanonicalDigitalSubscriptionLink("uk", orderIsAGift),

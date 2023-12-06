@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import type { ContributionType } from 'helpers/contributions';
 import { getValidPaymentMethods } from 'helpers/forms/checkouts';
 import type { RecentlySignedInExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
@@ -45,15 +46,20 @@ function getExistingPaymentMethodProps(
 	};
 }
 
-function PaymentMethodSelectorContainer({
-	render,
-}: {
+type PaymentMethodSelectorContainerProps = {
 	render: (
 		paymentMethodSelectorProps: PaymentMethodSelectorProps,
 	) => JSX.Element;
-}): JSX.Element {
+	contributionTypeOverride?: ContributionType;
+};
+
+function PaymentMethodSelectorContainer({
+	render,
+	contributionTypeOverride,
+}: PaymentMethodSelectorContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
-	const contributionType = useContributionsSelector(getContributionType);
+	const contributionType =
+		contributionTypeOverride ?? useContributionsSelector(getContributionType);
 
 	const { countryId, countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,

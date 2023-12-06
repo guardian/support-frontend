@@ -36,13 +36,10 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
+import { getPaymentMethodButtons } from 'pages/digital-subscriber-checkout/paymentButtons';
 import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
-import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentFailureMessage } from 'pages/supporter-plus-landing/components/paymentFailure';
-import { getPaymentMethodButtons } from 'pages/supporter-plus-landing/paymentButtons';
 import { BillingPeriodSelector } from './components/billingPeriodSelector';
 import { PaymentTsAndCs } from './components/paymentTsAndCs';
 
@@ -73,6 +70,30 @@ const subheading = css`
 	padding-right: ${space[2]}px;
 `;
 
+const cancelAnytime = css`
+	${textSans.medium()};
+	color: ${neutral[7]};
+	margin-bottom: ${space[3]}px;
+	margin-left: ${space[5]}px;
+	font-weight: 800;
+	/* We use negative margin here as BillingPeriodSelector,
+	which this is below has a tonne of margin on it.
+	It felt better to do this than change that component
+	as it's used elsewhere. */
+	margin-top: -${space[4]}px;
+	${from.tablet} {
+		margin-top: -${space[4] * 2}px;
+	}
+`;
+
+const leftColImageEditions = css`
+	height: 129px;
+
+	img {
+		max-width: 100%;
+	}
+`;
+
 export function SupporterPlusLandingPage({
 	thankYouRoute,
 }: {
@@ -85,7 +106,7 @@ export function SupporterPlusLandingPage({
 		(state) => state.common.settings,
 	);
 
-	const contributionType = useContributionsSelector(getContributionType);
+	const contributionType = 'MONTHLY';
 
 	const { paymentComplete, isWaiting } = useContributionsSelector(
 		(state) => state.page.form,
@@ -106,7 +127,9 @@ export function SupporterPlusLandingPage({
 		selectedCountryGroup: countryGroupId,
 		subPath: '/kindle',
 	};
-	const heading = <LandingPageHeading />;
+	const heading = (
+		<LandingPageHeading heading="Under no one’s thumb but yours" />
+	);
 
 	useEffect(() => {
 		if (paymentComplete) {
@@ -138,33 +161,38 @@ export function SupporterPlusLandingPage({
 			<CheckoutHeading
 				heading={heading}
 				image={
-					<GridImage
-						gridId="supporterPlusLanding"
-						srcSizes={[500]}
-						sizes="500px"
-						imgType="png"
-						altText=""
-					/>
+					<figure css={leftColImageEditions}>
+						<GridImage
+							gridId="digitalEditionLanding"
+							srcSizes={[420, 840, 1680]}
+							sizes="420px"
+							imgType="png"
+							altText=""
+						/>
+					</figure>
 				}
 			>
 				<p css={subheading}>
-					As a reader-funded news organisation, we rely on your generosity.
-					Please subscribe today, so millions can benefit from quality reporting
-					on the events shaping our world.
+					Keep informed on the day’s top stories with the Guardian digital
+					edition. Read the headlines, along with your favourite political
+					commentators, lifestyle columnists, sport pundits and more - in a
+					daily, digestible read, across all your devices.
 				</p>
 			</CheckoutHeading>
 			<Container sideBorders backgroundColor={neutral[97]}>
 				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
 					<Column span={[0, 2, 5]}></Column>
 					<Column span={[1, 8, 7]}>
-						<Hide from="desktop">{heading}</Hide>
 						<Box>
 							<BillingPeriodSelector />
+							<p css={cancelAnytime}>Cancel anytime</p>
 						</Box>
 						<Box>
 							<BoxContents>
 								{/* The same Stripe provider *must* enclose the Stripe card form and payment button(s). */}
-								<ContributionsStripe>
+								<ContributionsStripe
+									contributionTypeOverride={contributionType}
+								>
 									<SecureTransactionIndicator align="center" />
 									<PersonalDetailsContainer
 										renderPersonalDetails={(personalDetailsProps) => (
@@ -176,6 +204,7 @@ export function SupporterPlusLandingPage({
 									/>
 									<Divider size="full" cssOverrides={divider} />
 									<PaymentMethodSelectorContainer
+										contributionTypeOverride={contributionType}
 										render={(paymentMethodSelectorProps) => (
 											<PaymentMethodSelector {...paymentMethodSelectorProps} />
 										)}
@@ -194,16 +223,6 @@ export function SupporterPlusLandingPage({
 								<PaymentTsAndCs />
 							</BoxContents>
 						</Box>
-						<Divider size="full" cssOverrides={divider} />
-						<PatronsMessage countryGroupId={countryGroupId} />
-						<Divider
-							size="full"
-							cssOverrides={css`
-								max-width: 100%;
-								margin: ${space[4]}px 0 ${space[4]}px;
-							`}
-						/>
-						<GuardianTsAndCs />
 					</Column>
 				</Columns>
 			</Container>

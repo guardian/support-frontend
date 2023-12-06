@@ -66,6 +66,7 @@ class WeeklySubscriptionFormController(
       maybeIdUser,
       testMode,
       priceSummaryServiceProvider.forUser(testMode).getPrices(GuardianWeekly, promoCodes, readerType),
+      maybePromotionCopy = None,
       stripeConfigProvider.get(),
       stripeConfigProvider.get(true),
       payPalConfigProvider.get(),
