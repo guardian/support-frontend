@@ -54,24 +54,14 @@ const router = () => {
 		<BrowserRouter>
 			<Provider store={store}>
 				<Routes>
-					{/* We're supporting both routes for now until we make `/kindle` obsolete */}
 					{countryIds.map((countryId) => (
 						<>
-							<Route path={`/${countryId}/kindle`} element={landingPage} />
 							<Route
-								path={`/${countryId}/subscribe/digital`}
+								path={`/${countryId}/subscribe/digitaledition`}
 								element={landingPage}
 							/>
-						</>
-					))}
-					{countryIds.map((countryId) => (
-						<>
 							<Route
-								path={`/${countryId}/kindle/thankyou`}
-								element={<DigitalSubscriptionThankYou />}
-							/>
-							<Route
-								path={`/${countryId}/thankyou`}
+								path={`/${countryId}/subscribe/digitaledition/thankyou`}
 								element={<DigitalSubscriptionThankYou />}
 							/>
 						</>

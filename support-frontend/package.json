@@ -81,7 +81,7 @@
   "dependencies": {
     "@babel/runtime": "^7.23.2",
     "@emotion/cache": "^10.0.29",
-    "@emotion/core": "^10.0.35",
+    "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.11.1",
     "@emotion/serialize": "^1.1.2",
     "@emotion/utils": "^1.1.0",
@@ -167,7 +167,7 @@
     "core-js": "^3.33.3",
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^4.2.2",
-    "cssnano": "^5.1.5",
+    "cssnano": "^6.0.1",
     "eslint": "^8.51.0",
     "eslint-import-resolver-typescript": "^3.6.0",
     "eslint-nibble": "^8.1.0",

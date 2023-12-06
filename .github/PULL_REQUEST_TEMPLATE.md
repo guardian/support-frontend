@@ -6,7 +6,6 @@ This pr adds a widget to the doogle so that we can buy a sub from any page in on
 For detailed changes see the inline self-review comments.
 -->
 
-
 [**Trello Card**](https://trello.com)
 
 ## Why are you doing this?
@@ -15,20 +14,23 @@ For detailed changes see the inline self-review comments.
 Remember, PRs are documentation for future contributors.
 -->
 
-## Is this an AB test?
-- [ ] Yes
-- [ ] No
+## How to test
 
-<!--
-Delete this section if it's not an AB test
--->
-If this is an AB test, PR reviewers should open and check the Optimize test.
-[**Optimize Link**](https://optimize.google.com/optimize/home)
+<!-- Provide instructions to help others verify the change. This could take the form of "On PROD, do X and witness Y. On this branch, do X and witness Z. " -->
+
+## How can we measure success?
+
+<!-- Do you expect errors to decrease? Do you expect user journeys to be simplified? What can be used to prove this? A filtered view of logs or analytics, etc? -->
+
+## Have we considered potential risks?
+
+<!-- What are the potential risks and how can they be mitigated? Does an error require an alarm? Should user help, infosec, or legal be informed of this change? Is private information guarded? Do we need to add anything in the backlog? -->
 
 ## Accessibility test checklist
- - [ ] [Tested with screen reader](https://webaim.org/articles/voiceover/)
- - [ ] [Navigable with keyboard](https://www.accessibility-developer-guide.com/knowledge/keyboard-only/browsing-websites/)
- - [ ] [Colour contrast passed](https://www.whocanuse.com/)
+
+-  [ ] [Tested with screen reader](https://github.com/guardian/accessibility/blob/main/people-and-technology/03-visual.md#screen-reader)
+-  [ ] [Navigable with keyboard](https://github.com/guardian/accessibility/blob/main/people-and-technology/02-physical.md#keyboard)
+-  [ ] [Colour contrast passed](https://github.com/guardian/accessibility/blob/main/people-and-technology/03-visual.md#contrast)
+-  [ ] [The change doesn't use only colour to convey meaning](https://github.com/guardian/accessibility/blob/main/people-and-technology/03-visual.md#use-of-colour)
 
 ## Screenshots
-

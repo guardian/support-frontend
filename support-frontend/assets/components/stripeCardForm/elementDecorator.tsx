@@ -123,7 +123,7 @@ export function ElementDecorator({
 				onFocus: () => setIsFocused(true),
 				onBlur: () => setIsFocused(false),
 			})}
-			{id === 'cardNumber' && (
+			{id === 'card-number' && (
 				<p css={mobileCreditDebitIcons}>
 					<BrandedIcons />
 				</p>
