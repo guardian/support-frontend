@@ -319,7 +319,7 @@ object DigitalPackValidation {
     def isValidPaidSub(paymentFields: PaymentFields) =
       SimpleCheckoutFormValidation.passes(createSupportWorkersRequest) and
         hasStateIfRequired(country, state) and
-        // Lines removed to facilitate purchase of digi subs via the S+ checkout for migrating Kindle customers
+        // Lines removed to facilitate purchase of digi subs via the S+ checkout
         // hasAddressLine1AndCity(billingAddress) and
         // hasPostcodeIfRequired(country, postCode) and
         // hasValidPostcodeLength(postCode, "Billing") and
