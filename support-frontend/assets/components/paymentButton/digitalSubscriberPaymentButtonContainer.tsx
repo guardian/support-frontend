@@ -22,7 +22,7 @@ function getButtonText(
 	}`;
 }
 
-export function KindleSubscriberPaymentButtonContainer({
+export function DigitalSubscriberPaymentButtonContainer({
 	onClick,
 	createButtonText = getButtonText,
 }: DefaultPaymentContainerProps): JSX.Element {

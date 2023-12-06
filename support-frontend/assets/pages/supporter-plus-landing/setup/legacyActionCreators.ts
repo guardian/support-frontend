@@ -147,7 +147,7 @@ function getBillingCountryAndState(state: ContributionsState): {
 	};
 }
 
-// This exists *only* to support the purchase of digi subs for migrating Kindle subscribers
+// This exists *only* to support the purchase of digi subs
 function getPromoCode(state: ContributionsState) {
 	const promotion = getSubscriptionPromotionForBillingPeriod(state);
 	if (promotion) {
