@@ -125,7 +125,7 @@ export function SupporterPlusLandingPage({
 			International,
 		],
 		selectedCountryGroup: countryGroupId,
-		subPath: '/kindle',
+		subPath: '/subscribe/digitaledition',
 	};
 	const heading = (
 		<LandingPageHeading heading="Under no one’s thumb but yours" />
