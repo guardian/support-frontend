@@ -40,6 +40,7 @@ import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getPaymentMethodButtons } from 'pages/digital-subscriber-checkout/paymentButtons';
 import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
 import { PaymentFailureMessage } from 'pages/supporter-plus-landing/components/paymentFailure';
+import { currencySignal } from 'product/ui';
 import { BillingPeriodSelector } from './components/billingPeriodSelector';
 import { PaymentTsAndCs } from './components/paymentTsAndCs';
 
@@ -172,6 +173,7 @@ export function SupporterPlusLandingPage({
 					</figure>
 				}
 			>
+				<p>{currencySignal.value}</p>
 				<p css={subheading}>
 					Keep informed on the day’s top stories with the Guardian digital
 					edition. Read the headlines, along with your favourite political

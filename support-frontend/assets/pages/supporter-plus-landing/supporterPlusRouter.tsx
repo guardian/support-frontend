@@ -12,6 +12,7 @@ import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
+import { setCurrencyFromUrl } from 'product/ui';
 import { setUpRedux } from './setup/setUpRedux';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
 import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
@@ -28,6 +29,7 @@ const countryGroupId: CountryGroupId = detect();
 const store = initReduxForContributions();
 
 setUpRedux(store);
+setCurrencyFromUrl();
 
 const reactElementId = `supporter-plus-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;

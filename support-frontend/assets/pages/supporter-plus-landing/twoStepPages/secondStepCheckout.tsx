@@ -28,6 +28,7 @@ import {
 } from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
+import { currencySignal } from 'product/ui';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
@@ -96,6 +97,7 @@ export function SupporterPlusCheckout({
 
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
+			<h1>Hello there {currencySignal.value}</h1>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					<ContributionsOrderSummaryContainer

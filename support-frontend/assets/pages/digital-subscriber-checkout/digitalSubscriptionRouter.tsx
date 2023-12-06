@@ -12,6 +12,7 @@ import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { SupporterPlusLandingPage } from 'pages/digital-subscriber-checkout/digitalSubscriptionLandingPage';
 import { DigitalSubscriptionThankYou } from 'pages/digital-subscriber-thank-you/digitalSubscriptionThankYou';
+import { setCurrencyFromUrl } from 'product/ui';
 import { setUpRedux } from './setup/setUpRedux';
 
 if (!isDetailsSupported) {
@@ -24,6 +25,7 @@ setUpTrackingAndConsents();
 
 const countryGroupId: CountryGroupId = detect();
 const store = initReduxForContributions();
+setCurrencyFromUrl();
 
 // Brute force override of the Sepa switch, as we can't accept Sepa for digi sub payments
 window.guardian.settings = {

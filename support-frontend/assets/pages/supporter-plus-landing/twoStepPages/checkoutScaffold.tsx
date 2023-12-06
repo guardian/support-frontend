@@ -35,6 +35,7 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { currencySignal } from 'product/ui';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { GuardianTsAndCs } from '../components/guardianTsAndCs';
 import { LandingPageHeading } from '../components/landingPageHeading';
@@ -234,11 +235,14 @@ export function SupporterPlusCheckoutScaffold({
 							support helps to sustain our journalism.
 						</p>
 					) : (
-						<p css={subHeading}>
-							As a reader-funded news organisation, we rely on your generosity.
-							Please give what you can, so millions can benefit from quality
-							reporting on the events shaping our world.
-						</p>
+						<>
+							<p>{currencySignal.value}</p>
+							<p css={subHeading}>
+								As a reader-funded news organisation, we rely on your
+								generosity. Please give what you can, so millions can benefit
+								from quality reporting on the events shaping our world.
+							</p>
+						</>
 					))}
 			</CheckoutHeading>
 
