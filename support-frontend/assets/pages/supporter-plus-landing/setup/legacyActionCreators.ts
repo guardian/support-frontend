@@ -162,7 +162,7 @@ function getProductFields(
 	state: ContributionsState,
 	amount: number,
 ): RegularPaymentRequest['product'] {
-	// This exists *only* to support the purchase of digi subs for migrating Kindle subscribers
+	// This exists *only* to support the purchase of digi subs
 	if (state.page.checkoutForm.product.productType === 'DigitalPack') {
 		return {
 			productType: 'DigitalPack',
