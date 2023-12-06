@@ -10,6 +10,7 @@ table support_frontend_redirects {
   "/ca/support": "/ca/contribute",
   "/showcase": "/contribute",
   "/uk": "/contribute",
+  "/digital": "/uk/subscribe/digitaledition",
   "/uk/digital": "/uk/subscribe/digitaledition",
   "/us/digital": "/us/subscribe/digitaledition",
   "/au/digital": "/au/subscribe/digitaledition",
