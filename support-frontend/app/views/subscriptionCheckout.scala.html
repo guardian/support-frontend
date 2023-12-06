@@ -33,10 +33,9 @@
   v2recaptchaConfigPublicKey: String,
   orderIsAGift: Boolean = false,
   homeDeliveryPostcodes: Option[List[String]] = None,
-  noindex: Boolean = false
 )(implicit assets: AssetsResolver, requestHeader: RequestHeader, settings: AllSettings)
 
-  @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf, noindex = noindex) {
+  @main(title = title, mainJsBundle = Left(RefPath(js)), mainElement = mainElement, mainStyleBundle = Left(RefPath(css)), csrf = csrf) {
     <script type="text/javascript">
       window.guardian = window.guardian || {};
 

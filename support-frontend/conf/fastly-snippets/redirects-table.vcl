@@ -1,4 +1,5 @@
-table redirects {
+# type: init
+table support_frontend_redirects {
   "/support": "/contribute",
   "/uk/support": "/uk/contribute",
   "/us/support": "/us/contribute",

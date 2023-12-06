@@ -47,8 +47,7 @@ function calcWeeklyAmount(
 }
 
 function getDynamicCopy(
-	isDynamicUs: boolean,
-	isDynamicGlobal: boolean,
+	isDynamic: boolean,
 	countryGroupId: CountryGroupId,
 	clampedAmount: number,
 ): { title: string; subtitle: string; paragraph: string } {
@@ -62,20 +61,11 @@ function getDynamicCopy(
 		},
 	).format(clampedAmount)}`;
 
-	if (isDynamicUs) {
-		return {
-			title: 'Make it annual',
-			subtitle: `change to ${clampedAmountToCurrenyStr} per year`,
-			paragraph:
-				'Regular, reliable funding from readers is vital for our future. Help protect our open, independent journalism long term.',
-		};
-	}
-
 	const title = 'Support us every year';
 	const paragraph =
 		'Funding Guardian journalism every year is great value on a weekly basis. Make a bigger impact today, and protect our independence long term. Please consider annual support.';
 
-	if (isDynamicGlobal) {
+	if (isDynamic) {
 		return {
 			title,
 			paragraph,
@@ -127,15 +117,9 @@ export function CheckoutNudgeContainer({
 		defaultAmount,
 	).toString();
 
-	const isDynamicUs = useContributionsSelector(
-		isUserInAbVariant('makeItAnnualNudge', 'variant'),
-	);
-
-	const isDynamicGlobal = useContributionsSelector(
+	const isDynamic = useContributionsSelector(
 		isUserInAbVariant('makeItAnnualNudgeGlobal', 'variant'),
 	);
-
-	const isDynamic = isDynamicUs || isDynamicGlobal;
 
 	const { otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
@@ -161,8 +145,7 @@ export function CheckoutNudgeContainer({
 	);
 
 	const { title, subtitle, paragraph } = getDynamicCopy(
-		isDynamicUs,
-		isDynamicGlobal,
+		isDynamic,
 		countryGroupId,
 		clampedAmount,
 	);

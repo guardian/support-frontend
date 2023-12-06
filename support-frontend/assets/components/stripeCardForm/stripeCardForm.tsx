@@ -41,7 +41,7 @@ export function StripeCardForm({
 		<div>
 			<Stack space={3}>
 				<ElementDecorator
-					id="cardNumber"
+					id="card-number"
 					text="Card number"
 					error={errors.cardNumber?.[0]}
 					renderElement={({ id, options, onFocus, onBlur }) => (
@@ -53,7 +53,7 @@ export function StripeCardForm({
 				/>
 				<div css={inlineContainer}>
 					<ElementDecorator
-						id="expiry"
+						id="card-expiry"
 						text="Expiry date"
 						error={errors.expiry?.[0]}
 						renderElement={({ id, options, onFocus, onBlur }) => (
