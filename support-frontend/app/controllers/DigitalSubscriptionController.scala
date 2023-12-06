@@ -46,7 +46,7 @@ class DigitalSubscriptionController(
     if (orderIsAGift) "subscribe/digital/gift" else "subscribe/digital",
   )
 
-  def kindleGeoRedirectWithPromoCode(): Action[AnyContent] = geoRedirect("kindle?promoCode=DLESNCWON")
+  def digitalEditionGeoRedirect(): Action[AnyContent] = geoRedirect("subscribe/digitaledition")
 
   def digital(countryCode: String, orderIsAGift: Boolean): Action[AnyContent] = {
     MaybeAuthenticatedAction { implicit request =>
@@ -89,7 +89,6 @@ class DigitalSubscriptionController(
             payPalConfigProvider.get(true),
             v2recaptchaConfigPublicKey,
             orderIsAGift,
-            noindex = true,
           ),
         )
       }

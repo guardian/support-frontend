@@ -1,29 +1,28 @@
 import * as React from 'react';
 // constants
-import GuardianWeeklyPackShot from 'components/packshots/guardian-weekly-packshot';
+import DigitalPackshotHero from 'components/packshots/digital-packshot-hero';
 import GuardianWeeklyPackShotHero from 'components/packshots/guardian-weekly-packshot-hero';
 import PaperPackshot from 'components/packshots/paper-packshot';
 // images
-import PrintFeaturePackshot from 'components/packshots/print-feature-packshot';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {
-	AUDCountries,
-	EURCountries,
-	GBPCountries,
-	NZDCountries,
-} from 'helpers/internationalisation/countryGroup';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { Monthly } from 'helpers/productPrice/billingPeriods';
 import {
+	DigitalPack,
 	fixDecimals,
 	GuardianWeekly,
 	Paper,
 	sendTrackingEventsOnClick,
 } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
-import { guardianWeeklyLanding, paperSubsUrl } from 'helpers/urls/routes';
+import {
+	digitalSubscriptionLanding,
+	guardianWeeklyLanding,
+	paperSubsUrl,
+} from 'helpers/urls/routes';
 import type { PriceCopy, PricingCopy } from '../subscriptionsLandingProps';
 
 // types
@@ -63,18 +62,34 @@ function getGuardianWeeklyOfferCopy(discountCopy: string) {
 	return '';
 }
 
-const getWeeklyImage = (isTop: boolean) => {
-	if (isTop) {
-		return <GuardianWeeklyPackShotHero />;
-	}
-
-	return <GuardianWeeklyPackShot />;
-};
+const digital = (
+	countryGroupId: CountryGroupId,
+	priceCopy: PriceCopy,
+): ProductCopy => ({
+	title: 'The Guardian Digital Edition',
+	subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
+	description:
+		'Keep informed on the day’s top stories with the Guardian digital edition. Read the headlines, along with your favourite political commentators, lifestyle columnists, sport pundits and more – in a daily, digestible read, across all your devices.',
+	buttons: [
+		{
+			ctaButtonText: 'Find out more',
+			link: digitalSubscriptionLanding(countryGroupId, false),
+			analyticsTracking: sendTrackingEventsOnClick({
+				id: 'digipack_cta',
+				product: 'DigitalPack',
+				componentType: 'ACQUISITIONS_BUTTON',
+			}),
+			modifierClasses: 'digital',
+		},
+	],
+	productImage: <DigitalPackshotHero />,
+	classModifier: ['subscriptions__digital'],
+	offer: priceCopy.discountCopy,
+});
 
 const guardianWeekly = (
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
-	isTop: boolean,
 	participations: Participations,
 ): ProductCopy => ({
 	title: 'Guardian Weekly',
@@ -104,23 +119,14 @@ const guardianWeekly = (
 			modifierClasses: 'guardian-weekly',
 		},
 	],
-	productImage: getWeeklyImage(isTop),
+	productImage: <GuardianWeeklyPackShotHero />,
 	participations: participations,
 	classModifier: ['subscriptions__guardian-weekly'],
 });
 
-const getPaperImage = (isTop: boolean) => {
-	if (isTop) {
-		return <PrintFeaturePackshot />;
-	}
-
-	return <PaperPackshot />;
-};
-
 const paper = (
 	countryGroupId: CountryGroupId,
 	priceCopy: PriceCopy,
-	isTop: boolean,
 ): ProductCopy => ({
 	title: 'Newspaper',
 	subtitle: `from ${getDisplayPrice(countryGroupId, priceCopy.price)}`,
@@ -137,7 +143,7 @@ const paper = (
 			}),
 		},
 	],
-	productImage: getPaperImage(isTop),
+	productImage: <PaperPackshot />,
 	offer: priceCopy.discountCopy,
 });
 
@@ -146,26 +152,13 @@ const getSubscriptionCopy = (
 	pricingCopy: PricingCopy,
 	participations: Participations,
 ): ProductCopy[] => {
-	const isRegionWeeklyFirst = [
-		GBPCountries,
-		EURCountries,
-		AUDCountries,
-		NZDCountries,
-	].includes(countryGroupId)
-		? true
-		: false;
 	const productcopy: ProductCopy[] = [
-		guardianWeekly(
-			countryGroupId,
-			pricingCopy[GuardianWeekly],
-			isRegionWeeklyFirst,
-			participations,
-		),
+		guardianWeekly(countryGroupId, pricingCopy[GuardianWeekly], participations),
 	];
 	if (countryGroupId === GBPCountries) {
-		productcopy.push(paper(countryGroupId, pricingCopy[Paper], false));
+		productcopy.push(paper(countryGroupId, pricingCopy[Paper]));
 	}
-
+	productcopy.push(digital(countryGroupId, pricingCopy[DigitalPack]));
 	return productcopy;
 };
 
