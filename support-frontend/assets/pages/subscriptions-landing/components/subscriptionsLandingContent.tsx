@@ -4,7 +4,7 @@ import type { SubscriptionsLandingPropTypes } from '../subscriptionsLandingProps
 import FeatureHeader from './featureHeader';
 import SubscriptionsProduct from './subscriptionsProduct';
 
-const isFeature = (index: number) => index === 0; // make the first card a feature
+const isFeature = (index: number) => index === 0 || index === 2; // make the first and third card a feature
 
 function SubscriptionsLandingContent({
 	countryGroupId,

@@ -26,7 +26,7 @@ const routes: Record<string, string> = {
 	payPalRestReturnURL: '/paypal/rest/return',
 	subscriptionCreate: '/subscribe/create',
 	subscriptionsLanding: '/subscribe',
-	digitalSubscriptionLanding: '/subscribe/digital',
+	digitalSubscriptionLanding: '/subscribe/digitaledition',
 	digitalSubscriptionLandingGift: '/subscribe/digital/gift',
 	paperSubscriptionLanding: '/subscribe/paper',
 	paperSubscriptionProductChoices: '/subscribe/paper#subscribe',
