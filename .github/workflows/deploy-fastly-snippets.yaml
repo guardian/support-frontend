@@ -10,9 +10,11 @@ on:
         type: boolean
         description: Delete all Fastly snippets before deploying
         required: true
+        default: true
       lock-and-activate-service:
         type: boolean
         description: Lock and activate the service version after snippets are deployed
+        required: true
         default: true
 jobs:
   deploy_fastly_snippets:
