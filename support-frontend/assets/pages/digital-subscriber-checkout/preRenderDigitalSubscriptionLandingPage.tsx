@@ -109,6 +109,6 @@ function PreRenderDigitalSubscriptionLandingPage(): JSX.Element {
 	);
 }
 
-export const digitalSubscriptionLanding = (
+export const digitalSubscriptionLandingPage = (
 	<PreRenderDigitalSubscriptionLandingPage />
 );
