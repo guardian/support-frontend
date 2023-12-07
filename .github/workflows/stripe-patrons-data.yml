@@ -20,6 +20,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
+      pull-requests: write
 
     name: stripe-patrons-data build
     runs-on: ubuntu-latest
@@ -64,6 +65,7 @@ jobs:
       - name: Upload to RiffRaff
         uses: guardian/actions-riff-raff@v3
         with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
           app: stripe-patrons-data
           buildNumberOffset: 3000
           config: |
