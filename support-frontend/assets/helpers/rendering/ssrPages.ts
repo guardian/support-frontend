@@ -8,7 +8,7 @@ export const pages = [
 		html: renderToString(supporterPlusLanding),
 	},
 	{
-		filename: 'digital-subscriber-checkout.html',
+		filename: 'digital-subscription-checkout-page.html',
 		html: renderToString(digitalSubscriptionLanding),
 	},
 ];

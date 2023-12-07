@@ -10,7 +10,7 @@ import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import { SupporterPlusLandingPage } from 'pages/digital-subscriber-checkout/digitalSubscriptionLandingPage';
+import { DigitalSubscriptionLandingPage } from 'pages/digital-subscriber-checkout/digitalSubscriptionLandingPage';
 import { DigitalSubscriptionThankYou } from 'pages/digital-subscriber-thank-you/digitalSubscriptionThankYou';
 import { setUpRedux } from './setup/setUpRedux';
 
@@ -49,7 +49,7 @@ const countryIds = Object.values(countryGroups).map(
 
 const router = () => {
 	const landingPage = (
-		<SupporterPlusLandingPage thankYouRoute={thankYouRoute} />
+		<DigitalSubscriptionLandingPage thankYouRoute={thankYouRoute} />
 	);
 
 	return (

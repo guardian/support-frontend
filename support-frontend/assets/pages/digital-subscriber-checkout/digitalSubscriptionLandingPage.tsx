@@ -94,7 +94,7 @@ const leftColImageEditions = css`
 	}
 `;
 
-export function SupporterPlusLandingPage({
+export function DigitalSubscriptionLandingPage({
 	thankYouRoute,
 }: {
 	thankYouRoute: string;
@@ -139,7 +139,7 @@ export function SupporterPlusLandingPage({
 
 	return (
 		<PageScaffold
-			id="supporter-plus-landing"
+			id="digital-subscription-checkout-page"
 			header={
 				<>
 					<Header>
