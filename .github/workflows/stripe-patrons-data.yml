@@ -62,7 +62,7 @@ jobs:
           sbt "project stripe-patrons-data" "test; assembly"
 
       - name: Upload to RiffRaff
-        uses: guardian/actions-riff-raff@v3
+        uses: guardian/actions-riff-raff@v2
         with:
           app: stripe-patrons-data
           buildNumberOffset: 3000
