@@ -26,7 +26,7 @@ jobs:
 
       - name: Install
         run: yarn
-      - uses: chromaui/action@v1
+      - uses: chromaui/action@v10
         with:
           workingDir: support-frontend
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
