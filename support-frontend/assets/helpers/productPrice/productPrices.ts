@@ -1,3 +1,4 @@
+import { CountryGroup as CountryGroupHelper } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type {
 	CountryGroup,
@@ -5,7 +6,6 @@ import type {
 } from 'helpers/internationalisation/countryGroup';
 import {
 	countryGroups,
-	fromCountry,
 	GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -51,7 +51,7 @@ function getFirstValidPrice(
 }
 
 function getCountryGroup(country: IsoCountry): CountryGroup {
-	return countryGroups[fromCountry(country) ?? GBPCountries];
+	return countryGroups[CountryGroupHelper.fromCountry(country) ?? GBPCountries];
 }
 
 function getProductPrice(

@@ -41,7 +41,7 @@ test.describe("Sign up for a Recurring Contribution (Two-Step checkout)", () => 
       await page.getByRole("button", { name: "Continue to checkout" }).click();
       await setTestUserDetails(page, testFirstName, testLastName, testEmail);
       if (testDetails.country === "US") {
-        await page.getByLabel("State").fill("NY");
+        await page.getByLabel("State").selectOption({ label: "New York" })
         await page.getByLabel("ZIP code").fill("90210");
       }
       await page.getByRole("radio", { name: testDetails.paymentType }).check();
@@ -71,7 +71,7 @@ test.describe("Sign up for a Recurring Contribution (Two-Step checkout)", () => 
         testDetails.paymentType === "Direct debit"
       ) {
         await checkRecaptcha(page);
-        await page.getByText(/Pay (£|\$)([0-9]+) per (month|year)/).click();
+        await page.getByText(/(Pay|Support us with) (£|\$)([0-9]+) per (month|year)/).click();
       }
       await expect(page).toHaveURL(
         `/${testDetails.country?.toLowerCase() || "uk"}/thankyou`,
