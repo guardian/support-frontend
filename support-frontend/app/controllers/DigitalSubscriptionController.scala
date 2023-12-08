@@ -72,10 +72,16 @@ class DigitalSubscriptionController(
         val maybePromotionCopy = {
           landingCopyProvider.promotionCopy(promoCodes ++ defaultPromos, DigitalPack, "uk", orderIsAGift)
         }
+
+        val mainElement = assets.getSsrCacheContentsAsHtml(
+          divId = s"digital-subscription-checkout-page-$countryCode",
+          file = "digital-subscription-checkout-page.html",
+        )
+
         Ok(
           views.html.subscriptionCheckout(
             title,
-            id,
+            mainElement,
             js,
             css,
             Some(csrf),
