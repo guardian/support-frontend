@@ -8,13 +8,13 @@ import {
 import React from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import { Country } from 'helpers/internationalisation';
 import {
 	auStates,
 	caStates,
-	fromString as isoCountryFromString,
 	usStates,
 } from 'helpers/internationalisation/country';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type {
 	AddressFieldsState,
 	PostcodeFinderState,
@@ -85,7 +85,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				label="Country"
 				value={props.country}
 				onChange={(e) => {
-					const isoCountry = isoCountryFromString(e.target.value);
+					const isoCountry = Country.fromString(e.target.value);
 					if (isoCountry) {
 						props.setCountry(isoCountry);
 					}

@@ -1,12 +1,12 @@
 import { Option, Select } from '@guardian/source-react-components';
 import type { ContributionType } from 'helpers/contributions';
+import { CountryGroup } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	auStates,
 	caStates,
 	usStates,
 } from 'helpers/internationalisation/country';
-import { fromCountry } from 'helpers/internationalisation/countryGroup';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { shouldCollectStateForContributions } from 'helpers/internationalisation/shouldCollectStateForContribs';
 
@@ -37,7 +37,7 @@ export function StateSelect({
 	onStateChange,
 	error,
 }: StateSelectProps): JSX.Element | null {
-	const countryGroupId = fromCountry(countryId);
+	const countryGroupId = CountryGroup.fromCountry(countryId);
 	const statesList = (countryGroupId ? stateLists[countryGroupId] : {}) ?? {};
 	const stateDescriptor =
 		(countryGroupId ? stateDescriptors[countryGroupId] : 'State') ?? 'State';

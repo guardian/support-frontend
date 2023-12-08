@@ -2,11 +2,7 @@ import type {
 	PaymentMethod,
 	PaymentRequestPaymentMethodEvent,
 } from '@stripe/stripe-js';
-import {
-	detect as detectCountry,
-	findIsoCountry,
-	stateProvinceFromString,
-} from 'helpers/internationalisation/country';
+import { Country } from 'helpers/internationalisation';
 import {
 	setBillingCountry,
 	setBillingState,
@@ -56,10 +52,10 @@ function dispatchPaymentMethodCountryAndState(
 ): void {
 	const { country, state } = billingDetails.address ?? {};
 
-	const validatedCountry = findIsoCountry(country ?? undefined);
+	const validatedCountry = Country.findIsoCountry(country ?? undefined);
 
 	if (validatedCountry) {
-		const validatedState = stateProvinceFromString(
+		const validatedState = Country.stateProvinceFromString(
 			validatedCountry,
 			state ?? undefined,
 		);
@@ -83,6 +79,6 @@ export function resetPayerDetails(dispatch: ContributionsDispatch): void {
 	dispatch(setEmail(storage.getSession('gu.email') ?? ''));
 	dispatch(setFirstName(''));
 	dispatch(setLastName(''));
-	dispatch(setBillingCountry(detectCountry()));
+	dispatch(setBillingCountry(Country.detect()));
 	dispatch(setBillingState(''));
 }
