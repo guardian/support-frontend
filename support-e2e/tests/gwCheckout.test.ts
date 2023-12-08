@@ -4,7 +4,7 @@ import { email, firstName, lastName } from "./utils/users";
 import { checkRecaptcha } from "./utils/recaptcha";
 import { fillInCardDetails } from "./utils/cardDetails";
 import { fillInDirectDebitDetails } from "./utils/directDebitDetails";
-import { fillInPayPalDetails } from "./utils/payPal";
+import { fillInPayPalDetails } from "./utils/paypal";
 import { setupPage } from "./utils/page";
 
 type PaymentType = "Credit/Debit card" | "Direct debit" | "PayPal";

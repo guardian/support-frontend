@@ -19,7 +19,7 @@ import { Container } from 'components/layout/container';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
-import { KindleSubscriberPaymentButtonContainer } from 'components/paymentButton/kindleSubscriberPaymentButtonContainer';
+import { DigitalSubscriberPaymentButtonContainer } from 'components/paymentButton/digitalSubscriberPaymentButtonContainer';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
 import { PaymentMethodSelector } from 'components/paymentMethodSelector/paymentMethodSelector';
 import PaymentMethodSelectorContainer from 'components/paymentMethodSelector/PaymentMethodSelectorContainer';
@@ -210,7 +210,7 @@ export function SupporterPlusLandingPage({
 										)}
 									/>
 									<PaymentButtonController
-										defaultContainer={KindleSubscriberPaymentButtonContainer}
+										defaultContainer={DigitalSubscriberPaymentButtonContainer}
 										paymentButtons={getPaymentMethodButtons(
 											contributionType,
 											switches,

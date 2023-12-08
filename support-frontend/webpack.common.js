@@ -86,7 +86,7 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 		new CleanUpStatsPlugin(),
 		new CircularDependencyPlugin({
 			// exclude detection of files based on a RegExp
-			exclude: /a\.js|node_modules/,
+			exclude: /node_modules/,
 		}),
 	],
 
