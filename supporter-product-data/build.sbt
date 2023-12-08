@@ -5,7 +5,7 @@ import sbt.Keys.libraryDependencies
 version := "0.1-SNAPSHOT"
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.4.13",
+  "ch.qos.logback" % "logback-classic" % "1.4.12",
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
