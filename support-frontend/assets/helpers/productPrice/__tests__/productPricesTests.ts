@@ -5,7 +5,6 @@ import type {
 } from 'helpers/productPrice/productPrices';
 import {
 	displayPrice,
-	finalPrice,
 	getCountryGroup,
 	getCurrency,
 	getFirstValidPrice,
@@ -13,6 +12,7 @@ import {
 	isNumeric,
 	showPrice,
 } from 'helpers/productPrice/productPrices';
+import { finalPrice } from 'helpers/productPrice/promotions';
 
 // ----- Tests ----- //
 jest.mock('ophan', () => () => ({}));

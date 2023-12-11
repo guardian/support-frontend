@@ -45,6 +45,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
 
     const deadLetterQueue = new Queue(this, `dead-letters-${appName}Queue`, {
       queueName: deadLetterQueueName,
+      retentionPeriod: Duration.days(14),
     });
 
     const queue = new Queue(this, `${appName}Queue`, {

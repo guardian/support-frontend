@@ -7,12 +7,10 @@ import { detect, glyph } from 'helpers/internationalisation/currency';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
 import {
 	getContributionType,
-	getSelectedAmount,
-} from 'helpers/redux/checkout/product/selectors/productType';
-import {
 	getMaximumContributionAmount,
 	getMinimumContributionAmount,
-} from 'helpers/redux/commonState/selectors';
+	getSelectedAmount,
+} from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
