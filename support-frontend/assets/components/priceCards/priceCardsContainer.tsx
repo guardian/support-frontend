@@ -6,8 +6,10 @@ import {
 	setSelectedAmount,
 	setSelectedAmountBeforeAmendment,
 } from 'helpers/redux/checkout/product/actions';
-import { getSelectedAmount } from 'helpers/redux/checkout/product/selectors/productType';
-import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
+import {
+	getMinimumContributionAmount,
+	getSelectedAmount,
+} from 'helpers/redux/checkout/product/selectors/productType';
 import { getOtherAmountErrors } from 'helpers/redux/selectors/formValidation/otherAmountValidation';
 import {
 	useContributionsDispatch,

@@ -24,12 +24,11 @@ import {
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import {
-	finalPrice,
 	getCurrency,
 	getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import { finalPrice, getAppliedPromo } from 'helpers/productPrice/promotions';
 import { Direct, Gift } from 'helpers/productPrice/readerType';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {

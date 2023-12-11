@@ -1,5 +1,5 @@
 import type { ContributionType, SelectedAmounts } from 'helpers/contributions';
-import { contributionTypes } from 'helpers/contributions';
+import { config, contributionTypes } from 'helpers/contributions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
 	DigitalPack,
@@ -7,7 +7,6 @@ import {
 	Paper,
 	PaperAndDigital,
 } from 'helpers/productPrice/subscriptions';
-// eslint-disable-next-line import/no-cycle -- these are quite tricky to unpick so we should come back to this
 import { getDefaultContributionType } from 'helpers/redux/commonState/selectors';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
@@ -68,4 +67,28 @@ export function getSelectedAmount(
 	defaultAmount: number,
 ): number | string {
 	return selectedAmounts[contributionType] || defaultAmount;
+}
+
+export function getMinimumContributionAmount(
+	contributionType?: ContributionType,
+) {
+	return (state: ContributionsState): number => {
+		const { countryGroupId } = state.common.internationalisation;
+		const { min } =
+			config[countryGroupId][contributionType ?? getContributionType(state)];
+
+		return min;
+	};
+}
+
+export function getMaximumContributionAmount(
+	contributionType?: ContributionType,
+) {
+	return (state: ContributionsState): number => {
+		const { countryGroupId } = state.common.internationalisation;
+		const { max } =
+			config[countryGroupId][contributionType ?? getContributionType(state)];
+
+		return max;
+	};
 }
