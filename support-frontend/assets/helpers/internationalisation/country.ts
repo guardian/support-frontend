@@ -640,6 +640,47 @@ const stripePaymentRequestAllowedCountries = [
 	'SK',
 	'US',
 ];
+
+const countriesAffectedByVATStatus: IsoCountry[] = [
+	'RS',
+	'EG',
+	'PK',
+	'MU',
+	'BH',
+	'MA',
+	'MC',
+	'OM',
+	'GE',
+	'NC',
+	'TZ',
+	'ZM',
+	'AL',
+	'BD',
+	'KZ',
+	'CW',
+	'DO',
+	'GP',
+	'MQ',
+	'PF',
+	'TN',
+	'BQ',
+	'AX',
+	'SN',
+	'AM',
+	'CM',
+	'AO',
+	'KG',
+	'GA',
+	'UZ',
+	'MD',
+	'DZ',
+	'TJ',
+	'LS',
+	'CG',
+	'TG',
+	'NE',
+];
+
 export const isInStripePaymentRequestAllowedCountries = (
 	country: IsoCountry,
 ): boolean => stripePaymentRequestAllowedCountries.includes(country);
@@ -652,4 +693,5 @@ export {
 	countries,
 	newspaperCountries,
 	isoCountrySet,
+	countriesAffectedByVATStatus,
 };

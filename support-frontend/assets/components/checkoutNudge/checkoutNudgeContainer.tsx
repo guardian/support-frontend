@@ -1,6 +1,7 @@
 import { useState } from 'preact/hooks';
 import type { ContributionType } from 'helpers/contributions';
 import { getConfigMinAmount } from 'helpers/contributions';
+import { Country } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
@@ -10,7 +11,6 @@ import {
 	getMinimumContributionAmount,
 	getSelectedAmount,
 } from 'helpers/redux/checkout/product/selectors/productType';
-import { isUserInAbVariant } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -95,7 +95,7 @@ export function CheckoutNudgeContainer({
 }: CheckoutNudgeContainerProps): JSX.Element | null {
 	const dispatch = useContributionsDispatch();
 	const contributionType = useContributionsSelector(getContributionType);
-	const { countryGroupId } = useContributionsSelector(
+	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 
@@ -115,9 +115,7 @@ export function CheckoutNudgeContainer({
 		defaultAmount,
 	).toString();
 
-	const isDynamic = useContributionsSelector(
-		isUserInAbVariant('makeItAnnualNudgeGlobal', 'variant'),
-	);
+	const isDynamic = Country.isVatAffected(countryId);
 
 	const { otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
