@@ -61,9 +61,12 @@ const countrySwitcherProps: CountryGroupSwitcherProps = {
 	subPath: '/contribute',
 };
 
-function PreRenderSupporterPlusLandingPage(): JSX.Element {
-	const heading = <LandingPageHeading />;
-
+export function PreRenderSupporterPlusLandingPage({
+	leftTitleText,
+}: {
+	leftTitleText: string;
+}): JSX.Element {
+	const heading = <LandingPageHeading heading={leftTitleText} />;
 	return (
 		<PageScaffold
 			id="supporter-plus-landing"
@@ -106,5 +109,3 @@ function PreRenderSupporterPlusLandingPage(): JSX.Element {
 		</PageScaffold>
 	);
 }
-
-export const supporterPlusLanding = <PreRenderSupporterPlusLandingPage />;

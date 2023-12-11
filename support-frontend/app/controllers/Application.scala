@@ -173,9 +173,13 @@ class Application(
     val classes = "gu-content--contribution-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
 
+    val htmlFile =
+      if (countryCode.equals("us")) "supporter-plus-landing-US.html"
+      else "supporter-plus-landing.html"
+
     val mainElement = assets.getSsrCacheContentsAsHtml(
       divId = s"supporter-plus-landing-page-$countryCode",
-      file = "supporter-plus-landing.html",
+      file = htmlFile,
       classes = Some(classes),
     )
 
