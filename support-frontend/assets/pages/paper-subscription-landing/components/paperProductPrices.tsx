@@ -11,12 +11,11 @@ import type {
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
 import {
-	finalPrice,
 	getDiscountVsRetail,
 	getProductPrice,
 	showPrice,
 } from 'helpers/productPrice/productPrices';
-import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import { finalPrice, getAppliedPromo } from 'helpers/productPrice/promotions';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	sendTrackingEventsOnClick,
