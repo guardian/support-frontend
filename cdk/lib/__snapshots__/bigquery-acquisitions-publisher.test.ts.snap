@@ -542,6 +542,7 @@ Logs are at https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-w
     "deadlettersbigqueryacquisitionspublisherQueue2B5FA5C1": {
       "DeletionPolicy": "Delete",
       "Properties": {
+        "MessageRetentionPeriod": 1209600,
         "QueueName": "dead-letters-bigquery-acquisitions-publisher-PROD",
         "Tags": [
           {
