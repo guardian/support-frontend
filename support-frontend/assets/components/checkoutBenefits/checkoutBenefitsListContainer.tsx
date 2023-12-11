@@ -3,9 +3,11 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { shouldHideBenefitsList } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
-import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import {
+	getContributionType,
+	getMinimumContributionAmount,
+} from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
-import { getMinimumContributionAmount } from 'helpers/redux/commonState/selectors';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
