@@ -40,6 +40,9 @@ Resources:
       TimeToLiveSpecification:
         AttributeName: "expiryDate"
         Enabled: true
+      Tags:
+        - Key: devx-backup-enabled
+          Value: true
 
   WriteCapacityScalableTarget:
     Condition: CreateProdResources
@@ -126,6 +129,9 @@ Resources:
       TimeToLiveSpecification:
         AttributeName: "expiryDate"
         Enabled: true
+      Tags:
+        - Key: devx-backup-enabled
+          Value: true
 Outputs:
   ProvisionedTableOutput:
     Condition: CreateProdResources
