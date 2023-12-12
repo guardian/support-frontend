@@ -7,11 +7,11 @@ import headerWithCountrySwitcherContainer from 'components/headers/header/header
 import Block from 'components/page/block';
 import Page from 'components/page/page';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
+import { CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
-	detect,
 	EURCountries,
 	GBPCountries,
 	International,
@@ -35,7 +35,7 @@ import type {
 } from './weeklySubscriptionLandingProps';
 import { weeklyLandingProps } from './weeklySubscriptionLandingProps';
 
-const countryGroupId: CountryGroupId = detect();
+const countryGroupId: CountryGroupId = CountryGroup.detect();
 
 const reactElementId: Record<CountryGroupId, string> = {
 	GBPCountries: 'weekly-landing-page-uk',

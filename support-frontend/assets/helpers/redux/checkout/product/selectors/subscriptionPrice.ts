@@ -1,10 +1,10 @@
+import { getProductPrice, showPrice } from 'helpers/productPrice/productPrices';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import {
 	finalPrice,
-	getProductPrice,
-	showPrice,
-} from 'helpers/productPrice/productPrices';
-import type { Promotion } from 'helpers/productPrice/promotions';
-import { getAppliedPromo, getPromotion } from 'helpers/productPrice/promotions';
+	getAppliedPromo,
+	getPromotion,
+} from 'helpers/productPrice/promotions';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 
 export function getSubscriptionPrices(

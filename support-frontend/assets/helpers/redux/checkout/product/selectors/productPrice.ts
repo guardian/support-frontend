@@ -1,9 +1,7 @@
 import { productOptionIfDigiAddOnChanged } from 'helpers/productPrice/productOptions';
 import type { ProductPrice } from 'helpers/productPrice/productPrices';
-import {
-	finalPrice,
-	getProductPrice,
-} from 'helpers/productPrice/productPrices';
+import { getProductPrice } from 'helpers/productPrice/productPrices';
+import { finalPrice } from 'helpers/productPrice/promotions';
 import { paperProductTypes } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { renderError } from 'helpers/rendering/render';

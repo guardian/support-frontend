@@ -1,11 +1,9 @@
 // ----- Imports ----- //
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {
-	countryGroups,
-	detect,
-} from 'helpers/internationalisation/countryGroup';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
 import { initReduxForContributions } from 'helpers/redux/contributionsStore';
@@ -22,7 +20,7 @@ setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
 
-const countryGroupId: CountryGroupId = detect();
+const countryGroupId: CountryGroupId = CountryGroup.detect();
 const store = initReduxForContributions();
 
 // Brute force override of the Sepa switch, as we can't accept Sepa for digi sub payments

@@ -19,12 +19,10 @@ import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import OfferStrapline from 'components/page/offerStrapline';
 import PageTitle from 'components/page/pageTitle';
+import { CountryGroup } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {
-	detect,
-	GBPCountries,
-} from 'helpers/internationalisation/countryGroup';
+import { GBPCountries } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import { promotionHTML } from 'helpers/productPrice/promotions';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
@@ -144,7 +142,9 @@ export function WeeklyHero({
 	promotionCopy,
 }: WeeklyHeroPropTypes): JSX.Element {
 	const defaultRoundelText = 'Save up to 35% a year';
-	const defaultTitle = orderIsAGift ? null : getRegionalCopyFor(detect());
+	const defaultTitle = orderIsAGift
+		? null
+		: getRegionalCopyFor(CountryGroup.detect());
 	const title = promotionCopy.title ?? defaultTitle;
 	const copy = getFirstParagraph(promotionCopy, orderIsAGift);
 	const roundelText = promotionCopy.roundel ?? defaultRoundelText;

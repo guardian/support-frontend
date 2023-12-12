@@ -1,3 +1,4 @@
+import { CountryGroup as CountryGroupHelper } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type {
 	CountryGroup,
@@ -5,7 +6,6 @@ import type {
 } from 'helpers/internationalisation/countryGroup';
 import {
 	countryGroups,
-	fromCountry,
 	GBPCountries,
 } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -16,8 +16,6 @@ import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
-// eslint-disable-next-line import/no-cycle -- these are quite tricky to unpick so we should come back to this
-import { applyDiscount, getPromotion } from 'helpers/productPrice/promotions';
 import { fixDecimals } from 'helpers/productPrice/subscriptions';
 
 // ----- Types ----- //
@@ -51,7 +49,7 @@ function getFirstValidPrice(
 }
 
 function getCountryGroup(country: IsoCountry): CountryGroup {
-	return countryGroups[fromCountry(country) ?? GBPCountries];
+	return countryGroups[CountryGroupHelper.fromCountry(country) ?? GBPCountries];
 }
 
 function getProductPrice(
@@ -73,31 +71,6 @@ function getProductPrice(
 	}
 
 	throw new Error('getProductPrice: product price unavailable');
-}
-
-function finalPrice(
-	productPrices: ProductPrices,
-	country: IsoCountry,
-	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
-	productOption: ProductOptions = NoProductOptions,
-): ProductPrice {
-	return applyDiscount(
-		getProductPrice(
-			productPrices,
-			country,
-			billingPeriod,
-			fulfilmentOption,
-			productOption,
-		),
-		getPromotion(
-			productPrices,
-			country,
-			billingPeriod,
-			fulfilmentOption,
-			productOption,
-		),
-	);
 }
 
 const showPrice = (p: ProductPrice, isExtended = true): string => {
@@ -146,7 +119,6 @@ const getDiscountVsRetail = (
 export {
 	getProductPrice,
 	getFirstValidPrice,
-	finalPrice,
 	getCurrency,
 	getCountryGroup,
 	showPrice,

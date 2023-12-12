@@ -2,9 +2,8 @@
 import type { Participations } from 'helpers/abTests/abtest';
 import { init as initAbTests } from 'helpers/abTests/abtest';
 import { getGlobal } from 'helpers/globalsAndSwitches/globals';
-import { detect as detectCountry } from 'helpers/internationalisation/country';
+import { Country, CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect as detectCountryGroup } from 'helpers/internationalisation/countryGroup';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
 import { getReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -20,10 +19,10 @@ export type SubscriptionsLandingPropTypes = {
 	pricingCopy: PricingCopy | null | undefined;
 	referrerAcquisitions: ReferrerAcquisitionData;
 };
-const countryGroupId = detectCountryGroup();
+const countryGroupId = CountryGroup.detect();
 export const subscriptionsLandingProps = (): SubscriptionsLandingPropTypes => ({
 	countryGroupId,
-	participations: initAbTests(detectCountry(), countryGroupId),
+	participations: initAbTests(Country.detect(), countryGroupId),
 	pricingCopy: getGlobal('pricingCopy'),
 	referrerAcquisitions: getReferrerAcquisitionData(),
 });

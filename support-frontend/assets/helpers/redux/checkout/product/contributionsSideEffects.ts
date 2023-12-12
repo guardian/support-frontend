@@ -1,10 +1,6 @@
 import { isAnyOf } from '@reduxjs/toolkit';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
-import {
-	getMaximumContributionAmount,
-	getMinimumContributionAmount,
-} from 'helpers/redux/commonState/selectors';
 import type { ContributionsStartListening } from 'helpers/redux/contributionsStore';
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -18,7 +14,11 @@ import {
 	validateOtherAmount,
 } from './actions';
 import { getContributionCartValueData } from './selectors/cartValue';
-import { isContribution } from './selectors/productType';
+import {
+	getMaximumContributionAmount,
+	getMinimumContributionAmount,
+	isContribution,
+} from './selectors/productType';
 
 const shouldSendEventContributionCartValue = isAnyOf(
 	setAllAmounts,
