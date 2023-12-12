@@ -115,7 +115,7 @@ export function CheckoutNudgeContainer({
 		defaultAmount,
 	).toString();
 
-	const isDynamic = Country.isVatAffected(countryId);
+	const isDynamic = !Country.isVatAffected(countryId);
 
 	const { otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
