@@ -136,6 +136,6 @@ Outputs:
   OnDemandTableOutput:
     Condition: CreateCodeResources
     Description: This Dynamo table is used to store rate plan information about supporters
-    Value: !GetAtt [ DevOrUatTable, "Arn" ]
+    Value: !GetAtt [ CodeTable, "Arn" ]
     Export:
       Name: !Sub ${AWS::StackName}-SupporterProductDataTable
