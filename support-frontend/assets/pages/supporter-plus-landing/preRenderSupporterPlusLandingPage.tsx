@@ -64,7 +64,7 @@ const countrySwitcherProps: CountryGroupSwitcherProps = {
 export function PreRenderSupporterPlusLandingPage({
 	leftTitleText,
 }: {
-	leftTitleText: string;
+	leftTitleText: string | JSX.Element;
 }): JSX.Element {
 	const heading = <LandingPageHeading heading={leftTitleText} />;
 	return (

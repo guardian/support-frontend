@@ -1,7 +1,14 @@
 import { PreRenderSupporterPlusLandingPage } from './preRenderSupporterPlusLandingPage';
 
 const leftTitleSupporterPlusROW = 'Support fearless, independent journalism';
-const leftTitleSupporterPlusUS = 'Make a\nyear-end gift\nto the Guardian';
+const leftTitleSupporterPlusUS = (
+	<>
+		Make a<br />
+		year-end gift
+		<br />
+		to the Guardian
+	</>
+);
 const leftTitleDigiSub = 'Under no one’s thumb but yours';
 
 export const supporterPlusLanding = (
