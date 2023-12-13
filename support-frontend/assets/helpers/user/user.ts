@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import { getGlobal, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import * as cookie from 'helpers/storage/cookie';
+import * as storage from 'helpers/storage/storage';
 import type { Option } from 'helpers/types/option';
 import { getSignoutUrl } from 'helpers/urls/externalLinks';
 
@@ -49,8 +50,20 @@ function getUserStateField(): string | undefined {
 const isPostDeployUser = (): boolean =>
 	cookie.get('_post_deploy_user') === 'true';
 
+const CURRENT_URL_QUERY_PARAMS_STORAGE_KEY = 'Current URL Query Parameters';
+
 const signOut = (): void => {
-	window.location.href = getSignoutUrl();
+	const currentUrl = window.location.href;
+	console.log('currentUrl', currentUrl);
+	const storedURL = storage.getSession(CURRENT_URL_QUERY_PARAMS_STORAGE_KEY);
+	console.log('storedURL', storedURL);
+	const deCodedReturn = decodeURIComponent(storedURL ?? '');
+	//TODO: Update query parameter field in session storage, based on the current URl query parameter
+	// window.location.href = getSignoutUrl();
+	window.location.href = deCodedReturn
+		? decodeURIComponent(storedURL ?? '')
+		: getSignoutUrl();
+	console.log('window.location.href', window.location.href);
 };
 
 const doesUserAppearToBeSignedIn = (): boolean =>

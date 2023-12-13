@@ -8,6 +8,7 @@ import type {
 } from 'helpers/productPrice/billingPeriods';
 import { promoQueryParam } from 'helpers/productPrice/promotions';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
+import * as storage from 'helpers/storage/storage';
 import type { Option } from 'helpers/types/option';
 import { getBaseDomain, getOrigin } from 'helpers/urls/url';
 
@@ -118,8 +119,11 @@ function getDailyEditionUrl(countryGroupId: CountryGroupId): string {
 	);
 }
 
+const CURRENT_URL_QUERY_PARAMS_STORAGE_KEY = 'Current URL Query Parameters';
+
 const getProfileUrl = (path: string) => (returnUrl?: string | null) => {
 	const encodedReturn = encodeURIComponent(returnUrl ?? window.location.href);
+	storage.setSession(CURRENT_URL_QUERY_PARAMS_STORAGE_KEY, encodedReturn);
 	return `https://profile.${getBaseDomain()}/${path}?returnUrl=${encodedReturn}`;
 };
 
