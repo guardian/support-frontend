@@ -149,7 +149,7 @@ Logs are at https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-w
             "Arn",
           ],
         },
-        "Runtime": "java11",
+        "Runtime": "java8.al2",
         "Tags": [
           {
             "Key": "App",

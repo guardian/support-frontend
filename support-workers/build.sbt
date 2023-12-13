@@ -8,9 +8,9 @@ scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-release:8", "-
 libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "2.2.3",
   "org.typelevel" %% "cats-core" % catsVersion,
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-  "ch.qos.logback" % "logback-classic" % "1.4.7",
-  "io.symphonia" % "lambda-logging" % "1.0.3",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
+  "ch.qos.logback" % "logback-classic" % "1.2.12",
+  "io.symphonia" % "lambda-logging" % "1.0.1",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-generic-extras" % "0.14.3",
   "io.circe" %% "circe-parser" % circeVersion,
-  "io.sentry" % "sentry-logback" % "6.19.0",
+  "io.sentry" % "sentry-logback" % "1.7.30",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
 )
