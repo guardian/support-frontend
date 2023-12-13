@@ -177,12 +177,12 @@ class CreateSubscriptionController(
     val maybeLoggedInIdentityIdAndEmail =
       request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
 
-    val userDesc = maybeLoggedInIdentityIdAndEmail match {
+    val (user, desc) = maybeLoggedInIdentityIdAndEmail match {
       case None => (request.body.email, "guest")
       case Some(idAndEmail) => (idAndEmail.primaryEmailAddress, "logged-in")
     }
     SafeLogger.info(
-      s"[CreateSubscriptionController] [${request.uuid}] [${userDesc._1}] [${userDesc._2}] [${request.body.product.describe}] $message",
+      s"[CreateSubscriptionController] [${request.uuid}] [$user] [$desc] [${request.body.product.describe}] $message",
     )
   }
 
