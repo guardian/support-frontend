@@ -28,9 +28,9 @@ class RecaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) {
       .withMethod("POST")
       .execute()
       .attemptT
-      .leftMap(err => {
+      .leftMap { err => 
         SafeLogger.error(scrub"Recaptcha failed on ${err.toString}")
         err.toString
-      })
+      }
       .subflatMap(resp => (resp.json).validate[RecaptchaResponse].asEither.leftMap(_.mkString(",")))
 }
