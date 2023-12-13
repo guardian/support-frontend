@@ -139,7 +139,7 @@ export function DigitalSubscriptionLandingPage({
 
 	return (
 		<PageScaffold
-			id="digital-subscription-checkout-page"
+			id="digital-subscription-landing-page"
 			header={
 				<>
 					<Header>

@@ -60,7 +60,7 @@ class DigitalSubscriptionController(
         } else {
           "Support the Guardian | The Guardian Digital Subscription"
         }
-        val id = EmptyDiv("digital-subscription-checkout-page-" + countryCode)
+
         val js = "digitalSubscriptionLandingPage.js"
         val css = "digitalSubscriptionLandingPage.css"
         val csrf = CSRF.getToken.value
