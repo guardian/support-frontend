@@ -20,7 +20,6 @@ export const header = css`
 export const headerTitleText = css`
 	${titlepiece.small()};
 	font-size: 24px;
-
 	${from.tablet} {
 		font-size: 40px;
 	}

@@ -18,9 +18,9 @@ export function AppDownloadBodyCopy(): JSX.Element {
 	);
 }
 
-export const appDownloadKindleHeader = 'Download the Guardian Editions app';
+export const appDownloadEditionsHeader = 'Download the Guardian Editions app';
 
-export function AppDownloadKindleBodyCopy(): JSX.Element {
+export function AppDownloadEditionsBodyCopy(): JSX.Element {
 	return (
 		<span css={downloadCopy}>
 			Unlock full access to our quality news app today

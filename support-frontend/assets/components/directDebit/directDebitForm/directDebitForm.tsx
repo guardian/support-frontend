@@ -148,11 +148,13 @@ function LegalNotice(props: { countryGroupId: CountryGroupId }) {
 			</p>
 			<p>
 				<strong>Direct Debit</strong>
-				The Guardian, Unit 16, Coalfield Way, Ashby Park, Ashby-De-La-Zouch,
-				LE65 1JT United Kingdom
+				<address>
+					The Guardian, Mease Mill, Westminster Industrial Estate, Measham,
+					Swadlincote, DE12 7DS
+				</address>
 				<br />
 				Tel: 0330 333 6767 (within UK). Lines are open 8am-8pm on weekdays,
-				8am-6pm at weekends (GMT/BST)
+				9am-6pm at weekends (GMT/BST)
 				<br />
 				<a href={contributionsEmail[props.countryGroupId]}>
 					{contributionsEmail[props.countryGroupId].replace('mailto:', '')}
