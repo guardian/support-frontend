@@ -16,7 +16,6 @@ import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
 import com.gu.support.workers.states.{AnalyticsInfo, CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers._
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.semiauto.deriveCodec
 import org.joda.time.LocalDate
 import play.api.mvc.{Call, Request}
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
