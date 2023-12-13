@@ -3,7 +3,11 @@ const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
-module.exports = () => {
+module.exports = (
+	env = {
+		ci: 'teamcity',
+	},
+) => {
 	const { ci } = env;
 	const isGithubAction = ci === 'github';
 	const jsFileName = isGithubAction ? '[name].js' : '[name].[chunkhash].js';
