@@ -41,10 +41,7 @@ export type PropTypes = {
 };
 
 type SignedInEmailFooterTypes = {
-	handleSignOut: (
-		event: React.MouseEvent<HTMLButtonElement>,
-		currentUrl: string,
-	) => void;
+	handleSignOut: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 function SignedInEmailFooter(props: SignedInEmailFooterTypes) {
@@ -62,7 +59,7 @@ function SignedInEmailFooter(props: SignedInEmailFooterTypes) {
 						<Button
 							type="button"
 							data-testid="sign-out"
-							onClick={(e) => props.handleSignOut(e, window.location.href)}
+							onClick={(e) => props.handleSignOut(e)}
 							priority="tertiary"
 							size="small"
 						>
@@ -81,12 +78,8 @@ function SignedOutEmailFooter() {
 }
 
 export default function PersonalDetails(props: PropTypes): JSX.Element {
-	const handleSignOut = (
-		e: React.MouseEvent<HTMLButtonElement>,
-		currentUrl: string,
-	) => {
+	const handleSignOut = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		console.log('Current URL:', currentUrl);
 		props.signOut();
 	};
 

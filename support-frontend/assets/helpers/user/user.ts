@@ -2,7 +2,7 @@
 import { getGlobal, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import * as cookie from 'helpers/storage/cookie';
 import type { Option } from 'helpers/types/option';
-import { getSignoutUrl } from '../urls/externalLinks';
+import { getSignoutUrl } from 'helpers/urls/externalLinks';
 
 export type User = {
 	firstName: Option<string>;
