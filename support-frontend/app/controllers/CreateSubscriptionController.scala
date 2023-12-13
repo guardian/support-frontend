@@ -26,7 +26,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
-import services.{IdentityService, RecaptchaService, StripeSetupIntentService, TestUserService}
+import services.{IdentityService, RecaptchaResponse, RecaptchaService, StripeSetupIntentService, TestUserService}
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber, PaperValidation}
 
@@ -61,17 +61,32 @@ class CreateSubscriptionController(
 
   import actionRefiners._
 
+  // This is just for readability
+  private type CreateRequest = OptionalAuthRequest[CreateSupportWorkersRequest]
+
   def create: EssentialAction =
     LoggingAndAlarmOnFailure {
       MaybeAuthenticatedActionOnFormSubmission.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
         implicit val settings: AllSettings = settingsProvider.getAllSettings()
-        SafeLogger.info(s"${request.uuid}: debug info ${request.body.debugInfo}")
+
+        logDetailedMessage("attempting to create")
+        val json = request.body.copy(debugInfo = None).asJson
+        logDetailedMessage(json.toString)
+
+        // Only Direct Debit requests include a recaptchaToken.
+        // For Stripe payments, recaptcha validation is done earlier in the flow
+        val recaptchaToken =
+          request.body.paymentFields match {
+            case Left(dd: DirectDebitPaymentFields) => Some(dd.recaptchaToken)
+            case _ => None
+          }
+
         val errorOrStatusResponse = for {
-          _ <- getRecaptchaTokenFromRequest(request) match {
+          _ <- recaptchaToken match {
             case Some(token) => validateRecaptcha(token, testUsers.isTestUser(request))
             case None => EitherT.rightT[Future, RequestValidationError](())
           }
-          result <- createSubscription(request)
+          result <- createSubscription
         } yield result
 
         toHttpResponse(errorOrStatusResponse, request.body.product, request.body.email)
@@ -79,19 +94,10 @@ class CreateSubscriptionController(
       }
     }
 
-  private def getRecaptchaTokenFromRequest(
-      request: OptionalAuthRequest[CreateSupportWorkersRequest],
-  ): Option[String] = {
-    // Only Direct Debit requests include a recaptchaToken. For Stripe payments, recaptcha validation is done earlier in the flow
-    request.body.paymentFields match {
-      case Left(dd: DirectDebitPaymentFields) => Some(dd.recaptchaToken)
-      case _ => None
-    }
-  }
-
   // Returns a Right if validation succeeds
   private def validateRecaptcha(token: String, isTestUser: Boolean)(implicit
       settings: AllSettings,
+      request: CreateRequest,
   ): EitherT[Future, RequestValidationError, Unit] = {
     val recaptchaBackendEnabled =
       settings.switches.recaptchaSwitches.enableRecaptchaBackend.isOn
@@ -106,22 +112,26 @@ class CreateSubscriptionController(
       recaptchaService
         .verify(token, v2RecaptchaSecretKey)
         .leftMap(err => RequestValidationError(err))
-        .map(_.success)
         .subflatMap {
-          case true => Right(())
-          case false => Left(RequestValidationError("Recaptcha validation failed"))
+          case RecaptchaResponse(true, _) => Right(())
+
+          case RecaptchaResponse(false, _) =>
+            errorDetailedMessage("recaptcha failed")
+            Left(RequestValidationError("Recaptcha validation failed"))
         }
     } else {
       EitherT.rightT(())
     }
   }
 
-  private def createSubscription(
-      request: OptionalAuthRequest[CreateSupportWorkersRequest],
-  )(implicit settings: AllSettings): EitherT[Future, CreateSubscriptionError, StatusResponse] = {
+  private def createSubscription(implicit
+      settings: AllSettings,
+      request: CreateRequest,
+  ): EitherT[Future, CreateSubscriptionError, StatusResponse] = {
     val maybeLoggedInIdentityIdAndEmail =
       request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
-    logIncomingRequest(request, maybeLoggedInIdentityIdAndEmail)
+
+    logDetailedMessage("createSubscription")
 
     for {
       userAndEmail <- maybeLoggedInIdentityIdAndEmail match {
@@ -150,15 +160,30 @@ class CreateSubscriptionController(
         }
     }
 
-  private def logIncomingRequest(
-      request: OptionalAuthRequest[CreateSupportWorkersRequest],
-      maybeLoggedInIdentityIdAndEmail: Option[IdentityIdAndEmail],
-  ) = {
+  private def errorDetailedMessage(message: String)(implicit request: CreateRequest) = {
+    val maybeLoggedInIdentityIdAndEmail =
+      request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
+
     val userDesc = maybeLoggedInIdentityIdAndEmail match {
-      case None => s"Guest User ${request.body.email}"
-      case Some(idAndEmail) => s"User ${idAndEmail.primaryEmailAddress}"
+      case None => (request.body.email, "guest")
+      case Some(idAndEmail) => (idAndEmail.primaryEmailAddress, "logged-in")
     }
-    SafeLogger.info(s"$userDesc is attempting to create a new ${request.body.product.describe} [${request.uuid}]")
+    SafeLogger.error(
+      scrub"[CreateSubscriptionController] [${request.uuid}] [${userDesc._1}] [${userDesc._2}] [${request.body.product.describe}] $message",
+    )
+  }
+
+  private def logDetailedMessage(message: String)(implicit request: CreateRequest) = {
+    val maybeLoggedInIdentityIdAndEmail =
+      request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
+
+    val (user, desc) = maybeLoggedInIdentityIdAndEmail match {
+      case None => (request.body.email, "guest")
+      case Some(idAndEmail) => (idAndEmail.primaryEmailAddress, "logged-in")
+    }
+    SafeLogger.info(
+      s"[CreateSubscriptionController] [${request.uuid}] [$user] [$desc] [${request.body.product.describe}] $message",
+    )
   }
 
   private def getOrCreateIdentityUser(
@@ -217,13 +242,11 @@ class CreateSubscriptionController(
       result: EitherT[Future, CreateSubscriptionError, StatusResponse],
       product: ProductType,
       userEmail: String,
-  )(implicit request: Request[CreateSupportWorkersRequest], writeable: Writeable[String]): Future[Result] = {
+  )(implicit request: CreateRequest, writeable: Writeable[String]): Future[Result] = {
     result
       .fold(
         { error =>
-          SafeLogger.error(
-            scrub"[${request.uuid}] Failed to create new ${request.body.product.describe}, due to $error",
-          )
+          errorDetailedMessage(s"create failed due to $error")
           val errResult = error match {
             case err: RequestValidationError =>
               // Store the error message in the result.header.reasonPhrase this will allow us to
@@ -241,9 +264,7 @@ class CreateSubscriptionController(
           Future.successful(errResult)
         },
         { statusResponse =>
-          SafeLogger.info(
-            s"[${request.uuid}] Successfully created a support workers execution for a new ${request.body.product.describe}",
-          )
+          logDetailedMessage("create succeeded")
           cookies(product, userEmail)
             .map(cookies => Accepted(statusResponse.asJson).withCookies(cookies: _*))
         },
