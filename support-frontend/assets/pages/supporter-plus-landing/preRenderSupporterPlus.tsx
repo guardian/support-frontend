@@ -15,10 +15,10 @@ export const supporterPlusLanding = (
 	countryCode?: string,
 	digitalCheckout?: boolean,
 ) => {
-	let leftText;
+	let leftText: string | JSX.Element = '';
 	if (digitalCheckout) {
 		leftText = leftTitleDigiSub;
-	} else {
+	} else if (countryCode) {
 		leftText =
 			countryCode === 'US'
 				? leftTitleSupporterPlusUS

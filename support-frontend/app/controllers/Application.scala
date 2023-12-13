@@ -125,6 +125,7 @@ class Application(
   def contributionsLanding(
       countryCode: String,
       campaignCode: String,
+      isSecondPage: Boolean = false,
   ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
 
@@ -137,7 +138,7 @@ class Application(
 
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
-      contributionsHtml(countryCode, geoData, request.user, campaignCodeOption, guestAccountCreationToken),
+      contributionsHtml(countryCode, geoData, request.user, campaignCodeOption, guestAccountCreationToken, isSecondPage),
     ).withSettingsSurrogateKey
   }
 
@@ -163,6 +164,7 @@ class Application(
       idUser: Option[IdUser],
       campaignCode: Option[String],
       guestAccountCreationToken: Option[String],
+      isSecondPage: Boolean = false,
   )(implicit request: RequestHeader, settings: AllSettings) = {
 
     val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
@@ -174,7 +176,8 @@ class Application(
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
 
     val htmlFile =
-      if (countryCode.equals("us")) "supporter-plus-landing-US.html"
+      if (isSecondPage) "supporter-plus-checkout-page.html"
+      else if (countryCode.equals("us")) "supporter-plus-landing-US.html"
       else "supporter-plus-landing.html"
 
     val mainElement = assets.getSsrCacheContentsAsHtml(
