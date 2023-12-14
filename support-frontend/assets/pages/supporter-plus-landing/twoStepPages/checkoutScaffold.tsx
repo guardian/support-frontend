@@ -44,11 +44,16 @@ const checkoutContainer = (isPaymentPage?: boolean) => css`
 	position: relative;
 	color: ${palette.neutral[7]};
 	${textSans.medium()};
+
 	padding-top: ${space[isPaymentPage ? 2 : 6]}px;
 	padding-bottom: ${space[9]}px;
+
 	${from.tablet} {
-		padding-top: 40px;
 		padding-bottom: ${space[12]}px;
+	}
+
+	${from.desktop} {
+		padding-top: ${space[6]}px;
 	}
 `;
 
