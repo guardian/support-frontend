@@ -6,7 +6,11 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
-import type { AmountsTest, SelectedAmountsVariant } from '../contributions';
+import type {
+	AmountsTest,
+	AmountsVariant,
+	SelectedAmountsVariant,
+} from '../contributions';
 import { tests } from './abtestDefinitions';
 import { getFallbackAmounts } from './helpers';
 
@@ -317,9 +321,21 @@ export function getAmountsTestVariant(
 		};
 	}
 
+	const selectVariant = (
+		isLive: boolean,
+		variants: AmountsVariant[],
+	): AmountsVariant => {
+		if (isLive && variants.length > 1) {
+			const assignmentIndex = randomNumber(mvt, seed) % variants.length;
+			return variants[assignmentIndex];
+		}
+		// For regional AmountsTests, if the test is not live then we use the control
+		return variants[0];
+	};
+
 	const currentTestName = isLive && liveTestName ? liveTestName : testName;
-	const assignmentIndex = randomNumber(mvt, seed) % variants.length;
-	const variant = variants[assignmentIndex];
+	const variant = selectVariant(isLive, variants);
+
 	const amountsParticipation = buildParticipation(
 		targetedTest,
 		currentTestName,
