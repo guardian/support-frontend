@@ -1,5 +1,12 @@
 import { css } from '@emotion/react';
-import { from, neutral, space, textSans } from '@guardian/source-foundations';
+import {
+	from,
+	neutral,
+	palette,
+	space,
+	textSans,
+	until,
+} from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
 import {
 	FooterLinks,
@@ -39,6 +46,14 @@ const checkoutContainer = css`
 
 	${from.desktop} {
 		padding-top: ${space[6]}px;
+	}
+`;
+
+const darkBackgroundContainerMobile = css`
+	background-color: ${palette.neutral[97]};
+	${until.tablet} {
+		background-color: ${palette.brand[400]};
+		border-bottom: 1px solid ${palette.brand[600]};
 	}
 `;
 
@@ -84,7 +99,7 @@ function PreRenderSupporterPlusLandingPage(): JSX.Element {
 			<CheckoutHeading heading={heading}>
 				<p></p>
 			</CheckoutHeading>
-			<Container sideBorders backgroundColor={neutral[97]}>
+			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
 				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
 					<Column span={[0, 2, 5]}></Column>
 					<Column span={[1, 8, 7]}>
