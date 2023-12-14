@@ -14,7 +14,11 @@ const headingStyles = css`
 	}
 `;
 
-type Props = { heading?: string | JSX.Element };
-export function LandingPageHeading({ heading = '' }: Props): JSX.Element {
+interface LandingHeadingProps {
+	heading: string | JSX.Element;
+}
+export function LandingPageHeading({
+	heading,
+}: LandingHeadingProps): JSX.Element {
 	return <h1 css={headingStyles}>{heading}</h1>;
 }
