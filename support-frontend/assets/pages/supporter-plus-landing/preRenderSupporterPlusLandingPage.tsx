@@ -5,7 +5,6 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
-import { Box } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
@@ -41,10 +40,6 @@ const checkoutContainer = css`
 	${from.desktop} {
 		padding-top: ${space[6]}px;
 	}
-`;
-
-const emptyBox = css`
-	height: 500px;
 `;
 
 const countrySwitcherProps: CountryGroupSwitcherProps = {
@@ -94,12 +89,6 @@ function PreRenderSupporterPlusLandingPage(): JSX.Element {
 					<Column span={[0, 2, 5]}></Column>
 					<Column span={[1, 8, 7]}>
 						<Hide from="desktop">{heading}</Hide>
-						<Box>
-							<div css={emptyBox}></div>
-						</Box>
-						<Box>
-							<div css={emptyBox}></div>
-						</Box>
 					</Column>
 				</Columns>
 			</Container>
