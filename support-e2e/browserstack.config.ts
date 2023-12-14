@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import { execSync } from 'child_process';
 import BrowserStackLocal from 'browserstack-local';
-import { Page } from '@playwright/test';
 
 interface BrowserDetails {
 	browser: string;
@@ -33,15 +32,20 @@ export const BS_LOCAL_ARGS = {
 export const getCdpEndpoint = (
 	browserDetails: BrowserDetails,
 ) => {
-  const latestCommitID = execSync("git rev-parse --short HEAD").toString().trim();
+  const latestCommitID = execSync(`git rev-parse --short ${process.env.GITHUB_SHA ?? "HEAD"}`).toString().trim();
   const niceDateStringNow = new Intl.DateTimeFormat('en-GB', {
-    dateStyle: 'full',
-    timeStyle: 'long',
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    timeZone: "Europe/London",
   }).format(new Date());
   const caps = {
     ...browserStackProperties,
     ...browserDetails,
-    build: `playwright-build-${latestCommitID}`,
+    build: `playwright-build-${latestCommitID}-${niceDateStringNow}`,
     name: `playwright E2E test - ${niceDateStringNow}`
   };
 	const cdpUrl = `wss://cdp.browserstack.com/playwright?caps=${encodeURIComponent(
@@ -51,11 +55,4 @@ export const getCdpEndpoint = (
 	return cdpUrl;
 };
 
-export const markTest = (page:Page, status:string, reason:string) => {
-    return page.evaluate(
-        _ => {},
-        `browserstack_executor: ${JSON.stringify({
-            action: 'setSessionStatus',
-            arguments: { status, reason }
-        })}`);
-}
+

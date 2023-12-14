@@ -2,7 +2,7 @@
 	"name": "support-e2e",
 	"version": "0.0.0",
 	"scripts": {
-		"pw-browserstack-test": "playwright test --config=playwright.browserstack.config.ts",
+		"pw-browserstack-test": "RUNNING_IN_BROWSERSTACK=true playwright test --config=playwright.browserstack.config.ts",
 		"pw-local-test": "playwright test --ui --config=playwright.local.config.ts",
 		"pw-prod-test": "playwright test --ui --config=playwright.prod.config.ts"
 	},
