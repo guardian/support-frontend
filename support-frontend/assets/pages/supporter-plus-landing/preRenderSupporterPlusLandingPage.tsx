@@ -30,7 +30,6 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { PrerenderGlobalStyles } from 'helpers/rendering/prerenderGlobalStyles';
-import { LandingPageHeading } from './components/landingPageHeading';
 
 const checkoutContainer = css`
 	position: relative;
@@ -72,8 +71,6 @@ const countrySwitcherProps: CountryGroupSwitcherProps = {
 };
 
 function PreRenderSupporterPlusLandingPage(): JSX.Element {
-	const heading = <LandingPageHeading />;
-
 	return (
 		<PageScaffold
 			id="supporter-plus-landing"
@@ -96,15 +93,13 @@ function PreRenderSupporterPlusLandingPage(): JSX.Element {
 			}
 		>
 			<PrerenderGlobalStyles />
-			<CheckoutHeading heading={heading}>
+			<CheckoutHeading>
 				<p></p>
 			</CheckoutHeading>
 			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
 				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
 					<Column span={[0, 2, 5]}></Column>
-					<Column span={[1, 8, 7]}>
-						<Hide from="desktop">{heading}</Hide>
-					</Column>
+					<Column span={[1, 8, 7]}></Column>
 				</Columns>
 			</Container>
 		</PageScaffold>
