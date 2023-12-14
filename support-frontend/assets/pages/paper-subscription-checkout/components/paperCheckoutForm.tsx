@@ -188,6 +188,11 @@ function setSubsCardStartDateInState(
 
 // ----- Component ----- //
 function PaperCheckoutForm(props: PropTypes) {
+	console.log(
+		'props.fulfilment and product',
+		props.fulfilmentOption,
+		props.productOption,
+	);
 	useCsrCustomerData(props.setCsrCustomerData);
 
 	const invalidDeliveryDates = ['-12-25', '-01-01'];

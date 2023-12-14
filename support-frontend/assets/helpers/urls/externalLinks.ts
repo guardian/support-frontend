@@ -120,7 +120,7 @@ function getDailyEditionUrl(countryGroupId: CountryGroupId): string {
 
 const getProfileUrl = (path: string) => (returnUrl?: string | null) => {
 	const encodedReturn = encodeURIComponent(returnUrl ?? window.location.href);
-	return `https://profile.${getBaseDomain()}/${path}?returnUrl=${encodedReturn}`;
+  return `https://profile.${getBaseDomain()}/${path}?returnUrl=${encodedReturn}`;
 };
 
 const getSignoutUrl = getProfileUrl('signout');
