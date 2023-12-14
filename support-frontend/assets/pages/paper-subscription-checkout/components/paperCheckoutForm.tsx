@@ -53,11 +53,11 @@ import {
 	selectPriceForProduct,
 } from 'helpers/redux/checkout/product/selectors/productPrice';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
-import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
 	formActionCreators,
 	setCsrCustomerData,
-} from 'helpers/subscriptionsForms/formActions';
+} from 'helpers/subscriptionsForms/formActionCreators';
+import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import {
