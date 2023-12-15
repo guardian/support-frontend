@@ -1,6 +1,6 @@
 import { css, ThemeProvider } from '@emotion/react';
 import { cmp } from '@guardian/consent-management-platform';
-import { from, palette, space, until } from '@guardian/source-foundations';
+import { from, palette, space } from '@guardian/source-foundations';
 import {
 	Button,
 	buttonThemeReaderRevenueBrand,
@@ -41,23 +41,34 @@ const checkoutBtnStyleOverrides = css`
 	justify-content: center;
 `;
 
-const darkBackgroundContainerMobile = css`
-	display: flex;
-	background: linear-gradient(
-		to bottom,
-		${palette.brand[400]} 441px,
-		${palette.neutral[97]} 441px,
-		${palette.neutral[97]} 100%
-	);
-	${until.tablet} {
-		background-color: ${palette.brand[400]};
-		border-bottom: 1px solid ${palette.brand[600]};
+const recurringContainer = css`
+	background-color: ${palette.brand[400]};
+	border-bottom: 1px solid ${palette.brand[600]};
+
+	${from.tablet} {
+		border-bottom: none;
 	}
-	min-height: 480px;
+	> div {
+		padding: ${space[2]}px 10px ${space[4]}px;
+	}
 	${from.desktop} {
-		min-height: 440px;
+		> div {
+			padding: 40px 10px ${space[6]}px;
+		}
 	}
-	padding-top: ${space[6]}px;
+`;
+
+const oneTimeContainer = css`
+	display: flex;
+	background-color: ${palette.brand[800]};
+	> div {
+		padding: ${space[6]}px 10px 72px;
+	}
+	${from.desktop} {
+		> div {
+			padding-top: 32px;
+		}
+	}
 `;
 
 const links = [
@@ -84,7 +95,7 @@ const links = [
 	},
 ];
 
-export function ThreeTierLandingPage(): JSX.Element {
+export function ThreeTierLanding(): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const navigate = useNavigate();
 	const contributionType = useContributionsSelector(getContributionType);
@@ -143,7 +154,7 @@ export function ThreeTierLandingPage(): JSX.Element {
 				sideBorders
 				topBorder
 				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={darkBackgroundContainerMobile}
+				cssOverrides={recurringContainer}
 			>
 				<h1>Support fearless, independent journalism</h1>
 				<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
@@ -157,6 +168,13 @@ export function ThreeTierLandingPage(): JSX.Element {
 						Support with XX
 					</Button>
 				</ThemeProvider>
+			</Container>
+			<Container
+				sideBorders
+				borderColor="rgba(170, 170, 180, 0.5)"
+				cssOverrides={oneTimeContainer}
+			>
+				<p>one time placeholder</p>
 			</Container>
 		</PageScaffold>
 	);

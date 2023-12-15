@@ -13,7 +13,7 @@ import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterP
 import { setUpRedux } from './setup/setUpRedux';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
 import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
-import { ThreeTierLandingPage } from './twoStepPages/threeTierFirstStepLanding';
+import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
 if (!isDetailsSupported) {
 	polyfillDetails();
@@ -55,7 +55,7 @@ const router = () => {
 	const isInThreeTierCheckoutTest =
 		abParticipations.threeTierCheckout === 'variant';
 	const firstStepLandingPage = isInThreeTierCheckoutTest ? (
-		<ThreeTierLandingPage />
+		<ThreeTierLanding />
 	) : (
 		<SupporterPlusInitialLandingPage thankYouRoute={thankYouRoute} />
 	);
