@@ -11,11 +11,11 @@ object getPaymentMethod {
   case class StripePaymentMethod(
       card: StripeCard,
   )
-  implicit val decoder = deriveDecoder[StripePaymentMethod]
+  implicit val decoder: Decoder[StripePaymentMethod] = deriveDecoder[StripePaymentMethod]
 
   object StripeCard {
 
-    implicit val brandDecoder = StripeBrand.decoder(_.paymentMethodValue)
+    implicit val brandDecoder: Decoder[StripeBrand] = StripeBrand.decoder(_.paymentMethodValue)
     implicit val decoder: Decoder[StripeCard] = deriveDecoder
 
   }
