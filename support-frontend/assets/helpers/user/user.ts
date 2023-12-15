@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import { getGlobal, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import * as cookie from 'helpers/storage/cookie';
+import * as storage from 'helpers/storage/storage';
 import type { Option } from 'helpers/types/option';
 import { getSignoutUrl } from 'helpers/urls/externalLinks';
 
@@ -49,7 +50,9 @@ function getUserStateField(): string | undefined {
 const isPostDeployUser = (): boolean =>
 	cookie.get('_post_deploy_user') === 'true';
 
+export const REDIRECT_AFTER_SIGNOUT_STORAGE_KEY = 'redirectAfterSignOut';
 const signOut = (): void => {
+	storage.setSession(REDIRECT_AFTER_SIGNOUT_STORAGE_KEY, window.location.href);
 	window.location.href = getSignoutUrl();
 };
 
