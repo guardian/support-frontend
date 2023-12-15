@@ -29,10 +29,6 @@ const redirectUrlFromSessionStorage = storage.getSession(
 if (redirectUrlFromSessionStorage) {
 	storage.setSession(REDIRECT_AFTER_SIGNOUT_STORAGE_KEY, '');
 	window.location.href = redirectUrlFromSessionStorage;
-	console.log(
-		'REDIRECT_AFTER_SIGNOUT_STORAGE_KEY ',
-		redirectUrlFromSessionStorage,
-	);
 }
 setUpTrackingAndConsents();
 // ----- Redux Store ----- //

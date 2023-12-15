@@ -266,8 +266,6 @@ function PaperCheckoutForm(props: PropTypes) {
 			? props.correspondingProductOptionPrice
 			: props.discountedPrice;
 
-		console.log('Paper Price', paperPrice);
-
 		const digitalCost = sensiblyGenerateDigiSubPrice(plusPrice, paperPrice);
 		setDigiSubPriceString(
 			getPriceSummary(showPrice(digitalCost, false), props.billingPeriod),
