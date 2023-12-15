@@ -5,12 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { ContributionsOrderSummaryContainer } from 'components/orderSummary/contributionsOrderSummaryContainer';
+import { OtherAmount } from 'components/otherAmount/otherAmount';
 import { PaymentButtonController } from 'components/paymentButton/paymentButtonController';
 import { PaymentMethodSelector } from 'components/paymentMethodSelector/paymentMethodSelector';
 import PaymentMethodSelectorContainer from 'components/paymentMethodSelector/PaymentMethodSelectorContainer';
 import { PaymentRequestButtonContainer } from 'components/paymentRequestButton/paymentRequestButtonContainer';
 import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
+import { PriceCards } from 'components/priceCards/priceCards';
+import { PriceCardsContainer } from 'components/priceCards/priceCardsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -75,6 +78,12 @@ export function SupporterPlusCheckout({
 
 	const navigate = useNavigate();
 
+	const isInThreeTierCheckoutTest =
+		abParticipations.threeTierCheckout === 'variant';
+
+	const showPriceCards =
+		isInThreeTierCheckoutTest && contributionType === 'ONE_OFF';
+
 	const changeButton = (
 		<Button
 			priority="tertiary"
@@ -101,14 +110,54 @@ export function SupporterPlusCheckout({
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
-					<ContributionsOrderSummaryContainer
-						renderOrderSummary={(orderSummaryProps) => (
-							<ContributionsOrderSummary
-								{...orderSummaryProps}
-								headerButton={changeButton}
-							/>
-						)}
-					/>
+					{!showPriceCards && (
+						<ContributionsOrderSummaryContainer
+							renderOrderSummary={(orderSummaryProps) => (
+								<ContributionsOrderSummary
+									{...orderSummaryProps}
+									headerButton={changeButton}
+								/>
+							)}
+						/>
+					)}
+					{showPriceCards && (
+						<PriceCardsContainer
+							frequency={'ONE_OFF'}
+							renderPriceCards={({
+								amounts,
+								selectedAmount,
+								otherAmount,
+								currency,
+								paymentInterval,
+								onAmountChange,
+								minAmount,
+								onOtherAmountChange,
+								hideChooseYourAmount,
+								errors,
+							}) => (
+								<>
+									<PriceCards
+										amounts={amounts}
+										selectedAmount={selectedAmount}
+										currency={currency}
+										paymentInterval={paymentInterval}
+										onAmountChange={onAmountChange}
+										hideChooseYourAmount={hideChooseYourAmount}
+										otherAmountField={
+											<OtherAmount
+												currency={currency}
+												minAmount={minAmount}
+												selectedAmount={selectedAmount}
+												otherAmount={otherAmount}
+												onOtherAmountChange={onOtherAmountChange}
+												errors={errors}
+											/>
+										}
+									/>
+								</>
+							)}
+						/>
+					)}
 				</BoxContents>
 			</Box>
 			<Box cssOverrides={shorterBoxMargin}>
