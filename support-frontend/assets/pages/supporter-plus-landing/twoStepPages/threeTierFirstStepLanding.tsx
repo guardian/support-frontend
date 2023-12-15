@@ -123,7 +123,7 @@ export function ThreeTierLandingPage(): JSX.Element {
 
 	return (
 		<PageScaffold
-			id="supporter-plus-landing"
+			id="supporter-plus-landing-three-tier"
 			header={
 				<>
 					<Header>
