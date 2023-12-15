@@ -22,7 +22,6 @@ import ThankYouContent from './components/thankYou';
 import 'stylesheets/skeleton/skeleton.scss';
 import './_legacyImports.scss';
 
-
 const redirectUrlFromSessionStorage = storage.getSession(
 	REDIRECT_AFTER_SIGNOUT_STORAGE_KEY,
 );
