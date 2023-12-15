@@ -30,7 +30,6 @@ import org.joda.time.{DateTimeZone, LocalDate}
 import java.io.ByteArrayInputStream
 import java.util.UUID
 
-//noinspection TypeAnnotation
 object JsonFixtures {
 
   def wrapFixture(string: String): ByteArrayInputStream =
