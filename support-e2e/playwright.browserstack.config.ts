@@ -20,7 +20,8 @@ export default defineConfig({
 							browser_version: 'latest',
 							os: 'Windows',
 							os_version: '11',
-              name: 'testing the browserstack with new node',
+              'browserstack.debug': 'true',
+              'browserstack.networkLogs': 'true'
 						},
 
 					),
