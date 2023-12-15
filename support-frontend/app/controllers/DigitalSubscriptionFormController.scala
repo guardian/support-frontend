@@ -51,7 +51,7 @@ class DigitalSubscriptionFormController(
     } else {
       "Support the Guardian | The Guardian Digital Subscription"
     }
-    val id = EmptyDiv("digital-subscription-landing")
+    val id = EmptyDiv("digital-subscription-checkout-page")
     val js = "digitalSubscriptionCheckoutPage.js"
     val css = "digitalSubscriptionCheckoutPage.css"
     val csrf = CSRF.getToken.value
@@ -83,10 +83,7 @@ class DigitalSubscriptionFormController(
   def displayThankYouExisting(): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val title = "Support the Guardian | The Guardian Digital Subscription"
-    val mainElement = assets.getSsrCacheContentsAsHtml(
-      divId = s"digital-subscription-landing",
-      file = "digital-subscription-landing.html",
-    )
+    val mainElement = EmptyDiv("digital-subscription-checkout-page")
     val js = Left(RefPath("digitalSubscriptionCheckoutPageThankYouExisting.js"))
     val css = Left(RefPath("digitalSubscriptionCheckoutPageThankYouExisting.css"))
 
