@@ -45,7 +45,9 @@ Template.decorators = [] as unknown[];
 export const Heading = Template.bind({});
 
 Heading.args = {
-	heading: <LandingPageHeading />,
+	heading: (
+		<LandingPageHeading heading="Support fearless, independent journalism" />
+	),
 	children: (
 		<p style={{ marginRight: '48px' }}>
 			Help protect the Guardian&apos;s independence so we can keep delivering
