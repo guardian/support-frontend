@@ -60,7 +60,6 @@ class DigitalSubscriptionController(
         } else {
           "Support the Guardian | The Guardian Digital Subscription"
         }
-        val id = EmptyDiv("digital-subscription-checkout-page-" + countryCode)
         val js = "digitalSubscriptionLandingPage.js"
         val css = "digitalSubscriptionLandingPage.css"
         val csrf = CSRF.getToken.value
@@ -72,10 +71,14 @@ class DigitalSubscriptionController(
         val maybePromotionCopy = {
           landingCopyProvider.promotionCopy(promoCodes ++ defaultPromos, DigitalPack, "uk", orderIsAGift)
         }
+        val mainElement = assets.getSsrCacheContentsAsHtml(
+          divId = s"digital-subscription-landing-$countryCode",
+          file = "digital-subscription-landing.html",
+        )
         Ok(
           views.html.subscriptionCheckout(
             title,
-            id,
+            mainElement,
             js,
             css,
             Some(csrf),

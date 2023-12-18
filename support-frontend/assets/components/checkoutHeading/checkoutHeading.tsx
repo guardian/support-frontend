@@ -27,7 +27,7 @@ const headingContentContainer = css`
 `;
 
 export interface CheckoutHeadingProps extends CSSOverridable {
-	heading: React.ReactNode;
+	heading?: React.ReactNode;
 	children?: React.ReactNode;
 	image?: React.ReactNode;
 	withTopborder?: true;
