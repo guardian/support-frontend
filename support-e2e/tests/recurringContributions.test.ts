@@ -6,6 +6,7 @@ import { fillInCardDetails } from "./utils/cardDetails";
 import { fillInDirectDebitDetails } from "./utils/directDebitDetails";
 import { fillInPayPalDetails } from "./utils/paypal";
 import { setupPage } from "./utils/page";
+import { afterEachTasks } from "./utils/afterEachTest";
 
 interface TestDetails {
   paymentType: "Credit/Debit card" | "Direct debit" | "PayPal";
@@ -21,6 +22,8 @@ const testsDetails: TestDetails[] = [
   { paymentType: "Direct debit", frequency: "Annual" },
   { paymentType: "PayPal", frequency: "Monthly" },
 ];
+
+afterEachTasks(test);
 
 test.describe("Sign up for a Recurring Contribution (Two-Step checkout)", () => {
   testsDetails.forEach((testDetails) => {
@@ -77,7 +80,6 @@ test.describe("Sign up for a Recurring Contribution (Two-Step checkout)", () => 
         `/${testDetails.country?.toLowerCase() || "uk"}/thankyou`,
         { timeout: 600000 }
       );
-      await page.close();
     });
   });
 });

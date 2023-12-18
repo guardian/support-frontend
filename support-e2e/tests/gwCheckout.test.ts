@@ -6,6 +6,7 @@ import { fillInCardDetails } from "./utils/cardDetails";
 import { fillInDirectDebitDetails } from "./utils/directDebitDetails";
 import { fillInPayPalDetails } from "./utils/paypal";
 import { setupPage } from "./utils/page";
+import { afterEachTasks } from "./utils/afterEachTest";
 
 type PaymentType = "Credit/Debit card" | "Direct debit" | "PayPal";
 
@@ -72,6 +73,8 @@ const testsDetailsGifted: TestDetailsGifted[] = [
     paymentType: "PayPal",
   },
 ];
+
+afterEachTasks(test);
 
 test.describe("Sign up for a Guardian Weekly subscription", () => {
   testsDetails.forEach((testDetails) => {
@@ -146,9 +149,6 @@ test.describe("Sign up for a Guardian Weekly subscription", () => {
         page.getByRole("heading", { name: successMsgRegex })
       ).toBeVisible();
 
-      context.pages().forEach(async (page) => {
-        await page.close();
-      });
     });
   });
 });
@@ -239,9 +239,6 @@ test.describe("Gifted subscriptions", () => {
         page.getByRole("heading", { name: successMsgRegex })
       ).toBeVisible();
 
-      context.pages().forEach(async (page) => {
-        await page.close();
-      });
     });
   });
 });
