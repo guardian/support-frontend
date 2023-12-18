@@ -56,7 +56,7 @@ import type {
 import {
 	formActionCreators,
 	setCsrCustomerData,
-} from 'helpers/subscriptionsForms/formActions';
+} from 'helpers/subscriptionsForms/formActionCreators';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import {
 	validateWithDeliveryForm,
