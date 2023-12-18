@@ -10,7 +10,7 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
   "ch.qos.logback" % "logback-classic" % "1.4.12",
-  "io.symphonia" % "lambda-logging" % "1.0.1",
+//  "io.symphonia" % "lambda-logging" % "1.0.3",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
