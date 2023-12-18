@@ -19,4 +19,4 @@ const content = (
 		supportLink={false}
 	/>
 );
-renderPage(content, 'down-for-maintenance-page');
+renderPage(content);
