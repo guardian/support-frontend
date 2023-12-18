@@ -1,8 +1,6 @@
 // ----- Imports ----- //
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { CountryGroup } from 'helpers/internationalisation';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
@@ -20,7 +18,6 @@ setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
 
-const countryGroupId: CountryGroupId = CountryGroup.detect();
 const store = initReduxForContributions();
 
 // Brute force override of the Sepa switch, as we can't accept Sepa for digi sub payments
@@ -37,7 +34,6 @@ window.guardian.settings = {
 
 setUpRedux(store);
 
-const reactElementId = `digital-subscription-checkout-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 const thankYouRoute = 'thankyou';
 const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
@@ -72,4 +68,4 @@ const router = () => {
 	);
 };
 
-renderPage(router(), reactElementId);
+renderPage(router());
