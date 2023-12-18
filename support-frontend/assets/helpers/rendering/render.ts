@@ -53,7 +53,6 @@ const renderError = (e: Error, id?: string | null): void => {
 const renderPage = (
 	content: React.ReactElement<React.DOMAttributes<Element>>,
 	id: string,
-	callBack?: () => void,
 ): void => {
 	const element = getElement(id);
 
@@ -67,10 +66,10 @@ const renderPage = (
 				void import('@axe-core/react').then((axe) => {
 					console.log('Loading react-axe for accessibility analysis');
 					void axe.default(React, ReactDOM, 1000);
-					render(content, element, callBack);
+					render(content, element);
 				});
 			} else {
-				render(content, element, callBack);
+				render(content, element);
 			}
 		} catch (e) {
 			renderError(e as Error, id);
