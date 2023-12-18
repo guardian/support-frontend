@@ -14,7 +14,7 @@ object createCustomerFromToken {
 
     object StripeCard {
 
-      implicit val brandDecoder = StripeBrand.decoder(_.customerValue)
+      implicit val brandDecoder: Decoder[StripeBrand] = StripeBrand.decoder(_.customerValue)
       implicit val decoder: Decoder[StripeCard] = deriveDecoder
 
     }

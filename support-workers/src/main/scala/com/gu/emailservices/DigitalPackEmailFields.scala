@@ -248,7 +248,7 @@ class DigitalPackEmailFields(
       unmanaged_digital_subscription_gift_end_date: String,
   )
   object GifteeRedemptionUserAttributes {
-    implicit val encoder = deriveEncoder[GifteeRedemptionUserAttributes]
+    implicit val encoder: Encoder.AsObject[GifteeRedemptionUserAttributes] = deriveEncoder[GifteeRedemptionUserAttributes]
   }
 
   private def giftRedemption(state: SendThankYouEmailDigitalSubscriptionGiftRedemptionState) =
