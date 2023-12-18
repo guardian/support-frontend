@@ -31,7 +31,7 @@ Resources:
     Properties:
       FunctionName: !Sub ${App}-${Stage}
       Description: A Firehose transformation lambda for serialising the acquisitions event stream to csv
-      Runtime: java8.al2
+      Runtime: java11
       Handler: com.gu.acquisitionFirehoseTransformer.Lambda::handler
       MemorySize: 512
       Timeout: 300
