@@ -13,7 +13,6 @@ import com.gu.support.workers._
 import com.gu.support.zuora.api._
 import org.joda.time.LocalDate
 
-//noinspection TypeAnnotation
 object Fixtures {
   val accountNumber = "A00084679"
 

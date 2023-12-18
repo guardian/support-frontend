@@ -10,7 +10,6 @@ import com.gu.support.workers.{
 }
 import org.joda.time.LocalDate
 
-//noinspection TypeAnnotation
 object Fixtures {
   val accountNumber = "A00071408"
   val promoCode = "TEST_CODE"
