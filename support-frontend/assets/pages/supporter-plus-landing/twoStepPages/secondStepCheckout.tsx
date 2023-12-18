@@ -57,6 +57,9 @@ export function SupporterPlusCheckout({
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
+  const { abParticipations } = useContributionsSelector(
+    (state) => state.common,
+  );
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
 	const amountBeforeAmendments = useContributionsSelector(
@@ -87,7 +90,7 @@ export function SupporterPlusCheckout({
 				);
 				dispatch(resetValidation());
 				const destination = `/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`;
-				navigateWithPageView(navigate, destination);
+				navigateWithPageView(navigate, destination , abParticipations);
 			}}
 		>
 			Change
