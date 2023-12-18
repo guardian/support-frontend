@@ -10,27 +10,26 @@ const safeFetch = (url: string, opts?: Record<string, string>) => {
 	}
 };
 
-const getElement = (id: string): HTMLElement | null =>
-	document.getElementById(id);
-
-const getElementOrBody = (id?: string | null): HTMLElement => {
-	if (id) {
-		return getElement(id) ?? getElementOrBody();
-	}
+const getGuRenderToOrBody = (): HTMLElement => {
 	return document.querySelector('.gu-render-to') ?? document.body;
 };
 
-const renderError = (e: Error, id?: string | null): void => {
+const logRenderingException = (e: Error): void => {
 	safeFetch(window.guardian.settings.metricUrl, {
 		mode: 'no-cors',
 	}); // ignore result, fire and forget
 
-	const element = getElementOrBody(id);
 	logException(
-		`Fatal error rendering page: ${id ?? ''}. Error message: ${
+		`Fatal error rendering page: ${window.location.pathname}. Error message: ${
 			e.message
 		}. Stack trace: ${e.stack ? e.stack : 'none'}`,
 	);
+};
+
+const renderError = (e: Error): void => {
+	const element = getGuRenderToOrBody();
+	logRenderingException(e);
+
 	void import('pages/error/components/errorPage').then(
 		({ default: ErrorPage }) => {
 			render(
@@ -52,13 +51,8 @@ const renderError = (e: Error, id?: string | null): void => {
 
 const renderPage = (
 	content: React.ReactElement<React.DOMAttributes<Element>>,
-	id?: string,
 ): void => {
-	let element: HTMLElement | null = document.querySelector('.gu-render-to');
-
-	if (!element && id) {
-		element = document.getElementById(id);
-	}
+	const element: HTMLElement | null = document.querySelector('.gu-render-to');
 
 	if (element) {
 		delete element.dataset.notHydrated;
@@ -76,14 +70,10 @@ const renderPage = (
 				render(content, element);
 			}
 		} catch (e) {
-			renderError(e as Error, id);
+			renderError(e as Error);
 		}
 	} else {
-		safeFetch(window.guardian.settings.metricUrl, {
-			mode: 'no-cors',
-		}); // ignore result, fire and forget
-
-		logException(`Fatal error trying to render a page. id:${id ?? ''}`);
+		logRenderingException(new Error('Could not find gu-render-to element'));
 	}
 };
 

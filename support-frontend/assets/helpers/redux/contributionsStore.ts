@@ -53,7 +53,7 @@ export function initReduxForContributions(
 		store.dispatch(setCurrency(initialState.internationalisation.currencyId));
 		return store;
 	} catch (err) {
-		renderError(err as Error, null);
+		renderError(err as Error);
 		throw err;
 	}
 }
