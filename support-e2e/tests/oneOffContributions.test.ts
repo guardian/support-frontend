@@ -4,6 +4,7 @@ import { checkRecaptcha } from "./utils/recaptcha";
 import { fillInCardDetails } from "./utils/cardDetails";
 import { fillInPayPalDetails } from "./utils/paypal";
 import { setupPage } from "./utils/page";
+import { afterEachTasks } from "./utils/afterEachTest";
 
 interface TestDetails {
   paymentType: "Credit/Debit card" | "PayPal";
@@ -14,6 +15,8 @@ const testsDetails: TestDetails[] = [
   { paymentType: "Credit/Debit card", customAmount: "22.55" },
   { paymentType: "PayPal" },
 ];
+
+afterEachTasks(test);
 
 test.describe("Sign up for a one-off contribution", () => {
   testsDetails.forEach((testDetails) => {
@@ -48,9 +51,6 @@ test.describe("Sign up for a one-off contribution", () => {
           break;
       }
       await expect(page).toHaveURL(/\/uk\/thankyou/);
-      context.pages().forEach(async (page) => {
-        await page.close();
-      });
     });
   });
 });

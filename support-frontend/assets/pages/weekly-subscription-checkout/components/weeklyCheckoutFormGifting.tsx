@@ -49,7 +49,7 @@ import type {
 	SubscriptionsDispatch,
 	SubscriptionsState,
 } from 'helpers/redux/subscriptionsStore';
-import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
+import { formActionCreators } from 'helpers/subscriptionsForms/formActionCreators';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import {
 	validateWithDeliveryForm,
