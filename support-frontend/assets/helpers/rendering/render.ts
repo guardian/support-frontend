@@ -52,9 +52,13 @@ const renderError = (e: Error, id?: string | null): void => {
 
 const renderPage = (
 	content: React.ReactElement<React.DOMAttributes<Element>>,
-	id: string,
+	id?: string,
 ): void => {
-	const element = getElement(id);
+	let element: HTMLElement | null = document.querySelector('.gu-render-to');
+
+	if (!element && id) {
+		element = document.getElementById(id);
+	}
 
 	if (element) {
 		delete element.dataset.notHydrated;
@@ -79,7 +83,7 @@ const renderPage = (
 			mode: 'no-cors',
 		}); // ignore result, fire and forget
 
-		logException(`Fatal error trying to render a page. id:${id}`);
+		logException(`Fatal error trying to render a page. id:${id ?? ''}`);
 	}
 };
 
