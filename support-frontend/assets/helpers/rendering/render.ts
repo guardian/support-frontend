@@ -10,10 +10,6 @@ const safeFetch = (url: string, opts?: Record<string, string>) => {
 	}
 };
 
-const getGuRenderToOrBody = (): HTMLElement => {
-	return document.querySelector('.gu-render-to') ?? document.body;
-};
-
 const logRenderingException = (e: Error): void => {
 	safeFetch(window.guardian.settings.metricUrl, {
 		mode: 'no-cors',
@@ -27,7 +23,8 @@ const logRenderingException = (e: Error): void => {
 };
 
 const renderError = (e: Error): void => {
-	const element = getGuRenderToOrBody();
+	// We fallback to the body here as the error should always render
+	const element = document.querySelector('.gu-render-to') ?? document.body;
 	logRenderingException(e);
 
 	void import('pages/error/components/errorPage').then(
