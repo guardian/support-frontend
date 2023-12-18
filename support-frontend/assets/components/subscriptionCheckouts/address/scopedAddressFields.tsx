@@ -23,7 +23,7 @@ import {
 } from 'helpers/redux/checkout/address/reducer';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { AddressType } from 'helpers/subscriptionsForms/addressType';
-import { setPaperDeliveryPostcode } from 'helpers/subscriptionsForms/formActions';
+import { setPaperDeliveryPostcode } from 'helpers/subscriptionsForms/formActionCreators';
 import { AddressFields } from './addressFields';
 
 // ---- Billing address ---- //
