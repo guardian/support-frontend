@@ -125,7 +125,9 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const proceedToNextStep = useOtherAmountValidation(() => {
 		const destination = `checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`;
-		navigateWithPageView(navigate, destination, abParticipations);
+		navigateWithPageView(navigate, destination, {
+			participations: abParticipations,
+		});
 	}, false);
 
 	useEffect(() => {
