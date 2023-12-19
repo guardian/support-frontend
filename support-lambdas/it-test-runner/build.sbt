@@ -3,7 +3,7 @@ import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProj
 import sbt.Keys.libraryDependencies
 
 version := "0.1-SNAPSHOT"
-scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-release:8", "-Xfatal-warnings")
+scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-Xfatal-warnings")
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",

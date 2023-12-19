@@ -7,8 +7,6 @@ import headerWithCountrySwitcherContainer from 'components/headers/header/header
 import Block from 'components/page/block';
 import Page from 'components/page/page';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
-import { CountryGroup } from 'helpers/internationalisation';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -34,18 +32,6 @@ import type {
 	WeeklyLPContentPropTypes,
 } from './weeklySubscriptionLandingProps';
 import { weeklyLandingProps } from './weeklySubscriptionLandingProps';
-
-const countryGroupId: CountryGroupId = CountryGroup.detect();
-
-const reactElementId: Record<CountryGroupId, string> = {
-	GBPCountries: 'weekly-landing-page-uk',
-	UnitedStates: 'weekly-landing-page-us',
-	AUDCountries: 'weekly-landing-page-au',
-	NZDCountries: 'weekly-landing-page-nz',
-	EURCountries: 'weekly-landing-page-eu',
-	Canada: 'weekly-landing-page-ca',
-	International: 'weekly-landing-page-int',
-};
 
 const styles = {
 	closeGapAfterPageTitle: css`
@@ -180,7 +166,4 @@ function WeeklyLandingPage({
 }
 
 setUpTrackingAndConsents();
-renderPage(
-	<WeeklyLandingPage {...weeklyLandingProps()} />,
-	reactElementId[countryGroupId],
-);
+renderPage(<WeeklyLandingPage {...weeklyLandingProps()} />);

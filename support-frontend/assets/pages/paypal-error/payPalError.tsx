@@ -29,4 +29,4 @@ const content = (
 		</div>
 	</Page>
 );
-renderPage(content, 'paypal-error-page');
+renderPage(content);

@@ -45,4 +45,4 @@ const content = (
 		</Page>
 	</Provider>
 );
-renderPage(content, 'subscriptions-redemption-page');
+renderPage(content);

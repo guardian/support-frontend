@@ -21,6 +21,7 @@ import utils.FastlyGEOIP._
 
 import scala.concurrent.{ExecutionContext, Future}
 import play.twirl.api.Html
+import views.EmptyDiv
 
 case class ContributionsPaymentMethodConfigs(
     oneOffDefaultStripeConfig: StripeConfig,
@@ -220,7 +221,7 @@ class Application(
     Ok(
       views.html.main(
         title = "Guardian Supporters Map",
-        mainElement = assets.getSsrCacheContentsAsHtml("aus-moment-map", "aus-moment-map.html"),
+        mainElement = EmptyDiv("aus-moment-map"),
         mainJsBundle = Left(RefPath("ausMomentMap.js")),
         mainStyleBundle = Left(RefPath("ausMomentMap.css")),
         description = stringsConfig.contributionsLandingDescription,

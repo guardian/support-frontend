@@ -20,4 +20,4 @@ const content = (
 		reportLink
 	/>
 );
-renderPage(content, 'error-500-page');
+renderPage(content);
