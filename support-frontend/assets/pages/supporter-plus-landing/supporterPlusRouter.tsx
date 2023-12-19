@@ -28,7 +28,6 @@ const store = initReduxForContributions();
 
 setUpRedux(store);
 
-const reactElementId = `supporter-plus-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
 const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
@@ -93,4 +92,4 @@ const router = () => {
 	);
 };
 
-renderPage(router(), reactElementId);
+renderPage(router());

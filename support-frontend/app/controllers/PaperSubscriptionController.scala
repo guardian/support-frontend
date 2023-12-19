@@ -11,6 +11,7 @@ import com.gu.support.promotions.DefaultPromotions
 import config.StringsConfig
 import play.api.mvc._
 import play.twirl.api.Html
+import views.EmptyDiv
 import views.ViewHelpers.outputJson
 
 import scala.concurrent.ExecutionContext
@@ -47,8 +48,7 @@ class PaperSubscriptionController(
     Ok(
       views.html.main(
         title = "The Guardian Newspaper Subscription | Subscription Card and Home Delivery",
-        mainElement =
-          assets.getSsrCacheContentsAsHtml("paper-subscription-landing-page", "paper-subscription-landing.html"),
+        mainElement = EmptyDiv("paper-subscription-landing-page"),
         mainJsBundle = Left(RefPath("paperSubscriptionLandingPage.js")),
         mainStyleBundle = Left(RefPath("paperSubscriptionLandingPage.css")),
         description = stringsConfig.paperLandingDescription,

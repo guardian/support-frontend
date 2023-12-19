@@ -28,10 +28,6 @@ import { paperLandingProps } from './paperSubscriptionLandingProps';
 import 'stylesheets/skeleton/skeleton.scss';
 import './paperSubscriptionLanding.scss';
 
-// ----- Collection or delivery ----- //
-
-const reactElementId = 'paper-subscription-landing-page';
-
 // ----- Redux Store ----- //
 
 const paperSubsFooter = (
@@ -127,5 +123,5 @@ function PaperLandingPage({
 
 setUpTrackingAndConsents();
 const content = <PaperLandingPage {...paperLandingProps()} />;
-renderPage(content, reactElementId);
+renderPage(content);
 export { content };

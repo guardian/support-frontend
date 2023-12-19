@@ -15,4 +15,4 @@ const content = (
 		reportLink
 	/>
 );
-renderPage(content, 'error-404-page');
+renderPage(content);
