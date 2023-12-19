@@ -25,6 +25,7 @@ import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import HeadlineImageDesktop from 'components/svgs/headlineImageDesktop';
 import {
 	AUDCountries,
 	Canada,
@@ -202,13 +203,7 @@ export function SupporterPlusCheckoutScaffold({
 				heading={
 					!isPaymentPage && (
 						<figure css={leftColImageHeader}>
-							<GridImage
-								gridId="supporterPlusLandingTop"
-								srcSizes={[1370, 685, 342]}
-								sizes="342px"
-								imgType="jpg"
-								altText=""
-							/>
+							<HeadlineImageDesktop />
 						</figure>
 					)
 				}
