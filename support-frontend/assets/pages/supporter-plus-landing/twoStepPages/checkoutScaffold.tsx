@@ -26,6 +26,7 @@ import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import HeadlineImageDesktop from 'components/svgs/headlineImageDesktop';
+import HeadlineImageMobile from 'components/svgs/headlineImageMobile';
 import {
 	AUDCountries,
 	Canada,
@@ -45,7 +46,7 @@ const checkoutContainer = (isPaymentPage?: boolean) => css`
 	color: ${palette.neutral[7]};
 	${textSans.medium()};
 
-	padding-top: ${space[isPaymentPage ? 2 : 6]}px;
+	padding-top: ${space[isPaymentPage ? 2 : 3]}px;
 	padding-bottom: ${space[9]}px;
 
 	${from.tablet} {
@@ -84,10 +85,13 @@ const secureIndicatorSpacing = css`
 `;
 
 const leftColImageHeader = css`
-	text-align: left;
-	padding-bottom: ${space[6]}px;
-	img {
-		max-width: 100%;
+	text-align: center;
+	${from.desktop} {
+		text-align: left;
+		padding-bottom: ${space[6]}px;
+		img {
+			max-width: 100%;
+		}
 	}
 `;
 
@@ -203,7 +207,12 @@ export function SupporterPlusCheckoutScaffold({
 				heading={
 					!isPaymentPage && (
 						<figure css={leftColImageHeader}>
-							<HeadlineImageDesktop />
+							<Hide from="desktop">
+								<HeadlineImageMobile />
+							</Hide>
+							<Hide until="desktop">
+								<HeadlineImageDesktop />
+							</Hide>
 						</figure>
 					)
 				}

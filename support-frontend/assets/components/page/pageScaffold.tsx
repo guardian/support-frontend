@@ -1,5 +1,5 @@
 import { css, Global } from '@emotion/react';
-import { FocusStyleManager } from '@guardian/source-foundations';
+import { brand, FocusStyleManager } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { SkipLink } from 'components/skipLink/skipLink';
@@ -14,6 +14,7 @@ const container = css`
 	min-height: 100vh;
 	max-width: 100%;
 	overflow-x: hidden;
+	background-color: ${brand[400]};
 
 	& main {
 		flex: 1;

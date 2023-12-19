@@ -11,19 +11,21 @@ import { Container } from 'components/layout/container';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 
 const mainStyles = css`
-	position: absolute;
 	left: 0;
 	right: 0;
 	color: ${neutral[100]};
+	${from.desktop} {
+		position: absolute;
+	}
 `;
 
 const headingContentContainer = css`
-	min-height: 480px;
+	padding-top: ${space[2]}px;
+	${textSans.large({ fontWeight: 'bold' })}
 	${from.desktop} {
 		min-height: 430px;
+		padding-top: ${space[6]}px;
 	}
-	padding-top: ${space[6]}px;
-	${textSans.large({ fontWeight: 'bold' })}
 `;
 
 export interface CheckoutHeadingProps extends CSSOverridable {
@@ -45,8 +47,8 @@ export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
 				<Columns collapseUntil="desktop">
 					<Column span={[1, 2, 5]}>
 						<div css={headingContentContainer}>
+							{props.heading}
 							<Hide until="desktop">
-								{props.heading}
 								{props.children}
 								{props.image}
 							</Hide>
