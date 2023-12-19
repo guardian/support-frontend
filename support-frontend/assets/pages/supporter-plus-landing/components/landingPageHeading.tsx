@@ -7,7 +7,7 @@ const headingStyles = css`
 	color: ${neutral[100]};
 	max-width: 480px;
 	${headline.large({ fontWeight: 'bold' })}
-	margin-bottom: ${space[3]}px;
+	margin-bottom: ${space[6]}px;
 
 	${from.desktop} {
 		display: inline-block;

@@ -37,7 +37,6 @@ import {
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { GuardianTsAndCs } from '../components/guardianTsAndCs';
-import { LandingPageHeading } from '../components/landingPageHeading';
 import { PatronsMessage } from '../components/patronsMessage';
 
 const checkoutContainer = (isPaymentPage?: boolean) => css`
@@ -65,9 +64,15 @@ const darkBackgroundContainerMobile = css`
 	}
 `;
 
+const subHeadingUS = css`
+	${textSans.medium()};
+	padding-right: ${space[2]}px;
+`;
+
 const subHeading = css`
 	${textSans.medium()};
 	padding-right: ${space[2]}px;
+	padding-bottom: 32px;
 `;
 
 const secureIndicatorSpacing = css`
@@ -77,12 +82,17 @@ const secureIndicatorSpacing = css`
 	}
 `;
 
-const leftColImage = css`
-	height: 140px;
-	margin-top: ${space[6]}px;
-	margin-left: -${space[9]}px;
-	margin-right: ${space[5]}px;
+const leftColImageHeader = css`
+	text-align: left;
+	padding-bottom: ${space[6]}px;
+	img {
+		max-width: 100%;
+	}
+`;
 
+const leftColImage = css`
+	text-align: center;
+	height: 0px;
 	img {
 		max-width: 100%;
 	}
@@ -159,21 +169,6 @@ export function SupporterPlusCheckoutScaffold({
 	const showUsEoy2023Content =
 		isUsEoy2023CampaignEnabled && countryGroupId === 'UnitedStates';
 
-	const heading = showUsEoy2023Content ? (
-		<LandingPageHeading
-			heading={
-				<>
-					Make a<br />
-					year-end gift
-					<br />
-					to the Guardian
-				</>
-			}
-		/>
-	) : (
-		<LandingPageHeading heading="Support fearless, independent journalism" />
-	);
-
 	useEffect(() => {
 		if (paymentComplete) {
 			navigate(thankYouRoute, { replace: true });
@@ -204,7 +199,19 @@ export function SupporterPlusCheckoutScaffold({
 			}
 		>
 			<CheckoutHeading
-				heading={!isPaymentPage && heading}
+				heading={
+					!isPaymentPage && (
+						<figure css={leftColImageHeader}>
+							<GridImage
+								gridId="supporterPlusLandingTop"
+								srcSizes={[1370, 685, 342]}
+								sizes="342px"
+								imgType="jpg"
+								altText=""
+							/>
+						</figure>
+					)
+				}
 				image={
 					!isPaymentPage &&
 					(showUsEoy2023Content ? (
@@ -221,8 +228,8 @@ export function SupporterPlusCheckoutScaffold({
 						<figure css={leftColImage}>
 							<GridImage
 								gridId="supporterPlusLanding"
-								srcSizes={[500]}
-								sizes="500px"
+								srcSizes={[817, 408, 204]}
+								sizes="204px"
 								imgType="png"
 								altText=""
 							/>
@@ -233,7 +240,7 @@ export function SupporterPlusCheckoutScaffold({
 			>
 				{!isPaymentPage &&
 					(showUsEoy2023Content ? (
-						<p css={subHeading}>
+						<p css={subHeadingUS}>
 							We rely on funding from readers, not shareholders or a billionaire
 							owner. Join the more than 250,000 readers in the US whose regular
 							support helps to sustain our journalism.
