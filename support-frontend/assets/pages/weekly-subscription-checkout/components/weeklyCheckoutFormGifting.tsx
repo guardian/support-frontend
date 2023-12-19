@@ -461,7 +461,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 						errorHeading={submissionErrorHeading}
 					/>
 					<Total
-						price={props.price.price}
+						price={props.discountedPrice.price}
 						currency={props.currencyId}
 						promotions={props.price.promotions}
 					/>
