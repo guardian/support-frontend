@@ -22,9 +22,14 @@ const mainStyles = css`
 const headingContentContainer = css`
 	padding-top: ${space[2]}px;
 	${textSans.large({ fontWeight: 'bold' })}
-	${from.desktop} {
+	${from.tablet} {
 		min-height: 430px;
+		margin: auto;
+		max-width: 65%;
+	}
+	${from.desktop} {
 		padding-top: ${space[6]}px;
+		max-width: 100%;
 	}
 `;
 
