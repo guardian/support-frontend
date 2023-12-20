@@ -117,11 +117,7 @@ GET  /subscribe/weekly/checkout/gift                               controllers.W
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly           controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = false)
 GET  /$country<(uk|us|au|int|nz|ca|eu)>/subscribe/weekly/gift      controllers.WeeklySubscriptionController.weekly(country: String, orderIsAGift: Boolean = true)
 
-GET  /paper                                                        controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = false)
-GET  /subscribe/paper                                              controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = false)
-GET  /subscribe/paper/delivery                                     controllers.PaperSubscriptionController.paperMethodRedirect(withDelivery: Boolean = true)
 GET  /uk/subscribe/paper                                           controllers.PaperSubscriptionController.paper()
-GET  /uk/subscribe/paper/delivery                                  controllers.PaperSubscriptionController.paper()
 GET  /subscribe/paper/checkout                                     controllers.PaperSubscriptionFormController.displayForm()
 
 # redemptions

@@ -35,13 +35,9 @@ class PaperSubscriptionController(
 
   implicit val a: AssetsResolver = assets
 
-  def paperMethodRedirect(withDelivery: Boolean = false): Action[AnyContent] = Action { implicit request =>
-    Redirect(buildCanonicalPaperSubscriptionLink(withDelivery), request.queryString, status = FOUND)
-  }
-
   def paper(): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
+    val canonicalLink = Some(s"${supportUrl}/uk/subscribe/paper")
     val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(Paper)
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
 

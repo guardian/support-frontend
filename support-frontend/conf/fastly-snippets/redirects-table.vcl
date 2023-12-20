@@ -49,4 +49,10 @@ table support_frontend_redirects {
   "/int/subscribe": "/int/subscribe/weekly",
   "/nz/subscribe": "/nz/subscribe/weekly",
   "/ca/subscribe": "/ca/subscribe/weekly",
+
+  # paper
+  "/paper": "/uk/subscribe/paper",
+  "/subscribe/paper": "/uk/subscribe/paper",
+  # This was a legacy URL to differentiate between tabs on the page
+  "/uk/subscribe/paper/delivery": "/uk/subscribe/paper",
 }
