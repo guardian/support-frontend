@@ -10,7 +10,7 @@ const headlineImageMobile = css`
 	}
 `;
 
-export default function HeadlineImageDesktop() {
+export default function HeadlineImageMobile() {
 	return (
 		<svg
 			css={headlineImageMobile}
