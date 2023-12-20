@@ -21,9 +21,7 @@ const mainStyles = css`
 
 const headingContainerStyle = css`
 	> div {
-		${from.tablet} {
-			min-height: 430px;
-		}
+		min-height: 430px;
 	}
 `;
 

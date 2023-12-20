@@ -84,6 +84,13 @@ const secureIndicatorSpacing = css`
 	}
 `;
 
+// TODO : re-factor SupporterPlusCheckoutScaffold so that we do not require negative margin here
+const secureIndicatorHoist = css`
+	${until.desktop} {
+		margin-top: -430px;
+	}
+`;
+
 const leftColImageHeader = css`
 	${from.desktop} {
 		text-align: left;
@@ -268,7 +275,7 @@ export function SupporterPlusCheckoutScaffold({
 							<SecureTransactionIndicator
 								align="center"
 								theme="light"
-								cssOverrides={secureIndicatorSpacing}
+								cssOverrides={[secureIndicatorSpacing, secureIndicatorHoist]}
 							/>
 						)}
 						{children}

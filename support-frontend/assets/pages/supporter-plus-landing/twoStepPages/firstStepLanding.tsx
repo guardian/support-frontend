@@ -1,6 +1,5 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
-	between,
 	from,
 	neutral,
 	space,
@@ -32,13 +31,17 @@ import { LimitedPriceCards } from '../formSections/limitedPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 // TODO : re-factor SupporterPlusCheckoutScaffold so that we do not require negative margin here
-const shorterBoxMargin = css`
+const boxShorterMargin = css`
 	:not(:last-child) {
 		${until.tablet} {
 			margin-bottom: ${space[2]}px;
 		}
 	}
-	${between.tablet.and.desktop} {
+`;
+
+// TODO : re-factor SupporterPlusCheckoutScaffold so that we do not require negative margin here
+const boxHoist = css`
+	${until.desktop} {
 		margin-top: -350px;
 	}
 `;
@@ -137,7 +140,7 @@ export function SupporterPlusInitialLandingPage({
 			thankYouRoute={thankYouRoute}
 			isUsEoy2023CampaignEnabled={isUsEoy2023CampaignEnabled}
 		>
-			<Box cssOverrides={shorterBoxMargin}>
+			<Box cssOverrides={[boxShorterMargin, boxHoist]}>
 				{displayLimitedPriceCards ? (
 					<LimitedPriceCards />
 				) : (

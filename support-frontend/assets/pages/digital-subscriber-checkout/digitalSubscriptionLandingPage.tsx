@@ -1,5 +1,11 @@
 import { css } from '@emotion/react';
-import { from, neutral, space, textSans } from '@guardian/source-foundations';
+import {
+	from,
+	neutral,
+	space,
+	textSans,
+	until,
+} from '@guardian/source-foundations';
 import { Column, Columns, Hide } from '@guardian/source-react-components';
 import {
 	Divider,
@@ -57,6 +63,13 @@ const checkoutContainer = css`
 
 	${from.desktop} {
 		padding-top: ${space[6]}px;
+	}
+`;
+
+// TODO : re-factor SupporterPlusCheckoutScaffold so that we do not require negative margin here
+const boxHoist = css`
+	${until.desktop} {
+		margin-top: -430px;
 	}
 `;
 
@@ -183,7 +196,7 @@ export function DigitalSubscriptionLandingPage({
 				<Columns cssOverrides={checkoutContainer} collapseUntil="tablet">
 					<Column span={[0, 2, 5]}></Column>
 					<Column span={[1, 8, 7]}>
-						<Box>
+						<Box cssOverrides={boxHoist}>
 							<BillingPeriodSelector />
 							<p css={cancelAnytime}>Cancel anytime</p>
 						</Box>
