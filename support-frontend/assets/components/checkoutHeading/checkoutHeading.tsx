@@ -32,7 +32,7 @@ const headingContainerContent = css`
 	${textSans.large({ fontWeight: 'bold' })}
 	${from.tablet} {
 		margin: auto;
-		max-width: 65%;
+		max-width: 456px;
 	}
 	${from.desktop} {
 		padding-top: ${space[6]}px;
