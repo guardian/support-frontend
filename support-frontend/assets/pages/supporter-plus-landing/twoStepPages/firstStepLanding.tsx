@@ -1,5 +1,6 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
+	between,
 	from,
 	neutral,
 	space,
@@ -30,11 +31,15 @@ import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { LimitedPriceCards } from '../formSections/limitedPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
+// TODO : re-factor SupporterPlusCheckoutScaffold so that we do not require negative margin here
 const shorterBoxMargin = css`
 	:not(:last-child) {
 		${until.tablet} {
 			margin-bottom: ${space[2]}px;
 		}
+	}
+	${between.tablet.and.desktop} {
+		margin-top: -350px;
 	}
 `;
 

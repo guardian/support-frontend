@@ -19,11 +19,18 @@ const mainStyles = css`
 	}
 `;
 
-const headingContentContainer = css`
+const headingContainerStyle = css`
+	> div {
+		${from.tablet} {
+			min-height: 430px;
+		}
+	}
+`;
+
+const headingContainerContent = css`
 	padding-top: ${space[2]}px;
 	${textSans.large({ fontWeight: 'bold' })}
 	${from.tablet} {
-		min-height: 430px;
 		margin: auto;
 		max-width: 65%;
 	}
@@ -48,10 +55,11 @@ export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
 				topBorder={props.withTopborder}
 				borderColor={brand[600]}
 				backgroundColor={brand[400]}
+				cssOverrides={headingContainerStyle}
 			>
 				<Columns collapseUntil="desktop">
 					<Column span={[1, 2, 5]}>
-						<div css={headingContentContainer}>
+						<div css={headingContainerContent}>
 							{props.heading}
 							<Hide until="desktop">
 								{props.children}
