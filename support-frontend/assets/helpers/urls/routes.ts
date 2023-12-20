@@ -1,5 +1,8 @@
 // ----- Routes ----- //
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import {
+	type FulfilmentOptions,
+	HomeDelivery,
+} from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { Option } from 'helpers/types/option';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
@@ -58,11 +61,7 @@ function paperSubsUrl(
 	withDelivery = false,
 	promoCode?: Option<string>,
 ): string {
-	const baseURL = [
-		getOrigin(),
-		'uk/subscribe/paper',
-		...(withDelivery ? ['delivery'] : []),
-	].join('/');
+	const baseURL = [getOrigin(), 'uk/subscribe/paper'].join('/');
 	const queryParams = [
 		...getAllQueryParams(),
 		...(promoCode ? [['promoCode', promoCode]] : []),
@@ -71,8 +70,10 @@ function paperSubsUrl(
 		.map((keyValuePair) => keyValuePair.join('='))
 		.join('&');
 
+	const hash = withDelivery ? `#${HomeDelivery}` : '';
+
 	if (queryParamsString) {
-		return `${baseURL}?${queryParamsString}`;
+		return `${baseURL}?${queryParamsString}${hash}`;
 	}
 
 	return baseURL;

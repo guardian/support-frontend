@@ -19,10 +19,9 @@ import {
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { renderPage } from 'helpers/rendering/render';
-import { paperSubsUrl } from 'helpers/urls/routes';
 import { PaperHero } from './components/hero/hero';
 import PaperProductPrices from './components/paperProductPrices';
-import Tabs from './components/tabs';
+import PaperTabs from './components/paperTabs';
 import type { PaperLandingPropTypes } from './paperSubscriptionLandingProps';
 import { paperLandingProps } from './paperSubscriptionLandingProps';
 import 'stylesheets/skeleton/skeleton.scss';
@@ -51,22 +50,9 @@ function PaperLandingPage({
 }: PaperLandingPropTypes) {
 	const sanitisedPromoCopy = getPromotionCopy(promotionCopy);
 
-	const [shouldRedirectToHomeDelivery, setShouldRedirectToHomeDelivery] =
-		useState<boolean>(true);
+	const fulfilment =
+		window.location.hash === `#${Collection}` ? Collection : HomeDelivery;
 
-	if (
-		shouldRedirectToHomeDelivery &&
-		!window.location.pathname.includes('delivery')
-	) {
-		window.history.replaceState({}, '', paperSubsUrl(true));
-		setShouldRedirectToHomeDelivery(false);
-	}
-
-	const fulfilment: PaperFulfilmentOptions =
-		window.location.pathname.includes('delivery') ||
-		shouldRedirectToHomeDelivery
-			? HomeDelivery
-			: Collection;
 	const [selectedTab, setSelectedTab] =
 		useState<PaperFulfilmentOptions>(fulfilment);
 
@@ -82,7 +68,8 @@ function PaperLandingPage({
 			product: 'Paper',
 			componentType: 'ACQUISITIONS_BUTTON',
 		})();
-		window.history.replaceState({}, '', paperSubsUrl(newTab === HomeDelivery));
+
+		window.history.replaceState({}, '', `#${newTab}`);
 	}
 
 	return (
@@ -99,7 +86,7 @@ function PaperLandingPage({
 				<CentredContainer>
 					<Block>
 						<div css={tabsTabletSpacing}>
-							<Tabs
+							<PaperTabs
 								selectedTab={selectedTab}
 								setTabAction={handleSetTabAction}
 							/>
