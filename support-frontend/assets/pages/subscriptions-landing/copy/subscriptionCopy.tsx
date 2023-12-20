@@ -69,7 +69,7 @@ const digital = (
 	title: 'The Guardian Digital Edition',
 	subtitle: getDisplayPrice(countryGroupId, priceCopy.price),
 	description:
-		'Keep informed on the day’s top stories with the Guardian digital edition. Read the headlines, along with your favourite political commentators, lifestyle columnists, sport pundits and more – in a daily, digestible read, across all your devices.',
+		'Enjoy the Guardian and Observer newspaper, reimagined for mobile and tablet',
 	buttons: [
 		{
 			ctaButtonText: 'Find out more',
