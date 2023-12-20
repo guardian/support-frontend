@@ -10,26 +10,18 @@ import { Monthly } from 'helpers/productPrice/billingPeriods';
 import { Paper } from 'helpers/productPrice/subscriptions';
 import { initReduxForSubscriptions } from 'helpers/redux/subscriptionsStore';
 import { renderPage } from 'helpers/rendering/render';
-import * as storage from 'helpers/storage/storage';
 import CheckoutForm from 'pages/paper-subscription-checkout/components/paperCheckoutForm';
 import {
 	getFulfilmentOption,
 	getProductOption,
 	getStartDate,
 } from 'pages/paper-subscription-checkout/helpers/options';
-import { REDIRECT_AFTER_SIGNOUT_STORAGE_KEY } from '../../helpers/user/user';
+import { checkSignOutRedirectInStorage } from '../../helpers/signoutRedirectStorage/signoutRedirectStorage';
 import ThankYouContent from './components/thankYou';
 import 'stylesheets/skeleton/skeleton.scss';
 import './_legacyImports.scss';
 
-const redirectUrlFromSessionStorage = storage.getSession(
-	REDIRECT_AFTER_SIGNOUT_STORAGE_KEY,
-);
-//This check is to make sure we are retaining the url with query params when we hit sign out
-if (redirectUrlFromSessionStorage) {
-	storage.setSession(REDIRECT_AFTER_SIGNOUT_STORAGE_KEY, '');
-	window.location.href = redirectUrlFromSessionStorage;
-}
+checkSignOutRedirectInStorage();
 setUpTrackingAndConsents();
 // ----- Redux Store ----- //
 const fulfilmentOption = getFulfilmentOption();
