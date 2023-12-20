@@ -4,9 +4,10 @@ import { css } from '@emotion/react';
 import { until } from '@guardian/source-foundations';
 
 const headlineImageMobile = css`
-	${until.desktop} {
-		width: 100%;
-		height: 100%;
+	width: 100%;
+	height: 100%;
+	${until.tablet} {
+		max-width: 440px;
 	}
 `;
 

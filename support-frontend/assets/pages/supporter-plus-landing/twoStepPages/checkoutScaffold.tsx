@@ -85,7 +85,6 @@ const secureIndicatorSpacing = css`
 `;
 
 const leftColImageHeader = css`
-	text-align: center;
 	${from.desktop} {
 		text-align: left;
 		padding-bottom: ${space[6]}px;
