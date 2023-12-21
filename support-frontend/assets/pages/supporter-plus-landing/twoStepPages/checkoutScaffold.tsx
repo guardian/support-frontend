@@ -38,16 +38,20 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { LandingPageHeading } from 'pages/digital-subscriber-checkout/components/landingPageHeading';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { GuardianTsAndCs } from '../components/guardianTsAndCs';
 import { PatronsMessage } from '../components/patronsMessage';
 
-const checkoutContainer = (isPaymentPage?: boolean) => css`
+const checkoutContainer = (
+	isPaymentPage?: boolean,
+	showUsEoy2023Content?: boolean,
+) => css`
 	position: relative;
 	color: ${palette.neutral[7]};
 	${textSans.medium()};
 
-	padding-top: ${space[isPaymentPage ? 2 : 3]}px;
+	padding-top: ${space[isPaymentPage ? 2 : !showUsEoy2023Content ? 3 : 6]}px;
 	padding-bottom: ${space[9]}px;
 
 	${from.tablet} {
@@ -172,6 +176,19 @@ export function SupporterPlusCheckoutScaffold({
 	const showUsEoy2023Content =
 		isUsEoy2023CampaignEnabled && countryGroupId === 'UnitedStates';
 
+	const showUsEoy2023Heading = (
+		<LandingPageHeading
+			heading={
+				<>
+					Make a<br />
+					year-end gift
+					<br />
+					to the Guardian
+				</>
+			}
+		/>
+	);
+
 	useEffect(() => {
 		if (paymentComplete) {
 			navigate(thankYouRoute, { replace: true });
@@ -205,20 +222,11 @@ export function SupporterPlusCheckoutScaffold({
 				<CheckoutHeading withTopborder={isPaymentPage}></CheckoutHeading>
 			)}
 
-			{!isPaymentPage && (
-				<CheckoutHeadingImage
-					heading={
-						<figure css={leftColImageHeader}>
-							<Hide from="desktop">
-								<HeadlineImageMobile />
-							</Hide>
-							<Hide until="desktop">
-								<HeadlineImageDesktop />
-							</Hide>
-						</figure>
-					}
-					image={
-						showUsEoy2023Content ? (
+			{!isPaymentPage &&
+				(showUsEoy2023Content ? (
+					<CheckoutHeading
+						heading={showUsEoy2023Heading}
+						image={
 							<figure css={leftColImageUnitedStates}>
 								<GridImage
 									gridId="supporterPlusLandingUnitedStates"
@@ -228,7 +236,28 @@ export function SupporterPlusCheckoutScaffold({
 									altText=""
 								/>
 							</figure>
-						) : (
+						}
+						withTopborder={isPaymentPage}
+					>
+						<p css={subHeading}>
+							We rely on funding from readers, not shareholders or a billionaire
+							owner. Join the more than 250,000 readers in the US whose regular
+							support helps to sustain our journalism.
+						</p>
+					</CheckoutHeading>
+				) : (
+					<CheckoutHeadingImage
+						heading={
+							<figure css={leftColImageHeader}>
+								<Hide from="desktop">
+									<HeadlineImageMobile />
+								</Hide>
+								<Hide until="desktop">
+									<HeadlineImageDesktop />
+								</Hide>
+							</figure>
+						}
+						image={
 							<figure css={leftColImage}>
 								<GridImage
 									gridId="supporterPlusLanding"
@@ -238,29 +267,20 @@ export function SupporterPlusCheckoutScaffold({
 									altText=""
 								/>
 							</figure>
-						)
-					}
-					withTopborder={isPaymentPage}
-				>
-					{showUsEoy2023Content ? (
-						<p css={subHeading}>
-							We rely on funding from readers, not shareholders or a billionaire
-							owner. Join the more than 250,000 readers in the US whose regular
-							support helps to sustain our journalism.
-						</p>
-					) : (
+						}
+						withTopborder={isPaymentPage}
+					>
 						<p css={[subHeading, subHeadingPadBelow]}>
 							As a reader-funded news organisation, we rely on your generosity.
 							Please give what you can, so millions can benefit from quality
 							reporting on the events shaping our world.
 						</p>
-					)}
-				</CheckoutHeadingImage>
-			)}
+					</CheckoutHeadingImage>
+				))}
 
 			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
 				<Columns
-					cssOverrides={checkoutContainer(isPaymentPage)}
+					cssOverrides={checkoutContainer(isPaymentPage, showUsEoy2023Content)}
 					collapseUntil="tablet"
 				>
 					<Column span={[0, 2, 5]}></Column>
