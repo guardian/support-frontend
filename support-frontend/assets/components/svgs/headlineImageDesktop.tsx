@@ -1,5 +1,3 @@
-// wonky headline on checkout
-
 export default function HeadlineImageDesktop() {
 	return (
 		<svg

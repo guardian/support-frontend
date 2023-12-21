@@ -1,20 +1,24 @@
-// wonky headline on checkout
-
 import { css } from '@emotion/react';
-import { until } from '@guardian/source-foundations';
+import { from } from '@guardian/source-foundations';
 
-const headlineImageMobile = css`
+const headlineImageMobileCss = css`
 	width: 100%;
 	height: 100%;
-	${until.tablet} {
-		max-width: 440px;
+	${from.mobile} {
+		max-width: 292px;
+	}
+	${from.mobileMedium} {
+		max-width: 355px;
+	}
+	${from.mobileLandscape} {
+		max-width: 439px;
 	}
 `;
 
 export default function HeadlineImageMobile() {
 	return (
 		<svg
-			css={headlineImageMobile}
+			css={headlineImageMobileCss}
 			width="356"
 			height="61"
 			viewBox="0 0 356 61"
