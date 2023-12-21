@@ -126,18 +126,18 @@
     </noscript>
 
     @emptyDiv(id: EmptyDiv) = {
-    <div class="gu-render-to" data-not-hydrated="true" id="@id.value"></div>
-  }
+      <div class="gu-render-to" data-not-hydrated="true" id="@id.value"></div>
+    }
 
     @withContent(ssrContent: SSRContent) = {
-    <div
-      class="gu-render-to"
-      data-not-hydrated="true"
-      id="@ssrContent.value"
-    >
-      @ssrContent.content
-    </div>
-  }
+      <div
+        class="gu-render-to"
+        data-not-hydrated="true"
+        id="@ssrContent.value"
+      >
+        @ssrContent.content
+      </div>
+    }
 
     @mainElement.fold(emptyDiv, withContent)
 

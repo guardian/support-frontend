@@ -90,7 +90,7 @@ export function initReduxForSubscriptions(
 
 		return store;
 	} catch (err) {
-		renderError(err as Error, null);
+		renderError(err as Error);
 		throw err;
 	}
 }
