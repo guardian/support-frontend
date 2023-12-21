@@ -15,6 +15,7 @@ import {
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
+import { CheckoutHeadingImage } from 'components/checkoutHeading/checkoutHeadingImage';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import GridImage from 'components/gridImage/gridImage';
@@ -66,14 +67,12 @@ const darkBackgroundContainerMobile = css`
 	}
 `;
 
-const subHeadingUS = css`
+const subHeading = css`
 	${textSans.medium()};
 	padding-right: ${space[2]}px;
 `;
 
-const subHeading = css`
-	${textSans.medium()};
-	padding-right: ${space[2]}px;
+const subHeadingPadBelow = css`
 	padding-bottom: 32px;
 `;
 
@@ -81,13 +80,6 @@ const secureIndicatorSpacing = css`
 	margin-bottom: ${space[3]}px;
 	${from.tablet} {
 		margin-bottom: ${space[4]}px;
-	}
-`;
-
-// TODO : re-factor SupporterPlusCheckoutScaffold so that we do not require negative margin here
-const secureIndicatorHoist = css`
-	${until.desktop} {
-		margin-top: -430px;
 	}
 `;
 
@@ -209,9 +201,13 @@ export function SupporterPlusCheckoutScaffold({
 				</FooterWithContents>
 			}
 		>
-			<CheckoutHeading
-				heading={
-					!isPaymentPage && (
+			{isPaymentPage && (
+				<CheckoutHeading withTopborder={isPaymentPage}></CheckoutHeading>
+			)}
+
+			{!isPaymentPage && (
+				<CheckoutHeadingImage
+					heading={
 						<figure css={leftColImageHeader}>
 							<Hide from="desktop">
 								<HeadlineImageMobile />
@@ -220,49 +216,47 @@ export function SupporterPlusCheckoutScaffold({
 								<HeadlineImageDesktop />
 							</Hide>
 						</figure>
-					)
-				}
-				image={
-					!isPaymentPage &&
-					(showUsEoy2023Content ? (
-						<figure css={leftColImageUnitedStates}>
-							<GridImage
-								gridId="supporterPlusLandingUnitedStates"
-								srcSizes={[420]}
-								sizes="420px"
-								imgType="png"
-								altText=""
-							/>
-						</figure>
-					) : (
-						<figure css={leftColImage}>
-							<GridImage
-								gridId="supporterPlusLanding"
-								srcSizes={[817, 408, 204]}
-								sizes="204px"
-								imgType="png"
-								altText=""
-							/>
-						</figure>
-					))
-				}
-				withTopborder={isPaymentPage}
-			>
-				{!isPaymentPage &&
-					(showUsEoy2023Content ? (
-						<p css={subHeadingUS}>
+					}
+					image={
+						showUsEoy2023Content ? (
+							<figure css={leftColImageUnitedStates}>
+								<GridImage
+									gridId="supporterPlusLandingUnitedStates"
+									srcSizes={[420]}
+									sizes="420px"
+									imgType="png"
+									altText=""
+								/>
+							</figure>
+						) : (
+							<figure css={leftColImage}>
+								<GridImage
+									gridId="supporterPlusLanding"
+									srcSizes={[817, 408, 204]}
+									sizes="204px"
+									imgType="png"
+									altText=""
+								/>
+							</figure>
+						)
+					}
+					withTopborder={isPaymentPage}
+				>
+					{showUsEoy2023Content ? (
+						<p css={subHeading}>
 							We rely on funding from readers, not shareholders or a billionaire
 							owner. Join the more than 250,000 readers in the US whose regular
 							support helps to sustain our journalism.
 						</p>
 					) : (
-						<p css={subHeading}>
+						<p css={[subHeading, subHeadingPadBelow]}>
 							As a reader-funded news organisation, we rely on your generosity.
 							Please give what you can, so millions can benefit from quality
 							reporting on the events shaping our world.
 						</p>
-					))}
-			</CheckoutHeading>
+					)}
+				</CheckoutHeadingImage>
+			)}
 
 			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
 				<Columns
@@ -275,7 +269,7 @@ export function SupporterPlusCheckoutScaffold({
 							<SecureTransactionIndicator
 								align="center"
 								theme="light"
-								cssOverrides={[secureIndicatorSpacing, secureIndicatorHoist]}
+								cssOverrides={secureIndicatorSpacing}
 							/>
 						)}
 						{children}

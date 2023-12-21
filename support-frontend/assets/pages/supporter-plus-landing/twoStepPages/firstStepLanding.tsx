@@ -30,7 +30,6 @@ import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { LimitedPriceCards } from '../formSections/limitedPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
-// TODO : re-factor SupporterPlusCheckoutScaffold so that we do not require negative margin here
 const boxShorterMargin = css`
 	:not(:last-child) {
 		${until.tablet} {
