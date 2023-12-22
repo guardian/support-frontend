@@ -6,7 +6,7 @@ import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHe
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import GridImage from 'components/gridImage/gridImage';
 import { Container } from 'components/layout/container';
-import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
+import { LandingPageHeading } from 'pages/digital-subscriber-checkout/components/landingPageHeading';
 import { withPositionRelative } from '../../.storybook/decorators/withPositionRelative';
 
 export default {

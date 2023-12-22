@@ -11,29 +11,43 @@ import { Container } from 'components/layout/container';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 
 const mainStyles = css`
-	position: absolute;
 	left: 0;
 	right: 0;
 	color: ${neutral[100]};
-`;
-
-const headingContentContainer = css`
-	min-height: 480px;
 	${from.desktop} {
-		min-height: 440px;
+		position: absolute;
 	}
-	padding-top: ${space[6]}px;
-	${textSans.large({ fontWeight: 'bold' })}
 `;
 
-export interface CheckoutHeadingProps extends CSSOverridable {
+const headingContainerStyle = css`
+	> div {
+		min-height: 430px;
+	}
+`;
+
+const headingContainerContent = css`
+	padding-top: ${space[2]}px;
+	${textSans.large({ fontWeight: 'bold' })}
+	${from.tablet} {
+		margin: auto;
+		max-width: 456px;
+	}
+	${from.desktop} {
+		padding-top: ${space[6]}px;
+		max-width: 100%;
+	}
+`;
+
+interface CheckoutHeadingImageProps extends CSSOverridable {
 	heading?: React.ReactNode;
 	children?: React.ReactNode;
 	image?: React.ReactNode;
 	withTopBorder?: true;
 }
 
-export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
+export function CheckoutHeadingImage(
+	props: CheckoutHeadingImageProps,
+): JSX.Element {
 	return (
 		<div css={mainStyles}>
 			<Container
@@ -41,12 +55,13 @@ export function CheckoutHeading(props: CheckoutHeadingProps): JSX.Element {
 				topBorder={props.withTopBorder}
 				borderColor={brand[600]}
 				backgroundColor={brand[400]}
+				cssOverrides={headingContainerStyle}
 			>
 				<Columns collapseUntil="desktop">
 					<Column span={[1, 2, 5]}>
-						<div css={headingContentContainer}>
+						<div css={headingContainerContent}>
+							{props.heading}
 							<Hide until="desktop">
-								{props.heading}
 								{props.children}
 								{props.image}
 							</Hide>
