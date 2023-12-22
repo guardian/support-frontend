@@ -138,7 +138,7 @@ export function SupporterPlusInitialLandingPage({
 	`;
 
 	const isUsEoy2023CampaignEnabled = isCampaignEnabled(`usEoy2023`);
-	const hoistHeader =
+	const hoistPriceCardsAmountsBenefitsContainer =
 		isUsEoy2023CampaignEnabled && countryGroupId === 'UnitedStates'
 			? css``
 			: boxHoist;
@@ -152,7 +152,12 @@ export function SupporterPlusInitialLandingPage({
 			thankYouRoute={thankYouRoute}
 			isUsEoy2023CampaignEnabled={isUsEoy2023CampaignEnabled}
 		>
-			<Box cssOverrides={[boxShorterMargin, hoistHeader]}>
+			<Box
+				cssOverrides={[
+					boxShorterMargin,
+					hoistPriceCardsAmountsBenefitsContainer,
+				]}
+			>
 				{displayLimitedPriceCards ? (
 					<LimitedPriceCards />
 				) : (

@@ -71,12 +71,14 @@ const darkBackgroundContainerMobile = css`
 	}
 `;
 
-const subHeading = css`
+const subHeadingUnitedStates = css`
 	${textSans.medium()};
 	padding-right: ${space[2]}px;
 `;
 
-const subHeadingPadBelow = css`
+const subHeading = css`
+	${textSans.medium()};
+	padding-right: ${space[2]}px;
 	padding-bottom: 32px;
 `;
 
@@ -176,7 +178,7 @@ export function SupporterPlusCheckoutScaffold({
 	const showUsEoy2023Content =
 		isUsEoy2023CampaignEnabled && countryGroupId === 'UnitedStates';
 
-	const showUsEoy2023Heading = (
+	const headingUSEoy2023 = (
 		<LandingPageHeading
 			heading={
 				<>
@@ -219,13 +221,13 @@ export function SupporterPlusCheckoutScaffold({
 			}
 		>
 			{isPaymentPage && (
-				<CheckoutHeading withTopborder={isPaymentPage}></CheckoutHeading>
+				<CheckoutHeading withTopBorder={isPaymentPage}></CheckoutHeading>
 			)}
 
 			{!isPaymentPage &&
 				(showUsEoy2023Content ? (
 					<CheckoutHeading
-						heading={showUsEoy2023Heading}
+						heading={headingUSEoy2023}
 						image={
 							<figure css={leftColImageUnitedStates}>
 								<GridImage
@@ -237,9 +239,9 @@ export function SupporterPlusCheckoutScaffold({
 								/>
 							</figure>
 						}
-						withTopborder={isPaymentPage}
+						withTopBorder={isPaymentPage}
 					>
-						<p css={subHeading}>
+						<p css={subHeadingUnitedStates}>
 							We rely on funding from readers, not shareholders or a billionaire
 							owner. Join the more than 250,000 readers in the US whose regular
 							support helps to sustain our journalism.
@@ -268,9 +270,9 @@ export function SupporterPlusCheckoutScaffold({
 								/>
 							</figure>
 						}
-						withTopborder={isPaymentPage}
+						withTopBorder={isPaymentPage}
 					>
-						<p css={[subHeading, subHeadingPadBelow]}>
+						<p css={subHeading}>
 							As a reader-funded news organisation, we rely on your generosity.
 							Please give what you can, so millions can benefit from quality
 							reporting on the events shaping our world.
