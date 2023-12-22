@@ -46,22 +46,22 @@ import { PatronsMessage } from '../components/patronsMessage';
 const checkoutContainer = (
 	isPaymentPage?: boolean,
 	showUsEoy2023Content?: boolean,
-) => css`
-	position: relative;
-	color: ${palette.neutral[7]};
-	${textSans.medium()};
-
-	padding-top: ${space[isPaymentPage ? 2 : !showUsEoy2023Content ? 3 : 6]}px;
-	padding-bottom: ${space[9]}px;
-
-	${from.tablet} {
-		padding-bottom: ${space[12]}px;
+) => {
+	type SpaceRange = 2 | 3 | 6;
+	let paddingTop: SpaceRange = 6;
+	if (isPaymentPage) {
+		paddingTop = 2;
+	} else if (!showUsEoy2023Content) {
+		paddingTop = 3;
 	}
 
-	${from.desktop} {
-		padding-top: ${space[6]}px;
-	}
-`;
+	return css`
+		position: relative;
+		color: ${palette.neutral[7]};
+		${textSans.medium()};
+		padding-top: ${space[paddingTop]}px;
+	`;
+};
 
 const darkBackgroundContainerMobile = css`
 	background-color: ${palette.neutral[97]};
