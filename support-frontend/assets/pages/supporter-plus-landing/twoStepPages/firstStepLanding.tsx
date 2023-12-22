@@ -39,7 +39,7 @@ const boxShorterMargin = css`
 	}
 `;
 
-// TODO : re-factor SupporterPlusCheckoutScaffold so that we do not require negative margin here
+// TODO : re-factor SupporterPlusCheckoutScaffold so that we do not require negative margin here, this overlays the PriceCardsAmountsBenefitsContainer over the PageScaffold
 const boxHoist = css`
 	${until.mobileMedium} {
 		margin-top: -370px;
