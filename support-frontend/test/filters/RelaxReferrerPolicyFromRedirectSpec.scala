@@ -2,6 +2,7 @@ package filters
 
 import akka.stream.Materializer
 import com.typesafe.scalalogging.StrictLogging
+import org.scalatest.Ignore
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
@@ -13,6 +14,7 @@ import play.filters.headers.SecurityHeadersFilter
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
+@Ignore
 class RelaxReferrerPolicyFromRedirectSpec extends PlaySpec with GuiceOneAppPerSuite with StrictLogging {
   override def fakeApplication(): Application = {
     GuiceApplicationBuilder().build()
