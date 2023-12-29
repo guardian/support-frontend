@@ -87,9 +87,7 @@ export function Ticker(props: TickerProps): JSX.Element {
 
 	return (
 		<div>
-			{props.headline.length > 0 && (
-				<h2 css={tickerHeadline}>{props.headline}</h2>
-			)}
+			<h2 css={tickerHeadline}>{props.headline}</h2>
 			<div css={tickerProgressBar}>
 				<div css={tickerProgressBarBackground}>
 					<div
