@@ -33,7 +33,7 @@ export const activeCampaigns: Record<string, CampaignSettings> = {
 		tickerSettings: {
 			countType: 'money',
 			endType: 'unlimited',
-			headline: 'Help us reach our end-of-year goal',
+			headline: '',
 		},
 	},
 	ausTicker2023: {

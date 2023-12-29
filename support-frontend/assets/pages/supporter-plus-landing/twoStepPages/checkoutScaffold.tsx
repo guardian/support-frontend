@@ -74,6 +74,7 @@ const darkBackgroundContainerMobile = css`
 const subHeadingUnitedStates = css`
 	${textSans.medium()};
 	padding-right: ${space[2]}px;
+	margin-bottom: 54px;
 `;
 
 const subHeading = css`
@@ -179,16 +180,7 @@ export function SupporterPlusCheckoutScaffold({
 		isUsEoy2023CampaignEnabled && countryGroupId === 'UnitedStates';
 
 	const headingUSEoy2023 = (
-		<LandingPageHeading
-			heading={
-				<>
-					Make a<br />
-					year-end gift
-					<br />
-					to the Guardian
-				</>
-			}
-		/>
+		<LandingPageHeading heading={<>Support the Guardian</>} />
 	);
 
 	useEffect(() => {
