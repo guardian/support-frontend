@@ -22,7 +22,7 @@ function setUpTrackingAndConsents(): void {
 		countryGroupId,
 		settings,
 	);
-  const participationsWithAmountsTest = {
+	const participationsWithAmountsTest = {
 		...participations,
 		...amountsParticipation,
 	};

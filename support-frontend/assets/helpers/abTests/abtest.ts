@@ -220,8 +220,8 @@ function getAmountsTestVariant(
 ): GetAmountsTestVariantResult {
 	const { amounts } = settings;
 
-  if (!amounts) {
-    return {
+	if (!amounts) {
+		return {
 			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
 		};
 	}
@@ -231,7 +231,7 @@ function getAmountsTestVariant(
 		testName: string,
 		variantName: string,
 	): Participations | undefined => {
-    // Check if we actually want to track this test
+		// Check if we actually want to track this test
 		const pathMatches = targetPageMatches(
 			path,
 			'/??/contribute|thankyou(/.*)?$',
@@ -344,7 +344,7 @@ function getAmountsTestVariant(
 		variant.variantName,
 	);
 
-  return {
+	return {
 		selectedAmountsVariant: {
 			...variant,
 			testName: currentTestName,
@@ -542,12 +542,9 @@ function targetPageMatches(
 	return locationPath.match(targetPage) != null;
 }
 
-export {
-  init,
-  getAmountsTestVariant,
-}
+export { init, getAmountsTestVariant };
 
 // Exported for testing only
 export const _ = {
-  targetPageMatches
-}
+	targetPageMatches,
+};
