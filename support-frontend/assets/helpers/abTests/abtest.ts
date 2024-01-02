@@ -79,7 +79,7 @@ export type Tests = Record<string, Test>;
 
 // ----- Init ----- //
 
-export function init(
+function init(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	abTests: Tests = tests,
@@ -209,7 +209,7 @@ interface GetAmountsTestVariantResult {
 	selectedAmountsVariant: SelectedAmountsVariant; // Always return an AmountsVariant, even if it's a fallback
 	amountsParticipation?: Participations; // Optional because we only add participation if we want to track an amounts test that has multiple variants
 }
-export function getAmountsTestVariant(
+function getAmountsTestVariant(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	settings: Settings,
@@ -219,8 +219,9 @@ export function getAmountsTestVariant(
 		[],
 ): GetAmountsTestVariantResult {
 	const { amounts } = settings;
-	if (!amounts) {
-		return {
+
+  if (!amounts) {
+    return {
 			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
 		};
 	}
@@ -230,11 +231,12 @@ export function getAmountsTestVariant(
 		testName: string,
 		variantName: string,
 	): Participations | undefined => {
-		// Check if we actually want to track this test
+    // Check if we actually want to track this test
 		const pathMatches = targetPageMatches(
 			path,
 			'/??/contribute|thankyou(/.*)?$',
 		);
+
 		if (pathMatches && test.variants.length > 1 && test.isLive) {
 			return {
 				[testName]: variantName,
@@ -341,7 +343,8 @@ export function getAmountsTestVariant(
 		currentTestName,
 		variant.variantName,
 	);
-	return {
+
+  return {
 		selectedAmountsVariant: {
 			...variant,
 			testName: currentTestName,
@@ -372,7 +375,7 @@ function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
 	}
 }
 
-export function getSourceFromAcquisitionData(): string | undefined {
+function getSourceFromAcquisitionData(): string | undefined {
 	const acquisitionDataParam = getQueryParameter('acquisitionData');
 
 	if (!acquisitionDataParam) {
@@ -528,7 +531,7 @@ function assigned(variantIndex: number): VariantAssignment {
 	return { type: 'ASSIGNED', variantIndex };
 }
 
-export function targetPageMatches(
+function targetPageMatches(
 	locationPath: string,
 	targetPage: (string | null | undefined) | RegExp,
 ): boolean {
@@ -537,4 +540,14 @@ export function targetPageMatches(
 	}
 
 	return locationPath.match(targetPage) != null;
+}
+
+export {
+  init,
+  getAmountsTestVariant,
+}
+
+// Exported for testing only
+export const _ = {
+  targetPageMatches
 }
