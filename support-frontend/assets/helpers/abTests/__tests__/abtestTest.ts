@@ -13,13 +13,10 @@ import {
 	GBPCountries,
 	UnitedStates,
 } from '../../internationalisation/countryGroup';
-import {
-	init as abInit,
-	getAmountsTestVariant,
-	targetPageMatches,
-} from '../abtest';
+import { _, init as abInit, getAmountsTestVariant } from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../abtest';
 
+const { targetPageMatches } = _;
 const { subsDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
 const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckoutWithGuest } =
 	digiSub;
