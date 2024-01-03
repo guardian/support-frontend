@@ -1,12 +1,20 @@
 {
   "typescript.format.enable": false, // disable default VS code TS formatting in favour of ESLint
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+  "[typescript]": { // for .ts files
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+  },
+  "[typescriptreact]": { // for .tsx files
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
   },
   "eslint.workingDirectories": ["support-frontend"],
-  "eslint.validate": ["typescript", "typescriptreact"],
   "jumpToAliasFile.alias": {
     "react": "preact-compat",
     "react-dom": "preact-compat",
