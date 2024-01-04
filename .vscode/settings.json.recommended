@@ -14,6 +14,13 @@
       "source.fixAll.eslint": true
     },
   },
+  "[javascript]": { // for .js files
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+  },
   "eslint.workingDirectories": ["support-frontend"],
   "jumpToAliasFile.alias": {
     "react": "preact-compat",
