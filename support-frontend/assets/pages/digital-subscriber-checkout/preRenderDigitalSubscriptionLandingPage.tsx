@@ -68,7 +68,6 @@ function PreRenderDigitalSubscriptionLandingPage(): JSX.Element {
 
 	return (
 		<PageScaffold
-			id="digital-subscription-landing"
 			header={
 				<>
 					<Header>

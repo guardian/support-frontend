@@ -75,7 +75,6 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 
 	return (
 		<PageScaffold
-			id="supporter-plus-thank-you"
 			header={<Header />}
 			footer={
 				<FooterWithContents>

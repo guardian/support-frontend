@@ -199,7 +199,6 @@ export function SupporterPlusCheckoutScaffold({
 
 	return (
 		<PageScaffold
-			id="supporter-plus-landing"
 			header={
 				<>
 					<Header>
