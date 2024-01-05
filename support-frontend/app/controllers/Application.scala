@@ -126,7 +126,7 @@ class Application(
   def contributionsLanding(
       countryCode: String,
       campaignCode: String,
-  ): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+  ): Action[AnyContent] = AuthUserActionWithRedirect { implicit request =>
     type Attempt[A] = EitherT[Future, String, A]
 
     val geoData = request.geoData

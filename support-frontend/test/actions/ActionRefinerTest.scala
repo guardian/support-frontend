@@ -1,6 +1,8 @@
 package actions
 
+import actions.UserFromAuthCookiesActionBuilder.UserClaims
 import admin.settings.{FeatureSwitches, Off, On}
+import com.gu.identity.auth.{DefaultAccessClaims, OktaAuthService}
 import com.gu.identity.model.User
 import com.gu.support.config.Stages
 import fixtures.TestCSRFComponents
@@ -30,6 +32,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
     val asyncAuthenticationService = mock[AsyncAuthenticationService]
     val userFromAuthCookiesOrAuthServerActionBuilder = mock[UserFromAuthCookiesOrAuthServerActionBuilder]
     val userFromAuthCookiesActionBuilder = mock[UserFromAuthCookiesActionBuilder]
+    val oktaAuthService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+    val identityConfig = mock[config.Identity]
   }
 
   "PrivateAction" should {
@@ -45,6 +49,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
           csrfCheck,
           csrfConfig,
           stage,
+          oktaAuthService,
+          identityConfig,
           featureSwitches,
         )
       val result = actionRefiner.PrivateAction(Ok("")).apply(FakeRequest())
@@ -70,6 +76,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         csrfCheck,
         csrfConfig,
         stage,
+        oktaAuthService,
+        identityConfig,
         featureSwitches,
       )
 
@@ -96,6 +104,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
         stage = stage,
+        oktaAuthService,
+        identityConfig,
         featureSwitches,
       )
 
@@ -122,6 +132,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
         stage = stage,
+        oktaAuthService,
+        identityConfig,
         featureSwitches,
       )
       val result = actionRefiner.MaybeAuthenticatedAction(Ok("authentication-test")).apply(fakeRequest)
@@ -139,6 +151,8 @@ class ActionRefinerTest extends AnyWordSpec with Matchers with TestCSRFComponent
         checkToken = csrfCheck,
         csrfConfig = csrfConfig,
         stage = stage,
+        oktaAuthService,
+        identityConfig,
         featureSwitches,
       )
       val result = actionRefiner.MaybeAuthenticatedAction(Ok("authentication-test")).apply(fakeRequest)

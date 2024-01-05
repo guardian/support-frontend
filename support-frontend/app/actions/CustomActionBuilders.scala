@@ -1,10 +1,12 @@
 package actions
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
+import actions.UserFromAuthCookiesActionBuilder.UserClaims
 import admin.settings.FeatureSwitches
 import akka.stream.scaladsl.Flow
 import akka.util.ByteString
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
+import com.gu.identity.auth.{DefaultAccessClaims, OktaAuthService}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.support.config.Stage
@@ -14,6 +16,7 @@ import play.api.mvc._
 import play.filters.csrf._
 import services.AsyncAuthenticationService
 import utils.FastlyGEOIP
+import config.{Identity => IdentityConfig}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -26,6 +29,8 @@ class CustomActionBuilders(
     checkToken: CSRFCheck,
     csrfConfig: CSRFConfig,
     stage: Stage,
+    oktaAuthService: OktaAuthService[DefaultAccessClaims, UserClaims],
+    identityConfig: IdentityConfig,
     featureSwitches: => FeatureSwitches,
 )(implicit private val ec: ExecutionContext) {
 
@@ -107,6 +112,18 @@ class CustomActionBuilders(
     cc.parsers.defaultBodyParser,
     cc.executionContext,
     List("Vary" -> FastlyGEOIP.fastlyCountryHeader),
+  )
+
+  val AuthUserActionWithRedirect = PrivateAction andThen new AuthUserActionBuilder(
+    parser = cc.parsers.defaultBodyParser,
+    identityConfig = identityConfig,
+    oktaAuthService = oktaAuthService,
+  ).andThen(AuthUserActionBuilder.withRemoteAuthRedirect(asyncAuthenticationService.isAuthServerUp))
+
+  val AuthUserAction = PrivateAction andThen new AuthUserActionBuilder(
+    parser = cc.parsers.defaultBodyParser,
+    identityConfig = identityConfig,
+    oktaAuthService = oktaAuthService,
   )
 
 }

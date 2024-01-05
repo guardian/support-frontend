@@ -17,5 +17,7 @@ trait ActionBuilders {
     csrfConfig = csrfConfig,
     stage = appConfig.stage,
     featureSwitches = allSettingsProvider.getAllSettings().switches.featureSwitches,
+    oktaAuthService = oktaAuthService,
+    identityConfig = appConfig.identity,
   )
 }

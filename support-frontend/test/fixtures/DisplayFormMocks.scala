@@ -1,8 +1,10 @@
 package controllers
 
+import actions.UserFromAuthCookiesActionBuilder.UserClaims
 import actions.{CustomActionBuilders, UserFromAuthCookiesActionBuilder, UserFromAuthCookiesOrAuthServerActionBuilder}
 import admin.settings.{FeatureSwitches, Off, On}
 import assets.{AssetsResolver, RefPath}
+import com.gu.identity.auth.{DefaultAccessClaims, OktaAuthService}
 import com.gu.identity.model.{PublicFields, User}
 import com.gu.support.config.Stages
 import fixtures.TestCSRFComponents
@@ -38,6 +40,10 @@ trait DisplayFormMocks extends TestCSRFComponents {
 
   val stage = Stages.DEV
 
+  val oktaAuthService = mock[OktaAuthService[DefaultAccessClaims, UserClaims]]
+
+  val identityConfig = mock[config.Identity]
+
   val loggedInActionRefiner = new CustomActionBuilders(
     asyncAuthenticationService,
     userFromAuthCookiesOrAuthServerActionBuilder = mock[UserFromAuthCookiesOrAuthServerActionBuilder],
@@ -47,6 +53,8 @@ trait DisplayFormMocks extends TestCSRFComponents {
     checkToken = csrfCheck,
     csrfConfig = csrfConfig,
     stage = stage,
+    oktaAuthService,
+    identityConfig,
     featureSwitches = FeatureSwitches(On, On, Off),
   )
 
