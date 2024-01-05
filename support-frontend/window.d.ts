@@ -61,8 +61,6 @@ declare global {
 				default: string;
 				test: string;
 			};
-			polyfillScriptLoaded?: boolean;
-			polyfillVersion?: string;
 			productPrices: ProductPrices;
 			recaptchaEnabled?: boolean;
 			serversideTests?: Participations | null;
