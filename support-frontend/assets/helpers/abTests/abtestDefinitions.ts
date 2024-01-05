@@ -1,4 +1,3 @@
-import { getAmountFromUrl } from 'helpers/forms/checkouts';
 import { countriesAffectedByVATStatus } from 'helpers/internationalisation/country';
 import type { Tests } from './abtest';
 // ----- Tests ----- //
@@ -83,27 +82,5 @@ export const tests: Tests = {
 		referrerControlled: false,
 		seed: 0,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesExecptSupportPlus,
-	},
-	skipPage1Checkout: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		isActive: true,
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		canRun: () => typeof getAmountFromUrl() === 'number',
-		omitCountries: [...countriesAffectedByVATStatus, 'US'],
-		referrerControlled: false,
-		seed: 0,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
 };

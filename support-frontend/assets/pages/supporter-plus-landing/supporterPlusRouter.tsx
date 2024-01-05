@@ -2,7 +2,6 @@
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
-import type { Participations } from 'helpers/abTests/abtest';
 import { CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -69,12 +68,7 @@ const router = () => {
 						<>
 							<Route
 								path={`/${countryId}/contribute/`}
-								element={
-									<ChooseCheckoutPage
-										abParticipations={abParticipations}
-										firstStepLandingPage={firstStepLandingPage}
-									/>
-								}
+								element={firstStepLandingPage}
 							/>
 							<Route
 								path={`/${countryId}/contribute/:campaignCode`}
@@ -97,25 +91,5 @@ const router = () => {
 		</BrowserRouter>
 	);
 };
-
-function ChooseCheckoutPage({
-	abParticipations,
-	firstStepLandingPage,
-}: {
-	abParticipations: Participations;
-	firstStepLandingPage: JSX.Element;
-}): JSX.Element {
-	const location = useLocation();
-	const isPageOneOverride =
-		(location.state as 'FORCE_PAGE_ONE_OF_CHECKOUT' | null) ===
-		'FORCE_PAGE_ONE_OF_CHECKOUT';
-	const isInSkipPage1Checkout =
-		abParticipations.skipPage1Checkout === 'variant';
-	return isInSkipPage1Checkout && !isPageOneOverride ? (
-		<SupporterPlusCheckout thankYouRoute={thankYouRoute} />
-	) : (
-		firstStepLandingPage
-	);
-}
 
 renderPage(router());
