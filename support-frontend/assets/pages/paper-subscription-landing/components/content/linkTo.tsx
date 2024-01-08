@@ -38,13 +38,13 @@ function LinkTo({
 	setTabAction: (arg0: PaperFulfilmentOptions) => void;
 	tab: PaperFulfilmentOptions;
 	children: ReactNode;
-	activeTab?: PaperFulfilmentOptions | null;
+	activeTab?: PaperFulfilmentOptions;
 	isPricesTabLink?: boolean;
 }): JSX.Element {
 	return (
 		<Link
 			css={isPricesTabLink ? linkStyles(tab, activeTab) : linkColor}
-			href={paperSubsUrl(tab === 'HomeDelivery')}
+			href={paperSubsUrl(activeTab)}
 			aria-current={tab === activeTab}
 			onClick={(ev) => {
 				ev.preventDefault();
