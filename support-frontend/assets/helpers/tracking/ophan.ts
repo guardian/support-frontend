@@ -138,10 +138,7 @@ const getPageViewId = (): string => ophan.viewId;
 const navigateWithPageView = (
 	navigate: NavigateFunction,
 	destination: string,
-	options?: {
-		participations?: Participations;
-		locationState?: string;
-	},
+	participations?: Participations,
 ): void => {
 	const refererData = {
 		referrerUrl: document.location.href,
@@ -152,13 +149,13 @@ const navigateWithPageView = (
 	setReferrerDataInLocalStorage(refererData);
 
 	// navigate to next page
-	navigate(destination, { state: options?.locationState });
+	navigate(destination);
 
 	// manual pageView
 	pageView(document.location.href, getAbsoluteURL(destination));
 
-	if (options?.participations) {
-		trackAbTests(options.participations);
+	if (participations) {
+		trackAbTests(participations);
 	}
 };
 

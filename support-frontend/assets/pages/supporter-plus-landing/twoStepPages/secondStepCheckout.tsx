@@ -90,10 +90,7 @@ export function SupporterPlusCheckout({
 				);
 				dispatch(resetValidation());
 				const destination = `/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`;
-				navigateWithPageView(navigate, destination, {
-					locationState: 'FORCE_PAGE_ONE_OF_CHECKOUT',
-					participations: abParticipations,
-				});
+				navigateWithPageView(navigate, destination, abParticipations);
 			}}
 		>
 			Change
