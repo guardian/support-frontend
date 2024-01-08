@@ -1,3 +1,3 @@
 module.exports = {
-  ...require('@guardian/prettier')
+	...require('@guardian/prettier'),
 };
