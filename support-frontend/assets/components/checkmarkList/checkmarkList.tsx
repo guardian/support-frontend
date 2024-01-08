@@ -57,6 +57,7 @@ export type CheckmarkListProps = {
 	checkListData: CheckListData[];
 	style?: CheckmarkListStyle;
 	iconColor?: string;
+	cssOverrides?: SerializedStyles;
 };
 
 function ChecklistItemIcon({
@@ -83,9 +84,10 @@ export function CheckmarkList({
 	checkListData,
 	style = 'standard',
 	iconColor = style === 'compact' ? palette.success[400] : palette.brand[500],
+	cssOverrides,
 }: CheckmarkListProps): JSX.Element {
 	return (
-		<table css={tableCss(style)}>
+		<table css={[tableCss(style), cssOverrides]}>
 			{checkListData.map((item) => (
 				<tr>
 					<td
