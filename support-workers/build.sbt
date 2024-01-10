@@ -9,7 +9,7 @@ libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "2.2.3",
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
-  "ch.qos.logback" % "logback-classic" % "1.4.13",
+  "ch.qos.logback" % "logback-classic" % "1.4.14",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
