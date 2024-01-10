@@ -27,7 +27,6 @@ const container = css`
 `;
 
 export type PageScaffoldProps = {
-	id: string;
 	header?: ReactNode;
 	footer?: ReactNode;
 	children: ReactNode;
@@ -35,21 +34,25 @@ export type PageScaffoldProps = {
 
 FocusStyleManager.onlyShowFocusOnTabs();
 
-export function PageScaffold(props: PageScaffoldProps): JSX.Element {
+export function PageScaffold({
+	header,
+	footer,
+	children,
+}: PageScaffoldProps): JSX.Element {
 	useScrollToAnchor();
 
 	return (
-		<div id={props.id} css={container}>
+		<div css={container}>
 			<Global styles={[reset, guardianFonts]} />
 			<SkipLink id="maincontent" label="Skip to main content" />
 			<SkipLink id="navigation" label="Skip to navigation" />
 			<CsrBanner />
 			<TestUserBanner />
-			{props.header}
+			{header}
 			<main role="main" id="maincontent">
-				{props.children}
+				{children}
 			</main>
-			{props.footer}
+			{footer}
 		</div>
 	);
 }
