@@ -135,7 +135,7 @@ const paper = (
 	buttons: [
 		{
 			ctaButtonText: 'Find out more',
-			link: paperSubsUrl(false),
+			link: paperSubsUrl(),
 			analyticsTracking: sendTrackingEventsOnClick({
 				id: 'paper_cta',
 				product: Paper,

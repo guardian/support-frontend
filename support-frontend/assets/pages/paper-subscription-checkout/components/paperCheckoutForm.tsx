@@ -295,9 +295,9 @@ function PaperCheckoutForm(props: PropTypes) {
 			startDate={formattedStartDate}
 			includesDigiSub={includesDigiSub}
 			changeSubscription={`${paperSubsUrl(
-				false,
+				Collection,
 				getQueryParameter('promoCode'),
-			)}#subscribe`}
+			)}`}
 		/>
 	);
 
@@ -316,9 +316,9 @@ function PaperCheckoutForm(props: PropTypes) {
 			digiSubPrice={expandedPricingText}
 			includesDigiSub={includesDigiSub}
 			changeSubscription={`${paperSubsUrl(
-				true,
+				HomeDelivery,
 				getQueryParameter('promoCode'),
-			)}#subscribe`}
+			)}`}
 			startDate={formattedStartDate}
 		/>
 	);

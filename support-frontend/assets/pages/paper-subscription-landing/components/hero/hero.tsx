@@ -152,7 +152,7 @@ export function PaperHero({
 								priority="tertiary"
 								iconSide="right"
 								icon={<SvgArrowDownStraight />}
-								href="#subscribe"
+								href="#HomeDelivery"
 							>
 								See pricing options
 							</LinkButton>
