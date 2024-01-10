@@ -14,6 +14,7 @@ import play.twirl.api.Html
 import services.TestUserService
 import views.EmptyDiv
 import views.ViewHelpers.outputJson
+import admin.ServersideAbTest.{Participation}
 
 class Promotions(
     promotionServiceProvider: PromotionServiceProvider,
@@ -72,6 +73,13 @@ class Promotions(
           mainElement,
           js,
           css,
+          None,
+          None,
+          Map.empty[String, String],
+          None,
+          None,
+          None,
+          Map.empty[String, Participation],
         ) {
           Html(s"""<script type="text/javascript">
                 window.guardian.productPrices = ${outputJson(productPrices)}
