@@ -1,21 +1,19 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source-foundations';
 import type { RegularContributionType } from 'helpers/contributions';
+import type { PlanCosts, TierBenefits } from '../setup/threeTierConfig';
 import { ThreeTierCard } from './threeTierCard';
 
 interface ThreeTierCardsProps {
 	cardsContent: Array<{
-		cardTitle: string;
-		currentPrice: string;
-		previousPrice?: string;
-		priceSuffix?: string;
+		title: string;
 		isRecommended?: true;
-		benefits: Array<{ copy: string; tooltip?: string }>;
-		benefitsPrefix?: string | JSX.Element;
+		benefits: TierBenefits;
+		planCost: PlanCosts;
 	}>;
 	currency: string;
 	paymentFrequency: RegularContributionType;
-	cardsCtaClickHandler: (price: string) => void;
+	cardsCtaClickHandler: (price: number) => void;
 }
 
 const container = (cardCount: number) => css`

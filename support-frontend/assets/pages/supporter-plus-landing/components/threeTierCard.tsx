@@ -12,19 +12,17 @@ import {
 } from '@guardian/source-react-components';
 import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
 import type { RegularContributionType } from 'helpers/contributions';
+import type { PlanCosts, TierBenefits } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
 interface ThreeTierCardProps {
-	cardTitle: string;
-	currentPrice: string;
-	previousPrice?: string;
-	priceSuffix?: string;
+	title: string;
 	isRecommended?: true;
-	benefits: Array<{ copy: string; tooltip?: string }>;
-	benefitsPrefix?: string | JSX.Element;
+	benefits: TierBenefits;
+	planCost: PlanCosts;
 	currency: string;
 	paymentFrequency: RegularContributionType;
-	cardCtaClickHandler: (price: string) => void;
+	cardCtaClickHandler: (price: number) => void;
 }
 
 const container = (isRecommended?: boolean) => css`
@@ -38,7 +36,7 @@ const container = (isRecommended?: boolean) => css`
 	}
 `;
 
-const title = css`
+const titleCss = css`
 	${textSans.small({ fontWeight: 'bold' })};
 	color: #606060;
 `;
@@ -87,33 +85,81 @@ const checkmarkList = css`
 	}
 `;
 
+const benefitsPrefixCss = css`
+	${textSans.small()};
+	color: ${palette.neutral[7]};
+	text-align: left;
+	strong {
+		font-weight: bold;
+	}
+`;
+
+const benefitsPrefixPlus = css`
+	${textSans.small()};
+	color: ${palette.neutral[7]};
+	display: flex;
+	align-items: center;
+	margin: ${space[3]}px 0;
+	:before {
+		content: '';
+		height: 1px;
+		background-color: ${palette.neutral[86]};
+		flex-grow: 2;
+		margin-right: ${space[2]}px;
+	}
+	:after {
+		content: '';
+		height: 1px;
+		background-color: ${palette.neutral[86]};
+		flex-grow: 2;
+		margin-left: ${space[2]}px;
+	}
+`;
+
+const frequencyCopyMap = {
+	MONTHLY: 'month',
+	ANNUAL: 'year',
+};
+
+const priceSuffixCopy = (currency: string, planCost: PlanCosts) => {
+	// EXAMPLE: £16 for the first 12 months, then £25
+	if (!planCost.discount) {
+		return '';
+	}
+	return `${currency}${planCost.discount.price} for the first ${
+		planCost.discount.duration.value > 1 ? planCost.discount.duration.value : ''
+	} ${frequencyCopyMap[planCost.discount.duration.period]}${
+		planCost.discount.duration.value > 1 ? 's' : ''
+	}, then ${currency}${planCost.price}`;
+};
+
 export function ThreeTierCard({
-	cardTitle,
-	currentPrice,
-	previousPrice,
-	priceSuffix,
+	title,
+	planCost,
 	isRecommended,
 	benefits,
-	benefitsPrefix,
 	currency,
 	paymentFrequency,
 	cardCtaClickHandler,
 }: ThreeTierCardProps): JSX.Element {
-	const frequencyCopyMap = {
-		MONTHLY: 'month',
-		ANNUAL: 'year',
-	};
-	const previousPriceCopy = previousPrice && `${currency}${previousPrice}`;
+	const currentPrice = planCost.discount?.price ?? planCost.price;
+	const previousPriceCopy =
+		!!planCost.discount && `${currency}${planCost.price}`;
 	const currentPriceCopy = `${currency}${currentPrice}/${frequencyCopyMap[paymentFrequency]}`;
+
 	return (
 		<div css={container(isRecommended)}>
 			{isRecommended && <ThreeTierLozenge title="Recommended" />}
-			<h3 css={title}>{cardTitle}</h3>
-			<h2 css={price(!!priceSuffix)}>
+			<h3 css={titleCss}>{title}</h3>
+			<h2 css={price(!!planCost.discount)}>
 				<span css={previousPriceStrikeThrough}>{previousPriceCopy}</span>
 				{previousPriceCopy && ' '}
 				{currentPriceCopy}
-				{priceSuffix && <span css={priceSuffixCss}>{priceSuffix}</span>}
+				{!!planCost.discount && (
+					<span css={priceSuffixCss}>
+						{priceSuffixCopy(currency, planCost)}
+					</span>
+				)}
 			</h2>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<Button
@@ -126,9 +172,23 @@ export function ThreeTierCard({
 					Support now
 				</Button>
 			</ThemeProvider>
-			{benefitsPrefix}
+
+			{benefits.description && (
+				<div css={benefitsPrefixCss}>
+					<span>
+						{benefits.description.map((stringPart) => {
+							if (typeof stringPart === 'string') {
+								return stringPart;
+							} else {
+								return <strong>{stringPart.copy}</strong>;
+							}
+						})}
+					</span>
+					<span css={benefitsPrefixPlus}>plus</span>
+				</div>
+			)}
 			<CheckmarkList
-				checkListData={benefits.map((benefit) => {
+				checkListData={benefits.list.map((benefit) => {
 					return { text: <span>{benefit.copy}</span>, isChecked: true };
 				})}
 				style={'compact'}
