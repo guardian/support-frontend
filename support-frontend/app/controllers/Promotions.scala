@@ -80,6 +80,7 @@ class Promotions(
           None,
           None,
           Map.empty[String, Participation],
+          Some(true),
         ) {
           Html(s"""<script type="text/javascript">
                 window.guardian.productPrices = ${outputJson(productPrices)}
