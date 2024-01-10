@@ -1,4 +1,4 @@
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import { countriesAffectedByVATStatus } from 'helpers/internationalisation/country';
 import type { Tests } from './abtest';
 // ----- Tests ----- //
 // Note: When setting up a test to run on the contributions thank you page
@@ -13,6 +13,8 @@ export const pageUrlRegexes = {
 		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
 		auLandingPage: '/au/contribute(/.*)?$',
 		usLandingPage: '/us/contribute(/.*)?$',
+		allLandingPagesExecptSupportPlus:
+			'\bcontribute\b(?!.*acquisitionData.*abTest.*supporterPlusOnly.*variant.*variant)',
 	},
 	subscriptions: {
 		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
@@ -42,46 +44,6 @@ export const pageUrlRegexes = {
 	},
 };
 
-const countriesAffectedByVATStatus: IsoCountry[] = [
-	'RS',
-	'EG',
-	'PK',
-	'MU',
-	'BH',
-	'MA',
-	'MC',
-	'OM',
-	'GE',
-	'NC',
-	'TZ',
-	'ZM',
-	'AL',
-	'BD',
-	'KZ',
-	'CW',
-	'DO',
-	'GP',
-	'MQ',
-	'PF',
-	'TN',
-	'BQ',
-	'AX',
-	'SN',
-	'AM',
-	'CM',
-	'AO',
-	'KG',
-	'GA',
-	'UZ',
-	'MD',
-	'DZ',
-	'TJ',
-	'LS',
-	'CG',
-	'TG',
-	'NE',
-];
-
 export const tests: Tests = {
 	supporterPlusOnly: {
 		variants: [
@@ -103,16 +65,13 @@ export const tests: Tests = {
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
-	makeItAnnualNudgeGlobal: {
+	threeTierCheckout: {
 		variants: [
-			{
-				id: 'control',
-			},
 			{
 				id: 'variant',
 			},
 		],
-		isActive: true,
+		isActive: false,
 		audiences: {
 			ALL: {
 				offset: 0,
@@ -122,6 +81,6 @@ export const tests: Tests = {
 		omitCountries: countriesAffectedByVATStatus,
 		referrerControlled: false,
 		seed: 0,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesExecptSupportPlus,
 	},
 };

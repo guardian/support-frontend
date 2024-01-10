@@ -24,12 +24,11 @@ import {
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import {
-	finalPrice,
 	getCurrency,
 	getProductPrice,
 } from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { getAppliedPromo } from 'helpers/productPrice/promotions';
+import { finalPrice, getAppliedPromo } from 'helpers/productPrice/promotions';
 import { Direct, Gift } from 'helpers/productPrice/readerType';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import {
@@ -43,13 +42,11 @@ import type { DirectDebitState } from 'helpers/redux/checkout/payment/directDebi
 import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
-// eslint-disable-next-line import/no-cycle -- these are quite tricky to unpick so we should come back to this
 import {
 	setFormSubmitted,
 	setStage,
 	setSubmissionError,
 } from 'helpers/subscriptionsForms/formActions';
-// eslint-disable-next-line import/no-cycle -- these are quite tricky to unpick so we should come back to this
 import {
 	validateCheckoutForm,
 	validateWithDeliveryForm,

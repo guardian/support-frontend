@@ -2,7 +2,7 @@ package wiring
 
 import com.gu.monitoring.SafeLogger
 import controllers.AssetsComponents
-import filters.{CacheHeadersCheck, SetCookiesCheck}
+import filters.{CacheHeadersCheck, RelaxReferrerPolicyFromRedirectFilter, SetCookiesCheck}
 import lib.{CustomHttpErrorHandler, ErrorController}
 import monitoring.{SentryLogging, StateMachineMonitor}
 import play.api.BuiltInComponentsFromContext
@@ -44,6 +44,8 @@ trait AppComponents
   final override lazy val corsConfig: CORSConfig = CORSConfig().withOriginsAllowed(_ == appConfig.supportUrl)
 
   override lazy val httpFilters: Seq[EssentialFilter] = Seq(
+    // This filter needs to be before the `securityHeadersFilter` as it removes a header set by that filter
+    new RelaxReferrerPolicyFromRedirectFilter(),
     cspFilter,
     corsFilter,
     new SetCookiesCheck(),

@@ -18,7 +18,7 @@ export default {
 function Template(args: PageScaffoldProps) {
 	return (
 		<MemoryRouter>
-			<PageScaffold id={args.id}>{args.children}</PageScaffold>
+			<PageScaffold>{args.children}</PageScaffold>
 		</MemoryRouter>
 	);
 }

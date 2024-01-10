@@ -16,8 +16,6 @@ import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { Promotion } from 'helpers/productPrice/promotions';
-// eslint-disable-next-line import/no-cycle -- these are quite tricky to unpick so we should come back to this
-import { applyDiscount, getPromotion } from 'helpers/productPrice/promotions';
 import { fixDecimals } from 'helpers/productPrice/subscriptions';
 
 // ----- Types ----- //
@@ -75,31 +73,6 @@ function getProductPrice(
 	throw new Error('getProductPrice: product price unavailable');
 }
 
-function finalPrice(
-	productPrices: ProductPrices,
-	country: IsoCountry,
-	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
-	productOption: ProductOptions = NoProductOptions,
-): ProductPrice {
-	return applyDiscount(
-		getProductPrice(
-			productPrices,
-			country,
-			billingPeriod,
-			fulfilmentOption,
-			productOption,
-		),
-		getPromotion(
-			productPrices,
-			country,
-			billingPeriod,
-			fulfilmentOption,
-			productOption,
-		),
-	);
-}
-
 const showPrice = (p: ProductPrice, isExtended = true): string => {
 	const showGlyph = isExtended ? extendedGlyph : glyph;
 	return `${showGlyph(p.currency)}${fixDecimals(p.price)}`;
@@ -146,7 +119,6 @@ const getDiscountVsRetail = (
 export {
 	getProductPrice,
 	getFirstValidPrice,
-	finalPrice,
 	getCurrency,
 	getCountryGroup,
 	showPrice,

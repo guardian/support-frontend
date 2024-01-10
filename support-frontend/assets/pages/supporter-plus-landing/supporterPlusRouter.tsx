@@ -13,6 +13,7 @@ import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterP
 import { setUpRedux } from './setup/setUpRedux';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
 import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
+import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
 if (!isDetailsSupported) {
 	polyfillDetails();
@@ -27,7 +28,6 @@ const store = initReduxForContributions();
 
 setUpRedux(store);
 
-const reactElementId = `supporter-plus-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
 const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
 const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
@@ -48,7 +48,14 @@ function ScrollToTop() {
 // ----- Render ----- //
 
 const router = () => {
-	const firstStepLandingPage = (
+	const {
+		common: { abParticipations },
+	} = store.getState();
+	const isInThreeTierCheckoutTest =
+		abParticipations.threeTierCheckout === 'variant';
+	const firstStepLandingPage = isInThreeTierCheckoutTest ? (
+		<ThreeTierLanding />
+	) : (
 		<SupporterPlusInitialLandingPage thankYouRoute={thankYouRoute} />
 	);
 
@@ -85,4 +92,4 @@ const router = () => {
 	);
 };
 
-renderPage(router(), reactElementId);
+renderPage(router());

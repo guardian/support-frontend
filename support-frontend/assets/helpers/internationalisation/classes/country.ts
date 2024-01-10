@@ -11,6 +11,7 @@ import {
 	auStates,
 	caStates,
 	countries,
+	countriesAffectedByVATStatus,
 	isoCountries,
 	isoCountrySet,
 	usStates,
@@ -240,6 +241,10 @@ export default class CountryHelper {
 		}
 
 		return defaultCountry[targetCountryGroup];
+	}
+
+	static isVatAffected(country: IsoCountry) {
+		return countriesAffectedByVATStatus.includes(country);
 	}
 
 	static detect(

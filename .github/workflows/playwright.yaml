@@ -18,6 +18,7 @@ jobs:
       BROWSERSTACK_USERNAME : ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY : ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
       GOOGLE_CHAT_WEB_HOOK : ${{ secrets.GOOGLE_CHAT_WEB_HOOK }}
+      PAYPAL_TEST_PASSWORD : ${{secrets.PAYPAL_TEST_PASSWORD}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

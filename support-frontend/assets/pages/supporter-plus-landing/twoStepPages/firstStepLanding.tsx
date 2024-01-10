@@ -1,5 +1,6 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
+	between,
 	from,
 	neutral,
 	space,
@@ -30,11 +31,24 @@ import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { LimitedPriceCards } from '../formSections/limitedPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
-const shorterBoxMargin = css`
+const boxShorterMargin = css`
 	:not(:last-child) {
 		${until.tablet} {
 			margin-bottom: ${space[2]}px;
 		}
+	}
+`;
+
+// TODO : re-factor SupporterPlusCheckoutScaffold so that we do not require negative margin here, this overlays the PriceCardsAmountsBenefitsContainer over the PageScaffold
+const boxHoist = css`
+	${until.mobileMedium} {
+		margin-top: -370px;
+	}
+	${between.mobileMedium.and.mobileLandscape} {
+		margin-top: -358px;
+	}
+	${between.mobileLandscape.and.desktop} {
+		margin-top: -344px;
 	}
 `;
 
@@ -122,6 +136,10 @@ export function SupporterPlusInitialLandingPage({
 	`;
 
 	const isUsEoy2023CampaignEnabled = isCampaignEnabled(`usEoy2023`);
+	const hoistPriceCardsAmountsBenefitsContainer =
+		isUsEoy2023CampaignEnabled && countryGroupId === 'UnitedStates'
+			? css``
+			: boxHoist;
 
 	useEffect(() => {
 		dispatch(resetValidation());
@@ -132,7 +150,12 @@ export function SupporterPlusInitialLandingPage({
 			thankYouRoute={thankYouRoute}
 			isUsEoy2023CampaignEnabled={isUsEoy2023CampaignEnabled}
 		>
-			<Box cssOverrides={shorterBoxMargin}>
+			<Box
+				cssOverrides={[
+					boxShorterMargin,
+					hoistPriceCardsAmountsBenefitsContainer,
+				]}
+			>
 				{displayLimitedPriceCards ? (
 					<LimitedPriceCards />
 				) : (

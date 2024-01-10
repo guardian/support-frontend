@@ -6,6 +6,7 @@ import { fillInCardDetails } from "./utils/cardDetails";
 import { fillInDirectDebitDetails } from "./utils/directDebitDetails";
 import { fillInPayPalDetails } from "./utils/paypal";
 import { setupPage } from "./utils/page";
+import { afterEachTasks } from "./utils/afterEachTest";
 
 interface TestDetails {
   frequency: "Every day" | "Weekend" | "Six day" | "Saturday" | "Sunday";
@@ -58,6 +59,8 @@ const testsDetails: TestDetails[] = [
     paymentType: "Direct debit",
   },
 ];
+
+afterEachTasks(test);
 
 test.describe("Sign up newspaper subscription", () => {
   testsDetails.forEach((testDetails) => {
@@ -125,9 +128,6 @@ test.describe("Sign up newspaper subscription", () => {
         page.getByRole("heading", { name: successMsgRegex })
       ).toBeVisible();
 
-      context.pages().forEach(async (page) => {
-        await page.close();
-      });
     });
   });
 });

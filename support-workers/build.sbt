@@ -3,16 +3,16 @@ import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProj
 import sbt.Keys.libraryDependencies
 
 version := "0.1-SNAPSHOT"
-scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-release:8", "-Xfatal-warnings")
+scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-Xfatal-warnings")
 
 libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "2.2.3",
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
   "ch.qos.logback" % "logback-classic" % "1.2.12",
-  "io.symphonia" % "lambda-logging" % "1.0.1",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
+  "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,

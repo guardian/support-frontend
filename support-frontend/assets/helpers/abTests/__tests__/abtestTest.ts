@@ -13,13 +13,10 @@ import {
 	GBPCountries,
 	UnitedStates,
 } from '../../internationalisation/countryGroup';
-import {
-	init as abInit,
-	getAmountsTestVariant,
-	targetPageMatches,
-} from '../abtest';
+import { _, init as abInit, getAmountsTestVariant } from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../abtest';
 
+const { targetPageMatches } = _;
 const { subsDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
 const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckoutWithGuest } =
 	digiSub;
@@ -432,7 +429,7 @@ describe('getAmountsTestVariant', () => {
 		}
 		return {
 			testName,
-			liveTestName: testName,
+			liveTestName: `${testName}_LIVE`,
 			isLive: withVariant,
 			targeting,
 			order: 0,
@@ -513,8 +510,8 @@ describe('getAmountsTestVariant', () => {
 			acquisitionAbTests,
 		);
 
-		expect(result.amountsParticipation).toEqual({ [testName]: 'V1' });
-		expect(result.selectedAmountsVariant.testName).toEqual(testName);
+		expect(result.amountsParticipation).toEqual({ [`${testName}_LIVE`]: 'V1' });
+		expect(result.selectedAmountsVariant.testName).toEqual(`${testName}_LIVE`);
 	});
 
 	it('targets amounts test based on region, and returns a participation because there is a variant', () => {
@@ -555,8 +552,8 @@ describe('getAmountsTestVariant', () => {
 			acquisitionAbTests,
 		);
 
-		expect(result.amountsParticipation).toEqual({ GBP_TEST: 'V1' });
-		expect(result.selectedAmountsVariant.testName).toEqual('GBP_TEST');
+		expect(result.amountsParticipation).toEqual({ GBP_TEST_LIVE: 'V1' });
+		expect(result.selectedAmountsVariant.testName).toEqual('GBP_TEST_LIVE');
 	});
 
 	it('targets amounts test based on region, and returns no participation because there is no variant', () => {
@@ -601,6 +598,37 @@ describe('getAmountsTestVariant', () => {
 		expect(result.selectedAmountsVariant.testName).toEqual('GBP_TEST');
 	});
 
+	it('targets amounts test based on region, and returns no participation because test is not live', () => {
+		const acquisitionAbTests: AcquisitionABTest[] = [];
+		const test = buildAmountsTest(
+			'GBP_TEST',
+			{
+				targetingType: 'Region',
+				region: 'GBPCountries',
+			},
+			true,
+		);
+		const tests = [
+			{
+				...test,
+				isLive: false, // test has a variant, but is not live
+			},
+		];
+
+		const result = getAmountsTestVariant(
+			country,
+			countryGroupId,
+			buildSettings(tests),
+			path,
+			mvt,
+			acquisitionAbTests,
+		);
+
+		expect(result.amountsParticipation).toBeUndefined();
+		expect(result.selectedAmountsVariant.testName).toEqual('GBP_TEST');
+		expect(result.selectedAmountsVariant.variantName).toEqual('CONTROL');
+	});
+
 	it('targets amounts test based on country, and returns a participation because there is a variant', () => {
 		const acquisitionAbTests: AcquisitionABTest[] = [];
 		const tests = [
@@ -631,8 +659,8 @@ describe('getAmountsTestVariant', () => {
 			acquisitionAbTests,
 		);
 
-		expect(result.amountsParticipation).toEqual({ COUNTRY_TEST: 'V1' });
-		expect(result.selectedAmountsVariant.testName).toEqual('COUNTRY_TEST');
+		expect(result.amountsParticipation).toEqual({ COUNTRY_TEST_LIVE: 'V1' });
+		expect(result.selectedAmountsVariant.testName).toEqual('COUNTRY_TEST_LIVE');
 	});
 });
 

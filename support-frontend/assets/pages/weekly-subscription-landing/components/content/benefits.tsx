@@ -4,16 +4,24 @@ import BenefitsHeading from './benefitsHeading';
 
 const coreBenefits = [
 	{
-		content: `Every issue delivered with up to 35% off the cover price`,
+		content:
+			'The Guardian Weekly magazine delivered every week to your door, wherever you live in the world',
 	},
 	{
-		content: "Access to the magazine's digital archive",
+		content:
+			'64 pages of carefully curated news, features and opinion from the Guardian',
 	},
 	{
-		content: 'A weekly email newsletter from the editor',
+		content: 'A selection of puzzles, crosswords and a weekly recipe',
 	},
 	{
-		content: "The very best of the Guardian's puzzles",
+		content: 'Access to a digital version of the magazine',
+	},
+	{
+		content: `Become part of our global community of supporters who collectively power the Guardian's fiercely independent journalism`,
+	},
+	{
+		content: 'A weekly newsletter from the editor',
 	},
 ];
 
@@ -25,7 +33,7 @@ function Benefits(): JSX.Element {
 					id: 'benefits',
 					content: (
 						<>
-							<BenefitsHeading text="As a subscriber you’ll enjoy" />
+							<BenefitsHeading text="What do you get with a Guardian Weekly subscription?" />
 							<List items={coreBenefits} />
 						</>
 					),

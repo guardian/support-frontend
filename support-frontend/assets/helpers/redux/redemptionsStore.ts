@@ -25,7 +25,7 @@ export function initReduxForRedemption(): RedemptionStore {
 
 		return redemptionStore;
 	} catch (err) {
-		renderError(err as Error, null);
+		renderError(err as Error);
 		throw err;
 	}
 }

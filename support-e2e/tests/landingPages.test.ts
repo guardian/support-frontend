@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { afterEachTasks } from "./utils/afterEachTest";
 import { setTestCookies } from "./utils/cookies";
 import { firstName } from "./utils/users";
+
+afterEachTasks(test);
 
 test.describe("Paper product page", () => {
   test("Basic loading-when a user goes to the Newspapar Subscriptions page,it should display the page", async ({
@@ -15,7 +18,6 @@ test.describe("Paper product page", () => {
     await page.goto(pageUrl);
     await page.locator("id=qa-paper-subscriptions").isVisible();
     await expect(page).toHaveURL(/\/uk\/subscribe\/paper/);
-    await page.close();
   });
 });
 
@@ -33,7 +35,6 @@ test.describe("Weekly product page", () => {
 
     await page.locator("id=qa-guardian-weekly").isVisible();
     await expect(page).toHaveURL(/\/uk\/subscribe\/weekly/);
-    await page.close();
   });
 });
 
@@ -51,7 +52,6 @@ test.describe("Weekly gift product page", () => {
 
     await page.locator("id=qa-guardian-weekly-gift").isVisible();
     await expect(page).toHaveURL(/\/uk\/subscribe\/weekly\/gift/);
-    await page.close();
   });
 });
 
@@ -69,6 +69,5 @@ test.describe("Subscriptions landing page", () => {
 
     await page.locator("id=qa-subscriptions-landing-page").isVisible();
     await expect(page).toHaveURL(/\/uk\/subscribe/);
-    await page.close();
   });
 });

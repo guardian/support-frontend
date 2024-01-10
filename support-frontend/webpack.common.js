@@ -10,7 +10,6 @@ const { getClassName } = require('./scripts/css');
 const entryPoints = require('./webpack.entryPoints');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const CircularDependencyPlugin = require('circular-dependency-plugin');
 
 const cssLoaders = [
 	{
@@ -84,10 +83,6 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 		}),
 		...(minimizeCss ? [new CssMinimizerPlugin()] : []),
 		new CleanUpStatsPlugin(),
-		new CircularDependencyPlugin({
-			// exclude detection of files based on a RegExp
-			exclude: /node_modules/,
-		}),
 	],
 
 	context: path.resolve(__dirname, 'assets'),

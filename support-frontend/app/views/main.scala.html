@@ -74,7 +74,7 @@
 
     @inline(inlineCss: StyleContent) = {
       <style>
-      @inlineCss.value
+        @inlineCss.value
       </style>
     }
 
@@ -103,16 +103,16 @@
     <link rel="apple-touch-icon-precomposed" href="@assets("images/favicons/57x57.png")">
 
     <script type="application/ld+json">
-		{
-			"@@context": "http://schema.org",
-			"@@type": "Organization",
-			"name": "Support the Guardian",
-			"url": "https://support.theguardian.com",
-			"logo": "https://support.theguardian.com@assets("images/favicons/152x152.png")"
-		}
-	</script>
+      {
+        "@@context": "http://schema.org",
+        "@@type": "Organization",
+        "name": "Support the Guardian",
+        "url": "https://support.theguardian.com",
+        "logo": "https://support.theguardian.com@assets("images/favicons/152x152.png")"
+      }
+	  </script>
 
-    </head>
+  </head>
   <body class="header-tweaks">
     <noscript>
       <div style="text-align: center;
@@ -126,33 +126,22 @@
     </noscript>
 
     @emptyDiv(id: EmptyDiv) = {
-    <div class="gu-render-to" data-not-hydrated="true" id="@id.value"></div>
-  }
+      <div class="gu-render-to" data-not-hydrated="true" id="@id.value"></div>
+    }
 
     @withContent(ssrContent: SSRContent) = {
-    <div
-      class="gu-render-to"
-      data-not-hydrated="true"
-      id="@ssrContent.value"
-    >
-      @ssrContent.content
-    </div>
-  }
+      <div
+        class="gu-render-to"
+        data-not-hydrated="true"
+        id="@ssrContent.value"
+      >
+        @ssrContent.content
+      </div>
+    }
 
     @mainElement.fold(emptyDiv, withContent)
 
-    <script>
-      function guardianPolyfilled() {
-        window.guardian.polyfillScriptLoaded = true;
-      }
-    </script>
-
-    <script src="https://assets.guim.co.uk/polyfill.io/v3/polyfill.min.js?rum=0&features=es6,es7,es2017,es2018,es2019,default-3.6,HTMLPictureElement,IntersectionObserver,IntersectionObserverEntry,fetch,NodeList.prototype.forEach,ResizeObserver&flags=gated&callback=guardianPolyfilled&unknown=polyfill&cacheClear=1"></script>
-
-    <script>
-      window.guardian = window.guardian || {};
-      window.guardian.polyfillVersion = 'v3';
-    </script>
+    <script src="https://assets.guim.co.uk/polyfill.io/v3/polyfill.min.js?rum=0&features=es6,es7,es2017,es2018,es2019,default-3.6,HTMLPictureElement,IntersectionObserver,IntersectionObserverEntry,fetch,NodeList.prototype.forEach,ResizeObserver&flags=gated&unknown=polyfill&cacheClear=1"></script>
 
     <script type="text/javascript">
       window.guardian = window.guardian || {};

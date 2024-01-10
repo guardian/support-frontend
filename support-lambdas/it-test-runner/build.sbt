@@ -3,7 +3,7 @@ import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProj
 import sbt.Keys.libraryDependencies
 
 version := "0.1-SNAPSHOT"
-scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-release:8", "-Xfatal-warnings")
+scalacOptions ++= Seq("-deprecation", "-feature", "-unchecked", "-Xfatal-warnings")
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
@@ -13,7 +13,6 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
   "ch.qos.logback" % "logback-classic" % "1.2.12",
-  "io.symphonia" % "lambda-logging" % "1.0.3",
   "org.scalatest" %% "scalatest" % "3.2.16", // not a "Test" dependency, it's an actual one
 )
 
