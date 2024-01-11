@@ -15,7 +15,7 @@
   shareImageUrl: Option[String] = None,
   shareUrl: Option[String] = None,
   serversideTests: Map[String,Participation] = Map(),
-  noindex: Option[Boolean] = None,
+  noindex: Boolean = false,
 )(body: Html = Html(""))(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
