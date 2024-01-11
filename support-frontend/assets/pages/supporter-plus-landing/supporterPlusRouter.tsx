@@ -1,7 +1,13 @@
 // ----- Imports ----- //
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import {
+	BrowserRouter,
+	Navigate,
+	Route,
+	Routes,
+	useLocation,
+} from 'react-router-dom';
 import { CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -50,6 +56,7 @@ function ScrollToTop() {
 const router = () => {
 	const {
 		common: { abParticipations },
+		page: { checkoutForm },
 	} = store.getState();
 	const isInThreeTierCheckoutTest =
 		abParticipations.threeTierCheckout === 'variant';
@@ -59,6 +66,10 @@ const router = () => {
 		<SupporterPlusInitialLandingPage thankYouRoute={thankYouRoute} />
 	);
 
+	const contributionType = checkoutForm.product.productType;
+	const isThreeTierAndOneOff =
+		isInThreeTierCheckoutTest && contributionType === 'ONE_OFF';
+
 	return (
 		<BrowserRouter>
 			<ScrollToTop />
@@ -67,12 +78,17 @@ const router = () => {
 					{countryIds.map((countryId) => (
 						<>
 							<Route
-								path={`/${countryId}/contribute/`}
-								element={firstStepLandingPage}
-							/>
-							<Route
-								path={`/${countryId}/contribute/:campaignCode`}
-								element={firstStepLandingPage}
+								path={`/${countryId}/contribute/:campaignCode?`}
+								element={
+									isThreeTierAndOneOff ? (
+										<Navigate
+											to={`/${countryId}/contribute/checkout`} // TODO: make sure to pass through all url params and hash here
+											replace
+										/>
+									) : (
+										firstStepLandingPage
+									)
+								}
 							/>
 							<Route
 								path={`/${countryId}/contribute/checkout`}
