@@ -81,14 +81,6 @@ class Promotions(
           shareUrl = None,
           serversideTests = Map(),
           noindex = true,
-          // None,
-          // None,
-          // Map.empty[String, String],
-          // None,
-          // None,
-          // None,
-          // Map.empty[String, Participation],
-          // Some(true),
         ) {
           Html(s"""<script type="text/javascript">
                 window.guardian.productPrices = ${outputJson(productPrices)}
