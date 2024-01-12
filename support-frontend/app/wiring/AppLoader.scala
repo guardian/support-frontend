@@ -60,7 +60,7 @@ class AppLoader extends ApplicationLoader with StrictLogging {
       )
 
     try {
-      (new BuiltInComponentsFromContext(contextWithConfig.get) with AppComponents).application
+      new AppComponents(contextWithConfig.get).application
     } catch {
       case err: Throwable =>
         logger.error("Could not start application", err)

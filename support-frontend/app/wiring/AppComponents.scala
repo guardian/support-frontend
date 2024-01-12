@@ -5,6 +5,7 @@ import controllers.AssetsComponents
 import filters.{CacheHeadersCheck, RelaxReferrerPolicyFromRedirectFilter, SetCookiesCheck}
 import lib.{CustomHttpErrorHandler, ErrorController}
 import monitoring.{SentryLogging, StateMachineMonitor}
+import play.api.ApplicationLoader.Context
 import play.api.BuiltInComponentsFromContext
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.EssentialFilter
@@ -14,8 +15,9 @@ import play.filters.cors.{CORSComponents, CORSConfig}
 import play.filters.csp.CSPComponents
 import play.filters.gzip.GzipFilter
 
-trait AppComponents
-    extends PlayComponents
+class AppComponents(context: Context)
+    extends BuiltInComponentsFromContext(context)
+    with PlayComponents
     with AhcWSComponents
     with AssetsComponents
     with Controllers
@@ -27,7 +29,6 @@ trait AppComponents
     with CORSComponents
     with CSPComponents
     with HttpFiltersComponents {
-  self: BuiltInComponentsFromContext =>
 
   private lazy val customHandler: CustomHttpErrorHandler = new CustomHttpErrorHandler(
     environment,
@@ -39,7 +40,7 @@ trait AppComponents
     appConfig.stage,
   )
   override lazy val httpErrorHandler = customHandler
-  override lazy val errorController = new ErrorController(actionRefiners, customHandler)
+  override lazy val errorController = new ErrorController(actionBuilders, customHandler)
 
   final override lazy val corsConfig: CORSConfig = CORSConfig().withOriginsAllowed(_ == appConfig.supportUrl)
 

@@ -12,7 +12,7 @@ libraryDependencies ++= Seq(
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
-  "ch.qos.logback" % "logback-classic" % "1.2.12",
+  "ch.qos.logback" % "logback-classic" % "1.4.14",
   "org.scalatest" %% "scalatest" % "3.2.16", // not a "Test" dependency, it's an actual one
 )
 
