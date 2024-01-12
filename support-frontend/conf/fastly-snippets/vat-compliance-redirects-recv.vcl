@@ -40,7 +40,7 @@ if (
   client.geo.country_code == "TG" ||
   client.geo.country_code == "NE"
 ) {
-  if (req.url ~ "^\/[a-z]{2}/subscribe/digital" || req.url == "/subscribe/digital"){
+  if (req.url ~ "^\/[a-z]{2}/subscribe/digitaledition" || req.url == "/subscribe/digitaledition"){
     error 619;
   }
 }
