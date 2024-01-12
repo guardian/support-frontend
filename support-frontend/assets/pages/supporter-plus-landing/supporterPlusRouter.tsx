@@ -56,7 +56,6 @@ function ScrollToTop() {
 const router = () => {
 	const {
 		common: { abParticipations },
-		page: { checkoutForm },
 	} = store.getState();
 	const isInThreeTierCheckoutTest =
 		abParticipations.threeTierCheckout === 'variant';
@@ -66,9 +65,21 @@ const router = () => {
 		<SupporterPlusInitialLandingPage thankYouRoute={thankYouRoute} />
 	);
 
-	const contributionType = checkoutForm.product.productType;
-	const isThreeTierAndOneOff =
-		isInThreeTierCheckoutTest && contributionType === 'ONE_OFF';
+	const isThreeTierAndOneOffUrlParam = () => {
+		const urlParams = new URLSearchParams(window.location.search);
+		const urlSelectedContributionType = urlParams.get(
+			'selected-contribution-type',
+		);
+
+		return (
+			isInThreeTierCheckoutTest && urlSelectedContributionType === 'ONE_OFF'
+		);
+	};
+
+	const getExistingUrlParamsAndHash = () => {
+		const urlParams = new URLSearchParams(window.location.search).toString();
+		return `${urlParams ? `?${urlParams}` : ''}${window.location.hash}`;
+	};
 
 	return (
 		<BrowserRouter>
@@ -80,9 +91,9 @@ const router = () => {
 							<Route
 								path={`/${countryId}/contribute/:campaignCode?`}
 								element={
-									isThreeTierAndOneOff ? (
+									isThreeTierAndOneOffUrlParam() ? (
 										<Navigate
-											to={`/${countryId}/contribute/checkout`} // TODO: make sure to pass through all url params and hash here
+											to={`/${countryId}/contribute/checkout${getExistingUrlParamsAndHash()}`}
 											replace
 										/>
 									) : (
