@@ -29,7 +29,6 @@ if (
   client.geo.country_code == "CM" ||
   client.geo.country_code == "AO" ||
   client.geo.country_code == "KG" ||
-  client.geo.country_code == "MR" ||
   client.geo.country_code == "GA" ||
   client.geo.country_code == "UZ" ||
   client.geo.country_code == "MD" ||
@@ -38,7 +37,108 @@ if (
   client.geo.country_code == "LS" ||
   client.geo.country_code == "CG" ||
   client.geo.country_code == "TG" ||
-  client.geo.country_code == "NE"
+  client.geo.country_code == "NE" ||
+  client.geo.country_code == "ZW" ||
+  client.geo.country_code == "LB" ||
+  client.geo.country_code == "CD" ||
+  client.geo.country_code == "ML" ||
+  client.geo.country_code == "KE" ||
+  client.geo.country_code == "BM" ||
+  client.geo.country_code == "PR" ||
+  client.geo.country_code == "PA" ||
+  client.geo.country_code == "KW" ||
+  client.geo.country_code == "TT" ||
+  client.geo.country_code == "PE" ||
+  client.geo.country_code == "KY" ||
+  client.geo.country_code == "JM" ||
+  client.geo.country_code == "JO" ||
+  client.geo.country_code == "LK" ||
+  client.geo.country_code == "KH" ||
+  client.geo.country_code == "BS" ||
+  client.geo.country_code == "FJ" ||
+  client.geo.country_code == "PG" ||
+  client.geo.country_code == "GT" ||
+  client.geo.country_code == "LI" ||
+  client.geo.country_code == "GH" ||
+  client.geo.country_code == "MO" ||
+  client.geo.country_code == "RE" ||
+  client.geo.country_code == "MZ" ||
+  client.geo.country_code == "SV" ||
+  client.geo.country_code == "ET" ||
+  client.geo.country_code == "MW" ||
+  client.geo.country_code == "BZ" ||
+  client.geo.country_code == "AW" ||
+  client.geo.country_code == "HN" ||
+  client.geo.country_code == "BN" ||
+  client.geo.country_code == "NA" ||
+  client.geo.country_code == "RW" ||
+  client.geo.country_code == "SC" ||
+  client.geo.country_code == "BW" ||
+  client.geo.country_code == "AD" ||
+  client.geo.country_code == "VG" ||
+  client.geo.country_code == "KN" ||
+  client.geo.country_code == "GD" ||
+  client.geo.country_code == "MK" ||
+  client.geo.country_code == "GU" ||
+  client.geo.country_code == "BO" ||
+  client.geo.country_code == "MG" ||
+  client.geo.country_code == "NP" ||
+  client.geo.country_code == "GY" ||
+  client.geo.country_code == "MV" ||
+  client.geo.country_code == "ME" ||
+  client.geo.country_code == "AZ" ||
+  client.geo.country_code == "TD" ||
+  client.geo.country_code == "BF" ||
+  client.geo.country_code == "PW" ||
+  client.geo.country_code == "KI" ||
+  client.geo.country_code == "LR" ||
+  client.geo.country_code == "DM" ||
+  client.geo.country_code == "WS" ||
+  client.geo.country_code == "TO" ||
+  client.geo.country_code == "CV" ||
+  client.geo.country_code == "SY" ||
+  client.geo.country_code == "NU" ||
+  client.geo.country_code == "EH" ||
+  client.geo.country_code == "WF" ||
+  client.geo.country_code == "SA" ||
+  client.geo.country_code == "TV" ||
+  client.geo.country_code == "TM" ||
+  client.geo.country_code == "TK" ||
+  client.geo.country_code == "SJ" ||
+  client.geo.country_code == "ST" ||
+  client.geo.country_code == "PM" ||
+  client.geo.country_code == "PN" ||
+  client.geo.country_code == "NR" ||
+  client.geo.country_code == "ER" ||
+  client.geo.country_code == "CX" ||
+  client.geo.country_code == "BV" ||
+  client.geo.country_code == "SM" ||
+  client.geo.country_code == "YT" ||
+  client.geo.country_code == "DJ" ||
+  client.geo.country_code == "BT" ||
+  client.geo.country_code == "SH" ||
+  client.geo.country_code == "SY" ||
+  client.geo.country_code == "NF" ||
+  client.geo.country_code == "TO" ||
+  client.geo.country_code == "CI" ||
+  client.geo.country_code == "MM" ||
+  client.geo.country_code == "BA" ||
+  client.geo.country_code == "IQ" ||
+  client.geo.country_code == "AF" ||
+  client.geo.country_code == "VE" ||
+  client.geo.country_code == "NI" ||
+  client.geo.country_code == "SO" ||
+  client.geo.country_code == "BY" ||
+  client.geo.country_code == "IR" ||
+  client.geo.country_code == "GW" ||
+  client.geo.country_code == "YE" ||
+  client.geo.country_code == "HT" ||
+  client.geo.country_code == "LY" ||
+  client.geo.country_code == "CU" ||
+  client.geo.country_code == "CF" ||
+  client.geo.country_code == "GN" ||
+  client.geo.country_code == "BI" ||
+  client.geo.country_code == "CD"
 ) {
   if (req.url ~ "^\/[a-z]{2}/subscribe/digitaledition" || req.url == "/subscribe/digitaledition"){
     error 619;
