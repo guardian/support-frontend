@@ -145,7 +145,7 @@
     "@storybook/jest": "^0.2.1",
     "@storybook/preact": "^7.3.2",
     "@storybook/preact-webpack5": "^7.3.2",
-    "@storybook/testing-library": "^0.2.0",
+    "@storybook/testing-library": "^0.2.2",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
