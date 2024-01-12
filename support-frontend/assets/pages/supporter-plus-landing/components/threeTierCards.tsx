@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source-foundations';
 import type { RegularContributionType } from 'helpers/contributions';
-import type { PlanCosts, TierBenefits } from '../setup/threeTierConfig';
+import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierCard } from './threeTierCard';
 
 interface ThreeTierCardsProps {
@@ -9,7 +9,7 @@ interface ThreeTierCardsProps {
 		title: string;
 		isRecommended?: true;
 		benefits: TierBenefits;
-		planCost: PlanCosts;
+		planCost: TierPlanCosts;
 	}>;
 	currency: string;
 	paymentFrequency: RegularContributionType;

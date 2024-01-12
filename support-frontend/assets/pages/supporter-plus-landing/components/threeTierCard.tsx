@@ -12,14 +12,14 @@ import {
 } from '@guardian/source-react-components';
 import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
 import type { RegularContributionType } from 'helpers/contributions';
-import type { PlanCosts, TierBenefits } from '../setup/threeTierConfig';
+import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
 interface ThreeTierCardProps {
 	title: string;
 	isRecommended?: true;
 	benefits: TierBenefits;
-	planCost: PlanCosts;
+	planCost: TierPlanCosts;
 	currency: string;
 	paymentFrequency: RegularContributionType;
 	cardCtaClickHandler: (price: number) => void;
@@ -100,18 +100,17 @@ const benefitsPrefixPlus = css`
 	display: flex;
 	align-items: center;
 	margin: ${space[3]}px 0;
-	:before {
-		content: '';
-		height: 1px;
-		background-color: ${palette.neutral[86]};
-		flex-grow: 2;
-		margin-right: ${space[2]}px;
-	}
+	:before,
 	:after {
 		content: '';
 		height: 1px;
 		background-color: ${palette.neutral[86]};
 		flex-grow: 2;
+	}
+	:before {
+		margin-right: ${space[2]}px;
+	}
+	:after {
 		margin-left: ${space[2]}px;
 	}
 `;
@@ -121,16 +120,16 @@ const frequencyCopyMap = {
 	ANNUAL: 'year',
 };
 
-const priceSuffixCopy = (currency: string, planCost: PlanCosts) => {
+const priceSuffixCopy = (currency: string, planCost: TierPlanCosts) => {
 	// EXAMPLE: £16 for the first 12 months, then £25
-	if (!planCost.discount) {
-		return '';
+	if (planCost.discount) {
+		const durationValue = planCost.discount.duration.value;
+		return `${currency}${planCost.discount.price} for the first ${
+			durationValue > 1 ? durationValue : ''
+		} ${frequencyCopyMap[planCost.discount.duration.period]}${
+			durationValue > 1 ? 's' : ''
+		}, then ${currency}${planCost.price}`;
 	}
-	return `${currency}${planCost.discount.price} for the first ${
-		planCost.discount.duration.value > 1 ? planCost.discount.duration.value : ''
-	} ${frequencyCopyMap[planCost.discount.duration.period]}${
-		planCost.discount.duration.value > 1 ? 's' : ''
-	}, then ${currency}${planCost.price}`;
 };
 
 export function ThreeTierCard({

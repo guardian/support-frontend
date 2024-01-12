@@ -6,7 +6,7 @@ export interface TierBenefits {
 	list: Array<{ copy: string; tooltip?: string }>;
 }
 
-export interface PlanCosts {
+export interface TierPlanCosts {
 	price: number;
 	discount?: {
 		percentage: number;
@@ -17,7 +17,7 @@ export interface PlanCosts {
 
 interface FrequencyPlans {
 	label: string;
-	charges: Record<CountryGroupId, PlanCosts>;
+	charges: Record<CountryGroupId, TierPlanCosts>;
 }
 
 interface TierPlans {
