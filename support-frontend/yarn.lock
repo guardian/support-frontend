@@ -6946,7 +6946,7 @@ comma-separated-tokens@^1.0.0:
   resolved "https://registry.yarnpkg.com/comma-separated-tokens/-/comma-separated-tokens-1.0.8.tgz#632b80b6117867a158f1080ad498b2fbe7e3f5ea"
   integrity sha512-GHuDRO12Sypu2cV70d1dkA2EUmXHgntrzbpvOB+Qy+49ypNfGgFQIC2fhhXbnyrJRynDCAARsT7Ou0M6hirpfw==
 
-commander@11.1.0:
+commander@11.1.0, commander@^11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-11.1.0.tgz#62fdce76006a68e5c1ab3314dc92e800eb83d906"
   integrity sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==
@@ -6955,11 +6955,6 @@ commander@^2.16.0, commander@^2.19.0, commander@^2.20.0, commander@^2.20.3, comm
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
-
-commander@^4.1.0:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
-  integrity sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
 
 commander@^6.2.1:
   version "6.2.1"
@@ -14824,13 +14819,12 @@ schema-utils@^4.0.0:
     ajv-formats "^2.1.1"
     ajv-keywords "^5.0.0"
 
-search-in-file@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/search-in-file/-/search-in-file-2.2.2.tgz#91d9116702883498597bf69019c157e0f4543634"
-  integrity sha512-XCuD677UTU9eYaylUCR14pRiQ8uy9vWBXRwxhALl1cIqHuQ+hoqYr3WpSzm5WnRscUjGVGcfuLUAPBAwx4COIw==
+search-in-file@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/search-in-file/-/search-in-file-3.3.2.tgz#dda7149b76e57a6558e61b5be92ed1c25cf07cfa"
+  integrity sha512-SfpxPR2tK4JpojJiRJdwky7cDkxlwRU68r8GGT90s9FNq0knVNd1yvC8FIgDWDsXgXAiaYW8B9bhQ1S8T7GT8A==
   dependencies:
-    commander "^4.1.0"
-    typescript "^4.7.4"
+    commander "^11.1.0"
 
 seedrandom@^3.0.5:
   version "3.0.5"
@@ -16224,7 +16218,7 @@ typescript@^3.9.10, typescript@^3.9.3, typescript@^3.9.7:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.10.tgz#70f3910ac7a51ed6bef79da7800690b19bf778b8"
   integrity sha512-w6fIxVE/H1PkLKcCPsFqKE7Kv7QUwhU8qQY2MueZXWx5cPZdwFupLgKK3vntcK98BtNHZtAF4LA/yl2a7k8R6Q==
 
-typescript@^4.0.0, typescript@^4.7.4, typescript@^4.9.5:
+typescript@^4.0.0, typescript@^4.9.5:
   version "4.9.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
