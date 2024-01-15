@@ -77,7 +77,7 @@ test.describe("Sign up newspaper subscription", () => {
       const page = await context.newPage();
       const testFirstName = firstName();
       const testEmail = email();
-      setupPage(page, context, baseURL, "/uk/subscribe/paper/delivery");
+      setupPage(page, context, baseURL, "/uk/subscribe/paper");
       await page
         .locator(`a[aria-label='${testDetails.frequency}- Subscribe']`)
         .click();
