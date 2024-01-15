@@ -79,10 +79,9 @@ object UserFromAuthCookiesActionBuilder extends Logging {
       handleFailure: ValidationError => Future[Result],
   )(implicit ctx: ExecutionContext): Future[Result] = {
     def isCookiePresent(name: String) = request.cookies.get(name).isDefined
-    val isSignedOut = isCookiePresent(config.signedOutCookieName)
     val isSignedIn = isCookiePresent(config.signedInCookieName)
-    // If user is signed out or there are no cookies, just pass request through without a user
-    if (isSignedOut || !isSignedIn) {
+    // If user is signed out just pass request through without a user
+    if (!isSignedIn) {
       responseWithNoUser(config)(request, block)
     } else {
       validateUserLocally(config, oktaAuthService)(request).fold(
@@ -108,6 +107,29 @@ object UserFromAuthCookiesActionBuilder extends Logging {
         .toRight(GenericValidationError("No access token cookie"))
       userClaims <- oktaAuthService.validateIdTokenLocally(IdToken(idTokenCookie.value), nonce = None)
       _ <- oktaAuthService.validateAccessTokenLocally(AccessToken(accessTokenCookie.value), accessScopes)
+      // read the GU_SO cookie to get the timestamp for when a user last signed out,
+      // and compare it to the iat claim in the id token
+      // if the GU_SO value is > iat then the user has signed out recently, so the tokens are invalid
+      // if the GU_SO value is < iat then the user has not signed out recently, so the tokens are valid
+      // if the GU_SO cookie is missing then the user has not signed out recently, so the tokens are valid
+      // based on logic from https://github.com/guardian/gateway/blob/main/docs/okta/web-apps-integration-guide.md#how-to-know-if-a-reader-is-signed-in
+      _ <- request.cookies.get(config.signedOutCookieName) match {
+        case Some(cookie) =>
+          val lastSignedOutTime = cookie.value.toLong
+          if (
+            // lastSignedOutTime is in the past
+            lastSignedOutTime < System.currentTimeMillis / 1000 &&
+            // lastSignedOutTime is after the iat claim in the id token
+            lastSignedOutTime > userClaims.iat.getOrElse(0L)
+          ) {
+            // clear tokens from cookies
+
+            Left(GenericValidationError("User has signed out recently"))
+          } else {
+            Right(())
+          }
+        case None => Right(())
+      }
     } yield toUser(userClaims)
   }
 
@@ -161,6 +183,7 @@ object UserFromAuthCookiesActionBuilder extends Logging {
       identityId: String,
       firstName: Option[String],
       lastName: Option[String],
+      iat: Option[Long],
   ) extends IdentityClaims
 
   object UserClaims {
@@ -183,6 +206,7 @@ object UserFromAuthCookiesActionBuilder extends Logging {
             identityId = defaultClaims.identityId,
             firstName = unparsedClaims.getOptional("first_name"),
             lastName = unparsedClaims.getOptional("last_name"),
+            iat = unparsedClaims.getOptional[Long]("iat"),
           ),
         )
     }
