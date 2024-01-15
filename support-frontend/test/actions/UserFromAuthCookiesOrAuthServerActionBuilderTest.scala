@@ -29,7 +29,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
   private val accessToken = AccessToken("accessToken")
   private val idToken = IdToken("idToken")
   private val idClaims =
-    UserClaims(primaryEmailAddress = "email", identityId = "id", firstName = None, lastName = None)
+    UserClaims(primaryEmailAddress = "email", identityId = "id", firstName = None, lastName = None, iat = None)
   private val accessClaims = DefaultAccessClaims(primaryEmailAddress = "email", identityId = "id", username = None)
   private val accessScopes = "scope1 scope2 scope3"
   private val accessScopeList =
@@ -392,6 +392,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
             identityId = "idid",
             firstName = None,
             lastName = None,
+            iat = None,
           ),
         )
       }
@@ -406,6 +407,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
               "username" -> "un",
               "first_name" -> "fn",
               "last_name" -> "sn",
+              "iat" -> 123456.asInstanceOf[AnyRef],
             ),
           ),
         ) mustBe Right(
@@ -414,6 +416,7 @@ class UserFromAuthCookiesOrAuthServerActionBuilderTest extends AnyWordSpec with 
             identityId = "idid",
             firstName = Some("fn"),
             lastName = Some("sn"),
+            iat = Some(123456),
           ),
         )
       }
