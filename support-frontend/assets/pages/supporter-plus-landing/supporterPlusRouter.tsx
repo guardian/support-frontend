@@ -64,17 +64,13 @@ const router = () => {
 	) : (
 		<SupporterPlusInitialLandingPage thankYouRoute={thankYouRoute} />
 	);
+	const urlParams = new URLSearchParams(window.location.search);
+	const urlSelectedContributionType = urlParams.get(
+		'selected-contribution-type',
+	);
 
-	const isThreeTierAndOneOffUrlParam = () => {
-		const urlParams = new URLSearchParams(window.location.search);
-		const urlSelectedContributionType = urlParams.get(
-			'selected-contribution-type',
-		);
-
-		return (
-			isInThreeTierCheckoutTest && urlSelectedContributionType === 'ONE_OFF'
-		);
-	};
+	const isThreeTierAndOneOffUrlParam =
+		isInThreeTierCheckoutTest && urlSelectedContributionType === 'ONE_OFF';
 
 	const getExistingUrlParamsAndHash = () => {
 		const urlParams = new URLSearchParams(window.location.search).toString();
@@ -91,7 +87,12 @@ const router = () => {
 							<Route
 								path={`/${countryId}/contribute/:campaignCode?`}
 								element={
-									isThreeTierAndOneOffUrlParam() ? (
+									/*
+									 * if you are coming to the /contribute route(s) and you also have a one off
+									 * contribution type (set in the url) and find yourself in the three tier
+									 * variant we should redirect you to the /contribute/checkout route
+									 */
+									isThreeTierAndOneOffUrlParam ? (
 										<Navigate
 											to={`/${countryId}/contribute/checkout${getExistingUrlParamsAndHash()}`}
 											replace
