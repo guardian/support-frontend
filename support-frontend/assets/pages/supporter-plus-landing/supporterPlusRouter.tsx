@@ -1,7 +1,13 @@
 // ----- Imports ----- //
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import {
+	BrowserRouter,
+	Navigate,
+	Route,
+	Routes,
+	useLocation,
+} from 'react-router-dom';
 import { CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -58,6 +64,18 @@ const router = () => {
 	) : (
 		<SupporterPlusInitialLandingPage thankYouRoute={thankYouRoute} />
 	);
+	const urlParams = new URLSearchParams(window.location.search);
+	const urlSelectedContributionType = urlParams.get(
+		'selected-contribution-type',
+	);
+
+	const isThreeTierAndOneOffUrlParam =
+		isInThreeTierCheckoutTest && urlSelectedContributionType === 'ONE_OFF';
+
+	const getExistingUrlParamsAndHash = () => {
+		const urlParams = new URLSearchParams(window.location.search).toString();
+		return `${urlParams ? `?${urlParams}` : ''}${window.location.hash}`;
+	};
 
 	return (
 		<BrowserRouter>
@@ -67,12 +85,22 @@ const router = () => {
 					{countryIds.map((countryId) => (
 						<>
 							<Route
-								path={`/${countryId}/contribute/`}
-								element={firstStepLandingPage}
-							/>
-							<Route
-								path={`/${countryId}/contribute/:campaignCode`}
-								element={firstStepLandingPage}
+								path={`/${countryId}/contribute/:campaignCode?`}
+								element={
+									/*
+									 * if you are coming to the /contribute route(s) and you also have a one off
+									 * contribution type (set in the url) and find yourself in the three tier
+									 * variant we should redirect you to the /contribute/checkout route
+									 */
+									isThreeTierAndOneOffUrlParam ? (
+										<Navigate
+											to={`/${countryId}/contribute/checkout${getExistingUrlParamsAndHash()}`}
+											replace
+										/>
+									) : (
+										firstStepLandingPage
+									)
+								}
 							/>
 							<Route
 								path={`/${countryId}/contribute/checkout`}
