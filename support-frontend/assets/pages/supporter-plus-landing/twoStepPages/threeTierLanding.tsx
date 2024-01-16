@@ -222,11 +222,7 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const handleSupportOnceBtnClick = () => {
 		dispatch(setProductType('ONE_OFF'));
-		navigateWithPageView(
-			navigate,
-			'checkout?showChoiceCards=true',
-			abParticipations,
-		);
+		navigateWithPageView(navigate, 'checkout', abParticipations);
 	};
 
 	const regularProductTypeKey =
