@@ -41,16 +41,16 @@ const titleCss = css`
 	color: #606060;
 `;
 
-const price = (hasPriceSuffix: boolean) => css`
+const price = (hasDiscountSummary: boolean) => css`
 	${textSans.xlarge({ fontWeight: 'bold' })};
 	position: relative;
-	margin-bottom: ${hasPriceSuffix ? '0' : `${space[4]}px`};
+	margin-bottom: ${hasDiscountSummary ? '0' : `${space[4]}px`};
 	${from.desktop} {
 		margin-bottom: ${space[6]}px;
 	}
 `;
 
-const priceSuffixCss = css`
+const discountSummaryCss = css`
 	display: block;
 	font-size: ${space[3]}px;
 	font-weight: 400;
@@ -120,7 +120,7 @@ const frequencyCopyMap = {
 	ANNUAL: 'year',
 };
 
-const priceSuffixCopy = (currency: string, planCost: TierPlanCosts) => {
+const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
 	// EXAMPLE: £16 for the first 12 months, then £25
 	if (planCost.discount) {
 		const durationValue = planCost.discount.duration.value;
@@ -155,8 +155,8 @@ export function ThreeTierCard({
 				{previousPriceCopy && ' '}
 				{currentPriceCopy}
 				{!!planCost.discount && (
-					<span css={priceSuffixCss}>
-						{priceSuffixCopy(currency, planCost)}
+					<span css={discountSummaryCss}>
+						{discountSummaryCopy(currency, planCost)}
 					</span>
 				)}
 			</h2>
