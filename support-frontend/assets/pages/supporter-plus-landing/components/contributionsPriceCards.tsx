@@ -63,7 +63,7 @@ export function ContributionsPriceCards(): JSX.Element {
 	);
 
 	return (
-		<div // this can be split out into it's own component called orderSummaryPriceCards
+		<div
 			css={css`
 				${textSans.medium()}
 			`}
@@ -87,26 +87,24 @@ export function ContributionsPriceCards(): JSX.Element {
 					hideChooseYourAmount,
 					errors,
 				}) => (
-					<>
-						<PriceCards
-							amounts={amounts}
-							selectedAmount={selectedAmount}
-							currency={currency}
-							paymentInterval={paymentInterval}
-							onAmountChange={onAmountChange}
-							hideChooseYourAmount={hideChooseYourAmount}
-							otherAmountField={
-								<OtherAmount
-									currency={currency}
-									minAmount={minAmount}
-									selectedAmount={selectedAmount}
-									otherAmount={otherAmount}
-									onOtherAmountChange={onOtherAmountChange}
-									errors={errors}
-								/>
-							}
-						/>
-					</>
+					<PriceCards
+						amounts={amounts}
+						selectedAmount={selectedAmount}
+						currency={currency}
+						paymentInterval={paymentInterval}
+						onAmountChange={onAmountChange}
+						hideChooseYourAmount={hideChooseYourAmount}
+						otherAmountField={
+							<OtherAmount
+								currency={currency}
+								minAmount={minAmount}
+								selectedAmount={selectedAmount}
+								otherAmount={otherAmount}
+								onOtherAmountChange={onOtherAmountChange}
+								errors={errors}
+							/>
+						}
+					/>
 				)}
 			/>
 		</div>
