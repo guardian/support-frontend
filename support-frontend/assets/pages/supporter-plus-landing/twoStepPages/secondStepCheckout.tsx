@@ -29,6 +29,7 @@ import {
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { CheckoutDivider } from '../components/checkoutDivider';
+import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
@@ -75,6 +76,12 @@ export function SupporterPlusCheckout({
 
 	const navigate = useNavigate();
 
+	const isInThreeTierCheckoutTest =
+		abParticipations.threeTierCheckout === 'variant';
+
+	const showPriceCards =
+		isInThreeTierCheckoutTest && contributionType === 'ONE_OFF';
+
 	const changeButton = (
 		<Button
 			priority="tertiary"
@@ -101,14 +108,18 @@ export function SupporterPlusCheckout({
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
-					<ContributionsOrderSummaryContainer
-						renderOrderSummary={(orderSummaryProps) => (
-							<ContributionsOrderSummary
-								{...orderSummaryProps}
-								headerButton={changeButton}
-							/>
-						)}
-					/>
+					{showPriceCards ? (
+						<ContributionsPriceCards />
+					) : (
+						<ContributionsOrderSummaryContainer
+							renderOrderSummary={(orderSummaryProps) => (
+								<ContributionsOrderSummary
+									{...orderSummaryProps}
+									headerButton={changeButton}
+								/>
+							)}
+						/>
+					)}
 				</BoxContents>
 			</Box>
 			<Box cssOverrides={shorterBoxMargin}>
