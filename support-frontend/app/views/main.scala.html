@@ -14,7 +14,8 @@
   csrf: Option[String] = None,
   shareImageUrl: Option[String] = None,
   shareUrl: Option[String] = None,
-  serversideTests: Map[String,Participation] = Map()
+  serversideTests: Map[String,Participation] = Map(),
+  noindex: Boolean = false,
 )(body: Html = Html(""))(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 <!DOCTYPE html>
@@ -31,6 +32,10 @@
           window.guardian.csrf = {token: "@token"}
         }
       </script>
+    }
+
+    @if(noindex) {
+      <meta name="robots" content="noindex">
     }
 
     <meta property="og:type" content="website" />

@@ -30,6 +30,7 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import { currencies } from 'helpers/internationalisation/currency';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
 	setProductType,
@@ -43,6 +44,7 @@ import {
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
+import { tierCards } from '../setup/threeTierConfig';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -121,41 +123,10 @@ const standFirst = css`
 	}
 `;
 
-const benefitsPrefixCss = css`
-	${textSans.small()};
-	color: ${palette.neutral[7]};
-	text-align: left;
-	strong {
-		font-weight: bold;
-	}
-`;
-
 const paymentFrequencyButtonsCss = css`
 	margin: ${space[4]}px auto 32px;
 	${from.desktop} {
 		margin: ${space[6]}px auto ${space[12]}px;
-	}
-`;
-
-const benefitsPrefixPlus = css`
-	${textSans.small()};
-	color: ${palette.neutral[7]};
-	display: flex;
-	align-items: center;
-	margin: ${space[3]}px 0;
-	:before {
-		content: '';
-		height: 1px;
-		background-color: ${palette.neutral[86]};
-		flex-grow: 2;
-		margin-right: ${space[2]}px;
-	}
-	:after {
-		content: '';
-		height: 1px;
-		background-color: ${palette.neutral[86]};
-		flex-grow: 2;
-		margin-left: ${space[2]}px;
 	}
 `;
 
@@ -196,7 +167,7 @@ export function ThreeTierLanding(): JSX.Element {
 		(state) => state.common,
 	);
 
-	const { countryGroupId } = useContributionsSelector(
+	const { countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 
@@ -221,10 +192,10 @@ export function ThreeTierLanding(): JSX.Element {
 		if (productType === 'ONE_OFF') {
 			dispatch(setProductType('MONTHLY'));
 			/*
-			 * Resets the product type to be a recurring type so
-			 * that the cards show monthly or annual values. This
-			 * happens if a user comes back to this page from the
-			 * one off contribution checkout
+			 * Interaction on this page only works
+			 * with regular contributions (monthly | annual)
+			 * this resets the product type to monthly if
+			 * coming from the one off contribution checkout
 			 */
 		}
 	}, []);
@@ -239,11 +210,11 @@ export function ThreeTierLanding(): JSX.Element {
 		dispatch(setProductType(paymentFrequencies[buttonIndex]));
 	};
 
-	const handleCardCtaClick = (price: string) => {
+	const handleCardCtaClick = (price: number) => {
 		dispatch(
 			setSelectedAmount({
 				contributionType: productType,
-				amount: price,
+				amount: `${price}`,
 			}),
 		);
 		navigateWithPageView(navigate, 'checkout', abParticipations);
@@ -253,6 +224,11 @@ export function ThreeTierLanding(): JSX.Element {
 		dispatch(setProductType('ONE_OFF'));
 		navigateWithPageView(navigate, 'checkout', abParticipations);
 	};
+
+	const regularProductTypeKey =
+		productType === 'ONE_OFF'
+			? 'monthly'
+			: (productType.toLowerCase() as 'monthly' | 'annual');
 
 	return (
 		<PageScaffold
@@ -299,55 +275,34 @@ export function ThreeTierLanding(): JSX.Element {
 					<ThreeTierCards
 						cardsContent={[
 							{
-								cardTitle: 'Support',
-								currentPrice: productType === 'MONTHLY' ? '4' : '400',
-								benefits: [
-									{
-										copy: 'Regular supporter newsletter from inside our newsroom',
-									},
-									{ copy: 'See far fewer asks for support' },
-								],
+								title: tierCards.tier1.title,
+								benefits: tierCards.tier1.benefits,
+								isRecommended: tierCards.tier1.isRecommended,
+								planCost:
+									tierCards.tier1.plans[regularProductTypeKey].charges[
+										countryGroupId
+									],
 							},
 							{
-								cardTitle: 'All access digital',
-								currentPrice: productType === 'MONTHLY' ? '10' : '1000',
-								isRecommended: true,
-								benefits: [
-									{
-										copy: 'Guardian news app with personalised recommendations and offline reading',
-									},
-									{ copy: 'Ad-free reading on all your digital devices' },
-									{
-										copy: 'Regular supporter newsletter from inside our newsroom',
-									},
-									{ copy: 'See far fewer asks for support' },
-								],
+								title: tierCards.tier2.title,
+								benefits: tierCards.tier2.benefits,
+								isRecommended: tierCards.tier2.isRecommended,
+								planCost:
+									tierCards.tier2.plans[regularProductTypeKey].charges[
+										countryGroupId
+									],
 							},
 							{
-								cardTitle: 'Digital + print',
-								previousPrice: productType === 'MONTHLY' ? '25' : '2500',
-								currentPrice: productType === 'MONTHLY' ? '16' : '1600',
-								priceSuffix:
-									productType === 'MONTHLY'
-										? '£16 for the first 12 months, then £25'
-										: '£1600 for the first 12 months, then £2500',
-								benefits: [
-									{
-										copy: 'Guardian Weekly magazine delivered to your door, offering a digestible view of world news.',
-										tooltip: 'tooltip text',
-									},
-								],
-								benefitsPrefix: (
-									<div css={benefitsPrefixCss}>
-										<span>
-											All features of <strong>All access digital</strong>
-										</span>
-										<span css={benefitsPrefixPlus}>plus</span>
-									</div>
-								),
+								title: tierCards.tier3.title,
+								benefits: tierCards.tier3.benefits,
+								isRecommended: tierCards.tier3.isRecommended,
+								planCost:
+									tierCards.tier3.plans[regularProductTypeKey].charges[
+										countryGroupId
+									],
 							},
 						]}
-						currency="£"
+						currency={currencies[currencyId].glyph}
 						paymentFrequency={productType as RegularContributionType}
 						cardsCtaClickHandler={handleCardCtaClick}
 					/>
