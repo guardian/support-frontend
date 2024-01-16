@@ -70,15 +70,15 @@ const recurringContainer = css`
 	}
 `;
 
-const oneTimeContainer = css`
+const oneTimeContainer = (withShortPaddingBottom: boolean) => css`
 	display: flex;
 	background-color: ${palette.neutral[97]};
 	> div {
-		padding: ${space[6]}px 10px 72px;
+		padding: ${space[6]}px 10px ${withShortPaddingBottom ? space[6] : '72'}px;
 	}
 	${from.desktop} {
 		> div {
-			padding-bottom: ${space[24]}px;
+			padding-bottom: ${withShortPaddingBottom ? space[9] : space[24]}px;
 		}
 	}
 `;
@@ -133,6 +133,28 @@ const paymentFrequencyButtonsCss = css`
 const tabletLineBreak = css`
 	${from.desktop} {
 		display: none;
+	}
+`;
+
+const suppportAnotherWayContainer = css`
+	margin: ${space[9]}px auto 0;
+	border-top: 1px solid ${palette.neutral[86]};
+	padding-top: 32px;
+	max-width: 940px;
+	text-align: left;
+	color: #606060;
+	h4 {
+		${textSans.medium({ fontWeight: 'bold' })};
+	}
+	p {
+		${textSans.small()};
+	}
+	a {
+		color: #606060;
+	}
+	${from.desktop} {
+		text-align: center;
+		padding-top: ${space[9]}px;
 	}
 `;
 
@@ -315,9 +337,22 @@ export function ThreeTierLanding(): JSX.Element {
 			<Container
 				sideBorders
 				borderColor="rgba(170, 170, 180, 0.5)"
-				cssOverrides={oneTimeContainer}
+				cssOverrides={oneTimeContainer(countryGroupId === UnitedStates)}
 			>
 				<SupportOnce btnClickHandler={handleSupportOnceBtnClick} />
+				{countryGroupId === UnitedStates && (
+					<div css={suppportAnotherWayContainer}>
+						<h4>Support another way</h4>
+						<p>
+							To learn more about other ways to support the Guardian, including
+							checks and tax-exempt options, please visit our{' '}
+							<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way?INTCMP=gdnwb_copts_support_contributions_referral">
+								help page
+							</a>{' '}
+							on this topic.
+						</p>
+					</div>
+				)}
 			</Container>
 		</PageScaffold>
 	);
