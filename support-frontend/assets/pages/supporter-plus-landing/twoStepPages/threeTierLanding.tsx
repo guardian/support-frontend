@@ -1,13 +1,7 @@
 import { css } from '@emotion/react';
 import { cmp } from '@guardian/consent-management-platform';
-import {
-	from,
-	headline,
-	palette,
-	space,
-	textSans,
-} from '@guardian/source-foundations';
-import { Container } from '@guardian/source-react-components';
+import { from, palette, space, textSans } from '@guardian/source-foundations';
+import { Container, Hide } from '@guardian/source-react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
@@ -20,6 +14,8 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
+import ThreeTierHeadlineImageDesktop from 'components/svgs/threeTierHeadlineImageDesktop';
+import ThreeTierHeadlineImageMobile from 'components/svgs/threeTierHeadlineImageMobile';
 import type { RegularContributionType } from 'helpers/contributions';
 import {
 	AUDCountries,
@@ -50,17 +46,17 @@ const recurringContainer = css`
 	background-color: ${palette.brand[400]};
 	border-bottom: 1px solid ${palette.brand[600]};
 	> div {
-		padding: ${space[2]}px 10px ${space[4]}px;
+		padding: ${space[4]}px 10px ${space[4]}px;
 	}
 	${from.mobileLandscape} {
 		> div {
-			padding: ${space[2]}px ${space[5]}px ${space[4]}px;
+			padding: ${space[4]}px ${space[5]}px ${space[4]}px;
 		}
 	}
 	${from.tablet} {
 		border-bottom: none;
 		> div {
-			padding: ${space[2]}px 10px ${space[4]}px;
+			padding: ${space[4]}px 10px ${space[4]}px;
 		}
 	}
 	${from.desktop} {
@@ -89,18 +85,13 @@ const innerContentContainer = css`
 	text-align: center;
 `;
 
-const heading = css`
+const imageHeaderAlignmentCss = css`
 	text-align: left;
-	color: ${palette.neutral[100]};
-	margin-top: ${space[4]}px;
-	${headline.xsmall({
-		fontWeight: 'bold',
-	})}
 	${from.tablet} {
 		text-align: center;
-	}
-	${from.desktop} {
-		font-size: 2.625rem;
+		img {
+			max-width: 100%;
+		}
 	}
 `;
 
@@ -115,11 +106,11 @@ const standFirst = css`
 	}
 	${from.tablet} {
 		text-align: center;
-		width: 65%;
+		width: 60%;
 		margin: 0 auto;
 	}
 	${from.desktop} {
-		margin: ${space[4]}px auto ${space[6]}px;
+		margin: 0 auto ${space[6]}px;
 	}
 `;
 
@@ -127,12 +118,6 @@ const paymentFrequencyButtonsCss = css`
 	margin: ${space[4]}px auto 32px;
 	${from.desktop} {
 		margin: ${space[6]}px auto ${space[12]}px;
-	}
-`;
-
-const tabletLineBreak = css`
-	${from.desktop} {
-		display: none;
 	}
 `;
 
@@ -276,12 +261,17 @@ export function ThreeTierLanding(): JSX.Element {
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					<h1 css={heading}>
-						Support fearless, <br css={tabletLineBreak} />
-						independent journalism
-					</h1>
+					<figure css={imageHeaderAlignmentCss}>
+						<Hide from="desktop">
+							<ThreeTierHeadlineImageMobile />
+						</Hide>
+						<Hide until="desktop">
+							<ThreeTierHeadlineImageDesktop />
+						</Hide>
+					</figure>
 					<p css={standFirst}>
-						Here comes body copy about the support option below.{' '}
+						We're not owned by a billionaire or shareholders – our readers
+						support us. Join them with one of three options below.{' '}
 						<strong>Cancel anytime.</strong>
 					</p>
 					<PaymentFrequencyButtons
