@@ -81,6 +81,34 @@ export const tests: Tests = {
 		omitCountries: countriesAffectedByVATStatus,
 		referrerControlled: false,
 		seed: 0,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesExecptSupportPlus,
+
+		/**
+		 * This runs on
+		 * - /{countryGroupId}/contribute
+		 * - /{countryGroupId}/contribute/checkout
+		 * - /{countryGroupId}/thankyou
+		 * - /subscribe/weekly/checkout?isThirdTier=true
+		 *
+		 * And does not run on
+		 * - /subscribe/weekly/checkout
+		 */
+		canRun: () => {
+			// Contribution pages
+			const isContribution =
+				window.location.pathname.match(
+					/\/uk|us|au|eu|int|nz|ca\/contribute(\/.*)?$/,
+				) !== null;
+			const isThankYou =
+				window.location.pathname.match(/\/uk|us|au|eu|int|nz|ca\/thankyou/) !==
+				null;
+
+			// Weekly pages
+			const urlParams = new URLSearchParams(window.location.search);
+			const isThirdTier = urlParams.get('isThirdTier') === 'true';
+			const isWeeklyCheckout =
+				window.location.pathname === '/subscribe/weekly/checkout';
+
+			return isContribution || isThankYou || (isWeeklyCheckout && isThirdTier);
+		},
 	},
 };
