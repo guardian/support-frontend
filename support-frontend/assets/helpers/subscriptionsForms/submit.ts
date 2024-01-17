@@ -57,7 +57,7 @@ import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagMana
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
-import { getQueryParameter, isProd } from 'helpers/urls/url';
+import { getQueryParameter } from 'helpers/urls/url';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
@@ -181,7 +181,7 @@ function buildRegularPaymentRequest(
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
 	// We will need to remove this !isProd check before we go live
 	const threeTierCreateSupporterPlusSubscription =
-		!isProd() &&
+		state.common.abParticipations.threeTierCheckout === 'variant' &&
 		getQueryParameter('threeTierCreateSupporterPlusSubscription') === 'true';
 
 	return {
