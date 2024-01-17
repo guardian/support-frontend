@@ -1,7 +1,13 @@
 import { css } from '@emotion/react';
 import { cmp } from '@guardian/consent-management-platform';
-import { from, palette, space, textSans } from '@guardian/source-foundations';
-import { Container, Hide } from '@guardian/source-react-components';
+import {
+	between,
+	from,
+	palette,
+	space,
+	textSans,
+} from '@guardian/source-foundations';
+import { Container } from '@guardian/source-react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
@@ -14,8 +20,6 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
-import ThreeTierHeadlineImageDesktop from 'components/svgs/threeTierHeadlineImageDesktop';
-import ThreeTierHeadlineImageMobile from 'components/svgs/threeTierHeadlineImageMobile';
 import type { RegularContributionType } from 'helpers/contributions';
 import {
 	AUDCountries,
@@ -85,13 +89,26 @@ const innerContentContainer = css`
 	text-align: center;
 `;
 
-const imageHeaderAlignmentCss = css`
+const headlineCss = css`
 	text-align: left;
+	margin-bottom: ${space[1]}px;
+	img {
+		width: 100%;
+		${from.mobileMedium} {
+			max-width: 90%;
+		}
+		${from.mobileLandscape} {
+			max-width: 80%;
+		}
+		${between.tablet.and.desktop} {
+			max-width: 46%;
+		}
+	}
+	${from.mobileLandscape} {
+		margin-bottom: ${space[3]}px;
+	}
 	${from.tablet} {
 		text-align: center;
-		img {
-			max-width: 100%;
-		}
 	}
 `;
 
@@ -261,14 +278,29 @@ export function ThreeTierLanding(): JSX.Element {
 				cssOverrides={recurringContainer}
 			>
 				<div css={innerContentContainer}>
-					<figure css={imageHeaderAlignmentCss}>
-						<Hide from="desktop">
-							<ThreeTierHeadlineImageMobile />
-						</Hide>
-						<Hide until="desktop">
-							<ThreeTierHeadlineImageDesktop />
-						</Hide>
-					</figure>
+					<h1 css={headlineCss}>
+						<picture>
+							<source
+								media="(max-width: 739px)"
+								srcSet="https://uploads.guim.co.uk/2024/01/17/headlineMobile.svg"
+								type="image/svg+xml"
+							/>
+							<source
+								media="(max-width: 979px)"
+								srcSet="https://uploads.guim.co.uk/2024/01/17/headlineTablet.svg"
+								type="image/svg+xml"
+							/>
+							<source
+								srcSet="https://uploads.guim.co.uk/2024/01/17/headlineDesktop.svg"
+								type="image/svg+xml"
+							/>
+
+							<img
+								src="https://uploads.guim.co.uk/2024/01/17/headlineDesktop.svg"
+								alt="Support fearless, independent journalism"
+							/>
+						</picture>
+					</h1>
 					<p css={standFirst}>
 						We're not owned by a billionaire or shareholders – our readers
 						support us. Join them with one of three options below.{' '}
