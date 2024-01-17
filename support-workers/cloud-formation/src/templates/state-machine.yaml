@@ -68,6 +68,93 @@ States:
           Resource: "${SendAcquisitionEventLambda.Arn}"
           End: True
           {{> retry}}
+
+    # We use this step to pass through state that can then be read to three tier steps
+    - StartAt: ThreeTierPassThrough
+      States:
+        ThreeTierPassThrough:
+          Type: Pass
+          End: True
+    Next: ThreeTierUnpackJsonList
+
+  # Unpack the list of states from the parallel tasks into a single item
+  ThreeTierUnpackJsonList:
+    Type: Pass
+    InputPath: $.[0]
+    Next: ThreeTierShouldCreateSupporterPlusSubscription
+
+  ThreeTierShouldCreateSupporterPlusSubscription:
+    Type: Choice
+    Choices:
+      - Next: ThreeTierUnpackSendThankYouEmailState
+        And:
+          - Variable: $.state.acquisitionData.threeTierCreateSupporterPlusSubscription
+            IsPresent: true
+          - Variable: $.state.acquisitionData.threeTierCreateSupporterPlusSubscription
+            BooleanEquals: true
+          - Variable: $.state.sendThankYouEmailState.product.productType
+            IsPresent: true
+          - Variable: $.state.sendThankYouEmailState.product.productType
+            StringEquals: GuardianWeekly
+    Default: Done
+
+  # This transform
+  # - moves state from `sendThankYouEmailState` back into the root state
+  # - adds `paymentFields.billingAccountId` that's required by `PreparePaymentMethodForReuse`
+  ThreeTierUnpackSendThankYouEmailState:
+    Type: Pass
+    Parameters:
+      state:
+        paymentFields:
+          billingAccountId.$: $.state.sendThankYouEmailState.accountNumber
+        user.$: $.state.sendThankYouEmailState.user
+        product.$: $.state.sendThankYouEmailState.product
+        giftRecipient.$: $.state.sendThankYouEmailState.giftRecipient
+        paymentMethod.$: $.state.sendThankYouEmailState.paymentMethod
+        paymentSchedule.$: $.state.sendThankYouEmailState.paymentSchedule
+        promoCode.$: $.state.sendThankYouEmailState.promoCode
+        accountNumber.$: $.state.sendThankYouEmailState.accountNumber
+        subscriptionNumber.$: $.state.sendThankYouEmailState.subscriptionNumber
+        firstDeliveryDate.$: $.state.sendThankYouEmailState.firstDeliveryDate
+        productType.$: $.state.sendThankYouEmailState.productType
+        requestId.$: $.state.requestId
+        analyticsInfo.$: $.state.analyticsInfo
+        acquisitionData.$: $.state.acquisitionData
+      error.$: $.error
+      requestInfo.$: $.requestInfo
+    Next: ThreeTierChooseSubscriberPlusProduct
+
+  ThreeTierChooseSubscriberPlusProduct:
+    Type: Choice
+    Choices:
+      {{> subscriberPlusProductChoice currency="GBP" amount=10 billingPeriod="Monthly" }}
+      {{> subscriberPlusProductChoice currency="EUR" amount=10 billingPeriod="Monthly" }}
+      {{> subscriberPlusProductChoice currency="USD" amount=13 billingPeriod="Monthly" }}
+      {{> subscriberPlusProductChoice currency="CAD" amount=13 billingPeriod="Monthly" }}
+      {{> subscriberPlusProductChoice currency="NZD" amount=17 billingPeriod="Monthly" }}
+      {{> subscriberPlusProductChoice currency="AUD" amount=20 billingPeriod="Monthly" }}
+      {{> subscriberPlusProductChoice currency="GBP" amount=95 billingPeriod="Annual" }}
+      {{> subscriberPlusProductChoice currency="EUR" amount=95 billingPeriod="Annual" }}
+      {{> subscriberPlusProductChoice currency="USD" amount=120 billingPeriod="Annual" }}
+      {{> subscriberPlusProductChoice currency="CAD" amount=120 billingPeriod="Annual" }}
+      {{> subscriberPlusProductChoice currency="NZD" amount=160 billingPeriod="Annual" }}
+      {{> subscriberPlusProductChoice currency="AUD" amount=160 billingPeriod="Annual" }}
+
+  {{> subscriberPlusProduct currency="GBP" amount=10 billingPeriod="Monthly" }}
+  {{> subscriberPlusProduct currency="EUR" amount=10 billingPeriod="Monthly" }}
+  {{> subscriberPlusProduct currency="USD" amount=13 billingPeriod="Monthly" }}
+  {{> subscriberPlusProduct currency="CAD" amount=13 billingPeriod="Monthly" }}
+  {{> subscriberPlusProduct currency="NZD" amount=17 billingPeriod="Monthly" }}
+  {{> subscriberPlusProduct currency="AUD" amount=20 billingPeriod="Monthly" }}
+  {{> subscriberPlusProduct currency="GBP" amount=95 billingPeriod="Annual" }}
+  {{> subscriberPlusProduct currency="EUR" amount=95 billingPeriod="Annual" }}
+  {{> subscriberPlusProduct currency="USD" amount=120 billingPeriod="Annual" }}
+  {{> subscriberPlusProduct currency="CAD" amount=120 billingPeriod="Annual" }}
+  {{> subscriberPlusProduct currency="NZD" amount=160 billingPeriod="Annual" }}
+  {{> subscriberPlusProduct currency="AUD" amount=160 billingPeriod="Annual" }}
+
+  Done:
+    Type: Pass
     End: True
 
   FailureHandler:

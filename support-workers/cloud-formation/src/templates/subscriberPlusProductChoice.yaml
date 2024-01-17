@@ -1,0 +1,6 @@
+- Next: {{billingPeriod}}SubscriberPlus{{currency}}{{amount}}
+  And:
+  - Variable: $.state.product.currency
+    StringEquals: {{currency}}
+  - Variable: $.state.product.billingPeriod
+    StringEquals: {{billingPeriod}}

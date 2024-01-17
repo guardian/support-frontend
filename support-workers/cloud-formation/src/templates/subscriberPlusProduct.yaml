@@ -1,0 +1,9 @@
+{{billingPeriod}}SubscriberPlus{{currency}}{{amount}}:
+  Type: Pass
+  Result:
+    amount: {{amount}}
+    currency: {{currency}}
+    billingPeriod: {{billingPeriod}}
+    productType: SupporterPlus
+  ResultPath: $.state.product
+  Next: PreparePaymentMethodForReuse
