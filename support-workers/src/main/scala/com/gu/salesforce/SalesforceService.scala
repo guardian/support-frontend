@@ -7,10 +7,10 @@ import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import com.gu.salesforce.AddressLine.getAddressLine
 import com.gu.salesforce.Salesforce._
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.{Address, GiftRecipient, SalesforceContactRecord, User}
 import io.circe
-import io.circe.Decoder
+import io.circe.generic.semiauto.deriveCodec
+import io.circe.{Codec, Decoder}
 import io.circe.parser._
 import io.circe.syntax._
 import okhttp3.Request
@@ -43,8 +43,31 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   ): Either[circe.Error, SalesforceErrorResponse] =
     decode[List[SalesforceErrorResponse]](responseBody).map(_.head) // Salesforce returns a list of error responses
 
-  def upsert(data: UpsertData): Future[SalesforceContactResponse] = {
-    postJson[SalesforceContactResponse](upsertEndpoint, data.asJson)
+  /** We map over the response from `WebServiceHelper.postJson` as there is a case where Salesforce returns
+    * `Response.status = 200` with `Success = false` for errors rather than using the HTTP status code to indicate that
+    * an error has occurred.
+    */
+  def upsert(data: UpsertData): Future[SalesforceContactSuccess] = {
+    // This is just a convenience class for decoding
+    postJson[SalesforceContactResponse](upsertEndpoint, data.asJson).flatMap(response => {
+      if (response.Success && response.ContactRecord.isDefined) {
+        Future.successful(
+          SalesforceContactSuccess(
+            Success = response.Success,
+            ContactRecord = response.ContactRecord.get,
+            ErrorString = response.ErrorString,
+          ),
+        )
+      } else {
+        Future.failed(
+          SalesforceErrorResponse(
+            message = response.ErrorString.getOrElse("Salesforce `Success` returned as `false` with no error message"),
+            errorCode = "500",
+          ),
+        )
+      }
+    })
+
   }
 
   def createContactRecords(

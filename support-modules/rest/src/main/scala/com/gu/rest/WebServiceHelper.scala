@@ -75,6 +75,7 @@ trait WebServiceHelper[Error <: Throwable] {
       rb: Request.Builder,
   )(implicit decoder: Decoder[A], errorDecoder: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     for {
+
       response <- getResponse(rb)
       codeBody <- Future.fromTry(getJsonBody(response))
       decodedResponse <- Future.fromTry(decodeBody[A](codeBody))
@@ -82,11 +83,12 @@ trait WebServiceHelper[Error <: Throwable] {
 
   }
 
-  protected def getResponse(rb: Request.Builder) = for {
-    req <- wsPreExecute(rb).map(_.build())
-    _ = SafeLogger.info(s"Issuing request ${req.method} ${req.url}")
-    response <- httpClient(req)
-  } yield response
+  protected def getResponse(rb: Request.Builder) =
+    for {
+      req <- wsPreExecute(rb).map(_.build())
+      _ = SafeLogger.info(s"Issuing request ${req.method} ${req.url}")
+      response <- httpClient(req)
+    } yield response
 
   def getJsonBody[A](response: Response)(implicit ctag: ClassTag[A]): Try[CodeBody] = {
     val code = response.code().toString
@@ -115,7 +117,7 @@ trait WebServiceHelper[Error <: Throwable] {
     responseFamily match {
       case "2xx" =>
         decode[A](responseBody).left.map { err =>
-          decodeError(responseBody).right.getOrElse(
+          decodeError(responseBody).getOrElse(
             WebServiceHelperError[A](
               codeBody,
               s"failed to parse response. Error was: $err, Response was: $responseBody",
@@ -124,7 +126,7 @@ trait WebServiceHelper[Error <: Throwable] {
           )
         }.toTry
       case "4xx" =>
-        Failure(decodeError(responseBody).right.toOption.getOrElse(WebServiceClientError(codeBody)))
+        Failure(decodeError(responseBody).toOption.getOrElse(WebServiceClientError(codeBody)))
       case statusCode =>
         Failure(WebServiceHelperError[A](codeBody, s"unrecognised response code $statusCode"))
     }
