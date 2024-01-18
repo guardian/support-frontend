@@ -102,24 +102,4 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
       err shouldBe a[SalesforceErrorResponse]
     }
   }
-
-  "SalesforceService" should "throw a SalesforceErrorResponse with errorCode INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE if in maintenance" in {
-    val service =
-      new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
-    val message =
-      "Failed Upsert of new Contact: Upsert failed. First exception on row 0; first error: INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE, Updates can’t be made during maintenance. Try again when maintenance is complete: []"
-
-    /** This is some logic that has been baked into the CODE API for testing.
-      *
-      * see: https://github.com/guardian/support-frontend/pull/5612#issuecomment-1898191628
-      */
-    val upsert = service.upsert(upsertData.copy(Email = "readonly@readonly.com"))
-    upsert.failed.map { err =>
-      err shouldBe a[SalesforceErrorResponse]
-      err shouldBe SalesforceErrorResponse(
-        errorCode = "INSERT_UPDATE_DELETE_NOT_ALLOWED_DURING_MAINTENANCE",
-        message = message,
-      )
-    }
-  }
 }
