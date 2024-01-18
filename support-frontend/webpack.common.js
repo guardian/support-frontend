@@ -120,10 +120,11 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 					not: [
 						/@guardian\/consent-management-platform/,
 						/@guardian\/libs/,
-						// we need to include this here to support Safari < v14 which doens't support private class fields
-						// used here: https://github.com/guardian/csnx/blob/e3678d2fffb206ec560891db8ff0ce8c47b05328/libs/%40guardian/source-foundations/src/accessibility/focus-style-manager.ts#L9
-						// see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Public_class_fields
+						// we need to include this here to support Safari < v14 as @guardian/source doesn't ship compiled,
+						// so we need our Babel to make it compatible with things like public class fields
 						/@guardian\/source-foundations/,
+						/@guardian\/source-react-components/,
+						/@guardian\/source-react-components-development-kitchen/,
 					],
 				},
 				use: [
