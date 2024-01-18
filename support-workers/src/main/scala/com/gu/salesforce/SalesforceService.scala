@@ -49,25 +49,30 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
     */
   def upsert(data: UpsertData): Future[SalesforceContactSuccess] = {
     // This is just a convenience class for decoding
-    postJson[SalesforceContactResponse](upsertEndpoint, data.asJson).flatMap(response => {
-      if (response.Success && response.ContactRecord.isDefined) {
-        Future.successful(
-          SalesforceContactSuccess(
-            Success = response.Success,
-            ContactRecord = response.ContactRecord.get,
-            ErrorString = response.ErrorString,
-          ),
-        )
-      } else {
-        Future.failed(
-          SalesforceErrorResponse(
-            message = response.ErrorString.getOrElse("Salesforce `Success` returned as `false` with no error message"),
-            errorCode = "500",
-          ),
-        )
-      }
-    })
+    postJson[SalesforceContactResponse](upsertEndpoint, data.asJson).flatMap(parseResponseToResult)
+  }
 
+  // This method is public for testing
+  def parseResponseToResult(response: SalesforceContactResponse): Future[SalesforceContactSuccess] = if (
+    response.Success && response.ContactRecord.isDefined
+  ) {
+    Future.successful(
+      SalesforceContactSuccess(
+        Success = response.Success,
+        ContactRecord = response.ContactRecord.get,
+        ErrorString = response.ErrorString,
+      ),
+    )
+  } else {
+    val isReadOnlyMaintenance =
+      response.ErrorString.exists(_.contains(SalesforceErrorResponse.readOnlyMaintenance))
+
+    Future.failed(
+      SalesforceErrorResponse(
+        message = response.ErrorString.getOrElse("Salesforce `Success` returned as `false` with no error message"),
+        errorCode = if (isReadOnlyMaintenance) SalesforceErrorResponse.readOnlyMaintenance else "UNKNOWN_ERROR",
+      ),
+    )
   }
 
   def createContactRecords(
