@@ -1544,6 +1544,9 @@ exports[`The Payment API stack matches the snapshot 1`] = `
       "Type": "AWS::EC2::SecurityGroupIngress",
     },
     "supportPRODpaymentapiF3F3A4D6": {
+      "DependsOn": [
+        "InstanceRolePaymentapi2FA25312",
+      ],
       "Properties": {
         "LaunchTemplateData": {
           "IamInstanceProfile": {
