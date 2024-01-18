@@ -6,9 +6,10 @@ declare module '*.png' {
 }
 
 declare module '*.svg' {
-	const content: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+	const content: React.FunctionComponent<React.SVGAttributes<SVGElement>> | string;
 	export default content;
 }
+
 
 declare module 'ophan' {
 	export const init: () => void;

@@ -42,6 +42,9 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
+import headlineDesktop from '../../../images/svgs/headlineDesktop.svg';
+import headlineMobile from '../../../images/svgs/headlineMobile.svg';
+import headlineTablet from '../../../images/svgs/headlineTablet.svg';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { tierCards } from '../setup/threeTierConfig';
@@ -282,21 +285,18 @@ export function ThreeTierLanding(): JSX.Element {
 						<picture>
 							<source
 								media="(max-width: 739px)"
-								srcSet="https://uploads.guim.co.uk/2024/01/17/headlineMobile.svg"
+								srcSet={headlineMobile as string}
 								type="image/svg+xml"
 							/>
 							<source
 								media="(max-width: 979px)"
-								srcSet="https://uploads.guim.co.uk/2024/01/17/headlineTablet.svg"
+								srcSet={headlineTablet as string}
 								type="image/svg+xml"
 							/>
-							<source
-								srcSet="https://uploads.guim.co.uk/2024/01/17/headlineDesktop.svg"
-								type="image/svg+xml"
-							/>
+							<source srcSet={headlineDesktop as string} type="image/svg+xml" />
 
 							<img
-								src="https://uploads.guim.co.uk/2024/01/17/headlineDesktop.svg"
+								src={headlineDesktop as string}
 								alt="Support fearless, independent journalism"
 							/>
 						</picture>

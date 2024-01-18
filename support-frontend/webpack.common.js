@@ -147,8 +147,18 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 					name: '[path][name].[hash].[ext]',
 				},
 			},
+      {
+				test: /\.svg$/,
+				include: [path.resolve(__dirname, 'assets/images/svgs')],
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
+			},
 			{
 				test: /\.svg$/,
+				include: [path.resolve(__dirname, 'assets/components')],
 				use: [
 					{
 						loader: 'babel-loader',
