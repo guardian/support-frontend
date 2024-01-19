@@ -21,15 +21,21 @@ type CheckoutBenefitsListContainerProps = {
 	renderBenefitsList: (props: CheckoutBenefitsListProps) => JSX.Element;
 };
 
-function getBenefitsListTitle(
+function getEmotionalBenefitsTitle(
 	priceString: string,
 	contributionType: ContributionType,
 	displayEmotionalBenefit: boolean,
 ) {
 	const billingPeriod = contributionType === 'MONTHLY' ? 'month' : 'year';
-	return `For ${priceString} per ${billingPeriod}, ${
-		displayEmotionalBenefit ? getEmotionalBenefit(priceString) : ''
-	}you’ll unlock`;
+	const emotionalMessage = displayEmotionalBenefit
+		? getEmotionalBenefit(priceString)
+		: ``;
+	return [
+		{ copy: `For ${priceString} per ${billingPeriod}`, strong: true },
+		`, `,
+		emotionalMessage,
+		`you’ll unlock`,
+	];
 }
 
 function getEmotionalBenefit(priceString: string) {
@@ -114,7 +120,7 @@ export function CheckoutBenefitsListContainer({
 	}
 
 	return renderBenefitsList({
-		title: getBenefitsListTitle(
+		title: getEmotionalBenefitsTitle(
 			userSelectedAmountWithCurrency,
 			contributionType,
 			displayEmotionalBenefit,
@@ -127,6 +133,7 @@ export function CheckoutBenefitsListContainer({
 			thresholdPriceWithCurrency,
 			selectedAmount,
 		),
+		displayEmotionalBenefit: displayEmotionalBenefit,
 		handleButtonClick,
 	});
 }

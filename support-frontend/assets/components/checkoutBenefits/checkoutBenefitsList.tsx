@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import {
 	between,
 	from,
-	headline,
 	palette,
 	space,
 	textSans,
@@ -36,11 +35,14 @@ const maxWidth = css`
 		max-width: 15ch;
 	}
 `;
+
 const headingCss = css`
-	${headline.xsmall({ fontWeight: 'bold' })}
+	${textSans.small()}
+	strong {
+		font-weight: bold;
+	}
 	${from.tablet} {
-		font-size: 28px;
-		line-height: 115%;
+		${textSans.medium({ lineHeight: 'tight' })}
 	}
 `;
 
@@ -55,12 +57,13 @@ const hrCss = (margin: string) => css`
 `;
 
 export type CheckoutBenefitsListProps = {
-	title: string;
+	title: Array<string | { copy: string; strong: boolean }>;
 	checkListData: CheckListData[];
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
 	withBackground?: boolean;
 	isCompactList?: boolean;
+	displayEmotionalBenefit?: boolean;
 };
 
 export function CheckoutBenefitsList({
@@ -68,7 +71,15 @@ export function CheckoutBenefitsList({
 	checkListData,
 	withBackground,
 	isCompactList,
+	displayEmotionalBenefit,
 }: CheckoutBenefitsListProps): JSX.Element {
+	const titleCopy = title.map((stringPart) => {
+		if (typeof stringPart === 'string') {
+			return stringPart;
+		} else {
+			return <strong>{stringPart.copy}</strong>;
+		}
+	});
 	return (
 		<div
 			css={
@@ -79,10 +90,14 @@ export function CheckoutBenefitsList({
 		>
 			<h2
 				css={
-					withBackground ? [headingCss, maxWidth] : [headingCss, smallMaxWidth]
+					withBackground
+						? displayEmotionalBenefit
+							? [headingCss]
+							: [headingCss, maxWidth]
+						: [headingCss, smallMaxWidth]
 				}
 			>
-				{title}
+				<span>{titleCopy}</span>
 			</h2>
 			<hr css={hrCss(`${space[4]}px 0`)} />
 			<CheckmarkList
