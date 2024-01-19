@@ -17,7 +17,9 @@ import { ThreeTierLozenge } from './threeTierLozenge';
 
 interface ThreeTierCardProps {
 	title: string;
-	isRecommended?: true;
+	isRecommended: boolean;
+	isRecommendedSubdued: boolean;
+	isUserSelected: boolean;
 	benefits: TierBenefits;
 	planCost: TierPlanCosts;
 	currency: string;
@@ -25,16 +27,30 @@ interface ThreeTierCardProps {
 	cardCtaClickHandler: (price: number) => void;
 }
 
-const container = (isRecommended?: boolean) => css`
-	position: ${isRecommended ? 'relative' : 'static'};
-	background-color: ${isRecommended ? '#F1FBFF' : palette.neutral[100]};
-	border-radius: ${space[3]}px;
-	padding: 32px ${space[3]}px ${space[6]}px ${space[3]}px;
-	${until.desktop} {
-		order: ${isRecommended ? 0 : 1};
-		padding-top: ${space[6]}px;
+const container = (
+	isRecommended: boolean,
+	isUserSelected: boolean,
+	subdueHighlight: boolean,
+) => {
+	const hasLozenge = isRecommended || isUserSelected;
+	let cardOrder = 2;
+	if (hasLozenge) {
+		cardOrder = subdueHighlight ? 1 : 0;
 	}
-`;
+	return css`
+		position: ${hasLozenge ? 'relative' : 'static'};
+		background-color: ${hasLozenge && !subdueHighlight
+			? '#F1FBFF'
+			: palette.neutral[100]};
+		border-radius: ${space[3]}px;
+		padding: 32px ${space[3]}px ${space[6]}px ${space[3]}px;
+		${until.desktop} {
+			order: ${cardOrder};
+			padding-top: ${space[6]}px;
+			margin-top: ${isRecommended && subdueHighlight ? '15px' : '0'};
+		}
+	`;
+};
 
 const titleCss = css`
 	${textSans.small({ fontWeight: 'bold' })};
@@ -136,6 +152,8 @@ export function ThreeTierCard({
 	title,
 	planCost,
 	isRecommended,
+	isRecommendedSubdued,
+	isUserSelected,
 	benefits,
 	currency,
 	paymentFrequency,
@@ -147,8 +165,11 @@ export function ThreeTierCard({
 	const currentPriceCopy = `${currency}${currentPrice}/${frequencyCopyMap[paymentFrequency]}`;
 
 	return (
-		<div css={container(isRecommended)}>
-			{isRecommended && <ThreeTierLozenge title="Recommended" />}
+		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
+			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
+			{isRecommended && !isUserSelected && (
+				<ThreeTierLozenge subdue={isRecommendedSubdued} title="Recommended" />
+			)}
 			<h3 css={titleCss}>{title}</h3>
 			<h2 css={price(!!planCost.discount)}>
 				<span css={previousPriceStrikeThrough}>{previousPriceCopy}</span>
