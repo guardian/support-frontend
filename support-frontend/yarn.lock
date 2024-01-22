@@ -3294,20 +3294,12 @@
     memoizerific "^1.11.3"
     prop-types "^15.7.2"
 
-"@storybook/addon-viewport@^7.5.1":
-  version "7.5.1"
-  resolved "https://registry.yarnpkg.com/@storybook/addon-viewport/-/addon-viewport-7.5.1.tgz#1df1a7b9d9f9243ed5b8de604da667ed62ebf036"
-  integrity sha512-L57lOGB3LfKgAdLinaZojRQ9W9w2RC0iP9bVaXwrRVeJdpNayfuW4Kh1C8dmacZroB4Zp2U/nEjkSmdcp6uUWg==
+"@storybook/addon-viewport@^7.6.10":
+  version "7.6.10"
+  resolved "https://registry.yarnpkg.com/@storybook/addon-viewport/-/addon-viewport-7.6.10.tgz#834bad76a56e4117ffb2dc935d349dca3b49bcc3"
+  integrity sha512-+bA6juC/lH4vEhk+w0rXakaG8JgLG4MOYrIudk5vJKQaC6X58LIM9N4kzIS2KSExRhkExXBPrWsnMfCo7uxmKg==
   dependencies:
-    "@storybook/client-logger" "7.5.1"
-    "@storybook/components" "7.5.1"
-    "@storybook/core-events" "7.5.1"
-    "@storybook/global" "^5.0.0"
-    "@storybook/manager-api" "7.5.1"
-    "@storybook/preview-api" "7.5.1"
-    "@storybook/theming" "7.5.1"
     memoizerific "^1.11.3"
-    prop-types "^15.7.2"
 
 "@storybook/addons@7.3.2":
   version "7.3.2"
