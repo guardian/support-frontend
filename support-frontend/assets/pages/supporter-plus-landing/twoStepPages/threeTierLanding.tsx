@@ -209,6 +209,9 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const productType = useContributionsSelector(getContributionType);
 
+	const urlParams = new URLSearchParams(window.location.search);
+	const urlSelectedAmount = urlParams.get('selected-amount');
+
 	useEffect(() => {
 		dispatch(resetValidation());
 		if (productType === 'ONE_OFF') {
@@ -251,6 +254,22 @@ export function ThreeTierLanding(): JSX.Element {
 		productType === 'ONE_OFF'
 			? 'monthly'
 			: (productType.toLowerCase() as 'monthly' | 'annual');
+
+	const isCardUserSelected = (
+		cardPrice: number,
+		cardPriceDiscount?: number,
+	): boolean => {
+		const cardPriceToCompare = cardPriceDiscount ?? cardPrice;
+		const hasUrlSelectedAmount = !isNaN(Number(urlSelectedAmount));
+
+		if (!hasUrlSelectedAmount) {
+			return false;
+		}
+		return (
+			productType in paymentFrequencyMap &&
+			Number(urlSelectedAmount) === cardPriceToCompare
+		);
+	};
 
 	return (
 		<PageScaffold
@@ -299,7 +318,15 @@ export function ThreeTierLanding(): JSX.Element {
 							{
 								title: tierCards.tier1.title,
 								benefits: tierCards.tier1.benefits,
-								isRecommended: tierCards.tier1.isRecommended,
+								isRecommended: !!tierCards.tier1.isRecommended,
+								isUserSelected: isCardUserSelected(
+									tierCards.tier1.plans[regularProductTypeKey].charges[
+										countryGroupId
+									].price,
+									tierCards.tier1.plans[regularProductTypeKey].charges[
+										countryGroupId
+									].discount?.price,
+								),
 								planCost:
 									tierCards.tier1.plans[regularProductTypeKey].charges[
 										countryGroupId
@@ -308,7 +335,15 @@ export function ThreeTierLanding(): JSX.Element {
 							{
 								title: tierCards.tier2.title,
 								benefits: tierCards.tier2.benefits,
-								isRecommended: tierCards.tier2.isRecommended,
+								isRecommended: !!tierCards.tier2.isRecommended,
+								isUserSelected: isCardUserSelected(
+									tierCards.tier2.plans[regularProductTypeKey].charges[
+										countryGroupId
+									].price,
+									tierCards.tier2.plans[regularProductTypeKey].charges[
+										countryGroupId
+									].discount?.price,
+								),
 								planCost:
 									tierCards.tier2.plans[regularProductTypeKey].charges[
 										countryGroupId
@@ -317,7 +352,15 @@ export function ThreeTierLanding(): JSX.Element {
 							{
 								title: tierCards.tier3.title,
 								benefits: tierCards.tier3.benefits,
-								isRecommended: tierCards.tier3.isRecommended,
+								isRecommended: !!tierCards.tier3.isRecommended,
+								isUserSelected: isCardUserSelected(
+									tierCards.tier3.plans[regularProductTypeKey].charges[
+										countryGroupId
+									].price,
+									tierCards.tier3.plans[regularProductTypeKey].charges[
+										countryGroupId
+									].discount?.price,
+								),
 								planCost:
 									tierCards.tier3.plans[regularProductTypeKey].charges[
 										countryGroupId
