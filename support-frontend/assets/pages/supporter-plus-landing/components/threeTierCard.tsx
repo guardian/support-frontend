@@ -165,14 +165,6 @@ export function ThreeTierCard({
 		!!planCost.discount && `${currency}${planCost.price}`;
 	const currentPriceCopy = `${currency}${currentPrice}/${frequencyCopyMap[paymentFrequency]}`;
 
-	console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-	console.log('currentPrice = ', currentPrice);
-	console.log('previousPriceCopy = ', previousPriceCopy);
-	console.log('isRecommended = ', isRecommended);
-	console.log('isRecommendedSubdued = ', isRecommendedSubdued);
-	console.log('isUserSelected = ', isUserSelected);
-	console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
-
 	return (
 		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
 			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
