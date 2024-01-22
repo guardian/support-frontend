@@ -7,7 +7,8 @@ import { ThreeTierCard } from './threeTierCard';
 interface ThreeTierCardsProps {
 	cardsContent: Array<{
 		title: string;
-		isRecommended?: true;
+		isRecommended: boolean;
+		isUserSelected: boolean;
 		benefits: TierBenefits;
 		planCost: TierPlanCosts;
 	}>;
@@ -39,6 +40,10 @@ export function ThreeTierCards({
 	paymentFrequency,
 	cardsCtaClickHandler,
 }: ThreeTierCardsProps): JSX.Element {
+	const haveRecommendedAndSelectedCards =
+		cardsContent.filter((card) => card.isRecommended || card.isUserSelected)
+			.length > 1;
+
 	return (
 		<div css={container(cardsContent.length)}>
 			{cardsContent.map((cardContent, cardIndex) => {
@@ -46,6 +51,7 @@ export function ThreeTierCards({
 					<ThreeTierCard
 						key={`threeTierCard${cardIndex}`}
 						{...cardContent}
+						isRecommendedSubdued={haveRecommendedAndSelectedCards}
 						currency={currency}
 						paymentFrequency={paymentFrequency}
 						cardCtaClickHandler={cardsCtaClickHandler}
