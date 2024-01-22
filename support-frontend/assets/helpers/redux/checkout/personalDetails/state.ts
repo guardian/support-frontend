@@ -17,6 +17,7 @@ export type UserTypeFromIdentityResponse =
 export const emailRules = zuoraCompatibleString(
 	z
 		.string()
+		.regex(/^[^,]+$/, 'Please enter a valid email address.')
 		.email('Please enter a valid email address.')
 		.min(1, 'Please enter an email address.')
 		.max(maxLengths.email, 'Email address is too long'),
