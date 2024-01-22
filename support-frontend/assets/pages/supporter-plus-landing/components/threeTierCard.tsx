@@ -32,14 +32,15 @@ const container = (
 	isUserSelected: boolean,
 	subdueHighlight: boolean,
 ) => {
-	const hasLozenge = isRecommended || isUserSelected;
 	let cardOrder = 2;
-	if (hasLozenge) {
-		cardOrder = subdueHighlight ? 1 : 0;
+	if (isRecommended) {
+		cardOrder = 1;
+	} else if (isUserSelected) {
+		cardOrder = 0;
 	}
 	return css`
-		position: ${hasLozenge ? 'relative' : 'static'};
-		background-color: ${hasLozenge && !subdueHighlight
+		position: ${isRecommended || isUserSelected ? 'relative' : 'static'};
+		background-color: ${(isRecommended && !subdueHighlight) || isUserSelected
 			? '#F1FBFF'
 			: palette.neutral[100]};
 		border-radius: ${space[3]}px;
@@ -163,6 +164,14 @@ export function ThreeTierCard({
 	const previousPriceCopy =
 		!!planCost.discount && `${currency}${planCost.price}`;
 	const currentPriceCopy = `${currency}${currentPrice}/${frequencyCopyMap[paymentFrequency]}`;
+
+	console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+	console.log('currentPrice = ', currentPrice);
+	console.log('previousPriceCopy = ', previousPriceCopy);
+	console.log('isRecommended = ', isRecommended);
+	console.log('isRecommendedSubdued = ', isRecommendedSubdued);
+	console.log('isUserSelected = ', isUserSelected);
+	console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
 
 	return (
 		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
