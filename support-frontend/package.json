@@ -199,7 +199,7 @@
     "rimraf": "^5.0.1",
     "sass": "^1.69.5",
     "sass-mq": "^5.0.1",
-    "search-in-file": "^2.2.2",
+    "search-in-file": "^3.5.2",
     "storybook": "^7.3.2",
     "ts-loader": "9.4.4",
     "tsc-files": "^1.1.4",
