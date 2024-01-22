@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	between,
@@ -85,6 +86,20 @@ export function CheckoutBenefitsList({
 			return <strong>{stringPart.copy}</strong>;
 		}
 	});
+
+	const headerMessageStyle = (
+		displayEmotionalBenefit?: boolean,
+		withBackground?: boolean,
+	): SerializedStyles | SerializedStyles[] => {
+		if (displayEmotionalBenefit) {
+			return headingEmotionalCss;
+		} else if (withBackground) {
+			return [headingCss, maxWidth];
+		} else {
+			return [headingCss, smallMaxWidth];
+		}
+	};
+
 	return (
 		<div
 			css={
@@ -93,15 +108,7 @@ export function CheckoutBenefitsList({
 					: [containerCss]
 			}
 		>
-			<h2
-				css={
-					!displayEmotionalBenefit
-						? withBackground
-							? [headingCss, maxWidth]
-							: [headingCss, smallMaxWidth]
-						: [headingEmotionalCss]
-				}
-			>
+			<h2 css={headerMessageStyle(displayEmotionalBenefit, withBackground)}>
 				<span>{titleCopy}</span>
 			</h2>
 			<hr css={hrCss(`${space[4]}px 0`)} />
