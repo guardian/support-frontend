@@ -266,7 +266,7 @@ export function ThreeTierLanding(): JSX.Element {
 			return false;
 		}
 		return (
-			Object.prototype.hasOwnProperty.call(paymentFrequencyMap, productType) &&
+			productType in paymentFrequencyMap &&
 			Number(urlSelectedAmount) === cardPriceToCompare
 		);
 	};
