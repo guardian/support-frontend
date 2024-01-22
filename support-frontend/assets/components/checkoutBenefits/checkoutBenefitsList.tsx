@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import {
 	between,
 	from,
+	headline,
 	palette,
 	space,
 	textSans,
@@ -37,12 +38,16 @@ const maxWidth = css`
 `;
 
 const headingCss = css`
+	${headline.xsmall({ fontWeight: 'bold' })}
+	${from.tablet} {
+		${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })}
+	}
+`;
+
+const headingEmotionalCss = css`
 	${textSans.small()}
 	strong {
 		font-weight: bold;
-	}
-	${from.tablet} {
-		${textSans.medium({ lineHeight: 'tight' })}
 	}
 `;
 
@@ -90,11 +95,11 @@ export function CheckoutBenefitsList({
 		>
 			<h2
 				css={
-					withBackground
-						? displayEmotionalBenefit
-							? [headingCss]
-							: [headingCss, maxWidth]
-						: [headingCss, smallMaxWidth]
+					!displayEmotionalBenefit
+						? withBackground
+							? [headingCss, maxWidth]
+							: [headingCss, smallMaxWidth]
+						: [headingEmotionalCss]
 				}
 			>
 				<span>{titleCopy}</span>
