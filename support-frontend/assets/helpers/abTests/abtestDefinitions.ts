@@ -81,7 +81,7 @@ export const tests: Tests = {
 			},
 		},
 		isActive: true,
-		referrerControlled: true,
+		referrerControlled: false,
 		seed: 5,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
