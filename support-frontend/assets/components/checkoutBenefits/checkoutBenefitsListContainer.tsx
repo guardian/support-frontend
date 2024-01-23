@@ -51,7 +51,7 @@ function getEmotionalBenefit(
 	selectedAmount: number,
 	contributionType: ContributionType,
 ) {
-	let message = `support access to independent journalism for all those who want and need it, `;
+	let message = `support access to independent journalism for all those who want and need it, and `;
 	if (contributionType === 'MONTHLY') {
 		if (selectedAmount >= 35) {
 			message =
