@@ -57,6 +57,7 @@ import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagMana
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
+import { getQueryParameter } from 'helpers/urls/url';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
@@ -178,6 +179,10 @@ function buildRegularPaymentRequest(
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const promoCode = getPromoCode(promotions);
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
+	// We will need to remove this !isProd check before we go live
+	const threeTierCreateSupporterPlusSubscription =
+		state.common.abParticipations.threeTierCheckout === 'variant' &&
+		getQueryParameter('threeTierCreateSupporterPlusSubscription') === 'true';
 
 	return {
 		title,
@@ -200,6 +205,7 @@ function buildRegularPaymentRequest(
 		deliveryInstructions,
 		csrUsername,
 		salesforceCaseId,
+		threeTierCreateSupporterPlusSubscription,
 		debugInfo: actionHistory,
 	};
 }
