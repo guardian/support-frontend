@@ -56,7 +56,7 @@ function getEmotionalBenefit(
 		if (selectedAmount >= 35) {
 			message =
 				'make a greater impact on the future of independent journalism and ';
-		} else if (selectedAmount >= 20) {
+		} else if (selectedAmount >= 13) {
 			message = 'deepen your commitment to the Guardian’s independence and ';
 		}
 	} else if (contributionType === 'ANNUAL') {
