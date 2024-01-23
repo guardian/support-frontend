@@ -36,14 +36,17 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
     val zuoraService = services.zuoraService
     val accountId = state.paymentFields.billingAccountId
     for {
-      account <- zuoraService.getObjectAccount(accountId).withEventualLogging(s"getObjectAccount($accountId)")
-      accountIdentityId <- getOrFailWithMessage(account.IdentityId__c, s"Zuora account $accountId has no identityId")
+      account <- zuoraService.getAccount(accountId).withEventualLogging(s"getObjectAccount($accountId)")
+      accountIdentityId <- getOrFailWithMessage(
+        account.basicInfo.IdentityId__c,
+        s"Zuora account $accountId has no identityId",
+      )
       _ <- ifFalseReturnError(
         accountIdentityId == state.user.id,
         s"Zuora account $accountId identity id: $accountIdentityId does not match ${state.user.id}",
       )
       paymentId <- getOrFailWithMessage(
-        account.DefaultPaymentMethodId,
+        account.billingAndPayment.defaultPaymentMethodId,
         s"Zuora account $accountId has no default payment method",
       )
       getPaymentMethodResponse <- zuoraService
@@ -53,10 +56,16 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
         getPaymentMethodResponse.paymentMethodStatus == "Active",
         s"Zuora account $accountId has a non active default payment method",
       )
-      sfContactId <- getOrFailWithMessage(account.sfContactId__c, s"Zuora account $accountId has no sfContact")
-      crmId <- getOrFailWithMessage(account.CrmId, s"Zuora account $accountId has not CrmId")
-      paymentMethod <- toPaymentMethod(getPaymentMethodResponse, services.goCardlessService, account.PaymentGateway)
-      sfContact = SalesforceContactRecord(sfContactId, crmId)
+      sfContactId <- getOrFailWithMessage(
+        account.basicInfo.sfContactId__c,
+        s"Zuora account $accountId has no sfContact",
+      )
+      paymentMethod <- toPaymentMethod(
+        getPaymentMethodResponse,
+        services.goCardlessService,
+        account.billingAndPayment.paymentGateway,
+      )
+      sfContact = SalesforceContactRecord(sfContactId, account.basicInfo.crmId)
       (productState, productType) <- Future.fromTry(state.product match {
         case c: Contribution =>
           Success(
