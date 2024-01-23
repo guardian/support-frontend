@@ -1,5 +1,6 @@
 import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { shouldHideBenefitsList } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
@@ -22,33 +23,51 @@ type CheckoutBenefitsListContainerProps = {
 };
 
 function getEmotionalBenefitsTitle(
-	priceString: string,
+	selectedAmount: number,
+	currency: Currency,
 	contributionType: ContributionType,
 	displayEmotionalBenefit: boolean,
 ) {
+	const selectedAmountWithCurrency = simpleFormatAmount(
+		currency,
+		+parseFloat(selectedAmount.toFixed(2)),
+	);
 	const billingPeriod = contributionType === 'MONTHLY' ? 'month' : 'year';
 	const emotionalMessage = displayEmotionalBenefit
-		? getEmotionalBenefit(priceString)
+		? getEmotionalBenefit(selectedAmount, contributionType)
 		: ``;
 	return [
-		{ copy: `For ${priceString} per ${billingPeriod}`, strong: true },
+		{
+			copy: `For ${selectedAmountWithCurrency} per ${billingPeriod}`,
+			strong: true,
+		},
 		`, `,
 		emotionalMessage,
 		`you’ll unlock`,
 	];
 }
 
-function getEmotionalBenefit(priceString: string) {
-	switch (priceString) {
-		case '$35':
-		case '$378':
-			return 'make a greater impact on the future of independent journalism and ';
-		case '$13':
-		case '$120':
-			return 'deepen your commitment to the Guardian’s independence and ';
-		default:
-			return `support access to independent journalism for all those who want and need it, `;
+function getEmotionalBenefit(
+	selectedAmount: number,
+	contributionType: ContributionType,
+) {
+	let message = `support access to independent journalism for all those who want and need it, `;
+	if (contributionType === 'MONTHLY') {
+		if (selectedAmount >= 35) {
+			message =
+				'make a greater impact on the future of independent journalism and ';
+		} else if (selectedAmount >= 20) {
+			message = 'deepen your commitment to the Guardian’s independence and ';
+		}
+	} else if (contributionType === 'ANNUAL') {
+		if (selectedAmount >= 378) {
+			message =
+				'make a greater impact on the future of independent journalism and ';
+		} else if (selectedAmount >= 120) {
+			message = 'deepen your commitment to the Guardian’s independence and ';
+		}
 	}
+	return message;
 }
 
 const getbuttonCopy = (
@@ -96,10 +115,6 @@ export function CheckoutBenefitsListContainer({
 		currency,
 		thresholdPrice,
 	);
-	const userSelectedAmountWithCurrency = simpleFormatAmount(
-		currency,
-		+parseFloat(selectedAmount.toFixed(2)),
-	);
 
 	const higherTier = thresholdPrice <= selectedAmount;
 	const displayBenefits =
@@ -121,7 +136,8 @@ export function CheckoutBenefitsListContainer({
 
 	return renderBenefitsList({
 		title: getEmotionalBenefitsTitle(
-			userSelectedAmountWithCurrency,
+			selectedAmount,
+			currency,
 			contributionType,
 			displayEmotionalBenefit,
 		),
