@@ -21,12 +21,34 @@ type CheckoutBenefitsListContainerProps = {
 	renderBenefitsList: (props: CheckoutBenefitsListProps) => JSX.Element;
 };
 
-function getBenefitsListTitle(
+function getEmotionalBenefitsTitle(
 	priceString: string,
 	contributionType: ContributionType,
+	displayEmotionalBenefit: boolean,
 ) {
 	const billingPeriod = contributionType === 'MONTHLY' ? 'month' : 'year';
-	return `For ${priceString} per ${billingPeriod}, you’ll unlock`;
+	const emotionalMessage = displayEmotionalBenefit
+		? getEmotionalBenefit(priceString)
+		: ``;
+	return [
+		{ copy: `For ${priceString} per ${billingPeriod}`, strong: true },
+		`, `,
+		emotionalMessage,
+		`you’ll unlock`,
+	];
+}
+
+function getEmotionalBenefit(priceString: string) {
+	switch (priceString) {
+		case '$35':
+		case '$378':
+			return 'make a greater impact on the future of independent journalism and ';
+		case '$13':
+		case '$120':
+			return 'deepen your commitment to the Guardian’s independence and ';
+		default:
+			return `support access to independent journalism for all those who want and need it, `;
+	}
 }
 
 const getbuttonCopy = (
@@ -50,9 +72,18 @@ export function CheckoutBenefitsListContainer({
 		return null;
 	}
 
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
+	);
+
 	const { countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
+
+	const displayEmotionalBenefit =
+		abParticipations.emotionalBenefits === 'variant' &&
+		countryGroupId === 'UnitedStates';
+
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const minimumContributionAmount = useContributionsSelector(
 		getMinimumContributionAmount(),
@@ -89,9 +120,10 @@ export function CheckoutBenefitsListContainer({
 	}
 
 	return renderBenefitsList({
-		title: getBenefitsListTitle(
+		title: getEmotionalBenefitsTitle(
 			userSelectedAmountWithCurrency,
 			contributionType,
+			displayEmotionalBenefit,
 		),
 		checkListData: checkListData({
 			higherTier,
@@ -101,6 +133,7 @@ export function CheckoutBenefitsListContainer({
 			thresholdPriceWithCurrency,
 			selectedAmount,
 		),
+		displayEmotionalBenefit: displayEmotionalBenefit,
 		handleButtonClick,
 	});
 }
