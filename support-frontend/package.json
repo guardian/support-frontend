@@ -214,17 +214,6 @@
     "webpack-stats-plugin": "^0.3.2",
     "yargs": "^17.7.2"
   },
-  "resolutions": {
-    "cssnano/cosmiconfig/js-yaml": "3.13.1",
-    "optimize-css-assets-webpack-plugin/**/js-yaml": "3.13.1",
-    "postcss-load-config/cosmiconfig/js-yaml": "3.13.1",
-    "lodash": "^4.17.21",
-    "ssri": "^7.0.0",
-    "y18n": "^4.0.1",
-    "immer": "^9.0.6",
-    "serialize-javascript": "^4.0.0",
-    "prismjs": "^1.25.0"
-  },
   "lint-staged": {
     "./assets/**/**/*.{js,jsx,ts,tsx}": "eslint"
   }
