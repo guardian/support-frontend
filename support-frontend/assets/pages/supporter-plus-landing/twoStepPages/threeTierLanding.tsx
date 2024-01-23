@@ -271,6 +271,37 @@ export function ThreeTierLanding(): JSX.Element {
 		);
 	};
 
+	const getCardContentBaseObject = (cardNumber: 1 | 2 | 3) => {
+		return {
+			title: tierCards[`tier${cardNumber}`].title,
+			benefits: tierCards[`tier${cardNumber}`].benefits,
+			isRecommended: !!tierCards[`tier${cardNumber}`].isRecommended,
+			isUserSelected: isCardUserSelected(
+				tierCards[`tier${cardNumber}`].plans[regularProductTypeKey].charges[
+					countryGroupId
+				].price,
+				tierCards[`tier${cardNumber}`].plans[regularProductTypeKey].charges[
+					countryGroupId
+				].discount?.price,
+			),
+			planCost:
+				tierCards[`tier${cardNumber}`].plans[regularProductTypeKey].charges[
+					countryGroupId
+				],
+		};
+	};
+
+	const generateTopTierGWCheckoutLink = () => {
+		const potentialPromoCode =
+			tierCards.tier3.plans[regularProductTypeKey].charges[countryGroupId]
+				.promoCode;
+		return `/subscribe/weekly/checkout?period=${
+			paymentFrequencyMap[productType as RegularContributionType]
+		}&threeTierCreateSupporterPlusSubscription=true${
+			potentialPromoCode ? `&promoCode=${potentialPromoCode}` : ''
+		}`;
+	};
+
 	return (
 		<PageScaffold
 			header={
@@ -316,55 +347,14 @@ export function ThreeTierLanding(): JSX.Element {
 					<ThreeTierCards
 						cardsContent={[
 							{
-								title: tierCards.tier1.title,
-								benefits: tierCards.tier1.benefits,
-								isRecommended: !!tierCards.tier1.isRecommended,
-								isUserSelected: isCardUserSelected(
-									tierCards.tier1.plans[regularProductTypeKey].charges[
-										countryGroupId
-									].price,
-									tierCards.tier1.plans[regularProductTypeKey].charges[
-										countryGroupId
-									].discount?.price,
-								),
-								planCost:
-									tierCards.tier1.plans[regularProductTypeKey].charges[
-										countryGroupId
-									],
+								...getCardContentBaseObject(1),
 							},
 							{
-								title: tierCards.tier2.title,
-								benefits: tierCards.tier2.benefits,
-								isRecommended: !!tierCards.tier2.isRecommended,
-								isUserSelected: isCardUserSelected(
-									tierCards.tier2.plans[regularProductTypeKey].charges[
-										countryGroupId
-									].price,
-									tierCards.tier2.plans[regularProductTypeKey].charges[
-										countryGroupId
-									].discount?.price,
-								),
-								planCost:
-									tierCards.tier2.plans[regularProductTypeKey].charges[
-										countryGroupId
-									],
+								...getCardContentBaseObject(2),
 							},
 							{
-								title: tierCards.tier3.title,
-								benefits: tierCards.tier3.benefits,
-								isRecommended: !!tierCards.tier3.isRecommended,
-								isUserSelected: isCardUserSelected(
-									tierCards.tier3.plans[regularProductTypeKey].charges[
-										countryGroupId
-									].price,
-									tierCards.tier3.plans[regularProductTypeKey].charges[
-										countryGroupId
-									].discount?.price,
-								),
-								planCost:
-									tierCards.tier3.plans[regularProductTypeKey].charges[
-										countryGroupId
-									],
+								...getCardContentBaseObject(3),
+								externalBtnLink: generateTopTierGWCheckoutLink(),
 							},
 						]}
 						currency={currencies[currencyId].glyph}

@@ -11,6 +11,7 @@ interface ThreeTierCardsProps {
 		isUserSelected: boolean;
 		benefits: TierBenefits;
 		planCost: TierPlanCosts;
+		externalBtnLink?: string;
 	}>;
 	currency: string;
 	paymentFrequency: RegularContributionType;
