@@ -11,8 +11,8 @@ let partials = {
   retry: loadTemplate('retries.yaml'),
   emailRetry: loadTemplate('emailRetries.yaml'),
   catch: loadTemplate('catch.yaml'),
-  subscriberPlusProduct: loadTemplate('subscriberPlusProduct.yaml'),
-  subscriberPlusProductChoice: loadTemplate('subscriberPlusProductChoice.yaml')
+  supporterPlusProduct: loadTemplate('supporterPlusProduct.yaml'),
+  supporterPlusProductChoice: loadTemplate('supporterPlusProductChoice.yaml')
 }
 const stateMachine = Handlebars.compile(loadTemplate('state-machine.yaml'))
 const stateMachineYaml = stateMachine({}, {partials})
