@@ -29,10 +29,13 @@ const checkListTextCss = css`
 `;
 
 const toolTipCss = css`
-	display: inline;
-	//display: static;
-	margin-left: ${space[1]}px;
-	vertical-align: top;
+	display: none;
+
+	${from.desktop} {
+		display: inline;
+		margin-left: ${space[1]}px;
+		vertical-align: top;
+	}
 `;
 
 const tableCss = (style: CheckmarkListStyle) => css`
