@@ -88,10 +88,10 @@ States:
     Choices:
       - Next: ThreeTierUnpackSendThankYouEmailState
         And:
-          - Variable: $.state.acquisitionData.threeTierCreateSupporterPlusSubscription
-            IsPresent: true
-          - Variable: $.state.acquisitionData.threeTierCreateSupporterPlusSubscription
-            BooleanEquals: true
+#          - Variable: $.state.acquisitionData.threeTierCreateSupporterPlusSubscription
+#            IsPresent: true
+#          - Variable: $.state.acquisitionData.threeTierCreateSupporterPlusSubscription
+#            BooleanEquals: true
           - Variable: $.state.sendThankYouEmailState.product.productType
             IsPresent: true
           - Variable: $.state.sendThankYouEmailState.product.productType
@@ -142,18 +142,18 @@ States:
       {{> supporterPlusProductChoice currency="AUD" amount=160 billingPeriod="Annual" }}
 
   # These steps are called from the `supporterPlusProductChoice` choices above
-  {{> supporterPlusProduct currency="GBP" amount=10 billingPeriod="Monthly" }}
-  {{> supporterPlusProduct currency="EUR" amount=10 billingPeriod="Monthly" }}
-  {{> supporterPlusProduct currency="USD" amount=13 billingPeriod="Monthly" }}
-  {{> supporterPlusProduct currency="CAD" amount=13 billingPeriod="Monthly" }}
-  {{> supporterPlusProduct currency="NZD" amount=17 billingPeriod="Monthly" }}
-  {{> supporterPlusProduct currency="AUD" amount=20 billingPeriod="Monthly" }}
-  {{> supporterPlusProduct currency="GBP" amount=95 billingPeriod="Annual" }}
-  {{> supporterPlusProduct currency="EUR" amount=95 billingPeriod="Annual" }}
-  {{> supporterPlusProduct currency="USD" amount=120 billingPeriod="Annual" }}
-  {{> supporterPlusProduct currency="CAD" amount=120 billingPeriod="Annual" }}
-  {{> supporterPlusProduct currency="NZD" amount=160 billingPeriod="Annual" }}
-  {{> supporterPlusProduct currency="AUD" amount=160 billingPeriod="Annual" }}
+  {{> supporterPlusProduct currency="GBP" amount=10 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_UK_MONTHLY" }}
+  {{> supporterPlusProduct currency="EUR" amount=10 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_EU_MONTHLY" }}
+  {{> supporterPlusProduct currency="USD" amount=13 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_US_MONTHLY" }}
+  {{> supporterPlusProduct currency="CAD" amount=13 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_CA_MONTHLY" }}
+  {{> supporterPlusProduct currency="NZD" amount=17 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_NZ_MONTHLY" }}
+  {{> supporterPlusProduct currency="AUD" amount=20 billingPeriod="Monthly" promoCode="3TIER_SUPPORTERPLUS_AU_MONTHLY" }}
+  {{> supporterPlusProduct currency="GBP" amount=95 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_UK_ANNUAL" }}
+  {{> supporterPlusProduct currency="EUR" amount=95 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_EU_ANNUAL" }}
+  {{> supporterPlusProduct currency="USD" amount=120 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_US_ANNUAL" }}
+  {{> supporterPlusProduct currency="CAD" amount=120 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_CA_ANNUAL" }}
+  {{> supporterPlusProduct currency="NZD" amount=160 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_NZ_ANNUAL" }}
+  {{> supporterPlusProduct currency="AUD" amount=160 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_AU_ANNUAL" }}
 
   Done:
     Type: Pass
