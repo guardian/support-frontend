@@ -80,8 +80,10 @@ class CustomHttpErrorHandler(
       case _ => "unknown line number, please check the logs"
     }
     val sanitizedExceptionDetails = s"Caused by: ${usefulException.cause} in $lineInfo"
+    val signedIn = request.cookies.get("GU_U").isDefined
+    val signedOut = request.cookies.get("GU_SO").isDefined
     val requestDetails =
-      s"(${request.method}) [${request.path}]" // Use path, not uri, as query strings often contain things like ?api-key=my_secret
+      s"(${request.method}) [signedIn: $signedIn, signedOut: $signedOut] [${request.path}]" // Use path, not uri, as query strings often contain things like ?api-key=my_secret
 
     // We are deliberately bypassing the SafeLogger here, because we need to use standard string interpolation to make this exception handling useful.
     logger.error(
