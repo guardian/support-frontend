@@ -1,4 +1,5 @@
-- Next: {{billingPeriod}}SubscriberPlus{{currency}}{{amount}}
+# This step ID is generated and should match in ./subscriberPlusProduct.yaml
+- Next: ThreeTierSubscriberPlus{{billingPeriod}}{{currency}}
   And:
   - Variable: $.state.product.currency
     StringEquals: {{currency}}

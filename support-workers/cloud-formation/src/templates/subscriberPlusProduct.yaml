@@ -1,4 +1,5 @@
-{{billingPeriod}}SubscriberPlus{{currency}}{{amount}}:
+# This step ID is called from and should match ./subscriberPlusProductChoice.yaml
+ThreeTierSubscriberPlus{{billingPeriod}}{{currency}}:
   Type: Pass
   Result:
     amount: {{amount}}
