@@ -4,7 +4,8 @@
 
 aws --region eu-west-1 cloudformation validate-template --template-body file://../cloud-formation/target/cfn.yaml --profile membership
 
-aws cloudformation update-stack \
+aws --region eu-west-1 --profile membership \
+  cloudformation update-stack \
   --capabilities CAPABILITY_IAM  \
   --stack-name support-CODE-workers \
   --template-body file://../cloud-formation/target/cfn.yaml \

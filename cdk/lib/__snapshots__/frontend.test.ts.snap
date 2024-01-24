@@ -1537,6 +1537,9 @@ exports[`The Frontend stack matches the snapshot 1`] = `
       "Type": "AWS::EC2::SecurityGroupIngress",
     },
     "supportPRODfrontend47D51027": {
+      "DependsOn": [
+        "InstanceRoleFrontend9A970131",
+      ],
       "Properties": {
         "LaunchTemplateData": {
           "IamInstanceProfile": {
