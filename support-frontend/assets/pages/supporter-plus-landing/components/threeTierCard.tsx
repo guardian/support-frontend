@@ -210,7 +210,11 @@ export function ThreeTierCard({
 			)}
 			<CheckmarkList
 				checkListData={benefits.list.map((benefit) => {
-					return { text: <span>{benefit.copy}</span>, isChecked: true };
+					return {
+						text: benefit.copy,
+						isChecked: true,
+						toolTip: benefit.tooltip,
+					};
 				})}
 				style={'compact'}
 				iconColor={palette.brand[500]}

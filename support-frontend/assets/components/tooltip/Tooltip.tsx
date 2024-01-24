@@ -1,4 +1,6 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
+import type { Placement } from '@floating-ui/react';
 import {
 	autoUpdate,
 	flip,
@@ -164,28 +166,36 @@ const arrowTop = css`
 `;
 
 export type TooltipProps = {
-	promptText: string;
+	promptText?: string;
 	buttonLabel?: string;
 	children: React.ReactNode;
+	xAxisOffset?: number;
+	yAxisOffset?: number;
+	placement?: Placement;
+	cssOverrides?: SerializedStyles;
 };
 
 export default function Tooltip({
 	promptText,
 	buttonLabel = 'More information',
 	children,
+	cssOverrides,
+	placement,
+	xAxisOffset,
+	yAxisOffset,
 }: TooltipProps): JSX.Element {
 	const [open, setOpen] = useState(false);
 
 	const { x, y, refs, strategy, context } = useFloating({
 		open,
 		onOpenChange: setOpen,
-		placement: 'top',
+		placement: placement ? placement : 'top',
 		// Make sure the tooltip stays on the screen
 		whileElementsMounted: autoUpdate,
 		middleware: [
 			offset({
-				mainAxis: 16,
-				crossAxis: 0,
+				mainAxis: yAxisOffset ? yAxisOffset : 16,
+				crossAxis: xAxisOffset ? xAxisOffset : 0,
 			}),
 			flip({
 				// Ensure the tooltip only appears above / below reference element
@@ -207,11 +217,11 @@ export default function Tooltip({
 
 	return (
 		<div
-			css={tooltipAndCopyContainer}
+			css={[tooltipAndCopyContainer, cssOverrides]}
 			ref={refs.setReference}
 			{...getReferenceProps()}
 		>
-			<p css={copy}>{promptText}</p>
+			{promptText && <p css={copy}>{promptText}</p>}
 			<div css={buttonAndTooltipContainer}>
 				<div>
 					<Button
