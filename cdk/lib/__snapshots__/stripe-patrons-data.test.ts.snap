@@ -69,7 +69,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
           },
         ],
         "AlarmDescription": "stripe-patrons-data exceeded 1% error rate",
-        "AlarmName": "High 5XX error % from stripe-patrons-data (ApiGateway) in PROD",
+        "AlarmName": "High 5XX error percentage from stripe-patrons-data (ApiGateway) in PROD",
         "ComparisonOperator": "GreaterThanThreshold",
         "EvaluationPeriods": 1,
         "Metrics": [
