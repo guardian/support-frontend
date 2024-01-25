@@ -44,16 +44,30 @@ class ZuoraSubscriptionCreator(
 
 object ZuoraSubscriptionCreator {
 
+  def subscriptionRatePlansMatchDomainSubscriptionRatePlans(
+      subscribeItemRatePlans: List[RatePlanData],
+      domainSubscriptionRatePlans: List[com.gu.support.zuora.api.response.RatePlan],
+  ): Boolean = {
+    // Do all the rate plans in the subscription we are trying to create match the domain rate plans?
+    val domainRatePlanIds = domainSubscriptionRatePlans.map(_.productRatePlanId)
+    val ratePlanIds = subscribeItemRatePlans.map(_.ratePlan.productRatePlanId)
+    ratePlanIds.forall(productRatePlanId => domainRatePlanIds.contains(productRatePlanId))
+  }
+
   def subscribeIfApplicable(
       zuoraService: ZuoraSubscribeService,
       subscribeItem: SubscribeItem,
       maybeDomainSubscription: Option[DomainSubscription],
   ): Future[(ZuoraAccountNumber, ZuoraSubscriptionNumber)] =
     maybeDomainSubscription match {
-      case Some(domainSubscription) =>
+      case Some(domainSubscription)
+          if subscriptionRatePlansMatchDomainSubscriptionRatePlans(
+            subscribeItem.subscriptionData.ratePlanData,
+            domainSubscription.ratePlans,
+          ) =>
         SafeLogger.info("Skipping subscribe for user because a subscription has already been created for this request")
         Future.successful((domainSubscription.accountNumber, domainSubscription.subscriptionNumber))
-      case None =>
+      case _ =>
         checkSingleResponse(zuoraService.subscribe(SubscribeRequest(List(subscribeItem)))).map { response =>
           (response.domainAccountNumber, response.domainSubscriptionNumber)
         }

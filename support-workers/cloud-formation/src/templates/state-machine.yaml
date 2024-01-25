@@ -88,10 +88,10 @@ States:
     Choices:
       - Next: ThreeTierUnpackSendThankYouEmailState
         And:
-#          - Variable: $.state.acquisitionData.threeTierCreateSupporterPlusSubscription
-#            IsPresent: true
-#          - Variable: $.state.acquisitionData.threeTierCreateSupporterPlusSubscription
-#            BooleanEquals: true
+          - Variable: $.state.acquisitionData.threeTierCreateSupporterPlusSubscription
+            IsPresent: true
+          - Variable: $.state.acquisitionData.threeTierCreateSupporterPlusSubscription
+            BooleanEquals: true
           - Variable: $.state.sendThankYouEmailState.product.productType
             IsPresent: true
           - Variable: $.state.sendThankYouEmailState.product.productType
