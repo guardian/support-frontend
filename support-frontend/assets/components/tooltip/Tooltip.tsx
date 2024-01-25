@@ -61,6 +61,13 @@ const tooltipContainer = css`
 	}
 `;
 
+const tooltipContainerDisplay = (open: boolean, desktopOnly?: boolean) => css`
+	${!open && visuallyHidden}
+	${until.desktop} {
+		${desktopOnly && visuallyHidden}
+	}
+`;
+
 const tooltipCss = css`
 	overflow: hidden;
 	${textSans.small()};
@@ -172,6 +179,7 @@ export type TooltipProps = {
 	xAxisOffset?: number;
 	yAxisOffset?: number;
 	placement?: Placement;
+	desktopOnly?: boolean;
 };
 
 export default function Tooltip({
@@ -179,9 +187,10 @@ export default function Tooltip({
 	buttonLabel = 'More information',
 	buttonColor,
 	children,
-	placement,
 	xAxisOffset,
 	yAxisOffset,
+	placement,
+	desktopOnly,
 }: TooltipProps): JSX.Element {
 	const [open, setOpen] = useState(false);
 
@@ -235,14 +244,7 @@ export default function Tooltip({
 				<FloatingPortal>
 					<div
 						role="status"
-						css={[
-							tooltipContainer,
-							open
-								? css``
-								: css`
-										${visuallyHidden}
-								  `,
-						]}
+						css={[tooltipContainer, tooltipContainerDisplay(open, desktopOnly)]}
 						ref={refs.setFloating}
 						style={{
 							// Positioning styles

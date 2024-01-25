@@ -126,6 +126,7 @@ export function CheckmarkList({
 										xAxisOffset={108}
 										yAxisOffset={12}
 										placement="bottom"
+										desktopOnly={true}
 									></Tooltip>
 								)}
 							</span>
