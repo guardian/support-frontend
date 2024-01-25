@@ -61,6 +61,7 @@ export type CheckListData = {
 	text?: JSX.Element | string;
 	maybeGreyedOut?: SerializedStyles;
 	toolTip?: string;
+	toolTipButtonColor?: string;
 };
 
 type CheckmarkListStyle = 'standard' | 'compact';
@@ -120,6 +121,7 @@ export function CheckmarkList({
 								{item.toolTip && (
 									<Tooltip
 										cssOverrides={toolTipCss}
+										buttonColor={item.toolTipButtonColor}
 										children={<p>{item.toolTip}</p>}
 										xAxisOffset={108}
 										yAxisOffset={12}
