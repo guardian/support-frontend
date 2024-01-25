@@ -32,6 +32,7 @@ object StripeApiError {
 
   val recaptchaErrorText = "Recaptcha failed"
   val stripeDisabledErrorText = "Stripe payments are currently disabled"
+  val invalidEmailAddress = "Invalid email address"
 
   def fromString(message: String, publicKey: Option[String]): StripeApiError =
     StripeApiError(None, None, None, message, publicKey)

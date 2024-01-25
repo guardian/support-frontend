@@ -17,7 +17,7 @@ import conf._
 import model.Environment.Live
 import model._
 import model.acquisition.{AcquisitionDataRowBuilder, AmazonPayAcquisition}
-import model.amazonpay.AmazonPayApiError.amazonPayErrorText
+import model.amazonpay.AmazonPayApiError.{amazonPayErrorText, invalidEmailAddress}
 import model.amazonpay.BundledAmazonPayRequest.AmazonPayRequest
 import model.amazonpay.{AmazonPayApiError, AmazonPaymentData}
 import model.db.ContributionData
@@ -67,6 +67,12 @@ class AmazonPayBackend(
       )
     }
 
+    def isValidEmail(email: String): Boolean = {
+      // Use a regular expression to check if the email address is valid and does not contain a comma
+      val emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$"
+      email.matches(emailRegex) && !email.contains(",")
+    }
+
     def getAuthorizationDetails: Either[AmazonPayApiError, AuthorizationDetails] = for {
       orderRef <- service.getOrderReference(amazonPayRequest.paymentData.orderReferenceId)
       _ <-
@@ -78,7 +84,14 @@ class AmazonPayBackend(
 
     amazonPayEnabled.flatMap {
       case true =>
-        handleResponse(getAuthorizationDetails, amazonPayRequest, clientBrowserInfo)
+        if (isValidEmail(amazonPayRequest.paymentData.email))
+          handleResponse(getAuthorizationDetails, amazonPayRequest, clientBrowserInfo)
+        else
+          handleResponse(
+            Either.left(AmazonPayApiError.fromString(invalidEmailAddress)),
+            amazonPayRequest,
+            clientBrowserInfo,
+          )
       case false =>
         handleResponse(
           Either.left(AmazonPayApiError.fromString(amazonPayErrorText)),

@@ -12,6 +12,7 @@ case class AmazonPayApiError(responseCode: Option[Int], message: String, failure
 object AmazonPayApiError {
 
   val amazonPayErrorText = "Amazon Pay Switch not enabled"
+  val invalidEmailAddress = "Invalid email address"
   def fromString(message: String): AmazonPayApiError = AmazonPayApiError(None, message)
 
   def withReason(code: Int, message: String, reason: String): AmazonPayApiError = {

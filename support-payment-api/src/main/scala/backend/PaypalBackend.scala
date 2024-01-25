@@ -20,7 +20,7 @@ import model._
 import model.acquisition.{AcquisitionDataRowBuilder, PaypalAcquisition}
 import model.db.ContributionData
 import model.email.ContributorRow
-import model.paypal.PaypalApiError.paypalErrorText
+import model.paypal.PaypalApiError.{invalidEmailAddress, paypalErrorText}
 import model.paypal._
 import play.api.libs.ws.WSClient
 import services._
@@ -53,16 +53,28 @@ class PaypalBackend(
   private def paypalEnabled = {
     switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.payPal.state.isOn))
   }
+  def isValidEmail(url: String): Boolean = {
+    val urlRegex = "email=([^&]+)".r
+    val email = urlRegex.findFirstMatchIn(url) match {
+      case Some(matched) => Some(java.net.URLDecoder.decode(matched.group(1), "UTF-8"))
+      case None => None
+    }
+    // Use a regular expression to check if the email address is valid and does not contain a comma
+    val emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$"
+    email.exists(email => email.matches(emailRegex) && !email.contains(","))
+  }
 
   def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] = {
     paypalEnabled.flatMap {
       case true =>
-        paypalService
-          .createPayment(c)
-          .leftMap { error =>
-            cloudWatchService.recordFailedPayment(error, PaymentProvider.Paypal)
-            error
-          }
+        if (isValidEmail(c.returnURL))
+          paypalService
+            .createPayment(c)
+            .leftMap { error =>
+              cloudWatchService.recordFailedPayment(error, PaymentProvider.Paypal)
+              error
+            }
+        else EitherT.leftT(PaypalApiError.fromString(invalidEmailAddress))
       case _ =>
         EitherT.leftT(PaypalApiError.fromString(paypalErrorText))
     }
