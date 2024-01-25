@@ -304,7 +304,9 @@ export function ThreeTierLanding(): JSX.Element {
 			urlParams.set('promoCode', potentialPromoCode);
 		}
 
-		return `/subscribe/weekly/checkout?${urlParams.toString()}`;
+		return `/subscribe/weekly/checkout?${urlParams.toString()}${
+			window.location.hash
+		}`;
 	};
 
 	return (
