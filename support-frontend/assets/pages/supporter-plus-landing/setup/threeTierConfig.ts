@@ -53,26 +53,26 @@ const tier1: TierCard = {
 				GBPCountries: {
 					price: 4,
 				},
-				UnitedStates: { price: 4 },
-				AUDCountries: { price: 4 },
 				EURCountries: { price: 4 },
-				NZDCountries: { price: 4 },
-				Canada: { price: 4 },
-				International: { price: 4 },
+				International: { price: 5 },
+				UnitedStates: { price: 5 },
+				Canada: { price: 5 },
+				NZDCountries: { price: 10 },
+				AUDCountries: { price: 10 },
 			},
 		},
 		annual: {
 			label: 'Annual',
 			charges: {
 				GBPCountries: {
-					price: 400,
+					price: 50,
 				},
-				UnitedStates: { price: 400 },
-				AUDCountries: { price: 400 },
-				EURCountries: { price: 400 },
-				NZDCountries: { price: 400 },
-				Canada: { price: 400 },
-				International: { price: 400 },
+				EURCountries: { price: 50 },
+				International: { price: 60 },
+				UnitedStates: { price: 60 },
+				Canada: { price: 60 },
+				NZDCountries: { price: 80 },
+				AUDCountries: { price: 80 },
 			},
 		},
 	},
@@ -102,26 +102,26 @@ const tier2: TierCard = {
 				GBPCountries: {
 					price: 10,
 				},
-				UnitedStates: { price: 10 },
-				AUDCountries: { price: 10 },
 				EURCountries: { price: 10 },
-				NZDCountries: { price: 10 },
-				Canada: { price: 10 },
-				International: { price: 10 },
+				International: { price: 13 },
+				UnitedStates: { price: 13 },
+				Canada: { price: 13 },
+				NZDCountries: { price: 17 },
+				AUDCountries: { price: 17 },
 			},
 		},
 		annual: {
 			label: 'Annual',
 			charges: {
 				GBPCountries: {
-					price: 1000,
+					price: 95,
 				},
-				UnitedStates: { price: 1000 },
-				AUDCountries: { price: 1000 },
-				EURCountries: { price: 1000 },
-				NZDCountries: { price: 1000 },
-				Canada: { price: 1000 },
-				International: { price: 1000 },
+				EURCountries: { price: 95 },
+				International: { price: 120 },
+				UnitedStates: { price: 120 },
+				Canada: { price: 120 },
+				NZDCountries: { price: 160 },
+				AUDCountries: { price: 160 },
 			},
 		},
 	},
@@ -149,60 +149,60 @@ const tier3: TierCard = {
 				GBPCountries: {
 					price: 25,
 					discount: {
-						percentage: 64,
+						percentage: 36,
 						price: 16,
 						duration: {
-							value: 6,
+							value: 12,
 							period: 'MONTHLY',
 						},
 					},
 				},
-				UnitedStates: {
-					price: 25,
-					discount: {
-						percentage: 64,
-						price: 16,
-						duration: { value: 6, period: 'MONTHLY' },
-					},
-				},
-				AUDCountries: {
-					price: 25,
-					discount: {
-						percentage: 64,
-						price: 16,
-						duration: { value: 6, period: 'MONTHLY' },
-					},
-				},
 				EURCountries: {
-					price: 25,
+					price: 36.5,
 					discount: {
-						percentage: 64,
-						price: 16,
-						duration: { value: 6, period: 'MONTHLY' },
-					},
-				},
-				NZDCountries: {
-					price: 25,
-					discount: {
-						percentage: 64,
-						price: 16,
-						duration: { value: 6, period: 'MONTHLY' },
-					},
-				},
-				Canada: {
-					price: 25,
-					discount: {
-						percentage: 64,
-						price: 16,
-						duration: { value: 6, period: 'MONTHLY' },
+						percentage: 23.29,
+						price: 28,
+						duration: { value: 12, period: 'MONTHLY' },
 					},
 				},
 				International: {
-					price: 25,
+					price: 49,
 					discount: {
-						percentage: 64,
-						price: 16,
-						duration: { value: 6, period: 'MONTHLY' },
+						percentage: 26.09,
+						price: 34,
+						duration: { value: 12, period: 'MONTHLY' },
+					},
+				},
+				UnitedStates: {
+					price: 43,
+					discount: {
+						percentage: 18.6,
+						price: 35,
+						duration: { value: 12, period: 'MONTHLY' },
+					},
+				},
+				Canada: {
+					price: 46,
+					discount: {
+						percentage: 23.91,
+						price: 35,
+						duration: { value: 12, period: 'MONTHLY' },
+					},
+				},
+				NZDCountries: {
+					price: 67,
+					discount: {
+						percentage: 23.88,
+						price: 51,
+						duration: { value: 12, period: 'MONTHLY' },
+					},
+				},
+				AUDCountries: {
+					price: 57,
+					discount: {
+						percentage: 21.05,
+						price: 45,
+						duration: { value: 12, period: 'MONTHLY' },
 					},
 				},
 			},
@@ -211,61 +211,61 @@ const tier3: TierCard = {
 			label: 'Annual',
 			charges: {
 				GBPCountries: {
-					price: 2500,
+					price: 275,
 					discount: {
-						percentage: 64,
-						price: 1600,
+						percentage: 37.09,
+						price: 173,
 						duration: {
 							value: 1,
 							period: 'ANNUAL',
 						},
 					},
 				},
-				UnitedStates: {
-					price: 2500,
-					discount: {
-						percentage: 64,
-						price: 1600,
-						duration: { value: 1, period: 'ANNUAL' },
-					},
-				},
-				AUDCountries: {
-					price: 2500,
-					discount: {
-						percentage: 64,
-						price: 1600,
-						duration: { value: 1, period: 'ANNUAL' },
-					},
-				},
 				EURCountries: {
-					price: 2500,
+					price: 413,
 					discount: {
-						percentage: 64,
-						price: 1600,
-						duration: { value: 1, period: 'ANNUAL' },
-					},
-				},
-				NZDCountries: {
-					price: 2500,
-					discount: {
-						percentage: 64,
-						price: 1600,
-						duration: { value: 1, period: 'ANNUAL' },
-					},
-				},
-				Canada: {
-					price: 2500,
-					discount: {
-						percentage: 64,
-						price: 1600,
+						percentage: 26.88,
+						price: 302,
 						duration: { value: 1, period: 'ANNUAL' },
 					},
 				},
 				International: {
-					price: 2500,
+					price: 516,
 					discount: {
-						percentage: 64,
-						price: 1600,
+						percentage: 28.88,
+						price: 367,
+						duration: { value: 1, period: 'ANNUAL' },
+					},
+				},
+				UnitedStates: {
+					price: 480,
+					discount: {
+						percentage: 21.25,
+						price: 378,
+						duration: { value: 1, period: 'ANNUAL' },
+					},
+				},
+				Canada: {
+					price: 516,
+					discount: {
+						percentage: 26.74,
+						price: 378,
+						duration: { value: 1, period: 'ANNUAL' },
+					},
+				},
+				NZDCountries: {
+					price: 760,
+					discount: {
+						percentage: 27.5,
+						price: 551,
+						duration: { value: 1, period: 'ANNUAL' },
+					},
+				},
+				AUDCountries: {
+					price: 640,
+					discount: {
+						percentage: 24.06,
+						price: 486,
 						duration: { value: 1, period: 'ANNUAL' },
 					},
 				},
