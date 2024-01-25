@@ -13,4 +13,4 @@ ThreeTierSupporterPlus{{billingPeriod}}{{currency}}PromoCode:
   Type: Pass
   Result: {{promoCode}}
   ResultPath: $.state.promoCode
-  Next: PreparePaymentMethodForReuse
+  Next: ThreeTierPreparePaymentMethodForReuse

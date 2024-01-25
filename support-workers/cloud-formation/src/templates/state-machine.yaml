@@ -155,6 +155,20 @@ States:
   {{> supporterPlusProduct currency="NZD" amount=160 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_NZ_ANNUAL" }}
   {{> supporterPlusProduct currency="AUD" amount=160 billingPeriod="Annual" promoCode="3TIER_SUPPORTERPLUS_AU_ANNUAL" }}
 
+  ThreeTierPreparePaymentMethodForReuse:
+    Type: Task
+    Resource: "${PreparePaymentMethodForReuseLambda.Arn}"
+    Next: ThreeTierCreateZuoraSubscription
+    {{> retry}}
+    {{> catch}}
+
+  ThreeTierCreateZuoraSubscription:
+    Type: Task
+    Resource: "${CreateZuoraSubscriptionLambda.Arn}"
+    Next: ParallelTasks
+    {{> retry}}
+    {{> catch}}
+
   Done:
     Type: Pass
     End: True
