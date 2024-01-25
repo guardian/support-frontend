@@ -207,14 +207,17 @@ export function ThreeTierLanding(): JSX.Element {
 		subPath: '/contribute',
 	};
 
-	const productType = useContributionsSelector(getContributionType);
+	const contributionTypeFromState =
+		useContributionsSelector(getContributionType);
+	const contributionType =
+		contributionTypeFromState === 'MONTHLY' ? 'MONTHLY' : 'ANNUAL';
 
 	const urlParams = new URLSearchParams(window.location.search);
 	const urlSelectedAmount = urlParams.get('selected-amount');
 
 	useEffect(() => {
 		dispatch(resetValidation());
-		if (productType === 'ONE_OFF') {
+		if (contributionTypeFromState === 'ONE_OFF') {
 			dispatch(setProductType('MONTHLY'));
 			/*
 			 * Interaction on this page only works
@@ -225,6 +228,7 @@ export function ThreeTierLanding(): JSX.Element {
 		}
 	}, []);
 
+	// The three tier checkout only supports monthly and annual contributions
 	const paymentFrequencies: RegularContributionType[] = ['MONTHLY', 'ANNUAL'];
 	const paymentFrequencyMap = {
 		MONTHLY: 'Monthly',
@@ -238,7 +242,7 @@ export function ThreeTierLanding(): JSX.Element {
 	const handleCardCtaClick = (price: number) => {
 		dispatch(
 			setSelectedAmount({
-				contributionType: productType,
+				contributionType,
 				amount: `${price}`,
 			}),
 		);
@@ -250,10 +254,9 @@ export function ThreeTierLanding(): JSX.Element {
 		navigateWithPageView(navigate, 'checkout', abParticipations);
 	};
 
-	const regularProductTypeKey =
-		productType === 'ONE_OFF'
-			? 'monthly'
-			: (productType.toLowerCase() as 'monthly' | 'annual');
+	const regularContributionTypeKey = contributionType.toLowerCase() as
+		| 'monthly'
+		| 'annual';
 
 	const isCardUserSelected = (
 		cardPrice: number,
@@ -266,9 +269,44 @@ export function ThreeTierLanding(): JSX.Element {
 			return false;
 		}
 		return (
-			productType in paymentFrequencyMap &&
+			contributionType in paymentFrequencyMap &&
 			Number(urlSelectedAmount) === cardPriceToCompare
 		);
+	};
+
+	const getCardContentBaseObject = (cardNumber: 1 | 2 | 3) => {
+		return {
+			title: tierCards[`tier${cardNumber}`].title,
+			benefits: tierCards[`tier${cardNumber}`].benefits,
+			isRecommended: !!tierCards[`tier${cardNumber}`].isRecommended,
+			isUserSelected: isCardUserSelected(
+				tierCards[`tier${cardNumber}`].plans[regularContributionTypeKey]
+					.charges[countryGroupId].price,
+				tierCards[`tier${cardNumber}`].plans[regularContributionTypeKey]
+					.charges[countryGroupId].discount?.price,
+			),
+			planCost:
+				tierCards[`tier${cardNumber}`].plans[regularContributionTypeKey]
+					.charges[countryGroupId],
+		};
+	};
+
+	const generateTopTierGWCheckoutLink = () => {
+		const potentialPromoCode =
+			tierCards.tier3.plans[regularContributionTypeKey].charges[countryGroupId]
+				.promoCode;
+
+		const urlParams = new URLSearchParams();
+		urlParams.set('period', paymentFrequencyMap[contributionType]);
+		urlParams.set('threeTierCreateSupporterPlusSubscription', 'true');
+
+		if (potentialPromoCode) {
+			urlParams.set('promoCode', potentialPromoCode);
+		}
+
+		return `/subscribe/weekly/checkout?${urlParams.toString()}${
+			window.location.hash
+		}`;
 	};
 
 	return (
@@ -307,7 +345,7 @@ export function ThreeTierLanding(): JSX.Element {
 						paymentFrequencies={paymentFrequencies.map(
 							(paymentFrequency, index) => ({
 								label: paymentFrequencyMap[paymentFrequency],
-								isPreSelected: paymentFrequencies[index] === productType,
+								isPreSelected: paymentFrequencies[index] === contributionType,
 							}),
 						)}
 						buttonClickHandler={handlePaymentFrequencyBtnClick}
@@ -316,59 +354,18 @@ export function ThreeTierLanding(): JSX.Element {
 					<ThreeTierCards
 						cardsContent={[
 							{
-								title: tierCards.tier1.title,
-								benefits: tierCards.tier1.benefits,
-								isRecommended: !!tierCards.tier1.isRecommended,
-								isUserSelected: isCardUserSelected(
-									tierCards.tier1.plans[regularProductTypeKey].charges[
-										countryGroupId
-									].price,
-									tierCards.tier1.plans[regularProductTypeKey].charges[
-										countryGroupId
-									].discount?.price,
-								),
-								planCost:
-									tierCards.tier1.plans[regularProductTypeKey].charges[
-										countryGroupId
-									],
+								...getCardContentBaseObject(1),
 							},
 							{
-								title: tierCards.tier2.title,
-								benefits: tierCards.tier2.benefits,
-								isRecommended: !!tierCards.tier2.isRecommended,
-								isUserSelected: isCardUserSelected(
-									tierCards.tier2.plans[regularProductTypeKey].charges[
-										countryGroupId
-									].price,
-									tierCards.tier2.plans[regularProductTypeKey].charges[
-										countryGroupId
-									].discount?.price,
-								),
-								planCost:
-									tierCards.tier2.plans[regularProductTypeKey].charges[
-										countryGroupId
-									],
+								...getCardContentBaseObject(2),
 							},
 							{
-								title: tierCards.tier3.title,
-								benefits: tierCards.tier3.benefits,
-								isRecommended: !!tierCards.tier3.isRecommended,
-								isUserSelected: isCardUserSelected(
-									tierCards.tier3.plans[regularProductTypeKey].charges[
-										countryGroupId
-									].price,
-									tierCards.tier3.plans[regularProductTypeKey].charges[
-										countryGroupId
-									].discount?.price,
-								),
-								planCost:
-									tierCards.tier3.plans[regularProductTypeKey].charges[
-										countryGroupId
-									],
+								...getCardContentBaseObject(3),
+								externalBtnLink: generateTopTierGWCheckoutLink(),
 							},
 						]}
 						currency={currencies[currencyId].glyph}
-						paymentFrequency={productType as RegularContributionType}
+						paymentFrequency={contributionType}
 						cardsCtaClickHandler={handleCardCtaClick}
 					/>
 				</div>

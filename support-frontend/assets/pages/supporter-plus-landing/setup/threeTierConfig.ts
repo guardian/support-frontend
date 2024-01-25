@@ -8,6 +8,7 @@ export interface TierBenefits {
 
 export interface TierPlanCosts {
 	price: number;
+	promoCode?: string;
 	discount?: {
 		percentage: number;
 		price: number;
@@ -148,6 +149,7 @@ const tier3: TierCard = {
 			charges: {
 				GBPCountries: {
 					price: 25,
+					promoCode: '3TIER_WEEKLY_UK_MONTHLY',
 					discount: {
 						percentage: 36,
 						price: 16,
@@ -159,6 +161,7 @@ const tier3: TierCard = {
 				},
 				EURCountries: {
 					price: 36.5,
+					promoCode: '3TIER_WEEKLY_EU_MONTHLY',
 					discount: {
 						percentage: 23.29,
 						price: 28,
@@ -167,6 +170,7 @@ const tier3: TierCard = {
 				},
 				International: {
 					price: 49,
+					promoCode: '3TIER_WEEKLY_INT_MONTHLY',
 					discount: {
 						percentage: 26.09,
 						price: 34,
@@ -175,6 +179,7 @@ const tier3: TierCard = {
 				},
 				UnitedStates: {
 					price: 43,
+					promoCode: '3TIER_WEEKLY_US_MONTHLY',
 					discount: {
 						percentage: 18.6,
 						price: 35,
@@ -183,6 +188,7 @@ const tier3: TierCard = {
 				},
 				Canada: {
 					price: 46,
+					promoCode: '3TIER_WEEKLY_CA_MONTHLY',
 					discount: {
 						percentage: 23.91,
 						price: 35,
@@ -191,6 +197,7 @@ const tier3: TierCard = {
 				},
 				NZDCountries: {
 					price: 67,
+					promoCode: '3TIER_WEEKLY_NZ_MONTHLY',
 					discount: {
 						percentage: 23.88,
 						price: 51,
@@ -199,6 +206,7 @@ const tier3: TierCard = {
 				},
 				AUDCountries: {
 					price: 57,
+					promoCode: '3TIER_WEEKLY_AU_MONTHLY',
 					discount: {
 						percentage: 21.05,
 						price: 45,
@@ -212,6 +220,7 @@ const tier3: TierCard = {
 			charges: {
 				GBPCountries: {
 					price: 275,
+					promoCode: '3TIER_WEEKLY_UK_ANNUAL',
 					discount: {
 						percentage: 37.09,
 						price: 173,
@@ -223,6 +232,7 @@ const tier3: TierCard = {
 				},
 				EURCountries: {
 					price: 413,
+					promoCode: '3TIER_WEEKLY_EU_ANNUAL',
 					discount: {
 						percentage: 26.88,
 						price: 302,
@@ -231,6 +241,7 @@ const tier3: TierCard = {
 				},
 				International: {
 					price: 516,
+					promoCode: '3TIER_WEEKLY_INT_ANNUAL',
 					discount: {
 						percentage: 28.88,
 						price: 367,
@@ -239,6 +250,7 @@ const tier3: TierCard = {
 				},
 				UnitedStates: {
 					price: 480,
+					promoCode: '3TIER_WEEKLY_US_ANNUAL',
 					discount: {
 						percentage: 21.25,
 						price: 378,
@@ -247,6 +259,7 @@ const tier3: TierCard = {
 				},
 				Canada: {
 					price: 516,
+					promoCode: '3TIER_WEEKLY_CA_ANNUAL',
 					discount: {
 						percentage: 26.74,
 						price: 378,
@@ -255,6 +268,7 @@ const tier3: TierCard = {
 				},
 				NZDCountries: {
 					price: 760,
+					promoCode: '3TIER_WEEKLY_NZ_ANNUAL',
 					discount: {
 						percentage: 27.5,
 						price: 551,
@@ -263,6 +277,7 @@ const tier3: TierCard = {
 				},
 				AUDCountries: {
 					price: 640,
+					promoCode: '3TIER_WEEKLY_AU_ANNUAL',
 					discount: {
 						percentage: 24.06,
 						price: 486,
