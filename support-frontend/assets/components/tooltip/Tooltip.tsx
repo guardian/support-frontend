@@ -1,4 +1,3 @@
-import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import type { Placement } from '@floating-ui/react';
 import {
@@ -173,7 +172,6 @@ export type TooltipProps = {
 	xAxisOffset?: number;
 	yAxisOffset?: number;
 	placement?: Placement;
-	cssOverrides?: SerializedStyles;
 };
 
 export default function Tooltip({
@@ -181,7 +179,6 @@ export default function Tooltip({
 	buttonLabel = 'More information',
 	buttonColor,
 	children,
-	cssOverrides,
 	placement,
 	xAxisOffset,
 	yAxisOffset,
@@ -219,7 +216,7 @@ export default function Tooltip({
 
 	return (
 		<div
-			css={[tooltipAndCopyContainer, cssOverrides]}
+			css={tooltipAndCopyContainer}
 			ref={refs.setReference}
 			{...getReferenceProps()}
 		>

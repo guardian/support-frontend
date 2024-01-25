@@ -29,15 +29,16 @@ const checkListTextCss = css`
 `;
 
 const toolTipCss = css`
-	display: none;
+	& div {
+		display: none;
 
-	${from.desktop} {
-		display: inline;
-		margin-left: ${space[1]}px;
-		vertical-align: top;
+		${from.desktop} {
+			display: inline;
+			margin-left: 1px;
+			vertical-align: middle;
+		}
 	}
 `;
-
 const tableCss = (style: CheckmarkListStyle) => css`
 	${style === 'standard'
 		? textSans.medium({ lineHeight: 'tight' })
@@ -116,11 +117,10 @@ export function CheckmarkList({
 					</td>
 					<td css={[checkListTextCss, item.maybeGreyedOut]}>
 						{typeof item.text === 'string' ? (
-							<span>
+							<span css={toolTipCss}>
 								{item.text}
 								{item.toolTip && (
 									<Tooltip
-										cssOverrides={toolTipCss}
 										buttonColor={item.toolTipButtonColor}
 										children={<p>{item.toolTip}</p>}
 										xAxisOffset={108}
