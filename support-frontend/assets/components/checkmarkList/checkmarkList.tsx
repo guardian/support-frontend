@@ -2,6 +2,7 @@ import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { from, palette, space, textSans } from '@guardian/source-foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
+import Tooltip from 'components/tooltip/Tooltip';
 
 const checkListIconCss = (style: CheckmarkListStyle) => css`
 	vertical-align: top;
@@ -27,6 +28,17 @@ const checkListTextCss = css`
 	}
 `;
 
+const toolTipCss = css`
+	& div {
+		display: none;
+
+		${from.desktop} {
+			display: inline;
+			margin-left: 1px;
+			vertical-align: middle;
+		}
+	}
+`;
 const tableCss = (style: CheckmarkListStyle) => css`
 	${style === 'standard'
 		? textSans.medium({ lineHeight: 'tight' })
@@ -47,8 +59,9 @@ const tableCss = (style: CheckmarkListStyle) => css`
 
 export type CheckListData = {
 	isChecked: boolean;
-	text?: JSX.Element;
+	text?: JSX.Element | string;
 	maybeGreyedOut?: SerializedStyles;
+	toolTip?: string;
 };
 
 type CheckmarkListStyle = 'standard' | 'compact';
@@ -101,7 +114,24 @@ export function CheckmarkList({
 							<ChecklistItemIcon checked={item.isChecked} style={style} />
 						</div>
 					</td>
-					<td css={[checkListTextCss, item.maybeGreyedOut]}>{item.text}</td>
+					<td css={[checkListTextCss, item.maybeGreyedOut]}>
+						{typeof item.text === 'string' ? (
+							<span css={toolTipCss}>
+								{item.text}
+								{item.toolTip && (
+									<Tooltip
+										children={<p>{item.toolTip}</p>}
+										xAxisOffset={108}
+										yAxisOffset={12}
+										placement="bottom"
+										desktopOnly={true}
+									></Tooltip>
+								)}
+							</span>
+						) : (
+							item.text
+						)}
+					</td>
 				</tr>
 			))}
 		</table>

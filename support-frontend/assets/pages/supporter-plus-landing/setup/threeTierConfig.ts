@@ -84,8 +84,9 @@ const tier2: TierCard = {
 	benefits: {
 		list: [
 			{
-				copy: 'Guardian news app with personalised recommendations and offline reading',
-				tooltip: 'TODO: copy',
+				copy: 'Full access to the Guardian News app',
+				tooltip:
+					'With offline reading and personalised recommendations, never miss a story with the Guardian News app – a beautiful, intuitive reading experience that you can access anywhere',
 			},
 			{ copy: 'Ad-free reading on all your digital devices' },
 			{
@@ -135,8 +136,9 @@ const tier3: TierCard = {
 		],
 		list: [
 			{
-				copy: 'Guardian Weekly magazine delivered to your door, offering a digestible view of world news.',
-				tooltip: 'tooltip text',
+				copy: 'Guardian Weekly magazine delivered to your door every week',
+				tooltip:
+					'Guardian Weekly is a handpicked selection of in-depth articles, global news, long reads, opinion and more. In a beautifully concise magazine, it is delivered to you every every, wherever you are in the world.',
 			},
 		],
 	},
