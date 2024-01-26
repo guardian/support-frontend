@@ -40,11 +40,9 @@ const container = (
 	}
 	return css`
 		position: ${isRecommended || isUserSelected ? 'relative' : 'static'};
-		background-color: ${cardBackColor(
-			isRecommended,
-			isUserSelected,
-			subdueHighlight,
-		)};
+		background-color: ${(isRecommended && !subdueHighlight) || isUserSelected
+			? '#F1FBFF'
+			: palette.neutral[100]};
 		border-radius: ${space[3]}px;
 		padding: 32px ${space[3]}px ${space[6]}px ${space[3]}px;
 		${until.desktop} {
@@ -151,16 +149,6 @@ const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
 	}
 };
 
-const cardBackColor = (
-	isRecommended: boolean,
-	isUserSelected: boolean,
-	subdueHighlight: boolean,
-) => {
-	return (isRecommended && !subdueHighlight) || isUserSelected
-		? '#F1FBFF'
-		: palette.neutral[100];
-};
-
 export function ThreeTierCard({
 	title,
 	planCost,
@@ -226,11 +214,6 @@ export function ThreeTierCard({
 						text: benefit.copy,
 						isChecked: true,
 						toolTip: benefit.tooltip,
-						toolTipButtonColor: cardBackColor(
-							isRecommended,
-							isUserSelected,
-							isRecommendedSubdued,
-						),
 					};
 				})}
 				style={'compact'}

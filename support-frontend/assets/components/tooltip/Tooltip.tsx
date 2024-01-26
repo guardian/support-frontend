@@ -174,7 +174,6 @@ const arrowTop = css`
 export type TooltipProps = {
 	promptText?: string;
 	buttonLabel?: string;
-	buttonColor?: string;
 	children: React.ReactNode;
 	xAxisOffset?: number;
 	yAxisOffset?: number;
@@ -185,7 +184,6 @@ export type TooltipProps = {
 export default function Tooltip({
 	promptText,
 	buttonLabel = 'More information',
-	buttonColor,
 	children,
 	xAxisOffset,
 	yAxisOffset,
@@ -234,7 +232,7 @@ export default function Tooltip({
 				<div>
 					<Button
 						hideLabel
-						icon={<InfoRound backColor={buttonColor} />}
+						icon={<InfoRound />}
 						priority="tertiary"
 						css={buttonOverrides}
 					>
