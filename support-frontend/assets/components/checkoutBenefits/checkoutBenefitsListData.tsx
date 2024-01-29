@@ -11,6 +11,10 @@ const greyedOut = css`
 	}
 `;
 
+const hideBenefitCss = css`
+	display: none;
+`;
+
 const boldText = css`
 	font-weight: bold;
 `;
@@ -24,6 +28,7 @@ export type CheckListData = {
 	isChecked: boolean;
 	text?: JSX.Element;
 	maybeGreyedOut?: SerializedStyles;
+	isVisible?: SerializedStyles;
 };
 
 export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
@@ -57,6 +62,16 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			),
 			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
+		{
+			isChecked: higherTier,
+			text: (
+				<p>
+					<span css={boldText}>Uninterrupted reading. </span> See far fewer asks
+					for support
+				</p>
+			),
+			isVisible: higherTier ? undefined : hideBenefitCss,
+		},
 	];
 
 	return [
@@ -66,15 +81,6 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 				<p>
 					<span css={boldText}>A regular supporter newsletter. </span>Get
 					exclusive insight from our newsroom
-				</p>
-			),
-		},
-		{
-			isChecked: true,
-			text: (
-				<p>
-					<span css={boldText}>Uninterrupted reading. </span> See far fewer asks
-					for support
 				</p>
 			),
 		},

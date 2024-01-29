@@ -61,6 +61,7 @@ export type CheckListData = {
 	isChecked: boolean;
 	text?: JSX.Element | string;
 	maybeGreyedOut?: SerializedStyles;
+	isVisible?: SerializedStyles;
 	toolTip?: string;
 };
 
@@ -102,7 +103,7 @@ export function CheckmarkList({
 	return (
 		<table css={[tableCss(style), cssOverrides]}>
 			{checkListData.map((item) => (
-				<tr>
+				<tr css={item.isVisible}>
 					<td
 						css={[
 							checkListIconCss(style),
