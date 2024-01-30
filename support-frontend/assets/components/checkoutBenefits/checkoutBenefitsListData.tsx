@@ -11,10 +11,6 @@ const greyedOut = css`
 	}
 `;
 
-const hideBenefitCss = css`
-	display: none;
-`;
-
 const boldText = css`
 	font-weight: bold;
 `;
@@ -28,7 +24,6 @@ export type CheckListData = {
 	isChecked: boolean;
 	text?: JSX.Element;
 	maybeGreyedOut?: SerializedStyles;
-	isVisible?: SerializedStyles;
 };
 
 export const getSvgIcon = (isUnlocked: boolean): JSX.Element =>
@@ -70,7 +65,7 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 					for support
 				</p>
 			),
-			isVisible: higherTier ? undefined : hideBenefitCss,
+			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
 	];
 
