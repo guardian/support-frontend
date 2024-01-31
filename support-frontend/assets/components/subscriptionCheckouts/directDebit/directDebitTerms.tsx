@@ -1,21 +1,26 @@
 import { css } from '@emotion/react';
-import { text, textSans } from '@guardian/source-foundations';
+import { textSans } from '@guardian/source-foundations';
 
-const directDebitTerms = css`
-	${textSans.xsmall()};
+const directDebitTerms = (isThreeTier?: true) => css`
+	${isThreeTier ? textSans.xxsmall() : textSans.xsmall()};
 
 	a,
 	a:visited {
-		color: ${text.primary};
+		color: ${isThreeTier ? '#606060' : 'inherit'};
 	}
 	p {
 		margin-top: 10px;
+		color: ${isThreeTier ? '#606060' : 'inherit'};
 	}
 `;
 
-function DirectDebitTerms() {
+interface DirectDebitTermsProps {
+	isThreeTier?: true;
+}
+
+function DirectDebitTerms({ isThreeTier }: DirectDebitTermsProps) {
 	return (
-		<div css={directDebitTerms}>
+		<div css={directDebitTerms(isThreeTier)}>
 			<p>
 				<strong>Payments by GoCardless</strong>
 				<br />
