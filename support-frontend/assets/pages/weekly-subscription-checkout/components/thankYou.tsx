@@ -30,7 +30,10 @@ const styles = moduleStyles as {
 
 // ----- Map State/Props ----- //
 function mapStateToProps(state: SubscriptionsState) {
-	return { ...getFormFields(state) };
+	return {
+		...getFormFields(state),
+		participations: state.common.abParticipations,
+	};
 }
 
 const connector = connect(mapStateToProps);
@@ -128,7 +131,10 @@ function ThankYouContent({
 	isPending,
 	orderIsGift,
 	product,
+	participations,
 }: PropTypes) {
+	const inThreeTierTestVariant = participations.threeTierCheckout === 'variant';
+
 	const whatHappensNextItems = orderIsGift
 		? [
 				<span>
@@ -164,6 +170,7 @@ function ThankYouContent({
 
 	return (
 		<div className="thank-you-stage">
+			{inThreeTierTestVariant && <h1>TEMPORARY TEST MESSAGE</h1>}
 			<HeroWrapper
 				appearance="custom"
 				className={

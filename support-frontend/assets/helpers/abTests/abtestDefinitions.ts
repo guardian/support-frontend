@@ -94,7 +94,7 @@ export const tests: Tests = {
 				id: 'control',
 			},
 		],
-		isActive: false,
+		isActive: true,
 		audiences: {
 			ALL: {
 				offset: 0,
