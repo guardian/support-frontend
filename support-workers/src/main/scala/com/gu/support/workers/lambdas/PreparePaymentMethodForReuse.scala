@@ -98,15 +98,15 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
       })
     } yield HandlerResult(
       CreateZuoraSubscriptionState(
-        productState,
-        state.requestId,
-        state.user,
-        productType,
-        state.analyticsInfo,
-        None,
-        None,
-        None,
-        None,
+        productSpecificState = productState,
+        requestId = state.requestId,
+        user = state.user,
+        product = productType,
+        analyticsInfo = state.analyticsInfo,
+        firstDeliveryDate = None,
+        promoCode = state.promoCode,
+        csrUsername = None,
+        salesforceCaseId = None,
         acquisitionData = state.acquisitionData,
       ),
       requestInfo

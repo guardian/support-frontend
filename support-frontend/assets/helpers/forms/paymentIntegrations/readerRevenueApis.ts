@@ -169,8 +169,8 @@ export type RegularPaymentRequest = {
 	csrUsername?: string;
 	salesforceCaseId?: string;
 	recaptchaToken?: string;
-	debugInfo: string;
 	threeTierCreateSupporterPlusSubscription?: boolean;
+	debugInfo: string;
 };
 export type StripePaymentIntentAuthorisation = {
 	paymentMethod: typeof Stripe;
