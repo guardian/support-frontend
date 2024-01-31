@@ -7,4 +7,10 @@ ThreeTierSupporterPlus{{billingPeriod}}{{currency}}:
     billingPeriod: {{billingPeriod}}
     productType: SupporterPlus
   ResultPath: $.state.product
-  Next: PreparePaymentMethodForReuse
+  Next: ThreeTierSupporterPlus{{billingPeriod}}{{currency}}PromoCode
+
+ThreeTierSupporterPlus{{billingPeriod}}{{currency}}PromoCode:
+  Type: Pass
+  Result: {{promoCode}}
+  ResultPath: $.state.promoCode
+  Next: ThreeTierPreparePaymentMethodForReuse
