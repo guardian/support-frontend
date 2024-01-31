@@ -221,6 +221,16 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		);
 	});
 
+	const potentialDiscount = digitalPlusPrintPotentialDiscount
+		? {
+				total: digitalPlusPrintPotentialDiscount.price,
+				duration: digitalPlusPrintPotentialDiscount.duration.value,
+				period: recurringContributionPeriodMap[
+					digitalPlusPrintPotentialDiscount.duration.period
+				] as 'month' | 'year',
+		  }
+		: undefined;
+
 	return (
 		<Content>
 			<Layout
@@ -232,18 +242,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 								total={standardDigitalPlusPrintPrice}
 								currencySymbol={currencies[props.price.currency].glyph}
 								paymentFrequency={billingPeriodNounLowerCase}
-								discount={
-									digitalPlusPrintPotentialDiscount
-										? {
-												total: digitalPlusPrintPotentialDiscount.price,
-												duration:
-													digitalPlusPrintPotentialDiscount.duration.value,
-												period: recurringContributionPeriodMap[
-													digitalPlusPrintPotentialDiscount.duration.period
-												] as 'month' | 'year',
-										  }
-										: undefined
-								}
+								discount={potentialDiscount}
 								startDateGW={formatUserDate(publicationStartDays[0])}
 							/>
 						) : (
@@ -502,18 +501,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							total={standardDigitalPlusPrintPrice}
 							currencySymbol={currencies[props.price.currency].glyph}
 							paymentFrequency={billingPeriodNounLowerCase}
-							discount={
-								digitalPlusPrintPotentialDiscount
-									? {
-											total: digitalPlusPrintPotentialDiscount.price,
-											duration:
-												digitalPlusPrintPotentialDiscount.duration.value,
-											period: recurringContributionPeriodMap[
-												digitalPlusPrintPotentialDiscount.duration.period
-											] as 'month' | 'year',
-									  }
-									: undefined
-							}
+							discount={potentialDiscount}
 						/>
 					) : (
 						<PaymentTerms paymentMethod={props.paymentMethod} />

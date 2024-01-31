@@ -198,13 +198,13 @@ export function DigitalPlusPrintSummary({
 	discount,
 	startDateGW,
 }: DigitalPlusPrintSummaryProps) {
-	const [showDeatilsStatus, setShowDeatilsStatus] = useState<
+	const [showDetailsStatus, setshowDetailsStatus] = useState<
 		'visible' | 'hidden'
 	>('hidden');
 
 	const handleShowHideDetails = () => {
-		setShowDeatilsStatus(
-			showDeatilsStatus === 'visible' ? 'hidden' : 'visible',
+		setshowDetailsStatus(
+			showDetailsStatus === 'visible' ? 'hidden' : 'visible',
 		);
 	};
 
@@ -213,9 +213,9 @@ export function DigitalPlusPrintSummary({
 			<div css={borderedContent}>
 				<header css={titleContainer}>
 					<h2 css={title}>Your subscription</h2>
-					<h3 css={subtitle(showDeatilsStatus)}>Digital + print</h3>
+					<h3 css={subtitle(showDetailsStatus)}>Digital + print</h3>
 				</header>
-				<hgroup css={subTitleAndDescription(showDeatilsStatus)}>
+				<hgroup css={subTitleAndDescription(showDetailsStatus)}>
 					<h3>Digital + print</h3>
 					<p>
 						All benefits from All-access digital + Guardian Weekly print
@@ -248,7 +248,7 @@ export function DigitalPlusPrintSummary({
 					</li>
 					<li>Auto renews every {paymentFrequency}. Cancel anytime.</li>
 				</ul>
-				<ul css={productStartDates(showDeatilsStatus)}>
+				<ul css={productStartDates(showDetailsStatus)}>
 					<li>Your digital benefits will start today.</li>
 					<li>
 						Your Guardian Weekly subscription will start on {startDateGW}.
@@ -259,8 +259,8 @@ export function DigitalPlusPrintSummary({
 			</div>
 			<div css={detailsAndChangeButtons}>
 				<button css={showDetails} onClick={handleShowHideDetails}>
-					{showDeatilsStatus === 'visible' ? 'hide' : 'show'} details
-					{showDeatilsStatus === 'visible' ? (
+					{showDetailsStatus === 'visible' ? 'hide' : 'show'} details
+					{showDetailsStatus === 'visible' ? (
 						<SvgChevronUpSingle isAnnouncedByScreenReader size="xsmall" />
 					) : (
 						<SvgChevronDownSingle isAnnouncedByScreenReader size="xsmall" />
