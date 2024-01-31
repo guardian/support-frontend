@@ -9,9 +9,11 @@ import {
 import {
 	Button,
 	buttonThemeReaderRevenueBrand,
+	LinkButton,
 } from '@guardian/source-react-components';
 import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
 import type { RegularContributionType } from 'helpers/contributions';
+import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
@@ -25,6 +27,7 @@ interface ThreeTierCardProps {
 	currency: string;
 	paymentFrequency: RegularContributionType;
 	cardCtaClickHandler: (price: number) => void;
+	externalBtnLink?: string;
 }
 
 const container = (
@@ -132,18 +135,13 @@ const benefitsPrefixPlus = css`
 	}
 `;
 
-const frequencyCopyMap = {
-	MONTHLY: 'month',
-	ANNUAL: 'year',
-};
-
 const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
 	// EXAMPLE: £16 for the first 12 months, then £25
 	if (planCost.discount) {
 		const durationValue = planCost.discount.duration.value;
 		return `${currency}${planCost.discount.price} for the first ${
 			durationValue > 1 ? durationValue : ''
-		} ${frequencyCopyMap[planCost.discount.duration.period]}${
+		} ${recurringContributionPeriodMap[planCost.discount.duration.period]}${
 			durationValue > 1 ? 's' : ''
 		}, then ${currency}${planCost.price}`;
 	}
@@ -159,11 +157,12 @@ export function ThreeTierCard({
 	currency,
 	paymentFrequency,
 	cardCtaClickHandler,
+	externalBtnLink,
 }: ThreeTierCardProps): JSX.Element {
 	const currentPrice = planCost.discount?.price ?? planCost.price;
 	const previousPriceCopy =
 		!!planCost.discount && `${currency}${planCost.price}`;
-	const currentPriceCopy = `${currency}${currentPrice}/${frequencyCopyMap[paymentFrequency]}`;
+	const currentPriceCopy = `${currency}${currentPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
 
 	return (
 		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
@@ -183,15 +182,21 @@ export function ThreeTierCard({
 				)}
 			</h2>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-				<Button
-					iconSide="left"
-					priority="primary"
-					size="default"
-					cssOverrides={btnStyleOverrides}
-					onClick={() => cardCtaClickHandler(currentPrice)}
-				>
-					Support now
-				</Button>
+				{externalBtnLink ? (
+					<LinkButton href={externalBtnLink} cssOverrides={btnStyleOverrides}>
+						Support now
+					</LinkButton>
+				) : (
+					<Button
+						iconSide="left"
+						priority="primary"
+						size="default"
+						cssOverrides={btnStyleOverrides}
+						onClick={() => cardCtaClickHandler(currentPrice)}
+					>
+						Support now
+					</Button>
+				)}
 			</ThemeProvider>
 
 			{benefits.description && (
