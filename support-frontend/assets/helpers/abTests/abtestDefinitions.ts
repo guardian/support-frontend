@@ -90,6 +90,9 @@ export const tests: Tests = {
 			{
 				id: 'variant',
 			},
+			{
+				id: 'control',
+			},
 		],
 		isActive: false,
 		audiences: {
@@ -107,7 +110,7 @@ export const tests: Tests = {
 		 * - /{countryGroupId}/contribute
 		 * - /{countryGroupId}/contribute/checkout
 		 * - /{countryGroupId}/thankyou
-		 * - /subscribe/weekly/checkout?isThirdTier=true
+		 * - /subscribe/weekly/checkout?threeTierCreateSupporterPlusSubscription=true
 		 *
 		 * And does not run on
 		 * - /subscribe/weekly/checkout
@@ -124,7 +127,8 @@ export const tests: Tests = {
 
 			// Weekly pages
 			const urlParams = new URLSearchParams(window.location.search);
-			const isThirdTier = urlParams.get('isThirdTier') === 'true';
+			const isThirdTier =
+				urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
 			const isWeeklyCheckout =
 				window.location.pathname === '/subscribe/weekly/checkout';
 
