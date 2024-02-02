@@ -196,13 +196,11 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.billingCountry,
 	);
 
-	const billingPeriodNounLowerCase = billingPeriodNoun(
-		props.billingPeriod,
-	).toLowerCase() as 'month' | 'year';
-
-	const digitalPlusPrintBillingPeriod = props.billingPeriod.toLowerCase() as
-		| 'monthly'
-		| 'annual';
+	// Quarterly & other billing periods not available in 3-tier ab-test
+	const billingPeriodNounLowerCase =
+		billingPeriodNoun(props.billingPeriod) === 'Annual' ? 'year' : 'month';
+	const digitalPlusPrintBillingPeriod =
+		props.billingPeriod === 'Annual' ? 'annual' : 'monthly';
 
 	const standardDigitalPlusPrintPrice =
 		tierCards.tier3.plans[digitalPlusPrintBillingPeriod].charges[

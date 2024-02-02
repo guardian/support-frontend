@@ -4,6 +4,7 @@ import com.gu.support.acquisitions.AcquisitionData
 
 import java.util.UUID
 import com.gu.support.encoding.Codec.deriveCodec
+import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.{User, _}
 
@@ -15,6 +16,7 @@ case class PreparePaymentMethodForReuseState(
     user: User,
     giftRecipient: Option[GiftRecipient],
     acquisitionData: Option[AcquisitionData],
+    promoCode: Option[PromoCode],
 ) extends MinimalFailureHandlerState
 
 import com.gu.support.encoding.Codec
