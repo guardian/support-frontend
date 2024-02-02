@@ -1,7 +1,10 @@
 // ----- Imports ----- //
+import { css } from '@emotion/react';
+import { from, palette } from '@guardian/source-foundations';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Asyncronously from 'components/asyncronously/asyncronously';
+import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
 import Content from 'components/content/content';
 import GridPicture from 'components/gridPicture/gridPicture';
 import HeadingBlock from 'components/headingBlock/headingBlock';
@@ -22,6 +25,7 @@ import {
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
 	heroGuardianWeeklyNonGifting: string;
@@ -42,6 +46,14 @@ type PropTypes = ConnectedProps<typeof connector> & {
 	isPending: boolean;
 	orderIsGift: boolean;
 };
+
+const checkmarkListStyles = css`
+	width: 100%;
+	text-align: left;
+	${from.desktop} {
+		width: 75%;
+	}
+`;
 
 // ----- Helper ----- //
 const getPackageTitle = (billingPeriod: BillingPeriod) => {
@@ -98,6 +110,29 @@ function StartDateCopy({
 		return (
 			<Text title={title}>
 				<LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
+			</Text>
+		);
+	}
+
+	return null;
+}
+
+function StartDateCopyThreeTier({ startDate }: { startDate: Option<string> }) {
+	if (startDate) {
+		return (
+			<Text title={'When will my subscription start?'}>
+				<SansParagraph>
+					<strong>
+						Your first issue of Guardian Weekly will be published on&nbsp;
+					</strong>
+					{formatUserDate(new Date(startDate))}
+				</SansParagraph>
+				<SansParagraph>
+					<strong>Your digital benefits will start today.</strong>
+					<br />
+					Please ensure you are signed in on all your devices to enjoy unlimited
+					app access and ad-free reading.
+				</SansParagraph>
 			</Text>
 		);
 	}
@@ -173,6 +208,10 @@ function ThankYouContent({
 				</span>,
 		  ];
 
+	const benefitsTier3and2 = tierCards.tier3.benefits.list.concat(
+		tierCards.tier2.benefits.list,
+	);
+
 	useScrollToTop();
 
 	return (
@@ -196,20 +235,56 @@ function ThankYouContent({
 					)}
 				</HeadingBlock>
 			</HeroWrapper>
-			<Content>
-				{isPending && (
-					<Text>
-						<LargeParagraph>
-							Your subscription is being processed and you will receive an email
-							when it goes live.
-						</LargeParagraph>
+
+			{inThreeTierTestVariant ? (
+				<>
+					<Content>
+						{isPending && (
+							<Text>
+								<LargeParagraph>
+									Your subscription is being processed and you will receive an
+									email when it goes live.
+								</LargeParagraph>
+							</Text>
+						)}
+						<Text title="What is included in my subscription?">
+							Your subscription includes:
+							<br />
+							<CheckmarkList
+								checkListData={benefitsTier3and2.map((benefit) => {
+									return { text: <span>{benefit.copy}</span>, isChecked: true };
+								})}
+								style={'standard'}
+								iconColor={palette.brand[500]}
+								cssOverrides={checkmarkListStyles}
+							/>
+						</Text>
+					</Content>
+					<Content>
+						<StartDateCopyThreeTier startDate={startDate} />
+					</Content>
+					<Content>
+						<Text title="What happens next?">
+							<OrderedList items={whatHappensNextItems} />
+						</Text>
+					</Content>
+				</>
+			) : (
+				<Content>
+					{isPending && (
+						<Text>
+							<LargeParagraph>
+								Your subscription is being processed and you will receive an
+								email when it goes live.
+							</LargeParagraph>
+						</Text>
+					)}
+					<StartDateCopy orderIsGift={orderIsGift} startDate={startDate} />
+					<Text title="What happens next?">
+						<OrderedList items={whatHappensNextItems} />
 					</Text>
-				)}
-				<StartDateCopy orderIsGift={orderIsGift} startDate={startDate} />
-				<Text title="What happens next?">
-					<OrderedList items={whatHappensNextItems} />
-				</Text>
-			</Content>
+				</Content>
+			)}
 			<Content>
 				<Text>
 					<SansParagraph>
