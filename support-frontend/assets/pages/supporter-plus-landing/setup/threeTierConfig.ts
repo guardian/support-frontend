@@ -43,8 +43,9 @@ const tier1: TierCard = {
 	title: 'Support',
 	benefits: {
 		list: [
-			{ copy: 'Regular supporter newsletter from inside our newsroom' },
-			{ copy: 'See far fewer asks for support' },
+			{
+				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+			},
 		],
 	},
 	plans: {
@@ -85,15 +86,15 @@ const tier2: TierCard = {
 	benefits: {
 		list: [
 			{
-				copy: 'Full access to the Guardian News app',
+				copy: 'Unlimited access to the Guardian app',
 				tooltip:
 					'With offline reading and personalised recommendations, never miss a story with the Guardian News app – a beautiful, intuitive reading experience that you can access anywhere',
 			},
-			{ copy: 'Ad-free reading on all your digital devices' },
+			{ copy: 'Ad-free reading on all your devices' },
 			{
-				copy: 'Regular supporter newsletter from inside our newsroom',
+				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
 			},
-			{ copy: 'See far fewer asks for support' },
+			{ copy: 'Far fewer asks for support' },
 		],
 	},
 	plans: {
@@ -137,7 +138,7 @@ const tier3: TierCard = {
 		],
 		list: [
 			{
-				copy: 'Guardian Weekly magazine delivered to your door every week',
+				copy: 'Guardian Weekly print magazine delivered to your door every week',
 				tooltip:
 					'Guardian Weekly is a handpicked selection of in-depth articles, global news, long reads, opinion and more. In a beautifully concise magazine, it is delivered to you every every, wherever you are in the world.',
 			},
