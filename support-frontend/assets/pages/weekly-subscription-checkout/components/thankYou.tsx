@@ -64,6 +64,7 @@ const getHeading = (
 	billingPeriod: BillingPeriod,
 	isPending: boolean,
 	orderIsGift: boolean,
+	isInThreeTier: boolean,
 ) => {
 	if (orderIsGift) {
 		return isPending
@@ -71,7 +72,13 @@ const getHeading = (
 			: 'Your purchase of a Guardian Weekly gift subscription is now complete';
 	}
 
+	if (isInThreeTier) {
+		return isPending
+			? `Your subscription to Digital + print is being processed`
+			: `You have now subscribed to Digital + print`;
+	}
 	const packageTitle = getPackageTitle(billingPeriod);
+
 	return isPending
 		? `Your subscription to the Guardian Weekly ${packageTitle} is being processed`
 		: `You have now subscribed to the Guardian Weekly ${packageTitle}`;
@@ -170,7 +177,6 @@ function ThankYouContent({
 
 	return (
 		<div className="thank-you-stage">
-			{inThreeTierTestVariant && <h1>TEMPORARY TEST MESSAGE</h1>}
 			<HeroWrapper
 				appearance="custom"
 				className={
@@ -182,7 +188,12 @@ function ThankYouContent({
 					overheadingClass="--thankyou"
 					overheading="Thank you for supporting our journalism!"
 				>
-					{getHeading(billingPeriod, isPending, orderIsGift)}
+					{getHeading(
+						billingPeriod,
+						isPending,
+						orderIsGift,
+						inThreeTierTestVariant,
+					)}
 				</HeadingBlock>
 			</HeroWrapper>
 			<Content>
@@ -228,19 +239,21 @@ function ThankYouContent({
 					</SansParagraph>
 				</Text>
 			</Content>
-			<SubscriptionsSurvey product={product} />
-			<Content>
-				<Asyncronously
-					loader={
-						import(
-							'components/subscriptionCheckouts/thankYou/marketingConsentContainer'
-						)
-					}
-					render={(MktConsent) => (
-						<MktConsent requestPending={false} error={false} />
-					)}
-				/>
-			</Content>
+			{!inThreeTierTestVariant && <SubscriptionsSurvey product={product} />}
+			{!inThreeTierTestVariant && (
+				<Content>
+					<Asyncronously
+						loader={
+							import(
+								'components/subscriptionCheckouts/thankYou/marketingConsentContainer'
+							)
+						}
+						render={(MktConsent) => (
+							<MktConsent requestPending={false} error={false} />
+						)}
+					/>
+				</Content>
+			)}
 		</div>
 	);
 }
