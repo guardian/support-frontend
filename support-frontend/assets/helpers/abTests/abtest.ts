@@ -179,10 +179,7 @@ function getParticipations(
 
 	// If referrerControlled is set for any test, exclude tests that have excludeIfInReferrerControlledTest set
 	const inReferrerControlledTest = Object.keys(participations).some(
-		(testName) => {
-			const test = abTests[testName];
-			return test.referrerControlled;
-		},
+		(testId) => abTests[testId].referrerControlled,
 	);
 	if (inReferrerControlledTest) {
 		Object.keys(participations).forEach((testId) => {
