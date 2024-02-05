@@ -338,7 +338,8 @@ export function ThreeTierLanding(): JSX.Element {
 						independent journalism
 					</h1>
 					<p css={standFirst}>
-						Here comes body copy about the support option below.{' '}
+						We're not owned by a billionaire or shareholders - our readers
+						support us. Choose to join with one of the options below.{' '}
 						<strong>Cancel anytime.</strong>
 					</p>
 					<PaymentFrequencyButtons
