@@ -17,7 +17,10 @@ import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
+export type Tier = 1 | 2 | 3;
+
 interface ThreeTierCardProps {
+	cardTier: Tier;
 	title: string;
 	isRecommended: boolean;
 	isRecommendedSubdued: boolean;
@@ -26,7 +29,7 @@ interface ThreeTierCardProps {
 	planCost: TierPlanCosts;
 	currency: string;
 	paymentFrequency: RegularContributionType;
-	cardCtaClickHandler: (price: number) => void;
+	cardCtaClickHandler: (price: number, cardTier: Tier) => void;
 	externalBtnLink?: string;
 }
 
@@ -150,6 +153,7 @@ const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
 };
 
 export function ThreeTierCard({
+	cardTier,
 	title,
 	planCost,
 	isRecommended,
@@ -165,7 +169,6 @@ export function ThreeTierCard({
 	const previousPriceCopy =
 		!!planCost.discount && `${currency}${planCost.price}`;
 	const currentPriceCopy = `${currency}${currentPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
-
 	return (
 		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
 			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
@@ -194,7 +197,7 @@ export function ThreeTierCard({
 						priority="primary"
 						size="default"
 						cssOverrides={btnStyleOverrides}
-						onClick={() => cardCtaClickHandler(currentPrice)}
+						onClick={() => cardCtaClickHandler(currentPrice, cardTier)}
 					>
 						Support now
 					</Button>
