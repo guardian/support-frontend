@@ -43,7 +43,6 @@ import {
 } from 'helpers/redux/storeHooks';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { SupportOnce } from '../components/supportOnce';
-import type { Tier } from '../components/threeTierCard';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { tierCards } from '../setup/threeTierConfig';
 
@@ -242,7 +241,7 @@ export function ThreeTierLanding(): JSX.Element {
 		dispatch(setProductType(paymentFrequencies[buttonIndex]));
 	};
 
-	const handleCardCtaClick = (price: number, cardTier: Tier) => {
+	const handleCardCtaClick = (price: number, cardTier: 1 | 2 | 3) => {
 		dispatch(
 			setSelectedAmount({
 				contributionType,
@@ -281,7 +280,7 @@ export function ThreeTierLanding(): JSX.Element {
 		);
 	};
 
-	const getCardContentBaseObject = (cardTier: Tier) => {
+	const getCardContentBaseObject = (cardTier: 1 | 2 | 3) => {
 		const tierPlanCountryCharges =
 			tierCards[`tier${cardTier}`].plans[contributionTypeKey].charges[
 				countryGroupId
@@ -298,7 +297,7 @@ export function ThreeTierLanding(): JSX.Element {
 		};
 	};
 
-	const generateTierCheckoutLink = (cardTier: Tier) => {
+	const generateTierCheckoutLink = (cardTier: 1 | 2 | 3) => {
 		const tierPlanCountryCharges =
 			tierCards[`tier${cardTier}`].plans[contributionTypeKey].charges[
 				countryGroupId
