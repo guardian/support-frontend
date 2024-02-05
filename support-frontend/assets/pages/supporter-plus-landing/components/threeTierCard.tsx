@@ -17,10 +17,8 @@ import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
-export type Tier = 1 | 2 | 3;
-
 interface ThreeTierCardProps {
-	cardTier: Tier;
+	cardTier: 1 | 2 | 3;
 	title: string;
 	isRecommended: boolean;
 	isRecommendedSubdued: boolean;
@@ -29,7 +27,7 @@ interface ThreeTierCardProps {
 	planCost: TierPlanCosts;
 	currency: string;
 	paymentFrequency: RegularContributionType;
-	cardCtaClickHandler: (price: number, cardTier: Tier) => void;
+	cardCtaClickHandler: (price: number, cardTier: 1 | 2 | 3) => void;
 	externalBtnLink?: string;
 }
 

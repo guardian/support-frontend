@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source-foundations';
 import type { RegularContributionType } from 'helpers/contributions';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
-import type { Tier } from './threeTierCard';
 import { ThreeTierCard } from './threeTierCard';
 
 interface ThreeTierCardsProps {
@@ -16,7 +15,7 @@ interface ThreeTierCardsProps {
 	}>;
 	currency: string;
 	paymentFrequency: RegularContributionType;
-	cardsCtaClickHandler: (price: number, cardTier: Tier) => void;
+	cardsCtaClickHandler: (price: number, cardTier: 1 | 2 | 3) => void;
 }
 
 const container = (cardCount: number) => css`
@@ -36,7 +35,7 @@ const container = (cardCount: number) => css`
 	}
 `;
 
-const cardIndexToTier = (index: number): Tier => {
+const cardIndexToTier = (index: number): 1 | 2 | 3 => {
 	switch (index) {
 		case 1:
 			return 2;
