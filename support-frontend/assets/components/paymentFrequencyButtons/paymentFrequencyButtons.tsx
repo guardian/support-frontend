@@ -5,8 +5,8 @@ import { useState } from 'react';
 import type { RegularContributionType } from 'helpers/contributions';
 
 interface PaymentFrequencyButtonObj {
-	label: string;
-	paymentFrequency: RegularContributionType;
+	paymentFrequencyLabel: string;
+	paymentFrequencyId: RegularContributionType;
 	isPreSelected?: boolean;
 }
 
@@ -70,15 +70,15 @@ export function PaymentFrequencyButtons({
 				<button
 					css={button(buttonIndex === selectedButton)}
 					role="tab"
-					id={paymentFrequency.paymentFrequency}
-					aria-controls={`${paymentFrequency.paymentFrequency}-tab`}
+					id={paymentFrequency.paymentFrequencyId}
+					aria-controls={`${paymentFrequency.paymentFrequencyId}-tab`}
 					aria-selected={buttonIndex === selectedButton}
 					onClick={() => {
 						setSelectedButton(buttonIndex);
 						buttonClickHandler(buttonIndex);
 					}}
 				>
-					{paymentFrequency.label}
+					{paymentFrequency.paymentFrequencyLabel}
 				</button>
 			))}
 		</div>

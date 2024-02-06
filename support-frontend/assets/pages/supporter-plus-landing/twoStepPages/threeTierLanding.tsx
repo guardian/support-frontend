@@ -366,8 +366,8 @@ export function ThreeTierLanding(): JSX.Element {
 					<PaymentFrequencyButtons
 						paymentFrequencies={paymentFrequencies.map(
 							(paymentFrequency, index) => ({
-								label: paymentFrequencyMap[paymentFrequency],
-								paymentFrequency,
+								paymentFrequencyLabel: paymentFrequencyMap[paymentFrequency],
+								paymentFrequencyId: paymentFrequency,
 								isPreSelected: paymentFrequencies[index] === contributionType,
 							}),
 						)}
