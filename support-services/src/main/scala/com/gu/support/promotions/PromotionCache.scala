@@ -5,18 +5,17 @@ import org.joda.time.{DateTime, Minutes}
 
 import scala.concurrent.stm.{Ref, atomic}
 
-case class PromotionCache(fetched: DateTime, promotions: Iterable[Promotion]) {
-  def isFresh: Boolean = DateTime.now.getMillis - fetched.getMillis < PromotionCache.maxAge
+case class PromotionCacheResponse(fetched: DateTime, promotions: Iterable[Promotion]) {
+  val maxAge = Minutes.ONE.toStandardDuration.getMillis
+  def isFresh: Boolean = DateTime.now.getMillis - fetched.getMillis < maxAge
 }
 
-object PromotionCache {
-  val maxAge = Minutes.ONE.toStandardDuration.getMillis
-
-  val promotionsRef = Ref[Option[PromotionCache]](None)
+class PromotionCache {
+  val promotionsRef = Ref[Option[PromotionCacheResponse]](None)
 
   def get: Option[Iterable[Promotion]] = promotionsRef.single().filter(_.isFresh).map(_.promotions)
 
   def set(promotions: Iterable[Promotion], fetched: DateTime = DateTime.now): Unit = atomic { implicit txn =>
-    promotionsRef() = Some(PromotionCache(fetched, promotions))
+    promotionsRef() = Some(PromotionCacheResponse(fetched, promotions))
   }
 }
