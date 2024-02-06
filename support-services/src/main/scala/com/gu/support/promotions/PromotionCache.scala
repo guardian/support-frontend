@@ -11,6 +11,7 @@ case class PromotionCacheResponse(fetched: DateTime, promotions: Iterable[Promot
 }
 
 class PromotionCache {
+  // this val contains the mutable cache contents
   val promotionsRef = Ref[Option[PromotionCacheResponse]](None)
 
   def get: Option[Iterable[Promotion]] = promotionsRef.single().filter(_.isFresh).map(_.promotions)
