@@ -58,7 +58,12 @@ export function ThreeTierCards({
 			.length > 1;
 
 	return (
-		<div css={container(cardsContent.length)}>
+		<div
+			css={container(cardsContent.length)}
+			role="tabpanel"
+			id={`${paymentFrequency}-tab`}
+			aria-labelledby={`${paymentFrequency}`}
+		>
 			{cardsContent.map((cardContent, cardIndex) => {
 				return (
 					<ThreeTierCard
