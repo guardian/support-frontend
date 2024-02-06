@@ -90,11 +90,11 @@ export const tests: Tests = {
 			{
 				id: 'variant',
 			},
-			{
-				id: 'control',
-			},
+			// {
+			// 	id: 'control',
+			// },
 		],
-		isActive: false,
+		isActive: true,
 		audiences: {
 			ALL: {
 				offset: 0,
