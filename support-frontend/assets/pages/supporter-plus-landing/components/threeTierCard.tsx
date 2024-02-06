@@ -137,14 +137,16 @@ const benefitsPrefixPlus = css`
 `;
 
 const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
-	// EXAMPLE: £16 for the first 12 months, then £25
+	// EXAMPLE: £16 for the first 12 months, then £25/month
 	if (planCost.discount) {
 		const durationValue = planCost.discount.duration.value;
 		return `${currency}${planCost.discount.price} for the first ${
 			durationValue > 1 ? durationValue : ''
 		} ${recurringContributionPeriodMap[planCost.discount.duration.period]}${
 			durationValue > 1 ? 's' : ''
-		}, then ${currency}${planCost.price}`;
+		}, then ${currency}${planCost.price}/${
+			recurringContributionPeriodMap[planCost.discount.duration.period]
+		}`;
 	}
 };
 
@@ -178,7 +180,7 @@ export function ThreeTierCard({
 				{currentPriceCopy}
 				{!!planCost.discount && (
 					<span css={discountSummaryCss}>
-						{discountSummaryCopy(currency, planCost)}
+						{discountSummaryCopy(currency, planCost)}*
 					</span>
 				)}
 			</h2>

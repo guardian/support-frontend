@@ -44,6 +44,7 @@ import {
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
+import { ThreeTierDisclaimer } from '../components/threeTierDisclaimer';
 import { tierCards } from '../setup/threeTierConfig';
 
 const recurringContainer = css`
@@ -155,6 +156,19 @@ const suppportAnotherWayContainer = css`
 	${from.desktop} {
 		text-align: center;
 		padding-top: ${space[9]}px;
+	}
+`;
+
+const disclaimerContainer = css`
+	background-color: ${palette.brand[400]};
+	> div {
+		border-bottom: 1px solid ${palette.brand[600]};
+		padding: ${space[4]}px 10px;
+	}
+	${from.mobileLandscape} {
+		> div {
+			padding: ${space[4]}px ${space[5]}px;
+		}
 	}
 `;
 
@@ -360,7 +374,8 @@ export function ThreeTierLanding(): JSX.Element {
 						independent journalism
 					</h1>
 					<p css={standFirst}>
-						Here comes body copy about the support option below.{' '}
+						We're not owned by a billionaire or shareholders - our readers
+						support us. Choose to join with one of the options below.{' '}
 						<strong>Cancel anytime.</strong>
 					</p>
 					<PaymentFrequencyButtons
@@ -411,6 +426,17 @@ export function ThreeTierLanding(): JSX.Element {
 						</p>
 					</div>
 				)}
+			</Container>
+			<Container
+				sideBorders
+				topBorder
+				borderColor="rgba(170, 170, 180, 0.5)"
+				cssOverrides={disclaimerContainer}
+			>
+				<ThreeTierDisclaimer
+					planCost={getCardContentBaseObject(3).planCost}
+					currency={currencies[currencyId].glyph}
+				></ThreeTierDisclaimer>
 			</Container>
 		</PageScaffold>
 	);
