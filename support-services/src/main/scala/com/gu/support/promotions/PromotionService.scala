@@ -16,6 +16,9 @@ class PromotionService(config: PromotionsConfig, maybeCollection: Option[Promoti
   // This is a small hack to allow us to start using promotions to handle 6 for 6 without having to build the tooling
   private def allWith6For6 = promotionCollection.all.toList :+ Promotions.SixForSixPromotion
 
+  def environment = if (config.tables.promotions.contains("PROD")) { "PROD" }
+  else { "CODE" }
+
   def findPromotion(promoCode: PromoCode): Either[PromoError, PromotionWithCode] =
     allWith6For6
       .filter(_.promoCodes.exists(_ == promoCode))
