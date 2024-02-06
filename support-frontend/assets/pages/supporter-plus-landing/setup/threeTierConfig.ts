@@ -81,7 +81,7 @@ const tier1: TierCard = {
 };
 
 const tier2: TierCard = {
-	title: 'All access digital',
+	title: 'All-access digital',
 	isRecommended: true,
 	benefits: {
 		list: [
@@ -135,8 +135,8 @@ const tier3: TierCard = {
 	title: 'Digital + print',
 	benefits: {
 		description: [
-			'All features of ',
-			{ strong: true, copy: 'All access digital' },
+			'The rewards from ',
+			{ strong: true, copy: 'All-access digital' },
 		],
 		list: [
 			{

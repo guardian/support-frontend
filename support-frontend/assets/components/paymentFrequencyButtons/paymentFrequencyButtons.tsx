@@ -2,9 +2,11 @@ import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import { from, palette, space, textSans } from '@guardian/source-foundations';
 import { useState } from 'react';
+import type { RegularContributionType } from 'helpers/contributions';
 
 interface PaymentFrequencyButtonObj {
-	label: string;
+	paymentFrequencyLabel: string;
+	paymentFrequencyId: RegularContributionType;
 	isPreSelected?: boolean;
 }
 
@@ -59,16 +61,24 @@ export function PaymentFrequencyButtons({
 		),
 	);
 	return (
-		<div css={[container(paymentFrequencies.length), additionalStyles]}>
+		<div
+			css={[container(paymentFrequencies.length), additionalStyles]}
+			role="tablist"
+			aria-label="Payment frequency options"
+		>
 			{paymentFrequencies.map((paymentFrequency, buttonIndex) => (
 				<button
 					css={button(buttonIndex === selectedButton)}
+					role="tab"
+					id={paymentFrequency.paymentFrequencyId}
+					aria-controls={`${paymentFrequency.paymentFrequencyId}-tab`}
+					aria-selected={buttonIndex === selectedButton}
 					onClick={() => {
 						setSelectedButton(buttonIndex);
 						buttonClickHandler(buttonIndex);
 					}}
 				>
-					{paymentFrequency.label}
+					{paymentFrequency.paymentFrequencyLabel}
 				</button>
 			))}
 		</div>

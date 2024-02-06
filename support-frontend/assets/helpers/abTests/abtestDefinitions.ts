@@ -103,6 +103,7 @@ export const tests: Tests = {
 		},
 		omitCountries: countriesAffectedByVATStatus,
 		referrerControlled: false,
+		excludeIfInReferrerControlledTest: true,
 		seed: 0,
 
 		/**
