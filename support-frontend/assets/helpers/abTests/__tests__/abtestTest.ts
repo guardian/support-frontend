@@ -101,6 +101,44 @@ describe('init', () => {
 		expect(participations).toEqual(expectedParticipations);
 	});
 
+	it('excludes a test with excludeIfInReferrerControlledTest set if another test has referrerControlled set', () => {
+		const tests = {
+			t1: buildTest({
+				variants: [
+					buildVariant({ id: 'control' }),
+					buildVariant({ id: 'variant' }),
+				],
+				referrerControlled: false,
+				excludeIfInReferrerControlledTest: true,
+			}),
+			t2: buildTest({
+				variants: [
+					buildVariant({ id: 'control' }),
+					buildVariant({ id: 'variant' }),
+				],
+				referrerControlled: true,
+			}),
+		};
+
+		const acquisitionAbTests = [
+			buildAcquisitionAbTest({ name: 't2', variant: 'variant' }),
+		];
+
+		const participations: Participations = abInit(
+			country,
+			countryGroupId,
+			tests,
+			mvt,
+			acquisitionAbTests,
+		);
+
+		const expectedParticipations: Participations = {
+			t2: 'variant',
+		};
+
+		expect(participations).toEqual(expectedParticipations);
+	});
+
 	it('uses the variant assignment in the acquisitionData for referrerControlled tests belonging to a campaign', () => {
 		const campaignPrefix = 't';
 
@@ -684,6 +722,7 @@ function buildTest({
 	audiences = { ALL: buildAudience({}) },
 	isActive = true,
 	seed = 0,
+	excludeIfInReferrerControlledTest = false,
 }: Partial<Test>): Test {
 	return {
 		variants,
@@ -691,6 +730,7 @@ function buildTest({
 		isActive,
 		referrerControlled,
 		seed,
+		excludeIfInReferrerControlledTest,
 	};
 }
 
