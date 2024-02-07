@@ -28,6 +28,7 @@ import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { LimitedPriceCards } from '../formSections/limitedPriceCards';
+import { PatronsPriceCards } from '../formSections/patronsPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const boxShorterMargin = css`
@@ -106,6 +107,8 @@ export function SupporterPlusInitialLandingPage({
 	const displayLimitedPriceCards =
 		abParticipations.supporterPlusOnly === 'variant';
 
+	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
+
 	const proceedToNextStep = useOtherAmountValidation(() => {
 		const destination = `checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`;
 		navigateWithPageView(navigate, destination, abParticipations);
@@ -138,21 +141,28 @@ export function SupporterPlusInitialLandingPage({
 		dispatch(resetValidation());
 	}, []);
 
+	function TopSection() {
+		if (displayLimitedPriceCards) {
+			return <LimitedPriceCards />;
+		}
+		if (displayPatronsCheckout) {
+			return <PatronsPriceCards />;
+		}
+		return (
+			<AmountAndBenefits
+				countryGroupId={countryGroupId}
+				amountIsAboveThreshold={!!(thresholdPrice && amount >= thresholdPrice)}
+				addBackgroundToBenefitsList
+				isCompactBenefitsList
+			/>
+		);
+	}
+
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute}>
 			<Box cssOverrides={[boxShorterMargin, boxHoist]}>
-				{displayLimitedPriceCards ? (
-					<LimitedPriceCards />
-				) : (
-					<AmountAndBenefits
-						countryGroupId={countryGroupId}
-						amountIsAboveThreshold={
-							!!(thresholdPrice && amount >= thresholdPrice)
-						}
-						addBackgroundToBenefitsList
-						isCompactBenefitsList
-					/>
-				)}
+        <TopSection />
+
 				<div css={checkoutBtnAndPaymentIconsHolder}>
 					<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 						<Button
