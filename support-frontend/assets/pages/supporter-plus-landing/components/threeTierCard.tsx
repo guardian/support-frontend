@@ -137,10 +137,10 @@ const benefitsPrefixPlus = css`
 `;
 
 const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
-	// EXAMPLE: £16 for the first 12 months, then £25/month
+	// EXAMPLE: £16 for 12 months, then £25/month
 	if (planCost.discount) {
 		const durationValue = planCost.discount.duration.value;
-		return `${currency}${planCost.discount.price} for the first ${
+		return `${currency}${planCost.discount.price} for ${
 			durationValue > 1 ? durationValue : ''
 		} ${recurringContributionPeriodMap[planCost.discount.duration.period]}${
 			durationValue > 1 ? 's' : ''
@@ -187,7 +187,7 @@ export function ThreeTierCard({
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				{externalBtnLink ? (
 					<LinkButton href={externalBtnLink} cssOverrides={btnStyleOverrides}>
-						Support now
+						Subscribe
 					</LinkButton>
 				) : (
 					<Button
@@ -197,7 +197,7 @@ export function ThreeTierCard({
 						cssOverrides={btnStyleOverrides}
 						onClick={() => cardCtaClickHandler(currentPrice, cardTier)}
 					>
-						Support now
+						Subscribe
 					</Button>
 				)}
 			</ThemeProvider>

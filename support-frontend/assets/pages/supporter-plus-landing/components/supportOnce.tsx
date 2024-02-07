@@ -31,7 +31,9 @@ const standFirst = css`
 	color: ${palette.neutral[10]};
 	${textSans.medium()};
 	line-height: 1.35;
+	padding-top: ${space[1]}px;
 	${from.tablet} {
+		padding-top: ${space[2]}px;
 		margin: 0 auto;
 		max-width: 340px;
 	}
@@ -53,18 +55,21 @@ const btnStyleOverrides = css`
 `;
 
 interface SupportOnceProps {
+	currency: string;
 	btnClickHandler: () => void;
 }
 
 export function SupportOnce({
+	currency,
 	btnClickHandler,
 }: SupportOnceProps): JSX.Element {
 	return (
 		<div css={container}>
 			<h2 css={heading}>Support us just once</h2>
 			<p css={standFirst}>
-				We welcome support of any size, any time, whether you choose to give £1
-				or much more.
+				We welcome support of any size, any time - whether you choose to
+				give&nbsp;
+				{currency}1 or more.
 			</p>
 			<Button
 				iconSide="left"
