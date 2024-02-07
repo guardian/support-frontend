@@ -130,6 +130,7 @@ class ZuoraProductHandlers(services: Services, state: CreateZuoraSubscriptionSta
       dateGenerator,
       touchPointEnvironment,
       subscribeItemBuilder,
+      services.promotionService,
     ),
     state.user,
   )

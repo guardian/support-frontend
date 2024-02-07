@@ -47,6 +47,7 @@ object CreateZuoraSubscriptionProductState {
       paymentMethod: PaymentMethod,
       salesForceContact: SalesforceContactRecord,
       promoCode: Option[PromoCode],
+      user: User,
   ) extends CreateZuoraSubscriptionProductState
 
   case class DigitalSubscriptionDirectPurchaseState(
