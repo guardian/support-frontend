@@ -69,7 +69,7 @@ export function SupportOnce({
 			<p css={standFirst}>
 				We welcome support of any size, any time - whether you choose to
 				give&nbsp;
-				{currency}1 or much more.
+				{currency}1 or more.
 			</p>
 			<Button
 				iconSide="left"
