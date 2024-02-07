@@ -187,7 +187,7 @@ export function ThreeTierCard({
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				{externalBtnLink ? (
 					<LinkButton href={externalBtnLink} cssOverrides={btnStyleOverrides}>
-						Support now
+						Subscribe
 					</LinkButton>
 				) : (
 					<Button
@@ -197,7 +197,7 @@ export function ThreeTierCard({
 						cssOverrides={btnStyleOverrides}
 						onClick={() => cardCtaClickHandler(currentPrice, cardTier)}
 					>
-						Support now
+						Subscribe
 					</Button>
 				)}
 			</ThemeProvider>
