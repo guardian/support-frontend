@@ -47,7 +47,6 @@ type PropTypes = ConnectedProps<typeof connector> & {
 };
 
 const checkmarkListStyles = css`
-	width: 100%;
 	text-align: left;
 	${from.desktop} {
 		width: 75%;
