@@ -18,10 +18,13 @@ const threeTierTerms = css`
 `;
 
 export default function ThreeTierTerms(props: {
+	paymentFrequency: 'month' | 'year';
 	paymentMethod?: PaymentMethod;
 }): JSX.Element {
 	const supporterPlusTermsLinks =
 		'https://www.theguardian.com/info/2022/oct/28/the-guardian-supporter-plus-terms-and-conditions';
+	const paymentFrequencyName =
+		props.paymentFrequency === 'year' ? 'annual' : 'monthly';
 	return (
 		<>
 			<FormSection>
@@ -29,23 +32,26 @@ export default function ThreeTierTerms(props: {
 					<p>
 						By signing up, you are taking out separate subscriptions for
 						Guardian Weekly and All Access Digital. The Guardian Weekly and All
-						Access Digital subscriptions will auto-renew each month unless
-						cancelled. The first payment for Guardian Weekly will be taken on
-						the date of your first publication and the first payment for the All
-						Access Digital subscription will be taken today. Subsequent monthly
-						payments will be taken at these intervals unless you cancel. Payment
-						will be taken using your chosen payment method. Both subscriptions
-						must be cancelled separately and you can cancel the subscriptions at
-						any time before your next renewal date. If you cancel either or both
-						subscriptions within 14 days of signing up, you&apos;ll receive a
-						full refund for the cancelled subscription and the cancelled
-						subscription will stop immediately. Cancellation of either or both
-						subscriptions after 14 days will take effect at the end of your
-						current monthly payment period, and you'll receive a full refund for
-						any Guardian Weekly issues not sent to you. If you cancel one
-						subscription, the other subscription will continue and auto-renew
-						each month at its applicable price unless cancelled. To cancel your
-						Guardian Weekly subscription, see our Guardian Weekly{' '}
+						Access Digital subscriptions will auto-renew each&nbsp;
+						{props.paymentFrequency} unless cancelled. The first payment for
+						Guardian Weekly will be taken on the date of your first publication
+						and the first payment for the All Access Digital subscription will
+						be taken today. Subsequent&nbsp;
+						{paymentFrequencyName} payments will be taken at these intervals
+						unless you cancel. Payment will be taken using your chosen payment
+						method. Both subscriptions must be cancelled separately and you can
+						cancel the subscriptions at any time before your next renewal date.
+						If you cancel either or both subscriptions within 14 days of signing
+						up, you&apos;ll receive a full refund for the cancelled subscription
+						and the cancelled subscription will stop immediately. Cancellation
+						of either or both subscriptions after 14 days will take effect at
+						the end of your current&nbsp;
+						{paymentFrequencyName} payment period, and you'll receive a full
+						refund for any Guardian Weekly issues not sent to you. If you cancel
+						one subscription, the other subscription will continue and
+						auto-renew each&nbsp;
+						{props.paymentFrequency} at its applicable price unless cancelled.
+						To cancel your Guardian Weekly subscription, see our Guardian Weekly{' '}
 						<a
 							target="_blank"
 							rel="noopener noreferrer"
