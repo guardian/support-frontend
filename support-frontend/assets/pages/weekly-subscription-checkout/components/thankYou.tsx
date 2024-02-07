@@ -18,7 +18,6 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type { Option } from 'helpers/types/option';
 import {
 	helpCentreUrl,
 	homeDeliveryUrl,
@@ -100,7 +99,7 @@ function StartDateCopy({
 	startDate,
 	orderIsGift,
 }: {
-	startDate: Option<string>;
+	startDate?: string;
 	orderIsGift: boolean;
 }) {
 	if (startDate) {
@@ -117,7 +116,7 @@ function StartDateCopy({
 	return null;
 }
 
-function StartDateCopyThreeTier({ startDate }: { startDate: Option<string> }) {
+function StartDateCopyThreeTier({ startDate }: { startDate?: string }) {
 	if (startDate) {
 		return (
 			<Text title={'When will my subscription start?'}>
