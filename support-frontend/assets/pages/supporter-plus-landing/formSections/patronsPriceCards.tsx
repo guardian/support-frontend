@@ -1,20 +1,12 @@
-import { useEffect } from 'react';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutErrorSummary } from 'components/errorSummary/errorSummary';
 import { CheckoutErrorSummaryContainer } from 'components/errorSummary/errorSummaryContainer';
 import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/paymentFrequencyTabsContainer';
 import { PriceCardsContainer } from 'components/priceCards/priceCardsContainer';
-import {
-	setSelectedAmount,
-	setSelectedAmountBeforeAmendment,
-} from 'helpers/redux/checkout/product/actions';
-import {
-	useContributionsDispatch,
-	useContributionsSelector,
-} from 'helpers/redux/storeHooks';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
-import type {
-	CountryGroupId} from '../../../helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from '../../../helpers/internationalisation/countryGroup';
 
 const REGIONAL_AMOUNTS: Record<CountryGroupId, string[]> = {
 	GBPCountries: ['300', '350', '500', '1000'],
@@ -27,7 +19,6 @@ const REGIONAL_AMOUNTS: Record<CountryGroupId, string[]> = {
 };
 
 export function PatronsPriceCards(): JSX.Element {
-	const dispatch = useContributionsDispatch();
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -36,18 +27,9 @@ export function PatronsPriceCards(): JSX.Element {
 
 	const contributionType = 'ONE_OFF';
 
-	useEffect(() => {
-		dispatch(
-			setSelectedAmount({
-				contributionType,
-				amount: amounts[1],
-			}),
-		);
-	}, []);
-
 	return (
 		<PaymentFrequencyTabsContainer
-			render={({ onTabChange }) => (
+			render={() => (
 				<BoxContents>
 					<CheckoutErrorSummaryContainer
 						renderSummary={({ errorList }) => (
@@ -56,40 +38,32 @@ export function PatronsPriceCards(): JSX.Element {
 					/>
 					<PriceCardsContainer
 						frequency={contributionType}
-						renderPriceCards={({ selectedAmount }) => {
-							console.log({ selectedAmount });
+						renderPriceCards={({
+							selectedAmount,
+							otherAmount,
+							currency,
+							onAmountChange,
+							minAmount,
+							onOtherAmountChange,
+							errors,
+						}) => {
 							return (
 								<PriceCards
 									amounts={amounts}
 									selectedAmount={selectedAmount}
-									currency={'GBP'}
-									// paymentInterval={paymentInterval}
-									onAmountChange={(amount) => {
-										onTabChange(contributionType);
-										dispatch(
-											setSelectedAmount({
-												contributionType,
-												amount: amount.toString(),
-											}),
-										);
-										dispatch(
-											setSelectedAmountBeforeAmendment({
-												contributionType,
-												amount: amount.toString(),
-											}),
-										);
-									}}
-									hideChooseYourAmount={true}
-									// otherAmountField={
-									//   <OtherAmount
-									//     currency={'GBP'}
-									//     minAmount={2}
-									//     selectedAmount={selectedAmount}
-									//     otherAmount={otherAmount}
-									//     onOtherAmountChange={onOtherAmountChange}
-									//     errors={errors}
-									//   />
-									// }
+									currency={currency}
+									onAmountChange={onAmountChange}
+									hideChooseYourAmount={false}
+									otherAmountField={
+										<OtherAmount
+											currency={currency}
+											minAmount={minAmount}
+											selectedAmount={selectedAmount}
+											otherAmount={otherAmount}
+											onOtherAmountChange={onOtherAmountChange}
+											errors={errors}
+										/>
+									}
 								/>
 							);
 						}}

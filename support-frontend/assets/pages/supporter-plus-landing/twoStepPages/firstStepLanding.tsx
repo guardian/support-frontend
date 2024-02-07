@@ -141,27 +141,23 @@ export function SupporterPlusInitialLandingPage({
 		dispatch(resetValidation());
 	}, []);
 
-	function TopSection() {
-		if (displayLimitedPriceCards) {
-			return <LimitedPriceCards />;
-		}
-		if (displayPatronsCheckout) {
-			return <PatronsPriceCards />;
-		}
-		return (
-			<AmountAndBenefits
-				countryGroupId={countryGroupId}
-				amountIsAboveThreshold={!!(thresholdPrice && amount >= thresholdPrice)}
-				addBackgroundToBenefitsList
-				isCompactBenefitsList
-			/>
-		);
-	}
-
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute}>
 			<Box cssOverrides={[boxShorterMargin, boxHoist]}>
-        <TopSection />
+				{displayLimitedPriceCards ? (
+					<LimitedPriceCards />
+				) : displayPatronsCheckout ? (
+					<PatronsPriceCards />
+				) : (
+					<AmountAndBenefits
+						countryGroupId={countryGroupId}
+						amountIsAboveThreshold={
+							!!(thresholdPrice && amount >= thresholdPrice)
+						}
+						addBackgroundToBenefitsList
+						isCompactBenefitsList
+					/>
+				)}
 
 				<div css={checkoutBtnAndPaymentIconsHolder}>
 					<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
