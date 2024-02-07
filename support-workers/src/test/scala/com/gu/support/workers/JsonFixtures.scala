@@ -504,6 +504,8 @@ object JsonFixtures {
         SupporterPlus(amount, currency, billingPeriod),
         stripePaymentMethodObj,
         salesforceContact,
+        None,
+        user("9999998", country),
       ),
       UUID.randomUUID(),
       user("9999998", country),
