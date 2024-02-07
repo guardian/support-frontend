@@ -494,13 +494,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						currency={props.currencyId}
 					/>
 					{inThreeTierTestVariant ? (
-						<ThreeTierTerms
-							paymentMethod={props.paymentMethod}
-							total={standardDigitalPlusPrintPrice}
-							currencySymbol={currencies[props.price.currency].glyph}
-							paymentFrequency={billingPeriodNounLowerCase}
-							discount={potentialDiscount}
-						/>
+						<ThreeTierTerms paymentMethod={props.paymentMethod} />
 					) : (
 						<PaymentTerms paymentMethod={props.paymentMethod} />
 					)}
