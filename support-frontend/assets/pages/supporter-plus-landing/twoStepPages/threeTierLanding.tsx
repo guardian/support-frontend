@@ -413,7 +413,10 @@ export function ThreeTierLanding(): JSX.Element {
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={oneTimeContainer(countryGroupId === UnitedStates)}
 			>
-				<SupportOnce btnClickHandler={handleSupportOnceBtnClick} />
+				<SupportOnce
+					currency={currencies[currencyId].glyph}
+					btnClickHandler={handleSupportOnceBtnClick}
+				/>
 				{countryGroupId === UnitedStates && (
 					<div css={suppportAnotherWayContainer}>
 						<h4>Support another way</h4>
