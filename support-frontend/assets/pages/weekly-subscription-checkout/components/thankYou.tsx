@@ -208,9 +208,26 @@ function ThankYouContent({
 				</span>,
 		  ];
 
+	const whatHappensNextItemsThreeTier = [
+		<SansParagraph>
+			You&apos;ll receive a confirmation email containing everything you need to
+			know about your subscription, including how to make the most of your
+			subscription. You can opt out any time via your account.
+		</SansParagraph>,
+		<SansParagraph>
+			Guardian Weekly magazine will be delivered to your door. Please allow one
+			to seven days after the publication date for your copy to arrive,
+			depending on postal services.
+		</SansParagraph>,
+	];
+
 	const benefitsTier3and2 = tierCards.tier3.benefits.list.concat(
 		tierCards.tier2.benefits.list,
 	);
+
+	const thankyouSupportHeader = `Thank you for supporting our journalism${
+		!inThreeTierTestVariant ? '!' : ''
+	}`;
 
 	useScrollToTop();
 
@@ -225,7 +242,7 @@ function ThankYouContent({
 				<HeroImage orderIsGift={orderIsGift} />
 				<HeadingBlock
 					overheadingClass="--thankyou"
-					overheading="Thank you for supporting our journalism!"
+					overheading={thankyouSupportHeader}
 				>
 					{getHeading(
 						billingPeriod,
@@ -265,7 +282,7 @@ function ThankYouContent({
 					</Content>
 					<Content>
 						<Text title="What happens next?">
-							<OrderedList items={whatHappensNextItems} />
+							<OrderedList items={whatHappensNextItemsThreeTier} />
 						</Text>
 					</Content>
 				</>
