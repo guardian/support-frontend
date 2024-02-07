@@ -99,44 +99,36 @@ function StartDateCopy({
 	startDate,
 	orderIsGift,
 }: {
-	startDate?: string;
+	startDate: string;
 	orderIsGift: boolean;
 }) {
-	if (startDate) {
-		const title = orderIsGift
-			? "The gift recipient's first issue will be published on"
-			: 'Your first issue will be published on';
-		return (
-			<Text title={title}>
-				<LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
-			</Text>
-		);
-	}
-
-	return null;
+	const title = orderIsGift
+		? "The gift recipient's first issue will be published on"
+		: 'Your first issue will be published on';
+	return (
+		<Text title={title}>
+			<LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
+		</Text>
+	);
 }
 
-function StartDateCopyThreeTier({ startDate }: { startDate?: string }) {
-	if (startDate) {
-		return (
-			<Text title={'When will my subscription start?'}>
-				<SansParagraph>
-					<strong>
-						Your first issue of Guardian Weekly will be published on&nbsp;
-					</strong>
-					{formatUserDate(new Date(startDate))}
-				</SansParagraph>
-				<SansParagraph>
-					<strong>Your digital benefits will start today.</strong>
-					<br />
-					Please ensure you are signed in on all your devices to enjoy unlimited
-					app access and ad-free reading.
-				</SansParagraph>
-			</Text>
-		);
-	}
-
-	return null;
+function StartDateCopyThreeTier({ startDate }: { startDate: string }) {
+	return (
+		<Text title={'When will my subscription start?'}>
+			<SansParagraph>
+				<strong>
+					Your first issue of Guardian Weekly will be published on&nbsp;
+				</strong>
+				{formatUserDate(new Date(startDate))}
+			</SansParagraph>
+			<SansParagraph>
+				<strong>Your digital benefits will start today.</strong>
+				<br />
+				Please ensure you are signed in on all your devices to enjoy unlimited
+				app access and ad-free reading.
+			</SansParagraph>
+		</Text>
+	);
 }
 
 function HeroImage({ orderIsGift }: { orderIsGift: boolean }) {
