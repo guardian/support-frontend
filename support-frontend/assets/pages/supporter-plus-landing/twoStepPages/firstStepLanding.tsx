@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import { BrandedIcons } from 'components/paymentMethodSelector/creditDebitIcons';
 import { PaypalIcon } from 'components/paymentMethodSelector/paypalIcon';
-import { isCampaignEnabled } from 'helpers/campaigns/campaigns';
 import { useOtherAmountValidation } from 'helpers/customHooks/useFormValidation';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -135,27 +134,13 @@ export function SupporterPlusInitialLandingPage({
 			: paymentMethodsMarginRecurring}
 	`;
 
-	const isUsEoy2023CampaignEnabled = isCampaignEnabled(`usEoy2023`);
-	const hoistPriceCardsAmountsBenefitsContainer =
-		isUsEoy2023CampaignEnabled && countryGroupId === 'UnitedStates'
-			? css``
-			: boxHoist;
-
 	useEffect(() => {
 		dispatch(resetValidation());
 	}, []);
 
 	return (
-		<SupporterPlusCheckoutScaffold
-			thankYouRoute={thankYouRoute}
-			isUsEoy2023CampaignEnabled={isUsEoy2023CampaignEnabled}
-		>
-			<Box
-				cssOverrides={[
-					boxShorterMargin,
-					hoistPriceCardsAmountsBenefitsContainer,
-				]}
-			>
+		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute}>
+			<Box cssOverrides={[boxShorterMargin, boxHoist]}>
 				{displayLimitedPriceCards ? (
 					<LimitedPriceCards />
 				) : (
