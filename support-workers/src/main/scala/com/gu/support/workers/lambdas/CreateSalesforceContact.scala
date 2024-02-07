@@ -116,6 +116,7 @@ class NextState(state: CreateSalesforceContactState) {
         product,
         purchase,
         salesforceContactRecords.buyer,
+        promoCode,
       ),
       requestId,
       user,

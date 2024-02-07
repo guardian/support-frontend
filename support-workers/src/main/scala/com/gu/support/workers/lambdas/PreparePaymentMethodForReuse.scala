@@ -80,12 +80,11 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
           )
         case sp: SupporterPlus =>
           Success(
-            (
-              SupporterPlusState(
-                product = sp,
-                paymentMethod = paymentMethod,
-                salesForceContact = sfContact,
-              ),
+            SupporterPlusState(
+              product = sp,
+              paymentMethod = paymentMethod,
+              salesForceContact = sfContact,
+              state.promoCode,
             ),
             sp,
           )
