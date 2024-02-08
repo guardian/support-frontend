@@ -124,6 +124,7 @@ export type ContributionsOrderSummaryProps = {
 	onAccordionClick?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
+	threeTierProductName?: string;
 	showTopUpAmounts?: boolean;
 	topUpToggleChecked?: boolean;
 	topUpToggleOnChange?: () => void;
@@ -155,6 +156,7 @@ export function ContributionsOrderSummary({
 	onAccordionClick,
 	headerButton,
 	tsAndCs,
+	threeTierProductName,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showDetails, setShowDetails] = useState(false);
 
@@ -172,13 +174,18 @@ export function ContributionsOrderSummary({
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
-				<h2 css={heading}>Your support</h2>
+				<h2 css={heading}>
+					{threeTierProductName ? 'Your subscription' : 'Your support'}
+				</h2>
 				{headerButton}
 			</div>
 			<hr css={hrCss} />
 			<div css={detailsSection}>
 				<div css={summaryRow}>
-					<p>{supportTypes[contributionType]} support</p>
+					<p>
+						{threeTierProductName ??
+							`${supportTypes[contributionType]} support`}
+					</p>
 					{showAccordion && (
 						<Button
 							priority="subdued"

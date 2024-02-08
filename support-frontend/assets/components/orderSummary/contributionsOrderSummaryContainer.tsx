@@ -9,6 +9,7 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary';
 
 type ContributionsOrderSummaryContainerProps = {
+	inThreeTier: boolean;
 	renderOrderSummary: (props: ContributionsOrderSummaryProps) => JSX.Element;
 };
 
@@ -39,6 +40,7 @@ function getTermsConditions(
 }
 
 export function ContributionsOrderSummaryContainer({
+	inThreeTier,
 	renderOrderSummary,
 }: ContributionsOrderSummaryContainerProps): JSX.Element {
 	const contributionType = useContributionsSelector(getContributionType);
@@ -64,12 +66,23 @@ export function ContributionsOrderSummaryContainer({
 		);
 	}
 
+	const threeTierProductName = (): string | undefined => {
+		if (inThreeTier) {
+			if (isSupporterPlus) {
+				return 'All-access digital';
+			} else {
+				return 'Support';
+			}
+		}
+	};
+
 	return renderOrderSummary({
 		contributionType,
 		total: selectedAmount,
 		currency: currency,
 		checkListData: checklist,
 		onAccordionClick,
+		threeTierProductName: threeTierProductName(),
 		tsAndCs: getTermsConditions(contributionType, isSupporterPlus),
 	});
 }

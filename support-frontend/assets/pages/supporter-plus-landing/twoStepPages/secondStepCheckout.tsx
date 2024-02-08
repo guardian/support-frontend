@@ -112,6 +112,7 @@ export function SupporterPlusCheckout({
 						<ContributionsPriceCards />
 					) : (
 						<ContributionsOrderSummaryContainer
+							inThreeTier={isInThreeTierCheckoutTest}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}
