@@ -1,12 +1,17 @@
+import { useEffect } from 'react';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutErrorSummary } from 'components/errorSummary/errorSummary';
 import { CheckoutErrorSummaryContainer } from 'components/errorSummary/errorSummaryContainer';
 import { PaymentFrequencyTabsContainer } from 'components/paymentFrequencyTabs/paymentFrequencyTabsContainer';
 import { PriceCardsContainer } from 'components/priceCards/priceCardsContainer';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import {
+	useContributionsDispatch,
+	useContributionsSelector,
+} from 'helpers/redux/storeHooks';
 import { OtherAmount } from '../../../components/otherAmount/otherAmount';
 import { PriceCards } from '../../../components/priceCards/priceCards';
 import type { CountryGroupId } from '../../../helpers/internationalisation/countryGroup';
+import { setProductType } from '../../../helpers/redux/checkout/product/actions';
 
 const REGIONAL_AMOUNTS: Record<CountryGroupId, string[]> = {
 	GBPCountries: ['300', '350', '500', '1000'],
@@ -19,6 +24,7 @@ const REGIONAL_AMOUNTS: Record<CountryGroupId, string[]> = {
 };
 
 export function PatronsPriceCards(): JSX.Element {
+	const dispatch = useContributionsDispatch();
 	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -26,6 +32,11 @@ export function PatronsPriceCards(): JSX.Element {
 	const amounts = REGIONAL_AMOUNTS[countryGroupId];
 
 	const contributionType = 'ONE_OFF';
+
+	useEffect(() => {
+		console.log('Setting contribution type');
+		dispatch(setProductType(contributionType));
+	}, []);
 
 	return (
 		<PaymentFrequencyTabsContainer
