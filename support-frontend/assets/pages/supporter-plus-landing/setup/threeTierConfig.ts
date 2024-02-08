@@ -171,7 +171,7 @@ const tier3: TierCard = {
 					},
 				},
 				International: {
-					price: 49,
+					price: 46,
 					promoCode: '3TIER_WEEKLY_INT_MONTHLY',
 					discount: {
 						percentage: 26.09,
