@@ -8,6 +8,8 @@ const guardianTsAndCsStyles = (displayPatronsCheckout: boolean) => css`
 	margin-bottom: ${space[6]}px;
 	${from.tablet} {
 		margin-bottom: 64px;
+	}
+	${from.desktop} {
 		${displayPatronsCheckout ? 'margin-top: 100px;' : ''}
 	}
 `;
