@@ -501,6 +501,7 @@ object JsonFixtures {
   ): String =
     CreateZuoraSubscriptionState(
       SupporterPlusState(
+        Country.UK,
         SupporterPlus(amount, currency, billingPeriod),
         stripePaymentMethodObj,
         None,

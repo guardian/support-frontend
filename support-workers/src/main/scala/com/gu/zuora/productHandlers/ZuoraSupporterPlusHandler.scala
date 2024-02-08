@@ -1,5 +1,6 @@
 package com.gu.zuora.productHandlers
 
+import cats.implicits._
 import com.gu.support.workers.User
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.SupporterPlusState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailSupporterPlusState
@@ -18,9 +19,14 @@ class ZuoraSupporterPlusHandler(
       state: SupporterPlusState,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
-  ): Future[SendThankYouEmailSupporterPlusState] = {
-    val subscribeItem = supporterPlusSubscriptionBuilder.build(state, csrUsername, salesforceCaseId)
+  ): Future[SendThankYouEmailSupporterPlusState] =
     for {
+      subscribeItem <- Future.fromTry(
+        supporterPlusSubscriptionBuilder
+          .build(state, csrUsername, salesforceCaseId)
+          .leftMap(BuildSubscribePromoError)
+          .toTry,
+      )
       paymentSchedule <- zuoraSubscriptionCreator.preview(subscribeItem, state.product.billingPeriod)
       (account, sub) <- zuoraSubscriptionCreator.ensureSubscriptionCreated(subscribeItem)
     } yield SendThankYouEmailSupporterPlusState(
@@ -32,6 +38,5 @@ class ZuoraSupporterPlusHandler(
       account.value,
       sub.value,
     )
-  }
 
 }

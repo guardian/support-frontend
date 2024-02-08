@@ -86,6 +86,7 @@ class PreparePaymentMethodForReuse(servicesProvider: ServiceProvider = ServicePr
                 paymentMethod = paymentMethod,
                 promoCode = state.promoCode,
                 salesForceContact = sfContact,
+                billingCountry = state.user.billingAddress.country,
               ),
             ),
             sp,

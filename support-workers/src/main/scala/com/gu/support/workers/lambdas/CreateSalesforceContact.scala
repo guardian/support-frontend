@@ -113,6 +113,7 @@ class NextState(state: CreateSalesforceContactState) {
   ): CreateZuoraSubscriptionState =
     CreateZuoraSubscriptionState(
       SupporterPlusState(
+        user.billingAddress.country,
         product,
         purchase,
         promoCode,
