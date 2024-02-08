@@ -38,6 +38,8 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import HeadlineImagePatronsDesktop from '../../../components/svgs/headlineImagePatronsDesktop';
+import HeadlineImagePatronsMobile from '../../../components/svgs/headlineImagePatronsMobile';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { GuardianTsAndCs } from '../components/guardianTsAndCs';
 import { PatronsMessage } from '../components/patronsMessage';
@@ -96,6 +98,10 @@ const leftColImage = css`
 	}
 `;
 
+const boldText = css`
+	font-weight: 700;
+`;
+
 const links = [
 	{
 		href: 'https://www.theguardian.com/info/privacy',
@@ -137,6 +143,10 @@ export function SupporterPlusCheckoutScaffold({
 		(state) => state.page.form,
 	);
 
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
+	);
+
 	const navigate = useNavigate();
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
@@ -158,6 +168,41 @@ export function SupporterPlusCheckoutScaffold({
 			navigate(thankYouRoute, { replace: true });
 		}
 	}, [paymentComplete]);
+
+	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
+
+	function SubHeading() {
+		if (displayPatronsCheckout) {
+			if (countryGroupId === UnitedStates) {
+				return (
+					<p css={subHeading}>
+						You are already among a small and vital number of{' '}
+						<span css={boldText}>
+							people whose support significantly helps to fund our work
+						</span>
+						. If you can, please consider topping up your support. Thank you.
+					</p>
+				);
+			} else {
+				return (
+					<p css={subHeading}>
+						You are already among a small and vital number of{' '}
+						<span css={boldText}>
+							people whose support disproportionately helps to fund our work
+						</span>
+						. If you can, please consider topping up your support. Thank you.
+					</p>
+				);
+			}
+		}
+		return (
+			<p css={subHeading}>
+				As a reader-funded news organisation, we rely on your generosity. Please
+				give what you can, so millions can benefit from quality reporting on the
+				events shaping our world.
+			</p>
+		);
+	}
 
 	return (
 		<PageScaffold
@@ -190,10 +235,18 @@ export function SupporterPlusCheckoutScaffold({
 					heading={
 						<figure css={leftColImageHeader}>
 							<Hide from="desktop">
-								<HeadlineImageMobile />
+								{displayPatronsCheckout ? (
+									<HeadlineImagePatronsMobile />
+								) : (
+									<HeadlineImageMobile />
+								)}
 							</Hide>
 							<Hide until="desktop">
-								<HeadlineImageDesktop />
+								{displayPatronsCheckout ? (
+									<HeadlineImagePatronsDesktop />
+								) : (
+									<HeadlineImageDesktop />
+								)}
 							</Hide>
 						</figure>
 					}
@@ -210,11 +263,7 @@ export function SupporterPlusCheckoutScaffold({
 					}
 					withTopBorder={isPaymentPage}
 				>
-					<p css={subHeading}>
-						As a reader-funded news organisation, we rely on your generosity.
-						Please give what you can, so millions can benefit from quality
-						reporting on the events shaping our world.
-					</p>
+					<SubHeading />
 				</CheckoutHeadingImage>
 			)}
 
@@ -233,13 +282,20 @@ export function SupporterPlusCheckoutScaffold({
 							/>
 						)}
 						{children}
-						<CheckoutDivider spacing="loose" mobileTheme={'light'} />
-						<PatronsMessage
-							countryGroupId={countryGroupId}
+
+						{!displayPatronsCheckout && (
+							<>
+								<CheckoutDivider spacing="loose" mobileTheme={'light'} />
+								<PatronsMessage
+									countryGroupId={countryGroupId}
+									mobileTheme={'light'}
+								/>
+							</>
+						)}
+						<GuardianTsAndCs
 							mobileTheme={'light'}
+							displayPatronsCheckout={displayPatronsCheckout}
 						/>
-						<CheckoutDivider spacing="tight" mobileTheme={'light'} />
-						<GuardianTsAndCs mobileTheme={'light'} />
 					</Column>
 				</Columns>
 			</Container>
