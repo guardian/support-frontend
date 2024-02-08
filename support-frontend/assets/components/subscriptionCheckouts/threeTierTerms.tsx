@@ -17,6 +17,12 @@ const threeTierTerms = css`
 	}
 `;
 
+const termsLink = (linkText: string, url: string) => (
+	<a target="_blank" rel="noopener noreferrer" href={url}>
+		{linkText}
+	</a>
+);
+
 export default function ThreeTierTerms(props: {
 	paymentFrequency: 'month' | 'year';
 	paymentMethod?: PaymentMethod;
@@ -52,56 +58,27 @@ export default function ThreeTierTerms(props: {
 						auto-renew each&nbsp;
 						{props.paymentFrequency} at its applicable price unless cancelled.
 						To cancel your Guardian Weekly subscription, see our Guardian Weekly{' '}
-						<a
-							target="_blank"
-							rel="noopener noreferrer"
-							href={subscriptionsTermsLinks.GuardianWeekly}
-						>
-							Terms
-						</a>
-						. To cancel your All Access Digital subscription go to{' '}
-						<a
-							target="_blank"
-							rel="noopener noreferrer"
-							href="https://profile.theguardian.com/signin"
-						>
-							Manage My Account
-						</a>{' '}
+						{termsLink('Terms', subscriptionsTermsLinks.GuardianWeekly)}. To
+						cancel your All Access Digital subscription go to{' '}
+						{termsLink(
+							'Manage My Account',
+							'https://profile.theguardian.com/signin',
+						)}{' '}
 						or see our All Access Digital and All-Access Digital{' '}
-						<a
-							target="_blank"
-							rel="noopener noreferrer"
-							href={supporterPlusTermsLinks}
-						>
-							Terms
-						</a>
-						.
+						{termsLink('Terms', supporterPlusTermsLinks)}.
 					</p>
 					<p>
 						By proceeding, you are agreeing to the Guardian Weekly{' '}
-						<a
-							target="_blank"
-							rel="noopener noreferrer"
-							href={subscriptionsTermsLinks.GuardianWeekly}
-						>
-							Terms and Conditions
-						</a>{' '}
+						{termsLink(
+							'Terms and Conditions',
+							subscriptionsTermsLinks.GuardianWeekly,
+						)}{' '}
 						and All-Access Digital{' '}
-						<a
-							target="_blank"
-							rel="noopener noreferrer"
-							href={supporterPlusTermsLinks}
-						>
-							Terms and Conditions
-						</a>
-						.
+						{termsLink('Terms and Conditions', supporterPlusTermsLinks)}.
 					</p>
 					<p>
 						To find out what personal data we collect and how we use it, please
-						visit our{' '}
-						<a target="_blank" rel="noopener noreferrer" href={privacyLink}>
-							Privacy Policy.
-						</a>
+						visit our {termsLink('Privacy Policy', privacyLink)}.
 					</p>
 				</div>
 			</FormSection>
