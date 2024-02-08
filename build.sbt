@@ -158,7 +158,7 @@ lazy val `support-workers` = (project in file("support-workers"))
     mergeStrategySettings,
   )
   .dependsOn(
-    `support-services`,
+    `support-services` % "test->test;compile->compile",
     `support-models` % "test->test;it->test;compile->compile",
     `support-config`,
     `support-internationalisation`,
