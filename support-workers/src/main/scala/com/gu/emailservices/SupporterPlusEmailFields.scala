@@ -1,6 +1,7 @@
 package com.gu.emailservices
 
 import com.gu.emailservices.SubscriptionEmailFieldHelpers.{formatDate, hyphenate, mask}
+import com.gu.support.config.TouchPointEnvironment
 import com.gu.support.workers._
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailSupporterPlusState
 import org.joda.time.DateTime
@@ -8,7 +9,9 @@ import org.joda.time.DateTime
 import scala.concurrent.{ExecutionContext, Future}
 
 class SupporterPlusEmailFields(
+    paperFieldsGenerator: PaperFieldsGenerator,
     getMandate: String => Future[Option[String]],
+    touchPointEnvironment: TouchPointEnvironment,
     created: DateTime,
 ) {
 
@@ -20,6 +23,14 @@ class SupporterPlusEmailFields(
       state.accountNumber,
       created,
     ).map { paymentFields =>
+      import state._
+      val promotion = paperFieldsGenerator.getAppliedPromotion(
+        state.promoCode,
+        state.user.billingAddress.country,
+        ProductTypeRatePlans.supporterPlusRatePlan(state.product, touchPointEnvironment).map(_.id).getOrElse(""),
+      )
+      val subscription_details = SubscriptionEmailFieldHelpers
+        .describe(paymentSchedule, product.billingPeriod, product.currency, promotion)
       val fields = List(
         "email_address" -> state.user.primaryEmailAddress,
         "created" -> created.toString,
@@ -30,6 +41,7 @@ class SupporterPlusEmailFields(
         "billing_period" -> state.product.billingPeriod.toString.toLowerCase,
         "product" -> s"${state.product.billingPeriod.toString.toLowerCase}-supporter-plus",
         "zuorasubscriberid" -> state.subscriptionNumber,
+        "subscription_details" -> subscription_details,
       ) ++ paymentFields
 
       EmailFields(fields, state.user, "supporter-plus")

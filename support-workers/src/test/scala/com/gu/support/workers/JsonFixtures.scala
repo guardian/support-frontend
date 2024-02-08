@@ -503,6 +503,7 @@ object JsonFixtures {
       SupporterPlusState(
         SupporterPlus(amount, currency, billingPeriod),
         stripePaymentMethodObj,
+        None,
         salesforceContact,
       ),
       UUID.randomUUID(),

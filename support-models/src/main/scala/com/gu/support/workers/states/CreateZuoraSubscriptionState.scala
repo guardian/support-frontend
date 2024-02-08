@@ -44,6 +44,7 @@ object CreateZuoraSubscriptionProductState {
   case class SupporterPlusState(
       product: SupporterPlus,
       paymentMethod: PaymentMethod,
+      promoCode: Option[PromoCode],
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
 

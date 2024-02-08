@@ -93,7 +93,7 @@ object UpdateSupporterProductData {
           )
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
 
-      case SendThankYouEmailSupporterPlusState(user, product, _, _, subscriptionNumber) =>
+      case SendThankYouEmailSupporterPlusState(user, product, _, _, _, _, subscriptionNumber) =>
         catalogService
           .getProductRatePlan(SupporterPlus, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
