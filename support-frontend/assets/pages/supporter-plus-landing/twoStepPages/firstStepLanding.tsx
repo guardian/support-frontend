@@ -16,7 +16,6 @@ import { useNavigate } from 'react-router';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import { BrandedIcons } from 'components/paymentMethodSelector/creditDebitIcons';
 import { PaypalIcon } from 'components/paymentMethodSelector/paypalIcon';
-import { isCampaignEnabled } from 'helpers/campaigns/campaigns';
 import { useOtherAmountValidation } from 'helpers/customHooks/useFormValidation';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -29,6 +28,7 @@ import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { LimitedPriceCards } from '../formSections/limitedPriceCards';
+import { PatronsPriceCards } from '../formSections/patronsPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const boxShorterMargin = css`
@@ -107,6 +107,8 @@ export function SupporterPlusInitialLandingPage({
 	const displayLimitedPriceCards =
 		abParticipations.supporterPlusOnly === 'variant';
 
+	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
+
 	const proceedToNextStep = useOtherAmountValidation(() => {
 		const destination = `checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`;
 		navigateWithPageView(navigate, destination, abParticipations);
@@ -135,29 +137,17 @@ export function SupporterPlusInitialLandingPage({
 			: paymentMethodsMarginRecurring}
 	`;
 
-	const isUsEoy2023CampaignEnabled = isCampaignEnabled(`usEoy2023`);
-	const hoistPriceCardsAmountsBenefitsContainer =
-		isUsEoy2023CampaignEnabled && countryGroupId === 'UnitedStates'
-			? css``
-			: boxHoist;
-
 	useEffect(() => {
 		dispatch(resetValidation());
 	}, []);
 
 	return (
-		<SupporterPlusCheckoutScaffold
-			thankYouRoute={thankYouRoute}
-			isUsEoy2023CampaignEnabled={isUsEoy2023CampaignEnabled}
-		>
-			<Box
-				cssOverrides={[
-					boxShorterMargin,
-					hoistPriceCardsAmountsBenefitsContainer,
-				]}
-			>
+		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute}>
+			<Box cssOverrides={[boxShorterMargin, boxHoist]}>
 				{displayLimitedPriceCards ? (
 					<LimitedPriceCards />
+				) : displayPatronsCheckout ? (
+					<PatronsPriceCards />
 				) : (
 					<AmountAndBenefits
 						countryGroupId={countryGroupId}
@@ -168,6 +158,7 @@ export function SupporterPlusInitialLandingPage({
 						isCompactBenefitsList
 					/>
 				)}
+
 				<div css={checkoutBtnAndPaymentIconsHolder}>
 					<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 						<Button

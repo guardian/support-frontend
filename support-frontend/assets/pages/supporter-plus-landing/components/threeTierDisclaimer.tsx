@@ -42,7 +42,7 @@ export function ThreeTierDisclaimer({
 					</p>
 					<p>
 						Offer only available to new subscribers who do not have an existing
-						subscription with the Guardian
+						subscription with the Guardian.
 					</p>
 				</div>
 			)}
