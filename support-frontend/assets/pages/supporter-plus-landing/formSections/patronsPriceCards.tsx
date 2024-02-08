@@ -10,12 +10,12 @@ import type { CountryGroupId } from '../../../helpers/internationalisation/count
 
 const REGIONAL_AMOUNTS: Record<CountryGroupId, string[]> = {
 	GBPCountries: ['300', '350', '500', '1000'],
-	UnitedStates: ['300', '350', '500', '1000'],
-	AUDCountries: ['300', '350', '500', '1000'],
-	Canada: ['300', '350', '500', '1000'],
-	NZDCountries: ['300', '350', '500', '1000'],
-	International: ['300', '350', '500', '1000'],
-	EURCountries: ['300', '350', '500', '1000'],
+	UnitedStates: ['250', '350', '500', '1000'],
+	EURCountries: ['350', '400', '600', '1200'],
+	AUDCountries: ['500', '700', '1000', '2000'],
+	Canada: ['500', '600', '800', '1500'],
+	NZDCountries: ['500', '700', '1000', '2000'],
+	International: ['250', '350', '500', '1000'],
 };
 
 export function PatronsPriceCards(): JSX.Element {
