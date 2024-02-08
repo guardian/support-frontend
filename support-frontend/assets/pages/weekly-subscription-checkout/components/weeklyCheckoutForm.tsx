@@ -45,10 +45,7 @@ import {
 	currencyFromCountryCode,
 } from 'helpers/internationalisation/currency';
 import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
-import {
-	billingPeriodNoun,
-	weeklyBillingPeriods,
-} from 'helpers/productPrice/billingPeriods';
+import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
@@ -196,20 +193,16 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.billingCountry,
 	);
 
-	// Quarterly & other billing periods not available in 3-tier ab-test
-	const billingPeriodNounLowerCase =
-		billingPeriodNoun(props.billingPeriod) === 'Annual' ? 'year' : 'month';
-	const digitalPlusPrintBillingPeriod =
+	const tierBillingPeriod = props.billingPeriod === 'Annual' ? 'year' : 'month';
+	const tierBillingPeriodName =
 		props.billingPeriod === 'Annual' ? 'annual' : 'monthly';
 
 	const standardDigitalPlusPrintPrice =
-		tierCards.tier3.plans[digitalPlusPrintBillingPeriod].charges[
-			props.countryGroupId
-		].price;
+		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
+			.price;
 	const digitalPlusPrintPotentialDiscount =
-		tierCards.tier3.plans[digitalPlusPrintBillingPeriod].charges[
-			props.countryGroupId
-		].discount;
+		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
+			.discount;
 
 	const publicationStartDays = days.filter((day) => {
 		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
@@ -239,7 +232,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							<DigitalPlusPrintSummary
 								total={standardDigitalPlusPrintPrice}
 								currencySymbol={currencies[props.price.currency].glyph}
-								paymentFrequency={billingPeriodNounLowerCase}
+								paymentFrequency={tierBillingPeriod}
 								discount={potentialDiscount}
 								startDateGW={formatUserDate(publicationStartDays[0])}
 							/>
@@ -441,7 +434,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 									? `Pay ${currencies[props.price.currency].glyph}${
 											digitalPlusPrintPotentialDiscount?.price ??
 											standardDigitalPlusPrintPrice
-									  } per ${billingPeriodNounLowerCase}`
+									  } per ${tierBillingPeriod}`
 									: 'Pay now'
 							}
 							csrf={props.csrf}
@@ -496,10 +489,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					{inThreeTierTestVariant ? (
 						<ThreeTierTerms
 							paymentMethod={props.paymentMethod}
-							total={standardDigitalPlusPrintPrice}
-							currencySymbol={currencies[props.price.currency].glyph}
-							paymentFrequency={billingPeriodNounLowerCase}
-							discount={potentialDiscount}
+							paymentFrequency={tierBillingPeriod}
 						/>
 					) : (
 						<PaymentTerms paymentMethod={props.paymentMethod} />

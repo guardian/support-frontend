@@ -163,6 +163,11 @@ export function SupporterPlusCheckout({
 						currency={currencyId}
 						amount={amount}
 						amountIsAboveThreshold={amountIsAboveThreshold}
+						productNameAboveThreshold={
+							isInThreeTierCheckoutTest
+								? 'All-access digital'
+								: 'Supporter Plus'
+						}
 					/>
 				</BoxContents>
 			</Box>
