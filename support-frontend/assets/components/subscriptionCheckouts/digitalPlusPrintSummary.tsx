@@ -242,7 +242,9 @@ export function DigitalPlusPrintSummary({
 						You’ll pay {currencySymbol}
 						{discount?.total ?? total}/{paymentFrequency}
 						{discount &&
-							` for ${discount.duration} ${discount.period}${
+							` for the first ${
+								discount.duration > 1 ? discount.duration : ''
+							} ${discount.period}${
 								discount.duration > 1 ? 's' : ''
 							}, then ${currencySymbol}${total}/${paymentFrequency} afterwards unless you cancel. Offer only available to new subscribers who do not have an existing subscription with the Guardian.`}
 					</li>
