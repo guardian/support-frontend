@@ -9,11 +9,13 @@ import { privacyLink, subscriptionsTermsLinks } from 'helpers/legal';
 const threeTierTerms = css`
 	${textSans.xxsmall()};
 	color: #606060;
-	:visited {
-		color: #606060;
-	}
 	p {
 		margin-top: 10px;
+		a {
+			:visited {
+				color: #606060;
+			}
+		}
 	}
 `;
 
