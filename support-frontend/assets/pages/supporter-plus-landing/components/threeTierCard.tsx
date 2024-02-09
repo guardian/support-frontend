@@ -150,11 +150,11 @@ const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
 				? 1
 				: planCost.discount.duration.value;
 
-		return `${currency}${planCost.discount.price} for the first ${
-			duration > 1 ? duration : ''
-		} ${recurringContributionPeriodMap[period]}${
-			duration > 1 ? 's' : ''
-		}, then ${currency}${planCost.price}/${
+		return `${currency}${planCost.discount.price}/${
+			recurringContributionPeriodMap[planCost.discount.duration.period]
+		} for the first ${duration > 1 ? duration : ''} ${
+			recurringContributionPeriodMap[period]
+		}${duration > 1 ? 's' : ''}, then ${currency}${planCost.price}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
 		}`;
 	}
