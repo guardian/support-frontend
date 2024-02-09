@@ -218,7 +218,7 @@ export function DigitalPlusPrintSummary({
 				<hgroup css={subTitleAndDescription(showDetailsStatus)}>
 					<h3>Digital + print</h3>
 					<p>
-						All benefits from All-access digital + Guardian Weekly print
+						All benefits from All-access digital, plus Guardian Weekly print
 						magazine delivered to your door.
 					</p>
 				</hgroup>
@@ -242,18 +242,20 @@ export function DigitalPlusPrintSummary({
 						You’ll pay {currencySymbol}
 						{discount?.total ?? total}/{paymentFrequency}
 						{discount &&
-							` for ${discount.duration} ${discount.period}${
+							` for the first ${
+								discount.duration > 1 ? discount.duration : ''
+							} ${discount.period}${
 								discount.duration > 1 ? 's' : ''
-							}, then ${currencySymbol}${total}/${paymentFrequency}.`}
+							}, then ${currencySymbol}${total}/${paymentFrequency} afterwards unless you cancel. Offer only available to new subscribers who do not have an existing subscription with the Guardian.`}
 					</li>
 					<li>Auto renews every {paymentFrequency}. Cancel anytime.</li>
 				</ul>
 				<ul css={productStartDates(showDetailsStatus)}>
 					<li>Your digital benefits will start today.</li>
 					<li>
-						Your Guardian Weekly subscription will start on {startDateGW}.
-						Please allow 1 to 7 days after your start date for your magazine to
-						arrive, depending on national post services.
+						Your first issue of Guardian Weekly will be published on{' '}
+						{startDateGW}. Please allow 1 to 7 days after publication date for
+						your magazine to arrive, depending on national post services.
 					</li>
 				</ul>
 			</div>
@@ -267,10 +269,7 @@ export function DigitalPlusPrintSummary({
 					)}
 				</button>
 				<ThemeProvider theme={linkThemeDefault}>
-					<Link
-						href="/contribute#ab-threeTierCheckout=variant"
-						cssOverrides={changeSubscriptionLink}
-					>
+					<Link href="/contribute" cssOverrides={changeSubscriptionLink}>
 						Change subscription
 					</Link>
 				</ThemeProvider>

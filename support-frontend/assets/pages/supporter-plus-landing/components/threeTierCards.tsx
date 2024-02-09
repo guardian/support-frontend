@@ -15,7 +15,7 @@ interface ThreeTierCardsProps {
 	}>;
 	currency: string;
 	paymentFrequency: RegularContributionType;
-	cardsCtaClickHandler: (price: number) => void;
+	cardsCtaClickHandler: (price: number, cardTier: 1 | 2 | 3) => void;
 }
 
 const container = (cardCount: number) => css`
@@ -35,6 +35,18 @@ const container = (cardCount: number) => css`
 	}
 `;
 
+const cardIndexToTier = (index: number): 1 | 2 | 3 => {
+	switch (index) {
+		case 1:
+			return 2;
+		case 2:
+			return 3;
+		case 0:
+		default:
+			return 1;
+	}
+};
+
 export function ThreeTierCards({
 	cardsContent,
 	currency,
@@ -46,10 +58,16 @@ export function ThreeTierCards({
 			.length > 1;
 
 	return (
-		<div css={container(cardsContent.length)}>
+		<div
+			css={container(cardsContent.length)}
+			role="tabpanel"
+			id={`${paymentFrequency}-tab`}
+			aria-labelledby={`${paymentFrequency}`}
+		>
 			{cardsContent.map((cardContent, cardIndex) => {
 				return (
 					<ThreeTierCard
+						cardTier={cardIndexToTier(cardIndex)}
 						key={`threeTierCard${cardIndex}`}
 						{...cardContent}
 						isRecommendedSubdued={haveRecommendedAndSelectedCards}

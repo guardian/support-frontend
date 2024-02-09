@@ -43,8 +43,9 @@ const tier1: TierCard = {
 	title: 'Support',
 	benefits: {
 		list: [
-			{ copy: 'Regular supporter newsletter from inside our newsroom' },
-			{ copy: 'See far fewer asks for support' },
+			{
+				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+			},
 		],
 	},
 	plans: {
@@ -80,20 +81,22 @@ const tier1: TierCard = {
 };
 
 const tier2: TierCard = {
-	title: 'All access digital',
+	title: 'All-access digital',
 	isRecommended: true,
 	benefits: {
 		list: [
 			{
-				copy: 'Full access to the Guardian News app',
-				tooltip:
-					'With offline reading and personalised recommendations, never miss a story with the Guardian News app – a beautiful, intuitive reading experience that you can access anywhere',
+				copy: 'Unlimited access to the Guardian app',
+				tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
 			},
-			{ copy: 'Ad-free reading on all your digital devices' },
+			{ copy: 'Ad-free reading on all your devices' },
 			{
-				copy: 'Regular supporter newsletter from inside our newsroom',
+				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
 			},
-			{ copy: 'See far fewer asks for support' },
+			{
+				copy: 'Far fewer asks for support',
+				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
+			},
 		],
 	},
 	plans: {
@@ -132,14 +135,13 @@ const tier3: TierCard = {
 	title: 'Digital + print',
 	benefits: {
 		description: [
-			'All features of ',
-			{ strong: true, copy: 'All access digital' },
+			'The rewards from ',
+			{ strong: true, copy: 'All-access digital' },
 		],
 		list: [
 			{
-				copy: 'Guardian Weekly magazine delivered to your door every week',
-				tooltip:
-					'Guardian Weekly is a handpicked selection of in-depth articles, global news, long reads, opinion and more. In a beautifully concise magazine, it is delivered to you every every, wherever you are in the world.',
+				copy: 'Guardian Weekly print magazine delivered to your door every week  ',
+				tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 			},
 		],
 	},
@@ -169,7 +171,7 @@ const tier3: TierCard = {
 					},
 				},
 				International: {
-					price: 49,
+					price: 46,
 					promoCode: '3TIER_WEEKLY_INT_MONTHLY',
 					discount: {
 						percentage: 26.09,

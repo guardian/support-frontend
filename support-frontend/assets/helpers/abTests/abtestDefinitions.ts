@@ -45,6 +45,24 @@ export const pageUrlRegexes = {
 };
 
 export const tests: Tests = {
+	patronsOneOffOnly: {
+		variants: [
+			// not really an AB test
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		isActive: true,
+		referrerControlled: true,
+		seed: 1,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+	},
 	supporterPlusOnly: {
 		variants: [
 			{
@@ -103,6 +121,7 @@ export const tests: Tests = {
 		},
 		omitCountries: countriesAffectedByVATStatus,
 		referrerControlled: false,
+		excludeIfInReferrerControlledTest: true,
 		seed: 0,
 
 		/**
