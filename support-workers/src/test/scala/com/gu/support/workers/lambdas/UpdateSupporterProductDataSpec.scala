@@ -21,33 +21,36 @@ import scala.io.Source
 class UpdateSupporterProductDataSpec extends AnyFlatSpec {
 
   "UpdateSupporterProductData" should "not insert an item into Dynamo for a digisub gift purchase" in {
-    val state = decode[SendThankYouEmailState](digitalSusbcriptionGiftPurchaseState)
-    state.isRight shouldBe true
-    val supporterRatePlanItem = UpdateSupporterProductData
-      .getSupporterRatePlanItemFromState(state.toOption.get, serviceWithFixtures)
-    inside(supporterRatePlanItem) { case Right(value) =>
-      value shouldBe None
+    val maybeState = decode[SendThankYouEmailState](digitalSusbcriptionGiftPurchaseState)
+    inside(maybeState) { case Right(state) =>
+      val supporterRatePlanItem =
+        UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures)
+      inside(supporterRatePlanItem) { case Right(value) =>
+        value shouldBe None
+      }
     }
   }
 
   "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a digisub gift redemption" in {
-    val state = decode[SendThankYouEmailState](digitalSubscriptionGiftRedemptionState)
-    state.isRight shouldBe true
-    val supporterRatePlanItem = UpdateSupporterProductData
-      .getSupporterRatePlanItemFromState(state.toOption.get, serviceWithFixtures)
-    inside(supporterRatePlanItem) { case Right(item) =>
-      item.value.identityId shouldBe "102803446"
+    val maybeState = decode[SendThankYouEmailState](digitalSubscriptionGiftRedemptionState)
+    inside(maybeState) { case Right(state) =>
+      val supporterRatePlanItem =
+        UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures)
+      inside(supporterRatePlanItem) { case Right(item) =>
+        item.value.identityId shouldBe "102803446"
+      }
     }
   }
 
   "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a Supporter Plus purchase" in {
-    val state = decode[SendThankYouEmailState](supporterPlusState)
-    state.isRight shouldBe true
-    val supporterRatePlanItem = UpdateSupporterProductData
-      .getSupporterRatePlanItemFromState(state.toOption.get, serviceWithFixtures)
-    inside(supporterRatePlanItem) { case Right(item) =>
-      item.value.identityId shouldBe "200092951"
-      item.value.contributionAmount shouldBe Some(ContributionAmount(12, "GBP"))
+    val maybeState = decode[SendThankYouEmailState](supporterPlusState)
+    inside(maybeState) { case Right(state) =>
+      val supporterRatePlanItem =
+        UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures)
+      inside(supporterRatePlanItem) { case Right(item) =>
+        item.value.identityId shouldBe "200092951"
+        item.value.contributionAmount shouldBe Some(ContributionAmount(12, "GBP"))
+      }
     }
   }
 }
@@ -93,6 +96,14 @@ object UpdateSupporterProductDataSpec {
             "PaymentGateway": "Stripe PaymentIntents GNM Membership",
             "Type": "CreditCardReferenceTransaction",
             "StripePaymentType": "StripeCheckout"
+          },
+          "paymentSchedule": {
+            "payments": [
+              {
+                "date": "2024-01-08",
+                "amount": 20
+              }
+            ]
           },
           "accountNumber": "A00485141",
           "subscriptionNumber": "A-S00489451",

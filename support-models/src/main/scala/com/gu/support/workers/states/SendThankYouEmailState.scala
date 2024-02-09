@@ -33,6 +33,8 @@ object SendThankYouEmailState {
       user: User,
       product: SupporterPlus,
       paymentMethod: PaymentMethod,
+      paymentSchedule: PaymentSchedule,
+      promoCode: Option[PromoCode],
       accountNumber: String,
       subscriptionNumber: String,
   ) extends SendThankYouEmailState

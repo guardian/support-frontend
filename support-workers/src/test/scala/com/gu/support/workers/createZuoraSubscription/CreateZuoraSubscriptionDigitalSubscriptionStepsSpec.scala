@@ -1,15 +1,11 @@
-package com.gu.support.workers
+package com.gu.support.workers.createZuoraSubscription
 
-import com.gu.helpers
 import com.gu.helpers.DateGenerator
-import com.gu.i18n.Country.Australia
-import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, Currency}
 import com.gu.support.config.{TouchPointEnvironments, ZuoraDigitalPackConfig, ZuoraInvoiceTemplatesConfig}
-
-import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.DigitalSubscriptionDirectPurchaseState
 import com.gu.support.workers.states.SendThankYouEmailState.SendThankYouEmailDigitalSubscriptionDirectPurchaseState
+import com.gu.support.workers._
 import com.gu.support.zuora.api.response._
 import com.gu.support.zuora.api.{PreviewSubscribeRequest, ReaderType, SubscribeRequest}
 import com.gu.support.zuora.domain
@@ -24,7 +20,7 @@ import org.scalatest.matchers.should.Matchers
 import java.util.UUID
 import scala.concurrent.Future
 
-class CreateZuoraSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
+class CreateZuoraSubscriptionDigitalSubscriptionStepsSpec extends AsyncFlatSpec with Matchers {
 
   val invoiceTemplateIds = ZuoraInvoiceTemplatesConfig(
     auTemplateId = "auInvoiceTemplateId",

@@ -60,6 +60,12 @@ export function DefaultPaymentButtonContainer({
 		(state) => state.common.internationalisation,
 	);
 
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
+	);
+	const isInThreeTierCheckoutTest =
+		abParticipations.threeTierCheckout === 'variant';
+
 	const testId = 'qa-contributions-landing-submit-contribution-button';
 
 	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
@@ -73,7 +79,7 @@ export function DefaultPaymentButtonContainer({
 		? 'Pay now'
 		: createButtonText(
 				amountWithCurrency,
-				amountIsAboveThreshold,
+				amountIsAboveThreshold || isInThreeTierCheckoutTest,
 				contributionTypeToPaymentInterval[contributionType],
 		  );
 

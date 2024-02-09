@@ -38,6 +38,7 @@ interface PaymentTsAndCsProps {
 	currency: IsoCurrency;
 	amount: number;
 	amountIsAboveThreshold: boolean;
+	productNameAboveThreshold: string;
 }
 
 const manageMyAccount = (
@@ -110,6 +111,7 @@ export function PaymentTsAndCs({
 	currency,
 	amount,
 	amountIsAboveThreshold,
+	productNameAboveThreshold,
 }: PaymentTsAndCsProps): JSX.Element {
 	const amountCopy = isNaN(amount)
 		? null
@@ -158,29 +160,33 @@ export function PaymentTsAndCs({
 		)}`;
 	};
 
-	const copyAboveThreshold = (contributionType: ContributionType) => {
+	const copyAboveThreshold = (
+		contributionType: ContributionType,
+		productNameAboveThreshold: string,
+	) => {
 		return (
 			<>
 				<div>
 					If you pay at least {thresholdDescription('MONTHLY')} or{' '}
-					{thresholdDescription('ANNUAL')}, you will receive the Supporter Plus
-					benefits on a subscription basis. If you pay more than{' '}
-					{thresholdDescription(contributionType)}, these additional amounts
-					will be separate {frequencyPlural(contributionType)} voluntary
-					financial contributions to the Guardian. The Supporter Plus
-					subscription and any contributions will auto-renew each{' '}
+					{thresholdDescription('ANNUAL')}, you will receive the{' '}
+					{productNameAboveThreshold} benefits on a subscription basis. If you
+					pay more than {thresholdDescription(contributionType)}, these
+					additional amounts will be separate{' '}
+					{frequencyPlural(contributionType)} voluntary financial contributions
+					to the Guardian. The {productNameAboveThreshold} subscription and any
+					contributions will auto-renew each{' '}
 					{frequencySingular(contributionType)}. You will be charged the
 					subscription and contribution amounts using your chosen payment method
 					at each renewal unless you cancel. You can cancel your subscription or
 					change your contributions at any time before your next renewal date.
-					If you cancel within 14 days of taking out a Supporter Plus
-					subscription, you’ll receive a full refund (including of any
-					contributions) and your subscription and any contribution will stop
-					immediately. Cancellation of your subscription (which will also cancel
-					any contribution) or cancellation of your contribution made after 14
-					days will take effect at the end of your current{' '}
-					{frequencyPlural(contributionType)} payment period. To cancel, go to{' '}
-					{manageMyAccount} or see our {termsSupporterPlus('Terms')}.
+					If you cancel within 14 days of taking out a{' '}
+					{productNameAboveThreshold} subscription, you’ll receive a full refund
+					(including of any contributions) and your subscription and any
+					contribution will stop immediately. Cancellation of your subscription
+					(which will also cancel any contribution) or cancellation of your
+					contribution made after 14 days will take effect at the end of your
+					current {frequencyPlural(contributionType)} payment period. To cancel,
+					go to {manageMyAccount} or see our {termsSupporterPlus('Terms')}.
 				</div>
 				<TsAndCsFooterLinks
 					countryGroupId={countryGroupId}
@@ -205,7 +211,7 @@ export function PaymentTsAndCs({
 		return (
 			<div css={container}>
 				{amountIsAboveThreshold
-					? copyAboveThreshold(contributionType)
+					? copyAboveThreshold(contributionType, productNameAboveThreshold)
 					: copyBelowThreshold(contributionType)}
 			</div>
 		);
@@ -214,7 +220,7 @@ export function PaymentTsAndCs({
 	return (
 		<div css={container}>
 			{amountIsAboveThreshold
-				? copyAboveThreshold(contributionType)
+				? copyAboveThreshold(contributionType, productNameAboveThreshold)
 				: copyBelowThreshold(contributionType)}
 		</div>
 	);
