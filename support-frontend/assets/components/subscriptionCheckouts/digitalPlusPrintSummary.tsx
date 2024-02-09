@@ -269,10 +269,7 @@ export function DigitalPlusPrintSummary({
 					)}
 				</button>
 				<ThemeProvider theme={linkThemeDefault}>
-					<Link
-						href="/contribute#ab-threeTierCheckout=variant"
-						cssOverrides={changeSubscriptionLink}
-					>
+					<Link href="/contribute" cssOverrides={changeSubscriptionLink}>
 						Change subscription
 					</Link>
 				</ThemeProvider>
