@@ -68,6 +68,8 @@ export type Test = {
 	// In particular this allows 3rd party tests to be identified and tracked in support-frontend
 	// without too much "magic" involving the shared mvtId.
 	referrerControlled: boolean;
+	// If another test participation is referrerControlled, exclude this test
+	excludeIfInReferrerControlledTest?: boolean;
 	seed: number;
 	// An optional regex that will be tested against the path of the current page
 	// before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
@@ -174,6 +176,19 @@ function getParticipations(
 
 		participations[testId] = test.variants[variantAssignment.variantIndex].id;
 	});
+
+	// If referrerControlled is set for any test, exclude tests that have excludeIfInReferrerControlledTest set
+	const inReferrerControlledTest = Object.keys(participations).some(
+		(testId) => abTests[testId].referrerControlled,
+	);
+	if (inReferrerControlledTest) {
+		Object.keys(participations).forEach((testId) => {
+			if (abTests[testId].excludeIfInReferrerControlledTest) {
+				delete participations[testId];
+			}
+		});
+	}
+
 	return participations;
 }
 

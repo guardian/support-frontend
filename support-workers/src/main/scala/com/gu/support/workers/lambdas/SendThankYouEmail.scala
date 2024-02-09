@@ -74,7 +74,12 @@ class EmailBuilder(
     val paperEmailFields = new PaperEmailFields(paperFieldsGenerator, touchpointEnvironment)
     val guardianWeeklyEmailFields = new GuardianWeeklyEmailFields(paperFieldsGenerator, touchpointEnvironment)
     val contributionEmailFields = new ContributionEmailFields(getMandate, created = DateTime.now())
-    val supporterPlusEmailFields = new SupporterPlusEmailFields(getMandate, created = DateTime.now())
+    val supporterPlusEmailFields = new SupporterPlusEmailFields(
+      paperFieldsGenerator,
+      getMandate,
+      touchpointEnvironment,
+      created = DateTime.now(),
+    )
 
     state match {
       case contribution: SendThankYouEmailContributionState => contributionEmailFields.build(contribution).map(List(_))

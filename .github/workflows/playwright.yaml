@@ -5,7 +5,7 @@ on:
     types: [labeled] # Only run when a PR is labeled with the 'Seen-on-PROD' label set by prout
 
 concurrency:
-  group: 'playwright-${{ github.head_ref }}'
+  group: "playwright-${{ github.head_ref }}"
   cancel-in-progress: true
 
 jobs:
@@ -14,11 +14,11 @@ jobs:
     name: Playwright
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    env :
-      BROWSERSTACK_USERNAME : ${{ secrets.BROWSERSTACK_USERNAME }}
-      BROWSERSTACK_ACCESS_KEY : ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-      GOOGLE_CHAT_WEB_HOOK : ${{ secrets.GOOGLE_CHAT_WEB_HOOK }}
-      PAYPAL_TEST_PASSWORD : ${{secrets.PAYPAL_TEST_PASSWORD}}
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      GOOGLE_CHAT_WEB_HOOK: ${{ secrets.GOOGLE_CHAT_WEB_HOOK }}
+      PAYPAL_TEST_PASSWORD: ${{ secrets.PAYPAL_TEST_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,7 +26,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: ".nvmrc"
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -41,5 +41,4 @@ jobs:
         run: |
           echo "Tests have failed - calling webhook"
           failedWorkflowRun="https://github.com/guardian/support-frontend/actions/runs/$GITHUB_RUN_ID"
-          curl -X POST -H 'Content-Type: application/json' '$GOOGLE_CHAT_WEB_HOOK' -d '{"text": "❌ The Playwright post deployment tests for support frontend have failed! <users/all> \n \n 👉 <'"$failedWorkflowRun"'|Workflow run> \n 🤖 <https://automate.browserstack.com/dashboard/v2/builds/31f35a1d9bccc9d45360aa7bfd651fcd9e1499d0|Browser stack test results> \n \n 📖 <https://github.com/guardian/support-frontend/wiki/Post-deployment-test-runbook|Check the runbook for a step by step guide>"}'
-
+          curl -X POST -H "Content-Type: application/json" "$GOOGLE_CHAT_WEB_HOOK" -d '{"text": "🚨 The Playwright post deployment tests for support frontend have failed! <users/all> \n \n 👉 <'"$failedWorkflowRun"'|Workflow run> \n 🤖 <https://automate.browserstack.com/dashboard/v2/builds/31f35a1d9bccc9d45360aa7bfd651fcd9e1499d0|Browser stack test results> \n \n 📖 <https://github.com/guardian/support-frontend/wiki/Post-deployment-test-runbook|Check the runbook for a step by step guide>"}'
