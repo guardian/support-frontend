@@ -17,20 +17,19 @@ class SupporterPlusEmailFields(
 
   def build(
       state: SendThankYouEmailSupporterPlusState,
-  )(implicit ec: ExecutionContext): Future[EmailFields] = {
+  )(implicit ec: ExecutionContext): Future[EmailFields] =
     getPaymentFields(
       state.paymentMethod,
       state.accountNumber,
       created,
     ).map { paymentFields =>
-      import state._
       val promotion = paperFieldsGenerator.getAppliedPromotion(
         state.promoCode,
         state.user.billingAddress.country,
         ProductTypeRatePlans.supporterPlusRatePlan(state.product, touchPointEnvironment).map(_.id).getOrElse(""),
       )
       val subscription_details = SubscriptionEmailFieldHelpers
-        .describe(paymentSchedule, product.billingPeriod, product.currency, promotion)
+        .describe(state.paymentSchedule, state.product.billingPeriod, state.product.currency, promotion)
       val fields = List(
         "email_address" -> state.user.primaryEmailAddress,
         "created" -> created.toString,
@@ -46,7 +45,6 @@ class SupporterPlusEmailFields(
 
       EmailFields(fields, state.user, "supporter-plus")
     }
-  }
 
   def getPaymentFields(paymentMethod: PaymentMethod, accountNumber: String, created: DateTime)(implicit
       ec: ExecutionContext,
