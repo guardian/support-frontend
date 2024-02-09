@@ -112,6 +112,7 @@ export function SupporterPlusCheckout({
 						<ContributionsPriceCards />
 					) : (
 						<ContributionsOrderSummaryContainer
+							inThreeTier={isInThreeTierCheckoutTest}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}
@@ -163,6 +164,11 @@ export function SupporterPlusCheckout({
 						currency={currencyId}
 						amount={amount}
 						amountIsAboveThreshold={amountIsAboveThreshold}
+						productNameAboveThreshold={
+							isInThreeTierCheckoutTest
+								? 'All-access digital'
+								: 'Supporter Plus'
+						}
 					/>
 				</BoxContents>
 			</Box>

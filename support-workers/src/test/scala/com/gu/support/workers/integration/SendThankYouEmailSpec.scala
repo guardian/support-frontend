@@ -12,7 +12,7 @@ import com.gu.support.config.TouchPointEnvironments.CODE
 import com.gu.support.config.{PromotionsConfig, PromotionsDiscountConfig, PromotionsTablesConfig}
 import com.gu.support.paperround.AgentId
 import com.gu.support.paperround.AgentsEndpoint.AgentDetails
-import com.gu.support.promotions.{PromotionService, SimplePromotionCollection}
+import com.gu.support.promotions.{AppliesTo, DiscountBenefit, Promotion, PromotionService, SimplePromotionCollection}
 import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
 import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventJson, wrapFixture}
 import com.gu.support.workers._
@@ -29,7 +29,7 @@ import com.gu.threadpools.CustomPool.executionContext
 import io.circe.Json
 import io.circe.generic.auto._
 import io.circe.parser._
-import org.joda.time.{DateTime, LocalDate}
+import org.joda.time.{DateTime, LocalDate, Months}
 import org.mockito.ArgumentMatchers.any
 
 import scala.concurrent.duration.Duration
@@ -101,6 +101,7 @@ object SendThankYouEmailManualTest {
 
   def main(args: Array[String]): Unit = {
     SendContributionEmail.main(args)
+    SendSupporterPlusEmail.main(args)
     SendDigitalPackEmail.main(args)
     SendDigitalPackGiftPurchaseEmails.main(args)
     SendDigitalPackGiftRedemptionEmail.main(args)
@@ -137,6 +138,40 @@ object SendContributionEmail extends App {
   sendSingle(ef)
 
 }
+
+object SendSupporterPlusEmail extends App {
+
+  val supporterPlusPaymentSchedule = PaymentSchedule(
+    List(
+      Payment(new LocalDate(2024, 1, 8), 10),
+      Payment(new LocalDate(2024, 2, 8), 10),
+      Payment(new LocalDate(2024, 3, 8), 20),
+      Payment(new LocalDate(2024, 4, 8), 20),
+      Payment(new LocalDate(2024, 5, 8), 20),
+      Payment(new LocalDate(2024, 6, 8), 20),
+    ),
+  )
+
+  val ef = new SupporterPlusEmailFields(
+    new PaperFieldsGenerator(supporterPlusPromotionService, getMandate),
+    getMandate,
+    CODE,
+    new DateTime(1999, 12, 31, 11, 59),
+  ).build(
+    SendThankYouEmailSupporterPlusState(
+      billingOnlyUser,
+      SupporterPlus(20, GBP, Monthly),
+      directDebitPaymentMethod,
+      supporterPlusPaymentSchedule,
+      Some("SUPPORTER_PLUS_PROMO"),
+      acno,
+      subno,
+    ),
+  )
+  sendSingle(ef)
+
+}
+
 object SendDigitalPackEmail extends App {
 
   send(
@@ -308,6 +343,32 @@ object TestData {
   )
 
   val getMandate = (_: String) => Future.successful(Some("65HK26E"))
+
+  val supporterPlusPromotionService = new PromotionService(
+    PromotionsConfig(PromotionsDiscountConfig("", ""), PromotionsTablesConfig("", "")),
+    Some(
+      new SimplePromotionCollection(
+        List(
+          Promotion(
+            name = "supporter+",
+            description = "descpromo",
+            appliesTo = AppliesTo(Set("8a128ed885fc6ded018602296ace3eb8" /*s+*/ ), Set(Country.UK)),
+            campaignCode = "ccode",
+            channelCodes = Map("webchannel" -> Set("SUPPORTER_PLUS_PROMO")),
+            starts = DateTime.now,
+            expires = None,
+            discount = Some(DiscountBenefit(80d, Some(Months.months(3)))),
+            freeTrial = None,
+            incentive = None,
+            introductoryPrice = None,
+            renewalOnly = false,
+            tracking = false,
+            landingPage = None,
+          ),
+        ),
+      ),
+    ),
+  )
 
   val promotionService = new PromotionService(
     PromotionsConfig(PromotionsDiscountConfig("", ""), PromotionsTablesConfig("", "")),
