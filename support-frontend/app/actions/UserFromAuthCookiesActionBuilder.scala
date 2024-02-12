@@ -206,7 +206,10 @@ object UserFromAuthCookiesActionBuilder extends Logging {
             identityId = defaultClaims.identityId,
             firstName = unparsedClaims.getOptional("first_name"),
             lastName = unparsedClaims.getOptional("last_name"),
-            iat = unparsedClaims.getOptional[Long]("iat"),
+            iat = unparsedClaims.rawClaims.get("iat").map {
+              case iat: java.lang.Integer => iat.toLong
+              case iat: java.lang.Long => iat.toLong
+            }
           ),
         )
     }
