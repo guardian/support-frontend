@@ -34,7 +34,7 @@ class SupporterPlusSubcriptionBuilder(
       else config.v2.annualContributionChargeId
     val todaysDate = dateGenerator.today
 
-    val contributionAmount = state.product.preDiscountAmount - getBaseProductPrice(productRatePlanId, state.product.currency)
+    val contributionAmount = state.product.nonDiscountedAmount - getBaseProductPrice(productRatePlanId, state.product.currency)
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId = productRatePlanId,
       ratePlanCharges = List(

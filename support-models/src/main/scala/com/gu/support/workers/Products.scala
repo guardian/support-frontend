@@ -31,11 +31,11 @@ case class Contribution(
 }
 
 case class SupporterPlus(
-    preDiscountAmount: BigDecimal,
+    nonDiscountedAmount: BigDecimal,
     currency: Currency,
     billingPeriod: BillingPeriod,
 ) extends ProductType {
-  override def describe: String = s"$billingPeriod-SupporterPlus-$currency-$preDiscountAmount"
+  override def describe: String = s"$billingPeriod-SupporterPlus-$currency-$nonDiscountedAmount"
 }
 
 case class DigitalPack(
