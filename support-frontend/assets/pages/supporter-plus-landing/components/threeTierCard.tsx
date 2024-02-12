@@ -12,7 +12,14 @@ import {
 	LinkButton,
 } from '@guardian/source-react-components';
 import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
-import type { RegularContributionType } from 'helpers/contributions';
+import type {
+	ContributionType,
+	RegularContributionType,
+} from 'helpers/contributions';
+import {
+	currencies,
+	type IsoCurrency,
+} from 'helpers/internationalisation/currency';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
@@ -25,9 +32,14 @@ interface ThreeTierCardProps {
 	isUserSelected: boolean;
 	benefits: TierBenefits;
 	planCost: TierPlanCosts;
-	currency: string;
+	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
-	cardCtaClickHandler: (price: number, cardTier: 1 | 2 | 3) => void;
+	cardCtaClickHandler: (
+		price: number,
+		cardTier: 1 | 2 | 3,
+		contributionType: ContributionType,
+		contributionCurrency: IsoCurrency,
+	) => void;
 	externalBtnLink?: string;
 }
 
@@ -168,11 +180,12 @@ export function ThreeTierCard({
 	isRecommendedSubdued,
 	isUserSelected,
 	benefits,
-	currency,
+	currencyId,
 	paymentFrequency,
 	cardCtaClickHandler,
 	externalBtnLink,
 }: ThreeTierCardProps): JSX.Element {
+	const currency = currencies[currencyId].glyph;
 	const currentPrice = planCost.discount?.price ?? planCost.price;
 	const previousPriceCopy =
 		!!planCost.discount && `${currency}${planCost.price}`;
@@ -205,7 +218,14 @@ export function ThreeTierCard({
 						priority="primary"
 						size="default"
 						cssOverrides={btnStyleOverrides}
-						onClick={() => cardCtaClickHandler(currentPrice, cardTier)}
+						onClick={() =>
+							cardCtaClickHandler(
+								currentPrice,
+								cardTier,
+								paymentFrequency,
+								currencyId,
+							)
+						}
 					>
 						Subscribe
 					</Button>

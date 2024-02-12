@@ -20,7 +20,10 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
-import type { RegularContributionType } from 'helpers/contributions';
+import type {
+	ContributionType,
+	RegularContributionType,
+} from 'helpers/contributions';
 import {
 	AUDCountries,
 	Canada,
@@ -30,6 +33,7 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
@@ -42,6 +46,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
+import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierDisclaimer } from '../components/threeTierDisclaimer';
@@ -255,7 +260,12 @@ export function ThreeTierLanding(): JSX.Element {
 		dispatch(setProductType(paymentFrequencies[buttonIndex]));
 	};
 
-	const handleCardCtaClick = (price: number, cardTier: 1 | 2 | 3) => {
+	const handleCardCtaClick = (
+		price: number,
+		cardTier: 1 | 2 | 3,
+		contributionType: ContributionType,
+		contributionCurrency: IsoCurrency,
+	) => {
 		dispatch(
 			setSelectedAmount({
 				contributionType,
@@ -266,6 +276,11 @@ export function ThreeTierLanding(): JSX.Element {
 			navigate,
 			generateTierCheckoutLink(cardTier),
 			abParticipations,
+		);
+		sendEventContributionCartValue(
+			price.toString(),
+			contributionType,
+			contributionCurrency,
 		);
 	};
 
@@ -402,7 +417,7 @@ export function ThreeTierLanding(): JSX.Element {
 								externalBtnLink: generateTierCheckoutLink(3),
 							},
 						]}
-						currency={currencies[currencyId].glyph}
+						currencyId={currencyId}
 						paymentFrequency={contributionType}
 						cardsCtaClickHandler={handleCardCtaClick}
 					/>

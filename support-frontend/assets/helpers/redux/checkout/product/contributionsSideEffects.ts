@@ -37,7 +37,10 @@ export function addProductSideEffects(
 			const { contributionAmount, contributionType, contributionCurrency } =
 				getContributionCartValueData(listenerApi.getState());
 
-			if (contributionAmount) {
+			const { abParticipations } = listenerApi.getState().common;
+			const inThreeTierVariant =
+				abParticipations.threeTierCheckout === 'variant';
+			if (contributionAmount && !inThreeTierVariant) {
 				sendEventContributionCartValue(
 					contributionAmount.toString(),
 					contributionType,
