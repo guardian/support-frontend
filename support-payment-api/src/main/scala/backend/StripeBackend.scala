@@ -20,7 +20,7 @@ import model._
 import model.acquisition.{AcquisitionDataRowBuilder, StripeAcquisition}
 import model.db.ContributionData
 import model.email.ContributorRow
-import model.stripe.StripeApiError.{invalidEmailAddress, recaptchaErrorText, stripeDisabledErrorText}
+import model.stripe.StripeApiError.{recaptchaErrorText, stripeDisabledErrorText}
 import model.stripe.StripePaymentMethod.{StripeApplePay, StripeCheckout, StripePaymentRequestButton}
 import model.stripe._
 import play.api.libs.ws.WSClient
@@ -119,9 +119,7 @@ class StripeBackend(
     }
 
     def isValidEmail(email: String): Boolean = {
-      // Use a regular expression to check if the email address is valid and does not contain a comma
-      val emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$"
-      email.matches(emailRegex) && !email.contains(",")
+      !email.contains(",")
     }
 
     // Check the Switch Bypass Recaptcha for Test Stripe account // Apple Pay on Live
@@ -189,7 +187,7 @@ class StripeBackend(
     stripeEnabled(request).flatMap {
       case true =>
         if (isValidEmail(request.paymentData.email.toString())) checkRecaptcha
-        else EitherT.leftT(StripeApiError.fromString(invalidEmailAddress, publicKey = None))
+        else EitherT.leftT(StripeApiError.fromString("Invalid email address", publicKey = None))
 
       case false =>
         EitherT.leftT(StripeApiError.fromString(stripeDisabledErrorText, publicKey = None))

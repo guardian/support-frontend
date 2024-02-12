@@ -84,7 +84,6 @@ class StripeBackendFixture(implicit ec: ExecutionContext) extends MockitoSugar {
   val stripeApiError = StripeApiError.fromThrowable(new Exception("Stripe error"), None)
   val backendError = BackendError.fromStripeApiError(stripeApiError)
   val emailError: EmailService.Error = EmailService.Error(new Exception("Email error response"))
-  val invalidEmailAddress = "Invalid email address"
 
   // -- mocks
   val chargeMock: Charge = mock[Charge]
@@ -394,7 +393,6 @@ class StripeBackendSpec
           .futureRight mustBe
           StripePaymentIntentsApiResponse.Success()
       }
-
     }
 
     "a request is made to create a charge/payment" should {
@@ -412,7 +410,7 @@ class StripeBackendSpec
           )
         populateChargeMock()
         stripeBackend.createPaymentIntent(createPaymentIntentWithStripeCheckout, clientBrowserInfo).futureLeft mustBe
-          StripeApiError.fromString(invalidEmailAddress, None)
+          StripeApiError.fromString("Invalid email address", None)
       }
 
       "return error if stripe service fails" in new StripeBackendFixture {

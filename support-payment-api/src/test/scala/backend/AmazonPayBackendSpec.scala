@@ -55,8 +55,6 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
 
   val paymentError = AmazonPayApiError.fromString("Error response")
   val amazonPaySwitchError = AmazonPayApiError.fromString("Amazon Pay Switch not enabled")
-  val invalidEmailAddress = AmazonPayApiError.fromString("Invalid email address")
-
   val emailError: EmailService.Error = EmailService.Error(new Exception("Email error response"))
   val responseXml =
     <RefundNotification xmlns="https://mws.amazonservices.com/ipn/OffAmazonPayments/2013-01-01">
@@ -234,7 +232,6 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
-
     }
 
     "refund" should {
@@ -265,7 +262,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
         when(mockAmazonPayService.setOrderReference(paymentDataWithInvalidEmail)).thenReturn(setOrderRefRes)
         amazonPayBackend
           .makePayment(amazonPayRequestWithInvalidEmail, clientBrowserInfo)
-          .futureLeft mustBe invalidEmailAddress
+          .futureLeft mustBe AmazonPayApiError.fromString("Invalid email address")
       }
 
     }

@@ -17,7 +17,6 @@ import scala.jdk.CollectionConverters._
 object PaypalApiError {
 
   val paypalErrorText = "Paypal Switch not enabled"
-  val invalidEmailAddress = "Invalid email address"
 
   def fromString(message: String): PaypalApiError = PaypalApiError(None, None, message)
 

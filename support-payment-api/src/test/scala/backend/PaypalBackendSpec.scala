@@ -186,7 +186,12 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
     "a request  is made to create a payment" should {
 
       "return Paypal switch not enabled error  if paypal switch in support-admin-console is Off" in new PaypalBackendFixture {
-        val createPaypalPaymentData = CreatePaypalPaymentData(Currency.GBP, BigDecimal(3), "return-url", "cancel-url")
+        val createPaypalPaymentData = CreatePaypalPaymentData(
+          Currency.GBP,
+          BigDecimal(3),
+          "return-url/return?email=test.user@gmail.com",
+          "cancel-url",
+        )
         val switchServiceOffResponse: EitherT[Future, Nothing, Switches] =
           EitherT.right(
             Future.successful(
@@ -244,18 +249,16 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
       }
 
       "return error if email address has a comma " in new PaypalBackendFixture {
-        val createPaypalPaymentData = CreatePaypalPaymentData(
+        val createPaypalPaymentDataWithInvalidEmail = CreatePaypalPaymentData(
           Currency.GBP,
           BigDecimal(3),
           "return-url/return?email=test,user@gmail.com",
           "cancel-url",
         )
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
-        when(mockPaypalService.createPayment(createPaypalPaymentData)).thenReturn(paymentServiceResponse)
-        paypalBackend.createPayment(createPaypalPaymentData).futureLeft mustBe
+        paypalBackend.createPayment(createPaypalPaymentDataWithInvalidEmail).futureLeft mustBe
           PaypalApiError(None, None, "Invalid email address")
       }
-
     }
 
     "a request is made to capture a payment" should {
