@@ -55,6 +55,7 @@ class AmazonPayBackendFixture(implicit ec: ExecutionContext) extends MockitoSuga
 
   val paymentError = AmazonPayApiError.fromString("Error response")
   val amazonPaySwitchError = AmazonPayApiError.fromString("Amazon Pay Switch not enabled")
+  val invalidEmailAddress = AmazonPayApiError.fromString("Invalid email address")
 
   val emailError: EmailService.Error = EmailService.Error(new Exception("Email error response"))
   val responseXml =
@@ -233,6 +234,7 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
+
     }
 
     "refund" should {
@@ -251,6 +253,21 @@ class AmazonPayBackendSpec extends AnyWordSpec with Matchers with FutureEitherVa
           amazonPayBackend.makePayment(amazonPayRequest, clientBrowserInfo).futureLeft mustBe paymentError
         }
       }
+
+      "return error if the email address is invalid due to a comma in it" in new AmazonPayBackendFixture {
+        val paymentDataWithInvalidEmail =
+          AmazonPaymentData("refId", BigDecimal(25), Currency.USD, "email,email@thegulocal.com")
+        val amazonPayRequestWithInvalidEmail = AmazonPayRequest(paymentDataWithInvalidEmail, Some(acquisitionData))
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
+        when(mockAmazonPayService.getOrderReference(any())).thenReturn(getOrderRefRes)
+        when(mockOrderRef.getOrderReferenceStatus).thenReturn(mockOrderReferenceStatus)
+        when(mockOrderReferenceStatus.getState).thenReturn("Open")
+        when(mockAmazonPayService.setOrderReference(paymentDataWithInvalidEmail)).thenReturn(setOrderRefRes)
+        amazonPayBackend
+          .makePayment(amazonPayRequestWithInvalidEmail, clientBrowserInfo)
+          .futureLeft mustBe invalidEmailAddress
+      }
+
     }
 
     "request" should {
