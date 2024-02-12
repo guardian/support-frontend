@@ -209,7 +209,7 @@ object UserFromAuthCookiesActionBuilder extends Logging {
             iat = unparsedClaims.rawClaims.get("iat").map {
               case iat: java.lang.Integer => iat.toLong
               case iat: java.lang.Long => iat.toLong
-            }
+            },
           ),
         )
     }
