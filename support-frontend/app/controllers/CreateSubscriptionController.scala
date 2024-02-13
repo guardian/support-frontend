@@ -414,7 +414,7 @@ object ThreeTierTest {
         case _ => None
       }
 
-      (for {
+      Some((for {
         id <- maybeId
         billingPeriod <- maybeBillingPeriod
       } yield Map(
@@ -432,7 +432,7 @@ object ThreeTierTest {
         "nz-annual" -> "3TIER_WEEKLY_NZ_ANNUAL",
         "au-monthly" -> "3TIER_WEEKLY_AU_MONTHLY",
         "au-annual" -> "3TIER_WEEKLY_AU_ANNUAL",
-      ) get s"$id-$billingPeriod").flatten
+      ) get s"$id-$billingPeriod").flatten.get)
     } else body.promoCode
 
     body.copy(promoCode = threeTierPromoCode)
