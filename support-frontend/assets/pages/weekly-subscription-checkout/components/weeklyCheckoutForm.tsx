@@ -168,7 +168,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		sendEventSubscriptionCheckoutStart(
 			props.product,
 			false,
-			props.price,
+			inThreeTierTestVariant ? 16 : props.price,
 			props.billingPeriod,
 		);
 		inThreeTierTestVariant &&
