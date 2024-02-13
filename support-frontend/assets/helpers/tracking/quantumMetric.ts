@@ -115,7 +115,6 @@ function sendEvent(
 		: cartValueEventIds.includes(id)
 		? 64
 		: 0;
-	console.log('QM', id, qmCartValueEventId, value);
 	if (window.QuantumMetricAPI?.isOn()) {
 		window.QuantumMetricAPI.sendEvent(id, qmCartValueEventId, value);
 	}
