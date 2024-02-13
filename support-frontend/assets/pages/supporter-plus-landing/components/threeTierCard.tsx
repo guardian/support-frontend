@@ -34,11 +34,15 @@ interface ThreeTierCardProps {
 	planCost: TierPlanCosts;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
-	cardCtaClickHandler: (
+	buttonCtaClickHandler: (
 		price: number,
 		cardTier: 1 | 2 | 3,
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
+	) => void;
+	linkCtaClickHandler: (
+		price: number,
+		contributionType: ContributionType,
 	) => void;
 	externalBtnLink?: string;
 }
@@ -182,7 +186,8 @@ export function ThreeTierCard({
 	benefits,
 	currencyId,
 	paymentFrequency,
-	cardCtaClickHandler,
+	buttonCtaClickHandler,
+	linkCtaClickHandler,
 	externalBtnLink,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId].glyph;
@@ -209,7 +214,13 @@ export function ThreeTierCard({
 			</h2>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				{externalBtnLink ? (
-					<LinkButton href={externalBtnLink} cssOverrides={btnStyleOverrides}>
+					<LinkButton
+						href={externalBtnLink}
+						cssOverrides={btnStyleOverrides}
+						onClick={() => {
+							linkCtaClickHandler(currentPrice, paymentFrequency);
+						}}
+					>
 						Subscribe
 					</LinkButton>
 				) : (
@@ -219,7 +230,7 @@ export function ThreeTierCard({
 						size="default"
 						cssOverrides={btnStyleOverrides}
 						onClick={() =>
-							cardCtaClickHandler(
+							buttonCtaClickHandler(
 								currentPrice,
 								cardTier,
 								paymentFrequency,

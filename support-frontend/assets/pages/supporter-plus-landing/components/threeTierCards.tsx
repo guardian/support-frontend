@@ -19,11 +19,15 @@ interface ThreeTierCardsProps {
 	}>;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
-	cardsCtaClickHandler: (
+	buttonCtaClickHandler: (
 		price: number,
 		cardTier: 1 | 2 | 3,
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
+	) => void;
+	linkCtaClickHandler: (
+		price: number,
+		contributionType: ContributionType,
 	) => void;
 }
 
@@ -60,7 +64,8 @@ export function ThreeTierCards({
 	cardsContent,
 	currencyId,
 	paymentFrequency,
-	cardsCtaClickHandler,
+	buttonCtaClickHandler,
+	linkCtaClickHandler,
 }: ThreeTierCardsProps): JSX.Element {
 	const haveRecommendedAndSelectedCards =
 		cardsContent.filter((card) => card.isRecommended || card.isUserSelected)
@@ -82,7 +87,8 @@ export function ThreeTierCards({
 						isRecommendedSubdued={haveRecommendedAndSelectedCards}
 						currencyId={currencyId}
 						paymentFrequency={paymentFrequency}
-						cardCtaClickHandler={cardsCtaClickHandler}
+						buttonCtaClickHandler={buttonCtaClickHandler}
+						linkCtaClickHandler={linkCtaClickHandler}
 					/>
 				);
 			})}
