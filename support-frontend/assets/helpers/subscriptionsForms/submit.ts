@@ -40,7 +40,11 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import type { GiftingState } from 'helpers/redux/checkout/giftingState/state';
 import type { DirectDebitState } from 'helpers/redux/checkout/payment/directDebit/state';
-import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
+import {
+	getContributionType,
+	getSubscriptionType,
+} from 'helpers/redux/checkout/product/selectors/productType';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
@@ -54,7 +58,10 @@ import {
 } from 'helpers/subscriptionsForms/formValidation';
 import type { AnyCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagManager';
+import {
+	successfulContributionConversion,
+	successfulSubscriptionConversion,
+} from 'helpers/tracking/googleTagManager';
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
@@ -212,7 +219,7 @@ function onPaymentAuthorised(
 	paymentAuthorisation: PaymentAuthorisation,
 	dispatch: Dispatch<Action>,
 	state: SubscriptionsState,
-	currencyId?: Option<IsoCurrency>,
+	currency?: IsoCurrency,
 ): void {
 	const {
 		billingPeriod,
@@ -221,6 +228,8 @@ function onPaymentAuthorised(
 		productOption,
 		productPrices,
 	} = state.page.checkoutForm.product;
+
+	const contributionType = useContributionsSelector(getContributionType);
 	const productType = getSubscriptionType(state);
 	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { csrf } = state.page.checkoutForm;
@@ -239,7 +248,7 @@ function onPaymentAuthorised(
 		paymentAuthorisation,
 		addresses,
 		productPrice.promotions,
-		currencyId,
+		currency,
 	);
 
 	const handleSubscribeResult = (result: PaymentResult) => {
@@ -249,25 +258,22 @@ function onPaymentAuthorised(
 			} else {
 				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
-			// track conversion with GTM
-			successfulSubscriptionConversion();
 
 			const tierBillingPeriodName =
 				billingPeriod === 'Monthly' ? 'monthly' : 'annual';
-			const { countryGroupId } = state.common.internationalisation;
+			const { currencyId, countryGroupId } = state.common.internationalisation;
 
 			const { abParticipations } = state.common;
 			const inThreeTierTestVariant =
 				abParticipations.threeTierCheckout === 'variant';
-			const standardDigitalPlusPrintPrice =
-				tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
-					.price;
-			const digitalPlusPrintPotentialDiscount =
+			const digitalPlusPrintDiscount =
 				tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
 					.discount;
-			const discountedDigitalPlusPrintPrice =
-				digitalPlusPrintPotentialDiscount?.price ??
-				standardDigitalPlusPrintPrice;
+			const digitalPlusPrintPrice =
+				tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
+					.price;
+			const digitalPlusPrintPriceDiscounted =
+				digitalPlusPrintDiscount?.price ?? digitalPlusPrintPrice;
 
 			/**
 			 * Rewrite the price (cart value) to report to QM
@@ -278,7 +284,7 @@ function onPaymentAuthorised(
 				? {
 						...productPrice,
 						promotions: [],
-						price: discountedDigitalPlusPrintPrice,
+						price: digitalPlusPrintPriceDiscounted,
 				  }
 				: productPrice;
 
@@ -289,6 +295,28 @@ function onPaymentAuthorised(
 				priceForQuantumMetric,
 				billingPeriod,
 			);
+
+			// track conversion with GTM
+			successfulSubscriptionConversion();
+			if (inThreeTierTestVariant) {
+				/**
+				 * track S+ with GTM, digital split price unavailable from config
+				 * so discounted digitalPlusPrint price applied
+				 **/
+				console.log(
+					'GTM successfulContributionConversion',
+					digitalPlusPrintPriceDiscounted,
+					contributionType,
+					currencyId,
+					paymentMethod.name,
+				);
+				successfulContributionConversion(
+					digitalPlusPrintPriceDiscounted,
+					contributionType,
+					currencyId,
+					paymentMethod.name,
+				);
+			}
 		} else if (result.error) {
 			dispatch(setSubmissionError(result.error));
 		}
