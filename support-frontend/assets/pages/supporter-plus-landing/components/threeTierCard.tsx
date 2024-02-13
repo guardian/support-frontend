@@ -43,6 +43,7 @@ interface ThreeTierCardProps {
 	linkCtaClickHandler: (
 		price: number,
 		contributionType: ContributionType,
+		contributionCurrency: IsoCurrency,
 	) => void;
 	externalBtnLink?: string;
 }
@@ -218,7 +219,7 @@ export function ThreeTierCard({
 						href={externalBtnLink}
 						cssOverrides={btnStyleOverrides}
 						onClick={() => {
-							linkCtaClickHandler(currentPrice, paymentFrequency);
+							linkCtaClickHandler(currentPrice, paymentFrequency, currencyId);
 						}}
 					>
 						Subscribe

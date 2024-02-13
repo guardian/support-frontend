@@ -288,7 +288,13 @@ export function ThreeTierLanding(): JSX.Element {
 	const handleLinkCtaClick = (
 		price: number,
 		contributionType: ContributionType,
+		contributionCurrency: IsoCurrency,
 	) => {
+		sendEventContributionCartValue(
+			price.toString(),
+			contributionType,
+			contributionCurrency,
+		);
 		/**
 		 * Lower & middle tier track component click fired via redux side effects.
 		 * Top tier accessed via network request to GuardianWeekly landing page

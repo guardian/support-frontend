@@ -28,6 +28,7 @@ interface ThreeTierCardsProps {
 	linkCtaClickHandler: (
 		price: number,
 		contributionType: ContributionType,
+		contributionCurrency: IsoCurrency,
 	) => void;
 }
 
