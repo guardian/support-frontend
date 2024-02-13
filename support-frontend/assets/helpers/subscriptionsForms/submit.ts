@@ -40,11 +40,7 @@ import {
 } from 'helpers/productPrice/subscriptions';
 import type { GiftingState } from 'helpers/redux/checkout/giftingState/state';
 import type { DirectDebitState } from 'helpers/redux/checkout/payment/directDebit/state';
-import {
-	getContributionType,
-	getSubscriptionType,
-} from 'helpers/redux/checkout/product/selectors/productType';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
@@ -229,7 +225,6 @@ function onPaymentAuthorised(
 		productPrices,
 	} = state.page.checkoutForm.product;
 
-	const contributionType = useContributionsSelector(getContributionType);
 	const productType = getSubscriptionType(state);
 	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { csrf } = state.page.checkoutForm;
@@ -261,6 +256,8 @@ function onPaymentAuthorised(
 
 			const tierBillingPeriodName =
 				billingPeriod === 'Monthly' ? 'monthly' : 'annual';
+			const contributionType =
+				billingPeriod === 'Monthly' ? 'MONTHLY' : 'ANNUAL';
 			const { currencyId, countryGroupId } = state.common.internationalisation;
 
 			const { abParticipations } = state.common;
@@ -303,13 +300,6 @@ function onPaymentAuthorised(
 				 * track S+ with GTM, digital split price unavailable from config
 				 * so discounted digitalPlusPrint price applied
 				 **/
-				console.log(
-					'GTM successfulContributionConversion',
-					digitalPlusPrintPriceDiscounted,
-					contributionType,
-					currencyId,
-					paymentMethod.name,
-				);
 				successfulContributionConversion(
 					digitalPlusPrintPriceDiscounted,
 					contributionType,
