@@ -45,6 +45,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
@@ -260,7 +261,7 @@ export function ThreeTierLanding(): JSX.Element {
 		dispatch(setProductType(paymentFrequencies[buttonIndex]));
 	};
 
-	const handleCardCtaClick = (
+	const handleButtonCtaClick = (
 		price: number,
 		cardTier: 1 | 2 | 3,
 		contributionType: ContributionType,
@@ -284,12 +285,35 @@ export function ThreeTierLanding(): JSX.Element {
 		);
 	};
 
+	const handleLinkCtaClick = (
+		price: number,
+		contributionType: ContributionType,
+		contributionCurrency: IsoCurrency,
+	) => {
+		sendEventContributionCartValue(
+			price.toString(),
+			contributionType,
+			contributionCurrency,
+		);
+		/**
+		 * Lower & middle tier track component click fired via redux side effects.
+		 * Top tier accessed via network request to GuardianWeekly landing page
+		 * therefore tracking required
+		 **/
+		trackComponentClick(
+			`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${price}`,
+		);
+	};
+
 	const handleSupportOnceBtnClick = () => {
 		dispatch(setProductType('ONE_OFF'));
 		navigateWithPageView(
 			navigate,
 			generateOneOffCheckoutLink(),
 			abParticipations,
+		);
+		trackComponentClick(
+			`npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
 		);
 	};
 
@@ -419,7 +443,8 @@ export function ThreeTierLanding(): JSX.Element {
 						]}
 						currencyId={currencyId}
 						paymentFrequency={contributionType}
-						cardsCtaClickHandler={handleCardCtaClick}
+						buttonCtaClickHandler={handleButtonCtaClick}
+						linkCtaClickHandler={handleLinkCtaClick}
 					/>
 				</div>
 			</Container>
