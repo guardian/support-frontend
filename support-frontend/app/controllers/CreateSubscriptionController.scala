@@ -125,46 +125,6 @@ class CreateSubscriptionController(
     }
   }
 
-  def threeTierAugmentPromoCode(body: CreateSupportWorkersRequest) = {
-    val isGuardianWeekly = body.product match {
-      case _: GuardianWeekly => true
-      case _ => false
-    }
-    val isInThreeTier = body.threeTierCreateSupporterPlusSubscription.getOrElse(false)
-
-    val threeTierPromoCode = if (isInThreeTier && isGuardianWeekly) {
-      val maybeId = CountryGroup.byCountryCode(body.billingAddress.country.alpha2).map(_.id)
-
-      val maybeBillingPeriod = body.product.billingPeriod match {
-        case Monthly => Some("monthly")
-        case Annual => Some("annual")
-        case _ => None
-      }
-
-      (for {
-        id <- maybeId
-        billingPeriod <- maybeBillingPeriod
-      } yield Map(
-        "uk-monthly" -> "3TIER_WEEKLY_UK_MONTHLY",
-        "uk-annual" -> "3TIER_WEEKLY_UK_ANNUAL",
-        "eu-monthly" -> "3TIER_WEEKLY_EU_MONTHLY",
-        "eu-annual" -> "3TIER_WEEKLY_EU_ANNUAL",
-        "int-monthly" -> "3TIER_WEEKLY_INT_MONTHLY",
-        "int-monthly" -> "3TIER_WEEKLY_INT_ANNUAL",
-        "us-monthly" -> "3TIER_WEEKLY_US_MONTHLY",
-        "us-annual" -> "3TIER_WEEKLY_US_ANNUAL",
-        "ca-monthly" -> "3TIER_WEEKLY_CA_MONTHLY",
-        "ca-annual" -> "3TIER_WEEKLY_CA_ANNUAL",
-        "nz-monthly" -> "3TIER_WEEKLY_NZ_MONTHLY",
-        "nz-annual" -> "3TIER_WEEKLY_NZ_ANNUAL",
-        "au-monthly" -> "3TIER_WEEKLY_AU_MONTHLY",
-        "au-annual" -> "3TIER_WEEKLY_AU_ANNUAL",
-      ) get s"$id-$billingPeriod").flatten
-    } else body.promoCode
-
-    body.copy(promoCode = threeTierPromoCode)
-  }
-
   private def createSubscription(implicit
       settings: AllSettings,
       originalRequest: CreateRequest,
@@ -177,7 +137,7 @@ class CreateSubscriptionController(
       */
 
     // The original val name is used here to avoid having to change code downstream
-    val threeTierBody = threeTierAugmentPromoCode(originalRequest.body)
+    val threeTierBody = ThreeTierTest.augmentPromoCode(originalRequest.body)
     val request = originalRequest.withBody(threeTierBody).asInstanceOf[CreateRequest]
 
     /** Finish: Three tier tidy */
@@ -434,5 +394,47 @@ class CreateSubscriptionController(
       isTestUser = isTestUser,
       deliveryInstructions = request.deliveryInstructions,
     )
+  }
+}
+
+object ThreeTierTest {
+  def augmentPromoCode(body: CreateSupportWorkersRequest) = {
+    val isGuardianWeekly = body.product match {
+      case _: GuardianWeekly => true
+      case _ => false
+    }
+    val isInThreeTier = body.threeTierCreateSupporterPlusSubscription.getOrElse(false)
+
+    val threeTierPromoCode = if (isInThreeTier && isGuardianWeekly) {
+      val maybeId = CountryGroup.byCountryCode(body.billingAddress.country.alpha2).map(_.id)
+
+      val maybeBillingPeriod = body.product.billingPeriod match {
+        case Monthly => Some("monthly")
+        case Annual => Some("annual")
+        case _ => None
+      }
+
+      (for {
+        id <- maybeId
+        billingPeriod <- maybeBillingPeriod
+      } yield Map(
+        "uk-monthly" -> "3TIER_WEEKLY_UK_MONTHLY",
+        "uk-annual" -> "3TIER_WEEKLY_UK_ANNUAL",
+        "eu-monthly" -> "3TIER_WEEKLY_EU_MONTHLY",
+        "eu-annual" -> "3TIER_WEEKLY_EU_ANNUAL",
+        "int-monthly" -> "3TIER_WEEKLY_INT_MONTHLY",
+        "int-annual" -> "3TIER_WEEKLY_INT_ANNUAL",
+        "us-monthly" -> "3TIER_WEEKLY_US_MONTHLY",
+        "us-annual" -> "3TIER_WEEKLY_US_ANNUAL",
+        "ca-monthly" -> "3TIER_WEEKLY_CA_MONTHLY",
+        "ca-annual" -> "3TIER_WEEKLY_CA_ANNUAL",
+        "nz-monthly" -> "3TIER_WEEKLY_NZ_MONTHLY",
+        "nz-annual" -> "3TIER_WEEKLY_NZ_ANNUAL",
+        "au-monthly" -> "3TIER_WEEKLY_AU_MONTHLY",
+        "au-annual" -> "3TIER_WEEKLY_AU_ANNUAL",
+      ) get s"$id-$billingPeriod").flatten
+    } else body.promoCode
+
+    body.copy(promoCode = threeTierPromoCode)
   }
 }
