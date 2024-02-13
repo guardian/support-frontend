@@ -61,7 +61,9 @@ case class CreateSupportWorkersRequest(
     telephoneNumber: Option[String],
     deliveryInstructions: Option[String],
     debugInfo: Option[String],
-    /** We do not generally set default values, but because this is a test it is a way of avoiding having to edit loads
+    /** TODO: Three tier tidy
+      *
+      * We do not generally set default values, but because this is a test it is a way of avoiding having to edit loads
       * of places in the code base
       */
     threeTierCreateSupporterPlusSubscription: Option[Boolean] = None,
