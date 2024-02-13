@@ -81,6 +81,7 @@ Universal / javaOptions ++= Seq(
   "-J-XX:+PrintGCDetails",
   "-J-XX:+PrintGCDateStamps",
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log",
+  "-XX:-OmitStackTraceInFastThrow",
 )
 
 addCommandAlias(
