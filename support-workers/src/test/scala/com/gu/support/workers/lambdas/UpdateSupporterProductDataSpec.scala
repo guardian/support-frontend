@@ -203,8 +203,12 @@ object UpdateSupporterProductDataSpec {
       "productType": "DigitalSubscriptionGiftPurchase"
     }
   """
-
-  lazy val catalog: String = Source.fromURL(getClass.getResource("/catalog.json")).mkString
+  lazy val catalogSource = Source.fromURL(getClass.getResource("/catalog.json"))
+  lazy val catalog: String = {
+    val catalogString = catalogSource.mkString
+    catalogSource.close()
+    catalogString
+  }
 
   private val json = parse(catalog).toOption.get
   private val jsonProvider = new SimpleJsonProvider(json)
