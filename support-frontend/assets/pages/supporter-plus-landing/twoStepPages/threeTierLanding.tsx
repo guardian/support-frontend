@@ -306,6 +306,9 @@ export function ThreeTierLanding(): JSX.Element {
 			generateOneOffCheckoutLink(),
 			abParticipations,
 		);
+		trackComponentClick(
+			`npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
+		);
 	};
 
 	const isCardUserSelected = (
