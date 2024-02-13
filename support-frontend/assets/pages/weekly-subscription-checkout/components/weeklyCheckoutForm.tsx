@@ -498,10 +498,21 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						errorReason={props.submissionError}
 						errorHeading={submissionErrorHeading}
 					/>
-					<Total
-						price={props.discountedPrice.price}
-						currency={props.currencyId}
-					/>
+					{inThreeTierTestVariant ? (
+						<Total
+							price={
+								digitalPlusPrintPotentialDiscount?.price ??
+								standardDigitalPlusPrintPrice
+							}
+							currency={props.currencyId}
+						/>
+					) : (
+						<Total
+							price={props.discountedPrice.price}
+							currency={props.currencyId}
+						/>
+					)}
+
 					{inThreeTierTestVariant ? (
 						<ThreeTierTerms
 							paymentMethod={props.paymentMethod}

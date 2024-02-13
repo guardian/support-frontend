@@ -1,6 +1,10 @@
 import { css } from '@emotion/react';
 import { between, from, space } from '@guardian/source-foundations';
-import type { RegularContributionType } from 'helpers/contributions';
+import type {
+	ContributionType,
+	RegularContributionType,
+} from 'helpers/contributions';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierCard } from './threeTierCard';
 
@@ -13,9 +17,14 @@ interface ThreeTierCardsProps {
 		planCost: TierPlanCosts;
 		externalBtnLink?: string;
 	}>;
-	currency: string;
+	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
-	cardsCtaClickHandler: (price: number, cardTier: 1 | 2 | 3) => void;
+	cardsCtaClickHandler: (
+		price: number,
+		cardTier: 1 | 2 | 3,
+		contributionType: ContributionType,
+		contributionCurrency: IsoCurrency,
+	) => void;
 }
 
 const container = (cardCount: number) => css`
@@ -49,7 +58,7 @@ const cardIndexToTier = (index: number): 1 | 2 | 3 => {
 
 export function ThreeTierCards({
 	cardsContent,
-	currency,
+	currencyId,
 	paymentFrequency,
 	cardsCtaClickHandler,
 }: ThreeTierCardsProps): JSX.Element {
@@ -71,7 +80,7 @@ export function ThreeTierCards({
 						key={`threeTierCard${cardIndex}`}
 						{...cardContent}
 						isRecommendedSubdued={haveRecommendedAndSelectedCards}
-						currency={currency}
+						currencyId={currencyId}
 						paymentFrequency={paymentFrequency}
 						cardCtaClickHandler={cardsCtaClickHandler}
 					/>
