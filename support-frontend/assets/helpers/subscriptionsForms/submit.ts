@@ -271,7 +271,7 @@ function onPaymentAuthorised(
 
 			/**
 			 * Rewrite the price (cart value) to report to QM
-			 * for users inThreeTierTestVariant as the original props.price
+			 * for users inThreeTierTestVariant as the original productPrice
 			 * object doesn't account for the addition of S+ and associated promotions.
 			 */
 			const priceForQuantumMetric: ProductPrice = inThreeTierTestVariant
