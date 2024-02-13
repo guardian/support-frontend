@@ -197,12 +197,14 @@ function WeeklyCheckoutForm(props: PropTypes) {
 	const tierBillingPeriodName =
 		props.billingPeriod === 'Annual' ? 'annual' : 'monthly';
 
-	const standardDigitalPlusPrintPrice =
-		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
-			.price;
-	const digitalPlusPrintPotentialDiscount =
+	const digitalPlusPrintDiscount =
 		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
 			.discount;
+	const digitalPlusPrintPrice =
+		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
+			.price;
+	const digitalPlusPrintPriceDiscounted =
+		digitalPlusPrintDiscount?.price ?? digitalPlusPrintPrice;
 
 	const publicationStartDays = days.filter((day) => {
 		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
@@ -212,12 +214,12 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		);
 	});
 
-	const potentialDiscount = digitalPlusPrintPotentialDiscount
+	const potentialDiscount = digitalPlusPrintDiscount
 		? {
-				total: digitalPlusPrintPotentialDiscount.price,
-				duration: digitalPlusPrintPotentialDiscount.duration.value,
+				total: digitalPlusPrintDiscount.price,
+				duration: digitalPlusPrintDiscount.duration.value,
 				period: recurringContributionPeriodMap[
-					digitalPlusPrintPotentialDiscount.duration.period
+					digitalPlusPrintDiscount.duration.period
 				] as 'month' | 'year',
 		  }
 		: undefined;
@@ -230,7 +232,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					<>
 						{inThreeTierTestVariant ? (
 							<DigitalPlusPrintSummary
-								total={standardDigitalPlusPrintPrice}
+								total={digitalPlusPrintPrice}
 								currencySymbol={currencies[props.price.currency].glyph}
 								paymentFrequency={tierBillingPeriod}
 								discount={potentialDiscount}
@@ -431,10 +433,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							validateForm={props.validateForm}
 							buttonText={
 								inThreeTierTestVariant
-									? `Pay ${currencies[props.price.currency].glyph}${
-											digitalPlusPrintPotentialDiscount?.price ??
-											standardDigitalPlusPrintPrice
-									  } per ${tierBillingPeriod}`
+									? `Pay ${
+											currencies[props.price.currency].glyph
+									  }${digitalPlusPrintPriceDiscounted} per ${tierBillingPeriod}`
 									: 'Pay now'
 							}
 							csrf={props.csrf}
@@ -483,7 +484,11 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						errorHeading={submissionErrorHeading}
 					/>
 					<Total
-						price={props.discountedPrice.price}
+						price={
+							inThreeTierTestVariant
+								? digitalPlusPrintPriceDiscounted
+								: props.discountedPrice.price
+						}
 						currency={props.currencyId}
 					/>
 					{inThreeTierTestVariant ? (
