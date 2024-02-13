@@ -75,6 +75,7 @@ import { supportedPaymentMethods } from 'helpers/subscriptionsForms/supportedPay
 import { firstError } from 'helpers/subscriptionsForms/validation';
 import { sendEventSubscriptionCheckoutStart } from 'helpers/tracking/quantumMetric';
 import { routes } from 'helpers/urls/routes';
+import { getQueryParameter } from 'helpers/urls/url';
 import { titles } from 'helpers/user/details';
 import { signOut } from 'helpers/user/user';
 import {
@@ -185,24 +186,35 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.setBillingCountry(props.deliveryCountry);
 	};
 
-	const inThreeTierTestVariant =
-		props.participations.threeTierCheckout === 'variant';
-
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,
 		props.billingCountry,
 	);
 
+	/** TODO: Three tier tidy */
+	const promoCodeFromQueryParams = getQueryParameter('promoCode');
 	const tierBillingPeriod = props.billingPeriod === 'Annual' ? 'year' : 'month';
 	const tierBillingPeriodName =
 		props.billingPeriod === 'Annual' ? 'annual' : 'monthly';
 
+	const digitalPlusCharge =
+		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId];
+
 	const standardDigitalPlusPrintPrice =
 		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
 			.price;
+
 	const digitalPlusPrintPotentialDiscount =
 		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
 			.discount;
+
+	// If the promo doesn't match, let's just ignore the whole thing
+	const promoMatchesChargePromoCode =
+		digitalPlusCharge.promoCode === promoCodeFromQueryParams;
+
+	const inThreeTierTestVariant =
+		props.participations.threeTierCheckout === 'variant' &&
+		promoMatchesChargePromoCode;
 
 	const publicationStartDays = days.filter((day) => {
 		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
