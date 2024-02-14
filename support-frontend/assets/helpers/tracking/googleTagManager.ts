@@ -10,9 +10,17 @@ import { onConsentChangeEvent } from './thirdPartyTrackingConsent';
 // ----- Types ----- //
 type EventType = 'DataLayerReady' | 'SuccessfulConversion';
 
+type ConversionData = ContributionConversionData | SubscriptionConversionData;
+
 type ContributionConversionData = {
 	value: number;
 	contributionType: ContributionType;
+	currency: IsoCurrency;
+	paymentMethod: PaymentMethod;
+};
+
+type SubscriptionConversionData = {
+	value: number;
 	currency: IsoCurrency;
 	paymentMethod: PaymentMethod;
 };
@@ -98,7 +106,7 @@ function push(data: Record<string, unknown>) {
 
 function getData(
 	event: EventType,
-	contributionConversionData?: ContributionConversionData,
+	conversionData?: ConversionData,
 ): Record<string, unknown> {
 	const commonData = {
 		event,
@@ -120,22 +128,19 @@ function getData(
 		vendorConsentsLookup, // eg. "google-analytics,twitter",
 	};
 
-	if (contributionConversionData) {
+	if (conversionData) {
 		return {
 			...commonData,
-			...contributionConversionData,
+			...conversionData,
 		};
 	}
 
 	return commonData;
 }
 
-function sendData(
-	event: EventType,
-	contributionConversionData?: ContributionConversionData,
-) {
+function sendData(event: EventType, conversionData?: ConversionData) {
 	const pushDataToGTM = () => {
-		const dataToPush = getData(event, contributionConversionData);
+		const dataToPush = getData(event, conversionData);
 		push(dataToPush);
 	};
 
@@ -255,8 +260,18 @@ function successfulContributionConversion(
 	sendData('SuccessfulConversion', contributionConversionData);
 }
 
-function successfulSubscriptionConversion(): void {
-	sendData('SuccessfulConversion');
+function successfulSubscriptionConversion(
+	amount: number,
+	sourceCurrency: IsoCurrency,
+	paymentMethod: PaymentMethod,
+): void {
+	const subscriptionConversionData: SubscriptionConversionData = {
+		value: amount,
+		currency: sourceCurrency,
+		paymentMethod,
+	};
+
+	sendData('SuccessfulConversion', subscriptionConversionData);
 }
 
 // ----- Exports ---//

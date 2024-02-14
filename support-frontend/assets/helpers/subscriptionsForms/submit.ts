@@ -318,7 +318,11 @@ function onPaymentAuthorised(
 			);
 
 			// track conversion with GTM
-			successfulSubscriptionConversion();
+			successfulSubscriptionConversion(
+				digitalPriceDiscounted,
+				currencyId,
+				paymentMethod.name,
+			);
 			if (inThreeTierTestVariant) {
 				// track S+ with GTM
 				successfulContributionConversion(
