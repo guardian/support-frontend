@@ -98,7 +98,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: false,
 		seed: 5,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
@@ -108,9 +108,9 @@ export const tests: Tests = {
 			{
 				id: 'variant',
 			},
-			// {
-			// 	id: 'control',
-			// },
+			{
+				id: 'control',
+			},
 		],
 		isActive: true,
 		audiences: {
