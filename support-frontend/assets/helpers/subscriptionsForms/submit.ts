@@ -162,6 +162,22 @@ function getGiftRecipient(giftingState: GiftingState) {
 	return {};
 }
 
+function getPrintDiscountedPrice(
+	productPrice: ProductPrice,
+	promoCode?: Option<string>,
+): number {
+	const defaultPrice = productPrice.price;
+	if (productPrice.promotions && productPrice.promotions.length > 0) {
+		const validPromo = productPrice.promotions.find(
+			(promotion) => promotion.promoCode === promoCode,
+		);
+		if (validPromo) {
+			return validPromo.discountedPrice ?? defaultPrice;
+		}
+	}
+	return defaultPrice;
+}
+
 function buildRegularPaymentRequest(
 	state: SubscriptionsState,
 	paymentAuthorisation: PaymentAuthorisation,
@@ -271,6 +287,14 @@ function onPaymentAuthorised(
 					.price;
 			const digitalPlusPrintPriceDiscounted =
 				digitalPlusPrintDiscount?.price ?? digitalPlusPrintPrice;
+			const printPriceDiscounted = getPrintDiscountedPrice(
+				productPrice,
+				data.promoCode,
+			);
+			const digitalPriceDiscounted =
+				digitalPlusPrintPriceDiscounted - printPriceDiscounted;
+			console.log('GTM.printPriceDiscounted -> ', printPriceDiscounted);
+			console.log('GTM.digitalPriceDiscounted -> ', digitalPriceDiscounted);
 
 			/**
 			 * Rewrite the price (cart value) to report to QM
@@ -296,12 +320,9 @@ function onPaymentAuthorised(
 			// track conversion with GTM
 			successfulSubscriptionConversion();
 			if (inThreeTierTestVariant) {
-				/**
-				 * track S+ with GTM, digital split price unavailable from config
-				 * so discounted digitalPlusPrint price applied
-				 **/
+				// track S+ with GTM
 				successfulContributionConversion(
-					digitalPlusPrintPriceDiscounted,
+					digitalPriceDiscounted,
 					contributionType,
 					currencyId,
 					paymentMethod.name,
