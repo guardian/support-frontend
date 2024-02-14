@@ -98,7 +98,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: false,
 		seed: 5,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
@@ -112,7 +112,7 @@ export const tests: Tests = {
 				id: 'control',
 			},
 		],
-		isActive: false,
+		isActive: true,
 		audiences: {
 			ALL: {
 				offset: 0,
@@ -135,14 +135,11 @@ export const tests: Tests = {
 		 * - /subscribe/weekly/checkout
 		 */
 		canRun: () => {
-			// Contribution pages
-			const isContribution =
+			// Contribute pages
+			const isContributionLandingPageOrThankyou =
 				window.location.pathname.match(
-					/\/uk|us|au|eu|int|nz|ca\/contribute(\/.*)?$/,
+					pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 				) !== null;
-			const isThankYou =
-				window.location.pathname.match(/\/uk|us|au|eu|int|nz|ca\/thankyou/) !==
-				null;
 
 			// Weekly pages
 			const urlParams = new URLSearchParams(window.location.search);
@@ -151,7 +148,9 @@ export const tests: Tests = {
 			const isWeeklyCheckout =
 				window.location.pathname === '/subscribe/weekly/checkout';
 
-			return isContribution || isThankYou || (isWeeklyCheckout && isThirdTier);
+			return (
+				isContributionLandingPageOrThankyou || (isWeeklyCheckout && isThirdTier)
+			);
 		},
 	},
 };
