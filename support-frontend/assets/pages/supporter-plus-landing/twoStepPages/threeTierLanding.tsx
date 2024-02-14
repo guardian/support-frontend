@@ -20,7 +20,10 @@ import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countr
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
-import type { RegularContributionType } from 'helpers/contributions';
+import type {
+	ContributionType,
+	RegularContributionType,
+} from 'helpers/contributions';
 import {
 	AUDCountries,
 	Canada,
@@ -30,6 +33,7 @@ import {
 	NZDCountries,
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
@@ -41,7 +45,9 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
+import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierDisclaimer } from '../components/threeTierDisclaimer';
@@ -255,7 +261,12 @@ export function ThreeTierLanding(): JSX.Element {
 		dispatch(setProductType(paymentFrequencies[buttonIndex]));
 	};
 
-	const handleCardCtaClick = (price: number, cardTier: 1 | 2 | 3) => {
+	const handleButtonCtaClick = (
+		price: number,
+		cardTier: 1 | 2 | 3,
+		contributionType: ContributionType,
+		contributionCurrency: IsoCurrency,
+	) => {
 		dispatch(
 			setSelectedAmount({
 				contributionType,
@@ -267,6 +278,31 @@ export function ThreeTierLanding(): JSX.Element {
 			generateTierCheckoutLink(cardTier),
 			abParticipations,
 		);
+		sendEventContributionCartValue(
+			price.toString(),
+			contributionType,
+			contributionCurrency,
+		);
+	};
+
+	const handleLinkCtaClick = (
+		price: number,
+		contributionType: ContributionType,
+		contributionCurrency: IsoCurrency,
+	) => {
+		sendEventContributionCartValue(
+			price.toString(),
+			contributionType,
+			contributionCurrency,
+		);
+		/**
+		 * Lower & middle tier track component click fired via redux side effects.
+		 * Top tier accessed via network request to GuardianWeekly landing page
+		 * therefore tracking required
+		 **/
+		trackComponentClick(
+			`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${price}`,
+		);
 	};
 
 	const handleSupportOnceBtnClick = () => {
@@ -275,6 +311,9 @@ export function ThreeTierLanding(): JSX.Element {
 			navigate,
 			generateOneOffCheckoutLink(),
 			abParticipations,
+		);
+		trackComponentClick(
+			`npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
 		);
 	};
 
@@ -381,7 +420,8 @@ export function ThreeTierLanding(): JSX.Element {
 					<PaymentFrequencyButtons
 						paymentFrequencies={paymentFrequencies.map(
 							(paymentFrequency, index) => ({
-								label: paymentFrequencyMap[paymentFrequency],
+								paymentFrequencyLabel: paymentFrequencyMap[paymentFrequency],
+								paymentFrequencyId: paymentFrequency,
 								isPreSelected: paymentFrequencies[index] === contributionType,
 							}),
 						)}
@@ -401,9 +441,10 @@ export function ThreeTierLanding(): JSX.Element {
 								externalBtnLink: generateTierCheckoutLink(3),
 							},
 						]}
-						currency={currencies[currencyId].glyph}
+						currencyId={currencyId}
 						paymentFrequency={contributionType}
-						cardsCtaClickHandler={handleCardCtaClick}
+						buttonCtaClickHandler={handleButtonCtaClick}
+						linkCtaClickHandler={handleLinkCtaClick}
 					/>
 				</div>
 			</Container>
@@ -412,7 +453,10 @@ export function ThreeTierLanding(): JSX.Element {
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={oneTimeContainer(countryGroupId === UnitedStates)}
 			>
-				<SupportOnce btnClickHandler={handleSupportOnceBtnClick} />
+				<SupportOnce
+					currency={currencies[currencyId].glyph}
+					btnClickHandler={handleSupportOnceBtnClick}
+				/>
 				{countryGroupId === UnitedStates && (
 					<div css={suppportAnotherWayContainer}>
 						<h4>Support another way</h4>

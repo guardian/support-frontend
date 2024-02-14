@@ -12,7 +12,14 @@ import {
 	LinkButton,
 } from '@guardian/source-react-components';
 import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
-import type { RegularContributionType } from 'helpers/contributions';
+import type {
+	ContributionType,
+	RegularContributionType,
+} from 'helpers/contributions';
+import {
+	currencies,
+	type IsoCurrency,
+} from 'helpers/internationalisation/currency';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
@@ -25,9 +32,19 @@ interface ThreeTierCardProps {
 	isUserSelected: boolean;
 	benefits: TierBenefits;
 	planCost: TierPlanCosts;
-	currency: string;
+	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
-	cardCtaClickHandler: (price: number, cardTier: 1 | 2 | 3) => void;
+	buttonCtaClickHandler: (
+		price: number,
+		cardTier: 1 | 2 | 3,
+		contributionType: ContributionType,
+		contributionCurrency: IsoCurrency,
+	) => void;
+	linkCtaClickHandler: (
+		price: number,
+		contributionType: ContributionType,
+		contributionCurrency: IsoCurrency,
+	) => void;
 	externalBtnLink?: string;
 }
 
@@ -137,14 +154,24 @@ const benefitsPrefixPlus = css`
 `;
 
 const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
-	// EXAMPLE: £16 for the first 12 months, then £25/month
+	// EXAMPLE: £16 for the first year, then £25/month
 	if (planCost.discount) {
-		const durationValue = planCost.discount.duration.value;
-		return `${currency}${planCost.discount.price} for the first ${
-			durationValue > 1 ? durationValue : ''
-		} ${recurringContributionPeriodMap[planCost.discount.duration.period]}${
-			durationValue > 1 ? 's' : ''
-		}, then ${currency}${planCost.price}/${
+		const period =
+			planCost.discount.duration.value === 12 &&
+			planCost.discount.duration.period === 'MONTHLY'
+				? 'ANNUAL'
+				: planCost.discount.duration.period;
+		const duration =
+			planCost.discount.duration.value === 12 &&
+			planCost.discount.duration.period === 'MONTHLY'
+				? 1
+				: planCost.discount.duration.value;
+
+		return `${currency}${planCost.discount.price}/${
+			recurringContributionPeriodMap[planCost.discount.duration.period]
+		} for the first ${duration > 1 ? duration : ''} ${
+			recurringContributionPeriodMap[period]
+		}${duration > 1 ? 's' : ''}, then ${currency}${planCost.price}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
 		}`;
 	}
@@ -158,11 +185,13 @@ export function ThreeTierCard({
 	isRecommendedSubdued,
 	isUserSelected,
 	benefits,
-	currency,
+	currencyId,
 	paymentFrequency,
-	cardCtaClickHandler,
+	buttonCtaClickHandler,
+	linkCtaClickHandler,
 	externalBtnLink,
 }: ThreeTierCardProps): JSX.Element {
+	const currency = currencies[currencyId].glyph;
 	const currentPrice = planCost.discount?.price ?? planCost.price;
 	const previousPriceCopy =
 		!!planCost.discount && `${currency}${planCost.price}`;
@@ -186,8 +215,14 @@ export function ThreeTierCard({
 			</h2>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				{externalBtnLink ? (
-					<LinkButton href={externalBtnLink} cssOverrides={btnStyleOverrides}>
-						Support now
+					<LinkButton
+						href={externalBtnLink}
+						cssOverrides={btnStyleOverrides}
+						onClick={() => {
+							linkCtaClickHandler(currentPrice, paymentFrequency, currencyId);
+						}}
+					>
+						Subscribe
 					</LinkButton>
 				) : (
 					<Button
@@ -195,9 +230,16 @@ export function ThreeTierCard({
 						priority="primary"
 						size="default"
 						cssOverrides={btnStyleOverrides}
-						onClick={() => cardCtaClickHandler(currentPrice, cardTier)}
+						onClick={() =>
+							buttonCtaClickHandler(
+								currentPrice,
+								cardTier,
+								paymentFrequency,
+								currencyId,
+							)
+						}
 					>
-						Support now
+						Subscribe
 					</Button>
 				)}
 			</ThemeProvider>

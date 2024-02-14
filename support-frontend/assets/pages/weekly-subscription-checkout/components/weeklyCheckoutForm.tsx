@@ -45,11 +45,9 @@ import {
 	currencyFromCountryCode,
 } from 'helpers/internationalisation/currency';
 import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
-import {
-	billingPeriodNoun,
-	weeklyBillingPeriods,
-} from 'helpers/productPrice/billingPeriods';
+import { weeklyBillingPeriods } from 'helpers/productPrice/billingPeriods';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
 import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
@@ -168,10 +166,23 @@ function WeeklyCheckoutForm(props: PropTypes) {
 	useCsrCustomerData(props.setCsrCustomerData);
 
 	useEffect(() => {
+		/**
+		 * Rewrite the price (cart value) to report to QM
+		 * for users inThreeTierTestVariant as the original props.price
+		 * object doesn't account for the addition of S+ and associated promotions.
+		 */
+		const priceForQuantumMetric: ProductPrice = inThreeTierTestVariant
+			? {
+					...props.price,
+					promotions: [],
+					price: discountedDigitalPlusPrintPrice,
+			  }
+			: props.price;
+
 		sendEventSubscriptionCheckoutStart(
 			props.product,
 			false,
-			props.price,
+			priceForQuantumMetric,
 			props.billingPeriod,
 		);
 		inThreeTierTestVariant &&
@@ -196,20 +207,33 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.billingCountry,
 	);
 
-	// Quarterly & other billing periods not available in 3-tier ab-test
-	const billingPeriodNounLowerCase =
-		billingPeriodNoun(props.billingPeriod) === 'Annual' ? 'year' : 'month';
-	const digitalPlusPrintBillingPeriod =
+	/**
+	 * PayPal is not supported as a payment method for users
+	 * inThreeTierTestVariant, so remove it from paymentMethods
+	 * array.
+	 **/
+	if (inThreeTierTestVariant) {
+		const paypalIndex = paymentMethods.findIndex(
+			(subscriptionPaymentMethod) => subscriptionPaymentMethod === 'PayPal',
+		);
+
+		if (paypalIndex !== -1) {
+			paymentMethods.splice(paypalIndex);
+		}
+	}
+
+	const tierBillingPeriod = props.billingPeriod === 'Annual' ? 'year' : 'month';
+	const tierBillingPeriodName =
 		props.billingPeriod === 'Annual' ? 'annual' : 'monthly';
 
 	const standardDigitalPlusPrintPrice =
-		tierCards.tier3.plans[digitalPlusPrintBillingPeriod].charges[
-			props.countryGroupId
-		].price;
+		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
+			.price;
 	const digitalPlusPrintPotentialDiscount =
-		tierCards.tier3.plans[digitalPlusPrintBillingPeriod].charges[
-			props.countryGroupId
-		].discount;
+		tierCards.tier3.plans[tierBillingPeriodName].charges[props.countryGroupId]
+			.discount;
+	const discountedDigitalPlusPrintPrice =
+		digitalPlusPrintPotentialDiscount?.price ?? standardDigitalPlusPrintPrice;
 
 	const publicationStartDays = days.filter((day) => {
 		const invalidPublicationDates = ['-12-24', '-12-25', '-12-30'];
@@ -239,7 +263,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							<DigitalPlusPrintSummary
 								total={standardDigitalPlusPrintPrice}
 								currencySymbol={currencies[props.price.currency].glyph}
-								paymentFrequency={billingPeriodNounLowerCase}
+								paymentFrequency={tierBillingPeriod}
 								discount={potentialDiscount}
 								startDateGW={formatUserDate(publicationStartDays[0])}
 							/>
@@ -441,7 +465,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 									? `Pay ${currencies[props.price.currency].glyph}${
 											digitalPlusPrintPotentialDiscount?.price ??
 											standardDigitalPlusPrintPrice
-									  } per ${billingPeriodNounLowerCase}`
+									  } per ${tierBillingPeriod}`
 									: 'Pay now'
 							}
 							csrf={props.csrf}
@@ -489,17 +513,25 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						errorReason={props.submissionError}
 						errorHeading={submissionErrorHeading}
 					/>
-					<Total
-						price={props.discountedPrice.price}
-						currency={props.currencyId}
-					/>
+					{inThreeTierTestVariant ? (
+						<Total
+							price={
+								digitalPlusPrintPotentialDiscount?.price ??
+								standardDigitalPlusPrintPrice
+							}
+							currency={props.currencyId}
+						/>
+					) : (
+						<Total
+							price={props.discountedPrice.price}
+							currency={props.currencyId}
+						/>
+					)}
+
 					{inThreeTierTestVariant ? (
 						<ThreeTierTerms
 							paymentMethod={props.paymentMethod}
-							total={standardDigitalPlusPrintPrice}
-							currencySymbol={currencies[props.price.currency].glyph}
-							paymentFrequency={billingPeriodNounLowerCase}
-							discount={potentialDiscount}
+							paymentFrequency={tierBillingPeriod}
 						/>
 					) : (
 						<PaymentTerms paymentMethod={props.paymentMethod} />

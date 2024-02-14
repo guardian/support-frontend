@@ -25,28 +25,7 @@ export type CampaignSettings = {
 	// If set, the form will be replaced with this if goal reached
 };
 
-export const activeCampaigns: Record<string, CampaignSettings> = {
-	usEoy2023: {
-		campaignCode: 'usEoy2023',
-		campaignPath: 'us/contribute',
-		tickerId: 'US',
-		tickerSettings: {
-			countType: 'money',
-			endType: 'unlimited',
-			headline: 'Help us reach our end-of-year goal',
-		},
-	},
-	ausTicker2023: {
-		campaignCode: 'ausTicker2023',
-		campaignPath: 'au/contribute',
-		tickerId: 'AU',
-		tickerSettings: {
-			countType: 'money',
-			endType: 'unlimited',
-			headline: 'Help us reach our end-of-year goal',
-		},
-	},
-};
+export const activeCampaigns: Record<string, CampaignSettings> = {};
 
 function campaignEnabledForUser(campaignCode?: string): boolean {
 	if (campaignCode && isCampaignEnabled(campaignCode)) {
