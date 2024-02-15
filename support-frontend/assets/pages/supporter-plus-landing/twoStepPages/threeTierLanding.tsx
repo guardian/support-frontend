@@ -230,9 +230,9 @@ export function ThreeTierLanding(): JSX.Element {
 	const contributionTypeFromState =
 		useContributionsSelector(getContributionType);
 	const contributionType =
-		contributionTypeFromState === 'MONTHLY' ? 'MONTHLY' : 'ANNUAL';
+		contributionTypeFromState === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
 	const contributionTypeKey =
-		contributionTypeFromState === 'MONTHLY' ? 'monthly' : 'annual';
+		contributionTypeFromState === 'ANNUAL' ? 'annual' : 'monthly';
 
 	const urlParams = new URLSearchParams(window.location.search);
 	const urlSelectedAmount = urlParams.get('selected-amount');
