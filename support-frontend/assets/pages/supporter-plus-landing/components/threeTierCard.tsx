@@ -153,27 +153,23 @@ const benefitsPrefixPlus = css`
 	}
 `;
 
-const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
-	// EXAMPLE: £16 for the first year, then £25/month
+export const discountSummaryCopy = (
+	currency: string,
+	planCost: TierPlanCosts,
+	periodMonthToYear?: boolean,
+) => {
 	if (planCost.discount) {
+		const discountDuration = planCost.discount.duration.value;
 		const period =
-			planCost.discount.duration.value === 12 &&
-			planCost.discount.duration.period === 'MONTHLY'
-				? 'ANNUAL'
-				: planCost.discount.duration.period;
-		const duration =
-			planCost.discount.duration.value === 12 &&
-			planCost.discount.duration.period === 'MONTHLY'
-				? 1
-				: planCost.discount.duration.value;
-
-		return `${currency}${planCost.discount.price}/${
-			recurringContributionPeriodMap[planCost.discount.duration.period]
-		} for the first ${duration > 1 ? duration : ''} ${
-			recurringContributionPeriodMap[period]
-		}${duration > 1 ? 's' : ''}, then ${currency}${planCost.price}/${
-			recurringContributionPeriodMap[planCost.discount.duration.period]
-		}`;
+			recurringContributionPeriodMap[planCost.discount.duration.period];
+		const discountRate = `${currency}${planCost.discount.price}/${period}`;
+		const introductoryPeriod = periodMonthToYear
+			? `year`
+			: `${discountDuration > 1 ? discountDuration : ''} ${period}${
+					discountDuration > 1 ? 's' : ''
+			  }`;
+		const usualPrice = `${currency}${planCost.price}/${period}`;
+		return `${discountRate} for the first ${introductoryPeriod}, then ${usualPrice}`;
 	}
 };
 
@@ -209,7 +205,7 @@ export function ThreeTierCard({
 				{currentPriceCopy}
 				{!!planCost.discount && (
 					<span css={discountSummaryCss}>
-						{discountSummaryCopy(currency, planCost)}*
+						{discountSummaryCopy(currency, planCost, true)}*
 					</span>
 				)}
 			</h2>
