@@ -37,13 +37,24 @@ export function addProductSideEffects(
 			const { contributionAmount, contributionType, contributionCurrency } =
 				getContributionCartValueData(listenerApi.getState());
 
-			if (contributionAmount) {
-				sendEventContributionCartValue(
-					contributionAmount.toString(),
-					contributionType,
-					contributionCurrency,
-				);
+			if (!contributionAmount) {
+				return;
 			}
+
+			const { abParticipations } = listenerApi.getState().common;
+			const inThreeTierVariant =
+				abParticipations.threeTierCheckout === 'variant';
+			const isMonthlyOrAnnual = ['MONTHLY', 'ANNUAL'].includes(
+				contributionType,
+			);
+			if (inThreeTierVariant && isMonthlyOrAnnual) {
+				return;
+			}
+			sendEventContributionCartValue(
+				contributionAmount.toString(),
+				contributionType,
+				contributionCurrency,
+			);
 		},
 	});
 
