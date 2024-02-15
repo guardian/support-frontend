@@ -18,8 +18,8 @@ const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
 	// EXAMPLE: £16/month for the first 12 months, then £25/month
 	if (planCost.discount) {
 		const duration = planCost.discount.duration.value;
-    const period = planCost.discount.duration.period;
-    return `${currency}${planCost.discount.price}/${
+		const period = planCost.discount.duration.period;
+		return `${currency}${planCost.discount.price}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
 		} for the first ${duration > 1 ? duration : ''} ${
 			recurringContributionPeriodMap[period]
