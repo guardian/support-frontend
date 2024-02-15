@@ -15,17 +15,13 @@ const container = css`
 `;
 
 const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
-	// EXAMPLE: £16/month for the first 12 months, then £25/month
 	if (planCost.discount) {
-		const duration = planCost.discount.duration.value;
-		const period = planCost.discount.duration.period;
-		return `${currency}${planCost.discount.price}/${
-			recurringContributionPeriodMap[planCost.discount.duration.period]
-		} for the first ${duration > 1 ? duration : ''} ${
-			recurringContributionPeriodMap[period]
-		}${duration > 1 ? 's' : ''}, then ${currency}${planCost.price}/${
-			recurringContributionPeriodMap[planCost.discount.duration.period]
-		}`;
+		const discountDuration = planCost.discount.duration.value;
+		const period = recurringContributionPeriodMap[planCost.discount.duration.period];
+		const discountRate = `${currency}${planCost.discount.price}/${period}`
+		const introductoryPeriod = `${discountDuration > 1 ? discountDuration : ''} ${period}${discountDuration > 1 ? 's' : ''}`
+		const usualPrice = `${currency}${planCost.price}/${period}`
+		return `${discountRate} for the first ${introductoryPeriod}, then ${usualPrice}`;
 	}
 };
 
