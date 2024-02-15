@@ -207,6 +207,21 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.billingCountry,
 	);
 
+	/**
+	 * PayPal is not supported as a payment method for users
+	 * inThreeTierTestVariant, so remove it from paymentMethods
+	 * array.
+	 **/
+	if (inThreeTierTestVariant) {
+		const paypalIndex = paymentMethods.findIndex(
+			(subscriptionPaymentMethod) => subscriptionPaymentMethod === 'PayPal',
+		);
+
+		if (paypalIndex !== -1) {
+			paymentMethods.splice(paypalIndex);
+		}
+	}
+
 	const tierBillingPeriod = props.billingPeriod === 'Annual' ? 'year' : 'month';
 	const tierBillingPeriodName =
 		props.billingPeriod === 'Annual' ? 'annual' : 'monthly';
