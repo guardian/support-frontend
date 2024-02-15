@@ -43,7 +43,7 @@ export function addProductSideEffects(
 
 			const { abParticipations } = listenerApi.getState().common;
 			const inThreeTierVariant =
-				abParticipations.threeTierCheckout === 'variant';
+				abParticipations.threeTierCheckout.startsWith('variant');
 			const isMonthlyOrAnnual = ['MONTHLY', 'ANNUAL'].includes(
 				contributionType,
 			);

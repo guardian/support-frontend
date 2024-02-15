@@ -204,7 +204,7 @@ function buildRegularPaymentRequest(
 		salesforceCaseId,
 		debugInfo: actionHistory,
 		threeTierCreateSupporterPlusSubscription:
-			state.common.abParticipations.threeTierCheckout === 'variant',
+			state.common.abParticipations.threeTierCheckout.startsWith('variant'),
 	};
 }
 
@@ -257,8 +257,8 @@ function onPaymentAuthorised(
 			const { countryGroupId } = state.common.internationalisation;
 
 			const { abParticipations } = state.common;
-			const inThreeTierTestVariant =
-				abParticipations.threeTierCheckout === 'variant';
+			const inThreeTierVariant =
+				abParticipations.threeTierCheckout.startsWith('variant');
 			const standardDigitalPlusPrintPrice =
 				tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
 					.price;
@@ -274,7 +274,7 @@ function onPaymentAuthorised(
 			 * for users inThreeTierTestVariant as the original productPrice
 			 * object doesn't account for the addition of S+ and associated promotions.
 			 */
-			const priceForQuantumMetric: ProductPrice = inThreeTierTestVariant
+			const priceForQuantumMetric: ProductPrice = inThreeTierVariant
 				? {
 						...productPrice,
 						promotions: [],

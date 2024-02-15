@@ -165,7 +165,8 @@ function ThankYouContent({
 	product,
 	participations,
 }: PropTypes) {
-	const inThreeTierTestVariant = participations.threeTierCheckout === 'variant';
+	const inThreeTierVariant =
+		participations.threeTierCheckout.startsWith('variant');
 
 	const whatHappensNextItems = orderIsGift
 		? [
@@ -216,7 +217,7 @@ function ThankYouContent({
 	);
 
 	const thankyouSupportHeader = `Thank you for supporting our journalism${
-		!inThreeTierTestVariant ? '!' : ''
+		!inThreeTierVariant ? '!' : ''
 	}`;
 
 	useScrollToTop();
@@ -238,12 +239,12 @@ function ThankYouContent({
 						billingPeriod,
 						isPending,
 						orderIsGift,
-						inThreeTierTestVariant,
+						inThreeTierVariant,
 					)}
 				</HeadingBlock>
 			</HeroWrapper>
 
-			{inThreeTierTestVariant ? (
+			{inThreeTierVariant ? (
 				<>
 					<Content>
 						{isPending && (
@@ -321,8 +322,8 @@ function ThankYouContent({
 					</SansParagraph>
 				</Text>
 			</Content>
-			{!inThreeTierTestVariant && <SubscriptionsSurvey product={product} />}
-			{!inThreeTierTestVariant && (
+			{!inThreeTierVariant && <SubscriptionsSurvey product={product} />}
+			{!inThreeTierVariant && (
 				<Content>
 					<Asyncronously
 						loader={

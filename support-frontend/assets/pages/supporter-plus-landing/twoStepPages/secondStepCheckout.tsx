@@ -76,11 +76,10 @@ export function SupporterPlusCheckout({
 
 	const navigate = useNavigate();
 
-	const isInThreeTierCheckoutTest =
-		abParticipations.threeTierCheckout === 'variant';
+	const inThreeTierVariant =
+		abParticipations.threeTierCheckout.startsWith('variant');
 
-	const showPriceCards =
-		isInThreeTierCheckoutTest && contributionType === 'ONE_OFF';
+	const showPriceCards = inThreeTierVariant && contributionType === 'ONE_OFF';
 
 	const changeButton = (
 		<Button
@@ -112,7 +111,7 @@ export function SupporterPlusCheckout({
 						<ContributionsPriceCards />
 					) : (
 						<ContributionsOrderSummaryContainer
-							inThreeTier={isInThreeTierCheckoutTest}
+							inThreeTier={inThreeTierVariant}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}
@@ -165,9 +164,7 @@ export function SupporterPlusCheckout({
 						amount={amount}
 						amountIsAboveThreshold={amountIsAboveThreshold}
 						productNameAboveThreshold={
-							isInThreeTierCheckoutTest
-								? 'All-access digital'
-								: 'Supporter Plus'
+							inThreeTierVariant ? 'All-access digital' : 'Supporter Plus'
 						}
 					/>
 				</BoxContents>

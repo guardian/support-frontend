@@ -106,10 +106,13 @@ export const tests: Tests = {
 	threeTierCheckout: {
 		variants: [
 			{
-				id: 'variant',
+				id: 'control',
 			},
 			{
-				id: 'control',
+				id: 'variantA',
+			},
+			{
+				id: 'variantB',
 			},
 		],
 		isActive: true,
