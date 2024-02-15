@@ -17,10 +17,13 @@ const container = css`
 const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
 	if (planCost.discount) {
 		const discountDuration = planCost.discount.duration.value;
-		const period = recurringContributionPeriodMap[planCost.discount.duration.period];
-		const discountRate = `${currency}${planCost.discount.price}/${period}`
-		const introductoryPeriod = `${discountDuration > 1 ? discountDuration : ''} ${period}${discountDuration > 1 ? 's' : ''}`
-		const usualPrice = `${currency}${planCost.price}/${period}`
+		const period =
+			recurringContributionPeriodMap[planCost.discount.duration.period];
+		const discountRate = `${currency}${planCost.discount.price}/${period}`;
+		const introductoryPeriod = `${
+			discountDuration > 1 ? discountDuration : ''
+		} ${period}${discountDuration > 1 ? 's' : ''}`;
+		const usualPrice = `${currency}${planCost.price}/${period}`;
 		return `${discountRate} for the first ${introductoryPeriod}, then ${usualPrice}`;
 	}
 };
