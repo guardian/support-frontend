@@ -254,7 +254,22 @@ class Application(
       case _ => s"/uk/$path"
     }
   }
+
+  def checkout(country: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+
+    Ok(
+      views.html.main(
+        title = "Support the Guardian | Checkout",
+        mainElement = EmptyDiv("checkout"),
+        mainJsBundle = Left(RefPath("checkout.js")),
+        mainStyleBundle = Right(StyleContent(Html(""))),
+      )(),
+    ).withSettingsSurrogateKey
+  }
 }
+
+case class Page()
 
 object CSSElementForStage {
 
