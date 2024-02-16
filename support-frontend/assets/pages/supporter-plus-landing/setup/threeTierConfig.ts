@@ -1,4 +1,7 @@
-import type { RegularContributionType } from 'helpers/contributions';
+import type {
+	AmountValuesObject,
+	RegularContributionType,
+} from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 export interface TierBenefits {
@@ -19,6 +22,7 @@ export interface TierPlanCosts {
 interface FrequencyPlans {
 	label: string;
 	charges: Record<CountryGroupId, TierPlanCosts>;
+	priceCards?: Record<CountryGroupId, AmountValuesObject>;
 }
 
 interface TierPlans {
@@ -62,6 +66,43 @@ const tier1: TierCard = {
 				NZDCountries: { price: 10 },
 				AUDCountries: { price: 10 },
 			},
+			priceCards: {
+				GBPCountries: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+				EURCountries: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+				International: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+				UnitedStates: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+				Canada: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+				NZDCountries: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+				AUDCountries: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+			},
 		},
 		annual: {
 			label: 'Annual',
@@ -75,6 +116,43 @@ const tier1: TierCard = {
 				Canada: { price: 60 },
 				NZDCountries: { price: 80 },
 				AUDCountries: { price: 80 },
+			},
+			priceCards: {
+				GBPCountries: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+				EURCountries: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+				International: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+				UnitedStates: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+				Canada: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+				NZDCountries: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
+				AUDCountries: {
+					amounts: [2, 4, 6],
+					defaultAmount: 2,
+					hideChooseYourAmount: false,
+				},
 			},
 		},
 	},

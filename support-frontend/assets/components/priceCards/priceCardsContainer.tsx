@@ -1,5 +1,9 @@
 import type { OtherAmountProps } from 'components/otherAmount/otherAmount';
-import type { ContributionType } from 'helpers/contributions';
+import type {
+	AmountValuesObject,
+	ContributionType,
+} from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	setOtherAmount,
 	setOtherAmountBeforeAmendment,
@@ -15,6 +19,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import type { PriceCardPaymentInterval } from './priceCard';
 import type { PriceCardsProps } from './priceCards';
 
@@ -37,8 +42,8 @@ export function PriceCardsContainer({
 	renderPriceCards,
 }: PriceCardsContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
-	const currency = useContributionsSelector(
-		(state) => state.common.internationalisation.currencyId,
+	const { countryGroupId, currencyId } = useContributionsSelector(
+		(state) => state.common.internationalisation,
 	);
 	const { amounts } = useContributionsSelector((state) => state.common);
 	const { amountsCardData } = amounts;
@@ -46,11 +51,35 @@ export function PriceCardsContainer({
 		(state) => state.page.checkoutForm.product,
 	);
 	const minAmount = useContributionsSelector(getMinimumContributionAmount());
+
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
+	);
+	const inThreeTierVariantB = abParticipations.threeTierCheckout === 'variantB';
+
+	const getTierLowPiceCardAmounts = (
+		contributionType: ContributionType,
+		countryGroup: CountryGroupId,
+		intThreeTierVariant: boolean,
+	): AmountValuesObject | undefined => {
+		const tierBillingPeriod =
+			contributionType === 'ANNUAL' ? 'annual' : 'monthly';
+		const priceCards = tierCards[`tier1`].plans[tierBillingPeriod].priceCards;
+		if (priceCards && intThreeTierVariant) {
+			return priceCards[countryGroup];
+		}
+	};
+
 	const {
 		amounts: frequencyAmounts,
 		defaultAmount,
 		hideChooseYourAmount,
-	} = amountsCardData[paymentFrequency];
+	} = getTierLowPiceCardAmounts(
+		paymentFrequency,
+		countryGroupId,
+		inThreeTierVariantB,
+	) ?? amountsCardData[paymentFrequency];
+
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
 		paymentFrequency,
@@ -91,7 +120,7 @@ export function PriceCardsContainer({
 	}
 
 	return renderPriceCards({
-		currency,
+		currency: currencyId,
 		amounts: frequencyAmounts.map((amount) => amount.toString()),
 		selectedAmount,
 		otherAmount,
