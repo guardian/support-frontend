@@ -21,7 +21,7 @@ import type { PriceCardsProps } from './priceCards';
 type PriceCardsRenderProps = PriceCardsProps & OtherAmountProps;
 
 type PriceCardsContainerProps = {
-	frequency: ContributionType;
+	paymentFrequency: ContributionType;
 	renderPriceCards: (props: PriceCardsRenderProps) => JSX.Element;
 };
 
@@ -33,7 +33,7 @@ const contributionTypeToPaymentInterval: Partial<
 };
 
 export function PriceCardsContainer({
-	frequency,
+	paymentFrequency,
 	renderPriceCards,
 }: PriceCardsContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
@@ -50,26 +50,26 @@ export function PriceCardsContainer({
 		amounts: frequencyAmounts,
 		defaultAmount,
 		hideChooseYourAmount,
-	} = amountsCardData[frequency];
+	} = amountsCardData[paymentFrequency];
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
-		frequency,
+		paymentFrequency,
 		defaultAmount,
 	).toString();
 	const otherAmountErrors = useContributionsSelector(getOtherAmountErrors);
 
-	const otherAmount = otherAmounts[frequency].amount ?? '';
+	const otherAmount = otherAmounts[paymentFrequency].amount ?? '';
 
 	function onAmountChange(newAmount: string) {
 		dispatch(
 			setSelectedAmount({
-				contributionType: frequency,
+				contributionType: paymentFrequency,
 				amount: newAmount,
 			}),
 		);
 		dispatch(
 			setSelectedAmountBeforeAmendment({
-				contributionType: frequency,
+				contributionType: paymentFrequency,
 				amount: newAmount,
 			}),
 		);
@@ -78,13 +78,13 @@ export function PriceCardsContainer({
 	function onOtherAmountChange(newAmount: string) {
 		dispatch(
 			setOtherAmount({
-				contributionType: frequency,
+				contributionType: paymentFrequency,
 				amount: newAmount,
 			}),
 		);
 		dispatch(
 			setOtherAmountBeforeAmendment({
-				contributionType: frequency,
+				contributionType: paymentFrequency,
 				amount: newAmount,
 			}),
 		);
@@ -95,7 +95,7 @@ export function PriceCardsContainer({
 		amounts: frequencyAmounts.map((amount) => amount.toString()),
 		selectedAmount,
 		otherAmount,
-		paymentInterval: contributionTypeToPaymentInterval[frequency],
+		paymentInterval: contributionTypeToPaymentInterval[paymentFrequency],
 		minAmount,
 		onAmountChange,
 		onOtherAmountChange,

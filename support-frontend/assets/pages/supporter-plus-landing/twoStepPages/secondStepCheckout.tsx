@@ -79,7 +79,11 @@ export function SupporterPlusCheckout({
 	const inThreeTierVariant =
 		abParticipations.threeTierCheckout.startsWith('variant');
 
-	const showPriceCards = inThreeTierVariant && contributionType === 'ONE_OFF';
+	// Price Cards also shown for lower tier in three-tier variantB
+	const inThreeTierVariantB = abParticipations.threeTierCheckout === 'variantB';
+	const showPriceCards =
+		(inThreeTierVariant && contributionType === 'ONE_OFF') ||
+		(inThreeTierVariantB && !amountIsAboveThreshold);
 
 	const changeButton = (
 		<Button
@@ -108,7 +112,7 @@ export function SupporterPlusCheckout({
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					{showPriceCards ? (
-						<ContributionsPriceCards />
+						<ContributionsPriceCards paymentFrequency={contributionType} />
 					) : (
 						<ContributionsOrderSummaryContainer
 							inThreeTier={inThreeTierVariant}

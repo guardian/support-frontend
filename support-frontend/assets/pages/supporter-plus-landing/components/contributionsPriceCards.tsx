@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { OtherAmount } from 'components/otherAmount/otherAmount';
 import { PriceCards } from 'components/priceCards/priceCards';
 import { PriceCardsContainer } from 'components/priceCards/priceCardsContainer';
+import type { ContributionType } from 'helpers/contributions';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
@@ -38,7 +39,13 @@ const standFirst = css`
 	}
 `;
 
-export function ContributionsPriceCards(): JSX.Element {
+interface ContributionsPriceCardsProps {
+	paymentFrequency: ContributionType;
+}
+
+export function ContributionsPriceCards({
+	paymentFrequency,
+}: ContributionsPriceCardsProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
@@ -69,12 +76,16 @@ export function ContributionsPriceCards(): JSX.Element {
 			`}
 		>
 			<div css={titleAndButtonContainer}>
-				<h2 css={title}>Support just once</h2>
+				<h2 css={title}>
+					{paymentFrequency === 'ONE_OFF'
+						? 'Support just once'
+						: 'Your subscription'}
+				</h2>
 				{backButton}
 			</div>
 			<p css={standFirst}>Support us with the amount of your choice.</p>
 			<PriceCardsContainer
-				frequency={'ONE_OFF'}
+				paymentFrequency={paymentFrequency}
 				renderPriceCards={({
 					amounts,
 					selectedAmount,
