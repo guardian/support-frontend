@@ -78,6 +78,7 @@ Universal / javaOptions ++= Seq(
   "-J-XX:MaxMetaspaceSize=256m",
   "-J-XX:+PrintGCDetails",
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log",
+  "-XX:-OmitStackTraceInFastThrow",
 )
 
 addCommandAlias(
