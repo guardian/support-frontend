@@ -49,7 +49,7 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec {
         UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures)
       inside(supporterRatePlanItem) { case Right(item) =>
         item.value.identityId shouldBe "200092951"
-        item.value.contributionAmount shouldBe Some(ContributionAmount(12, "GBP"))
+        item.value.contributionAmount shouldBe None // not guaranteed right if discounted, and unused anyway
       }
     }
   }
