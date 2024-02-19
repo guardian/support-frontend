@@ -18,10 +18,15 @@ const stateMachine = Handlebars.compile(loadTemplate('state-machine.yaml'))
 const stateMachineYaml = stateMachine({}, {partials})
 const stateMachineJson = JSON.stringify(yaml.load(stateMachineYaml))
 
+const threeTierStateMachine = Handlebars.compile(loadTemplate('three-tier-state-machine.yaml'))
+const threeTierStateMachineYaml = threeTierStateMachine({}, {partials})
+const threeTierStateMachineJson = JSON.stringify(yaml.load(threeTierStateMachineYaml))
+
 partials = {
   lambda: loadTemplate('lambda.yaml'),
   environmentVariables: loadTemplate('environment-variables.yaml'),
   stateMachine: stateMachineJson,
+  threeTierStateMachine: threeTierStateMachineJson,
 }
 const main = Handlebars.compile(loadTemplate('cfn-template.yaml'))
 const output = main(yaml.load(readFile('view.yaml')), {partials})
