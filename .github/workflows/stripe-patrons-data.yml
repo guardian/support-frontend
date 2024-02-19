@@ -63,7 +63,7 @@ jobs:
           sbt "project stripe-patrons-data" "test; assembly"
 
       - name: Upload to RiffRaff
-        uses: guardian/actions-riff-raff@v3
+        uses: guardian/actions-riff-raff@v4
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           app: stripe-patrons-data
