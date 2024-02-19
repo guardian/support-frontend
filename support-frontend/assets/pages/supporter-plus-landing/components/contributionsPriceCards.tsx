@@ -41,10 +41,12 @@ const standFirst = css`
 
 interface ContributionsPriceCardsProps {
 	paymentFrequency: ContributionType;
+	inThreeTierVariant?: boolean;
 }
 
 export function ContributionsPriceCards({
 	paymentFrequency,
+	inThreeTierVariant,
 }: ContributionsPriceCardsProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const { abParticipations } = useContributionsSelector(
@@ -79,11 +81,13 @@ export function ContributionsPriceCards({
 				<h2 css={title}>
 					{paymentFrequency === 'ONE_OFF'
 						? 'Support just once'
-						: 'Your subscription'}
+						: 'Choose your amount'}
 				</h2>
 				{backButton}
 			</div>
-			<p css={standFirst}>Support us with the amount of your choice.</p>
+			{paymentFrequency === 'ONE_OFF' && (
+				<p css={standFirst}>Support us with the amount of your choice.</p>
+			)}
 			<PriceCardsContainer
 				paymentFrequency={paymentFrequency}
 				renderPriceCards={({
@@ -115,6 +119,7 @@ export function ContributionsPriceCards({
 								errors={errors}
 							/>
 						}
+						inThreeTierVariant={inThreeTierVariant}
 					/>
 				)}
 			/>
