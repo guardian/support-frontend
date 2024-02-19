@@ -51,6 +51,33 @@ function ScrollToTop() {
 	return null;
 }
 
+type ThreeTierRedirectProps = {
+	children: React.ReactNode;
+	countryId: string;
+};
+function ThreeTierRedirectOneOffToCheckout({
+	children,
+	countryId,
+}: ThreeTierRedirectProps) {
+	const urlParams = new URLSearchParams(window.location.search);
+	const urlSelectedContributionType = urlParams.get(
+		'selected-contribution-type',
+	);
+	const urlParamsString = urlParams.toString();
+	const oneOff = urlSelectedContributionType === 'ONE_OFF';
+
+	return oneOff ? (
+		<Navigate
+			to={`/${countryId}/contribute/checkout${`${
+				urlParamsString ? `?${urlParamsString}` : ''
+			}${window.location.hash}`}`}
+			replace
+		/>
+	) : (
+		<>{children}</>
+	);
+}
+
 // ----- Render ----- //
 
 const router = () => {
@@ -59,23 +86,6 @@ const router = () => {
 	} = store.getState();
 	const isInThreeTierCheckoutTest =
 		abParticipations.threeTierCheckout === 'variant';
-	const firstStepLandingPage = isInThreeTierCheckoutTest ? (
-		<ThreeTierLanding />
-	) : (
-		<SupporterPlusInitialLandingPage thankYouRoute={thankYouRoute} />
-	);
-	const urlParams = new URLSearchParams(window.location.search);
-	const urlSelectedContributionType = urlParams.get(
-		'selected-contribution-type',
-	);
-
-	const isThreeTierAndOneOffUrlParam =
-		isInThreeTierCheckoutTest && urlSelectedContributionType === 'ONE_OFF';
-
-	const getExistingUrlParamsAndHash = () => {
-		const urlParams = new URLSearchParams(window.location.search).toString();
-		return `${urlParams ? `?${urlParams}` : ''}${window.location.hash}`;
-	};
 
 	return (
 		<BrowserRouter>
@@ -92,13 +102,14 @@ const router = () => {
 									 * contribution type (set in the url) and find yourself in the three tier
 									 * variant we should redirect you to the /contribute/checkout route
 									 */
-									isThreeTierAndOneOffUrlParam ? (
-										<Navigate
-											to={`/${countryId}/contribute/checkout${getExistingUrlParamsAndHash()}`}
-											replace
-										/>
+									isInThreeTierCheckoutTest ? (
+										<ThreeTierRedirectOneOffToCheckout countryId={countryId}>
+											<ThreeTierLanding />
+										</ThreeTierRedirectOneOffToCheckout>
 									) : (
-										firstStepLandingPage
+										<SupporterPlusInitialLandingPage
+											thankYouRoute={thankYouRoute}
+										/>
 									)
 								}
 							/>
