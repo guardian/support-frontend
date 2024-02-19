@@ -49,8 +49,6 @@ Compile / packageDoc / publishArtifact := false
 
 enablePlugins(SystemdPlugin)
 
-debianPackageDependencies := Seq("openjdk-8-jre-headless")
-
 packageSummary := "Support Frontend Play App"
 packageDescription := """Frontend for the new supporter platform"""
 maintainer := "Membership <membership.dev@theguardian.com>"
@@ -79,8 +77,8 @@ Universal / javaOptions ++= Seq(
   "-Dpidfile.path=/dev/null",
   "-J-XX:MaxMetaspaceSize=256m",
   "-J-XX:+PrintGCDetails",
-  "-J-XX:+PrintGCDateStamps",
   s"-J-Xloggc:/var/log/${packageName.value}/gc.log",
+  "-XX:-OmitStackTraceInFastThrow",
 )
 
 addCommandAlias(
