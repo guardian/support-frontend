@@ -23,6 +23,7 @@ import {
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import {
 	getCurrency,
 	getProductPrice,
@@ -57,6 +58,7 @@ import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagMana
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
@@ -201,6 +203,8 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
+		threeTierCreateSupporterPlusSubscription:
+			state.common.abParticipations.threeTierCheckout === 'variant',
 	};
 }
 
@@ -247,11 +251,42 @@ function onPaymentAuthorised(
 			}
 			// track conversion with GTM
 			successfulSubscriptionConversion();
+
+			const tierBillingPeriodName =
+				billingPeriod === 'Monthly' ? 'monthly' : 'annual';
+			const { countryGroupId } = state.common.internationalisation;
+
+			const { abParticipations } = state.common;
+			const inThreeTierTestVariant =
+				abParticipations.threeTierCheckout === 'variant';
+			const standardDigitalPlusPrintPrice =
+				tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
+					.price;
+			const digitalPlusPrintPotentialDiscount =
+				tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
+					.discount;
+			const discountedDigitalPlusPrintPrice =
+				digitalPlusPrintPotentialDiscount?.price ??
+				standardDigitalPlusPrintPrice;
+
+			/**
+			 * Rewrite the price (cart value) to report to QM
+			 * for users inThreeTierTestVariant as the original productPrice
+			 * object doesn't account for the addition of S+ and associated promotions.
+			 */
+			const priceForQuantumMetric: ProductPrice = inThreeTierTestVariant
+				? {
+						...productPrice,
+						promotions: [],
+						price: discountedDigitalPlusPrintPrice,
+				  }
+				: productPrice;
+
 			// track conversion with QM
 			sendEventSubscriptionCheckoutConversion(
 				productType,
 				!!orderIsAGift,
-				productPrice,
+				priceForQuantumMetric,
 				billingPeriod,
 			);
 		} else if (result.error) {

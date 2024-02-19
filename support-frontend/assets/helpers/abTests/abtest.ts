@@ -68,6 +68,8 @@ export type Test = {
 	// In particular this allows 3rd party tests to be identified and tracked in support-frontend
 	// without too much "magic" involving the shared mvtId.
 	referrerControlled: boolean;
+	// If another test participation is referrerControlled, exclude this test
+	excludeIfInReferrerControlledTest?: boolean;
 	seed: number;
 	// An optional regex that will be tested against the path of the current page
 	// before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
@@ -79,7 +81,7 @@ export type Tests = Record<string, Test>;
 
 // ----- Init ----- //
 
-export function init(
+function init(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	abTests: Tests = tests,
@@ -174,6 +176,19 @@ function getParticipations(
 
 		participations[testId] = test.variants[variantAssignment.variantIndex].id;
 	});
+
+	// If referrerControlled is set for any test, exclude tests that have excludeIfInReferrerControlledTest set
+	const inReferrerControlledTest = Object.keys(participations).some(
+		(testId) => abTests[testId].referrerControlled,
+	);
+	if (inReferrerControlledTest) {
+		Object.keys(participations).forEach((testId) => {
+			if (abTests[testId].excludeIfInReferrerControlledTest) {
+				delete participations[testId];
+			}
+		});
+	}
+
 	return participations;
 }
 
@@ -209,7 +224,7 @@ interface GetAmountsTestVariantResult {
 	selectedAmountsVariant: SelectedAmountsVariant; // Always return an AmountsVariant, even if it's a fallback
 	amountsParticipation?: Participations; // Optional because we only add participation if we want to track an amounts test that has multiple variants
 }
-export function getAmountsTestVariant(
+function getAmountsTestVariant(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	settings: Settings,
@@ -219,6 +234,7 @@ export function getAmountsTestVariant(
 		[],
 ): GetAmountsTestVariantResult {
 	const { amounts } = settings;
+
 	if (!amounts) {
 		return {
 			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
@@ -235,6 +251,7 @@ export function getAmountsTestVariant(
 			path,
 			'/??/contribute|thankyou(/.*)?$',
 		);
+
 		if (pathMatches && test.variants.length > 1 && test.isLive) {
 			return {
 				[testName]: variantName,
@@ -341,6 +358,7 @@ export function getAmountsTestVariant(
 		currentTestName,
 		variant.variantName,
 	);
+
 	return {
 		selectedAmountsVariant: {
 			...variant,
@@ -372,7 +390,7 @@ function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
 	}
 }
 
-export function getSourceFromAcquisitionData(): string | undefined {
+function getSourceFromAcquisitionData(): string | undefined {
 	const acquisitionDataParam = getQueryParameter('acquisitionData');
 
 	if (!acquisitionDataParam) {
@@ -528,7 +546,7 @@ function assigned(variantIndex: number): VariantAssignment {
 	return { type: 'ASSIGNED', variantIndex };
 }
 
-export function targetPageMatches(
+function targetPageMatches(
 	locationPath: string,
 	targetPage: (string | null | undefined) | RegExp,
 ): boolean {
@@ -538,3 +556,10 @@ export function targetPageMatches(
 
 	return locationPath.match(targetPage) != null;
 }
+
+export { init, getAmountsTestVariant };
+
+// Exported for testing only
+export const _ = {
+	targetPageMatches,
+};

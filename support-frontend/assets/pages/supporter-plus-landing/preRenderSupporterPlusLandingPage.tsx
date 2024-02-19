@@ -73,7 +73,6 @@ const countrySwitcherProps: CountryGroupSwitcherProps = {
 function PreRenderSupporterPlusLandingPage(): JSX.Element {
 	return (
 		<PageScaffold
-			id="supporter-plus-landing"
 			header={
 				<>
 					<Header>

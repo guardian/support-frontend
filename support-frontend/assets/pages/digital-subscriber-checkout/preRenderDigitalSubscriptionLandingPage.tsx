@@ -24,7 +24,7 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { PrerenderGlobalStyles } from 'helpers/rendering/prerenderGlobalStyles';
-import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
+import { LandingPageHeading } from 'pages/digital-subscriber-checkout/components/landingPageHeading';
 
 const checkoutContainer = css`
 	position: relative;
@@ -68,7 +68,6 @@ function PreRenderDigitalSubscriptionLandingPage(): JSX.Element {
 
 	return (
 		<PageScaffold
-			id="digital-subscription-landing"
 			header={
 				<>
 					<Header>

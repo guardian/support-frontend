@@ -4,15 +4,25 @@ import com.gu.config.Configuration
 import com.gu.i18n.{Country, Title}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.salesforce.Fixtures._
-import com.gu.salesforce.Salesforce.{Authentication, DeliveryContact, NewContact, SalesforceContactResponse}
+import com.gu.salesforce.Salesforce.{
+  Authentication,
+  DeliveryContact,
+  NewContact,
+  SalesforceContactSuccess,
+  SalesforceErrorResponse,
+}
 import com.gu.support.workers
 import com.gu.support.workers.{Address, GiftRecipient}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
+import org.scalatest.concurrent.PatienceConfiguration.Timeout
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.concurrent.{Eventually, ScalaFutures}
+import org.scalatest.time.{Millis, Seconds, Span}
 
 import scala.concurrent.duration._
+import scala.util.{Failure, Success}
 
 @IntegrationTest
 class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
@@ -62,7 +72,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
     val service =
       new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
 
-    service.upsert(customer).map { response: SalesforceContactResponse =>
+    service.upsert(customer).map { response: SalesforceContactSuccess =>
       response.Success shouldBe true
       response.ContactRecord.Id shouldBe salesforceId
       response.ContactRecord.AccountId shouldBe salesforceAccountId
@@ -85,7 +95,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       Phone = Some(telephoneNumber),
     )
 
-    service.upsert(upsertData).map { response: SalesforceContactResponse =>
+    service.upsert(upsertData).map { response: SalesforceContactSuccess =>
       response.Success shouldBe true
       response.ContactRecord.Id shouldBe salesforceId
       response.ContactRecord.AccountId shouldBe salesforceAccountId
@@ -110,7 +120,7 @@ class SalesforceSpec extends AsyncFlatSpec with Matchers with LazyLogging {
       MailingCountry = Some(uk),
     )
 
-    service.upsert(upsertData).map { response: SalesforceContactResponse =>
+    service.upsert(upsertData).map { response: SalesforceContactSuccess =>
       response.Success shouldBe true
       response.ContactRecord.AccountId shouldBe salesforceAccountId
     }

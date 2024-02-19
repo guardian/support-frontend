@@ -45,6 +45,24 @@ export const pageUrlRegexes = {
 };
 
 export const tests: Tests = {
+	patronsOneOffOnly: {
+		variants: [
+			// not really an AB test
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		isActive: true,
+		referrerControlled: true,
+		seed: 1,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+	},
 	supporterPlusOnly: {
 		variants: [
 			{
@@ -65,13 +83,36 @@ export const tests: Tests = {
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
+	emotionalBenefits: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			UnitedStates: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: false,
+		referrerControlled: false,
+		seed: 5,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+	},
 	threeTierCheckout: {
 		variants: [
 			{
 				id: 'variant',
 			},
+			{
+				id: 'control',
+			},
 		],
-		isActive: false,
+		isActive: true,
 		audiences: {
 			ALL: {
 				offset: 0,
@@ -80,7 +121,36 @@ export const tests: Tests = {
 		},
 		omitCountries: countriesAffectedByVATStatus,
 		referrerControlled: false,
+		excludeIfInReferrerControlledTest: true,
 		seed: 0,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesExecptSupportPlus,
+
+		/**
+		 * This runs on
+		 * - /{countryGroupId}/contribute
+		 * - /{countryGroupId}/contribute/checkout
+		 * - /{countryGroupId}/thankyou
+		 * - /subscribe/weekly/checkout?threeTierCreateSupporterPlusSubscription=true
+		 *
+		 * And does not run on
+		 * - /subscribe/weekly/checkout
+		 */
+		canRun: () => {
+			// Contribute pages
+			const isContributionLandingPageOrThankyou =
+				window.location.pathname.match(
+					pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+				) !== null;
+
+			// Weekly pages
+			const urlParams = new URLSearchParams(window.location.search);
+			const isThirdTier =
+				urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
+			const isWeeklyCheckout =
+				window.location.pathname === '/subscribe/weekly/checkout';
+
+			return (
+				isContributionLandingPageOrThankyou || (isWeeklyCheckout && isThirdTier)
+			);
+		},
 	},
 };

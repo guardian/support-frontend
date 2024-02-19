@@ -1,5 +1,6 @@
 // ----- Routes ----- //
-import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { type FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { Option } from 'helpers/types/option';
 import type { CountryGroupId } from '../internationalisation/countryGroup';
@@ -29,9 +30,9 @@ const routes: Record<string, string> = {
 	digitalSubscriptionLanding: '/subscribe/digitaledition',
 	digitalSubscriptionLandingGift: '/subscribe/digital/gift',
 	paperSubscriptionLanding: '/subscribe/paper',
-	paperSubscriptionProductChoices: '/subscribe/paper#subscribe',
+	paperSubscriptionProductChoices: '/subscribe/paper#HomeDelivery',
 	paperSubscriptionDeliveryProductChoices:
-		'/subscribe/paper/delivery#subscribe',
+		'/subscribe/paper/delivery#HomeDelivery',
 	guardianWeeklySubscriptionLanding: '/subscribe/weekly',
 	guardianWeeklySubscriptionLandingGift: '/subscribe/weekly/gift',
 	guardianWeeklyStudent:
@@ -55,14 +56,10 @@ function postcodeLookupUrl(postcode: string): string {
 }
 
 function paperSubsUrl(
-	withDelivery = false,
+	paperFulfulmentOption?: PaperFulfilmentOptions,
 	promoCode?: Option<string>,
 ): string {
-	const baseURL = [
-		getOrigin(),
-		'uk/subscribe/paper',
-		...(withDelivery ? ['delivery'] : []),
-	].join('/');
+	const baseURL = [getOrigin(), 'uk/subscribe/paper'].join('/');
 	const queryParams = [
 		...getAllQueryParams(),
 		...(promoCode ? [['promoCode', promoCode]] : []),
@@ -71,8 +68,10 @@ function paperSubsUrl(
 		.map((keyValuePair) => keyValuePair.join('='))
 		.join('&');
 
+	const hash = paperFulfulmentOption ? `#${paperFulfulmentOption}` : '';
+
 	if (queryParamsString) {
-		return `${baseURL}?${queryParamsString}`;
+		return `${baseURL}?${queryParamsString}${hash}`;
 	}
 
 	return baseURL;

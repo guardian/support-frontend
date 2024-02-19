@@ -1,0 +1,7 @@
+# This step ID is generated and should match in ./supporterPlusProduct.yaml
+- Next: ThreeTierSupporterPlus{{billingPeriod}}{{countryCode}}
+  And:
+  - Variable: $.state.user.billingAddress.country
+    StringEquals: {{countryCode}}
+  - Variable: $.state.product.billingPeriod
+    StringEquals: {{billingPeriod}}

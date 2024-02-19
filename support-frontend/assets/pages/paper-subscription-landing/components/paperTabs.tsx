@@ -2,7 +2,10 @@
 import { Outset } from 'components/content/content';
 import Tabs from 'components/tabs/tabs';
 import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { paperSubsUrl } from 'helpers/urls/routes';
+import {
+	Collection,
+	HomeDelivery,
+} from 'helpers/productPrice/fulfilmentOptions';
 import { ContentDeliveryFaqBlock } from './content/deliveryTab';
 import { SubsCardFaqBlock } from './content/subsCardTab';
 // ----- Tabs ----- //
@@ -14,12 +17,12 @@ type TabOptions = {
 export const tabs: Record<PaperFulfilmentOptions, TabOptions> = {
 	HomeDelivery: {
 		name: 'Home Delivery',
-		href: paperSubsUrl(true),
+		href: `#${HomeDelivery}`,
 		content: ContentDeliveryFaqBlock,
 	},
 	Collection: {
 		name: 'Subscription Card',
-		href: paperSubsUrl(false),
+		href: `#${Collection}`,
 		content: SubsCardFaqBlock,
 	},
 };

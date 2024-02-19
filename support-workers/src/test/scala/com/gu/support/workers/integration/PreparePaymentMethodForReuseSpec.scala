@@ -64,9 +64,9 @@ class PreparePaymentMethodForReuseSpec extends AsyncLambdaSpec with MockServices
     // Need to return None from the Zuora service `getRecurringSubscription`
     // method or the subscribe step gets skipped
     // if these methods weren't coupled into one class then we could pass them separately and avoid reflection
-    when(mockZuora.getObjectAccount(any[String]))
+    when(mockZuora.getAccount(any[String]))
       .thenAnswer((invocation: InvocationOnMock) =>
-        realZuoraService.getObjectAccount(invocation.getArguments.head.asInstanceOf[String]),
+        realZuoraService.getAccount(invocation.getArguments.head.asInstanceOf[String]),
       )
     when(mockZuora.getPaymentMethod(any[String]))
       .thenAnswer((invocation: InvocationOnMock) =>

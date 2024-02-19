@@ -199,7 +199,7 @@ export function WeeklyHero({
 								iconSide="right"
 								icon={<SvgArrowDownStraight />}
 								cssOverrides={linkButtonColour}
-								href="#subscribe"
+								href="#HomeDelivery"
 							>
 								See pricing options
 							</LinkButton>

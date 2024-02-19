@@ -73,4 +73,4 @@ const content = (
 		</Page>
 	</Provider>
 );
-renderPage(content, 'paper-subscription-checkout-page');
+renderPage(content);

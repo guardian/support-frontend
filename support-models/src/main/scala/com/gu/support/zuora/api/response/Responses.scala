@@ -65,6 +65,8 @@ object BasicInfo {
 case class BasicInfo(
     id: String,
     name: String,
+    IdentityId__c: Option[String],
+    sfContactId__c: Option[String],
     accountNumber: String,
     notes: Option[String],
     status: String,
@@ -74,27 +76,17 @@ case class BasicInfo(
     communicationProfileId: Option[String],
 )
 
+object BillingAndPayment {
+  implicit val codec: Codec[BillingAndPayment] = deriveCodec
+}
+case class BillingAndPayment(defaultPaymentMethodId: Option[String], paymentGateway: PaymentGateway)
+
 object GetAccountResponse {
   implicit val codec: Codec[GetAccountResponse] = deriveCodec
 }
 
-case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo) extends ZuoraResponse
-
-//this response cannot extend ZuoraResponse because this endpoint doesn't return a 'success' boolean field
-case class GetObjectAccountResponse(
-    IdentityId__c: Option[String],
-    sfContactId__c: Option[String],
-    CrmId: Option[String],
-    DefaultPaymentMethodId: Option[String],
-    AutoPay: Boolean,
-    Balance: Double,
-    Currency: String,
-    PaymentGateway: PaymentGateway,
-)
-
-object GetObjectAccountResponse {
-  implicit val codec: Codec[GetObjectAccountResponse] = deriveCodec
-}
+case class GetAccountResponse(success: Boolean, basicInfo: BasicInfo, billingAndPayment: BillingAndPayment)
+    extends ZuoraResponse
 
 sealed trait GetPaymentMethodResponse {
   def `type`: String

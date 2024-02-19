@@ -1,3 +1,4 @@
+import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	between,
@@ -36,11 +37,18 @@ const maxWidth = css`
 		max-width: 15ch;
 	}
 `;
+
 const headingCss = css`
 	${headline.xsmall({ fontWeight: 'bold' })}
 	${from.tablet} {
-		font-size: 28px;
-		line-height: 115%;
+		${headline.small({ fontWeight: 'bold', lineHeight: 'tight' })}
+	}
+`;
+
+const headingEmotionalCss = css`
+	${textSans.small()}
+	strong {
+		font-weight: bold;
 	}
 `;
 
@@ -55,12 +63,13 @@ const hrCss = (margin: string) => css`
 `;
 
 export type CheckoutBenefitsListProps = {
-	title: string;
+	title: Array<string | { copy: string; strong: boolean }>;
 	checkListData: CheckListData[];
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
 	withBackground?: boolean;
 	isCompactList?: boolean;
+	displayEmotionalBenefit?: boolean;
 };
 
 export function CheckoutBenefitsList({
@@ -68,7 +77,29 @@ export function CheckoutBenefitsList({
 	checkListData,
 	withBackground,
 	isCompactList,
+	displayEmotionalBenefit,
 }: CheckoutBenefitsListProps): JSX.Element {
+	const titleCopy = title.map((stringPart) => {
+		if (typeof stringPart === 'string') {
+			return stringPart;
+		} else {
+			return <strong>{stringPart.copy}</strong>;
+		}
+	});
+
+	const headerMessageStyle = (
+		displayEmotionalBenefit?: boolean,
+		withBackground?: boolean,
+	): SerializedStyles | SerializedStyles[] => {
+		if (displayEmotionalBenefit) {
+			return headingEmotionalCss;
+		} else if (withBackground) {
+			return [headingCss, maxWidth];
+		} else {
+			return [headingCss, smallMaxWidth];
+		}
+	};
+
 	return (
 		<div
 			css={
@@ -77,12 +108,8 @@ export function CheckoutBenefitsList({
 					: [containerCss]
 			}
 		>
-			<h2
-				css={
-					withBackground ? [headingCss, maxWidth] : [headingCss, smallMaxWidth]
-				}
-			>
-				{title}
+			<h2 css={headerMessageStyle(displayEmotionalBenefit, withBackground)}>
+				<span>{titleCopy}</span>
 			</h2>
 			<hr css={hrCss(`${space[4]}px 0`)} />
 			<CheckmarkList

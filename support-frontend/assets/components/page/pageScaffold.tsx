@@ -1,5 +1,5 @@
 import { css, Global } from '@emotion/react';
-import { FocusStyleManager } from '@guardian/source-foundations';
+import { brand, FocusStyleManager } from '@guardian/source-foundations';
 import type { ReactNode } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { SkipLink } from 'components/skipLink/skipLink';
@@ -14,6 +14,7 @@ const container = css`
 	min-height: 100vh;
 	max-width: 100%;
 	overflow-x: hidden;
+	background-color: ${brand[400]};
 
 	& main {
 		flex: 1;
@@ -26,7 +27,6 @@ const container = css`
 `;
 
 export type PageScaffoldProps = {
-	id: string;
 	header?: ReactNode;
 	footer?: ReactNode;
 	children: ReactNode;
@@ -34,21 +34,25 @@ export type PageScaffoldProps = {
 
 FocusStyleManager.onlyShowFocusOnTabs();
 
-export function PageScaffold(props: PageScaffoldProps): JSX.Element {
+export function PageScaffold({
+	header,
+	footer,
+	children,
+}: PageScaffoldProps): JSX.Element {
 	useScrollToAnchor();
 
 	return (
-		<div id={props.id} css={container}>
+		<div css={container}>
 			<Global styles={[reset, guardianFonts]} />
 			<SkipLink id="maincontent" label="Skip to main content" />
 			<SkipLink id="navigation" label="Skip to navigation" />
 			<CsrBanner />
 			<TestUserBanner />
-			{props.header}
+			{header}
 			<main role="main" id="maincontent">
-				{props.children}
+				{children}
 			</main>
-			{props.footer}
+			{footer}
 		</div>
 	);
 }

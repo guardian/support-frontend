@@ -44,4 +44,4 @@ function PromotionTermsPage(props: PromotionTermsPropTypes) {
 	);
 }
 
-renderPage(PromotionTermsPage(getPromotionTermsProps()), 'promotion-terms');
+renderPage(PromotionTermsPage(getPromotionTermsProps()));

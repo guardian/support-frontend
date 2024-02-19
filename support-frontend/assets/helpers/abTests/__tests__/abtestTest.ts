@@ -13,13 +13,10 @@ import {
 	GBPCountries,
 	UnitedStates,
 } from '../../internationalisation/countryGroup';
-import {
-	init as abInit,
-	getAmountsTestVariant,
-	targetPageMatches,
-} from '../abtest';
+import { _, init as abInit, getAmountsTestVariant } from '../abtest';
 import type { Audience, Participations, Test, Variant } from '../abtest';
 
+const { targetPageMatches } = _;
 const { subsDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
 const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckoutWithGuest } =
 	digiSub;
@@ -98,6 +95,44 @@ describe('init', () => {
 
 		const expectedParticipations: Participations = {
 			t1: 'control',
+			t2: 'variant',
+		};
+
+		expect(participations).toEqual(expectedParticipations);
+	});
+
+	it('excludes a test with excludeIfInReferrerControlledTest set if another test has referrerControlled set', () => {
+		const tests = {
+			t1: buildTest({
+				variants: [
+					buildVariant({ id: 'control' }),
+					buildVariant({ id: 'variant' }),
+				],
+				referrerControlled: false,
+				excludeIfInReferrerControlledTest: true,
+			}),
+			t2: buildTest({
+				variants: [
+					buildVariant({ id: 'control' }),
+					buildVariant({ id: 'variant' }),
+				],
+				referrerControlled: true,
+			}),
+		};
+
+		const acquisitionAbTests = [
+			buildAcquisitionAbTest({ name: 't2', variant: 'variant' }),
+		];
+
+		const participations: Participations = abInit(
+			country,
+			countryGroupId,
+			tests,
+			mvt,
+			acquisitionAbTests,
+		);
+
+		const expectedParticipations: Participations = {
 			t2: 'variant',
 		};
 
@@ -687,6 +722,7 @@ function buildTest({
 	audiences = { ALL: buildAudience({}) },
 	isActive = true,
 	seed = 0,
+	excludeIfInReferrerControlledTest = false,
 }: Partial<Test>): Test {
 	return {
 		variants,
@@ -694,6 +730,7 @@ function buildTest({
 		isActive,
 		referrerControlled,
 		seed,
+		excludeIfInReferrerControlledTest,
 	};
 }
 

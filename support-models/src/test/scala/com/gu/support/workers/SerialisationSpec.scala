@@ -139,5 +139,6 @@ object StatesTestData {
     analyticsInfo = AnalyticsInfo(false, StripeApplePay),
     paymentFields = ExistingPaymentFields("existingBillingAcId"),
     acquisitionData = None,
+    promoCode = None,
   )
 }

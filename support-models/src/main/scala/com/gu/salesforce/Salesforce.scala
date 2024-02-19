@@ -126,36 +126,35 @@ object Salesforce {
       MailingCountry: Option[String],
   ) extends UpsertData
 
-  trait SalesforceResponse {
-    val Success: Boolean
-  }
-
+  case class SalesforceContactResponse(
+      Success: Boolean,
+      ErrorString: Option[String],
+      ContactRecord: Option[SalesforceContactRecord],
+  )
   object SalesforceContactResponse {
     implicit val codec: Codec[SalesforceContactResponse] = deriveCodec
   }
 
-  object SalesforceContactRecords {
-    implicit val codec: Codec[SalesforceContactRecords] = deriveCodec
-  }
-
-  case class SalesforceContactResponse(
+  case class SalesforceContactSuccess(
       Success: Boolean,
       ErrorString: Option[String],
       ContactRecord: SalesforceContactRecord,
-  ) extends SalesforceResponse
-
-  case class SalesforceContactError(
-      Success: Boolean,
-      ErrorString: Option[String],
   )
+
+  object SalesforceContactSuccess {
+    implicit val codec: Codec[SalesforceContactSuccess] = deriveCodec
+  }
 
   case class SalesforceContactRecords(buyer: SalesforceContactRecord, giftRecipient: Option[SalesforceContactRecord]) {
     def recipient: SalesforceContactRecord = giftRecipient.getOrElse(buyer)
   }
+  object SalesforceContactRecords {
+    implicit val codec: Codec[SalesforceContactRecords] = deriveCodec
+  }
 
   case class SalesforceContactRecordsResponse(
-      buyer: SalesforceContactResponse,
-      giftRecipient: Option[SalesforceContactResponse],
+      buyer: SalesforceContactSuccess,
+      giftRecipient: Option[SalesforceContactSuccess],
   ) {
     def successful: Boolean = buyer.Success && giftRecipient.forall(_.Success)
 
