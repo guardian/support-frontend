@@ -198,8 +198,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.setBillingCountry(props.deliveryCountry);
 	};
 
-	const inThreeTierVariant =
-		props.participations.threeTierCheckout.startsWith('variant');
+	const inThreeTierVariant = props.participations.threeTierCheckout
+		? props.participations.threeTierCheckout.startsWith('variant')
+		: false;
 
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,
