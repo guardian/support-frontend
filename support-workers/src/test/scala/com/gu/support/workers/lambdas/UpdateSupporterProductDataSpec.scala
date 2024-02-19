@@ -80,7 +80,7 @@ object UpdateSupporterProductDataSpec {
             "deliveryInstructions": null
           },
           "product": {
-            "amount": 12,
+            "nonDiscountedAmount": 12,
             "currency": "GBP",
             "billingPeriod": "Monthly",
             "productType": "SupporterPlus"
