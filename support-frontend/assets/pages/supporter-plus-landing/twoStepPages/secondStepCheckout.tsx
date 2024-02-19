@@ -15,7 +15,10 @@ import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
-import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
+import {
+	setOtherAmount,
+	setSelectedAmount,
+} from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	getUserSelectedAmount,
@@ -98,6 +101,15 @@ export function SupporterPlusCheckout({
 						amount: `${amountToBePassed}`,
 					}),
 				);
+				// 3-tier Other amount over S+ threshold will not re-display unless reset
+				if (inThreeTierVariantB && amountIsAboveThreshold) {
+					dispatch(
+						setOtherAmount({
+							contributionType: contributionType,
+							amount: '',
+						}),
+					);
+				}
 				dispatch(resetValidation());
 				const destination = `/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`;
 				navigateWithPageView(navigate, destination, abParticipations);
