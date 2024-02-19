@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { ContributionType } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import * as storage from 'helpers/storage/storage';
 import { getQueryParameter } from 'helpers/urls/url';
 import type { PaymentMethod } from '../forms/paymentMethods';
@@ -17,12 +19,15 @@ type ContributionConversionData = {
 	contributionType: ContributionType;
 	currency: IsoCurrency;
 	paymentMethod: PaymentMethod;
+	productType: 'Contribution';
 };
 
 type SubscriptionConversionData = {
 	value: number;
 	currency: IsoCurrency;
 	paymentMethod: PaymentMethod;
+	billingPeriod: BillingPeriod;
+	productType: SubscriptionProduct;
 };
 
 // these values match the keys used by @guardian/consent-management-platform
@@ -255,6 +260,7 @@ function successfulContributionConversion(
 		contributionType,
 		currency: sourceCurrency,
 		paymentMethod,
+		productType: 'Contribution',
 	};
 
 	sendData('SuccessfulConversion', contributionConversionData);
@@ -264,11 +270,15 @@ function successfulSubscriptionConversion(
 	amount: number,
 	sourceCurrency: IsoCurrency,
 	paymentMethod: PaymentMethod,
+	billingPeriod: BillingPeriod,
+	productType: SubscriptionProduct,
 ): void {
 	const subscriptionConversionData: SubscriptionConversionData = {
 		value: amount,
 		currency: sourceCurrency,
 		paymentMethod,
+		billingPeriod,
+		productType,
 	};
 
 	sendData('SuccessfulConversion', subscriptionConversionData);

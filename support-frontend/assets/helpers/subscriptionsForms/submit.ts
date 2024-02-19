@@ -270,66 +270,73 @@ function onPaymentAuthorised(
 				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
 
-			const tierBillingPeriodName =
-				billingPeriod === 'Monthly' ? 'monthly' : 'annual';
-			const contributionType =
-				billingPeriod === 'Monthly' ? 'MONTHLY' : 'ANNUAL';
-			const { currencyId, countryGroupId } = state.common.internationalisation;
-
 			const { abParticipations } = state.common;
 			const inThreeTierTestVariant =
 				abParticipations.threeTierCheckout === 'variant';
-			const digitalPlusPrintDiscount =
-				tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
-					.discount;
-			const digitalPlusPrintPrice =
-				tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
-					.price;
-			const digitalPlusPrintPriceDiscounted =
-				digitalPlusPrintDiscount?.price ?? digitalPlusPrintPrice;
 			const printPriceDiscounted = getPrintDiscountedPrice(
 				productPrice,
 				data.promoCode,
 			);
-			const digitalPriceDiscounted =
-				digitalPlusPrintPriceDiscounted - printPriceDiscounted;
-			console.log('GTM.printPriceDiscounted -> ', printPriceDiscounted);
-			console.log('GTM.digitalPriceDiscounted -> ', digitalPriceDiscounted);
+			const { currencyId, countryGroupId } = state.common.internationalisation;
 
-			/**
-			 * Rewrite the price (cart value) to report to QM
-			 * for users inThreeTierTestVariant as the original productPrice
-			 * object doesn't account for the addition of S+ and associated promotions.
-			 */
-			const priceForQuantumMetric: ProductPrice = inThreeTierTestVariant
-				? {
-						...productPrice,
-						promotions: [],
-						price: digitalPlusPrintPriceDiscounted,
-				  }
-				: productPrice;
-
-			// track conversion with QM
-			sendEventSubscriptionCheckoutConversion(
-				productType,
-				!!orderIsAGift,
-				priceForQuantumMetric,
-				billingPeriod,
-			);
-
-			// track conversion with GTM
+			// GTM: track print subscription conversion
 			successfulSubscriptionConversion(
-				digitalPriceDiscounted,
+				printPriceDiscounted,
 				currencyId,
 				paymentMethod.name,
+				billingPeriod,
+				productType,
 			);
+
 			if (inThreeTierTestVariant) {
-				// track S+ with GTM
+				const tierBillingPeriodName =
+					billingPeriod === 'Annual' ? 'annual' : 'monthly';
+				const contributionType =
+					billingPeriod === 'Annual' ? 'ANNUAL' : 'MONTHLY';
+				const digitalPlusPrintDiscount =
+					tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
+						.discount;
+				const digitalPlusPrintPrice =
+					tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
+						.price;
+				const digitalPlusPrintPriceDiscounted =
+					digitalPlusPrintDiscount?.price ?? digitalPlusPrintPrice;
+				const digitalPriceDiscounted =
+					digitalPlusPrintPriceDiscounted - printPriceDiscounted;
+
+				// GTM: track S+ conversion
 				successfulContributionConversion(
 					digitalPriceDiscounted,
 					contributionType,
 					currencyId,
 					paymentMethod.name,
+				);
+
+				/**
+				 * Rewrite the productPrice (aka cart value) to report to QM
+				 * for users inThreeTierTestVariant as the original productPrice
+				 * object doesn't account for the addition of S+ and associated promotions.
+				 */
+				const productPriceForQuantumMetric: ProductPrice = {
+					...productPrice,
+					promotions: [],
+					price: digitalPlusPrintPriceDiscounted,
+				};
+
+				// QM: track GW subscription & S+ conversion
+				sendEventSubscriptionCheckoutConversion(
+					productType,
+					!!orderIsAGift,
+					productPriceForQuantumMetric,
+					billingPeriod,
+				);
+			} else {
+				// QM: track print subscription conversion
+				sendEventSubscriptionCheckoutConversion(
+					productType,
+					!!orderIsAGift,
+					productPrice,
+					billingPeriod,
 				);
 			}
 		} else if (result.error) {
