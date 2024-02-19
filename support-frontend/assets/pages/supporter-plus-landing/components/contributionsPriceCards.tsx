@@ -65,7 +65,7 @@ export function ContributionsPriceCards({
 				navigateWithPageView(navigate, destination, abParticipations);
 			}}
 		>
-			Back
+			back
 		</Button>
 	);
 
