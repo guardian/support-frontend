@@ -8,11 +8,11 @@ class PromotionsConfigSpec extends AsyncFlatSpec with Matchers {
   "PromotionsTablesConfigProvider" should "load successfully" in {
     val devConfig = new PromotionsConfigProvider(ConfigFactory.load(), Stages.DEV).get()
     devConfig.tables.promotions shouldBe "MembershipSub-Promotions-CODE"
-    devConfig.discount.productRatePlanChargeId shouldBe "2c92c0f952f30dc30152f92b2ee62707"
+    devConfig.discount.productRatePlanChargeId shouldBe "2c92c0f957220b5d0157299c97a60bbd"
 
     val codeConfig = new PromotionsConfigProvider(ConfigFactory.load(), Stages.CODE).get()
     codeConfig.tables.promotions shouldBe "MembershipSub-Promotions-CODE"
-    codeConfig.discount.productRatePlanChargeId shouldBe "2c92c0f952f30dc30152f92b2ee62707"
+    codeConfig.discount.productRatePlanChargeId shouldBe "2c92c0f957220b5d0157299c97a60bbd"
 
     val prodConfig = new PromotionsConfigProvider(ConfigFactory.load(), Stages.PROD).get()
     prodConfig.tables.promotions shouldBe "MembershipSub-Promotions-PROD"
