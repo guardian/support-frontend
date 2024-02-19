@@ -21,7 +21,7 @@ deployments:
         PROD: Frontend-PROD.template.json
       amiParameter: AMIFrontend
       amiTags:
-        Recipe: jammy-membership-java8
+        Recipe: jammy-membership-java11
         AmigoStage: PROD
       amiEncrypted: true
   frontend:
