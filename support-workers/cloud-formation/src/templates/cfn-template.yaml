@@ -194,7 +194,7 @@ Resources:
 
   SupportThreeTierPROD:
     Type: "AWS::StepFunctions::StateMachine"
-    Condition: CreateCodeResources
+    Condition: CreateProdResources
     Properties:
       StateMachineName: !Sub support-three-tier-${Stage}
       DefinitionString:
