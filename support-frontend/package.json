@@ -163,7 +163,7 @@
     "babel-plugin-add-react-displayname": "^0.0.5",
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "chalk": "^4.1.0",
-    "chromatic": "^6.7.1",
+    "chromatic": "^10.9.6",
     "core-js": "^3.33.3",
     "css-loader": "^6.7.1",
     "css-minimizer-webpack-plugin": "^4.2.2",
