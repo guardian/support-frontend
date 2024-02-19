@@ -179,6 +179,19 @@ Resources:
           - {}
       RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
 
+  SupportThreeTierCODE:
+    Type: "AWS::StepFunctions::StateMachine"
+    Condition: CreateCodeResources
+    Properties:
+      StateMachineName: !Sub support-three-tier-${Stage}
+      DefinitionString:
+        !Sub
+          - |-
+            {{> threeTierStateMachine}}
+
+          - {}
+      RoleArn: !GetAtt [ StatesExecutionRole, Arn ]
+
   ExecutionFailureAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
