@@ -1,11 +1,11 @@
 # This step ID is generated and should match in ./supporterPlusProduct.yaml
-- Next: ThreeTierSupporterPlus{{billingPeriod}}{{currency}}{{#if isUS}}US{{/if}}
+- Next: ThreeTierSupporterPlus{{billingPeriod}}{{currency}}{{fulfilmentOptions}}
   And:
   - Variable: $.state.product.currency
     StringEquals: {{currency}}
   - Variable: $.state.product.billingPeriod
     StringEquals: {{billingPeriod}}
-  {{#if isUS}}
-  - Variable: $.state.user.billingAddress.country
-    StringEquals: US
+  {{#if fulfilmentOptions}}
+  - Variable: $.state.product.fulfilmentOptions
+    StringEquals: {{fulfilmentOptions}}
   {{/if}}
