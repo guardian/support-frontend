@@ -1,82 +1,7 @@
 Comment: Carries out the steps needed to create a Subscription or Regular Contributor
-StartAt: ShouldClonePaymentMethodChoice
+StartAt: ThreeTierUnpackJsonList
 TimeoutSeconds: 86400
 States:
-  ShouldClonePaymentMethodChoice:
-    Type: Choice
-    Choices:
-      - Variable: "$.requestInfo.accountExists"
-        BooleanEquals: true
-        Next: PreparePaymentMethodForReuse
-    Default: CreatePaymentMethod
-
-  PreparePaymentMethodForReuse:
-    Type: Task
-    Resource: "${PreparePaymentMethodForReuseLambda.Arn}"
-    Next: CreateZuoraSubscription
-    {{> retry}}
-    {{> catch}}
-
-  CreatePaymentMethod:
-    Type: Task
-    Resource: "${CreatePaymentMethodLambda.Arn}"
-    Next: CreateSalesforceContact
-    {{> retry}}
-    {{> catch}}
-
-  CreateSalesforceContact:
-    Type: Task
-    Resource: "${CreateSalesforceContactLambda.Arn}"
-    Next: CreateZuoraSubscription
-    {{> retry}}
-    {{> catch}}
-
-  CreateZuoraSubscription:
-    Type: Task
-    Resource: "${CreateZuoraSubscriptionLambda.Arn}"
-    Next: ParallelTasks
-    {{> retry}}
-    {{> catch}}
-
-  ParallelTasks:
-    Type: Parallel
-    Branches:
-    - StartAt: CheckoutSuccess
-      States:
-        # Do not rename this step as it is used by support-frontend's polling logic.
-        CheckoutSuccess:
-          Type: Pass
-          End: True
-    - StartAt: SendThankYouEmail
-      States:
-        SendThankYouEmail:
-          Type: Task
-          Resource: "${SendThankYouEmailLambda.Arn}"
-          End: True
-          {{> emailRetry}}
-    - StartAt: UpdateSupporterProductData
-      States:
-        UpdateSupporterProductData:
-          Type: Task
-          Resource: "${UpdateSupporterProductDataLambda.Arn}"
-          End: True
-          {{> retry}}
-    - StartAt: SendAcquisitionEvent
-      States:
-        SendAcquisitionEvent:
-          Type: Task
-          Resource: "${SendAcquisitionEventLambda.Arn}"
-          End: True
-          {{> retry}}
-
-    # We use this step to pass through state that can then be read to three tier steps
-    - StartAt: ThreeTierPassThrough
-      States:
-        ThreeTierPassThrough:
-          Type: Pass
-          End: True
-    Next: ThreeTierUnpackJsonList
-
   # Unpack the list of states from the parallel tasks into a single item
   ThreeTierUnpackJsonList:
     Type: Pass
@@ -201,3 +126,34 @@ States:
   FailState:
     Type: Fail
 
+  ParallelTasks:
+    Type: Parallel
+    Branches:
+      - StartAt: CheckoutSuccess
+        States:
+          # Do not rename this step as it is used by support-frontend's polling logic.
+          CheckoutSuccess:
+            Type: Pass
+            End: True
+      - StartAt: SendThankYouEmail
+        States:
+          SendThankYouEmail:
+            Type: Task
+            Resource: "${SendThankYouEmailLambda.Arn}"
+            End: True
+            {{> emailRetry}}
+      - StartAt: UpdateSupporterProductData
+        States:
+          UpdateSupporterProductData:
+            Type: Task
+            Resource: "${UpdateSupporterProductDataLambda.Arn}"
+            End: True
+            {{> retry}}
+      - StartAt: SendAcquisitionEvent
+        States:
+          SendAcquisitionEvent:
+            Type: Task
+            Resource: "${SendAcquisitionEventLambda.Arn}"
+            End: True
+            {{> retry}}
+    End: True

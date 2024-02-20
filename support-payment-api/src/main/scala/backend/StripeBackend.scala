@@ -118,6 +118,10 @@ class StripeBackend(
       case _ => false
     }
 
+    def isValidEmail(email: String): Boolean = {
+      !email.contains(",")
+    }
+
     // Check the Switch Bypass Recaptcha for Test Stripe account // Apple Pay on Live
     // Note that in DEV/CODE there is no Live StripeBackend, so it will never verify Recaptcha
     def recaptchaRequired() =
@@ -182,7 +186,9 @@ class StripeBackend(
 
     stripeEnabled(request).flatMap {
       case true =>
-        checkRecaptcha
+        if (isValidEmail(request.paymentData.email.toString())) checkRecaptcha
+        else EitherT.leftT(StripeApiError.fromString("Invalid email address", publicKey = None))
+
       case false =>
         EitherT.leftT(StripeApiError.fromString(stripeDisabledErrorText, publicKey = None))
     }
