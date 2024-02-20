@@ -43,7 +43,48 @@ interface TierCards {
 	tier3: TierCard;
 }
 
-const tier1: TierCard = {
+const tier1VariantA: TierCard = {
+	title: 'Support',
+	benefits: {
+		list: [
+			{
+				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+			},
+		],
+	},
+	plans: {
+		monthly: {
+			label: 'Monthly',
+			charges: {
+				GBPCountries: {
+					price: 4,
+				},
+				EURCountries: { price: 4 },
+				International: { price: 5 },
+				UnitedStates: { price: 5 },
+				Canada: { price: 5 },
+				NZDCountries: { price: 10 },
+				AUDCountries: { price: 10 },
+			},
+		},
+		annual: {
+			label: 'Annual',
+			charges: {
+				GBPCountries: {
+					price: 50,
+				},
+				EURCountries: { price: 50 },
+				International: { price: 60 },
+				UnitedStates: { price: 60 },
+				Canada: { price: 60 },
+				NZDCountries: { price: 80 },
+				AUDCountries: { price: 80 },
+			},
+		},
+	},
+};
+
+const tier1VariantB: TierCard = {
 	title: 'Support',
 	benefits: {
 		list: [
@@ -368,9 +409,14 @@ const tier3: TierCard = {
 		},
 	},
 };
+export const tierCardsVariantA: TierCards = {
+	tier1: tier1VariantA,
+	tier2,
+	tier3,
+};
 
-export const tierCards: TierCards = {
-	tier1,
+export const tierCardsVariantB: TierCards = {
+	tier1: tier1VariantB,
 	tier2,
 	tier3,
 };

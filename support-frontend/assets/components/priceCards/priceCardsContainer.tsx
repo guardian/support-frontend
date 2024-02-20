@@ -19,7 +19,10 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import {
+	tierCardsVariantA,
+	tierCardsVariantB,
+} from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import type { PriceCardPaymentInterval } from './priceCard';
 import type { PriceCardsProps } from './priceCards';
 
@@ -56,6 +59,7 @@ export function PriceCardsContainer({
 		(state) => state.common,
 	);
 	const inThreeTierVariantB = abParticipations.threeTierCheckout === 'variantB';
+	const tierCards = inThreeTierVariantB ? tierCardsVariantB : tierCardsVariantA;
 
 	const getTierLowPriceCardAmounts = (
 		contributionType: ContributionType,

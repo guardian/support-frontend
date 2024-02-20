@@ -58,7 +58,7 @@ import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagMana
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
-import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCardsVariantB as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
