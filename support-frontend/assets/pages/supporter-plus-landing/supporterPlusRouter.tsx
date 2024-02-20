@@ -82,7 +82,9 @@ const {
 	common: { abParticipations },
 } = store.getState();
 export const inThreeTierVariant =
-	abParticipations.threeTierCheckout.startsWith('variant');
+	abParticipations.threeTierCheckout === 'variant' ||
+	abParticipations.threeTierCheckoutV2 === 'variantA' ||
+	abParticipations.threeTierCheckoutV2 === 'variantB';
 
 // ----- Render ----- //
 

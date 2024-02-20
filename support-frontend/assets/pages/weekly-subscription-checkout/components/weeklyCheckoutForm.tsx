@@ -199,7 +199,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 	};
 
 	const inThreeTierVariant = props.participations.threeTierCheckout
-		? props.participations.threeTierCheckout.startsWith('variant')
+		? props.participations.threeTierCheckout === 'variant' ||
+		  props.participations.threeTierCheckoutV2 === 'variantA' ||
+		  props.participations.threeTierCheckoutV2 === 'variantB'
 		: false;
 
 	const paymentMethods = supportedPaymentMethods(

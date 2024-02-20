@@ -166,7 +166,9 @@ function ThankYouContent({
 	participations,
 }: PropTypes) {
 	const inThreeTierVariant =
-		participations.threeTierCheckout.startsWith('variant');
+		participations.threeTierCheckout === 'variant' ||
+		participations.threeTierCheckoutV2 === 'variantA' ||
+		participations.threeTierCheckoutV2 === 'variantB';
 
 	const whatHappensNextItems = orderIsGift
 		? [

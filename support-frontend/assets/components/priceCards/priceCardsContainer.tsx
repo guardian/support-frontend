@@ -58,7 +58,8 @@ export function PriceCardsContainer({
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
-	const inThreeTierVariantB = abParticipations.threeTierCheckout === 'variantB';
+	const inThreeTierVariantB =
+		abParticipations.threeTierCheckoutV2 === 'variantB';
 	const tierCards = inThreeTierVariantB ? tierCardsVariantB : tierCardsVariantA;
 
 	const getTierLowPriceCardAmounts = (

@@ -109,13 +109,63 @@ export const tests: Tests = {
 				id: 'control',
 			},
 			{
+				id: 'variant',
+			},
+		],
+		isActive: true,
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		omitCountries: countriesAffectedByVATStatus,
+		referrerControlled: false,
+		excludeIfInReferrerControlledTest: true,
+		seed: 0,
+
+		/**
+		 * This runs on
+		 * - /{countryGroupId}/contribute
+		 * - /{countryGroupId}/contribute/checkout
+		 * - /{countryGroupId}/thankyou
+		 * - /subscribe/weekly/checkout?threeTierCreateSupporterPlusSubscription=true
+		 *
+		 * And does not run on
+		 * - /subscribe/weekly/checkout
+		 */
+		canRun: () => {
+			// Contribute pages
+			const isContributionLandingPageOrThankyou =
+				window.location.pathname.match(
+					pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+				) !== null;
+
+			// Weekly pages
+			const urlParams = new URLSearchParams(window.location.search);
+			const isThirdTier =
+				urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
+			const isWeeklyCheckout =
+				window.location.pathname === '/subscribe/weekly/checkout';
+
+			return (
+				isContributionLandingPageOrThankyou || (isWeeklyCheckout && isThirdTier)
+			);
+		},
+	},
+	threeTierCheckoutV2: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
 				id: 'variantA',
 			},
 			{
 				id: 'variantB',
 			},
 		],
-		isActive: true,
+		isActive: false,
 		audiences: {
 			ALL: {
 				offset: 0,

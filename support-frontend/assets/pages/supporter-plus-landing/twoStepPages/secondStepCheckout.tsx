@@ -80,10 +80,13 @@ export function SupporterPlusCheckout({
 	const navigate = useNavigate();
 
 	const inThreeTierVariant =
-		abParticipations.threeTierCheckout.startsWith('variant');
+		abParticipations.threeTierCheckout === 'variant' ||
+		abParticipations.threeTierCheckoutV2 === 'variantA' ||
+		abParticipations.threeTierCheckoutV2 === 'variantB';
 
 	// Price Cards also shown for lower tier in three-tier variantB
-	const inThreeTierVariantB = abParticipations.threeTierCheckout === 'variantB';
+	const inThreeTierVariantB =
+		abParticipations.threeTierCheckoutV2 === 'variantB';
 	const showPriceCards =
 		(inThreeTierVariant && contributionType === 'ONE_OFF') ||
 		(inThreeTierVariantB && !amountIsAboveThreshold);

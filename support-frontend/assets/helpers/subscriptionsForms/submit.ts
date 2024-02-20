@@ -204,7 +204,9 @@ function buildRegularPaymentRequest(
 		salesforceCaseId,
 		debugInfo: actionHistory,
 		threeTierCreateSupporterPlusSubscription:
-			state.common.abParticipations.threeTierCheckout.startsWith('variant'),
+			state.common.abParticipations.threeTierCheckout === 'variant' ||
+			state.common.abParticipations.threeTierCheckoutV2 === 'variantA' ||
+			state.common.abParticipations.threeTierCheckoutV2 === 'variantB',
 	};
 }
 
@@ -258,7 +260,9 @@ function onPaymentAuthorised(
 
 			const { abParticipations } = state.common;
 			const inThreeTierVariant =
-				abParticipations.threeTierCheckout.startsWith('variant');
+				abParticipations.threeTierCheckout === 'variant' ||
+				abParticipations.threeTierCheckoutV2 === 'variantA' ||
+				abParticipations.threeTierCheckoutV2 === 'variantB';
 			const standardDigitalPlusPrintPrice =
 				tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
 					.price;

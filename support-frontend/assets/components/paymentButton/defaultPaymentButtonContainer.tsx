@@ -64,7 +64,9 @@ export function DefaultPaymentButtonContainer({
 		(state) => state.common,
 	);
 	const inThreeTierVariant =
-		abParticipations.threeTierCheckout.startsWith('variant');
+		abParticipations.threeTierCheckout === 'variant' ||
+		abParticipations.threeTierCheckoutV2 === 'variantA' ||
+		abParticipations.threeTierCheckoutV2 === 'variantB';
 
 	const testId = 'qa-contributions-landing-submit-contribution-button';
 
