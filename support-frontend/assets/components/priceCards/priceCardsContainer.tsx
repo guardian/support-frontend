@@ -57,7 +57,7 @@ export function PriceCardsContainer({
 	);
 	const inThreeTierVariantB = abParticipations.threeTierCheckout === 'variantB';
 
-	const getTierLowPiceCardAmounts = (
+	const getTierLowPriceCardAmounts = (
 		contributionType: ContributionType,
 		countryGroup: CountryGroupId,
 		intThreeTierVariant: boolean,
@@ -74,7 +74,7 @@ export function PriceCardsContainer({
 		amounts: frequencyAmounts,
 		defaultAmount,
 		hideChooseYourAmount,
-	} = getTierLowPiceCardAmounts(
+	} = getTierLowPriceCardAmounts(
 		paymentFrequency,
 		countryGroupId,
 		inThreeTierVariantB,
