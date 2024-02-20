@@ -36,6 +36,10 @@ import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
+import {
+	inThreeTierV2VariantB,
+	inThreeTierVariants,
+} from '../setup/threeTierABTest';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`
@@ -61,9 +65,6 @@ export function SupporterPlusCheckout({
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
-	);
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
 	const amountBeforeAmendments = useContributionsSelector(
@@ -78,15 +79,12 @@ export function SupporterPlusCheckout({
 	);
 
 	const navigate = useNavigate();
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
+	);
+	const inThreeTierVariant = inThreeTierVariants(abParticipations);
+	const inThreeTierVariantB = inThreeTierV2VariantB(abParticipations);
 
-	const inThreeTierVariant =
-		abParticipations.threeTierCheckout === 'variant' ||
-		abParticipations.threeTierCheckoutV2 === 'variantA' ||
-		abParticipations.threeTierCheckoutV2 === 'variantB';
-
-	// Price Cards also shown for lower tier in three-tier variantB
-	const inThreeTierVariantB =
-		abParticipations.threeTierCheckoutV2 === 'variantB';
 	const showPriceCards =
 		(inThreeTierVariant && contributionType === 'ONE_OFF') ||
 		(inThreeTierVariantB && !amountIsAboveThreshold);

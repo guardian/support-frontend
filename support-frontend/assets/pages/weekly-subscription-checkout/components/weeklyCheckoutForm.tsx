@@ -83,6 +83,7 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
+import { inThreeTierVariants } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import { tierCardsVariantB as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
@@ -198,11 +199,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.setBillingCountry(props.deliveryCountry);
 	};
 
-	const inThreeTierVariant = props.participations.threeTierCheckout
-		? props.participations.threeTierCheckout === 'variant' ||
-		  props.participations.threeTierCheckoutV2 === 'variantA' ||
-		  props.participations.threeTierCheckoutV2 === 'variantB'
-		: false;
+	const inThreeTierVariant = inThreeTierVariants(props.participations);
 
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,

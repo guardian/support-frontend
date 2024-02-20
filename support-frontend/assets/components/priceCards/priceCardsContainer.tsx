@@ -19,6 +19,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { inThreeTierV2VariantB } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import {
 	tierCardsVariantA,
 	tierCardsVariantB,
@@ -55,11 +56,9 @@ export function PriceCardsContainer({
 	);
 	const minAmount = useContributionsSelector(getMinimumContributionAmount());
 
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
+	const inThreeTierVariantB = inThreeTierV2VariantB(
+		useContributionsSelector((state) => state.common).abParticipations,
 	);
-	const inThreeTierVariantB =
-		abParticipations.threeTierCheckoutV2 === 'variantB';
 	const tierCards = inThreeTierVariantB ? tierCardsVariantB : tierCardsVariantA;
 
 	const getTierLowPriceCardAmounts = (

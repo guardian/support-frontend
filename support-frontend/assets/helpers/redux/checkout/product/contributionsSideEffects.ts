@@ -5,6 +5,7 @@ import type { ContributionsStartListening } from 'helpers/redux/contributionsSto
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
+import { inThreeTierVariants } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import { validateForm } from '../checkoutActions';
 import {
 	setAllAmounts,
@@ -41,11 +42,9 @@ export function addProductSideEffects(
 				return;
 			}
 
-			const { abParticipations } = listenerApi.getState().common;
-			const inThreeTierVariant =
-				abParticipations.threeTierCheckout === 'variant' ||
-				abParticipations.threeTierCheckoutV2 === 'variantA' ||
-				abParticipations.threeTierCheckoutV2 === 'variantB';
+			const inThreeTierVariant = inThreeTierVariants(
+				listenerApi.getState().common.abParticipations,
+			);
 			const isMonthlyOrAnnual = ['MONTHLY', 'ANNUAL'].includes(
 				contributionType,
 			);

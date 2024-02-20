@@ -24,6 +24,7 @@ import {
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { inThreeTierVariants } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import { tierCardsVariantB as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
@@ -165,10 +166,7 @@ function ThankYouContent({
 	product,
 	participations,
 }: PropTypes) {
-	const inThreeTierVariant =
-		participations.threeTierCheckout === 'variant' ||
-		participations.threeTierCheckoutV2 === 'variantA' ||
-		participations.threeTierCheckoutV2 === 'variantB';
+	const inThreeTierVariant = inThreeTierVariants(participations);
 
 	const whatHappensNextItems = orderIsGift
 		? [

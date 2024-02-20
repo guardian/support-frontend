@@ -58,6 +58,7 @@ import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagMana
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
+import { inThreeTierVariants } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import { tierCardsVariantB as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
@@ -203,10 +204,9 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
-		threeTierCreateSupporterPlusSubscription:
-			state.common.abParticipations.threeTierCheckout === 'variant' ||
-			state.common.abParticipations.threeTierCheckoutV2 === 'variantA' ||
-			state.common.abParticipations.threeTierCheckoutV2 === 'variantB',
+		threeTierCreateSupporterPlusSubscription: inThreeTierVariants(
+			state.common.abParticipations,
+		),
 	};
 }
 
@@ -258,11 +258,9 @@ function onPaymentAuthorised(
 				billingPeriod === 'Monthly' ? 'monthly' : 'annual';
 			const { countryGroupId } = state.common.internationalisation;
 
-			const { abParticipations } = state.common;
-			const inThreeTierVariant =
-				abParticipations.threeTierCheckout === 'variant' ||
-				abParticipations.threeTierCheckoutV2 === 'variantA' ||
-				abParticipations.threeTierCheckoutV2 === 'variantB';
+			const inThreeTierVariant = inThreeTierVariants(
+				state.common.abParticipations,
+			);
 			const standardDigitalPlusPrintPrice =
 				tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
 					.price;

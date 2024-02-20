@@ -5,6 +5,7 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
+import { inThreeTierVariants } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import { DefaultPaymentButton } from './defaultPaymentButton';
 
 const contributionTypeToPaymentInterval: Partial<
@@ -60,13 +61,9 @@ export function DefaultPaymentButtonContainer({
 		(state) => state.common.internationalisation,
 	);
 
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
+	const inThreeTierVariant = inThreeTierVariants(
+		useContributionsSelector((state) => state.common).abParticipations,
 	);
-	const inThreeTierVariant =
-		abParticipations.threeTierCheckout === 'variant' ||
-		abParticipations.threeTierCheckoutV2 === 'variantA' ||
-		abParticipations.threeTierCheckoutV2 === 'variantB';
 
 	const testId = 'qa-contributions-landing-submit-contribution-button';
 
