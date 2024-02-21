@@ -269,29 +269,35 @@ function getReferrerAcquisitionDataFromSessionStorage():
 		: null;
 }
 
-function getAcquisitionDataFromUtmParams(): | Record<string, unknown>
-  | null
-  | undefined {
+function getAcquisitionDataFromUtmParams():
+	| Record<string, unknown>
+	| null
+	| undefined {
+	// Same order of fields as https://reader-revenue-lynx.s3.eu-west-1.amazonaws.com/v3.html
+	const utmParamNames = [
+		'utm_campaign',
+		'utm_content',
+		'utm_term',
+		'utm_source',
+		'utm_medium',
+	];
+	const utmParameters = Object.fromEntries(
+		utmParamNames.map((paramName) => [paramName, getQueryParameter(paramName)]),
+	);
 
-  // Same order of fields as https://reader-revenue-lynx.s3.eu-west-1.amazonaws.com/v3.html
-  const utmParamNames = ['utm_campaign', 'utm_content', 'utm_term', 'utm_source', 'utm_medium'];
-  const utmParameters = Object.fromEntries(
-    utmParamNames.map(paramName => [paramName, getQueryParameter(paramName)])
-  );
-
-  // All must be present in the URL for them to be accepted
-  if (utmParamNames.every(paramName => utmParameters[paramName].length > 0)) {
-    return {
-      campaignCode: utmParameters.utm_campaign,
-      abTest: {
-        name: utmParameters.utm_content,
-        variant: utmParameters.utm_term
-      },
-      source: utmParameters.utm_source,
-      componentType: utmParameters.utm_medium,
-      queryParameters: toAcquisitionQueryParameters(getAllQueryParams()),
-    };
-  }
+	// All must be present in the URL for them to be accepted
+	if (utmParamNames.every((paramName) => utmParameters[paramName].length > 0)) {
+		return {
+			campaignCode: utmParameters.utm_campaign,
+			abTest: {
+				name: utmParameters.utm_content,
+				variant: utmParameters.utm_term,
+			},
+			source: utmParameters.utm_source,
+			componentType: utmParameters.utm_medium,
+			queryParameters: toAcquisitionQueryParameters(getAllQueryParams()),
+		};
+	}
 }
 
 // Reads the acquisition data from the &acquistionData param containing a serialised JSON string.
@@ -328,7 +334,7 @@ function getReferrerAcquisitionData(): ReferrerAcquisitionData {
 	// Read acquisitonData from the various query params, or from sessionStorage, in the following precedence
 	const candidateAcquisitionData =
 		getAcquisitionDataFromAcquisitionDataParam() ??
-    getAcquisitionDataFromUtmParams() ??
+		getAcquisitionDataFromUtmParams() ??
 		getAcquisitionDataFromPPCParams() ??
 		getReferrerAcquisitionDataFromSessionStorage();
 
