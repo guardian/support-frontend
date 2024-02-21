@@ -125,10 +125,7 @@ export function SupporterPlusCheckout({
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					{showPriceCards ? (
-						<ContributionsPriceCards
-							paymentFrequency={contributionType}
-							inThreeTierVariant={inThreeTierVariantB}
-						/>
+						<ContributionsPriceCards paymentFrequency={contributionType} />
 					) : (
 						<ContributionsOrderSummaryContainer
 							inThreeTier={inThreeTierVariant}

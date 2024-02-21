@@ -68,7 +68,7 @@ export type PriceCardsProps = {
 	paymentInterval?: PriceCardPaymentInterval;
 	otherAmountField?: React.ReactNode;
 	hideChooseYourAmount?: boolean;
-	inThreeTierVariant?: boolean;
+	amountIntervalSeperator?: string;
 };
 
 export function PriceCards({
@@ -79,7 +79,7 @@ export function PriceCards({
 	paymentInterval,
 	otherAmountField,
 	hideChooseYourAmount,
-	inThreeTierVariant,
+	amountIntervalSeperator = ' per ',
 }: PriceCardsProps): JSX.Element {
 	// Override hideChooseYourAmount if no amounts supplied
 	const enableChooseYourAmountButton = !hideChooseYourAmount || !amounts.length;
@@ -87,7 +87,6 @@ export function PriceCards({
 		? amounts.length + 1
 		: amounts.length;
 	const lastButtonFullWidth = buttonCount % 2 !== 0;
-	const amountIntervalSeperator = inThreeTierVariant ? '/' : ' per ';
 
 	return (
 		<div css={cardsContainer}>
