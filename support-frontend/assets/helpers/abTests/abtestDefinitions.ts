@@ -112,7 +112,7 @@ export const tests: Tests = {
 				id: 'variant',
 			},
 		],
-		isActive: true,
+		isActive: false,
 		audiences: {
 			ALL: {
 				offset: 0,
