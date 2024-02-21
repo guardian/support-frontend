@@ -275,7 +275,7 @@ class Application(
   def products() = Action.async { implicit request =>
     wsClient
       .url(
-        "https://raw.githubusercontent.com/guardian/support-service-lambdas/977cfb8384004cd4e5f07af31aa7dbc59dee12da/modules/product/src/prodCatalogMapping.json",
+        "https://raw.githubusercontent.com/guardian/support-service-lambdas/0b031ea5821c95a7f7c59e45951d2d1f0bebed9d/modules/product/src/prodCatalogMapping.json",
       )
       .get()
       .map(response => Ok(response.body).withHeaders("Cache-Control" -> "max-age=30"))

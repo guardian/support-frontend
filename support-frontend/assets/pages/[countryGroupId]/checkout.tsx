@@ -67,7 +67,6 @@ const searchParams = new URLSearchParams(window.location.search);
 const query = {
 	productId: searchParams.get('product'),
 	ratePlanId: searchParams.get('ratePlan'),
-	chargeId: searchParams.get('charge'),
 };
 
 const countryGroupIds = ['uk', 'us', 'eu', 'au', 'nz', 'ca', 'int'] as const;
@@ -110,10 +109,10 @@ const ProductSchema = object({
 	ratePlans: record(
 		object({
 			id: string(),
+			pricing: record(number()),
 			charges: record(
 				object({
 					id: string(),
-					pricing: record(number()),
 				}),
 			),
 		}),
@@ -125,12 +124,8 @@ const ProductsSchema = object({
 });
 type Products = Output<typeof ProductsSchema>;
 
-function describeProduct(
-	productId: string,
-	ratePlanId: string,
-	chargeId: string,
-) {
-	let description = `${productId} - ${ratePlanId} ${chargeId}`;
+function describeProduct(productId: string, ratePlanId: string) {
+	let description = `${productId} - ${ratePlanId}`;
 	let frequency = '';
 
 	if (productId === 'HomeDelivery') {
@@ -199,14 +194,13 @@ export function Checkout() {
 			});
 	}, []);
 
-	if (!query.productId || !query.ratePlanId || !query.chargeId) {
+	if (!query.productId || !query.ratePlanId) {
 		return <div>Not enough query parameters</div>;
 	}
 
 	const currentProduct = products?.products[query.productId];
 	const currentRatePlan = currentProduct?.ratePlans[query.ratePlanId];
-	const currentCharge = currentRatePlan?.charges[query.chargeId];
-	const currentPrice = currentCharge?.pricing[currentCurrencyKey] ?? 0;
+	const currentPrice = currentRatePlan?.pricing[currentCurrencyKey] ?? 0;
 
 	if (!currentProduct) {
 		return <div>Product not found</div>;
@@ -248,7 +242,6 @@ export function Checkout() {
 									productDescription={describeProduct(
 										query.productId,
 										query.ratePlanId,
-										query.chargeId,
 									)}
 									tsAndCs={null}
 								/>

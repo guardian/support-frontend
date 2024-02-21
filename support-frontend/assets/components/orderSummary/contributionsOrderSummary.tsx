@@ -217,7 +217,10 @@ export function ContributionsOrderSummary({
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
 				<p>
-					{productDescription && `${total}/${productDescription.frequency}`}
+					{productDescription &&
+						`${simpleFormatAmount(currency, total)}/${
+							productDescription.frequency
+						}`}
 					{!productDescription &&
 						totalWithFrequency(
 							simpleFormatAmount(currency, total),
