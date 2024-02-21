@@ -20,10 +20,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { inThreeTierV2VariantB } from 'pages/supporter-plus-landing/setup/threeTierABTest';
-import {
-	tierCardsVariantA,
-	tierCardsVariantB,
-} from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCardsVariantB } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import type { PriceCardPaymentInterval } from './priceCard';
 import type { PriceCardsProps } from './priceCards';
 
@@ -59,7 +56,6 @@ export function PriceCardsContainer({
 	const inThreeTierVariantB = inThreeTierV2VariantB(
 		useContributionsSelector((state) => state.common).abParticipations,
 	);
-	const tierCards = inThreeTierVariantB ? tierCardsVariantB : tierCardsVariantA;
 
 	const getTierLowPriceCardAmounts = (
 		contributionType: ContributionType,
@@ -68,7 +64,8 @@ export function PriceCardsContainer({
 	): AmountValuesObject | undefined => {
 		const tierBillingPeriod =
 			contributionType === 'ANNUAL' ? 'annual' : 'monthly';
-		const priceCards = tierCards[`tier1`].plans[tierBillingPeriod].priceCards;
+		const priceCards =
+			tierCardsVariantB[`tier1`].plans[tierBillingPeriod].priceCards;
 		if (priceCards && intThreeTierVariant) {
 			return priceCards[countryGroup];
 		}
