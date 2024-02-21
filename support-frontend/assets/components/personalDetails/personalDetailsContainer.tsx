@@ -31,6 +31,8 @@ export function PersonalDetailsContainer({
 	);
 
 	const contributionType = useContributionsSelector(getContributionType);
+	const hideNameFields = contributionType === 'ONE_OFF';
+
 	const { state, postCode, errorObject } = useContributionsSelector(
 		(state) => state.page.checkoutForm.billingAddress.fields,
 	);
@@ -67,7 +69,6 @@ export function PersonalDetailsContainer({
 		email,
 		firstName,
 		lastName,
-		contributionType,
 		isSignedIn,
 		onEmailChange,
 		onFirstNameChange,
@@ -95,5 +96,6 @@ export function PersonalDetailsContainer({
 				/>
 			</div>
 		) : undefined,
+		hideNameFields,
 	});
 }
