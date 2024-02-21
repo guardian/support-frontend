@@ -33,42 +33,7 @@ import { renderPage } from 'helpers/rendering/render';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 
-const darkBackgroundContainerMobile = css`
-	background-color: ${palette.neutral[97]};
-	${until.tablet} {
-		background-color: ${palette.brand[400]};
-		border-bottom: 1px solid ${palette.brand[600]};
-	}
-`;
-
-const columns = css`
-	position: relative;
-	color: ${palette.neutral[7]};
-	${textSans.medium()};
-	padding-top: ${space[2]}px;
-`;
-
-const secureTransactionIndicator = css`
-	margin-bottom: ${space[3]}px;
-	${from.tablet} {
-		margin-bottom: ${space[4]}px;
-	}
-`;
-
-const shorterBoxMargin = css`
-	:not(:last-child) {
-		${until.tablet} {
-			margin-bottom: ${space[2]}px;
-		}
-	}
-`;
-
-const searchParams = new URLSearchParams(window.location.search);
-const query = {
-	productId: searchParams.get('product'),
-	ratePlanId: searchParams.get('ratePlan'),
-};
-
+/** App config - this is config that should persist throughout the app */
 const countryGroupIds = ['uk', 'us', 'eu', 'au', 'nz', 'ca', 'int'] as const;
 const CountryGroupIdSchema = picklist(countryGroupIds);
 const countryGroupId = parse(
@@ -104,6 +69,13 @@ switch (countryGroupId) {
 		currentCurrencyKey = 'CAD';
 		break;
 }
+
+/** Page config - this is setup specifically for the checkout page */
+const searchParams = new URLSearchParams(window.location.search);
+const query = {
+	productId: searchParams.get('product'),
+	ratePlanId: searchParams.get('ratePlan'),
+};
 
 const ProductSchema = object({
 	ratePlans: record(
@@ -181,6 +153,37 @@ function describeProduct(productId: string, ratePlanId: string) {
 
 	return { description, frequency };
 }
+
+/** Page styles - styles used specifically for the checkout page */
+const darkBackgroundContainerMobile = css`
+	background-color: ${palette.neutral[97]};
+	${until.tablet} {
+		background-color: ${palette.brand[400]};
+		border-bottom: 1px solid ${palette.brand[600]};
+	}
+`;
+
+const columns = css`
+	position: relative;
+	color: ${palette.neutral[7]};
+	${textSans.medium()};
+	padding-top: ${space[2]}px;
+`;
+
+const secureTransactionIndicator = css`
+	margin-bottom: ${space[3]}px;
+	${from.tablet} {
+		margin-bottom: ${space[4]}px;
+	}
+`;
+
+const shorterBoxMargin = css`
+	:not(:last-child) {
+		${until.tablet} {
+			margin-bottom: ${space[2]}px;
+		}
+	}
+`;
 
 export function Checkout() {
 	const [products, setProducts] = useState<Products>();
