@@ -261,6 +261,8 @@ function getAmountsTestVariant(
 	};
 
 	// Is the country in the list for contributions only checkout?
+	// This relies on the existence of an amounts test with a specific name
+	// And that the country targeting in the test be in sync with countriesAffectedByVATStatus
 	if (countriesAffectedByVATStatus.includes(country)) {
 		const contribOnlyTestName = 'VAT_COMPLIANCE';
 		const contribOnlyAmounts = amounts.find((t) => {
