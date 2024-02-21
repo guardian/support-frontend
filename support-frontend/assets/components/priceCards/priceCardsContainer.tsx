@@ -1,9 +1,5 @@
 import type { OtherAmountProps } from 'components/otherAmount/otherAmount';
-import type {
-	AmountValuesObject,
-	ContributionType,
-} from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { ContributionType } from 'helpers/contributions';
 import {
 	setOtherAmount,
 	setOtherAmountBeforeAmendment,
@@ -54,32 +50,19 @@ export function PriceCardsContainer({
 	const minAmount = useContributionsSelector(getMinimumContributionAmount());
 
 	const inThreeTierVariantB = inThreeTierV2VariantB(
-		useContributionsSelector((state) => state.common).abParticipations,
+		useContributionsSelector((state) => state.common.abParticipations),
 	);
-
-	const getTierLowPriceCardAmounts = (
-		contributionType: ContributionType,
-		countryGroup: CountryGroupId,
-		intThreeTierVariant: boolean,
-	): AmountValuesObject | undefined => {
-		const tierBillingPeriod =
-			contributionType === 'ANNUAL' ? 'annual' : 'monthly';
-		const priceCards =
-			tierCardsVariantB[`tier1`].plans[tierBillingPeriod].priceCards;
-		if (priceCards && intThreeTierVariant) {
-			return priceCards[countryGroup];
-		}
-	};
-
+	const tierBillingPeriod =
+		paymentFrequency === 'ANNUAL' ? 'annual' : 'monthly';
+	const tierCardData =
+		tierCardsVariantB.tier1.plans[tierBillingPeriod].priceCards;
 	const {
 		amounts: frequencyAmounts,
 		defaultAmount,
 		hideChooseYourAmount,
-	} = getTierLowPriceCardAmounts(
-		paymentFrequency,
-		countryGroupId,
-		inThreeTierVariantB,
-	) ?? amountsCardData[paymentFrequency];
+	} = inThreeTierVariantB && tierCardData
+		? tierCardData[countryGroupId]
+		: amountsCardData[paymentFrequency];
 
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
