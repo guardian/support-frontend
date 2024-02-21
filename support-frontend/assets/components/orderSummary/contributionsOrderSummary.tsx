@@ -11,9 +11,8 @@ import {
 	SvgChevronDownSingle,
 } from '@guardian/source-react-components';
 import { useState } from 'react';
-import type { CheckListData } from 'components/checkmarkList/checkmarkList';
-import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
-import type { ContributionType } from 'helpers/contributions';
+import type { CheckListData } from 'components/checkList/checkList';
+import { CheckList } from 'components/checkList/checkList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
 
@@ -117,11 +116,13 @@ const termsAndConditions = css`
 `;
 
 export type ContributionsOrderSummaryProps = {
-	contributionType: ContributionType;
+	description: string;
 	total: number;
 	currency: Currency;
+	enableCheckList: boolean;
 	checkListData: CheckListData[];
-	onAccordionClick?: (opening: boolean) => void;
+	paymentFrequency?: string;
+	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
 	threeTierProductName?: string;
@@ -130,46 +131,30 @@ export type ContributionsOrderSummaryProps = {
 	topUpToggleOnChange?: () => void;
 };
 
-const supportTypes = {
-	ONE_OFF: 'One-time',
-	MONTHLY: 'Monthly',
-	ANNUAL: 'Annual',
-};
-
-const timePeriods = {
-	MONTHLY: 'month',
-	ANNUAL: 'year',
-};
-
-function totalWithFrequency(total: string, contributionType: ContributionType) {
-	if (contributionType === 'ONE_OFF') {
-		return total;
-	}
-	return `${total}/${timePeriods[contributionType]}`;
-}
-
 export function ContributionsOrderSummary({
-	contributionType,
+	description,
 	total,
 	currency,
+	paymentFrequency,
 	checkListData,
-	onAccordionClick,
+	onCheckListToggle,
 	headerButton,
 	tsAndCs,
 	threeTierProductName,
+	enableCheckList,
 }: ContributionsOrderSummaryProps): JSX.Element {
-	const [showDetails, setShowDetails] = useState(false);
+	const [showCheckList, setCheckList] = useState(false);
 
-	const showAccordion =
-		contributionType !== 'ONE_OFF' && checkListData.length > 0;
-
-	const checkmarkList = (
-		<CheckmarkList
+	const hasCheckList = enableCheckList && checkListData.length > 0;
+	const checkList = hasCheckList && (
+		<CheckList
 			checkListData={checkListData}
 			style="compact"
 			iconColor={palette.brand[500]}
 		/>
 	);
+
+	const formattedTotal = simpleFormatAmount(currency, total);
 
 	return (
 		<div css={componentStyles}>
@@ -182,29 +167,26 @@ export function ContributionsOrderSummary({
 			<hr css={hrCss} />
 			<div css={detailsSection}>
 				<div css={summaryRow}>
-					<p>
-						{threeTierProductName ??
-							`${supportTypes[contributionType]} support`}
-					</p>
-					{showAccordion && (
+					<p>{description}</p>
+					{hasCheckList && (
 						<Button
 							priority="subdued"
-							aria-expanded={showDetails ? 'true' : 'false'}
+							aria-expanded={showCheckList ? 'true' : 'false'}
 							onClick={() => {
-								onAccordionClick?.(!showDetails);
-								setShowDetails(!showDetails);
+								onCheckListToggle?.(!showCheckList);
+								setCheckList(!showCheckList);
 							}}
 							icon={<SvgChevronDownSingle />}
 							iconSide="right"
-							cssOverrides={[buttonOverrides, iconCss(showDetails)]}
+							cssOverrides={[buttonOverrides, iconCss(showCheckList)]}
 						>
-							{showDetails ? 'Hide details' : 'View details'}
+							{showCheckList ? 'Hide details' : 'View details'}
 						</Button>
 					)}
 				</div>
 
-				{showAccordion && showDetails && (
-					<div css={checklistContainer}>{checkmarkList}</div>
+				{hasCheckList && showCheckList && (
+					<div css={checklistContainer}>{checkList}</div>
 				)}
 			</div>
 
@@ -212,10 +194,9 @@ export function ContributionsOrderSummary({
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
 				<p>
-					{totalWithFrequency(
-						simpleFormatAmount(currency, total),
-						contributionType,
-					)}
+					{paymentFrequency
+						? `${formattedTotal}/${paymentFrequency}`
+						: formattedTotal}
 				</p>
 			</div>
 			{!!tsAndCs && (

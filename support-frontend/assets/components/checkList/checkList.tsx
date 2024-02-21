@@ -4,7 +4,7 @@ import { from, palette, space, textSans } from '@guardian/source-foundations';
 import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
 import Tooltip from 'components/tooltip/Tooltip';
 
-const checkListIconCss = (style: CheckmarkListStyle) => css`
+const checkListIconCss = (style: CheckListStyle) => css`
 	vertical-align: top;
 	padding-right: ${style === 'compact' ? '4px' : '10px'};
 	line-height: 0;
@@ -39,7 +39,7 @@ const toolTipCss = css`
 		}
 	}
 `;
-const tableCss = (style: CheckmarkListStyle) => css`
+const tableCss = (style: CheckListStyle) => css`
 	${style === 'standard'
 		? textSans.medium({ lineHeight: 'tight' })
 		: textSans.small()}
@@ -64,11 +64,11 @@ export type CheckListData = {
 	toolTip?: string;
 };
 
-type CheckmarkListStyle = 'standard' | 'compact';
+type CheckListStyle = 'standard' | 'compact';
 
-export type CheckmarkListProps = {
+export type CheckListProps = {
 	checkListData: CheckListData[];
-	style?: CheckmarkListStyle;
+	style?: CheckListStyle;
 	iconColor?: string;
 	cssOverrides?: SerializedStyles;
 };
@@ -78,7 +78,7 @@ function ChecklistItemIcon({
 	style,
 }: {
 	checked: boolean;
-	style: CheckmarkListStyle;
+	style: CheckListStyle;
 }): JSX.Element {
 	return checked ? (
 		<SvgTickRound
@@ -93,12 +93,12 @@ function ChecklistItemIcon({
 	);
 }
 
-export function CheckmarkList({
+export function CheckList({
 	checkListData,
 	style = 'standard',
 	iconColor = style === 'compact' ? palette.success[400] : palette.brand[500],
 	cssOverrides,
-}: CheckmarkListProps): JSX.Element {
+}: CheckListProps): JSX.Element {
 	return (
 		<table css={[tableCss(style), cssOverrides]}>
 			{checkListData.map((item) => (
