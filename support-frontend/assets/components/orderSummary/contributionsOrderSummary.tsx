@@ -128,6 +128,7 @@ export type ContributionsOrderSummaryProps = {
 	showTopUpAmounts?: boolean;
 	topUpToggleChecked?: boolean;
 	topUpToggleOnChange?: () => void;
+	productDescription?: { description: string; frequency: string };
 };
 
 const supportTypes = {
@@ -157,6 +158,7 @@ export function ContributionsOrderSummary({
 	headerButton,
 	tsAndCs,
 	threeTierProductName,
+	productDescription,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showDetails, setShowDetails] = useState(false);
 
@@ -182,10 +184,13 @@ export function ContributionsOrderSummary({
 			<hr css={hrCss} />
 			<div css={detailsSection}>
 				<div css={summaryRow}>
-					<p>
-						{threeTierProductName ??
-							`${supportTypes[contributionType]} support`}
-					</p>
+					{productDescription && <p>{productDescription.description}</p>}
+					{!productDescription && (
+						<p>
+							{threeTierProductName ??
+								`${supportTypes[contributionType]} support`}
+						</p>
+					)}
 					{showAccordion && (
 						<Button
 							priority="subdued"
@@ -212,10 +217,12 @@ export function ContributionsOrderSummary({
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
 				<p>
-					{totalWithFrequency(
-						simpleFormatAmount(currency, total),
-						contributionType,
-					)}
+					{productDescription && `${total}/${productDescription.frequency}`}
+					{!productDescription &&
+						totalWithFrequency(
+							simpleFormatAmount(currency, total),
+							contributionType,
+						)}
 				</p>
 			</div>
 			{!!tsAndCs && (

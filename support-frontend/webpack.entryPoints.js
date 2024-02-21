@@ -1,6 +1,6 @@
 module.exports = {
   common: {
-    checkout: 'pages/[countryGroupId]/checkout.tsx',
+    '[countryGroupId]/checkout': 'pages/[countryGroupId]/checkout.tsx',
     favicons: 'images/favicons.ts',
     subscriptionsLandingPage: 'pages/subscriptions-landing/subscriptionsLanding.tsx',
     supporterPlusLandingPage: 'pages/supporter-plus-landing/supporterPlusRouter.tsx',

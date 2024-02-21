@@ -10,6 +10,7 @@ import fixtures.TestCSRFComponents
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar.mock
+import play.api.libs.ws.WSClient
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import services._
@@ -52,6 +53,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[StringsConfig],
         mock[AllSettingsProvider],
         mock[Stage],
+        mock[WSClient],
         "support.thegulocal.com",
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
@@ -73,6 +75,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[StringsConfig],
         mock[AllSettingsProvider],
         mock[Stage],
+        mock[WSClient],
         "support.thegulocal.com",
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
