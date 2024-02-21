@@ -5,13 +5,12 @@ export const inThreeTierVariants = (
 ): boolean => {
 	return (
 		abParticipations.threeTierCheckout === 'variant' ||
-		abParticipations.threeTierCheckoutV2 === 'variantA' ||
-		abParticipations.threeTierCheckoutV2 === 'variantB'
+		abParticipations.threeTierCheckoutV2 === 'variant'
 	);
 };
 
 export const inThreeTierV2VariantB = (
 	abParticipations: Participations,
 ): boolean => {
-	return abParticipations.threeTierCheckoutV2 === 'variantB';
+	return abParticipations.threeTierCheckoutV2 === 'variant';
 };

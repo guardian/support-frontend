@@ -159,10 +159,7 @@ export const tests: Tests = {
 				id: 'control',
 			},
 			{
-				id: 'variantA',
-			},
-			{
-				id: 'variantB',
+				id: 'variant',
 			},
 		],
 		isActive: false,
