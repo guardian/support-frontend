@@ -3,6 +3,7 @@
 import seedrandom from 'seedrandom';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import { countriesAffectedByVATStatus } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
@@ -258,6 +259,28 @@ function getAmountsTestVariant(
 			};
 		}
 	};
+
+	// Is the country in the list for contributions only checkout?
+	if (countriesAffectedByVATStatus.includes(country)) {
+		const contribOnlyTestName = 'VAT_COMPLIANCE';
+		const contribOnlyAmounts = amounts.find((t) => {
+			return t.isLive && t.testName === contribOnlyTestName;
+		});
+		if (contribOnlyAmounts) {
+			const amountsParticipation = buildParticipation(
+				contribOnlyAmounts,
+				contribOnlyTestName,
+				contribOnlyAmounts.variants[0].variantName,
+			);
+			return {
+				selectedAmountsVariant: {
+					...contribOnlyAmounts.variants[0],
+					testName: contribOnlyTestName,
+				},
+				amountsParticipation,
+			};
+		}
+	}
 
 	// Is an amounts test defined in the url?
 	const urlTest = getAmountsTestFromURL(acquisitionDataTests);
