@@ -21,7 +21,7 @@ interface FrequencyPlans {
 	charges: Record<CountryGroupId, TierPlanCosts>;
 }
 
-interface TierPlans {
+export interface TierPlans {
 	monthly: FrequencyPlans;
 	annual: FrequencyPlans;
 }

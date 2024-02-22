@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import type { PaymentMethod as StripePaymentMethod } from '@stripe/stripe-js';
 import type { Dispatch } from 'redux';
+import type { RegularContributionTypeMap } from 'helpers/contributions';
 import type {
 	PaymentAuthorisation,
 	PaymentResult,
@@ -61,6 +62,7 @@ import {
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
+import type { TierPlans } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
@@ -289,8 +291,11 @@ function onPaymentAuthorised(
 			);
 
 			if (inThreeTierTestVariant) {
-				const tierBillingPeriodName = billingPeriod.toLowerCase();
-				const contributionType = billingPeriod.toUpperCase();
+				const tierBillingPeriodName =
+					billingPeriod.toLowerCase() as keyof TierPlans;
+				const contributionType = billingPeriod.toUpperCase() as
+					| keyof RegularContributionTypeMap<null>;
+
 				const digitalPlusPrintDiscount =
 					tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
 						.discount;
