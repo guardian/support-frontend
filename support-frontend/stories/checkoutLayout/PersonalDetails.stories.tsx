@@ -57,14 +57,7 @@ SingleContribSignedIn.args = {
 	contributionType: 'ONE_OFF',
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={true} />,
-	contributionState: (
-		<StateSelect
-			state=""
-			onStateChange={() => null}
-			contributionType={'ONE_OFF'}
-			countryId={'GB'}
-		/>
-	),
+	contributionState: null,
 	hideDetailsHeading: true,
 };
 
@@ -77,14 +70,7 @@ SingleContribSignedOut.args = {
 	contributionType: 'ONE_OFF',
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={false} />,
-	contributionState: (
-		<StateSelect
-			state=""
-			onStateChange={() => null}
-			contributionType={'ONE_OFF'}
-			countryId={'GB'}
-		/>
-	),
+	contributionState: null,
 	hideDetailsHeading: true,
 };
 
@@ -97,14 +83,7 @@ SingleContribSignedOutWithVisibleHeader.args = {
 	contributionType: 'ONE_OFF',
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={false} />,
-	contributionState: (
-		<StateSelect
-			state=""
-			onStateChange={() => null}
-			contributionType={'ONE_OFF'}
-			countryId={'GB'}
-		/>
-	),
+	contributionState: null,
 };
 
 export const MultiContribSignedIn = Template.bind({});
@@ -117,12 +96,7 @@ MultiContribSignedIn.args = {
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
-		<StateSelect
-			state=""
-			onStateChange={() => null}
-			contributionType={'MONTHLY'}
-			countryId={'GB'}
-		/>
+		<StateSelect state="" onStateChange={() => null} countryId={'GB'} />
 	),
 	hideDetailsHeading: true,
 };
@@ -137,12 +111,7 @@ MultiContribSignedOut.args = {
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
-		<StateSelect
-			state=""
-			onStateChange={() => null}
-			contributionType={'MONTHLY'}
-			countryId={'GB'}
-		/>
+		<StateSelect state="" onStateChange={() => null} countryId={'GB'} />
 	),
 	hideDetailsHeading: true,
 };
@@ -157,12 +126,7 @@ MultiContribUSSignedIn.args = {
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
-		<StateSelect
-			state=""
-			onStateChange={() => null}
-			contributionType={'MONTHLY'}
-			countryId={'US'}
-		/>
+		<StateSelect state="" onStateChange={() => null} countryId={'US'} />
 	),
 	hideDetailsHeading: true,
 };
@@ -177,12 +141,7 @@ MultiContribUSSignedOut.args = {
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
-		<StateSelect
-			state=""
-			onStateChange={() => null}
-			contributionType={'MONTHLY'}
-			countryId={'US'}
-		/>
+		<StateSelect state="" onStateChange={() => null} countryId={'US'} />
 	),
 	hideDetailsHeading: true,
 };
@@ -206,7 +165,6 @@ WithErrors.args = {
 			state=""
 			error="Please select your state, province or territory"
 			onStateChange={() => null}
-			contributionType={'MONTHLY'}
 			countryId={'US'}
 		/>
 	),
