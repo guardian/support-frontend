@@ -20,7 +20,9 @@ import {
 	currencies,
 	type IsoCurrency,
 } from 'helpers/internationalisation/currency';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
+import { inThreeTierV2VariantB } from '../setup/threeTierABTest';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
@@ -191,11 +193,18 @@ export function ThreeTierCard({
 	linkCtaClickHandler,
 	externalBtnLink,
 }: ThreeTierCardProps): JSX.Element {
+	const inThreeTierVariantB = inThreeTierV2VariantB(
+		useContributionsSelector((state) => state.common).abParticipations,
+	);
 	const currency = currencies[currencyId].glyph;
 	const currentPrice = planCost.discount?.price ?? planCost.price;
 	const previousPriceCopy =
 		!!planCost.discount && `${currency}${planCost.price}`;
-	const currentPriceCopy = `${currency}${currentPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
+	const currentPriceCopy = `${
+		inThreeTierVariantB && cardTier === 1 ? 'From ' : ''
+	}${currency}${currentPrice}/${
+		recurringContributionPeriodMap[paymentFrequency]
+	}`;
 	return (
 		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
 			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
