@@ -289,10 +289,8 @@ function onPaymentAuthorised(
 			);
 
 			if (inThreeTierTestVariant) {
-				const tierBillingPeriodName =
-					billingPeriod === 'Annual' ? 'annual' : 'monthly';
-				const contributionType =
-					billingPeriod === 'Annual' ? 'ANNUAL' : 'MONTHLY';
+				const tierBillingPeriodName = billingPeriod.toLowerCase();
+				const contributionType = billingPeriod.toUpperCase();
 				const digitalPlusPrintDiscount =
 					tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
 						.discount;
