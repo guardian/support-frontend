@@ -54,7 +54,6 @@ SingleContribSignedIn.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	contributionType: 'ONE_OFF',
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: null,
@@ -67,7 +66,6 @@ SingleContribSignedOut.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	contributionType: 'ONE_OFF',
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: null,
@@ -80,7 +78,6 @@ SingleContribSignedOutWithVisibleHeader.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	contributionType: 'ONE_OFF',
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: null,
@@ -92,7 +89,6 @@ MultiContribSignedIn.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	contributionType: 'MONTHLY',
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
@@ -107,7 +103,6 @@ MultiContribSignedOut.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	contributionType: 'MONTHLY',
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
@@ -122,7 +117,6 @@ MultiContribUSSignedIn.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	contributionType: 'MONTHLY',
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={true} />,
 	contributionState: (
@@ -137,7 +131,6 @@ MultiContribUSSignedOut.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	contributionType: 'MONTHLY',
 	isSignedIn: false,
 	signOutLink: <Signout isSignedIn={false} />,
 	contributionState: (
@@ -152,7 +145,6 @@ WithErrors.args = {
 	email: '',
 	firstName: '',
 	lastName: '',
-	contributionType: 'MONTHLY',
 	isSignedIn: false,
 	errors: {
 		firstName: ['Please enter your first name'],
