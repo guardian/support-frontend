@@ -1,5 +1,4 @@
 import { Option, Select } from '@guardian/source-react-components';
-import type { ContributionType } from 'helpers/contributions';
 import { CountryGroup } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
@@ -8,11 +7,9 @@ import {
 	usStates,
 } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { shouldCollectStateForContributions } from 'helpers/internationalisation/shouldCollectStateForContribs';
 
 type StateSelectProps = {
 	countryId: IsoCountry;
-	contributionType: ContributionType;
 	state: string;
 	onStateChange: (newState: string) => void;
 	error?: string;
@@ -32,7 +29,6 @@ const stateLists: Partial<Record<CountryGroupId, Record<string, string>>> = {
 
 export function StateSelect({
 	countryId,
-	contributionType,
 	state,
 	onStateChange,
 	error,
@@ -42,31 +38,28 @@ export function StateSelect({
 	const stateDescriptor =
 		(countryGroupId ? stateDescriptors[countryGroupId] : 'State') ?? 'State';
 
-	if (shouldCollectStateForContributions(countryId, contributionType)) {
-		return (
-			<div>
-				<Select
-					id="state"
-					label={stateDescriptor}
-					value={state}
-					onChange={(e) => onStateChange(e.target.value)}
-					error={error}
-				>
-					<>
-						<Option value="">
-							{`Select your ${stateDescriptor.toLowerCase()}`}
-						</Option>
-						{Object.entries(statesList).map(([abbreviation, name]) => {
-							return (
-								<Option value={abbreviation} selected={abbreviation === state}>
-									{name}
-								</Option>
-							);
-						})}
-					</>
-				</Select>
-			</div>
-		);
-	}
-	return null;
+	return (
+		<div>
+			<Select
+				id="state"
+				label={stateDescriptor}
+				value={state}
+				onChange={(e) => onStateChange(e.target.value)}
+				error={error}
+			>
+				<>
+					<Option value="">
+						{`Select your ${stateDescriptor.toLowerCase()}`}
+					</Option>
+					{Object.entries(statesList).map(([abbreviation, name]) => {
+						return (
+							<Option value={abbreviation} selected={abbreviation === state}>
+								{name}
+							</Option>
+						);
+					})}
+				</>
+			</Select>
+		</div>
+	);
 }

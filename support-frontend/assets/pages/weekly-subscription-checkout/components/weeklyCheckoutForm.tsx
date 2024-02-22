@@ -83,7 +83,8 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { inThreeTierVariants } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { tierCardsVariantB as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
 // ----- Styles ----- //
@@ -171,7 +172,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		 * for users inThreeTierTestVariant as the original props.price
 		 * object doesn't account for the addition of S+ and associated promotions.
 		 */
-		const priceForQuantumMetric: ProductPrice = inThreeTierTestVariant
+		const priceForQuantumMetric: ProductPrice = inThreeTierVariant
 			? {
 					...props.price,
 					promotions: [],
@@ -185,8 +186,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 			priceForQuantumMetric,
 			props.billingPeriod,
 		);
-		inThreeTierTestVariant &&
-			props.setPaymentMethod({ paymentMethod: 'Stripe' });
+		inThreeTierVariant && props.setPaymentMethod({ paymentMethod: 'Stripe' });
 	}, []);
 
 	const submissionErrorHeading =
@@ -199,8 +199,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.setBillingCountry(props.deliveryCountry);
 	};
 
-	const inThreeTierTestVariant =
-		props.participations.threeTierCheckout === 'variant';
+	const inThreeTierVariant = inThreeTierVariants(props.participations);
 
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,
@@ -212,7 +211,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 	 * inThreeTierTestVariant, so remove it from paymentMethods
 	 * array.
 	 **/
-	if (inThreeTierTestVariant) {
+	if (inThreeTierVariant) {
 		const paypalIndex = paymentMethods.findIndex(
 			(subscriptionPaymentMethod) => subscriptionPaymentMethod === 'PayPal',
 		);
@@ -256,10 +255,10 @@ function WeeklyCheckoutForm(props: PropTypes) {
 	return (
 		<Content>
 			<Layout
-				asideNoBorders={inThreeTierTestVariant}
+				asideNoBorders={inThreeTierVariant}
 				aside={
 					<>
-						{inThreeTierTestVariant ? (
+						{inThreeTierVariant ? (
 							<DigitalPlusPrintSummary
 								total={standardDigitalPlusPrintPrice}
 								currencySymbol={currencies[props.price.currency].glyph}
@@ -368,7 +367,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							<BillingAddress countries={billableCountries} />
 						</FormSection>
 					) : null}
-					{!inThreeTierTestVariant && (
+					{!inThreeTierVariant && (
 						<FormSection title="Please select the first publication you’d like to receive">
 							<Rows>
 								<RadioGroup
@@ -407,7 +406,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							</Rows>
 						</FormSection>
 					)}
-					{!inThreeTierTestVariant && (
+					{!inThreeTierVariant && (
 						<BillingPeriodSelector
 							fulfilmentOption={props.fulfilmentOption}
 							onChange={(billingPeriod) =>
@@ -461,7 +460,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 							name={`${props.firstName} ${props.lastName}`}
 							validateForm={props.validateForm}
 							buttonText={
-								inThreeTierTestVariant
+								inThreeTierVariant
 									? `Pay ${currencies[props.price.currency].glyph}${
 											digitalPlusPrintPotentialDiscount?.price ??
 											standardDigitalPlusPrintPrice
@@ -513,7 +512,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						errorReason={props.submissionError}
 						errorHeading={submissionErrorHeading}
 					/>
-					{inThreeTierTestVariant ? (
+					{inThreeTierVariant ? (
 						<Total
 							price={
 								digitalPlusPrintPotentialDiscount?.price ??
@@ -528,7 +527,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						/>
 					)}
 
-					{inThreeTierTestVariant ? (
+					{inThreeTierVariant ? (
 						<ThreeTierTerms
 							paymentMethod={props.paymentMethod}
 							paymentFrequency={tierBillingPeriod}

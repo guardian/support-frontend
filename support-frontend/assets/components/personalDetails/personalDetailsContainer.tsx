@@ -44,6 +44,9 @@ export function PersonalDetailsContainer({
 	);
 
 	const showZipCodeField = countryId === 'US';
+	const showStateField =
+		contributionType !== 'ONE_OFF' &&
+		(countryId === 'US' || countryId === 'CA' || countryId === 'AU');
 
 	function onEmailChange(email: string) {
 		dispatch(setEmail(email));
@@ -75,10 +78,9 @@ export function PersonalDetailsContainer({
 		onLastNameChange,
 		errors,
 		signOutLink: <Signout isSignedIn={isSignedIn} />,
-		contributionState: (
+		contributionState: showStateField && (
 			<StateSelect
 				countryId={countryId}
-				contributionType={contributionType}
 				state={state}
 				onStateChange={onBillingStateChange}
 				error={errorObject?.state?.[0]}
