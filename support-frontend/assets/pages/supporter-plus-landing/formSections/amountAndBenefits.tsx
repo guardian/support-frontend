@@ -69,7 +69,7 @@ export function AmountAndBenefits({
 								)}
 							/>
 							<PriceCardsContainer
-								frequency={tabId}
+								paymentFrequency={tabId}
 								renderPriceCards={({
 									amounts,
 									selectedAmount,
