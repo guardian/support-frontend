@@ -268,6 +268,7 @@ class Application(
         mainElement = EmptyDiv("checkout"),
         mainJsBundle = Left(RefPath("[countryGroupId]/checkout.js")),
         mainStyleBundle = Right(StyleContent(Html(""))),
+        noindex = true,
       )(),
     ).withSettingsSurrogateKey
   }
