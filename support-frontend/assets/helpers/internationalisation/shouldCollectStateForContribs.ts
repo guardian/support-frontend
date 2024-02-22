@@ -6,7 +6,6 @@ export function shouldCollectStateForContributions(
 	contributionType: ContributionType,
 ): boolean {
 	if (contributionType === 'ONE_OFF') return false;
-
 	if (countryId === 'US' || countryId === 'CA' || countryId === 'AU') {
 		return true;
 	}

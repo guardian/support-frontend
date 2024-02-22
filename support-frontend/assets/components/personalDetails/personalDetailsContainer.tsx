@@ -31,6 +31,8 @@ export function PersonalDetailsContainer({
 	);
 
 	const contributionType = useContributionsSelector(getContributionType);
+	const hideNameFields = contributionType === 'ONE_OFF';
+
 	const { state, postCode, errorObject } = useContributionsSelector(
 		(state) => state.page.checkoutForm.billingAddress.fields,
 	);
@@ -42,6 +44,9 @@ export function PersonalDetailsContainer({
 	);
 
 	const showZipCodeField = countryId === 'US';
+	const showStateField =
+		contributionType !== 'ONE_OFF' &&
+		(countryId === 'US' || countryId === 'CA' || countryId === 'AU');
 
 	function onEmailChange(email: string) {
 		dispatch(setEmail(email));
@@ -67,17 +72,15 @@ export function PersonalDetailsContainer({
 		email,
 		firstName,
 		lastName,
-		contributionType,
 		isSignedIn,
 		onEmailChange,
 		onFirstNameChange,
 		onLastNameChange,
 		errors,
 		signOutLink: <Signout isSignedIn={isSignedIn} />,
-		contributionState: (
+		contributionState: showStateField && (
 			<StateSelect
 				countryId={countryId}
-				contributionType={contributionType}
 				state={state}
 				onStateChange={onBillingStateChange}
 				error={errorObject?.state?.[0]}
@@ -95,5 +98,6 @@ export function PersonalDetailsContainer({
 				/>
 			</div>
 		) : undefined,
+		hideNameFields,
 	});
 }
