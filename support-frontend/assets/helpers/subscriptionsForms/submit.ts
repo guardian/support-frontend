@@ -58,8 +58,8 @@ import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagMana
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
-import { inThreeTierVariants } from 'pages/supporter-plus-landing/setup/threeTierABTest';
-import { tierCardsVariantB as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { inThreeTierV2Variant } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { tierCards as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
@@ -204,7 +204,7 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
-		threeTierCreateSupporterPlusSubscription: inThreeTierVariants(
+		threeTierCreateSupporterPlusSubscription: inThreeTierV2Variant(
 			state.common.abParticipations,
 		),
 	};
@@ -258,7 +258,7 @@ function onPaymentAuthorised(
 				billingPeriod === 'Monthly' ? 'monthly' : 'annual';
 			const { countryGroupId } = state.common.internationalisation;
 
-			const inThreeTierVariant = inThreeTierVariants(
+			const inThreeTierVariant = inThreeTierV2Variant(
 				state.common.abParticipations,
 			);
 			const standardDigitalPlusPrintPrice =

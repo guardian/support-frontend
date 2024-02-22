@@ -24,8 +24,8 @@ import {
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { inThreeTierVariants } from 'pages/supporter-plus-landing/setup/threeTierABTest';
-import { tierCardsVariantB as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { inThreeTierV2Variant } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
 	heroGuardianWeeklyNonGifting: string;
@@ -166,7 +166,7 @@ function ThankYouContent({
 	product,
 	participations,
 }: PropTypes) {
-	const inThreeTierVariant = inThreeTierVariants(participations);
+	const inThreeTierVariant = inThreeTierV2Variant(participations);
 
 	const whatHappensNextItems = orderIsGift
 		? [
