@@ -123,7 +123,7 @@ export function LimitedPriceCards(): JSX.Element {
 						)}
 					/>
 					<PriceCardsContainer
-						frequency={contributionType}
+						paymentFrequency={contributionType}
 						renderPriceCards={({ selectedAmount }) => (
 							<SimplePriceCards
 								title="Support Guardian journalism"
