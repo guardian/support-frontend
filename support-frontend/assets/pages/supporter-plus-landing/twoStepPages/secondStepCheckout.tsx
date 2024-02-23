@@ -15,7 +15,10 @@ import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
-import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
+import {
+	setOtherAmount,
+	setSelectedAmount,
+} from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	getUserSelectedAmount,
@@ -33,6 +36,7 @@ import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
+import { inThreeTierV2Variant } from '../setup/threeTierABTest';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`
@@ -58,9 +62,6 @@ export function SupporterPlusCheckout({
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
-	);
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
 	const amountBeforeAmendments = useContributionsSelector(
@@ -75,12 +76,14 @@ export function SupporterPlusCheckout({
 	);
 
 	const navigate = useNavigate();
-
-	const isInThreeTierCheckoutTest =
-		abParticipations.threeTierCheckout === 'variant';
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
+	);
+	const inThreeTierVariant = inThreeTierV2Variant(abParticipations);
 
 	const showPriceCards =
-		isInThreeTierCheckoutTest && contributionType === 'ONE_OFF';
+		(inThreeTierVariant && contributionType === 'ONE_OFF') ||
+		(inThreeTierVariant && !amountIsAboveThreshold);
 
 	const changeButton = (
 		<Button
@@ -95,6 +98,15 @@ export function SupporterPlusCheckout({
 						amount: `${amountToBePassed}`,
 					}),
 				);
+				// 3-tier Other amount over S+ threshold will not re-display unless reset
+				if (inThreeTierVariant && amountIsAboveThreshold) {
+					dispatch(
+						setOtherAmount({
+							contributionType: contributionType,
+							amount: '',
+						}),
+					);
+				}
 				dispatch(resetValidation());
 				const destination = `/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`;
 				navigateWithPageView(navigate, destination, abParticipations);
@@ -109,10 +121,10 @@ export function SupporterPlusCheckout({
 			<Box cssOverrides={shorterBoxMargin}>
 				<BoxContents>
 					{showPriceCards ? (
-						<ContributionsPriceCards />
+						<ContributionsPriceCards paymentFrequency={contributionType} />
 					) : (
 						<ContributionsOrderSummaryContainer
-							inThreeTier={isInThreeTierCheckoutTest}
+							inThreeTier={inThreeTierVariant}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}
@@ -165,9 +177,7 @@ export function SupporterPlusCheckout({
 						amount={amount}
 						amountIsAboveThreshold={amountIsAboveThreshold}
 						productNameAboveThreshold={
-							isInThreeTierCheckoutTest
-								? 'All-access digital'
-								: 'Supporter Plus'
+							inThreeTierVariant ? 'All-access digital' : 'Supporter Plus'
 						}
 					/>
 				</BoxContents>

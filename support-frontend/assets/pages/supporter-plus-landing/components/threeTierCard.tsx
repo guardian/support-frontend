@@ -195,7 +195,11 @@ export function ThreeTierCard({
 	const currentPrice = planCost.discount?.price ?? planCost.price;
 	const previousPriceCopy =
 		!!planCost.discount && `${currency}${planCost.price}`;
-	const currentPriceCopy = `${currency}${currentPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
+	const currentPriceCopy = `${
+		cardTier === 1 ? 'From ' : ''
+	}${currency}${currentPrice}/${
+		recurringContributionPeriodMap[paymentFrequency]
+	}`;
 	return (
 		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
 			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
