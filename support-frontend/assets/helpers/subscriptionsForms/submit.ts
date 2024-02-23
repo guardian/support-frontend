@@ -62,9 +62,9 @@ import {
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
+import { inThreeTierV2Variant } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import type { TierPlans } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
-import { inThreeTierV2Variant } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
@@ -274,9 +274,6 @@ function onPaymentAuthorised(
 				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
 
-      const inThreeTierVariant = inThreeTierV2Variant(
-				state.common.abParticipations,
-			);
 			const printPriceDiscounted = getPrintDiscountedPrice(
 				productPrice,
 				data.promoCode,
@@ -292,7 +289,10 @@ function onPaymentAuthorised(
 				productType,
 			);
 
-			if (inThreeTierTestVariant) {
+			const inThreeTierVariant = inThreeTierV2Variant(
+				state.common.abParticipations,
+			);
+			if (inThreeTierVariant) {
 				const tierBillingPeriodName =
 					billingPeriod.toLowerCase() as keyof TierPlans;
 				const contributionType = billingPeriod.toUpperCase() as
