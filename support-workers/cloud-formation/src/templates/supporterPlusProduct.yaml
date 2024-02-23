@@ -1,5 +1,5 @@
 # This step ID is called from and should match ./supporterPlusProductChoice.yaml
-ThreeTierSupporterPlus{{billingPeriod}}{{countryCode}}:
+ThreeTierSupporterPlus{{billingPeriod}}{{currency}}{{fulfilmentOptions}}:
   Type: Pass
   Result:
     amount: {{amount}}
@@ -7,9 +7,9 @@ ThreeTierSupporterPlus{{billingPeriod}}{{countryCode}}:
     billingPeriod: {{billingPeriod}}
     productType: SupporterPlus
   ResultPath: $.state.product
-  Next: ThreeTierSupporterPlus{{billingPeriod}}{{countryCode}}PromoCode
+  Next: ThreeTierSupporterPlus{{billingPeriod}}{{currency}}{{fulfilmentOptions}}PromoCode
 
-ThreeTierSupporterPlus{{billingPeriod}}{{countryCode}}PromoCode:
+ThreeTierSupporterPlus{{billingPeriod}}{{currency}}{{fulfilmentOptions}}PromoCode:
   Type: Pass
   Result: {{promoCode}}
   ResultPath: $.state.promoCode

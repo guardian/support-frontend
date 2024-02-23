@@ -64,6 +64,7 @@ import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import type { TierPlans } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { inThreeTierV2Variant } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
@@ -224,8 +225,9 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
-		threeTierCreateSupporterPlusSubscription:
-			state.common.abParticipations.threeTierCheckout === 'variant',
+		threeTierCreateSupporterPlusSubscription: inThreeTierV2Variant(
+			state.common.abParticipations,
+		),
 	};
 }
 
@@ -272,9 +274,9 @@ function onPaymentAuthorised(
 				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
 
-			const { abParticipations } = state.common;
-			const inThreeTierTestVariant =
-				abParticipations.threeTierCheckout === 'variant';
+      const inThreeTierVariant = inThreeTierV2Variant(
+				state.common.abParticipations,
+			);
 			const printPriceDiscounted = getPrintDiscountedPrice(
 				productPrice,
 				data.promoCode,

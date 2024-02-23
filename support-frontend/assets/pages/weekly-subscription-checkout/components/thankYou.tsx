@@ -24,6 +24,7 @@ import {
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { inThreeTierV2Variant } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
@@ -165,7 +166,7 @@ function ThankYouContent({
 	product,
 	participations,
 }: PropTypes) {
-	const inThreeTierTestVariant = participations.threeTierCheckout === 'variant';
+	const inThreeTierVariant = inThreeTierV2Variant(participations);
 
 	const whatHappensNextItems = orderIsGift
 		? [
@@ -216,7 +217,7 @@ function ThankYouContent({
 	);
 
 	const thankyouSupportHeader = `Thank you for supporting our journalism${
-		!inThreeTierTestVariant ? '!' : ''
+		!inThreeTierVariant ? '!' : ''
 	}`;
 
 	useScrollToTop();
@@ -238,12 +239,12 @@ function ThankYouContent({
 						billingPeriod,
 						isPending,
 						orderIsGift,
-						inThreeTierTestVariant,
+						inThreeTierVariant,
 					)}
 				</HeadingBlock>
 			</HeroWrapper>
 
-			{inThreeTierTestVariant ? (
+			{inThreeTierVariant ? (
 				<>
 					<Content>
 						{isPending && (
@@ -321,8 +322,8 @@ function ThankYouContent({
 					</SansParagraph>
 				</Text>
 			</Content>
-			{!inThreeTierTestVariant && <SubscriptionsSurvey product={product} />}
-			{!inThreeTierTestVariant && (
+			{!inThreeTierVariant && <SubscriptionsSurvey product={product} />}
+			{!inThreeTierVariant && (
 				<Content>
 					<Asyncronously
 						loader={
