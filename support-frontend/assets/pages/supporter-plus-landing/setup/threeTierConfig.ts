@@ -25,7 +25,7 @@ interface FrequencyPlans {
 	priceCards?: Record<CountryGroupId, AmountValuesObject>;
 }
 
-interface TierPlans {
+export interface TierPlans {
 	monthly: FrequencyPlans;
 	annual: FrequencyPlans;
 }
