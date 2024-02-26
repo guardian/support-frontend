@@ -450,16 +450,25 @@ Resources:
       AlarmDescription: >
         The supporter-product-data step function failed, check for failed executions here:
         https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:supporter-product-data-PROD
-      MetricName: ExecutionsFailed
-      Namespace: AWS/States
-      Dimensions:
-        - Name: StateMachineArn
-          Value: !Ref SupporterProductData
+      Metrics:
+        - Id: errors
+          # Do not alarm between 00:00 and 06:00 because Zuora is very slow and we often have failures during these hours
+          Expression: "IF(HOUR(m1) > 5, m1)"
+        - Id: m1
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/States
+              MetricName: ExecutionsFailed
+              Dimensions:
+                - Name: StateMachineArn
+                  Value: !Ref SupporterProductData
+            Stat: Sum
+            Period: 60
+            Unit: Count
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 1
-      Period: 60
       EvaluationPeriods: 60
-      Statistic: Sum
       TreatMissingData: notBreaching
     DependsOn: SupporterProductData
 
