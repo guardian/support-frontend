@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import type { CheckListData } from 'components/checkmarkList/checkmarkList';
+import type { CheckListData } from 'components/checkList/checkList';
 
 const boldText = css`
 	font-weight: bold;
