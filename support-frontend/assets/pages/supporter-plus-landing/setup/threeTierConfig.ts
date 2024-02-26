@@ -25,7 +25,7 @@ interface FrequencyPlans {
 	priceCards?: Record<CountryGroupId, AmountValuesObject>;
 }
 
-interface TierPlans {
+export interface TierPlans {
 	monthly: FrequencyPlans;
 	annual: FrequencyPlans;
 }
@@ -43,48 +43,7 @@ interface TierCards {
 	tier3: TierCard;
 }
 
-const tier1VariantA: TierCard = {
-	title: 'Support',
-	benefits: {
-		list: [
-			{
-				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
-			},
-		],
-	},
-	plans: {
-		monthly: {
-			label: 'Monthly',
-			charges: {
-				GBPCountries: {
-					price: 4,
-				},
-				EURCountries: { price: 4 },
-				International: { price: 5 },
-				UnitedStates: { price: 5 },
-				Canada: { price: 5 },
-				NZDCountries: { price: 10 },
-				AUDCountries: { price: 10 },
-			},
-		},
-		annual: {
-			label: 'Annual',
-			charges: {
-				GBPCountries: {
-					price: 50,
-				},
-				EURCountries: { price: 50 },
-				International: { price: 60 },
-				UnitedStates: { price: 60 },
-				Canada: { price: 60 },
-				NZDCountries: { price: 80 },
-				AUDCountries: { price: 80 },
-			},
-		},
-	},
-};
-
-const tier1VariantB: TierCard = {
+const tier1: TierCard = {
 	title: 'Support',
 	benefits: {
 		list: [
@@ -104,8 +63,8 @@ const tier1VariantB: TierCard = {
 				International: { price: 2 },
 				UnitedStates: { price: 5 },
 				Canada: { price: 5 },
-				NZDCountries: { price: 4 },
-				AUDCountries: { price: 4 },
+				NZDCountries: { price: 5 },
+				AUDCountries: { price: 5 },
 			},
 			priceCards: {
 				GBPCountries: {
@@ -134,13 +93,13 @@ const tier1VariantB: TierCard = {
 					hideChooseYourAmount: false,
 				},
 				NZDCountries: {
-					amounts: [4, 10, 15],
-					defaultAmount: 4,
+					amounts: [5, 10, 15],
+					defaultAmount: 5,
 					hideChooseYourAmount: false,
 				},
 				AUDCountries: {
-					amounts: [4, 10, 15],
-					defaultAmount: 4,
+					amounts: [5, 10, 15],
+					defaultAmount: 5,
 					hideChooseYourAmount: false,
 				},
 			},
@@ -160,12 +119,12 @@ const tier1VariantB: TierCard = {
 			},
 			priceCards: {
 				GBPCountries: {
-					amounts: [50, 95, 173],
+					amounts: [50, 95, 150],
 					defaultAmount: 50,
 					hideChooseYourAmount: false,
 				},
 				EURCountries: {
-					amounts: [50, 95, 302],
+					amounts: [50, 95, 250],
 					defaultAmount: 50,
 					hideChooseYourAmount: false,
 				},
@@ -175,22 +134,22 @@ const tier1VariantB: TierCard = {
 					hideChooseYourAmount: false,
 				},
 				UnitedStates: {
-					amounts: [60, 120, 378],
+					amounts: [60, 120, 350],
 					defaultAmount: 60,
 					hideChooseYourAmount: false,
 				},
 				Canada: {
-					amounts: [60, 120, 378],
+					amounts: [60, 120, 350],
 					defaultAmount: 60,
 					hideChooseYourAmount: false,
 				},
 				NZDCountries: {
-					amounts: [80, 160, 551],
+					amounts: [80, 160, 450],
 					defaultAmount: 80,
 					hideChooseYourAmount: false,
 				},
 				AUDCountries: {
-					amounts: [80, 160, 486],
+					amounts: [80, 160, 450],
 					defaultAmount: 80,
 					hideChooseYourAmount: false,
 				},
@@ -409,14 +368,9 @@ const tier3: TierCard = {
 		},
 	},
 };
-export const tierCardsVariantA: TierCards = {
-	tier1: tier1VariantA,
-	tier2,
-	tier3,
-};
 
-export const tierCardsVariantB: TierCards = {
-	tier1: tier1VariantB,
+export const tierCards: TierCards = {
+	tier1,
 	tier2,
 	tier3,
 };

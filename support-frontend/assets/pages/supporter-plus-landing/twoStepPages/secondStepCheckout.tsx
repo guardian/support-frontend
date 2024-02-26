@@ -36,10 +36,7 @@ import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
-import {
-	inThreeTierV2VariantB,
-	inThreeTierVariants,
-} from '../setup/threeTierABTest';
+import { inThreeTierV2Variant } from '../setup/threeTierABTest';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`
@@ -82,12 +79,11 @@ export function SupporterPlusCheckout({
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
-	const inThreeTierVariant = inThreeTierVariants(abParticipations);
-	const inThreeTierVariantB = inThreeTierV2VariantB(abParticipations);
+	const inThreeTierVariant = inThreeTierV2Variant(abParticipations);
 
 	const showPriceCards =
 		(inThreeTierVariant && contributionType === 'ONE_OFF') ||
-		(inThreeTierVariantB && !amountIsAboveThreshold);
+		(inThreeTierVariant && !amountIsAboveThreshold);
 
 	const changeButton = (
 		<Button
@@ -103,7 +99,7 @@ export function SupporterPlusCheckout({
 					}),
 				);
 				// 3-tier Other amount over S+ threshold will not re-display unless reset
-				if (inThreeTierVariantB && amountIsAboveThreshold) {
+				if (inThreeTierVariant && amountIsAboveThreshold) {
 					dispatch(
 						setOtherAmount({
 							contributionType: contributionType,
