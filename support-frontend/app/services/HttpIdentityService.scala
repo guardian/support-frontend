@@ -1,6 +1,6 @@
 package services
 
-import akka.actor.Scheduler
+import org.apache.pekko.actor.Scheduler
 import cats.data.EitherT
 import cats.implicits._
 import com.google.common.net.InetAddresses

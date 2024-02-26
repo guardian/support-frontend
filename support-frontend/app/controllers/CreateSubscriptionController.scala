@@ -3,7 +3,7 @@ package controllers
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, Switches}
-import akka.actor.{ActorSystem, Scheduler}
+import org.apache.pekko.actor.{ActorSystem, Scheduler}
 import cats.data.EitherT
 import cats.implicits._
 import com.gu.monitoring.SafeLogger
