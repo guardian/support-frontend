@@ -37,6 +37,7 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.stage,
+    implicitWs,
     appConfig.supportUrl,
   )
 

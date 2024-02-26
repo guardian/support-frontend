@@ -129,6 +129,7 @@ export type ContributionsOrderSummaryProps = {
 	showTopUpAmounts?: boolean;
 	topUpToggleChecked?: boolean;
 	topUpToggleOnChange?: () => void;
+	productDescription?: { description: string; frequency: string };
 };
 
 export function ContributionsOrderSummary({
