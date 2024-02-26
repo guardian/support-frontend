@@ -11,7 +11,7 @@ import {
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
 } from '@guardian/source-react-components';
-import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
+import { CheckList } from 'components/checkList/checkList';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -262,7 +262,7 @@ export function ThreeTierCard({
 					<span css={benefitsPrefixPlus}>plus</span>
 				</div>
 			)}
-			<CheckmarkList
+			<CheckList
 				checkListData={benefits.list.map((benefit) => {
 					return {
 						text: benefit.copy,

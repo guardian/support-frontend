@@ -9,8 +9,8 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
-import type { CheckListData } from 'components/checkmarkList/checkmarkList';
+import { CheckList } from 'components/checkList/checkList';
+import type { CheckListData } from 'components/checkList/checkList';
 
 const containerCss = css`
 	${textSans.medium({ lineHeight: 'tight' })};
@@ -112,7 +112,7 @@ export function CheckoutBenefitsList({
 				<span>{titleCopy}</span>
 			</h2>
 			<hr css={hrCss(`${space[4]}px 0`)} />
-			<CheckmarkList
+			<CheckList
 				checkListData={checkListData}
 				style={isCompactList ? 'compact' : 'standard'}
 				iconColor={palette.brand[500]}

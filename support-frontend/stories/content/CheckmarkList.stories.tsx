@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Column, Columns } from '@guardian/source-react-components';
-import type { CheckmarkListProps } from 'components/checkmarkList/checkmarkList';
-import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
+import type { CheckListProps } from 'components/checkList/checkList';
+import { CheckList } from 'components/checkList/checkList';
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
@@ -9,7 +9,7 @@ import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 
 export default {
 	title: 'Content/Checkmark List',
-	component: CheckmarkList,
+	component: CheckList,
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Columns
@@ -32,11 +32,11 @@ export default {
 	],
 };
 
-function Template(args: CheckmarkListProps) {
-	return <CheckmarkList {...args} />;
+function Template(args: CheckListProps) {
+	return <CheckList {...args} />;
 }
 
-Template.args = {} as CheckmarkListProps;
+Template.args = {} as CheckListProps;
 
 export const Default = Template.bind({});
 
