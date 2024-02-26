@@ -209,6 +209,8 @@ export function Checkout() {
 		return <div>Product not found</div>;
 	}
 
+	const product = describeProduct(query.productId, query.ratePlanId);
+
 	return (
 		<PageScaffold
 			header={<Header></Header>}
@@ -231,21 +233,19 @@ export function Checkout() {
 						<Box cssOverrides={shorterBoxMargin}>
 							<BoxContents>
 								<ContributionsOrderSummary
-									contributionType={'MONTHLY'}
+									description={product.description}
+									paymentFrequency={product.frequency}
 									total={currentPrice}
 									currency={currentCurrency}
 									checkListData={[]}
-									onAccordionClick={(isOpen) => {
+									onCheckListToggle={(isOpen) => {
 										trackComponentClick(
 											`contribution-order-summary-${
 												isOpen ? 'opened' : 'closed'
 											}`,
 										);
 									}}
-									productDescription={describeProduct(
-										query.productId,
-										query.ratePlanId,
-									)}
+									enableCheckList={true}
 									tsAndCs={null}
 								/>
 							</BoxContents>
