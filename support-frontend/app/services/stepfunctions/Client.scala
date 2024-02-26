@@ -2,7 +2,7 @@ package services.stepfunctions
 
 import services.aws.AwsAsync
 import StateMachineContainer.{Response, convertErrors}
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.regions.Regions

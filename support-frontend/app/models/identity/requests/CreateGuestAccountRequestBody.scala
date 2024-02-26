@@ -1,6 +1,6 @@
 package models.identity.requests
 
-import akka.util.ByteString
+import org.apache.pekko.util.ByteString
 import com.gu.identity.model.{PrivateFields, PublicFields}
 import play.api.libs.json.{Json, Writes}
 import play.api.libs.ws.{BodyWritable, InMemoryBody}

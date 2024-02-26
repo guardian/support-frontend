@@ -2,8 +2,8 @@ package actions
 
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import admin.settings.FeatureSwitches
-import akka.stream.scaladsl.Flow
-import akka.util.ByteString
+import org.apache.pekko.stream.scaladsl.Flow
+import org.apache.pekko.util.ByteString
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger.Sanitizer

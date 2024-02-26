@@ -2,7 +2,7 @@ package controllers
 
 import actions.{CustomActionBuilders, UserFromAuthCookiesActionBuilder, UserFromAuthCookiesOrAuthServerActionBuilder}
 import admin.settings.{AllSettingsProvider, FeatureSwitches, On}
-import akka.util.Timeout
+import org.apache.pekko.util.Timeout
 import assets.AssetsResolver
 import com.gu.support.config._
 import config.{RecaptchaConfigProvider, StringsConfig}

@@ -1,7 +1,7 @@
 package controllers
 
-import akka.actor.ActorSystem
-import akka.stream.{ActorMaterializer, Materializer}
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.{ActorMaterializer, Materializer}
 import backend._
 import cats.data.EitherT
 import cats.instances.all._

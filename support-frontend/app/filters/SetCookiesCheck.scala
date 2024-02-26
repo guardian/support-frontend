@@ -1,7 +1,7 @@
 package filters
 
 import scala.concurrent.{ExecutionContext, Future}
-import akka.stream.Materializer
+import org.apache.pekko.stream.Materializer
 import play.api.mvc._
 import play.api.http.Status.{MOVED_PERMANENTLY, NOT_FOUND, OK}
 import play.api.mvc.request.RequestAttrKey
