@@ -16,16 +16,23 @@ export type DefaultPaymentButtonProps = {
 	buttonText: string;
 	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 	disabled?: boolean;
+	type?: HTMLButtonElement['type'];
 };
 
 export function DefaultPaymentButton({
 	id,
 	buttonText,
 	onClick,
+	type,
 }: DefaultPaymentButtonProps): JSX.Element {
 	return (
 		<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-			<Button id={id} cssOverrides={buttonOverrides} onClick={onClick}>
+			<Button
+				id={id}
+				cssOverrides={buttonOverrides}
+				onClick={onClick}
+				type={type}
+			>
 				{buttonText}
 			</Button>
 		</ThemeProvider>

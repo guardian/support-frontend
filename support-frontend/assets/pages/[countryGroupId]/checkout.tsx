@@ -6,7 +6,12 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import { Column, Columns, Container } from '@guardian/source-react-components';
+import {
+	Column,
+	Columns,
+	Container,
+	TextInput,
+} from '@guardian/source-react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
@@ -26,11 +31,19 @@ import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { PageScaffold } from 'components/page/pageScaffold';
+import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
+import { PersonalDetails } from 'components/personalDetails/personalDetails';
+import { StateSelect } from 'components/personalDetails/stateSelect';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import Signout from 'components/signout/signout';
+import CountryHelper from 'helpers/internationalisation/classes/country';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import { renderPage } from 'helpers/rendering/render';
+import { get } from 'helpers/storage/cookie';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 
 /** App config - this is config that should persist throughout the app */
@@ -70,11 +83,15 @@ switch (countryGroupId) {
 		break;
 }
 
+const isSignedIn = !!get('GU_U');
+const countryId: IsoCountry =
+	CountryHelper.fromString(get('GU_country') ?? 'GB') ?? 'GB';
+
 /** Page config - this is setup specifically for the checkout page */
 const searchParams = new URLSearchParams(window.location.search);
 const query = {
-	productId: searchParams.get('product'),
-	ratePlanId: searchParams.get('ratePlan'),
+	product: searchParams.get('product'),
+	ratePlan: searchParams.get('ratePlan'),
 };
 
 const ProductSchema = object({
@@ -96,56 +113,56 @@ const ProductsSchema = object({
 });
 type Products = Output<typeof ProductsSchema>;
 
-function describeProduct(productId: string, ratePlanId: string) {
-	let description = `${productId} - ${ratePlanId}`;
+function describeProduct(product: string, ratePlan: string) {
+	let description = `${product} - ${ratePlan}`;
 	let frequency = '';
 
-	if (productId === 'HomeDelivery') {
+	if (product === 'HomeDelivery') {
 		frequency = 'month';
-		description = `${ratePlanId} paper`;
+		description = `${ratePlan} paper`;
 
-		if (ratePlanId === 'Sixday') {
+		if (ratePlan === 'Sixday') {
 			description = 'Six day paper';
 		}
-		if (ratePlanId === 'Everyday') {
+		if (ratePlan === 'Everyday') {
 			description = 'Every day paper';
 		}
-		if (ratePlanId === 'Weekend') {
+		if (ratePlan === 'Weekend') {
 			description = 'Weekend paper';
 		}
-		if (ratePlanId === 'Saturday') {
+		if (ratePlan === 'Saturday') {
 			description = 'Saturday paper';
 		}
-		if (ratePlanId === 'Sunday') {
+		if (ratePlan === 'Sunday') {
 			description = 'Sunday paper';
 		}
 	}
 
 	if (
-		productId === 'GuardianWeeklyDomestic' ||
-		productId === 'GuardianWeeklyRestOfWorld'
+		product === 'GuardianWeeklyDomestic' ||
+		product === 'GuardianWeeklyRestOfWorld'
 	) {
-		if (ratePlanId === 'OneYearGift') {
+		if (ratePlan === 'OneYearGift') {
 			frequency = 'year';
 			description = 'The Guardian Weekly Gift Subscription';
 		}
-		if (ratePlanId === 'Annual') {
+		if (ratePlan === 'Annual') {
 			frequency = 'year';
 			description = 'The Guardian Weekly';
 		}
-		if (ratePlanId === 'Quarterly') {
+		if (ratePlan === 'Quarterly') {
 			frequency = 'quarter';
 			description = 'The Guardian Weekly';
 		}
-		if (ratePlanId === 'Monthly') {
+		if (ratePlan === 'Monthly') {
 			frequency = 'month';
 			description = 'The Guardian Weekly';
 		}
-		if (ratePlanId === 'ThreeMonthGift') {
+		if (ratePlan === 'ThreeMonthGift') {
 			frequency = 'quarter';
 			description = 'The Guardian Weekly Gift Subscription';
 		}
-		if (ratePlanId === 'SixWeekly') {
+		if (ratePlan === 'SixWeekly') {
 			frequency = 'month';
 			description = 'The Guardian Weekly';
 		}
@@ -197,19 +214,22 @@ export function Checkout() {
 			});
 	}, []);
 
-	if (!query.productId || !query.ratePlanId) {
+	if (!query.product || !query.ratePlan) {
 		return <div>Not enough query parameters</div>;
 	}
 
-	const currentProduct = products?.products[query.productId];
-	const currentRatePlan = currentProduct?.ratePlans[query.ratePlanId];
+	const currentProduct = products?.products[query.product];
+	const currentRatePlan = currentProduct?.ratePlans[query.ratePlan];
 	const currentPrice = currentRatePlan?.pricing[currentCurrencyKey] ?? 0;
 
 	if (!currentProduct) {
 		return <div>Product not found</div>;
 	}
 
-	const product = describeProduct(query.productId, query.ratePlanId);
+	const product = describeProduct(query.product, query.ratePlan);
+	const showStateSelect =
+		query.product !== 'Contribution' &&
+		(countryId === 'US' || countryId === 'CA' || countryId === 'AU');
 
 	return (
 		<PageScaffold
@@ -250,6 +270,100 @@ export function Checkout() {
 								/>
 							</BoxContents>
 						</Box>
+						<form
+							action="/contribute/recurring/create"
+							method="POST"
+							onSubmit={(event) => {
+								event.preventDefault();
+								const form = event.currentTarget;
+								const formData = new FormData(form);
+
+								/**
+								 * The validation for this is currently happening on the client side form validation
+								 * So we'll assume strings are not null.
+								 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
+								 */
+								const data = {
+									firstName: formData.get('firstName') as string,
+									lastName: formData.get('lastName') as string,
+									email: formData.get('email') as string,
+									product: formData.get('product') as string,
+									ratePlan: formData.get('ratePlan') as string,
+									currency: formData.get('currency') as string,
+								};
+								console.info('Posting data', data);
+
+								// Currently support-workers doesn't understand the new shape, and we also need to
+								// add payment data, so for now, just abort.
+								return false;
+							}}
+						>
+							<input type="hidden" name="product" value={query.product} />
+							<input type="hidden" name="ratePlan" value={currentCurrencyKey} />
+							<input type="hidden" name="currency" value={currentCurrencyKey} />
+
+							<Box cssOverrides={shorterBoxMargin}>
+								<BoxContents>
+									<PersonalDetails
+										email={''}
+										firstName={''}
+										lastName={''}
+										isSignedIn={isSignedIn}
+										hideNameFields={query.product === 'Contribution'}
+										onEmailChange={() => {
+											//  no-op
+										}}
+										onFirstNameChange={() => {
+											//  no-op
+										}}
+										onLastNameChange={() => {
+											//  no-op
+										}}
+										errors={{}}
+										signOutLink={<Signout isSignedIn={isSignedIn} />}
+										contributionState={
+											showStateSelect && (
+												<StateSelect
+													countryId={countryId}
+													state={'STATE'}
+													onStateChange={() => {
+														//  no-op
+													}}
+													error={undefined}
+												/>
+											)
+										}
+										contributionZipcode={
+											countryId === 'US' ? (
+												<div>
+													<TextInput
+														id="zipCode"
+														name="zip-code"
+														label="ZIP code"
+														value={''}
+														error={undefined}
+														onChange={() => {
+															//  no-op
+														}}
+													/>
+												</div>
+											) : undefined
+										}
+										hideDetailsHeading={true}
+										overrideHeadingCopy="1. Your details"
+									/>
+									<CheckoutDivider spacing="loose" />
+								</BoxContents>
+							</Box>
+
+							<DefaultPaymentButton
+								buttonText="Pay now"
+								onClick={() => {
+									//  no-op
+								}}
+								type="submit"
+							/>
+						</form>
 						<GuardianTsAndCs
 							mobileTheme={'light'}
 							displayPatronsCheckout={false}
