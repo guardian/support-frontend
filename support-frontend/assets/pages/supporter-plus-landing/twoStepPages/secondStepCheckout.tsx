@@ -80,10 +80,7 @@ export function SupporterPlusCheckout({
 		(state) => state.common,
 	);
 	const inThreeTierVariant = inThreeTierV2Variant(abParticipations);
-
-	const showPriceCards =
-		(inThreeTierVariant && contributionType === 'ONE_OFF') ||
-		(inThreeTierVariant && !amountIsAboveThreshold);
+	const showPriceCards = inThreeTierVariant && contributionType === 'ONE_OFF';
 
 	const changeButton = (
 		<Button
