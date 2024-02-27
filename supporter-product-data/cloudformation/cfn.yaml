@@ -421,7 +421,6 @@ Resources:
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 1
       EvaluationPeriods: 1
-      Statistic: Sum
     DependsOn: SupporterProductData
 
   UnprocessedSupporterProductDataRecordAlarm:
