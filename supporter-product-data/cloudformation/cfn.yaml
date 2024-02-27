@@ -396,7 +396,7 @@ Resources:
 
   ExecutionFailureAlarm:
     Type: AWS::CloudWatch::Alarm
-    Condition: CreateProdResources
+#    Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
@@ -421,7 +421,6 @@ Resources:
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 1
       EvaluationPeriods: 1
-      Statistic: Sum
     DependsOn: SupporterProductData
 
   UnprocessedSupporterProductDataRecordAlarm:
