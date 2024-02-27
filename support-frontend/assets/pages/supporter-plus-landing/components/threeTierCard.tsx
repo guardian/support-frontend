@@ -11,7 +11,7 @@ import {
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
 } from '@guardian/source-react-components';
-import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
+import { CheckList } from 'components/checkList/checkList';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -20,9 +20,7 @@ import {
 	currencies,
 	type IsoCurrency,
 } from 'helpers/internationalisation/currency';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import { inThreeTierV2VariantB } from '../setup/threeTierABTest';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
@@ -193,15 +191,12 @@ export function ThreeTierCard({
 	linkCtaClickHandler,
 	externalBtnLink,
 }: ThreeTierCardProps): JSX.Element {
-	const inThreeTierVariantB = inThreeTierV2VariantB(
-		useContributionsSelector((state) => state.common).abParticipations,
-	);
 	const currency = currencies[currencyId].glyph;
 	const currentPrice = planCost.discount?.price ?? planCost.price;
 	const previousPriceCopy =
 		!!planCost.discount && `${currency}${planCost.price}`;
 	const currentPriceCopy = `${
-		inThreeTierVariantB && cardTier === 1 ? 'From ' : ''
+		cardTier === 1 ? 'From ' : ''
 	}${currency}${currentPrice}/${
 		recurringContributionPeriodMap[paymentFrequency]
 	}`;
@@ -267,7 +262,7 @@ export function ThreeTierCard({
 					<span css={benefitsPrefixPlus}>plus</span>
 				</div>
 			)}
-			<CheckmarkList
+			<CheckList
 				checkListData={benefits.list.map((benefit) => {
 					return {
 						text: benefit.copy,

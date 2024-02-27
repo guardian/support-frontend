@@ -1,6 +1,6 @@
 package controllers
 
-import akka.util.ByteString
+import org.apache.pekko.util.ByteString
 import com.typesafe.scalalogging.StrictLogging
 import io.circe.generic.semiauto.deriveDecoder
 import io.circe.syntax._

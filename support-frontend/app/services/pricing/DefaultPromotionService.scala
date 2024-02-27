@@ -6,7 +6,7 @@ import com.gu.support.config.{Stage, TouchPointEnvironments}
 import io.circe._
 import io.circe.parser._
 import io.circe.generic.auto._
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.defaultPromotionsLoadingFailure
 import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product}

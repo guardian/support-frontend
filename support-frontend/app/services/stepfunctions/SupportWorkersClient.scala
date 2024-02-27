@@ -1,6 +1,6 @@
 package services.stepfunctions
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails

@@ -3,7 +3,7 @@ package admin.settings
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
 import admin.settings.SettingsProvider._
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
 import com.gu.aws.AwsS3Client
