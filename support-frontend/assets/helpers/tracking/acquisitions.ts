@@ -270,7 +270,7 @@ function getReferrerAcquisitionDataFromSessionStorage():
 }
 
 function getAcquisitionDataFromUtmParams():
-	| Record<string, unknown>
+	| Record<string, string | AcquisitionABTest | AcquisitionQueryParameters>
 	| null
 	| undefined {
 	// Same order of fields as https://reader-revenue-lynx.s3.eu-west-1.amazonaws.com/v3.html
