@@ -59,7 +59,7 @@ export function PriceCardsContainer({
 		amounts: frequencyAmounts,
 		defaultAmount,
 		hideChooseYourAmount,
-	} = inThreeTierVariant && tierCardData
+	} = inThreeTierVariant && tierCardData && paymentFrequency !== 'ONE_OFF'
 		? tierCardData[countryGroupId]
 		: amountsCardData[paymentFrequency];
 
