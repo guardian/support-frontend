@@ -4,7 +4,7 @@ import { from, palette } from '@guardian/source-foundations';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Asyncronously from 'components/asyncronously/asyncronously';
-import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
+import { CheckList } from 'components/checkList/checkList';
 import Content from 'components/content/content';
 import GridPicture from 'components/gridPicture/gridPicture';
 import HeadingBlock from 'components/headingBlock/headingBlock';
@@ -24,8 +24,8 @@ import {
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { inThreeTierVariants } from 'pages/supporter-plus-landing/setup/threeTierABTest';
-import { tierCardsVariantB as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { inThreeTierV2Variant } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
 	heroGuardianWeeklyNonGifting: string;
@@ -166,7 +166,7 @@ function ThankYouContent({
 	product,
 	participations,
 }: PropTypes) {
-	const inThreeTierVariant = inThreeTierVariants(participations);
+	const inThreeTierVariant = inThreeTierV2Variant(participations);
 
 	const whatHappensNextItems = orderIsGift
 		? [
@@ -258,7 +258,7 @@ function ThankYouContent({
 						<Text title="What is included in my subscription?">
 							Your subscription includes:
 							<br />
-							<CheckmarkList
+							<CheckList
 								checkListData={benefitsTier3and2.map((benefit) => {
 									return { text: <span>{benefit.copy}</span>, isChecked: true };
 								})}

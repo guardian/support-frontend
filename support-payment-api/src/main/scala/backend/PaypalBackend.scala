@@ -1,6 +1,6 @@
 package backend
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.apply._

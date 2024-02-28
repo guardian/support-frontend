@@ -1,5 +1,5 @@
 import _root_.controllers._
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import aws.AWSClientBuilder
 import backend._
 import com.amazon.pay.impl.ipn.NotificationFactory

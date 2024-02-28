@@ -60,7 +60,7 @@ export function ContributionsOrderSummaryContainer({
 					higherTier: isSupporterPlus,
 			  });
 
-	function onAccordionClick(isOpen: boolean) {
+	function onCheckListToggle(isOpen: boolean) {
 		trackComponentClick(
 			`contribution-order-summary-${isOpen ? 'opened' : 'closed'}`,
 		);
@@ -76,12 +76,28 @@ export function ContributionsOrderSummaryContainer({
 		}
 	};
 
+	let description;
+	let paymentFrequency;
+	if (contributionType === 'ONE_OFF') {
+		description = 'One-time support';
+	} else if (contributionType === 'MONTHLY') {
+		description = 'Monthly support';
+		paymentFrequency = 'month';
+	} else {
+		// The if (contributionType === 'ANNUAL') condition would be here
+		// but typescript errors on it being unnecessary due to it always being truthy
+		description = 'Annual support';
+		paymentFrequency = 'year';
+	}
+
 	return renderOrderSummary({
-		contributionType,
+		description,
 		total: selectedAmount,
 		currency: currency,
+		paymentFrequency,
+		enableCheckList: contributionType !== 'ONE_OFF',
 		checkListData: checklist,
-		onAccordionClick,
+		onCheckListToggle,
 		threeTierProductName: threeTierProductName(),
 		tsAndCs: getTermsConditions(contributionType, isSupporterPlus),
 	});

@@ -1,6 +1,6 @@
 package services.pricing
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import com.gu.aws.AwsS3Client
 import com.gu.i18n.CountryGroup.{UK, US}
 import com.gu.support.catalog._

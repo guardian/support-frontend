@@ -18,6 +18,8 @@ import models.GeoData
 import play.api.mvc._
 import services.{PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
+import play.api.libs.circe.Circe
+import play.api.libs.ws.WSClient
 
 import scala.concurrent.{ExecutionContext, Future}
 import play.twirl.api.Html
@@ -49,12 +51,14 @@ class Application(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     stage: Stage,
+    wsClient: WSClient,
     val supportUrl: String,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax
     with CanonicalLinks
-    with StrictLogging {
+    with StrictLogging
+    with Circe {
 
   import actionRefiners._
 
@@ -253,6 +257,29 @@ class Application(
       case Some(RestOfTheWorld) => s"/int/$path"
       case _ => s"/uk/$path"
     }
+  }
+
+  def checkout(countryGroupId: String): Action[AnyContent] = CachedAction() { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+
+    Ok(
+      views.html.main(
+        title = "Support the Guardian | Checkout",
+        mainElement = EmptyDiv("checkout"),
+        mainJsBundle = Left(RefPath("[countryGroupId]/checkout.js")),
+        mainStyleBundle = Right(StyleContent(Html(""))),
+        noindex = true,
+      )(),
+    ).withSettingsSurrogateKey
+  }
+
+  def products() = Action.async { implicit request =>
+    wsClient
+      .url(
+        "https://raw.githubusercontent.com/guardian/support-service-lambdas/0b031ea5821c95a7f7c59e45951d2d1f0bebed9d/modules/product/src/prodCatalogMapping.json",
+      )
+      .get()
+      .map(response => Ok(response.body).withHeaders("Cache-Control" -> "max-age=30"))
   }
 }
 

@@ -187,6 +187,10 @@ States:
   SucceedOrFailChoice:
     Type: Choice
     Choices:
+        # Do not trigger an alarm if the user is a test user
+      - Variable: "$.requestInfo.testUser"
+        BooleanEquals: true
+        Next: CheckoutFailure
       - Variable: "$.requestInfo.failed"
         BooleanEquals: true
         Next: FailState

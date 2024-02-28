@@ -1,6 +1,6 @@
 package model
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import cats.data.Validated
 import cats.syntax.apply._
 import cats.syntax.validated._

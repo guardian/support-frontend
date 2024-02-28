@@ -33,7 +33,6 @@ class SupporterPlusEmailFields(
       val fields = List(
         "email_address" -> state.user.primaryEmailAddress,
         "created" -> created.toString,
-        "amount" -> state.product.amount.toString,
         "currency" -> state.product.currency.iso,
         "first_name" -> state.user.firstName,
         "last_name" -> state.user.lastName,

@@ -1,6 +1,6 @@
 package backend
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import backend.BackendError.SoftOptInsServiceError
 import cats.data.EitherT
 import cats.implicits._
