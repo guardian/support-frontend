@@ -1,17 +1,13 @@
 import type { Participations } from 'helpers/abTests/abtest';
 
-export const inThreeTierV2Variant = (
-	abParticipations: Participations,
-): boolean => {
+export const inThreeTierV3 = (abParticipations: Participations): boolean => {
 	return (
 		inThreeTierV3Control(abParticipations) ||
 		inThreeTierV3Variant(abParticipations)
 	);
 };
 
-export const inThreeTierV3Control = (
-	abParticipations: Participations,
-): boolean => {
+const inThreeTierV3Control = (abParticipations: Participations): boolean => {
 	return abParticipations.threeTierCheckoutV3 === 'control';
 };
 
