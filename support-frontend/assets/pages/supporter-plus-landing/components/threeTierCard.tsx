@@ -247,6 +247,7 @@ export function ThreeTierCard({
 								currencyId,
 							)
 						}
+						data-qm-trackable={`tier-${cardTier}-button`}
 					>
 						Subscribe
 					</Button>
