@@ -36,7 +36,10 @@ import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
-import { inThreeTierV2Variant } from '../setup/threeTierABTest';
+import {
+	inThreeTierV2Variant,
+	inThreeTierV3Variant,
+} from '../setup/threeTierABTest';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`
@@ -80,10 +83,20 @@ export function SupporterPlusCheckout({
 		(state) => state.common,
 	);
 	const inThreeTierVariant = inThreeTierV2Variant(abParticipations);
+	const inThreeTierVariantV3 = inThreeTierV3Variant(abParticipations);
 
-	const showPriceCards =
-		(inThreeTierVariant && contributionType === 'ONE_OFF') ||
-		(inThreeTierVariant && !amountIsAboveThreshold);
+	const showPriceCardsOneOff =
+		inThreeTierVariant && contributionType === 'ONE_OFF';
+	const showPriceCardsTier1 = inThreeTierVariantV3 && !amountIsAboveThreshold;
+	const showPriceCards = showPriceCardsOneOff || showPriceCardsTier1;
+	console.log('TEST showPriceCardsOneOff', showPriceCardsOneOff);
+	console.log(
+		'TEST showPriceCardsTier1 inThreeTierVariantV3 !amountIsAboveThreshold',
+		showPriceCardsTier1,
+		inThreeTierVariantV3,
+		!amountIsAboveThreshold,
+	);
+	console.log('TEST showPriceCards ', showPriceCards);
 
 	const changeButton = (
 		<Button
