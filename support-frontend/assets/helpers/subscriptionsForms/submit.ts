@@ -64,7 +64,7 @@ import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
 import { inThreeTierV3 } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import type { TierPlans } from 'pages/supporter-plus-landing/setup/threeTierConfig';
-import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCardsControl as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {

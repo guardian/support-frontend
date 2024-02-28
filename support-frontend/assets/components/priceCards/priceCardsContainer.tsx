@@ -16,7 +16,10 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { inThreeTierV3Variant } from 'pages/supporter-plus-landing/setup/threeTierABTest';
-import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import {
+	tierCardsControl,
+	tierCardsVariant,
+} from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import type { PriceCardPaymentInterval } from './priceCard';
 import type { PriceCardsProps } from './priceCards';
 
@@ -54,6 +57,8 @@ export function PriceCardsContainer({
 	);
 	const tierBillingPeriod =
 		paymentFrequency === 'ANNUAL' ? 'annual' : 'monthly';
+
+	const tierCards = inThreeTierVariant ? tierCardsVariant : tierCardsControl;
 	const tierCardData = tierCards.tier1.plans[tierBillingPeriod].priceCards;
 	const {
 		amounts: frequencyAmounts,
