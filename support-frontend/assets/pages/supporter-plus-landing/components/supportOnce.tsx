@@ -77,6 +77,7 @@ export function SupportOnce({
 				size="default"
 				cssOverrides={btnStyleOverrides}
 				onClick={() => btnClickHandler()}
+				data-qm-trackable="support-once-button"
 			>
 				Support now
 			</Button>

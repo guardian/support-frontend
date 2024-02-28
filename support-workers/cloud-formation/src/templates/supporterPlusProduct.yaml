@@ -2,7 +2,7 @@
 ThreeTierSupporterPlus{{billingPeriod}}{{currency}}{{fulfilmentOptions}}:
   Type: Pass
   Result:
-    amount: {{amount}}
+    nonDiscountedAmount: {{amount}}
     currency: {{currency}}
     billingPeriod: {{billingPeriod}}
     productType: SupporterPlus
