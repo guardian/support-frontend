@@ -36,10 +36,7 @@ import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
-import {
-	inThreeTierV2Variant,
-	inThreeTierV3Variant,
-} from '../setup/threeTierABTest';
+import { inThreeTierV3Variant } from '../setup/threeTierABTest';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`
@@ -82,21 +79,10 @@ export function SupporterPlusCheckout({
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
-	const inThreeTierVariant = inThreeTierV2Variant(abParticipations);
-	const inThreeTierVariantV3 = inThreeTierV3Variant(abParticipations);
+	const inThreeTierVariant = inThreeTierV3Variant(abParticipations);
 
-	const showPriceCardsOneOff =
-		inThreeTierVariant && contributionType === 'ONE_OFF';
-	const showPriceCardsTier1 = inThreeTierVariantV3 && !amountIsAboveThreshold;
-	const showPriceCards = showPriceCardsOneOff || showPriceCardsTier1;
-	console.log('TEST showPriceCardsOneOff', showPriceCardsOneOff);
-	console.log(
-		'TEST showPriceCardsTier1 inThreeTierVariantV3 !amountIsAboveThreshold',
-		showPriceCardsTier1,
-		inThreeTierVariantV3,
-		!amountIsAboveThreshold,
-	);
-	console.log('TEST showPriceCards ', showPriceCards);
+	const showPriceCardsTier1 = inThreeTierVariant && !amountIsAboveThreshold;
+	const showPriceCards = contributionType === 'ONE_OFF' || showPriceCardsTier1;
 
 	const changeButton = (
 		<Button
@@ -137,7 +123,6 @@ export function SupporterPlusCheckout({
 						<ContributionsPriceCards paymentFrequency={contributionType} />
 					) : (
 						<ContributionsOrderSummaryContainer
-							inThreeTier={inThreeTierVariant}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}
@@ -189,9 +174,7 @@ export function SupporterPlusCheckout({
 						currency={currencyId}
 						amount={amount}
 						amountIsAboveThreshold={amountIsAboveThreshold}
-						productNameAboveThreshold={
-							inThreeTierVariant ? 'All-access digital' : 'Supporter Plus'
-						}
+						productNameAboveThreshold={'All-access digital'}
 					/>
 				</BoxContents>
 			</Box>
