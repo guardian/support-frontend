@@ -289,8 +289,8 @@ function onPaymentAuthorised(
 				productType,
 			);
 
-			const inThreeTierVariant = inThreeTierV3(state.common.abParticipations);
-			if (inThreeTierVariant) {
+			const inThreeTier = inThreeTierV3(state.common.abParticipations);
+			if (inThreeTier) {
 				const tierBillingPeriodName =
 					billingPeriod.toLowerCase() as keyof TierPlans;
 				const contributionType = billingPeriod.toUpperCase() as
