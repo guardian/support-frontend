@@ -185,6 +185,7 @@ function buildRegularPaymentRequest(
 	state: SubscriptionsState,
 	paymentAuthorisation: PaymentAuthorisation,
 	addresses: Addresses,
+	inThreeTier: boolean,
 	promotions?: Promotion[],
 	currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
@@ -225,9 +226,7 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
-		threeTierCreateSupporterPlusSubscription: showThreeTierCheckout(
-			state.common.abParticipations,
-		),
+		threeTierCreateSupporterPlusSubscription: inThreeTier,
 	};
 }
 
@@ -244,7 +243,7 @@ function onPaymentAuthorised(
 		productOption,
 		productPrices,
 	} = state.page.checkoutForm.product;
-
+	const inThreeTier = showThreeTierCheckout(state.common.abParticipations);
 	const productType = getSubscriptionType(state);
 	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { csrf } = state.page.checkoutForm;
@@ -262,6 +261,7 @@ function onPaymentAuthorised(
 		state,
 		paymentAuthorisation,
 		addresses,
+		inThreeTier,
 		productPrice.promotions,
 		currency,
 	);
@@ -288,8 +288,6 @@ function onPaymentAuthorised(
 				billingPeriod,
 				productType,
 			);
-
-			const inThreeTier = showThreeTierCheckout(state.common.abParticipations);
 			if (inThreeTier) {
 				const tierBillingPeriodName =
 					billingPeriod.toLowerCase() as keyof TierPlans;
