@@ -87,6 +87,7 @@ export function PersonalDetails({
 					pattern={emailRegexPattern}
 					error={errors?.email?.[0]}
 					disabled={isSignedIn}
+					name="email"
 				/>
 			</div>
 
@@ -104,6 +105,7 @@ export function PersonalDetails({
 							autoCapitalize="words"
 							onChange={(e) => onFirstNameChange(e.target.value)}
 							error={errors?.firstName?.[0]}
+							name="firstName"
 							required
 						/>
 					</div>
@@ -117,6 +119,7 @@ export function PersonalDetails({
 							autoCapitalize="words"
 							onChange={(e) => onLastNameChange(e.target.value)}
 							error={errors?.lastName?.[0]}
+							name="lastName"
 							required
 						/>
 					</div>
