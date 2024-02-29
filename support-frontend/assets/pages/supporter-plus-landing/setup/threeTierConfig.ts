@@ -43,7 +43,7 @@ interface TierCards {
 	tier3: TierCard;
 }
 
-const tier1Control: TierCard = {
+const tier1Fixed: TierCard = {
 	title: 'Support',
 	benefits: {
 		list: [
@@ -84,7 +84,7 @@ const tier1Control: TierCard = {
 	},
 };
 
-const tier1Variant: TierCard = {
+const tier1Variable: TierCard = {
 	title: 'Support',
 	benefits: {
 		list: [
@@ -411,13 +411,13 @@ const tier3: TierCard = {
 };
 
 export const tierCardsFixed: TierCards = {
-	tier1: tier1Control,
+	tier1: tier1Fixed,
 	tier2,
 	tier3,
 };
 
 export const tierCardsVariable: TierCards = {
-	tier1: tier1Variant,
+	tier1: tier1Variable,
 	tier2,
 	tier3,
 };
