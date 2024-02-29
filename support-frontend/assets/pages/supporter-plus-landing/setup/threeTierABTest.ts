@@ -4,16 +4,16 @@ export const showThreeTierCheckout = (
 	abParticipations: Participations,
 ): boolean => {
 	return (
-		inThreeTierV3Fixed(abParticipations) ||
-		inThreeTierV3Variable(abParticipations)
+		showThreeTierFixedPrice(abParticipations) ||
+		showThreeTierVariablePrice(abParticipations)
 	);
 };
 
-const inThreeTierV3Fixed = (abParticipations: Participations): boolean => {
+const showThreeTierFixedPrice = (abParticipations: Participations): boolean => {
 	return abParticipations.threeTierCheckoutV3 === 'variantFixed';
 };
 
-export const inThreeTierV3Variable = (
+export const showThreeTierVariablePrice = (
 	abParticipations: Participations,
 ): boolean => {
 	return abParticipations.threeTierCheckoutV3 === 'variantVariable';

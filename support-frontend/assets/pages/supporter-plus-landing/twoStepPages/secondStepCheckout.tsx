@@ -37,8 +37,8 @@ import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
 import {
-	inThreeTierV3Variable,
 	showThreeTierCheckout,
+	showThreeTierVariablePrice,
 } from '../setup/threeTierABTest';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
@@ -83,7 +83,7 @@ export function SupporterPlusCheckout({
 		(state) => state.common,
 	);
 	const inThreeTier = showThreeTierCheckout(abParticipations);
-	const inThreeTierVariant = inThreeTierV3Variable(abParticipations);
+	const inThreeTierVariant = showThreeTierVariablePrice(abParticipations);
 
 	const showPriceCards =
 		(inThreeTier && contributionType === 'ONE_OFF') ||

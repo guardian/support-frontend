@@ -13,7 +13,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
-import { inThreeTierV3Variable } from '../setup/threeTierABTest';
+import { showThreeTierVariablePrice } from '../setup/threeTierABTest';
 
 const titleAndButtonContainer = css`
 	display: flex;
@@ -57,7 +57,7 @@ export function ContributionsPriceCards({
 	);
 	const navigate = useNavigate();
 
-	const inThreeTierVariant = inThreeTierV3Variable(
+	const inThreeTierVariant = showThreeTierVariablePrice(
 		useContributionsSelector((state) => state.common).abParticipations,
 	);
 
