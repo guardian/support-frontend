@@ -62,7 +62,7 @@ import {
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
-import { inThreeTierV3 } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import type { TierPlans } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { tierCardsFixed as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
@@ -225,7 +225,7 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
-		threeTierCreateSupporterPlusSubscription: inThreeTierV3(
+		threeTierCreateSupporterPlusSubscription: showThreeTierCheckout(
 			state.common.abParticipations,
 		),
 	};
@@ -289,7 +289,7 @@ function onPaymentAuthorised(
 				productType,
 			);
 
-			const inThreeTier = inThreeTierV3(state.common.abParticipations);
+			const inThreeTier = showThreeTierCheckout(state.common.abParticipations);
 			if (inThreeTier) {
 				const tierBillingPeriodName =
 					billingPeriod.toLowerCase() as keyof TierPlans;

@@ -1,6 +1,8 @@
 import type { Participations } from 'helpers/abTests/abtest';
 
-export const inThreeTierV3 = (abParticipations: Participations): boolean => {
+export const showThreeTierCheckout = (
+	abParticipations: Participations,
+): boolean => {
 	return (
 		inThreeTierV3Fixed(abParticipations) ||
 		inThreeTierV3Variable(abParticipations)
