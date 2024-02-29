@@ -209,8 +209,11 @@ export function ThreeTierLanding(): JSX.Element {
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
-	const inThreeTierVariant = showThreeTierVariablePrice(abParticipations);
-	const tierCards = inThreeTierVariant ? tierCardsVariable : tierCardsFixed;
+	const inThreeTierVariantVariable =
+		showThreeTierVariablePrice(abParticipations);
+	const tierCards = inThreeTierVariantVariable
+		? tierCardsVariable
+		: tierCardsFixed;
 	const { countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);

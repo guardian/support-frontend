@@ -52,18 +52,22 @@ export function PriceCardsContainer({
 	);
 	const minAmount = useContributionsSelector(getMinimumContributionAmount());
 
-	const inThreeTierVariant = showThreeTierVariablePrice(
+	const inThreeTierVariantVariable = showThreeTierVariablePrice(
 		useContributionsSelector((state) => state.common.abParticipations),
 	);
 	const tierBillingPeriod =
 		paymentFrequency === 'ANNUAL' ? 'annual' : 'monthly';
-	const tierCards = inThreeTierVariant ? tierCardsVariable : tierCardsFixed;
+	const tierCards = inThreeTierVariantVariable
+		? tierCardsVariable
+		: tierCardsFixed;
 	const tierCardData = tierCards.tier1.plans[tierBillingPeriod].priceCards;
 	const {
 		amounts: frequencyAmounts,
 		defaultAmount,
 		hideChooseYourAmount,
-	} = inThreeTierVariant && tierCardData && paymentFrequency !== 'ONE_OFF'
+	} = inThreeTierVariantVariable &&
+	tierCardData &&
+	paymentFrequency !== 'ONE_OFF'
 		? tierCardData[countryGroupId]
 		: amountsCardData[paymentFrequency];
 

@@ -42,7 +42,6 @@ const standFirst = css`
 
 interface ContributionsPriceCardsProps {
 	paymentFrequency: ContributionType;
-	inThreeTierVariant?: boolean;
 }
 
 export function ContributionsPriceCards({
@@ -57,7 +56,7 @@ export function ContributionsPriceCards({
 	);
 	const navigate = useNavigate();
 
-	const inThreeTierVariant = showThreeTierVariablePrice(
+	const inThreeTierVariantVariable = showThreeTierVariablePrice(
 		useContributionsSelector((state) => state.common).abParticipations,
 	);
 
@@ -123,7 +122,9 @@ export function ContributionsPriceCards({
 								errors={errors}
 							/>
 						}
-						amountIntervalSeperator={inThreeTierVariant ? '/' : undefined}
+						amountIntervalSeperator={
+							inThreeTierVariantVariable ? '/' : undefined
+						}
 					/>
 				)}
 			/>

@@ -83,11 +83,12 @@ export function SupporterPlusCheckout({
 		(state) => state.common,
 	);
 	const inThreeTier = showThreeTierCheckout(abParticipations);
-	const inThreeTierVariant = showThreeTierVariablePrice(abParticipations);
+	const inThreeTierVariantVariable =
+		showThreeTierVariablePrice(abParticipations);
 
 	const showPriceCards =
 		(inThreeTier && contributionType === 'ONE_OFF') ||
-		(inThreeTierVariant && !amountIsAboveThreshold);
+		(inThreeTierVariantVariable && !amountIsAboveThreshold);
 
 	const changeButton = (
 		<Button
@@ -103,7 +104,7 @@ export function SupporterPlusCheckout({
 					}),
 				);
 				// 3-tier Other amount over S+ threshold will not re-display unless reset
-				if (inThreeTierVariant && amountIsAboveThreshold) {
+				if (inThreeTierVariantVariable && amountIsAboveThreshold) {
 					dispatch(
 						setOtherAmount({
 							contributionType: contributionType,

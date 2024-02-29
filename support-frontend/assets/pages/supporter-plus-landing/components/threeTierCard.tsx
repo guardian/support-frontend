@@ -193,7 +193,7 @@ export function ThreeTierCard({
 	linkCtaClickHandler,
 	externalBtnLink,
 }: ThreeTierCardProps): JSX.Element {
-	const inThreeTierVariant = showThreeTierVariablePrice(
+	const inThreeTierVariantVariable = showThreeTierVariablePrice(
 		useContributionsSelector((state) => state.common).abParticipations,
 	);
 	const currency = currencies[currencyId].glyph;
@@ -201,7 +201,7 @@ export function ThreeTierCard({
 	const previousPriceCopy =
 		!!planCost.discount && `${currency}${planCost.price}`;
 	const currentPriceCopy = `${
-		inThreeTierVariant && cardTier === 1 ? 'From ' : ''
+		inThreeTierVariantVariable && cardTier === 1 ? 'From ' : ''
 	}${currency}${currentPrice}/${
 		recurringContributionPeriodMap[paymentFrequency]
 	}`;
