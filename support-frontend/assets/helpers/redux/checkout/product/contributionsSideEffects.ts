@@ -42,13 +42,13 @@ export function addProductSideEffects(
 				return;
 			}
 
-			const inThreeTierVariant = inThreeTierV3(
+			const inThreeTier = inThreeTierV3(
 				listenerApi.getState().common.abParticipations,
 			);
 			const isMonthlyOrAnnual = ['MONTHLY', 'ANNUAL'].includes(
 				contributionType,
 			);
-			if (inThreeTierVariant && isMonthlyOrAnnual) {
+			if (inThreeTier && isMonthlyOrAnnual) {
 				return;
 			}
 			sendEventContributionCartValue(

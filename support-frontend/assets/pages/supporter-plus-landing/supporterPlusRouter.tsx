@@ -79,7 +79,7 @@ function ThreeTierRedirectOneOffToCheckout({
 	);
 }
 
-export const inThreeTierVariant = inThreeTierV3(
+export const inThreeTier = inThreeTierV3(
 	store.getState().common.abParticipations,
 );
 
@@ -101,7 +101,7 @@ const router = () => {
 									 * contribution type (set in the url) and find yourself in the three tier
 									 * variant we should redirect you to the /contribute/checkout route
 									 */
-									inThreeTierVariant ? (
+									inThreeTier ? (
 										<ThreeTierRedirectOneOffToCheckout countryId={countryId}>
 											<ThreeTierLanding />
 										</ThreeTierRedirectOneOffToCheckout>

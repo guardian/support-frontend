@@ -166,7 +166,7 @@ function ThankYouContent({
 	product,
 	participations,
 }: PropTypes) {
-	const inThreeTierVariant = inThreeTierV3(participations);
+	const inThreeTier = inThreeTierV3(participations);
 
 	const whatHappensNextItems = orderIsGift
 		? [
@@ -217,7 +217,7 @@ function ThankYouContent({
 	);
 
 	const thankyouSupportHeader = `Thank you for supporting our journalism${
-		!inThreeTierVariant ? '!' : ''
+		!inThreeTier ? '!' : ''
 	}`;
 
 	useScrollToTop();
@@ -235,16 +235,11 @@ function ThankYouContent({
 					overheadingClass="--thankyou"
 					overheading={thankyouSupportHeader}
 				>
-					{getHeading(
-						billingPeriod,
-						isPending,
-						orderIsGift,
-						inThreeTierVariant,
-					)}
+					{getHeading(billingPeriod, isPending, orderIsGift, inThreeTier)}
 				</HeadingBlock>
 			</HeroWrapper>
 
-			{inThreeTierVariant ? (
+			{inThreeTier ? (
 				<>
 					<Content>
 						{isPending && (
@@ -322,8 +317,8 @@ function ThankYouContent({
 					</SansParagraph>
 				</Text>
 			</Content>
-			{!inThreeTierVariant && <SubscriptionsSurvey product={product} />}
-			{!inThreeTierVariant && (
+			{!inThreeTier && <SubscriptionsSurvey product={product} />}
+			{!inThreeTier && (
 				<Content>
 					<Asyncronously
 						loader={

@@ -61,7 +61,7 @@ export function DefaultPaymentButtonContainer({
 		(state) => state.common.internationalisation,
 	);
 
-	const inThreeTierVariant = inThreeTierV3(
+	const inThreeTier = inThreeTierV3(
 		useContributionsSelector((state) => state.common).abParticipations,
 	);
 
@@ -78,7 +78,7 @@ export function DefaultPaymentButtonContainer({
 		? 'Pay now'
 		: createButtonText(
 				amountWithCurrency,
-				amountIsAboveThreshold || inThreeTierVariant,
+				amountIsAboveThreshold || inThreeTier,
 				contributionTypeToPaymentInterval[contributionType],
 		  );
 
