@@ -15,8 +15,11 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { inThreeTierV3 } from 'pages/supporter-plus-landing/setup/threeTierABTest';
-import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { inThreeTierV3VariantVariable } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import {
+	tierCardsFixed,
+	tierCardsVariable,
+} from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import type { PriceCardPaymentInterval } from './priceCard';
 import type { PriceCardsProps } from './priceCards';
 
@@ -49,11 +52,12 @@ export function PriceCardsContainer({
 	);
 	const minAmount = useContributionsSelector(getMinimumContributionAmount());
 
-	const inThreeTierVariant = inThreeTierV3(
+	const inThreeTierVariant = inThreeTierV3VariantVariable(
 		useContributionsSelector((state) => state.common.abParticipations),
 	);
 	const tierBillingPeriod =
 		paymentFrequency === 'ANNUAL' ? 'annual' : 'monthly';
+	const tierCards = inThreeTierVariant ? tierCardsVariable : tierCardsFixed;
 	const tierCardData = tierCards.tier1.plans[tierBillingPeriod].priceCards;
 	const {
 		amounts: frequencyAmounts,
