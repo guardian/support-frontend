@@ -36,7 +36,7 @@ import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
-import { inThreeTierV2Variant } from '../setup/threeTierABTest';
+import { inThreeTierV3 } from '../setup/threeTierABTest';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`
@@ -79,7 +79,7 @@ export function SupporterPlusCheckout({
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
-	const inThreeTierVariant = inThreeTierV2Variant(abParticipations);
+	const inThreeTierVariant = inThreeTierV3(abParticipations);
 
 	const showPriceCards =
 		(inThreeTierVariant && contributionType === 'ONE_OFF') ||
