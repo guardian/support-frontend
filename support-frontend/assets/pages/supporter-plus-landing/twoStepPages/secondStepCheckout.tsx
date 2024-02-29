@@ -36,7 +36,10 @@ import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
-import { inThreeTierV3 } from '../setup/threeTierABTest';
+import {
+	inThreeTierV3,
+	inThreeTierV3VariantVariable,
+} from '../setup/threeTierABTest';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`
@@ -79,10 +82,11 @@ export function SupporterPlusCheckout({
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
-	const inThreeTierVariant = inThreeTierV3(abParticipations);
+	const inThreeTier = inThreeTierV3(abParticipations);
+	const inThreeTierVariant = inThreeTierV3VariantVariable(abParticipations);
 
 	const showPriceCards =
-		(inThreeTierVariant && contributionType === 'ONE_OFF') ||
+		(inThreeTier && contributionType === 'ONE_OFF') ||
 		(inThreeTierVariant && !amountIsAboveThreshold);
 
 	const changeButton = (
@@ -124,7 +128,7 @@ export function SupporterPlusCheckout({
 						<ContributionsPriceCards paymentFrequency={contributionType} />
 					) : (
 						<ContributionsOrderSummaryContainer
-							inThreeTier={inThreeTierVariant}
+							inThreeTier={inThreeTier}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}
@@ -177,7 +181,7 @@ export function SupporterPlusCheckout({
 						amount={amount}
 						amountIsAboveThreshold={amountIsAboveThreshold}
 						productNameAboveThreshold={
-							inThreeTierVariant ? 'All-access digital' : 'Supporter Plus'
+							inThreeTier ? 'All-access digital' : 'Supporter Plus'
 						}
 					/>
 				</BoxContents>
