@@ -231,6 +231,9 @@ export function Checkout() {
 		query.product !== 'Contribution' &&
 		(countryId === 'US' || countryId === 'CA' || countryId === 'AU');
 
+	const [groupSize, setGroupSize] = useState(0);
+	const [price, setPrice] = useState(currentPrice);
+
 	return (
 		<PageScaffold
 			header={<Header></Header>}
@@ -243,7 +246,17 @@ export function Checkout() {
 			<CheckoutHeading withTopBorder={true}></CheckoutHeading>
 			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
 				<Columns cssOverrides={columns} collapseUntil="tablet">
-					<Column span={[0, 2, 5]}></Column>
+					<Column span={[0, 2, 5]}>
+						<img
+							src="https://uploads.guim.co.uk/2024/02/29/helena-lopes-PGnqT0rXWLs-unsplash.jpg"
+							width={380}
+							style={{
+								marginLeft: '-20px',
+								marginTop: '-10px',
+								width: '1140px',
+							}}
+						/>
+					</Column>
 					<Column span={[1, 8, 7]}>
 						<SecureTransactionIndicator
 							align="center"
@@ -253,9 +266,15 @@ export function Checkout() {
 						<Box cssOverrides={shorterBoxMargin}>
 							<BoxContents>
 								<ContributionsOrderSummary
-									description={product.description}
-									paymentFrequency={product.frequency}
-									total={currentPrice}
+									description={'🧑‍🤝‍🧑🧑‍🤝‍🧑🧑‍🤝‍🧑 Guardian group subscription 🧑‍🤝‍🧑🧑‍🤝‍🧑🧑‍🤝‍🧑}'}
+									paymentFrequency={`${
+										groupSize <= 1 ? '' : `Save £${groupSize}`
+									}`}
+									total={
+										groupSize <= 1
+											? currentPrice
+											: groupSize * currentPrice - groupSize
+									}
 									currency={currentCurrency}
 									checkListData={[]}
 									onCheckListToggle={(isOpen) => {
@@ -304,6 +323,25 @@ export function Checkout() {
 
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
+									<TextInput
+										name="groupSize"
+										type="number"
+										label="How many in your group?"
+										onChange={(event) =>
+											setGroupSize(event.currentTarget.valueAsNumber)
+										}
+									/>
+									{Array(groupSize)
+										.fill(0)
+										.map((_, i) => {
+											return (
+												<TextInput
+													key={`email-for-${i}`}
+													name="groupSize"
+													label={`Email for person ${i}?`}
+												/>
+											);
+										})}
 									<PersonalDetails
 										email={''}
 										firstName={''}
