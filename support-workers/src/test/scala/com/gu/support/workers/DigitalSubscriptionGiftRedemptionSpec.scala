@@ -64,7 +64,8 @@ class DigitalSubscriptionGiftRedemptionSpec extends AnyFlatSpec with Serialisati
       .getSubscriptionState(expiredResponse, Some("456"))
       .clientCode shouldBe CodeExpired.clientCode
 
-    val nonExpiredDate = LocalDate.now().minusYears(1)
+    // The plusDays(1) if for feb 29 but we should fix this as it masks a bug in prod
+    val nonExpiredDate = LocalDate.now().minusYears(1).plusDays(1)
     val nonExpiredResponse = SubscriptionRedemptionQueryResponse(
       List(
         SubscriptionRedemptionFields(
