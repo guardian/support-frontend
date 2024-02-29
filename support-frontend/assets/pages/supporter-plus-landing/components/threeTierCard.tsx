@@ -22,7 +22,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import { inThreeTierV3VariantVariable } from '../setup/threeTierABTest';
+import { inThreeTierV3Variable } from '../setup/threeTierABTest';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
@@ -193,7 +193,7 @@ export function ThreeTierCard({
 	linkCtaClickHandler,
 	externalBtnLink,
 }: ThreeTierCardProps): JSX.Element {
-	const inThreeTierVariant = inThreeTierV3VariantVariable(
+	const inThreeTierVariant = inThreeTierV3Variable(
 		useContributionsSelector((state) => state.common).abParticipations,
 	);
 	const currency = currencies[currencyId].glyph;

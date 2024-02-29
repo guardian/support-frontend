@@ -15,7 +15,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { inThreeTierV3VariantVariable } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { inThreeTierV3Variable } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import {
 	tierCardsFixed,
 	tierCardsVariable,
@@ -52,7 +52,7 @@ export function PriceCardsContainer({
 	);
 	const minAmount = useContributionsSelector(getMinimumContributionAmount());
 
-	const inThreeTierVariant = inThreeTierV3VariantVariable(
+	const inThreeTierVariant = inThreeTierV3Variable(
 		useContributionsSelector((state) => state.common.abParticipations),
 	);
 	const tierBillingPeriod =
