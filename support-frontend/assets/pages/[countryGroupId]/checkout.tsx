@@ -10,12 +10,23 @@ import {
 	Column,
 	Columns,
 	Container,
+	Radio,
 	TextInput,
 } from '@guardian/source-react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-react-components-development-kitchen';
+import {
+	CardNumberElement,
+	useElements,
+	useStripe,
+} from '@stripe/react-stripe-js';
+import type {
+	StripeCardCvcElementChangeEvent,
+	StripeCardExpiryElementChangeEvent,
+	StripeCardNumberElementChangeEvent,
+} from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import {
 	number,
@@ -34,10 +45,17 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { StateSelect } from 'components/personalDetails/stateSelect';
+import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import Signout from 'components/signout/signout';
+import { StripeElements } from 'components/stripe/stripeElements';
+import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
+import { getValidPaymentMethods } from 'helpers/forms/checkouts';
+import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import { getStripeKey } from 'helpers/forms/stripe';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import { renderPage } from 'helpers/rendering/render';
@@ -47,39 +65,49 @@ import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkou
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 
 /** App config - this is config that should persist throughout the app */
-const countryGroupIds = ['uk', 'us', 'eu', 'au', 'nz', 'ca', 'int'] as const;
-const CountryGroupIdSchema = picklist(countryGroupIds);
-const countryGroupId = parse(
-	CountryGroupIdSchema,
-	window.location.pathname.split('/')[1],
-);
+const isTestUser = true;
+const geoIds = ['uk', 'us', 'eu', 'au', 'nz', 'ca', 'int'] as const;
+const GeoIdSchema = picklist(geoIds);
+const geoId = parse(GeoIdSchema, window.location.pathname.split('/')[1]);
 
 let currentCurrency: Currency;
 let currentCurrencyKey: keyof typeof currencies;
-switch (countryGroupId) {
+let countryGroupId: CountryGroupId;
+switch (geoId) {
 	case 'uk':
 		currentCurrency = currencies.GBP;
 		currentCurrencyKey = 'GBP';
+		countryGroupId = 'GBPCountries';
 		break;
 	case 'us':
 		currentCurrency = currencies.USD;
 		currentCurrencyKey = 'USD';
+		countryGroupId = 'UnitedStates';
 		break;
 	case 'au':
 		currentCurrency = currencies.AUD;
 		currentCurrencyKey = 'AUD';
+		countryGroupId = 'AUDCountries';
 		break;
 	case 'eu':
 		currentCurrency = currencies.EUR;
 		currentCurrencyKey = 'EUR';
+		countryGroupId = 'EURCountries';
 		break;
 	case 'nz':
 		currentCurrency = currencies.NZD;
 		currentCurrencyKey = 'NZD';
+		countryGroupId = 'NZDCountries';
 		break;
 	case 'ca':
 		currentCurrency = currencies.CAD;
 		currentCurrencyKey = 'CAD';
+		countryGroupId = 'Canada';
+		break;
+	case 'int':
+		currentCurrency = currencies.USD;
+		currentCurrencyKey = 'USD';
+		countryGroupId = 'International';
 		break;
 }
 
@@ -202,6 +230,16 @@ const shorterBoxMargin = css`
 	}
 `;
 
+const validPaymentMethods = getValidPaymentMethods(
+	'MONTHLY',
+	window.guardian.settings.switches,
+	countryId,
+	countryGroupId,
+);
+
+const stripeAccount = 'REGULAR';
+const stripePublicKey = getStripeKey(stripeAccount, countryId, isTestUser);
+
 export function Checkout() {
 	const [products, setProducts] = useState<Products>();
 
@@ -230,6 +268,17 @@ export function Checkout() {
 	const showStateSelect =
 		query.product !== 'Contribution' &&
 		(countryId === 'US' || countryId === 'CA' || countryId === 'AU');
+
+	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(
+		null,
+	);
+
+	const stripe = useStripe();
+	const elements = useElements();
+	const cardElement = elements?.getElement(CardNumberElement);
+	const [stripeClientSecret, setStripeClientSecret] = useState<string>();
+
+	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
 	return (
 		<PageScaffold
@@ -277,7 +326,6 @@ export function Checkout() {
 								event.preventDefault();
 								const form = event.currentTarget;
 								const formData = new FormData(form);
-
 								/**
 								 * The validation for this is currently happening on the client side form validation
 								 * So we'll assume strings are not null.
@@ -290,16 +338,53 @@ export function Checkout() {
 									product: formData.get('product') as string,
 									ratePlan: formData.get('ratePlan') as string,
 									currency: formData.get('currency') as string,
+									recaptchaToken: formData.get('recaptchaToken') as string,
 								};
-								console.info('Posting data', data);
 
-								// Currently support-workers doesn't understand the new shape, and we also need to
-								// add payment data, so for now, just abort.
+								console.info(
+									paymentMethod === 'Stripe',
+									stripe,
+									cardElement,
+									stripeClientSecret,
+								);
+
+								if (
+									paymentMethod === 'Stripe' &&
+									stripe &&
+									cardElement &&
+									stripeClientSecret
+								) {
+									void stripe
+										.confirmCardSetup(stripeClientSecret, {
+											payment_method: {
+												card: cardElement,
+											},
+										})
+										.then((result) => {
+											if (result.error) {
+												console.error(result.error);
+											} else if (result.setupIntent.payment_method) {
+												const paymentFields = {
+													recaptchaToken: recaptchaToken,
+													stripePaymentType: 'StripeCheckout',
+													paymentMethod: result.setupIntent
+														.payment_method as string,
+												};
+
+												console.info('Posting data', {
+													...data,
+													paymentFields,
+												});
+											}
+										});
+								}
+
+								// The form is sumitted async as a lot of the payment methods require fetch requests
 								return false;
 							}}
 						>
 							<input type="hidden" name="product" value={query.product} />
-							<input type="hidden" name="ratePlan" value={currentCurrencyKey} />
+							<input type="hidden" name="ratePlan" value={query.ratePlan} />
 							<input type="hidden" name="currency" value={currentCurrencyKey} />
 
 							<Box cssOverrides={shorterBoxMargin}>
@@ -353,13 +438,86 @@ export function Checkout() {
 										overrideHeadingCopy="1. Your details"
 									/>
 									<CheckoutDivider spacing="loose" />
+
+									{validPaymentMethods.map((paymentMethod) => {
+										return (
+											<div>
+												<Radio
+													label={paymentMethod}
+													name="paymentMethod"
+													value={paymentMethod}
+													onChange={() => {
+														setPaymentMethod(paymentMethod);
+													}}
+												/>
+											</div>
+										);
+									})}
+
+									{paymentMethod === 'Stripe' && (
+										<>
+											<input
+												type="hidden"
+												name="recaptchaToken"
+												value={recaptchaToken}
+											/>
+											<StripeCardForm
+												onCardNumberChange={(
+													event: StripeCardNumberElementChangeEvent,
+												) => {
+													console.info(event);
+												}}
+												onExpiryChange={(
+													event: StripeCardExpiryElementChangeEvent,
+												) => {
+													console.info(event);
+												}}
+												onCvcChange={(
+													event: StripeCardCvcElementChangeEvent,
+												) => {
+													console.info(event);
+												}}
+												errors={{}}
+												recaptcha={
+													<Recaptcha
+														// let's change the type of this to Promise
+														onRecaptchaCompleted={(token) => {
+															setRecaptchaToken(token);
+															void fetch(
+																'/stripe/create-setup-intent/recaptcha',
+																{
+																	method: 'POST',
+																	headers: {
+																		'Content-Type': 'application/json',
+																	},
+																	body: JSON.stringify({
+																		isTestUser,
+																		stripePublicKey,
+																		token,
+																	}),
+																},
+															)
+																.then((resp) => resp.json())
+																.then((json) =>
+																	setStripeClientSecret(
+																		(json as Record<string, string>)
+																			.client_secret,
+																	),
+																);
+														}}
+														onRecaptchaExpired={() => console.info('expired')}
+													/>
+												}
+											/>
+										</>
+									)}
 								</BoxContents>
 							</Box>
 
 							<DefaultPaymentButton
 								buttonText="Pay now"
 								onClick={() => {
-									//  no-op
+									console.info('Submit button click');
 								}}
 								type="submit"
 							/>
@@ -375,4 +533,8 @@ export function Checkout() {
 	);
 }
 
-export default renderPage(<Checkout />);
+export default renderPage(
+	<StripeElements key={stripePublicKey} stripeKey={stripePublicKey}>
+		<Checkout />
+	</StripeElements>,
+);

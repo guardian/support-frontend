@@ -259,17 +259,38 @@ class Application(
     }
   }
 
-  def checkout(countryGroupId: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def checkout(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-
+    val isTestUser = testUsers.isTestUser(request)
     Ok(
-      views.html.main(
+      views.html.contributions(
         title = "Support the Guardian | Checkout",
+        id = "checkout",
         mainElement = EmptyDiv("checkout"),
-        mainJsBundle = Left(RefPath("[countryGroupId]/checkout.js")),
-        mainStyleBundle = Right(StyleContent(Html(""))),
-        noindex = true,
-      )(),
+        js = Left(RefPath("[countryGroupId]/checkout.js")),
+        css = Right(StyleContent(Html(""))),
+        description = stringsConfig.contributionsLandingDescription,
+        paymentMethodConfigs = ContributionsPaymentMethodConfigs(
+          oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+          oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
+          regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+          regularTestStripeConfig = regularStripeConfigProvider.get(true),
+          regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+          regularTestPayPalConfig = payPalConfigProvider.get(true),
+          defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
+          testAmazonPayConfig = amazonPayConfigProvider.get(true),
+        ),
+        paymentApiUrl = paymentAPIService.paymentAPIUrl,
+        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+        membersDataApiUrl = membersDataApiUrl,
+        idUser = None,
+        guestAccountCreationToken = request.flash.get("guestAccountCreationToken"),
+        geoData = request.geoData,
+        shareImageUrl = shareImageUrl(settings),
+        shareUrl = "https://support.theguardian.com/contribute",
+        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
+        serversideTests = generateParticipations(Nil),
+      ),
     ).withSettingsSurrogateKey
   }
 
