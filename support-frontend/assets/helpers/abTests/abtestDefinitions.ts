@@ -112,7 +112,7 @@ export const tests: Tests = {
 				id: 'variantVariable',
 			},
 		],
-		isActive: false,
+		isActive: true,
 		audiences: {
 			ALL: {
 				offset: 0,
