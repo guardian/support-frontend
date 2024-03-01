@@ -23,7 +23,7 @@
     "@types/jest": "^29.5.11",
     "@types/node": "20.11.17",
     "aws-cdk": "2.122.0",
-    "aws-cdk-lib": "2.125.0",
+    "aws-cdk-lib": "2.130.0",
     "@aws-cdk/aws-apigatewayv2": "1.113.0",
     "@aws-cdk/aws-apigatewayv2-alpha": "^2.14.0-alpha.0",
     "constructs": "10.3.0",
