@@ -103,13 +103,13 @@ export const tests: Tests = {
 		seed: 5,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
-	threeTierCheckoutV2: {
+	threeTierCheckoutV3: {
 		variants: [
 			{
-				id: 'control',
+				id: 'variantFixed',
 			},
 			{
-				id: 'variant',
+				id: 'variantVariable',
 			},
 		],
 		isActive: false,

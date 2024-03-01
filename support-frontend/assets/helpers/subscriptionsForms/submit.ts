@@ -62,9 +62,9 @@ import {
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
-import { inThreeTierV2Variant } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierABTest';
 import type { TierPlans } from 'pages/supporter-plus-landing/setup/threeTierConfig';
-import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCardsFixed as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
@@ -185,6 +185,7 @@ function buildRegularPaymentRequest(
 	state: SubscriptionsState,
 	paymentAuthorisation: PaymentAuthorisation,
 	addresses: Addresses,
+	inThreeTier: boolean,
 	promotions?: Promotion[],
 	currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
@@ -225,9 +226,7 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
-		threeTierCreateSupporterPlusSubscription: inThreeTierV2Variant(
-			state.common.abParticipations,
-		),
+		threeTierCreateSupporterPlusSubscription: inThreeTier,
 	};
 }
 
@@ -244,7 +243,7 @@ function onPaymentAuthorised(
 		productOption,
 		productPrices,
 	} = state.page.checkoutForm.product;
-
+	const inThreeTier = showThreeTierCheckout(state.common.abParticipations);
 	const productType = getSubscriptionType(state);
 	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { csrf } = state.page.checkoutForm;
@@ -262,6 +261,7 @@ function onPaymentAuthorised(
 		state,
 		paymentAuthorisation,
 		addresses,
+		inThreeTier,
 		productPrice.promotions,
 		currency,
 	);
@@ -288,11 +288,7 @@ function onPaymentAuthorised(
 				billingPeriod,
 				productType,
 			);
-
-			const inThreeTierVariant = inThreeTierV2Variant(
-				state.common.abParticipations,
-			);
-			if (inThreeTierVariant) {
+			if (inThreeTier) {
 				const tierBillingPeriodName =
 					billingPeriod.toLowerCase() as keyof TierPlans;
 				const contributionType = billingPeriod.toUpperCase() as
