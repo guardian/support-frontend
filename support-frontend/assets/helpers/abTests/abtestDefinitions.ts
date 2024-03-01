@@ -83,26 +83,6 @@ export const tests: Tests = {
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
-	emotionalBenefits: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			UnitedStates: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: false,
-		referrerControlled: false,
-		seed: 5,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-	},
 	threeTierCheckoutV3: {
 		variants: [
 			{
