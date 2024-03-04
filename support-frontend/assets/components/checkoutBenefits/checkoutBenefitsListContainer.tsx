@@ -1,6 +1,5 @@
 import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { shouldHideBenefitsList } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
@@ -22,52 +21,12 @@ type CheckoutBenefitsListContainerProps = {
 	renderBenefitsList: (props: CheckoutBenefitsListProps) => JSX.Element;
 };
 
-function getEmotionalBenefitsTitle(
-	selectedAmount: number,
-	currency: Currency,
+function getBenefitsListTitle(
+	priceString: string,
 	contributionType: ContributionType,
-	displayEmotionalBenefit: boolean,
 ) {
-	const selectedAmountWithCurrency = simpleFormatAmount(
-		currency,
-		+parseFloat(selectedAmount.toFixed(2)),
-	);
 	const billingPeriod = contributionType === 'MONTHLY' ? 'month' : 'year';
-	const emotionalMessage = displayEmotionalBenefit
-		? getEmotionalBenefit(selectedAmount, contributionType)
-		: ``;
-	return [
-		{
-			copy: `For ${selectedAmountWithCurrency} per ${billingPeriod}`,
-			strong: true,
-		},
-		`, `,
-		emotionalMessage,
-		`you’ll unlock`,
-	];
-}
-
-function getEmotionalBenefit(
-	selectedAmount: number,
-	contributionType: ContributionType,
-) {
-	let message = `support access to independent journalism for all those who want and need it, and `;
-	if (contributionType === 'MONTHLY') {
-		if (selectedAmount >= 35) {
-			message =
-				'make a greater impact on the future of independent journalism and ';
-		} else if (selectedAmount >= 13) {
-			message = 'deepen your commitment to the Guardian’s independence and ';
-		}
-	} else if (contributionType === 'ANNUAL') {
-		if (selectedAmount >= 378) {
-			message =
-				'make a greater impact on the future of independent journalism and ';
-		} else if (selectedAmount >= 120) {
-			message = 'deepen your commitment to the Guardian’s independence and ';
-		}
-	}
-	return message;
+	return `For ${priceString} per ${billingPeriod}, you’ll unlock`;
 }
 
 const getbuttonCopy = (
@@ -91,17 +50,9 @@ export function CheckoutBenefitsListContainer({
 		return null;
 	}
 
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
-	);
-
 	const { countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-
-	const displayEmotionalBenefit =
-		abParticipations.emotionalBenefits === 'variant' &&
-		countryGroupId === 'UnitedStates';
 
 	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
 	const minimumContributionAmount = useContributionsSelector(
@@ -114,6 +65,10 @@ export function CheckoutBenefitsListContainer({
 	const thresholdPriceWithCurrency = simpleFormatAmount(
 		currency,
 		thresholdPrice,
+	);
+	const userSelectedAmountWithCurrency = simpleFormatAmount(
+		currency,
+		+parseFloat(selectedAmount.toFixed(2)),
 	);
 
 	const higherTier = thresholdPrice <= selectedAmount;
@@ -135,11 +90,9 @@ export function CheckoutBenefitsListContainer({
 	}
 
 	return renderBenefitsList({
-		title: getEmotionalBenefitsTitle(
-			selectedAmount,
-			currency,
+		title: getBenefitsListTitle(
+			userSelectedAmountWithCurrency,
 			contributionType,
-			displayEmotionalBenefit,
 		),
 		checkListData: checkListData({
 			higherTier,
@@ -149,7 +102,6 @@ export function CheckoutBenefitsListContainer({
 			thresholdPriceWithCurrency,
 			selectedAmount,
 		),
-		displayEmotionalBenefit: displayEmotionalBenefit,
 		handleButtonClick,
 	});
 }
