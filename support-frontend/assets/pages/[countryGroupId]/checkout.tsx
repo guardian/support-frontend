@@ -36,6 +36,7 @@ import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import Signout from 'components/signout/signout';
+import { validatePaymentConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { Currency } from 'helpers/internationalisation/currency';
@@ -47,6 +48,8 @@ import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkou
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 
 /** App config - this is config that should persist throughout the app */
+validatePaymentConfig(window.guardian);
+
 const countryGroupIds = ['uk', 'us', 'eu', 'au', 'nz', 'ca', 'int'] as const;
 const CountryGroupIdSchema = picklist(countryGroupIds);
 const countryGroupId = parse(
