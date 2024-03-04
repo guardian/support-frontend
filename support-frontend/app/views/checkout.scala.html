@@ -8,6 +8,10 @@
   geoData: GeoData,
   serversideTests: Map[String,Participation],
   paymentMethodConfigs: PaymentMethodConfigs,
+  paymentApiUrl: String,
+  paymentApiPayPalEndpoint: String,
+  membersDataApiUrl: String,
+  guestAccountCreationToken: Option[String],
   v2recaptchaConfigPublicKey: String,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
@@ -30,5 +34,9 @@
     paymentMethodConfigs = paymentMethodConfigs,
     v2recaptchaConfigPublicKey = v2recaptchaConfigPublicKey,
     settings = settings,
+    paymentApiUrl = paymentApiUrl,
+    paymentApiPayPalEndpoint = paymentApiPayPalEndpoint,
+    membersDataApiUrl = membersDataApiUrl,
+    guestAccountCreationToken = guestAccountCreationToken,
   )
 }

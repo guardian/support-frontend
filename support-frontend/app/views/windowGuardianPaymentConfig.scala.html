@@ -2,7 +2,16 @@
 @import admin.settings.AllSettings
 @import views.html.helper.CSRF
 
-@(geoData: GeoData, paymentMethodConfigs: PaymentMethodConfigs, v2recaptchaConfigPublicKey: String, settings: AllSettings)(implicit request: RequestHeader)
+@(
+  geoData: GeoData,
+  paymentMethodConfigs: PaymentMethodConfigs,
+  paymentApiUrl: String,
+  paymentApiPayPalEndpoint: String,
+  membersDataApiUrl: String,
+  v2recaptchaConfigPublicKey: String,
+  guestAccountCreationToken: Option[String],
+  settings: AllSettings
+)(implicit request: RequestHeader)
 
 <script type="text/javascript">
   window.guardian.geoip = {
@@ -60,8 +69,15 @@
     test: "@paymentMethodConfigs.testAmazonPayConfig.clientId",
   };
 
+  window.guardian.paymentApiUrl = "@paymentApiUrl";
+  window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
+  window.guardian.mdapiUrl = "@membersDataApiUrl";
+  window.guardian.csrf = { token: "@CSRF.getToken.value" };
+
+  @guestAccountCreationToken.map { guestAccountCreationToken =>
+    window.guardian.guestAccountCreationToken = "@guestAccountCreationToken";
+  }
+
   window.guardian.recaptchaEnabled = @settings.switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
   window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey";
-
-  window.guardian.csrf = { token: "@CSRF.getToken.value" };
 </script>

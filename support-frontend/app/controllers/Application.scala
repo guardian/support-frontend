@@ -261,9 +261,12 @@ class Application(
 
   def checkout(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
+
     val geoData = request.geoData
     val serversideTests = generateParticipations(Nil)
     val isTestUser = testUsers.isTestUser(request)
+    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
+    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
     Ok(
       views.html.checkout(
@@ -280,6 +283,10 @@ class Application(
         ),
         v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
         serversideTests = serversideTests,
+        paymentApiUrl = paymentAPIService.paymentAPIUrl,
+        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+        membersDataApiUrl = membersDataApiUrl,
+        guestAccountCreationToken = guestAccountCreationToken,
       ),
     ).withSettingsSurrogateKey
   }
