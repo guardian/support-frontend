@@ -8,7 +8,9 @@
 @import views.{Preload, SSRContent, ReactDiv}
 @import models.GeoData
 @import controllers.PaymentMethodConfigs
-
+@import com.gu.support.encoding.CustomCodecs._
+@import services.pricing.ProductPrices
+@import views.ViewHelpers.outputJson
 @(
   title: String,
   id: String,
@@ -26,7 +28,8 @@
   shareImageUrl: String,
   shareUrl: String,
   v2recaptchaConfigPublicKey: String,
-  serversideTests: Map[String, Participation] = Map()
+  serversideTests: Map[String, Participation] = Map(),
+  productPrices: ProductPrices,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(title = title, mainJsBundle = js, description = description, mainElement = mainElement, mainStyleBundle = css, shareImageUrl = Some(shareImageUrl), shareUrl = Some(shareUrl), serversideTests = serversideTests) {
@@ -51,6 +54,8 @@
         }
       };
     }
+
+    window.guardian.productPrices = @Html(outputJson(productPrices))
   </script>
 
   @windowGuardianPaymentConfig(

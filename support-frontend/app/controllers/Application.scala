@@ -10,6 +10,7 @@ import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
@@ -23,6 +24,7 @@ import play.api.libs.ws.WSClient
 
 import scala.concurrent.{ExecutionContext, Future}
 import play.twirl.api.Html
+import services.pricing.PriceSummaryServiceProvider
 import views.EmptyDiv
 
 case class PaymentMethodConfigs(
@@ -52,6 +54,7 @@ class Application(
     settingsProvider: AllSettingsProvider,
     stage: Stage,
     wsClient: WSClient,
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
     val supportUrl: String,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
@@ -187,6 +190,13 @@ class Application(
     val serversideTests = generateParticipations(Nil)
     val testMode = testUsers.isTestUser(request)
 
+    val queryPromos =
+      request.queryString
+        .getOrElse("promoCode", Nil)
+        .toList
+
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(SupporterPlus, queryPromos)
+
     views.html.contributions(
       title = "Support the Guardian",
       id = s"contributions-landing-page-$countryCode",
@@ -214,6 +224,7 @@ class Application(
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey,
       serversideTests = serversideTests,
+      productPrices = productPrices,
     )
   }
 
