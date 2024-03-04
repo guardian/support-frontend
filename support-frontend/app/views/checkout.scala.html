@@ -1,0 +1,34 @@
+@import admin.ServersideAbTest.Participation
+@import assets.StyleContent
+@import assets.RefPath
+@import assets.AssetsResolver
+@import admin.settings.AllSettings
+@import views.EmptyDiv
+@(
+  geoData: GeoData,
+  serversideTests: Map[String,Participation],
+  paymentMethodConfigs: PaymentMethodConfigs,
+  v2recaptchaConfigPublicKey: String,
+)(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
+
+@main(
+  title = "Support the Guardian | Checkout",
+  mainElement = EmptyDiv("checkout"),
+  mainJsBundle = Left(RefPath("[countryGroupId]/checkout.js")),
+  mainStyleBundle = Right(StyleContent(Html(""))),
+  description = Some("Help us deliver the independent journalism the world needs. Support the Guardian by making a contribution."),
+  canonicalLink = Some("https://support.theguardian.com/checkout"),
+  serversideTests = serversideTests,
+  hrefLangLinks = Map(),
+  csrf = None,
+  shareImageUrl = None,
+  shareUrl = None,
+  noindex = true
+){
+  @windowGuardianPaymentConfig(
+    geoData = geoData,
+    paymentMethodConfigs = paymentMethodConfigs,
+    v2recaptchaConfigPublicKey = v2recaptchaConfigPublicKey,
+    settings = settings,
+  )
+}

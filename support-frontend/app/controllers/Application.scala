@@ -25,7 +25,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import play.twirl.api.Html
 import views.EmptyDiv
 
-case class ContributionsPaymentMethodConfigs(
+case class PaymentMethodConfigs(
     oneOffDefaultStripeConfig: StripeConfig,
     oneOffTestStripeConfig: StripeConfig,
     regularDefaultStripeConfig: StripeConfig,
@@ -194,7 +194,7 @@ class Application(
       js = js,
       css = css,
       description = stringsConfig.contributionsLandingDescription,
-      paymentMethodConfigs = ContributionsPaymentMethodConfigs(
+      paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
         oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
         regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
@@ -259,17 +259,28 @@ class Application(
     }
   }
 
-  def checkout(countryGroupId: String): Action[AnyContent] = CachedAction() { implicit request =>
+  def checkout(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    val geoData = request.geoData
+    val serversideTests = generateParticipations(Nil)
+    val isTestUser = testUsers.isTestUser(request)
 
     Ok(
-      views.html.main(
-        title = "Support the Guardian | Checkout",
-        mainElement = EmptyDiv("checkout"),
-        mainJsBundle = Left(RefPath("[countryGroupId]/checkout.js")),
-        mainStyleBundle = Right(StyleContent(Html(""))),
-        noindex = true,
-      )(),
+      views.html.checkout(
+        geoData = geoData,
+        paymentMethodConfigs = PaymentMethodConfigs(
+          oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+          oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
+          regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+          regularTestStripeConfig = regularStripeConfigProvider.get(true),
+          regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+          regularTestPayPalConfig = payPalConfigProvider.get(true),
+          defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
+          testAmazonPayConfig = amazonPayConfigProvider.get(true),
+        ),
+        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
+        serversideTests = serversideTests,
+      ),
     ).withSettingsSurrogateKey
   }
 
