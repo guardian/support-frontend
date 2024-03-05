@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
+import type { CountryCode } from '@guardian/libs';
 import { space, textSans } from '@guardian/source-foundations';
 import {
 	Option as OptionForSelect,
@@ -27,11 +27,11 @@ export type SepaFormProps = {
 	iban?: string;
 	accountHolderName?: string;
 	addressStreetName?: string;
-	addressCountry?: Country;
+	addressCountry?: CountryCode;
 	updateIban: (iban: string) => void;
 	updateAccountHolderName: (accountHolderName: string) => void;
 	updateAddressStreetName: (addressStreetName: string) => void;
-	updateAddressCountry: (addressCountry: Country) => void;
+	updateAddressCountry: (addressCountry: CountryCode) => void;
 	errors: SepaState['errors'];
 };
 

@@ -1,4 +1,4 @@
-import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
+import type { CountryCode } from '@guardian/libs';
 import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
 import {
 	fetchJson,
@@ -112,7 +112,7 @@ type RegularDirectDebitPaymentFields = {
 type RegularSepaPaymentFields = {
 	accountHolderName: string;
 	iban: string;
-	country?: Option<Country>;
+	country?: Option<CountryCode>;
 	streetName?: Option<string>;
 };
 type GiftRedemption = {
@@ -192,7 +192,7 @@ export type SepaAuthorisation = {
 	paymentMethod: typeof Sepa;
 	accountHolderName: string;
 	iban: string;
-	country?: Country;
+	country?: CountryCode;
 	streetName?: string;
 };
 export type ExistingCardAuthorisation = {
