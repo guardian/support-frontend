@@ -24,8 +24,8 @@ export function ContributionsStripe({
 	children,
 	contributionTypeOverride,
 }: ContributionsStripeProps): JSX.Element {
-	const country = useContributionsSelector(
-		(state) => state.common.internationalisation.countryId,
+	const { countryId, currencyId } = useContributionsSelector(
+		(state) => state.common.internationalisation,
 	);
 	const contributionType =
 		contributionTypeOverride ?? useContributionsSelector(getContributionType);
@@ -38,7 +38,12 @@ export function ContributionsStripe({
 
 	useEffect(() => {
 		const stripeAccount = stripeAccountForContributionType[contributionType];
-		const publicKey = getStripeKey(stripeAccount, country, isTestUser);
+		const publicKey = getStripeKey(
+			stripeAccount,
+			countryId,
+			currencyId,
+			isTestUser,
+		);
 
 		dispatch(setStripeAccountName(stripeAccount));
 		dispatch(setStripePublicKey(publicKey));
