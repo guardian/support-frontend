@@ -35,6 +35,8 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
 	setProductType,
@@ -52,6 +54,7 @@ import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierDisclaimer } from '../components/threeTierDisclaimer';
 import { showThreeTierVariablePrice } from '../setup/threeTierABTest';
+import type { TierPlans } from '../setup/threeTierConfig';
 import { tierCardsFixed, tierCardsVariable } from '../setup/threeTierConfig';
 
 const recurringContainer = css`
@@ -214,7 +217,7 @@ export function ThreeTierLanding(): JSX.Element {
 	const tierCards = inThreeTierVariantVariable
 		? tierCardsVariable
 		: tierCardsFixed;
-	const { countryGroupId, currencyId } = useContributionsSelector(
+	const { countryGroupId, currencyId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 
@@ -236,8 +239,17 @@ export function ThreeTierLanding(): JSX.Element {
 		useContributionsSelector(getContributionType);
 	const contributionType =
 		contributionTypeFromState === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
-	const contributionTypeKey =
-		contributionTypeFromState === 'ANNUAL' ? 'annual' : 'monthly';
+	const tierPlanPeriod = contributionType.toLowerCase() as keyof TierPlans;
+	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
+		tierPlanPeriod.slice(1)) as BillingPeriod;
+
+	const promotion = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.productPrices,
+			countryId,
+			billingPeriod,
+		),
+	);
 
 	const urlParams = new URLSearchParams(window.location.search);
 	const urlSelectedAmount = urlParams.get('selected-amount');
@@ -339,10 +351,28 @@ export function ThreeTierLanding(): JSX.Element {
 	};
 
 	const getCardContentBaseObject = (cardTier: 1 | 2 | 3) => {
-		const tierPlanCountryCharges =
-			tierCards[`tier${cardTier}`].plans[contributionTypeKey].charges[
+		let tierPlanCountryCharges =
+			tierCards[`tier${cardTier}`].plans[tierPlanPeriod].charges[
 				countryGroupId
 			];
+
+		if (cardTier === 2 && promotion) {
+			tierPlanCountryCharges = {
+				...tierPlanCountryCharges,
+				promoCode: promotion.promoCode,
+				discount: promotion.discount
+					? {
+							percentage: promotion.discount.amount,
+							price: promotion.discountedPrice ?? tierPlanCountryCharges.price,
+							duration: {
+								value: promotion.numberOfDiscountedPeriods ?? 0,
+								period: contributionType,
+							},
+					  }
+					: undefined,
+			};
+		}
+
 		return {
 			title: tierCards[`tier${cardTier}`].title,
 			benefits: tierCards[`tier${cardTier}`].benefits,
@@ -357,7 +387,7 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const generateTierCheckoutLink = (cardTier: 1 | 2 | 3) => {
 		const tierPlanCountryCharges =
-			tierCards[`tier${cardTier}`].plans[contributionTypeKey].charges[
+			tierCards[`tier${cardTier}`].plans[tierPlanPeriod].charges[
 				countryGroupId
 			];
 		const promoCode = tierPlanCountryCharges.promoCode;
@@ -376,7 +406,7 @@ export function ThreeTierLanding(): JSX.Element {
 			urlParams.set('period', paymentFrequencyMap[contributionType]);
 		} else {
 			urlParams.set('selected-amount', price.toString());
-			urlParams.set('selected-contribution-type', contributionTypeKey);
+			urlParams.set('selected-contribution-type', tierPlanPeriod);
 		}
 
 		return `${url}${urlParams.toString()}${window.location.hash}`;
