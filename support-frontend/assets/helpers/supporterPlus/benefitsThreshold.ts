@@ -3,6 +3,7 @@ import type {
 	RegularContributionType,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { isRecurring } from './isContributionRecurring';
 
 export const benefitsThresholdsByCountryGroup: Record<
@@ -47,24 +48,35 @@ export const benefitsThresholdsByCountryGroup: Record<
 export function getThresholdPrice(
 	countryGroupId: CountryGroupId,
 	contributionType: 'ONE_OFF',
+	promotion?: Promotion,
 ): undefined;
 export function getThresholdPrice(
 	countryGroupId: CountryGroupId,
 	contributionType: RegularContributionType,
+	promotion?: Promotion,
 ): number;
 export function getThresholdPrice(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
+	promotion?: Promotion,
 ): number | undefined;
 // Implementation
 export function getThresholdPrice(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
+	promotion?: Promotion,
 ): number | undefined {
 	if (isRecurring(contributionType)) {
 		const countryGroupThresholds =
 			benefitsThresholdsByCountryGroup[countryGroupId];
-		const threshold = countryGroupThresholds[contributionType];
+		console.log(
+			'TEST promotion?.discountedPrice,  countryGroupThresholds[contributionType]',
+			promotion?.discountedPrice,
+			countryGroupThresholds[contributionType],
+		);
+		const threshold = promotion
+			? promotion.discountedPrice
+			: countryGroupThresholds[contributionType];
 		return threshold;
 	}
 }

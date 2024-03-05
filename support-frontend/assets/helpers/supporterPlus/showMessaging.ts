@@ -4,6 +4,7 @@ import type {
 	SelectedAmounts,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { getThresholdPrice } from './benefitsThreshold';
 import { isOneOff } from './isContributionRecurring';
 
@@ -12,13 +13,23 @@ export function shouldShowSupporterPlusMessaging(
 	selectedAmounts: SelectedAmounts,
 	otherAmounts: OtherAmounts,
 	countryGroupId: CountryGroupId,
+	promotion?: Promotion,
 ): boolean {
 	if (isOneOff(contributionType)) {
 		return false;
 	}
 
-	const benefitsThreshold = getThresholdPrice(countryGroupId, contributionType);
+	const benefitsThreshold = getThresholdPrice(
+		countryGroupId,
+		contributionType,
+		promotion,
+	);
 	const selectedAmount = selectedAmounts[contributionType];
+	console.log(
+		'TEST shouldShowSupporterPlusMessaging.benefitsThreshold/selectedAmount',
+		benefitsThreshold,
+		selectedAmount,
+	);
 
 	if (selectedAmount === 'other') {
 		const otherAmount = otherAmounts[contributionType].amount;

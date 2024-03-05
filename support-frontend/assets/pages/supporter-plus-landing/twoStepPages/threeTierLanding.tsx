@@ -36,6 +36,7 @@ import {
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
@@ -284,6 +285,7 @@ export function ThreeTierLanding(): JSX.Element {
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
 	) => {
+		console.log(`TEST handleButtonCtaClick:${price}`);
 		dispatch(
 			setSelectedAmount({
 				contributionType,
@@ -292,7 +294,7 @@ export function ThreeTierLanding(): JSX.Element {
 		);
 		navigateWithPageView(
 			navigate,
-			generateTierCheckoutLink(cardTier, promotion?.promoCode),
+			generateTierCheckoutLink(cardTier, promotion),
 			abParticipations,
 		);
 		sendEventContributionCartValue(
@@ -385,18 +387,17 @@ export function ThreeTierLanding(): JSX.Element {
 		};
 	};
 
-	const generateTierCheckoutLink = (
-		cardTier: 1 | 2 | 3,
-		promoCode?: string,
-	) => {
+	const generateTierCheckoutLink = (cardTier: 1 | 2 | 3, promo?: Promotion) => {
 		const tierPlanCountryCharges =
 			tierCards[`tier${cardTier}`].plans[tierPlanPeriod].charges[
 				countryGroupId
 			];
-		const promoCodeTierFallBack = promoCode ?? tierPlanCountryCharges.promoCode;
-		const price = tierPlanCountryCharges.discount
-			? tierPlanCountryCharges.discount.price
-			: tierPlanCountryCharges.price;
+		const promoCodeTierFallBack =
+			promo?.promoCode ?? tierPlanCountryCharges.promoCode;
+		const price =
+			promo?.discountedPrice ??
+			tierPlanCountryCharges.discount?.price ??
+			tierPlanCountryCharges.price;
 
 		const url = cardTier === 3 ? `/subscribe/weekly/checkout?` : `checkout?`;
 		const urlParams = new URLSearchParams();

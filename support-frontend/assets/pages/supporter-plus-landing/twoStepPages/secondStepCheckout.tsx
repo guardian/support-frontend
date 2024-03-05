@@ -14,6 +14,8 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
 	setOtherAmount,
@@ -40,6 +42,7 @@ import {
 	showThreeTierCheckout,
 	showThreeTierVariablePrice,
 } from '../setup/threeTierABTest';
+import type { TierPlans } from '../setup/threeTierConfig';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`
@@ -65,7 +68,21 @@ export function SupporterPlusCheckout({
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
+	console.log('TEST SupporterPlusCheckout.selectedAmounts', selectedAmounts);
 	const contributionType = useContributionsSelector(getContributionType);
+	const tierContributionType =
+		contributionType === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
+	const tierPlanPeriod = tierContributionType.toLowerCase() as keyof TierPlans;
+	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
+		tierPlanPeriod.slice(1)) as BillingPeriod;
+	const promotion = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.productPrices,
+			countryId,
+			billingPeriod,
+		),
+	);
+
 	const amount = useContributionsSelector(getUserSelectedAmount);
 	const amountBeforeAmendments = useContributionsSelector(
 		getUserSelectedAmountBeforeAmendment,
@@ -76,8 +93,9 @@ export function SupporterPlusCheckout({
 		selectedAmounts,
 		otherAmounts,
 		countryGroupId,
+		promotion,
 	);
-
+	console.log('TEST amountIsAboveThreshold', amountIsAboveThreshold);
 	const navigate = useNavigate();
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
