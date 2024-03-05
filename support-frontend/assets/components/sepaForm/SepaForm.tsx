@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import { space, textSans } from '@guardian/source-foundations';
 import {
 	Option as OptionForSelect,
@@ -7,6 +6,7 @@ import {
 	Stack,
 	TextInput,
 } from '@guardian/source-react-components';
+import type { Country } from 'helpers/internationalisation/countries';
 import { sepaEligibleCountries } from 'helpers/internationalisation/sepaEligibleCountries';
 import type { SepaState } from 'helpers/redux/checkout/payment/sepa/state';
 import { sortedOptions } from '../forms/customFields/sortedOptions';
