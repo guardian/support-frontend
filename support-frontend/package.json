@@ -217,6 +217,5 @@
   },
   "lint-staged": {
     "./assets/**/**/*.{js,jsx,ts,tsx}": "eslint"
-  },
-  "packageManager": "yarn@1.22.19"
+  }
 }
