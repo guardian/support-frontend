@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import type { CountryCode } from '@guardian/libs';
 import { space, textSans } from '@guardian/source-foundations';
 import {
 	Option as OptionForSelect,
@@ -7,6 +6,7 @@ import {
 	Stack,
 	TextInput,
 } from '@guardian/source-react-components';
+import type { Country } from 'helpers/internationalisation/countries';
 import { sepaEligibleCountries } from 'helpers/internationalisation/sepaEligibleCountries';
 import type { SepaState } from 'helpers/redux/checkout/payment/sepa/state';
 import { sortedOptions } from '../forms/customFields/sortedOptions';
@@ -27,11 +27,11 @@ export type SepaFormProps = {
 	iban?: string;
 	accountHolderName?: string;
 	addressStreetName?: string;
-	addressCountry?: CountryCode;
+	addressCountry?: Country;
 	updateIban: (iban: string) => void;
 	updateAccountHolderName: (accountHolderName: string) => void;
 	updateAddressStreetName: (addressStreetName: string) => void;
-	updateAddressCountry: (addressCountry: CountryCode) => void;
+	updateAddressCountry: (addressCountry: Country) => void;
 	errors: SepaState['errors'];
 };
 

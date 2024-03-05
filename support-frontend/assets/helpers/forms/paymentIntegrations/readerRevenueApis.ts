@@ -1,4 +1,3 @@
-import type { CountryCode } from '@guardian/libs';
 import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
 import {
 	fetchJson,
@@ -16,6 +15,7 @@ import {
 	Sepa,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
+import type { Country } from 'helpers/internationalisation/countries';
 import type {
 	CaState,
 	IsoCountry,
@@ -112,7 +112,7 @@ type RegularDirectDebitPaymentFields = {
 type RegularSepaPaymentFields = {
 	accountHolderName: string;
 	iban: string;
-	country?: Option<CountryCode>;
+	country?: Option<Country>;
 	streetName?: Option<string>;
 };
 type GiftRedemption = {
@@ -192,7 +192,7 @@ export type SepaAuthorisation = {
 	paymentMethod: typeof Sepa;
 	accountHolderName: string;
 	iban: string;
-	country?: CountryCode;
+	country?: Country;
 	streetName?: string;
 };
 export type ExistingCardAuthorisation = {
