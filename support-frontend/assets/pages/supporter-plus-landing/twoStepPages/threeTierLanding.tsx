@@ -292,7 +292,7 @@ export function ThreeTierLanding(): JSX.Element {
 		);
 		navigateWithPageView(
 			navigate,
-			generateTierCheckoutLink(cardTier),
+			generateTierCheckoutLink(cardTier, promotion?.promoCode),
 			abParticipations,
 		);
 		sendEventContributionCartValue(
@@ -385,22 +385,24 @@ export function ThreeTierLanding(): JSX.Element {
 		};
 	};
 
-	const generateTierCheckoutLink = (cardTier: 1 | 2 | 3) => {
+	const generateTierCheckoutLink = (
+		cardTier: 1 | 2 | 3,
+		promoCode?: string,
+	) => {
 		const tierPlanCountryCharges =
 			tierCards[`tier${cardTier}`].plans[tierPlanPeriod].charges[
 				countryGroupId
 			];
-		const promoCode = tierPlanCountryCharges.promoCode;
+		const promoCodeTierFallBack = promoCode ?? tierPlanCountryCharges.promoCode;
 		const price = tierPlanCountryCharges.discount
 			? tierPlanCountryCharges.discount.price
 			: tierPlanCountryCharges.price;
 
 		const url = cardTier === 3 ? `/subscribe/weekly/checkout?` : `checkout?`;
 		const urlParams = new URLSearchParams();
-		if (promoCode) {
-			urlParams.set('promoCode', promoCode);
+		if (promoCodeTierFallBack) {
+			urlParams.set('promoCode', promoCodeTierFallBack);
 		}
-
 		if (cardTier === 3) {
 			urlParams.set('threeTierCreateSupporterPlusSubscription', 'true');
 			urlParams.set('period', paymentFrequencyMap[contributionType]);
