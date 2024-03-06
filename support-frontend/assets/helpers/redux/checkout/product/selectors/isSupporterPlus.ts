@@ -1,4 +1,5 @@
 import { getAmount } from 'helpers/contributions';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
@@ -11,9 +12,16 @@ export function isSupporterPlusPurchase(state: ContributionsState): boolean {
 		return false;
 	}
 
+	const promotion = getPromotion(
+		state.page.checkoutForm.product.productPrices,
+		state.common.internationalisation.countryId,
+		state.page.checkoutForm.product.billingPeriod,
+	);
+
 	const thresholdPrice = getThresholdPrice(
 		state.common.internationalisation.countryGroupId,
 		contributionType,
+		promotion,
 	);
 	const amount = getAmount(
 		state.page.checkoutForm.product.selectedAmounts,
