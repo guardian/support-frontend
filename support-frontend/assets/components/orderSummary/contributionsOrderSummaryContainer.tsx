@@ -56,12 +56,17 @@ export function ContributionsOrderSummaryContainer({
 	const { countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
+	const { productType } = useContributionsSelector(
+		(state) => state.page.checkoutForm.product,
+	);
+	const billingPeriod = (productType[0] +
+		productType.slice(1).toLowerCase()) as BillingPeriod;
 	const currentPrice = useContributionsSelector(getUserSelectedAmount);
 	const originalPrice = useContributionsSelector((state) =>
 		getOriginalPrice(
 			state.page.checkoutForm.product.productPrices,
 			countryId,
-			state.page.checkoutForm.product.billingPeriod,
+			billingPeriod,
 		),
 	);
 
