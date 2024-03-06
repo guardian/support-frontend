@@ -83,6 +83,11 @@ const buttonOverrides = css`
 	}
 `;
 
+const originalPriceStrikeThrough = css`
+	font-weight: 400;
+	text-decoration: line-through;
+`;
+
 const iconCss = (flip: boolean) => css`
 	svg {
 		max-width: ${space[4]}px;
@@ -121,6 +126,7 @@ export type ContributionsOrderSummaryProps = {
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: CheckListData[];
+	totalOriginal?: number;
 	paymentFrequency?: string;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
@@ -138,6 +144,7 @@ export function ContributionsOrderSummary({
 	currency,
 	paymentFrequency,
 	checkListData,
+	totalOriginal,
 	onCheckListToggle,
 	headerButton,
 	tsAndCs,
@@ -156,7 +163,9 @@ export function ContributionsOrderSummary({
 	);
 
 	const formattedTotal = simpleFormatAmount(currency, total);
-
+	const formattedTotalOriginal = totalOriginal
+		? simpleFormatAmount(currency, totalOriginal)
+		: '';
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
@@ -195,6 +204,7 @@ export function ContributionsOrderSummary({
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
 				<p>
+					<span css={originalPriceStrikeThrough}>{formattedTotalOriginal}</span>{' '}
 					{paymentFrequency
 						? `${formattedTotal}/${paymentFrequency}`
 						: formattedTotal}
