@@ -36,7 +36,10 @@ import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
-import { inThreeTierV2Variant } from '../setup/threeTierABTest';
+import {
+	showThreeTierCheckout,
+	showThreeTierVariablePrice,
+} from '../setup/threeTierABTest';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`
@@ -79,11 +82,13 @@ export function SupporterPlusCheckout({
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
-	const inThreeTierVariant = inThreeTierV2Variant(abParticipations);
+	const inThreeTier = showThreeTierCheckout(abParticipations);
+	const inThreeTierVariantVariable =
+		showThreeTierVariablePrice(abParticipations);
 
 	const showPriceCards =
-		(inThreeTierVariant && contributionType === 'ONE_OFF') ||
-		(inThreeTierVariant && !amountIsAboveThreshold);
+		(inThreeTier && contributionType === 'ONE_OFF') ||
+		(inThreeTierVariantVariable && !amountIsAboveThreshold);
 
 	const changeButton = (
 		<Button
@@ -99,7 +104,7 @@ export function SupporterPlusCheckout({
 					}),
 				);
 				// 3-tier Other amount over S+ threshold will not re-display unless reset
-				if (inThreeTierVariant && amountIsAboveThreshold) {
+				if (inThreeTierVariantVariable && amountIsAboveThreshold) {
 					dispatch(
 						setOtherAmount({
 							contributionType: contributionType,
@@ -124,7 +129,7 @@ export function SupporterPlusCheckout({
 						<ContributionsPriceCards paymentFrequency={contributionType} />
 					) : (
 						<ContributionsOrderSummaryContainer
-							inThreeTier={inThreeTierVariant}
+							inThreeTier={inThreeTier}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}
@@ -177,7 +182,7 @@ export function SupporterPlusCheckout({
 						amount={amount}
 						amountIsAboveThreshold={amountIsAboveThreshold}
 						productNameAboveThreshold={
-							inThreeTierVariant ? 'All-access digital' : 'Supporter Plus'
+							inThreeTier ? 'All-access digital' : 'Supporter Plus'
 						}
 					/>
 				</BoxContents>

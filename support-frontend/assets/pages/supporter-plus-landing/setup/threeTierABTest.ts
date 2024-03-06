@@ -1,7 +1,20 @@
 import type { Participations } from 'helpers/abTests/abtest';
 
-export const inThreeTierV2Variant = (
+export const showThreeTierCheckout = (
 	abParticipations: Participations,
 ): boolean => {
-	return abParticipations.threeTierCheckoutV2 === 'variant';
+	return (
+		showThreeTierFixedPrice(abParticipations) ||
+		showThreeTierVariablePrice(abParticipations)
+	);
+};
+
+const showThreeTierFixedPrice = (abParticipations: Participations): boolean => {
+	return abParticipations.threeTierCheckoutV3 === 'variantFixed';
+};
+
+export const showThreeTierVariablePrice = (
+	abParticipations: Participations,
+): boolean => {
+	return abParticipations.threeTierCheckoutV3 === 'variantVariable';
 };

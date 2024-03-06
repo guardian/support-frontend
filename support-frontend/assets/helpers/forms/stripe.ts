@@ -5,6 +5,7 @@ import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { Stripe } from 'helpers/forms/paymentMethods';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { IsoCurrency } from '../internationalisation/currency';
 
 const stripeCardFormIsIncomplete = (
 	paymentMethod: PaymentMethod,
@@ -40,24 +41,26 @@ export interface StripeKey {
 function getStripeKey(
 	stripeAccount: StripeAccount,
 	country: IsoCountry,
+	currency: IsoCurrency,
 	isTestUser: boolean,
 ): string {
-	switch (country) {
-		case 'AU':
-			return isTestUser
-				? window.guardian.stripeKeyAustralia[stripeAccount].test
-				: window.guardian.stripeKeyAustralia[stripeAccount].default;
-
-		case 'US':
-			return isTestUser
-				? window.guardian.stripeKeyUnitedStates[stripeAccount].test
-				: window.guardian.stripeKeyUnitedStates[stripeAccount].default;
-
+	let account;
+	switch (currency) {
+		case 'AUD': // need to match with how support-workers does it
+			account = window.guardian.stripeKeyAustralia[stripeAccount];
+			break;
+		case 'USD':
+			if (country === 'US') {
+				// this allows support of US only cards (for single)
+				account = window.guardian.stripeKeyUnitedStates[stripeAccount];
+			} else {
+				account = window.guardian.stripeKeyDefaultCurrencies[stripeAccount];
+			}
+			break;
 		default:
-			return isTestUser
-				? window.guardian.stripeKeyDefaultCurrencies[stripeAccount].test
-				: window.guardian.stripeKeyDefaultCurrencies[stripeAccount].default;
+			account = window.guardian.stripeKeyDefaultCurrencies[stripeAccount];
 	}
+	return isTestUser ? account.test : account.default;
 }
 
 //  this is required as useStripeObjects is used in multiple components

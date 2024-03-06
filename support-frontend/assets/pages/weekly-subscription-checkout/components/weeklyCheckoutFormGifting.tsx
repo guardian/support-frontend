@@ -404,6 +404,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 					>
 						<StripeProviderForCountry
 							country={props.deliveryCountry}
+							currency={props.currencyId}
 							isTestUser={props.isTestUser}
 							submitForm={props.submitForm}
 							// @ts-expect-error TODO: Fixing the types around validation errors will affect every checkout, too much to tackle now
