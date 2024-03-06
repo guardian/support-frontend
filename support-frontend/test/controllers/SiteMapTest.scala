@@ -2,7 +2,7 @@ package controllers
 
 import actions.{CustomActionBuilders, UserFromAuthCookiesActionBuilder, UserFromAuthCookiesOrAuthServerActionBuilder}
 import admin.settings.{FeatureSwitches, On}
-import akka.util.Timeout
+import org.apache.pekko.util.Timeout
 import com.gu.support.config.Stages
 import fixtures.TestCSRFComponents
 import org.scalatest.matchers.must.Matchers

@@ -4,7 +4,7 @@ import { from, palette } from '@guardian/source-foundations';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Asyncronously from 'components/asyncronously/asyncronously';
-import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
+import { CheckList } from 'components/checkList/checkList';
 import Content from 'components/content/content';
 import GridPicture from 'components/gridPicture/gridPicture';
 import HeadingBlock from 'components/headingBlock/headingBlock';
@@ -24,7 +24,8 @@ import {
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { tierCardsFixed as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
 	heroGuardianWeeklyNonGifting: string;
@@ -165,7 +166,7 @@ function ThankYouContent({
 	product,
 	participations,
 }: PropTypes) {
-	const inThreeTierTestVariant = participations.threeTierCheckout === 'variant';
+	const inThreeTier = showThreeTierCheckout(participations);
 
 	const whatHappensNextItems = orderIsGift
 		? [
@@ -216,7 +217,7 @@ function ThankYouContent({
 	);
 
 	const thankyouSupportHeader = `Thank you for supporting our journalism${
-		!inThreeTierTestVariant ? '!' : ''
+		!inThreeTier ? '!' : ''
 	}`;
 
 	useScrollToTop();
@@ -234,16 +235,11 @@ function ThankYouContent({
 					overheadingClass="--thankyou"
 					overheading={thankyouSupportHeader}
 				>
-					{getHeading(
-						billingPeriod,
-						isPending,
-						orderIsGift,
-						inThreeTierTestVariant,
-					)}
+					{getHeading(billingPeriod, isPending, orderIsGift, inThreeTier)}
 				</HeadingBlock>
 			</HeroWrapper>
 
-			{inThreeTierTestVariant ? (
+			{inThreeTier ? (
 				<>
 					<Content>
 						{isPending && (
@@ -257,7 +253,7 @@ function ThankYouContent({
 						<Text title="What is included in my subscription?">
 							Your subscription includes:
 							<br />
-							<CheckmarkList
+							<CheckList
 								checkListData={benefitsTier3and2.map((benefit) => {
 									return { text: <span>{benefit.copy}</span>, isChecked: true };
 								})}
@@ -321,8 +317,8 @@ function ThankYouContent({
 					</SansParagraph>
 				</Text>
 			</Content>
-			{!inThreeTierTestVariant && <SubscriptionsSurvey product={product} />}
-			{!inThreeTierTestVariant && (
+			{!inThreeTier && <SubscriptionsSurvey product={product} />}
+			{!inThreeTier && (
 				<Content>
 					<Asyncronously
 						loader={

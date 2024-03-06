@@ -56,6 +56,7 @@ describe('Stripe Form', () => {
 		validateForm = jest.fn();
 		props = {
 			country: 'GB',
+			currency: 'GBP',
 			isTestUser: true,
 			allErrors: [],
 			submitForm,

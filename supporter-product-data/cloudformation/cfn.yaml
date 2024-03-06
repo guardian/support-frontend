@@ -402,16 +402,25 @@ Resources:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
       AlarmName: !Sub Supporter Product Data step function Failure in ${Stage}
       AlarmDescription: !Sub The supporter-product-data-${Stage} step function has failed. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:supporter-product-data-${Stage}?statusFilter=FAILED for details.
-      MetricName: ExecutionsFailed
-      Namespace: AWS/States
-      Dimensions:
-        - Name: StateMachineArn
-          Value: !Ref SupporterProductData
+      Metrics:
+        - Id: errorsOutsideZuoraSlowHours
+          # Do not alarm between 00:00 and 06:00 because Zuora is very slow and we often have failures during these hours
+          Expression: "IF(HOUR(errors) > 5, errors)"
+        - Id: errors
+          ReturnData: false
+          MetricStat:
+            Metric:
+              Namespace: AWS/States
+              MetricName: ExecutionsFailed
+              Dimensions:
+                - Name: StateMachineArn
+                  Value: !Ref SupporterProductData
+            Stat: Sum
+            Period: 60
+            Unit: Count
       ComparisonOperator: GreaterThanOrEqualToThreshold
       Threshold: 1
-      Period: 60
       EvaluationPeriods: 1
-      Statistic: Sum
     DependsOn: SupporterProductData
 
   UnprocessedSupporterProductDataRecordAlarm:
@@ -439,29 +448,6 @@ Resources:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
     DependsOn:
       - SupporterProductDataDeadLetterQueue
-
-  SupporterProductDataAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: CreateProdResources
-    Properties:
-      AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
-      AlarmName: Failed to extract supporter product data from Zuora
-      AlarmDescription: >
-        The supporter-product-data step function failed, check for failed executions here:
-        https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:supporter-product-data-PROD
-      MetricName: ExecutionsFailed
-      Namespace: AWS/States
-      Dimensions:
-        - Name: StateMachineArn
-          Value: !Ref SupporterProductData
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      Threshold: 1
-      Period: 60
-      EvaluationPeriods: 60
-      Statistic: Sum
-      TreatMissingData: notBreaching
-    DependsOn: SupporterProductData
 
   CsvReadAlarm:
     Type: AWS::CloudWatch::Alarm

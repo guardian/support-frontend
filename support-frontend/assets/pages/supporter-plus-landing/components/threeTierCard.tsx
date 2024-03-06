@@ -11,7 +11,7 @@ import {
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
 } from '@guardian/source-react-components';
-import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
+import { CheckList } from 'components/checkList/checkList';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -20,7 +20,9 @@ import {
 	currencies,
 	type IsoCurrency,
 } from 'helpers/internationalisation/currency';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
+import { showThreeTierVariablePrice } from '../setup/threeTierABTest';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
@@ -191,11 +193,18 @@ export function ThreeTierCard({
 	linkCtaClickHandler,
 	externalBtnLink,
 }: ThreeTierCardProps): JSX.Element {
+	const inThreeTierVariantVariable = showThreeTierVariablePrice(
+		useContributionsSelector((state) => state.common).abParticipations,
+	);
 	const currency = currencies[currencyId].glyph;
 	const currentPrice = planCost.discount?.price ?? planCost.price;
 	const previousPriceCopy =
 		!!planCost.discount && `${currency}${planCost.price}`;
-	const currentPriceCopy = `${currency}${currentPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
+	const currentPriceCopy = `${
+		inThreeTierVariantVariable && cardTier === 1 ? 'From ' : ''
+	}${currency}${currentPrice}/${
+		recurringContributionPeriodMap[paymentFrequency]
+	}`;
 	return (
 		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
 			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
@@ -238,6 +247,7 @@ export function ThreeTierCard({
 								currencyId,
 							)
 						}
+						data-qm-trackable={`tier-${cardTier}-button`}
 					>
 						Subscribe
 					</Button>
@@ -258,7 +268,7 @@ export function ThreeTierCard({
 					<span css={benefitsPrefixPlus}>plus</span>
 				</div>
 			)}
-			<CheckmarkList
+			<CheckList
 				checkListData={benefits.list.map((benefit) => {
 					return {
 						text: benefit.copy,

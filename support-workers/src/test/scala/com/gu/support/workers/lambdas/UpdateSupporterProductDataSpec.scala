@@ -42,7 +42,7 @@ class UpdateSupporterProductDataSpec extends AnyFlatSpec with EitherValues {
     val supporterRatePlanItem =
       UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures).value
     supporterRatePlanItem.value.identityId shouldBe "200092951"
-    supporterRatePlanItem.value.contributionAmount shouldBe Some(ContributionAmount(12, "GBP"))
+    supporterRatePlanItem.value.contributionAmount shouldBe None // not guaranteed right if discounted, and unused anyway
   }
 }
 

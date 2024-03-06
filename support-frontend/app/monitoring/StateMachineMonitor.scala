@@ -1,6 +1,6 @@
 package monitoring
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import services.stepfunctions.SupportWorkersClient
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}

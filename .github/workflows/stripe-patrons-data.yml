@@ -31,7 +31,7 @@ jobs:
       - name: Setup Node for CDK
         uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 18
           cache: "yarn"
           cache-dependency-path: cdk/yarn.lock
 

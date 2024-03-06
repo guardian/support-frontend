@@ -1,6 +1,6 @@
 package services
 
-import akka.actor.{ActorSystem, Cancellable}
+import org.apache.pekko.actor.{ActorSystem, Cancellable}
 import cats.data.EitherT
 import com.amazonaws.services.s3.AmazonS3
 import com.github.blemale.scaffeine.{AsyncLoadingCache, Scaffeine}

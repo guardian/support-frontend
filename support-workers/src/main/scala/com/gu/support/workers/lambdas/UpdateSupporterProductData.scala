@@ -103,7 +103,7 @@ object UpdateSupporterProductData {
                 identityId = user.id,
                 productRatePlanId = productRatePlan.id,
                 productRatePlanName = s"support-workers added ${product.describe}",
-                Some(ContributionAmount(product.amount, product.currency.iso)),
+                None, // We don't send the amount for S+, because it may be discounted
               ),
             ),
           )

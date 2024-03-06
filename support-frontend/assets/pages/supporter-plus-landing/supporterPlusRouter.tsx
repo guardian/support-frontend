@@ -17,6 +17,7 @@ import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
+import { showThreeTierCheckout } from './setup/threeTierABTest';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
 import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
@@ -78,15 +79,13 @@ function ThreeTierRedirectOneOffToCheckout({
 	);
 }
 
+export const inThreeTier = showThreeTierCheckout(
+	store.getState().common.abParticipations,
+);
+
 // ----- Render ----- //
 
 const router = () => {
-	const {
-		common: { abParticipations },
-	} = store.getState();
-	const isInThreeTierCheckoutTest =
-		abParticipations.threeTierCheckout === 'variant';
-
 	return (
 		<BrowserRouter>
 			<ScrollToTop />
@@ -102,7 +101,7 @@ const router = () => {
 									 * contribution type (set in the url) and find yourself in the three tier
 									 * variant we should redirect you to the /contribute/checkout route
 									 */
-									isInThreeTierCheckoutTest ? (
+									inThreeTier ? (
 										<ThreeTierRedirectOneOffToCheckout countryId={countryId}>
 											<ThreeTierLanding />
 										</ThreeTierRedirectOneOffToCheckout>

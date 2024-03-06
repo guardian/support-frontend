@@ -1,0 +1,83 @@
+@import com.gu.i18n.Country
+@import admin.settings.AllSettings
+@import views.html.helper.CSRF
+
+@(
+  geoData: GeoData,
+  paymentMethodConfigs: PaymentMethodConfigs,
+  paymentApiUrl: String,
+  paymentApiPayPalEndpoint: String,
+  membersDataApiUrl: String,
+  v2recaptchaConfigPublicKey: String,
+  guestAccountCreationToken: Option[String],
+  settings: AllSettings
+)(implicit request: RequestHeader)
+
+<script type="text/javascript">
+  window.guardian.geoip = {
+    countryGroup: "@geoData.countryGroup.map(_.id).mkString",
+    countryCode: "@geoData.country.map(_.alpha2).mkString",
+    stateCode: "@geoData.validatedStateCodeForCountry.mkString"
+  };
+
+  window.guardian.stripeKeyDefaultCurrencies = {
+    ONE_OFF: {
+      default: "@paymentMethodConfigs.oneOffDefaultStripeConfig.defaultAccount.publicKey",
+      test: "@paymentMethodConfigs.oneOffTestStripeConfig.defaultAccount.publicKey"
+    },
+    REGULAR: {
+      default: "@paymentMethodConfigs.regularDefaultStripeConfig.defaultAccount.publicKey",
+      test: "@paymentMethodConfigs.regularTestStripeConfig.defaultAccount.publicKey"
+    }
+  };
+
+  window.guardian.stripeKeyAustralia = {
+    ONE_OFF: {
+      default: "@paymentMethodConfigs.oneOffDefaultStripeConfig.forCountry(Some(Country.Australia)).publicKey",
+      test: "@paymentMethodConfigs.oneOffTestStripeConfig.forCountry(Some(Country.Australia)).publicKey"
+    },
+    REGULAR: {
+      default: "@paymentMethodConfigs.regularDefaultStripeConfig.forCountry(Some(Country.Australia)).publicKey",
+      test: "@paymentMethodConfigs.regularTestStripeConfig.forCountry(Some(Country.Australia)).publicKey"
+    }
+  };
+
+  window.guardian.stripeKeyUnitedStates = {
+    @if(settings.switches.featureSwitches.usStripeAccountForSingle.isOn) {
+    ONE_OFF: {
+      default: "@paymentMethodConfigs.oneOffDefaultStripeConfig.forCountry(Some(Country.US)).publicKey",
+      test: "@paymentMethodConfigs.oneOffTestStripeConfig.forCountry(Some(Country.US)).publicKey"
+    },
+    } else {
+    ONE_OFF: window.guardian.stripeKeyDefaultCurrencies.ONE_OFF,
+    }
+    REGULAR: window.guardian.stripeKeyDefaultCurrencies.REGULAR
+  };
+
+  window.guardian.payPalEnvironment = {
+    default: "@paymentMethodConfigs.regularDefaultPayPalConfig.payPalEnvironment",
+    test: "@paymentMethodConfigs.regularTestPayPalConfig.payPalEnvironment"
+  };
+
+  window.guardian.amazonPaySellerId = {
+    default: "@paymentMethodConfigs.defaultAmazonPayConfig.sellerId",
+    test: "@paymentMethodConfigs.testAmazonPayConfig.sellerId"
+  };
+
+  window.guardian.amazonPayClientId = {
+    default: "@paymentMethodConfigs.defaultAmazonPayConfig.clientId",
+    test: "@paymentMethodConfigs.testAmazonPayConfig.clientId",
+  };
+
+  window.guardian.paymentApiUrl = "@paymentApiUrl";
+  window.guardian.paymentApiPayPalEndpoint = "@paymentApiPayPalEndpoint";
+  window.guardian.mdapiUrl = "@membersDataApiUrl";
+  window.guardian.csrf = { token: "@CSRF.getToken.value" };
+
+  @guestAccountCreationToken.map { guestAccountCreationToken =>
+    window.guardian.guestAccountCreationToken = "@guestAccountCreationToken";
+  }
+
+  window.guardian.recaptchaEnabled = @settings.switches.recaptchaSwitches.enableRecaptchaFrontend.isOn
+  window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey";
+</script>

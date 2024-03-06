@@ -1,4 +1,3 @@
-import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
 import {
 	between,
@@ -9,8 +8,8 @@ import {
 	textSans,
 	until,
 } from '@guardian/source-foundations';
-import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
-import type { CheckListData } from 'components/checkmarkList/checkmarkList';
+import { CheckList } from 'components/checkList/checkList';
+import type { CheckListData } from 'components/checkList/checkList';
 
 const containerCss = css`
 	${textSans.medium({ lineHeight: 'tight' })};
@@ -45,13 +44,6 @@ const headingCss = css`
 	}
 `;
 
-const headingEmotionalCss = css`
-	${textSans.small()}
-	strong {
-		font-weight: bold;
-	}
-`;
-
 const hrCss = (margin: string) => css`
 	border: none;
 	height: 1px;
@@ -63,13 +55,12 @@ const hrCss = (margin: string) => css`
 `;
 
 export type CheckoutBenefitsListProps = {
-	title: Array<string | { copy: string; strong: boolean }>;
+	title: string;
 	checkListData: CheckListData[];
 	buttonCopy: string | null;
 	handleButtonClick: () => void;
 	withBackground?: boolean;
 	isCompactList?: boolean;
-	displayEmotionalBenefit?: boolean;
 };
 
 export function CheckoutBenefitsList({
@@ -77,29 +68,7 @@ export function CheckoutBenefitsList({
 	checkListData,
 	withBackground,
 	isCompactList,
-	displayEmotionalBenefit,
 }: CheckoutBenefitsListProps): JSX.Element {
-	const titleCopy = title.map((stringPart) => {
-		if (typeof stringPart === 'string') {
-			return stringPart;
-		} else {
-			return <strong>{stringPart.copy}</strong>;
-		}
-	});
-
-	const headerMessageStyle = (
-		displayEmotionalBenefit?: boolean,
-		withBackground?: boolean,
-	): SerializedStyles | SerializedStyles[] => {
-		if (displayEmotionalBenefit) {
-			return headingEmotionalCss;
-		} else if (withBackground) {
-			return [headingCss, maxWidth];
-		} else {
-			return [headingCss, smallMaxWidth];
-		}
-	};
-
 	return (
 		<div
 			css={
@@ -108,11 +77,15 @@ export function CheckoutBenefitsList({
 					: [containerCss]
 			}
 		>
-			<h2 css={headerMessageStyle(displayEmotionalBenefit, withBackground)}>
-				<span>{titleCopy}</span>
+			<h2
+				css={
+					withBackground ? [headingCss, maxWidth] : [headingCss, smallMaxWidth]
+				}
+			>
+				<span>{title}</span>
 			</h2>
 			<hr css={hrCss(`${space[4]}px 0`)} />
-			<CheckmarkList
+			<CheckList
 				checkListData={checkListData}
 				style={isCompactList ? 'compact' : 'standard'}
 				iconColor={palette.brand[500]}

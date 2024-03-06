@@ -7,7 +7,6 @@ import {
 	visuallyHidden,
 } from '@guardian/source-foundations';
 import { TextInput } from '@guardian/source-react-components';
-import type { ContributionType } from 'helpers/contributions';
 import { emailRegexPattern } from 'helpers/forms/formValidation';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 
@@ -42,13 +41,13 @@ export type PersonalDetailsProps = {
 	email: string;
 	firstName: string;
 	lastName: string;
-	contributionType: ContributionType;
 	isSignedIn: boolean;
 	onEmailChange: (email: string) => void;
 	onFirstNameChange: (firstName: string) => void;
 	onLastNameChange: (lastName: string) => void;
 	signOutLink: React.ReactNode;
 	contributionState: React.ReactNode;
+	hideNameFields?: boolean;
 	contributionZipcode?: React.ReactNode;
 	overrideHeadingCopy?: string;
 	hideDetailsHeading?: true;
@@ -59,7 +58,6 @@ export function PersonalDetails({
 	email,
 	firstName,
 	lastName,
-	contributionType,
 	isSignedIn,
 	onEmailChange,
 	onFirstNameChange,
@@ -67,6 +65,7 @@ export function PersonalDetails({
 	errors,
 	signOutLink,
 	contributionState,
+	hideNameFields,
 	contributionZipcode,
 	hideDetailsHeading,
 	overrideHeadingCopy,
@@ -88,12 +87,13 @@ export function PersonalDetails({
 					pattern={emailRegexPattern}
 					error={errors?.email?.[0]}
 					disabled={isSignedIn}
+					name="email"
 				/>
 			</div>
 
 			{signOutLink}
 
-			{contributionType !== 'ONE_OFF' ? (
+			{!hideNameFields && (
 				<>
 					<div>
 						<TextInput
@@ -105,6 +105,7 @@ export function PersonalDetails({
 							autoCapitalize="words"
 							onChange={(e) => onFirstNameChange(e.target.value)}
 							error={errors?.firstName?.[0]}
+							name="firstName"
 							required
 						/>
 					</div>
@@ -118,11 +119,12 @@ export function PersonalDetails({
 							autoCapitalize="words"
 							onChange={(e) => onLastNameChange(e.target.value)}
 							error={errors?.lastName?.[0]}
+							name="lastName"
 							required
 						/>
 					</div>
 				</>
-			) : null}
+			)}
 
 			{contributionState}
 

@@ -10,6 +10,7 @@ import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
 import com.gu.monitoring.SafeLogger
 import com.gu.monitoring.SafeLogger._
+import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
@@ -18,12 +19,15 @@ import models.GeoData
 import play.api.mvc._
 import services.{PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
+import play.api.libs.circe.Circe
+import play.api.libs.ws.WSClient
 
 import scala.concurrent.{ExecutionContext, Future}
 import play.twirl.api.Html
+import services.pricing.PriceSummaryServiceProvider
 import views.EmptyDiv
 
-case class ContributionsPaymentMethodConfigs(
+case class PaymentMethodConfigs(
     oneOffDefaultStripeConfig: StripeConfig,
     oneOffTestStripeConfig: StripeConfig,
     regularDefaultStripeConfig: StripeConfig,
@@ -49,12 +53,15 @@ class Application(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     stage: Stage,
+    wsClient: WSClient,
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
     val supportUrl: String,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax
     with CanonicalLinks
-    with StrictLogging {
+    with StrictLogging
+    with Circe {
 
   import actionRefiners._
 
@@ -183,6 +190,13 @@ class Application(
     val serversideTests = generateParticipations(Nil)
     val testMode = testUsers.isTestUser(request)
 
+    val queryPromos =
+      request.queryString
+        .getOrElse("promoCode", Nil)
+        .toList
+
+    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(SupporterPlus, queryPromos)
+
     views.html.contributions(
       title = "Support the Guardian",
       id = s"contributions-landing-page-$countryCode",
@@ -190,7 +204,7 @@ class Application(
       js = js,
       css = css,
       description = stringsConfig.contributionsLandingDescription,
-      paymentMethodConfigs = ContributionsPaymentMethodConfigs(
+      paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
         oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
         regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
@@ -210,6 +224,7 @@ class Application(
       shareUrl = "https://support.theguardian.com/contribute",
       v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey,
       serversideTests = serversideTests,
+      productPrices = productPrices,
     )
   }
 
@@ -253,6 +268,47 @@ class Application(
       case Some(RestOfTheWorld) => s"/int/$path"
       case _ => s"/uk/$path"
     }
+  }
+
+  def checkout(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+
+    val geoData = request.geoData
+    val serversideTests = generateParticipations(Nil)
+    val isTestUser = testUsers.isTestUser(request)
+    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
+    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
+
+    Ok(
+      views.html.checkout(
+        geoData = geoData,
+        paymentMethodConfigs = PaymentMethodConfigs(
+          oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+          oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
+          regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+          regularTestStripeConfig = regularStripeConfigProvider.get(true),
+          regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+          regularTestPayPalConfig = payPalConfigProvider.get(true),
+          defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
+          testAmazonPayConfig = amazonPayConfigProvider.get(true),
+        ),
+        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
+        serversideTests = serversideTests,
+        paymentApiUrl = paymentAPIService.paymentAPIUrl,
+        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+        membersDataApiUrl = membersDataApiUrl,
+        guestAccountCreationToken = guestAccountCreationToken,
+      ),
+    ).withSettingsSurrogateKey
+  }
+
+  def products() = Action.async { implicit request =>
+    wsClient
+      .url(
+        "https://raw.githubusercontent.com/guardian/support-service-lambdas/0b031ea5821c95a7f7c59e45951d2d1f0bebed9d/modules/product/src/prodCatalogMapping.json",
+      )
+      .get()
+      .map(response => Ok(response.body).withHeaders("Cache-Control" -> "max-age=30"))
   }
 }
 

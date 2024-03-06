@@ -15,13 +15,18 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { showThreeTierVariablePrice } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import {
+	tierCardsFixed,
+	tierCardsVariable,
+} from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import type { PriceCardPaymentInterval } from './priceCard';
 import type { PriceCardsProps } from './priceCards';
 
 type PriceCardsRenderProps = PriceCardsProps & OtherAmountProps;
 
 type PriceCardsContainerProps = {
-	frequency: ContributionType;
+	paymentFrequency: ContributionType;
 	renderPriceCards: (props: PriceCardsRenderProps) => JSX.Element;
 };
 
@@ -33,12 +38,12 @@ const contributionTypeToPaymentInterval: Partial<
 };
 
 export function PriceCardsContainer({
-	frequency,
+	paymentFrequency,
 	renderPriceCards,
 }: PriceCardsContainerProps): JSX.Element {
 	const dispatch = useContributionsDispatch();
-	const currency = useContributionsSelector(
-		(state) => state.common.internationalisation.currencyId,
+	const { countryGroupId, currencyId } = useContributionsSelector(
+		(state) => state.common.internationalisation,
 	);
 	const { amounts } = useContributionsSelector((state) => state.common);
 	const { amountsCardData } = amounts;
@@ -46,30 +51,45 @@ export function PriceCardsContainer({
 		(state) => state.page.checkoutForm.product,
 	);
 	const minAmount = useContributionsSelector(getMinimumContributionAmount());
+
+	const inThreeTierVariantVariable = showThreeTierVariablePrice(
+		useContributionsSelector((state) => state.common.abParticipations),
+	);
+	const tierBillingPeriod =
+		paymentFrequency === 'ANNUAL' ? 'annual' : 'monthly';
+	const tierCards = inThreeTierVariantVariable
+		? tierCardsVariable
+		: tierCardsFixed;
+	const tierCardData = tierCards.tier1.plans[tierBillingPeriod].priceCards;
 	const {
 		amounts: frequencyAmounts,
 		defaultAmount,
 		hideChooseYourAmount,
-	} = amountsCardData[frequency];
+	} = inThreeTierVariantVariable &&
+	tierCardData &&
+	paymentFrequency !== 'ONE_OFF'
+		? tierCardData[countryGroupId]
+		: amountsCardData[paymentFrequency];
+
 	const selectedAmount = getSelectedAmount(
 		selectedAmounts,
-		frequency,
+		paymentFrequency,
 		defaultAmount,
 	).toString();
 	const otherAmountErrors = useContributionsSelector(getOtherAmountErrors);
 
-	const otherAmount = otherAmounts[frequency].amount ?? '';
+	const otherAmount = otherAmounts[paymentFrequency].amount ?? '';
 
 	function onAmountChange(newAmount: string) {
 		dispatch(
 			setSelectedAmount({
-				contributionType: frequency,
+				contributionType: paymentFrequency,
 				amount: newAmount,
 			}),
 		);
 		dispatch(
 			setSelectedAmountBeforeAmendment({
-				contributionType: frequency,
+				contributionType: paymentFrequency,
 				amount: newAmount,
 			}),
 		);
@@ -78,24 +98,24 @@ export function PriceCardsContainer({
 	function onOtherAmountChange(newAmount: string) {
 		dispatch(
 			setOtherAmount({
-				contributionType: frequency,
+				contributionType: paymentFrequency,
 				amount: newAmount,
 			}),
 		);
 		dispatch(
 			setOtherAmountBeforeAmendment({
-				contributionType: frequency,
+				contributionType: paymentFrequency,
 				amount: newAmount,
 			}),
 		);
 	}
 
 	return renderPriceCards({
-		currency,
+		currency: currencyId,
 		amounts: frequencyAmounts.map((amount) => amount.toString()),
 		selectedAmount,
 		otherAmount,
-		paymentInterval: contributionTypeToPaymentInterval[frequency],
+		paymentInterval: contributionTypeToPaymentInterval[paymentFrequency],
 		minAmount,
 		onAmountChange,
 		onOtherAmountChange,

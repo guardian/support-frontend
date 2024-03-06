@@ -507,6 +507,7 @@ function PaperCheckoutForm(props: PropTypes) {
 					>
 						<StripeProviderForCountry
 							country={props.country}
+							currency={props.currencyId}
 							isTestUser={props.isTestUser}
 							submitForm={props.submitForm}
 							allErrors={

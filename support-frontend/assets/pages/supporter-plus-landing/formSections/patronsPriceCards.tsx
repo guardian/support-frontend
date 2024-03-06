@@ -48,7 +48,7 @@ export function PatronsPriceCards(): JSX.Element {
 						)}
 					/>
 					<PriceCardsContainer
-						frequency={contributionType}
+						paymentFrequency={contributionType}
 						renderPriceCards={({
 							selectedAmount,
 							otherAmount,

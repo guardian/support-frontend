@@ -1,4 +1,3 @@
-import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
 import {
 	fetchJson,
@@ -16,6 +15,7 @@ import {
 	Sepa,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
+import type { Country } from 'helpers/internationalisation/countries';
 import type {
 	CaState,
 	IsoCountry,

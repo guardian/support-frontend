@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { textSans } from '@guardian/source-foundations';
 import { useEffect } from 'react';
-import type { CheckListData } from 'components/checkmarkList/checkmarkList';
-import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
+import type { CheckListData } from 'components/checkList/checkList';
+import { CheckList } from 'components/checkList/checkList';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutErrorSummary } from 'components/errorSummary/errorSummary';
 import { CheckoutErrorSummaryContainer } from 'components/errorSummary/errorSummaryContainer';
@@ -123,7 +123,7 @@ export function LimitedPriceCards(): JSX.Element {
 						)}
 					/>
 					<PriceCardsContainer
-						frequency={contributionType}
+						paymentFrequency={contributionType}
 						renderPriceCards={({ selectedAmount }) => (
 							<SimplePriceCards
 								title="Support Guardian journalism"
@@ -150,7 +150,7 @@ export function LimitedPriceCards(): JSX.Element {
 								<div>
 									<h3 css={accordionHeading}>Exclusive extras include:</h3>
 									<div css={listSpacing}>
-										<CheckmarkList
+										<CheckList
 											checkListData={testCheckListData()}
 											style="compact"
 										/>

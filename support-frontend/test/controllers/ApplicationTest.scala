@@ -2,7 +2,7 @@ package controllers
 
 import actions.{CustomActionBuilders, UserFromAuthCookiesActionBuilder, UserFromAuthCookiesOrAuthServerActionBuilder}
 import admin.settings.{AllSettingsProvider, FeatureSwitches, On}
-import akka.util.Timeout
+import org.apache.pekko.util.Timeout
 import assets.AssetsResolver
 import com.gu.support.config._
 import config.{RecaptchaConfigProvider, StringsConfig}
@@ -10,9 +10,11 @@ import fixtures.TestCSRFComponents
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.mockito.MockitoSugar.mock
+import play.api.libs.ws.WSClient
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, header, stubControllerComponents}
 import services._
+import services.pricing.PriceSummaryServiceProvider
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -52,6 +54,8 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[StringsConfig],
         mock[AllSettingsProvider],
         mock[Stage],
+        mock[WSClient],
+        mock[PriceSummaryServiceProvider],
         "support.thegulocal.com",
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
@@ -73,6 +77,8 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[StringsConfig],
         mock[AllSettingsProvider],
         mock[Stage],
+        mock[WSClient],
+        mock[PriceSummaryServiceProvider],
         "support.thegulocal.com",
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
