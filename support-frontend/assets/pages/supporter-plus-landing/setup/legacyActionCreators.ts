@@ -112,12 +112,13 @@ const buildStripeChargeDataFromAuthorisation = (
 		state.common.abParticipations,
 		state.page.checkoutForm.billingAddress.fields.postCode,
 	),
-	publicKey: getStripeKey(
-		stripeAccountForContributionType[getContributionType(state)],
-		state.common.internationalisation.countryId,
-		state.common.internationalisation.currencyId,
-		state.page.user.isTestUser,
-	),
+	publicKey:
+		/* why don't we use state.page.checkoutForm.payment.stripeAccountDetails.publicKey ?*/ getStripeKey(
+			stripeAccountForContributionType[getContributionType(state)],
+			state.common.internationalisation.countryId,
+			state.common.internationalisation.currencyId,
+			state.page.user.isTestUser,
+		),
 	recaptchaToken: state.page.checkoutForm.recaptcha.token,
 });
 
@@ -227,7 +228,10 @@ function regularPaymentRequestFromAuthorisation(
 		product: getProductFields(state, amount),
 		firstDeliveryDate: null,
 		paymentFields: {
-			...regularPaymentFieldsFromAuthorisation(authorisation),
+			...regularPaymentFieldsFromAuthorisation(
+				authorisation,
+				state.page.checkoutForm.payment.stripeAccountDetails.publicKey,
+			),
 			recaptchaToken,
 		},
 		...getPromoCode(state),

@@ -30,7 +30,7 @@ trait SerialisationTestHelpers extends Matchers {
       objectChecks: T => Assertion = (_: T) => succeed,
   ): Assertion =
     decodeResult.fold(
-      e => fail(e.getMessage),
+      e => throw new RuntimeException(e),
       result => objectChecks(result),
     )
 

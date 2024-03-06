@@ -2,7 +2,7 @@ package com.gu.support.workers
 
 import cats.syntax.functor._
 import com.gu.i18n.Country
-import com.gu.support.encoding.Codec
+import com.gu.support.encoding.{Codec, CodecHelpers}
 import com.gu.support.encoding.Codec.deriveCodec
 import io.circe.syntax._
 import io.circe.{Encoder, _}
@@ -11,19 +11,34 @@ sealed trait PaymentFields
 
 case class PayPalPaymentFields(baid: String) extends PaymentFields
 
-sealed trait StripePaymentFields extends PaymentFields {
-  val stripePaymentType: Option[StripePaymentType]
-}
-
-case class StripeSourcePaymentFields(
-    stripeToken: String,
-    stripePaymentType: Option[StripePaymentType],
-) extends StripePaymentFields // pre SCA compatibility
-
-case class StripePaymentMethodPaymentFields(
+case class StripePaymentFields(
     paymentMethod: PaymentMethodId,
     stripePaymentType: Option[StripePaymentType],
-) extends StripePaymentFields
+    stripePublicKey: Option[StripePublicKey], // this is only optional until all checkouts are updated
+) extends PaymentFields
+
+object StripePublicKey {
+
+  def parse(value: String): Either[String, StripePublicKey] =
+    if (
+      value.length > 10 &&
+      value.forall { char =>
+        (char >= 'a' && char <= 'z') ||
+        (char >= 'A' && char <= 'Z') ||
+        (char >= '0' && char <= '9') ||
+        char == '_'
+      }
+    ) Right(new StripePublicKey(value))
+    else Left(s"StripePublicKey <$value> had invalid characters")
+
+  def get(value: String): StripePublicKey =
+    parse(value).left.map(new Throwable(_)).toTry.get
+
+  implicit val decoder: Decoder[StripePublicKey] = Decoder.decodeString.emap(parse)
+  implicit val encoder: Encoder[StripePublicKey] = Encoder.encodeString.contramap[StripePublicKey](_.value)
+
+}
+case class StripePublicKey private (value: String) extends AnyVal
 
 object PaymentMethodId {
 
@@ -68,8 +83,7 @@ case class AmazonPayPaymentFields(amazonPayBillingAgreementId: String) extends P
 object PaymentFields {
   // Payment fields are input from support-frontend
   implicit val payPalPaymentFieldsCodec: Codec[PayPalPaymentFields] = deriveCodec
-  implicit val stripeSourcePaymentFieldsCodec: Codec[StripeSourcePaymentFields] = deriveCodec
-  implicit val stripePaymentMethodPaymentFieldsCodec: Codec[StripePaymentMethodPaymentFields] = deriveCodec
+  implicit val stripePaymentMethodPaymentFieldsCodec: Codec[StripePaymentFields] = deriveCodec
   implicit val directDebitPaymentFieldsCodec: Codec[DirectDebitPaymentFields] = deriveCodec
   implicit val sepaPaymentFieldsCodec: Codec[SepaPaymentFields] = deriveCodec
   implicit val existingPaymentFieldsCodec: Codec[ExistingPaymentFields] = deriveCodec
@@ -77,33 +91,23 @@ object PaymentFields {
 
   implicit val encodePaymentFields: Encoder[PaymentFields] = Encoder.instance {
     case p: PayPalPaymentFields => p.asJson
-    case s: StripeSourcePaymentFields => s.asJson
-    case s: StripePaymentMethodPaymentFields => s.asJson
+    case s: StripePaymentFields => s.asJson
     case d: DirectDebitPaymentFields => d.asJson
     case s: SepaPaymentFields => s.asJson.deepDropNullValues
     case e: ExistingPaymentFields => e.asJson
     case a: AmazonPayPaymentFields => a.asJson
   }
 
-  implicit val decodePaymentFields: Decoder[PaymentFields] =
+  implicit val decodePaymentFields: Decoder[PaymentFields] = {
+    import CodecHelpers.withClue
     List[Decoder[PaymentFields]](
-      Decoder[PayPalPaymentFields].widen,
-      Decoder[StripeSourcePaymentFields].widen,
-      Decoder[StripePaymentMethodPaymentFields].widen,
-      Decoder[DirectDebitPaymentFields].widen,
-      Decoder[SepaPaymentFields].widen,
-      Decoder[ExistingPaymentFields].widen,
-      Decoder[AmazonPayPaymentFields].widen,
-    ).reduceLeft(or(_, _))
-
-  final def or[A, AA >: A](a: Decoder[A], d: => Decoder[AA]): Decoder[AA] = new Decoder[AA] {
-    final def apply(c: HCursor): Decoder.Result[AA] = a(c) match {
-      case r @ Right(_) => r
-      case Left(err) =>
-        d(c).left.map { decodingFailure: DecodingFailure =>
-          DecodingFailure(err.message + " OR " + decodingFailure.message, err.history ++ decodingFailure.history)
-        }
-    }
+      withClue(Decoder[PayPalPaymentFields].widen, "PayPalPaymentFields"),
+      withClue(Decoder[StripePaymentFields].widen, "StripePaymentFields"),
+      withClue(Decoder[DirectDebitPaymentFields].widen, "DirectDebitPaymentFields"),
+      withClue(Decoder[SepaPaymentFields].widen, "SepaPaymentFields"),
+      withClue(Decoder[ExistingPaymentFields].widen, "ExistingPaymentFields"),
+      withClue(Decoder[AmazonPayPaymentFields].widen, "AmazonPayPaymentFields"),
+    ).reduceLeft(CodecHelpers.or(_, _))
   }
 
 }

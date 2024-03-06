@@ -299,21 +299,14 @@ object JsonFixtures {
       }
     """
 
-  val stripeToken = "tok_visa"
-  val stripePaymentMethodToken = PaymentMethodId("pm_card_visa").get
+  val stripeToken = PaymentMethodId("pm_card_visa").get
+
   val stripeJson =
     s"""
       {
-        "stripeToken": "$stripeToken",
-        "stripePaymentType": "StripeCheckout"
-      }
-    """
-
-  val stripePaymentMethodJson =
-    s"""
-      {
-        "paymentMethod": "${stripePaymentMethodToken.value}",
-        "stripePaymentType": "StripeCheckout"
+        "paymentMethod": "${stripeToken.value}",
+        "stripePaymentType": "StripeCheckout",
+        "stripePublicKey": "pk_test_Qm3CGRdrV4WfGYCpm0sftR0f"
       }
     """
 
@@ -332,7 +325,7 @@ object JsonFixtures {
           "userAgent": "Test"
         }"""
 
-  def createStripeSourcePaymentMethodContributionJson(
+  def createStripePaymentMethodContributionJson(
       billingPeriod: BillingPeriod = Monthly,
       amount: BigDecimal = 5,
       currency: Currency = GBP,
@@ -346,26 +339,6 @@ object JsonFixtures {
             "isGiftPurchase": false
           },
           "paymentFields": $stripeJson,
-          "sessionId": "testingToken",
-          "acquisitionData": $acquisitionData,
-          "ipAddress": "127.0.0.1",
-          "userAgent": "Test"
-        }"""
-
-  def createStripePaymentMethodPaymentMethodContributionJson(
-      billingPeriod: BillingPeriod = Monthly,
-      amount: BigDecimal = 5,
-      currency: Currency = GBP,
-  ): String =
-    s"""{
-          $requestIdJson,
-          ${userJson()},
-          "product": ${contribution(amount = amount, billingPeriod = billingPeriod, currency = currency)},
-          "analyticsInfo": {
-            "paymentProvider": "Stripe",
-            "isGiftPurchase": false
-          },
-          "paymentFields": $stripePaymentMethodJson,
           "sessionId": "testingToken",
           "acquisitionData": $acquisitionData,
           "ipAddress": "127.0.0.1",

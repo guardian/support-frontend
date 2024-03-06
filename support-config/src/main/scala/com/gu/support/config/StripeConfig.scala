@@ -3,6 +3,8 @@ package com.gu.support.config
 import com.gu.i18n.{Country, Currency}
 import com.gu.i18n.Currency.AUD
 import com.gu.monitoring.SafeLogger
+import com.gu.support.workers.StripePublicKey
+import com.gu.support.zuora.api.{PaymentGateway, StripeGatewayPaymentIntentsAUD, StripeGatewayPaymentIntentsDefault}
 import com.typesafe.config.Config
 
 case class StripeConfig(
@@ -11,8 +13,19 @@ case class StripeConfig(
     unitedStatesAccount: StripeAccountConfig,
     version: Option[String],
 ) {
+  val secretForPublic: Map[StripePublicKey, (StripeAccountConfig, PaymentGateway)] =
+    List(
+      (defaultAccount, StripeGatewayPaymentIntentsDefault),
+      (australiaAccount, StripeGatewayPaymentIntentsAUD),
+      (unitedStatesAccount, StripeGatewayPaymentIntentsDefault), // US currently uses default account for recurring
+    ).map { config =>
+      StripePublicKey.get(config._1.publicKey) -> config
+    }.toMap
 
-  // Still needed for SupportWorkers (recurring products) which don't support a US Stripe account yet.
+  def forPublicKey(publicKey: StripePublicKey): (StripeAccountConfig, PaymentGateway) =
+    secretForPublic(publicKey)
+
+  // fallback for SupportWorkers (recurring products) which don't support a US Stripe account yet.
   def forCurrency(maybeCurrency: Option[Currency]): StripeAccountConfig =
     maybeCurrency match {
       case Some(AUD) =>

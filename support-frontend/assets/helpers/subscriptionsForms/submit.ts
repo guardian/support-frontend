@@ -198,8 +198,10 @@ function buildRegularPaymentRequest(
 	} = state.page.checkoutForm.addressMeta;
 	const { csrUsername, salesforceCaseId } = state.page.checkout;
 	const product = getProduct(state, currencyId, chosenDeliveryAgent);
-	const paymentFields =
-		regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
+	const paymentFields = regularPaymentFieldsFromAuthorisation(
+		paymentAuthorisation,
+		state.page.checkoutForm.payment.stripeAccountDetails.publicKey,
+	);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const promoCode = getPromoCode(promotions);
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);

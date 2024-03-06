@@ -56,7 +56,7 @@ object CheckoutValidationRules {
       if (switches.paypal.isOn) Valid else Invalid("Invalid Payment Method")
     case Left(_: DirectDebitPaymentFields) =>
       if (switches.directDebit.isOn) Valid else Invalid("Invalid Payment Method")
-    case Left(_: StripePaymentMethodPaymentFields) =>
+    case Left(_: StripePaymentFields) =>
       if (switches.creditCard.isOn) Valid else Invalid("Invalid Payment Method")
     case Left(_) => Invalid("Invalid Payment Method")
     case Right(_) => Valid
@@ -72,9 +72,7 @@ object CheckoutValidationRules {
       if (switches.directDebit.isOn) Valid else Invalid("Invalid Payment Method")
     case Left(_: SepaPaymentFields) =>
       if (switches.sepa.isOn) Valid else Invalid("Invalid Payment Method")
-    case Left(_: StripeSourcePaymentFields) =>
-      if (switches.stripe.isOn) Valid else Invalid("Invalid Payment Method")
-    case Left(s: StripePaymentMethodPaymentFields) =>
+    case Left(s: StripePaymentFields) =>
       s.stripePaymentType match {
         case Some(StripePaymentType.StripeApplePay) =>
           if (switches.stripeApplePay.isOn) Valid else Invalid("Invalid Payment Method")
@@ -230,9 +228,7 @@ object PaidProductValidation {
       directDebitDetails.accountHolderName.nonEmpty.otherwise("DD account name missing") and
         directDebitDetails.accountNumber.nonEmpty.otherwise("DD account number missing") and
         directDebitDetails.sortCode.nonEmpty.otherwise("DD sort code missing")
-    case _: StripePaymentMethodPaymentFields => Valid // already validated in PaymentMethodId.apply
-    case stripeDetails: StripeSourcePaymentFields =>
-      stripeDetails.stripeToken.nonEmpty.otherwise("stripe token missing")
+    case _: StripePaymentFields => Valid // already validated in PaymentMethodId.apply
     case payPalDetails: PayPalPaymentFields => payPalDetails.baid.nonEmpty.otherwise("paypal BAID missing")
     case existingDetails: ExistingPaymentFields =>
       existingDetails.billingAccountId.nonEmpty.otherwise("existing billing account id missing")

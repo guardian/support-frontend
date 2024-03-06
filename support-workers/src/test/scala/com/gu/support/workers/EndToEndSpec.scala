@@ -1,11 +1,10 @@
 package com.gu.support.workers
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
-
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.monitoring.SafeLogger
-import com.gu.support.workers.JsonFixtures.{createStripeSourcePaymentMethodContributionJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{createStripePaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.lambdas._
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe
@@ -25,7 +24,7 @@ class EndToEndSpec extends AsyncLambdaSpec with MockContext {
   ignore should "work with other currencies" in runSignupWithCurrency(EUR)
 
   def runSignupWithCurrency(currency: Currency): Future[Assertion] = {
-    val json = createStripeSourcePaymentMethodContributionJson(currency = currency)
+    val json = createStripePaymentMethodContributionJson(currency = currency)
     SafeLogger.info(json)
     val output = Future
       .successful(wrapFixture(json))

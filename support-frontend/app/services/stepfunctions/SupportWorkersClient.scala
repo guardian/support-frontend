@@ -22,7 +22,7 @@ import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import services.stepfunctions.SupportWorkersClient._
 
 import java.util.UUID
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.{Failure, Success, Try}
 
 object CreateSupportWorkersRequest {
@@ -98,8 +98,8 @@ class SupportWorkersClient(
     supportUrl: String,
     statusCall: String => Call,
 )(implicit system: ActorSystem) {
-  private implicit val sw = stateWrapper
-  private implicit val ec = system.dispatcher
+  private implicit val sw: StateWrapper = stateWrapper
+  private implicit val ec: ExecutionContextExecutor = system.dispatcher
   private val underlying = Client(arn)
 
   private def referrerAcquisitionDataWithGAFields(
