@@ -8,10 +8,12 @@ import { boolean, object, optional, string, ValiError } from 'valibot';
  * It will only error in NODE_ENV === 'development'.
  */
 const PaymentConfigSchema = object({
-	geoip: object({
-		countryCode: string(),
-		stateCode: optional(string()),
-	}),
+	geoip: optional(
+		object({
+			countryCode: string(),
+			stateCode: optional(string()),
+		}),
+	),
 	stripeKeyDefaultCurrencies: object({
 		ONE_OFF: object({ default: string(), test: string() }),
 		REGULAR: object({ default: string(), test: string() }),

@@ -449,6 +449,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 					>
 						<StripeProviderForCountry
 							country={props.deliveryCountry}
+							currency={props.currencyId}
 							isTestUser={props.isTestUser}
 							submitForm={props.submitForm}
 							// @ts-expect-error TODO: fix when we can fix error states for all checkouts
