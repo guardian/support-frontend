@@ -72,13 +72,9 @@ function PaymentMethodSelectorContainer({
 	const { existingPaymentMethods } = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment,
 	);
-	const { switches } = useContributionsSelector(
-		(state) => state.common.settings,
-	);
 
 	const availablePaymentMethods = getValidPaymentMethods(
 		contributionType,
-		switches,
 		countryId,
 		countryGroupId,
 	).filter(
