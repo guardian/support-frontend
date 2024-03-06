@@ -156,7 +156,7 @@ export function BillingPeriodSelector(): JSX.Element {
 			</div>
 
 			<CheckoutBenefitsList
-				title={['']}
+				title={''}
 				buttonCopy={null}
 				handleButtonClick={() => undefined}
 				checkListData={[

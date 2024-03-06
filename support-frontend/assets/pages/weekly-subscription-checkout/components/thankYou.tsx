@@ -24,8 +24,8 @@ import {
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { inThreeTierV2Variant } from 'pages/supporter-plus-landing/setup/threeTierABTest';
-import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { tierCardsFixed as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
 	heroGuardianWeeklyNonGifting: string;
@@ -166,7 +166,7 @@ function ThankYouContent({
 	product,
 	participations,
 }: PropTypes) {
-	const inThreeTierVariant = inThreeTierV2Variant(participations);
+	const inThreeTier = showThreeTierCheckout(participations);
 
 	const whatHappensNextItems = orderIsGift
 		? [
@@ -217,7 +217,7 @@ function ThankYouContent({
 	);
 
 	const thankyouSupportHeader = `Thank you for supporting our journalism${
-		!inThreeTierVariant ? '!' : ''
+		!inThreeTier ? '!' : ''
 	}`;
 
 	useScrollToTop();
@@ -235,16 +235,11 @@ function ThankYouContent({
 					overheadingClass="--thankyou"
 					overheading={thankyouSupportHeader}
 				>
-					{getHeading(
-						billingPeriod,
-						isPending,
-						orderIsGift,
-						inThreeTierVariant,
-					)}
+					{getHeading(billingPeriod, isPending, orderIsGift, inThreeTier)}
 				</HeadingBlock>
 			</HeroWrapper>
 
-			{inThreeTierVariant ? (
+			{inThreeTier ? (
 				<>
 					<Content>
 						{isPending && (
@@ -322,8 +317,8 @@ function ThankYouContent({
 					</SansParagraph>
 				</Text>
 			</Content>
-			{!inThreeTierVariant && <SubscriptionsSurvey product={product} />}
-			{!inThreeTierVariant && (
+			{!inThreeTier && <SubscriptionsSurvey product={product} />}
+			{!inThreeTier && (
 				<Content>
 					<Asyncronously
 						loader={

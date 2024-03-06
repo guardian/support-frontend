@@ -22,11 +22,6 @@ import {
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
-import type {
-	StripeCardCvcElementChangeEvent,
-	StripeCardExpiryElementChangeEvent,
-	StripeCardNumberElementChangeEvent,
-} from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
 import {
 	number,
@@ -50,8 +45,15 @@ import { SecureTransactionIndicator } from 'components/secureTransactionIndicato
 import Signout from 'components/signout/signout';
 import { StripeElements } from 'components/stripe/stripeElements';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
-import { getValidPaymentMethods } from 'helpers/forms/checkouts';
-import type { PaymentMethod } from 'helpers/forms/paymentMethods';
+import {
+	AmazonPay,
+	DirectDebit,
+	isPaymentMethod,
+	type PaymentMethod,
+	PayPal,
+	Sepa,
+	Stripe,
+} from 'helpers/forms/paymentMethods';
 import { getStripeKey } from 'helpers/forms/stripe';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
@@ -230,15 +232,21 @@ const shorterBoxMargin = css`
 	}
 `;
 
-const validPaymentMethods = getValidPaymentMethods(
-	'MONTHLY',
-	window.guardian.settings.switches,
-	countryId,
-	countryGroupId,
-);
+const validPaymentMethods = [
+	query.product !== 'Contribution' && countryGroupId === 'EURCountries' && Sepa,
+	query.product !== 'Contribution' && countryId === 'GB' && DirectDebit,
+	Stripe,
+	PayPal,
+	countryId === 'US' && AmazonPay,
+].filter(isPaymentMethod);
 
-const stripeAccount = 'REGULAR';
-const stripePublicKey = getStripeKey(stripeAccount, countryId, isTestUser);
+const stripeAccount = query.product !== 'Contribution' ? 'REGULAR' : 'ONE_OFF';
+const stripePublicKey = getStripeKey(
+	stripeAccount,
+	countryId,
+	currentCurrencyKey,
+	isTestUser,
+);
 
 export function Checkout() {
 	const [products, setProducts] = useState<Products>();
@@ -341,13 +349,6 @@ export function Checkout() {
 									recaptchaToken: formData.get('recaptchaToken') as string,
 								};
 
-								console.info(
-									paymentMethod === 'Stripe',
-									stripe,
-									cardElement,
-									stripeClientSecret,
-								);
-
 								if (
 									paymentMethod === 'Stripe' &&
 									stripe &&
@@ -371,6 +372,7 @@ export function Checkout() {
 														.payment_method as string,
 												};
 
+												// This data is what will be posted to /create
 												console.info('Posting data', {
 													...data,
 													paymentFields,
@@ -462,34 +464,26 @@ export function Checkout() {
 												value={recaptchaToken}
 											/>
 											<StripeCardForm
-												onCardNumberChange={(
-													event: StripeCardNumberElementChangeEvent,
-												) => {
-													console.info(event);
+												onCardNumberChange={() => {
+													// no-op
 												}}
-												onExpiryChange={(
-													event: StripeCardExpiryElementChangeEvent,
-												) => {
-													console.info(event);
+												onExpiryChange={() => {
+													// no-op
 												}}
-												onCvcChange={(
-													event: StripeCardCvcElementChangeEvent,
-												) => {
-													console.info(event);
+												onCvcChange={() => {
+													// no-op
 												}}
 												errors={{}}
 												recaptcha={
 													<Recaptcha
-														// let's change the type of this to Promise
+														// We could change the parents type to Promise and uses await here, but that has
+														// a lot of refactoring with not too much gain
 														onRecaptchaCompleted={(token) => {
 															setRecaptchaToken(token);
 															void fetch(
 																'/stripe/create-setup-intent/recaptcha',
 																{
 																	method: 'POST',
-																	headers: {
-																		'Content-Type': 'application/json',
-																	},
 																	body: JSON.stringify({
 																		isTestUser,
 																		stripePublicKey,
@@ -505,7 +499,9 @@ export function Checkout() {
 																	),
 																);
 														}}
-														onRecaptchaExpired={() => console.info('expired')}
+														onRecaptchaExpired={() => {
+															// no-op
+														}}
 													/>
 												}
 											/>
@@ -517,7 +513,8 @@ export function Checkout() {
 							<DefaultPaymentButton
 								buttonText="Pay now"
 								onClick={() => {
-									console.info('Submit button click');
+									// no-op
+									// This isn't needed because we are now using the form onSubmit handler
 								}}
 								type="submit"
 							/>
