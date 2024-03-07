@@ -19,7 +19,7 @@ case class StripeConfig(
       (australiaAccount, StripeGatewayPaymentIntentsAUD),
       (unitedStatesAccount, StripeGatewayPaymentIntentsDefault), // US currently uses default account for recurring
     ).map { config =>
-      StripePublicKey.get(config._1.publicKey) -> config
+      config._1.publicKey -> config
     }.toMap
 
   def forPublicKey(publicKey: StripePublicKey): (StripeAccountConfig, PaymentGateway) =
@@ -50,7 +50,7 @@ case class StripeConfig(
     }
 }
 
-case class StripeAccountConfig(secretKey: String, publicKey: String)
+case class StripeAccountConfig(secretKey: String, publicKey: StripePublicKey)
 
 class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String = "stripe")
     extends TouchpointConfigProvider[StripeConfig](config, defaultStage) {
@@ -64,7 +64,7 @@ class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String =
   private def accountFromConfig(config: Config, prefix: String, country: String) =
     StripeAccountConfig(
       secretKey = config.getString(s"$prefix.$country.api.key.secret"),
-      publicKey = config.getString(s"$prefix.$country.api.key.public"),
+      publicKey = StripePublicKey.get(config.getString(s"$prefix.$country.api.key.public")),
     )
 
   private def stripeVersion(config: Config): Option[String] = {
