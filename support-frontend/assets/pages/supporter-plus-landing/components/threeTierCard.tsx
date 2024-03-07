@@ -205,6 +205,7 @@ export function ThreeTierCard({
 	}${currency}${currentPrice}/${
 		recurringContributionPeriodMap[paymentFrequency]
 	}`;
+	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	return (
 		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
 			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
@@ -230,6 +231,7 @@ export function ThreeTierCard({
 						onClick={() => {
 							linkCtaClickHandler(currentPrice, paymentFrequency, currencyId);
 						}}
+						data-qm-trackable={quantumMetricButtonRef}
 					>
 						Subscribe
 					</LinkButton>
@@ -247,7 +249,7 @@ export function ThreeTierCard({
 								currencyId,
 							)
 						}
-						data-qm-trackable={`tier-${cardTier}-button`}
+						data-qm-trackable={quantumMetricButtonRef}
 					>
 						Subscribe
 					</Button>
