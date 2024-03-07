@@ -66,6 +66,8 @@ export function SupporterPlusCheckout({
 	);
 	const { switches } = useContributionsSelector(
 		(state) => state.common.settings,
+	const { selectedAmounts, otherAmounts } = useContributionsSelector(
+		(state) => state.page.checkoutForm.product,
 	);
 	const contributionType = useContributionsSelector(getContributionType);
 	const tierContributionType =
@@ -217,7 +219,6 @@ export function SupporterPlusCheckout({
 							`}
 							paymentButtons={getPaymentMethodButtons(
 								contributionType,
-								switches,
 								countryId,
 								countryGroupId,
 							)}
