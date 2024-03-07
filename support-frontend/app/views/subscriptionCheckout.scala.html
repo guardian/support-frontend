@@ -67,14 +67,14 @@
 
       window.guardian.stripeKeyDefaultCurrencies = {
         REGULAR: {
-          default: "@defaultStripeConfig.forCurrency(None).publicKey",
-          test: "@testStripeConfig.forCurrency(None).publicKey"
+          default: "@defaultStripeConfig.forCurrency(None).publicKey.value",
+          test: "@testStripeConfig.forCurrency(None).publicKey.value"
         }
       };
       window.guardian.stripeKeyAustralia = {
         REGULAR: {
-          default: "@defaultStripeConfig.forCurrency(Some(AUD)).publicKey",
-          test: "@testStripeConfig.forCurrency(Some(AUD)).publicKey"
+          default: "@defaultStripeConfig.forCurrency(Some(AUD)).publicKey.value",
+          test: "@testStripeConfig.forCurrency(Some(AUD)).publicKey.value"
         }
       };
       window.guardian.stripeKeyUnitedStates = window.guardian.stripeKeyDefaultCurrencies;

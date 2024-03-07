@@ -62,8 +62,6 @@ class StripeController(
       val cloudwatchEvent = AwsCloudWatchMetricSetup.createSetupIntentRequest(stage, "v2Recaptcha")
       AwsCloudWatchMetricPut(client)(cloudwatchEvent)
 
-      val testPublicKeys = Set(testStripeConfig.australiaAccount.publicKey, testStripeConfig.defaultAccount.publicKey)
-
       // Requests against the test account do not require verification
       val verified =
         if (recaptchaEnabled)
