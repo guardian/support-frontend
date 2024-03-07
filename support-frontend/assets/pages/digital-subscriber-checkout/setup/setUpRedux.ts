@@ -13,7 +13,6 @@ import {
 	getValidPaymentMethods,
 } from 'helpers/forms/checkouts';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { setBillingState } from 'helpers/redux/checkout/address/actions';
@@ -43,12 +42,10 @@ function getInitialPaymentMethod(
 	contributionType: ContributionType,
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
-	switches: Switches,
 ): PaymentMethod {
 	const paymentMethodFromSession = getPaymentMethodFromSession();
 	const validPaymentMethods = getValidPaymentMethods(
 		contributionType,
-		switches,
 		countryId,
 		countryGroupId,
 	);
@@ -166,7 +163,6 @@ function selectInitialContributionTypeAndPaymentMethod(
 	contributionTypes: ContributionTypes,
 ): ContributionType {
 	const { countryId } = state.common.internationalisation;
-	const { switches } = state.common.settings;
 	const { countryGroupId } = state.common.internationalisation;
 	const contributionType = getInitialContributionType(
 		countryGroupId,
@@ -176,7 +172,6 @@ function selectInitialContributionTypeAndPaymentMethod(
 		contributionType,
 		countryId,
 		countryGroupId,
-		switches,
 	);
 	dispatch(setProductType('DigitalPack'));
 	dispatch(setPaymentMethod({ paymentMethod }));
