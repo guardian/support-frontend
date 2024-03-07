@@ -13,11 +13,11 @@ class PaymentConfigSpec extends AnyFlatSpec with Matchers with LazyLogging {
     Configuration.stage should be(Stages.DEV)
 
     val stripeDefault = config.stripeConfigProvider.get().forCurrency(None)
-    stripeDefault.publicKey should be("pk_test_Qm3CGRdrV4WfGYCpm0sftR0f")
+    stripeDefault.publicKey.value should be("pk_test_Qm3CGRdrV4WfGYCpm0sftR0f")
     stripeDefault.secretKey.length should be > 0
 
     val stripeAustralia = config.stripeConfigProvider.get().forCurrency(Some(AUD))
-    stripeAustralia.publicKey should be("pk_test_m0sjR1tGM22fpaz48csa49us")
+    stripeAustralia.publicKey.value should be("pk_test_m0sjR1tGM22fpaz48csa49us")
     stripeAustralia.secretKey.length should be > 0
 
     // This won't work on TeamCity unless we add the version into reference.conf in support-config
