@@ -8,7 +8,7 @@ import com.gu.stripe.Stripe._
 import io.circe.syntax._
 import com.gu.support.config.{StripeAccountConfig, StripeConfig}
 import com.gu.support.encoding.Codec
-import com.gu.support.workers.StripePublicKey
+import com.gu.support.workers.{StripePublicKey, StripeSecretKey}
 import com.gu.support.workers.exceptions.{RetryException, RetryLimited, RetryNone, RetryUnlimited}
 import com.gu.support.zuora.api.{
   PaymentGateway,
@@ -39,20 +39,20 @@ class StripeService(val config: StripeConfig, client: FutureHttpClient, baseUrl:
   def withCurrency(currency: Currency): StripeServiceForCurrency = {
     logger.warn(s"DEPRECATED FALLBACK - using currency $currency to determine stripe gateway")
     val gateway = if (currency == AUD) StripeGatewayPaymentIntentsAUD else StripeGatewayPaymentIntentsDefault
-    val stripeAccountConfig = config.forCurrency(Some(currency))
+    val stripeAccountConfig = config.forCurrency(Some(currency)).secretKey
     new StripeServiceForCurrency(this, stripeAccountConfig, gateway)
   }
 
   def withPublicKey(stripePublicKey: StripePublicKey): StripeServiceForCurrency = {
-    val (stripeAccountConfig, gateway) = config.forPublicKey(stripePublicKey)
-    new StripeServiceForCurrency(this, stripeAccountConfig, gateway)
+    val (stripeSecretKey, gateway) = config.forPublicKey(stripePublicKey)
+    new StripeServiceForCurrency(this, stripeSecretKey, gateway)
   }
 
 }
 
 class StripeServiceForCurrency(
     stripeService: StripeService,
-    stripeAccountConfig: StripeAccountConfig,
+    stripeSecretKey: StripeSecretKey,
     val paymentIntentGateway: PaymentGateway,
 ) {
 
@@ -69,7 +69,7 @@ class StripeServiceForCurrency(
   }
 
   private def getHeaders(): Map[String, String] = {
-    val authorizationHeader = "Authorization" -> s"Bearer ${stripeAccountConfig.secretKey}"
+    val authorizationHeader = "Authorization" -> s"Bearer ${stripeSecretKey.secret}"
     val versionHeader = stripeService.config.version.map("Stripe-Version" -> _)
     List(Some(authorizationHeader), versionHeader).flatten.toMap
   }

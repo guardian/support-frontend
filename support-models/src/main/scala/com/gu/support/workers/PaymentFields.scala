@@ -22,6 +22,7 @@ object StripePublicKey {
   def parse(value: String): Either[String, StripePublicKey] =
     if (
       value.length > 10 &&
+      value.startsWith("pk_") &&
       value.forall { char =>
         (char >= 'a' && char <= 'z') ||
         (char >= 'A' && char <= 'Z') ||
@@ -32,13 +33,37 @@ object StripePublicKey {
     else Left(s"StripePublicKey <$value> had invalid characters")
 
   def get(value: String): StripePublicKey =
-    parse(value).left.map(new Throwable(_)).toTry.get
+    parse(value).left.map(new Throwable(_)).toTry.get // Try.get will rethrow the useful error
 
   implicit val decoder: Decoder[StripePublicKey] = Decoder.decodeString.emap(parse)
   implicit val encoder: Encoder[StripePublicKey] = Encoder.encodeString.contramap[StripePublicKey](_.value)
 
 }
 case class StripePublicKey private (value: String) extends AnyVal
+
+object StripeSecretKey {
+
+  def parse(value: String): Either[String, StripeSecretKey] =
+    if (
+      value.length > 10 &&
+      value.startsWith("sk_") &&
+      value.forall { char =>
+        (char >= 'a' && char <= 'z') ||
+        (char >= 'A' && char <= 'Z') ||
+        (char >= '0' && char <= '9') ||
+        char == '_'
+      }
+    ) Right(new StripeSecretKey(value))
+    else Left(s"StripeSecretKey <$value> had invalid characters")
+
+  def get(value: String): StripeSecretKey =
+    parse(value).left.map(new Throwable(_)).toTry.get // Try.get will rethrow the useful error
+
+  implicit val decoder: Decoder[StripeSecretKey] = Decoder.decodeString.emap(parse)
+  implicit val encoder: Encoder[StripeSecretKey] = Encoder.encodeString.contramap[StripeSecretKey](_.secret)
+
+}
+case class StripeSecretKey private (secret: String) extends AnyVal
 
 object PaymentMethodId {
 

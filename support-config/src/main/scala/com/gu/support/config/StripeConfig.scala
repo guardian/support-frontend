@@ -3,7 +3,7 @@ package com.gu.support.config
 import com.gu.i18n.{Country, Currency}
 import com.gu.i18n.Currency.AUD
 import com.gu.monitoring.SafeLogger
-import com.gu.support.workers.StripePublicKey
+import com.gu.support.workers.{StripePublicKey, StripeSecretKey}
 import com.gu.support.zuora.api.{PaymentGateway, StripeGatewayPaymentIntentsAUD, StripeGatewayPaymentIntentsDefault}
 import com.typesafe.config.Config
 
@@ -13,16 +13,13 @@ case class StripeConfig(
     unitedStatesAccount: StripeAccountConfig,
     version: Option[String],
 ) {
-  val secretForPublic: Map[StripePublicKey, (StripeAccountConfig, PaymentGateway)] =
-    List(
-      (defaultAccount, StripeGatewayPaymentIntentsDefault),
-      (australiaAccount, StripeGatewayPaymentIntentsAUD),
-      (unitedStatesAccount, StripeGatewayPaymentIntentsDefault), // US currently uses default account for recurring
-    ).map { config =>
-      config._1.publicKey -> config
-    }.toMap
+  private val secretForPublic: Map[StripePublicKey, (StripeSecretKey, PaymentGateway)] = Map(
+    defaultAccount.publicKey -> (defaultAccount.secretKey, StripeGatewayPaymentIntentsDefault),
+    australiaAccount.publicKey -> (australiaAccount.secretKey, StripeGatewayPaymentIntentsAUD),
+    unitedStatesAccount.publicKey -> (unitedStatesAccount.secretKey, StripeGatewayPaymentIntentsDefault), // US currently uses default account for recurring
+  )
 
-  def forPublicKey(publicKey: StripePublicKey): (StripeAccountConfig, PaymentGateway) =
+  def forPublicKey(publicKey: StripePublicKey): (StripeSecretKey, PaymentGateway) =
     secretForPublic(publicKey)
 
   // fallback for SupportWorkers (recurring products) which don't support a US Stripe account yet.
@@ -50,7 +47,7 @@ case class StripeConfig(
     }
 }
 
-case class StripeAccountConfig(secretKey: String, publicKey: StripePublicKey)
+case class StripeAccountConfig(secretKey: StripeSecretKey, publicKey: StripePublicKey)
 
 class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String = "stripe")
     extends TouchpointConfigProvider[StripeConfig](config, defaultStage) {
@@ -63,7 +60,7 @@ class StripeConfigProvider(config: Config, defaultStage: Stage, prefix: String =
 
   private def accountFromConfig(config: Config, prefix: String, country: String) =
     StripeAccountConfig(
-      secretKey = config.getString(s"$prefix.$country.api.key.secret"),
+      secretKey = StripeSecretKey.get(config.getString(s"$prefix.$country.api.key.secret")),
       publicKey = StripePublicKey.get(config.getString(s"$prefix.$country.api.key.public")),
     )
 
