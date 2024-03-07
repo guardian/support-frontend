@@ -91,10 +91,8 @@ object CodecHelpers {
       case success @ Right(_) => success
       case Left(leftFailure) =>
         rightDecoder(hCursor).left.map { rightFailure: DecodingFailure =>
-          val leftPath = leftFailure.pathToRootString.getOrElse("")
-          val rightPath = rightFailure.pathToRootString.getOrElse("")
-          val leftPart = s"${leftFailure.message} $leftPath"
-          val rightPart = s"${rightFailure.message} $rightPath"
+          val leftPart = leftFailure.message + " " + leftFailure.pathToRootString.getOrElse("")
+          val rightPart = rightFailure.message + " " + rightFailure.pathToRootString.getOrElse("")
           DecodingFailure(CustomReason(leftPart + s"\n OR " + rightPart), Nil)
         }
     }
