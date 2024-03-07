@@ -17,6 +17,7 @@ app/npm-debug.log
 coverage/
 package-lock.json
 build-storybook.log
+tsconfig.tsbuildinfo
 
 dev
 logs
