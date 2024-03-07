@@ -64,11 +64,6 @@ export function SupporterPlusCheckout({
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const { switches } = useContributionsSelector(
-		(state) => state.common.settings,
-	const { selectedAmounts, otherAmounts } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
 	const contributionType = useContributionsSelector(getContributionType);
 	const tierContributionType =
 		contributionType === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
