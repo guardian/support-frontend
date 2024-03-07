@@ -522,7 +522,9 @@ function PaperCheckoutForm(props: PropTypes) {
 							validateForm={props.validateForm}
 							buttonText="Pay now"
 							csrf={props.csrf}
-							setStripePublicKey={props.setStripePublicKey}
+							setStripePublicKey={(key: string) =>
+								props.setStripePublicKey(key)
+							}
 						/>
 					</FormSectionHiddenUntilSelected>
 					<FormSectionHiddenUntilSelected

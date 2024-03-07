@@ -1,4 +1,3 @@
-import type { ActionCreatorWithPayload } from '@reduxjs/toolkit';
 import { Elements } from '@stripe/react-stripe-js';
 import * as stripeJs from '@stripe/stripe-js';
 import { useEffect, useState } from 'react';
@@ -20,10 +19,7 @@ export type PropTypes = {
 	validateForm: () => void;
 	buttonText: string;
 	csrf: CsrfState;
-	setStripePublicKey: ActionCreatorWithPayload<
-		string,
-		'stripeAccountDetails/setStripePublicKey'
-	>;
+	setStripePublicKey: (payload: string) => void;
 };
 
 function StripeProviderForCountry(props: PropTypes): JSX.Element {

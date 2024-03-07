@@ -471,7 +471,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 									: 'Pay now'
 							}
 							csrf={props.csrf}
-							setStripePublicKey={props.setStripePublicKey}
+							setStripePublicKey={(key: string) =>
+								props.setStripePublicKey(key)
+							}
 						/>
 					</FormSectionHiddenUntilSelected>
 					<FormSectionHiddenUntilSelected

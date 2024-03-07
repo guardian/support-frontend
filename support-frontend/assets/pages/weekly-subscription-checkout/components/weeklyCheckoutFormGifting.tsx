@@ -419,7 +419,9 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 							validateForm={props.validateForm}
 							buttonText="Pay now"
 							csrf={props.csrf}
-							setStripePublicKey={props.setStripePublicKey}
+							setStripePublicKey={(key: string) =>
+								props.setStripePublicKey(key)
+							}
 						/>
 					</FormSectionHiddenUntilSelected>
 					<FormSectionHiddenUntilSelected
