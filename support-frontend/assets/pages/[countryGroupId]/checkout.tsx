@@ -146,10 +146,12 @@ type Products = Output<typeof ProductsSchema>;
 function describeProduct(product: string, ratePlan: string) {
 	let description = `${product} - ${ratePlan}`;
 	let frequency = '';
+	let showDeliveryFields = false;
 
 	if (product === 'HomeDelivery') {
 		frequency = 'month';
 		description = `${ratePlan} paper`;
+		showDeliveryFields = true;
 
 		if (ratePlan === 'Sixday') {
 			description = 'Six day paper';
@@ -168,10 +170,16 @@ function describeProduct(product: string, ratePlan: string) {
 		}
 	}
 
+	if (product === 'NationalDelivery') {
+		showDeliveryFields = true;
+	}
+
 	if (
 		product === 'GuardianWeeklyDomestic' ||
 		product === 'GuardianWeeklyRestOfWorld'
 	) {
+		showDeliveryFields = true;
+
 		if (ratePlan === 'OneYearGift') {
 			frequency = 'year';
 			description = 'The Guardian Weekly Gift Subscription';
@@ -198,7 +206,7 @@ function describeProduct(product: string, ratePlan: string) {
 		}
 	}
 
-	return { description, frequency };
+	return { description, frequency, showDeliveryFields };
 }
 
 /** Page styles - styles used specifically for the checkout page */
