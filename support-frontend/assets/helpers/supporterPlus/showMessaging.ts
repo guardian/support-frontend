@@ -24,12 +24,8 @@ export function shouldShowSupporterPlusMessaging(
 		contributionType,
 		promotion,
 	);
+
 	const selectedAmount = selectedAmounts[contributionType];
-	console.log(
-		'TEST shouldShowSupporterPlusMessaging.benefitsThreshold/selectedAmount',
-		benefitsThreshold,
-		selectedAmount,
-	);
 
 	if (selectedAmount === 'other') {
 		const otherAmount = otherAmounts[contributionType].amount;

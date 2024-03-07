@@ -69,11 +69,6 @@ export function getThresholdPrice(
 	if (isRecurring(contributionType)) {
 		const countryGroupThresholds =
 			benefitsThresholdsByCountryGroup[countryGroupId];
-		console.log(
-			'TEST promotion?.discountedPrice,  countryGroupThresholds[contributionType]',
-			promotion?.discountedPrice,
-			countryGroupThresholds[contributionType],
-		);
 		const threshold = promotion
 			? promotion.discountedPrice
 			: countryGroupThresholds[contributionType];

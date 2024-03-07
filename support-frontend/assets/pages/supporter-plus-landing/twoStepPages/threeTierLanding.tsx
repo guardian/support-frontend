@@ -285,7 +285,6 @@ export function ThreeTierLanding(): JSX.Element {
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
 	) => {
-		console.log(`TEST handleButtonCtaClick:${price}`);
 		dispatch(
 			setSelectedAmount({
 				contributionType,

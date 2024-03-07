@@ -13,6 +13,7 @@ import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
+import type { ThresholdAmounts } from 'helpers/contributions';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotion } from 'helpers/productPrice/promotions';
@@ -31,6 +32,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { CheckoutDivider } from '../components/checkoutDivider';
@@ -65,10 +67,6 @@ export function SupporterPlusCheckout({
 	const { switches } = useContributionsSelector(
 		(state) => state.common.settings,
 	);
-	const { selectedAmounts, otherAmounts } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
-	console.log('TEST SupporterPlusCheckout.selectedAmounts', selectedAmounts);
 	const contributionType = useContributionsSelector(getContributionType);
 	const tierContributionType =
 		contributionType === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
@@ -88,6 +86,9 @@ export function SupporterPlusCheckout({
 		getUserSelectedAmountBeforeAmendment,
 	);
 	const otherAmount = useContributionsSelector(getUserSelectedOtherAmount);
+	const { selectedAmounts, otherAmounts } = useContributionsSelector(
+		(state) => state.page.checkoutForm.product,
+	);
 	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
 		contributionType,
 		selectedAmounts,
@@ -95,7 +96,36 @@ export function SupporterPlusCheckout({
 		countryGroupId,
 		promotion,
 	);
-	console.log('TEST amountIsAboveThreshold', amountIsAboveThreshold);
+
+	const promotionMonthly = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.productPrices,
+			countryId,
+			'Monthly',
+		),
+	);
+	const monthlyBenefitsThreshold = getThresholdPrice(
+		countryGroupId,
+		'MONTHLY',
+		promotionMonthly,
+	);
+	const promotionAnnual = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.productPrices,
+			countryId,
+			'Annual',
+		),
+	);
+	const annualBenefitsThreshold = getThresholdPrice(
+		countryGroupId,
+		'ANNUAL',
+		promotionAnnual,
+	);
+	const thresholdAmounts: ThresholdAmounts = {
+		MONTHLY: monthlyBenefitsThreshold,
+		ANNUAL: annualBenefitsThreshold,
+	};
+
 	const navigate = useNavigate();
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
@@ -148,6 +178,7 @@ export function SupporterPlusCheckout({
 					) : (
 						<ContributionsOrderSummaryContainer
 							inThreeTier={inThreeTier}
+							amountIsAboveThreshold={amountIsAboveThreshold}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}
@@ -198,6 +229,7 @@ export function SupporterPlusCheckout({
 						contributionType={contributionType}
 						currency={currencyId}
 						amount={amount}
+						amountThresholds={thresholdAmounts}
 						amountIsAboveThreshold={amountIsAboveThreshold}
 						productNameAboveThreshold={
 							inThreeTier ? 'All-access digital' : 'Supporter Plus'
