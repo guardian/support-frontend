@@ -55,18 +55,16 @@ function getCountryGroup(country: IsoCountry): CountryGroup {
 
 function getProductPrice(
 	productPrices: ProductPrices,
-	country: IsoCountry | CountryGroupId,
+	country: IsoCountry,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
+	countryGroupId?: CountryGroupId,
 ): ProductPrice {
-	// Swaps out IsoCountry for wider CountryGroupId
-	const isIsoCountry = (x: IsoCountry | CountryGroupId): x is IsoCountry =>
-		country.includes(x);
-	const countryGroupId = isIsoCountry(country)
-		? CountryGroupHelper.fromCountry(country) ?? GBPCountries
-		: country;
-	const countryGroup = countryGroups[countryGroupId];
+	const countryGroup =
+		countryGroups[
+			countryGroupId ?? CountryGroupHelper.fromCountry(country) ?? GBPCountries
+		];
 	const productPrice =
 		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
 			billingPeriod

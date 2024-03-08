@@ -79,14 +79,14 @@ export function getLowerBenefitsThresholds(
 		const promotionMonthly = useContributionsSelector((state) =>
 			getPromotion(
 				state.page.checkoutForm.product.productPrices,
-				countryGroupId,
+				state.common.internationalisation.countryId,
 				'Monthly',
 			),
 		);
 		const promotionAnnual = useContributionsSelector((state) =>
 			getPromotion(
 				state.page.checkoutForm.product.productPrices,
-				countryGroupId,
+				state.common.internationalisation.countryId,
 				'Annual',
 			),
 		);

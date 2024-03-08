@@ -25,7 +25,7 @@ export function shouldShowSupporterPlusMessaging(
 	const promotion = useContributionsSelector((state) =>
 		getPromotion(
 			state.page.checkoutForm.product.productPrices,
-			countryGroupId,
+			state.common.internationalisation.countryId,
 			billingPeriod,
 		),
 	);
