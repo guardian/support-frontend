@@ -184,6 +184,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 	);
 	const billingPeriod = (productType[0] +
 		productType.slice(1).toLowerCase()) as BillingPeriod;
+
 	const promotion = useContributionsSelector((state) =>
 		getPromotionUndefined(
 			state.page.checkoutForm.product.productPrices,

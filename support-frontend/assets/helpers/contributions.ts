@@ -131,8 +131,6 @@ export type OtherAmounts = Record<
 
 export type SelectedAmounts = Record<ContributionType, number | 'other'>;
 
-export type ThresholdAmounts = Record<RegularContributionType, number>;
-
 const getAmount = (
 	selectedAmounts: SelectedAmounts,
 	otherAmounts: OtherAmounts,

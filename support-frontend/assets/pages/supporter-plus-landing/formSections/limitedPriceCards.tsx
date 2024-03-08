@@ -23,7 +23,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
+import { getLowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 
 const accordionHeading = css`
 	${textSans.small()};
@@ -100,15 +100,13 @@ export function LimitedPriceCards(): JSX.Element {
 		dispatch(
 			setSelectedAmount({
 				contributionType,
-				amount:
-					benefitsThresholdsByCountryGroup[countryGroupId][type].toString(),
+				amount: getLowerBenefitsThresholds(countryGroupId)[type].toString(),
 			}),
 		);
 		dispatch(
 			setSelectedAmountBeforeAmendment({
 				contributionType,
-				amount:
-					benefitsThresholdsByCountryGroup[countryGroupId][type].toString(),
+				amount: getLowerBenefitsThresholds(countryGroupId)[type].toString(),
 			}),
 		);
 	}, []);
@@ -130,7 +128,7 @@ export function LimitedPriceCards(): JSX.Element {
 								subtitle="and&nbsp;unlock exclusive extras"
 								contributionType={selectedTab}
 								countryGroupId={countryGroupId}
-								prices={benefitsThresholdsByCountryGroup[countryGroupId]}
+								prices={getLowerBenefitsThresholds(countryGroupId)}
 								onPriceChange={({ contributionType, amount }) => {
 									onTabChange(contributionType);
 									dispatch(

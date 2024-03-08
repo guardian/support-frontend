@@ -1,6 +1,11 @@
 import DOMPurify from 'dompurify';
 import snarkdown from 'snarkdown';
+import CountryGroupHelper from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import {
+	type CountryGroupId,
+	GBPCountries,
+} from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -106,15 +111,21 @@ function getAppliedPromo(promotions?: Promotion[]): Promotion | undefined {
 
 function getPromotion(
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: IsoCountry | CountryGroupId,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
 ): Promotion | undefined {
+	// Swaps out IsoCountry for wider CountryGroupId
+	const isIsoCountry = (x: IsoCountry | CountryGroupId): x is IsoCountry =>
+		country.includes(x);
+	const countryGroupId = isIsoCountry(country)
+		? CountryGroupHelper.fromCountry(country) ?? GBPCountries
+		: country;
 	return getAppliedPromo(
 		getProductPrice(
 			productPrices,
-			country,
+			countryGroupId,
 			billingPeriod,
 			fulfilmentOption,
 			productOption,

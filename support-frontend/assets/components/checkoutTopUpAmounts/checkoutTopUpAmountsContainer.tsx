@@ -1,4 +1,3 @@
-import { checkoutTopUpUpperThresholdsByCountryGroup } from 'helpers/checkoutTopUp/upperThreshold';
 import { currencies } from 'helpers/internationalisation/currency';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -10,7 +9,10 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
+import {
+	getLowerBenefitsThresholds,
+	upperBenefitsThresholds,
+} from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { CheckoutTopUpAmountsProps } from './checkoutTopUpAmounts';
 
@@ -35,11 +37,9 @@ export function CheckoutTopUpAmountsContainer({
 	const isWithinThreshold =
 		contributionType !== 'ONE_OFF' &&
 		amountBeforeAmendments >=
-			benefitsThresholdsByCountryGroup[countryGroupId][contributionType] &&
+			getLowerBenefitsThresholds(countryGroupId, true)[contributionType] &&
 		amountBeforeAmendments <=
-			checkoutTopUpUpperThresholdsByCountryGroup[countryGroupId][
-				contributionType
-			];
+			upperBenefitsThresholds[countryGroupId][contributionType];
 
 	const timePeriods = {
 		ONE_OFF: 'one-off',

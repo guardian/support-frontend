@@ -3,7 +3,6 @@ import { neutral, textSans } from '@guardian/source-foundations';
 import type {
 	ContributionType,
 	RegularContributionType,
-	ThresholdAmounts,
 } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -16,6 +15,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { getLowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	getDateWithOrdinal,
@@ -40,7 +40,6 @@ interface PaymentTsAndCsProps {
 	countryGroupId: CountryGroupId;
 	currency: IsoCurrency;
 	amount: number;
-	amountThresholds: ThresholdAmounts;
 	amountIsAboveThreshold: boolean;
 	productNameAboveThreshold: string;
 }
@@ -114,7 +113,6 @@ export function PaymentTsAndCs({
 	countryGroupId,
 	currency,
 	amount,
-	amountThresholds,
 	amountIsAboveThreshold,
 	productNameAboveThreshold,
 }: PaymentTsAndCsProps): JSX.Element {
@@ -153,9 +151,10 @@ export function PaymentTsAndCs({
 		);
 	};
 
+	const thresholdAmounts = getLowerBenefitsThresholds(countryGroupId, true);
 	const thresholdDescription = (contributionType: RegularContributionType) => {
 		return `${currencyGlyph}${
-			amountThresholds[contributionType]
+			thresholdAmounts[contributionType]
 		} per ${frequencySingular(contributionType)}`;
 	};
 

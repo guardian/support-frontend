@@ -13,7 +13,6 @@ import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { PersonalDetailsContainer } from 'components/personalDetails/personalDetailsContainer';
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
-import type { ThresholdAmounts } from 'helpers/contributions';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotion } from 'helpers/productPrice/promotions';
@@ -32,7 +31,6 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { CheckoutDivider } from '../components/checkoutDivider';
@@ -93,35 +91,6 @@ export function SupporterPlusCheckout({
 		countryGroupId,
 		promotion,
 	);
-
-	const promotionMonthly = useContributionsSelector((state) =>
-		getPromotion(
-			state.page.checkoutForm.product.productPrices,
-			countryId,
-			'Monthly',
-		),
-	);
-	const monthlyBenefitsThreshold = getThresholdPrice(
-		countryGroupId,
-		'MONTHLY',
-		promotionMonthly,
-	);
-	const promotionAnnual = useContributionsSelector((state) =>
-		getPromotion(
-			state.page.checkoutForm.product.productPrices,
-			countryId,
-			'Annual',
-		),
-	);
-	const annualBenefitsThreshold = getThresholdPrice(
-		countryGroupId,
-		'ANNUAL',
-		promotionAnnual,
-	);
-	const thresholdAmounts: ThresholdAmounts = {
-		MONTHLY: monthlyBenefitsThreshold,
-		ANNUAL: annualBenefitsThreshold,
-	};
 
 	const navigate = useNavigate();
 	const { abParticipations } = useContributionsSelector(
@@ -225,7 +194,6 @@ export function SupporterPlusCheckout({
 						contributionType={contributionType}
 						currency={currencyId}
 						amount={amount}
-						amountThresholds={thresholdAmounts}
 						amountIsAboveThreshold={amountIsAboveThreshold}
 						productNameAboveThreshold={
 							inThreeTier ? 'All-access digital' : 'Supporter Plus'

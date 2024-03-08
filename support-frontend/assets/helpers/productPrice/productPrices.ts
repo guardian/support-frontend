@@ -2,6 +2,7 @@ import { CountryGroup as CountryGroupHelper } from 'helpers/internationalisation
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type {
 	CountryGroup,
+	CountryGroupId,
 	CountryGroupName,
 } from 'helpers/internationalisation/countryGroup';
 import {
@@ -54,13 +55,18 @@ function getCountryGroup(country: IsoCountry): CountryGroup {
 
 function getProductPrice(
 	productPrices: ProductPrices,
-	country: IsoCountry,
+	country: IsoCountry | CountryGroupId,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
 ): ProductPrice {
-	const countryGroup = getCountryGroup(country);
-
+	// Swaps out IsoCountry for wider CountryGroupId
+	const isIsoCountry = (x: IsoCountry | CountryGroupId): x is IsoCountry =>
+		country.includes(x);
+	const countryGroupId = isIsoCountry(country)
+		? CountryGroupHelper.fromCountry(country) ?? GBPCountries
+		: country;
+	const countryGroup = countryGroups[countryGroupId];
 	const productPrice =
 		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
 			billingPeriod
