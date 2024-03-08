@@ -77,6 +77,26 @@ function getProductPrice(
 	throw new Error('getProductPrice: product price unavailable');
 }
 
+function getProductPriceUndefined(
+	productPrices: ProductPrices,
+	country: IsoCountry,
+	billingPeriod: BillingPeriod,
+	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
+	productOption: ProductOptions = NoProductOptions,
+	countryGroupId?: CountryGroupId,
+): Promotion[] | undefined {
+	const countryGroup =
+		countryGroups[
+			countryGroupId ?? CountryGroupHelper.fromCountry(country) ?? GBPCountries
+		];
+	const productPrice =
+		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
+			billingPeriod
+		]?.[countryGroup.currency]?.promotions;
+
+	return productPrice;
+}
+
 const showPrice = (p: ProductPrice, isExtended = true): string => {
 	const showGlyph = isExtended ? extendedGlyph : glyph;
 	return `${showGlyph(p.currency)}${fixDecimals(p.price)}`;
@@ -122,6 +142,7 @@ const getDiscountVsRetail = (
 
 export {
 	getProductPrice,
+	getProductPriceUndefined,
 	getFirstValidPrice,
 	getCurrency,
 	getCountryGroup,

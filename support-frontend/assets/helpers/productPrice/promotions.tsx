@@ -10,7 +10,11 @@ import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
-import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
+import {
+	getProductPrice,
+	getProductPriceUndefined,
+	isNumeric,
+} from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/urls/url';
@@ -118,6 +122,24 @@ function getPromotion(
 	);
 }
 
+function getPromotionUndefined(
+	productPrices: ProductPrices,
+	country: IsoCountry,
+	billingPeriod: BillingPeriod,
+	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
+	productOption: ProductOptions = NoProductOptions,
+): Promotion | undefined {
+	return getAppliedPromo(
+		getProductPriceUndefined(
+			productPrices,
+			country,
+			billingPeriod,
+			fulfilmentOption,
+			productOption,
+		),
+	);
+}
+
 function getSanitisedHtml(markdownString: string): string {
 	// ensure we don't accidentally inject dangerous html into the page
 	return DOMPurify.sanitize(snarkdown(markdownString), {
@@ -191,6 +213,7 @@ function finalPrice(
 
 export {
 	getPromotion,
+	getPromotionUndefined,
 	getAppliedPromo,
 	applyDiscount,
 	hasIntroductoryPrice,
