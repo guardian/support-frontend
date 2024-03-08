@@ -123,10 +123,10 @@ const termsAndConditions = css`
 export type ContributionsOrderSummaryProps = {
 	description: string;
 	total: number;
+	totalOriginal?: number;
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: CheckListData[];
-	totalOriginal?: number;
 	paymentFrequency?: string;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
@@ -141,10 +141,10 @@ export type ContributionsOrderSummaryProps = {
 export function ContributionsOrderSummary({
 	description,
 	total,
+	totalOriginal,
 	currency,
 	paymentFrequency,
 	checkListData,
-	totalOriginal,
 	onCheckListToggle,
 	headerButton,
 	tsAndCs,
@@ -163,9 +163,11 @@ export function ContributionsOrderSummary({
 	);
 
 	const formattedTotal = simpleFormatAmount(currency, total);
-	const formattedTotalOriginal = totalOriginal
-		? simpleFormatAmount(currency, totalOriginal)
-		: '';
+	const formattedTotalOriginal = simpleFormatAmount(
+		currency,
+		totalOriginal ?? '',
+	);
+
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
@@ -204,7 +206,11 @@ export function ContributionsOrderSummary({
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
 				<p>
-					<span css={originalPriceStrikeThrough}>{formattedTotalOriginal}</span>{' '}
+					{totalOriginal && (
+						<span css={originalPriceStrikeThrough}>
+							{formattedTotalOriginal}
+						</span>
+					)}{' '}
 					{paymentFrequency
 						? `${formattedTotal}/${paymentFrequency}`
 						: formattedTotal}
