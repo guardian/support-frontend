@@ -16,8 +16,6 @@ import { getAmount } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { getPromotionUndefined } from 'helpers/productPrice/promotions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
@@ -179,25 +177,11 @@ export function SupporterPlusThankYou(): JSX.Element {
 		}
 	}, []);
 
-	const { productType } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
-	const billingPeriod = (productType[0] +
-		productType.slice(1).toLowerCase()) as BillingPeriod;
-
-	const promotion = useContributionsSelector((state) =>
-		getPromotionUndefined(
-			state.page.checkoutForm.product.productPrices,
-			countryId,
-			billingPeriod,
-		),
-	);
 	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
 		contributionType,
 		selectedAmounts,
 		otherAmounts,
 		countryGroupId,
-		promotion,
 	);
 
 	const thankYouModuleData = getThankYouModuleData(

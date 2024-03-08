@@ -4,7 +4,9 @@ import type {
 	SelectedAmounts,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { Promotion } from 'helpers/productPrice/promotions';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getPromotion } from 'helpers/productPrice/promotions';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getThresholdPrice } from './benefitsThreshold';
 import { isOneOff } from './isContributionRecurring';
 
@@ -13,12 +15,20 @@ export function shouldShowSupporterPlusMessaging(
 	selectedAmounts: SelectedAmounts,
 	otherAmounts: OtherAmounts,
 	countryGroupId: CountryGroupId,
-	promotion?: Promotion,
 ): boolean {
 	if (isOneOff(contributionType)) {
 		return false;
 	}
 
+	const billingPeriod = (contributionType[0] +
+		contributionType.slice(1).toLowerCase()) as BillingPeriod;
+	const promotion = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.productPrices,
+			countryGroupId,
+			billingPeriod,
+		),
+	);
 	const benefitsThreshold = getThresholdPrice(
 		countryGroupId,
 		contributionType,

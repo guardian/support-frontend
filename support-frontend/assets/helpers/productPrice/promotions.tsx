@@ -15,11 +15,7 @@ import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
-import {
-	getProductPrice,
-	getProductPriceUndefined,
-	isNumeric,
-} from 'helpers/productPrice/productPrices';
+import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/urls/url';
@@ -133,42 +129,6 @@ function getPromotion(
 	);
 }
 
-function getAppliedUndefined(
-	promotions: Promotion[] | undefined,
-): Promotion | undefined {
-	if (promotions && promotions.length > 0) {
-		if (promotions.length > 1) {
-			return (
-				promotions.find(introductoryPrice) ??
-				promotions.find(matchesQueryParam) ??
-				promotions[0]
-			);
-		}
-
-		return promotions[0];
-	}
-
-	return undefined;
-}
-
-function getPromotionUndefined(
-	productPrices: ProductPrices,
-	country: IsoCountry,
-	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
-	productOption: ProductOptions = NoProductOptions,
-): Promotion | undefined {
-	return getAppliedUndefined(
-		getProductPriceUndefined(
-			productPrices,
-			country,
-			billingPeriod,
-			fulfilmentOption,
-			productOption,
-		),
-	);
-}
-
 function getSanitisedHtml(markdownString: string): string {
 	// ensure we don't accidentally inject dangerous html into the page
 	return DOMPurify.sanitize(snarkdown(markdownString), {
@@ -242,7 +202,6 @@ function finalPrice(
 
 export {
 	getPromotion,
-	getPromotionUndefined,
 	getAppliedPromo,
 	applyDiscount,
 	hasIntroductoryPrice,

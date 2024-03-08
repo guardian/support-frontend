@@ -1,8 +1,6 @@
 import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { getPromotion } from 'helpers/productPrice/promotions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -59,29 +57,17 @@ export function DefaultPaymentButtonContainer({
 	const currency = currencies[currencyId];
 	const amountWithCurrency = simpleFormatAmount(currency, selectedAmount);
 
-	const { countryId, countryGroupId } = useContributionsSelector(
+	const { countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
-	);
-	const { productType } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
-	const billingPeriod = (productType[0] +
-		productType.slice(1).toLowerCase()) as BillingPeriod;
-	const promotion = useContributionsSelector((state) =>
-		getPromotion(
-			state.page.checkoutForm.product.productPrices,
-			countryId,
-			billingPeriod,
-		),
 	);
 
 	const testId = 'qa-contributions-landing-submit-contribution-button';
+
 	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
 		contributionType,
 		selectedAmounts,
 		otherAmounts,
 		countryGroupId,
-		promotion,
 	);
 
 	const buttonText = Number.isNaN(selectedAmount)
