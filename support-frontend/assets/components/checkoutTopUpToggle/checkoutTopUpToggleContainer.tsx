@@ -34,8 +34,9 @@ export function CheckoutTopUpToggleContainer({
 		return null;
 	}
 
-	const benefitsThreshold =
-		getLowerBenefitsThresholds(countryGroupId)[contributionType];
+	const benefitsThreshold = getLowerBenefitsThresholds(countryGroupId, true)[
+		contributionType
+	];
 
 	useEffect(() => {
 		dispatch(
