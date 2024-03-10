@@ -124,7 +124,7 @@ function getPromotion(
 	);
 }
 
-function getPromotionUndefined(
+function getPromotionOrUndefined(
 	productPrices: ProductPrices,
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
@@ -234,7 +234,7 @@ function finalPrice(
 
 export {
 	getPromotion,
-	getPromotionUndefined,
+	getPromotionOrUndefined,
 	getAppliedPromo,
 	applyDiscount,
 	hasIntroductoryPrice,
