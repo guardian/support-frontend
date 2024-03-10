@@ -1,6 +1,12 @@
 import DOMPurify from 'dompurify';
 import snarkdown from 'snarkdown';
+import CountryGroupHelper from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+	countryGroups,
+	GBPCountries,
+} from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -10,11 +16,7 @@ import type {
 	ProductPrice,
 	ProductPrices,
 } from 'helpers/productPrice/productPrices';
-import {
-	getProductPrice,
-	getProductPriceUndefined,
-	isNumeric,
-} from 'helpers/productPrice/productPrices';
+import { getProductPrice, isNumeric } from 'helpers/productPrice/productPrices';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import type { Option } from 'helpers/types/option';
 import { getQueryParameter } from 'helpers/urls/url';
@@ -130,7 +132,7 @@ function getPromotionUndefined(
 	productOption: ProductOptions = NoProductOptions,
 ): Promotion | undefined {
 	return getAppliedPromo(
-		getProductPriceUndefined(
+		getPromotions(
 			productPrices,
 			country,
 			billingPeriod,
@@ -138,6 +140,25 @@ function getPromotionUndefined(
 			productOption,
 		),
 	);
+}
+function getPromotions(
+	productPrices: ProductPrices,
+	country: IsoCountry,
+	billingPeriod: BillingPeriod,
+	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
+	productOption: ProductOptions = NoProductOptions,
+	countryGroupId?: CountryGroupId,
+): Promotion[] | undefined {
+	const countryGroup =
+		countryGroups[
+			countryGroupId ?? CountryGroupHelper.fromCountry(country) ?? GBPCountries
+		];
+	const productPrice =
+		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
+			billingPeriod
+		]?.[countryGroup.currency]?.promotions;
+
+	return productPrice;
 }
 
 function getSanitisedHtml(markdownString: string): string {
