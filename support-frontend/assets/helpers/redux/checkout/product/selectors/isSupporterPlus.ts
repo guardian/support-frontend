@@ -40,9 +40,15 @@ export function shouldHideBenefitsList(state: ContributionsState): boolean {
 		return true;
 	}
 
+	const promotion = getPromotionOrUndefined(
+		state.page.checkoutForm.product.productPrices,
+		state.common.internationalisation.countryId,
+		state.page.checkoutForm.product.billingPeriod,
+	);
 	const thresholdPrice = getThresholdPrice(
 		state.common.internationalisation.countryGroupId,
 		contributionType,
+		promotion,
 	);
 	const displayedAmounts =
 		state.common.amounts.amountsCardData[contributionType];
