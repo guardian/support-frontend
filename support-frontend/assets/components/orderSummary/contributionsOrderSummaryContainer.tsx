@@ -9,7 +9,7 @@ import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { getCountryGroup } from 'helpers/productPrice/productPrices';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import { isSupporterPlusPurchase } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
+import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -87,7 +87,7 @@ export function ContributionsOrderSummaryContainer({
 		return originalPrice > currentPrice ? originalPrice : undefined;
 	}
 
-	const isSupporterPlus = useContributionsSelector(isSupporterPlusPurchase);
+	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
 
 	const currency = currencies[currencyId];
 
