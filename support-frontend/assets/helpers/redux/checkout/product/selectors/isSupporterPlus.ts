@@ -47,28 +47,12 @@ export function isSupporterPlus(
 
 export function isSupporterPlusFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
-	if (isOneOff(contributionType)) {
-		return false;
-	}
-
-	const billingPeriod = (contributionType[0] +
-		contributionType.slice(1).toLowerCase()) as BillingPeriod;
-	const promotion = getPromotionOrUndefined(
-		state.page.checkoutForm.product.productPrices,
-		state.common.internationalisation.countryId,
-		billingPeriod,
-	);
-	const benefitsThreshold = getThresholdPrice(
-		state.common.internationalisation.countryGroupId,
+	return isSupporterPlus(
 		contributionType,
-		promotion,
-	);
-	const selectedAmount = getSelectedAmount(
 		state.page.checkoutForm.product.selectedAmounts,
 		state.page.checkoutForm.product.otherAmounts,
-		contributionType,
+		state.common.internationalisation.countryGroupId,
 	);
-	return selectedAmount >= benefitsThreshold;
 }
 
 export function hideBenefitsListFromState(state: ContributionsState): boolean {
@@ -78,10 +62,12 @@ export function hideBenefitsListFromState(state: ContributionsState): boolean {
 		return true;
 	}
 
+	const billingPeriod = (contributionType[0] +
+		contributionType.slice(1).toLowerCase()) as BillingPeriod;
 	const promotion = getPromotionOrUndefined(
 		state.page.checkoutForm.product.productPrices,
 		state.common.internationalisation.countryId,
-		state.page.checkoutForm.product.billingPeriod,
+		billingPeriod,
 	);
 	const benefitsThreshold = getThresholdPrice(
 		state.common.internationalisation.countryGroupId,
