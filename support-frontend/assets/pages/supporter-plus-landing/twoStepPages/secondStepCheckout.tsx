@@ -15,10 +15,7 @@ import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
-import {
-	setOtherAmount,
-	setSelectedAmount,
-} from 'helpers/redux/checkout/product/actions';
+import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	getUserSelectedAmount,
@@ -36,10 +33,7 @@ import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
-import {
-	showThreeTierCheckout,
-	showThreeTierVariablePrice,
-} from '../setup/threeTierChecks';
+import { showThreeTierCheckout } from '../setup/threeTierChecks';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`
@@ -80,12 +74,7 @@ export function SupporterPlusCheckout({
 		(state) => state.common,
 	);
 	const inThreeTier = showThreeTierCheckout(abParticipations);
-	const inThreeTierVariantVariable =
-		showThreeTierVariablePrice(abParticipations);
-
-	const showPriceCards =
-		(inThreeTier && contributionType === 'ONE_OFF') ||
-		(inThreeTierVariantVariable && !amountIsAboveThreshold);
+	const showPriceCards = inThreeTier && contributionType === 'ONE_OFF';
 
 	const changeButton = (
 		<Button
@@ -100,15 +89,6 @@ export function SupporterPlusCheckout({
 						amount: `${amountToBePassed}`,
 					}),
 				);
-				// 3-tier Other amount over S+ threshold will not re-display unless reset
-				if (inThreeTierVariantVariable && amountIsAboveThreshold) {
-					dispatch(
-						setOtherAmount({
-							contributionType: contributionType,
-							amount: '',
-						}),
-					);
-				}
 				dispatch(resetValidation());
 				const destination = `/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`;
 				navigateWithPageView(navigate, destination, abParticipations);

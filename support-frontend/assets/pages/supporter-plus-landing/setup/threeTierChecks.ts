@@ -9,7 +9,3 @@ export const showThreeTierCheckout = (
 
 	return !displayPatronsCheckout || !displaySupportPlusOnlyCheckout;
 };
-
-export const showThreeTierVariablePrice = (): boolean => {
-	return false;
-};

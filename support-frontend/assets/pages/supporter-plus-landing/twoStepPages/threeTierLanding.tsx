@@ -51,8 +51,7 @@ import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierDisclaimer } from '../components/threeTierDisclaimer';
-import { showThreeTierVariablePrice } from '../setup/threeTierChecks';
-import { tierCardsFixed, tierCardsVariable } from '../setup/threeTierConfig';
+import { tierCards } from '../setup/threeTierConfig';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -209,11 +208,7 @@ export function ThreeTierLanding(): JSX.Element {
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
-	const inThreeTierVariantVariable =
-		showThreeTierVariablePrice(abParticipations);
-	const tierCards = inThreeTierVariantVariable
-		? tierCardsVariable
-		: tierCardsFixed;
+
 	const { countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);

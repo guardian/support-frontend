@@ -68,7 +68,6 @@ export type PriceCardsProps = {
 	paymentInterval?: PriceCardPaymentInterval;
 	otherAmountField?: React.ReactNode;
 	hideChooseYourAmount?: boolean;
-	amountIntervalSeperator?: string;
 };
 
 export function PriceCards({
@@ -79,7 +78,6 @@ export function PriceCards({
 	paymentInterval,
 	otherAmountField,
 	hideChooseYourAmount,
-	amountIntervalSeperator = ' per ',
 }: PriceCardsProps): JSX.Element {
 	// Override hideChooseYourAmount if no amounts supplied
 	const enableChooseYourAmountButton = !hideChooseYourAmount || !amounts.length;
@@ -109,9 +107,7 @@ export function PriceCards({
 							alternateLabel={`${simpleFormatAmount(
 								currencies[currency],
 								amount,
-							)}${
-								paymentInterval ? amountIntervalSeperator + paymentInterval : ''
-							}`}
+							)}${paymentInterval ? 'per' + paymentInterval : ''}`}
 						/>
 					))}
 					{enableChooseYourAmountButton && (
