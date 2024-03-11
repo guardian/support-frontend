@@ -6,7 +6,7 @@ import type {
 import { getAmount as getSelectedAmount } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { getPromotionOrUndefined } from 'helpers/productPrice/promotions';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -26,7 +26,7 @@ export function isSupporterPlus(
 	const billingPeriod = (contributionType[0] +
 		contributionType.slice(1).toLowerCase()) as BillingPeriod;
 	const promotion = useContributionsSelector((state) =>
-		getPromotionOrUndefined(
+		getPromotion(
 			state.page.checkoutForm.product.productPrices,
 			state.common.internationalisation.countryId,
 			billingPeriod,
@@ -64,11 +64,13 @@ export function hideBenefitsListFromState(state: ContributionsState): boolean {
 
 	const billingPeriod = (contributionType[0] +
 		contributionType.slice(1).toLowerCase()) as BillingPeriod;
-	const promotion = getPromotionOrUndefined(
+
+	const promotion = getPromotion(
 		state.page.checkoutForm.product.productPrices,
 		state.common.internationalisation.countryId,
 		billingPeriod,
 	);
+
 	const benefitsThreshold = getThresholdPrice(
 		state.common.internationalisation.countryGroupId,
 		contributionType,

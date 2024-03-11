@@ -1,12 +1,6 @@
 import DOMPurify from 'dompurify';
 import snarkdown from 'snarkdown';
-import CountryGroupHelper from 'helpers/internationalisation/classes/countryGroup';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import {
-	countryGroups,
-	GBPCountries,
-} from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
@@ -124,43 +118,6 @@ function getPromotion(
 	);
 }
 
-function getPromotionOrUndefined(
-	productPrices: ProductPrices,
-	country: IsoCountry,
-	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
-	productOption: ProductOptions = NoProductOptions,
-): Promotion | undefined {
-	return getAppliedPromo(
-		getPromotions(
-			productPrices,
-			country,
-			billingPeriod,
-			fulfilmentOption,
-			productOption,
-		),
-	);
-}
-function getPromotions(
-	productPrices: ProductPrices,
-	country: IsoCountry,
-	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
-	productOption: ProductOptions = NoProductOptions,
-	countryGroupId?: CountryGroupId,
-): Promotion[] | undefined {
-	const countryGroup =
-		countryGroups[
-			countryGroupId ?? CountryGroupHelper.fromCountry(country) ?? GBPCountries
-		];
-	const productPrice =
-		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
-			billingPeriod
-		]?.[countryGroup.currency]?.promotions;
-
-	return productPrice;
-}
-
 function getSanitisedHtml(markdownString: string): string {
 	// ensure we don't accidentally inject dangerous html into the page
 	return DOMPurify.sanitize(snarkdown(markdownString), {
@@ -234,7 +191,6 @@ function finalPrice(
 
 export {
 	getPromotion,
-	getPromotionOrUndefined,
 	getAppliedPromo,
 	applyDiscount,
 	hasIntroductoryPrice,
