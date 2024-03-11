@@ -40,6 +40,25 @@ export const recaptchaRequiredPaymentMethods: PaymentMethod[] = [
 	Stripe,
 ];
 
+const paymentMethods = [
+	Stripe,
+	PayPal,
+	DirectDebit,
+	Sepa,
+	ExistingCard,
+	ExistingDirectDebit,
+	AmazonPay,
+	None,
+];
+
+export const isPaymentMethod = (
+	paymentMethod: unknown,
+): paymentMethod is PaymentMethod => {
+	return (
+		typeof paymentMethod === 'string' && paymentMethods.includes(paymentMethod)
+	);
+};
+
 export {
 	Stripe,
 	PayPal,

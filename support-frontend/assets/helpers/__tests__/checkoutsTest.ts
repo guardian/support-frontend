@@ -7,7 +7,7 @@ import {
 	PayPal,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
-import { emptySwitches, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getValidPaymentMethods } from '../forms/checkouts';
 
@@ -29,12 +29,7 @@ describe('checkouts', () => {
 			mock(isSwitchOn).mockImplementation(() => true);
 
 			expect(
-				getValidPaymentMethods(
-					contributionType,
-					emptySwitches,
-					countryId,
-					countryGroupId,
-				),
+				getValidPaymentMethods(contributionType, countryId, countryGroupId),
 			).toEqual([
 				DirectDebit,
 				ExistingCard,
@@ -51,12 +46,7 @@ describe('checkouts', () => {
 			mock(isSwitchOn).mockImplementation(() => false);
 
 			expect(
-				getValidPaymentMethods(
-					contributionType,
-					emptySwitches,
-					countryId,
-					countryGroupId,
-				),
+				getValidPaymentMethods(contributionType, countryId, countryGroupId),
 			).toEqual([]);
 		});
 
@@ -69,12 +59,7 @@ describe('checkouts', () => {
 			);
 
 			expect(
-				getValidPaymentMethods(
-					contributionType,
-					emptySwitches,
-					countryId,
-					countryGroupId,
-				),
+				getValidPaymentMethods(contributionType, countryId, countryGroupId),
 			).toEqual([Stripe]);
 		});
 	});

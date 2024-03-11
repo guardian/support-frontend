@@ -59,9 +59,6 @@ export function SupporterPlusCheckout({
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const { switches } = useContributionsSelector(
-		(state) => state.common.settings,
-	);
 	const { selectedAmounts, otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
 	);
@@ -168,7 +165,6 @@ export function SupporterPlusCheckout({
 							`}
 							paymentButtons={getPaymentMethodButtons(
 								contributionType,
-								switches,
 								countryId,
 								countryGroupId,
 							)}
