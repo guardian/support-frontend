@@ -27,7 +27,7 @@ import {
 } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import { setIsSignedIn, setStorybookUser } from 'helpers/redux/user/actions';
-import { getLowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
+import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 import {
 	largeDonations,
 	SupporterPlusThankYou,
@@ -286,9 +286,10 @@ RecurringNotSignedIn.decorators = [
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
 
-		const thresholdPrice = getLowerBenefitsThresholds(countryGroup, true)[
-			contributionType as RegularContributionType
-		];
+		const thresholdPrice =
+			lowerBenefitsThresholds[countryGroup][
+				contributionType as RegularContributionType
+			];
 
 		store.dispatch(
 			setSelectedAmount(
@@ -351,9 +352,10 @@ RecurringSignedIn.decorators = [
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
 
-		const thresholdPrice = getLowerBenefitsThresholds(countryGroup, true)[
-			contributionType as RegularContributionType
-		];
+		const thresholdPrice =
+			lowerBenefitsThresholds[countryGroup][
+				contributionType as RegularContributionType
+			];
 
 		store.dispatch(
 			setSelectedAmount(
@@ -417,9 +419,10 @@ RecurringSignUp.decorators = [
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
 
-		const thresholdPrice = getLowerBenefitsThresholds(countryGroup, true)[
-			contributionType as RegularContributionType
-		];
+		const thresholdPrice =
+			lowerBenefitsThresholds[countryGroup][
+				contributionType as RegularContributionType
+			];
 
 		store.dispatch(
 			setSelectedAmount(

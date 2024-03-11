@@ -41,65 +41,62 @@ export const upperBenefitsThresholds: Record<CountryGroupId, ThresholdAmounts> =
 		},
 	};
 
-const lowerBenefitsThresholds: Record<CountryGroupId, ThresholdAmounts> = {
-	GBPCountries: {
-		MONTHLY: 10,
-		ANNUAL: 95,
-	},
-	UnitedStates: {
-		MONTHLY: 13,
-		ANNUAL: 120,
-	},
-	EURCountries: {
-		MONTHLY: 10,
-		ANNUAL: 95,
-	},
-	International: {
-		MONTHLY: 13,
-		ANNUAL: 120,
-	},
-	AUDCountries: {
-		MONTHLY: 17,
-		ANNUAL: 160,
-	},
-	NZDCountries: {
-		MONTHLY: 17,
-		ANNUAL: 160,
-	},
-	Canada: {
-		MONTHLY: 13,
-		ANNUAL: 120,
-	},
-};
+export const lowerBenefitsThresholds: Record<CountryGroupId, ThresholdAmounts> =
+	{
+		GBPCountries: {
+			MONTHLY: 10,
+			ANNUAL: 95,
+		},
+		UnitedStates: {
+			MONTHLY: 13,
+			ANNUAL: 120,
+		},
+		EURCountries: {
+			MONTHLY: 10,
+			ANNUAL: 95,
+		},
+		International: {
+			MONTHLY: 13,
+			ANNUAL: 120,
+		},
+		AUDCountries: {
+			MONTHLY: 17,
+			ANNUAL: 160,
+		},
+		NZDCountries: {
+			MONTHLY: 17,
+			ANNUAL: 160,
+		},
+		Canada: {
+			MONTHLY: 13,
+			ANNUAL: 120,
+		},
+	};
 export function getLowerBenefitsThresholds(
 	countryGroupId: CountryGroupId,
-	skipPromo?: boolean,
 ): ThresholdAmounts {
-	if (!skipPromo) {
-		const promotionMonthly = useContributionsSelector((state) =>
-			getPromotion(
-				state.page.checkoutForm.product.productPrices,
-				state.common.internationalisation.countryId,
-				'Monthly',
-			),
-		);
-		const promotionAnnual = useContributionsSelector((state) =>
-			getPromotion(
-				state.page.checkoutForm.product.productPrices,
-				state.common.internationalisation.countryId,
-				'Annual',
-			),
-		);
-		return {
-			MONTHLY:
-				promotionMonthly?.discountedPrice ??
-				lowerBenefitsThresholds[countryGroupId].MONTHLY,
-			ANNUAL:
-				promotionAnnual?.discountedPrice ??
-				lowerBenefitsThresholds[countryGroupId].ANNUAL,
-		};
-	}
-	return lowerBenefitsThresholds[countryGroupId];
+	const promotionMonthly = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.productPrices,
+			state.common.internationalisation.countryId,
+			'Monthly',
+		),
+	);
+	const promotionAnnual = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.productPrices,
+			state.common.internationalisation.countryId,
+			'Annual',
+		),
+	);
+	return {
+		MONTHLY:
+			promotionMonthly?.discountedPrice ??
+			lowerBenefitsThresholds[countryGroupId].MONTHLY,
+		ANNUAL:
+			promotionAnnual?.discountedPrice ??
+			lowerBenefitsThresholds[countryGroupId].ANNUAL,
+	};
 }
 
 // This is a function overload that means if the caller has already determined that contributionType is recurring
