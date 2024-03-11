@@ -23,7 +23,6 @@ import {
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
@@ -180,7 +179,6 @@ function switchKeyForContributionType(
 
 function getValidPaymentMethods(
 	contributionType: ContributionType,
-	_allSwitches: Switches,
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
 ): PaymentMethod[] {

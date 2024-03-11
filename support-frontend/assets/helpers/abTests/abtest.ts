@@ -259,6 +259,35 @@ function getAmountsTestVariant(
 		}
 	};
 
+	// Is the country in the list for contributions only checkout?
+	// This relies on the existence of an amounts test with a specific name
+	// It could be done using the countriesAffectedByVATStatus list
+	// but this would need the list and the amounts test to be in sync
+	// and this way simplifies testing as it is all set up in the RRCP
+	const contribOnlyTestName = 'VAT_COMPLIANCE';
+	const contribOnlyAmounts = amounts.find((t) => {
+		return (
+			t.isLive &&
+			t.testName === contribOnlyTestName &&
+			t.targeting.targetingType === 'Country' &&
+			t.targeting.countries.includes(country)
+		);
+	});
+	if (contribOnlyAmounts) {
+		const amountsParticipation = buildParticipation(
+			contribOnlyAmounts,
+			contribOnlyTestName,
+			contribOnlyAmounts.variants[0].variantName,
+		);
+		return {
+			selectedAmountsVariant: {
+				...contribOnlyAmounts.variants[0],
+				testName: contribOnlyTestName,
+			},
+			amountsParticipation,
+		};
+	}
+
 	// Is an amounts test defined in the url?
 	const urlTest = getAmountsTestFromURL(acquisitionDataTests);
 	if (urlTest) {
