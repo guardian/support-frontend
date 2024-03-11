@@ -51,10 +51,12 @@ export function isSupporterPlusFromState(state: ContributionsState): boolean {
 		return false;
 	}
 
+	const billingPeriod = (contributionType[0] +
+		contributionType.slice(1).toLowerCase()) as BillingPeriod;
 	const promotion = getPromotionOrUndefined(
 		state.page.checkoutForm.product.productPrices,
 		state.common.internationalisation.countryId,
-		state.page.checkoutForm.product.billingPeriod,
+		billingPeriod,
 	);
 	const benefitsThreshold = getThresholdPrice(
 		state.common.internationalisation.countryGroupId,

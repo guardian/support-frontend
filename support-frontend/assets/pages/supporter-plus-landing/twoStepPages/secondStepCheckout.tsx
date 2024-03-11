@@ -127,7 +127,6 @@ export function SupporterPlusCheckout({
 					) : (
 						<ContributionsOrderSummaryContainer
 							inThreeTier={inThreeTier}
-							amountIsAboveThreshold={amountIsAboveThreshold}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}

@@ -18,7 +18,6 @@ import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary
 
 type ContributionsOrderSummaryContainerProps = {
 	inThreeTier: boolean;
-	amountIsAboveThreshold: boolean;
 	renderOrderSummary: (props: ContributionsOrderSummaryProps) => JSX.Element;
 };
 
@@ -50,7 +49,6 @@ function getTermsConditions(
 
 export function ContributionsOrderSummaryContainer({
 	inThreeTier,
-	amountIsAboveThreshold,
 	renderOrderSummary,
 }: ContributionsOrderSummaryContainerProps): JSX.Element {
 	const contributionType = useContributionsSelector(getContributionType);
@@ -95,7 +93,7 @@ export function ContributionsOrderSummaryContainer({
 		contributionType === 'ONE_OFF'
 			? []
 			: checkListData({
-					higherTier: amountIsAboveThreshold,
+					higherTier: isSupporterPlus,
 			  });
 
 	function onCheckListToggle(isOpen: boolean) {
@@ -131,7 +129,7 @@ export function ContributionsOrderSummaryContainer({
 	return renderOrderSummary({
 		description,
 		total: currentPrice,
-		totalOriginal: amountIsAboveThreshold ? originalPrice : undefined,
+		totalOriginal: isSupporterPlus ? originalPrice : undefined,
 		currency: currency,
 		paymentFrequency,
 		enableCheckList: contributionType !== 'ONE_OFF',
