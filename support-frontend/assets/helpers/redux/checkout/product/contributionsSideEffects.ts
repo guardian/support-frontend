@@ -45,12 +45,19 @@ export function addProductSideEffects(
 			const isMonthlyOrAnnual = ['MONTHLY', 'ANNUAL'].includes(
 				contributionType,
 			);
+
+			const commonState = listenerApi.getState().common;
+
 			if (
-				showThreeTierCheckout(listenerApi.getState().common.abParticipations) &&
+				showThreeTierCheckout(
+					commonState.abParticipations,
+					commonState.internationalisation.countryId,
+				) &&
 				isMonthlyOrAnnual
 			) {
 				return;
 			}
+
 			sendEventContributionCartValue(
 				contributionAmount.toString(),
 				contributionType,

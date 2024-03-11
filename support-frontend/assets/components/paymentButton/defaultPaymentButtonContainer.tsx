@@ -57,7 +57,7 @@ export function DefaultPaymentButtonContainer({
 	const currency = currencies[currencyId];
 	const amountWithCurrency = simpleFormatAmount(currency, selectedAmount);
 
-	const { countryGroupId } = useContributionsSelector(
+	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 
@@ -77,6 +77,7 @@ export function DefaultPaymentButtonContainer({
 				amountIsAboveThreshold ||
 					showThreeTierCheckout(
 						useContributionsSelector((state) => state.common).abParticipations,
+						countryId,
 					),
 				contributionTypeToPaymentInterval[contributionType],
 		  );

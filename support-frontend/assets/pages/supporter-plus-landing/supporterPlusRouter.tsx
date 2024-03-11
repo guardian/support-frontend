@@ -79,8 +79,11 @@ function ThreeTierRedirectOneOffToCheckout({
 	);
 }
 
+const commonState = store.getState().common;
+
 export const inThreeTier = showThreeTierCheckout(
-	store.getState().common.abParticipations,
+	commonState.abParticipations,
+	commonState.internationalisation.countryId,
 );
 
 // ----- Render ----- //

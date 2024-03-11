@@ -25,7 +25,7 @@ import {
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
 import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierChecks';
-import { tierCardsFixed as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
 	heroGuardianWeeklyNonGifting: string;
@@ -37,6 +37,7 @@ function mapStateToProps(state: SubscriptionsState) {
 	return {
 		...getFormFields(state),
 		participations: state.common.abParticipations,
+		countryId: state.common.internationalisation.countryId,
 	};
 }
 
@@ -165,8 +166,9 @@ function ThankYouContent({
 	orderIsGift,
 	product,
 	participations,
+	countryId,
 }: PropTypes) {
-	const inThreeTier = showThreeTierCheckout(participations);
+	const inThreeTier = showThreeTierCheckout(participations, countryId);
 
 	const whatHappensNextItems = orderIsGift
 		? [
