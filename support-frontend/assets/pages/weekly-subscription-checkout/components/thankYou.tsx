@@ -24,7 +24,7 @@ import {
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { tierCardsFixed as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {

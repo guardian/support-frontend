@@ -39,7 +39,7 @@ import { getPaymentMethodButtons } from '../paymentButtons';
 import {
 	showThreeTierCheckout,
 	showThreeTierVariablePrice,
-} from '../setup/threeTierABTest';
+} from '../setup/threeTierChecks';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`

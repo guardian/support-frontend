@@ -83,7 +83,7 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { tierCardsFixed as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 

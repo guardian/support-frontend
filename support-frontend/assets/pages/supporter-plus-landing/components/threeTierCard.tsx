@@ -22,7 +22,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import { showThreeTierVariablePrice } from '../setup/threeTierABTest';
+import { showThreeTierVariablePrice } from '../setup/threeTierChecks';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 

@@ -62,7 +62,7 @@ import {
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
-import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import type { TierPlans } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { tierCardsFixed as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';

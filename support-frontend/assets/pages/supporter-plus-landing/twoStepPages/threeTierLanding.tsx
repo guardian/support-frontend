@@ -51,7 +51,7 @@ import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierDisclaimer } from '../components/threeTierDisclaimer';
-import { showThreeTierVariablePrice } from '../setup/threeTierABTest';
+import { showThreeTierVariablePrice } from '../setup/threeTierChecks';
 import { tierCardsFixed, tierCardsVariable } from '../setup/threeTierConfig';
 
 const recurringContainer = css`

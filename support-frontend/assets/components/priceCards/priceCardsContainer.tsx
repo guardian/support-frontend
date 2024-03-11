@@ -15,7 +15,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { showThreeTierVariablePrice } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { showThreeTierVariablePrice } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import {
 	tierCardsFixed,
 	tierCardsVariable,

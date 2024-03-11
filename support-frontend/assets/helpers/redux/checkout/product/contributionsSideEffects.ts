@@ -5,7 +5,7 @@ import type { ContributionsStartListening } from 'helpers/redux/contributionsSto
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
-import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { validateForm } from '../checkoutActions';
 import {
 	setAllAmounts,

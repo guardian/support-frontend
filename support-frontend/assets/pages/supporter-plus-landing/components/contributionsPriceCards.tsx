@@ -13,7 +13,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
-import { showThreeTierVariablePrice } from '../setup/threeTierABTest';
+import { showThreeTierVariablePrice } from '../setup/threeTierChecks';
 
 const titleAndButtonContainer = css`
 	display: flex;
