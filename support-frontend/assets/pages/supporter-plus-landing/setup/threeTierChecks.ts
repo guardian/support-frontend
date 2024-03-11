@@ -9,9 +9,9 @@ export const showThreeTierCheckout = (
 	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
 	const displaySupportPlusOnlyCheckout = !!abParticipations.supporterPlusOnly;
 
-	return (
-		!displayPatronsCheckout ||
-		!displaySupportPlusOnlyCheckout ||
-		!countriesAffectedByVATStatus.includes(countryId)
+	return !(
+		displayPatronsCheckout ||
+		displaySupportPlusOnlyCheckout ||
+		countriesAffectedByVATStatus.includes(countryId)
 	);
 };
