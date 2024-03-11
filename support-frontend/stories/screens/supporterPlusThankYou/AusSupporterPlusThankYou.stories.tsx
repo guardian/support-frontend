@@ -278,10 +278,9 @@ RecurringNotSignedIn.decorators = [
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
 
-		const thresholdPrice =
-			getLowerBenefitsThresholds('AUDCountries')[
-				contributionType as RegularContributionType
-			];
+		const thresholdPrice = getLowerBenefitsThresholds('AUDCountries', true)[
+			contributionType as RegularContributionType
+		];
 
 		store.dispatch(
 			setSelectedAmount(
@@ -340,10 +339,9 @@ RecurringSignedIn.decorators = [
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
 
-		const thresholdPrice =
-			getLowerBenefitsThresholds('AUDCountries')[
-				contributionType as RegularContributionType
-			];
+		const thresholdPrice = getLowerBenefitsThresholds('AUDCountries', true)[
+			contributionType as RegularContributionType
+		];
 
 		store.dispatch(
 			setSelectedAmount(
@@ -403,10 +401,9 @@ RecurringSignUp.decorators = [
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
 
-		const thresholdPrice =
-			getLowerBenefitsThresholds('AUDCountries')[
-				contributionType as RegularContributionType
-			];
+		const thresholdPrice = getLowerBenefitsThresholds('AUDCountries', true)[
+			contributionType as RegularContributionType
+		];
 
 		store.dispatch(
 			setSelectedAmount(

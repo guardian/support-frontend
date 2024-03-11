@@ -151,7 +151,7 @@ export function PaymentTsAndCs({
 		);
 	};
 
-	const thresholdAmounts = getLowerBenefitsThresholds(countryGroupId, true);
+	const thresholdAmounts = getLowerBenefitsThresholds(countryGroupId);
 	const thresholdDescription = (contributionType: RegularContributionType) => {
 		return `${currencyGlyph}${
 			thresholdAmounts[contributionType]

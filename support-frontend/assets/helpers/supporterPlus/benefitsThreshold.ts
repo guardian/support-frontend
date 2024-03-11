@@ -73,9 +73,9 @@ const lowerBenefitsThresholds: Record<CountryGroupId, ThresholdAmounts> = {
 };
 export function getLowerBenefitsThresholds(
 	countryGroupId: CountryGroupId,
-	applyPromo?: boolean,
+	skipPromo?: boolean,
 ): ThresholdAmounts {
-	if (applyPromo) {
+	if (!skipPromo) {
 		const promotionMonthly = useContributionsSelector((state) =>
 			getPromotion(
 				state.page.checkoutForm.product.productPrices,
