@@ -83,7 +83,6 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 
@@ -119,7 +118,6 @@ function mapStateToProps(state: SubscriptionsState) {
 		discountedPrice: selectDiscountedPrice(state),
 		participations: state.common.abParticipations,
 		countryGroupId: state.common.internationalisation.countryGroupId,
-		countryId: state.common.internationalisation.countryId,
 	};
 }
 
@@ -200,10 +198,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.setBillingCountry(props.deliveryCountry);
 	};
 
-	const inThreeTier = threeTierCheckoutEnabled(
-		props.participations,
-		props.countryId,
-	);
+	const urlParams = new URLSearchParams(window.location.search);
+	const inThreeTier =
+		urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
 
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,
