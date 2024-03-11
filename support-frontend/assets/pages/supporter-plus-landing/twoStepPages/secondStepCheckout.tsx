@@ -33,7 +33,7 @@ import { ContributionsPriceCards } from '../components/contributionsPriceCards';
 import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
-import { showThreeTierCheckout } from '../setup/threeTierChecks';
+import { threeTierCheckoutEnabled } from '../setup/threeTierChecks';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`
@@ -74,7 +74,7 @@ export function SupporterPlusCheckout({
 		(state) => state.common,
 	);
 
-	const inThreeTier = showThreeTierCheckout(abParticipations, countryId);
+	const inThreeTier = threeTierCheckoutEnabled(abParticipations, countryId);
 	const showPriceCards = inThreeTier && contributionType === 'ONE_OFF';
 
 	const changeButton = (

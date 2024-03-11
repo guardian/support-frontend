@@ -5,7 +5,7 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
-import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierChecks';
+import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { DefaultPaymentButton } from './defaultPaymentButton';
 
 const contributionTypeToPaymentInterval: Partial<
@@ -75,7 +75,7 @@ export function DefaultPaymentButtonContainer({
 		: createButtonText(
 				amountWithCurrency,
 				amountIsAboveThreshold ||
-					showThreeTierCheckout(
+					threeTierCheckoutEnabled(
 						useContributionsSelector((state) => state.common).abParticipations,
 						countryId,
 					),

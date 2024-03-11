@@ -62,7 +62,7 @@ import {
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
-import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierChecks';
+import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import type { TierPlans } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
@@ -243,7 +243,7 @@ function onPaymentAuthorised(
 		productOption,
 		productPrices,
 	} = state.page.checkoutForm.product;
-	const inThreeTier = showThreeTierCheckout(
+	const inThreeTier = threeTierCheckoutEnabled(
 		state.common.abParticipations,
 		state.common.internationalisation.countryId,
 	);

@@ -2,7 +2,7 @@ import type { Participations } from 'helpers/abTests/abtest';
 import { countriesAffectedByVATStatus } from 'helpers/internationalisation/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 
-export const showThreeTierCheckout = (
+export const threeTierCheckoutEnabled = (
 	abParticipations: Participations,
 	countryId: IsoCountry,
 ): boolean => {
