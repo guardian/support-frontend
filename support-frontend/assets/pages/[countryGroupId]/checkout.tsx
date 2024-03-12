@@ -55,6 +55,7 @@ import {
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import { getStripeKey } from 'helpers/forms/stripe';
+import { validatePaymentConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -67,6 +68,8 @@ import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkou
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 
 /** App config - this is config that should persist throughout the app */
+validatePaymentConfig(window.guardian);
+
 const isTestUser = true;
 const geoIds = ['uk', 'us', 'eu', 'au', 'nz', 'ca', 'int'] as const;
 const GeoIdSchema = picklist(geoIds);
