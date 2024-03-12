@@ -52,7 +52,11 @@ import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierDisclaimer } from '../components/threeTierDisclaimer';
 import { showThreeTierVariablePrice } from '../setup/threeTierABTest';
-import { tierCardsFixed, tierCardsVariable } from '../setup/threeTierConfig';
+import {
+	tierCardsFixed,
+	tierCardsFixedUS,
+	tierCardsVariable,
+} from '../setup/threeTierConfig';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -209,14 +213,16 @@ export function ThreeTierLanding(): JSX.Element {
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
 	);
+	const { countryGroupId, currencyId } = useContributionsSelector(
+		(state) => state.common.internationalisation,
+	);
 	const inThreeTierVariantVariable =
 		showThreeTierVariablePrice(abParticipations);
 	const tierCards = inThreeTierVariantVariable
 		? tierCardsVariable
+		: countryGroupId === UnitedStates
+		? tierCardsFixedUS
 		: tierCardsFixed;
-	const { countryGroupId, currencyId } = useContributionsSelector(
-		(state) => state.common.internationalisation,
-	);
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [

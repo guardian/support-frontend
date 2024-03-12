@@ -250,6 +250,29 @@ const tier2: TierCard = {
 	},
 };
 
+const tier2FixedUS: TierCard = {
+	...tier2,
+	benefits: {
+		list: [
+			{
+				copy: 'Limited time only: "Not for Sale" Guardian tote bag**',
+			},
+			{
+				copy: 'Unlimited access to the Guardian app',
+				tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
+			},
+			{ copy: 'Ad-free reading on all your devices' },
+			{
+				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+			},
+			{
+				copy: 'Far fewer asks for support',
+				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
+			},
+		],
+	},
+};
+
 const tier3: TierCard = {
 	title: 'Digital + print',
 	benefits: {
@@ -408,6 +431,28 @@ const tier3: TierCard = {
 			},
 		},
 	},
+};
+
+const tier3FixedUS: TierCard = {
+	...tier3,
+	benefits: {
+		description: [
+			'The rewards from All-access digital ',
+			{ strong: true, copy: 'including a limited-edition Guardian tote bag**' },
+		],
+		list: [
+			{
+				copy: 'Guardian Weekly print magazine delivered to your door every week  ',
+				tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
+			},
+		],
+	},
+};
+
+export const tierCardsFixedUS: TierCards = {
+	tier1: tier1Fixed,
+	tier2: tier2FixedUS,
+	tier3: tier3FixedUS,
 };
 
 export const tierCardsFixed: TierCards = {
