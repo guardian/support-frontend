@@ -5,7 +5,7 @@ import type { ContributionsStartListening } from 'helpers/redux/contributionsSto
 import * as storage from 'helpers/storage/storage';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
-import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { validateForm } from '../checkoutActions';
 import {
 	setAllAmounts,
@@ -45,12 +45,19 @@ export function addProductSideEffects(
 			const isMonthlyOrAnnual = ['MONTHLY', 'ANNUAL'].includes(
 				contributionType,
 			);
+
+			const commonState = listenerApi.getState().common;
+
 			if (
-				showThreeTierCheckout(listenerApi.getState().common.abParticipations) &&
+				threeTierCheckoutEnabled(
+					commonState.abParticipations,
+					commonState.internationalisation.countryId,
+				) &&
 				isMonthlyOrAnnual
 			) {
 				return;
 			}
+
 			sendEventContributionCartValue(
 				contributionAmount.toString(),
 				contributionType,

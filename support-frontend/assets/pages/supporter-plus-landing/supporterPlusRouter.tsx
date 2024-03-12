@@ -18,7 +18,7 @@ import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
-import { showThreeTierCheckout } from './setup/threeTierABTest';
+import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
 import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
@@ -82,8 +82,11 @@ function ThreeTierRedirectOneOffToCheckout({
 	);
 }
 
-export const inThreeTier = showThreeTierCheckout(
-	store.getState().common.abParticipations,
+const commonState = store.getState().common;
+
+export const inThreeTier = threeTierCheckoutEnabled(
+	commonState.abParticipations,
+	commonState.internationalisation.countryId,
 );
 
 // ----- Render ----- //
