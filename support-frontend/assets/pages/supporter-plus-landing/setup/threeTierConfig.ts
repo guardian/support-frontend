@@ -315,7 +315,7 @@ const tier3tote: TierCard = {
 			'The rewards from All-access digital ',
 			{ strong: true, copy: 'including a limited-edition Guardian tote bag**' },
 		],
-		list: [...tier2.benefits.list],
+		list: [...tier3.benefits.list],
 	},
 };
 
