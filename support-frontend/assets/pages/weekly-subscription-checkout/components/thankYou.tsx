@@ -24,7 +24,6 @@ import {
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
-import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
@@ -36,8 +35,6 @@ const styles = moduleStyles as {
 function mapStateToProps(state: SubscriptionsState) {
 	return {
 		...getFormFields(state),
-		participations: state.common.abParticipations,
-		countryId: state.common.internationalisation.countryId,
 	};
 }
 
@@ -165,10 +162,10 @@ function ThankYouContent({
 	isPending,
 	orderIsGift,
 	product,
-	participations,
-	countryId,
 }: PropTypes) {
-	const inThreeTier = threeTierCheckoutEnabled(participations, countryId);
+	const urlParams = new URLSearchParams(window.location.search);
+	const inThreeTier =
+		urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
 
 	const whatHappensNextItems = orderIsGift
 		? [
