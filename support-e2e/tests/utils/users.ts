@@ -17,8 +17,8 @@ export const lastName = () => `${generateString(5)}TestL`;
 /**
  * This email needs to end with @thegulocal.com.
  *
- * Those are often skipped by things like our Braze helpers to avoid
- * us spamming non-existant email addresses which might hurt our
+ * Those are skipped by membership-workflow to avoid
+ * us spamming non-existent email addresses which might hurt our
  * reputation with email clients.
  *
  * e.g: https://github.com/guardian/membership-workflow/blob/99e2b90305f93bf35ce230f6b6c17e0c4533facb/app/model/BrazeCampaignTriggerPayload.scala#L28
