@@ -276,6 +276,7 @@ export function ThreeTierCard({
 						text: benefit.copy,
 						isChecked: true,
 						toolTip: benefit.tooltip,
+						strong: benefit.strong,
 					};
 				})}
 				style={'compact'}
