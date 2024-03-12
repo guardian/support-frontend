@@ -107,7 +107,7 @@ export function PriceCards({
 							alternateLabel={`${simpleFormatAmount(
 								currencies[currency],
 								amount,
-							)}${paymentInterval ? 'per' + paymentInterval : ''}`}
+							)}${paymentInterval ? ' per ' + paymentInterval : ''}`}
 						/>
 					))}
 					{enableChooseYourAmountButton && (
