@@ -8,6 +8,12 @@ interface ThreeTierDisclaimerProps {
 	currency: string;
 }
 
+interface ToteTsAndCsProps {
+	currency: string;
+	toteCostMonthly: number;
+	toteCostAnnual: number;
+}
+
 const container = css`
 	text-align: left;
 	color: ${palette.neutral[100]};
@@ -48,5 +54,24 @@ export function ThreeTierDisclaimer({
 				</div>
 			)}
 		</>
+	);
+}
+
+export function ToteTsAndCs({
+	currency,
+	toteCostMonthly,
+	toteCostAnnual,
+}: ToteTsAndCsProps): JSX.Element {
+	return (
+		<div css={container}>
+			<p>
+				**Tote bags are only available for qualified new recurring supporters
+				(monthly: {currency}
+				{toteCostMonthly} or more; annual: {currency}
+				{toteCostAnnual} or more) on a first come, first served basis while
+				supplies last. Limit one per customer. Distribution to US and
+				APO/FPO/DPO addresses only. Please allow 2-4 weeks for shipping.
+			</p>
+		</div>
 	);
 }
