@@ -18,20 +18,25 @@ export function isSupporterPlus(
 	selectedAmounts: SelectedAmounts,
 	otherAmounts: OtherAmounts,
 	countryGroupId: CountryGroupId,
+	skipPromotion?: boolean,
 ): boolean {
 	if (isOneOff(contributionType)) {
 		return false;
 	}
 
-	const billingPeriod = (contributionType[0] +
-		contributionType.slice(1).toLowerCase()) as BillingPeriod;
-	const promotion = useContributionsSelector((state) =>
-		getPromotion(
-			state.page.checkoutForm.product.productPrices,
-			state.common.internationalisation.countryId,
-			billingPeriod,
-		),
-	);
+	let promotion = undefined;
+	if (!skipPromotion) {
+		const billingPeriod = (contributionType[0] +
+			contributionType.slice(1).toLowerCase()) as BillingPeriod;
+		promotion = useContributionsSelector((state) =>
+			getPromotion(
+				state.page.checkoutForm.product.productPrices,
+				state.common.internationalisation.countryId,
+				billingPeriod,
+			),
+		);
+	}
+
 	const benefitsThreshold = getThresholdPrice(
 		countryGroupId,
 		contributionType,
