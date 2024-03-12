@@ -135,7 +135,7 @@ const tier2: TierCard = {
 	},
 };
 
-const tier2FixedUS: TierCard = {
+const tier2tote: TierCard = {
 	...tier2,
 	benefits: {
 		list: [
@@ -308,7 +308,7 @@ const tier3: TierCard = {
 	},
 };
 
-const tier3FixedUS: TierCard = {
+const tier3tote: TierCard = {
 	...tier3,
 	benefits: {
 		description: [
@@ -319,10 +319,10 @@ const tier3FixedUS: TierCard = {
 	},
 };
 
-export const tierCardsFixedUS: TierCards = {
+export const tierCardsTote: TierCards = {
 	tier1,
-	tier2: tier2FixedUS,
-	tier3: tier3FixedUS,
+	tier2: tier2tote,
+	tier3: tier3tote,
 };
 
 export const tierCards: TierCards = {
