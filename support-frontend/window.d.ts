@@ -4,11 +4,10 @@ import type {
 	AmazonObject,
 	AmazonPaymentsObject,
 } from 'helpers/forms/paymentIntegrations/amazonPay/types';
-import type { StripeKey } from 'helpers/forms/stripe';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
+import type { PaymentConfig } from 'helpers/globalsAndSwitches/window';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
-import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { SendEventId } from 'helpers/tracking/quantumMetric';
 import type { User } from 'helpers/user/user';
 
@@ -37,40 +36,15 @@ declare global {
 	};
 
 	interface Window {
-		guardian: {
-			amazonPayClientId: {
-				default: string;
-				test: string;
-			};
-			amazonPaySellerId: {
-				default: string;
-				test: string;
-			};
-			csrf?: CsrfState;
+		guardian: PaymentConfig & {
 			email?: string;
-			geoip?: {
-				countryCode: string;
-				stateCode?: string;
-			};
 			gitCommitId?: string;
-			mdapiUrl: string;
 			orderIsAGift: boolean;
-			paymentApiPayPalEndpoint: string;
-			paymentApiUrl: string;
-			payPalEnvironment: {
-				default: string;
-				test: string;
-			};
 			productPrices: ProductPrices;
-			recaptchaEnabled?: boolean;
 			serversideTests?: Participations | null;
 			settings: Settings;
-			stripeKeyAustralia: StripeKey;
-			stripeKeyDefaultCurrencies: StripeKey;
-			stripeKeyUnitedStates: StripeKey;
 			testMode?: boolean;
 			user?: User;
-			v2recaptchaPublicKey: string;
 		};
 
 		amazon?: AmazonObject;
