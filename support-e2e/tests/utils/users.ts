@@ -13,4 +13,10 @@ function generateString(length:number) {
 
 export const firstName = () => `${generateString(5)}TestF`;
 export const lastName = () => `${generateString(5)}TestL`;
-export const email = () => `test${uuidv4()}@theguardian.com`;
+/**
+ * This email is skipped when sending thank you emails from Braze in `support-workers`.
+ * If you change this here, you need to change it there too.
+ *
+ * see: support-workers/src/main/scala/com/gu/support/workers/lambdas/SendThankYouEmail.scala
+ */
+export const email = () => `test.e2e.supporter.revenue+${uuidv4()}@theguardian.com`;

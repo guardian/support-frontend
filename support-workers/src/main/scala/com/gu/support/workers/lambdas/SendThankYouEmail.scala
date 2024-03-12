@@ -44,6 +44,7 @@ class SendThankYouEmail(
             response <- services.paperRoundService.agents()
           } yield response.data.agents.find(_.refId == id)
       }
+
     val emailBuilder = new EmailBuilder(
       services.zuoraService.getMandateIdFromAccountNumber,
       getAgentDetails,
@@ -51,12 +52,24 @@ class SendThankYouEmail(
       Configuration.stage,
     )
 
-    for {
-      emailFields <- emailBuilder.buildEmail(state)
-      emailResult <- Future.sequence(emailFields.map(emailService.send))
-    } yield HandlerResult(emailResult, requestInfo)
+    /** We generate these `test.e2e.supporter.revenue` emails as part of our e2e testing and don't want to create a
+      * braze user for them as if the emails bounce it might affect our reputation with email clients in the long run.
+      *
+      * see: support-e2e/tests/utils/users.ts
+      *
+      * We cannot use `isTestUser` as we do actually use this for testing receiving of emails and it _might_ still have
+      * a negative affect on the reputation as email clients are not aware it is a test account.
+      */
+    val email = state.user.primaryEmailAddress
+    if (email.startsWith("test.e2e.supporter.revenue") && email.endsWith("theguardian.com")) {
+      Future.successful(HandlerResult(Nil, requestInfo))
+    } else {
+      for {
+        emailFields <- emailBuilder.buildEmail(state)
+        emailResult <- Future.sequence(emailFields.map(emailService.send))
+      } yield HandlerResult(emailResult, requestInfo)
+    }
   }
-
 }
 
 class EmailBuilder(

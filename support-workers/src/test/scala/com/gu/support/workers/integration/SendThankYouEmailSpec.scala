@@ -14,7 +14,11 @@ import com.gu.support.paperround.AgentId
 import com.gu.support.paperround.AgentsEndpoint.AgentDetails
 import com.gu.support.promotions.{AppliesTo, DiscountBenefit, Promotion, PromotionService, SimplePromotionCollection}
 import com.gu.support.workers.GiftRecipient.DigitalSubscriptionGiftRecipient
-import com.gu.support.workers.JsonFixtures.{sendAcquisitionEventJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{
+  sendAcquisitionEventJson,
+  sendAcquisitionEventJsonWithE2ETestUser,
+  wrapFixture,
+}
 import com.gu.support.workers._
 import com.gu.support.workers.encoding.Conversions.FromOutputStream
 import com.gu.support.workers.encoding.Encoding
@@ -31,11 +35,13 @@ import io.circe.generic.auto._
 import io.circe.parser._
 import org.joda.time.{DateTime, LocalDate, Months}
 import org.mockito.ArgumentMatchers.any
+import org.scalatest.TryValues
+import org.scalatestplus.mockito.MockitoSugar.mock
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class SendThankYouEmailITSpec extends AsyncLambdaSpec with MockContext {
+class SendThankYouEmailITSpec extends AsyncLambdaSpec with MockContext with TryValues {
   "SendThankYouEmail lambda" should "add message to sqs queue" taggedAs IntegrationTest in {
     val sendThankYouEmail = new SendThankYouEmail(emailService = new EmailService(emailQueueName))
 
@@ -43,8 +49,23 @@ class SendThankYouEmailITSpec extends AsyncLambdaSpec with MockContext {
 
     sendThankYouEmail.handleRequestFuture(wrapFixture(sendAcquisitionEventJson), outStream, context).map { _ =>
       val result = Encoding.in[List[SendMessageResult]](outStream.toInputStream)
+      result.success.value._1.size should be(1)
       result.isSuccess should be(true)
     }
+  }
+
+  "SendThankYouEmail lambda" should "add nothing to the queue with a test.e2e.supporter.revenue email" taggedAs IntegrationTest in {
+    val sendThankYouEmail = new SendThankYouEmail(emailService = new EmailService(emailQueueName))
+
+    val outStream = new ByteArrayOutputStream()
+
+    sendThankYouEmail
+      .handleRequestFuture(wrapFixture(sendAcquisitionEventJsonWithE2ETestUser), outStream, context)
+      .map { _ =>
+        val result = Encoding.in[List[SendMessageResult]](outStream.toInputStream)
+        result.isSuccess should be(true)
+        result.success.value._1 should be(Nil)
+      }
   }
 
 }

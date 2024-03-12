@@ -57,11 +57,11 @@ object JsonFixtures {
       ),
       deliveryInstructions = Some("Leave with neighbour"),
     )
-  def userJson(id: String = idId): String =
+  def userJson(id: String = idId, primaryEmailAddress: String = emailAddress): String =
     s"""
       "user":{
           "id": "$id",
-          "primaryEmailAddress": "$emailAddress",
+          "primaryEmailAddress": "$primaryEmailAddress",
           "firstName": "test",
           "lastName": "user",
           "country": "GB",
@@ -813,6 +813,30 @@ object JsonFixtures {
           },
           "acquisitionData": $acquisitionData
         }"""
+  val sendAcquisitionEventJsonWithE2ETestUser =
+    s"""{
+          $requestIdJson,
+          "analyticsInfo": {
+            "paymentProvider": "Stripe",
+            "isGiftPurchase": false
+          },
+          "sendThankYouEmailState": {
+            "productType": "Contribution",
+            ${userJson(primaryEmailAddress =
+        "test.e2e.supporter.revenue+2b45f234-3969-49bf-b0fa-70c361737e76@theguardian.com",
+      )},
+            "salesForceContact": {
+                "Id": "0036E00000VlOPDQA3",
+                "AccountId": "0016E00000f17pYQAQ"
+            },
+            "product": ${contribution(currency = GBP)},
+            "paymentMethod": $stripePaymentMethod,
+            "accountNumber": "accountnumber123",
+            "subscriptionNumber": "subno123"
+          },
+          "acquisitionData": $acquisitionData
+        }"""
+
   val sendAcquisitionEventPrintJson =
     s"""
     {
