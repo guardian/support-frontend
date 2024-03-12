@@ -55,7 +55,7 @@ import {
 	ToteTsAndCs,
 } from '../components/threeTierDisclaimer';
 import {
-	tierCardsFixed as tierCards,
+	tierCards as tierCardsFixed,
 	tierCardsFixedUS,
 } from '../setup/threeTierConfig';
 
@@ -219,10 +219,8 @@ export function ThreeTierLanding(): JSX.Element {
 		(state) => state.common.internationalisation,
 	);
 
-	const tierCards = countryGroupId === UnitedStates
-		? tierCardsFixedUS
-		: tierCardsFixed;
-
+	const tierCards =
+		countryGroupId === UnitedStates ? tierCardsFixedUS : tierCardsFixed;
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
