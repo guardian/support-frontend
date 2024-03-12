@@ -36,6 +36,7 @@ import {
 } from 'valibot'; // 1.54 kB
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
+import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -347,6 +348,13 @@ export function Checkout() {
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
 
+	/** Direct debit details */
+	const [accountHolderName, setAccountHolderName] = useState('');
+	const [accountNumber, setAccountNumber] = useState('');
+	const [sortCode, setSortCode] = useState('');
+	const [accountHolderConfirmation, setAccountHolderConfirmation] =
+		useState(false);
+
 	return (
 		<PageScaffold
 			header={<Header></Header>}
@@ -464,6 +472,25 @@ export function Checkout() {
 												});
 											}
 										});
+								}
+
+								if (paymentMethod === 'DirectDebit') {
+									const paymentFields = {
+										accountHolderName: formData.get(
+											'accountHolderName',
+										) as string,
+										accountNumber: formData.get('accountNumber') as string,
+										sortCode: formData.get('sortCode') as string,
+										recaptchaToken,
+									};
+
+									// This data is what will be posted to /create
+									console.info('Posting data', {
+										...data,
+										paymentFields,
+										deliveryAddress,
+										billingAddress,
+									});
 								}
 
 								// The form is sumitted async as a lot of the payment methods require fetch requests
@@ -746,6 +773,66 @@ export function Checkout() {
 												}
 											/>
 										</>
+									)}
+
+									{paymentMethod === 'DirectDebit' && (
+										<DirectDebitForm
+											countryGroupId={countryGroupId}
+											accountHolderName={accountHolderName}
+											accountNumber={accountNumber}
+											accountHolderConfirmation={accountHolderConfirmation}
+											sortCode={sortCode}
+											recaptchaCompleted={false}
+											updateAccountHolderName={(name: string) => {
+												setAccountHolderName(name);
+											}}
+											updateAccountNumber={(number: string) => {
+												setAccountNumber(number);
+											}}
+											updateSortCode={(sortCode: string) => {
+												setSortCode(sortCode);
+											}}
+											updateAccountHolderConfirmation={(
+												confirmation: boolean,
+											) => {
+												setAccountHolderConfirmation(confirmation);
+											}}
+											recaptcha={
+												<Recaptcha
+													// We could change the parents type to Promise and uses await here, but that has
+													// a lot of refactoring with not too much gain
+													onRecaptchaCompleted={(token) => {
+														setRecaptchaToken(token);
+														void fetch(
+															'/stripe/create-setup-intent/recaptcha',
+															{
+																method: 'POST',
+																headers: {
+																	'Content-Type': 'application/json',
+																},
+																body: JSON.stringify({
+																	isTestUser,
+																	stripePublicKey,
+																	token,
+																}),
+															},
+														)
+															.then((resp) => resp.json())
+															.then((json) =>
+																setStripeClientSecret(
+																	(json as Record<string, string>)
+																		.client_secret,
+																),
+															);
+													}}
+													onRecaptchaExpired={() => {
+														// no-op
+													}}
+												/>
+											}
+											formError={''}
+											errors={{}}
+										/>
 									)}
 								</BoxContents>
 							</Box>
