@@ -16,4 +16,14 @@ export const firstName = () =>
   `test.support.frontend.e2e.firstName+${generateString(5)}`;
 export const lastName = () =>
   `test.support.frontend.e2e.lastName+${generateString(5)}`;
-export const email = () => `test${uuidv4()}@theguardian.com`;
+/**
+ * This email needs to end with @thegulocal.com.
+ *
+ * Those are skipped by membership-workflow to avoid
+ * us spamming non-existent email addresses which might hurt our
+ * reputation with email clients.
+ *
+ * @see https://github.com/guardian/membership-workflow/blob/99e2b90305f93bf35ce230f6b6c17e0c4533facb/app/model/BrazeCampaignTriggerPayload.scala#L28
+ **/
+export const email = () =>
+  `test.support.frontend.e2e+${uuidv4()}@thegulocal.com`;
