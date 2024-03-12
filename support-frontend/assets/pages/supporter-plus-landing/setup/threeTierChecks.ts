@@ -6,8 +6,9 @@ export const threeTierCheckoutEnabled = (
 	abParticipations: Participations,
 	countryId: IsoCountry,
 ): boolean => {
-	const isWeeklyCheckout =
-		window.location.pathname === '/subscribe/weekly/checkout';
+	const isWeeklyCheckout = window.location.pathname.startsWith(
+		'/subscribe/weekly/checkout',
+	);
 
 	if (isWeeklyCheckout) {
 		const urlParams = new URLSearchParams(window.location.search);
