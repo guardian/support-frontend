@@ -245,166 +245,167 @@ Resources:
       Statistic: Sum
     DependsOn: SupportWorkersPROD
 
-# This query is useful to check what a reasonable interval is for each product if you
-# want the alarm to go off less than once a month.  Update the date range to get more current figures.
-#
-#  with timegaps as(
-#  select
-#  product,
-#  if (print_options.product is null, null, if(print_options.product = 'GUARDIAN_WEEKLY', 'WEEKLY', 'NEWSPAPER')) print_product,
-#  payment_provider,
-#  e.event_timestamp,
-#  (lag(e.event_timestamp) over (partition by payment_provider, product order by event_timestamp)) as last_acquisition,
-#  from `datalake.fact_acquisition_event` e
-#  where 1=1
-#  and date(e.event_timestamp) >= date'2024-02-01'
-#  and date(e.event_timestamp) < date'2024-02-27'
-#  and payment_provider in ('STRIPE', 'GOCARDLESS', 'PAYPAL')
-#  and product in ('RECURRING_CONTRIBUTION', 'PRINT_SUBSCRIPTION', 'SUPPORTER_PLUS')
-#  )
-#  select
-#  product,
-#  print_product,
-#  payment_provider,
-#  max(timestamp_diff(event_timestamp, last_acquisition, HOUR)),
-#  from timegaps
-#  group by 1,2,3
-#  order by 1,2,3
-  NoPaypalContributionsAlarm:
+  NoPaypalContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful recurring paypal contributions recently
-      MetricName: PaymentSuccess
-      Namespace: support-frontend
-      Dimensions:
-        - Name: PaymentProvider
-          Value: PayPal
-        - Name: ProductType
-          Value: Contribution
-        - Name: Stage
-          Value: !Ref Stage
+      AlarmName: !Sub support-workers ${Stage} No successful recurring paypal contributions for two hours
+      Metrics:
+        - Id: e1
+          Expression: "SUM([FILL(m1,0),FILL(m2,0)])"
+          Label: AllRecurringPayPalContributions
+        - Id: m1
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: PayPal
+                - Name: ProductType
+                  Value: Contribution
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
+        - Id: m2
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: PayPal
+                - Name: ProductType
+                  Value: SupporterPlus
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 300
-      EvaluationPeriods: 36
-      TreatMissingData: breaching
-    DependsOn: SupportWorkersPROD
-
-  NoStripeContributionsAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: CreateProdResources
-    Properties:
-      AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful recurring stripe contributions recently
-      MetricName: PaymentSuccess
-      Namespace: support-frontend
-      Dimensions:
-        - Name: PaymentProvider
-          Value: Stripe
-        - Name: ProductType
-          Value: Contribution
-        - Name: Stage
-          Value: !Ref Stage
-      ComparisonOperator: LessThanOrEqualToThreshold
-      Threshold: 0
-      Period: 300
       EvaluationPeriods: 24
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
-  NoGocardlessContributionsAlarm:
+  NoStripeContributionsInTwoHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful recurring Gocardless contributions recently
-      MetricName: PaymentSuccess
-      Namespace: support-frontend
-      Dimensions:
-        - Name: PaymentProvider
-          Value: DirectDebit
-        - Name: ProductType
-          Value: Contribution
-        - Name: Stage
-          Value: !Ref Stage
+      AlarmName: !Sub support-workers ${Stage} No successful recurring stripe contributions for two hours
+      Metrics:
+        - Id: e1
+          Expression: "SUM([FILL(m1,0),FILL(m2,0)])"
+          Label: AllRecurringStripeContributions
+        - Id: m1
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: Stripe
+                - Name: ProductType
+                  Value: Contribution
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
+        - Id: m2
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: Stripe
+                - Name: ProductType
+                  Value: SupporterPlus
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 3600
-      EvaluationPeriods: 14
+      EvaluationPeriods: 24
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
-  NoPaypalSupporterPlusAlarm:
+  # Why 10 hours for gocardless? Well...
+  #
+  # select
+  # event_timestamp,
+  # (to_unixtime(event_timestamp) - lag(to_unixtime(event_timestamp)) over (order by event_timestamp))/60/60 as hours_between_go_cardless_acquisitions
+  # from acquisitions
+  # where received_date>date'2019-04-01'
+  # and received_date<date'2019-05-01'
+  # and payment_provider='GOCARDLESS'
+  # order by hours_between_go_cardless_acquisitions desc;
+  #
+  NoGocardlessContributionsInTenHoursAlarm:
     Type: AWS::CloudWatch::Alarm
     Condition: CreateProdResources
     Properties:
       AlarmActions:
         - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful paypal supporter plus acquisitions recently
-      MetricName: PaymentSuccess
-      Namespace: support-frontend
-      Dimensions:
-        - Name: PaymentProvider
-          Value: PayPal
-        - Name: ProductType
-          Value: SupporterPlus
-        - Name: Stage
-          Value: !Ref Stage
+      AlarmName: !Sub support-workers ${Stage} No successful recurring Gocardless contributions for ten hours
+      Metrics:
+        - Id: e1
+          Expression: "SUM([FILL(m1,0),FILL(m2,0)])"
+          Label: AllRecurringGocardlessContributions
+        - Id: m1
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: DirectDebit
+                - Name: ProductType
+                  Value: Contribution
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
+        - Id: m2
+          Label: String
+          MetricStat:
+            Metric:
+              Dimensions:
+                - Name: PaymentProvider
+                  Value: DirectDebit
+                - Name: ProductType
+                  Value: SupporterPlus
+                - Name: Stage
+                  Value: !Ref Stage
+              MetricName: PaymentSuccess
+              Namespace: support-frontend
+            Period: 300
+            Stat: Sum
+            Unit: Count
+          ReturnData: false
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 300
-      EvaluationPeriods: 48
-      TreatMissingData: breaching
-    DependsOn: SupportWorkersPROD
-
-  NoStripeSupporterPlusAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: CreateProdResources
-    Properties:
-      AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful stripe supporter plus acquisitions recently
-      MetricName: PaymentSuccess
-      Namespace: support-frontend
-      Dimensions:
-        - Name: PaymentProvider
-          Value: Stripe
-        - Name: ProductType
-          Value: SupporterPlus
-        - Name: Stage
-          Value: !Ref Stage
-      ComparisonOperator: LessThanOrEqualToThreshold
-      Threshold: 0
-      Period: 300
-      EvaluationPeriods: 36
-      TreatMissingData: breaching
-    DependsOn: SupportWorkersPROD
-
-  NoGocardlessSupporterPlusAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Condition: CreateProdResources
-    Properties:
-      AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:contributions-dev
-      AlarmName: !Sub support-workers ${Stage} No successful Gocardless supporter plus acquisitions recently
-      MetricName: PaymentSuccess
-      Namespace: support-frontend
-      Dimensions:
-        - Name: PaymentProvider
-          Value: DirectDebit
-        - Name: ProductType
-          Value: SupporterPlus
-        - Name: Stage
-          Value: !Ref Stage
-      ComparisonOperator: LessThanOrEqualToThreshold
-      Threshold: 0
-      Period: 3600
-      EvaluationPeriods: 14
+      EvaluationPeriods: 120
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
