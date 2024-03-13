@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 
 const characters =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -12,8 +12,10 @@ function generateString(length: number) {
   return result;
 }
 
-export const firstName = () => `e2e.firstName+${generateString(5)}`;
-export const lastName = () => `e2e.lastName+${generateString(5)}`;
+export const firstName = () =>
+  `test.support.frontend.e2e.firstName+${generateString(5)}`;
+export const lastName = () =>
+  `test.support.frontend.e2e.lastName+${generateString(5)}`;
 /**
  * This email needs to end with @thegulocal.com.
  *
@@ -23,4 +25,5 @@ export const lastName = () => `e2e.lastName+${generateString(5)}`;
  *
  * @see https://github.com/guardian/membership-workflow/blob/99e2b90305f93bf35ce230f6b6c17e0c4533facb/app/model/BrazeCampaignTriggerPayload.scala#L28
  **/
-export const email = () => `e2e.email+${uuidv4()}@thegulocal.com`;
+export const email = () =>
+  `test.support.frontend.e2e+${nanoid()}@thegulocal.com`;
