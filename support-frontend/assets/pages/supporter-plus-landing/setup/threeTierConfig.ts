@@ -6,7 +6,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 export interface TierBenefits {
 	description?: Array<string | { copy: string; strong: boolean }>;
-	list: Array<{ copy: string; tooltip?: string }>;
+	list: Array<{ copy: string; tooltip?: string; strong?: boolean }>;
 }
 
 export interface TierPlanCosts {
@@ -132,6 +132,19 @@ const tier2: TierCard = {
 				AUDCountries: { price: 160 },
 			},
 		},
+	},
+};
+
+const tier2tote: TierCard = {
+	...tier2,
+	benefits: {
+		list: [
+			{
+				copy: 'Limited time only: "Not for Sale" Guardian tote bag**',
+				strong: true,
+			},
+			...tier2.benefits.list,
+		],
 	},
 };
 
@@ -293,6 +306,23 @@ const tier3: TierCard = {
 			},
 		},
 	},
+};
+
+const tier3tote: TierCard = {
+	...tier3,
+	benefits: {
+		description: [
+			'The rewards from All-access digital ',
+			{ strong: true, copy: 'including a limited-edition Guardian tote bag**' },
+		],
+		list: [...tier3.benefits.list],
+	},
+};
+
+export const tierCardsTote: TierCards = {
+	tier1,
+	tier2: tier2tote,
+	tier3: tier3tote,
 };
 
 export const tierCards: TierCards = {
