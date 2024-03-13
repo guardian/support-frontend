@@ -182,7 +182,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 		selectedAmounts,
 		otherAmounts,
 		countryGroupId,
-		true,
 	);
 
 	const thankYouModuleData = getThankYouModuleData(
