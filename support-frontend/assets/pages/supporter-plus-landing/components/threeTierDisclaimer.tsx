@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette, textSans } from '@guardian/source-foundations';
+import { from, palette, textSans } from '@guardian/source-foundations';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierPlanCosts } from '../setup/threeTierConfig';
 
@@ -18,6 +18,9 @@ const container = css`
 	text-align: left;
 	color: ${palette.neutral[100]};
 	${textSans.xxsmall({ lineHeight: 'tight' })};
+	${from.desktop} {
+		max-width: 780px;
+	}
 `;
 
 const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
