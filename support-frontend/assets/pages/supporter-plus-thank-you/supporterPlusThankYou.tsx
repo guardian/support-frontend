@@ -16,11 +16,11 @@ import { getAmount } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { isSupporterPlus } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
 import { getSession } from 'helpers/storage/storage';
-import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
 import {
 	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 	trackUserData,
@@ -177,7 +177,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 		}
 	}, []);
 
-	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
+	const amountIsAboveThreshold = isSupporterPlus(
 		contributionType,
 		selectedAmounts,
 		otherAmounts,
