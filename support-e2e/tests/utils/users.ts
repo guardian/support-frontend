@@ -12,8 +12,10 @@ function generateString(length: number) {
   return result;
 }
 
-export const firstName = () => `${generateString(5)}TestF`;
-export const lastName = () => `${generateString(5)}TestL`;
+export const firstName = () =>
+  `test.support.frontend.e2e.firstName+${generateString(5)}`;
+export const lastName = () =>
+  `test.support.frontend.e2e.lastName+${generateString(5)}`;
 /**
  * This email needs to end with @thegulocal.com.
  *
