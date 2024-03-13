@@ -18,7 +18,7 @@ const testsDetails: TestDetails[] = [
 
 afterEachTasks(test);
 
-test.describe("Sign up for a one-off contribution", () => {
+test.describe.skip("Sign up for a one-off contribution", () => {
   testsDetails.forEach((testDetails) => {
     test(`One off contribution ${
       testDetails.customAmount

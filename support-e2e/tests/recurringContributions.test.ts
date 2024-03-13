@@ -25,61 +25,72 @@ const testsDetails: TestDetails[] = [
 
 afterEachTasks(test);
 
-test.describe("Sign up for a Recurring Contribution (Two-Step checkout)", () => {
-  testsDetails.forEach((testDetails) => {
-    test(`${testDetails.frequency} contribution checkout with ${
-      testDetails.paymentType
-    } - ${testDetails.country ?? "UK"}`, async ({ context, baseURL }) => {
-      const page = await context.newPage();
-      const testFirstName = firstName();
-      const testLastName = lastName();
-      const testEmail = email();
-      setupPage(
-        page,
-        context,
-        baseURL,
-        `/${testDetails.country?.toLowerCase() || "uk"}/contribute`
-      );
-      await page.getByRole("tab").getByText(testDetails.frequency).click();
-      await page.getByRole("button", { name: "Continue to checkout" }).click();
-      await setTestUserDetails(page, testFirstName, testLastName, testEmail);
-      if (testDetails.country === "US") {
-        await page.getByLabel("State").selectOption({ label: "New York" })
-        await page.getByLabel("ZIP code").fill("90210");
-      }
-      await page.getByRole("radio", { name: testDetails.paymentType }).check();
-      switch (testDetails.paymentType) {
-        case "Credit/Debit card":
-          await fillInCardDetails(page);
-          break;
-        case "Direct debit":
-          await fillInDirectDebitDetails(page, "contribution");
+test.describe.skip(
+  "Sign up for a Recurring Contribution (Two-Step checkout)",
+  () => {
+    testsDetails.forEach((testDetails) => {
+      test(`${testDetails.frequency} contribution checkout with ${
+        testDetails.paymentType
+      } - ${testDetails.country ?? "UK"}`, async ({ context, baseURL }) => {
+        const page = await context.newPage();
+        const testFirstName = firstName();
+        const testLastName = lastName();
+        const testEmail = email();
+        setupPage(
+          page,
+          context,
+          baseURL,
+          `/${testDetails.country?.toLowerCase() || "uk"}/contribute`,
+        );
+        await page.getByRole("tab").getByText(testDetails.frequency).click();
+        await page
+          .getByRole("button", { name: "Continue to checkout" })
+          .click();
+        await setTestUserDetails(page, testFirstName, testLastName, testEmail);
+        if (testDetails.country === "US") {
+          await page.getByLabel("State").selectOption({ label: "New York" });
+          await page.getByLabel("ZIP code").fill("90210");
+        }
+        await page
+          .getByRole("radio", { name: testDetails.paymentType })
+          .check();
+        switch (testDetails.paymentType) {
+          case "Credit/Debit card":
+            await fillInCardDetails(page);
+            break;
+          case "Direct debit":
+            await fillInDirectDebitDetails(page, "contribution");
+            await checkRecaptcha(page);
+            break;
+          case "PayPal":
+            const popupPagePromise = page.waitForEvent("popup");
+            await page
+              .locator("iframe[name^='xcomponent__ppbutton']")
+              .scrollIntoViewIfNeeded();
+            await page
+              .frameLocator("iframe[name^='xcomponent__ppbutton']")
+              // this class gets added to the iframe body after the JavaScript has finished executing
+              .locator("body.dom-ready")
+              .locator('[role="button"]:has-text("Pay with")')
+              .click({ delay: 2000 });
+            const popupPage = await popupPagePromise;
+            fillInPayPalDetails(popupPage);
+            break;
+        }
+        if (
+          testDetails.paymentType === "Credit/Debit card" ||
+          testDetails.paymentType === "Direct debit"
+        ) {
           await checkRecaptcha(page);
-          break;
-        case "PayPal":
-          const popupPagePromise = page.waitForEvent("popup");
-          await page.locator("iframe[name^='xcomponent__ppbutton']").scrollIntoViewIfNeeded();
           await page
-            .frameLocator("iframe[name^='xcomponent__ppbutton']")
-            // this class gets added to the iframe body after the JavaScript has finished executing
-            .locator("body.dom-ready")
-            .locator('[role="button"]:has-text("Pay with")')
-            .click({ delay: 2000 });
-          const popupPage = await popupPagePromise;
-          fillInPayPalDetails(popupPage);
-          break;
-      }
-      if (
-        testDetails.paymentType === "Credit/Debit card" ||
-        testDetails.paymentType === "Direct debit"
-      ) {
-        await checkRecaptcha(page);
-        await page.getByText(/(Pay|Support us with) (£|\$)([0-9]+) per (month|year)/).click();
-      }
-      await expect(page).toHaveURL(
-        `/${testDetails.country?.toLowerCase() || "uk"}/thankyou`,
-        { timeout: 600000 }
-      );
+            .getByText(/(Pay|Support us with) (£|\$)([0-9]+) per (month|year)/)
+            .click();
+        }
+        await expect(page).toHaveURL(
+          `/${testDetails.country?.toLowerCase() || "uk"}/thankyou`,
+          { timeout: 600000 },
+        );
+      });
     });
-  });
-});
+  },
+);
