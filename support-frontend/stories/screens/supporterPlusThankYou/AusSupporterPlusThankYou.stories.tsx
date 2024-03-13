@@ -30,7 +30,7 @@ import {
 } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import { setIsSignedIn, setStorybookUser } from 'helpers/redux/user/actions';
-import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
+import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 import {
 	largeDonations,
 	SupporterPlusThankYou,
@@ -279,7 +279,7 @@ RecurringNotSignedIn.decorators = [
 		store.dispatch(setPaymentMethod({ paymentMethod }));
 
 		const thresholdPrice =
-			benefitsThresholdsByCountryGroup['AUDCountries'][
+			lowerBenefitsThresholds['AUDCountries'][
 				contributionType as RegularContributionType
 			];
 
@@ -341,7 +341,7 @@ RecurringSignedIn.decorators = [
 		store.dispatch(setPaymentMethod({ paymentMethod }));
 
 		const thresholdPrice =
-			benefitsThresholdsByCountryGroup['AUDCountries'][
+			lowerBenefitsThresholds['AUDCountries'][
 				contributionType as RegularContributionType
 			];
 
@@ -404,7 +404,7 @@ RecurringSignUp.decorators = [
 		store.dispatch(setPaymentMethod({ paymentMethod }));
 
 		const thresholdPrice =
-			benefitsThresholdsByCountryGroup['AUDCountries'][
+			lowerBenefitsThresholds['AUDCountries'][
 				contributionType as RegularContributionType
 			];
 

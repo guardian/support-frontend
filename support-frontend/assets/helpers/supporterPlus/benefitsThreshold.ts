@@ -5,39 +5,38 @@ import type {
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { isRecurring } from './isContributionRecurring';
 
-export const benefitsThresholdsByCountryGroup: Record<
-	CountryGroupId,
-	Record<RegularContributionType, number>
-> = {
-	GBPCountries: {
-		MONTHLY: 10,
-		ANNUAL: 95,
-	},
-	UnitedStates: {
-		MONTHLY: 13,
-		ANNUAL: 120,
-	},
-	EURCountries: {
-		MONTHLY: 10,
-		ANNUAL: 95,
-	},
-	International: {
-		MONTHLY: 13,
-		ANNUAL: 120,
-	},
-	AUDCountries: {
-		MONTHLY: 17,
-		ANNUAL: 160,
-	},
-	NZDCountries: {
-		MONTHLY: 17,
-		ANNUAL: 160,
-	},
-	Canada: {
-		MONTHLY: 13,
-		ANNUAL: 120,
-	},
-};
+export type ThresholdAmounts = Record<RegularContributionType, number>;
+export const lowerBenefitsThresholds: Record<CountryGroupId, ThresholdAmounts> =
+	{
+		GBPCountries: {
+			MONTHLY: 10,
+			ANNUAL: 95,
+		},
+		UnitedStates: {
+			MONTHLY: 13,
+			ANNUAL: 120,
+		},
+		EURCountries: {
+			MONTHLY: 10,
+			ANNUAL: 95,
+		},
+		International: {
+			MONTHLY: 13,
+			ANNUAL: 120,
+		},
+		AUDCountries: {
+			MONTHLY: 17,
+			ANNUAL: 160,
+		},
+		NZDCountries: {
+			MONTHLY: 17,
+			ANNUAL: 160,
+		},
+		Canada: {
+			MONTHLY: 13,
+			ANNUAL: 120,
+		},
+	};
 
 // This is a function overload that means if the caller has already determined that contributionType is recurring
 // they do not have to handle an undefined return type from getThresholdPrice
@@ -62,8 +61,7 @@ export function getThresholdPrice(
 	contributionType: ContributionType,
 ): number | undefined {
 	if (isRecurring(contributionType)) {
-		const countryGroupThresholds =
-			benefitsThresholdsByCountryGroup[countryGroupId];
+		const countryGroupThresholds = lowerBenefitsThresholds[countryGroupId];
 		const threshold = countryGroupThresholds[contributionType];
 		return threshold;
 	}
