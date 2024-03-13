@@ -290,6 +290,7 @@ Resources:
       Threshold: 0
       Period: 300
       EvaluationPeriods: 36
+      Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
@@ -313,6 +314,7 @@ Resources:
       Threshold: 0
       Period: 300
       EvaluationPeriods: 24
+      Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
@@ -336,6 +338,7 @@ Resources:
       Threshold: 0
       Period: 3600
       EvaluationPeriods: 14
+      Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
@@ -359,6 +362,7 @@ Resources:
       Threshold: 0
       Period: 300
       EvaluationPeriods: 48
+      Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
@@ -382,6 +386,7 @@ Resources:
       Threshold: 0
       Period: 300
       EvaluationPeriods: 36
+      Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
@@ -405,6 +410,7 @@ Resources:
       Threshold: 0
       Period: 3600
       EvaluationPeriods: 14
+      Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
 
