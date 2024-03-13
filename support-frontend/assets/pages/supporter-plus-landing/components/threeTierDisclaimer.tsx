@@ -48,11 +48,9 @@ export function ThreeTierDisclaimer({
 				<div css={container}>
 					<p>
 						*Digital + Print offer is {discountSummaryCopy(currency, planCost)}{' '}
-						afterwards unless you cancel.
-					</p>
-					<p>
-						Offer only available to new subscribers who do not have an existing
-						subscription with the Guardian.
+						afterwards unless you cancel. Offer only available to new
+						subscribers who do not have an existing subscription with the
+						Guardian.
 					</p>
 				</div>
 			)}
