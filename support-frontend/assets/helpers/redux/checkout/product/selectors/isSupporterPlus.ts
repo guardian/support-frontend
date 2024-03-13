@@ -31,7 +31,7 @@ export function isSupporterPlus(
 	return selectedAmount >= benefitsThreshold;
 }
 
-export function isSupporterPlusPurchase(state: ContributionsState): boolean {
+export function isSupporterPlusFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
 
 	if (isOneOff(contributionType)) {
@@ -53,7 +53,7 @@ export function isSupporterPlusPurchase(state: ContributionsState): boolean {
 	return amountIsHighEnough;
 }
 
-export function shouldHideBenefitsList(state: ContributionsState): boolean {
+export function hideBenefitsListFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
 
 	if (isOneOff(contributionType)) {

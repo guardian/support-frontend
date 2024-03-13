@@ -2,7 +2,7 @@ import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
-import { shouldHideBenefitsList } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
+import { hideBenefitsListFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import {
 	getContributionType,
 	getMinimumContributionAmount,
@@ -44,7 +44,9 @@ export function CheckoutBenefitsListContainer({
 	const dispatch = useContributionsDispatch();
 
 	const contributionType = useContributionsSelector(getContributionType);
-	const benefitsListIsHidden = useContributionsSelector(shouldHideBenefitsList);
+	const benefitsListIsHidden = useContributionsSelector(
+		hideBenefitsListFromState,
+	);
 
 	if (benefitsListIsHidden || isOneOff(contributionType)) {
 		return null;
