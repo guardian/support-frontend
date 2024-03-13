@@ -53,9 +53,15 @@ import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
-import { ThreeTierDisclaimer } from '../components/threeTierDisclaimer';
 import type { TierPlans } from '../setup/threeTierConfig';
-import { tierCards } from '../setup/threeTierConfig';
+import {
+	ThreeTierDisclaimer,
+	ToteTsAndCs,
+} from '../components/threeTierDisclaimer';
+import {
+	tierCards as tierCardsNoTote,
+	tierCardsTote,
+} from '../setup/threeTierConfig';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -217,6 +223,9 @@ export function ThreeTierLanding(): JSX.Element {
 		(state) => state.common.internationalisation,
 	);
 
+	const tierCards =
+		countryGroupId === UnitedStates ? tierCardsTote : tierCardsNoTote;
+
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
 			GBPCountries,
@@ -346,11 +355,14 @@ export function ThreeTierLanding(): JSX.Element {
 		);
 	};
 
-	const getCardContentBaseObject = (cardTier: 1 | 2 | 3) => {
+	const getCardContentBaseObject = (
+		cardTier: 1 | 2 | 3,
+		contributionTypeKeyOverride?: 'annual' | 'monthly',
+	) => {
 		let tierPlanCountryCharges =
-			tierCards[`tier${cardTier}`].plans[tierPlanPeriod].charges[
-				countryGroupId
-			];
+			tierCards[`tier${cardTier}`].plans[
+				contributionTypeKeyOverride ?? contributionTypeKey
+			].charges[countryGroupId];
 
 		if (cardTier === 2 && promotion) {
 			tierPlanCountryCharges = {
@@ -513,6 +525,17 @@ export function ThreeTierLanding(): JSX.Element {
 					planCost={getCardContentBaseObject(3).planCost}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierDisclaimer>
+				{countryGroupId === UnitedStates && (
+					<ToteTsAndCs
+						currency={currencies[currencyId].glyph}
+						toteCostMonthly={
+							getCardContentBaseObject(2, 'monthly').planCost.price
+						}
+						toteCostAnnual={
+							getCardContentBaseObject(2, 'annual').planCost.price
+						}
+					></ToteTsAndCs>
+				)}
 			</Container>
 		</PageScaffold>
 	);
