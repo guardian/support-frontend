@@ -12,3 +12,5 @@
       S3Key: !Sub support/${Stage}/support-workers/support-workers.jar
     Runtime: "java21"
     Timeout: "60"
+    Architectures:
+      - arm64
