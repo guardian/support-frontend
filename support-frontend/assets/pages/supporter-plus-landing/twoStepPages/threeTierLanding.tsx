@@ -53,11 +53,11 @@ import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
-import type { TierPlans } from '../setup/threeTierConfig';
 import {
 	ThreeTierDisclaimer,
 	ToteTsAndCs,
 } from '../components/threeTierDisclaimer';
+import type { TierPlans } from '../setup/threeTierConfig';
 import {
 	tierCards as tierCardsNoTote,
 	tierCardsTote,
@@ -361,7 +361,7 @@ export function ThreeTierLanding(): JSX.Element {
 	) => {
 		let tierPlanCountryCharges =
 			tierCards[`tier${cardTier}`].plans[
-				contributionTypeKeyOverride ?? contributionTypeKey
+				contributionTypeKeyOverride ?? tierPlanPeriod
 			].charges[countryGroupId];
 
 		if (cardTier === 2 && promotion) {
