@@ -6,7 +6,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
+import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { CheckoutTopUpToggleProps } from './checkoutTopUpToggle';
 
@@ -35,7 +35,7 @@ export function CheckoutTopUpToggleContainer({
 	}
 
 	const benefitsThreshold =
-		benefitsThresholdsByCountryGroup[countryGroupId][contributionType];
+		lowerBenefitsThresholds[countryGroupId][contributionType];
 
 	useEffect(() => {
 		dispatch(

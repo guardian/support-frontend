@@ -12,7 +12,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
+import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	getDateWithOrdinal,
@@ -149,8 +149,7 @@ export function PaymentTsAndCs({
 	};
 
 	const thresholdDescription = (contributionType: ContributionType) => {
-		const supporterPlusThresholds =
-			benefitsThresholdsByCountryGroup[countryGroupId];
+		const supporterPlusThresholds = lowerBenefitsThresholds[countryGroupId];
 		const threshold: number =
 			contributionType === 'MONTHLY'
 				? supporterPlusThresholds['MONTHLY']
