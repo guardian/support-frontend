@@ -54,7 +54,6 @@ import {
 	ThreeTierDisclaimer,
 	ToteTsAndCs,
 } from '../components/threeTierDisclaimer';
-import type { TierPlans } from '../setup/threeTierConfig';
 import {
 	tierCards as tierCardsNoTote,
 	tierCardsTote,
@@ -241,7 +240,8 @@ export function ThreeTierLanding(): JSX.Element {
 		useContributionsSelector(getContributionType);
 	const contributionType =
 		contributionTypeFromState === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
-	const tierPlanPeriod = contributionType.toLowerCase() as keyof TierPlans;
+	const contributionTypeKey =
+		contributionTypeFromState === 'ANNUAL' ? 'annual' : 'monthly';
 
 	const urlParams = new URLSearchParams(window.location.search);
 	const urlSelectedAmount = urlParams.get('selected-amount');
@@ -348,7 +348,7 @@ export function ThreeTierLanding(): JSX.Element {
 	) => {
 		const tierPlanCountryCharges =
 			tierCards[`tier${cardTier}`].plans[
-				contributionTypeKeyOverride ?? tierPlanPeriod
+				contributionTypeKeyOverride ?? contributionTypeKey
 			].charges[countryGroupId];
 		return {
 			title: tierCards[`tier${cardTier}`].title,
@@ -364,12 +364,13 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const generateTierCheckoutLink = (cardTier: 1 | 2 | 3) => {
 		const tierPlanCountryCharges =
-			tierCards[`tier${cardTier}`].plans[tierPlanPeriod].charges[
+			tierCards[`tier${cardTier}`].plans[contributionTypeKey].charges[
 				countryGroupId
 			];
 		const promoCode = tierPlanCountryCharges.promoCode;
-		const price =
-			tierPlanCountryCharges.discount?.price ?? tierPlanCountryCharges.price;
+		const price = tierPlanCountryCharges.discount
+			? tierPlanCountryCharges.discount.price
+			: tierPlanCountryCharges.price;
 
 		const url = cardTier === 3 ? `/subscribe/weekly/checkout?` : `checkout?`;
 		const urlParams = new URLSearchParams();
@@ -382,7 +383,7 @@ export function ThreeTierLanding(): JSX.Element {
 			urlParams.set('period', paymentFrequencyMap[contributionType]);
 		} else {
 			urlParams.set('selected-amount', price.toString());
-			urlParams.set('selected-contribution-type', tierPlanPeriod);
+			urlParams.set('selected-contribution-type', contributionTypeKey);
 		}
 
 		return `${url}${urlParams.toString()}${window.location.hash}`;

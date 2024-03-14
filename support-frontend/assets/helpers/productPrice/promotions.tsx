@@ -107,24 +107,15 @@ function getPromotion(
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
 ): Promotion | undefined {
-	/*
-  getProductPrice can raise an Error if not available (ie Storybook)
-  this try/catch wrapper ensures its returned as undefined as specified,
-  getProductPrice (used throughout) safer to remain un-changed
-  */
-	try {
-		return getAppliedPromo(
-			getProductPrice(
-				productPrices,
-				country,
-				billingPeriod,
-				fulfilmentOption,
-				productOption,
-			).promotions,
-		);
-	} catch (error) {
-		return undefined;
-	}
+	return getAppliedPromo(
+		getProductPrice(
+			productPrices,
+			country,
+			billingPeriod,
+			fulfilmentOption,
+			productOption,
+		).promotions,
+	);
 }
 
 function getSanitisedHtml(markdownString: string): string {
