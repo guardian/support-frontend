@@ -53,6 +53,22 @@ function getTermsConditions(
 	);
 }
 
+function getOriginalPrice(
+	productPrices: ProductPrices,
+	currentPrice: number,
+	country: IsoCountry,
+	billingPeriod: BillingPeriod,
+	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
+	productOption: ProductOptions = NoProductOptions,
+): number | undefined {
+	const countryGroup = getCountryGroup(country);
+	const originalPrice =
+		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
+			billingPeriod
+		]?.[countryGroup.currency]?.price ?? 0;
+	return originalPrice > currentPrice ? originalPrice : undefined;
+}
+
 export function ContributionsOrderSummaryContainer({
 	inThreeTier,
 	renderOrderSummary,
@@ -71,25 +87,11 @@ export function ContributionsOrderSummaryContainer({
 	const originalPrice = useContributionsSelector((state) =>
 		getOriginalPrice(
 			state.page.checkoutForm.product.productPrices,
+			currentPrice,
 			countryId,
 			billingPeriod,
 		),
 	);
-
-	function getOriginalPrice(
-		productPrices: ProductPrices,
-		country: IsoCountry,
-		billingPeriod: BillingPeriod,
-		fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
-		productOption: ProductOptions = NoProductOptions,
-	): number | undefined {
-		const countryGroup = getCountryGroup(country);
-		const originalPrice =
-			productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
-				billingPeriod
-			]?.[countryGroup.currency]?.price ?? 0;
-		return originalPrice > currentPrice ? originalPrice : undefined;
-	}
 
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
 
