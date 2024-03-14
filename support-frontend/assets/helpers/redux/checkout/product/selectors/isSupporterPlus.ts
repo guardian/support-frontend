@@ -1,7 +1,8 @@
-import type {
-	ContributionType,
-	OtherAmounts,
-	SelectedAmounts,
+import {
+	type ContributionType,
+	getAmount,
+	type OtherAmounts,
+	type SelectedAmounts,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -19,15 +20,14 @@ export function isSupporterPlus(
 		return false;
 	}
 
-	const benefitsThreshold = getThresholdPrice(countryGroupId, contributionType);
-	const selectedAmount = selectedAmounts[contributionType];
+	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
+	const selectedAmount = getAmount(
+		selectedAmounts,
+		otherAmounts,
+		contributionType,
+	);
 
-	if (selectedAmount === 'other') {
-		const otherAmount = otherAmounts[contributionType].amount;
-		return otherAmount ? parseInt(otherAmount) >= benefitsThreshold : false;
-	}
-
-	return selectedAmount >= benefitsThreshold;
+	return selectedAmount >= thresholdPrice;
 }
 
 export function isSupporterPlusFromState(state: ContributionsState): boolean {
