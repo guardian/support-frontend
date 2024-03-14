@@ -1,9 +1,9 @@
-import type {
-	ContributionType,
-	OtherAmounts,
-	SelectedAmounts,
+import {
+	type ContributionType,
+	getAmount,
+	type OtherAmounts,
+	type SelectedAmounts,
 } from 'helpers/contributions';
-import { getAmount } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
@@ -20,37 +20,24 @@ export function isSupporterPlus(
 		return false;
 	}
 
-	const benefitsThreshold = getThresholdPrice(countryGroupId, contributionType);
-	const selectedAmount = selectedAmounts[contributionType];
+	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
+	const selectedAmount = getAmount(
+		selectedAmounts,
+		otherAmounts,
+		contributionType,
+	);
 
-	if (selectedAmount === 'other') {
-		const otherAmount = otherAmounts[contributionType].amount;
-		return otherAmount ? parseInt(otherAmount) >= benefitsThreshold : false;
-	}
-
-	return selectedAmount >= benefitsThreshold;
+	return selectedAmount >= thresholdPrice;
 }
 
 export function isSupporterPlusFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
-
-	if (isOneOff(contributionType)) {
-		return false;
-	}
-
-	const thresholdPrice = getThresholdPrice(
-		state.common.internationalisation.countryGroupId,
+	return isSupporterPlus(
 		contributionType,
-	);
-	const amount = getAmount(
 		state.page.checkoutForm.product.selectedAmounts,
 		state.page.checkoutForm.product.otherAmounts,
-		contributionType,
+		state.common.internationalisation.countryGroupId,
 	);
-
-	const amountIsHighEnough = !!(thresholdPrice && amount >= thresholdPrice);
-
-	return amountIsHighEnough;
 }
 
 export function hideBenefitsListFromState(state: ContributionsState): boolean {
