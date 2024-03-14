@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   test:
-#    if: ${{ github.event.label.name == 'Seen-on-PROD' }}
+    if: ${{ github.event.label.name == 'Seen-on-PROD' }}
     name: Playwright
     timeout-minutes: 30
     runs-on: ubuntu-latest
@@ -23,27 +23,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-#      - name: Setup node
-#        uses: actions/setup-node@v4
-#        with:
-#          node-version-file: ".nvmrc"
-#
-#      - name: Install dependencies
-#        run: yarn install --frozen-lockfile
-#        working-directory: ./support-e2e
-#
-#      - name: Run Playwright
-#        run: yarn pw-browserstack-test
-#        working-directory: ./support-e2e
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: ./support-e2e
+
+      - name: Run Playwright
+        run: yarn pw-browserstack-test
+        working-directory: ./support-e2e
 
       - name: Set outputs
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Notify on Failure
-#        if: ${{ failure() }}
+        if: ${{ failure() }}
         run: |
           echo "Tests have failed - calling webhook"
           failedWorkflowRun="https://github.com/guardian/support-frontend/actions/runs/$GITHUB_RUN_ID"
           browserStackSearch="https://automate.browserstack.com/dashboard/v2/search?query=playwright-build-${{ steps.vars.outputs.sha_short }}&type=builds"
-          curl -X POST -H "Content-Type: application/json" "$GOOGLE_CHAT_WEB_HOOK" -d '{"text": "IGNORE TESTING🚨 The Playwright post deployment tests for support frontend have failed! <users/all> \n \n Visit first to check failing tests <'"$failedWorkflowRun"'|Workflow run> \n Visit next to see related sessions: <'"$browserStackSearch"'|Browser stack test results> \n \n 📖 <https://github.com/guardian/support-frontend/wiki/Post-deployment-test-runbook|Check the runbook for a step by step guide>"}'
+          curl -X POST -H "Content-Type: application/json" "$GOOGLE_CHAT_WEB_HOOK" -d '{"text": "🚨 The Playwright post deployment tests for support frontend have failed! <users/all> \n \n Visit first to check failing tests <'"$failedWorkflowRun"'|Workflow run> \n Visit next to see related sessions: <'"$browserStackSearch"'|Browser stack test results> \n \n 📖 <https://github.com/guardian/support-frontend/wiki/Post-deployment-test-runbook|Check the runbook for a step by step guide>"}'
