@@ -1,0 +1,15 @@
+*
+
+!assets/
+!package.json
+!server.tsx
+!tsconfig.json
+!tsconfig.server.json
+!webpack.common.js
+!webpack.dev-server.js
+!webpack.dev.js
+!webpack.entryPoints.js
+!webpack.prod.js
+!webpack.ssr.js
+!window.d.ts
+!node_modules
