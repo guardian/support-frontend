@@ -10,7 +10,7 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import {
-	lowerBenefitsThresholds,
+	getLowerBenefitsThresholds,
 	upperBenefitsThresholds,
 } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -37,7 +37,7 @@ export function CheckoutTopUpAmountsContainer({
 	const isWithinThreshold =
 		contributionType !== 'ONE_OFF' &&
 		amountBeforeAmendments >=
-			lowerBenefitsThresholds[countryGroupId][contributionType] &&
+			getLowerBenefitsThresholds(countryGroupId)[contributionType] &&
 		amountBeforeAmendments <=
 			upperBenefitsThresholds[countryGroupId][contributionType];
 

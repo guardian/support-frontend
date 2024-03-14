@@ -15,7 +15,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
+import { getLowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	getDateWithOrdinal,
@@ -151,7 +151,7 @@ export function PaymentTsAndCs({
 		);
 	};
 
-	const thresholdAmounts = lowerBenefitsThresholds[countryGroupId];
+	const thresholdAmounts = getLowerBenefitsThresholds(countryGroupId);
 	const thresholdDescription = (contributionType: RegularContributionType) => {
 		return `${currencyGlyph}${
 			thresholdAmounts[contributionType]

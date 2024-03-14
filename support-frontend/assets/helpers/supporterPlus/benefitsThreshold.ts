@@ -3,6 +3,8 @@ import type {
 	RegularContributionType,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { getPromotion } from 'helpers/productPrice/promotions';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { isRecurring } from './isContributionRecurring';
 
 export type ThresholdAmounts = Record<RegularContributionType, number>;
@@ -69,6 +71,32 @@ export const lowerBenefitsThresholds: Record<CountryGroupId, ThresholdAmounts> =
 			ANNUAL: 120,
 		},
 	};
+export function getLowerBenefitsThresholds(
+	countryGroupId: CountryGroupId,
+): ThresholdAmounts {
+	const promotionMonthly = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.productPrices,
+			state.common.internationalisation.countryId,
+			'Monthly',
+		),
+	);
+	const promotionAnnual = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.productPrices,
+			state.common.internationalisation.countryId,
+			'Annual',
+		),
+	);
+	return {
+		MONTHLY:
+			promotionMonthly?.discountedPrice ??
+			lowerBenefitsThresholds[countryGroupId].MONTHLY,
+		ANNUAL:
+			promotionAnnual?.discountedPrice ??
+			lowerBenefitsThresholds[countryGroupId].ANNUAL,
+	};
+}
 
 // This is a function overload that means if the caller has already determined that contributionType is recurring
 // they do not have to handle an undefined return type from getThresholdPrice
