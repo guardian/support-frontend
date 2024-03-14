@@ -35,6 +35,8 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
 	setProductType,
@@ -216,7 +218,7 @@ export function ThreeTierLanding(): JSX.Element {
 		(state) => state.common,
 	);
 
-	const { countryGroupId, currencyId } = useContributionsSelector(
+	const { countryGroupId, currencyId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 
@@ -242,6 +244,16 @@ export function ThreeTierLanding(): JSX.Element {
 	const contributionType =
 		contributionTypeFromState === 'ANNUAL' ? 'ANNUAL' : 'MONTHLY';
 	const tierPlanPeriod = contributionType.toLowerCase() as keyof TierPlans;
+	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
+		tierPlanPeriod.slice(1)) as BillingPeriod;
+
+	const promotion = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.productPrices,
+			countryId,
+			billingPeriod,
+		),
+	);
 
 	const urlParams = new URLSearchParams(window.location.search);
 	const urlSelectedAmount = urlParams.get('selected-amount');
@@ -346,10 +358,28 @@ export function ThreeTierLanding(): JSX.Element {
 		cardTier: 1 | 2 | 3,
 		contributionTypeKeyOverride?: 'annual' | 'monthly',
 	) => {
-		const tierPlanCountryCharges =
+		let tierPlanCountryCharges =
 			tierCards[`tier${cardTier}`].plans[
 				contributionTypeKeyOverride ?? tierPlanPeriod
 			].charges[countryGroupId];
+
+		if (cardTier === 2 && promotion) {
+			tierPlanCountryCharges = {
+				...tierPlanCountryCharges,
+				promoCode: promotion.promoCode,
+				discount: promotion.discount
+					? {
+							percentage: promotion.discount.amount,
+							price: promotion.discountedPrice ?? tierPlanCountryCharges.price,
+							duration: {
+								value: promotion.numberOfDiscountedPeriods ?? 0,
+								period: contributionType,
+							},
+					  }
+					: undefined,
+			};
+		}
+
 		return {
 			title: tierCards[`tier${cardTier}`].title,
 			benefits: tierCards[`tier${cardTier}`].benefits,
