@@ -2186,11 +2186,6 @@
   resolved "https://registry.yarnpkg.com/@guardian/browserslist-config/-/browserslist-config-5.0.0.tgz#734603a4553670abb69ff290e9ff20ef61b17218"
   integrity sha512-NrmQflwQKWYSNHUXsq9uroPIp+d5+mzZrDUy8MEFdNDqVjy8WPfbhANhQtFWGGjRifL0Z7yrfG/cYyBxbKFY3w==
 
-"@guardian/consent-management-platform@^13.12.0":
-  version "13.12.0"
-  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-13.12.0.tgz#7cd52881ac017eca8697b368c313678664acc10e"
-  integrity sha512-weLk3tR1ZtMvn5tfTFItvbIT84JFaXMdP5zcbu1Aynt+eTKZD8oVKTtuvdg6ZmTuxsEOIfsel0fFirjDUo5ccQ==
-
 "@guardian/eslint-config-typescript@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@guardian/eslint-config-typescript/-/eslint-config-typescript-7.0.0.tgz#b16fab129fb6e7fe9343143d9bdcbe1867117ab8"
@@ -2228,10 +2223,10 @@
     "@typescript-eslint/eslint-plugin" "5.46.1"
     "@typescript-eslint/parser" "5.59.9"
 
-"@guardian/libs@15.9.1":
-  version "15.9.1"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.9.1.tgz#6846c9f0debb19d650f1775b21314a99ea80248d"
-  integrity sha512-Mns6Gc3MQacVxQ44Ei5HaVak3y9HYQF5kZ4lZGnacJfRdWAfW9K5K5rphf7mSgqkygOGoTs5TMQ3gO37MP8hbw==
+"@guardian/libs@0.0.0-canary-20240314102721":
+  version "0.0.0-canary-20240314102721"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-0.0.0-canary-20240314102721.tgz#92c6450574d5fdd0a2dc60bc446a86854c1c8eca"
+  integrity sha512-hPaXN2+QpJNwlZ7aO8I9vZhjdgkgSthoT2szC6ZKjbQCB+wBte477vac11OCYVu0WAKi+mO55SAMnXYBehLQ9A==
 
 "@guardian/paparazzi@^0.3.1":
   version "0.3.1"
