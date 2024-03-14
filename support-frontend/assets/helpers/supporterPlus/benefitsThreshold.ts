@@ -121,8 +121,6 @@ export function getThresholdPrice(
 	contributionType: ContributionType,
 ): number | undefined {
 	if (isRecurring(contributionType)) {
-		const countryGroupThresholds = lowerBenefitsThresholds[countryGroupId];
-		const threshold = countryGroupThresholds[contributionType];
-		return threshold;
+		return getLowerBenefitsThresholds(countryGroupId)[contributionType];
 	}
 }
