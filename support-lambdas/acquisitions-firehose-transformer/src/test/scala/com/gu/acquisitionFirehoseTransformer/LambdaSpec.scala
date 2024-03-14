@@ -4,6 +4,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.flatspec.AnyFlatSpec
 
 import com.gu.support.acquisitions.models._
+import com.gu.support.acquisitions.AbTest
 import com.amazonaws.services.lambda.runtime.events.KinesisFirehoseEvent
 
 import io.circe.syntax._
@@ -37,10 +38,10 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
     val jsons = records.toList.map { record => new String(record.getData().array()) }
 
     jsons(0) should be(
-      """{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":10.0,"annualisedValue":100.18037999999999,"annualisedValueGBP":120.21645599999998,"currency":"USD","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE","referrerUrl":"referrer-url","labels":[]}""" + '\n',
+      """{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":10.0,"annualisedValue":100.18037999999999,"annualisedValueGBP":120.21645599999998,"currency":"USD","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE","referrerUrl":"referrer-url","labels":[],"abTests":[{"name":"name","variant":"variant"}]}""" + '\n',
     )
     jsons(1) should be(
-      """{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":20.0,"annualisedValue":200.36075999999997,"annualisedValueGBP":240.43291199999996,"currency":"USD","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE","referrerUrl":"referrer-url","labels":[]}""" + '\n',
+      """{"paymentFrequency":"MONTHLY","countryCode":"GB","amount":20.0,"annualisedValue":200.36075999999997,"annualisedValueGBP":240.43291199999996,"currency":"USD","timestamp":"2018-12-13 14:15:04","campaignCode":"MY_CAMPAIGN_CODE","componentId":"MY_COMPONENT_ID","product":"RECURRING_CONTRIBUTION","paymentProvider":"STRIPE","referrerUrl":"referrer-url","labels":[],"abTests":[{"name":"name","variant":"variant"}]}""" + '\n',
     )
   }
 
@@ -70,7 +71,7 @@ class LambdaSpec extends AnyFlatSpec with Matchers {
       campaignCode = Some("MY_CAMPAIGN_CODE"),
       source = None,
       referrerUrl = Some("referrer-url"),
-      abTests = Nil,
+      abTests = List(AbTest("name", "variant")),
       paymentFrequency = PaymentFrequency.Monthly,
       paymentProvider = Some(PaymentProvider.Stripe),
       printOptions = None,
