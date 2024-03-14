@@ -23,7 +23,10 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { getLowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
+import {
+	getLowerBenefitsThreshold,
+	getLowerBenefitsThresholds,
+} from 'helpers/supporterPlus/benefitsThreshold';
 
 const accordionHeading = css`
 	${textSans.small()};
@@ -100,13 +103,13 @@ export function LimitedPriceCards(): JSX.Element {
 		dispatch(
 			setSelectedAmount({
 				contributionType,
-				amount: getLowerBenefitsThresholds(countryGroupId)[type].toString(),
+				amount: getLowerBenefitsThreshold(countryGroupId, type).toString(),
 			}),
 		);
 		dispatch(
 			setSelectedAmountBeforeAmendment({
 				contributionType,
-				amount: getLowerBenefitsThresholds(countryGroupId)[type].toString(),
+				amount: getLowerBenefitsThreshold(countryGroupId, type).toString(),
 			}),
 		);
 	}, []);
