@@ -52,7 +52,7 @@ class StripePatronsDataLambda extends GuScheduledLambda {
         "com.gu.patrons.lambdas.ProcessStripeSubscriptionsLambda::handleRequest",
       monitoringConfiguration: monitoringForEnvironment(scope.stage),
       rules: [{ schedule: scheduleRateForEnvironment(scope.stage) }],
-      runtime: Runtime.JAVA_11,
+      runtime: Runtime.JAVA_21,
       memorySize: 1536,
       timeout: Duration.minutes(15),
       enableVersioning: true,
@@ -93,7 +93,7 @@ class PatronSignUpLambda extends GuLambdaFunction {
       functionName: `${appName}-sign-up-${scope.stage}`,
       handler:
         "com.gu.patrons.lambdas.PatronSignUpEventLambda::handleRequest",
-      runtime: Runtime.JAVA_11,
+      runtime: Runtime.JAVA_21,
       memorySize: 1536,
       timeout: Duration.minutes(15),
       enableVersioning: true,
@@ -114,7 +114,7 @@ class PatronCancelledLambda extends GuLambdaFunction {
       functionName: `${appName}-cancelled-${scope.stage}`,
       handler:
         "com.gu.patrons.lambdas.PatronCancelledEventLambda::handleRequest",
-      runtime: Runtime.JAVA_11,
+      runtime: Runtime.JAVA_21,
       memorySize: 1536,
       timeout: Duration.minutes(15),
       enableVersioning: true,
