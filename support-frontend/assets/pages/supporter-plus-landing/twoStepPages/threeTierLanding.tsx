@@ -36,6 +36,7 @@ import {
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
@@ -296,7 +297,7 @@ export function ThreeTierLanding(): JSX.Element {
 		);
 		navigateWithPageView(
 			navigate,
-			generateTierCheckoutLink(cardTier),
+			generateTierCheckoutLink(cardTier, promotion),
 			abParticipations,
 		);
 		sendEventContributionCartValue(
@@ -392,14 +393,19 @@ export function ThreeTierLanding(): JSX.Element {
 		};
 	};
 
-	const generateTierCheckoutLink = (cardTier: 1 | 2 | 3) => {
+	const generateTierCheckoutLink = (cardTier: 1 | 2 | 3, promo?: Promotion) => {
 		const tierPlanCountryCharges =
 			tierCards[`tier${cardTier}`].plans[tierPlanPeriod].charges[
 				countryGroupId
 			];
-		const promoCode = tierPlanCountryCharges.promoCode;
+
+		const promoCode = promo?.promoCode ?? tierPlanCountryCharges.promoCode;
+		const promoDiscountPriceTierMid =
+			cardTier === 2 ? promo?.discountedPrice : undefined;
 		const price =
-			tierPlanCountryCharges.discount?.price ?? tierPlanCountryCharges.price;
+			promoDiscountPriceTierMid ??
+			tierPlanCountryCharges.discount?.price ??
+			tierPlanCountryCharges.price;
 
 		const url = cardTier === 3 ? `/subscribe/weekly/checkout?` : `checkout?`;
 		const urlParams = new URLSearchParams();
