@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@guardian/prettier@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/prettier/-/prettier-8.0.0.tgz#d621f01ad5ae7fa8579a966045ed0e3748beaede"
+  integrity sha512-Q2z9jDTf+38hXpfXSq4whbvfh5CpkB+z7DbL6AvO3O0+Kl6/FOCQLyFJe3YWT1WnnZPf/iF3VvVr/zjtRcBkuA==
+
 "@playwright/test@1.40.1":
   version "1.40.1"
   resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.40.1.tgz#9e66322d97b1d74b9f8718bacab15080f24cde65"
