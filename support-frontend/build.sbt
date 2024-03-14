@@ -77,13 +77,17 @@ def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
   getFiles0(rootFile)
 }
 
-Universal / javaOptions ++= Seq(
-  "-Dpidfile.path=/dev/null",
-  "-J-XX:MaxMetaspaceSize=256m",
-  "-J-XX:+PrintGCDetails",
-  s"-J-Xloggc:/var/log/${packageName.value}/gc.log",
+val jvmParameters = Def.setting(Seq(
+  "-XX:MaxMetaspaceSize=256m",
+  s"-Xlog:gc*:/var/log/${packageName.value}/gc.log", // https://docs.azul.com/prime/Unified-GC-Logging#enabling-unified-gc-logging
   "-XX:-OmitStackTraceInFastThrow",
+))
+val playParameters = Seq(
+  "-Dpidfile.path=/dev/null", // https://www.playframework.com/documentation/3.0.x/ProductionConfiguration#Changing-the-path-of-RUNNING_PID
 )
+// -J tells the packager to pass it through to the JVM
+// https://www.scala-sbt.org/sbt-native-packager/archetypes/java_app/customize.html#via-build-sbt
+Universal / javaOptions ++= playParameters ++ jvmParameters.value.map(param => "-J" + param)
 
 addCommandAlias(
   "devrun",
