@@ -16,7 +16,10 @@ test.describe("Paper product page", () => {
     const domain = new URL(pageUrl).hostname;
     await setTestCookies(context, firstName(), domain);
     await page.goto(pageUrl);
-    await page.locator("id=qa-paper-subscriptions").isVisible();
+    const pageRendered = await page
+      .locator("id=qa-paper-subscriptions")
+      .isVisible();
+    expect(pageRendered).toBeTruthy();
     await expect(page).toHaveURL(/\/uk\/subscribe\/paper/);
   });
 });
@@ -32,8 +35,10 @@ test.describe("Weekly product page", () => {
     const domain = new URL(pageUrl).hostname;
     await setTestCookies(context, firstName(), domain);
     await page.goto(pageUrl);
-
-    await page.locator("id=qa-guardian-weekly").isVisible();
+    const pageRendered = await page
+      .locator("id=qa-guardian-weekly")
+      .isVisible();
+    expect(pageRendered).toBeTruthy();
     await expect(page).toHaveURL(/\/uk\/subscribe\/weekly/);
   });
 });
@@ -49,8 +54,10 @@ test.describe("Weekly gift product page", () => {
     const domain = new URL(pageUrl).hostname;
     await setTestCookies(context, firstName(), domain);
     await page.goto(pageUrl);
-
-    await page.locator("id=qa-guardian-weekly-gift").isVisible();
+    const pageRendered = await page
+      .locator("id=qa-guardian-weekly-gift")
+      .isVisible();
+    expect(pageRendered).toBeTruthy();
     await expect(page).toHaveURL(/\/uk\/subscribe\/weekly\/gift/);
   });
 });
@@ -66,8 +73,10 @@ test.describe("Subscriptions landing page", () => {
     const domain = new URL(pageUrl).hostname;
     await setTestCookies(context, firstName(), domain);
     await page.goto(pageUrl);
-
-    await page.locator("id=qa-subscriptions-landing-page").isVisible();
+    const pageRendered = await page
+      .locator("id=qa-subscriptions-landing-page")
+      .isVisible();
+    expect(pageRendered).toBeTruthy();
     await expect(page).toHaveURL(/\/uk\/subscribe/);
   });
 });
