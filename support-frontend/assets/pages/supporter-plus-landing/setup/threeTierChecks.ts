@@ -6,6 +6,17 @@ export const threeTierCheckoutEnabled = (
 	abParticipations: Participations,
 	countryId: IsoCountry,
 ): boolean => {
+	const isPaperCheckout = window.location.pathname.startsWith(
+		'/subscribe/paper/checkout',
+	);
+	const isDigitalEditionCheckout = window.location.pathname.startsWith(
+		'/subscribe/digitaledition/checkout',
+	);
+
+	if (isPaperCheckout || isDigitalEditionCheckout) {
+		return false;
+	}
+
 	const isWeeklyCheckout = window.location.pathname.startsWith(
 		'/subscribe/weekly/checkout',
 	);
