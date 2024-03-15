@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   test:
-   if: ${{ github.event.label.name == 'Seen-on-PROD' }}
+    if: ${{ github.event.label.name == 'Seen-on-PROD' }}
     name: Playwright
     timeout-minutes: 30
     runs-on: ubuntu-latest
@@ -23,18 +23,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-     - name: Setup node
-       uses: actions/setup-node@v4
-       with:
-         node-version-file: ".nvmrc"
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
 
-     - name: Install dependencies
-       run: yarn install --frozen-lockfile
-       working-directory: ./support-e2e
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: ./support-e2e
 
-     - name: Run Playwright
-       run: yarn pw-browserstack-test
-       working-directory: ./support-e2e
+      - name: Run Playwright
+        run: yarn pw-browserstack-test
+        working-directory: ./support-e2e
 
       - name: Set outputs
         id: vars
