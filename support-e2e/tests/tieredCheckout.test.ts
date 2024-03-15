@@ -30,7 +30,7 @@ const testsDetails: TestDetails[] = [
 
 afterEachTasks(test);
 
-test.describe.only('Subscribe/Contribute via the Tiered checkout)', () => {
+test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 	testsDetails.forEach((testDetails) => {
 		test(`${testDetails.frequency} Subscription/Contribution at Tier-${
 			testDetails.tier
