@@ -41,7 +41,7 @@ jobs:
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
       - name: Notify on Failure
-        if: ${{ failure() }}
+        # if: ${{ failure() }}
         run: |
           echo "Tests have failed - calling webhook"
           failedWorkflowRun="https://github.com/guardian/support-frontend/actions/runs/$GITHUB_RUN_ID"
