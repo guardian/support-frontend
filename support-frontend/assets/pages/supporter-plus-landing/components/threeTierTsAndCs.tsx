@@ -3,8 +3,13 @@ import { from, palette, textSans } from '@guardian/source-foundations';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierPlanCosts } from '../setup/threeTierConfig';
 
-interface ThreeTierDisclaimerProps {
+export interface TsAndCsProps {
+	title: string;
 	planCost: TierPlanCosts;
+}
+
+interface ThreeTierTsAndCsProps {
+	tsAndCsContent: TsAndCsProps[];
 	currency: string;
 }
 
@@ -38,22 +43,28 @@ const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
 	}
 };
 
-export function ThreeTierDisclaimer({
-	planCost,
+export function ThreeTierTsAndCs({
+	tsAndCsContent,
 	currency,
-}: ThreeTierDisclaimerProps): JSX.Element {
+}: ThreeTierTsAndCsProps): JSX.Element {
+	let counter = 0;
 	return (
 		<>
-			{!!planCost.discount && (
-				<div css={container}>
-					<p>
-						*Digital + Print offer is {discountSummaryCopy(currency, planCost)}{' '}
-						afterwards unless you cancel. Offer only available to new
-						subscribers who do not have an existing subscription with the
-						Guardian.
-					</p>
-				</div>
-			)}
+			{tsAndCsContent.map((tcContent) => {
+				if (tcContent.planCost.discount) {
+					counter++;
+					return (
+						<div css={container}>
+							<p>
+								{'*'.repeat(counter)} {tcContent.title} offer is{' '}
+								{discountSummaryCopy(currency, tcContent.planCost)} afterwards
+								unless you cancel. Offer only available to new subscribers who
+								do not have an existing subscription with the Guardian.
+							</p>
+						</div>
+					);
+				}
+			})}
 		</>
 	);
 }

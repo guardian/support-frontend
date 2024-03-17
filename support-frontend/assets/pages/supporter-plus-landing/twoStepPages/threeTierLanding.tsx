@@ -53,10 +53,8 @@ import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
-import {
-	ThreeTierDisclaimer,
-	ToteTsAndCs,
-} from '../components/threeTierDisclaimer';
+import type { TsAndCsProps } from '../components/threeTierTsAndCs';
+import { ThreeTierTsAndCs, ToteTsAndCs } from '../components/threeTierTsAndCs';
 import type { TierPlans } from '../setup/threeTierConfig';
 import {
 	tierCards as tierCardsNoTote,
@@ -393,6 +391,20 @@ export function ThreeTierLanding(): JSX.Element {
 		};
 	};
 
+	const getTsAndCsBaseObject = (
+		cardTier: 1 | 2 | 3,
+		contributionTypeKeyOverride?: 'annual' | 'monthly',
+	): TsAndCsProps => {
+		const cardContent = getCardContentBaseObject(
+			cardTier,
+			contributionTypeKeyOverride,
+		);
+		return {
+			title: cardContent.title,
+			planCost: cardContent.planCost,
+		};
+	};
+
 	const generateTierCheckoutLink = (cardTier: 1 | 2 | 3, promo?: Promotion) => {
 		const tierPlanCountryCharges =
 			tierCards[`tier${cardTier}`].plans[tierPlanPeriod].charges[
@@ -524,10 +536,20 @@ export function ThreeTierLanding(): JSX.Element {
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={disclaimerContainer}
 			>
-				<ThreeTierDisclaimer
-					planCost={getCardContentBaseObject(3).planCost}
+				<ThreeTierTsAndCs
+					tsAndCsContent={[
+						{
+							...getTsAndCsBaseObject(1),
+						},
+						{
+							...getTsAndCsBaseObject(2),
+						},
+						{
+							...getTsAndCsBaseObject(3),
+						},
+					]}
 					currency={currencies[currencyId].glyph}
-				></ThreeTierDisclaimer>
+				></ThreeTierTsAndCs>
 				{countryGroupId === UnitedStates && (
 					<ToteTsAndCs
 						currency={currencies[currencyId].glyph}
