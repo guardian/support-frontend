@@ -83,8 +83,7 @@ import {
 	formatUserDate,
 } from 'helpers/utilities/dateConversions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierABTest';
-import { tierCardsFixed as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 
@@ -201,7 +200,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		props.setBillingCountry(props.deliveryCountry);
 	};
 
-	const inThreeTier = showThreeTierCheckout(props.participations);
+	const urlParams = new URLSearchParams(window.location.search);
+	const inThreeTier =
+		urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
 
 	const paymentMethods = supportedPaymentMethods(
 		props.currencyId,

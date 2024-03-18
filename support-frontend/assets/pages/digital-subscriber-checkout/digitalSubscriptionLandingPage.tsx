@@ -102,9 +102,6 @@ export function DigitalSubscriptionLandingPage({
 	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const { switches } = useContributionsSelector(
-		(state) => state.common.settings,
-	);
 
 	const contributionType = 'MONTHLY';
 
@@ -212,7 +209,7 @@ export function DigitalSubscriptionLandingPage({
 										defaultContainer={DigitalSubscriberPaymentButtonContainer}
 										paymentButtons={getPaymentMethodButtons(
 											contributionType,
-											switches,
+
 											countryId,
 											countryGroupId,
 										)}

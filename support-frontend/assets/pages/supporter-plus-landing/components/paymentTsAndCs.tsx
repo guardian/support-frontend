@@ -1,6 +1,9 @@
 import { css } from '@emotion/react';
 import { neutral, textSans } from '@guardian/source-foundations';
-import type { ContributionType } from 'helpers/contributions';
+import type {
+	ContributionType,
+	RegularContributionType,
+} from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
@@ -12,7 +15,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
+import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	getDateWithOrdinal,
@@ -148,16 +151,11 @@ export function PaymentTsAndCs({
 		);
 	};
 
-	const thresholdDescription = (contributionType: ContributionType) => {
-		const supporterPlusThresholds =
-			benefitsThresholdsByCountryGroup[countryGroupId];
-		const threshold: number =
-			contributionType === 'MONTHLY'
-				? supporterPlusThresholds['MONTHLY']
-				: supporterPlusThresholds['ANNUAL'];
-		return `${currencyGlyph}${threshold} per ${frequencySingular(
-			contributionType,
-		)}`;
+	const thresholdAmounts = lowerBenefitsThresholds[countryGroupId];
+	const thresholdDescription = (contributionType: RegularContributionType) => {
+		return `${currencyGlyph}${
+			thresholdAmounts[contributionType]
+		} per ${frequencySingular(contributionType)}`;
 	};
 
 	const copyAboveThreshold = (
@@ -170,8 +168,9 @@ export function PaymentTsAndCs({
 					If you pay at least {thresholdDescription('MONTHLY')} or{' '}
 					{thresholdDescription('ANNUAL')}, you will receive the{' '}
 					{productNameAboveThreshold} benefits on a subscription basis. If you
-					pay more than {thresholdDescription(contributionType)}, these
-					additional amounts will be separate{' '}
+					pay more than{' '}
+					{thresholdDescription(contributionType as RegularContributionType)},
+					these additional amounts will be separate{' '}
 					{frequencyPlural(contributionType)} voluntary financial contributions
 					to the Guardian. The {productNameAboveThreshold} subscription and any
 					contributions will auto-renew each{' '}

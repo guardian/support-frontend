@@ -8,7 +8,6 @@ import { StripePaymentButton } from 'components/stripeCardForm/stripePaymentButt
 import type { ContributionType } from 'helpers/contributions';
 import { getValidPaymentMethods } from 'helpers/forms/checkouts';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
-import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
@@ -26,13 +25,11 @@ const allPaymentMethodButtons: PaymentMethodButtons = {
 
 export function getPaymentMethodButtons(
 	contributionType: ContributionType,
-	switches: Switches,
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
 ): PaymentMethodButtons {
 	const paymentMethodList = getValidPaymentMethods(
 		contributionType,
-		switches,
 		countryId,
 		countryGroupId,
 	);

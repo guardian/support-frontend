@@ -1,7 +1,7 @@
 package com.gu.acquisitionFirehoseTransformer
 
 import com.gu.support.acquisitions.models.AcquisitionDataRow
-
+import com.gu.support.acquisitions.AbTest
 import io.circe.Json
 import io.circe.generic.auto._
 import io.circe.syntax._
@@ -26,6 +26,7 @@ object AcquisitionToJson {
       paymentProvider: String,
       referrerUrl: String,
       labels: List[String],
+      abTests: List[AbTest],
   )
 
   def apply(
@@ -48,6 +49,7 @@ object AcquisitionToJson {
       acquisition.paymentProvider.map(_.value).getOrElse(""),
       acquisition.referrerUrl.getOrElse(""),
       acquisition.labels,
+      acquisition.abTests,
     ).asJson
   }
 }

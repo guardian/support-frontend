@@ -114,7 +114,10 @@ function AddressSelector({ results, onAddressSelected }: AddressSelectorProps) {
 			<Option value={''}>Select an address</Option>
 			<>
 				{results.map((result, index) => (
-					<Option key={result.lineOne} value={index}>
+					<Option
+						key={`${result.lineOne ?? ''}/${result.lineTwo ?? ''}`}
+						value={index}
+					>
 						{addressOption(result)}
 					</Option>
 				))}

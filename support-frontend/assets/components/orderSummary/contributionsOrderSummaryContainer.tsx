@@ -1,7 +1,21 @@
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
 import type { ContributionType } from 'helpers/contributions';
+import type { IsoCountry } from 'helpers/internationalisation/country';
 import { currencies } from 'helpers/internationalisation/currency';
-import { isSupporterPlusPurchase } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import {
+	type FulfilmentOptions,
+	NoFulfilmentOptions,
+} from 'helpers/productPrice/fulfilmentOptions';
+import {
+	NoProductOptions,
+	type ProductOptions,
+} from 'helpers/productPrice/productOptions';
+import {
+	getCountryGroup,
+	type ProductPrices,
+} from 'helpers/productPrice/productPrices';
+import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -39,17 +53,47 @@ function getTermsConditions(
 	);
 }
 
+function getOriginalPrice(
+	productPrices: ProductPrices,
+	currentPrice: number,
+	country: IsoCountry,
+	billingPeriod: BillingPeriod,
+	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
+	productOption: ProductOptions = NoProductOptions,
+): number | undefined {
+	const countryGroup = getCountryGroup(country);
+	const originalPrice =
+		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
+			billingPeriod
+		]?.[countryGroup.currency]?.price ?? 0;
+	return originalPrice > currentPrice ? originalPrice : undefined;
+}
+
 export function ContributionsOrderSummaryContainer({
 	inThreeTier,
 	renderOrderSummary,
 }: ContributionsOrderSummaryContainerProps): JSX.Element {
 	const contributionType = useContributionsSelector(getContributionType);
 
-	const { currencyId } = useContributionsSelector(
+	const { countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
-	const isSupporterPlus = useContributionsSelector(isSupporterPlusPurchase);
+	const { productType } = useContributionsSelector(
+		(state) => state.page.checkoutForm.product,
+	);
+	const billingPeriod = (productType[0] +
+		productType.slice(1).toLowerCase()) as BillingPeriod;
+	const currentPrice = useContributionsSelector(getUserSelectedAmount);
+	const originalPrice = useContributionsSelector((state) =>
+		getOriginalPrice(
+			state.page.checkoutForm.product.productPrices,
+			currentPrice,
+			countryId,
+			billingPeriod,
+		),
+	);
+
+	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
 
 	const currency = currencies[currencyId];
 
@@ -92,7 +136,8 @@ export function ContributionsOrderSummaryContainer({
 
 	return renderOrderSummary({
 		description,
-		total: selectedAmount,
+		total: currentPrice,
+		totalOriginal: isSupporterPlus ? originalPrice : undefined,
 		currency: currency,
 		paymentFrequency,
 		enableCheckList: contributionType !== 'ONE_OFF',

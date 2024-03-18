@@ -62,9 +62,9 @@ import {
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
-import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import type { TierPlans } from 'pages/supporter-plus-landing/setup/threeTierConfig';
-import { tierCardsFixed as tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
@@ -245,7 +245,10 @@ function onPaymentAuthorised(
 		productOption,
 		productPrices,
 	} = state.page.checkoutForm.product;
-	const inThreeTier = showThreeTierCheckout(state.common.abParticipations);
+	const inThreeTier = threeTierCheckoutEnabled(
+		state.common.abParticipations,
+		state.common.internationalisation.countryId,
+	);
 	const productType = getSubscriptionType(state);
 	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { csrf } = state.page.checkoutForm;
