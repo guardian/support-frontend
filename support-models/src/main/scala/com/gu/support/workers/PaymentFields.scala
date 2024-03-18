@@ -46,7 +46,7 @@ object StripeSecretKey {
   def parse(value: String): Either[String, StripeSecretKey] =
     if (
       value.length > 10 &&
-      value.startsWith("sk_") &&
+      (value.startsWith("sk_") || value.startsWith("rk_")) &&
       value.forall { char =>
         (char >= 'a' && char <= 'z') ||
         (char >= 'A' && char <= 'Z') ||
