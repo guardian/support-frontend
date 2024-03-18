@@ -1,4 +1,3 @@
-import { countriesAffectedByVATStatus } from 'helpers/internationalisation/country';
 import type { Tests } from './abtest';
 // ----- Tests ----- //
 // Note: When setting up a test to run on the contributions thank you page
@@ -82,55 +81,5 @@ export const tests: Tests = {
 		referrerControlled: true,
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-	},
-	threeTierCheckoutV3: {
-		variants: [
-			{
-				id: 'variantFixed',
-			},
-			{
-				id: 'variantVariable',
-			},
-		],
-		isActive: true,
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		omitCountries: countriesAffectedByVATStatus,
-		referrerControlled: false,
-		excludeIfInReferrerControlledTest: true,
-		seed: 0,
-
-		/**
-		 * This runs on
-		 * - /{countryGroupId}/contribute
-		 * - /{countryGroupId}/contribute/checkout
-		 * - /{countryGroupId}/thankyou
-		 * - /subscribe/weekly/checkout?threeTierCreateSupporterPlusSubscription=true
-		 *
-		 * And does not run on
-		 * - /subscribe/weekly/checkout
-		 */
-		canRun: () => {
-			// Contribute pages
-			const isContributionLandingPageOrThankyou =
-				window.location.pathname.match(
-					pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-				) !== null;
-
-			// Weekly pages
-			const urlParams = new URLSearchParams(window.location.search);
-			const isThirdTier =
-				urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
-			const isWeeklyCheckout =
-				window.location.pathname === '/subscribe/weekly/checkout';
-
-			return (
-				isContributionLandingPageOrThankyou || (isWeeklyCheckout && isThirdTier)
-			);
-		},
 	},
 };

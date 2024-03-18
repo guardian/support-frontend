@@ -27,7 +27,7 @@ import {
 } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import { setIsSignedIn, setStorybookUser } from 'helpers/redux/user/actions';
-import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
+import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 import {
 	largeDonations,
 	SupporterPlusThankYou,
@@ -287,7 +287,7 @@ RecurringNotSignedIn.decorators = [
 		);
 
 		const thresholdPrice =
-			benefitsThresholdsByCountryGroup[countryGroup][
+			lowerBenefitsThresholds[countryGroup][
 				contributionType as RegularContributionType
 			];
 
@@ -353,7 +353,7 @@ RecurringSignedIn.decorators = [
 		);
 
 		const thresholdPrice =
-			benefitsThresholdsByCountryGroup[countryGroup][
+			lowerBenefitsThresholds[countryGroup][
 				contributionType as RegularContributionType
 			];
 
@@ -420,7 +420,7 @@ RecurringSignUp.decorators = [
 		);
 
 		const thresholdPrice =
-			benefitsThresholdsByCountryGroup[countryGroup][
+			lowerBenefitsThresholds[countryGroup][
 				contributionType as RegularContributionType
 			];
 

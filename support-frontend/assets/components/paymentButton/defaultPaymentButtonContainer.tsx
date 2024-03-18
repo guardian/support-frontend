@@ -1,11 +1,11 @@
 import type { ContributionType } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
+import { isSupporterPlus } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
-import { showThreeTierCheckout } from 'pages/supporter-plus-landing/setup/threeTierABTest';
+import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
 import { DefaultPaymentButton } from './defaultPaymentButton';
 
 const contributionTypeToPaymentInterval: Partial<
@@ -57,13 +57,13 @@ export function DefaultPaymentButtonContainer({
 	const currency = currencies[currencyId];
 	const amountWithCurrency = simpleFormatAmount(currency, selectedAmount);
 
-	const { countryGroupId } = useContributionsSelector(
+	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 
 	const testId = 'qa-contributions-landing-submit-contribution-button';
 
-	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
+	const amountIsAboveThreshold = isSupporterPlus(
 		contributionType,
 		selectedAmounts,
 		otherAmounts,
@@ -75,8 +75,9 @@ export function DefaultPaymentButtonContainer({
 		: createButtonText(
 				amountWithCurrency,
 				amountIsAboveThreshold ||
-					showThreeTierCheckout(
+					threeTierCheckoutEnabled(
 						useContributionsSelector((state) => state.common).abParticipations,
+						countryId,
 					),
 				contributionTypeToPaymentInterval[contributionType],
 		  );

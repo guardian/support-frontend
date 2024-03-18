@@ -46,7 +46,7 @@ function GiftOrPersonalOrStudent({
 						: 'Gift subscriptions'}
 				</h2>
 				{isStudent ? (
-					<p>{product}s get 70% off a Guardian Weekly subscription.</p>
+					<p>{product}s get 50% off a Guardian Weekly subscription.</p>
 				) : (
 					!orderIsAGift && <p>A {product} subscription makes a great gift.</p>
 				)}

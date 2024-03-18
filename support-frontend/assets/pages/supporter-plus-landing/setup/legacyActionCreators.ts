@@ -51,7 +51,7 @@ import {
 	setAmazonPayWalletIsStale,
 } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import { setPaymentRequestError } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
-import { isSupporterPlusPurchase } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
+import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getSubscriptionPromotionForBillingPeriod } from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
@@ -174,7 +174,7 @@ function getProductFields(
 	}
 
 	const contributionType = getContributionType(state);
-	const productOptions = isSupporterPlusPurchase(state)
+	const productOptions = isSupporterPlusFromState(state)
 		? { productType: 'SupporterPlus' as const }
 		: { productType: 'Contribution' as const };
 
