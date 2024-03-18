@@ -47,16 +47,21 @@ export function ThreeTierTsAndCs({
 	tsAndCsContent,
 	currency,
 }: ThreeTierTsAndCsProps): JSX.Element {
-	let counter = 0;
+	/*
+  Each Ts&Cs is bound to a tierCard, a matching promoCount exists in threeTierCards
+  therefore the '*' count can match between the promotion offer description & its
+  associated Ts&Cs.
+  */
+	let promoCount = 0;
 	return (
 		<>
 			{tsAndCsContent.map((tcContent) => {
 				if (tcContent.planCost.discount) {
-					counter++;
+					promoCount++;
 					return (
 						<div css={container}>
 							<p>
-								{'*'.repeat(counter)} {tcContent.title} offer is{' '}
+								{'*'.repeat(promoCount)} {tcContent.title} offer is{' '}
 								{discountSummaryCopy(currency, tcContent.planCost)} afterwards
 								unless you cancel. Offer only available to new subscribers who
 								do not have an existing subscription with the Guardian.
