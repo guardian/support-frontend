@@ -95,6 +95,7 @@ export function LimitedPriceCards(): JSX.Element {
 	);
 
 	const contributionType = useContributionsSelector(getContributionType);
+	const thresholdAmounts = useContributionsSelector(getLowerBenefitsThresholds);
 
 	useEffect(() => {
 		// The contribution type will be set by the query param to be either MONTHLY or ANNUAL, but we
@@ -103,13 +104,17 @@ export function LimitedPriceCards(): JSX.Element {
 		dispatch(
 			setSelectedAmount({
 				contributionType,
-				amount: getLowerBenefitsThreshold(countryGroupId, type).toString(),
+				amount: useContributionsSelector((state) =>
+					getLowerBenefitsThreshold(state, type),
+				).toString(),
 			}),
 		);
 		dispatch(
 			setSelectedAmountBeforeAmendment({
 				contributionType,
-				amount: getLowerBenefitsThreshold(countryGroupId, type).toString(),
+				amount: useContributionsSelector((state) =>
+					getLowerBenefitsThreshold(state, type),
+				).toString(),
 			}),
 		);
 	}, []);
@@ -131,7 +136,7 @@ export function LimitedPriceCards(): JSX.Element {
 								subtitle="and&nbsp;unlock exclusive extras"
 								contributionType={selectedTab}
 								countryGroupId={countryGroupId}
-								prices={getLowerBenefitsThresholds(countryGroupId)}
+								prices={thresholdAmounts}
 								onPriceChange={({ contributionType, amount }) => {
 									onTabChange(contributionType);
 									dispatch(

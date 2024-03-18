@@ -74,8 +74,12 @@ export const lowerBenefitsThresholds: Record<CountryGroupId, ThresholdAmounts> =
 		},
 	};
 
-export function getLowerBenefitsThreshold(state: ContributionsState): number {
-	const contributionType = getContributionType(state);
+export function getLowerBenefitsThreshold(
+	state: ContributionsState,
+	regularContributionType?: RegularContributionType,
+): number {
+	const contributionType =
+		regularContributionType ?? getContributionType(state);
 	const contributionTypeThreshold =
 		contributionType.toUpperCase() as keyof ThresholdAmounts;
 	const billingPeriod = (contributionType[0] +
@@ -98,8 +102,8 @@ export function getLowerBenefitsThresholds(
 	state: ContributionsState,
 ): ThresholdAmounts {
 	return {
-		MONTHLY: getLowerBenefitsThreshold(state),
-		ANNUAL: getLowerBenefitsThreshold(state),
+		MONTHLY: getLowerBenefitsThreshold(state, 'MONTHLY'),
+		ANNUAL: getLowerBenefitsThreshold(state, 'ANNUAL'),
 	};
 }
 

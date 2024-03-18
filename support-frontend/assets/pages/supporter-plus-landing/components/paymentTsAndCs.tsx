@@ -15,6 +15,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
+import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getLowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
@@ -151,7 +152,7 @@ export function PaymentTsAndCs({
 		);
 	};
 
-	const thresholdAmounts = getLowerBenefitsThresholds(countryGroupId);
+	const thresholdAmounts = useContributionsSelector(getLowerBenefitsThresholds);
 	const thresholdDescription = (contributionType: RegularContributionType) => {
 		return `${currencyGlyph}${
 			thresholdAmounts[contributionType]

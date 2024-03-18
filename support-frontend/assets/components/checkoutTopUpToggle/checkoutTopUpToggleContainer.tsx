@@ -26,17 +26,17 @@ export function CheckoutTopUpToggleContainer({
 	);
 
 	const contributionType = useContributionsSelector(getContributionType);
-	const amountBeforeAmendments = useContributionsSelector(
-		getUserSelectedAmountBeforeAmendment,
-	);
 
 	if (contributionType === 'ONE_OFF') {
 		return null;
 	}
 
-	const benefitsThreshold = getLowerBenefitsThreshold(
-		countryGroupId,
-		contributionType,
+	const amountBeforeAmendments = useContributionsSelector(
+		getUserSelectedAmountBeforeAmendment,
+	);
+
+	const benefitsThreshold = useContributionsSelector((state) =>
+		getLowerBenefitsThreshold(state, contributionType),
 	);
 
 	useEffect(() => {

@@ -37,7 +37,9 @@ export function CheckoutTopUpAmountsContainer({
 	const isWithinThreshold =
 		contributionType !== 'ONE_OFF' &&
 		amountBeforeAmendments >=
-			getLowerBenefitsThreshold(countryGroupId, contributionType) &&
+			useContributionsSelector((state) =>
+				getLowerBenefitsThreshold(state, contributionType),
+			) &&
 		amountBeforeAmendments <=
 			upperBenefitsThresholds[countryGroupId][contributionType];
 
