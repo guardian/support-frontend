@@ -54,18 +54,12 @@ jobs:
           role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           aws-region: eu-west-1
 
-      - name: Setup Java 11
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: "11"
+          java-version: "21"
           distribution: "corretto"
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.ivy2/cache
-            ~/.sbt
-            ~/.coursier
-          key: sbt
+          cache: sbt
 
       # There are two separate build in the support-workers project
       # - the integration tests build which is uploaded so it can be run in a lambda
