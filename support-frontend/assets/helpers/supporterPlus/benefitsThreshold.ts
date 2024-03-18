@@ -5,7 +5,8 @@ import type {
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotion } from 'helpers/productPrice/promotions';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { isRecurring } from './isContributionRecurring';
 
 export type ThresholdAmounts = Record<RegularContributionType, number>;
@@ -72,32 +73,33 @@ export const lowerBenefitsThresholds: Record<CountryGroupId, ThresholdAmounts> =
 			ANNUAL: 120,
 		},
 	};
-export function getLowerBenefitsThreshold(
-	countryGroupId: CountryGroupId,
-	contributionType: RegularContributionType,
-): number {
+
+export function getLowerBenefitsThreshold(state: ContributionsState): number {
+	const contributionType = getContributionType(state);
 	const contributionTypeThreshold =
 		contributionType.toUpperCase() as keyof ThresholdAmounts;
 	const billingPeriod = (contributionType[0] +
 		contributionType.slice(1).toLowerCase()) as BillingPeriod;
-	const promotion = useContributionsSelector((state) =>
-		getPromotion(
-			state.page.checkoutForm.product.productPrices,
-			state.common.internationalisation.countryId,
-			billingPeriod,
-		),
+
+	const promotion = getPromotion(
+		state.page.checkoutForm.product.productPrices,
+		state.common.internationalisation.countryId,
+		billingPeriod,
 	);
+
 	return (
 		promotion?.discountedPrice ??
-		lowerBenefitsThresholds[countryGroupId][contributionTypeThreshold]
+		lowerBenefitsThresholds[state.common.internationalisation.countryGroupId][
+			contributionTypeThreshold
+		]
 	);
 }
 export function getLowerBenefitsThresholds(
-	countryGroupId: CountryGroupId,
+	state: ContributionsState,
 ): ThresholdAmounts {
 	return {
-		MONTHLY: getLowerBenefitsThreshold(countryGroupId, 'MONTHLY'),
-		ANNUAL: getLowerBenefitsThreshold(countryGroupId, 'ANNUAL'),
+		MONTHLY: getLowerBenefitsThreshold(state),
+		ANNUAL: getLowerBenefitsThreshold(state),
 	};
 }
 
@@ -107,23 +109,23 @@ export function getLowerBenefitsThresholds(
 
 // Signatures
 export function getThresholdPrice(
-	countryGroupId: CountryGroupId,
 	contributionType: 'ONE_OFF',
+	state: ContributionsState,
 ): undefined;
 export function getThresholdPrice(
-	countryGroupId: CountryGroupId,
 	contributionType: RegularContributionType,
+	state: ContributionsState,
 ): number;
 export function getThresholdPrice(
-	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
+	state: ContributionsState,
 ): number | undefined;
 // Implementation
 export function getThresholdPrice(
-	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
+	state: ContributionsState,
 ): number | undefined {
 	if (isRecurring(contributionType)) {
-		return getLowerBenefitsThreshold(countryGroupId, contributionType);
+		return getLowerBenefitsThreshold(state);
 	}
 }

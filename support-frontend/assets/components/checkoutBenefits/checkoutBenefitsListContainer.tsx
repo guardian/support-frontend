@@ -52,7 +52,7 @@ export function CheckoutBenefitsListContainer({
 		return null;
 	}
 
-	const { countryGroupId, currencyId } = useContributionsSelector(
+	const { currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 
@@ -63,7 +63,9 @@ export function CheckoutBenefitsListContainer({
 
 	const currency = currencies[currencyId];
 
-	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
+	const thresholdPrice = useContributionsSelector((state) =>
+		getThresholdPrice(contributionType, state),
+	);
 	const thresholdPriceWithCurrency = simpleFormatAmount(
 		currency,
 		thresholdPrice,
