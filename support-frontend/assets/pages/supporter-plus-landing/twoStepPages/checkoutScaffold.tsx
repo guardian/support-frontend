@@ -28,6 +28,7 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import HeadlineImageDesktop from 'components/svgs/headlineImageDesktop';
 import HeadlineImageMobile from 'components/svgs/headlineImageMobile';
+import { countriesAffectedByVATStatus } from 'helpers/internationalisation/country';
 import {
 	AUDCountries,
 	Canada,
@@ -135,7 +136,7 @@ export function SupporterPlusCheckoutScaffold({
 	thankYouRoute: string;
 	isPaymentPage?: true;
 }): JSX.Element {
-	const { countryGroupId } = useContributionsSelector(
+	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 
@@ -170,6 +171,9 @@ export function SupporterPlusCheckoutScaffold({
 	}, [paymentComplete]);
 
 	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
+
+	const countryIsAffectedByVATStatus =
+		countriesAffectedByVATStatus.includes(countryId);
 
 	function SubHeading() {
 		if (displayPatronsCheckout) {
@@ -209,7 +213,7 @@ export function SupporterPlusCheckoutScaffold({
 			header={
 				<>
 					<Header>
-						{!isPaymentPage && (
+						{!countryIsAffectedByVATStatus && !isPaymentPage && (
 							<Hide from="desktop">
 								<CountrySwitcherContainer>
 									<CountryGroupSwitcher {...countrySwitcherProps} />
@@ -217,7 +221,9 @@ export function SupporterPlusCheckoutScaffold({
 							</Hide>
 						)}
 					</Header>
-					{!isPaymentPage && <Nav {...countrySwitcherProps} />}
+					{!countryIsAffectedByVATStatus && !isPaymentPage && (
+						<Nav {...countrySwitcherProps} />
+					)}
 				</>
 			}
 			footer={
