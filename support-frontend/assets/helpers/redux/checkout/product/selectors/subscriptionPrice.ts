@@ -6,6 +6,7 @@ import {
 	getPromotion,
 } from 'helpers/productPrice/promotions';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
+import { isSupporterPlusFromState } from './isSupporterPlus';
 
 export function getSubscriptionPrices(
 	state: ContributionsState,
@@ -105,18 +106,18 @@ export function getSubscriptionPromotionForBillingPeriod(
 		billingPeriod,
 		productType,
 	} = state.page.checkoutForm.product;
-	if (productType !== 'DigitalPack') {
-		return;
+
+	if (productType === 'DigitalPack' || isSupporterPlusFromState(state)) {
+		return getAppliedPromo(
+			getProductPrice(
+				productPrices,
+				countryId,
+				billingPeriod,
+				fulfilmentOption,
+				productOption,
+			).promotions,
+		);
 	}
-	return getAppliedPromo(
-		getProductPrice(
-			productPrices,
-			countryId,
-			billingPeriod,
-			fulfilmentOption,
-			productOption,
-		).promotions,
-	);
 }
 
 export function getSubscriptionPriceForBillingPeriod(
