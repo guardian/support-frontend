@@ -411,7 +411,10 @@ export function ThreeTierLanding(): JSX.Element {
 				countryGroupId
 			];
 
-		const promoCode = promo?.promoCode ?? tierPlanCountryCharges.promoCode;
+		const promoCode =
+			cardTier !== 1
+				? promo?.promoCode ?? tierPlanCountryCharges.promoCode
+				: undefined;
 		const promoDiscountPriceTierMid =
 			cardTier === 2 ? promo?.discountedPrice : undefined;
 		const price =
