@@ -13,7 +13,7 @@ interface TestDetails {
 
 const testsDetails: TestDetails[] = [
 	{ paymentType: 'Credit/Debit card', customAmount: '22.55' },
-	// { paymentType: 'PayPal' },
+	{ paymentType: 'PayPal' },
 ];
 
 afterEachTasks(test);
