@@ -28,19 +28,19 @@ object PricesController {
       currency: String, // never quote a price without a currency, even if grouped
       priceSummary: Option[PriceSummary],
   )
-  implicit val rppdEncoder: Encoder.AsObject[RatePlanPriceData] = deriveEncoder[RatePlanPriceData]
+  implicit val rppdEncoder: Encoder[RatePlanPriceData] = deriveEncoder[RatePlanPriceData]
 
   case class ProductPriceData(
       Monthly: RatePlanPriceData,
       Annual: RatePlanPriceData,
   )
-  implicit val ppdEncoder: Encoder.AsObject[ProductPriceData] = deriveEncoder[ProductPriceData]
+  implicit val ppdEncoder: Encoder[ProductPriceData] = deriveEncoder[ProductPriceData]
 
   case class CountryGroupPriceData(
       GuardianWeekly: Option[ProductPriceData],
       Digisub: Option[ProductPriceData],
   )
-  implicit val cgpdEncoder: Encoder.AsObject[CountryGroupPriceData] = deriveEncoder[CountryGroupPriceData]
+  implicit val cgpdEncoder: Encoder[CountryGroupPriceData] = deriveEncoder[CountryGroupPriceData]
 
   /** This is the model that we return from the prices endpoint. It gives us what we need for displaying prices in
     * Dotcom messages. It is simpler than the internal com.gu.support.ProductPrices model.
@@ -87,7 +87,7 @@ object PricesController {
       Annual = buildRatePlanPriceData(annualPriceSummary, includeSummary),
     )
 
-  implicit val pricesEncoder: Encoder.AsObject[Prices] = deriveEncoder[Prices]
+  implicit val pricesEncoder: Encoder[Prices] = deriveEncoder[Prices]
 }
 
 class PricesController(
