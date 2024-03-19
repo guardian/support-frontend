@@ -1,20 +1,19 @@
 package services.stepfunctions
 
-import org.apache.pekko.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.services.stepfunctions.model.StateExitedEventDetails
 import com.gu.i18n.Title
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
 import com.gu.support.encoding.Codec
 import com.gu.support.encoding.Codec._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.CheckoutFailureReasons.CheckoutFailureReason
-import com.gu.support.workers.states.{AnalyticsInfo, CheckoutFailureState, CreatePaymentMethodState}
 import com.gu.support.workers._
+import com.gu.support.workers.states.{AnalyticsInfo, CheckoutFailureState, CreatePaymentMethodState}
+import org.apache.pekko.actor.ActorSystem
 import io.circe.{Decoder, Encoder}
 import org.joda.time.LocalDate
 import play.api.mvc.{Call, Request}
@@ -22,7 +21,7 @@ import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import services.stepfunctions.SupportWorkersClient._
 
 import java.util.UUID
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContextExecutor, Future}
 import scala.util.{Failure, Success, Try}
 
 object CreateSupportWorkersRequest {
@@ -97,9 +96,10 @@ class SupportWorkersClient(
     stateWrapper: StateWrapper,
     supportUrl: String,
     statusCall: String => Call,
-)(implicit system: ActorSystem) {
-  private implicit val sw = stateWrapper
-  private implicit val ec = system.dispatcher
+)(implicit system: ActorSystem)
+    extends SafeLogging {
+  private implicit val sw: StateWrapper = stateWrapper
+  private implicit val ec: ExecutionContextExecutor = system.dispatcher
   private val underlying = Client(arn)
 
   private def referrerAcquisitionDataWithGAFields(
@@ -183,18 +183,18 @@ class SupportWorkersClient(
         .triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount)
         .bimap(
           { error =>
-            SafeLogger.error(scrub"[$requestId] Failed to trigger Step Function execution for ${user.id} - $error")
+            logger.error(scrub"[$requestId] Failed to trigger Step Function execution for ${user.id} - $error")
             StateMachineFailure.toString
           },
           { success =>
-            SafeLogger.info(s"[$requestId] Successfully triggered Step Function execution for ${user.id} ($success)")
+            logger.info(s"[$requestId] Successfully triggered Step Function execution for ${user.id} ($success)")
             underlying.jobIdFromArn(success.arn).map { jobId =>
               StatusResponse(
                 status = Status.Pending,
                 trackingUri = supportUrl + statusCall(jobId).url,
               )
             } getOrElse {
-              SafeLogger.error(
+              logger.error(
                 scrub"[$requestId] Failed to parse ${success.arn} to a jobId after triggering Step Function execution for ${user.id} $request",
               )
               StatusResponse(
@@ -213,7 +213,7 @@ class SupportWorkersClient(
   def status(jobId: String, requestId: UUID): EitherT[Future, SupportWorkersError, StatusResponse] = {
 
     def respondToClient(statusResponse: StatusResponse): StatusResponse = {
-      SafeLogger.info(
+      logger.info(
         s"[$requestId] Client is polling for status - the current status for execution $jobId is: ${statusResponse}",
       )
       statusResponse
@@ -223,7 +223,7 @@ class SupportWorkersClient(
       .history(jobId)
       .bimap(
         { error =>
-          SafeLogger.error(scrub"[$requestId] failed to get status of step function execution $jobId: $error")
+          logger.error(scrub"[$requestId] failed to get status of step function execution $jobId: $error")
           StateMachineFailure: SupportWorkersError
         },
         { events =>
@@ -240,7 +240,7 @@ class SupportWorkersClient(
 
 }
 
-object StepFunctionExecutionStatus {
+object StepFunctionExecutionStatus extends SafeLogging {
 
   def checkoutStatus(
       detailedHistory: List[Try[StateExitedEventDetails]],
@@ -263,12 +263,12 @@ object StepFunctionExecutionStatus {
       stateWrapper: StateWrapper,
       eventDetails: StateExitedEventDetails,
   ): Option[CheckoutFailureReason] = {
-    SafeLogger.info(s"Event details are: $eventDetails")
+    logger.info(s"Event details are: $eventDetails")
     stateWrapper.unWrap[CheckoutFailureState](eventDetails.getOutput) match {
       case Success(checkoutFailureState) =>
         Some(checkoutFailureState.checkoutFailureReason)
       case Failure(error) =>
-        SafeLogger.error(scrub"Failed to determine checkout failure reason due to $error")
+        logger.error(scrub"Failed to determine checkout failure reason due to $error")
         None
     }
 

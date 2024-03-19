@@ -4,7 +4,7 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath}
 import cats.implicits._
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.{SafeLogger, SafeLogging}
 import play.api.libs.circe.Circe
 import play.api.libs.json.{JsObject, JsString, JsValue, Json}
 import play.api.mvc._
@@ -24,7 +24,8 @@ class PayPalOneOff(
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with Circe
-    with SettingsSurrogateKeySyntax {
+    with SettingsSurrogateKeySyntax
+    with SafeLogging {
 
   import actionBuilders._
 
@@ -46,7 +47,7 @@ class PayPalOneOff(
 
   def processPayPalError(error: PayPalError)(implicit request: RequestHeader): Result = {
     if (error.errorName.contains("PAYMENT_ALREADY_DONE")) {
-      SafeLogger.info(s"PAYMENT_ALREADY_DONE error code received. Sending user to thank-you page")
+      logger.info(s"PAYMENT_ALREADY_DONE error code received. Sending user to thank-you page")
       Redirect("/contribute/one-off/thankyou")
     } else {
       Redirect(routes.PayPalOneOff.paypalError())
@@ -63,13 +64,13 @@ class PayPalOneOff(
   }
 
   def resultFromPaypalSuccess(success: PayPalSuccess, country: String)(implicit request: RequestHeader): Result = {
-    SafeLogger.info(s"One-off contribution for Paypal payment is successful")
+    logger.info(s"One-off contribution for Paypal payment is successful")
     val redirect = Redirect(s"/$country/thankyou")
     success.guestAccountCreationToken.fold {
-      SafeLogger.info("Redirecting to thank you page without guestAccountCreationToken")
+      logger.info("Redirecting to thank you page without guestAccountCreationToken")
       redirect
     } { guestAccountCreationToken =>
-      SafeLogger.info("Redirecting to thank you page with guestAccountCreationToken in flash session")
+      logger.info("Redirecting to thank you page with guestAccountCreationToken in flash session")
       redirect.flashing("guestAccountCreationToken" -> guestAccountCreationToken)
     }
   }

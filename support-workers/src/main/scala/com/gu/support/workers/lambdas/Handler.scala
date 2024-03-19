@@ -3,7 +3,7 @@ package com.gu.support.workers.lambdas
 import java.io.{InputStream, OutputStream}
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogging
 import com.gu.support.workers.exceptions.ErrorHandler
 import com.gu.support.workers.{ExecutionError, RequestInfo}
 import io.circe.{Decoder, Encoder}
@@ -16,7 +16,8 @@ abstract class Handler[IN, OUT](implicit
     decoder: Decoder[IN],
     encoder: Encoder[OUT],
     ec: ExecutionContext,
-) extends RequestStreamHandler {
+) extends RequestStreamHandler
+    with SafeLogging {
 
   import com.gu.support.workers.encoding.Encoding._
 
@@ -37,10 +38,10 @@ abstract class Handler[IN, OUT](implicit
   def handleRequestFuture(is: InputStream, os: OutputStream, context: Context): Future[Unit] = {
     val eventualUnit: Future[Unit] = for {
       inputData <- Future.fromTry(in(is))
-      _ = SafeLogger.info(s"START  ${this.getClass} with $inputData")
+      _ = logger.info(s"START  ${this.getClass} with $inputData")
       (input, error, requestInfo) = inputData
       result <- handlerFuture(input, error, requestInfo, context)
-      _ = SafeLogger.info(s"FINISH ${this.getClass} with $result")
+      _ = logger.info(s"FINISH ${this.getClass} with $result")
       _ <- Future.fromTry(out(result, os))
     } yield ()
     eventualUnit.recover { case t =>

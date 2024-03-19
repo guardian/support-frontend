@@ -3,13 +3,11 @@ package controllers
 import actions.CustomActionBuilders
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
-import com.gu.aws.AwsCloudWatchMetricSetup.{getDeliveryAgentsSuccess, getDeliveryAgentsFailure}
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
-import com.gu.rest.{CodeBody, WebServiceHelperError}
+import com.gu.aws.AwsCloudWatchMetricSetup.{getDeliveryAgentsFailure, getDeliveryAgentsSuccess}
+import com.gu.monitoring.SafeLogging
 import com.gu.support.config.Stage
-import com.gu.support.paperround.{AgentId, CoverageEndpoint, PaperRound, PaperRoundService, PaperRoundServiceProvider}
 import com.gu.support.paperround.CoverageEndpoint._
+import com.gu.support.paperround.{AgentId, CoverageEndpoint, PaperRound, PaperRoundServiceProvider}
 import io.circe._
 import io.circe.generic.semiauto._
 import io.circe.syntax._
@@ -18,7 +16,6 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 import services.TestUserService
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class PaperRound(
     components: ControllerComponents,
@@ -27,7 +24,8 @@ class PaperRound(
     testUserService: TestUserService,
     stage: Stage,
 ) extends AbstractController(components)
-    with Circe {
+    with Circe
+    with SafeLogging {
   import actionRefiners._
 
   def getAgents(postcode: String): Action[AnyContent] = NoCacheAction().async { implicit request =>
@@ -43,7 +41,7 @@ class PaperRound(
             case IP => BadRequest(toJson(ProblemWithInput))
             case IE =>
               val errorMessage = s"${result.data.message}"
-              SafeLogger.error(scrub"Got internal error from PaperRound: $errorMessage")
+              logger.error(scrub"Got internal error from PaperRound: $errorMessage")
               InternalServerError(toJson(PaperRoundError(errorMessage)))
           }
           result.data.status match {
@@ -55,11 +53,11 @@ class PaperRound(
       } recover {
       case PaperRound.Error(statusCode, message, errorCode) =>
         val responseBody = s"$errorCode – Got $statusCode reponse with message $message"
-        SafeLogger.error(scrub"Error calling PaperRound, returning $responseBody")
+        logger.error(scrub"Error calling PaperRound, returning $responseBody")
         AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(stage))
         InternalServerError(responseBody)
       case error =>
-        SafeLogger.error(scrub"Failed to get agents from PaperRound due to: $error")
+        logger.error(scrub"Failed to get agents from PaperRound due to: $error")
         AwsCloudWatchMetricPut(cloudwatchClient)(getDeliveryAgentsFailure(stage))
         InternalServerError(s"Unknown error: $error")
     }

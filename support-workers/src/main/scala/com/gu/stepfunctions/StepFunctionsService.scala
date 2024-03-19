@@ -5,7 +5,7 @@ import com.amazonaws.services.stepfunctions.AWSStepFunctionsAsyncClientBuilder
 import com.amazonaws.services.stepfunctions.model.{DescribeExecutionResult, ExecutionListItem, StateMachineListItem}
 import com.gu.aws.CredentialsProvider
 import com.gu.config.Configuration.stage
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.{SafeLogger, SafeLogging}
 import com.gu.support.config.Stages
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.User
@@ -17,7 +17,7 @@ import io.circe.generic.auto._
 import scala.jdk.CollectionConverters._
 import scala.concurrent.{ExecutionContext, Future}
 
-class StepFunctionsService {
+class StepFunctionsService extends SafeLogging {
   private val prefix =
     if (stage == Stages.DEV)
       s"MonthlyContributions${Stages.CODE.toString}-" // There is no DEV state machine
@@ -44,7 +44,7 @@ class StepFunctionsService {
   private def findUserDataInStateMachine(userId: String, arn: String, nextToken: Option[String] = None)(implicit
       ec: ExecutionContext,
   ): Future[Option[User]] = {
-    SafeLogger.info(s"Searching for user in statemachine $arn, nextToken: ${nextToken.getOrElse("")}")
+    logger.info(s"Searching for user in statemachine $arn, nextToken: ${nextToken.getOrElse("")}")
 
     for {
       response <- client.listExecutions(arn, nextToken)

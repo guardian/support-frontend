@@ -1,6 +1,6 @@
 package com.gu.rest
 
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.{SafeLogger, SafeLogging}
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import io.circe
 import io.circe.parser._
@@ -41,7 +41,7 @@ case class CodeBody(code: String, body: String) {
   *   The type that will attempt to be extracted if extracting the expected object fails. This is useful when a web
   *   service has a standard error format
   */
-trait WebServiceHelper[Error <: Throwable] {
+trait WebServiceHelper[Error <: Throwable] extends SafeLogging {
   val wsUrl: String
   val httpClient: FutureHttpClient
 
@@ -86,7 +86,7 @@ trait WebServiceHelper[Error <: Throwable] {
   protected def getResponse(rb: Request.Builder) =
     for {
       req <- wsPreExecute(rb).map(_.build())
-      _ = SafeLogger.info(s"Issuing request ${req.method} ${req.url}")
+      _ = logger.info(s"Issuing request ${req.method} ${req.url}")
       response <- httpClient(req)
     } yield response
 
@@ -99,7 +99,7 @@ trait WebServiceHelper[Error <: Throwable] {
         .toTry
       responseBody <- Try(body.string())
       codeBody = CodeBody(code, responseBody)
-      _ = SafeLogger.info(s"response $code body: ${responseBody.replace("\n", "")}")
+      _ = logger.info(s"response $code body: ${responseBody.replace("\n", "")}")
       _ <-
         if ((contentType.`type`(), contentType.subtype()) == ("application", "json")) Success(())
         else Failure(WebServiceHelperError(codeBody, s"wrong content type"))
@@ -157,7 +157,7 @@ trait WebServiceHelper[Error <: Throwable] {
       params: ParamMap = empty,
   )(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val json = data.printWith(Printer.noSpaces.copy(dropNullValues = true))
-    SafeLogger.info(s"Issuing request POST $endpoint $json")
+    logger.info(s"Issuing request POST $endpoint $json")
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](buildRequest(endpoint, headers, params).post(body))
   }
@@ -169,7 +169,7 @@ trait WebServiceHelper[Error <: Throwable] {
       params: ParamMap = empty,
   )(implicit reads: Decoder[A], error: Decoder[Error], ctag: ClassTag[A]): Future[A] = {
     val json = data.printWith(Printer.noSpaces.copy(dropNullValues = true))
-    SafeLogger.info(s"Issuing request PUT $endpoint $json")
+    logger.info(s"Issuing request PUT $endpoint $json")
     val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
     request[A](buildRequest(endpoint, headers, params).put(body))
   }

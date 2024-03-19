@@ -1,15 +1,14 @@
 package services
 
 import cats.data.EitherT
-import com.gu.monitoring.SafeLogger._
+import cats.implicits._
+import com.gu.monitoring.SafeLogging
+import io.circe.Decoder
+import io.circe.generic.semiauto.deriveDecoder
+import io.circe.parser.decode
 import play.api.libs.json._
 import play.api.libs.ws.{WSClient, WSResponse}
 import services.ExecutePaymentBody._
-import io.circe.Decoder
-import io.circe.parser.decode
-import com.gu.monitoring.SafeLogger
-import cats.implicits._
-import io.circe.generic.semiauto.deriveDecoder
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -48,7 +47,8 @@ object ExecutePaymentBody {
   implicit val jf: OFormat[ExecutePaymentBody] = Json.format[ExecutePaymentBody]
 }
 
-class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit ec: ExecutionContext) {
+class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit ec: ExecutionContext)
+    extends SafeLogging {
 
   private val paypalCreatePaymentPath = "/contribute/one-off/paypal/create-payment"
   private val paypalExecutePaymentPath = "/contribute/one-off/paypal/execute-payment"
@@ -86,9 +86,9 @@ class PaymentAPIService(wsClient: WSClient, val paymentAPIUrl: String)(implicit 
 
   def logErrorResponse(error: PayPalError): Unit = {
     if (error.errorName.contains("INSTRUMENT_DECLINED")) {
-      SafeLogger.info("Paypal payment failed with 'INSTRUMENT_DECLINED' response.")
+      logger.info("Paypal payment failed with 'INSTRUMENT_DECLINED' response.")
     } else {
-      SafeLogger.error(scrub"Paypal payment failed due to ${error.errorName} error. Full message: ${error.message}")
+      logger.error(scrub"Paypal payment failed due to ${error.errorName} error. Full message: ${error.message}")
     }
   }
 

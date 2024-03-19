@@ -2,8 +2,7 @@ package services
 
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger.Sanitizer
+import com.gu.monitoring.SafeLogging
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
 import play.api.libs.json._
@@ -17,7 +16,7 @@ object RecaptchaResponse {
   implicit val getUserTypeEncoder: Encoder[RecaptchaResponse] = deriveEncoder
 }
 
-class RecaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) {
+class RecaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) extends SafeLogging {
   val recaptchaEndpoint = "https://www.google.com/recaptcha/api/siteverify"
 
   def verify(token: String, secretKey: String): EitherT[Future, String, RecaptchaResponse] =
@@ -28,8 +27,8 @@ class RecaptchaService(wsClient: WSClient)(implicit ec: ExecutionContext) {
       .withMethod("POST")
       .execute()
       .attemptT
-      .leftMap { err => 
-        SafeLogger.error(scrub"Recaptcha failed on ${err.toString}")
+      .leftMap { err =>
+        logger.error(scrub"Recaptcha failed on ${err.toString}")
         err.toString
       }
       .subflatMap(resp => (resp.json).validate[RecaptchaResponse].asEither.leftMap(_.mkString(",")))
