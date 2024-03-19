@@ -1,6 +1,5 @@
 @import admin.settings.AllSettings
 @import assets.AssetsResolver
-@import com.gu.i18n.Currency.AUD
 @import com.gu.identity.model.{User => IdUser}
 @import com.gu.support.config._
 @import helper.CSRF
@@ -26,8 +25,8 @@
   testMode: Boolean,
   productPrices: ProductPrices,
   maybePromotionCopy: Option[PromotionCopy] = None,
-  defaultStripeConfig: StripeConfig,
-  testStripeConfig: StripeConfig,
+  defaultStripeConfig: StripePublicConfig,
+  testStripeConfig: StripePublicConfig,
   defaultPayPalConfig: PayPalConfig,
   testPayPalConfig: PayPalConfig,
   v2recaptchaConfigPublicKey: String,
@@ -67,14 +66,14 @@
 
       window.guardian.stripeKeyDefaultCurrencies = {
         REGULAR: {
-          default: "@defaultStripeConfig.forCurrency(None).publicKey.value",
-          test: "@testStripeConfig.forCurrency(None).publicKey.value"
+          default: "@defaultStripeConfig.defaultAccount.rawPublicKey",
+          test: "@testStripeConfig.defaultAccount.rawPublicKey"
         }
       };
       window.guardian.stripeKeyAustralia = {
         REGULAR: {
-          default: "@defaultStripeConfig.forCurrency(Some(AUD)).publicKey.value",
-          test: "@testStripeConfig.forCurrency(Some(AUD)).publicKey.value"
+          default: "@defaultStripeConfig.australiaAccount.rawPublicKey",
+          test: "@testStripeConfig.australiaAccount.rawPublicKey"
         }
       };
       window.guardian.stripeKeyUnitedStates = window.guardian.stripeKeyDefaultCurrencies;

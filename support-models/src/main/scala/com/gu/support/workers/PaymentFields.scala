@@ -36,10 +36,10 @@ object StripePublicKey {
     parse(value).left.map(new Throwable(_)).toTry.get // Try.get will rethrow the useful error
 
   implicit val decoder: Decoder[StripePublicKey] = Decoder.decodeString.emap(parse)
-  implicit val encoder: Encoder[StripePublicKey] = Encoder.encodeString.contramap[StripePublicKey](_.value)
+  implicit val encoder: Encoder[StripePublicKey] = Encoder.encodeString.contramap[StripePublicKey](_.rawPublicKey)
 
 }
-case class StripePublicKey private (value: String) extends AnyVal
+case class StripePublicKey private (rawPublicKey: String) extends AnyVal
 
 object StripeSecretKey {
 
@@ -54,6 +54,10 @@ object StripeSecretKey {
         char == '_'
       }
     ) Right(new StripeSecretKey(value))
+    else if (value == "unused")
+      Right(
+        new StripeSecretKey(value),
+      ) // TODO remove once we have deleted all support-frontend stripe api.config. from parameter store
     else Left(s"StripeSecretKey <$value> had invalid characters")
 
   def get(value: String): StripeSecretKey =

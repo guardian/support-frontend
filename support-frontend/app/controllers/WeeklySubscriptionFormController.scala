@@ -5,9 +5,9 @@ import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyn
 import assets.AssetsResolver
 import com.gu.identity.model.{User => IdUser}
 import com.gu.support.catalog.GuardianWeekly
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, StripePublicConfigProvider}
 import services.pricing.PriceSummaryServiceProvider
-import com.gu.support.promotions.{DefaultPromotions}
+import com.gu.support.promotions.DefaultPromotions
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import config.RecaptchaConfigProvider
 import play.api.mvc._
@@ -24,7 +24,7 @@ class WeeklySubscriptionFormController(
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
     testUsers: TestUserService,
-    stripeConfigProvider: StripeConfigProvider,
+    stripeConfigProvider: StripePublicConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
     settingsProvider: AllSettingsProvider,
