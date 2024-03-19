@@ -16,7 +16,10 @@ import {
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { getLowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
+import {
+	getLowerBenefitsThresholds,
+	lowerBenefitsThresholds,
+} from 'helpers/supporterPlus/benefitsThreshold';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	getDateWithOrdinal,
@@ -153,10 +156,36 @@ export function PaymentTsAndCs({
 	};
 
 	const thresholdAmounts = useContributionsSelector(getLowerBenefitsThresholds);
-	const thresholdDescription = (contributionType: RegularContributionType) => {
+	const thresholdDescriptionInclPromo = (
+		contributionType: RegularContributionType,
+	) => {
 		return `${currencyGlyph}${
 			thresholdAmounts[contributionType]
 		} per ${frequencySingular(contributionType)}`;
+	};
+	const thresholdDescriptionExclPromo = (
+		contributionType: RegularContributionType,
+	) => {
+		return `${currencyGlyph}${
+			lowerBenefitsThresholds[countryGroupId][contributionType]
+		} per ${frequencySingular(contributionType)}`;
+	};
+
+	const promotionExists = (): boolean => {
+		return (
+			thresholdDescriptionInclPromo('ANNUAL') !==
+				thresholdDescriptionExclPromo('ANNUAL') &&
+			thresholdDescriptionInclPromo('MONTHLY') !==
+				thresholdDescriptionExclPromo('MONTHLY')
+		);
+	};
+
+	const promotionOfferCopy = () => {
+		if (promotionExists()) {
+			return ` for the first year, then ${thresholdDescriptionExclPromo(
+				'MONTHLY',
+			)} or ${thresholdDescriptionExclPromo('ANNUAL')} afterwards`;
+		}
 	};
 
 	const copyAboveThreshold = (
@@ -166,12 +195,15 @@ export function PaymentTsAndCs({
 		return (
 			<>
 				<div>
-					If you pay at least {thresholdDescription('MONTHLY')} or{' '}
-					{thresholdDescription('ANNUAL')}, you will receive the{' '}
+					If you pay at least {thresholdDescriptionInclPromo('MONTHLY')} or{' '}
+					{thresholdDescriptionInclPromo('ANNUAL')}
+					{promotionOfferCopy()}, you will receive the{' '}
 					{productNameAboveThreshold} benefits on a subscription basis. If you
 					pay more than{' '}
-					{thresholdDescription(contributionType as RegularContributionType)},
-					these additional amounts will be separate{' '}
+					{thresholdDescriptionExclPromo(
+						contributionType as RegularContributionType,
+					)}
+					, these additional amounts will be separate{' '}
 					{frequencyPlural(contributionType)} voluntary financial contributions
 					to the Guardian. The {productNameAboveThreshold} subscription and any
 					contributions will auto-renew each{' '}
