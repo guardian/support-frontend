@@ -137,7 +137,7 @@ export function ContributionsOrderSummaryContainer({
 	return renderOrderSummary({
 		description,
 		total: productPriceWithPromo,
-		totalOriginal: isSupporterPlus ? productPrice : undefined,
+		totalExcludingPromo: isSupporterPlus ? productPrice : undefined,
 		currency: currency,
 		paymentFrequency,
 		enableCheckList: contributionType !== 'ONE_OFF',
