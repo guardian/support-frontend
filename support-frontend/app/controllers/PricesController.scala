@@ -84,7 +84,7 @@ object PricesController {
     )
 
   import io.circe.generic.auto._
-  implicit val pricesEncoder: Encoder[Prices] = Encoder[Prices]
+  implicit val pricesEncoder = Encoder[Prices]
 }
 
 class PricesController(
