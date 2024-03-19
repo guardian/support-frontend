@@ -77,25 +77,7 @@ class PriceSummaryService(
       productRatePlan: ProductRatePlan[Product],
       price: Price,
       saving: Option[Int],
-  ) = {
-    val country = countryGroup.defaultCountry.orElse(countryGroup.countries.headOption).getOrElse(Country.UK)
-    logger.info(s"Validating promotions. Country: $country, productRatePlan: ${productRatePlan.id}")
-
-    logger.info("Promotions to validate")
-    logger.info(promotions.map(promo => promo.promoCode).mkString(", "))
-
-    val (invalidPromotions, validPromotions) = promotions
-      .map(promo =>
-        promotionService
-          .validatePromotion(promo, country, productRatePlan.id, isRenewal = false),
-      )
-      .partitionMap(identity)
-
-    logger.info("Invalid promotions")
-    logger.info(invalidPromotions.map(promoError => promoError.msg).mkString(", "))
-
-    logger.info("Valid promotions")
-    logger.info(validPromotions.map(promoError => promoError.promoCode).mkString(", "))
+  ): (Currency, PriceSummary) = {
 
     val promotionSummaries: List[PromotionSummary] = for {
       promotion <- promotions
