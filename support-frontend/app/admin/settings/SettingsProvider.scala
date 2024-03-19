@@ -2,13 +2,12 @@ package admin.settings
 
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
-import admin.settings.SettingsProvider._
+import admin.settings.SettingsProvider.SettingsUpdate
 import org.apache.pekko.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
 import com.gu.aws.AwsS3Client
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import config.Configuration.MetricUrl
 import config.{Configuration, FastlyConfig}
 import io.circe.Decoder
@@ -18,7 +17,6 @@ import services.fastly.FastlyService
 
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
-
 import admin.settings.AmountsTests.AmountsTests
 
 abstract class SettingsProvider[T] {
@@ -83,7 +81,8 @@ class S3SettingsProvider[T: Decoder] private (
     source: SettingsSource.S3,
     fastlyService: Option[FastlyService],
 )(implicit ec: ExecutionContext, s3Client: AwsS3Client, system: ActorSystem)
-    extends SettingsProvider[T] {
+    extends SettingsProvider[T]
+    with SafeLogging {
 
   private val cachedSettings = new AtomicReference[T](initialSettings)
 
@@ -97,7 +96,7 @@ class S3SettingsProvider[T: Decoder] private (
       // Only consider using the service if there has been a change
       .filter(_ => diff.isChange)
       .fold(EitherT.pure[Future, Throwable](diff)) { service =>
-        SafeLogger.info(
+        logger.info(
           s"settings update detected, purging Fastly by surrogate key ${SettingsSurrogateKey.settingsSurrogateKey} " +
             "so that new settings propagate to the user",
         )
@@ -107,7 +106,7 @@ class S3SettingsProvider[T: Decoder] private (
           // propagate the error so that it will be logged at the end of the flow.
           .ensureOr(response => new RuntimeException(s"failed to purge support frontend: $response"))(_.isOk)
           .map { response =>
-            SafeLogger.info(s"settings purged successfully: $response")
+            logger.info(s"settings purged successfully: $response")
             diff
           }
       }
@@ -117,10 +116,10 @@ class S3SettingsProvider[T: Decoder] private (
       getAndSetSettings()
         .flatMap(purgeIfChanged)
         .fold(
-          err => SafeLogger.error(scrub"error occurred updating the settings from S3", err),
+          err => logger.error(scrub"error occurred updating the settings from S3", err),
           update =>
             if (update.isChange) {
-              SafeLogger.info(s"settings changed from ${update.old} to ${update.current}")
+              logger.info(s"settings changed from ${update.old} to ${update.current}")
             },
         )
     }
@@ -128,7 +127,7 @@ class S3SettingsProvider[T: Decoder] private (
   override def settings(): T = cachedSettings.get
 }
 
-object S3SettingsProvider {
+object S3SettingsProvider extends SafeLogging {
 
   def fromS3[T: Decoder](s3: SettingsSource.S3, fastlyConfig: Option[FastlyConfig])(implicit
       client: AwsS3Client,
@@ -141,7 +140,7 @@ object S3SettingsProvider {
 
     val fastlyService = fastlyConfig.map(new FastlyService(_))
     if (fastlyConfig.isEmpty) {
-      SafeLogger.warn("no Fastly config defined, Fastly will not be purged if there are settings updates from RRAC")
+      logger.warn("no Fastly config defined, Fastly will not be purged if there are settings updates from RRAC")
     }
 
     Settings.fromS3(s3).map { settings =>
@@ -152,14 +151,14 @@ object S3SettingsProvider {
   }
 }
 
-object SettingsProvider {
+object SettingsProvider extends SafeLogging {
 
   def fromAppConfig[T: Decoder](settingsSource: SettingsSource, config: Configuration)(implicit
       client: AwsS3Client,
       system: ActorSystem,
       wsClient: WSClient,
   ): Either[Throwable, SettingsProvider[T]] = {
-    SafeLogger.info(s"loading settings from $settingsSource")
+    logger.info(s"loading settings from $settingsSource")
     settingsSource match {
       case s3: SettingsSource.S3 => S3SettingsProvider.fromS3[T](s3, config.fastlyConfig)
       case localFile: SettingsSource.LocalFile => LocalFileSettingsProvider.fromLocalFile[T](localFile)

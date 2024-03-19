@@ -1,6 +1,6 @@
 package com.gu.patrons.services
 
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogging
 import com.gu.patrons.model.{ExpandedStripeCustomer, StripeSubscription}
 import com.gu.supporterdata.model.SupporterRatePlanItem
 import com.gu.supporterdata.services.SupporterDataDynamoService
@@ -13,7 +13,7 @@ class StripeSubscriptionsProcessor(
     subscriptionProcessor: SubscriptionProcessor,
 )(implicit
     executionContext: ExecutionContext,
-) {
+) extends SafeLogging {
 
   def processSubscriptions(account: PatronsStripeAccount, pageSize: Int) =
     processFutureResponse(account, pageSize, None)
@@ -52,11 +52,12 @@ trait SubscriptionProcessor {
 
 abstract class DynamoProcessor(
     supporterDataDynamoService: SupporterDataDynamoService,
-) extends SubscriptionProcessor {
+) extends SubscriptionProcessor
+    with SafeLogging {
   import scala.concurrent.ExecutionContext.Implicits.global
 
   def writeToDynamo(identityId: String, sub: StripeSubscription[ExpandedStripeCustomer]) = {
-    SafeLogger.info(
+    logger.info(
       s"Attempting to write subscription (${sub.customer.email}, $identityId) to Dynamo",
     )
     supporterDataDynamoService
@@ -76,9 +77,9 @@ abstract class DynamoProcessor(
 
   def logDynamoResult(email: String, addSubscriptionsToQueueState: UpdateItemResponse) =
     if (addSubscriptionsToQueueState.sdkHttpResponse().statusCode() == 200)
-      SafeLogger.info(s"Dynamo record successfully written for $email")
+      logger.info(s"Dynamo record successfully written for $email")
     else
-      SafeLogger.info(
+      logger.info(
         s"Error response from Dynamo for $email. Status code was ${addSubscriptionsToQueueState.sdkHttpResponse().statusCode()}",
       )
 }
@@ -112,7 +113,7 @@ class CreateMissingIdentityProcessor(
   def maybeAddJointPatron(subscription: StripeSubscription[ExpandedStripeCustomer]) =
     subscription.customer.jointPatronEmail match {
       case Some(email) =>
-        SafeLogger.info(s"Customer ${subscription.customer.email} has an associated joint patron - $email")
+        logger.info(s"Customer ${subscription.customer.email} has an associated joint patron - $email")
         processCustomerEmail(email, subscription.customer.jointPatronName, subscription)
       case _ => Future.successful(())
     }

@@ -1,9 +1,7 @@
 package com.gu.paypal
 
-import java.util.NoSuchElementException
-
 import com.gu.config.Configuration
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogging
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.support.config.{PayPalConfig, Stages}
 import io.lemonlabs.uri.QueryString
@@ -14,7 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Try
 
-class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) {
+class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) extends SafeLogging {
 
   val config = apiConfig
   // The parameters sent with every NVP request.
@@ -31,10 +29,10 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) {
     def msg(status: String) = s"PayPal: $status (NVPResponse: $response)"
 
     retrieveNVPParam(response, "ACK") match {
-      case "Success" => SafeLogger.info("Successful PayPal NVP request")
-      case "SuccessWithWarning" => SafeLogger.warn(msg("Warning"))
-      case "Failure" => SafeLogger.warn(msg("Error"))
-      case "FailureWithWarning" => SafeLogger.warn(msg("Error With Warning"))
+      case "Success" => logger.info("Successful PayPal NVP request")
+      case "SuccessWithWarning" => logger.warn(msg("Warning"))
+      case "Failure" => logger.warn(msg("Error"))
+      case "FailureWithWarning" => logger.warn(msg("Error With Warning"))
     }
 
   }
@@ -47,7 +45,7 @@ class PayPalService(apiConfig: PayPalConfig, client: FutureHttpClient) {
       throw PayPalError(response.code(), responseBody)
 
     if (Configuration.stage == Stages.DEV)
-      SafeLogger.info("NVP response body = " + responseBody)
+      logger.info("NVP response body = " + responseBody)
 
     val parsedResponse = parseQuery(responseBody)
 

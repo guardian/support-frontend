@@ -27,7 +27,6 @@ class CustomHttpErrorHandler(
     router: => Option[Router],
     val assets: AssetsResolver,
     settingsProvider: AllSettingsProvider,
-    stage: Stage,
 )(implicit val ec: ExecutionContext)
     extends DefaultHttpErrorHandler(env, config, sourceMapper, router)
     with LazyLogging

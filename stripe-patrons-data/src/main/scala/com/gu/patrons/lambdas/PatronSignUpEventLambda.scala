@@ -43,7 +43,7 @@ import scala.util.{Failure, Success, Try}
 class PatronSignUpEventLambda extends StrictLogging {
   val runner = configurableFutureRunner(60.seconds)
 
-  implicit val stage = StageConstructors.fromEnvironment
+  implicit val stage: Stage = StageConstructors.fromEnvironment
   private val stripeConfig = PatronsStripeConfig.fromParameterStoreSync(stage)
   private val identityConfig = PatronsIdentityConfig.fromParameterStoreSync(stage)
 
@@ -103,7 +103,7 @@ class PatronSignUpEventLambda extends StrictLogging {
     logger.info("Attempting to verify event payload")
     EitherT.fromEither(for {
       payload <- Option(event.getBody).toRight(InvalidRequestError("Missing body"))
-      _ = SafeLogger.info(s"payload is ${payload.replace("\n", "")}")
+      _ = logger.info(s"payload is ${payload.replace("\n", "")}")
       sigHeader <- event.getHeaders.asScala.get("Stripe-Signature").toRight(InvalidRequestError("Missing sig header"))
       _ <- Try(
         Webhook.Signature.verifyHeader(payload, sigHeader, signingSecret, 300),

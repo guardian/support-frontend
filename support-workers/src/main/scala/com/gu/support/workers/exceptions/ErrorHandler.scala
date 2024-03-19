@@ -1,7 +1,6 @@
 package com.gu.support.workers.exceptions
 
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import com.gu.paypal.PayPalError
 import com.gu.rest.{WebServiceClientError, WebServiceHelperError}
 import com.gu.salesforce.Salesforce.SalesforceErrorResponse
@@ -18,10 +17,10 @@ import javax.net.ssl.SSLException
 /** Maps exceptions from the application to either fatal or non fatal exceptions based on whether we think retrying them
   * has a chance of succeeding see support-workers/docs/error-handling.md
   */
-object ErrorHandler {
+object ErrorHandler extends SafeLogging {
   def handleException(throwable: Throwable): Nothing = {
     val retryException = toRetryException(throwable)
-    SafeLogger.error(scrub"${retryException.getMessage}", retryException)
+    logger.error(scrub"${retryException.getMessage}", retryException)
     throw retryException
   }
 

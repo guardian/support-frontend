@@ -2,7 +2,7 @@ package com.gu.support.config
 
 import com.gu.i18n.{Country, Currency}
 import com.gu.i18n.Currency.AUD
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.{SafeLogger, SafeLogging}
 import com.typesafe.config.Config
 
 case class StripeConfig(
@@ -10,29 +10,29 @@ case class StripeConfig(
     australiaAccount: StripeAccountConfig,
     unitedStatesAccount: StripeAccountConfig,
     version: Option[String],
-) {
+) extends SafeLogging {
 
   // Still needed for SupportWorkers (recurring products) which don't support a US Stripe account yet.
   def forCurrency(maybeCurrency: Option[Currency]): StripeAccountConfig =
     maybeCurrency match {
       case Some(AUD) =>
-        SafeLogger.debug(s"StripeConfig: getting AU stripe account for AUD")
+        logger.debug(s"StripeConfig: getting AU stripe account for AUD")
         australiaAccount
       case _ =>
-        SafeLogger.debug(s"StripeConfig: getting default stripe account for ${maybeCurrency.map(_.iso).mkString}")
+        logger.debug(s"StripeConfig: getting default stripe account for ${maybeCurrency.map(_.iso).mkString}")
         defaultAccount
     }
 
   def forCountry(maybeCountry: Option[Country]): StripeAccountConfig =
     maybeCountry match {
       case Some(Country.Australia) =>
-        SafeLogger.debug(s"StripeConfig: getting AU stripe account for Australia")
+        logger.debug(s"StripeConfig: getting AU stripe account for Australia")
         australiaAccount
       case Some(Country.US) =>
-        SafeLogger.debug(s"StripeConfig: getting US stripe account for United States")
+        logger.debug(s"StripeConfig: getting US stripe account for United States")
         unitedStatesAccount
       case _ =>
-        SafeLogger.debug(s"StripeConfig: getting default stripe account for ${maybeCountry.map(_.name).mkString}")
+        logger.debug(s"StripeConfig: getting default stripe account for ${maybeCountry.map(_.name).mkString}")
         defaultAccount
     }
 }

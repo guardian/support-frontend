@@ -1,14 +1,14 @@
 package com.gu.config
 
 import com.gu.config.loaders.PrivateConfigLoader
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogging
 import com.gu.salesforce.SalesforceConfigProvider
 import com.gu.support.config._
 import com.typesafe.config.{Config, ConfigFactory}
 
 import scala.util.Try
 
-object Configuration {
+object Configuration extends SafeLogging {
 
   def load(): Configuration = new Configuration(loadConfig)
 
@@ -26,7 +26,7 @@ object Configuration {
     )
     .getOrElse(Stages.DEV)
 
-  SafeLogger.info(s"Load from S3: $loadFromS3, Stage: $stage")
+  logger.info(s"Load from S3: $loadFromS3, Stage: $stage")
 
   // this is static so it persists between lambda executions, but lazy so it doesn't cause a fatal error at class loading time
   private lazy val loadConfig = PrivateConfigLoader
