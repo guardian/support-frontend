@@ -9,9 +9,9 @@ import { setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
 
 interface TestDetails {
-	paymentType: 'Credit/Debit card' | 'Direct debit' | 'PayPal';
 	tier: 1 | 2 | 3;
 	frequency: 'Monthly' | 'Annual';
+	paymentType?: 'Credit/Debit card' | 'Direct debit' | 'PayPal';
 	country?: 'US' | 'AU';
 }
 
@@ -26,6 +26,11 @@ const testsDetails: TestDetails[] = [
 		frequency: 'Monthly',
 		country: 'US',
 	},
+];
+
+const testDetailsPromo: TestDetails[] = [
+	{ tier: 2, frequency: 'Monthly' },
+	{ tier: 2, frequency: 'Annual' },
 ];
 
 afterEachTasks(test);
@@ -60,9 +65,6 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 			}
 			await page.getByRole('radio', { name: testDetails.paymentType }).check();
 			switch (testDetails.paymentType) {
-				case 'Credit/Debit card':
-					await fillInCardDetails(page);
-					break;
 				case 'Direct debit':
 					await fillInDirectDebitDetails(page, 'contribution');
 					await checkRecaptcha(page);
@@ -80,6 +82,10 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 						.click({ delay: 2000 });
 					const popupPage = await popupPagePromise;
 					fillInPayPalDetails(popupPage);
+					break;
+				case 'Credit/Debit card':
+				default:
+					await fillInCardDetails(page);
 					break;
 			}
 			if (
@@ -99,6 +105,52 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 				`/${testDetails.country?.toLowerCase() || 'uk'}/thankyou`,
 				{ timeout: 600000 },
 			);
+		});
+	});
+});
+
+test.describe('Subscribe (S+) incl PromoCode via the Tiered checkout', () => {
+	testDetailsPromo.forEach((testDetails) => {
+		test(`${testDetails.frequency} (S+) Subscription incl PromoCode at Tier-2 with Credit/Debit card - UK`, async ({
+			context,
+			baseURL,
+		}) => {
+			const page = await context.newPage();
+			const testFirstName = firstName();
+			const testLastName = lastName();
+			const testEmail = email();
+			await setupPage(
+				page,
+				context,
+				baseURL,
+				`/uk/contribute?promoCode=PLAYWRIGHT_TEST_SPLUS`,
+			);
+			await page.getByRole('tab').getByText(testDetails.frequency).click();
+			await expect(
+				page
+					.getByText(
+						` ${
+							testDetails.frequency === `Monthly`
+								? `month for the first 3 months`
+								: `year for the first year`
+						}, then`,
+					)
+					.first(),
+			).toBeVisible();
+			await page
+				.locator(
+					`:nth-match(button:has-text("Subscribe"), ${testDetails.tier})`,
+				)
+				.click();
+			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
+			await page.getByRole('radio', { name: 'Credit/Debit card' }).check();
+			await fillInCardDetails(page);
+			await checkRecaptcha(page);
+			var paymentButtonRegex = new RegExp(
+				'Pay £([0-9]+|(([0-9]+).([0-9]+))) per (year|month)',
+			);
+			await page.getByText(paymentButtonRegex).click();
+			await expect(page).toHaveURL(`/uk/thankyou`, { timeout: 600000 });
 		});
 	});
 });
