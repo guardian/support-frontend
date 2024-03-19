@@ -300,13 +300,14 @@ object JsonFixtures {
     """
 
   val stripeToken = PaymentMethodId("pm_card_visa").get
+  val stripePublicKey = StripePublicKey.get("pk_test_Qm3CGRdrV4WfGYCpm0sftR0f")
 
   val stripeJson =
     s"""
       {
         "paymentMethod": "${stripeToken.value}",
         "stripePaymentType": "StripeCheckout",
-        "stripePublicKey": "pk_test_Qm3CGRdrV4WfGYCpm0sftR0f"
+        "stripePublicKey": "${stripePublicKey.rawPublicKey}"
       }
     """
 

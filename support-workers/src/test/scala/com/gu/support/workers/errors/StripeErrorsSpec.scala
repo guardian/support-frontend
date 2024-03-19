@@ -5,11 +5,19 @@ import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
 import com.gu.stripe.{StripeError, StripeService}
+import com.gu.support.config.{StripeAccountConfig, StripeConfig}
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.JsonFixtures.{createStripePaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
-import com.gu.support.workers.{AsyncLambdaSpec, JsonFixtures, JsonWrapper, MockContext}
+import com.gu.support.workers.{
+  AsyncLambdaSpec,
+  JsonFixtures,
+  JsonWrapper,
+  MockContext,
+  StripePublicKey,
+  StripeSecretKey,
+}
 import io.circe.Json
 import io.circe.parser.decode
 import io.circe.syntax._
@@ -109,16 +117,23 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
     stripeError.flatMap(_.code.toRight("no code")) should be(Right("card_declined"))
   }
 
+  val dummyStripeConfig: StripeConfig = StripeConfig(
+    StripeAccountConfig(StripeSecretKey("sk_secretKeyHere"), JsonFixtures.stripePublicKey),
+    StripeAccountConfig(StripeSecretKey("sk_asdfqwer"), StripePublicKey("pk_asdfqwer")),
+    StripeAccountConfig(StripeSecretKey("sk_asdfqwer"), StripePublicKey("pk_asdfqwer")),
+    None,
+  )
+
   private lazy val timeoutServices = mockService(
     s => s.stripeService,
     // Create a stripe service which will timeout after 1 millisecond
-    new StripeService(Configuration.load().stripeConfigProvider.get(), configurableFutureRunner(1.milliseconds)),
+    new StripeService(dummyStripeConfig, configurableFutureRunner(1.milliseconds)),
   )
 
   def errorServices(baseUrl: String): ServiceProvider = {
     mockService(
       s => s.stripeService,
-      new StripeService(Configuration.load().stripeConfigProvider.get(), configurableFutureRunner(10.seconds), baseUrl),
+      new StripeService(dummyStripeConfig, configurableFutureRunner(10.seconds), baseUrl),
     )
   }
 
