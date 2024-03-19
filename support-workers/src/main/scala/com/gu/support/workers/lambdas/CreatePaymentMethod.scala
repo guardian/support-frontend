@@ -27,7 +27,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       context: Context,
       services: Services,
   ): FutureHandlerResult = {
-    SafeLogger.debug(s"CreatePaymentMethod state: $state")
+    logger.debug(s"CreatePaymentMethod state: $state")
 
     state.paymentFields fold (
       paymentFields =>
@@ -169,10 +169,10 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       userAgent: String,
   ): Future[SepaPaymentMethod] = {
     if (ipAddress.length() > 15) {
-      SafeLogger.warn(s"IPv6 Address: ${ipAddress} is longer than 15 characters")
+      logger.warn(s"IPv6 Address: ${ipAddress} is longer than 15 characters")
     }
     if (userAgent.length() > 255) {
-      SafeLogger.warn(s"User Agent: ${userAgent} will be truncated to 255 characters")
+      logger.warn(s"User Agent: ${userAgent} will be truncated to 255 characters")
     }
     Future.successful(
       SepaPaymentMethod(

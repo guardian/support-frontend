@@ -8,7 +8,7 @@ import com.amazonaws.auth.{
 }
 import com.amazonaws.services.s3.AmazonS3URI
 import com.gu.aws.AwsS3Client
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogging
 import com.typesafe.config.{Config, ConfigFactory}
 
 object Aws {
@@ -23,9 +23,9 @@ object Aws {
 
 }
 
-object S3Loader {
+object S3Loader extends SafeLogging {
   def load(uri: AmazonS3URI): Config = {
-    SafeLogger.info(s"Loading config from S3 from $uri")
+    logger.info(s"Loading config from S3 from $uri")
     AwsS3Client
       .fetchAsString(uri)
       .map(

@@ -3,32 +3,19 @@ package utils
 import admin.settings.{RecurringPaymentMethodSwitches, SubscriptionsPaymentMethodSwitches, Switches}
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
-import com.gu.support.acquisitions.AbTest
-import com.gu.support.catalog.{
-  Collection,
-  Domestic,
-  FulfilmentOptions,
-  NationalDelivery,
-  HomeDelivery,
-  NoFulfilmentOptions,
-  RestOfWorld,
-}
-import com.gu.support.paperround.PaperRoundAPI
+import com.gu.support.catalog.{Contribution, DigitalPack, GuardianWeekly, Paper, SupporterPlus, _}
 import com.gu.support.paperround.CoverageEndpoint.{CO, RequestBody}
+import com.gu.support.paperround.{AgentId, PaperRoundAPI}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
-import java.nio.charset.Charset
 import services.stepfunctions.CreateSupportWorkersRequest
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import utils.CheckoutValidationRules._
 
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext
-import com.gu.support.paperround.AgentId
+import scala.concurrent.{ExecutionContext, Future}
 
 object CheckoutValidationRules {
 
@@ -371,7 +358,7 @@ object GuardianWeeklyValidation {
 
 }
 
-object PaperValidation {
+object PaperValidation extends SafeLogging {
 
   import AddressAndCurrencyValidationRules._
 
@@ -432,7 +419,7 @@ object PaperValidation {
           response.data.status match {
             case CO if response.data.agents.map(_.agentId).contains(agent) => Valid
             case _ =>
-              SafeLogger.error(
+              logger.error(
                 scrub"User’s postcode $postcode wasn’t covered by their chosen delivery agent $agent: PaperRound response was $response",
               )
               Invalid(

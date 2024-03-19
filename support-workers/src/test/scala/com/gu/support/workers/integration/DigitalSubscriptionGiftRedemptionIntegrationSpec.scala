@@ -24,7 +24,7 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
 
     val requestId = UUID.randomUUID()
     val giftCode = new GiftCodeGeneratorService().generateCode(Annual)
-    SafeLogger.info(s"Gift code non existent = $giftCode")
+    info(s"Gift code non existent = $giftCode")
     val nonExistentCode = giftCode.value // We haven't created a sub with this
 
     recoverToExceptionIf[RuntimeException](
@@ -38,7 +38,7 @@ class DigitalSubscriptionGiftRedemptionIntegrationSpec extends AsyncLambdaSpec w
     val createSubRequestId = UUID.randomUUID()
     val redeemSubRequestId = UUID.randomUUID()
     val giftCode = new GiftCodeGeneratorService().generateCode(Annual)
-    SafeLogger.info(s"Gift code to create = $giftCode")
+    info(s"Gift code to create = $giftCode")
     val mockCodeGenerator = mock[GiftCodeGeneratorService]
     when(mockCodeGenerator.generateCode(any[BillingPeriod])).thenReturn(giftCode)
 

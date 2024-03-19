@@ -25,7 +25,7 @@ class EndToEndSpec extends AsyncLambdaSpec with MockContext {
 
   def runSignupWithCurrency(currency: Currency): Future[Assertion] = {
     val json = createStripePaymentMethodContributionJson(currency = currency)
-    SafeLogger.info(json)
+    info(json)
     val output = Future
       .successful(wrapFixture(json))
       .chain(new CreatePaymentMethod())
@@ -81,9 +81,9 @@ class EndToEndSpec extends AsyncLambdaSpec with MockContext {
 
     def last(handler: Handler[_, _]): Future[ByteArrayOutputStream] = stream flatMap { stream =>
       val output = new ByteArrayOutputStream()
-      SafeLogger.info(s"calling handler: ${handler.getClass}")
+      info(s"calling handler: ${handler.getClass}")
       handler.handleRequestFuture(stream, output, context).map { _ =>
-        SafeLogger.info(s"finished handler: ${handler.getClass}")
+        info(s"finished handler: ${handler.getClass}")
         output
       }
     }

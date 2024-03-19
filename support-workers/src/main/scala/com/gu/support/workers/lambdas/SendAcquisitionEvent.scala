@@ -5,8 +5,6 @@ import com.gu.acquisitions.AcquisitionDataRowBuilder
 import com.gu.aws.AwsCloudWatchMetricPut
 import com.gu.aws.AwsCloudWatchMetricSetup.paymentSuccessRequest
 import com.gu.config.Configuration
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger.Sanitizer
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.catalog.{Contribution => _, DigitalPack => _, Paper => _}
 import com.gu.support.workers._
@@ -29,7 +27,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
       services: Services,
   ): FutureHandlerResult = {
 
-    SafeLogger.info(s"Sending acquisition event to BigQuery: ${state.toString}")
+    logger.info(s"Sending acquisition event to BigQuery: ${state.toString}")
 
     state.sendThankYouEmailState match {
       case _: SendThankYouEmailDigitalSubscriptionGiftRedemptionState =>
@@ -43,7 +41,7 @@ class SendAcquisitionEvent(serviceProvider: ServiceProvider = ServiceProvider)
 
   private def sendAcquisitionEvent(state: SendAcquisitionEventState, requestInfo: RequestInfo, services: Services) = {
     sendPaymentSuccessMetric(state).toEither.left
-      .foreach(SafeLogger.error(scrub"failed to send PaymentSuccess metric", _))
+      .foreach(logger.error(scrub"failed to send PaymentSuccess metric", _))
 
     val acquisition = AcquisitionDataRowBuilder.buildFromState(state, requestInfo)
 

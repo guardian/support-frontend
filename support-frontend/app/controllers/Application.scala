@@ -8,24 +8,22 @@ import cats.data.EitherT
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
-import play.api.mvc._
-import services.{PaymentAPIService, TestUserService}
-import utils.FastlyGEOIP._
 import play.api.libs.circe.Circe
 import play.api.libs.ws.WSClient
+import play.api.mvc._
+import services.pricing.PriceSummaryServiceProvider
+import services.{PaymentAPIService, TestUserService}
+import utils.FastlyGEOIP._
+import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
-import play.twirl.api.Html
-import services.pricing.PriceSummaryServiceProvider
-import views.EmptyDiv
 
 case class PaymentMethodConfigs(
     oneOffDefaultStripeConfig: StripePublicConfig,
@@ -312,7 +310,7 @@ class Application(
   }
 }
 
-object CSSElementForStage {
+object CSSElementForStage extends SafeLogging {
 
   def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage)(
       cssPath: RefPath,
@@ -321,7 +319,7 @@ object CSSElementForStage {
       Left(cssPath)
     } else {
       getFileContentsAsHtml(cssPath).fold[Either[RefPath, StyleContent]] {
-        SafeLogger.error(
+        logger.error(
           scrub"Inline CSS failed to load for $cssPath",
         ) // in future add email perf alert instead (cloudwatch alarm perhaps)
         Left(cssPath)

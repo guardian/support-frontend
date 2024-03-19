@@ -1,21 +1,18 @@
 package services.stepfunctions
 
-import services.aws.AwsAsync
-import StateMachineContainer.{Response, convertErrors}
-import org.apache.pekko.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import com.amazonaws.regions.Regions
-import services.aws.CredentialsProvider
 import com.amazonaws.services.stepfunctions.model.{ExecutionStatus => _, _}
 import com.amazonaws.services.stepfunctions.{AWSStepFunctionsAsync, AWSStepFunctionsAsyncClientBuilder}
+import com.gu.monitoring.SafeLogging
 import io.circe.Encoder
-import cats.implicits._
-import com.gu.monitoring.SafeLogger
+import org.apache.pekko.actor.ActorSystem
+import services.aws.{AwsAsync, CredentialsProvider}
+import services.stepfunctions.StateMachineContainer.{Response, convertErrors}
 import services.stepfunctions.StateMachineErrors.Fail
 
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters._
 
 object Client {
@@ -32,14 +29,14 @@ object Client {
   }
 }
 
-class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) {
+class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) extends SafeLogging {
 
   private def startExecution(arn: String, input: String)(implicit
       ec: ExecutionContext,
   ): Response[StartExecutionResult] = convertErrors {
     AwsAsync(client.startExecutionAsync, new StartExecutionRequest().withStateMachineArn(arn).withInput(input))
       .transform { theTry =>
-        SafeLogger.info(s"state machine result: $theTry")
+        logger.info(s"state machine result: $theTry")
         theTry
       }
   }

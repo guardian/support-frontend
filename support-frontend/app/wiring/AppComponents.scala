@@ -37,7 +37,6 @@ class AppComponents(context: Context)
     Some(router),
     assetsResolver,
     allSettingsProvider,
-    appConfig.stage,
   )
   override lazy val httpErrorHandler = customHandler
   override lazy val errorController = new ErrorController(actionBuilders, customHandler)

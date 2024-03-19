@@ -1,7 +1,7 @@
 package com.gu.salesforce
 
 import com.gu.config.Configuration
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogging
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
@@ -9,8 +9,7 @@ import com.gu.salesforce.AddressLine.getAddressLine
 import com.gu.salesforce.Salesforce._
 import com.gu.support.workers.{Address, GiftRecipient, SalesforceContactRecord, User}
 import io.circe
-import io.circe.generic.semiauto.deriveCodec
-import io.circe.{Codec, Decoder}
+import io.circe.Decoder
 import io.circe.parser._
 import io.circe.syntax._
 import okhttp3.Request
@@ -27,7 +26,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   val upsertEndpoint = "services/apexrest/RegisterCustomer/v1/"
 
   override def wsPreExecute(req: Request.Builder): Future[Request.Builder] = {
-    SafeLogger.info(s"Issuing request to wsPreExecute: $config")
+    logger.info(s"Issuing request to wsPreExecute: $config")
     AuthService.getAuth(config).map(auth => addAuthenticationToRequest(auth, req))
   }
 
@@ -182,7 +181,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   * problem we have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs. If
   * the token is stale a new one is fetched
   */
-object AuthService {
+object AuthService extends SafeLogging {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -201,7 +200,7 @@ object AuthService {
   })
 
   private def storeAuth(authentication: Authentication, stage: String) = atomic { implicit txn =>
-    SafeLogger.info(s"Successfully retrieved Salesforce authentication token for $stage")
+    logger.info(s"Successfully retrieved Salesforce authentication token for $stage")
     val newAuths = authRef().updated(stage, authentication)
     authRef() = newAuths
   }
@@ -214,7 +213,7 @@ class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
   val httpClient: FutureHttpClient = RequestRunners.configurableFutureRunner(10.seconds)
 
   def authorize: Future[Authentication] = {
-    SafeLogger.info(s"Trying to authenticate with Salesforce ${Configuration.stage}...")
+    logger.info(s"Trying to authenticate with Salesforce ${Configuration.stage}...")
 
     def postAuthRequest: Future[Authentication] =
       postForm[Authentication](
