@@ -19,8 +19,8 @@ case class StripeConfig(
     unitedStatesAccount.publicKey -> (unitedStatesAccount.secretKey, StripeGatewayPaymentIntentsDefault), // US currently uses default account for recurring
   )
 
-  def forPublicKey(publicKey: StripePublicKey): (StripeSecretKey, PaymentGateway) =
-    secretForPublic(publicKey)
+  def forPublicKey(publicKey: StripePublicKey): Option[(StripeSecretKey, PaymentGateway)] =
+    secretForPublic.get(publicKey)
 
   // fallback for SupportWorkers (recurring products) which don't support a US Stripe account yet.
   def forCurrency(maybeCurrency: Option[Currency]): StripeAccountConfig =
