@@ -26,10 +26,6 @@ class PriceSummaryService(
       promoCodes: List[PromoCode],
       readerType: ReaderType = Direct,
   ): ProductPrices = {
-    logger.info(
-      s"getPrices for catalogue: ${catalogService.environment}, promotionService: ${promotionService.environment}",
-    )
-
     val defaultPromos = getDefaultPromoCodes(product)
     val promotions = promotionService.findPromotions(promoCodes ++ defaultPromos)
     product
