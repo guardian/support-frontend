@@ -53,10 +53,10 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
       val requestInfo = outState.get._3
       val checkoutFailureState = outState.get._1
 
-      SafeLogger.info(requestInfo.messages.head)
-
-      requestInfo.failed should be(false)
-      checkoutFailureState.checkoutFailureReason should be(PaymentMethodUnacceptable)
+      withClue(requestInfo.messages.head) {
+        requestInfo.failed should be(false)
+        checkoutFailureState.checkoutFailureReason should be(PaymentMethodUnacceptable)
+      }
     }
 
   }
@@ -71,10 +71,10 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
       val requestInfo = outState.get._3
       val checkoutFailureState = outState.get._1
 
-      SafeLogger.info(requestInfo.messages.head)
-
-      requestInfo.failed should be(false)
-      checkoutFailureState.checkoutFailureReason should be(PaymentMethodUnacceptable)
+      withClue(requestInfo.messages.head) {
+        requestInfo.failed should be(false)
+        checkoutFailureState.checkoutFailureReason should be(PaymentMethodUnacceptable)
+      }
     }
 
   }
@@ -89,10 +89,10 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
       val requestInfo = outState.get._3
       val checkoutFailureState = outState.get._1
 
-      SafeLogger.warn(requestInfo.messages.head)
-
-      requestInfo.failed should be(false)
-      checkoutFailureState.checkoutFailureReason should be(PaymentMethodUnacceptable)
+      withClue(requestInfo.messages.head) {
+        requestInfo.failed should be(false)
+        checkoutFailureState.checkoutFailureReason should be(PaymentMethodUnacceptable)
+      }
     }
 
   }
@@ -107,10 +107,10 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
       val requestInfo = outState.get._3
       val checkoutFailureState = outState.get._1
 
-      SafeLogger.info(requestInfo.messages.head)
-
-      requestInfo.failed should be(false)
-      checkoutFailureState.checkoutFailureReason should be(AccountMismatch)
+      withClue(requestInfo.messages.head) {
+        requestInfo.failed should be(false)
+        checkoutFailureState.checkoutFailureReason should be(AccountMismatch)
+      }
     }
   }
 
@@ -132,9 +132,9 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
       val outState = Encoding.in[CheckoutFailureState](outStream.toInputStream)
       val requestInfo = outState.get._3
 
-      SafeLogger.warn(requestInfo.messages.head)
-
-      requestInfo.failed should be(false)
+      withClue(requestInfo.messages.head) {
+        requestInfo.failed should be(false)
+      }
     }
   }
 

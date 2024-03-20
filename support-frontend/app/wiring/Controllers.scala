@@ -173,7 +173,6 @@ trait Controllers {
     recaptchaService = recaptchaService,
     stripeService = stripeService,
     recaptchaConfigProvider = appConfig.recaptchaConfigProvider,
-    testStripeConfig = appConfig.regularStripeConfigProvider.get(true),
     allSettingsProvider,
     appConfig.stage,
   )

@@ -33,7 +33,7 @@ class ZuoraErrorsITSpec
       new ZuoraService(Configuration.load().zuoraConfigProvider.get(), configurableFutureRunner(30.seconds))
     recoverToSucceededIf[ZuoraErrorResponse] {
       zuoraService.subscribe(invalidSubscriptionRequest).map { response =>
-        SafeLogger.info(s"response: $response")
+        info(s"response: $response")
       }
     }
   }
@@ -43,7 +43,7 @@ class ZuoraErrorsITSpec
       new ZuoraService(Configuration.load().zuoraConfigProvider.get(), configurableFutureRunner(30.seconds))
     recoverToSucceededIf[ZuoraErrorResponse] {
       zuoraService.subscribe(incorrectPaymentMethod).map { response =>
-        SafeLogger.info(s"response: $response")
+        info(s"response: $response")
       }
     }
   }

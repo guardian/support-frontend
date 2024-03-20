@@ -5,8 +5,7 @@ import com.gu.conf.ZuoraQuerierConfig
 import com.gu.model.StageConstructors
 import com.gu.model.dynamo.SupporterRatePlanItemCodecs._
 import com.gu.model.sqs.SqsEvent
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger.Sanitizer
+import com.gu.monitoring.SafeLogging
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.{AlarmService, ConfigService, DiscountService, ZuoraSubscriptionService}
 import com.gu.supporterdata.model.Stage.{CODE, PROD}
@@ -23,14 +22,14 @@ import scala.util.{Failure, Success}
 class ProcessSupporterRatePlanItemLambda extends Handler[SqsEvent, Unit] {
 
   override protected def handlerFuture(input: SqsEvent, context: Context) = {
-    SafeLogger.info(s"Received ${input.Records.length} records from the queue")
+    logger.info(s"Received ${input.Records.length} records from the queue")
     Future
       .sequence(input.Records.map { record =>
         val subscription = decode[SupporterRatePlanItem](record.body)
         subscription match {
           case Right(item) => ProcessSupporterRatePlanItemLambda.processItem(item)
           case _ =>
-            SafeLogger.warn(s"Couldn't decode a SupporterRatePlanItem with body: ${record.body}")
+            logger.warn(s"Couldn't decode a SupporterRatePlanItem with body: ${record.body}")
             Future.successful(()) // This should never happen so I don't think it's worth alerting on
         }
       })
@@ -38,7 +37,7 @@ class ProcessSupporterRatePlanItemLambda extends Handler[SqsEvent, Unit] {
   }
 }
 
-object ProcessSupporterRatePlanItemLambda {
+object ProcessSupporterRatePlanItemLambda extends SafeLogging {
   val stage = StageConstructors.fromEnvironment
   val config = ConfigService(stage).load
   val dynamoService = SupporterDataDynamoService(stage)
@@ -52,7 +51,7 @@ object ProcessSupporterRatePlanItemLambda {
 
   private def addAmountIfContribution(supporterRatePlanItem: SupporterRatePlanItem) =
     if (isRecurringContribution(supporterRatePlanItem)) {
-      SafeLogger.info(s"Supporter ${supporterRatePlanItem.identityId} is a recurring contributor")
+      logger.info(s"Supporter ${supporterRatePlanItem.identityId} is a recurring contributor")
       contributionAmountFetcher.fetchContributionAmountFromZuora(supporterRatePlanItem)
     } else
       Future.successful(supporterRatePlanItem)
@@ -62,41 +61,41 @@ object ProcessSupporterRatePlanItemLambda {
 
   def processItem(supporterRatePlanItem: SupporterRatePlanItem) = {
     if (itemIsDiscount(supporterRatePlanItem)) {
-      SafeLogger.info(s"Supporter rate plan item ${supporterRatePlanItem.asJson.spaces2} is a discount")
+      logger.info(s"Supporter rate plan item ${supporterRatePlanItem.asJson.spaces2} is a discount")
       Future.successful(())
     } else
       addAmountIfContribution(supporterRatePlanItem).flatMap(writeItemToDynamo)
   }
 
   private def writeItemToDynamo(supporterRatePlanItem: SupporterRatePlanItem) = {
-    SafeLogger.info(s"Attempting to write item to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}")
+    logger.info(s"Attempting to write item to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}")
 
     dynamoService
       .writeItem(supporterRatePlanItem)
       .map { _ =>
-        SafeLogger.info(s"Successfully wrote item to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}")
+        logger.info(s"Successfully wrote item to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}")
         ()
       }
       .recover { case t: Throwable =>
-        SafeLogger.error(scrub"Error writing item to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}", t)
+        logger.error(scrub"Error writing item to Dynamo - ${supporterRatePlanItem.asJson.noSpaces}", t)
         alarmService.triggerDynamoWriteAlarm match {
           case Success(_) => Future.successful(())
           case Failure(exception) =>
-            SafeLogger.error(scrub"Failed to trigger dynamo alarm", exception)
+            logger.error(scrub"Failed to trigger dynamo alarm", exception)
             Future.successful(())
         }
       }
   }
 }
 
-class ContributionAmountFetcher(config: ZuoraQuerierConfig) {
+class ContributionAmountFetcher(config: ZuoraQuerierConfig) extends SafeLogging {
   lazy val zuoraService = new ZuoraSubscriptionService(config, configurableFutureRunner(60.seconds))
 
   def fetchContributionAmountFromZuora(supporterRatePlanItem: SupporterRatePlanItem) =
     zuoraService
       .getSubscription(supporterRatePlanItem.subscriptionName)
       .map { sub =>
-        SafeLogger.info(
+        logger.info(
           s"Contribution amount for supporter ${supporterRatePlanItem.identityId} is ${sub.contributionAmount}",
         )
         supporterRatePlanItem.copy(contributionAmount = sub.contributionAmount)

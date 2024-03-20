@@ -102,6 +102,7 @@ type RegularStripePaymentIntentFields = {
 	paymentMethod: string | PaymentMethod;
 	// The ID of the Stripe Payment Method
 	stripePaymentType: StripePaymentMethod; // The type of Stripe payment, e.g. Apple Pay
+	stripePublicKey: string;
 };
 type RegularDirectDebitPaymentFields = {
 	accountHolderName: string;
@@ -250,6 +251,7 @@ const MAX_POLLS = 10;
 // ----- Functions ----- //
 function regularPaymentFieldsFromAuthorisation(
 	authorisation: PaymentAuthorisation,
+	stripePublicKey: string,
 ): RegularPaymentFields {
 	switch (authorisation.paymentMethod) {
 		case Stripe:
@@ -257,6 +259,7 @@ function regularPaymentFieldsFromAuthorisation(
 				return {
 					paymentMethod: authorisation.paymentMethodId,
 					stripePaymentType: authorisation.stripePaymentMethod,
+					stripePublicKey: stripePublicKey,
 				};
 			}
 

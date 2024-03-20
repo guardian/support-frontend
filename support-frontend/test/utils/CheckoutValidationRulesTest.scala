@@ -20,6 +20,7 @@ import com.gu.support.catalog.{Collection, Domestic, Everyday, HomeDelivery, Nat
 import com.gu.support.paperround.{AgentId, CoverageEndpoint, PaperRoundAPI}
 import com.gu.support.paperround.CoverageEndpoint.{NC, CO, PostcodeCoverage}
 import com.gu.support.redemptions.{RedemptionCode, RedemptionData}
+import com.gu.support.workers.StripePaymentType.StripeCheckout
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import org.joda.time.LocalDate
@@ -49,9 +50,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(
-        StripePaymentMethodPaymentFields(
+        StripePaymentFields(
           paymentMethod = PaymentMethodId("testId").get,
           stripePaymentType = Some(StripePaymentType.StripeApplePay),
+          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
         ),
       ),
       switches = TestData.buildSwitches(
@@ -85,7 +87,11 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(
-        StripeSourcePaymentFields("testStripeToken", stripePaymentType = None),
+        StripePaymentFields(
+          PaymentMethodId("testStripeToken").get,
+          stripePaymentType = None,
+          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+        ),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(Off, On, On, On, On, On, On, On, On),
@@ -97,9 +103,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(
-        StripePaymentMethodPaymentFields(
+        StripePaymentFields(
           paymentMethod = PaymentMethodId("testId").get,
           stripePaymentType = Some(StripePaymentType.StripePaymentRequestButton),
+          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
         ),
       ),
       switches = TestData.buildSwitches(
@@ -112,9 +119,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(
-        StripePaymentMethodPaymentFields(
+        StripePaymentFields(
           paymentMethod = PaymentMethodId("testId").get,
           stripePaymentType = Some(StripePaymentType.StripeCheckout),
+          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
         ),
       ),
       switches = TestData.buildSwitches(
@@ -178,9 +186,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         Some(0),
       ),
       paymentFields = Left(
-        StripePaymentMethodPaymentFields(
+        StripePaymentFields(
           paymentMethod = PaymentMethodId("testId").get,
           stripePaymentType = Some(StripePaymentType.StripeCheckout),
+          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
         ),
       ),
       switches = TestData.buildSwitches(
@@ -206,9 +215,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(
-        StripePaymentMethodPaymentFields(
+        StripePaymentFields(
           paymentMethod = PaymentMethodId("testId").get,
           stripePaymentType = Some(StripePaymentType.StripeApplePay),
+          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
         ),
       ),
       switches = TestData.buildSwitches(
@@ -242,7 +252,11 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(
-        StripeSourcePaymentFields("testStripeToken", stripePaymentType = None),
+        StripePaymentFields(
+          PaymentMethodId("testStripeToken").get,
+          stripePaymentType = Some(StripeCheckout),
+          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+        ),
       ),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
@@ -254,9 +268,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(
-        StripePaymentMethodPaymentFields(
+        StripePaymentFields(
           paymentMethod = PaymentMethodId("testId").get,
           stripePaymentType = Some(StripePaymentType.StripePaymentRequestButton),
+          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
         ),
       ),
       switches = TestData.buildSwitches(
@@ -269,9 +284,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
     CheckoutValidationRules.checkPaymentMethodEnabled(
       product = Contribution(0, GBP, Monthly),
       paymentFields = Left(
-        StripePaymentMethodPaymentFields(
+        StripePaymentFields(
           paymentMethod = PaymentMethodId("testId").get,
           stripePaymentType = Some(StripePaymentType.StripeCheckout),
+          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
         ),
       ),
       switches = TestData.buildSwitches(
@@ -335,9 +351,10 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
         Some(0),
       ),
       paymentFields = Left(
-        StripePaymentMethodPaymentFields(
+        StripePaymentFields(
           paymentMethod = PaymentMethodId("testId").get,
           stripePaymentType = Some(StripePaymentType.StripeCheckout),
+          stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
         ),
       ),
       switches = TestData.buildSwitches(
@@ -498,8 +515,8 @@ class DigitalPackValidationTest extends AnyFlatSpec with Matchers {
   }
 
   it should "fail if the source payment field received is an empty string" in {
-    val requestMissingState = validDigitalPackRequest.copy(paymentFields = Left(StripeSourcePaymentFields("", None)))
-    DigitalPackValidation.passes(requestMissingState, monthlyDirectUSDProduct) shouldBe an[Invalid]
+    val requestMissingState = PaymentMethodId("")
+    requestMissingState shouldBe None
   }
 
   it should "succeed for a standard country and currency combination" in {
@@ -787,14 +804,18 @@ object TestData {
   )
 
   val monthlyDirectUSDProduct = DigitalPack(Currency.USD, Monthly)
+  private val stripePaymentFields: StripePaymentFields = StripePaymentFields(
+    paymentMethod = PaymentMethodId("test_token").get,
+    stripePaymentType = Some(StripePaymentType.StripeCheckout),
+    stripePublicKey = Some(StripePublicKey.get("pk_test_asdf")),
+  )
   val validDigitalPackRequest = CreateSupportWorkersRequest(
     title = None,
     firstName = "grace",
     lastName = "hopper",
     product = monthlyDirectUSDProduct,
     firstDeliveryDate = None,
-    paymentFields =
-      Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
+    paymentFields = Left(stripePaymentFields),
     ophanIds = OphanIds(None, None),
     referrerAcquisitionData =
       ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
@@ -833,8 +854,7 @@ object TestData {
     lastName = "hopper",
     product = Paper(Currency.GBP, Monthly, HomeDelivery, Everyday, Some(AgentId(134789))),
     firstDeliveryDate = Some(someDateNextMonth),
-    paymentFields =
-      Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
+    paymentFields = Left(stripePaymentFields),
     ophanIds = OphanIds(None, None),
     referrerAcquisitionData =
       ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),
@@ -857,8 +877,7 @@ object TestData {
     lastName = "hopper",
     product = GuardianWeekly(Currency.GBP, Monthly, Domestic),
     firstDeliveryDate = Some(someDateNextMonth),
-    paymentFields =
-      Left(StripePaymentMethodPaymentFields(PaymentMethodId("test_token").get, Some(StripePaymentType.StripeCheckout))),
+    paymentFields = Left(stripePaymentFields),
     ophanIds = OphanIds(None, None),
     referrerAcquisitionData =
       ReferrerAcquisitionData(None, None, None, None, None, None, None, None, None, None, None, None, None),

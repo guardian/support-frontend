@@ -20,6 +20,7 @@ import com.gu.support.catalog.{
 import com.gu.support.promotions.DefaultPromotions
 import com.gu.support.workers.{Annual, Monthly}
 import com.gu.support.zuora.api.ReaderType.Direct
+import io.circe.generic.semiauto.deriveEncoder
 
 object PricesController {
   case class RatePlanPriceData(
@@ -27,16 +28,19 @@ object PricesController {
       currency: String, // never quote a price without a currency, even if grouped
       priceSummary: Option[PriceSummary],
   )
+  implicit val rppdEncoder: Encoder[RatePlanPriceData] = deriveEncoder[RatePlanPriceData]
 
   case class ProductPriceData(
       Monthly: RatePlanPriceData,
       Annual: RatePlanPriceData,
   )
+  implicit val ppdEncoder: Encoder[ProductPriceData] = deriveEncoder[ProductPriceData]
 
   case class CountryGroupPriceData(
       GuardianWeekly: Option[ProductPriceData],
       Digisub: Option[ProductPriceData],
   )
+  implicit val cgpdEncoder: Encoder[CountryGroupPriceData] = deriveEncoder[CountryGroupPriceData]
 
   /** This is the model that we return from the prices endpoint. It gives us what we need for displaying prices in
     * Dotcom messages. It is simpler than the internal com.gu.support.ProductPrices model.
@@ -83,8 +87,7 @@ object PricesController {
       Annual = buildRatePlanPriceData(annualPriceSummary, includeSummary),
     )
 
-  import io.circe.generic.auto._
-  implicit val pricesEncoder = Encoder[Prices]
+  implicit val pricesEncoder: Encoder[Prices] = deriveEncoder[Prices]
 }
 
 class PricesController(

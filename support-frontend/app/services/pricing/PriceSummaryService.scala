@@ -1,7 +1,7 @@
 package services.pricing
 
 import com.gu.i18n.{Country, CountryGroup, Currency}
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogging
 import com.gu.support.catalog._
 import services.pricing.PriceSummaryService.{getDiscountedPrice, getNumberOfDiscountedPeriods}
 import com.gu.support.promotions._
@@ -17,7 +17,8 @@ class PriceSummaryService(
     promotionService: PromotionService,
     defaultPromotionService: DefaultPromotionService,
     catalogService: CatalogService,
-) extends TouchpointService {
+) extends TouchpointService
+    with SafeLogging {
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
 
   def getPrices[T <: Product](
@@ -25,10 +26,6 @@ class PriceSummaryService(
       promoCodes: List[PromoCode],
       readerType: ReaderType = Direct,
   ): ProductPrices = {
-    SafeLogger.info(
-      s"getPrices for catalogue: ${catalogService.environment}, promotionService: ${promotionService.environment}",
-    )
-
     val defaultPromos = getDefaultPromoCodes(product)
     val promotions = promotionService.findPromotions(promoCodes ++ defaultPromos)
     product
@@ -76,25 +73,7 @@ class PriceSummaryService(
       productRatePlan: ProductRatePlan[Product],
       price: Price,
       saving: Option[Int],
-  ) = {
-    val country = countryGroup.defaultCountry.orElse(countryGroup.countries.headOption).getOrElse(Country.UK)
-    SafeLogger.info(s"Validating promotions. Country: $country, productRatePlan: ${productRatePlan.id}")
-
-    SafeLogger.info("Promotions to validate")
-    SafeLogger.info(promotions.map(promo => promo.promoCode).mkString(", "))
-
-    val (invalidPromotions, validPromotions) = promotions
-      .map(promo =>
-        promotionService
-          .validatePromotion(promo, country, productRatePlan.id, isRenewal = false),
-      )
-      .partitionMap(identity)
-
-    SafeLogger.info("Invalid promotions")
-    SafeLogger.info(invalidPromotions.map(promoError => promoError.msg).mkString(", "))
-
-    SafeLogger.info("Valid promotions")
-    SafeLogger.info(validPromotions.map(promoError => promoError.promoCode).mkString(", "))
+  ): (Currency, PriceSummary) = {
 
     val promotionSummaries: List[PromotionSummary] = for {
       promotion <- promotions

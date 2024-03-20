@@ -1,11 +1,10 @@
 package com.gu.support.workers
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, InputStream}
-
 import com.gu.i18n.Currency
 import com.gu.i18n.Currency.{EUR, GBP}
 import com.gu.monitoring.SafeLogger
-import com.gu.support.workers.JsonFixtures.{createStripeSourcePaymentMethodContributionJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{createStripePaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.lambdas._
 import com.gu.test.tags.annotations.IntegrationTest
 import io.circe
@@ -25,8 +24,8 @@ class EndToEndSpec extends AsyncLambdaSpec with MockContext {
   ignore should "work with other currencies" in runSignupWithCurrency(EUR)
 
   def runSignupWithCurrency(currency: Currency): Future[Assertion] = {
-    val json = createStripeSourcePaymentMethodContributionJson(currency = currency)
-    SafeLogger.info(json)
+    val json = createStripePaymentMethodContributionJson(currency = currency)
+    info(json)
     val output = Future
       .successful(wrapFixture(json))
       .chain(new CreatePaymentMethod())
@@ -82,9 +81,9 @@ class EndToEndSpec extends AsyncLambdaSpec with MockContext {
 
     def last(handler: Handler[_, _]): Future[ByteArrayOutputStream] = stream flatMap { stream =>
       val output = new ByteArrayOutputStream()
-      SafeLogger.info(s"calling handler: ${handler.getClass}")
+      info(s"calling handler: ${handler.getClass}")
       handler.handleRequestFuture(stream, output, context).map { _ =>
-        SafeLogger.info(s"finished handler: ${handler.getClass}")
+        info(s"finished handler: ${handler.getClass}")
         output
       }
     }
