@@ -1,27 +1,27 @@
 {
-  "extends": "@guardian/tsconfig/tsconfig.json",
-  "compilerOptions": {
-    "allowJs": true, // Allow JavaScript files to be compiled
-    "skipLibCheck": true, // Skip type checking of all declaration files
-    "forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file.
-    "isolatedModules": true, // Unconditionally emit imports for unresolved files
-    "noEmit": true, // Do not emit output (meaning do not compile code, only perform type checking)
-    "jsx": "react-jsx",
-    "jsxImportSource": "@emotion/react",
-    "noUnusedParameters": true, // Report errors on unused parameters
-    "noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statement
-    "noImplicitAny": true, // Enable error reporting for expressions and declarations with an implied any type
-    "baseUrl": "./assets", // The baseUrl to be used when resolving absolute module paths
-    "paths": {
-      "ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"],
-    },
+	"extends": "@guardian/tsconfig/tsconfig.json",
+	"compilerOptions": {
+		"allowJs": true, // Allow JavaScript files to be compiled
+		"skipLibCheck": true, // Skip type checking of all declaration files
+		"forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file.
+		"isolatedModules": true, // Unconditionally emit imports for unresolved files
+		"noEmit": true, // Do not emit output (meaning do not compile code, only perform type checking)
+		"jsx": "react-jsx",
+		"jsxImportSource": "@emotion/react",
+		"noUnusedParameters": true, // Report errors on unused parameters
+		"noFallthroughCasesInSwitch": true, // Report errors for fallthrough cases in switch statement
+		"noImplicitAny": true, // Enable error reporting for expressions and declarations with an implied any type
+		"baseUrl": "./assets", // The baseUrl to be used when resolving absolute module paths
+		"paths": {
+			"ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"]
+		},
 
-    // These override @guardian/tsconfig as they have introduced a lot of errors.
-    // The number of errors indicated below is at the time of writing to give an idea of the scale of the fix needed.
-    // We should look at removing these as soon as we can.
-    "noImplicitReturns": false, // Found 16 errors in 14 files.
-    "noUncheckedIndexedAccess": false // 209 errors in 63 files.
-  },
-  "include": ["./assets", "./stories", "./declaration.d.ts", "./window.d.ts"], // The files to type check,
-  "exclude": ["node_modules"] // The files to not type check
+		// These override @guardian/tsconfig as they have introduced a lot of errors.
+		// The number of errors indicated below is at the time of writing to give an idea of the scale of the fix needed.
+		// We should look at removing these as soon as we can.
+		"noImplicitReturns": false, // Found 16 errors in 14 files.
+		"noUncheckedIndexedAccess": false // 209 errors in 63 files.
+	},
+	"include": ["./assets", "./stories", "./declaration.d.ts", "./window.d.ts"], // The files to type check,
+	"exclude": ["node_modules"] // The files to not type check
 }
