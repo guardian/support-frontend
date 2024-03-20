@@ -34,11 +34,17 @@ class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) extends SafeLo
   private def startExecution(arn: String, input: String, name: String)(implicit
       ec: ExecutionContext,
   ): Response[StartExecutionResult] = convertErrors {
+    val proposedName = name + "-" + System.nanoTime().toString
+    val validName =
+      if (proposedName.length <= 80)
+        proposedName
+      else
+        (System.nanoTime().toString + "-" + name).take(78) + "--"
     val startExecutionRequest =
       new StartExecutionRequest()
         .withStateMachineArn(arn)
         .withInput(input)
-        .withName(name + "-" + System.nanoTime().toString)
+        .withName(validName)
     AwsAsync(client.startExecutionAsync, startExecutionRequest)
       .transform { theTry =>
         logger.info(s"state machine result: $theTry")
