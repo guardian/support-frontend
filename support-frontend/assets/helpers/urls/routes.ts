@@ -13,7 +13,7 @@ import {
 } from './url';
 import 'helpers/types/option';
 
-const routes: Record<string, string> = {
+const routes = {
 	recurringContribCheckout: '/contribute/recurring',
 	recurringContribCreate: '/contribute/recurring/create',
 	recurringContribPending: '/contribute/recurring/pending',
@@ -40,7 +40,7 @@ const routes: Record<string, string> = {
 	postcodeLookup: '/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
 	stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
-};
+} as const;
 const createOneOffReminderEndpoint = isProd()
 	? 'https://support.theguardian.com/reminders/create/one-off'
 	: 'https://support.code.dev-theguardian.com/reminders/create/one-off';
