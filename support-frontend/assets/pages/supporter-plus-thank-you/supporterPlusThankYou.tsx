@@ -16,7 +16,7 @@ import { getAmount } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import { isSupporterPlus } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
+import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
@@ -177,11 +177,8 @@ export function SupporterPlusThankYou(): JSX.Element {
 		}
 	}, []);
 
-	const amountIsAboveThreshold = isSupporterPlus(
-		contributionType,
-		selectedAmounts,
-		otherAmounts,
-		countryGroupId,
+	const amountIsAboveThreshold = useContributionsSelector(
+		isSupporterPlusFromState,
 	);
 
 	const thankYouModuleData = getThankYouModuleData(

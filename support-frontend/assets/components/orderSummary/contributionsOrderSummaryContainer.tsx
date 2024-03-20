@@ -53,20 +53,20 @@ function getTermsConditions(
 	);
 }
 
-function getOriginalPrice(
+function getProductPrice(
 	productPrices: ProductPrices,
-	currentPrice: number,
+	productPriceWithPromo: number,
 	country: IsoCountry,
 	billingPeriod: BillingPeriod,
 	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
 	productOption: ProductOptions = NoProductOptions,
 ): number | undefined {
 	const countryGroup = getCountryGroup(country);
-	const originalPrice =
+	const productPrice =
 		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
 			billingPeriod
 		]?.[countryGroup.currency]?.price ?? 0;
-	return originalPrice > currentPrice ? originalPrice : undefined;
+	return productPrice > productPriceWithPromo ? productPrice : undefined;
 }
 
 export function ContributionsOrderSummaryContainer({
@@ -83,11 +83,11 @@ export function ContributionsOrderSummaryContainer({
 	);
 	const billingPeriod = (productType[0] +
 		productType.slice(1).toLowerCase()) as BillingPeriod;
-	const currentPrice = useContributionsSelector(getUserSelectedAmount);
-	const originalPrice = useContributionsSelector((state) =>
-		getOriginalPrice(
+	const productPriceWithPromo = useContributionsSelector(getUserSelectedAmount);
+	const productPrice = useContributionsSelector((state) =>
+		getProductPrice(
 			state.page.checkoutForm.product.productPrices,
-			currentPrice,
+			productPriceWithPromo,
 			countryId,
 			billingPeriod,
 		),
@@ -136,8 +136,8 @@ export function ContributionsOrderSummaryContainer({
 
 	return renderOrderSummary({
 		description,
-		total: currentPrice,
-		totalOriginal: isSupporterPlus ? originalPrice : undefined,
+		total: productPriceWithPromo,
+		totalExcludingPromo: isSupporterPlus ? productPrice : undefined,
 		currency: currency,
 		paymentFrequency,
 		enableCheckList: contributionType !== 'ONE_OFF',

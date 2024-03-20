@@ -26,6 +26,7 @@ import { ThreeTierLozenge } from './threeTierLozenge';
 
 interface ThreeTierCardProps {
 	cardTier: 1 | 2 | 3;
+	promoCount: number;
 	title: string;
 	isRecommended: boolean;
 	isRecommendedSubdued: boolean;
@@ -153,7 +154,11 @@ const benefitsPrefixPlus = css`
 	}
 `;
 
-const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
+const discountSummaryCopy = (
+	currency: string,
+	planCost: TierPlanCosts,
+	promoCount: number,
+) => {
 	// EXAMPLE: £16 for the first year, then £25/month
 	if (planCost.discount) {
 		const period =
@@ -173,12 +178,13 @@ const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
 			recurringContributionPeriodMap[period]
 		}${duration > 1 ? 's' : ''}, then ${currency}${planCost.price}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
-		}`;
+		}${'*'.repeat(promoCount)}`;
 	}
 };
 
 export function ThreeTierCard({
 	cardTier,
+	promoCount,
 	title,
 	planCost,
 	isRecommended,
@@ -210,7 +216,7 @@ export function ThreeTierCard({
 				{currentPriceCopy}
 				{!!planCost.discount && (
 					<span css={discountSummaryCss}>
-						{discountSummaryCopy(currency, planCost)}*
+						{discountSummaryCopy(currency, planCost, promoCount)}
 					</span>
 				)}
 			</h2>
