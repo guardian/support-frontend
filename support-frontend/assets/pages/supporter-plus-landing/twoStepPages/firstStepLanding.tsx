@@ -98,7 +98,10 @@ export function SupporterPlusInitialLandingPage({
 	const navigate = useNavigate();
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
-	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
+
+	const thresholdPrice = useContributionsSelector((state) =>
+		getThresholdPrice(contributionType, state),
+	);
 
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,

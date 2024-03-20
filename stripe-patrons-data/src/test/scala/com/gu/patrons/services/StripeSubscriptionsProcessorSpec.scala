@@ -1,10 +1,9 @@
 package com.gu.patrons.services
 
-import com.gu.monitoring.SafeLogger
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.patrons.conf.{PatronsIdentityConfig, PatronsStripeConfig}
-import com.gu.patrons.model.{StripeSubscription, ExpandedStripeCustomer}
-import com.gu.supporterdata.model.Stage.{CODE, PROD}
+import com.gu.patrons.model.{ExpandedStripeCustomer, StripeSubscription}
+import com.gu.supporterdata.model.Stage.CODE
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -33,7 +32,7 @@ class StripeSubscriptionsProcessorSpec extends AsyncFlatSpec with Matchers {
       identityService
         .getUserIdFromEmail(subscription.customer.email)
         .map(maybeIdentityId =>
-          SafeLogger.info(s"${subscription.customer.email} - ${maybeIdentityId.getOrElse("No Identity account")}"),
+          info(s"${subscription.customer.email} - ${maybeIdentityId.getOrElse("No Identity account")}"),
         )
   }
 

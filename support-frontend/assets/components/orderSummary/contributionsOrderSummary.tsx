@@ -123,7 +123,7 @@ const termsAndConditions = css`
 export type ContributionsOrderSummaryProps = {
 	description: string;
 	total: number;
-	totalOriginal?: number;
+	totalExcludingPromo?: number;
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: CheckListData[];
@@ -141,7 +141,7 @@ export type ContributionsOrderSummaryProps = {
 export function ContributionsOrderSummary({
 	description,
 	total,
-	totalOriginal,
+	totalExcludingPromo,
 	currency,
 	paymentFrequency,
 	checkListData,
@@ -163,9 +163,9 @@ export function ContributionsOrderSummary({
 	);
 
 	const formattedTotal = simpleFormatAmount(currency, total);
-	const formattedTotalOriginal = simpleFormatAmount(
+	const formattedTotalExcludingPromo = simpleFormatAmount(
 		currency,
-		totalOriginal ?? '',
+		totalExcludingPromo ?? '',
 	);
 
 	return (
@@ -206,9 +206,9 @@ export function ContributionsOrderSummary({
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
 				<p>
-					{totalOriginal && (
+					{totalExcludingPromo && (
 						<span css={originalPriceStrikeThrough}>
-							{formattedTotalOriginal}
+							{formattedTotalExcludingPromo}
 						</span>
 					)}{' '}
 					{paymentFrequency

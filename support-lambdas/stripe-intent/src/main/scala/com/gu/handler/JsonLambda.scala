@@ -1,14 +1,11 @@
 package com.gu.handler
 
-import java.io.{InputStream, OutputStream}
-
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
 import io.circe.Decoder
 import io.circe.parser.decode
 import io.circe.syntax._
 
+import java.io.{InputStream, OutputStream}
 import scala.concurrent.duration.{Duration, MILLISECONDS}
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.io.Source
@@ -42,7 +39,7 @@ abstract class JsonLambda[Request: Decoder, Environment](implicit executionConte
       t
     }
     ioStreamAttempt.recover { case t =>
-      SafeLogger.error(scrub"Lambda failed with exception", t)
+      logger.error(scrub"Lambda failed with exception", t)
       throw t
     }
   }

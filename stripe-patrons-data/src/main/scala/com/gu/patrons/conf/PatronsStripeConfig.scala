@@ -17,7 +17,7 @@ object PatronsStripeConfig extends ConfigService {
   private val stripeConfigPath = "stripe-config"
 
   def fromParameterStoreSync(stage: Stage): PatronsStripeConfig = {
-    SafeLogger.info(s"Loading Stripe config")
+    logger.info(s"Loading Stripe config")
     val params = ParameterStoreService(stage).getParametersByPathSync(stripeConfigPath)
     PatronsStripeConfig(
       findParameterOrThrow("api-key", params),

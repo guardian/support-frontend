@@ -132,12 +132,11 @@ object Fixtures {
       }
     """
 
-  val stripeToken = "tok_AXY4M16p60c2sg"
+  val stripePM = "pm_AXY4M16p60c2sg"
   val stripeJson =
     s"""
       {
-        "userId": "12345",
-        "stripeToken": "$stripeToken"
+        "paymentMethod": "$stripePM"
       }
     """
 

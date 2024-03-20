@@ -4,7 +4,7 @@ import actions.CustomActionBuilders
 import admin.settings.AllSettingsProvider
 import com.gu.aws.AwsCloudWatchMetricPut.client
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsCloudWatchMetricSetup}
-import com.gu.support.config.{Stage, StripeConfig}
+import com.gu.support.config.Stage
 import com.typesafe.scalalogging.StrictLogging
 import config.RecaptchaConfigProvider
 import io.circe.Decoder
@@ -31,7 +31,6 @@ class StripeController(
     recaptchaService: RecaptchaService,
     stripeService: StripeSetupIntentService,
     recaptchaConfigProvider: RecaptchaConfigProvider,
-    testStripeConfig: StripeConfig,
     settingsProvider: AllSettingsProvider,
     stage: Stage,
 )(implicit ec: ExecutionContext)
@@ -61,8 +60,6 @@ class StripeController(
 
       val cloudwatchEvent = AwsCloudWatchMetricSetup.createSetupIntentRequest(stage, "v2Recaptcha")
       AwsCloudWatchMetricPut(client)(cloudwatchEvent)
-
-      val testPublicKeys = Set(testStripeConfig.australiaAccount.publicKey, testStripeConfig.defaultAccount.publicKey)
 
       // Requests against the test account do not require verification
       val verified =

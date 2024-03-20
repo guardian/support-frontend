@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import {
 	from,
+	headline,
 	palette,
 	space,
 	textSans,
@@ -45,6 +46,9 @@ import { SecureTransactionIndicator } from 'components/secureTransactionIndicato
 import Signout from 'components/signout/signout';
 import { StripeElements } from 'components/stripe/stripeElements';
 import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
+import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
+import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -57,10 +61,14 @@ import {
 import { getStripeKey } from 'helpers/forms/stripe';
 import { validatePaymentConfig } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import {
+	type IsoCountry,
+	newspaperCountries,
+} from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
+import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
 import { renderPage } from 'helpers/rendering/render';
 import { get } from 'helpers/storage/cookie';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -149,10 +157,15 @@ type Products = Output<typeof ProductsSchema>;
 function describeProduct(product: string, ratePlan: string) {
 	let description = `${product} - ${ratePlan}`;
 	let frequency = '';
+	let showAddressFields = false;
+	let addressCountries = {};
 
 	if (product === 'HomeDelivery') {
 		frequency = 'month';
 		description = `${ratePlan} paper`;
+
+		showAddressFields = true;
+		addressCountries = newspaperCountries;
 
 		if (ratePlan === 'Sixday') {
 			description = 'Six day paper';
@@ -171,10 +184,18 @@ function describeProduct(product: string, ratePlan: string) {
 		}
 	}
 
+	if (product === 'NationalDelivery') {
+		showAddressFields = true;
+		addressCountries = newspaperCountries;
+	}
+
 	if (
 		product === 'GuardianWeeklyDomestic' ||
 		product === 'GuardianWeeklyRestOfWorld'
 	) {
+		showAddressFields = true;
+		addressCountries = gwDeliverableCountries;
+
 		if (ratePlan === 'OneYearGift') {
 			frequency = 'year';
 			description = 'The Guardian Weekly Gift Subscription';
@@ -201,7 +222,7 @@ function describeProduct(product: string, ratePlan: string) {
 		}
 	}
 
-	return { description, frequency };
+	return { description, frequency, showAddressFields, addressCountries };
 }
 
 /** Page styles - styles used specifically for the checkout page */
@@ -232,6 +253,14 @@ const shorterBoxMargin = css`
 		${until.tablet} {
 			margin-bottom: ${space[2]}px;
 		}
+	}
+`;
+
+const legend = css`
+	margin-bottom: ${space[3]}px;
+	${headline.xsmall({ fontWeight: 'bold' })};
+	${from.tablet} {
+		font-size: 28px;
 	}
 `;
 
@@ -290,6 +319,20 @@ export function Checkout() {
 	const [stripeClientSecret, setStripeClientSecret] = useState<string>();
 
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
+
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
+	const [email, setEmail] = useState('');
+
+	const [deliveryPostcode, setDeliveryPostcode] = useState('');
+	const [deliveryLineOne, setDeliveryLineOne] = useState('');
+	const [deliveryLineTwo, setDeliveryLineTwo] = useState('');
+	const [deliveryCity, setDeliveryCity] = useState('');
+	const [deliveryState, setDeliveryState] = useState('');
+	const [deliveryPostcodeStateResults, setDeliveryPostcodeStateResults] =
+		useState<PostcodeFinderResult[]>([]);
+	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
+		useState(false);
 
 	return (
 		<PageScaffold
@@ -352,6 +395,16 @@ export function Checkout() {
 									recaptchaToken: formData.get('recaptchaToken') as string,
 								};
 
+								const deliveryAddress = product.showAddressFields
+									? {
+											lineOne: formData.get('delivery-lineOne') as string,
+											lineTwo: formData.get('delivery-lineTwo') as string,
+											city: formData.get('delivery-city') as string,
+											state: formData.get('delivery-state') as string,
+											postcode: formData.get('delivery-postcode') as string,
+									  }
+									: {};
+
 								if (
 									paymentMethod === 'Stripe' &&
 									stripe &&
@@ -379,6 +432,8 @@ export function Checkout() {
 												console.info('Posting data', {
 													...data,
 													paymentFields,
+													deliveryAddress,
+													billingAddress: deliveryAddress,
 												});
 											}
 										});
@@ -395,19 +450,19 @@ export function Checkout() {
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
 									<PersonalDetails
-										email={''}
-										firstName={''}
-										lastName={''}
+										email={email}
+										firstName={firstName}
+										lastName={lastName}
 										isSignedIn={isSignedIn}
 										hideNameFields={query.product === 'Contribution'}
-										onEmailChange={() => {
-											//  no-op
+										onEmailChange={(email) => {
+											setEmail(email);
 										}}
-										onFirstNameChange={() => {
-											//  no-op
+										onFirstNameChange={(firstName) => {
+											setFirstName(firstName);
 										}}
-										onLastNameChange={() => {
-											//  no-op
+										onLastNameChange={(lastName) => {
+											setLastName(lastName);
 										}}
 										errors={{}}
 										signOutLink={<Signout isSignedIn={isSignedIn} />}
@@ -442,7 +497,65 @@ export function Checkout() {
 										hideDetailsHeading={true}
 										overrideHeadingCopy="1. Your details"
 									/>
+
 									<CheckoutDivider spacing="loose" />
+
+									{product.showAddressFields && (
+										<fieldset>
+											<h2 css={legend}>Where should we deliver to?</h2>
+											<AddressFields
+												scope={'delivery'}
+												lineOne={deliveryLineOne}
+												lineTwo={deliveryLineTwo}
+												city={deliveryCity}
+												country={countryId}
+												state={deliveryState}
+												postCode={deliveryPostcode}
+												countries={product.addressCountries}
+												errors={[]}
+												postcodeState={{
+													results: deliveryPostcodeStateResults,
+													isLoading: deliveryPostcodeStateLoading,
+													postcode: deliveryPostcode,
+													error: '',
+												}}
+												setLineOne={(lineOne) => {
+													setDeliveryLineOne(lineOne);
+												}}
+												setLineTwo={(lineTwo) => {
+													setDeliveryLineTwo(lineTwo);
+												}}
+												setTownCity={(city) => {
+													setDeliveryCity(city);
+												}}
+												setState={(state) => {
+													setDeliveryState(state);
+												}}
+												setPostcode={(postcode) => {
+													setDeliveryPostcode(postcode);
+												}}
+												setCountry={() => {
+													// no-op
+												}}
+												setPostcodeForFinder={() => {
+													// no-op
+												}}
+												setPostcodeErrorForFinder={() => {
+													// no-op
+												}}
+												onFindAddress={(postcode) => {
+													setDeliveryPostcodeStateLoading(true);
+													void findAddressesForPostcode(postcode).then(
+														(results) => {
+															setDeliveryPostcodeStateLoading(false);
+															setDeliveryPostcodeStateResults(results);
+														},
+													);
+												}}
+											/>
+											<CheckoutDivider spacing="loose" />
+										</fieldset>
+									)}
 
 									{validPaymentMethods.map((paymentMethod) => {
 										return (
@@ -487,6 +600,9 @@ export function Checkout() {
 																'/stripe/create-setup-intent/recaptcha',
 																{
 																	method: 'POST',
+																	headers: {
+																		'Content-Type': 'application/json',
+																	},
 																	body: JSON.stringify({
 																		isTestUser,
 																		stripePublicKey,

@@ -95,7 +95,7 @@ const termsConditionsLink =
 
 function Prices({ orderIsAGift, products }: PropTypes): JSX.Element {
 	return (
-		<section css={pricesSection}>
+		<section css={pricesSection} id="subscribe">
 			<h2 css={pricesHeadline}>Subscribe to the Guardian Weekly today</h2>
 			<p css={pricesSubHeadline}>
 				{orderIsAGift ? 'Select a gift period' : "Choose how you'd like to pay"}

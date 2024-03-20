@@ -1,6 +1,7 @@
 package com.gu.support.getaddressio
 
 import com.gu.i18n.{Country, PostalCode}
+import com.gu.monitoring.SafeLogging
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
@@ -28,8 +29,7 @@ object FindAddressResultError {
 
 class GetAddressIOService(config: GetAddressIOConfig, client: FutureHttpClient)(implicit
     executionContext: ExecutionContext,
-) extends WebServiceHelper[FindAddressResultError]
-    with LazyLogging {
+) extends WebServiceHelper[FindAddressResultError] {
 
   override val wsUrl: String = config.apiUrl
   override val httpClient: FutureHttpClient = client

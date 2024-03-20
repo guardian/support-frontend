@@ -19,6 +19,7 @@ export type PropTypes = {
 	validateForm: () => void;
 	buttonText: string;
 	csrf: CsrfState;
+	setStripePublicKey: (payload: string) => void;
 };
 
 function StripeProviderForCountry(props: PropTypes): JSX.Element {
@@ -33,6 +34,7 @@ function StripeProviderForCountry(props: PropTypes): JSX.Element {
 	);
 	useEffect(() => {
 		if (stripeObject === null) {
+			props.setStripePublicKey(stripeKey);
 			void stripeJs.loadStripe(stripeKey).then(setStripeObject);
 		}
 	}, []);

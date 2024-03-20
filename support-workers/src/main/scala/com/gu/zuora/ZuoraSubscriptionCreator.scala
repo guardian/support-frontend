@@ -2,10 +2,10 @@ package com.gu.zuora
 
 import com.gu.WithLoggingSugar._
 import com.gu.helpers.DateGenerator
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogging
 import com.gu.support.workers._
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraSubscriptionNumber}
-import com.gu.support.zuora.api.{SubscribeItem, _}
+import com.gu.support.zuora.api._
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ZuoraSubscriptionCreator.checkSingleResponse
 
@@ -42,7 +42,7 @@ class ZuoraSubscriptionCreator(
 
 }
 
-object ZuoraSubscriptionCreator {
+object ZuoraSubscriptionCreator extends SafeLogging {
 
   def subscriptionRatePlansMatchDomainSubscriptionRatePlans(
       subscribeItemRatePlans: List[RatePlanData],
@@ -65,7 +65,7 @@ object ZuoraSubscriptionCreator {
             subscribeItem.subscriptionData.ratePlanData,
             domainSubscription.ratePlans,
           ) =>
-        SafeLogger.info("Skipping subscribe for user because a subscription has already been created for this request")
+        logger.info("Skipping subscribe for user because a subscription has already been created for this request")
         Future.successful((domainSubscription.accountNumber, domainSubscription.subscriptionNumber))
       case _ =>
         checkSingleResponse(zuoraService.subscribe(SubscribeRequest(List(subscribeItem)))).map { response =>

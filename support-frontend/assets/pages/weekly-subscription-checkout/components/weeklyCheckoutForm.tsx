@@ -85,6 +85,7 @@ import {
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
+import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 
 // ----- Styles ----- //
 const marginBottom = css`
@@ -151,6 +152,7 @@ function mapDispatchToProps() {
 		setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
 		setCsrCustomerData: (customerData: CsrCustomerData) =>
 			setCsrCustomerData('delivery', customerData),
+		setStripePublicKey,
 	};
 }
 
@@ -470,6 +472,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 									: 'Pay now'
 							}
 							csrf={props.csrf}
+							setStripePublicKey={(key: string) =>
+								props.setStripePublicKey(key)
+							}
 						/>
 					</FormSectionHiddenUntilSelected>
 					<FormSectionHiddenUntilSelected

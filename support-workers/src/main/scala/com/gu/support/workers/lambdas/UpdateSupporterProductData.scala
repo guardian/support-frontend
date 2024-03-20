@@ -46,16 +46,16 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
       catalogService: CatalogService,
       supporterDataDynamoService: SupporterDataDynamoService,
   ) = {
-    SafeLogger.info(s"Attempting to update user ${state.user.id}")
+    logger.info(s"Attempting to update user ${state.user.id}")
     getSupporterRatePlanItemFromState(state, catalogService) match {
       case Right(Some(supporterRatePlanItem)) =>
-        SafeLogger.info(s"Attempting to write supporterRatePlanItem $supporterRatePlanItem")
+        logger.info(s"Attempting to write supporterRatePlanItem $supporterRatePlanItem")
         supporterDataDynamoService.writeItem(supporterRatePlanItem).map { _ =>
-          SafeLogger.info(s"Successfully updated supporterRatePlanItem for user ${state.user.id}")
+          logger.info(s"Successfully updated supporterRatePlanItem for user ${state.user.id}")
           ()
         }
       case Right(None) =>
-        SafeLogger.info(
+        logger.info(
           s"Skipping write to SupporterProductData dynamo table because product is ${state.product.describe}",
         )
         Future.successful(())

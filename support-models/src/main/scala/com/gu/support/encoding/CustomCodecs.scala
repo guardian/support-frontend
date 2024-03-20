@@ -1,9 +1,10 @@
 package com.gu.support.encoding
 
 import java.util.UUID
-
 import com.gu.i18n.{Country, CountryGroup, Currency, Title}
-import io.circe.{Decoder, Encoder, KeyDecoder, KeyEncoder}
+import io.circe.Decoder.Result
+import io.circe.DecodingFailure.Reason.CustomReason
+import io.circe.{Decoder, DecodingFailure, Encoder, HCursor, KeyDecoder, KeyEncoder}
 import org.joda.time.format.ISODateTimeFormat
 import org.joda.time.{DateTime, Days, LocalDate, Months}
 
@@ -65,7 +66,10 @@ trait EitherCodecs {
   implicit def decodeEither[A, B](implicit
       decoderA: Decoder[A],
       decoderB: Decoder[B],
-  ): Decoder[Either[A, B]] = decoderA.either(decoderB)
+  ): Decoder[Either[A, B]] = {
+    import CodecHelpers.withClue
+    CodecHelpers.or(withClue(decoderA.map(Left.apply), "Left"), withClue(decoderB.map(Right.apply), "Right"))
+  }
 
   implicit def encodeEither[A, B](implicit
       encoderA: Encoder[A],
@@ -73,4 +77,25 @@ trait EitherCodecs {
   ): Encoder[Either[A, B]] = { o: Either[A, B] =>
     o.fold(_.asJson, _.asJson)
   }
+}
+
+object CodecHelpers {
+
+  final def withClue[A](a: Decoder[A], message: String): Decoder[A] = new Decoder[A] {
+    override def apply(c: HCursor): Result[A] =
+      a.apply(c).left.map(err => err.copy(message = message + ": " + err.message))
+  }
+
+  final def or[A, AA >: A](leftDecoder: Decoder[A], rightDecoder: => Decoder[AA]): Decoder[AA] = new Decoder[AA] {
+    final def apply(hCursor: HCursor): Decoder.Result[AA] = leftDecoder(hCursor) match {
+      case success @ Right(_) => success
+      case Left(leftFailure) =>
+        rightDecoder(hCursor).left.map { rightFailure: DecodingFailure =>
+          val leftPart = leftFailure.message + " " + leftFailure.pathToRootString.getOrElse("")
+          val rightPart = rightFailure.message + " " + rightFailure.pathToRootString.getOrElse("")
+          DecodingFailure(CustomReason(leftPart + s"\n OR " + rightPart), Nil)
+        }
+    }
+  }
+
 }

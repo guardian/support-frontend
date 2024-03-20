@@ -7,7 +7,6 @@ import com.gu.paypal.PayPalService
 import com.gu.salesforce.AddressLineTransformer
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.stripe.StripeService
-import com.gu.stripe.StripeServiceForCurrency._
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.workers.lambdas.PaymentMethodExtensions.PaymentMethodExtension
@@ -28,7 +27,7 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       context: Context,
       services: Services,
   ): FutureHandlerResult = {
-    SafeLogger.debug(s"CreatePaymentMethod state: $state")
+    logger.debug(s"CreatePaymentMethod state: $state")
 
     state.paymentFields fold (
       paymentFields =>
@@ -106,42 +105,32 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       stripeService: StripeService,
       currency: Currency,
   ): Future[CreditCardReferenceTransaction] = {
-    val stripeServiceForCurrency = stripeService.withCurrency(currency)
-    stripe match {
-      case StripeSourcePaymentFields(source, stripePaymentType) =>
-        stripeServiceForCurrency.createCustomerFromToken(source).map { customer =>
-          val card = customer.source
-          CreditCardReferenceTransaction(
-            card.id,
-            customer.id,
-            card.last4,
-            CountryGroup.countryByCode(card.country),
-            card.exp_month,
-            card.exp_year,
-            card.brand.zuoraCreditCardType,
-            PaymentGateway = chargeGateway(currency),
-            StripePaymentType = stripePaymentType,
-          )
-        }
-      case StripePaymentMethodPaymentFields(paymentMethod, stripePaymentType) =>
-        for {
-          stripeCustomer <- stripeServiceForCurrency.createCustomerFromPaymentMethod(paymentMethod)
-          stripePaymentMethod <- stripeServiceForCurrency.getPaymentMethod(paymentMethod)
-        } yield {
-          val card = stripePaymentMethod.card
-          CreditCardReferenceTransaction(
-            paymentMethod.value,
-            stripeCustomer.id,
-            card.last4,
-            CountryGroup.countryByCode(card.country),
-            card.exp_month,
-            card.exp_year,
-            card.brand.zuoraCreditCardType,
-            PaymentGateway = paymentIntentGateway(currency),
-            StripePaymentType = stripePaymentType,
-          )
-        }
+    val stripeServiceForCurrency = {
+      stripe.stripePublicKey match {
+        case Some(stripePublicKey) => stripeService.withPublicKey(stripePublicKey)
+        case None => stripeService.withCurrency(currency)
+      }
+
     }
+
+    for {
+      stripeCustomer <- stripeServiceForCurrency.createCustomerFromPaymentMethod(stripe.paymentMethod)
+      stripePaymentMethod <- stripeServiceForCurrency.getPaymentMethod(stripe.paymentMethod)
+    } yield {
+      val card = stripePaymentMethod.card
+      CreditCardReferenceTransaction(
+        stripe.paymentMethod.value,
+        stripeCustomer.id,
+        card.last4,
+        CountryGroup.countryByCode(card.country),
+        card.exp_month,
+        card.exp_year,
+        card.brand.zuoraCreditCardType,
+        PaymentGateway = stripeServiceForCurrency.paymentIntentGateway,
+        StripePaymentType = stripe.stripePaymentType,
+      )
+    }
+
   }
 
   def createPayPalPaymentMethod(
@@ -180,10 +169,10 @@ class CreatePaymentMethod(servicesProvider: ServiceProvider = ServiceProvider)
       userAgent: String,
   ): Future[SepaPaymentMethod] = {
     if (ipAddress.length() > 15) {
-      SafeLogger.warn(s"IPv6 Address: ${ipAddress} is longer than 15 characters")
+      logger.warn(s"IPv6 Address: ${ipAddress} is longer than 15 characters")
     }
     if (userAgent.length() > 255) {
-      SafeLogger.warn(s"User Agent: ${userAgent} will be truncated to 255 characters")
+      logger.warn(s"User Agent: ${userAgent} will be truncated to 255 characters")
     }
     Future.successful(
       SepaPaymentMethod(
