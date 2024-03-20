@@ -23,16 +23,8 @@ import {
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
-import { useEffect, useState } from 'react';
-import {
-	number,
-	object,
-	type Output,
-	parse,
-	picklist,
-	record,
-	string,
-} from 'valibot'; // 1.54 kB
+import { useState } from 'react';
+import { parse, picklist } from 'valibot'; // 1.54 kB
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
@@ -59,7 +51,7 @@ import {
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import { getStripeKey } from 'helpers/forms/stripe';
-import { validatePaymentConfig } from 'helpers/globalsAndSwitches/window';
+import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import {
 	type IsoCountry,
@@ -76,7 +68,7 @@ import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkou
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 
 /** App config - this is config that should persist throughout the app */
-validatePaymentConfig(window.guardian);
+validateWindowGuardian(window.guardian);
 
 const isTestUser = true;
 const geoIds = ['uk', 'us', 'eu', 'au', 'nz', 'ca', 'int'] as const;
@@ -128,30 +120,14 @@ const isSignedIn = !!get('GU_U');
 const countryId: IsoCountry =
 	CountryHelper.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 
+const productCatalog = window.guardian.productCatalog;
+
 /** Page config - this is setup specifically for the checkout page */
 const searchParams = new URLSearchParams(window.location.search);
 const query = {
 	product: searchParams.get('product'),
 	ratePlan: searchParams.get('ratePlan'),
 };
-
-const ProductCatalogSchema = record(
-	object({
-		ratePlans: record(
-			object({
-				id: string(),
-				pricing: record(number()),
-				charges: record(
-					object({
-						id: string(),
-					}),
-				),
-			}),
-		),
-	}),
-);
-
-type ProductCatalog = Output<typeof ProductCatalogSchema>;
 
 function describeProduct(product: string, ratePlan: string) {
 	let description = `${product} - ${ratePlan}`;
@@ -280,28 +256,21 @@ const stripePublicKey = getStripeKey(
 );
 
 export function Checkout() {
-	const [productCatalog, setProductCatalog] = useState<ProductCatalog>();
-
-	useEffect(() => {
-		void fetch('/api/products')
-			.then((resp) => resp.json())
-			.then((data) => {
-				const vData = parse(ProductCatalogSchema, data);
-				setProductCatalog(vData);
-			});
-	}, []);
-
 	if (!query.product || !query.ratePlan) {
 		return <div>Not enough query parameters</div>;
 	}
 
-	const currentProduct = productCatalog?.[query.product];
-	const currentRatePlan = currentProduct?.ratePlans[query.ratePlan];
-	const currentPrice = currentRatePlan?.pricing[currentCurrencyKey] ?? 0;
-
-	if (!currentProduct) {
+	/**
+	 * We do this check here as we have `noUncheckedIndexedAccess: false` set in our `tsconfig`
+	 * which means `productCatalog[query.product]` would never return undefined, but it could.
+	 */
+	if (!(query.product in productCatalog)) {
 		return <div>Product not found</div>;
 	}
+
+	const currentProduct = productCatalog[query.product];
+	const currentRatePlan = currentProduct.ratePlans[query.ratePlan];
+	const currentPrice = currentRatePlan.pricing[currentCurrencyKey];
 
 	const product = describeProduct(query.product, query.ratePlan);
 	const showStateSelect =

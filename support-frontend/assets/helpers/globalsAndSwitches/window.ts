@@ -1,5 +1,14 @@
 import type { Output } from 'valibot';
-import { boolean, object, optional, string, ValiError } from 'valibot';
+import {
+	boolean,
+	intersect,
+	number,
+	object,
+	optional,
+	record,
+	string,
+	ValiError,
+} from 'valibot';
 
 /**
  * This file is used to validate data that get's injected from
@@ -47,14 +56,37 @@ const PaymentConfigSchema = object({
 	v2recaptchaPublicKey: string(),
 });
 
-export type PaymentConfig = Output<typeof PaymentConfigSchema>;
+const ProductCatalogSchema = object({
+	productCatalog: record(
+		object({
+			ratePlans: record(
+				object({
+					id: string(),
+					pricing: record(number()),
+					charges: record(
+						object({
+							id: string(),
+						}),
+					),
+				}),
+			),
+		}),
+	),
+});
 
-export const validatePaymentConfig = (obj: unknown) => {
+const WindowGuardianSchema = intersect([
+	PaymentConfigSchema,
+	ProductCatalogSchema,
+]);
+
+export type WindowGuardian = Output<typeof WindowGuardianSchema>;
+
+export const validateWindowGuardian = (obj: unknown) => {
 	// We only run this in development as we don't want to hard error on what might be an OK error.
 	if (process.env.NODE_ENV === 'development') {
 		void import('valibot').then((valibot) => {
 			try {
-				valibot.parse(PaymentConfigSchema, obj);
+				valibot.parse(WindowGuardianSchema, obj);
 			} catch (e) {
 				if (e instanceof ValiError) {
 					console.error('Valibot error', e.issues);
