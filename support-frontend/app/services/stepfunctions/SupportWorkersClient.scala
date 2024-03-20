@@ -180,7 +180,7 @@ class SupportWorkersClient(
       )
       isExistingAccount = createPaymentMethodState.paymentFields.left.exists(_.isInstanceOf[ExistingPaymentFields])
       name =
-        (if (user.isTestUser) "TEST-" else "") +
+        (if (user.isTestUser) "TestUser-" else "") +
           createPaymentMethodState.product.describe + "-" +
           createPaymentMethodState.paymentFields.fold(_.describe, _.getClass.getSimpleName)
       executionResult <- underlying
