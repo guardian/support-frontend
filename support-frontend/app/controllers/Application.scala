@@ -26,10 +26,10 @@ import views.EmptyDiv
 import scala.concurrent.{ExecutionContext, Future}
 
 case class PaymentMethodConfigs(
-    oneOffDefaultStripeConfig: StripeConfig,
-    oneOffTestStripeConfig: StripeConfig,
-    regularDefaultStripeConfig: StripeConfig,
-    regularTestStripeConfig: StripeConfig,
+    oneOffDefaultStripeConfig: StripePublicConfig,
+    oneOffTestStripeConfig: StripePublicConfig,
+    regularDefaultStripeConfig: StripePublicConfig,
+    regularTestStripeConfig: StripePublicConfig,
     regularDefaultPayPalConfig: PayPalConfig,
     regularTestPayPalConfig: PayPalConfig,
     defaultAmazonPayConfig: AmazonPayConfig,
@@ -41,8 +41,8 @@ class Application(
     val assets: AssetsResolver,
     testUsers: TestUserService,
     components: ControllerComponents,
-    oneOffStripeConfigProvider: StripeConfigProvider,
-    regularStripeConfigProvider: StripeConfigProvider,
+    oneOffStripeConfigProvider: StripePublicConfigProvider,
+    regularStripeConfigProvider: StripePublicConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     amazonPayConfigProvider: AmazonPayConfigProvider,
     recaptchaConfigProvider: RecaptchaConfigProvider,

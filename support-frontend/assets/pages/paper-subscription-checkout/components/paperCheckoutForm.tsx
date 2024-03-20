@@ -92,6 +92,7 @@ import {
 	getFormattedStartDate,
 	getPaymentStartDate,
 } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 import { DeliveryAgentsSelect } from './deliveryAgentsSelect';
 
 const marginBottom = css`
@@ -168,6 +169,7 @@ function mapDispatchToProps() {
 		setCsrCustomerData: (customerData: CsrCustomerData) =>
 			setCsrCustomerData('delivery', customerData),
 		setDeliveryAgent,
+		setStripePublicKey,
 	};
 }
 
@@ -520,6 +522,9 @@ function PaperCheckoutForm(props: PropTypes) {
 							validateForm={props.validateForm}
 							buttonText="Pay now"
 							csrf={props.csrf}
+							setStripePublicKey={(key: string) =>
+								props.setStripePublicKey(key)
+							}
 						/>
 					</FormSectionHiddenUntilSelected>
 					<FormSectionHiddenUntilSelected

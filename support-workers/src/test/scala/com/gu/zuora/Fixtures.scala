@@ -138,14 +138,17 @@ object Fixtures {
     Subscription(date, date, date, "id123", deliveryAgent = Some(AgentId(deliveryAgentId))),
   )
 
-  def creditCardSubscriptionRequest(currency: Currency = GBP): SubscribeRequest =
+  def creditCardSubscriptionRequest(
+      currency: Currency = GBP,
+      paymentIntentGateway: PaymentGateway = StripeGatewayPaymentIntentsDefault,
+  ): SubscribeRequest =
     SubscribeRequest(
       List(
         SubscribeItem(
           account(currency),
           contactDetails,
           None,
-          Some(creditCardPaymentMethod(StripeServiceForCurrency.paymentIntentGateway(currency))),
+          Some(creditCardPaymentMethod(paymentIntentGateway)),
           monthlySubscriptionData,
           SubscribeOptions(),
         ),

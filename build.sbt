@@ -11,7 +11,7 @@ lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ S
   IntegrationTest / javaSource := baseDirectory.value / "src" / "test" / "java",
   IntegrationTest / resourceDirectory := baseDirectory.value / "src" / "test" / "resources",
   Test / testOptions += Tests
-    .Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest", "-oI"),
+    .Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest", "-oIS"),
   libraryDependencies += scalatest % "it",
 )
 
