@@ -92,4 +92,18 @@ trait Services {
 
   lazy val zuoraGiftLookupServiceProvider: ZuoraGiftLookupServiceProvider =
     new ZuoraGiftLookupServiceProvider(appConfig.zuoraConfigProvider, appConfig.stage)
+
+  lazy val prodProductCatalogService: ProdProductCatalogService = new ProdProductCatalogService(
+    RequestRunners.futureRunner,
+  )
+  lazy val codeProductCatalogService: CodeProductCatalogService = new CodeProductCatalogService(
+    RequestRunners.futureRunner,
+  )
+
+  lazy val cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider =
+    new CachedProductCatalogServiceProvider(
+      codeCachedProductCatalogService = new CachedProductCatalogService(actorSystem, codeProductCatalogService),
+      prodCachedProductCatalogService = new CachedProductCatalogService(actorSystem, prodProductCatalogService),
+    )
+
 }

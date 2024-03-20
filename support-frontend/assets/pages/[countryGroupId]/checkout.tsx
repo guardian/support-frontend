@@ -149,9 +149,7 @@ const ProductSchema = object({
 	),
 });
 
-const ProductsSchema = object({
-	products: record(ProductSchema),
-});
+const ProductsSchema = record(ProductSchema);
 type Products = Output<typeof ProductsSchema>;
 
 function describeProduct(product: string, ratePlan: string) {
@@ -296,7 +294,7 @@ export function Checkout() {
 		return <div>Not enough query parameters</div>;
 	}
 
-	const currentProduct = products?.products[query.product];
+	const currentProduct = products?.[query.product];
 	const currentRatePlan = currentProduct?.ratePlans[query.ratePlan];
 	const currentPrice = currentRatePlan?.pricing[currentCurrencyKey] ?? 0;
 
