@@ -135,22 +135,23 @@ const query = {
 	ratePlan: searchParams.get('ratePlan'),
 };
 
-const ProductSchema = object({
-	ratePlans: record(
-		object({
-			id: string(),
-			pricing: record(number()),
-			charges: record(
-				object({
-					id: string(),
-				}),
-			),
-		}),
-	),
-});
+const ProductCatalogSchema = record(
+	object({
+		ratePlans: record(
+			object({
+				id: string(),
+				pricing: record(number()),
+				charges: record(
+					object({
+						id: string(),
+					}),
+				),
+			}),
+		),
+	}),
+);
 
-const ProductsSchema = record(ProductSchema);
-type Products = Output<typeof ProductsSchema>;
+type ProductCatalog = Output<typeof ProductCatalogSchema>;
 
 function describeProduct(product: string, ratePlan: string) {
 	let description = `${product} - ${ratePlan}`;
@@ -279,14 +280,14 @@ const stripePublicKey = getStripeKey(
 );
 
 export function Checkout() {
-	const [products, setProducts] = useState<Products>();
+	const [productCatalog, setProductCatalog] = useState<ProductCatalog>();
 
 	useEffect(() => {
 		void fetch('/api/products')
 			.then((resp) => resp.json())
 			.then((data) => {
-				const vData = parse(ProductsSchema, data);
-				setProducts(vData);
+				const vData = parse(ProductCatalogSchema, data);
+				setProductCatalog(vData);
 			});
 	}, []);
 
@@ -294,7 +295,7 @@ export function Checkout() {
 		return <div>Not enough query parameters</div>;
 	}
 
-	const currentProduct = products?.[query.product];
+	const currentProduct = productCatalog?.[query.product];
 	const currentRatePlan = currentProduct?.ratePlans[query.ratePlan];
 	const currentPrice = currentRatePlan?.pricing[currentCurrencyKey] ?? 0;
 
