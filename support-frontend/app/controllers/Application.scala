@@ -187,7 +187,7 @@ class Application(
     )
 
     val serversideTests = generateParticipations(Nil)
-    val testMode = testUserService.isTestUser(request)
+    val isTestUser = testUserService.isTestUser(request)
 
     val queryPromos =
       request.queryString
@@ -195,6 +195,7 @@ class Application(
         .toList
 
     val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(SupporterPlus, queryPromos)
+    val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
 
     views.html.contributions(
       title = "Support the Guardian",
@@ -221,9 +222,10 @@ class Application(
       geoData = geoData,
       shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
-      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey,
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
       productPrices = productPrices,
+      productCatalog = productCatalog,
     )
   }
 
@@ -277,6 +279,7 @@ class Application(
     val isTestUser = testUserService.isTestUser(request)
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
+    val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
 
     Ok(
       views.html.checkout(
@@ -297,6 +300,7 @@ class Application(
         paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
+        productCatalog = productCatalog,
       ),
     ).withSettingsSurrogateKey
   }
