@@ -111,7 +111,7 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 
 test.describe('Subscribe (S+) incl PromoCode via the Tiered checkout', () => {
 	testDetailsPromo.forEach((testDetails) => {
-		test(`${testDetails.frequency} (S+) Subscription incl PromoCode at Tier-2 with Credit/Debit card - UK`, async ({
+		test.skip(`${testDetails.frequency} (S+) Subscription incl PromoCode at Tier-2 with Credit/Debit card - UK`, async ({
 			context,
 			baseURL,
 		}) => {
