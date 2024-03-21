@@ -124,9 +124,11 @@ export function ToteHeading(): JSX.Element {
 			>
 				Remember to claim your tote bag
 			</div>
-			To claim your tote, sign in to{' '}
-			<a href="https://manage.theguardian.com">your account</a> and complete
-			your ‘Correspondence address’ located on the ‘Settings’ page.
+			<span>
+				To claim your tote, sign in to{' '}
+				<a href="https://manage.theguardian.com">your account</a> and complete
+				your ‘Correspondence address’ located on the ‘Settings’ page.
+			</span>
 		</>
 	);
 }
