@@ -38,7 +38,7 @@ object RunITTests {
       _ <-
         if (exists) Success(())
         else {
-          val jarUrl = S3Location("support-workers-dist", s"/support/${stage}/it-tests/support-workers-it.jar")
+          val jarUrl = S3Location("support-workers-dist", s"support/${stage}/it-tests/support-workers-it.jar")
           log(s"getting s3 file: $jarUrl")
           copyJar(jarUrl)
         }

@@ -21,7 +21,10 @@ object AwsS3Client extends AwsS3Client {
 
   def withStream[RESULT](s3Location: S3Location)(block: InputStream => Try[RESULT]): Try[RESULT] = {
 
-    val objectRequest: GetObjectRequest = GetObjectRequest.builder.key(s3Location.key).bucket(s3Location.bucket).build
+    val objectRequest: GetObjectRequest = GetObjectRequest.builder
+      .key(s3Location.key)
+      .bucket(s3Location.bucket)
+      .build
 
     for {
       stream <- Try(s3.getObject(objectRequest))

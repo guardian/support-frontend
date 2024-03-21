@@ -37,7 +37,7 @@ class DefaultPromotionServiceS3(
     with LazyLogging {
 
   private val s3Uri =
-    S3Location("support-admin-console", s"/$stage/default-promos.json")
+    S3Location("support-admin-console", s"$stage/default-promos.json")
 
   private val defaultPromoCodes = new AtomicReference[DefaultPromotions](
     DefaultPromotions(guardianWeekly = Nil, paper = Nil, digital = Nil),

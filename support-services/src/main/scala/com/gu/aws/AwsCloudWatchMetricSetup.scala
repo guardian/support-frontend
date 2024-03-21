@@ -1,29 +1,13 @@
 package com.gu.aws
 
 import com.gu.aws.AwsCloudWatchMetricPut._
-import com.gu.support.config.{Stage, TouchPointEnvironment}
+import com.gu.support.config.Stage
 import com.gu.support.workers.{PaymentProvider, ProductType}
 
 object AwsCloudWatchMetricSetup {
   def setupWarningRequest(stage: Stage): MetricRequest =
     getMetricRequest(
       MetricName("WarningCount"),
-      Map(
-        MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
-      ),
-    )
-
-  def catalogFailureRequest(environment: TouchPointEnvironment): MetricRequest =
-    getMetricRequest(
-      MetricName("CatalogLoadingFailure"),
-      Map(
-        MetricDimensionName("Environment") -> MetricDimensionValue(environment.envValue),
-      ),
-    )
-
-  def revenueDistributionFailureRequest(stage: Stage): MetricRequest =
-    getMetricRequest(
-      MetricName("RevenueDistributionFailure"),
       Map(
         MetricDimensionName("Stage") -> MetricDimensionValue(stage.toString),
       ),

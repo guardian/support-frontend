@@ -39,7 +39,7 @@ object Settings {
   def fromS3[T: Decoder](source: SettingsSource.S3)(implicit s3: AwsS3Client): Either[Throwable, T] =
     for {
       buf <-
-        s3.fetchAsString(S3Location(source.bucket, "/" + source.key))
+        s3.fetchAsString(S3Location(source.bucket, source.key))
           .toEither
           .leftMap(ex => new RuntimeException(s"couldn't getObject content for source: $source", ex))
       settings <- decode[T](buf)

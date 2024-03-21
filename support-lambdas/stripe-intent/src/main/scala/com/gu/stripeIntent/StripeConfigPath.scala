@@ -10,5 +10,5 @@ object StripeConfigPath {
     case Stages.PROD => "live"
   }
   def forStage(stage: Stage): S3Location =
-    S3Location("gu-reader-revenue-private", s"/stripe/${pathForStage(stage)}-stripe-regular.private.conf")
+    S3Location("gu-reader-revenue-private", s"stripe/${pathForStage(stage)}-stripe-regular.private.conf")
 }

@@ -6,21 +6,14 @@ import com.typesafe.scalalogging.LazyLogging
 import io.circe._
 import io.circe.parser._
 
-import scala.util.{Failure, Success}
+import scala.util.Try
 
 object AwsS3ClientJson extends LazyLogging {
 
-  def fetchJson(s3Client: AwsS3Client, request: S3Location): Option[Json] = {
-    val attempt = for {
+  def fetchJson(s3Client: AwsS3Client, request: S3Location): Try[Json] =
+    for {
       string <- s3Client.fetchAsString(request)
       json <- parse(string).toTry
     } yield json
-    attempt match {
-      case Success(json) => Some(json)
-      case Failure(ex) => {
-        logger.warn(s"Couldn't get catalog", ex)
-        None
-      }
-    }
-  }
+
 }
