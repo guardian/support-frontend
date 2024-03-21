@@ -114,4 +114,21 @@ function Subheading({
 	);
 }
 
+export function ToteHeading(): JSX.Element {
+	return (
+		<>
+			<div
+				css={css`
+					font-weight: bold;
+				`}
+			>
+				Remember to claim your tote bag
+			</div>
+			To claim your tote, sign in to{' '}
+			<a href="https://manage.theguardian.com">your account</a> and complete
+			your ‘Correspondence address’ located on the ‘Settings’ page.
+		</>
+	);
+}
+
 export default Subheading;

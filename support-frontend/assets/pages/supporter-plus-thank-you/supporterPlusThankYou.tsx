@@ -15,7 +15,10 @@ import type { ContributionType } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import {
+	countryGroups,
+	UnitedStates,
+} from 'helpers/internationalisation/countryGroup';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -218,6 +221,10 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
 	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
+	const showTote =
+		countryGroupId === UnitedStates &&
+		useContributionsSelector(isSupporterPlusFromState);
+
 	return (
 		<PageScaffold
 			header={<Header />}
@@ -240,6 +247,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 							amountIsAboveThreshold={amountIsAboveThreshold}
 							isSignedIn={isSignedIn}
 							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
+							showTote={showTote}
 						/>
 					</div>
 
