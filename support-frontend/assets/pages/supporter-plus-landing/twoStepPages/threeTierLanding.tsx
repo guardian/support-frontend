@@ -415,12 +415,6 @@ export function ThreeTierLanding(): JSX.Element {
 			cardTier !== 1
 				? promo?.promoCode ?? tierPlanCountryCharges.promoCode
 				: undefined;
-		const promoDiscountPriceTierMid =
-			cardTier === 2 ? promo?.discountedPrice : undefined;
-		const price =
-			promoDiscountPriceTierMid ??
-			tierPlanCountryCharges.discount?.price ??
-			tierPlanCountryCharges.price;
 
 		const url = cardTier === 3 ? `/subscribe/weekly/checkout?` : `checkout?`;
 		const urlParams = new URLSearchParams();
@@ -432,7 +426,7 @@ export function ThreeTierLanding(): JSX.Element {
 			urlParams.set('threeTierCreateSupporterPlusSubscription', 'true');
 			urlParams.set('period', paymentFrequencyMap[contributionType]);
 		} else {
-			urlParams.set('selected-amount', price.toString());
+			urlParams.set('selected-amount', tierPlanCountryCharges.price.toString());
 			urlParams.set('selected-contribution-type', tierPlanPeriod);
 		}
 
