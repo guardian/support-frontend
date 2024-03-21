@@ -2,7 +2,7 @@ package com.gu.stepfunctions
 
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.stepfunctions.{AWSStepFunctionsAsync, AWSStepFunctionsAsyncClientBuilder}
-import com.gu.aws.CredentialsProvider
+import com.gu.aws.CredentialsProviderDEPRECATEDV1
 import com.gu.test.tags.annotations.IntegrationTest
 import com.typesafe.scalalogging.LazyLogging
 import org.scalatest.flatspec.AsyncFlatSpec
@@ -13,7 +13,7 @@ import org.scalatest.matchers.should.Matchers
 @Ignore //ignore this by default because it takes a very long time to run
 class StepFunctionsSpec extends AsyncFlatSpec with Matchers with LazyLogging {
   val client: AWSStepFunctionsAsync = AWSStepFunctionsAsyncClientBuilder.standard
-    .withCredentials(CredentialsProvider)
+    .withCredentials(CredentialsProviderDEPRECATEDV1)
     .withRegion(Regions.EU_WEST_1)
     .build()
 

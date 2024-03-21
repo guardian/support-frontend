@@ -3,16 +3,15 @@ package com.gu.stepfunctions
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.stepfunctions.AWSStepFunctionsAsyncClientBuilder
 import com.amazonaws.services.stepfunctions.model.{DescribeExecutionResult, ExecutionListItem, StateMachineListItem}
-import com.gu.aws.CredentialsProvider
+import com.gu.aws.CredentialsProviderDEPRECATEDV1
 import com.gu.config.Configuration.stage
-import com.gu.monitoring.{SafeLogger, SafeLogging}
+import com.gu.monitoring.SafeLogging
 import com.gu.support.config.Stages
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.User
 import com.gu.support.workers.encoding.Conversions.StringInputStreamConversions
 import com.gu.support.workers.encoding.Encoding
 import com.gu.support.workers.states.CreatePaymentMethodState
-import io.circe.generic.auto._
 
 import scala.jdk.CollectionConverters._
 import scala.concurrent.{ExecutionContext, Future}
@@ -26,7 +25,7 @@ class StepFunctionsService extends SafeLogging {
 
   private val client = new ClientWrapper(
     AWSStepFunctionsAsyncClientBuilder.standard
-      .withCredentials(CredentialsProvider)
+      .withCredentials(CredentialsProviderDEPRECATEDV1)
       .withRegion(Regions.EU_WEST_1)
       .build(),
   )

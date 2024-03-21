@@ -1,10 +1,9 @@
 package com.gu.support.catalog
 
-import com.amazonaws.services.s3.AmazonS3URI
 import com.gu.aws.AwsS3Client
+import com.gu.aws.AwsS3Client.S3Location
 import com.gu.support.catalog.AwsS3ClientJson.fetchJson
 import com.gu.support.config.TouchPointEnvironment
-import com.gu.support.config.TouchPointEnvironments.CODE
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.Json
 
@@ -14,9 +13,8 @@ trait CatalogJsonProvider {
 
 class S3CatalogProvider(environment: TouchPointEnvironment) extends CatalogJsonProvider with LazyLogging {
   override def get: Option[Json] = {
-    val bucket = s"s3://gu-zuora-catalog/PROD/Zuora-${environment}"
-    logger.info(s"Attempting to load catalog from $bucket/catalog.json")
-    val catalog = new AmazonS3URI(bucket + "/catalog.json")
+    val catalog = S3Location("gu-zuora-catalog", s"/PROD/Zuora-$environment/catalog.json")
+    logger.info(s"Attempting to load catalog from $catalog")
     fetchJson(AwsS3Client, catalog)
   }
 }

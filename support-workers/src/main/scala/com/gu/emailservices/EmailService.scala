@@ -3,7 +3,7 @@ package com.gu.emailservices
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder
 import com.amazonaws.services.sqs.model.{SendMessageRequest, SendMessageResult}
-import com.gu.aws.{AwsAsync, CredentialsProvider}
+import com.gu.aws.{AwsAsync, CredentialsProviderDEPRECATEDV1}
 import com.gu.monitoring.SafeLogging
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -11,7 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class EmailService(emailQueueName: String)(implicit val executionContext: ExecutionContext) extends SafeLogging {
 
   private val sqsClient = AmazonSQSAsyncClientBuilder.standard
-    .withCredentials(CredentialsProvider)
+    .withCredentials(CredentialsProviderDEPRECATEDV1)
     .withRegion(Regions.EU_WEST_1)
     .build()
 
