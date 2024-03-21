@@ -86,9 +86,13 @@ export function ContributionsOrderSummaryContainer({
 		);
 	}
 
-	const threeTierProductName = (): string | undefined => {
+	const threeTierProductName = (
+		contributionType: ContributionType,
+	): string | undefined => {
 		if (inThreeTier) {
-			if (isSupporterPlus) {
+			if (contributionType === 'ONE_OFF') {
+				return 'One-time support';
+			} else if (isSupporterPlus) {
 				return 'All-access digital';
 			} else {
 				return 'Support';
@@ -96,30 +100,24 @@ export function ContributionsOrderSummaryContainer({
 		}
 	};
 
-	let description;
-	let paymentFrequency;
-	if (contributionType === 'ONE_OFF') {
-		description = 'One-time support';
-	} else if (contributionType === 'MONTHLY') {
-		description = 'Monthly support';
-		paymentFrequency = 'month';
-	} else {
-		// The if (contributionType === 'ANNUAL') condition would be here
-		// but typescript errors on it being unnecessary due to it always being truthy
-		description = 'Annual support';
-		paymentFrequency = 'year';
-	}
+	const description = threeTierProductName(contributionType) ?? '';
+	const paymentFrequency =
+		contributionType === 'MONTHLY'
+			? 'month'
+			: contributionType === 'ANNUAL'
+			? 'year'
+			: '';
 
 	return renderOrderSummary({
 		description,
 		total: promoPrice,
 		totalExcludingPromo: isSupporterPlus && isPromoApplied ? price : undefined,
-		currency: currency,
+		currency,
 		paymentFrequency,
 		enableCheckList: contributionType !== 'ONE_OFF',
 		checkListData: checklist,
 		onCheckListToggle,
-		threeTierProductName: threeTierProductName(),
+		threeTierProductName: threeTierProductName(contributionType),
 		tsAndCs: getTermsConditions(contributionType, isSupporterPlus),
 	});
 }
