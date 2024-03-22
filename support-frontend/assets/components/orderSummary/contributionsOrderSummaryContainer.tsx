@@ -1,24 +1,15 @@
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
-import type { ContributionType } from 'helpers/contributions';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import {
+	type ContributionType,
+	getAmount,
+	type RegularContributionType,
+} from 'helpers/contributions';
 import { currencies } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import {
-	type FulfilmentOptions,
-	NoFulfilmentOptions,
-} from 'helpers/productPrice/fulfilmentOptions';
-import {
-	NoProductOptions,
-	type ProductOptions,
-} from 'helpers/productPrice/productOptions';
-import {
-	getCountryGroup,
-	type ProductPrices,
-} from 'helpers/productPrice/productPrices';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { getLowerBenefitsThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary';
 
@@ -53,49 +44,34 @@ function getTermsConditions(
 	);
 }
 
-function getProductPrice(
-	productPrices: ProductPrices,
-	productPriceWithPromo: number,
-	country: IsoCountry,
-	billingPeriod: BillingPeriod,
-	fulfilmentOption: FulfilmentOptions = NoFulfilmentOptions,
-	productOption: ProductOptions = NoProductOptions,
-): number | undefined {
-	const countryGroup = getCountryGroup(country);
-	const productPrice =
-		productPrices[countryGroup.name]?.[fulfilmentOption]?.[productOption]?.[
-			billingPeriod
-		]?.[countryGroup.currency]?.price ?? 0;
-	return productPrice > productPriceWithPromo ? productPrice : undefined;
-}
-
 export function ContributionsOrderSummaryContainer({
 	inThreeTier,
 	renderOrderSummary,
 }: ContributionsOrderSummaryContainerProps): JSX.Element {
 	const contributionType = useContributionsSelector(getContributionType);
 
-	const { countryId, currencyId } = useContributionsSelector(
+	const { currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const { productType } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
-	const billingPeriod = (productType[0] +
-		productType.slice(1).toLowerCase()) as BillingPeriod;
-	const productPriceWithPromo = useContributionsSelector(getUserSelectedAmount);
-	const productPrice = useContributionsSelector((state) =>
-		getProductPrice(
-			state.page.checkoutForm.product.productPrices,
-			productPriceWithPromo,
-			countryId,
-			billingPeriod,
-		),
-	);
+	const currency = currencies[currencyId];
 
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
-
-	const currency = currencies[currencyId];
+	const promoPrice = useContributionsSelector((state) =>
+		isSupporterPlus
+			? getLowerBenefitsThreshold(
+					state,
+					contributionType as RegularContributionType,
+			  )
+			: getUserSelectedAmount(state),
+	);
+	const price = useContributionsSelector((state) =>
+		getAmount(
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
+			contributionType,
+		),
+	);
+	const isPromoApplied = price > promoPrice;
 
 	const checklist =
 		contributionType === 'ONE_OFF'
@@ -110,9 +86,13 @@ export function ContributionsOrderSummaryContainer({
 		);
 	}
 
-	const threeTierProductName = (): string | undefined => {
+	const threeTierProductName = (
+		contributionType: ContributionType,
+	): string | undefined => {
 		if (inThreeTier) {
-			if (isSupporterPlus) {
+			if (contributionType === 'ONE_OFF') {
+				return 'One-time support';
+			} else if (isSupporterPlus) {
 				return 'All-access digital';
 			} else {
 				return 'Support';
@@ -120,30 +100,24 @@ export function ContributionsOrderSummaryContainer({
 		}
 	};
 
-	let description;
-	let paymentFrequency;
-	if (contributionType === 'ONE_OFF') {
-		description = 'One-time support';
-	} else if (contributionType === 'MONTHLY') {
-		description = 'Monthly support';
-		paymentFrequency = 'month';
-	} else {
-		// The if (contributionType === 'ANNUAL') condition would be here
-		// but typescript errors on it being unnecessary due to it always being truthy
-		description = 'Annual support';
-		paymentFrequency = 'year';
-	}
+	const description = threeTierProductName(contributionType) ?? '';
+	const paymentFrequency =
+		contributionType === 'MONTHLY'
+			? 'month'
+			: contributionType === 'ANNUAL'
+			? 'year'
+			: '';
 
 	return renderOrderSummary({
 		description,
-		total: productPriceWithPromo,
-		totalExcludingPromo: isSupporterPlus ? productPrice : undefined,
-		currency: currency,
+		total: promoPrice,
+		totalExcludingPromo: isSupporterPlus && isPromoApplied ? price : undefined,
+		currency,
 		paymentFrequency,
 		enableCheckList: contributionType !== 'ONE_OFF',
 		checkListData: checklist,
 		onCheckListToggle,
-		threeTierProductName: threeTierProductName(),
+		threeTierProductName: threeTierProductName(contributionType),
 		tsAndCs: getTermsConditions(contributionType, isSupporterPlus),
 	});
 }
