@@ -174,7 +174,7 @@ export function PaymentTsAndCs({
 	const promotionExists = (): boolean => {
 		return (
 			thresholdDescriptionInclPromo('ANNUAL') !==
-				thresholdDescriptionExclPromo('ANNUAL') &&
+				thresholdDescriptionExclPromo('ANNUAL') ||
 			thresholdDescriptionInclPromo('MONTHLY') !==
 				thresholdDescriptionExclPromo('MONTHLY')
 		);
