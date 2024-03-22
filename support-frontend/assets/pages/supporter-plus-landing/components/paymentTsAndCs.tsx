@@ -9,19 +9,17 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
-	detect,
-	glyph,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	getDateWithOrdinal,
 	getLongMonth,
 } from 'helpers/utilities/dateFormatting';
+import { supporterPlusLegal } from '../setup/supporterPlusLegal';
 
 const marginTop = css`
 	margin-top: 4px;
@@ -128,34 +126,11 @@ export function PaymentTsAndCs({
 				false,
 		  )}`;
 
-	const currencyGlyph = glyph(detect(countryGroupId));
-
 	const frequencySingular = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'month' : 'year';
 
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
-
-	const thresholdDescription = (
-		contributionType: RegularContributionType,
-		promotion?: Promotion,
-	) => {
-		const tierPlanCost = `${currencyGlyph}${lowerBenefitsThresholds[countryGroupId][contributionType]}`;
-		const period = frequencySingular(contributionType);
-		if (promotion) {
-			if (promotion.discountedPrice && promotion.numberOfDiscountedPeriods) {
-				// EXAMPLE: £16/month for the first 12 months, then £25/month
-				const discountTierPlanCost = `${currencyGlyph}${promotion.discountedPrice}`;
-				const discountDuration = promotion.numberOfDiscountedPeriods;
-				return `${discountTierPlanCost} per ${period} for the first ${
-					discountDuration > 1 ? discountDuration : ''
-				} ${period}${
-					discountDuration > 1 ? 's' : ''
-				}, then ${tierPlanCost} per ${period}`;
-			}
-		}
-		return `${tierPlanCost} per ${period}`;
-	};
 
 	const copyAboveThreshold = (
 		contributionType: RegularContributionType,
@@ -166,9 +141,15 @@ export function PaymentTsAndCs({
 			<>
 				<div>
 					If you pay at least{' '}
-					{thresholdDescription(contributionType, promotion)}, you will receive
-					the {productNameAboveThreshold} benefits on a subscription basis. If
-					you pay more than {thresholdDescription(contributionType)}, these
+					{supporterPlusLegal(
+						countryGroupId,
+						contributionType,
+						' per ',
+						promotion,
+					)}
+					, you will receive the {productNameAboveThreshold} benefits on a
+					subscription basis. If you pay more than{' '}
+					{supporterPlusLegal(countryGroupId, contributionType, ' per ')}, these
 					additional amounts will be separate{' '}
 					{frequencyPlural(contributionType)} voluntary financial contributions
 					to the Guardian. The {productNameAboveThreshold} subscription and any
