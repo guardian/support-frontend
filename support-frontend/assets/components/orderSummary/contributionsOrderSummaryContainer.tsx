@@ -1,7 +1,15 @@
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
-import type { ContributionType } from 'helpers/contributions';
+import type {
+	ContributionType,
+	RegularContributionType,
+} from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { currencies } from 'helpers/internationalisation/currency';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import {
+	currencies,
+	detect,
+	glyph,
+} from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import {
 	type FulfilmentOptions,
@@ -15,21 +23,54 @@ import {
 	getCountryGroup,
 	type ProductPrices,
 } from 'helpers/productPrice/productPrices';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary';
 
 type ContributionsOrderSummaryContainerProps = {
 	inThreeTier: boolean;
 	renderOrderSummary: (props: ContributionsOrderSummaryProps) => JSX.Element;
+	promotion?: Promotion;
+};
+
+const thresholdDescription = (
+	countryGroupId: CountryGroupId,
+	contributionType: RegularContributionType,
+	divider: string,
+	promotion?: Promotion,
+	beforeCopy?: string,
+	afterCopy?: string,
+) => {
+	const currencyGlyph = glyph(detect(countryGroupId));
+	const tierPlanCost = `${currencyGlyph}${lowerBenefitsThresholds[countryGroupId][contributionType]}`;
+	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
+	const planCostNoPromo = `${tierPlanCost}${divider}${period}${
+		afterCopy ?? ''
+	}`;
+	if (promotion) {
+		if (promotion.discountedPrice && promotion.numberOfDiscountedPeriods) {
+			// EXAMPLE: £16/month for the first 12 months, then £25/month
+			const discountTierPlanCost = `${currencyGlyph}${promotion.discountedPrice}`;
+			const discountDuration = promotion.numberOfDiscountedPeriods;
+			return `${
+				beforeCopy ?? ''
+			}${discountTierPlanCost}${divider}${period} for the first ${
+				discountDuration > 1 ? discountDuration : ''
+			} ${period}${discountDuration > 1 ? 's' : ''}, then ${planCostNoPromo}`;
+		}
+	}
 };
 
 function getTermsConditions(
+	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
 	isSupporterPlus: boolean,
+	promotion?: Promotion,
 ) {
 	if (contributionType === 'ONE_OFF') return;
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
@@ -37,6 +78,16 @@ function getTermsConditions(
 	if (isSupporterPlus) {
 		return (
 			<>
+				<p>
+					{thresholdDescription(
+						countryGroupId,
+						contributionType,
+						'/',
+						promotion,
+						`You’ll pay `,
+						` afterwards unless you cancel. Offer only available to new subscribers who do not have an existing subscription with the Guardian.`,
+					)}
+				</p>
 				<p>Auto renews every {period} until you cancel.</p>
 				<p>
 					Cancel or change your support anytime. If you cancel within the first
@@ -72,10 +123,11 @@ function getProductPrice(
 export function ContributionsOrderSummaryContainer({
 	inThreeTier,
 	renderOrderSummary,
+	promotion,
 }: ContributionsOrderSummaryContainerProps): JSX.Element {
 	const contributionType = useContributionsSelector(getContributionType);
 
-	const { countryId, currencyId } = useContributionsSelector(
+	const { countryId, currencyId, countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const { productType } = useContributionsSelector(
@@ -144,6 +196,11 @@ export function ContributionsOrderSummaryContainer({
 		checkListData: checklist,
 		onCheckListToggle,
 		threeTierProductName: threeTierProductName(),
-		tsAndCs: getTermsConditions(contributionType, isSupporterPlus),
+		tsAndCs: getTermsConditions(
+			countryGroupId,
+			contributionType,
+			isSupporterPlus,
+			promotion,
+		),
 	});
 }

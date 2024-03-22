@@ -116,6 +116,7 @@ export function SupporterPlusCheckout({
 					) : (
 						<ContributionsOrderSummaryContainer
 							inThreeTier={inThreeTier}
+							promotion={promotion}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}
