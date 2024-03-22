@@ -14,12 +14,9 @@ import {
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import {
-	getLowerBenefitsThresholds,
-	lowerBenefitsThresholds,
-} from 'helpers/supporterPlus/benefitsThreshold';
+import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	getDateWithOrdinal,
@@ -46,6 +43,7 @@ interface PaymentTsAndCsProps {
 	amount: number;
 	amountIsAboveThreshold: boolean;
 	productNameAboveThreshold: string;
+	promotion?: Promotion;
 }
 
 const manageMyAccount = (
@@ -119,6 +117,7 @@ export function PaymentTsAndCs({
 	amount,
 	amountIsAboveThreshold,
 	productNameAboveThreshold,
+	promotion,
 }: PaymentTsAndCsProps): JSX.Element {
 	const amountCopy = isNaN(amount)
 		? null
@@ -137,73 +136,40 @@ export function PaymentTsAndCs({
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
 
-	const copyBelowThreshold = (contributionType: ContributionType) => {
-		return (
-			<>
-				<div>
-					We will attempt to take payment{amountCopy},{' '}
-					<TsAndCsRenewal contributionType={contributionType} />, from now until
-					you cancel your payment. Payments may take up to 6 days to be recorded
-					in your bank account. You can change how much you give or cancel your
-					payment at any time.
-				</div>
-				<TsAndCsFooterLinks
-					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
-				/>
-			</>
-		);
-	};
-
-	const thresholdAmounts = useContributionsSelector(getLowerBenefitsThresholds);
-	const thresholdDescriptionInclPromo = (
+	const thresholdDescription = (
 		contributionType: RegularContributionType,
+		promotion?: Promotion,
 	) => {
-		return `${currencyGlyph}${
-			thresholdAmounts[contributionType]
-		} per ${frequencySingular(contributionType)}`;
-	};
-	const thresholdDescriptionExclPromo = (
-		contributionType: RegularContributionType,
-	) => {
-		return `${currencyGlyph}${
-			lowerBenefitsThresholds[countryGroupId][contributionType]
-		} per ${frequencySingular(contributionType)}`;
-	};
-
-	const promotionExists = (): boolean => {
-		return (
-			thresholdDescriptionInclPromo('ANNUAL') !==
-				thresholdDescriptionExclPromo('ANNUAL') ||
-			thresholdDescriptionInclPromo('MONTHLY') !==
-				thresholdDescriptionExclPromo('MONTHLY')
-		);
-	};
-
-	const promotionOfferCopy = () => {
-		if (promotionExists()) {
-			return ` for the first year, then ${thresholdDescriptionExclPromo(
-				'MONTHLY',
-			)} or ${thresholdDescriptionExclPromo('ANNUAL')} afterwards`;
+		const tierPlanCost = `${currencyGlyph}${lowerBenefitsThresholds[countryGroupId][contributionType]}`;
+		const period = frequencySingular(contributionType);
+		if (promotion) {
+			if (promotion.discountedPrice && promotion.numberOfDiscountedPeriods) {
+				// EXAMPLE: £16/month for the first 12 months, then £25/month
+				const discountTierPlanCost = `${currencyGlyph}${promotion.discountedPrice}`;
+				const discountDuration = promotion.numberOfDiscountedPeriods;
+				return `${discountTierPlanCost} per ${period} for the first ${
+					discountDuration > 1 ? discountDuration : ''
+				} ${period}${
+					discountDuration > 1 ? 's' : ''
+				}, then ${tierPlanCost} per ${period}`;
+			}
 		}
+		return `${tierPlanCost} per ${period}`;
 	};
 
 	const copyAboveThreshold = (
-		contributionType: ContributionType,
+		contributionType: RegularContributionType,
 		productNameAboveThreshold: string,
+		promotion?: Promotion,
 	) => {
 		return (
 			<>
 				<div>
-					If you pay at least {thresholdDescriptionInclPromo('MONTHLY')} or{' '}
-					{thresholdDescriptionInclPromo('ANNUAL')}
-					{promotionOfferCopy()}, you will receive the{' '}
-					{productNameAboveThreshold} benefits on a subscription basis. If you
-					pay more than{' '}
-					{thresholdDescriptionExclPromo(
-						contributionType as RegularContributionType,
-					)}
-					, these additional amounts will be separate{' '}
+					If you pay at least{' '}
+					{thresholdDescription(contributionType, promotion)}, you will receive
+					the {productNameAboveThreshold} benefits on a subscription basis. If
+					you pay more than {thresholdDescription(contributionType)}, these
+					additional amounts will be separate{' '}
 					{frequencyPlural(contributionType)} voluntary financial contributions
 					to the Guardian. The {productNameAboveThreshold} subscription and any
 					contributions will auto-renew each{' '}
@@ -239,20 +205,32 @@ export function PaymentTsAndCs({
 		);
 	}
 
-	if (contributionType === 'MONTHLY') {
+	const copyBelowThreshold = (contributionType: ContributionType) => {
 		return (
-			<div css={container}>
-				{amountIsAboveThreshold
-					? copyAboveThreshold(contributionType, productNameAboveThreshold)
-					: copyBelowThreshold(contributionType)}
-			</div>
+			<>
+				<div>
+					We will attempt to take payment{amountCopy},{' '}
+					<TsAndCsRenewal contributionType={contributionType} />, from now until
+					you cancel your payment. Payments may take up to 6 days to be recorded
+					in your bank account. You can change how much you give or cancel your
+					payment at any time.
+				</div>
+				<TsAndCsFooterLinks
+					countryGroupId={countryGroupId}
+					amountIsAboveThreshold={amountIsAboveThreshold}
+				/>
+			</>
 		);
-	}
+	};
 
 	return (
 		<div css={container}>
 			{amountIsAboveThreshold
-				? copyAboveThreshold(contributionType, productNameAboveThreshold)
+				? copyAboveThreshold(
+						contributionType,
+						productNameAboveThreshold,
+						promotion,
+				  )
 				: copyBelowThreshold(contributionType)}
 		</div>
 	);
