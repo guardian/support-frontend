@@ -40,6 +40,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
+	setBillingPeriod,
 	setProductType,
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
@@ -268,10 +269,12 @@ export function ThreeTierLanding(): JSX.Element {
 			 * coming from the one off contribution checkout
 			 */
 		}
+		dispatch(setBillingPeriod(billingPeriod));
 	}, []);
 
 	// The three tier checkout only supports monthly and annual contributions
 	const paymentFrequencies: RegularContributionType[] = ['MONTHLY', 'ANNUAL'];
+	const billingFrequencies: BillingPeriod[] = ['Monthly', 'Annual'];
 	const paymentFrequencyMap = {
 		MONTHLY: 'Monthly',
 		ANNUAL: 'Annual',
@@ -279,6 +282,7 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
 		dispatch(setProductType(paymentFrequencies[buttonIndex]));
+		dispatch(setBillingPeriod(billingFrequencies[buttonIndex]));
 	};
 
 	const handleButtonCtaClick = (

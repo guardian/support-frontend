@@ -14,7 +14,6 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
@@ -36,7 +35,6 @@ import { PaymentFailureMessage } from '../components/paymentFailure';
 import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
 import { threeTierCheckoutEnabled } from '../setup/threeTierChecks';
-import type { TierPlans } from '../setup/threeTierConfig';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
 const shorterBoxMargin = css`
@@ -96,17 +94,13 @@ export function SupporterPlusCheckout({
 		</Button>
 	);
 
-	const tierPlanPeriod = contributionType.toLowerCase() as keyof TierPlans;
-	const billingPeriod = (tierPlanPeriod[0].toUpperCase() +
-		tierPlanPeriod.slice(1)) as BillingPeriod;
 	const promotion = useContributionsSelector((state) =>
 		getPromotion(
 			state.page.checkoutForm.product.productPrices,
 			countryId,
-			billingPeriod,
+			state.page.checkoutForm.product.billingPeriod,
 		),
 	);
-
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
 			<Box cssOverrides={shorterBoxMargin}>
