@@ -28,7 +28,7 @@ const checkListTextCss = css`
 	}
 `;
 
-const toolTipCss = css`
+const checkListTextItemCss = css`
 	& div {
 		display: none;
 
@@ -37,6 +37,9 @@ const toolTipCss = css`
 			margin-left: 1px;
 			vertical-align: middle;
 		}
+	}
+	strong {
+		font-weight: bold;
 	}
 `;
 const tableCss = (style: CheckListStyle) => css`
@@ -62,6 +65,7 @@ export type CheckListData = {
 	text?: JSX.Element | string;
 	maybeGreyedOut?: SerializedStyles;
 	toolTip?: string;
+	strong?: boolean;
 };
 
 type CheckListStyle = 'standard' | 'compact';
@@ -116,8 +120,8 @@ export function CheckList({
 					</td>
 					<td css={[checkListTextCss, item.maybeGreyedOut]}>
 						{typeof item.text === 'string' ? (
-							<span css={toolTipCss}>
-								{item.text}
+							<span css={checkListTextItemCss}>
+								{item.strong ? <strong>{item.text}</strong> : item.text}
 								{item.toolTip && (
 									<Tooltip
 										children={<p>{item.toolTip}</p>}

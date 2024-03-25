@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette, textSans } from '@guardian/source-foundations';
+import { from, palette, textSans } from '@guardian/source-foundations';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierPlanCosts } from '../setup/threeTierConfig';
 
@@ -8,10 +8,19 @@ interface ThreeTierDisclaimerProps {
 	currency: string;
 }
 
+interface ToteTsAndCsProps {
+	currency: string;
+	toteCostMonthly: number;
+	toteCostAnnual: number;
+}
+
 const container = css`
 	text-align: left;
 	color: ${palette.neutral[100]};
 	${textSans.xxsmall({ lineHeight: 'tight' })};
+	${from.desktop} {
+		max-width: 780px;
+	}
 `;
 
 const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
@@ -39,14 +48,31 @@ export function ThreeTierDisclaimer({
 				<div css={container}>
 					<p>
 						*Digital + Print offer is {discountSummaryCopy(currency, planCost)}{' '}
-						afterwards unless you cancel.
-					</p>
-					<p>
-						Offer only available to new subscribers who do not have an existing
-						subscription with the Guardian.
+						afterwards unless you cancel. Offer only available to new
+						subscribers who do not have an existing subscription with the
+						Guardian.
 					</p>
 				</div>
 			)}
 		</>
+	);
+}
+
+export function ToteTsAndCs({
+	currency,
+	toteCostMonthly,
+	toteCostAnnual,
+}: ToteTsAndCsProps): JSX.Element {
+	return (
+		<div css={container}>
+			<p>
+				**Tote bags are only available for qualified new recurring supporters
+				(monthly: {currency}
+				{toteCostMonthly} or more; annual: {currency}
+				{toteCostAnnual} or more) on a first come, first served basis while
+				supplies last. Limit one per customer. Distribution to US and
+				APO/FPO/DPO addresses only. Please allow 2-4 weeks for shipping.
+			</p>
+		</div>
 	);
 }

@@ -83,6 +83,11 @@ const buttonOverrides = css`
 	}
 `;
 
+const originalPriceStrikeThrough = css`
+	font-weight: 400;
+	text-decoration: line-through;
+`;
+
 const iconCss = (flip: boolean) => css`
 	svg {
 		max-width: ${space[4]}px;
@@ -118,6 +123,7 @@ const termsAndConditions = css`
 export type ContributionsOrderSummaryProps = {
 	description: string;
 	total: number;
+	totalOriginal?: number;
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: CheckListData[];
@@ -135,6 +141,7 @@ export type ContributionsOrderSummaryProps = {
 export function ContributionsOrderSummary({
 	description,
 	total,
+	totalOriginal,
 	currency,
 	paymentFrequency,
 	checkListData,
@@ -156,6 +163,10 @@ export function ContributionsOrderSummary({
 	);
 
 	const formattedTotal = simpleFormatAmount(currency, total);
+	const formattedTotalOriginal = simpleFormatAmount(
+		currency,
+		totalOriginal ?? '',
+	);
 
 	return (
 		<div css={componentStyles}>
@@ -195,6 +206,11 @@ export function ContributionsOrderSummary({
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
 				<p>
+					{totalOriginal && (
+						<span css={originalPriceStrikeThrough}>
+							{formattedTotalOriginal}
+						</span>
+					)}{' '}
 					{paymentFrequency
 						? `${formattedTotal}/${paymentFrequency}`
 						: formattedTotal}

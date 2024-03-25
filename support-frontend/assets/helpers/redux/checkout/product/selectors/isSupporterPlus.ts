@@ -1,32 +1,46 @@
-import { getAmount } from 'helpers/contributions';
+import {
+	type ContributionType,
+	getAmount,
+	type OtherAmounts,
+	type SelectedAmounts,
+} from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { isOneOff } from 'helpers/supporterPlus/isContributionRecurring';
 
-export function isSupporterPlusPurchase(state: ContributionsState): boolean {
-	const contributionType = getContributionType(state);
-
+export function isSupporterPlus(
+	contributionType: ContributionType,
+	selectedAmounts: SelectedAmounts,
+	otherAmounts: OtherAmounts,
+	countryGroupId: CountryGroupId,
+): boolean {
 	if (isOneOff(contributionType)) {
 		return false;
 	}
 
-	const thresholdPrice = getThresholdPrice(
-		state.common.internationalisation.countryGroupId,
-		contributionType,
-	);
-	const amount = getAmount(
-		state.page.checkoutForm.product.selectedAmounts,
-		state.page.checkoutForm.product.otherAmounts,
+	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
+	const selectedAmount = getAmount(
+		selectedAmounts,
+		otherAmounts,
 		contributionType,
 	);
 
-	const amountIsHighEnough = !!(thresholdPrice && amount >= thresholdPrice);
-
-	return amountIsHighEnough;
+	return selectedAmount >= thresholdPrice;
 }
 
-export function shouldHideBenefitsList(state: ContributionsState): boolean {
+export function isSupporterPlusFromState(state: ContributionsState): boolean {
+	const contributionType = getContributionType(state);
+	return isSupporterPlus(
+		contributionType,
+		state.page.checkoutForm.product.selectedAmounts,
+		state.page.checkoutForm.product.otherAmounts,
+		state.common.internationalisation.countryGroupId,
+	);
+}
+
+export function hideBenefitsListFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
 
 	if (isOneOff(contributionType)) {

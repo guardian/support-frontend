@@ -96,7 +96,7 @@ describe('Guardian Weekly checkout form', () => {
 					countryId: 'GB',
 					currencyId: 'GBP',
 				},
-				abParticipations: [],
+				abParticipations: {},
 			},
 		};
 
