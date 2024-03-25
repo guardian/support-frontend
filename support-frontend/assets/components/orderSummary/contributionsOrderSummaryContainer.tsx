@@ -1,21 +1,8 @@
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
-import type { ContributionType } from 'helpers/contributions';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { RegularContributionType } from 'helpers/contributions';
+import { type ContributionType, getAmount } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import {
-	type FulfilmentOptions,
-	NoFulfilmentOptions,
-} from 'helpers/productPrice/fulfilmentOptions';
-import {
-	NoProductOptions,
-	type ProductOptions,
-} from 'helpers/productPrice/productOptions';
-import {
-	getCountryGroup,
-	type ProductPrices,
-} from 'helpers/productPrice/productPrices';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -80,8 +67,7 @@ export function ContributionsOrderSummaryContainer({
 	promotion,
 }: ContributionsOrderSummaryContainerProps): JSX.Element {
 	const contributionType = useContributionsSelector(getContributionType);
-	const { countryId, currencyId, countryGroupId } = useContributionsSelector(
-
+	const { currencyId, countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 	const currency = currencies[currencyId];
