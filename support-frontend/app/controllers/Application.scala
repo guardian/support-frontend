@@ -19,7 +19,7 @@ import play.api.libs.circe.Circe
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 import services.pricing.PriceSummaryServiceProvider
-import services.{PaymentAPIService, TestUserService}
+import services.{CachedProductCatalogService, CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
 import views.EmptyDiv
 
@@ -39,7 +39,7 @@ case class PaymentMethodConfigs(
 class Application(
     actionRefiners: CustomActionBuilders,
     val assets: AssetsResolver,
-    testUsers: TestUserService,
+    testUserService: TestUserService,
     components: ControllerComponents,
     oneOffStripeConfigProvider: StripePublicConfigProvider,
     regularStripeConfigProvider: StripePublicConfigProvider,
@@ -53,6 +53,7 @@ class Application(
     stage: Stage,
     wsClient: WSClient,
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val supportUrl: String,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
@@ -186,7 +187,7 @@ class Application(
     )
 
     val serversideTests = generateParticipations(Nil)
-    val testMode = testUsers.isTestUser(request)
+    val testMode = testUserService.isTestUser(request)
 
     val queryPromos =
       request.queryString
@@ -273,7 +274,7 @@ class Application(
 
     val geoData = request.geoData
     val serversideTests = generateParticipations(Nil)
-    val isTestUser = testUsers.isTestUser(request)
+    val isTestUser = testUserService.isTestUser(request)
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
 
@@ -300,13 +301,12 @@ class Application(
     ).withSettingsSurrogateKey
   }
 
-  def products() = Action.async { implicit request =>
-    wsClient
-      .url(
-        "https://raw.githubusercontent.com/guardian/support-service-lambdas/0b031ea5821c95a7f7c59e45951d2d1f0bebed9d/modules/product/src/prodCatalogMapping.json",
-      )
-      .get()
-      .map(response => Ok(response.body).withHeaders("Cache-Control" -> "max-age=30"))
+  @deprecated("We will remove this once the data is embedded in the page")
+  def products() = NoCacheAction() { implicit request =>
+    val isTestUser = testUserService.isTestUser(request)
+    val cachedProductCatalogService = cachedProductCatalogServiceProvider.forUser(isTestUser)
+
+    Ok(cachedProductCatalogService.get().toJson)
   }
 }
 

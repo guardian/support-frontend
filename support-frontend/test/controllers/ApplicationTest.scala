@@ -56,6 +56,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[Stage],
         mock[WSClient],
         mock[PriceSummaryServiceProvider],
+        mock[CachedProductCatalogServiceProvider],
         "support.thegulocal.com",
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
@@ -79,6 +80,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[Stage],
         mock[WSClient],
         mock[PriceSummaryServiceProvider],
+        mock[CachedProductCatalogServiceProvider],
         "support.thegulocal.com",
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       header("Cache-Control", result) mustBe Some("no-cache, private")
