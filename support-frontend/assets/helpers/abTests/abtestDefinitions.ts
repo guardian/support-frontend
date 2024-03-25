@@ -82,4 +82,24 @@ export const tests: Tests = {
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
+	additionalBenefits: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		isActive: false,
+		referrerControlled: true,
+		seed: 3,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+	},
 };
