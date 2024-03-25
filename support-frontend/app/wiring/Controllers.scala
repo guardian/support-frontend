@@ -39,6 +39,7 @@ trait Controllers {
     appConfig.stage,
     implicitWs,
     priceSummaryServiceProvider,
+    cachedProductCatalogServiceProvider,
     appConfig.supportUrl,
   )
 

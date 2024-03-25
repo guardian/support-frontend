@@ -14,6 +14,7 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
@@ -93,6 +94,13 @@ export function SupporterPlusCheckout({
 		</Button>
 	);
 
+	const promotion = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.productPrices,
+			countryId,
+			state.page.checkoutForm.product.billingPeriod,
+		),
+	);
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -102,6 +110,7 @@ export function SupporterPlusCheckout({
 					) : (
 						<ContributionsOrderSummaryContainer
 							inThreeTier={inThreeTier}
+							promotion={promotion}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}
@@ -155,6 +164,7 @@ export function SupporterPlusCheckout({
 						productNameAboveThreshold={
 							inThreeTier ? 'All-access digital' : 'Supporter Plus'
 						}
+						promotion={promotion}
 					/>
 				</BoxContents>
 			</Box>

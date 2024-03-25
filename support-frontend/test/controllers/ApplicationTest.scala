@@ -74,6 +74,7 @@ class ApplicationTest extends AnyWordSpec with Matchers with TestCSRFComponents 
         mock[Stage],
         mock[WSClient],
         priceSummaryServiceProvider,
+        mock[CachedProductCatalogServiceProvider],
         "support.thegulocal.com",
       )(mock[ExecutionContext]).healthcheck.apply(FakeRequest())
       contentAsString(result) mustBe "healthy"
