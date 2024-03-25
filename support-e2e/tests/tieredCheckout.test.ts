@@ -150,7 +150,10 @@ test.describe('Subscribe (S+) incl PromoCode via the Tiered checkout', () => {
 				'Pay £([0-9]+|(([0-9]+).([0-9]+))) per (year|month)',
 			);
 			await page.getByText(paymentButtonRegex).click();
-			await expect(page).toHaveURL(`/uk/thankyou`, { timeout: 600000 });
+			await expect(page).toHaveURL(
+				`/uk/thankyou?promoCode=PLAYWRIGHT_TEST_SPLUS`,
+				{ timeout: 600000 },
+			);
 		});
 	});
 });
