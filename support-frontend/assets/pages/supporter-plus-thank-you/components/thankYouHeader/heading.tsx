@@ -57,10 +57,10 @@ function Monthly({ isoCurrency, amount, promotion, name }: MonthlyProps) {
 	}
 
 	return (
-		<div>
+		<h1 css={headerTitleText}>
 			Thank you {name}for supporting us with{' '}
 			<YellowAmount currency={isoCurrency} amount={amount} /> each month ❤️
-		</div>
+		</h1>
 	);
 }
 
