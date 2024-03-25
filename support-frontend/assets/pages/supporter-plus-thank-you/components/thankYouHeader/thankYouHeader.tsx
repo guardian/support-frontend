@@ -5,7 +5,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
 import DirectDebitMessage from './directDebitMessage';
 import Heading from './heading';
-import Subheading from './subheading';
+import Subheading, { ToteHeading } from './subheading';
 
 export const header = css`
 	background: white;
@@ -44,6 +44,7 @@ type ThankYouHeaderProps = {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
+	showTote?: boolean;
 };
 
 function ThankYouHeader({
@@ -56,6 +57,7 @@ function ThankYouHeader({
 	amountIsAboveThreshold,
 	isSignedIn,
 	userTypeFromIdentityResponse,
+	showTote,
 }: ThankYouHeaderProps): JSX.Element {
 	return (
 		<header css={header}>
@@ -77,6 +79,11 @@ function ThankYouHeader({
 					userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 				/>
 			</p>
+			{showTote && (
+				<p css={headerSupportingText}>
+					<ToteHeading />
+				</p>
+			)}
 		</header>
 	);
 }
