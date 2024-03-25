@@ -64,7 +64,6 @@ class SupportWorkersClientTest extends AnyFlatSpec with Matchers with MockitoSug
     def doTest(len: Int, value: Long, truncated: Boolean) = {
       import Client.generateExecutionName
       val actual = generateExecutionName(("123456789-" * 10).take(len), value)
-      info(s"string: <$actual>")
       withClue(s"string: <$actual>") {
         actual.length should be(80)
         actual should fullyMatch regex ("[0-9a-zA-Z_-]+")
