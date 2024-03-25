@@ -3,6 +3,7 @@ import type { RegularContributionType } from 'helpers/contributions';
 import { type ContributionType, getAmount } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
+import { supporterPlusLegal } from 'helpers/legalCopy';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -10,7 +11,6 @@ import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { getLowerBenefitsThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { supporterPlusLegal } from 'pages/supporter-plus-landing/setup/supporterPlusLegal';
 import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary';
 
 type ContributionsOrderSummaryContainerProps = {

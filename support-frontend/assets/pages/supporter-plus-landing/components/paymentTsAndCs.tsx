@@ -12,6 +12,7 @@ import {
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
+import { supporterPlusLegal } from 'helpers/legalCopy';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
@@ -19,7 +20,6 @@ import {
 	getDateWithOrdinal,
 	getLongMonth,
 } from 'helpers/utilities/dateFormatting';
-import { supporterPlusLegal } from '../setup/supporterPlusLegal';
 
 const marginTop = css`
 	margin-top: 4px;
