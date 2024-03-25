@@ -194,7 +194,7 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(SupporterPlus, queryPromos)
+    val productPrices = priceSummaryServiceProvider.forUser(testMode).getPrices(SupporterPlus, queryPromos)
 
     views.html.contributions(
       title = "Support the Guardian",
