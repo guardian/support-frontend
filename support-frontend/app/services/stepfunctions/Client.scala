@@ -12,6 +12,8 @@ import services.aws.{AwsAsync, CredentialsProvider}
 import services.stepfunctions.StateMachineContainer.{Response, convertErrors}
 import services.stepfunctions.StateMachineErrors.Fail
 
+import java.nio.ByteBuffer
+import java.util.Base64
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters._
 
@@ -27,6 +29,24 @@ object Client {
 
     new Client(client, arn)
   }
+
+  def generateExecutionName(name: String, l: Long = System.nanoTime()) = {
+    val uniq = {
+      val bytes = ByteBuffer.allocate(8).putLong(l).array()
+      val encodedString = Base64.getEncoder.encodeToString(bytes)
+      encodedString.replaceAll("\\+", "_").replaceAll("/", "_").replaceAll("=", "")
+    }
+    val freeCharacters = 80 - name.length - 1 - uniq.length
+    val validName =
+      if (freeCharacters >= 0)
+        name + "-" + uniq
+      else {
+        val truncatedName = name.take(80 - 1 - uniq.length - 2)
+        truncatedName + "-" + uniq + "--"
+      }
+    validName
+  }
+
 }
 
 class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) extends SafeLogging {
@@ -34,12 +54,7 @@ class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) extends SafeLo
   private def startExecution(arn: String, input: String, name: String)(implicit
       ec: ExecutionContext,
   ): Response[StartExecutionResult] = convertErrors {
-    val proposedName = name + "-" + System.nanoTime().toString
-    val validName =
-      if (proposedName.length <= 80)
-        proposedName
-      else
-        (System.nanoTime().toString + "-" + name).take(78) + "--"
+    val validName: String = Client.generateExecutionName(name)
     val startExecutionRequest =
       new StartExecutionRequest()
         .withStateMachineArn(arn)

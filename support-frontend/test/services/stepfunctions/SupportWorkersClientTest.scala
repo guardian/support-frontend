@@ -60,4 +60,28 @@ class SupportWorkersClientTest extends AnyFlatSpec with Matchers with MockitoSug
     actual shouldBe StatusResults.failure(CheckoutFailureReasons.Unknown)
   }
 
+  "generateExecutionName" should "generate a valid name" in {
+    def doTest(len: Int, value: Long, truncated: Boolean) = {
+      import Client.generateExecutionName
+      val actual = generateExecutionName(("123456789-" * 10).take(len), value)
+      info(s"string: <$actual>")
+      withClue(s"string: <$actual>") {
+        actual.length should be(80)
+        actual should fullyMatch regex ("[0-9a-zA-Z_-]+")
+        if (truncated)
+          actual.takeRight(2) should be("--")
+        else
+          actual.last should not be (('-'))
+      }
+    }
+    doTest(68, Long.MinValue, truncated = false)
+    doTest(69, Long.MinValue, truncated = true)
+    doTest(68, Long.MaxValue, truncated = false)
+    doTest(69, Long.MaxValue, truncated = true)
+    doTest(68, 0L, truncated = false)
+    doTest(69, 0L, truncated = true)
+    doTest(68, System.nanoTime(), truncated = false)
+    doTest(69, System.nanoTime(), truncated = true)
+  }
+
 }
