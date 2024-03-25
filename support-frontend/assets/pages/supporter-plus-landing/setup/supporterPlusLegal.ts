@@ -14,15 +14,13 @@ export const supporterPlusLegal = (
 	const tierPlanCost = `${currencyGlyph}${lowerBenefitsThresholds[countryGroupId][contributionType]}`;
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
 	const planCostNoPromo = `${tierPlanCost}${divider}${period}`;
-	if (promotion) {
-		if (promotion.discountedPrice && promotion.numberOfDiscountedPeriods) {
-			// EXAMPLE: £16/month for the first 12 months, then £25/month
-			const discountTierPlanCost = `${currencyGlyph}${promotion.discountedPrice}`;
-			const discountDuration = promotion.numberOfDiscountedPeriods;
-			return `${discountTierPlanCost}${divider}${period} for the first ${
-				discountDuration > 1 ? discountDuration : ''
-			} ${period}${discountDuration > 1 ? 's' : ''}, then ${planCostNoPromo}`;
-		}
+	if (promotion?.discountedPrice && promotion.numberOfDiscountedPeriods) {
+		// EXAMPLE: £16/month for the first 12 months, then £25/month
+		const discountTierPlanCost = `${currencyGlyph}${promotion.discountedPrice}`;
+		const discountDuration = promotion.numberOfDiscountedPeriods;
+		return `${discountTierPlanCost}${divider}${period} for the first ${
+			discountDuration > 1 ? discountDuration : ''
+		} ${period}${discountDuration > 1 ? 's' : ''}, then ${planCostNoPromo}`;
 	}
 	return planCostNoPromo;
 };
