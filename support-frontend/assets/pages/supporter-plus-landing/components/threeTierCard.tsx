@@ -80,7 +80,7 @@ const titleCss = css`
 	color: #606060;
 `;
 
-const price = (hasDiscountSummary: boolean) => css`
+const priceCss = (hasDiscountSummary: boolean) => css`
 	${textSans.xlarge({ fontWeight: 'bold' })};
 	position: relative;
 	margin-bottom: ${hasDiscountSummary ? '0' : `${space[4]}px`};
@@ -198,10 +198,10 @@ export function ThreeTierCard({
 	externalBtnLink,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId].glyph;
-	const currentPrice = planCost.discount?.price ?? planCost.price;
-	const previousPriceCopy =
-		!!planCost.discount && `${currency}${planCost.price}`;
-	const currentPriceCopy = `${currency}${currentPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
+	const price = planCost.price;
+	const priceCopy = !!planCost.discount && `${currency}${price}`;
+	const promoPrice = planCost.discount?.price ?? planCost.price;
+	const promoPriceCopy = `${currency}${promoPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	return (
 		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
@@ -210,10 +210,10 @@ export function ThreeTierCard({
 				<ThreeTierLozenge subdue={isRecommendedSubdued} title="Recommended" />
 			)}
 			<h3 css={titleCss}>{title}</h3>
-			<h2 css={price(!!planCost.discount)}>
-				<span css={previousPriceStrikeThrough}>{previousPriceCopy}</span>
-				{previousPriceCopy && ' '}
-				{currentPriceCopy}
+			<h2 css={priceCss(!!planCost.discount)}>
+				<span css={previousPriceStrikeThrough}>{priceCopy}</span>
+				{priceCopy && ' '}
+				{promoPriceCopy}
 				{!!planCost.discount && (
 					<span css={discountSummaryCss}>
 						{discountSummaryCopy(currency, planCost, promoCount)}
@@ -226,7 +226,7 @@ export function ThreeTierCard({
 						href={externalBtnLink}
 						cssOverrides={btnStyleOverrides}
 						onClick={() => {
-							linkCtaClickHandler(currentPrice, paymentFrequency, currencyId);
+							linkCtaClickHandler(price, paymentFrequency, currencyId);
 						}}
 						data-qm-trackable={quantumMetricButtonRef}
 					>
@@ -240,7 +240,7 @@ export function ThreeTierCard({
 						cssOverrides={btnStyleOverrides}
 						onClick={() =>
 							buttonCtaClickHandler(
-								currentPrice,
+								price,
 								cardTier,
 								paymentFrequency,
 								currencyId,

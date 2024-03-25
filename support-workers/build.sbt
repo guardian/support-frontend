@@ -31,6 +31,7 @@ libraryDependencies ++= Seq(
   "io.sentry" % "sentry-logback" % "1.7.30",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
+  "com.lihaoyi" %% "pprint" % "0.8.1",
 )
 
 riffRaffPackageType := assembly.value
@@ -65,9 +66,12 @@ lazy val deployToCode =
 
 deployToCode := {
   import scala.sys.process._
+  val log = streams.value.log
   val s3Bucket = "support-workers-dist"
   val s3Path = "support/CODE/support-workers/support-workers.jar"
-  (s"aws s3 cp ${assembly.value} s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!
+  val assemblyJar = assembly.value
+  log.info(s"generated jar $assemblyJar, about to upload to S3...")
+  log.info((s"aws s3 cp $assemblyJar s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!)
   List(
     "-CreatePaymentMethodLambda-",
     "-CreateSalesforceContactLambda-",
@@ -77,8 +81,10 @@ deployToCode := {
     "-FailureHandlerLambda-",
     "-SendAcquisitionEventLambda-",
     "-PreparePaymentMethodForReuseLambda-",
-  ).foreach(functionPartial =>
-    s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!,
-  )
+  ).foreach { functionPartial =>
+    log.info("updating " + functionPartial + "...")
+    s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!
+    log.info("finished " + functionPartial)
+  }
 
 }

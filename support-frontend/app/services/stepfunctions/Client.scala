@@ -31,22 +31,27 @@ object Client {
 
 class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) extends SafeLogging {
 
-  private def startExecution(arn: String, input: String)(implicit
+  private def startExecution(arn: String, input: String, name: String)(implicit
       ec: ExecutionContext,
   ): Response[StartExecutionResult] = convertErrors {
-    AwsAsync(client.startExecutionAsync, new StartExecutionRequest().withStateMachineArn(arn).withInput(input))
+    val startExecutionRequest =
+      new StartExecutionRequest()
+        .withStateMachineArn(arn)
+        .withInput(input)
+        .withName(name + "-" + System.nanoTime().toString)
+    AwsAsync(client.startExecutionAsync, startExecutionRequest)
       .transform { theTry =>
         logger.info(s"state machine result: $theTry")
         theTry
       }
   }
 
-  def triggerExecution[T](input: T, isTestUser: Boolean, isExistingAccount: Boolean = false)(implicit
+  def triggerExecution[T](input: T, isTestUser: Boolean, isExistingAccount: Boolean, name: String)(implicit
       ec: ExecutionContext,
       encoder: Encoder[T],
       stateWrapper: StateWrapper,
   ): Response[StateMachineExecution] = {
-    startExecution(arn.asString, stateWrapper.wrap(input, isTestUser, isExistingAccount))
+    startExecution(arn.asString, stateWrapper.wrap(input, isTestUser, isExistingAccount), name)
       .map(StateMachineExecution.fromStartExecution)
   }
 

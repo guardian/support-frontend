@@ -7,7 +7,9 @@ import com.gu.support.encoding.Codec.deriveCodec
 import io.circe.syntax._
 import io.circe.{Encoder, _}
 
-sealed trait PaymentFields
+sealed trait PaymentFields {
+  def describe: String = getClass.getSimpleName.replaceAll("PaymentFields", "")
+}
 
 case class PayPalPaymentFields(baid: String) extends PaymentFields
 
@@ -15,7 +17,10 @@ case class StripePaymentFields(
     paymentMethod: PaymentMethodId,
     stripePaymentType: Option[StripePaymentType],
     stripePublicKey: Option[StripePublicKey], // this is only optional until all checkouts are updated
-) extends PaymentFields
+) extends PaymentFields {
+  override def describe: String =
+    stripePaymentType.map(_.getClass.getSimpleName.replaceAll("\\$", "")).getOrElse("Stripe")
+}
 
 object StripePublicKey {
 
