@@ -2,10 +2,9 @@ package com.gu
 
 import java.io.{File, InputStream, OutputStream}
 import java.nio.file.Files
-
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
-import com.amazonaws.services.s3.AmazonS3URI
 import com.gu.aws.AwsCloudWatchMetricPut._
+import com.gu.aws.AwsS3Client.S3Location
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsS3Client}
 import org.scalatest.Reporter
 import org.scalatest.events.{Event, RunAborted, RunCompleted, TestFailed}
@@ -39,9 +38,9 @@ object RunITTests {
       _ <-
         if (exists) Success(())
         else {
-          val jarUrl = s"s3://support-workers-dist/support/${stage}/it-tests/support-workers-it.jar"
+          val jarUrl = S3Location("support-workers-dist", s"support/${stage}/it-tests/support-workers-it.jar")
           log(s"getting s3 file: $jarUrl")
-          copyJar(new AmazonS3URI(jarUrl))
+          copyJar(jarUrl)
         }
       a = Array(
         "-R",
@@ -66,10 +65,10 @@ object RunITTests {
     }
   }
 
-  def copyJar(request: AmazonS3URI): Try[Unit] =
-    AwsS3Client.withStream { is =>
+  private def copyJar(uri: S3Location): Try[Unit] =
+    AwsS3Client.withStream(uri) { is =>
       Try(Files.copy(is, new File(tempJar).toPath)).map(_ => ())
-    }(request)
+    }
 
 }
 
