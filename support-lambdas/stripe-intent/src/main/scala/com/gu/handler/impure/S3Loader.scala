@@ -1,30 +1,12 @@
 package com.gu.handler.impure
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.auth.{
-  AWSCredentialsProviderChain,
-  EnvironmentVariableCredentialsProvider,
-  InstanceProfileCredentialsProvider,
-}
-import com.amazonaws.services.s3.AmazonS3URI
 import com.gu.aws.AwsS3Client
+import com.gu.aws.AwsS3Client.S3Location
 import com.gu.monitoring.SafeLogging
 import com.typesafe.config.{Config, ConfigFactory}
 
-object Aws {
-
-  val ProfileName = "membership"
-
-  lazy val CredentialsProvider = new AWSCredentialsProviderChain(
-    new ProfileCredentialsProvider(ProfileName),
-    new InstanceProfileCredentialsProvider(false),
-    new EnvironmentVariableCredentialsProvider(),
-  )
-
-}
-
 object S3Loader extends SafeLogging {
-  def load(uri: AmazonS3URI): Config = {
+  def load(uri: S3Location): Config = {
     logger.info(s"Loading config from S3 from $uri")
     AwsS3Client
       .fetchAsString(uri)

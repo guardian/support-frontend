@@ -3,7 +3,6 @@ package admin.settings
 import java.io.FileNotFoundException
 import java.nio.file.{Files, Paths}
 import cats.implicits._
-import com.amazonaws.services.s3.AmazonS3URI
 import com.gu.aws.AwsS3Client
 import com.gu.support.config.Stage
 import com.gu.support.encoding.Codec
@@ -18,6 +17,7 @@ import scala.io.Source
 import scala.util.Try
 
 import AmountsTests._ // intellij doesn't think this is needed, but it is
+import com.gu.aws.AwsS3Client.S3Location
 
 case class AllSettings(
     switches: Switches,
@@ -39,7 +39,7 @@ object Settings {
   def fromS3[T: Decoder](source: SettingsSource.S3)(implicit s3: AwsS3Client): Either[Throwable, T] =
     for {
       buf <-
-        s3.fetchAsString(new AmazonS3URI("s3://" + source.bucket + "/" + source.key))
+        s3.fetchAsString(S3Location(source.bucket, source.key))
           .toEither
           .leftMap(ex => new RuntimeException(s"couldn't getObject content for source: $source", ex))
       settings <- decode[T](buf)

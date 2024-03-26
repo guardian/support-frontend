@@ -3,7 +3,7 @@ package com.gu.support.acquisitions.eventbridge
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.eventbridge.model.{PutEventsRequest, PutEventsRequestEntry}
 import com.amazonaws.services.eventbridge.{AmazonEventBridge, AmazonEventBridgeClient}
-import com.gu.aws.CredentialsProvider
+import com.gu.aws.CredentialsProviderDEPRECATEDV1
 import com.gu.monitoring.SafeLogging
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 import com.gu.support.config.Stage
@@ -64,7 +64,7 @@ object AcquisitionsEventBusService {
   lazy val eventBridgeClient = AmazonEventBridgeClient
     .builder()
     .withRegion(Regions.EU_WEST_1)
-    .withCredentials(CredentialsProvider)
+    .withCredentials(CredentialsProviderDEPRECATEDV1)
     .build
 
   /** @param source

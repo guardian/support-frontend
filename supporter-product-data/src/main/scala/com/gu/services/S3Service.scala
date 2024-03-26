@@ -4,7 +4,7 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.model.{GetObjectRequest, ObjectMetadata, PutObjectRequest}
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder
-import com.gu.aws.CredentialsProvider
+import com.gu.aws.CredentialsProviderDEPRECATEDV1
 import com.gu.supporterdata.model.Stage
 import com.typesafe.scalalogging.StrictLogging
 
@@ -13,7 +13,7 @@ import java.io.InputStream
 object S3Service extends StrictLogging {
   val s3Client = AmazonS3ClientBuilder.standard
     .withRegion(Regions.EU_WEST_1)
-    .withCredentials(CredentialsProvider)
+    .withCredentials(CredentialsProviderDEPRECATEDV1)
     .build
   val transferManager = TransferManagerBuilder.standard
     .withS3Client(s3Client)
