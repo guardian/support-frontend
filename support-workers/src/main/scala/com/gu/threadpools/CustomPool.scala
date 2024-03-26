@@ -5,6 +5,7 @@ import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
 
 object CustomPool {
 
-  implicit val executionContext: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(4))
+  implicit val executionContext: ExecutionContextExecutor =
+    ExecutionContext.fromExecutor(Executors.newFixedThreadPool(4))
 
 }
