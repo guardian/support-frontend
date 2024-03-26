@@ -33,7 +33,7 @@ const testDetailsPromo = [
 		tier: 2,
 		frequency: 'Monthly',
 		promoCode: 'PLAYWRIGHT_TEST_SPLUS_MONTHLY',
-		expectedPromoText: '£8/month for the first 3 months, then £10/month',
+		expectedPromoText: '£8/month for 3 months, then £10/month',
 		/** This looks a little odd as it is searching for the original price struck out with the promo price */
 		expectedCheckoutTotalText: '£10 £8/month',
 		expectedCheckoutButtonText: 'Pay £8 per month',
