@@ -222,8 +222,9 @@ export function ThreeTierLanding(): JSX.Element {
 		(state) => state.common.internationalisation,
 	);
 
-	const tierCards =
-		countryGroupId === UnitedStates ? tierCardsTote : tierCardsNoTote;
+	const tierCards = abParticipations.additionalBenefits
+		? tierCardsTote
+		: tierCardsNoTote;
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
@@ -551,7 +552,7 @@ export function ThreeTierLanding(): JSX.Element {
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
-				{countryGroupId === UnitedStates && (
+				{!!abParticipations.additionalBenefits && (
 					<ToteTsAndCs
 						currency={currencies[currencyId].glyph}
 						toteCostMonthly={
