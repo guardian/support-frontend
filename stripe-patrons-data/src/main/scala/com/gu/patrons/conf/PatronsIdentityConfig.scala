@@ -8,7 +8,7 @@ case class PatronsIdentityConfig(apiUrl: String, apiClientToken: String)
 
 object PatronsIdentityConfig extends ConfigService {
   def fromParameterStoreSync(stage: Stage) = {
-    SafeLogger.info(s"Loading Identity config")
+    logger.info(s"Loading Identity config")
     val params = ParameterStoreService(stage).getParametersByPathSync("identity-config")
     PatronsIdentityConfig(
       findParameterOrThrow("api-url", params),

@@ -3,32 +3,19 @@ package utils
 import admin.settings.{RecurringPaymentMethodSwitches, SubscriptionsPaymentMethodSwitches, Switches}
 import com.gu.i18n.Currency.GBP
 import com.gu.i18n.{Country, CountryGroup, Currency}
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import com.gu.support.abtests.BenefitsTest.isValidBenefitsTestPurchase
-import com.gu.support.acquisitions.AbTest
-import com.gu.support.catalog.{
-  Collection,
-  Domestic,
-  FulfilmentOptions,
-  NationalDelivery,
-  HomeDelivery,
-  NoFulfilmentOptions,
-  RestOfWorld,
-}
-import com.gu.support.paperround.PaperRoundAPI
+import com.gu.support.catalog.{Contribution, DigitalPack, GuardianWeekly, Paper, SupporterPlus, _}
 import com.gu.support.paperround.CoverageEndpoint.{CO, RequestBody}
+import com.gu.support.paperround.{AgentId, PaperRoundAPI}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
-import java.nio.charset.Charset
 import services.stepfunctions.CreateSupportWorkersRequest
 import services.stepfunctions.CreateSupportWorkersRequest.GiftRecipientRequest
 import utils.CheckoutValidationRules._
 
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext
-import com.gu.support.paperround.AgentId
+import scala.concurrent.{ExecutionContext, Future}
 
 object CheckoutValidationRules {
 
@@ -56,7 +43,7 @@ object CheckoutValidationRules {
       if (switches.paypal.isOn) Valid else Invalid("Invalid Payment Method")
     case Left(_: DirectDebitPaymentFields) =>
       if (switches.directDebit.isOn) Valid else Invalid("Invalid Payment Method")
-    case Left(_: StripePaymentMethodPaymentFields) =>
+    case Left(_: StripePaymentFields) =>
       if (switches.creditCard.isOn) Valid else Invalid("Invalid Payment Method")
     case Left(_) => Invalid("Invalid Payment Method")
     case Right(_) => Valid
@@ -72,9 +59,7 @@ object CheckoutValidationRules {
       if (switches.directDebit.isOn) Valid else Invalid("Invalid Payment Method")
     case Left(_: SepaPaymentFields) =>
       if (switches.sepa.isOn) Valid else Invalid("Invalid Payment Method")
-    case Left(_: StripeSourcePaymentFields) =>
-      if (switches.stripe.isOn) Valid else Invalid("Invalid Payment Method")
-    case Left(s: StripePaymentMethodPaymentFields) =>
+    case Left(s: StripePaymentFields) =>
       s.stripePaymentType match {
         case Some(StripePaymentType.StripeApplePay) =>
           if (switches.stripeApplePay.isOn) Valid else Invalid("Invalid Payment Method")
@@ -230,9 +215,7 @@ object PaidProductValidation {
       directDebitDetails.accountHolderName.nonEmpty.otherwise("DD account name missing") and
         directDebitDetails.accountNumber.nonEmpty.otherwise("DD account number missing") and
         directDebitDetails.sortCode.nonEmpty.otherwise("DD sort code missing")
-    case _: StripePaymentMethodPaymentFields => Valid // already validated in PaymentMethodId.apply
-    case stripeDetails: StripeSourcePaymentFields =>
-      stripeDetails.stripeToken.nonEmpty.otherwise("stripe token missing")
+    case _: StripePaymentFields => Valid // already validated in PaymentMethodId.apply
     case payPalDetails: PayPalPaymentFields => payPalDetails.baid.nonEmpty.otherwise("paypal BAID missing")
     case existingDetails: ExistingPaymentFields =>
       existingDetails.billingAccountId.nonEmpty.otherwise("existing billing account id missing")
@@ -375,7 +358,7 @@ object GuardianWeeklyValidation {
 
 }
 
-object PaperValidation {
+object PaperValidation extends SafeLogging {
 
   import AddressAndCurrencyValidationRules._
 
@@ -436,7 +419,7 @@ object PaperValidation {
           response.data.status match {
             case CO if response.data.agents.map(_.agentId).contains(agent) => Valid
             case _ =>
-              SafeLogger.error(
+              logger.error(
                 scrub"User’s postcode $postcode wasn’t covered by their chosen delivery agent $agent: PaperRound response was $response",
               )
               Invalid(

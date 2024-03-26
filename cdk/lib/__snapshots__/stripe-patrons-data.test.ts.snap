@@ -584,7 +584,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "java11",
+        "Runtime": "java21",
         "SnapStart": {
           "ApplyOn": "PublishedVersions",
         },
@@ -621,7 +621,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "StripePatronsDataPRODCurrentVersion700541B42effd2f99f91df5bb62353bc4f5861fb",
+            "StripePatronsDataPRODCurrentVersion700541B465621c82ee6833a6ab679e7e10d9ad5e",
             "Version",
           ],
         },
@@ -629,7 +629,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "StripePatronsDataPRODCurrentVersion700541B42effd2f99f91df5bb62353bc4f5861fb": {
+    "StripePatronsDataPRODCurrentVersion700541B465621c82ee6833a6ab679e7e10d9ad5e": {
       "Properties": {
         "FunctionName": {
           "Ref": "StripePatronsDataPROD61F45521",
@@ -968,7 +968,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "java11",
+        "Runtime": "java21",
         "SnapStart": {
           "ApplyOn": "PublishedVersions",
         },
@@ -1005,7 +1005,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "stripepatronsdatacancelledCurrentVersion23EC801E668c829e508d52168af15fd98d6b51b2",
+            "stripepatronsdatacancelledCurrentVersion23EC801Eb15ada947f2b1c050fce4ce19ae71fa6",
             "Version",
           ],
         },
@@ -1013,7 +1013,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "stripepatronsdatacancelledCurrentVersion23EC801E668c829e508d52168af15fd98d6b51b2": {
+    "stripepatronsdatacancelledCurrentVersion23EC801Eb15ada947f2b1c050fce4ce19ae71fa6": {
       "Properties": {
         "FunctionName": {
           "Ref": "stripepatronsdatacancelled2E3CED96",
@@ -1234,7 +1234,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "java11",
+        "Runtime": "java21",
         "SnapStart": {
           "ApplyOn": "PublishedVersions",
         },
@@ -1271,7 +1271,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
         },
         "FunctionVersion": {
           "Fn::GetAtt": [
-            "stripepatronsdatasignupCurrentVersionCB0F0BAAee23f55eebd2989f259cf31bd84411f7",
+            "stripepatronsdatasignupCurrentVersionCB0F0BAAed955197ca6426d2357b69ebab143a5f",
             "Version",
           ],
         },
@@ -1279,7 +1279,7 @@ exports[`The Stripe patrons data stack matches the snapshot 1`] = `
       },
       "Type": "AWS::Lambda::Alias",
     },
-    "stripepatronsdatasignupCurrentVersionCB0F0BAAee23f55eebd2989f259cf31bd84411f7": {
+    "stripepatronsdatasignupCurrentVersionCB0F0BAAed955197ca6426d2357b69ebab143a5f": {
       "Properties": {
         "FunctionName": {
           "Ref": "stripepatronsdatasignup4E7F0A3F",

@@ -1,8 +1,7 @@
 package com.gu.lambdas
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
-import com.gu.monitoring.SafeLogger
-import com.typesafe.scalalogging.StrictLogging
+import com.gu.monitoring.SafeLogging
 import io.circe.parser.decode
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
@@ -17,7 +16,8 @@ abstract class Handler[IN, OUT](implicit
     decoder: Decoder[IN],
     encoder: Encoder[OUT],
     ec: ExecutionContext,
-) extends RequestStreamHandler {
+) extends RequestStreamHandler
+    with SafeLogging {
 
   override def handleRequest(is: InputStream, os: OutputStream, context: Context): Unit =
     Await.result(
@@ -40,11 +40,11 @@ abstract class Handler[IN, OUT](implicit
 
 }
 
-object StreamHandler {
+object StreamHandler extends SafeLogging {
   def fromStream[T](is: InputStream)(implicit decoder: Decoder[T]): Try[T] = {
     val triedT = Try {
       val body = Source.fromInputStream(is).mkString
-      SafeLogger.info(s"Lambda input: $body")
+      logger.info(s"Lambda input: $body")
       body
     }.flatMap(decode[T](_).toTry)
     is.close()

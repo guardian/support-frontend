@@ -74,6 +74,7 @@ import {
 } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import './weeklyCheckout.scss';
+import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 
 // ----- Styles ----- //
 const marginBottom = css`
@@ -139,6 +140,7 @@ function mapDispatchToProps() {
 				}
 			},
 		setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
+		setStripePublicKey,
 	};
 }
 
@@ -417,6 +419,9 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 							validateForm={props.validateForm}
 							buttonText="Pay now"
 							csrf={props.csrf}
+							setStripePublicKey={(key: string) =>
+								props.setStripePublicKey(key)
+							}
 						/>
 					</FormSectionHiddenUntilSelected>
 					<FormSectionHiddenUntilSelected

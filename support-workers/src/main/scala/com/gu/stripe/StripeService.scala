@@ -4,51 +4,44 @@ import com.gu.i18n.Currency
 import com.gu.i18n.Currency.AUD
 import com.gu.okhttp.RequestRunners._
 import com.gu.rest.WebServiceHelper
-import com.gu.stripe.Stripe._
-import io.circe.syntax._
 import com.gu.support.config.StripeConfig
-import com.gu.support.encoding.Codec
-import com.gu.support.workers.exceptions.{RetryException, RetryLimited, RetryNone, RetryUnlimited}
-import com.gu.support.zuora.api.{
-  PaymentGateway,
-  StripeGatewayAUD,
-  StripeGatewayDefault,
-  StripeGatewayPaymentIntentsAUD,
-  StripeGatewayPaymentIntentsDefault,
-}
-import io.circe.{Decoder, Json}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import com.gu.support.workers.exceptions.{RetryException, RetryLimited, RetryNone, RetryUnlimited}
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.syntax._
-import io.circe.{Decoder, Encoder, Json}
-import scala.concurrent.{ExecutionContext, Future}
+import com.gu.support.workers.lambdas.StateNotValidException
+import com.gu.support.workers.{StripePublicKey, StripeSecretKey}
+import com.gu.support.zuora.api.{PaymentGateway, StripeGatewayPaymentIntentsAUD, StripeGatewayPaymentIntentsDefault}
+import com.typesafe.scalalogging.StrictLogging
+import io.circe.Decoder
+
+import scala.concurrent.Future
 import scala.reflect.ClassTag
 
-class StripeService(val config: StripeConfig, client: FutureHttpClient, baseUrl: String = "https://api.stripe.com/v1")(
-    implicit ec: ExecutionContext,
-) extends WebServiceHelper[StripeError] {
+class StripeService(val config: StripeConfig, client: FutureHttpClient, baseUrl: String = "https://api.stripe.com/v1")
+    extends WebServiceHelper[StripeError] {
 
   // Stripe URL is the same in all environments
   val wsUrl = baseUrl
   val httpClient: FutureHttpClient = client
 
-  def withCurrency(currency: Currency): StripeServiceForCurrency = new StripeServiceForCurrency(this, currency)
+  def withCurrency(currency: Currency): StripeServiceForCurrency = {
+    logger.warn(s"DEPRECATED FALLBACK - using currency $currency to determine stripe gateway")
+    val gateway = if (currency == AUD) StripeGatewayPaymentIntentsAUD else StripeGatewayPaymentIntentsDefault
+    val stripeAccountConfig = config.forCurrency(Some(currency)).secretKey
+    new StripeServiceForCurrency(this, stripeAccountConfig, gateway)
+  }
+
+  def withPublicKey(stripePublicKey: StripePublicKey): StripeServiceForCurrency = {
+    val (stripeSecretKey, gateway) = config
+      .forPublicKey(stripePublicKey)
+      .getOrElse(throw StateNotValidException("not a known public key: " + stripePublicKey))
+    new StripeServiceForCurrency(this, stripeSecretKey, gateway)
+  }
 
 }
 
-object StripeServiceForCurrency {
-
-  def chargeGateway(currency: Currency): PaymentGateway =
-    if (currency == AUD) StripeGatewayAUD else StripeGatewayDefault
-
-  def paymentIntentGateway(currency: Currency): PaymentGateway =
-    if (currency == AUD) StripeGatewayPaymentIntentsAUD else StripeGatewayPaymentIntentsDefault
-
-}
-
-class StripeServiceForCurrency(val stripeService: StripeService, currency: Currency) {
-  import stripeService._
+class StripeServiceForCurrency(
+    stripeService: StripeService,
+    stripeSecretKey: StripeSecretKey,
+    val paymentIntentGateway: PaymentGateway,
+) {
 
   def get[A](
       endpoint: String,
@@ -62,17 +55,13 @@ class StripeServiceForCurrency(val stripeService: StripeService, currency: Curre
     stripeService.postForm[A](endpoint, data, getHeaders())
   }
 
-  private def getHeaders() =
-    config.version.foldLeft(getAuthorizationHeader()) { case (map, version) =>
-      map + ("Stripe-Version" -> version)
-    }
-
-  private def getAuthorizationHeader() =
-    Map("Authorization" -> s"Bearer ${config.forCurrency(Some(currency)).secretKey}")
+  private def getHeaders(): Map[String, String] = {
+    val authorizationHeader = "Authorization" -> s"Bearer ${stripeSecretKey.secret}"
+    val versionHeader = stripeService.config.version.map("Stripe-Version" -> _)
+    List(Some(authorizationHeader), versionHeader).flatten.toMap
+  }
 
   val createCustomerFromPaymentMethod = com.gu.stripe.createCustomerFromPaymentMethod.apply(this) _
-
-  val createCustomerFromToken = com.gu.stripe.createCustomerFromToken.apply(this) _
 
   val getPaymentMethod = com.gu.stripe.getPaymentMethod.apply(this) _
 

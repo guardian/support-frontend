@@ -2,16 +2,15 @@ package controllers
 
 import actions.CustomActionBuilders
 import cats.implicits._
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import config.Configuration.IdentityUrl
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 import play.api.libs.circe.Circe
 import play.api.mvc._
-import services.IdentityService
 import services.GetUserTypeError._
+import services.IdentityService
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -24,14 +23,15 @@ class IdentityController(
     warn: () => Try[Unit],
 )(implicit ec: ExecutionContext)
     extends AbstractController(components)
-    with Circe {
+    with Circe
+    with SafeLogging {
 
   import actionRefiners._
 
   def warnAndReturn(): Status =
     warn().fold(
       { t =>
-        SafeLogger.error(scrub"failed to send metrics", t)
+        logger.error(scrub"failed to send metrics", t)
         InternalServerError
       },
       _ => NotFound,
@@ -42,7 +42,7 @@ class IdentityController(
       val result = identityService.sendConsentPreferencesEmail(request.body.email)
       result.map { res =>
         if (res) {
-          SafeLogger.info(s"Successfully sent consents preferences email for ${request.body.email}")
+          logger.info(s"Successfully sent consents preferences email for ${request.body.email}")
           Ok
         } else {
           warnAndReturn()
@@ -52,7 +52,7 @@ class IdentityController(
 
   def getUserType(maybeEmail: Option[String]): Action[AnyContent] = PrivateAction.async { implicit request =>
     maybeEmail.fold {
-      SafeLogger.error(scrub"No email provided")
+      logger.error(scrub"No email provided")
       Future.successful(BadRequest("No email provided"))
     } { email =>
       identityService
@@ -61,24 +61,24 @@ class IdentityController(
           _ match {
             case GotErrorResponse(response) =>
               if (response.status >= 400 && response.status < 500) {
-                SafeLogger.warn(s"4xx error when retrieving user type for $email: ${response.body}")
+                logger.warn(s"4xx error when retrieving user type for $email: ${response.body}")
                 BadRequest(response.body)
               } else {
-                SafeLogger.error(scrub"Failed to retrieve user type for $email: ${response.body}")
+                logger.error(scrub"Failed to retrieve user type for $email: ${response.body}")
                 InternalServerError
               }
             case CallFailed(err) => {
-              SafeLogger.error(scrub"Failed to retrieve user type for $email: $err")
+              logger.error(scrub"Failed to retrieve user type for $email: $err")
               InternalServerError
             }
             case DecodeFailed(decodeErrors) => {
-              SafeLogger.error(scrub"Failed to retrieve user type for $email: ${decodeErrors.mkString(",")}")
+              logger.error(scrub"Failed to retrieve user type for $email: ${decodeErrors.mkString(",")}")
               InternalServerError
             }
           },
           response => {
-            SafeLogger.info(s"Successfully retrieved user type for $email")
-            SafeLogger.info(s"USERTYPE: $response")
+            logger.info(s"Successfully retrieved user type for $email")
+            logger.info(s"USERTYPE: $response")
             Ok(response.asJson)
           },
         )
@@ -91,12 +91,12 @@ class IdentityController(
         .createSignInToken(request.body.email)
         .fold(
           err => {
-            SafeLogger.error(scrub"Failed to create a sign in token for ${request.body.email}: ${err.toString}")
+            logger.error(scrub"Failed to create a sign in token for ${request.body.email}: ${err.toString}")
             warnAndReturn()
           },
           response => {
             val signInUrl = s"${identityUrl.value}/signin?encryptedEmail=${response.encryptedEmail}"
-            SafeLogger.info(s"Successfully created a sign in token for ${request.body.email}")
+            logger.info(s"Successfully created a sign in token for ${request.body.email}")
             Ok(CreateSignInLinkResponse(signInUrl).asJson)
           },
         )

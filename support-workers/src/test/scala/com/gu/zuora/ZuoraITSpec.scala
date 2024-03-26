@@ -8,7 +8,7 @@ import com.gu.support.config.Stages
 import com.gu.support.redemptions.RedemptionCode
 import com.gu.support.workers.{GetSubscriptionWithCurrentRequestId, IdentityId}
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraErrorResponse}
-import com.gu.support.zuora.api.{PreviewSubscribeRequest, SubscribeRequest}
+import com.gu.support.zuora.api.{PreviewSubscribeRequest, StripeGatewayPaymentIntentsAUD, SubscribeRequest}
 import com.gu.test.tags.annotations.IntegrationTest
 import com.gu.zuora.Fixtures._
 import org.joda.time.{DateTime, DateTimeZone}
@@ -152,7 +152,9 @@ class ZuoraITSpec extends AsyncFlatSpec with Matchers {
 
   it should "work for €Euro contributions" in doRequest(Right(creditCardSubscriptionRequest(EUR)))
 
-  it should "work for AUD contributions" in doRequest(Right(creditCardSubscriptionRequest(AUD)))
+  it should "work for AUD contributions" in doRequest(
+    Right(creditCardSubscriptionRequest(AUD, StripeGatewayPaymentIntentsAUD)),
+  )
 
   it should "work with Direct Debit" in doRequest(Right(directDebitSubscriptionRequest))
 

@@ -1,11 +1,12 @@
 import { css } from '@emotion/react';
-import { body, from, space, titlepiece } from '@guardian/source-foundations';
+import { body, from, space } from '@guardian/source-foundations';
 import type { ContributionType } from 'helpers/contributions';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { type IsoCurrency } from 'helpers/internationalisation/currency';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
 import DirectDebitMessage from './directDebitMessage';
 import Heading from './heading';
-import Subheading from './subheading';
+import Subheading, { ToteHeading } from './subheading';
 
 export const header = css`
 	background: white;
@@ -14,14 +15,6 @@ export const header = css`
 
 	${from.tablet} {
 		background: none;
-	}
-`;
-
-export const headerTitleText = css`
-	${titlepiece.small()};
-	font-size: 24px;
-	${from.tablet} {
-		font-size: 40px;
 	}
 `;
 
@@ -44,6 +37,8 @@ type ThankYouHeaderProps = {
 	amountIsAboveThreshold: boolean;
 	isSignedIn: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
+	promotion?: Promotion;
+	showTote?: boolean;
 };
 
 function ThankYouHeader({
@@ -56,18 +51,20 @@ function ThankYouHeader({
 	amountIsAboveThreshold,
 	isSignedIn,
 	userTypeFromIdentityResponse,
+	showTote,
+	promotion,
 }: ThankYouHeaderProps): JSX.Element {
 	return (
 		<header css={header}>
-			<h1 css={headerTitleText}>
-				<Heading
-					name={name}
-					isOneOffPayPal={isOneOffPayPal}
-					amount={amount}
-					currency={currency}
-					contributionType={contributionType}
-				/>
-			</h1>
+			<Heading
+				name={name}
+				isOneOffPayPal={isOneOffPayPal}
+				amount={amount}
+				promotion={promotion}
+				currency={currency}
+				contributionType={contributionType}
+			/>
+
 			<p css={headerSupportingText}>
 				{showDirectDebitMessage && <DirectDebitMessage />}
 				<Subheading
@@ -77,6 +74,11 @@ function ThankYouHeader({
 					userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 				/>
 			</p>
+			{showTote && (
+				<p css={headerSupportingText}>
+					<ToteHeading />
+				</p>
+			)}
 		</header>
 	);
 }

@@ -4,8 +4,7 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.eventbridge.model.{PutEventsRequest, PutEventsRequestEntry}
 import com.amazonaws.services.eventbridge.{AmazonEventBridge, AmazonEventBridgeClient}
 import com.gu.aws.CredentialsProvider
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger.Sanitizer
+import com.gu.monitoring.SafeLogging
 import com.gu.support.acquisitions.models.AcquisitionDataRow
 import com.gu.support.config.Stage
 import com.gu.support.config.Stages.CODE
@@ -17,12 +16,12 @@ import java.util.Date
 import scala.concurrent.Promise
 import scala.jdk.CollectionConverters.SeqHasAsJava
 
-class AcquisitionsEventBusService(source: String, stage: Stage, client: AmazonEventBridge) {
+class AcquisitionsEventBusService(source: String, stage: Stage, client: AmazonEventBridge) extends SafeLogging {
   val eventBusName = s"acquisitions-bus-${stage.toString}"
   val detailType = "AcquisitionsEvent"
   def putAcquisitionEvent(acquisition: AcquisitionDataRow) = {
     val acquisitionJson = acquisition.asJson
-    SafeLogger.info(s"Attempting to send event ${acquisitionJson.spaces2}")
+    logger.info(s"Attempting to send event ${acquisitionJson.spaces2}")
     val entry = new PutEventsRequestEntry
     entry.setEventBusName(eventBusName)
     entry.setSource(source)
@@ -40,7 +39,7 @@ class AcquisitionsEventBusService(source: String, stage: Stage, client: AmazonEv
         // We only ever send one event at a time
         val failureMessage = result.getEntries.get(0).getErrorMessage
         val errorMessage = s"There was failure writing ${acquisitionJson.spaces2} to Eventbridge: $failureMessage"
-        SafeLogger.warn(s"$errorMessage")
+        logger.warn(s"$errorMessage")
         promise.success(Left(errorMessage))
       } else {
         promise.success(Right(()))
@@ -48,7 +47,7 @@ class AcquisitionsEventBusService(source: String, stage: Stage, client: AmazonEv
     } catch {
       case e: SdkException =>
         val errorMessage = s"There was an exception writing ${acquisitionJson.spaces2} to Eventbridge: ${e.getMessage}"
-        SafeLogger.error(scrub"$errorMessage", e)
+        logger.error(scrub"$errorMessage", e)
         promise.success(Left(errorMessage))
     }
     promise.future

@@ -60,7 +60,7 @@ class ZuoraGiftService(val config: ZuoraConfig, stage: Stage, client: FutureHttp
       putJson[ZuoraSuccessOrFailureResponse](s"subscriptions/${subscriptionId}", requestData.asJson, authHeaders)
     response.transform {
       case Success(successfulResponse) if successfulResponse.success =>
-        SafeLogger.info(
+        logger.info(
           s"Successfully updated gifteeIdentityId on Digital Subscription gift for user $gifteeIdentityId",
         )
         Success(successfulResponse)

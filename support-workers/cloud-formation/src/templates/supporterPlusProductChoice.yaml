@@ -5,6 +5,8 @@
     StringEquals: {{currency}}
   - Variable: $.state.product.billingPeriod
     StringEquals: {{billingPeriod}}
+  - Variable: $.state.promoCode
+    StringEquals: {{promoCode}}
   {{#if fulfilmentOptions}}
   - Variable: $.state.product.fulfilmentOptions
     StringEquals: {{fulfilmentOptions}}
