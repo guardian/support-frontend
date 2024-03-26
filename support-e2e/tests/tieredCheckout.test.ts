@@ -28,9 +28,29 @@ const testsDetails: TestDetails[] = [
 	},
 ];
 
-const testDetailsPromo: TestDetails[] = [
-	{ tier: 2, frequency: 'Monthly' },
-	{ tier: 2, frequency: 'Annual' },
+const testDetailsPromo = [
+	{
+		tier: 2,
+		frequency: 'Monthly',
+		promoCode: 'PLAYWRIGHT_TEST_SPLUS_MONTHLY',
+		expectedPromoText: '£8/month for 3 months, then £10/month',
+		/** This looks a little odd as it is searching for the original price struck out with the promo price */
+		expectedCheckoutTotalText: '£10 £8/month',
+		expectedCheckoutButtonText: 'Pay £8 per month',
+		expectedThankYouText:
+			"You'll pay £8/month for the first 3 months, then £10/month afterwards unless you cancel.",
+	},
+	{
+		tier: 2,
+		frequency: 'Annual',
+		promoCode: 'PLAYWRIGHT_TEST_SPLUS_ANNUAL',
+		expectedPromoText: '£76/year for the first year, then £95/year',
+		/** This looks a little odd as it is searching for the original price struck out with the promo price */
+		expectedCheckoutTotalText: '£95 £76/year',
+		expectedCheckoutButtonText: 'Pay £76 per year',
+		expectedThankYouText:
+			"You'll pay £76/year for the first year, then £95/year afterwards unless you cancel.",
+	},
 ];
 
 afterEachTasks(test);
@@ -111,10 +131,11 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 
 test.describe('Subscribe (S+) incl PromoCode via the Tiered checkout', () => {
 	testDetailsPromo.forEach((testDetails) => {
-		test(`${testDetails.frequency} (S+) Subscription incl PromoCode at Tier-2 with Credit/Debit card - UK`, async ({
+		test(`${testDetails.frequency} (S+) Subscription incl PromoCode at Tier-${testDetails.tier} with Credit/Debit card - UK`, async ({
 			context,
 			baseURL,
 		}) => {
+			// Landing
 			const page = await context.newPage();
 			const testFirstName = firstName();
 			const testLastName = lastName();
@@ -123,35 +144,34 @@ test.describe('Subscribe (S+) incl PromoCode via the Tiered checkout', () => {
 				page,
 				context,
 				baseURL,
-				`/uk/contribute?promoCode=PLAYWRIGHT_TEST_SPLUS`,
+				`/uk/contribute?promoCode=${testDetails.promoCode}`,
 			);
 			await page.getByRole('tab').getByText(testDetails.frequency).click();
 			await expect(
-				page
-					.getByText(
-						` ${
-							testDetails.frequency === `Monthly`
-								? `month for the first 3 months`
-								: `year for the first year`
-						}, then`,
-					)
-					.first(),
+				page.getByText(testDetails.expectedPromoText).first(),
 			).toBeVisible();
 			await page
 				.locator(
 					`:nth-match(button:has-text("Subscribe"), ${testDetails.tier})`,
 				)
 				.click();
+
+			// Checkout
+			await expect(
+				page.getByText(testDetails.expectedCheckoutTotalText).first(),
+			).toBeVisible();
 			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
 			await page.getByRole('radio', { name: 'Credit/Debit card' }).check();
 			await fillInCardDetails(page);
 			await checkRecaptcha(page);
-			var paymentButtonRegex = new RegExp(
-				'Pay £([0-9]+|(([0-9]+).([0-9]+))) per (year|month)',
-			);
-			await page.getByText(paymentButtonRegex).click();
+			await page.getByText(testDetails.expectedCheckoutButtonText).click();
+
+			// Thank you
+			await expect(
+				page.getByText(testDetails.expectedThankYouText).first(),
+			).toBeVisible();
 			await expect(page).toHaveURL(
-				`/uk/thankyou?promoCode=PLAYWRIGHT_TEST_SPLUS`,
+				`/uk/thankyou?promoCode=${testDetails.promoCode}`,
 				{ timeout: 600000 },
 			);
 		});

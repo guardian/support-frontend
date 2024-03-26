@@ -15,10 +15,7 @@ import type { ContributionType } from 'helpers/contributions';
 import { getAmount } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
-import {
-	countryGroups,
-	UnitedStates,
-} from 'helpers/internationalisation/countryGroup';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -105,6 +102,9 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const campaignSettings = useMemo<CampaignSettings | null>(
 		() => getCampaignSettings(campaignCode),
 		[],
+	);
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
 	);
 	const { countryId, countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -236,7 +236,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
 	const showTote =
-		countryGroupId === UnitedStates &&
+		!!abParticipations.additionalBenefits &&
 		useContributionsSelector(isSupporterPlusFromState);
 
 	return (
