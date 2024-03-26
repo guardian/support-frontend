@@ -201,13 +201,15 @@ export function ThreeTierCard({
 	const promoPriceCopy = `${currency}${promoPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	return (
-		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
+		<section
+			css={container(isRecommended, isUserSelected, isRecommendedSubdued)}
+		>
 			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
 			{isRecommended && !isUserSelected && (
 				<ThreeTierLozenge subdue={isRecommendedSubdued} title="Recommended" />
 			)}
 			<h2 css={titleCss}>{title}</h2>
-			<h3 css={priceCss(!!planCost.discount)}>
+			<p css={priceCss(!!planCost.discount)}>
 				<span css={previousPriceStrikeThrough}>{priceCopy}</span>
 				{priceCopy && ' '}
 				{promoPriceCopy}
@@ -216,7 +218,7 @@ export function ThreeTierCard({
 						{discountSummaryCopy(currency, planCost, promoCount)}
 					</span>
 				)}
-			</h3>
+			</p>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				{externalBtnLink ? (
 					<LinkButton
@@ -277,6 +279,6 @@ export function ThreeTierCard({
 				iconColor={palette.brand[500]}
 				cssOverrides={checkmarkList}
 			/>
-		</div>
+		</section>
 	);
 }
