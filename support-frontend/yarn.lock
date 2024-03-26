@@ -2223,10 +2223,10 @@
     "@typescript-eslint/eslint-plugin" "5.46.1"
     "@typescript-eslint/parser" "5.59.9"
 
-"@guardian/libs@0.0.0-canary-20240314102721":
-  version "0.0.0-canary-20240314102721"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-0.0.0-canary-20240314102721.tgz#92c6450574d5fdd0a2dc60bc446a86854c1c8eca"
-  integrity sha512-hPaXN2+QpJNwlZ7aO8I9vZhjdgkgSthoT2szC6ZKjbQCB+wBte477vac11OCYVu0WAKi+mO55SAMnXYBehLQ9A==
+"@guardian/libs@0.0.0-canary-20240325210020":
+  version "0.0.0-canary-20240325210020"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-0.0.0-canary-20240325210020.tgz#4afd7a2864709bc8ea877cf91c7b6a5c245f5eda"
+  integrity sha512-hmPR5dnKNn/Gdbr9g6vEcfhYWdGEnVzBcF5tiZrwxBvZimCT+qXtUIJezOIkqobiNKUP7X7Ih5UN33Hrk/CifQ==
 
 "@guardian/paparazzi@^0.3.1":
   version "0.3.1"
