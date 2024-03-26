@@ -10,9 +10,9 @@ addSbtPlugin(
   "org.playframework" % "sbt-plugin" % "3.0.1",
 ) // when updating major version, also update play-circe version
 
-addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.4")
+addSbtPlugin("com.github.sbt" % "sbt-digest" % "2.0.0")
 
-addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.11.0")
+addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.12.0")
 
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "2.1.1")
 
