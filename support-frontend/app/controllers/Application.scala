@@ -304,14 +304,6 @@ class Application(
       ),
     ).withSettingsSurrogateKey
   }
-
-  @deprecated("We will remove this once the data is embedded in the page")
-  def products() = NoCacheAction() { implicit request =>
-    val isTestUser = testUserService.isTestUser(request)
-    val cachedProductCatalogService = cachedProductCatalogServiceProvider.forUser(isTestUser)
-
-    Ok(cachedProductCatalogService.get().toJson)
-  }
 }
 
 object CSSElementForStage extends SafeLogging {
