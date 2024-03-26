@@ -194,7 +194,7 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val productPrices = priceSummaryServiceProvider.forUser(false).getPrices(SupporterPlus, queryPromos)
+    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
     val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
 
     views.html.contributions(
