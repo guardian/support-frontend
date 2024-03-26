@@ -8,7 +8,7 @@ import {
 	Routes,
 	useLocation,
 } from 'react-router-dom';
-import { validatePaymentConfig } from 'helpers/globalsAndSwitches/window';
+import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import { CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -23,7 +23,7 @@ import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding
 import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
-validatePaymentConfig(window.guardian);
+validateWindowGuardian(window.guardian);
 
 if (!isDetailsSupported) {
 	polyfillDetails();

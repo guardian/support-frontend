@@ -187,14 +187,15 @@ class Application(
     )
 
     val serversideTests = generateParticipations(Nil)
-    val testMode = testUserService.isTestUser(request)
+    val isTestUser = testUserService.isTestUser(request)
 
     val queryPromos =
       request.queryString
         .getOrElse("promoCode", Nil)
         .toList
 
-    val productPrices = priceSummaryServiceProvider.forUser(testMode).getPrices(SupporterPlus, queryPromos)
+    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+    val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
 
     views.html.contributions(
       title = "Support the Guardian",
@@ -221,9 +222,10 @@ class Application(
       geoData = geoData,
       shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
-      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey,
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
       productPrices = productPrices,
+      productCatalog = productCatalog,
     )
   }
 
@@ -280,6 +282,7 @@ class Application(
     val isTestUser = testUserService.isTestUser(request)
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
+    val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
 
     Ok(
       views.html.checkout(
@@ -300,16 +303,9 @@ class Application(
         paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
+        productCatalog = productCatalog,
       ),
     ).withSettingsSurrogateKey
-  }
-
-  @deprecated("We will remove this once the data is embedded in the page")
-  def products() = NoCacheAction() { implicit request =>
-    val isTestUser = testUserService.isTestUser(request)
-    val cachedProductCatalogService = cachedProductCatalogServiceProvider.forUser(isTestUser)
-
-    Ok(cachedProductCatalogService.get().toJson)
   }
 }
 
