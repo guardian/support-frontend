@@ -9,6 +9,14 @@ import {
 } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
+const supCss = css`
+	font-size: 60%;
+	vertical-align: 9px;
+	${from.tablet} {
+		font-size: 60%;
+		vertical-align: 14px;
+	}
+`;
 type MonthlyProps = {
 	amount: number;
 	isoCurrency: IsoCurrency;
@@ -36,21 +44,28 @@ function Monthly({ isoCurrency, amount, promotion, name }: MonthlyProps) {
 						currency={isoCurrency}
 					/>
 					{`/month`}
-					<sup>*</sup>
+					<sup css={supCss}>*</sup>
 				</h1>
 				<p
 					css={css`
 						margin-top: ${space[2]}px;
 					`}
 				>
-					<sup>*</sup> for {promotion.discount.durationMonths} months, then{' '}
+					<sup>*</sup> You'll pay{' '}
 					{formatAmount(
 						currencies[isoCurrency],
 						spokenCurrencies[isoCurrency],
 						amount,
 						false,
 					)}
-					{`/month`} afterwards unless you cancel.{' '}
+					/month for the first {promotion.discount.durationMonths} months, then{' '}
+					{formatAmount(
+						currencies[isoCurrency],
+						spokenCurrencies[isoCurrency],
+						amount,
+						false,
+					)}
+					/month afterwards unless you cancel.
 				</p>
 			</>
 		);
