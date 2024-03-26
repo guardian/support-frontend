@@ -2,11 +2,11 @@
 	"name": "support-e2e",
 	"version": "0.0.0",
 	"scripts": {
-		"prettier:check": "prettier --check ./",
-		"prettier:fix": "prettier --write ./",
-		"pw-browserstack-test": "RUNNING_IN_BROWSERSTACK=true playwright test --config=playwright.browserstack.config.ts",
-		"pw-local-test": "playwright test --ui --config=playwright.local.config.ts",
-		"pw-prod-test": "playwright test --ui --config=playwright.prod.config.ts"
+		"prettier-check": "prettier --check ./",
+		"prettier-fix": "prettier --write ./",
+		"test-browserstack": "RUNNING_IN_BROWSERSTACK=true playwright test --config=playwright.browserstack.config.ts",
+		"test-local": "playwright test --ui --config=playwright.local.config.ts",
+		"test-prod": "playwright test --ui --config=playwright.prod.config.ts"
 	},
 	"dependencies": {
 		"@playwright/test": "1.40.1",
