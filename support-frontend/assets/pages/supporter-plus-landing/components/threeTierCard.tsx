@@ -159,22 +159,19 @@ const discountSummaryCopy = (
 	planCost: TierPlanCosts,
 	promoCount: number,
 ) => {
-	// EXAMPLE: £16 for the first year, then £25/month
+	/* EXAMPLE:
+  £6.5/month for 6 months, then £10/month
+  £173/year for the first year, then £275/year
+  */
 	if (planCost.discount) {
-		const period =
-			planCost.discount.duration.value === 12 &&
-			planCost.discount.duration.period === 'MONTHLY'
-				? 'ANNUAL'
-				: planCost.discount.duration.period;
-		const duration =
-			planCost.discount.duration.value === 12 &&
-			planCost.discount.duration.period === 'MONTHLY'
-				? 1
-				: planCost.discount.duration.value;
+		const period = planCost.discount.duration.period;
+		const duration = planCost.discount.duration.value;
+		const singleYear =
+			period === 'ANNUAL' && duration === 1 ? ' the first ' : '';
 
 		return `${currency}${planCost.discount.price}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
-		} for the first ${duration > 1 ? duration : ''} ${
+		} for ${duration > 1 ? duration : singleYear} ${
 			recurringContributionPeriodMap[period]
 		}${duration > 1 ? 's' : ''}, then ${currency}${planCost.price}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
