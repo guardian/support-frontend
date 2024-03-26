@@ -40,7 +40,7 @@ object AwsS3Client extends AwsS3Client {
     }
 
   case class S3Location(bucket: String, key: String)
-  def parseUri(uri: String): S3Location = {
+  def parseUri(uri: String): Try[S3Location] = Try {
     val s3Uri = s3.utilities().parseUri(URI.create(uri))
     S3Location(
       s3Uri.bucket().get(), // throw if not present
@@ -53,6 +53,6 @@ trait AwsS3Client {
 
   def fetchAsString(s3Location: S3Location): Try[String]
 
-  def parseUri(uri: String): S3Location
+  def parseUri(uri: String): Try[S3Location]
 
 }
