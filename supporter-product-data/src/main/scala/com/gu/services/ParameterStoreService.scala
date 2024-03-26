@@ -11,7 +11,7 @@ import com.amazonaws.services.simplesystemsmanagement.{
   AWSSimpleSystemsManagementAsync,
   AWSSimpleSystemsManagementAsyncClientBuilder,
 }
-import com.gu.aws.{AwsAsync, CredentialsProvider}
+import com.gu.aws.{AwsAsync, CredentialsProviderDEPRECATEDV1}
 import com.gu.supporterdata.model.Stage
 
 import scala.concurrent.ExecutionContext
@@ -53,7 +53,7 @@ object ParameterStoreService {
   lazy val client = AWSSimpleSystemsManagementAsyncClientBuilder
     .standard()
     .withRegion(Regions.EU_WEST_1)
-    .withCredentials(CredentialsProvider)
+    .withCredentials(CredentialsProviderDEPRECATEDV1)
     .build()
 
   def apply(stage: Stage) = new ParameterStoreService(client, stage)

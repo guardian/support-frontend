@@ -248,7 +248,10 @@ class Application(
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {
-    Ok("healthy")
+    if (priceSummaryServiceProvider.forUser(false).getPrices(SupporterPlus, List()).isEmpty)
+      InternalServerError("no prices in catalog")
+    else
+      Ok("healthy")
   }
 
   // Remove trailing slashes so that /uk/ redirects to /uk
