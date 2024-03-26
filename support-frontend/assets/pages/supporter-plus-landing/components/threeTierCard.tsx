@@ -206,8 +206,8 @@ export function ThreeTierCard({
 			{isRecommended && !isUserSelected && (
 				<ThreeTierLozenge subdue={isRecommendedSubdued} title="Recommended" />
 			)}
-			<h3 css={titleCss}>{title}</h3>
-			<h2 css={priceCss(!!planCost.discount)}>
+			<h2 css={titleCss}>{title}</h2>
+			<h3 css={priceCss(!!planCost.discount)}>
 				<span css={previousPriceStrikeThrough}>{priceCopy}</span>
 				{priceCopy && ' '}
 				{promoPriceCopy}
@@ -216,7 +216,7 @@ export function ThreeTierCard({
 						{discountSummaryCopy(currency, planCost, promoCount)}
 					</span>
 				)}
-			</h2>
+			</h3>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				{externalBtnLink ? (
 					<LinkButton
