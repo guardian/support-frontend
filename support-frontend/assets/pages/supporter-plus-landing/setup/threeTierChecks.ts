@@ -1,7 +1,6 @@
 import type { Participations } from 'helpers/abTests/abtest';
 import { countriesAffectedByVATStatus } from 'helpers/internationalisation/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 export const threeTierCheckoutEnabled = (
 	abParticipations: Participations,
@@ -41,12 +40,4 @@ export const threeTierCheckoutEnabled = (
 		displaySupportPlusOnlyCheckout ||
 		countriesAffectedByVATStatus.includes(countryId)
 	);
-};
-
-export const additionalBenefitsEnabled = (
-	abParticipations: Participations,
-	countryGroupId: CountryGroupId,
-): boolean => {
-	const displayAdditionalBenefits = !!abParticipations.additionalBenefits;
-	return countryGroupId === 'UnitedStates' && displayAdditionalBenefits;
 };

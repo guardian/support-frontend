@@ -87,18 +87,15 @@ export const tests: Tests = {
 			{
 				id: 'control',
 			},
-			{
-				id: 'variant',
-			},
 		],
 		audiences: {
-			ALL: {
+			US: {
 				offset: 0,
 				size: 0,
 			},
 		},
 		isActive: false,
-		referrerControlled: true,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 3,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
