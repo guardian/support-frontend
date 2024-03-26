@@ -16,6 +16,7 @@ import { getAmount } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
@@ -102,6 +103,9 @@ export function SupporterPlusThankYou(): JSX.Element {
 		() => getCampaignSettings(campaignCode),
 		[],
 	);
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
+	);
 	const { countryId, countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -116,9 +120,14 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const paymentMethod = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.paymentMethod.name,
 	);
-	const { selectedAmounts, otherAmounts } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
+	const {
+		selectedAmounts,
+		otherAmounts,
+		billingPeriod,
+		fulfilmentOption,
+		productOption,
+		productPrices,
+	} = useContributionsSelector((state) => state.page.checkoutForm.product);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const contributionType = useContributionsSelector(getContributionType);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
@@ -131,6 +140,14 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const isAmountLargeDonation = amount
 		? isLargeDonation(amount, contributionType, paymentMethod)
 		: false;
+
+	const promotion = getPromotion(
+		productPrices,
+		countryId,
+		billingPeriod,
+		fulfilmentOption,
+		productOption,
+	);
 
 	useEffect(() => {
 		if (amount) {
@@ -218,6 +235,10 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
 	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
+	const showTote =
+		!!abParticipations.additionalBenefits &&
+		useContributionsSelector(isSupporterPlusFromState);
+
 	return (
 		<PageScaffold
 			header={<Header />}
@@ -240,6 +261,8 @@ export function SupporterPlusThankYou(): JSX.Element {
 							amountIsAboveThreshold={amountIsAboveThreshold}
 							isSignedIn={isSignedIn}
 							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
+							showTote={showTote}
+							promotion={promotion}
 						/>
 					</div>
 

@@ -80,7 +80,7 @@ const titleCss = css`
 	color: #606060;
 `;
 
-const price = (hasDiscountSummary: boolean) => css`
+const priceCss = (hasDiscountSummary: boolean) => css`
 	${textSans.xlarge({ fontWeight: 'bold' })};
 	position: relative;
 	margin-bottom: ${hasDiscountSummary ? '0' : `${space[4]}px`};
@@ -159,22 +159,19 @@ const discountSummaryCopy = (
 	planCost: TierPlanCosts,
 	promoCount: number,
 ) => {
-	// EXAMPLE: £16 for the first year, then £25/month
+	/* EXAMPLE:
+  £6.5/month for 6 months, then £10/month
+  £173/year for the first year, then £275/year
+  */
 	if (planCost.discount) {
-		const period =
-			planCost.discount.duration.value === 12 &&
-			planCost.discount.duration.period === 'MONTHLY'
-				? 'ANNUAL'
-				: planCost.discount.duration.period;
-		const duration =
-			planCost.discount.duration.value === 12 &&
-			planCost.discount.duration.period === 'MONTHLY'
-				? 1
-				: planCost.discount.duration.value;
+		const period = planCost.discount.duration.period;
+		const duration = planCost.discount.duration.value;
+		const singleYear =
+			period === 'ANNUAL' && duration === 1 ? ' the first ' : '';
 
 		return `${currency}${planCost.discount.price}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
-		} for the first ${duration > 1 ? duration : ''} ${
+		} for ${duration > 1 ? duration : singleYear} ${
 			recurringContributionPeriodMap[period]
 		}${duration > 1 ? 's' : ''}, then ${currency}${planCost.price}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
@@ -198,10 +195,10 @@ export function ThreeTierCard({
 	externalBtnLink,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId].glyph;
-	const currentPrice = planCost.discount?.price ?? planCost.price;
-	const previousPriceCopy =
-		!!planCost.discount && `${currency}${planCost.price}`;
-	const currentPriceCopy = `${currency}${currentPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
+	const price = planCost.price;
+	const priceCopy = !!planCost.discount && `${currency}${price}`;
+	const promoPrice = planCost.discount?.price ?? planCost.price;
+	const promoPriceCopy = `${currency}${promoPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	return (
 		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
@@ -210,10 +207,10 @@ export function ThreeTierCard({
 				<ThreeTierLozenge subdue={isRecommendedSubdued} title="Recommended" />
 			)}
 			<h3 css={titleCss}>{title}</h3>
-			<h2 css={price(!!planCost.discount)}>
-				<span css={previousPriceStrikeThrough}>{previousPriceCopy}</span>
-				{previousPriceCopy && ' '}
-				{currentPriceCopy}
+			<h2 css={priceCss(!!planCost.discount)}>
+				<span css={previousPriceStrikeThrough}>{priceCopy}</span>
+				{priceCopy && ' '}
+				{promoPriceCopy}
 				{!!planCost.discount && (
 					<span css={discountSummaryCss}>
 						{discountSummaryCopy(currency, planCost, promoCount)}
@@ -226,7 +223,7 @@ export function ThreeTierCard({
 						href={externalBtnLink}
 						cssOverrides={btnStyleOverrides}
 						onClick={() => {
-							linkCtaClickHandler(currentPrice, paymentFrequency, currencyId);
+							linkCtaClickHandler(price, paymentFrequency, currencyId);
 						}}
 						data-qm-trackable={quantumMetricButtonRef}
 					>
@@ -240,7 +237,7 @@ export function ThreeTierCard({
 						cssOverrides={btnStyleOverrides}
 						onClick={() =>
 							buttonCtaClickHandler(
-								currentPrice,
+								price,
 								cardTier,
 								paymentFrequency,
 								currencyId,

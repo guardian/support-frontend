@@ -12,6 +12,8 @@ import services.aws.{AwsAsync, CredentialsProvider}
 import services.stepfunctions.StateMachineContainer.{Response, convertErrors}
 import services.stepfunctions.StateMachineErrors.Fail
 
+import java.nio.ByteBuffer
+import java.util.Base64
 import scala.concurrent.{ExecutionContext, Future}
 import scala.jdk.CollectionConverters._
 
@@ -27,26 +29,49 @@ object Client {
 
     new Client(client, arn)
   }
+
+  def generateExecutionName(name: String, l: Long = System.nanoTime()) = {
+    val uniq = {
+      val bytes = ByteBuffer.allocate(8).putLong(l).array()
+      val encodedString = Base64.getEncoder.encodeToString(bytes)
+      encodedString.replaceAll("\\+", "_").replaceAll("/", "_").replaceAll("=", "")
+    }
+    val freeCharacters = 80 - name.length - 1 - uniq.length
+    val validName =
+      if (freeCharacters >= 0)
+        name + "-" + uniq
+      else {
+        val truncatedName = name.take(80 - 1 - uniq.length - 2)
+        truncatedName + "-" + uniq + "--"
+      }
+    validName
+  }
+
 }
 
 class Client(client: AWSStepFunctionsAsync, arn: StateMachineArn) extends SafeLogging {
 
-  private def startExecution(arn: String, input: String)(implicit
+  private def startExecution(arn: String, input: String, name: String)(implicit
       ec: ExecutionContext,
   ): Response[StartExecutionResult] = convertErrors {
-    AwsAsync(client.startExecutionAsync, new StartExecutionRequest().withStateMachineArn(arn).withInput(input))
+    val startExecutionRequest =
+      new StartExecutionRequest()
+        .withStateMachineArn(arn)
+        .withInput(input)
+        .withName(Client.generateExecutionName(name))
+    AwsAsync(client.startExecutionAsync, startExecutionRequest)
       .transform { theTry =>
         logger.info(s"state machine result: $theTry")
         theTry
       }
   }
 
-  def triggerExecution[T](input: T, isTestUser: Boolean, isExistingAccount: Boolean = false)(implicit
+  def triggerExecution[T](input: T, isTestUser: Boolean, isExistingAccount: Boolean, name: String)(implicit
       ec: ExecutionContext,
       encoder: Encoder[T],
       stateWrapper: StateWrapper,
   ): Response[StateMachineExecution] = {
-    startExecution(arn.asString, stateWrapper.wrap(input, isTestUser, isExistingAccount))
+    startExecution(arn.asString, stateWrapper.wrap(input, isTestUser, isExistingAccount), name)
       .map(StateMachineExecution.fromStartExecution)
   }
 

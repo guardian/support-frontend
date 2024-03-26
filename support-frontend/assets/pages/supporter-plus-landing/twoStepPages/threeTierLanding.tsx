@@ -40,6 +40,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import {
+	setBillingPeriod,
 	setProductType,
 	setSelectedAmount,
 } from 'helpers/redux/checkout/product/actions';
@@ -221,8 +222,9 @@ export function ThreeTierLanding(): JSX.Element {
 		(state) => state.common.internationalisation,
 	);
 
-	const tierCards =
-		countryGroupId === UnitedStates ? tierCardsTote : tierCardsNoTote;
+	const tierCards = abParticipations.additionalBenefits
+		? tierCardsTote
+		: tierCardsNoTote;
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
@@ -268,10 +270,12 @@ export function ThreeTierLanding(): JSX.Element {
 			 * coming from the one off contribution checkout
 			 */
 		}
+		dispatch(setBillingPeriod(billingPeriod));
 	}, []);
 
 	// The three tier checkout only supports monthly and annual contributions
 	const paymentFrequencies: RegularContributionType[] = ['MONTHLY', 'ANNUAL'];
+	const billingFrequencies: BillingPeriod[] = ['Monthly', 'Annual'];
 	const paymentFrequencyMap = {
 		MONTHLY: 'Monthly',
 		ANNUAL: 'Annual',
@@ -279,6 +283,7 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
 		dispatch(setProductType(paymentFrequencies[buttonIndex]));
+		dispatch(setBillingPeriod(billingFrequencies[buttonIndex]));
 	};
 
 	const handleButtonCtaClick = (
@@ -415,12 +420,6 @@ export function ThreeTierLanding(): JSX.Element {
 			cardTier !== 1
 				? promo?.promoCode ?? tierPlanCountryCharges.promoCode
 				: undefined;
-		const promoDiscountPriceTierMid =
-			cardTier === 2 ? promo?.discountedPrice : undefined;
-		const price =
-			promoDiscountPriceTierMid ??
-			tierPlanCountryCharges.discount?.price ??
-			tierPlanCountryCharges.price;
 
 		const url = cardTier === 3 ? `/subscribe/weekly/checkout?` : `checkout?`;
 		const urlParams = new URLSearchParams();
@@ -432,7 +431,7 @@ export function ThreeTierLanding(): JSX.Element {
 			urlParams.set('threeTierCreateSupporterPlusSubscription', 'true');
 			urlParams.set('period', paymentFrequencyMap[contributionType]);
 		} else {
-			urlParams.set('selected-amount', price.toString());
+			urlParams.set('selected-amount', tierPlanCountryCharges.price.toString());
 			urlParams.set('selected-contribution-type', tierPlanPeriod);
 		}
 
@@ -553,7 +552,7 @@ export function ThreeTierLanding(): JSX.Element {
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
-				{countryGroupId === UnitedStates && (
+				{!!abParticipations.additionalBenefits && (
 					<ToteTsAndCs
 						currency={currencies[currencyId].glyph}
 						toteCostMonthly={

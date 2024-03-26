@@ -179,8 +179,12 @@ class SupportWorkersClient(
           request.headers.get("X-Forwarded-For").flatMap(_.split(',').headOption).getOrElse(request.remoteAddress),
       )
       isExistingAccount = createPaymentMethodState.paymentFields.left.exists(_.isInstanceOf[ExistingPaymentFields])
+      name =
+        (if (user.isTestUser) "TestUser-" else "") +
+          createPaymentMethodState.product.describe + "-" +
+          createPaymentMethodState.paymentFields.fold(_.describe, _.getClass.getSimpleName)
       executionResult <- underlying
-        .triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount)
+        .triggerExecution(createPaymentMethodState, user.isTestUser, isExistingAccount, name)
         .bimap(
           { error =>
             logger.error(scrub"[$requestId] Failed to trigger Step Function execution for ${user.id} - $error")
