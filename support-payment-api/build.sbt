@@ -8,7 +8,7 @@ scalacOptions ++= Seq(
   "-Ymacro-annotations",
 )
 
-addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.13.2")
+addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.13.3")
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
@@ -63,7 +63,7 @@ libraryDependencies ++= Seq(
     */
   "com.sun.xml.bind" % "jaxb-core" % "2.3.0.1",
   "javax.xml.bind" % "jaxb-api" % "2.3.1",
-  "com.sun.xml.bind" % "jaxb-impl" % "2.3.1",
+  "com.sun.xml.bind" % "jaxb-impl" % "2.3.9",
 )
 
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion

@@ -4,7 +4,7 @@ import LibraryVersions._
 
 import scala.sys.process._
 
-val scalatest = "org.scalatest" %% "scalatest" % "3.2.16"
+val scalatest = "org.scalatest" %% "scalatest" % "3.2.18"
 
 lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ Seq(
   IntegrationTest / scalaSource := baseDirectory.value / "src" / "test" / "scala",
@@ -57,7 +57,7 @@ inThisBuild(
       case y =>
         val oldStrategy = (assembly / assemblyMergeStrategy).value
         oldStrategy(y)
-    }
+    },
   ),
 )
 
@@ -84,10 +84,10 @@ lazy val releaseSettings = Seq(
 )
 
 lazy val commonDependencies = Seq(
-  "com.typesafe" % "config" % "1.4.2",
+  "com.typesafe" % "config" % "1.4.3",
   scalatest % "test",
   "com.typesafe.scala-logging" % "scala-logging_2.13" % "3.9.5",
-  "ch.qos.logback" % "logback-classic" % "1.4.14",
+  "ch.qos.logback" % "logback-classic" % "1.5.3",
 )
 
 lazy val root = (project in file("."))

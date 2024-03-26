@@ -123,7 +123,8 @@ object AcquisitionDataRowBuilder {
 
   private def productTypeAndAmount(product: ProductType): (AcquisitionProduct, Option[BigDecimal]) = product match {
     case c: Contribution => (AcquisitionProduct.RecurringContribution, Some(c.amount.toDouble))
-    case s: SupporterPlus => (AcquisitionProduct.SupporterPlus, None) // we don't send S+ amount because it may be discounted
+    case s: SupporterPlus =>
+      (AcquisitionProduct.SupporterPlus, None) // we don't send S+ amount because it may be discounted
     case _: DigitalPack => (AcquisitionProduct.DigitalSubscription, None)
     case _: Paper => (AcquisitionProduct.Paper, None)
     case _: GuardianWeekly => (AcquisitionProduct.GuardianWeekly, None)

@@ -5,11 +5,11 @@ version := "1.0-SNAPSHOT"
 packageSummary := "Support Play APP"
 
 libraryDependencies ++= Seq(
-  "com.typesafe" % "config" % "1.4.2",
+  "com.typesafe" % "config" % "1.4.3",
   "com.gu" %% "simple-configuration-ssm" % "1.7.0",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
-  "io.sentry" % "sentry-logback" % "6.29.0",
+  "io.sentry" % "sentry-logback" % "6.34.0",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sts" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
@@ -26,14 +26,14 @@ libraryDependencies ++= Seq(
   "com.okta.jwt" % "okta-jwt-verifier" % oktaJwtVerifierVersion,
   "com.okta.jwt" % "okta-jwt-verifier-impl" % oktaJwtVerifierVersion % Runtime,
   "com.gu" %% "identity-test-users" % "0.8",
-  "com.google.guava" % "guava" % "32.1.1-jre",
+  "com.google.guava" % "guava" % "32.1.3-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
-  "com.gu.play-googleauth" %% "play-v30" % "3.0.6",
-  "io.github.bonigarcia" % "webdrivermanager" % "5.5.3" % "test",
+  "com.gu.play-googleauth" %% "play-v30" % "3.0.7",
+  "io.github.bonigarcia" % "webdrivermanager" % "5.7.0" % "test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
-  "com.squareup.okhttp3" % "okhttp" % "4.11.0",
+  "com.squareup.okhttp3" % "okhttp" % "4.12.0",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
-  "com.googlecode.libphonenumber" % "libphonenumber" % "8.13.20",
+  "com.googlecode.libphonenumber" % "libphonenumber" % "8.13.33",
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
@@ -44,7 +44,7 @@ libraryDependencies ++= Seq(
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
 ThisBuild / libraryDependencySchemes ++= Seq(
-  "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
+  "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always,
 )
 
 Compile / doc / sources := Seq.empty
@@ -77,11 +77,13 @@ def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
   getFiles0(rootFile)
 }
 
-val jvmParameters = Def.setting(Seq(
-  "-XX:MaxMetaspaceSize=256m",
-  s"-Xlog:gc*:/var/log/${packageName.value}/gc.log", // https://docs.azul.com/prime/Unified-GC-Logging#enabling-unified-gc-logging
-  "-XX:-OmitStackTraceInFastThrow",
-))
+val jvmParameters = Def.setting(
+  Seq(
+    "-XX:MaxMetaspaceSize=256m",
+    s"-Xlog:gc*:/var/log/${packageName.value}/gc.log", // https://docs.azul.com/prime/Unified-GC-Logging#enabling-unified-gc-logging
+    "-XX:-OmitStackTraceInFastThrow",
+  ),
+)
 val playParameters = Seq(
   "-Dpidfile.path=/dev/null", // https://www.playframework.com/documentation/3.0.x/ProductionConfiguration#Changing-the-path-of-RUNNING_PID
 )
