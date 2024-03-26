@@ -134,9 +134,9 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const isOneOffPayPal =
 		paymentMethod === PayPal && contributionType === 'ONE_OFF';
 	const isOneOff = contributionType === 'ONE_OFF';
-	const amount = isOneOffPayPal
-		? getAmountFromSessionStorage()
-		: getAmount(selectedAmounts, otherAmounts, contributionType);
+	const amount =
+		getAmountFromSessionStorage() ??
+		getAmount(selectedAmounts, otherAmounts, contributionType);
 	const isAmountLargeDonation = amount
 		? isLargeDonation(amount, contributionType, paymentMethod)
 		: false;
