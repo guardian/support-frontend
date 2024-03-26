@@ -7,7 +7,7 @@ packageSummary := "Support Play APP"
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.4.2",
   "com.gu" %% "simple-configuration-ssm" % "1.7.0",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
   "io.sentry" % "sentry-logback" % "6.29.0",
   "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
