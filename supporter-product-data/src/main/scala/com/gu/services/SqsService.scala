@@ -3,8 +3,8 @@ package com.gu.services
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder
 import com.amazonaws.services.sqs.model.{SendMessageBatchRequest, SendMessageBatchRequestEntry}
-import com.gu.aws.CredentialsProviderDEPRECATEDV1
 import com.gu.monitoring.SafeLogging
+import com.gu.services.ParameterStoreService.CredentialsProviderDEPRECATEDV1
 import com.gu.supporterdata.model.{ContributionAmount, Stage, SupporterRatePlanItem}
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
