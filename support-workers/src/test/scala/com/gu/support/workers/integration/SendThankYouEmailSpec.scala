@@ -1,7 +1,6 @@
 package com.gu.support.workers.integration
 
 import java.io.ByteArrayOutputStream
-import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices._
 import com.gu.i18n.Country
 import com.gu.i18n.Country.UK
@@ -27,7 +26,6 @@ import com.gu.support.zuora.api.ReaderType
 import com.gu.test.tags.objects.IntegrationTest
 import com.gu.threadpools.CustomPool.executionContext
 import io.circe.Json
-import io.circe.generic.auto._
 import io.circe.parser._
 import org.joda.time.{DateTime, LocalDate, Months}
 import org.mockito.ArgumentMatchers.any
@@ -42,7 +40,7 @@ class SendThankYouEmailITSpec extends AsyncLambdaSpec with MockContext {
     val outStream = new ByteArrayOutputStream()
 
     sendThankYouEmail.handleRequestFuture(wrapFixture(sendAcquisitionEventJson), outStream, context).map { _ =>
-      val result = Encoding.in[List[SendMessageResult]](outStream.toInputStream)
+      val result = Encoding.in[Unit](outStream.toInputStream)
       result.isSuccess should be(true)
     }
   }
@@ -112,11 +110,11 @@ object SendThankYouEmailManualTest {
 
   def send(eventualEF: Future[List[EmailFields]]): Unit = {
     val service = new EmailService(emailQueueName)
-    Await.ready(eventualEF.flatMap(efList => Future.sequence(efList.map(service.send))), Duration.Inf)
+    Await.ready(eventualEF.map(efList => efList.map(service.send)), Duration.Inf)
   }
   def sendSingle(ef: Future[EmailFields]): Unit = {
     val service = new EmailService(emailQueueName)
-    Await.ready(ef.flatMap(service.send), Duration.Inf)
+    Await.ready(ef.map(service.send), Duration.Inf)
   }
 }
 import com.gu.support.workers.integration.SendThankYouEmailManualTest._
