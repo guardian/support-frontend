@@ -19,7 +19,12 @@ const testsDetails: TestDetails[] = [
 	{ paymentType: 'Credit/Debit card', tier: 1, frequency: 'Monthly' },
 	{ paymentType: 'Credit/Debit card', tier: 2, frequency: 'Annual' },
 	{ paymentType: 'Direct debit', tier: 2, frequency: 'Monthly' },
-	{ paymentType: 'PayPal', tier: 2, frequency: 'Monthly' },
+	/**
+	 * PayPal is currently throwing a "to many login attempts" error, so we're
+	 * going to inactivate this test until we have a solution for it to avoid
+	 * alert numbness.
+	 */
+	// { paymentType: 'PayPal', tier: 2, frequency: 'Monthly' },
 	{
 		paymentType: 'Credit/Debit card',
 		tier: 1,
