@@ -13,7 +13,14 @@ interface TestDetails {
 
 const testsDetails: TestDetails[] = [
 	{ paymentType: 'Credit/Debit card', customAmount: '22.55' },
-	{ paymentType: 'PayPal' },
+	/**
+	 * PayPal is currently throwing a "to many login attempts" error, so we're
+	 * going to inactivate this test until we have a solution for it to avoid
+	 * alert numbness.
+	 *
+	 * TODO - re-enable this test when PayPal is fixed
+	 */
+	// { paymentType: 'PayPal' },
 ];
 
 afterEachTasks(test);

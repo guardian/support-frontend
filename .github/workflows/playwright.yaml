@@ -33,7 +33,7 @@ jobs:
         working-directory: ./support-e2e
 
       - name: Run Playwright
-        run: yarn pw-browserstack-test
+        run: yarn test-browserstack
         working-directory: ./support-e2e
 
       - name: Set outputs

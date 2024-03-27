@@ -2,12 +2,10 @@ name: Build stripe-patrons-data
 
 on:
   pull_request:
-    branches:
-      - main
+  workflow_dispatch:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   support_frontend_build:

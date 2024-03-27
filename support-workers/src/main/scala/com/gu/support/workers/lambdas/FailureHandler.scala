@@ -1,11 +1,9 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.helpers.FutureExtensions._
-import com.gu.monitoring.SafeLogger
 import com.gu.stripe.StripeError
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.CheckoutFailureReasons._
@@ -34,10 +32,11 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
         s"test_user: ${state.user.isTestUser}\n" +
         s"error: $error\n",
     )
-    sendEmail(state).whenFinished(handleError(state, error, requestInfo))
+    sendEmail(state)
+    Future.successful(handleError(state, error, requestInfo))
   }
 
-  private def sendEmail(state: FailureHandlerState): Future[SendMessageResult] = {
+  private def sendEmail(state: FailureHandlerState): Unit = {
     val emailFields = state.product match {
       case _: Contribution =>
         FailedEmailFields.contribution(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))

@@ -148,12 +148,11 @@ export function PaymentTsAndCs({
 						promotion,
 					)}
 					, you will receive the {productNameAboveThreshold} benefits on a
-					subscription basis. If you pay more than{' '}
-					{supporterPlusLegal(countryGroupId, contributionType, ' per ')}, these
-					additional amounts will be separate{' '}
-					{frequencyPlural(contributionType)} voluntary financial contributions
-					to the Guardian. The {productNameAboveThreshold} subscription and any
-					contributions will auto-renew each{' '}
+					subscription basis. If you increase your payments per{' '}
+					{frequencySingular(contributionType)}, these additional amounts will
+					be separate {frequencyPlural(contributionType)} voluntary financial
+					contributions to the Guardian. The {productNameAboveThreshold}{' '}
+					subscription and any contributions will auto-renew each{' '}
 					{frequencySingular(contributionType)}. You will be charged the
 					subscription and contribution amounts using your chosen payment method
 					at each renewal unless you cancel. You can cancel your subscription or

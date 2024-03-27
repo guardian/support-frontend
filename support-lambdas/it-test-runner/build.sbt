@@ -12,7 +12,6 @@ libraryDependencies ++= Seq(
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-cbor" % jacksonVersion,
-  "ch.qos.logback" % "logback-classic" % "1.4.14",
   "org.scalatest" %% "scalatest" % "3.2.16", // not a "Test" dependency, it's an actual one
 )
 
@@ -22,9 +21,3 @@ riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("support-lambdas/it-test-runner/cfn.yaml"), "cfn/cfn.yaml")
 assemblyJarName := s"${name.value}.jar"
-assembly / assemblyMergeStrategy := {
-  case x if x.endsWith("module-info.class") => MergeStrategy.discard
-  case y =>
-    val oldStrategy = (assembly / assemblyMergeStrategy).value
-    oldStrategy(y)
-}

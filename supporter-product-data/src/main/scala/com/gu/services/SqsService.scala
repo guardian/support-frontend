@@ -3,8 +3,8 @@ package com.gu.services
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder
 import com.amazonaws.services.sqs.model.{SendMessageBatchRequest, SendMessageBatchRequestEntry}
-import com.gu.aws.CredentialsProvider
 import com.gu.monitoring.SafeLogging
+import com.gu.services.ParameterStoreService.CredentialsProviderDEPRECATEDV1
 import com.gu.supporterdata.model.{ContributionAmount, Stage, SupporterRatePlanItem}
 import io.circe.Encoder
 import io.circe.generic.semiauto.deriveEncoder
@@ -19,7 +19,7 @@ class SqsService(queueName: String, alarmService: AlarmService)(implicit val exe
   implicit val encoder: Encoder[SupporterRatePlanItem] = deriveEncoder
   implicit val contributionAmountEncoder: Encoder[ContributionAmount] = deriveEncoder
   private val sqsClient = AmazonSQSAsyncClientBuilder.standard
-    .withCredentials(CredentialsProvider)
+    .withCredentials(CredentialsProviderDEPRECATEDV1)
     .withRegion(Regions.EU_WEST_1)
     .build()
 

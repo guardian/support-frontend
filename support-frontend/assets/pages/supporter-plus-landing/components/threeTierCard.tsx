@@ -159,22 +159,19 @@ const discountSummaryCopy = (
 	planCost: TierPlanCosts,
 	promoCount: number,
 ) => {
-	// EXAMPLE: £16 for the first year, then £25/month
+	/* EXAMPLE:
+  £6.5/month for 6 months, then £10/month
+  £173/year for the first year, then £275/year
+  */
 	if (planCost.discount) {
-		const period =
-			planCost.discount.duration.value === 12 &&
-			planCost.discount.duration.period === 'MONTHLY'
-				? 'ANNUAL'
-				: planCost.discount.duration.period;
-		const duration =
-			planCost.discount.duration.value === 12 &&
-			planCost.discount.duration.period === 'MONTHLY'
-				? 1
-				: planCost.discount.duration.value;
+		const period = planCost.discount.duration.period;
+		const duration = planCost.discount.duration.value;
+		const singleYear =
+			period === 'ANNUAL' && duration === 1 ? ' the first ' : '';
 
 		return `${currency}${planCost.discount.price}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
-		} for the first ${duration > 1 ? duration : ''} ${
+		} for ${duration > 1 ? duration : singleYear} ${
 			recurringContributionPeriodMap[period]
 		}${duration > 1 ? 's' : ''}, then ${currency}${planCost.price}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
@@ -204,13 +201,15 @@ export function ThreeTierCard({
 	const promoPriceCopy = `${currency}${promoPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	return (
-		<div css={container(isRecommended, isUserSelected, isRecommendedSubdued)}>
+		<section
+			css={container(isRecommended, isUserSelected, isRecommendedSubdued)}
+		>
 			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
 			{isRecommended && !isUserSelected && (
 				<ThreeTierLozenge subdue={isRecommendedSubdued} title="Recommended" />
 			)}
-			<h3 css={titleCss}>{title}</h3>
-			<h2 css={priceCss(!!planCost.discount)}>
+			<h2 css={titleCss}>{title}</h2>
+			<p css={priceCss(!!planCost.discount)}>
 				<span css={previousPriceStrikeThrough}>{priceCopy}</span>
 				{priceCopy && ' '}
 				{promoPriceCopy}
@@ -219,7 +218,7 @@ export function ThreeTierCard({
 						{discountSummaryCopy(currency, planCost, promoCount)}
 					</span>
 				)}
-			</h2>
+			</p>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				{externalBtnLink ? (
 					<LinkButton
@@ -280,6 +279,6 @@ export function ThreeTierCard({
 				iconColor={palette.brand[500]}
 				cssOverrides={checkmarkList}
 			/>
-		</div>
+		</section>
 	);
 }

@@ -1,36 +1,48 @@
 package com.gu.emailservices
 
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder
-import com.amazonaws.services.sqs.model.{SendMessageRequest, SendMessageResult}
-import com.gu.aws.{AwsAsync, CredentialsProvider}
+import com.gu.aws.CredentialsProvider
 import com.gu.monitoring.SafeLogging
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.sqs._
+import software.amazon.awssdk.services.sqs.model.{GetQueueUrlRequest, SendMessageRequest}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+import scala.util.{Failure, Success, Try}
 
 class EmailService(emailQueueName: String)(implicit val executionContext: ExecutionContext) extends SafeLogging {
 
-  private val sqsClient = AmazonSQSAsyncClientBuilder.standard
-    .withCredentials(CredentialsProvider)
-    .withRegion(Regions.EU_WEST_1)
+  private val sqsClient = SqsClient
+    .builder()
+    .credentialsProvider(CredentialsProvider)
+    .region(Region.EU_WEST_1)
     .build()
 
-  private val queueUrl = sqsClient.getQueueUrl(emailQueueName).getQueueUrl
+  private val queueUrl = sqsClient
+    .getQueueUrl(
+      GetQueueUrlRequest.builder().queueName(emailQueueName).build(),
+    )
+    .queueUrl()
 
-  def send(fields: EmailFields): Future[SendMessageResult] = {
+  def send(fields: EmailFields): Unit = {
     logger.info(s"Sending message to SQS queue $queueUrl")
     val payload = fields.payload
     logger.info(s"message content is: $payload")
-    val messageResult = AwsAsync(sqsClient.sendMessageAsync, new SendMessageRequest(queueUrl, payload))
-    messageResult
-      .recover { case throwable =>
+    val messageResult = Try {
+      sqsClient.sendMessage(
+        SendMessageRequest
+          .builder()
+          .queueUrl(queueUrl)
+          .messageBody(payload)
+          .build(),
+      )
+    }
+    messageResult match {
+      case Failure(throwable) =>
         logger.error(scrub"Failed to send message due to $queueUrl due to:", throwable)
-        throw throwable
-      }
-      .map { result =>
+      case Success(result) =>
         logger.info(s"Successfully sent message to $queueUrl: $result")
-        result
-      }
+    }
+    messageResult.get // throw exception
   }
 
 }

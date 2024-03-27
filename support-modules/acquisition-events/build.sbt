@@ -1,4 +1,4 @@
-import LibraryVersions.{circeVersion, jacksonDatabindVersion, jacksonVersion, okhttpVersion, awsClientVersion}
+import LibraryVersions.*
 
 name := "module-acquisition-events"
 
@@ -8,7 +8,7 @@ libraryDependencies ++= Seq(
   "com.google.cloud" % "google-cloud-bigquery" % "2.34.0",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
-  "com.amazonaws" % "aws-java-sdk-eventbridge" % awsClientVersion,
+  "software.amazon.awssdk" % "eventbridge" % awsClientVersion2,
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
 
   // This is required to force aws libraries to use the latest version of jackson
