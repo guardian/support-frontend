@@ -3,10 +3,9 @@ package controllers
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath, StyleContent}
+import assets.{AssetsResolver, RefPath}
+import com.gu.monitoring.SafeLogging
 import io.circe.syntax._
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.paypal.PayPalBillingDetails.codec
@@ -26,7 +25,8 @@ class PayPalRegular(
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with Circe
-    with SettingsSurrogateKeySyntax {
+    with SettingsSurrogateKeySyntax
+    with SafeLogging {
 
   import actionBuilders._
 
@@ -82,7 +82,7 @@ class PayPalRegular(
   // redirected and needs to come back.
   def returnUrl: Action[AnyContent] = PrivateAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    SafeLogger.error(scrub"User hit the PayPal returnUrl.")
+    logger.error(scrub"User hit the PayPal returnUrl.")
     Ok(
       views.html.main(
         "Support the Guardian | PayPal Error",
@@ -96,7 +96,7 @@ class PayPalRegular(
   // The endpoint corresponding to the PayPal cancel url, hit if the user is
   // redirected and the payment fails.
   def cancelUrl: Action[AnyContent] = PrivateAction { implicit request =>
-    SafeLogger.error(scrub"User hit the PayPal cancelUrl, something went wrong.")
+    logger.error(scrub"User hit the PayPal cancelUrl, something went wrong.")
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(
       views.html.main(

@@ -9,13 +9,10 @@ libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "2.2.3",
   "org.typelevel" %% "cats-core" % catsVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
-  "ch.qos.logback" % "logback-classic" % "1.4.14",
   "com.squareup.okhttp3" % "okhttp" % okhttpVersion,
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.amazonaws" % "aws-lambda-java-core" % "1.2.3",
-  "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
-  "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
-  "com.amazonaws" % "aws-java-sdk-stepfunctions" % awsClientVersion,
+  "software.amazon.awssdk" % "sqs" % awsClientVersion2,
   // This is required to force aws libraries to use the latest version of jackson
   "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion,
   "com.fasterxml.jackson.core" % "jackson-annotations" % jacksonVersion,
@@ -31,6 +28,7 @@ libraryDependencies ++= Seq(
   "io.sentry" % "sentry-logback" % "1.7.30",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
+  "com.lihaoyi" %% "pprint" % "0.8.1",
 )
 
 riffRaffPackageType := assembly.value
@@ -65,9 +63,12 @@ lazy val deployToCode =
 
 deployToCode := {
   import scala.sys.process._
+  val log = streams.value.log
   val s3Bucket = "support-workers-dist"
   val s3Path = "support/CODE/support-workers/support-workers.jar"
-  (s"aws s3 cp ${assembly.value} s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!
+  val assemblyJar = assembly.value
+  log.info(s"generated jar $assemblyJar, about to upload to S3...")
+  log.info((s"aws s3 cp $assemblyJar s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!)
   List(
     "-CreatePaymentMethodLambda-",
     "-CreateSalesforceContactLambda-",
@@ -77,8 +78,10 @@ deployToCode := {
     "-FailureHandlerLambda-",
     "-SendAcquisitionEventLambda-",
     "-PreparePaymentMethodForReuseLambda-",
-  ).foreach(functionPartial =>
-    s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!,
-  )
+  ).foreach { functionPartial =>
+    log.info("updating " + functionPartial + "...")
+    s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!
+    log.info("finished " + functionPartial)
+  }
 
 }

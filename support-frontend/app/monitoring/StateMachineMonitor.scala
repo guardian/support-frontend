@@ -1,13 +1,13 @@
 package monitoring
 
+import com.gu.monitoring.SafeLogging
 import org.apache.pekko.actor.ActorSystem
 import services.stepfunctions.SupportWorkersClient
+
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
 
-class StateMachineMonitor(client: SupportWorkersClient, actorSystem: ActorSystem) {
+class StateMachineMonitor(client: SupportWorkersClient, actorSystem: ActorSystem) extends SafeLogging {
 
   val cloudwatchMetricsPattern = "regular-contributions-state-machine-unavailable"
 
@@ -15,11 +15,11 @@ class StateMachineMonitor(client: SupportWorkersClient, actorSystem: ActorSystem
     implicit val ec = actorSystem.dispatcher
     actorSystem.scheduler.schedule(5.seconds, 60.seconds) {
       client.healthy().onComplete {
-        case Success(true) => SafeLogger.debug("Regular contributions state machine is healthy")
+        case Success(true) => logger.debug("Regular contributions state machine is healthy")
         case Success(false) =>
-          SafeLogger.error(scrub"Regular contributions state machine is not available [$cloudwatchMetricsPattern]")
+          logger.error(scrub"Regular contributions state machine is not available [$cloudwatchMetricsPattern]")
         case Failure(exception) =>
-          SafeLogger.error(
+          logger.error(
             scrub"Exception while fetching regular contributions state machine status [$cloudwatchMetricsPattern]",
             exception,
           )

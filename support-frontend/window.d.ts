@@ -5,7 +5,7 @@ import type {
 	AmazonPaymentsObject,
 } from 'helpers/forms/paymentIntegrations/amazonPay/types';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
-import type { PaymentConfig } from 'helpers/globalsAndSwitches/window';
+import type { WindowGuardian } from 'helpers/globalsAndSwitches/window';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { SendEventId } from 'helpers/tracking/quantumMetric';
@@ -36,7 +36,7 @@ declare global {
 	};
 
 	interface Window {
-		guardian: PaymentConfig & {
+		guardian: WindowGuardian & {
 			email?: string;
 			gitCommitId?: string;
 			orderIsAGift: boolean;

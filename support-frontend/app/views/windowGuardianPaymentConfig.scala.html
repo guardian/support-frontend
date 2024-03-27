@@ -2,6 +2,8 @@
 @import admin.settings.AllSettings
 @import views.html.helper.CSRF
 
+@import views.ViewHelpers.outputJson
+@import io.circe.JsonObject
 @(
   geoData: GeoData,
   paymentMethodConfigs: PaymentMethodConfigs,
@@ -10,6 +12,7 @@
   membersDataApiUrl: String,
   v2recaptchaConfigPublicKey: String,
   guestAccountCreationToken: Option[String],
+  productCatalog: JsonObject,
   settings: AllSettings
 )(implicit request: RequestHeader)
 
@@ -22,31 +25,31 @@
 
   window.guardian.stripeKeyDefaultCurrencies = {
     ONE_OFF: {
-      default: "@paymentMethodConfigs.oneOffDefaultStripeConfig.defaultAccount.publicKey",
-      test: "@paymentMethodConfigs.oneOffTestStripeConfig.defaultAccount.publicKey"
+      default: "@paymentMethodConfigs.oneOffDefaultStripeConfig.defaultAccount.rawPublicKey",
+      test: "@paymentMethodConfigs.oneOffTestStripeConfig.defaultAccount.rawPublicKey"
     },
     REGULAR: {
-      default: "@paymentMethodConfigs.regularDefaultStripeConfig.defaultAccount.publicKey",
-      test: "@paymentMethodConfigs.regularTestStripeConfig.defaultAccount.publicKey"
+      default: "@paymentMethodConfigs.regularDefaultStripeConfig.defaultAccount.rawPublicKey",
+      test: "@paymentMethodConfigs.regularTestStripeConfig.defaultAccount.rawPublicKey"
     }
   };
 
   window.guardian.stripeKeyAustralia = {
     ONE_OFF: {
-      default: "@paymentMethodConfigs.oneOffDefaultStripeConfig.forCountry(Some(Country.Australia)).publicKey",
-      test: "@paymentMethodConfigs.oneOffTestStripeConfig.forCountry(Some(Country.Australia)).publicKey"
+      default: "@paymentMethodConfigs.oneOffDefaultStripeConfig.australiaAccount.rawPublicKey",
+      test: "@paymentMethodConfigs.oneOffTestStripeConfig.australiaAccount.rawPublicKey"
     },
     REGULAR: {
-      default: "@paymentMethodConfigs.regularDefaultStripeConfig.forCountry(Some(Country.Australia)).publicKey",
-      test: "@paymentMethodConfigs.regularTestStripeConfig.forCountry(Some(Country.Australia)).publicKey"
+      default: "@paymentMethodConfigs.regularDefaultStripeConfig.australiaAccount.rawPublicKey",
+      test: "@paymentMethodConfigs.regularTestStripeConfig.australiaAccount.rawPublicKey"
     }
   };
 
   window.guardian.stripeKeyUnitedStates = {
     @if(settings.switches.featureSwitches.usStripeAccountForSingle.isOn) {
     ONE_OFF: {
-      default: "@paymentMethodConfigs.oneOffDefaultStripeConfig.forCountry(Some(Country.US)).publicKey",
-      test: "@paymentMethodConfigs.oneOffTestStripeConfig.forCountry(Some(Country.US)).publicKey"
+      default: "@paymentMethodConfigs.oneOffDefaultStripeConfig.unitedStatesAccount.rawPublicKey",
+      test: "@paymentMethodConfigs.oneOffTestStripeConfig.unitedStatesAccount.rawPublicKey"
     },
     } else {
     ONE_OFF: window.guardian.stripeKeyDefaultCurrencies.ONE_OFF,
@@ -82,4 +85,6 @@
   window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey";
 
   window.guardian.checkoutPostcodeLookup = @settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.isOn
+
+  window.guardian.productCatalog = @Html(outputJson(productCatalog))
 </script>

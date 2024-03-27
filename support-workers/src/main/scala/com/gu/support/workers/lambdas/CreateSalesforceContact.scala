@@ -40,14 +40,14 @@ class CreateSalesforceContact
       context: Context,
       services: Services,
   ): Future[HandlerResult[CreateZuoraSubscriptionState]] = {
-    SafeLogger.debug(s"CreateSalesforceContact state: $state")
+    logger.debug(s"CreateSalesforceContact state: $state")
 
     services.salesforceService.createContactRecords(state.user, state.giftRecipient).flatMap { response =>
       if (response.successful) {
         Future.successful(HandlerResult(new NextState(state).build(response.contactRecords), requestInfo))
       } else {
         val errorMessage = response.errorMessage.getOrElse("No error message returned")
-        SafeLogger.warn(s"Error creating Salesforce contact:\n$errorMessage")
+        logger.warn(s"Error creating Salesforce contact:\n$errorMessage")
         Future.failed(new SalesforceException(errorMessage))
       }
     }

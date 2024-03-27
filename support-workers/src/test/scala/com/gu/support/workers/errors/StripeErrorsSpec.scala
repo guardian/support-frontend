@@ -1,13 +1,12 @@
 package com.gu.support.workers.errors
 
 import java.io.ByteArrayOutputStream
-
 import com.gu.config.Configuration
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
 import com.gu.stripe.{StripeError, StripeService}
 import com.gu.support.encoding.ErrorJson
-import com.gu.support.workers.JsonFixtures.{createStripeSourcePaymentMethodContributionJson, wrapFixture}
+import com.gu.support.workers.JsonFixtures.{createStripePaymentMethodContributionJson, wrapFixture}
 import com.gu.support.workers.exceptions.{RetryNone, RetryUnlimited}
 import com.gu.support.workers.lambdas.CreatePaymentMethod
 import com.gu.support.workers.{AsyncLambdaSpec, JsonFixtures, JsonWrapper, MockContext}
@@ -25,7 +24,7 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
 
     recoverToSucceededIf[RetryUnlimited] {
       createPaymentMethod.handleRequestFuture(
-        wrapFixture(createStripeSourcePaymentMethodContributionJson()),
+        wrapFixture(createStripePaymentMethodContributionJson()),
         outStream,
         context,
       )
@@ -43,7 +42,7 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
 
     val assertion = recoverToSucceededIf[RetryUnlimited] {
       createPaymentMethod.handleRequestFuture(
-        wrapFixture(createStripeSourcePaymentMethodContributionJson()),
+        wrapFixture(createStripePaymentMethodContributionJson()),
         outStream,
         context,
       )
@@ -71,7 +70,7 @@ class StripeErrorsSpec extends AsyncLambdaSpec with MockWebServerCreator with Mo
 
     val assertion = recoverToSucceededIf[RetryNone] {
       createPaymentMethod.handleRequestFuture(
-        wrapFixture(createStripeSourcePaymentMethodContributionJson()),
+        wrapFixture(createStripePaymentMethodContributionJson()),
         outStream,
         context,
       )

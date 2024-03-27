@@ -6,8 +6,7 @@ import admin.settings.{AllSettings, AllSettingsProvider}
 import assets.AssetsResolver
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import com.gu.support.redemption._
 import com.gu.support.redemption.gifting.GiftCodeValidator
 import com.gu.support.redemptions.RedemptionCode
@@ -37,7 +36,8 @@ class RedemptionController(
 )(implicit
     val ec: ExecutionContext,
 ) extends AbstractController(components)
-    with Circe {
+    with Circe
+    with SafeLogging {
 
   import actionRefiners._
 
@@ -83,7 +83,7 @@ class RedemptionController(
   def displayError(redemptionCode: RawRedemptionCode, error: String, isTestUser: Boolean)(implicit
       request: OptionalAuthRequest[Any],
   ): Result = {
-    SafeLogger.error(
+    logger.error(
       scrub"An error occurred while trying to process redemption code - ${redemptionCode}. Error was - ${error}",
     )
     Ok(
@@ -110,7 +110,7 @@ class RedemptionController(
       val codeValidator =
         new CodeValidator(zuoraLookupServiceProvider.forUser(testUser))
       codeValidator.validate(redemptionCode).value.map { validationResult =>
-        SafeLogger.info(s"Validating code ${redemptionCode}: ${validationResult}")
+        logger.info(s"Validating code ${redemptionCode}: ${validationResult}")
         Ok(
           RedemptionValidationResult(
             valid = validationResult.isRight,

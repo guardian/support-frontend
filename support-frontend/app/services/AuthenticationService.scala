@@ -5,8 +5,7 @@ import com.gu.identity.auth.{IdapiAuthConfig, IdentityClient}
 import com.gu.identity.model.User
 import com.gu.identity.play.IdapiPlayAuthService
 import com.gu.identity.play.IdapiPlayAuthService.UserCredentialsMissingError
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import config.Identity
 import org.http4s.Uri
 import play.api.http.ContentTypes.FORM
@@ -18,7 +17,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AsyncAuthenticationService(identityPlayAuthService: IdapiPlayAuthService, ws: WSClient, config: Identity)(implicit
     ec: ExecutionContext,
-) {
+) extends SafeLogging {
 
   def tryAuthenticateUser(requestHeader: RequestHeader): Future[Option[User]] =
     identityPlayAuthService
@@ -38,7 +37,7 @@ class AsyncAuthenticationService(identityPlayAuthService: IdapiPlayAuthService, 
           None
         case err =>
           // something else went wrong - we should alert on this
-          SafeLogger.error(scrub"unable to authorize user", err)
+          logger.error(scrub"unable to authorize user", err)
           None
       }
 

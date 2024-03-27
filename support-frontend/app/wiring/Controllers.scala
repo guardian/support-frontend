@@ -39,6 +39,7 @@ trait Controllers {
     appConfig.stage,
     implicitWs,
     priceSummaryServiceProvider,
+    cachedProductCatalogServiceProvider,
     appConfig.supportUrl,
   )
 
@@ -173,7 +174,6 @@ trait Controllers {
     recaptchaService = recaptchaService,
     stripeService = stripeService,
     recaptchaConfigProvider = appConfig.recaptchaConfigProvider,
-    testStripeConfig = appConfig.regularStripeConfigProvider.get(true),
     allSettingsProvider,
     appConfig.stage,
   )

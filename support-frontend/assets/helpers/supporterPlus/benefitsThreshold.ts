@@ -3,6 +3,10 @@ import type {
 	RegularContributionType,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
+import { getPromotion } from 'helpers/productPrice/promotions';
+import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { isRecurring } from './isContributionRecurring';
 
 export type ThresholdAmounts = Record<RegularContributionType, number>;
@@ -70,31 +74,62 @@ export const lowerBenefitsThresholds: Record<CountryGroupId, ThresholdAmounts> =
 		},
 	};
 
+export function getLowerBenefitsThreshold(
+	state: ContributionsState,
+	regularContributionType?: RegularContributionType,
+): number {
+	const contributionType =
+		regularContributionType ?? getContributionType(state);
+	const contributionTypeThreshold =
+		contributionType.toUpperCase() as keyof ThresholdAmounts;
+	const billingPeriod = (contributionType[0] +
+		contributionType.slice(1).toLowerCase()) as BillingPeriod;
+
+	const promotion = getPromotion(
+		state.page.checkoutForm.product.productPrices,
+		state.common.internationalisation.countryId,
+		billingPeriod,
+	);
+
+	return (
+		promotion?.discountedPrice ??
+		lowerBenefitsThresholds[state.common.internationalisation.countryGroupId][
+			contributionTypeThreshold
+		]
+	);
+}
+export function getLowerBenefitsThresholds(
+	state: ContributionsState,
+): ThresholdAmounts {
+	return {
+		MONTHLY: getLowerBenefitsThreshold(state, 'MONTHLY'),
+		ANNUAL: getLowerBenefitsThreshold(state, 'ANNUAL'),
+	};
+}
+
 // This is a function overload that means if the caller has already determined that contributionType is recurring
 // they do not have to handle an undefined return type from getThresholdPrice
 // cf. https://www.typescriptlang.org/docs/handbook/2/functions.html#overload-signatures-and-the-implementation-signature
 
 // Signatures
 export function getThresholdPrice(
-	countryGroupId: CountryGroupId,
 	contributionType: 'ONE_OFF',
+	state: ContributionsState,
 ): undefined;
 export function getThresholdPrice(
-	countryGroupId: CountryGroupId,
 	contributionType: RegularContributionType,
+	state: ContributionsState,
 ): number;
 export function getThresholdPrice(
-	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
+	state: ContributionsState,
 ): number | undefined;
 // Implementation
 export function getThresholdPrice(
-	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
+	state: ContributionsState,
 ): number | undefined {
 	if (isRecurring(contributionType)) {
-		const countryGroupThresholds = lowerBenefitsThresholds[countryGroupId];
-		const threshold = countryGroupThresholds[contributionType];
-		return threshold;
+		return getLowerBenefitsThreshold(state);
 	}
 }

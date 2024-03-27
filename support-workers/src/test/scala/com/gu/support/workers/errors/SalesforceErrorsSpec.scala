@@ -28,7 +28,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
     val invalidConfig = SalesforceConfig("", "https://test.salesforce.com", "", "", "", "", "")
     val authService = new AuthService(invalidConfig)
     recoverToSucceededIf[SalesforceAuthenticationErrorResponse] {
-      authService.authorize.map(auth => SafeLogger.info(s"Got an auth: $auth"))
+      authService.authorize.map(auth => info(s"Got an auth: $auth"))
     }
   }
 
@@ -57,7 +57,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
     val service = new SalesforceService(invalidConfig, configurableFutureRunner(10.seconds))
 
     recoverToSucceededIf[SalesforceAuthenticationErrorResponse] {
-      service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
+      service.upsert(upsertData).map(response => info(s"Got a response: $response"))
     }
   }
 
@@ -69,10 +69,10 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
           req.url(s"${auth.instance_url}/$upsertEndpoint") // We still need to set the base url
       }
 
-    service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
+    service.upsert(upsertData).map(response => info(s"Got a response: $response"))
 
     recoverToExceptionIf[SalesforceErrorResponse] {
-      service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
+      service.upsert(upsertData).map(response => info(s"Got a response: $response"))
     }.map(_.message shouldBe "Session expired or invalid")
   }
 

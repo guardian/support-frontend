@@ -14,9 +14,10 @@ import { PersonalDetailsContainer } from 'components/personalDetails/personalDet
 import { SavedCardButton } from 'components/savedCardButton/savedCardButton';
 import { ContributionsStripe } from 'components/stripe/contributionsStripe';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import { setSelectedAmount } from 'helpers/redux/checkout/product/actions';
-import { isSupporterPlus } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
+import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import {
 	getUserSelectedAmount,
@@ -53,20 +54,14 @@ export function SupporterPlusCheckout({
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const { selectedAmounts, otherAmounts } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
 	const amountBeforeAmendments = useContributionsSelector(
 		getUserSelectedAmountBeforeAmendment,
 	);
 	const otherAmount = useContributionsSelector(getUserSelectedOtherAmount);
-	const amountIsAboveThreshold = isSupporterPlus(
-		contributionType,
-		selectedAmounts,
-		otherAmounts,
-		countryGroupId,
+	const amountIsAboveThreshold = useContributionsSelector(
+		isSupporterPlusFromState,
 	);
 
 	const navigate = useNavigate();
@@ -99,6 +94,13 @@ export function SupporterPlusCheckout({
 		</Button>
 	);
 
+	const promotion = useContributionsSelector((state) =>
+		getPromotion(
+			state.page.checkoutForm.product.productPrices,
+			countryId,
+			state.page.checkoutForm.product.billingPeriod,
+		),
+	);
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -108,6 +110,7 @@ export function SupporterPlusCheckout({
 					) : (
 						<ContributionsOrderSummaryContainer
 							inThreeTier={inThreeTier}
+							promotion={promotion}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary
 									{...orderSummaryProps}
@@ -161,6 +164,7 @@ export function SupporterPlusCheckout({
 						productNameAboveThreshold={
 							inThreeTier ? 'All-access digital' : 'Supporter Plus'
 						}
+						promotion={promotion}
 					/>
 				</BoxContents>
 			</Box>

@@ -2,12 +2,10 @@ name: Build stripe-patrons-data
 
 on:
   pull_request:
-    branches:
-      - main
+  workflow_dispatch:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   support_frontend_build:
@@ -39,18 +37,12 @@ jobs:
         run: ./script/ci
         working-directory: cdk
 
-      - name: Setup Java 11
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: "corretto"
-          java-version: "11"
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.ivy2/cache
-            ~/.sbt
-            ~/.coursier
-          key: sbt
+          java-version: "21"
+          cache: sbt
 
       - name: Build
         run: |

@@ -8,7 +8,7 @@ import com.gu.support.catalog.{NoFulfilmentOptions, NoProductOptions}
 import com.gu.support.config._
 import services.pricing.{PriceSummary, PriceSummaryService, PriceSummaryServiceProvider, ProductPrices}
 import com.gu.support.promotions.PromoCode
-import com.gu.support.workers.Monthly
+import com.gu.support.workers.{Monthly, StripePublicKey, StripeSecretKey}
 import com.gu.support.zuora.api.ReaderType
 import com.typesafe.config.ConfigFactory
 import config.Configuration.MetricUrl
@@ -103,10 +103,10 @@ class SubscriptionsTest extends AnyWordSpec with Matchers with TestCSRFComponent
       val settingsProvider = mock[AllSettingsProvider]
       when(settingsProvider.getAllSettings()).thenReturn(allSettings)
       val testUserService = mock[TestUserService]
-      val stripe = mock[StripeConfigProvider]
-      val stripeAccountConfig = StripeAccountConfig("", "")
+      val stripe = mock[StripePublicConfigProvider]
+      val stripeAccountConfig = StripePublicKey.get("pk_test_asdf")
       when(stripe.get(any[Boolean]))
-        .thenReturn(StripeConfig(stripeAccountConfig, stripeAccountConfig, stripeAccountConfig, None))
+        .thenReturn(StripePublicConfig(stripeAccountConfig, stripeAccountConfig, stripeAccountConfig))
       val payPal = mock[PayPalConfigProvider]
       when(payPal.get(any[Boolean])).thenReturn(PayPalConfig("", "", "", "", "", ""))
       val recaptchaConfigProvider = mock[RecaptchaConfigProvider]

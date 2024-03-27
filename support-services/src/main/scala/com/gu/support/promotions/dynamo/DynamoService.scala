@@ -1,41 +1,53 @@
 package com.gu.support.promotions.dynamo
 
 import cats.syntax.either._
-import com.amazonaws.auth.profile.ProfileCredentialsProvider
-import com.amazonaws.auth.{AWSCredentialsProviderChain, InstanceProfileCredentialsProvider}
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient
-import com.amazonaws.services.dynamodbv2.document.{DynamoDB, Item, Table}
+import com.gu.aws.CredentialsProvider
 import com.typesafe.scalalogging.LazyLogging
 import io.circe.Decoder
 import io.circe.parser._
+import software.amazon.awssdk.enhanced.dynamodb.{
+  AttributeConverterProvider,
+  DynamoDbEnhancedClient,
+  DynamoDbTable,
+  TableSchema,
+}
+import software.amazon.awssdk.enhanced.dynamodb.document.EnhancedDocument
+import software.amazon.awssdk.enhanced.dynamodb.model.Page
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient
 
 import scala.jdk.CollectionConverters._
 
-class DynamoService[T](table: Table)(implicit decoder: Decoder[T]) extends LazyLogging {
+class DynamoService[T](table: String)(implicit decoder: Decoder[T]) extends LazyLogging {
+
+  val dynamoTable: DynamoDbTable[EnhancedDocument] = {
+    val dynamoDBClient = DynamoDbClient.builder
+      .credentialsProvider(CredentialsProvider)
+      .region(Region.EU_WEST_1)
+      .build()
+    val enhancedClient = DynamoDbEnhancedClient
+      .builder()
+      .dynamoDbClient(dynamoDBClient)
+      .build();
+    val documentDynamoDbTable =
+      enhancedClient.table(
+        table,
+        TableSchema
+          .documentSchemaBuilder()
+          .attributeConverterProviders(AttributeConverterProvider.defaultProvider())
+          .build(),
+      );
+    documentDynamoDbTable
+  }
+
   def all: Iterator[T] = {
-    val items: Iterator[Item] = table.scan().iterator().asScala
-    items.flatMap { item =>
-      val result = decode[T](item.toJSON)
-      result.leftMap(err => logger.warn(s"Couldn't decode a PromoCode with body ${item.toJSON}. Error was: $err"))
+    val pages: Iterator[Page[EnhancedDocument]] = dynamoTable.scan().iterator().asScala
+    val items = pages.flatMap(_.items().asScala)
+    val jsonItems = items.map(_.toJson)
+    jsonItems.flatMap { json =>
+      val result = decode[T](json)
+      result.leftMap(err => logger.warn(s"Couldn't decode a PromoCode with body $json. Error was: $err"))
       result.toOption
     }
-  }
-}
-
-object DynamoService {
-  val ProfileName = "membership"
-
-  lazy val CredentialsProvider = new AWSCredentialsProviderChain(
-    new ProfileCredentialsProvider(ProfileName),
-    new InstanceProfileCredentialsProvider(false),
-  )
-
-  def forTable[T](table: String)(implicit decoder: Decoder[T]): DynamoService[T] = {
-    val dynamoDBClient = AmazonDynamoDBClient.builder
-      .withCredentials(CredentialsProvider)
-      .withRegion(Regions.EU_WEST_1)
-      .build()
-    new DynamoService(new DynamoDB(dynamoDBClient).getTable(table))
   }
 }

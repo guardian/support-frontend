@@ -71,7 +71,7 @@ export function ThreeTierCards({
 	const haveRecommendedAndSelectedCards =
 		cardsContent.filter((card) => card.isRecommended || card.isUserSelected)
 			.length > 1;
-
+	let promoCount = 0;
 	return (
 		<div
 			css={container(cardsContent.length)}
@@ -80,10 +80,14 @@ export function ThreeTierCards({
 			aria-labelledby={`${paymentFrequency}`}
 		>
 			{cardsContent.map((cardContent, cardIndex) => {
+				if (cardContent.planCost.discount) {
+					promoCount++;
+				}
 				return (
 					<ThreeTierCard
 						cardTier={cardIndexToTier(cardIndex)}
 						key={`threeTierCard${cardIndex}`}
+						promoCount={promoCount}
 						{...cardContent}
 						isRecommendedSubdued={haveRecommendedAndSelectedCards}
 						currencyId={currencyId}
