@@ -75,10 +75,17 @@ const testsDetailsGifted: TestDetailsGifted[] = [
 		frequency: '12 months',
 		paymentType: 'Direct debit',
 	},
-	{
-		frequency: '3 months',
-		paymentType: 'PayPal',
-	},
+  /**
+	 * PayPal is currently throwing a "to many login attempts" error, so we're
+	 * going to inactivate this test until we have a solution for it to avoid
+	 * alert numbness.
+	 *
+	 * TODO - re-enable this test when PayPal is fixed
+	 */
+	// {
+	// 	frequency: '3 months',
+	// 	paymentType: 'PayPal',
+	// },
 ];
 
 afterEachTasks(test);
