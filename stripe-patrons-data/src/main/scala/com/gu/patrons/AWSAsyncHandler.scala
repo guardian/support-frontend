@@ -1,10 +1,10 @@
-package com.gu.aws
+package com.gu.patrons
 
-import java.util.concurrent.{Future => JFuture}
 import com.amazonaws.handlers.AsyncHandler
 import com.amazonaws.{AmazonServiceException, AmazonWebServiceRequest}
 import com.typesafe.scalalogging.LazyLogging
 
+import java.util.concurrent.{Future => JFuture}
 import scala.concurrent.{Future, Promise}
 
 class AwsAsyncHandler[Request <: AmazonWebServiceRequest, Response](

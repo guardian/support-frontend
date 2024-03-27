@@ -4,7 +4,7 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import com.amazonaws.services.s3.model.{GetObjectRequest, ObjectMetadata, PutObjectRequest}
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder
-import com.gu.aws.CredentialsProviderDEPRECATEDV1
+import com.gu.services.ParameterStoreService.CredentialsProviderDEPRECATEDV1
 import com.gu.supporterdata.model.Stage
 import com.typesafe.scalalogging.StrictLogging
 

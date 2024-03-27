@@ -1,8 +1,6 @@
 package com.gu.support.workers.lambdas
 
-import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.emailservices._
-import com.gu.monitoring.SafeLogger
 import com.gu.support.workers.CheckoutFailureReasons.{
   AccountMismatch,
   AmazonPayTryAnotherCard,
@@ -116,11 +114,10 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
 
   it should "send an email with FailedDigitalPackEmailFields when there are Stripe payment errors " in {
     val emailService = mock[EmailService]
-    val result = mock[SendMessageResult]
 
     val testFields = FailedEmailFields.digitalPack("test@thegulocal.com", IdentityUserId("30001643"))
 
-    when(emailService.send(any[EmailFields])).thenReturn(Future.successful(result))
+    when(emailService.send(any[EmailFields])).thenReturn(Future.successful(()))
 
     val failureHandler = new FailureHandler(emailService)
 
@@ -184,7 +181,6 @@ object FailureHandlerManualTest extends Matchers {
     val email = "rupert.bates@theguardian.com"
     service
       .send(FailedEmailFields.contribution(email, IdentityUserId("identityId")))
-      .map(result => result.getMessageId should not be "")
   }
 
 }
@@ -203,10 +199,6 @@ object DigiPackFailureHandlerManualTest extends Matchers {
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
       .send(FailedEmailFields.digitalPack(email, IdentityUserId("identityId")))
-      .map { result =>
-        result.getMessageId should not be ""
-        sys.exit(0)
-      }
   }
 }
 
@@ -224,10 +216,6 @@ object GuardianWeeklyFailureHandlerTest extends Matchers {
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
       .send(FailedEmailFields.guardianWeekly(email, IdentityUserId("identityId")))
-      .map { result =>
-        result.getMessageId should not be ""
-        sys.exit(0)
-      }
   }
 }
 
@@ -245,9 +233,5 @@ object PrintFailureHandlerTest extends Matchers {
     val email = "flavian.alexandru.freelancer@guardian.co.uk"
     service
       .send(FailedEmailFields.paper(email, IdentityUserId("identityId")))
-      .map { result =>
-        result.getMessageId should not be ""
-        sys.exit(0)
-      }
   }
 }

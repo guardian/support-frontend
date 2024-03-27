@@ -1,7 +1,6 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.services.{ServiceProvider, Services}
@@ -13,7 +12,6 @@ import com.gu.support.workers._
 import com.gu.support.workers.states.SendThankYouEmailState._
 import com.gu.support.workers.states.{SendAcquisitionEventState, SendThankYouEmailState}
 import com.gu.threadpools.CustomPool.executionContext
-import io.circe.generic.auto._
 import org.joda.time.DateTime
 
 import scala.concurrent.Future
@@ -23,7 +21,7 @@ case class StateNotValidException(message: String) extends RuntimeException(mess
 class SendThankYouEmail(
     serviceProvider: ServiceProvider = ServiceProvider,
     emailService: EmailService = new EmailService(Configuration.emailQueueName),
-) extends SubsetServicesHandler[SendAcquisitionEventState, List[SendMessageResult], SendThankYouEmailState](
+) extends SubsetServicesHandler[SendAcquisitionEventState, Unit, SendThankYouEmailState](
       serviceProvider,
       _.sendThankYouEmailState,
     ) {
@@ -53,8 +51,8 @@ class SendThankYouEmail(
 
     for {
       emailFields <- emailBuilder.buildEmail(state)
-      emailResult <- Future.sequence(emailFields.map(emailService.send))
-    } yield HandlerResult(emailResult, requestInfo)
+      _ = emailFields.map(emailService.send)
+    } yield HandlerResult((), requestInfo)
   }
 
 }
