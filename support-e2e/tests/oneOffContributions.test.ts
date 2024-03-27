@@ -20,7 +20,7 @@ const testsDetails: TestDetails[] = [
 	 *
 	 * TODO - re-enable this test when PayPal is fixed
 	 */
-	{ paymentType: 'PayPal' },
+	// { paymentType: 'PayPal' },
 ];
 
 afterEachTasks(test);
