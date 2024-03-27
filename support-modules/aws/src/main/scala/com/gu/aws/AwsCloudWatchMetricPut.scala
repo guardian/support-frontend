@@ -1,12 +1,14 @@
 package com.gu.aws
 
+import com.typesafe.scalalogging.LazyLogging
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.cloudwatch.CloudWatchClient
 import software.amazon.awssdk.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, StandardUnit}
 
-import scala.util.Try
+import scala.jdk.CollectionConverters._
+import scala.util.{Failure, Success, Try}
 
-object AwsCloudWatchMetricPut {
+object AwsCloudWatchMetricPut extends LazyLogging {
   val client: CloudWatchClient =
     CloudWatchClient
       .builder()
@@ -27,24 +29,27 @@ object AwsCloudWatchMetricPut {
   )
 
   def apply(client: CloudWatchClient)(request: MetricRequest): Try[Unit] = {
+    logger.info("Logging metric: " + request)
 
-    val metricDatum1 = request.dimensions
-      .foldLeft(
-        MetricDatum
+    val javaDimensions = request.dimensions
+      .map { case (name, value) =>
+        Dimension
           .builder()
-          .metricName(request.name.value),
-      ) { case (agg, (name, value)) =>
-        agg.dimensions(
-          Dimension
-            .builder()
-            .name(name.value)
-            .value(value.value)
-            .build(),
-        )
+          .name(name.value)
+          .value(value.value)
+          .build()
       }
-      .value(request.value)
-      .unit(StandardUnit.COUNT)
-      .build()
+      .toSeq
+      .asJava
+
+    val metricDatum1 =
+      MetricDatum
+        .builder()
+        .metricName(request.name.value)
+        .dimensions(javaDimensions)
+        .value(request.value)
+        .unit(StandardUnit.COUNT)
+        .build()
 
     val putMetricDataRequest = PutMetricDataRequest
       .builder()
@@ -52,7 +57,12 @@ object AwsCloudWatchMetricPut {
       .metricData(metricDatum1)
       .build()
 
-    Try(client.putMetricData(putMetricDataRequest)).map(_ => ())
+    val attempt = Try(client.putMetricData(putMetricDataRequest))
+    attempt match {
+      case Failure(exception) => logger.warn("metric send failed with " + exception.toString)
+      case Success(value) => logger.info("metric sent successfully: " + value)
+    }
+    attempt.map(_ => ())
   }
 
 }
