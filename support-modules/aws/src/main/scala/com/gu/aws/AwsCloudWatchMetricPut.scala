@@ -59,7 +59,7 @@ object AwsCloudWatchMetricPut extends LazyLogging {
 
     val attempt = Try(client.putMetricData(putMetricDataRequest))
     attempt match {
-      case Failure(exception) => logger.warn("metric send failed with " + exception.toString)
+      case Failure(exception) => logger.error("metric send failed with " + exception.toString)
       case Success(value) => logger.info("metric sent successfully: " + value)
     }
     attempt.map(_ => ())
