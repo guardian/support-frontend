@@ -2,6 +2,8 @@
 @import admin.settings.AllSettings
 @import views.html.helper.CSRF
 
+@import views.ViewHelpers.outputJson
+@import io.circe.JsonObject
 @(
   geoData: GeoData,
   paymentMethodConfigs: PaymentMethodConfigs,
@@ -10,6 +12,7 @@
   membersDataApiUrl: String,
   v2recaptchaConfigPublicKey: String,
   guestAccountCreationToken: Option[String],
+  productCatalog: JsonObject,
   settings: AllSettings
 )(implicit request: RequestHeader)
 
@@ -82,4 +85,6 @@
   window.guardian.v2recaptchaPublicKey = "@v2recaptchaConfigPublicKey";
 
   window.guardian.checkoutPostcodeLookup = @settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.isOn
+
+  window.guardian.productCatalog = @Html(outputJson(productCatalog))
 </script>
