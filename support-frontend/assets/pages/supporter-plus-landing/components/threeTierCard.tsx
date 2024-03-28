@@ -168,8 +168,11 @@ const discountSummaryCopy = (
 		const duration = planCost.discount.duration.value;
 		const singleYear =
 			period === 'ANNUAL' && duration === 1 ? ' the first ' : '';
+		const promoPrice = planCost.discount.price;
+		const promoPriceRounded =
+			promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);
 
-		return `${currency}${planCost.discount.price}/${
+		return `${currency}${promoPriceRounded}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
 		} for ${duration > 1 ? duration : singleYear} ${
 			recurringContributionPeriodMap[period]
@@ -198,7 +201,9 @@ export function ThreeTierCard({
 	const price = planCost.price;
 	const priceCopy = !!planCost.discount && `${currency}${price}`;
 	const promoPrice = planCost.discount?.price ?? planCost.price;
-	const promoPriceCopy = `${currency}${promoPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
+	const promoPriceRounded =
+		promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);
+	const promoPriceCopy = `${currency}${promoPriceRounded}/${recurringContributionPeriodMap[paymentFrequency]}`;
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	return (
 		<section
