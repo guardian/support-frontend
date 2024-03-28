@@ -19,7 +19,14 @@ const testsDetails: TestDetails[] = [
 	{ paymentType: 'Credit/Debit card', tier: 1, frequency: 'Monthly' },
 	{ paymentType: 'Credit/Debit card', tier: 2, frequency: 'Annual' },
 	{ paymentType: 'Direct debit', tier: 2, frequency: 'Monthly' },
-	{ paymentType: 'PayPal', tier: 2, frequency: 'Monthly' },
+	/**
+	 * PayPal is currently throwing a "to many login attempts" error, so we're
+	 * going to inactivate this test until we have a solution for it to avoid
+	 * alert numbness.
+	 *
+	 * TODO - re-enable this test when PayPal is fixed
+	 */
+	// { paymentType: 'PayPal', tier: 2, frequency: 'Monthly' },
 	{
 		paymentType: 'Credit/Debit card',
 		tier: 1,
@@ -34,8 +41,7 @@ const testDetailsPromo = [
 		frequency: 'Monthly',
 		promoCode: 'PLAYWRIGHT_TEST_SPLUS_MONTHLY',
 		expectedPromoText: '£8/month for 3 months, then £10/month',
-		/** This looks a little odd as it is searching for the original price struck out with the promo price */
-		expectedCheckoutTotalText: '£10 £8/month',
+		expectedCheckoutTotalText: 'Was £10, now £8/month',
 		expectedCheckoutButtonText: 'Pay £8 per month',
 		expectedThankYouText:
 			"You'll pay £8/month for the first 3 months, then £10/month afterwards unless you cancel.",
@@ -45,8 +51,7 @@ const testDetailsPromo = [
 		frequency: 'Annual',
 		promoCode: 'PLAYWRIGHT_TEST_SPLUS_ANNUAL',
 		expectedPromoText: '£76/year for the first year, then £95/year',
-		/** This looks a little odd as it is searching for the original price struck out with the promo price */
-		expectedCheckoutTotalText: '£95 £76/year',
+		expectedCheckoutTotalText: 'Was £95, now £76/year',
 		expectedCheckoutButtonText: 'Pay £76 per year',
 		expectedThankYouText:
 			"You'll pay £76/year for the first year, then £95/year afterwards unless you cancel.",

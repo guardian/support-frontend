@@ -1,5 +1,12 @@
 package com.gu.services
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.auth.{
+  AWSCredentialsProviderChain,
+  EC2ContainerCredentialsProviderWrapper,
+  EnvironmentVariableCredentialsProvider,
+  InstanceProfileCredentialsProvider,
+}
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.simplesystemsmanagement.model.{
   GetParameterRequest,
@@ -11,7 +18,8 @@ import com.amazonaws.services.simplesystemsmanagement.{
   AWSSimpleSystemsManagementAsync,
   AWSSimpleSystemsManagementAsyncClientBuilder,
 }
-import com.gu.aws.{AwsAsync, CredentialsProviderDEPRECATEDV1}
+import com.gu.AwsAsync
+import com.gu.aws.ProfileName
 import com.gu.supporterdata.model.Stage
 
 import scala.concurrent.ExecutionContext
@@ -50,6 +58,14 @@ class ParameterStoreService(client: AWSSimpleSystemsManagementAsync, stage: Stag
 }
 
 object ParameterStoreService {
+  // please update to AWS SDK 2 and use com.gu.aws.CredentialsProvider
+  lazy val CredentialsProviderDEPRECATEDV1 = new AWSCredentialsProviderChain(
+    new ProfileCredentialsProvider(ProfileName),
+    new InstanceProfileCredentialsProvider(false),
+    new EnvironmentVariableCredentialsProvider(),
+    new EC2ContainerCredentialsProviderWrapper(), // for use with lambda snapstart
+  )
+
   lazy val client = AWSSimpleSystemsManagementAsyncClientBuilder
     .standard()
     .withRegion(Regions.EU_WEST_1)
