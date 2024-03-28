@@ -60,6 +60,7 @@ export default function DirectDebitForm(
 				onChange={(e) => props.updateAccountHolderName(e.target.value)}
 				maxLength={40}
 				error={props.errors.accountHolderName?.[0]}
+				name="accountHolderName"
 			/>
 
 			<div css={accountNumberSortCodeContainer}>
@@ -75,6 +76,8 @@ export default function DirectDebitForm(
 						maxLength={6}
 						inputMode="numeric"
 						error={props.errors.sortCode?.[0]}
+						name="sortCode"
+						required={true}
 					/>
 				</div>
 
@@ -90,6 +93,8 @@ export default function DirectDebitForm(
 						maxLength={10}
 						inputMode="numeric"
 						error={props.errors.accountNumber?.[0]}
+						name="accountNumber"
+						required={true}
 					/>
 				</div>
 			</div>
@@ -103,6 +108,8 @@ export default function DirectDebitForm(
 					props.updateAccountHolderConfirmation(e.target.checked)
 				}
 				checked={props.accountHolderConfirmation}
+				name="accountHolderConfirmation"
+				required={true}
 			/>
 
 			{props.recaptcha && (
