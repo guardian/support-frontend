@@ -346,15 +346,14 @@ export function ThreeTierLanding(): JSX.Element {
 		cardPrice: number,
 		cardPriceDiscount?: number,
 	): boolean => {
-		const cardPriceToCompare = cardPriceDiscount ?? cardPrice;
 		const hasUrlSelectedAmount = !isNaN(Number(urlSelectedAmount));
-
 		if (!hasUrlSelectedAmount) {
 			return false;
 		}
 		return (
-			contributionType in paymentFrequencyMap &&
-			Number(urlSelectedAmount) === cardPriceToCompare
+			(contributionType in paymentFrequencyMap &&
+				Number(urlSelectedAmount) === cardPrice) ||
+			Number(urlSelectedAmount) === cardPriceDiscount
 		);
 	};
 
