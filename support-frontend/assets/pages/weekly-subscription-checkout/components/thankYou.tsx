@@ -24,6 +24,7 @@ import {
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { convertText } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
@@ -254,7 +255,10 @@ function ThankYouContent({
 							<br />
 							<CheckList
 								checkListData={benefitsTier3and2.map((benefit) => {
-									return { text: <span>{benefit.copy}</span>, isChecked: true };
+									return {
+										text: <span>{convertText(benefit.copy)}</span>,
+										isChecked: true,
+									};
 								})}
 								style={'standard'}
 								iconColor={palette.brand[500]}

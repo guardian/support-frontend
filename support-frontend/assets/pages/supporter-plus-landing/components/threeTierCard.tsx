@@ -179,6 +179,20 @@ const discountSummaryCopy = (
 	}
 };
 
+export const convertText = (
+	copy: Array<string | { copy: string; strong: boolean }>,
+): string => {
+	const sections = copy.map((section) => {
+		if (typeof section === 'string') {
+			return `${section} `;
+		} else {
+			return `<strong>${section.copy}</strong>`;
+		}
+	});
+	const convertedText = sections.join(' ');
+	return convertedText;
+};
+
 export function ThreeTierCard({
 	cardTier,
 	promoCount,
@@ -269,10 +283,9 @@ export function ThreeTierCard({
 			<CheckList
 				checkListData={benefits.list.map((benefit) => {
 					return {
-						text: benefit.copy,
+						text: convertText(benefit.copy),
 						isChecked: true,
 						toolTip: benefit.tooltip,
-						strong: benefit.strong,
 					};
 				})}
 				style={'compact'}
