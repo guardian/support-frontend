@@ -252,7 +252,7 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
         val createPaypalPaymentDataWithInvalidEmail = CreatePaypalPaymentData(
           Currency.GBP,
           BigDecimal(3),
-          "return-url/return?email=test,user@gmail.com",
+          "https://support.thegulocal.com/uk/paypal/rest/return?email=test,user@gmail.com",
           "cancel-url",
         )
         when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
@@ -341,6 +341,17 @@ class PaypalBackendSpec extends AnyWordSpec with Matchers with FutureEitherValue
 
         verify(mockSoftOptInsService, times(1)).sendMessage(any(), any())(any())
       }
+
+      "return error if email address has a comma" in new PaypalBackendFixture {
+        when(mockSwitchService.allSwitches).thenReturn(switchServiceOnResponse)
+        when(mockPaypalService.executePayment(executePaypalPaymentData)).thenReturn(paymentServiceResponse)
+        paypalBackend
+          .executePayment(executePaypalPaymentData.copy(email = "john,duff@thegulocal.com"), clientBrowserInfo)
+          .futureLeft
+          .message mustBe "Invalid email address"
+
+      }
+
     }
 
     "a request is made to process a refund hook" should {
