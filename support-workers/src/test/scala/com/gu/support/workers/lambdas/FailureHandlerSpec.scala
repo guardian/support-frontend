@@ -117,8 +117,6 @@ class FailureHandlerITSpec extends AsyncLambdaSpec with MockContext {
 
     val testFields = FailedEmailFields.digitalPack("test@thegulocal.com", IdentityUserId("30001643"))
 
-    when(emailService.send(any[EmailFields])).thenReturn(Future.successful(()))
-
     val failureHandler = new FailureHandler(emailService)
 
     val outStream = new ByteArrayOutputStream()
