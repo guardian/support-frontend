@@ -58,8 +58,8 @@ import type { TsAndCsProps } from '../components/threeTierTsAndCs';
 import { ThreeTierTsAndCs, ToteTsAndCs } from '../components/threeTierTsAndCs';
 import type { TierPlans } from '../setup/threeTierConfig';
 import {
-	tierCards as tierCardsNoTote,
-	tierCardsTote,
+	tierCardsAdditionalBenefits,
+	tierCards as tierCardsNoAdditionalBenefits,
 } from '../setup/threeTierConfig';
 
 const recurringContainer = css`
@@ -223,8 +223,8 @@ export function ThreeTierLanding(): JSX.Element {
 	);
 
 	const tierCards = abParticipations.additionalBenefits
-		? tierCardsTote
-		: tierCardsNoTote;
+		? tierCardsAdditionalBenefits
+		: tierCardsNoAdditionalBenefits;
 
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [

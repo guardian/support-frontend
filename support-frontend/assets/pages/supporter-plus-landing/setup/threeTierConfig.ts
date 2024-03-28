@@ -148,6 +148,20 @@ const tier2tote: TierCard = {
 	},
 };
 
+const tier2AdditionalBenefit: TierCard = {
+	...tier2,
+	benefits: {
+		list: [
+			{
+				copy: 'A free book as our gift to you.** Choose from a list of xx selected especially for readers by Guardian staff',
+				strong: true,
+				tooltip: `Choose from a list of xx selected especially for readers by Guardian staff`,
+			},
+			...tier2.benefits.list,
+		],
+	},
+};
+
 const tier3: TierCard = {
 	title: 'Digital + print',
 	benefits: {
@@ -317,6 +331,33 @@ const tier3tote: TierCard = {
 		],
 		list: [...tier3.benefits.list],
 	},
+};
+
+const tier3AdditionalBenefit: TierCard = {
+	...tier3,
+	benefits: {
+		description: [
+			'The rewards from All-access digital ',
+			{ strong: true, copy: 'including a free book as our gift to you**' },
+		],
+		list: [
+			{
+				copy: 'A free book as our gift to you.** Choose from a list of xx selected especially for readers by Guardian staff',
+				strong: true,
+			},
+			{
+				copy: 'Choose from a list of xx selected especially for readers by Guardian staff',
+				tooltip: `Choose from a list of xx selected especially for readers by Guardian staff`,
+			},
+			...tier3.benefits.list,
+		],
+	},
+};
+
+export const tierCardsAdditionalBenefits: TierCards = {
+	tier1,
+	tier2: tier2AdditionalBenefit,
+	tier3: tier3AdditionalBenefit,
 };
 
 export const tierCardsTote: TierCards = {
