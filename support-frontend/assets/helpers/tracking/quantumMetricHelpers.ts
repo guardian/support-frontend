@@ -1,7 +1,4 @@
-import {
-	getConsentFor,
-	onConsent,
-} from '@guardian/consent-management-platform';
+import { getConsentFor, onConsent } from '@guardian/libs';
 import type { ContributionType } from 'helpers/contributions';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';

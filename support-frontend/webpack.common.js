@@ -118,7 +118,6 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 				exclude: {
 					and: [/node_modules/],
 					not: [
-						/@guardian\/consent-management-platform/,
 						/@guardian\/libs/,
 						// we need to include this here to support Safari < v14 as @guardian/source doesn't ship compiled,
 						// so we need our Babel to make it compatible with things like public class fields
