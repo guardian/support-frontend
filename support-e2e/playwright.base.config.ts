@@ -17,8 +17,6 @@ export const baseObject: PlaywrightTestConfig = {
 	/* Fail the build on CI if you accidentally left test.only in the source code. */
 	forbidOnly: !!process.env.CI,
 	retries: 1,
-	/* Opt out of parallel tests on CI. */
-	workers: process.env.CI ? 1 : undefined,
 	reporter: 'html',
 	use: {
 		/* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
