@@ -366,6 +366,13 @@ export function ThreeTierLanding(): JSX.Element {
 				contributionTypeKeyOverride ?? tierPlanPeriod
 			].charges[countryGroupId];
 
+		if (cardTier === 1) {
+			tierPlanCountryCharges = {
+				...tierPlanCountryCharges,
+				price: recurringAmount,
+			};
+		}
+
 		if (cardTier === 2 && promotion) {
 			tierPlanCountryCharges = {
 				...tierPlanCountryCharges,
@@ -408,6 +415,14 @@ export function ThreeTierLanding(): JSX.Element {
 			planCost: cardContent.planCost,
 		};
 	};
+
+	const { amounts } = useContributionsSelector((state) => state.common);
+	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY.amounts[0];
+	const annualRecurringAmount = amounts.amountsCardData.ANNUAL.amounts[0];
+	const recurringAmount =
+		contributionType === 'MONTHLY'
+			? monthlyRecurringAmount
+			: annualRecurringAmount;
 
 	const generateTierCheckoutLink = (cardTier: 1 | 2 | 3, promo?: Promotion) => {
 		const tierPlanCountryCharges =
