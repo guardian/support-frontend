@@ -5,8 +5,13 @@ export const baseObject: PlaywrightTestConfig = {
 	testDir: 'tests',
 	testMatch: '**/*.test.ts',
 
-	/* Maximum time one test can run for. */
-	timeout: 120 * 1000,
+	/**
+	 * Maximum time one test can run for.
+	 *
+	 * This is set to 40 seconds due to the thank you page timeout being 30 seconds allowing for
+	 * {@link https://github.com/guardian/support-frontend/blob/62727c38f160e2effe83cbe990319ca05e12a777/support-frontend/assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts#L248-L249}
+	 * */
+	timeout: 40 * 1000,
 	expect: {
 		timeout: 90000,
 	},
