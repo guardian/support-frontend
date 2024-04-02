@@ -12,9 +12,6 @@ export const baseObject: PlaywrightTestConfig = {
 	 * {@link https://github.com/guardian/support-frontend/blob/62727c38f160e2effe83cbe990319ca05e12a777/support-frontend/assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts#L248-L249}
 	 * */
 	timeout: 40 * 1000,
-	expect: {
-		timeout: 90000,
-	},
 	fullyParallel: true,
 	/* Fail the build on CI if you accidentally left test.only in the source code. */
 	forbidOnly: !!process.env.CI,
