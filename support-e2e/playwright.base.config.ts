@@ -8,10 +8,11 @@ export const baseObject: PlaywrightTestConfig = {
 	/**
 	 * Maximum time one test can run for.
 	 *
-	 * This is set to 40 seconds due to the thank you page timeout being 30 seconds allowing for
-	 * {@link https://github.com/guardian/support-frontend/blob/62727c38f160e2effe83cbe990319ca05e12a777/support-frontend/assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts#L248-L249}
+	 * This is set to 60 seconds due to the thank you page timeout being 30 seconds for checking on support-workers.
+	 * This value is `(supportWorkersTimeout + defaultPlaywrightTimeout) * millisecondsInSecond`
+	 * @see `POLLING_INTERVAL` and `MAX_POLLS` in {@link file://./../../support-frontend/assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts}
 	 * */
-	timeout: 40 * 1000,
+	timeout: (30 + 30) * 1000,
 	fullyParallel: true,
 	/* Fail the build on CI if you accidentally left test.only in the source code. */
 	forbidOnly: !!process.env.CI,
