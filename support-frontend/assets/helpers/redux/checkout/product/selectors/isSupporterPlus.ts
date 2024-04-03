@@ -15,6 +15,7 @@ export function isSupporterPlusFromState(state: ContributionsState): boolean {
 		state.page.checkoutForm.product.otherAmounts,
 		contributionType,
 	);
+	console.info('isSupporterPlusFromState', thresholdPrice, selectedAmount);
 	return selectedAmount >= thresholdPrice;
 }
 

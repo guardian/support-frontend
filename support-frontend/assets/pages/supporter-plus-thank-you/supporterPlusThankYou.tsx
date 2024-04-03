@@ -22,6 +22,7 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
 import { getSession } from 'helpers/storage/storage';
+import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import {
 	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 	trackUserData,
@@ -140,14 +141,32 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const isAmountLargeDonation = amount
 		? isLargeDonation(amount, contributionType, paymentMethod)
 		: false;
-
-	const promotion = getPromotion(
-		productPrices,
-		countryId,
-		billingPeriod,
-		fulfilmentOption,
-		productOption,
+	const thresholdPrice = useContributionsSelector((state) =>
+		getThresholdPrice(contributionType, state),
 	);
+	/**
+	 * We would normally use the isSuporterPlusFromState selector here,
+	 * but the amount can actually come from `localStorage`.
+	 *
+	 * We should clear this up when refactoring
+	 */
+	const isSupporterPlus = thresholdPrice ? amount >= thresholdPrice : false;
+
+	/**
+	 * We only support SupporterPlus for now.
+	 *
+	 * This is an edgecase we see if the promoCode gets passed through to the thank you page.
+	 * We have not found the route where this happens - this is a hack.
+	 */
+	const promotion = isSupporterPlus
+		? getPromotion(
+				productPrices,
+				countryId,
+				billingPeriod,
+				fulfilmentOption,
+				productOption,
+		  )
+		: undefined;
 
 	useEffect(() => {
 		if (amount) {
@@ -194,10 +213,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 		}
 	}, []);
 
-	const amountIsAboveThreshold = useContributionsSelector(
-		isSupporterPlusFromState,
-	);
-
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
@@ -219,7 +234,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 			'signIn',
 		),
 		...maybeThankYouModule(
-			contributionType !== 'ONE_OFF' && amountIsAboveThreshold,
+			contributionType !== 'ONE_OFF' && isSupporterPlus,
 			'appDownload',
 		),
 		...maybeThankYouModule(
@@ -258,7 +273,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 							contributionType={contributionType}
 							amount={amount}
 							currency={currencyId}
-							amountIsAboveThreshold={amountIsAboveThreshold}
+							amountIsAboveThreshold={isSupporterPlus}
 							isSignedIn={isSignedIn}
 							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 							showTote={showTote}
