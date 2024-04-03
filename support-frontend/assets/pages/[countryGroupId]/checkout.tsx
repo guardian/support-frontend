@@ -54,14 +54,11 @@ import {
 import { getStripeKey } from 'helpers/forms/stripe';
 import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
-import {
-	type IsoCountry,
-	newspaperCountries,
-} from 'helpers/internationalisation/country';
+import { type IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
+import { describeProduct } from 'helpers/productCatalogue';
 import { renderPage } from 'helpers/rendering/render';
 import { get } from 'helpers/storage/cookie';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -129,77 +126,6 @@ const query = {
 	product: searchParams.get('product'),
 	ratePlan: searchParams.get('ratePlan'),
 };
-
-function describeProduct(product: string, ratePlan: string) {
-	let description = `${product} - ${ratePlan}`;
-	let frequency = '';
-	let showAddressFields = false;
-	let addressCountries = {};
-
-	if (product === 'HomeDelivery') {
-		frequency = 'month';
-		description = `${ratePlan} paper`;
-
-		showAddressFields = true;
-		addressCountries = newspaperCountries;
-
-		if (ratePlan === 'Sixday') {
-			description = 'Six day paper';
-		}
-		if (ratePlan === 'Everyday') {
-			description = 'Every day paper';
-		}
-		if (ratePlan === 'Weekend') {
-			description = 'Weekend paper';
-		}
-		if (ratePlan === 'Saturday') {
-			description = 'Saturday paper';
-		}
-		if (ratePlan === 'Sunday') {
-			description = 'Sunday paper';
-		}
-	}
-
-	if (product === 'NationalDelivery') {
-		showAddressFields = true;
-		addressCountries = newspaperCountries;
-	}
-
-	if (
-		product === 'GuardianWeeklyDomestic' ||
-		product === 'GuardianWeeklyRestOfWorld'
-	) {
-		showAddressFields = true;
-		addressCountries = gwDeliverableCountries;
-
-		if (ratePlan === 'OneYearGift') {
-			frequency = 'year';
-			description = 'The Guardian Weekly Gift Subscription';
-		}
-		if (ratePlan === 'Annual') {
-			frequency = 'year';
-			description = 'The Guardian Weekly';
-		}
-		if (ratePlan === 'Quarterly') {
-			frequency = 'quarter';
-			description = 'The Guardian Weekly';
-		}
-		if (ratePlan === 'Monthly') {
-			frequency = 'month';
-			description = 'The Guardian Weekly';
-		}
-		if (ratePlan === 'ThreeMonthGift') {
-			frequency = 'quarter';
-			description = 'The Guardian Weekly Gift Subscription';
-		}
-		if (ratePlan === 'SixWeekly') {
-			frequency = 'month';
-			description = 'The Guardian Weekly';
-		}
-	}
-
-	return { description, frequency, showAddressFields, addressCountries };
-}
 
 /** Page styles - styles used specifically for the checkout page */
 const darkBackgroundContainerMobile = css`
