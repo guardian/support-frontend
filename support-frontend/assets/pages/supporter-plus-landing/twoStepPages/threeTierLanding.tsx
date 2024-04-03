@@ -35,6 +35,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
+import { productCatalogDescription } from 'helpers/productCatalogue';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
@@ -54,7 +55,6 @@ import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
-import type { TsAndCsProps } from '../components/threeTierTsAndCs';
 import { ThreeTierTsAndCs, ToteTsAndCs } from '../components/threeTierTsAndCs';
 import type { TierPlans } from '../setup/threeTierConfig';
 import {
@@ -220,7 +220,6 @@ const paymentFrequencyMap = {
 };
 const isCardUserSelected = (
 	cardPrice: number,
-	contributionType: 'MONTHLY' | 'ANNUAL',
 	cardPriceDiscount?: number,
 ): boolean => {
 	const urlParams = new URLSearchParams(window.location.search);
@@ -230,11 +229,50 @@ const isCardUserSelected = (
 		return false;
 	}
 	return (
-		(contributionType in paymentFrequencyMap &&
-			Number(urlSelectedAmount) === cardPrice) ||
+		Number(urlSelectedAmount) === cardPrice ||
 		Number(urlSelectedAmount) === cardPriceDiscount
 	);
 };
+
+const productCatalog = window.guardian.productCatalog;
+function getCardData(
+	productKey: 'Contribution' | 'SupporterPlus',
+	ratePlan: 'Monthly' | 'Annual',
+	isoCurrency: IsoCurrency,
+	promotion?: Promotion,
+	pricingOverride?: number,
+) {
+	const description = productCatalogDescription[productKey];
+	const pricing =
+		pricingOverride ??
+		productCatalog[productKey].ratePlans[ratePlan].pricing[isoCurrency];
+
+	return {
+		title: description.label,
+		isRecommended: productKey === 'SupporterPlus',
+		isUserSelected: isCardUserSelected(pricing, promotion?.discount?.amount),
+		benefits: {
+			list: description.benefits.map((benefit) => ({ copy: benefit.text })),
+			description: undefined,
+		},
+		planCost: {
+			price: pricing,
+			promoCode: promotion?.name,
+			discount:
+				promotion?.discount?.amount && promotion.discountedPrice
+					? {
+							percentage: promotion.discount.amount,
+							price: promotion.discountedPrice,
+							duration: {
+								value: promotion.numberOfDiscountedPeriods ?? 0,
+								period: 'MONTHLY' as RegularContributionType,
+							},
+					  }
+					: undefined,
+		},
+		externalBtnLink: 'checkout',
+	};
+}
 
 export function ThreeTierLanding(): JSX.Element {
 	const dispatch = useContributionsDispatch();
@@ -356,38 +394,15 @@ export function ThreeTierLanding(): JSX.Element {
 		);
 	};
 
+	/** @deprecated - use getCardData instead */
 	const getCardContentBaseObject = (
-		cardTier: 1 | 2 | 3,
+		cardTier: 3,
 		contributionTypeKeyOverride?: 'annual' | 'monthly',
 	) => {
-		let tierPlanCountryCharges =
+		const tierPlanCountryCharges =
 			tierCards[`tier${cardTier}`].plans[
 				contributionTypeKeyOverride ?? tierPlanPeriod
 			].charges[countryGroupId];
-
-		if (cardTier === 1) {
-			tierPlanCountryCharges = {
-				...tierPlanCountryCharges,
-				price: recurringAmount,
-			};
-		}
-
-		if (cardTier === 2 && promotion) {
-			tierPlanCountryCharges = {
-				...tierPlanCountryCharges,
-				promoCode: promotion.promoCode,
-				discount: promotion.discount
-					? {
-							percentage: promotion.discount.amount,
-							price: promotion.discountedPrice ?? tierPlanCountryCharges.price,
-							duration: {
-								value: promotion.numberOfDiscountedPeriods ?? 0,
-								period: contributionType,
-							},
-					  }
-					: undefined,
-			};
-		}
 
 		return {
 			title: tierCards[`tier${cardTier}`].title,
@@ -395,24 +410,9 @@ export function ThreeTierLanding(): JSX.Element {
 			isRecommended: !!tierCards[`tier${cardTier}`].isRecommended,
 			isUserSelected: isCardUserSelected(
 				tierPlanCountryCharges.price,
-				contributionType,
 				tierPlanCountryCharges.discount?.price,
 			),
 			planCost: tierPlanCountryCharges,
-		};
-	};
-
-	const getTsAndCsBaseObject = (
-		cardTier: 1 | 2 | 3,
-		contributionTypeKeyOverride?: 'annual' | 'monthly',
-	): TsAndCsProps => {
-		const cardContent = getCardContentBaseObject(
-			cardTier,
-			contributionTypeKeyOverride,
-		);
-		return {
-			title: cardContent.title,
-			planCost: cardContent.planCost,
 		};
 	};
 
@@ -457,6 +457,29 @@ export function ThreeTierLanding(): JSX.Element {
 		urlParams.set('selected-contribution-type', 'one_off');
 
 		return `checkout?${urlParams.toString()}${window.location.hash}`;
+	};
+
+	const ratePlan = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
+	const tier1Card = getCardData(
+		'Contribution',
+		ratePlan,
+		currencyId,
+		undefined,
+		recurringAmount,
+	);
+	const tier2Card = getCardData(
+		'SupporterPlus',
+		ratePlan,
+		currencyId,
+		/**
+		 * We only pass promotion to Supporter Plus (Tier 2)
+		 * as that's the only product we support promotions on for now.
+		 **/
+		promotion,
+	);
+	const tier3Card = {
+		...getCardContentBaseObject(3),
+		externalBtnLink: generateTierCheckoutLink(3),
 	};
 
 	return (
@@ -504,18 +527,7 @@ export function ThreeTierLanding(): JSX.Element {
 						additionalStyles={paymentFrequencyButtonsCss}
 					/>
 					<ThreeTierCards
-						cardsContent={[
-							{
-								...getCardContentBaseObject(1),
-							},
-							{
-								...getCardContentBaseObject(2),
-							},
-							{
-								...getCardContentBaseObject(3),
-								externalBtnLink: generateTierCheckoutLink(3),
-							},
-						]}
+						cardsContent={[tier1Card, tier2Card, tier3Card]}
 						currencyId={currencyId}
 						paymentFrequency={contributionType}
 						buttonCtaClickHandler={handleButtonCtaClick}
@@ -554,15 +566,9 @@ export function ThreeTierLanding(): JSX.Element {
 			>
 				<ThreeTierTsAndCs
 					tsAndCsContent={[
-						{
-							...getTsAndCsBaseObject(1),
-						},
-						{
-							...getTsAndCsBaseObject(2),
-						},
-						{
-							...getTsAndCsBaseObject(3),
-						},
+						{ title: tier1Card.title, planCost: tier1Card.planCost },
+						{ title: tier2Card.title, planCost: tier2Card.planCost },
+						{ title: tier3Card.title, planCost: tier3Card.planCost },
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
@@ -570,10 +576,12 @@ export function ThreeTierLanding(): JSX.Element {
 					<ToteTsAndCs
 						currency={currencies[currencyId].glyph}
 						toteCostMonthly={
-							getCardContentBaseObject(2, 'monthly').planCost.price
+							getCardData('SupporterPlus', 'Monthly', currencyId, promotion)
+								.planCost.price
 						}
 						toteCostAnnual={
-							getCardContentBaseObject(2, 'annual').planCost.price
+							getCardData('SupporterPlus', 'Annual', currencyId, promotion)
+								.planCost.price
 						}
 					></ToteTsAndCs>
 				)}

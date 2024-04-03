@@ -8,7 +8,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierCard } from './threeTierCard';
 
-interface ThreeTierCardsProps {
+type ThreeTierCardsProps = {
 	cardsContent: Array<{
 		title: string;
 		isRecommended: boolean;
@@ -30,7 +30,7 @@ interface ThreeTierCardsProps {
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
 	) => void;
-}
+};
 
 const container = (cardCount: number) => css`
 	display: flex;
