@@ -17,3 +17,9 @@ export const setupPage = async (
 	await setTestCookies(context, 'SupportPostDeployTestF', domain);
 	await page.goto(pageUrl);
 };
+
+/**
+ * This is set to 35 seconds due to the 30 second timeout we have on the thank you screen displaying.
+ * @see `POLLING_INTERVAL` and `MAX_POLLS` in {@link file://./../../support-frontend/assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts}
+ **/
+export const THANK_YOU_PAGE_EXPECT_TIMEOUT = 35 * 1000;

@@ -3,7 +3,7 @@ import { email } from './utils/users';
 import { checkRecaptcha } from './utils/recaptcha';
 import { fillInCardDetails } from './utils/cardDetails';
 import { fillInPayPalDetails } from './utils/paypal';
-import { setupPage } from './utils/page';
+import { THANK_YOU_PAGE_EXPECT_TIMEOUT, setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
 
 interface TestDetails {
@@ -35,9 +35,12 @@ test.describe('Sign up for a one-off contribution', () => {
 			context,
 			baseURL,
 		}) => {
+			// Landing
 			const page = await context.newPage();
 			await setupPage(page, context, baseURL, '/uk/contribute');
 			await page.getByRole('button', { name: 'Support now' }).click();
+
+			// Checkout
 			await expect(page).toHaveURL(/\/uk\/contribute\/checkout/);
 			if (testDetails.customAmount) {
 				await page.locator("label[for='amount-other']").click();
@@ -57,7 +60,11 @@ test.describe('Sign up for a one-off contribution', () => {
 					fillInPayPalDetails(page);
 					break;
 			}
-			await expect(page).toHaveURL(/\/uk\/thankyou/);
+
+			// Thank you
+			await expect(page).toHaveURL(/\/uk\/thankyou/, {
+				timeout: THANK_YOU_PAGE_EXPECT_TIMEOUT,
+			});
 		});
 	});
 });

@@ -5,7 +5,7 @@ import { checkRecaptcha } from './utils/recaptcha';
 import { fillInCardDetails } from './utils/cardDetails';
 import { fillInDirectDebitDetails } from './utils/directDebitDetails';
 import { fillInPayPalDetails } from './utils/paypal';
-import { setupPage } from './utils/page';
+import { THANK_YOU_PAGE_EXPECT_TIMEOUT, setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
 
 type PaymentType = 'Credit/Debit card' | 'Direct debit' | 'PayPal';
@@ -75,7 +75,7 @@ const testsDetailsGifted: TestDetailsGifted[] = [
 		frequency: '12 months',
 		paymentType: 'Direct debit',
 	},
-  /**
+	/**
 	 * PayPal is currently throwing a "to many login attempts" error, so we're
 	 * going to inactivate this test until we have a solution for it to avoid
 	 * alert numbness.
@@ -96,6 +96,7 @@ test.describe('Sign up for a Guardian Weekly subscription', () => {
 			context,
 			baseURL,
 		}) => {
+			// Landing
 			const page = await context.newPage();
 			const testFirstName = firstName();
 			const testEmail = email();
@@ -103,6 +104,8 @@ test.describe('Sign up for a Guardian Weekly subscription', () => {
 			await page
 				.locator(`a[aria-label='${testDetails.frequency}- Subscribe now']`)
 				.click();
+
+			// Checkout
 			await page.getByLabel('title').selectOption('Ms');
 			await page.getByLabel('First name').fill(testFirstName);
 			await page.getByLabel('Last name').fill(lastName());
@@ -163,7 +166,7 @@ test.describe('Sign up for a Guardian Weekly subscription', () => {
 
 			await expect(
 				page.getByRole('heading', { name: successMsgRegex }),
-			).toBeVisible();
+			).toBeVisible({ timeout: THANK_YOU_PAGE_EXPECT_TIMEOUT });
 		});
 	});
 });
@@ -175,6 +178,7 @@ test.describe('Gifted subscriptions', () => {
 			context,
 			baseURL,
 		}) => {
+			// Landing
 			const testFirstName = firstName();
 			const testLastName = lastName();
 			const testEmail = email();
@@ -182,6 +186,8 @@ test.describe('Gifted subscriptions', () => {
 			await page
 				.locator(`a[aria-label='${testDetails.frequency}- Subscribe now']`)
 				.click();
+
+			// Checkout
 			const gifteeDetails = await page
 				.getByText("Gift recipient's details", { exact: true })
 				.locator('..');
@@ -252,9 +258,10 @@ test.describe('Gifted subscriptions', () => {
 				`${processingSubscriptionMessage}|${subscribedMessage}`,
 			);
 
+			// Thank you
 			await expect(
 				page.getByRole('heading', { name: successMsgRegex }),
-			).toBeVisible();
+			).toBeVisible({ timeout: THANK_YOU_PAGE_EXPECT_TIMEOUT });
 		});
 	});
 });
