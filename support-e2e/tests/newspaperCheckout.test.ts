@@ -5,7 +5,7 @@ import { checkRecaptcha } from './utils/recaptcha';
 import { fillInCardDetails } from './utils/cardDetails';
 import { fillInDirectDebitDetails } from './utils/directDebitDetails';
 import { fillInPayPalDetails } from './utils/paypal';
-import { THANK_YOU_PAGE_EXPECT_TIMEOUT, setupPage } from './utils/page';
+import { setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
 
 interface TestDetails {
@@ -81,7 +81,6 @@ test.describe('Sign up newspaper subscription', () => {
 			) {
 				test.skip();
 			}
-			// Landing
 			const page = await context.newPage();
 			const testFirstName = firstName();
 			const testEmail = email();
@@ -89,8 +88,6 @@ test.describe('Sign up newspaper subscription', () => {
 			await page
 				.locator(`a[aria-label='${testDetails.frequency}- Subscribe']`)
 				.click();
-
-			// Checkout
 			await page.getByLabel('title').selectOption('Ms');
 			await page.fill('label:has-text("First name")', testFirstName);
 			await page.fill('label:has-text("Last name")', lastName());
@@ -136,10 +133,9 @@ test.describe('Sign up newspaper subscription', () => {
 				`${processingSubscriptionMessage}|${subscribedMessage}`,
 			);
 
-			// Thank you
 			await expect(
 				page.getByRole('heading', { name: successMsgRegex }),
-			).toBeVisible({ timeout: THANK_YOU_PAGE_EXPECT_TIMEOUT });
+			).toBeVisible();
 		});
 	});
 });
