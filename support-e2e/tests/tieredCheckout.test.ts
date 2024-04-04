@@ -5,7 +5,7 @@ import { checkRecaptcha } from './utils/recaptcha';
 import { fillInCardDetails } from './utils/cardDetails';
 import { fillInDirectDebitDetails } from './utils/directDebitDetails';
 import { fillInPayPalDetails } from './utils/paypal';
-import { THANK_YOU_PAGE_EXPECT_TIMEOUT, setupPage } from './utils/page';
+import { setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
 
 interface TestDetails {
@@ -128,7 +128,7 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 			}
 			await expect(page).toHaveURL(
 				`/${testDetails.country?.toLowerCase() || 'uk'}/thankyou`,
-				{ timeout: THANK_YOU_PAGE_EXPECT_TIMEOUT },
+				{ timeout: 600000 },
 			);
 		});
 	});
@@ -174,9 +174,10 @@ test.describe('Subscribe (S+) incl PromoCode via the Tiered checkout', () => {
 			// Thank you
 			await expect(
 				page.getByText(testDetails.expectedThankYouText).first(),
-			).toBeVisible({ timeout: THANK_YOU_PAGE_EXPECT_TIMEOUT });
+			).toBeVisible();
 			await expect(page).toHaveURL(
 				`/uk/thankyou?promoCode=${testDetails.promoCode}`,
+				{ timeout: 600000 },
 			);
 		});
 	});

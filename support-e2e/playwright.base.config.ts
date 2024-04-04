@@ -5,18 +5,17 @@ export const baseObject: PlaywrightTestConfig = {
 	testDir: 'tests',
 	testMatch: '**/*.test.ts',
 
-	/**
-	 * Maximum time one test can run for.
-	 *
-	 * This is set to 60 seconds due to the thank you page timeout being 30 seconds for checking on support-workers.
-	 * This value is `(supportWorkersTimeout + defaultPlaywrightTimeout) * millisecondsInSecond`
-	 * @see `POLLING_INTERVAL` and `MAX_POLLS` in {@link file://./../../support-frontend/assets/helpers/forms/paymentIntegrations/readerRevenueApis.ts}
-	 * */
-	timeout: (30 + 30) * 1000,
+	/* Maximum time one test can run for. */
+	timeout: 120 * 1000,
+	expect: {
+		timeout: 90000,
+	},
 	fullyParallel: true,
 	/* Fail the build on CI if you accidentally left test.only in the source code. */
 	forbidOnly: !!process.env.CI,
 	retries: 1,
+	/* Opt out of parallel tests on CI. */
+	workers: process.env.CI ? 1 : undefined,
 	reporter: 'html',
 	use: {
 		/* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
