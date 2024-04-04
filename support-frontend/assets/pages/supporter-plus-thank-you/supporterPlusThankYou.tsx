@@ -150,7 +150,10 @@ export function SupporterPlusThankYou(): JSX.Element {
 	 *
 	 * We should clear this up when refactoring
 	 */
-	const isSupporterPlus = thresholdPrice ? amount >= thresholdPrice : false;
+	const isSupporterPlus =
+		contributionType !== 'ONE_OFF' && thresholdPrice
+			? amount >= thresholdPrice
+			: false;
 
 	/**
 	 * We only support SupporterPlus for now.
