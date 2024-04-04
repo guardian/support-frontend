@@ -5,6 +5,7 @@ import {
 	palette,
 	space,
 	textSans,
+	visuallyHidden,
 } from '@guardian/source-foundations';
 import {
 	Button,
@@ -138,6 +139,10 @@ export type ContributionsOrderSummaryProps = {
 	productDescription?: { description: string; frequency: string };
 };
 
+const visuallyHiddenCss = css`
+	${visuallyHidden};
+`;
+
 export function ContributionsOrderSummary({
 	description,
 	total,
@@ -208,7 +213,9 @@ export function ContributionsOrderSummary({
 				<p>
 					{totalExcludingPromo && (
 						<span css={originalPriceStrikeThrough}>
+							<span css={visuallyHiddenCss}>Was </span>
 							{formattedTotalExcludingPromo}
+							<span css={visuallyHiddenCss}>, now </span>
 						</span>
 					)}{' '}
 					{paymentFrequency

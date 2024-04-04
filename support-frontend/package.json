@@ -104,6 +104,7 @@
     "emotion-theming": "^11.0.0",
     "framer-motion": "^1.11.1",
     "lodash.debounce": "^4.0.6",
+    "mockdate": "^3.0.5",
     "ophan-tracker-js": "^1.4.3",
     "react-day-picker": "^7.4.8",
     "react-is": "^18.2.0",

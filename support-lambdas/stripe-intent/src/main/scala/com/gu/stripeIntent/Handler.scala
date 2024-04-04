@@ -76,7 +76,7 @@ object Handler extends ApiGatewayHandler[RequestBody, StripeIntentEnv] {
 
   def getRealConfig(stage: Stage): Map[StripePublicKey, StripePrivateKey] = {
     val config = S3Loader
-      .load(StripeConfigPath.apply(stage))
+      .load(StripeConfigPath.forStage(stage))
     val stripeKeys = config
       .getObject("mappings")
       .entrySet()

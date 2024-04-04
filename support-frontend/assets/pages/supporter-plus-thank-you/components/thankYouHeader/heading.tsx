@@ -55,7 +55,7 @@ function Monthly({ isoCurrency, amount, promotion, name }: MonthlyProps) {
 					{formatAmount(
 						currencies[isoCurrency],
 						spokenCurrencies[isoCurrency],
-						amount,
+						promotion.discountedPrice,
 						false,
 					)}
 					/month for the first {promotion.discount.durationMonths} months, then{' '}
@@ -75,6 +75,73 @@ function Monthly({ isoCurrency, amount, promotion, name }: MonthlyProps) {
 		<h1 css={headerTitleText}>
 			Thank you {name}for supporting us with{' '}
 			<YellowAmount currency={isoCurrency} amount={amount} /> each month ❤️
+		</h1>
+	);
+}
+
+type AnnualProps = {
+	amount: number;
+	isoCurrency: IsoCurrency;
+	promotion?: Promotion;
+	name?: string;
+};
+function Annual({ isoCurrency, amount, promotion, name }: AnnualProps) {
+	if (
+		/**
+		 * This is a check to see if the promo exists,
+		 * it's a little odd due to the type having
+		 * every prop optional.
+		 *
+		 * We could/should do some parsing pre-render to avoid this.
+		 * */
+		promotion?.discountedPrice &&
+		promotion.discount?.durationMonths
+	) {
+		return (
+			<>
+				<h1 css={headerTitleText}>
+					Thank you {name}for supporting us with{' '}
+					<YellowAmount
+						amount={promotion.discountedPrice}
+						currency={isoCurrency}
+					/>
+					{`/year`}
+					<sup css={supCss}>*</sup>
+				</h1>
+				<p
+					css={css`
+						margin-top: ${space[2]}px;
+					`}
+				>
+					<sup>*</sup> You'll pay{' '}
+					{formatAmount(
+						currencies[isoCurrency],
+						spokenCurrencies[isoCurrency],
+						promotion.discountedPrice,
+						false,
+					)}
+					{/**
+					 * We'll assume that yearly promotions are always 12 months.
+					 * if not this will look weird, but we can work out what we would
+					 * like to do if that becomes a usecase
+					 **/}
+					/year for the first year, then{' '}
+					{formatAmount(
+						currencies[isoCurrency],
+						spokenCurrencies[isoCurrency],
+						amount,
+						false,
+					)}
+					/year afterwards unless you cancel.
+				</p>
+			</>
+		);
+	}
+
+	return (
+		<h1 css={headerTitleText}>
+			Thank you {name}for supporting us with{' '}
+			<YellowAmount currency={isoCurrency} amount={amount} /> each year ❤️
 		</h1>
 	);
 }
@@ -156,10 +223,12 @@ function Heading({
 
 		case 'ANNUAL':
 			return (
-				<h1 css={headerTitleText}>
-					Thank you {maybeNameAndTrailingSpace}for supporting us with{' '}
-					<YellowAmount currency={currency} amount={amount} /> each year ❤️
-				</h1>
+				<Annual
+					amount={amount}
+					isoCurrency={currency}
+					promotion={promotion}
+					name={maybeNameAndTrailingSpace}
+				/>
 			);
 
 		default:

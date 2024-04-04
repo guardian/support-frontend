@@ -1,17 +1,19 @@
 package com.gu.aws
 
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, StandardUnit}
-import com.amazonaws.services.cloudwatch.{AmazonCloudWatch, AmazonCloudWatchClientBuilder}
+import com.typesafe.scalalogging.LazyLogging
+import software.amazon.awssdk.regions.Region
+import software.amazon.awssdk.services.cloudwatch.CloudWatchClient
+import software.amazon.awssdk.services.cloudwatch.model.{Dimension, MetricDatum, PutMetricDataRequest, StandardUnit}
 
-import scala.util.Try
+import scala.jdk.CollectionConverters._
+import scala.util.{Failure, Success, Try}
 
-object AwsCloudWatchMetricPut {
-  val client: AmazonCloudWatch =
-    AmazonCloudWatchClientBuilder
-      .standard()
-      .withRegion(Regions.EU_WEST_1)
-      .withCredentials(CredentialsProvider)
+object AwsCloudWatchMetricPut extends LazyLogging {
+  val client: CloudWatchClient =
+    CloudWatchClient
+      .builder()
+      .region(Region.EU_WEST_1)
+      .credentialsProvider(CredentialsProvider)
       .build()
 
   case class MetricNamespace(value: String) extends AnyVal
@@ -26,25 +28,41 @@ object AwsCloudWatchMetricPut {
       value: Double = 1.0,
   )
 
-  def apply(client: AmazonCloudWatch)(request: MetricRequest): Try[Unit] = {
+  def apply(client: CloudWatchClient)(request: MetricRequest): Try[Unit] = {
+    logger.info("Logging metric: " + request)
 
-    val putMetricDataRequest = new PutMetricDataRequest
-    putMetricDataRequest.setNamespace(request.namespace.value)
+    val javaDimensions = request.dimensions
+      .map { case (name, value) =>
+        Dimension
+          .builder()
+          .name(name.value)
+          .value(value.value)
+          .build()
+      }
+      .toSeq
+      .asJava
 
-    val metricDatum1 = request.dimensions.foldLeft(
-      new MetricDatum()
-        .withMetricName(request.name.value),
-    ) { case (agg, (name, value)) =>
-      agg.withDimensions(
-        new Dimension()
-          .withName(name.value)
-          .withValue(value.value),
-      )
+    val metricDatum1 =
+      MetricDatum
+        .builder()
+        .metricName(request.name.value)
+        .dimensions(javaDimensions)
+        .value(request.value)
+        .unit(StandardUnit.COUNT)
+        .build()
+
+    val putMetricDataRequest = PutMetricDataRequest
+      .builder()
+      .namespace(request.namespace.value)
+      .metricData(metricDatum1)
+      .build()
+
+    val attempt = Try(client.putMetricData(putMetricDataRequest))
+    attempt match {
+      case Failure(exception) => logger.error("metric send failed with " + exception.toString)
+      case Success(value) => logger.info("metric sent successfully: " + value)
     }
-    metricDatum1.setValue(request.value)
-    metricDatum1.setUnit(StandardUnit.Count)
-    putMetricDataRequest.getMetricData.add(metricDatum1)
-    Try(client.putMetricData(putMetricDataRequest)).map(_ => ())
+    attempt.map(_ => ())
   }
 
 }

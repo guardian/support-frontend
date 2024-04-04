@@ -14,9 +14,12 @@ export const supporterPlusLegal = (
 	const tierPlanCost = `${currencyGlyph}${lowerBenefitsThresholds[countryGroupId][contributionType]}`;
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
 	const planCostNoPromo = `${tierPlanCost}${divider}${period}`;
-	if (promotion?.discountedPrice && promotion.numberOfDiscountedPeriods) {
-		// EXAMPLE: £16/month for the first 12 months, then £25/month
-		const discountTierPlanCost = `${currencyGlyph}${promotion.discountedPrice}`;
+	const promoPrice = promotion?.discountedPrice;
+	if (promoPrice && promotion.numberOfDiscountedPeriods) {
+		// EXAMPLE: $8.50/month for the first 6 months, then $17/month
+		const promoPriceRounded =
+			promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);
+		const discountTierPlanCost = `${currencyGlyph}${promoPriceRounded}`;
 		const discountDuration = promotion.numberOfDiscountedPeriods;
 		return `${discountTierPlanCost}${divider}${period} for the first ${
 			discountDuration > 1 ? discountDuration : ''

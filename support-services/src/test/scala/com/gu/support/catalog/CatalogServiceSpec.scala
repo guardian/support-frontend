@@ -6,8 +6,11 @@ import io.circe.parser._
 import CatalogServiceSpec.serviceWithFixtures
 import com.gu.i18n.Currency
 import com.gu.support.config.TouchPointEnvironments.PROD
+import io.circe.Json
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+
+import scala.util.{Success, Try}
 
 class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
 
@@ -72,6 +75,10 @@ class CatalogServiceSpec extends AsyncFlatSpec with Matchers {
     } yield priceList.savingVsRetail shouldBe Some(34)).getOrElse(fail())
 
   }
+}
+
+class SimpleJsonProvider(json: Json) extends CatalogJsonProvider {
+  override def get: Try[Json] = Success(json)
 }
 
 object CatalogServiceSpec {

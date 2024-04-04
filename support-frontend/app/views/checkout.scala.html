@@ -4,6 +4,8 @@
 @import assets.AssetsResolver
 @import admin.settings.AllSettings
 @import views.EmptyDiv
+@import io.circe.JsonObject
+
 @(
   geoData: GeoData,
   serversideTests: Map[String,Participation],
@@ -13,6 +15,7 @@
   membersDataApiUrl: String,
   guestAccountCreationToken: Option[String],
   v2recaptchaConfigPublicKey: String,
+  productCatalog: JsonObject,
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(
@@ -38,5 +41,6 @@
     paymentApiPayPalEndpoint = paymentApiPayPalEndpoint,
     membersDataApiUrl = membersDataApiUrl,
     guestAccountCreationToken = guestAccountCreationToken,
+    productCatalog = productCatalog,
   )
 }
