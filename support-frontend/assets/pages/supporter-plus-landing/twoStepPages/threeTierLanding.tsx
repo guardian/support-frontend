@@ -211,6 +211,31 @@ const links = [
 	},
 ];
 
+// The three tier checkout only supports monthly and annual contributions
+const paymentFrequencies: RegularContributionType[] = ['MONTHLY', 'ANNUAL'];
+const billingFrequencies: BillingPeriod[] = ['Monthly', 'Annual'];
+const paymentFrequencyMap = {
+	MONTHLY: 'Monthly',
+	ANNUAL: 'Annual',
+};
+const isCardUserSelected = (
+	cardPrice: number,
+	contributionType: 'MONTHLY' | 'ANNUAL',
+	cardPriceDiscount?: number,
+): boolean => {
+	const urlParams = new URLSearchParams(window.location.search);
+	const urlSelectedAmount = urlParams.get('selected-amount');
+	const hasUrlSelectedAmount = !isNaN(Number(urlSelectedAmount));
+	if (!hasUrlSelectedAmount) {
+		return false;
+	}
+	return (
+		(contributionType in paymentFrequencyMap &&
+			Number(urlSelectedAmount) === cardPrice) ||
+		Number(urlSelectedAmount) === cardPriceDiscount
+	);
+};
+
 export function ThreeTierLanding(): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const navigate = useNavigate();
@@ -256,9 +281,6 @@ export function ThreeTierLanding(): JSX.Element {
 		),
 	);
 
-	const urlParams = new URLSearchParams(window.location.search);
-	const urlSelectedAmount = urlParams.get('selected-amount');
-
 	useEffect(() => {
 		dispatch(resetValidation());
 		if (contributionTypeFromState === 'ONE_OFF') {
@@ -272,14 +294,6 @@ export function ThreeTierLanding(): JSX.Element {
 		}
 		dispatch(setBillingPeriod(billingPeriod));
 	}, []);
-
-	// The three tier checkout only supports monthly and annual contributions
-	const paymentFrequencies: RegularContributionType[] = ['MONTHLY', 'ANNUAL'];
-	const billingFrequencies: BillingPeriod[] = ['Monthly', 'Annual'];
-	const paymentFrequencyMap = {
-		MONTHLY: 'Monthly',
-		ANNUAL: 'Annual',
-	};
 
 	const handlePaymentFrequencyBtnClick = (buttonIndex: number) => {
 		dispatch(setProductType(paymentFrequencies[buttonIndex]));
@@ -342,21 +356,6 @@ export function ThreeTierLanding(): JSX.Element {
 		);
 	};
 
-	const isCardUserSelected = (
-		cardPrice: number,
-		cardPriceDiscount?: number,
-	): boolean => {
-		const hasUrlSelectedAmount = !isNaN(Number(urlSelectedAmount));
-		if (!hasUrlSelectedAmount) {
-			return false;
-		}
-		return (
-			(contributionType in paymentFrequencyMap &&
-				Number(urlSelectedAmount) === cardPrice) ||
-			Number(urlSelectedAmount) === cardPriceDiscount
-		);
-	};
-
 	const getCardContentBaseObject = (
 		cardTier: 1 | 2 | 3,
 		contributionTypeKeyOverride?: 'annual' | 'monthly',
@@ -389,6 +388,7 @@ export function ThreeTierLanding(): JSX.Element {
 			isRecommended: !!tierCards[`tier${cardTier}`].isRecommended,
 			isUserSelected: isCardUserSelected(
 				tierPlanCountryCharges.price,
+				contributionType,
 				tierPlanCountryCharges.discount?.price,
 			),
 			planCost: tierPlanCountryCharges,
