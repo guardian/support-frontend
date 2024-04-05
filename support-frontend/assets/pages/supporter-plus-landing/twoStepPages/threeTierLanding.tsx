@@ -62,10 +62,6 @@ import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
 import { ThreeTierTsAndCs, ToteTsAndCs } from '../components/threeTierTsAndCs';
 import type { TierPlans } from '../setup/threeTierConfig';
-import {
-	tierCards as tierCardsNoTote,
-	tierCardsTote,
-} from '../setup/threeTierConfig';
 
 const recurringContainer = css`
 	background-color: ${palette.brand[400]};
@@ -286,10 +282,6 @@ export function ThreeTierLanding(): JSX.Element {
 		(state) => state.common.internationalisation,
 	);
 
-	const tierCards = abParticipations.additionalBenefits
-		? tierCardsTote
-		: tierCardsNoTote;
-
 	const countrySwitcherProps: CountryGroupSwitcherProps = {
 		countryGroupIds: [
 			GBPCountries,
@@ -339,48 +331,41 @@ export function ThreeTierLanding(): JSX.Element {
 		dispatch(setBillingPeriod(billingFrequencies[buttonIndex]));
 	};
 
-	const handleButtonCtaClick = (
+	const handleLinkCtaClick = (
 		price: number,
 		cardTier: 1 | 2 | 3,
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
 	) => {
-		dispatch(
-			setSelectedAmount({
+		/** This is a workaround for now while we move tier 3 to a new SupporterPlus ratePlan */
+		if (cardTier === 3) {
+			sendEventContributionCartValue(
+				price.toString(),
 				contributionType,
-				amount: `${price}`,
-			}),
-		);
-		navigateWithPageView(
-			navigate,
-			generateTierCheckoutLink(cardTier, promotion),
-			abParticipations,
-		);
-		sendEventContributionCartValue(
-			price.toString(),
-			contributionType,
-			contributionCurrency,
-		);
-	};
-
-	const handleLinkCtaClick = (
-		price: number,
-		contributionType: ContributionType,
-		contributionCurrency: IsoCurrency,
-	) => {
-		sendEventContributionCartValue(
-			price.toString(),
-			contributionType,
-			contributionCurrency,
-		);
-		/**
-		 * Lower & middle tier track component click fired via redux side effects.
-		 * Top tier accessed via network request to GuardianWeekly landing page
-		 * therefore tracking required
-		 **/
-		trackComponentClick(
-			`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${price}`,
-		);
+				contributionCurrency,
+			);
+			/**
+			 * Lower & middle tier track component click fired via redux side effects.
+			 * Top tier accessed via network request to GuardianWeekly landing page
+			 * therefore tracking required
+			 **/
+			trackComponentClick(
+				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${price}`,
+			);
+		} else {
+			dispatch(
+				setSelectedAmount({
+					contributionType,
+					amount: recurringAmount.toString(),
+				}),
+			);
+			navigateWithPageView(navigate, tier1Link, abParticipations);
+			sendEventContributionCartValue(
+				recurringAmount.toString(),
+				contributionType,
+				currencyId,
+			);
+		}
 	};
 
 	const handleSupportOnceBtnClick = () => {
@@ -395,34 +380,6 @@ export function ThreeTierLanding(): JSX.Element {
 		);
 	};
 
-	const generateTierCheckoutLink = (cardTier: 1 | 2 | 3, promo?: Promotion) => {
-		const tierPlanCountryCharges =
-			tierCards[`tier${cardTier}`].plans[tierPlanPeriod].charges[
-				countryGroupId
-			];
-
-		const promoCode =
-			cardTier !== 1
-				? promo?.promoCode ?? tierPlanCountryCharges.promoCode
-				: undefined;
-
-		const url = cardTier === 3 ? `/subscribe/weekly/checkout?` : `checkout?`;
-		const urlParams = new URLSearchParams();
-		if (promoCode) {
-			urlParams.set('promoCode', promoCode);
-		}
-
-		if (cardTier === 3) {
-			urlParams.set('threeTierCreateSupporterPlusSubscription', 'true');
-			urlParams.set('period', paymentFrequencyMap[contributionType]);
-		} else {
-			urlParams.set('selected-amount', tierPlanCountryCharges.price.toString());
-			urlParams.set('selected-contribution-type', tierPlanPeriod);
-		}
-
-		return `${url}${urlParams.toString()}${window.location.hash}`;
-	};
-
 	const generateOneOffCheckoutLink = () => {
 		const urlParams = new URLSearchParams();
 		urlParams.set('selected-contribution-type', 'one_off');
@@ -433,8 +390,10 @@ export function ThreeTierLanding(): JSX.Element {
 	const selectedContributionType =
 		contributionType === 'ANNUAL' ? 'annual' : 'monthly';
 
-	/** Tier 1: Contributions */
-	/** We use the amounts from RRCP to populate the Contribution tier */
+	/**
+	 * Tier 1: Contributions
+	 * We use the amounts from RRCP to populate the Contribution tier
+	 */
 	const { amounts } = useContributionsSelector((state) => state.common);
 	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY.amounts[0];
 	const annualRecurringAmount = amounts.amountsCardData.ANNUAL.amounts[0];
@@ -446,10 +405,11 @@ export function ThreeTierLanding(): JSX.Element {
 		'selected-amount': recurringAmount.toString(),
 		'selected-contribution-type': selectedContributionType,
 	});
+	const tier1Link = `contribute/checkout?${tier1UrlParams.toString()}`;
 	const tier1Card = getCardData(
 		productCatalogDescription.Contribution,
 		recurringAmount,
-		`contribute/checkout?${tier1UrlParams.toString()}`,
+		tier1Link,
 	);
 
 	/** Tier 2: SupporterPlus */
@@ -546,7 +506,6 @@ export function ThreeTierLanding(): JSX.Element {
 						cardsContent={[tier1Card, tier2Card, tier3Card]}
 						currencyId={currencyId}
 						paymentFrequency={contributionType}
-						buttonCtaClickHandler={handleButtonCtaClick}
 						linkCtaClickHandler={handleLinkCtaClick}
 					/>
 				</div>

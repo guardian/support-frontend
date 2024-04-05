@@ -15,18 +15,13 @@ type ThreeTierCardsProps = {
 		isUserSelected: boolean;
 		benefits: TierBenefits;
 		planCost: TierPlanCosts;
-		externalBtnLink?: string;
+		externalBtnLink: string;
 	}>;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
-	buttonCtaClickHandler: (
-		price: number,
-		cardTier: 1 | 2 | 3,
-		contributionType: ContributionType,
-		contributionCurrency: IsoCurrency,
-	) => void;
 	linkCtaClickHandler: (
 		price: number,
+		cardTier: 1 | 2 | 3,
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
 	) => void;
@@ -65,7 +60,6 @@ export function ThreeTierCards({
 	cardsContent,
 	currencyId,
 	paymentFrequency,
-	buttonCtaClickHandler,
 	linkCtaClickHandler,
 }: ThreeTierCardsProps): JSX.Element {
 	const haveRecommendedAndSelectedCards =
@@ -92,7 +86,6 @@ export function ThreeTierCards({
 						isRecommendedSubdued={haveRecommendedAndSelectedCards}
 						currencyId={currencyId}
 						paymentFrequency={paymentFrequency}
-						buttonCtaClickHandler={buttonCtaClickHandler}
 						linkCtaClickHandler={linkCtaClickHandler}
 					/>
 				);
