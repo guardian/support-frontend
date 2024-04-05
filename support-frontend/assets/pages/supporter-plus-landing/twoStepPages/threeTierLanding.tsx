@@ -236,23 +236,18 @@ const isCardUserSelected = (
 
 const productCatalog = window.guardian.productCatalog;
 function getCardData(
-	productKey: 'Contribution' | 'SupporterPlus',
-	ratePlan: 'Monthly' | 'Annual',
-	isoCurrency: IsoCurrency,
+	// TODO - this type could use some refinement
+	productDescription: (typeof productCatalogDescription)[keyof typeof productCatalogDescription],
+	pricing: number,
 	promotion?: Promotion,
-	pricingOverride?: number,
+	isRecommended = false,
 ) {
-	const description = productCatalogDescription[productKey];
-	const pricing =
-		pricingOverride ??
-		productCatalog[productKey].ratePlans[ratePlan].pricing[isoCurrency];
-
 	return {
-		title: description.label,
-		isRecommended: productKey === 'SupporterPlus',
+		title: productDescription.label,
+		isRecommended,
 		isUserSelected: isCardUserSelected(pricing, promotion?.discount?.amount),
 		benefits: {
-			list: description.benefits.map((benefit) => ({ copy: benefit.text })),
+			list: 'benefits' in productDescription ? productDescription.benefits : [],
 			description: undefined,
 		},
 		planCost: {
@@ -416,14 +411,6 @@ export function ThreeTierLanding(): JSX.Element {
 		};
 	};
 
-	const { amounts } = useContributionsSelector((state) => state.common);
-	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY.amounts[0];
-	const annualRecurringAmount = amounts.amountsCardData.ANNUAL.amounts[0];
-	const recurringAmount =
-		contributionType === 'MONTHLY'
-			? monthlyRecurringAmount
-			: annualRecurringAmount;
-
 	const generateTierCheckoutLink = (cardTier: 1 | 2 | 3, promo?: Promotion) => {
 		const tierPlanCountryCharges =
 			tierCards[`tier${cardTier}`].plans[tierPlanPeriod].charges[
@@ -459,22 +446,29 @@ export function ThreeTierLanding(): JSX.Element {
 		return `checkout?${urlParams.toString()}${window.location.hash}`;
 	};
 
-	const ratePlan = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
+	/** We use the amounts from RRCP to populate the Contribution tier */
+	const { amounts } = useContributionsSelector((state) => state.common);
+	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY.amounts[0];
+	const annualRecurringAmount = amounts.amountsCardData.ANNUAL.amounts[0];
+	const recurringAmount =
+		contributionType === 'MONTHLY'
+			? monthlyRecurringAmount
+			: annualRecurringAmount;
 	const tier1Card = getCardData(
-		'Contribution',
-		ratePlan,
-		currencyId,
-		undefined,
+		productCatalogDescription.Contribution,
 		recurringAmount,
+		undefined, // promotion
+		true, // isRecommended
 	);
+
+	const ratePlan = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 	const tier2Card = getCardData(
-		'SupporterPlus',
-		ratePlan,
-		currencyId,
+		productCatalogDescription.SupporterPlus,
+		productCatalog.SupporterPlus.ratePlans[ratePlan].pricing[currencyId],
 		/**
 		 * We only pass promotion to Supporter Plus (Tier 2)
-		 * as that's the only product we support promotions on for now.
-		 **/
+		 * as we only support SupporterPlus promos on the landing page for now
+		 */
 		promotion,
 	);
 	const tier3Card = {
@@ -576,12 +570,22 @@ export function ThreeTierLanding(): JSX.Element {
 					<ToteTsAndCs
 						currency={currencies[currencyId].glyph}
 						toteCostMonthly={
-							getCardData('SupporterPlus', 'Monthly', currencyId, promotion)
-								.planCost.price
+							getCardData(
+								productCatalogDescription.SupporterPlus,
+								productCatalog.SupporterPlus.ratePlans.Monthly.pricing[
+									currencyId
+								],
+								promotion,
+							).planCost.price
 						}
 						toteCostAnnual={
-							getCardData('SupporterPlus', 'Annual', currencyId, promotion)
-								.planCost.price
+							getCardData(
+								productCatalogDescription.SupporterPlus,
+								productCatalog.SupporterPlus.ratePlans.Annual.pricing[
+									currencyId
+								],
+								promotion,
+							).planCost.price
 						}
 					></ToteTsAndCs>
 				)}
