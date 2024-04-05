@@ -244,6 +244,7 @@ function getCardData(
 	// TODO - this type could use some refinement
 	productDescription: (typeof productCatalogDescription)[keyof typeof productCatalogDescription],
 	pricing: number,
+	link: string,
 	promotion?: Promotion,
 	isRecommended = false,
 ) {
@@ -270,7 +271,7 @@ function getCardData(
 					  }
 					: undefined,
 		},
-		externalBtnLink: 'checkout',
+		externalBtnLink: link,
 	};
 }
 
@@ -429,6 +430,10 @@ export function ThreeTierLanding(): JSX.Element {
 		return `checkout?${urlParams.toString()}${window.location.hash}`;
 	};
 
+	const selectedContributionType =
+		contributionType === 'ANNUAL' ? 'annual' : 'monthly';
+
+	/** Tier 1: Contributions */
 	/** We use the amounts from RRCP to populate the Contribution tier */
 	const { amounts } = useContributionsSelector((state) => state.common);
 	const monthlyRecurringAmount = amounts.amountsCardData.MONTHLY.amounts[0];
@@ -437,18 +442,34 @@ export function ThreeTierLanding(): JSX.Element {
 		contributionType === 'MONTHLY'
 			? monthlyRecurringAmount
 			: annualRecurringAmount;
+	const tier1UrlParams = new URLSearchParams({
+		'selected-amount': recurringAmount.toString(),
+		'selected-contribution-type': selectedContributionType,
+	});
 	const tier1Card = getCardData(
 		productCatalogDescription.Contribution,
 		recurringAmount,
+		`contribute/checkout?${tier1UrlParams.toString()}`,
 	);
 
+	/** Tier 2: SupporterPlus */
 	const supporterPlusRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-	const tier2Card = getCardData(
-		productCatalogDescription.SupporterPlus,
+	const pricing =
 		productCatalog.SupporterPlus.ratePlans[supporterPlusRatePlan].pricing[
 			currencyId
-		],
+		];
+	const tier2UrlParams = new URLSearchParams({
+		'selected-amount': pricing.toString(),
+		'selected-contribution-type': selectedContributionType,
+	});
+	if (promotion) {
+		tier2UrlParams.set('promoCode', promotion.promoCode);
+	}
+	const tier2Card = getCardData(
+		productCatalogDescription.SupporterPlus,
+		pricing,
+		`contribute/checkout?${tier2UrlParams.toString()}`,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion,
 		true, // isRecommended
@@ -463,11 +484,17 @@ export function ThreeTierLanding(): JSX.Element {
 		contributionType === 'ANNUAL'
 			? 'AnnualWithGuardianWeekly'
 			: 'MonthlyWithGuardianWeekly';
+	const tier3UrlParams = new URLSearchParams({
+		promoCode: tier3Promotion.promoCode,
+		threeTierCreateSupporterPlusSubscription: 'true',
+		period: paymentFrequencyMap[contributionType],
+	});
 	const tier3Card = getCardData(
 		productCatalogDescription.SupporterPlusWithGuardianWeekly,
 		supporterPlusWithGuardianWeekly.ratePlans[
 			supporterPlusWithGuardianWeeklyRatePlan
 		].pricing[currencyId],
+		`/subscribe/weekly/checkout?${tier3UrlParams.toString()}`,
 		tier3Promotion,
 	);
 
@@ -570,6 +597,7 @@ export function ThreeTierLanding(): JSX.Element {
 								productCatalog.SupporterPlus.ratePlans.Monthly.pricing[
 									currencyId
 								],
+								'', // We don't care about the link here as we just want the price
 								promotion,
 							).planCost.price
 						}
@@ -579,6 +607,7 @@ export function ThreeTierLanding(): JSX.Element {
 								productCatalog.SupporterPlus.ratePlans.Annual.pricing[
 									currencyId
 								],
+								'', // We don't care about the link here as we just want the price
 								promotion,
 							).planCost.price
 						}
