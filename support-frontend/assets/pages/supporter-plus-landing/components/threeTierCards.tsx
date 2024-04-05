@@ -20,6 +20,8 @@ type ThreeTierCardsProps = {
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
 	linkCtaClickHandler: (
+		event: React.MouseEvent<HTMLAnchorElement>,
+		link: string,
 		price: number,
 		cardTier: 1 | 2 | 3,
 		contributionType: ContributionType,

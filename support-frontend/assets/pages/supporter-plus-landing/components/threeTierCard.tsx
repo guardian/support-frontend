@@ -23,7 +23,7 @@ import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
-interface ThreeTierCardProps {
+type ThreeTierCardProps = {
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
 	title: string;
@@ -35,13 +35,15 @@ interface ThreeTierCardProps {
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
 	linkCtaClickHandler: (
+		event: React.MouseEvent<HTMLAnchorElement>,
+		link: string,
 		price: number,
 		cardTier: 1 | 2 | 3,
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
 	) => void;
 	externalBtnLink: string;
-}
+};
 
 const container = (
 	isRecommended: boolean,
@@ -221,8 +223,15 @@ export function ThreeTierCard({
 				<LinkButton
 					href={externalBtnLink}
 					cssOverrides={btnStyleOverrides}
-					onClick={() => {
-						linkCtaClickHandler(price, cardTier, paymentFrequency, currencyId);
+					onClick={(event) => {
+						linkCtaClickHandler(
+							event,
+							externalBtnLink,
+							price,
+							cardTier,
+							paymentFrequency,
+							currencyId,
+						);
 					}}
 					data-qm-trackable={quantumMetricButtonRef}
 				>

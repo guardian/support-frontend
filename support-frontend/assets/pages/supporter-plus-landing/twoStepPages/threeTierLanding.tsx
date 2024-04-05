@@ -332,6 +332,8 @@ export function ThreeTierLanding(): JSX.Element {
 	};
 
 	const handleLinkCtaClick = (
+		event: React.MouseEvent<HTMLAnchorElement>,
+		link: string,
 		price: number,
 		cardTier: 1 | 2 | 3,
 		contributionType: ContributionType,
@@ -353,18 +355,28 @@ export function ThreeTierLanding(): JSX.Element {
 				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${price}`,
 			);
 		} else {
+			event.preventDefault();
 			dispatch(
 				setSelectedAmount({
 					contributionType,
 					amount: recurringAmount.toString(),
 				}),
 			);
-			navigateWithPageView(navigate, tier1Link, abParticipations);
+
+			/**
+			 * I am not sure why links and the react router can't both use a direct link?
+			 * i.e. `link` here is `contribute/checkout` which then doubles up when using the router
+			 * to `contribute/contribute/checkout` even though it is rendered as `contribute/checkout`.
+			 */
+			const linkWithoutContribute = link.split('/')[1];
+			navigateWithPageView(navigate, linkWithoutContribute, abParticipations);
+
 			sendEventContributionCartValue(
 				recurringAmount.toString(),
 				contributionType,
 				currencyId,
 			);
+			return false;
 		}
 	};
 
