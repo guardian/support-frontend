@@ -36,6 +36,7 @@ import {
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
+	productCatalog,
 	productCatalogDescription,
 	supporterPlusWithGuardianWeekly,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
@@ -235,7 +236,6 @@ const isCardUserSelected = (
 	);
 };
 
-const productCatalog = window.guardian.productCatalog;
 function getCardData(
 	// TODO - this type could use some refinement
 	productDescription: (typeof productCatalogDescription)[keyof typeof productCatalogDescription],

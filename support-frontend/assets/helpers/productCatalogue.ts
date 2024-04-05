@@ -1,6 +1,8 @@
 import { newspaperCountries } from 'helpers/internationalisation/country';
 import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
 
+export const productCatalog = window.guardian.productCatalog;
+
 export const productCatalogDescription = {
 	SupporterPlusWithGuardianWeekly: {
 		label: 'Digital + print',
