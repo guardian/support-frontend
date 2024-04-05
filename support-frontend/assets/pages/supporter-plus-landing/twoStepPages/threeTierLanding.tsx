@@ -35,7 +35,12 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import { productCatalogDescription } from 'helpers/productCatalogue';
+import {
+	productCatalogDescription,
+	supporterPlusWithGuardianWeekly,
+	supporterPlusWithGuardianWeeklyAnnualPromos,
+	supporterPlusWithGuardianWeeklyMonthlyPromos,
+} from 'helpers/productCatalogue';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
@@ -389,28 +394,6 @@ export function ThreeTierLanding(): JSX.Element {
 		);
 	};
 
-	/** @deprecated - use getCardData instead */
-	const getCardContentBaseObject = (
-		cardTier: 3,
-		contributionTypeKeyOverride?: 'annual' | 'monthly',
-	) => {
-		const tierPlanCountryCharges =
-			tierCards[`tier${cardTier}`].plans[
-				contributionTypeKeyOverride ?? tierPlanPeriod
-			].charges[countryGroupId];
-
-		return {
-			title: tierCards[`tier${cardTier}`].title,
-			benefits: tierCards[`tier${cardTier}`].benefits,
-			isRecommended: !!tierCards[`tier${cardTier}`].isRecommended,
-			isUserSelected: isCardUserSelected(
-				tierPlanCountryCharges.price,
-				tierPlanCountryCharges.discount?.price,
-			),
-			planCost: tierPlanCountryCharges,
-		};
-	};
-
 	const generateTierCheckoutLink = (cardTier: 1 | 2 | 3, promo?: Promotion) => {
 		const tierPlanCountryCharges =
 			tierCards[`tier${cardTier}`].plans[tierPlanPeriod].charges[
@@ -457,24 +440,36 @@ export function ThreeTierLanding(): JSX.Element {
 	const tier1Card = getCardData(
 		productCatalogDescription.Contribution,
 		recurringAmount,
-		undefined, // promotion
+	);
+
+	const supporterPlusRatePlan =
+		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
+	const tier2Card = getCardData(
+		productCatalogDescription.SupporterPlus,
+		productCatalog.SupporterPlus.ratePlans[supporterPlusRatePlan].pricing[
+			currencyId
+		],
+		/** The promotion from the querystring is for the SupporterPlus product only */
+		promotion,
 		true, // isRecommended
 	);
 
-	const ratePlan = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-	const tier2Card = getCardData(
-		productCatalogDescription.SupporterPlus,
-		productCatalog.SupporterPlus.ratePlans[ratePlan].pricing[currencyId],
-		/**
-		 * We only pass promotion to Supporter Plus (Tier 2)
-		 * as we only support SupporterPlus promos on the landing page for now
-		 */
-		promotion,
+	/** This product is hard-coded for now, but will become a new ratePlan on the SupporterPlus product */
+	const tier3Promotion =
+		contributionType === 'ANNUAL'
+			? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
+			: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
+	const supporterPlusWithGuardianWeeklyRatePlan =
+		contributionType === 'ANNUAL'
+			? 'AnnualWithGuardianWeekly'
+			: 'MonthlyWithGuardianWeekly';
+	const tier3Card = getCardData(
+		productCatalogDescription.SupporterPlusWithGuardianWeekly,
+		supporterPlusWithGuardianWeekly.ratePlans[
+			supporterPlusWithGuardianWeeklyRatePlan
+		].pricing[currencyId],
+		tier3Promotion,
 	);
-	const tier3Card = {
-		...getCardContentBaseObject(3),
-		externalBtnLink: generateTierCheckoutLink(3),
-	};
 
 	return (
 		<PageScaffold
