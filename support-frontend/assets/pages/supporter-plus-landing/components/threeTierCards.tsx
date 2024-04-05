@@ -15,7 +15,7 @@ type ThreeTierCardsProps = {
 		isUserSelected: boolean;
 		benefits: TierBenefits;
 		planCost: TierPlanCosts;
-		externalBtnLink: string;
+		link: string;
 	}>;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;

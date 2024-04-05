@@ -267,7 +267,7 @@ function getCardData(
 					  }
 					: undefined,
 		},
-		externalBtnLink: link,
+		link,
 	};
 }
 

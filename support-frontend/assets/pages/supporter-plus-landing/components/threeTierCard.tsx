@@ -42,7 +42,7 @@ type ThreeTierCardProps = {
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
 	) => void;
-	externalBtnLink: string;
+	link: string;
 };
 
 const container = (
@@ -190,7 +190,7 @@ export function ThreeTierCard({
 	currencyId,
 	paymentFrequency,
 	linkCtaClickHandler,
-	externalBtnLink,
+	link,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId].glyph;
 	const price = planCost.price;
@@ -221,12 +221,12 @@ export function ThreeTierCard({
 			</p>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<LinkButton
-					href={externalBtnLink}
+					href={link}
 					cssOverrides={btnStyleOverrides}
 					onClick={(event) => {
 						linkCtaClickHandler(
 							event,
-							externalBtnLink,
+							link,
 							price,
 							cardTier,
 							paymentFrequency,
