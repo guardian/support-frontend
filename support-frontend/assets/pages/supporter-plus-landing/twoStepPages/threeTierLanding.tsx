@@ -35,6 +35,7 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
+import type { ProductDescription } from 'helpers/productCatalogue';
 import {
 	productCatalog,
 	productCatalogDescription,
@@ -238,14 +239,13 @@ const isCardUserSelected = (
 
 function getCardData(
 	// TODO - this type could use some refinement
-	productDescription: (typeof productCatalogDescription)[keyof typeof productCatalogDescription],
+	productDescription: ProductDescription,
 	pricing: number,
 	link: string,
 	promotion?: Promotion,
 	isRecommended = false,
 ) {
 	return {
-		title: productDescription.label,
 		isRecommended,
 		isUserSelected: isCardUserSelected(pricing, promotion?.discount?.amount),
 		benefits: {
@@ -271,6 +271,7 @@ function getCardData(
 					: undefined,
 		},
 		link,
+		productDescription,
 	};
 }
 
@@ -421,6 +422,7 @@ export function ThreeTierLanding(): JSX.Element {
 		'selected-contribution-type': selectedContributionType,
 	});
 	const tier1Link = `contribute/checkout?${tier1UrlParams.toString()}`;
+
 	const tier1Card = getCardData(
 		productCatalogDescription.Contribution,
 		recurringAmount,
@@ -559,9 +561,18 @@ export function ThreeTierLanding(): JSX.Element {
 			>
 				<ThreeTierTsAndCs
 					tsAndCsContent={[
-						{ title: tier1Card.title, planCost: tier1Card.planCost },
-						{ title: tier2Card.title, planCost: tier2Card.planCost },
-						{ title: tier3Card.title, planCost: tier3Card.planCost },
+						{
+							title: tier1Card.productDescription.label,
+							planCost: tier1Card.planCost,
+						},
+						{
+							title: tier2Card.productDescription.label,
+							planCost: tier2Card.planCost,
+						},
+						{
+							title: tier3Card.productDescription.label,
+							planCost: tier3Card.planCost,
+						},
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>

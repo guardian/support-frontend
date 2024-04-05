@@ -140,6 +140,8 @@ export const supporterPlusWithGuardianWeekly = {
 		},
 	},
 } as const;
+export type ProductDescription =
+	(typeof productCatalogDescription)[keyof typeof productCatalogDescription];
 
 export const supporterPlusWithGuardianWeeklyAnnualPromos = {
 	GBPCountries: {

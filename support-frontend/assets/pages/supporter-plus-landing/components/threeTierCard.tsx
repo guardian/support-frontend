@@ -19,6 +19,7 @@ import {
 	currencies,
 	type IsoCurrency,
 } from 'helpers/internationalisation/currency';
+import type { ProductDescription } from 'helpers/productCatalogue';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
@@ -26,7 +27,6 @@ import { ThreeTierLozenge } from './threeTierLozenge';
 type ThreeTierCardProps = {
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
-	title: string;
 	isRecommended: boolean;
 	isRecommendedSubdued: boolean;
 	isUserSelected: boolean;
@@ -43,6 +43,7 @@ type ThreeTierCardProps = {
 		contributionCurrency: IsoCurrency,
 	) => void;
 	link: string;
+	productDescription: ProductDescription;
 };
 
 const container = (
@@ -181,7 +182,6 @@ const discountSummaryCopy = (
 export function ThreeTierCard({
 	cardTier,
 	promoCount,
-	title,
 	planCost,
 	isRecommended,
 	isRecommendedSubdued,
@@ -191,6 +191,7 @@ export function ThreeTierCard({
 	paymentFrequency,
 	linkCtaClickHandler,
 	link,
+	productDescription,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId].glyph;
 	const price = planCost.price;
@@ -208,7 +209,7 @@ export function ThreeTierCard({
 			{isRecommended && !isUserSelected && (
 				<ThreeTierLozenge subdue={isRecommendedSubdued} title="Recommended" />
 			)}
-			<h2 css={titleCss}>{title}</h2>
+			<h2 css={titleCss}>{productDescription.label}</h2>
 			<p css={priceCss(!!planCost.discount)}>
 				<span css={previousPriceStrikeThrough}>{priceCopy}</span>
 				{priceCopy && ' '}
