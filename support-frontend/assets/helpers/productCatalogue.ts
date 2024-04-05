@@ -6,7 +6,10 @@ export const productCatalog = window.guardian.productCatalog;
 export const productCatalogDescription = {
 	SupporterPlusWithGuardianWeekly: {
 		label: 'Digital + print',
-		benefitsSummary: 'The rewards from All-access digital',
+		benefitsSummary: [
+			'The rewards from ',
+			{ strong: true, copy: 'All-access digital' },
+		],
 		benefits: [
 			{
 				copy: 'Guardian Weekly print magazine delivered to your door every week  ',

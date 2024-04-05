@@ -250,7 +250,10 @@ function getCardData(
 		isUserSelected: isCardUserSelected(pricing, promotion?.discount?.amount),
 		benefits: {
 			list: 'benefits' in productDescription ? productDescription.benefits : [],
-			description: undefined,
+			description:
+				'benefitsSummary' in productDescription
+					? productDescription.benefitsSummary
+					: undefined,
 		},
 		planCost: {
 			price: pricing,
