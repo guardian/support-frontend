@@ -248,13 +248,6 @@ function getCardData(
 	return {
 		isRecommended,
 		isUserSelected: isCardUserSelected(pricing, promotion?.discount?.amount),
-		benefits: {
-			list: 'benefits' in productDescription ? productDescription.benefits : [],
-			description:
-				'benefitsSummary' in productDescription
-					? productDescription.benefitsSummary
-					: undefined,
-		},
 		planCost: {
 			price: pricing,
 			promoCode: promotion?.name,

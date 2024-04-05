@@ -1,9 +1,12 @@
-import { newspaperCountries } from 'helpers/internationalisation/country';
-import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
-
 export const productCatalog = window.guardian.productCatalog;
 
-export const productCatalogDescription = {
+export type ProductDescription = {
+	label: string;
+	benefits: Array<{ copy: string; tooltip?: string }>;
+	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
+};
+
+export const productCatalogDescription: Record<string, ProductDescription> = {
 	SupporterPlusWithGuardianWeekly: {
 		label: 'Digital + print',
 		benefitsSummary: [
@@ -32,8 +35,7 @@ export const productCatalogDescription = {
 	},
 	NationalDelivery: {
 		label: 'National Delivery',
-		delivery: true,
-		addressCountries: newspaperCountries,
+		benefits: [],
 	},
 	SupporterPlus: {
 		label: 'All-access digital',
@@ -54,17 +56,15 @@ export const productCatalogDescription = {
 	},
 	GuardianWeeklyRestOfWorld: {
 		label: 'The Guardian Weekly',
-		delivery: true,
-		addressCountries: gwDeliverableCountries,
+		benefits: [],
 	},
 	GuardianWeeklyDomestic: {
 		label: 'The Guardian Weekly',
-		delivery: true,
-		addressCountries: gwDeliverableCountries,
+		benefits: [],
 	},
 	SubscriptionCard: {
 		label: 'Newspaper subscription',
-		delivery: true,
+		benefits: [],
 	},
 	Contribution: {
 		label: 'Support',
@@ -76,10 +76,9 @@ export const productCatalogDescription = {
 	},
 	HomeDelivery: {
 		label: 'Home Delivery',
-		delivery: true,
-		addressCountries: newspaperCountries,
+		benefits: [],
 	},
-};
+} as const;
 
 /** These `ratePlans` will eventually becomes part of the SupportPlus product in Zuora */
 export const supporterPlusWithGuardianWeekly = {
@@ -140,8 +139,6 @@ export const supporterPlusWithGuardianWeekly = {
 		},
 	},
 } as const;
-export type ProductDescription =
-	(typeof productCatalogDescription)[keyof typeof productCatalogDescription];
 
 export const supporterPlusWithGuardianWeeklyAnnualPromos = {
 	GBPCountries: {

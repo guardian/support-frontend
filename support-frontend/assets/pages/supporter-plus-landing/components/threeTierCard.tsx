@@ -21,7 +21,7 @@ import {
 } from 'helpers/internationalisation/currency';
 import type { ProductDescription } from 'helpers/productCatalogue';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
+import type { TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
 type ThreeTierCardProps = {
@@ -30,7 +30,6 @@ type ThreeTierCardProps = {
 	isRecommended: boolean;
 	isRecommendedSubdued: boolean;
 	isUserSelected: boolean;
-	benefits: TierBenefits;
 	planCost: TierPlanCosts;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
@@ -186,7 +185,6 @@ export function ThreeTierCard({
 	isRecommended,
 	isRecommendedSubdued,
 	isUserSelected,
-	benefits,
 	currencyId,
 	paymentFrequency,
 	linkCtaClickHandler,
@@ -201,6 +199,7 @@ export function ThreeTierCard({
 		promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);
 	const promoPriceCopy = `${currency}${promoPriceRounded}/${recurringContributionPeriodMap[paymentFrequency]}`;
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
+	const { label, benefits, benefitsSummary } = productDescription;
 	return (
 		<section
 			css={container(isRecommended, isUserSelected, isRecommendedSubdued)}
@@ -209,7 +208,7 @@ export function ThreeTierCard({
 			{isRecommended && !isUserSelected && (
 				<ThreeTierLozenge subdue={isRecommendedSubdued} title="Recommended" />
 			)}
-			<h2 css={titleCss}>{productDescription.label}</h2>
+			<h2 css={titleCss}>{label}</h2>
 			<p css={priceCss(!!planCost.discount)}>
 				<span css={previousPriceStrikeThrough}>{priceCopy}</span>
 				{priceCopy && ' '}
@@ -240,10 +239,10 @@ export function ThreeTierCard({
 				</LinkButton>
 			</ThemeProvider>
 
-			{benefits.description && (
+			{benefitsSummary && (
 				<div css={benefitsPrefixCss}>
 					<span>
-						{benefits.description.map((stringPart) => {
+						{benefitsSummary.map((stringPart) => {
 							if (typeof stringPart === 'string') {
 								return stringPart;
 							} else {
@@ -255,12 +254,11 @@ export function ThreeTierCard({
 				</div>
 			)}
 			<CheckList
-				checkListData={benefits.list.map((benefit) => {
+				checkListData={benefits.map((benefit) => {
 					return {
 						text: benefit.copy,
 						isChecked: true,
 						toolTip: benefit.tooltip,
-						strong: benefit.strong,
 					};
 				})}
 				style={'compact'}

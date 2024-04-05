@@ -6,14 +6,13 @@ import type {
 } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { ProductDescription } from 'helpers/productCatalogue';
-import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
+import type { TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierCard } from './threeTierCard';
 
 type ThreeTierCardsProps = {
 	cardsContent: Array<{
 		isRecommended: boolean;
 		isUserSelected: boolean;
-		benefits: TierBenefits;
 		planCost: TierPlanCosts;
 		link: string;
 		productDescription: ProductDescription;
