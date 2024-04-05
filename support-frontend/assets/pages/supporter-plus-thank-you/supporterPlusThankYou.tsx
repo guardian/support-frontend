@@ -216,12 +216,15 @@ export function SupporterPlusThankYou(): JSX.Element {
 		}
 	}, []);
 
+	const amountIsAboveThreshold = !!(thresholdPrice && amount >= thresholdPrice);
+
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
 		csrf,
 		email,
 		isOneOff,
+		amountIsAboveThreshold,
 		campaignSettings?.campaignCode,
 	);
 
