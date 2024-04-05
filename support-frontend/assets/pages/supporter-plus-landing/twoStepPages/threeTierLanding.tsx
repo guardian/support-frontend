@@ -447,7 +447,10 @@ export function ThreeTierLanding(): JSX.Element {
 		true, // isRecommended
 	);
 
-	/** This product is hard-coded for now, but will become a new ratePlan on the SupporterPlus product */
+	/**
+	 * Tier 3: SupporterPlus with Guardian Weekly
+	 * This product is hard-coded for now, but will become a new ratePlan on the SupporterPlus product
+	 */
 	const tier3Promotion =
 		contributionType === 'ANNUAL'
 			? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
