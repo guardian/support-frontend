@@ -55,7 +55,7 @@ export function PriceCardsContainer({
 		selectedAmounts,
 		paymentFrequency,
 		defaultAmount,
-	).toString();
+	);
 	const otherAmountErrors = useContributionsSelector(getOtherAmountErrors);
 	const otherAmount = otherAmounts[paymentFrequency].amount ?? '';
 
@@ -91,7 +91,7 @@ export function PriceCardsContainer({
 
 	return renderPriceCards({
 		currency: currencyId,
-		amounts: frequencyAmounts.map((amount) => amount.toString()),
+		amounts: frequencyAmounts,
 		selectedAmount,
 		otherAmount,
 		paymentInterval: contributionTypeToPaymentInterval[paymentFrequency],
