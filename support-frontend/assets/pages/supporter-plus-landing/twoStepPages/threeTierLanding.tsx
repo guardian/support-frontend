@@ -41,7 +41,7 @@ import {
 	supporterPlusWithGuardianWeekly,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
-} from 'helpers/productCatalogue';
+} from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
