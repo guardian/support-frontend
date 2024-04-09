@@ -46,6 +46,19 @@ export const productCatalogDescription = {
 				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
 			},
 		],
+		offers: [
+			{
+				copy: (
+					<p>
+						<span style={{ fontWeight: 'bold' }}>
+							A free book as our gift to you**{' '}
+						</span>
+						Choose from a selection curated by Guardian staff
+					</p>
+				),
+				tooltip: 'tba',
+			},
+		],
 	},
 	GuardianWeeklyRestOfWorld: {
 		label: 'The Guardian Weekly',

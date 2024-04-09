@@ -31,6 +31,7 @@ type ThreeTierCardProps = {
 	isRecommendedSubdued: boolean;
 	isUserSelected: boolean;
 	benefits: TierBenefits;
+	offers?: TierBenefits['list'];
 	planCost: TierPlanCosts;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
@@ -187,6 +188,7 @@ export function ThreeTierCard({
 	isRecommendedSubdued,
 	isUserSelected,
 	benefits,
+	offers,
 	currencyId,
 	paymentFrequency,
 	linkCtaClickHandler,
@@ -266,6 +268,21 @@ export function ThreeTierCard({
 				iconColor={palette.brand[500]}
 				cssOverrides={checkmarkList}
 			/>
+			{offers && (
+				<CheckList
+					checkListData={offers.map((offer) => {
+						return {
+							text: offer.copy,
+							isChecked: true,
+							toolTip: offer.tooltip,
+							strong: offer.strong,
+						};
+					})}
+					style={'compact'}
+					iconColor={palette.brand[500]}
+					cssOverrides={checkmarkList}
+				/>
+			)}
 		</section>
 	);
 }

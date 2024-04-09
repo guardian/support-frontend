@@ -6,7 +6,11 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 
 export interface TierBenefits {
 	description?: Array<string | { copy: string; strong: boolean }>;
-	list: Array<{ copy: string; tooltip?: string; strong?: boolean }>;
+	list: Array<{
+		copy: string | JSX.Element;
+		tooltip?: string;
+		strong?: boolean;
+	}>;
 }
 
 export interface TierPlanCosts {
