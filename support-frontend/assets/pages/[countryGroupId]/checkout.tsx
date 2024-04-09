@@ -54,10 +54,8 @@ import {
 import { getStripeKey } from 'helpers/forms/stripe';
 import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
-import {
-	type IsoCountry,
-	newspaperCountries,
-} from 'helpers/internationalisation/country';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { newspaperCountries } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';

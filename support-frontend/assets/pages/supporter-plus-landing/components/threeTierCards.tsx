@@ -8,29 +8,26 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierCard } from './threeTierCard';
 
-interface ThreeTierCardsProps {
+type ThreeTierCardsProps = {
 	cardsContent: Array<{
 		title: string;
 		isRecommended: boolean;
 		isUserSelected: boolean;
 		benefits: TierBenefits;
 		planCost: TierPlanCosts;
-		externalBtnLink?: string;
+		link: string;
 	}>;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
-	buttonCtaClickHandler: (
+	linkCtaClickHandler: (
+		event: React.MouseEvent<HTMLAnchorElement>,
+		link: string,
 		price: number,
 		cardTier: 1 | 2 | 3,
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
 	) => void;
-	linkCtaClickHandler: (
-		price: number,
-		contributionType: ContributionType,
-		contributionCurrency: IsoCurrency,
-	) => void;
-}
+};
 
 const container = (cardCount: number) => css`
 	display: flex;
@@ -65,7 +62,6 @@ export function ThreeTierCards({
 	cardsContent,
 	currencyId,
 	paymentFrequency,
-	buttonCtaClickHandler,
 	linkCtaClickHandler,
 }: ThreeTierCardsProps): JSX.Element {
 	const haveRecommendedAndSelectedCards =
@@ -92,7 +88,6 @@ export function ThreeTierCards({
 						isRecommendedSubdued={haveRecommendedAndSelectedCards}
 						currencyId={currencyId}
 						paymentFrequency={paymentFrequency}
-						buttonCtaClickHandler={buttonCtaClickHandler}
 						linkCtaClickHandler={linkCtaClickHandler}
 					/>
 				);
