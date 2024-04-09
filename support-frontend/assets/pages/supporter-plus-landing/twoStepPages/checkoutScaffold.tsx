@@ -221,9 +221,6 @@ export function SupporterPlusCheckoutScaffold({
 							</Hide>
 						)}
 					</Header>
-					{/* {!countryIsAffectedByVATStatus && !isPaymentPage && (
-						<Nav {...countrySwitcherProps} />
-					)} */}
 					{!isPaymentPage && (
 						<Nav
 							{...countrySwitcherProps}
