@@ -241,9 +241,28 @@ function getCardData(
 	productDescription: (typeof productCatalogDescription)[keyof typeof productCatalogDescription],
 	pricing: number,
 	link: string,
+	contributionType: ContributionType,
 	promotion?: Promotion,
 	isRecommended = false,
 ) {
+	/**
+	 * The text we show depends `contributionType` selected by the user
+	 * We only support ANNUAL style text for promotions with durationMonths === 12
+	 *
+	 * EXAMPLE
+	 * MONTHLY: £6.5/month for 6 months, then £10/month
+	 * ANNUAL: £173/year for the first year, then £275/year
+	 */
+	const promotionDurationPeriod: RegularContributionType =
+		contributionType === 'ANNUAL' && promotion?.discount?.durationMonths === 12
+			? 'ANNUAL'
+			: 'MONTHLY';
+
+	const promotionDurationValue =
+		promotionDurationPeriod === 'ANNUAL'
+			? 1
+			: promotion?.discount?.durationMonths;
+
 	return {
 		title: productDescription.label,
 		isRecommended,
@@ -264,8 +283,8 @@ function getCardData(
 							percentage: promotion.discount.amount,
 							price: promotion.discountedPrice,
 							duration: {
-								value: promotion.numberOfDiscountedPeriods ?? 0,
-								period: 'MONTHLY' as RegularContributionType,
+								value: promotionDurationValue ?? 0,
+								period: promotionDurationPeriod,
 							},
 					  }
 					: undefined,
@@ -425,6 +444,7 @@ export function ThreeTierLanding(): JSX.Element {
 		productCatalogDescription.Contribution,
 		recurringAmount,
 		tier1Link,
+		contributionType,
 	);
 
 	/** Tier 2: SupporterPlus */
@@ -441,10 +461,12 @@ export function ThreeTierLanding(): JSX.Element {
 	if (promotion) {
 		tier2UrlParams.set('promoCode', promotion.promoCode);
 	}
+
 	const tier2Card = getCardData(
 		productCatalogDescription.SupporterPlus,
 		pricing,
 		`contribute/checkout?${tier2UrlParams.toString()}`,
+		contributionType,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion,
 		true, // isRecommended
@@ -473,6 +495,7 @@ export function ThreeTierLanding(): JSX.Element {
 			supporterPlusWithGuardianWeeklyRatePlan
 		].pricing[currencyId],
 		`/subscribe/weekly/checkout?${tier3UrlParams.toString()}`,
+		contributionType,
 		tier3Promotion,
 	);
 
@@ -575,6 +598,7 @@ export function ThreeTierLanding(): JSX.Element {
 									currencyId
 								],
 								'', // We don't care about the link here as we just want the price
+								contributionType,
 								promotion,
 							).planCost.price
 						}
@@ -585,6 +609,7 @@ export function ThreeTierLanding(): JSX.Element {
 									currencyId
 								],
 								'', // We don't care about the link here as we just want the price
+								contributionType,
 								promotion,
 							).planCost.price
 						}
