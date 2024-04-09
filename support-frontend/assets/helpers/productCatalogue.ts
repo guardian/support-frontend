@@ -1,6 +1,3 @@
-import { newspaperCountries } from 'helpers/internationalisation/country';
-import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
-
 export const productCatalog = window.guardian.productCatalog;
 
 export const productCatalogDescription = {
@@ -32,8 +29,6 @@ export const productCatalogDescription = {
 	},
 	NationalDelivery: {
 		label: 'National Delivery',
-		delivery: true,
-		addressCountries: newspaperCountries,
 	},
 	SupporterPlus: {
 		label: 'All-access digital',
@@ -54,17 +49,12 @@ export const productCatalogDescription = {
 	},
 	GuardianWeeklyRestOfWorld: {
 		label: 'The Guardian Weekly',
-		delivery: true,
-		addressCountries: gwDeliverableCountries,
 	},
 	GuardianWeeklyDomestic: {
 		label: 'The Guardian Weekly',
-		delivery: true,
-		addressCountries: gwDeliverableCountries,
 	},
 	SubscriptionCard: {
 		label: 'Newspaper subscription',
-		delivery: true,
 	},
 	Contribution: {
 		label: 'Support',
@@ -76,8 +66,6 @@ export const productCatalogDescription = {
 	},
 	HomeDelivery: {
 		label: 'Home Delivery',
-		delivery: true,
-		addressCountries: newspaperCountries,
 	},
 };
 
