@@ -4,8 +4,7 @@ import com.gocardless.GoCardlessClient
 import com.gocardless.GoCardlessClient.Environment
 import com.gocardless.errors.GoCardlessApiException
 import com.gocardless.resources.BankDetailsLookup.AvailableDebitScheme
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import com.gu.support.config.GoCardlessConfig
 import com.gu.support.gocardless.GoCardlessService
 import models.CheckBankAccountDetails
@@ -13,7 +12,7 @@ import models.CheckBankAccountDetails
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class GoCardlessFrontendService(config: GoCardlessConfig) extends GoCardlessService(config) {
+class GoCardlessFrontendService(config: GoCardlessConfig) extends GoCardlessService(config) with SafeLogging {
 
   lazy val client = GoCardlessClient.create(config.apiToken, Environment.valueOf(config.environment))
 
@@ -34,7 +33,7 @@ class GoCardlessFrontendService(config: GoCardlessConfig) extends GoCardlessServ
       bdl.getAvailableDebitSchemes.contains(AvailableDebitScheme.BACS)
     } recover { case e: GoCardlessApiException =>
       if (e.getCode == 429) {
-        SafeLogger.error(scrub"Bypassing preliminary bank account check - GoCardless rate limit has been exceeded")
+        logger.error(scrub"Bypassing preliminary bank account check - GoCardless rate limit has been exceeded")
         true
       } else {
         false

@@ -3,11 +3,9 @@ package controllers
 import actions.AsyncAuthenticatedBuilder.OptionalAuthRequest
 import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, Switches}
-import akka.actor.{ActorSystem, Scheduler}
 import cats.data.EitherT
 import cats.implicits._
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import com.gu.support.catalog.NationalDelivery
 import com.gu.support.paperround.PaperRoundServiceProvider
 import com.gu.support.workers._
@@ -18,15 +16,15 @@ import io.circe.Encoder
 import io.circe.generic.semiauto._
 import io.circe.syntax._
 import lib.PlayImplicits._
-import models.identity.responses.IdentityErrorResponse.IdentityError
-import models.identity.responses.IdentityErrorResponse._
+import models.identity.responses.IdentityErrorResponse.{IdentityError, _}
+import org.apache.pekko.actor.{ActorSystem, Scheduler}
 import org.joda.time.DateTime
 import play.api.http.Writeable
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import services.AsyncAuthenticationService.IdentityIdAndEmail
 import services.stepfunctions.{CreateSupportWorkersRequest, StatusResponse, SupportWorkersClient}
-import services.{IdentityService, RecaptchaResponse, RecaptchaService, StripeSetupIntentService, TestUserService}
+import services.{IdentityService, RecaptchaResponse, RecaptchaService, TestUserService}
 import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.{CheckoutValidationRules, NormalisedTelephoneNumber, PaperValidation}
 
@@ -36,11 +34,9 @@ import scala.util.chaining._
 
 object CreateSubscriptionController {
 
-  sealed abstract class CreateSubscriptionError(message: String)
-  case class ServerError(message: String) extends CreateSubscriptionError(message)
-  case class RequestValidationError(message: String) extends CreateSubscriptionError(message)
-
-  type ApiResponseOrError[RES] = EitherT[Future, CreateSubscriptionError, RES]
+  private sealed abstract class CreateSubscriptionError
+  private case class ServerError(message: String) extends CreateSubscriptionError
+  private case class RequestValidationError(message: String) extends CreateSubscriptionError
 
 }
 
@@ -57,16 +53,25 @@ class CreateSubscriptionController(
     paperRoundServiceProvider: PaperRoundServiceProvider,
 )(implicit val ec: ExecutionContext, system: ActorSystem)
     extends AbstractController(components)
-    with Circe {
+    with Circe
+    with SafeLogging {
 
   import actionRefiners._
 
   // This is just for readability
   private type CreateRequest = OptionalAuthRequest[CreateSupportWorkersRequest]
 
+  private val createRequestBodyParser: BodyParser[CreateSupportWorkersRequest] = {
+    val maxCreateJsonLength: Long = 200 * 1024
+    circe.json(maxCreateJsonLength).validate { json =>
+      val decoderResult = json.as[CreateSupportWorkersRequest]
+      decoderResult.leftMap(error => Results.BadRequest(error.show))
+    }
+  }
+
   def create: EssentialAction =
     LoggingAndAlarmOnFailure {
-      MaybeAuthenticatedActionOnFormSubmission.async(circe.json[CreateSupportWorkersRequest]) { implicit request =>
+      MaybeAuthenticatedActionOnFormSubmission.async(createRequestBodyParser) { implicit request =>
         implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
         logDetailedMessage("attempting to create")
@@ -116,7 +121,7 @@ class CreateSubscriptionController(
           case RecaptchaResponse(true, _) => Right(())
 
           case RecaptchaResponse(false, _) =>
-            errorDetailedMessage("recaptcha failed")
+            logErrorDetailedMessage("recaptcha failed")
             Left(RequestValidationError("Recaptcha validation failed"))
         }
     } else {
@@ -150,17 +155,17 @@ class CreateSubscriptionController(
 
   private def mapIdentityErrorToCreateSubscriptionError(identityError: IdentityError) =
     identityError match {
-      case EmailProviderRejected(_endpoint) => RequestValidationError(emailProviderRejectedCode)
-      case InvalidEmailAddress(_endpoint) => RequestValidationError(invalidEmailAddressCode)
+      case EmailProviderRejected(_) => RequestValidationError(emailProviderRejectedCode)
+      case InvalidEmailAddress(_) => RequestValidationError(invalidEmailAddressCode)
       case OtherIdentityError(message, description, endpoint) =>
         endpoint match {
-          case Some(GuestEndpoint) => ServerError(s"Error calling /guest: ${message}; ${description}")
-          case Some(UserEndpoint) => ServerError(s"Error calling /user: ${message}; ${description}")
-          case None => ServerError(s"${message}: ${description}")
+          case Some(GuestEndpoint) => ServerError(s"Error calling /guest: $message; $description")
+          case Some(UserEndpoint) => ServerError(s"Error calling /user: $message; $description")
+          case None => ServerError(s"$message: $description")
         }
     }
 
-  private def errorDetailedMessage(message: String)(implicit request: CreateRequest) = {
+  private def logErrorDetailedMessage(message: String)(implicit request: CreateRequest): Unit = {
     val maybeLoggedInIdentityIdAndEmail =
       request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
 
@@ -168,12 +173,12 @@ class CreateSubscriptionController(
       case None => (request.body.email, "guest")
       case Some(idAndEmail) => (idAndEmail.primaryEmailAddress, "logged-in")
     }
-    SafeLogger.error(
+    logger.error(
       scrub"[CreateSubscriptionController] [${request.uuid}] [${userDesc._1}] [${userDesc._2}] [${request.body.product.describe}] $message",
     )
   }
 
-  private def logDetailedMessage(message: String)(implicit request: CreateRequest) = {
+  private def logDetailedMessage(message: String)(implicit request: CreateRequest): Unit = {
     val maybeLoggedInIdentityIdAndEmail =
       request.user.map(authIdUser => IdentityIdAndEmail(authIdUser.id, authIdUser.primaryEmailAddress))
 
@@ -181,7 +186,7 @@ class CreateSubscriptionController(
       case None => (request.body.email, "guest")
       case Some(idAndEmail) => (idAndEmail.primaryEmailAddress, "logged-in")
     }
-    SafeLogger.info(
+    logger.info(
       s"[CreateSubscriptionController] [${request.uuid}] [$user] [$desc] [${request.body.product.describe}] $message",
     )
   }
@@ -246,7 +251,7 @@ class CreateSubscriptionController(
     result
       .fold(
         { error =>
-          errorDetailedMessage(s"create failed due to $error")
+          logErrorDetailedMessage(s"create failed due to $error")
           val errResult = error match {
             case err: RequestValidationError =>
               // Store the error message in the result.header.reasonPhrase this will allow us to
@@ -276,7 +281,7 @@ class CreateSubscriptionController(
       userType: String,
       product: String,
   )
-  object CheckoutCompleteCookieBody {
+  private object CheckoutCompleteCookieBody {
     implicit val encoder: Encoder[CheckoutCompleteCookieBody] =
       deriveEncoder[CheckoutCompleteCookieBody]
   }
@@ -285,13 +290,13 @@ class CreateSubscriptionController(
       .getUserType(userEmail)
       .fold(
         err => {
-          SafeLogger.error(scrub"Failed to retrieve user type for $userEmail: $err")
-          SafeLogger.error(scrub"Failed to create GU_CO_COMPLETE cookie")
+          logger.error(scrub"Failed to retrieve user type for $userEmail: $err")
+          logger.error(scrub"Failed to create GU_CO_COMPLETE cookie")
           List.empty
         },
         response => {
-          SafeLogger.info(s"Successfully retrieved user type for $userEmail")
-          SafeLogger.info(s"USERTYPE: ${response.userType}")
+          logger.info(s"Successfully retrieved user type for $userEmail")
+          logger.info(s"USERTYPE: ${response.userType}")
           val cookieValue: String = CheckoutCompleteCookieBody(
             userType = response.userType,
             product = productType.toString,
@@ -374,7 +379,7 @@ class CreateSubscriptionController(
         phoneNo <- request.telephoneNumber
         updatedNo <- NormalisedTelephoneNumber
           .formatFromStringAndCountry(phoneNo, request.billingAddress.country)
-          .tap(_.left.foreach(SafeLogger.warn))
+          .tap(_.left.foreach(logger.warn))
           .toOption
       } yield updatedNo,
       isTestUser = isTestUser,

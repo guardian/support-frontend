@@ -3,7 +3,6 @@ on:
   push:
 jobs:
   upload-storybook:
-    if: ${{ github.actor != 'gu-scala-steward-public-repos[bot]' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,7 +25,7 @@ jobs:
 
       - name: Install
         run: yarn
-      - uses: chromaui/action@v10
+      - uses: chromaui/action@v11
         with:
           workingDir: support-frontend
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}

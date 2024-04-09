@@ -57,9 +57,6 @@ class ZuoraService(val config: ZuoraConfig, client: FutureHttpClient, baseUrl: O
     )
   }
 
-  def getObjectAccount(accountId: String): Future[GetObjectAccountResponse] =
-    get[GetObjectAccountResponse](s"object/account/$accountId", authHeaders)
-
   override def getSubscriptions(accountNumber: ZuoraAccountNumber): Future[List[DomainSubscription]] =
     get[SubscriptionsResponse](s"subscriptions/accounts/${accountNumber.value}", authHeaders).map {
       subscriptionsResponse =>

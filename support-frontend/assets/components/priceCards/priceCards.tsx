@@ -61,8 +61,8 @@ function getChoiceCardGroupStyles(lastButtonFullWidth: boolean) {
 }
 
 export type PriceCardsProps = {
-	amounts: string[];
-	selectedAmount: string;
+	amounts: number[];
+	selectedAmount: number | 'other';
 	currency: IsoCurrency;
 	onAmountChange: (newAmount: string) => void;
 	paymentInterval?: PriceCardPaymentInterval;
@@ -104,6 +104,10 @@ export function PriceCards({
 							isSelected={amount === selectedAmount}
 							onClick={onAmountChange}
 							paymentInterval={paymentInterval}
+							alternateLabel={`${simpleFormatAmount(
+								currencies[currency],
+								amount,
+							)}${paymentInterval ? ' per ' + paymentInterval : ''}`}
 						/>
 					))}
 					{enableChooseYourAmountButton && (

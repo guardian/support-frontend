@@ -5,7 +5,6 @@ import sbt.Keys.libraryDependencies
 version := "0.1-SNAPSHOT"
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.4.13",
   "software.amazon.awssdk" % "dynamodb" % awsClientVersion2,
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
@@ -27,16 +26,6 @@ riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
 riffRaffArtifactResources += (file("supporter-product-data/cloudformation/cfn.yaml"), "cfn/cfn.yaml")
 assemblyJarName := s"${name.value}.jar"
-assembly / assemblyMergeStrategy := {
-  case PathList("models", xs @ _*) => MergeStrategy.discard
-  case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
-  case x if x.endsWith("module-info.class") => MergeStrategy.discard
-  case "mime.types" => MergeStrategy.first
-  case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
-  case y =>
-    val oldStrategy = (assembly / assemblyMergeStrategy).value
-    oldStrategy(y)
-}
 
 lazy val deployToCode =
   inputKey[Unit]("Directly update AWS lambda code from CODE instead of via RiffRaff for faster feedback loop")

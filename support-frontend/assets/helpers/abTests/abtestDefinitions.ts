@@ -12,6 +12,8 @@ export const pageUrlRegexes = {
 		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
 		auLandingPage: '/au/contribute(/.*)?$',
 		usLandingPage: '/us/contribute(/.*)?$',
+		allLandingPagesExecptSupportPlus:
+			'\bcontribute\b(?!.*acquisitionData.*abTest.*supporterPlusOnly.*variant.*variant)',
 	},
 	subscriptions: {
 		subsDigiSubPages: '(/??/subscribe(\\?.*)?$|/??/subscribe/digital(\\?.*)?$)',
@@ -42,6 +44,24 @@ export const pageUrlRegexes = {
 };
 
 export const tests: Tests = {
+	patronsOneOffOnly: {
+		variants: [
+			// not really an AB test
+			{
+				id: 'variant',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		isActive: true,
+		referrerControlled: true,
+		seed: 1,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+	},
 	supporterPlusOnly: {
 		variants: [
 			{
@@ -60,6 +80,23 @@ export const tests: Tests = {
 		isActive: true,
 		referrerControlled: true,
 		seed: 2,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+	},
+	additionalBenefits: {
+		variants: [
+			{
+				id: 'control',
+			},
+		],
+		audiences: {
+			US: {
+				offset: 0,
+				size: 0,
+			},
+		},
+		isActive: false,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 3,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
 };

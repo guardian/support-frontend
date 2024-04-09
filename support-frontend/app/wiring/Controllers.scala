@@ -18,12 +18,12 @@ trait Controllers {
     with GoogleAuth =>
 
   lazy val assetController = new controllers.Assets(httpErrorHandler, assetsMetadata)
-  lazy val faviconController = new controllers.Favicon(actionRefiners, appConfig.stage)(fileMimeTypes, implicitly)
+  lazy val faviconController = new controllers.Favicon(actionBuilders, appConfig.stage)(fileMimeTypes, implicitly)
   def errorController: ErrorController
   lazy val elementForStage = CSSElementForStage(assetsResolver.getFileContentsAsHtml, appConfig.stage) _
 
   lazy val applicationController = new Application(
-    actionRefiners,
+    actionBuilders,
     assetsResolver,
     testUsers,
     controllerComponents,
@@ -37,21 +37,24 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.stage,
+    implicitWs,
+    priceSummaryServiceProvider,
+    cachedProductCatalogServiceProvider,
     appConfig.supportUrl,
   )
 
   lazy val diagnosticsController = new DiagnosticsController(
-    actionRefiners,
+    actionBuilders,
   )
 
   lazy val articleShareController = new ArticleShare(
-    actionRefiners,
+    actionBuilders,
     controllerComponents,
     capiService,
   )
 
   lazy val subscriptionsController = new SubscriptionsController(
-    actionRefiners,
+    actionBuilders,
     priceSummaryServiceProvider,
     assetsResolver,
     controllerComponents,
@@ -61,7 +64,7 @@ trait Controllers {
   )
 
   lazy val redemptionController = new RedemptionController(
-    actionRefiners,
+    actionBuilders,
     assetsResolver,
     allSettingsProvider,
     testUsers,
@@ -78,7 +81,7 @@ trait Controllers {
     priceSummaryServiceProvider,
     landingCopyProvider,
     assetsResolver,
-    actionRefiners,
+    actionBuilders,
     testUsers,
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
@@ -92,7 +95,7 @@ trait Controllers {
     priceSummaryServiceProvider,
     landingCopyProvider,
     assetsResolver,
-    actionRefiners,
+    actionBuilders,
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
@@ -103,7 +106,7 @@ trait Controllers {
     priceSummaryServiceProvider,
     landingCopyProvider,
     assetsResolver,
-    actionRefiners,
+    actionBuilders,
     controllerComponents,
     stringsConfig,
     allSettingsProvider,
@@ -113,7 +116,7 @@ trait Controllers {
   lazy val digitalPackFormController = new DigitalSubscriptionFormController(
     priceSummaryServiceProvider,
     assetsResolver,
-    actionRefiners,
+    actionBuilders,
     testUsers,
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
@@ -125,7 +128,7 @@ trait Controllers {
   lazy val paperFormController = new PaperSubscriptionFormController(
     priceSummaryServiceProvider,
     assetsResolver,
-    actionRefiners,
+    actionBuilders,
     testUsers,
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
@@ -137,7 +140,7 @@ trait Controllers {
   lazy val weeklyFormController = new WeeklySubscriptionFormController(
     priceSummaryServiceProvider,
     assetsResolver,
-    actionRefiners,
+    actionBuilders,
     testUsers,
     appConfig.regularStripeConfigProvider,
     appConfig.regularPayPalConfigProvider,
@@ -148,7 +151,7 @@ trait Controllers {
 
   lazy val createSubscriptionController = new CreateSubscriptionController(
     supportWorkersClient,
-    actionRefiners,
+    actionBuilders,
     identityService,
     recaptchaService = recaptchaService,
     recaptchaConfigProvider = appConfig.recaptchaConfigProvider,
@@ -162,22 +165,21 @@ trait Controllers {
   lazy val supportWorkersStatusController = new SupportWorkersStatus(
     supportWorkersClient,
     controllerComponents,
-    actionRefiners,
+    actionBuilders,
   )
 
   lazy val stripeController = new StripeController(
     components = controllerComponents,
-    actionRefiners = actionRefiners,
+    actionRefiners = actionBuilders,
     recaptchaService = recaptchaService,
     stripeService = stripeService,
     recaptchaConfigProvider = appConfig.recaptchaConfigProvider,
-    testStripeConfig = appConfig.regularStripeConfigProvider.get(true),
     allSettingsProvider,
     appConfig.stage,
   )
 
   lazy val payPalRegularController = new PayPalRegular(
-    actionRefiners,
+    actionBuilders,
     assetsResolver,
     payPalNvpServiceProvider,
     testUsers,
@@ -186,7 +188,7 @@ trait Controllers {
   )
 
   lazy val payPalOneOffController = new PayPalOneOff(
-    actionRefiners,
+    actionBuilders,
     assetsResolver,
     testUsers,
     controllerComponents,
@@ -206,20 +208,20 @@ trait Controllers {
     new AuthCodeFlowController(controllerComponents, asyncAuthenticationService, appConfig.identity)
 
   lazy val siteMapController = new SiteMap(
-    actionRefiners,
+    actionBuilders,
     controllerComponents,
   )
 
   lazy val identityController = new IdentityController(
     identityService,
     controllerComponents,
-    actionRefiners,
+    actionBuilders,
     appConfig.identity.webappUrl,
     () => AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(setupWarningRequest(appConfig.stage)),
   )
 
   lazy val directDebitController = new DirectDebit(
-    actionRefiners,
+    actionBuilders,
     controllerComponents,
     goCardlessServiceProvider,
     testUsers,
@@ -228,13 +230,13 @@ trait Controllers {
   lazy val getAddressController = new GetAddress(
     controllerComponents,
     getAddressIOService,
-    actionRefiners,
+    actionBuilders,
   )
 
   lazy val paperRoundController = new PaperRound(
     controllerComponents,
     paperRoundServiceProvider,
-    actionRefiners,
+    actionBuilders,
     testUsers,
     appConfig.stage,
   )
@@ -243,7 +245,7 @@ trait Controllers {
     promotionServiceProvider,
     priceSummaryServiceProvider,
     assetsResolver,
-    actionRefiners,
+    actionBuilders,
     testUsers,
     controllerComponents,
     allSettingsProvider,
@@ -252,7 +254,7 @@ trait Controllers {
 
   lazy val pricesController = new PricesController(
     priceSummaryServiceProvider,
-    actionRefiners,
+    actionBuilders,
     controllerComponents,
   )
 

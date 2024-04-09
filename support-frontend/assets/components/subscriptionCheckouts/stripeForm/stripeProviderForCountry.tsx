@@ -7,25 +7,34 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
+import type { IsoCurrency } from '../../../helpers/internationalisation/currency';
 
 // Types
 export type PropTypes = {
 	country: IsoCountry;
+	currency: IsoCurrency;
 	isTestUser: boolean;
 	allErrors: Array<FormError<FormField>>;
 	submitForm: () => void;
 	validateForm: () => void;
 	buttonText: string;
 	csrf: CsrfState;
+	setStripePublicKey: (payload: string) => void;
 };
 
 function StripeProviderForCountry(props: PropTypes): JSX.Element {
 	const [stripeObject, setStripeObject] = useState<stripeJs.Stripe | null>(
 		null,
 	);
-	const stripeKey = getStripeKey('REGULAR', props.country, props.isTestUser);
+	const stripeKey = getStripeKey(
+		'REGULAR',
+		props.country,
+		props.currency,
+		props.isTestUser,
+	);
 	useEffect(() => {
 		if (stripeObject === null) {
+			props.setStripePublicKey(stripeKey);
 			void stripeJs.loadStripe(stripeKey).then(setStripeObject);
 		}
 	}, []);

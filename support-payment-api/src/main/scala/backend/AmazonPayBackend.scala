@@ -1,6 +1,6 @@
 package backend
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import cats.data.EitherT
 import cats.implicits._
 import com.amazon.pay.response.ipn.model.{Notification, NotificationType, RefundNotification}
@@ -67,6 +67,10 @@ class AmazonPayBackend(
       )
     }
 
+    def isValidEmail(email: String): Boolean = {
+      !email.contains(",")
+    }
+
     def getAuthorizationDetails: Either[AmazonPayApiError, AuthorizationDetails] = for {
       orderRef <- service.getOrderReference(amazonPayRequest.paymentData.orderReferenceId)
       _ <-
@@ -78,7 +82,14 @@ class AmazonPayBackend(
 
     amazonPayEnabled.flatMap {
       case true =>
-        handleResponse(getAuthorizationDetails, amazonPayRequest, clientBrowserInfo)
+        if (isValidEmail(amazonPayRequest.paymentData.email))
+          handleResponse(getAuthorizationDetails, amazonPayRequest, clientBrowserInfo)
+        else
+          handleResponse(
+            Either.left(AmazonPayApiError.fromString("Invalid email address")),
+            amazonPayRequest,
+            clientBrowserInfo,
+          )
       case false =>
         handleResponse(
           Either.left(AmazonPayApiError.fromString(amazonPayErrorText)),

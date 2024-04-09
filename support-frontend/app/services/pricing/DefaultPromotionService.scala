@@ -1,14 +1,14 @@
 package services.pricing
 
-import com.amazonaws.services.s3.AmazonS3URI
 import com.gu.aws.{AwsCloudWatchMetricPut, AwsS3Client}
-import com.gu.support.config.{Stage, TouchPointEnvironments}
+import com.gu.support.config.Stage
 import io.circe._
 import io.circe.parser._
 import io.circe.generic.auto._
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.defaultPromotionsLoadingFailure
+import com.gu.aws.AwsS3Client.S3Location
 import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product}
 import com.typesafe.scalalogging.LazyLogging
 import services.pricing.DefaultPromotionService.DefaultPromotions
@@ -36,10 +36,9 @@ class DefaultPromotionServiceS3(
     extends DefaultPromotionService
     with LazyLogging {
 
-  private val s3Uri = {
-    val env = TouchPointEnvironments.fromStage(stage)
-    new AmazonS3URI(s"s3://support-admin-console/$stage/default-promos.json")
-  }
+  private val s3Uri =
+    S3Location("support-admin-console", s"$stage/default-promos.json")
+
   private val defaultPromoCodes = new AtomicReference[DefaultPromotions](
     DefaultPromotions(guardianWeekly = Nil, paper = Nil, digital = Nil),
   )

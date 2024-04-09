@@ -7,9 +7,10 @@ import {
 	PayPal,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
-import { emptySwitches, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
+import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { getValidPaymentMethods } from '../forms/checkouts';
+import { currencies } from 'helpers/internationalisation/currency';
+import { getValidPaymentMethods, simpleFormatAmount } from '../forms/checkouts';
 
 jest.mock('helpers/globalsAndSwitches/globals', () => ({
 	__esModule: true,
@@ -29,12 +30,7 @@ describe('checkouts', () => {
 			mock(isSwitchOn).mockImplementation(() => true);
 
 			expect(
-				getValidPaymentMethods(
-					contributionType,
-					emptySwitches,
-					countryId,
-					countryGroupId,
-				),
+				getValidPaymentMethods(contributionType, countryId, countryGroupId),
 			).toEqual([
 				DirectDebit,
 				ExistingCard,
@@ -51,12 +47,7 @@ describe('checkouts', () => {
 			mock(isSwitchOn).mockImplementation(() => false);
 
 			expect(
-				getValidPaymentMethods(
-					contributionType,
-					emptySwitches,
-					countryId,
-					countryGroupId,
-				),
+				getValidPaymentMethods(contributionType, countryId, countryGroupId),
 			).toEqual([]);
 		});
 
@@ -69,13 +60,19 @@ describe('checkouts', () => {
 			);
 
 			expect(
-				getValidPaymentMethods(
-					contributionType,
-					emptySwitches,
-					countryId,
-					countryGroupId,
-				),
+				getValidPaymentMethods(contributionType, countryId, countryGroupId),
 			).toEqual([Stripe]);
+		});
+	});
+
+	describe('simpleFormatAmount', () => {
+		it.each([
+			[currencies.GBP, 12, '£12'],
+			[currencies.NZD, 12.5, '$12.50'],
+			[currencies.CAD, 12.0005, '$12'],
+			[currencies.CAD, 12.015, '$12.02'],
+		])(`%i%i should format as %i`, (currency, amount, expected) => {
+			expect(simpleFormatAmount(currency, amount)).toBe(expected);
 		});
 	});
 });

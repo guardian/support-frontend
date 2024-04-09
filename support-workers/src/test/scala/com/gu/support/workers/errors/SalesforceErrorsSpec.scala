@@ -7,15 +7,16 @@ import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.salesforce.Fixtures._
 import com.gu.salesforce.Salesforce.{
   Authentication,
+  DeliveryContact,
   NewContact,
   SalesforceAuthenticationErrorResponse,
   SalesforceErrorResponse,
-  UpsertData,
 }
 import com.gu.salesforce.{AuthService, SalesforceConfig, SalesforceService}
 import com.gu.support.workers.AsyncLambdaSpec
 import com.gu.test.tags.annotations.IntegrationTest
 import okhttp3.Request
+import org.mockito.ArgumentMatchersSugar.any
 import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.duration._
@@ -27,7 +28,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
     val invalidConfig = SalesforceConfig("", "https://test.salesforce.com", "", "", "", "", "")
     val authService = new AuthService(invalidConfig)
     recoverToSucceededIf[SalesforceAuthenticationErrorResponse] {
-      authService.authorize.map(auth => SafeLogger.info(s"Got an auth: $auth"))
+      authService.authorize.map(auth => info(s"Got an auth: $auth"))
     }
   }
 
@@ -56,7 +57,7 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
     val service = new SalesforceService(invalidConfig, configurableFutureRunner(10.seconds))
 
     recoverToSucceededIf[SalesforceAuthenticationErrorResponse] {
-      service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
+      service.upsert(upsertData).map(response => info(s"Got a response: $response"))
     }
   }
 
@@ -68,11 +69,37 @@ class SalesforceErrorsSpec extends AsyncLambdaSpec with Matchers {
           req.url(s"${auth.instance_url}/$upsertEndpoint") // We still need to set the base url
       }
 
-    service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
+    service.upsert(upsertData).map(response => info(s"Got a response: $response"))
 
     recoverToExceptionIf[SalesforceErrorResponse] {
-      service.upsert(upsertData).map(response => SafeLogger.info(s"Got a response: $response"))
+      service.upsert(upsertData).map(response => info(s"Got a response: $response"))
     }.map(_.message shouldBe "Session expired or invalid")
   }
 
+  /** We were seeing the `upsert` method throw circe decoding errors, which messed with the retry logic of the lambda.
+    * This is caused by the Salesforce API error with a `http.status == 200` but `Success == false`.
+    */
+  "SalesforceService" should "throw a SalesforceErrorResponse when an API returns 200 but Success == false" in {
+    val service =
+      new SalesforceService(Configuration.load().salesforceConfigProvider.get(), configurableFutureRunner(10.seconds))
+
+    // This just forces an invalid API call
+    val invalidUpsertData = DeliveryContact(
+      AccountId = salesforceAccountId,
+      Email = Some("integration-test-recipient@thegulocal.com"),
+      Salutation = None,
+      FirstName = "",
+      LastName = "",
+      MailingStreet = None,
+      MailingCity = None,
+      MailingState = None,
+      MailingPostalCode = None,
+      MailingCountry = None,
+    )
+
+    val upsert = service.upsert(invalidUpsertData)
+    upsert.failed.map { err =>
+      err shouldBe a[SalesforceErrorResponse]
+    }
+  }
 }

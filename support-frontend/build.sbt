@@ -6,7 +6,7 @@ packageSummary := "Support Play APP"
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.4.2",
-  "com.gu" %% "simple-configuration-ssm" % "1.5.7",
+  "com.gu" %% "simple-configuration-ssm" % "1.7.0",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
   "org.mockito" % "mockito-core" % "2.28.2" % Test,
   "io.sentry" % "sentry-logback" % "6.29.0",
@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
   "com.gu" %% "identity-test-users" % "0.8",
   "com.google.guava" % "guava" % "32.1.1-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
-  "com.gu.play-googleauth" %% "play-v28" % "2.2.7",
+  "com.gu.play-googleauth" %% "play-v30" % "3.0.6",
   "io.github.bonigarcia" % "webdrivermanager" % "5.5.3" % "test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "4.11.0",
@@ -43,13 +43,15 @@ libraryDependencies ++= Seq(
 )
 dependencyOverrides += "com.fasterxml.jackson.core" % "jackson-databind" % jacksonDatabindVersion
 
+ThisBuild / libraryDependencySchemes ++= Seq(
+  "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always
+)
+
 Compile / doc / sources := Seq.empty
 
 Compile / packageDoc / publishArtifact := false
 
 enablePlugins(SystemdPlugin)
-
-debianPackageDependencies := Seq("openjdk-8-jre-headless")
 
 packageSummary := "Support Frontend Play App"
 packageDescription := """Frontend for the new supporter platform"""
@@ -75,13 +77,17 @@ def getFiles(rootFile: File, deployName: String): Seq[(File, String)] = {
   getFiles0(rootFile)
 }
 
-Universal / javaOptions ++= Seq(
-  "-Dpidfile.path=/dev/null",
-  "-J-XX:MaxMetaspaceSize=256m",
-  "-J-XX:+PrintGCDetails",
-  "-J-XX:+PrintGCDateStamps",
-  s"-J-Xloggc:/var/log/${packageName.value}/gc.log",
+val jvmParameters = Def.setting(Seq(
+  "-XX:MaxMetaspaceSize=256m",
+  s"-Xlog:gc*:/var/log/${packageName.value}/gc.log", // https://docs.azul.com/prime/Unified-GC-Logging#enabling-unified-gc-logging
+  "-XX:-OmitStackTraceInFastThrow",
+))
+val playParameters = Seq(
+  "-Dpidfile.path=/dev/null", // https://www.playframework.com/documentation/3.0.x/ProductionConfiguration#Changing-the-path-of-RUNNING_PID
 )
+// -J tells the packager to pass it through to the JVM
+// https://www.scala-sbt.org/sbt-native-packager/archetypes/java_app/customize.html#via-build-sbt
+Universal / javaOptions ++= playParameters ++ jvmParameters.value.map(param => "-J" + param)
 
 addCommandAlias(
   "devrun",

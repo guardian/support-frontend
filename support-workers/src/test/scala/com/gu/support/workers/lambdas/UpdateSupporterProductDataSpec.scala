@@ -11,6 +11,7 @@ import com.gu.support.workers.lambdas.UpdateSupporterProductDataSpec.{
 import com.gu.support.workers.states.SendThankYouEmailState
 import com.gu.supporterdata.model.ContributionAmount
 import io.circe.parser._
+import org.scalatest.EitherValues
 import org.scalatest.Inside.inside
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
@@ -18,37 +19,30 @@ import org.scalatest.OptionValues._
 
 import scala.io.Source
 
-class UpdateSupporterProductDataSpec extends AnyFlatSpec {
+class UpdateSupporterProductDataSpec extends AnyFlatSpec with EitherValues {
 
   "UpdateSupporterProductData" should "not insert an item into Dynamo for a digisub gift purchase" in {
-    val state = decode[SendThankYouEmailState](digitalSusbcriptionGiftPurchaseState)
-    state.isRight shouldBe true
-    val supporterRatePlanItem = UpdateSupporterProductData
-      .getSupporterRatePlanItemFromState(state.toOption.get, serviceWithFixtures)
-    inside(supporterRatePlanItem) { case Right(value) =>
-      value shouldBe None
-    }
+    val state = decode[SendThankYouEmailState](digitalSusbcriptionGiftPurchaseState).value
+    val supporterRatePlanItem =
+      UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures).value
+
+    supporterRatePlanItem shouldBe None
   }
 
   "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a digisub gift redemption" in {
-    val state = decode[SendThankYouEmailState](digitalSubscriptionGiftRedemptionState)
-    state.isRight shouldBe true
-    val supporterRatePlanItem = UpdateSupporterProductData
-      .getSupporterRatePlanItemFromState(state.toOption.get, serviceWithFixtures)
-    inside(supporterRatePlanItem) { case Right(item) =>
-      item.value.identityId shouldBe "102803446"
-    }
+    val state = decode[SendThankYouEmailState](digitalSubscriptionGiftRedemptionState).value
+    val supporterRatePlanItem =
+      UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures).value
+
+    supporterRatePlanItem.value.identityId shouldBe "102803446"
   }
 
   "UpdateSupporterProductData" should "return a valid SupporterRatePlanItem for a Supporter Plus purchase" in {
-    val state = decode[SendThankYouEmailState](supporterPlusState)
-    state.isRight shouldBe true
-    val supporterRatePlanItem = UpdateSupporterProductData
-      .getSupporterRatePlanItemFromState(state.toOption.get, serviceWithFixtures)
-    inside(supporterRatePlanItem) { case Right(item) =>
-      item.value.identityId shouldBe "200092951"
-      item.value.contributionAmount shouldBe Some(ContributionAmount(12, "GBP"))
-    }
+    val state = decode[SendThankYouEmailState](supporterPlusState).value
+    val supporterRatePlanItem =
+      UpdateSupporterProductData.getSupporterRatePlanItemFromState(state, serviceWithFixtures).value
+    supporterRatePlanItem.value.identityId shouldBe "200092951"
+    supporterRatePlanItem.value.contributionAmount shouldBe None // not guaranteed right if discounted, and unused anyway
   }
 }
 
@@ -93,6 +87,14 @@ object UpdateSupporterProductDataSpec {
             "PaymentGateway": "Stripe PaymentIntents GNM Membership",
             "Type": "CreditCardReferenceTransaction",
             "StripePaymentType": "StripeCheckout"
+          },
+          "paymentSchedule": {
+            "payments": [
+              {
+                "date": "2024-01-08",
+                "amount": 20
+              }
+            ]
           },
           "accountNumber": "A00485141",
           "subscriptionNumber": "A-S00489451",
@@ -201,8 +203,12 @@ object UpdateSupporterProductDataSpec {
       "productType": "DigitalSubscriptionGiftPurchase"
     }
   """
-
-  lazy val catalog: String = Source.fromURL(getClass.getResource("/catalog.json")).mkString
+  lazy val catalogSource = Source.fromURL(getClass.getResource("/catalog.json"))
+  lazy val catalog: String = {
+    val catalogString = catalogSource.mkString
+    catalogSource.close()
+    catalogString
+  }
 
   private val json = parse(catalog).toOption.get
   private val jsonProvider = new SimpleJsonProvider(json)

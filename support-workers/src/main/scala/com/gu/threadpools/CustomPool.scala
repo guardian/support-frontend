@@ -1,11 +1,10 @@
 package com.gu.threadpools
 
 import java.util.concurrent.Executors
-
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
 
 object CustomPool {
 
-  implicit val executionContext = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(4))
+  implicit val executionContext: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(4))
 
 }

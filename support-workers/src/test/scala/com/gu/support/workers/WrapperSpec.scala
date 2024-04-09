@@ -20,7 +20,7 @@ class WrapperSpec extends AnyFlatSpec with Matchers {
 
   it should "be able to handle a JsonWrapper with messages" in {
     val result = Encoding.in[CreateSalesforceContactState](JsonFixtures.wrapperWithMessages.asInputStream)
-    SafeLogger.info(s"$result")
+    info(s"$result")
     result.isSuccess should be(true)
   }
 }

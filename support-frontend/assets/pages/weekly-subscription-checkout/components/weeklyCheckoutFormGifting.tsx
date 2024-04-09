@@ -44,12 +44,15 @@ import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { GuardianWeekly } from 'helpers/productPrice/subscriptions';
 import { setBillingCountry } from 'helpers/redux/checkout/address/actions';
 import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
-import { selectPriceForProduct } from 'helpers/redux/checkout/product/selectors/productPrice';
+import {
+	selectDiscountedPrice,
+	selectPriceForProduct,
+} from 'helpers/redux/checkout/product/selectors/productPrice';
 import type {
 	SubscriptionsDispatch,
 	SubscriptionsState,
 } from 'helpers/redux/subscriptionsStore';
-import { formActionCreators } from 'helpers/subscriptionsForms/formActions';
+import { formActionCreators } from 'helpers/subscriptionsForms/formActionCreators';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import {
 	validateWithDeliveryForm,
@@ -71,6 +74,7 @@ import {
 } from 'helpers/utilities/dateConversions';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import './weeklyCheckout.scss';
+import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 
 // ----- Styles ----- //
 const marginBottom = css`
@@ -103,6 +107,7 @@ function mapStateToProps(state: SubscriptionsState) {
 			state.common.internationalisation.defaultCurrency,
 		payPalHasLoaded: state.page.checkoutForm.payment.payPal.hasLoaded,
 		price: selectPriceForProduct(state),
+		discountedPrice: selectDiscountedPrice(state),
 	};
 }
 
@@ -135,6 +140,7 @@ function mapDispatchToProps() {
 				}
 			},
 		setupRecurringPayPalPayment: setupSubscriptionPayPalPaymentNoShipping,
+		setStripePublicKey,
 	};
 }
 
@@ -400,6 +406,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 					>
 						<StripeProviderForCountry
 							country={props.deliveryCountry}
+							currency={props.currencyId}
 							isTestUser={props.isTestUser}
 							submitForm={props.submitForm}
 							// @ts-expect-error TODO: Fixing the types around validation errors will affect every checkout, too much to tackle now
@@ -412,6 +419,9 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 							validateForm={props.validateForm}
 							buttonText="Pay now"
 							csrf={props.csrf}
+							setStripePublicKey={(key: string) =>
+								props.setStripePublicKey(key)
+							}
 						/>
 					</FormSectionHiddenUntilSelected>
 					<FormSectionHiddenUntilSelected
@@ -442,7 +452,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 							validateForm={props.validateForm}
 							isTestUser={props.isTestUser}
 							setupRecurringPayPalPayment={props.setupRecurringPayPalPayment}
-							amount={props.price.price}
+							amount={props.discountedPrice.price}
 							billingPeriod={props.billingPeriod}
 							// @ts-expect-error TODO: Fixing the types around validation errors will affect every checkout, too much to tackle now
 							allErrors={[
@@ -457,7 +467,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 						errorHeading={submissionErrorHeading}
 					/>
 					<Total
-						price={props.price.price}
+						price={props.discountedPrice.price}
 						currency={props.currencyId}
 						promotions={props.price.promotions}
 					/>

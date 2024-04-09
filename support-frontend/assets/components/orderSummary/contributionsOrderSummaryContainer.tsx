@@ -1,20 +1,29 @@
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
-import type { ContributionType } from 'helpers/contributions';
+import type { RegularContributionType } from 'helpers/contributions';
+import { type ContributionType, getAmount } from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
-import { isSupporterPlusPurchase } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
+import { supporterPlusLegal } from 'helpers/legalCopy';
+import type { Promotion } from 'helpers/productPrice/promotions';
+import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { getLowerBenefitsThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary';
 
 type ContributionsOrderSummaryContainerProps = {
+	inThreeTier: boolean;
 	renderOrderSummary: (props: ContributionsOrderSummaryProps) => JSX.Element;
+	promotion?: Promotion;
 };
 
 function getTermsConditions(
+	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
 	isSupporterPlus: boolean,
+	promotion?: Promotion,
 ) {
 	if (contributionType === 'ONE_OFF') return;
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
@@ -22,6 +31,20 @@ function getTermsConditions(
 	if (isSupporterPlus) {
 		return (
 			<>
+				{promotion && (
+					<p>
+						You’ll pay{' '}
+						{supporterPlusLegal(
+							countryGroupId,
+							contributionType,
+							'/',
+							promotion,
+						)}{' '}
+						afterwards unless you cancel. Offer only available to new
+						subscribers who do not have an existing subscription with the
+						Guardian.
+					</p>
+				)}
 				<p>Auto renews every {period} until you cancel.</p>
 				<p>
 					Cancel or change your support anytime. If you cancel within the first
@@ -39,17 +62,33 @@ function getTermsConditions(
 }
 
 export function ContributionsOrderSummaryContainer({
+	inThreeTier,
 	renderOrderSummary,
+	promotion,
 }: ContributionsOrderSummaryContainerProps): JSX.Element {
 	const contributionType = useContributionsSelector(getContributionType);
-
-	const { currencyId } = useContributionsSelector(
+	const { currencyId, countryGroupId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const selectedAmount = useContributionsSelector(getUserSelectedAmount);
-	const isSupporterPlus = useContributionsSelector(isSupporterPlusPurchase);
-
 	const currency = currencies[currencyId];
+
+	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
+	const promoPrice = useContributionsSelector((state) =>
+		isSupporterPlus
+			? getLowerBenefitsThreshold(
+					state,
+					contributionType as RegularContributionType,
+			  )
+			: getUserSelectedAmount(state),
+	);
+	const price = useContributionsSelector((state) =>
+		getAmount(
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
+			contributionType,
+		),
+	);
+	const isPromoApplied = price > promoPrice;
 
 	const checklist =
 		contributionType === 'ONE_OFF'
@@ -58,18 +97,49 @@ export function ContributionsOrderSummaryContainer({
 					higherTier: isSupporterPlus,
 			  });
 
-	function onAccordionClick(isOpen: boolean) {
+	function onCheckListToggle(isOpen: boolean) {
 		trackComponentClick(
 			`contribution-order-summary-${isOpen ? 'opened' : 'closed'}`,
 		);
 	}
 
+	const threeTierProductName = (
+		contributionType: ContributionType,
+	): string | undefined => {
+		if (inThreeTier) {
+			if (contributionType === 'ONE_OFF') {
+				return 'One-time support';
+			} else if (isSupporterPlus) {
+				return 'All-access digital';
+			} else {
+				return 'Support';
+			}
+		}
+	};
+
+	const description = threeTierProductName(contributionType) ?? '';
+	const paymentFrequency =
+		contributionType === 'MONTHLY'
+			? 'month'
+			: contributionType === 'ANNUAL'
+			? 'year'
+			: '';
+
 	return renderOrderSummary({
-		contributionType,
-		total: selectedAmount,
-		currency: currency,
+		description,
+		total: promoPrice,
+		totalExcludingPromo: isSupporterPlus && isPromoApplied ? price : undefined,
+		currency,
+		paymentFrequency,
+		enableCheckList: contributionType !== 'ONE_OFF',
 		checkListData: checklist,
-		onAccordionClick,
-		tsAndCs: getTermsConditions(contributionType, isSupporterPlus),
+		onCheckListToggle,
+		threeTierProductName: threeTierProductName(contributionType),
+		tsAndCs: getTermsConditions(
+			countryGroupId,
+			contributionType,
+			isSupporterPlus,
+			promotion,
+		),
 	});
 }

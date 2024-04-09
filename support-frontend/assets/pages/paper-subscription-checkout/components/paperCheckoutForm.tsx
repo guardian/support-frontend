@@ -53,11 +53,11 @@ import {
 	selectPriceForProduct,
 } from 'helpers/redux/checkout/product/selectors/productPrice';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
-import type { Action } from 'helpers/subscriptionsForms/formActions';
 import {
 	formActionCreators,
 	setCsrCustomerData,
-} from 'helpers/subscriptionsForms/formActions';
+} from 'helpers/subscriptionsForms/formActionCreators';
+import type { Action } from 'helpers/subscriptionsForms/formActions';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import {
@@ -92,6 +92,7 @@ import {
 	getFormattedStartDate,
 	getPaymentStartDate,
 } from 'pages/paper-subscription-checkout/helpers/subsCardDays';
+import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 import { DeliveryAgentsSelect } from './deliveryAgentsSelect';
 
 const marginBottom = css`
@@ -168,6 +169,7 @@ function mapDispatchToProps() {
 		setCsrCustomerData: (customerData: CsrCustomerData) =>
 			setCsrCustomerData('delivery', customerData),
 		setDeliveryAgent,
+		setStripePublicKey,
 	};
 }
 
@@ -295,9 +297,9 @@ function PaperCheckoutForm(props: PropTypes) {
 			startDate={formattedStartDate}
 			includesDigiSub={includesDigiSub}
 			changeSubscription={`${paperSubsUrl(
-				false,
+				Collection,
 				getQueryParameter('promoCode'),
-			)}#subscribe`}
+			)}`}
 		/>
 	);
 
@@ -316,9 +318,9 @@ function PaperCheckoutForm(props: PropTypes) {
 			digiSubPrice={expandedPricingText}
 			includesDigiSub={includesDigiSub}
 			changeSubscription={`${paperSubsUrl(
-				true,
+				HomeDelivery,
 				getQueryParameter('promoCode'),
-			)}#subscribe`}
+			)}`}
 			startDate={formattedStartDate}
 		/>
 	);
@@ -507,6 +509,7 @@ function PaperCheckoutForm(props: PropTypes) {
 					>
 						<StripeProviderForCountry
 							country={props.country}
+							currency={props.currencyId}
 							isTestUser={props.isTestUser}
 							submitForm={props.submitForm}
 							allErrors={
@@ -519,6 +522,9 @@ function PaperCheckoutForm(props: PropTypes) {
 							validateForm={props.validateForm}
 							buttonText="Pay now"
 							csrf={props.csrf}
+							setStripePublicKey={(key: string) =>
+								props.setStripePublicKey(key)
+							}
 						/>
 					</FormSectionHiddenUntilSelected>
 					<FormSectionHiddenUntilSelected

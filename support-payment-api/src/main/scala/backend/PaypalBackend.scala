@@ -1,6 +1,6 @@
 package backend
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.apply._
@@ -15,6 +15,7 @@ import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
 import conf.ConfigLoader._
 import conf._
+import io.netty.handler.codec.http.QueryStringDecoder
 import model.Environment.Live
 import model._
 import model.acquisition.{AcquisitionDataRowBuilder, PaypalAcquisition}
@@ -53,19 +54,26 @@ class PaypalBackend(
   private def paypalEnabled = {
     switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.payPal.state.isOn))
   }
+  def isValidEmail(url: String): Boolean = {
+    val querystring = new QueryStringDecoder(url).parameters().asScala
+    val email = querystring.get("email").flatMap(_.asScala.headOption)
+    email.exists(!_.contains(","))
+  }
 
   def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] = {
-    paypalEnabled.flatMap {
-      case true =>
-        paypalService
-          .createPayment(c)
-          .leftMap { error =>
-            cloudWatchService.recordFailedPayment(error, PaymentProvider.Paypal)
-            error
-          }
-      case _ =>
-        EitherT.leftT(PaypalApiError.fromString(paypalErrorText))
-    }
+    if (isValidEmail(c.returnURL))
+      paypalEnabled.flatMap {
+        case true =>
+          paypalService
+            .createPayment(c)
+            .leftMap { error =>
+              cloudWatchService.recordFailedPayment(error, PaymentProvider.Paypal)
+              error
+            }
+        case _ =>
+          EitherT.leftT(PaypalApiError.fromString(paypalErrorText))
+      }
+    else EitherT.leftT(PaypalApiError.fromString("Invalid email address"))
   }
 
   /*

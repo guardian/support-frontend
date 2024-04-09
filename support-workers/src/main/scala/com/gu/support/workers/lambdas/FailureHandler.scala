@@ -1,11 +1,9 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.amazonaws.services.sqs.model.SendMessageResult
 import com.gu.config.Configuration
 import com.gu.emailservices._
 import com.gu.helpers.FutureExtensions._
-import com.gu.monitoring.SafeLogger
 import com.gu.stripe.StripeError
 import com.gu.support.encoding.ErrorJson
 import com.gu.support.workers.CheckoutFailureReasons._
@@ -29,15 +27,16 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
       requestInfo: RequestInfo,
       context: Context,
   ): FutureHandlerResult = {
-    SafeLogger.info(
+    logger.info(
       s"FAILED product: ${state.product.describe}\n " +
         s"test_user: ${state.user.isTestUser}\n" +
         s"error: $error\n",
     )
-    sendEmail(state).whenFinished(handleError(state, error, requestInfo))
+    sendEmail(state)
+    Future.successful(handleError(state, error, requestInfo))
   }
 
-  private def sendEmail(state: FailureHandlerState): Future[SendMessageResult] = {
+  private def sendEmail(state: FailureHandlerState): Unit = {
     val emailFields = state.product match {
       case _: Contribution =>
         FailedEmailFields.contribution(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
@@ -49,12 +48,12 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
       case _: GuardianWeekly =>
         FailedEmailFields.guardianWeekly(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
     }
-    SafeLogger.info(s"Sending a failure email. Email fields: $emailFields")
+    logger.info(s"Sending a failure email. Email fields: $emailFields")
     emailService.send(emailFields)
   }
 
   private def handleError(state: FailureHandlerState, error: Option[ExecutionError], requestInfo: RequestInfo) = {
-    SafeLogger.info(s"Attempting to handle error $error")
+    logger.info(s"Attempting to handle error $error")
     val pattern =
       "No such token: (.*); a similar object exists in test mode, but a live mode key was used to make this request.".r
     error.flatMap(extractUnderlyingError) match {
@@ -95,7 +94,7 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
       checkoutFailureReason: CheckoutFailureReason,
       requestInfo: RequestInfo,
   ) = {
-    SafeLogger.info(s"Returning CheckoutFailure state...")
+    logger.info(s"Returning CheckoutFailure state...")
     HandlerResult(CheckoutFailureState(state.user, checkoutFailureReason), requestInfo)
   }
 

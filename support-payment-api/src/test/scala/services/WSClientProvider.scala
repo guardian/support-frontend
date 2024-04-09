@@ -1,7 +1,7 @@
 package services
 
-import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko.stream.ActorMaterializer
 import org.scalatest.{BeforeAndAfterAll, Suite}
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSClient

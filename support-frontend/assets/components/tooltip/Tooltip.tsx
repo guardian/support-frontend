@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import type { Placement } from '@floating-ui/react';
 import {
 	autoUpdate,
 	flip,
@@ -57,6 +58,13 @@ const tooltipContainer = css`
 		> div {
 			left: 94px !important;
 		}
+	}
+`;
+
+const tooltipContainerDisplay = (open: boolean, desktopOnly?: boolean) => css`
+	${!open && visuallyHidden}
+	${until.desktop} {
+		${desktopOnly && visuallyHidden}
 	}
 `;
 
@@ -164,28 +172,36 @@ const arrowTop = css`
 `;
 
 export type TooltipProps = {
-	promptText: string;
+	promptText?: string;
 	buttonLabel?: string;
 	children: React.ReactNode;
+	xAxisOffset?: number;
+	yAxisOffset?: number;
+	placement?: Placement;
+	desktopOnly?: boolean;
 };
 
 export default function Tooltip({
 	promptText,
 	buttonLabel = 'More information',
 	children,
+	xAxisOffset,
+	yAxisOffset,
+	placement,
+	desktopOnly,
 }: TooltipProps): JSX.Element {
 	const [open, setOpen] = useState(false);
 
 	const { x, y, refs, strategy, context } = useFloating({
 		open,
 		onOpenChange: setOpen,
-		placement: 'top',
+		placement: placement ? placement : 'top',
 		// Make sure the tooltip stays on the screen
 		whileElementsMounted: autoUpdate,
 		middleware: [
 			offset({
-				mainAxis: 16,
-				crossAxis: 0,
+				mainAxis: yAxisOffset ? yAxisOffset : 16,
+				crossAxis: xAxisOffset ? xAxisOffset : 0,
 			}),
 			flip({
 				// Ensure the tooltip only appears above / below reference element
@@ -211,7 +227,7 @@ export default function Tooltip({
 			ref={refs.setReference}
 			{...getReferenceProps()}
 		>
-			<p css={copy}>{promptText}</p>
+			{promptText && <p css={copy}>{promptText}</p>}
 			<div css={buttonAndTooltipContainer}>
 				<div>
 					<Button
@@ -226,14 +242,7 @@ export default function Tooltip({
 				<FloatingPortal>
 					<div
 						role="status"
-						css={[
-							tooltipContainer,
-							open
-								? css``
-								: css`
-										${visuallyHidden}
-								  `,
-						]}
+						css={[tooltipContainer, tooltipContainerDisplay(open, desktopOnly)]}
 						ref={refs.setFloating}
 						style={{
 							// Positioning styles

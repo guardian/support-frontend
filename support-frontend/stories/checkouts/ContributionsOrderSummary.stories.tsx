@@ -10,7 +10,7 @@ import { withSourceReset } from '../../.storybook/decorators/withSourceReset';
 export default {
 	title: 'Checkouts/Contributions Order Summary',
 	component: ContributionsOrderSummary,
-	argTypes: { onAccordionClick: { action: 'accordion clicked' } },
+	argTypes: { onCheckListToggle: { action: 'accordion clicked' } },
 	decorators: [
 		(Story: React.FC): JSX.Element => (
 			<Columns
@@ -42,7 +42,9 @@ Template.args = {} as ContributionsOrderSummaryProps;
 export const Default = Template.bind({});
 
 Default.args = {
-	contributionType: 'MONTHLY',
+	description: 'Monthly support',
+	paymentFrequency: 'month',
+	enableCheckList: true,
 	total: 10,
 	currency: {
 		glyph: '£',
@@ -70,7 +72,8 @@ Default.args = {
 export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {
-	contributionType: 'ONE_OFF',
+	description: 'One-off contribution',
+	enableCheckList: false,
 	total: 25,
 	currency: {
 		glyph: '$',

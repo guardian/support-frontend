@@ -1,13 +1,12 @@
 package com.gu.salesforce
 
 import com.gu.config.Configuration
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogging
 import com.gu.okhttp.RequestRunners
 import com.gu.okhttp.RequestRunners.FutureHttpClient
 import com.gu.rest.WebServiceHelper
 import com.gu.salesforce.AddressLine.getAddressLine
 import com.gu.salesforce.Salesforce._
-import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.workers.{Address, GiftRecipient, SalesforceContactRecord, User}
 import io.circe
 import io.circe.Decoder
@@ -27,7 +26,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   val upsertEndpoint = "services/apexrest/RegisterCustomer/v1/"
 
   override def wsPreExecute(req: Request.Builder): Future[Request.Builder] = {
-    SafeLogger.info(s"Issuing request to wsPreExecute: $config")
+    logger.info(s"Issuing request to wsPreExecute: $config")
     AuthService.getAuth(config).map(auth => addAuthenticationToRequest(auth, req))
   }
 
@@ -43,8 +42,36 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   ): Either[circe.Error, SalesforceErrorResponse] =
     decode[List[SalesforceErrorResponse]](responseBody).map(_.head) // Salesforce returns a list of error responses
 
-  def upsert(data: UpsertData): Future[SalesforceContactResponse] = {
-    postJson[SalesforceContactResponse](upsertEndpoint, data.asJson)
+  /** We map over the response from `WebServiceHelper.postJson` as there is a case where Salesforce returns
+    * `Response.status = 200` with `Success = false` for errors rather than using the HTTP status code to indicate that
+    * an error has occurred.
+    */
+  def upsert(data: UpsertData): Future[SalesforceContactSuccess] = {
+    // This is just a convenience class for decoding
+    postJson[SalesforceContactResponse](upsertEndpoint, data.asJson).flatMap(parseResponseToResult)
+  }
+
+  // This method is public for testing
+  def parseResponseToResult(response: SalesforceContactResponse): Future[SalesforceContactSuccess] = if (
+    response.Success && response.ContactRecord.isDefined
+  ) {
+    Future.successful(
+      SalesforceContactSuccess(
+        Success = response.Success,
+        ContactRecord = response.ContactRecord.get,
+        ErrorString = response.ErrorString,
+      ),
+    )
+  } else {
+    val isReadOnlyMaintenance =
+      response.ErrorString.exists(_.contains(SalesforceErrorResponse.readOnlyMaintenance))
+
+    Future.failed(
+      SalesforceErrorResponse(
+        message = response.ErrorString.getOrElse("Salesforce `Success` returned as `false` with no error message"),
+        errorCode = if (isReadOnlyMaintenance) SalesforceErrorResponse.readOnlyMaintenance else "UNKNOWN_ERROR",
+      ),
+    )
   }
 
   def createContactRecords(
@@ -154,7 +181,7 @@ class SalesforceService(config: SalesforceConfig, client: FutureHttpClient)(impl
   * problem we have apparently seen in the past despite Salesforce telling us that tokens should be valid for 12hrs. If
   * the token is stale a new one is fetched
   */
-object AuthService {
+object AuthService extends SafeLogging {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -173,7 +200,7 @@ object AuthService {
   })
 
   private def storeAuth(authentication: Authentication, stage: String) = atomic { implicit txn =>
-    SafeLogger.info(s"Successfully retrieved Salesforce authentication token for $stage")
+    logger.info(s"Successfully retrieved Salesforce authentication token for $stage")
     val newAuths = authRef().updated(stage, authentication)
     authRef() = newAuths
   }
@@ -186,7 +213,7 @@ class AuthService(config: SalesforceConfig)(implicit ec: ExecutionContext)
   val httpClient: FutureHttpClient = RequestRunners.configurableFutureRunner(10.seconds)
 
   def authorize: Future[Authentication] = {
-    SafeLogger.info(s"Trying to authenticate with Salesforce ${Configuration.stage}...")
+    logger.info(s"Trying to authenticate with Salesforce ${Configuration.stage}...")
 
     def postAuthRequest: Future[Authentication] =
       postForm[Authentication](

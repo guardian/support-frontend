@@ -97,7 +97,7 @@ export function PaperPrices({
 	}You can cancel your subscription at any time`;
 
 	return (
-		<section css={pricesSection} id="subscribe">
+		<section css={pricesSection}>
 			<h2 css={pricesHeadline}>Pick your subscription package below</h2>
 			<div css={pricesTabs}>
 				<LinkTo

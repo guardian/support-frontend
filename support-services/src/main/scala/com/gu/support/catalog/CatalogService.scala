@@ -58,24 +58,16 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
     )
   }
 
-  private lazy val catalog = {
+  private lazy val catalog: Catalog = {
 
-    jsonProvider.get.flatMap { json =>
-      val attempt = json.as[ZuoraCatalog].map(Catalog.convert)
-      attempt.fold(
-        err => {
-          logger.error(s"Failed to load the catalog, error was: $err")
-          AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(
-            AwsCloudWatchMetricSetup.catalogFailureRequest(environment),
-          )
-          None
-        },
-        c => {
-          logger.info(s"Successfully loaded the catalog")
-          Some(adjustSixWeeklyPriceList(c))
-        },
-      )
+    val attempt = for {
+      json <- jsonProvider.get
+      decoded <- json.as[ZuoraCatalog].toTry
+    } yield {
+      adjustSixWeeklyPriceList(Catalog.convert(decoded))
     }
+
+    attempt.get
   }
 
   def getProductRatePlanFromId[T <: Product](product: T, id: ProductRatePlanId): Option[ProductRatePlan[Product]] = {
@@ -102,6 +94,5 @@ class CatalogService(val environment: TouchPointEnvironment, jsonProvider: Catal
   }
 
   def getPriceList[T <: Product](productRatePlanId: ProductRatePlanId): Option[Pricelist] =
-    catalog.flatMap(_.prices.find(_.productRatePlanId == productRatePlanId))
-
+    catalog.prices.find(_.productRatePlanId == productRatePlanId)
 }

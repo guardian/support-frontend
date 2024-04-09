@@ -1,7 +1,9 @@
 package com.gu.aws
 
-import com.gu.aws.AwsCloudWatchMetricSetup.catalogFailureRequest
-import com.gu.support.config.TouchPointEnvironments
+import com.gu.aws.AwsCloudWatchMetricSetup.paymentSuccessRequest
+import com.gu.i18n.Currency.GBP
+import com.gu.support.config.Stages
+import com.gu.support.workers.{DirectDebit, Monthly, SupporterPlus}
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -9,8 +11,15 @@ import org.scalatest.matchers.should.Matchers
 @IntegrationTest
 class AwsCloudWatchMetricPutSpec extends AsyncFlatSpec with Matchers {
 
-  "CatalogFailures" should "be logged to CloudWatch" in {
-    AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(catalogFailureRequest(TouchPointEnvironments.CODE))
+  "payment success request" should "be logged to CloudWatch" in {
+    val cloudwatchEvent =
+      paymentSuccessRequest(
+        Stages.CODE,
+        true,
+        DirectDebit,
+        SupporterPlus(amount = 10, currency = GBP, billingPeriod = Monthly),
+      )
+    AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
       .fold(
         err => fail(err),
         _ => succeed,

@@ -6,7 +6,7 @@ import type { CheckoutHeadingProps } from 'components/checkoutHeading/checkoutHe
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import GridImage from 'components/gridImage/gridImage';
 import { Container } from 'components/layout/container';
-import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
+import { LandingPageHeading } from 'pages/digital-subscriber-checkout/components/landingPageHeading';
 import { withPositionRelative } from '../../.storybook/decorators/withPositionRelative';
 
 export default {
@@ -45,7 +45,9 @@ Template.decorators = [] as unknown[];
 export const Heading = Template.bind({});
 
 Heading.args = {
-	heading: <LandingPageHeading />,
+	heading: (
+		<LandingPageHeading heading="Support fearless, independent journalism" />
+	),
 	children: (
 		<p style={{ marginRight: '48px' }}>
 			Help protect the Guardian&apos;s independence so we can keep delivering

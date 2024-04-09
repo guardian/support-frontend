@@ -1,0 +1,33 @@
+{
+  "typescript.format.enable": false, // disable default VS code TS formatting in favour of ESLint
+  "[typescript]": { // for .ts files
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+  },
+  "[typescriptreact]": { // for .tsx files
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+  },
+  "[javascript]": { // for .js files
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+  },
+  "eslint.workingDirectories": ["support-frontend"],
+  "jumpToAliasFile.alias": {
+    "react": "preact-compat",
+    "react-dom": "preact-compat",
+    "ophan": "ophan-tracker-js/build/ophan.support"
+  },
+  "files.watcherExclude": {
+    "**/target": true
+  }
+}

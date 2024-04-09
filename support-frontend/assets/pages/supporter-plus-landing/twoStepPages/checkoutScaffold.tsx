@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { cmp } from '@guardian/consent-management-platform';
+import { cmp } from '@guardian/libs';
 import {
 	from,
 	palette,
@@ -15,6 +15,7 @@ import {
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
+import { CheckoutHeadingImage } from 'components/checkoutHeading/checkoutHeadingImage';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import GridImage from 'components/gridImage/gridImage';
@@ -25,6 +26,9 @@ import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import Nav from 'components/nav/nav';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
+import HeadlineImageDesktop from 'components/svgs/headlineImageDesktop';
+import HeadlineImageMobile from 'components/svgs/headlineImageMobile';
+import { countriesAffectedByVATStatus } from 'helpers/internationalisation/country';
 import {
 	AUDCountries,
 	Canada,
@@ -35,22 +39,26 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import HeadlineImagePatronsDesktop from '../../../components/svgs/headlineImagePatronsDesktop';
+import HeadlineImagePatronsMobile from '../../../components/svgs/headlineImagePatronsMobile';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { GuardianTsAndCs } from '../components/guardianTsAndCs';
-import { LandingPageHeading } from '../components/landingPageHeading';
 import { PatronsMessage } from '../components/patronsMessage';
 
-const checkoutContainer = (isPaymentPage?: boolean) => css`
-	position: relative;
-	color: ${palette.neutral[7]};
-	${textSans.medium()};
-	padding-top: ${space[isPaymentPage ? 2 : 6]}px;
-	padding-bottom: ${space[9]}px;
-	${from.tablet} {
-		padding-top: 40px;
-		padding-bottom: ${space[12]}px;
+const checkoutContainer = (isPaymentPage?: boolean) => {
+	type SpaceRange = 2 | 3 | 6;
+	let paddingTop: SpaceRange = 6;
+	if (isPaymentPage) {
+		paddingTop = 2;
 	}
-`;
+
+	return css`
+		position: relative;
+		color: ${palette.neutral[7]};
+		${textSans.medium()};
+		padding-top: ${space[paddingTop]}px;
+	`;
+};
 
 const darkBackgroundContainerMobile = css`
 	background-color: ${palette.neutral[97]};
@@ -63,6 +71,7 @@ const darkBackgroundContainerMobile = css`
 const subHeading = css`
 	${textSans.medium()};
 	padding-right: ${space[2]}px;
+	padding-bottom: 32px;
 `;
 
 const secureIndicatorSpacing = css`
@@ -72,24 +81,26 @@ const secureIndicatorSpacing = css`
 	}
 `;
 
-const leftColImage = css`
-	height: 140px;
-	margin-top: ${space[6]}px;
-	margin-left: -${space[9]}px;
-	margin-right: ${space[5]}px;
+const leftColImageHeader = css`
+	${from.desktop} {
+		text-align: left;
+		padding-bottom: ${space[6]}px;
+		img {
+			max-width: 100%;
+		}
+	}
+`;
 
+const leftColImage = css`
+	text-align: center;
+	height: 0px;
 	img {
 		max-width: 100%;
 	}
 `;
 
-const leftColImageUnitedStates = css`
-	margin-left: -${space[5]}px;
-	margin-top: 6px;
-
-	img {
-		display: block;
-	}
+const boldText = css`
+	font-weight: 700;
 `;
 
 const links = [
@@ -120,19 +131,21 @@ export function SupporterPlusCheckoutScaffold({
 	children,
 	thankYouRoute,
 	isPaymentPage,
-	isUsEoy2023CampaignEnabled = false,
 }: {
 	children: React.ReactNode;
 	thankYouRoute: string;
 	isPaymentPage?: true;
-	isUsEoy2023CampaignEnabled?: boolean;
 }): JSX.Element {
-	const { countryGroupId } = useContributionsSelector(
+	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
 
 	const { paymentComplete, isWaiting } = useContributionsSelector(
 		(state) => state.page.form,
+	);
+
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
 	);
 
 	const navigate = useNavigate();
@@ -151,37 +164,56 @@ export function SupporterPlusCheckoutScaffold({
 		subPath: '/contribute',
 	};
 
-	const showUsEoy2023Content =
-		isUsEoy2023CampaignEnabled && countryGroupId === 'UnitedStates';
-
-	const heading = showUsEoy2023Content ? (
-		<LandingPageHeading
-			heading={
-				<>
-					Make a<br />
-					year-end gift
-					<br />
-					to the Guardian
-				</>
-			}
-		/>
-	) : (
-		<LandingPageHeading heading="Support fearless, independent journalism" />
-	);
-
 	useEffect(() => {
 		if (paymentComplete) {
 			navigate(thankYouRoute, { replace: true });
 		}
 	}, [paymentComplete]);
 
+	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
+
+	const countryIsAffectedByVATStatus =
+		countriesAffectedByVATStatus.includes(countryId);
+
+	function SubHeading() {
+		if (displayPatronsCheckout) {
+			if (countryGroupId === UnitedStates) {
+				return (
+					<p css={subHeading}>
+						You are already among a small and vital number of{' '}
+						<span css={boldText}>
+							people whose support significantly helps to fund our work
+						</span>
+						. If you can, please consider topping up your support. Thank you.
+					</p>
+				);
+			} else {
+				return (
+					<p css={subHeading}>
+						You are already among a small and vital number of{' '}
+						<span css={boldText}>
+							people whose support disproportionately helps to fund our work
+						</span>
+						. If you can, please consider topping up your support. Thank you.
+					</p>
+				);
+			}
+		}
+		return (
+			<p css={subHeading}>
+				As a reader-funded news organisation, we rely on your generosity. Please
+				give what you can, so millions can benefit from quality reporting on the
+				events shaping our world.
+			</p>
+		);
+	}
+
 	return (
 		<PageScaffold
-			id="supporter-plus-landing"
 			header={
 				<>
 					<Header>
-						{!isPaymentPage && (
+						{!countryIsAffectedByVATStatus && !isPaymentPage && (
 							<Hide from="desktop">
 								<CountrySwitcherContainer>
 									<CountryGroupSwitcher {...countrySwitcherProps} />
@@ -189,7 +221,9 @@ export function SupporterPlusCheckoutScaffold({
 							</Hide>
 						)}
 					</Header>
-					{!isPaymentPage && <Nav {...countrySwitcherProps} />}
+					{!countryIsAffectedByVATStatus && !isPaymentPage && (
+						<Nav {...countrySwitcherProps} />
+					)}
 				</>
 			}
 			footer={
@@ -198,49 +232,46 @@ export function SupporterPlusCheckoutScaffold({
 				</FooterWithContents>
 			}
 		>
-			<CheckoutHeading
-				heading={!isPaymentPage && heading}
-				image={
-					!isPaymentPage &&
-					(showUsEoy2023Content ? (
-						<figure css={leftColImageUnitedStates}>
-							<GridImage
-								gridId="supporterPlusLandingUnitedStates"
-								srcSizes={[420]}
-								sizes="420px"
-								imgType="png"
-								altText=""
-							/>
+			{isPaymentPage && (
+				<CheckoutHeading withTopBorder={isPaymentPage}></CheckoutHeading>
+			)}
+
+			{!isPaymentPage && (
+				<CheckoutHeadingImage
+					heading={
+						<figure css={leftColImageHeader}>
+							<Hide from="desktop">
+								{displayPatronsCheckout ? (
+									<HeadlineImagePatronsMobile />
+								) : (
+									<HeadlineImageMobile />
+								)}
+							</Hide>
+							<Hide until="desktop">
+								{displayPatronsCheckout ? (
+									<HeadlineImagePatronsDesktop />
+								) : (
+									<HeadlineImageDesktop />
+								)}
+							</Hide>
 						</figure>
-					) : (
+					}
+					image={
 						<figure css={leftColImage}>
 							<GridImage
 								gridId="supporterPlusLanding"
-								srcSizes={[500]}
-								sizes="500px"
+								srcSizes={[817, 408, 204]}
+								sizes="204px"
 								imgType="png"
 								altText=""
 							/>
 						</figure>
-					))
-				}
-				withTopborder={isPaymentPage}
-			>
-				{!isPaymentPage &&
-					(showUsEoy2023Content ? (
-						<p css={subHeading}>
-							We rely on funding from readers, not shareholders or a billionaire
-							owner. Join the more than 250,000 readers in the US whose regular
-							support helps to sustain our journalism.
-						</p>
-					) : (
-						<p css={subHeading}>
-							As a reader-funded news organisation, we rely on your generosity.
-							Please give what you can, so millions can benefit from quality
-							reporting on the events shaping our world.
-						</p>
-					))}
-			</CheckoutHeading>
+					}
+					withTopBorder={isPaymentPage}
+				>
+					<SubHeading />
+				</CheckoutHeadingImage>
+			)}
 
 			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
 				<Columns
@@ -257,13 +288,20 @@ export function SupporterPlusCheckoutScaffold({
 							/>
 						)}
 						{children}
-						<CheckoutDivider spacing="loose" mobileTheme={'light'} />
-						<PatronsMessage
-							countryGroupId={countryGroupId}
+
+						{!displayPatronsCheckout && (
+							<>
+								<CheckoutDivider spacing="loose" mobileTheme={'light'} />
+								<PatronsMessage
+									countryGroupId={countryGroupId}
+									mobileTheme={'light'}
+								/>
+							</>
+						)}
+						<GuardianTsAndCs
 							mobileTheme={'light'}
+							displayPatronsCheckout={displayPatronsCheckout}
 						/>
-						<CheckoutDivider spacing="tight" mobileTheme={'light'} />
-						<GuardianTsAndCs mobileTheme={'light'} />
 					</Column>
 				</Columns>
 			</Container>

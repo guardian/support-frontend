@@ -37,8 +37,8 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { LandingPageHeading } from 'pages/digital-subscriber-checkout/components/landingPageHeading';
 import { getPaymentMethodButtons } from 'pages/digital-subscriber-checkout/paymentButtons';
-import { LandingPageHeading } from 'pages/supporter-plus-landing/components/landingPageHeading';
 import { PaymentFailureMessage } from 'pages/supporter-plus-landing/components/paymentFailure';
 import { BillingPeriodSelector } from './components/billingPeriodSelector';
 import { PaymentTsAndCs } from './components/paymentTsAndCs';
@@ -94,16 +94,13 @@ const leftColImageEditions = css`
 	}
 `;
 
-export function SupporterPlusLandingPage({
+export function DigitalSubscriptionLandingPage({
 	thankYouRoute,
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
 	const { countryGroupId, countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
-	);
-	const { switches } = useContributionsSelector(
-		(state) => state.common.settings,
 	);
 
 	const contributionType = 'MONTHLY';
@@ -139,7 +136,6 @@ export function SupporterPlusLandingPage({
 
 	return (
 		<PageScaffold
-			id="supporter-plus-landing"
 			header={
 				<>
 					<Header>
@@ -213,7 +209,7 @@ export function SupporterPlusLandingPage({
 										defaultContainer={DigitalSubscriberPaymentButtonContainer}
 										paymentButtons={getPaymentMethodButtons(
 											contributionType,
-											switches,
+
 											countryId,
 											countryGroupId,
 										)}

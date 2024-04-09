@@ -23,7 +23,6 @@ import {
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import { isSwitchOn } from 'helpers/globalsAndSwitches/globals';
-import type { Switches } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
@@ -180,7 +179,6 @@ function switchKeyForContributionType(
 
 function getValidPaymentMethods(
 	contributionType: ContributionType,
-	_allSwitches: Switches,
 	countryId: IsoCountry,
 	countryGroupId: CountryGroupId,
 ): PaymentMethod[] {
@@ -230,12 +228,28 @@ function getPaymentDescription(
 	return '';
 }
 
-const simpleFormatAmount = (
-	currency: Currency,
-	amount: number | string,
-): string => {
+function round(amount: number) {
+	/**
+	 * This rounds a `number` to the second decimal.
+	 *
+	 * `Number.toFixed` returns a string which is not useful for calculations
+	 * and would need unnecessary type conversions
+	 */
+	return Math.round(amount * 1e2) / 1e2;
+}
+
+const simpleFormatAmount = (currency: Currency, amount: number): string => {
 	const glyph = currency.isPaddedGlyph ? ` ${currency.glyph} ` : currency.glyph;
-	const amountText = /^(\d+\.\d)$/.test(`${amount}`) ? `${amount}0` : amount;
+	/**
+	 * We need to round the amount before checking if it is an Int for the edge case of something like 12.0001
+	 * which would not be an int, but then format as 12.00, whereas we'd like 12.
+	 */
+	const roundedAmount = round(amount);
+	const isInt = roundedAmount % 1 === 0;
+	/** only add the percentile amount if it's not a round integer */
+	const amountText = isInt
+		? roundedAmount.toString()
+		: roundedAmount.toFixed(2);
 
 	const valueWithGlyph = currency.isSuffixGlyph
 		? `${amountText}${glyph}`

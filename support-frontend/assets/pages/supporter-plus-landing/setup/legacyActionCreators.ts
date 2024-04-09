@@ -51,7 +51,7 @@ import {
 	setAmazonPayWalletIsStale,
 } from 'helpers/redux/checkout/payment/amazonPay/actions';
 import { setPaymentRequestError } from 'helpers/redux/checkout/payment/paymentRequestButton/actions';
-import { isSupporterPlusPurchase } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
+import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getSubscriptionPromotionForBillingPeriod } from 'helpers/redux/checkout/product/selectors/subscriptionPrice';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
@@ -112,11 +112,13 @@ const buildStripeChargeDataFromAuthorisation = (
 		state.common.abParticipations,
 		state.page.checkoutForm.billingAddress.fields.postCode,
 	),
-	publicKey: getStripeKey(
-		stripeAccountForContributionType[getContributionType(state)],
-		state.common.internationalisation.countryId,
-		state.page.user.isTestUser,
-	),
+	publicKey:
+		/* why don't we use state.page.checkoutForm.payment.stripeAccountDetails.publicKey ?*/ getStripeKey(
+			stripeAccountForContributionType[getContributionType(state)],
+			state.common.internationalisation.countryId,
+			state.common.internationalisation.currencyId,
+			state.page.user.isTestUser,
+		),
 	recaptchaToken: state.page.checkoutForm.recaptcha.token,
 });
 
@@ -173,7 +175,7 @@ function getProductFields(
 	}
 
 	const contributionType = getContributionType(state);
-	const productOptions = isSupporterPlusPurchase(state)
+	const productOptions = isSupporterPlusFromState(state)
 		? { productType: 'SupporterPlus' as const }
 		: { productType: 'Contribution' as const };
 
@@ -226,7 +228,10 @@ function regularPaymentRequestFromAuthorisation(
 		product: getProductFields(state, amount),
 		firstDeliveryDate: null,
 		paymentFields: {
-			...regularPaymentFieldsFromAuthorisation(authorisation),
+			...regularPaymentFieldsFromAuthorisation(
+				authorisation,
+				state.page.checkoutForm.payment.stripeAccountDetails.publicKey,
+			),
 			recaptchaToken,
 		},
 		...getPromoCode(state),

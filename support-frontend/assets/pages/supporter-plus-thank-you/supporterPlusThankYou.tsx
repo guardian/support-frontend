@@ -16,11 +16,13 @@ import { getAmount } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { getPromotion } from 'helpers/productPrice/promotions';
+import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { setOneOffContributionCookie } from 'helpers/storage/contributionsCookies';
 import { getSession } from 'helpers/storage/storage';
-import { shouldShowSupporterPlusMessaging } from 'helpers/supporterPlus/showMessaging';
+import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import {
 	OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN,
 	trackUserData,
@@ -102,6 +104,9 @@ export function SupporterPlusThankYou(): JSX.Element {
 		() => getCampaignSettings(campaignCode),
 		[],
 	);
+	const { abParticipations } = useContributionsSelector(
+		(state) => state.common,
+	);
 	const { countryId, countryGroupId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
@@ -116,21 +121,55 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const paymentMethod = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.paymentMethod.name,
 	);
-	const { selectedAmounts, otherAmounts } = useContributionsSelector(
-		(state) => state.page.checkoutForm.product,
-	);
+	const {
+		selectedAmounts,
+		otherAmounts,
+		billingPeriod,
+		fulfilmentOption,
+		productOption,
+		productPrices,
+	} = useContributionsSelector((state) => state.page.checkoutForm.product);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const contributionType = useContributionsSelector(getContributionType);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const isOneOffPayPal =
 		paymentMethod === PayPal && contributionType === 'ONE_OFF';
 	const isOneOff = contributionType === 'ONE_OFF';
-	const amount = isOneOffPayPal
-		? getAmountFromSessionStorage()
-		: getAmount(selectedAmounts, otherAmounts, contributionType);
+	const amount =
+		getAmountFromSessionStorage() ??
+		getAmount(selectedAmounts, otherAmounts, contributionType);
 	const isAmountLargeDonation = amount
 		? isLargeDonation(amount, contributionType, paymentMethod)
 		: false;
+	const thresholdPrice = useContributionsSelector((state) =>
+		getThresholdPrice(contributionType, state),
+	);
+	/**
+	 * We would normally use the isSuporterPlusFromState selector here,
+	 * but the amount can actually come from `localStorage`.
+	 *
+	 * We should clear this up when refactoring
+	 */
+	const isSupporterPlus =
+		contributionType !== 'ONE_OFF' && thresholdPrice
+			? amount >= thresholdPrice
+			: false;
+
+	/**
+	 * We only support SupporterPlus for now.
+	 *
+	 * This is an edgecase we see if the promoCode gets passed through to the thank you page.
+	 * We have not found the route where this happens - this is a hack.
+	 */
+	const promotion = isSupporterPlus
+		? getPromotion(
+				productPrices,
+				countryId,
+				billingPeriod,
+				fulfilmentOption,
+				productOption,
+		  )
+		: undefined;
 
 	useEffect(() => {
 		if (amount) {
@@ -177,12 +216,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 		}
 	}, []);
 
-	const amountIsAboveThreshold = shouldShowSupporterPlusMessaging(
-		contributionType,
-		selectedAmounts,
-		otherAmounts,
-		countryGroupId,
-	);
+	const amountIsAboveThreshold = !!(thresholdPrice && amount >= thresholdPrice);
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
@@ -190,6 +224,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 		csrf,
 		email,
 		isOneOff,
+		amountIsAboveThreshold,
 		campaignSettings?.campaignCode,
 	);
 
@@ -205,7 +240,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 			'signIn',
 		),
 		...maybeThankYouModule(
-			contributionType !== 'ONE_OFF' && amountIsAboveThreshold,
+			contributionType !== 'ONE_OFF' && isSupporterPlus,
 			'appDownload',
 		),
 		...maybeThankYouModule(
@@ -221,9 +256,12 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
 	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
+	const showTote =
+		!!abParticipations.additionalBenefits &&
+		useContributionsSelector(isSupporterPlusFromState);
+
 	return (
 		<PageScaffold
-			id="supporter-plus-thank-you"
 			header={<Header />}
 			footer={
 				<FooterWithContents>
@@ -241,9 +279,11 @@ export function SupporterPlusThankYou(): JSX.Element {
 							contributionType={contributionType}
 							amount={amount}
 							currency={currencyId}
-							amountIsAboveThreshold={amountIsAboveThreshold}
+							amountIsAboveThreshold={isSupporterPlus}
 							isSignedIn={isSignedIn}
 							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
+							showTote={showTote}
+							promotion={promotion}
 						/>
 					</div>
 

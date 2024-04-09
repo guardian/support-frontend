@@ -12,6 +12,7 @@ import com.gu.support.paperround.PaperRoundServiceProvider
 import com.gu.support.promotions.PromotionServiceProvider
 import com.gu.zuora.ZuoraGiftLookupServiceProvider
 import play.api.BuiltInComponentsFromContext
+import play.api.libs.ws.WSClient
 import play.api.libs.ws.ahc.AhcWSComponents
 import services._
 import services.paypal.PayPalNvpServiceProvider
@@ -21,7 +22,7 @@ import services.stepfunctions.{StateWrapper, SupportWorkersClient}
 trait Services {
   self: BuiltInComponentsFromContext with AhcWSComponents with PlayComponents with ApplicationConfiguration =>
 
-  implicit private val implicitWs = wsClient
+  implicit val implicitWs: WSClient = wsClient
   implicit private val s3Client: AwsS3Client = AwsS3Client
 
   lazy val payPalNvpServiceProvider = new PayPalNvpServiceProvider(appConfig.regularPayPalConfigProvider, wsClient)
@@ -91,5 +92,18 @@ trait Services {
 
   lazy val zuoraGiftLookupServiceProvider: ZuoraGiftLookupServiceProvider =
     new ZuoraGiftLookupServiceProvider(appConfig.zuoraConfigProvider, appConfig.stage)
+
+  lazy val prodProductCatalogService: ProdProductCatalogService = new ProdProductCatalogService(
+    RequestRunners.futureRunner,
+  )
+  lazy val codeProductCatalogService: CodeProductCatalogService = new CodeProductCatalogService(
+    RequestRunners.futureRunner,
+  )
+
+  lazy val cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider =
+    new CachedProductCatalogServiceProvider(
+      codeCachedProductCatalogService = new CachedProductCatalogService(actorSystem, codeProductCatalogService),
+      prodCachedProductCatalogService = new CachedProductCatalogService(actorSystem, prodProductCatalogService),
+    )
 
 }

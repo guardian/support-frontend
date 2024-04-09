@@ -11,7 +11,6 @@ scalacOptions ++= Seq(
 addCompilerPlugin("org.typelevel" % "kind-projector_2.13.4" % "0.13.2")
 
 libraryDependencies ++= Seq(
-  "ch.qos.logback" % "logback-classic" % "1.4.13",
   "com.amazonaws" % "aws-java-sdk-ssm" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-sqs" % awsClientVersion,
   "com.amazonaws" % "aws-java-sdk-s3" % awsClientVersion,
@@ -44,13 +43,12 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
   "com.google.guava" % "guava" % "25.1-jre", // -- added explicitly - snyk report avoid logback vulnerability
   "com.paypal.sdk" % "rest-api-sdk" % "1.14.0" exclude ("org.apache.logging.log4j", "log4j-slf4j-impl"),
-  akkaHttpServer, // or use nettyServer for Netty
+  pekkoHttpServer, // or use nettyServer for Netty
   logback, // add Play logging support
   jdbc,
   ws,
   "com.lihaoyi" %% "pprint" % "0.8.1",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
-  "org.scala-lang.modules" %% "scala-xml" % "1.3.1",
 
   /** This is to satisfy `amazon-pay-java-sdk` dependencies as jaxb has been removed from Java 8 => Java 11.
     *

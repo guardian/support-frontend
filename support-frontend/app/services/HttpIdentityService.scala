@@ -1,12 +1,10 @@
 package services
 
-import akka.actor.Scheduler
 import cats.data.EitherT
 import cats.implicits._
 import com.google.common.net.InetAddresses
 import com.gu.identity.model.PrivateFields
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import com.gu.retry.EitherTRetry.retry
 import config.Identity
 import io.circe.Encoder
@@ -14,6 +12,7 @@ import io.circe.generic.semiauto.deriveEncoder
 import models.identity.requests.CreateGuestAccountRequestBody
 import models.identity.responses.IdentityErrorResponse.{GuestEndpoint, IdentityError, OtherIdentityError, UserEndpoint}
 import models.identity.responses.{GuestRegistrationResponse, IdentityErrorResponse, UserResponse}
+import org.apache.pekko.actor.Scheduler
 import play.api.libs.json.{JsPath, Json, JsonValidationError, Reads}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.mvc.RequestHeader
@@ -72,7 +71,7 @@ object IdentityService {
     new IdentityService(apiUrl = config.apiUrl, apiClientToken = config.apiClientToken)
 }
 
-class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) {
+class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient: WSClient) extends SafeLogging {
 
   import IdentityServiceEnrichers._
 
@@ -86,11 +85,11 @@ class IdentityService(apiUrl: String, apiClientToken: String)(implicit wsClient:
     val payload = Json.obj("email" -> email, "set-consents" -> Json.arr("supporter"))
     request(s"consent-email").post(payload).map { response =>
       val validResponse = response.status >= 200 && response.status < 300
-      if (validResponse) SafeLogger.info("Successful response from Identity Consent API")
-      else SafeLogger.error(scrub"Failure response from Identity Consent API: ${response.toString}")
+      if (validResponse) logger.info("Successful response from Identity Consent API")
+      else logger.error(scrub"Failure response from Identity Consent API: ${response.toString}")
       validResponse
     } recover { case e: Exception =>
-      SafeLogger.error(scrub"Failed to update the user's marketing preferences $e")
+      logger.error(scrub"Failed to update the user's marketing preferences $e")
       false
     }
   }

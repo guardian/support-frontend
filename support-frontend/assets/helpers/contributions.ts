@@ -6,7 +6,6 @@ import type {
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
 	spokenCurrencies,
@@ -146,7 +145,7 @@ const getAmount = (
 
 // ----- Setup ----- //
 
-const numbersInWords: Record<string, string> = {
+const numbersInWords = {
 	'1': 'one',
 	'2': 'two',
 	'5': 'five',
@@ -173,7 +172,7 @@ const numbersInWords: Record<string, string> = {
 	'2000': 'two thousand',
 	'10000': 'ten thousand',
 	'16000': 'sixteen thousand',
-};
+} as const;
 
 const defaultConfig: Config = {
 	ANNUAL: {
@@ -474,29 +473,6 @@ function getCustomAmountA11yHint(
     ${getSpokenType(contributionType)} contribution.`;
 }
 
-function getAmountA11yHint(
-	contributionType: ContributionType,
-	currencyId: IsoCurrency,
-	spokenAmount: string,
-): string {
-	const spokenCurrency = spokenCurrencies[currencyId].plural;
-
-	if (contributionType === 'ONE_OFF') {
-		return `make a single contribution of ${spokenAmount} ${spokenCurrency}`;
-	} else if (contributionType === 'MONTHLY') {
-		return `contribute ${spokenAmount} ${spokenCurrency} a month`;
-	}
-
-	return `contribute ${spokenAmount} ${spokenCurrency} annually`;
-}
-
-type Radio = {
-	id?: string;
-	value: string;
-	text: string;
-	accessibilityHint?: string | null | undefined;
-};
-
 const contributionTypeRadios = [
 	{
 		value: 'ONE_OFF',
@@ -515,22 +491,6 @@ const contributionTypeRadios = [
 		accessibilityHint: 'Make a regular annual contribution',
 	},
 ];
-
-function getContributionAmountRadios(
-	amounts: number[],
-	contributionType: ContributionType,
-	currencyId: IsoCurrency,
-): Radio[] {
-	return amounts.map((amount) => ({
-		value: amount.toString(),
-		text: `${currencies[currencyId].glyph}${amount}`,
-		accessibilityHint: getAmountA11yHint(
-			contributionType,
-			currencyId,
-			numbersInWords[amount.toString()],
-		),
-	}));
-}
 
 const contributionTypeAvailable = (
 	contributionType: ContributionType,
@@ -557,7 +517,6 @@ export {
 	getFrequency,
 	getCustomAmountA11yHint,
 	contributionTypeRadios,
-	getContributionAmountRadios,
 	parseRegularContributionType,
 	getAmount,
 	contributionTypeAvailable,

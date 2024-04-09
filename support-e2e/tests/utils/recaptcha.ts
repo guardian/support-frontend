@@ -1,21 +1,21 @@
-import {expect, Page} from "@playwright/test";
+import { expect, Page } from '@playwright/test';
 
-export const checkRecaptcha = async (
-  page:Page,
-) => {
-  await expect(
-    await page
-      .frameLocator('[title="reCAPTCHA"]')
-      .locator("#recaptcha-anchor-label"),
-  ).toBeVisible();
+export const checkRecaptcha = async (page: Page) => {
+	await expect(
+		await page
+			.frameLocator('[title="reCAPTCHA"]')
+			.locator('#recaptcha-anchor-label'),
+	).toBeVisible();
 
-  const recaptchaIframe = page.frameLocator('[title="reCAPTCHA"]');
-  const recaptchaCheckbox = recaptchaIframe.locator(".recaptcha-checkbox[role='checkbox']");
-  await expect(recaptchaCheckbox).toBeEnabled();
+	const recaptchaIframe = page.frameLocator('[title="reCAPTCHA"]');
+	const recaptchaCheckbox = recaptchaIframe.locator(
+		".recaptcha-checkbox[role='checkbox']",
+	);
+	await expect(recaptchaCheckbox).toBeEnabled();
 
-  await recaptchaCheckbox.click({force: true, noWaitAfter: true});
+	await recaptchaCheckbox.click({ force: true, noWaitAfter: true });
 
-  await expect(
-    recaptchaIframe.locator("#recaptcha-accessible-status"),
-  ).toContainText("You are verified");
+	await expect(
+		recaptchaIframe.locator('#recaptcha-accessible-status'),
+	).toContainText('You are verified');
 };

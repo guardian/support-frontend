@@ -1,8 +1,6 @@
 package services
 
-import cats.data.OptionT
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
 import com.gu.support.config.PayPalConfig
 import com.gu.support.touchpoint.TouchpointService
 import io.lemonlabs.uri.QueryString
@@ -14,7 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Try
 
-class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends TouchpointService {
+class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends TouchpointService with SafeLogging {
 
   val defaultNVPParams = Map(
     "USER" -> apiConfig.user,
@@ -28,11 +26,11 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
     val msg = s"NVPResponse: $response"
 
     retrieveNVPParam(response, "ACK") match {
-      case Some("Success") => SafeLogger.info("Successful PayPal NVP request")
-      case Some("SuccessWithWarning") => SafeLogger.warn(s"Response (with warning) from PayPal was: $msg")
-      case Some("Failure") => SafeLogger.error(scrub"Failure response from PayPal was: $msg")
-      case Some("FailureWithWarning") => SafeLogger.error(scrub"Response from PayPal was: $msg")
-      case _ => SafeLogger.warn("No ACK parameter was present in the response")
+      case Some("Success") => logger.info("Successful PayPal NVP request")
+      case Some("SuccessWithWarning") => logger.warn(s"Response (with warning) from PayPal was: $msg")
+      case Some("Failure") => logger.error(scrub"Failure response from PayPal was: $msg")
+      case Some("FailureWithWarning") => logger.error(scrub"Response from PayPal was: $msg")
+      case _ => logger.warn("No ACK parameter was present in the response")
     }
 
   }
@@ -62,7 +60,7 @@ class PayPalNvpService(apiConfig: PayPalConfig, wsClient: WSClient) extends Touc
   private def retrieveNVPParam(response: QueryString, paramName: String) =
     response.paramMap.getOrElse(paramName, Nil).headOption match {
       case None =>
-        SafeLogger.warn(s"Parameter $paramName was missing from the NVP response - $response")
+        logger.warn(s"Parameter $paramName was missing from the NVP response - $response")
         None
       case Some(value) => Some(value)
     }

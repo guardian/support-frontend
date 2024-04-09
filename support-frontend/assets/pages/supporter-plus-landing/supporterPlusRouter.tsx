@@ -1,7 +1,14 @@
 // ----- Imports ----- //
 import { useEffect } from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import {
+	BrowserRouter,
+	Navigate,
+	Route,
+	Routes,
+	useLocation,
+} from 'react-router-dom';
+import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import { CountryGroup } from 'helpers/internationalisation';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -11,8 +18,12 @@ import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import { renderPage } from 'helpers/rendering/render';
 import { SupporterPlusThankYou } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import { setUpRedux } from './setup/setUpRedux';
+import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
 import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
 import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
+import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
+
+validateWindowGuardian(window.guardian);
 
 if (!isDetailsSupported) {
 	polyfillDetails();
@@ -27,8 +38,12 @@ const store = initReduxForContributions();
 
 setUpRedux(store);
 
-const reactElementId = `supporter-plus-landing-page-${countryGroups[countryGroupId].supportInternationalisationId}`;
-const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
+const urlParams = new URLSearchParams(window.location.search);
+const promoCode = urlParams.get('promoCode');
+const thankYouRouteParams = promoCode
+	? `?${new URLSearchParams({ promoCode }).toString()}`
+	: '';
+const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou${thankYouRouteParams}`;
 const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
 );
@@ -45,13 +60,43 @@ function ScrollToTop() {
 	return null;
 }
 
+type ThreeTierRedirectProps = {
+	children: React.ReactNode;
+	countryId: string;
+};
+function ThreeTierRedirectOneOffToCheckout({
+	children,
+	countryId,
+}: ThreeTierRedirectProps) {
+	const urlParams = new URLSearchParams(window.location.search);
+	const urlSelectedContributionType = urlParams.get(
+		'selected-contribution-type',
+	);
+	const urlParamsString = urlParams.toString();
+	const oneOff = urlSelectedContributionType === 'ONE_OFF';
+
+	return oneOff ? (
+		<Navigate
+			to={`/${countryId}/contribute/checkout${`${
+				urlParamsString ? `?${urlParamsString}` : ''
+			}${window.location.hash}`}`}
+			replace
+		/>
+	) : (
+		<>{children}</>
+	);
+}
+
+const commonState = store.getState().common;
+
+export const inThreeTier = threeTierCheckoutEnabled(
+	commonState.abParticipations,
+	commonState.internationalisation.countryId,
+);
+
 // ----- Render ----- //
 
 const router = () => {
-	const firstStepLandingPage = (
-		<SupporterPlusInitialLandingPage thankYouRoute={thankYouRoute} />
-	);
-
 	return (
 		<BrowserRouter>
 			<ScrollToTop />
@@ -60,12 +105,23 @@ const router = () => {
 					{countryIds.map((countryId) => (
 						<>
 							<Route
-								path={`/${countryId}/contribute/`}
-								element={firstStepLandingPage}
-							/>
-							<Route
-								path={`/${countryId}/contribute/:campaignCode`}
-								element={firstStepLandingPage}
+								path={`/${countryId}/contribute/:campaignCode?`}
+								element={
+									/*
+									 * if you are coming to the /contribute route(s) and you also have a one off
+									 * contribution type (set in the url) and find yourself in the three tier
+									 * variant we should redirect you to the /contribute/checkout route
+									 */
+									inThreeTier ? (
+										<ThreeTierRedirectOneOffToCheckout countryId={countryId}>
+											<ThreeTierLanding />
+										</ThreeTierRedirectOneOffToCheckout>
+									) : (
+										<SupporterPlusInitialLandingPage
+											thankYouRoute={thankYouRoute}
+										/>
+									)
+								}
 							/>
 							<Route
 								path={`/${countryId}/contribute/checkout`}
@@ -85,4 +141,4 @@ const router = () => {
 	);
 };
 
-renderPage(router(), reactElementId);
+renderPage(router());

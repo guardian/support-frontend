@@ -32,7 +32,4 @@ function SubscriptionsLandingPage({
 }
 
 setUpTrackingAndConsents();
-renderPage(
-	<SubscriptionsLandingPage {...subscriptionsLandingProps()} />,
-	'subscriptions-landing-page',
-);
+renderPage(<SubscriptionsLandingPage {...subscriptionsLandingProps()} />);

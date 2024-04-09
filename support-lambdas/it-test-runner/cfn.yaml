@@ -31,7 +31,7 @@ Resources:
         Bucket: support-workers-dist
         Key: !Sub support/${Stage}/it-test-runner/it-test-runner.jar
       MemorySize: 2048
-      Runtime: java11
+      Runtime: java21
       Timeout: 300
       Environment:
         Variables:
@@ -67,6 +67,7 @@ Resources:
               Resource:
                - arn:aws:s3:::support-workers-private/CODE/support-workers.private.conf
                - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-CODE/catalog.json
+               - arn:aws:s3:::gu-zuora-catalog/PROD/Zuora-PROD/catalog.json
         - Statement:
             - Effect: Allow
               Action: dynamodb:Scan

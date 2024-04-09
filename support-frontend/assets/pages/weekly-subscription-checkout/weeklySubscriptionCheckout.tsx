@@ -73,4 +73,4 @@ const content = (
 		</Page>
 	</Provider>
 );
-renderPage(content, 'weekly-subscription-checkout-page');
+renderPage(content);

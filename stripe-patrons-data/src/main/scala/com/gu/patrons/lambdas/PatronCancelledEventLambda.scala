@@ -43,7 +43,7 @@ import scala.util.{Failure, Success, Try}
 class PatronCancelledEventLambda extends StrictLogging {
   val runner = configurableFutureRunner(60.seconds)
 
-  implicit val stage = StageConstructors.fromEnvironment
+  implicit val stage: Stage = StageConstructors.fromEnvironment
   private val stripeConfig = PatronsStripeConfig.fromParameterStoreSync(stage)
   private val identityConfig = PatronsIdentityConfig.fromParameterStoreSync(stage)
 
@@ -56,7 +56,7 @@ class PatronCancelledEventLambda extends StrictLogging {
 
   def cancelCustomerInDynamoDb(event: APIGatewayProxyRequestEvent): Future[APIGatewayProxyResponseEvent] = {
     val countryId = event.getPathParameters.get("countryId")
-    SafeLogger.info(s"Path is ${countryId}")
+    logger.info(s"Path is ${countryId}")
     val account = if (countryId == "au") GnmPatronSchemeAus else GnmPatronScheme
 
     (for {
@@ -90,7 +90,7 @@ class PatronCancelledEventLambda extends StrictLogging {
   ): EitherT[Future, CancelError, Unit] =
     customer.jointPatronEmail match {
       case Some(email) =>
-        SafeLogger.info(s"Customer ${customer.email} has an associated joint patron - $email")
+        logger.info(s"Customer ${customer.email} has an associated joint patron - $email")
         cancelSubscriptionForEmail(email, subscriptionId, identityConfig)
       case _ =>
         EitherT.pure(())
@@ -130,7 +130,7 @@ class PatronCancelledEventLambda extends StrictLogging {
     logger.info("Attempting to verify event payload")
     EitherT.fromEither(for {
       payload <- Option(event.getBody).toRight(InvalidRequestError("Missing body"))
-      _ = SafeLogger.info(s"payload is ${payload.replace("\n", "")}")
+      _ = logger.info(s"payload is ${payload.replace("\n", "")}")
       sigHeader <- event.getHeaders.asScala.get("Stripe-Signature").toRight(InvalidRequestError("Missing sig header"))
       _ <- Try(
         Webhook.Signature.verifyHeader(payload, sigHeader, signingSecret, 300),

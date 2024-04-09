@@ -57,6 +57,16 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 			),
 			maybeGreyedOut: maybeGreyedOutHigherTier,
 		},
+		{
+			isChecked: higherTier,
+			text: (
+				<p>
+					<span css={boldText}>Uninterrupted reading. </span> See far fewer asks
+					for support
+				</p>
+			),
+			maybeGreyedOut: maybeGreyedOutHigherTier,
+		},
 	];
 
 	return [
@@ -66,15 +76,6 @@ export const checkListData = ({ higherTier }: TierUnlocks): CheckListData[] => {
 				<p>
 					<span css={boldText}>A regular supporter newsletter. </span>Get
 					exclusive insight from our newsroom
-				</p>
-			),
-		},
-		{
-			isChecked: true,
-			text: (
-				<p>
-					<span css={boldText}>Uninterrupted reading. </span> See far fewer asks
-					for support
 				</p>
 			),
 		},

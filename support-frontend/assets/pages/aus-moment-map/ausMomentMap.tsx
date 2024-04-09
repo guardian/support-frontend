@@ -194,5 +194,5 @@ function AusMomentMap(): JSX.Element {
 	);
 }
 
-renderPage(<AusMomentMap />, 'aus-moment-map');
+renderPage(<AusMomentMap />);
 export { AusMomentMap };

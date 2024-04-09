@@ -11,7 +11,7 @@ lazy val integrationTestSettings: Seq[Def.Setting[_]] = Defaults.itSettings ++ S
   IntegrationTest / javaSource := baseDirectory.value / "src" / "test" / "java",
   IntegrationTest / resourceDirectory := baseDirectory.value / "src" / "test" / "resources",
   Test / testOptions += Tests
-    .Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest", "-oI"),
+    .Argument(TestFrameworks.ScalaTest, "-l", "com.gu.test.tags.annotations.IntegrationTest", "-oIS"),
   libraryDependencies += scalatest % "it",
 )
 
@@ -40,28 +40,26 @@ lazy val release = Seq[ReleaseStep](
 inThisBuild(
   Seq(
     organization := "com.gu",
-    scalaVersion := "2.13.10",
+    scalaVersion := "2.13.13",
     // https://www.scala-sbt.org/1.x/docs/Cached-Resolution.html
     updateOptions := updateOptions.value.withCachedResolution(true),
     resolvers ++= Resolver.sonatypeOssRepos("releases"), // libraries that haven't yet synced to maven central
+    assembly / assemblyMergeStrategy := {
+      case PathList("models", xs @ _*) => MergeStrategy.discard
+      case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
+      case x if x.endsWith("git.properties") => MergeStrategy.discard
+      case x if x.endsWith("module-info.class") => MergeStrategy.discard
+      case "mime.types" => MergeStrategy.first
+      case str if str.contains("simulacrum") => MergeStrategy.first
+      case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
+      case PathList("javax", "annotation", _ @_*) => MergeStrategy.first
+      case PathList("deriving.conf") => MergeStrategy.concat
+      case y =>
+        val oldStrategy = (assembly / assemblyMergeStrategy).value
+        oldStrategy(y)
+    }
   ),
 )
-
-val mergeStrategySettings = {
-  assembly / assemblyMergeStrategy := {
-    case PathList("models", xs @ _*) => MergeStrategy.discard
-    case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
-    case x if x.endsWith("git.properties") => MergeStrategy.discard
-    case x if x.endsWith("module-info.class") => MergeStrategy.discard
-    case "mime.types" => MergeStrategy.first
-    case str if str.contains("simulacrum") => MergeStrategy.first
-    case name if name.endsWith("execution.interceptors") => MergeStrategy.filterDistinctLines
-    case PathList("javax", "annotation", _ @_*) => MergeStrategy.first
-    case y =>
-      val oldStrategy = (assembly / assemblyMergeStrategy).value
-      oldStrategy(y)
-  }
-}
 
 lazy val releaseSettings = Seq(
   isSnapshot := false,
@@ -89,6 +87,7 @@ lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.4.2",
   scalatest % "test",
   "com.typesafe.scala-logging" % "scala-logging_2.13" % "3.9.5",
+  "ch.qos.logback" % "logback-classic" % "1.4.14",
 )
 
 lazy val root = (project in file("."))
@@ -155,10 +154,9 @@ lazy val `support-workers` = (project in file("support-workers"))
     scalafmtSettings,
     libraryDependencies ++= commonDependencies,
     scalacOptions += "-Ytasty-reader",
-    mergeStrategySettings,
   )
   .dependsOn(
-    `support-services`,
+    `support-services` % "test->test;it->test;compile->compile",
     `support-models` % "test->test;it->test;compile->compile",
     `support-config`,
     `support-internationalisation`,
@@ -190,7 +188,6 @@ lazy val `supporter-product-data-dynamo` = (project in file("support-modules/sup
     libraryDependencies ++= commonDependencies,
     releaseSettings,
     scalafmtSettings,
-    mergeStrategySettings,
   )
 
 lazy val `stripe-patrons-data` = (project in file("stripe-patrons-data"))
@@ -330,7 +327,6 @@ lazy val `acquisitions-firehose-transformer` = (project in file("support-lambdas
     scalafmtSettings,
     scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
-    mergeStrategySettings,
   )
   .dependsOn(`module-acquisition-events`)
   .aggregate(`module-acquisition-events`)
@@ -342,7 +338,6 @@ lazy val `acquisition-events-api` = (project in file("support-lambdas/acquisitio
     scalafmtSettings,
     scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
-    mergeStrategySettings,
   )
   .dependsOn(`module-acquisition-events`, `module-aws`)
   .aggregate(`module-acquisition-events`)
@@ -354,7 +349,6 @@ lazy val `bigquery-acquisitions-publisher` = (project in file("support-lambdas/b
     scalafmtSettings,
     scalacOptions += "-Ytasty-reader",
     libraryDependencies ++= commonDependencies,
-    mergeStrategySettings,
   )
   .dependsOn(`module-acquisition-events`, `module-aws`)
   .aggregate(`module-acquisition-events`)

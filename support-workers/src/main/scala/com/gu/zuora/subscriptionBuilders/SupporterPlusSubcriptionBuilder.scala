@@ -4,16 +4,18 @@ import com.gu.helpers.DateGenerator
 import com.gu.i18n.Currency
 import com.gu.support.catalog.{CatalogService, ProductRatePlanId}
 import com.gu.support.config.{TouchPointEnvironment, ZuoraSupporterPlusConfig}
+import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.workers.Monthly
 import com.gu.support.workers.ProductTypeRatePlans.supporterPlusRatePlan
 import com.gu.support.workers.exceptions.CatalogDataNotFoundException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.SupporterPlusState
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
-import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.validateRatePlan
+import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
 
 class SupporterPlusSubcriptionBuilder(
     config: ZuoraSupporterPlusConfig,
+    promotionService: PromotionService,
     catalogService: CatalogService,
     dateGenerator: DateGenerator,
     environment: TouchPointEnvironment,
@@ -24,7 +26,7 @@ class SupporterPlusSubcriptionBuilder(
       state: SupporterPlusState,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
-  ): SubscribeItem = {
+  ): Either[PromoError, SubscribeItem] = {
     val productRatePlanId =
       validateRatePlan(supporterPlusRatePlan(state.product, environment), state.product.describe)
     val contributionRatePlanChargeId =
@@ -49,7 +51,16 @@ class SupporterPlusSubcriptionBuilder(
       csrUsername = csrUsername,
       salesforceCaseId = salesforceCaseId,
     )
-    subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
+
+    applyPromoCodeIfPresent(
+      promotionService,
+      state.promoCode,
+      state.billingCountry,
+      productRatePlanId,
+      subscriptionData,
+    ).map { subscriptionData =>
+      subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
+    }
 
   }
 

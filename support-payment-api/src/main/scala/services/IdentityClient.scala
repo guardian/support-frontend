@@ -1,6 +1,6 @@
 package services
 
-import akka.util.ByteString
+import org.apache.pekko.util.ByteString
 import cats.data.EitherT
 import cats.instances.future._
 import cats.syntax.applicativeError._

@@ -1,5 +1,6 @@
 import { css, ThemeProvider } from '@emotion/react';
 import {
+	between,
 	from,
 	neutral,
 	space,
@@ -15,7 +16,6 @@ import { useNavigate } from 'react-router';
 import { Box } from 'components/checkoutBox/checkoutBox';
 import { BrandedIcons } from 'components/paymentMethodSelector/creditDebitIcons';
 import { PaypalIcon } from 'components/paymentMethodSelector/paypalIcon';
-import { isCampaignEnabled } from 'helpers/campaigns/campaigns';
 import { useOtherAmountValidation } from 'helpers/customHooks/useFormValidation';
 import { resetValidation } from 'helpers/redux/checkout/checkoutActions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -28,13 +28,27 @@ import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { AmountAndBenefits } from '../formSections/amountAndBenefits';
 import { LimitedPriceCards } from '../formSections/limitedPriceCards';
+import { PatronsPriceCards } from '../formSections/patronsPriceCards';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
 
-const shorterBoxMargin = css`
+const boxShorterMargin = css`
 	:not(:last-child) {
 		${until.tablet} {
 			margin-bottom: ${space[2]}px;
 		}
+	}
+`;
+
+// TODO : re-factor SupporterPlusCheckoutScaffold so that we do not require negative margin here, this overlays the PriceCardsAmountsBenefitsContainer over the PageScaffold
+const boxHoist = css`
+	${until.mobileMedium} {
+		margin-top: -370px;
+	}
+	${between.mobileMedium.and.mobileLandscape} {
+		margin-top: -358px;
+	}
+	${between.mobileLandscape.and.desktop} {
+		margin-top: -344px;
 	}
 `;
 
@@ -84,7 +98,10 @@ export function SupporterPlusInitialLandingPage({
 	const navigate = useNavigate();
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
-	const thresholdPrice = getThresholdPrice(countryGroupId, contributionType);
+
+	const thresholdPrice = useContributionsSelector((state) =>
+		getThresholdPrice(contributionType, state),
+	);
 
 	const { abParticipations } = useContributionsSelector(
 		(state) => state.common,
@@ -92,6 +109,8 @@ export function SupporterPlusInitialLandingPage({
 
 	const displayLimitedPriceCards =
 		abParticipations.supporterPlusOnly === 'variant';
+
+	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
 
 	const proceedToNextStep = useOtherAmountValidation(() => {
 		const destination = `checkout?selected-amount=${amount}&selected-contribution-type=${contributionType.toLowerCase()}`;
@@ -121,20 +140,17 @@ export function SupporterPlusInitialLandingPage({
 			: paymentMethodsMarginRecurring}
 	`;
 
-	const isUsEoy2023CampaignEnabled = isCampaignEnabled(`usEoy2023`);
-
 	useEffect(() => {
 		dispatch(resetValidation());
 	}, []);
 
 	return (
-		<SupporterPlusCheckoutScaffold
-			thankYouRoute={thankYouRoute}
-			isUsEoy2023CampaignEnabled={isUsEoy2023CampaignEnabled}
-		>
-			<Box cssOverrides={shorterBoxMargin}>
+		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute}>
+			<Box cssOverrides={[boxShorterMargin, boxHoist]}>
 				{displayLimitedPriceCards ? (
 					<LimitedPriceCards />
+				) : displayPatronsCheckout ? (
+					<PatronsPriceCards />
 				) : (
 					<AmountAndBenefits
 						countryGroupId={countryGroupId}
@@ -145,6 +161,7 @@ export function SupporterPlusInitialLandingPage({
 						isCompactBenefitsList
 					/>
 				)}
+
 				<div css={checkoutBtnAndPaymentIconsHolder}>
 					<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 						<Button

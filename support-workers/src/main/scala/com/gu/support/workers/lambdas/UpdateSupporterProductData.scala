@@ -46,16 +46,16 @@ class UpdateSupporterProductData(serviceProvider: ServiceProvider)
       catalogService: CatalogService,
       supporterDataDynamoService: SupporterDataDynamoService,
   ) = {
-    SafeLogger.info(s"Attempting to update user ${state.user.id}")
+    logger.info(s"Attempting to update user ${state.user.id}")
     getSupporterRatePlanItemFromState(state, catalogService) match {
       case Right(Some(supporterRatePlanItem)) =>
-        SafeLogger.info(s"Attempting to write supporterRatePlanItem $supporterRatePlanItem")
+        logger.info(s"Attempting to write supporterRatePlanItem $supporterRatePlanItem")
         supporterDataDynamoService.writeItem(supporterRatePlanItem).map { _ =>
-          SafeLogger.info(s"Successfully updated supporterRatePlanItem for user ${state.user.id}")
+          logger.info(s"Successfully updated supporterRatePlanItem for user ${state.user.id}")
           ()
         }
       case Right(None) =>
-        SafeLogger.info(
+        logger.info(
           s"Skipping write to SupporterProductData dynamo table because product is ${state.product.describe}",
         )
         Future.successful(())
@@ -93,7 +93,7 @@ object UpdateSupporterProductData {
           )
           .toRight(s"Unable to create SupporterRatePlanItem from state $state")
 
-      case SendThankYouEmailSupporterPlusState(user, product, _, _, subscriptionNumber) =>
+      case SendThankYouEmailSupporterPlusState(user, product, _, _, _, _, subscriptionNumber) =>
         catalogService
           .getProductRatePlan(SupporterPlus, product.billingPeriod, NoFulfilmentOptions, NoProductOptions)
           .map(productRatePlan =>
@@ -103,7 +103,7 @@ object UpdateSupporterProductData {
                 identityId = user.id,
                 productRatePlanId = productRatePlan.id,
                 productRatePlanName = s"support-workers added ${product.describe}",
-                Some(ContributionAmount(product.amount, product.currency.iso)),
+                None, // We don't send the amount for S+, because it may be discounted
               ),
             ),
           )

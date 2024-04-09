@@ -50,12 +50,16 @@ describe('Stripe Form', () => {
 	let store: ReturnType<typeof createTestStoreForSubscriptions>;
 	let submitForm: () => void;
 	let validateForm: () => void;
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- dont care if the function is called
+	const setStripePublicKey: (key: string) => void = (_ignored: string) =>
+		void 0;
 
 	beforeEach(async () => {
 		submitForm = jest.fn();
 		validateForm = jest.fn();
 		props = {
 			country: 'GB',
+			currency: 'GBP',
 			isTestUser: true,
 			allErrors: [],
 			submitForm,
@@ -64,6 +68,7 @@ describe('Stripe Form', () => {
 			csrf: {
 				token: 'mock token',
 			},
+			setStripePublicKey,
 		};
 
 		mockFetch({

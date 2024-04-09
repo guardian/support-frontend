@@ -1,6 +1,6 @@
 package backend
 
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import backend.BackendError.SoftOptInsServiceError
 import cats.data.EitherT
 import cats.implicits._
@@ -396,6 +396,22 @@ class StripeBackendSpec
     }
 
     "a request is made to create a charge/payment" should {
+
+      "return error if the email address is invalid due to a comma in it" in new StripeBackendFixture {
+        val emailWithComma = Json.fromString("email,address@email.com").as[NonEmptyString].toOption.get
+        val stripePaymentDataWithStripe = StripePaymentData(emailWithComma, Currency.USD, 12, Some(StripeCheckout))
+        val createPaymentIntentWithStripeCheckout =
+          CreatePaymentIntent(
+            "payment-method-id",
+            stripePaymentDataWithStripe,
+            acquisitionData,
+            Some(stripePublicKey),
+            recaptchaToken,
+          )
+        populateChargeMock()
+        stripeBackend.createPaymentIntent(createPaymentIntentWithStripeCheckout, clientBrowserInfo).futureLeft mustBe
+          StripeApiError.fromString("Invalid email address", None)
+      }
 
       "return error if stripe service fails" in new StripeBackendFixture {
         when(mockStripeService.createCharge(stripeChargeRequest)).thenReturn(paymentServiceResponseError)

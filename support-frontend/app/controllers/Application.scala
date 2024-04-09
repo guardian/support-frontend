@@ -8,25 +8,28 @@ import cats.data.EitherT
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.monitoring.SafeLogger
-import com.gu.monitoring.SafeLogger._
+import com.gu.monitoring.SafeLogging
+import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
+import play.api.libs.circe.Circe
+import play.api.libs.ws.WSClient
 import play.api.mvc._
-import services.{PaymentAPIService, TestUserService}
+import services.pricing.PriceSummaryServiceProvider
+import services.{CachedProductCatalogService, CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
+import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
-import play.twirl.api.Html
 
-case class ContributionsPaymentMethodConfigs(
-    oneOffDefaultStripeConfig: StripeConfig,
-    oneOffTestStripeConfig: StripeConfig,
-    regularDefaultStripeConfig: StripeConfig,
-    regularTestStripeConfig: StripeConfig,
+case class PaymentMethodConfigs(
+    oneOffDefaultStripeConfig: StripePublicConfig,
+    oneOffTestStripeConfig: StripePublicConfig,
+    regularDefaultStripeConfig: StripePublicConfig,
+    regularTestStripeConfig: StripePublicConfig,
     regularDefaultPayPalConfig: PayPalConfig,
     regularTestPayPalConfig: PayPalConfig,
     defaultAmazonPayConfig: AmazonPayConfig,
@@ -36,10 +39,10 @@ case class ContributionsPaymentMethodConfigs(
 class Application(
     actionRefiners: CustomActionBuilders,
     val assets: AssetsResolver,
-    testUsers: TestUserService,
+    testUserService: TestUserService,
     components: ControllerComponents,
-    oneOffStripeConfigProvider: StripeConfigProvider,
-    regularStripeConfigProvider: StripeConfigProvider,
+    oneOffStripeConfigProvider: StripePublicConfigProvider,
+    regularStripeConfigProvider: StripePublicConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     amazonPayConfigProvider: AmazonPayConfigProvider,
     recaptchaConfigProvider: RecaptchaConfigProvider,
@@ -48,12 +51,16 @@ class Application(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     stage: Stage,
+    wsClient: WSClient,
+    priceSummaryServiceProvider: PriceSummaryServiceProvider,
+    cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val supportUrl: String,
 )(implicit val ec: ExecutionContext)
     extends AbstractController(components)
     with SettingsSurrogateKeySyntax
     with CanonicalLinks
-    with StrictLogging {
+    with StrictLogging
+    with Circe {
 
   import actionRefiners._
 
@@ -180,7 +187,15 @@ class Application(
     )
 
     val serversideTests = generateParticipations(Nil)
-    val testMode = testUsers.isTestUser(request)
+    val isTestUser = testUserService.isTestUser(request)
+
+    val queryPromos =
+      request.queryString
+        .getOrElse("promoCode", Nil)
+        .toList
+
+    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+    val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
 
     views.html.contributions(
       title = "Support the Guardian",
@@ -189,7 +204,7 @@ class Application(
       js = js,
       css = css,
       description = stringsConfig.contributionsLandingDescription,
-      paymentMethodConfigs = ContributionsPaymentMethodConfigs(
+      paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
         oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
         regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
@@ -207,8 +222,10 @@ class Application(
       geoData = geoData,
       shareImageUrl = shareImageUrl(settings),
       shareUrl = "https://support.theguardian.com/contribute",
-      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(testMode).v2PublicKey,
+      v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
       serversideTests = serversideTests,
+      productPrices = productPrices,
+      productCatalog = productCatalog,
     )
   }
 
@@ -220,7 +237,7 @@ class Application(
     Ok(
       views.html.main(
         title = "Guardian Supporters Map",
-        mainElement = assets.getSsrCacheContentsAsHtml("aus-moment-map", "aus-moment-map.html"),
+        mainElement = EmptyDiv("aus-moment-map"),
         mainJsBundle = Left(RefPath("ausMomentMap.js")),
         mainStyleBundle = Left(RefPath("ausMomentMap.css")),
         description = stringsConfig.contributionsLandingDescription,
@@ -233,7 +250,10 @@ class Application(
   }
 
   def healthcheck: Action[AnyContent] = PrivateAction {
-    Ok("healthy")
+    if (priceSummaryServiceProvider.forUser(false).getPrices(SupporterPlus, List()).isEmpty)
+      InternalServerError("no prices in catalog")
+    else
+      Ok("healthy")
   }
 
   // Remove trailing slashes so that /uk/ redirects to /uk
@@ -253,9 +273,43 @@ class Application(
       case _ => s"/uk/$path"
     }
   }
+
+  def checkout(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+
+    val geoData = request.geoData
+    val serversideTests = generateParticipations(Nil)
+    val isTestUser = testUserService.isTestUser(request)
+    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
+    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
+    val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
+
+    Ok(
+      views.html.checkout(
+        geoData = geoData,
+        paymentMethodConfigs = PaymentMethodConfigs(
+          oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+          oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
+          regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+          regularTestStripeConfig = regularStripeConfigProvider.get(true),
+          regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+          regularTestPayPalConfig = payPalConfigProvider.get(true),
+          defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
+          testAmazonPayConfig = amazonPayConfigProvider.get(true),
+        ),
+        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
+        serversideTests = serversideTests,
+        paymentApiUrl = paymentAPIService.paymentAPIUrl,
+        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+        membersDataApiUrl = membersDataApiUrl,
+        guestAccountCreationToken = guestAccountCreationToken,
+        productCatalog = productCatalog,
+      ),
+    ).withSettingsSurrogateKey
+  }
 }
 
-object CSSElementForStage {
+object CSSElementForStage extends SafeLogging {
 
   def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage)(
       cssPath: RefPath,
@@ -264,7 +318,7 @@ object CSSElementForStage {
       Left(cssPath)
     } else {
       getFileContentsAsHtml(cssPath).fold[Either[RefPath, StyleContent]] {
-        SafeLogger.error(
+        logger.error(
           scrub"Inline CSS failed to load for $cssPath",
         ) // in future add email perf alert instead (cloudwatch alarm perhaps)
         Left(cssPath)

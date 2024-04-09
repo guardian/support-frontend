@@ -91,6 +91,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 					}
 				}}
 				error={firstError('country', props.errors)}
+				name={`${scope}-country`}
 			>
 				<OptionForSelect value="">Select a country</OptionForSelect>
 				{sortedOptions(props.countries)}
@@ -127,6 +128,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				value={props.lineOne ?? ''}
 				onChange={(e) => props.setLineOne(e.target.value)}
 				error={firstError('lineOne', props.errors)}
+				name={`${scope}-lineOne`}
 			/>
 			<TextInput
 				css={marginBottom}
@@ -138,6 +140,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				value={props.lineTwo ?? ''}
 				onChange={(e) => props.setLineTwo(e.target.value)}
 				error={firstError('lineTwo', props.errors)}
+				name={`${scope}-lineTwo`}
 			/>
 			<TextInput
 				css={marginBottom}
@@ -149,6 +152,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				value={props.city ?? ''}
 				onChange={(e) => props.setTownCity(e.target.value)}
 				error={firstError('city', props.errors)}
+				name={`${scope}-city`}
 			/>
 			<MaybeSelect
 				css={marginBottom}
@@ -159,6 +163,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				onChange={(e) => props.setState(e.target.value)}
 				error={firstError('state', props.errors)}
 				isShown={shouldShowStateDropdown(props.country)}
+				name={`${scope}-stateProvince`}
 			>
 				<>
 					<OptionForSelect value="">{`Select a ${
@@ -177,6 +182,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				error={firstError('state', props.errors)}
 				optional
 				isShown={shouldShowStateInput(props.country)}
+				name={`${scope}-stateProvince`}
 			/>
 			<TextInput
 				css={marginBottom}
@@ -188,6 +194,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				value={props.postCode}
 				onChange={(e) => props.setPostcode(e.target.value)}
 				error={firstError('postCode', props.errors)}
+				name={`${scope}-postcode`}
 			/>
 		</div>
 	);

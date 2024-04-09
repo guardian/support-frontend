@@ -4,10 +4,9 @@ import actions.CustomActionBuilders
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import com.gu.support.catalog.DigitalPack
-import com.gu.support.config.{PayPalConfigProvider, StripeConfigProvider}
+import com.gu.support.config.{PayPalConfigProvider, StripePublicConfigProvider}
 import com.gu.support.encoding.CustomCodecs._
 import services.pricing.{PriceSummaryServiceProvider, ProductPrices}
-import com.gu.i18n.Currency.{AUD}
 import com.gu.support.promotions._
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import config.RecaptchaConfigProvider
@@ -26,7 +25,7 @@ class DigitalSubscriptionController(
     val assets: AssetsResolver,
     val actionRefiners: CustomActionBuilders,
     testUsers: TestUserService,
-    stripeConfigProvider: StripeConfigProvider,
+    stripeConfigProvider: StripePublicConfigProvider,
     payPalConfigProvider: PayPalConfigProvider,
     components: ControllerComponents,
     settingsProvider: AllSettingsProvider,
@@ -60,7 +59,6 @@ class DigitalSubscriptionController(
         } else {
           "Support the Guardian | The Guardian Digital Subscription"
         }
-        val id = EmptyDiv("digital-subscription-checkout-page-" + countryCode)
         val js = "digitalSubscriptionLandingPage.js"
         val css = "digitalSubscriptionLandingPage.css"
         val csrf = CSRF.getToken.value
@@ -72,10 +70,14 @@ class DigitalSubscriptionController(
         val maybePromotionCopy = {
           landingCopyProvider.promotionCopy(promoCodes ++ defaultPromos, DigitalPack, "uk", orderIsAGift)
         }
+        val mainElement = assets.getSsrCacheContentsAsHtml(
+          divId = s"digital-subscription-landing-$countryCode",
+          file = "digital-subscription-landing.html",
+        )
         Ok(
           views.html.subscriptionCheckout(
             title,
-            id,
+            mainElement,
             js,
             css,
             Some(csrf),

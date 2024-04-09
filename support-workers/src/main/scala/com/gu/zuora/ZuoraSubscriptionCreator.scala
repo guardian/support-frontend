@@ -2,10 +2,10 @@ package com.gu.zuora
 
 import com.gu.WithLoggingSugar._
 import com.gu.helpers.DateGenerator
-import com.gu.monitoring.SafeLogger
+import com.gu.monitoring.SafeLogging
 import com.gu.support.workers._
 import com.gu.support.zuora.api.response.{ZuoraAccountNumber, ZuoraSubscriptionNumber}
-import com.gu.support.zuora.api.{SubscribeItem, _}
+import com.gu.support.zuora.api._
 import com.gu.support.zuora.domain.DomainSubscription
 import com.gu.zuora.ZuoraSubscriptionCreator.checkSingleResponse
 
@@ -42,7 +42,17 @@ class ZuoraSubscriptionCreator(
 
 }
 
-object ZuoraSubscriptionCreator {
+object ZuoraSubscriptionCreator extends SafeLogging {
+
+  def subscriptionRatePlansMatchDomainSubscriptionRatePlans(
+      subscribeItemRatePlans: List[RatePlanData],
+      domainSubscriptionRatePlans: List[com.gu.support.zuora.api.response.RatePlan],
+  ): Boolean = {
+    // Do all the rate plans in the subscription we are trying to create match the domain rate plans?
+    val domainRatePlanIds = domainSubscriptionRatePlans.map(_.productRatePlanId)
+    val ratePlanIds = subscribeItemRatePlans.map(_.ratePlan.productRatePlanId)
+    ratePlanIds.forall(productRatePlanId => domainRatePlanIds.contains(productRatePlanId))
+  }
 
   def subscribeIfApplicable(
       zuoraService: ZuoraSubscribeService,
@@ -50,10 +60,14 @@ object ZuoraSubscriptionCreator {
       maybeDomainSubscription: Option[DomainSubscription],
   ): Future[(ZuoraAccountNumber, ZuoraSubscriptionNumber)] =
     maybeDomainSubscription match {
-      case Some(domainSubscription) =>
-        SafeLogger.info("Skipping subscribe for user because a subscription has already been created for this request")
+      case Some(domainSubscription)
+          if subscriptionRatePlansMatchDomainSubscriptionRatePlans(
+            subscribeItem.subscriptionData.ratePlanData,
+            domainSubscription.ratePlans,
+          ) =>
+        logger.info("Skipping subscribe for user because a subscription has already been created for this request")
         Future.successful((domainSubscription.accountNumber, domainSubscription.subscriptionNumber))
-      case None =>
+      case _ =>
         checkSingleResponse(zuoraService.subscribe(SubscribeRequest(List(subscribeItem)))).map { response =>
           (response.domainAccountNumber, response.domainSubscriptionNumber)
         }

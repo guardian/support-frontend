@@ -1,6 +1,7 @@
 package services.pricing
 
-import com.gu.i18n.{CountryGroup, Currency}
+import com.gu.i18n.{Country, CountryGroup, Currency}
+import com.gu.monitoring.SafeLogging
 import com.gu.support.catalog._
 import services.pricing.PriceSummaryService.{getDiscountedPrice, getNumberOfDiscountedPeriods}
 import com.gu.support.promotions._
@@ -16,7 +17,8 @@ class PriceSummaryService(
     promotionService: PromotionService,
     defaultPromotionService: DefaultPromotionService,
     catalogService: CatalogService,
-) extends TouchpointService {
+) extends TouchpointService
+    with SafeLogging {
   private type GroupedPriceList = Map[(FulfilmentOptions, ProductOptions, BillingPeriod), Map[Currency, PriceSummary]]
 
   def getPrices[T <: Product](
@@ -71,7 +73,8 @@ class PriceSummaryService(
       productRatePlan: ProductRatePlan[Product],
       price: Price,
       saving: Option[Int],
-  ) = {
+  ): (Currency, PriceSummary) = {
+
     val promotionSummaries: List[PromotionSummary] = for {
       promotion <- promotions
       country <- countryGroup.defaultCountry.orElse(countryGroup.countries.headOption)

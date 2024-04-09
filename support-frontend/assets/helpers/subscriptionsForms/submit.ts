@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import type { PaymentMethod as StripePaymentMethod } from '@stripe/stripe-js';
 import type { Dispatch } from 'redux';
+import type { RegularContributionTypeMap } from 'helpers/contributions';
 import type {
 	PaymentAuthorisation,
 	PaymentResult,
@@ -23,6 +24,7 @@ import {
 } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
+import type { ProductPrice } from 'helpers/productPrice/productPrices';
 import {
 	getCurrency,
 	getProductPrice,
@@ -42,23 +44,27 @@ import type { DirectDebitState } from 'helpers/redux/checkout/payment/directDebi
 import { getSubscriptionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import type { Action } from 'helpers/subscriptionsForms/formActions';
-// eslint-disable-next-line import/no-cycle -- these are quite tricky to unpick so we should come back to this
 import {
 	setFormSubmitted,
 	setStage,
 	setSubmissionError,
 } from 'helpers/subscriptionsForms/formActions';
-// eslint-disable-next-line import/no-cycle -- these are quite tricky to unpick so we should come back to this
 import {
 	validateCheckoutForm,
 	validateWithDeliveryForm,
 } from 'helpers/subscriptionsForms/formValidation';
 import type { AnyCheckoutState } from 'helpers/subscriptionsForms/subscriptionCheckoutReducer';
 import { getOphanIds, getSupportAbTests } from 'helpers/tracking/acquisitions';
-import { successfulSubscriptionConversion } from 'helpers/tracking/googleTagManager';
+import {
+	successfulContributionConversion,
+	successfulSubscriptionConversion,
+} from 'helpers/tracking/googleTagManager';
 import { sendEventSubscriptionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import type { Option } from 'helpers/types/option';
 import { routes } from 'helpers/urls/routes';
+import { threeTierCheckoutEnabled } from 'pages/supporter-plus-landing/setup/threeTierChecks';
+import type { TierPlans } from 'pages/supporter-plus-landing/setup/threeTierConfig';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { trackCheckoutSubmitAttempt } from '../tracking/behaviour';
 
 type Addresses = {
@@ -159,10 +165,27 @@ function getGiftRecipient(giftingState: GiftingState) {
 	return {};
 }
 
+function getPrintDiscountedPrice(
+	productPrice: ProductPrice,
+	promoCode?: Option<string>,
+): number {
+	const defaultPrice = productPrice.price;
+	if (productPrice.promotions && productPrice.promotions.length > 0) {
+		const validPromo = productPrice.promotions.find(
+			(promotion) => promotion.promoCode === promoCode,
+		);
+		if (validPromo) {
+			return validPromo.discountedPrice ?? defaultPrice;
+		}
+	}
+	return defaultPrice;
+}
+
 function buildRegularPaymentRequest(
 	state: SubscriptionsState,
 	paymentAuthorisation: PaymentAuthorisation,
 	addresses: Addresses,
+	inThreeTier: boolean,
 	promotions?: Promotion[],
 	currencyId?: Option<IsoCurrency>,
 ): RegularPaymentRequest {
@@ -175,8 +198,10 @@ function buildRegularPaymentRequest(
 	} = state.page.checkoutForm.addressMeta;
 	const { csrUsername, salesforceCaseId } = state.page.checkout;
 	const product = getProduct(state, currencyId, chosenDeliveryAgent);
-	const paymentFields =
-		regularPaymentFieldsFromAuthorisation(paymentAuthorisation);
+	const paymentFields = regularPaymentFieldsFromAuthorisation(
+		paymentAuthorisation,
+		state.page.checkoutForm.payment.stripeAccountDetails.publicKey,
+	);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const promoCode = getPromoCode(promotions);
 	const giftRecipient = getGiftRecipient(state.page.checkoutForm.gifting);
@@ -203,6 +228,7 @@ function buildRegularPaymentRequest(
 		csrUsername,
 		salesforceCaseId,
 		debugInfo: actionHistory,
+		threeTierCreateSupporterPlusSubscription: inThreeTier,
 	};
 }
 
@@ -210,7 +236,7 @@ function onPaymentAuthorised(
 	paymentAuthorisation: PaymentAuthorisation,
 	dispatch: Dispatch<Action>,
 	state: SubscriptionsState,
-	currencyId?: Option<IsoCurrency>,
+	currency?: IsoCurrency,
 ): void {
 	const {
 		billingPeriod,
@@ -219,6 +245,10 @@ function onPaymentAuthorised(
 		productOption,
 		productPrices,
 	} = state.page.checkoutForm.product;
+	const inThreeTier = threeTierCheckoutEnabled(
+		state.common.abParticipations,
+		state.common.internationalisation.countryId,
+	);
 	const productType = getSubscriptionType(state);
 	const { paymentMethod } = state.page.checkoutForm.payment;
 	const { csrf } = state.page.checkoutForm;
@@ -236,8 +266,9 @@ function onPaymentAuthorised(
 		state,
 		paymentAuthorisation,
 		addresses,
+		inThreeTier,
 		productPrice.promotions,
-		currencyId,
+		currency,
 	);
 
 	const handleSubscribeResult = (result: PaymentResult) => {
@@ -247,15 +278,73 @@ function onPaymentAuthorised(
 			} else {
 				dispatch(setStage('thankyou', productType, paymentMethod.name));
 			}
-			// track conversion with GTM
-			successfulSubscriptionConversion();
-			// track conversion with QM
-			sendEventSubscriptionCheckoutConversion(
-				productType,
-				!!orderIsAGift,
+
+			const printPriceDiscounted = getPrintDiscountedPrice(
 				productPrice,
-				billingPeriod,
+				data.promoCode,
 			);
+			const { currencyId, countryGroupId } = state.common.internationalisation;
+
+			// GTM: track print subscription conversion
+			successfulSubscriptionConversion(
+				printPriceDiscounted,
+				currencyId,
+				paymentMethod.name,
+				billingPeriod,
+				productType,
+			);
+			if (inThreeTier) {
+				const tierBillingPeriodName =
+					billingPeriod.toLowerCase() as keyof TierPlans;
+				const contributionType = billingPeriod.toUpperCase() as
+					| keyof RegularContributionTypeMap<null>;
+
+				const digitalPlusPrintDiscount =
+					tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
+						.discount;
+				const digitalPlusPrintPrice =
+					tierCards.tier3.plans[tierBillingPeriodName].charges[countryGroupId]
+						.price;
+				const digitalPlusPrintPriceDiscounted =
+					digitalPlusPrintDiscount?.price ?? digitalPlusPrintPrice;
+				const digitalPriceDiscounted =
+					digitalPlusPrintPriceDiscounted - printPriceDiscounted;
+
+				// GTM: track S+ conversion
+				successfulContributionConversion(
+					digitalPriceDiscounted,
+					contributionType,
+					currencyId,
+					paymentMethod.name,
+				);
+
+				/**
+				 * Rewrite the productPrice (aka cart value) to report to QM
+				 * for users inThreeTierTestVariant as the original productPrice
+				 * object doesn't account for the addition of S+ and associated promotions.
+				 */
+				const productPriceForQuantumMetric: ProductPrice = {
+					...productPrice,
+					promotions: [],
+					price: digitalPlusPrintPriceDiscounted,
+				};
+
+				// QM: track GW subscription & S+ conversion
+				sendEventSubscriptionCheckoutConversion(
+					productType,
+					!!orderIsAGift,
+					productPriceForQuantumMetric,
+					billingPeriod,
+				);
+			} else {
+				// QM: track print subscription conversion
+				sendEventSubscriptionCheckoutConversion(
+					productType,
+					!!orderIsAGift,
+					productPrice,
+					billingPeriod,
+				);
+			}
 		} else if (result.error) {
 			dispatch(setSubmissionError(result.error));
 		}

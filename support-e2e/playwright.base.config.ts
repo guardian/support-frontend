@@ -13,7 +13,7 @@ export const baseObject: PlaywrightTestConfig = {
 	fullyParallel: true,
 	/* Fail the build on CI if you accidentally left test.only in the source code. */
 	forbidOnly: !!process.env.CI,
-	retries: 3,
+	retries: 1,
 	/* Opt out of parallel tests on CI. */
 	workers: process.env.CI ? 1 : undefined,
 	reporter: 'html',
@@ -30,7 +30,7 @@ export const baseObject: PlaywrightTestConfig = {
 			name: 'chromium',
 			use: {
 				...devices['Desktop Chrome'],
-        viewport: { width: 1280, height: 720 },
+				viewport: { width: 1280, height: 720 },
 			},
 		},
 	],

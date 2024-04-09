@@ -11,6 +11,7 @@ import com.gu.support.promotions.DefaultPromotions
 import config.StringsConfig
 import play.api.mvc._
 import play.twirl.api.Html
+import views.EmptyDiv
 import views.ViewHelpers.outputJson
 
 import scala.concurrent.ExecutionContext
@@ -34,21 +35,16 @@ class PaperSubscriptionController(
 
   implicit val a: AssetsResolver = assets
 
-  def paperMethodRedirect(withDelivery: Boolean = false): Action[AnyContent] = Action { implicit request =>
-    Redirect(buildCanonicalPaperSubscriptionLink(withDelivery), request.queryString, status = FOUND)
-  }
-
   def paper(): Action[AnyContent] = CachedAction() { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
-    val canonicalLink = Some(buildCanonicalPaperSubscriptionLink())
+    val canonicalLink = Some(s"${supportUrl}/uk/subscribe/paper")
     val defaultPromos = priceSummaryServiceProvider.forUser(isTestUser = false).getDefaultPromoCodes(Paper)
     val queryPromos = request.queryString.get("promoCode").map(_.toList).getOrElse(Nil)
 
     Ok(
       views.html.main(
         title = "The Guardian Newspaper Subscription | Subscription Card and Home Delivery",
-        mainElement =
-          assets.getSsrCacheContentsAsHtml("paper-subscription-landing-page", "paper-subscription-landing.html"),
+        mainElement = EmptyDiv("paper-subscription-landing-page"),
         mainJsBundle = Left(RefPath("paperSubscriptionLandingPage.js")),
         mainStyleBundle = Left(RefPath("paperSubscriptionLandingPage.css")),
         description = stringsConfig.paperLandingDescription,

@@ -1,6 +1,6 @@
 package controllers
 
-import akka.util.ByteString
+import org.apache.pekko.util.ByteString
 import com.typesafe.scalalogging.LazyLogging
 import play.api.libs.streams.Accumulator
 import play.api.mvc._

@@ -4,39 +4,29 @@ import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { isOneOff } from 'helpers/supporterPlus/isContributionRecurring';
 
-export function isSupporterPlusPurchase(state: ContributionsState): boolean {
+export function isSupporterPlusFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
-
 	if (isOneOff(contributionType)) {
 		return false;
 	}
-
-	const thresholdPrice = getThresholdPrice(
-		state.common.internationalisation.countryGroupId,
-		contributionType,
-	);
-	const amount = getAmount(
+	const thresholdPrice = getThresholdPrice(contributionType, state);
+	const selectedAmount = getAmount(
 		state.page.checkoutForm.product.selectedAmounts,
 		state.page.checkoutForm.product.otherAmounts,
 		contributionType,
 	);
 
-	const amountIsHighEnough = !!(thresholdPrice && amount >= thresholdPrice);
-
-	return amountIsHighEnough;
+	return selectedAmount >= thresholdPrice;
 }
 
-export function shouldHideBenefitsList(state: ContributionsState): boolean {
+export function hideBenefitsListFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
 
 	if (isOneOff(contributionType)) {
 		return true;
 	}
 
-	const thresholdPrice = getThresholdPrice(
-		state.common.internationalisation.countryGroupId,
-		contributionType,
-	);
+	const thresholdPrice = getThresholdPrice(contributionType, state);
 	const displayedAmounts =
 		state.common.amounts.amountsCardData[contributionType];
 	const customAmountIsHidden = displayedAmounts.hideChooseYourAmount;

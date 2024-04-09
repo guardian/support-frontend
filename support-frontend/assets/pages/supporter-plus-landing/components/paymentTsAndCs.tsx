@@ -1,18 +1,20 @@
 import { css } from '@emotion/react';
 import { neutral, textSans } from '@guardian/source-foundations';
-import type { ContributionType } from 'helpers/contributions';
+import type {
+	ContributionType,
+	RegularContributionType,
+} from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
-	detect,
-	glyph,
 	spokenCurrencies,
 } from 'helpers/internationalisation/currency';
 import { contributionsTermsLinks, privacyLink } from 'helpers/legal';
+import { supporterPlusLegal } from 'helpers/legalCopy';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
-import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
 import { manageSubsUrl } from 'helpers/urls/externalLinks';
 import {
 	getDateWithOrdinal,
@@ -38,6 +40,8 @@ interface PaymentTsAndCsProps {
 	currency: IsoCurrency;
 	amount: number;
 	amountIsAboveThreshold: boolean;
+	productNameAboveThreshold: string;
+	promotion?: Promotion;
 }
 
 const manageMyAccount = (
@@ -110,6 +114,8 @@ export function PaymentTsAndCs({
 	currency,
 	amount,
 	amountIsAboveThreshold,
+	productNameAboveThreshold,
+	promotion,
 }: PaymentTsAndCsProps): JSX.Element {
 	const amountCopy = isNaN(amount)
 		? null
@@ -120,67 +126,45 @@ export function PaymentTsAndCs({
 				false,
 		  )}`;
 
-	const currencyGlyph = glyph(detect(countryGroupId));
-
 	const frequencySingular = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'month' : 'year';
 
 	const frequencyPlural = (contributionType: ContributionType) =>
 		contributionType === 'MONTHLY' ? 'monthly' : 'annual';
 
-	const copyBelowThreshold = (contributionType: ContributionType) => {
+	const copyAboveThreshold = (
+		contributionType: RegularContributionType,
+		productNameAboveThreshold: string,
+		promotion?: Promotion,
+	) => {
 		return (
 			<>
 				<div>
-					We will attempt to take payment{amountCopy},{' '}
-					<TsAndCsRenewal contributionType={contributionType} />, from now until
-					you cancel your payment. Payments may take up to 6 days to be recorded
-					in your bank account. You can change how much you give or cancel your
-					payment at any time.
-				</div>
-				<TsAndCsFooterLinks
-					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
-				/>
-			</>
-		);
-	};
-
-	const thresholdDescription = (contributionType: ContributionType) => {
-		const supporterPlusThresholds =
-			benefitsThresholdsByCountryGroup[countryGroupId];
-		const threshold: number =
-			contributionType === 'MONTHLY'
-				? supporterPlusThresholds['MONTHLY']
-				: supporterPlusThresholds['ANNUAL'];
-		return `${currencyGlyph}${threshold} per ${frequencySingular(
-			contributionType,
-		)}`;
-	};
-
-	const copyAboveThreshold = (contributionType: ContributionType) => {
-		return (
-			<>
-				<div>
-					If you pay at least {thresholdDescription('MONTHLY')} or{' '}
-					{thresholdDescription('ANNUAL')}, you will receive the Supporter Plus
-					benefits on a subscription basis. If you pay more than{' '}
-					{thresholdDescription(contributionType)}, these additional amounts
-					will be separate {frequencyPlural(contributionType)} voluntary
-					financial contributions to the Guardian. The Supporter Plus
+					If you pay at least{' '}
+					{supporterPlusLegal(
+						countryGroupId,
+						contributionType,
+						' per ',
+						promotion,
+					)}
+					, you will receive the {productNameAboveThreshold} benefits on a
+					subscription basis. If you increase your payments per{' '}
+					{frequencySingular(contributionType)}, these additional amounts will
+					be separate {frequencyPlural(contributionType)} voluntary financial
+					contributions to the Guardian. The {productNameAboveThreshold}{' '}
 					subscription and any contributions will auto-renew each{' '}
 					{frequencySingular(contributionType)}. You will be charged the
 					subscription and contribution amounts using your chosen payment method
 					at each renewal unless you cancel. You can cancel your subscription or
 					change your contributions at any time before your next renewal date.
-					If you cancel within 14 days of taking out a Supporter Plus
-					subscription, you’ll receive a full refund (including of any
-					contributions) and your subscription and any contribution will stop
-					immediately. Cancellation of your subscription (which will also cancel
-					any contribution) or cancellation of your contribution made after 14
-					days will take effect at the end of your current{' '}
-					{frequencyPlural(contributionType)} payment period. To cancel, go to{' '}
-					{manageMyAccount} or see our {termsSupporterPlus('Terms')}.
+					If you cancel within 14 days of taking out a{' '}
+					{productNameAboveThreshold} subscription, you’ll receive a full refund
+					(including of any contributions) and your subscription and any
+					contribution will stop immediately. Cancellation of your subscription
+					(which will also cancel any contribution) or cancellation of your
+					contribution made after 14 days will take effect at the end of your
+					current {frequencyPlural(contributionType)} payment period. To cancel,
+					go to {manageMyAccount} or see our {termsSupporterPlus('Terms')}.
 				</div>
 				<TsAndCsFooterLinks
 					countryGroupId={countryGroupId}
@@ -201,20 +185,32 @@ export function PaymentTsAndCs({
 		);
 	}
 
-	if (contributionType === 'MONTHLY') {
+	const copyBelowThreshold = (contributionType: ContributionType) => {
 		return (
-			<div css={container}>
-				{amountIsAboveThreshold
-					? copyAboveThreshold(contributionType)
-					: copyBelowThreshold(contributionType)}
-			</div>
+			<>
+				<div>
+					We will attempt to take payment{amountCopy},{' '}
+					<TsAndCsRenewal contributionType={contributionType} />, from now until
+					you cancel your payment. Payments may take up to 6 days to be recorded
+					in your bank account. You can change how much you give or cancel your
+					payment at any time.
+				</div>
+				<TsAndCsFooterLinks
+					countryGroupId={countryGroupId}
+					amountIsAboveThreshold={amountIsAboveThreshold}
+				/>
+			</>
 		);
-	}
+	};
 
 	return (
 		<div css={container}>
 			{amountIsAboveThreshold
-				? copyAboveThreshold(contributionType)
+				? copyAboveThreshold(
+						contributionType,
+						productNameAboveThreshold,
+						promotion,
+				  )
 				: copyBelowThreshold(contributionType)}
 		</div>
 	);

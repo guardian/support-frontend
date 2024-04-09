@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { textSans } from '@guardian/source-foundations';
 import { useEffect } from 'react';
-import type { CheckListData } from 'components/checkmarkList/checkmarkList';
-import { CheckmarkList } from 'components/checkmarkList/checkmarkList';
+import type { CheckListData } from 'components/checkList/checkList';
+import { CheckList } from 'components/checkList/checkList';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutErrorSummary } from 'components/errorSummary/errorSummary';
 import { CheckoutErrorSummaryContainer } from 'components/errorSummary/errorSummaryContainer';
@@ -23,7 +23,10 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import { benefitsThresholdsByCountryGroup } from 'helpers/supporterPlus/benefitsThreshold';
+import {
+	getLowerBenefitsThreshold,
+	getLowerBenefitsThresholds,
+} from 'helpers/supporterPlus/benefitsThreshold';
 
 const accordionHeading = css`
 	${textSans.small()};
@@ -92,6 +95,7 @@ export function LimitedPriceCards(): JSX.Element {
 	);
 
 	const contributionType = useContributionsSelector(getContributionType);
+	const thresholdAmounts = useContributionsSelector(getLowerBenefitsThresholds);
 
 	useEffect(() => {
 		// The contribution type will be set by the query param to be either MONTHLY or ANNUAL, but we
@@ -100,15 +104,17 @@ export function LimitedPriceCards(): JSX.Element {
 		dispatch(
 			setSelectedAmount({
 				contributionType,
-				amount:
-					benefitsThresholdsByCountryGroup[countryGroupId][type].toString(),
+				amount: useContributionsSelector((state) =>
+					getLowerBenefitsThreshold(state, type),
+				).toString(),
 			}),
 		);
 		dispatch(
 			setSelectedAmountBeforeAmendment({
 				contributionType,
-				amount:
-					benefitsThresholdsByCountryGroup[countryGroupId][type].toString(),
+				amount: useContributionsSelector((state) =>
+					getLowerBenefitsThreshold(state, type),
+				).toString(),
 			}),
 		);
 	}, []);
@@ -123,14 +129,14 @@ export function LimitedPriceCards(): JSX.Element {
 						)}
 					/>
 					<PriceCardsContainer
-						frequency={contributionType}
+						paymentFrequency={contributionType}
 						renderPriceCards={({ selectedAmount }) => (
 							<SimplePriceCards
 								title="Support Guardian journalism"
 								subtitle="and&nbsp;unlock exclusive extras"
 								contributionType={selectedTab}
 								countryGroupId={countryGroupId}
-								prices={benefitsThresholdsByCountryGroup[countryGroupId]}
+								prices={thresholdAmounts}
 								onPriceChange={({ contributionType, amount }) => {
 									onTabChange(contributionType);
 									dispatch(
@@ -150,7 +156,7 @@ export function LimitedPriceCards(): JSX.Element {
 								<div>
 									<h3 css={accordionHeading}>Exclusive extras include:</h3>
 									<div css={listSpacing}>
-										<CheckmarkList
+										<CheckList
 											checkListData={testCheckListData()}
 											style="compact"
 										/>

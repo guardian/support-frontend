@@ -1,7 +1,10 @@
 // ----- Imports ----- //
+import { css } from '@emotion/react';
+import { from, palette } from '@guardian/source-foundations';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Asyncronously from 'components/asyncronously/asyncronously';
+import { CheckList } from 'components/checkList/checkList';
 import Content from 'components/content/content';
 import GridPicture from 'components/gridPicture/gridPicture';
 import HeadingBlock from 'components/headingBlock/headingBlock';
@@ -15,13 +18,13 @@ import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 import type { SubscriptionsState } from 'helpers/redux/subscriptionsStore';
 import { getFormFields } from 'helpers/subscriptionsForms/formFields';
-import type { Option } from 'helpers/types/option';
 import {
 	helpCentreUrl,
 	homeDeliveryUrl,
 	manageSubsUrl,
 } from 'helpers/urls/externalLinks';
 import { formatUserDate } from 'helpers/utilities/dateConversions';
+import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 
 const styles = moduleStyles as {
 	heroGuardianWeeklyNonGifting: string;
@@ -30,7 +33,9 @@ const styles = moduleStyles as {
 
 // ----- Map State/Props ----- //
 function mapStateToProps(state: SubscriptionsState) {
-	return { ...getFormFields(state) };
+	return {
+		...getFormFields(state),
+	};
 }
 
 const connector = connect(mapStateToProps);
@@ -39,6 +44,13 @@ type PropTypes = ConnectedProps<typeof connector> & {
 	isPending: boolean;
 	orderIsGift: boolean;
 };
+
+const checkmarkListStyles = css`
+	text-align: left;
+	${from.desktop} {
+		width: 75%;
+	}
+`;
 
 // ----- Helper ----- //
 const getPackageTitle = (billingPeriod: BillingPeriod) => {
@@ -61,6 +73,7 @@ const getHeading = (
 	billingPeriod: BillingPeriod,
 	isPending: boolean,
 	orderIsGift: boolean,
+	isInThreeTier: boolean,
 ) => {
 	if (orderIsGift) {
 		return isPending
@@ -68,7 +81,13 @@ const getHeading = (
 			: 'Your purchase of a Guardian Weekly gift subscription is now complete';
 	}
 
+	if (isInThreeTier) {
+		return isPending
+			? `Your subscription to Digital + print is being processed`
+			: `You have now subscribed to Digital + print`;
+	}
 	const packageTitle = getPackageTitle(billingPeriod);
+
 	return isPending
 		? `Your subscription to the Guardian Weekly ${packageTitle} is being processed`
 		: `You have now subscribed to the Guardian Weekly ${packageTitle}`;
@@ -78,21 +97,36 @@ function StartDateCopy({
 	startDate,
 	orderIsGift,
 }: {
-	startDate: Option<string>;
+	startDate: string;
 	orderIsGift: boolean;
 }) {
-	if (startDate) {
-		const title = orderIsGift
-			? "The gift recipient's first issue will be published on"
-			: 'Your first issue will be published on';
-		return (
-			<Text title={title}>
-				<LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
-			</Text>
-		);
-	}
+	const title = orderIsGift
+		? "The gift recipient's first issue will be published on"
+		: 'Your first issue will be published on';
+	return (
+		<Text title={title}>
+			<LargeParagraph>{formatUserDate(new Date(startDate))}</LargeParagraph>
+		</Text>
+	);
+}
 
-	return null;
+function StartDateCopyThreeTier({ startDate }: { startDate: string }) {
+	return (
+		<Text title={'When will my subscription start?'}>
+			<SansParagraph>
+				<strong>
+					Your first issue of Guardian Weekly will be published on&nbsp;
+				</strong>
+				{formatUserDate(new Date(startDate))}
+			</SansParagraph>
+			<SansParagraph>
+				<strong>Your digital benefits will start today.</strong>
+				<br />
+				Please ensure you are signed in on all your devices to enjoy unlimited
+				app access and ad-free reading.
+			</SansParagraph>
+		</Text>
+	);
 }
 
 function HeroImage({ orderIsGift }: { orderIsGift: boolean }) {
@@ -129,6 +163,10 @@ function ThankYouContent({
 	orderIsGift,
 	product,
 }: PropTypes) {
+	const urlParams = new URLSearchParams(window.location.search);
+	const inThreeTier =
+		urlParams.get('threeTierCreateSupporterPlusSubscription') === 'true';
+
 	const whatHappensNextItems = orderIsGift
 		? [
 				<span>
@@ -160,6 +198,27 @@ function ThankYouContent({
 				</span>,
 		  ];
 
+	const whatHappensNextItemsThreeTier = [
+		<SansParagraph>
+			You&apos;ll receive a confirmation email containing everything you need to
+			know about your subscription, including how to make the most of your
+			subscription. You can opt out any time via your account.
+		</SansParagraph>,
+		<SansParagraph>
+			Guardian Weekly magazine will be delivered to your door. Please allow one
+			to seven days after the publication date for your copy to arrive,
+			depending on postal services.
+		</SansParagraph>,
+	];
+
+	const benefitsTier3and2 = tierCards.tier3.benefits.list.concat(
+		tierCards.tier2.benefits.list,
+	);
+
+	const thankyouSupportHeader = `Thank you for supporting our journalism${
+		!inThreeTier ? '!' : ''
+	}`;
+
 	useScrollToTop();
 
 	return (
@@ -173,25 +232,61 @@ function ThankYouContent({
 				<HeroImage orderIsGift={orderIsGift} />
 				<HeadingBlock
 					overheadingClass="--thankyou"
-					overheading="Thank you for supporting our journalism!"
+					overheading={thankyouSupportHeader}
 				>
-					{getHeading(billingPeriod, isPending, orderIsGift)}
+					{getHeading(billingPeriod, isPending, orderIsGift, inThreeTier)}
 				</HeadingBlock>
 			</HeroWrapper>
-			<Content>
-				{isPending && (
-					<Text>
-						<LargeParagraph>
-							Your subscription is being processed and you will receive an email
-							when it goes live.
-						</LargeParagraph>
+
+			{inThreeTier ? (
+				<>
+					<Content>
+						{isPending && (
+							<Text>
+								<LargeParagraph>
+									Your subscription is being processed and you will receive an
+									email when it goes live.
+								</LargeParagraph>
+							</Text>
+						)}
+						<Text title="What is included in my subscription?">
+							Your subscription includes:
+							<br />
+							<CheckList
+								checkListData={benefitsTier3and2.map((benefit) => {
+									return { text: <span>{benefit.copy}</span>, isChecked: true };
+								})}
+								style={'standard'}
+								iconColor={palette.brand[500]}
+								cssOverrides={checkmarkListStyles}
+							/>
+						</Text>
+					</Content>
+					<Content>
+						<StartDateCopyThreeTier startDate={startDate} />
+					</Content>
+					<Content>
+						<Text title="What happens next?">
+							<OrderedList items={whatHappensNextItemsThreeTier} />
+						</Text>
+					</Content>
+				</>
+			) : (
+				<Content>
+					{isPending && (
+						<Text>
+							<LargeParagraph>
+								Your subscription is being processed and you will receive an
+								email when it goes live.
+							</LargeParagraph>
+						</Text>
+					)}
+					<StartDateCopy orderIsGift={orderIsGift} startDate={startDate} />
+					<Text title="What happens next?">
+						<OrderedList items={whatHappensNextItems} />
 					</Text>
-				)}
-				<StartDateCopy orderIsGift={orderIsGift} startDate={startDate} />
-				<Text title="What happens next?">
-					<OrderedList items={whatHappensNextItems} />
-				</Text>
-			</Content>
+				</Content>
+			)}
 			<Content>
 				<Text>
 					<SansParagraph>
@@ -221,19 +316,21 @@ function ThankYouContent({
 					</SansParagraph>
 				</Text>
 			</Content>
-			<SubscriptionsSurvey product={product} />
-			<Content>
-				<Asyncronously
-					loader={
-						import(
-							'components/subscriptionCheckouts/thankYou/marketingConsentContainer'
-						)
-					}
-					render={(MktConsent) => (
-						<MktConsent requestPending={false} error={false} />
-					)}
-				/>
-			</Content>
+			{!inThreeTier && <SubscriptionsSurvey product={product} />}
+			{!inThreeTier && (
+				<Content>
+					<Asyncronously
+						loader={
+							import(
+								'components/subscriptionCheckouts/thankYou/marketingConsentContainer'
+							)
+						}
+						render={(MktConsent) => (
+							<MktConsent requestPending={false} error={false} />
+						)}
+					/>
+				</Content>
+			)}
 		</div>
 	);
 }

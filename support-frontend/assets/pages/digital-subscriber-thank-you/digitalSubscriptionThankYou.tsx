@@ -10,6 +10,7 @@ import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
+import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -42,6 +43,10 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 	const paymentMethod = useContributionsSelector(
 		(state) => state.page.checkoutForm.payment.paymentMethod.name,
 	);
+
+	const amountIsAboveThreshold = useContributionsSelector(
+		isSupporterPlusFromState,
+	);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
 	const thankYouModuleData = getThankYouModuleData(
@@ -50,6 +55,7 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		csrf,
 		email,
 		false,
+		amountIsAboveThreshold,
 		campaignSettings?.campaignCode,
 	);
 
@@ -75,7 +81,6 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 
 	return (
 		<PageScaffold
-			id="supporter-plus-thank-you"
 			header={<Header />}
 			footer={
 				<FooterWithContents>

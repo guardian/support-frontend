@@ -8,6 +8,7 @@
 .metals
 metals.sbt
 .bloop
+.vscode/settings.json
 
 node_modules
 npm-debug.log
@@ -16,6 +17,7 @@ app/npm-debug.log
 coverage/
 package-lock.json
 build-storybook.log
+tsconfig.tsbuildinfo
 
 dev
 logs

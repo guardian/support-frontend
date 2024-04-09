@@ -1,4 +1,3 @@
-import type { Country } from '@guardian/consent-management-platform/dist/types/countries';
 import type { PaymentIntentResult, PaymentMethod } from '@stripe/stripe-js';
 import {
 	fetchJson,
@@ -16,6 +15,7 @@ import {
 	Sepa,
 	Stripe,
 } from 'helpers/forms/paymentMethods';
+import type { Country } from 'helpers/internationalisation/countries';
 import type {
 	CaState,
 	IsoCountry,
@@ -102,6 +102,7 @@ type RegularStripePaymentIntentFields = {
 	paymentMethod: string | PaymentMethod;
 	// The ID of the Stripe Payment Method
 	stripePaymentType: StripePaymentMethod; // The type of Stripe payment, e.g. Apple Pay
+	stripePublicKey: string;
 };
 type RegularDirectDebitPaymentFields = {
 	accountHolderName: string;
@@ -170,6 +171,7 @@ export type RegularPaymentRequest = {
 	salesforceCaseId?: string;
 	recaptchaToken?: string;
 	debugInfo: string;
+	threeTierCreateSupporterPlusSubscription?: boolean;
 };
 export type StripePaymentIntentAuthorisation = {
 	paymentMethod: typeof Stripe;
@@ -249,6 +251,7 @@ const MAX_POLLS = 10;
 // ----- Functions ----- //
 function regularPaymentFieldsFromAuthorisation(
 	authorisation: PaymentAuthorisation,
+	stripePublicKey: string,
 ): RegularPaymentFields {
 	switch (authorisation.paymentMethod) {
 		case Stripe:
@@ -256,6 +259,7 @@ function regularPaymentFieldsFromAuthorisation(
 				return {
 					paymentMethod: authorisation.paymentMethodId,
 					stripePaymentType: authorisation.stripePaymentMethod,
+					stripePublicKey: stripePublicKey,
 				};
 			}
 

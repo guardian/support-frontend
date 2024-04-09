@@ -1,6 +1,6 @@
 <configuration>
 
-    <appender name="STDOUT" class="io.symphonia.lambda.logging.DefaultConsoleAppender">
+    <appender name="STDOUT" class="com.gu.support.workers.lambdas.LambdaAppender">
         <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
             <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
                 <marker>SENTRY</marker>

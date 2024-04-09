@@ -6,7 +6,11 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
-import type { AmountsTest, SelectedAmountsVariant } from '../contributions';
+import type {
+	AmountsTest,
+	AmountsVariant,
+	SelectedAmountsVariant,
+} from '../contributions';
 import { tests } from './abtestDefinitions';
 import { getFallbackAmounts } from './helpers';
 
@@ -64,6 +68,8 @@ export type Test = {
 	// In particular this allows 3rd party tests to be identified and tracked in support-frontend
 	// without too much "magic" involving the shared mvtId.
 	referrerControlled: boolean;
+	// If another test participation is referrerControlled, exclude this test
+	excludeIfInReferrerControlledTest?: boolean;
 	seed: number;
 	// An optional regex that will be tested against the path of the current page
 	// before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
@@ -75,7 +81,7 @@ export type Tests = Record<string, Test>;
 
 // ----- Init ----- //
 
-export function init(
+function init(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	abTests: Tests = tests,
@@ -170,6 +176,19 @@ function getParticipations(
 
 		participations[testId] = test.variants[variantAssignment.variantIndex].id;
 	});
+
+	// If referrerControlled is set for any test, exclude tests that have excludeIfInReferrerControlledTest set
+	const inReferrerControlledTest = Object.keys(participations).some(
+		(testId) => abTests[testId].referrerControlled,
+	);
+	if (inReferrerControlledTest) {
+		Object.keys(participations).forEach((testId) => {
+			if (abTests[testId].excludeIfInReferrerControlledTest) {
+				delete participations[testId];
+			}
+		});
+	}
+
 	return participations;
 }
 
@@ -205,7 +224,7 @@ interface GetAmountsTestVariantResult {
 	selectedAmountsVariant: SelectedAmountsVariant; // Always return an AmountsVariant, even if it's a fallback
 	amountsParticipation?: Participations; // Optional because we only add participation if we want to track an amounts test that has multiple variants
 }
-export function getAmountsTestVariant(
+function getAmountsTestVariant(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	settings: Settings,
@@ -215,6 +234,7 @@ export function getAmountsTestVariant(
 		[],
 ): GetAmountsTestVariantResult {
 	const { amounts } = settings;
+
 	if (!amounts) {
 		return {
 			selectedAmountsVariant: getFallbackAmounts(countryGroupId),
@@ -231,12 +251,42 @@ export function getAmountsTestVariant(
 			path,
 			'/??/contribute|thankyou(/.*)?$',
 		);
+
 		if (pathMatches && test.variants.length > 1 && test.isLive) {
 			return {
 				[testName]: variantName,
 			};
 		}
 	};
+
+	// Is the country in the list for contributions only checkout?
+	// This relies on the existence of an amounts test with a specific name
+	// It could be done using the countriesAffectedByVATStatus list
+	// but this would need the list and the amounts test to be in sync
+	// and this way simplifies testing as it is all set up in the RRCP
+	const contribOnlyTestName = 'VAT_COMPLIANCE';
+	const contribOnlyAmounts = amounts.find((t) => {
+		return (
+			t.isLive &&
+			t.testName === contribOnlyTestName &&
+			t.targeting.targetingType === 'Country' &&
+			t.targeting.countries.includes(country)
+		);
+	});
+	if (contribOnlyAmounts) {
+		const amountsParticipation = buildParticipation(
+			contribOnlyAmounts,
+			contribOnlyTestName,
+			contribOnlyAmounts.variants[0].variantName,
+		);
+		return {
+			selectedAmountsVariant: {
+				...contribOnlyAmounts.variants[0],
+				testName: contribOnlyTestName,
+			},
+			amountsParticipation,
+		};
+	}
 
 	// Is an amounts test defined in the url?
 	const urlTest = getAmountsTestFromURL(acquisitionDataTests);
@@ -317,14 +367,27 @@ export function getAmountsTestVariant(
 		};
 	}
 
+	const selectVariant = (
+		isLive: boolean,
+		variants: AmountsVariant[],
+	): AmountsVariant => {
+		if (isLive && variants.length > 1) {
+			const assignmentIndex = randomNumber(mvt, seed) % variants.length;
+			return variants[assignmentIndex];
+		}
+		// For regional AmountsTests, if the test is not live then we use the control
+		return variants[0];
+	};
+
 	const currentTestName = isLive && liveTestName ? liveTestName : testName;
-	const assignmentIndex = randomNumber(mvt, seed) % variants.length;
-	const variant = variants[assignmentIndex];
+	const variant = selectVariant(isLive, variants);
+
 	const amountsParticipation = buildParticipation(
 		targetedTest,
 		currentTestName,
 		variant.variantName,
 	);
+
 	return {
 		selectedAmountsVariant: {
 			...variant,
@@ -356,7 +419,7 @@ function getTestFromAcquisitionData(): AcquisitionABTest[] | undefined {
 	}
 }
 
-export function getSourceFromAcquisitionData(): string | undefined {
+function getSourceFromAcquisitionData(): string | undefined {
 	const acquisitionDataParam = getQueryParameter('acquisitionData');
 
 	if (!acquisitionDataParam) {
@@ -512,7 +575,7 @@ function assigned(variantIndex: number): VariantAssignment {
 	return { type: 'ASSIGNED', variantIndex };
 }
 
-export function targetPageMatches(
+function targetPageMatches(
 	locationPath: string,
 	targetPage: (string | null | undefined) | RegExp,
 ): boolean {
@@ -522,3 +585,10 @@ export function targetPageMatches(
 
 	return locationPath.match(targetPage) != null;
 }
+
+export { init, getAmountsTestVariant };
+
+// Exported for testing only
+export const _ = {
+	targetPageMatches,
+};

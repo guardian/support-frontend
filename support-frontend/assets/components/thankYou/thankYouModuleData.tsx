@@ -53,10 +53,26 @@ export const getThankYouModuleData = (
 	csrf: CsrfState,
 	email: string,
 	isOneOff: boolean,
+	amountIsAboveThreshold: boolean,
 	campaignCode?: string,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
 	const { feedbackSurveyHasBeenCompleted, supportReminder } =
 		useContributionsSelector((state) => state.page.checkoutForm.thankYou);
+
+	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
+		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
+		if (countryId === 'AU') {
+			return `${surveyBasePath}guardian_australia_message`;
+		}
+		if (isOneOff) {
+			return `${surveyBasePath}guardian_supporter_single`;
+		}
+		return `${surveyBasePath}${
+			amountIsAboveThreshold
+				? 'guardian_supporter_above'
+				: 'guardian_supporter_below'
+		}`;
+	};
 
 	const thankYouModuleData: Record<ThankYouModuleType, ThankYouModuleData> = {
 		appDownload: {
@@ -87,11 +103,7 @@ export const getThankYouModuleData = (
 				/>
 			),
 			ctas: feedbackSurveyHasBeenCompleted ? null : (
-				<FeedbackCTA
-					feedbackSurveyLink={`https://guardiannewsandmedia.formstack.com/forms/eoy_ny_23_24_${
-						isOneOff ? 'onetime' : 'recurring'
-					}`}
-				/>
+				<FeedbackCTA feedbackSurveyLink={getFeedbackSurveyLink(countryId)} />
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
 		},
