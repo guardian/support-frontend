@@ -22,7 +22,7 @@ Template.args = {} as Omit<PriceCardProps, 'onClick'>;
 export const WithFrequency = Template.bind({});
 
 WithFrequency.args = {
-	amount: '10',
+	amount: 10,
 	amountWithCurrency: '£10',
 	isSelected: true,
 	paymentInterval: 'month',
@@ -31,7 +31,7 @@ WithFrequency.args = {
 export const WithoutFrequency = Template.bind({});
 
 WithoutFrequency.args = {
-	amount: '30',
+	amount: 30,
 	amountWithCurrency: '$30',
 	isSelected: false,
 };
