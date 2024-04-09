@@ -19,7 +19,7 @@ import {
 	currencies,
 	type IsoCurrency,
 } from 'helpers/internationalisation/currency';
-import type { ProductDescription } from 'helpers/productCatalogue';
+import type { ProductDescription } from 'helpers/productCatalog';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';

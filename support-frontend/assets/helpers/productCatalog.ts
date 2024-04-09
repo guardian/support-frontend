@@ -78,7 +78,7 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		label: 'Home Delivery',
 		benefits: [],
 	},
-} as const;
+};
 
 /** These `ratePlans` will eventually becomes part of the SupportPlus product in Zuora */
 export const supporterPlusWithGuardianWeekly = {

@@ -61,16 +61,16 @@ Template.args = {} as Omit<PriceCardsProps, 'onAmountChange'>;
 export const SingleContribution = Template.bind({});
 
 SingleContribution.args = {
-	amounts: ['5', '12', '15', '20'],
-	selectedAmount: '12',
+	amounts: [5, 12, 15, 20],
+	selectedAmount: 12,
 	currency: 'GBP',
 };
 
 export const RecurringContribution = Template.bind({});
 
 RecurringContribution.args = {
-	amounts: ['5', '12', '15', '20'],
-	selectedAmount: '12',
+	amounts: [5, 12, 15, 20],
+	selectedAmount: 12,
 	currency: 'GBP',
 	paymentInterval: 'month',
 };
@@ -78,8 +78,8 @@ RecurringContribution.args = {
 export const OddAmountOfOptions = Template.bind({});
 
 OddAmountOfOptions.args = {
-	amounts: ['5', '12', '15', '20', '30'],
-	selectedAmount: '12',
+	amounts: [5, 12, 15, 20, 30],
+	selectedAmount: 12,
 	currency: 'GBP',
 	paymentInterval: 'year',
 };

@@ -3,7 +3,7 @@ import { ChoiceCard } from '@guardian/source-react-components';
 export type PriceCardPaymentInterval = 'month' | 'year';
 
 export type PriceCardProps = {
-	amount: string;
+	amount: number | 'other';
 	amountWithCurrency: string;
 	isSelected: boolean;
 	onClick: (amount: string) => void;
@@ -45,9 +45,9 @@ export function PriceCard({
 			id={`amount-${amount}`}
 			key={`amount-${amount}`}
 			name="amount"
-			onChange={() => onClick(amount)}
+			onChange={() => onClick(amount.toString())}
 			checked={isSelected}
-			value={amount}
+			value={amount.toString()}
 			label={labelText}
 		/>
 	);

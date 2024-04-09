@@ -65,7 +65,7 @@ export function getSelectedAmount(
 	selectedAmounts: SelectedAmounts,
 	contributionType: ContributionType,
 	defaultAmount: number,
-): number | string {
+) {
 	return selectedAmounts[contributionType] || defaultAmount;
 }
 

@@ -5,7 +5,7 @@ import type {
 	RegularContributionType,
 } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ProductDescription } from 'helpers/productCatalogue';
+import type { ProductDescription } from 'helpers/productCatalog';
 import type { TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierCard } from './threeTierCard';
 

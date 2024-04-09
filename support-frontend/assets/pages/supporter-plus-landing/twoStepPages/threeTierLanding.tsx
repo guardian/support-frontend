@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { cmp } from '@guardian/consent-management-platform';
+import { cmp } from '@guardian/libs';
 import {
 	from,
 	headline,
@@ -35,14 +35,14 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import type { ProductDescription } from 'helpers/productCatalogue';
+import type { ProductDescription } from 'helpers/productCatalog';
 import {
 	productCatalog,
 	productCatalogDescription,
 	supporterPlusWithGuardianWeekly,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
-} from 'helpers/productCatalogue';
+} from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { getPromotion } from 'helpers/productPrice/promotions';
@@ -242,9 +242,28 @@ function getCardData(
 	productDescription: ProductDescription,
 	pricing: number,
 	link: string,
+	contributionType: ContributionType,
 	promotion?: Promotion,
 	isRecommended = false,
 ) {
+	/**
+	 * The text we show depends `contributionType` selected by the user
+	 * We only support ANNUAL style text for promotions with durationMonths === 12
+	 *
+	 * EXAMPLE
+	 * MONTHLY: £6.5/month for 6 months, then £10/month
+	 * ANNUAL: £173/year for the first year, then £275/year
+	 */
+	const promotionDurationPeriod: RegularContributionType =
+		contributionType === 'ANNUAL' && promotion?.discount?.durationMonths === 12
+			? 'ANNUAL'
+			: 'MONTHLY';
+
+	const promotionDurationValue =
+		promotionDurationPeriod === 'ANNUAL'
+			? 1
+			: promotion?.discount?.durationMonths;
+
 	return {
 		isRecommended,
 		isUserSelected: isCardUserSelected(pricing, promotion?.discount?.amount),
@@ -257,8 +276,8 @@ function getCardData(
 							percentage: promotion.discount.amount,
 							price: promotion.discountedPrice,
 							duration: {
-								value: promotion.numberOfDiscountedPeriods ?? 0,
-								period: 'MONTHLY' as RegularContributionType,
+								value: promotionDurationValue ?? 0,
+								period: promotionDurationPeriod,
 							},
 					  }
 					: undefined,
@@ -356,7 +375,7 @@ export function ThreeTierLanding(): JSX.Element {
 			dispatch(
 				setSelectedAmount({
 					contributionType,
-					amount: recurringAmount.toString(),
+					amount: price.toString(),
 				}),
 			);
 
@@ -420,6 +439,7 @@ export function ThreeTierLanding(): JSX.Element {
 		productCatalogDescription.Contribution,
 		recurringAmount,
 		tier1Link,
+		contributionType,
 	);
 
 	/** Tier 2: SupporterPlus */
@@ -436,10 +456,12 @@ export function ThreeTierLanding(): JSX.Element {
 	if (promotion) {
 		tier2UrlParams.set('promoCode', promotion.promoCode);
 	}
+
 	const tier2Card = getCardData(
 		productCatalogDescription.SupporterPlus,
 		pricing,
 		`contribute/checkout?${tier2UrlParams.toString()}`,
+		contributionType,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion,
 		true, // isRecommended
@@ -468,6 +490,7 @@ export function ThreeTierLanding(): JSX.Element {
 			supporterPlusWithGuardianWeeklyRatePlan
 		].pricing[currencyId],
 		`/subscribe/weekly/checkout?${tier3UrlParams.toString()}`,
+		contributionType,
 		tier3Promotion,
 	);
 
@@ -579,6 +602,7 @@ export function ThreeTierLanding(): JSX.Element {
 									currencyId
 								],
 								'', // We don't care about the link here as we just want the price
+								contributionType,
 								promotion,
 							).planCost.price
 						}
@@ -589,6 +613,7 @@ export function ThreeTierLanding(): JSX.Element {
 									currencyId
 								],
 								'', // We don't care about the link here as we just want the price
+								contributionType,
 								promotion,
 							).planCost.price
 						}
