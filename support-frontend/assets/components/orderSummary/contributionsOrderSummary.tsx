@@ -174,7 +174,6 @@ export function ContributionsOrderSummary({
 		promotion?.discount?.amount &&
 		simpleFormatAmount(currency, amount - promotion.discount.amount);
 
-	console.info(amount, promotion?.discount?.amount);
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
