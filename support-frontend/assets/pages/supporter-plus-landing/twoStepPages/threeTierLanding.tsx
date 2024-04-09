@@ -381,7 +381,7 @@ export function ThreeTierLanding(): JSX.Element {
 			dispatch(
 				setSelectedAmount({
 					contributionType,
-					amount: recurringAmount.toString(),
+					amount: price.toString(),
 				}),
 			);
 
