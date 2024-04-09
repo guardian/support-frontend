@@ -29,7 +29,7 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "32.1.3-jre",
   "io.lemonlabs" %% "scala-uri" % scalaUriVersion,
   "com.gu.play-googleauth" %% "play-v30" % "3.0.7",
-  "io.github.bonigarcia" % "webdrivermanager" % "5.5.3" % "test",
+  "io.github.bonigarcia" % "webdrivermanager" % "5.8.0" % "test",
   "org.scalatestplus" %% "scalatestplus-mockito" % "1.0.0-M2" % Test,
   "com.squareup.okhttp3" % "okhttp" % "4.12.0",
   "com.gocardless" % "gocardless-pro" % "2.10.0",
