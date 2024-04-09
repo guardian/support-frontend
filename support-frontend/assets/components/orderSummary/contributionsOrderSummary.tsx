@@ -170,7 +170,7 @@ export function ContributionsOrderSummary({
 	const formattedTotal = simpleFormatAmount(currency, total);
 	const formattedTotalExcludingPromo = simpleFormatAmount(
 		currency,
-		totalExcludingPromo ?? '',
+		totalExcludingPromo ?? 0,
 	);
 
 	return (

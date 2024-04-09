@@ -12,6 +12,7 @@ import {
 	Columns,
 	Container,
 	Radio,
+	RadioGroup,
 	TextInput,
 } from '@guardian/source-react-components';
 import {
@@ -53,10 +54,8 @@ import {
 import { getStripeKey } from 'helpers/forms/stripe';
 import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
-import {
-	type IsoCountry,
-	newspaperCountries,
-} from 'helpers/internationalisation/country';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import { newspaperCountries } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -288,10 +287,12 @@ export function Checkout() {
 
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
+	/** Personal details */
 	const [firstName, setFirstName] = useState('');
 	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
 
+	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
 	const [deliveryLineOne, setDeliveryLineOne] = useState('');
 	const [deliveryLineTwo, setDeliveryLineTwo] = useState('');
@@ -300,6 +301,19 @@ export function Checkout() {
 	const [deliveryPostcodeStateResults, setDeliveryPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
+		useState(false);
+
+	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
+		useState(true);
+
+	const [billingPostcode, setBillingPostcode] = useState('');
+	const [billingLineOne, setBillingLineOne] = useState('');
+	const [billingLineTwo, setBillingLineTwo] = useState('');
+	const [billingCity, setBillingCity] = useState('');
+	const [billingState, setBillingState] = useState('');
+	const [billingPostcodeStateResults, setBillingPostcodeStateResults] =
+		useState<PostcodeFinderResult[]>([]);
+	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
 
 	return (
@@ -373,6 +387,20 @@ export function Checkout() {
 									  }
 									: {};
 
+								const billingAddressMatchesDelivery =
+									formData.get('billingAddressMatchesDelivery') === 'yes';
+
+								const billingAddress =
+									product.showAddressFields && !billingAddressMatchesDelivery
+										? {
+												lineOne: formData.get('billing-lineOne') as string,
+												lineTwo: formData.get('billing-lineTwo') as string,
+												city: formData.get('billing-city') as string,
+												state: formData.get('billing-state') as string,
+												postcode: formData.get('billing-postcode') as string,
+										  }
+										: deliveryAddress;
+
 								if (
 									paymentMethod === 'Stripe' &&
 									stripe &&
@@ -401,7 +429,7 @@ export function Checkout() {
 													...data,
 													paymentFields,
 													deliveryAddress,
-													billingAddress: deliveryAddress,
+													billingAddress,
 												});
 											}
 										});
@@ -469,60 +497,154 @@ export function Checkout() {
 									<CheckoutDivider spacing="loose" />
 
 									{product.showAddressFields && (
-										<fieldset>
-											<h2 css={legend}>Where should we deliver to?</h2>
-											<AddressFields
-												scope={'delivery'}
-												lineOne={deliveryLineOne}
-												lineTwo={deliveryLineTwo}
-												city={deliveryCity}
-												country={countryId}
-												state={deliveryState}
-												postCode={deliveryPostcode}
-												countries={product.addressCountries}
-												errors={[]}
-												postcodeState={{
-													results: deliveryPostcodeStateResults,
-													isLoading: deliveryPostcodeStateLoading,
-													postcode: deliveryPostcode,
-													error: '',
-												}}
-												setLineOne={(lineOne) => {
-													setDeliveryLineOne(lineOne);
-												}}
-												setLineTwo={(lineTwo) => {
-													setDeliveryLineTwo(lineTwo);
-												}}
-												setTownCity={(city) => {
-													setDeliveryCity(city);
-												}}
-												setState={(state) => {
-													setDeliveryState(state);
-												}}
-												setPostcode={(postcode) => {
-													setDeliveryPostcode(postcode);
-												}}
-												setCountry={() => {
-													// no-op
-												}}
-												setPostcodeForFinder={() => {
-													// no-op
-												}}
-												setPostcodeErrorForFinder={() => {
-													// no-op
-												}}
-												onFindAddress={(postcode) => {
-													setDeliveryPostcodeStateLoading(true);
-													void findAddressesForPostcode(postcode).then(
-														(results) => {
-															setDeliveryPostcodeStateLoading(false);
-															setDeliveryPostcodeStateResults(results);
-														},
-													);
-												}}
-											/>
+										<>
+											<fieldset>
+												<h2 css={legend}>Where should we deliver to?</h2>
+												<AddressFields
+													scope={'delivery'}
+													lineOne={deliveryLineOne}
+													lineTwo={deliveryLineTwo}
+													city={deliveryCity}
+													country={countryId}
+													state={deliveryState}
+													postCode={deliveryPostcode}
+													countries={product.addressCountries}
+													errors={[]}
+													postcodeState={{
+														results: deliveryPostcodeStateResults,
+														isLoading: deliveryPostcodeStateLoading,
+														postcode: deliveryPostcode,
+														error: '',
+													}}
+													setLineOne={(lineOne) => {
+														setDeliveryLineOne(lineOne);
+													}}
+													setLineTwo={(lineTwo) => {
+														setDeliveryLineTwo(lineTwo);
+													}}
+													setTownCity={(city) => {
+														setDeliveryCity(city);
+													}}
+													setState={(state) => {
+														setDeliveryState(state);
+													}}
+													setPostcode={(postcode) => {
+														setDeliveryPostcode(postcode);
+													}}
+													setCountry={() => {
+														// no-op
+													}}
+													setPostcodeForFinder={() => {
+														// no-op
+													}}
+													setPostcodeErrorForFinder={() => {
+														// no-op
+													}}
+													onFindAddress={(postcode) => {
+														setDeliveryPostcodeStateLoading(true);
+														void findAddressesForPostcode(postcode).then(
+															(results) => {
+																setDeliveryPostcodeStateLoading(false);
+																setDeliveryPostcodeStateResults(results);
+															},
+														);
+													}}
+												/>
+											</fieldset>
 											<CheckoutDivider spacing="loose" />
-										</fieldset>
+											<RadioGroup
+												label="Is the billing address the same as the delivery address?"
+												hideLabel
+												id="billingAddressMatchesDelivery"
+												name="billingAddressMatchesDelivery"
+												orientation="vertical"
+												error={undefined}
+											>
+												<h2 css={legend}>
+													Is the billing address the same as the delivery
+													address?
+												</h2>
+
+												<Radio
+													id="qa-billing-address-same"
+													value="yes"
+													label="Yes"
+													name="billingAddressMatchesDelivery"
+													checked={billingAddressMatchesDelivery}
+													onChange={() => {
+														setBillingAddressMatchesDelivery(true);
+													}}
+												/>
+
+												<Radio
+													id="qa-billing-address-different"
+													label="No"
+													value="no"
+													name="billingAddressMatchesDelivery"
+													checked={!billingAddressMatchesDelivery}
+													onChange={() => {
+														setBillingAddressMatchesDelivery(false);
+													}}
+												/>
+											</RadioGroup>
+											<CheckoutDivider spacing="loose" />
+											{!billingAddressMatchesDelivery && (
+												<fieldset>
+													<h2 css={legend}>Your billing address</h2>
+													<AddressFields
+														scope={'billing'}
+														lineOne={billingLineOne}
+														lineTwo={billingLineTwo}
+														city={billingCity}
+														country={countryId}
+														state={billingState}
+														postCode={billingPostcode}
+														countries={product.addressCountries}
+														errors={[]}
+														postcodeState={{
+															results: billingPostcodeStateResults,
+															isLoading: billingPostcodeStateLoading,
+															postcode: billingPostcode,
+															error: '',
+														}}
+														setLineOne={(lineOne) => {
+															setBillingLineOne(lineOne);
+														}}
+														setLineTwo={(lineTwo) => {
+															setBillingLineTwo(lineTwo);
+														}}
+														setTownCity={(city) => {
+															setBillingCity(city);
+														}}
+														setState={(state) => {
+															setBillingState(state);
+														}}
+														setPostcode={(postcode) => {
+															setBillingPostcode(postcode);
+														}}
+														setCountry={() => {
+															// no-op
+														}}
+														setPostcodeForFinder={() => {
+															// no-op
+														}}
+														setPostcodeErrorForFinder={() => {
+															// no-op
+														}}
+														onFindAddress={(postcode) => {
+															setBillingPostcodeStateLoading(true);
+															void findAddressesForPostcode(postcode).then(
+																(results) => {
+																	setBillingPostcodeStateLoading(false);
+																	setBillingPostcodeStateResults(results);
+																},
+															);
+														}}
+													/>
+													<CheckoutDivider spacing="loose" />
+												</fieldset>
+											)}
+										</>
 									)}
 
 									{validPaymentMethods.map((paymentMethod) => {

@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 
-import { cmp } from '@guardian/consent-management-platform';
+import { cmp } from '@guardian/libs';
 import ophan from 'ophan';
 import type { Participations } from 'helpers/abTests/abtest';
 import type { IsoCountry } from 'helpers/internationalisation/country';

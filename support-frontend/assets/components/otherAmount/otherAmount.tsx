@@ -9,7 +9,7 @@ const topSpacing = css`
 `;
 
 export type OtherAmountProps = {
-	selectedAmount: string;
+	selectedAmount: number | 'other';
 	otherAmount: string;
 	currency: IsoCurrency;
 	minAmount: number;
