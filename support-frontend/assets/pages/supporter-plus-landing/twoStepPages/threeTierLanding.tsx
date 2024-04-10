@@ -595,31 +595,33 @@ export function ThreeTierLanding(): JSX.Element {
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
-				{/* {!!abParticipations.additionalOffers && ( */}
-				<OfferTsAndCs
-					currency={currencies[currencyId].glyph}
-					offerCostMonthly={
-						getCardData(
-							productCatalogDescription.SupporterPlus,
-							productCatalog.SupporterPlus.ratePlans.Monthly.pricing[
-								currencyId
-							],
-							'', // We don't care about the link here as we just want the price
-							contributionType,
-							promotion,
-						).planCost.price
-					}
-					offerCostAnnual={
-						getCardData(
-							productCatalogDescription.SupporterPlus,
-							productCatalog.SupporterPlus.ratePlans.Annual.pricing[currencyId],
-							'', // We don't care about the link here as we just want the price
-							contributionType,
-							promotion,
-						).planCost.price
-					}
-				></OfferTsAndCs>
-				{/* )} */}
+				{!!abParticipations.additionalOffers && (
+					<OfferTsAndCs
+						currency={currencies[currencyId].glyph}
+						offerCostMonthly={
+							getCardData(
+								productCatalogDescription.SupporterPlus,
+								productCatalog.SupporterPlus.ratePlans.Monthly.pricing[
+									currencyId
+								],
+								'', // We don't care about the link here as we just want the price
+								contributionType,
+								promotion,
+							).planCost.price
+						}
+						offerCostAnnual={
+							getCardData(
+								productCatalogDescription.SupporterPlus,
+								productCatalog.SupporterPlus.ratePlans.Annual.pricing[
+									currencyId
+								],
+								'', // We don't care about the link here as we just want the price
+								contributionType,
+								promotion,
+							).planCost.price
+						}
+					></OfferTsAndCs>
+				)}
 			</Container>
 		</PageScaffold>
 	);

@@ -82,7 +82,7 @@ export const tests: Tests = {
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 	},
-	additionalBenefits: {
+	additionalOffers: {
 		variants: [
 			{
 				id: 'control',
