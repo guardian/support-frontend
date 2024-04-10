@@ -340,7 +340,7 @@ export function Checkout() {
 								<ContributionsOrderSummary
 									description={product.description}
 									paymentFrequency={product.frequency}
-									total={currentPrice}
+									amount={currentPrice}
 									currency={currentCurrency}
 									checkListData={[]}
 									onCheckListToggle={(isOpen) => {
