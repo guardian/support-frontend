@@ -197,6 +197,7 @@ export function ThreeTierCard({
 	promotion,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId];
+	const period = recurringContributionPeriodMap[paymentFrequency];
 	const promotionPrice = promotion?.discountedPrice;
 	const formattedPromotionPrice =
 		promotionPrice && simpleFormatAmount(currency, promotionPrice);
@@ -218,7 +219,7 @@ export function ThreeTierCard({
 				{hasPromotion && (
 					<>
 						<span css={previousPriceStrikeThrough}>{formattedPrice}</span>{' '}
-						{`${formattedPromotionPrice}/${recurringContributionPeriodMap[paymentFrequency]}`}
+						{`${formattedPromotionPrice}/${period}`}
 						<span css={discountSummaryCss}>
 							{discountSummaryCopy(
 								currency,
@@ -230,8 +231,7 @@ export function ThreeTierCard({
 						</span>
 					</>
 				)}
-				{!hasPromotion &&
-					`${formattedPrice}/${recurringContributionPeriodMap[paymentFrequency]}`}
+				{!hasPromotion && `${formattedPrice}/${period}`}
 			</p>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<LinkButton
