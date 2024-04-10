@@ -60,14 +60,14 @@ jobs:
         run: |
           sbt "project support-workers" it:assembly
 
-      - name: Build and upload support-workers and it tests to RiffRaff
+      - name: Build support-workers assembly
         run: |
           sbt "project support-workers" test assembly
 
       - name: Upload to riff-raff
         uses: guardian/actions-riff-raff@v4
         with:
-          app: support:support-workers-mono
+          projectName: support:support-workers-mono
           roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           buildNumberOffset: 12000
