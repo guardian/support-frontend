@@ -35,7 +35,6 @@ import {
 } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import type { ProductDescription } from 'helpers/productCatalog';
 import {
 	productCatalog,
 	productCatalogDescription,
@@ -62,7 +61,7 @@ import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
-import { ThreeTierTsAndCs, ToteTsAndCs } from '../components/threeTierTsAndCs';
+import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import type { TierPlans } from '../setup/threeTierConfig';
 
 const recurringContainer = css`
@@ -236,23 +235,6 @@ const isCardUserSelected = (
 		Number(urlSelectedAmount) === cardPriceDiscount
 	);
 };
-
-function getCardData(
-	productDescription: ProductDescription,
-	pricing: number,
-	link: string,
-	promotion?: Promotion,
-	isRecommended = false,
-) {
-	return {
-		isRecommended,
-		isUserSelected: isCardUserSelected(pricing, promotion?.discount?.amount),
-		link,
-		productDescription,
-		price: pricing,
-		promotion: promotion,
-	};
-}
 
 /**
  * @deprecated - we should be useing ProductCatalog data types.
@@ -438,35 +420,41 @@ export function ThreeTierLanding(): JSX.Element {
 	});
 	const tier1Link = `contribute/checkout?${tier1UrlParams.toString()}`;
 
-	const tier1Card = getCardData(
-		productCatalogDescription.Contribution,
-		recurringAmount,
-		tier1Link,
-	);
+	const tier1Card = {
+		productDescription: productCatalogDescription.Contribution,
+		price: recurringAmount,
+		link: tier1Link,
+		isUserSelected: isCardUserSelected(recurringAmount),
+		isRecommended: false,
+	};
 
 	/** Tier 2: SupporterPlus */
 	const supporterPlusRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-	const pricing =
+	const tier2Pricing =
 		productCatalog.SupporterPlus.ratePlans[supporterPlusRatePlan].pricing[
 			currencyId
 		];
 	const tier2UrlParams = new URLSearchParams({
-		'selected-amount': pricing.toString(),
+		'selected-amount': tier2Pricing.toString(),
 		'selected-contribution-type': selectedContributionType,
 	});
 	if (promotion) {
 		tier2UrlParams.set('promoCode', promotion.promoCode);
 	}
 
-	const tier2Card = getCardData(
-		productCatalogDescription.SupporterPlus,
-		pricing,
-		`contribute/checkout?${tier2UrlParams.toString()}`,
+	const tier2Card = {
+		productDescription: productCatalogDescription.SupporterPlus,
+		price: tier2Pricing,
+		link: `contribute/checkout?${tier2UrlParams.toString()}`,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion,
-		true, // isRecommended
-	);
+		isRecommended: true,
+		isUserSelected: isCardUserSelected(
+			tier2Pricing,
+			promotion?.discount?.amount,
+		),
+	};
 
 	/**
 	 * Tier 3: SupporterPlus with Guardian Weekly
@@ -485,14 +473,31 @@ export function ThreeTierLanding(): JSX.Element {
 		threeTierCreateSupporterPlusSubscription: 'true',
 		period: paymentFrequencyMap[contributionType],
 	});
-	const tier3Card = getCardData(
-		productCatalogDescription.SupporterPlusWithGuardianWeekly,
+	const tier3Pricing =
 		supporterPlusWithGuardianWeekly.ratePlans[
 			supporterPlusWithGuardianWeeklyRatePlan
-		].pricing[currencyId],
-		`/subscribe/weekly/checkout?${tier3UrlParams.toString()}`,
-		tier3Promotion,
-	);
+		].pricing[currencyId];
+	const tier3Card = {
+		productDescription:
+			productCatalogDescription.SupporterPlusWithGuardianWeekly,
+		price: tier3Pricing,
+		link: `/subscribe/weekly/checkout?${tier3UrlParams.toString()}`,
+		promotion: tier3Promotion,
+		isRecommended: false,
+		isUserSelected: isCardUserSelected(
+			tier3Pricing,
+			promotion?.discount?.amount,
+		),
+	};
+
+	// {
+	// 	isRecommended,
+	// 	isUserSelected: isCardUserSelected(pricing, promotion?.discount?.amount),
+	// 	link,
+	// 	productDescription,
+	// 	price: pricing,
+	// 	promotion: promotion,
+	// }
 
 	return (
 		<PageScaffold
@@ -600,31 +605,6 @@ export function ThreeTierLanding(): JSX.Element {
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
-				{!!abParticipations.additionalBenefits && (
-					<ToteTsAndCs
-						currency={currencies[currencyId].glyph}
-						toteCostMonthly={
-							getCardData(
-								productCatalogDescription.SupporterPlus,
-								productCatalog.SupporterPlus.ratePlans.Monthly.pricing[
-									currencyId
-								],
-								'', // We don't care about the link here as we just want the price
-								promotion,
-							).price
-						}
-						toteCostAnnual={
-							getCardData(
-								productCatalogDescription.SupporterPlus,
-								productCatalog.SupporterPlus.ratePlans.Annual.pricing[
-									currencyId
-								],
-								'', // We don't care about the link here as we just want the price
-								promotion,
-							).price
-						}
-					></ToteTsAndCs>
-				)}
 			</Container>
 		</PageScaffold>
 	);
