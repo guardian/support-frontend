@@ -284,6 +284,8 @@ function getCardData(
 		},
 		link,
 		productDescription,
+		price: pricing,
+		promotion: promotion,
 	};
 }
 
