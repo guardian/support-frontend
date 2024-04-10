@@ -490,15 +490,6 @@ export function ThreeTierLanding(): JSX.Element {
 		),
 	};
 
-	// {
-	// 	isRecommended,
-	// 	isUserSelected: isCardUserSelected(pricing, promotion?.discount?.amount),
-	// 	link,
-	// 	productDescription,
-	// 	price: pricing,
-	// 	promotion: promotion,
-	// }
-
 	return (
 		<PageScaffold
 			header={
