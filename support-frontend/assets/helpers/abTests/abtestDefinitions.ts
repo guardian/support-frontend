@@ -91,7 +91,7 @@ export const tests: Tests = {
 		audiences: {
 			US: {
 				offset: 0,
-				size: 0,
+				size: 1,
 			},
 		},
 		isActive: false,

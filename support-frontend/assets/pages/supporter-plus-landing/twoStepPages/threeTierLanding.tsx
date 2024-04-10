@@ -37,7 +37,8 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
-	productCatalogDescription,
+	productCatalogDescExclOffers,
+	productCatalogDescInclOffers,
 	supporterPlusWithGuardianWeekly,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
@@ -238,7 +239,7 @@ const isCardUserSelected = (
 
 function getCardData(
 	// TODO - this type could use some refinement
-	productDescription: (typeof productCatalogDescription)[keyof typeof productCatalogDescription],
+	productDescription: (typeof productCatalogDescExclOffers)[keyof typeof productCatalogDescExclOffers],
 	pricing: number,
 	link: string,
 	contributionType: ContributionType,
@@ -340,6 +341,13 @@ export function ThreeTierLanding(): JSX.Element {
 			billingPeriod,
 		),
 	);
+
+	// TODO : additionalOffers US audience not working
+	const showOffers =
+		!!abParticipations.additionalOffers && countryGroupId === 'UnitedStates';
+	const productCatalogDescription = showOffers
+		? productCatalogDescInclOffers
+		: productCatalogDescExclOffers;
 
 	useEffect(() => {
 		dispatch(resetValidation());
@@ -595,7 +603,7 @@ export function ThreeTierLanding(): JSX.Element {
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
-				{!!abParticipations.additionalOffers && (
+				{showOffers && (
 					<OfferTsAndCs
 						currency={currencies[currencyId].glyph}
 						offerCostMonthly={

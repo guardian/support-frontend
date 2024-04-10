@@ -2,16 +2,14 @@ import { OfferBook } from 'components/offer/offer';
 
 export const productCatalog = window.guardian.productCatalog;
 
-export const productCatalogDescription = {
+export const productCatalogDescExclOffers = {
 	SupporterPlusWithGuardianWeekly: {
 		label: 'Digital + print',
 		benefitsSummary: [
 			'The rewards from ',
 			{ strong: true, copy: 'All-access digital' },
 		],
-		offersSummary: [
-			{ strong: true, copy: 'including a free book as our gift to you.†' },
-		],
+		offersSummary: undefined,
 		benefits: [
 			{
 				copy: 'Guardian Weekly print magazine delivered to your door every week  ',
@@ -51,11 +49,7 @@ export const productCatalogDescription = {
 				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
 			},
 		],
-		offers: [
-			{
-				copy: <OfferBook></OfferBook>,
-			},
-		],
+		offers: [],
 	},
 	GuardianWeeklyRestOfWorld: {
 		label: 'The Guardian Weekly',
@@ -76,6 +70,27 @@ export const productCatalogDescription = {
 	},
 	HomeDelivery: {
 		label: 'Home Delivery',
+	},
+};
+export const productCatalogDescInclOffers = {
+	...productCatalogDescExclOffers,
+	SupporterPlusWithGuardianWeekly: {
+		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
+		benefitsSummary: ['The rewards from All-access digital'],
+		offersSummary: [
+			{ strong: true, copy: 'including a free book as our gift to you.†' },
+		],
+		benefits:
+			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.benefits,
+	},
+	SupporterPlus: {
+		label: productCatalogDescExclOffers.SupporterPlus.label,
+		benefits: productCatalogDescExclOffers.SupporterPlus.benefits,
+		offers: [
+			{
+				copy: <OfferBook></OfferBook>,
+			},
+		],
 	},
 };
 
