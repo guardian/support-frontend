@@ -238,22 +238,31 @@ const isCardUserSelected = (
 };
 
 function getCardData(
-	// TODO - this type could use some refinement
 	productDescription: ProductDescription,
 	pricing: number,
 	link: string,
-	contributionType: ContributionType,
 	promotion?: Promotion,
 	isRecommended = false,
 ) {
-	/**
-	 * The text we show depends `contributionType` selected by the user
-	 * We only support ANNUAL style text for promotions with durationMonths === 12
-	 *
-	 * EXAMPLE
-	 * MONTHLY: £6.5/month for 6 months, then £10/month
-	 * ANNUAL: £173/year for the first year, then £275/year
-	 */
+	return {
+		isRecommended,
+		isUserSelected: isCardUserSelected(pricing, promotion?.discount?.amount),
+		link,
+		productDescription,
+		price: pricing,
+		promotion: promotion,
+	};
+}
+
+/**
+ * @deprecated - we should be useing ProductCatalog data types.
+ * TODO - remove this once TsAndCs work of ☝️ types
+ */
+function getPlanCost(
+	pricing: number,
+	contributionType: ContributionType,
+	promotion?: Promotion,
+) {
 	const promotionDurationPeriod: RegularContributionType =
 		contributionType === 'ANNUAL' && promotion?.discount?.durationMonths === 12
 			? 'ANNUAL'
@@ -265,27 +274,19 @@ function getCardData(
 			: promotion?.discount?.durationMonths;
 
 	return {
-		isRecommended,
-		isUserSelected: isCardUserSelected(pricing, promotion?.discount?.amount),
-		planCost: {
-			price: pricing,
-			promoCode: promotion?.name,
-			discount:
-				promotion?.discount?.amount && promotion.discountedPrice
-					? {
-							percentage: promotion.discount.amount,
-							price: promotion.discountedPrice,
-							duration: {
-								value: promotionDurationValue ?? 0,
-								period: promotionDurationPeriod,
-							},
-					  }
-					: undefined,
-		},
-		link,
-		productDescription,
 		price: pricing,
-		promotion: promotion,
+		promoCode: promotion?.name,
+		discount:
+			promotion?.discount?.amount && promotion.discountedPrice
+				? {
+						percentage: promotion.discount.amount,
+						price: promotion.discountedPrice,
+						duration: {
+							value: promotionDurationValue ?? 0,
+							period: promotionDurationPeriod,
+						},
+				  }
+				: undefined,
 	};
 }
 
@@ -441,7 +442,6 @@ export function ThreeTierLanding(): JSX.Element {
 		productCatalogDescription.Contribution,
 		recurringAmount,
 		tier1Link,
-		contributionType,
 	);
 
 	/** Tier 2: SupporterPlus */
@@ -463,7 +463,6 @@ export function ThreeTierLanding(): JSX.Element {
 		productCatalogDescription.SupporterPlus,
 		pricing,
 		`contribute/checkout?${tier2UrlParams.toString()}`,
-		contributionType,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion,
 		true, // isRecommended
@@ -492,7 +491,6 @@ export function ThreeTierLanding(): JSX.Element {
 			supporterPlusWithGuardianWeeklyRatePlan
 		].pricing[currencyId],
 		`/subscribe/weekly/checkout?${tier3UrlParams.toString()}`,
-		contributionType,
 		tier3Promotion,
 	);
 
@@ -581,15 +579,23 @@ export function ThreeTierLanding(): JSX.Element {
 					tsAndCsContent={[
 						{
 							title: tier1Card.productDescription.label,
-							planCost: tier1Card.planCost,
+							planCost: getPlanCost(tier1Card.price, contributionType),
 						},
 						{
 							title: tier2Card.productDescription.label,
-							planCost: tier2Card.planCost,
+							planCost: getPlanCost(
+								tier2Card.price,
+								contributionType,
+								promotion,
+							),
 						},
 						{
 							title: tier3Card.productDescription.label,
-							planCost: tier3Card.planCost,
+							planCost: getPlanCost(
+								tier3Card.price,
+								contributionType,
+								tier3Promotion,
+							),
 						},
 					]}
 					currency={currencies[currencyId].glyph}
@@ -604,9 +610,8 @@ export function ThreeTierLanding(): JSX.Element {
 									currencyId
 								],
 								'', // We don't care about the link here as we just want the price
-								contributionType,
 								promotion,
-							).planCost.price
+							).price
 						}
 						toteCostAnnual={
 							getCardData(
@@ -615,9 +620,8 @@ export function ThreeTierLanding(): JSX.Element {
 									currencyId
 								],
 								'', // We don't care about the link here as we just want the price
-								contributionType,
 								promotion,
-							).planCost.price
+							).price
 						}
 					></ToteTsAndCs>
 				)}
