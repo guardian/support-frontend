@@ -274,8 +274,13 @@ function getCardData(
 					? productDescription.benefitsSummary
 					: undefined,
 		},
-		offers:
-			'offers' in productDescription ? productDescription.offers : undefined,
+		offers: {
+			list: 'offers' in productDescription ? productDescription.offers : [],
+			description:
+				'offersSummary' in productDescription
+					? productDescription.offersSummary
+					: undefined,
+		},
 		planCost: {
 			price: pricing,
 			promoCode: promotion?.name,

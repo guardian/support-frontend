@@ -9,6 +9,9 @@ export const productCatalogDescription = {
 			'The rewards from ',
 			{ strong: true, copy: 'All-access digital' },
 		],
+		offersSummary: [
+			{ strong: true, copy: 'including a free book as our gift to you.**' },
+		],
 		benefits: [
 			{
 				copy: 'Guardian Weekly print magazine delivered to your door every week  ',

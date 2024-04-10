@@ -14,7 +14,7 @@ type ThreeTierCardsProps = {
 		isRecommended: boolean;
 		isUserSelected: boolean;
 		benefits: TierBenefits;
-		offers?: TierBenefits['list'];
+		offers?: TierBenefits;
 		planCost: TierPlanCosts;
 		link: string;
 	}>;

@@ -31,7 +31,7 @@ type ThreeTierCardProps = {
 	isRecommendedSubdued: boolean;
 	isUserSelected: boolean;
 	benefits: TierBenefits;
-	offers?: TierBenefits['list'];
+	offers?: TierBenefits;
 	planCost: TierPlanCosts;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
@@ -252,8 +252,23 @@ export function ThreeTierCard({
 							}
 						})}
 					</span>
-					<span css={benefitsPrefixPlus}>plus</span>
 				</div>
+			)}
+			{offers?.description && (
+				<div css={benefitsPrefixCss}>
+					<span>
+						{offers.description.map((stringPart) => {
+							if (typeof stringPart === 'string') {
+								return stringPart;
+							} else {
+								return <strong>{stringPart.copy}</strong>;
+							}
+						})}
+					</span>
+				</div>
+			)}
+			{(benefits.description || offers?.description) && (
+				<span css={benefitsPrefixPlus}>plus</span>
 			)}
 			<CheckList
 				checkListData={benefits.list.map((benefit) => {
@@ -268,11 +283,11 @@ export function ThreeTierCard({
 				iconColor={palette.brand[500]}
 				cssOverrides={checkmarkList}
 			/>
-			{offers && (
+			{offers?.list && offers.list.length > 0 && (
 				<>
 					<span css={benefitsPrefixPlus}>LIMITED TIME-OFFER</span>
 					<CheckList
-						checkListData={offers.map((offer) => {
+						checkListData={offers.list.map((offer) => {
 							return {
 								text: offer.copy,
 								isChecked: true,
