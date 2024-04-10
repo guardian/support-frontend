@@ -15,7 +15,7 @@ interface NavProps {
 	countryGroupIds: CountryGroupId[];
 	selectedCountryGroup: CountryGroupId;
 	subPath: string;
-	countryIsAffectedByVATStatus: boolean;
+	countryIsAffectedByVATStatus?: boolean;
 }
 
 function Nav({
