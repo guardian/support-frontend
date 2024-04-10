@@ -22,7 +22,7 @@ function Nav({
 	countryGroupIds,
 	selectedCountryGroup,
 	subPath,
-	countryIsAffectedByVATStatus,
+	countryIsAffectedByVATStatus = false,
 }: NavProps): JSX.Element {
 	return (
 		<Container
