@@ -7,7 +7,6 @@ import {
 	until,
 } from '@guardian/source-foundations';
 import {
-	Button,
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
 } from '@guardian/source-react-components';
@@ -24,7 +23,7 @@ import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
-interface ThreeTierCardProps {
+type ThreeTierCardProps = {
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
 	title: string;
@@ -35,19 +34,16 @@ interface ThreeTierCardProps {
 	planCost: TierPlanCosts;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
-	buttonCtaClickHandler: (
+	linkCtaClickHandler: (
+		event: React.MouseEvent<HTMLAnchorElement>,
+		link: string,
 		price: number,
 		cardTier: 1 | 2 | 3,
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
 	) => void;
-	linkCtaClickHandler: (
-		price: number,
-		contributionType: ContributionType,
-		contributionCurrency: IsoCurrency,
-	) => void;
-	externalBtnLink?: string;
-}
+	link: string;
+};
 
 const container = (
 	isRecommended: boolean,
@@ -193,9 +189,8 @@ export function ThreeTierCard({
 	benefits,
 	currencyId,
 	paymentFrequency,
-	buttonCtaClickHandler,
 	linkCtaClickHandler,
-	externalBtnLink,
+	link,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId].glyph;
 	const price = planCost.price;
@@ -225,36 +220,23 @@ export function ThreeTierCard({
 				)}
 			</p>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-				{externalBtnLink ? (
-					<LinkButton
-						href={externalBtnLink}
-						cssOverrides={btnStyleOverrides}
-						onClick={() => {
-							linkCtaClickHandler(price, paymentFrequency, currencyId);
-						}}
-						data-qm-trackable={quantumMetricButtonRef}
-					>
-						Subscribe
-					</LinkButton>
-				) : (
-					<Button
-						iconSide="left"
-						priority="primary"
-						size="default"
-						cssOverrides={btnStyleOverrides}
-						onClick={() =>
-							buttonCtaClickHandler(
-								price,
-								cardTier,
-								paymentFrequency,
-								currencyId,
-							)
-						}
-						data-qm-trackable={quantumMetricButtonRef}
-					>
-						Subscribe
-					</Button>
-				)}
+				<LinkButton
+					href={link}
+					cssOverrides={btnStyleOverrides}
+					onClick={(event) => {
+						linkCtaClickHandler(
+							event,
+							link,
+							price,
+							cardTier,
+							paymentFrequency,
+							currencyId,
+						);
+					}}
+					data-qm-trackable={quantumMetricButtonRef}
+				>
+					Subscribe
+				</LinkButton>
 			</ThemeProvider>
 
 			{benefits.description && (
