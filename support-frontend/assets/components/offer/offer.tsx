@@ -25,7 +25,7 @@ export function OfferBook(): JSX.Element {
 					children={
 						<p>
 							{
-								'A free book as our gift to you. Choose from a selection curated by Guardian staff.'
+								'Books are redeemed with a unique code from Tertulia, an online co-op bookstore loved by avid readers and writers. Instructions to redeem your free book offer will be sent to your email within 24 hours.'
 							}
 						</p>
 					}
