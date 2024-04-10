@@ -1,6 +1,9 @@
 #!/bin/bash
+set -xe
 
-cd ../cloud-formation
+base=`dirname -- "$0"`
+
+cd ${base}/../cloud-formation
 
 [ -d target ] && rm -rf target
 
@@ -10,4 +13,4 @@ cd src
 rm -rf node_modules
 yarn install
 
-yarn run build-cfn
+GITHUB_RUN_NUMBER=$1 yarn run build-cfn

@@ -83,8 +83,11 @@ jobs:
                 app: workers
                 parameters:
                   templatePath: cfn.yaml
+                dependencies: [support-workers]
               support-workers:
                 type: aws-lambda
+                actions:
+                  - uploadLambda
                 parameters:
                   bucket: support-workers-dist
                   functionNames:
@@ -97,7 +100,6 @@ jobs:
                     - "-SendAcquisitionEventLambda-"
                     - "-PreparePaymentMethodForReuseLambda-"
                   fileName: support-workers-${{ github.run_number }}.jar
-                dependencies: [cfn]
               it-tests:
                 type: aws-s3
                 parameters:
@@ -108,6 +110,6 @@ jobs:
               cfn:
                 - support-workers/cloud-formation/target/cfn.yaml
               support-workers:
-                - support-workers/target/scala-2.13/support-workers.jar
+                - support-workers/target/scala-2.13/support-workers-${{ github.run_number }}.jar
               it-tests:
                 - support-workers/target/scala-2.13/support-workers-it.jar

@@ -1,9 +1,12 @@
 #!/bin/bash
+set -xe
 
-./build-cloudformation.sh
+base=`dirname -- "$0"`
+
+${base}/build-cloudformation.sh $1
 
 aws --region eu-west-1 --profile membership \
-  s3 cp ../cloud-formation/target/cfn.yaml s3://support-workers-dist/support/CODE/cloudformation/
+  s3 cp ${base}/../cloud-formation/target/cfn.yaml s3://support-workers-dist/support/CODE/cloudformation/
 
 aws --region eu-west-1 --profile membership \
   cloudformation validate-template --template-url https://s3.amazonaws.com/support-workers-dist/support/CODE/cloudformation/cfn.yaml

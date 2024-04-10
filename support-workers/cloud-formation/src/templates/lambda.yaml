@@ -22,11 +22,12 @@
   Properties:
     FunctionName: !Ref {{name}}Lambda
     FunctionVersion: !GetAtt [ {{name}}CurrentVersion, Version ]
-    Name: PROD
+    Name: SNAPSTART
 
 {{name}}CurrentVersion:
   Type: "AWS::Lambda::Version"
   Properties:
     FunctionName: !Ref {{name}}Lambda
+    Description: {{> GITHUB_RUN_NUMBER}}
 
 

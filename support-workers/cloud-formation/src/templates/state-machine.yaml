@@ -12,28 +12,28 @@ States:
 
   PreparePaymentMethodForReuse:
     Type: Task
-    Resource: "${PreparePaymentMethodForReuseLambda.Arn}"
+    Resource: "${PreparePaymentMethodForReuseAliasForLambda}"
     Next: CreateZuoraSubscription
     {{> retry}}
     {{> catch}}
 
   CreatePaymentMethod:
     Type: Task
-    Resource: "${CreatePaymentMethodLambda.Arn}"
+    Resource: "${CreatePaymentMethodAliasForLambda}"
     Next: CreateSalesforceContact
     {{> retry}}
     {{> catch}}
 
   CreateSalesforceContact:
     Type: Task
-    Resource: "${CreateSalesforceContactLambda.Arn}"
+    Resource: "${CreateSalesforceContactAliasForLambda}"
     Next: CreateZuoraSubscription
     {{> retry}}
     {{> catch}}
 
   CreateZuoraSubscription:
     Type: Task
-    Resource: "${CreateZuoraSubscriptionLambda.Arn}"
+    Resource: "${CreateZuoraSubscriptionAliasForLambda}"
     Next: ParallelTasks
     {{> retry}}
     {{> catch}}
@@ -51,21 +51,21 @@ States:
       States:
         SendThankYouEmail:
           Type: Task
-          Resource: "${SendThankYouEmailLambda.Arn}"
+          Resource: "${SendThankYouEmailAliasForLambda}"
           End: True
           {{> emailRetry}}
     - StartAt: UpdateSupporterProductData
       States:
         UpdateSupporterProductData:
           Type: Task
-          Resource: "${UpdateSupporterProductDataLambda.Arn}"
+          Resource: "${UpdateSupporterProductDataAliasForLambda}"
           End: True
           {{> retry}}
     - StartAt: SendAcquisitionEvent
       States:
         SendAcquisitionEvent:
           Type: Task
-          Resource: "${SendAcquisitionEventLambda.Arn}"
+          Resource: "${SendAcquisitionEventAliasForLambda}"
           End: True
           {{> retry}}
 
@@ -163,14 +163,14 @@ States:
 
   ThreeTierPreparePaymentMethodForReuse:
     Type: Task
-    Resource: "${PreparePaymentMethodForReuseLambda.Arn}"
+    Resource: "${PreparePaymentMethodForReuseAliasForLambda}"
     Next: ThreeTierCreateZuoraSubscription
     {{> retry}}
     {{> catch}}
 
   ThreeTierCreateZuoraSubscription:
     Type: Task
-    Resource: "${CreateZuoraSubscriptionLambda.Arn}"
+    Resource: "${CreateZuoraSubscriptionAliasForLambda}"
     Next: ParallelTasks
     {{> retry}}
     {{> catch}}
@@ -181,7 +181,7 @@ States:
 
   FailureHandler:
     Type: Task
-    Resource: "${FailureHandlerLambda.Arn}"
+    Resource: "${FailureHandlerAliasForLambda}"
     Next: SucceedOrFailChoice
     {{> emailRetry}}
 

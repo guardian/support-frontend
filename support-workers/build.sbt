@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
   "com.lihaoyi" %% "pprint" % "0.8.1",
 )
 
-assemblyJarName := s"${name.value}.jar"
+assemblyJarName := s"${name.value}-${lambdaVersion.value}.jar"
 
 Project.inConfig(IntegrationTest)(baseAssemblySettings)
 IntegrationTest / assembly / assemblyJarName := s"${name.value}-it.jar"
@@ -50,21 +50,33 @@ IntegrationTest / assembly / test := {}
 assembly / aggregate := false
 
 // We also have to put the build number in the .jar, because AWS refuses to create a new lambda version if the jar is the same!
-resourceGenerators in Compile += Def.task {
-  val buildNumber = sys.env.getOrElse("GITHUB_RUN_NUMBER", "DEV")
-  val file = (resourceManaged ).value / "build.number"
+Compile / resourceGenerators += Def.task {
+  val buildNumber = lambdaVersion.value
+  val file = resourceManaged.value / "build.number"
   IO.write(file, buildNumber)
   Seq(file)
 }.taskValue
 
-lazy val deployToCode =
+lazy val lambdaVersion = taskKey[String]("unique value to allow us to create a new AWS lambda version every time")
+lambdaVersion := {
+  val version = sys.env.getOrElse("GITHUB_RUN_NUMBER", "DEV-" + System.currentTimeMillis().toHexString)
+  val log = streams.value.log
+  log.info("version: " + version)
+  version
+}
+
+lazy val deployToCode = inputKey[Unit]("use deployToCodeQuick or deployToCodeWithCfn")
+deployToCode := {
+  streams.value.log.error("**\n** Please use deployToCodeQuick (or deployToCodeWithCfn) **\n**")
+}
+lazy val deployToCodeQuick =
   inputKey[Unit]("Directly update AWS lambda code from CODE instead of via RiffRaff for faster feedback loop")
 
-deployToCode := {
+deployToCodeQuick := {
   import scala.sys.process._
   val log = streams.value.log
   val s3Bucket = "support-workers-dist"
-  val s3Path = "support/CODE/support-workers/support-workers-DEV.jar"
+  val s3Path = s"support/CODE/support-workers/support-workers-DEV.jar"
   val assemblyJar = assembly.value
   log.info(s"generated jar $assemblyJar, about to upload to S3...")
   log.info((s"aws s3 cp $assemblyJar s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!)
@@ -77,10 +89,26 @@ deployToCode := {
     "-FailureHandlerLambda-",
     "-SendAcquisitionEventLambda-",
     "-PreparePaymentMethodForReuseLambda-",
-  ).foreach { functionPartial =>
+  ).par.foreach { functionPartial =>
     log.info("updating " + functionPartial + "...")
-    s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!
+    log.info(s"aws lambda update-function-code --function-name support${functionPartial}CODE --s3-bucket $s3Bucket --s3-key $s3Path --profile membership --region eu-west-1".!!)
+    log.info(s"aws lambda update-alias --function-name support${functionPartial}CODE --name SNAPSTART --function-version ${'$'}LATEST --profile membership --region eu-west-1".!!)
     log.info("finished " + functionPartial)
   }
+}
 
+lazy val deployToCodeWithCfn =
+  inputKey[Unit]("Directly update CFN and AWS lambda code from CODE instead of via RiffRaff for faster feedback loop")
+
+deployToCodeWithCfn := {
+  import scala.sys.process._
+  val log = streams.value.log
+  val version = lambdaVersion.value
+  val s3Bucket = "support-workers-dist"
+  val s3Path = s"support/CODE/support-workers/support-workers-$version.jar"
+  val assemblyJar = assembly.value
+  log.info(s"generated jar $assemblyJar, about to upload to S3...")
+  log.info((s"aws s3 cp $assemblyJar s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!)
+  log.info("now running scripts/update-code-cloudformation.sh in order to activate the uploaded JAR")
+  log.info((s"/bin/bash ./support-workers/scripts/update-code-cloudformation.sh $version").!!)
 }
