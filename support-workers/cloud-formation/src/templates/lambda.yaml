@@ -9,8 +9,24 @@
     Role: !GetAtt [ LambdaExecutionRole, Arn ]
     Code:
       S3Bucket: support-workers-dist
-      S3Key: !Sub support/${Stage}/support-workers/support-workers.jar
+      S3Key: !Sub support/${Stage}/support-workers/support-workers-{{> GITHUB_RUN_NUMBER}}.jar
+    SnapStart:
+      ApplyOn: PublishedVersions
     Runtime: "java21"
     Timeout: "60"
     Architectures:
-      - arm64
+      - x86_64
+
+{{name}}AliasForLambda:
+  Type: "AWS::Lambda::Alias"
+  Properties:
+    FunctionName: !Ref {{name}}Lambda
+    FunctionVersion: !GetAtt [ {{name}}CurrentVersion, Version ]
+    Name: PROD
+
+{{name}}CurrentVersion:
+  Type: "AWS::Lambda::Version"
+  Properties:
+    FunctionName: !Ref {{name}}Lambda
+
+

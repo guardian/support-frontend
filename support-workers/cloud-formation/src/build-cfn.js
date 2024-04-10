@@ -27,7 +27,10 @@ partials = {
   environmentVariables: loadTemplate('environment-variables.yaml'),
   stateMachine: stateMachineJson,
   threeTierStateMachine: threeTierStateMachineJson,
+  GITHUB_RUN_NUMBER: process.env.GITHUB_RUN_NUMBER || 'DEV',
 }
+console.log('GITHUB_RUN_NUMBER:', partials.GITHUB_RUN_NUMBER);
+
 const main = Handlebars.compile(loadTemplate('cfn-template.yaml'))
 const output = main(yaml.load(readFile('view.yaml')), {partials})
 

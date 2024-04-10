@@ -49,6 +49,14 @@ IntegrationTest / assembly / assemblyMergeStrategy := {
 IntegrationTest / assembly / test := {}
 assembly / aggregate := false
 
+// We also have to put the build number in the .jar, because AWS refuses to create a new lambda version if the jar is the same!
+resourceGenerators in Compile += Def.task {
+  val buildNumber = sys.env.getOrElse("GITHUB_RUN_NUMBER", "DEV")
+  val file = (resourceManaged ).value / "build.number"
+  IO.write(file, buildNumber)
+  Seq(file)
+}.taskValue
+
 lazy val deployToCode =
   inputKey[Unit]("Directly update AWS lambda code from CODE instead of via RiffRaff for faster feedback loop")
 
@@ -56,7 +64,7 @@ deployToCode := {
   import scala.sys.process._
   val log = streams.value.log
   val s3Bucket = "support-workers-dist"
-  val s3Path = "support/CODE/support-workers/support-workers.jar"
+  val s3Path = "support/CODE/support-workers/support-workers-DEV.jar"
   val assemblyJar = assembly.value
   log.info(s"generated jar $assemblyJar, about to upload to S3...")
   log.info((s"aws s3 cp $assemblyJar s3://" + s3Bucket + "/" + s3Path + " --profile membership --region eu-west-1").!!)

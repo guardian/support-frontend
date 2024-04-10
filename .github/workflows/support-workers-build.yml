@@ -96,7 +96,7 @@ jobs:
                     - "-FailureHandlerLambda-"
                     - "-SendAcquisitionEventLambda-"
                     - "-PreparePaymentMethodForReuseLambda-"
-                  fileName: support-workers.jar
+                  fileName: support-workers-${{ github.run_number }}.jar
                 dependencies: [cfn]
               it-tests:
                 type: aws-s3
