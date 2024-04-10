@@ -51,7 +51,7 @@ export const productCatalogDescription = {
 				copy: (
 					<p>
 						<span style={{ fontWeight: 'bold' }}>
-							A free book as our gift to you**{' '}
+							A free book as our gift to you.**{' '}
 						</span>
 						Choose from a selection curated by Guardian staff
 					</p>

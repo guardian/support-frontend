@@ -269,19 +269,22 @@ export function ThreeTierCard({
 				cssOverrides={checkmarkList}
 			/>
 			{offers && (
-				<CheckList
-					checkListData={offers.map((offer) => {
-						return {
-							text: offer.copy,
-							isChecked: true,
-							toolTip: offer.tooltip,
-							strong: offer.strong,
-						};
-					})}
-					style={'compact'}
-					iconColor={palette.brand[500]}
-					cssOverrides={checkmarkList}
-				/>
+				<>
+					<span css={benefitsPrefixPlus}>LIMITED TIME-OFFER</span>
+					<CheckList
+						checkListData={offers.map((offer) => {
+							return {
+								text: offer.copy,
+								isChecked: true,
+								toolTip: offer.tooltip,
+								strong: offer.strong,
+							};
+						})}
+						style={'compact'}
+						iconColor={palette.brand[500]}
+						cssOverrides={checkmarkList}
+					/>
+				</>
 			)}
 		</section>
 	);
