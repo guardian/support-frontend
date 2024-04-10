@@ -158,22 +158,22 @@ const discountSummaryCopy = (
 	promoCount: number,
 	price: number,
 	promotion: Promotion,
+	paymentFrequency: RegularContributionType,
 ) => {
 	/**
 	 * EXAMPLE:
 	 * - £6.5/month for 6 months, then £10/month
 	 * - £173/year for the first year, then £275/year
 	 */
+	const durationMonths = promotion.discount?.durationMonths ?? 0;
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const formattedPromotionPrice = simpleFormatAmount(
 		currency,
 		promotion.discountedPrice ?? 0,
 	);
-	const period = promotion.discount?.durationMonths === 12 ? 'year' : 'month';
+	const period = paymentFrequency === 'ANNUAL' ? 'year' : 'month';
 	const duration =
-		promotion.discount?.durationMonths === 12
-			? 1
-			: promotion.discount?.durationMonths ?? 1;
+		paymentFrequency === 'ANNUAL' ? durationMonths / 12 : durationMonths;
 
 	return `${formattedPromotionPrice}/${period} for ${
 		period === 'year' ? ' the first ' : ''
@@ -220,7 +220,13 @@ export function ThreeTierCard({
 						<span css={previousPriceStrikeThrough}>{formattedPrice}</span>{' '}
 						{`${formattedPromotionPrice}/${recurringContributionPeriodMap[paymentFrequency]}`}
 						<span css={discountSummaryCss}>
-							{discountSummaryCopy(currency, promoCount, price, promotion)}
+							{discountSummaryCopy(
+								currency,
+								promoCount,
+								price,
+								promotion,
+								paymentFrequency,
+							)}
 						</span>
 					</>
 				)}
