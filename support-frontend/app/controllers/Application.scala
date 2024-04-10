@@ -19,7 +19,7 @@ import play.api.libs.circe.Circe
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 import services.pricing.PriceSummaryServiceProvider
-import services.{CachedProductCatalogService, CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
+import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
 import views.EmptyDiv
 
@@ -194,7 +194,9 @@ class Application(
         .getOrElse("promoCode", Nil)
         .toList
 
-    val productPrices = priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+    val productPrices =
+      priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+
     val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
 
     views.html.contributions(
