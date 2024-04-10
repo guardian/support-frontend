@@ -1,19 +1,6 @@
-import { css } from '@emotion/react';
-import { from } from '@guardian/source-foundations';
-import Tooltip from 'components/tooltip/Tooltip';
+import { OfferBook } from 'components/offer/offer';
 
 export const productCatalog = window.guardian.productCatalog;
-
-const tooltipOfferStyle = css`
-	> div {
-		display: none;
-		${from.desktop} {
-			display: inline;
-			margin-left: 1px;
-			vertical-align: middle;
-		}
-	}
-`;
 
 export const productCatalogDescription = {
 	SupporterPlusWithGuardianWeekly: {
@@ -63,28 +50,7 @@ export const productCatalogDescription = {
 		],
 		offers: [
 			{
-				copy: (
-					<p>
-						<span style={{ fontWeight: 'bold' }}>
-							A free book as our gift to you.**{' '}
-						</span>
-						Choose from a selection curated by Guardian staff{' '}
-						<span css={tooltipOfferStyle}>
-							<Tooltip
-								children={
-									<p>
-										{
-											'A free book as our gift to you. Choose from a selection curated by Guardian staff.'
-										}
-									</p>
-								}
-								xAxisOffset={108}
-								yAxisOffset={12}
-								placement="bottom"
-							></Tooltip>
-						</span>
-					</p>
-				),
+				copy: <OfferBook></OfferBook>,
 			},
 		],
 	},
