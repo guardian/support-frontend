@@ -13,4 +13,4 @@
     Runtime: "java21"
     Timeout: "60"
     Architectures:
-      - arm64
+      - x86_64
