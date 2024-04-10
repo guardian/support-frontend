@@ -61,7 +61,7 @@ import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
-import { ThreeTierTsAndCs, ToteTsAndCs } from '../components/threeTierTsAndCs';
+import { OfferTsAndCs, ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import type { TierPlans } from '../setup/threeTierConfig';
 
 const recurringContainer = css`
@@ -595,33 +595,31 @@ export function ThreeTierLanding(): JSX.Element {
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
-				{!!abParticipations.additionalBenefits && (
-					<ToteTsAndCs
-						currency={currencies[currencyId].glyph}
-						toteCostMonthly={
-							getCardData(
-								productCatalogDescription.SupporterPlus,
-								productCatalog.SupporterPlus.ratePlans.Monthly.pricing[
-									currencyId
-								],
-								'', // We don't care about the link here as we just want the price
-								contributionType,
-								promotion,
-							).planCost.price
-						}
-						toteCostAnnual={
-							getCardData(
-								productCatalogDescription.SupporterPlus,
-								productCatalog.SupporterPlus.ratePlans.Annual.pricing[
-									currencyId
-								],
-								'', // We don't care about the link here as we just want the price
-								contributionType,
-								promotion,
-							).planCost.price
-						}
-					></ToteTsAndCs>
-				)}
+				{/* {!!abParticipations.additionalOffers && ( */}
+				<OfferTsAndCs
+					currency={currencies[currencyId].glyph}
+					offerCostMonthly={
+						getCardData(
+							productCatalogDescription.SupporterPlus,
+							productCatalog.SupporterPlus.ratePlans.Monthly.pricing[
+								currencyId
+							],
+							'', // We don't care about the link here as we just want the price
+							contributionType,
+							promotion,
+						).planCost.price
+					}
+					offerCostAnnual={
+						getCardData(
+							productCatalogDescription.SupporterPlus,
+							productCatalog.SupporterPlus.ratePlans.Annual.pricing[currencyId],
+							'', // We don't care about the link here as we just want the price
+							contributionType,
+							promotion,
+						).planCost.price
+					}
+				></OfferTsAndCs>
+				{/* )} */}
 			</Container>
 		</PageScaffold>
 	);
