@@ -2,7 +2,7 @@ import { OfferBook } from 'components/offer/offer';
 
 export const productCatalog = window.guardian.productCatalog;
 
-export const productCatalogDescExclOffers = {
+export const productCatalogDescription = {
 	SupporterPlusWithGuardianWeekly: {
 		label: 'Digital + print',
 		benefitsSummary: [
@@ -73,19 +73,19 @@ export const productCatalogDescExclOffers = {
 	},
 };
 export const productCatalogDescInclOffers = {
-	...productCatalogDescExclOffers,
+	...productCatalogDescription,
 	SupporterPlusWithGuardianWeekly: {
-		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
+		label: productCatalogDescription.SupporterPlusWithGuardianWeekly.label,
 		benefitsSummary: ['The rewards from All-access digital'],
 		offersSummary: [
 			{ strong: true, copy: 'including a free book as our gift to you**' },
 		],
 		benefits:
-			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.benefits,
+			productCatalogDescription.SupporterPlusWithGuardianWeekly.benefits,
 	},
 	SupporterPlus: {
-		label: productCatalogDescExclOffers.SupporterPlus.label,
-		benefits: productCatalogDescExclOffers.SupporterPlus.benefits,
+		label: productCatalogDescription.SupporterPlus.label,
+		benefits: productCatalogDescription.SupporterPlus.benefits,
 		offers: [
 			{
 				copy: <OfferBook></OfferBook>,

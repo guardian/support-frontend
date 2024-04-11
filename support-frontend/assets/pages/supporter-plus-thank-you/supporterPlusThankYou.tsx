@@ -257,7 +257,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
 	const showOffer =
-		!!abParticipations.additionalOffers &&
+		!!abParticipations.usFreeBookOffer &&
 		useContributionsSelector(isSupporterPlusFromState);
 
 	return (

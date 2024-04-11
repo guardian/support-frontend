@@ -37,7 +37,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
-	productCatalogDescExclOffers,
+	productCatalogDescription as productCatalogDescExclOffers,
 	productCatalogDescInclOffers,
 	supporterPlusWithGuardianWeekly,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
@@ -342,10 +342,9 @@ export function ThreeTierLanding(): JSX.Element {
 		),
 	);
 
-	// TODO : additionalOffers US audience not working
-	const showOffers =
-		!!abParticipations.additionalOffers && countryGroupId === 'UnitedStates';
-	const productCatalogDescription = showOffers
+	const showOffer =
+		!!abParticipations.usFreeBookOffer && countryGroupId === 'UnitedStates';
+	const productCatalogDescription = showOffer
 		? productCatalogDescInclOffers
 		: productCatalogDescExclOffers;
 
@@ -603,7 +602,7 @@ export function ThreeTierLanding(): JSX.Element {
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
-				{showOffers && (
+				{showOffer && (
 					<OfferTsAndCs
 						currency={currencies[currencyId].glyph}
 						offerCostMonthly={
