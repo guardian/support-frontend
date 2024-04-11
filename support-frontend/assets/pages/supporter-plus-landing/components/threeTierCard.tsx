@@ -285,7 +285,7 @@ export function ThreeTierCard({
 			/>
 			{offers?.list && offers.list.length > 0 && (
 				<>
-					<span css={benefitsPrefixPlus}>LIMITED TIME-OFFER</span>
+					<span css={benefitsPrefixPlus}>limited-time offer</span>
 					<CheckList
 						checkListData={offers.list.map((offer) => {
 							return {

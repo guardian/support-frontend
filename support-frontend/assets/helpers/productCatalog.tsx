@@ -78,7 +78,7 @@ export const productCatalogDescInclOffers = {
 		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
 		benefitsSummary: ['The rewards from All-access digital'],
 		offersSummary: [
-			{ strong: true, copy: 'including a free book as our gift to you.†' },
+			{ strong: true, copy: 'including a free book as our gift to you**' },
 		],
 		benefits:
 			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.benefits,
