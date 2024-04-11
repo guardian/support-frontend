@@ -18,6 +18,7 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
+import { OfferBook } from 'components/offer/offer';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import type {
@@ -38,7 +39,6 @@ import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
 	productCatalogDescription as productCatalogDescExclOffers,
-	productCatalogDescInclOffers,
 	supporterPlusWithGuardianWeekly,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
@@ -235,6 +235,28 @@ const isCardUserSelected = (
 		Number(urlSelectedAmount) === cardPrice ||
 		Number(urlSelectedAmount) === cardPriceDiscount
 	);
+};
+
+const productCatalogDescInclOffers = {
+	...productCatalogDescExclOffers,
+	SupporterPlusWithGuardianWeekly: {
+		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
+		benefitsSummary: ['The rewards from All-access digital'],
+		offersSummary: [
+			{ strong: true, copy: 'including a free book as our gift to you**' },
+		],
+		benefits:
+			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.benefits,
+	},
+	SupporterPlus: {
+		label: productCatalogDescExclOffers.SupporterPlus.label,
+		benefits: productCatalogDescExclOffers.SupporterPlus.benefits,
+		offers: [
+			{
+				copy: <OfferBook></OfferBook>,
+			},
+		],
+	},
 };
 
 function getCardData(

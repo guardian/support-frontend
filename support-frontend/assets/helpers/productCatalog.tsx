@@ -1,5 +1,3 @@
-import { OfferBook } from 'components/offer/offer';
-
 export const productCatalog = window.guardian.productCatalog;
 
 export const productCatalogDescription = {
@@ -68,27 +66,6 @@ export const productCatalogDescription = {
 	},
 	HomeDelivery: {
 		label: 'Home Delivery',
-	},
-};
-export const productCatalogDescInclOffers = {
-	...productCatalogDescription,
-	SupporterPlusWithGuardianWeekly: {
-		label: productCatalogDescription.SupporterPlusWithGuardianWeekly.label,
-		benefitsSummary: ['The rewards from All-access digital'],
-		offersSummary: [
-			{ strong: true, copy: 'including a free book as our gift to you**' },
-		],
-		benefits:
-			productCatalogDescription.SupporterPlusWithGuardianWeekly.benefits,
-	},
-	SupporterPlus: {
-		label: productCatalogDescription.SupporterPlus.label,
-		benefits: productCatalogDescription.SupporterPlus.benefits,
-		offers: [
-			{
-				copy: <OfferBook></OfferBook>,
-			},
-		],
 	},
 };
 
