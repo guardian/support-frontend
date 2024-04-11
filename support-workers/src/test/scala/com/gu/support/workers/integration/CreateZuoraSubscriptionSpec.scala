@@ -1,8 +1,8 @@
 package com.gu.support.workers.integration
 
 import com.gu.config.Configuration
-import com.gu.i18n.CountryGroup
-import com.gu.i18n.Currency.{EUR, GBP}
+import com.gu.i18n.{Country, CountryGroup}
+import com.gu.i18n.Currency.{EUR, GBP, USD}
 import com.gu.okhttp.RequestRunners.configurableFutureRunner
 import com.gu.services.ServiceProvider
 import com.gu.support.acquisitions.{AbTest, AcquisitionData, OphanIds, ReferrerAcquisitionData}
@@ -70,6 +70,17 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
       .createSubscription(createSupporterPlusZuoraSubscriptionJson(10, EUR, Monthly, austria))
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
+  }
+
+  it should "not create a Supporter Plus subscription at less than the base price" in {
+    createZuoraHelper
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(10, USD, Monthly))
+      .failed
+      .map(ex =>
+        ex.getMessage should include(
+          "The contribution amount of a supporter plus subscription cannot be less than zero",
+        ),
+      )
   }
 
   it should "create a Digital Pack subscription" in {
