@@ -245,10 +245,10 @@ export function ThreeTierCard({
 				<div css={benefitsPrefixCss}>
 					<span>
 						{benefits.description.map((stringPart) => {
-							if (typeof stringPart === 'string') {
-								return stringPart;
-							} else {
+							if (typeof stringPart !== 'string') {
 								return <strong>{stringPart.copy}</strong>;
+							} else {
+								return stringPart;
 							}
 						})}
 					</span>
@@ -258,10 +258,10 @@ export function ThreeTierCard({
 				<div css={benefitsPrefixCss}>
 					<span>
 						{offers.description.map((stringPart) => {
-							if (typeof stringPart === 'string') {
-								return stringPart;
-							} else {
+							if (typeof stringPart !== 'string') {
 								return <strong>{stringPart.copy}</strong>;
+							} else {
+								return stringPart;
 							}
 						})}
 					</span>
