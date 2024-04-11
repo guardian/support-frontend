@@ -130,6 +130,10 @@ const benefitsPrefixCss = css`
 	}
 `;
 
+const offerLimitedTimeCss = css`
+	color: #606060;
+`;
+
 const benefitsPrefixPlus = css`
 	${textSans.small()};
 	color: ${palette.neutral[7]};
@@ -285,7 +289,9 @@ export function ThreeTierCard({
 			/>
 			{offers?.list && offers.list.length > 0 && (
 				<>
-					<span css={benefitsPrefixPlus}>limited-time offer</span>
+					<span css={[benefitsPrefixPlus, offerLimitedTimeCss]}>
+						limited-time offer
+					</span>
 					<CheckList
 						checkListData={offers.list.map((offer) => {
 							return {
