@@ -92,6 +92,7 @@ export function SupporterPlusCheckout({
 		</Button>
 	);
 
+	/** Promotions on the checkout are for SupporterPlus only for now */
 	const promotion = isSupporterPlus
 		? useContributionsSelector((state) =>
 				getPromotion(
