@@ -239,7 +239,9 @@ const isCardUserSelected = (
 
 function getCardData(
 	// TODO - this type could use some refinement
-	productDescription: (typeof productCatalogDescExclOffers)[keyof typeof productCatalogDescExclOffers],
+	productDescription:
+		| (typeof productCatalogDescExclOffers)[keyof typeof productCatalogDescExclOffers]
+		| (typeof productCatalogDescInclOffers)[keyof typeof productCatalogDescInclOffers],
 	pricing: number,
 	link: string,
 	contributionType: ContributionType,

@@ -9,7 +9,6 @@ export const productCatalogDescription = {
 			'The rewards from ',
 			{ strong: true, copy: 'All-access digital' },
 		],
-		offersSummary: undefined,
 		benefits: [
 			{
 				copy: 'Guardian Weekly print magazine delivered to your door every week  ',
@@ -49,7 +48,6 @@ export const productCatalogDescription = {
 				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
 			},
 		],
-		offers: [],
 	},
 	GuardianWeeklyRestOfWorld: {
 		label: 'The Guardian Weekly',
