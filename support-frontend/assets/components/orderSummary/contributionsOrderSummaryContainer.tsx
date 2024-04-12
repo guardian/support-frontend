@@ -1,5 +1,4 @@
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
-import type { RegularContributionType } from 'helpers/contributions';
 import { type ContributionType, getAmount } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { currencies } from 'helpers/internationalisation/currency';
@@ -7,9 +6,7 @@ import { supporterPlusLegal } from 'helpers/legalCopy';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
-import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { getLowerBenefitsThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary';
 
@@ -71,24 +68,14 @@ export function ContributionsOrderSummaryContainer({
 		(state) => state.common.internationalisation,
 	);
 	const currency = currencies[currencyId];
-
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
-	const promoPrice = useContributionsSelector((state) =>
-		isSupporterPlus
-			? getLowerBenefitsThreshold(
-					state,
-					contributionType as RegularContributionType,
-			  )
-			: getUserSelectedAmount(state),
-	);
-	const price = useContributionsSelector((state) =>
+	const amount = useContributionsSelector((state) =>
 		getAmount(
 			state.page.checkoutForm.product.selectedAmounts,
 			state.page.checkoutForm.product.otherAmounts,
 			contributionType,
 		),
 	);
-	const isPromoApplied = price > promoPrice;
 
 	const checklist =
 		contributionType === 'ONE_OFF'
@@ -127,8 +114,8 @@ export function ContributionsOrderSummaryContainer({
 
 	return renderOrderSummary({
 		description,
-		total: promoPrice,
-		totalExcludingPromo: isSupporterPlus && isPromoApplied ? price : undefined,
+		amount: amount,
+		promotion,
 		currency,
 		paymentFrequency,
 		enableCheckList: contributionType !== 'ONE_OFF',

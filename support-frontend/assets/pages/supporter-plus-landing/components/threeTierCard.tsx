@@ -132,6 +132,10 @@ const benefitsPrefixCss = css`
 	}
 `;
 
+const offerLimitedTimeCss = css`
+	color: #606060;
+`;
+
 const benefitsPrefixPlus = css`
 	${textSans.small()};
 	color: ${palette.neutral[7]};
@@ -204,7 +208,8 @@ export function ThreeTierCard({
 	const hasPromotion = !!formattedPromotionPrice;
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
-	const { label, benefits, benefitsSummary } = productDescription;
+	const { label, benefits, benefitsSummary, offers, offersSummary } =
+		productDescription;
 
 	return (
 		<section
@@ -257,15 +262,30 @@ export function ThreeTierCard({
 				<div css={benefitsPrefixCss}>
 					<span>
 						{benefitsSummary.map((stringPart) => {
-							if (typeof stringPart === 'string') {
-								return stringPart;
-							} else {
+							if (typeof stringPart !== 'string') {
 								return <strong>{stringPart.copy}</strong>;
+							} else {
+								return stringPart;
 							}
 						})}
 					</span>
-					<span css={benefitsPrefixPlus}>plus</span>
 				</div>
+			)}
+			{offersSummary && (
+				<div css={benefitsPrefixCss}>
+					<span>
+						{offersSummary.map((stringPart) => {
+							if (typeof stringPart !== 'string') {
+								return <strong>{stringPart.copy}</strong>;
+							} else {
+								return stringPart;
+							}
+						})}
+					</span>
+				</div>
+			)}
+			{(benefitsSummary || offersSummary) && (
+				<span css={benefitsPrefixPlus}>plus</span>
 			)}
 			<CheckList
 				checkListData={benefits.map((benefit) => {
@@ -279,6 +299,25 @@ export function ThreeTierCard({
 				iconColor={palette.brand[500]}
 				cssOverrides={checkmarkList}
 			/>
+			{offers && offers.length > 0 && (
+				<>
+					<span css={[benefitsPrefixPlus, offerLimitedTimeCss]}>
+						limited-time offer
+					</span>
+					<CheckList
+						checkListData={offers.map((offer) => {
+							return {
+								text: offer.copy,
+								isChecked: true,
+								toolTip: offer.tooltip,
+							};
+						})}
+						style={'compact'}
+						iconColor={palette.brand[500]}
+						cssOverrides={checkmarkList}
+					/>
+				</>
+			)}
 		</section>
 	);
 }

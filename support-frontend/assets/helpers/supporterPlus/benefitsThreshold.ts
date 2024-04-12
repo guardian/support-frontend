@@ -3,8 +3,6 @@ import type {
 	RegularContributionType,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import { getPromotion } from 'helpers/productPrice/promotions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { isRecurring } from './isContributionRecurring';
@@ -82,21 +80,10 @@ export function getLowerBenefitsThreshold(
 		regularContributionType ?? getContributionType(state);
 	const contributionTypeThreshold =
 		contributionType.toUpperCase() as keyof ThresholdAmounts;
-	const billingPeriod = (contributionType[0] +
-		contributionType.slice(1).toLowerCase()) as BillingPeriod;
 
-	const promotion = getPromotion(
-		state.page.checkoutForm.product.productPrices,
-		state.common.internationalisation.countryId,
-		billingPeriod,
-	);
-
-	return (
-		promotion?.discountedPrice ??
-		lowerBenefitsThresholds[state.common.internationalisation.countryGroupId][
-			contributionTypeThreshold
-		]
-	);
+	return lowerBenefitsThresholds[
+		state.common.internationalisation.countryGroupId
+	][contributionTypeThreshold];
 }
 export function getLowerBenefitsThresholds(
 	state: ContributionsState,

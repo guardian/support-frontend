@@ -4,6 +4,8 @@ export type ProductDescription = {
 	label: string;
 	benefits: Array<{ copy: string; tooltip?: string }>;
 	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
+	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
+	offersSummary?: Array<string | { strong: boolean; copy: string }>;
 };
 
 export const productCatalogDescription: Record<string, ProductDescription> = {

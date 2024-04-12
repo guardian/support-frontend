@@ -18,6 +18,7 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
+import { OfferBook } from 'components/offer/offer';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import type {
@@ -37,7 +38,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
-	productCatalogDescription,
+	productCatalogDescription as productCatalogDescExclOffers,
 	supporterPlusWithGuardianWeekly,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
@@ -61,7 +62,7 @@ import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
-import { ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
+import { OfferTsAndCs, ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import type { TierPlans } from '../setup/threeTierConfig';
 
 const recurringContainer = css`
@@ -236,6 +237,28 @@ const isCardUserSelected = (
 	);
 };
 
+const productCatalogDescInclOffers: typeof productCatalogDescExclOffers = {
+	...productCatalogDescExclOffers,
+	SupporterPlusWithGuardianWeekly: {
+		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
+		benefitsSummary: ['The rewards from All-access digital'],
+		offersSummary: [
+			{ strong: true, copy: 'including a free book as our gift to you**' },
+		],
+		benefits:
+			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.benefits,
+	},
+	SupporterPlus: {
+		label: productCatalogDescExclOffers.SupporterPlus.label,
+		benefits: productCatalogDescExclOffers.SupporterPlus.benefits,
+		offers: [
+			{
+				copy: <OfferBook></OfferBook>,
+			},
+		],
+	},
+};
+
 /**
  * @deprecated - we should be useing ProductCatalog data types.
  * TODO - remove this once TsAndCs work of ☝️ types
@@ -312,6 +335,13 @@ export function ThreeTierLanding(): JSX.Element {
 			billingPeriod,
 		),
 	);
+
+	const showOffer =
+		!!abParticipations.usFreeBookOffer && countryGroupId === 'UnitedStates';
+
+	const productCatalogDescription = showOffer
+		? productCatalogDescInclOffers
+		: productCatalogDescExclOffers;
 
 	useEffect(() => {
 		dispatch(resetValidation());
@@ -596,6 +626,29 @@ export function ThreeTierLanding(): JSX.Element {
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
+				{showOffer && (
+					<OfferTsAndCs
+						currency={currencies[currencyId].glyph}
+						offerCostMonthly={
+							getPlanCost(
+								productCatalog.SupporterPlus.ratePlans.Monthly.pricing[
+									currencyId
+								],
+								'MONTHLY',
+								promotion,
+							).price
+						}
+						offerCostAnnual={
+							getPlanCost(
+								productCatalog.SupporterPlus.ratePlans.Annual.pricing[
+									currencyId
+								],
+								'ANNUAL',
+								promotion,
+							).price
+						}
+					></OfferTsAndCs>
+				)}
 			</Container>
 		</PageScaffold>
 	);

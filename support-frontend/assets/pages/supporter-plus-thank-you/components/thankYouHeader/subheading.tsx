@@ -114,7 +114,7 @@ function Subheading({
 	);
 }
 
-export function ToteHeading(): JSX.Element {
+export function OfferHeading(): JSX.Element {
 	return (
 		<>
 			<div
@@ -122,12 +122,16 @@ export function ToteHeading(): JSX.Element {
 					font-weight: bold;
 				`}
 			>
-				Remember to claim your tote bag
+				We will email you within 24 hours with a unique promo code and
+				instructions for how to redeem your free book from Tertulia.
 			</div>
 			<span>
-				To claim your tote, sign in to{' '}
-				<a href="https://manage.theguardian.com">your account</a> and complete
-				your ‘Correspondence address’ located on the ‘Settings’ page.
+				To preview the list of books, click{' '}
+				<a href="https://tertulia.com/editorial-list/guardian-editors-gift-books-for-supporters">
+					here.
+				</a>{' '}
+				(Remember, you will not be able to claim your free book until you
+				receive your promo code.)
 			</span>
 		</>
 	);
