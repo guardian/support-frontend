@@ -62,6 +62,7 @@ import { currencies } from 'helpers/internationalisation/currency';
 import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
 import { renderPage } from 'helpers/rendering/render';
 import { get } from 'helpers/storage/cookie';
+import { getOphanIds } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
@@ -428,16 +429,20 @@ export function Checkout() {
 									email: formData.get('email') as string,
 								};
 
+								/** Form: tracking data  */
+								const ophanIds = getOphanIds();
+
 								/** Form: data */
 								const data = {
 									...personalData,
+									ophanIds,
 									ratePlan: formData.get('ratePlan') as string,
 									currency: formData.get('currency') as string,
 									recaptchaToken: formData.get('recaptchaToken') as string,
 									product: productData,
 								};
 
-								/** Form; Address data */
+								/** Form: Address data */
 								const deliveryAddress = product.showAddressFields
 									? {
 											lineOne: formData.get('delivery-lineOne') as string,
