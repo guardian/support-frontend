@@ -772,27 +772,6 @@ export function Checkout() {
 													// a lot of refactoring with not too much gain
 													onRecaptchaCompleted={(token) => {
 														setRecaptchaToken(token);
-														void fetch(
-															'/stripe/create-setup-intent/recaptcha',
-															{
-																method: 'POST',
-																headers: {
-																	'Content-Type': 'application/json',
-																},
-																body: JSON.stringify({
-																	isTestUser,
-																	stripePublicKey,
-																	token,
-																}),
-															},
-														)
-															.then((resp) => resp.json())
-															.then((json) =>
-																setStripeClientSecret(
-																	(json as Record<string, string>)
-																		.client_secret,
-																),
-															);
 													}}
 													onRecaptchaExpired={() => {
 														// no-op
