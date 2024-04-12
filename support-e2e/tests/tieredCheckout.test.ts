@@ -35,29 +35,6 @@ const testsDetails: TestDetails[] = [
 	},
 ];
 
-const testDetailsPromo = [
-	{
-		tier: 2,
-		frequency: 'Monthly',
-		promoCode: 'PLAYWRIGHT_TEST_SPLUS_MONTHLY',
-		expectedPromoText: '£8/month for 3 months, then £10/month',
-		expectedCheckoutTotalText: 'Was £10, now £8/month',
-		expectedCheckoutButtonText: 'Pay £8 per month',
-		expectedThankYouText:
-			"You'll pay £8/month for the first 3 months, then £10/month afterwards unless you cancel.",
-	},
-	{
-		tier: 2,
-		frequency: 'Annual',
-		promoCode: 'PLAYWRIGHT_TEST_SPLUS_ANNUAL',
-		expectedPromoText: '£76/year for the first year, then £95/year',
-		expectedCheckoutTotalText: 'Was £95, now £76/year',
-		expectedCheckoutButtonText: 'Pay £76 per year',
-		expectedThankYouText:
-			"You'll pay £76/year for the first year, then £95/year afterwards unless you cancel.",
-	},
-];
-
 afterEachTasks(test);
 
 test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
@@ -79,9 +56,8 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 			);
 			await page.getByRole('tab').getByText(testDetails.frequency).click();
 			await page
-				.locator(
-					`:nth-match(button:has-text("Subscribe"), ${testDetails.tier})`,
-				)
+				.getByRole('link', { name: 'Subscribe' })
+				.nth(testDetails.tier - 1)
 				.click();
 			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
 			if (testDetails.country === 'US') {
@@ -134,7 +110,29 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 	});
 });
 
-test.describe('Subscribe (S+) incl PromoCode via the Tiered checkout', () => {
+const testDetailsPromo = [
+	{
+		tier: 2,
+		frequency: 'Monthly',
+		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
+		expectedPromoText: '£8/month for 6 months, then £10/month',
+		expectedCheckoutTotalText: 'Was £10, now £8/month',
+		expectedCheckoutButtonText: 'Pay £8 per month',
+		expectedThankYouText:
+			"You'll pay £8/month for the first 6 months, then £10/month afterwards unless you cancel.",
+	},
+	{
+		tier: 2,
+		frequency: 'Annual',
+		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
+		expectedPromoText: '£76/year for the first year, then £95/year',
+		expectedCheckoutTotalText: 'Was £95, now £76/year',
+		expectedCheckoutButtonText: 'Pay £76 per year',
+		expectedThankYouText:
+			"You'll pay £76/year for the first year, then £95/year afterwards unless you cancel.",
+	},
+];
+test.describe('Supporter Plus promoCodes', () => {
 	testDetailsPromo.forEach((testDetails) => {
 		test(`${testDetails.frequency} (S+) Subscription incl PromoCode at Tier-${testDetails.tier} with Credit/Debit card - UK`, async ({
 			context,
@@ -156,9 +154,8 @@ test.describe('Subscribe (S+) incl PromoCode via the Tiered checkout', () => {
 				page.getByText(testDetails.expectedPromoText).first(),
 			).toBeVisible();
 			await page
-				.locator(
-					`:nth-match(button:has-text("Subscribe"), ${testDetails.tier})`,
-				)
+				.getByRole('link', { name: 'Subscribe' })
+				.nth(testDetails.tier - 1)
 				.click();
 
 			// Checkout
@@ -174,10 +171,9 @@ test.describe('Subscribe (S+) incl PromoCode via the Tiered checkout', () => {
 			// Thank you
 			await expect(
 				page.getByText(testDetails.expectedThankYouText).first(),
-			).toBeVisible();
+			).toBeVisible({ timeout: 600000 });
 			await expect(page).toHaveURL(
 				`/uk/thankyou?promoCode=${testDetails.promoCode}`,
-				{ timeout: 600000 },
 			);
 		});
 	});
