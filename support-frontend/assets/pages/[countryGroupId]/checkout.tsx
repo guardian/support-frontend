@@ -62,7 +62,10 @@ import { currencies } from 'helpers/internationalisation/currency';
 import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
 import { renderPage } from 'helpers/rendering/render';
 import { get } from 'helpers/storage/cookie';
-import { getOphanIds } from 'helpers/tracking/acquisitions';
+import {
+	getOphanIds,
+	getReferrerAcquisitionData,
+} from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
@@ -431,11 +434,13 @@ export function Checkout() {
 
 								/** Form: tracking data  */
 								const ophanIds = getOphanIds();
+								const referrerAcquisitionData = getReferrerAcquisitionData();
 
 								/** Form: data */
 								const data = {
 									...personalData,
 									ophanIds,
+									referrerAcquisitionData,
 									ratePlan: formData.get('ratePlan') as string,
 									currency: formData.get('currency') as string,
 									recaptchaToken: formData.get('recaptchaToken') as string,
