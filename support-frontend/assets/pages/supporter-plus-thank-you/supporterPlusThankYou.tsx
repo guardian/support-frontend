@@ -256,8 +256,8 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
 	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
-	const showTote =
-		!!abParticipations.additionalBenefits &&
+	const showOffer =
+		!!abParticipations.usFreeBookOffer &&
 		useContributionsSelector(isSupporterPlusFromState);
 
 	return (
@@ -282,7 +282,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 							amountIsAboveThreshold={isSupporterPlus}
 							isSignedIn={isSignedIn}
 							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
-							showTote={showTote}
+							showOffer={showOffer}
 							promotion={promotion}
 						/>
 					</div>
