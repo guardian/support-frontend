@@ -15,24 +15,23 @@ import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
+import { simpleFormatAmount } from 'helpers/forms/checkouts';
+import type { Currency } from 'helpers/internationalisation/currency';
 import {
 	currencies,
 	type IsoCurrency,
 } from 'helpers/internationalisation/currency';
+import type { ProductDescription } from 'helpers/productCatalog';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
-import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
 type ThreeTierCardProps = {
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
-	title: string;
 	isRecommended: boolean;
 	isRecommendedSubdued: boolean;
 	isUserSelected: boolean;
-	benefits: TierBenefits;
-	offers?: TierBenefits;
-	planCost: TierPlanCosts;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
 	linkCtaClickHandler: (
@@ -44,6 +43,9 @@ type ThreeTierCardProps = {
 		contributionCurrency: IsoCurrency,
 	) => void;
 	link: string;
+	productDescription: ProductDescription;
+	price: number;
+	promotion?: Promotion;
 };
 
 const container = (
@@ -77,10 +79,10 @@ const titleCss = css`
 	color: #606060;
 `;
 
-const priceCss = (hasDiscountSummary: boolean) => css`
+const priceCss = (hasPromotion: boolean) => css`
 	${textSans.xlarge({ fontWeight: 'bold' })};
 	position: relative;
-	margin-bottom: ${hasDiscountSummary ? '0' : `${space[4]}px`};
+	margin-bottom: ${hasPromotion ? '0' : `${space[4]}px`};
 	${from.desktop} {
 		margin-bottom: ${space[6]}px;
 	}
@@ -156,56 +158,59 @@ const benefitsPrefixPlus = css`
 `;
 
 const discountSummaryCopy = (
-	currency: string,
-	planCost: TierPlanCosts,
+	currency: Currency,
 	promoCount: number,
+	price: number,
+	promotion: Promotion,
+	paymentFrequency: RegularContributionType,
 ) => {
-	/* EXAMPLE:
-  £6.5/month for 6 months, then £10/month
-  £173/year for the first year, then £275/year
-  */
-	if (planCost.discount) {
-		const period = planCost.discount.duration.period;
-		const duration = planCost.discount.duration.value;
-		const singleYear =
-			period === 'ANNUAL' && duration === 1 ? ' the first ' : '';
-		const promoPrice = planCost.discount.price;
-		const promoPriceRounded =
-			promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);
+	/**
+	 * EXAMPLE:
+	 * - £6.5/month for 6 months, then £10/month
+	 * - £173/year for the first year, then £275/year
+	 */
+	const durationMonths = promotion.discount?.durationMonths ?? 0;
+	const formattedPrice = simpleFormatAmount(currency, price);
+	const formattedPromotionPrice = simpleFormatAmount(
+		currency,
+		promotion.discountedPrice ?? 0,
+	);
+	const period = paymentFrequency === 'ANNUAL' ? 'year' : 'month';
+	const duration =
+		paymentFrequency === 'ANNUAL' ? durationMonths / 12 : durationMonths;
 
-		return `${currency}${promoPriceRounded}/${
-			recurringContributionPeriodMap[planCost.discount.duration.period]
-		} for ${duration > 1 ? duration : singleYear} ${
-			recurringContributionPeriodMap[period]
-		}${duration > 1 ? 's' : ''}, then ${currency}${planCost.price}/${
-			recurringContributionPeriodMap[planCost.discount.duration.period]
-		}${'*'.repeat(promoCount)}`;
-	}
+	return `${formattedPromotionPrice}/${period} for ${
+		period === 'year' ? ' the first ' : ''
+	} ${duration} ${period}${
+		duration > 1 ? 's' : ''
+	}, then ${formattedPrice}/${period}${'*'.repeat(promoCount)}`;
 };
 
 export function ThreeTierCard({
 	cardTier,
 	promoCount,
-	title,
-	planCost,
 	isRecommended,
 	isRecommendedSubdued,
 	isUserSelected,
-	benefits,
-	offers,
 	currencyId,
 	paymentFrequency,
 	linkCtaClickHandler,
 	link,
+	productDescription,
+	price,
+	promotion,
 }: ThreeTierCardProps): JSX.Element {
-	const currency = currencies[currencyId].glyph;
-	const price = planCost.price;
-	const priceCopy = !!planCost.discount && `${currency}${price}`;
-	const promoPrice = planCost.discount?.price ?? planCost.price;
-	const promoPriceRounded =
-		promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);
-	const promoPriceCopy = `${currency}${promoPriceRounded}/${recurringContributionPeriodMap[paymentFrequency]}`;
+	const currency = currencies[currencyId];
+	const period = recurringContributionPeriodMap[paymentFrequency];
+	const promotionPrice = promotion?.discountedPrice;
+	const formattedPromotionPrice =
+		promotionPrice && simpleFormatAmount(currency, promotionPrice);
+	const hasPromotion = !!formattedPromotionPrice;
+	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
+	const { label, benefits, benefitsSummary, offers, offersSummary } =
+		productDescription;
+
 	return (
 		<section
 			css={container(isRecommended, isUserSelected, isRecommendedSubdued)}
@@ -214,16 +219,24 @@ export function ThreeTierCard({
 			{isRecommended && !isUserSelected && (
 				<ThreeTierLozenge subdue={isRecommendedSubdued} title="Recommended" />
 			)}
-			<h2 css={titleCss}>{title}</h2>
-			<p css={priceCss(!!planCost.discount)}>
-				<span css={previousPriceStrikeThrough}>{priceCopy}</span>
-				{priceCopy && ' '}
-				{promoPriceCopy}
-				{!!planCost.discount && (
-					<span css={discountSummaryCss}>
-						{discountSummaryCopy(currency, planCost, promoCount)}
-					</span>
+			<h2 css={titleCss}>{label}</h2>
+			<p css={priceCss(hasPromotion)}>
+				{hasPromotion && (
+					<>
+						<span css={previousPriceStrikeThrough}>{formattedPrice}</span>{' '}
+						{`${formattedPromotionPrice}/${period}`}
+						<span css={discountSummaryCss}>
+							{discountSummaryCopy(
+								currency,
+								promoCount,
+								price,
+								promotion,
+								paymentFrequency,
+							)}
+						</span>
+					</>
 				)}
+				{!hasPromotion && `${formattedPrice}/${period}`}
 			</p>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<LinkButton
@@ -245,10 +258,10 @@ export function ThreeTierCard({
 				</LinkButton>
 			</ThemeProvider>
 
-			{benefits.description && (
+			{benefitsSummary && (
 				<div css={benefitsPrefixCss}>
 					<span>
-						{benefits.description.map((stringPart) => {
+						{benefitsSummary.map((stringPart) => {
 							if (typeof stringPart !== 'string') {
 								return <strong>{stringPart.copy}</strong>;
 							} else {
@@ -258,10 +271,10 @@ export function ThreeTierCard({
 					</span>
 				</div>
 			)}
-			{offers?.description && (
+			{offersSummary && (
 				<div css={benefitsPrefixCss}>
 					<span>
-						{offers.description.map((stringPart) => {
+						{offersSummary.map((stringPart) => {
 							if (typeof stringPart !== 'string') {
 								return <strong>{stringPart.copy}</strong>;
 							} else {
@@ -271,34 +284,32 @@ export function ThreeTierCard({
 					</span>
 				</div>
 			)}
-			{(benefits.description || offers?.description) && (
+			{(benefitsSummary || offersSummary) && (
 				<span css={benefitsPrefixPlus}>plus</span>
 			)}
 			<CheckList
-				checkListData={benefits.list.map((benefit) => {
+				checkListData={benefits.map((benefit) => {
 					return {
 						text: benefit.copy,
 						isChecked: true,
 						toolTip: benefit.tooltip,
-						strong: benefit.strong,
 					};
 				})}
 				style={'compact'}
 				iconColor={palette.brand[500]}
 				cssOverrides={checkmarkList}
 			/>
-			{offers?.list && offers.list.length > 0 && (
+			{offers && offers.length > 0 && (
 				<>
 					<span css={[benefitsPrefixPlus, offerLimitedTimeCss]}>
 						limited-time offer
 					</span>
 					<CheckList
-						checkListData={offers.list.map((offer) => {
+						checkListData={offers.map((offer) => {
 							return {
 								text: offer.copy,
 								isChecked: true,
 								toolTip: offer.tooltip,
-								strong: offer.strong,
 							};
 						})}
 						style={'compact'}
