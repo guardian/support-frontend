@@ -405,6 +405,8 @@ export function Checkout() {
 								 * So we'll assume strings are not null.
 								 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
 								 */
+
+								/** Form: Product data */
 								const productType = formData.get('productType') as string;
 								const currency = formData.get('currency') as string;
 								const billingPeriod = formData.get('billingPeriod') as string;
@@ -419,16 +421,23 @@ export function Checkout() {
 									billingPeriod,
 								};
 
-								const data = {
+								/** Form: Personal data */
+								const personalData = {
 									firstName: formData.get('firstName') as string,
 									lastName: formData.get('lastName') as string,
 									email: formData.get('email') as string,
+								};
+
+								/** Form: data */
+								const data = {
+									...personalData,
 									ratePlan: formData.get('ratePlan') as string,
 									currency: formData.get('currency') as string,
 									recaptchaToken: formData.get('recaptchaToken') as string,
 									product: productData,
 								};
 
+								/** Form; Address data */
 								const deliveryAddress = product.showAddressFields
 									? {
 											lineOne: formData.get('delivery-lineOne') as string,
