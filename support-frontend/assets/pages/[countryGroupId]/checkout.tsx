@@ -435,12 +435,15 @@ export function Checkout() {
 								/** Form: tracking data  */
 								const ophanIds = getOphanIds();
 								const referrerAcquisitionData = getReferrerAcquisitionData();
+								// TODO - this needs to be populated properly
+								const supportAbTests: string[] = [];
 
 								/** Form: data */
 								const data = {
 									...personalData,
 									ophanIds,
 									referrerAcquisitionData,
+									supportAbTests,
 									ratePlan: formData.get('ratePlan') as string,
 									currency: formData.get('currency') as string,
 									recaptchaToken: formData.get('recaptchaToken') as string,
@@ -499,6 +502,8 @@ export function Checkout() {
 
 												const createSupportWorkersRequest = {
 													...data,
+													// TODO - get this from the form
+													firstDeliveryDate: '2024-04-26',
 													paymentFields,
 													deliveryAddress,
 													billingAddress,
