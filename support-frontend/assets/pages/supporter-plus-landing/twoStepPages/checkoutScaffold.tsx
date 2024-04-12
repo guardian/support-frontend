@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { cmp } from '@guardian/consent-management-platform';
+import { cmp } from '@guardian/libs';
 import {
 	from,
 	palette,
@@ -221,8 +221,11 @@ export function SupporterPlusCheckoutScaffold({
 							</Hide>
 						)}
 					</Header>
-					{!countryIsAffectedByVATStatus && !isPaymentPage && (
-						<Nav {...countrySwitcherProps} />
+					{!isPaymentPage && (
+						<Nav
+							{...countrySwitcherProps}
+							countryIsAffectedByVATStatus={countryIsAffectedByVATStatus}
+						/>
 					)}
 				</>
 			}

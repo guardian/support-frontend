@@ -15,7 +15,6 @@ import com.paypal.api.payments.Payment
 import com.typesafe.scalalogging.StrictLogging
 import conf.ConfigLoader._
 import conf._
-import io.netty.handler.codec.http.QueryStringDecoder
 import model.Environment.Live
 import model._
 import model.acquisition.{AcquisitionDataRowBuilder, PaypalAcquisition}
@@ -23,6 +22,7 @@ import model.db.ContributionData
 import model.email.ContributorRow
 import model.paypal.PaypalApiError.paypalErrorText
 import model.paypal._
+import org.apache.pekko.http.scaladsl.model.Uri
 import play.api.libs.ws.WSClient
 import services._
 import util.EnvironmentBasedBuilder
@@ -54,26 +54,36 @@ class PaypalBackend(
   private def paypalEnabled = {
     switchService.allSwitches.map(switch => switch.oneOffPaymentMethods.exists(s => s.switches.payPal.state.isOn))
   }
-  def isValidEmail(url: String): Boolean = {
-    val querystring = new QueryStringDecoder(url).parameters().asScala
-    val email = querystring.get("email").flatMap(_.asScala.headOption)
-    email.exists(!_.contains(","))
-  }
+  def isValidEmail(email: String): Boolean =
+    !email.contains(",")
+
+  private def extractEmail(url: String): EitherT[Future, PaypalApiError, String] =
+    Uri(url).query().getAll("email") match {
+      case email :: Nil => EitherT.rightT(email)
+      case _ => EitherT.leftT(PaypalApiError.fromString("Missing or multiple email addresses"))
+    }
 
   def createPayment(c: CreatePaypalPaymentData): EitherT[Future, PaypalApiError, Payment] = {
-    if (isValidEmail(c.returnURL))
-      paypalEnabled.flatMap {
-        case true =>
-          paypalService
-            .createPayment(c)
-            .leftMap { error =>
-              cloudWatchService.recordFailedPayment(error, PaymentProvider.Paypal)
-              error
-            }
-        case _ =>
+    for {
+      email <- extractEmail(c.returnURL)
+      _ <-
+        if (isValidEmail(email))
+          EitherT.rightT[Future, PaypalApiError](())
+        else
+          EitherT.leftT(PaypalApiError.fromString("Invalid email address"))
+      isPaypalEnabled <- paypalEnabled
+      _ <-
+        if (isPaypalEnabled)
+          EitherT.rightT[Future, PaypalApiError](())
+        else
           EitherT.leftT(PaypalApiError.fromString(paypalErrorText))
-      }
-    else EitherT.leftT(PaypalApiError.fromString("Invalid email address"))
+      payment <- paypalService
+        .createPayment(c)
+        .leftMap { error =>
+          cloudWatchService.recordFailedPayment(error, PaymentProvider.Paypal)
+          error
+        }
+    } yield payment
   }
 
   /*
@@ -112,28 +122,32 @@ class PaypalBackend(
   def executePayment(
       executePaymentData: ExecutePaypalPaymentData,
       clientBrowserInfo: ClientBrowserInfo,
-  ): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] =
-    paypalService
-      .executePayment(executePaymentData)
-      .leftMap(err => {
-        cloudWatchService.recordFailedPayment(err, PaymentProvider.Paypal)
-        err
-      })
-      .semiflatMap { payment =>
-        cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
+  ): EitherT[Future, PaypalApiError, EnrichedPaypalPayment] = {
+    if (isValidEmail(executePaymentData.email))
+      paypalService
+        .executePayment(executePaymentData)
+        .leftMap(err => {
+          cloudWatchService.recordFailedPayment(err, PaymentProvider.Paypal)
+          err
+        })
+        .semiflatMap { payment =>
+          cloudWatchService.recordPaymentSuccess(PaymentProvider.Paypal)
 
-        getOrCreateIdentityIdFromEmail(executePaymentData.email).map { identityId =>
-          postPaymentTasks(
-            payment,
-            executePaymentData.email,
-            identityId,
-            executePaymentData.acquisitionData,
-            clientBrowserInfo,
-          )
+          getOrCreateIdentityIdFromEmail(executePaymentData.email).map { identityId =>
+            postPaymentTasks(
+              payment,
+              executePaymentData.email,
+              identityId,
+              executePaymentData.acquisitionData,
+              clientBrowserInfo,
+            )
 
-          EnrichedPaypalPayment(payment, Some(executePaymentData.email))
+            EnrichedPaypalPayment(payment, Some(executePaymentData.email))
+          }
         }
-      }
+    else
+      EitherT.leftT(PaypalApiError.fromString("Invalid email address"))
+  }
 
   def processRefundHook(data: PaypalRefundWebHookData): EitherT[Future, BackendError, Unit] = {
     for {
