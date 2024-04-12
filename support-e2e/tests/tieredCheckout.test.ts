@@ -178,3 +178,68 @@ test.describe('Supporter Plus promoCodes', () => {
 		});
 	});
 });
+
+const thresholdTests = [
+	{ amount: '10', contributionType: 'monthly', product: 'All-access digital' },
+	{ amount: '9', contributionType: 'monthly', product: 'Support' },
+	{ amount: '95', contributionType: 'annual', product: 'All-access digital' },
+	{ amount: '94', contributionType: 'annual', product: 'Support' },
+	{
+		amount: '10',
+		contributionType: 'monthly',
+		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
+		product: 'All-access digital',
+	},
+	{
+		amount: '9',
+		contributionType: 'monthly',
+		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
+		product: 'Support',
+	},
+	{
+		amount: '95',
+		contributionType: 'annual',
+		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
+		product: 'All-access digital',
+	},
+	{
+		amount: '94',
+		contributionType: 'annual',
+		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
+		product: 'Support',
+	},
+];
+test.describe('Thresholds - the product is "Support" or "All-access digital" correctly based on selected-amount', () => {
+	for (const testConfig of thresholdTests) {
+		test(`Thresholds - ${testConfig.product} ${testConfig.amount}/${
+			testConfig.contributionType
+		}/${testConfig.promoCode ?? ''}`, async ({ context, baseURL }) => {
+			const page = await context.newPage();
+			const urlParams = new URLSearchParams({
+				'selected-amount': testConfig.amount,
+				'selected-contribution-type': testConfig.contributionType,
+			});
+			if (testConfig.promoCode) {
+				urlParams.append('promoCode', testConfig.promoCode);
+			}
+			await setupPage(
+				page,
+				context,
+				baseURL,
+				`/uk/contribute/checkout?${urlParams.toString()}`,
+			);
+
+			const orderSummaryHeading = page.getByRole('heading', {
+				name: 'Your subscription',
+			});
+			const orderSummarySection = page
+				.locator('section')
+				.filter({ has: orderSummaryHeading })
+				.nth(1);
+
+			expect(
+				orderSummarySection.getByText(`${testConfig.product}`, { exact: true }),
+			).toBeVisible();
+		});
+	}
+});
