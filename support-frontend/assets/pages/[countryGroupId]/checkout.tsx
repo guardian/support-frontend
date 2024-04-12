@@ -302,6 +302,7 @@ export function Checkout() {
 		useState<PostcodeFinderResult[]>([]);
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
+	const [deliveryCountry, setDeliveryCountry] = useState(countryId);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useState(true);
@@ -313,8 +314,45 @@ export function Checkout() {
 	const [billingState, setBillingState] = useState('');
 	const [billingPostcodeStateResults, setBillingPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
+	const [billingCountry, setBillingCountry] = useState(countryId);
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
+
+	/**
+	 * This is some data normalisation around the product name.
+	 * This will match the types in `CreateSupportWorkersRequest.product`.
+	 *
+	 * We might be able to defer this to the backend.
+	 *
+	 * TODO - We should be matching exhaustively here and not have a fallback.
+	 * This is just to get Guardian Weekly working.
+	 */
+	let productType:
+		| 'Contribution'
+		| 'SupporterPlus'
+		| 'DigitalPack'
+		| 'Paper'
+		| 'GuardianWeekly';
+
+	let fulfilmentOptions: 'Domestic' | 'RestofWorld' | undefined;
+	if (query.product === 'Contribution') {
+		productType = 'Contribution';
+	} else if (query.product === 'SupporterPlus') {
+		productType = 'SupporterPlus';
+	} else if (
+		query.product === 'GuardianWeeklyDomestic' ||
+		query.product === 'GuardianWeeklyRestOfWorld'
+	) {
+		productType = 'GuardianWeekly';
+		if (query.product === 'GuardianWeeklyDomestic') {
+			fulfilmentOptions = 'Domestic';
+		} /* if (query.product === 'GuardianWeeklyRestOfWorld') */ else {
+			fulfilmentOptions = 'RestofWorld';
+		}
+	} else {
+		// TODO: We should be matching exhaustively here
+		productType = 'Paper';
+	}
 
 	return (
 		<PageScaffold
@@ -367,14 +405,28 @@ export function Checkout() {
 								 * So we'll assume strings are not null.
 								 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
 								 */
+								const productType = formData.get('productType') as string;
+								const currency = formData.get('currency') as string;
+								const billingPeriod = formData.get('billingPeriod') as string;
+								const fulfilmentOptions = formData.get(
+									'fulfilmentOptions',
+								) as string;
+
+								const productData = {
+									productType,
+									currency,
+									fulfilmentOptions,
+									billingPeriod,
+								};
+
 								const data = {
 									firstName: formData.get('firstName') as string,
 									lastName: formData.get('lastName') as string,
 									email: formData.get('email') as string,
-									product: formData.get('product') as string,
 									ratePlan: formData.get('ratePlan') as string,
 									currency: formData.get('currency') as string,
 									recaptchaToken: formData.get('recaptchaToken') as string,
+									product: productData,
 								};
 
 								const deliveryAddress = product.showAddressFields
@@ -384,6 +436,7 @@ export function Checkout() {
 											city: formData.get('delivery-city') as string,
 											state: formData.get('delivery-state') as string,
 											postcode: formData.get('delivery-postcode') as string,
+											country: formData.get('delivery-country') as string,
 									  }
 									: {};
 
@@ -398,6 +451,7 @@ export function Checkout() {
 												city: formData.get('billing-city') as string,
 												state: formData.get('billing-state') as string,
 												postcode: formData.get('billing-postcode') as string,
+												country: formData.get('billing-country') as string,
 										  }
 										: deliveryAddress;
 
@@ -424,13 +478,27 @@ export function Checkout() {
 														.payment_method as string,
 												};
 
-												// This data is what will be posted to /create
-												console.info('Posting data', {
+												const createSupportWorkersRequest = {
 													...data,
 													paymentFields,
 													deliveryAddress,
 													billingAddress,
-												});
+												};
+
+												// This data is what will be posted to /create
+												void fetch('/subscribe/create', {
+													method: 'POST',
+													body: JSON.stringify(createSupportWorkersRequest),
+													headers: {
+														'Content-Type': 'application/json',
+													},
+												})
+													.then((response) => {
+														console.info(response);
+													})
+													.catch((error) => {
+														console.error(error);
+													});
 											}
 										});
 								}
@@ -442,6 +510,14 @@ export function Checkout() {
 							<input type="hidden" name="product" value={query.product} />
 							<input type="hidden" name="ratePlan" value={query.ratePlan} />
 							<input type="hidden" name="currency" value={currentCurrencyKey} />
+							{/* TODO - this is introduced here https://github.com/guardian/support-frontend/pull/5914 */}
+							<input type="hidden" name="billingPeriod" value={'Monthly'} />
+							<input
+								type="hidden"
+								name="fulfilmentOptions"
+								value={fulfilmentOptions ?? ''}
+							/>
+							<input type="hidden" name="productType" value={productType} />
 
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
@@ -505,7 +581,7 @@ export function Checkout() {
 													lineOne={deliveryLineOne}
 													lineTwo={deliveryLineTwo}
 													city={deliveryCity}
-													country={countryId}
+													country={deliveryCountry}
 													state={deliveryState}
 													postCode={deliveryPostcode}
 													countries={product.addressCountries}
@@ -531,8 +607,8 @@ export function Checkout() {
 													setPostcode={(postcode) => {
 														setDeliveryPostcode(postcode);
 													}}
-													setCountry={() => {
-														// no-op
+													setCountry={(country) => {
+														setDeliveryCountry(country);
 													}}
 													setPostcodeForFinder={() => {
 														// no-op
@@ -596,7 +672,7 @@ export function Checkout() {
 														lineOne={billingLineOne}
 														lineTwo={billingLineTwo}
 														city={billingCity}
-														country={countryId}
+														country={billingCountry}
 														state={billingState}
 														postCode={billingPostcode}
 														countries={product.addressCountries}
@@ -622,8 +698,8 @@ export function Checkout() {
 														setPostcode={(postcode) => {
 															setBillingPostcode(postcode);
 														}}
-														setCountry={() => {
-															// no-op
+														setCountry={(country) => {
+															setBillingCountry(country);
 														}}
 														setPostcodeForFinder={() => {
 															// no-op
