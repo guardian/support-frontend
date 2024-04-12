@@ -247,6 +247,8 @@ const productCatalogDescInclOffers: typeof productCatalogDescExclOffers = {
 		],
 		benefits:
 			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.benefits,
+		ratePlans:
+			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.ratePlans,
 	},
 	SupporterPlus: {
 		label: productCatalogDescExclOffers.SupporterPlus.label,
@@ -256,6 +258,7 @@ const productCatalogDescInclOffers: typeof productCatalogDescExclOffers = {
 				copy: <OfferBook></OfferBook>,
 			},
 		],
+		ratePlans: productCatalogDescExclOffers.SupporterPlus.ratePlans,
 	},
 };
 
