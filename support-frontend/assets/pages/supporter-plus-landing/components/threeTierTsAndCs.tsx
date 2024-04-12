@@ -13,10 +13,10 @@ interface ThreeTierTsAndCsProps {
 	currency: string;
 }
 
-interface ToteTsAndCsProps {
+interface OfferTsAndCsProps {
 	currency: string;
-	toteCostMonthly: number;
-	toteCostAnnual: number;
+	offerCostMonthly: number;
+	offerCostAnnual: number;
 }
 
 const container = css`
@@ -33,7 +33,10 @@ const discountSummaryCopy = (currency: string, planCost: TierPlanCosts) => {
 	if (planCost.discount) {
 		const duration = planCost.discount.duration.value;
 		const period = planCost.discount.duration.period;
-		return `${currency}${planCost.discount.price}/${
+		const promoPrice = planCost.discount.price;
+		const promoPriceRounded =
+			promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);
+		return `${currency}${promoPriceRounded}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
 		} for the first ${duration > 1 ? duration : ''} ${
 			recurringContributionPeriodMap[period]
@@ -74,20 +77,21 @@ export function ThreeTierTsAndCs({
 	);
 }
 
-export function ToteTsAndCs({
+export function OfferTsAndCs({
 	currency,
-	toteCostMonthly,
-	toteCostAnnual,
-}: ToteTsAndCsProps): JSX.Element {
+	offerCostMonthly,
+	offerCostAnnual,
+}: OfferTsAndCsProps): JSX.Element {
 	return (
 		<div css={container}>
 			<p>
-				**Tote bags are only available for qualified new recurring supporters
-				(monthly: {currency}
-				{toteCostMonthly} or more; annual: {currency}
-				{toteCostAnnual} or more) on a first come, first served basis while
+				<sup>**</sup> Free books are only available for qualified new recurring
+				supporters (monthly: {currency}
+				{offerCostMonthly} or more; annual: {currency}
+				{offerCostAnnual} or more) on a first come, first served basis while
 				supplies last. Limit one per customer. Distribution to US and
-				APO/FPO/DPO addresses only. Please allow 2-4 weeks for shipping.
+				APO/FPO/DPO addresses only. Instructions to redeem your free book offer
+				will be sent to your email within 24 hours.
 			</p>
 		</div>
 	);

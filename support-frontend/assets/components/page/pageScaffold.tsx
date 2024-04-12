@@ -44,8 +44,10 @@ export function PageScaffold({
 	return (
 		<div css={container}>
 			<Global styles={[reset, guardianFonts]} />
-			<SkipLink id="maincontent" label="Skip to main content" />
-			<SkipLink id="navigation" label="Skip to navigation" />
+			<nav aria-label="Skip to section">
+				<SkipLink id="maincontent" label="Skip to main content" />
+				<SkipLink id="navigation" label="Skip to navigation" />
+			</nav>
 			<CsrBanner />
 			<TestUserBanner />
 			{header}

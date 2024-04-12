@@ -7,7 +7,6 @@ import {
 	until,
 } from '@guardian/source-foundations';
 import {
-	Button,
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
 } from '@guardian/source-react-components';
@@ -24,7 +23,7 @@ import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
-interface ThreeTierCardProps {
+type ThreeTierCardProps = {
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
 	title: string;
@@ -32,22 +31,20 @@ interface ThreeTierCardProps {
 	isRecommendedSubdued: boolean;
 	isUserSelected: boolean;
 	benefits: TierBenefits;
+	offers?: TierBenefits;
 	planCost: TierPlanCosts;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
-	buttonCtaClickHandler: (
+	linkCtaClickHandler: (
+		event: React.MouseEvent<HTMLAnchorElement>,
+		link: string,
 		price: number,
 		cardTier: 1 | 2 | 3,
 		contributionType: ContributionType,
 		contributionCurrency: IsoCurrency,
 	) => void;
-	linkCtaClickHandler: (
-		price: number,
-		contributionType: ContributionType,
-		contributionCurrency: IsoCurrency,
-	) => void;
-	externalBtnLink?: string;
-}
+	link: string;
+};
 
 const container = (
 	isRecommended: boolean,
@@ -133,6 +130,10 @@ const benefitsPrefixCss = css`
 	}
 `;
 
+const offerLimitedTimeCss = css`
+	color: #606060;
+`;
+
 const benefitsPrefixPlus = css`
 	${textSans.small()};
 	color: ${palette.neutral[7]};
@@ -168,8 +169,11 @@ const discountSummaryCopy = (
 		const duration = planCost.discount.duration.value;
 		const singleYear =
 			period === 'ANNUAL' && duration === 1 ? ' the first ' : '';
+		const promoPrice = planCost.discount.price;
+		const promoPriceRounded =
+			promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);
 
-		return `${currency}${planCost.discount.price}/${
+		return `${currency}${promoPriceRounded}/${
 			recurringContributionPeriodMap[planCost.discount.duration.period]
 		} for ${duration > 1 ? duration : singleYear} ${
 			recurringContributionPeriodMap[period]
@@ -188,17 +192,19 @@ export function ThreeTierCard({
 	isRecommendedSubdued,
 	isUserSelected,
 	benefits,
+	offers,
 	currencyId,
 	paymentFrequency,
-	buttonCtaClickHandler,
 	linkCtaClickHandler,
-	externalBtnLink,
+	link,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId].glyph;
 	const price = planCost.price;
 	const priceCopy = !!planCost.discount && `${currency}${price}`;
 	const promoPrice = planCost.discount?.price ?? planCost.price;
-	const promoPriceCopy = `${currency}${promoPrice}/${recurringContributionPeriodMap[paymentFrequency]}`;
+	const promoPriceRounded =
+		promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);
+	const promoPriceCopy = `${currency}${promoPriceRounded}/${recurringContributionPeriodMap[paymentFrequency]}`;
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	return (
 		<section
@@ -220,51 +226,53 @@ export function ThreeTierCard({
 				)}
 			</p>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
-				{externalBtnLink ? (
-					<LinkButton
-						href={externalBtnLink}
-						cssOverrides={btnStyleOverrides}
-						onClick={() => {
-							linkCtaClickHandler(price, paymentFrequency, currencyId);
-						}}
-						data-qm-trackable={quantumMetricButtonRef}
-					>
-						Subscribe
-					</LinkButton>
-				) : (
-					<Button
-						iconSide="left"
-						priority="primary"
-						size="default"
-						cssOverrides={btnStyleOverrides}
-						onClick={() =>
-							buttonCtaClickHandler(
-								price,
-								cardTier,
-								paymentFrequency,
-								currencyId,
-							)
-						}
-						data-qm-trackable={quantumMetricButtonRef}
-					>
-						Subscribe
-					</Button>
-				)}
+				<LinkButton
+					href={link}
+					cssOverrides={btnStyleOverrides}
+					onClick={(event) => {
+						linkCtaClickHandler(
+							event,
+							link,
+							price,
+							cardTier,
+							paymentFrequency,
+							currencyId,
+						);
+					}}
+					data-qm-trackable={quantumMetricButtonRef}
+				>
+					Subscribe
+				</LinkButton>
 			</ThemeProvider>
 
 			{benefits.description && (
 				<div css={benefitsPrefixCss}>
 					<span>
 						{benefits.description.map((stringPart) => {
-							if (typeof stringPart === 'string') {
-								return stringPart;
-							} else {
+							if (typeof stringPart !== 'string') {
 								return <strong>{stringPart.copy}</strong>;
+							} else {
+								return stringPart;
 							}
 						})}
 					</span>
-					<span css={benefitsPrefixPlus}>plus</span>
 				</div>
+			)}
+			{offers?.description && (
+				<div css={benefitsPrefixCss}>
+					<span>
+						{offers.description.map((stringPart) => {
+							if (typeof stringPart !== 'string') {
+								return <strong>{stringPart.copy}</strong>;
+							} else {
+								return stringPart;
+							}
+						})}
+					</span>
+				</div>
+			)}
+			{(benefits.description || offers?.description) && (
+				<span css={benefitsPrefixPlus}>plus</span>
 			)}
 			<CheckList
 				checkListData={benefits.list.map((benefit) => {
@@ -279,6 +287,26 @@ export function ThreeTierCard({
 				iconColor={palette.brand[500]}
 				cssOverrides={checkmarkList}
 			/>
+			{offers?.list && offers.list.length > 0 && (
+				<>
+					<span css={[benefitsPrefixPlus, offerLimitedTimeCss]}>
+						limited-time offer
+					</span>
+					<CheckList
+						checkListData={offers.list.map((offer) => {
+							return {
+								text: offer.copy,
+								isChecked: true,
+								toolTip: offer.tooltip,
+								strong: offer.strong,
+							};
+						})}
+						style={'compact'}
+						iconColor={palette.brand[500]}
+						cssOverrides={checkmarkList}
+					/>
+				</>
+			)}
 		</section>
 	);
 }

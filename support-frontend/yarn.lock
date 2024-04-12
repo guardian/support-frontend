@@ -2186,11 +2186,6 @@
   resolved "https://registry.yarnpkg.com/@guardian/browserslist-config/-/browserslist-config-5.0.0.tgz#734603a4553670abb69ff290e9ff20ef61b17218"
   integrity sha512-NrmQflwQKWYSNHUXsq9uroPIp+d5+mzZrDUy8MEFdNDqVjy8WPfbhANhQtFWGGjRifL0Z7yrfG/cYyBxbKFY3w==
 
-"@guardian/consent-management-platform@^13.12.0":
-  version "13.12.0"
-  resolved "https://registry.yarnpkg.com/@guardian/consent-management-platform/-/consent-management-platform-13.12.0.tgz#7cd52881ac017eca8697b368c313678664acc10e"
-  integrity sha512-weLk3tR1ZtMvn5tfTFItvbIT84JFaXMdP5zcbu1Aynt+eTKZD8oVKTtuvdg6ZmTuxsEOIfsel0fFirjDUo5ccQ==
-
 "@guardian/eslint-config-typescript@^7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@guardian/eslint-config-typescript/-/eslint-config-typescript-7.0.0.tgz#b16fab129fb6e7fe9343143d9bdcbe1867117ab8"
@@ -2228,10 +2223,10 @@
     "@typescript-eslint/eslint-plugin" "5.46.1"
     "@typescript-eslint/parser" "5.59.9"
 
-"@guardian/libs@15.9.1":
-  version "15.9.1"
-  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-15.9.1.tgz#6846c9f0debb19d650f1775b21314a99ea80248d"
-  integrity sha512-Mns6Gc3MQacVxQ44Ei5HaVak3y9HYQF5kZ4lZGnacJfRdWAfW9K5K5rphf7mSgqkygOGoTs5TMQ3gO37MP8hbw==
+"@guardian/libs@16.1.0":
+  version "16.1.0"
+  resolved "https://registry.yarnpkg.com/@guardian/libs/-/libs-16.1.0.tgz#70d986a312a04e609a89ef1a631f6a3000e322da"
+  integrity sha512-nb7r0C+UO4P6f0wH8sATtGYnGrfqCzOX4M1Pp2G+uj9c3tehMRSum4mgnqxSAVXN50LtkL2bwd4u3Ichk6670Q==
 
 "@guardian/paparazzi@^0.3.1":
   version "0.3.1"
@@ -4623,10 +4618,10 @@
     jest-matcher-utils "^28.0.0"
     pretty-format "^28.0.0"
 
-"@types/jsdom@^21.1.1":
-  version "21.1.1"
-  resolved "https://registry.yarnpkg.com/@types/jsdom/-/jsdom-21.1.1.tgz#e59e26352071267b507bf04d51841a1d7d3e8617"
-  integrity sha512-cZFuoVLtzKP3gmq9eNosUL1R50U+USkbLtUQ1bYVgl/lKp0FZM7Cq4aIHAL8oIvQ17uSHi7jXPtfDOdjPwBE7A==
+"@types/jsdom@^21.1.6":
+  version "21.1.6"
+  resolved "https://registry.yarnpkg.com/@types/jsdom/-/jsdom-21.1.6.tgz#bcbc7b245787ea863f3da1ef19aa1dcfb9271a1b"
+  integrity sha512-/7kkMsC+/kMs7gAYmmBR9P0vGTnOoLhQhyhQJSlXGI5bzTHp6xdo0TtKWQAsz6pmSAeVqKSbqeyP6hytqr9FDw==
   dependencies:
     "@types/node" "*"
     "@types/tough-cookie" "*"
@@ -11919,6 +11914,11 @@ mkdirp@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
+
+mockdate@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/mockdate/-/mockdate-3.0.5.tgz#789be686deb3149e7df2b663d2bc4392bc3284fb"
+  integrity sha512-iniQP4rj1FhBdBYS/+eQv7j1tadJ9lJtdzgOpvsOHng/GbcDh2Fhdeq+ZRldrPYdXvCyfFUmFeEwEGXZB5I/AQ==
 
 module-definition@^3.3.1:
   version "3.4.0"

@@ -16,10 +16,10 @@ jobs:
         (github.repository_owner == 'guardian' ||
           github.event_name == 'push')
 
-    # Required by actions-assume-aws-role
     permissions:
       id-token: write
       contents: read
+      pull-requests: write
 
     name: support-workers build
     runs-on: ubuntu-latest
@@ -46,13 +46,6 @@ jobs:
         run: yarn run build-cfn
         working-directory: support-workers/cloud-formation/src
 
-      # Required by sbt riffRaffUpload
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
-          aws-region: eu-west-1
-
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -65,12 +58,56 @@ jobs:
       # - the support-workers build
       - name: Build integration test assembly
         run: |
-          export LAST_TEAMCITY_BUILD=12000
-          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
           sbt "project support-workers" it:assembly
 
-      - name: Build and upload support-workers and it tests to RiffRaff
+      - name: Build support-workers assembly
         run: |
-          export LAST_TEAMCITY_BUILD=12000
-          export GITHUB_RUN_NUMBER=$(( $GITHUB_RUN_NUMBER + $LAST_TEAMCITY_BUILD ))
-          sbt "project support-workers" riffRaffUpload
+          sbt "project support-workers" test assembly
+
+      - name: Upload to riff-raff
+        uses: guardian/actions-riff-raff@v4
+        with:
+          projectName: support:support-workers-mono
+          roleArn: ${{ secrets.GU_RIFF_RAFF_ROLE_ARN }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          buildNumberOffset: 12000
+          config: |
+            stacks: [support]
+            regions: [eu-west-1]
+            allowedStages:
+              - CODE
+              - PROD
+            deployments:
+              cfn:
+                type: cloud-formation
+                app: workers
+                parameters:
+                  templatePath: cfn.yaml
+              support-workers:
+                type: aws-lambda
+                parameters:
+                  bucket: support-workers-dist
+                  functionNames:
+                    - "-CreatePaymentMethodLambda-"
+                    - "-CreateSalesforceContactLambda-"
+                    - "-CreateZuoraSubscriptionLambda-"
+                    - "-SendThankYouEmailLambda-"
+                    - "-UpdateSupporterProductDataLambda-"
+                    - "-FailureHandlerLambda-"
+                    - "-SendAcquisitionEventLambda-"
+                    - "-PreparePaymentMethodForReuseLambda-"
+                  fileName: support-workers.jar
+                dependencies: [cfn]
+              it-tests:
+                type: aws-s3
+                parameters:
+                  bucket: support-workers-dist
+                  cacheControl: private
+                  publicReadAcl: false
+          contentDirectories: |
+              cfn:
+                - support-workers/cloud-formation/target/cfn.yaml
+              support-workers:
+                - support-workers/target/scala-2.13/support-workers.jar
+              it-tests:
+                - support-workers/target/scala-2.13/support-workers-it.jar
