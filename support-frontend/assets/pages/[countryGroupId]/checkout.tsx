@@ -324,7 +324,7 @@ export function Checkout() {
 
 	/**
 	 * This is some data normalisation around the product name.
-	 * This will match the types in `CreateSupportWorkersRequest.product`.
+	 * This must match the types in `CreateSupportWorkersRequest#product`.
 	 *
 	 * We might be able to defer this to the backend.
 	 *
