@@ -335,7 +335,8 @@ export function Checkout() {
 		| 'SupporterPlus'
 		| 'DigitalPack'
 		| 'Paper'
-		| 'GuardianWeekly';
+		| 'GuardianWeekly'
+		| undefined;
 
 	let fulfilmentOptions: 'Domestic' | 'RestofWorld' | undefined;
 	if (query.product === 'Contribution') {
