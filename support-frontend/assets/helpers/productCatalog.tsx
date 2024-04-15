@@ -1,6 +1,14 @@
 export const productCatalog = window.guardian.productCatalog;
 
-export const productCatalogDescription = {
+export type ProductDescription = {
+	label: string;
+	benefits: Array<{ copy: string; tooltip?: string }>;
+	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
+	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
+	offersSummary?: Array<string | { strong: boolean; copy: string }>;
+};
+
+export const productCatalogDescription: Record<string, ProductDescription> = {
 	SupporterPlusWithGuardianWeekly: {
 		label: 'Digital + print',
 		benefitsSummary: [
@@ -29,6 +37,7 @@ export const productCatalogDescription = {
 	},
 	NationalDelivery: {
 		label: 'National Delivery',
+		benefits: [],
 	},
 	SupporterPlus: {
 		label: 'All-access digital',
@@ -49,12 +58,15 @@ export const productCatalogDescription = {
 	},
 	GuardianWeeklyRestOfWorld: {
 		label: 'The Guardian Weekly',
+		benefits: [],
 	},
 	GuardianWeeklyDomestic: {
 		label: 'The Guardian Weekly',
+		benefits: [],
 	},
 	SubscriptionCard: {
 		label: 'Newspaper subscription',
+		benefits: [],
 	},
 	Contribution: {
 		label: 'Support',
@@ -66,6 +78,7 @@ export const productCatalogDescription = {
 	},
 	HomeDelivery: {
 		label: 'Home Delivery',
+		benefits: [],
 	},
 };
 

@@ -85,8 +85,10 @@ export function OfferTsAndCs({
 	return (
 		<div css={container}>
 			<p>
-				<sup>**</sup> Free books are only available for qualified new recurring
-				supporters (monthly: {currency}
+				{' '}
+				<sup style={{ fontWeight: 'lighter', fontSize: '14px' }}>**</sup> Free
+				books are only available for qualified new recurring supporters
+				(monthly: {currency}
 				{offerCostMonthly} or more; annual: {currency}
 				{offerCostAnnual} or more) on a first come, first served basis while
 				supplies last. Limit one per customer. Distribution to US and
