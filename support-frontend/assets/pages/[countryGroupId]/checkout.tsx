@@ -323,13 +323,12 @@ export function Checkout() {
 		useState(false);
 
 	/**
-	 * This is some data normalisation around the product name.
+	 * This is some data normalisation around the productType
+	 * that we send to the `/subscribe/create` endpoint.
+	 *
 	 * This must match the types in `CreateSupportWorkersRequest#product`.
 	 *
 	 * We might be able to defer this to the backend.
-	 *
-	 * TODO - We should be matching exhaustively here and not have a fallback.
-	 * This is just to get Guardian Weekly working.
 	 */
 	let productType:
 		| 'Contribution'
@@ -353,8 +352,13 @@ export function Checkout() {
 		} /* if (query.product === 'GuardianWeeklyRestOfWorld') */ else {
 			fulfilmentOptions = 'RestofWorld';
 		}
-	} else {
-		// TODO: We should be matching exhaustively here
+	} else if (query.product === 'DigitalSubscription') {
+		productType = 'DigitalPack';
+	} else if (
+		query.product === 'NationalDelivery' ||
+		query.product === 'SubscriptionCard' ||
+		query.product === 'HomeDelivery'
+	) {
 		productType = 'Paper';
 	}
 
