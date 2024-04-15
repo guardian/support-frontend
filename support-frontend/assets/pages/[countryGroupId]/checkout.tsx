@@ -347,7 +347,6 @@ export function Checkout() {
 		useState(false);
 
 	const formRef = useRef<HTMLFormElement>(null);
-	const [, setIsFormValid] = useState(false);
 	return (
 		<PageScaffold
 			header={<Header></Header>}
@@ -391,9 +390,6 @@ export function Checkout() {
 							ref={formRef}
 							action="/contribute/recurring/create"
 							method="POST"
-							onChange={(event) => {
-								setIsFormValid(event.currentTarget.checkValidity());
-							}}
 							onSubmit={(event) => {
 								event.preventDefault();
 								const form = event.currentTarget;
