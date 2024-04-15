@@ -1,8 +1,12 @@
 import type { RegularContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect, glyph } from 'helpers/internationalisation/currency';
+import {
+	detect,
+	fromCountryGroupId,
+	glyph,
+} from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
+import { getLowerBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 
 export const supporterPlusLegal = (
 	countryGroupId: CountryGroupId,
@@ -11,7 +15,10 @@ export const supporterPlusLegal = (
 	promotion?: Promotion,
 ) => {
 	const currencyGlyph = glyph(detect(countryGroupId));
-	const tierPlanCost = `${currencyGlyph}${lowerBenefitsThresholds[countryGroupId][contributionType]}`;
+	const tierPlanCost = `${currencyGlyph}${getLowerBenefitThreshold(
+		contributionType,
+		fromCountryGroupId(countryGroupId),
+	)}`;
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
 	const planCostNoPromo = `${tierPlanCost}${divider}${period}`;
 	const promoPrice = promotion?.discountedPrice;

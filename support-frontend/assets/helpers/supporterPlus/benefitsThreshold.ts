@@ -3,6 +3,8 @@ import type {
 	RegularContributionType,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import { productCatalog } from 'helpers/productCatalog';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { isRecurring } from './isContributionRecurring';
@@ -40,57 +42,35 @@ export const upperBenefitsThresholds: Record<CountryGroupId, ThresholdAmounts> =
 		},
 	};
 
-export const lowerBenefitsThresholds: Record<CountryGroupId, ThresholdAmounts> =
-	{
-		GBPCountries: {
-			MONTHLY: 10,
-			ANNUAL: 95,
-		},
-		UnitedStates: {
-			MONTHLY: 13,
-			ANNUAL: 120,
-		},
-		EURCountries: {
-			MONTHLY: 10,
-			ANNUAL: 95,
-		},
-		International: {
-			MONTHLY: 13,
-			ANNUAL: 120,
-		},
-		AUDCountries: {
-			MONTHLY: 17,
-			ANNUAL: 160,
-		},
-		NZDCountries: {
-			MONTHLY: 17,
-			ANNUAL: 160,
-		},
-		Canada: {
-			MONTHLY: 13,
-			ANNUAL: 120,
-		},
-	};
-
 export function getLowerBenefitsThreshold(
 	state: ContributionsState,
 	regularContributionType?: RegularContributionType,
+	currencyId?: IsoCurrency,
 ): number {
 	const contributionType =
 		regularContributionType ?? getContributionType(state);
-	const contributionTypeThreshold =
-		contributionType.toUpperCase() as keyof ThresholdAmounts;
-
-	return lowerBenefitsThresholds[
-		state.common.internationalisation.countryGroupId
-	][contributionTypeThreshold];
+	const currency = currencyId ?? state.common.internationalisation.currencyId;
+	return getLowerBenefitThreshold(contributionType, currency);
 }
+
+export function getLowerBenefitThreshold(
+	contributionType: ContributionType,
+	currencyId: IsoCurrency,
+): number {
+	const supporterPlusRatePlan =
+		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
+	return productCatalog.SupporterPlus.ratePlans[supporterPlusRatePlan].pricing[
+		currencyId
+	];
+}
+
 export function getLowerBenefitsThresholds(
 	state: ContributionsState,
+	currencyId: IsoCurrency,
 ): ThresholdAmounts {
 	return {
-		MONTHLY: getLowerBenefitsThreshold(state, 'MONTHLY'),
-		ANNUAL: getLowerBenefitsThreshold(state, 'ANNUAL'),
+		MONTHLY: getLowerBenefitThreshold('MONTHLY', currencyId),
+		ANNUAL: getLowerBenefitThreshold('ANNUAL', currencyId),
 	};
 }
 

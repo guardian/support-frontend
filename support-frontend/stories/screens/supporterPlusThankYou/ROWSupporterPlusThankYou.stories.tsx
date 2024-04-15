@@ -14,6 +14,7 @@ import {
 } from 'helpers/forms/paymentMethods';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
+import { fromCountryGroupId } from 'helpers/internationalisation/currency';
 import { setPaymentMethod } from 'helpers/redux/checkout/payment/paymentMethod/actions';
 import {
 	setEmail,
@@ -27,7 +28,7 @@ import {
 } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import { setIsSignedIn, setStorybookUser } from 'helpers/redux/user/actions';
-import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
+import { getLowerBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import {
 	largeDonations,
 	SupporterPlusThankYou,
@@ -286,10 +287,10 @@ RecurringNotSignedIn.decorators = [
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
 
-		const thresholdPrice =
-			lowerBenefitsThresholds[countryGroup][
-				contributionType as RegularContributionType
-			];
+		const thresholdPrice = getLowerBenefitThreshold(
+			contributionType as RegularContributionType,
+			fromCountryGroupId(countryGroup),
+		);
 
 		store.dispatch(
 			setSelectedAmount(
@@ -352,10 +353,10 @@ RecurringSignedIn.decorators = [
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
 
-		const thresholdPrice =
-			lowerBenefitsThresholds[countryGroup][
-				contributionType as RegularContributionType
-			];
+		const thresholdPrice = getLowerBenefitThreshold(
+			contributionType as RegularContributionType,
+			fromCountryGroupId(countryGroup),
+		);
 
 		store.dispatch(
 			setSelectedAmount(
@@ -419,10 +420,10 @@ RecurringSignUp.decorators = [
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
 
-		const thresholdPrice =
-			lowerBenefitsThresholds[countryGroup][
-				contributionType as RegularContributionType
-			];
+		const thresholdPrice = getLowerBenefitThreshold(
+			contributionType as RegularContributionType,
+			fromCountryGroupId(countryGroup),
+		);
 
 		store.dispatch(
 			setSelectedAmount(

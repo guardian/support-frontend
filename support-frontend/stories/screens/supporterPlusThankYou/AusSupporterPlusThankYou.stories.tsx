@@ -30,7 +30,7 @@ import {
 } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import { setIsSignedIn, setStorybookUser } from 'helpers/redux/user/actions';
-import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
+import { getLowerBenefitThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import {
 	largeDonations,
 	SupporterPlusThankYou,
@@ -278,11 +278,10 @@ RecurringNotSignedIn.decorators = [
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
 
-		const thresholdPrice =
-			lowerBenefitsThresholds['AUDCountries'][
-				contributionType as RegularContributionType
-			];
-
+		const thresholdPrice = getLowerBenefitThreshold(
+			contributionType as RegularContributionType,
+			'AUD',
+		);
 		store.dispatch(
 			setSelectedAmount(
 				amountIsAboveThreshold
@@ -340,10 +339,10 @@ RecurringSignedIn.decorators = [
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
 
-		const thresholdPrice =
-			lowerBenefitsThresholds['AUDCountries'][
-				contributionType as RegularContributionType
-			];
+		const thresholdPrice = getLowerBenefitThreshold(
+			contributionType as RegularContributionType,
+			'AUD',
+		);
 
 		store.dispatch(
 			setSelectedAmount(
@@ -403,10 +402,10 @@ RecurringSignUp.decorators = [
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
 
-		const thresholdPrice =
-			lowerBenefitsThresholds['AUDCountries'][
-				contributionType as RegularContributionType
-			];
+		const thresholdPrice = getLowerBenefitThreshold(
+			contributionType as RegularContributionType,
+			'AUD',
+		);
 
 		store.dispatch(
 			setSelectedAmount(
