@@ -115,6 +115,7 @@ const testDetailsPromo = [
 		tier: 2,
 		frequency: 'Monthly',
 		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
+		expectedCardHeading: 'All-access digital',
 		expectedPromoText: '£8/month for 6 months, then £10/month',
 		expectedCheckoutTotalText: 'Was £10, now £8/month',
 		expectedCheckoutButtonText: 'Pay £8 per month',
@@ -125,6 +126,7 @@ const testDetailsPromo = [
 		tier: 2,
 		frequency: 'Annual',
 		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
+		expectedCardHeading: 'All-access digital',
 		expectedPromoText: '£76/year for the first year, then £95/year',
 		expectedCheckoutTotalText: 'Was £95, now £76/year',
 		expectedCheckoutButtonText: 'Pay £76 per year',
@@ -150,8 +152,13 @@ test.describe('Supporter Plus promoCodes', () => {
 				`/uk/contribute?promoCode=${testDetails.promoCode}`,
 			);
 			await page.getByRole('tab').getByText(testDetails.frequency).click();
+
+			const cardHeading = page.getByRole('heading', {
+				name: testDetails.expectedCardHeading,
+			});
+			const card = page.locator('section').filter({ has: cardHeading });
 			await expect(
-				page.getByText(testDetails.expectedPromoText).first(),
+				card.getByText(testDetails.expectedPromoText).first(),
 			).toBeVisible();
 			await page
 				.getByRole('link', { name: 'Subscribe' })

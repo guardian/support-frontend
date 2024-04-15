@@ -28,6 +28,7 @@ import { useEffect, useRef, useState } from 'react';
 import { parse, picklist } from 'valibot'; // 1.54 kB
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
+import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -347,6 +348,14 @@ export function Checkout() {
 		useState(false);
 
 	const formRef = useRef<HTMLFormElement>(null);
+
+	/** Direct debit details */
+	const [accountHolderName, setAccountHolderName] = useState('');
+	const [accountNumber, setAccountNumber] = useState('');
+	const [sortCode, setSortCode] = useState('');
+	const [accountHolderConfirmation, setAccountHolderConfirmation] =
+		useState(false);
+
 	return (
 		<PageScaffold
 			header={<Header></Header>}
@@ -466,12 +475,28 @@ export function Checkout() {
 											}
 										});
 								}
-
 								if (paymentMethod === 'PayPal') {
 									const paymentFields = {
 										recaptchaToken: '',
 										paymentMethod: 'PayPal',
 										baid: formData.get('payPalBAID') as string,
+									};
+									console.info('Posting data', {
+										...data,
+										paymentFields,
+										deliveryAddress,
+										billingAddress,
+									});
+								}
+
+								if (paymentMethod === 'DirectDebit') {
+									const paymentFields = {
+										accountHolderName: formData.get(
+											'accountHolderName',
+										) as string,
+										accountNumber: formData.get('accountNumber') as string,
+										sortCode: formData.get('sortCode') as string,
+										recaptchaToken,
 									};
 
 									// This data is what will be posted to /create
@@ -482,6 +507,7 @@ export function Checkout() {
 										billingAddress,
 									});
 								}
+
 								// The form is sumitted async as a lot of the payment methods require fetch requests
 								return false;
 							}}
@@ -763,6 +789,45 @@ export function Checkout() {
 											/>
 										</>
 									)}
+
+									{paymentMethod === 'DirectDebit' && (
+										<DirectDebitForm
+											countryGroupId={countryGroupId}
+											accountHolderName={accountHolderName}
+											accountNumber={accountNumber}
+											accountHolderConfirmation={accountHolderConfirmation}
+											sortCode={sortCode}
+											recaptchaCompleted={false}
+											updateAccountHolderName={(name: string) => {
+												setAccountHolderName(name);
+											}}
+											updateAccountNumber={(number: string) => {
+												setAccountNumber(number);
+											}}
+											updateSortCode={(sortCode: string) => {
+												setSortCode(sortCode);
+											}}
+											updateAccountHolderConfirmation={(
+												confirmation: boolean,
+											) => {
+												setAccountHolderConfirmation(confirmation);
+											}}
+											recaptcha={
+												<Recaptcha
+													// We could change the parents type to Promise and uses await here, but that has
+													// a lot of refactoring with not too much gain
+													onRecaptchaCompleted={(token) => {
+														setRecaptchaToken(token);
+													}}
+													onRecaptchaExpired={() => {
+														// no-op
+													}}
+												/>
+											}
+											formError={''}
+											errors={{}}
+										/>
+									)}
 								</BoxContents>
 							</Box>
 
@@ -792,6 +857,15 @@ export function Checkout() {
 										}}
 										commit={true}
 										validate={({ disable, enable }) => {
+											/** We run this initially to set the button to the correct state */
+											const valid = formRef.current?.checkValidity();
+											if (valid) {
+												enable();
+											} else {
+												disable();
+											}
+
+											/** And then run it on form change */
 											formRef.current?.addEventListener('change', (event) => {
 												const valid =
 													// TODO - we shouldn't have to type infer here
