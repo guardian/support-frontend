@@ -16,6 +16,7 @@ import type { CheckListData } from 'components/checkList/checkList';
 import { CheckList } from 'components/checkList/checkList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
+import type { Promotion } from 'helpers/productPrice/promotions';
 
 const componentStyles = css`
 	${textSans.medium()}
@@ -123,8 +124,8 @@ const termsAndConditions = css`
 
 export type ContributionsOrderSummaryProps = {
 	description: string;
-	total: number;
-	totalExcludingPromo?: number;
+	amount: number;
+	promotion?: Promotion;
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: CheckListData[];
@@ -145,8 +146,8 @@ const visuallyHiddenCss = css`
 
 export function ContributionsOrderSummary({
 	description,
-	total,
-	totalExcludingPromo,
+	amount,
+	promotion,
 	currency,
 	paymentFrequency,
 	checkListData,
@@ -167,11 +168,11 @@ export function ContributionsOrderSummary({
 		/>
 	);
 
-	const formattedTotal = simpleFormatAmount(currency, total);
-	const formattedTotalExcludingPromo = simpleFormatAmount(
-		currency,
-		totalExcludingPromo ?? 0,
-	);
+	const formattedAmount = simpleFormatAmount(currency, amount);
+	/** We have to check deeper than just promotion as the other values are optional */
+	const formattedPromotionAmount =
+		promotion?.discountedPrice &&
+		simpleFormatAmount(currency, promotion.discountedPrice);
 
 	return (
 		<div css={componentStyles}>
@@ -211,16 +212,25 @@ export function ContributionsOrderSummary({
 			<div css={[summaryRow, rowSpacing, boldText, totalRow(!!tsAndCs)]}>
 				<p>Total</p>
 				<p>
-					{totalExcludingPromo && (
-						<span css={originalPriceStrikeThrough}>
-							<span css={visuallyHiddenCss}>Was </span>
-							{formattedTotalExcludingPromo}
-							<span css={visuallyHiddenCss}>, now </span>
-						</span>
-					)}{' '}
-					{paymentFrequency
-						? `${formattedTotal}/${paymentFrequency}`
-						: formattedTotal}
+					{formattedPromotionAmount && (
+						<>
+							<span css={originalPriceStrikeThrough}>
+								<span css={visuallyHiddenCss}>Was </span>
+								{formattedAmount}
+								<span css={visuallyHiddenCss}>, now </span>
+							</span>{' '}
+							{paymentFrequency
+								? `${formattedPromotionAmount}/${paymentFrequency}`
+								: formattedPromotionAmount}
+						</>
+					)}
+					{!formattedPromotionAmount && (
+						<>
+							{paymentFrequency
+								? `${formattedAmount}/${paymentFrequency}`
+								: formattedAmount}
+						</>
+					)}
 				</p>
 			</div>
 			{!!tsAndCs && (

@@ -20,6 +20,7 @@ import {
 import { getUserTypeFromIdentity } from 'helpers/redux/checkout/personalDetails/thunks';
 import {
 	setAllAmounts,
+	setBillingPeriod,
 	setOtherAmount,
 	setProductType,
 } from 'helpers/redux/checkout/product/actions';
@@ -168,6 +169,9 @@ export function setUpRedux(store: ContributionsStore): void {
 		dispatch,
 	);
 	selectInitialAmounts(state, dispatch, contributionType);
+
+	const billingPeriod = contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
+	dispatch(setBillingPeriod(billingPeriod));
 
 	// For PayPal one-off we need to get userType from session after the thankyou page redirect
 	const userType = storage.getSession('userTypeFromIdentityResponse');

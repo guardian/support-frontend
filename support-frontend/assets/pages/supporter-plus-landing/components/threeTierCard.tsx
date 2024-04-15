@@ -31,6 +31,7 @@ type ThreeTierCardProps = {
 	isRecommendedSubdued: boolean;
 	isUserSelected: boolean;
 	benefits: TierBenefits;
+	offers?: TierBenefits;
 	planCost: TierPlanCosts;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
@@ -129,6 +130,10 @@ const benefitsPrefixCss = css`
 	}
 `;
 
+const offerLimitedTimeCss = css`
+	color: #606060;
+`;
+
 const benefitsPrefixPlus = css`
 	${textSans.small()};
 	color: ${palette.neutral[7]};
@@ -187,6 +192,7 @@ export function ThreeTierCard({
 	isRecommendedSubdued,
 	isUserSelected,
 	benefits,
+	offers,
 	currencyId,
 	paymentFrequency,
 	linkCtaClickHandler,
@@ -243,15 +249,30 @@ export function ThreeTierCard({
 				<div css={benefitsPrefixCss}>
 					<span>
 						{benefits.description.map((stringPart) => {
-							if (typeof stringPart === 'string') {
-								return stringPart;
-							} else {
+							if (typeof stringPart !== 'string') {
 								return <strong>{stringPart.copy}</strong>;
+							} else {
+								return stringPart;
 							}
 						})}
 					</span>
-					<span css={benefitsPrefixPlus}>plus</span>
 				</div>
+			)}
+			{offers?.description && (
+				<div css={benefitsPrefixCss}>
+					<span>
+						{offers.description.map((stringPart) => {
+							if (typeof stringPart !== 'string') {
+								return <strong>{stringPart.copy}</strong>;
+							} else {
+								return stringPart;
+							}
+						})}
+					</span>
+				</div>
+			)}
+			{(benefits.description || offers?.description) && (
+				<span css={benefitsPrefixPlus}>plus</span>
 			)}
 			<CheckList
 				checkListData={benefits.list.map((benefit) => {
@@ -266,6 +287,26 @@ export function ThreeTierCard({
 				iconColor={palette.brand[500]}
 				cssOverrides={checkmarkList}
 			/>
+			{offers?.list && offers.list.length > 0 && (
+				<>
+					<span css={[benefitsPrefixPlus, offerLimitedTimeCss]}>
+						limited-time offer
+					</span>
+					<CheckList
+						checkListData={offers.list.map((offer) => {
+							return {
+								text: offer.copy,
+								isChecked: true,
+								toolTip: offer.tooltip,
+								strong: offer.strong,
+							};
+						})}
+						style={'compact'}
+						iconColor={palette.brand[500]}
+						cssOverrides={checkmarkList}
+					/>
+				</>
+			)}
 		</section>
 	);
 }
