@@ -43,6 +43,7 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import type { StripePaymentMethod } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -345,6 +346,7 @@ export function Checkout() {
 		| 'Paper'
 		| 'GuardianWeekly'
 		| undefined;
+	type ProductType = typeof productType;
 
 	let fulfilmentOptions: 'Domestic' | 'RestofWorld' | undefined;
 	if (query.product === 'Contribution') {
@@ -370,6 +372,154 @@ export function Checkout() {
 	) {
 		productType = 'Paper';
 	}
+
+	/** This method is defined here as it's async and is called from the form.onSubmit() */
+	const formOnSubmit = async (formData: FormData) => {
+		/**
+		 * The validation for this is currently happening on the client side form validation
+		 * So we'll assume strings are not null.
+		 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
+		 */
+
+		/** Form: Product data */
+		const productType = formData.get('productType') as ProductType;
+		const currency = formData.get('currency') as string;
+		const billingPeriod = formData.get('billingPeriod') as string;
+		const fulfilmentOptions = formData.get('fulfilmentOptions') as string;
+
+		const productData = {
+			productType,
+			currency,
+			fulfilmentOptions,
+			billingPeriod,
+		};
+
+		/** Form: Personal data */
+		const personalData = {
+			firstName: formData.get('firstName') as string,
+			lastName: formData.get('lastName') as string,
+			email: formData.get('email') as string,
+		};
+
+		/** Form: tracking data  */
+		const ophanIds = getOphanIds();
+		const referrerAcquisitionData = getReferrerAcquisitionData();
+		// TODO - this needs to be populated properly
+		const supportAbTests: string[] = [];
+
+		/** Form: Address data */
+		const countryAddress = {
+			country: formData.get('delivery-country') as IsoCountry,
+			lineOne: undefined,
+		};
+		let billingAddress;
+		let deliveryAddress = undefined;
+
+		if (product.showAddressFields) {
+			deliveryAddress = {
+				...countryAddress,
+				lineOne: formData.get('delivery-lineOne') as string,
+				lineTwo: formData.get('delivery-lineTwo') as string,
+				city: formData.get('delivery-city') as string,
+				state: formData.get('delivery-state') as string,
+				postCode: formData.get('delivery-postcode') as string,
+			};
+
+			const billingAddressMatchesDelivery =
+				formData.get('billingAddressMatchesDelivery') === 'yes';
+
+			billingAddress = !billingAddressMatchesDelivery
+				? {
+						...countryAddress,
+						lineOne: formData.get('billing-lineOne') as string,
+						lineTwo: formData.get('billing-lineTwo') as string,
+						city: formData.get('billing-city') as string,
+						state: formData.get('billing-state') as string,
+						postCode: formData.get('billing-postcode') as string,
+				  }
+				: deliveryAddress;
+		} else {
+			billingAddress = countryAddress;
+		}
+
+		// TODO - get this from the form
+		const today = new Date();
+		const paddedTodayMonth = (today.getMonth() + 1).toString().padStart(2, '0');
+		const todayDateString = `${today.getFullYear()}-${paddedTodayMonth}-${today.getDate()}`;
+		const firstDeliveryDate = todayDateString;
+
+		/** Form: data */
+		const data = {
+			...personalData,
+			ophanIds,
+			referrerAcquisitionData,
+			supportAbTests,
+			deliveryAddress,
+			billingAddress,
+			firstDeliveryDate,
+			ratePlan: formData.get('ratePlan') as string,
+			currency: formData.get('currency') as string,
+			recaptchaToken: formData.get('recaptchaToken') as string,
+			product: productData,
+			// TODO - we don't have debugInfo as this is populated with Redux state
+			// Not 100% sure what and if we should populate this
+			debugInfo: '',
+		};
+
+		let paymentFields;
+		if (
+			paymentMethod === 'Stripe' &&
+			stripe &&
+			cardElement &&
+			stripeClientSecret
+		) {
+			const setupIntentResult = await stripe.confirmCardSetup(
+				stripeClientSecret,
+				{
+					payment_method: {
+						card: cardElement,
+					},
+				},
+			);
+
+			if (setupIntentResult.error) {
+				console.error(setupIntentResult.error);
+			} else if (setupIntentResult.setupIntent.payment_method) {
+				paymentFields = {
+					recaptchaToken: recaptchaToken,
+					stripePaymentType: 'StripeCheckout' as StripePaymentMethod,
+					paymentMethod: setupIntentResult.setupIntent.payment_method as string,
+					stripePublicKey,
+				};
+			}
+		}
+
+		if (paymentMethod === 'DirectDebit') {
+			paymentFields = {
+				accountHolderName: formData.get('accountHolderName') as string,
+				accountNumber: formData.get('accountNumber') as string,
+				sortCode: formData.get('sortCode') as string,
+				recaptchaToken,
+			};
+		}
+
+		if (paymentFields) {
+			const createSupportWorkersRequest = {
+				...data,
+				paymentFields,
+			};
+			const createSubscriptionResult = await fetch('/subscribe/create', {
+				method: 'POST',
+				body: JSON.stringify(createSupportWorkersRequest),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			// TODO - pass onto the thank you page
+			console.info('createSubscriptionResult', createSubscriptionResult);
+		}
+	};
 
 	return (
 		<PageScaffold
@@ -417,149 +567,9 @@ export function Checkout() {
 								event.preventDefault();
 								const form = event.currentTarget;
 								const formData = new FormData(form);
-								/**
-								 * The validation for this is currently happening on the client side form validation
-								 * So we'll assume strings are not null.
-								 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
-								 */
+								void formOnSubmit(formData);
 
-								/** Form: Product data */
-								const productType = formData.get('productType') as string;
-								const currency = formData.get('currency') as string;
-								const billingPeriod = formData.get('billingPeriod') as string;
-								const fulfilmentOptions = formData.get(
-									'fulfilmentOptions',
-								) as string;
-
-								const productData = {
-									productType,
-									currency,
-									fulfilmentOptions,
-									billingPeriod,
-								};
-
-								/** Form: Personal data */
-								const personalData = {
-									firstName: formData.get('firstName') as string,
-									lastName: formData.get('lastName') as string,
-									email: formData.get('email') as string,
-								};
-
-								/** Form: tracking data  */
-								const ophanIds = getOphanIds();
-								const referrerAcquisitionData = getReferrerAcquisitionData();
-								// TODO - this needs to be populated properly
-								const supportAbTests: string[] = [];
-
-								/** Form: data */
-								const data = {
-									...personalData,
-									ophanIds,
-									referrerAcquisitionData,
-									supportAbTests,
-									ratePlan: formData.get('ratePlan') as string,
-									currency: formData.get('currency') as string,
-									recaptchaToken: formData.get('recaptchaToken') as string,
-									product: productData,
-								};
-
-								/** Form: Address data */
-								const deliveryAddress = product.showAddressFields
-									? {
-											lineOne: formData.get('delivery-lineOne') as string,
-											lineTwo: formData.get('delivery-lineTwo') as string,
-											city: formData.get('delivery-city') as string,
-											state: formData.get('delivery-state') as string,
-											postcode: formData.get('delivery-postcode') as string,
-											country: formData.get('delivery-country') as string,
-									  }
-									: {};
-
-								const billingAddressMatchesDelivery =
-									formData.get('billingAddressMatchesDelivery') === 'yes';
-
-								const billingAddress =
-									product.showAddressFields && !billingAddressMatchesDelivery
-										? {
-												lineOne: formData.get('billing-lineOne') as string,
-												lineTwo: formData.get('billing-lineTwo') as string,
-												city: formData.get('billing-city') as string,
-												state: formData.get('billing-state') as string,
-												postcode: formData.get('billing-postcode') as string,
-												country: formData.get('billing-country') as string,
-										  }
-										: deliveryAddress;
-
-								if (
-									paymentMethod === 'Stripe' &&
-									stripe &&
-									cardElement &&
-									stripeClientSecret
-								) {
-									void stripe
-										.confirmCardSetup(stripeClientSecret, {
-											payment_method: {
-												card: cardElement,
-											},
-										})
-										.then((result) => {
-											if (result.error) {
-												console.error(result.error);
-											} else if (result.setupIntent.payment_method) {
-												const paymentFields = {
-													recaptchaToken: recaptchaToken,
-													stripePaymentType: 'StripeCheckout',
-													paymentMethod: result.setupIntent
-														.payment_method as string,
-												};
-
-												const createSupportWorkersRequest = {
-													...data,
-													// TODO - get this from the form
-													firstDeliveryDate: '2024-04-26',
-													paymentFields,
-													deliveryAddress,
-													billingAddress,
-												};
-
-												// This data is what will be posted to /create
-												void fetch('/subscribe/create', {
-													method: 'POST',
-													body: JSON.stringify(createSupportWorkersRequest),
-													headers: {
-														'Content-Type': 'application/json',
-													},
-												})
-													.then((response) => {
-														console.info(response);
-													})
-													.catch((error) => {
-														console.error(error);
-													});
-											}
-										});
-								}
-
-								if (paymentMethod === 'DirectDebit') {
-									const paymentFields = {
-										accountHolderName: formData.get(
-											'accountHolderName',
-										) as string,
-										accountNumber: formData.get('accountNumber') as string,
-										sortCode: formData.get('sortCode') as string,
-										recaptchaToken,
-									};
-
-									// This data is what will be posted to /create
-									console.info('Posting data', {
-										...data,
-										paymentFields,
-										deliveryAddress,
-										billingAddress,
-									});
-								}
-
-								// The form is sumitted async as a lot of the payment methods require fetch requests
+								/** The form uses a lot of async requests, so we just return false */
 								return false;
 							}}
 						>
