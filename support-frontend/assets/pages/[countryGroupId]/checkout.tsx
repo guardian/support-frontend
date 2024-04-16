@@ -56,11 +56,10 @@ import { getStripeKey } from 'helpers/forms/stripe';
 import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { newspaperCountries } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
+import { productCatalogDescription } from 'helpers/productCatalog';
 import { renderPage } from 'helpers/rendering/render';
 import { get } from 'helpers/storage/cookie';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -128,77 +127,6 @@ const query = {
 	product: searchParams.get('product'),
 	ratePlan: searchParams.get('ratePlan'),
 };
-
-function describeProduct(product: string, ratePlan: string) {
-	let description = `${product} - ${ratePlan}`;
-	let frequency = '';
-	let showAddressFields = false;
-	let addressCountries = {};
-
-	if (product === 'HomeDelivery') {
-		frequency = 'month';
-		description = `${ratePlan} paper`;
-
-		showAddressFields = true;
-		addressCountries = newspaperCountries;
-
-		if (ratePlan === 'Sixday') {
-			description = 'Six day paper';
-		}
-		if (ratePlan === 'Everyday') {
-			description = 'Every day paper';
-		}
-		if (ratePlan === 'Weekend') {
-			description = 'Weekend paper';
-		}
-		if (ratePlan === 'Saturday') {
-			description = 'Saturday paper';
-		}
-		if (ratePlan === 'Sunday') {
-			description = 'Sunday paper';
-		}
-	}
-
-	if (product === 'NationalDelivery') {
-		showAddressFields = true;
-		addressCountries = newspaperCountries;
-	}
-
-	if (
-		product === 'GuardianWeeklyDomestic' ||
-		product === 'GuardianWeeklyRestOfWorld'
-	) {
-		showAddressFields = true;
-		addressCountries = gwDeliverableCountries;
-
-		if (ratePlan === 'OneYearGift') {
-			frequency = 'year';
-			description = 'The Guardian Weekly Gift Subscription';
-		}
-		if (ratePlan === 'Annual') {
-			frequency = 'year';
-			description = 'The Guardian Weekly';
-		}
-		if (ratePlan === 'Quarterly') {
-			frequency = 'quarter';
-			description = 'The Guardian Weekly';
-		}
-		if (ratePlan === 'Monthly') {
-			frequency = 'month';
-			description = 'The Guardian Weekly';
-		}
-		if (ratePlan === 'ThreeMonthGift') {
-			frequency = 'quarter';
-			description = 'The Guardian Weekly Gift Subscription';
-		}
-		if (ratePlan === 'SixWeekly') {
-			frequency = 'month';
-			description = 'The Guardian Weekly';
-		}
-	}
-
-	return { description, frequency, showAddressFields, addressCountries };
-}
 
 /** Page styles - styles used specifically for the checkout page */
 const darkBackgroundContainerMobile = css`
@@ -272,7 +200,17 @@ export function Checkout() {
 	const currentRatePlan = currentProduct.ratePlans[query.ratePlan];
 	const currentPrice = currentRatePlan.pricing[currentCurrencyKey];
 
-	const product = describeProduct(query.product, query.ratePlan);
+	const productDescription = productCatalogDescription[query.product];
+	const ratePlanDescription = productDescription.ratePlans[query.ratePlan];
+	let paymentFrequency;
+	if (ratePlanDescription.billingPeriod === 'Annual') {
+		paymentFrequency = 'year';
+	} else if (ratePlanDescription.billingPeriod === 'Month') {
+		paymentFrequency = 'month';
+	} else {
+		paymentFrequency = 'quarter';
+	}
+
 	const showStateSelect =
 		query.product !== 'Contribution' &&
 		(countryId === 'US' || countryId === 'CA' || countryId === 'AU');
@@ -346,8 +284,8 @@ export function Checkout() {
 						<Box cssOverrides={shorterBoxMargin}>
 							<BoxContents>
 								<ContributionsOrderSummary
-									description={product.description}
-									paymentFrequency={product.frequency}
+									description={productDescription.label}
+									paymentFrequency={paymentFrequency}
 									amount={currentPrice}
 									currency={currentCurrency}
 									checkListData={[]}
@@ -385,7 +323,7 @@ export function Checkout() {
 									recaptchaToken: formData.get('recaptchaToken') as string,
 								};
 
-								const deliveryAddress = product.showAddressFields
+								const deliveryAddress = productDescription.deliverableTo
 									? {
 											lineOne: formData.get('delivery-lineOne') as string,
 											lineTwo: formData.get('delivery-lineTwo') as string,
@@ -399,7 +337,8 @@ export function Checkout() {
 									formData.get('billingAddressMatchesDelivery') === 'yes';
 
 								const billingAddress =
-									product.showAddressFields && !billingAddressMatchesDelivery
+									productDescription.deliverableTo &&
+									!billingAddressMatchesDelivery
 										? {
 												lineOne: formData.get('billing-lineOne') as string,
 												lineTwo: formData.get('billing-lineTwo') as string,
@@ -523,7 +462,7 @@ export function Checkout() {
 
 									<CheckoutDivider spacing="loose" />
 
-									{product.showAddressFields && (
+									{productDescription.deliverableTo && (
 										<>
 											<fieldset>
 												<h2 css={legend}>Where should we deliver to?</h2>
@@ -535,7 +474,7 @@ export function Checkout() {
 													country={countryId}
 													state={deliveryState}
 													postCode={deliveryPostcode}
-													countries={product.addressCountries}
+													countries={productDescription.deliverableTo}
 													errors={[]}
 													postcodeState={{
 														results: deliveryPostcodeStateResults,
@@ -626,7 +565,7 @@ export function Checkout() {
 														country={countryId}
 														state={billingState}
 														postCode={billingPostcode}
-														countries={product.addressCountries}
+														countries={productDescription.deliverableTo}
 														errors={[]}
 														postcodeState={{
 															results: billingPostcodeStateResults,
