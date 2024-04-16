@@ -115,11 +115,7 @@ export function CheckoutNudgeContainer({
 		defaultAmount,
 	).toString();
 
-	const { amounts: amountsVariant } = useContributionsSelector(
-		(state) => state.common,
-	);
-
-	const isDynamic = !isSubjectToVatCompliantAmounts(amountsVariant);
+	const isDynamic = !isSubjectToVatCompliantAmounts(amounts);
 
 	const { otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
