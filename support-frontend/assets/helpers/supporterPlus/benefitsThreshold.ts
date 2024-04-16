@@ -2,7 +2,6 @@ import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { productCatalog } from 'helpers/productCatalog';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -10,37 +9,6 @@ import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { isRecurring } from './isContributionRecurring';
 
 export type ThresholdAmounts = Record<RegularContributionType, number>;
-export const upperBenefitsThresholds: Record<CountryGroupId, ThresholdAmounts> =
-	{
-		GBPCountries: {
-			MONTHLY: 20,
-			ANNUAL: 120,
-		},
-		UnitedStates: {
-			MONTHLY: 20,
-			ANNUAL: 120,
-		},
-		EURCountries: {
-			MONTHLY: 20,
-			ANNUAL: 120,
-		},
-		International: {
-			MONTHLY: 22,
-			ANNUAL: 150,
-		},
-		AUDCountries: {
-			MONTHLY: 30,
-			ANNUAL: 170,
-		},
-		NZDCountries: {
-			MONTHLY: 30,
-			ANNUAL: 170,
-		},
-		Canada: {
-			MONTHLY: 22,
-			ANNUAL: 150,
-		},
-	};
 
 export function getLowerBenefitsThreshold(
 	state: ContributionsState,
