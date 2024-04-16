@@ -99,7 +99,13 @@ export const isLargeDonation = (
 	return amount >= largeDonations[contributionType];
 };
 
-export function SupporterPlusThankYou(): JSX.Element {
+export type SupporterPlusThankYouProps = {
+	overideThresholdPrice?: number;
+};
+
+export function SupporterPlusThankYou({
+	overideThresholdPrice,
+}: SupporterPlusThankYouProps): JSX.Element {
 	const campaignSettings = useMemo<CampaignSettings | null>(
 		() => getCampaignSettings(campaignCode),
 		[],
@@ -141,9 +147,16 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const isAmountLargeDonation = amount
 		? isLargeDonation(amount, contributionType, paymentMethod)
 		: false;
-	const thresholdPrice = useContributionsSelector((state) =>
-		getThresholdPrice(contributionType, state),
-	);
+	/**
+	 * thankyou stories do not have access to the productCatalog thresholdPrice from Zuora
+	 * overideThresholdPrice allows thankyou stories to provide their own thresholdPrice
+	 * without it ever appearing in the actual thankyou page
+	 */
+	const thresholdPrice =
+		overideThresholdPrice ??
+		useContributionsSelector((state) =>
+			getThresholdPrice(contributionType, state),
+		);
 	/**
 	 * We would normally use the isSuporterPlusFromState selector here,
 	 * but the amount can actually come from `localStorage`.
