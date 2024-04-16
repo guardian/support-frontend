@@ -144,6 +144,10 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const thresholdPrice = useContributionsSelector((state) =>
 		getThresholdPrice(contributionType, state),
 	);
+	const { testName: amountsTestName } = useContributionsSelector(
+		(state) => state.common.amounts,
+	);
+
 	/**
 	 * We would normally use the isSuporterPlusFromState selector here,
 	 * but the amount can actually come from `localStorage`.
@@ -151,7 +155,9 @@ export function SupporterPlusThankYou(): JSX.Element {
 	 * We should clear this up when refactoring
 	 */
 	const isSupporterPlus =
-		contributionType !== 'ONE_OFF' && thresholdPrice
+		contributionType !== 'ONE_OFF' &&
+		amountsTestName !== 'VAT_COMPLIANCE' &&
+		thresholdPrice
 			? amount >= thresholdPrice
 			: false;
 
