@@ -34,11 +34,16 @@ export function getLowerBenefitThreshold(
 
 export function getLowerBenefitsThresholds(
 	state: ContributionsState,
-	currencyId: IsoCurrency,
 ): ThresholdAmounts {
 	return {
-		MONTHLY: getLowerBenefitThreshold('MONTHLY', currencyId),
-		ANNUAL: getLowerBenefitThreshold('ANNUAL', currencyId),
+		MONTHLY: getLowerBenefitThreshold(
+			'MONTHLY',
+			state.common.internationalisation.currencyId,
+		),
+		ANNUAL: getLowerBenefitThreshold(
+			'ANNUAL',
+			state.common.internationalisation.currencyId,
+		),
 	};
 }
 
