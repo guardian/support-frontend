@@ -59,7 +59,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import { productCatalogDescription } from 'helpers/productCatalog';
+import { isProductId, productCatalogDescription } from 'helpers/productCatalog';
 import { renderPage } from 'helpers/rendering/render';
 import { get } from 'helpers/storage/cookie';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -188,18 +188,13 @@ export function Checkout() {
 		return <div>Not enough query parameters</div>;
 	}
 
-	/**
-	 * We do this check here as we have `noUncheckedIndexedAccess: false` set in our `tsconfig`
-	 * which means `productCatalog[query.product]` would never return undefined, but it could.
-	 */
-	if (!(query.product in productCatalog)) {
-		return <div>Product not found</div>;
-	}
-
 	const currentProduct = productCatalog[query.product];
 	const currentRatePlan = currentProduct.ratePlans[query.ratePlan];
 	const currentPrice = currentRatePlan.pricing[currentCurrencyKey];
 
+	if (!isProductId(query.product)) {
+		return <div>Product {query.product} not found</div>;
+	}
 	const productDescription = productCatalogDescription[query.product];
 	const ratePlanDescription = productDescription.ratePlans[query.ratePlan];
 	let paymentFrequency;
