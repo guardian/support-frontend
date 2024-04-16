@@ -105,7 +105,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 		() => getCampaignSettings(campaignCode),
 		[],
 	);
-	const { abParticipations } = useContributionsSelector(
+	const { abParticipations, amounts } = useContributionsSelector(
 		(state) => state.common,
 	);
 	const { countryId, countryGroupId, currencyId } = useContributionsSelector(
@@ -145,9 +145,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const thresholdPrice = useContributionsSelector((state) =>
 		getThresholdPrice(contributionType, state),
 	);
-	const { amounts: amountsVariant } = useContributionsSelector(
-		(state) => state.common,
-	);
 
 	/**
 	 * We would normally use the isSuporterPlusFromState selector here,
@@ -157,7 +154,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 	 */
 	const isSupporterPlus =
 		contributionType !== 'ONE_OFF' &&
-		!isSubjectToVatCompliantAmounts(amountsVariant) &&
+		!isSubjectToVatCompliantAmounts(amounts) &&
 		thresholdPrice
 			? amount >= thresholdPrice
 			: false;
