@@ -262,6 +262,99 @@ export function Checkout() {
 	const [accountHolderConfirmation, setAccountHolderConfirmation] =
 		useState(false);
 
+	const formOnSubmit = async (formData: FormData) => {
+		/**
+		 * The validation for this is currently happening on the client side form validation
+		 * So we'll assume strings are not null.
+		 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
+		 */
+		const data = {
+			firstName: formData.get('firstName') as string,
+			lastName: formData.get('lastName') as string,
+			email: formData.get('email') as string,
+			product: formData.get('product') as string,
+			ratePlan: formData.get('ratePlan') as string,
+			currency: formData.get('currency') as string,
+			recaptchaToken: formData.get('recaptchaToken') as string,
+		};
+
+		const deliveryAddress = productDescription.deliverableTo
+			? {
+					lineOne: formData.get('delivery-lineOne') as string,
+					lineTwo: formData.get('delivery-lineTwo') as string,
+					city: formData.get('delivery-city') as string,
+					state: formData.get('delivery-state') as string,
+					postcode: formData.get('delivery-postcode') as string,
+			  }
+			: {};
+
+		const billingAddressMatchesDelivery =
+			formData.get('billingAddressMatchesDelivery') === 'yes';
+
+		const billingAddress =
+			productDescription.deliverableTo && !billingAddressMatchesDelivery
+				? {
+						lineOne: formData.get('billing-lineOne') as string,
+						lineTwo: formData.get('billing-lineTwo') as string,
+						city: formData.get('billing-city') as string,
+						state: formData.get('billing-state') as string,
+						postcode: formData.get('billing-postcode') as string,
+				  }
+				: deliveryAddress;
+
+		if (
+			paymentMethod === 'Stripe' &&
+			stripe &&
+			cardElement &&
+			stripeClientSecret
+		) {
+			const stripeIntentResult = await stripe.confirmCardSetup(
+				stripeClientSecret,
+				{
+					payment_method: {
+						card: cardElement,
+					},
+				},
+			);
+
+			if (stripeIntentResult.error) {
+				console.error(stripeIntentResult.error);
+			} else if (stripeIntentResult.setupIntent.payment_method) {
+				const paymentFields = {
+					recaptchaToken: recaptchaToken,
+					stripePaymentType: 'StripeCheckout',
+					paymentMethod: stripeIntentResult.setupIntent
+						.payment_method as string,
+				};
+
+				// This data is what will be posted to /create
+				console.info('Posting data', {
+					...data,
+					paymentFields,
+					deliveryAddress,
+					billingAddress,
+				});
+			}
+		}
+
+		if (paymentMethod === 'DirectDebit') {
+			const paymentFields = {
+				accountHolderName: formData.get('accountHolderName') as string,
+				accountNumber: formData.get('accountNumber') as string,
+				sortCode: formData.get('sortCode') as string,
+				recaptchaToken,
+			};
+
+			// This data is what will be posted to /create
+			console.info('Posting data', {
+				...data,
+				paymentFields,
+				deliveryAddress,
+				billingAddress,
+			});
+		}
+	};
+
 	return (
 		<PageScaffold
 			header={<Header></Header>}
@@ -308,100 +401,9 @@ export function Checkout() {
 								event.preventDefault();
 								const form = event.currentTarget;
 								const formData = new FormData(form);
-								/**
-								 * The validation for this is currently happening on the client side form validation
-								 * So we'll assume strings are not null.
-								 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
-								 */
-								const data = {
-									firstName: formData.get('firstName') as string,
-									lastName: formData.get('lastName') as string,
-									email: formData.get('email') as string,
-									product: formData.get('product') as string,
-									ratePlan: formData.get('ratePlan') as string,
-									currency: formData.get('currency') as string,
-									recaptchaToken: formData.get('recaptchaToken') as string,
-								};
+								/** we defer this to an external function as a lot of the payment methods use async */
+								void formOnSubmit(formData);
 
-								const deliveryAddress = productDescription.deliverableTo
-									? {
-											lineOne: formData.get('delivery-lineOne') as string,
-											lineTwo: formData.get('delivery-lineTwo') as string,
-											city: formData.get('delivery-city') as string,
-											state: formData.get('delivery-state') as string,
-											postcode: formData.get('delivery-postcode') as string,
-									  }
-									: {};
-
-								const billingAddressMatchesDelivery =
-									formData.get('billingAddressMatchesDelivery') === 'yes';
-
-								const billingAddress =
-									productDescription.deliverableTo &&
-									!billingAddressMatchesDelivery
-										? {
-												lineOne: formData.get('billing-lineOne') as string,
-												lineTwo: formData.get('billing-lineTwo') as string,
-												city: formData.get('billing-city') as string,
-												state: formData.get('billing-state') as string,
-												postcode: formData.get('billing-postcode') as string,
-										  }
-										: deliveryAddress;
-
-								if (
-									paymentMethod === 'Stripe' &&
-									stripe &&
-									cardElement &&
-									stripeClientSecret
-								) {
-									void stripe
-										.confirmCardSetup(stripeClientSecret, {
-											payment_method: {
-												card: cardElement,
-											},
-										})
-										.then((result) => {
-											if (result.error) {
-												console.error(result.error);
-											} else if (result.setupIntent.payment_method) {
-												const paymentFields = {
-													recaptchaToken: recaptchaToken,
-													stripePaymentType: 'StripeCheckout',
-													paymentMethod: result.setupIntent
-														.payment_method as string,
-												};
-
-												// This data is what will be posted to /create
-												console.info('Posting data', {
-													...data,
-													paymentFields,
-													deliveryAddress,
-													billingAddress,
-												});
-											}
-										});
-								}
-
-								if (paymentMethod === 'DirectDebit') {
-									const paymentFields = {
-										accountHolderName: formData.get(
-											'accountHolderName',
-										) as string,
-										accountNumber: formData.get('accountNumber') as string,
-										sortCode: formData.get('sortCode') as string,
-										recaptchaToken,
-									};
-
-									// This data is what will be posted to /create
-									console.info('Posting data', {
-										...data,
-										paymentFields,
-										deliveryAddress,
-										billingAddress,
-									});
-								}
-
-								// The form is sumitted async as a lot of the payment methods require fetch requests
 								return false;
 							}}
 						>
