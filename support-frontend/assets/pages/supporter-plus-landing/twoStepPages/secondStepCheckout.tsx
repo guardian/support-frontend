@@ -63,11 +63,11 @@ export function SupporterPlusCheckout({
 	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
 
 	const navigate = useNavigate();
-	const { abParticipations } = useContributionsSelector(
+	const { abParticipations, amounts } = useContributionsSelector(
 		(state) => state.common,
 	);
 
-	const inThreeTier = threeTierCheckoutEnabled(abParticipations, countryId);
+	const inThreeTier = threeTierCheckoutEnabled(abParticipations, amounts);
 	const showPriceCards = inThreeTier && contributionType === 'ONE_OFF';
 
 	const changeButton = (
