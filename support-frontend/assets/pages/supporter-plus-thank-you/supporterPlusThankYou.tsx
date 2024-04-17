@@ -32,6 +32,7 @@ import { successfulContributionConversion } from 'helpers/tracking/googleTagMana
 import { pageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { getAbsoluteURL } from 'helpers/urls/url';
+import { isSubjectToVatCompliantAmounts } from 'helpers/vatCompliance';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
@@ -104,7 +105,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 		() => getCampaignSettings(campaignCode),
 		[],
 	);
-	const { abParticipations } = useContributionsSelector(
+	const { abParticipations, amounts } = useContributionsSelector(
 		(state) => state.common,
 	);
 	const { countryId, countryGroupId, currencyId } = useContributionsSelector(
@@ -144,9 +145,6 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const thresholdPrice = useContributionsSelector((state) =>
 		getThresholdPrice(contributionType, state),
 	);
-	const { testName: amountsTestName } = useContributionsSelector(
-		(state) => state.common.amounts,
-	);
 
 	/**
 	 * We would normally use the isSuporterPlusFromState selector here,
@@ -156,7 +154,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 	 */
 	const isSupporterPlus =
 		contributionType !== 'ONE_OFF' &&
-		amountsTestName !== 'VAT_COMPLIANCE' &&
+		!isSubjectToVatCompliantAmounts(amounts) &&
 		thresholdPrice
 			? amount >= thresholdPrice
 			: false;

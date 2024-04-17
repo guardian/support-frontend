@@ -6,6 +6,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
+import { vatCompliantAmountsTestName } from 'helpers/vatCompliance';
 import type {
 	AmountsTest,
 	AmountsVariant,
@@ -259,16 +260,10 @@ function getAmountsTestVariant(
 		}
 	};
 
-	// Is the country in the list for contributions only checkout?
-	// This relies on the existence of an amounts test with a specific name
-	// It could be done using the countriesAffectedByVATStatus list
-	// but this would need the list and the amounts test to be in sync
-	// and this way simplifies testing as it is all set up in the RRCP
-	const contribOnlyTestName = 'VAT_COMPLIANCE';
 	const contribOnlyAmounts = amounts.find((t) => {
 		return (
 			t.isLive &&
-			t.testName === contribOnlyTestName &&
+			t.testName === vatCompliantAmountsTestName &&
 			t.targeting.targetingType === 'Country' &&
 			t.targeting.countries.includes(country)
 		);
@@ -276,13 +271,13 @@ function getAmountsTestVariant(
 	if (contribOnlyAmounts) {
 		const amountsParticipation = buildParticipation(
 			contribOnlyAmounts,
-			contribOnlyTestName,
+			vatCompliantAmountsTestName,
 			contribOnlyAmounts.variants[0].variantName,
 		);
 		return {
 			selectedAmountsVariant: {
 				...contribOnlyAmounts.variants[0],
-				testName: contribOnlyTestName,
+				testName: vatCompliantAmountsTestName,
 			},
 			amountsParticipation,
 		};

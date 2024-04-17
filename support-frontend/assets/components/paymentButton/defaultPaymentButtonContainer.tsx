@@ -87,15 +87,16 @@ export function DefaultPaymentButtonContainer({
 		isSupporterPlusFromState,
 	);
 
+	const { abParticipations, amounts } = useContributionsSelector(
+		(state) => state.common,
+	);
+
 	const buttonText = Number.isNaN(selectedAmount)
 		? 'Pay now'
 		: createButtonText(
 				amountWithCurrency,
 				amountIsAboveThreshold ||
-					threeTierCheckoutEnabled(
-						useContributionsSelector((state) => state.common).abParticipations,
-						countryId,
-					),
+					threeTierCheckoutEnabled(abParticipations, amounts),
 				contributionTypeToPaymentInterval[contributionType],
 		  );
 

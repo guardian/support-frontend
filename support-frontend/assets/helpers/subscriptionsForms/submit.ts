@@ -247,7 +247,7 @@ function onPaymentAuthorised(
 	} = state.page.checkoutForm.product;
 	const inThreeTier = threeTierCheckoutEnabled(
 		state.common.abParticipations,
-		state.common.internationalisation.countryId,
+		state.common.amounts,
 	);
 	const productType = getSubscriptionType(state);
 	const { paymentMethod } = state.page.checkoutForm.payment;
