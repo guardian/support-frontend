@@ -3,14 +3,12 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { isOneOff } from 'helpers/supporterPlus/isContributionRecurring';
-
-const isCountryAffectedByVATStatus = (testName: string): boolean =>
-	testName === 'VAT_COMPLIANCE';
+import { isSubjectToVatCompliantAmounts } from 'helpers/vatCompliance';
 
 export function isSupporterPlusFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
-	const countryIsAffectedByVATStatus = isCountryAffectedByVATStatus(
-		state.common.amounts.testName,
+	const countryIsAffectedByVATStatus = isSubjectToVatCompliantAmounts(
+		state.common.amounts,
 	);
 
 	if (isOneOff(contributionType) || countryIsAffectedByVATStatus) {
@@ -28,8 +26,8 @@ export function isSupporterPlusFromState(state: ContributionsState): boolean {
 
 export function hideBenefitsListFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
-	const countryIsAffectedByVATStatus = isCountryAffectedByVATStatus(
-		state.common.amounts.testName,
+	const countryIsAffectedByVATStatus = isSubjectToVatCompliantAmounts(
+		state.common.amounts,
 	);
 
 	if (isOneOff(contributionType) || countryIsAffectedByVATStatus) {

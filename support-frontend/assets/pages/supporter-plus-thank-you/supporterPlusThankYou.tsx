@@ -32,6 +32,7 @@ import { successfulContributionConversion } from 'helpers/tracking/googleTagMana
 import { pageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { getAbsoluteURL } from 'helpers/urls/url';
+import { isSubjectToVatCompliantAmounts } from 'helpers/vatCompliance';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
@@ -110,7 +111,7 @@ export function SupporterPlusThankYou({
 		() => getCampaignSettings(campaignCode),
 		[],
 	);
-	const { abParticipations } = useContributionsSelector(
+	const { abParticipations, amounts } = useContributionsSelector(
 		(state) => state.common,
 	);
 	const { countryId, countryGroupId, currencyId } = useContributionsSelector(
@@ -171,7 +172,7 @@ export function SupporterPlusThankYou({
 	 */
 	const isSupporterPlus =
 		contributionType !== 'ONE_OFF' &&
-		amountsTestName !== 'VAT_COMPLIANCE' &&
+		!isSubjectToVatCompliantAmounts(amounts) &&
 		thresholdPrice
 			? amount >= thresholdPrice
 			: false;
