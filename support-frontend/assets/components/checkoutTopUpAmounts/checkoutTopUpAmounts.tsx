@@ -16,7 +16,7 @@ export interface CheckoutTopUpAmountsProps {
 	currencySymbol: string;
 	timePeriod: string;
 	amounts: number[];
-	isWithinThreshold: boolean;
+	isAboveThreshold: boolean;
 	handleAmountUpdate?: (updateAmountBy: number, index: number) => void;
 	customMargin?: string;
 }
@@ -25,14 +25,14 @@ export function CheckoutTopUpAmounts({
 	currencySymbol,
 	timePeriod,
 	amounts,
-	isWithinThreshold,
+	isAboveThreshold,
 	handleAmountUpdate,
 	customMargin,
 }: CheckoutTopUpAmountsProps): JSX.Element {
 	const [selectedTopUpamount, setSelectedTopUpamount] = useState<number>(0);
 	const amountsLength = amounts.length;
 
-	if (!isWithinThreshold) return <></>;
+	if (!isAboveThreshold) return <></>;
 	return (
 		<section css={container(customMargin)}>
 			<h3 css={title}>Your support funds our journalism</h3>
