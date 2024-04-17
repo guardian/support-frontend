@@ -1,8 +1,9 @@
 import type { RegularContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import { detect, glyph } from 'helpers/internationalisation/currency';
+import { currencies, detect } from 'helpers/internationalisation/currency';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
+import { simpleFormatAmount } from './forms/checkouts';
 
 export const supporterPlusLegal = (
 	countryGroupId: CountryGroupId,
@@ -10,20 +11,22 @@ export const supporterPlusLegal = (
 	divider: string,
 	promotion?: Promotion,
 ) => {
-	const currencyGlyph = glyph(detect(countryGroupId));
-	const tierPlanCost = `${currencyGlyph}${lowerBenefitsThresholds[countryGroupId][contributionType]}`;
+	const isoCurrency = detect(countryGroupId);
+	const currency = currencies[isoCurrency];
+	const amount = lowerBenefitsThresholds[countryGroupId][contributionType];
+	const amountFormatted = simpleFormatAmount(currency, amount);
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
-	const planCostNoPromo = `${tierPlanCost}${divider}${period}`;
-	const promoPrice = promotion?.discountedPrice;
-	if (promoPrice && promotion.numberOfDiscountedPeriods) {
+	const amountPerPeriod = `${amountFormatted}${divider}${period}`;
+
+	if (promotion) {
 		// EXAMPLE: $8.50/month for the first 6 months, then $17/month
-		const promoPriceRounded =
-			promoPrice % 1 === 0 ? promoPrice : promoPrice.toFixed(2);
-		const discountTierPlanCost = `${currencyGlyph}${promoPriceRounded}`;
-		const discountDuration = promotion.numberOfDiscountedPeriods;
-		return `${discountTierPlanCost}${divider}${period} for the first ${
+		const promoPrice = promotion.discountedPrice ?? amount;
+		const promoPriceFormatted = simpleFormatAmount(currency, promoPrice);
+		const discountDuration = promotion.numberOfDiscountedPeriods ?? 0;
+		return `${promoPriceFormatted}${divider}${period} for the first ${
 			discountDuration > 1 ? discountDuration : ''
-		} ${period}${discountDuration > 1 ? 's' : ''}, then ${planCostNoPromo}`;
+		} ${period}${discountDuration > 1 ? 's' : ''}, then ${amountPerPeriod}`;
 	}
-	return planCostNoPromo;
+
+	return amountPerPeriod;
 };

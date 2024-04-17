@@ -202,10 +202,6 @@ export function ThreeTierCard({
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId];
 	const period = recurringContributionPeriodMap[paymentFrequency];
-	const promotionPrice = promotion?.discountedPrice;
-	const formattedPromotionPrice =
-		promotionPrice && simpleFormatAmount(currency, promotionPrice);
-	const hasPromotion = !!formattedPromotionPrice;
 	const formattedPrice = simpleFormatAmount(currency, price);
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const { label, benefits, benefitsSummary, offers, offersSummary } =
@@ -220,11 +216,14 @@ export function ThreeTierCard({
 				<ThreeTierLozenge subdue={isRecommendedSubdued} title="Recommended" />
 			)}
 			<h2 css={titleCss}>{label}</h2>
-			<p css={priceCss(hasPromotion)}>
-				{hasPromotion && (
+			<p css={priceCss(!!promotion)}>
+				{promotion && (
 					<>
 						<span css={previousPriceStrikeThrough}>{formattedPrice}</span>{' '}
-						{`${formattedPromotionPrice}/${period}`}
+						{`${simpleFormatAmount(
+							currency,
+							promotion.discountedPrice ?? price,
+						)}/${period}`}
 						<span css={discountSummaryCss}>
 							{discountSummaryCopy(
 								currency,
@@ -236,7 +235,7 @@ export function ThreeTierCard({
 						</span>
 					</>
 				)}
-				{!hasPromotion && `${formattedPrice}/${period}`}
+				{!promotion && `${formattedPrice}/${period}`}
 			</p>
 			<ThemeProvider theme={buttonThemeReaderRevenueBrand}>
 				<LinkButton
