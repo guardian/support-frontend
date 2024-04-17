@@ -104,7 +104,7 @@ OneOffNotSignedIn.args = {
 OneOffNotSignedIn.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const { paymentMethod, shouldShowLargeDonationMessage, countryGroup } =
 			args;
@@ -117,9 +117,11 @@ OneOffNotSignedIn.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-		store.dispatch(
-			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
-		);
+
+		const country = countryGroups[countryGroup].countries[0];
+		if (country) {
+			store.dispatch(setCountryInternationalisation(country));
+		}
 
 		store.dispatch(
 			setSelectedAmount(
@@ -155,7 +157,7 @@ OneOffSignedIn.args = {
 OneOffSignedIn.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const { paymentMethod, shouldShowLargeDonationMessage, countryGroup } =
 			args;
@@ -169,9 +171,10 @@ OneOffSignedIn.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-		store.dispatch(
-			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
-		);
+		const country = countryGroups[countryGroup].countries[0];
+		if (country) {
+			store.dispatch(setCountryInternationalisation(country));
+		}
 
 		store.dispatch(
 			setSelectedAmount(
@@ -206,7 +209,7 @@ OneOffSignUp.args = {
 OneOffSignUp.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const { paymentMethod, shouldShowLargeDonationMessage, countryGroup } =
 			args;
@@ -222,9 +225,10 @@ OneOffSignUp.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-		store.dispatch(
-			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
-		);
+		const country = countryGroups[countryGroup].countries[0];
+		if (country) {
+			store.dispatch(setCountryInternationalisation(country));
+		}
 
 		store.dispatch(
 			setSelectedAmount(
@@ -261,7 +265,7 @@ RecurringNotSignedIn.args = {
 RecurringNotSignedIn.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const {
 			contributionType,
@@ -282,9 +286,10 @@ RecurringNotSignedIn.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-		store.dispatch(
-			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
-		);
+		const country = countryGroups[countryGroup].countries[0];
+		if (country) {
+			store.dispatch(setCountryInternationalisation(country));
+		}
 
 		const thresholdPrice =
 			lowerBenefitsThresholds[countryGroup][
@@ -326,7 +331,7 @@ RecurringSignedIn.args = {
 RecurringSignedIn.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const {
 			contributionType,
@@ -348,9 +353,10 @@ RecurringSignedIn.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-		store.dispatch(
-			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
-		);
+		const country = countryGroups[countryGroup].countries[0];
+		if (country) {
+			store.dispatch(setCountryInternationalisation(country));
+		}
 
 		const thresholdPrice =
 			lowerBenefitsThresholds[countryGroup][
@@ -392,7 +398,7 @@ RecurringSignUp.args = {
 RecurringSignUp.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const {
 			contributionType,
@@ -415,9 +421,10 @@ RecurringSignUp.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-		store.dispatch(
-			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
-		);
+		const country = countryGroups[countryGroup].countries[0];
+		if (country) {
+			store.dispatch(setCountryInternationalisation(country));
+		}
 
 		const thresholdPrice =
 			lowerBenefitsThresholds[countryGroup][

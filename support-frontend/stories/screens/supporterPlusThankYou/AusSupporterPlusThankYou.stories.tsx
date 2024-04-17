@@ -112,7 +112,7 @@ OneOffNotSignedIn.args = {
 OneOffNotSignedIn.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const { paymentMethod, shouldShowLargeDonationMessage } = args;
 
@@ -158,7 +158,7 @@ OneOffSignedIn.args = {
 OneOffSignedIn.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const { paymentMethod, shouldShowLargeDonationMessage } = args;
 
@@ -205,7 +205,7 @@ OneOffSignUp.args = {
 OneOffSignUp.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const { paymentMethod, shouldShowLargeDonationMessage } = args;
 
@@ -256,7 +256,7 @@ RecurringNotSignedIn.args = {
 RecurringNotSignedIn.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const {
 			contributionType,
@@ -317,7 +317,7 @@ RecurringSignedIn.args = {
 RecurringSignedIn.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const {
 			contributionType,
@@ -379,7 +379,7 @@ RecurringSignUp.args = {
 RecurringSignUp.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const {
 			contributionType,
