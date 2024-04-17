@@ -1,7 +1,7 @@
 import type { RegularContributionType } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
-  currencies, 
+	currencies,
 	detect,
 	fromCountryGroupId,
 } from 'helpers/internationalisation/currency';
