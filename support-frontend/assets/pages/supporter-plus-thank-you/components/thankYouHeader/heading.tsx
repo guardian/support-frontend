@@ -24,25 +24,14 @@ type MonthlyProps = {
 	name?: string;
 };
 function Monthly({ isoCurrency, amount, promotion, name }: MonthlyProps) {
-	if (
-		/**
-		 * This is a check to see if the promo exists,
-		 * it's a little odd due to the type having
-		 * every prop optional.
-		 *
-		 * We could/should do some parsing pre-render to avoid this.
-		 * */
-		promotion?.discountedPrice &&
-		promotion.discount?.durationMonths
-	) {
+	if (promotion) {
+		const promotionPrice = promotion.discountedPrice ?? amount;
+		const promotionDuration = promotion.discount?.durationMonths ?? 0;
 		return (
 			<>
 				<h1 css={headerTitleText}>
 					Thank you {name}for supporting us with{' '}
-					<YellowAmount
-						amount={promotion.discountedPrice}
-						currency={isoCurrency}
-					/>
+					<YellowAmount amount={promotionPrice} currency={isoCurrency} />
 					{`/month`}
 					<sup css={supCss}>*</sup>
 				</h1>
@@ -55,10 +44,10 @@ function Monthly({ isoCurrency, amount, promotion, name }: MonthlyProps) {
 					{formatAmount(
 						currencies[isoCurrency],
 						spokenCurrencies[isoCurrency],
-						promotion.discountedPrice,
+						promotionPrice,
 						false,
 					)}
-					/month for the first {promotion.discount.durationMonths} months, then{' '}
+					/month for the first {promotionDuration} months, then{' '}
 					{formatAmount(
 						currencies[isoCurrency],
 						spokenCurrencies[isoCurrency],
@@ -86,25 +75,14 @@ type AnnualProps = {
 	name?: string;
 };
 function Annual({ isoCurrency, amount, promotion, name }: AnnualProps) {
-	if (
-		/**
-		 * This is a check to see if the promo exists,
-		 * it's a little odd due to the type having
-		 * every prop optional.
-		 *
-		 * We could/should do some parsing pre-render to avoid this.
-		 * */
-		promotion?.discountedPrice &&
-		promotion.discount?.durationMonths
-	) {
+	if (promotion) {
+		const promotionPrice = promotion.discountedPrice ?? amount;
+
 		return (
 			<>
 				<h1 css={headerTitleText}>
 					Thank you {name}for supporting us with{' '}
-					<YellowAmount
-						amount={promotion.discountedPrice}
-						currency={isoCurrency}
-					/>
+					<YellowAmount amount={promotionPrice} currency={isoCurrency} />
 					{`/year`}
 					<sup css={supCss}>*</sup>
 				</h1>
@@ -117,7 +95,7 @@ function Annual({ isoCurrency, amount, promotion, name }: AnnualProps) {
 					{formatAmount(
 						currencies[isoCurrency],
 						spokenCurrencies[isoCurrency],
-						promotion.discountedPrice,
+						promotionPrice,
 						false,
 					)}
 					{/**
