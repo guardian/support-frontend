@@ -1,3 +1,5 @@
+/* eslint "@typescript-eslint/no-unnecessary-condition": "off" -- this is while we are fixing `noUncheckedIndexedAccess` errors */
+
 // ----- Imports ----- //
 
 import seedrandom from 'seedrandom';
@@ -174,16 +176,19 @@ function getParticipations(
 			return;
 		}
 
-		participations[testId] = test.variants[variantAssignment.variantIndex].id;
+		const testVariantId = test.variants[variantAssignment.variantIndex]?.id;
+		if (testVariantId) {
+			participations[testId] = testVariantId;
+		}
 	});
 
 	// If referrerControlled is set for any test, exclude tests that have excludeIfInReferrerControlledTest set
 	const inReferrerControlledTest = Object.keys(participations).some(
-		(testId) => abTests[testId].referrerControlled,
+		(testId) => abTests[testId]?.referrerControlled,
 	);
 	if (inReferrerControlledTest) {
 		Object.keys(participations).forEach((testId) => {
-			if (abTests[testId].excludeIfInReferrerControlledTest) {
+			if (abTests[testId]?.excludeIfInReferrerControlledTest) {
 				delete participations[testId];
 			}
 		});
@@ -192,15 +197,15 @@ function getParticipations(
 	return participations;
 }
 
-function getParticipationsFromUrl(): Participations | null | undefined {
+function getParticipationsFromUrl(): Participations | undefined {
 	const hashUrl = new URL(document.URL).hash;
 
 	if (hashUrl.startsWith('#ab-')) {
 		const [testId, variant] = decodeURI(hashUrl.substr(4)).split('=');
-		return { [testId]: variant };
+		if (testId && variant) {
+			return { [testId]: variant };
+		}
 	}
-
-	return null;
 }
 
 function getServerSideParticipations(): Participations | null | undefined {
@@ -212,12 +217,9 @@ function getServerSideParticipations(): Participations | null | undefined {
 
 function getAmountsTestFromURL(
 	data: AcquisitionABTest[],
-): AcquisitionABTest | null {
+): AcquisitionABTest | undefined {
 	const amountTests = data.filter((t) => t.testType === 'AMOUNTS_TEST');
-	if (amountTests.length) {
-		return amountTests[0];
-	}
-	return null;
+	return amountTests[0];
 }
 
 interface GetAmountsTestVariantResult {
@@ -273,7 +275,7 @@ function getAmountsTestVariant(
 			t.targeting.countries.includes(country)
 		);
 	});
-	if (contribOnlyAmounts) {
+	if (contribOnlyAmounts?.variants[0]) {
 		const amountsParticipation = buildParticipation(
 			contribOnlyAmounts,
 			contribOnlyTestName,
@@ -305,18 +307,21 @@ function getAmountsTestVariant(
 				const variant =
 					variants.find((variant) => variant.variantName === urlTest.variant) ??
 					variants[0];
-				const amountsParticipation = buildParticipation(
-					candidate,
-					urlTest.name,
-					variant.variantName,
-				);
-				return {
-					selectedAmountsVariant: {
-						...variant,
-						testName: urlTest.name,
-					},
-					amountsParticipation,
-				};
+
+				if (variant) {
+					const amountsParticipation = buildParticipation(
+						candidate,
+						urlTest.name,
+						variant.variantName,
+					);
+					return {
+						selectedAmountsVariant: {
+							...variant,
+							testName: urlTest.name,
+						},
+						amountsParticipation,
+					};
+				}
 			}
 		}
 	}
@@ -373,10 +378,10 @@ function getAmountsTestVariant(
 	): AmountsVariant => {
 		if (isLive && variants.length > 1) {
 			const assignmentIndex = randomNumber(mvt, seed) % variants.length;
-			return variants[assignmentIndex];
+			return variants[assignmentIndex]!;
 		}
 		// For regional AmountsTests, if the test is not live then we use the control
-		return variants[0];
+		return variants[0]!;
 	};
 
 	const currentTestName = isLive && liveTestName ? liveTestName : testName;
