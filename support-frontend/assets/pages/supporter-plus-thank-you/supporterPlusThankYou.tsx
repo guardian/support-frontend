@@ -160,10 +160,6 @@ export function SupporterPlusThankYou({
 			getThresholdPrice(contributionType, state),
 		);
 
-	const { testName: amountsTestName } = useContributionsSelector(
-		(state) => state.common.amounts,
-	);
-
 	/**
 	 * We would normally use the isSuporterPlusFromState selector here,
 	 * but the amount can actually come from `localStorage`.
