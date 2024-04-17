@@ -63,7 +63,9 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import { isProductId, productCatalogDescription } from 'helpers/productCatalog';
+import { productCatalogDescription } from 'helpers/productCatalog';
+import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import { renderPage } from 'helpers/rendering/render';
 import { get } from 'helpers/storage/cookie';
 import {
@@ -82,43 +84,43 @@ const geoIds = ['uk', 'us', 'eu', 'au', 'nz', 'ca', 'int'] as const;
 const GeoIdSchema = picklist(geoIds);
 const geoId = parse(GeoIdSchema, window.location.pathname.split('/')[1]);
 
-let currentCurrency: Currency;
-let currentCurrencyKey: keyof typeof currencies;
+let currency: Currency;
+let currencyKey: keyof typeof currencies;
 let countryGroupId: CountryGroupId;
 switch (geoId) {
 	case 'uk':
-		currentCurrency = currencies.GBP;
-		currentCurrencyKey = 'GBP';
+		currency = currencies.GBP;
+		currencyKey = 'GBP';
 		countryGroupId = 'GBPCountries';
 		break;
 	case 'us':
-		currentCurrency = currencies.USD;
-		currentCurrencyKey = 'USD';
+		currency = currencies.USD;
+		currencyKey = 'USD';
 		countryGroupId = 'UnitedStates';
 		break;
 	case 'au':
-		currentCurrency = currencies.AUD;
-		currentCurrencyKey = 'AUD';
+		currency = currencies.AUD;
+		currencyKey = 'AUD';
 		countryGroupId = 'AUDCountries';
 		break;
 	case 'eu':
-		currentCurrency = currencies.EUR;
-		currentCurrencyKey = 'EUR';
+		currency = currencies.EUR;
+		currencyKey = 'EUR';
 		countryGroupId = 'EURCountries';
 		break;
 	case 'nz':
-		currentCurrency = currencies.NZD;
-		currentCurrencyKey = 'NZD';
+		currency = currencies.NZD;
+		currencyKey = 'NZD';
 		countryGroupId = 'NZDCountries';
 		break;
 	case 'ca':
-		currentCurrency = currencies.CAD;
-		currentCurrencyKey = 'CAD';
+		currency = currencies.CAD;
+		currencyKey = 'CAD';
 		countryGroupId = 'Canada';
 		break;
 	case 'int':
-		currentCurrency = currencies.USD;
-		currentCurrencyKey = 'USD';
+		currency = currencies.USD;
+		currencyKey = 'USD';
 		countryGroupId = 'International';
 		break;
 }
@@ -130,10 +132,17 @@ const countryId: IsoCountry =
 const productCatalog = window.guardian.productCatalog;
 
 /** Page config - this is setup specifically for the checkout page */
+function isNumeric(str: string) {
+	return !isNaN(parseFloat(str));
+}
+
 const searchParams = new URLSearchParams(window.location.search);
+const queryAmount = searchParams.get('amount');
 const query = {
-	product: searchParams.get('product'),
-	ratePlan: searchParams.get('ratePlan'),
+	product: searchParams.get('product') ?? '',
+	ratePlan: searchParams.get('ratePlan') ?? '',
+	amount:
+		queryAmount && isNumeric(queryAmount) ? parseFloat(queryAmount) : undefined,
 };
 
 /** Page styles - styles used specifically for the checkout page */
@@ -187,31 +196,111 @@ const stripeAccount = query.product !== 'Contribution' ? 'REGULAR' : 'ONE_OFF';
 const stripePublicKey = getStripeKey(
 	stripeAccount,
 	countryId,
-	currentCurrencyKey,
+	currencyKey,
 	isTestUser,
 );
 
+/**
+ * Product config - we check that the querystring returns a product, ratePlan and price
+ */
+const productId = query.product in productCatalog ? query.product : undefined;
+const product = productId ? productCatalog[query.product] : undefined;
+const ratePlan = product?.ratePlans[query.ratePlan];
+const price = ratePlan?.pricing[currencyKey];
+const productDescription = productId
+	? productCatalogDescription[productId]
+	: undefined;
+const ratePlanDescription = productDescription?.ratePlans[query.ratePlan];
+
+/**
+ * This is the data structure used by the `/subscribe/create` endpoint.
+ *
+ * This must match the types in `CreateSupportWorkersRequest#product`
+ * and readerRevenueApis - `RegularPaymentRequest#product`.
+ *
+ * We might be able to defer this to the backend.
+ */
+let productFields: RegularPaymentRequest['product'] | undefined;
+if (ratePlanDescription) {
+	if (productId === 'Contribution') {
+		productFields = {
+			productType: 'Contribution',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			amount: query.amount ?? 0,
+		};
+	} else if (productId === 'SupporterPlus') {
+		productFields = {
+			productType: 'SupporterPlus',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			amount: query.amount ?? 0,
+		};
+	} else if (productId === 'GuardianWeeklyDomestic') {
+		productFields = {
+			productType: 'GuardianWeekly',
+			currency: currencyKey,
+			fulfilmentOptions: 'Domestic',
+			billingPeriod: ratePlanDescription.billingPeriod,
+		};
+	} else if (productId === 'GuardianWeeklyRestOfWorld') {
+		productFields = {
+			productType: 'GuardianWeekly',
+			fulfilmentOptions: 'RestOfWorld',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+		};
+	} else if (productId === 'DigitalSubscription') {
+		productFields = {
+			productType: 'DigitalPack',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			// TODO - this needs filling in properly, I am not sure where this value comes from
+			readerType: 'Direct',
+		};
+	} else if (
+		productId === 'NationalDelivery' ||
+		productId === 'SubscriptionCard' ||
+		productId === 'HomeDelivery'
+	) {
+		productFields = {
+			productType: 'Paper',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			// TODO - this needs filling in properly
+			fulfilmentOptions: NoFulfilmentOptions,
+			productOptions: NoProductOptions,
+		};
+	}
+}
+
+/** These are just some values needed for rendering */
+let paymentFrequency: 'year' | 'month' | 'quarter';
+if (ratePlanDescription?.billingPeriod === 'Annual') {
+	paymentFrequency = 'year';
+} else if (ratePlanDescription?.billingPeriod === 'Monthly') {
+	paymentFrequency = 'month';
+} else {
+	paymentFrequency = 'quarter';
+}
+
 export function Checkout() {
-	if (!query.product || !query.ratePlan) {
-		return <div>Not enough query parameters</div>;
-	}
-
-	const currentProduct = productCatalog[query.product];
-	const currentRatePlan = currentProduct.ratePlans[query.ratePlan];
-	const currentPrice = currentRatePlan.pricing[currentCurrencyKey];
-
-	if (!isProductId(query.product)) {
-		return <div>Product {query.product} not found</div>;
-	}
-	const productDescription = productCatalogDescription[query.product];
-	const ratePlanDescription = productDescription.ratePlans[query.ratePlan];
-	let paymentFrequency;
-	if (ratePlanDescription.billingPeriod === 'Annual') {
-		paymentFrequency = 'year';
-	} else if (ratePlanDescription.billingPeriod === 'Month') {
-		paymentFrequency = 'month';
-	} else {
-		paymentFrequency = 'quarter';
+	if (
+		/** These are all the things we need to parse the page */
+		!(
+			product &&
+			productDescription &&
+			ratePlan &&
+			ratePlanDescription &&
+			price &&
+			productFields
+		)
+	) {
+		return (
+			<div>
+				Could not find product: {query.product} ratePlan: {query.ratePlan}
+			</div>
+		);
 	}
 
 	const showStateSelect =
@@ -361,11 +450,11 @@ export function Checkout() {
 		const ophanIds = getOphanIds();
 		const referrerAcquisitionData = getReferrerAcquisitionData();
 
-		if (paymentFields) {
+		if (paymentFields && productFields) {
 			/** TODO - Remove this Omit to make the data valid to the endpoint */
 			const createSupportWorkersRequest: Omit<
 				RegularPaymentRequest,
-				'product' | 'firstDeliveryDate' | 'supportAbTests' | 'debugInfo'
+				'firstDeliveryDate' | 'supportAbTests' | 'debugInfo'
 			> = {
 				...personalData,
 				billingAddress,
@@ -373,6 +462,7 @@ export function Checkout() {
 				paymentFields,
 				ophanIds,
 				referrerAcquisitionData,
+				product: productFields,
 			};
 			const createSubscriptionResult = await fetch('/subscribe/create', {
 				method: 'POST',
@@ -411,8 +501,8 @@ export function Checkout() {
 								<ContributionsOrderSummary
 									description={productDescription.label}
 									paymentFrequency={paymentFrequency}
-									amount={currentPrice}
-									currency={currentCurrency}
+									amount={price}
+									currency={currency}
 									checkListData={[]}
 									onCheckListToggle={(isOpen) => {
 										trackComponentClick(
@@ -439,10 +529,6 @@ export function Checkout() {
 								return false;
 							}}
 						>
-							<input type="hidden" name="product" value={query.product} />
-							<input type="hidden" name="ratePlan" value={query.ratePlan} />
-							<input type="hidden" name="currency" value={currentCurrencyKey} />
-
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
 									<PersonalDetails
