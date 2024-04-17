@@ -135,11 +135,11 @@ export type RegularPaymentFields =
 	| RegularAmazonPayPaymentFields;
 export type RegularPaymentRequestAddress = {
 	country: IsoCountry;
-	state: UsState | CaState | null;
-	lineOne: Option<string>;
-	lineTwo: Option<string>;
-	postCode: Option<string>;
-	city: Option<string>;
+	state?: UsState | CaState | null;
+	lineOne?: Option<string>;
+	lineTwo?: Option<string>;
+	postCode?: Option<string>;
+	city?: Option<string>;
 };
 type GiftRecipientType = {
 	title?: Title;

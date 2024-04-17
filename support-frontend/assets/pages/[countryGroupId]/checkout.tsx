@@ -43,6 +43,10 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import type {
+	RegularPaymentRequest,
+	StripePaymentMethod,
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -62,6 +66,10 @@ import { currencies } from 'helpers/internationalisation/currency';
 import { isProductId, productCatalogDescription } from 'helpers/productCatalog';
 import { renderPage } from 'helpers/rendering/render';
 import { get } from 'helpers/storage/cookie';
+import {
+	getOphanIds,
+	getReferrerAcquisitionData,
+} from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
@@ -236,6 +244,7 @@ export function Checkout() {
 		useState<PostcodeFinderResult[]>([]);
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
+	const [deliveryCountry, setDeliveryCountry] = useState(countryId);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useState(true);
@@ -249,6 +258,7 @@ export function Checkout() {
 		useState<PostcodeFinderResult[]>([]);
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
+	const [billingCountry, setBillingCountry] = useState(countryId);
 
 	/** Direct debit details */
 	const [accountHolderName, setAccountHolderName] = useState('');
@@ -263,40 +273,53 @@ export function Checkout() {
 		 * So we'll assume strings are not null.
 		 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
 		 */
-		const data = {
+
+		/** Form: Personal data */
+		const personalData = {
 			firstName: formData.get('firstName') as string,
 			lastName: formData.get('lastName') as string,
 			email: formData.get('email') as string,
-			product: formData.get('product') as string,
-			ratePlan: formData.get('ratePlan') as string,
-			currency: formData.get('currency') as string,
-			recaptchaToken: formData.get('recaptchaToken') as string,
 		};
 
-		const deliveryAddress = productDescription.deliverableTo
-			? {
-					lineOne: formData.get('delivery-lineOne') as string,
-					lineTwo: formData.get('delivery-lineTwo') as string,
-					city: formData.get('delivery-city') as string,
-					state: formData.get('delivery-state') as string,
-					postcode: formData.get('delivery-postcode') as string,
-			  }
-			: {};
+		/**
+		 * FormData: address
+		 * `billingAddress` is required for all products, but we only ever need to the country field populated.
+		 *
+		 * For products that have a `deliveryAddress`, we collect that and either copy it in `billingAddress`
+		 * or allow a person to enter it manually.
+		 */
+		let billingAddress;
+		let deliveryAddress;
+		if (productDescription.deliverableTo) {
+			deliveryAddress = {
+				lineOne: formData.get('delivery-lineOne') as string,
+				lineTwo: formData.get('delivery-lineTwo') as string,
+				city: formData.get('delivery-city') as string,
+				state: formData.get('delivery-state') as string,
+				postCode: formData.get('delivery-postcode') as string,
+				country: formData.get('country') as IsoCountry,
+			};
 
-		const billingAddressMatchesDelivery =
-			formData.get('billingAddressMatchesDelivery') === 'yes';
+			const billingAddressMatchesDelivery =
+				formData.get('billingAddressMatchesDelivery') === 'yes';
 
-		const billingAddress =
-			productDescription.deliverableTo && !billingAddressMatchesDelivery
+			billingAddress = !billingAddressMatchesDelivery
 				? {
 						lineOne: formData.get('billing-lineOne') as string,
 						lineTwo: formData.get('billing-lineTwo') as string,
 						city: formData.get('billing-city') as string,
 						state: formData.get('billing-state') as string,
-						postcode: formData.get('billing-postcode') as string,
+						postCode: formData.get('billing-postcode') as string,
+						country: formData.get('country') as IsoCountry,
 				  }
 				: deliveryAddress;
+		} else {
+			billingAddress = { country: formData.get('country') as IsoCountry };
+			deliveryAddress = undefined;
+		}
 
+		/** FormData: `paymentFields` */
+		let paymentFields;
 		if (
 			paymentMethod === 'Stripe' &&
 			stripe &&
@@ -315,38 +338,52 @@ export function Checkout() {
 			if (stripeIntentResult.error) {
 				console.error(stripeIntentResult.error);
 			} else if (stripeIntentResult.setupIntent.payment_method) {
-				const paymentFields = {
+				paymentFields = {
+					stripePublicKey,
 					recaptchaToken: recaptchaToken,
-					stripePaymentType: 'StripeCheckout',
+					stripePaymentType: 'StripeCheckout' as StripePaymentMethod,
 					paymentMethod: stripeIntentResult.setupIntent
 						.payment_method as string,
 				};
-
-				// This data is what will be posted to /create
-				console.info('Posting data', {
-					...data,
-					paymentFields,
-					deliveryAddress,
-					billingAddress,
-				});
 			}
 		}
 
 		if (paymentMethod === 'DirectDebit') {
-			const paymentFields = {
+			paymentFields = {
 				accountHolderName: formData.get('accountHolderName') as string,
 				accountNumber: formData.get('accountNumber') as string,
 				sortCode: formData.get('sortCode') as string,
 				recaptchaToken,
 			};
+		}
 
-			// This data is what will be posted to /create
-			console.info('Posting data', {
-				...data,
-				paymentFields,
-				deliveryAddress,
+		/** Form: tracking data  */
+		const ophanIds = getOphanIds();
+		const referrerAcquisitionData = getReferrerAcquisitionData();
+
+		if (paymentFields) {
+			/** TODO - Remove this Omit to make the data valid to the endpoint */
+			const createSupportWorkersRequest: Omit<
+				RegularPaymentRequest,
+				'product' | 'firstDeliveryDate' | 'supportAbTests' | 'debugInfo'
+			> = {
+				...personalData,
 				billingAddress,
+				deliveryAddress,
+				paymentFields,
+				ophanIds,
+				referrerAcquisitionData,
+			};
+			const createSubscriptionResult = await fetch('/subscribe/create', {
+				method: 'POST',
+				body: JSON.stringify(createSupportWorkersRequest),
+				headers: {
+					'Content-Type': 'application/json',
+				},
 			});
+
+			// TODO - pass onto the thank you page
+			console.info('createSubscriptionResult', createSubscriptionResult);
 		}
 	};
 
@@ -468,7 +505,7 @@ export function Checkout() {
 													lineOne={deliveryLineOne}
 													lineTwo={deliveryLineTwo}
 													city={deliveryCity}
-													country={countryId}
+													country={deliveryCountry}
 													state={deliveryState}
 													postCode={deliveryPostcode}
 													countries={productDescription.deliverableTo}
@@ -494,8 +531,8 @@ export function Checkout() {
 													setPostcode={(postcode) => {
 														setDeliveryPostcode(postcode);
 													}}
-													setCountry={() => {
-														// no-op
+													setCountry={(country) => {
+														setDeliveryCountry(country);
 													}}
 													setPostcodeForFinder={() => {
 														// no-op
@@ -559,7 +596,7 @@ export function Checkout() {
 														lineOne={billingLineOne}
 														lineTwo={billingLineTwo}
 														city={billingCity}
-														country={countryId}
+														country={billingCountry}
 														state={billingState}
 														postCode={billingPostcode}
 														countries={productDescription.deliverableTo}
@@ -585,8 +622,8 @@ export function Checkout() {
 														setPostcode={(postcode) => {
 															setBillingPostcode(postcode);
 														}}
-														setCountry={() => {
-															// no-op
+														setCountry={(country) => {
+															setBillingCountry(country);
 														}}
 														setPostcodeForFinder={() => {
 															// no-op
