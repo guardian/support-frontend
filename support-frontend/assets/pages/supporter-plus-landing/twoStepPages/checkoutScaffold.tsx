@@ -28,6 +28,7 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import HeadlineImageDesktop from 'components/svgs/headlineImageDesktop';
 import HeadlineImageMobile from 'components/svgs/headlineImageMobile';
+import { isSubjectToContributionsOnlyAmounts } from 'helpers/contributions';
 import {
 	AUDCountries,
 	Canada,
@@ -38,7 +39,6 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
-import { isSubjectToVatCompliantAmounts } from 'helpers/vatCompliance';
 import HeadlineImagePatronsDesktop from '../../../components/svgs/headlineImagePatronsDesktop';
 import HeadlineImagePatronsMobile from '../../../components/svgs/headlineImagePatronsMobile';
 import { CheckoutDivider } from '../components/checkoutDivider';
@@ -172,7 +172,8 @@ export function SupporterPlusCheckoutScaffold({
 
 	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
 
-	const countryIsAffectedByVATStatus = isSubjectToVatCompliantAmounts(amounts);
+	const countryIsAffectedByVATStatus =
+		isSubjectToContributionsOnlyAmounts(amounts);
 
 	function SubHeading() {
 		if (displayPatronsCheckout) {

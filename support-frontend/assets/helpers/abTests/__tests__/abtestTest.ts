@@ -1,9 +1,9 @@
 // ----- Imports ----- //
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
+import { contributionsOnlyAmountsTestName } from 'helpers/contributions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
-import { vatCompliantAmountsTestName } from 'helpers/vatCompliance';
 import type {
 	AmountsTest,
 	AmountsTests,
@@ -336,7 +336,7 @@ describe('init', () => {
 
 	describe('excludeCountriesSubjectToVatCompliantAmounts', () => {
 		const selectedAmountsVariant: SelectedAmountsVariant = {
-			testName: vatCompliantAmountsTestName,
+			testName: contributionsOnlyAmountsTestName,
 			variantName: 'CONTROL',
 			defaultContributionType: 'MONTHLY',
 			displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
@@ -359,7 +359,7 @@ describe('init', () => {
 			},
 		};
 
-		it(`does not assign a user to a test if excludeCountriesSubjectToVatCompliantAmounts is true set and selectedAmountsVariant test name is ${vatCompliantAmountsTestName}`, () => {
+		it(`does not assign a user to a test if excludeCountriesSubjectToVatCompliantAmounts is true set and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
@@ -379,7 +379,7 @@ describe('init', () => {
 			expect(participations).toEqual({});
 		});
 
-		it(`does assign a user to a test if excludeCountriesSubjectToVatCompliantAmounts is false and selectedAmountsVariant test name is ${vatCompliantAmountsTestName}`, () => {
+		it(`does assign a user to a test if excludeCountriesSubjectToVatCompliantAmounts is false and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
