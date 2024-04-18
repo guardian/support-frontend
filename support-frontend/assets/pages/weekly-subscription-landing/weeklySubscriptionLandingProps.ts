@@ -33,6 +33,10 @@ export type WeeklyLPContentPropTypes = {
 };
 
 const countryGroupId = CountryGroup.detect();
+const abtestInitalizerData = {
+	countryId: Country.detect(),
+	countryGroupId,
+};
 
 export const weeklyLandingProps = (): WeeklyLandingPropTypes => ({
 	countryGroupId,
@@ -40,5 +44,5 @@ export const weeklyLandingProps = (): WeeklyLandingPropTypes => ({
 	productPrices: getProductPrices(),
 	promotionCopy: getPromotionCopy(),
 	orderIsAGift: getGlobal('orderIsAGift'),
-	participations: initAbTests(Country.detect(), countryGroupId),
+	participations: initAbTests(abtestInitalizerData),
 });

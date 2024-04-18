@@ -20,9 +20,13 @@ export type SubscriptionsLandingPropTypes = {
 	referrerAcquisitions: ReferrerAcquisitionData;
 };
 const countryGroupId = CountryGroup.detect();
+const abtestInitalizerData = {
+	countryId: Country.detect(),
+	countryGroupId,
+};
 export const subscriptionsLandingProps = (): SubscriptionsLandingPropTypes => ({
 	countryGroupId,
-	participations: initAbTests(Country.detect(), countryGroupId),
+	participations: initAbTests(abtestInitalizerData),
 	pricingCopy: getGlobal('pricingCopy'),
 	referrerAcquisitions: getReferrerAcquisitionData(),
 });
