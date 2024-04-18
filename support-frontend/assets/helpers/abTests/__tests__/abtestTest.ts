@@ -3,11 +3,13 @@ import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
+import { vatCompliantAmountsTestName } from 'helpers/vatCompliance';
 import type {
 	AmountsTest,
 	AmountsTests,
 	AmountsTestTargeting,
 	AmountsVariant,
+	SelectedAmountsVariant,
 } from '../../contributions';
 import { emptySwitches } from '../../globalsAndSwitches/globals';
 import type { Settings } from '../../globalsAndSwitches/settings';
@@ -330,6 +332,72 @@ describe('init', () => {
 		});
 
 		expect(participations).toEqual({});
+	});
+
+	describe('excludeCountriesSubjectToVatCompliantAmounts', () => {
+		const selectedAmountsVariant: SelectedAmountsVariant = {
+			testName: vatCompliantAmountsTestName,
+			variantName: 'CONTROL',
+			defaultContributionType: 'MONTHLY',
+			displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+			amountsCardData: {
+				ONE_OFF: {
+					amounts: [1, 2, 5, 10],
+					defaultAmount: 2,
+					hideChooseYourAmount: true,
+				},
+				MONTHLY: {
+					amounts: [2, 3, 5, 7, 9, 12],
+					defaultAmount: 5,
+					hideChooseYourAmount: true,
+				},
+				ANNUAL: {
+					amounts: [10, 15, 20, 30],
+					defaultAmount: 15,
+					hideChooseYourAmount: true,
+				},
+			},
+		};
+
+		it(`does not assign a user to a test if excludeCountriesSubjectToVatCompliantAmounts is true set and selectedAmountsVariant test name is ${vatCompliantAmountsTestName}`, () => {
+			const abTests = {
+				t1: buildTest({
+					variants: [
+						buildVariant({ id: 'control' }),
+						buildVariant({ id: 'variant' }),
+					],
+					excludeCountriesSubjectToVatCompliantAmounts: true,
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				selectedAmountsVariant,
+			});
+
+			expect(participations).toEqual({});
+		});
+
+		it(`does assign a user to a test if excludeCountriesSubjectToVatCompliantAmounts is false and selectedAmountsVariant test name is ${vatCompliantAmountsTestName}`, () => {
+			const abTests = {
+				t1: buildTest({
+					variants: [
+						buildVariant({ id: 'control' }),
+						buildVariant({ id: 'variant' }),
+					],
+					excludeCountriesSubjectToVatCompliantAmounts: false,
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				selectedAmountsVariant,
+			});
+
+			expect(participations).toEqual({ t1: 'variant' });
+		});
 	});
 });
 
@@ -712,7 +780,7 @@ function buildTest({
 	isActive = true,
 	seed = 0,
 	excludeIfInReferrerControlledTest = false,
-	excludeCountriesSubjectToVatCompliantAmounts = false,
+	excludeCountriesSubjectToVatCompliantAmounts = true,
 }: Partial<Test>): Test {
 	return {
 		variants,
