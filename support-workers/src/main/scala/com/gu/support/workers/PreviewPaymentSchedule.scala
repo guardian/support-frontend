@@ -12,13 +12,12 @@ object PreviewPaymentSchedule {
 
   def preview(
       subscribeItem: SubscribeItem,
-      billingPeriod: BillingPeriod,
       zuoraService: ZuoraSubscribeService,
       singleResponseCheck: Future[List[PreviewSubscribeResponse]] => Future[PreviewSubscribeResponse],
   ): Future[PaymentSchedule] = {
-    val numberOfInvoicesToPreview: Int = 13
+    val numberOfMonthsToPreview: Int = 13 // 13 allows for annual subs to have a second invoice
     singleResponseCheck(
-      zuoraService.previewSubscribe(PreviewSubscribeRequest.fromSubscribe(subscribeItem, numberOfInvoicesToPreview)),
+      zuoraService.previewSubscribe(PreviewSubscribeRequest.fromSubscribe(subscribeItem, numberOfMonthsToPreview)),
     ).map(response => paymentSchedule(response.invoiceData.flatMap(_.invoiceItem)))
   }
 
