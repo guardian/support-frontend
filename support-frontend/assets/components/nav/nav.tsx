@@ -15,12 +15,14 @@ interface NavProps {
 	countryGroupIds: CountryGroupId[];
 	selectedCountryGroup: CountryGroupId;
 	subPath: string;
+	countryIsAffectedByVATStatus?: boolean;
 }
 
 function Nav({
 	countryGroupIds,
 	selectedCountryGroup,
 	subPath,
+	countryIsAffectedByVATStatus = false,
 }: NavProps): JSX.Element {
 	return (
 		<Container
@@ -34,15 +36,17 @@ function Nav({
 			<Hide until="desktop">
 				<Columns>
 					<Column span={5} />
-					<Column>
-						<div css={switcherContainer}>
-							<CountryGroupSwitcher
-								countryGroupIds={countryGroupIds}
-								selectedCountryGroup={selectedCountryGroup}
-								subPath={subPath}
-							/>
-						</div>
-					</Column>
+					{!countryIsAffectedByVATStatus && (
+						<Column>
+							<div css={switcherContainer} data-test="xxx">
+								<CountryGroupSwitcher
+									countryGroupIds={countryGroupIds}
+									selectedCountryGroup={selectedCountryGroup}
+									subPath={subPath}
+								/>
+							</div>
+						</Column>
+					)}
 				</Columns>
 			</Hide>
 		</Container>

@@ -3,10 +3,15 @@ import { getContributionType } from 'helpers/redux/checkout/product/selectors/pr
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
 import { isOneOff } from 'helpers/supporterPlus/isContributionRecurring';
+import { isSubjectToVatCompliantAmounts } from 'helpers/vatCompliance';
 
 export function isSupporterPlusFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
-	if (isOneOff(contributionType)) {
+	const countryIsAffectedByVATStatus = isSubjectToVatCompliantAmounts(
+		state.common.amounts,
+	);
+
+	if (isOneOff(contributionType) || countryIsAffectedByVATStatus) {
 		return false;
 	}
 	const thresholdPrice = getThresholdPrice(contributionType, state);
@@ -21,11 +26,18 @@ export function isSupporterPlusFromState(state: ContributionsState): boolean {
 
 export function hideBenefitsListFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
+	const countryIsAffectedByVATStatus = isSubjectToVatCompliantAmounts(
+		state.common.amounts,
+	);
 
-	if (isOneOff(contributionType)) {
+	if (isOneOff(contributionType) || countryIsAffectedByVATStatus) {
 		return true;
 	}
 
+	/**
+	 * If amounts config has no options at or above the benefits
+	 * threshold then hide then hide the benefits container.
+	 */
 	const thresholdPrice = getThresholdPrice(contributionType, state);
 	const displayedAmounts =
 		state.common.amounts.amountsCardData[contributionType];

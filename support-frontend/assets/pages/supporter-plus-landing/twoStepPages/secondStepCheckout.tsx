@@ -60,16 +60,14 @@ export function SupporterPlusCheckout({
 		getUserSelectedAmountBeforeAmendment,
 	);
 	const otherAmount = useContributionsSelector(getUserSelectedOtherAmount);
-	const amountIsAboveThreshold = useContributionsSelector(
-		isSupporterPlusFromState,
-	);
+	const isSupporterPlus = useContributionsSelector(isSupporterPlusFromState);
 
 	const navigate = useNavigate();
-	const { abParticipations } = useContributionsSelector(
+	const { abParticipations, amounts } = useContributionsSelector(
 		(state) => state.common,
 	);
 
-	const inThreeTier = threeTierCheckoutEnabled(abParticipations, countryId);
+	const inThreeTier = threeTierCheckoutEnabled(abParticipations, amounts);
 	const showPriceCards = inThreeTier && contributionType === 'ONE_OFF';
 
 	const changeButton = (
@@ -94,13 +92,16 @@ export function SupporterPlusCheckout({
 		</Button>
 	);
 
-	const promotion = useContributionsSelector((state) =>
-		getPromotion(
-			state.page.checkoutForm.product.productPrices,
-			countryId,
-			state.page.checkoutForm.product.billingPeriod,
-		),
-	);
+	/** Promotions on the checkout are for SupporterPlus only for now */
+	const promotion = isSupporterPlus
+		? useContributionsSelector((state) =>
+				getPromotion(
+					state.page.checkoutForm.product.productPrices,
+					countryId,
+					state.page.checkoutForm.product.billingPeriod,
+				),
+		  )
+		: undefined;
 	return (
 		<SupporterPlusCheckoutScaffold thankYouRoute={thankYouRoute} isPaymentPage>
 			<Box cssOverrides={shorterBoxMargin}>
@@ -160,7 +161,7 @@ export function SupporterPlusCheckout({
 						contributionType={contributionType}
 						currency={currencyId}
 						amount={amount}
-						amountIsAboveThreshold={amountIsAboveThreshold}
+						amountIsAboveThreshold={isSupporterPlus}
 						productNameAboveThreshold={
 							inThreeTier ? 'All-access digital' : 'Supporter Plus'
 						}
