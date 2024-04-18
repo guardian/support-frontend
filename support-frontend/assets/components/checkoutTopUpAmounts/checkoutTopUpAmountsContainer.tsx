@@ -9,10 +9,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
-import {
-	getLowerBenefitsThreshold,
-	upperBenefitsThresholds,
-} from 'helpers/supporterPlus/benefitsThreshold';
+import { getLowerBenefitsThreshold } from 'helpers/supporterPlus/benefitsThreshold';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { CheckoutTopUpAmountsProps } from './checkoutTopUpAmounts';
 
@@ -34,14 +31,12 @@ export function CheckoutTopUpAmountsContainer({
 	const contributionType = useContributionsSelector(getContributionType);
 	const currencySymbol = currencies[currencyId].glyph;
 
-	const isWithinThreshold =
+	const isAboveThreshold =
 		contributionType !== 'ONE_OFF' &&
 		amountBeforeAmendments >=
 			useContributionsSelector((state) =>
 				getLowerBenefitsThreshold(state, contributionType),
-			) &&
-		amountBeforeAmendments <=
-			upperBenefitsThresholds[countryGroupId][contributionType];
+			);
 
 	const timePeriods = {
 		ONE_OFF: 'one-off',
@@ -75,6 +70,6 @@ export function CheckoutTopUpAmountsContainer({
 		timePeriod,
 		amounts,
 		handleAmountUpdate,
-		isWithinThreshold,
+		isAboveThreshold,
 	});
 }

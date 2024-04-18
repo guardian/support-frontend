@@ -4,6 +4,7 @@ import type {
 } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import { getUserSelectedAmount } from 'helpers/redux/checkout/product/selectors/selectedAmount';
@@ -62,9 +63,19 @@ export function DefaultPaymentButtonContainer({
 			  )
 			: getUserSelectedAmount(state),
 	);
+	const promotion = isSupporterPlus
+		? useContributionsSelector((state) =>
+				getPromotion(
+					state.page.checkoutForm.product.productPrices,
+					countryId,
+					state.page.checkoutForm.product.billingPeriod,
+				),
+		  )
+		: undefined;
+	const amount = promotion?.discountedPrice ?? selectedAmount;
 
 	const currency = currencies[currencyId];
-	const amountWithCurrency = simpleFormatAmount(currency, selectedAmount);
+	const amountWithCurrency = simpleFormatAmount(currency, amount);
 
 	const { countryId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -76,15 +87,16 @@ export function DefaultPaymentButtonContainer({
 		isSupporterPlusFromState,
 	);
 
+	const { abParticipations, amounts } = useContributionsSelector(
+		(state) => state.common,
+	);
+
 	const buttonText = Number.isNaN(selectedAmount)
 		? 'Pay now'
 		: createButtonText(
 				amountWithCurrency,
 				amountIsAboveThreshold ||
-					threeTierCheckoutEnabled(
-						useContributionsSelector((state) => state.common).abParticipations,
-						countryId,
-					),
+					threeTierCheckoutEnabled(abParticipations, amounts),
 				contributionTypeToPaymentInterval[contributionType],
 		  );
 

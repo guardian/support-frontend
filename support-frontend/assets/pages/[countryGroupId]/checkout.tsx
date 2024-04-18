@@ -28,6 +28,7 @@ import { useState } from 'react';
 import { parse, picklist } from 'valibot'; // 1.54 kB
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
+import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -42,6 +43,10 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import type {
+	RegularPaymentRequest,
+	StripePaymentMethod,
+} from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -55,13 +60,16 @@ import { getStripeKey } from 'helpers/forms/stripe';
 import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import { newspaperCountries } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
-import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
+import { productCatalogDescription } from 'helpers/productCatalog';
 import { renderPage } from 'helpers/rendering/render';
 import { get } from 'helpers/storage/cookie';
+import {
+	getOphanIds,
+	getReferrerAcquisitionData,
+} from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
@@ -127,77 +135,6 @@ const query = {
 	product: searchParams.get('product'),
 	ratePlan: searchParams.get('ratePlan'),
 };
-
-function describeProduct(product: string, ratePlan: string) {
-	let description = `${product} - ${ratePlan}`;
-	let frequency = '';
-	let showAddressFields = false;
-	let addressCountries = {};
-
-	if (product === 'HomeDelivery') {
-		frequency = 'month';
-		description = `${ratePlan} paper`;
-
-		showAddressFields = true;
-		addressCountries = newspaperCountries;
-
-		if (ratePlan === 'Sixday') {
-			description = 'Six day paper';
-		}
-		if (ratePlan === 'Everyday') {
-			description = 'Every day paper';
-		}
-		if (ratePlan === 'Weekend') {
-			description = 'Weekend paper';
-		}
-		if (ratePlan === 'Saturday') {
-			description = 'Saturday paper';
-		}
-		if (ratePlan === 'Sunday') {
-			description = 'Sunday paper';
-		}
-	}
-
-	if (product === 'NationalDelivery') {
-		showAddressFields = true;
-		addressCountries = newspaperCountries;
-	}
-
-	if (
-		product === 'GuardianWeeklyDomestic' ||
-		product === 'GuardianWeeklyRestOfWorld'
-	) {
-		showAddressFields = true;
-		addressCountries = gwDeliverableCountries;
-
-		if (ratePlan === 'OneYearGift') {
-			frequency = 'year';
-			description = 'The Guardian Weekly Gift Subscription';
-		}
-		if (ratePlan === 'Annual') {
-			frequency = 'year';
-			description = 'The Guardian Weekly';
-		}
-		if (ratePlan === 'Quarterly') {
-			frequency = 'quarter';
-			description = 'The Guardian Weekly';
-		}
-		if (ratePlan === 'Monthly') {
-			frequency = 'month';
-			description = 'The Guardian Weekly';
-		}
-		if (ratePlan === 'ThreeMonthGift') {
-			frequency = 'quarter';
-			description = 'The Guardian Weekly Gift Subscription';
-		}
-		if (ratePlan === 'SixWeekly') {
-			frequency = 'month';
-			description = 'The Guardian Weekly';
-		}
-	}
-
-	return { description, frequency, showAddressFields, addressCountries };
-}
 
 /** Page styles - styles used specifically for the checkout page */
 const darkBackgroundContainerMobile = css`
@@ -271,7 +208,17 @@ export function Checkout() {
 	const currentRatePlan = currentProduct.ratePlans[query.ratePlan];
 	const currentPrice = currentRatePlan.pricing[currentCurrencyKey];
 
-	const product = describeProduct(query.product, query.ratePlan);
+	const productDescription = productCatalogDescription[query.product];
+	const ratePlanDescription = productDescription.ratePlans[query.ratePlan];
+	let paymentFrequency;
+	if (ratePlanDescription.billingPeriod === 'Annual') {
+		paymentFrequency = 'year';
+	} else if (ratePlanDescription.billingPeriod === 'Month') {
+		paymentFrequency = 'month';
+	} else {
+		paymentFrequency = 'quarter';
+	}
+
 	const showStateSelect =
 		query.product !== 'Contribution' &&
 		(countryId === 'US' || countryId === 'CA' || countryId === 'AU');
@@ -302,6 +249,7 @@ export function Checkout() {
 		useState<PostcodeFinderResult[]>([]);
 	const [deliveryPostcodeStateLoading, setDeliveryPostcodeStateLoading] =
 		useState(false);
+	const [deliveryCountry, setDeliveryCountry] = useState(countryId);
 
 	const [billingAddressMatchesDelivery, setBillingAddressMatchesDelivery] =
 		useState(true);
@@ -315,6 +263,134 @@ export function Checkout() {
 		useState<PostcodeFinderResult[]>([]);
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
+	const [billingCountry, setBillingCountry] = useState(countryId);
+
+	/** Direct debit details */
+	const [accountHolderName, setAccountHolderName] = useState('');
+	const [accountNumber, setAccountNumber] = useState('');
+	const [sortCode, setSortCode] = useState('');
+	const [accountHolderConfirmation, setAccountHolderConfirmation] =
+		useState(false);
+
+	const formOnSubmit = async (formData: FormData) => {
+		/**
+		 * The validation for this is currently happening on the client side form validation
+		 * So we'll assume strings are not null.
+		 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
+		 */
+
+		/** Form: Personal data */
+		const personalData = {
+			firstName: formData.get('firstName') as string,
+			lastName: formData.get('lastName') as string,
+			email: formData.get('email') as string,
+		};
+
+		/**
+		 * FormData: address
+		 * `billingAddress` is required for all products, but we only ever need to the country field populated.
+		 *
+		 * For products that have a `deliveryAddress`, we collect that and either copy it in `billingAddress`
+		 * or allow a person to enter it manually.
+		 */
+		let billingAddress;
+		let deliveryAddress;
+		if (productDescription.deliverableTo) {
+			deliveryAddress = {
+				lineOne: formData.get('delivery-lineOne') as string,
+				lineTwo: formData.get('delivery-lineTwo') as string,
+				city: formData.get('delivery-city') as string,
+				state: formData.get('delivery-state') as string,
+				postCode: formData.get('delivery-postcode') as string,
+				country: formData.get('country') as IsoCountry,
+			};
+
+			const billingAddressMatchesDelivery =
+				formData.get('billingAddressMatchesDelivery') === 'yes';
+
+			billingAddress = !billingAddressMatchesDelivery
+				? {
+						lineOne: formData.get('billing-lineOne') as string,
+						lineTwo: formData.get('billing-lineTwo') as string,
+						city: formData.get('billing-city') as string,
+						state: formData.get('billing-state') as string,
+						postCode: formData.get('billing-postcode') as string,
+						country: formData.get('country') as IsoCountry,
+				  }
+				: deliveryAddress;
+		} else {
+			billingAddress = { country: formData.get('country') as IsoCountry };
+			deliveryAddress = undefined;
+		}
+
+		/** FormData: `paymentFields` */
+		let paymentFields;
+		if (
+			paymentMethod === 'Stripe' &&
+			stripe &&
+			cardElement &&
+			stripeClientSecret
+		) {
+			const stripeIntentResult = await stripe.confirmCardSetup(
+				stripeClientSecret,
+				{
+					payment_method: {
+						card: cardElement,
+					},
+				},
+			);
+
+			if (stripeIntentResult.error) {
+				console.error(stripeIntentResult.error);
+			} else if (stripeIntentResult.setupIntent.payment_method) {
+				paymentFields = {
+					stripePublicKey,
+					recaptchaToken: recaptchaToken,
+					stripePaymentType: 'StripeCheckout' as StripePaymentMethod,
+					paymentMethod: stripeIntentResult.setupIntent
+						.payment_method as string,
+				};
+			}
+		}
+
+		if (paymentMethod === 'DirectDebit') {
+			paymentFields = {
+				accountHolderName: formData.get('accountHolderName') as string,
+				accountNumber: formData.get('accountNumber') as string,
+				sortCode: formData.get('sortCode') as string,
+				recaptchaToken,
+			};
+		}
+
+		/** Form: tracking data  */
+		const ophanIds = getOphanIds();
+		const referrerAcquisitionData = getReferrerAcquisitionData();
+
+		if (paymentFields) {
+			/** TODO - Remove this Omit to make the data valid to the endpoint */
+			const createSupportWorkersRequest: Omit<
+				RegularPaymentRequest,
+				'product' | 'firstDeliveryDate' | 'supportAbTests' | 'debugInfo'
+			> = {
+				...personalData,
+				billingAddress,
+				deliveryAddress,
+				paymentFields,
+				ophanIds,
+				referrerAcquisitionData,
+			};
+			const createSubscriptionResult = await fetch('/subscribe/create', {
+				method: 'POST',
+				body: JSON.stringify(createSupportWorkersRequest),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			// TODO - pass onto the thank you page
+			console.info('createSubscriptionResult', createSubscriptionResult);
+		}
+	};
 
 	return (
 		<PageScaffold
@@ -338,9 +414,9 @@ export function Checkout() {
 						<Box cssOverrides={shorterBoxMargin}>
 							<BoxContents>
 								<ContributionsOrderSummary
-									description={product.description}
-									paymentFrequency={product.frequency}
-									total={currentPrice}
+									description={productDescription.label}
+									paymentFrequency={paymentFrequency}
+									amount={currentPrice}
 									currency={currentCurrency}
 									checkListData={[]}
 									onCheckListToggle={(isOpen) => {
@@ -362,80 +438,9 @@ export function Checkout() {
 								event.preventDefault();
 								const form = event.currentTarget;
 								const formData = new FormData(form);
-								/**
-								 * The validation for this is currently happening on the client side form validation
-								 * So we'll assume strings are not null.
-								 * see: https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation
-								 */
-								const data = {
-									firstName: formData.get('firstName') as string,
-									lastName: formData.get('lastName') as string,
-									email: formData.get('email') as string,
-									product: formData.get('product') as string,
-									ratePlan: formData.get('ratePlan') as string,
-									currency: formData.get('currency') as string,
-									recaptchaToken: formData.get('recaptchaToken') as string,
-								};
+								/** we defer this to an external function as a lot of the payment methods use async */
+								void formOnSubmit(formData);
 
-								const deliveryAddress = product.showAddressFields
-									? {
-											lineOne: formData.get('delivery-lineOne') as string,
-											lineTwo: formData.get('delivery-lineTwo') as string,
-											city: formData.get('delivery-city') as string,
-											state: formData.get('delivery-state') as string,
-											postcode: formData.get('delivery-postcode') as string,
-									  }
-									: {};
-
-								const billingAddressMatchesDelivery =
-									formData.get('billingAddressMatchesDelivery') === 'yes';
-
-								const billingAddress =
-									product.showAddressFields && !billingAddressMatchesDelivery
-										? {
-												lineOne: formData.get('billing-lineOne') as string,
-												lineTwo: formData.get('billing-lineTwo') as string,
-												city: formData.get('billing-city') as string,
-												state: formData.get('billing-state') as string,
-												postcode: formData.get('billing-postcode') as string,
-										  }
-										: deliveryAddress;
-
-								if (
-									paymentMethod === 'Stripe' &&
-									stripe &&
-									cardElement &&
-									stripeClientSecret
-								) {
-									void stripe
-										.confirmCardSetup(stripeClientSecret, {
-											payment_method: {
-												card: cardElement,
-											},
-										})
-										.then((result) => {
-											if (result.error) {
-												console.error(result.error);
-											} else if (result.setupIntent.payment_method) {
-												const paymentFields = {
-													recaptchaToken: recaptchaToken,
-													stripePaymentType: 'StripeCheckout',
-													paymentMethod: result.setupIntent
-														.payment_method as string,
-												};
-
-												// This data is what will be posted to /create
-												console.info('Posting data', {
-													...data,
-													paymentFields,
-													deliveryAddress,
-													billingAddress,
-												});
-											}
-										});
-								}
-
-								// The form is sumitted async as a lot of the payment methods require fetch requests
 								return false;
 							}}
 						>
@@ -496,7 +501,7 @@ export function Checkout() {
 
 									<CheckoutDivider spacing="loose" />
 
-									{product.showAddressFields && (
+									{productDescription.deliverableTo && (
 										<>
 											<fieldset>
 												<h2 css={legend}>Where should we deliver to?</h2>
@@ -505,10 +510,10 @@ export function Checkout() {
 													lineOne={deliveryLineOne}
 													lineTwo={deliveryLineTwo}
 													city={deliveryCity}
-													country={countryId}
+													country={deliveryCountry}
 													state={deliveryState}
 													postCode={deliveryPostcode}
-													countries={product.addressCountries}
+													countries={productDescription.deliverableTo}
 													errors={[]}
 													postcodeState={{
 														results: deliveryPostcodeStateResults,
@@ -531,8 +536,8 @@ export function Checkout() {
 													setPostcode={(postcode) => {
 														setDeliveryPostcode(postcode);
 													}}
-													setCountry={() => {
-														// no-op
+													setCountry={(country) => {
+														setDeliveryCountry(country);
 													}}
 													setPostcodeForFinder={() => {
 														// no-op
@@ -596,10 +601,10 @@ export function Checkout() {
 														lineOne={billingLineOne}
 														lineTwo={billingLineTwo}
 														city={billingCity}
-														country={countryId}
+														country={billingCountry}
 														state={billingState}
 														postCode={billingPostcode}
-														countries={product.addressCountries}
+														countries={productDescription.deliverableTo}
 														errors={[]}
 														postcodeState={{
 															results: billingPostcodeStateResults,
@@ -622,8 +627,8 @@ export function Checkout() {
 														setPostcode={(postcode) => {
 															setBillingPostcode(postcode);
 														}}
-														setCountry={() => {
-															// no-op
+														setCountry={(country) => {
+															setBillingCountry(country);
 														}}
 														setPostcodeForFinder={() => {
 															// no-op
@@ -715,6 +720,45 @@ export function Checkout() {
 												}
 											/>
 										</>
+									)}
+
+									{paymentMethod === 'DirectDebit' && (
+										<DirectDebitForm
+											countryGroupId={countryGroupId}
+											accountHolderName={accountHolderName}
+											accountNumber={accountNumber}
+											accountHolderConfirmation={accountHolderConfirmation}
+											sortCode={sortCode}
+											recaptchaCompleted={false}
+											updateAccountHolderName={(name: string) => {
+												setAccountHolderName(name);
+											}}
+											updateAccountNumber={(number: string) => {
+												setAccountNumber(number);
+											}}
+											updateSortCode={(sortCode: string) => {
+												setSortCode(sortCode);
+											}}
+											updateAccountHolderConfirmation={(
+												confirmation: boolean,
+											) => {
+												setAccountHolderConfirmation(confirmation);
+											}}
+											recaptcha={
+												<Recaptcha
+													// We could change the parents type to Promise and uses await here, but that has
+													// a lot of refactoring with not too much gain
+													onRecaptchaCompleted={(token) => {
+														setRecaptchaToken(token);
+													}}
+													onRecaptchaExpired={() => {
+														// no-op
+													}}
+												/>
+											}
+											formError={''}
+											errors={{}}
+										/>
 									)}
 								</BoxContents>
 							</Box>

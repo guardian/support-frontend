@@ -2,7 +2,6 @@ import '__mocks__/settingsMock';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
-import type { RegularContributionType } from 'helpers/contributions';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -27,7 +26,7 @@ import {
 } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import { setIsSignedIn, setStorybookUser } from 'helpers/redux/user/actions';
-import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
+import type { SupporterPlusThankYouProps } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import {
 	largeDonations,
 	SupporterPlusThankYou,
@@ -81,10 +80,12 @@ export default {
 	},
 };
 
-function Template() {
+const supporterPlusROWMonthlyThreshold = 13;
+
+function Template(args: SupporterPlusThankYouProps) {
 	return (
 		<MemoryRouter>
-			<SupporterPlusThankYou />
+			<SupporterPlusThankYou {...args} />
 		</MemoryRouter>
 	);
 }
@@ -256,6 +257,7 @@ RecurringNotSignedIn.args = {
 	nameIsOverTenCharacters: true,
 	amountIsAboveThreshold: true,
 	countryGroup: 'GBPCountries',
+	overideThresholdPrice: supporterPlusROWMonthlyThreshold,
 };
 
 RecurringNotSignedIn.decorators = [
@@ -269,6 +271,7 @@ RecurringNotSignedIn.decorators = [
 			nameIsOverTenCharacters,
 			amountIsAboveThreshold,
 			countryGroup,
+			overideThresholdPrice,
 		} = args;
 
 		const store = createTestStoreForContributions();
@@ -286,23 +289,12 @@ RecurringNotSignedIn.decorators = [
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
 
-		const thresholdPrice =
-			lowerBenefitsThresholds[countryGroup][
-				contributionType as RegularContributionType
-			];
-
+		const thresholdAdjustment = amountIsAboveThreshold ? 5 : -5;
 		store.dispatch(
-			setSelectedAmount(
-				amountIsAboveThreshold
-					? {
-							contributionType,
-							amount: `${thresholdPrice + 5}`,
-					  }
-					: {
-							contributionType,
-							amount: `${thresholdPrice - 5}`,
-					  },
-			),
+			setSelectedAmount({
+				contributionType,
+				amount: `${overideThresholdPrice + thresholdAdjustment}`,
+			}),
 		);
 
 		return (
@@ -321,6 +313,7 @@ RecurringSignedIn.args = {
 	nameIsOverTenCharacters: true,
 	amountIsAboveThreshold: true,
 	countryGroup: 'GBPCountries',
+	overideThresholdPrice: supporterPlusROWMonthlyThreshold,
 };
 
 RecurringSignedIn.decorators = [
@@ -334,6 +327,7 @@ RecurringSignedIn.decorators = [
 			nameIsOverTenCharacters,
 			amountIsAboveThreshold,
 			countryGroup,
+			overideThresholdPrice,
 		} = args;
 
 		const store = createTestStoreForContributions();
@@ -352,23 +346,12 @@ RecurringSignedIn.decorators = [
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
 
-		const thresholdPrice =
-			lowerBenefitsThresholds[countryGroup][
-				contributionType as RegularContributionType
-			];
-
+		const thresholdAdjustment = amountIsAboveThreshold ? 5 : -5;
 		store.dispatch(
-			setSelectedAmount(
-				amountIsAboveThreshold
-					? {
-							contributionType,
-							amount: `${thresholdPrice + 5}`,
-					  }
-					: {
-							contributionType,
-							amount: `${thresholdPrice - 5}`,
-					  },
-			),
+			setSelectedAmount({
+				contributionType,
+				amount: `${overideThresholdPrice + thresholdAdjustment}`,
+			}),
 		);
 
 		return (
@@ -387,6 +370,7 @@ RecurringSignUp.args = {
 	nameIsOverTenCharacters: true,
 	amountIsAboveThreshold: true,
 	countryGroup: 'GBPCountries',
+	overideThresholdPrice: supporterPlusROWMonthlyThreshold,
 };
 
 RecurringSignUp.decorators = [
@@ -400,6 +384,7 @@ RecurringSignUp.decorators = [
 			nameIsOverTenCharacters,
 			amountIsAboveThreshold,
 			countryGroup,
+			overideThresholdPrice,
 		} = args;
 
 		const store = createTestStoreForContributions();
@@ -419,23 +404,12 @@ RecurringSignUp.decorators = [
 			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
 		);
 
-		const thresholdPrice =
-			lowerBenefitsThresholds[countryGroup][
-				contributionType as RegularContributionType
-			];
-
+		const thresholdAdjustment = amountIsAboveThreshold ? 5 : -5;
 		store.dispatch(
-			setSelectedAmount(
-				amountIsAboveThreshold
-					? {
-							contributionType,
-							amount: `${thresholdPrice + 5}`,
-					  }
-					: {
-							contributionType,
-							amount: `${thresholdPrice - 5}`,
-					  },
-			),
+			setSelectedAmount({
+				contributionType,
+				amount: `${overideThresholdPrice + thresholdAdjustment}`,
+			}),
 		);
 
 		return (

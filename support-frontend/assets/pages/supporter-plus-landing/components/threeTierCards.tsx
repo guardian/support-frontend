@@ -5,17 +5,18 @@ import type {
 	RegularContributionType,
 } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { TierBenefits, TierPlanCosts } from '../setup/threeTierConfig';
+import type { ProductDescription } from 'helpers/productCatalog';
+import type { Promotion } from 'helpers/productPrice/promotions';
 import { ThreeTierCard } from './threeTierCard';
 
 type ThreeTierCardsProps = {
 	cardsContent: Array<{
-		title: string;
 		isRecommended: boolean;
 		isUserSelected: boolean;
-		benefits: TierBenefits;
-		planCost: TierPlanCosts;
 		link: string;
+		productDescription: ProductDescription;
+		price: number;
+		promotion?: Promotion;
 	}>;
 	currencyId: IsoCurrency;
 	paymentFrequency: RegularContributionType;
@@ -76,7 +77,7 @@ export function ThreeTierCards({
 			aria-labelledby={`${paymentFrequency}`}
 		>
 			{cardsContent.map((cardContent, cardIndex) => {
-				if (cardContent.planCost.discount) {
+				if (cardContent.promotion) {
 					promoCount++;
 				}
 				return (
