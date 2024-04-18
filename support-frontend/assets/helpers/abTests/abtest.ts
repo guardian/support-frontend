@@ -102,7 +102,6 @@ function init({
 	mvt = getMvtId(),
 	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
 }: ABtestInitalizerData): Participations {
-	console.log('*** INIT ***');
 	const participations = getParticipations(
 		abTests,
 		mvt,

@@ -711,6 +711,7 @@ function buildTest({
 	audiences = { ALL: buildAudience({}) },
 	isActive = true,
 	seed = 0,
+	excludeIfInReferrerControlledTest = false,
 	excludeCountriesSubjectToVatCompliantAmounts = false,
 }: Partial<Test>): Test {
 	return {
@@ -719,6 +720,7 @@ function buildTest({
 		isActive,
 		referrerControlled,
 		seed,
+		excludeIfInReferrerControlledTest,
 		excludeCountriesSubjectToVatCompliantAmounts,
 	};
 }
