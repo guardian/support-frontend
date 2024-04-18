@@ -257,8 +257,7 @@ Resources:
 #  (lag(e.event_timestamp) over (partition by payment_provider, product order by event_timestamp)) as last_acquisition,
 #  from `datalake.fact_acquisition_event` e
 #  where 1=1
-#  and date(e.event_timestamp) >= date'2024-02-01'
-#  and date(e.event_timestamp) < date'2024-02-27'
+#  and date(e.event_timestamp) >= date'2024-03-01' -- keep it after 1st March 2024 as the outage caused a S+ gap
 #  and payment_provider in ('STRIPE', 'GOCARDLESS', 'PAYPAL')
 #  and product in ('RECURRING_CONTRIBUTION', 'PRINT_SUBSCRIPTION', 'SUPPORTER_PLUS')
 #  )
@@ -266,7 +265,7 @@ Resources:
 #  product,
 #  print_product,
 #  payment_provider,
-#  max(timestamp_diff(event_timestamp, last_acquisition, HOUR)),
+#  max(timestamp_diff(event_timestamp, last_acquisition, HOUR)) max_diff,
 #  from timegaps
 #  group by 1,2,3
 #  order by 1,2,3
@@ -288,8 +287,8 @@ Resources:
           Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 300
-      EvaluationPeriods: 36
+      Period: 3600
+      EvaluationPeriods: 4
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
@@ -312,8 +311,8 @@ Resources:
           Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 300
-      EvaluationPeriods: 24
+      Period: 3600
+      EvaluationPeriods: 3
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
@@ -337,7 +336,7 @@ Resources:
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
       Period: 3600
-      EvaluationPeriods: 14
+      EvaluationPeriods: 16
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
@@ -360,8 +359,8 @@ Resources:
           Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 300
-      EvaluationPeriods: 48
+      Period: 3600
+      EvaluationPeriods: 6
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
@@ -384,8 +383,8 @@ Resources:
           Value: !Ref Stage
       ComparisonOperator: LessThanOrEqualToThreshold
       Threshold: 0
-      Period: 300
-      EvaluationPeriods: 36
+      Period: 3600
+      EvaluationPeriods: 3
       Statistic: Sum
       TreatMissingData: breaching
     DependsOn: SupportWorkersPROD
