@@ -76,6 +76,9 @@ object SubscriptionEmailFieldHelpers {
       s"${priceWithCurrency(currency, initialPrice)} for the first ${billingPeriod.noun}"
     } else if (paymentsWithDifferentPrice.isEmpty) {
       s"${priceWithCurrency(currency, initialPrice)} every ${billingPeriod.noun}"
+    } else if (paymentsWithInitialPrice.length == 1) {
+      s"${priceWithCurrency(currency, initialPrice)} for the first ${billingPeriod.noun}, " +
+        s"then ${priceWithCurrency(currency, paymentsWithDifferentPrice.head.amount)} every ${billingPeriod.noun}"
     } else {
       val introductoryTimespan = {
         val firstIntroductoryPayment = paymentsWithInitialPrice.minBy(_.date)

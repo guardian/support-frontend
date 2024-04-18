@@ -16,18 +16,13 @@ object PreviewPaymentSchedule {
       zuoraService: ZuoraSubscribeService,
       singleResponseCheck: Future[List[PreviewSubscribeResponse]] => Future[PreviewSubscribeResponse],
   ): Future[PaymentSchedule] = {
-    val numberOfInvoicesToPreview: Int = billingPeriod match {
-      case Monthly => 13
-      case Quarterly => 5
-      case com.gu.support.workers.Annual => 2
-      case SixWeekly => 2
-    }
+    val numberOfInvoicesToPreview: Int = 13
     singleResponseCheck(
       zuoraService.previewSubscribe(PreviewSubscribeRequest.fromSubscribe(subscribeItem, numberOfInvoicesToPreview)),
     ).map(response => paymentSchedule(response.invoiceData.flatMap(_.invoiceItem)))
   }
 
-  def round(d: Double) = BigDecimal(d).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
+  private def round(d: Double) = BigDecimal(d).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
 
   def paymentSchedule(charges: List[Charge]): PaymentSchedule = {
     val dateChargeMap = charges.groupBy(_.serviceStartDate)

@@ -55,6 +55,14 @@ class SubscriptionEmailFieldHelpersSpec extends AnyFlatSpec with Matchers {
     assert(SubscriptionEmailFieldHelpers.describe(PaymentSchedule(schedule), Monthly, GBP, None) == expected)
   }
 
+  "describe" should "explain a payment schedule correctly for an annual subscription" in {
+    val firstDiscountedPayment = Payment(referenceDate, 59.76)
+    val firstFullPricePayment = Payment(referenceDate.plusYears(1), 95)
+    val schedule: List[Payment] = List(firstDiscountedPayment, firstFullPricePayment)
+    val expected = "£59.76 for the first year, then £95.00 every year"
+    assert(SubscriptionEmailFieldHelpers.describe(PaymentSchedule(schedule), Annual, GBP, None) == expected)
+  }
+
   "describe" should "explain a payment schedule correctly if the first 2 quarters are discounted" in {
     val firstDiscountedPayment = Payment(referenceDate, 30.00)
     val firstFullPricePayment = Payment(referenceDate.plusMonths(6), 37.50)
