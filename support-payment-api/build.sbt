@@ -47,7 +47,7 @@ libraryDependencies ++= Seq(
   logback, // add Play logging support
   jdbc,
   ws,
-  "com.lihaoyi" %% "pprint" % "0.8.1",
+  "com.lihaoyi" %% "pprint" % "0.9.0",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
 
   /** This is to satisfy `amazon-pay-java-sdk` dependencies as jaxb has been removed from Java 8 => Java 11.
