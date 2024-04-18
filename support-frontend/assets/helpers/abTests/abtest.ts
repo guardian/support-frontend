@@ -78,30 +78,41 @@ export type Test = {
 	// before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
 	targetPage?: string | RegExp;
 	omitCountries?: IsoCountry[];
+	excludeCountriesSubjectToVatCompliantAmounts: boolean;
 };
 
 export type Tests = Record<string, Test>;
 
 // ----- Init ----- //
 
-function init(
-	country: IsoCountry,
-	countryGroupId: CountryGroupId,
-	abTests: Tests = tests,
-	mvt: number = getMvtId(),
-	acquisitionDataTests: AcquisitionABTest[] = getTestFromAcquisitionData() ??
-		[],
-): Participations {
+type ABtestInitalizerData = {
+	countryId: IsoCountry;
+	countryGroupId: CountryGroupId;
+	selectedAmountsVariant?: SelectedAmountsVariant;
+	abTests?: Tests;
+	mvt?: number;
+	acquisitionDataTests?: AcquisitionABTest[];
+};
+
+function init({
+	countryId,
+	countryGroupId,
+	selectedAmountsVariant,
+	abTests = tests,
+	mvt = getMvtId(),
+	acquisitionDataTests = getTestFromAcquisitionData() ?? [],
+}: ABtestInitalizerData): Participations {
+	console.log('*** INIT ***');
 	const participations = getParticipations(
 		abTests,
 		mvt,
-		country,
+		countryId,
 		countryGroupId,
 		acquisitionDataTests,
+		selectedAmountsVariant,
 	);
 	const urlParticipations = getParticipationsFromUrl();
 	const serverSideParticipations = getServerSideParticipations();
-
 	return {
 		...participations,
 		...serverSideParticipations,
@@ -138,6 +149,7 @@ function getParticipations(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
 	acquisitionDataTests?: AcquisitionABTest[],
+	selectedAmountsVariant?: SelectedAmountsVariant,
 ): Participations {
 	const participations: Participations = {};
 
@@ -155,6 +167,13 @@ function getParticipations(
 		}
 
 		if (!targetPageMatches(window.location.pathname, test.targetPage)) {
+			return;
+		}
+
+		if (
+			test.excludeCountriesSubjectToVatCompliantAmounts &&
+			selectedAmountsVariant?.testName === vatCompliantAmountsTestName
+		) {
 			return;
 		}
 
@@ -178,6 +197,7 @@ function getParticipations(
 		}
 
 		const testVariantId = test.variants[variantAssignment.variantIndex]?.id;
+
 		if (testVariantId) {
 			participations[testId] = testVariantId;
 		}

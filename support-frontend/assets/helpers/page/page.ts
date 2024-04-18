@@ -16,7 +16,11 @@ function setUpTrackingAndConsents(): void {
 	const settings = getSettings();
 	const countryId: IsoCountry = Country.detect();
 	const countryGroupId: CountryGroupId = CountryGroup.detect();
-	const participations: Participations = abTest.init(countryId, countryGroupId);
+	const abtestInitalizerData = {
+		countryId,
+		countryGroupId,
+	};
+	const participations: Participations = abTest.init(abtestInitalizerData);
 	const { amountsParticipation } = getAmountsTestVariant(
 		countryId,
 		countryGroupId,
