@@ -78,7 +78,10 @@ export type Test = {
 	// before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
 	targetPage?: string | RegExp;
 	omitCountries?: IsoCountry[];
-	excludeCountriesSubjectToVatCompliantAmounts: boolean;
+	// Some users will see a version of the checkout that only offers
+	// the option to make contributions. We won't want to include these
+	// users in some AB tests
+	excludeCountriesSubjectToContributionsOnlyAmounts: boolean;
 };
 
 export type Tests = Record<string, Test>;
@@ -170,7 +173,7 @@ function getParticipations(
 		}
 
 		if (
-			test.excludeCountriesSubjectToVatCompliantAmounts &&
+			test.excludeCountriesSubjectToContributionsOnlyAmounts &&
 			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName
 		) {
 			return;

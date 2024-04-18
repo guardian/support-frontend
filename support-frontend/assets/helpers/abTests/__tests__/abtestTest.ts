@@ -334,7 +334,7 @@ describe('init', () => {
 		expect(participations).toEqual({});
 	});
 
-	describe('excludeCountriesSubjectToVatCompliantAmounts', () => {
+	describe('excludeCountriesSubjectToContributionsOnlyAmounts', () => {
 		const selectedAmountsVariant: SelectedAmountsVariant = {
 			testName: contributionsOnlyAmountsTestName,
 			variantName: 'CONTROL',
@@ -359,14 +359,14 @@ describe('init', () => {
 			},
 		};
 
-		it(`does not assign a user to a test if excludeCountriesSubjectToVatCompliantAmounts is true set and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+		it(`does not assign a user to a test if excludeCountriesSubjectToContributionsOnlyAmounts is true set and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
 						buildVariant({ id: 'control' }),
 						buildVariant({ id: 'variant' }),
 					],
-					excludeCountriesSubjectToVatCompliantAmounts: true,
+					excludeCountriesSubjectToContributionsOnlyAmounts: true,
 				}),
 			};
 
@@ -379,14 +379,14 @@ describe('init', () => {
 			expect(participations).toEqual({});
 		});
 
-		it(`does assign a user to a test if excludeCountriesSubjectToVatCompliantAmounts is false and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+		it(`does assign a user to a test if excludeCountriesSubjectToContributionsOnlyAmounts is false and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
 			const abTests = {
 				t1: buildTest({
 					variants: [
 						buildVariant({ id: 'control' }),
 						buildVariant({ id: 'variant' }),
 					],
-					excludeCountriesSubjectToVatCompliantAmounts: false,
+					excludeCountriesSubjectToContributionsOnlyAmounts: false,
 				}),
 			};
 
@@ -780,7 +780,7 @@ function buildTest({
 	isActive = true,
 	seed = 0,
 	excludeIfInReferrerControlledTest = false,
-	excludeCountriesSubjectToVatCompliantAmounts = true,
+	excludeCountriesSubjectToContributionsOnlyAmounts = true,
 }: Partial<Test>): Test {
 	return {
 		variants,
@@ -789,7 +789,7 @@ function buildTest({
 		referrerControlled,
 		seed,
 		excludeIfInReferrerControlledTest,
-		excludeCountriesSubjectToVatCompliantAmounts,
+		excludeCountriesSubjectToContributionsOnlyAmounts,
 	};
 }
 

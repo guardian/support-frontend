@@ -61,7 +61,7 @@ export const tests: Tests = {
 		referrerControlled: true,
 		seed: 1,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToVatCompliantAmounts: true,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
 	supporterPlusOnly: {
 		variants: [
@@ -82,7 +82,7 @@ export const tests: Tests = {
 		referrerControlled: true,
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToVatCompliantAmounts: true,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
 	usFreeBookOffer: {
 		variants: [
@@ -100,6 +100,6 @@ export const tests: Tests = {
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 3,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToVatCompliantAmounts: true,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
 };
