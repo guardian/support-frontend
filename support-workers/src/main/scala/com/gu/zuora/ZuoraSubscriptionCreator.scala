@@ -25,7 +25,7 @@ class ZuoraSubscriptionCreator(
       billingPeriod: BillingPeriod,
   ): Future[PaymentSchedule] =
     PreviewPaymentSchedule
-      .preview(subscribeItem, billingPeriod, zuoraService, checkSingleResponse)
+      .preview(subscribeItem, zuoraService, checkSingleResponse)
       .withEventualLogging("PreviewPaymentSchedule")
 
   def ensureSubscriptionCreated(subscribeItem: SubscribeItem): Future[(ZuoraAccountNumber, ZuoraSubscriptionNumber)] =
