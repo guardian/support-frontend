@@ -7,7 +7,7 @@ import com.gu.support.config.{TouchPointEnvironment, ZuoraSupporterPlusConfig}
 import com.gu.support.promotions.{PromoError, PromotionService}
 import com.gu.support.workers.Monthly
 import com.gu.support.workers.ProductTypeRatePlans.supporterPlusRatePlan
-import com.gu.support.workers.exceptions.CatalogDataNotFoundException
+import com.gu.support.workers.exceptions.{BadRequestException, CatalogDataNotFoundException}
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.SupporterPlusState
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
@@ -35,6 +35,11 @@ class SupporterPlusSubcriptionBuilder(
     val todaysDate = dateGenerator.today
 
     val contributionAmount = state.product.amount - getBaseProductPrice(productRatePlanId, state.product.currency)
+    if (contributionAmount < 0)
+      throw new BadRequestException(
+        s"The contribution amount of a supporter plus subscription cannot be less than zero, but here it would be $contributionAmount",
+      )
+
     val subscriptionData = subscribeItemBuilder.buildProductSubscription(
       productRatePlanId = productRatePlanId,
       ratePlanCharges = List(

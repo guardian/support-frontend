@@ -32,6 +32,7 @@ import { successfulContributionConversion } from 'helpers/tracking/googleTagMana
 import { pageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { getAbsoluteURL } from 'helpers/urls/url';
+import { isSubjectToVatCompliantAmounts } from 'helpers/vatCompliance';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
@@ -99,12 +100,18 @@ export const isLargeDonation = (
 	return amount >= largeDonations[contributionType];
 };
 
-export function SupporterPlusThankYou(): JSX.Element {
+export type SupporterPlusThankYouProps = {
+	overideThresholdPrice?: number;
+};
+
+export function SupporterPlusThankYou({
+	overideThresholdPrice,
+}: SupporterPlusThankYouProps): JSX.Element {
 	const campaignSettings = useMemo<CampaignSettings | null>(
 		() => getCampaignSettings(campaignCode),
 		[],
 	);
-	const { abParticipations } = useContributionsSelector(
+	const { abParticipations, amounts } = useContributionsSelector(
 		(state) => state.common,
 	);
 	const { countryId, countryGroupId, currencyId } = useContributionsSelector(
@@ -141,9 +148,18 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const isAmountLargeDonation = amount
 		? isLargeDonation(amount, contributionType, paymentMethod)
 		: false;
-	const thresholdPrice = useContributionsSelector((state) =>
-		getThresholdPrice(contributionType, state),
-	);
+
+	/**
+	 * thankyou stories do not have access to the productCatalog thresholdPrice from Zuora
+	 * overideThresholdPrice allows thankyou stories to provide their own thresholdPrice
+	 * without it ever appearing in the actual thankyou page
+	 */
+	const thresholdPrice =
+		overideThresholdPrice ??
+		useContributionsSelector((state) =>
+			getThresholdPrice(contributionType, state),
+		);
+
 	/**
 	 * We would normally use the isSuporterPlusFromState selector here,
 	 * but the amount can actually come from `localStorage`.
@@ -151,7 +167,9 @@ export function SupporterPlusThankYou(): JSX.Element {
 	 * We should clear this up when refactoring
 	 */
 	const isSupporterPlus =
-		contributionType !== 'ONE_OFF' && thresholdPrice
+		contributionType !== 'ONE_OFF' &&
+		!isSubjectToVatCompliantAmounts(amounts) &&
+		thresholdPrice
 			? amount >= thresholdPrice
 			: false;
 
@@ -256,8 +274,8 @@ export function SupporterPlusThankYou(): JSX.Element {
 	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
 	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
-	const showTote =
-		!!abParticipations.additionalBenefits &&
+	const showOffer =
+		!!abParticipations.usFreeBookOffer &&
 		useContributionsSelector(isSupporterPlusFromState);
 
 	return (
@@ -282,7 +300,7 @@ export function SupporterPlusThankYou(): JSX.Element {
 							amountIsAboveThreshold={isSupporterPlus}
 							isSignedIn={isSignedIn}
 							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
-							showTote={showTote}
+							showOffer={showOffer}
 							promotion={promotion}
 						/>
 					</div>

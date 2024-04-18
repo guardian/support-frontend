@@ -2,10 +2,7 @@ import '__mocks__/settingsMock';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
-import type {
-	ContributionType,
-	RegularContributionType,
-} from 'helpers/contributions';
+import type { ContributionType } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,
@@ -30,7 +27,7 @@ import {
 } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import { setIsSignedIn, setStorybookUser } from 'helpers/redux/user/actions';
-import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
+import type { SupporterPlusThankYouProps } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import {
 	largeDonations,
 	SupporterPlusThankYou,
@@ -81,10 +78,12 @@ export default {
 	},
 };
 
-function Template() {
+const supporterPlusAUSMonthlyThreshold = 17;
+
+function Template(args: SupporterPlusThankYouProps) {
 	return (
 		<MemoryRouter>
-			<SupporterPlusThankYou />
+			<SupporterPlusThankYou {...args} />
 		</MemoryRouter>
 	);
 }
@@ -100,6 +99,7 @@ export interface SupporterPlusThankYouArgs {
 	shouldShowLargeDonationMessage: boolean;
 	amountIsAboveThreshold: boolean;
 	countryGroup: CountryGroupId;
+	overideThresholdPrice: number;
 }
 
 export const OneOffNotSignedIn = Template.bind({});
@@ -251,6 +251,7 @@ RecurringNotSignedIn.args = {
 	contributionType: 'MONTHLY',
 	nameIsOverTenCharacters: true,
 	amountIsAboveThreshold: true,
+	overideThresholdPrice: supporterPlusAUSMonthlyThreshold,
 };
 
 RecurringNotSignedIn.decorators = [
@@ -263,6 +264,7 @@ RecurringNotSignedIn.decorators = [
 			paymentMethod,
 			nameIsOverTenCharacters,
 			amountIsAboveThreshold,
+			overideThresholdPrice,
 		} = args;
 
 		const store = createTestStoreForContributions();
@@ -278,23 +280,12 @@ RecurringNotSignedIn.decorators = [
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
 
-		const thresholdPrice =
-			lowerBenefitsThresholds['AUDCountries'][
-				contributionType as RegularContributionType
-			];
-
+		const thresholdAdjustment = amountIsAboveThreshold ? 5 : -5;
 		store.dispatch(
-			setSelectedAmount(
-				amountIsAboveThreshold
-					? {
-							contributionType,
-							amount: `${thresholdPrice + 5}`,
-					  }
-					: {
-							contributionType,
-							amount: `${thresholdPrice - 5}`,
-					  },
-			),
+			setSelectedAmount({
+				contributionType,
+				amount: `${overideThresholdPrice + thresholdAdjustment}`,
+			}),
 		);
 
 		return (
@@ -312,6 +303,7 @@ RecurringSignedIn.args = {
 	contributionType: 'MONTHLY',
 	nameIsOverTenCharacters: true,
 	amountIsAboveThreshold: true,
+	overideThresholdPrice: supporterPlusAUSMonthlyThreshold,
 };
 
 RecurringSignedIn.decorators = [
@@ -324,6 +316,7 @@ RecurringSignedIn.decorators = [
 			paymentMethod,
 			nameIsOverTenCharacters,
 			amountIsAboveThreshold,
+			overideThresholdPrice,
 		} = args;
 
 		const store = createTestStoreForContributions();
@@ -339,24 +332,13 @@ RecurringSignedIn.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-
-		const thresholdPrice =
-			lowerBenefitsThresholds['AUDCountries'][
-				contributionType as RegularContributionType
-			];
+		const thresholdAdjustment = amountIsAboveThreshold ? 5 : -5;
 
 		store.dispatch(
-			setSelectedAmount(
-				amountIsAboveThreshold
-					? {
-							contributionType,
-							amount: `${thresholdPrice + 5}`,
-					  }
-					: {
-							contributionType,
-							amount: `${thresholdPrice - 5}`,
-					  },
-			),
+			setSelectedAmount({
+				contributionType,
+				amount: `${overideThresholdPrice + thresholdAdjustment}`,
+			}),
 		);
 
 		return (
@@ -374,6 +356,7 @@ RecurringSignUp.args = {
 	contributionType: 'MONTHLY',
 	nameIsOverTenCharacters: true,
 	amountIsAboveThreshold: true,
+	overideThresholdPrice: supporterPlusAUSMonthlyThreshold,
 };
 
 RecurringSignUp.decorators = [
@@ -386,6 +369,7 @@ RecurringSignUp.decorators = [
 			paymentMethod,
 			nameIsOverTenCharacters,
 			amountIsAboveThreshold,
+			overideThresholdPrice,
 		} = args;
 
 		const store = createTestStoreForContributions();
@@ -403,23 +387,12 @@ RecurringSignUp.decorators = [
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
 
-		const thresholdPrice =
-			lowerBenefitsThresholds['AUDCountries'][
-				contributionType as RegularContributionType
-			];
-
+		const thresholdAdjustment = amountIsAboveThreshold ? 5 : -5;
 		store.dispatch(
-			setSelectedAmount(
-				amountIsAboveThreshold
-					? {
-							contributionType,
-							amount: `${thresholdPrice + 5}`,
-					  }
-					: {
-							contributionType,
-							amount: `${thresholdPrice - 5}`,
-					  },
-			),
+			setSelectedAmount({
+				contributionType,
+				amount: `${overideThresholdPrice + thresholdAdjustment}`,
+			}),
 		);
 
 		return (

@@ -146,7 +146,6 @@ lazy val `support-frontend` = (project in file("support-frontend"))
   )
 
 lazy val `support-workers` = (project in file("support-workers"))
-  .enablePlugins(RiffRaffArtifact)
   .disablePlugins(ReleasePlugin, SbtPgp, Sonatype)
   .configs(IntegrationTest)
   .settings(

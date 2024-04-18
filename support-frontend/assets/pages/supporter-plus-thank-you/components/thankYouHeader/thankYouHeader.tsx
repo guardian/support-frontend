@@ -6,7 +6,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
 import DirectDebitMessage from './directDebitMessage';
 import Heading from './heading';
-import Subheading, { ToteHeading } from './subheading';
+import Subheading, { OfferHeading } from './subheading';
 
 export const header = css`
 	background: white;
@@ -38,7 +38,7 @@ type ThankYouHeaderProps = {
 	isSignedIn: boolean;
 	userTypeFromIdentityResponse: UserTypeFromIdentityResponse;
 	promotion?: Promotion;
-	showTote?: boolean;
+	showOffer?: boolean;
 };
 
 function ThankYouHeader({
@@ -51,7 +51,7 @@ function ThankYouHeader({
 	amountIsAboveThreshold,
 	isSignedIn,
 	userTypeFromIdentityResponse,
-	showTote,
+	showOffer,
 	promotion,
 }: ThankYouHeaderProps): JSX.Element {
 	return (
@@ -74,9 +74,9 @@ function ThankYouHeader({
 					userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 				/>
 			</p>
-			{showTote && (
+			{showOffer && (
 				<p css={headerSupportingText}>
-					<ToteHeading />
+					<OfferHeading />
 				</p>
 			)}
 		</header>

@@ -1,6 +1,19 @@
+import { newspaperCountries } from './internationalisation/country';
+import { gwDeliverableCountries } from './internationalisation/gwDeliverableCountries';
+
 export const productCatalog = window.guardian.productCatalog;
 
-export const productCatalogDescription = {
+export type ProductDescription = {
+	label: string;
+	benefits: Array<{ copy: string; tooltip?: string }>;
+	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
+	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
+	offersSummary?: Array<string | { strong: boolean; copy: string }>;
+	ratePlans: Record<string, { billingPeriod: 'Annual' | 'Month' | 'Quarter' }>;
+	deliverableTo?: Record<string, string>;
+};
+
+export const productCatalogDescription: Record<string, ProductDescription> = {
 	SupporterPlusWithGuardianWeekly: {
 		label: 'Digital + print',
 		benefitsSummary: [
@@ -13,6 +26,21 @@ export const productCatalogDescription = {
 				tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
 			},
 		],
+		ratePlans: {
+			MonthlyWithGuardianWeekly: {
+				billingPeriod: 'Month',
+			},
+			AnnualWithGuardianWeekly: {
+				billingPeriod: 'Annual',
+			},
+			MonthlyWithGuardianWeeklyInt: {
+				billingPeriod: 'Month',
+			},
+			AnnualWithGuardianWeeklyInt: {
+				billingPeriod: 'Annual',
+			},
+		},
+		deliverableTo: gwDeliverableCountries,
 	},
 	DigitalSubscription: {
 		label: 'The Guardian Digital Edition',
@@ -26,9 +54,36 @@ export const productCatalogDescription = {
 				copy: 'Free 14 day trial. Enjoy a free trial of your subscription, before you pay',
 			},
 		],
+		ratePlans: {
+			Monthly: {
+				billingPeriod: 'Month',
+			},
+			Annual: {
+				billingPeriod: 'Annual',
+			},
+			ThreeMonthGift: {
+				billingPeriod: 'Month',
+			},
+			OneYearGift: {
+				billingPeriod: 'Annual',
+			},
+		},
 	},
 	NationalDelivery: {
 		label: 'National Delivery',
+		benefits: [],
+		ratePlans: {
+			Sixday: {
+				billingPeriod: 'Month',
+			},
+			Weekend: {
+				billingPeriod: 'Annual',
+			},
+			Everyday: {
+				billingPeriod: 'Month',
+			},
+		},
+		deliverableTo: newspaperCountries,
 	},
 	SupporterPlus: {
 		label: 'All-access digital',
@@ -46,15 +101,85 @@ export const productCatalogDescription = {
 				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
 			},
 		],
+		ratePlans: {
+			Monthly: {
+				billingPeriod: 'Month',
+			},
+			Annual: {
+				billingPeriod: 'Annual',
+			},
+		},
 	},
 	GuardianWeeklyRestOfWorld: {
 		label: 'The Guardian Weekly',
+		benefits: [],
+		ratePlans: {
+			Monthly: {
+				billingPeriod: 'Month',
+			},
+			OneYearGift: {
+				billingPeriod: 'Annual',
+			},
+			Annual: {
+				billingPeriod: 'Annual',
+			},
+			SixWeekly: {
+				billingPeriod: 'Month',
+			},
+			Quarterly: {
+				billingPeriod: 'Quarter',
+			},
+			ThreeMonthGift: {
+				billingPeriod: 'Month',
+			},
+		},
+		deliverableTo: gwDeliverableCountries,
 	},
 	GuardianWeeklyDomestic: {
 		label: 'The Guardian Weekly',
+		benefits: [],
+		ratePlans: {
+			Monthly: {
+				billingPeriod: 'Month',
+			},
+			OneYearGift: {
+				billingPeriod: 'Annual',
+			},
+			Annual: {
+				billingPeriod: 'Annual',
+			},
+			SixWeekly: {
+				billingPeriod: 'Month',
+			},
+			Quarterly: {
+				billingPeriod: 'Quarter',
+			},
+			ThreeMonthGift: {
+				billingPeriod: 'Month',
+			},
+		},
+		deliverableTo: gwDeliverableCountries,
 	},
 	SubscriptionCard: {
 		label: 'Newspaper subscription',
+		benefits: [],
+		ratePlans: {
+			Sixday: {
+				billingPeriod: 'Month',
+			},
+			Everyday: {
+				billingPeriod: 'Month',
+			},
+			Weekend: {
+				billingPeriod: 'Month',
+			},
+			Sunday: {
+				billingPeriod: 'Month',
+			},
+			Saturday: {
+				billingPeriod: 'Month',
+			},
+		},
 	},
 	Contribution: {
 		label: 'Support',
@@ -63,9 +188,36 @@ export const productCatalogDescription = {
 				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
 			},
 		],
+		ratePlans: {
+			Monthly: {
+				billingPeriod: 'Month',
+			},
+			Annual: {
+				billingPeriod: 'Annual',
+			},
+		},
 	},
 	HomeDelivery: {
 		label: 'Home Delivery',
+		benefits: [],
+		ratePlans: {
+			Everyday: {
+				billingPeriod: 'Month',
+			},
+			Sunday: {
+				billingPeriod: 'Month',
+			},
+			Sixday: {
+				billingPeriod: 'Month',
+			},
+			Weekend: {
+				billingPeriod: 'Month',
+			},
+			Saturday: {
+				billingPeriod: 'Month',
+			},
+		},
+		deliverableTo: newspaperCountries,
 	},
 };
 

@@ -1,5 +1,4 @@
 import LibraryVersions._
-import com.gu.riffraff.artifact.RiffRaffArtifact.autoImport.riffRaffManifestProjectName
 import sbt.Keys.libraryDependencies
 
 version := "0.1-SNAPSHOT"
@@ -31,14 +30,6 @@ libraryDependencies ++= Seq(
   "com.lihaoyi" %% "pprint" % "0.8.1",
 )
 
-riffRaffPackageType := assembly.value
-riffRaffManifestProjectName := s"support:support-workers-mono"
-riffRaffUploadArtifactBucket := Option("riffraff-artifact")
-riffRaffUploadManifestBucket := Option("riffraff-builds")
-riffRaffArtifactResources += (file("support-workers/cloud-formation/target/cfn.yaml"), "cfn/cfn.yaml")
-riffRaffArtifactResources += (file(
-  "support-workers/target/scala-2.13/support-workers-it.jar",
-), "it-tests/support-workers-it.jar")
 assemblyJarName := s"${name.value}.jar"
 
 Project.inConfig(IntegrationTest)(baseAssemblySettings)

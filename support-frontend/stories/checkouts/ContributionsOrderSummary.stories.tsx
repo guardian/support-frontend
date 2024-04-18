@@ -45,7 +45,7 @@ Default.args = {
 	description: 'Monthly support',
 	paymentFrequency: 'month',
 	enableCheckList: true,
-	total: 10,
+	amount: 10,
 	currency: {
 		glyph: '£',
 		extendedGlyph: '£',
@@ -74,7 +74,7 @@ export const SingleContribution = Template.bind({});
 SingleContribution.args = {
 	description: 'One-off contribution',
 	enableCheckList: false,
-	total: 25,
+	amount: 25,
 	currency: {
 		glyph: '$',
 		extendedGlyph: 'US$',

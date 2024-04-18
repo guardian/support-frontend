@@ -1,3 +1,5 @@
+/* eslint "@typescript-eslint/no-unnecessary-condition": "off" -- this is while we are fixing `noUncheckedIndexedAccess` errors */
+
 // ----- Imports ----- //
 
 import seedrandom from 'seedrandom';
@@ -6,6 +8,7 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
+import { vatCompliantAmountsTestName } from 'helpers/vatCompliance';
 import type {
 	AmountsTest,
 	AmountsVariant,
@@ -174,16 +177,19 @@ function getParticipations(
 			return;
 		}
 
-		participations[testId] = test.variants[variantAssignment.variantIndex].id;
+		const testVariantId = test.variants[variantAssignment.variantIndex]?.id;
+		if (testVariantId) {
+			participations[testId] = testVariantId;
+		}
 	});
 
 	// If referrerControlled is set for any test, exclude tests that have excludeIfInReferrerControlledTest set
 	const inReferrerControlledTest = Object.keys(participations).some(
-		(testId) => abTests[testId].referrerControlled,
+		(testId) => abTests[testId]?.referrerControlled,
 	);
 	if (inReferrerControlledTest) {
 		Object.keys(participations).forEach((testId) => {
-			if (abTests[testId].excludeIfInReferrerControlledTest) {
+			if (abTests[testId]?.excludeIfInReferrerControlledTest) {
 				delete participations[testId];
 			}
 		});
@@ -192,15 +198,15 @@ function getParticipations(
 	return participations;
 }
 
-function getParticipationsFromUrl(): Participations | null | undefined {
+function getParticipationsFromUrl(): Participations | undefined {
 	const hashUrl = new URL(document.URL).hash;
 
 	if (hashUrl.startsWith('#ab-')) {
 		const [testId, variant] = decodeURI(hashUrl.substr(4)).split('=');
-		return { [testId]: variant };
+		if (testId && variant) {
+			return { [testId]: variant };
+		}
 	}
-
-	return null;
 }
 
 function getServerSideParticipations(): Participations | null | undefined {
@@ -212,12 +218,9 @@ function getServerSideParticipations(): Participations | null | undefined {
 
 function getAmountsTestFromURL(
 	data: AcquisitionABTest[],
-): AcquisitionABTest | null {
+): AcquisitionABTest | undefined {
 	const amountTests = data.filter((t) => t.testType === 'AMOUNTS_TEST');
-	if (amountTests.length) {
-		return amountTests[0];
-	}
-	return null;
+	return amountTests[0];
 }
 
 interface GetAmountsTestVariantResult {
@@ -259,30 +262,24 @@ function getAmountsTestVariant(
 		}
 	};
 
-	// Is the country in the list for contributions only checkout?
-	// This relies on the existence of an amounts test with a specific name
-	// It could be done using the countriesAffectedByVATStatus list
-	// but this would need the list and the amounts test to be in sync
-	// and this way simplifies testing as it is all set up in the RRCP
-	const contribOnlyTestName = 'VAT_COMPLIANCE';
 	const contribOnlyAmounts = amounts.find((t) => {
 		return (
 			t.isLive &&
-			t.testName === contribOnlyTestName &&
+			t.testName === vatCompliantAmountsTestName &&
 			t.targeting.targetingType === 'Country' &&
 			t.targeting.countries.includes(country)
 		);
 	});
-	if (contribOnlyAmounts) {
+	if (contribOnlyAmounts?.variants[0]) {
 		const amountsParticipation = buildParticipation(
 			contribOnlyAmounts,
-			contribOnlyTestName,
+			vatCompliantAmountsTestName,
 			contribOnlyAmounts.variants[0].variantName,
 		);
 		return {
 			selectedAmountsVariant: {
 				...contribOnlyAmounts.variants[0],
-				testName: contribOnlyTestName,
+				testName: vatCompliantAmountsTestName,
 			},
 			amountsParticipation,
 		};
@@ -305,18 +302,21 @@ function getAmountsTestVariant(
 				const variant =
 					variants.find((variant) => variant.variantName === urlTest.variant) ??
 					variants[0];
-				const amountsParticipation = buildParticipation(
-					candidate,
-					urlTest.name,
-					variant.variantName,
-				);
-				return {
-					selectedAmountsVariant: {
-						...variant,
-						testName: urlTest.name,
-					},
-					amountsParticipation,
-				};
+
+				if (variant) {
+					const amountsParticipation = buildParticipation(
+						candidate,
+						urlTest.name,
+						variant.variantName,
+					);
+					return {
+						selectedAmountsVariant: {
+							...variant,
+							testName: urlTest.name,
+						},
+						amountsParticipation,
+					};
+				}
 			}
 		}
 	}
@@ -373,10 +373,10 @@ function getAmountsTestVariant(
 	): AmountsVariant => {
 		if (isLive && variants.length > 1) {
 			const assignmentIndex = randomNumber(mvt, seed) % variants.length;
-			return variants[assignmentIndex];
+			return variants[assignmentIndex]!;
 		}
 		// For regional AmountsTests, if the test is not live then we use the control
-		return variants[0];
+		return variants[0]!;
 	};
 
 	const currentTestName = isLive && liveTestName ? liveTestName : testName;
