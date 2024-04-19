@@ -51,7 +51,7 @@ export function addProductSideEffects(
 			if (
 				threeTierCheckoutEnabled(
 					commonState.abParticipations,
-					commonState.internationalisation.countryId,
+					commonState.amounts,
 				) &&
 				isMonthlyOrAnnual
 			) {

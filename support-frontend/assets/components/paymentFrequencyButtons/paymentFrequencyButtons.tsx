@@ -10,7 +10,7 @@ interface PaymentFrequencyButtonObj {
 	isPreSelected?: boolean;
 }
 
-interface PaymentFrequencyButtonsProps {
+export interface PaymentFrequencyButtonsProps {
 	paymentFrequencies: PaymentFrequencyButtonObj[];
 	buttonClickHandler: (buttonIndex: number) => void;
 	additionalStyles?: SerializedStyles;

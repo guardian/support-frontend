@@ -21,8 +21,13 @@ export type PaperLandingPropTypes = {
 
 const countryGroupId = CountryGroup.detect();
 
+const abtestInitalizerData = {
+	countryId: Country.detect(),
+	countryGroupId,
+};
+
 export const paperLandingProps = (): PaperLandingPropTypes => ({
 	productPrices: getProductPrices(),
 	promotionCopy: getPromotionCopy(),
-	participations: initAbTests(Country.detect(), countryGroupId),
+	participations: initAbTests(abtestInitalizerData),
 });

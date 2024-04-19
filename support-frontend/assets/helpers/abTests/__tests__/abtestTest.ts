@@ -1,11 +1,15 @@
 // ----- Imports ----- //
 import { pageUrlRegexes } from 'helpers/abTests/abtestDefinitions';
+import { contributionsOnlyAmountsTestName } from 'helpers/contributions';
+import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { AcquisitionABTest } from 'helpers/tracking/acquisitions';
 import type {
 	AmountsTest,
 	AmountsTests,
 	AmountsTestTargeting,
 	AmountsVariant,
+	SelectedAmountsVariant,
 } from '../../contributions';
 import { emptySwitches } from '../../globalsAndSwitches/globals';
 import type { Settings } from '../../globalsAndSwitches/settings';
@@ -36,24 +40,27 @@ describe('init', () => {
 
 	// Common arguments to init
 	const mvt = 123456;
-	const country = 'GB';
-	const countryGroupId = GBPCountries;
+	const country: IsoCountry = 'GB';
+	const countryGroupId: CountryGroupId = GBPCountries;
+	const abtestInitalizerData = {
+		countryId: country,
+		countryGroupId,
+		mvt,
+	};
 
 	afterEach(() => {
 		window.localStorage.clear();
 	});
 
 	it('assigns a user to a variant', () => {
-		const tests = {
+		const abTests = {
 			t: buildTest({ variants: [buildVariant({ id: 'control' })] }),
 		};
 
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			tests,
-			mvt,
-		);
+		const participations: Participations = abInit({
+			...abtestInitalizerData,
+			abTests,
+		});
 
 		const expectedParticipations: Participations = {
 			t: 'control',
@@ -63,7 +70,7 @@ describe('init', () => {
 	});
 
 	it('uses the variant assignment in the acquisitionData for referrerControlled tests', () => {
-		const tests = {
+		const abTests = {
 			t1: buildTest({
 				variants: [
 					buildVariant({ id: 'control' }),
@@ -80,18 +87,16 @@ describe('init', () => {
 			}),
 		};
 
-		const acquisitionAbTests = [
+		const acquisitionDataTests = [
 			buildAcquisitionAbTest({ name: 't1', variant: 'control' }),
 			buildAcquisitionAbTest({ name: 't2', variant: 'variant' }),
 		];
 
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			tests,
-			mvt,
-			acquisitionAbTests,
-		);
+		const participations: Participations = abInit({
+			...abtestInitalizerData,
+			abTests,
+			acquisitionDataTests,
+		});
 
 		const expectedParticipations: Participations = {
 			t1: 'control',
@@ -102,7 +107,7 @@ describe('init', () => {
 	});
 
 	it('excludes a test with excludeIfInReferrerControlledTest set if another test has referrerControlled set', () => {
-		const tests = {
+		const abTests = {
 			t1: buildTest({
 				variants: [
 					buildVariant({ id: 'control' }),
@@ -120,17 +125,15 @@ describe('init', () => {
 			}),
 		};
 
-		const acquisitionAbTests = [
+		const acquisitionDataTests = [
 			buildAcquisitionAbTest({ name: 't2', variant: 'variant' }),
 		];
 
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			tests,
-			mvt,
-			acquisitionAbTests,
-		);
+		const participations: Participations = abInit({
+			...abtestInitalizerData,
+			abTests,
+			acquisitionDataTests,
+		});
 
 		const expectedParticipations: Participations = {
 			t2: 'variant',
@@ -142,7 +145,7 @@ describe('init', () => {
 	it('uses the variant assignment in the acquisitionData for referrerControlled tests belonging to a campaign', () => {
 		const campaignPrefix = 't';
 
-		const tests = {
+		const abTests = {
 			[campaignPrefix]: buildTest({
 				variants: [
 					buildVariant({ id: 'control' }),
@@ -152,20 +155,18 @@ describe('init', () => {
 			}),
 		};
 
-		const acquisitionAbTests = [
+		const acquisitionDataTests = [
 			buildAcquisitionAbTest({
 				name: `${campaignPrefix}__HEADER`,
 				variant: 'control',
 			}),
 		];
 
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			tests,
-			mvt,
-			acquisitionAbTests,
-		);
+		const participations: Participations = abInit({
+			...abtestInitalizerData,
+			abTests,
+			acquisitionDataTests,
+		});
 
 		const expectedParticipations: Participations = {
 			[campaignPrefix]: 'control',
@@ -175,41 +176,41 @@ describe('init', () => {
 	});
 
 	it('does not assign a user to a test in another country', () => {
-		const tests = {
+		const abTests = {
 			t: buildTest({ audiences: { GB: buildAudience({}) } }),
 		};
 
-		const country = 'US';
+		const countryId = 'US';
 		const countryGroupId = UnitedStates;
-		const participations: Participations = abInit(
-			country,
+		const participations: Participations = abInit({
+			...abtestInitalizerData,
+			countryId,
 			countryGroupId,
-			tests,
-			mvt,
-		);
+			abTests,
+		});
 
 		expect(participations).toEqual({});
 	});
 
 	it('does not assign a user to a test in another country group', () => {
-		const tests = {
+		const abTests = {
 			t: buildTest({ audiences: { GBPCountries: buildAudience({}) } }),
 		};
 
-		const country = 'US';
+		const countryId = 'US';
 		const countryGroupId = UnitedStates;
-		const participations: Participations = abInit(
-			country,
+		const participations: Participations = abInit({
+			...abtestInitalizerData,
+			countryId,
 			countryGroupId,
-			tests,
-			mvt,
-		);
+			abTests,
+		});
 
 		expect(participations).toEqual({});
 	});
 
 	it('does not assign a user to a test if they are below the min breakpoint', () => {
-		const tests = {
+		const abTests = {
 			t: buildTest({
 				audiences: {
 					GB: buildAudience({
@@ -219,12 +220,10 @@ describe('init', () => {
 			}),
 		};
 
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			tests,
-			mvt,
-		);
+		const participations: Participations = abInit({
+			...abtestInitalizerData,
+			abTests,
+		});
 
 		const expectedMediaQuery = '(min-width:740px)';
 
@@ -233,7 +232,7 @@ describe('init', () => {
 	});
 
 	it('does not assign a user to a test if they are above the max breakpoint', () => {
-		const tests = {
+		const abTests = {
 			t: buildTest({
 				audiences: {
 					GB: buildAudience({
@@ -243,12 +242,10 @@ describe('init', () => {
 			}),
 		};
 
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			tests,
-			mvt,
-		);
+		const participations: Participations = abInit({
+			...abtestInitalizerData,
+			abTests,
+		});
 
 		const expectedMediaQuery = '(max-width:740px)';
 
@@ -257,7 +254,7 @@ describe('init', () => {
 	});
 
 	it('does not assign a user to a test if they are outside of the min and max breakpoints', () => {
-		const tests = {
+		const abTests = {
 			t: buildTest({
 				audiences: {
 					GB: buildAudience({
@@ -267,12 +264,10 @@ describe('init', () => {
 			}),
 		};
 
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			tests,
-			mvt,
-		);
+		const participations: Participations = abInit({
+			...abtestInitalizerData,
+			abTests,
+		});
 
 		const expectedMediaQuery = '(min-width:740px) and (max-width:980px)';
 
@@ -289,16 +284,14 @@ describe('init', () => {
 
 		document.cookie = postDeploymentTestCookie;
 
-		const tests = {
+		const abTests = {
 			t: buildTest({}),
 		};
 
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			tests,
-			mvt,
-		);
+		const participations: Participations = abInit({
+			...abtestInitalizerData,
+			abTests,
+		});
 
 		expect(participations).toEqual({});
 
@@ -308,18 +301,17 @@ describe('init', () => {
 	it('does not assign a user to a test if their mvt is below the offset', () => {
 		const mvt = 100_000; // This is 10% of the max mvt
 
-		const tests = {
+		const abTests = {
 			t1: buildTest({
 				audiences: { GB: buildAudience({ offset: 0.2, size: 0.8 }) },
 			}),
 		};
 
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			tests,
+		const participations: Participations = abInit({
+			...abtestInitalizerData,
+			abTests,
 			mvt,
-		);
+		});
 
 		expect(participations).toEqual({});
 	});
@@ -327,20 +319,85 @@ describe('init', () => {
 	it('does not assign a user to a test if their mvt is above the offset plus size', () => {
 		const mvt = 900_000; // This is 90% of the max mvt
 
-		const tests = {
+		const abTests = {
 			t1: buildTest({
 				audiences: { GB: buildAudience({ offset: 0.1, size: 0.8 }) },
 			}),
 		};
 
-		const participations: Participations = abInit(
-			country,
-			countryGroupId,
-			tests,
+		const participations: Participations = abInit({
+			...abtestInitalizerData,
+			abTests,
 			mvt,
-		);
+		});
 
 		expect(participations).toEqual({});
+	});
+
+	describe('excludeCountriesSubjectToContributionsOnlyAmounts', () => {
+		const selectedAmountsVariant: SelectedAmountsVariant = {
+			testName: contributionsOnlyAmountsTestName,
+			variantName: 'CONTROL',
+			defaultContributionType: 'MONTHLY',
+			displayContributionType: ['ONE_OFF', 'MONTHLY', 'ANNUAL'],
+			amountsCardData: {
+				ONE_OFF: {
+					amounts: [1, 2, 5, 10],
+					defaultAmount: 2,
+					hideChooseYourAmount: true,
+				},
+				MONTHLY: {
+					amounts: [2, 3, 5, 7, 9, 12],
+					defaultAmount: 5,
+					hideChooseYourAmount: true,
+				},
+				ANNUAL: {
+					amounts: [10, 15, 20, 30],
+					defaultAmount: 15,
+					hideChooseYourAmount: true,
+				},
+			},
+		};
+
+		it(`does not assign a user to a test if excludeCountriesSubjectToContributionsOnlyAmounts is true set and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+			const abTests = {
+				t1: buildTest({
+					variants: [
+						buildVariant({ id: 'control' }),
+						buildVariant({ id: 'variant' }),
+					],
+					excludeCountriesSubjectToContributionsOnlyAmounts: true,
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				selectedAmountsVariant,
+			});
+
+			expect(participations).toEqual({});
+		});
+
+		it(`does assign a user to a test if excludeCountriesSubjectToContributionsOnlyAmounts is false and selectedAmountsVariant test name is ${contributionsOnlyAmountsTestName}`, () => {
+			const abTests = {
+				t1: buildTest({
+					variants: [
+						buildVariant({ id: 'control' }),
+						buildVariant({ id: 'variant' }),
+					],
+					excludeCountriesSubjectToContributionsOnlyAmounts: false,
+				}),
+			};
+
+			const participations: Participations = abInit({
+				...abtestInitalizerData,
+				abTests,
+				selectedAmountsVariant,
+			});
+
+			expect(participations).toEqual({ t1: 'variant' });
+		});
 	});
 });
 
@@ -723,6 +780,7 @@ function buildTest({
 	isActive = true,
 	seed = 0,
 	excludeIfInReferrerControlledTest = false,
+	excludeCountriesSubjectToContributionsOnlyAmounts = true,
 }: Partial<Test>): Test {
 	return {
 		variants,
@@ -731,6 +789,7 @@ function buildTest({
 		referrerControlled,
 		seed,
 		excludeIfInReferrerControlledTest,
+		excludeCountriesSubjectToContributionsOnlyAmounts,
 	};
 }
 

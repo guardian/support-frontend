@@ -169,10 +169,10 @@ export function ContributionsOrderSummary({
 	);
 
 	const formattedAmount = simpleFormatAmount(currency, amount);
-	/** We have to check deeper than just promotion as the other values are optional */
+
 	const formattedPromotionAmount =
-		promotion?.discountedPrice &&
-		simpleFormatAmount(currency, promotion.discountedPrice);
+		promotion &&
+		simpleFormatAmount(currency, promotion.discountedPrice ?? amount);
 
 	return (
 		<div css={componentStyles}>

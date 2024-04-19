@@ -26,7 +26,7 @@ function Template(args: CheckoutTopUpAmountsProps) {
 			currencySymbol={args.currencySymbol}
 			timePeriod={args.timePeriod}
 			amounts={args.amounts}
-			isWithinThreshold={args.isWithinThreshold}
+			isAboveThreshold={args.isAboveThreshold}
 		/>
 	);
 }
@@ -39,7 +39,7 @@ UKMonthlyTopUpAmounts.args = {
 	currencySymbol: '£',
 	timePeriod: 'month',
 	amounts: [1, 2, 3, 4, 5],
-	isWithinThreshold: true,
+	isAboveThreshold: true,
 };
 
 export const UKYearlyTopUpAmounts = Template.bind({});
@@ -48,7 +48,7 @@ UKYearlyTopUpAmounts.args = {
 	currencySymbol: '£',
 	timePeriod: 'year',
 	amounts: [1, 2, 3, 4, 5],
-	isWithinThreshold: true,
+	isAboveThreshold: true,
 };
 
 export const USMonthlyTopUpAmounts = Template.bind({});
@@ -57,5 +57,5 @@ USMonthlyTopUpAmounts.args = {
 	currencySymbol: '$',
 	timePeriod: 'month',
 	amounts: [1, 2, 3, 4, 5],
-	isWithinThreshold: true,
+	isAboveThreshold: true,
 };

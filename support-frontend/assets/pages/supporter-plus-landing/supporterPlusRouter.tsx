@@ -91,7 +91,7 @@ const commonState = store.getState().common;
 
 export const inThreeTier = threeTierCheckoutEnabled(
 	commonState.abParticipations,
-	commonState.internationalisation.countryId,
+	commonState.amounts,
 );
 
 // ----- Render ----- //

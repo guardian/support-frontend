@@ -56,7 +56,13 @@ export function getInitialState(): CommonState {
 	const { selectedAmountsVariant, amountsParticipation } =
 		getAmountsTestVariant(countryId, countryGroupId, settings);
 
-	const participations: Participations = abTest.init(countryId, countryGroupId);
+	const abtestInitalizerData = {
+		countryId,
+		countryGroupId,
+		selectedAmountsVariant,
+	};
+
+	const participations: Participations = abTest.init(abtestInitalizerData);
 	const participationsWithAmountsTest = {
 		...participations,
 		...amountsParticipation,
