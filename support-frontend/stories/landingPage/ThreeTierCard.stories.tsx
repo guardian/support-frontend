@@ -1,9 +1,13 @@
 import { css } from '@emotion/react';
+import { palette } from '@guardian/source-foundations';
 import {
 	currencies,
 	type IsoCurrency,
 } from 'helpers/internationalisation/currency';
-import { gwDeliverableCountries } from 'helpers/internationalisation/gwDeliverableCountries';
+import {
+	productCatalogDescription,
+	supporterPlusWithGuardianWeeklyMonthlyPromos,
+} from 'helpers/productCatalog';
 import type { ThreeTierCardProps } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { ThreeTierCard } from 'pages/supporter-plus-landing/components/threeTierCard';
 import { withCenterAlignment } from '../../.storybook/decorators/withCenterAlignment';
@@ -32,13 +36,16 @@ export default {
 };
 
 function Template(args: ThreeTierCardProps) {
+	const innerContentContainer = css`
+		max-width: 940px;
+		margin: 0 auto;
+		text-align: center;
+		background-color: ${palette.brand[400]};
+		padding: 25px;
+	`;
 	return (
-		<div
-			css={css`
-				text-align: center;
-			`}
-		>
-			<ThreeTierCard {...args} />
+		<div css={innerContentContainer}>
+			<ThreeTierCard {...args} />;
 		</div>
 	);
 }
@@ -54,31 +61,20 @@ Default.args = {
 	currencyId: 'GBP',
 	paymentFrequency: 'MONTHLY',
 	price: 10,
-	productDescription: {
-		label: 'All-access digital',
-		benefits: [
-			{
-				copy: 'Unlimited access to the Guardian app',
-				tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
-			},
-			{ copy: 'Ad-free reading on all your devices' },
-			{
-				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
-			},
-			{
-				copy: 'Far fewer asks for support',
-				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
-			},
-		],
-		ratePlans: {
-			Monthly: {
-				billingPeriod: 'Month',
-			},
-			Annual: {
-				billingPeriod: 'Annual',
-			},
-		},
-	},
+	productDescription: productCatalogDescription.SupporterPlus,
+};
+
+export const Promotion = Template.bind({});
+
+Promotion.args = {
+	isRecommended: true,
+	isRecommendedSubdued: false,
+	isUserSelected: false,
+	currencyId: 'EUR',
+	paymentFrequency: 'MONTHLY',
+	price: 36.5,
+	productDescription: productCatalogDescription.SupporterPlusWithGuardianWeekly,
+	promotion: supporterPlusWithGuardianWeeklyMonthlyPromos.EURCountries,
 };
 
 export const Offer = Template.bind({});
@@ -91,31 +87,10 @@ Offer.args = {
 	paymentFrequency: 'MONTHLY',
 	price: 13,
 	productDescription: {
-		label: 'Digital + print',
-		benefitsSummary: ['The rewards from All-access digital'],
+		...productCatalogDescription.SupporterPlusWithGuardianWeekly,
 		offersSummary: [
 			{ strong: true, copy: 'including a free book as our gift to you**' },
 		],
-		benefits: [
-			{
-				copy: 'Guardian Weekly print magazine delivered to your door every week  ',
-				tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
-			},
-		],
-		ratePlans: {
-			MonthlyWithGuardianWeekly: {
-				billingPeriod: 'Month',
-			},
-			AnnualWithGuardianWeekly: {
-				billingPeriod: 'Annual',
-			},
-			MonthlyWithGuardianWeeklyInt: {
-				billingPeriod: 'Month',
-			},
-			AnnualWithGuardianWeeklyInt: {
-				billingPeriod: 'Annual',
-			},
-		},
 		offers: [
 			{
 				copy: (
@@ -131,51 +106,5 @@ Offer.args = {
 				),
 			},
 		],
-	},
-};
-
-export const Promotion = Template.bind({});
-
-Promotion.args = {
-	isRecommended: true,
-	isRecommendedSubdued: false,
-	isUserSelected: false,
-	currencyId: 'EUR',
-	paymentFrequency: 'MONTHLY',
-	productDescription: {
-		label: 'Digital + print',
-		benefitsSummary: [
-			'The rewards from ',
-			{ strong: true, copy: 'All-access digital' },
-		],
-		benefits: [
-			{
-				copy: 'Guardian Weekly print magazine delivered to your door every week  ',
-				tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
-			},
-		],
-		ratePlans: {
-			MonthlyWithGuardianWeekly: {
-				billingPeriod: 'Month',
-			},
-			AnnualWithGuardianWeekly: {
-				billingPeriod: 'Annual',
-			},
-			MonthlyWithGuardianWeeklyInt: {
-				billingPeriod: 'Month',
-			},
-			AnnualWithGuardianWeeklyInt: {
-				billingPeriod: 'Annual',
-			},
-		},
-		deliverableTo: gwDeliverableCountries,
-	},
-	price: 10,
-	promotion: {
-		discountedPrice: 5,
-		discount: {
-			amount: 5,
-			durationMonths: 6,
-		},
 	},
 };
