@@ -54,6 +54,7 @@ case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
     case List(ZuoraError("REQUEST_EXCEEDED_RATE", _)) => toRetryUnlimited
     case List(ZuoraError("SERVER_UNAVAILABLE", _)) => toRetryUnlimited
     case List(ZuoraError("UNKNOWN_ERROR", _)) => toRetryUnlimited
+    case List(ZuoraError("TEMPORARY_ERROR", _)) => toRetryUnlimited
     case _ => toRetryNone
   }
 }
