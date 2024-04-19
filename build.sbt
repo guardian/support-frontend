@@ -57,7 +57,7 @@ inThisBuild(
       case y =>
         val oldStrategy = (assembly / assemblyMergeStrategy).value
         oldStrategy(y)
-    }
+    },
   ),
 )
 
@@ -87,7 +87,7 @@ lazy val commonDependencies = Seq(
   "com.typesafe" % "config" % "1.4.2",
   scalatest % "test",
   "com.typesafe.scala-logging" % "scala-logging_2.13" % "3.9.5",
-  "ch.qos.logback" % "logback-classic" % "1.4.14",
+  "ch.qos.logback" % "logback-classic" % "1.5.6",
 )
 
 lazy val root = (project in file("."))
