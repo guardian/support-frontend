@@ -1,5 +1,9 @@
 import { css } from '@emotion/react';
 import { palette } from '@guardian/source-foundations';
+import {
+	currencies,
+	type IsoCurrency,
+} from 'helpers/internationalisation/currency';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import type { ThreeTierCardsProps } from 'pages/supporter-plus-landing/components/threeTierCards';
 import { ThreeTierCards } from 'pages/supporter-plus-landing/components/threeTierCards';
@@ -11,6 +15,10 @@ export default {
 	component: ThreeTierCards,
 	argTypes: {
 		linkCtaClickHandler: { action: 'tier card clicked' },
+		currencyId: {
+			options: Object.keys(currencies) as IsoCurrency[],
+			control: { type: 'radio' },
+		},
 	},
 	decorators: [withCenterAlignment, withSourceReset],
 	parameters: {
