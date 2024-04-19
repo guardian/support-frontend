@@ -322,9 +322,11 @@ export function Checkout() {
 	const cardElement = elements?.getElement(CardNumberElement);
 	const [stripeClientSecret, setStripeClientSecret] = useState<string>();
 
-	/** Payment method: PayPal */
+	/**
+	 * Payment method: PayPal
+	 * BAID = Billing Agreement ID
+	 */
 	const [payPalLoaded, setPayPalLoaded] = useState(false);
-	// BAID = Billing Agreement ID
 	const [payPalBAID, setPayPalBAID] = useState('');
 	useEffect(() => {
 		if (paymentMethod === 'PayPal' && !payPalLoaded) {
