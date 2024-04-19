@@ -12,7 +12,7 @@ import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
-import { getAmount } from 'helpers/contributions';
+import { getAmount, isContributionsOnlyCountry } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -32,7 +32,6 @@ import { successfulContributionConversion } from 'helpers/tracking/googleTagMana
 import { pageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { getAbsoluteURL } from 'helpers/urls/url';
-import { isSubjectToVatCompliantAmounts } from 'helpers/vatCompliance';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
@@ -168,7 +167,7 @@ export function SupporterPlusThankYou({
 	 */
 	const isSupporterPlus =
 		contributionType !== 'ONE_OFF' &&
-		!isSubjectToVatCompliantAmounts(amounts) &&
+		!isContributionsOnlyCountry(amounts) &&
 		thresholdPrice
 			? amount >= thresholdPrice
 			: false;

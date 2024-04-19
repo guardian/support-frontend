@@ -1,6 +1,9 @@
 import { useState } from 'preact/hooks';
 import type { ContributionType } from 'helpers/contributions';
-import { getConfigMinAmount } from 'helpers/contributions';
+import {
+	getConfigMinAmount,
+	isContributionsOnlyCountry,
+} from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect, glyph } from 'helpers/internationalisation/currency';
 import { setProductType } from 'helpers/redux/checkout/product/actions';
@@ -15,7 +18,6 @@ import {
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { isSubjectToVatCompliantAmounts } from 'helpers/vatCompliance';
 import type { CheckoutNudgeProps } from './checkoutNudge';
 
 type CheckoutNudgeContainerProps = {
@@ -115,7 +117,7 @@ export function CheckoutNudgeContainer({
 		defaultAmount,
 	).toString();
 
-	const isDynamic = !isSubjectToVatCompliantAmounts(amounts);
+	const isDynamic = !isContributionsOnlyCountry(amounts);
 
 	const { otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
