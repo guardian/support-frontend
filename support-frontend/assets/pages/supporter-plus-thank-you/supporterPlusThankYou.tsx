@@ -12,10 +12,7 @@ import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import type { CampaignSettings } from 'helpers/campaigns/campaigns';
 import { getCampaignSettings } from 'helpers/campaigns/campaigns';
 import type { ContributionType } from 'helpers/contributions';
-import {
-	getAmount,
-	isSubjectToContributionsOnlyAmounts,
-} from 'helpers/contributions';
+import { getAmount, isContributionsOnlyCountry } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
@@ -170,7 +167,7 @@ export function SupporterPlusThankYou({
 	 */
 	const isSupporterPlus =
 		contributionType !== 'ONE_OFF' &&
-		!isSubjectToContributionsOnlyAmounts(amounts) &&
+		!isContributionsOnlyCountry(amounts) &&
 		thresholdPrice
 			? amount >= thresholdPrice
 			: false;

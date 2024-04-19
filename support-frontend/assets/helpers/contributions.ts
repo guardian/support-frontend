@@ -503,7 +503,7 @@ const contributionTypeAvailable = (
 
 const contributionsOnlyAmountsTestName = 'VAT_COMPLIANCE';
 
-const isSubjectToContributionsOnlyAmounts = (
+const isContributionsOnlyCountry = (
 	amountsVariant: SelectedAmountsVariant,
 ): boolean => {
 	const { testName } = amountsVariant;
@@ -530,5 +530,5 @@ export {
 	getAmount,
 	contributionTypeAvailable,
 	contributionsOnlyAmountsTestName,
-	isSubjectToContributionsOnlyAmounts,
+	isContributionsOnlyCountry,
 };

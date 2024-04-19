@@ -1,6 +1,6 @@
 import type { Participations } from 'helpers/abTests/abtest';
 import type { SelectedAmountsVariant } from 'helpers/contributions';
-import { isSubjectToContributionsOnlyAmounts } from 'helpers/contributions';
+import { isContributionsOnlyCountry } from 'helpers/contributions';
 
 export const threeTierCheckoutEnabled = (
 	abParticipations: Participations,
@@ -38,6 +38,6 @@ export const threeTierCheckoutEnabled = (
 	return !(
 		displayPatronsCheckout ||
 		displaySupportPlusOnlyCheckout ||
-		isSubjectToContributionsOnlyAmounts(amountsVariant)
+		isContributionsOnlyCountry(amountsVariant)
 	);
 };

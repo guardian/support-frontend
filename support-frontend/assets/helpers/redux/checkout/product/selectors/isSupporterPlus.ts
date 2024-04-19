@@ -1,7 +1,4 @@
-import {
-	getAmount,
-	isSubjectToContributionsOnlyAmounts,
-} from 'helpers/contributions';
+import { getAmount, isContributionsOnlyCountry } from 'helpers/contributions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { getThresholdPrice } from 'helpers/supporterPlus/benefitsThreshold';
@@ -9,7 +6,7 @@ import { isOneOff } from 'helpers/supporterPlus/isContributionRecurring';
 
 export function isSupporterPlusFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
-	const countryIsAffectedByVATStatus = isSubjectToContributionsOnlyAmounts(
+	const countryIsAffectedByVATStatus = isContributionsOnlyCountry(
 		state.common.amounts,
 	);
 
@@ -28,7 +25,7 @@ export function isSupporterPlusFromState(state: ContributionsState): boolean {
 
 export function hideBenefitsListFromState(state: ContributionsState): boolean {
 	const contributionType = getContributionType(state);
-	const countryIsAffectedByVATStatus = isSubjectToContributionsOnlyAmounts(
+	const countryIsAffectedByVATStatus = isContributionsOnlyCountry(
 		state.common.amounts,
 	);
 

@@ -28,7 +28,7 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import HeadlineImageDesktop from 'components/svgs/headlineImageDesktop';
 import HeadlineImageMobile from 'components/svgs/headlineImageMobile';
-import { isSubjectToContributionsOnlyAmounts } from 'helpers/contributions';
+import { isContributionsOnlyCountry } from 'helpers/contributions';
 import {
 	AUDCountries,
 	Canada,
@@ -172,8 +172,7 @@ export function SupporterPlusCheckoutScaffold({
 
 	const displayPatronsCheckout = !!abParticipations.patronsOneOffOnly;
 
-	const countryIsAffectedByVATStatus =
-		isSubjectToContributionsOnlyAmounts(amounts);
+	const countryIsAffectedByVATStatus = isContributionsOnlyCountry(amounts);
 
 	function SubHeading() {
 		if (displayPatronsCheckout) {

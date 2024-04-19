@@ -2,7 +2,7 @@ import { useState } from 'preact/hooks';
 import type { ContributionType } from 'helpers/contributions';
 import {
 	getConfigMinAmount,
-	isSubjectToContributionsOnlyAmounts,
+	isContributionsOnlyCountry,
 } from 'helpers/contributions';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { detect, glyph } from 'helpers/internationalisation/currency';
@@ -117,7 +117,7 @@ export function CheckoutNudgeContainer({
 		defaultAmount,
 	).toString();
 
-	const isDynamic = !isSubjectToContributionsOnlyAmounts(amounts);
+	const isDynamic = !isContributionsOnlyCountry(amounts);
 
 	const { otherAmounts } = useContributionsSelector(
 		(state) => state.page.checkoutForm.product,
