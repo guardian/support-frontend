@@ -501,6 +501,15 @@ const contributionTypeAvailable = (
 		(settings) => settings.contributionType === contributionType,
 	);
 
+const contributionsOnlyAmountsTestName = 'VAT_COMPLIANCE';
+
+const isContributionsOnlyCountry = (
+	amountsVariant: SelectedAmountsVariant,
+): boolean => {
+	const { testName } = amountsVariant;
+	return testName === contributionsOnlyAmountsTestName;
+};
+
 // ----- Exports ----- //
 export {
 	config,
@@ -520,4 +529,6 @@ export {
 	parseRegularContributionType,
 	getAmount,
 	contributionTypeAvailable,
+	contributionsOnlyAmountsTestName,
+	isContributionsOnlyCountry,
 };

@@ -1,6 +1,6 @@
 import type { Participations } from 'helpers/abTests/abtest';
 import type { SelectedAmountsVariant } from 'helpers/contributions';
-import { isSubjectToVatCompliantAmounts } from 'helpers/vatCompliance';
+import { isContributionsOnlyCountry } from 'helpers/contributions';
 
 export const threeTierCheckoutEnabled = (
 	abParticipations: Participations,
@@ -38,6 +38,6 @@ export const threeTierCheckoutEnabled = (
 	return !(
 		displayPatronsCheckout ||
 		displaySupportPlusOnlyCheckout ||
-		isSubjectToVatCompliantAmounts(amountsVariant)
+		isContributionsOnlyCountry(amountsVariant)
 	);
 };

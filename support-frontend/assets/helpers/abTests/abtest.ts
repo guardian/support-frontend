@@ -3,12 +3,12 @@
 // ----- Imports ----- //
 
 import seedrandom from 'seedrandom';
+import { contributionsOnlyAmountsTestName } from 'helpers/contributions';
 import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
 import { getQueryParameter } from 'helpers/urls/url';
-import { vatCompliantAmountsTestName } from 'helpers/vatCompliance';
 import type {
 	AmountsTest,
 	AmountsVariant,
@@ -78,7 +78,10 @@ export type Test = {
 	// before activating this test eg. '/(uk|us|au|ca|nz)/subscribe$'
 	targetPage?: string | RegExp;
 	omitCountries?: IsoCountry[];
-	excludeCountriesSubjectToVatCompliantAmounts: boolean;
+	// Some users will see a version of the checkout that only offers
+	// the option to make contributions. We won't want to include these
+	// users in some AB tests
+	excludeCountriesSubjectToContributionsOnlyAmounts: boolean;
 };
 
 export type Tests = Record<string, Test>;
@@ -170,8 +173,8 @@ function getParticipations(
 		}
 
 		if (
-			test.excludeCountriesSubjectToVatCompliantAmounts &&
-			selectedAmountsVariant?.testName === vatCompliantAmountsTestName
+			test.excludeCountriesSubjectToContributionsOnlyAmounts &&
+			selectedAmountsVariant?.testName === contributionsOnlyAmountsTestName
 		) {
 			return;
 		}
@@ -284,7 +287,7 @@ function getAmountsTestVariant(
 	const contribOnlyAmounts = amounts.find((t) => {
 		return (
 			t.isLive &&
-			t.testName === vatCompliantAmountsTestName &&
+			t.testName === contributionsOnlyAmountsTestName &&
 			t.targeting.targetingType === 'Country' &&
 			t.targeting.countries.includes(country)
 		);
@@ -292,13 +295,13 @@ function getAmountsTestVariant(
 	if (contribOnlyAmounts?.variants[0]) {
 		const amountsParticipation = buildParticipation(
 			contribOnlyAmounts,
-			vatCompliantAmountsTestName,
+			contributionsOnlyAmountsTestName,
 			contribOnlyAmounts.variants[0].variantName,
 		);
 		return {
 			selectedAmountsVariant: {
 				...contribOnlyAmounts.variants[0],
-				testName: vatCompliantAmountsTestName,
+				testName: contributionsOnlyAmountsTestName,
 			},
 			amountsParticipation,
 		};

@@ -9,7 +9,10 @@ export type ProductDescription = {
 	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
 	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
 	offersSummary?: Array<string | { strong: boolean; copy: string }>;
-	ratePlans: Record<string, { billingPeriod: 'Annual' | 'Month' | 'Quarter' }>;
+	ratePlans: Record<
+		string,
+		{ billingPeriod: 'Annual' | 'Monthly' | 'Quarterly' }
+	>;
 	deliverableTo?: Record<string, string>;
 };
 
@@ -28,13 +31,13 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		],
 		ratePlans: {
 			MonthlyWithGuardianWeekly: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			AnnualWithGuardianWeekly: {
 				billingPeriod: 'Annual',
 			},
 			MonthlyWithGuardianWeeklyInt: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			AnnualWithGuardianWeeklyInt: {
 				billingPeriod: 'Annual',
@@ -56,13 +59,13 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		],
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Annual: {
 				billingPeriod: 'Annual',
 			},
 			ThreeMonthGift: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			OneYearGift: {
 				billingPeriod: 'Annual',
@@ -74,13 +77,13 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		benefits: [],
 		ratePlans: {
 			Sixday: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Weekend: {
 				billingPeriod: 'Annual',
 			},
 			Everyday: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 		},
 		deliverableTo: newspaperCountries,
@@ -103,7 +106,7 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		],
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Annual: {
 				billingPeriod: 'Annual',
@@ -115,7 +118,7 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		benefits: [],
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			OneYearGift: {
 				billingPeriod: 'Annual',
@@ -124,13 +127,13 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				billingPeriod: 'Annual',
 			},
 			SixWeekly: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Quarterly: {
-				billingPeriod: 'Quarter',
+				billingPeriod: 'Quarterly',
 			},
 			ThreeMonthGift: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 		},
 		deliverableTo: gwDeliverableCountries,
@@ -140,7 +143,7 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		benefits: [],
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			OneYearGift: {
 				billingPeriod: 'Annual',
@@ -149,13 +152,13 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 				billingPeriod: 'Annual',
 			},
 			SixWeekly: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Quarterly: {
-				billingPeriod: 'Quarter',
+				billingPeriod: 'Quarterly',
 			},
 			ThreeMonthGift: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 		},
 		deliverableTo: gwDeliverableCountries,
@@ -165,19 +168,19 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		benefits: [],
 		ratePlans: {
 			Sixday: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Everyday: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Weekend: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Sunday: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Saturday: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 		},
 	},
@@ -190,7 +193,7 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		],
 		ratePlans: {
 			Monthly: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Annual: {
 				billingPeriod: 'Annual',
@@ -202,19 +205,19 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		benefits: [],
 		ratePlans: {
 			Everyday: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Sunday: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Sixday: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Weekend: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 			Saturday: {
-				billingPeriod: 'Month',
+				billingPeriod: 'Monthly',
 			},
 		},
 		deliverableTo: newspaperCountries,
