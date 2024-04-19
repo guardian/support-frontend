@@ -61,6 +61,7 @@ export const tests: Tests = {
 		referrerControlled: true,
 		seed: 1,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
 	supporterPlusOnly: {
 		variants: [
@@ -81,8 +82,9 @@ export const tests: Tests = {
 		referrerControlled: true,
 		seed: 2,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
-	additionalBenefits: {
+	usFreeBookOffer: {
 		variants: [
 			{
 				id: 'control',
@@ -91,12 +93,13 @@ export const tests: Tests = {
 		audiences: {
 			US: {
 				offset: 0,
-				size: 0,
+				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 3,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
 };

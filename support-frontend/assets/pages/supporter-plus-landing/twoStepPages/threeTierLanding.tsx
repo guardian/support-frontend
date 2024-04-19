@@ -18,6 +18,7 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
+import { OfferBook } from 'components/offer/offer';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import type {
@@ -37,7 +38,7 @@ import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 import {
 	productCatalog,
-	productCatalogDescription,
+	productCatalogDescription as productCatalogDescExclOffers,
 	supporterPlusWithGuardianWeekly,
 	supporterPlusWithGuardianWeeklyAnnualPromos,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
@@ -61,7 +62,7 @@ import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCartValue } from 'helpers/tracking/quantumMetric';
 import { SupportOnce } from '../components/supportOnce';
 import { ThreeTierCards } from '../components/threeTierCards';
-import { ThreeTierTsAndCs, ToteTsAndCs } from '../components/threeTierTsAndCs';
+import { OfferTsAndCs, ThreeTierTsAndCs } from '../components/threeTierTsAndCs';
 import type { TierPlans } from '../setup/threeTierConfig';
 
 const recurringContainer = css`
@@ -236,23 +237,43 @@ const isCardUserSelected = (
 	);
 };
 
-function getCardData(
-	// TODO - this type could use some refinement
-	productDescription: (typeof productCatalogDescription)[keyof typeof productCatalogDescription],
+const productCatalogDescInclOffers: typeof productCatalogDescExclOffers = {
+	...productCatalogDescExclOffers,
+	SupporterPlusWithGuardianWeekly: {
+		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
+		benefitsSummary: ['The rewards from All-access digital'],
+		offersSummary: [
+			{
+				strong: true,
+				copy: `including a free book as our gift to${'\u00A0'}you**`,
+			},
+		],
+		benefits:
+			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.benefits,
+		ratePlans:
+			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.ratePlans,
+	},
+	SupporterPlus: {
+		label: productCatalogDescExclOffers.SupporterPlus.label,
+		benefits: productCatalogDescExclOffers.SupporterPlus.benefits,
+		offers: [
+			{
+				copy: <OfferBook></OfferBook>,
+			},
+		],
+		ratePlans: productCatalogDescExclOffers.SupporterPlus.ratePlans,
+	},
+};
+
+/**
+ * @deprecated - we should be useing ProductCatalog data types.
+ * TODO - remove this once TsAndCs work of ☝️ types
+ */
+function getPlanCost(
 	pricing: number,
-	link: string,
 	contributionType: ContributionType,
 	promotion?: Promotion,
-	isRecommended = false,
 ) {
-	/**
-	 * The text we show depends `contributionType` selected by the user
-	 * We only support ANNUAL style text for promotions with durationMonths === 12
-	 *
-	 * EXAMPLE
-	 * MONTHLY: £6.5/month for 6 months, then £10/month
-	 * ANNUAL: £173/year for the first year, then £275/year
-	 */
 	const promotionDurationPeriod: RegularContributionType =
 		contributionType === 'ANNUAL' && promotion?.discount?.durationMonths === 12
 			? 'ANNUAL'
@@ -264,32 +285,19 @@ function getCardData(
 			: promotion?.discount?.durationMonths;
 
 	return {
-		title: productDescription.label,
-		isRecommended,
-		isUserSelected: isCardUserSelected(pricing, promotion?.discount?.amount),
-		benefits: {
-			list: 'benefits' in productDescription ? productDescription.benefits : [],
-			description:
-				'benefitsSummary' in productDescription
-					? productDescription.benefitsSummary
-					: undefined,
-		},
-		planCost: {
-			price: pricing,
-			promoCode: promotion?.name,
-			discount:
-				promotion?.discount?.amount && promotion.discountedPrice
-					? {
-							percentage: promotion.discount.amount,
-							price: promotion.discountedPrice,
-							duration: {
-								value: promotionDurationValue ?? 0,
-								period: promotionDurationPeriod,
-							},
-					  }
-					: undefined,
-		},
-		link,
+		price: pricing,
+		promoCode: promotion?.name,
+		discount:
+			promotion?.discount?.amount && promotion.discountedPrice
+				? {
+						percentage: promotion.discount.amount,
+						price: promotion.discountedPrice,
+						duration: {
+							value: promotionDurationValue ?? 0,
+							period: promotionDurationPeriod,
+						},
+				  }
+				: undefined,
 	};
 }
 
@@ -333,6 +341,13 @@ export function ThreeTierLanding(): JSX.Element {
 			billingPeriod,
 		),
 	);
+
+	const showOffer =
+		!!abParticipations.usFreeBookOffer && countryGroupId === 'UnitedStates';
+
+	const productCatalogDescription = showOffer
+		? productCatalogDescInclOffers
+		: productCatalogDescExclOffers;
 
 	useEffect(() => {
 		dispatch(resetValidation());
@@ -440,37 +455,42 @@ export function ThreeTierLanding(): JSX.Element {
 		'selected-contribution-type': selectedContributionType,
 	});
 	const tier1Link = `contribute/checkout?${tier1UrlParams.toString()}`;
-	const tier1Card = getCardData(
-		productCatalogDescription.Contribution,
-		recurringAmount,
-		tier1Link,
-		contributionType,
-	);
+
+	const tier1Card = {
+		productDescription: productCatalogDescription.Contribution,
+		price: recurringAmount,
+		link: tier1Link,
+		isUserSelected: isCardUserSelected(recurringAmount),
+		isRecommended: false,
+	};
 
 	/** Tier 2: SupporterPlus */
 	const supporterPlusRatePlan =
 		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
-	const pricing =
+	const tier2Pricing =
 		productCatalog.SupporterPlus.ratePlans[supporterPlusRatePlan].pricing[
 			currencyId
 		];
 	const tier2UrlParams = new URLSearchParams({
-		'selected-amount': pricing.toString(),
+		'selected-amount': tier2Pricing.toString(),
 		'selected-contribution-type': selectedContributionType,
 	});
 	if (promotion) {
 		tier2UrlParams.set('promoCode', promotion.promoCode);
 	}
 
-	const tier2Card = getCardData(
-		productCatalogDescription.SupporterPlus,
-		pricing,
-		`contribute/checkout?${tier2UrlParams.toString()}`,
-		contributionType,
+	const tier2Card = {
+		productDescription: productCatalogDescription.SupporterPlus,
+		price: tier2Pricing,
+		link: `contribute/checkout?${tier2UrlParams.toString()}`,
 		/** The promotion from the querystring is for the SupporterPlus product only */
 		promotion,
-		true, // isRecommended
-	);
+		isRecommended: true,
+		isUserSelected: isCardUserSelected(
+			tier2Pricing,
+			promotion?.discount?.amount,
+		),
+	};
 
 	/**
 	 * Tier 3: SupporterPlus with Guardian Weekly
@@ -489,15 +509,22 @@ export function ThreeTierLanding(): JSX.Element {
 		threeTierCreateSupporterPlusSubscription: 'true',
 		period: paymentFrequencyMap[contributionType],
 	});
-	const tier3Card = getCardData(
-		productCatalogDescription.SupporterPlusWithGuardianWeekly,
+	const tier3Pricing =
 		supporterPlusWithGuardianWeekly.ratePlans[
 			supporterPlusWithGuardianWeeklyRatePlan
-		].pricing[currencyId],
-		`/subscribe/weekly/checkout?${tier3UrlParams.toString()}`,
-		contributionType,
-		tier3Promotion,
-	);
+		].pricing[currencyId];
+	const tier3Card = {
+		productDescription:
+			productCatalogDescription.SupporterPlusWithGuardianWeekly,
+		price: tier3Pricing,
+		link: `/subscribe/weekly/checkout?${tier3UrlParams.toString()}`,
+		promotion: tier3Promotion,
+		isRecommended: false,
+		isUserSelected: isCardUserSelected(
+			tier3Pricing,
+			promotion?.discount?.amount,
+		),
+	};
 
 	return (
 		<PageScaffold
@@ -582,38 +609,51 @@ export function ThreeTierLanding(): JSX.Element {
 			>
 				<ThreeTierTsAndCs
 					tsAndCsContent={[
-						{ title: tier1Card.title, planCost: tier1Card.planCost },
-						{ title: tier2Card.title, planCost: tier2Card.planCost },
-						{ title: tier3Card.title, planCost: tier3Card.planCost },
+						{
+							title: tier1Card.productDescription.label,
+							planCost: getPlanCost(tier1Card.price, contributionType),
+						},
+						{
+							title: tier2Card.productDescription.label,
+							planCost: getPlanCost(
+								tier2Card.price,
+								contributionType,
+								promotion,
+							),
+						},
+						{
+							title: tier3Card.productDescription.label,
+							planCost: getPlanCost(
+								tier3Card.price,
+								contributionType,
+								tier3Promotion,
+							),
+						},
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
-				{!!abParticipations.additionalBenefits && (
-					<ToteTsAndCs
+				{showOffer && (
+					<OfferTsAndCs
 						currency={currencies[currencyId].glyph}
-						toteCostMonthly={
-							getCardData(
-								productCatalogDescription.SupporterPlus,
+						offerCostMonthly={
+							getPlanCost(
 								productCatalog.SupporterPlus.ratePlans.Monthly.pricing[
 									currencyId
 								],
-								'', // We don't care about the link here as we just want the price
-								contributionType,
+								'MONTHLY',
 								promotion,
-							).planCost.price
+							).price
 						}
-						toteCostAnnual={
-							getCardData(
-								productCatalogDescription.SupporterPlus,
+						offerCostAnnual={
+							getPlanCost(
 								productCatalog.SupporterPlus.ratePlans.Annual.pricing[
 									currencyId
 								],
-								'', // We don't care about the link here as we just want the price
-								contributionType,
+								'ANNUAL',
 								promotion,
-							).planCost.price
+							).price
 						}
-					></ToteTsAndCs>
+					></OfferTsAndCs>
 				)}
 			</Container>
 		</PageScaffold>

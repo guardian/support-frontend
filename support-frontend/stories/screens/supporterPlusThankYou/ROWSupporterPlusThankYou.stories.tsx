@@ -2,7 +2,6 @@ import '__mocks__/settingsMock';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { createTestStoreForContributions } from '__test-utils__/testStore';
-import type { RegularContributionType } from 'helpers/contributions';
 import {
 	AmazonPay,
 	DirectDebit,
@@ -27,7 +26,7 @@ import {
 } from 'helpers/redux/checkout/product/actions';
 import { setCountryInternationalisation } from 'helpers/redux/commonState/actions';
 import { setIsSignedIn, setStorybookUser } from 'helpers/redux/user/actions';
-import { lowerBenefitsThresholds } from 'helpers/supporterPlus/benefitsThreshold';
+import type { SupporterPlusThankYouProps } from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 import {
 	largeDonations,
 	SupporterPlusThankYou,
@@ -81,10 +80,12 @@ export default {
 	},
 };
 
-function Template() {
+const supporterPlusROWMonthlyThreshold = 13;
+
+function Template(args: SupporterPlusThankYouProps) {
 	return (
 		<MemoryRouter>
-			<SupporterPlusThankYou />
+			<SupporterPlusThankYou {...args} />
 		</MemoryRouter>
 	);
 }
@@ -104,7 +105,7 @@ OneOffNotSignedIn.args = {
 OneOffNotSignedIn.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const { paymentMethod, shouldShowLargeDonationMessage, countryGroup } =
 			args;
@@ -117,9 +118,11 @@ OneOffNotSignedIn.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-		store.dispatch(
-			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
-		);
+
+		const country = countryGroups[countryGroup].countries[0];
+		if (country) {
+			store.dispatch(setCountryInternationalisation(country));
+		}
 
 		store.dispatch(
 			setSelectedAmount(
@@ -155,7 +158,7 @@ OneOffSignedIn.args = {
 OneOffSignedIn.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const { paymentMethod, shouldShowLargeDonationMessage, countryGroup } =
 			args;
@@ -169,9 +172,10 @@ OneOffSignedIn.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-		store.dispatch(
-			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
-		);
+		const country = countryGroups[countryGroup].countries[0];
+		if (country) {
+			store.dispatch(setCountryInternationalisation(country));
+		}
 
 		store.dispatch(
 			setSelectedAmount(
@@ -206,7 +210,7 @@ OneOffSignUp.args = {
 OneOffSignUp.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const { paymentMethod, shouldShowLargeDonationMessage, countryGroup } =
 			args;
@@ -222,9 +226,10 @@ OneOffSignUp.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-		store.dispatch(
-			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
-		);
+		const country = countryGroups[countryGroup].countries[0];
+		if (country) {
+			store.dispatch(setCountryInternationalisation(country));
+		}
 
 		store.dispatch(
 			setSelectedAmount(
@@ -256,12 +261,13 @@ RecurringNotSignedIn.args = {
 	nameIsOverTenCharacters: true,
 	amountIsAboveThreshold: true,
 	countryGroup: 'GBPCountries',
+	overideThresholdPrice: supporterPlusROWMonthlyThreshold,
 };
 
 RecurringNotSignedIn.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const {
 			contributionType,
@@ -269,6 +275,7 @@ RecurringNotSignedIn.decorators = [
 			nameIsOverTenCharacters,
 			amountIsAboveThreshold,
 			countryGroup,
+			overideThresholdPrice,
 		} = args;
 
 		const store = createTestStoreForContributions();
@@ -282,27 +289,17 @@ RecurringNotSignedIn.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-		store.dispatch(
-			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
-		);
+		const country = countryGroups[countryGroup].countries[0];
+		if (country) {
+			store.dispatch(setCountryInternationalisation(country));
+		}
 
-		const thresholdPrice =
-			lowerBenefitsThresholds[countryGroup][
-				contributionType as RegularContributionType
-			];
-
+		const thresholdAdjustment = amountIsAboveThreshold ? 5 : -5;
 		store.dispatch(
-			setSelectedAmount(
-				amountIsAboveThreshold
-					? {
-							contributionType,
-							amount: `${thresholdPrice + 5}`,
-					  }
-					: {
-							contributionType,
-							amount: `${thresholdPrice - 5}`,
-					  },
-			),
+			setSelectedAmount({
+				contributionType,
+				amount: `${overideThresholdPrice + thresholdAdjustment}`,
+			}),
 		);
 
 		return (
@@ -321,12 +318,13 @@ RecurringSignedIn.args = {
 	nameIsOverTenCharacters: true,
 	amountIsAboveThreshold: true,
 	countryGroup: 'GBPCountries',
+	overideThresholdPrice: supporterPlusROWMonthlyThreshold,
 };
 
 RecurringSignedIn.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const {
 			contributionType,
@@ -334,6 +332,7 @@ RecurringSignedIn.decorators = [
 			nameIsOverTenCharacters,
 			amountIsAboveThreshold,
 			countryGroup,
+			overideThresholdPrice,
 		} = args;
 
 		const store = createTestStoreForContributions();
@@ -348,27 +347,17 @@ RecurringSignedIn.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-		store.dispatch(
-			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
-		);
+		const country = countryGroups[countryGroup].countries[0];
+		if (country) {
+			store.dispatch(setCountryInternationalisation(country));
+		}
 
-		const thresholdPrice =
-			lowerBenefitsThresholds[countryGroup][
-				contributionType as RegularContributionType
-			];
-
+		const thresholdAdjustment = amountIsAboveThreshold ? 5 : -5;
 		store.dispatch(
-			setSelectedAmount(
-				amountIsAboveThreshold
-					? {
-							contributionType,
-							amount: `${thresholdPrice + 5}`,
-					  }
-					: {
-							contributionType,
-							amount: `${thresholdPrice - 5}`,
-					  },
-			),
+			setSelectedAmount({
+				contributionType,
+				amount: `${overideThresholdPrice + thresholdAdjustment}`,
+			}),
 		);
 
 		return (
@@ -387,12 +376,13 @@ RecurringSignUp.args = {
 	nameIsOverTenCharacters: true,
 	amountIsAboveThreshold: true,
 	countryGroup: 'GBPCountries',
+	overideThresholdPrice: supporterPlusROWMonthlyThreshold,
 };
 
 RecurringSignUp.decorators = [
 	(
 		Story: React.FC,
-		{ args }: Record<string, SupporterPlusThankYouArgs>,
+		{ args }: { args: SupporterPlusThankYouArgs },
 	): JSX.Element => {
 		const {
 			contributionType,
@@ -400,6 +390,7 @@ RecurringSignUp.decorators = [
 			nameIsOverTenCharacters,
 			amountIsAboveThreshold,
 			countryGroup,
+			overideThresholdPrice,
 		} = args;
 
 		const store = createTestStoreForContributions();
@@ -415,27 +406,17 @@ RecurringSignUp.decorators = [
 		store.dispatch(setLastName('Bloggs'));
 		store.dispatch(setEmail('abcd@thegulocal.com'));
 		store.dispatch(setPaymentMethod({ paymentMethod }));
-		store.dispatch(
-			setCountryInternationalisation(countryGroups[countryGroup].countries[0]),
-		);
+		const country = countryGroups[countryGroup].countries[0];
+		if (country) {
+			store.dispatch(setCountryInternationalisation(country));
+		}
 
-		const thresholdPrice =
-			lowerBenefitsThresholds[countryGroup][
-				contributionType as RegularContributionType
-			];
-
+		const thresholdAdjustment = amountIsAboveThreshold ? 5 : -5;
 		store.dispatch(
-			setSelectedAmount(
-				amountIsAboveThreshold
-					? {
-							contributionType,
-							amount: `${thresholdPrice + 5}`,
-					  }
-					: {
-							contributionType,
-							amount: `${thresholdPrice - 5}`,
-					  },
-			),
+			setSelectedAmount({
+				contributionType,
+				amount: `${overideThresholdPrice + thresholdAdjustment}`,
+			}),
 		);
 
 		return (

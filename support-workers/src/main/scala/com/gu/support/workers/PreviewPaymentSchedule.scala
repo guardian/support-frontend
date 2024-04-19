@@ -12,22 +12,16 @@ object PreviewPaymentSchedule {
 
   def preview(
       subscribeItem: SubscribeItem,
-      billingPeriod: BillingPeriod,
       zuoraService: ZuoraSubscribeService,
       singleResponseCheck: Future[List[PreviewSubscribeResponse]] => Future[PreviewSubscribeResponse],
   ): Future[PaymentSchedule] = {
-    val numberOfInvoicesToPreview: Int = billingPeriod match {
-      case Monthly => 13
-      case Quarterly => 5
-      case com.gu.support.workers.Annual => 2
-      case SixWeekly => 2
-    }
+    val numberOfMonthsToPreview: Int = 13 // 13 allows for annual subs to have a second invoice
     singleResponseCheck(
-      zuoraService.previewSubscribe(PreviewSubscribeRequest.fromSubscribe(subscribeItem, numberOfInvoicesToPreview)),
+      zuoraService.previewSubscribe(PreviewSubscribeRequest.fromSubscribe(subscribeItem, numberOfMonthsToPreview)),
     ).map(response => paymentSchedule(response.invoiceData.flatMap(_.invoiceItem)))
   }
 
-  def round(d: Double) = BigDecimal(d).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
+  private def round(d: Double) = BigDecimal(d).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
 
   def paymentSchedule(charges: List[Charge]): PaymentSchedule = {
     val dateChargeMap = charges.groupBy(_.serviceStartDate)

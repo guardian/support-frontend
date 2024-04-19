@@ -4,7 +4,7 @@ name := "acquisitions-firehose-transformer"
 description := "A Firehose transformation lambda for serialising the acquisitions event stream to csv"
 
 libraryDependencies ++= Seq(
-  "com.amazonaws" % "aws-lambda-java-events" % "3.11.4",
+  "com.amazonaws" % "aws-lambda-java-events" % "3.11.5",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "org.scanamo" %% "scanamo" % "1.0.0-M26",

@@ -35,29 +35,6 @@ const testsDetails: TestDetails[] = [
 	},
 ];
 
-const testDetailsPromo = [
-	{
-		tier: 2,
-		frequency: 'Monthly',
-		promoCode: 'PLAYWRIGHT_TEST_SPLUS_MONTHLY',
-		expectedPromoText: '£8/month for 3 months, then £10/month',
-		expectedCheckoutTotalText: 'Was £10, now £8/month',
-		expectedCheckoutButtonText: 'Pay £8 per month',
-		expectedThankYouText:
-			"You'll pay £8/month for the first 3 months, then £10/month afterwards unless you cancel.",
-	},
-	{
-		tier: 2,
-		frequency: 'Annual',
-		promoCode: 'PLAYWRIGHT_TEST_SPLUS_ANNUAL',
-		expectedPromoText: '£76/year for the first year, then £95/year',
-		expectedCheckoutTotalText: 'Was £95, now £76/year',
-		expectedCheckoutButtonText: 'Pay £76 per year',
-		expectedThankYouText:
-			"You'll pay £76/year for the first year, then £95/year afterwards unless you cancel.",
-	},
-];
-
 afterEachTasks(test);
 
 test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
@@ -79,9 +56,8 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 			);
 			await page.getByRole('tab').getByText(testDetails.frequency).click();
 			await page
-				.locator(
-					`:nth-match(button:has-text("Subscribe"), ${testDetails.tier})`,
-				)
+				.getByRole('link', { name: 'Subscribe' })
+				.nth(testDetails.tier - 1)
 				.click();
 			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
 			if (testDetails.country === 'US') {
@@ -134,7 +110,31 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 	});
 });
 
-test.describe('Subscribe (S+) incl PromoCode via the Tiered checkout', () => {
+const testDetailsPromo = [
+	{
+		tier: 2,
+		frequency: 'Monthly',
+		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
+		expectedCardHeading: 'All-access digital',
+		expectedPromoText: '£8/month for 6 months, then £10/month',
+		expectedCheckoutTotalText: 'Was £10, now £8/month',
+		expectedCheckoutButtonText: 'Pay £8 per month',
+		expectedThankYouText:
+			"You'll pay £8/month for the first 6 months, then £10/month afterwards unless you cancel.",
+	},
+	{
+		tier: 2,
+		frequency: 'Annual',
+		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
+		expectedCardHeading: 'All-access digital',
+		expectedPromoText: '£76/year for the first year, then £95/year',
+		expectedCheckoutTotalText: 'Was £95, now £76/year',
+		expectedCheckoutButtonText: 'Pay £76 per year',
+		expectedThankYouText:
+			"You'll pay £76/year for the first year, then £95/year afterwards unless you cancel.",
+	},
+];
+test.describe('Supporter Plus promoCodes', () => {
 	testDetailsPromo.forEach((testDetails) => {
 		test(`${testDetails.frequency} (S+) Subscription incl PromoCode at Tier-${testDetails.tier} with Credit/Debit card - UK`, async ({
 			context,
@@ -152,13 +152,17 @@ test.describe('Subscribe (S+) incl PromoCode via the Tiered checkout', () => {
 				`/uk/contribute?promoCode=${testDetails.promoCode}`,
 			);
 			await page.getByRole('tab').getByText(testDetails.frequency).click();
+
+			const cardHeading = page.getByRole('heading', {
+				name: testDetails.expectedCardHeading,
+			});
+			const card = page.locator('section').filter({ has: cardHeading });
 			await expect(
-				page.getByText(testDetails.expectedPromoText).first(),
+				card.getByText(testDetails.expectedPromoText).first(),
 			).toBeVisible();
 			await page
-				.locator(
-					`:nth-match(button:has-text("Subscribe"), ${testDetails.tier})`,
-				)
+				.getByRole('link', { name: 'Subscribe' })
+				.nth(testDetails.tier - 1)
 				.click();
 
 			// Checkout
@@ -174,11 +178,75 @@ test.describe('Subscribe (S+) incl PromoCode via the Tiered checkout', () => {
 			// Thank you
 			await expect(
 				page.getByText(testDetails.expectedThankYouText).first(),
-			).toBeVisible();
+			).toBeVisible({ timeout: 600000 });
 			await expect(page).toHaveURL(
 				`/uk/thankyou?promoCode=${testDetails.promoCode}`,
-				{ timeout: 600000 },
 			);
 		});
 	});
+});
+
+const thresholdTests = [
+	{ amount: '10', contributionType: 'monthly', product: 'All-access digital' },
+	{ amount: '9', contributionType: 'monthly', product: 'Support' },
+	{ amount: '95', contributionType: 'annual', product: 'All-access digital' },
+	{ amount: '94', contributionType: 'annual', product: 'Support' },
+	{
+		amount: '10',
+		contributionType: 'monthly',
+		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
+		product: 'All-access digital',
+	},
+	{
+		amount: '9',
+		contributionType: 'monthly',
+		promoCode: 'E2E_TEST_SPLUS_MONTHLY',
+		product: 'Support',
+	},
+	{
+		amount: '95',
+		contributionType: 'annual',
+		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
+		product: 'All-access digital',
+	},
+	{
+		amount: '94',
+		contributionType: 'annual',
+		promoCode: 'E2E_TEST_SPLUS_ANNUAL',
+		product: 'Support',
+	},
+];
+test.describe('Thresholds - the product is "Support" or "All-access digital" correctly based on selected-amount', () => {
+	for (const testConfig of thresholdTests) {
+		test(`Thresholds - ${testConfig.product} ${testConfig.amount}/${
+			testConfig.contributionType
+		}/${testConfig.promoCode ?? ''}`, async ({ context, baseURL }) => {
+			const page = await context.newPage();
+			const urlParams = new URLSearchParams({
+				'selected-amount': testConfig.amount,
+				'selected-contribution-type': testConfig.contributionType,
+			});
+			if (testConfig.promoCode) {
+				urlParams.append('promoCode', testConfig.promoCode);
+			}
+			await setupPage(
+				page,
+				context,
+				baseURL,
+				`/uk/contribute/checkout?${urlParams.toString()}`,
+			);
+
+			const orderSummaryHeading = page.getByRole('heading', {
+				name: 'Your subscription',
+			});
+			const orderSummarySection = page
+				.locator('section')
+				.filter({ has: orderSummaryHeading })
+				.nth(1);
+
+			expect(
+				orderSummarySection.getByText(`${testConfig.product}`, { exact: true }),
+			).toBeVisible();
+		});
+	}
 });

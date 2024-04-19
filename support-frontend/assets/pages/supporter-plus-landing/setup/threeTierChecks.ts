@@ -1,10 +1,10 @@
 import type { Participations } from 'helpers/abTests/abtest';
-import { countriesAffectedByVATStatus } from 'helpers/internationalisation/country';
-import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { SelectedAmountsVariant } from 'helpers/contributions';
+import { isContributionsOnlyCountry } from 'helpers/contributions';
 
 export const threeTierCheckoutEnabled = (
 	abParticipations: Participations,
-	countryId: IsoCountry,
+	amountsVariant: SelectedAmountsVariant,
 ): boolean => {
 	const isPaperCheckout = window.location.pathname.startsWith(
 		'/subscribe/paper/checkout',
@@ -38,6 +38,6 @@ export const threeTierCheckoutEnabled = (
 	return !(
 		displayPatronsCheckout ||
 		displaySupportPlusOnlyCheckout ||
-		countriesAffectedByVATStatus.includes(countryId)
+		isContributionsOnlyCountry(amountsVariant)
 	);
 };

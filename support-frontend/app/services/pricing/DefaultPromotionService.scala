@@ -9,7 +9,7 @@ import org.apache.pekko.actor.ActorSystem
 import com.gu.aws.AwsCloudWatchMetricPut.{client => cloudwatchClient}
 import com.gu.aws.AwsCloudWatchMetricSetup.defaultPromotionsLoadingFailure
 import com.gu.aws.AwsS3Client.S3Location
-import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product}
+import com.gu.support.catalog.{DigitalPack, GuardianWeekly, Paper, Product, SupporterPlus}
 import com.typesafe.scalalogging.LazyLogging
 import services.pricing.DefaultPromotionService.DefaultPromotions
 
@@ -23,7 +23,12 @@ trait DefaultPromotionService {
 }
 
 object DefaultPromotionService {
-  case class DefaultPromotions(guardianWeekly: List[String], paper: List[String], digital: List[String])
+  case class DefaultPromotions(
+      guardianWeekly: List[String],
+      paper: List[String],
+      digital: List[String],
+      supporterPlus: List[String],
+  )
 
   implicit val decoder = Decoder[DefaultPromotions]
 }
@@ -40,7 +45,7 @@ class DefaultPromotionServiceS3(
     S3Location("support-admin-console", s"$stage/default-promos.json")
 
   private val defaultPromoCodes = new AtomicReference[DefaultPromotions](
-    DefaultPromotions(guardianWeekly = Nil, paper = Nil, digital = Nil),
+    DefaultPromotions(guardianWeekly = Nil, paper = Nil, digital = Nil, supporterPlus = Nil),
   )
 
   private def fetch(): Try[DefaultPromotions] =
@@ -66,6 +71,7 @@ class DefaultPromotionServiceS3(
       case GuardianWeekly => defaultPromoCodes.get().guardianWeekly
       case Paper => defaultPromoCodes.get().paper
       case DigitalPack => defaultPromoCodes.get().digital
+      case SupporterPlus => defaultPromoCodes.get().supporterPlus
       case _ => Nil
     }
 
