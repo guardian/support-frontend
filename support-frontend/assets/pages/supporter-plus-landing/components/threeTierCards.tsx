@@ -9,7 +9,7 @@ import type { ProductDescription } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 import { ThreeTierCard } from './threeTierCard';
 
-type ThreeTierCardsProps = {
+export type ThreeTierCardsProps = {
 	cardsContent: Array<{
 		isRecommended: boolean;
 		isUserSelected: boolean;
