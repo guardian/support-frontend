@@ -6,3 +6,6 @@
 
 # ESLinting
 21cd445db44519bdd51ee2771881e695764bfd32
+
+# Scala Steward: Reformat with scalafmt 3.7.17
+aff6dc3aad1458ce409d20309afef2c48773cb32
