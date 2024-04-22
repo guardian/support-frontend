@@ -342,6 +342,7 @@ export function ThreeTierLanding(): JSX.Element {
 		),
 	);
 
+	const useGenericCheckout = !!abParticipations.contributionGenericCheckout;
 	const showOffer =
 		!!abParticipations.usFreeBookOffer && countryGroupId === 'UnitedStates';
 
@@ -438,6 +439,8 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const selectedContributionType =
 		contributionType === 'ANNUAL' ? 'annual' : 'monthly';
+	const selectedContributionRatePlan =
+		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
 	/**
 	 * Tier 1: Contributions
@@ -456,10 +459,17 @@ export function ThreeTierLanding(): JSX.Element {
 	});
 	const tier1Link = `contribute/checkout?${tier1UrlParams.toString()}`;
 
+	const tier1GenericCheckoutUrlParams = new URLSearchParams({
+		product: 'Contribution',
+		ratePlan: selectedContributionRatePlan,
+		amount: recurringAmount.toString(),
+	});
+	const tier1GenericCheckoutLink = `checkout?${tier1GenericCheckoutUrlParams.toString()}`;
+
 	const tier1Card = {
 		productDescription: productCatalogDescription.Contribution,
 		price: recurringAmount,
-		link: tier1Link,
+		link: useGenericCheckout ? tier1GenericCheckoutLink : tier1Link,
 		isUserSelected: isCardUserSelected(recurringAmount),
 		isRecommended: false,
 	};
