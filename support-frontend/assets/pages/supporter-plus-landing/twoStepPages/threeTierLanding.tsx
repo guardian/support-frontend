@@ -401,19 +401,26 @@ export function ThreeTierLanding(): JSX.Element {
 				}),
 			);
 
-			/**
-			 * I am not sure why links and the react router can't both use a direct link?
-			 * i.e. `link` here is `contribute/checkout` which then doubles up when using the router
-			 * to `contribute/contribute/checkout` even though it is rendered as `contribute/checkout`.
-			 */
-			const linkWithoutContribute = link.split('/')[1];
-			navigateWithPageView(navigate, linkWithoutContribute, abParticipations);
-
 			sendEventContributionCartValue(
 				recurringAmount.toString(),
 				contributionType,
 				currencyId,
 			);
+
+			if (useGenericCheckout) {
+				/**
+				 * Generic Checkout is not defined in supporterPlusRouter
+				 */
+				window.location.href = link;
+			} else {
+				/**
+				 * I am not sure why links and the react router can't both use a direct link?
+				 * i.e. `link` here is `contribute/checkout` which then doubles up when using the router
+				 * to `contribute/contribute/checkout` even though it is rendered as `contribute/checkout`.
+				 */
+				const linkWithoutContribute = link.split('/')[1];
+				navigateWithPageView(navigate, linkWithoutContribute, abParticipations);
+			}
 			return false;
 		}
 	};
