@@ -3,6 +3,7 @@ import { getGlobal, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import * as cookie from 'helpers/storage/cookie';
 import type { Option } from 'helpers/types/option';
 import { getSignoutUrl } from 'helpers/urls/externalLinks';
+import { setSignOutRedirectInStorage } from '../signoutRedirectStorage/signoutRedirectStorage';
 
 export type User = {
 	firstName: Option<string>;
@@ -50,6 +51,7 @@ const isPostDeployUser = (): boolean =>
 	cookie.get('_post_deploy_user') === 'true';
 
 const signOut = (): void => {
+	setSignOutRedirectInStorage();
 	window.location.href = getSignoutUrl();
 };
 

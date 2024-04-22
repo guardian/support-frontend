@@ -16,10 +16,12 @@ import {
 	getProductOption,
 	getStartDate,
 } from 'pages/paper-subscription-checkout/helpers/options';
+import { checkSignOutRedirectInStorage } from '../../helpers/signoutRedirectStorage/signoutRedirectStorage';
 import ThankYouContent from './components/thankYou';
 import 'stylesheets/skeleton/skeleton.scss';
 import './_legacyImports.scss';
 
+checkSignOutRedirectInStorage();
 setUpTrackingAndConsents();
 // ----- Redux Store ----- //
 const fulfilmentOption = getFulfilmentOption();
