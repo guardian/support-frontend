@@ -415,25 +415,55 @@ export function Checkout() {
 			cardElement &&
 			stripeClientSecret
 		) {
-			const stripeIntentResult = await stripe.confirmCardSetup(
-				stripeClientSecret,
-				{
-					payment_method: {
-						card: cardElement,
-					},
-				},
-			);
+			if (productId === 'Contribution') {
+				// const handle3DS = (clientSecret: string) => {
+				// 	trackComponentLoad('stripe-3ds');
+				// 	return stripe.handleCardAction(clientSecret);
+				// };
 
-			if (stripeIntentResult.error) {
-				console.error(stripeIntentResult.error);
-			} else if (stripeIntentResult.setupIntent.payment_method) {
-				paymentFields = {
-					stripePublicKey,
-					recaptchaToken: recaptchaToken,
-					stripePaymentType: 'StripeCheckout' as StripePaymentMethod,
-					paymentMethod: stripeIntentResult.setupIntent
-						.payment_method as string,
-				};
+				const stripePaymentMethodResult = await stripe.createPaymentMethod({
+					type: 'card',
+					card: cardElement,
+					billing_details: {
+						address: {
+							postal_code: billingPostcode,
+						},
+					},
+				});
+
+				if (stripePaymentMethodResult.error) {
+					// TODO - error handling
+					console.error(stripePaymentMethodResult.error);
+				} else {
+					paymentFields = {
+						stripePublicKey,
+						recaptchaToken: recaptchaToken,
+						stripePaymentType: 'StripeCheckout' as StripePaymentMethod,
+						paymentMethod: stripePaymentMethodResult.paymentMethod.id,
+					};
+				}
+			} else {
+				const stripeSetupIntentResult = await stripe.confirmCardSetup(
+					stripeClientSecret,
+					{
+						payment_method: {
+							card: cardElement,
+						},
+					},
+				);
+
+				if (stripeSetupIntentResult.error) {
+					// TODO - error handling
+					console.error(stripeSetupIntentResult.error);
+				} else if (stripeSetupIntentResult.setupIntent.payment_method) {
+					paymentFields = {
+						stripePublicKey,
+						recaptchaToken: recaptchaToken,
+						stripePaymentType: 'StripeCheckout' as StripePaymentMethod,
+						paymentMethod: stripeSetupIntentResult.setupIntent
+							.payment_method as string,
+					};
+				}
 			}
 		}
 
