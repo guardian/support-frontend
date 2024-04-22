@@ -4,7 +4,7 @@ import com.gu.support.encoding.Codec._
 import com.gu.support.encoding.CustomCodecs.{decodeLocalTime, encodeLocalTime}
 import com.gu.support.encoding.JsonHelpers._
 import com.gu.support.encoding.{Codec, ErrorJson}
-import com.gu.support.workers.exceptions.{RetryException, RetryNone, RetryUnlimited}
+import com.gu.support.workers.exceptions.{RetryException, RetryLimited, RetryNone, RetryUnlimited}
 import com.gu.support.zuora.api.PaymentGateway
 import io.circe.Decoder.Result
 import io.circe.parser._
@@ -46,6 +46,8 @@ case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
 
   def toRetryUnlimited: RetryUnlimited = new RetryUnlimited(this.asJson.noSpaces, cause = this)
 
+  def toRetryLimited: RetryLimited = new RetryLimited(this.asJson.noSpaces, cause = this)
+
   // Based on https://knowledgecenter.zuora.com/DC_Developers/G_SOAP_API/L_Error_Handling/Errors#ErrorCode_Object
   def asRetryException: RetryException = errors match {
     case List(ZuoraError("API_DISABLED", _)) => toRetryUnlimited
@@ -54,7 +56,7 @@ case class ZuoraErrorResponse(success: Boolean, errors: List[ZuoraError])
     case List(ZuoraError("REQUEST_EXCEEDED_RATE", _)) => toRetryUnlimited
     case List(ZuoraError("SERVER_UNAVAILABLE", _)) => toRetryUnlimited
     case List(ZuoraError("UNKNOWN_ERROR", _)) => toRetryUnlimited
-    case List(ZuoraError("TEMPORARY_ERROR", _)) => toRetryUnlimited
+    case List(ZuoraError("TEMPORARY_ERROR", _)) => toRetryLimited
     case _ => toRetryNone
   }
 }

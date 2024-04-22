@@ -97,7 +97,7 @@ class ErrorHandlerSpec extends AnyFlatSpec with Matchers {
       false,
       List(ZuoraError("TEMPORARY_ERROR", "Operation failed due to a temporary error, please retry later.")),
     ).asRetryException shouldBe a[
-      RetryUnlimited,
+      RetryLimited,
     ]
     ZuoraErrorResponse(
       false,
