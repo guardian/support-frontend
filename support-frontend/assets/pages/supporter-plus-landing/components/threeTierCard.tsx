@@ -26,7 +26,7 @@ import type { Promotion } from 'helpers/productPrice/promotions';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
-type ThreeTierCardProps = {
+export type ThreeTierCardProps = {
 	cardTier: 1 | 2 | 3;
 	promoCount: number;
 	isRecommended: boolean;
