@@ -5,7 +5,7 @@ name := "module-acquisition-events"
 description := "Module for sending acquisition events"
 
 libraryDependencies ++= Seq(
-  "com.google.cloud" % "google-cloud-bigquery" % "2.34.0",
+  "com.google.cloud" % "google-cloud-bigquery" % "2.34.2",
   "io.circe" %% "circe-core" % circeVersion,
   "io.circe" %% "circe-generic" % circeVersion,
   "software.amazon.awssdk" % "eventbridge" % awsClientVersion2,
