@@ -342,6 +342,7 @@ export function ThreeTierLanding(): JSX.Element {
 		),
 	);
 
+	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 	const showOffer =
 		!!abParticipations.usFreeBookOffer && countryGroupId === 'UnitedStates';
 
@@ -400,19 +401,26 @@ export function ThreeTierLanding(): JSX.Element {
 				}),
 			);
 
-			/**
-			 * I am not sure why links and the react router can't both use a direct link?
-			 * i.e. `link` here is `contribute/checkout` which then doubles up when using the router
-			 * to `contribute/contribute/checkout` even though it is rendered as `contribute/checkout`.
-			 */
-			const linkWithoutContribute = link.split('/')[1];
-			navigateWithPageView(navigate, linkWithoutContribute, abParticipations);
-
 			sendEventContributionCartValue(
 				recurringAmount.toString(),
 				contributionType,
 				currencyId,
 			);
+
+			if (useGenericCheckout) {
+				/**
+				 * Generic Checkout is not defined in supporterPlusRouter
+				 */
+				window.location.href = link;
+			} else {
+				/**
+				 * I am not sure why links and the react router can't both use a direct link?
+				 * i.e. `link` here is `contribute/checkout` which then doubles up when using the router
+				 * to `contribute/contribute/checkout` even though it is rendered as `contribute/checkout`.
+				 */
+				const linkWithoutContribute = link.split('/')[1];
+				navigateWithPageView(navigate, linkWithoutContribute, abParticipations);
+			}
 			return false;
 		}
 	};
@@ -438,6 +446,8 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const selectedContributionType =
 		contributionType === 'ANNUAL' ? 'annual' : 'monthly';
+	const selectedContributionRatePlan =
+		contributionType === 'ANNUAL' ? 'Annual' : 'Monthly';
 
 	/**
 	 * Tier 1: Contributions
@@ -456,10 +466,17 @@ export function ThreeTierLanding(): JSX.Element {
 	});
 	const tier1Link = `contribute/checkout?${tier1UrlParams.toString()}`;
 
+	const tier1GenericCheckoutUrlParams = new URLSearchParams({
+		product: 'Contribution',
+		ratePlan: selectedContributionRatePlan,
+		amount: recurringAmount.toString(),
+	});
+	const tier1GenericCheckoutLink = `checkout?${tier1GenericCheckoutUrlParams.toString()}`;
+
 	const tier1Card = {
 		productDescription: productCatalogDescription.Contribution,
 		price: recurringAmount,
-		link: tier1Link,
+		link: useGenericCheckout ? tier1GenericCheckoutLink : tier1Link,
 		isUserSelected: isCardUserSelected(recurringAmount),
 		isRecommended: false,
 	};
