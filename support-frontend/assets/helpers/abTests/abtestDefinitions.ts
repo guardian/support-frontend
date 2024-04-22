@@ -102,7 +102,7 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
-	contributionGenericCheckout: {
+	useGenericCheckout: {
 		variants: [
 			{
 				id: 'control',
