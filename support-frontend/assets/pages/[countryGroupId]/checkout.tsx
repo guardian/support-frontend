@@ -212,7 +212,7 @@ const queryPrice = query.amount;
 const price = queryPrice ?? ratePlan?.pricing[currencyKey];
 
 /**
- * Is It a Contribution? URL queryPrice supplied? Do we have a ratePlanPrice?
+ * Is It a Contribution? URL queryPrice supplied?
  *    If queryPrice above ratePlanPrice, in a upgrade to S+ country, invalid amount
  */
 let isInvalidAmount = false;
@@ -231,6 +231,18 @@ if (productId === 'Contribution' && queryPrice) {
 		) {
 			isInvalidAmount = true;
 		}
+	}
+}
+/**
+ * Is It a SupporterPlus? URL queryPrice supplied?
+ *    If queryPrice below S+ ratePlanPrice, invalid amount
+ */
+if (productId === 'SupporterPlus' && queryPrice) {
+	if (
+		queryPrice <
+		productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[currencyKey]
+	) {
+		isInvalidAmount = true;
 	}
 }
 
