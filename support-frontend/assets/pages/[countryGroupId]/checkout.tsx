@@ -43,6 +43,8 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import { isContributionsOnlyCountry } from 'helpers/contributions';
 import type {
 	RegularPaymentRequest,
 	StripePaymentMethod,
@@ -206,7 +208,32 @@ const stripePublicKey = getStripeKey(
 const productId = query.product in productCatalog ? query.product : undefined;
 const product = productId ? productCatalog[query.product] : undefined;
 const ratePlan = product?.ratePlans[query.ratePlan];
-const price = ratePlan?.pricing[currencyKey];
+const queryPrice = query.amount;
+const price = queryPrice ?? ratePlan?.pricing[currencyKey];
+
+/**
+ * Is It a Contribution? URL queryPrice supplied? Do we have a ratePlanPrice?
+ *    If queryPrice above ratePlanPrice, in a upgrade to S+ country, invalid amount
+ */
+let isInvalidAmount = false;
+if (productId === 'Contribution' && queryPrice) {
+	const { selectedAmountsVariant } = getAmountsTestVariant(
+		countryId,
+		countryGroupId,
+		window.guardian.settings,
+	);
+	if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
+		if (
+			queryPrice >=
+			productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[
+				currencyKey
+			]
+		) {
+			isInvalidAmount = true;
+		}
+	}
+}
+
 const productDescription = productId
 	? productCatalogDescription[productId]
 	: undefined;
@@ -303,6 +330,14 @@ export function Checkout() {
 		);
 	}
 
+	if (isInvalidAmount) {
+		return (
+			<div>
+				Invalid Amount In Query String: {query.product} ratePlan:{' '}
+				{query.ratePlan} amount: {query.amount}
+			</div>
+		);
+	}
 	const showStateSelect =
 		query.product !== 'Contribution' &&
 		(countryId === 'US' || countryId === 'CA' || countryId === 'AU');
