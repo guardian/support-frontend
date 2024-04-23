@@ -211,6 +211,8 @@ const product = productId ? productCatalog[query.product] : undefined;
 const ratePlan = product?.ratePlans[query.ratePlan];
 const queryPrice = query.amount;
 const price = queryPrice ?? ratePlan?.pricing[currencyKey];
+const supporterPlusRatePlanPrice =
+	productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[currencyKey];
 
 /**
  * Is It a Contribution? URL queryPrice supplied?
@@ -223,29 +225,22 @@ if (productId === 'Contribution' && queryPrice) {
 		countryGroupId,
 		window.guardian.settings,
 	);
-	if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
-		if (
-			queryPrice >=
-			productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[
-				currencyKey
-			]
-		) {
-			isInvalidAmount = true;
-		}
-	}
 	if (queryPrice < 1) {
 		isInvalidAmount = true;
 	}
+	if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
+		if (queryPrice >= supporterPlusRatePlanPrice) {
+			isInvalidAmount = true;
+		}
+	}
 }
+
 /**
  * Is It a SupporterPlus? URL queryPrice supplied?
  *    If queryPrice below S+ ratePlanPrice, invalid amount
  */
 if (productId === 'SupporterPlus' && queryPrice) {
-	if (
-		queryPrice <
-		productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[currencyKey]
-	) {
+	if (queryPrice < supporterPlusRatePlanPrice) {
 		isInvalidAmount = true;
 	}
 }
