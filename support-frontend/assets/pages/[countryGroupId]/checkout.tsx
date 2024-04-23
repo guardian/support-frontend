@@ -187,16 +187,17 @@ const legend = css`
 `;
 
 const validPaymentMethods = [
-	query.product !== 'Contribution' && countryGroupId === 'EURCountries' && Sepa,
-	query.product !== 'Contribution' && countryId === 'GB' && DirectDebit,
+	countryGroupId === 'EURCountries' && Sepa,
+	countryId === 'GB' && DirectDebit,
+	// TODO - ONE_OFF support - ☝️ these will be inactivated for ONE_OFF payments
 	Stripe,
 	PayPal,
 	countryId === 'US' && AmazonPay,
 ].filter(isPaymentMethod);
 
-const stripeAccount = query.product !== 'Contribution' ? 'REGULAR' : 'ONE_OFF';
 const stripePublicKey = getStripeKey(
-	stripeAccount,
+	// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
+	'REGULAR',
 	countryId,
 	currencyKey,
 	isTestUser,
@@ -353,9 +354,10 @@ export function Checkout() {
 			</div>
 		);
 	}
+
+	// TODO - ONE_OFF support, this should be false when ONE_OFF
 	const showStateSelect =
-		query.product !== 'Contribution' &&
-		(countryId === 'US' || countryId === 'CA' || countryId === 'AU');
+		countryId === 'US' || countryId === 'CA' || countryId === 'AU';
 
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(
 		null,
@@ -465,6 +467,8 @@ export function Checkout() {
 			cardElement &&
 			stripeClientSecret
 		) {
+			// TODO - ONE_OFF support - we'l need to implement the ONE_OFF stripe payment.
+			// You can find this in file://./../../components/stripeCardForm/stripePaymentButton.tsx#oneOffPayment
 			const stripeIntentResult = await stripe.confirmCardSetup(
 				stripeClientSecret,
 				{
@@ -586,7 +590,8 @@ export function Checkout() {
 										firstName={firstName}
 										lastName={lastName}
 										isSignedIn={isSignedIn}
-										hideNameFields={query.product === 'Contribution'}
+										// TODO - ONE_OFF support, this should be true when ONE_OFF
+										hideNameFields={false}
 										onEmailChange={(email) => {
 											setEmail(email);
 										}}
