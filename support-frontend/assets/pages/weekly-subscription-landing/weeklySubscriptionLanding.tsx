@@ -7,15 +7,15 @@ import headerWithCountrySwitcherContainer from 'components/headers/header/header
 import Block from 'components/page/block';
 import Page from 'components/page/page';
 import GiftNonGiftCta from 'components/product/giftNonGiftCta';
-import type { CountryGroupId} from 'helpers/internationalisation/countryGroup';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
-  AUDCountries,
-  Canada,
-  EURCountries,
-  GBPCountries,
-  International,
-  NZDCountries,
-  UnitedStates,
+	AUDCountries,
+	Canada,
+	EURCountries,
+	GBPCountries,
+	International,
+	NZDCountries,
+	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { getPromotionCopy } from 'helpers/productPrice/promotions';
@@ -97,7 +97,8 @@ function WeeklyLPContent({
 							href={giftNonGiftLink}
 							orderIsAGift={orderIsAGift}
 						/>
-						{(countryGroupId === 'GBPCountries'|| countryGroupId === 'AUDCountries')&& (
+						{(countryGroupId === 'GBPCountries' ||
+							countryGroupId === 'AUDCountries') && (
 							<GiftNonGiftCta
 								product="Student"
 								href={getStudentBeanLink(countryGroupId)}
@@ -112,12 +113,11 @@ function WeeklyLPContent({
 	);
 }
 
-
 function getStudentBeanLink(countryGroupId: CountryGroupId) {
-  if (countryGroupId === 'AUDCountries') {
-    return routes.guardianWeeklyStudentAU;
-  }
-    return routes.guardianWeeklyStudentUK;
+	if (countryGroupId === 'AUDCountries') {
+		return routes.guardianWeeklyStudentAU;
+	}
+	return routes.guardianWeeklyStudentUK;
 }
 
 // ----- Render ----- //

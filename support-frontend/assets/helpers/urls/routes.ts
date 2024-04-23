@@ -37,8 +37,8 @@ const routes = {
 	guardianWeeklySubscriptionLandingGift: '/subscribe/weekly/gift',
 	guardianWeeklyStudentUK:
 		'https://connect.studentbeans.com/v4/hosted/the-guardian-weekly/uk',
-  guardianWeeklyStudentAU:
-    'https://connect.studentbeans.com/v4/hosted/the-guardian-weekly/au',
+	guardianWeeklyStudentAU:
+		'https://connect.studentbeans.com/v4/hosted/the-guardian-weekly/au',
 	postcodeLookup: '/postcode-lookup',
 	createSignInUrl: '/identity/signin-url',
 	stripeSetupIntentRecaptcha: '/stripe/create-setup-intent/recaptcha',
