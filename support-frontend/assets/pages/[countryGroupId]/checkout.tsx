@@ -232,6 +232,9 @@ if (productId === 'Contribution' && queryPrice) {
 			isInvalidAmount = true;
 		}
 	}
+	if (queryPrice < 1) {
+		isInvalidAmount = true;
+	}
 }
 /**
  * Is It a SupporterPlus? URL queryPrice supplied?
