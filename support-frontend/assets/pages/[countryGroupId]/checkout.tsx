@@ -24,7 +24,7 @@ import {
 	useElements,
 	useStripe,
 } from '@stripe/react-stripe-js';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { parse, picklist } from 'valibot'; // 1.54 kB
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
@@ -33,6 +33,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
+import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
@@ -45,6 +46,7 @@ import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/addr
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
 	RegularPaymentRequest,
 	StripePaymentMethod,
@@ -81,7 +83,10 @@ import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardia
 /** App config - this is config that should persist throughout the app */
 validateWindowGuardian(window.guardian);
 
-const isTestUser = true;
+const isTestUser = true as boolean;
+const csrf = window.guardian.csrf.token;
+
+/** Geo */
 const geoIds = ['uk', 'us', 'eu', 'au', 'nz', 'ca', 'int'] as const;
 const GeoIdSchema = picklist(geoIds);
 const geoId = parse(GeoIdSchema, window.location.pathname.split('/')[1]);
@@ -359,11 +364,25 @@ export function Checkout() {
 		null,
 	);
 
+	/** Payment methods: Stripe */
 	const stripe = useStripe();
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
 	const [stripeClientSecret, setStripeClientSecret] = useState<string>();
 
+	/**
+	 * Payment method: PayPal
+	 * BAID = Billing Agreement ID
+	 */
+	const [payPalLoaded, setPayPalLoaded] = useState(false);
+	const [payPalBAID, setPayPalBAID] = useState('');
+	useEffect(() => {
+		if (paymentMethod === 'PayPal' && !payPalLoaded) {
+			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
+		}
+	}, [paymentMethod, payPalLoaded]);
+
+	/** Recaptcha */
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
 	/** Personal details */
@@ -396,6 +415,8 @@ export function Checkout() {
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
 		useState(false);
 	const [billingCountry, setBillingCountry] = useState(countryId);
+
+	const formRef = useRef<HTMLFormElement>(null);
 
 	/** Direct debit details */
 	const [accountHolderName, setAccountHolderName] = useState('');
@@ -434,7 +455,7 @@ export function Checkout() {
 				city: formData.get('delivery-city') as string,
 				state: formData.get('delivery-state') as string,
 				postCode: formData.get('delivery-postcode') as string,
-				country: formData.get('country') as IsoCountry,
+				country: formData.get('delivery-country') as IsoCountry,
 			};
 
 			const billingAddressMatchesDelivery =
@@ -447,11 +468,13 @@ export function Checkout() {
 						city: formData.get('billing-city') as string,
 						state: formData.get('billing-state') as string,
 						postCode: formData.get('billing-postcode') as string,
-						country: formData.get('country') as IsoCountry,
+						country: formData.get('billing-country') as IsoCountry,
 				  }
 				: deliveryAddress;
 		} else {
-			billingAddress = { country: formData.get('country') as IsoCountry };
+			billingAddress = {
+				country: formData.get('billing-country') as IsoCountry,
+			};
 			deliveryAddress = undefined;
 		}
 
@@ -485,6 +508,14 @@ export function Checkout() {
 						.payment_method as string,
 				};
 			}
+		}
+
+		if (paymentMethod === 'PayPal') {
+			paymentFields = {
+				recaptchaToken: '',
+				paymentMethod: 'PayPal',
+				baid: formData.get('payPalBAID') as string,
+			};
 		}
 
 		if (paymentMethod === 'DirectDebit') {
@@ -567,6 +598,7 @@ export function Checkout() {
 							</BoxContents>
 						</Box>
 						<form
+							ref={formRef}
 							action="/contribute/recurring/create"
 							method="POST"
 							onSubmit={(event) => {
@@ -633,6 +665,17 @@ export function Checkout() {
 
 									<CheckoutDivider spacing="loose" />
 
+									{/**
+									 * We need the billing-country for all transactions, even non-deliverable ones
+									 * which we get from the GU_country cookie which comes from the Fastly geo client.
+									 */}
+									{!productDescription.deliverableTo && (
+										<input
+											type="hidden"
+											name="billing-country"
+											value={countryId}
+										/>
+									)}
 									{productDescription.deliverableTo && (
 										<>
 											<fieldset>
@@ -895,14 +938,110 @@ export function Checkout() {
 								</BoxContents>
 							</Box>
 
-							<DefaultPaymentButton
-								buttonText="Pay now"
-								onClick={() => {
-									// no-op
-									// This isn't needed because we are now using the form onSubmit handler
-								}}
-								type="submit"
-							/>
+							{paymentMethod !== 'PayPal' && (
+								<DefaultPaymentButton
+									buttonText="Pay now"
+									onClick={() => {
+										// no-op
+										// This isn't needed because we are now using the form onSubmit handler
+									}}
+									type="submit"
+								/>
+							)}
+							{payPalLoaded && paymentMethod === 'PayPal' && (
+								<>
+									<input type="hidden" name="payPalBAID" value={payPalBAID} />
+
+									<PayPalButton
+										env={isTestUser ? 'sandbox' : 'production'}
+										style={{
+											color: 'blue',
+											size: 'responsive',
+											label: 'pay',
+											tagline: false,
+											layout: 'horizontal',
+											fundingicons: false,
+										}}
+										commit={true}
+										validate={({ disable, enable }) => {
+											/** We run this initially to set the button to the correct state */
+											const valid = formRef.current?.checkValidity();
+											if (valid) {
+												enable();
+											} else {
+												disable();
+											}
+
+											/** And then run it on form change */
+											formRef.current?.addEventListener('change', (event) => {
+												const valid =
+													// TODO - we shouldn't have to type infer here
+													(
+														event.currentTarget as HTMLFormElement
+													).checkValidity();
+												if (valid) {
+													enable();
+												} else {
+													disable();
+												}
+											});
+										}}
+										funding={{
+											disallowed: [window.paypal.FUNDING.CREDIT],
+										}}
+										onClick={() => {
+											// TODO
+										}}
+										/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
+										payment={(resolve, reject) => {
+											const requestBody = {
+												amount: price,
+												billingPeriod: ratePlanDescription.billingPeriod,
+												currency: currencyKey,
+												requireShippingAddress: false,
+											};
+											void fetch('/paypal/setup-payment', {
+												credentials: 'include',
+												method: 'POST',
+												headers: {
+													'Content-Type': 'application/json',
+													'Csrf-Token': csrf,
+												},
+												body: JSON.stringify(requestBody),
+											})
+												.then((response) => response.json())
+												.then((json) => {
+													resolve((json as { token: string }).token);
+												})
+												.catch((error) => {
+													console.error(error);
+													reject(error as Error);
+												});
+										}}
+										onAuthorize={(payPalData: Record<string, unknown>) => {
+											const body = {
+												token: payPalData.paymentToken,
+											};
+											void fetch('/paypal/one-click-checkout', {
+												credentials: 'include',
+												method: 'POST',
+												headers: {
+													'Content-Type': 'application/json',
+													'Csrf-Token': csrf,
+												},
+												body: JSON.stringify(body),
+											})
+												.then((response) => response.json())
+												.then((json) => {
+													setPayPalBAID((json as { baid: string }).baid);
+													// TODO - this might not meet our browser compatibility requirements (Safari)
+													// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+													formRef.current?.requestSubmit();
+												});
+										}}
+									/>
+								</>
+							)}
 						</form>
 						<GuardianTsAndCs
 							mobileTheme={'light'}
