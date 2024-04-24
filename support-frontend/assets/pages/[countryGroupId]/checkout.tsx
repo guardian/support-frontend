@@ -30,6 +30,7 @@ import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
+import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
@@ -47,6 +48,7 @@ import { findAddressesForPostcode } from 'components/subscriptionCheckouts/addre
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
 	RegularPaymentRequest,
+	StatusResponse,
 	StripePaymentMethod,
 } from 'helpers/forms/paymentIntegrations/readerRevenueApis';
 import {
@@ -290,6 +292,28 @@ if (ratePlanDescription?.billingPeriod === 'Annual') {
 	paymentFrequency = 'quarter';
 }
 
+const processPayment = (statusResponse: StatusResponse) => {
+	const { trackingUri, status, failureReason } = statusResponse;
+	const jobId = new URL(trackingUri).searchParams.get('jobId') ?? '';
+	if (status === 'success') {
+		window.location.href = `uk/thank-you?jobId=${jobId}`;
+	} else if (status === 'failure') {
+		console.error(failureReason);
+	} else {
+		setTimeout(() => {
+			void fetch(trackingUri, {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+				.then((response) => response.json())
+				.then((json) => {
+					processPayment(json as StatusResponse);
+				});
+		}, 1000);
+	}
+};
+
 export function Checkout() {
 	if (
 		/** These are all the things we need to parse the page */
@@ -378,7 +402,9 @@ export function Checkout() {
 	const [accountHolderConfirmation, setAccountHolderConfirmation] =
 		useState(false);
 
+	const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 	const formOnSubmit = async (formData: FormData) => {
+		setIsProcessingPayment(true);
 		/**
 		 * The validation for this is currently happening on the client side form validation
 		 * So we'll assume strings are not null.
@@ -485,10 +511,15 @@ export function Checkout() {
 		const referrerAcquisitionData = getReferrerAcquisitionData();
 
 		if (paymentFields && productFields) {
-			/** TODO - Remove this Omit to make the data valid to the endpoint */
+			/** TODO
+			 * - add supportAbTests
+			 * - add debugInfo
+			 * - add firstDeliveryDate
+			 */
+
 			const createSupportWorkersRequest: Omit<
 				RegularPaymentRequest,
-				'firstDeliveryDate' | 'supportAbTests' | 'debugInfo'
+				'firstDeliveryDate'
 			> = {
 				...personalData,
 				billingAddress,
@@ -497,6 +528,8 @@ export function Checkout() {
 				ophanIds,
 				referrerAcquisitionData,
 				product: productFields,
+				supportAbTests: [],
+				debugInfo: '',
 			};
 			const createSubscriptionResult = await fetch('/subscribe/create', {
 				method: 'POST',
@@ -504,10 +537,13 @@ export function Checkout() {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-			});
+			})
+				.then((response) => response.json())
+				.then((json) => json as StatusResponse);
 
-			// TODO - pass onto the thank you page
-			console.info('createSubscriptionResult', createSubscriptionResult);
+			processPayment(createSubscriptionResult);
+		} else {
+			setIsProcessingPayment(false);
 		}
 	};
 
@@ -1003,6 +1039,12 @@ export function Checkout() {
 					</Column>
 				</Columns>
 			</Container>
+			{isProcessingPayment && (
+				<LoadingOverlay>
+					<p>Processing transaction</p>
+					<p>Please wait</p>
+				</LoadingOverlay>
+			)}
 		</PageScaffold>
 	);
 }
