@@ -211,8 +211,7 @@ const stripePublicKey = getStripeKey(
 const productId = query.product in productCatalog ? query.product : undefined;
 const product = productId ? productCatalog[query.product] : undefined;
 const ratePlan = product?.ratePlans[query.ratePlan];
-const queryPrice = query.price;
-const price = queryPrice ?? ratePlan?.pricing[currencyKey];
+const price = query.price ?? ratePlan?.pricing[currencyKey];
 const supporterPlusRatePlanPrice =
 	productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[currencyKey];
 
@@ -221,17 +220,17 @@ const supporterPlusRatePlanPrice =
  *    If queryPrice above ratePlanPrice, in a upgrade to S+ country, invalid amount
  */
 let isInvalidAmount = false;
-if (productId === 'Contribution' && queryPrice) {
+if (productId === 'Contribution' && query.price) {
 	const { selectedAmountsVariant } = getAmountsTestVariant(
 		countryId,
 		countryGroupId,
 		window.guardian.settings,
 	);
-	if (queryPrice < 1) {
+	if (query.price < 1) {
 		isInvalidAmount = true;
 	}
 	if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
-		if (queryPrice >= supporterPlusRatePlanPrice) {
+		if (query.price >= supporterPlusRatePlanPrice) {
 			isInvalidAmount = true;
 		}
 	}
@@ -241,8 +240,8 @@ if (productId === 'Contribution' && queryPrice) {
  * Is It a SupporterPlus? URL queryPrice supplied?
  *    If queryPrice below S+ ratePlanPrice, invalid amount
  */
-if (productId === 'SupporterPlus' && queryPrice) {
-	if (queryPrice < supporterPlusRatePlanPrice) {
+if (productId === 'SupporterPlus' && query.price) {
+	if (query.price < supporterPlusRatePlanPrice) {
 		isInvalidAmount = true;
 	}
 }
