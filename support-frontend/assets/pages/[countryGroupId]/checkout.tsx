@@ -584,8 +584,10 @@ export function Checkout() {
 									paymentFrequency={paymentFrequency}
 									amount={price}
 									currency={currency}
-									checkListData={[]}
-									productDescription={productDescription}
+									checkListData={productDescription.benefits.map((benefit) => ({
+										isChecked: true,
+										text: benefit.copy,
+									}))}
 									onCheckListToggle={(isOpen) => {
 										trackComponentClick(
 											`contribution-order-summary-${
