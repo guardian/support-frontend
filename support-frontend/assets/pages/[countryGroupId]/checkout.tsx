@@ -139,12 +139,14 @@ function isNumeric(str: string) {
 }
 
 const searchParams = new URLSearchParams(window.location.search);
-const queryAmount = searchParams.get('amount');
+const searchParamsPrice = searchParams.get('price');
 const query = {
 	product: searchParams.get('product') ?? '',
 	ratePlan: searchParams.get('ratePlan') ?? '',
-	amount:
-		queryAmount && isNumeric(queryAmount) ? parseFloat(queryAmount) : undefined,
+	price:
+		searchParamsPrice && isNumeric(searchParamsPrice)
+			? parseFloat(searchParamsPrice)
+			: undefined,
 };
 
 /** Page styles - styles used specifically for the checkout page */
@@ -209,7 +211,7 @@ const stripePublicKey = getStripeKey(
 const productId = query.product in productCatalog ? query.product : undefined;
 const product = productId ? productCatalog[query.product] : undefined;
 const ratePlan = product?.ratePlans[query.ratePlan];
-const queryPrice = query.amount;
+const queryPrice = query.price;
 const price = queryPrice ?? ratePlan?.pricing[currencyKey];
 const supporterPlusRatePlanPrice =
 	productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[currencyKey];
@@ -265,14 +267,14 @@ if (ratePlanDescription) {
 			productType: 'Contribution',
 			currency: currencyKey,
 			billingPeriod: ratePlanDescription.billingPeriod,
-			amount: query.amount ?? 0,
+			amount: query.price ?? 0,
 		};
 	} else if (productId === 'SupporterPlus') {
 		productFields = {
 			productType: 'SupporterPlus',
 			currency: currencyKey,
 			billingPeriod: ratePlanDescription.billingPeriod,
-			amount: query.amount ?? 0,
+			amount: query.price ?? 0,
 		};
 	} else if (productId === 'GuardianWeeklyDomestic') {
 		productFields = {
@@ -345,7 +347,7 @@ export function Checkout() {
 		return (
 			<div>
 				Invalid Amount In Query String: {query.product} ratePlan:{' '}
-				{query.ratePlan} amount: {query.amount}
+				{query.ratePlan} amount: {query.price}
 			</div>
 		);
 	}
