@@ -44,6 +44,8 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
+import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
 	RegularPaymentRequest,
@@ -142,12 +144,14 @@ function isNumeric(str: string) {
 }
 
 const searchParams = new URLSearchParams(window.location.search);
-const queryAmount = searchParams.get('amount');
+const searchParamsPrice = searchParams.get('price');
 const query = {
 	product: searchParams.get('product') ?? '',
 	ratePlan: searchParams.get('ratePlan') ?? '',
-	amount:
-		queryAmount && isNumeric(queryAmount) ? parseFloat(queryAmount) : undefined,
+	price:
+		searchParamsPrice && isNumeric(searchParamsPrice)
+			? parseFloat(searchParamsPrice)
+			: undefined,
 };
 
 /** Page styles - styles used specifically for the checkout page */
@@ -212,7 +216,41 @@ const stripePublicKey = getStripeKey(
 const productId = query.product in productCatalog ? query.product : undefined;
 const product = productId ? productCatalog[query.product] : undefined;
 const ratePlan = product?.ratePlans[query.ratePlan];
-const price = ratePlan?.pricing[currencyKey];
+const price = query.price ?? ratePlan?.pricing[currencyKey];
+const supporterPlusRatePlanPrice =
+	productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[currencyKey];
+
+/**
+ * Is It a Contribution? URL queryPrice supplied?
+ *    If queryPrice above ratePlanPrice, in a upgrade to S+ country, invalid amount
+ */
+let isInvalidAmount = false;
+if (productId === 'Contribution' && query.price) {
+	const { selectedAmountsVariant } = getAmountsTestVariant(
+		countryId,
+		countryGroupId,
+		window.guardian.settings,
+	);
+	if (query.price < 1) {
+		isInvalidAmount = true;
+	}
+	if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
+		if (query.price >= supporterPlusRatePlanPrice) {
+			isInvalidAmount = true;
+		}
+	}
+}
+
+/**
+ * Is It a SupporterPlus? URL queryPrice supplied?
+ *    If queryPrice below S+ ratePlanPrice, invalid amount
+ */
+if (productId === 'SupporterPlus' && query.price) {
+	if (query.price < supporterPlusRatePlanPrice) {
+		isInvalidAmount = true;
+	}
+}
+
 const productDescription = productId
 	? productCatalogDescription[productId]
 	: undefined;
@@ -233,14 +271,14 @@ if (ratePlanDescription) {
 			productType: 'Contribution',
 			currency: currencyKey,
 			billingPeriod: ratePlanDescription.billingPeriod,
-			amount: query.amount ?? 0,
+			amount: query.price ?? 0,
 		};
 	} else if (productId === 'SupporterPlus') {
 		productFields = {
 			productType: 'SupporterPlus',
 			currency: currencyKey,
 			billingPeriod: ratePlanDescription.billingPeriod,
-			amount: query.amount ?? 0,
+			amount: query.price ?? 0,
 		};
 	} else if (productId === 'GuardianWeeklyDomestic') {
 		productFields = {
@@ -305,6 +343,15 @@ export function Checkout() {
 		return (
 			<div>
 				Could not find product: {query.product} ratePlan: {query.ratePlan}
+			</div>
+		);
+	}
+
+	if (isInvalidAmount) {
+		return (
+			<div>
+				Invalid Amount In Query String: {query.product} ratePlan:{' '}
+				{query.ratePlan} amount: {query.price}
 			</div>
 		);
 	}
