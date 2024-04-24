@@ -176,16 +176,16 @@ export function ContributionsOrderSummary({
 	const hasCheckList =
 		enableCheckList && (checkListData.length > 0 || !!productDescription);
 
-	const checkListDataFromBenefits = checkListFromBenefits(
-		productDescription?.benefits,
-	);
 	const checkList = hasCheckList && (
 		<CheckList
-			checkListData={checkListDataFromBenefits ?? checkListData}
+			checkListData={
+				checkListFromBenefits(productDescription?.benefits) ?? checkListData
+			}
 			style="compact"
 			iconColor={palette.brand[500]}
 		/>
 	);
+	const productName = productDescription?.label ?? description;
 
 	const formattedAmount = simpleFormatAmount(currency, amount);
 
@@ -204,7 +204,7 @@ export function ContributionsOrderSummary({
 			<hr css={hrCss} />
 			<div css={detailsSection}>
 				<div css={summaryRow}>
-					<p>{description}</p>
+					<p>{productName}</p>
 					{hasCheckList && (
 						<Button
 							priority="subdued"
