@@ -16,6 +16,7 @@ import type { CheckListData } from 'components/checkList/checkList';
 import { CheckList } from 'components/checkList/checkList';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { Currency } from 'helpers/internationalisation/currency';
+import type { ProductDescription } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
 
 const componentStyles = css`
@@ -122,6 +123,18 @@ const termsAndConditions = css`
 	}
 `;
 
+function checkListFromBenefits(
+	benefits: Array<{ copy: string; tooltip?: string }> | undefined,
+): CheckListData[] | undefined {
+	if (benefits) {
+		return benefits.map((benefit) => ({
+			isChecked: true,
+			text: benefit.copy,
+			strong: false,
+		}));
+	}
+}
+
 export type ContributionsOrderSummaryProps = {
 	description: string;
 	amount: number;
@@ -129,6 +142,7 @@ export type ContributionsOrderSummaryProps = {
 	currency: Currency;
 	enableCheckList: boolean;
 	checkListData: CheckListData[];
+	productDescription?: ProductDescription;
 	paymentFrequency?: string;
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
@@ -137,7 +151,6 @@ export type ContributionsOrderSummaryProps = {
 	showTopUpAmounts?: boolean;
 	topUpToggleChecked?: boolean;
 	topUpToggleOnChange?: () => void;
-	productDescription?: { description: string; frequency: string };
 };
 
 const visuallyHiddenCss = css`
@@ -151,6 +164,7 @@ export function ContributionsOrderSummary({
 	currency,
 	paymentFrequency,
 	checkListData,
+	productDescription,
 	onCheckListToggle,
 	headerButton,
 	tsAndCs,
@@ -159,10 +173,15 @@ export function ContributionsOrderSummary({
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
 
-	const hasCheckList = enableCheckList && checkListData.length > 0;
+	const hasCheckList =
+		enableCheckList && (checkListData.length > 0 || !!productDescription);
+
+	const checkListDataFromBenefits = checkListFromBenefits(
+		productDescription?.benefits,
+	);
 	const checkList = hasCheckList && (
 		<CheckList
-			checkListData={checkListData}
+			checkListData={checkListDataFromBenefits ?? checkListData}
 			style="compact"
 			iconColor={palette.brand[500]}
 		/>

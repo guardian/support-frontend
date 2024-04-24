@@ -538,6 +538,7 @@ export function Checkout() {
 									amount={price}
 									currency={currency}
 									checkListData={[]}
+									productDescription={productDescription}
 									onCheckListToggle={(isOpen) => {
 										trackComponentClick(
 											`contribution-order-summary-${
