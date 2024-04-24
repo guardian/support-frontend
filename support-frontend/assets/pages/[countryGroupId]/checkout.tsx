@@ -408,7 +408,7 @@ export function Checkout() {
 				city: formData.get('delivery-city') as string,
 				state: formData.get('delivery-state') as string,
 				postCode: formData.get('delivery-postcode') as string,
-				country: formData.get('country') as IsoCountry,
+				country: formData.get('delivery-country') as IsoCountry,
 			};
 
 			const billingAddressMatchesDelivery =
@@ -421,11 +421,13 @@ export function Checkout() {
 						city: formData.get('billing-city') as string,
 						state: formData.get('billing-state') as string,
 						postCode: formData.get('billing-postcode') as string,
-						country: formData.get('country') as IsoCountry,
+						country: formData.get('billing-country') as IsoCountry,
 				  }
 				: deliveryAddress;
 		} else {
-			billingAddress = { country: formData.get('country') as IsoCountry };
+			billingAddress = {
+				country: formData.get('billing-country') as IsoCountry,
+			};
 			deliveryAddress = undefined;
 		}
 
@@ -616,6 +618,17 @@ export function Checkout() {
 
 									<CheckoutDivider spacing="loose" />
 
+									{/**
+									 * We need the billing-country for all transactions, even non-deliverable ones
+									 * which we get from the GU_country cookie which comes from the Fastly geo client.
+									 */}
+									{!productDescription.deliverableTo && (
+										<input
+											type="hidden"
+											name="billing-country"
+											value={countryId}
+										/>
+									)}
 									{productDescription.deliverableTo && (
 										<>
 											<fieldset>
