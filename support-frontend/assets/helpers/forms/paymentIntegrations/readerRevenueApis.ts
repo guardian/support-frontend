@@ -235,7 +235,7 @@ export type PaymentResult = {
 	error?: ErrorReason;
 };
 
-type StatusResponse = {
+export type StatusResponse = {
 	status: Status;
 	trackingUri: string;
 	failureReason?: ErrorReason;
