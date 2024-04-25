@@ -40,7 +40,7 @@ Resources:
         RerunTests:
           Type: Schedule
           Properties:
-            Schedule: 'rate(1 hour)'
+            Schedule: 'rate(6 hour)'
             Description: run the tests regularly so we know if they're broken
       EventInvokeConfig:
         MaximumRetryAttempts: 0
