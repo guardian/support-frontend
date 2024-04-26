@@ -1,6 +1,6 @@
 import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
-import { GuStack } from "@guardian/cdk/lib/constructs/core";
+import { GuStack, GuStringParameter } from "@guardian/cdk/lib/constructs/core";
 import { GuLambdaFunction } from "@guardian/cdk/lib/constructs/lambda";
 import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
@@ -10,7 +10,7 @@ import {
 } from "aws-cdk-lib/aws-cloudwatch";
 import { Archive, EventBus, Rule } from "aws-cdk-lib/aws-events";
 import { SqsQueue } from "aws-cdk-lib/aws-events-targets";
-import { PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import {AccountPrincipal, Effect, PolicyStatement, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 import { Runtime } from "aws-cdk-lib/aws-lambda";
 import { SqsEventSource } from "aws-cdk-lib/aws-lambda-event-sources";
 import { Queue } from "aws-cdk-lib/aws-sqs";
@@ -20,6 +20,10 @@ const appName = "bigquery-acquisitions-publisher";
 export class BigqueryAcquisitionsPublisher extends GuStack {
   constructor(scope: App, id: string, props: GuStackProps) {
     super(scope, id, props);
+
+    const mobileAccountId = new GuStringParameter(this, 'MobileAccountId', {
+      description: 'ID of the mobile aws account',
+    });
 
     const busName = `acquisitions-bus-${props.stage}`;
 
@@ -90,6 +94,18 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
         resources: [
           `arn:aws:ssm:${this.region}:${this.account}:parameter/${appName}/${props.stage}/gcp-wif-credentials-config`,
         ],
+      })
+    );
+
+    const mobileEventBusPutRole = new Role(this, "mobile-event-bus-put-role", {
+      roleName: `${this.stack}-cross-account-role-${this.stage}`,
+      assumedBy: new AccountPrincipal(mobileAccountId.valueAsString),
+    })
+    mobileEventBusPutRole.addToPolicy(
+      new PolicyStatement({
+        effect: Effect.ALLOW,
+        resources: [eventBus.eventBusArn],
+        actions: ["events:PutEvents"],
       })
     );
 
