@@ -20,7 +20,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: ".nvmrc"
 
       # Cache npm dependencies using https://github.com/bahmutov/npm-install
       - name: Cache dependencies
@@ -36,6 +36,6 @@ jobs:
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           cwd: "./support-frontend"
-          pattern: "./public/compiled-assets/{javascripts,webpack}/*.js"
+          pattern: "./public/compiled-assets/{javascripts,webpack}/**/*.js"
           build-script: "build-github-action"
           minimum-change-threshold: 500
