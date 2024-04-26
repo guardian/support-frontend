@@ -276,7 +276,7 @@ class Application(
     }
   }
 
-  def checkout(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+  def router(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
     val geoData = request.geoData
@@ -287,7 +287,7 @@ class Application(
     val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
 
     Ok(
-      views.html.checkout(
+      views.html.router(
         geoData = geoData,
         paymentMethodConfigs = PaymentMethodConfigs(
           oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
