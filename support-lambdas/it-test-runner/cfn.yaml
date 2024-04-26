@@ -155,7 +155,7 @@ Resources:
                 - Name: Stage
                   Value: !Ref Stage
             Stat: Sum
-            Period: 900
+            Period: 3600 # 1 hour
             Unit: Count
         - Id: m2
           ReturnData: false
@@ -167,10 +167,10 @@ Resources:
                 - Name: Stage
                   Value: !Ref Stage
             Stat: Sum
-            Period: 900
+            Period: 3600 # 1 hour
             Unit: Count
       ComparisonOperator: LessThanThreshold
       Threshold: 100
-      EvaluationPeriods: 9
-      DatapointsToAlarm: 9
+      EvaluationPeriods: 7
+      DatapointsToAlarm: 7
       TreatMissingData: breaching
