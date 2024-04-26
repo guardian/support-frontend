@@ -90,7 +90,8 @@ GET  /subscribe                                                    controllers.S
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.SubscriptionsController.landing(country: String)
 
 # ----- Checkout ----- #
-GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.checkout(countryGroupId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.router(countryGroupId: String)
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.router(countryGroupId: String)
 
 # This is just a fallback in case someone accidentally uses an unsupported country-specific
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
