@@ -571,7 +571,10 @@ function CheckoutComponent({ geoId }: Props) {
 									}
 									amount={price}
 									currency={currency}
-									checkListData={[]}
+									checkListData={productDescription.benefits.map((benefit) => ({
+										isChecked: true,
+										text: benefit.copy,
+									}))}
 									onCheckListToggle={(isOpen) => {
 										trackComponentClick(
 											`contribution-order-summary-${
