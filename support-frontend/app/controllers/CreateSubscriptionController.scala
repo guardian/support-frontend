@@ -318,7 +318,7 @@ class CreateSubscriptionController(
 
   private def cookies(product: ProductType, userEmail: String): Future[List[Cookie]] = {
     // Setting the user attributes cookies used by frontend. See:
-    // https://github.com/guardian/frontend/blob/main/static/src/javascripts/projects/common/modules/commercial/user-features.js#L69
+    // https://github.com/guardian/dotcom-rendering/blob/3c4700cae532993ace6f40c3b59c337f3efe2247/dotcom-rendering/src/client/userFeatures/user-features.ts
     val standardCookies = List(
       "gu_user_features_expiry" -> DateTime.now.plusDays(1).getMillis.toString,
       "gu_hide_support_messaging" -> true.toString,
