@@ -12,7 +12,6 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.Support
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
-import shapeless.ops.product
 import com.gu.support.catalog.NoFulfilmentOptions
 
 class SupporterPlusSubcriptionBuilder(
