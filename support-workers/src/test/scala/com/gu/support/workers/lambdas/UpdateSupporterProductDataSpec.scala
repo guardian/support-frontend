@@ -74,6 +74,7 @@ object UpdateSupporterProductDataSpec {
             "amount": 12,
             "currency": "GBP",
             "billingPeriod": "Monthly",
+            "fulfilmentOptions": "NoFulfilmentOptions",
             "productType": "SupporterPlus"
           },
           "paymentMethod": {
