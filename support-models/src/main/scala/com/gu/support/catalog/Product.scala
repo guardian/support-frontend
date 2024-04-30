@@ -46,11 +46,12 @@ case object SupporterPlus extends Product {
   private def productRatePlan(
       id: String,
       billingPeriod: BillingPeriod,
+      fulfilmentOptions: FulfilmentOptions = NoFulfilmentOptions,
   ) =
     ProductRatePlan(
       id,
       billingPeriod,
-      NoFulfilmentOptions,
+      fulfilmentOptions,
       NoProductOptions,
       s"Supporter Plus ${billingPeriod.getClass.getSimpleName}",
     )
@@ -64,6 +65,10 @@ case object SupporterPlus extends Product {
       CODE -> List(
         productRatePlan("8ad08cbd8586721c01858804e3275376", Monthly),
         productRatePlan("8ad08e1a8586721801858805663f6fab", Annual),
+        productRatePlan("8ad081dd8ef57784018ef6e159224bfa", Monthly, Domestic),
+        productRatePlan("8ad097b48f006681018f059b755e0140", Annual, Domestic),
+        productRatePlan("8ad097b48f006681018f05a0496e01f4", Annual, RestOfWorld),
+        productRatePlan("8ad097b48f006681018f05a2c0fb0227", Monthly, RestOfWorld),
       ),
     )
 }

@@ -21,6 +21,7 @@ import org.scalatest.matchers.should.Matchers
 
 import java.util.UUID
 import scala.concurrent.Future
+import com.gu.support.catalog.NoFulfilmentOptions
 
 class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with Matchers {
 
@@ -40,7 +41,7 @@ class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with M
 
     val state = SupporterPlusState(
       billingCountry = Country.UK,
-      product = SupporterPlus(20, Currency.GBP, Monthly),
+      product = SupporterPlus(20, Currency.GBP, Monthly, NoFulfilmentOptions),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
       promoCode = Some("SUPPORTER_PLUS_PROMO"),
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),
