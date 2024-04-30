@@ -7,6 +7,7 @@ import com.gu.support.workers.{DirectDebit, Monthly, SupporterPlus}
 import com.gu.test.tags.annotations.IntegrationTest
 import org.scalatest.flatspec.AsyncFlatSpec
 import org.scalatest.matchers.should.Matchers
+import com.gu.support.catalog.NoFulfilmentOptions
 
 @IntegrationTest
 class AwsCloudWatchMetricPutSpec extends AsyncFlatSpec with Matchers {
@@ -17,7 +18,7 @@ class AwsCloudWatchMetricPutSpec extends AsyncFlatSpec with Matchers {
         Stages.CODE,
         true,
         DirectDebit,
-        SupporterPlus(amount = 10, currency = GBP, billingPeriod = Monthly),
+        SupporterPlus(amount = 10, currency = GBP, billingPeriod = Monthly, NoFulfilmentOptions),
       )
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
       .fold(

@@ -29,6 +29,8 @@ import org.joda.time.{DateTimeZone, LocalDate}
 
 import java.io.ByteArrayInputStream
 import java.util.UUID
+import com.gu.support.catalog.NoFulfilmentOptions
+import com.gu.support.catalog.FulfilmentOptions
 
 //noinspection TypeAnnotation
 object JsonFixtures {
@@ -471,19 +473,20 @@ object JsonFixtures {
       amount: BigDecimal,
       currency: Currency,
       billingPeriod: BillingPeriod,
+      fulfilmentOptions: FulfilmentOptions = NoFulfilmentOptions,
       country: Country = UK,
   ): String =
     CreateZuoraSubscriptionState(
       SupporterPlusState(
         Country.UK,
-        SupporterPlus(amount, currency, billingPeriod),
+        SupporterPlus(amount, currency, billingPeriod, fulfilmentOptions),
         stripePaymentMethodObj,
         None,
         salesforceContact,
       ),
       UUID.randomUUID(),
       user("9999998", country),
-      SupporterPlus(amount, currency, Monthly),
+      SupporterPlus(amount, currency, Monthly, NoFulfilmentOptions),
       AnalyticsInfo(isGiftPurchase = false, Stripe),
       None,
       None,

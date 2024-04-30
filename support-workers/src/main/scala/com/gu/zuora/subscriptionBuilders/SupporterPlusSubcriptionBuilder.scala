@@ -12,6 +12,8 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.Support
 import com.gu.support.zuora.api.ReaderType.Direct
 import com.gu.support.zuora.api._
 import com.gu.zuora.subscriptionBuilders.ProductSubscriptionBuilders.{applyPromoCodeIfPresent, validateRatePlan}
+import shapeless.ops.product
+import com.gu.support.catalog.NoFulfilmentOptions
 
 class SupporterPlusSubcriptionBuilder(
     config: ZuoraSupporterPlusConfig,
@@ -27,6 +29,55 @@ class SupporterPlusSubcriptionBuilder(
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
   ): Either[PromoError, SubscribeItem] = {
+    if (state.product.fulfilmentOptions == NoFulfilmentOptions) {
+      createSecondTierSupporterPlus(state, csrUsername, salesforceCaseId)
+    } else {
+      createThirdTierSupporterPlus(state, csrUsername, salesforceCaseId)
+    }
+  }
+
+  private def createThirdTierSupporterPlus(
+      state: SupporterPlusState,
+      csrUsername: Option[String],
+      salesforceCaseId: Option[String],
+  ) = {
+    val productRatePlanId =
+      validateRatePlan(supporterPlusRatePlan(state.product, environment), state.product.describe)
+
+    if (state.product.amount != getBaseProductPrice(productRatePlanId, state.product.currency)) {
+      throw new BadRequestException(
+        s"The amount passed in (${state.product.amount}) does not match the price of this product.",
+      )
+    }
+
+    val todaysDate = dateGenerator.today
+
+    val subscriptionData = subscribeItemBuilder.buildProductSubscription(
+      productRatePlanId = productRatePlanId,
+      contractEffectiveDate = todaysDate,
+      contractAcceptanceDate = todaysDate,
+      readerType = Direct,
+      csrUsername = csrUsername,
+      salesforceCaseId = salesforceCaseId,
+    )
+
+    applyPromoCodeIfPresent(
+      promotionService,
+      state.promoCode,
+      state.billingCountry,
+      productRatePlanId,
+      subscriptionData,
+    ).map { subscriptionData =>
+      subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
+    }
+
+  }
+
+  private def createSecondTierSupporterPlus(
+      state: SupporterPlusState,
+      csrUsername: Option[String],
+      salesforceCaseId: Option[String],
+  ) = {
     val productRatePlanId =
       validateRatePlan(supporterPlusRatePlan(state.product, environment), state.product.describe)
     val contributionRatePlanChargeId =
@@ -66,7 +117,6 @@ class SupporterPlusSubcriptionBuilder(
     ).map { subscriptionData =>
       subscribeItemBuilder.build(subscriptionData, state.salesForceContact, Some(state.paymentMethod), None)
     }
-
   }
 
   private def getBaseProductPrice(productRatePlanId: ProductRatePlanId, currency: Currency) =
