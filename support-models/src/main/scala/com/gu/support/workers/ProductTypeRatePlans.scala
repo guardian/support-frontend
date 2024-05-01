@@ -55,7 +55,7 @@ object ProductTypeRatePlans {
       .getOrElse(environment, Nil)
       .find(productRatePlan =>
         productRatePlan.billingPeriod == product.billingPeriod && product.fulfilmentOptions
-          .contains(productRatePlan.fulfilmentOptions),
+          .getOrElse(catalog.NoFulfilmentOptions) == productRatePlan.fulfilmentOptions,
       )
 
   def paperRatePlan(product: Paper, environment: TouchPointEnvironment): Option[ProductRatePlan[catalog.Paper.type]] =
