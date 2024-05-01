@@ -1,0 +1,10 @@
+{
+    "jumpToAliasFile.alias": {
+        "react": "preact/compat",
+        "react-dom": "preact/compat",
+        "ophan": "ophan-tracker-js/build/ophan.support"
+    },
+    "files.watcherExclude": {
+        "**/target": true
+    }
+}
