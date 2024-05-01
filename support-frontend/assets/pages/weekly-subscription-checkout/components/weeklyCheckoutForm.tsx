@@ -167,11 +167,6 @@ const days = getWeeklyDays();
 // ----- Component ----- //
 function WeeklyCheckoutForm(props: PropTypes) {
 
-	useEffect(() => {
-		//set cookie
-		cookie.set('dpGWTest1', 'abc', 3)
-		cookie.set('dpGWTest2', JSON.stringify(props), 3)
-	}, []);
 	useCsrCustomerData(props.setCsrCustomerData);
 
 	useEffect(() => {
@@ -261,6 +256,19 @@ function WeeklyCheckoutForm(props: PropTypes) {
 				] as 'month' | 'year',
 		  }
 		: undefined;
+
+	useEffect(() => {
+		//set cookie
+		cookie.set('dpGWTest1', 'abc', 3)
+		cookie.set('dpProduct', props.product, 3)
+		cookie.set('dpPrice', props.price, 3)
+		cookie.set('dpTierBillingPeriod', tierBillingPeriod, 3)
+		cookie.set('dpDeliveryCountry', props.deliveryCountry, 3)
+		
+	}, []);
+
+	console.log('props:',props);
+	console.log('JSON.stringify(props):',JSON.stringify(props));
 
 	return (
 		<Content>
