@@ -36,8 +36,7 @@ import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
 import { threeTierCheckoutEnabled } from '../setup/threeTierChecks';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
-import * as cookie from 'helpers/storage/cookie';
-import { useEffect } from 'react';
+import { setAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 
 const shorterBoxMargin = css`
 	:not(:last-child) {
@@ -46,25 +45,6 @@ const shorterBoxMargin = css`
 		}
 	}
 `;
-
-function setAbandonedBasketCookie(
-	product: string, 
-	amount: number, 
-	billingPeriod: string, 
-	region: string
-){
-	const abandonedBasket = {
-		product,
-		amount,
-		billingPeriod,
-		region
-	};
-
-	const COOKIE_EXPIRY_DAYS = 3;
-	useEffect(() => {
-		cookie.set('abandonedBasket', JSON.stringify(abandonedBasket), COOKIE_EXPIRY_DAYS)
-	}, []);
-}
 
 export function SupporterPlusCheckout({
 	thankYouRoute,
@@ -94,11 +74,13 @@ export function SupporterPlusCheckout({
 	const showPriceCards = inThreeTier && contributionType === 'ONE_OFF';
 	const product = isSupporterPlus ? 'SupporterPlus' : 'Contribution';
 	
+	const COOKIE_EXPIRY_DAYS = 3;
 	setAbandonedBasketCookie(
 		product,
 		amount,
 		contributionType,
-		country
+		country,
+		COOKIE_EXPIRY_DAYS
 	);
 
 	const changeButton = (

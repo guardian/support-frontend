@@ -87,6 +87,7 @@ import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 import * as cookie from 'helpers/storage/cookie';
+import { setAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 
 // ----- Styles ----- //
 const marginBottom = css`
@@ -257,12 +258,22 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		  }
 		: undefined;
 
+	const country = countryGroups[countryGroupId].supportInternationalisationId;
+	const COOKIE_EXPIRY_DAYS = 3;
+	setAbandonedBasketCookie(
+		props.product,
+		props.price.price,
+		tierBillingPeriodName,
+		country,
+		COOKIE_EXPIRY_DAYS
+	);
+		
 	useEffect(() => {
 		//set cookie
 		cookie.set('dpGWTest1', 'abc', 3)
 		cookie.set('dpProduct', props.product, 3)
-		cookie.set('dpPrice', props.price, 3)
-		cookie.set('dpTierBillingPeriod', tierBillingPeriod, 3)
+		cookie.set('dpPrice', props.price.price, 3)
+		cookie.set('dpTierBillingPeriod', tierBillingPeriodName, 3)
 		cookie.set('dpDeliveryCountry', props.deliveryCountry, 3)
 		
 	}, []);
