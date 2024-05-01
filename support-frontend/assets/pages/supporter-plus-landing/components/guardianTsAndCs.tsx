@@ -10,6 +10,7 @@ import { FinePrint } from './finePrint';
 import { PaymentTsAndCs } from './paymentTsAndCs';
 
 const guardianTsAndCsStyles = (displayPatronsCheckout: boolean) => css`
+	margin-top: ${space[3]}px;
 	margin-bottom: ${space[6]}px;
 	${from.tablet} {
 		margin-bottom: 64px;
