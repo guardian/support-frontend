@@ -77,18 +77,16 @@ export function SupporterPlusCheckout({
 	const inThreeTier = threeTierCheckoutEnabled(abParticipations, amounts);
 	const showPriceCards = inThreeTier && contributionType === 'ONE_OFF';
 
+	const abandonedBasket = {
+		product:'something',
+		amount,
+		billingPeriod: contributionType,
+		region: countryId
+	};
+
 	useEffect(() => {
 		//set cookie
-		cookie.set('countryGroupId', countryGroupId, 3)
-		cookie.set('countryId', countryId, 3)
-		cookie.set('currencyId', currencyId, 3)
-		cookie.set('contributionType', contributionType, 3)
-		cookie.set('amount', amount, 3)
-		cookie.set('amountBeforeAmendments', amountBeforeAmendments, 3)
-		cookie.set('otherAmount', otherAmount, 3)
-		cookie.set('isSupporterPlus', isSupporterPlus, 3)
-		cookie.set('inThreeTier', inThreeTier.toString(), 3)
-		cookie.set('showPriceCards', showPriceCards.toString(), 3)
+		cookie.set('abandonedBasket', JSON.stringify(abandonedBasket), 3)
 	}, []);
 
 
