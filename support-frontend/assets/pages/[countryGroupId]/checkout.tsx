@@ -1036,6 +1036,11 @@ function CheckoutComponent({ geoId }: Props) {
 						<GuardianTsAndCs
 							mobileTheme={'light'}
 							displayPatronsCheckout={false}
+							countryGroupId={countryGroupId}
+							currency={currencyKey}
+							amount={price}
+							billingPeriod={productFields.billingPeriod}
+							productType={productFields.productType}
 						/>
 					</Column>
 				</Columns>
