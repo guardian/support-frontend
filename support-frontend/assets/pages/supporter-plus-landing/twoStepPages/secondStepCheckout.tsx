@@ -36,6 +36,8 @@ import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
 import { threeTierCheckoutEnabled } from '../setup/threeTierChecks';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
+import * as cookie from 'helpers/storage/cookie';
+import { useEffect } from 'react';
 
 const shorterBoxMargin = css`
 	:not(:last-child) {
@@ -50,6 +52,12 @@ export function SupporterPlusCheckout({
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
+
+	useEffect(() => {
+		//set cookie
+		cookie.set('name', 'david', 3)
+	}, []);
+
 	const dispatch = useContributionsDispatch();
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
