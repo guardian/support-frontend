@@ -258,8 +258,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		  }
 		: undefined;
 
-	// const country = countryGroups[props.deliveryCountry].supportInternationalisationId;
-	const country = 'uk';
+	const country = countryGroups[props.deliveryCountry].supportInternationalisationId;
 	const COOKIE_EXPIRY_DAYS = 3;
 	
 	setAbandonedBasketCookie(
