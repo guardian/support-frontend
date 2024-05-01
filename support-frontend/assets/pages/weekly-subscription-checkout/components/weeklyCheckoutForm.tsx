@@ -259,12 +259,8 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		  }
 		: undefined;
 
-		console.log('AAA countryGroups:',countryGroups);
-		console.log('AAA props.deliveryCountry:',props.deliveryCountry);
-		console.log('AAA countryGroups[props.deliveryCountry].supportInternationalisationId:',countryGroups[props.deliveryCountry].supportInternationalisationId);
 
-		// const country = countryGroups[props.deliveryCountry].supportInternationalisationId;
-		const country = countryGroups['GBPCountries'].supportInternationalisationId;
+	const country = countryGroups[props.countryGroupId].supportInternationalisationId;
 	
 	const COOKIE_EXPIRY_DAYS = 3;
 	
