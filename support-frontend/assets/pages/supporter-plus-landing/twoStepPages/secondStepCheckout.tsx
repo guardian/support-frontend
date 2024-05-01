@@ -47,6 +47,25 @@ const shorterBoxMargin = css`
 	}
 `;
 
+function setAbandonedBasketCookie(
+	product: string, 
+	amount: number, 
+	billingPeriod: string, 
+	region: string
+){
+	const abandonedBasket = {
+		product,
+		amount,
+		billingPeriod,
+		region
+	};
+
+	const COOKIE_EXPIRY_DAYS = 3;
+	useEffect(() => {
+		cookie.set('abandonedBasket', JSON.stringify(abandonedBasket), COOKIE_EXPIRY_DAYS)
+	}, []);
+}
+
 export function SupporterPlusCheckout({
 	thankYouRoute,
 }: {
@@ -73,18 +92,14 @@ export function SupporterPlusCheckout({
 
 	const inThreeTier = threeTierCheckoutEnabled(abParticipations, amounts);
 	const showPriceCards = inThreeTier && contributionType === 'ONE_OFF';
-
-	const abandonedBasket = {
-		product: isSupporterPlus ? 'SupporterPlus' : 'Contribution',
-		amount,
-		billingPeriod: contributionType,
-		region: country
-	};
+	const product = isSupporterPlus ? 'SupporterPlus' : 'Contribution';
 	
-	const COOKIE_EXPIRY_DAYS = 3;
-	useEffect(() => {
-		cookie.set('abandonedBasket', JSON.stringify(abandonedBasket), COOKIE_EXPIRY_DAYS)
-	}, []);
+	setAbandonedBasketCookie(
+		product,
+		amount,
+		contributionType,
+		country
+	);
 
 	const changeButton = (
 		<Button
