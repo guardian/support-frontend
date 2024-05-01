@@ -102,7 +102,7 @@ export function SupporterPlusCheckout({
 					}),
 				);
 				dispatch(resetValidation());
-				const destination = `/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`;
+				const destination = `/${country}/contribute`;
 				navigateWithPageView(navigate, destination, abParticipations);
 			}}
 		>
