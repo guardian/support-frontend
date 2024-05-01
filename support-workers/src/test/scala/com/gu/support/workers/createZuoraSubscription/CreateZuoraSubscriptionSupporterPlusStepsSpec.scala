@@ -41,7 +41,7 @@ class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with M
 
     val state = SupporterPlusState(
       billingCountry = Country.UK,
-      product = SupporterPlus(20, Currency.GBP, Monthly, NoFulfilmentOptions),
+      product = SupporterPlus(20, Currency.GBP, Monthly),
       paymentMethod = PayPalReferenceTransaction("baid", "me@somewhere.com"),
       promoCode = Some("SUPPORTER_PLUS_PROMO"),
       salesForceContact = SalesforceContactRecord("sfbuy", "sfbuyacid"),

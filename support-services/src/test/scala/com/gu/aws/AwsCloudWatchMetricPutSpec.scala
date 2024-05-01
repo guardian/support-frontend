@@ -18,7 +18,7 @@ class AwsCloudWatchMetricPutSpec extends AsyncFlatSpec with Matchers {
         Stages.CODE,
         true,
         DirectDebit,
-        SupporterPlus(amount = 10, currency = GBP, billingPeriod = Monthly, NoFulfilmentOptions),
+        SupporterPlus(amount = 10, currency = GBP, billingPeriod = Monthly),
       )
     AwsCloudWatchMetricPut(AwsCloudWatchMetricPut.client)(cloudwatchEvent)
       .fold(

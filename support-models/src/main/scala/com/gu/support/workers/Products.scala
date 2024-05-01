@@ -35,7 +35,7 @@ case class SupporterPlus(
     amount: BigDecimal,
     currency: Currency,
     billingPeriod: BillingPeriod,
-    fulfilmentOptions: FulfilmentOptions = NoFulfilmentOptions,
+    fulfilmentOptions: Option[FulfilmentOptions] = None,
 ) extends ProductType {
   override def describe: String = s"$billingPeriod-SupporterPlus-$currency-$amount"
 }
