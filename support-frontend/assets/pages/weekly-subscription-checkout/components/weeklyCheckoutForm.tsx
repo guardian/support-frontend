@@ -88,7 +88,7 @@ import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/delive
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 import * as cookie from 'helpers/storage/cookie';
 import { setAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
+// import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
 // ----- Styles ----- //
 const marginBottom = css`
