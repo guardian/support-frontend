@@ -46,6 +46,7 @@ import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/addr
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
 	RegularPaymentRequest,
@@ -78,6 +79,7 @@ import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
+import { setThankYouOrder } from './thank-you';
 
 /** App config - this is config that should persist throughout the app */
 validateWindowGuardian(window.guardian);
@@ -130,26 +132,36 @@ const legend = css`
 	}
 `;
 
-const processPayment = (statusResponse: StatusResponse, geoId: GeoId) => {
-	const { trackingUri, status, failureReason } = statusResponse;
-	const jobId = new URL(trackingUri).searchParams.get('jobId') ?? '';
-	if (status === 'success') {
-		window.location.href = `/${geoId}/thank-you?jobId=${jobId}`;
-	} else if (status === 'failure') {
-		console.error(failureReason);
-	} else {
-		setTimeout(() => {
-			void fetch(trackingUri, {
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-				.then((response) => response.json())
-				.then((json) => {
-					void processPayment(json as StatusResponse, geoId);
-				});
-		}, 1000);
-	}
+/**
+ * This method removes the `pending` state by retrying,
+ * resolving on success or failure only.
+ */
+const processPayment = async (
+	statusResponse: StatusResponse,
+	geoId: GeoId,
+): Promise<
+	{ status: 'success' } | { status: 'failure'; failureReason?: ErrorReason }
+> => {
+	return new Promise((resolve) => {
+		const { trackingUri, status, failureReason } = statusResponse;
+		if (status === 'success') {
+			resolve({ status: 'success' });
+		} else if (status === 'failure') {
+			resolve({ status, failureReason });
+		} else {
+			setTimeout(() => {
+				void fetch(trackingUri, {
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				})
+					.then((response) => response.json())
+					.then((json) => {
+						resolve(processPayment(json as StatusResponse, geoId));
+					});
+			}, 1000);
+		}
+	});
 };
 
 /** QueryString - this is setup specifically for the checkout page */
@@ -247,6 +259,7 @@ function CheckoutComponent({ geoId }: Props) {
 	if (
 		/** These are all the things we need to parse the page */
 		!(
+			productId &&
 			product &&
 			productDescription &&
 			ratePlan &&
@@ -491,6 +504,7 @@ function CheckoutComponent({ geoId }: Props) {
 
 		if (paymentMethod === 'DirectDebit') {
 			paymentFields = {
+				paymentMethod: 'DirectDebit',
 				accountHolderName: formData.get('accountHolderName') as string,
 				accountNumber: formData.get('accountNumber') as string,
 				sortCode: formData.get('sortCode') as string,
@@ -533,7 +547,27 @@ function CheckoutComponent({ geoId }: Props) {
 				.then((response) => response.json())
 				.then((json) => json as StatusResponse);
 
-			processPayment(createSubscriptionResult, geoId);
+			const processPaymentResponse = await processPayment(
+				createSubscriptionResult,
+				geoId,
+			);
+			if (processPaymentResponse.status === 'success') {
+				const order = {
+					firstName: personalData.firstName,
+					price: price,
+					product: productId,
+					ratePlan: query.ratePlan,
+					paymentMethod: paymentMethod as string,
+				};
+				setThankYouOrder(order);
+				window.location.href = `/${geoId}/thank-you`;
+			} else {
+				// TODO - error handling
+				console.error(
+					'processPaymentResponse error:',
+					processPaymentResponse.failureReason,
+				);
+			}
 		} else {
 			setIsProcessingPayment(false);
 		}
