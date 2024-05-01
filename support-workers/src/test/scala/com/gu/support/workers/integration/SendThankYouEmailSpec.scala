@@ -159,7 +159,7 @@ object SendSupporterPlusEmail extends App {
   ).build(
     SendThankYouEmailSupporterPlusState(
       billingOnlyUser,
-      SupporterPlus(20, GBP, Monthly, NoFulfilmentOptions),
+      SupporterPlus(20, GBP, Monthly),
       directDebitPaymentMethod,
       supporterPlusPaymentSchedule,
       Some("SUPPORTER_PLUS_PROMO"),

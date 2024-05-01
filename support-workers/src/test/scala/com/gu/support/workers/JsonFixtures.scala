@@ -473,7 +473,7 @@ object JsonFixtures {
       amount: BigDecimal,
       currency: Currency,
       billingPeriod: BillingPeriod,
-      fulfilmentOptions: FulfilmentOptions = NoFulfilmentOptions,
+      fulfilmentOptions: Option[FulfilmentOptions] = None,
       country: Country = UK,
   ): String =
     CreateZuoraSubscriptionState(
@@ -486,7 +486,7 @@ object JsonFixtures {
       ),
       UUID.randomUUID(),
       user("9999998", country),
-      SupporterPlus(amount, currency, Monthly, NoFulfilmentOptions),
+      SupporterPlus(amount, currency, Monthly),
       AnalyticsInfo(isGiftPurchase = false, Stripe),
       None,
       None,
