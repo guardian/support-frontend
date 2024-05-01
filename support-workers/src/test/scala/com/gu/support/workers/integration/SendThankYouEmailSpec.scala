@@ -32,7 +32,6 @@ import org.mockito.ArgumentMatchers.any
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
-import com.gu.support.catalog.NoFulfilmentOptions
 
 class SendThankYouEmailITSpec extends AsyncLambdaSpec with MockContext {
   "SendThankYouEmail lambda" should "add message to sqs queue" taggedAs IntegrationTest in {
