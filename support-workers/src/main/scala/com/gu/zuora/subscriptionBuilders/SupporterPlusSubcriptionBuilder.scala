@@ -29,13 +29,13 @@ class SupporterPlusSubcriptionBuilder(
       salesforceCaseId: Option[String],
   ): Either[PromoError, SubscribeItem] = {
     if (state.product.fulfilmentOptions == NoFulfilmentOptions) {
-      createSecondTierSupporterPlus(state, csrUsername, salesforceCaseId)
+      createStandardSupporterPlus(state, csrUsername, salesforceCaseId)
     } else {
-      createThirdTierSupporterPlus(state, csrUsername, salesforceCaseId)
+      createSupporterPlusWithGuardianWeekly(state, csrUsername, salesforceCaseId)
     }
   }
 
-  private def createThirdTierSupporterPlus(
+  private def createSupporterPlusWithGuardianWeekly(
       state: SupporterPlusState,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
@@ -72,7 +72,7 @@ class SupporterPlusSubcriptionBuilder(
 
   }
 
-  private def createSecondTierSupporterPlus(
+  private def createStandardSupporterPlus(
       state: SupporterPlusState,
       csrUsername: Option[String],
       salesforceCaseId: Option[String],

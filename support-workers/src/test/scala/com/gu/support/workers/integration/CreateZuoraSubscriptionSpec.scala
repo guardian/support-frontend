@@ -58,14 +58,14 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
       })
   }
 
-  it should "create a monthly Third Tier subscription" in {
+  it should "create a monthly SupporterPlusWithGuardianWeekly subscription" in {
     createZuoraHelper
       .createSubscription(createSupporterPlusZuoraSubscriptionJson(25, GBP, Monthly, Domestic))
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }
 
-  it should "not create a monthly Third Tier subscription unless the amount is equal to the price" in {
+  it should "not create a monthly SupporterPlusWithGuardianWeekly subscription unless the amount is equal to the price" in {
     createZuoraHelper
       .createSubscription(createSupporterPlusZuoraSubscriptionJson(10, GBP, Monthly, Domestic))
       .failed
