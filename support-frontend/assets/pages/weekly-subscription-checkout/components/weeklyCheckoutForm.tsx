@@ -169,7 +169,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 
 	useEffect(() => {
 		//set cookie
-		cookie.set('dpGWTest', 'PASS', 3)
+		cookie.set('dpGWTestProps', JSON.stringify(props), 3)
 	}, []);
 	useCsrCustomerData(props.setCsrCustomerData);
 
