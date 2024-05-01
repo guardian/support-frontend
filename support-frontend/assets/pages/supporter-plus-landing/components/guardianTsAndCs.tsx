@@ -27,7 +27,7 @@ export function GuardianTsAndCs({
 	countryGroupId,
 	currency,
 	amount,
-	productType,
+	productLabel,
 	promotion,
 }: {
 	mobileTheme?: FinePrintTheme;
@@ -36,7 +36,7 @@ export function GuardianTsAndCs({
 	countryGroupId: CountryGroupId;
 	currency: IsoCurrency;
 	amount: number;
-	productType: string;
+	productLabel: string;
 	promotion?: Promotion;
 }): JSX.Element {
 	return (
@@ -49,8 +49,8 @@ export function GuardianTsAndCs({
 				contributionType={billingPeriod === 'Monthly' ? 'MONTHLY' : 'ANNUAL'}
 				currency={currency}
 				amount={amount}
-				amountIsAboveThreshold={productType === 'SupporterPlus'}
-				productNameAboveThreshold={productType}
+				amountIsAboveThreshold={productLabel === 'All-access digital'}
+				productNameAboveThreshold={productLabel}
 				promotion={promotion}
 			/>
 			<CheckoutDivider spacing="tight" mobileTheme={'light'} />

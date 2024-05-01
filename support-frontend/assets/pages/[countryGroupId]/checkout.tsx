@@ -1040,7 +1040,7 @@ function CheckoutComponent({ geoId }: Props) {
 							currency={currencyKey}
 							amount={price}
 							billingPeriod={productFields.billingPeriod}
-							productType={productFields.productType}
+							productLabel={productDescription.label}
 						/>
 					</Column>
 				</Columns>
