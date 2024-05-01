@@ -29,7 +29,6 @@ import org.joda.time.{DateTimeZone, LocalDate}
 
 import java.io.ByteArrayInputStream
 import java.util.UUID
-import com.gu.support.catalog.NoFulfilmentOptions
 import com.gu.support.catalog.FulfilmentOptions
 
 //noinspection TypeAnnotation
