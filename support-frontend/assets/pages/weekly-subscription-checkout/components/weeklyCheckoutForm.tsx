@@ -259,7 +259,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		  }
 		: undefined;
 
-	const country = countryGroups[countryGroupId].supportInternationalisationId;
+	const country = countryGroups[props.billingCountry].supportInternationalisationId;
 	const COOKIE_EXPIRY_DAYS = 3;
 	setAbandonedBasketCookie(
 		props.product,
