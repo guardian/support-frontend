@@ -43,6 +43,9 @@ const OrderSchema = object({
 export function setThankYouOrder(order: Input<typeof OrderSchema>) {
 	storage.session.set('thankYouOrder', order);
 }
+export function unsetThankYouOrder() {
+	storage.session.remove('thankYouOrder');
+}
 
 type Props = {
 	geoId: GeoId;

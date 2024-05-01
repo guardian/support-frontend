@@ -79,7 +79,7 @@ import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
-import { setThankYouOrder } from './thank-you';
+import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
 /** App config - this is config that should persist throughout the app */
 validateWindowGuardian(window.guardian);
@@ -183,6 +183,8 @@ type Props = {
 	geoId: GeoId;
 };
 function CheckoutComponent({ geoId }: Props) {
+	/** we unset any previous orders that have been made */
+	unsetThankYouOrder();
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const productId = query.product in productCatalog ? query.product : undefined;
 	const product = productId ? productCatalog[query.product] : undefined;
