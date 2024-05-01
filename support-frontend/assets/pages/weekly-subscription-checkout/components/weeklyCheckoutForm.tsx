@@ -271,12 +271,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		
 	useEffect(() => {
 		//set cookie
-		cookie.set('dpGWTest1', 'abc', 3)
-		cookie.set('dpProduct', props.product, 3)
-		cookie.set('dpPrice', props.price.price, 3)
-		cookie.set('dpTierBillingPeriod', tierBillingPeriodName, 3)
-		cookie.set('dpDeliveryCountry', props.deliveryCountry, 3)
-		
+		cookie.set('dpGWTest1', 'def', 3)		
 	}, []);
 
 	console.log('props:',props);
