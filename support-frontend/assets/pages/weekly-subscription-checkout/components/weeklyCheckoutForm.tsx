@@ -263,7 +263,9 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		console.log('AAA props.deliveryCountry:',props.deliveryCountry);
 		console.log('AAA countryGroups[props.deliveryCountry].supportInternationalisationId:',countryGroups[props.deliveryCountry].supportInternationalisationId);
 
-	const country = countryGroups[props.deliveryCountry].supportInternationalisationId;
+		// const country = countryGroups[props.deliveryCountry].supportInternationalisationId;
+		const country = countryGroups['GBPCountries'].supportInternationalisationId;
+	
 	const COOKIE_EXPIRY_DAYS = 3;
 	
 	setAbandonedBasketCookie(
