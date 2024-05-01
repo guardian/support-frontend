@@ -87,7 +87,6 @@ import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
 import * as cookie from 'helpers/storage/cookie';
-import { useEffect } from 'react';
 
 // ----- Styles ----- //
 const marginBottom = css`
