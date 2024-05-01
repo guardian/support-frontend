@@ -86,6 +86,7 @@ import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
+import * as cookie from 'helpers/storage/cookie';
 
 // ----- Styles ----- //
 const marginBottom = css`
@@ -165,6 +166,12 @@ const days = getWeeklyDays();
 
 // ----- Component ----- //
 function WeeklyCheckoutForm(props: PropTypes) {
+
+	useEffect(() => {
+		//set cookie
+		cookie.set('dpGWTest1', 'abc', 3)
+		cookie.set('dpGWTest2', JSON.stringify(props), 3)
+	}, []);
 	useCsrCustomerData(props.setCsrCustomerData);
 
 	useEffect(() => {
