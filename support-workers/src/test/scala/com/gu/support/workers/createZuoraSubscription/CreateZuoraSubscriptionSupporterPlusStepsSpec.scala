@@ -21,7 +21,6 @@ import org.scalatest.matchers.should.Matchers
 
 import java.util.UUID
 import scala.concurrent.Future
-import com.gu.support.catalog.NoFulfilmentOptions
 
 class CreateZuoraSubscriptionSupporterPlusStepsSpec extends AsyncFlatSpec with Matchers {
 

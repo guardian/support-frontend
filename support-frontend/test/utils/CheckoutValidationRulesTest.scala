@@ -32,7 +32,6 @@ import utils.CheckoutValidationRules.{Invalid, Valid}
 import utils.TestData.monthlyDirectUSDProduct
 
 import scala.concurrent.Future
-import com.gu.support.catalog.NoFulfilmentOptions
 
 class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
 
@@ -319,7 +318,7 @@ class PaymentSwitchValidationTest extends AnyFlatSpec with Matchers {
   }
   it should "return Valid if a user tries to pay with Pay Pal while the Pay Pal switch in RRCP is on for Subscription Payment " in {
     CheckoutValidationRules.checkPaymentMethodEnabled(
-      product = SupporterPlus(0, GBP, Monthly, NoFulfilmentOptions),
+      product = SupporterPlus(0, GBP, Monthly),
       paymentFields = Left(PayPalPaymentFields("")),
       switches = TestData.buildSwitches(
         RecurringPaymentMethodSwitches(On, On, On, On, On, On, On, On, On),
@@ -418,7 +417,7 @@ class PaidProductValidationTest extends AnyFlatSpec with Matchers {
   "PaidProductValidation.passes" should " fail if the country is United States and there is no state" in {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = None),
-      product = SupporterPlus(50, Currency.USD, Annual, NoFulfilmentOptions),
+      product = SupporterPlus(50, Currency.USD, Annual),
     )
     PaidProductValidation.passes(requestMissingState) shouldBe an[Invalid]
   }
@@ -426,7 +425,7 @@ class PaidProductValidationTest extends AnyFlatSpec with Matchers {
   it should " fail if the country is United States and there is no state for Contribution product" in {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = None),
-      product = SupporterPlus(5, Currency.USD, Annual, NoFulfilmentOptions),
+      product = SupporterPlus(5, Currency.USD, Annual),
     )
     PaidProductValidation.passes(requestMissingState) shouldBe an[Invalid]
   }
@@ -434,7 +433,7 @@ class PaidProductValidationTest extends AnyFlatSpec with Matchers {
   it should " fail if the country is United States and there is empty string in state for Contribution product" in {
     val requestMissingState = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.US, state = Some("")),
-      product = SupporterPlus(5, Currency.USD, Annual, NoFulfilmentOptions),
+      product = SupporterPlus(5, Currency.USD, Annual),
     )
     PaidProductValidation.passes(requestMissingState) shouldBe an[Invalid]
   }
@@ -442,7 +441,7 @@ class PaidProductValidationTest extends AnyFlatSpec with Matchers {
   it should "succeed  if the country is UK and there is no state" in {
     val requestSupporterPlus = validDigitalPackRequest.copy(
       billingAddress = validDigitalPackRequest.billingAddress.copy(country = Country.UK, state = None),
-      product = SupporterPlus(50, Currency.GBP, Annual, NoFulfilmentOptions),
+      product = SupporterPlus(50, Currency.GBP, Annual),
     )
     PaidProductValidation.passes(requestSupporterPlus) shouldBe Valid
   }

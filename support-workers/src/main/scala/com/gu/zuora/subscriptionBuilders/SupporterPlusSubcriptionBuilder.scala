@@ -28,7 +28,7 @@ class SupporterPlusSubcriptionBuilder(
       csrUsername: Option[String],
       salesforceCaseId: Option[String],
   ): Either[PromoError, SubscribeItem] = {
-    if (state.product.fulfilmentOptions == NoFulfilmentOptions) {
+    if (state.product.fulfilmentOptions.getOrElse(NoFulfilmentOptions) == NoFulfilmentOptions) {
       createStandardSupporterPlus(state, csrUsername, salesforceCaseId)
     } else {
       createSupporterPlusWithGuardianWeekly(state, csrUsername, salesforceCaseId)
