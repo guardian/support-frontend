@@ -20,6 +20,8 @@ import {
 	getDateWithOrdinal,
 	getLongMonth,
 } from 'helpers/utilities/dateFormatting';
+import type { FinePrintTheme } from './finePrint';
+import { FinePrint } from './finePrint';
 
 const marginTop = css`
 	margin-top: 4px;
@@ -35,6 +37,7 @@ const container = css`
 `;
 
 interface PaymentTsAndCsProps {
+	mobileTheme?: FinePrintTheme;
 	contributionType: ContributionType;
 	countryGroupId: CountryGroupId;
 	currency: IsoCurrency;
@@ -109,6 +112,7 @@ function TsAndCsFooterLinks({
 }
 
 export function PaymentTsAndCs({
+	mobileTheme = 'dark',
 	contributionType,
 	countryGroupId,
 	currency,
@@ -138,7 +142,7 @@ export function PaymentTsAndCs({
 		promotion?: Promotion,
 	) => {
 		return (
-			<>
+			<FinePrint mobileTheme={mobileTheme}>
 				<div>
 					If you pay at least{' '}
 					{supporterPlusLegal(
@@ -170,7 +174,7 @@ export function PaymentTsAndCs({
 					countryGroupId={countryGroupId}
 					amountIsAboveThreshold={amountIsAboveThreshold}
 				/>
-			</>
+			</FinePrint>
 		);
 	};
 

@@ -964,113 +964,119 @@ function CheckoutComponent({ geoId }: Props) {
 									)}
 								</BoxContents>
 							</Box>
-
-							{paymentMethod !== 'PayPal' && (
-								<DefaultPaymentButton
-									buttonText="Pay now"
-									onClick={() => {
-										// no-op
-										// This isn't needed because we are now using the form onSubmit handler
-									}}
-									type="submit"
-								/>
-							)}
-							{payPalLoaded && paymentMethod === 'PayPal' && (
-								<>
-									<input type="hidden" name="payPalBAID" value={payPalBAID} />
-
-									<PayPalButton
-										env={isTestUser ? 'sandbox' : 'production'}
-										style={{
-											color: 'blue',
-											size: 'responsive',
-											label: 'pay',
-											tagline: false,
-											layout: 'horizontal',
-											fundingicons: false,
+							<div
+								css={css`
+									margin-bottom: ${space[2]}px;
+								`}
+							>
+								{paymentMethod !== 'PayPal' && (
+									<DefaultPaymentButton
+										buttonText="Pay now"
+										onClick={() => {
+											// no-op
+											// This isn't needed because we are now using the form onSubmit handler
 										}}
-										commit={true}
-										validate={({ disable, enable }) => {
-											/** We run this initially to set the button to the correct state */
-											const valid = formRef.current?.checkValidity();
-											if (valid) {
-												enable();
-											} else {
-												disable();
-											}
+										type="submit"
+									/>
+								)}
+								{payPalLoaded && paymentMethod === 'PayPal' && (
+									<>
+										<input type="hidden" name="payPalBAID" value={payPalBAID} />
 
-											/** And then run it on form change */
-											formRef.current?.addEventListener('change', (event) => {
-												const valid =
-													// TODO - we shouldn't have to type infer here
-													(
-														event.currentTarget as HTMLFormElement
-													).checkValidity();
+										<PayPalButton
+											env={isTestUser ? 'sandbox' : 'production'}
+											style={{
+												color: 'blue',
+												size: 'responsive',
+												label: 'pay',
+												tagline: false,
+												layout: 'horizontal',
+												fundingicons: false,
+											}}
+											commit={true}
+											validate={({ disable, enable }) => {
+												/** We run this initially to set the button to the correct state */
+												const valid = formRef.current?.checkValidity();
 												if (valid) {
 													enable();
 												} else {
 													disable();
 												}
-											});
-										}}
-										funding={{
-											disallowed: [window.paypal.FUNDING.CREDIT],
-										}}
-										onClick={() => {
-											// TODO
-										}}
-										/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
-										payment={(resolve, reject) => {
-											const requestBody = {
-												amount: price,
-												billingPeriod: ratePlanDescription.billingPeriod,
-												currency: currencyKey,
-												requireShippingAddress: false,
-											};
-											void fetch('/paypal/setup-payment', {
-												credentials: 'include',
-												method: 'POST',
-												headers: {
-													'Content-Type': 'application/json',
-													'Csrf-Token': csrf,
-												},
-												body: JSON.stringify(requestBody),
-											})
-												.then((response) => response.json())
-												.then((json) => {
-													resolve((json as { token: string }).token);
+
+												/** And then run it on form change */
+												formRef.current?.addEventListener('change', (event) => {
+													const valid =
+														// TODO - we shouldn't have to type infer here
+														(
+															event.currentTarget as HTMLFormElement
+														).checkValidity();
+													if (valid) {
+														enable();
+													} else {
+														disable();
+													}
+												});
+											}}
+											funding={{
+												disallowed: [window.paypal.FUNDING.CREDIT],
+											}}
+											onClick={() => {
+												// TODO
+											}}
+											/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
+											payment={(resolve, reject) => {
+												const requestBody = {
+													amount: price,
+													billingPeriod: ratePlanDescription.billingPeriod,
+													currency: currencyKey,
+													requireShippingAddress: false,
+												};
+												void fetch('/paypal/setup-payment', {
+													credentials: 'include',
+													method: 'POST',
+													headers: {
+														'Content-Type': 'application/json',
+														'Csrf-Token': csrf,
+													},
+													body: JSON.stringify(requestBody),
 												})
-												.catch((error) => {
-													console.error(error);
-													reject(error as Error);
-												});
-										}}
-										onAuthorize={(payPalData: Record<string, unknown>) => {
-											const body = {
-												token: payPalData.paymentToken,
-											};
-											void fetch('/paypal/one-click-checkout', {
-												credentials: 'include',
-												method: 'POST',
-												headers: {
-													'Content-Type': 'application/json',
-													'Csrf-Token': csrf,
-												},
-												body: JSON.stringify(body),
-											})
-												.then((response) => response.json())
-												.then((json) => {
-													setPayPalBAID((json as { baid: string }).baid);
-													// TODO - this might not meet our browser compatibility requirements (Safari)
-													// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
-													formRef.current?.requestSubmit();
-												});
-										}}
-									/>
-								</>
-							)}
+													.then((response) => response.json())
+													.then((json) => {
+														resolve((json as { token: string }).token);
+													})
+													.catch((error) => {
+														console.error(error);
+														reject(error as Error);
+													});
+											}}
+											onAuthorize={(payPalData: Record<string, unknown>) => {
+												const body = {
+													token: payPalData.paymentToken,
+												};
+												void fetch('/paypal/one-click-checkout', {
+													credentials: 'include',
+													method: 'POST',
+													headers: {
+														'Content-Type': 'application/json',
+														'Csrf-Token': csrf,
+													},
+													body: JSON.stringify(body),
+												})
+													.then((response) => response.json())
+													.then((json) => {
+														setPayPalBAID((json as { baid: string }).baid);
+														// TODO - this might not meet our browser compatibility requirements (Safari)
+														// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+														formRef.current?.requestSubmit();
+													});
+											}}
+										/>
+									</>
+								)}
+							</div>
 						</form>
 						<PaymentTsAndCs
+							mobileTheme={'light'}
 							countryGroupId={countryGroupId}
 							contributionType={
 								productFields.billingPeriod === 'Monthly' ? 'MONTHLY' : 'ANNUAL'
