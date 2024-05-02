@@ -16,6 +16,6 @@ export function useAbandonedBasketCookie(
 	};
 
 	useEffect(() => {
-		cookie.set('abandonedBasket', JSON.stringify(abandonedBasket), cookieExpiryDays)
+		cookie.set('GU_CO_INCOMPLETE', JSON.stringify(abandonedBasket), cookieExpiryDays)
 	}, []);
 }
