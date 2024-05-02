@@ -243,6 +243,10 @@ class CreateSubscriptionController(
     )
   }
 
+  // When the user completes the checkout, remove the incomplete checkout cookie
+  private val discardIncompleteCheckoutCookie =
+    DiscardingCookie(name = "GU_CO_INCOMPLETE", domain = Some(guardianDomain.value))
+
   private def toHttpResponse(
       result: EitherT[Future, CreateSubscriptionError, StatusResponse],
       product: ProductType,
@@ -274,7 +278,7 @@ class CreateSubscriptionController(
             .map(cookies =>
               Accepted(statusResponse.asJson)
                 .withCookies(cookies: _*)
-                .discardingCookies(DiscardingCookie("GU_CO_INCOMPLETE")),
+                .discardingCookies(discardIncompleteCheckoutCookie),
             )
         },
       )
