@@ -142,7 +142,7 @@ export function PaymentTsAndCs({
 		promotion?: Promotion,
 	) => {
 		return (
-			<FinePrint mobileTheme={mobileTheme}>
+			<>
 				<div>
 					If you pay at least{' '}
 					{supporterPlusLegal(
@@ -174,17 +174,19 @@ export function PaymentTsAndCs({
 					countryGroupId={countryGroupId}
 					amountIsAboveThreshold={amountIsAboveThreshold}
 				/>
-			</FinePrint>
+			</>
 		);
 	};
 
 	if (contributionType === 'ONE_OFF') {
 		return (
 			<div css={container}>
-				<TsAndCsFooterLinks
-					countryGroupId={countryGroupId}
-					amountIsAboveThreshold={amountIsAboveThreshold}
-				/>
+				<FinePrint mobileTheme={mobileTheme}>
+					<TsAndCsFooterLinks
+						countryGroupId={countryGroupId}
+						amountIsAboveThreshold={amountIsAboveThreshold}
+					/>
+				</FinePrint>
 			</div>
 		);
 	}
@@ -209,13 +211,15 @@ export function PaymentTsAndCs({
 
 	return (
 		<div css={container}>
-			{amountIsAboveThreshold
-				? copyAboveThreshold(
-						contributionType,
-						productNameAboveThreshold,
-						promotion,
-				  )
-				: copyBelowThreshold(contributionType)}
+			<FinePrint mobileTheme={mobileTheme}>
+				{amountIsAboveThreshold
+					? copyAboveThreshold(
+							contributionType,
+							productNameAboveThreshold,
+							promotion,
+					  )
+					: copyBelowThreshold(contributionType)}
+			</FinePrint>
 		</div>
 	);
 }
