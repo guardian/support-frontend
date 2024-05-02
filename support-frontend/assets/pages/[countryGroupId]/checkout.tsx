@@ -25,7 +25,6 @@ import {
 	useStripe,
 } from '@stripe/react-stripe-js';
 import { useEffect, useRef, useState } from 'react';
-import { parse, picklist } from 'valibot'; // 1.54 kB
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitForm';
@@ -47,6 +46,7 @@ import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/addr
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
 	RegularPaymentRequest,
@@ -66,21 +66,20 @@ import { getStripeKey } from 'helpers/forms/stripe';
 import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { Currency } from 'helpers/internationalisation/currency';
-import { currencies } from 'helpers/internationalisation/currency';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import { renderPage } from 'helpers/rendering/render';
 import { get } from 'helpers/storage/cookie';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import type { GeoId } from 'pages/geoIdConfig';
+import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
+import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
 /** App config - this is config that should persist throughout the app */
 validateWindowGuardian(window.guardian);
@@ -88,73 +87,11 @@ validateWindowGuardian(window.guardian);
 const isTestUser = true as boolean;
 const csrf = window.guardian.csrf.token;
 
-/** Geo */
-const geoIds = ['uk', 'us', 'eu', 'au', 'nz', 'ca', 'int'] as const;
-const GeoIdSchema = picklist(geoIds);
-const geoId = parse(GeoIdSchema, window.location.pathname.split('/')[1]);
-
-let currency: Currency;
-let currencyKey: keyof typeof currencies;
-let countryGroupId: CountryGroupId;
-switch (geoId) {
-	case 'uk':
-		currency = currencies.GBP;
-		currencyKey = 'GBP';
-		countryGroupId = 'GBPCountries';
-		break;
-	case 'us':
-		currency = currencies.USD;
-		currencyKey = 'USD';
-		countryGroupId = 'UnitedStates';
-		break;
-	case 'au':
-		currency = currencies.AUD;
-		currencyKey = 'AUD';
-		countryGroupId = 'AUDCountries';
-		break;
-	case 'eu':
-		currency = currencies.EUR;
-		currencyKey = 'EUR';
-		countryGroupId = 'EURCountries';
-		break;
-	case 'nz':
-		currency = currencies.NZD;
-		currencyKey = 'NZD';
-		countryGroupId = 'NZDCountries';
-		break;
-	case 'ca':
-		currency = currencies.CAD;
-		currencyKey = 'CAD';
-		countryGroupId = 'Canada';
-		break;
-	case 'int':
-		currency = currencies.USD;
-		currencyKey = 'USD';
-		countryGroupId = 'International';
-		break;
-}
-
 const isSignedIn = !!get('GU_U');
 const countryId: IsoCountry =
 	CountryHelper.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 
 const productCatalog = window.guardian.productCatalog;
-
-/** Page config - this is setup specifically for the checkout page */
-function isNumeric(str: string) {
-	return !isNaN(parseFloat(str));
-}
-
-const searchParams = new URLSearchParams(window.location.search);
-const searchParamsPrice = searchParams.get('price');
-const query = {
-	product: searchParams.get('product') ?? '',
-	ratePlan: searchParams.get('ratePlan') ?? '',
-	price:
-		searchParamsPrice && isNumeric(searchParamsPrice)
-			? parseFloat(searchParamsPrice)
-			: undefined,
-};
 
 /** Page styles - styles used specifically for the checkout page */
 const darkBackgroundContainerMobile = css`
@@ -195,167 +132,136 @@ const legend = css`
 	}
 `;
 
-const validPaymentMethods = [
-	countryGroupId === 'EURCountries' && Sepa,
-	countryId === 'GB' && DirectDebit,
-	// TODO - ONE_OFF support - ☝️ these will be inactivated for ONE_OFF payments
-	Stripe,
-	PayPal,
-	countryId === 'US' && AmazonPay,
-].filter(isPaymentMethod);
-
-const stripePublicKey = getStripeKey(
-	// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
-	'REGULAR',
-	countryId,
-	currencyKey,
-	isTestUser,
-);
-
 /**
- * Product config - we check that the querystring returns a product, ratePlan and price
+ * This method removes the `pending` state by retrying,
+ * resolving on success or failure only.
  */
-const productId = query.product in productCatalog ? query.product : undefined;
-const product = productId ? productCatalog[query.product] : undefined;
-const ratePlan = product?.ratePlans[query.ratePlan];
-const price = query.price ?? ratePlan?.pricing[currencyKey];
-const supporterPlusRatePlanPrice =
-	productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[currencyKey];
-
-/**
- * Is It a Contribution? URL queryPrice supplied?
- *    If queryPrice above ratePlanPrice, in a upgrade to S+ country, invalid amount
- */
-let isInvalidAmount = false;
-if (productId === 'Contribution' && query.price) {
-	const { selectedAmountsVariant } = getAmountsTestVariant(
-		countryId,
-		countryGroupId,
-		window.guardian.settings,
-	);
-	if (query.price < 1) {
-		isInvalidAmount = true;
-	}
-	if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
-		if (query.price >= supporterPlusRatePlanPrice) {
-			isInvalidAmount = true;
+const processPayment = async (
+	statusResponse: StatusResponse,
+	geoId: GeoId,
+): Promise<
+	{ status: 'success' } | { status: 'failure'; failureReason?: ErrorReason }
+> => {
+	return new Promise((resolve) => {
+		const { trackingUri, status, failureReason } = statusResponse;
+		if (status === 'success') {
+			resolve({ status: 'success' });
+		} else if (status === 'failure') {
+			resolve({ status, failureReason });
+		} else {
+			setTimeout(() => {
+				void fetch(trackingUri, {
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				})
+					.then((response) => response.json())
+					.then((json) => {
+						resolve(processPayment(json as StatusResponse, geoId));
+					});
+			}, 1000);
 		}
-	}
-}
-
-/**
- * Is It a SupporterPlus? URL queryPrice supplied?
- *    If queryPrice below S+ ratePlanPrice, invalid amount
- */
-if (productId === 'SupporterPlus' && query.price) {
-	if (query.price < supporterPlusRatePlanPrice) {
-		isInvalidAmount = true;
-	}
-}
-
-const productDescription = productId
-	? productCatalogDescription[productId]
-	: undefined;
-const ratePlanDescription = productDescription?.ratePlans[query.ratePlan];
-
-/**
- * This is the data structure used by the `/subscribe/create` endpoint.
- *
- * This must match the types in `CreateSupportWorkersRequest#product`
- * and readerRevenueApis - `RegularPaymentRequest#product`.
- *
- * We might be able to defer this to the backend.
- */
-let productFields: RegularPaymentRequest['product'] | undefined;
-if (ratePlanDescription) {
-	if (productId === 'Contribution') {
-		productFields = {
-			productType: 'Contribution',
-			currency: currencyKey,
-			billingPeriod: ratePlanDescription.billingPeriod,
-			amount: query.price ?? 0,
-		};
-	} else if (productId === 'SupporterPlus') {
-		productFields = {
-			productType: 'SupporterPlus',
-			currency: currencyKey,
-			billingPeriod: ratePlanDescription.billingPeriod,
-			amount: query.price ?? 0,
-		};
-	} else if (productId === 'GuardianWeeklyDomestic') {
-		productFields = {
-			productType: 'GuardianWeekly',
-			currency: currencyKey,
-			fulfilmentOptions: 'Domestic',
-			billingPeriod: ratePlanDescription.billingPeriod,
-		};
-	} else if (productId === 'GuardianWeeklyRestOfWorld') {
-		productFields = {
-			productType: 'GuardianWeekly',
-			fulfilmentOptions: 'RestOfWorld',
-			currency: currencyKey,
-			billingPeriod: ratePlanDescription.billingPeriod,
-		};
-	} else if (productId === 'DigitalSubscription') {
-		productFields = {
-			productType: 'DigitalPack',
-			currency: currencyKey,
-			billingPeriod: ratePlanDescription.billingPeriod,
-			// TODO - this needs filling in properly, I am not sure where this value comes from
-			readerType: 'Direct',
-		};
-	} else if (
-		productId === 'NationalDelivery' ||
-		productId === 'SubscriptionCard' ||
-		productId === 'HomeDelivery'
-	) {
-		productFields = {
-			productType: 'Paper',
-			currency: currencyKey,
-			billingPeriod: ratePlanDescription.billingPeriod,
-			// TODO - this needs filling in properly
-			fulfilmentOptions: NoFulfilmentOptions,
-			productOptions: NoProductOptions,
-		};
-	}
-}
-
-/** These are just some values needed for rendering */
-let paymentFrequency: 'year' | 'month' | 'quarter';
-if (ratePlanDescription?.billingPeriod === 'Annual') {
-	paymentFrequency = 'year';
-} else if (ratePlanDescription?.billingPeriod === 'Monthly') {
-	paymentFrequency = 'month';
-} else {
-	paymentFrequency = 'quarter';
-}
-
-const processPayment = (statusResponse: StatusResponse) => {
-	const { trackingUri, status, failureReason } = statusResponse;
-	const jobId = new URL(trackingUri).searchParams.get('jobId') ?? '';
-	if (status === 'success') {
-		window.location.href = `uk/thank-you?jobId=${jobId}`;
-	} else if (status === 'failure') {
-		console.error(failureReason);
-	} else {
-		setTimeout(() => {
-			void fetch(trackingUri, {
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-				.then((response) => response.json())
-				.then((json) => {
-					processPayment(json as StatusResponse);
-				});
-		}, 1000);
-	}
+	});
 };
 
-export function Checkout() {
+/** QueryString - this is setup specifically for the checkout page */
+function isNumeric(str: string) {
+	return !isNaN(parseFloat(str));
+}
+const searchParams = new URLSearchParams(window.location.search);
+const searchParamsPrice = searchParams.get('price');
+const query = {
+	product: searchParams.get('product') ?? '',
+	ratePlan: searchParams.get('ratePlan') ?? '',
+	price:
+		searchParamsPrice && isNumeric(searchParamsPrice)
+			? parseFloat(searchParamsPrice)
+			: undefined,
+};
+
+type Props = {
+	geoId: GeoId;
+};
+function CheckoutComponent({ geoId }: Props) {
+	/** we unset any previous orders that have been made */
+	unsetThankYouOrder();
+	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const productId = query.product in productCatalog ? query.product : undefined;
+	const product = productId ? productCatalog[query.product] : undefined;
+	const ratePlan = product?.ratePlans[query.ratePlan];
+	const price = query.price ?? ratePlan?.pricing[currencyKey];
+
+	const productDescription = productId
+		? productCatalogDescription[productId]
+		: undefined;
+	const ratePlanDescription = productDescription?.ratePlans[query.ratePlan];
+
+	/**
+	 * This is the data structure used by the `/subscribe/create` endpoint.
+	 *
+	 * This must match the types in `CreateSupportWorkersRequest#product`
+	 * and readerRevenueApis - `RegularPaymentRequest#product`.
+	 *
+	 * We might be able to defer this to the backend.
+	 */
+	let productFields: RegularPaymentRequest['product'] | undefined;
+	if (ratePlanDescription) {
+		if (productId === 'Contribution') {
+			productFields = {
+				productType: 'Contribution',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+				amount: query.price ?? 0,
+			};
+		} else if (productId === 'SupporterPlus') {
+			productFields = {
+				productType: 'SupporterPlus',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+				amount: query.price ?? 0,
+			};
+		} else if (productId === 'GuardianWeeklyDomestic') {
+			productFields = {
+				productType: 'GuardianWeekly',
+				currency: currencyKey,
+				fulfilmentOptions: 'Domestic',
+				billingPeriod: ratePlanDescription.billingPeriod,
+			};
+		} else if (productId === 'GuardianWeeklyRestOfWorld') {
+			productFields = {
+				productType: 'GuardianWeekly',
+				fulfilmentOptions: 'RestOfWorld',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+			};
+		} else if (productId === 'DigitalSubscription') {
+			productFields = {
+				productType: 'DigitalPack',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+				// TODO - this needs filling in properly, I am not sure where this value comes from
+				readerType: 'Direct',
+			};
+		} else if (
+			productId === 'NationalDelivery' ||
+			productId === 'SubscriptionCard' ||
+			productId === 'HomeDelivery'
+		) {
+			productFields = {
+				productType: 'Paper',
+				currency: currencyKey,
+				billingPeriod: ratePlanDescription.billingPeriod,
+				// TODO - this needs filling in properly
+				fulfilmentOptions: NoFulfilmentOptions,
+				productOptions: NoProductOptions,
+			};
+		}
+	}
+
 	if (
 		/** These are all the things we need to parse the page */
 		!(
+			productId &&
 			product &&
 			productDescription &&
 			ratePlan &&
@@ -371,6 +277,46 @@ export function Checkout() {
 		);
 	}
 
+	/**
+	 * Is It a Contribution? URL queryPrice supplied?
+	 *    If queryPrice above ratePlanPrice, in a upgrade to S+ country, invalid amount
+	 */
+	let isInvalidAmount = false;
+	if (productId === 'Contribution' && query.price) {
+		const supporterPlusRatePlanPrice =
+			productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[
+				currencyKey
+			];
+
+		const { selectedAmountsVariant } = getAmountsTestVariant(
+			countryId,
+			countryGroupId,
+			window.guardian.settings,
+		);
+		if (query.price < 1) {
+			isInvalidAmount = true;
+		}
+		if (!isContributionsOnlyCountry(selectedAmountsVariant)) {
+			if (query.price >= supporterPlusRatePlanPrice) {
+				isInvalidAmount = true;
+			}
+		}
+	}
+
+	/**
+	 * Is It a SupporterPlus? URL queryPrice supplied?
+	 *    If queryPrice below S+ ratePlanPrice, invalid amount
+	 */
+	if (productId === 'SupporterPlus' && query.price) {
+		const supporterPlusRatePlanPrice =
+			productCatalog.SupporterPlus.ratePlans[query.ratePlan].pricing[
+				currencyKey
+			];
+
+		if (query.price < supporterPlusRatePlanPrice) {
+			isInvalidAmount = true;
+		}
+	}
 	if (isInvalidAmount) {
 		return (
 			<div>
@@ -380,15 +326,29 @@ export function Checkout() {
 		);
 	}
 
+	const validPaymentMethods = [
+		countryGroupId === 'EURCountries' && Sepa,
+		countryId === 'GB' && DirectDebit,
+		// TODO - ONE_OFF support - ☝️ these will be inactivated for ONE_OFF payments
+		Stripe,
+		PayPal,
+		countryId === 'US' && AmazonPay,
+	].filter(isPaymentMethod);
+
 	// TODO - ONE_OFF support, this should be false when ONE_OFF
 	const showStateSelect =
 		countryId === 'US' || countryId === 'CA' || countryId === 'AU';
 
-	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(
-		null,
-	);
+	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
 
 	/** Payment methods: Stripe */
+	const stripePublicKey = getStripeKey(
+		// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
+		'REGULAR',
+		countryId,
+		currencyKey,
+		isTestUser,
+	);
 	const stripe = useStripe();
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
@@ -546,6 +506,7 @@ export function Checkout() {
 
 		if (paymentMethod === 'DirectDebit') {
 			paymentFields = {
+				paymentMethod: 'DirectDebit',
 				accountHolderName: formData.get('accountHolderName') as string,
 				accountNumber: formData.get('accountNumber') as string,
 				sortCode: formData.get('sortCode') as string,
@@ -588,7 +549,27 @@ export function Checkout() {
 				.then((response) => response.json())
 				.then((json) => json as StatusResponse);
 
-			processPayment(createSubscriptionResult);
+			const processPaymentResponse = await processPayment(
+				createSubscriptionResult,
+				geoId,
+			);
+			if (processPaymentResponse.status === 'success') {
+				const order = {
+					firstName: personalData.firstName,
+					price: price,
+					product: productId,
+					ratePlan: query.ratePlan,
+					paymentMethod: paymentMethod as string,
+				};
+				setThankYouOrder(order);
+				window.location.href = `/${geoId}/thank-you`;
+			} else {
+				// TODO - error handling
+				console.error(
+					'processPaymentResponse error:',
+					processPaymentResponse.failureReason,
+				);
+			}
 		} else {
 			setIsProcessingPayment(false);
 		}
@@ -617,7 +598,13 @@ export function Checkout() {
 							<BoxContents>
 								<ContributionsOrderSummary
 									description={productDescription.label}
-									paymentFrequency={paymentFrequency}
+									paymentFrequency={
+										ratePlanDescription.billingPeriod === 'Annual'
+											? 'year'
+											: ratePlanDescription.billingPeriod === 'Monthly'
+											? 'month'
+											: 'quarter'
+									}
 									amount={price}
 									currency={currency}
 									checkListData={productDescription.benefits.map((benefit) => ({
@@ -1099,8 +1086,19 @@ export function Checkout() {
 	);
 }
 
-export default renderPage(
-	<StripeElements key={stripePublicKey} stripeKey={stripePublicKey}>
-		<Checkout />
-	</StripeElements>,
-);
+export function Checkout({ geoId }: Props) {
+	const { currencyKey } = getGeoIdConfig(geoId);
+	const stripePublicKey = getStripeKey(
+		// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
+		'REGULAR',
+		countryId,
+		currencyKey,
+		isTestUser,
+	);
+
+	return (
+		<StripeElements key={stripePublicKey} stripeKey={stripePublicKey}>
+			<CheckoutComponent geoId={geoId} />
+		</StripeElements>
+	);
+}
