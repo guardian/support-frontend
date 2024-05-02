@@ -1,5 +1,5 @@
-import * as cookie from 'helpers/storage/cookie';
 import { useEffect } from 'react';
+import * as cookie from 'helpers/storage/cookie';
 
 export function useAbandonedBasketCookie(
 	product: string, 

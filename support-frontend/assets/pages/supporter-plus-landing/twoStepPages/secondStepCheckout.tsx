@@ -28,6 +28,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { ContributionsPriceCards } from '../components/contributionsPriceCards';
@@ -36,7 +37,6 @@ import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
 import { threeTierCheckoutEnabled } from '../setup/threeTierChecks';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
-import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 
 const shorterBoxMargin = css`
 	:not(:last-child) {
