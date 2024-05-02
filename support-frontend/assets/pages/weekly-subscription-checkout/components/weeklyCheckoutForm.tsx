@@ -40,6 +40,7 @@ import Text from 'components/text/text';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { billableCountries } from 'helpers/internationalisation/billableCountries';
+import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import {
 	currencies,
 	currencyFromCountryCode,
@@ -59,6 +60,8 @@ import type {
 	SubscriptionsDispatch,
 	SubscriptionsState,
 } from 'helpers/redux/subscriptionsStore';
+import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
+import * as cookie from 'helpers/storage/cookie';
 import {
 	formActionCreators,
 	setCsrCustomerData,
@@ -86,9 +89,6 @@ import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import { tierCards } from 'pages/supporter-plus-landing/setup/threeTierConfig';
 import { getWeeklyDays } from 'pages/weekly-subscription-checkout/helpers/deliveryDays';
 import { setStripePublicKey } from '../../../helpers/redux/checkout/payment/stripeAccountDetails/actions';
-import * as cookie from 'helpers/storage/cookie';
-import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
 
 // ----- Styles ----- //
 const marginBottom = css`
