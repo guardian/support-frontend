@@ -1079,7 +1079,11 @@ function CheckoutComponent({ geoId }: Props) {
 							mobileTheme={'light'}
 							countryGroupId={countryGroupId}
 							contributionType={
-								productFields.billingPeriod === 'Monthly' ? 'MONTHLY' : 'ANNUAL'
+								productFields.billingPeriod === 'Monthly'
+									? 'MONTHLY'
+									: productFields.billingPeriod === 'Annual'
+									? 'ANNUAL'
+									: 'ONE_OFF'
 							}
 							currency={currencyKey}
 							amount={price}
@@ -1087,6 +1091,7 @@ function CheckoutComponent({ geoId }: Props) {
 								productDescription.label === 'All-access digital'
 							}
 							productNameAboveThreshold={productDescription.label}
+							promotion={undefined} // TO DO : future support promotions
 						/>
 						<GuardianTsAndCs
 							mobileTheme={'light'}
