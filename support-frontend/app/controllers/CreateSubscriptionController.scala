@@ -271,7 +271,11 @@ class CreateSubscriptionController(
         { statusResponse =>
           logDetailedMessage("create succeeded")
           cookies(product, userEmail)
-            .map(cookies => Accepted(statusResponse.asJson).withCookies(cookies: _*))
+            .map(cookies =>
+              Accepted(statusResponse.asJson)
+                .withCookies(cookies: _*)
+                .discardingCookies(DiscardingCookie("GU_CO_INCOMPLETE")),
+            )
         },
       )
       .flatten
