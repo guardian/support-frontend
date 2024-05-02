@@ -79,6 +79,7 @@ import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
+import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
 /** App config - this is config that should persist throughout the app */
@@ -1069,14 +1070,21 @@ function CheckoutComponent({ geoId }: Props) {
 								</>
 							)}
 						</form>
+						<PaymentTsAndCs
+							countryGroupId={countryGroupId}
+							contributionType={
+								productFields.billingPeriod === 'Monthly' ? 'MONTHLY' : 'ANNUAL'
+							}
+							currency={currencyKey}
+							amount={price}
+							amountIsAboveThreshold={
+								productDescription.label === 'All-access digital'
+							}
+							productNameAboveThreshold={productDescription.label}
+						/>
 						<GuardianTsAndCs
 							mobileTheme={'light'}
 							displayPatronsCheckout={false}
-							countryGroupId={countryGroupId}
-							currency={currencyKey}
-							amount={price}
-							billingPeriod={productFields.billingPeriod}
-							productLabel={productDescription.label}
 						/>
 					</Column>
 				</Columns>

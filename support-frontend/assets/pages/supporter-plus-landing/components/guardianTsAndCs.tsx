@@ -1,16 +1,10 @@
 import { css } from '@emotion/react';
 import { from, space } from '@guardian/source-foundations';
-import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
-import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
-import type { Promotion } from 'helpers/productPrice/promotions';
 import { CheckoutDivider } from './checkoutDivider';
 import type { FinePrintTheme } from './finePrint';
 import { FinePrint } from './finePrint';
-import { PaymentTsAndCs } from './paymentTsAndCs';
 
 const guardianTsAndCsStyles = (displayPatronsCheckout: boolean) => css`
-	margin-top: ${space[3]}px;
 	margin-bottom: ${space[6]}px;
 	${from.tablet} {
 		margin-bottom: 64px;
@@ -23,36 +17,15 @@ const guardianTsAndCsStyles = (displayPatronsCheckout: boolean) => css`
 export function GuardianTsAndCs({
 	mobileTheme = 'dark',
 	displayPatronsCheckout = true,
-	billingPeriod,
-	countryGroupId,
-	currency,
-	amount,
-	productLabel,
-	promotion,
 }: {
 	mobileTheme?: FinePrintTheme;
 	displayPatronsCheckout: boolean;
-	billingPeriod: BillingPeriod;
-	countryGroupId: CountryGroupId;
-	currency: IsoCurrency;
-	amount: number;
-	productLabel: string;
-	promotion?: Promotion;
 }): JSX.Element {
 	return (
 		<FinePrint
 			mobileTheme={mobileTheme}
 			cssOverrides={guardianTsAndCsStyles(displayPatronsCheckout)}
 		>
-			<PaymentTsAndCs
-				countryGroupId={countryGroupId}
-				contributionType={billingPeriod === 'Monthly' ? 'MONTHLY' : 'ANNUAL'}
-				currency={currency}
-				amount={amount}
-				amountIsAboveThreshold={productLabel === 'All-access digital'}
-				productNameAboveThreshold={productLabel}
-				promotion={promotion}
-			/>
 			<CheckoutDivider spacing="tight" mobileTheme={'light'} />
 			<p>
 				The ultimate owner of the Guardian is The Scott Trust Limited, whose
