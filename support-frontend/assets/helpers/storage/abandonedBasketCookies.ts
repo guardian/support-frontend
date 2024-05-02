@@ -1,7 +1,7 @@
 import * as cookie from 'helpers/storage/cookie';
 import { useEffect } from 'react';
 
-export function setAbandonedBasketCookie(
+export function useAbandonedBasketCookie(
 	product: string, 
 	amount: number, 
 	billingPeriod: string, 
