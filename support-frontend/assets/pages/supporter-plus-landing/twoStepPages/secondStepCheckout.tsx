@@ -36,7 +36,7 @@ import { PaymentTsAndCs } from '../components/paymentTsAndCs';
 import { getPaymentMethodButtons } from '../paymentButtons';
 import { threeTierCheckoutEnabled } from '../setup/threeTierChecks';
 import { SupporterPlusCheckoutScaffold } from './checkoutScaffold';
-import { setAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
+import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 
 const shorterBoxMargin = css`
 	:not(:last-child) {
@@ -75,7 +75,7 @@ export function SupporterPlusCheckout({
 	const product = isSupporterPlus ? 'SupporterPlus' : 'Contribution';
 	
 	const COOKIE_EXPIRY_DAYS = 3;
-	setAbandonedBasketCookie(
+	useAbandonedBasketCookie(
 		product,
 		amount,
 		contributionType,
