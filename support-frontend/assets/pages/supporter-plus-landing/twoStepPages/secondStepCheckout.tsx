@@ -51,7 +51,6 @@ export function SupporterPlusCheckout({
 }: {
 	thankYouRoute: string;
 }): JSX.Element {
-
 	const dispatch = useContributionsDispatch();
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
@@ -73,14 +72,14 @@ export function SupporterPlusCheckout({
 	const inThreeTier = threeTierCheckoutEnabled(abParticipations, amounts);
 	const showPriceCards = inThreeTier && contributionType === 'ONE_OFF';
 	const product = isSupporterPlus ? 'SupporterPlus' : 'Contribution';
-	
+
 	const COOKIE_EXPIRY_DAYS = 3;
 	useAbandonedBasketCookie(
 		product,
 		amount,
 		contributionType,
 		country,
-		COOKIE_EXPIRY_DAYS
+		COOKIE_EXPIRY_DAYS,
 	);
 
 	const changeButton = (

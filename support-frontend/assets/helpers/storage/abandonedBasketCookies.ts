@@ -2,20 +2,24 @@ import { useEffect } from 'react';
 import * as cookie from 'helpers/storage/cookie';
 
 export function useAbandonedBasketCookie(
-	product: string, 
-	amount: number, 
-	billingPeriod: string, 
+	product: string,
+	amount: number,
+	billingPeriod: string,
 	region: string,
-    cookieExpiryDays: number
-){
+	cookieExpiryDays: number,
+) {
 	const abandonedBasket = {
 		product,
 		amount,
 		billingPeriod,
-		region
+		region,
 	};
 
 	useEffect(() => {
-		cookie.set('GU_CO_INCOMPLETE', JSON.stringify(abandonedBasket), cookieExpiryDays)
+		cookie.set(
+			'GU_CO_INCOMPLETE',
+			JSON.stringify(abandonedBasket),
+			cookieExpiryDays,
+		);
 	}, []);
 }

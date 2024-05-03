@@ -168,7 +168,6 @@ const days = getWeeklyDays();
 
 // ----- Component ----- //
 function WeeklyCheckoutForm(props: PropTypes) {
-
 	useCsrCustomerData(props.setCsrCustomerData);
 
 	useEffect(() => {
@@ -259,26 +258,18 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		  }
 		: undefined;
 
+	const country =
+		countryGroups[props.countryGroupId].supportInternationalisationId;
 
-	const country = countryGroups[props.countryGroupId].supportInternationalisationId;
-	
 	const COOKIE_EXPIRY_DAYS = 3;
-	
+
 	useAbandonedBasketCookie(
 		props.product,
 		props.price.price,
 		tierBillingPeriodName,
 		country,
-		COOKIE_EXPIRY_DAYS
+		COOKIE_EXPIRY_DAYS,
 	);
-		
-	useEffect(() => {
-		//set cookie
-		cookie.set('dpGWTest1', 'def', 3)		
-	}, []);
-
-	console.log('props:',props);
-	console.log('JSON.stringify(props):',JSON.stringify(props));
 
 	return (
 		<Content>
