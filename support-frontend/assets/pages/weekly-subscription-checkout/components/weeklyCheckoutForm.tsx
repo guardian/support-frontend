@@ -61,7 +61,6 @@ import type {
 	SubscriptionsState,
 } from 'helpers/redux/subscriptionsStore';
 import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
-import * as cookie from 'helpers/storage/cookie';
 import {
 	formActionCreators,
 	setCsrCustomerData,
