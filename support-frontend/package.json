@@ -172,7 +172,7 @@
     "eslint": "^8.51.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-nibble": "^8.1.0",
-    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-storybook": "^0.6.15",
     "fast-sass-loader": "^2.0.1",
