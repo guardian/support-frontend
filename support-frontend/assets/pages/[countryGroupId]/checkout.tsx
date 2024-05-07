@@ -6,6 +6,7 @@ import {
 	space,
 	textSans,
 	until,
+	visuallyHidden,
 } from '@guardian/source-foundations';
 import {
 	Column,
@@ -34,7 +35,6 @@ import { ContributionsOrderSummary } from 'components/orderSummary/contributions
 import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
-import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -47,6 +47,7 @@ import { findAddressesForPostcode } from 'components/subscriptionCheckouts/addre
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
+import { emailRegexPattern } from 'helpers/forms/formValidation';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
 	RegularPaymentRequest,
@@ -131,6 +132,23 @@ const legend = css`
 	${from.tablet} {
 		font-size: 28px;
 	}
+`;
+
+const personalDetailsFieldGroupStyles = (hideDetailsHeading?: boolean) => css`
+	position: relative;
+	margin-top: ${hideDetailsHeading ? `${space[4]}px` : '0'};
+
+	& > *:not(:first-of-type) {
+		margin-top: ${space[3]}px;
+	}
+	${from.tablet} {
+		& > *:not(:first-of-type) {
+			margin-top: ${space[4]}px;
+		}
+	}
+`;
+const personalDetailsHeader = css`
+	${visuallyHidden};
 `;
 
 /**
@@ -640,55 +658,83 @@ function CheckoutComponent({ geoId }: Props) {
 						>
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
-									<PersonalDetails
-										email={email}
-										firstName={firstName}
-										lastName={lastName}
-										isSignedIn={isSignedIn}
-										// TODO - ONE_OFF support, this should be true when ONE_OFF
-										hideNameFields={false}
-										onEmailChange={(email) => {
-											setEmail(email);
-										}}
-										onFirstNameChange={(firstName) => {
-											setFirstName(firstName);
-										}}
-										onLastNameChange={(lastName) => {
-											setLastName(lastName);
-										}}
-										errors={{}}
-										signOutLink={<Signout isSignedIn={isSignedIn} />}
-										contributionState={
-											showStateSelect && (
-												<StateSelect
-													countryId={countryId}
-													state={'STATE'}
-													onStateChange={() => {
+									<div css={personalDetailsFieldGroupStyles(true)}>
+										<h2 css={personalDetailsHeader}>Your details</h2>
+										<div>
+											<TextInput
+												id="email"
+												data-qm-masking="blocklist"
+												label="Email address"
+												value={email}
+												type="email"
+												autoComplete="email"
+												onChange={(event) => setEmail(event.target.value)}
+												pattern={emailRegexPattern}
+												error={undefined}
+												disabled={isSignedIn}
+												name="email"
+											/>
+										</div>
+
+										<Signout isSignedIn={isSignedIn} />
+
+										<>
+											<div>
+												<TextInput
+													id="firstName"
+													data-qm-masking="blocklist"
+													label="First name"
+													value={firstName}
+													autoComplete="given-name"
+													autoCapitalize="words"
+													onChange={(event) => setFirstName(event.target.value)}
+													error={undefined}
+													name="firstName"
+													required
+												/>
+											</div>
+											<div>
+												<TextInput
+													id="lastName"
+													data-qm-masking="blocklist"
+													label="Last name"
+													value={lastName}
+													autoComplete="family-name"
+													autoCapitalize="words"
+													onChange={(event) => setLastName(event.target.value)}
+													error={undefined}
+													name="lastName"
+													required
+												/>
+											</div>
+										</>
+
+										{showStateSelect && (
+											<StateSelect
+												countryId={countryId}
+												state={'STATE'}
+												onStateChange={() => {
+													//  no-op
+												}}
+												error={undefined}
+											/>
+										)}
+
+										{countryId === 'US' && (
+											<div>
+												<TextInput
+													id="zipCode"
+													name="zip-code"
+													label="ZIP code"
+													value={''}
+													error={undefined}
+													onChange={() => {
 														//  no-op
 													}}
-													error={undefined}
 												/>
-											)
-										}
-										contributionZipcode={
-											countryId === 'US' ? (
-												<div>
-													<TextInput
-														id="zipCode"
-														name="zip-code"
-														label="ZIP code"
-														value={''}
-														error={undefined}
-														onChange={() => {
-															//  no-op
-														}}
-													/>
-												</div>
-											) : undefined
-										}
-										hideDetailsHeading={true}
-										overrideHeadingCopy="1. Your details"
-									/>
+											</div>
+										)}
+									</div>
 
 									<CheckoutDivider spacing="loose" />
 
