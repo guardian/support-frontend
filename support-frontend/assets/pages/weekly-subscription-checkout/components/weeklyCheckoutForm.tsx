@@ -260,14 +260,11 @@ function WeeklyCheckoutForm(props: PropTypes) {
 	const country =
 		countryGroups[props.countryGroupId].supportInternationalisationId;
 
-	const COOKIE_EXPIRY_DAYS = 3;
-
 	useAbandonedBasketCookie(
 		props.product,
 		props.price.price,
 		tierBillingPeriodName,
 		country,
-		COOKIE_EXPIRY_DAYS,
 	);
 
 	return (

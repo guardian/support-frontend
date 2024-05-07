@@ -73,13 +73,11 @@ export function SupporterPlusCheckout({
 	const showPriceCards = inThreeTier && contributionType === 'ONE_OFF';
 	const product = isSupporterPlus ? 'SupporterPlus' : 'Contribution';
 
-	const COOKIE_EXPIRY_DAYS = 3;
 	useAbandonedBasketCookie(
 		product,
 		amount,
 		contributionType,
 		country,
-		COOKIE_EXPIRY_DAYS,
 	);
 
 	const changeButton = (
