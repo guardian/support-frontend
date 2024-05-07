@@ -47,7 +47,6 @@ import { findAddressesForPostcode } from 'components/subscriptionCheckouts/addre
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import { emailRegexPattern } from 'helpers/forms/formValidation';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
 	RegularPaymentRequest,
@@ -197,6 +196,20 @@ const query = {
 			? parseFloat(searchParamsPrice)
 			: undefined,
 };
+
+function preventDefaultValidityMessage(currentTarget: HTMLInputElement) {
+	/**
+	 * Prevents default message showing, but maintains the default validation methods occuring
+	 * such as onInvalid.
+	 */
+	// 3. Reset the value from previous invalid events
+	currentTarget.setCustomValidity('');
+	// 1. Check the validity of the input
+	if (!currentTarget.validity.valid) {
+		// 2. setCustomValidity to " " which avoids the browser's default message
+		currentTarget.setCustomValidity(' ');
+	}
+}
 
 type Props = {
 	geoId: GeoId;
@@ -396,8 +409,11 @@ function CheckoutComponent({ geoId }: Props) {
 
 	/** Personal details */
 	const [firstName, setFirstName] = useState('');
+	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastName, setLastName] = useState('');
+	const [lastNameError, setLastNameError] = useState<string>();
 	const [email, setEmail] = useState('');
+	const [emailError, setEmailError] = useState<string>();
 
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
@@ -675,10 +691,25 @@ function CheckoutComponent({ geoId }: Props) {
 												type="email"
 												autoComplete="email"
 												onChange={(event) => setEmail(event.target.value)}
-												pattern={emailRegexPattern}
-												error={undefined}
 												disabled={isSignedIn}
 												name="email"
+												required
+												error={emailError}
+												onInvalid={(event) => {
+													preventDefaultValidityMessage(event.currentTarget);
+													const validityState = event.currentTarget.validity;
+													if (validityState.valid) {
+														setEmailError(undefined);
+													} else {
+														if (validityState.valueMissing) {
+															setEmailError('Please enter your email address.');
+														} else {
+															setEmailError(
+																'Please enter a valid email address.',
+															);
+														}
+													}
+												}}
 											/>
 										</div>
 
@@ -694,9 +725,26 @@ function CheckoutComponent({ geoId }: Props) {
 													autoComplete="given-name"
 													autoCapitalize="words"
 													onChange={(event) => setFirstName(event.target.value)}
-													error={undefined}
 													name="firstName"
 													required
+													error={firstNameError}
+													onInvalid={(event) => {
+														preventDefaultValidityMessage(event.currentTarget);
+														const validityState = event.currentTarget.validity;
+														if (validityState.valid) {
+															setFirstNameError(undefined);
+														} else {
+															if (validityState.valueMissing) {
+																setFirstNameError(
+																	'Please enter your first name.',
+																);
+															} else {
+																setFirstNameError(
+																	'Please enter a valid first name.',
+																);
+															}
+														}
+													}}
 												/>
 											</div>
 											<div>
@@ -708,9 +756,26 @@ function CheckoutComponent({ geoId }: Props) {
 													autoComplete="family-name"
 													autoCapitalize="words"
 													onChange={(event) => setLastName(event.target.value)}
-													error={undefined}
 													name="lastName"
 													required
+													error={lastNameError}
+													onInvalid={(event) => {
+														preventDefaultValidityMessage(event.currentTarget);
+														const validityState = event.currentTarget.validity;
+														if (validityState.valid) {
+															setLastNameError(undefined);
+														} else {
+															if (validityState.valueMissing) {
+																setLastNameError(
+																	'Please enter your last name.',
+																);
+															} else {
+																setLastNameError(
+																	'Please enter a valid last name.',
+																);
+															}
+														}
+													}}
 												/>
 											</div>
 										</>
