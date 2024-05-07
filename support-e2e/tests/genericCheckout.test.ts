@@ -121,8 +121,9 @@ test.describe('Flexible Checkout', () => {
 				testDetails.paymentType === 'DirectDebit'
 			) {
 				await checkRecaptcha(page);
-				await page.getByText('Pay now').click();
+				await page.getByRole('button', { name: 'Pay now' }).click();
 			}
+
 			await expect(page).toHaveURL(
 				`/${testDetails.country?.toLowerCase() || 'uk'}/thank-you`,
 				{ timeout: 600000 },

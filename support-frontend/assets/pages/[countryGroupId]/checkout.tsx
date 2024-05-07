@@ -353,6 +353,12 @@ function CheckoutComponent({ geoId }: Props) {
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
 	const [stripeClientSecret, setStripeClientSecret] = useState<string>();
+	/**
+	 * flag to ensure the (successful) recaptcha token has been fully passed to Stripe
+	 * used to disable/set 'Loading...' message on Pay Now button (Playwright test use)
+	 */
+	const [stripeClientSecretInProgress, setStripeClientSecretInProgress] =
+		useState(false);
 
 	/**
 	 * Payment method: PayPal
@@ -891,6 +897,7 @@ function CheckoutComponent({ geoId }: Props) {
 														// We could change the parents type to Promise and uses await here, but that has
 														// a lot of refactoring with not too much gain
 														onRecaptchaCompleted={(token) => {
+															setStripeClientSecretInProgress(true);
 															setRecaptchaToken(token);
 															void fetch(
 																'/stripe/create-setup-intent/recaptcha',
@@ -907,12 +914,13 @@ function CheckoutComponent({ geoId }: Props) {
 																},
 															)
 																.then((resp) => resp.json())
-																.then((json) =>
+																.then((json) => {
 																	setStripeClientSecret(
 																		(json as Record<string, string>)
 																			.client_secret,
-																	),
-																);
+																	);
+																	setStripeClientSecretInProgress(false);
+																});
 														}}
 														onRecaptchaExpired={() => {
 															// no-op
@@ -966,12 +974,15 @@ function CheckoutComponent({ geoId }: Props) {
 
 							{paymentMethod !== 'PayPal' && (
 								<DefaultPaymentButton
-									buttonText="Pay now"
+									buttonText={
+										stripeClientSecretInProgress ? 'Loading...' : 'Pay now'
+									}
 									onClick={() => {
 										// no-op
 										// This isn't needed because we are now using the form onSubmit handler
 									}}
 									type="submit"
+									disabled={stripeClientSecretInProgress}
 								/>
 							)}
 							{payPalLoaded && paymentMethod === 'PayPal' && (
