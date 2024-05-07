@@ -3,6 +3,7 @@ import * as cookie from 'helpers/storage/cookie';
 import { ProductCheckout } from 'helpers/tracking/behaviour';
 
 const COOKIE_EXPIRY_DAYS = 3;
+const ABANDONED_BASKET_COOKIE_NAME = 'GU_CO_INCOMPLETE';
 
 export function useAbandonedBasketCookie(
 	product: ProductCheckout,
@@ -19,7 +20,7 @@ export function useAbandonedBasketCookie(
 
 	useEffect(() => {
 		cookie.set(
-			'GU_CO_INCOMPLETE',
+			ABANDONED_BASKET_COOKIE_NAME,
 			JSON.stringify(abandonedBasket),
 			COOKIE_EXPIRY_DAYS,
 		);
