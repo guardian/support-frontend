@@ -34,7 +34,7 @@ const testDetails: TestDetails[] = [
 		product: 'Contribution',
 		ratePlan: 'Monthly',
 		paymentType: 'DirectDebit',
-		price: 10,
+		price: 9,
 	},
 	{
 		product: 'Contribution',
