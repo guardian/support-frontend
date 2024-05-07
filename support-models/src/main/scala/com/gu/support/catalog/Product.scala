@@ -61,6 +61,10 @@ case object SupporterPlus extends Product {
       PROD -> List(
         productRatePlan("8a128ed885fc6ded018602296ace3eb8", Monthly),
         productRatePlan("8a128ed885fc6ded01860228f77e3d5a", Annual),
+        productRatePlan("8a1288a38f518d01018f529a04443172", Monthly, Domestic),
+        productRatePlan("8a1282048f518d08018f529ead0f3d91", Annual, Domestic),
+        productRatePlan("8a1292628f51a923018f52a324e45710", Annual, RestOfWorld),
+        productRatePlan("8a1281f38f518d11018f52a599806a65", Monthly, RestOfWorld),
       ),
       CODE -> List(
         productRatePlan("8ad08cbd8586721c01858804e3275376", Monthly),
