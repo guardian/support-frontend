@@ -191,16 +191,16 @@ const discountSummaryCopy = (
 const getTierCardCtaCopy = (
 	abParticipations: Participations,
 	cardTier: 1 | 2 | 3,
-) => {
-	const getTierCardCtaCopyCohort = abParticipations.getTierCardCtaCopy;
+): string => {
+	const tierCardCtaCopyCohort = abParticipations.tierCardCtaCopy;
 
-	if (getTierCardCtaCopyCohort === 'v1') {
-		return 'Continue';
+	if (tierCardCtaCopyCohort === 'v1') {
+		return 'Select';
 	}
 
 	if (
-		getTierCardCtaCopyCohort === 'v2' ||
-		(getTierCardCtaCopyCohort === 'v3' && cardTier === 1)
+		tierCardCtaCopyCohort === 'v2' ||
+		(tierCardCtaCopyCohort === 'v3' && cardTier === 1)
 	) {
 		return 'Support';
 	}

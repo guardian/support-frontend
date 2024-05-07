@@ -129,13 +129,13 @@ export const tests: Tests = {
 				id: 'control',
 			},
 			{
-				id: 'variantA',
+				id: 'v1',
 			},
 			{
-				id: 'variantB',
+				id: 'v2',
 			},
 			{
-				id: 'variantC',
+				id: 'v3',
 			},
 		],
 		audiences: {
