@@ -564,7 +564,7 @@ export function ThreeTierLanding(): JSX.Element {
 			tier3Pricing,
 			promotion?.discount?.amount,
 		),
-		ctaCopy: getThreeTierCardCtaCopy(abParticipations, 1),
+		ctaCopy: getThreeTierCardCtaCopy(abParticipations, 3),
 	};
 
 	return (
