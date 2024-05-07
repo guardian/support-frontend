@@ -11,7 +11,6 @@ import {
 	LinkButton,
 } from '@guardian/source-react-components';
 import { CheckList } from 'components/checkList/checkList';
-import type { Participations } from 'helpers/abTests/abtest';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -24,7 +23,6 @@ import {
 } from 'helpers/internationalisation/currency';
 import type { ProductDescription } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import { recurringContributionPeriodMap } from 'helpers/utilities/timePeriods';
 import { ThreeTierLozenge } from './threeTierLozenge';
 
@@ -48,6 +46,7 @@ export type ThreeTierCardProps = {
 	productDescription: ProductDescription;
 	price: number;
 	promotion?: Promotion;
+	ctaCopy: string;
 };
 
 const container = (
@@ -188,26 +187,6 @@ const discountSummaryCopy = (
 	}, then ${formattedPrice}/${period}${'*'.repeat(promoCount)}`;
 };
 
-const getTierCardCtaCopy = (
-	abParticipations: Participations,
-	cardTier: 1 | 2 | 3,
-): string => {
-	const tierCardCtaCopyCohort = abParticipations.tierCardCtaCopy;
-
-	if (tierCardCtaCopyCohort === 'v1') {
-		return 'Select';
-	}
-
-	if (
-		tierCardCtaCopyCohort === 'v2' ||
-		(tierCardCtaCopyCohort === 'v3' && cardTier === 1)
-	) {
-		return 'Support';
-	}
-
-	return 'Subscribe';
-};
-
 export function ThreeTierCard({
 	cardTier,
 	promoCount,
@@ -221,6 +200,7 @@ export function ThreeTierCard({
 	productDescription,
 	price,
 	promotion,
+	ctaCopy,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId];
 	const period = recurringContributionPeriodMap[paymentFrequency];
@@ -228,9 +208,6 @@ export function ThreeTierCard({
 	const quantumMetricButtonRef = `tier-${cardTier}-button`;
 	const { label, benefits, benefitsSummary, offers, offersSummary } =
 		productDescription;
-	const { abParticipations } = useContributionsSelector(
-		(state) => state.common,
-	);
 
 	return (
 		<section
@@ -278,7 +255,7 @@ export function ThreeTierCard({
 					}}
 					data-qm-trackable={quantumMetricButtonRef}
 				>
-					{getTierCardCtaCopy(abParticipations, cardTier)}
+					{ctaCopy}
 				</LinkButton>
 			</ThemeProvider>
 
