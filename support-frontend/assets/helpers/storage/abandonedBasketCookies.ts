@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import * as cookie from 'helpers/storage/cookie';
 
+const COOKIE_EXPIRY_DAYS = 3;
+
 export function useAbandonedBasketCookie(
 	product: string,
 	amount: number,
 	billingPeriod: string,
 	region: string,
-	cookieExpiryDays: number,
 ) {
 	const abandonedBasket = {
 		product,
@@ -19,7 +20,7 @@ export function useAbandonedBasketCookie(
 		cookie.set(
 			'GU_CO_INCOMPLETE',
 			JSON.stringify(abandonedBasket),
-			cookieExpiryDays,
+			COOKIE_EXPIRY_DAYS,
 		);
 	}, []);
 }
