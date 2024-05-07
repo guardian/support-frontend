@@ -55,7 +55,7 @@ export function SupporterPlusCheckout({
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const country = countryGroups[countryGroupId].supportInternationalisationId;
+	const supportInternationalisationId = countryGroups[countryGroupId].supportInternationalisationId;
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
 	const amountBeforeAmendments = useContributionsSelector(
@@ -77,7 +77,7 @@ export function SupporterPlusCheckout({
 		product,
 		amount,
 		contributionType,
-		country,
+		supportInternationalisationId,
 	);
 
 	const changeButton = (
@@ -94,7 +94,7 @@ export function SupporterPlusCheckout({
 					}),
 				);
 				dispatch(resetValidation());
-				const destination = `/${country}/contribute`;
+				const destination = `/${supportInternationalisationId}/contribute`;
 				navigateWithPageView(navigate, destination, abParticipations);
 			}}
 		>

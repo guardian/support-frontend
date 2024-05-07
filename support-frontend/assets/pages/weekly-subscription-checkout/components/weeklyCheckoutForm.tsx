@@ -257,14 +257,14 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		  }
 		: undefined;
 
-	const country =
+	const supportInternationalisationId =
 		countryGroups[props.countryGroupId].supportInternationalisationId;
 
 	useAbandonedBasketCookie(
 		props.product,
 		props.price.price,
 		tierBillingPeriodName,
-		country,
+		supportInternationalisationId,
 	);
 
 	return (
