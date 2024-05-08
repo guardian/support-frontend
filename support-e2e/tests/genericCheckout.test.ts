@@ -27,12 +27,6 @@ const testDetails: TestDetails[] = [
 	{
 		product: 'Contribution',
 		ratePlan: 'Monthly',
-		paymentType: 'Stripe',
-		price: 3,
-	},
-	{
-		product: 'Contribution',
-		ratePlan: 'Monthly',
 		paymentType: 'DirectDebit',
 		price: 9,
 	},
@@ -46,15 +40,9 @@ const testDetails: TestDetails[] = [
 	{
 		product: 'SupporterPlus',
 		ratePlan: 'Monthly',
-		paymentType: 'Stripe',
+		paymentType: 'PayPal',
 		price: 17,
 		country: 'AU',
-	},
-	{
-		product: 'SupporterPlus',
-		ratePlan: 'Annual',
-		paymentType: 'DirectDebit',
-		price: 95,
 	},
 	{
 		product: 'SupporterPlus',

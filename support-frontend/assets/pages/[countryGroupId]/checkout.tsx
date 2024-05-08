@@ -987,6 +987,7 @@ function CheckoutComponent({ geoId }: Props) {
 											// This isn't needed because we are now using the form onSubmit handler
 										}}
 										type="submit"
+										disabled={stripeClientSecretInProgress}
 									/>
 								)}
 								{payPalLoaded && paymentMethod === 'PayPal' && (
