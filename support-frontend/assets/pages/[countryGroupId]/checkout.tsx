@@ -694,6 +694,7 @@ function CheckoutComponent({ geoId }: Props) {
 												disabled={isSignedIn}
 												name="email"
 												required
+												maxLength={80}
 												error={emailError}
 												onInvalid={(event) => {
 													preventDefaultValidityMessage(event.currentTarget);
@@ -727,6 +728,7 @@ function CheckoutComponent({ geoId }: Props) {
 													onChange={(event) => setFirstName(event.target.value)}
 													name="firstName"
 													required
+													maxLength={40}
 													error={firstNameError}
 													onInvalid={(event) => {
 														preventDefaultValidityMessage(event.currentTarget);
@@ -758,6 +760,7 @@ function CheckoutComponent({ geoId }: Props) {
 													onChange={(event) => setLastName(event.target.value)}
 													name="lastName"
 													required
+													maxLength={40}
 													error={lastNameError}
 													onInvalid={(event) => {
 														preventDefaultValidityMessage(event.currentTarget);
