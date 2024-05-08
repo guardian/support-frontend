@@ -21,6 +21,7 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { OfferBook } from 'components/offer/offer';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
+import type { Participations } from 'helpers/abTests/abtest';
 import type {
 	ContributionType,
 	RegularContributionType,
@@ -301,6 +302,26 @@ function getPlanCost(
 	};
 }
 
+const getThreeTierCardCtaCopy = (
+	abParticipations: Participations,
+	cardTier: 1 | 2 | 3,
+): string => {
+	const tierCardCtaCopyCohort = abParticipations.tierCardCtaCopy;
+
+	if (tierCardCtaCopyCohort === 'v1') {
+		return 'Select';
+	}
+
+	if (
+		tierCardCtaCopyCohort === 'v2' ||
+		(tierCardCtaCopyCohort === 'v3' && cardTier === 1)
+	) {
+		return 'Support';
+	}
+
+	return 'Subscribe';
+};
+
 export function ThreeTierLanding(): JSX.Element {
 	const dispatch = useContributionsDispatch();
 	const navigate = useNavigate();
@@ -479,6 +500,7 @@ export function ThreeTierLanding(): JSX.Element {
 		link: useGenericCheckout ? tier1GenericCheckoutLink : tier1Link,
 		isUserSelected: isCardUserSelected(recurringAmount),
 		isRecommended: false,
+		ctaCopy: getThreeTierCardCtaCopy(abParticipations, 1),
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -507,6 +529,7 @@ export function ThreeTierLanding(): JSX.Element {
 			tier2Pricing,
 			promotion?.discount?.amount,
 		),
+		ctaCopy: getThreeTierCardCtaCopy(abParticipations, 2),
 	};
 
 	/**
@@ -541,6 +564,7 @@ export function ThreeTierLanding(): JSX.Element {
 			tier3Pricing,
 			promotion?.discount?.amount,
 		),
+		ctaCopy: getThreeTierCardCtaCopy(abParticipations, 3),
 	};
 
 	return (
