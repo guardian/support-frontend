@@ -9,8 +9,8 @@ You can view the action [here](../.github/workflows/playwright.yaml).
 Scripts to run the tests are present in the [package.json](package.json) file. Allowing you to also run the tests locally. Three ways of running the tests have been setup:
 
 - `test-browserstack` Runs the tests via BrowserStack Automate against the production site (https://support.theguardian.com/).
-- `local-test` Runs the tests via the Playwright ui against a local running version of the site (https://support.thegulocal.com/).
-- `prod-test` Runs the tests via the Playwright ui against the production site (https://support.theguardian.com/).
+- `test-local` Runs the tests via the Playwright ui against a local running version of the site (https://support.thegulocal.com/).
+- `test-prod` Runs the tests via the Playwright ui against the production site (https://support.theguardian.com/).
 
 It should also be possible to run the tests via BrowserStack Automate against a local running version of the site if you have local testing setup in your BrowserStack account and amend/create a new test configuration file.
 
