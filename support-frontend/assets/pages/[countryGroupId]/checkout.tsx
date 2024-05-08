@@ -979,9 +979,9 @@ function CheckoutComponent({ geoId }: Props) {
 							>
 								{paymentMethod !== 'PayPal' && (
 									<DefaultPaymentButton
-                    buttonText={
-										  stripeClientSecretInProgress ? 'Loading...' : 'Pay now'
-									  }
+										buttonText={
+											stripeClientSecretInProgress ? 'Loading...' : 'Pay now'
+										}
 										onClick={() => {
 											// no-op
 											// This isn't needed because we are now using the form onSubmit handler
