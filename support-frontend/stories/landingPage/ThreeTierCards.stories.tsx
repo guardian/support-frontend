@@ -40,7 +40,7 @@ function Template(args: ThreeTierCardsProps) {
 	`;
 	return (
 		<div css={innerContentContainer}>
-			<ThreeTierCards {...args} />;
+			<ThreeTierCards {...args} />
 		</div>
 	);
 }
