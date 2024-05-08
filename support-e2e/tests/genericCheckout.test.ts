@@ -67,7 +67,7 @@ const testDetails: TestDetails[] = [
 
 afterEachTasks(test);
 
-test.describe('Flexible Checkout', () => {
+test.describe('Generic Checkout', () => {
 	testDetails.forEach((testDetails) => {
 		test(`${testDetails.product} ${testDetails.ratePlan} with ${
 			testDetails.paymentType
