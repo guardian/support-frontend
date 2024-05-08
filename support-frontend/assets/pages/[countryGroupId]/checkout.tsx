@@ -197,6 +197,12 @@ const query = {
 			: undefined,
 };
 
+/** Form Validation */
+/**
+ * This uses a Unicode character class escape
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape
+ */
+const doesNotContainEmojiPattern = '^[^\\p{Emoji_Presentation}]+$';
 function preventDefaultValidityMessage(currentTarget: HTMLInputElement) {
 	/**
 	 * Prevents default message showing, but maintains the default validation methods occuring
@@ -724,6 +730,7 @@ function CheckoutComponent({ geoId }: Props) {
 													required
 													maxLength={40}
 													error={firstNameError}
+													pattern={doesNotContainEmojiPattern}
 													onInvalid={(event) => {
 														preventDefaultValidityMessage(event.currentTarget);
 														const validityState = event.currentTarget.validity;
@@ -756,6 +763,7 @@ function CheckoutComponent({ geoId }: Props) {
 													required
 													maxLength={40}
 													error={lastNameError}
+													pattern={doesNotContainEmojiPattern}
 													onInvalid={(event) => {
 														preventDefaultValidityMessage(event.currentTarget);
 														const validityState = event.currentTarget.validity;
