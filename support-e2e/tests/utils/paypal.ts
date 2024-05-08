@@ -12,19 +12,36 @@ export const fillInPayPalDetails = async (page: Page) => {
 		paypalUsernamePrefixes[
 			Math.floor(Math.random() * paypalUsernamePrefixes.length)
 		];
-	await page
-		.locator('#email')
-		.fill(`${[paypalUsernamePrefix]}@personal.example.com`);
+
+	const tryAgainLink = page.getByText('Please try again');
+
+	if (await tryAgainLink.isVisible()) {
+		await tryAgainLink.click();
+	}
+
+	const emailInput = page.locator('#email');
+
+	await emailInput.fill(`${[paypalUsernamePrefix]}@personal.example.com`);
+
 	const nextButton = page.locator('#btnNext');
+
 	if (await nextButton.isVisible()) {
 		await nextButton.click();
 	}
-	await page
-		.locator('#password')
-		.fill(`${paypalUsernamePrefix}-${process.env.PAYPAL_TEST_PASSWORD}`);
+
+	const passwordInput = page.locator('#password');
+
+	await passwordInput.fill(
+		`${paypalUsernamePrefix}-${process.env.PAYPAL_TEST_PASSWORD}`,
+	);
+
 	const loginButton = page.locator('#btnLogin');
+
 	if (await loginButton.isVisible()) {
 		await loginButton.click();
 	}
-	await page.locator('#payment-submit-btn').click();
+
+	const submitButton = page.locator('#payment-submit-btn');
+
+	await submitButton.click();
 };
