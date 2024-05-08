@@ -12,19 +12,16 @@ test('Should show a dismissable consent management banner', async ({
 	);
 
 	await expect(
-		consentManagementBanner
-			// We use this role check as this text exists in the legal copy too
-			.getByRole('button')
-			.getByText('No, thank you'),
+		consentManagementBanner.getByRole('button', { name: 'No' }),
 	).toBeVisible({ timeout: 50000 });
 	await expect(
-		consentManagementBanner.getByText('Yes, I’m happy'),
+		consentManagementBanner.getByRole('button', { name: 'Yes' }),
 	).toBeVisible();
-	await consentManagementBanner.getByText('Yes, I’m happy').click();
+	await consentManagementBanner.getByRole('button', { name: 'Yes' }).click();
 	await expect(
-		consentManagementBanner.getByText('No, thank you'),
+		consentManagementBanner.getByRole('button', { name: 'No' }),
 	).not.toBeVisible();
 	await expect(
-		consentManagementBanner.getByText('Yes, I’m happy'),
+		consentManagementBanner.getByRole('button', { name: 'Yes' }),
 	).not.toBeVisible();
 });
