@@ -257,8 +257,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 		  }
 		: undefined;
 
-	const supportInternationalisationId =
-		countryGroups[props.countryGroupId].supportInternationalisationId;
+	const { supportInternationalisationId } = countryGroups[props.countryGroupId];
 
 	useAbandonedBasketCookie(
 		props.product,
