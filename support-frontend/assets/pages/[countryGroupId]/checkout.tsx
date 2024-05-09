@@ -506,6 +506,8 @@ function CheckoutComponent({ geoId }: Props) {
 				: deliveryAddress;
 		} else {
 			billingAddress = {
+				state: formData.get('billing-state') as string,
+				postCode: formData.get('billing-postcode') as string,
 				country: formData.get('billing-country') as IsoCountry,
 			};
 			deliveryAddress = undefined;
@@ -621,8 +623,6 @@ function CheckoutComponent({ geoId }: Props) {
 			setIsProcessingPayment(false);
 		}
 	};
-	console.log('checkout.billingState:', billingState);
-	console.log('checkout.billingPostcode:', billingPostcode);
 	return (
 		<PageScaffold
 			header={<Header></Header>}
@@ -805,7 +805,7 @@ function CheckoutComponent({ geoId }: Props) {
 											<div>
 												<TextInput
 													id="zipCode"
-													name="zip-code"
+													name="billing-postcode"
 													label="ZIP code"
 													value={billingPostcode}
 													error={undefined}
