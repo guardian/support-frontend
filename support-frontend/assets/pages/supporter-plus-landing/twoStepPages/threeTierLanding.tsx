@@ -490,7 +490,7 @@ export function ThreeTierLanding(): JSX.Element {
 	const tier1GenericCheckoutUrlParams = new URLSearchParams({
 		product: 'Contribution',
 		ratePlan: selectedContributionRatePlan,
-		amount: recurringAmount.toString(),
+		price: recurringAmount.toString(),
 	});
 	const tier1GenericCheckoutLink = `checkout?${tier1GenericCheckoutUrlParams.toString()}`;
 
