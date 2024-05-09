@@ -397,6 +397,16 @@ function CheckoutComponent({ geoId }: Props) {
 	 */
 	const [payPalLoaded, setPayPalLoaded] = useState(false);
 	const [payPalBAID, setPayPalBAID] = useState('');
+	/**
+	 * PayPalBAID forces formOnSubmit
+	 */
+	useEffect(() => {
+		if (payPalBAID !== '') {
+			// TODO - this might not meet our browser compatibility requirements (Safari)
+			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+			formRef.current?.requestSubmit();
+		}
+	}, [payPalBAID]);
 	useEffect(() => {
 		if (paymentMethod === 'PayPal' && !payPalLoaded) {
 			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
@@ -542,7 +552,7 @@ function CheckoutComponent({ geoId }: Props) {
 			paymentFields = {
 				recaptchaToken: '',
 				paymentMethod: 'PayPal',
-				baid: formData.get('payPalBAID') as string,
+				baid: payPalBAID,
 			};
 		}
 
@@ -1184,9 +1194,6 @@ function CheckoutComponent({ geoId }: Props) {
 													.then((response) => response.json())
 													.then((json) => {
 														setPayPalBAID((json as { baid: string }).baid);
-														// TODO - this might not meet our browser compatibility requirements (Safari)
-														// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
-														formRef.current?.requestSubmit();
 													});
 											}}
 										/>
