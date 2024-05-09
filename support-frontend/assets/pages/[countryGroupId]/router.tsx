@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { renderPage } from 'helpers/rendering/render';
 import { geoIds } from 'pages/geoIdConfig';
 import { Checkout } from './checkout';
+import { ThankYou } from './thank-you';
 
 const router = createBrowserRouter(
 	geoIds.flatMap((geoId) => [
@@ -11,7 +12,7 @@ const router = createBrowserRouter(
 		},
 		{
 			path: `/${geoId}/thank-you`,
-			element: <div>Thanks!</div>,
+			element: <ThankYou geoId={geoId} />,
 		},
 	]),
 );

@@ -46,6 +46,7 @@ import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/addr
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
+import type { ErrorReason } from 'helpers/forms/errorReasons';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
 	RegularPaymentRequest,
@@ -78,6 +79,8 @@ import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
+import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
 /** App config - this is config that should persist throughout the app */
 validateWindowGuardian(window.guardian);
@@ -130,26 +133,36 @@ const legend = css`
 	}
 `;
 
-const processPayment = (statusResponse: StatusResponse, geoId: GeoId) => {
-	const { trackingUri, status, failureReason } = statusResponse;
-	const jobId = new URL(trackingUri).searchParams.get('jobId') ?? '';
-	if (status === 'success') {
-		window.location.href = `/${geoId}/thank-you?jobId=${jobId}`;
-	} else if (status === 'failure') {
-		console.error(failureReason);
-	} else {
-		setTimeout(() => {
-			void fetch(trackingUri, {
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			})
-				.then((response) => response.json())
-				.then((json) => {
-					void processPayment(json as StatusResponse, geoId);
-				});
-		}, 1000);
-	}
+/**
+ * This method removes the `pending` state by retrying,
+ * resolving on success or failure only.
+ */
+const processPayment = async (
+	statusResponse: StatusResponse,
+	geoId: GeoId,
+): Promise<
+	{ status: 'success' } | { status: 'failure'; failureReason?: ErrorReason }
+> => {
+	return new Promise((resolve) => {
+		const { trackingUri, status, failureReason } = statusResponse;
+		if (status === 'success') {
+			resolve({ status: 'success' });
+		} else if (status === 'failure') {
+			resolve({ status, failureReason });
+		} else {
+			setTimeout(() => {
+				void fetch(trackingUri, {
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				})
+					.then((response) => response.json())
+					.then((json) => {
+						resolve(processPayment(json as StatusResponse, geoId));
+					});
+			}, 1000);
+		}
+	});
 };
 
 /** QueryString - this is setup specifically for the checkout page */
@@ -171,6 +184,8 @@ type Props = {
 	geoId: GeoId;
 };
 function CheckoutComponent({ geoId }: Props) {
+	/** we unset any previous orders that have been made */
+	unsetThankYouOrder();
 	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
 	const productId = query.product in productCatalog ? query.product : undefined;
 	const product = productId ? productCatalog[query.product] : undefined;
@@ -247,6 +262,7 @@ function CheckoutComponent({ geoId }: Props) {
 	if (
 		/** These are all the things we need to parse the page */
 		!(
+			productId &&
 			product &&
 			productDescription &&
 			ratePlan &&
@@ -491,6 +507,7 @@ function CheckoutComponent({ geoId }: Props) {
 
 		if (paymentMethod === 'DirectDebit') {
 			paymentFields = {
+				paymentMethod: 'DirectDebit',
 				accountHolderName: formData.get('accountHolderName') as string,
 				accountNumber: formData.get('accountNumber') as string,
 				sortCode: formData.get('sortCode') as string,
@@ -533,7 +550,27 @@ function CheckoutComponent({ geoId }: Props) {
 				.then((response) => response.json())
 				.then((json) => json as StatusResponse);
 
-			processPayment(createSubscriptionResult, geoId);
+			const processPaymentResponse = await processPayment(
+				createSubscriptionResult,
+				geoId,
+			);
+			if (processPaymentResponse.status === 'success') {
+				const order = {
+					firstName: personalData.firstName,
+					price: price,
+					product: productId,
+					ratePlan: query.ratePlan,
+					paymentMethod: paymentMethod as string,
+				};
+				setThankYouOrder(order);
+				window.location.href = `/${geoId}/thank-you`;
+			} else {
+				// TODO - error handling
+				console.error(
+					'processPaymentResponse error:',
+					processPaymentResponse.failureReason,
+				);
+			}
 		} else {
 			setIsProcessingPayment(false);
 		}
@@ -927,112 +964,135 @@ function CheckoutComponent({ geoId }: Props) {
 									)}
 								</BoxContents>
 							</Box>
-
-							{paymentMethod !== 'PayPal' && (
-								<DefaultPaymentButton
-									buttonText="Pay now"
-									onClick={() => {
-										// no-op
-										// This isn't needed because we are now using the form onSubmit handler
-									}}
-									type="submit"
-								/>
-							)}
-							{payPalLoaded && paymentMethod === 'PayPal' && (
-								<>
-									<input type="hidden" name="payPalBAID" value={payPalBAID} />
-
-									<PayPalButton
-										env={isTestUser ? 'sandbox' : 'production'}
-										style={{
-											color: 'blue',
-											size: 'responsive',
-											label: 'pay',
-											tagline: false,
-											layout: 'horizontal',
-											fundingicons: false,
+							<div
+								css={css`
+									margin-bottom: ${space[2]}px;
+								`}
+							>
+								{paymentMethod !== 'PayPal' && (
+									<DefaultPaymentButton
+										buttonText="Pay now"
+										onClick={() => {
+											// no-op
+											// This isn't needed because we are now using the form onSubmit handler
 										}}
-										commit={true}
-										validate={({ disable, enable }) => {
-											/** We run this initially to set the button to the correct state */
-											const valid = formRef.current?.checkValidity();
-											if (valid) {
-												enable();
-											} else {
-												disable();
-											}
+										type="submit"
+									/>
+								)}
+								{payPalLoaded && paymentMethod === 'PayPal' && (
+									<>
+										<input type="hidden" name="payPalBAID" value={payPalBAID} />
 
-											/** And then run it on form change */
-											formRef.current?.addEventListener('change', (event) => {
-												const valid =
-													// TODO - we shouldn't have to type infer here
-													(
-														event.currentTarget as HTMLFormElement
-													).checkValidity();
+										<PayPalButton
+											env={isTestUser ? 'sandbox' : 'production'}
+											style={{
+												color: 'blue',
+												size: 'responsive',
+												label: 'pay',
+												tagline: false,
+												layout: 'horizontal',
+												fundingicons: false,
+											}}
+											commit={true}
+											validate={({ disable, enable }) => {
+												/** We run this initially to set the button to the correct state */
+												const valid = formRef.current?.checkValidity();
 												if (valid) {
 													enable();
 												} else {
 													disable();
 												}
-											});
-										}}
-										funding={{
-											disallowed: [window.paypal.FUNDING.CREDIT],
-										}}
-										onClick={() => {
-											// TODO
-										}}
-										/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
-										payment={(resolve, reject) => {
-											const requestBody = {
-												amount: price,
-												billingPeriod: ratePlanDescription.billingPeriod,
-												currency: currencyKey,
-												requireShippingAddress: false,
-											};
-											void fetch('/paypal/setup-payment', {
-												credentials: 'include',
-												method: 'POST',
-												headers: {
-													'Content-Type': 'application/json',
-													'Csrf-Token': csrf,
-												},
-												body: JSON.stringify(requestBody),
-											})
-												.then((response) => response.json())
-												.then((json) => {
-													resolve((json as { token: string }).token);
+
+												/** And then run it on form change */
+												formRef.current?.addEventListener('change', (event) => {
+													const valid =
+														// TODO - we shouldn't have to type infer here
+														(
+															event.currentTarget as HTMLFormElement
+														).checkValidity();
+													if (valid) {
+														enable();
+													} else {
+														disable();
+													}
+												});
+											}}
+											funding={{
+												disallowed: [window.paypal.FUNDING.CREDIT],
+											}}
+											onClick={() => {
+												// TODO
+											}}
+											/** the order is Button.payment(opens PayPal window).then(Button.onAuthorize) */
+											payment={(resolve, reject) => {
+												const requestBody = {
+													amount: price,
+													billingPeriod: ratePlanDescription.billingPeriod,
+													currency: currencyKey,
+													requireShippingAddress: false,
+												};
+												void fetch('/paypal/setup-payment', {
+													credentials: 'include',
+													method: 'POST',
+													headers: {
+														'Content-Type': 'application/json',
+														'Csrf-Token': csrf,
+													},
+													body: JSON.stringify(requestBody),
 												})
-												.catch((error) => {
-													console.error(error);
-													reject(error as Error);
-												});
-										}}
-										onAuthorize={(payPalData: Record<string, unknown>) => {
-											const body = {
-												token: payPalData.paymentToken,
-											};
-											void fetch('/paypal/one-click-checkout', {
-												credentials: 'include',
-												method: 'POST',
-												headers: {
-													'Content-Type': 'application/json',
-													'Csrf-Token': csrf,
-												},
-												body: JSON.stringify(body),
-											})
-												.then((response) => response.json())
-												.then((json) => {
-													setPayPalBAID((json as { baid: string }).baid);
-													// TODO - this might not meet our browser compatibility requirements (Safari)
-													// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
-													formRef.current?.requestSubmit();
-												});
-										}}
-									/>
-								</>
-							)}
+													.then((response) => response.json())
+													.then((json) => {
+														resolve((json as { token: string }).token);
+													})
+													.catch((error) => {
+														console.error(error);
+														reject(error as Error);
+													});
+											}}
+											onAuthorize={(payPalData: Record<string, unknown>) => {
+												const body = {
+													token: payPalData.paymentToken,
+												};
+												void fetch('/paypal/one-click-checkout', {
+													credentials: 'include',
+													method: 'POST',
+													headers: {
+														'Content-Type': 'application/json',
+														'Csrf-Token': csrf,
+													},
+													body: JSON.stringify(body),
+												})
+													.then((response) => response.json())
+													.then((json) => {
+														setPayPalBAID((json as { baid: string }).baid);
+														// TODO - this might not meet our browser compatibility requirements (Safari)
+														// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+														formRef.current?.requestSubmit();
+													});
+											}}
+										/>
+									</>
+								)}
+							</div>
 						</form>
+						<PaymentTsAndCs
+							mobileTheme={'light'}
+							countryGroupId={countryGroupId}
+							contributionType={
+								productFields.billingPeriod === 'Monthly'
+									? 'MONTHLY'
+									: productFields.billingPeriod === 'Annual'
+									? 'ANNUAL'
+									: 'ONE_OFF'
+							}
+							currency={currencyKey}
+							amount={price}
+							amountIsAboveThreshold={
+								productDescription.label === 'All-access digital'
+							}
+							productNameAboveThreshold={productDescription.label}
+							promotion={undefined} // TO DO : future support promotions
+						/>
 						<GuardianTsAndCs
 							mobileTheme={'light'}
 							displayPatronsCheckout={false}
