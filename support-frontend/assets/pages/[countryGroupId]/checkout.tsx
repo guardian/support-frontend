@@ -89,8 +89,7 @@ const isTestUser = true as boolean;
 const csrf = window.guardian.csrf.token;
 
 const isSignedIn = !!get('GU_U');
-const countryId: IsoCountry =
-	CountryHelper.fromString(get('GU_country') ?? 'GB') ?? 'GB';
+const countryId: IsoCountry = CountryHelper.detect();
 
 const productCatalog = window.guardian.productCatalog;
 
