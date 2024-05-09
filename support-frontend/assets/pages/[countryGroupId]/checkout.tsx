@@ -621,7 +621,8 @@ function CheckoutComponent({ geoId }: Props) {
 			setIsProcessingPayment(false);
 		}
 	};
-
+	console.log('checkout.billingState:', billingState);
+	console.log('checkout.billingPostcode:', billingPostcode);
 	return (
 		<PageScaffold
 			header={<Header></Header>}
@@ -794,10 +795,8 @@ function CheckoutComponent({ geoId }: Props) {
 										{showStateSelect && (
 											<StateSelect
 												countryId={countryId}
-												state={'STATE'}
-												onStateChange={() => {
-													//  no-op
-												}}
+												state={billingState}
+												onStateChange={setBillingState}
 												error={undefined}
 											/>
 										)}
@@ -808,11 +807,11 @@ function CheckoutComponent({ geoId }: Props) {
 													id="zipCode"
 													name="zip-code"
 													label="ZIP code"
-													value={''}
+													value={billingPostcode}
 													error={undefined}
-													onChange={() => {
-														//  no-op
-													}}
+													onChange={(event) =>
+														setBillingPostcode(event.target.value)
+													}
 												/>
 											</div>
 										)}
