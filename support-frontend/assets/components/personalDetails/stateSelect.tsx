@@ -46,6 +46,7 @@ export function StateSelect({
 				value={state}
 				onChange={(e) => onStateChange(e.target.value)}
 				error={error}
+				name={'billing-state'}
 			>
 				<>
 					<Option value="">

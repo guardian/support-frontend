@@ -500,6 +500,8 @@ function CheckoutComponent({ geoId }: Props) {
 				: deliveryAddress;
 		} else {
 			billingAddress = {
+				state: formData.get('billing-state') as string,
+				postCode: formData.get('billing-postcode') as string,
 				country: formData.get('billing-country') as IsoCountry,
 			};
 			deliveryAddress = undefined;
@@ -615,7 +617,6 @@ function CheckoutComponent({ geoId }: Props) {
 			setIsProcessingPayment(false);
 		}
 	};
-
 	return (
 		<PageScaffold
 			header={<Header></Header>}
@@ -788,10 +789,8 @@ function CheckoutComponent({ geoId }: Props) {
 										{showStateSelect && (
 											<StateSelect
 												countryId={countryId}
-												state={'STATE'}
-												onStateChange={() => {
-													//  no-op
-												}}
+												state={billingState}
+												onStateChange={setBillingState}
 												error={undefined}
 											/>
 										)}
@@ -800,13 +799,13 @@ function CheckoutComponent({ geoId }: Props) {
 											<div>
 												<TextInput
 													id="zipCode"
-													name="zip-code"
+													name="billing-postcode"
 													label="ZIP code"
-													value={''}
+													value={billingPostcode}
 													error={undefined}
-													onChange={() => {
-														//  no-op
-													}}
+													onChange={(event) =>
+														setBillingPostcode(event.target.value)
+													}
 												/>
 											</div>
 										)}
