@@ -82,6 +82,11 @@ test.describe('Generic Checkout', () => {
 				await page.getByLabel('State').selectOption({ label: 'New York' });
 				await page.getByLabel('ZIP code').fill('90210');
 			}
+			if (testDetails.country === 'AU') {
+				await page
+					.getByLabel('State')
+					.selectOption({ label: 'New South Wales' });
+			}
 			await page.getByRole('radio', { name: testDetails.paymentType }).check();
 			switch (testDetails.paymentType) {
 				case 'DirectDebit':
