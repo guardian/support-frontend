@@ -78,6 +78,10 @@ test.describe('Generic Checkout', () => {
 			);
 
 			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
+			if (testDetails.country === 'US') {
+				await page.getByLabel('State').selectOption({ label: 'New York' });
+				await page.getByLabel('ZIP code').fill('90210');
+			}
 			await page.getByRole('radio', { name: testDetails.paymentType }).check();
 			switch (testDetails.paymentType) {
 				case 'DirectDebit':
