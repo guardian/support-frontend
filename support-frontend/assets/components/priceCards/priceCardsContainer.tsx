@@ -89,6 +89,7 @@ export function PriceCardsContainer({
 				amount: newAmount,
 			}),
 		);
+		updateAbandonedBasketCookie(newAmount);
 	}
 
 	return renderPriceCards({

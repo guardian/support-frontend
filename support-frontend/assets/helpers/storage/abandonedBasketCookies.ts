@@ -9,16 +9,16 @@ const ABANDONED_BASKET_COOKIE_NAME = 'GU_CO_INCOMPLETE';
 
 const abandonedBasketSchema = z.object({
 	product: z.string(),
-	amount: z.number(),
+	amount: z.union([z.number(), z.literal('other')]),
 	billingPeriod: z.string(),
 	region: z.string(),
 });
 
-//type AbandonedBasket = z.infer<typeof abandonedBasketSchema>;
+type AbandonedBasket = z.infer<typeof abandonedBasketSchema>;
 
 export function useAbandonedBasketCookie(
 	product: ProductCheckout,
-	amount: number,
+	amount: number | 'other',
 	billingPeriod: string,
 	region: string,
 ) {
@@ -38,9 +38,14 @@ export function useAbandonedBasketCookie(
 	}, []);
 }
 
-export function updateAbandonedBasketCookie(newAmount: string) {
-	const abandonedBasketCookie = cookie.get(ABANDONED_BASKET_COOKIE_NAME);
+function parseAmount(amount: string): number | 'other' {
+	return amount === 'other' || amount === ''
+		? 'other'
+		: Number.parseFloat(amount);
+}
 
+export function updateAbandonedBasketCookie(amount: string) {
+	const abandonedBasketCookie = cookie.get(ABANDONED_BASKET_COOKIE_NAME);
 	if (!abandonedBasketCookie) return;
 
 	const parsedCookie = abandonedBasketSchema.safeParse(
@@ -48,7 +53,10 @@ export function updateAbandonedBasketCookie(newAmount: string) {
 	);
 
 	if (parsedCookie.success) {
-		const newCookie = { ...parsedCookie.data, amount: newAmount };
+		const newCookie: AbandonedBasket = {
+			...parsedCookie.data,
+			amount: parseAmount(amount),
+		};
 
 		cookie.set(
 			ABANDONED_BASKET_COOKIE_NAME,
