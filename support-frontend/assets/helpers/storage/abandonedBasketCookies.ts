@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import * as cookie from 'helpers/storage/cookie';
-import { ProductCheckout } from 'helpers/tracking/behaviour';
+import type { ProductCheckout } from 'helpers/tracking/behaviour';
 
 const COOKIE_EXPIRY_DAYS = 3;
 const ABANDONED_BASKET_COOKIE_NAME = 'GU_CO_INCOMPLETE';
