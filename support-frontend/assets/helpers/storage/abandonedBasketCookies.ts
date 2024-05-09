@@ -1,9 +1,20 @@
 import { useEffect } from 'react';
 import * as cookie from 'helpers/storage/cookie';
 import type { ProductCheckout } from 'helpers/tracking/behaviour';
+import { z } from Zod;
+import { logException } from 'helpers/utilities/logger';
 
 const COOKIE_EXPIRY_DAYS = 3;
 const ABANDONED_BASKET_COOKIE_NAME = 'GU_CO_INCOMPLETE';
+
+const abandonedBasketSchema = z.object({
+	product: z.string(),
+	amount: z.number(),
+	billingPeriod: z.string(),
+	region: z.string(),
+});
+
+type AbandonedBasket = z.infer<typeof abandonedBasketSchema>;
 
 export function useAbandonedBasketCookie(
 	product: ProductCheckout,
@@ -11,6 +22,8 @@ export function useAbandonedBasketCookie(
 	billingPeriod: string,
 	region: string,
 ) {
+
+
 	const abandonedBasket = {
 		product,
 		amount,
@@ -25,4 +38,27 @@ export function useAbandonedBasketCookie(
 			COOKIE_EXPIRY_DAYS,
 		);
 	}, []);
+}
+
+export function updateAbandonedBasketCookie(newAmount: string){
+
+	const abandonedBasketCookie = cookie.get(ABANDONED_BASKET_COOKIE_NAME);
+
+	if(!abandonedBasketCookie) return;
+
+	const parsedCookie = abandonedBasketSchema.safeParse(abandonedBasketCookie);
+
+	if (parsedCookie.success) {
+
+		const newCookie = {... parsedCookie.data, amount: newAmount};
+		
+		cookie.set(
+			ABANDONED_BASKET_COOKIE_NAME,
+			JSON.stringify(newCookie.data),
+			COOKIE_EXPIRY_DAYS,
+		);
+	} else {
+		logException('Failed to parse abandoned basket cookie', parsedCookie.error);
+	  }
+
 }
