@@ -552,7 +552,7 @@ function CheckoutComponent({ geoId }: Props) {
 			paymentFields = {
 				recaptchaToken: '',
 				paymentMethod: 'PayPal',
-				baid: payPalBAID,
+				baid: formData.get('payPalBAID') as string,
 			};
 		}
 
