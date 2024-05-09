@@ -548,7 +548,6 @@ function CheckoutComponent({ geoId }: Props) {
 
 		if (paymentMethod === 'DirectDebit') {
 			paymentFields = {
-				paymentMethod: 'DirectDebit',
 				accountHolderName: formData.get('accountHolderName') as string,
 				accountNumber: formData.get('accountNumber') as string,
 				sortCode: formData.get('sortCode') as string,
