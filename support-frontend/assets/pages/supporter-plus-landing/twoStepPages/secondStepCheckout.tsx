@@ -55,7 +55,7 @@ export function SupporterPlusCheckout({
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const supportInternationalisationId = countryGroups[countryGroupId].supportInternationalisationId;
+	const { supportInternationalisationId } = countryGroups[countryGroupId];
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
 	const amountBeforeAmendments = useContributionsSelector(
