@@ -6,6 +6,7 @@ import {
 	space,
 	textSans,
 	until,
+	visuallyHidden,
 } from '@guardian/source-foundations';
 import {
 	Column,
@@ -34,7 +35,6 @@ import { ContributionsOrderSummary } from 'components/orderSummary/contributions
 import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
-import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -133,6 +133,23 @@ const legend = css`
 	}
 `;
 
+const personalDetailsFieldGroupStyles = (hideDetailsHeading?: boolean) => css`
+	position: relative;
+	margin-top: ${hideDetailsHeading ? `${space[4]}px` : '0'};
+
+	& > *:not(:first-of-type) {
+		margin-top: ${space[3]}px;
+	}
+	${from.tablet} {
+		& > *:not(:first-of-type) {
+			margin-top: ${space[4]}px;
+		}
+	}
+`;
+const personalDetailsHeader = css`
+	${visuallyHidden};
+`;
+
 /**
  * This method removes the `pending` state by retrying,
  * resolving on success or failure only.
@@ -179,6 +196,26 @@ const query = {
 			? parseFloat(searchParamsPrice)
 			: undefined,
 };
+
+/** Form Validation */
+/**
+ * This uses a Unicode character class escape
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape
+ */
+const doesNotContainEmojiPattern = '^[^\\p{Emoji_Presentation}]+$';
+function preventDefaultValidityMessage(currentTarget: HTMLInputElement) {
+	/**
+	 * Prevents default message showing, but maintains the default validation methods occuring
+	 * such as onInvalid.
+	 */
+	// 3. Reset the value from previous invalid events
+	currentTarget.setCustomValidity('');
+	// 1. Check the validity of the input
+	if (!currentTarget.validity.valid) {
+		// 2. setCustomValidity to " " which avoids the browser's default message
+		currentTarget.setCustomValidity(' ');
+	}
+}
 
 type Props = {
 	geoId: GeoId;
@@ -372,8 +409,11 @@ function CheckoutComponent({ geoId }: Props) {
 
 	/** Personal details */
 	const [firstName, setFirstName] = useState('');
+	const [firstNameError, setFirstNameError] = useState<string>();
 	const [lastName, setLastName] = useState('');
+	const [lastNameError, setLastNameError] = useState<string>();
 	const [email, setEmail] = useState('');
+	const [emailError, setEmailError] = useState<string>();
 
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
@@ -640,55 +680,137 @@ function CheckoutComponent({ geoId }: Props) {
 						>
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
-									<PersonalDetails
-										email={email}
-										firstName={firstName}
-										lastName={lastName}
-										isSignedIn={isSignedIn}
-										// TODO - ONE_OFF support, this should be true when ONE_OFF
-										hideNameFields={false}
-										onEmailChange={(email) => {
-											setEmail(email);
-										}}
-										onFirstNameChange={(firstName) => {
-											setFirstName(firstName);
-										}}
-										onLastNameChange={(lastName) => {
-											setLastName(lastName);
-										}}
-										errors={{}}
-										signOutLink={<Signout isSignedIn={isSignedIn} />}
-										contributionState={
-											showStateSelect && (
-												<StateSelect
-													countryId={countryId}
-													state={'STATE'}
-													onStateChange={() => {
+									<div css={personalDetailsFieldGroupStyles(true)}>
+										<h2 css={personalDetailsHeader}>Your details</h2>
+										<div>
+											<TextInput
+												id="email"
+												data-qm-masking="blocklist"
+												label="Email address"
+												value={email}
+												type="email"
+												autoComplete="email"
+												onChange={(event) => setEmail(event.target.value)}
+												disabled={isSignedIn}
+												name="email"
+												required
+												maxLength={80}
+												error={emailError}
+												onInvalid={(event) => {
+													preventDefaultValidityMessage(event.currentTarget);
+													const validityState = event.currentTarget.validity;
+													if (validityState.valid) {
+														setEmailError(undefined);
+													} else {
+														if (validityState.valueMissing) {
+															setEmailError('Please enter your email address.');
+														} else {
+															setEmailError(
+																'Please enter a valid email address.',
+															);
+														}
+													}
+												}}
+											/>
+										</div>
+
+										<Signout isSignedIn={isSignedIn} />
+
+										<>
+											<div>
+												<TextInput
+													id="firstName"
+													data-qm-masking="blocklist"
+													label="First name"
+													value={firstName}
+													autoComplete="given-name"
+													autoCapitalize="words"
+													onChange={(event) => setFirstName(event.target.value)}
+													name="firstName"
+													required
+													maxLength={40}
+													error={firstNameError}
+													pattern={doesNotContainEmojiPattern}
+													onInvalid={(event) => {
+														preventDefaultValidityMessage(event.currentTarget);
+														const validityState = event.currentTarget.validity;
+														if (validityState.valid) {
+															setFirstNameError(undefined);
+														} else {
+															if (validityState.valueMissing) {
+																setFirstNameError(
+																	'Please enter your first name.',
+																);
+															} else {
+																setFirstNameError(
+																	'Please enter a valid first name.',
+																);
+															}
+														}
+													}}
+												/>
+											</div>
+											<div>
+												<TextInput
+													id="lastName"
+													data-qm-masking="blocklist"
+													label="Last name"
+													value={lastName}
+													autoComplete="family-name"
+													autoCapitalize="words"
+													onChange={(event) => setLastName(event.target.value)}
+													name="lastName"
+													required
+													maxLength={40}
+													error={lastNameError}
+													pattern={doesNotContainEmojiPattern}
+													onInvalid={(event) => {
+														preventDefaultValidityMessage(event.currentTarget);
+														const validityState = event.currentTarget.validity;
+														if (validityState.valid) {
+															setLastNameError(undefined);
+														} else {
+															if (validityState.valueMissing) {
+																setLastNameError(
+																	'Please enter your last name.',
+																);
+															} else {
+																setLastNameError(
+																	'Please enter a valid last name.',
+																);
+															}
+														}
+													}}
+												/>
+											</div>
+										</>
+
+										{showStateSelect && (
+											<StateSelect
+												countryId={countryId}
+												state={'STATE'}
+												onStateChange={() => {
+													//  no-op
+												}}
+												error={undefined}
+											/>
+										)}
+
+										{countryId === 'US' && (
+											<div>
+												<TextInput
+													id="zipCode"
+													name="zip-code"
+													label="ZIP code"
+													value={''}
+													error={undefined}
+													onChange={() => {
 														//  no-op
 													}}
-													error={undefined}
 												/>
-											)
-										}
-										contributionZipcode={
-											countryId === 'US' ? (
-												<div>
-													<TextInput
-														id="zipCode"
-														name="zip-code"
-														label="ZIP code"
-														value={''}
-														error={undefined}
-														onChange={() => {
-															//  no-op
-														}}
-													/>
-												</div>
-											) : undefined
-										}
-										hideDetailsHeading={true}
-										overrideHeadingCopy="1. Your details"
-									/>
+											</div>
+										)}
+									</div>
 
 									<CheckoutDivider spacing="loose" />
 
