@@ -43,7 +43,9 @@ export function updateAbandonedBasketCookie(newAmount: string) {
 
 	if (!abandonedBasketCookie) return;
 
-	const parsedCookie = abandonedBasketSchema.safeParse(abandonedBasketCookie);
+	const parsedCookie = abandonedBasketSchema.safeParse(
+		JSON.parse(abandonedBasketCookie),
+	);
 
 	if (parsedCookie.success) {
 		const newCookie = { ...parsedCookie.data, amount: newAmount };
