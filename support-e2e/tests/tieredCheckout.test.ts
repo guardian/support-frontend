@@ -7,6 +7,10 @@ import { fillInDirectDebitDetails } from './utils/directDebitDetails';
 import { fillInPayPalDetails } from './utils/paypal';
 import { setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
+import {
+	checkAbandonedBasketCookieExists,
+	checkAbandonedBasketCookieRemoved,
+} from './utils/cookies';
 
 interface TestDetails {
 	tier: 1 | 2 | 3;
@@ -59,6 +63,7 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 				.getByRole('link', { name: 'Subscribe' })
 				.nth(testDetails.tier - 1)
 				.click();
+			await checkAbandonedBasketCookieExists(context);
 			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
 			if (testDetails.country === 'US') {
 				await page.getByLabel('State').selectOption({ label: 'New York' });
@@ -106,6 +111,7 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 				`/${testDetails.country?.toLowerCase() || 'uk'}/thankyou`,
 				{ timeout: 600000 },
 			);
+			await checkAbandonedBasketCookieRemoved(context);
 		});
 	});
 });
