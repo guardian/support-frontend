@@ -1193,6 +1193,7 @@ function CheckoutComponent({ geoId }: Props) {
 												})
 													.then((response) => response.json())
 													.then((json) => {
+														// The state below has a useEffect that submits the form
 														setPayPalBAID((json as { baid: string }).baid);
 													});
 											}}
