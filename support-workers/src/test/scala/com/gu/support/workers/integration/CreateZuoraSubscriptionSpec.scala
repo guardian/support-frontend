@@ -31,6 +31,7 @@ import org.mockito.invocation.InvocationOnMock
 import java.io.ByteArrayOutputStream
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
+import com.gu.support.catalog.Domestic
 
 @IntegrationTest
 class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreator with MockContext {
@@ -57,6 +58,24 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
       })
   }
 
+  it should "create a monthly SupporterPlusWithGuardianWeekly subscription" in {
+    createZuoraHelper
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(25, GBP, Monthly, Some(Domestic)))
+      .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
+      })
+  }
+
+  it should "not create a monthly SupporterPlusWithGuardianWeekly subscription unless the amount is equal to the price" in {
+    createZuoraHelper
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(10, GBP, Monthly, Some(Domestic)))
+      .failed
+      .map(ex =>
+        ex.getMessage should include(
+          "The amount passed in (10) does not match the price of this product.",
+        ),
+      )
+  }
+
   it should "create an annual Supporter Plus subscription" in {
     createZuoraHelper
       .createSubscription(createSupporterPlusZuoraSubscriptionJson(95, GBP, Annual))
@@ -67,7 +86,7 @@ class CreateZuoraSubscriptionSpec extends AsyncLambdaSpec with MockServicesCreat
   it should "create a Supporter Plus subscription in a country where it is taxed" in {
     val austria = CountryGroup.Europe.countries.find(_.alpha2 == "AT").get // Fail here if we can't find it
     createZuoraHelper
-      .createSubscription(createSupporterPlusZuoraSubscriptionJson(10, EUR, Monthly, austria))
+      .createSubscription(createSupporterPlusZuoraSubscriptionJson(10, EUR, Monthly, country = austria))
       .map(_ should matchPattern { case _: SendThankYouEmailSupporterPlusState =>
       })
   }

@@ -8,7 +8,7 @@
 .metals
 metals.sbt
 .bloop
-.vscode/settings.json
+**/.vscode/settings.json
 
 node_modules
 npm-debug.log
