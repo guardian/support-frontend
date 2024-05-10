@@ -19,7 +19,7 @@ type AbandonedBasket = Input<typeof abandonedBasketSchema>;
 
 export function useAbandonedBasketCookie(
 	product: ProductCheckout,
-	amount: number | 'other',
+	amount: number,
 	billingPeriod: string,
 	region: string,
 ) {
