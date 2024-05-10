@@ -8,14 +8,6 @@ import { fillInPayPalDetails } from './utils/paypal';
 import { setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
 
-interface TestDetails {
-	product: 'Contribution' | 'SupporterPlus';
-	ratePlan: 'Monthly' | 'Annual';
-	paymentType?: 'Stripe' | 'DirectDebit' | 'PayPal';
-	price: number;
-	country: 'UK' | 'US' | 'AU' | 'EU';
-}
-
 const glyphs: Record<'UK' | 'US' | 'AU' | 'EU', string> = {
 	UK: '£',
 	US: '$',
@@ -23,7 +15,7 @@ const glyphs: Record<'UK' | 'US' | 'AU' | 'EU', string> = {
 	EU: '€',
 };
 
-const testDetails: TestDetails[] = [
+const testDetails = [
 	{
 		product: 'Contribution',
 		ratePlan: 'Monthly',
@@ -52,7 +44,7 @@ const testDetails: TestDetails[] = [
 		price: 95,
 		country: 'EU',
 	},
-];
+] as const;
 
 afterEachTasks(test);
 
