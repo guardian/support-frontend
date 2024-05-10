@@ -446,6 +446,7 @@ function CheckoutComponent({ geoId }: Props) {
 		useState(true);
 
 	const [billingPostcode, setBillingPostcode] = useState('');
+	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
 	const [billingLineOne, setBillingLineOne] = useState('');
 	const [billingLineTwo, setBillingLineTwo] = useState('');
 	const [billingCity, setBillingCity] = useState('');
@@ -813,13 +814,32 @@ function CheckoutComponent({ geoId }: Props) {
 											<div>
 												<TextInput
 													id="zipCode"
-													name="billing-postcode"
 													label="ZIP code"
-													value={billingPostcode}
-													error={undefined}
+													name="billing-postcode"
 													onChange={(event) =>
 														setBillingPostcode(event.target.value)
 													}
+													maxLength={20}
+													value={billingPostcode}
+													pattern={doesNotContainEmojiPattern}
+													error={billingPostcodeError}
+													onInvalid={(event) => {
+														preventDefaultValidityMessage(event.currentTarget);
+														const validityState = event.currentTarget.validity;
+														if (validityState.valid) {
+															setBillingPostcodeError(undefined);
+														} else {
+															if (validityState.valueMissing) {
+																setBillingPostcodeError(
+																	'Please enter a zip code.',
+																);
+															} else {
+																setBillingPostcodeError(
+																	'Please enter a valid zip code.',
+																);
+															}
+														}
+													}}
 												/>
 											</div>
 										)}
