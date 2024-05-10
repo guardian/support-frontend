@@ -13,7 +13,7 @@ interface TestDetails {
 	ratePlan: 'Monthly' | 'Annual';
 	paymentType?: 'Stripe' | 'DirectDebit' | 'PayPal';
 	price: number;
-	country?: 'UK' | 'US' | 'AU' | 'EU';
+	country: 'UK' | 'US' | 'AU' | 'EU';
 }
 
 const glyphs: Record<'UK' | 'US' | 'AU' | 'EU', string> = {
@@ -29,6 +29,7 @@ const testDetails: TestDetails[] = [
 		ratePlan: 'Monthly',
 		paymentType: 'DirectDebit',
 		price: 9,
+		country: 'UK',
 	},
 	{
 		product: 'Contribution',
