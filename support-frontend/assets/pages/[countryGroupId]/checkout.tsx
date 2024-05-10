@@ -391,8 +391,8 @@ function CheckoutComponent({ geoId }: Props) {
 	const cardElement = elements?.getElement(CardNumberElement);
 	const [stripeClientSecret, setStripeClientSecret] = useState<string>();
 	/**
-	 * flag to ensure the (successful) recaptcha token has been fully passed to Stripe
-	 * used to disable/set 'Loading...' message on Pay Now button (Playwright test use)
+	 * flag that disables the submission of the form until the stripeClientSecret is
+	 * fetched from the Stripe API with using the reCaptcha token
 	 */
 	const [stripeClientSecretInProgress, setStripeClientSecretInProgress] =
 		useState(false);
