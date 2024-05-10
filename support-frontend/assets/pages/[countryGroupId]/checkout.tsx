@@ -450,7 +450,23 @@ function CheckoutComponent({ geoId }: Props) {
 	const [billingLineOne, setBillingLineOne] = useState('');
 	const [billingLineTwo, setBillingLineTwo] = useState('');
 	const [billingCity, setBillingCity] = useState('');
-	const [billingState, setBillingState] = useState('');
+	const [billingStateError, setBillingStateError] = useState<string>();
+	/**
+	 * BillingState selector initialised to undefined to hide
+	 * billingStateError message. formOnSubmit checks and converts to
+	 * empty string to display billingStateError message.
+	 */
+	const [billingState, setBillingState] = useState<string | undefined>(
+		undefined,
+	);
+	useEffect(() => {
+		if (billingState === '') {
+			setBillingStateError('Please enter a state, province or territory');
+		} else {
+			setBillingStateError('');
+		}
+	}, [billingState]);
+
 	const [billingPostcodeStateResults, setBillingPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
 	const [billingPostcodeStateLoading, setBillingPostcodeStateLoading] =
@@ -469,6 +485,9 @@ function CheckoutComponent({ geoId }: Props) {
 	const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
+		if (!billingState) {
+			setBillingState('');
+		}
 		/**
 		 * The validation for this is currently happening on the client side form validation
 		 * So we'll assume strings are not null.
@@ -804,9 +823,9 @@ function CheckoutComponent({ geoId }: Props) {
 										{showStateSelect && (
 											<StateSelect
 												countryId={countryId}
-												state={billingState}
+												state={billingState ?? ''}
 												onStateChange={setBillingState}
-												error={undefined}
+												error={billingStateError}
 											/>
 										)}
 
@@ -959,7 +978,7 @@ function CheckoutComponent({ geoId }: Props) {
 														lineTwo={billingLineTwo}
 														city={billingCity}
 														country={billingCountry}
-														state={billingState}
+														state={billingState ?? ''}
 														postCode={billingPostcode}
 														countries={productDescription.deliverableTo}
 														errors={[]}
