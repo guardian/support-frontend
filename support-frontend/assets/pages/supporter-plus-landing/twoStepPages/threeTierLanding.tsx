@@ -363,7 +363,8 @@ export function ThreeTierLanding(): JSX.Element {
 		),
 	);
 
-	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
+	const useGenericCheckout =
+		abParticipations.useGenericCheckout.startsWith('variant');
 	const showOffer =
 		!!abParticipations.usFreeBookOffer && countryGroupId === 'UnitedStates';
 
