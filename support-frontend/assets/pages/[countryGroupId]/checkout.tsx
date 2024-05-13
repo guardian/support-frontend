@@ -69,7 +69,6 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import { get } from 'helpers/storage/cookie';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
@@ -89,8 +88,8 @@ validateWindowGuardian(window.guardian);
 const isTestUser = true as boolean;
 const csrf = window.guardian.csrf.token;
 
-const isSignedIn = !!get('GU_U');
 const user = getUser();
+const isSignedIn = user.isSignedIn;
 const countryId: IsoCountry = CountryHelper.detect();
 
 const productCatalog = window.guardian.productCatalog;
