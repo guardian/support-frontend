@@ -75,6 +75,7 @@ import {
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { getUser } from 'helpers/user/user';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -89,6 +90,7 @@ const isTestUser = true as boolean;
 const csrf = window.guardian.csrf.token;
 
 const isSignedIn = !!get('GU_U');
+const user = getUser();
 const countryId: IsoCountry = CountryHelper.detect();
 
 const productCatalog = window.guardian.productCatalog;
@@ -423,13 +425,12 @@ function CheckoutComponent({ geoId }: Props) {
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
 	/** Personal details */
-	const [firstName, setFirstName] = useState('');
+	const [firstName, setFirstName] = useState(user.firstName ?? '');
 	const [firstNameError, setFirstNameError] = useState<string>();
-	const [lastName, setLastName] = useState('');
+	const [lastName, setLastName] = useState(user.lastName ?? '');
 	const [lastNameError, setLastNameError] = useState<string>();
-	const [email, setEmail] = useState('');
+	const [email, setEmail] = useState(user.email ?? '');
 	const [emailError, setEmailError] = useState<string>();
-
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
 	const [deliveryLineOne, setDeliveryLineOne] = useState('');
