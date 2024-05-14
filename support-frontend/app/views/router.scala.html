@@ -6,6 +6,7 @@
 @import views.EmptyDiv
 @import io.circe.JsonObject
 
+@import com.gu.identity.model.User
 @(
   geoData: GeoData,
   serversideTests: Map[String,Participation],
@@ -16,6 +17,7 @@
   guestAccountCreationToken: Option[String],
   v2recaptchaConfigPublicKey: String,
   productCatalog: JsonObject,
+  user: Option[User]
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(
@@ -30,7 +32,7 @@
   csrf = None,
   shareImageUrl = None,
   shareUrl = None,
-  noindex = true
+  noindex = true,
 ){
   @windowGuardianPaymentConfig(
     geoData = geoData,
@@ -42,5 +44,6 @@
     membersDataApiUrl = membersDataApiUrl,
     guestAccountCreationToken = guestAccountCreationToken,
     productCatalog = productCatalog,
+    user = user
   )
 }
