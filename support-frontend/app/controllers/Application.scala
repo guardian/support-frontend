@@ -306,6 +306,7 @@ class Application(
         membersDataApiUrl = membersDataApiUrl,
         guestAccountCreationToken = guestAccountCreationToken,
         productCatalog = productCatalog,
+        user = request.user,
       ),
     ).withSettingsSurrogateKey
   }
