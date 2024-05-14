@@ -376,17 +376,7 @@ function CheckoutComponent({ geoId }: Props) {
 	const showStateSelect =
 		countryId === 'US' || countryId === 'CA' || countryId === 'AU';
 
-	/**
-	 * Payment method: PayPal
-	 * BAID = Billing Agreement ID
-	 */
 	const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>();
-	const [payPalLoaded, setPayPalLoaded] = useState(false);
-	useEffect(() => {
-		if (paymentMethod === 'PayPal' && !payPalLoaded) {
-			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
-		}
-	}, [paymentMethod, payPalLoaded]);
 
 	/** Payment methods: Stripe */
 	const stripePublicKey = getStripeKey(
@@ -400,7 +390,6 @@ function CheckoutComponent({ geoId }: Props) {
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
 	const [stripeClientSecret, setStripeClientSecret] = useState<string>();
-
 	/**
 	 * flag that disables the submission of the form until the stripeClientSecret is
 	 * fetched from the Stripe API with using the reCaptcha token
@@ -408,6 +397,11 @@ function CheckoutComponent({ geoId }: Props) {
 	const [stripeClientSecretInProgress, setStripeClientSecretInProgress] =
 		useState(false);
 
+	/**
+	 * Payment method: PayPal
+	 * BAID = Billing Agreement ID
+	 */
+	const [payPalLoaded, setPayPalLoaded] = useState(false);
 	const [payPalBAID, setPayPalBAID] = useState('');
 	/**
 	 * PayPalBAID forces formOnSubmit
@@ -419,6 +413,11 @@ function CheckoutComponent({ geoId }: Props) {
 			formRef.current?.requestSubmit();
 		}
 	}, [payPalBAID]);
+	useEffect(() => {
+		if (paymentMethod === 'PayPal' && !payPalLoaded) {
+			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
+		}
+	}, [paymentMethod, payPalLoaded]);
 
 	/** Recaptcha */
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
