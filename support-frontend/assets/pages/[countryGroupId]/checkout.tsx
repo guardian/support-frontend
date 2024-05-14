@@ -129,6 +129,10 @@ const legend = css`
 	${from.tablet} {
 		font-size: 28px;
 	}
+
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
 `;
 
 const fieldset = css`
@@ -992,11 +996,14 @@ function CheckoutComponent({ geoId }: Props) {
 										</>
 									)}
 									<fieldset>
-										<legend css={legend}>2. Payment method</legend>
-										<SecureTransactionIndicator
-											hideText={true}
-											cssOverrides={cssOverrides ?? css``}
-										/>
+										<legend css={legend}>
+											2. Payment method
+											<SecureTransactionIndicator
+												hideText={true}
+												cssOverrides={css``}
+											/>
+										</legend>
+
 										{validPaymentMethods.map((paymentMethod) => {
 											return (
 												<div>
