@@ -6,7 +6,6 @@ import {
 	space,
 	textSans,
 	until,
-	visuallyHidden,
 } from '@guardian/source-foundations';
 import {
 	Column,
@@ -132,21 +131,18 @@ const legend = css`
 	}
 `;
 
-const personalDetailsFieldGroupStyles = (hideDetailsHeading?: boolean) => css`
+const fieldset = css`
 	position: relative;
-	margin-top: ${hideDetailsHeading ? `${space[4]}px` : '0'};
 
 	& > *:not(:first-of-type) {
 		margin-top: ${space[3]}px;
 	}
+
 	${from.tablet} {
 		& > *:not(:first-of-type) {
 			margin-top: ${space[4]}px;
 		}
 	}
-`;
-const personalDetailsHeader = css`
-	${visuallyHidden};
 `;
 
 /**
@@ -631,6 +627,7 @@ function CheckoutComponent({ geoId }: Props) {
 			setIsProcessingPayment(false);
 		}
 	};
+
 	return (
 		<PageScaffold
 			header={<Header></Header>}
@@ -695,8 +692,8 @@ function CheckoutComponent({ geoId }: Props) {
 						>
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
-									<div css={personalDetailsFieldGroupStyles(true)}>
-										<h2 css={personalDetailsHeader}>Your details</h2>
+									<fieldset css={fieldset}>
+										<legend css={legend}>1. Your details</legend>
 										<div>
 											<TextInput
 												id="email"
@@ -823,7 +820,7 @@ function CheckoutComponent({ geoId }: Props) {
 												/>
 											</div>
 										)}
-									</div>
+									</fieldset>
 
 									<CheckoutDivider spacing="loose" />
 
@@ -841,7 +838,9 @@ function CheckoutComponent({ geoId }: Props) {
 									{productDescription.deliverableTo && (
 										<>
 											<fieldset>
-												<h2 css={legend}>Where should we deliver to?</h2>
+												<legend css={legend}>
+													Where should we deliver to?
+												</legend>
 												<AddressFields
 													scope={'delivery'}
 													lineOne={deliveryLineOne}
@@ -893,7 +892,9 @@ function CheckoutComponent({ geoId }: Props) {
 													}}
 												/>
 											</fieldset>
+
 											<CheckoutDivider spacing="loose" />
+
 											<RadioGroup
 												label="Is the billing address the same as the delivery address?"
 												hideLabel
@@ -929,10 +930,12 @@ function CheckoutComponent({ geoId }: Props) {
 													}}
 												/>
 											</RadioGroup>
+
 											<CheckoutDivider spacing="loose" />
+
 											{!billingAddressMatchesDelivery && (
 												<fieldset>
-													<h2 css={legend}>Your billing address</h2>
+													<legend css={legend}>Your billing address</legend>
 													<AddressFields
 														scope={'billing'}
 														lineOne={billingLineOne}
@@ -988,117 +991,123 @@ function CheckoutComponent({ geoId }: Props) {
 											)}
 										</>
 									)}
+									<fieldset>
+										<legend css={legend}>2. Payment method</legend>
+										<SecureTransactionIndicator
+											hideText={true}
+											cssOverrides={cssOverrides ?? css``}
+										/>
+										{validPaymentMethods.map((paymentMethod) => {
+											return (
+												<div>
+													<Radio
+														label={paymentMethod}
+														name="paymentMethod"
+														value={paymentMethod}
+														onChange={() => {
+															setPaymentMethod(paymentMethod);
+														}}
+													/>
+												</div>
+											);
+										})}
 
-									{validPaymentMethods.map((paymentMethod) => {
-										return (
-											<div>
-												<Radio
-													label={paymentMethod}
-													name="paymentMethod"
-													value={paymentMethod}
-													onChange={() => {
-														setPaymentMethod(paymentMethod);
-													}}
+										{paymentMethod === 'Stripe' && (
+											<>
+												<input
+													type="hidden"
+													name="recaptchaToken"
+													value={recaptchaToken}
 												/>
-											</div>
-										);
-									})}
+												<StripeCardForm
+													onCardNumberChange={() => {
+														// no-op
+													}}
+													onExpiryChange={() => {
+														// no-op
+													}}
+													onCvcChange={() => {
+														// no-op
+													}}
+													errors={{}}
+													recaptcha={
+														<Recaptcha
+															// We could change the parents type to Promise and uses await here, but that has
+															// a lot of refactoring with not too much gain
+															onRecaptchaCompleted={(token) => {
+																setStripeClientSecretInProgress(true);
+																setRecaptchaToken(token);
+																void fetch(
+																	'/stripe/create-setup-intent/recaptcha',
+																	{
+																		method: 'POST',
+																		headers: {
+																			'Content-Type': 'application/json',
+																		},
+																		body: JSON.stringify({
+																			isTestUser,
+																			stripePublicKey,
+																			token,
+																		}),
+																	},
+																)
+																	.then((resp) => resp.json())
+																	.then((json) => {
+																		setStripeClientSecret(
+																			(json as Record<string, string>)
+																				.client_secret,
+																		);
+																		setStripeClientSecretInProgress(false);
+																	});
+															}}
+															onRecaptchaExpired={() => {
+																// no-op
+															}}
+														/>
+													}
+												/>
+											</>
+										)}
 
-									{paymentMethod === 'Stripe' && (
-										<>
-											<input
-												type="hidden"
-												name="recaptchaToken"
-												value={recaptchaToken}
-											/>
-											<StripeCardForm
-												onCardNumberChange={() => {
-													// no-op
+										{paymentMethod === 'DirectDebit' && (
+											<DirectDebitForm
+												countryGroupId={countryGroupId}
+												accountHolderName={accountHolderName}
+												accountNumber={accountNumber}
+												accountHolderConfirmation={accountHolderConfirmation}
+												sortCode={sortCode}
+												recaptchaCompleted={false}
+												updateAccountHolderName={(name: string) => {
+													setAccountHolderName(name);
 												}}
-												onExpiryChange={() => {
-													// no-op
+												updateAccountNumber={(number: string) => {
+													setAccountNumber(number);
 												}}
-												onCvcChange={() => {
-													// no-op
+												updateSortCode={(sortCode: string) => {
+													setSortCode(sortCode);
 												}}
-												errors={{}}
+												updateAccountHolderConfirmation={(
+													confirmation: boolean,
+												) => {
+													setAccountHolderConfirmation(confirmation);
+												}}
 												recaptcha={
 													<Recaptcha
 														// We could change the parents type to Promise and uses await here, but that has
 														// a lot of refactoring with not too much gain
 														onRecaptchaCompleted={(token) => {
-															setStripeClientSecretInProgress(true);
 															setRecaptchaToken(token);
-															void fetch(
-																'/stripe/create-setup-intent/recaptcha',
-																{
-																	method: 'POST',
-																	headers: {
-																		'Content-Type': 'application/json',
-																	},
-																	body: JSON.stringify({
-																		isTestUser,
-																		stripePublicKey,
-																		token,
-																	}),
-																},
-															)
-																.then((resp) => resp.json())
-																.then((json) => {
-																	setStripeClientSecret(
-																		(json as Record<string, string>)
-																			.client_secret,
-																	);
-																	setStripeClientSecretInProgress(false);
-																});
 														}}
 														onRecaptchaExpired={() => {
 															// no-op
 														}}
 													/>
 												}
+												formError={''}
+												errors={{}}
 											/>
-										</>
-									)}
-
-									{paymentMethod === 'DirectDebit' && (
-										<DirectDebitForm
-											countryGroupId={countryGroupId}
-											accountHolderName={accountHolderName}
-											accountNumber={accountNumber}
-											accountHolderConfirmation={accountHolderConfirmation}
-											sortCode={sortCode}
-											recaptchaCompleted={false}
-											updateAccountHolderName={(name: string) => {
-												setAccountHolderName(name);
-											}}
-											updateAccountNumber={(number: string) => {
-												setAccountNumber(number);
-											}}
-											updateSortCode={(sortCode: string) => {
-												setSortCode(sortCode);
-											}}
-											updateAccountHolderConfirmation={(
-												confirmation: boolean,
-											) => {
-												setAccountHolderConfirmation(confirmation);
-											}}
-											recaptcha={
-												<Recaptcha
-													// We could change the parents type to Promise and uses await here, but that has
-													// a lot of refactoring with not too much gain
-													onRecaptchaCompleted={(token) => {
-														setRecaptchaToken(token);
-													}}
-													onRecaptchaExpired={() => {
-														// no-op
-													}}
-												/>
-											}
-											formError={''}
-											errors={{}}
-										/>
-									)}
+										)}
+									</fieldset>
 								</BoxContents>
 							</Box>
 							<div
