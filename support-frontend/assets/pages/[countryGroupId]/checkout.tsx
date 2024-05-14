@@ -456,9 +456,7 @@ function CheckoutComponent({ geoId }: Props) {
 	 * billingStateError message. formOnSubmit checks and converts to
 	 * empty string to display billingStateError message.
 	 */
-	const [billingState, setBillingState] = useState<string | undefined>(
-		undefined,
-	);
+	const [billingState, setBillingState] = useState<string>();
 	useEffect(() => {
 		if (billingState === '') {
 			setBillingStateError('Please enter a state, province or territory');
