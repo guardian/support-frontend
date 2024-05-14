@@ -49,7 +49,7 @@ export function StateSelect({
 				name={'billing-state'}
 			>
 				<>
-					<Option value="" selected>
+					<Option value="">
 						{`Select your ${stateDescriptor.toLowerCase()}`}
 					</Option>
 					{Object.entries(statesList).map(([abbreviation, name]) => {
