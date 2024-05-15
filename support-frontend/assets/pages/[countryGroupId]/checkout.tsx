@@ -849,7 +849,10 @@ function CheckoutComponent({ geoId }: Props) {
 											<StateSelect
 												countryId={countryId}
 												state={billingState}
-												onStateChange={setBillingState}
+												onStateChange={(event) => {
+													setBillingState(event.currentTarget.value);
+													event.currentTarget.checkValidity();
+												}}
 												onInvalid={(event) => {
 													preventDefaultValidityMessage(event.currentTarget);
 													const validityState = event.currentTarget.validity;

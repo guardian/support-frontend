@@ -13,7 +13,7 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 type StateSelectProps = {
 	countryId: IsoCountry;
 	state: string;
-	onStateChange: (newState: string) => void;
+	onStateChange: FormEventHandler<HTMLSelectElement>;
 	onInvalid?: FormEventHandler<HTMLSelectElement>;
 	error?: string;
 };
@@ -48,7 +48,7 @@ export function StateSelect({
 				id="state"
 				label={stateDescriptor}
 				value={state}
-				onChange={(e) => onStateChange(e.target.value)}
+				onChange={onStateChange}
 				onInvalid={onInvalid}
 				error={error}
 				name={'billing-state'}
