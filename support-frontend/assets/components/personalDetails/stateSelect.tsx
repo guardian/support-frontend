@@ -1,4 +1,6 @@
+import { css } from '@emotion/react';
 import { Option, Select } from '@guardian/source-react-components';
+import type { FormEventHandler } from 'react';
 import { CountryGroup } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
@@ -12,6 +14,7 @@ type StateSelectProps = {
 	countryId: IsoCountry;
 	state: string;
 	onStateChange: (newState: string) => void;
+	onInvalid?: FormEventHandler<HTMLSelectElement>;
 	error?: string;
 };
 
@@ -31,6 +34,7 @@ export function StateSelect({
 	countryId,
 	state,
 	onStateChange,
+	onInvalid,
 	error,
 }: StateSelectProps): JSX.Element | null {
 	const countryGroupId = CountryGroup.fromCountry(countryId);
@@ -45,8 +49,23 @@ export function StateSelect({
 				label={stateDescriptor}
 				value={state}
 				onChange={(e) => onStateChange(e.target.value)}
+				onInvalid={onInvalid}
 				error={error}
 				name={'billing-state'}
+				required
+				cssOverrides={
+					/**
+					 * Source applies a red border initially unlike textInput's
+					 */
+					!error
+						? css`
+								:invalid {
+									border-color: #707070;
+									border-width: 1px;
+								}
+						  `
+						: undefined
+				}
 			>
 				<>
 					<Option value="">
