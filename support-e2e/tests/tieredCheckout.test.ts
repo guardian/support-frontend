@@ -96,7 +96,9 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 				const frequencyLabel =
 					testDetails.frequency === 'Annual' ? 'year' : 'month';
 				var paymentButtonRegex = new RegExp(
-					'(Pay|Support us with) (£|\\$)([0-9]+) per (' + frequencyLabel + ')',
+					'(Pay|Support us with) (£|\\$)([0-9]+|([0-9]+.[0-9]+)) per (' +
+						frequencyLabel +
+						')',
 				);
 				await page.getByText(paymentButtonRegex).click();
 			}

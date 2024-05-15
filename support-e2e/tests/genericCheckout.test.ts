@@ -19,14 +19,14 @@ const testDetails = [
 	{
 		product: 'Contribution',
 		ratePlan: 'Monthly',
-		paymentType: 'DirectDebit',
+		paymentType: 'Direct debit',
 		price: 9,
 		country: 'UK',
 	},
 	{
 		product: 'Contribution',
 		ratePlan: 'Annual',
-		paymentType: 'Stripe',
+		paymentType: 'Credit/Debit card',
 		price: 90,
 		country: 'US',
 	},
@@ -40,7 +40,7 @@ const testDetails = [
 	{
 		product: 'SupporterPlus',
 		ratePlan: 'Annual',
-		paymentType: 'Stripe',
+		paymentType: 'Credit/Debit card',
 		price: 95,
 		country: 'EU',
 	},
@@ -82,7 +82,7 @@ test.describe('Generic Checkout', () => {
 			}
 			await page.getByRole('radio', { name: testDetails.paymentType }).check();
 			switch (testDetails.paymentType) {
-				case 'DirectDebit':
+				case 'Direct debit':
 					await fillInDirectDebitDetails(page, 'contribution');
 					await checkRecaptcha(page);
 					break;
@@ -100,15 +100,15 @@ test.describe('Generic Checkout', () => {
 					const popupPage = await popupPagePromise;
 					fillInPayPalDetails(popupPage);
 					break;
-				case 'Stripe':
+				case 'Credit/Debit card':
 				default:
 					await fillInCardDetails(page);
 					break;
 			}
 
 			if (
-				testDetails.paymentType === 'Stripe' ||
-				testDetails.paymentType === 'DirectDebit'
+				testDetails.paymentType === 'Credit/Debit card' ||
+				testDetails.paymentType === 'Direct debit'
 			) {
 				await checkRecaptcha(page);
 				await page.getByRole('button', { name: 'Pay now' }).click();
