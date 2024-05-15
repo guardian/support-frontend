@@ -14,6 +14,7 @@ import {
 	Radio,
 	RadioGroup,
 	TextInput,
+	textInputThemeDefault,
 } from '@guardian/source-react-components';
 import {
 	FooterLinks,
@@ -33,6 +34,7 @@ import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
+import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
@@ -68,12 +70,12 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import { get } from 'helpers/storage/cookie';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { getUser } from 'helpers/user/user';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -87,7 +89,8 @@ validateWindowGuardian(window.guardian);
 const isTestUser = true as boolean;
 const csrf = window.guardian.csrf.token;
 
-const isSignedIn = !!get('GU_U');
+const user = getUser();
+const isSignedIn = user.isSignedIn;
 const countryId: IsoCountry = CountryHelper.detect();
 
 const productCatalog = window.guardian.productCatalog;
@@ -147,6 +150,39 @@ const fieldset = css`
 			margin-top: ${space[4]}px;
 		}
 	}
+`;
+
+const paymentMethodSelected = css`
+	box-shadow: inset 0 0 0 2px ${textInputThemeDefault.textInput.borderActive};
+	margin-top: ${space[2]}px;
+	border-radius: 4px;
+`;
+
+const paymentMethodNotSelected = css`
+	/* Using box shadows prevents layout shift when the rows are expanded */
+	box-shadow: inset 0 0 0 1px ${textInputThemeDefault.textInput.border};
+	margin-top: ${space[2]}px;
+	border-radius: 4px;
+`;
+
+const paymentMethodBody = css`
+	padding: ${space[5]}px ${space[3]}px ${space[6]}px;
+`;
+
+const paymentMethodRadioWithImage = css`
+	display: inline-flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	padding: ${space[2]}px ${space[3]}px;
+	font-weight: bold;
+`;
+const paymentMethodRadioWithImageSelected = css`
+	background-image: linear-gradient(
+		to top,
+		${palette.brand[500]} 2px,
+		transparent 2px
+	);
 `;
 
 /**
@@ -423,13 +459,12 @@ function CheckoutComponent({ geoId }: Props) {
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
 	/** Personal details */
-	const [firstName, setFirstName] = useState('');
+	const [firstName, setFirstName] = useState(user.firstName ?? '');
 	const [firstNameError, setFirstNameError] = useState<string>();
-	const [lastName, setLastName] = useState('');
+	const [lastName, setLastName] = useState(user.lastName ?? '');
 	const [lastNameError, setLastNameError] = useState<string>();
-	const [email, setEmail] = useState('');
+	const [email, setEmail] = useState(user.email ?? '');
 	const [emailError, setEmailError] = useState<string>();
-
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
 	const [deliveryLineOne, setDeliveryLineOne] = useState('');
@@ -995,7 +1030,7 @@ function CheckoutComponent({ geoId }: Props) {
 											)}
 										</>
 									)}
-									<fieldset>
+									<fieldset css={fieldset}>
 										<legend css={legend}>
 											2. Payment method
 											<SecureTransactionIndicator
@@ -1004,116 +1039,151 @@ function CheckoutComponent({ geoId }: Props) {
 											/>
 										</legend>
 
-										{validPaymentMethods.map((paymentMethod) => {
-											return (
-												<div>
-													<Radio
-														label={paymentMethod}
-														name="paymentMethod"
-														value={paymentMethod}
-														onChange={() => {
-															setPaymentMethod(paymentMethod);
-														}}
-													/>
-												</div>
-											);
-										})}
+										<RadioGroup>
+											{validPaymentMethods.map((validPaymentMethod) => {
+												const selected = paymentMethod === validPaymentMethod;
+												const { label, icon } =
+													paymentMethodData[validPaymentMethod];
+												return (
+													<div
+														css={
+															selected
+																? paymentMethodSelected
+																: paymentMethodNotSelected
+														}
+													>
+														<div
+															css={[
+																paymentMethodRadioWithImage,
+																selected
+																	? paymentMethodRadioWithImageSelected
+																	: undefined,
+															]}
+														>
+															<Radio
+																label={label}
+																name="paymentMethod"
+																value={validPaymentMethod}
+																onChange={() => {
+																	setPaymentMethod(validPaymentMethod);
+																}}
+															/>
+															<div>{icon}</div>
+														</div>
+														{validPaymentMethod === 'Stripe' && selected && (
+															<div css={paymentMethodBody}>
+																<input
+																	type="hidden"
+																	name="recaptchaToken"
+																	value={recaptchaToken}
+																/>
+																<StripeCardForm
+																	onCardNumberChange={() => {
+																		// no-op
+																	}}
+																	onExpiryChange={() => {
+																		// no-op
+																	}}
+																	onCvcChange={() => {
+																		// no-op
+																	}}
+																	errors={{}}
+																	recaptcha={
+																		<Recaptcha
+																			// We could change the parents type to Promise and uses await here, but that has
+																			// a lot of refactoring with not too much gain
+																			onRecaptchaCompleted={(token) => {
+																				setStripeClientSecretInProgress(true);
+																				setRecaptchaToken(token);
+																				void fetch(
+																					'/stripe/create-setup-intent/recaptcha',
+																					{
+																						method: 'POST',
+																						headers: {
+																							'Content-Type':
+																								'application/json',
+																						},
+																						body: JSON.stringify({
+																							isTestUser,
+																							stripePublicKey,
+																							token,
+																						}),
+																					},
+																				)
+																					.then((resp) => resp.json())
+																					.then((json) => {
+																						setStripeClientSecret(
+																							(json as Record<string, string>)
+																								.client_secret,
+																						);
+																						setStripeClientSecretInProgress(
+																							false,
+																						);
+																					});
+																			}}
+																			onRecaptchaExpired={() => {
+																				// no-op
+																			}}
+																		/>
+																	}
+																/>
+															</div>
+														)}
 
-										{paymentMethod === 'Stripe' && (
-											<>
-												<input
-													type="hidden"
-													name="recaptchaToken"
-													value={recaptchaToken}
-												/>
-												<StripeCardForm
-													onCardNumberChange={() => {
-														// no-op
-													}}
-													onExpiryChange={() => {
-														// no-op
-													}}
-													onCvcChange={() => {
-														// no-op
-													}}
-													errors={{}}
-													recaptcha={
-														<Recaptcha
-															// We could change the parents type to Promise and uses await here, but that has
-															// a lot of refactoring with not too much gain
-															onRecaptchaCompleted={(token) => {
-																setStripeClientSecretInProgress(true);
-																setRecaptchaToken(token);
-																void fetch(
-																	'/stripe/create-setup-intent/recaptcha',
-																	{
-																		method: 'POST',
-																		headers: {
-																			'Content-Type': 'application/json',
-																		},
-																		body: JSON.stringify({
-																			isTestUser,
-																			stripePublicKey,
-																			token,
-																		}),
-																	},
-																)
-																	.then((resp) => resp.json())
-																	.then((json) => {
-																		setStripeClientSecret(
-																			(json as Record<string, string>)
-																				.client_secret,
-																		);
-																		setStripeClientSecretInProgress(false);
-																	});
-															}}
-															onRecaptchaExpired={() => {
-																// no-op
-															}}
-														/>
-													}
-												/>
-											</>
-										)}
-
-										{paymentMethod === 'DirectDebit' && (
-											<DirectDebitForm
-												countryGroupId={countryGroupId}
-												accountHolderName={accountHolderName}
-												accountNumber={accountNumber}
-												accountHolderConfirmation={accountHolderConfirmation}
-												sortCode={sortCode}
-												recaptchaCompleted={false}
-												updateAccountHolderName={(name: string) => {
-													setAccountHolderName(name);
-												}}
-												updateAccountNumber={(number: string) => {
-													setAccountNumber(number);
-												}}
-												updateSortCode={(sortCode: string) => {
-													setSortCode(sortCode);
-												}}
-												updateAccountHolderConfirmation={(
-													confirmation: boolean,
-												) => {
-													setAccountHolderConfirmation(confirmation);
-												}}
-												recaptcha={
-													<Recaptcha
-														// We could change the parents type to Promise and uses await here, but that has
-														// a lot of refactoring with not too much gain
-														onRecaptchaCompleted={(token) => {
-															setRecaptchaToken(token);
-														}}
-														onRecaptchaExpired={() => {
-															// no-op
-														}}
-													/>
-												}
-												formError={''}
-												errors={{}}
-											/>
-										)}
+														{validPaymentMethod === 'DirectDebit' &&
+															selected && (
+																<div
+																	css={css`
+																		padding: ${space[5]}px ${space[3]}px
+																			${space[6]}px;
+																	`}
+																>
+																	<DirectDebitForm
+																		countryGroupId={countryGroupId}
+																		accountHolderName={accountHolderName}
+																		accountNumber={accountNumber}
+																		accountHolderConfirmation={
+																			accountHolderConfirmation
+																		}
+																		sortCode={sortCode}
+																		recaptchaCompleted={false}
+																		updateAccountHolderName={(name: string) => {
+																			setAccountHolderName(name);
+																		}}
+																		updateAccountNumber={(number: string) => {
+																			setAccountNumber(number);
+																		}}
+																		updateSortCode={(sortCode: string) => {
+																			setSortCode(sortCode);
+																		}}
+																		updateAccountHolderConfirmation={(
+																			confirmation: boolean,
+																		) => {
+																			setAccountHolderConfirmation(
+																				confirmation,
+																			);
+																		}}
+																		recaptcha={
+																			<Recaptcha
+																				// We could change the parents type to Promise and uses await here, but that has
+																				// a lot of refactoring with not too much gain
+																				onRecaptchaCompleted={(token) => {
+																					setRecaptchaToken(token);
+																				}}
+																				onRecaptchaExpired={() => {
+																					// no-op
+																				}}
+																			/>
+																		}
+																		formError={''}
+																		errors={{}}
+																	/>
+																</div>
+															)}
+													</div>
+												);
+											})}
+										</RadioGroup>
 									</fieldset>
 								</BoxContents>
 							</Box>
