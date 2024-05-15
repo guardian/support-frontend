@@ -73,6 +73,7 @@ abstract class Handler[IN, OUT](implicit
       _ <- Future.fromTry(out(result, os))
     } yield ()
     eventualUnit.recover { case t =>
+      logger.error(scrub"${t.getMessage()}")
       ErrorHandler.handleException(t)
     }
   }
