@@ -238,7 +238,9 @@ const query = {
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape
  */
 const doesNotContainEmojiPattern = '^[^\\p{Emoji_Presentation}]+$';
-function preventDefaultValidityMessage(currentTarget: HTMLInputElement) {
+function preventDefaultValidityMessage(
+	currentTarget: HTMLInputElement | HTMLSelectElement,
+) {
 	/**
 	 * Prevents default message showing, but maintains the default validation methods occuring
 	 * such as onInvalid.
@@ -481,9 +483,16 @@ function CheckoutComponent({ geoId }: Props) {
 		useState(true);
 
 	const [billingPostcode, setBillingPostcode] = useState('');
+	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
 	const [billingLineOne, setBillingLineOne] = useState('');
 	const [billingLineTwo, setBillingLineTwo] = useState('');
 	const [billingCity, setBillingCity] = useState('');
+	const [billingStateError, setBillingStateError] = useState<string>();
+	/**
+	 * BillingState selector initialised to undefined to hide
+	 * billingStateError message. formOnSubmit checks and converts to
+	 * empty string to display billingStateError message.
+	 */
 	const [billingState, setBillingState] = useState('');
 	const [billingPostcodeStateResults, setBillingPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
@@ -841,7 +850,18 @@ function CheckoutComponent({ geoId }: Props) {
 												countryId={countryId}
 												state={billingState}
 												onStateChange={setBillingState}
-												error={undefined}
+												onInvalid={(event) => {
+													preventDefaultValidityMessage(event.currentTarget);
+													const validityState = event.currentTarget.validity;
+													if (validityState.valid) {
+														setBillingStateError(undefined);
+													} else {
+														setBillingStateError(
+															'Please enter a state, province or territory.',
+														);
+													}
+												}}
+												error={billingStateError}
 											/>
 										)}
 
@@ -849,13 +869,32 @@ function CheckoutComponent({ geoId }: Props) {
 											<div>
 												<TextInput
 													id="zipCode"
-													name="billing-postcode"
 													label="ZIP code"
-													value={billingPostcode}
-													error={undefined}
+													name="billing-postcode"
 													onChange={(event) =>
 														setBillingPostcode(event.target.value)
 													}
+													maxLength={20}
+													value={billingPostcode}
+													pattern={doesNotContainEmojiPattern}
+													error={billingPostcodeError}
+													onInvalid={(event) => {
+														preventDefaultValidityMessage(event.currentTarget);
+														const validityState = event.currentTarget.validity;
+														if (validityState.valid) {
+															setBillingPostcodeError(undefined);
+														} else {
+															if (validityState.valueMissing) {
+																setBillingPostcodeError(
+																	'Please enter a zip code.',
+																);
+															} else {
+																setBillingPostcodeError(
+																	'Please enter a valid zip code.',
+																);
+															}
+														}
+													}}
 												/>
 											</div>
 										)}
