@@ -750,7 +750,10 @@ function CheckoutComponent({ geoId }: Props) {
 												value={email}
 												type="email"
 												autoComplete="email"
-												onChange={(event) => setEmail(event.target.value)}
+												onChange={(event) => {
+													setEmail(event.target.value);
+													event.target.checkValidity();
+												}}
 												disabled={isSignedIn}
 												name="email"
 												required
@@ -785,7 +788,10 @@ function CheckoutComponent({ geoId }: Props) {
 													value={firstName}
 													autoComplete="given-name"
 													autoCapitalize="words"
-													onChange={(event) => setFirstName(event.target.value)}
+													onChange={(event) => {
+														setFirstName(event.target.value);
+														event.target.checkValidity();
+													}}
 													name="firstName"
 													required
 													maxLength={40}
@@ -818,7 +824,10 @@ function CheckoutComponent({ geoId }: Props) {
 													value={lastName}
 													autoComplete="family-name"
 													autoCapitalize="words"
-													onChange={(event) => setLastName(event.target.value)}
+													onChange={(event) => {
+														setLastName(event.target.value);
+														event.target.checkValidity();
+													}}
 													name="lastName"
 													required
 													maxLength={40}
@@ -874,9 +883,10 @@ function CheckoutComponent({ geoId }: Props) {
 													id="zipCode"
 													label="ZIP code"
 													name="billing-postcode"
-													onChange={(event) =>
-														setBillingPostcode(event.target.value)
-													}
+													onChange={(event) => {
+														setBillingPostcode(event.target.value);
+														event.target.checkValidity();
+													}}
 													maxLength={20}
 													value={billingPostcode}
 													pattern={doesNotContainEmojiPattern}
