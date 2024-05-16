@@ -751,7 +751,9 @@ function CheckoutComponent({ geoId }: Props) {
 												type="email"
 												autoComplete="email"
 												onChange={(event) => {
-													setEmail(event.target.value);
+													setEmail(event.currentTarget.value);
+												}}
+												onBlur={(event) => {
 													event.target.checkValidity();
 												}}
 												disabled={isSignedIn}
@@ -790,6 +792,8 @@ function CheckoutComponent({ geoId }: Props) {
 													autoCapitalize="words"
 													onChange={(event) => {
 														setFirstName(event.target.value);
+													}}
+													onBlur={(event) => {
 														event.target.checkValidity();
 													}}
 													name="firstName"
@@ -826,6 +830,8 @@ function CheckoutComponent({ geoId }: Props) {
 													autoCapitalize="words"
 													onChange={(event) => {
 														setLastName(event.target.value);
+													}}
+													onBlur={(event) => {
 														event.target.checkValidity();
 													}}
 													name="lastName"
