@@ -74,7 +74,10 @@ import {
 	getOphanIds,
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import {
+	trackComponentClick,
+	trackComponentInsert,
+} from 'helpers/tracking/behaviour';
 import { getUser } from 'helpers/user/user';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
@@ -251,6 +254,20 @@ function preventDefaultValidityMessage(
 	if (!currentTarget.validity.valid) {
 		// 2. setCustomValidity to " " which avoids the browser's default message
 		currentTarget.setCustomValidity(' ');
+	}
+}
+
+function onPaymentMethodEvent(
+	event: 'select' | 'render',
+	paymentMethod?: PaymentMethod,
+): void {
+	if (paymentMethod) {
+		const trackingId = `payment-method-selector-${paymentMethod}`;
+		if (event === 'select') {
+			trackComponentClick(trackingId);
+		} else {
+			trackComponentInsert(trackingId);
+		}
 	}
 }
 
@@ -1078,7 +1095,11 @@ function CheckoutComponent({ geoId }: Props) {
 											/>
 										</legend>
 
-										<RadioGroup>
+										<RadioGroup
+											onChange={() => {
+												onPaymentMethodEvent('select', paymentMethod);
+											}}
+										>
 											{validPaymentMethods.map((validPaymentMethod) => {
 												const selected = paymentMethod === validPaymentMethod;
 												const { label, icon } =
