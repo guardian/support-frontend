@@ -893,6 +893,8 @@ function CheckoutComponent({ geoId }: Props) {
 													name="billing-postcode"
 													onChange={(event) => {
 														setBillingPostcode(event.target.value);
+													}}
+													onBlur={(event) => {
 														event.target.checkValidity();
 													}}
 													maxLength={20}
