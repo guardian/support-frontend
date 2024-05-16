@@ -21,7 +21,6 @@ class DiagnosticsController(
     "gu.contributions.recurring.contrib-timestamp.Annual",
     "gu.contributions.contrib-timestamp",
     "gu_article_count_opt_out",
-    "gu_contributions_reminder_signed_up",
   )
 
   import actionRefiners._
