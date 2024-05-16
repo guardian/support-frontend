@@ -67,6 +67,7 @@ function FeedbackCTA({
 	const dispatch = useContributionsDispatch();
 
 	const onClick = () => {
+		console.log('TEST trackComponentClick-FeedbackItems');
 		trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
 		dispatch(setThankYouFeedbackSurveyHasBeenCompleted(true));
 	};

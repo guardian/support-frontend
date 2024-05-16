@@ -154,6 +154,7 @@ export function CheckoutNudgeContainer({
 
 	function onNudgeClick(event: React.MouseEvent<HTMLAnchorElement>) {
 		event.preventDefault();
+		console.log('TEST trackComponentClick-checkoutNudgeContainer');
 		trackComponentClick('contribution-annual-nudge');
 
 		if (isDynamic) {

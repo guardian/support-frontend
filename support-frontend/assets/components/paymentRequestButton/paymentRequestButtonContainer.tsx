@@ -49,6 +49,7 @@ export function PaymentRequestButtonContainer({
 			function handleButtonClick() {
 				paymentRequest?.show();
 				if (internalPaymentMethodName) {
+					console.log('TEST trackComponentClick-paymentRequestButtonContainer');
 					trackComponentClick(`${internalPaymentMethodName}-${buttonType}`);
 				}
 				dispatch(

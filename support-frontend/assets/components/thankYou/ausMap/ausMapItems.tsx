@@ -16,7 +16,10 @@ export const ausMapBodyCopy =
 export function AusMapCTA(): JSX.Element {
 	return (
 		<LinkButton
-			onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_AUS_MAP)}
+			onClick={() => {
+				console.log('TEST trackComponentClick-ausMapItems');
+				trackComponentClick(OPHAN_COMPONENT_ID_AUS_MAP);
+			}}
 			href={AUS_MAP_URL}
 			target="_blank"
 			rel="noopener noreferrer"

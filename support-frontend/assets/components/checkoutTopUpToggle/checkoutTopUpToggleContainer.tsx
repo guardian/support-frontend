@@ -46,6 +46,7 @@ export function CheckoutTopUpToggleContainer({
 				amount: checked ? `${benefitsThreshold}` : `${amountBeforeAmendments}`,
 			}),
 		);
+		console.log('TEST trackComponentClick-checkoutTopToggleContainer');
 		trackComponentClick(
 			`contribution-topup-toggle-${
 				checked ? 'checked' : 'unchecked'

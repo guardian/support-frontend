@@ -48,6 +48,7 @@ export function usePaymentRequestCompletion(
 			return;
 		}
 		if (stripe && paymentMethod && internalPaymentMethodName) {
+			console.log('TEST trackComponentClick-usePaymentRequestCompletion');
 			trackComponentClick(`${paymentWallet}-paymentAuthorised`);
 
 			dispatch(paymentWaiting(true));

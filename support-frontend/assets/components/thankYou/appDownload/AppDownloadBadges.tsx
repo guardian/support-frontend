@@ -195,9 +195,10 @@ function AppDownloadBadges({
 			<a
 				href={androidAppUrl}
 				target="blank"
-				onClick={() =>
-					trackComponentClick(OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE)
-				}
+				onClick={() => {
+					console.log('TEST trackComponentClick-AppDownloadBadges1');
+					trackComponentClick(OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE);
+				}}
 				css={googlePlayLink}
 				aria-label="Get it on Google Play"
 			>
@@ -414,9 +415,10 @@ export function AppDownloadBadgesEditions({
 			<a
 				href={editionsPlayStoreUrl}
 				target="blank"
-				onClick={() =>
-					trackComponentClick(OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE)
-				}
+				onClick={() => {
+					console.log('TEST trackComponentClick-AppDownloadBadges2');
+					trackComponentClick(OPHAN_COMPONENT_ID_GOOGLE_PLAY_BADGE);
+				}}
 				css={googlePlayLink}
 				aria-label="Get it on Google Play"
 			>

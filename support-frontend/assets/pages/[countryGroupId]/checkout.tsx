@@ -264,6 +264,7 @@ function onPaymentMethodEvent(
 	if (paymentMethod) {
 		const trackingId = `payment-method-selector-${paymentMethod}`;
 		if (event === 'select') {
+			console.log('TEST trackComponentClick-checkout');
 			trackComponentClick(trackingId);
 		} else {
 			trackComponentInsert(trackingId);

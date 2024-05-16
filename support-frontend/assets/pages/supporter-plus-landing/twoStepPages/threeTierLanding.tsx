@@ -410,6 +410,7 @@ export function ThreeTierLanding(): JSX.Element {
 			 * Top tier accessed via network request to GuardianWeekly landing page
 			 * therefore tracking required
 			 **/
+			console.log('TEST trackComponentClick-threeTierLanding1');
 			trackComponentClick(
 				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${price}`,
 			);
@@ -453,6 +454,7 @@ export function ThreeTierLanding(): JSX.Element {
 			generateOneOffCheckoutLink(),
 			abParticipations,
 		);
+		console.log('TEST trackComponentClick-threeTierLanding2');
 		trackComponentClick(
 			`npf-contribution-amount-toggle-${countryGroupId}-ONE_OFF`,
 		);

@@ -61,6 +61,7 @@ export function SignInBodyCopy(): JSX.Element {
 	const [isExpanded, setIsExpanded] = useState(false);
 
 	const onReadMoreClick = () => {
+		console.log('TEST trackComponentClick-SignInItems1');
 		trackComponentClick(OPHAN_COMPONENT_ID_READ_MORE_SIGN_IN);
 		setIsExpanded(true);
 	};
@@ -147,7 +148,10 @@ export function SignInCTA({ email, csrf }: SignInBodyCopyProps): JSX.Element {
 		fetchSignInLink(payload);
 	}, []);
 
-	const onSignInClick = () => trackComponentClick(OPHAN_COMPONENT_ID_SIGN_IN);
+	const onSignInClick = () => {
+		console.log('TEST trackComponentClick-SignInItems2');
+		trackComponentClick(OPHAN_COMPONENT_ID_SIGN_IN);
+	};
 
 	return (
 		<LinkButton

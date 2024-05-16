@@ -29,6 +29,7 @@ export function PaymentFrequencyTabsContainer({
 	const productType = useContributionsSelector(getContributionType);
 
 	function onTabChange(contributionType: ContributionType) {
+		console.log('TEST trackComponentClick-paymntFrquencyTabsContainer');
 		trackComponentClick(
 			`npf-contribution-type-toggle-${countryGroupId}-${contributionType}`,
 		);
