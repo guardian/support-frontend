@@ -82,7 +82,9 @@ export function PersonalDetailsContainer({
 			<StateSelect
 				countryId={countryId}
 				state={state}
-				onStateChange={onBillingStateChange}
+				onStateChange={(event) => {
+					onBillingStateChange(event.currentTarget.value);
+				}}
 				error={errorObject?.state?.[0]}
 			/>
 		),
