@@ -866,6 +866,8 @@ function CheckoutComponent({ geoId }: Props) {
 												state={billingState}
 												onStateChange={(event) => {
 													setBillingState(event.currentTarget.value);
+												}}
+												onBlur={(event) => {
 													event.currentTarget.checkValidity();
 												}}
 												onInvalid={(event) => {

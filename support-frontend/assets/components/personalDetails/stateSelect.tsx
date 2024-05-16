@@ -14,6 +14,7 @@ type StateSelectProps = {
 	countryId: IsoCountry;
 	state: string;
 	onStateChange: FormEventHandler<HTMLSelectElement>;
+	onBlur?: FormEventHandler<HTMLSelectElement>;
 	onInvalid?: FormEventHandler<HTMLSelectElement>;
 	error?: string;
 };
@@ -34,6 +35,7 @@ export function StateSelect({
 	countryId,
 	state,
 	onStateChange,
+	onBlur,
 	onInvalid,
 	error,
 }: StateSelectProps): JSX.Element | null {
@@ -49,6 +51,7 @@ export function StateSelect({
 				label={stateDescriptor}
 				value={state}
 				onChange={onStateChange}
+				onBlur={onBlur}
 				onInvalid={onInvalid}
 				error={error}
 				name={'billing-state'}
