@@ -1,0 +1,20 @@
+@import assets.AssetsResolver
+@import admin.settings.AllSettings
+@import views.EmptyDiv
+@import assets.RefPath
+@import assets.StyleContent
+@()(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
+
+@main(
+  title = "Support the Guardian | Events",
+  mainElement = EmptyDiv("events"),
+  mainJsBundle = Left(RefPath("[countryGroupId]/events/router.js")),
+  mainStyleBundle = Right(StyleContent(Html(""))),
+  description = Some("Help us deliver the independent journalism the world needs. Support the Guardian by making a contribution."),
+  canonicalLink = Some("https://support.theguardian.com/events"),
+  hrefLangLinks = Map(),
+  csrf = None,
+  shareImageUrl = None,
+  shareUrl = None,
+  noindex = true
+){Html()}

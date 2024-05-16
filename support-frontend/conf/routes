@@ -89,9 +89,12 @@ POST /identity/signin-url                                          controllers.I
 GET  /subscribe                                                    controllers.SubscriptionsController.geoRedirect()
 GET  /$country<(uk|us|au|eu|int|nz|ca)>/subscribe                  controllers.SubscriptionsController.landing(country: String)
 
-# ----- Checkout ----- #
+# Checkout
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/checkout            controllers.Application.router(countryGroupId: String)
 GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/thank-you           controllers.Application.router(countryGroupId: String)
+
+# Events
+GET  /$countryGroupId<(uk|us|au|eu|int|nz|ca)>/events              controllers.Application.eventsRouter(countryGroupId: String, eventId: Option[String] = None)
 
 # This is just a fallback in case someone accidentally uses an unsupported country-specific
 # subscribe route. We just redirect to the subscriptions site and let its geolocation handle it.
