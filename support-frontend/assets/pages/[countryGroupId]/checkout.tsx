@@ -756,7 +756,7 @@ function CheckoutComponent({ geoId }: Props) {
 												onBlur={(event) => {
 													event.target.checkValidity();
 												}}
-												disabled={isSignedIn}
+												readOnly={isSignedIn}
 												name="email"
 												required
 												maxLength={80}
