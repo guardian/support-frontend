@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { from, sport } from '@guardian/source-foundations';
 import { Container } from '@guardian/source-react-components';
 import { FooterWithContents } from '@guardian/source-react-components-development-kitchen';
+import ophan from 'ophan';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
@@ -12,6 +13,7 @@ const checkoutContainer = css`
 	}
 `;
 
+ophan.init();
 export function Events() {
 	const searchParams = new URLSearchParams(window.location.search);
 	const eventId = searchParams.get('eventId') ?? '4180362';
