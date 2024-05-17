@@ -360,13 +360,6 @@ function CheckoutComponent({ geoId }: Props) {
 				productOptions: NoProductOptions,
 			};
 		}
-		if (price) {
-			trackPriceChange(
-				countryGroupId,
-				ratePlanDescription.billingPeriod,
-				price,
-			);
-		}
 	}
 
 	if (
@@ -485,6 +478,15 @@ function CheckoutComponent({ geoId }: Props) {
 			// TODO - this might not meet our browser compatibility requirements (Safari)
 			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
 			formRef.current?.requestSubmit();
+		} else {
+			// Tracking here as executed once when checkout loaded
+			if (price) {
+				trackPriceChange(
+					countryGroupId,
+					ratePlanDescription.billingPeriod,
+					price,
+				);
+			}
 		}
 	}, [payPalBAID]);
 	useEffect(() => {
