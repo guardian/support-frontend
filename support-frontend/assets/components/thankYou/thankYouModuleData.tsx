@@ -1,7 +1,7 @@
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
-import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import type { ThankYouSupportReminderState } from 'helpers/redux/checkout/thankYouState/state';
 import {
 	OPHAN_COMPONENT_ID_AUS_MAP,
 	OPHAN_COMPONENT_ID_SET_REMINDER,
@@ -54,11 +54,10 @@ export const getThankYouModuleData = (
 	email: string,
 	isOneOff: boolean,
 	amountIsAboveThreshold: boolean,
+	feedbackSurveyHasBeenCompleted: boolean,
+	supportReminder: ThankYouSupportReminderState,
 	campaignCode?: string,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
-	const { feedbackSurveyHasBeenCompleted, supportReminder } =
-		useContributionsSelector((state) => state.page.checkoutForm.thankYou);
-
 	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
 		if (countryId === 'AU') {

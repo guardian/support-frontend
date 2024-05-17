@@ -657,10 +657,12 @@ function CheckoutComponent({ geoId }: Props) {
 			if (processPaymentResponse.status === 'success') {
 				const order = {
 					firstName: personalData.firstName,
+					email: personalData.email,
 					price: price,
 					product: productId,
 					ratePlan: query.ratePlan,
 					paymentMethod: paymentMethod as string,
+					userTypeFromIdentityResponse: 'new',
 				};
 				setThankYouOrder(order);
 				window.location.href = `/${geoId}/thank-you`;

@@ -1,12 +1,20 @@
 import { css } from '@emotion/react';
 import { storage } from '@guardian/libs';
 import { from, space, sport } from '@guardian/source-foundations';
-import { Container, LinkButton } from '@guardian/source-react-components';
+import {
+	Column,
+	Columns,
+	Container,
+	LinkButton,
+} from '@guardian/source-react-components';
 import { FooterWithContents } from '@guardian/source-react-components-development-kitchen';
 import type { Input } from 'valibot';
 import { number, object, safeParse, string } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
+import ThankYouModule from 'components/thankYou/thankYouModule';
+import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import { init as abTestInit } from 'helpers/abTests/abtest';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import { get } from 'helpers/storage/cookie';
@@ -15,6 +23,10 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
+import {
+	columnContainer,
+	firstColumnContainer,
+} from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 
 export const checkoutContainer = css`
 	${from.tablet} {
@@ -41,10 +53,12 @@ export const buttonContainer = css`
  */
 const OrderSchema = object({
 	firstName: string(),
+	email: string(),
 	price: number(),
 	product: string(),
 	ratePlan: string(),
 	paymentMethod: string(),
+	userTypeFromIdentityResponse: string(),
 });
 export function setThankYouOrder(order: Input<typeof OrderSchema>) {
 	storage.session.set('thankYouOrder', order);
@@ -95,6 +109,54 @@ export function ThankYou({ geoId }: Props) {
 	const showOffer =
 		!!abParticipations.usFreeBookOffer && order.product === 'SupporterPlus';
 
+	const isSupporterPlus = order.product === 'SupporterPlus';
+	const isNewAccount = order.userTypeFromIdentityResponse === 'new';
+	const feedbackSurveyHasBeenCompleted = true;
+	const supportReminder = {
+		selectedChoiceIndex: 1,
+		hasBeenCompleted: true,
+		errorMessage: '',
+	};
+
+	const thankYouModuleData = getThankYouModuleData(
+		countryId,
+		countryGroupId,
+		{ token: undefined },
+		order.email,
+		order.product === 'OneTime',
+		isSupporterPlus,
+		feedbackSurveyHasBeenCompleted,
+		supportReminder,
+	);
+
+	const maybeThankYouModule = (
+		condtion: boolean,
+		moduleType: ThankYouModuleType,
+	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
+
+	const thankYouModules: ThankYouModuleType[] = [
+		...maybeThankYouModule(isNewAccount, 'signUp'),
+		...maybeThankYouModule(
+			!isNewAccount && !isSignedIn && order.email.length > 0,
+			'signIn',
+		),
+		...maybeThankYouModule(
+			contributionType !== 'ONE_OFF' && isSupporterPlus,
+			'appDownload',
+		),
+		...maybeThankYouModule(
+			contributionType === 'ONE_OFF' && order.email.length > 0,
+			'supportReminder',
+		),
+		...maybeThankYouModule(order.email.length > 0, 'feedback'),
+		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
+		'socialShare',
+	];
+
+	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;
+	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
+	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
+
 	return (
 		<PageScaffold
 			header={<Header />}
@@ -122,6 +184,27 @@ export function ThankYou({ geoId }: Props) {
 							// TODO - get this from the /identity/get-user-type endpoint
 							userTypeFromIdentityResponse={'guest'}
 						/>
+
+						<Columns collapseUntil="desktop">
+							<Column cssOverrides={[columnContainer, firstColumnContainer]}>
+								{firstColumn.map((moduleType) => (
+									<ThankYouModule
+										moduleType={moduleType}
+										isSignedIn={isSignedIn}
+										{...thankYouModuleData[moduleType]}
+									/>
+								))}
+							</Column>
+							<Column cssOverrides={columnContainer}>
+								{secondColumn.map((moduleType) => (
+									<ThankYouModule
+										moduleType={moduleType}
+										isSignedIn={isSignedIn}
+										{...thankYouModuleData[moduleType]}
+									/>
+								))}
+							</Column>
+						</Columns>
 
 						<div css={buttonContainer}>
 							<LinkButton
