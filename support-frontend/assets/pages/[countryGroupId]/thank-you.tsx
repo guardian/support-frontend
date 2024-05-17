@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { storage } from '@guardian/libs';
 import { from, space, sport } from '@guardian/source-foundations';
-import { Container } from '@guardian/source-react-components';
+import { Container, LinkButton } from '@guardian/source-react-components';
 import { FooterWithContents } from '@guardian/source-react-components-development-kitchen';
 import type { Input } from 'valibot';
 import { number, object, safeParse, string } from 'valibot';
@@ -10,6 +10,8 @@ import { PageScaffold } from 'components/page/pageScaffold';
 import { init as abTestInit } from 'helpers/abTests/abtest';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import { get } from 'helpers/storage/cookie';
+import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
@@ -27,6 +29,10 @@ export const headerContainer = css`
 	${from.leftCol} {
 		width: calc(50% - ${space[3]}px);
 	}
+`;
+
+export const buttonContainer = css`
+	padding: ${space[12]}px 0;
 `;
 
 /**
@@ -116,6 +122,18 @@ export function ThankYou({ geoId }: Props) {
 							// TODO - get this from the /identity/get-user-type endpoint
 							userTypeFromIdentityResponse={'guest'}
 						/>
+
+						<div css={buttonContainer}>
+							<LinkButton
+								href="https://www.theguardian.com"
+								priority="tertiary"
+								onClick={() =>
+									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
+								}
+							>
+								Return to the Guardian
+							</LinkButton>
+						</div>
 					</div>
 				</Container>
 			</div>
