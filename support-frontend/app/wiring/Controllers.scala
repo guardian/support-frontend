@@ -37,7 +37,7 @@ trait Controllers {
     stringsConfig,
     allSettingsProvider,
     appConfig.stage,
-    implicitWs,
+    authAction,
     priceSummaryServiceProvider,
     cachedProductCatalogServiceProvider,
     appConfig.supportUrl,

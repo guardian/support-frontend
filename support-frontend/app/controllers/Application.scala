@@ -1,10 +1,11 @@
 package controllers
 
-import actions.CustomActionBuilders
+import actions.{CacheControl, CustomActionBuilders}
 import admin.ServersideAbTest.generateParticipations
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
 import assets.{AssetsResolver, RefPath, StyleContent}
 import cats.data.EitherT
+import com.gu.googleauth.AuthAction
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
@@ -22,6 +23,7 @@ import services.pricing.PriceSummaryServiceProvider
 import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
 import views.EmptyDiv
+import wiring.GoogleAuth
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -51,7 +53,7 @@ class Application(
     stringsConfig: StringsConfig,
     settingsProvider: AllSettingsProvider,
     stage: Stage,
-    wsClient: WSClient,
+    authAction: AuthAction[AnyContent],
     priceSummaryServiceProvider: PriceSummaryServiceProvider,
     cachedProductCatalogServiceProvider: CachedProductCatalogServiceProvider,
     val supportUrl: String,
@@ -309,6 +311,11 @@ class Application(
         user = request.user,
       ),
     ).withSettingsSurrogateKey
+  }
+
+  def eventsRouter(countryGroupId: String, eventId: Option[String]) = authAction { implicit request =>
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    Ok(views.html.eventsRouter()).withHeaders(CacheControl.noCache)
   }
 }
 
