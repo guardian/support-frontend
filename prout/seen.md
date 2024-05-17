@@ -1,2 +1,3 @@
 
-- Keep an eye out for [post deployment test](https://github.com/guardian/support-frontend/wiki/Post-Deployment-Testing) results on [teamcity](https://teamcity.gutools.co.uk/buildConfiguration/memsub_Support_SupportFrontendPostDeployTests?branch=%3Cdefault%3E&mode=builds)
+- Keep an eye out for the post deployment tests [github action](https://github.com/guardian/support-frontend/actions/workflows/support-frontend-post-deploy-tests-using-playwright.yml)
+- If the tests have failed, the [post deployment test runbook](https://github.com/guardian/support-frontend/wiki/Post-deployment-test-runbook) should help troubleshoot.
