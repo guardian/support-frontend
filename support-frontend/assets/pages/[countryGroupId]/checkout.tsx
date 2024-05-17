@@ -67,7 +67,9 @@ import { getStripeKey } from 'helpers/forms/stripe';
 import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { productCatalogDescription } from 'helpers/productCatalog';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import {
@@ -257,7 +259,7 @@ function preventDefaultValidityMessage(
 	}
 }
 
-function onPaymentMethodEvent(
+function trackPaymentMethod(
 	event: 'select' | 'render',
 	paymentMethod?: PaymentMethod,
 ): void {
@@ -270,6 +272,15 @@ function onPaymentMethodEvent(
 			trackComponentInsert(trackingId);
 		}
 	}
+}
+function trackPriceChange(
+	countryGroupId: CountryGroupId,
+	billingPeriod: BillingPeriod,
+	price: number,
+): void {
+	trackComponentClick(
+		`npf-contribution-amount-toggle-${countryGroupId}-${billingPeriod.toUpperCase()}-${price}`,
+	);
 }
 
 type Props = {
@@ -348,6 +359,13 @@ function CheckoutComponent({ geoId }: Props) {
 				fulfilmentOptions: NoFulfilmentOptions,
 				productOptions: NoProductOptions,
 			};
+		}
+		if (price) {
+			trackPriceChange(
+				countryGroupId,
+				ratePlanDescription.billingPeriod,
+				price,
+			);
 		}
 	}
 
@@ -1098,7 +1116,7 @@ function CheckoutComponent({ geoId }: Props) {
 
 										<RadioGroup
 											onChange={() => {
-												onPaymentMethodEvent('select', paymentMethod);
+												trackPaymentMethod('select', paymentMethod);
 											}}
 										>
 											{validPaymentMethods.map((validPaymentMethod) => {
