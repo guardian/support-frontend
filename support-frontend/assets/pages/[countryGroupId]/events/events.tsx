@@ -27,15 +27,25 @@ export function Events() {
 			<div css={checkoutContainer}>
 				<Container>
 					<div className="tt-widget">
+						<div className="tt-widget-fallback">
+							<p>
+								<a
+									href={`https://tickets.theguardian.live/checkout/new-session/id/${eventId}/chk/9fa2/?ref=support-theguardian-com`}
+									target="_blank"
+								>
+									Click here to buy tickets
+								</a>
+							</p>
+						</div>
 						<script
 							src="https://cdn.tickettailor.com/js/widgets/min/widget.js"
-							data-url={`https://tickets.theguardian.live/checkout/view-event/id/${eventId}/chk/9fa2/?modal_widget=true&widget=true`}
+							data-url={`https://tickets.theguardian.live/checkout/new-session/id/${eventId}/chk/9fa2/?ref=support-theguardian-com`}
 							data-type="inline"
 							data-inline-minimal="true"
 							data-inline-show-logo="false"
 							data-inline-bg-fill="false"
-							data-inline-inherit-ref-from-url-param="utm_campaign"
-							data-inline-ref="guardian"
+							data-inline-inherit-ref-from-url-param=""
+							data-inline-ref="support-theguardian-com"
 						></script>
 					</div>
 				</Container>
