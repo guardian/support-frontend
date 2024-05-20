@@ -244,8 +244,8 @@ export function SupporterPlusThankYou({
 		email,
 		isOneOff,
 		amountIsAboveThreshold,
-		feedbackSurveyHasBeenCompleted,
 		supportReminder,
+		feedbackSurveyHasBeenCompleted,
 		campaignSettings?.campaignCode,
 	);
 

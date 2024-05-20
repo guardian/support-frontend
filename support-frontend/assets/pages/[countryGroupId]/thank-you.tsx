@@ -59,6 +59,7 @@ const OrderSchema = object({
 	ratePlan: string(),
 	paymentMethod: string(),
 	userTypeFromIdentityResponse: string(),
+	csrf: string(),
 });
 export function setThankYouOrder(order: Input<typeof OrderSchema>) {
 	storage.session.set('thankYouOrder', order);
@@ -102,16 +103,15 @@ export function ThankYou({ geoId }: Props) {
 		return <div>Unable to find contribution type {contributionType}</div>;
 	}
 
-	const isOneOffPayPal =
-		order.paymentMethod === 'PayPal' && order.product === 'Contribution';
-
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const showOffer =
 		!!abParticipations.usFreeBookOffer && order.product === 'SupporterPlus';
 
+	const isOneOff = order.product === 'Contribution';
+	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = order.product === 'SupporterPlus';
 	const isNewAccount = order.userTypeFromIdentityResponse === 'new';
-	const feedbackSurveyHasBeenCompleted = true; // TODO
+	const csrf = { token: order.csrf };
 	const supportReminder = {
 		selectedChoiceIndex: 1, // TODO
 		hasBeenCompleted: true, // TODO
@@ -121,11 +121,10 @@ export function ThankYou({ geoId }: Props) {
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
-		{ token: undefined }, // TODO
+		csrf,
 		order.email,
-		order.product === 'OneTime', // TODO
+		isOneOff,
 		isSupporterPlus,
-		feedbackSurveyHasBeenCompleted, // TODO
 		supportReminder, // TODO
 	);
 
@@ -148,7 +147,7 @@ export function ThankYou({ geoId }: Props) {
 			contributionType === 'ONE_OFF' && order.email.length > 0,
 			'supportReminder',
 		),
-		...maybeThankYouModule(order.email.length > 0, 'feedback'),
+		...maybeThankYouModule(order.email.length > 0, 'feedbackCheckout'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];

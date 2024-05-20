@@ -58,8 +58,8 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		email,
 		false,
 		amountIsAboveThreshold,
-		feedbackSurveyHasBeenCompleted,
 		supportReminder,
+		feedbackSurveyHasBeenCompleted,
 		campaignSettings?.campaignCode,
 	);
 

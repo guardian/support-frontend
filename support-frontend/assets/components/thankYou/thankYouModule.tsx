@@ -149,6 +149,7 @@ export type ThankYouModuleType =
 	| 'appDownloadEditions'
 	| 'ausMap'
 	| 'feedback'
+	| 'feedbackCheckout'
 	| 'signIn'
 	| 'signUp'
 	| 'socialShare'

@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
+import { setThankYouFeedbackSurveyHasBeenCompleted } from 'helpers/redux/checkout/thankYouState/actions';
 import type { ThankYouSupportReminderState } from 'helpers/redux/checkout/thankYouState/state';
+import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import {
 	OPHAN_COMPONENT_ID_AUS_MAP,
 	OPHAN_COMPONENT_ID_SET_REMINDER,
@@ -10,6 +13,7 @@ import {
 	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -54,10 +58,15 @@ export const getThankYouModuleData = (
 	email: string,
 	isOneOff: boolean,
 	amountIsAboveThreshold: boolean,
-	feedbackSurveyHasBeenCompleted: boolean,
 	supportReminder: ThankYouSupportReminderState,
+	feedbackSurveyHasBeenCompleted?: boolean,
 	campaignCode?: string,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
+	const [
+		feedbackSurveyHasBeenCompletedCheckout,
+		SetFeedbackSurveyHasBeenCompletedCheckout,
+	] = useState(false);
+
 	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
 		const surveyBasePath = 'https://guardiannewsandmedia.formstack.com/forms/';
 		if (countryId === 'AU') {
@@ -95,14 +104,44 @@ export const getThankYouModuleData = (
 		},
 		feedback: {
 			icon: getThankYouModuleIcon('feedback'),
-			header: getFeedbackHeader(feedbackSurveyHasBeenCompleted),
+			header: getFeedbackHeader(feedbackSurveyHasBeenCompleted ?? false),
 			bodyCopy: (
 				<FeedbackBodyCopy
-					feedbackSurveyHasBeenCompleted={feedbackSurveyHasBeenCompleted}
+					feedbackSurveyHasBeenCompleted={
+						feedbackSurveyHasBeenCompleted ?? false
+					}
 				/>
 			),
 			ctas: feedbackSurveyHasBeenCompleted ? null : (
-				<FeedbackCTA feedbackSurveyLink={getFeedbackSurveyLink(countryId)} />
+				<FeedbackCTA
+					feedbackSurveyLink={getFeedbackSurveyLink(countryId)}
+					onClick={() => {
+						const dispatch = useContributionsDispatch();
+						trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
+						dispatch(setThankYouFeedbackSurveyHasBeenCompleted(true));
+					}}
+				/>
+			),
+			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
+		},
+		feedbackCheckout: {
+			icon: getThankYouModuleIcon('feedback'),
+			header: getFeedbackHeader(feedbackSurveyHasBeenCompletedCheckout),
+			bodyCopy: (
+				<FeedbackBodyCopy
+					feedbackSurveyHasBeenCompleted={
+						feedbackSurveyHasBeenCompletedCheckout
+					}
+				/>
+			),
+			ctas: feedbackSurveyHasBeenCompletedCheckout ? null : (
+				<FeedbackCTA
+					feedbackSurveyLink={getFeedbackSurveyLink(countryId)}
+					onClick={() => {
+						trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
+						SetFeedbackSurveyHasBeenCompletedCheckout(true);
+					}}
+				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
 		},
