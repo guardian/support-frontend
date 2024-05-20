@@ -111,22 +111,22 @@ export function ThankYou({ geoId }: Props) {
 
 	const isSupporterPlus = order.product === 'SupporterPlus';
 	const isNewAccount = order.userTypeFromIdentityResponse === 'new';
-	const feedbackSurveyHasBeenCompleted = true;
+	const feedbackSurveyHasBeenCompleted = true; // TODO
 	const supportReminder = {
-		selectedChoiceIndex: 1,
-		hasBeenCompleted: true,
+		selectedChoiceIndex: 1, // TODO
+		hasBeenCompleted: true, // TODO
 		errorMessage: '',
 	};
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
-		{ token: undefined },
+		{ token: undefined }, // TODO
 		order.email,
-		order.product === 'OneTime',
+		order.product === 'OneTime', // TODO
 		isSupporterPlus,
-		feedbackSurveyHasBeenCompleted,
-		supportReminder,
+		feedbackSurveyHasBeenCompleted, // TODO
+		supportReminder, // TODO
 	);
 
 	const maybeThankYouModule = (
@@ -184,39 +184,39 @@ export function ThankYou({ geoId }: Props) {
 							// TODO - get this from the /identity/get-user-type endpoint
 							userTypeFromIdentityResponse={'guest'}
 						/>
+					</div>
 
-						<Columns collapseUntil="desktop">
-							<Column cssOverrides={[columnContainer, firstColumnContainer]}>
-								{firstColumn.map((moduleType) => (
-									<ThankYouModule
-										moduleType={moduleType}
-										isSignedIn={isSignedIn}
-										{...thankYouModuleData[moduleType]}
-									/>
-								))}
-							</Column>
-							<Column cssOverrides={columnContainer}>
-								{secondColumn.map((moduleType) => (
-									<ThankYouModule
-										moduleType={moduleType}
-										isSignedIn={isSignedIn}
-										{...thankYouModuleData[moduleType]}
-									/>
-								))}
-							</Column>
-						</Columns>
+					<Columns collapseUntil="desktop">
+						<Column cssOverrides={[columnContainer, firstColumnContainer]}>
+							{firstColumn.map((moduleType) => (
+								<ThankYouModule
+									moduleType={moduleType}
+									isSignedIn={isSignedIn}
+									{...thankYouModuleData[moduleType]}
+								/>
+							))}
+						</Column>
+						<Column cssOverrides={columnContainer}>
+							{secondColumn.map((moduleType) => (
+								<ThankYouModule
+									moduleType={moduleType}
+									isSignedIn={isSignedIn}
+									{...thankYouModuleData[moduleType]}
+								/>
+							))}
+						</Column>
+					</Columns>
 
-						<div css={buttonContainer}>
-							<LinkButton
-								href="https://www.theguardian.com"
-								priority="tertiary"
-								onClick={() =>
-									trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
-								}
-							>
-								Return to the Guardian
-							</LinkButton>
-						</div>
+					<div css={buttonContainer}>
+						<LinkButton
+							href="https://www.theguardian.com"
+							priority="tertiary"
+							onClick={() =>
+								trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
+							}
+						>
+							Return to the Guardian
+						</LinkButton>
 					</div>
 				</Container>
 			</div>
