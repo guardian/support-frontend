@@ -29,14 +29,14 @@ export type CountryGroupName =
 	| 'New Zealand'
 	| 'Canada';
 
-export type SupportInternationalisationId = 
+export type SupportInternationalisationId =
 	| 'uk'
 	| 'us'
 	| 'au'
 	| 'eu'
 	| 'int'
 	| 'nz'
-	| 'ca'
+	| 'ca';
 
 /*
   Note: supportInternationalizationId should match an existing
