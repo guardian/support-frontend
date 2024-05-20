@@ -29,6 +29,15 @@ export type CountryGroupName =
 	| 'New Zealand'
 	| 'Canada';
 
+export type SupportInternationalisationId = 
+	| 'uk'
+	| 'us'
+	| 'au'
+	| 'eu'
+	| 'int'
+	| 'nz'
+	| 'ca'
+
 /*
   Note: supportInternationalizationId should match an existing
   id from support-internationalisation library. We use it to
@@ -39,7 +48,7 @@ export type CountryGroup = {
 	name: CountryGroupName;
 	currency: IsoCurrency;
 	countries: IsoCountry[];
-	supportInternationalisationId: string;
+	supportInternationalisationId: SupportInternationalisationId;
 };
 type CountryGroups = Record<CountryGroupId, CountryGroup>;
 const countryGroups: CountryGroups = {
