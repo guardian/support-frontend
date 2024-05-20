@@ -145,12 +145,16 @@ export function ThankYou({ geoId }: Props) {
 		),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && order.email.length > 0,
-			'supportReminder',
+			'checkoutSupportReminder',
 		),
-		...maybeThankYouModule(order.email.length > 0, 'feedbackCheckout'),
+		...maybeThankYouModule(order.email.length > 0, 'checkoutFeedback'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];
+	// const thankYouModules: ThankYouModuleType[] = [
+	// 	...maybeThankYouModule(true, 'checkoutSupportReminder'),
+	// 	...maybeThankYouModule(true, 'checkoutFeedback'),
+	// ];
 
 	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;
 	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);

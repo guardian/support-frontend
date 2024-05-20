@@ -149,11 +149,12 @@ export type ThankYouModuleType =
 	| 'appDownloadEditions'
 	| 'ausMap'
 	| 'feedback'
-	| 'feedbackCheckout'
 	| 'signIn'
 	| 'signUp'
 	| 'socialShare'
-	| 'supportReminder';
+	| 'supportReminder'
+	| 'checkoutSupportReminder'
+	| 'checkoutFeedback';
 
 export interface ThankYouModuleProps {
 	moduleType: ThankYouModuleType;

@@ -2,7 +2,10 @@ import { useState } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { CsrfState } from 'helpers/redux/checkout/csrf/state';
-import { setThankYouFeedbackSurveyHasBeenCompleted } from 'helpers/redux/checkout/thankYouState/actions';
+import {
+	setThankYouFeedbackSurveyHasBeenCompleted,
+	setThankYouSupportReminder,
+} from 'helpers/redux/checkout/thankYouState/actions';
 import type { ThankYouSupportReminderState } from 'helpers/redux/checkout/thankYouState/state';
 import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import {
@@ -124,27 +127,6 @@ export const getThankYouModuleData = (
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
 		},
-		feedbackCheckout: {
-			icon: getThankYouModuleIcon('feedback'),
-			header: getFeedbackHeader(feedbackSurveyHasBeenCompletedCheckout),
-			bodyCopy: (
-				<FeedbackBodyCopy
-					feedbackSurveyHasBeenCompleted={
-						feedbackSurveyHasBeenCompletedCheckout
-					}
-				/>
-			),
-			ctas: feedbackSurveyHasBeenCompletedCheckout ? null : (
-				<FeedbackCTA
-					feedbackSurveyLink={getFeedbackSurveyLink(countryId)}
-					onClick={() => {
-						trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
-						SetFeedbackSurveyHasBeenCompletedCheckout(true);
-					}}
-				/>
-			),
-			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
-		},
 		signIn: {
 			icon: getThankYouModuleIcon('signIn'),
 			header: signInHeader,
@@ -174,12 +156,81 @@ export const getThankYouModuleData = (
 				? 'Your support reminder is set'
 				: 'Set a support reminder',
 			bodyCopy: (
-				<SupportReminderBodyCopy supportReminderState={supportReminder} />
+				<SupportReminderBodyCopy
+					supportReminderState={supportReminder}
+					onChange={() => {
+						const dispatch = useContributionsDispatch();
+						dispatch(
+							setThankYouSupportReminder({
+								...supportReminder,
+								selectedChoiceIndex: 0, // TODO
+							}),
+						);
+					}}
+				/>
 			),
 			ctas: supportReminder.hasBeenCompleted ? null : (
 				<SupportReminderCTAandPrivacy
 					email={email}
 					supportReminderState={supportReminder}
+					onClick={() => {
+						const dispatch = useContributionsDispatch();
+						dispatch(
+							setThankYouSupportReminder({
+								...supportReminder,
+								hasBeenCompleted: true,
+							}),
+						);
+					}}
+				/>
+			),
+		},
+		checkoutFeedback: {
+			icon: getThankYouModuleIcon('feedback'),
+			header: getFeedbackHeader(feedbackSurveyHasBeenCompletedCheckout),
+			bodyCopy: (
+				<FeedbackBodyCopy
+					feedbackSurveyHasBeenCompleted={
+						feedbackSurveyHasBeenCompletedCheckout
+					}
+				/>
+			),
+			ctas: feedbackSurveyHasBeenCompletedCheckout ? null : (
+				<FeedbackCTA
+					feedbackSurveyLink={getFeedbackSurveyLink(countryId)}
+					onClick={() => {
+						SetFeedbackSurveyHasBeenCompletedCheckout(true);
+					}}
+				/>
+			),
+			trackComponentLoadId: OPHAN_COMPONENT_ID_SURVEY,
+		},
+		checkoutSupportReminder: {
+			icon: getThankYouModuleIcon('supportReminder'),
+			header: supportReminder.hasBeenCompleted
+				? 'Your support reminder is set'
+				: 'Set a support reminder',
+			bodyCopy: (
+				<SupportReminderBodyCopy
+					supportReminderState={supportReminder}
+					onChange={() => {
+						setThankYouSupportReminder({
+							...supportReminder,
+							selectedChoiceIndex: 0, // TODO
+						});
+					}}
+				/>
+			),
+			ctas: supportReminder.hasBeenCompleted ? null : (
+				<SupportReminderCTAandPrivacy
+					email={email}
+					supportReminderState={supportReminder}
+					onClick={() => {
+						setThankYouSupportReminder({
+							...supportReminder,
+							hasBeenCompleted: true,
+						});
+					}}
 				/>
 			),
 			trackComponentLoadId: OPHAN_COMPONENT_ID_SET_REMINDER,

@@ -8,8 +8,6 @@ import {
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
 import { privacyLink } from 'helpers/legal';
-import { setThankYouSupportReminder } from 'helpers/redux/checkout/thankYouState/actions';
-import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import { OPHAN_COMPONENT_ID_SET_REMINDER } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import {
@@ -148,9 +146,8 @@ const reminderChoices = getDefaultReminderChoices();
 
 export function SupportReminderBodyCopy({
 	supportReminderState,
-}: SupportReminderState): JSX.Element {
-	const dispatch = useContributionsDispatch();
-
+	onChange,
+}: SupportReminderState & { onChange?: () => void }): JSX.Element {
 	return (
 		<>
 			{supportReminderState.hasBeenCompleted ? (
@@ -172,14 +169,7 @@ export function SupportReminderBodyCopy({
 									value={choice.label}
 									label={choice.label}
 									checked={supportReminderState.selectedChoiceIndex === index}
-									onChange={() =>
-										dispatch(
-											setThankYouSupportReminder({
-												...supportReminderState,
-												selectedChoiceIndex: index,
-											}),
-										)
-									}
+									onChange={onChange}
 								/>
 							))}
 						</RadioGroup>
@@ -193,9 +183,11 @@ export function SupportReminderBodyCopy({
 export function SupportReminderCTAandPrivacy({
 	email,
 	supportReminderState,
-}: { email: string } & SupportReminderState): JSX.Element {
-	const dispatch = useContributionsDispatch();
-
+	onClick,
+}: {
+	email: string;
+	onClick?: () => void;
+} & SupportReminderState): JSX.Element {
 	const setReminder = () => {
 		const choice = reminderChoices[supportReminderState.selectedChoiceIndex];
 		const url = getReminderUrl(choice);
@@ -222,18 +214,11 @@ export function SupportReminderCTAandPrivacy({
 			})
 			.catch(catchPromiseHandler('Error creating reminder sign up'));
 	};
-
 	const onSubmit = () => {
 		setReminder();
 		trackComponentClick(OPHAN_COMPONENT_ID_SET_REMINDER);
-		dispatch(
-			setThankYouSupportReminder({
-				...supportReminderState,
-				hasBeenCompleted: true,
-			}),
-		);
+		onClick;
 	};
-
 	return (
 		<>
 			<div>

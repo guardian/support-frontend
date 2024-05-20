@@ -4,6 +4,8 @@ import {
 	LinkButton,
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
+import { OPHAN_COMPONENT_ID_SURVEY } from 'helpers/thankYouPages/utils/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
 
 const hideAfterTablet = css`
 	display: block;
@@ -62,9 +64,13 @@ function FeedbackCTA({
 	feedbackSurveyLink: string;
 	onClick?: () => void;
 }): JSX.Element {
+	const onSubmit = () => {
+		trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
+		onClick;
+	};
 	return (
 		<LinkButton
-			onClick={onClick}
+			onClick={onSubmit}
 			href={feedbackSurveyLink}
 			target="_blank"
 			rel="noopener noreferrer"
