@@ -49,8 +49,6 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 	);
 	const { isSignedIn } = useContributionsSelector((state) => state.page.user);
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
-	const { feedbackSurveyHasBeenCompleted, supportReminder } =
-		useContributionsSelector((state) => state.page.checkoutForm.thankYou);
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
@@ -58,8 +56,6 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		email,
 		false,
 		amountIsAboveThreshold,
-		supportReminder,
-		feedbackSurveyHasBeenCompleted,
 		campaignSettings?.campaignCode,
 	);
 

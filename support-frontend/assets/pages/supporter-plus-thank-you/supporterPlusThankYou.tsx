@@ -235,8 +235,6 @@ export function SupporterPlusThankYou({
 
 	const amountIsAboveThreshold = !!(thresholdPrice && amount >= thresholdPrice);
 
-	const { feedbackSurveyHasBeenCompleted, supportReminder } =
-		useContributionsSelector((state) => state.page.checkoutForm.thankYou);
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
@@ -244,8 +242,6 @@ export function SupporterPlusThankYou({
 		email,
 		isOneOff,
 		amountIsAboveThreshold,
-		supportReminder,
-		feedbackSurveyHasBeenCompleted,
 		campaignSettings?.campaignCode,
 	);
 

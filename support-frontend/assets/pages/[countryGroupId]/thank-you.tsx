@@ -141,7 +141,6 @@ export function ThankYou({ geoId }: Props) {
 		),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && order.email.length > 0,
-
 			'supportReminder',
 		),
 		...maybeThankYouModule(order.email.length > 0, 'feedback'),

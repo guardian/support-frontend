@@ -65,9 +65,9 @@ export const getThankYouModuleData = (
 	email: string,
 	isOneOff: boolean,
 	amountIsAboveThreshold: boolean,
+	campaignCode?: string,
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
-	campaignCode?: string,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
 	const [feedbackSurveyCompleted, SetFeedbackSurveyCompleted] =
 		useState<boolean>(feedbackSurveyHasBeenCompleted ?? false);
