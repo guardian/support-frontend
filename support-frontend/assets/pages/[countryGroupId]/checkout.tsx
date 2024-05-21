@@ -14,6 +14,7 @@ import {
 	Radio,
 	RadioGroup,
 	TextInput,
+	textInputThemeDefault,
 } from '@guardian/source-react-components';
 import {
 	FooterLinks,
@@ -33,8 +34,8 @@ import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
+import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
 import { PayPalButton } from 'components/payPalPaymentButton/payPalButton';
-import { PersonalDetails } from 'components/personalDetails/personalDetails';
 import { StateSelect } from 'components/personalDetails/stateSelect';
 import { Recaptcha } from 'components/recaptcha/recaptcha';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
@@ -69,12 +70,12 @@ import type { IsoCountry } from 'helpers/internationalisation/country';
 import { productCatalogDescription } from 'helpers/productCatalog';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
-import { get } from 'helpers/storage/cookie';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { getUser } from 'helpers/user/user';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -88,9 +89,9 @@ validateWindowGuardian(window.guardian);
 const isTestUser = true as boolean;
 const csrf = window.guardian.csrf.token;
 
-const isSignedIn = !!get('GU_U');
-const countryId: IsoCountry =
-	CountryHelper.fromString(get('GU_country') ?? 'GB') ?? 'GB';
+const user = getUser();
+const isSignedIn = user.isSignedIn;
+const countryId: IsoCountry = CountryHelper.detect();
 
 const productCatalog = window.guardian.productCatalog;
 
@@ -131,6 +132,57 @@ const legend = css`
 	${from.tablet} {
 		font-size: 28px;
 	}
+
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+`;
+
+const fieldset = css`
+	position: relative;
+
+	& > *:not(:first-of-type) {
+		margin-top: ${space[3]}px;
+	}
+
+	${from.tablet} {
+		& > *:not(:first-of-type) {
+			margin-top: ${space[4]}px;
+		}
+	}
+`;
+
+const paymentMethodSelected = css`
+	box-shadow: inset 0 0 0 2px ${textInputThemeDefault.textInput.borderActive};
+	margin-top: ${space[2]}px;
+	border-radius: 4px;
+`;
+
+const paymentMethodNotSelected = css`
+	/* Using box shadows prevents layout shift when the rows are expanded */
+	box-shadow: inset 0 0 0 1px ${textInputThemeDefault.textInput.border};
+	margin-top: ${space[2]}px;
+	border-radius: 4px;
+`;
+
+const paymentMethodBody = css`
+	padding: ${space[5]}px ${space[3]}px ${space[6]}px;
+`;
+
+const paymentMethodRadioWithImage = css`
+	display: inline-flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	padding: ${space[2]}px ${space[3]}px;
+	font-weight: bold;
+`;
+const paymentMethodRadioWithImageSelected = css`
+	background-image: linear-gradient(
+		to top,
+		${palette.brand[500]} 2px,
+		transparent 2px
+	);
 `;
 
 /**
@@ -179,6 +231,28 @@ const query = {
 			? parseFloat(searchParamsPrice)
 			: undefined,
 };
+
+/** Form Validation */
+/**
+ * This uses a Unicode character class escape
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape
+ */
+const doesNotContainEmojiPattern = '^[^\\p{Emoji_Presentation}]+$';
+function preventDefaultValidityMessage(
+	currentTarget: HTMLInputElement | HTMLSelectElement,
+) {
+	/**
+	 * Prevents default message showing, but maintains the default validation methods occuring
+	 * such as onInvalid.
+	 */
+	// 3. Reset the value from previous invalid events
+	currentTarget.setCustomValidity('');
+	// 1. Check the validity of the input
+	if (!currentTarget.validity.valid) {
+		// 2. setCustomValidity to " " which avoids the browser's default message
+		currentTarget.setCustomValidity(' ');
+	}
+}
 
 type Props = {
 	geoId: GeoId;
@@ -354,6 +428,12 @@ function CheckoutComponent({ geoId }: Props) {
 	const elements = useElements();
 	const cardElement = elements?.getElement(CardNumberElement);
 	const [stripeClientSecret, setStripeClientSecret] = useState<string>();
+	/**
+	 * flag that disables the submission of the form until the stripeClientSecret is
+	 * fetched from the Stripe API with using the reCaptcha token
+	 */
+	const [stripeClientSecretInProgress, setStripeClientSecretInProgress] =
+		useState(false);
 
 	/**
 	 * Payment method: PayPal
@@ -361,6 +441,16 @@ function CheckoutComponent({ geoId }: Props) {
 	 */
 	const [payPalLoaded, setPayPalLoaded] = useState(false);
 	const [payPalBAID, setPayPalBAID] = useState('');
+	/**
+	 * PayPalBAID forces formOnSubmit
+	 */
+	useEffect(() => {
+		if (payPalBAID !== '') {
+			// TODO - this might not meet our browser compatibility requirements (Safari)
+			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
+			formRef.current?.requestSubmit();
+		}
+	}, [payPalBAID]);
 	useEffect(() => {
 		if (paymentMethod === 'PayPal' && !payPalLoaded) {
 			void loadPayPalRecurring().then(() => setPayPalLoaded(true));
@@ -371,10 +461,12 @@ function CheckoutComponent({ geoId }: Props) {
 	const [recaptchaToken, setRecaptchaToken] = useState<string>();
 
 	/** Personal details */
-	const [firstName, setFirstName] = useState('');
-	const [lastName, setLastName] = useState('');
-	const [email, setEmail] = useState('');
-
+	const [firstName, setFirstName] = useState(user.firstName ?? '');
+	const [firstNameError, setFirstNameError] = useState<string>();
+	const [lastName, setLastName] = useState(user.lastName ?? '');
+	const [lastNameError, setLastNameError] = useState<string>();
+	const [email, setEmail] = useState(user.email ?? '');
+	const [emailError, setEmailError] = useState<string>();
 	/** Delivery and billing addresses */
 	const [deliveryPostcode, setDeliveryPostcode] = useState('');
 	const [deliveryLineOne, setDeliveryLineOne] = useState('');
@@ -391,9 +483,16 @@ function CheckoutComponent({ geoId }: Props) {
 		useState(true);
 
 	const [billingPostcode, setBillingPostcode] = useState('');
+	const [billingPostcodeError, setBillingPostcodeError] = useState<string>();
 	const [billingLineOne, setBillingLineOne] = useState('');
 	const [billingLineTwo, setBillingLineTwo] = useState('');
 	const [billingCity, setBillingCity] = useState('');
+	const [billingStateError, setBillingStateError] = useState<string>();
+	/**
+	 * BillingState selector initialised to undefined to hide
+	 * billingStateError message. formOnSubmit checks and converts to
+	 * empty string to display billingStateError message.
+	 */
 	const [billingState, setBillingState] = useState('');
 	const [billingPostcodeStateResults, setBillingPostcodeStateResults] =
 		useState<PostcodeFinderResult[]>([]);
@@ -460,6 +559,8 @@ function CheckoutComponent({ geoId }: Props) {
 				: deliveryAddress;
 		} else {
 			billingAddress = {
+				state: formData.get('billing-state') as string,
+				postCode: formData.get('billing-postcode') as string,
 				country: formData.get('billing-country') as IsoCountry,
 			};
 			deliveryAddress = undefined;
@@ -507,7 +608,6 @@ function CheckoutComponent({ geoId }: Props) {
 
 		if (paymentMethod === 'DirectDebit') {
 			paymentFields = {
-				paymentMethod: 'DirectDebit',
 				accountHolderName: formData.get('accountHolderName') as string,
 				accountNumber: formData.get('accountNumber') as string,
 				sortCode: formData.get('sortCode') as string,
@@ -640,55 +740,188 @@ function CheckoutComponent({ geoId }: Props) {
 						>
 							<Box cssOverrides={shorterBoxMargin}>
 								<BoxContents>
-									<PersonalDetails
-										email={email}
-										firstName={firstName}
-										lastName={lastName}
-										isSignedIn={isSignedIn}
-										// TODO - ONE_OFF support, this should be true when ONE_OFF
-										hideNameFields={false}
-										onEmailChange={(email) => {
-											setEmail(email);
-										}}
-										onFirstNameChange={(firstName) => {
-											setFirstName(firstName);
-										}}
-										onLastNameChange={(lastName) => {
-											setLastName(lastName);
-										}}
-										errors={{}}
-										signOutLink={<Signout isSignedIn={isSignedIn} />}
-										contributionState={
-											showStateSelect && (
-												<StateSelect
-													countryId={countryId}
-													state={'STATE'}
-													onStateChange={() => {
-														//  no-op
+									<fieldset css={fieldset}>
+										<legend css={legend}>1. Your details</legend>
+										<div>
+											<TextInput
+												id="email"
+												data-qm-masking="blocklist"
+												label="Email address"
+												value={email}
+												type="email"
+												autoComplete="email"
+												onChange={(event) => {
+													setEmail(event.currentTarget.value);
+												}}
+												onBlur={(event) => {
+													event.target.checkValidity();
+												}}
+												readOnly={isSignedIn}
+												name="email"
+												required
+												maxLength={80}
+												error={emailError}
+												onInvalid={(event) => {
+													preventDefaultValidityMessage(event.currentTarget);
+													const validityState = event.currentTarget.validity;
+													if (validityState.valid) {
+														setEmailError(undefined);
+													} else {
+														if (validityState.valueMissing) {
+															setEmailError('Please enter your email address.');
+														} else {
+															setEmailError(
+																'Please enter a valid email address.',
+															);
+														}
+													}
+												}}
+											/>
+										</div>
+
+										<Signout isSignedIn={isSignedIn} />
+
+										<>
+											<div>
+												<TextInput
+													id="firstName"
+													data-qm-masking="blocklist"
+													label="First name"
+													value={firstName}
+													autoComplete="given-name"
+													autoCapitalize="words"
+													onChange={(event) => {
+														setFirstName(event.target.value);
 													}}
-													error={undefined}
+													onBlur={(event) => {
+														event.target.checkValidity();
+													}}
+													name="firstName"
+													required
+													maxLength={40}
+													error={firstNameError}
+													pattern={doesNotContainEmojiPattern}
+													onInvalid={(event) => {
+														preventDefaultValidityMessage(event.currentTarget);
+														const validityState = event.currentTarget.validity;
+														if (validityState.valid) {
+															setFirstNameError(undefined);
+														} else {
+															if (validityState.valueMissing) {
+																setFirstNameError(
+																	'Please enter your first name.',
+																);
+															} else {
+																setFirstNameError(
+																	'Please enter a valid first name.',
+																);
+															}
+														}
+													}}
 												/>
-											)
-										}
-										contributionZipcode={
-											countryId === 'US' ? (
-												<div>
-													<TextInput
-														id="zipCode"
-														name="zip-code"
-														label="ZIP code"
-														value={''}
-														error={undefined}
-														onChange={() => {
-															//  no-op
-														}}
-													/>
-												</div>
-											) : undefined
-										}
-										hideDetailsHeading={true}
-										overrideHeadingCopy="1. Your details"
-									/>
+											</div>
+											<div>
+												<TextInput
+													id="lastName"
+													data-qm-masking="blocklist"
+													label="Last name"
+													value={lastName}
+													autoComplete="family-name"
+													autoCapitalize="words"
+													onChange={(event) => {
+														setLastName(event.target.value);
+													}}
+													onBlur={(event) => {
+														event.target.checkValidity();
+													}}
+													name="lastName"
+													required
+													maxLength={40}
+													error={lastNameError}
+													pattern={doesNotContainEmojiPattern}
+													onInvalid={(event) => {
+														preventDefaultValidityMessage(event.currentTarget);
+														const validityState = event.currentTarget.validity;
+														if (validityState.valid) {
+															setLastNameError(undefined);
+														} else {
+															if (validityState.valueMissing) {
+																setLastNameError(
+																	'Please enter your last name.',
+																);
+															} else {
+																setLastNameError(
+																	'Please enter a valid last name.',
+																);
+															}
+														}
+													}}
+												/>
+											</div>
+										</>
+
+										{showStateSelect && (
+											<StateSelect
+												countryId={countryId}
+												state={billingState}
+												onStateChange={(event) => {
+													setBillingState(event.currentTarget.value);
+												}}
+												onBlur={(event) => {
+													event.currentTarget.checkValidity();
+												}}
+												onInvalid={(event) => {
+													preventDefaultValidityMessage(event.currentTarget);
+													const validityState = event.currentTarget.validity;
+													if (validityState.valid) {
+														setBillingStateError(undefined);
+													} else {
+														setBillingStateError(
+															'Please enter a state, province or territory.',
+														);
+													}
+												}}
+												error={billingStateError}
+											/>
+										)}
+
+										{countryId === 'US' && (
+											<div>
+												<TextInput
+													id="zipCode"
+													label="ZIP code"
+													name="billing-postcode"
+													onChange={(event) => {
+														setBillingPostcode(event.target.value);
+													}}
+													onBlur={(event) => {
+														event.target.checkValidity();
+													}}
+													maxLength={20}
+													value={billingPostcode}
+													pattern={doesNotContainEmojiPattern}
+													error={billingPostcodeError}
+													onInvalid={(event) => {
+														preventDefaultValidityMessage(event.currentTarget);
+														const validityState = event.currentTarget.validity;
+														if (validityState.valid) {
+															setBillingPostcodeError(undefined);
+														} else {
+															if (validityState.valueMissing) {
+																setBillingPostcodeError(
+																	'Please enter a zip code.',
+																);
+															} else {
+																setBillingPostcodeError(
+																	'Please enter a valid zip code.',
+																);
+															}
+														}
+													}}
+												/>
+											</div>
+										)}
+									</fieldset>
 
 									<CheckoutDivider spacing="loose" />
 
@@ -706,7 +939,9 @@ function CheckoutComponent({ geoId }: Props) {
 									{productDescription.deliverableTo && (
 										<>
 											<fieldset>
-												<h2 css={legend}>Where should we deliver to?</h2>
+												<legend css={legend}>
+													Where should we deliver to?
+												</legend>
 												<AddressFields
 													scope={'delivery'}
 													lineOne={deliveryLineOne}
@@ -758,7 +993,9 @@ function CheckoutComponent({ geoId }: Props) {
 													}}
 												/>
 											</fieldset>
+
 											<CheckoutDivider spacing="loose" />
+
 											<RadioGroup
 												label="Is the billing address the same as the delivery address?"
 												hideLabel
@@ -794,10 +1031,12 @@ function CheckoutComponent({ geoId }: Props) {
 													}}
 												/>
 											</RadioGroup>
+
 											<CheckoutDivider spacing="loose" />
+
 											{!billingAddressMatchesDelivery && (
 												<fieldset>
-													<h2 css={legend}>Your billing address</h2>
+													<legend css={legend}>Your billing address</legend>
 													<AddressFields
 														scope={'billing'}
 														lineOne={billingLineOne}
@@ -853,115 +1092,161 @@ function CheckoutComponent({ geoId }: Props) {
 											)}
 										</>
 									)}
-
-									{validPaymentMethods.map((paymentMethod) => {
-										return (
-											<div>
-												<Radio
-													label={paymentMethod}
-													name="paymentMethod"
-													value={paymentMethod}
-													onChange={() => {
-														setPaymentMethod(paymentMethod);
-													}}
-												/>
-											</div>
-										);
-									})}
-
-									{paymentMethod === 'Stripe' && (
-										<>
-											<input
-												type="hidden"
-												name="recaptchaToken"
-												value={recaptchaToken}
+									<fieldset css={fieldset}>
+										<legend css={legend}>
+											2. Payment method
+											<SecureTransactionIndicator
+												hideText={true}
+												cssOverrides={css``}
 											/>
-											<StripeCardForm
-												onCardNumberChange={() => {
-													// no-op
-												}}
-												onExpiryChange={() => {
-													// no-op
-												}}
-												onCvcChange={() => {
-													// no-op
-												}}
-												errors={{}}
-												recaptcha={
-													<Recaptcha
-														// We could change the parents type to Promise and uses await here, but that has
-														// a lot of refactoring with not too much gain
-														onRecaptchaCompleted={(token) => {
-															setRecaptchaToken(token);
-															void fetch(
-																'/stripe/create-setup-intent/recaptcha',
-																{
-																	method: 'POST',
-																	headers: {
-																		'Content-Type': 'application/json',
-																	},
-																	body: JSON.stringify({
-																		isTestUser,
-																		stripePublicKey,
-																		token,
-																	}),
-																},
-															)
-																.then((resp) => resp.json())
-																.then((json) =>
-																	setStripeClientSecret(
-																		(json as Record<string, string>)
-																			.client_secret,
-																	),
-																);
-														}}
-														onRecaptchaExpired={() => {
-															// no-op
-														}}
-													/>
-												}
-											/>
-										</>
-									)}
+										</legend>
 
-									{paymentMethod === 'DirectDebit' && (
-										<DirectDebitForm
-											countryGroupId={countryGroupId}
-											accountHolderName={accountHolderName}
-											accountNumber={accountNumber}
-											accountHolderConfirmation={accountHolderConfirmation}
-											sortCode={sortCode}
-											recaptchaCompleted={false}
-											updateAccountHolderName={(name: string) => {
-												setAccountHolderName(name);
-											}}
-											updateAccountNumber={(number: string) => {
-												setAccountNumber(number);
-											}}
-											updateSortCode={(sortCode: string) => {
-												setSortCode(sortCode);
-											}}
-											updateAccountHolderConfirmation={(
-												confirmation: boolean,
-											) => {
-												setAccountHolderConfirmation(confirmation);
-											}}
-											recaptcha={
-												<Recaptcha
-													// We could change the parents type to Promise and uses await here, but that has
-													// a lot of refactoring with not too much gain
-													onRecaptchaCompleted={(token) => {
-														setRecaptchaToken(token);
-													}}
-													onRecaptchaExpired={() => {
-														// no-op
-													}}
-												/>
-											}
-											formError={''}
-											errors={{}}
-										/>
-									)}
+										<RadioGroup>
+											{validPaymentMethods.map((validPaymentMethod) => {
+												const selected = paymentMethod === validPaymentMethod;
+												const { label, icon } =
+													paymentMethodData[validPaymentMethod];
+												return (
+													<div
+														css={
+															selected
+																? paymentMethodSelected
+																: paymentMethodNotSelected
+														}
+													>
+														<div
+															css={[
+																paymentMethodRadioWithImage,
+																selected
+																	? paymentMethodRadioWithImageSelected
+																	: undefined,
+															]}
+														>
+															<Radio
+																label={label}
+																name="paymentMethod"
+																value={validPaymentMethod}
+																onChange={() => {
+																	setPaymentMethod(validPaymentMethod);
+																}}
+															/>
+															<div>{icon}</div>
+														</div>
+														{validPaymentMethod === 'Stripe' && selected && (
+															<div css={paymentMethodBody}>
+																<input
+																	type="hidden"
+																	name="recaptchaToken"
+																	value={recaptchaToken}
+																/>
+																<StripeCardForm
+																	onCardNumberChange={() => {
+																		// no-op
+																	}}
+																	onExpiryChange={() => {
+																		// no-op
+																	}}
+																	onCvcChange={() => {
+																		// no-op
+																	}}
+																	errors={{}}
+																	recaptcha={
+																		<Recaptcha
+																			// We could change the parents type to Promise and uses await here, but that has
+																			// a lot of refactoring with not too much gain
+																			onRecaptchaCompleted={(token) => {
+																				setStripeClientSecretInProgress(true);
+																				setRecaptchaToken(token);
+																				void fetch(
+																					'/stripe/create-setup-intent/recaptcha',
+																					{
+																						method: 'POST',
+																						headers: {
+																							'Content-Type':
+																								'application/json',
+																						},
+																						body: JSON.stringify({
+																							isTestUser,
+																							stripePublicKey,
+																							token,
+																						}),
+																					},
+																				)
+																					.then((resp) => resp.json())
+																					.then((json) => {
+																						setStripeClientSecret(
+																							(json as Record<string, string>)
+																								.client_secret,
+																						);
+																						setStripeClientSecretInProgress(
+																							false,
+																						);
+																					});
+																			}}
+																			onRecaptchaExpired={() => {
+																				// no-op
+																			}}
+																		/>
+																	}
+																/>
+															</div>
+														)}
+
+														{validPaymentMethod === 'DirectDebit' &&
+															selected && (
+																<div
+																	css={css`
+																		padding: ${space[5]}px ${space[3]}px
+																			${space[6]}px;
+																	`}
+																>
+																	<DirectDebitForm
+																		countryGroupId={countryGroupId}
+																		accountHolderName={accountHolderName}
+																		accountNumber={accountNumber}
+																		accountHolderConfirmation={
+																			accountHolderConfirmation
+																		}
+																		sortCode={sortCode}
+																		recaptchaCompleted={false}
+																		updateAccountHolderName={(name: string) => {
+																			setAccountHolderName(name);
+																		}}
+																		updateAccountNumber={(number: string) => {
+																			setAccountNumber(number);
+																		}}
+																		updateSortCode={(sortCode: string) => {
+																			setSortCode(sortCode);
+																		}}
+																		updateAccountHolderConfirmation={(
+																			confirmation: boolean,
+																		) => {
+																			setAccountHolderConfirmation(
+																				confirmation,
+																			);
+																		}}
+																		recaptcha={
+																			<Recaptcha
+																				// We could change the parents type to Promise and uses await here, but that has
+																				// a lot of refactoring with not too much gain
+																				onRecaptchaCompleted={(token) => {
+																					setRecaptchaToken(token);
+																				}}
+																				onRecaptchaExpired={() => {
+																					// no-op
+																				}}
+																			/>
+																		}
+																		formError={''}
+																		errors={{}}
+																	/>
+																</div>
+															)}
+													</div>
+												);
+											})}
+										</RadioGroup>
+									</fieldset>
 								</BoxContents>
 							</Box>
 							<div
@@ -971,12 +1256,15 @@ function CheckoutComponent({ geoId }: Props) {
 							>
 								{paymentMethod !== 'PayPal' && (
 									<DefaultPaymentButton
-										buttonText="Pay now"
+										buttonText={
+											stripeClientSecretInProgress ? 'Loading...' : 'Pay now'
+										}
 										onClick={() => {
 											// no-op
 											// This isn't needed because we are now using the form onSubmit handler
 										}}
 										type="submit"
+										disabled={stripeClientSecretInProgress}
 									/>
 								)}
 								{payPalLoaded && paymentMethod === 'PayPal' && (
@@ -1064,10 +1352,8 @@ function CheckoutComponent({ geoId }: Props) {
 												})
 													.then((response) => response.json())
 													.then((json) => {
+														// The state below has a useEffect that submits the form
 														setPayPalBAID((json as { baid: string }).baid);
-														// TODO - this might not meet our browser compatibility requirements (Safari)
-														// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
-														formRef.current?.requestSubmit();
 													});
 											}}
 										/>
