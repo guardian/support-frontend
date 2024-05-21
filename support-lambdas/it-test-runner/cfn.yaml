@@ -96,7 +96,7 @@ Resources:
     Condition: ProdOnlyResource
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
       AlarmName: !Join
         - ' '
         - - 'non urgent -'
@@ -132,7 +132,7 @@ Resources:
     Condition: ProdOnlyResource
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
       AlarmName: !Join
         - ' '
         - - 'non urgent -'
