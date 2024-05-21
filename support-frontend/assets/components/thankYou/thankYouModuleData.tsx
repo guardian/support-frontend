@@ -156,12 +156,12 @@ export const getThankYouModuleData = (
 			bodyCopy: (
 				<SupportReminderBodyCopy
 					supportReminderState={supportReminder}
-					onChange={() => {
+					onChange={(index) => {
 						const dispatch = useContributionsDispatch();
 						dispatch(
 							setThankYouSupportReminder({
 								...supportReminder,
-								selectedChoiceIndex: 0, // TODO
+								selectedChoiceIndex: index,
 							}),
 						);
 					}}
@@ -211,10 +211,10 @@ export const getThankYouModuleData = (
 			bodyCopy: (
 				<SupportReminderBodyCopy
 					supportReminderState={supportReminder}
-					onChange={() => {
+					onChange={(index) => {
 						setThankYouSupportReminder({
 							...supportReminder,
-							selectedChoiceIndex: 0, // TODO
+							selectedChoiceIndex: index,
 						});
 					}}
 				/>

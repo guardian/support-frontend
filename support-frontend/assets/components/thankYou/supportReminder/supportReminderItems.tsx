@@ -147,7 +147,7 @@ const reminderChoices = getDefaultReminderChoices();
 export function SupportReminderBodyCopy({
 	supportReminderState,
 	onChange,
-}: SupportReminderState & { onChange?: () => void }): JSX.Element {
+}: SupportReminderState & { onChange?: (index: number) => void }): JSX.Element {
 	return (
 		<>
 			{supportReminderState.hasBeenCompleted ? (
@@ -169,7 +169,9 @@ export function SupportReminderBodyCopy({
 									value={choice.label}
 									label={choice.label}
 									checked={supportReminderState.selectedChoiceIndex === index}
-									onChange={onChange}
+									onChange={() => {
+										onChange ? onChange(index) : undefined;
+									}}
 								/>
 							))}
 						</RadioGroup>
