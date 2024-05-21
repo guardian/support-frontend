@@ -16,7 +16,6 @@ import {
 	OPHAN_COMPONENT_ID_SOCIAL,
 	OPHAN_COMPONENT_ID_SURVEY,
 } from 'helpers/thankYouPages/utils/ophan';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
 import AppDownloadBadges, {
 	AppDownloadBadgesEditions,
 } from './appDownload/AppDownloadBadges';
@@ -66,8 +65,8 @@ export const getThankYouModuleData = (
 	campaignCode?: string,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
 	const [
-		feedbackSurveyHasBeenCompletedCheckout,
-		SetFeedbackSurveyHasBeenCompletedCheckout,
+		checkoutFeedbackSurveyHasBeenCompleted,
+		SetCheckoutFeedbackSurveyHasBeenCompleted,
 	] = useState(false);
 
 	const getFeedbackSurveyLink = (countryId: IsoCountry) => {
@@ -120,7 +119,6 @@ export const getThankYouModuleData = (
 					feedbackSurveyLink={getFeedbackSurveyLink(countryId)}
 					onClick={() => {
 						const dispatch = useContributionsDispatch();
-						trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
 						dispatch(setThankYouFeedbackSurveyHasBeenCompleted(true));
 					}}
 				/>
@@ -187,19 +185,19 @@ export const getThankYouModuleData = (
 		},
 		checkoutFeedback: {
 			icon: getThankYouModuleIcon('feedback'),
-			header: getFeedbackHeader(feedbackSurveyHasBeenCompletedCheckout),
+			header: getFeedbackHeader(checkoutFeedbackSurveyHasBeenCompleted),
 			bodyCopy: (
 				<FeedbackBodyCopy
 					feedbackSurveyHasBeenCompleted={
-						feedbackSurveyHasBeenCompletedCheckout
+						checkoutFeedbackSurveyHasBeenCompleted
 					}
 				/>
 			),
-			ctas: feedbackSurveyHasBeenCompletedCheckout ? null : (
+			ctas: checkoutFeedbackSurveyHasBeenCompleted ? null : (
 				<FeedbackCTA
 					feedbackSurveyLink={getFeedbackSurveyLink(countryId)}
 					onClick={() => {
-						SetFeedbackSurveyHasBeenCompletedCheckout(true);
+						SetCheckoutFeedbackSurveyHasBeenCompleted(true);
 					}}
 				/>
 			),

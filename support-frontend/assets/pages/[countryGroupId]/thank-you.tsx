@@ -20,6 +20,7 @@ import CountryHelper from 'helpers/internationalisation/classes/country';
 import { get } from 'helpers/storage/cookie';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { getUser } from 'helpers/user/user';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
@@ -73,7 +74,9 @@ type Props = {
 };
 export function ThankYou({ geoId }: Props) {
 	const countryId = CountryHelper.fromString(get('GU_country') ?? 'GB') ?? 'GB';
-	const isSignedIn = !!get('GU_U');
+	const user = getUser();
+	const isSignedIn = user.isSignedIn;
+
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
 
 	const sessionStorageOrder = storage.session.get('thankYouOrder');
@@ -134,7 +137,7 @@ export function ThankYou({ geoId }: Props) {
 	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
 
 	const thankYouModules: ThankYouModuleType[] = [
-		...maybeThankYouModule(isNewAccount, 'signUp'),
+		...maybeThankYouModule(isNewAccount && !isSignedIn, 'signUp'),
 		...maybeThankYouModule(
 			!isNewAccount && !isSignedIn && order.email.length > 0,
 			'signIn',
