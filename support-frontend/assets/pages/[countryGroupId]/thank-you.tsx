@@ -115,11 +115,6 @@ export function ThankYou({ geoId }: Props) {
 	const isSupporterPlus = order.product === 'SupporterPlus';
 	const isNewAccount = order.userTypeFromIdentityResponse === 'new';
 	const csrf = { token: order.csrf };
-	const supportReminder = {
-		selectedChoiceIndex: 1, // TODO
-		hasBeenCompleted: true, // TODO
-		errorMessage: '',
-	};
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
@@ -128,9 +123,7 @@ export function ThankYou({ geoId }: Props) {
 		order.email,
 		isOneOff,
 		isSupporterPlus,
-		supportReminder, // TODO
 	);
-
 	const maybeThankYouModule = (
 		condtion: boolean,
 		moduleType: ThankYouModuleType,
@@ -148,16 +141,13 @@ export function ThankYou({ geoId }: Props) {
 		),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && order.email.length > 0,
-			'checkoutSupportReminder',
+
+			'supportReminder',
 		),
-		...maybeThankYouModule(order.email.length > 0, 'checkoutFeedback'),
+		...maybeThankYouModule(order.email.length > 0, 'feedback'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];
-	// const thankYouModules: ThankYouModuleType[] = [
-	// 	...maybeThankYouModule(true, 'checkoutSupportReminder'),
-	// 	...maybeThankYouModule(true, 'checkoutFeedback'),
-	// ];
 
 	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;
 	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);

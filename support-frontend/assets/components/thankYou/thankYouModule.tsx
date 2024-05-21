@@ -152,9 +152,7 @@ export type ThankYouModuleType =
 	| 'signIn'
 	| 'signUp'
 	| 'socialShare'
-	| 'supportReminder'
-	| 'checkoutSupportReminder'
-	| 'checkoutFeedback';
+	| 'supportReminder';
 
 export interface ThankYouModuleProps {
 	moduleType: ThankYouModuleType;

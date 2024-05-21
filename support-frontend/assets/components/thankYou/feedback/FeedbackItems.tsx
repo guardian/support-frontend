@@ -64,13 +64,12 @@ function FeedbackCTA({
 	feedbackSurveyLink: string;
 	onClick?: () => void;
 }): JSX.Element {
-	const onSubmit = () => {
-		trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
-		onClick;
-	};
 	return (
 		<LinkButton
-			onClick={onSubmit}
+			onClick={() => {
+				trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
+				onClick ? onClick() : undefined;
+			}}
 			href={feedbackSurveyLink}
 			target="_blank"
 			rel="noopener noreferrer"
