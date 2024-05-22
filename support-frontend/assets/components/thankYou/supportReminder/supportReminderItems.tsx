@@ -219,7 +219,7 @@ export function SupportReminderCTAandPrivacy({
 	const onSubmit = () => {
 		setReminder();
 		trackComponentClick(OPHAN_COMPONENT_ID_SET_REMINDER);
-		onClick ? onClick() : undefined;
+		onClick?.();
 	};
 	return (
 		<>

@@ -68,7 +68,7 @@ function FeedbackCTA({
 		<LinkButton
 			onClick={() => {
 				trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
-				onClick ? onClick() : undefined;
+				onClick?.();
 			}}
 			href={feedbackSurveyLink}
 			target="_blank"
