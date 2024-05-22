@@ -170,7 +170,7 @@ export function SupportReminderBodyCopy({
 									label={choice.label}
 									checked={supportReminderState.selectedChoiceIndex === index}
 									onChange={() => {
-										onChange ? onChange(index) : undefined;
+										onChange?.(index);
 									}}
 								/>
 							))}
