@@ -57,6 +57,7 @@ const defaultSupportReminder = {
 	hasBeenCompleted: false,
 	errorMessage: '',
 };
+const defaultFeedbackSurveyHasBeenCompleted = false;
 
 export const getThankYouModuleData = (
 	countryId: IsoCountry,
@@ -69,8 +70,10 @@ export const getThankYouModuleData = (
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
+	const initialFeedbackSurveyHasBeenCompleted =
+		feedbackSurveyHasBeenCompleted ?? defaultFeedbackSurveyHasBeenCompleted;
 	const [feedbackSurveyCompleted, setFeedbackSurveyCompleted] =
-		useState<boolean>(feedbackSurveyHasBeenCompleted ?? false);
+		useState<boolean>(initialFeedbackSurveyHasBeenCompleted);
 	const [supportRemind, setSupportRemind] =
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
