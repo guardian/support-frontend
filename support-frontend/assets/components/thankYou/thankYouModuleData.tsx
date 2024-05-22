@@ -74,7 +74,7 @@ export const getThankYouModuleData = (
 		feedbackSurveyHasBeenCompleted ?? defaultFeedbackSurveyHasBeenCompleted;
 	const [feedbackSurveyCompleted, setFeedbackSurveyCompleted] =
 		useState<boolean>(initialFeedbackSurveyHasBeenCompleted);
-	const [supportRemind, setSupportRemind] =
+	const [supportReminderCompleted, setSupportReminderCompleted] =
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
 		);
@@ -161,22 +161,22 @@ export const getThankYouModuleData = (
 		},
 		supportReminder: {
 			icon: getThankYouModuleIcon('supportReminder'),
-			header: supportRemind.hasBeenCompleted
+			header: supportReminderCompleted.hasBeenCompleted
 				? 'Your support reminder is set'
 				: 'Set a support reminder',
 			bodyCopy: (
 				<SupportReminderBodyCopy
-					supportReminderState={supportRemind}
+					supportReminderState={supportReminderCompleted}
 					onChange={(index) => {
-						setSupportRemind({
-							...supportRemind,
+						setSupportReminderCompleted({
+							...supportReminderCompleted,
 							selectedChoiceIndex: index,
 						});
 						if (supportReminder) {
 							const dispatch = useContributionsDispatch();
 							dispatch(
 								setThankYouSupportReminder({
-									...supportRemind,
+									...supportReminderCompleted,
 									selectedChoiceIndex: index,
 								}),
 							);
@@ -184,20 +184,20 @@ export const getThankYouModuleData = (
 					}}
 				/>
 			),
-			ctas: supportRemind.hasBeenCompleted ? null : (
+			ctas: supportReminderCompleted.hasBeenCompleted ? null : (
 				<SupportReminderCTAandPrivacy
 					email={email}
-					supportReminderState={supportRemind}
+					supportReminderState={supportReminderCompleted}
 					onClick={() => {
-						setSupportRemind({
-							...supportRemind,
+						setSupportReminderCompleted({
+							...supportReminderCompleted,
 							hasBeenCompleted: true,
 						});
 						if (supportReminder) {
 							const dispatch = useContributionsDispatch();
 							dispatch(
 								setThankYouSupportReminder({
-									...supportRemind,
+									...supportReminderCompleted,
 									hasBeenCompleted: true,
 								}),
 							);
