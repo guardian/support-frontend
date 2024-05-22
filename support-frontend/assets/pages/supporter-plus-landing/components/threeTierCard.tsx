@@ -46,6 +46,7 @@ export type ThreeTierCardProps = {
 	productDescription: ProductDescription;
 	price: number;
 	promotion?: Promotion;
+	ctaCopy: string;
 };
 
 const container = (
@@ -199,6 +200,7 @@ export function ThreeTierCard({
 	productDescription,
 	price,
 	promotion,
+	ctaCopy,
 }: ThreeTierCardProps): JSX.Element {
 	const currency = currencies[currencyId];
 	const period = recurringContributionPeriodMap[paymentFrequency];
@@ -253,7 +255,7 @@ export function ThreeTierCard({
 					}}
 					data-qm-trackable={quantumMetricButtonRef}
 				>
-					Subscribe
+					{ctaCopy}
 				</LinkButton>
 			</ThemeProvider>
 

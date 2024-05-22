@@ -13,6 +13,7 @@ import com.gu.support.zuora.api.ReaderType.Direct
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
+import com.gu.support.catalog.NoFulfilmentOptions
 
 sealed trait ProductType {
   def currency: Currency
@@ -34,6 +35,7 @@ case class SupporterPlus(
     amount: BigDecimal,
     currency: Currency,
     billingPeriod: BillingPeriod,
+    fulfilmentOptions: Option[FulfilmentOptions] = None, // Remove Option after we have updated the frontend
 ) extends ProductType {
   override def describe: String = s"$billingPeriod-SupporterPlus-$currency-$amount"
 }

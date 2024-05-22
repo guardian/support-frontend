@@ -42,7 +42,7 @@
       ".+\\.(js|jsx|ts|tsx)$": "./node_modules/babel-jest"
     },
     "transformIgnorePatterns": [
-      "/node_modules/(?!@guardian)",
+      "/node_modules/(?!@guardian|valibot)",
       "^.+\\.module\\.(css|sass|scss)$"
     ],
     "moduleFileExtensions": [

@@ -117,7 +117,7 @@ export class Frontend extends GuStack {
         hostedZoneId: "Z1E4V12LQGXFEC",
       },
       monitoringConfiguration: {
-        snsTopicName: "conversion-dev",
+        snsTopicName: `alarms-handler-topic-${this.stage}`,
         http5xxAlarm: {
           alarmName: alarmName("support-frontend is returning 5XX errors"),
           alarmDescription: alarmDescription(
@@ -158,7 +158,7 @@ export class Frontend extends GuStack {
         statistic: "Average",
         period: Duration.seconds(60),
       }),
-      snsTopicName: "conversion-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "ReducedHealthyInstancesAlarm", {
@@ -183,7 +183,7 @@ export class Frontend extends GuStack {
         statistic: "Average",
         period: Duration.seconds(300),
       }),
-      snsTopicName: "conversion-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "LatencyNotificationAlarm", {
@@ -206,7 +206,7 @@ export class Frontend extends GuStack {
         statistic: "Average",
         period: Duration.seconds(60),
       }),
-      snsTopicName: "conversion-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     // TODO: Do we still need this?
@@ -230,7 +230,7 @@ export class Frontend extends GuStack {
         statistic: "Average",
         period: Duration.seconds(60),
       }),
-      snsTopicName: "conversion-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "DefaultPromotionsLoadingFailureAlarm", {
@@ -253,7 +253,7 @@ export class Frontend extends GuStack {
         statistic: "Sum",
         period: Duration.seconds(60),
       }),
-      snsTopicName: "conversion-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     const stateMachineUnavailableMetricFilter = new MetricFilter(
@@ -289,7 +289,7 @@ export class Frontend extends GuStack {
         statistic: "Sum",
       }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: "conversion-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "ServerSideCreateFailureAlarm", {
@@ -314,7 +314,7 @@ export class Frontend extends GuStack {
         period: Duration.seconds(60),
       }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: "conversion-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "GetDeliveryAgentsFailure", {
@@ -337,7 +337,7 @@ export class Frontend extends GuStack {
         period: Duration.seconds(60),
       }),
       treatMissingData: TreatMissingData.NOT_BREACHING,
-      snsTopicName: "conversion-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
   }
 }

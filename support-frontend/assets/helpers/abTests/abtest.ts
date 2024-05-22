@@ -395,9 +395,11 @@ function getAmountsTestVariant(
 	): AmountsVariant => {
 		if (isLive && variants.length > 1) {
 			const assignmentIndex = randomNumber(mvt, seed) % variants.length;
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- the way this code is reached guarantees that assignmentIndex exists
 			return variants[assignmentIndex]!;
 		}
 		// For regional AmountsTests, if the test is not live then we use the control
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- the way this code is reached guarantees that variants.length > 0
 		return variants[0]!;
 	};
 

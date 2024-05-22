@@ -28,6 +28,7 @@ import {
 	useContributionsDispatch,
 	useContributionsSelector,
 } from 'helpers/redux/storeHooks';
+import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import { navigateWithPageView } from 'helpers/tracking/ophan';
 import { CheckoutDivider } from '../components/checkoutDivider';
 import { ContributionsPriceCards } from '../components/contributionsPriceCards';
@@ -54,6 +55,7 @@ export function SupporterPlusCheckout({
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
+	const { supportInternationalisationId } = countryGroups[countryGroupId];
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
 	const amountBeforeAmendments = useContributionsSelector(
@@ -69,6 +71,14 @@ export function SupporterPlusCheckout({
 
 	const inThreeTier = threeTierCheckoutEnabled(abParticipations, amounts);
 	const showPriceCards = inThreeTier && contributionType === 'ONE_OFF';
+	const product = isSupporterPlus ? 'SupporterPlus' : 'Contribution';
+
+	useAbandonedBasketCookie(
+		product,
+		amount,
+		contributionType,
+		supportInternationalisationId,
+	);
 
 	const changeButton = (
 		<Button
@@ -84,7 +94,7 @@ export function SupporterPlusCheckout({
 					}),
 				);
 				dispatch(resetValidation());
-				const destination = `/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`;
+				const destination = `/${supportInternationalisationId}/contribute`;
 				navigateWithPageView(navigate, destination, abParticipations);
 			}}
 		>

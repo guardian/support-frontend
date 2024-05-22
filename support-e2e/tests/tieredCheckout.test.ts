@@ -7,6 +7,10 @@ import { fillInDirectDebitDetails } from './utils/directDebitDetails';
 import { fillInPayPalDetails } from './utils/paypal';
 import { setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
+import {
+	checkAbandonedBasketCookieExists,
+	checkAbandonedBasketCookieRemoved,
+} from './utils/cookies';
 
 interface TestDetails {
 	tier: 1 | 2 | 3;
@@ -19,14 +23,7 @@ const testsDetails: TestDetails[] = [
 	{ paymentType: 'Credit/Debit card', tier: 1, frequency: 'Monthly' },
 	{ paymentType: 'Credit/Debit card', tier: 2, frequency: 'Annual' },
 	{ paymentType: 'Direct debit', tier: 2, frequency: 'Monthly' },
-	/**
-	 * PayPal is currently throwing a "to many login attempts" error, so we're
-	 * going to inactivate this test until we have a solution for it to avoid
-	 * alert numbness.
-	 *
-	 * TODO - re-enable this test when PayPal is fixed
-	 */
-	// { paymentType: 'PayPal', tier: 2, frequency: 'Monthly' },
+	{ paymentType: 'PayPal', tier: 2, frequency: 'Monthly' },
 	{
 		paymentType: 'Credit/Debit card',
 		tier: 1,
@@ -59,6 +56,7 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 				.getByRole('link', { name: 'Subscribe' })
 				.nth(testDetails.tier - 1)
 				.click();
+			await checkAbandonedBasketCookieExists(context);
 			await setTestUserDetails(page, testFirstName, testLastName, testEmail);
 			if (testDetails.country === 'US') {
 				await page.getByLabel('State').selectOption({ label: 'New York' });
@@ -98,7 +96,9 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 				const frequencyLabel =
 					testDetails.frequency === 'Annual' ? 'year' : 'month';
 				var paymentButtonRegex = new RegExp(
-					'(Pay|Support us with) (£|\\$)([0-9]+) per (' + frequencyLabel + ')',
+					'(Pay|Support us with) (£|\\$)([0-9]+|([0-9]+.[0-9]+)) per (' +
+						frequencyLabel +
+						')',
 				);
 				await page.getByText(paymentButtonRegex).click();
 			}
@@ -106,6 +106,7 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 				`/${testDetails.country?.toLowerCase() || 'uk'}/thankyou`,
 				{ timeout: 600000 },
 			);
+			await checkAbandonedBasketCookieRemoved(context);
 		});
 	});
 });

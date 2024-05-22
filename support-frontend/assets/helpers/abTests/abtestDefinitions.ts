@@ -123,4 +123,31 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
+	tierCardCtaCopy: {
+		variants: [
+			{
+				id: 'control',
+			},
+			{
+				id: 'v1',
+			},
+			{
+				id: 'v2',
+			},
+			{
+				id: 'v3',
+			},
+		],
+		audiences: {
+			ALL: {
+				offset: 0,
+				size: 1,
+			},
+		},
+		isActive: true,
+		referrerControlled: false, // ab-test name not needed to be in paramURL
+		seed: 6,
+		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
+		excludeCountriesSubjectToContributionsOnlyAmounts: true,
+	},
 };
