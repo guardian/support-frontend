@@ -59,7 +59,6 @@ const OrderSchema = object({
 	product: string(),
 	ratePlan: string(),
 	paymentMethod: string(),
-	userTypeFromIdentityResponse: string(),
 });
 export function setThankYouOrder(order: Input<typeof OrderSchema>) {
 	storage.session.set('thankYouOrder', order);
@@ -113,7 +112,9 @@ export function ThankYou({ geoId }: Props) {
 	const isOneOff = order.product === 'Contribution';
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = order.product === 'SupporterPlus';
-	const isNewAccount = order.userTypeFromIdentityResponse === 'new';
+	// TODO - get this from the /identity/get-user-type endpoint
+	const userTypeFromIdentityResponse = isSignedIn ? 'current' : 'new';
+	const isNewAccount = userTypeFromIdentityResponse === 'new';
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
@@ -176,7 +177,7 @@ export function ThankYou({ geoId }: Props) {
 							// TODO - generic checkout support promotions
 							promotion={undefined}
 							// TODO - get this from the /identity/get-user-type endpoint
-							userTypeFromIdentityResponse={'guest'}
+							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 						/>
 					</div>
 
