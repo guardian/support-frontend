@@ -664,7 +664,6 @@ function CheckoutComponent({ geoId }: Props) {
 					paymentMethod: paymentMethod as string,
 					// TODO - get this from the /identity/get-user-type endpoint (new/guest/existing)
 					userTypeFromIdentityResponse: 'new',
-					csrf: csrf,
 				};
 				setThankYouOrder(order);
 				window.location.href = `/${geoId}/thank-you`;

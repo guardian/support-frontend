@@ -60,7 +60,6 @@ const OrderSchema = object({
 	ratePlan: string(),
 	paymentMethod: string(),
 	userTypeFromIdentityResponse: string(),
-	csrf: string(),
 });
 export function setThankYouOrder(order: Input<typeof OrderSchema>) {
 	storage.session.set('thankYouOrder', order);
@@ -76,6 +75,7 @@ export function ThankYou({ geoId }: Props) {
 	const countryId = CountryHelper.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
 	const isSignedIn = user.isSignedIn;
+	const csrf = { token: window.guardian.csrf.token };
 
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
 
@@ -114,7 +114,6 @@ export function ThankYou({ geoId }: Props) {
 	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
 	const isSupporterPlus = order.product === 'SupporterPlus';
 	const isNewAccount = order.userTypeFromIdentityResponse === 'new';
-	const csrf = { token: order.csrf };
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
