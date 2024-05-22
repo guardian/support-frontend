@@ -54,7 +54,6 @@ export const buttonContainer = css`
  */
 const OrderSchema = object({
 	firstName: string(),
-	email: string(),
 	price: number(),
 	product: string(),
 	ratePlan: string(),
@@ -115,12 +114,12 @@ export function ThankYou({ geoId }: Props) {
 	// TODO - get this from the /identity/get-user-type endpoint
 	const userTypeFromIdentityResponse = isSignedIn ? 'current' : 'new';
 	const isNewAccount = userTypeFromIdentityResponse === 'new';
+	const emailExists = isSignedIn && !isNewAccount;
 
 	const thankYouModuleData = getThankYouModuleData(
 		countryId,
 		countryGroupId,
 		csrf,
-		order.email,
 		isOneOff,
 		isSupporterPlus,
 	);
@@ -132,7 +131,7 @@ export function ThankYou({ geoId }: Props) {
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount && !isSignedIn, 'signUp'),
 		...maybeThankYouModule(
-			!isNewAccount && !isSignedIn && order.email.length > 0,
+			!isNewAccount && !isSignedIn && emailExists,
 			'signIn',
 		),
 		...maybeThankYouModule(
@@ -140,10 +139,10 @@ export function ThankYou({ geoId }: Props) {
 			'appDownload',
 		),
 		...maybeThankYouModule(
-			contributionType === 'ONE_OFF' && order.email.length > 0,
+			contributionType === 'ONE_OFF' && emailExists,
 			'supportReminder',
 		),
-		...maybeThankYouModule(order.email.length > 0, 'feedback'),
+		...maybeThankYouModule(emailExists, 'feedback'),
 		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
 		'socialShare',
 	];

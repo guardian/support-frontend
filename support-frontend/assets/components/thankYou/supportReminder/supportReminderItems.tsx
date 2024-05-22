@@ -187,7 +187,7 @@ export function SupportReminderCTAandPrivacy({
 	supportReminderState,
 	onClick,
 }: {
-	email: string;
+	email?: string;
 	onClick?: () => void;
 } & SupportReminderState): JSX.Element {
 	const setReminder = () => {
@@ -217,9 +217,11 @@ export function SupportReminderCTAandPrivacy({
 			.catch(catchPromiseHandler('Error creating reminder sign up'));
 	};
 	const onSubmit = () => {
-		setReminder();
-		trackComponentClick(OPHAN_COMPONENT_ID_SET_REMINDER);
-		onClick?.();
+		if (email) {
+			setReminder();
+			trackComponentClick(OPHAN_COMPONENT_ID_SET_REMINDER);
+			onClick?.();
+		}
 	};
 	return (
 		<>
