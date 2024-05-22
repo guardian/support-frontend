@@ -53,6 +53,7 @@ export function CheckoutTopUpAmountsContainer({
 				amount: `${selectedAmount + updateAmountBy}`,
 			}),
 		);
+		console.log('TEST trackComponentClick-checkoutTopUAmountsContainer');
 		trackComponentClick(
 			`contribution-topup-amount-${
 				updateAmountBy > 0 ? 'select' : 'deselect'

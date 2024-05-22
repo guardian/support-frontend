@@ -85,6 +85,7 @@ export function ContributionsOrderSummaryContainer({
 			  });
 
 	function onCheckListToggle(isOpen: boolean) {
+		console.log('TEST trackComponentClick-contributionsOrderSummaryContainer');
 		trackComponentClick(
 			`contribution-order-summary-${isOpen ? 'opened' : 'closed'}`,
 		);

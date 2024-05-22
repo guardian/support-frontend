@@ -94,6 +94,7 @@ function PaymentMethodSelectorContainer({
 		const trackingId = `payment-method-selector-${paymentMethodDescription}`;
 
 		if (event === 'select') {
+			console.log('TEST trackComponentClick-paymentMethodSelectorContainer');
 			trackComponentClick(trackingId);
 			sendEventContributionPaymentMethod(paymentMethodDescription);
 			dispatch(setPaymentMethod({ paymentMethod }));

@@ -73,6 +73,7 @@ export function AmazonPayFormContainer(): JSX.Element {
 
 	const loginWithAmazonPay = function login() {
 		dispatch(paymentWaiting(true));
+		console.log('TEST trackComponentClick-amazonPayFormContainer');
 		trackComponentClick('amazon-pay-login-click');
 		const loginOptions = {
 			scope: 'profile postal_code payments:widget payments:shipping_address',

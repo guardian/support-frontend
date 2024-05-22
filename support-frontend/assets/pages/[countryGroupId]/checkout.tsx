@@ -67,14 +67,19 @@ import { getStripeKey } from 'helpers/forms/stripe';
 import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { productCatalogDescription } from 'helpers/productCatalog';
+import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import { NoFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
 } from 'helpers/tracking/acquisitions';
-import { trackComponentClick } from 'helpers/tracking/behaviour';
+import {
+	trackComponentClick,
+	trackComponentInsert,
+} from 'helpers/tracking/behaviour';
 import { getUser } from 'helpers/user/user';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
@@ -252,6 +257,30 @@ function preventDefaultValidityMessage(
 		// 2. setCustomValidity to " " which avoids the browser's default message
 		currentTarget.setCustomValidity(' ');
 	}
+}
+
+function trackPaymentMethod(
+	event: 'select' | 'render',
+	paymentMethod?: PaymentMethod,
+): void {
+	if (paymentMethod) {
+		const trackingId = `payment-method-selector-${paymentMethod}`;
+		if (event === 'select') {
+			console.log('TEST trackComponentClick-checkout');
+			trackComponentClick(trackingId);
+		} else {
+			trackComponentInsert(trackingId);
+		}
+	}
+}
+function trackPriceChange(
+	countryGroupId: CountryGroupId,
+	billingPeriod: BillingPeriod,
+	price: number,
+): void {
+	trackComponentClick(
+		`npf-contribution-amount-toggle-${countryGroupId}-${billingPeriod.toUpperCase()}-${price}`,
+	);
 }
 
 type Props = {
@@ -449,6 +478,15 @@ function CheckoutComponent({ geoId }: Props) {
 			// TODO - this might not meet our browser compatibility requirements (Safari)
 			// see: https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/requestSubmit#browser_compatibility
 			formRef.current?.requestSubmit();
+		} else {
+			// Tracking here as executed once when checkout loaded
+			if (price) {
+				trackPriceChange(
+					countryGroupId,
+					ratePlanDescription.billingPeriod,
+					price,
+				);
+			}
 		}
 	}, [payPalBAID]);
 	useEffect(() => {
@@ -1101,7 +1139,11 @@ function CheckoutComponent({ geoId }: Props) {
 											/>
 										</legend>
 
-										<RadioGroup>
+										<RadioGroup
+											onChange={() => {
+												trackPaymentMethod('select', paymentMethod);
+											}}
+										>
 											{validPaymentMethods.map((validPaymentMethod) => {
 												const selected = paymentMethod === validPaymentMethod;
 												const { label, icon } =

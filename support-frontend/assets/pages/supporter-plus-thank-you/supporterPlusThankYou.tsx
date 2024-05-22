@@ -329,9 +329,10 @@ export function SupporterPlusThankYou({
 						<LinkButton
 							href="https://www.theguardian.com"
 							priority="tertiary"
-							onClick={() =>
-								trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
-							}
+							onClick={() => {
+								console.log('TEST trackComponentClick-supporterPlusThankyou');
+								trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN);
+							}}
 						>
 							Return to the Guardian
 						</LinkButton>

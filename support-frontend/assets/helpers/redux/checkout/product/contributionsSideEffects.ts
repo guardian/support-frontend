@@ -86,7 +86,7 @@ export function addProductSideEffects(
 			const { countryGroupId } =
 				listenerApi.getState().common.internationalisation;
 			const { amount, contributionType } = action.payload;
-
+			console.log('TEST trackComponentClick-contributionsSideEffects');
 			trackComponentClick(
 				`npf-contribution-amount-toggle-${countryGroupId}-${contributionType}-${amount}`,
 			);

@@ -187,6 +187,7 @@ const processStripePaymentIntentRequest = (
 					return handleStripe3DS(_createIntentResponse.data.clientSecret).then(
 						(authResult: PaymentIntentResult) => {
 							if (authResult.error) {
+								console.log('TEST trackComponentClick-oneOffContributions1');
 								trackComponentClick('stripe-3ds-failure');
 								return {
 									type: 'error',
@@ -195,7 +196,7 @@ const processStripePaymentIntentRequest = (
 									},
 								};
 							}
-
+							console.log('TEST trackComponentClick-oneOffContributions2');
 							trackComponentClick('stripe-3ds-success');
 							return postToPaymentApi(
 								{ ...data, paymentIntentId: authResult.paymentIntent.id },

@@ -49,7 +49,10 @@ function SocialShareIcons({
 		<div css={buttonsContainer}>
 			<LinkButton
 				href={getFacebookShareLink(campaignCode)}
-				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK)}
+				onClick={() => {
+					console.log('TEST trackComponentClick-SocialShareItems1');
+					trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_FACEBOOK);
+				}}
 				target="_blank"
 				rel="noopener noreferrer"
 				priority="tertiary"
@@ -62,7 +65,10 @@ function SocialShareIcons({
 
 			<LinkButton
 				href={getTwitterShareLink(countryId, campaignCode)}
-				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER)}
+				onClick={() => {
+					console.log('TEST trackComponentClick-SocialShareItems2');
+					trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_TWITTER);
+				}}
 				target="_blank"
 				rel="noopener noreferrer"
 				priority="tertiary"
@@ -75,7 +81,10 @@ function SocialShareIcons({
 
 			<LinkButton
 				href={getLinkedInShareLink()}
-				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN)}
+				onClick={() => {
+					console.log('TEST trackComponentClick-SocialShareItems3');
+					trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_LINKED_IN);
+				}}
 				target="_blank"
 				rel="noopener noreferrer"
 				priority="tertiary"
@@ -88,7 +97,10 @@ function SocialShareIcons({
 
 			<LinkButton
 				href={getEmailShareLink(countryId, campaignCode)}
-				onClick={() => trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL)}
+				onClick={() => {
+					console.log('TEST trackComponentClick-SocialShareItems4');
+					trackComponentClick(OPHAN_COMPONENT_ID_SOCIAL_EMAIL);
+				}}
 				target="_blank"
 				rel="noopener noreferrer"
 				priority="tertiary"

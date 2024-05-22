@@ -225,6 +225,7 @@ export function SupportReminderCTAandPrivacy({
 
 	const onSubmit = () => {
 		setReminder();
+		console.log('TEST trackComponentClick-supportReminderItems');
 		trackComponentClick(OPHAN_COMPONENT_ID_SET_REMINDER);
 		dispatch(
 			setThankYouSupportReminder({
