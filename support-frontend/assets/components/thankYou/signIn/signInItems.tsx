@@ -47,7 +47,7 @@ const hideBeforeTablet = css`
 `;
 
 type SignInBodyCopyProps = {
-	email: string;
+	email?: string;
 	csrf: CsrfState;
 };
 
@@ -140,11 +140,13 @@ export function SignInCTA({ email, csrf }: SignInBodyCopyProps): JSX.Element {
 	}
 
 	useEffect(() => {
-		const payload = {
-			email,
-		};
+		if (email) {
+			const payload = {
+				email,
+			};
 
-		fetchSignInLink(payload);
+			fetchSignInLink(payload);
+		}
 	}, []);
 
 	const onSignInClick = () => trackComponentClick(OPHAN_COMPONENT_ID_SIGN_IN);

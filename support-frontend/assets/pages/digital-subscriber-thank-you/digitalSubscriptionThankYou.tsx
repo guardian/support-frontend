@@ -53,9 +53,9 @@ export function DigitalSubscriptionThankYou(): JSX.Element {
 		countryId,
 		countryGroupId,
 		csrf,
-		email,
 		false,
 		amountIsAboveThreshold,
+		email,
 		campaignSettings?.campaignCode,
 	);
 
