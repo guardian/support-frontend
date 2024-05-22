@@ -69,9 +69,9 @@ export const getThankYouModuleData = (
 	supportReminder?: ThankYouSupportReminderState,
 	feedbackSurveyHasBeenCompleted?: boolean,
 ): Record<ThankYouModuleType, ThankYouModuleData> => {
-	const [feedbackSurveyCompleted, SetFeedbackSurveyCompleted] =
+	const [feedbackSurveyCompleted, setFeedbackSurveyCompleted] =
 		useState<boolean>(feedbackSurveyHasBeenCompleted ?? false);
-	const [supportRemind, SetSupportRemind] =
+	const [supportRemind, setSupportRemind] =
 		useState<ThankYouSupportReminderState>(
 			supportReminder ?? defaultSupportReminder,
 		);
@@ -123,7 +123,7 @@ export const getThankYouModuleData = (
 				<FeedbackCTA
 					feedbackSurveyLink={getFeedbackSurveyLink(countryId)}
 					onClick={() => {
-						SetFeedbackSurveyCompleted(true);
+						setFeedbackSurveyCompleted(true);
 						if (feedbackSurveyHasBeenCompleted) {
 							const dispatch = useContributionsDispatch();
 							dispatch(setThankYouFeedbackSurveyHasBeenCompleted(true));
@@ -165,7 +165,7 @@ export const getThankYouModuleData = (
 				<SupportReminderBodyCopy
 					supportReminderState={supportRemind}
 					onChange={(index) => {
-						SetSupportRemind({
+						setSupportRemind({
 							...supportRemind,
 							selectedChoiceIndex: index,
 						});
@@ -186,7 +186,7 @@ export const getThankYouModuleData = (
 					email={email}
 					supportReminderState={supportRemind}
 					onClick={() => {
-						SetSupportRemind({
+						setSupportRemind({
 							...supportRemind,
 							hasBeenCompleted: true,
 						});
