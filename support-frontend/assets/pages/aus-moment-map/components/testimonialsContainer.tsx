@@ -3,7 +3,7 @@ import {
 	Button,
 	buttonThemeBrandAlt,
 	LinkButton,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import type { RefObject } from 'preact';
 import * as React from 'preact/compat';
 import type { ReactNode } from 'react';

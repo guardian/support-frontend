@@ -9,7 +9,7 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 
 export const componentFooter = css`
 	&,

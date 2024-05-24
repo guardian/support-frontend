@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { brand, space } from '@guardian/source-foundations';
-import { Column, Columns, Hide } from '@guardian/source-react-components';
+import { brand, space } from '@guardian/source/foundations';
+import { Column, Columns, Hide } from '@guardian/source/react-components';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { Container } from 'components/layout/container';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
-import { focusHalo, from, space } from '@guardian/source-foundations';
-import { Link } from '@guardian/source-react-components';
-import { ErrorSummary } from '@guardian/source-react-components-development-kitchen';
+import { focusHalo, from, space } from '@guardian/source/foundations';
+import { Link } from '@guardian/source/react-components';
+import { ErrorSummary } from '@guardian/source-development-kitchen/react-components';
 import { useAutoFocus } from 'helpers/customHooks/useAutoFocus';
 
 const errorContainerStyles = css`

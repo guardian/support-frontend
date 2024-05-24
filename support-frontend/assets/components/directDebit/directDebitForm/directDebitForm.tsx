@@ -2,7 +2,7 @@ import {
 	Checkbox,
 	InlineError,
 	TextInput,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import * as React from 'react';
 import { useState } from 'react';
 import DirectDebitGuarantee from 'components/directDebit/directDebitForm/directDebitGuarantee';

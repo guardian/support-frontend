@@ -6,7 +6,7 @@ import {
 	headline,
 	neutral,
 	space,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 
 export const tabList = css`
 	display: flex;

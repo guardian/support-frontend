@@ -1,11 +1,11 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
-import { from, space } from '@guardian/source-foundations';
+import { from, space } from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenue,
 	LinkButton,
 	SvgArrowRightStraight,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import Content, { Divider, NarrowContent } from 'components/content/content';
 import type { SubscriptionProduct } from 'helpers/productPrice/subscriptions';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';

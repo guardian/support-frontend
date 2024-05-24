@@ -1,13 +1,13 @@
 import { css } from '@emotion/react';
 import { storage } from '@guardian/libs';
-import { from, space, sport } from '@guardian/source-foundations';
+import { from, space, sport } from '@guardian/source/foundations';
 import {
 	Column,
 	Columns,
 	Container,
 	LinkButton,
-} from '@guardian/source-react-components';
-import { FooterWithContents } from '@guardian/source-react-components-development-kitchen';
+} from '@guardian/source/react-components';
+import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import type { Input } from 'valibot';
 import { number, object, safeParse, string } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';

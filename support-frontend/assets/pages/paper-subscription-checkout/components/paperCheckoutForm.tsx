@@ -1,13 +1,13 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
+import { space } from '@guardian/source/foundations';
 import {
 	Option as OptionForSelect,
 	Radio,
 	RadioGroup,
 	Select,
 	TextArea,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import type { ConnectedProps } from 'react-redux';

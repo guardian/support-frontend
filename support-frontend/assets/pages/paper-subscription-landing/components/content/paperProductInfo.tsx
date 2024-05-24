@@ -5,7 +5,7 @@ import {
 	from,
 	headline,
 	space,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';

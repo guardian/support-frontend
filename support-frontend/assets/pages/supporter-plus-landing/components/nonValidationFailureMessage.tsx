@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
-import { ErrorSummary } from '@guardian/source-react-components-development-kitchen';
+import { space } from '@guardian/source/foundations';
+import { ErrorSummary } from '@guardian/source-development-kitchen/react-components';
 
 const bottomSpacing = css`
 	margin-bottom: ${space[6]}px;

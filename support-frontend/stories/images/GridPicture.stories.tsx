@@ -1,4 +1,4 @@
-import { Container } from '@guardian/source-react-components';
+import { Container } from '@guardian/source/react-components';
 import React from 'react';
 import type { PropTypes } from 'components/gridPicture/gridPicture';
 import GridPicture from 'components/gridPicture/gridPicture';

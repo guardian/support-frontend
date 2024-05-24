@@ -4,7 +4,7 @@ import {
 	neutral,
 	space,
 	textSans,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import type { ListItemText } from 'components/list/list';
 import { ListWithSubText } from 'components/list/list';
 

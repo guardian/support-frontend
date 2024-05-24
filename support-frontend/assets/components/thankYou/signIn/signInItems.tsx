@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
-import { body, from, space } from '@guardian/source-foundations';
+import { body, from, space } from '@guardian/source/foundations';
 import {
 	ButtonLink,
 	LinkButton,
 	SvgArrowRightStraight,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { useEffect, useState } from 'react';
 import BulletPointedList from 'components/thankYou/utilityComponents/BulletPointedList';
 import ExpandableContainer from 'components/thankYou/utilityComponents/ExpandableContainer';

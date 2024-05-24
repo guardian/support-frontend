@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, space, titlepiece } from '@guardian/source-foundations';
+import { from, space, titlepiece } from '@guardian/source/foundations';
 import type { ContributionType } from 'helpers/contributions';
 import { formatAmount } from 'helpers/forms/checkouts';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';

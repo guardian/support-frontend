@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
-import { from, sport } from '@guardian/source-foundations';
-import { Container } from '@guardian/source-react-components';
-import { FooterWithContents } from '@guardian/source-react-components-development-kitchen';
+import { from, sport } from '@guardian/source/foundations';
+import { Container } from '@guardian/source/react-components';
+import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';

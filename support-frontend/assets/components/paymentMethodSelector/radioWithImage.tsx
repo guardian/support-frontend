@@ -1,7 +1,7 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { brand, neutral } from '@guardian/source-foundations';
-import { Radio } from '@guardian/source-react-components';
+import { brand, neutral } from '@guardian/source/foundations';
+import { Radio } from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 
 const radioWithImageStyles = css`

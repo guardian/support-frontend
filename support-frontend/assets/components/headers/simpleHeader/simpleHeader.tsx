@@ -5,12 +5,12 @@ import {
 	neutral,
 	space,
 	visuallyHidden,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import {
 	Column,
 	Columns,
 	SvgGuardianLogo,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import { Container } from 'components/layout/container';
 

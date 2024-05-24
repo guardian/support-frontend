@@ -1,10 +1,10 @@
 import { css, ThemeProvider } from '@emotion/react';
-import { space, textSans } from '@guardian/source-foundations';
+import { space, textSans } from '@guardian/source/foundations';
 import {
 	Button,
 	buttonThemeReaderRevenueBrandAlt,
 	TextInput,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import React from 'react';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import { emailRegexPattern } from 'helpers/forms/formValidation';

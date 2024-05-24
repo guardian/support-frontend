@@ -5,13 +5,13 @@ import {
 	height,
 	palette,
 	space,
-} from '@guardian/source-foundations';
-import type { LabelProps } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import type { LabelProps } from '@guardian/source/react-components';
 import {
 	InlineError,
 	Label,
 	textInputThemeDefault,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import type {
 	StripeCardElementOptions,
 	StripeElementStyleVariant,

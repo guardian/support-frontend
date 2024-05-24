@@ -5,8 +5,8 @@ import {
 	headline,
 	space,
 	visuallyHidden,
-} from '@guardian/source-foundations';
-import { TextInput } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { TextInput } from '@guardian/source/react-components';
 import { emailRegexPattern } from 'helpers/forms/formValidation';
 import type { PersonalDetailsState } from 'helpers/redux/checkout/personalDetails/state';
 

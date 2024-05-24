@@ -4,8 +4,8 @@ import {
 	error as errorColour,
 	space,
 	textSans,
-} from '@guardian/source-foundations';
-import { InlineError } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { InlineError } from '@guardian/source/react-components';
 import type { FormField } from 'helpers/subscriptionsForms/formFields';
 import type { FormError } from 'helpers/subscriptionsForms/validation';
 import type { CardFieldName } from './stripeForm/stripeForm';

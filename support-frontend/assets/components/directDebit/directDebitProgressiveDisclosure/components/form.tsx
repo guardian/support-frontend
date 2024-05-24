@@ -6,7 +6,7 @@ import {
 	Checkbox,
 	SvgArrowRightStraight,
 	TextInput,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import * as React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';

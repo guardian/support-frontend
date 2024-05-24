@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, headline, neutral, space } from '@guardian/source-foundations';
+import { from, headline, neutral, space } from '@guardian/source/foundations';
 
 const headingStyles = css`
 	display: none;

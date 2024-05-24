@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { from, space, until } from '@guardian/source-foundations';
-import { palette } from '@guardian/source-foundations/cjs/colour/palette';
+import { from, space, until } from '@guardian/source/foundations';
+import { palette } from '@guardian/source/foundations';
 
 export const accountNumberSortCodeContainer = css`
 	display: flex;

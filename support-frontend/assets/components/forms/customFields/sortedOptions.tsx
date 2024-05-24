@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { Option } from '@guardian/source-react-components';
+import { Option } from '@guardian/source/react-components';
 
 // ----- Functions ----- //
 function sortedOptions(optionsForSorting: Record<string, string>): JSX.Element {

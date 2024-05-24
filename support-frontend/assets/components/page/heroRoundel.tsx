@@ -6,7 +6,7 @@ import {
 	headline,
 	neutral,
 	space,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import type { ReactElement, ReactNode } from 'react';
 import { digitalSubscriptionsBlue } from 'stylesheets/emotion/colours';
 

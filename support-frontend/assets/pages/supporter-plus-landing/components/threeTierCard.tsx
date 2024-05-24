@@ -5,20 +5,20 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { CheckList } from 'components/checkList/checkList';
 import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { Currency } from 'helpers/internationalisation/currency';
-import {
-	currencies,
+import { currencies } from 'helpers/internationalisation/currency';
+import type {
+	Currency,
 	type IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import type { ProductDescription } from 'helpers/productCatalog';

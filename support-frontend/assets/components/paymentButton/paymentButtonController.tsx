@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
+import { space } from '@guardian/source/foundations';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';

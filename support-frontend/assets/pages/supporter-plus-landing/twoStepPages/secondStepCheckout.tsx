@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { space, until } from '@guardian/source-foundations';
-import { Button } from '@guardian/source-react-components';
+import { space, until } from '@guardian/source/foundations';
+import { Button } from '@guardian/source/react-components';
 import { useNavigate } from 'react-router-dom';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';

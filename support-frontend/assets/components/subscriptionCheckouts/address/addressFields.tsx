@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
+import { space } from '@guardian/source/foundations';
 import {
 	Option as OptionForSelect,
 	Select,
 	TextInput,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import React from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
