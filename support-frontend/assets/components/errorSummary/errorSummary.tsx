@@ -39,7 +39,9 @@ export function CheckoutErrorSummary({
 }: CheckoutErrorSummaryProps): JSX.Element | null {
 	const containerRef = useAutoFocus<HTMLDivElement>();
 
-	if (!errorList.length) {return null;}
+	if (!errorList.length) {
+		return null;
+	}
 	return (
 		<div
 			css={errorContainerStyles}

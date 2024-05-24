@@ -19,7 +19,6 @@ import {
 import { getFormattedStartDate, getPaymentStartDate } from '../subsCardDays';
 import { getVoucherDays } from '../voucherDeliveryDays';
 
- 
 jest.mock('ophan', () => {});
 
 // ----- Tests ----- //

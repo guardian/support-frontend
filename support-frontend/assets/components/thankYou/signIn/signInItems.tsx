@@ -122,7 +122,9 @@ export function SignInCTA({ email, csrf }: SignInBodyCopyProps): JSX.Element {
 	const [signInUrl, setSignInUrl] = useState('https://theguardian.com');
 
 	function fetchSignInLink(payload: { email: string }) {
-		if (!isCodeOrProd()) {return;}
+		if (!isCodeOrProd()) {
+			return;
+		}
 
 		fetch(routes.createSignInUrl, {
 			method: 'post',

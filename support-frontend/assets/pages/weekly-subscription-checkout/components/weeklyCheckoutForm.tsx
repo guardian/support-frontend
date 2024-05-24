@@ -527,7 +527,7 @@ function WeeklyCheckoutForm(props: PropTypes) {
 						/>
 					) : null}
 					<GeneralErrorMessage
-						errorReason={props.submissionError}
+						errorReason={props.submissionError ?? undefined}
 						errorHeading={submissionErrorHeading}
 					/>
 					{inThreeTier ? (

@@ -8,7 +8,7 @@ import './generalErrorMessage.scss';
 
 // ---- Types ----- //
 type PropTypes = {
-	errorReason: string;
+	errorReason?: string;
 	errorHeading: string;
 	svg: ReactNode;
 	classModifiers: Array<string | null | undefined>;

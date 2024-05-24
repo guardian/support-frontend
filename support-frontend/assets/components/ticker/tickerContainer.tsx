@@ -33,7 +33,9 @@ function getInitialTickerValues(
 }
 
 function getDefaultTickerEnd(total: number, goal: number) {
-	if (goal > total) {return goal;}
+	if (goal > total) {
+		return goal;
+	}
 	return total;
 }
 

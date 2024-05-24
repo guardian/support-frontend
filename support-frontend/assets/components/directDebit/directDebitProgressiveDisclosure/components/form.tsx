@@ -11,7 +11,6 @@ import * as React from 'react';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { ErrorSummary } from 'components/subscriptionCheckouts/submitFormErrorSummary';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
-import type { Option } from 'helpers/types/option';
 import type { DirectDebitFieldName } from '../types';
 
 const directDebitForm = css`
@@ -49,7 +48,7 @@ type PropTypes = {
 	accountErrors: Array<Record<string, string>>;
 	submissionError: ErrorReason | null;
 	submissionErrorHeading: string;
-	formError: Option<string>;
+	formError?: string;
 	updateAccountHolderName: EventHandler;
 	updateSortCode: EventHandler;
 	updateAccountNumber: EventHandler;

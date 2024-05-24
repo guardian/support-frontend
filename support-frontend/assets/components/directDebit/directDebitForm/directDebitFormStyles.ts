@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, palette, space , until } from '@guardian/source/foundations';
+import { from, palette, space, until } from '@guardian/source/foundations';
 
 export const accountNumberSortCodeContainer = css`
 	display: flex;

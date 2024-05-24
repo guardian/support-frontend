@@ -567,7 +567,7 @@ function PaperCheckoutForm(props: PropTypes) {
 						/>
 					) : null}
 					<GeneralErrorMessage
-						errorReason={props.submissionError}
+						errorReason={props.submissionError ?? undefined}
 						errorHeading={submissionErrorHeading}
 					/>
 					<DirectDebitPaymentTerms paymentMethod={props.paymentMethod} />

@@ -463,7 +463,7 @@ function WeeklyCheckoutFormGifting(props: PropTypes): JSX.Element {
 						/>
 					) : null}
 					<GeneralErrorMessage
-						errorReason={props.submissionError}
+						errorReason={props.submissionError ?? undefined}
 						errorHeading={submissionErrorHeading}
 					/>
 					<Total

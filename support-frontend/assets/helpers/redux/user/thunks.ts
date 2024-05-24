@@ -21,7 +21,9 @@ export const getRecurringContributorStatus = createAsyncThunk<
 		const accessToken = cookie.get('GU_ACCESS_TOKEN');
 
 		// Exit early if Okta isn't enabled or we're missing the access token
-		if (!authWithOkta || !accessToken) {return {};}
+		if (!authWithOkta || !accessToken) {
+			return {};
+		}
 
 		const attributes = await fetchJson<UserAttributes>(
 			`${window.guardian.mdapiUrl}/user-attributes/me`,
