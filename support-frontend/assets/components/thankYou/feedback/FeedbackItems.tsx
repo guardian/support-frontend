@@ -4,8 +4,6 @@ import {
 	LinkButton,
 	SvgArrowRightStraight,
 } from '@guardian/source-react-components';
-import { setThankYouFeedbackSurveyHasBeenCompleted } from 'helpers/redux/checkout/thankYouState/actions';
-import { useContributionsDispatch } from 'helpers/redux/storeHooks';
 import { OPHAN_COMPONENT_ID_SURVEY } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 
@@ -61,19 +59,17 @@ function FeedbackBodyCopy({
 
 function FeedbackCTA({
 	feedbackSurveyLink,
+	onClick,
 }: {
 	feedbackSurveyLink: string;
+	onClick?: () => void;
 }): JSX.Element {
-	const dispatch = useContributionsDispatch();
-
-	const onClick = () => {
-		trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
-		dispatch(setThankYouFeedbackSurveyHasBeenCompleted(true));
-	};
-
 	return (
 		<LinkButton
-			onClick={onClick}
+			onClick={() => {
+				trackComponentClick(OPHAN_COMPONENT_ID_SURVEY);
+				onClick?.();
+			}}
 			href={feedbackSurveyLink}
 			target="_blank"
 			rel="noopener noreferrer"

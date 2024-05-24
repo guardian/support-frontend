@@ -321,8 +321,10 @@ type Props = {
 	setSelectedTerritory: (arg0: string) => void;
 };
 
-export const TestimonialsContainer = React.forwardRef(
-	(props: Props, ref: React.Ref<HTMLDivElement>) => {
+type Ref = HTMLDivElement;
+
+export const TestimonialsContainer = React.forwardRef<Ref, Props>(
+	(props, ref) => {
 		const { windowWidthIsLessThan } = useWindowWidth();
 
 		if ('testimonialsCollection' in props) {

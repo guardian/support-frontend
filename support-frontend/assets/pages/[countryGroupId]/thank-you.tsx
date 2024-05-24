@@ -1,18 +1,33 @@
 import { css } from '@emotion/react';
 import { storage } from '@guardian/libs';
 import { from, space, sport } from '@guardian/source-foundations';
-import { Container } from '@guardian/source-react-components';
+import {
+	Column,
+	Columns,
+	Container,
+	LinkButton,
+} from '@guardian/source-react-components';
 import { FooterWithContents } from '@guardian/source-react-components-development-kitchen';
 import type { Input } from 'valibot';
 import { number, object, safeParse, string } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
+import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
+import ThankYouModule from 'components/thankYou/thankYouModule';
+import { getThankYouModuleData } from 'components/thankYou/thankYouModuleData';
 import { init as abTestInit } from 'helpers/abTests/abtest';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import { get } from 'helpers/storage/cookie';
+import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
+import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { getUser } from 'helpers/user/user';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
+import {
+	columnContainer,
+	firstColumnContainer,
+} from 'pages/supporter-plus-thank-you/supporterPlusThankYou';
 
 export const checkoutContainer = css`
 	${from.tablet} {
@@ -27,6 +42,10 @@ export const headerContainer = css`
 	${from.leftCol} {
 		width: calc(50% - ${space[3]}px);
 	}
+`;
+
+export const buttonContainer = css`
+	padding: ${space[12]}px 0;
 `;
 
 /**
@@ -52,7 +71,10 @@ type Props = {
 };
 export function ThankYou({ geoId }: Props) {
 	const countryId = CountryHelper.fromString(get('GU_country') ?? 'GB') ?? 'GB';
-	const isSignedIn = !!get('GU_U');
+	const user = getUser();
+	const isSignedIn = user.isSignedIn;
+	const csrf = { token: window.guardian.csrf.token };
+
 	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
 
 	const sessionStorageOrder = storage.session.get('thankYouOrder');
@@ -82,12 +104,52 @@ export function ThankYou({ geoId }: Props) {
 		return <div>Unable to find contribution type {contributionType}</div>;
 	}
 
-	const isOneOffPayPal =
-		order.paymentMethod === 'PayPal' && order.product === 'Contribution';
-
 	const abParticipations = abTestInit({ countryId, countryGroupId });
 	const showOffer =
 		!!abParticipations.usFreeBookOffer && order.product === 'SupporterPlus';
+
+	const isOneOff = order.product === 'Contribution';
+	const isOneOffPayPal = order.paymentMethod === 'PayPal' && isOneOff;
+	const isSupporterPlus = order.product === 'SupporterPlus';
+	// TODO - get this from the /identity/get-user-type endpoint
+	const userTypeFromIdentityResponse = isSignedIn ? 'current' : 'new';
+	const isNewAccount = userTypeFromIdentityResponse === 'new';
+	const emailExists = isSignedIn && !isNewAccount;
+
+	const thankYouModuleData = getThankYouModuleData(
+		countryId,
+		countryGroupId,
+		csrf,
+		isOneOff,
+		isSupporterPlus,
+	);
+	const maybeThankYouModule = (
+		condtion: boolean,
+		moduleType: ThankYouModuleType,
+	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
+
+	const thankYouModules: ThankYouModuleType[] = [
+		...maybeThankYouModule(isNewAccount && !isSignedIn, 'signUp'),
+		...maybeThankYouModule(
+			!isNewAccount && !isSignedIn && emailExists,
+			'signIn',
+		),
+		...maybeThankYouModule(
+			contributionType !== 'ONE_OFF' && isSupporterPlus,
+			'appDownload',
+		),
+		...maybeThankYouModule(
+			contributionType === 'ONE_OFF' && emailExists,
+			'supportReminder',
+		),
+		...maybeThankYouModule(emailExists, 'feedback'),
+		...maybeThankYouModule(countryId === 'AU', 'ausMap'),
+		'socialShare',
+	];
+
+	const numberOfModulesInFirstColumn = thankYouModules.length >= 6 ? 3 : 2;
+	const firstColumn = thankYouModules.slice(0, numberOfModulesInFirstColumn);
+	const secondColumn = thankYouModules.slice(numberOfModulesInFirstColumn);
 
 	return (
 		<PageScaffold
@@ -114,8 +176,41 @@ export function ThankYou({ geoId }: Props) {
 							// TODO - generic checkout support promotions
 							promotion={undefined}
 							// TODO - get this from the /identity/get-user-type endpoint
-							userTypeFromIdentityResponse={'guest'}
+							userTypeFromIdentityResponse={userTypeFromIdentityResponse}
 						/>
+					</div>
+
+					<Columns collapseUntil="desktop">
+						<Column cssOverrides={[columnContainer, firstColumnContainer]}>
+							{firstColumn.map((moduleType) => (
+								<ThankYouModule
+									moduleType={moduleType}
+									isSignedIn={isSignedIn}
+									{...thankYouModuleData[moduleType]}
+								/>
+							))}
+						</Column>
+						<Column cssOverrides={columnContainer}>
+							{secondColumn.map((moduleType) => (
+								<ThankYouModule
+									moduleType={moduleType}
+									isSignedIn={isSignedIn}
+									{...thankYouModuleData[moduleType]}
+								/>
+							))}
+						</Column>
+					</Columns>
+
+					<div css={buttonContainer}>
+						<LinkButton
+							href="https://www.theguardian.com"
+							priority="tertiary"
+							onClick={() =>
+								trackComponentClick(OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN)
+							}
+						>
+							Return to the Guardian
+						</LinkButton>
 					</div>
 				</Container>
 			</div>
