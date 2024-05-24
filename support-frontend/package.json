@@ -189,7 +189,7 @@
     "postcss": "^8.4.38",
     "postcss-loader": "^7.3.0",
     "postcss-pxtorem": "^6.0.0",
-    "preact": "^10.4.6",
+    "preact": "^10.22.0",
     "preact-render-to-string": "^5.2.6",
     "prettier": "^2.8.8",
     "prettier-eslint": "^16.3.0",
