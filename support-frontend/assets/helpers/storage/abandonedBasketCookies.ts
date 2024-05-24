@@ -55,7 +55,7 @@ function parseAmount(amount: string): number | 'other' {
 
 export function updateAbandonedBasketCookie(amount: string) {
 	const abandonedBasketCookie = cookie.get(ABANDONED_BASKET_COOKIE_NAME);
-	if (!abandonedBasketCookie) return;
+	if (!abandonedBasketCookie) {return;}
 
 	const parsedCookie = safeParse(
 		abandonedBasketSchema,

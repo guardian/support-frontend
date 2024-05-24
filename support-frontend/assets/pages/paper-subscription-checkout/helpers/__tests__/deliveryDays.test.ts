@@ -19,7 +19,7 @@ import {
 import { getFormattedStartDate, getPaymentStartDate } from '../subsCardDays';
 import { getVoucherDays } from '../voucherDeliveryDays';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function -- Test file so fine to disable lint rule
+ 
 jest.mock('ophan', () => {});
 
 // ----- Tests ----- //

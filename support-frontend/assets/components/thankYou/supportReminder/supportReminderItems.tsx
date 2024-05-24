@@ -194,7 +194,7 @@ export function SupportReminderCTAandPrivacy({
 		const choice = reminderChoices[supportReminderState.selectedChoiceIndex];
 		const url = getReminderUrl(choice);
 
-		if (!isCodeOrProd()) return;
+		if (!isCodeOrProd()) {return;}
 
 		fetch(url, {
 			method: 'POST',

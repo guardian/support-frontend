@@ -16,7 +16,7 @@ export function getPromotions(
 	currencyId?: IsoCurrency,
 	billingPeriod?: BillingPeriod,
 ): Promotion[] | undefined {
-	if (!productPrices || !currencyId || !billingPeriod) return;
+	if (!productPrices || !currencyId || !billingPeriod) {return;}
 
 	const countryGroupName: CountryGroupName = countryGroups[countryGroupId].name;
 

@@ -19,7 +19,7 @@ import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import { currencies } from 'helpers/internationalisation/currency';
 import type {
 	Currency,
-	type IsoCurrency,
+	IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import type { ProductDescription } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -285,7 +285,7 @@ export function ThreeTierCard({
 					</span>
 				</div>
 			)}
-			{(benefitsSummary || offersSummary) && (
+			{(benefitsSummary ?? offersSummary) && (
 				<span css={benefitsPrefixPlus}>plus</span>
 			)}
 			<CheckList

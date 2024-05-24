@@ -326,7 +326,7 @@ export const TestimonialsContainer = React.forwardRef(
 		const { windowWidthIsLessThan } = useWindowWidth();
 
 		if ('testimonialsCollection' in props) {
-			if (props.selectedTerritory || windowWidthIsLessThan('desktop')) {
+			if (props.selectedTerritory ?? windowWidthIsLessThan('desktop')) {
 				const testimonialsForTerritories =
 					props.testimonialsCollection &&
 					Object.keys(props.testimonialsCollection).map(

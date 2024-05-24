@@ -23,7 +23,7 @@ function notLongerThan(
 	value: string | null | undefined,
 	maxLength: number,
 ): boolean {
-	if (!value) return true;
+	if (!value) {return true;}
 	return value.length < maxLength;
 }
 

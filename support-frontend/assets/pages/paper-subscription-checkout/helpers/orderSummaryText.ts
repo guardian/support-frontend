@@ -25,7 +25,7 @@ export function getOrderSummaryTitle(
 	const fulfilmentOptionDescriptor =
 		fulfilmentOption === HomeDelivery ? 'Paper' : 'Subscription card';
 
-	if (productOption === 'NoProductOptions') return '';
+	if (productOption === 'NoProductOptions') {return '';}
 
 	return `${
 		productOptionDisplayNames[productOption]

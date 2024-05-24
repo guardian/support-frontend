@@ -1,6 +1,7 @@
 // https://en.wikipedia.org/wiki/ISO_3166-1
 // from https://gist.github.com/kyranjamie/646386d5edc174e8b549111572897f81
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars --  we need to update the check below to use this
 type Countries = {
 	Afghanistan: 'AF';
 	AlandIslands: 'AX';
@@ -253,5 +254,6 @@ type Countries = {
 	Zimbabwe: 'ZW';
 };
 
-// temporarily accept any string to integrate into DCR
-export type Country = Countries[keyof Countries] | string;
+// this should be `Countries[keyof Countries]`
+// but we temporarily accept any string to integrate into DCR
+export type Country = string;

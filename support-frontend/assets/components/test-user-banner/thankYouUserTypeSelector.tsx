@@ -31,7 +31,7 @@ export function ThankYouUserTypeSelector(): JSX.Element {
 	);
 
 	useEffect(() => {
-		if (userTypeFromIdentityResponse === selectedUserType) return;
+		if (userTypeFromIdentityResponse === selectedUserType) {return;}
 
 		switch (selectedUserType) {
 			case 'guest':
