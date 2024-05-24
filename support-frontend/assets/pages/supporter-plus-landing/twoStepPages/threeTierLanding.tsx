@@ -18,7 +18,7 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
-import { OfferBook } from 'components/offer/offer';
+import { OfferBook, OfferFeast } from 'components/offer/offer';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
 import type { Participations } from 'helpers/abTests/abtest';
@@ -238,7 +238,35 @@ const isCardUserSelected = (
 	);
 };
 
-const productCatalogDescInclOffers: typeof productCatalogDescExclOffers = {
+const productCatalogDescInclFeast: typeof productCatalogDescExclOffers = {
+	...productCatalogDescExclOffers,
+	SupporterPlusWithGuardianWeekly: {
+		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
+		benefitsSummary: ['The rewards from All-access digital'],
+		offersSummary: [
+			{
+				strong: true,
+				copy: `including unlimited access to the Guardian Feast App.`,
+			},
+		],
+		benefits:
+			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.benefits,
+		ratePlans:
+			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.ratePlans,
+	},
+	SupporterPlus: {
+		label: productCatalogDescExclOffers.SupporterPlus.label,
+		benefits: productCatalogDescExclOffers.SupporterPlus.benefits,
+		offers: [
+			{
+				copy: <OfferFeast></OfferFeast>,
+			},
+		],
+		ratePlans: productCatalogDescExclOffers.SupporterPlus.ratePlans,
+	},
+};
+
+const productCatalogDescInclBookOffers: typeof productCatalogDescExclOffers = {
 	...productCatalogDescExclOffers,
 	SupporterPlusWithGuardianWeekly: {
 		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
@@ -365,12 +393,13 @@ export function ThreeTierLanding(): JSX.Element {
 
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
 	const showFeast = abParticipations.feast === 'variant';
-	const showOffer =
-		showFeast ||
-		(!!abParticipations.usFreeBookOffer && countryGroupId === 'UnitedStates');
+	const showBookOffer =
+		!!abParticipations.usFreeBookOffer && countryGroupId === 'UnitedStates';
 
-	const productCatalogDescription = showOffer
-		? productCatalogDescInclOffers
+	const productCatalogDescription = showFeast
+		? productCatalogDescInclFeast
+		: showBookOffer
+		? productCatalogDescInclBookOffers
 		: productCatalogDescExclOffers;
 
 	useEffect(() => {
@@ -675,7 +704,7 @@ export function ThreeTierLanding(): JSX.Element {
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
-				{showOffer && (
+				{showBookOffer && (
 					<OfferTsAndCs
 						currency={currencies[currencyId].glyph}
 						offerCostMonthly={
