@@ -3,7 +3,6 @@ import type { Input } from 'valibot';
 import {
 	flatten,
 	literal,
-	nullable,
 	number,
 	object,
 	safeParse,
@@ -19,7 +18,7 @@ const ABANDONED_BASKET_COOKIE_NAME = 'GU_CO_INCOMPLETE';
 
 const abandonedBasketSchema = object({
 	product: string(),
-	amount: nullable(union([number(), literal('other')])),
+	amount: union([number(), literal('other')]),
 	billingPeriod: string(),
 	region: string(),
 });
@@ -34,7 +33,7 @@ export function useAbandonedBasketCookie(
 ) {
 	const abandonedBasket = {
 		product,
-		amount,
+		amount: parseAmount(amount),
 		billingPeriod,
 		region,
 	};
@@ -47,10 +46,8 @@ export function useAbandonedBasketCookie(
 	}, []);
 }
 
-function parseAmount(amount: string): number | 'other' {
-	return amount === 'other' || amount === ''
-		? 'other'
-		: Number.parseFloat(amount);
+function parseAmount(amount: number): number | 'other' {
+	return isNaN(amount) ? 'other' : amount;
 }
 
 export function updateAbandonedBasketCookie(amount: string) {
@@ -65,7 +62,7 @@ export function updateAbandonedBasketCookie(amount: string) {
 	if (parsedCookie.success) {
 		const newCookie: AbandonedBasket = {
 			...parsedCookie.output,
-			amount: parseAmount(amount),
+			amount: parseAmount(Number.parseFloat(amount)),
 		};
 
 		cookie.set(
