@@ -19,7 +19,7 @@ const ABANDONED_BASKET_COOKIE_NAME = 'GU_CO_INCOMPLETE';
 
 const abandonedBasketSchema = object({
 	product: string(),
-	amount: nullable(union([number(), literal('other')]), 'other'),
+	amount: nullable(union([number(), literal('other')])),
 	billingPeriod: string(),
 	region: string(),
 });
