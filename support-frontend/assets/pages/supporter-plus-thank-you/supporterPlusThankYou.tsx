@@ -239,9 +239,9 @@ export function SupporterPlusThankYou({
 		countryId,
 		countryGroupId,
 		csrf,
-		email,
 		isOneOff,
 		amountIsAboveThreshold,
+		email,
 		campaignSettings?.campaignCode,
 	);
 
