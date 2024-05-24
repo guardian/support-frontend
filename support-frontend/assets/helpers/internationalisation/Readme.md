@@ -27,7 +27,7 @@ type CountryGroup = {
   name: string,
   currency: IsoCurrency,
   countries: IsoCountry[],
-  supportInternationalizationId: string,
+  supportInternationalizationId: SupportInternationalizationId,
 };
 ```
 
