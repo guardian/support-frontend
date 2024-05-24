@@ -3,6 +3,7 @@ import type { Input } from 'valibot';
 import {
 	flatten,
 	literal,
+	nullable,
 	number,
 	object,
 	safeParse,
@@ -18,7 +19,7 @@ const ABANDONED_BASKET_COOKIE_NAME = 'GU_CO_INCOMPLETE';
 
 const abandonedBasketSchema = object({
 	product: string(),
-	amount: union([number(), literal('other')]),
+	amount: nullable(union([number(), literal('other')]), 'other'),
 	billingPeriod: string(),
 	region: string(),
 });
@@ -37,7 +38,6 @@ export function useAbandonedBasketCookie(
 		billingPeriod,
 		region,
 	};
-
 	useEffect(() => {
 		cookie.set(
 			ABANDONED_BASKET_COOKIE_NAME,
