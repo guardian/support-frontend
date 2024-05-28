@@ -116,12 +116,17 @@ const btnStyleOverrides = css`
 	margin-bottom: ${space[6]}px;
 `;
 
-const checkmarkList = css`
+const checkmarkBenefitList = css`
 	width: 100%;
 	text-align: left;
 	${from.desktop} {
 		width: 90%;
 	}
+`;
+
+const checkmarkOfferList = css`
+	width: 100%;
+	text-align: left;
 `;
 
 const benefitsPrefixCss = css`
@@ -133,13 +138,9 @@ const benefitsPrefixCss = css`
 	}
 `;
 
-const offerLimitedTimeCss = css`
-	color: #606060;
-`;
-
 const benefitsPrefixPlus = css`
 	${textSans.small()};
-	color: ${palette.neutral[7]};
+	color: #545454; // neutral[38] unavailable
 	display: flex;
 	align-items: center;
 	margin: ${space[3]}px 0;
@@ -298,13 +299,11 @@ export function ThreeTierCard({
 				})}
 				style={'compact'}
 				iconColor={palette.brand[500]}
-				cssOverrides={checkmarkList}
+				cssOverrides={checkmarkBenefitList}
 			/>
 			{offers && offers.length > 0 && (
 				<>
-					<span css={[benefitsPrefixPlus, offerLimitedTimeCss]}>
-						limited-time offer
-					</span>
+					<span css={benefitsPrefixPlus}>new benefit</span>
 					<CheckList
 						checkListData={offers.map((offer) => {
 							return {
@@ -313,9 +312,9 @@ export function ThreeTierCard({
 								toolTip: offer.tooltip,
 							};
 						})}
-						style={'compact'}
+						style={'hidden'}
 						iconColor={palette.brand[500]}
-						cssOverrides={checkmarkList}
+						cssOverrides={checkmarkOfferList}
 					/>
 				</>
 			)}
