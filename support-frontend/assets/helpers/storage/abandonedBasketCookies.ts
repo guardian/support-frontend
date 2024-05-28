@@ -1,6 +1,14 @@
 import { useEffect } from 'react';
 import type { Input } from 'valibot';
-import { literal, number, object, safeParse, string, union } from 'valibot';
+import {
+	flatten,
+	literal,
+	number,
+	object,
+	safeParse,
+	string,
+	union,
+} from 'valibot';
 import * as cookie from 'helpers/storage/cookie';
 import type { ProductCheckout } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
@@ -68,7 +76,7 @@ export function updateAbandonedBasketCookie(amount: string) {
 	} else {
 		logException(
 			`Failed to parse abandoned basket cookie. Error:
-			${parsedCookie.issues.toString()}`,
+			${JSON.stringify(flatten(parsedCookie.issues))}`,
 		);
 	}
 }

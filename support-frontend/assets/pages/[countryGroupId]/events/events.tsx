@@ -26,8 +26,23 @@ export function Events() {
 		>
 			<div css={checkoutContainer}>
 				<Container>
-					<div className="tt-widget">
-						<div className="tt-widget-fallback">
+					<div
+						className="tt-widget"
+						style={{
+							background: 'white',
+						}}
+					>
+						<iframe
+							src={`https://tickets.theguardian.live/checkout/new-session/id/${eventId}/chk/9fa2/?ref=support-theguardian-com&amp;widget=true&amp;minimal=true&amp;show_logo=false&amp;bg_fill=false`}
+							allow="payment"
+							style={{
+								height: '80vh',
+								width: '100%',
+								overflow: 'scroll',
+							}}
+						></iframe>
+						{/* We should reenstate this once we know while TT sort out some cross-domain problems */}
+						{/* <div className="tt-widget-fallback">
 							<p>
 								<a
 									href={`https://tickets.theguardian.live/checkout/new-session/id/${eventId}/chk/9fa2/?ref=support-theguardian-com`}
@@ -46,7 +61,7 @@ export function Events() {
 							data-inline-bg-fill="false"
 							data-inline-inherit-ref-from-url-param=""
 							data-inline-ref="support-theguardian-com"
-						></script>
+						></script> */}
 					</div>
 				</Container>
 			</div>
