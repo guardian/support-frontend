@@ -23,6 +23,11 @@ import {
 	AppDownloadEditionsBodyCopy,
 	appDownloadEditionsHeader,
 	appDownloadHeader,
+	AppFeastDownloadBodyCopy,
+	appFeastDownloadHeader,
+	AppNewsDownloadBodyCopy,
+	appNewsDownloadHeader,
+	appsDownloadHeader,
 } from './appDownload/appDownloadItems';
 import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
 import {
@@ -50,6 +55,7 @@ interface ThankYouModuleData {
 	bodyCopy: string | JSX.Element;
 	ctas: JSX.Element | null;
 	trackComponentLoadId?: string;
+	bodyCopy2?: string | JSX.Element;
 }
 
 const defaultSupportReminder = {
@@ -95,6 +101,23 @@ export const getThankYouModuleData = (
 	};
 
 	const thankYouModuleData: Record<ThankYouModuleType, ThankYouModuleData> = {
+		appsDownload: {
+			icon: getThankYouModuleIcon('appsDownload'),
+			header: appsDownloadHeader,
+			bodyCopy: (
+				<>
+					<h2>{appNewsDownloadHeader}</h2>
+					<AppNewsDownloadBodyCopy />
+				</>
+			),
+			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
+			bodyCopy2: (
+				<>
+					<h2>{appFeastDownloadHeader}</h2>
+					<AppFeastDownloadBodyCopy />
+				</>
+			),
+		},
 		appDownload: {
 			icon: getThankYouModuleIcon('appDownload'),
 			header: appDownloadHeader,

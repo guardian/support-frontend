@@ -39,6 +39,15 @@ const defaultGridContainer = css`
 	}
 `;
 
+const stackContainer = css`
+	display: grid;
+	place-content: center;
+
+	> * {
+		grid-area: 1 / 1;
+	}
+`;
+
 const downloadAppGridContainer = css`
 	display: grid;
 	grid-column-gap: ${space[3]}px;
@@ -146,6 +155,7 @@ const marginTop = css`
 
 export type ThankYouModuleType =
 	| 'appDownload'
+	| 'appsDownload'
 	| 'appDownloadEditions'
 	| 'ausMap'
 	| 'feedback'
@@ -162,9 +172,44 @@ export interface ThankYouModuleProps {
 	bodyCopy: JSX.Element | string;
 	ctas: JSX.Element | null;
 	trackComponentLoadId?: string;
+	bodyCopy2?: JSX.Element | string;
 }
 
 function ThankYouModule({
+	moduleType,
+	isSignedIn,
+	icon,
+	header,
+	bodyCopy,
+	ctas,
+	trackComponentLoadId,
+	bodyCopy2,
+}: ThankYouModuleProps): JSX.Element {
+	return bodyCopy2 ? (
+		<ThankYouModuleDualDownload
+			moduleType={moduleType}
+			isSignedIn={isSignedIn}
+			icon={icon}
+			header={header}
+			bodyCopy={bodyCopy}
+			ctas={ctas}
+			trackComponentLoadId={trackComponentLoadId}
+			bodyCopy2={bodyCopy2}
+		/>
+	) : (
+		<ThankYouModuleSingleDownload
+			moduleType={moduleType}
+			isSignedIn={isSignedIn}
+			icon={icon}
+			header={header}
+			bodyCopy={bodyCopy}
+			ctas={ctas}
+			trackComponentLoadId={trackComponentLoadId}
+		/>
+	);
+}
+
+function ThankYouModuleSingleDownload({
 	moduleType,
 	isSignedIn,
 	icon,
@@ -201,6 +246,61 @@ function ThankYouModule({
 					</div>
 				) : null}
 
+				{isDownloadModule && isSignedIn ? (
+					<div css={[qrCodesContainer, hideBelowTablet]}>
+						<AppDownloadQRCodes />
+					</div>
+				) : null}
+			</div>
+		</section>
+	);
+}
+
+function ThankYouModuleDualDownload({
+	moduleType,
+	isSignedIn,
+	icon,
+	header,
+	bodyCopy,
+	ctas,
+	trackComponentLoadId,
+	bodyCopy2,
+}: ThankYouModuleProps): JSX.Element {
+	useEffect(() => {
+		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
+	}, []);
+
+	const isDownloadModule = moduleType === 'appDownload';
+
+	const gridContainer = isDownloadModule
+		? downloadAppGridContainer
+		: defaultGridContainer;
+	const maybePaddingRight = !isDownloadModule && paddingRight;
+	const maybeMarginTop = !isDownloadModule && marginTop;
+	return (
+		<section css={[container, maybePaddingRight]}>
+			<div css={gridContainer}>
+				<div css={iconContainer}>{icon}</div>
+				<div css={headerContainer}>{header}</div>
+				<div css={stackContainer}>
+					<div css={bodyContainer}>
+						<p css={bodyCopyStyle}>{bodyCopy}</p>
+						<div css={maybeMarginTop}>{ctas}</div>
+					</div>
+					{bodyCopy2 ? (
+						<>
+							<div css={bodyContainer}>
+								<p css={bodyCopyStyle}>{bodyCopy2}</p>
+								<div css={maybeMarginTop}>{ctas}</div>
+							</div>
+						</>
+					) : null}
+				</div>
+				{isDownloadModule ? (
+					<div css={[imgContainer, !isSignedIn && hideBelowTablet]}>
+						<AppDownloadImage />
+					</div>
+				) : null}
 				{isDownloadModule && isSignedIn ? (
 					<div css={[qrCodesContainer, hideBelowTablet]}>
 						<AppDownloadQRCodes />
