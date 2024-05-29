@@ -21,11 +21,11 @@ import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { OfferBook, OfferFeast } from 'components/offer/offer';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
-import type { Participations } from 'helpers/abTests/abtest';
 import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -330,24 +330,8 @@ function getPlanCost(
 	};
 }
 
-const getThreeTierCardCtaCopy = (
-	abParticipations: Participations,
-	cardTier: 1 | 2 | 3,
-): string => {
-	const tierCardCtaCopyCohort = abParticipations.tierCardCtaCopy;
-
-	if (tierCardCtaCopyCohort === 'v1') {
-		return 'Select';
-	}
-
-	if (
-		tierCardCtaCopyCohort === 'v2' ||
-		(tierCardCtaCopyCohort === 'v3' && cardTier === 1)
-	) {
-		return 'Support';
-	}
-
-	return 'Subscribe';
+const getThreeTierCardCtaCopy = (countryGroupId: CountryGroupId): string => {
+	return countryGroupId === UnitedStates ? 'Subscribe' : 'Support';
 };
 
 export function ThreeTierLanding(): JSX.Element {
@@ -531,7 +515,7 @@ export function ThreeTierLanding(): JSX.Element {
 		link: useGenericCheckout ? tier1GenericCheckoutLink : tier1Link,
 		isUserSelected: isCardUserSelected(recurringAmount),
 		isRecommended: false,
-		ctaCopy: getThreeTierCardCtaCopy(abParticipations, 1),
+		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -560,7 +544,7 @@ export function ThreeTierLanding(): JSX.Element {
 			tier2Pricing,
 			promotion?.discount?.amount,
 		),
-		ctaCopy: getThreeTierCardCtaCopy(abParticipations, 2),
+		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
 	/**
@@ -595,7 +579,7 @@ export function ThreeTierLanding(): JSX.Element {
 			tier3Pricing,
 			promotion?.discount?.amount,
 		),
-		ctaCopy: getThreeTierCardCtaCopy(abParticipations, 3),
+		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
 	return (
