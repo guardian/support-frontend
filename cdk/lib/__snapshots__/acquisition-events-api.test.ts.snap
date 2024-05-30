@@ -45,7 +45,7 @@ exports[`The Acquisition Events API stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":alarms-handler-topic-PROD",
+                ":alarms-handler-topic-CODE",
               ],
             ],
           },
