@@ -1,11 +1,10 @@
 import "source-map-support/register";
 import { App } from "aws-cdk-lib";
-import {AcquisitionEventsApi} from "../lib/acquisition-events-api";
-import {BigqueryAcquisitionsPublisher} from "../lib/bigquery-acquisitions-publisher";
+import { AcquisitionEventsApi } from "../lib/acquisition-events-api";
+import { BigqueryAcquisitionsPublisher } from "../lib/bigquery-acquisitions-publisher";
 import { Frontend } from "../lib/frontend";
-import {PaymentApi} from "../lib/payment-api";
+import { PaymentApi } from "../lib/payment-api";
 import { StripePatronsData } from "../lib/stripe-patrons-data";
-
 
 const app = new App();
 const cloudFormationStackName = process.env.GU_CFN_STACK_NAME;
@@ -14,11 +13,10 @@ new Frontend(app, "Frontend-PROD", {
   stack: "support",
   stage: "PROD",
   cloudFormationStackName,
-  membershipSubPromotionsTables:
-    [
-      "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
-      "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
-    ],
+  membershipSubPromotionsTables: [
+    "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-PROD",
+    "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
+  ],
   domainName: "support.theguardian.com.origin.membership.guardianapis.com",
   scaling: {
     minimumInstances: 3,
@@ -31,7 +29,9 @@ new Frontend(app, "Frontend-CODE", {
   stack: "support",
   stage: "CODE",
   cloudFormationStackName,
-  membershipSubPromotionsTables: ["arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE"],
+  membershipSubPromotionsTables: [
+    "arn:aws:dynamodb:*:*:table/MembershipSub-Promotions-CODE",
+  ],
   domainName: "support.code.theguardian.com.origin.membership.guardianapis.com",
   scaling: {
     minimumInstances: 1,
@@ -78,10 +78,10 @@ new PaymentApi(app, "Payment-API-PROD", {
 new AcquisitionEventsApi(app, "Acquisition-Events-API-CODE", {
   stack: "support",
   stage: "CODE",
-  certificateId:"b384a6a0-2f54-4874-b99b-96eeff96c009",
+  certificateId: "b384a6a0-2f54-4874-b99b-96eeff96c009",
   domainName: "acquisition-events-code.support.guardianapis.com",
-  hostedZoneName:"support.guardianapis.com.",
-  hostedZoneId:"Z3KO35ELNWZMSX",
+  hostedZoneName: "support.guardianapis.com.",
+  hostedZoneId: "Z3KO35ELNWZMSX",
 });
 
 new AcquisitionEventsApi(app, "Acquisition-Events-API-PROD", {
