@@ -33,11 +33,10 @@ export function useAbandonedBasketCookie(
 ) {
 	const abandonedBasket = {
 		product,
-		amount,
+		amount: parseAmount(amount),
 		billingPeriod,
 		region,
 	};
-
 	useEffect(() => {
 		cookie.set(
 			ABANDONED_BASKET_COOKIE_NAME,
@@ -47,10 +46,8 @@ export function useAbandonedBasketCookie(
 	}, []);
 }
 
-function parseAmount(amount: string): number | 'other' {
-	return amount === 'other' || amount === ''
-		? 'other'
-		: Number.parseFloat(amount);
+function parseAmount(amount: number): number | 'other' {
+	return isNaN(amount) ? 'other' : amount;
 }
 
 export function updateAbandonedBasketCookie(amount: string) {
@@ -65,7 +62,7 @@ export function updateAbandonedBasketCookie(amount: string) {
 	if (parsedCookie.success) {
 		const newCookie: AbandonedBasket = {
 			...parsedCookie.output,
-			amount: parseAmount(amount),
+			amount: parseAmount(Number.parseFloat(amount)),
 		};
 
 		cookie.set(
