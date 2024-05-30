@@ -1,7 +1,7 @@
 import { DomainName, HttpApi } from "@aws-cdk/aws-apigatewayv2-alpha";
 import { GuAlarm } from "@guardian/cdk/lib/constructs/cloudwatch";
 import type { GuStackProps } from "@guardian/cdk/lib/constructs/core";
-import { GuStack } from "@guardian/cdk/lib/constructs/core";
+import {GuStack } from "@guardian/cdk/lib/constructs/core";
 import type { App } from "aws-cdk-lib";
 import { Duration } from "aws-cdk-lib";
 import { CfnIntegration, CfnRoute } from "aws-cdk-lib/aws-apigatewayv2";
