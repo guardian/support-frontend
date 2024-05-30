@@ -35,7 +35,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":contributions-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
@@ -192,7 +192,7 @@ Logs are at https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-w
                 {
                   "Ref": "AWS::AccountId",
                 },
-                ":conversion-dev",
+                ":alarms-handler-topic-PROD",
               ],
             ],
           },
