@@ -139,6 +139,7 @@ const navigateWithPageView = (
 	navigate: NavigateFunction,
 	destination: string,
 	participations?: Participations,
+	replace?: boolean,
 ): void => {
 	const refererData = {
 		referrerUrl: document.location.href,
@@ -148,8 +149,7 @@ const navigateWithPageView = (
 	// store referer data to be read and transmitted on manual pageView
 	setReferrerDataInLocalStorage(refererData);
 
-	// navigate to next page
-	navigate(destination);
+	navigate(destination, { replace: replace ?? false });
 
 	// manual pageView
 	pageView(document.location.href, getAbsoluteURL(destination));
