@@ -443,7 +443,10 @@ export function ThreeTierLanding(): JSX.Element {
 				currencyId,
 			);
 
-			if (useGenericCheckout) {
+			/**
+			 * Only Testing CardTier1 wth checkout
+			 */
+			if (useGenericCheckout && cardTier === 1) {
 				/**
 				 * Generic Checkout is not defined in supporterPlusRouter
 				 */

@@ -7,7 +7,8 @@ import type { Tests } from './abtest';
 // participations.
 export const pageUrlRegexes = {
 	contributions: {
-		allLandingPagesAndThankyouPages: '/contribute|thankyou(/.*)?$',
+		allLandingPagesAndThankyouPages:
+			'/checkout|contribute|thankyou|thank-you(/.*)?$',
 		notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
 		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
 		auLandingPage: '/au/contribute(/.*)?$',
