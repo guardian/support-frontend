@@ -1,13 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchJson } from 'helpers/async/fetch';
-import { billingPeriodFromContrib } from 'helpers/contributions';
+import { billingPeriodFromContrib, getAmount } from 'helpers/contributions';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
+import { getPromotion } from 'helpers/productPrice/promotions';
 import type { ContributionsState } from 'helpers/redux/contributionsStore';
 import { contributionsFormHasErrors } from 'helpers/redux/selectors/formValidation';
 import { routes } from 'helpers/urls/routes';
 import { logException } from 'helpers/utilities/logger';
 import { getContributionType } from '../../product/selectors/productType';
-import { getUserSelectedAmount } from '../../product/selectors/selectedAmount';
 
 export type PayPalTokenResolve = (token: string) => void;
 export type PayPalTokenReject = (err: Error) => void;
@@ -32,14 +32,21 @@ export const setUpPayPalPayment = createAsyncThunk<
 			reject(new Error('form invalid'));
 		}
 
-		const { currencyId } = state.common.internationalisation;
+		const { currencyId, countryId } = state.common.internationalisation;
 		const csrfToken = state.page.checkoutForm.csrf.token ?? '';
 		const contributionType = getContributionType(state);
-		const amount = getUserSelectedAmount(state);
+		const { productPrices } = state.page.checkoutForm.product;
 		const billingPeriod = billingPeriodFromContrib(contributionType);
+		const promotion = getPromotion(productPrices, countryId, billingPeriod);
+		const amount = getAmount(
+			state.page.checkoutForm.product.selectedAmounts,
+			state.page.checkoutForm.product.otherAmounts,
+			contributionType,
+		);
+		const finalAmount = promotion?.discountedPrice ?? amount;
 
 		const requestBody = {
-			amount,
+			amount: finalAmount,
 			billingPeriod,
 			currency: currencyId,
 			requireShippingAddress: false,
