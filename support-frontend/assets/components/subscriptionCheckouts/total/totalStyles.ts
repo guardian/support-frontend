@@ -4,7 +4,7 @@ import {
 	breakpoints,
 	from,
 	textSans,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 
 export const container = css`
 	padding: 10px;

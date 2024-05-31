@@ -121,9 +121,8 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 						/@guardian\/libs/,
 						// we need to include this here to support Safari < v14 as @guardian/source doesn't ship compiled,
 						// so we need our Babel to make it compatible with things like public class fields
-						/@guardian\/source-foundations/,
-						/@guardian\/source-react-components/,
-						/@guardian\/source-react-components-development-kitchen/,
+						/@guardian\/source/,
+						/@guardian\/source-development-kitchen/,
 					],
 				},
 				use: [

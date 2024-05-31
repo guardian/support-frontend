@@ -6,11 +6,11 @@ import {
 	space,
 	textSans,
 	visuallyHidden,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import {
 	Button,
 	SvgChevronDownSingle,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { useState } from 'react';
 import type { CheckListData } from 'components/checkList/checkList';
 import { CheckList } from 'components/checkList/checkList';

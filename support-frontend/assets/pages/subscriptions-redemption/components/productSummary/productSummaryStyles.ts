@@ -8,7 +8,7 @@ import {
 	text,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 
 export const wrapper = css`
 	background-color: ${background.primary};

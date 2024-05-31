@@ -6,12 +6,12 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
-import { Column, Columns, Hide } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { Column, Columns, Hide } from '@guardian/source/react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
-} from '@guardian/source-react-components-development-kitchen';
+} from '@guardian/source-development-kitchen/react-components';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';

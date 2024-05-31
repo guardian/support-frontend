@@ -1,10 +1,10 @@
 import { css, ThemeProvider } from '@emotion/react';
-import { space, textSans } from '@guardian/source-foundations';
+import { space, textSans } from '@guardian/source/foundations';
 import {
 	Button,
 	buttonThemeReaderRevenueBrandAlt,
 	TextInput,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import React from 'react';
 import CheckoutExpander from 'components/checkoutExpander/checkoutExpander';
 import { emailRegexPattern } from 'helpers/forms/formValidation';
@@ -32,7 +32,7 @@ export type PropTypes = {
 	setEmail: (email: string) => void;
 	confirmEmail?: string;
 	setConfirmEmail?: (confirmEmail: string) => void;
-	fetchAndStoreUserType?: (email: string) => unknown | Promise<unknown>;
+	fetchAndStoreUserType?: (email: string) => Promise<unknown>;
 	isSignedIn: boolean;
 	telephone?: string;
 	setTelephone: (telephone: string) => void;
@@ -87,7 +87,7 @@ export default function PersonalDetails(props: PropTypes): JSX.Element {
 		e: React.FocusEvent<HTMLInputElement>,
 	) => {
 		if (props.fetchAndStoreUserType) {
-			props.fetchAndStoreUserType(e.target.value);
+			void props.fetchAndStoreUserType(e.target.value);
 		}
 	};
 

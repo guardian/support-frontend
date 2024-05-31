@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
-import { InlineError } from '@guardian/source-react-components';
+import { space } from '@guardian/source/foundations';
+import { InlineError } from '@guardian/source/react-components';
 import { useEffect } from 'react';
 import type { ContributionType } from 'helpers/contributions';
 import type {

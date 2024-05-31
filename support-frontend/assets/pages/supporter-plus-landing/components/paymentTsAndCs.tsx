@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, textSans } from '@guardian/source-foundations';
+import { neutral, textSans } from '@guardian/source/foundations';
 import type {
 	ContributionType,
 	RegularContributionType,

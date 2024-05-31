@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
-import { space, textSans } from '@guardian/source-foundations';
+import { space, textSans } from '@guardian/source/foundations';
 import {
 	Option as OptionForSelect,
 	Select,
 	Stack,
 	TextInput,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import type { Country } from 'helpers/internationalisation/countries';
 import { sepaEligibleCountries } from 'helpers/internationalisation/sepaEligibleCountries';
 import type { SepaState } from 'helpers/redux/checkout/payment/sepa/state';

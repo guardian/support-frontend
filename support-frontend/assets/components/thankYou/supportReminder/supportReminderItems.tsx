@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
-import { from, neutral, space, textSans } from '@guardian/source-foundations';
+import { from, neutral, space, textSans } from '@guardian/source/foundations';
 import {
 	Button,
 	Link,
 	Radio,
 	RadioGroup,
 	SvgArrowRightStraight,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { privacyLink } from 'helpers/legal';
 import { OPHAN_COMPONENT_ID_SET_REMINDER } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
@@ -194,7 +194,9 @@ export function SupportReminderCTAandPrivacy({
 		const choice = reminderChoices[supportReminderState.selectedChoiceIndex];
 		const url = getReminderUrl(choice);
 
-		if (!isCodeOrProd()) return;
+		if (!isCodeOrProd()) {
+			return;
+		}
 
 		fetch(url, {
 			method: 'POST',

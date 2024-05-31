@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { between } from '@guardian/source-foundations';
+import { between } from '@guardian/source/foundations';
 
 const downloadCopy = css`
 	${between.desktop.and.leftCol} {

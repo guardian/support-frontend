@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { from, neutral, space } from '@guardian/source-foundations';
+import { from, neutral, space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import LeftMarginSection from 'components/leftMarginSection/leftMarginSection';
 import 'helpers/types/option';

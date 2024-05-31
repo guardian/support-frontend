@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { border, from, space } from '@guardian/source-foundations';
+import { border, from, space } from '@guardian/source/foundations';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit } from 'helpers/forms/paymentMethods';
 import type { Option } from 'helpers/types/option';

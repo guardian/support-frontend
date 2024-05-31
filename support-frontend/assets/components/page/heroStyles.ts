@@ -8,8 +8,8 @@ import {
 	neutral,
 	space,
 	until,
-} from '@guardian/source-foundations';
-import type { Breakpoint } from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
+import type { Breakpoint } from '@guardian/source/foundations';
 
 export const hero = css`
 	position: relative;

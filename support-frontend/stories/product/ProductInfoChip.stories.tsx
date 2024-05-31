@@ -1,4 +1,4 @@
-import { SvgInfoRound } from '@guardian/source-react-components';
+import { SvgInfoRound } from '@guardian/source/react-components';
 import React from 'react';
 import ProductInfoChip from 'components/product/productInfoChip';
 

@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { isOneOf } from '@guardian/libs';
-import { palette, space, textSans } from '@guardian/source-foundations';
-import { Label, Radio, RadioGroup } from '@guardian/source-react-components';
+import { palette, space, textSans } from '@guardian/source/foundations';
+import { Label, Radio, RadioGroup } from '@guardian/source/react-components';
 import type { ActionCreatorWithOptionalPayload } from '@reduxjs/toolkit';
 import type {
 	DeliveryAgentOption,

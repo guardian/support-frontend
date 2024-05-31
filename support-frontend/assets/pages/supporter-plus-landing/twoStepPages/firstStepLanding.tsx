@@ -6,11 +6,11 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import {
 	Button,
 	buttonThemeReaderRevenueBrand,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { useEffect } from 'preact/hooks';
 import { useNavigate } from 'react-router';
 import { Box } from 'components/checkoutBox/checkoutBox';

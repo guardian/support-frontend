@@ -1,12 +1,12 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
-import { space, textSans } from '@guardian/source-foundations';
+import { space, textSans } from '@guardian/source/foundations';
 import {
 	Button,
 	buttonThemeReaderRevenueBrand,
 	buttonThemeReaderRevenueBrandAlt,
 	SvgArrowRightStraight,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { useEffect, useRef } from 'react';
 import * as React from 'react';
 import { RecaptchaField } from 'components/recaptcha/recaptchaField';

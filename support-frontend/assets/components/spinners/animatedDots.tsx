@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { neutral } from '@guardian/source-foundations';
+import { neutral } from '@guardian/source/foundations';
 
 // ----- Component ----- //
 

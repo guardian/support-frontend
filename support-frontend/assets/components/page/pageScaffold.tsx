@@ -1,5 +1,5 @@
 import { css, Global } from '@emotion/react';
-import { brand, FocusStyleManager } from '@guardian/source-foundations';
+import { brand, FocusStyleManager } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import CsrBanner from 'components/csr/csrBanner';
 import { SkipLink } from 'components/skipLink/skipLink';

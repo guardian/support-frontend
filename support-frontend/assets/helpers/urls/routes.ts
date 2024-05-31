@@ -1,6 +1,8 @@
 // ----- Routes ----- //
-import type { PaperFulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
-import { type FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
+import type {
+	FulfilmentOptions,
+	PaperFulfilmentOptions,
+} from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
 import type { Option } from 'helpers/types/option';
 import type { CountryGroupId } from '../internationalisation/countryGroup';

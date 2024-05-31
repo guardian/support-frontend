@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
-import { brand } from '@guardian/source-foundations';
-import type { IconSize } from '@guardian/source-react-components';
-import { SvgCreditCard } from '@guardian/source-react-components';
+import { brand } from '@guardian/source/foundations';
+import type { IconSize } from '@guardian/source/react-components';
+import { SvgCreditCard } from '@guardian/source/react-components';
 
 const creditCardIcon = css`
 	@media (min-width: 355px) {

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, space } from '@guardian/source-foundations';
+import { from, space } from '@guardian/source/foundations';
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { CheckoutBenefitsListContainer } from 'components/checkoutBenefits/checkoutBenefitsListContainer';
 import { BoxContents } from 'components/checkoutBox/checkoutBox';

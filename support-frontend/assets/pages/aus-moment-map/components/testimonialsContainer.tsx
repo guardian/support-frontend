@@ -3,7 +3,7 @@ import {
 	Button,
 	buttonThemeBrandAlt,
 	LinkButton,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import type { RefObject } from 'preact';
 import * as React from 'preact/compat';
 import type { ReactNode } from 'react';
@@ -321,14 +321,12 @@ type Props = {
 	setSelectedTerritory: (arg0: string) => void;
 };
 
-type Ref = HTMLDivElement;
-
-export const TestimonialsContainer = React.forwardRef<Ref, Props>(
-	(props, ref) => {
+export const TestimonialsContainer = React.forwardRef(
+	(props: Props, ref: React.Ref<HTMLDivElement>) => {
 		const { windowWidthIsLessThan } = useWindowWidth();
 
 		if ('testimonialsCollection' in props) {
-			if (props.selectedTerritory || windowWidthIsLessThan('desktop')) {
+			if (props.selectedTerritory ?? windowWidthIsLessThan('desktop')) {
 				const testimonialsForTerritories =
 					props.testimonialsCollection &&
 					Object.keys(props.testimonialsCollection).map(

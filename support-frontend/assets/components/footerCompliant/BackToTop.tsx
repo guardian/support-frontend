@@ -4,7 +4,7 @@ import {
 	brandBackground,
 	brandText,
 	textSans,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 
 const iconHeight = '42px';
 const iconContainer = css`

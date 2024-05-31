@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, neutral, space } from '@guardian/source-foundations';
+import { from, neutral, space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import type { CSSOverridable } from 'helpers/types/cssOverrideable';
 

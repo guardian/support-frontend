@@ -6,7 +6,7 @@ import {
 	neutral,
 	space,
 	textSans,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
 const tabButtonStyles = css`
