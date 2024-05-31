@@ -42,7 +42,6 @@ export const mockSettings: Settings = {
 			enableRecaptchaBackend: 'On',
 			enableRecaptchaFrontend: 'On',
 		},
-		experiments: {},
 	},
 	amounts: [
 		{
