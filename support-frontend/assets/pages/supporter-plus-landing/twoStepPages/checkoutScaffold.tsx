@@ -167,7 +167,9 @@ export function SupporterPlusCheckoutScaffold({
 
 	useEffect(() => {
 		if (paymentComplete) {
-			navigateWithPageView(navigate, thankYouRoute, abParticipations, true);
+			navigateWithPageView(navigate, thankYouRoute, abParticipations, {
+				replace: true,
+			});
 		}
 	}, [paymentComplete]);
 
