@@ -2,7 +2,6 @@ import type { Participations } from 'helpers/abTests/abtest';
 import * as abTest from 'helpers/abTests/abtest';
 import { getAmountsTestVariant } from 'helpers/abTests/abtest';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
-import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import { Country, CountryGroup } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -23,7 +22,7 @@ function buildInitialState(
 	countryGroupId: CountryGroupId,
 	countryId: IsoCountry,
 	currencyId: IsoCurrency,
-	settings: Settings,
+	settings: Window['guardian']['settings'],
 	acquisitionData: ReferrerAcquisitionData,
 	amounts: SelectedAmountsVariant,
 ): CommonState {

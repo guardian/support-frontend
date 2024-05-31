@@ -11,7 +11,6 @@ import type {
 	ContributionTypeSetting,
 	SelectedAmounts,
 } from 'helpers/contributions';
-import 'helpers/globalsAndSwitches/settings';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import {
 	AmazonPay,

@@ -4,7 +4,6 @@
 
 import seedrandom from 'seedrandom';
 import { contributionsOnlyAmountsTestName } from 'helpers/contributions';
-import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import * as cookie from 'helpers/storage/cookie';
@@ -252,7 +251,7 @@ interface GetAmountsTestVariantResult {
 function getAmountsTestVariant(
 	country: IsoCountry,
 	countryGroupId: CountryGroupId,
-	settings: Settings,
+	settings: Window['guardian']['settings'],
 	path: string = window.location.pathname,
 	mvt: number = getMvtId(),
 	acquisitionDataTests: AcquisitionABTest[] = getTestFromAcquisitionData() ??

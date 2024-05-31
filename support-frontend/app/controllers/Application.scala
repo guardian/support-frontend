@@ -14,18 +14,21 @@ import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
+import io.circe.{Encoder, JsonObject}
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.libs.circe.Circe
-import play.api.libs.ws.WSClient
 import play.api.mvc._
 import services.pricing.PriceSummaryServiceProvider
 import services.{CachedProductCatalogServiceProvider, PaymentAPIService, TestUserService}
 import utils.FastlyGEOIP._
 import views.EmptyDiv
-import wiring.GoogleAuth
+import views.html.helper.CSRF
 
 import scala.concurrent.{ExecutionContext, Future}
+import admin.ServersideAbTest.Participation
+import com.gu.support.encoding.InternationalisationCodecs
+import services.pricing.ProductPrices
 
 case class PaymentMethodConfigs(
     oneOffDefaultStripeConfig: StripePublicConfig,
@@ -37,6 +40,52 @@ case class PaymentMethodConfigs(
     defaultAmazonPayConfig: AmazonPayConfig,
     testAmazonPayConfig: AmazonPayConfig,
 )
+
+// InternationalisationCodecs is needed for ProductPrices
+case object Window extends InternationalisationCodecs {
+  import io.circe.Encoder
+  import io.circe.generic.semiauto.deriveEncoder
+  import io.circe.JsonObject // This is needed for the JsonObject derivation
+  implicit val geoipEncoder: Encoder[Geoip] = deriveEncoder
+  implicit val configKeyValuesEncoder: Encoder[ConfigKeyValues] = deriveEncoder
+  implicit val stripeKeyConfigEncoder: Encoder[StripeKeyConfig] = deriveEncoder
+  implicit val csrfTokenEncoder: Encoder[CsrfToken] = deriveEncoder
+  implicit val userEncoder: Encoder[User] = deriveEncoder
+  implicit val guardianEncoder: Encoder[Guardian] = deriveEncoder
+
+  case class Geoip(countryGroup: String, countryCode: String, stateCode: String)
+
+  case class ConfigKeyValues(default: String, test: String)
+
+  case class StripeKeyConfig(ONE_OFF: ConfigKeyValues, REGULAR: ConfigKeyValues)
+
+  case class CsrfToken(token: String)
+
+  case class User(id: String, email: String, firstName: Option[String], lastName: Option[String])
+
+  case class Guardian(
+      geoip: Geoip,
+      stripeKeyDefaultCurrencies: StripeKeyConfig,
+      stripeKeyAustralia: StripeKeyConfig,
+      stripeKeyUnitedStates: StripeKeyConfig,
+      payPalEnvironment: ConfigKeyValues,
+      amazonPaySellerId: ConfigKeyValues,
+      amazonPayClientId: ConfigKeyValues,
+      paymentApiUrl: String,
+      paymentApiPayPalEndpoint: String,
+      mdapiUrl: String,
+      csrf: CsrfToken,
+      guestAccountCreationToken: Option[String],
+      recaptchaEnabled: Boolean,
+      v2recaptchaPublicKey: String,
+      checkoutPostcodeLookup: Boolean,
+      productCatalog: JsonObject,
+      productPrices: ProductPrices,
+      serversideTests: Map[String, Participation],
+      user: Option[User],
+      settings: AllSettings,
+  )
+}
 
 class Application(
     actionRefiners: CustomActionBuilders,
@@ -276,7 +325,7 @@ class Application(
     }
   }
 
-  def router(countryGroupId: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
+  def router(countryGroup: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
 
     val geoData = request.geoData
@@ -285,20 +334,111 @@ class Application(
     // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
     val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
     val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
+    val paymentMethodConfigs = PaymentMethodConfigs(
+      oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
+      oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
+      regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
+      regularTestStripeConfig = regularStripeConfigProvider.get(true),
+      regularDefaultPayPalConfig = payPalConfigProvider.get(false),
+      regularTestPayPalConfig = payPalConfigProvider.get(true),
+      defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
+      testAmazonPayConfig = amazonPayConfigProvider.get(true),
+    )
 
+    val queryPromos =
+      request.queryString
+        .getOrElse("promoCode", Nil)
+        .toList
+    val productPrices =
+      priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
+
+    import Window._
+    val windowGuardianJs = Window.Guardian(
+      geoip = Geoip(
+        countryGroup = geoData.countryGroup.map(_.id).mkString,
+        countryCode = geoData.country.map(_.alpha2).mkString,
+        stateCode = geoData.validatedStateCodeForCountry.mkString,
+      ),
+      stripeKeyDefaultCurrencies = StripeKeyConfig(
+        ONE_OFF = ConfigKeyValues(
+          default = paymentMethodConfigs.oneOffDefaultStripeConfig.defaultAccount.rawPublicKey,
+          test = paymentMethodConfigs.oneOffTestStripeConfig.defaultAccount.rawPublicKey,
+        ),
+        REGULAR = ConfigKeyValues(
+          default = paymentMethodConfigs.regularDefaultStripeConfig.defaultAccount.rawPublicKey,
+          test = paymentMethodConfigs.regularTestStripeConfig.defaultAccount.rawPublicKey,
+        ),
+      ),
+      stripeKeyAustralia = StripeKeyConfig(
+        ONE_OFF = ConfigKeyValues(
+          default = paymentMethodConfigs.oneOffDefaultStripeConfig.australiaAccount.rawPublicKey,
+          test = paymentMethodConfigs.oneOffTestStripeConfig.australiaAccount.rawPublicKey,
+        ),
+        REGULAR = ConfigKeyValues(
+          default = paymentMethodConfigs.regularDefaultStripeConfig.australiaAccount.rawPublicKey,
+          test = paymentMethodConfigs.regularTestStripeConfig.australiaAccount.rawPublicKey,
+        ),
+      ),
+      stripeKeyUnitedStates = if (settings.switches.featureSwitches.usStripeAccountForSingle.isOn) {
+        StripeKeyConfig(
+          ONE_OFF = ConfigKeyValues(
+            default = paymentMethodConfigs.oneOffDefaultStripeConfig.unitedStatesAccount.rawPublicKey,
+            test = paymentMethodConfigs.oneOffTestStripeConfig.unitedStatesAccount.rawPublicKey,
+          ),
+          REGULAR = ConfigKeyValues(
+            default = paymentMethodConfigs.regularDefaultStripeConfig.defaultAccount.rawPublicKey,
+            test = paymentMethodConfigs.regularTestStripeConfig.defaultAccount.rawPublicKey,
+          ),
+        )
+      } else {
+        StripeKeyConfig(
+          ONE_OFF = ConfigKeyValues(
+            default = paymentMethodConfigs.oneOffDefaultStripeConfig.defaultAccount.rawPublicKey,
+            test = paymentMethodConfigs.oneOffTestStripeConfig.defaultAccount.rawPublicKey,
+          ),
+          REGULAR = ConfigKeyValues(
+            default = paymentMethodConfigs.regularDefaultStripeConfig.defaultAccount.rawPublicKey,
+            test = paymentMethodConfigs.regularTestStripeConfig.defaultAccount.rawPublicKey,
+          ),
+        )
+      },
+      payPalEnvironment = ConfigKeyValues(
+        default = paymentMethodConfigs.regularDefaultPayPalConfig.payPalEnvironment,
+        test = paymentMethodConfigs.regularTestPayPalConfig.payPalEnvironment,
+      ),
+      amazonPaySellerId = ConfigKeyValues(
+        default = paymentMethodConfigs.defaultAmazonPayConfig.sellerId,
+        test = paymentMethodConfigs.testAmazonPayConfig.sellerId,
+      ),
+      amazonPayClientId = ConfigKeyValues(
+        default = paymentMethodConfigs.defaultAmazonPayConfig.clientId,
+        test = paymentMethodConfigs.testAmazonPayConfig.clientId,
+      ),
+      paymentApiUrl = paymentAPIService.paymentAPIUrl,
+      paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
+      mdapiUrl = membersDataApiUrl,
+      csrf = CsrfToken(CSRF.getToken.value),
+      guestAccountCreationToken = guestAccountCreationToken,
+      recaptchaEnabled = settings.switches.recaptchaSwitches.enableRecaptchaFrontend.isOn,
+      v2recaptchaPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
+      checkoutPostcodeLookup = settings.switches.subscriptionsSwitches.checkoutPostcodeLookup.isOn,
+      productCatalog = productCatalog,
+      serversideTests = serversideTests,
+      productPrices = productPrices,
+      user = request.user.map(user =>
+        Window.User(
+          id = user.id,
+          email = user.primaryEmailAddress,
+          firstName = user.privateFields.firstName,
+          lastName = user.privateFields.secondName,
+        ),
+      ),
+      settings = settings,
+    )
     Ok(
       views.html.router(
         geoData = geoData,
-        paymentMethodConfigs = PaymentMethodConfigs(
-          oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
-          oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
-          regularDefaultStripeConfig = regularStripeConfigProvider.get(false),
-          regularTestStripeConfig = regularStripeConfigProvider.get(true),
-          regularDefaultPayPalConfig = payPalConfigProvider.get(false),
-          regularTestPayPalConfig = payPalConfigProvider.get(true),
-          defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
-          testAmazonPayConfig = amazonPayConfigProvider.get(true),
-        ),
+        paymentMethodConfigs = paymentMethodConfigs,
         v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
         serversideTests = serversideTests,
         paymentApiUrl = paymentAPIService.paymentAPIUrl,
@@ -307,6 +447,7 @@ class Application(
         guestAccountCreationToken = guestAccountCreationToken,
         productCatalog = productCatalog,
         user = request.user,
+        windowGuardianJs = windowGuardianJs,
       ),
     ).withSettingsSurrogateKey
   }

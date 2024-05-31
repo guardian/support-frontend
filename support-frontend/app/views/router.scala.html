@@ -7,6 +7,7 @@
 @import io.circe.JsonObject
 
 @import com.gu.identity.model.User
+@import views.ViewHelpers.outputJson
 @(
   geoData: GeoData,
   serversideTests: Map[String,Participation],
@@ -17,7 +18,8 @@
   guestAccountCreationToken: Option[String],
   v2recaptchaConfigPublicKey: String,
   productCatalog: JsonObject,
-  user: Option[User]
+  user: Option[User],
+  windowGuardianJs: Window.Guardian
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
 @main(
@@ -34,6 +36,9 @@
   shareUrl = None,
   noindex = true,
 ){
+  <script id="window.guardian" type="application/json">
+    @Html(outputJson(windowGuardianJs))
+  </script>
   @windowGuardianPaymentConfig(
     geoData = geoData,
     paymentMethodConfigs = paymentMethodConfigs,

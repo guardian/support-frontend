@@ -67,7 +67,6 @@ import {
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import { getStripeKey } from 'helpers/forms/stripe';
-import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
 import CountryHelper from 'helpers/internationalisation/classes/country';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import { productCatalogDescription } from 'helpers/productCatalog';
@@ -88,8 +87,6 @@ import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentT
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
 /** App config - this is config that should persist throughout the app */
-validateWindowGuardian(window.guardian);
-
 const isTestUser = true as boolean;
 const csrf = window.guardian.csrf.token;
 

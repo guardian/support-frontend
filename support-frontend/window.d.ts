@@ -1,15 +1,11 @@
 import type { ComponentType, React } from 'react';
-import type { Participations } from 'helpers/abTests/abtest';
 import type {
 	AmazonObject,
 	AmazonPaymentsObject,
 } from 'helpers/forms/paymentIntegrations/amazonPay/types';
-import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import type { WindowGuardian } from 'helpers/globalsAndSwitches/window';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
-import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { SendEventId } from 'helpers/tracking/quantumMetric';
-import type { User } from 'helpers/user/user';
 
 declare global {
 	/* ~ Here, declare things that go in the global namespace, or augment
@@ -39,12 +35,8 @@ declare global {
 		guardian: WindowGuardian & {
 			email?: string;
 			gitCommitId?: string;
-			orderIsAGift: boolean;
-			productPrices: ProductPrices;
-			serversideTests?: Participations | null;
-			settings: Settings;
+			orderIsAGift?: boolean;
 			testMode?: boolean;
-			user?: User;
 		};
 
 		amazon?: AmazonObject;

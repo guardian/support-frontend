@@ -12,7 +12,6 @@ import type {
 	SelectedAmountsVariant,
 } from '../../contributions';
 import { emptySwitches } from '../../globalsAndSwitches/globals';
-import type { Settings } from '../../globalsAndSwitches/settings';
 import {
 	GBPCountries,
 	UnitedStates,
@@ -557,7 +556,9 @@ describe('getAmountsTestVariant', () => {
 		};
 	};
 
-	const buildSettings = (amounts: AmountsTests): Settings => ({
+	const buildSettings = (
+		amounts: AmountsTests,
+	): Window['guardian']['settings'] => ({
 		switches: emptySwitches,
 		amounts,
 		contributionTypes: {

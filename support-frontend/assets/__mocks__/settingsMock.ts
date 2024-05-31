@@ -1,6 +1,4 @@
-import type { Settings } from 'helpers/globalsAndSwitches/settings';
-
-export const mockSettings: Settings = {
+export const mockSettings = {
 	switches: {
 		oneOffPaymentMethods: {
 			stripe: 'On',
@@ -42,7 +40,7 @@ export const mockSettings: Settings = {
 			enableRecaptchaBackend: 'On',
 			enableRecaptchaFrontend: 'On',
 		},
-	},
+	} as Window['guardian']['settings']['switches'],
 	amounts: [
 		{
 			testName: 'FALLBACK_AMOUNTS__GBPCountries',
@@ -329,6 +327,9 @@ export const mockSettings: Settings = {
 	},
 	metricUrl:
 		'https://metric-push-api-code.support.guardianapis.com/metric-push-api',
-};
+} as Window['guardian']['settings'];
 
-window.guardian = { ...window.guardian, settings: mockSettings };
+window.guardian = {
+	...window.guardian,
+	settings: mockSettings,
+};
