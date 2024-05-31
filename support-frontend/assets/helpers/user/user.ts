@@ -1,14 +1,13 @@
 // ----- Imports ----- //
 import { getGlobal, isSwitchOn } from 'helpers/globalsAndSwitches/globals';
 import * as cookie from 'helpers/storage/cookie';
-import type { Option } from 'helpers/types/option';
 import { getSignoutUrl } from 'helpers/urls/externalLinks';
 import { setSignOutRedirectInStorage } from '../signoutRedirectStorage/signoutRedirectStorage';
 
 export type User = {
-	firstName: Option<string>;
-	lastName: Option<string>;
-	email: Option<string>;
+	firstName?: string;
+	lastName?: string;
+	email?: string;
 	isSignedIn: boolean;
 	address4?: string;
 };
@@ -18,17 +17,14 @@ function getUser(): User {
 	if (window.guardian.user && window.guardian.user.email !== '') {
 		const { firstName, lastName, email } = window.guardian.user;
 		return {
-			firstName: typeof firstName === 'string' ? firstName : null,
-			lastName: typeof lastName === 'string' ? lastName : null,
-			email: typeof email === 'string' ? email : null,
+			firstName: typeof firstName === 'string' ? firstName : undefined,
+			lastName: typeof lastName === 'string' ? lastName : undefined,
+			email: typeof email === 'string' ? email : undefined,
 			isSignedIn: true,
 		};
 	}
 
 	return {
-		firstName: null,
-		lastName: null,
-		email: null,
 		isSignedIn: false,
 	};
 }
