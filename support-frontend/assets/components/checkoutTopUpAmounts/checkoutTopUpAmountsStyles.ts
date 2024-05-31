@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/react';
-import { from, palette, space, textSans } from '@guardian/source-foundations';
+import { from, palette, space, textSans } from '@guardian/source/foundations';
 
 export const container = (customMargin?: string): SerializedStyles => css`
 	background-color: #f0f6fe;

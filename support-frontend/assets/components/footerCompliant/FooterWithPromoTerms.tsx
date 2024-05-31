@@ -66,7 +66,7 @@ function RegularLinks(props: LinkTypes) {
 	);
 	const multipleOffers = !!(annualUrl && monthlyUrl);
 
-	if (annualUrl || monthlyUrl) {
+	if (annualUrl ?? monthlyUrl) {
 		return (
 			<PromoTerms>
 				<span>
@@ -95,7 +95,7 @@ function GiftLinks(props: LinkTypes) {
 		props.fulfillmentOption,
 	);
 	const multipleOffers = !!(annualUrl && quarterlyUrl);
-	if (annualUrl || quarterlyUrl) {
+	if (annualUrl ?? quarterlyUrl) {
 		return (
 			<PromoTerms>
 				<span>

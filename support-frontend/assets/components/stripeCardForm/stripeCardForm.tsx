@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
-import { Stack } from '@guardian/source-react-components';
+import { space } from '@guardian/source/foundations';
+import { Stack } from '@guardian/source/react-components';
 import {
 	CardCvcElement,
 	CardExpiryElement,

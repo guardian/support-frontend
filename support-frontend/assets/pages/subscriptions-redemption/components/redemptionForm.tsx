@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
-import { from, headline, line, space } from '@guardian/source-foundations';
+import { from, headline, line, space } from '@guardian/source/foundations';
 import {
 	Button,
 	SvgArrowRightStraight,
 	TextInput,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import type { ConnectedProps } from 'react-redux';
 import { connect } from 'react-redux';
 import Form, { FormSection } from 'components/checkoutForm/checkoutForm';

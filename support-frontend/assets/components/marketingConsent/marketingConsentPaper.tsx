@@ -1,12 +1,12 @@
 // ----- Imports ----- //
 
 import { css, ThemeProvider } from '@emotion/react';
-import { from, headline, space, textSans } from '@guardian/source-foundations';
+import { from, headline, space, textSans } from '@guardian/source/foundations';
 import {
 	Button,
 	buttonThemeBrandAlt,
 	SvgEnvelope,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { connect } from 'react-redux';
 import type { Dispatch } from 'redux';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';

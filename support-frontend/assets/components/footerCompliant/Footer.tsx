@@ -5,7 +5,7 @@ import {
 	ButtonLink,
 	Link,
 	linkThemeBrand,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import { Children } from 'react';
 import { copyrightNotice } from 'helpers/legal';

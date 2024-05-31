@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { headline, space } from '@guardian/source-foundations';
+import { headline, space } from '@guardian/source/foundations';
 
 const heading = css`
 	${headline.xsmall({

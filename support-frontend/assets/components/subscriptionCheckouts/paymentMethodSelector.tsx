@@ -5,7 +5,7 @@ import {
 	SvgCreditCard,
 	SvgDirectDebit,
 	SvgPayPal,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import type { ReactNode } from 'react';
 import React, { useEffect } from 'react';
 import Rows from 'components/base/rows';

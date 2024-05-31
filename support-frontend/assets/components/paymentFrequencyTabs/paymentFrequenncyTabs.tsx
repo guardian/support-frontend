@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { focus } from '@guardian/source-foundations';
+import { focus } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 import { useEffect, useRef } from 'react';
 import type { ContributionType } from 'helpers/contributions';

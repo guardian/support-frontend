@@ -6,8 +6,8 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
-import { Accordion } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { Accordion } from '@guardian/source/react-components';
 import FlexContainer from 'components/containers/flexContainer';
 import GridImage from 'components/gridImage/gridImage';
 import { TabAccordionRow } from './tabAccordionRow';

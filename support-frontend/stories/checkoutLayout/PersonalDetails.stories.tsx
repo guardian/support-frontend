@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { neutral } from '@guardian/source-foundations';
-import { Column, Columns, Container } from '@guardian/source-react-components';
+import { neutral } from '@guardian/source/foundations';
+import { Column, Columns, Container } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { PersonalDetailsProps } from 'components/personalDetails/personalDetails';
 import { PersonalDetails } from 'components/personalDetails/personalDetails';

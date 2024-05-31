@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { textSans } from '@guardian/source-foundations';
+import { textSans } from '@guardian/source/foundations';
 import { useEffect } from 'react';
 import type { CheckListData } from 'components/checkList/checkList';
 import { CheckList } from 'components/checkList/checkList';

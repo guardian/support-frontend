@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
-import { from } from '@guardian/source-foundations';
+import { from } from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgArrowRightStraight,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { OPHAN_COMPONENT_ID_SURVEY } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, titlepiece } from '@guardian/source-foundations';
+import { from, titlepiece } from '@guardian/source/foundations';
 import DirectDebitMessage from 'pages/supporter-plus-thank-you/components/thankYouHeader/directDebitMessage';
 import {
 	header,

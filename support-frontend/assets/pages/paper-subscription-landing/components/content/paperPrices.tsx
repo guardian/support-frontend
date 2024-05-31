@@ -5,8 +5,8 @@ import {
 	from,
 	headline,
 	space,
-} from '@guardian/source-foundations';
-import { SvgInfo } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { SvgInfo } from '@guardian/source/react-components';
 import FlexContainer from 'components/containers/flexContainer';
 import ProductInfoChip from 'components/product/productInfoChip';
 import type { Product } from 'components/product/productOption';

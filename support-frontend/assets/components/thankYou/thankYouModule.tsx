@@ -5,7 +5,7 @@ import {
 	from,
 	neutral,
 	space,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import { useEffect } from 'react';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import AppDownloadImage from './appDownload/AppDownloadImage';

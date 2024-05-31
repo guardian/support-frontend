@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Option, Select } from '@guardian/source-react-components';
+import { Option, Select } from '@guardian/source/react-components';
 import type { FormEventHandler } from 'react';
 import { CountryGroup } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';

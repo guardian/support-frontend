@@ -1,7 +1,7 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { from, palette, space, textSans } from '@guardian/source-foundations';
-import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
+import { from, palette, space, textSans } from '@guardian/source/foundations';
+import { SvgCrossRound, SvgTickRound } from '@guardian/source/react-components';
 import Tooltip from 'components/tooltip/Tooltip';
 
 const checkListIconCss = (style: CheckListStyle) => css`

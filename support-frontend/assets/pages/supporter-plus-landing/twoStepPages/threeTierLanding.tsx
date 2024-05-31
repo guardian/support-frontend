@@ -6,12 +6,12 @@ import {
 	palette,
 	space,
 	textSans,
-} from '@guardian/source-foundations';
-import { Container } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { Container } from '@guardian/source/react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
-} from '@guardian/source-react-components-development-kitchen';
+} from '@guardian/source-development-kitchen/react-components';
 import { useEffect } from 'preact/hooks';
 import { useNavigate } from 'react-router-dom';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';

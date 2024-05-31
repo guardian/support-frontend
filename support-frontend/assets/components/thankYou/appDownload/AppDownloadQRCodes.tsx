@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { neutral, space, sport, textSans } from '@guardian/source-foundations';
+import { neutral, space, sport, textSans } from '@guardian/source/foundations';
 
 const container = css`
 	display: flex;

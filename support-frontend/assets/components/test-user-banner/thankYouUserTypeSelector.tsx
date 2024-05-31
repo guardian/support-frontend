@@ -3,7 +3,7 @@ import {
 	Radio,
 	RadioGroup,
 	radioThemeBrand,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { useEffect, useState } from 'react';
 import { setUserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/actions';
 import type { UserTypeFromIdentityResponse } from 'helpers/redux/checkout/personalDetails/state';
@@ -31,7 +31,9 @@ export function ThankYouUserTypeSelector(): JSX.Element {
 	);
 
 	useEffect(() => {
-		if (userTypeFromIdentityResponse === selectedUserType) return;
+		if (userTypeFromIdentityResponse === selectedUserType) {
+			return;
+		}
 
 		switch (selectedUserType) {
 			case 'guest':

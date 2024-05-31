@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { textSans } from '@guardian/source-foundations';
+import { textSans } from '@guardian/source/foundations';
 import { FormSection } from 'components/checkoutForm/checkoutForm';
 import DirectDebitTerms from 'components/subscriptionCheckouts/directDebit/directDebitTerms';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';

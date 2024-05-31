@@ -22,7 +22,9 @@ function getTermsConditions(
 	isSupporterPlus: boolean,
 	promotion?: Promotion,
 ) {
-	if (contributionType === 'ONE_OFF') return;
+	if (contributionType === 'ONE_OFF') {
+		return;
+	}
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
 
 	if (isSupporterPlus) {

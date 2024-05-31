@@ -1,4 +1,4 @@
-import { TextInput } from '@guardian/source-react-components';
+import { TextInput } from '@guardian/source/react-components';
 import Signout from 'components/signout/signout';
 import {
 	setBillingPostcode,

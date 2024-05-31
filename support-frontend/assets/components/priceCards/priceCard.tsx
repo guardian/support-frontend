@@ -1,4 +1,4 @@
-import { ChoiceCard } from '@guardian/source-react-components';
+import { ChoiceCard } from '@guardian/source/react-components';
 
 export type PriceCardPaymentInterval = 'month' | 'year';
 

@@ -16,11 +16,7 @@ import {
 	Stripe,
 } from 'helpers/forms/paymentMethods';
 import type { Country } from 'helpers/internationalisation/countries';
-import type {
-	CaState,
-	IsoCountry,
-	UsState,
-} from 'helpers/internationalisation/country';
+import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { FulfilmentOptions } from 'helpers/productPrice/fulfilmentOptions';
 import type { ProductOptions } from 'helpers/productPrice/productOptions';
@@ -135,7 +131,7 @@ export type RegularPaymentFields =
 	| RegularAmazonPayPaymentFields;
 export type RegularPaymentRequestAddress = {
 	country: IsoCountry;
-	state?: UsState | CaState | null;
+	state?: UsState | null;
 	lineOne?: Option<string>;
 	lineTwo?: Option<string>;
 	postCode?: Option<string>;
