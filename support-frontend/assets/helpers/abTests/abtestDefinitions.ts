@@ -123,19 +123,10 @@ export const tests: Tests = {
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},
-	tierCardCtaCopy: {
+	feast: {
 		variants: [
 			{
-				id: 'control',
-			},
-			{
-				id: 'v1',
-			},
-			{
-				id: 'v2',
-			},
-			{
-				id: 'v3',
+				id: 'variant',
 			},
 		],
 		audiences: {
@@ -144,9 +135,9 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: true,
+		isActive: false,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 6,
+		seed: 3,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},

@@ -97,7 +97,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       this.stage == "PROD"
         ? {
             toleratedErrorPercentage: 0,
-            snsTopicName: "conversion-dev",
+            snsTopicName: `alarms-handler-topic-${this.stage}`,
             alarmName: "big-query-acquisition-publisher lambda has failed",
             alarmDescription:
               "Check the logs for details https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fbigquery-acquisitions-publisher-PROD",
@@ -139,7 +139,7 @@ export class BigqueryAcquisitionsPublisher extends GuStack {
       evaluationPeriods: 1,
       comparisonOperator: ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
       treatMissingData: TreatMissingData.IGNORE,
-      snsTopicName: "contributions-dev",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
       actionsEnabled: this.stage === "PROD",
     });
   }

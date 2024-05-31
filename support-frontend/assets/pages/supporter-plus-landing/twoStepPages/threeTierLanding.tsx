@@ -18,14 +18,14 @@ import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSw
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
-import { OfferBook } from 'components/offer/offer';
+import { OfferBook, OfferFeast } from 'components/offer/offer';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { PaymentFrequencyButtons } from 'components/paymentFrequencyButtons/paymentFrequencyButtons';
-import type { Participations } from 'helpers/abTests/abtest';
 import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	AUDCountries,
 	Canada,
@@ -238,7 +238,35 @@ const isCardUserSelected = (
 	);
 };
 
-const productCatalogDescInclOffers: typeof productCatalogDescExclOffers = {
+const productCatalogDescInclFeast: typeof productCatalogDescExclOffers = {
+	...productCatalogDescExclOffers,
+	SupporterPlusWithGuardianWeekly: {
+		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
+		benefitsSummary: ['The rewards from All-access digital'],
+		offersSummary: [
+			{
+				strong: true,
+				copy: `including unlimited access to the Guardian Feast App.`,
+			},
+		],
+		benefits:
+			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.benefits,
+		ratePlans:
+			productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.ratePlans,
+	},
+	SupporterPlus: {
+		label: productCatalogDescExclOffers.SupporterPlus.label,
+		benefits: productCatalogDescExclOffers.SupporterPlus.benefits,
+		offers: [
+			{
+				copy: <OfferFeast></OfferFeast>,
+			},
+		],
+		ratePlans: productCatalogDescExclOffers.SupporterPlus.ratePlans,
+	},
+};
+
+const productCatalogDescInclBookOffers: typeof productCatalogDescExclOffers = {
 	...productCatalogDescExclOffers,
 	SupporterPlusWithGuardianWeekly: {
 		label: productCatalogDescExclOffers.SupporterPlusWithGuardianWeekly.label,
@@ -302,24 +330,8 @@ function getPlanCost(
 	};
 }
 
-const getThreeTierCardCtaCopy = (
-	abParticipations: Participations,
-	cardTier: 1 | 2 | 3,
-): string => {
-	const tierCardCtaCopyCohort = abParticipations.tierCardCtaCopy;
-
-	if (tierCardCtaCopyCohort === 'v1') {
-		return 'Select';
-	}
-
-	if (
-		tierCardCtaCopyCohort === 'v2' ||
-		(tierCardCtaCopyCohort === 'v3' && cardTier === 1)
-	) {
-		return 'Support';
-	}
-
-	return 'Subscribe';
+const getThreeTierCardCtaCopy = (countryGroupId: CountryGroupId): string => {
+	return countryGroupId === UnitedStates ? 'Subscribe' : 'Support';
 };
 
 export function ThreeTierLanding(): JSX.Element {
@@ -364,11 +376,14 @@ export function ThreeTierLanding(): JSX.Element {
 	);
 
 	const useGenericCheckout = abParticipations.useGenericCheckout === 'variant';
-	const showOffer =
+	const showFeast = abParticipations.feast === 'variant';
+	const showBookOffer =
 		!!abParticipations.usFreeBookOffer && countryGroupId === 'UnitedStates';
 
-	const productCatalogDescription = showOffer
-		? productCatalogDescInclOffers
+	const productCatalogDescription = showFeast
+		? productCatalogDescInclFeast
+		: showBookOffer
+		? productCatalogDescInclBookOffers
 		: productCatalogDescExclOffers;
 
 	useEffect(() => {
@@ -500,7 +515,7 @@ export function ThreeTierLanding(): JSX.Element {
 		link: useGenericCheckout ? tier1GenericCheckoutLink : tier1Link,
 		isUserSelected: isCardUserSelected(recurringAmount),
 		isRecommended: false,
-		ctaCopy: getThreeTierCardCtaCopy(abParticipations, 1),
+		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
 	/** Tier 2: SupporterPlus */
@@ -529,7 +544,7 @@ export function ThreeTierLanding(): JSX.Element {
 			tier2Pricing,
 			promotion?.discount?.amount,
 		),
-		ctaCopy: getThreeTierCardCtaCopy(abParticipations, 2),
+		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
 	/**
@@ -564,7 +579,7 @@ export function ThreeTierLanding(): JSX.Element {
 			tier3Pricing,
 			promotion?.discount?.amount,
 		),
-		ctaCopy: getThreeTierCardCtaCopy(abParticipations, 3),
+		ctaCopy: getThreeTierCardCtaCopy(countryGroupId),
 	};
 
 	return (
@@ -673,7 +688,7 @@ export function ThreeTierLanding(): JSX.Element {
 					]}
 					currency={currencies[currencyId].glyph}
 				></ThreeTierTsAndCs>
-				{showOffer && (
+				{showBookOffer && (
 					<OfferTsAndCs
 						currency={currencies[currencyId].glyph}
 						offerCostMonthly={
