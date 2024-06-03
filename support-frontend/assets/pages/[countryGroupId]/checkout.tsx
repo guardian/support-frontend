@@ -708,10 +708,25 @@ function CheckoutComponent({ geoId }: Props) {
 									}
 									amount={price}
 									currency={currency}
-									checkListData={productDescription.benefits.map((benefit) => ({
-										isChecked: true,
-										text: benefit.copy,
-									}))}
+									checkListData={[
+										...productDescription.benefits.map((benefit) => ({
+											isChecked: true,
+											text: benefit.copy,
+										})),
+										...(productDescription.missingBenefits ?? []).map(
+											(benefit) => ({
+												isChecked: false,
+												text: benefit.copy,
+												maybeGreyedOut: css`
+													color: ${palette.neutral[60]};
+
+													svg {
+														fill: ${palette.neutral[60]};
+													}
+												`,
+											}),
+										),
+									]}
 									onCheckListToggle={(isOpen) => {
 										trackComponentClick(
 											`contribution-order-summary-${
