@@ -87,8 +87,8 @@ class PayPalRegular(
       views.html.main(
         "Support the Guardian | PayPal Error",
         EmptyDiv("paypal-error-page"),
-        Left(RefPath("payPalErrorPage.js")),
-        Left(RefPath("payPalErrorPageStyles.css")),
+        RefPath("payPalErrorPage.js"),
+        RefPath("payPalErrorPageStyles.css"),
       )(),
     ).withSettingsSurrogateKey
   }
@@ -102,8 +102,8 @@ class PayPalRegular(
       views.html.main(
         "Support the Guardian | PayPal Error",
         EmptyDiv("paypal-error-page"),
-        Left(RefPath("payPalErrorPage.js")),
-        Left(RefPath("payPalErrorPageStyles.css")),
+        RefPath("payPalErrorPage.js"),
+        RefPath("payPalErrorPageStyles.css"),
       )(),
     ).withSettingsSurrogateKey
   }
