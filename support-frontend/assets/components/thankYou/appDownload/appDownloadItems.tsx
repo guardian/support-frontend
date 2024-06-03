@@ -30,7 +30,7 @@ export function AppDownloadEditionsBodyCopy(): JSX.Element {
 
 export const appsDownloadHeader = 'Explore your subscriber’s App';
 
-export const appNewsDownloadHeader = 'Download the Guardian App';
+export const appNewsDownloadHeader = 'The Guardian News App';
 
 export function AppNewsDownloadBodyCopy(): JSX.Element {
 	return (
