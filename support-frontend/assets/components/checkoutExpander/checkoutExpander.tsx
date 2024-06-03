@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { space, textSans } from '@guardian/source-foundations';
+import { space, textSans } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
 const expander = css`

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { error, neutral, space, textSans } from '@guardian/source-foundations';
+import { error, neutral, space, textSans } from '@guardian/source/foundations';
 import { isTestUser } from 'helpers/user/user';
 import { ThankYouUserTypeSelector } from './thankYouUserTypeSelector';
 

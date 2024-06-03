@@ -7,7 +7,7 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import { CheckList } from 'components/checkList/checkList';
 import type { CheckListData } from 'components/checkList/checkList';
 

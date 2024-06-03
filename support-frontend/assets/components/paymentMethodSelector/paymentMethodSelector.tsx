@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import type { SerializedStyles } from '@emotion/utils';
-import { from, headline, space } from '@guardian/source-foundations';
-import { Accordion, RadioGroup } from '@guardian/source-react-components';
+import { from, headline, space } from '@guardian/source/foundations';
+import { Accordion, RadioGroup } from '@guardian/source/react-components';
 import GeneralErrorMessage from 'components/generalErrorMessage/generalErrorMessage';
 import { SecureTransactionIndicator } from 'components/secureTransactionIndicator/secureTransactionIndicator';
 import AnimatedDots from 'components/spinners/animatedDots';

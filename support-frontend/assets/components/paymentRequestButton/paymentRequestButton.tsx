@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
-import { Divider } from '@guardian/source-react-components-development-kitchen';
+import { space } from '@guardian/source/foundations';
+import { Divider } from '@guardian/source-development-kitchen/react-components';
 
 const containerStyles = css`
 	width: 100%;

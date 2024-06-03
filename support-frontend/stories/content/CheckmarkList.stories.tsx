@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Column, Columns } from '@guardian/source-react-components';
+import { Column, Columns } from '@guardian/source/react-components';
 import type { CheckListProps } from 'components/checkList/checkList';
 import { CheckList } from 'components/checkList/checkList';
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';

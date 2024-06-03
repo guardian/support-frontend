@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { brand, space, until } from '@guardian/source-foundations';
-import { Divider } from '@guardian/source-react-components-development-kitchen';
+import { brand, space, until } from '@guardian/source/foundations';
+import { Divider } from '@guardian/source-development-kitchen/react-components';
 import type { FinePrintTheme } from './finePrint';
 
 const looseSpacing = css`

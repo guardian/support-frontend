@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { from, space, sport } from '@guardian/source-foundations';
-import { Column, Columns, Container } from '@guardian/source-react-components';
+import { from, space, sport } from '@guardian/source/foundations';
+import { Column, Columns, Container } from '@guardian/source/react-components';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createTestStoreForContributions } from '__test-utils__/testStore';

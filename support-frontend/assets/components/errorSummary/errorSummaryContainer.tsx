@@ -4,7 +4,9 @@ import type { CheckoutErrorSummaryProps } from './errorSummary';
 
 function createErrorList(errors: Partial<Record<string, string[]>>) {
 	return Object.entries(errors).flatMap(([fieldName, errorList]) => {
-		if (!errorList) return [];
+		if (!errorList) {
+			return [];
+		}
 		return errorList.map((message) => ({ href: `#${fieldName}`, message }));
 	});
 }

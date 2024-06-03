@@ -1,4 +1,4 @@
-import { Button, InlineError } from '@guardian/source-react-components';
+import { Button, InlineError } from '@guardian/source/react-components';
 import { useAmazonPayObjects } from 'helpers/customHooks/useAmazonPayObjects';
 import { AmazonPay } from 'helpers/forms/paymentMethods';
 import {

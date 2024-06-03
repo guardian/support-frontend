@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
-import { body, headline, space } from '@guardian/source-foundations';
+import { body, headline, space } from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgArrowRightStraight,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { sendTrackingEventsOnClick } from 'helpers/productPrice/subscriptions';
 
 type SubscriptionProduct = 'digital' | 'Guardian Weekly' | 'Student';

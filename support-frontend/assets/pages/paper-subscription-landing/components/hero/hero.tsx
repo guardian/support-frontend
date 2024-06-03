@@ -7,12 +7,12 @@ import {
 	headline,
 	space,
 	text,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import {
 	buttonThemeBrand,
 	LinkButton,
 	SvgArrowDownStraight,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import CentredContainer from 'components/containers/centredContainer';
 import GridImage from 'components/gridImage/gridImage';
 import Hero from 'components/page/hero';

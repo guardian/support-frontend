@@ -1,12 +1,12 @@
 import { css, ThemeProvider } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
+import { space } from '@guardian/source/foundations';
 import {
 	Button,
 	buttonThemeReaderRevenueBrandAlt,
 	Option,
 	Select,
 	TextInput,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import React from 'react';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 

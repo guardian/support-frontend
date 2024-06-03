@@ -1,7 +1,7 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css } from '@emotion/react';
-import { palette } from '@guardian/source-foundations';
-import { SvgCrossRound, SvgTickRound } from '@guardian/source-react-components';
+import { palette } from '@guardian/source/foundations';
+import { SvgCrossRound, SvgTickRound } from '@guardian/source/react-components';
 
 const greyedOut = css`
 	color: ${palette.neutral[60]};

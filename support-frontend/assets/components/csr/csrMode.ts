@@ -1,10 +1,6 @@
 import { useEffect } from 'react';
 import { Country } from 'helpers/internationalisation';
-import type {
-	CaState,
-	IsoCountry,
-	UsState,
-} from 'helpers/internationalisation/country';
+import type { IsoCountry, UsState } from 'helpers/internationalisation/country';
 
 // ---- Example JSON ----
 // {
@@ -50,7 +46,7 @@ export type CsrCustomerData = {
 		email?: string;
 		street?: string;
 		city?: string;
-		state?: UsState | CaState;
+		state?: UsState;
 		postcode?: string;
 		country?: IsoCountry;
 	};

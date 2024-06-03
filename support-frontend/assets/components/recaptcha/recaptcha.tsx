@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { palette, textSans, until } from '@guardian/source-foundations';
+import { palette, textSans, until } from '@guardian/source/foundations';
 import { useRecaptchaV2 } from 'helpers/customHooks/useRecaptcha';
 
 const container = css`

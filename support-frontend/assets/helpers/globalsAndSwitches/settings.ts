@@ -21,16 +21,7 @@ type SwitchesKeys =
 	| 'campaignSwitches'
 	| 'recaptchaSwitches';
 
-export type Switches = Record<SwitchesKeys, SwitchObject> & {
-	experiments: Record<
-		string,
-		{
-			name: string;
-			description: string;
-			state: Status;
-		}
-	>;
-};
+export type Switches = Record<SwitchesKeys, SwitchObject>;
 
 export type Settings = {
 	switches: Switches;

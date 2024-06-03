@@ -18,8 +18,8 @@ import {
 	textSans,
 	until,
 	visuallyHidden,
-} from '@guardian/source-foundations';
-import { Button, SvgCross } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { Button, SvgCross } from '@guardian/source/react-components';
 import { useState } from 'react';
 import { InfoRound } from './InfoRound';
 

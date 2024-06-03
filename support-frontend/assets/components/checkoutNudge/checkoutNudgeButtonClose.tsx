@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Button, SvgCross } from '@guardian/source-react-components';
+import { Button, SvgCross } from '@guardian/source/react-components';
 
 const button = css`
 	color: #606060;

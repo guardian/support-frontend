@@ -5,21 +5,21 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenueBrand,
 	LinkButton,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { CheckList } from 'components/checkList/checkList';
 import type {
 	ContributionType,
 	RegularContributionType,
 } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { Currency } from 'helpers/internationalisation/currency';
-import {
-	currencies,
-	type IsoCurrency,
+import { currencies } from 'helpers/internationalisation/currency';
+import type {
+	Currency,
+	IsoCurrency,
 } from 'helpers/internationalisation/currency';
 import type { ProductDescription } from 'helpers/productCatalog';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -286,7 +286,7 @@ export function ThreeTierCard({
 					</span>
 				</div>
 			)}
-			{(benefitsSummary || offersSummary) && (
+			{(benefitsSummary ?? offersSummary) && (
 				<span css={benefitsPrefixPlus}>plus</span>
 			)}
 			<CheckList

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, space } from '@guardian/source-foundations';
+import { from, space } from '@guardian/source/foundations';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import {
 	OPHAN_COMPONENT_ID_APP_STORE_BADGE,

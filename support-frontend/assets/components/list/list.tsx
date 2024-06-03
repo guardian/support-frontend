@@ -6,7 +6,7 @@ import {
 	brandAlt,
 	from,
 	space,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import * as React from 'react';
 
 export type ListItemText = {

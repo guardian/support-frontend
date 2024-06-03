@@ -6,7 +6,7 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import {
 	Column,
 	Columns,
@@ -15,11 +15,11 @@ import {
 	RadioGroup,
 	TextInput,
 	textInputThemeDefault,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
-} from '@guardian/source-react-components-development-kitchen';
+} from '@guardian/source-development-kitchen/react-components';
 import {
 	CardNumberElement,
 	useElements,

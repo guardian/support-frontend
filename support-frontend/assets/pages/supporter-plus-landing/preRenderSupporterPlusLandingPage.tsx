@@ -6,12 +6,12 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
-import { Column, Columns, Hide } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { Column, Columns, Hide } from '@guardian/source/react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
-} from '@guardian/source-react-components-development-kitchen';
+} from '@guardian/source-development-kitchen/react-components';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
 import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
 import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';

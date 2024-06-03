@@ -1,4 +1,4 @@
-import { neutral } from '@guardian/source-foundations';
+import { neutral } from '@guardian/source/foundations';
 import { Container } from 'components/layout/container';
 
 export default {

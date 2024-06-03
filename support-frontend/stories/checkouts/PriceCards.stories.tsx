@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Column, Columns } from '@guardian/source-react-components';
+import { Column, Columns } from '@guardian/source/react-components';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { PriceCardsProps } from 'components/priceCards/priceCards';
 import { PriceCards } from 'components/priceCards/priceCards';
