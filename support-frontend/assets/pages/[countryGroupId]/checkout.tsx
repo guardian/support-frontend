@@ -8,6 +8,7 @@ import {
 	until,
 } from '@guardian/source/foundations';
 import {
+	Button,
 	Column,
 	Columns,
 	Container,
@@ -252,6 +253,20 @@ function preventDefaultValidityMessage(
 		// 2. setCustomValidity to " " which avoids the browser's default message
 		currentTarget.setCustomValidity(' ');
 	}
+}
+
+type ChangeButtonProps = {
+	geoId: GeoId;
+};
+
+function ChangeButton({ geoId }: ChangeButtonProps) {
+	return (
+		<a href={`/${geoId}/contribute`}>
+			<Button priority="tertiary" size="xsmall" role="link">
+				Change
+			</Button>
+		</a>
+	);
 }
 
 type Props = {
@@ -721,6 +736,7 @@ function CheckoutComponent({ geoId }: Props) {
 									}}
 									enableCheckList={true}
 									tsAndCs={null}
+									headerButton={<ChangeButton geoId={geoId} />}
 								/>
 							</BoxContents>
 						</Box>
