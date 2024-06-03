@@ -32,6 +32,7 @@ import DirectDebitForm from 'components/directDebit/directDebitForm/directDebitF
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { LoadingOverlay } from 'components/loadingOverlay/loadingOverlay';
 import { ContributionsOrderSummary } from 'components/orderSummary/contributionsOrderSummary';
+import { getTermsConditions } from 'components/orderSummary/contributionsOrderSummaryContainer';
 import { PageScaffold } from 'components/page/pageScaffold';
 import { DefaultPaymentButton } from 'components/paymentButton/defaultPaymentButton';
 import { paymentMethodData } from 'components/paymentMethodSelector/paymentMethodData';
@@ -720,7 +721,15 @@ function CheckoutComponent({ geoId }: Props) {
 										);
 									}}
 									enableCheckList={true}
-									tsAndCs={null}
+									tsAndCs={getTermsConditions(
+										countryGroupId,
+										productFields.billingPeriod === 'Monthly'
+											? 'MONTHLY'
+											: productFields.billingPeriod === 'Annual'
+											? 'ANNUAL'
+											: 'ONE_OFF',
+										query.product === 'SupporterPlus',
+									)}
 								/>
 							</BoxContents>
 						</Box>

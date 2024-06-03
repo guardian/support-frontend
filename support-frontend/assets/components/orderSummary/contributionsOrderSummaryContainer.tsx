@@ -16,7 +16,7 @@ type ContributionsOrderSummaryContainerProps = {
 	promotion?: Promotion;
 };
 
-function getTermsConditions(
+export function getTermsConditions(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
 	isSupporterPlus: boolean,
