@@ -101,7 +101,7 @@
     "classnames": "^2.2.6",
     "dompurify": "^3.0.3",
     "emotion-theming": "^11.0.0",
-    "framer-motion": "^1.11.1",
+    "framer-motion": "^11.2.10",
     "lodash.debounce": "^4.0.6",
     "mockdate": "^3.0.5",
     "ophan-tracker-js": "^1.4.3",
