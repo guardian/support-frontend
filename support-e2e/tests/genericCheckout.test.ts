@@ -8,13 +8,6 @@ import { fillInPayPalDetails } from './utils/paypal';
 import { setupPage } from './utils/page';
 import { afterEachTasks } from './utils/afterEachTest';
 
-const glyphs: Record<'UK' | 'US' | 'AU' | 'EU', string> = {
-	UK: '£',
-	US: '$',
-	AU: '$',
-	EU: '€',
-};
-
 const testDetails = [
 	{
 		product: 'Contribution',
@@ -22,6 +15,8 @@ const testDetails = [
 		paymentType: 'Direct debit',
 		price: 9,
 		country: 'UK',
+		glyph: '£',
+		paymentFrequency: 'month',
 	},
 	{
 		product: 'Contribution',
@@ -29,6 +24,8 @@ const testDetails = [
 		paymentType: 'Credit/Debit card',
 		price: 90,
 		country: 'US',
+		glyph: '$',
+		paymentFrequency: 'year',
 	},
 	{
 		product: 'SupporterPlus',
@@ -36,6 +33,8 @@ const testDetails = [
 		paymentType: 'PayPal',
 		price: 17,
 		country: 'AU',
+		glyph: '$',
+		paymentFrequency: 'month',
 	},
 	{
 		product: 'SupporterPlus',
@@ -43,6 +42,8 @@ const testDetails = [
 		paymentType: 'Credit/Debit card',
 		price: 95,
 		country: 'EU',
+		glyph: '€',
+		paymentFrequency: 'year',
 	},
 ] as const;
 
@@ -52,9 +53,9 @@ test.describe('Generic Checkout', () => {
 	testDetails.forEach((testDetails) => {
 		test(`${testDetails.product} ${testDetails.ratePlan} with ${
 			testDetails.paymentType
-		} - ${testDetails.country ?? 'UK'} / ${
-			glyphs[testDetails.country || 'UK']
-		}${testDetails.price}`, async ({ context, baseURL }) => {
+		} - ${testDetails.country ?? 'UK'} / ${testDetails.glyph}${
+			testDetails.price
+		}`, async ({ context, baseURL }) => {
 			const page = await context.newPage();
 			const testFirstName = firstName();
 			const testLastName = lastName();
@@ -111,7 +112,11 @@ test.describe('Generic Checkout', () => {
 				testDetails.paymentType === 'Direct debit'
 			) {
 				await checkRecaptcha(page);
-				await page.getByRole('button', { name: 'Pay now' }).click();
+				await page
+					.getByRole('button', {
+						name: `Pay ${testDetails.glyph}${testDetails.price} per ${testDetails.paymentFrequency}`,
+					})
+					.click();
 			}
 
 			await expect(page).toHaveURL(
