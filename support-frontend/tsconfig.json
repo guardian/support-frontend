@@ -13,7 +13,11 @@
 		"noImplicitAny": true, // Enable error reporting for expressions and declarations with an implied any type
 		"baseUrl": "./assets", // The baseUrl to be used when resolving absolute module paths
 		"paths": {
-			"ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"]
+			"ophan": ["../node_modules/ophan-tracker-js/build/ophan.support"],
+			"react": ["./node_modules/preact/compat/"],
+			"react/jsx-runtime": ["./node_modules/preact/jsx-runtime"],
+			"react-dom": ["./node_modules/preact/compat/"],
+			"react-dom/*": ["./node_modules/preact/compat/*"]
 		},
 
 		// These override @guardian/tsconfig as they have introduced a lot of errors.

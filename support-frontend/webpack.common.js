@@ -100,7 +100,9 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 	resolve: {
 		alias: {
 			react: 'preact/compat',
+			'react-dom/test-utils': 'preact/test-utils',
 			'react-dom': 'preact/compat',
+			'react/jsx-runtime': 'preact/jsx-runtime',
 			ophan: 'ophan-tracker-js/build/ophan.support',
 		},
 		modules: [
