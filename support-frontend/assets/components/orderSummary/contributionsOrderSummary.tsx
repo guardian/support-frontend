@@ -59,7 +59,7 @@ const totalRow = (hasTsAncCs: boolean) => css`
 	}
 `;
 
-const heading = css`
+const headingCss = css`
 	${headline.xsmall({ fontWeight: 'bold' })}
 	${from.tablet} {
 		font-size: 28px;
@@ -133,7 +133,7 @@ export type ContributionsOrderSummaryProps = {
 	onCheckListToggle?: (opening: boolean) => void;
 	headerButton?: React.ReactNode;
 	tsAndCs?: React.ReactNode;
-	threeTierProductName?: string;
+	heading?: string;
 	showTopUpAmounts?: boolean;
 	topUpToggleChecked?: boolean;
 	topUpToggleOnChange?: () => void;
@@ -154,7 +154,7 @@ export function ContributionsOrderSummary({
 	onCheckListToggle,
 	headerButton,
 	tsAndCs,
-	threeTierProductName,
+	heading,
 	enableCheckList,
 }: ContributionsOrderSummaryProps): JSX.Element {
 	const [showCheckList, setCheckList] = useState(false);
@@ -177,9 +177,7 @@ export function ContributionsOrderSummary({
 	return (
 		<div css={componentStyles}>
 			<div css={[summaryRow, rowSpacing, headingRow]}>
-				<h2 css={heading}>
-					{threeTierProductName ? 'Your subscription' : 'Your support'}
-				</h2>
+				<h2 css={headingCss}>{heading ?? 'Your subscription'}</h2>
 				{headerButton}
 			</div>
 			<hr css={hrCss} />
