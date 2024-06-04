@@ -156,7 +156,7 @@ class Application(
         "Support the Guardian | Down for essential maintenance",
         views.EmptyDiv("down-for-maintenance-page"),
         RefPath("downForMaintenancePage.js"),
-        RefPath("downForMaintenancePage.css"),
+        Some(RefPath("downForMaintenancePage.css")),
       )()(assets, request, settingsProvider.getAllSettings()),
     ).withSettingsSurrogateKey
   }
@@ -173,9 +173,6 @@ class Application(
       campaignCode: Option[String],
       guestAccountCreationToken: Option[String],
   )(implicit request: RequestHeader, settings: AllSettings) = {
-
-    val css = RefPath("supporterPlusLandingPage.css")
-    val js = RefPath("supporterPlusLandingPage.js")
 
     val classes = "gu-content--contribution-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
@@ -203,8 +200,8 @@ class Application(
       title = "Support the Guardian",
       id = s"contributions-landing-page-$countryCode",
       mainElement = mainElement,
-      js = js,
-      css = css,
+      js = RefPath("supporterPlusLandingPage.js"),
+      css = Some(RefPath("supporterPlusLandingPage.css")),
       description = stringsConfig.contributionsLandingDescription,
       paymentMethodConfigs = PaymentMethodConfigs(
         oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
@@ -241,7 +238,7 @@ class Application(
         title = "Guardian Supporters Map",
         mainElement = EmptyDiv("aus-moment-map"),
         mainJsBundle = RefPath("ausMomentMap.js"),
-        mainStyleBundle = RefPath("ausMomentMap.css"),
+        mainStyleBundle = Some(RefPath("ausMomentMap.css")),
         description = stringsConfig.contributionsLandingDescription,
         canonicalLink = Some("https://support.theguardian.com/aus-map"),
         shareImageUrl = Some(
