@@ -120,7 +120,6 @@ export function SupporterPlusCheckout({
 						<ContributionsPriceCards paymentFrequency={contributionType} />
 					) : (
 						<ContributionsOrderSummaryContainer
-							inThreeTier={inThreeTier}
 							promotion={promotion}
 							renderOrderSummary={(orderSummaryProps) => (
 								<ContributionsOrderSummary

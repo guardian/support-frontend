@@ -56,8 +56,8 @@ class WeeklySubscriptionController(
           if (orderIsAGift) "The Guardian Weekly Gift Subscription | The Guardian"
           else "The Guardian Weekly Subscriptions | The Guardian",
         mainElement = EmptyDiv("weekly-landing-page-" + countryCode),
-        mainJsBundle = Left(RefPath("weeklySubscriptionLandingPage.js")),
-        mainStyleBundle = Left(RefPath("weeklySubscriptionLandingPage.css")),
+        mainJsBundle = RefPath("weeklySubscriptionLandingPage.js"),
+        mainStyleBundle = Some(RefPath("weeklySubscriptionLandingPage.css")),
         description = stringsConfig.weeklyLandingDescription,
         canonicalLink = canonicalLink,
         hrefLangLinks = getWeeklyHrefLangLinks(orderIsAGift),
