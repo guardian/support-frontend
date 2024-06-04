@@ -103,7 +103,7 @@ class SubscriptionsController(
         title,
         mainElement,
         RefPath(js),
-        RefPath("subscriptionsLandingPage.css"),
+        Some(RefPath("subscriptionsLandingPage.css")),
         description = stringsConfig.subscriptionsLandingDescription,
       ) {
         Html(s"""<script type="text/javascript">

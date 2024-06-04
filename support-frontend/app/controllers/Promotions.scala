@@ -59,7 +59,7 @@ class Promotions(
     val title = "Support the Guardian | Digital Pack Subscription"
     val mainElement = EmptyDiv("promotion-terms")
     val js = RefPath("promotionTerms.js")
-    val css = RefPath("promotionTerms.css")
+    val css = Some(RefPath("promotionTerms.css"))
     val promotionService = promotionServiceProvider.forUser(false)
     val maybePromotionTerms = PromotionTerms.fromPromoCode(promotionService, stage, promoCode)
 
