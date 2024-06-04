@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type { WritableDraft } from 'immer/dist/types/types-external';
+import type { Draft } from 'immer';
 import type { SelectedAmounts } from 'helpers/contributions';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
@@ -20,7 +20,7 @@ import { isContribution } from './selectors/productType';
 import type { AmountChange, GuardianProduct, ProductState } from './state';
 import { initialProductState, otherAmountSchema } from './state';
 
-function validateOtherAmount(state: WritableDraft<ProductState>) {
+function validateOtherAmount(state: Draft<ProductState>) {
 	if (!isContribution(state.productType)) {
 		return;
 	}

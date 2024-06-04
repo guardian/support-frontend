@@ -2250,10 +2250,10 @@
   dependencies:
     mini-svg-data-uri "1.4.4"
 
-"@guardian/tsconfig@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@guardian/tsconfig/-/tsconfig-0.2.0.tgz#b1dac8831d2ff7ac557229f350d4b2f8c9fc60b5"
-  integrity sha512-RauppalK+cQZDRK6IssVmDSnU/VyqMNuVOxPxhmI03kVRxEdwcmBuRqexHwDbnClVUxW/N9hYLbFNuAb9V/p+A==
+"@guardian/tsconfig@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@guardian/tsconfig/-/tsconfig-1.0.0.tgz#c86b8cf51ccb53b2783eeffb6d5f256c59094217"
+  integrity sha512-xgajw/jq4lEtQoN72vnmiXeRnejUcd3DgNFmH6TfAbWV6NRK4KC4hAjzKf0H69zBSJMxEfFVfGKP9wBzGII7qg==
 
 "@humanwhocodes/config-array@^0.11.13":
   version "0.11.13"
@@ -13403,17 +13403,15 @@ postcss@^8.1.7, postcss@^8.4.17, postcss@^8.4.23, postcss@^8.4.38, postcss@^8.4.
     picocolors "^1.0.0"
     source-map-js "^1.2.0"
 
-preact-render-to-string@^5.2.6:
-  version "5.2.6"
-  resolved "https://registry.yarnpkg.com/preact-render-to-string/-/preact-render-to-string-5.2.6.tgz#0ff0c86cd118d30affb825193f18e92bd59d0604"
-  integrity sha512-JyhErpYOvBV1hEPwIxc/fHWXPfnEGdRKxc8gFdAZ7XV4tlzyzG847XAyEZqoDnynP88akM4eaHcSOzNcLWFguw==
-  dependencies:
-    pretty-format "^3.8.0"
+preact-render-to-string@6.5.4:
+  version "6.5.4"
+  resolved "https://registry.yarnpkg.com/preact-render-to-string/-/preact-render-to-string-6.5.4.tgz#4c5891feef160b2b5e5c93bf6f77fe7726e7cae6"
+  integrity sha512-06s0E3cEMLoXQznmtJ/K/xbFs3uwo52Qpgf8lzbe+VbF/XzwJ0LxZGtVLZekhaEeC39+W1MEf05F4lUikzPnxA==
 
-preact@^10.4.6:
-  version "10.7.1"
-  resolved "https://registry.yarnpkg.com/preact/-/preact-10.7.1.tgz#bdd2b2dce91a5842c3b9b34dfe050e5401068c9e"
-  integrity sha512-MufnRFz39aIhs9AMFisonjzTud1PK1bY+jcJLo6m2T9Uh8AqjD77w11eAAawmjUogoGOnipECq7e/1RClIKsxg==
+preact@10.22.0:
+  version "10.22.0"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.22.0.tgz#a50f38006ae438d255e2631cbdaf7488e6dd4e16"
+  integrity sha512-RRurnSjJPj4rp5K6XoP45Ui33ncb7e4H7WiOHVpjbkvqvA3U+N8Z6Qbo0AE6leGYBV66n8EhEaFixvIu3SkxFw==
 
 precinct@^8.1.0:
   version "8.3.1"
@@ -13540,11 +13538,6 @@ pretty-format@^29.7.0:
     "@jest/schemas" "^29.6.3"
     ansi-styles "^5.0.0"
     react-is "^18.0.0"
-
-pretty-format@^3.8.0:
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-3.8.0.tgz#bfbed56d5e9a776645f4b1ff7aa1a3ac4fa3c385"
-  integrity sha1-v77VbV6ad2ZF9LH/eqGjrE+jw4U=
 
 pretty-hrtime@^1.0.3:
   version "1.0.3"
@@ -16018,10 +16011,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@5.1.6:
-  version "5.1.6"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.1.6.tgz#02f8ac202b6dad2c0dd5e0913745b47a37998274"
-  integrity sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==
+typescript@5.3.3, typescript@^5.2.2:
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.3.3.tgz#b3ce6ba258e72e6305ba66f5c9b452aaee3ffe37"
+  integrity sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==
 
 typescript@^3.9.10, typescript@^3.9.7:
   version "3.9.10"
@@ -16032,11 +16025,6 @@ typescript@^4.0.0, typescript@^4.9.5:
   version "4.9.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
   integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
-
-typescript@^5.2.2:
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.3.3.tgz#b3ce6ba258e72e6305ba66f5c9b452aaee3ffe37"
-  integrity sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==
 
 uglify-js@^3.1.4:
   version "3.16.2"

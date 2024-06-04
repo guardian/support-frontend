@@ -1,7 +1,6 @@
 // based on the accordion row: https://github.com/guardian/source/blob/81a17eaae383b1fad9a622ebd8c8833e108fef82/packages/%40guardian/source-react-components/src/accordion/AccordionRow.tsx
 
 import { css } from '@emotion/react';
-import type { EmotionJSX } from '@emotion/react/types/jsx-namespace';
 import {
 	from,
 	palette,
@@ -98,7 +97,7 @@ export function AvailablePaymentMethodAccordionRow({
 	onChange,
 	onRender,
 	addQuantumMetricBlockListAttribute,
-}: AvailablePaymentMethodAccordionRowProps): EmotionJSX.Element {
+}: AvailablePaymentMethodAccordionRowProps) {
 	useEffect(onRender, []);
 
 	const quantumMetricBlockListAttribute = addQuantumMetricBlockListAttribute
