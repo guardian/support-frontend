@@ -9,16 +9,7 @@
 @import com.gu.identity.model.User
 @import views.ViewHelpers.outputJson
 @(
-  geoData: GeoData,
   serversideTests: Map[String,Participation],
-  paymentMethodConfigs: PaymentMethodConfigs,
-  paymentApiUrl: String,
-  paymentApiPayPalEndpoint: String,
-  membersDataApiUrl: String,
-  guestAccountCreationToken: Option[String],
-  v2recaptchaConfigPublicKey: String,
-  productCatalog: JsonObject,
-  user: Option[User],
   windowGuardianJs: Window.Guardian
 )(implicit assets: AssetsResolver, request: RequestHeader, settings: AllSettings)
 
@@ -39,16 +30,5 @@
   <script id="window.guardian" type="application/json">
     @Html(outputJson(windowGuardianJs))
   </script>
-  @windowGuardianPaymentConfig(
-    geoData = geoData,
-    paymentMethodConfigs = paymentMethodConfigs,
-    v2recaptchaConfigPublicKey = v2recaptchaConfigPublicKey,
-    settings = settings,
-    paymentApiUrl = paymentApiUrl,
-    paymentApiPayPalEndpoint = paymentApiPayPalEndpoint,
-    membersDataApiUrl = membersDataApiUrl,
-    guestAccountCreationToken = guestAccountCreationToken,
-    productCatalog = productCatalog,
-    user = user
-  )
+
 }

@@ -3,18 +3,16 @@ package controllers
 import actions.{CacheControl, CustomActionBuilders}
 import admin.ServersideAbTest.generateParticipations
 import admin.settings.{AllSettings, AllSettingsProvider, SettingsSurrogateKeySyntax}
-import assets.{AssetsResolver, RefPath, StyleContent}
+import assets.{AssetsResolver, RefPath}
 import cats.data.EitherT
 import com.gu.googleauth.AuthAction
 import com.gu.i18n.CountryGroup
 import com.gu.i18n.CountryGroup._
 import com.gu.identity.model.{User => IdUser}
-import com.gu.monitoring.SafeLogging
 import com.gu.support.catalog.SupporterPlus
 import com.gu.support.config._
 import com.typesafe.scalalogging.StrictLogging
 import config.{RecaptchaConfigProvider, StringsConfig}
-import io.circe.{Encoder, JsonObject}
 import lib.RedirectWithEncodedQueryString
 import models.GeoData
 import play.api.libs.circe.Circe
@@ -29,6 +27,7 @@ import scala.concurrent.{ExecutionContext, Future}
 import admin.ServersideAbTest.Participation
 import com.gu.support.encoding.InternationalisationCodecs
 import services.pricing.ProductPrices
+import play.api.mvc.Security.AuthenticatedRequest
 
 case class PaymentMethodConfigs(
     oneOffDefaultStripeConfig: StripePublicConfig,
@@ -327,13 +326,26 @@ class Application(
 
   def router(countryGroup: String): Action[AnyContent] = MaybeAuthenticatedAction { implicit request =>
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
+    val windowGuardianJs = getWindowGuardianJs()
 
+    Ok(
+      views.html.router(
+        serversideTests = windowGuardianJs.serversideTests,
+        windowGuardianJs = windowGuardianJs,
+      ),
+    ).withSettingsSurrogateKey
+  }
+
+  def windowGuardianJson() = MaybeAuthenticatedAction { implicit request =>
+    import Window._
+    import io.circe.syntax._
+    val windowGuardianJs = getWindowGuardianJs()
+    Ok(windowGuardianJs.asJson)
+  }
+
+  def getWindowGuardianJs()(implicit request: AuthenticatedRequest[AnyContent, Option[IdUser]]) = {
+    implicit val settings: AllSettings = settingsProvider.getAllSettings()
     val geoData = request.geoData
-    val serversideTests = generateParticipations(Nil)
-    val isTestUser = testUserService.isTestUser(request)
-    // This will be present if the token has been flashed into the session by the PayPal redirect endpoint
-    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
-    val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
     val paymentMethodConfigs = PaymentMethodConfigs(
       oneOffDefaultStripeConfig = oneOffStripeConfigProvider.get(false),
       oneOffTestStripeConfig = oneOffStripeConfigProvider.get(true),
@@ -344,7 +356,10 @@ class Application(
       defaultAmazonPayConfig = amazonPayConfigProvider.get(false),
       testAmazonPayConfig = amazonPayConfigProvider.get(true),
     )
-
+    val guestAccountCreationToken = request.flash.get("guestAccountCreationToken")
+    val isTestUser = testUserService.isTestUser(request)
+    val productCatalog = cachedProductCatalogServiceProvider.forUser(isTestUser).get()
+    val serversideTests = generateParticipations(Nil)
     val queryPromos =
       request.queryString
         .getOrElse("promoCode", Nil)
@@ -353,7 +368,8 @@ class Application(
       priceSummaryServiceProvider.forUser(isTestUser).getPrices(SupporterPlus, queryPromos)
 
     import Window._
-    val windowGuardianJs = Window.Guardian(
+
+    Window.Guardian(
       geoip = Geoip(
         countryGroup = geoData.countryGroup.map(_.id).mkString,
         countryCode = geoData.country.map(_.alpha2).mkString,
@@ -435,21 +451,6 @@ class Application(
       ),
       settings = settings,
     )
-    Ok(
-      views.html.router(
-        geoData = geoData,
-        paymentMethodConfigs = paymentMethodConfigs,
-        v2recaptchaConfigPublicKey = recaptchaConfigProvider.get(isTestUser).v2PublicKey,
-        serversideTests = serversideTests,
-        paymentApiUrl = paymentAPIService.paymentAPIUrl,
-        paymentApiPayPalEndpoint = paymentAPIService.payPalCreatePaymentEndpoint,
-        membersDataApiUrl = membersDataApiUrl,
-        guestAccountCreationToken = guestAccountCreationToken,
-        productCatalog = productCatalog,
-        user = request.user,
-        windowGuardianJs = windowGuardianJs,
-      ),
-    ).withSettingsSurrogateKey
   }
 
   def eventsRouter(countryGroupId: String, eventId: Option[String]) = authAction { implicit request =>
