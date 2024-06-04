@@ -6,8 +6,8 @@
 @(
   title: String,
   mainElement: ReactDiv,
-  mainJsBundle: Either[RefPath, StyleContent],
-  mainStyleBundle: Either[RefPath, StyleContent],
+  mainJsBundle: RefPath,
+  mainStyleBundle: RefPath,
   description: Option[String] = None,
   canonicalLink: Option[String] = None,
   hrefLangLinks: Map[String, String] = Map(),
@@ -72,32 +72,7 @@
 
     <title>@title</title>
     <meta property="og:title" content="@title"/>
-
-    @linkedCss(path: RefPath) = {
-      <link rel="stylesheet" href="@assets(path)">
-    }
-
-    @inline(inlineCss: StyleContent) = {
-      <style>
-        @inlineCss.value
-      </style>
-    }
-
-    @linkedJs(path: RefPath) = {
-      <script type="text/javascript" src="@assets(path)"></script>
-    }
-
-     @asyncLinkedJs(path: RefPath) = {
-       <script async type="text/javascript" src="@assets(path)"></script>
-     }
-
-     @inlineJs(inlineJs: StyleContent) = {
-       <script type="text/javascript">
-         @inlineJs.value
-       </script>
-     }
-
-    @mainStyleBundle.fold(linkedCss, inline)
+    <link rel="stylesheet" href="@assets(mainStyleBundle)">
 
     <link rel="shortcut icon" type="image/png" href="@routes.Favicon.get()">
     <link rel="apple-touch-icon" sizes="152x152" href="@assets("images/favicons/152x152.png")">
@@ -155,8 +130,7 @@
 
     @body
 
-    @mainJsBundle.fold(asyncLinkedJs, inlineJs)
-
+    <script async type="text/javascript" src="@assets(mainJsBundle)"></script>
     <!-- build-commit-id: @app.BuildInfo.gitCommitId -->
   </body>
 </html>

@@ -155,8 +155,8 @@ class Application(
       views.html.main(
         "Support the Guardian | Down for essential maintenance",
         views.EmptyDiv("down-for-maintenance-page"),
-        Left(RefPath("downForMaintenancePage.js")),
-        Left(RefPath("downForMaintenancePage.css")),
+        RefPath("downForMaintenancePage.js"),
+        RefPath("downForMaintenancePage.css"),
       )()(assets, request, settingsProvider.getAllSettings()),
     ).withSettingsSurrogateKey
   }
@@ -174,10 +174,8 @@ class Application(
       guestAccountCreationToken: Option[String],
   )(implicit request: RequestHeader, settings: AllSettings) = {
 
-    val elementForStage = CSSElementForStage(assets.getFileContentsAsHtml, stage) _
-    val css = elementForStage(RefPath("supporterPlusLandingPage.css"))
-
-    val js = elementForStage(RefPath("supporterPlusLandingPage.js"))
+    val css = RefPath("supporterPlusLandingPage.css")
+    val js = RefPath("supporterPlusLandingPage.js")
 
     val classes = "gu-content--contribution-form--placeholder" +
       campaignCode.map(code => s" gu-content--campaign-landing gu-content--$code").getOrElse("")
@@ -242,8 +240,8 @@ class Application(
       views.html.main(
         title = "Guardian Supporters Map",
         mainElement = EmptyDiv("aus-moment-map"),
-        mainJsBundle = Left(RefPath("ausMomentMap.js")),
-        mainStyleBundle = Left(RefPath("ausMomentMap.css")),
+        mainJsBundle = RefPath("ausMomentMap.js"),
+        mainStyleBundle = RefPath("ausMomentMap.css"),
         description = stringsConfig.contributionsLandingDescription,
         canonicalLink = Some("https://support.theguardian.com/aus-map"),
         shareImageUrl = Some(
@@ -317,25 +315,4 @@ class Application(
     implicit val settings: AllSettings = settingsProvider.getAllSettings()
     Ok(views.html.eventsRouter()).withHeaders(CacheControl.noCache)
   }
-}
-
-object CSSElementForStage extends SafeLogging {
-
-  def apply(getFileContentsAsHtml: RefPath => Option[StyleContent], stage: Stage)(
-      cssPath: RefPath,
-  ): Either[RefPath, StyleContent] = {
-    if (stage == Stages.DEV) {
-      Left(cssPath)
-    } else {
-      getFileContentsAsHtml(cssPath).fold[Either[RefPath, StyleContent]] {
-        logger.error(
-          scrub"Inline CSS failed to load for $cssPath",
-        ) // in future add email perf alert instead (cloudwatch alarm perhaps)
-        Left(cssPath)
-      } { inlineCss =>
-        Right(inlineCss)
-      }
-    }
-  }
-
 }

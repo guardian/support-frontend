@@ -13,8 +13,6 @@ import assets.{AssetsResolver, RefPath}
 import views.html.main
 import play.core.SourceMapper
 import admin.settings.{AllSettingsProvider, SettingsSurrogateKeySyntax}
-import com.gu.support.config.Stage
-import controllers.CSSElementForStage
 import views.EmptyDiv
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,8 +41,8 @@ class CustomHttpErrorHandler(
         main(
           "Error 404",
           EmptyDiv("error-404-page"),
-          Left(RefPath("error404Page.js")),
-          Left(RefPath("error404Page.css")),
+          RefPath("error404Page.js"),
+          RefPath("error404Page.css"),
         )()(assets, request, settingsProvider.getAllSettings()),
       )
         .withHeaders(CacheControl.defaultCacheHeaders(30.seconds, 30.seconds): _*)
@@ -59,8 +57,8 @@ class CustomHttpErrorHandler(
         main(
           "Error 500",
           EmptyDiv("error-500-page"),
-          Left(RefPath("error500Page.js")),
-          Left(RefPath("error500Page.css")),
+          RefPath("error500Page.js"),
+          RefPath("error500Page.css"),
         )()(assets, request, settingsProvider.getAllSettings()),
       )
         .withHeaders(CacheControl.noCache)
