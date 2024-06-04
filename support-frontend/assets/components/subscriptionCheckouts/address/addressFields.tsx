@@ -77,7 +77,7 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 
 export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 	return (
-		<div>
+		<div data-component={`${scope}AddressFields`}>
 			<Select
 				css={marginBottom}
 				id={`${scope}-country`}
@@ -92,6 +92,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				}}
 				error={firstError('country', props.errors)}
 				name={`${scope}-country`}
+				data-link-name={`${scope}CountrySelect : ${props.country}`}
 			>
 				<OptionForSelect value="">Select a country</OptionForSelect>
 				{sortedOptions(props.countries)}
