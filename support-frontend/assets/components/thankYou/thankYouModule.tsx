@@ -25,9 +25,6 @@ const container = css`
 		border: 1px solid ${neutral[86]};
 	}
 `;
-const containerDualDownload = css`
-	padding-right: ${space[4]}px;
-`;
 
 const defaultGridContainer = css`
 	display: grid;
@@ -113,9 +110,7 @@ const bodyContainer = css`
 	grid-area: body;
 `;
 
-const bodyDualDownload = css`
-	grid-area: body;
-
+const bodyAppsContainer = css`
 	> div {
 		display: flex;
 		justify-content: space-between;
@@ -168,6 +163,9 @@ const paddingRight = css`
 	${from.tablet} {
 		padding-right: 72px;
 	}
+`;
+const paddingRightApps = css`
+	padding-right: ${space[4]}px;
 `;
 
 const hideBelowTablet = css`
@@ -229,57 +227,53 @@ function ThankYouModule({
 	trackComponentLoadId,
 	bodyCopySecond,
 }: ThankYouModuleProps): JSX.Element {
-	return bodyCopySecond ? (
-		<ThankYouModuleAppsDownload
-			icon={icon}
-			header={header}
-			bodyCopy={bodyCopy}
-			ctas={ctas}
-			trackComponentLoadId={trackComponentLoadId}
-			bodyCopySecond={bodyCopySecond}
-		/>
-	) : (
-		<ThankYouModules
-			moduleType={moduleType}
-			isSignedIn={isSignedIn}
-			icon={icon}
-			header={header}
-			bodyCopy={bodyCopy}
-			ctas={ctas}
-			trackComponentLoadId={trackComponentLoadId}
-		/>
-	);
-}
-
-function ThankYouModules({
-	moduleType,
-	isSignedIn,
-	icon,
-	header,
-	bodyCopy,
-	ctas,
-	trackComponentLoadId,
-}: ThankYouModuleProps): JSX.Element {
 	useEffect(() => {
 		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
 	}, []);
 
 	const isDownloadModule = moduleType === 'appDownload';
+	const isDownloadModules = moduleType === 'appsDownload';
 
 	const gridContainer = isDownloadModule
 		? downloadAppGridContainer
+		: isDownloadModules
+		? downloadAppsGridContainer
 		: defaultGridContainer;
-	const maybePaddingRight = !isDownloadModule && paddingRight;
+
+	const maybePaddingRight =
+		!isDownloadModule && (isDownloadModules ? paddingRightApps : paddingRight);
 	const maybeMarginTop = !isDownloadModule && marginTop;
+	const bodyContainerApps = isDownloadModules && bodyAppsContainer;
 
 	return (
 		<section css={[container, maybePaddingRight]}>
 			<div css={gridContainer}>
 				<div css={iconContainer}>{icon}</div>
 				<div css={headerContainer}>{header}</div>
-				<div css={bodyContainer}>
-					<p css={bodyCopyStyle}>{bodyCopy}</p>
-					<div css={maybeMarginTop}>{ctas}</div>
+				<div css={[bodyContainer, bodyContainerApps]}>
+					{isDownloadModules ? (
+						<>
+							<div css={bodyTop}>
+								<div>
+									<p css={bodyCopyStyle}>{bodyCopy}</p>
+									<div css={[ctaContainer, ctaTop]}>{ctas}</div>
+								</div>
+								<AppImageGuardianNews></AppImageGuardianNews>
+							</div>
+							<div>
+								<div>
+									<p css={bodyCopyStyle}>{bodyCopySecond}</p>
+									<div css={[ctaContainer, ctaBottom]}>{ctas}</div>
+								</div>
+								<AppImageFeast></AppImageFeast>
+							</div>
+						</>
+					) : (
+						<>
+							<p css={bodyCopyStyle}>{bodyCopy}</p>
+							<div css={maybeMarginTop}>{ctas}</div>
+						</>
+					)}
 				</div>
 
 				{isDownloadModule ? (
@@ -293,43 +287,6 @@ function ThankYouModules({
 						<AppDownloadQRCodes />
 					</div>
 				) : null}
-			</div>
-		</section>
-	);
-}
-
-function ThankYouModuleAppsDownload({
-	icon,
-	header,
-	bodyCopy,
-	ctas,
-	trackComponentLoadId,
-	bodyCopySecond,
-}: ThankYouModuleProps): JSX.Element {
-	useEffect(() => {
-		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
-	}, []);
-	return (
-		<section css={[container, containerDualDownload]}>
-			<div css={downloadAppsGridContainer}>
-				<div css={iconContainer}>{icon}</div>
-				<div css={headerContainer}>{header}</div>
-				<div css={bodyDualDownload}>
-					<div css={bodyTop}>
-						<div>
-							<p css={bodyCopyStyle}>{bodyCopy}</p>
-							<div css={[ctaContainer, ctaTop]}>{ctas}</div>
-						</div>
-						<AppImageGuardianNews></AppImageGuardianNews>
-					</div>
-					<div>
-						<div>
-							<p css={bodyCopyStyle}>{bodyCopySecond}</p>
-							<div css={[ctaContainer, ctaBottom]}>{ctas}</div>
-						</div>
-						<AppImageFeast></AppImageFeast>
-					</div>
-				</div>
 			</div>
 		</section>
 	);

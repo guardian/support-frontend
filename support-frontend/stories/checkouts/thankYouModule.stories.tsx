@@ -158,7 +158,7 @@ NewsFeastApps.args = {
 		</>
 	),
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
-	bodyCopy2: (
+	bodyCopySecond: (
 		<>
 			<h2>{appFeastDownloadHeader}</h2>
 			<AppFeastDownloadBodyCopy />
