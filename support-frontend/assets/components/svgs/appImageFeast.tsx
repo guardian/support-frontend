@@ -1,10 +1,23 @@
+import { css } from '@emotion/react';
+import { from } from '@guardian/source/foundations';
+
+const scales = css`
+	height: 55px;
+	width: auto;
+	display: block;
+
+	${from.mobileLandscape} {
+		height: 75px;
+	}
+`;
+
 export default function AppImageFeast() {
 	return (
 		<svg
 			width="75"
 			height="75"
 			viewBox="0 0 75 75"
-			fill="none"
+			css={scales}
 			xmlns="http://www.w3.org/2000/svg"
 			aria-hidden="true"
 			aria-labelledby="svgFeastApp"

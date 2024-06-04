@@ -114,26 +114,42 @@ const bodyAppsContainer = css`
 	> div {
 		display: flex;
 		justify-content: space-between;
-		margin-top: ${space[3]}px;
+		margin-top: ${space[6]}px;
 	}
 `;
 
 const bodyTop = css`
 	border-bottom: 1px solid ${neutral[86]};
 `;
+const bodyStyle = css`
+	max-width: 240px;
+	${from.mobileMedium} {
+		max-width: 340px;
+	}
+`;
 
 const bodyCopyStyle = css`
 	${body.small()};
-	margin-top: ${space[3]}px;
 	margin-bottom: ${space[1]}px;
-
 	${from.tablet} {
-		margin-top: ${space[2]}px;
 		font-size: 17px;
 	}
 
 	> h2 {
 		font-weight: 700;
+	}
+`;
+const bodyCopyMarginTop = css`
+	margin-top: ${space[3]}px;
+	${from.tablet} {
+		margin-top: ${space[2]}px;
+	}
+`;
+
+const appContainer = css`
+	width: 55px;
+	${from.mobileLandscape} {
+		width: 75px;
 	}
 `;
 
@@ -165,7 +181,9 @@ const paddingRight = css`
 	}
 `;
 const paddingRightApps = css`
-	padding-right: ${space[4]}px;
+	${from.tablet} {
+		padding-right: ${space[4]}px;
+	}
 `;
 
 const hideBelowTablet = css`
@@ -254,23 +272,27 @@ function ThankYouModule({
 					{isDownloadModules ? (
 						<>
 							<div css={bodyTop}>
-								<div>
+								<div css={bodyStyle}>
 									<p css={bodyCopyStyle}>{bodyCopy}</p>
 									<div css={[ctaContainer, ctaTop]}>{ctas}</div>
 								</div>
-								<AppImageGuardianNews></AppImageGuardianNews>
+								<span css={appContainer}>
+									<AppImageGuardianNews></AppImageGuardianNews>
+								</span>
 							</div>
 							<div>
-								<div>
+								<div css={bodyStyle}>
 									<p css={bodyCopyStyle}>{bodyCopySecond}</p>
 									<div css={[ctaContainer, ctaBottom]}>{ctas}</div>
 								</div>
-								<AppImageFeast></AppImageFeast>
+								<span css={appContainer}>
+									<AppImageFeast></AppImageFeast>
+								</span>
 							</div>
 						</>
 					) : (
 						<>
-							<p css={bodyCopyStyle}>{bodyCopy}</p>
+							<p css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</p>
 							<div css={maybeMarginTop}>{ctas}</div>
 						</>
 					)}
