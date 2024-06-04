@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM, { render } from 'react-dom';
+import { render } from 'preact';
+import type { DOMAttributes, ReactElement } from 'react';
 import { logException } from 'helpers/utilities/logger';
 import { isSafari } from 'helpers/utilities/userAgent';
 
@@ -46,9 +46,7 @@ const renderError = (e: Error): void => {
 	);
 };
 
-const renderPage = (
-	content: React.ReactElement<React.DOMAttributes<Element>>,
-): void => {
+const renderPage = (content: ReactElement<DOMAttributes<Element>>): void => {
 	const element: HTMLElement | null = document.querySelector('.gu-render-to');
 
 	if (element) {
@@ -57,7 +55,11 @@ const renderPage = (
 		try {
 			if (process.env.NODE_ENV === 'development' && !isSafari) {
 				void import('preact/debug');
-				void import('@axe-core/react').then((axe) => {
+				void Promise.all([
+					import('@axe-core/react'),
+					import('react'),
+					import('react-dom'),
+				]).then(([axe, React, ReactDOM]) => {
 					console.log('Loading react-axe for accessibility analysis');
 					void axe.default(React, ReactDOM, 1000);
 					render(content, element);
