@@ -110,7 +110,7 @@ function Template(args: ThankYouModuleProps): JSX.Element {
 						header={args.header}
 						bodyCopy={args.bodyCopy}
 						ctas={args.ctas}
-						bodyCopy2={args.bodyCopy2}
+						bodyCopySecond={args.bodyCopySecond}
 					/>
 				</Column>
 				<Column></Column>
@@ -144,33 +144,11 @@ DownloadTheAppSignedOut.args = {
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
 };
 
-export const NewsFeastAppsSignedIn = Template.bind({});
+export const NewsFeastApps = Template.bind({});
 
-NewsFeastAppsSignedIn.args = {
+NewsFeastApps.args = {
 	moduleType: 'appsDownload',
 	isSignedIn: true,
-	icon: getThankYouModuleIcon('appsDownload'),
-	header: appsDownloadHeader,
-	bodyCopy: (
-		<>
-			<h2>{appNewsDownloadHeader}</h2>
-			<AppNewsDownloadBodyCopy />
-		</>
-	),
-	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
-	bodyCopy2: (
-		<>
-			<h2>{appFeastDownloadHeader}</h2>
-			<AppFeastDownloadBodyCopy />
-		</>
-	),
-};
-
-export const NewsFeastAppsSignedOut = Template.bind({});
-
-NewsFeastAppsSignedOut.args = {
-	moduleType: 'appsDownload',
-	isSignedIn: false,
 	icon: getThankYouModuleIcon('appsDownload'),
 	header: appsDownloadHeader,
 	bodyCopy: (

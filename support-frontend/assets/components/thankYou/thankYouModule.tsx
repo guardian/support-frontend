@@ -209,14 +209,14 @@ export type ThankYouModuleType =
 	| 'supportReminder';
 
 export interface ThankYouModuleProps {
-	moduleType: ThankYouModuleType;
-	isSignedIn: boolean;
 	icon: JSX.Element;
 	header: string;
 	bodyCopy: JSX.Element | string;
 	ctas: JSX.Element | null;
+	moduleType?: ThankYouModuleType;
+	isSignedIn?: boolean;
 	trackComponentLoadId?: string;
-	bodyCopy2?: JSX.Element | string;
+	bodyCopySecond?: JSX.Element | string;
 }
 
 function ThankYouModule({
@@ -227,21 +227,19 @@ function ThankYouModule({
 	bodyCopy,
 	ctas,
 	trackComponentLoadId,
-	bodyCopy2,
+	bodyCopySecond,
 }: ThankYouModuleProps): JSX.Element {
-	return bodyCopy2 ? (
-		<ThankYouModuleDualDownload
-			moduleType={moduleType}
-			isSignedIn={isSignedIn}
+	return bodyCopySecond ? (
+		<ThankYouModuleAppsDownload
 			icon={icon}
 			header={header}
 			bodyCopy={bodyCopy}
 			ctas={ctas}
 			trackComponentLoadId={trackComponentLoadId}
-			bodyCopy2={bodyCopy2}
+			bodyCopySecond={bodyCopySecond}
 		/>
 	) : (
-		<ThankYouModuleSingleDownload
+		<ThankYouModules
 			moduleType={moduleType}
 			isSignedIn={isSignedIn}
 			icon={icon}
@@ -253,7 +251,7 @@ function ThankYouModule({
 	);
 }
 
-function ThankYouModuleSingleDownload({
+function ThankYouModules({
 	moduleType,
 	isSignedIn,
 	icon,
@@ -300,13 +298,13 @@ function ThankYouModuleSingleDownload({
 	);
 }
 
-function ThankYouModuleDualDownload({
+function ThankYouModuleAppsDownload({
 	icon,
 	header,
 	bodyCopy,
 	ctas,
 	trackComponentLoadId,
-	bodyCopy2,
+	bodyCopySecond,
 }: ThankYouModuleProps): JSX.Element {
 	useEffect(() => {
 		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
@@ -326,7 +324,7 @@ function ThankYouModuleDualDownload({
 					</div>
 					<div>
 						<div>
-							<p css={bodyCopyStyle}>{bodyCopy2}</p>
+							<p css={bodyCopyStyle}>{bodyCopySecond}</p>
 							<div css={[ctaContainer, ctaBottom]}>{ctas}</div>
 						</div>
 						<AppImageFeast></AppImageFeast>
