@@ -6,6 +6,7 @@ export const productCatalog = window.guardian.productCatalog;
 export type ProductDescription = {
 	label: string;
 	benefits: Array<{ copy: string; tooltip?: string }>;
+	missingBenefits?: Array<{ copy: string; tooltip?: string }>;
 	benefitsSummary?: Array<string | { strong: boolean; copy: string }>;
 	offers?: Array<{ copy: JSX.Element; tooltip?: string }>;
 	offersSummary?: Array<string | { strong: boolean; copy: string }>;
@@ -189,6 +190,17 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		benefits: [
 			{
 				copy: 'Exclusive newsletter for supporters, sent every week from the Guardian newsroom',
+			},
+		],
+		missingBenefits: [
+			{
+				copy: 'Unlimited access to the Guardian app',
+				tooltip: `Read beyond our 20 article-per-month limit, enjoy offline access and personalised recommendations, and access our full archive of journalism. Never miss a story with the Guardian News app – a beautiful, intuitive reading experience.`,
+			},
+			{ copy: 'Ad-free reading on all your devices' },
+			{
+				copy: 'Far fewer asks for support',
+				tooltip: `You'll see far fewer financial support asks at the bottom of articles or in pop-up banners.`,
 			},
 		],
 		ratePlans: {
