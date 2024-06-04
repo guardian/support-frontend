@@ -34,7 +34,7 @@ export function useAbandonedBasketCookie(
 	const abandonedBasket = {
 		product,
 		amount: parseAmount(amount),
-		billingPeriod,
+		billingPeriod: billingPeriod.toUpperCase(),
 		region,
 	};
 	useEffect(() => {
