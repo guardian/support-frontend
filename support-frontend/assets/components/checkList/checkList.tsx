@@ -33,7 +33,6 @@ const checkListTextItemCss = css`
 		${from.desktop} {
 			display: inline;
 			margin-left: 1px;
-			vertical-align: middle;
 		}
 	}
 	strong {
