@@ -708,8 +708,8 @@ function CheckoutComponent({ geoId }: Props) {
 			<CheckoutHeading withTopBorder={true}></CheckoutHeading>
 			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
 				<Columns cssOverrides={columns} collapseUntil="tablet">
-					<Column span={[0, 2, 5]}></Column>
-					<Column span={[1, 8, 7]}>
+					<Column span={[0, 2, 2, 3, 4]}></Column>
+					<Column span={[1, 8, 8, 8, 8]}>
 						<SecureTransactionIndicator
 							align="center"
 							theme="light"
