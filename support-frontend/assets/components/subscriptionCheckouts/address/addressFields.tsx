@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
+import { space } from '@guardian/source/foundations';
 import {
 	Option as OptionForSelect,
 	Select,
 	TextInput,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import React from 'react';
 import { sortedOptions } from 'components/forms/customFields/sortedOptions';
 import { PostcodeFinder } from 'components/subscriptionCheckouts/address/postcodeFinder';
@@ -77,7 +77,7 @@ function statesForCountry(country: Option<IsoCountry>): React.ReactNode {
 
 export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 	return (
-		<div>
+		<div data-component={`${scope}AddressFields`}>
 			<Select
 				css={marginBottom}
 				id={`${scope}-country`}
@@ -92,6 +92,7 @@ export function AddressFields({ scope, ...props }: PropTypes): JSX.Element {
 				}}
 				error={firstError('country', props.errors)}
 				name={`${scope}-country`}
+				data-link-name={`${scope}CountrySelect : ${props.country}`}
 			>
 				<OptionForSelect value="">Select a country</OptionForSelect>
 				{sortedOptions(props.countries)}

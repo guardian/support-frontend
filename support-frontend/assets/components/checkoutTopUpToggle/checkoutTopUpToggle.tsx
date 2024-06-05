@@ -1,5 +1,5 @@
-import { SvgTickRound } from '@guardian/source-react-components';
-import { ToggleSwitch } from '@guardian/source-react-components-development-kitchen';
+import { SvgTickRound } from '@guardian/source/react-components';
+import { ToggleSwitch } from '@guardian/source-development-kitchen/react-components';
 import type { RegularContributionType } from 'helpers/contributions';
 import {
 	standfirst,

@@ -45,6 +45,8 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 			const testFirstName = firstName();
 			const testLastName = lastName();
 			const testEmail = email();
+			const ctaCopy = testDetails.country === 'US' ? 'Subscribe' : 'Support';
+
 			await setupPage(
 				page,
 				context,
@@ -53,7 +55,7 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 			);
 			await page.getByRole('tab').getByText(testDetails.frequency).click();
 			await page
-				.getByRole('link', { name: 'Subscribe' })
+				.getByRole('link', { name: ctaCopy })
 				.nth(testDetails.tier - 1)
 				.click();
 			await checkAbandonedBasketCookieExists(context);
@@ -146,6 +148,8 @@ test.describe('Supporter Plus promoCodes', () => {
 			const testFirstName = firstName();
 			const testLastName = lastName();
 			const testEmail = email();
+			const ctaCopy = 'Support';
+
 			await setupPage(
 				page,
 				context,
@@ -162,7 +166,7 @@ test.describe('Supporter Plus promoCodes', () => {
 				card.getByText(testDetails.expectedPromoText).first(),
 			).toBeVisible();
 			await page
-				.getByRole('link', { name: 'Subscribe' })
+				.getByRole('link', { name: ctaCopy })
 				.nth(testDetails.tier - 1)
 				.click();
 

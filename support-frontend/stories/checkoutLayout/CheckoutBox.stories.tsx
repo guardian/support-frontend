@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { brand, neutral } from '@guardian/source-foundations';
-import { Column, Columns, TextInput } from '@guardian/source-react-components';
+import { brand, neutral } from '@guardian/source/foundations';
+import { Column, Columns, TextInput } from '@guardian/source/react-components';
 import type { BoxProps } from 'components/checkoutBox/checkoutBox';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import { Container } from 'components/layout/container';

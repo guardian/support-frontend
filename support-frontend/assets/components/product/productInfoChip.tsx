@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { body, space } from '@guardian/source-foundations';
+import { body, space } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
 type PropTypes = {

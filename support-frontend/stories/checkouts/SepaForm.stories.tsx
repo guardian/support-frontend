@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Column, Columns } from '@guardian/source-react-components';
+import { Column, Columns } from '@guardian/source/react-components';
 import React, { useState } from 'react';
 import type { SepaFormProps } from 'components/sepaForm/SepaForm';
 import { SepaForm } from 'components/sepaForm/SepaForm';

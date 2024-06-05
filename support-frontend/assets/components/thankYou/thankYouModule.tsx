@@ -5,8 +5,10 @@ import {
 	from,
 	neutral,
 	space,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import { useEffect } from 'react';
+import AppImageGuardianNews from 'components/svgs/appGuardianNews';
+import AppImageFeast from 'components/svgs/appImageFeast';
 import { trackComponentLoad } from 'helpers/tracking/behaviour';
 import AppDownloadImage from './appDownload/AppDownloadImage';
 import AppDownloadQRCodes from './appDownload/AppDownloadQRCodes';
@@ -64,6 +66,21 @@ const downloadAppGridContainer = css`
 	}
 `;
 
+const downloadAppsGridContainer = css`
+	display: grid;
+	grid-column-gap: ${space[3]}px;
+	grid-template-columns: min-content 1fr;
+	grid-template-areas:
+		'icon header'
+		'body body';
+
+	${from.tablet} {
+		grid-template-areas:
+			'icon header'
+			'---- body';
+	}
+`;
+
 const iconContainer = css`
 	grid-area: icon;
 	display: flex;
@@ -93,14 +110,40 @@ const bodyContainer = css`
 	grid-area: body;
 `;
 
+const bodyApps = css`
+	display: flex;
+	justify-content: space-between;
+	margin-top: ${space[6]}px;
+`;
+const bodyAppsTop = css`
+	border-bottom: 1px solid ${neutral[86]};
+`;
+
+const bodyStyle = css`
+	max-width: 240px;
+	${from.mobileMedium} {
+		max-width: 340px;
+	}
+`;
+
 const bodyCopyStyle = css`
 	${body.small()};
-	margin-top: ${space[3]}px;
 	margin-bottom: ${space[1]}px;
-
+	${from.tablet} {
+		font-size: 17px;
+	}
+`;
+const bodyCopyMarginTop = css`
+	margin-top: ${space[3]}px;
 	${from.tablet} {
 		margin-top: ${space[2]}px;
-		font-size: 17px;
+	}
+`;
+
+const appContainer = css`
+	width: 55px;
+	${from.mobileLandscape} {
+		width: 75px;
 	}
 `;
 
@@ -131,6 +174,11 @@ const paddingRight = css`
 		padding-right: 72px;
 	}
 `;
+const paddingRightApps = css`
+	${from.tablet} {
+		padding-right: ${space[4]}px;
+	}
+`;
 
 const hideBelowTablet = css`
 	display: none;
@@ -144,8 +192,25 @@ const marginTop = css`
 	margin-top: ${space[6]}px;
 `;
 
+const ctaContainerApps = css`
+	margin-top: ${space[4]}px;
+
+	// appDownload ctas require margin-top but appsDownload does not
+	> div {
+		margin-top: 0;
+	}
+`;
+const ctaTop = css`
+	padding-bottom: 32px;
+`;
+
+const ctaBottom = css`
+	padding-bottom: ${space[4]}px;
+`;
+
 export type ThankYouModuleType =
 	| 'appDownload'
+	| 'appsDownload'
 	| 'appDownloadEditions'
 	| 'ausMap'
 	| 'feedback'
@@ -155,13 +220,15 @@ export type ThankYouModuleType =
 	| 'supportReminder';
 
 export interface ThankYouModuleProps {
-	moduleType: ThankYouModuleType;
-	isSignedIn: boolean;
 	icon: JSX.Element;
 	header: string;
 	bodyCopy: JSX.Element | string;
 	ctas: JSX.Element | null;
+	moduleType?: ThankYouModuleType;
+	isSignedIn?: boolean;
 	trackComponentLoadId?: string;
+	bodyCopySecond?: JSX.Element | string;
+	ctasSecond?: JSX.Element | null;
 }
 
 function ThankYouModule({
@@ -172,17 +239,24 @@ function ThankYouModule({
 	bodyCopy,
 	ctas,
 	trackComponentLoadId,
+	bodyCopySecond,
+	ctasSecond,
 }: ThankYouModuleProps): JSX.Element {
 	useEffect(() => {
 		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
 	}, []);
 
 	const isDownloadModule = moduleType === 'appDownload';
+	const isDownloadModules = moduleType === 'appsDownload';
 
 	const gridContainer = isDownloadModule
 		? downloadAppGridContainer
+		: isDownloadModules
+		? downloadAppsGridContainer
 		: defaultGridContainer;
-	const maybePaddingRight = !isDownloadModule && paddingRight;
+
+	const maybePaddingRight =
+		!isDownloadModule && (isDownloadModules ? paddingRightApps : paddingRight);
 	const maybeMarginTop = !isDownloadModule && marginTop;
 
 	return (
@@ -191,8 +265,33 @@ function ThankYouModule({
 				<div css={iconContainer}>{icon}</div>
 				<div css={headerContainer}>{header}</div>
 				<div css={bodyContainer}>
-					<p css={bodyCopyStyle}>{bodyCopy}</p>
-					<div css={maybeMarginTop}>{ctas}</div>
+					{isDownloadModules ? (
+						<>
+							<div css={[bodyApps, bodyAppsTop]}>
+								<div css={bodyStyle}>
+									<p css={bodyCopyStyle}>{bodyCopy}</p>
+									<div css={[ctaContainerApps, ctaTop]}>{ctas}</div>
+								</div>
+								<span css={appContainer}>
+									<AppImageGuardianNews></AppImageGuardianNews>
+								</span>
+							</div>
+							<div css={bodyApps}>
+								<div css={bodyStyle}>
+									<p css={bodyCopyStyle}>{bodyCopySecond}</p>
+									<div css={[ctaContainerApps, ctaBottom]}>{ctasSecond}</div>
+								</div>
+								<span css={appContainer}>
+									<AppImageFeast></AppImageFeast>
+								</span>
+							</div>
+						</>
+					) : (
+						<>
+							<p css={[bodyCopyStyle, bodyCopyMarginTop]}>{bodyCopy}</p>
+							<div css={maybeMarginTop}>{ctas}</div>
+						</>
+					)}
 				</div>
 
 				{isDownloadModule ? (

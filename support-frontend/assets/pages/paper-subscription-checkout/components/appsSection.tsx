@@ -1,11 +1,11 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
-import { from, headline, space, textSans } from '@guardian/source-foundations';
+import { from, headline, space, textSans } from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenue,
 	LinkButton,
 	SvgArrowRightStraight,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import type { MouseEventHandler, ReactNode } from 'react';
 import GridImage from 'components/gridImage/gridImage';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';

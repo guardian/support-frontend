@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
-import { NumericInput } from '@guardian/source-react-components-development-kitchen';
+import { space } from '@guardian/source/foundations';
+import { NumericInput } from '@guardian/source-development-kitchen/react-components';
 import { currencies } from 'helpers/internationalisation/currency';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
 

@@ -7,7 +7,8 @@ import type { Tests } from './abtest';
 // participations.
 export const pageUrlRegexes = {
 	contributions: {
-		allLandingPagesAndThankyouPages: '/contribute|thankyou(/.*)?$',
+		allLandingPagesAndThankyouPages:
+			'/checkout|contribute|thankyou|thank-you(/.*)?$',
 		notUkLandingPage: '/us|au|eu|int|nz|ca/contribute(/.*)?$',
 		notUsLandingPage: '/uk|au|eu|int|nz|ca/contribute(/.*)?$',
 		auLandingPage: '/au/contribute(/.*)?$',
@@ -107,36 +108,9 @@ export const tests: Tests = {
 			{
 				id: 'control',
 			},
-			{
-				id: 'variant',
-			},
-		],
-		audiences: {
-			ALL: {
-				offset: 0,
-				size: 1,
-			},
-		},
-		isActive: false,
-		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 5,
-		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
-		excludeCountriesSubjectToContributionsOnlyAmounts: true,
-	},
-	tierCardCtaCopy: {
-		variants: [
-			{
-				id: 'control',
-			},
-			{
-				id: 'v1',
-			},
-			{
-				id: 'v2',
-			},
-			{
-				id: 'v3',
-			},
+			// {
+			// 	id: 'variant',
+			// },
 		],
 		audiences: {
 			ALL: {
@@ -146,7 +120,7 @@ export const tests: Tests = {
 		},
 		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
-		seed: 6,
+		seed: 5,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
 		excludeCountriesSubjectToContributionsOnlyAmounts: true,
 	},

@@ -17,7 +17,9 @@ export function getStripeFormErrors(
 	const { errors, showErrors } = state.page.checkoutForm.payment.stripe;
 	const recaptchaErrors = getRecaptchaError(state);
 
-	if (!showErrors) return {};
+	if (!showErrors) {
+		return {};
+	}
 	return { ...errors, robot_checkbox: recaptchaErrors };
 }
 

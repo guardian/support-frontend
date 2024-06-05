@@ -210,7 +210,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
       AlarmName: !Sub Support Workers Failure in ${Stage} (Recurring Contributions or Subscriptions Checkout)
       AlarmDescription: !Sub There was a failure whilst setting up recurring payments after the user attempted to complete a checkout process. Check https://eu-west-1.console.aws.amazon.com/states/home?region=eu-west-1#/statemachines/view/arn:aws:states:eu-west-1:865473395570:stateMachine:support-workers-${Stage}?statusFilter=FAILED
       MetricName: ExecutionsFailed
@@ -230,7 +230,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-      - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
       AlarmName: !Sub Support Workers Timeout in ${Stage} (Recurring Contributions or Subscriptions Checkout)
       AlarmDescription: An execution of the Support Workers state machine has taken an excessively long time to complete
       MetricName: ExecutionsTimedOut
@@ -421,7 +421,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
       AlarmName: !Sub URGENT 9-5 - ${Stage} support-workers No successful paper checkouts in 24h
       Metrics:
         - Id: e1
@@ -489,7 +489,7 @@ Resources:
     Condition: CreateProdResources
     Properties:
       AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-dev
+        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
       AlarmName: !Sub URGENT 9-5 - ${Stage} support-workers No successful guardian weekly checkouts in 8h
       Metrics:
         - Id: e1

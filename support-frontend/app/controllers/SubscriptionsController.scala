@@ -102,8 +102,8 @@ class SubscriptionsController(
       views.html.main(
         title,
         mainElement,
-        Left(RefPath(js)),
-        Left(RefPath("subscriptionsLandingPage.css")),
+        RefPath(js),
+        Some(RefPath("subscriptionsLandingPage.css")),
         description = stringsConfig.subscriptionsLandingDescription,
       ) {
         Html(s"""<script type="text/javascript">

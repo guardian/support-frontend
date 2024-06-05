@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Button } from '@guardian/source-react-components';
+import { Button } from '@guardian/source/react-components';
 
 const buttonStyles = css`
 	justify-content: center;

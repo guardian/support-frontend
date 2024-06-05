@@ -24,6 +24,7 @@ const { targetPageMatches } = _;
 const { subsDigiSubPages, digiSub } = pageUrlRegexes.subscriptions;
 const { nonGiftLandingNotAusNotUS, nonGiftLandingAndCheckoutWithGuest } =
 	digiSub;
+const { allLandingPagesAndThankyouPages } = pageUrlRegexes.contributions;
 
 jest.mock('ophan', () => ({
 	record: () => null,
@@ -461,6 +462,29 @@ it('targetPage matching', () => {
 	expect(
 		targetPageMatches('/uk/subscribe/digital/gift', nonGiftLandingNotAusNotUS),
 	).toEqual(false);
+	// Test 3-tier landing page
+	expect(
+		targetPageMatches('/uk/contribute', allLandingPagesAndThankyouPages),
+	).toEqual(true);
+	// Test 3-tier generic checkout
+	expect(
+		targetPageMatches('/uk/checkout', allLandingPagesAndThankyouPages),
+	).toEqual(true);
+	// Test 3-tier generic thankyou
+	expect(
+		targetPageMatches('/uk/thank-you', allLandingPagesAndThankyouPages),
+	).toEqual(true);
+	// Test 3-tier non-generic checkout
+	expect(
+		targetPageMatches(
+			'/uk/contribute/checkout',
+			allLandingPagesAndThankyouPages,
+		),
+	).toEqual(true);
+	// Test 3-tier non-generic thankyou
+	expect(
+		targetPageMatches('/uk/thankyou', allLandingPagesAndThankyouPages),
+	).toEqual(true);
 });
 
 describe('getAmountsTestVariant', () => {

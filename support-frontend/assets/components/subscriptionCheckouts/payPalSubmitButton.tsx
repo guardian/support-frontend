@@ -1,7 +1,7 @@
 // ----- Imports ----- //
 
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
+import { space } from '@guardian/source/foundations';
 import PayPalExpressButton from 'components/paypalExpressButton/PayPalExpressButton';
 import type {
 	PayPalCheckoutDetails,

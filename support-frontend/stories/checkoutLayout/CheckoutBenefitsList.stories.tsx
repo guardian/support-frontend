@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { neutral } from '@guardian/source-foundations';
-import { Column, Columns, Container } from '@guardian/source-react-components';
+import { neutral } from '@guardian/source/foundations';
+import { Column, Columns, Container } from '@guardian/source/react-components';
 import type { CheckoutBenefitsListProps } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { CheckoutBenefitsList } from 'components/checkoutBenefits/checkoutBenefitsList';
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';

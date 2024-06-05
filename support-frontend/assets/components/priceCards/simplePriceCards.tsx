@@ -6,13 +6,13 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import {
 	Button,
 	ChoiceCard,
 	ChoiceCardGroup,
 	SvgChevronDownSingle,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { useState } from 'react';
 import type {
 	ContributionType,

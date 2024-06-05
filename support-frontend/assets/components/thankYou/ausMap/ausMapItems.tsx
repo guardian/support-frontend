@@ -1,7 +1,7 @@
 import {
 	LinkButton,
 	SvgArrowRightStraight,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { OPHAN_COMPONENT_ID_AUS_MAP } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getOrigin } from 'helpers/urls/url';

@@ -11,18 +11,19 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import type { ContributionsOrderSummaryProps } from './contributionsOrderSummary';
 
 type ContributionsOrderSummaryContainerProps = {
-	inThreeTier: boolean;
 	renderOrderSummary: (props: ContributionsOrderSummaryProps) => JSX.Element;
 	promotion?: Promotion;
 };
 
-function getTermsConditions(
+export function getTermsConditions(
 	countryGroupId: CountryGroupId,
 	contributionType: ContributionType,
 	isSupporterPlus: boolean,
 	promotion?: Promotion,
 ) {
-	if (contributionType === 'ONE_OFF') return;
+	if (contributionType === 'ONE_OFF') {
+		return;
+	}
 	const period = contributionType === 'MONTHLY' ? 'month' : 'year';
 
 	if (isSupporterPlus) {
@@ -59,7 +60,6 @@ function getTermsConditions(
 }
 
 export function ContributionsOrderSummaryContainer({
-	inThreeTier,
 	renderOrderSummary,
 	promotion,
 }: ContributionsOrderSummaryContainerProps): JSX.Element {
@@ -90,21 +90,17 @@ export function ContributionsOrderSummaryContainer({
 		);
 	}
 
-	const threeTierProductName = (
-		contributionType: ContributionType,
-	): string | undefined => {
-		if (inThreeTier) {
-			if (contributionType === 'ONE_OFF') {
-				return 'One-time support';
-			} else if (isSupporterPlus) {
-				return 'All-access digital';
-			} else {
-				return 'Support';
-			}
-		}
-	};
+	let description;
+	let heading;
+	if (contributionType === 'ONE_OFF') {
+		heading = 'Your support';
+		description = 'One-time support';
+	} else if (isSupporterPlus) {
+		description = 'All-access digital';
+	} else {
+		description = 'Support';
+	}
 
-	const description = threeTierProductName(contributionType) ?? '';
 	const paymentFrequency =
 		contributionType === 'MONTHLY'
 			? 'month'
@@ -121,7 +117,7 @@ export function ContributionsOrderSummaryContainer({
 		enableCheckList: contributionType !== 'ONE_OFF',
 		checkListData: checklist,
 		onCheckListToggle,
-		threeTierProductName: threeTierProductName(contributionType),
+		heading,
 		tsAndCs: getTermsConditions(
 			countryGroupId,
 			contributionType,

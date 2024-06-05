@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, space } from '@guardian/source-foundations';
+import { from, space } from '@guardian/source/foundations';
 import { CheckoutDivider } from './checkoutDivider';
 import type { FinePrintTheme } from './finePrint';
 import { FinePrint } from './finePrint';

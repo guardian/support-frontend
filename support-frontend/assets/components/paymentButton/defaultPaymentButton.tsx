@@ -1,9 +1,9 @@
 import { css, ThemeProvider } from '@emotion/react';
-import { neutral } from '@guardian/source-foundations';
+import { neutral } from '@guardian/source/foundations';
 import {
 	Button,
 	buttonThemeReaderRevenueBrand,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 
 const buttonOverrides = css`
 	width: 100%;

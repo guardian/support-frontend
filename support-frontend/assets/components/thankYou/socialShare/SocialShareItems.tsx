@@ -1,12 +1,12 @@
 import { css } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
+import { space } from '@guardian/source/foundations';
 import {
 	LinkButton,
 	SvgEnvelope,
 	SvgFacebook,
 	SvgLinkedIn,
 	SvgTwitter,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import {
 	OPHAN_COMPONENT_ID_SOCIAL_EMAIL,

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, neutral, space } from '@guardian/source-foundations';
+import { from, neutral, space } from '@guardian/source/foundations';
 import Feast from 'components/svgs/feast';
 import { Tooltip } from '../../../stories/content/Tooltip.stories';
 

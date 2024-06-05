@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { error, textSans } from '@guardian/source-foundations';
+import { error, textSans } from '@guardian/source/foundations';
 import type { ReactNode } from 'react';
 
 // ---- Types ----- //

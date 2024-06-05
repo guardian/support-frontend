@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import { useState } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -23,6 +24,11 @@ import {
 	AppDownloadEditionsBodyCopy,
 	appDownloadEditionsHeader,
 	appDownloadHeader,
+	AppFeastDownloadBodyCopy,
+	appFeastDownloadHeader,
+	AppNewsDownloadBodyCopy,
+	appNewsDownloadHeader,
+	appsDownloadHeader,
 } from './appDownload/appDownloadItems';
 import { ausMapBodyCopy, AusMapCTA, ausMapHeader } from './ausMap/ausMapItems';
 import {
@@ -50,7 +56,13 @@ interface ThankYouModuleData {
 	bodyCopy: string | JSX.Element;
 	ctas: JSX.Element | null;
 	trackComponentLoadId?: string;
+	bodyCopySecond?: string | JSX.Element;
+	ctasSecond?: JSX.Element | null;
 }
+
+const headingCss = css`
+	font-weight: 700;
+`;
 
 const defaultSupportReminder = {
 	selectedChoiceIndex: 0,
@@ -95,6 +107,26 @@ export const getThankYouModuleData = (
 	};
 
 	const thankYouModuleData: Record<ThankYouModuleType, ThankYouModuleData> = {
+		appsDownload: {
+			icon: getThankYouModuleIcon('appsDownload'),
+			header: appsDownloadHeader,
+			bodyCopy: (
+				<>
+					<h2 css={headingCss}>{appNewsDownloadHeader}</h2>
+					<AppNewsDownloadBodyCopy />
+				</>
+			),
+			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
+			bodyCopySecond: (
+				<>
+					<h2 css={headingCss}>{appFeastDownloadHeader}</h2>
+					<AppFeastDownloadBodyCopy />
+				</>
+			),
+			ctasSecond: (
+				<AppDownloadBadges countryGroupId={countryGroupId} isFeast={true} />
+			),
+		},
 		appDownload: {
 			icon: getThankYouModuleIcon('appDownload'),
 			header: appDownloadHeader,

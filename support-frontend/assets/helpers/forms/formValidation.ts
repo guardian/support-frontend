@@ -59,7 +59,9 @@ export const notLongerThan = (
 	value: string | null,
 	maxLength: number,
 ): boolean => {
-	if (!value) return true;
+	if (!value) {
+		return true;
+	}
 	return value.length < maxLength;
 };
 

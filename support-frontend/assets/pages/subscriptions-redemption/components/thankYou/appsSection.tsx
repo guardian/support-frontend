@@ -1,11 +1,11 @@
 // ----- Imports ----- //
 import { css, ThemeProvider } from '@emotion/react';
-import { from, space } from '@guardian/source-foundations';
+import { from, space } from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenueBrandAlt,
 	LinkButton,
 	SvgArrowRightStraight,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import 'helpers/internationalisation/countryGroup';
 import { SvgEditionsIcon, SvgLiveAppIcon } from 'components/icons/appsIcon';
 import Text from 'components/text/text';

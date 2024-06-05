@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import { css } from '@emotion/react';
-import { visuallyHidden } from '@guardian/source-foundations';
+import { visuallyHidden } from '@guardian/source/foundations';
 import { useRef, useState } from 'react';
 import Dialog from 'components/dialog/dialog';
 import Menu, { LinkItem } from 'components/menu/menu';

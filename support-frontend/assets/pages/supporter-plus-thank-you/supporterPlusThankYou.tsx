@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
-import { between, from, space, sport } from '@guardian/source-foundations';
-import { Column, Columns, LinkButton } from '@guardian/source-react-components';
-import { FooterWithContents } from '@guardian/source-react-components-development-kitchen';
+import { between, from, space, sport } from '@guardian/source/foundations';
+import { Column, Columns, LinkButton } from '@guardian/source/react-components';
+import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
 import { useEffect, useMemo } from 'preact/hooks';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { Container } from 'components/layout/container';
@@ -15,7 +15,6 @@ import type { ContributionType } from 'helpers/contributions';
 import { getAmount, isContributionsOnlyCountry } from 'helpers/contributions';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 import { DirectDebit, PayPal } from 'helpers/forms/paymentMethods';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { getPromotion } from 'helpers/productPrice/promotions';
 import { isSupporterPlusFromState } from 'helpers/redux/checkout/product/selectors/isSupporterPlus';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
@@ -29,9 +28,7 @@ import {
 } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
-import { pageView } from 'helpers/tracking/ophan';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
-import { getAbsoluteURL } from 'helpers/urls/url';
 import ThankYouFooter from './components/thankYouFooter';
 import ThankYouHeader from './components/thankYouHeader/thankYouHeader';
 
@@ -213,21 +210,6 @@ export function SupporterPlusThankYou({
 			isAmountLargeDonation,
 		);
 
-		/**
-		 *  The TY page is client side routed for all Contributions
-		 * 	apart from Single paid with Paypal. For client side routed pages we
-		 * 	manually fire an Ophan pageView.
-		 **/
-		if (!isOneOffPayPal) {
-			const internationalisationIDValue =
-				countryGroups[countryGroupId].supportInternationalisationId;
-
-			pageView(
-				document.location.href,
-				getAbsoluteURL(`/${internationalisationIDValue}/contribute`),
-			);
-		}
-
 		if (contributionType === 'ONE_OFF') {
 			setOneOffContributionCookie();
 		}
@@ -250,16 +232,18 @@ export function SupporterPlusThankYou({
 		moduleType: ThankYouModuleType,
 	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
 
+	const showFeast =
+		!!abParticipations.feast &&
+		useContributionsSelector(isSupporterPlusFromState);
+
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'),
 		...maybeThankYouModule(
 			!isNewAccount && !isSignedIn && email.length > 0,
 			'signIn',
 		),
-		...maybeThankYouModule(
-			contributionType !== 'ONE_OFF' && isSupporterPlus,
-			'appDownload',
-		),
+		...maybeThankYouModule(isSupporterPlus && !showFeast, 'appDownload'),
+		...maybeThankYouModule(isSupporterPlus && showFeast, 'appsDownload'),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && email.length > 0,
 			'supportReminder',

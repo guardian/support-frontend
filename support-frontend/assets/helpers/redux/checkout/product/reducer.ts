@@ -21,7 +21,9 @@ import type { AmountChange, GuardianProduct, ProductState } from './state';
 import { initialProductState, otherAmountSchema } from './state';
 
 function validateOtherAmount(state: WritableDraft<ProductState>) {
-	if (!isContribution(state.productType)) return;
+	if (!isContribution(state.productType)) {
+		return;
+	}
 
 	if (state.selectedAmounts[state.productType] === 'other') {
 		const validationResult = otherAmountSchema.safeParse(

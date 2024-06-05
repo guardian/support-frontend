@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import * as ophan from 'ophan';
 import type { NavigateFunction } from 'react-router';
+import type { NavigateOptions } from 'react-router-dom';
 import type { Participations } from 'helpers/abTests/abtest';
 import { getLocal, setLocal } from 'helpers/storage/storage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
@@ -139,6 +140,7 @@ const navigateWithPageView = (
 	navigate: NavigateFunction,
 	destination: string,
 	participations?: Participations,
+	options?: NavigateOptions,
 ): void => {
 	const refererData = {
 		referrerUrl: document.location.href,
@@ -148,8 +150,7 @@ const navigateWithPageView = (
 	// store referer data to be read and transmitted on manual pageView
 	setReferrerDataInLocalStorage(refererData);
 
-	// navigate to next page
-	navigate(destination);
+	navigate(destination, options);
 
 	// manual pageView
 	pageView(document.location.href, getAbsoluteURL(destination));

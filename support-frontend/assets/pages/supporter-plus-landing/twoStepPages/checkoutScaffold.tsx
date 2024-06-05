@@ -6,12 +6,12 @@ import {
 	space,
 	textSans,
 	until,
-} from '@guardian/source-foundations';
-import { Column, Columns, Hide } from '@guardian/source-react-components';
+} from '@guardian/source/foundations';
+import { Column, Columns, Hide } from '@guardian/source/react-components';
 import {
 	FooterLinks,
 	FooterWithContents,
-} from '@guardian/source-react-components-development-kitchen';
+} from '@guardian/source-development-kitchen/react-components';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckoutHeading } from 'components/checkoutHeading/checkoutHeading';
@@ -39,6 +39,7 @@ import {
 	UnitedStates,
 } from 'helpers/internationalisation/countryGroup';
 import { useContributionsSelector } from 'helpers/redux/storeHooks';
+import { navigateWithPageView } from 'helpers/tracking/ophan';
 import HeadlineImagePatronsDesktop from '../../../components/svgs/headlineImagePatronsDesktop';
 import HeadlineImagePatronsMobile from '../../../components/svgs/headlineImagePatronsMobile';
 import { CheckoutDivider } from '../components/checkoutDivider';
@@ -166,7 +167,9 @@ export function SupporterPlusCheckoutScaffold({
 
 	useEffect(() => {
 		if (paymentComplete) {
-			navigate(thankYouRoute, { replace: true });
+			navigateWithPageView(navigate, thankYouRoute, abParticipations, {
+				replace: true,
+			});
 		}
 	}, [paymentComplete]);
 

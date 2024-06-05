@@ -1,10 +1,10 @@
 import { css, ThemeProvider } from '@emotion/react';
-import { space } from '@guardian/source-foundations';
+import { space } from '@guardian/source/foundations';
 import {
 	Button,
 	buttonThemeReaderRevenue,
 	SvgArrowRightStraight,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import * as stripeJs from '@stripe/react-stripe-js';
 import { CardNumberElement } from '@stripe/react-stripe-js';
 import type {

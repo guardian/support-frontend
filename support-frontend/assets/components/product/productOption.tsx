@@ -1,11 +1,11 @@
 import type { SerializedStyles } from '@emotion/react';
 import { css, ThemeProvider } from '@emotion/react';
-import { until } from '@guardian/source-foundations';
+import { until } from '@guardian/source/foundations';
 import {
 	buttonThemeReaderRevenue,
 	LinkButton,
-} from '@guardian/source-react-components';
-import { InfoSummary } from '@guardian/source-react-components-development-kitchen';
+} from '@guardian/source/react-components';
+import { InfoSummary } from '@guardian/source-development-kitchen/react-components';
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { useHasBeenSeen } from 'helpers/customHooks/useHasBeenSeen';

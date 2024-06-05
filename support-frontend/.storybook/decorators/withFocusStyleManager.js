@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FocusStyleManager } from '@guardian/source-foundations';
+import { FocusStyleManager } from '@guardian/source/foundations';
 
 export function withFocusStyleManager(storyFn) {
 	useEffect(() => {
@@ -7,4 +7,4 @@ export function withFocusStyleManager(storyFn) {
 	});
 
 	return <>{storyFn()}</>;
-};
+}

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { Button, Column, Columns } from '@guardian/source-react-components';
+import { Button, Column, Columns } from '@guardian/source/react-components';
 import { checkListData } from 'components/checkoutBenefits/checkoutBenefitsListData';
 import { Box, BoxContents } from 'components/checkoutBox/checkoutBox';
 import type { ContributionsOrderSummaryProps } from 'components/orderSummary/contributionsOrderSummary';

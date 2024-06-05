@@ -5,13 +5,13 @@ import {
 	palette,
 	space,
 	textSans,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 import {
 	Link,
 	linkThemeDefault,
 	SvgChevronDownSingle,
 	SvgChevronUpSingle,
-} from '@guardian/source-react-components';
+} from '@guardian/source/react-components';
 import { useState } from 'react';
 
 const container = css`

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { from, space, textSans } from '@guardian/source-foundations';
+import { from, space, textSans } from '@guardian/source/foundations';
 
 const footer = css`
 	${textSans.small()};

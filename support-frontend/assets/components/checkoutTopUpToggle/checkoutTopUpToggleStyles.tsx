@@ -5,7 +5,7 @@ import {
 	pxToRem,
 	space,
 	textSans,
-} from '@guardian/source-foundations';
+} from '@guardian/source/foundations';
 
 export const topUpToggleContainer = css`
 	background-color: #f0f6fe;

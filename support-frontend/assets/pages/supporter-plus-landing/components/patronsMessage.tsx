@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
-import { headline, space } from '@guardian/source-foundations';
-import { Link } from '@guardian/source-react-components';
+import { headline, space } from '@guardian/source/foundations';
+import { Link } from '@guardian/source/react-components';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { getPatronsLink } from 'helpers/urls/externalLinks';
 import type { FinePrintTheme } from './finePrint';
