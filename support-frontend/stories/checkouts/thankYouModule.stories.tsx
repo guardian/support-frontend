@@ -111,6 +111,7 @@ function Template(args: ThankYouModuleProps): JSX.Element {
 						bodyCopy={args.bodyCopy}
 						ctas={args.ctas}
 						bodyCopySecond={args.bodyCopySecond}
+						ctasSecond={args.ctasSecond}
 					/>
 				</Column>
 				<Column></Column>
@@ -163,6 +164,9 @@ NewsFeastApps.args = {
 			<h2>{appFeastDownloadHeader}</h2>
 			<AppFeastDownloadBodyCopy />
 		</>
+	),
+	ctasSecond: (
+		<AppDownloadBadges countryGroupId={'GBPCountries'} isFeast={true} />
 	),
 };
 

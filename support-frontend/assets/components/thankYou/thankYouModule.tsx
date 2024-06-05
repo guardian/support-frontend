@@ -228,6 +228,7 @@ export interface ThankYouModuleProps {
 	isSignedIn?: boolean;
 	trackComponentLoadId?: string;
 	bodyCopySecond?: JSX.Element | string;
+	ctasSecond?: JSX.Element | null;
 }
 
 function ThankYouModule({
@@ -239,6 +240,7 @@ function ThankYouModule({
 	ctas,
 	trackComponentLoadId,
 	bodyCopySecond,
+	ctasSecond,
 }: ThankYouModuleProps): JSX.Element {
 	useEffect(() => {
 		trackComponentLoadId && trackComponentLoad(trackComponentLoadId);
@@ -277,7 +279,7 @@ function ThankYouModule({
 							<div css={bodyApps}>
 								<div css={bodyStyle}>
 									<p css={bodyCopyStyle}>{bodyCopySecond}</p>
-									<div css={[ctaContainerApps, ctaBottom]}>{ctas}</div>
+									<div css={[ctaContainerApps, ctaBottom]}>{ctasSecond}</div>
 								</div>
 								<span css={appContainer}>
 									<AppImageFeast></AppImageFeast>

@@ -57,6 +57,7 @@ interface ThankYouModuleData {
 	ctas: JSX.Element | null;
 	trackComponentLoadId?: string;
 	bodyCopySecond?: string | JSX.Element;
+	ctasSecond?: JSX.Element | null;
 }
 
 const headingCss = css`
@@ -121,6 +122,9 @@ export const getThankYouModuleData = (
 					<h2 css={headingCss}>{appFeastDownloadHeader}</h2>
 					<AppFeastDownloadBodyCopy />
 				</>
+			),
+			ctasSecond: (
+				<AppDownloadBadges countryGroupId={countryGroupId} isFeast={true} />
 			),
 		},
 		appDownload: {
