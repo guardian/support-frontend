@@ -108,9 +108,9 @@ export const tests: Tests = {
 			{
 				id: 'control',
 			},
-			{
-				id: 'variant',
-			},
+			// {
+			// 	id: 'variant',
+			// },
 		],
 		audiences: {
 			ALL: {
@@ -118,7 +118,7 @@ export const tests: Tests = {
 				size: 1,
 			},
 		},
-		isActive: false,
+		isActive: true,
 		referrerControlled: false, // ab-test name not needed to be in paramURL
 		seed: 5,
 		targetPage: pageUrlRegexes.contributions.allLandingPagesAndThankyouPages,
