@@ -46,7 +46,7 @@ const shorterBoxMargin = css`
 	}
 `;
 
-export default function SupporterPlusCheckout({
+export function SupporterPlusCheckout({
 	thankYouRoute,
 }: {
 	thankYouRoute: string;
@@ -181,3 +181,5 @@ export default function SupporterPlusCheckout({
 		</SupporterPlusCheckoutScaffold>
 	);
 }
+
+export default SupporterPlusCheckout;
