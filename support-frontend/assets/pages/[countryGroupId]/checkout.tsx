@@ -1,7 +1,9 @@
 import { css } from '@emotion/react';
 import {
+	brand,
 	from,
 	headline,
+	neutral,
 	palette,
 	space,
 	textSans,
@@ -183,6 +185,16 @@ const paymentMethodRadioWithImageSelected = css`
 		${palette.brand[500]} 2px,
 		transparent 2px
 	);
+`;
+
+const defaultRadioLabelColour = css`
+	color: ${neutral[46]};
+	font-weight: bold;
+`;
+
+const checkedRadioLabelColour = css`
+	color: ${brand[400]};
+	font-weight: bold;
 `;
 
 /**
@@ -676,6 +688,14 @@ function CheckoutComponent({ geoId }: Props) {
 		}
 	};
 
+	function getLabelText(label: string, checked: boolean): JSX.Element {
+		return (
+			<p css={checked ? checkedRadioLabelColour : defaultRadioLabelColour}>
+				{label}
+			</p>
+		);
+	}
+
 	return (
 		<PageScaffold
 			header={<Header></Header>}
@@ -1123,7 +1143,7 @@ function CheckoutComponent({ geoId }: Props) {
 															]}
 														>
 															<Radio
-																label={label}
+																label={getLabelText(label, selected)}
 																name="paymentMethod"
 																value={validPaymentMethod}
 																onChange={() => {
