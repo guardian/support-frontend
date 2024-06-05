@@ -12,9 +12,11 @@ export type ProductDescription = {
 	offersSummary?: Array<string | { strong: boolean; copy: string }>;
 	ratePlans: Record<
 		string,
-		{ billingPeriod: 'Annual' | 'Monthly' | 'Quarterly' }
+		{
+			billingPeriod: 'Annual' | 'Monthly' | 'Quarterly';
+			deliverableTo?: Record<string, string>;
+		}
 	>;
-	deliverableTo?: Record<string, string>;
 };
 
 export const productCatalogDescription: Record<string, ProductDescription> = {
@@ -33,18 +35,21 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		ratePlans: {
 			MonthlyWithGuardianWeekly: {
 				billingPeriod: 'Monthly',
+				deliverableTo: gwDeliverableCountries,
 			},
 			AnnualWithGuardianWeekly: {
 				billingPeriod: 'Annual',
+				deliverableTo: gwDeliverableCountries,
 			},
 			MonthlyWithGuardianWeeklyInt: {
 				billingPeriod: 'Monthly',
+				deliverableTo: gwDeliverableCountries,
 			},
 			AnnualWithGuardianWeeklyInt: {
 				billingPeriod: 'Annual',
+				deliverableTo: gwDeliverableCountries,
 			},
 		},
-		deliverableTo: gwDeliverableCountries,
 	},
 	DigitalSubscription: {
 		label: 'The Guardian Digital Edition',
@@ -79,15 +84,17 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		ratePlans: {
 			Sixday: {
 				billingPeriod: 'Monthly',
+				deliverableTo: newspaperCountries,
 			},
 			Weekend: {
 				billingPeriod: 'Annual',
+				deliverableTo: newspaperCountries,
 			},
 			Everyday: {
 				billingPeriod: 'Monthly',
+				deliverableTo: newspaperCountries,
 			},
 		},
-		deliverableTo: newspaperCountries,
 	},
 	SupporterPlus: {
 		label: 'All-access digital',
@@ -112,6 +119,22 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 			Annual: {
 				billingPeriod: 'Annual',
 			},
+			GuardianWeeklyRestOfWorldMonthly: {
+				billingPeriod: 'Monthly',
+				deliverableTo: gwDeliverableCountries,
+			},
+			GuardianWeeklyRestOfWorldAnnual: {
+				billingPeriod: 'Annual',
+				deliverableTo: gwDeliverableCountries,
+			},
+			GuardianWeeklyDomesticMonthly: {
+				billingPeriod: 'Monthly',
+				deliverableTo: gwDeliverableCountries,
+			},
+			GuardianWeeklyDomesticAnnual: {
+				billingPeriod: 'Annual',
+				deliverableTo: gwDeliverableCountries,
+			},
 		},
 	},
 	GuardianWeeklyRestOfWorld: {
@@ -120,24 +143,29 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
+				deliverableTo: gwDeliverableCountries,
 			},
 			OneYearGift: {
 				billingPeriod: 'Annual',
+				deliverableTo: gwDeliverableCountries,
 			},
 			Annual: {
 				billingPeriod: 'Annual',
+				deliverableTo: gwDeliverableCountries,
 			},
 			SixWeekly: {
 				billingPeriod: 'Monthly',
+				deliverableTo: gwDeliverableCountries,
 			},
 			Quarterly: {
 				billingPeriod: 'Quarterly',
+				deliverableTo: gwDeliverableCountries,
 			},
 			ThreeMonthGift: {
 				billingPeriod: 'Monthly',
+				deliverableTo: gwDeliverableCountries,
 			},
 		},
-		deliverableTo: gwDeliverableCountries,
 	},
 	GuardianWeeklyDomestic: {
 		label: 'The Guardian Weekly',
@@ -145,24 +173,29 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		ratePlans: {
 			Monthly: {
 				billingPeriod: 'Monthly',
+				deliverableTo: gwDeliverableCountries,
 			},
 			OneYearGift: {
 				billingPeriod: 'Annual',
+				deliverableTo: gwDeliverableCountries,
 			},
 			Annual: {
 				billingPeriod: 'Annual',
+				deliverableTo: gwDeliverableCountries,
 			},
 			SixWeekly: {
 				billingPeriod: 'Monthly',
+				deliverableTo: gwDeliverableCountries,
 			},
 			Quarterly: {
 				billingPeriod: 'Quarterly',
+				deliverableTo: gwDeliverableCountries,
 			},
 			ThreeMonthGift: {
 				billingPeriod: 'Monthly',
+				deliverableTo: gwDeliverableCountries,
 			},
 		},
-		deliverableTo: gwDeliverableCountries,
 	},
 	SubscriptionCard: {
 		label: 'Newspaper subscription',
@@ -218,21 +251,25 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 		ratePlans: {
 			Everyday: {
 				billingPeriod: 'Monthly',
+				deliverableTo: newspaperCountries,
 			},
 			Sunday: {
 				billingPeriod: 'Monthly',
+				deliverableTo: newspaperCountries,
 			},
 			Sixday: {
 				billingPeriod: 'Monthly',
+				deliverableTo: newspaperCountries,
 			},
 			Weekend: {
 				billingPeriod: 'Monthly',
+				deliverableTo: newspaperCountries,
 			},
 			Saturday: {
 				billingPeriod: 'Monthly',
+				deliverableTo: newspaperCountries,
 			},
 		},
-		deliverableTo: newspaperCountries,
 	},
 };
 
