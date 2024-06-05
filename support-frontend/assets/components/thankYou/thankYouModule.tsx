@@ -110,17 +110,15 @@ const bodyContainer = css`
 	grid-area: body;
 `;
 
-const bodyAppsContainer = css`
-	> div {
-		display: flex;
-		justify-content: space-between;
-		margin-top: ${space[6]}px;
-	}
+const bodyApps = css`
+	display: flex;
+	justify-content: space-between;
+	margin-top: ${space[6]}px;
 `;
-
-const bodyTop = css`
+const bodyAppsTop = css`
 	border-bottom: 1px solid ${neutral[86]};
 `;
+
 const bodyStyle = css`
 	max-width: 240px;
 	${from.mobileMedium} {
@@ -133,10 +131,6 @@ const bodyCopyStyle = css`
 	margin-bottom: ${space[1]}px;
 	${from.tablet} {
 		font-size: 17px;
-	}
-
-	> h2 {
-		font-weight: 700;
 	}
 `;
 const bodyCopyMarginTop = css`
@@ -198,11 +192,12 @@ const marginTop = css`
 	margin-top: ${space[6]}px;
 `;
 
-const ctaContainer = css`
+const ctaContainerApps = css`
 	margin-top: ${space[4]}px;
 
+	// appDownload ctas require margin-top but appsDownload does not
 	> div {
-		margin-top: 0px;
+		margin-top: 0;
 	}
 `;
 const ctaTop = css`
@@ -261,29 +256,28 @@ function ThankYouModule({
 	const maybePaddingRight =
 		!isDownloadModule && (isDownloadModules ? paddingRightApps : paddingRight);
 	const maybeMarginTop = !isDownloadModule && marginTop;
-	const bodyContainerApps = isDownloadModules && bodyAppsContainer;
 
 	return (
 		<section css={[container, maybePaddingRight]}>
 			<div css={gridContainer}>
 				<div css={iconContainer}>{icon}</div>
 				<div css={headerContainer}>{header}</div>
-				<div css={[bodyContainer, bodyContainerApps]}>
+				<div css={bodyContainer}>
 					{isDownloadModules ? (
 						<>
-							<div css={bodyTop}>
+							<div css={[bodyApps, bodyAppsTop]}>
 								<div css={bodyStyle}>
 									<p css={bodyCopyStyle}>{bodyCopy}</p>
-									<div css={[ctaContainer, ctaTop]}>{ctas}</div>
+									<div css={[ctaContainerApps, ctaTop]}>{ctas}</div>
 								</div>
 								<span css={appContainer}>
 									<AppImageGuardianNews></AppImageGuardianNews>
 								</span>
 							</div>
-							<div>
+							<div css={bodyApps}>
 								<div css={bodyStyle}>
 									<p css={bodyCopyStyle}>{bodyCopySecond}</p>
-									<div css={[ctaContainer, ctaBottom]}>{ctas}</div>
+									<div css={[ctaContainerApps, ctaBottom]}>{ctas}</div>
 								</div>
 								<span css={appContainer}>
 									<AppImageFeast></AppImageFeast>

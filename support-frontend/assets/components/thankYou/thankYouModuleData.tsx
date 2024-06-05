@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import { useState } from 'react';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -58,6 +59,10 @@ interface ThankYouModuleData {
 	bodyCopySecond?: string | JSX.Element;
 }
 
+const headingCss = css`
+	font-weight: 700;
+`;
+
 const defaultSupportReminder = {
 	selectedChoiceIndex: 0,
 	hasBeenCompleted: false,
@@ -106,14 +111,14 @@ export const getThankYouModuleData = (
 			header: appsDownloadHeader,
 			bodyCopy: (
 				<>
-					<h2>{appNewsDownloadHeader}</h2>
+					<h2 css={headingCss}>{appNewsDownloadHeader}</h2>
 					<AppNewsDownloadBodyCopy />
 				</>
 			),
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
 			bodyCopySecond: (
 				<>
-					<h2>{appFeastDownloadHeader}</h2>
+					<h2 css={headingCss}>{appFeastDownloadHeader}</h2>
 					<AppFeastDownloadBodyCopy />
 				</>
 			),
