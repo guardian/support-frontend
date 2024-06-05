@@ -55,7 +55,7 @@ interface ThankYouModuleData {
 	bodyCopy: string | JSX.Element;
 	ctas: JSX.Element | null;
 	trackComponentLoadId?: string;
-	bodyCopy2?: string | JSX.Element;
+	bodyCopySecond?: string | JSX.Element;
 }
 
 const defaultSupportReminder = {
@@ -111,7 +111,7 @@ export const getThankYouModuleData = (
 				</>
 			),
 			ctas: <AppDownloadBadges countryGroupId={countryGroupId} />,
-			bodyCopy2: (
+			bodyCopySecond: (
 				<>
 					<h2>{appFeastDownloadHeader}</h2>
 					<AppFeastDownloadBodyCopy />
