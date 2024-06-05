@@ -100,7 +100,7 @@ export type SupporterPlusThankYouProps = {
 	overideThresholdPrice?: number;
 };
 
-export function SupporterPlusThankYou({
+export default function SupporterPlusThankYou({
 	overideThresholdPrice,
 }: SupporterPlusThankYouProps): JSX.Element {
 	const campaignSettings = useMemo<CampaignSettings | null>(

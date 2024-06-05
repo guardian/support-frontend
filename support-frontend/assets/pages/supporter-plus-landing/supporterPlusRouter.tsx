@@ -20,7 +20,7 @@ import { renderPage } from 'helpers/rendering/render';
 import { setUpRedux } from './setup/setUpRedux';
 import { threeTierCheckoutEnabled } from './setup/threeTierChecks';
 // import { SupporterPlusInitialLandingPage } from './twoStepPages/firstStepLanding';
-import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
+// import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
 import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
 
 validateWindowGuardian(window.guardian);
@@ -94,13 +94,16 @@ export const inThreeTier = threeTierCheckoutEnabled(
 	commonState.amounts,
 );
 
-// import { SupporterPlusCheckout } from './twoStepPages/secondStepCheckout';
-// import { ThreeTierLanding } from './twoStepPages/threeTierLanding';
-
 // Lazy load your components
+// const ThreeTierLanding = lazy(() => import('./twoStepPages/threeTierLanding'));
 const SupporterPlusCheckout = lazy(
 	() => import('./twoStepPages/secondStepCheckout'),
 );
+const SupporterPlusThankYou = lazy(
+	() => import('pages/supporter-plus-thank-you/supporterPlusThankYou'),
+);
+
+console.log('***');
 
 // ----- Render ----- //
 
@@ -109,7 +112,7 @@ const router = () => {
 		<BrowserRouter>
 			<ScrollToTop />
 			<Provider store={store}>
-				<Suspense fallback={<div>Loading...</div>}>
+				<Suspense fallback={<ThreeTierLanding />}>
 					<Routes>
 						{countryIds.map((countryId) => (
 							<>
@@ -121,44 +124,11 @@ const router = () => {
 									path={`/${countryId}/contribute/checkout`}
 									element={<SupporterPlusCheckout />}
 								/>
-								{/* <Route
-								path={`/${countryId}/contribute/checkout`}
-								element={
-									<SupporterPlusCheckout thankYouRoute={thankYouRoute} />
-								}
-							/> */}
+								<Route
+									path={`/${countryId}/thankyou`}
+									element={<SupporterPlusThankYou />}
+								/>
 							</>
-							// <>
-							// 	<Route
-							// 		path={`/${countryId}/contribute/:campaignCode?`}
-							// 		element={
-							// 			/*
-							// 			 * if you are coming to the /contribute route(s) and you also have a one off
-							// 			 * contribution type (set in the url) and find yourself in the three tier
-							// 			 * variant we should redirect you to the /contribute/checkout route
-							// 			 */
-							// 			inThreeTier ? (
-							// 				<ThreeTierRedirectOneOffToCheckout countryId={countryId}>
-							// 					<ThreeTierLanding />
-							// 				</ThreeTierRedirectOneOffToCheckout>
-							// 			) : (
-							// 				<SupporterPlusInitialLandingPage
-							// 					thankYouRoute={thankYouRoute}
-							// 				/>
-							// 			)
-							// 		}
-							// 	/>
-							// 	<Route
-							// 		path={`/${countryId}/contribute/checkout`}
-							// 		element={
-							// 			<SupporterPlusCheckout thankYouRoute={thankYouRoute} />
-							// 		}
-							// 	/>
-							// 	<Route
-							// 		path={`/${countryId}/thankyou`}
-							// 		element={<SupporterPlusThankYou />}
-							// 	/>
-							// </>
 						))}
 					</Routes>
 				</Suspense>
