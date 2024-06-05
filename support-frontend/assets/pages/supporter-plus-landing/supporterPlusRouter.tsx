@@ -1,5 +1,5 @@
 // ----- Imports ----- //
-import { useEffect, Suspense, lazy } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import {
 	BrowserRouter,
@@ -9,8 +9,8 @@ import {
 	useLocation,
 } from 'react-router-dom';
 import { validateWindowGuardian } from 'helpers/globalsAndSwitches/window';
-// import { CountryGroup } from 'helpers/internationalisation';
-// import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
+import { CountryGroup } from 'helpers/internationalisation';
+import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { isDetailsSupported, polyfillDetails } from 'helpers/polyfills/details';
@@ -33,17 +33,17 @@ setUpTrackingAndConsents();
 
 // ----- Redux Store ----- //
 
-// const countryGroupId: CountryGroupId = CountryGroup.detect();
+const countryGroupId: CountryGroupId = CountryGroup.detect();
 const store = initReduxForContributions();
 
 setUpRedux(store);
 
-// const urlParams = new URLSearchParams(window.location.search);
-// const promoCode = urlParams.get('promoCode');
-// const thankYouRouteParams = promoCode
-// 	? `?${new URLSearchParams({ promoCode }).toString()}`
-// 	: '';
-// const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou${thankYouRouteParams}`;
+const urlParams = new URLSearchParams(window.location.search);
+const promoCode = urlParams.get('promoCode');
+const thankYouRouteParams = promoCode
+	? `?${new URLSearchParams({ promoCode }).toString()}`
+	: '';
+const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou${thankYouRouteParams}`;
 const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
 );
@@ -122,7 +122,9 @@ const router = () => {
 								/>
 								<Route
 									path={`/${countryId}/contribute/checkout`}
-									element={<SupporterPlusCheckout />}
+									element={
+										<SupporterPlusCheckout thankYouRoute={thankYouRoute} />
+									}
 								/>
 								<Route
 									path={`/${countryId}/thankyou`}
