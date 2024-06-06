@@ -305,68 +305,6 @@ function CheckoutComponent({ geoId }: Props) {
 		: undefined;
 	const ratePlanDescription = productDescription?.ratePlans[query.ratePlan];
 
-	/**
-	 * This is the data structure used by the `/subscribe/create` endpoint.
-	 *
-	 * This must match the types in `CreateSupportWorkersRequest#product`
-	 * and readerRevenueApis - `RegularPaymentRequest#product`.
-	 *
-	 * We might be able to defer this to the backend.
-	 */
-	let productFields: RegularPaymentRequest['product'] | undefined;
-	if (ratePlanDescription) {
-		if (productId === 'Contribution') {
-			productFields = {
-				productType: 'Contribution',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				amount: query.price ?? 0,
-			};
-		} else if (productId === 'SupporterPlus') {
-			productFields = {
-				productType: 'SupporterPlus',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				amount: query.price ?? 0,
-			};
-		} else if (productId === 'GuardianWeeklyDomestic') {
-			productFields = {
-				productType: 'GuardianWeekly',
-				currency: currencyKey,
-				fulfilmentOptions: 'Domestic',
-				billingPeriod: ratePlanDescription.billingPeriod,
-			};
-		} else if (productId === 'GuardianWeeklyRestOfWorld') {
-			productFields = {
-				productType: 'GuardianWeekly',
-				fulfilmentOptions: 'RestOfWorld',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-			};
-		} else if (productId === 'DigitalSubscription') {
-			productFields = {
-				productType: 'DigitalPack',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				// TODO - this needs filling in properly, I am not sure where this value comes from
-				readerType: 'Direct',
-			};
-		} else if (
-			productId === 'NationalDelivery' ||
-			productId === 'SubscriptionCard' ||
-			productId === 'HomeDelivery'
-		) {
-			productFields = {
-				productType: 'Paper',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				// TODO - this needs filling in properly
-				fulfilmentOptions: NoFulfilmentOptions,
-				productOptions: NoProductOptions,
-			};
-		}
-	}
-
 	if (
 		/** These are all the things we need to parse the page */
 		!(
@@ -375,13 +313,88 @@ function CheckoutComponent({ geoId }: Props) {
 			productDescription &&
 			ratePlan &&
 			ratePlanDescription &&
-			price &&
-			productFields
+			price
 		)
 	) {
 		return (
 			<div>
 				Could not find product: {query.product} ratePlan: {query.ratePlan}
+			</div>
+		);
+	}
+
+	/**
+	 * This is the data structure used by the `/subscribe/create` endpoint.
+	 *
+	 * This must match the types in `CreateSupportWorkersRequest#product`
+	 * and readerRevenueApis - `RegularPaymentRequest#product`.
+	 *
+	 * We might be able to defer this to the backend.
+	 */
+	let productFields: RegularPaymentRequest['product'];
+
+	if (productId === 'Contribution') {
+		productFields = {
+			productType: 'Contribution',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			amount: price,
+		};
+	} else if (productId === 'SupporterPlus') {
+		productFields = {
+			productType: 'SupporterPlus',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			fulfilmentOptions:
+				query.ratePlan === 'GuardianWeeklyDomesticMonthly' ||
+				query.ratePlan === 'GuardianWeeklyDomesticAnnual'
+					? 'Domestic'
+					: query.ratePlan === 'GuardianWeeklyRestOfWorldMonthly' ||
+					  query.ratePlan === 'GuardianWeeklyRestOfWorldAnnual'
+					? 'RestOfWorld'
+					: undefined,
+			amount: price,
+		};
+	} else if (productId === 'GuardianWeeklyDomestic') {
+		productFields = {
+			productType: 'GuardianWeekly',
+			currency: currencyKey,
+			fulfilmentOptions: 'Domestic',
+			billingPeriod: ratePlanDescription.billingPeriod,
+		};
+	} else if (productId === 'GuardianWeeklyRestOfWorld') {
+		productFields = {
+			productType: 'GuardianWeekly',
+			fulfilmentOptions: 'RestOfWorld',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+		};
+	} else if (productId === 'DigitalSubscription') {
+		productFields = {
+			productType: 'DigitalPack',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			// TODO - this needs filling in properly, I am not sure where this value comes from
+			readerType: 'Direct',
+		};
+	} else if (
+		productId === 'NationalDelivery' ||
+		productId === 'SubscriptionCard' ||
+		productId === 'HomeDelivery'
+	) {
+		productFields = {
+			productType: 'Paper',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			// TODO - this needs filling in properly
+			fulfilmentOptions: NoFulfilmentOptions,
+			productOptions: NoProductOptions,
+		};
+	} else {
+		return (
+			<div>
+				Could not find productFields for: {query.product} ratePlan:{' '}
+				{query.ratePlan}
 			</div>
 		);
 	}
@@ -653,7 +666,7 @@ function CheckoutComponent({ geoId }: Props) {
 		const ophanIds = getOphanIds();
 		const referrerAcquisitionData = getReferrerAcquisitionData();
 
-		if (paymentMethod && paymentFields && productFields) {
+		if (paymentMethod && paymentFields) {
 			/** TODO
 			 * - add supportAbTests
 			 * - add debugInfo
