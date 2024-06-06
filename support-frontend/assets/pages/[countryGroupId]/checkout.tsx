@@ -1318,9 +1318,10 @@ function CheckoutComponent({ geoId }: Props) {
 									>
 										{paymentMethod !== 'PayPal' && (
 											<DefaultPaymentButton
+												isLoading={stripeClientSecretInProgress}
 												buttonText={
 													stripeClientSecretInProgress
-														? 'Loading...'
+														? 'Validating reCAPTCHA...'
 														: `Pay ${simpleFormatAmount(currency, price)} per ${
 																ratePlanDescription.billingPeriod === 'Annual'
 																	? 'year'
