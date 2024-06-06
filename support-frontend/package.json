@@ -129,7 +129,7 @@
     "@babel/preset-typescript": "^7.23.3",
     "@emotion/babel-plugin": "^11.11.0",
     "@emotion/eslint-plugin": "^11.11.0",
-    "@guardian/browserslist-config": "^5.0.0",
+    "@guardian/browserslist-config": "^6.1.1",
     "@guardian/eslint-config": "8.0.1",
     "@guardian/eslint-config-typescript": "10.0.1",
     "@guardian/paparazzi": "^0.3.1",
