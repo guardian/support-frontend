@@ -322,7 +322,7 @@ function CheckoutComponent({ geoId }: Props) {
 			productType: 'Contribution',
 			currency: currencyKey,
 			billingPeriod: ratePlanDescription.billingPeriod,
-			amount: query.price ?? 0,
+			amount: price,
 		};
 	} else if (productId === 'SupporterPlus') {
 		productFields = {
