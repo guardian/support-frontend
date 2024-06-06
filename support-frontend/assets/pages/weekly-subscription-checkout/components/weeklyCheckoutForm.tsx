@@ -40,7 +40,6 @@ import Text from 'components/text/text';
 import { setupSubscriptionPayPalPaymentNoShipping } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import { DirectDebit, PayPal, Stripe } from 'helpers/forms/paymentMethods';
 import { billableCountries } from 'helpers/internationalisation/billableCountries';
-import { countryGroups } from 'helpers/internationalisation/countryGroup';
 import {
 	currencies,
 	currencyFromCountryCode,
@@ -60,7 +59,6 @@ import type {
 	SubscriptionsDispatch,
 	SubscriptionsState,
 } from 'helpers/redux/subscriptionsStore';
-import { useAbandonedBasketCookie } from 'helpers/storage/abandonedBasketCookies';
 import {
 	formActionCreators,
 	setCsrCustomerData,
@@ -256,15 +254,6 @@ function WeeklyCheckoutForm(props: PropTypes) {
 				] as 'month' | 'year',
 		  }
 		: undefined;
-
-	const { supportInternationalisationId } = countryGroups[props.countryGroupId];
-
-	useAbandonedBasketCookie(
-		props.product,
-		props.price.price,
-		tierBillingPeriodName,
-		supportInternationalisationId,
-	);
 
 	return (
 		<Content>
