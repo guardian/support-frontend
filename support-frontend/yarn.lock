@@ -16300,10 +16300,10 @@ uuid@^9.0.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
   integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
 
-valibot@^0.28.1:
-  version "0.28.1"
-  resolved "https://registry.yarnpkg.com/valibot/-/valibot-0.28.1.tgz#c64893bbdb60cd26fe1163756250f2b3434af35e"
-  integrity sha512-zQnjwNJuXk6362Leu0+4eFa/SMwRom3/hEvH6s1EGf3oXIPbo2WFKDra9ymnbVh3clLRvd8hw4sKF5ruI2Lyvw==
+valibot@^0.31.0:
+  version "0.31.0"
+  resolved "https://registry.yarnpkg.com/valibot/-/valibot-0.31.0.tgz#1db44d9597dd1790901b7304854ad3db683e5cbb"
+  integrity sha512-bleS8aVFpRGTUgbMoXzsRJhpxJGiZ3MG1nuNSORuDvio+sI1EyT1+lQHg+77Pfnlxz+25Uj5HiwdaklcDcYdiQ==
 
 validate-npm-package-license@^3.0.1:
   version "3.0.4"

@@ -8,7 +8,7 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
-import type { Input } from 'valibot';
+import type { InferInput } from 'valibot';
 import { number, object, picklist, safeParse, string } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
@@ -70,7 +70,7 @@ const OrderSchema = object({
 		'None',
 	]),
 });
-export function setThankYouOrder(order: Input<typeof OrderSchema>) {
+export function setThankYouOrder(order: InferInput<typeof OrderSchema>) {
 	storage.session.set('thankYouOrder', order);
 }
 export function unsetThankYouOrder() {
