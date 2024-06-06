@@ -192,13 +192,17 @@ const paymentMethodRadioWithImageSelected = css`
 `;
 
 const defaultRadioLabelColour = css`
-	color: ${neutral[46]};
-	font-weight: bold;
+	+ label div {
+		color: ${neutral[46]};
+		font-weight: bold;
+	}
 `;
 
 const checkedRadioLabelColour = css`
-	color: ${brand[400]};
-	font-weight: bold;
+	+ label div {
+		color: ${brand[400]};
+		font-weight: bold;
+	}
 `;
 
 /**
@@ -706,14 +710,6 @@ function CheckoutComponent({ geoId }: Props) {
 		}
 	};
 
-	function getLabelText(label: string, checked: boolean): JSX.Element {
-		return (
-			<p css={checked ? checkedRadioLabelColour : defaultRadioLabelColour}>
-				{label}
-			</p>
-		);
-	}
-
 	return (
 		<PageScaffold
 			header={<Header></Header>}
@@ -1185,9 +1181,14 @@ function CheckoutComponent({ geoId }: Props) {
 															]}
 														>
 															<Radio
-																label={getLabelText(label, selected)}
+																label={label}
 																name="paymentMethod"
 																value={validPaymentMethod}
+																css={
+																	selected
+																		? checkedRadioLabelColour
+																		: defaultRadioLabelColour
+																}
 																onChange={() => {
 																	setPaymentMethod(validPaymentMethod);
 																}}
