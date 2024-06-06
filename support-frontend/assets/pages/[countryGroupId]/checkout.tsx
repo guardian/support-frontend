@@ -637,7 +637,7 @@ function CheckoutComponent({ geoId }: Props) {
 		const ophanIds = getOphanIds();
 		const referrerAcquisitionData = getReferrerAcquisitionData();
 
-		if (paymentFields && productFields) {
+		if (paymentMethod && paymentFields && productFields) {
 			/** TODO
 			 * - add supportAbTests
 			 * - add debugInfo
@@ -678,7 +678,7 @@ function CheckoutComponent({ geoId }: Props) {
 					price: price,
 					product: productId,
 					ratePlan: query.ratePlan,
-					paymentMethod: paymentMethod as string,
+					paymentMethod: paymentMethod,
 				};
 				setThankYouOrder(order);
 				window.location.href = `/${geoId}/thank-you`;
