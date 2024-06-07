@@ -49,7 +49,10 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import {
+	init as abTestInit,
+	getAmountsTestVariant,
+} from 'helpers/abTests/abtest';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
@@ -78,6 +81,7 @@ import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
+	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getUser } from 'helpers/user/user';
@@ -668,11 +672,12 @@ function CheckoutComponent({ geoId }: Props) {
 
 		if (paymentMethod && paymentFields) {
 			/** TODO
-			 * - add supportAbTests
 			 * - add debugInfo
 			 * - add firstDeliveryDate
 			 */
-
+			const supportAbTests = getSupportAbTests(
+				abTestInit({ countryId, countryGroupId }),
+			);
 			const createSupportWorkersRequest: Omit<
 				RegularPaymentRequest,
 				'firstDeliveryDate'
@@ -684,7 +689,7 @@ function CheckoutComponent({ geoId }: Props) {
 				ophanIds,
 				referrerAcquisitionData,
 				product: productFields,
-				supportAbTests: [],
+				supportAbTests,
 				debugInfo: '',
 			};
 			const createSubscriptionResult = await fetch('/subscribe/create', {
