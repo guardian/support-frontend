@@ -1,5 +1,5 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { Draft } from 'immer';
+import type { WritableDraft } from 'immer/dist/internal';
 import type { z } from 'zod';
 import type { PaymentMethod } from 'helpers/forms/paymentMethods';
 
@@ -47,7 +47,7 @@ export function createSliceValidatorFor(
 	checkPaymentMethod: PaymentMethodConditional = () => true,
 ) {
 	return function validateStateSlice(
-		state: Draft<SliceStateWithErrors>,
+		state: WritableDraft<SliceStateWithErrors>,
 		action: PayloadAction<PaymentMethod | undefined>,
 	): void {
 		if (checkPaymentMethod(action.payload)) {

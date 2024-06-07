@@ -1,6 +1,6 @@
 // ----- Imports ----- //
 import * as React from 'preact/compat';
-import type { ForwardedRef, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useWindowWidth } from '../hooks/useWindowWidth';
 import ActSvg from './territories/actSvg';
 import NewSouthWalesSvg from './territories/newSouthWalesSvg';
@@ -40,7 +40,7 @@ type MapProps = {
 };
 
 export const Map = React.forwardRef(
-	(props: MapProps, ref: ForwardedRef<HTMLDivElement>) => (
+	(props: MapProps, ref: React.Ref<HTMLDivElement>) => (
 		<div className="map" ref={ref}>
 			<div className="map-background" />
 			<div className="svg-wrapper">
