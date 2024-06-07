@@ -6,7 +6,7 @@ import {
 } from '@guardian/source/react-components';
 import type { RefObject } from 'preact';
 import * as React from 'preact/compat';
-import type { ReactNode } from 'react';
+import type { ForwardedRef, ReactNode } from 'react';
 import type { AuState } from 'helpers/internationalisation/country';
 import { auStates } from 'helpers/internationalisation/country';
 import type {
@@ -322,7 +322,7 @@ type Props = {
 };
 
 export const TestimonialsContainer = React.forwardRef(
-	(props: Props, ref: React.Ref<HTMLDivElement>) => {
+	(props: Props, ref: ForwardedRef<HTMLDivElement>) => {
 		const { windowWidthIsLessThan } = useWindowWidth();
 
 		if ('testimonialsCollection' in props) {
