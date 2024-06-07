@@ -472,7 +472,7 @@ Resources:
       Condition: CreateProdResources
       Properties:
         AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-24-7
+          - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
         AlarmName: !Sub ${App} ${Stage} CP One-off contributions with PayPal might be down
         AlarmDescription: There have been no one-off contributions using paypal in the last 2 hours
         MetricName: payment-success
@@ -492,7 +492,7 @@ Resources:
       Condition: CreateProdResources
       Properties:
         AlarmActions:
-        - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:reader-revenue-24-7
+          - !Sub arn:aws:sns:${AWS::Region}:${AWS::AccountId}:alarms-handler-topic-${Stage}
         AlarmName: !Sub ${App} ${Stage} CP One-off contributions with Card might be down
         AlarmDescription: There have been no one-off contributions using card payment in the last 3 hours
         MetricName: payment-success
