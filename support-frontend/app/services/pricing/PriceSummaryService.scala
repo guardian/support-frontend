@@ -111,6 +111,8 @@ class PriceSummaryService(
       incentive = promotion.incentive,
       introductoryPrice = promotion.introductoryPrice,
       landingPage = promotion.landingPage,
+      starts = promotion.starts,
+      expires = promotion.expires,
     )
   }
 

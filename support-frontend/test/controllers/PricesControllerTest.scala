@@ -7,7 +7,7 @@ import services.pricing.{PriceSummary, ProductPrices, PromotionSummary}
 import com.gu.support.promotions.{DiscountBenefit, PromotionCopy}
 import com.gu.support.workers.{Annual, Monthly}
 import controllers.PricesController.{ProductPriceData, RatePlanPriceData}
-import org.joda.time.Months
+import org.joda.time.{DateTime, Months}
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -45,6 +45,8 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
                               Some("50% off for 3 months"),
                             ),
                           ),
+                          new DateTime("2020-01-01"),
+                          None,
                         ),
                       ),
                     ),
@@ -68,6 +70,8 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
                           None,
                           None,
                           Some(PromotionCopy(None, None, Some("Subscribe for 12 months and save 10%"))),
+                          new DateTime("2020-01-01"),
+                          None,
                         ),
                       ),
                     ),
@@ -126,6 +130,8 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
                   None,
                   None,
                   None, // no landing page text
+                  new DateTime("2020-01-01"),
+                  None,
                 ),
               ),
             ),
@@ -152,6 +158,8 @@ class PricesControllerTest extends AnyWordSpec with Matchers {
                   None,
                   None,
                   None, // no landing page text
+                  new DateTime("2020-01-01"),
+                  None,
                 ),
               ),
             ),
