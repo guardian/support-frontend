@@ -9,6 +9,11 @@ import {
 	string,
 	union,
 } from 'valibot';
+import {
+	getMvtId,
+	randomNumber as getRandomNumber,
+} from 'helpers/abTests/abtest';
+import { sendTrackingEventsOnView } from 'helpers/productPrice/subscriptions';
 import * as cookie from 'helpers/storage/cookie';
 import type { ProductCheckout } from 'helpers/tracking/behaviour';
 import { logException } from 'helpers/utilities/logger';
@@ -44,6 +49,19 @@ export function useAbandonedBasketCookie(
 			COOKIE_EXPIRY_DAYS,
 		);
 	}, []);
+
+	sendTrackingEventsOnView({
+		id: getAbTestId(getMvtId()),
+		componentType: 'ACQUISITIONS_OTHER',
+	})();
+}
+
+function getAbTestId(mvtId: number) {
+	const randomNumber = getRandomNumber(mvtId, 1) % 2;
+
+	return randomNumber === 0
+		? 'abandoned-basket-control'
+		: 'abandoned-basket-variant';
 }
 
 function parseAmount(amount: number): number | 'other' {

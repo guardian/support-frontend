@@ -610,7 +610,7 @@ function targetPageMatches(
 	return locationPath.match(targetPage) != null;
 }
 
-export { init, getAmountsTestVariant };
+export { init, randomNumber, getMvtId, getAmountsTestVariant };
 
 // Exported for testing only
 export const _ = {
