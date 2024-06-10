@@ -1,4 +1,3 @@
-import type { Settings, Status } from 'helpers/globalsAndSwitches/settings';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { ProductPrices } from 'helpers/productPrice/productPrices';
 import type { PromotionCopy } from 'helpers/productPrice/promotions';
@@ -76,8 +75,8 @@ export const emptySwitches = {
 	recaptchaSwitches: {},
 };
 
-const getSettings = (): Settings => {
-	const globalSettings = getGlobal<Settings>('settings');
+const getSettings = (): Window['guardian']['settings'] => {
+	const globalSettings = getGlobal<Window['guardian']['settings']>('settings');
 
 	const defaultSettings = {
 		switches: emptySwitches,
@@ -139,7 +138,7 @@ const getPromotionCopy = (): PromotionCopy | null =>
 	getGlobal<PromotionCopy>('promotionCopy');
 
 const isSwitchOn = (switchName: string): boolean => {
-	const sw = getGlobal<Status>(`settings.switches.${switchName}`);
+	const sw = getGlobal<'On' | 'Off'>(`settings.switches.${switchName}`);
 	return !!(sw && sw === 'On');
 };
 

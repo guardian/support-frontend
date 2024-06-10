@@ -25,5 +25,6 @@ object ServersideAbTest {
   }
 
   import io.circe.syntax._
+
   val asJsonString: Map[String, Participation] => String = _.asJson.noSpaces
 }

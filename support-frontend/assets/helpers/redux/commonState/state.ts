@@ -3,7 +3,6 @@ import { getFallbackAmounts } from 'helpers/abTests/helpers';
 import type { SelectedAmountsVariant } from 'helpers/contributions';
 import type { ExistingPaymentMethod } from 'helpers/forms/existingPaymentMethods/existingPaymentMethods';
 import { getSettings } from 'helpers/globalsAndSwitches/globals';
-import type { Settings } from 'helpers/globalsAndSwitches/settings';
 import { Country, CountryGroup } from 'helpers/internationalisation';
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
@@ -27,7 +26,7 @@ export type CommonState = {
 	referrerAcquisitionData: ReferrerAcquisitionData;
 	otherQueryParams: Array<[string, string]>;
 	abParticipations: Participations;
-	settings: Settings;
+	settings: Window['guardian']['settings'];
 	amounts: SelectedAmountsVariant;
 	internationalisation: Internationalisation;
 	existingPaymentMethods?: ExistingPaymentMethod[];
@@ -39,7 +38,7 @@ export type CommonStateSetupData = {
 	otherQueryParams: Array<[string, string]>;
 	internationalisation: Internationalisation;
 	abParticipations: Participations;
-	settings: Settings;
+	settings: Window['guardian']['settings'];
 	amounts: SelectedAmountsVariant;
 };
 
