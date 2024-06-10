@@ -21,11 +21,10 @@ class QueryZuoraLambda extends Handler[QueryZuoraState, FetchResultsState] {
 }
 
 object QueryZuoraLambda extends StrictLogging {
-  val stage = StageConstructors.fromEnvironment
-  val config = ConfigService(stage).load
-  val service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
 
   def queryZuora(stage: Stage, queryType: QueryType) = {
+    val config = ConfigService(stage).load
+    val service = new ZuoraQuerierService(config, configurableFutureRunner(60.seconds))
     logger.info(s"Attempting to submit ${queryType.value} query to Zuora")
 
     // Get the time we started the query. Docs for why we need to do this are here:

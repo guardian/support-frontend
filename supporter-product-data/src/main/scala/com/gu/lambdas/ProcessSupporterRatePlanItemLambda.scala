@@ -61,7 +61,9 @@ object ProcessSupporterRatePlanItemLambda extends SafeLogging {
 
   def processItem(supporterRatePlanItem: SupporterRatePlanItem) = {
     if (itemIsDiscount(supporterRatePlanItem)) {
-      logger.info(s"Supporter rate plan item ${supporterRatePlanItem.asJson.spaces2} is a discount")
+      logger.info(
+        s"Supporter rate plan item ${supporterRatePlanItem.asJson.spaces2} is a discount rate plan, not a product",
+      )
       Future.successful(())
     } else
       addAmountIfContribution(supporterRatePlanItem).flatMap(writeItemToDynamo)
