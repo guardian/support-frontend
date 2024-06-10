@@ -80,7 +80,7 @@ export function unsetThankYouOrder() {
 type Props = {
 	geoId: GeoId;
 };
-export function ThankYou({ geoId }: Props) {
+export default function ThankYou({ geoId }: Props) {
 	const countryId = CountryHelper.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
 	const isSignedIn = user.isSignedIn;

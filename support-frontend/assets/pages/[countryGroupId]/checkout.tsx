@@ -1502,7 +1502,7 @@ function CheckoutComponent({ geoId }: Props) {
 	);
 }
 
-export function Checkout({ geoId }: Props) {
+export default function Checkout({ geoId }: Props) {
 	const { currencyKey } = getGeoIdConfig(geoId);
 	const stripePublicKey = getStripeKey(
 		// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
