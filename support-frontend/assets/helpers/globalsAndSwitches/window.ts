@@ -1,4 +1,4 @@
-import type { Output } from 'valibot';
+import type { InferOutput } from 'valibot';
 import {
 	array,
 	boolean,
@@ -203,12 +203,15 @@ const PaymentConfigSchema = object({
 
 const ProductCatalogSchema = object({
 	productCatalog: record(
+		string(),
 		object({
 			ratePlans: record(
+				string(),
 				object({
 					id: string(),
-					pricing: record(number()),
+					pricing: record(string(), number()),
 					charges: record(
+						string(),
 						object({
 							id: string(),
 						}),
@@ -224,7 +227,7 @@ const WindowGuardianSchema = intersect([
 	ProductCatalogSchema,
 ]);
 
-export type WindowGuardian = Output<typeof WindowGuardianSchema>;
+export type WindowGuardian = InferOutput<typeof WindowGuardianSchema>;
 
 export const parseWindowGuardian = (obj: unknown) => {
 	const windowGuardian = safeParse(WindowGuardianSchema, obj);

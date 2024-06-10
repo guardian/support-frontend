@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import type { Input } from 'valibot';
+import type { InferInput } from 'valibot';
 import {
 	flatten,
 	literal,
@@ -23,7 +23,7 @@ const abandonedBasketSchema = object({
 	region: string(),
 });
 
-type AbandonedBasket = Input<typeof abandonedBasketSchema>;
+type AbandonedBasket = InferInput<typeof abandonedBasketSchema>;
 
 export function useAbandonedBasketCookie(
 	product: ProductCheckout,
@@ -34,7 +34,7 @@ export function useAbandonedBasketCookie(
 	const abandonedBasket = {
 		product,
 		amount: parseAmount(amount),
-		billingPeriod,
+		billingPeriod: billingPeriod.toUpperCase(),
 		region,
 	};
 	useEffect(() => {

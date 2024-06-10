@@ -8,8 +8,8 @@ import {
 	LinkButton,
 } from '@guardian/source/react-components';
 import { FooterWithContents } from '@guardian/source-development-kitchen/react-components';
-import type { Input } from 'valibot';
-import { number, object, safeParse, string } from 'valibot';
+import type { InferInput } from 'valibot';
+import { number, object, picklist, safeParse, string } from 'valibot';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
 import type { ThankYouModuleType } from 'components/thankYou/thankYouModule';
@@ -20,6 +20,8 @@ import CountryHelper from 'helpers/internationalisation/classes/country';
 import { get } from 'helpers/storage/cookie';
 import { OPHAN_COMPONENT_ID_RETURN_TO_GUARDIAN } from 'helpers/thankYouPages/utils/ophan';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
+import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
+import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
 import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
@@ -57,9 +59,18 @@ const OrderSchema = object({
 	price: number(),
 	product: string(),
 	ratePlan: string(),
-	paymentMethod: string(),
+	paymentMethod: picklist([
+		'Stripe',
+		'PayPal',
+		'DirectDebit',
+		'Sepa',
+		'ExistingCard',
+		'ExistingDirectDebit',
+		'AmazonPay',
+		'None',
+	]),
 });
-export function setThankYouOrder(order: Input<typeof OrderSchema>) {
+export function setThankYouOrder(order: InferInput<typeof OrderSchema>) {
 	storage.session.set('thankYouOrder', order);
 }
 export function unsetThankYouOrder() {
@@ -88,17 +99,39 @@ export function ThankYou({ geoId }: Props) {
 			<div>Unable to read your order {JSON.stringify(sessionStorageOrder)}</div>
 		);
 	}
-
 	const order = parsedOrder.output;
-	// Soon we'll remove this be using billingPeriod from the API
+
+	/**
+	 * contributionType is only applicable to SupporterPlus and Contributions.
+	 * We should remove it for something more generic.
+	 */
+	const isContributionProduct =
+		order.product === 'Contribution' || order.product === 'SupporterPlus';
 	const contributionType =
-		order.ratePlan === 'Monthly'
+		isContributionProduct &&
+		(order.ratePlan === 'Monthly'
 			? 'MONTHLY'
 			: order.ratePlan === 'Annual'
 			? 'ANNUAL'
 			: order.product === 'Contribution'
 			? 'ONE_OFF'
-			: undefined;
+			: undefined);
+
+	if (contributionType) {
+		// track conversion with GTM
+		successfulContributionConversion(
+			order.price,
+			contributionType,
+			currencyKey,
+			order.paymentMethod,
+		);
+		// track conversion with QM
+		sendEventContributionCheckoutConversion(
+			order.price,
+			contributionType,
+			currencyKey,
+		);
+	}
 
 	if (!contributionType) {
 		return <div>Unable to find contribution type {contributionType}</div>;

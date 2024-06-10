@@ -1,7 +1,9 @@
 import { css } from '@emotion/react';
 import {
+	brand,
 	from,
 	headline,
+	neutral,
 	palette,
 	space,
 	textSans,
@@ -47,7 +49,10 @@ import { StripeCardForm } from 'components/stripeCardForm/stripeCardForm';
 import { AddressFields } from 'components/subscriptionCheckouts/address/addressFields';
 import type { PostcodeFinderResult } from 'components/subscriptionCheckouts/address/postcodeLookup';
 import { findAddressesForPostcode } from 'components/subscriptionCheckouts/address/postcodeLookup';
-import { getAmountsTestVariant } from 'helpers/abTests/abtest';
+import {
+	init as abTestInit,
+	getAmountsTestVariant,
+} from 'helpers/abTests/abtest';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
 import type { ErrorReason } from 'helpers/forms/errorReasons';
@@ -75,6 +80,7 @@ import { NoProductOptions } from 'helpers/productPrice/productOptions';
 import {
 	getOphanIds,
 	getReferrerAcquisitionData,
+	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getUser } from 'helpers/user/user';
@@ -186,6 +192,20 @@ const paymentMethodRadioWithImageSelected = css`
 	);
 `;
 
+const defaultRadioLabelColour = css`
+	+ label div {
+		color: ${neutral[46]};
+		font-weight: bold;
+	}
+`;
+
+const checkedRadioLabelColour = css`
+	+ label div {
+		color: ${brand[400]};
+		font-weight: bold;
+	}
+`;
+
 /**
  * This method removes the `pending` state by retrying,
  * resolving on success or failure only.
@@ -286,68 +306,6 @@ function CheckoutComponent({ geoId }: Props) {
 		: undefined;
 	const ratePlanDescription = productDescription?.ratePlans[query.ratePlan];
 
-	/**
-	 * This is the data structure used by the `/subscribe/create` endpoint.
-	 *
-	 * This must match the types in `CreateSupportWorkersRequest#product`
-	 * and readerRevenueApis - `RegularPaymentRequest#product`.
-	 *
-	 * We might be able to defer this to the backend.
-	 */
-	let productFields: RegularPaymentRequest['product'] | undefined;
-	if (ratePlanDescription) {
-		if (productId === 'Contribution') {
-			productFields = {
-				productType: 'Contribution',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				amount: query.price ?? 0,
-			};
-		} else if (productId === 'SupporterPlus') {
-			productFields = {
-				productType: 'SupporterPlus',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				amount: query.price ?? 0,
-			};
-		} else if (productId === 'GuardianWeeklyDomestic') {
-			productFields = {
-				productType: 'GuardianWeekly',
-				currency: currencyKey,
-				fulfilmentOptions: 'Domestic',
-				billingPeriod: ratePlanDescription.billingPeriod,
-			};
-		} else if (productId === 'GuardianWeeklyRestOfWorld') {
-			productFields = {
-				productType: 'GuardianWeekly',
-				fulfilmentOptions: 'RestOfWorld',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-			};
-		} else if (productId === 'DigitalSubscription') {
-			productFields = {
-				productType: 'DigitalPack',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				// TODO - this needs filling in properly, I am not sure where this value comes from
-				readerType: 'Direct',
-			};
-		} else if (
-			productId === 'NationalDelivery' ||
-			productId === 'SubscriptionCard' ||
-			productId === 'HomeDelivery'
-		) {
-			productFields = {
-				productType: 'Paper',
-				currency: currencyKey,
-				billingPeriod: ratePlanDescription.billingPeriod,
-				// TODO - this needs filling in properly
-				fulfilmentOptions: NoFulfilmentOptions,
-				productOptions: NoProductOptions,
-			};
-		}
-	}
-
 	if (
 		/** These are all the things we need to parse the page */
 		!(
@@ -356,13 +314,88 @@ function CheckoutComponent({ geoId }: Props) {
 			productDescription &&
 			ratePlan &&
 			ratePlanDescription &&
-			price &&
-			productFields
+			price
 		)
 	) {
 		return (
 			<div>
 				Could not find product: {query.product} ratePlan: {query.ratePlan}
+			</div>
+		);
+	}
+
+	/**
+	 * This is the data structure used by the `/subscribe/create` endpoint.
+	 *
+	 * This must match the types in `CreateSupportWorkersRequest#product`
+	 * and readerRevenueApis - `RegularPaymentRequest#product`.
+	 *
+	 * We might be able to defer this to the backend.
+	 */
+	let productFields: RegularPaymentRequest['product'];
+
+	if (productId === 'Contribution') {
+		productFields = {
+			productType: 'Contribution',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			amount: price,
+		};
+	} else if (productId === 'SupporterPlus') {
+		productFields = {
+			productType: 'SupporterPlus',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			fulfilmentOptions:
+				query.ratePlan === 'GuardianWeeklyDomesticMonthly' ||
+				query.ratePlan === 'GuardianWeeklyDomesticAnnual'
+					? 'Domestic'
+					: query.ratePlan === 'GuardianWeeklyRestOfWorldMonthly' ||
+					  query.ratePlan === 'GuardianWeeklyRestOfWorldAnnual'
+					? 'RestOfWorld'
+					: undefined,
+			amount: price,
+		};
+	} else if (productId === 'GuardianWeeklyDomestic') {
+		productFields = {
+			productType: 'GuardianWeekly',
+			currency: currencyKey,
+			fulfilmentOptions: 'Domestic',
+			billingPeriod: ratePlanDescription.billingPeriod,
+		};
+	} else if (productId === 'GuardianWeeklyRestOfWorld') {
+		productFields = {
+			productType: 'GuardianWeekly',
+			fulfilmentOptions: 'RestOfWorld',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+		};
+	} else if (productId === 'DigitalSubscription') {
+		productFields = {
+			productType: 'DigitalPack',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			// TODO - this needs filling in properly, I am not sure where this value comes from
+			readerType: 'Direct',
+		};
+	} else if (
+		productId === 'NationalDelivery' ||
+		productId === 'SubscriptionCard' ||
+		productId === 'HomeDelivery'
+	) {
+		productFields = {
+			productType: 'Paper',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			// TODO - this needs filling in properly
+			fulfilmentOptions: NoFulfilmentOptions,
+			productOptions: NoProductOptions,
+		};
+	} else {
+		return (
+			<div>
+				Could not find productFields for: {query.product} ratePlan:{' '}
+				{query.ratePlan}
 			</div>
 		);
 	}
@@ -549,7 +582,7 @@ function CheckoutComponent({ geoId }: Props) {
 		 */
 		let billingAddress;
 		let deliveryAddress;
-		if (productDescription.deliverableTo) {
+		if (ratePlanDescription.deliverableTo) {
 			deliveryAddress = {
 				lineOne: formData.get('delivery-lineOne') as string,
 				lineTwo: formData.get('delivery-lineTwo') as string,
@@ -634,13 +667,14 @@ function CheckoutComponent({ geoId }: Props) {
 		const ophanIds = getOphanIds();
 		const referrerAcquisitionData = getReferrerAcquisitionData();
 
-		if (paymentFields && productFields) {
+		if (paymentMethod && paymentFields) {
 			/** TODO
-			 * - add supportAbTests
 			 * - add debugInfo
 			 * - add firstDeliveryDate
 			 */
-
+			const supportAbTests = getSupportAbTests(
+				abTestInit({ countryId, countryGroupId }),
+			);
 			const createSupportWorkersRequest: Omit<
 				RegularPaymentRequest,
 				'firstDeliveryDate'
@@ -652,7 +686,7 @@ function CheckoutComponent({ geoId }: Props) {
 				ophanIds,
 				referrerAcquisitionData,
 				product: productFields,
-				supportAbTests: [],
+				supportAbTests,
 				debugInfo: '',
 			};
 			const createSubscriptionResult = await fetch('/subscribe/create', {
@@ -675,7 +709,7 @@ function CheckoutComponent({ geoId }: Props) {
 					price: price,
 					product: productId,
 					ratePlan: query.ratePlan,
-					paymentMethod: paymentMethod as string,
+					paymentMethod: paymentMethod,
 				};
 				setThankYouOrder(order);
 				window.location.href = `/${geoId}/thank-you`;
@@ -703,8 +737,8 @@ function CheckoutComponent({ geoId }: Props) {
 			<CheckoutHeading withTopBorder={true}></CheckoutHeading>
 			<Container sideBorders cssOverrides={darkBackgroundContainerMobile}>
 				<Columns cssOverrides={columns} collapseUntil="tablet">
-					<Column span={[0, 2, 5]}></Column>
-					<Column span={[1, 8, 7]}>
+					<Column span={[0, 2, 2, 3, 4]}></Column>
+					<Column span={[1, 8, 8, 8, 8]}>
 						<SecureTransactionIndicator
 							align="center"
 							theme="light"
@@ -968,14 +1002,14 @@ function CheckoutComponent({ geoId }: Props) {
 									 * We need the billing-country for all transactions, even non-deliverable ones
 									 * which we get from the GU_country cookie which comes from the Fastly geo client.
 									 */}
-									{!productDescription.deliverableTo && (
+									{!ratePlanDescription.deliverableTo && (
 										<input
 											type="hidden"
 											name="billing-country"
 											value={countryId}
 										/>
 									)}
-									{productDescription.deliverableTo && (
+									{ratePlanDescription.deliverableTo && (
 										<>
 											<fieldset>
 												<legend css={legend}>
@@ -989,7 +1023,7 @@ function CheckoutComponent({ geoId }: Props) {
 													country={deliveryCountry}
 													state={deliveryState}
 													postCode={deliveryPostcode}
-													countries={productDescription.deliverableTo}
+													countries={ratePlanDescription.deliverableTo}
 													errors={[]}
 													postcodeState={{
 														results: deliveryPostcodeStateResults,
@@ -1084,7 +1118,7 @@ function CheckoutComponent({ geoId }: Props) {
 														country={billingCountry}
 														state={billingState}
 														postCode={billingPostcode}
-														countries={productDescription.deliverableTo}
+														countries={ratePlanDescription.deliverableTo}
 														errors={[]}
 														postcodeState={{
 															results: billingPostcodeStateResults,
@@ -1165,6 +1199,11 @@ function CheckoutComponent({ geoId }: Props) {
 																label={label}
 																name="paymentMethod"
 																value={validPaymentMethod}
+																css={
+																	selected
+																		? checkedRadioLabelColour
+																		: defaultRadioLabelColour
+																}
 																onChange={() => {
 																	setPaymentMethod(validPaymentMethod);
 																}}
@@ -1294,9 +1333,10 @@ function CheckoutComponent({ geoId }: Props) {
 									>
 										{paymentMethod !== 'PayPal' && (
 											<DefaultPaymentButton
+												isLoading={stripeClientSecretInProgress}
 												buttonText={
 													stripeClientSecretInProgress
-														? 'Loading...'
+														? 'Validating reCAPTCHA...'
 														: `Pay ${simpleFormatAmount(currency, price)} per ${
 																ratePlanDescription.billingPeriod === 'Annual'
 																	? 'year'

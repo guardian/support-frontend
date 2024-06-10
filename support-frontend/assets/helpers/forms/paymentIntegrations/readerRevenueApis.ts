@@ -63,6 +63,7 @@ type SupporterPlus = {
 	amount: number;
 	currency: string;
 	billingPeriod: BillingPeriod;
+	fulfilmentOptions?: FulfilmentOptions;
 };
 export type DigitalSubscription = {
 	productType: typeof DigitalPack;

@@ -27,3 +27,25 @@ export function AppDownloadEditionsBodyCopy(): JSX.Element {
 		</span>
 	);
 }
+
+export const appsDownloadHeader = 'Explore your subscriber’s App';
+
+export const appNewsDownloadHeader = 'The Guardian News App';
+
+export function AppNewsDownloadBodyCopy(): JSX.Element {
+	return (
+		<span css={downloadCopy}>
+			Unlock limitless Guardian journalism in our quality news app today.
+		</span>
+	);
+}
+
+export const appFeastDownloadHeader = 'The Guardian Feast App';
+
+export function AppFeastDownloadBodyCopy(): JSX.Element {
+	return (
+		<span css={downloadCopy}>
+			Make a feast out of anything with the Guardian’s new recipe app – Feast.
+		</span>
+	);
+}

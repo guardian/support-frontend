@@ -232,16 +232,18 @@ export function SupporterPlusThankYou({
 		moduleType: ThankYouModuleType,
 	): ThankYouModuleType[] => (condtion ? [moduleType] : []);
 
+	const showFeast =
+		!!abParticipations.feast &&
+		useContributionsSelector(isSupporterPlusFromState);
+
 	const thankYouModules: ThankYouModuleType[] = [
 		...maybeThankYouModule(isNewAccount, 'signUp'),
 		...maybeThankYouModule(
 			!isNewAccount && !isSignedIn && email.length > 0,
 			'signIn',
 		),
-		...maybeThankYouModule(
-			contributionType !== 'ONE_OFF' && isSupporterPlus,
-			'appDownload',
-		),
+		...maybeThankYouModule(isSupporterPlus && !showFeast, 'appDownload'),
+		...maybeThankYouModule(isSupporterPlus && showFeast, 'appsDownload'),
 		...maybeThankYouModule(
 			contributionType === 'ONE_OFF' && email.length > 0,
 			'supportReminder',

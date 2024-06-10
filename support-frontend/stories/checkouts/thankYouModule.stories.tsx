@@ -8,6 +8,11 @@ import AppDownloadBadges from 'components/thankYou/appDownload/AppDownloadBadges
 import {
 	AppDownloadBodyCopy,
 	appDownloadHeader,
+	AppFeastDownloadBodyCopy,
+	appFeastDownloadHeader,
+	AppNewsDownloadBodyCopy,
+	appNewsDownloadHeader,
+	appsDownloadHeader,
 } from 'components/thankYou/appDownload/appDownloadItems';
 import {
 	ausMapBodyCopy,
@@ -105,6 +110,8 @@ function Template(args: ThankYouModuleProps): JSX.Element {
 						header={args.header}
 						bodyCopy={args.bodyCopy}
 						ctas={args.ctas}
+						bodyCopySecond={args.bodyCopySecond}
+						ctasSecond={args.ctasSecond}
 					/>
 				</Column>
 				<Column></Column>
@@ -136,6 +143,31 @@ DownloadTheAppSignedOut.args = {
 	header: appDownloadHeader,
 	bodyCopy: <AppDownloadBodyCopy />,
 	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
+};
+
+export const NewsFeastApps = Template.bind({});
+
+NewsFeastApps.args = {
+	moduleType: 'appsDownload',
+	isSignedIn: true,
+	icon: getThankYouModuleIcon('appsDownload'),
+	header: appsDownloadHeader,
+	bodyCopy: (
+		<>
+			<h2>{appNewsDownloadHeader}</h2>
+			<AppNewsDownloadBodyCopy />
+		</>
+	),
+	ctas: <AppDownloadBadges countryGroupId={'GBPCountries'} />,
+	bodyCopySecond: (
+		<>
+			<h2>{appFeastDownloadHeader}</h2>
+			<AppFeastDownloadBodyCopy />
+		</>
+	),
+	ctasSecond: (
+		<AppDownloadBadges countryGroupId={'GBPCountries'} isFeast={true} />
+	),
 };
 
 export const ShareYourSupport = Template.bind({});

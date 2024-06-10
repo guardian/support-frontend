@@ -46,7 +46,7 @@ class PaperSubscriptionController(
         title = "The Guardian Newspaper Subscription | Subscription Card and Home Delivery",
         mainElement = EmptyDiv("paper-subscription-landing-page"),
         mainJsBundle = RefPath("paperSubscriptionLandingPage.js"),
-        mainStyleBundle = RefPath("paperSubscriptionLandingPage.css"),
+        mainStyleBundle = Some(RefPath("paperSubscriptionLandingPage.css")),
         description = stringsConfig.paperLandingDescription,
         canonicalLink = canonicalLink,
         shareImageUrl = Some(
