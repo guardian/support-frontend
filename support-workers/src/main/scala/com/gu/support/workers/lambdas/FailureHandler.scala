@@ -42,6 +42,10 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
         FailedEmailFields.contribution(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case _: SupporterPlus =>
         FailedEmailFields.supporterPlus(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
+
+      case _: TierThree =>
+        // TODO: Do we need a new one here?
+        FailedEmailFields.supporterPlus(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case _: DigitalPack =>
         FailedEmailFields.digitalPack(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case _: Paper => FailedEmailFields.paper(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))

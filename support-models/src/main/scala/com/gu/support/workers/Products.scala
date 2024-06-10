@@ -31,11 +31,19 @@ case class Contribution(
   override def describe: String = s"$billingPeriod-Contribution-$currency-$amount"
 }
 
+case class TierThree(
+    amount: BigDecimal,
+    currency: Currency,
+    billingPeriod: BillingPeriod,
+    fulfilmentOptions: FulfilmentOptions,
+) extends ProductType {
+  override def describe: String = s"$billingPeriod-TierThree-$currency-$amount"
+}
+
 case class SupporterPlus(
     amount: BigDecimal,
     currency: Currency,
     billingPeriod: BillingPeriod,
-    fulfilmentOptions: Option[FulfilmentOptions] = None, // Remove Option after we have updated the frontend
 ) extends ProductType {
   override def describe: String = s"$billingPeriod-SupporterPlus-$currency-$amount"
 }

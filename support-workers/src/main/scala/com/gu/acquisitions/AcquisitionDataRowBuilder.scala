@@ -27,6 +27,7 @@ import com.gu.support.workers.{
   SixWeekly,
   StripePaymentType,
   SupporterPlus,
+  TierThree,
 }
 import com.gu.support.zuora.api.ReaderType.{Direct, Gift}
 import org.joda.time.{DateTime, DateTimeZone}
@@ -125,6 +126,7 @@ object AcquisitionDataRowBuilder {
     case c: Contribution => (AcquisitionProduct.RecurringContribution, Some(c.amount.toDouble))
     case s: SupporterPlus =>
       (AcquisitionProduct.SupporterPlus, None) // we don't send S+ amount because it may be discounted
+    case _: TierThree => (AcquisitionProduct.TierThree, None)
     case _: DigitalPack => (AcquisitionProduct.DigitalSubscription, None)
     case _: Paper => (AcquisitionProduct.Paper, None)
     case _: GuardianWeekly => (AcquisitionProduct.GuardianWeekly, None)

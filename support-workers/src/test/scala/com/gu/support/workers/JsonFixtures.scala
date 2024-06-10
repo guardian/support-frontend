@@ -472,13 +472,12 @@ object JsonFixtures {
       amount: BigDecimal,
       currency: Currency,
       billingPeriod: BillingPeriod,
-      fulfilmentOptions: Option[FulfilmentOptions] = None,
       country: Country = UK,
   ): String =
     CreateZuoraSubscriptionState(
       SupporterPlusState(
         Country.UK,
-        SupporterPlus(amount, currency, billingPeriod, fulfilmentOptions),
+        SupporterPlus(amount, currency, billingPeriod),
         stripePaymentMethodObj,
         None,
         salesforceContact,
