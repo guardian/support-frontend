@@ -45,8 +45,9 @@ export type ThreeTierCardProps = {
 	link: string;
 	productDescription: ProductDescription;
 	price: number;
-	promotion?: Promotion;
 	ctaCopy: string;
+	lozengeText?: string;
+	promotion?: Promotion;
 };
 
 const container = (
@@ -216,7 +217,10 @@ export function ThreeTierCard({
 		>
 			{isUserSelected && <ThreeTierLozenge title="Your selection" />}
 			{isRecommended && !isUserSelected && (
-				<ThreeTierLozenge subdue={isRecommendedSubdued} title="Recommended" />
+				<ThreeTierLozenge
+					subdue={isRecommendedSubdued}
+					title={promotion?.landingPage?.roundel ?? 'Recommended'}
+				/>
 			)}
 			<h2 css={titleCss}>{label}</h2>
 			<p css={priceCss(!!promotion)}>
