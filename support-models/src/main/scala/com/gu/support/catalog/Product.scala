@@ -59,14 +59,16 @@ case object TierThree extends Product {
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[SupporterPlus.type]]] =
     Map(
       PROD -> List(
-        productRatePlan("8a128ed885fc6ded018602296ace3eb8", Monthly),
-        productRatePlan("8a128ed885fc6ded01860228f77e3d5a", Annual),
+        productRatePlan("8a1299788ff2ec100190025fccc32bb1", Monthly, Domestic),
+        productRatePlan("8a1288a38ff2af980190025b32591ccc", Annual, Domestic),
+        productRatePlan("8a128ab18ff2af9301900255d77979ac", Monthly, RestOfWorld),
+        productRatePlan("8a1299788ff2ec100190024d1e3b1a09", Annual, RestOfWorld),
       ),
       CODE -> List(
         productRatePlan("8ad097b48ff26452019001cebac92376", Monthly, Domestic),
         productRatePlan("8ad081dd8ff24a9a019001d95e4e3574", Annual, Domestic),
-        productRatePlan("8ad097b48ff26452019001e65bbf2ca8", Annual, RestOfWorld),
         productRatePlan("8ad081dd8ff24a9a019001df2ce83657", Monthly, RestOfWorld),
+        productRatePlan("8ad097b48ff26452019001e65bbf2ca8", Annual, RestOfWorld),
       ),
     )
 }
