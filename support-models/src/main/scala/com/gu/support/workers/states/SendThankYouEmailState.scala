@@ -3,7 +3,7 @@ package com.gu.support.workers.states
 import com.gu.salesforce.Salesforce.SfContactId
 import com.gu.support.acquisitions.AbTest
 import com.gu.support.encoding.Codec.deriveCodec
-import com.gu.support.encoding.DiscriminatedType
+import com.gu.support.encoding.{Codec, DiscriminatedType}
 import com.gu.support.encoding.CustomCodecs._
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
@@ -37,6 +37,17 @@ object SendThankYouEmailState {
       promoCode: Option[PromoCode],
       accountNumber: String,
       subscriptionNumber: String,
+  ) extends SendThankYouEmailState
+
+  case class SendThankYouEmailTierThreeState(
+      user: User,
+      product: TierThree,
+      paymentMethod: PaymentMethod,
+      paymentSchedule: PaymentSchedule,
+      promoCode: Option[PromoCode],
+      accountNumber: String,
+      subscriptionNumber: String,
+      firstDeliveryDate: LocalDate,
   ) extends SendThankYouEmailState
 
   case class SendThankYouEmailDigitalSubscriptionDirectPurchaseState(
@@ -99,18 +110,19 @@ object SendThankYouEmailState {
       months: Int,
   )
 
-  implicit val codedTermDates = deriveCodec[TermDates]
+  implicit val codedTermDates: Codec[TermDates] = deriveCodec[TermDates]
 
-  implicit val encodeSFContactId = Encoder.encodeString.contramap[SfContactId](_.id)
-  implicit val decodeSFContactId = Decoder.decodeString.map(SfContactId.apply)
+  implicit val encodeSFContactId: Encoder[SfContactId] = Encoder.encodeString.contramap[SfContactId](_.id)
+  implicit val decodeSFContactId: Decoder[SfContactId] = Decoder.decodeString.map(SfContactId.apply)
 
   import ExecutionTypeDiscriminators._
 
   private val discriminatedType = new DiscriminatedType[SendThankYouEmailState](fieldName)
-  implicit val codec = discriminatedType.codec(
+  implicit val codec: Codec[SendThankYouEmailState] = discriminatedType.codec(
     List(
       discriminatedType.variant[SendThankYouEmailContributionState](contribution),
       discriminatedType.variant[SendThankYouEmailSupporterPlusState](supporterPlus),
+      discriminatedType.variant[SendThankYouEmailTierThreeState](tierThree),
       discriminatedType.variant[SendThankYouEmailDigitalSubscriptionDirectPurchaseState](
         digitalSubscriptionDirectPurchase,
       ),

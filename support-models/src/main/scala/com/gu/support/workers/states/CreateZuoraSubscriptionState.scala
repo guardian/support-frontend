@@ -1,11 +1,10 @@
 package com.gu.support.workers.states
 
 import com.gu.i18n.Country
-
-import java.util.UUID
-import com.gu.salesforce.Salesforce.{SalesforceContactRecords, SfContactId}
+import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.support.acquisitions.AcquisitionData
 import com.gu.support.encoding.Codec.deriveCodec
+import com.gu.support.encoding.{Codec, DiscriminatedType}
 import com.gu.support.promotions.PromoCode
 import com.gu.support.workers.{PaymentMethod, SalesforceContactRecord, User, _}
 import org.joda.time.LocalDate
@@ -13,6 +12,10 @@ import com.gu.support.encoding.CustomCodecs.{decodeCountry, decodeLocalTime, enc
 import com.gu.support.encoding.{Codec, DiscriminatedType}
 import com.gu.support.redemptions.RedemptionData
 import com.gu.support.workers.GiftRecipient.{DigitalSubscriptionGiftRecipient, WeeklyGiftRecipient}
+import com.gu.support.workers._
+import org.joda.time.LocalDate
+
+import java.util.UUID
 
 case class CreateZuoraSubscriptionState(
     productSpecificState: CreateZuoraSubscriptionProductState,
@@ -28,7 +31,7 @@ case class CreateZuoraSubscriptionState(
 ) extends FailureHandlerState
 
 object CreateZuoraSubscriptionState {
-  implicit val codec = deriveCodec[CreateZuoraSubscriptionState]
+  implicit val codec: Codec[CreateZuoraSubscriptionState] = deriveCodec[CreateZuoraSubscriptionState]
 }
 
 sealed trait CreateZuoraSubscriptionProductState
@@ -45,6 +48,15 @@ object CreateZuoraSubscriptionProductState {
       billingCountry: Country,
       product: SupporterPlus,
       paymentMethod: PaymentMethod,
+      promoCode: Option[PromoCode],
+      salesForceContact: SalesforceContactRecord,
+  ) extends CreateZuoraSubscriptionProductState
+
+  case class TierThreeState(
+      user: User,
+      product: TierThree,
+      paymentMethod: PaymentMethod,
+      firstDeliveryDate: LocalDate,
       promoCode: Option[PromoCode],
       salesForceContact: SalesforceContactRecord,
   ) extends CreateZuoraSubscriptionProductState
@@ -103,6 +115,7 @@ object CreateZuoraSubscriptionProductState {
       discriminatedType.variant[DigitalSubscriptionGiftRedemptionState](digitalSubscriptionGiftRedemption),
       discriminatedType.variant[PaperState](paper),
       discriminatedType.variant[GuardianWeeklyState](guardianWeekly),
+      discriminatedType.variant[TierThreeState](tierThree),
     ),
   )
 

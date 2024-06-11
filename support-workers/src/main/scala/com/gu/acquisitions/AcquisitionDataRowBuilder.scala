@@ -207,6 +207,15 @@ object AcquisitionDataRowBuilder {
           Some(s.accountNumber),
           Some(s.subscriptionNumber),
         )
+      case s: SendThankYouEmailTierThreeState =>
+        AcquisitionTypeDetails(
+          Some(s.paymentMethod),
+          s.promoCode,
+          Direct,
+          Purchase,
+          Some(s.accountNumber),
+          Some(s.subscriptionNumber),
+        )
       case s: SendThankYouEmailDigitalSubscriptionDirectPurchaseState =>
         AcquisitionTypeDetails(
           Some(s.paymentMethod),
