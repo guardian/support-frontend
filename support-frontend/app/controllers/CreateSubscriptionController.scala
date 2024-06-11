@@ -339,8 +339,12 @@ class CreateSubscriptionController(
         )
       case _: SupporterPlus =>
         List(
-          "gu_digital_subscriber" -> true.toString,
-          // "gu_supporter_plus" -> true.toString, // TODO: add this and remove the digisub one when the CMP cookie list has been updated
+          "gu_supporter_plus" -> true.toString,
+          "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
+        )
+      case _: TierThree =>
+        List(
+          "gu_supporter_plus" -> true.toString,
           "GU_AF1" -> DateTime.now().plusDays(1).getMillis.toString,
         )
       case _: DigitalPack =>
