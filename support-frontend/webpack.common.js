@@ -149,16 +149,10 @@ module.exports = (cssFilename, jsFilename, minimizeCss) => ({
 				test: /\.svg$/,
 				use: [
 					{
-						loader: 'babel-loader',
-					},
-					{
-						loader: 'react-svg-loader',
+						loader: '@svgr/webpack',
 						options: {
-							svgo: {
-								plugins: [{ removeTitle: true }],
-								floatPrecision: 2,
-							},
-							jsx: true,
+							/** this ensures that we keep the viewBox for imported SVGs */
+							svgo: false,
 						},
 					},
 				],

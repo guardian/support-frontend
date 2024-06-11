@@ -63,6 +63,9 @@ export function DefaultPaymentButtonContainer({
 			  )
 			: getUserSelectedAmount(state),
 	);
+	const { countryId } = useContributionsSelector(
+		(state) => state.common.internationalisation,
+	);
 	const promotion = isSupporterPlus
 		? useContributionsSelector((state) =>
 				getPromotion(
@@ -76,10 +79,6 @@ export function DefaultPaymentButtonContainer({
 
 	const currency = currencies[currencyId];
 	const amountWithCurrency = simpleFormatAmount(currency, amount);
-
-	const { countryId } = useContributionsSelector(
-		(state) => state.common.internationalisation,
-	);
 
 	const testId = 'qa-contributions-landing-submit-contribution-button';
 
