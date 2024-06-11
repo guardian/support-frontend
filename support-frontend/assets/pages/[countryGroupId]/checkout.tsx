@@ -84,7 +84,7 @@ import {
 	getSupportAbTests,
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
-import { getUser } from 'helpers/user/user';
+import { getUser, isTestUser as isTestUserFunc } from 'helpers/user/user';
 import type { GeoId } from 'pages/geoIdConfig';
 import { getGeoIdConfig } from 'pages/geoIdConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
@@ -96,11 +96,12 @@ import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 /** App config - this is config that should persist throughout the app */
 validateWindowGuardian(window.guardian);
 
-const isTestUser = true as boolean;
 const csrf = window.guardian.csrf.token;
 
 const user = getUser();
 const isSignedIn = user.isSignedIn;
+const isTestUser = isTestUserFunc();
+
 const countryId: IsoCountry = CountryHelper.detect();
 
 const productCatalog = window.guardian.productCatalog;
