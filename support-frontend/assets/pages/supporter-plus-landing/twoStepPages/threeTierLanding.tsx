@@ -681,6 +681,12 @@ export function ThreeTierLanding(): JSX.Element {
 								contributionType,
 								promotion,
 							),
+							starts: promotion?.starts
+								? new Date(promotion.starts)
+								: undefined,
+							expires: promotion?.expires
+								? new Date(promotion.expires)
+								: undefined,
 						},
 						{
 							title: tier3Card.productDescription.label,

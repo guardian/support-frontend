@@ -4,6 +4,12 @@ export function getLongMonth(date: Date): string {
 	});
 }
 
+export function getNumericYear(date: Date): string {
+	return date.toLocaleDateString('default', {
+		year: 'numeric',
+	});
+}
+
 function nth(d: number) {
 	if (d >= 11 && d <= 13) {
 		return 'th';
