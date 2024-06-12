@@ -351,7 +351,6 @@ function CheckoutComponent({ geoId }: Props) {
 					  query.ratePlan === 'RestOfWorldAnnual'
 					? 'RestOfWorld'
 					: 'Domestic',
-			amount: price,
 		};
 	} else if (productId === 'Contribution') {
 		productFields = {

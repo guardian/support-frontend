@@ -66,7 +66,6 @@ type SupporterPlus = {
 };
 export type TierThree = {
 	productType: 'TierThree';
-	amount: number;
 	currency: string;
 	billingPeriod: BillingPeriod;
 	fulfilmentOptions: FulfilmentOptions;
