@@ -1,21 +1,21 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { setUpTrackingAndConsents } from 'helpers/page/page';
 import { renderPage } from 'helpers/rendering/render';
-import { geoIds } from 'pages/geoIdConfig';
+import { i18nIds } from 'pages/i18nConfig';
 import { Checkout } from './checkout';
 import { ThankYou } from './thank-you';
 
 setUpTrackingAndConsents();
 
 const router = createBrowserRouter(
-	geoIds.flatMap((geoId) => [
+	i18nIds.flatMap((i18nId) => [
 		{
-			path: `/${geoId}/checkout`,
-			element: <Checkout geoId={geoId} />,
+			path: `/${i18nId}/checkout`,
+			element: <Checkout i18nId={i18nId} />,
 		},
 		{
-			path: `/${geoId}/thank-you`,
-			element: <ThankYou geoId={geoId} />,
+			path: `/${i18nId}/thank-you`,
+			element: <ThankYou i18nId={i18nId} />,
 		},
 	]),
 );

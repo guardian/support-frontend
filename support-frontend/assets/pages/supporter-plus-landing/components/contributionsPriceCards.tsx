@@ -60,7 +60,7 @@ export function ContributionsPriceCards({
 			size="xsmall"
 			onClick={() => {
 				dispatch(resetValidation());
-				const destination = `/${countryGroups[countryGroupId].supportInternationalisationId}/contribute`;
+				const destination = `/${countryGroups[countryGroupId].i18nId}/contribute`;
 				navigateWithPageView(navigate, destination, abParticipations);
 			}}
 		>

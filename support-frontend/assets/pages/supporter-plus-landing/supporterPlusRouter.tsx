@@ -43,10 +43,8 @@ const promoCode = urlParams.get('promoCode');
 const thankYouRouteParams = promoCode
 	? `?${new URLSearchParams({ promoCode }).toString()}`
 	: '';
-const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou${thankYouRouteParams}`;
-const countryIds = Object.values(countryGroups).map(
-	(group) => group.supportInternationalisationId,
-);
+const thankYouRoute = `/${countryGroups[countryGroupId].i18nId}/thankyou${thankYouRouteParams}`;
+const countryIds = Object.values(countryGroups).map((group) => group.i18nId);
 
 // ----- ScrollToTop on Navigate: https://v5.reactrouter.com/web/guides/scroll-restoration ---- //
 

@@ -23,7 +23,7 @@ import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { successfulContributionConversion } from 'helpers/tracking/googleTagManager';
 import { sendEventContributionCheckoutConversion } from 'helpers/tracking/quantumMetric';
 import { getUser } from 'helpers/user/user';
-import { type GeoId, getGeoIdConfig } from 'pages/geoIdConfig';
+import { getI18nConfig, type I18nId } from 'pages/i18nConfig';
 import ThankYouFooter from 'pages/supporter-plus-thank-you/components/thankYouFooter';
 import ThankYouHeader from 'pages/supporter-plus-thank-you/components/thankYouHeader/thankYouHeader';
 import {
@@ -78,15 +78,15 @@ export function unsetThankYouOrder() {
 }
 
 type Props = {
-	geoId: GeoId;
+	i18nId: I18nId;
 };
-export function ThankYou({ geoId }: Props) {
+export function ThankYou({ i18nId }: Props) {
 	const countryId = CountryHelper.fromString(get('GU_country') ?? 'GB') ?? 'GB';
 	const user = getUser();
 	const isSignedIn = user.isSignedIn;
 	const csrf = { token: window.guardian.csrf.token };
 
-	const { countryGroupId, currencyKey } = getGeoIdConfig(geoId);
+	const { countryGroupId, currencyKey } = getI18nConfig(i18nId);
 
 	const sessionStorageOrder = storage.session.get('thankYouOrder');
 	const parsedOrder = safeParse(

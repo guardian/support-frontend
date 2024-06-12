@@ -2,25 +2,25 @@ import type { CountryGroupId } from 'helpers/internationalisation/countryGroup';
 import type { Currency } from 'helpers/internationalisation/currency';
 import { currencies } from 'helpers/internationalisation/currency';
 
-type GeoIdConfig = {
+export const i18nIds = ['uk', 'us', 'eu', 'au', 'nz', 'ca', 'int'] as const;
+export type I18nId = (typeof i18nIds)[number];
+
+type I18nConfig = {
 	currency: Currency;
 	currencyKey: keyof typeof currencies;
 	countryGroupId: CountryGroupId;
 };
 
-export const geoIds = ['uk', 'us', 'eu', 'au', 'nz', 'ca', 'int'] as const;
-export type GeoId = (typeof geoIds)[number];
-
 /**
- * This method takes in the first URL segment (geoId) and returns static config
+ * This method takes in the first URL segment (i18nId) and returns static config
  * that varies on that segment and returns config used on all pages.
  *
  * This config value is intentially sparse to avoid overloading it with data that is
  * for a more specific use, in which case, you should try keep the data fetching closer
  * to that usecase.
  */
-export const getGeoIdConfig = (geoId: GeoId): GeoIdConfig => {
-	switch (geoId) {
+export const getI18nConfig = (i18nId: I18nId): I18nConfig => {
+	switch (i18nId) {
 		case 'uk':
 			return {
 				currency: currencies.GBP,
