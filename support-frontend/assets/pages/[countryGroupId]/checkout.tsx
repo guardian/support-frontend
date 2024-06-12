@@ -338,7 +338,21 @@ function CheckoutComponent({ geoId }: Props) {
 	 */
 	let productFields: RegularPaymentRequest['product'];
 
-	if (productId === 'Contribution') {
+	if (productId === 'TierThree') {
+		productFields = {
+			productType: 'TierThree',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			fulfilmentOptions:
+				query.ratePlan === 'DomesticMonthly' ||
+				query.ratePlan === 'DomesticAnnual'
+					? 'Domestic'
+					: query.ratePlan === 'RestOfWorldMonthly' ||
+					  query.ratePlan === 'RestOfWorldAnnual'
+					? 'RestOfWorld'
+					: 'Domestic',
+		};
+	} else if (productId === 'Contribution') {
 		productFields = {
 			productType: 'Contribution',
 			currency: currencyKey,
@@ -350,14 +364,6 @@ function CheckoutComponent({ geoId }: Props) {
 			productType: 'SupporterPlus',
 			currency: currencyKey,
 			billingPeriod: ratePlanDescription.billingPeriod,
-			fulfilmentOptions:
-				query.ratePlan === 'GuardianWeeklyDomesticMonthly' ||
-				query.ratePlan === 'GuardianWeeklyDomesticAnnual'
-					? 'Domestic'
-					: query.ratePlan === 'GuardianWeeklyRestOfWorldMonthly' ||
-					  query.ratePlan === 'GuardianWeeklyRestOfWorldAnnual'
-					? 'RestOfWorld'
-					: undefined,
 			amount: price,
 		};
 	} else if (productId === 'GuardianWeeklyDomestic') {
@@ -586,7 +592,7 @@ function CheckoutComponent({ geoId }: Props) {
 		 */
 		let billingAddress;
 		let deliveryAddress;
-		if (ratePlanDescription.deliverableTo) {
+		if (productDescription.deliverableTo) {
 			deliveryAddress = {
 				lineOne: formData.get('delivery-lineOne') as string,
 				lineTwo: formData.get('delivery-lineTwo') as string,
@@ -1006,14 +1012,14 @@ function CheckoutComponent({ geoId }: Props) {
 									 * We need the billing-country for all transactions, even non-deliverable ones
 									 * which we get from the GU_country cookie which comes from the Fastly geo client.
 									 */}
-									{!ratePlanDescription.deliverableTo && (
+									{!productDescription.deliverableTo && (
 										<input
 											type="hidden"
 											name="billing-country"
 											value={countryId}
 										/>
 									)}
-									{ratePlanDescription.deliverableTo && (
+									{productDescription.deliverableTo && (
 										<>
 											<fieldset>
 												<legend css={legend}>
@@ -1027,7 +1033,7 @@ function CheckoutComponent({ geoId }: Props) {
 													country={deliveryCountry}
 													state={deliveryState}
 													postCode={deliveryPostcode}
-													countries={ratePlanDescription.deliverableTo}
+													countries={productDescription.deliverableTo}
 													errors={[]}
 													postcodeState={{
 														results: deliveryPostcodeStateResults,
@@ -1122,7 +1128,7 @@ function CheckoutComponent({ geoId }: Props) {
 														country={billingCountry}
 														state={billingState}
 														postCode={billingPostcode}
-														countries={ratePlanDescription.deliverableTo}
+														countries={productDescription.deliverableTo}
 														errors={[]}
 														postcodeState={{
 															results: billingPostcodeStateResults,
