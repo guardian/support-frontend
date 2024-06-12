@@ -502,6 +502,7 @@ export function ThreeTierLanding(): JSX.Element {
 	const tier1UrlParams = new URLSearchParams({
 		'selected-amount': recurringAmount.toString(),
 		'selected-contribution-type': selectedContributionType,
+		product: 'Contribution',
 	});
 	const tier1Link = `contribute/checkout?${tier1UrlParams.toString()}`;
 
@@ -531,6 +532,7 @@ export function ThreeTierLanding(): JSX.Element {
 	const tier2UrlParams = new URLSearchParams({
 		'selected-amount': tier2Pricing.toString(),
 		'selected-contribution-type': selectedContributionType,
+		product: 'SupporterPlus',
 	});
 	if (promotion) {
 		tier2UrlParams.set('promoCode', promotion.promoCode);
