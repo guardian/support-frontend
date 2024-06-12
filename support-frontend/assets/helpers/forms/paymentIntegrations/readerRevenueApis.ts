@@ -63,7 +63,12 @@ type SupporterPlus = {
 	amount: number;
 	currency: string;
 	billingPeriod: BillingPeriod;
-	fulfilmentOptions?: FulfilmentOptions;
+};
+export type TierThree = {
+	productType: 'TierThree';
+	currency: string;
+	billingPeriod: BillingPeriod;
+	fulfilmentOptions: FulfilmentOptions;
 };
 export type DigitalSubscription = {
 	productType: typeof DigitalPack;
@@ -90,7 +95,8 @@ export type SubscriptionProductFields =
 	| SupporterPlus
 	| DigitalSubscription
 	| PaperSubscription
-	| GuardianWeeklySubscription;
+	| GuardianWeeklySubscription
+	| TierThree;
 type ProductFields = RegularContribution | SubscriptionProductFields;
 type RegularPayPalPaymentFields = {
 	baid: string;
