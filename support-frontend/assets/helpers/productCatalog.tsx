@@ -156,22 +156,6 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 			Annual: {
 				billingPeriod: 'Annual',
 			},
-			GuardianWeeklyRestOfWorldMonthly: {
-				billingPeriod: 'Monthly',
-				deliverableTo: gwDeliverableCountries,
-			},
-			GuardianWeeklyRestOfWorldAnnual: {
-				billingPeriod: 'Annual',
-				deliverableTo: gwDeliverableCountries,
-			},
-			GuardianWeeklyDomesticMonthly: {
-				billingPeriod: 'Monthly',
-				deliverableTo: gwDeliverableCountries,
-			},
-			GuardianWeeklyDomesticAnnual: {
-				billingPeriod: 'Annual',
-				deliverableTo: gwDeliverableCountries,
-			},
 		},
 	},
 	GuardianWeeklyRestOfWorld: {
