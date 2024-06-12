@@ -53,7 +53,7 @@ case object TierThree extends Product {
       billingPeriod,
       fulfilmentOptions,
       NoProductOptions,
-      s"Supporter Plus ${billingPeriod.getClass.getSimpleName}",
+      s"Tier Three ${billingPeriod.getClass.getSimpleName}",
     )
 
   lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[SupporterPlus.type]]] =

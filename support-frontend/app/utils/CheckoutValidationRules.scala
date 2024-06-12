@@ -102,7 +102,10 @@ object CheckoutValidationRules {
       case d: DigitalPack => DigitalPackValidation.passes(createSupportWorkersRequest, d)
       case p: Paper => PaperValidation.passes(createSupportWorkersRequest, p.fulfilmentOptions)
       case _: GuardianWeekly => GuardianWeeklyValidation.passes(createSupportWorkersRequest)
-      case _: TierThree => GuardianWeeklyValidation.passes(createSupportWorkersRequest) // TODO: is this right?
+      case _: TierThree =>
+        GuardianWeeklyValidation.passes(
+          createSupportWorkersRequest,
+        ) // Tier three has the same fields as Guardian Weekly
       case _: Contribution => PaidProductValidation.passes(createSupportWorkersRequest)
     }) match {
       case Invalid(message) =>

@@ -44,8 +44,8 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
         FailedEmailFields.supporterPlus(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
 
       case _: TierThree =>
-        // TODO: Do we need a new one here?
-        FailedEmailFields.supporterPlus(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
+        // TODO: Probably need a new one here?
+        FailedEmailFields.guardianWeekly(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case _: DigitalPack =>
         FailedEmailFields.digitalPack(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
       case _: Paper => FailedEmailFields.paper(email = state.user.primaryEmailAddress, IdentityUserId(state.user.id))
@@ -63,7 +63,7 @@ class FailureHandler(emailService: EmailService) extends Handler[FailureHandlerS
     error.flatMap(extractUnderlyingError) match {
       case Some(ZuoraErrorResponse(_, List(ze @ ZuoraError("TRANSACTION_FAILED", message)))) =>
         val checkoutFailureReason = toCheckoutFailureReason(ze, state.analyticsInfo.paymentProvider)
-        val updatedRequestInfo = requestInfo.appendMessage(s"Zuora reported a payment failure: $ze");
+        val updatedRequestInfo = requestInfo.appendMessage(s"Zuora reported a payment failure: $ze")
         exitHandler(
           state,
           checkoutFailureReason,
