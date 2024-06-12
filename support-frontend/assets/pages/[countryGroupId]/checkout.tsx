@@ -593,7 +593,7 @@ function CheckoutComponent({ geoId }: Props) {
 		 */
 		let billingAddress;
 		let deliveryAddress;
-		if (ratePlanDescription.deliverableTo) {
+		if (productDescription.deliverableTo) {
 			deliveryAddress = {
 				lineOne: formData.get('delivery-lineOne') as string,
 				lineTwo: formData.get('delivery-lineTwo') as string,
@@ -1013,14 +1013,14 @@ function CheckoutComponent({ geoId }: Props) {
 									 * We need the billing-country for all transactions, even non-deliverable ones
 									 * which we get from the GU_country cookie which comes from the Fastly geo client.
 									 */}
-									{!ratePlanDescription.deliverableTo && (
+									{!productDescription.deliverableTo && (
 										<input
 											type="hidden"
 											name="billing-country"
 											value={countryId}
 										/>
 									)}
-									{ratePlanDescription.deliverableTo && (
+									{productDescription.deliverableTo && (
 										<>
 											<fieldset>
 												<legend css={legend}>
@@ -1034,7 +1034,7 @@ function CheckoutComponent({ geoId }: Props) {
 													country={deliveryCountry}
 													state={deliveryState}
 													postCode={deliveryPostcode}
-													countries={ratePlanDescription.deliverableTo}
+													countries={productDescription.deliverableTo}
 													errors={[]}
 													postcodeState={{
 														results: deliveryPostcodeStateResults,
@@ -1129,7 +1129,7 @@ function CheckoutComponent({ geoId }: Props) {
 														country={billingCountry}
 														state={billingState}
 														postCode={billingPostcode}
-														countries={ratePlanDescription.deliverableTo}
+														countries={productDescription.deliverableTo}
 														errors={[]}
 														postcodeState={{
 															results: billingPostcodeStateResults,
