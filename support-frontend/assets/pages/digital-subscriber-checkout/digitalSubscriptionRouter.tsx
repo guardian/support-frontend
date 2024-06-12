@@ -35,9 +35,7 @@ window.guardian.settings = {
 setUpRedux(store);
 
 const thankYouRoute = 'thankyou';
-const countryIds = Object.values(countryGroups).map(
-	(group) => group.supportInternationalisationId,
-);
+const countryIds = Object.values(countryGroups).map((group) => group.i18nId);
 
 // ----- Render ----- //
 

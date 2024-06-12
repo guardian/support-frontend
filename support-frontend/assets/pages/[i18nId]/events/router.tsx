@@ -4,7 +4,7 @@ import * as abTest from 'helpers/abTests/abtest';
 import { Country, CountryGroup } from 'helpers/internationalisation';
 import { renderPage } from 'helpers/rendering/render';
 import { trackAbTests } from 'helpers/tracking/ophan';
-import { geoIds } from 'pages/geoIdConfig';
+import { i18nIds } from 'pages/i18nConfig';
 import { Events } from './events';
 
 const countryId = Country.detect();
@@ -17,9 +17,9 @@ ophan.init();
 trackAbTests(participations);
 
 const router = createBrowserRouter(
-	geoIds.flatMap((geoId) => [
+	i18nIds.flatMap((i18nId) => [
 		{
-			path: `/${geoId}/events`,
+			path: `/${i18nId}/events`,
 			element: <Events />,
 		},
 	]),

@@ -91,7 +91,7 @@ function CountryGroupSwitcher({
 				>
 					{countryGroupIds.map((countryGroupId: CountryGroupId) => (
 						<LinkItem
-							href={`/${countryGroups[countryGroupId].supportInternationalisationId}${subPath}${window.location.search}`}
+							href={`/${countryGroups[countryGroupId].i18nId}${subPath}${window.location.search}`}
 							onClick={() => {
 								sendTrackingEventsOnClick({
 									id: `toggle_country: ${countryGroupId}`,

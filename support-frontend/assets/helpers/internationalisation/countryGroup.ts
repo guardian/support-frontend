@@ -1,6 +1,7 @@
 // ----- Imports ----- //
 import type { IsoCountry } from 'helpers/internationalisation/country';
 import type { IsoCurrency } from 'helpers/internationalisation/currency';
+import type { I18nId } from 'pages/i18nConfig';
 
 // ----- Types ----- //
 const GBPCountries = 'GBPCountries';
@@ -29,15 +30,6 @@ export type CountryGroupName =
 	| 'New Zealand'
 	| 'Canada';
 
-export type SupportInternationalisationId =
-	| 'uk'
-	| 'us'
-	| 'au'
-	| 'eu'
-	| 'int'
-	| 'nz'
-	| 'ca';
-
 /*
   Note: supportInternationalizationId should match an existing
   id from support-internationalisation library. We use it to
@@ -48,7 +40,7 @@ export type CountryGroup = {
 	name: CountryGroupName;
 	currency: IsoCurrency;
 	countries: IsoCountry[];
-	supportInternationalisationId: SupportInternationalisationId;
+	i18nId: I18nId;
 };
 type CountryGroups = Record<CountryGroupId, CountryGroup>;
 const countryGroups: CountryGroups = {
@@ -56,19 +48,19 @@ const countryGroups: CountryGroups = {
 		name: 'United Kingdom',
 		currency: 'GBP',
 		countries: ['GB', 'FK', 'GI', 'GG', 'IM', 'JE', 'SH'],
-		supportInternationalisationId: 'uk',
+		i18nId: 'uk',
 	},
 	UnitedStates: {
 		name: 'United States',
 		currency: 'USD',
 		countries: ['US'],
-		supportInternationalisationId: 'us',
+		i18nId: 'us',
 	},
 	AUDCountries: {
 		name: 'Australia',
 		currency: 'AUD',
 		countries: ['AU', 'KI', 'NR', 'NF', 'TV'],
-		supportInternationalisationId: 'au',
+		i18nId: 'au',
 	},
 	EURCountries: {
 		name: 'Europe',
@@ -136,7 +128,7 @@ const countryGroups: CountryGroups = {
 			'UA',
 			'MK',
 		],
-		supportInternationalisationId: 'eu',
+		i18nId: 'eu',
 	},
 	International: {
 		name: 'International',
@@ -315,19 +307,19 @@ const countryGroups: CountryGroups = {
 			'ZM',
 			'ZW',
 		],
-		supportInternationalisationId: 'int',
+		i18nId: 'int',
 	},
 	NZDCountries: {
 		name: 'New Zealand',
 		currency: 'NZD',
 		countries: ['NZ', 'CK'],
-		supportInternationalisationId: 'nz',
+		i18nId: 'nz',
 	},
 	Canada: {
 		name: 'Canada',
 		currency: 'CAD',
 		countries: ['CA'],
-		supportInternationalisationId: 'ca',
+		i18nId: 'ca',
 	},
 };
 

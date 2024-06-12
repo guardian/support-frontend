@@ -77,7 +77,7 @@ function internationalisationID(
 ): string | null {
 	if (countryGroupId != null) {
 		const group = countryGroups[countryGroupId];
-		return group.supportInternationalisationId;
+		return group.i18nId;
 	}
 
 	return null;

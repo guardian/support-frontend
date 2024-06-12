@@ -85,8 +85,7 @@ import {
 } from 'helpers/tracking/acquisitions';
 import { trackComponentClick } from 'helpers/tracking/behaviour';
 import { getUser, isTestUser as isTestUserFunc } from 'helpers/user/user';
-import type { GeoId } from 'pages/geoIdConfig';
-import { getGeoIdConfig } from 'pages/geoIdConfig';
+import { getI18nConfig, type I18nId } from 'pages/i18nConfig';
 import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkoutDivider';
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
@@ -216,7 +215,7 @@ const checkedRadioLabelColour = css`
  */
 const processPayment = async (
 	statusResponse: StatusResponse,
-	geoId: GeoId,
+	i18nId: I18nId,
 ): Promise<
 	{ status: 'success' } | { status: 'failure'; failureReason?: ErrorReason }
 > => {
@@ -235,7 +234,7 @@ const processPayment = async (
 				})
 					.then((response) => response.json())
 					.then((json) => {
-						resolve(processPayment(json as StatusResponse, geoId));
+						resolve(processPayment(json as StatusResponse, i18nId));
 					});
 			}, 1000);
 		}
@@ -280,12 +279,12 @@ function preventDefaultValidityMessage(
 }
 
 type ChangeButtonProps = {
-	geoId: GeoId;
+	i18nId: I18nId;
 };
 
-function ChangeButton({ geoId }: ChangeButtonProps) {
+function ChangeButton({ i18nId }: ChangeButtonProps) {
 	return (
-		<a href={`/${geoId}/contribute`}>
+		<a href={`/${i18nId}/contribute`}>
 			<Button priority="tertiary" size="xsmall" role="link">
 				Change
 			</Button>
@@ -294,12 +293,12 @@ function ChangeButton({ geoId }: ChangeButtonProps) {
 }
 
 type Props = {
-	geoId: GeoId;
+	i18nId: I18nId;
 };
-function CheckoutComponent({ geoId }: Props) {
+function CheckoutComponent({ i18nId }: Props) {
 	/** we unset any previous orders that have been made */
 	unsetThankYouOrder();
-	const { currency, currencyKey, countryGroupId } = getGeoIdConfig(geoId);
+	const { currency, currencyKey, countryGroupId } = getI18nConfig(i18nId);
 	const productId = query.product in productCatalog ? query.product : undefined;
 	const product = productId ? productCatalog[query.product] : undefined;
 	const ratePlan = product?.ratePlans[query.ratePlan];
@@ -705,7 +704,7 @@ function CheckoutComponent({ geoId }: Props) {
 
 			const processPaymentResponse = await processPayment(
 				createSubscriptionResult,
-				geoId,
+				i18nId,
 			);
 			if (processPaymentResponse.status === 'success') {
 				const order = {
@@ -716,7 +715,7 @@ function CheckoutComponent({ geoId }: Props) {
 					paymentMethod: paymentMethod,
 				};
 				setThankYouOrder(order);
-				window.location.href = `/${geoId}/thank-you`;
+				window.location.href = `/${i18nId}/thank-you`;
 			} else {
 				// TODO - error handling
 				console.error(
@@ -797,7 +796,7 @@ function CheckoutComponent({ geoId }: Props) {
 											: 'ONE_OFF',
 										query.product === 'SupporterPlus',
 									)}
-									headerButton={<ChangeButton geoId={geoId} />}
+									headerButton={<ChangeButton i18nId={i18nId} />}
 								/>
 							</BoxContents>
 						</Box>
@@ -1503,8 +1502,8 @@ function CheckoutComponent({ geoId }: Props) {
 	);
 }
 
-export function Checkout({ geoId }: Props) {
-	const { currencyKey } = getGeoIdConfig(geoId);
+export function Checkout({ i18nId }: Props) {
+	const { currencyKey } = getI18nConfig(i18nId);
 	const stripePublicKey = getStripeKey(
 		// TODO - ONE_OFF support - This will need to be ONE_OFF when we support it
 		'REGULAR',
@@ -1515,7 +1514,7 @@ export function Checkout({ geoId }: Props) {
 
 	return (
 		<StripeElements key={stripePublicKey} stripeKey={stripePublicKey}>
-			<CheckoutComponent geoId={geoId} />
+			<CheckoutComponent i18nId={i18nId} />
 		</StripeElements>
 	);
 }

@@ -55,7 +55,7 @@ export function SupporterPlusCheckout({
 	const { countryGroupId, countryId, currencyId } = useContributionsSelector(
 		(state) => state.common.internationalisation,
 	);
-	const { supportInternationalisationId } = countryGroups[countryGroupId];
+	const { i18nId } = countryGroups[countryGroupId];
 	const contributionType = useContributionsSelector(getContributionType);
 	const amount = useContributionsSelector(getUserSelectedAmount);
 	const amountBeforeAmendments = useContributionsSelector(
@@ -73,12 +73,7 @@ export function SupporterPlusCheckout({
 	const showPriceCards = inThreeTier && contributionType === 'ONE_OFF';
 	const product = isSupporterPlus ? 'SupporterPlus' : 'Contribution';
 
-	useAbandonedBasketCookie(
-		product,
-		amount,
-		contributionType,
-		supportInternationalisationId,
-	);
+	useAbandonedBasketCookie(product, amount, contributionType, i18nId);
 
 	const changeButton = (
 		<Button
@@ -94,7 +89,7 @@ export function SupporterPlusCheckout({
 					}),
 				);
 				dispatch(resetValidation());
-				const destination = `/${supportInternationalisationId}/contribute`;
+				const destination = `/${i18nId}/contribute`;
 				navigateWithPageView(navigate, destination, abParticipations);
 			}}
 		>

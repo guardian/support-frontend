@@ -199,14 +199,14 @@ describe('getCountryGroup', () => {
 			countries: ['GB', 'FK', 'GI', 'GG', 'IM', 'JE', 'SH'],
 			currency: 'GBP',
 			name: 'United Kingdom',
-			supportInternationalisationId: 'uk',
+			i18nId: 'uk',
 		});
 
 		expect(getCountryGroup('CA')).toEqual({
 			countries: ['CA'],
 			currency: 'CAD',
 			name: 'Canada',
-			supportInternationalisationId: 'ca',
+			i18nId: 'ca',
 		});
 	});
 });

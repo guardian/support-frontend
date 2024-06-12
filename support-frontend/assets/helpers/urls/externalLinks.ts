@@ -88,7 +88,7 @@ function getDigitalCheckout(
 function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
 	const groupFromId = countryGroups[cgId];
 
-	switch (groupFromId.supportInternationalisationId.toLowerCase()) {
+	switch (groupFromId.i18nId.toLowerCase()) {
 		case 'uk':
 			return 'gb';
 
@@ -99,7 +99,7 @@ function convertCountryGroupIdToAppStoreCountryCode(cgId: CountryGroupId) {
 			return 'us';
 
 		default:
-			return groupFromId.supportInternationalisationId.toLowerCase();
+			return groupFromId.i18nId.toLowerCase();
 	}
 }
 
