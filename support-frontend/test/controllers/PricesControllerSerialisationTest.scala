@@ -9,7 +9,7 @@ import com.gu.support.promotions.{
   Issue,
 }
 import controllers.PricesController.{CountryGroupPriceData, Prices, ProductPriceData, RatePlanPriceData}
-import org.joda.time.Days
+import org.joda.time.{DateTime, Days}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import services.pricing.{PriceSummary, PromotionSummary}
@@ -30,6 +30,8 @@ class PricesControllerSerialisationTest extends AnyFlatSpec with Matchers {
       Some(FreeTrialBenefit(Days.SEVEN)),
       None,
       Some(IntroductoryPriceBenefit(0.5, 3, Issue)),
+      None,
+      new DateTime("2020-01-01"),
       None,
     )
     val priceSummary = PriceSummary(BigDecimal(1.2), Some(50), Currency.GBP, false, List(promotionSummary))
