@@ -338,7 +338,22 @@ function CheckoutComponent({ geoId }: Props) {
 	 */
 	let productFields: RegularPaymentRequest['product'];
 
-	if (productId === 'Contribution') {
+	if (productId === 'TierThree') {
+		productFields = {
+			productType: 'TierThree',
+			currency: currencyKey,
+			billingPeriod: ratePlanDescription.billingPeriod,
+			fulfilmentOptions:
+				query.ratePlan === 'DomesticMonthly' ||
+				query.ratePlan === 'DomesticAnnual'
+					? 'Domestic'
+					: query.ratePlan === 'RestOfWorldMonthly' ||
+					  query.ratePlan === 'RestOfWorldAnnual'
+					? 'RestOfWorld'
+					: 'Domestic',
+			amount: price,
+		};
+	} else if (productId === 'Contribution') {
 		productFields = {
 			productType: 'Contribution',
 			currency: currencyKey,
@@ -350,14 +365,6 @@ function CheckoutComponent({ geoId }: Props) {
 			productType: 'SupporterPlus',
 			currency: currencyKey,
 			billingPeriod: ratePlanDescription.billingPeriod,
-			fulfilmentOptions:
-				query.ratePlan === 'GuardianWeeklyDomesticMonthly' ||
-				query.ratePlan === 'GuardianWeeklyDomesticAnnual'
-					? 'Domestic'
-					: query.ratePlan === 'GuardianWeeklyRestOfWorldMonthly' ||
-					  query.ratePlan === 'GuardianWeeklyRestOfWorldAnnual'
-					? 'RestOfWorld'
-					: undefined,
 			amount: price,
 		};
 	} else if (productId === 'GuardianWeeklyDomestic') {

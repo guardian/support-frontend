@@ -20,6 +20,10 @@ export type ProductDescription = {
 };
 
 export const productCatalogDescription: Record<string, ProductDescription> = {
+	/**
+	 * We need `SupporterPlusWithGuardianWeekly` for the the landing page while we migrate
+	 * away from the hacked TierThree product to the actual TierThree product below.
+	 */
 	SupporterPlusWithGuardianWeekly: {
 		label: 'Digital + print',
 		benefitsSummary: [
@@ -51,6 +55,39 @@ export const productCatalogDescription: Record<string, ProductDescription> = {
 			},
 		},
 	},
+
+	TierThree: {
+		label: 'Digital + print',
+		benefitsSummary: [
+			'The rewards from ',
+			{ strong: true, copy: 'All-access digital' },
+		],
+		benefits: [
+			{
+				copy: 'Guardian Weekly print magazine delivered to your door every week  ',
+				tooltip: `Guardian Weekly is a beautifully concise magazine featuring a handpicked selection of in-depth articles, global news, long reads, opinion and more. Delivered to you every week, wherever you are in the world.`,
+			},
+		],
+		ratePlans: {
+			DomesticMonthly: {
+				billingPeriod: 'Monthly',
+				deliverableTo: gwDeliverableCountries,
+			},
+			DomesticAnnual: {
+				billingPeriod: 'Annual',
+				deliverableTo: gwDeliverableCountries,
+			},
+			RestOfWorldMonthly: {
+				billingPeriod: 'Monthly',
+				deliverableTo: gwDeliverableCountries,
+			},
+			RestOfWorldAnnual: {
+				billingPeriod: 'Annual',
+				deliverableTo: gwDeliverableCountries,
+			},
+		},
+	},
+
 	DigitalSubscription: {
 		label: 'The Guardian Digital Edition',
 		benefits: [
