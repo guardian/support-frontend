@@ -192,8 +192,7 @@ function regularPaymentRequestFromAuthorisation(
 	state: ContributionsState,
 ): RegularPaymentRequest {
 	const { actionHistory } = state.debug;
-	const { billingCountry, billingState, postCode } =
-		getBillingCountryAndState(state);
+	const { billingCountry, billingState } = getBillingCountryAndState(state);
 	const recaptchaToken = state.page.checkoutForm.recaptcha.token;
 	const contributionType = getContributionType(state);
 
@@ -221,7 +220,7 @@ function regularPaymentRequestFromAuthorisation(
 				? billingState
 				: null,
 			// required Zuora field if country is US or CA
-			postCode: billingCountry === 'US' ? postCode : null,
+			postCode: null,
 			// required go cardless field
 			country: billingCountry, // required Zuora field
 		},
