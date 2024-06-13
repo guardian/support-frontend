@@ -1,20 +1,9 @@
 package com.gu.support.workers.lambdas
 
 import com.amazonaws.services.lambda.runtime.Context
-import com.gu.monitoring.SafeLogger
 import com.gu.salesforce.Salesforce.SalesforceContactRecords
 import com.gu.services.{ServiceProvider, Services}
 import com.gu.support.redemptions.RedemptionData
-import com.gu.support.workers.{
-  Contribution,
-  DigitalPack,
-  GuardianWeekly,
-  Paper,
-  PaymentMethod,
-  RequestInfo,
-  SalesforceContactRecord,
-  SupporterPlus,
-}
 import com.gu.support.workers.exceptions.SalesforceException
 import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   ContributionState,
@@ -24,8 +13,10 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   GuardianWeeklyState,
   PaperState,
   SupporterPlusState,
+  TierThreeState,
 }
 import com.gu.support.workers.states.{CreateSalesforceContactState, CreateZuoraSubscriptionState}
+import com.gu.support.workers._
 import com.gu.support.zuora.api.ReaderType
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -70,6 +61,8 @@ class NextState(state: CreateSalesforceContactState) {
         toNextContribution(salesforceContactRecords, product, purchase)
       case (product: SupporterPlus, Purchase(purchase)) =>
         toNextSupporterPlus(salesforceContactRecords, product, purchase)
+      case (product: TierThree, Purchase(purchase)) =>
+        toNextTierThree(salesforceContactRecords, product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Direct =>
         toNextDSDirect(salesforceContactRecords.buyer, product, purchase)
       case (product: DigitalPack, Purchase(purchase)) if product.readerType == ReaderType.Gift =>
@@ -125,6 +118,31 @@ class NextState(state: CreateSalesforceContactState) {
       analyticsInfo,
       None,
       None,
+      state.csrUsername,
+      state.salesforceCaseId,
+      acquisitionData,
+    )
+
+  def toNextTierThree(
+      salesforceContactRecords: SalesforceContactRecords,
+      product: TierThree,
+      purchase: PaymentMethod,
+  ): CreateZuoraSubscriptionState =
+    CreateZuoraSubscriptionState(
+      TierThreeState(
+        user,
+        product,
+        purchase,
+        firstDeliveryDate.get,
+        promoCode,
+        salesforceContactRecords.buyer,
+      ),
+      requestId,
+      user,
+      product,
+      analyticsInfo,
+      firstDeliveryDate,
+      promoCode,
       state.csrUsername,
       state.salesforceCaseId,
       acquisitionData,
