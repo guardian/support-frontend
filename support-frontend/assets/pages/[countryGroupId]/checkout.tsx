@@ -91,6 +91,8 @@ import { CheckoutDivider } from 'pages/supporter-plus-landing/components/checkou
 import { GuardianTsAndCs } from 'pages/supporter-plus-landing/components/guardianTsAndCs';
 import { PatronsMessage } from 'pages/supporter-plus-landing/components/patronsMessage';
 import { PaymentTsAndCs } from 'pages/supporter-plus-landing/components/paymentTsAndCs';
+import { formatMachineDate } from '../../helpers/utilities/dateConversions';
+import { getWeeklyDays } from '../weekly-subscription-checkout/helpers/deliveryDays';
 import { setThankYouOrder, unsetThankYouOrder } from './thank-you';
 
 /** App config - this is config that should persist throughout the app */
@@ -685,13 +687,16 @@ function CheckoutComponent({ geoId }: Props) {
 			const supportAbTests = getSupportAbTests(
 				abTestInit({ countryId, countryGroupId }),
 			);
-			const createSupportWorkersRequest: Omit<
-				RegularPaymentRequest,
-				'firstDeliveryDate'
-			> = {
+			const firstDeliveryDate =
+				productId === 'TierThree'
+					? formatMachineDate(getWeeklyDays()[0])
+					: null;
+
+			const createSupportWorkersRequest: RegularPaymentRequest = {
 				...personalData,
 				billingAddress,
 				deliveryAddress,
+				firstDeliveryDate,
 				paymentFields,
 				ophanIds,
 				referrerAcquisitionData,
