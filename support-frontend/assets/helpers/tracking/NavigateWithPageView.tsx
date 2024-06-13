@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import type { Participations } from 'helpers/abTests/abtest';
 import {
@@ -26,15 +27,14 @@ function NavigateWithPageView({
 	// store referer data to be read and transmitted on manual pageView
 	setReferrerDataInLocalStorage(refererData);
 
-	// manual pageView
-	pageView(
-		`${document.location.origin}${destination}}`,
-		document.location.href,
-	);
+	useEffect(() => {
+		// manual pageView
+		pageView(document.location.href, referrerUrl);
 
-	if (participations) {
-		trackAbTests(participations);
-	}
+		if (participations) {
+			trackAbTests(participations);
+		}
+	});
 
 	return <Navigate to={destination} replace />;
 }
