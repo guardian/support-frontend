@@ -75,6 +75,7 @@ function ThreeTierRedirectOneOffToCheckout({
 			destination={`/${countryId}/contribute/checkout${`${
 				urlParamsString ? `?${urlParamsString}` : ''
 			}${window.location.hash}`}`}
+			participations={commonState.abParticipations}
 		/>
 	) : (
 		<>{children}</>

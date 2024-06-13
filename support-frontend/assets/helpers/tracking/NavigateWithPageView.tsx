@@ -1,8 +1,11 @@
-import * as ophan from 'ophan';
 import { Navigate } from 'react-router-dom';
 import type { Participations } from 'helpers/abTests/abtest';
-import { getAbsoluteURL } from 'helpers/urls/url';
-import { pageView, setReferrerDataInLocalStorage, trackAbTests } from './ophan';
+import {
+	getPageViewId,
+	pageView,
+	setReferrerDataInLocalStorage,
+	trackAbTests,
+} from './ophan';
 
 type NavigateWithPageViewProps = {
 	destination: string;
@@ -13,16 +16,21 @@ function NavigateWithPageView({
 	destination,
 	participations,
 }: NavigateWithPageViewProps) {
+	const referrerUrl = document.location.href;
+
 	const refererData = {
-		referrerUrl: document.location.href,
-		referrerPageviewId: ophan.viewId,
+		referrerUrl,
+		referrerPageviewId: getPageViewId(),
 	};
 
 	// store referer data to be read and transmitted on manual pageView
 	setReferrerDataInLocalStorage(refererData);
 
 	// manual pageView
-	pageView(document.location.href, getAbsoluteURL(destination));
+	pageView(
+		`${document.location.origin}${destination}}`,
+		document.location.href,
+	);
 
 	if (participations) {
 		trackAbTests(participations);

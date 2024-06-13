@@ -4,7 +4,6 @@ import type { NavigateFunction, NavigateOptions } from 'react-router';
 import type { Participations } from 'helpers/abTests/abtest';
 import { getLocal, setLocal } from 'helpers/storage/storage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
-import { getAbsoluteURL } from 'helpers/urls/url';
 
 // ----- Types ----- //
 // These are to match Thrift definitions which can be found here:
@@ -141,8 +140,10 @@ const navigateWithPageView = (
 	participations?: Participations,
 	options?: NavigateOptions,
 ): void => {
+	const referrerUrl = document.location.href;
+
 	const refererData = {
-		referrerUrl: document.location.href,
+		referrerUrl,
 		referrerPageviewId: getPageViewId(),
 	};
 
@@ -152,7 +153,7 @@ const navigateWithPageView = (
 	navigate(destination, options);
 
 	// manual pageView
-	pageView(document.location.href, getAbsoluteURL(destination));
+	pageView(document.location.href, referrerUrl);
 
 	if (participations) {
 		trackAbTests(participations);
@@ -165,4 +166,5 @@ export {
 	trackAbTests,
 	setReferrerDataInLocalStorage,
 	navigateWithPageView,
+	getPageViewId,
 };
