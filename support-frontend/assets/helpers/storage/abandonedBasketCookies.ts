@@ -30,6 +30,7 @@ export function useAbandonedBasketCookie(
 	amount: number,
 	billingPeriod: string,
 	region: string,
+	inAbandonedBasketVariant: boolean,
 ) {
 	const abandonedBasket = {
 		product,
@@ -38,11 +39,13 @@ export function useAbandonedBasketCookie(
 		region,
 	};
 	useEffect(() => {
-		cookie.set(
-			ABANDONED_BASKET_COOKIE_NAME,
-			JSON.stringify(abandonedBasket),
-			COOKIE_EXPIRY_DAYS,
-		);
+		if (inAbandonedBasketVariant) {
+			cookie.set(
+				ABANDONED_BASKET_COOKIE_NAME,
+				JSON.stringify(abandonedBasket),
+				COOKIE_EXPIRY_DAYS,
+			);
+		}
 	}, []);
 }
 

@@ -78,6 +78,7 @@ export function SupporterPlusCheckout({
 		amount,
 		contributionType,
 		supportInternationalisationId,
+		abParticipations.abandonedBasket === 'variant',
 	);
 
 	const changeButton = (
