@@ -51,7 +51,9 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 				page,
 				context,
 				baseURL,
-				`/${testDetails.country?.toLowerCase() || 'uk'}/contribute`,
+				`/${
+					testDetails.country?.toLowerCase() || 'uk'
+				}/contribute#ab-abandonedBasket=variant`, // remove once AB test is over
 			);
 			await page.getByRole('tab').getByText(testDetails.frequency).click();
 			await page
