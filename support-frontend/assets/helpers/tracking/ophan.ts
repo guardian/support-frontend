@@ -1,7 +1,6 @@
 // ----- Imports ----- //
 import * as ophan from 'ophan';
-import type { NavigateFunction } from 'react-router';
-import type { NavigateOptions } from 'react-router-dom';
+import type { NavigateFunction, NavigateOptions } from 'react-router';
 import type { Participations } from 'helpers/abTests/abtest';
 import { getLocal, setLocal } from 'helpers/storage/storage';
 import type { ReferrerAcquisitionData } from 'helpers/tracking/acquisitions';
