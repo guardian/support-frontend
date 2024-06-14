@@ -1498,7 +1498,6 @@ function CheckoutComponent({ geoId }: Props) {
 										</div>
 									)}
 									<PaymentTsAndCs
-										mobileTheme={'light'}
 										countryGroupId={countryGroupId}
 										contributionType={
 											productFields.billingPeriod === 'Monthly'
