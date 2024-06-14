@@ -25,18 +25,14 @@ function getZipCodeErrors(state: ContributionsState): ErrorCollection {
 		paymentMethod.name === 'Stripe' &&
 		(paymentMethod.stripePaymentMethod === 'StripeApplePay' ||
 			paymentMethod.stripePaymentMethod === 'StripePaymentRequestButton');
-	console.log('TEST getZipCodeErrors.paymentMethod', paymentMethod);
-	console.log('TEST getZipCodeErrors.shouldShowZipCode', shouldShowZipCode);
-	console.log('TEST getZipCodeErrors.isApplePayGooglePay', isApplePayGooglePay);
+
 	if (shouldShowZipCode && !isApplePayGooglePay) {
-		console.log('TEST getZipCodeErrors.APPLY ZipCode Check');
 		const zipCode =
 			state.page.checkoutForm.billingAddress.fields.errorObject?.postCode;
 		return {
 			zipCode,
 		};
 	}
-	console.log('TEST getZipCodeErrors.DONOT ZipCode Check');
 	return {};
 }
 
