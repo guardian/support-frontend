@@ -42,6 +42,37 @@ sealed trait Product {
       .distinct
 }
 
+case object TierThree extends Product {
+  private def productRatePlan(
+      id: String,
+      billingPeriod: BillingPeriod,
+      fulfilmentOptions: FulfilmentOptions = NoFulfilmentOptions,
+  ) =
+    ProductRatePlan(
+      id,
+      billingPeriod,
+      fulfilmentOptions,
+      NoProductOptions,
+      s"Tier Three ${billingPeriod.getClass.getSimpleName}",
+    )
+
+  lazy val ratePlans: Map[TouchPointEnvironment, List[ProductRatePlan[SupporterPlus.type]]] =
+    Map(
+      PROD -> List(
+        productRatePlan("8a1299788ff2ec100190025fccc32bb1", Monthly, Domestic),
+        productRatePlan("8a1288a38ff2af980190025b32591ccc", Annual, Domestic),
+        productRatePlan("8a128ab18ff2af9301900255d77979ac", Monthly, RestOfWorld),
+        productRatePlan("8a1299788ff2ec100190024d1e3b1a09", Annual, RestOfWorld),
+      ),
+      CODE -> List(
+        productRatePlan("8ad097b48ff26452019001cebac92376", Monthly, Domestic),
+        productRatePlan("8ad081dd8ff24a9a019001d95e4e3574", Annual, Domestic),
+        productRatePlan("8ad081dd8ff24a9a019001df2ce83657", Monthly, RestOfWorld),
+        productRatePlan("8ad097b48ff26452019001e65bbf2ca8", Annual, RestOfWorld),
+      ),
+    )
+}
+
 case object SupporterPlus extends Product {
   private def productRatePlan(
       id: String,
@@ -61,18 +92,10 @@ case object SupporterPlus extends Product {
       PROD -> List(
         productRatePlan("8a128ed885fc6ded018602296ace3eb8", Monthly),
         productRatePlan("8a128ed885fc6ded01860228f77e3d5a", Annual),
-        productRatePlan("8a1288a38f518d01018f529a04443172", Monthly, Domestic),
-        productRatePlan("8a1282048f518d08018f529ead0f3d91", Annual, Domestic),
-        productRatePlan("8a1292628f51a923018f52a324e45710", Annual, RestOfWorld),
-        productRatePlan("8a1281f38f518d11018f52a599806a65", Monthly, RestOfWorld),
       ),
       CODE -> List(
         productRatePlan("8ad08cbd8586721c01858804e3275376", Monthly),
         productRatePlan("8ad08e1a8586721801858805663f6fab", Annual),
-        productRatePlan("8ad081dd8ef57784018ef6e159224bfa", Monthly, Domestic),
-        productRatePlan("8ad097b48f006681018f059b755e0140", Annual, Domestic),
-        productRatePlan("8ad097b48f006681018f05a0496e01f4", Annual, RestOfWorld),
-        productRatePlan("8ad097b48f006681018f05a2c0fb0227", Monthly, RestOfWorld),
       ),
     )
 }

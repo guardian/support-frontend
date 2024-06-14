@@ -102,6 +102,10 @@ object CheckoutValidationRules {
       case d: DigitalPack => DigitalPackValidation.passes(createSupportWorkersRequest, d)
       case p: Paper => PaperValidation.passes(createSupportWorkersRequest, p.fulfilmentOptions)
       case _: GuardianWeekly => GuardianWeeklyValidation.passes(createSupportWorkersRequest)
+      case _: TierThree =>
+        GuardianWeeklyValidation.passes(
+          createSupportWorkersRequest,
+        ) // Tier three has the same fields as Guardian Weekly
       case _: Contribution => PaidProductValidation.passes(createSupportWorkersRequest)
     }) match {
       case Invalid(message) =>
@@ -188,7 +192,7 @@ object SimpleCheckoutFormValidation {
     "^[\\u0000-\\uFFFF]*$".r
       .matches(string)
       .otherwise(
-        s"""${name} contains characters which require more than 3 bytes to represent
+        s"""$name contains characters which require more than 3 bytes to represent
          |in UTF-8. These characters will break Zuora.""".stripMargin,
       )
   }
@@ -255,7 +259,7 @@ object AddressAndCurrencyValidationRules {
   //     hasValidPostcodeLength checks if the length of postCodeIsShortEnoughForSalesforce(must be less than or equal to 20 characters)
   def hasValidPostcodeLength(postcodeFromRequest: Option[String], addressType: String): Result = {
     val validPostCode = postcodeFromRequest match {
-      case Some(postCode) if (postCode.length > 20) =>
+      case Some(postCode) if postCode.length > 20 =>
         Invalid(s"$addressType PostCode length must not be greater than 20 characters")
       case _ => Valid
     }
@@ -281,7 +285,7 @@ object AddressAndCurrencyValidationRules {
         countryGroup.currency :: countryGroup.additionalCurrencies
       }
     isValid.otherwise(
-      s"currency $currencyFromRequest is not supported for country $countryFromRequest, can only have ${validCurrenciesForCountry}",
+      s"currency $currencyFromRequest is not supported for country $countryFromRequest, can only have $validCurrenciesForCountry",
     )
   }
 

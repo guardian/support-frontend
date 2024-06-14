@@ -6,6 +6,7 @@ object ExecutionTypeDiscriminators {
 
   val contribution = "Contribution"
   val supporterPlus = "SupporterPlus"
+  val tierThree = "TierThree"
   val digitalSubscriptionDirectPurchase = "DigitalSubscriptionDirectPurchase"
   val digitalSubscriptionGiftPurchase = "DigitalSubscriptionGiftPurchase"
   val digitalSubscriptionGiftRedemption = "DigitalSubscriptionGiftRedemption"

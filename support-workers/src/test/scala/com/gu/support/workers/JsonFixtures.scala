@@ -20,6 +20,7 @@ import com.gu.support.workers.states.CreateZuoraSubscriptionProductState.{
   GuardianWeeklyState,
   PaperState,
   SupporterPlusState,
+  TierThreeState,
 }
 import com.gu.support.zuora.api.StripeGatewayDefault
 import com.gu.zuora.Fixtures.deliveryAgentId
@@ -472,13 +473,12 @@ object JsonFixtures {
       amount: BigDecimal,
       currency: Currency,
       billingPeriod: BillingPeriod,
-      fulfilmentOptions: Option[FulfilmentOptions] = None,
       country: Country = UK,
   ): String =
     CreateZuoraSubscriptionState(
       SupporterPlusState(
         Country.UK,
-        SupporterPlus(amount, currency, billingPeriod, fulfilmentOptions),
+        SupporterPlus(amount, currency, billingPeriod),
         stripePaymentMethodObj,
         None,
         salesforceContact,
@@ -492,6 +492,32 @@ object JsonFixtures {
       None,
       None,
       None,
+    ).asJson.spaces2
+
+  def createTierThreeZuoraSubscriptionJson(
+      currency: Currency,
+      billingPeriod: BillingPeriod,
+      fulfilmentOptions: FulfilmentOptions,
+      country: Country = UK,
+  ): String =
+    CreateZuoraSubscriptionState(
+      productSpecificState = TierThreeState(
+        userJsonWithDeliveryAddress,
+        TierThree(currency, billingPeriod, fulfilmentOptions),
+        stripePaymentMethodObj,
+        LocalDate.now(DateTimeZone.UTC).plusDays(10),
+        None,
+        salesforceContact,
+      ),
+      requestId = UUID.randomUUID(),
+      user = user("9999998", country),
+      product = TierThree(currency, Monthly, fulfilmentOptions),
+      analyticsInfo = AnalyticsInfo(isGiftPurchase = false, Stripe),
+      firstDeliveryDate = None,
+      promoCode = None,
+      csrUsername = None,
+      salesforceCaseId = None,
+      acquisitionData = None,
     ).asJson.spaces2
 
   val createDigiPackZuoraSubscriptionJson =
