@@ -17,6 +17,28 @@ export function getStateOrProvinceError(
 	return {};
 }
 
+function getZipCodeErrors(state: ContributionsState): ErrorCollection {
+	const { internationalisation } = state.common;
+	const { paymentMethod } = state.page.checkoutForm.payment;
+	const shouldShowZipCode = internationalisation.countryId === 'US';
+	const isApplePayGooglePay =
+		paymentMethod.name === 'Stripe' &&
+		(paymentMethod.stripePaymentMethod === 'StripeApplePay' ||
+			paymentMethod.stripePaymentMethod === 'StripePaymentRequestButton');
+	console.log('TEST getZipCodeErrors.paymentMethod', paymentMethod);
+	console.log('TEST getZipCodeErrors.shouldShowZipCode', shouldShowZipCode);
+	console.log('TEST getZipCodeErrors.isApplePayGooglePay', isApplePayGooglePay);
+	if (isApplePayGooglePay && shouldShowZipCode) {
+		const zipCode =
+			state.page.checkoutForm.billingAddress.fields.errorObject?.postCode;
+		return {
+			zipCode,
+		};
+	}
+
+	return {};
+}
+
 export function getPersonalDetailsErrors(
 	state: ContributionsState,
 ): ErrorCollection {
@@ -26,11 +48,13 @@ export function getPersonalDetailsErrors(
 		state.page.checkoutForm.personalDetails.errors ?? {};
 
 	const stateOrProvinceErrors = getStateOrProvinceError(state);
+	const zipCodeErrors = getZipCodeErrors(state);
 
 	if (contributionType === 'ONE_OFF') {
 		return {
 			email,
 			...stateOrProvinceErrors,
+			...zipCodeErrors,
 		};
 	}
 	return {
@@ -38,5 +62,6 @@ export function getPersonalDetailsErrors(
 		firstName,
 		lastName,
 		...stateOrProvinceErrors,
+		...zipCodeErrors,
 	};
 }
