@@ -167,9 +167,26 @@ export function SupporterPlusCheckoutScaffold({
 
 	useEffect(() => {
 		if (paymentComplete) {
-			navigateWithPageView(navigate, thankYouRoute, abParticipations, {
-				replace: true,
-			});
+			const urlParams = new URLSearchParams(window.location.search);
+			const promoCode = urlParams.get('promoCode');
+			const product = urlParams.get('product');
+
+			const thankYouUrlSearchParams = new URLSearchParams();
+			if (promoCode) {
+				thankYouUrlSearchParams.set('promoCode', promoCode);
+			}
+			if (product) {
+				thankYouUrlSearchParams.set('product', product);
+			}
+			const thankYouRouteWithSearchParams = `${thankYouRoute}?${thankYouUrlSearchParams.toString()}`;
+			navigateWithPageView(
+				navigate,
+				thankYouRouteWithSearchParams,
+				abParticipations,
+				{
+					replace: true,
+				},
+			);
 		}
 	}, [paymentComplete]);
 

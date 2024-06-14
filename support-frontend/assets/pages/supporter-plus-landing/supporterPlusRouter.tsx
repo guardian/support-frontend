@@ -38,12 +38,7 @@ const store = initReduxForContributions();
 
 setUpRedux(store);
 
-const urlParams = new URLSearchParams(window.location.search);
-const promoCode = urlParams.get('promoCode');
-const thankYouRouteParams = promoCode
-	? `?${new URLSearchParams({ promoCode }).toString()}`
-	: '';
-const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou${thankYouRouteParams}`;
+const thankYouRoute = `/${countryGroups[countryGroupId].supportInternationalisationId}/thankyou`;
 const countryIds = Object.values(countryGroups).map(
 	(group) => group.supportInternationalisationId,
 );
