@@ -20,6 +20,7 @@ import {
 	textInputThemeDefault,
 } from '@guardian/source/react-components';
 import {
+	ErrorSummary,
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
@@ -55,7 +56,10 @@ import {
 } from 'helpers/abTests/abtest';
 import { isContributionsOnlyCountry } from 'helpers/contributions';
 import { simpleFormatAmount } from 'helpers/forms/checkouts';
-import type { ErrorReason } from 'helpers/forms/errorReasons';
+import {
+	appropriateErrorMessage,
+	type ErrorReason,
+} from 'helpers/forms/errorReasons';
 import { loadPayPalRecurring } from 'helpers/forms/paymentIntegrations/payPalRecurringCheckout';
 import type {
 	RegularPaymentRequest,
@@ -570,6 +574,11 @@ function CheckoutComponent({ geoId }: Props) {
 		useState(false);
 
 	const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+	/** General error that can occur via fetch validations */
+	const [errorMessage, setErrorMessage] = useState<string>();
+	const [errorContext, setErrorContext] = useState<string>();
+
 	const formOnSubmit = async (formData: FormData) => {
 		setIsProcessingPayment(true);
 		/**
@@ -646,6 +655,10 @@ function CheckoutComponent({ geoId }: Props) {
 			);
 
 			if (stripeIntentResult.error) {
+				setErrorMessage('There was an issue with your card details.');
+				setErrorContext(
+					appropriateErrorMessage(stripeIntentResult.error.decline_code ?? ''),
+				);
 				console.error(stripeIntentResult.error);
 			} else if (stripeIntentResult.setupIntent.payment_method) {
 				paymentFields = {
@@ -704,6 +717,8 @@ function CheckoutComponent({ geoId }: Props) {
 				supportAbTests,
 				debugInfo: '',
 			};
+			setErrorMessage(undefined);
+			setErrorContext(undefined);
 			const createSubscriptionResult = await fetch('/subscribe/create', {
 				method: 'POST',
 				body: JSON.stringify(createSupportWorkersRequest),
@@ -1471,6 +1486,17 @@ function CheckoutComponent({ geoId }: Props) {
 											</>
 										)}
 									</div>
+									{errorMessage && (
+										<div role="alert" data-qm-error>
+											<ErrorSummary
+												cssOverrides={css`
+													margin-bottom: ${space[6]}px;
+												`}
+												message={errorMessage}
+												context={errorContext}
+											/>
+										</div>
+									)}
 									<PaymentTsAndCs
 										mobileTheme={'light'}
 										countryGroupId={countryGroupId}
