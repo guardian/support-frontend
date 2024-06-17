@@ -253,7 +253,7 @@ export class PaymentApi extends GuStack {
         period: Duration.seconds(600),
       }),
       treatMissingData: TreatMissingData.BREACHING,
-      snsTopicName: "reader-revenue-24-7",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "NoStripePaymentsInThreeHours247Alarm", {
@@ -275,7 +275,7 @@ export class PaymentApi extends GuStack {
         period: Duration.seconds(900),
       }),
       treatMissingData: TreatMissingData.BREACHING,
-      snsTopicName: "reader-revenue-24-7",
+      snsTopicName: `alarms-handler-topic-${this.stage}`,
     });
 
     new GuAlarm(this, "NoPaypalPaymentsInOneHourAlarm", {
