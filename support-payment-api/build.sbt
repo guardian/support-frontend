@@ -47,7 +47,7 @@ libraryDependencies ++= Seq(
   logback, // add Play logging support
   jdbc,
   ws,
-  "com.lihaoyi" %% "pprint" % "0.8.1",
+  "com.lihaoyi" %% "pprint" % "0.9.0",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
 
   /** This is to satisfy `amazon-pay-java-sdk` dependencies as jaxb has been removed from Java 8 => Java 11.
@@ -61,7 +61,7 @@ libraryDependencies ++= Seq(
     *
     * But annoyingly we still get this error: `java.lang.NoClassDefFoundError: javax/xml/bind/JAXBException`
     */
-  "com.sun.xml.bind" % "jaxb-core" % "2.3.0.1",
+  "com.sun.xml.bind" % "jaxb-core" % "4.0.5",
   "javax.xml.bind" % "jaxb-api" % "2.3.1",
   "com.sun.xml.bind" % "jaxb-impl" % "2.3.1",
 )
