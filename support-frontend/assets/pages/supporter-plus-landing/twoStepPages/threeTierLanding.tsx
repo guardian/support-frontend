@@ -45,6 +45,7 @@ import {
 	supporterPlusWithGuardianWeeklyAnnualPromosV2,
 	supporterPlusWithGuardianWeeklyMonthlyPromos,
 	supporterPlusWithGuardianWeeklyMonthlyPromosV2,
+	supporterPlusWithGuardianWeeklyV2,
 } from 'helpers/productCatalog';
 import type { BillingPeriod } from 'helpers/productPrice/billingPeriods';
 import type { Promotion } from 'helpers/productPrice/promotions';
@@ -558,6 +559,11 @@ export function ThreeTierLanding(): JSX.Element {
 	 * Tier 3: SupporterPlus with Guardian Weekly
 	 * This product is hard-coded for now, but will become a new ratePlan on the SupporterPlus product
 	 */
+	const supporterPlusWithGuardianWeeklyRatePlan =
+		contributionType === 'ANNUAL'
+			? 'AnnualWithGuardianWeekly'
+			: 'MonthlyWithGuardianWeekly';
+
 	const isJuly2024PriceRise = abParticipations.july2024PriceRise === 'variant';
 	const tier3Promotion = isJuly2024PriceRise
 		? contributionType === 'ANNUAL'
@@ -566,19 +572,19 @@ export function ThreeTierLanding(): JSX.Element {
 		: contributionType === 'ANNUAL'
 		? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
 		: supporterPlusWithGuardianWeeklyMonthlyPromos[countryGroupId];
-	const supporterPlusWithGuardianWeeklyRatePlan =
-		contributionType === 'ANNUAL'
-			? 'AnnualWithGuardianWeekly'
-			: 'MonthlyWithGuardianWeekly';
+	const tier3Pricing = isJuly2024PriceRise
+		? supporterPlusWithGuardianWeeklyV2.ratePlans[
+				supporterPlusWithGuardianWeeklyRatePlan
+		  ].pricing[currencyId]
+		: supporterPlusWithGuardianWeekly.ratePlans[
+				supporterPlusWithGuardianWeeklyRatePlan
+		  ].pricing[currencyId];
+
 	const tier3UrlParams = new URLSearchParams({
 		promoCode: tier3Promotion.promoCode,
 		threeTierCreateSupporterPlusSubscription: 'true',
 		period: paymentFrequencyMap[contributionType],
 	});
-	const tier3Pricing =
-		supporterPlusWithGuardianWeekly.ratePlans[
-			supporterPlusWithGuardianWeeklyRatePlan
-		].pricing[currencyId];
 	const tier3CardHarcoded = {
 		productDescription:
 			productCatalogDescription.SupporterPlusWithGuardianWeekly,
