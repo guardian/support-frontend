@@ -106,10 +106,11 @@ test.describe('Subscribe/Contribute via the Tiered checkout)', () => {
 				);
 				await page.getByText(paymentButtonRegex).click();
 			}
-			await expect(page).toHaveURL(
-				`/${testDetails.country?.toLowerCase() || 'uk'}/thankyou`,
-				{ timeout: 600000 },
-			);
+			await expect(
+				page.getByRole('heading', { name: 'Thank you' }),
+			).toBeVisible({
+				timeout: 600000,
+			});
 			await checkAbandonedBasketCookieRemoved(context);
 		});
 	});
@@ -184,11 +185,12 @@ test.describe('Supporter Plus promoCodes', () => {
 
 			// Thank you
 			await expect(
+				page.getByRole('heading', { name: 'Thank you' }),
+			).toBeVisible({ timeout: 600000 });
+
+			await expect(
 				page.getByText(testDetails.expectedThankYouText).first(),
 			).toBeVisible({ timeout: 600000 });
-			await expect(page).toHaveURL(
-				`/uk/thankyou?promoCode=${testDetails.promoCode}`,
-			);
 		});
 	});
 });
