@@ -45,20 +45,37 @@ export function getPersonalDetailsErrors(
 		state.page.checkoutForm.personalDetails.errors ?? {};
 
 	const stateOrProvinceErrors = getStateOrProvinceError(state);
-	const zipCodeErrors = getZipCodeErrors(state);
 
-	if (contributionType === 'ONE_OFF') {
+	const usZipCodeMandatory =
+		state.common.abParticipations.usZipCodeMandatory === 'variant';
+	if (usZipCodeMandatory) {
+		const zipCodeErrors = getZipCodeErrors(state);
+		if (contributionType === 'ONE_OFF') {
+			return {
+				email,
+				...stateOrProvinceErrors,
+				...zipCodeErrors,
+			};
+		}
 		return {
 			email,
+			firstName,
+			lastName,
 			...stateOrProvinceErrors,
 			...zipCodeErrors,
 		};
+	} else {
+		if (contributionType === 'ONE_OFF') {
+			return {
+				email,
+				...stateOrProvinceErrors,
+			};
+		}
+		return {
+			email,
+			firstName,
+			lastName,
+			...stateOrProvinceErrors,
+		};
 	}
-	return {
-		email,
-		firstName,
-		lastName,
-		...stateOrProvinceErrors,
-		...zipCodeErrors,
-	};
 }
