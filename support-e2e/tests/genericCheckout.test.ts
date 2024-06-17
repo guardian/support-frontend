@@ -119,10 +119,9 @@ test.describe('Generic Checkout', () => {
 					.click();
 			}
 
-			await expect(page).toHaveURL(
-				`/${testDetails.country?.toLowerCase() || 'uk'}/thank-you`,
-				{ timeout: 600000 },
-			);
+			await expect(
+				page.getByRole('heading', { name: 'Thank you' }),
+			).toBeVisible({ timeout: 600000 });
 		});
 	});
 });

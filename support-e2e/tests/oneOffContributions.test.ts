@@ -50,7 +50,9 @@ test.describe('Sign up for a one-off contribution', () => {
 					fillInPayPalDetails(page);
 					break;
 			}
-			await expect(page).toHaveURL(/\/uk\/thankyou/);
+			await expect(
+				page.getByRole('heading', { name: 'Thank you' }),
+			).toBeVisible({ timeout: 600000 });
 		});
 	});
 });
