@@ -556,6 +556,8 @@ export function ThreeTierLanding(): JSX.Element {
 	 * Tier 3: SupporterPlus with Guardian Weekly
 	 * This product is hard-coded for now, but will become a new ratePlan on the SupporterPlus product
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- WIP
+	const isJuly2024PriceRise = abParticipations.july2024PriceRise === 'variant';
 	const tier3Promotion =
 		contributionType === 'ANNUAL'
 			? supporterPlusWithGuardianWeeklyAnnualPromos[countryGroupId]
