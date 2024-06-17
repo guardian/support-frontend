@@ -4,6 +4,7 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
 {
   "Metadata": {
     "gu:cdk:constructs": [
+      "GuStringParameter",
       "GuDistributionBucketParameter",
       "GuLambdaFunction",
       "GuLambdaErrorPercentageAlarm",
@@ -16,6 +17,10 @@ exports[`The BigqueryAcquisitionsPublisher stack matches the snapshot 1`] = `
       "Default": "/account/services/artifact.bucket",
       "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
       "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "MobileAccountId": {
+      "Description": "ID of the mobile aws account",
+      "Type": "String",
     },
   },
   "Resources": {
@@ -565,6 +570,83 @@ Logs are at https://eu-west-1.console.aws.amazon.com/cloudwatch/home?region=eu-w
       },
       "Type": "AWS::SQS::Queue",
       "UpdateReplacePolicy": "Delete",
+    },
+    "mobileeventbusputrole81016CF0": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "MobileAccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "RoleName": "support-cross-account-role-PROD",
+        "Tags": [
+          {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          {
+            "Key": "gu:repo",
+            "Value": "guardian/support-frontend",
+          },
+          {
+            "Key": "Stack",
+            "Value": "support",
+          },
+          {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mobileeventbusputroleDefaultPolicyB793C1C1": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "events:PutEvents",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "acquisitionsbusPROD768AFDE3",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "mobileeventbusputroleDefaultPolicyB793C1C1",
+        "Roles": [
+          {
+            "Ref": "mobileeventbusputrole81016CF0",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
   },
 }
