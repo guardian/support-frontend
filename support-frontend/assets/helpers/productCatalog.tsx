@@ -483,12 +483,12 @@ export const supporterPlusWithGuardianWeeklyV2 = {
 		MonthlyWithGuardianWeekly: {
 			id: '',
 			pricing: {
-				USD: 43,
-				NZD: 67,
-				EUR: 36.5,
-				GBP: 25,
-				CAD: 46,
-				AUD: 57,
+				USD: 86,
+				NZD: 134,
+				EUR: 73,
+				GBP: 50,
+				CAD: 92,
+				AUD: 114,
 			},
 			charges: {
 				Subscription: {
@@ -499,12 +499,12 @@ export const supporterPlusWithGuardianWeeklyV2 = {
 		AnnualWithGuardianWeekly: {
 			id: '',
 			pricing: {
-				USD: 480,
-				NZD: 760,
-				EUR: 413,
-				GBP: 275,
-				CAD: 516,
-				AUD: 640,
+				USD: 960,
+				NZD: 1520,
+				EUR: 826,
+				GBP: 550,
+				CAD: 1032,
+				AUD: 1280,
 			},
 			charges: {
 				Contribution: {
@@ -542,7 +542,7 @@ export const supporterPlusWithGuardianWeeklyAnnualPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_UK_ANNUAL_V2',
-		discountedPrice: 173,
+		discountedPrice: 346,
 		discount: {
 			amount: 37.09,
 			durationMonths: 12,
@@ -552,7 +552,7 @@ export const supporterPlusWithGuardianWeeklyAnnualPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_EU_ANNUAL_V2',
-		discountedPrice: 302,
+		discountedPrice: 604,
 		discount: {
 			amount: 26.88,
 			durationMonths: 12,
@@ -562,7 +562,7 @@ export const supporterPlusWithGuardianWeeklyAnnualPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_INT_ANNUAL_V2',
-		discountedPrice: 367,
+		discountedPrice: 734,
 		discount: {
 			amount: 28.88,
 			durationMonths: 12,
@@ -572,7 +572,7 @@ export const supporterPlusWithGuardianWeeklyAnnualPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_US_ANNUAL_V2',
-		discountedPrice: 378,
+		discountedPrice: 756,
 		discount: {
 			amount: 21.25,
 			durationMonths: 12,
@@ -582,7 +582,7 @@ export const supporterPlusWithGuardianWeeklyAnnualPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_CA_ANNUAL_V2',
-		discountedPrice: 378,
+		discountedPrice: 756,
 		discount: {
 			amount: 26.74,
 			durationMonths: 12,
@@ -592,7 +592,7 @@ export const supporterPlusWithGuardianWeeklyAnnualPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_NZ_ANNUAL_V2',
-		discountedPrice: 551,
+		discountedPrice: 1102,
 		discount: {
 			amount: 27.5,
 			durationMonths: 12,
@@ -602,7 +602,7 @@ export const supporterPlusWithGuardianWeeklyAnnualPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_AU_ANNUAL_V2',
-		discountedPrice: 486,
+		discountedPrice: 972,
 		discount: {
 			amount: 24.06,
 			durationMonths: 12,
@@ -615,7 +615,7 @@ export const supporterPlusWithGuardianWeeklyMonthlyPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_UK_MONTHLY_V2',
-		discountedPrice: 16,
+		discountedPrice: 32,
 		discount: {
 			amount: 36,
 			durationMonths: 12,
@@ -625,7 +625,7 @@ export const supporterPlusWithGuardianWeeklyMonthlyPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_EU_MONTHLY_V2',
-		discountedPrice: 28,
+		discountedPrice: 56,
 		discount: {
 			amount: 23.29,
 			durationMonths: 12,
@@ -635,7 +635,7 @@ export const supporterPlusWithGuardianWeeklyMonthlyPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_INT_MONTHLY_V2',
-		discountedPrice: 34,
+		discountedPrice: 68,
 		discount: {
 			amount: 26.09,
 			durationMonths: 12,
@@ -645,7 +645,7 @@ export const supporterPlusWithGuardianWeeklyMonthlyPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_US_MONTHLY_V2',
-		discountedPrice: 35,
+		discountedPrice: 70,
 		discount: {
 			amount: 18.6,
 			durationMonths: 12,
@@ -655,7 +655,7 @@ export const supporterPlusWithGuardianWeeklyMonthlyPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_CA_MONTHLY_V2',
-		discountedPrice: 35,
+		discountedPrice: 70,
 		discount: {
 			amount: 23.91,
 			durationMonths: 12,
@@ -665,7 +665,7 @@ export const supporterPlusWithGuardianWeeklyMonthlyPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_NZ_MONTHLY_V2',
-		discountedPrice: 51,
+		discountedPrice: 102,
 		discount: {
 			amount: 23.88,
 			durationMonths: 12,
@@ -675,7 +675,7 @@ export const supporterPlusWithGuardianWeeklyMonthlyPromosV2 = {
 		name: 'SupportPlusAndGuardianWeekly',
 		description: 'Supporter Plus and Guardian Weekly',
 		promoCode: '3TIER_WEEKLY_AU_MONTHLY_V2',
-		discountedPrice: 45,
+		discountedPrice: 90,
 		discount: {
 			amount: 21.05,
 			durationMonths: 12,
