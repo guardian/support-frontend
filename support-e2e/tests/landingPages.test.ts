@@ -18,7 +18,9 @@ test.describe('Paper product page', () => {
 		await page.goto(pageUrl);
 
 		await expect(page.locator('id=qa-paper-subscriptions')).toBeVisible();
-		await expect(page).toHaveURL(/\/uk\/subscribe\/paper/);
+		await expect(
+			page.getByRole('heading', { name: 'Newspaper subscription' }).first(),
+		).toBeVisible();
 	});
 });
 
@@ -35,7 +37,9 @@ test.describe('Weekly product page', () => {
 		await page.goto(pageUrl);
 
 		await expect(page.locator('id=qa-guardian-weekly')).toBeVisible();
-		await expect(page).toHaveURL(/\/uk\/subscribe\/weekly/);
+		await expect(
+			page.getByRole('heading', { name: 'The Guardian Weekly' }).first(),
+		).toBeVisible();
 	});
 });
 
@@ -52,7 +56,9 @@ test.describe('Weekly gift product page', () => {
 		await page.goto(pageUrl);
 
 		await expect(page.locator('id=qa-guardian-weekly-gift')).toBeVisible();
-		await expect(page).toHaveURL(/\/uk\/subscribe\/weekly\/gift/);
+		await expect(
+			page.getByRole('heading', { name: 'Give the Guardian Weekly' }).first(),
+		).toBeVisible();
 	});
 });
 
@@ -71,6 +77,12 @@ test.describe('Subscriptions landing page', () => {
 		await expect(
 			page.locator('id=qa-subscriptions-landing-page'),
 		).toBeVisible();
-		await expect(page).toHaveURL(/\/uk\/subscribe/);
+		await expect(
+			page
+				.getByRole('heading', {
+					name: 'Support the Guardian with a print subscription',
+				})
+				.first(),
+		).toBeVisible();
 	});
 });
