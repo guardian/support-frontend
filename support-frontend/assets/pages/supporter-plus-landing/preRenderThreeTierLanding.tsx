@@ -6,20 +6,8 @@ import {
 	FooterLinks,
 	FooterWithContents,
 } from '@guardian/source-development-kitchen/react-components';
-import CountryGroupSwitcher from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import type { CountryGroupSwitcherProps } from 'components/countryGroupSwitcher/countryGroupSwitcher';
-import { CountrySwitcherContainer } from 'components/headers/simpleHeader/countrySwitcherContainer';
 import { Header } from 'components/headers/simpleHeader/simpleHeader';
 import { PageScaffold } from 'components/page/pageScaffold';
-import {
-	AUDCountries,
-	Canada,
-	EURCountries,
-	GBPCountries,
-	International,
-	NZDCountries,
-	UnitedStates,
-} from 'helpers/internationalisation/countryGroup';
 import { PrerenderGlobalStyles } from 'helpers/rendering/prerenderGlobalStyles';
 
 const recurringContainer = css`
@@ -59,56 +47,34 @@ const oneTimeContainer = (withShortPaddingBottom: boolean) => css`
 	}
 `;
 
+const links = [
+	{
+		href: 'https://www.theguardian.com/info/privacy',
+		text: 'Privacy policy',
+		isExternal: true,
+	},
+	{
+		text: 'Privacy settings',
+		onClick: () => {
+			cmp.showPrivacyManager();
+		},
+	},
+	{
+		href: 'https://www.theguardian.com/help/contact-us',
+		text: 'Contact us',
+		isExternal: true,
+	},
+	{
+		href: 'https://www.theguardian.com/help',
+		text: 'Help centre',
+		isExternal: true,
+	},
+];
+
 function PreRenderThreeTierLanding(): JSX.Element {
-	const countrySwitcherProps: CountryGroupSwitcherProps = {
-		countryGroupIds: [
-			GBPCountries,
-			UnitedStates,
-			AUDCountries,
-			EURCountries,
-			NZDCountries,
-			Canada,
-			International,
-		],
-		selectedCountryGroup: GBPCountries,
-		subPath: '/contribute',
-	};
-
-	const links = [
-		{
-			href: 'https://www.theguardian.com/info/privacy',
-			text: 'Privacy policy',
-			isExternal: true,
-		},
-		{
-			text: 'Privacy settings',
-			onClick: () => {
-				cmp.showPrivacyManager();
-			},
-		},
-		{
-			href: 'https://www.theguardian.com/help/contact-us',
-			text: 'Contact us',
-			isExternal: true,
-		},
-		{
-			href: 'https://www.theguardian.com/help',
-			text: 'Help centre',
-			isExternal: true,
-		},
-	];
-
 	return (
 		<PageScaffold
-			header={
-				<>
-					<Header>
-						<CountrySwitcherContainer>
-							<CountryGroupSwitcher {...countrySwitcherProps} />
-						</CountrySwitcherContainer>
-					</Header>
-				</>
-			}
+			header={<Header />}
 			footer={
 				<FooterWithContents>
 					<FooterLinks links={links}></FooterLinks>
@@ -116,64 +82,17 @@ function PreRenderThreeTierLanding(): JSX.Element {
 			}
 		>
 			<PrerenderGlobalStyles />
-			{/* <Container
+			<Container
 				sideBorders
 				topBorder
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={recurringContainer}
-			> */}
-			{/* <div css={innerContentContainer}>
-					<h1 css={heading}>
-						Support fearless, <br css={tabletLineBreak} />
-						independent journalism
-					</h1>
-					<p css={standFirst}>
-						We're not owned by a billionaire or shareholders - our readers
-						support us. Choose to join with one of the options below.{' '}
-						<strong>Cancel anytime.</strong>
-					</p>
-					<PaymentFrequencyButtons
-						paymentFrequencies={paymentFrequencies.map(
-							(paymentFrequency, index) => ({
-								paymentFrequencyLabel: paymentFrequencyMap[paymentFrequency],
-								paymentFrequencyId: paymentFrequency,
-								isPreSelected: paymentFrequencies[index] === contributionType,
-							}),
-						)}
-						buttonClickHandler={handlePaymentFrequencyBtnClick}
-						additionalStyles={paymentFrequencyButtonsCss}
-					/>
-					<ThreeTierCards
-						cardsContent={[tier1Card, tier2Card, tier3Card]}
-						currencyId={currencyId}
-						paymentFrequency={contributionType}
-						linkCtaClickHandler={handleLinkCtaClick}
-					/>
-				</div> */}
-			{/* </Container> */}
-			<Container
+			/>
+			{/* <Container
 				sideBorders
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={oneTimeContainer(false)}
-			>
-				{/* <SupportOnce
-					currency={currencies[currencyId].glyph}
-					btnClickHandler={handleSupportOnceBtnClick}
-				/>
-				{countryGroupId === UnitedStates && (
-					<div css={suppportAnotherWayContainer}>
-						<h4>Support another way</h4>
-						<p>
-							To learn more about other ways to support the Guardian, including
-							checks and tax-exempt options, please visit our{' '}
-							<a href="https://manage.theguardian.com/help-centre/article/contribute-another-way?INTCMP=gdnwb_copts_support_contributions_referral">
-								help page
-							</a>{' '}
-							on this topic.
-						</p>
-					</div>
-				)} */}
-			</Container>
+			/> */}
 		</PageScaffold>
 	);
 }
