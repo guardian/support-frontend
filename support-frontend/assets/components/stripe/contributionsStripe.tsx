@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Provider } from 'react-redux';
 import type { ContributionType } from 'helpers/contributions';
 import {
 	getStripeKey,
@@ -9,6 +10,7 @@ import {
 	setStripePublicKey,
 } from 'helpers/redux/checkout/payment/stripeAccountDetails/actions';
 import { getContributionType } from 'helpers/redux/checkout/product/selectors/productType';
+import { initReduxForContributions } from 'helpers/redux/contributionsStore';
 import {
 	useContributionsDispatch,
 	useContributionsSelector,
@@ -58,6 +60,24 @@ export function ContributionsStripe({
 			<StripeElements key={publicKey} stripeKey={publicKey}>
 				{children}
 			</StripeElements>
+		</>
+	);
+}
+
+export function ContributionsStripeStandalone({
+	children,
+	contributionTypeOverride,
+}: ContributionsStripeProps): JSX.Element {
+	const store = initReduxForContributions();
+	return (
+		<>
+			{/* Non-safari browsers will fail to find react-redux context value without a provider */}
+			<Provider store={store}>
+				<ContributionsStripe
+					children={children}
+					contributionTypeOverride={contributionTypeOverride}
+				></ContributionsStripe>
+			</Provider>
 		</>
 	);
 }
