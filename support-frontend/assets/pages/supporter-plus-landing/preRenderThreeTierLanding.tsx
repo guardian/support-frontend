@@ -88,11 +88,11 @@ function PreRenderThreeTierLanding(): JSX.Element {
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={recurringContainer}
 			/>
-			{/* <Container
+			<Container
 				sideBorders
 				borderColor="rgba(170, 170, 180, 0.5)"
 				cssOverrides={oneTimeContainer(false)}
-			/> */}
+			/>
 		</PageScaffold>
 	);
 }
